@@ -382,17 +382,14 @@ Function doAddMenu()
 						
 						$fields:=catalog("fields"; New object:C1471("tableName"; $table[""].name)).fields
 						$field:=$fields.query("fieldNumber = :1"; $menu.fieldNumber).pop()
-						
-						$t:=String:C10($field.fieldNumber)
+						$field:=$table[String:C10($field.fieldNumber)]
 						
 						$parameter:=New object:C1471(\
 							"fieldNumber"; $field.fieldNumber; \
-							"name"; EDITOR.str.setText($table[$t].name).lowerCamelCase(); \
-							"label"; $table[$t].label; \
-							"shortLabel"; $table[$t].shortLabel; \
-							"type"; Choose:C955($field.fieldType=Is time:K8:8; "time"; $field.valueType))
-						
-						$parameter.defaultField:=formatString("field-name"; $table[$t].name)
+							"defaultField"; EDITOR.str.setText($field.name).lowerCamelCase(); \
+							"name"; $field.name; \
+							"type"; Choose:C955($field.fieldType=Is time:K8:8; "time"; $field.valueType); \
+							"format"; "ascending")
 						
 						$action.parameters.push($parameter)
 						
@@ -492,32 +489,12 @@ Function doRemoveAction()
 	
 	var $index : Integer
 	
-	This:C1470.removeFocus()
-	
 	$index:=Form:C1466.actions.indexOf(This:C1470.current)
+	Form:C1466.actions.remove($index; 1)
+	PROJECT.save()
 	
-	If ($index#-1)
-		
-		Form:C1466.actions.remove($index; 1)
-		PROJECT.save()
-		
-		If (Num:C11(This:C1470.index)>This:C1470.actions.rowsNumber())
-			
-			This:C1470.actions.unselect()
-			
-			This:C1470.index:=0
-			This:C1470.current:=Null:C1517
-			
-		Else 
-			
-			This:C1470.actions.select(Num:C11(This:C1470.index))
-			
-		End if 
-		
-		This:C1470.updateParameters()
-		
-	End if 
-	
+	// Update UI
+	This:C1470.actions.doSafeSelect($index+1)  // Collection index to listbox index
 	This:C1470.refresh()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
@@ -549,9 +526,11 @@ Function doTableMenu()
 	// Display scope menu
 Function doScopeMenu()
 	
-	var $t : Text
+	var $preset; $t : Text
 	var $i : Integer
 	var $menu : cs:C1710.menu
+	
+	$preset:=String:C10(This:C1470.current.preset)
 	
 	$menu:=cs:C1710.menu.new()
 	
@@ -568,13 +547,13 @@ Function doScopeMenu()
 					
 					//________________________________________
 				: ($i=1)\
-					 & (String:C10(This:C1470.current.preset)="delete")  // Table
+					 & ($preset="delete")  // Table
 					
 					$menu.disable()
 					
 					//________________________________________
 				: ($i=2)\
-					 & (String:C10(This:C1470.current.preset)="adding")  // Current entity
+					 & (($preset="add") | ($preset="sort"))  // Current entity
 					
 					$menu.disable()
 					
@@ -749,7 +728,9 @@ Function doOpenDatabaseMethod()
 		
 		If ($file.exists)
 			
-			PROCESS 4D TAGS:C816($file.getText(); $code; Form:C1466.actions.extract("name"); Form:C1466.actions.extract("label"))
+			var $c : Collection
+			$c:=Form:C1466.actions.query("preset != sort")
+			PROCESS 4D TAGS:C816($file.getText(); $code; $c.extract("name"); $c.extract("label"))
 			METHOD SET CODE:C1194($methods{0}; $code; *)
 			
 		End if 

@@ -209,8 +209,8 @@ Case of
 					"method"; "UI_SET_GEOMETRY"))
 				
 				// Footer
-				$o:=EDITOR.footer.coordinates
-				EDITOR.footer.setCoordinates($o.left; $o.top; $o.left+EDITOR.width()+1; $o.bottom)
+				$o:=EDITOR.footer.updateCoordinates().coordinates
+				EDITOR.footer.setCoordinates($o.left; $o.top; $o.left+EDITOR.width(); $o.bottom)
 				
 				// Center message
 				EDITOR.message.alignHorizontally(Align center:K42:3)
@@ -223,8 +223,8 @@ Case of
 				EDITOR.project.show()
 				
 				// Footer
-				$o:=EDITOR.footer.coordinates
-				EDITOR.footer.setCoordinates($o.left; $o.top; $o.left+EDITOR.width()+1; $o.bottom)
+				$o:=EDITOR.footer.updateCoordinates().coordinates
+				EDITOR.footer.setCoordinates($o.left; $o.top; $o.left+EDITOR.width(); $o.bottom)
 				
 				EDITOR.callChild(EDITOR.project.name; "call_MESSAGE_DISPATCH"; New object:C1471(\
 					"target"; "panel."; \

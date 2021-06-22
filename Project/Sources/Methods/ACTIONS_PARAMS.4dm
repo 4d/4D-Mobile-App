@@ -22,20 +22,6 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 				
 				$ƒ.add.enable()
 				
-				//If (_and(Formula($ƒ.action.parameters#Null); Formula($ƒ.action.parameters.length>0)))
-				//// Select last used action (or the first one)
-				//If ($ƒ.$current#Null)
-				//var $indx : Integer
-				//$indx:=$ƒ.action.parameters.indexOf($ƒ.$current)
-				//$ƒ.parameters.select($indx+1)
-				//Else 
-				//$ƒ.parameters.select(1)
-				//End if 
-				////$ƒ.callMeBack("selectParameters")
-				////$ƒ.updateParameters()
-				////$ƒ.actions.focus()
-				//End if 
-				
 			Else 
 				
 				$ƒ.noSelection.show()
@@ -45,8 +31,10 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 				
 			End if 
 			
+			$ƒ.dropCursor.setColors(Highlight menu background color:K23:7)
+			
 			// Add the events that we cannot select in the form properties 😇
-			$ƒ.appendEvents(New collection:C1472(On Alternative Click:K2:36))
+			$ƒ.appendEvents(On Alternative Click:K2:36)
 			
 			//______________________________________________________
 		: ($e.code=On Timer:K2:25)
@@ -137,6 +125,11 @@ Else   // <== WIDGETS METHOD
 			$ƒ.doFormatMenu()
 			
 			//==============================================
+		: ($ƒ.sortOrderPopup.catch($e; On Clicked:K2:4))
+			
+			$ƒ.doSortOrderMenu()
+			
+			//==============================================
 		: ($ƒ.min.catch($e; On Data Change:K2:15))
 			
 			$ƒ.doRule("min")
@@ -145,26 +138,6 @@ Else   // <== WIDGETS METHOD
 		: ($ƒ.max.catch($e; On Data Change:K2:15))
 			
 			$ƒ.doRule("max")
-			
-		: ($ƒ.format.catch($e))
-			
-			Case of 
-					//_____________________________________
-				: ($e.code=On Mouse Enter:K2:33)
-					
-					UI.tips.instantly()
-					
-					//_______________________________
-				: ($e.code=On Mouse Move:K2:35)
-					
-					$ƒ.setHelpTip($e)
-					
-					//_______________________________
-				: ($e.code=On Mouse Leave:K2:34)
-					
-					UI.tips.default()
-					
-			End case 
 			
 			//==============================================
 		: ($ƒ.defaultValue.catch($e; On After Edit:K2:43))
@@ -179,6 +152,27 @@ Else   // <== WIDGETS METHOD
 		: ($ƒ.defaultValue.catch($e; On Data Change:K2:15))
 			
 			$ƒ.doDefaultValue()
+			
+			//==================================================
+		: ($ƒ.format.catch())
+			
+			Case of 
+					//_____________________________________
+				: ($e.code=On Mouse Enter:K2:33)
+					
+					EDITOR.tips.instantly()
+					
+					//_______________________________
+				: ($e.code=On Mouse Move:K2:35)
+					
+					$ƒ.setHelpTip()
+					
+					//_______________________________
+				: ($e.code=On Mouse Leave:K2:34)
+					
+					EDITOR.tips.restore()
+					
+			End case 
 			
 			//==================================================
 		: ($e.code=On Data Change:K2:15)\

@@ -35,51 +35,58 @@ Function init()
 	This:C1470.add:=cs:C1710.button.new("parameters.add")
 	This:C1470.parameterGroup:=cs:C1710.group.new(This:C1470.parameters; This:C1470.parametersBorder; This:C1470.remove; This:C1470.add)
 	
-	This:C1470.paramName:=cs:C1710.input.new("02_property_name")
-	This:C1470.paramNameBorder:=cs:C1710.static.new("02_property_name.border")
-	This:C1470.paramNameLabel:=cs:C1710.static.new("02_property_name.label")
+	This:C1470.paramName:=cs:C1710.input.new("02_name")
+	This:C1470.paramNameBorder:=cs:C1710.static.new("02_name.border")
+	This:C1470.paramNameLabel:=cs:C1710.static.new("02_name.label")
 	This:C1470.paramNameGroup:=cs:C1710.group.new(This:C1470.paramName; This:C1470.paramNameBorder; This:C1470.paramNameLabel)
 	
-	This:C1470.mandatory:=cs:C1710.button.new("02_property_mandatory")
+	This:C1470.mandatory:=cs:C1710.button.new("02_mandatory")
 	
-	This:C1470.label:=cs:C1710.input.new("03_property_label")
-	This:C1470.labelBorder:=cs:C1710.static.new("03_property_label.border")
-	This:C1470.labelLabel:=cs:C1710.static.new("03_property_label.label")
+	This:C1470.label:=cs:C1710.input.new("03_label")
+	This:C1470.labelBorder:=cs:C1710.static.new("03_label.border")
+	This:C1470.labelLabel:=cs:C1710.static.new("03_label.label")
 	This:C1470.labelGroup:=cs:C1710.group.new(This:C1470.label; This:C1470.labelBorder; This:C1470.labelLabel)
 	
-	This:C1470.short:=cs:C1710.input.new("04_property_shortLabel")
-	This:C1470.shortBorder:=cs:C1710.static.new("04_property_shortLabel.border")
-	This:C1470.shortLabel:=cs:C1710.static.new("04_property_shortLabel.label")
+	This:C1470.short:=cs:C1710.input.new("04_shortLabel")
+	This:C1470.shortBorder:=cs:C1710.static.new("04_shortLabel.border")
+	This:C1470.shortLabel:=cs:C1710.static.new("04_shortLabel.label")
 	This:C1470.shortGroup:=cs:C1710.group.new(This:C1470.short; This:C1470.shortBorder; This:C1470.shortLabel)
 	
-	This:C1470.format:=cs:C1710.input.new("05_property_type")
-	This:C1470.formatBorder:=cs:C1710.static.new("05_property_type.border")
-	This:C1470.formatLabel:=cs:C1710.static.new("05_property_type.label")
-	This:C1470.formatPopup:=cs:C1710.button.new("05_property_type.popup")
-	This:C1470.formatPopupBorder:=cs:C1710.static.new("05_property_type.popup.border")
+	This:C1470.format:=cs:C1710.input.new("05_type")
+	This:C1470.formatBorder:=cs:C1710.static.new("05_type.border")
+	This:C1470.formatLabel:=cs:C1710.static.new("05_type.label")
+	This:C1470.formatPopup:=cs:C1710.button.new("05_type.popup")
+	This:C1470.formatPopupBorder:=cs:C1710.static.new("05_type.popup.border")
 	This:C1470.formatGroup:=cs:C1710.group.new(This:C1470.format; This:C1470.formatBorder; This:C1470.formatLabel; This:C1470.formatPopup; This:C1470.formatPopupBorder)
 	
-	This:C1470.placeholder:=cs:C1710.input.new("06_property_placeholder")
-	This:C1470.placeholderBorder:=cs:C1710.static.new("06_property_placeholder.border")
-	This:C1470.placeholderLabel:=cs:C1710.static.new("06_property_placeholder.label")
+	This:C1470.sortOrder:=cs:C1710.input.new("03_sortOrder")
+	This:C1470.sortOrderBorder:=cs:C1710.static.new("03_sortOrder.border")
+	This:C1470.sortOrderLabel:=cs:C1710.static.new("03_sortOrder.label")
+	This:C1470.sortOrderPopup:=cs:C1710.button.new("03_sortOrder.popup")
+	This:C1470.sortOrderPopupBorder:=cs:C1710.static.new("03_sortOrder.popup.border")
+	This:C1470.sortOrderGroup:=cs:C1710.group.new(This:C1470.sortOrder; This:C1470.sortOrderBorder; This:C1470.sortOrderLabel; This:C1470.sortOrderPopup; This:C1470.sortOrderPopupBorder)
+	
+	This:C1470.placeholder:=cs:C1710.input.new("06_placeholder")
+	This:C1470.placeholderBorder:=cs:C1710.static.new("06_placeholder.border")
+	This:C1470.placeholderLabel:=cs:C1710.static.new("06_placeholder.label")
 	This:C1470.placeholderGroup:=cs:C1710.group.new(This:C1470.placeholder; This:C1470.placeholderBorder; This:C1470.placeholderLabel)
 	
-	This:C1470.defaultValue:=cs:C1710.input.new("07_variable_default")
-	This:C1470.defaultValueBorder:=cs:C1710.static.new("07_variable_default.border")
-	This:C1470.defaultValueLabel:=cs:C1710.static.new("07_variable_default.label")
+	This:C1470.defaultValue:=cs:C1710.input.new("07_default")
+	This:C1470.defaultValueBorder:=cs:C1710.static.new("07_default.border")
+	This:C1470.defaultValueLabel:=cs:C1710.static.new("07_default.label")
 	This:C1470.defaultValueGroup:=cs:C1710.group.new(This:C1470.defaultValue; This:C1470.defaultValueBorder; This:C1470.defaultValueLabel)
 	
-	This:C1470.min:=cs:C1710.input.new("09_property_constraint_number_min")
-	This:C1470.minBorder:=cs:C1710.static.new("09_property_constraint_number_min.border")
-	This:C1470.minLabel:=cs:C1710.static.new("09_property_constraint_number_min.label")
+	This:C1470.min:=cs:C1710.input.new("09_min")
+	This:C1470.minBorder:=cs:C1710.static.new("09_min.border")
+	This:C1470.minLabel:=cs:C1710.static.new("09_min.label")
 	This:C1470.minGroup:=cs:C1710.group.new(This:C1470.min; This:C1470.minBorder; This:C1470.minLabel)
 	
-	This:C1470.max:=cs:C1710.input.new("10_property_constraint_number_max")
-	This:C1470.maxBorder:=cs:C1710.static.new("10_property_constraint_number_max.border")
-	This:C1470.maxLabel:=cs:C1710.static.new("10_property_constraint_number_max.label")
+	This:C1470.max:=cs:C1710.input.new("10_max")
+	This:C1470.maxBorder:=cs:C1710.static.new("10_max.border")
+	This:C1470.maxLabel:=cs:C1710.static.new("10_max.label")
 	This:C1470.maxGroup:=cs:C1710.group.new(This:C1470.max; This:C1470.maxBorder; This:C1470.maxLabel)
 	
-	This:C1470.field:=cs:C1710.input.new("00_field_comment")
+	This:C1470.field:=cs:C1710.input.new("00_info")
 	This:C1470.description:=cs:C1710.input.new("01_description")
 	
 	This:C1470.dropCursor:=cs:C1710.static.new("dropCursor").setColors(Highlight menu background color:K23:7)
@@ -96,7 +103,8 @@ Function init()
 		.addMember(This:C1470.formatGroup.members)\
 		.addMember(This:C1470.placeholderGroup.members)\
 		.addMember(This:C1470.defaultValueGroup.members)\
-		.addMember(This:C1470.number.members)
+		.addMember(This:C1470.number.members)\
+		.addMember(This:C1470.sortOrderGroup.members)
 	
 	This:C1470.withSelection:=cs:C1710.group.new()\
 		.addMember(This:C1470.parameterGroup.members)\
@@ -111,31 +119,60 @@ Function init()
 		.addMember(This:C1470.description)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-	// set help tip
-Function setHelpTip($e : Object)
-	If (This:C1470.format.catch($e))
+Function saveContext($current : Object)
+	
+	If (Count parameters:C259>=1)
 		
-		var $currentValue : Text
-		$currentValue:=String:C10(This:C1470.current.format)
+		This:C1470.$current:=$current
 		
-		Case of 
-			: (Length:C16($currentValue)=0)
+	Else 
+		
+		This:C1470.$current:=This:C1470.current
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function restoreContext()
+	
+	var $index : Integer
+	
+	// * Select last used action (or the first one) if any
+	Case of 
+			
+			//_______________________________________
+		: (This:C1470.action=Null:C1517) | (This:C1470.action.parameters=Null:C1517)
+			
+			// <NOTHING MORE TO DO>
+			
+			//_______________________________________
+		: (OB Keys:C1719(This:C1470).indexOf("$current")=-1)  // first display
+			
+			This:C1470.parameters.select(1)
+			
+			//_______________________________________
+		Else 
+			
+			If (This:C1470.current#Null:C1517)
 				
-				This:C1470.format.setHelpTip("")
-				
-				//%W-533.1
-			: ($currentValue[[1]]="/")
-				//%W+533.1
-				
-				This:C1470.format.setHelpTip(This:C1470.formatToolTip($currentValue))
+				$index:=This:C1470.action.parameters.indexOf(This:C1470.current)
+				This:C1470.parameters.select($index+1)
 				
 			Else 
 				
-				This:C1470.format.setHelpTip("")
-				
-		End case 
-		
-	End if 
+				If (This:C1470.$current=Null:C1517)
+					
+					// <NOTHING MORE TO DO>
+					
+				Else 
+					
+					$index:=This:C1470.action.parameters.indexOf(This:C1470.$current)
+					This:C1470.parameters.select($index+1)
+					
+				End if 
+			End if 
+			
+			//_______________________________________
+	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Update UI
@@ -149,6 +186,8 @@ Function update()
 	This:C1470.withSelection.hide()
 	This:C1470.noParameters.hide()
 	
+	This:C1470.paramName.enable()
+	
 	If (Form:C1466.actions=Null:C1517)\
 		 | (Num:C11(Form:C1466.actions.length)=0)  // No actions
 		
@@ -161,40 +200,29 @@ Function update()
 		$action:=This:C1470.action
 		$current:=This:C1470.current
 		
-		This:C1470.goToPage(1)
-		
 		If ($action=Null:C1517)  // No action selected
 			
 			This:C1470.noSelection.show()
 			
 		Else 
 			
-			// Select last used action (or the first one)
-			If ($current#Null:C1517)
-				
-				var $indx : Integer
-				$indx:=This:C1470.action.parameters.indexOf($current)
-				This:C1470.parameters.select($indx+1)
-				
-			Else 
-				
-				This:C1470.parameters.select(1)
-				
-			End if 
+			This:C1470.restoreContext()
 			
 			Case of 
 					
 					//______________________________________________________
 				: (String:C10($action.preset)="delete")
 					
+					This:C1470.goToPage(1)
 					This:C1470.noParameters.show()
 					
 					//______________________________________________________
 				: (String:C10($action.preset)="share")
 					
-					If (FEATURE.with("sharedActionWithDescription")) & False:C215
+					This:C1470.goToPage(2)
+					
+					If (FEATURE.with("sharedActionWithDescription"))  //& False
 						
-						This:C1470.goToPage(2)
 						This:C1470.description.show()
 						This:C1470.description.focus()
 						
@@ -207,12 +235,15 @@ Function update()
 					//______________________________________________________
 				: ($action.parameters=Null:C1517) | (Num:C11($action.parameters.length)=0)
 					
+					This:C1470.goToPage(1)
 					This:C1470.withSelection.show()
 					This:C1470.properties.hide()
+					This:C1470.sortOrderGroup.hide()
 					
 					//______________________________________________________
 				: (String:C10($action.preset)="sort")
 					
+					This:C1470.goToPage(1)
 					This:C1470.withSelection.show()
 					
 					If ($current=Null:C1517)
@@ -226,13 +257,20 @@ Function update()
 						This:C1470.placeholderGroup.hide()
 						This:C1470.defaultValueGroup.hide()
 						This:C1470.number.hide()
+						This:C1470.labelGroup.hide()
+						This:C1470.shortGroup.hide()
+						
+						This:C1470.sortOrderGroup.show()
+						This:C1470.paramName.disable()
 						
 					End if 
 					
 					//______________________________________________________
 				Else 
 					
+					This:C1470.goToPage(1)
 					This:C1470.withSelection.show()
+					This:C1470.sortOrderGroup.hide()
 					
 					If ($action.tableNumber=Null:C1517)  // No target table
 						
@@ -256,6 +294,7 @@ Function update()
 								
 								This:C1470.remove.enable()
 								This:C1470.properties.show()
+								This:C1470.sortOrderGroup.hide()
 								
 								This:C1470.defaultValueGroup.show($current.fieldNumber=Null:C1517)  // User parameter
 								This:C1470.field.show($current.fieldNumber#Null:C1517)  // Linked to a field
@@ -393,6 +432,30 @@ Function update()
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
+	// "format": "descending or "ascending"
+Function sortOrderValue()->$value : Text
+	
+	$value:=Get localized string:C991(This:C1470.current.format)
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+	// Format choice 
+Function doSortOrderMenu()
+	
+	var $menu : cs:C1710.menu
+	
+	$menu:=cs:C1710.menu.new()\
+		.append(":xliff:ascending"; "ascending"; String:C10(This:C1470.current.format)="ascending")\
+		.append(":xliff:descending"; "descending"; String:C10(This:C1470.current.format)="descending")
+	
+	If ($menu.popup(This:C1470.sortOrderBorder).selected)
+		
+		This:C1470.current.format:=$menu.choice
+		
+		PROJECT.save()
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function minValue()->$value : Text
 	
 	$value:=String:C10(This:C1470.ruleValue("min"))
@@ -433,24 +496,27 @@ Function formatValue()->$value : Text
 	$current:=This:C1470.current
 	
 	Case of 
+			
+			//________________________________________
 		: (Length:C16(String:C10($current.format))=0)
 			
 			// Take type
 			$value:=Choose:C955($current.type="string"; "text"; String:C10($current.type))
 			$value:=Get localized string:C991($value)
 			
-			//%W-533.1
-		: ($current.format[[1]]="/")  // host custom action parameter format
-			//%W+533.1
+			//________________________________________
+		: (PROJECT.isCustomResource($current.format))  // Host custom action parameter format
 			
 			$value:=Substring:C12($current.format; 2)
 			
+			//________________________________________
 		Else 
 			
 			// Prefer format
 			$value:=Choose:C955($current.format#$current.type; "f_"+String:C10($current.format); String:C10($current.type))
 			$value:=Get localized string:C991($value)
 			
+			//________________________________________
 	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
@@ -507,7 +573,7 @@ Function doAddParameterMenu()
 	var $t : Text
 	var $isSortAction : Boolean
 	var $field; $parameter; $table : Object
-	var $c; $cc : Collection
+	var $c : Collection
 	var $menu : cs:C1710.menu
 	
 	$isSortAction:=String:C10(This:C1470.action.preset)="sort"
@@ -549,7 +615,7 @@ Function doAddParameterMenu()
 					
 					If (Not:C34($isSortAction) | PROJECT.isSortable($table[$t]))
 						
-						If (This:C1470.action.parameters.query("fieldNumber = :1"; Num:C11($t)).length=0)
+						If (This:C1470.action.parameters.query("fieldNumber = :1"; Num:C11($t)).pop()=Null:C1517)
 							
 							$table[$t].fieldNumber:=Num:C11($t)
 							$c.push($table[$t])
@@ -587,44 +653,47 @@ Function doAddParameterMenu()
 			// <NOTHING MORE TO DO>
 			
 			//______________________________________________________
-		: ($menu.choice="new")  // Add a user parameter
+		: ($menu.choice="new")  // Add a user parpameter
 			
 			This:C1470.doNewParameter()
 			
 			//______________________________________________________
 		Else   // Add a field
 			
-			$c:=$c.query("fieldNumber = :1"; Num:C11($menu.choice))
+			$field:=$c.query("fieldNumber = :1"; Num:C11($menu.choice)).pop()
 			
-			$parameter:=New object:C1471(\
-				"fieldNumber"; $c[0].fieldNumber; \
-				"name"; EDITOR.str.setText($c[0].name).lowerCamelCase(); \
-				"label"; $c[0].label; \
-				"shortLabel"; $c[0].shortLabel; \
-				"defaultField"; formatString("field-name"; $c[0].name))
 			
-			If (Bool:C1537($c[0].mandatory))
+			If ($isSortAction)
 				
-				$parameter.rules:=New collection:C1472("mandatory")
+				$parameter:=New object:C1471(\
+					"fieldNumber"; $field.fieldNumber; \
+					"defaultField"; formatString("field-name"; $field.name); \
+					"name"; $field.name)
 				
+			Else 
+				
+				$parameter:=New object:C1471(\
+					"fieldNumber"; $field.fieldNumber; \
+					"label"; $field.label; \
+					"shortLabel"; $field.shortLabel; \
+					"defaultField"; formatString("field-name"; $field.name); \
+					"name"; EDITOR.str.setText($field.name).lowerCamelCase())
+				
+				If (Bool:C1537($field.mandatory))
+					
+					$parameter.rules:=New collection:C1472("mandatory")
+					
+				End if 
 			End if 
 			
-			$cc:=New collection:C1472
-			$cc[Is integer 64 bits:K8:25]:="number"
-			$cc[Is alpha field:K8:1]:="string"
-			$cc[Is integer:K8:5]:="number"
-			$cc[Is longint:K8:6]:="number"
-			$cc[Is picture:K8:10]:="image"
-			$cc[Is boolean:K8:9]:="bool"
-			$cc[_o_Is float:K8:26]:="number"
-			$cc[Is text:K8:3]:="string"
-			$cc[Is real:K8:4]:="number"
-			$cc[Is time:K8:8]:="time"
-			$cc[Is date:K8:7]:="date"
-			
-			$parameter.type:=$cc[$c[0].fieldType]
+			$parameter.type:=PROJECT.fieldType2type($field.fieldType)
 			
 			Case of 
+					
+					//……………………………………………………………………
+				: ($isSortAction)
+					
+					$parameter.format:="ascending"
 					
 					//……………………………………………………………………
 				: ($parameter.type="date")
@@ -685,8 +754,8 @@ Function _addParameter($parameter : Object)
 	PROJECT.save()
 	
 	This:C1470.parameters.focus()
+	This:C1470.saveContext($parameter)
 	This:C1470.parameters.reveal(This:C1470.parameters.rowsNumber()+Num:C11(This:C1470.parameters.rowsNumber()=0))
-	
 	This:C1470.refresh()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
@@ -697,21 +766,12 @@ Function doRemoveParameter()
 	
 	$index:=This:C1470.action.parameters.indexOf(This:C1470.current)
 	This:C1470.action.parameters.remove($index)
-	
-	$index:=$index+1  // Collection index to listbox index
-	
-	If ($index<=This:C1470.parameters.rowsNumber())
-		
-		This:C1470.parameters.select($index)
-		
-	Else 
-		
-		This:C1470.parameters.unselect()
-		
-	End if 
-	
-	//$form.form.refresh()
 	PROJECT.save()
+	
+	This:C1470.parameters.focus()
+	This:C1470.parameters.doSafeSelect($index+1)  // Collection index to listbox index
+	This:C1470.saveContext()
+	This:C1470.refresh()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Mandatory checkbox
@@ -760,44 +820,68 @@ Function doMandatory()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Format list 
-Function formats($host : Boolean)->$formats : Object
+Function getFormats()->$formats : Object
+	
+	var $type : Text
+	var $index : Integer
+	var $manifestData : Object
+	var $c : Collection
+	var $manifest : 4D:C1709.File
+	var $folder; $formatterFolder : 4D:C1709.Folder
+	
 	$formats:=JSON Parse:C1218(File:C1566("/RESOURCES/actionParameters.json").getText()).formats
 	
-	If ($host)
-		var $folder; $formatterFolder : 4D:C1709.Folder
-		var $manifestFile : 4D:C1709.File
-		var $manifestData : Object
-		var $type : Text
+	If (FEATURE.with("customActionFormatter"))
+		
 		$folder:=This:C1470.path.hostActionParameterFormatters(False:C215)
+		
 		If ($folder.exists)
+			
 			For each ($formatterFolder; $folder.folders())
-				$manifestFile:=$formatterFolder.file("manifest.json")
-				If ($manifestFile.exists)
-					$manifestData:=JSON Parse:C1218($manifestFile.getText())
+				
+				$manifest:=$formatterFolder.file("manifest.json")
+				
+				If ($manifest.exists)
+					
+					$manifestData:=JSON Parse:C1218($manifest.getText())
+					
 					If (Value type:C1509($manifestData.type)=Is text:K8:3)
+						
 						$manifestData.type:=New collection:C1472($manifestData.type)
+						
 					End if 
+					
 					If (Value type:C1509($manifestData.type)=Is collection:K8:32)
+						
+						$c:=New collection:C1472(\
+							"text"; \
+							"real"; \
+							"integer"; \
+							"boolean"; \
+							"picture")
+						
 						For each ($type; $manifestData.type)
 							
-							Case of   // OPTI replace by object map
-								: ($type="text")
-									$type:="string"
-								: ($type="real")
-									$type:="number"
-								: ($type="integer")
-									$type:="number"
-								: ($type="boolean")
-									$type:="bool"
-								: ($type="picture")
-									$type:="image"
-								Else 
-							End case 
+							$index:=$c.indexOf($type)
+							
+							If ($index>=0)
+								
+								$type:=Choose:C955($index; \
+									"string"; \
+									"number"; \
+									"number"; \
+									"bool"; \
+									"image")
+								
+							End if 
 							
 							If ($formats[$type]#Null:C1517)
+								
 								// ENHANCE: could add maybe object instead of string, to add some other info like helptype or custom label
 								If ($formats[$type].indexOf("/"+$formatterFolder.name)<0)
+									
 									$formats[$type].push("/"+$formatterFolder.name)
+									
 								End if 
 							End if 
 						End for each 
@@ -805,23 +889,6 @@ Function formats($host : Boolean)->$formats : Object
 				End if 
 			End for each 
 		End if 
-		
-	End if 
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-	// Format tool tip 
-Function formatToolTip($format : Text)->$tip
-	$tip:=""
-	//%W-533.1
-	If ($format[[1]]="/")
-		//%W+533.1
-		var $manifestFile : 4D:C1709.File
-		$manifestFile:=cs:C1710.path.new().hostActionParameterFormatters(False:C215).folder(Substring:C12($format; 2)).file("manifest.json")
-		// TODO If zip formatter, fix file path(read in zip SHARED.archiveExtension)
-		If ($manifestFile.exists)
-			$tip:=cs:C1710.str.new(JSON Stringify:C1217(JSON Parse:C1218($manifestFile.getText()).choiceList; *)).jsonSimplify()
-		End if 
-		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
@@ -829,14 +896,14 @@ Function formatToolTip($format : Text)->$tip
 Function doFormatMenu()
 	
 	var $currentFormat; $format; $label; $newType; $type : Text
-	var $index : Integer
-	var $current; $form; $formats; $subMenu : Object
-	var $menu : cs:C1710.menu
 	var $hasCustom : Boolean
+	var $index : Integer
+	var $current; $formats; $subMenu : Object
+	var $menu : cs:C1710.menu
 	
 	$current:=This:C1470.current
 	$currentFormat:=String:C10($current.format)
-	$formats:=This:C1470.formats(FEATURE.with("customActionFormatter"))
+	$formats:=This:C1470.getFormats()
 	
 	$menu:=cs:C1710.menu.new()
 	
@@ -848,16 +915,22 @@ Function doFormatMenu()
 		
 		For each ($format; $formats[Choose:C955($current.type="text"; "string"; $current.type)])
 			
-			If ($format[[1]]="/")
+			If (PROJECT.isCustomResource($format))
+				
 				If (Not:C34($hasCustom))
-					$menu.line()  // separate custom by a line
+					
+					$menu.line()  // Separate custom by a line
+					
 				End if 
+				
 				$hasCustom:=True:C214
 				$menu.append(Substring:C12($format; 2); $format; $currentFormat=$format)
+				
 			Else 
+				
 				$menu.append(":xliff:f_"+$format; $format; $currentFormat=$format)
+				
 			End if 
-			
 		End for each 
 		
 	Else 
@@ -867,24 +940,27 @@ Function doFormatMenu()
 			If ($formats[$type].length>0)
 				
 				$subMenu:=cs:C1710.menu.new()
-				
 				$label:=Choose:C955($type="string"; "text"; $type)
-				
 				$subMenu.append(":xliff:"+$label; $label).line()
 				
-				$hasCustom:=False:C215  // to have a line by type
 				For each ($format; $formats[$type])
 					
-					If ($format[[1]]="/")
+					If (PROJECT.isCustomResource($format))
+						
 						If (Not:C34($hasCustom))
-							$subMenu.line()  // separate custom by a line
+							
+							$subMenu.line()  // Separate custom by a line
+							
 						End if 
+						
 						$hasCustom:=True:C214
 						$subMenu.append(Substring:C12($format; 2); $format; $currentFormat=$format)
+						
 					Else 
+						
 						$subMenu.append(":xliff:f_"+$format; $format; $currentFormat=$format)
+						
 					End if 
-					
 				End for each 
 				
 				$menu.append(":xliff:"+$label; $subMenu)
@@ -1188,6 +1264,51 @@ Function doOnDrop()
 	This:C1470.dropCursor.hide()
 	
 	This:C1470.parameters.touch()
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	// Set help tip
+Function setHelpTip()  //($e : Object)
+	
+	var $currentValue : Text
+	$currentValue:=String:C10(This:C1470.current.format)
+	
+	Case of 
+			
+			//________________________________________
+		: (Length:C16($currentValue)=0)
+			
+			This:C1470.format.setHelpTip("")
+			
+			//________________________________________
+		: (EDITOR.isCustomResource($currentValue))
+			
+			This:C1470.format.setHelpTip(This:C1470.formatToolTip($currentValue))
+			
+			//________________________________________
+		Else 
+			
+			This:C1470.format.setHelpTip("")
+			
+			//________________________________________
+	End case 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+	// Format tool tip 
+Function formatToolTip($format : Text)->$tip
+	
+	var $manifest : 4D:C1709.File
+	
+	If (EDITOR.isCustomResource($format))
+		
+		$manifest:=EDITOR.path.hostActionParameterFormatters().folder(Delete string:C232($format; 1; 2)).file("manifest.json")
+		
+		// TODO If zip formatter, fix file path(read in zip SHARED.archiveExtension)
+		If ($manifest.exists)
+			
+			$tip:=EDITOR.str.setText(JSON Stringify:C1217(JSON Parse:C1218($manifest.getText()).choiceList; *)).jsonSimplify()
+			
+		End if 
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// <Background Color Expression> ******************** VERY SIMILAR TO ACTIONS.backgroundColor() ********************

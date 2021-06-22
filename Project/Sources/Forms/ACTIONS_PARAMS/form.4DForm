@@ -67,7 +67,7 @@
 		},
 		{
 			"objects": {
-				"05_property_type.border": {
+				"05_type.border": {
 					"type": "rectangle",
 					"top": 152,
 					"left": 488,
@@ -76,7 +76,7 @@
 					"visibility": "hidden",
 					"class": "border"
 				},
-				"05_property_type.popup.border": {
+				"05_type.popup.border": {
 					"type": "rectangle",
 					"top": 152,
 					"left": 488,
@@ -94,7 +94,7 @@
 					"visibility": "hidden",
 					"class": "border"
 				},
-				"02_property_name.border": {
+				"02_name.border": {
 					"type": "rectangle",
 					"top": 28,
 					"left": 488,
@@ -103,7 +103,7 @@
 					"visibility": "hidden",
 					"class": "border"
 				},
-				"02_property_name": {
+				"02_name": {
 					"type": "input",
 					"top": 36,
 					"left": 495,
@@ -209,9 +209,10 @@
 					"style": "bevel",
 					"events": [
 						"onClick"
-					]
+					],
+					"focusable": false
 				},
-				"03_property_label.border": {
+				"03_label.border": {
 					"type": "rectangle",
 					"top": 90,
 					"left": 488,
@@ -220,7 +221,7 @@
 					"visibility": "hidden",
 					"class": "border"
 				},
-				"03_property_label": {
+				"03_label": {
 					"type": "input",
 					"top": 98,
 					"left": 495,
@@ -234,7 +235,7 @@
 						"onDataChange"
 					]
 				},
-				"04_property_shortLabel.border": {
+				"04_shortLabel.border": {
 					"type": "rectangle",
 					"top": 90,
 					"left": 734,
@@ -243,7 +244,7 @@
 					"visibility": "hidden",
 					"class": "border"
 				},
-				"04_property_shortLabel": {
+				"04_shortLabel": {
 					"type": "input",
 					"top": 98,
 					"left": 741,
@@ -257,7 +258,26 @@
 						"onDataChange"
 					]
 				},
-				"02_property_name.label": {
+				"05_type": {
+					"type": "input",
+					"top": 160,
+					"left": 527,
+					"width": 157,
+					"height": 17,
+					"visibility": "hidden",
+					"dataSource": "panel.formatValue()",
+					"hideFocusRing": true,
+					"dragging": "none",
+					"focusable": false,
+					"class": "infos",
+					"contextMenu": "none",
+					"events": [
+						"onMouseEnter",
+						"onMouseLeave",
+						"onMouseMove"
+					]
+				},
+				"02_name.label": {
 					"type": "text",
 					"top": 5,
 					"left": 488,
@@ -267,7 +287,7 @@
 					"visibility": "hidden",
 					"class": "label"
 				},
-				"03_property_label.label": {
+				"03_label.label": {
 					"type": "text",
 					"top": 68,
 					"left": 488,
@@ -277,7 +297,7 @@
 					"visibility": "hidden",
 					"class": "label"
 				},
-				"04_property_shortLabel.label": {
+				"04_shortLabel.label": {
 					"type": "text",
 					"top": 68,
 					"left": 734,
@@ -287,7 +307,7 @@
 					"visibility": "hidden",
 					"class": "label"
 				},
-				"05_property_type.label": {
+				"05_type.label": {
 					"type": "text",
 					"top": 130,
 					"left": 488,
@@ -297,7 +317,7 @@
 					"visibility": "hidden",
 					"class": "label"
 				},
-				"05_property_type.popup": {
+				"05_type.popup": {
 					"type": "button",
 					"top": 152,
 					"left": 488,
@@ -312,7 +332,7 @@
 					"visibility": "hidden",
 					"focusable": false
 				},
-				"07_variable_default.border": {
+				"07_default.border": {
 					"type": "rectangle",
 					"top": 214,
 					"left": 488,
@@ -321,7 +341,7 @@
 					"visibility": "hidden",
 					"class": "border"
 				},
-				"07_variable_default": {
+				"07_default": {
 					"type": "input",
 					"top": 222,
 					"left": 495,
@@ -337,7 +357,7 @@
 					],
 					"textAlign": "left"
 				},
-				"07_variable_default.label": {
+				"07_default.label": {
 					"type": "text",
 					"top": 192,
 					"left": 488,
@@ -358,7 +378,7 @@
 					"text": "No target table defined",
 					"class": "label"
 				},
-				"02_property_mandatory": {
+				"02_mandatory": {
 					"type": "checkbox",
 					"text": ":xliff:mandatory",
 					"top": 35,
@@ -373,7 +393,7 @@
 					"visibility": "hidden",
 					"dataSourceTypeHint": "boolean"
 				},
-				"06_property_placeholder.border": {
+				"06_placeholder.border": {
 					"type": "rectangle",
 					"top": 152,
 					"left": 734,
@@ -382,7 +402,7 @@
 					"visibility": "hidden",
 					"class": "border"
 				},
-				"06_property_placeholder": {
+				"06_placeholder": {
 					"type": "input",
 					"top": 160,
 					"left": 741,
@@ -396,7 +416,7 @@
 						"onDataChange"
 					]
 				},
-				"06_property_placeholder.label": {
+				"06_placeholder.label": {
 					"type": "text",
 					"top": 130,
 					"left": 734,
@@ -406,7 +426,7 @@
 					"visibility": "hidden",
 					"class": "label"
 				},
-				"09_property_constraint_number_min.border": {
+				"09_min.border": {
 					"type": "rectangle",
 					"top": 214,
 					"left": 734,
@@ -415,7 +435,7 @@
 					"visibility": "hidden",
 					"class": "border"
 				},
-				"09_property_constraint_number_min": {
+				"09_min": {
 					"type": "input",
 					"top": 222,
 					"left": 741,
@@ -431,7 +451,7 @@
 					],
 					"dataSourceTypeHint": "text"
 				},
-				"09_property_constraint_number_min.label": {
+				"09_min.label": {
 					"type": "text",
 					"top": 192,
 					"left": 734,
@@ -441,7 +461,7 @@
 					"visibility": "hidden",
 					"class": "label"
 				},
-				"10_property_constraint_number_max.border": {
+				"10_max.border": {
 					"type": "rectangle",
 					"top": 214,
 					"left": 845,
@@ -450,7 +470,7 @@
 					"visibility": "hidden",
 					"class": "border"
 				},
-				"10_property_constraint_number_max": {
+				"10_max": {
 					"type": "input",
 					"top": 222,
 					"left": 852,
@@ -466,7 +486,7 @@
 						"onDataChange"
 					]
 				},
-				"10_property_constraint_number_max.label": {
+				"10_max.label": {
 					"type": "text",
 					"top": 192,
 					"left": 845,
@@ -476,7 +496,7 @@
 					"visibility": "hidden",
 					"class": "label"
 				},
-				"00_field_comment": {
+				"00_info": {
 					"type": "input",
 					"left": 86,
 					"top": 268,
@@ -500,42 +520,81 @@
 					"visibility": "hidden",
 					"startPoint": "topLeft"
 				},
-				"05_property_type": {
+				"03_sortOrder.border": {
+					"type": "rectangle",
+					"top": 90,
+					"left": 488,
+					"width": 204,
+					"height": 33,
+					"visibility": "hidden",
+					"class": "border"
+				},
+				"03_sortOrder.popup.border": {
+					"type": "rectangle",
+					"top": 90,
+					"left": 488,
+					"width": 33,
+					"height": 33,
+					"visibility": "hidden",
+					"class": "border"
+				},
+				"03_sortOrder": {
 					"type": "input",
-					"top": 160,
+					"top": 98,
 					"left": 527,
 					"width": 157,
 					"height": 17,
 					"visibility": "hidden",
-					"dataSource": "panel.formatValue()",
+					"dataSource": "panel.sortOrderValue()",
 					"hideFocusRing": true,
 					"dragging": "none",
 					"focusable": false,
 					"class": "infos",
-					"contextMenu": "none",
+					"contextMenu": "none"
+				},
+				"03_sortOrder.label": {
+					"type": "text",
+					"top": 68,
+					"left": 488,
+					"width": 140,
+					"height": 17,
+					"text": ":xliff:sortOrder",
+					"visibility": "hidden",
+					"class": "label"
+				},
+				"03_sortOrder.popup": {
+					"type": "button",
+					"top": 90,
+					"left": 488,
+					"width": 33,
+					"height": 33,
+					"icon": "/RESOURCES/images/common/down.png",
+					"iconFrames": 4,
+					"style": "custom",
 					"events": [
-						"onMouseEnter",
-						"onMouseLeave",
-						"onMouseMove"
+						"onClick"
 					],
-					"method": "ACTIONS_PARAMS"
+					"visibility": "hidden",
+					"focusable": false
 				}
 			},
 			"entryOrder": [
 				"01_Parameters",
-				"02_property_name",
-				"02_property_mandatory",
-				"03_property_label",
-				"04_property_shortLabel",
-				"05_property_type.popup",
-				"05_property_type",
-				"06_property_placeholder",
-				"07_variable_default",
-				"09_property_constraint_number_min",
-				"10_property_constraint_number_max",
+				"02_name",
+				"02_mandatory",
+				"03_label",
+				"04_shortLabel",
+				"05_type.popup",
+				"05_type",
+				"06_placeholder",
+				"07_default",
+				"09_min",
+				"10_max",
 				"parameters.add",
 				"parameters.remove",
-				"00_field_comment"
+				"00_info",
+				"03_sortOrder",
+				"03_sortOrder.popup"
 			]
 		},
 		{
@@ -582,8 +641,17 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 125,
+	"geometryStamp": 196,
 	"editor": {
+		"groups": {
+			"Group": [
+				"03_sortOrder.border",
+				"03_sortOrder.popup.border",
+				"03_sortOrder",
+				"03_sortOrder.label",
+				"03_sortOrder.popup"
+			]
+		},
 		"activeView": "View 1",
 		"defaultView": "View 1",
 		"views": {

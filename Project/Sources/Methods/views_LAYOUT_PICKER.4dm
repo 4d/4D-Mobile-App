@@ -336,7 +336,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 	
 	CLEAR VARIABLE:C89($p)
 	
-	If ($formsArray{$i}[[1]]="/")
+	If (PROJECT.isCustomResource($formsArray{$i}[[1]]))
 		
 		$t:=Delete string:C232($formsArray{$i}; 1; 1)
 		
@@ -440,17 +440,24 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 		
 	Else 
 		
-		$o:=Null:C1517  // import to reset to not pass to next template
+		$o:=Null:C1517  // Import to reset to not pass to next template
+		
 		If (FEATURE.with("duplicateTemplate"))
+			
 			If ($template.file("manifest.json").exists)
+				
 				$o:=JSON Parse:C1218($template.file("manifest.json").getText())
 				$o.file:=$template
 				
-				If ($o.homepage#Null:C1517)  // see tmpl_INFOS
+				If ($o.homepage#Null:C1517)  // See tmpl_INFOS
+					
 					$o.tips:="accessTheGithubRepository"
 					$o.formula:=Formula:C1597(tmpl_INFOS)
+					
 				Else 
+					
 					$o.formula:=Formula:C1597(tmpl_CONTEXTUAL)
+					
 				End if 
 			End if 
 		End if 
@@ -481,7 +488,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 				// Title
 				$t:=$formsArray{$i}
 				
-				If ($t[[1]]="/")  // Database template
+				If (PROJECT.isCustomResource($t))  // Database template
 					
 					$t:=Delete string:C232($t; 1; 1)
 					

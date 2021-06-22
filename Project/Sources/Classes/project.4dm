@@ -768,6 +768,14 @@ Function isSortable($field : Object)->$sortable : Boolean
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	// Returns True if the resource comes from the host's database.
+Function isCustomResource($resource : Text)->$custom : Boolean
+	
+	//%W-533.1
+	$custom:=($resource[[1]]="/")
+	//%W+533.1
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Returns the collection of table's sortable field 
 Function getSortableFields($table; $ordered : Boolean)->$fields : Collection
 	
@@ -996,6 +1004,29 @@ Function isStorage
 			$0:=True:C214
 			
 		End if 
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+Function fieldType2type($fieldType : Integer)->$type : Text
+	
+	var $c : Collection
+	$c:=New collection:C1472
+	$c[Is integer 64 bits:K8:25]:="number"
+	$c[Is alpha field:K8:1]:="string"
+	$c[Is integer:K8:5]:="number"
+	$c[Is longint:K8:6]:="number"
+	$c[Is picture:K8:10]:="image"
+	$c[Is boolean:K8:9]:="bool"
+	$c[_o_Is float:K8:26]:="number"
+	$c[Is text:K8:3]:="string"
+	$c[Is real:K8:4]:="number"
+	$c[Is time:K8:8]:="time"
+	$c[Is date:K8:7]:="date"
+	
+	If (Asserted:C1132($fieldType<=$c.length))
+		
+		$type:=$c[$fieldType]
+		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 

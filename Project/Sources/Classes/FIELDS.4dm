@@ -876,8 +876,7 @@ Function formatMenu($e : Object)
 			
 			// Update me
 			//%W-533.3
-			//%W-533.1
-			If ($menu.choice[[1]]="/")
+			If (PROJECT.isCustomResource($menu.choice))
 				
 				// User resources
 				$o:=$formatters.query("source.name = :1"; $menu.choice).pop()
@@ -888,7 +887,6 @@ Function formatMenu($e : Object)
 				Self:C308->{$e.row}:=$str.setText("_"+$menu.choice).localized()
 				
 			End if 
-			//%W+533.1
 			//%W+533.3
 			
 			This:C1470.updateForms($field; $e.row)

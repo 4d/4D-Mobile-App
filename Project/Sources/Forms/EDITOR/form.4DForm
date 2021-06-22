@@ -242,11 +242,12 @@
 		}
 	],
 	"editor": {
-		"activeView": "default",
+		"activeView": "Project",
 		"defaultView": "default",
 		"views": {
 			"default": {},
 			"message": {
+				"visible": false,
 				"objects": [
 					"message.back",
 					"message.button",
@@ -283,7 +284,7 @@
 			}
 		}
 	},
-	"geometryStamp": 174,
+	"geometryStamp": 193,
 	"width": 970,
 	"height": 870
 }
