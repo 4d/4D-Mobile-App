@@ -111,6 +111,33 @@ Function init()
 		.addMember(This:C1470.description)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
+	// set help tip
+Function setHelpTip($e : Object)
+	If (This:C1470.format.catch($e))
+		
+		var $currentValue : Text
+		$currentValue:=String:C10(This:C1470.current.format)
+		
+		Case of 
+			: (Length:C16($currentValue)=0)
+				
+				This:C1470.format.setHelpTip("")
+				
+				//%W-533.1
+			: ($currentValue[[1]]="/")
+				//%W+533.1
+				
+				This:C1470.format.setHelpTip(This:C1470.formatToolTip($currentValue))
+				
+			Else 
+				
+				This:C1470.format.setHelpTip("")
+				
+		End case 
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Update UI
 Function update()
 	
@@ -782,6 +809,22 @@ Function formats($host : Boolean)->$formats : Object
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
+	// Format tool tip 
+Function formatToolTip($format : Text)->$tip
+	$tip:=""
+	//%W-533.1
+	If ($format[[1]]="/")
+		//%W+533.1
+		var $manifestFile : 4D:C1709.File
+		$manifestFile:=cs:C1710.path.new().hostActionParameterFormatters(False:C215).folder(Substring:C12($format; 2)).file("manifest.json")
+		// TODO If zip formatter, fix file path(read in zip SHARED.archiveExtension)
+		If ($manifestFile.exists)
+			$tip:=cs:C1710.str.new(JSON Stringify:C1217(JSON Parse:C1218($manifestFile.getText()).choiceList; *)).jsonSimplify()
+		End if 
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Format choice 
 Function doFormatMenu()
 	
@@ -829,6 +872,7 @@ Function doFormatMenu()
 				
 				$subMenu.append(":xliff:"+$label; $label).line()
 				
+				$hasCustom:=False:C215  // to have a line by type
 				For each ($format; $formats[$type])
 					
 					If ($format[[1]]="/")

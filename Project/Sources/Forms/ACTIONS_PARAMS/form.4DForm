@@ -257,20 +257,6 @@
 						"onDataChange"
 					]
 				},
-				"05_property_type": {
-					"type": "input",
-					"top": 160,
-					"left": 527,
-					"width": 157,
-					"height": 17,
-					"visibility": "hidden",
-					"dataSource": "panel.formatValue()",
-					"hideFocusRing": true,
-					"dragging": "none",
-					"focusable": false,
-					"class": "infos",
-					"contextMenu": "none"
-				},
 				"02_property_name.label": {
 					"type": "text",
 					"top": 5,
@@ -513,6 +499,26 @@
 					"stroke": "#ff0000",
 					"visibility": "hidden",
 					"startPoint": "topLeft"
+				},
+				"05_property_type": {
+					"type": "input",
+					"top": 160,
+					"left": 527,
+					"width": 157,
+					"height": 17,
+					"visibility": "hidden",
+					"dataSource": "panel.formatValue()",
+					"hideFocusRing": true,
+					"dragging": "none",
+					"focusable": false,
+					"class": "infos",
+					"contextMenu": "none",
+					"events": [
+						"onMouseEnter",
+						"onMouseLeave",
+						"onMouseMove"
+					],
+					"method": "ACTIONS_PARAMS"
 				}
 			},
 			"entryOrder": [

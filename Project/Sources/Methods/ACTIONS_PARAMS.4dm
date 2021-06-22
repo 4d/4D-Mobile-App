@@ -146,6 +146,26 @@ Else   // <== WIDGETS METHOD
 			
 			$ƒ.doRule("max")
 			
+		: ($ƒ.format.catch($e))
+			
+			Case of 
+					//_____________________________________
+				: ($e.code=On Mouse Enter:K2:33)
+					
+					UI.tips.instantly()
+					
+					//_______________________________
+				: ($e.code=On Mouse Move:K2:35)
+					
+					$ƒ.setHelpTip($e)
+					
+					//_______________________________
+				: ($e.code=On Mouse Leave:K2:34)
+					
+					UI.tips.default()
+					
+			End case 
+			
 			//==============================================
 		: ($ƒ.defaultValue.catch($e; On After Edit:K2:43))
 			
