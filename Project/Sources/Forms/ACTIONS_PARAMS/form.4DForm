@@ -275,7 +275,8 @@
 						"onMouseEnter",
 						"onMouseLeave",
 						"onMouseMove"
-					]
+					],
+					"method": "ACTIONS_PARAMS"
 				},
 				"02_name.label": {
 					"type": "text",

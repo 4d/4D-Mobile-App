@@ -943,6 +943,7 @@ Function doFormatMenu()
 				$label:=Choose:C955($type="string"; "text"; $type)
 				$subMenu.append(":xliff:"+$label; $label).line()
 				
+				$hasCustom:=False:C215  // to have a line by type
 				For each ($format; $formats[$type])
 					
 					If (PROJECT.isCustomResource($format))
@@ -1280,7 +1281,7 @@ Function setHelpTip()  //($e : Object)
 			This:C1470.format.setHelpTip("")
 			
 			//________________________________________
-		: (EDITOR.isCustomResource($currentValue))
+		: (PROJECT.isCustomResource($currentValue))
 			
 			This:C1470.format.setHelpTip(This:C1470.formatToolTip($currentValue))
 			
@@ -1298,9 +1299,9 @@ Function formatToolTip($format : Text)->$tip
 	
 	var $manifest : 4D:C1709.File
 	
-	If (EDITOR.isCustomResource($format))
+	If (PROJECT.isCustomResource($format))
 		
-		$manifest:=EDITOR.path.hostActionParameterFormatters().folder(Delete string:C232($format; 1; 2)).file("manifest.json")
+		$manifest:=EDITOR.path.hostActionParameterFormatters().folder(Delete string:C232($format; 1; 1)).file("manifest.json")
 		
 		// TODO If zip formatter, fix file path(read in zip SHARED.archiveExtension)
 		If ($manifest.exists)
