@@ -17,7 +17,9 @@
 		"onDataChange",
 		"onTimer",
 		"onSelectionChange",
+		"onMouseEnter",
 		"onMouseLeave",
+		"onMouseMove",
 		"onAfterEdit",
 		"onBeginDragOver"
 	],
@@ -275,8 +277,7 @@
 						"onMouseEnter",
 						"onMouseLeave",
 						"onMouseMove"
-					],
-					"method": "ACTIONS_PARAMS"
+					]
 				},
 				"02_name.label": {
 					"type": "text",
