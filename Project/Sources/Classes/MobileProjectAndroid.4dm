@@ -114,23 +114,14 @@ Function create()->$result : Object
 	
 	If (Not:C34(This:C1470.isOnError))
 		
-		// * UNZIP 4D MOBILE SDK
-		This:C1470.postStep("decompressionOfTheSdk")
+		// * GENERATE PROJECT FILES
+		This:C1470.postStep("workspaceCreation")
 		
-		$o:=This:C1470.androidprojectgenerator.prepareSdk()
+		$o:=This:C1470.androidprojectgenerator.generate(This:C1470.file)
 		
-		If ($o.success)
-			
-			// * GENERATE PROJECT FILES
-			This:C1470.postStep("workspaceCreation")
-			
-			$o:=This:C1470.androidprojectgenerator.generate(This:C1470.file)
-			
-			// Log outputs
-			This:C1470.logFolder.file("lastCreate.android.out.log").setText(String:C10($o.outputStream))
-			This:C1470.logFolder.file("lastCreate.android.err.log").setText(String:C10($o.errorStream))
-			
-		End if 
+		// Log outputs
+		This:C1470.logFolder.file("lastCreate.android.out.log").setText(String:C10($o.outputStream))
+		This:C1470.logFolder.file("lastCreate.android.err.log").setText(String:C10($o.errorStream))
 		
 		If ($o.success)
 			
