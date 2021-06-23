@@ -42,7 +42,7 @@ Function reset($url)
 	This:C1470.errors:=New collection:C1472
 	This:C1470.lastError:=""
 	This:C1470.maxRedirect:=2  // Default value
-	This:C1470.success:=This:C1470.isInternetAvailable()
+	This:C1470.success:=True:C214  //This.isInternetAvailable()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// To set the display of the authentication dialog box
@@ -444,8 +444,8 @@ Function get()->$this : cs:C1710.http
 		//If (This.success)
 		
 		//ARRAY TO COLLECTION(This.headers; \
-			$headerNames; "name"; \
-			$headerValues; "value")
+						$headerNames; "name"; \
+						$headerValues; "value")
 		
 		//This._response($t; $x)
 		
