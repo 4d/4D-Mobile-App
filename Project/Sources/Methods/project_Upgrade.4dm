@@ -702,6 +702,32 @@ If (FEATURE.with("dominantColor")) & ($project.ui.dominantColor=Null:C1517)
 	End if 
 End if 
 
+//=====================================================================
+//                       CHANGE ACTION PRESET
+//=====================================================================
+
+If ($project.actions#Null:C1517)  // XXX add ideVersion check? to not do it each times
+	var $action : Object
+	For each ($action; $project.actions)
+		If ($action.preset#Null:C1517)
+			Case of 
+				: ($action.preset="adding")
+					$action.preset:="add"
+					$isUpgraded:=True:C214
+				: ($action.preset="suppression")
+					$action.preset:="delete"
+					$isUpgraded:=True:C214
+				: ($action.preset="sharing")
+					$action.preset:="share"
+					$isUpgraded:=True:C214
+				: ($action.preset="edition")
+					$action.preset:="edit"
+					$isUpgraded:=True:C214
+			End case 
+		End if 
+	End for each 
+End if 
+
 // Set the current version
 $project.info.componentBuild:=$info.componentBuild
 $project.info.ideVersion:=$info.ideVersion
