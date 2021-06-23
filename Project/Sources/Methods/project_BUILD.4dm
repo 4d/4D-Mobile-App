@@ -43,48 +43,41 @@ If (Asserted:C1132($project#Null:C1517))
 		
 		$project.organization.identifier:=$project.organization.id+"."+cs:C1710.str.new($project.product.name).uperCamelCase()
 		$project.product.bundleIdentifier:=formatString("bundleApp"; $project.organization.id+"."+$project.product.name)
-		
-		//$data.appFolder:=$path.products().folder($project.product.name)
 		$data.appFolder:=EDITOR.path.products().folder($project.product.name)
 		
 		If ($data.path=Null:C1517)
 			
-			If (FEATURE.with("android"))
+			If ($data.appFolder.exists)
 				
-				If ($data.appFolder.exists)
+				//#ASCENDING_COMPATIBILITY
+				$c:=$data.appFolder.folders()
+				
+				If ($c.query("name=iOS").pop()#Null:C1517)\
+					 | ($c.query("name=Android").pop()#Null:C1517)
 					
-					//#ASCENDING_COMPATIBILITY
-					$c:=$data.appFolder.folders()
+					// <NOTHING MORE TO DO>
 					
-					If ($c.query("name=iOS").pop()#Null:C1517)\
-						 | ($c.query("name=Android").pop()#Null:C1517)
+				Else 
+					
+					$o:=$data.appFolder.moveTo(Folder:C1567(Temporary folder:C486; fk platform path:K87:2); Generate UUID:C1066)
+					$data.appFolder.create()
+					
+					If ($o.folder(".gradle").exists)
 						
-						// <NOTHING MORE TO DO>
+						// Move to Android subfolder
+						$success:=$o.moveTo($data.appFolder; "Android").exists
 						
 					Else 
 						
-						$o:=$data.appFolder.moveTo(Folder:C1567(Temporary folder:C486; fk platform path:K87:2); Generate UUID:C1066)
-						$data.appFolder.create()
+						// Move to iOS subfolder
+						$success:=$o.moveTo($data.appFolder; "iOS").exists
 						
-						If ($o.folder(".gradle").exists)
-							
-							// Move to Android subfolder
-							$success:=$o.moveTo($data.appFolder; "Android").exists
-							
-						Else 
-							
-							// Move to iOS subfolder
-							$success:=$o.moveTo($data.appFolder; "iOS").exists
-							
-						End if 
 					End if 
 				End if 
-				
-				// According to the target
-				$data.appFolder:=$data.appFolder.folder(Choose:C955($project._buildTarget="iOS"; "iOS"; "Android"))
-				
 			End if 
 			
+			// According to the target
+			$data.appFolder:=$data.appFolder.folder(Choose:C955($project._buildTarget="iOS"; "iOS"; "Android"))
 			$data.path:=$data.appFolder.platformPath
 			
 		Else 
@@ -103,22 +96,17 @@ If (Asserted:C1132($project#Null:C1517))
 					
 					// Check if the project was modified by another application
 					// Compare to the signature of the sources folder
-					//$file:=$path.userCache().file($project._name)
 					$file:=EDITOR.path.userCache().file($project._name)
 					
-					If (FEATURE.with("android"))
+					If ($file.exists)
 						
-						If ($file.exists)
-							
-							// #ASCENDING_COMPATIBILITY
-							$file:=$file.rename($project._name+".ios.fingerprint")
-							
-						Else 
-							
-							//$file:=$path.userCache().file($project._name+".ios.fingerprint")
-							$file:=EDITOR.path.userCache().file($project._name+".ios.fingerprint")
-							
-						End if 
+						// #ASCENDING_COMPATIBILITY
+						$file:=$file.rename($project._name+".ios.fingerprint")
+						
+					Else 
+						
+						$file:=EDITOR.path.userCache().file($project._name+".ios.fingerprint")
+						
 					End if 
 					
 					If ($file.exists)
@@ -135,7 +123,6 @@ If (Asserted:C1132($project#Null:C1517))
 				
 			Else 
 				
-				//$file:=$path.userCache().file($project._name+".android.fingerprint")
 				$file:=EDITOR.path.userCache().file($project._name+".android.fingerprint")
 				
 				//#MARK_TODO

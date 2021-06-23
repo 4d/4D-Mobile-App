@@ -1,4 +1,4 @@
-//%attributes = {}
+//%attributes = {"invisible":true}
 // Refresh displayed panels
 var $panel : Text
 

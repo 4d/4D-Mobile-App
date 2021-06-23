@@ -138,18 +138,9 @@ Case of
 										
 										$c:=Split string:C1554(Form:C1466.url; "/")
 										
-										If (FEATURE.with("android"))
-											
-											var $index : Integer
-											$index:=$c.indexOf("type")
-											Form:C1466.selector:=$c[$index+1]
-											
-										Else 
-											
-											Form:C1466.selector:=$c[$c.length-3]
-											
-										End if 
-										
+										var $index : Integer
+										$index:=$c.indexOf("type")
+										Form:C1466.selector:=$c[$index+1]
 										Form:C1466.form:="/"+$formName
 										
 										CALL SUBFORM CONTAINER:C1086(-1)
@@ -173,43 +164,35 @@ Case of
 								
 							Else 
 								
-								If (FEATURE.with("android"))
-									
-									Case of 
-											
-											//______________________________________________________
-										: (Position:C15("form-list"; $formName)=1)
-											
-											Form:C1466.selector:="form-list"
-											
-											//______________________________________________________
-										: (Position:C15("form-detail"; $formName)=1)
-											
-											Form:C1466.selector:="form-detail"
-											
-											//______________________________________________________
-										: (Position:C15("form-formatter"; $formName)=1)
-											
-											Form:C1466.selector:="form-formatter"
-											
-											//______________________________________________________
-										: (Position:C15("form-login"; $formName)=1)
-											
-											Form:C1466.selector:="form-login"
-											
-											//______________________________________________________
-										Else 
-											
-											RECORD.warning("Unknown resource: "+$formName)
-											
-											//______________________________________________________
-									End case 
-									
-								Else 
-									
-									Form:C1466.selector:=$c[$c.length-3]
-									
-								End if 
+								Case of 
+										
+										//______________________________________________________
+									: (Position:C15("form-list"; $formName)=1)
+										
+										Form:C1466.selector:="form-list"
+										
+										//______________________________________________________
+									: (Position:C15("form-detail"; $formName)=1)
+										
+										Form:C1466.selector:="form-detail"
+										
+										//______________________________________________________
+									: (Position:C15("form-formatter"; $formName)=1)
+										
+										Form:C1466.selector:="form-formatter"
+										
+										//______________________________________________________
+									: (Position:C15("form-login"; $formName)=1)
+										
+										Form:C1466.selector:="form-login"
+										
+										//______________________________________________________
+									Else 
+										
+										RECORD.warning("Unknown resource: "+$formName)
+										
+										//______________________________________________________
+								End case 
 								
 								Form:C1466.form:="/"+$formName
 								

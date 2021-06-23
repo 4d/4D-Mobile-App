@@ -209,13 +209,10 @@ Case of
 				// Display the tab page
 				FORM GOTO PAGE:C247($button; *)
 				
-				If (FEATURE.with("android"))  // 🚧
+				If ($button=1)
 					
-					If ($button=1)
-						
-						CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "refresh")
-						
-					End if 
+					CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "refresh")
+					
 				End if 
 				
 				//……………………………………………………………………………………………………………………

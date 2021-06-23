@@ -112,78 +112,64 @@ Function prepare($icon : Picture)
 	$iosFolder:=This:C1470._folder.folder("Assets.xcassets/AppIcon.appiconset")
 	$AndroidFolder:=This:C1470._folder.folder("Android")
 	
-	If (FEATURE.with("android"))
+	If (Count parameters:C259>=1)
 		
-		If (Count parameters:C259>=1)
-			
-			$iconƒ:=$icon
-			
-		Else 
-			
-			If ($AndroidFolder.file("main/ic_launcher-playstore.png").exists)
-				
-				// Get the picture as default
-				READ PICTURE FILE:C678($AndroidFolder.file("main/ic_launcher-playstore.png").platformPath; $iconƒ)
-				
-				// ⚠️ the picture size is 512x512 instead of 1024x1024
-				TRANSFORM PICTURE:C988($iconƒ; Scale:K61:2; 2; 2)
-				
-			End if 
-		End if 
+		$iconƒ:=$icon
 		
-		If (Picture size:C356($iconƒ)=0)
+	Else 
+		
+		If ($AndroidFolder.file("main/ic_launcher-playstore.png").exists)
 			
-			// Get the default icon
-			READ PICTURE FILE:C678(File:C1566("/RESOURCES/Images/4d.png").platformPath; $iconƒ)
+			// Get the picture as default
+			READ PICTURE FILE:C678($AndroidFolder.file("main/ic_launcher-playstore.png").platformPath; $iconƒ)
+			
+			// ⚠️ the picture size is 512x512 instead of 1024x1024
+			TRANSFORM PICTURE:C988($iconƒ; Scale:K61:2; 2; 2)
 			
 		End if 
+	End if 
+	
+	If (Picture size:C356($iconƒ)=0)
 		
-		If (This:C1470.$ios) | (Is macOS:C1572 & Not:C34(This:C1470.$android))  // On macOS default is iOS
+		// Get the default icon
+		READ PICTURE FILE:C678(File:C1566("/RESOURCES/Images/4d.png").platformPath; $iconƒ)
+		
+	End if 
+	
+	If (This:C1470.$ios) | (Is macOS:C1572 & Not:C34(This:C1470.$android))  // On macOS default is iOS
+		
+		If (Not:C34($iosFolder.exists))  // Create & populate
 			
-			If (Not:C34($iosFolder.exists))  // Create & populate
-				
-				This:C1470.AppIconSet($iconƒ)
-				
-			End if 
-			
-			// Keep the picture for Android
-			READ PICTURE FILE:C678($iosFolder.file("ios-marketing1024.png").platformPath; $iconƒ)
-			
-		Else 
-			
-			If ($iosFolder.exists)  // Delete
-				
-				$iosFolder.parent.delete(Delete with contents:K24:24)
-				
-			End if 
+			This:C1470.AppIconSet($iconƒ)
 			
 		End if 
 		
-		If (This:C1470.$android)
+		// Keep the picture for Android
+		READ PICTURE FILE:C678($iosFolder.file("ios-marketing1024.png").platformPath; $iconƒ)
+		
+	Else 
+		
+		If ($iosFolder.exists)  // Delete
 			
-			If (Not:C34($AndroidFolder.exists))  // Create & populate
-				
-				This:C1470.AndroidIconSet($iconƒ)
-				
-			End if 
+			$iosFolder.parent.delete(Delete with contents:K24:24)
 			
-		Else 
+		End if 
+		
+	End if 
+	
+	If (This:C1470.$android)
+		
+		If (Not:C34($AndroidFolder.exists))  // Create & populate
 			
-			If ($AndroidFolder.exists)  // Delete
-				
-				$AndroidFolder.delete(Delete with contents:K24:24)
-				
-			End if 
+			This:C1470.AndroidIconSet($iconƒ)
+			
 		End if 
 		
 	Else 
 		
-		If (Not:C34($iosFolder.exists))
+		If ($AndroidFolder.exists)  // Delete
 			
-			// Get the default icon
-			READ PICTURE FILE:C678(File:C1566("/RESOURCES/Images/4d.png").platformPath; $iconƒ)
-			
-			This:C1470.AppIconSet($iconƒ)
+			$AndroidFolder.delete(Delete with contents:K24:24)
 			
 		End if 
 	End if 
@@ -889,11 +875,6 @@ Function getCatalog
 	var $0 : Collection
 	
 	Case of 
-			
-			//____________________________________
-			//: (FEATURE.with("android"))
-			
-			//$0:=Form.$catalog
 			
 			//____________________________________
 		: (This:C1470.$project#Null:C1517)

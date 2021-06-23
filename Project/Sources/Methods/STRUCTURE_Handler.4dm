@@ -133,11 +133,7 @@ Case of
 				editor_ui_LISTBOX($form.tableList)
 				editor_ui_LISTBOX($form.fieldList)
 				
-				If (FEATURE.with("android"))
-					
-					tempoDatamodelWith1toNRelation($context.currentTable)
-					
-				End if 
+				tempoDatamodelWith1toNRelation($context.currentTable)
 				
 				//______________________________________________________
 		End case 
@@ -316,17 +312,8 @@ Case of
 		//=========================================================
 	: ($IN.action="appendField")
 		
-		//If (FEATURE.with("android"))
-		
-		//var $dataModel : Object
-		//$dataModel:=PROJECT.dataModel
-		
-		//Else 
-		
 		var $dataModel : Object
 		$dataModel:=Form:C1466.dataModel
-		
-		//End if 
 		
 		var $dataModel : Object
 		$dataModel:=PROJECT.dataModel

@@ -21,19 +21,18 @@ Case of
 		//______________________________________________________
 	: (Is macOS:C1572)
 		
-		If (FEATURE.with("android"))  // 🚧
-			
-			$studio:=$in.studio
-			$xcode:=$in.xCode
-			
-			$android:=Bool:C1537($in.android)
-			$ios:=Bool:C1537($in.ios)
+		$xcode:=$in.xCode
+		$studio:=$in.studio
+		
+		$android:=Bool:C1537($in.android)
+		$ios:=Bool:C1537($in.ios)
+		
+		If (FEATURE.with("android"))
 			
 			If (Not:C34(Bool:C1537($studio.ready)))\
 				 & (Not:C34(Bool:C1537($studio.canceled)))
 				
-				// Silent mode if not Android target
-				$in.silent:=Not:C34($android)
+				$in.silent:=Not:C34($android)  // Silent mode if not Android target
 				$studio:=studioCheckInstall($in)
 				
 			End if 
@@ -59,19 +58,28 @@ Case of
 				
 			End if 
 			
-			If (Not:C34(Bool:C1537($xcode.ready))) & (Not:C34(Bool:C1537($xcode.alreadyNotified)))
-				
-				If (Not:C34(Bool:C1537($xcode.canceled)))
-					
-					$in.silent:=Not:C34($ios)
-					$xcode:=Xcode_CheckInstall($in)
-					
-				End if 
-			End if 
+		Else 
 			
-			If ($xcode.ready)
+			$studio:=New object:C1471("ready"; False:C215)
+			
+		End if 
+		
+		If (Not:C34(Bool:C1537($xcode.ready)))\
+			 & (Not:C34(Bool:C1537($xcode.alreadyNotified)))
+			
+			If (Not:C34(Bool:C1537($xcode.canceled)))
 				
-				If ($ios)
+				$in.silent:=Not:C34($ios)  // Silent mode if not iOS target
+				$xcode:=Xcode_CheckInstall($in)
+				
+			End if 
+		End if 
+		
+		If ($xcode.ready)
+			
+			If ($ios)
+				
+				If (FEATURE.with("iosSDKfromAWS"))
 					
 					$fileManifest:=cs:C1710.path.new().cacheSdkApple().parent.file("manifest.json")
 					
@@ -83,22 +91,17 @@ Case of
 						
 					End if 
 				End if 
-				
-			Else 
-				
-				$xcode.canceled:=Bool:C1537($xcode.canceled)
-				
 			End if 
-			
-			$out:=New object:C1471(\
-				"xCode"; $xcode; \
-				"studio"; $studio)
 			
 		Else 
 			
-			$out:=Xcode_CheckInstall($in)
+			$xcode.canceled:=Bool:C1537($xcode.canceled)
 			
 		End if 
+		
+		$out:=New object:C1471(\
+			"xCode"; $xcode; \
+			"studio"; $studio)
 		
 		//______________________________________________________
 	: (Is Windows:C1573)

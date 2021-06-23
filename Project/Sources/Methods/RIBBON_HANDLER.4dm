@@ -57,15 +57,7 @@ If (True:C214)
 	
 	$form.sectionButtons:=cs:C1710.group.new("101,102,107,108,103,104,105,106")
 	
-	If (FEATURE.with("android"))  //🚧
-		
-		$form.buildButtons:=cs:C1710.group.new("201,151,152,153")
-		
-	Else 
-		
-		$form.buildButtons:=cs:C1710.group.new("151,201,152,153")
-		
-	End if 
+	$form.buildButtons:=cs:C1710.group.new("201,151,152,153")
 	
 	$constraints:=New object:C1471(\
 		"start"; 16/* left margin */; \
@@ -111,100 +103,96 @@ Case of
 		$form.buildButtons.distributeLeftToRight($constraints)
 		
 		// * BUILD & INSTALL BUTTON ACTIVATION
-		If (FEATURE.with("android"))  //🚧
-			
-			Case of 
+		Case of 
+				
+				//______________________________________________________
+			: (Bool:C1537(EDITOR.android)) & (Bool:C1537(EDITOR.ios))
+				
+				If (EDITOR.xCode#Null:C1517)
 					
-					//______________________________________________________
-				: (Bool:C1537(EDITOR.android)) & (Bool:C1537(EDITOR.ios))
+					$isDevToolAvailable:=Bool:C1537(EDITOR.xCode.ready)
 					
-					If (EDITOR.xCode#Null:C1517)
-						
-						$isDevToolAvailable:=Bool:C1537(EDITOR.xCode.ready)
-						
-					End if 
-					
-					If (Not:C34($isDevToolAvailable))
-						
-						If (EDITOR.studio#Null:C1517)
-							
-							$isDevToolAvailable:=Bool:C1537(EDITOR.studio.ready)
-							
-						End if 
-					End if 
-					
-					$isDeviceSelected:=(EDITOR.currentDevice#Null:C1517)
-					$isSdkAvailable:=cs:C1710.path.new().cacheSdkAndroidUnzipped().exists
-					
-					//______________________________________________________
-				: (Bool:C1537(EDITOR.ios))
-					
-					If (EDITOR.xCode#Null:C1517)
-						
-						$isDevToolAvailable:=Bool:C1537(EDITOR.xCode.ready)
-						
-					End if 
-					
-					If (EDITOR.currentDevice#Null:C1517)
-						
-						$isDeviceSelected:=EDITOR.devices.apple.copy().combine(EDITOR.devices.plugged.apple).query("udid = :1"; EDITOR.currentDevice).pop()#Null:C1517
-						
-					End if 
-					
-					$isSdkAvailable:=True:C214
-					
-					//______________________________________________________
-				: (Bool:C1537(EDITOR.android))
+				End if 
+				
+				If (Not:C34($isDevToolAvailable))
 					
 					If (EDITOR.studio#Null:C1517)
 						
 						$isDevToolAvailable:=Bool:C1537(EDITOR.studio.ready)
 						
 					End if 
+				End if 
+				
+				$isDeviceSelected:=(EDITOR.currentDevice#Null:C1517)
+				$isSdkAvailable:=cs:C1710.path.new().cacheSdkAndroidUnzipped().exists
+				
+				//______________________________________________________
+			: (Bool:C1537(EDITOR.ios))
+				
+				If (EDITOR.xCode#Null:C1517)
 					
-					If (EDITOR.currentDevice#Null:C1517)
-						
-						$isDeviceSelected:=EDITOR.devices.android.copy().combine(EDITOR.devices.plugged.android).query("udid = :1"; EDITOR.currentDevice).pop()#Null:C1517
-						
-					End if 
+					$isDevToolAvailable:=Bool:C1537(EDITOR.xCode.ready)
 					
-					$isSdkAvailable:=cs:C1710.path.new().cacheSdkAndroidUnzipped().exists
+				End if 
+				
+				If (EDITOR.currentDevice#Null:C1517)
 					
-					//______________________________________________________
-			End case 
+					$isDeviceSelected:=EDITOR.devices.apple.copy().combine(EDITOR.devices.plugged.apple).query("udid = :1"; EDITOR.currentDevice).pop()#Null:C1517
+					
+				End if 
+				
+				$isSdkAvailable:=True:C214
+				
+				//______________________________________________________
+			: (Bool:C1537(EDITOR.android))
+				
+				If (EDITOR.studio#Null:C1517)
+					
+					$isDevToolAvailable:=Bool:C1537(EDITOR.studio.ready)
+					
+				End if 
+				
+				If (EDITOR.currentDevice#Null:C1517)
+					
+					$isDeviceSelected:=EDITOR.devices.android.copy().combine(EDITOR.devices.plugged.android).query("udid = :1"; EDITOR.currentDevice).pop()#Null:C1517
+					
+				End if 
+				
+				$isSdkAvailable:=cs:C1710.path.new().cacheSdkAndroidUnzipped().exists
+				
+				//______________________________________________________
+		End case 
+		
+		If (Is macOS:C1572)
 			
-			If (Is macOS:C1572)
-				
-				// True if only android | teamID OK
-				$withTeamID:=Choose:C955(Bool:C1537(EDITOR.ios); Bool:C1537(EDITOR.teamId); True:C214)
-				
-			Else 
-				
-				// No teamID so always true ;-)
-				$withTeamID:=True:C214
-				
-			End if 
+			// True if only android | teamID OK
+			$withTeamID:=Choose:C955(Bool:C1537(EDITOR.ios); Bool:C1537(EDITOR.teamId); True:C214)
 			
-			If (EDITOR.projectAudit#Null:C1517)
-				
-				$isProjectOK:=Bool:C1537(EDITOR.projectAudit.success)
-				
-			End if 
+		Else 
 			
-			If (Not:C34($isDevToolAvailable & $isProjectOK & $isDeviceSelected & $withTeamID & $isSdkAvailable))  //#DEBUG LOG
-				
-				RECORD.warning("project: "+Choose:C955($isProjectOK; "ok"; "NOT READY")\
-					+" - devTools: "+Choose:C955($isDevToolAvailable; "ready"; "NOT READY")\
-					+" - device: "+Choose:C955($isDeviceSelected; "ok"; "NO DEVICE SELECTED")\
-					+" - teamID: "+Choose:C955($withTeamID; "ok"; "NO TEAM SELECTED")\
-					+" - sdk: "+Choose:C955($isSdkAvailable; "ok"; "NO SDK"))
-				
-			End if 
-			
-			$form.build.enable($isDevToolAvailable & $isProjectOK & $isDeviceSelected & $isSdkAvailable)
-			$form.install.enable($isDevToolAvailable & $isProjectOK & $withTeamID & $isDeviceSelected)
+			// No teamID so always true ;-)
+			$withTeamID:=True:C214
 			
 		End if 
+		
+		If (EDITOR.projectAudit#Null:C1517)
+			
+			$isProjectOK:=Bool:C1537(EDITOR.projectAudit.success)
+			
+		End if 
+		
+		If (Not:C34($isDevToolAvailable & $isProjectOK & $isDeviceSelected & $withTeamID & $isSdkAvailable))  //#DEBUG LOG
+			
+			RECORD.warning("project: "+Choose:C955($isProjectOK; "ok"; "NOT READY")\
+				+" - devTools: "+Choose:C955($isDevToolAvailable; "ready"; "NOT READY")\
+				+" - device: "+Choose:C955($isDeviceSelected; "ok"; "NO DEVICE SELECTED")\
+				+" - teamID: "+Choose:C955($withTeamID; "ok"; "NO TEAM SELECTED")\
+				+" - sdk: "+Choose:C955($isSdkAvailable; "ok"; "NO SDK"))
+			
+		End if 
+		
+		$form.build.enable($isDevToolAvailable & $isProjectOK & $isDeviceSelected & $isSdkAvailable)
+		$form.install.enable($isDevToolAvailable & $isProjectOK & $withTeamID & $isDeviceSelected)
 		
 		//______________________________________________________
 	: ($e.code=On Page Change:K2:54)
@@ -225,15 +213,7 @@ Case of
 					//………………………………………………………………………………………
 				: ($currentPage=2)
 					
-					If (FEATURE.with("android"))
-						
-						SET TIMER:C645(-1)  // *UPDATE UI
-						
-					Else 
-						
-						$form.buildButtons.distributeLeftToRight($constraints)
-						
-					End if 
+					// <NOTHING MORE TO DO>
 					
 					//………………………………………………………………………………………
 			End case 
@@ -266,115 +246,139 @@ Case of
 		If (EDITOR.devices#Null:C1517) & (EDITOR.ios#Null:C1517) & (EDITOR.android#Null:C1517)
 			
 			// * UPDATE DEVICE BUTTON
-			If (FEATURE.with("android"))  //🚧
-				
-				$form.simulator.enable(EDITOR.taskNotInProgress("getDevices"))
-				
-				Case of   //#DEBUG LOG
-						
-						//______________________________________________________
-					: (Is Windows:C1573)
-						
-						If (EDITOR.devices.android.length=0)
-							
-							RECORD.warning("NO ANDROID SIMULATOR AVAILABLE")
-							
-						End if 
-						
-						//______________________________________________________
-					: (EDITOR.ios) & Not:C34(EDITOR.android) & (EDITOR.devices.apple.length=0)
-						
-						RECORD.warning("NO IOS SIMULATOR AVAILABLE")
-						
-						//______________________________________________________
-					: (EDITOR.ios) & (EDITOR.android)
-						
-						If (EDITOR.devices.apple.length=0)\
-							 & (EDITOR.devices.android.length=0)
-							
-							RECORD.warning("NO SIMULATOR AVAILABLE")
-							
-						Else 
-							
-							If (EDITOR.devices.apple.length=0)
-								
-								RECORD.warning("NO IOS SIMULATOR AVAILABLE")
-								
-							Else 
-								
-								If (EDITOR.devices.android.length=0)
-									
-									RECORD.warning("NO ANDROID SIMULATOR AVAILABLE")
-									
-								End if 
-							End if 
-						End if 
-						
-						//______________________________________________________
-					: (EDITOR.android) & (EDITOR.devices.android.length=0)
+			$form.simulator.enable(EDITOR.taskNotInProgress("getDevices"))
+			
+			Case of   //#DEBUG LOG
+					
+					//______________________________________________________
+				: (Is Windows:C1573)
+					
+					If (EDITOR.devices.android.length=0)
 						
 						RECORD.warning("NO ANDROID SIMULATOR AVAILABLE")
 						
-						//______________________________________________________
-				End case 
-				
-				Case of   // * GET THE LAST SIMULATOR USED, IF KNOWN
-						//______________________________________________________
-					: (EDITOR.ios & EDITOR.android)
-						
-						$lastDevice:=String:C10(EDITOR.preferences.get("lastDevice"))
-						
-						//______________________________________________________
-					: (EDITOR.ios)
-						
-						$lastDevice:=String:C10(EDITOR.preferences.get("lastIosDevice"))
-						
-						//______________________________________________________
-					: (EDITOR.android)
-						
-						$lastDevice:=String:C10(EDITOR.preferences.get("lastAndroidDevice"))
-						
-						//______________________________________________________
-				End case 
-				
-				If (Length:C16($lastDevice)=0)  // * GET A DEFAULT IOS DEVICE
-					
-					
-					If (Is macOS:C1572)\
-						 & (EDITOR.ios)\
-						 & (EDITOR.devices.apple.length>0)
-						
-						$lastDevice:=String:C10(cs:C1710.simctl.new(SHARED.iosDeploymentTarget).defaultDevice().udid)
-						
 					End if 
+					
+					//______________________________________________________
+				: (EDITOR.ios) & Not:C34(EDITOR.android) & (EDITOR.devices.apple.length=0)
+					
+					RECORD.warning("NO IOS SIMULATOR AVAILABLE")
+					
+					//______________________________________________________
+				: (EDITOR.ios) & (EDITOR.android)
+					
+					If (EDITOR.devices.apple.length=0)\
+						 & (EDITOR.devices.android.length=0)
+						
+						RECORD.warning("NO SIMULATOR AVAILABLE")
+						
+					Else 
+						
+						If (EDITOR.devices.apple.length=0)
+							
+							RECORD.warning("NO IOS SIMULATOR AVAILABLE")
+							
+						Else 
+							
+							If (EDITOR.devices.android.length=0)
+								
+								RECORD.warning("NO ANDROID SIMULATOR AVAILABLE")
+								
+							End if 
+						End if 
+					End if 
+					
+					//______________________________________________________
+				: (EDITOR.android) & (EDITOR.devices.android.length=0)
+					
+					RECORD.warning("NO ANDROID SIMULATOR AVAILABLE")
+					
+					//______________________________________________________
+			End case 
+			
+			Case of   // * GET THE LAST SIMULATOR USED, IF KNOWN
+					//______________________________________________________
+				: (EDITOR.ios & EDITOR.android)
+					
+					$lastDevice:=String:C10(EDITOR.preferences.get("lastDevice"))
+					
+					//______________________________________________________
+				: (EDITOR.ios)
+					
+					$lastDevice:=String:C10(EDITOR.preferences.get("lastIosDevice"))
+					
+					//______________________________________________________
+				: (EDITOR.android)
+					
+					$lastDevice:=String:C10(EDITOR.preferences.get("lastAndroidDevice"))
+					
+					//______________________________________________________
+			End case 
+			
+			If (Length:C16($lastDevice)=0)  // * GET A DEFAULT IOS DEVICE
+				
+				
+				If (Is macOS:C1572)\
+					 & (EDITOR.ios)\
+					 & (EDITOR.devices.apple.length>0)
+					
+					$lastDevice:=String:C10(cs:C1710.simctl.new(SHARED.iosDeploymentTarget).defaultDevice().udid)
+					
+				End if 
+			End if 
+			
+			If (Length:C16($lastDevice)=0)  // * GET A DEFAULT ANDROID DEVICE
+				
+				If (EDITOR.devices.android.length>0)
+					
+					// Select the first one
+					$lastDevice:=EDITOR.devices.android[0].udid
+					
+				End if 
+			End if 
+			
+			If (Length:C16($lastDevice)>0)
+				
+				If (EDITOR.devices.apple#Null:C1517)\
+					 & (EDITOR.devices.plugged.apple#Null:C1517)
+					
+					$device:=EDITOR.devices.apple.copy().combine(EDITOR.devices.plugged.apple).query("udid = :1"; $lastDevice).pop()
+					
 				End if 
 				
-				If (Length:C16($lastDevice)=0)  // * GET A DEFAULT ANDROID DEVICE
+				If ($device#Null:C1517)
 					
-					If (EDITOR.devices.android.length>0)
+					If (EDITOR.ios)
 						
-						// Select the first one
-						$lastDevice:=EDITOR.devices.android[0].udid
+						$form.simulator.setTitle($device.name)
+						EDITOR.currentDevice:=$lastDevice
+						PROJECT._buildTarget:="ios"
+						PROJECT._simulator:=$device.udid
+						
+					Else 
+						
+						$form.simulator.setTitle("select").setColors(EDITOR.errorRGB)
+						OB REMOVE:C1226(PROJECT; "_buildTarget")
+						OB REMOVE:C1226(PROJECT; "_simulator")
 						
 					End if 
-				End if 
-				
-				If (Length:C16($lastDevice)>0)
 					
-					If (EDITOR.devices.apple#Null:C1517)\
-						 & (EDITOR.devices.plugged.apple#Null:C1517)
+				Else 
+					
+					If (EDITOR.devices.android#Null:C1517)\
+						 & (EDITOR.devices.plugged.android#Null:C1517)
 						
-						$device:=EDITOR.devices.apple.copy().combine(EDITOR.devices.plugged.apple).query("udid = :1"; $lastDevice).pop()
+						$device:=EDITOR.devices.android.copy().combine(EDITOR.devices.plugged.android).query("udid = :1"; $lastDevice).pop()
 						
 					End if 
 					
 					If ($device#Null:C1517)
 						
-						If (EDITOR.ios)
+						If (EDITOR.android)
 							
 							$form.simulator.setTitle($device.name)
 							EDITOR.currentDevice:=$lastDevice
-							PROJECT._buildTarget:="ios"
+							PROJECT._buildTarget:="android"
 							PROJECT._simulator:=$device.udid
 							
 						Else 
@@ -387,101 +391,22 @@ Case of
 						
 					Else 
 						
-						If (EDITOR.devices.android#Null:C1517)\
-							 & (EDITOR.devices.plugged.android#Null:C1517)
-							
-							$device:=EDITOR.devices.android.copy().combine(EDITOR.devices.plugged.android).query("udid = :1"; $lastDevice).pop()
-							
-						End if 
+						$form.simulator.setTitle("unknown")
+						OB REMOVE:C1226(PROJECT; "_buildTarget")
+						OB REMOVE:C1226(PROJECT; "_simulator")
 						
-						If ($device#Null:C1517)
-							
-							If (EDITOR.android)
-								
-								$form.simulator.setTitle($device.name)
-								EDITOR.currentDevice:=$lastDevice
-								PROJECT._buildTarget:="android"
-								PROJECT._simulator:=$device.udid
-								
-							Else 
-								
-								$form.simulator.setTitle("select").setColors(EDITOR.errorRGB)
-								OB REMOVE:C1226(PROJECT; "_buildTarget")
-								OB REMOVE:C1226(PROJECT; "_simulator")
-								
-							End if 
-							
-						Else 
-							
-							$form.simulator.setTitle("unknown")
-							OB REMOVE:C1226(PROJECT; "_buildTarget")
-							OB REMOVE:C1226(PROJECT; "_simulator")
-							
-						End if 
 					End if 
-					
-				Else 
-					
-					$form.simulator.setTitle("unknown")
-					OB REMOVE:C1226(PROJECT; "_buildTarget")
-					OB REMOVE:C1226(PROJECT; "_simulator")
-					
 				End if 
-				
-				SET TIMER:C645(-1)
 				
 			Else 
 				
-				If (EDITOR.devices.length>0)
-					
-					$form.simulator.enable()
-					
-					// Get the default simulator
-					$plist:=cs:C1710.path.new().userlibrary().file("Preferences/com.apple.iphonesimulator.plist")
-					
-					If (Not:C34($plist.exists))
-						
-						_o_simulator(New object:C1471(\
-							"action"; "fixdefault"))
-						
-					End if 
-					
-					If ($plist.exists)
-						
-						$plist:=_o_plist(New object:C1471(\
-							"action"; "object"; \
-							"domain"; $plist.path))
-						
-						If ($plist.success)
-							
-							// Keep the current device identifier
-							EDITOR.currentDevice:=$plist.value.currentDevice
-							
-							// Display the current device name
-							$device:=EDITOR.devices.query("udid = :1"; EDITOR.currentDevice).pop()
-							
-							If ($device=Null:C1517)
-								
-								_o_simulator(New object:C1471(\
-									"action"; "getdefault"))
-								
-								$device:=EDITOR.devices.query("udid = :1"; EDITOR.currentDevice).pop()
-								
-							End if 
-							
-							If ($device=Null:C1517)
-								
-								$form.simulator.setTitle("unknown")
-								
-							Else 
-								
-								$form.simulator.setTitle($device.name)
-								
-							End if 
-						End if 
-					End if 
-				End if 
+				$form.simulator.setTitle("unknown")
+				OB REMOVE:C1226(PROJECT; "_buildTarget")
+				OB REMOVE:C1226(PROJECT; "_simulator")
+				
 			End if 
+			
+			SET TIMER:C645(-1)  // *UPDATE UI
 			
 		Else 
 			
@@ -490,17 +415,7 @@ Case of
 			
 		End if 
 		
-		If (FEATURE.with("android"))  //🚧
-			
-			SET TIMER:C645(-1)  // *UPDATE UI
-			
-		Else 
-			
-			$o:=PROJECT.$project
-			$form.build.enable(Bool:C1537($o.structure.dataModel) & Bool:C1537($o.xCode.ready) & Bool:C1537($o.status.project))
-			$form.install.enable(Bool:C1537($o.structure.dataModel) & Bool:C1537($o.xCode.ready) & Bool:C1537($o.status.project) & Bool:C1537($o.status.teamId))
-			
-		End if 
+		SET TIMER:C645(-1)  // *UPDATE UI
 		
 		//______________________________________________________
 	Else 

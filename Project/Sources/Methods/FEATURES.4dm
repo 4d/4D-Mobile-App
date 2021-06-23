@@ -50,41 +50,38 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 				
 			End if 
 			
-			If (FEATURE.with("android"))
-				
-				Case of 
-						
-						//______________________________________________________
-					: (Bool:C1537(Form:C1466.server.pushNotification))\
-						 & (Bool:C1537(Form:C1466.deepLinking.enabled))
-						
-						androidLimitations(False:C215; "Push notifications and Deep Linking are coming soon for Android")
-						
-						//______________________________________________________
-					: (Bool:C1537(Form:C1466.server.pushNotification))
-						
-						androidLimitations(False:C215; "Push notifications is coming soon for Android")
-						
-						//______________________________________________________
-					: (Bool:C1537(Form:C1466.deepLinking.enabled))
-						
-						androidLimitations(False:C215; "Deep Linking is coming soon for Android")
-						
-						//______________________________________________________
-					Else 
-						
-						androidLimitations(False:C215; "Push notifications and Deep Linking are coming soon for Android")
-						
-						//______________________________________________________
-				End case 
-				
-				$ƒ.pushNotification.enable(Is macOS:C1572 & PROJECT.$ios)
-				$ƒ.certificateGroup.enable(Is macOS:C1572 & PROJECT.$ios)
-				$ƒ.certificate.picker.browse:=(Is macOS:C1572 & PROJECT.$ios)
-				$ƒ.deepLinking.enable(Is macOS:C1572 & PROJECT.$ios)
-				$ƒ.deepLinkingGroup.enable(Is macOS:C1572 & PROJECT.$ios)
-				
-			End if 
+			Case of 
+					
+					//______________________________________________________
+				: (Bool:C1537(Form:C1466.server.pushNotification))\
+					 & (Bool:C1537(Form:C1466.deepLinking.enabled))
+					
+					androidLimitations(False:C215; "Push notifications and Deep Linking are coming soon for Android")
+					
+					//______________________________________________________
+				: (Bool:C1537(Form:C1466.server.pushNotification))
+					
+					androidLimitations(False:C215; "Push notifications is coming soon for Android")
+					
+					//______________________________________________________
+				: (Bool:C1537(Form:C1466.deepLinking.enabled))
+					
+					androidLimitations(False:C215; "Deep Linking is coming soon for Android")
+					
+					//______________________________________________________
+				Else 
+					
+					androidLimitations(False:C215; "Push notifications and Deep Linking are coming soon for Android")
+					
+					//______________________________________________________
+			End case 
+			
+			$ƒ.pushNotification.enable(Is macOS:C1572 & PROJECT.$ios)
+			$ƒ.certificateGroup.enable(Is macOS:C1572 & PROJECT.$ios)
+			$ƒ.certificate.picker.browse:=(Is macOS:C1572 & PROJECT.$ios)
+			$ƒ.deepLinking.enable(Is macOS:C1572 & PROJECT.$ios)
+			$ƒ.deepLinkingGroup.enable(Is macOS:C1572 & PROJECT.$ios)
+			
 			
 			//______________________________________________
 	End case 

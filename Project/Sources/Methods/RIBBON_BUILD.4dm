@@ -25,56 +25,54 @@ Case of
 			
 		Else 
 			
-			If (PROJECT._buildTarget#Null:C1517)
-				
-				Case of 
-						//______________________________________________________
-					: ((PROJECT._buildTarget="ios") & Bool:C1537(Not:C34(Bool:C1537(EDITOR.xCode.ready))))
-						
-						SET DATABASE PARAMETER:C642(Tips enabled:K37:79; 1)
-						SET DATABASE PARAMETER:C642(Tips delay:K37:80; 1)
-						OBJECT SET HELP TIP:C1181(*; $e.objectName; ".Xcode is not ready")
-						
-						//______________________________________________________
-					: (False:C215)
-						
-						
-						
-						//______________________________________________________
-					Else 
-						
-						// A "Case of" statement should never omit "Else"
-						
-						//______________________________________________________
-				End case 
-				
-			Else 
-				
-				
-				Case of 
-						//______________________________________________________
-					: (PROJECT.$ios & Bool:C1537(Not:C34(Bool:C1537(EDITOR.xCode.ready))))
-						
-						SET DATABASE PARAMETER:C642(Tips enabled:K37:79; 1)
-						SET DATABASE PARAMETER:C642(Tips delay:K37:80; 1)
-						OBJECT SET HELP TIP:C1181(*; $e.objectName; ".Xcode is not ready")
-						
-						//______________________________________________________
-					: (PROJECT.$android & Bool:C1537(Not:C34(Bool:C1537(EDITOR.studio.ready))))
-						
-						SET DATABASE PARAMETER:C642(Tips enabled:K37:79; 1)
-						SET DATABASE PARAMETER:C642(Tips delay:K37:80; 1)
-						OBJECT SET HELP TIP:C1181(*; $e.objectName; ".Android studio is not ready")
-						
-						//______________________________________________________
-					Else 
-						
-						// A "Case of" statement should never omit "Else"
-						
-						//______________________________________________________
-				End case 
-				
-			End if 
+/*
+If (PROJECT._buildTarget#Null)
+			
+Case of 
+			
+//______________________________________________________
+: ((PROJECT._buildTarget="ios") & Bool(Not(Bool(EDITOR.xCode.ready))))
+			
+SET DATABASE PARAMETER(Tips enabled; 1)
+SET DATABASE PARAMETER(Tips delay; 1)
+OBJECT SET HELP TIP(*; $e.objectName; ".Xcode is not ready")
+			
+//______________________________________________________
+: (False)
+			
+//______________________________________________________
+Else 
+			
+// A "Case of" statement should never omit "Else"
+//______________________________________________________
+End case 
+			
+Else 
+			
+Case of 
+			
+//______________________________________________________
+: (PROJECT.$ios & Bool(Not(Bool(EDITOR.xCode.ready))))
+			
+SET DATABASE PARAMETER(Tips enabled; 1)
+SET DATABASE PARAMETER(Tips delay; 1)
+OBJECT SET HELP TIP(*; $e.objectName; ".Xcode is not ready")
+			
+//______________________________________________________
+: (PROJECT.$android & Bool(Not(Bool(EDITOR.studio.ready))))
+			
+SET DATABASE PARAMETER(Tips enabled; 1)
+SET DATABASE PARAMETER(Tips delay; 1)
+OBJECT SET HELP TIP(*; $e.objectName; ".Android studio is not ready")
+			
+//______________________________________________________
+Else 
+			
+// A "Case of" statement should never omit "Else"
+//______________________________________________________
+End case 
+End if 
+*/
 			
 		End if 
 		
@@ -90,25 +88,18 @@ Case of
 		// Autosave
 		PROJECT.save()
 		
-		If (FEATURE.with("android"))
+		If (PROJECT._simulator#Null:C1517)\
+			 & (PROJECT._buildTarget#Null:C1517)
 			
-			If (PROJECT._simulator#Null:C1517) & (PROJECT._buildTarget#Null:C1517)
-				
-				CALL SUBFORM CONTAINER:C1086(-151)
-				
-			Else 
-				
-				POST_MESSAGE(New object:C1471(\
-					"target"; Form:C1466.editor.$mainWindow; \
-					"action"; "show"; \
-					"type"; "alert"; \
-					"title"; "youMustFirstSelectASimulator"))
-				
-			End if 
+			CALL SUBFORM CONTAINER:C1086(-151)
 			
 		Else 
 			
-			CALL SUBFORM CONTAINER:C1086(-151)
+			POST_MESSAGE(New object:C1471(\
+				"target"; Form:C1466.editor.$mainWindow; \
+				"action"; "show"; \
+				"type"; "alert"; \
+				"title"; "youMustFirstSelectASimulator"))
 			
 		End if 
 		

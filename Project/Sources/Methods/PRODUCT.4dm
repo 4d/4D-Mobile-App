@@ -87,17 +87,7 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 		: ($e.code=On Timer:K2:25)
 			
 			$ƒ.checkName(Form:C1466.product.name)
-			
-			If (FEATURE.with("android"))
-				
-				$ƒ.displayIcon()
-				
-			Else 
-				
-				// Obsolete
-				$ƒ.loadIcon()
-				
-			End if 
+			$ƒ.displayIcon()
 			
 			If (FEATURE.with("dominantColor"))
 				

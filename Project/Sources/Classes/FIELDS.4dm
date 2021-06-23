@@ -447,17 +447,14 @@ Function updateFieldList
 	
 	editor_ui_LISTBOX(This:C1470.fieldList.name)
 	
-	If (FEATURE.with("android"))
+	If (Num:C11(This:C1470.tabSelector.data)=1)  // Relations
 		
-		If (Num:C11(This:C1470.tabSelector.data)=1)  // Relations
-			
-			tempoDatamodelWith1toNRelation(This:C1470.tableNumber)
-			
-		Else 
-			
-			androidLimitations(False:C215; "")
-			
-		End if 
+		tempoDatamodelWith1toNRelation(This:C1470.tableNumber)
+		
+	Else 
+		
+		androidLimitations(False:C215; "")
+		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 

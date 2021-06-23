@@ -383,44 +383,42 @@ Function setTemplate($browser : Object)
 			Else 
 				
 				// * SHOW BROWSER
-				If (FEATURE.with("android"))
+				//If (FEATURE.with("android"))
+				
+				$url:="https://4d-go-mobile.github.io/gallery/"
+				
+				If (FEATURE.with("devGallery"))
 					
-					$url:="https://4d-go-mobile.github.io/gallery/"
-					
-					If (FEATURE.with("devGallery"))
-						
-						$url:="http://localhost:8080/"
-						
-					End if 
-					
-					Case of 
-							//______________________________________________________
-						: (PROJECT.$android & PROJECT.$ios)
-							
-							$url:=$url+"#/type/form-"+This:C1470.typeForm()+"/picker/1/target/ios,android"
-							
-							//______________________________________________________
-						: (PROJECT.$android)
-							
-							$url:=$url+"#/type/form-"+This:C1470.typeForm()+"/picker/1/target/android"
-							
-							//______________________________________________________
-						: (PROJECT.$ios)
-							
-							$url:=$url+"#/type/form-"+This:C1470.typeForm()+"/picker/1/target/ios"
-							
-							//______________________________________________________
-					End case 
-					
-					$o:=New object:C1471(\
-						"url"; $url)
-					
-				Else 
-					
-					$o:=New object:C1471(\
-						"url"; Get localized string:C991("res_"+This:C1470.typeForm()+"Forms"))
+					$url:="http://localhost:8080/"
 					
 				End if 
+				
+				Case of 
+						//______________________________________________________
+					: (PROJECT.$android & PROJECT.$ios)
+						
+						$url:=$url+"#/type/form-"+This:C1470.typeForm()+"/picker/1/target/ios,android"
+						
+						//______________________________________________________
+					: (PROJECT.$android)
+						
+						$url:=$url+"#/type/form-"+This:C1470.typeForm()+"/picker/1/target/android"
+						
+						//______________________________________________________
+					: (PROJECT.$ios)
+						
+						$url:=$url+"#/type/form-"+This:C1470.typeForm()+"/picker/1/target/ios"
+						
+						//______________________________________________________
+				End case 
+				
+				$o:=New object:C1471(\
+					"url"; $url)
+				
+				//Else 
+				//$o:=New object(\
+					"url"; Get localized string("res_"+This.typeForm()+"Forms"))
+				//End if 
 				
 				This:C1470.form.form.call(New collection:C1472("initBrowser"; $o))
 				

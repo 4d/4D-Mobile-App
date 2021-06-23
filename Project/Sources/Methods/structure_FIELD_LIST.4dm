@@ -45,17 +45,8 @@ $Ptr_fields:=UI.pointer($form.fields)
 $Ptr_icons:=UI.pointer($form.icons)
 $Ptr_published:=UI.pointer($form.published)
 
-//If (FEATURE.with("android"))
-
-//var $dataModel : Object
-//$dataModel:=PROJECT.dataModel
-
-//Else 
-
 var $dataModel : Object
 $dataModel:=Form:C1466.dataModel
-
-//End if 
 
 // Keep the selected field to restore the selection if necessary
 $selectedItems:=New collection:C1472
@@ -314,11 +305,7 @@ If ($row>0)
 	End if 
 End if 
 
-If (FEATURE.with("android"))
-	
-	tempoDatamodelWith1toNRelation($context.currentTable)
-	
-End if 
+tempoDatamodelWith1toNRelation($context.currentTable)
 
 // Disable field publication if the table is missing
 OBJECT SET ENTERABLE:C238($Ptr_published->; Not:C34(editor_Locked))

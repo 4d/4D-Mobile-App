@@ -71,30 +71,22 @@ Function iconMenu()
 	$menu.append("browse"; "browseIcon")
 	$menu.line()
 	
-	If (FEATURE.with("android"))  //🚧
+	If (Is macOS:C1572)
 		
-		If (Is macOS:C1572)
+		If (Value type:C1509(Form:C1466.info.target)=Is collection:K8:32)
 			
-			If (Value type:C1509(Form:C1466.info.target)=Is collection:K8:32)
-				
-				$menu.append("showiOSIconsFolder"; "openAppleIconFolder")
-				$menu.append("showAndroidIconsFolder"; "openAndroidIconFolder")
-				
-			Else 
-				
-				$menu.append("showIconsFolder"; Choose:C955(String:C10(Form:C1466.info.target)="iOS"; "openAppleIconFolder"; "openAndroidIconFolder"))
-				
-			End if 
+			$menu.append("showiOSIconsFolder"; "openAppleIconFolder")
+			$menu.append("showAndroidIconsFolder"; "openAndroidIconFolder")
 			
 		Else 
 			
-			$menu.append("showIconsFolder"; "openAndroidIconFolder")
+			$menu.append("showIconsFolder"; Choose:C955(String:C10(Form:C1466.info.target)="iOS"; "openAppleIconFolder"; "openAndroidIconFolder"))
 			
 		End if 
 		
 	Else 
 		
-		$menu.append("showIconsFolder"; "openAppleIconFolder").enable(Bool:C1537(This:C1470.assets.folder.exists))
+		$menu.append("showIconsFolder"; "openAndroidIconFolder")
 		
 	End if 
 	
@@ -120,103 +112,28 @@ Function displayIcon
 	var $picture : Picture
 	var $folder : 4D:C1709.Folder
 	
-	If (FEATURE.with("android"))
+	$folder:=Form:C1466._folder.folder("Assets.xcassets/AppIcon.appiconset")
+	
+	If ($folder.exists)
 		
-		$folder:=Form:C1466._folder.folder("Assets.xcassets/AppIcon.appiconset")
-		
-		If ($folder.exists)
-			
-			READ PICTURE FILE:C678($folder.file("ios-marketing1024.png").platformPath; $picture)
-			
-		Else 
-			
-			$folder:=Form:C1466._folder.folder("Android")
-			
-			If ($folder.exists)
-				
-				READ PICTURE FILE:C678($folder.file("main/ic_launcher-playstore.png").platformPath; $picture)
-				
-			Else 
-				
-				READ PICTURE FILE:C678(EDITOR.errorIcon; $picture)
-				
-			End if 
-		End if 
-		
-		This:C1470.icon.setValue($picture)
+		READ PICTURE FILE:C678($folder.file("ios-marketing1024.png").platformPath; $picture)
 		
 	Else 
 		
-		var $o : Object
-		var $file : 4D:C1709.File
+		$folder:=Form:C1466._folder.folder("Android")
 		
-		If (This:C1470.assets.icons#Null:C1517)
+		If ($folder.exists)
 			
-			If (Is macOS:C1572)
-				
-				$o:=This:C1470.assets.icons.images.query("idiom = :1"; "ios-marketing").pop()
-				
-				If ($o#Null:C1517)
-					
-					$file:=This:C1470.assets.folder.file($o.filename)
-					
-					If ($file.exists)
-						
-						READ PICTURE FILE:C678($file.platformPath; $picture)
-						This:C1470.icon.setValue($picture)
-						This:C1470.iconAlert.reset()
-						
-					Else 
-						
-						This:C1470.icon.setValue($picture)
-						This:C1470.iconAlert.alert(Replace string:C233(Get localized string:C991("missingFile"); "{file}"; $file.name))
-						
-					End if 
-					
-				Else 
-					
-					This:C1470.icon.setValue($picture)
-					This:C1470.iconAlert.alert("theIconIsMandatory")
-					
-				End if 
-				
-			Else 
-				
-				$o:=This:C1470.assets.icons.images.query("idiom = :1"; "ios-marketing").pop()
-				
-				If ($o#Null:C1517)
-					
-					$file:=This:C1470.assets.folder.file($o.filename)
-					
-					If ($file.exists)
-						
-						READ PICTURE FILE:C678($file.platformPath; $picture)
-						This:C1470.icon.setValue($picture)
-						This:C1470.iconAlert.reset()
-						
-					Else 
-						
-						This:C1470.icon.setValue($picture)
-						This:C1470.iconAlert.alert(Replace string:C233(Get localized string:C991("missingFile"); "{file}"; $file.name))
-						
-					End if 
-					
-				Else 
-					
-					This:C1470.icon.setValue($picture)
-					This:C1470.iconAlert.alert("theIconIsMandatory")
-					
-				End if 
-			End if 
+			READ PICTURE FILE:C678($folder.file("main/ic_launcher-playstore.png").platformPath; $picture)
 			
 		Else 
 			
-			
 			READ PICTURE FILE:C678(EDITOR.errorIcon; $picture)
-			This:C1470.icon.setValue($picture)
 			
 		End if 
 	End if 
+	
+	This:C1470.icon.setValue($picture)
 	
 	If (FEATURE.with("dominantColor")) & (String:C10(This:C1470.mainColor)="")
 		
@@ -330,23 +247,15 @@ Function getIcon($pathname : Text)
 	// Update assets according to the target systems 
 Function setIcon($picture : Picture)
 	
-	If (FEATURE.with("android"))
+	If (Is macOS:C1572)
 		
-		If (Is macOS:C1572)
+		If (Form:C1466.$ios)
 			
-			If (Form:C1466.$ios)
-				
-				PROJECT.AppIconSet($picture)
-				
-			End if 
+			PROJECT.AppIconSet($picture)
 			
-			If (Form:C1466.$android)
-				
-				PROJECT.AndroidIconSet($picture)
-				
-			End if 
-			
-		Else 
+		End if 
+		
+		If (Form:C1466.$android)
 			
 			PROJECT.AndroidIconSet($picture)
 			
@@ -354,9 +263,10 @@ Function setIcon($picture : Picture)
 		
 	Else 
 		
-		PROJECT.AppIconSet($picture)
+		PROJECT.AndroidIconSet($picture)
 		
 	End if 
+	
 	
 	If (FEATURE.with("dominantColor"))
 		
@@ -448,42 +358,4 @@ Function displayTarget
 	
 	This:C1470.ios.setValue(EDITOR.ios)
 	This:C1470.android.setValue(EDITOR.android)
-	
-	//=========================================================
-	//=                      OBSOLETE                         =
-	//=========================================================
-Function loadIcon
-	
-	If (Not:C34(FEATURE.with("android")))
-		
-		var $folder : 4D:C1709.Folder
-		$folder:=Form:C1466._folder.folder("Assets.xcassets/AppIcon.appiconset")
-		
-		If (This:C1470.assets=Null:C1517)
-			
-			$folder.create()
-			
-			This:C1470.assets:=New object:C1471(\
-				"root"; $folder.platformPath)
-			
-			This:C1470.assets.folder:=$folder
-			
-		End if 
-		
-		If (This:C1470.assets.icons=Null:C1517)\
-			 | (This:C1470.assets.file=Null:C1517)
-			
-			var $file : 4D:C1709.File
-			$file:=$folder.file("Contents.json")
-			
-			If ($file.exists)
-				
-				This:C1470.assets.icons:=JSON Parse:C1218($file.getText())
-				
-			End if 
-		End if 
-		
-		This:C1470.displayIcon()
-		
-	End if 
 	

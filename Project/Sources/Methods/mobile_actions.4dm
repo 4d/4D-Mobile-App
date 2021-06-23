@@ -65,7 +65,7 @@ Case of
 					
 					For each ($Obj_parameters; $Obj_action.parameters) Until ($Boo_hasImage)
 						
-						If ($Obj_parameters.type="image")
+						If (String:C10($Obj_parameters.type)="image")
 							
 							$Boo_hasImage:=True:C214
 							

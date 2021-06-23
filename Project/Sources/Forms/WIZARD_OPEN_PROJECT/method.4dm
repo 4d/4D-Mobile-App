@@ -19,6 +19,8 @@ Case of
 		var EDITOR : cs:C1710.EDITOR
 		EDITOR:=cs:C1710.EDITOR.new()
 		
+		Form:C1466._message:=cs:C1710.subform.new("message").setValue(New object:C1471)
+		
 		Form:C1466._browse:=cs:C1710.button.new("browse").bestSize(Align left:K42:2)
 		Form:C1466._open:=cs:C1710.button.new("open").bestSize(Align right:K42:4; 70).disable()
 		Form:C1466._selection:=cs:C1710.static.new("focus")

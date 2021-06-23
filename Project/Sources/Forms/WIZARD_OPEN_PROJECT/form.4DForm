@@ -32,7 +32,7 @@
 	"pages": [
 		{
 			"objects": {
-				"background": {
+				"wizard.background": {
 					"type": "rectangle",
 					"top": 0,
 					"left": 0,
@@ -133,44 +133,6 @@
 						}
 					]
 				},
-				"message.back": {
-					"type": "picture",
-					"top": 0,
-					"left": 0,
-					"width": 970,
-					"height": 875,
-					"visibility": "hidden",
-					"sizingX": "grow",
-					"sizingY": "grow",
-					"pictureFormat": "tiled",
-					"picture": "/RESOURCES/images/common/background.png"
-				},
-				"message.button": {
-					"type": "button",
-					"top": 0,
-					"left": 0,
-					"width": 970,
-					"height": 875,
-					"visibility": "hidden",
-					"sizingX": "grow",
-					"sizingY": "grow",
-					"display": false
-				},
-				"message": {
-					"type": "subform",
-					"top": 205,
-					"left": 280,
-					"width": 410,
-					"height": 180,
-					"visibility": "hidden",
-					"detailForm": "MESSAGE",
-					"focusable": false,
-					"deletableInList": false,
-					"doubleClickInRowAction": "editSubrecord",
-					"selectionMode": "multiple",
-					"printFrame": "variable",
-					"method": "ObjectMethods/message.4dm"
-				},
 				"browse": {
 					"type": "button",
 					"top": 700,
@@ -261,6 +223,44 @@
 					"width": 387,
 					"height": 1,
 					"sizingY": "move"
+				},
+				"message.back": {
+					"type": "picture",
+					"top": 0,
+					"left": 0,
+					"width": 970,
+					"height": 875,
+					"visibility": "hidden",
+					"sizingX": "grow",
+					"sizingY": "grow",
+					"pictureFormat": "tiled",
+					"picture": "/RESOURCES/images/common/background.png"
+				},
+				"message.button": {
+					"type": "button",
+					"top": 0,
+					"left": 0,
+					"width": 970,
+					"height": 875,
+					"visibility": "hidden",
+					"sizingX": "grow",
+					"sizingY": "grow",
+					"display": false
+				},
+				"message": {
+					"type": "subform",
+					"top": 205,
+					"left": 280,
+					"width": 410,
+					"height": 180,
+					"visibility": "hidden",
+					"detailForm": "MESSAGE",
+					"focusable": false,
+					"deletableInList": false,
+					"doubleClickInRowAction": "editSubrecord",
+					"selectionMode": "multiple",
+					"printFrame": "variable",
+					"method": "ObjectMethods/message.4dm"
 				}
 			},
 			"entryOrder": [
@@ -279,7 +279,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 474,
+	"geometryStamp": 475,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

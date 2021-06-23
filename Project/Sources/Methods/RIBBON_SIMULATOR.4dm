@@ -32,49 +32,54 @@ Case of
 		
 		$menu:=cs:C1710.menu.new()
 		
-		If (FEATURE.with("android"))  // 🚧
+		$lastDevice:=EDITOR.preferences.get("lastDevice")
+		$tab:="       "*Num:C11(FEATURE.with("android"))
+		
+		If (Is macOS:C1572)
 			
-			$lastDevice:=EDITOR.preferences.get("lastDevice")
-			$tab:="       "
-			
-			If (Is macOS:C1572)
+			If (FEATURE.with("android"))
 				
 				$menu.append("iOS").icon("images/os/iOS-24.png").disable()
 				
-				If (EDITOR.xCode.ready)
+			End if 
+			
+			If (EDITOR.xCode.ready)
+				
+				If (EDITOR.devices.plugged.apple.length>0)
 					
-					If (EDITOR.devices.plugged.apple.length>0)
+					For each ($device; EDITOR.devices.plugged.apple)
 						
-						For each ($device; EDITOR.devices.plugged.apple)
-							
-							$menu.append($tab+$device.name; $device.udid)\
-								.mark($device.udid=$lastDevice)
-							
-						End for each 
+						$menu.append($tab+$device.name; $device.udid)\
+							.mark($device.udid=$lastDevice)
 						
-						$menu.line()
-						
-					End if 
-					
-					If (EDITOR.devices.apple.length>0)
-						
-						For each ($device; EDITOR.devices.apple)
-							
-							$menu.append($tab+$device.name; $device.udid)\
-								.mark(($device.udid=$lastDevice) & PROJECT.$ios)
-							
-						End for each 
-					End if 
+					End for each 
 					
 					$menu.line()
 					
-					$menu.append($tab+Get localized string:C991("openTheXcodeSimulatorsManager"); "XcodeDeviceManager")
-					
-				Else 
-					
-					$menu.append($tab+Replace string:C233(Get localized string:C991("checkTheInstallationOf"); "{app}"; "Xcode"); "checkXcodeInstallation")
-					
 				End if 
+				
+				If (EDITOR.devices.apple.length>0)
+					
+					For each ($device; EDITOR.devices.apple)
+						
+						$menu.append($tab+$device.name; $device.udid)\
+							.mark(($device.udid=$lastDevice) & PROJECT.$ios)
+						
+					End for each 
+				End if 
+				
+				$menu.line()
+				
+				$menu.append($tab+Get localized string:C991("openTheXcodeSimulatorsManager"); "XcodeDeviceManager")
+				
+			Else 
+				
+				$menu.append($tab+Replace string:C233(Get localized string:C991("checkTheInstallationOf"); "{app}"; "Xcode"); "checkXcodeInstallation")
+				
+			End if 
+			
+			
+			If (FEATURE.with("android"))
 				
 				$menu.line()
 				
@@ -119,74 +124,54 @@ Case of
 					$menu.append($tab+Replace string:C233(Get localized string:C991("checkTheInstallationOf"); "{app}"; "Android Studio"); "checkAndroidInstallation")
 					
 				End if 
+			End if 
+		Else 
+			
+			If (EDITOR.studio.ready)
 				
-			Else 
+				If (EDITOR.devices.plugged.android.length>0)
+					
+					For each ($device; EDITOR.devices.plugged.android)
+						
+						$menu.append($device.name; $device.udid)\
+							.mark($device.udid=$lastDevice).enable(Not:C34(Bool:C1537($device.unauthorized)))
+						
+					End for each 
+					
+					$menu.line()
+					
+				End if 
 				
-				If (EDITOR.studio.ready)
+				If (EDITOR.devices.android.length>0)
 					
-					If (EDITOR.devices.plugged.android.length>0)
+					For each ($device; EDITOR.devices.android)
 						
-						For each ($device; EDITOR.devices.plugged.android)
-							
-							$menu.append($device.name; $device.udid)\
-								.mark($device.udid=$lastDevice).enable(Not:C34(Bool:C1537($device.unauthorized)))
-							
-						End for each 
+						$menu.append($device.name; $device.udid)\
+							.mark($device.udid=String:C10(EDITOR.currentDevice))
 						
-						$menu.line()
-						
-					End if 
+					End for each 
 					
-					If (EDITOR.devices.android.length>0)
-						
-						For each ($device; EDITOR.devices.android)
-							
-							$menu.append($device.name; $device.udid)\
-								.mark($device.udid=String:C10(EDITOR.currentDevice))
-							
-						End for each 
-						
-						$menu.line()
-						
-					Else 
-						
-						$menu.append("createASimulator"; "createAVD").line()
-						
-					End if 
-					
-					$menu.append("openTheAvdManager"; "avdManager")
+					$menu.line()
 					
 				Else 
 					
-					$menu.append($tab+Replace string:C233(Get localized string:C991("checkTheInstallationOf"); "{app}"; "Android Studio"); "checkAndroidInstallation")
+					$menu.append("createASimulator"; "createAVD").line()
 					
 				End if 
+				
+				$menu.append("openTheAvdManager"; "avdManager")
+				
+			Else 
+				
+				$menu.append($tab+Replace string:C233(Get localized string:C991("checkTheInstallationOf"); "{app}"; "Android Studio"); "checkAndroidInstallation")
+				
 			End if 
+		End if 
+		
+		If (EDITOR.xCode.ready) | (EDITOR.studio.ready)
 			
+			$menu.line().append("updatingTheListOfDevices"; "updateTheDeviceList")
 			
-			If (EDITOR.xCode.ready) | (EDITOR.studio.ready)
-				
-				$menu.line().append("updatingTheListOfDevices"; "updateTheDeviceList")
-				
-			End if 
-			
-		Else 
-			
-			If (EDITOR.devices.length>0)
-				
-				For each ($device; EDITOR.devices)
-					
-					$menu.append($device.name; $device.udid)\
-						.mark($device.udid=String:C10(EDITOR.currentDevice))
-					
-				End for each 
-				
-				If (Macintosh option down:C545 & Not:C34(Is compiled mode:C492))
-					
-					$menu.line().append(Get localized string:C991("openTheAvdManager"); "avdManager")
-					
-				End if 
-			End if 
 		End if 
 		
 		OBJECT GET COORDINATES:C663(*; $e.objectName; $left; $top; $right; $bottom)

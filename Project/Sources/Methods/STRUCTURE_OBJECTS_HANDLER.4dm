@@ -324,16 +324,8 @@ Case of
 										
 										If ($relatedCatalog.success)  // Open field picker
 											
-											//If (FEATURE.with("android"))
-											
-											//var $dataModel : Object
-											//$dataModel:=PROJECT.dataModel
-											
-											//Else 
 											var $dataModel : Object
 											$dataModel:=Form:C1466.dataModel
-											
-											//End if 
 											
 											If (Bool:C1537($context.fieldSortByName))
 												

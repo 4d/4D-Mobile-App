@@ -35,6 +35,27 @@ Else
 	
 End if 
 
+If (FEATURE.with("android"))
+	
+	If ($project.targetBackup#Null:C1517)
+		
+		// Restore
+		$project.info.target:=$project.targetBackup
+		OB REMOVE:C1226($project; "targetBackup")
+		
+	End if 
+	
+Else 
+	
+	If ($project.targetBackup=Null:C1517)
+		
+		// Backup
+		$project.targetBackup:=$project.info.target
+		$project.info.target:="ios"  // Keep ios only
+		
+	End if 
+End if 
+
 // ----------------------------------------------------
 // *RENAME cache.json -> catalog.json
 If (Form:C1466#Null:C1517)

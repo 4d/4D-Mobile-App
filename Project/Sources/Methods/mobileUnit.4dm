@@ -93,14 +93,8 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			//______________________________________________________
 		: ($entryPoint="checkInstall")
 			
-			//If (FEATURE.with("android"))
-			//EXECUTE METHOD("editor_CHECK_INSTALLATION"; $Obj_out)
-			//Else
-			
 			// Check without message
 			EXECUTE METHOD:C1007("Xcode_CheckInstall"; $response; New object:C1471("silent"; True:C214))
-			
-			//End if
 			
 			//________________________________________
 		: (Not:C34(Count parameters:C259=2))

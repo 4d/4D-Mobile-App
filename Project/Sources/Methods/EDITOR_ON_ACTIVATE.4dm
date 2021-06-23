@@ -23,22 +23,7 @@ If (FORM Get current page:C276=1)  // #MARK_OBSOLETE : with the wizards the 2nd 
 	// Verify the web server configuration
 	EDITOR.callMeBack("checkingServerConfiguration")
 	EDITOR.callMeBack("refreshServer")
-	
-	If (FEATURE.with("android"))
-		
-		EDITOR.checkDevTools()
-		
-	Else 
-		
-		// Recovering the list of available devices
-		CALL WORKER:C1389(Form:C1466.$worker; "editor_GET_DEVICES"; New object:C1471(\
-			"caller"; Form:C1466.$mainWindow; "project"; PROJECT))
-		
-		// Audit of development tools
-		CALL WORKER:C1389(Form:C1466.$worker; "editor_CHECK_INSTALLATION"; New object:C1471(\
-			"caller"; Form:C1466.$mainWindow; "project"; PROJECT))
-		
-	End if 
+	EDITOR.checkDevTools()
 	
 	// Launch project verifications
 	_o_editor_PROJECT_AUDIT

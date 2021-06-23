@@ -25,7 +25,8 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			$widget:=EDITOR.message
 			
 			//______________________________________________________
-		: (Current form name:C1298="WIZARD_NEW_PROJECT")
+		: (Current form name:C1298="WIZARD_NEW_PROJECT")\
+			 | (Current form name:C1298="WIZARD_OPEN_PROJECT")
 			
 			$widget:=Form:C1466._message
 			

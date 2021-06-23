@@ -106,28 +106,14 @@ Case of
 		//______________________________________________________
 	: ($message="getDevices")  // Callback from 'editor_GET_DEVICES'
 		
-		If (FEATURE.with("android"))  //🚧
-			
-			// Update task list
-			EDITOR.removeTask($message)
-			
-			// Store the result
-			EDITOR.devices:=$in
-			
-			// Touch
-			OBJECT SET VALUE:C1742($form.ribbon; OBJECT Get value:C1743($form.ribbon))
-			
-		Else 
-			
-			If ($in.success)
-				
-				Form:C1466.$dialog[$form.editor].ribbon.devices:=$in.devices
-				
-				// Touch the ribbon subform
-				(OBJECT Get pointer:C1124(Object named:K67:5; $form.ribbon))->:=Form:C1466.$dialog[$form.editor].ribbon
-				
-			End if 
-		End if 
+		// Update task list
+		EDITOR.removeTask($message)
+		
+		// Store the result
+		EDITOR.devices:=$in
+		
+		// Touch
+		OBJECT SET VALUE:C1742($form.ribbon; OBJECT Get value:C1743($form.ribbon))
 		
 		//______________________________________________________
 	: ($message="syncDataModel")
@@ -162,80 +148,29 @@ Case of
 		//______________________________________________________
 	: ($message="checkDevTools")  // Callback from 'editor_CHECK_INSTALLATION'
 		
-		If (FEATURE.with("android"))  //🚧
+		// Update task list
+		EDITOR.removeTask($message)
+		
+		If ($in#Null:C1517)
 			
-			// Update task list
-			EDITOR.removeTask($message)
-			
-			If ($in#Null:C1517)
-				
-				// Store the result
-				EDITOR.studio:=$in.studio
-				
-				//If (EDITOR.studio.ready)
-				//If (EDITOR.android)
-				//$fileManifest:=cs.path.new().cacheSdkAndroid().parent.file("manifest.json")
-				//If (Not($fileManifest.exists))\
-																									 | ($fileManifest.modificationDate#Current date)
-				//// Get the last 4D Mobile Android SDK from AWS server if any
-				//EDITOR.downloadSDK("aws"; "android"; False)
-				//End if
-				//End if
-				//End if
-				
-				EDITOR.xCode:=$in.xCode
-				
-			End if 
+			// Store the result
+			EDITOR.studio:=$in.studio
+			EDITOR.xCode:=$in.xCode
 			
 			If (EDITOR.devices=Null:C1517)  // First time -> Update the device list
 				
 				EDITOR.getDevices()
 				
 			End if 
-			
-		Else 
-			
-			// Store the result
-			Form:C1466.xCode:=$in
-			
-			If (Form:C1466.status=Null:C1517)
-				
-				Form:C1466.status:=New object:C1471(\
-					"xCode"; $in.ready)
-				
-			Else 
-				
-				Form:C1466.status.xCode:=$in.ready
-				
-			End if 
-			
-			editor_CALLBACK("updateRibbon")
-			
 		End if 
 		
 		//______________________________________________________
 	: ($message="updateRibbon")
 		
-		If (FEATURE.with("android"))  //🚧
-			
-			EDITOR.teamId:=(Length:C16(String:C10(PROJECT.organization.teamId))>0)
-			
-			// Touch
-			OBJECT SET VALUE:C1742($form.ribbon; OBJECT Get value:C1743($form.ribbon))
-			
-		Else 
-			
-			// Old
-			Form:C1466.status.teamId:=(Length:C16(String:C10(PROJECT.organization.teamId))>0)
-			
-			// Give status to ribbon
-			$o:=OBJECT Get value:C1743($form.ribbon)
-			$o.status:=Form:C1466.$status
-			OBJECT SET VALUE:C1742($form.ribbon; $o)  // Touch
-			
-		End if 
+		EDITOR.teamId:=(Length:C16(String:C10(PROJECT.organization.teamId))>0)
 		
-		
+		// Touch
+		OBJECT SET VALUE:C1742($form.ribbon; OBJECT Get value:C1743($form.ribbon))
 		
 		//______________________________________________________
 	: ($message="build@")

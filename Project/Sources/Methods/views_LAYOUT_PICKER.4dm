@@ -59,45 +59,35 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	$manifest:=JSON Parse:C1218($internal.file("manifest.json").getText())
 	$default:=String:C10($manifest.default)
 	
-	// 👀 We assume that our templates are well-formed
+	// WE ASSUME THAT OUR TEMPLATES ARE WELL-FORMED 😇
 	
-	If (FEATURE.with("android"))
+	$forIosOnly:=Not:C34(Form:C1466.$android)
+	$forAndroidOnly:=Not:C34(Form:C1466.$ios)
+	
+	For each ($folder; $internal.folders())
 		
-		$forIosOnly:=Not:C34(Form:C1466.$android)
-		$forAndroidOnly:=Not:C34(Form:C1466.$ios)
+		$tmpl:=cs:C1710.tmpl.new($folder.fullName; $data.type)
 		
-		For each ($folder; $internal.folders())
-			
-			$tmpl:=cs:C1710.tmpl.new($folder.fullName; $data.type)
-			
-			Case of 
-					//______________________________________________________
-				: ($forIosOnly & $tmpl.ios)
-					
-					$data.forms.push($folder.fullName)
-					
-					//______________________________________________________
-				: ($forAndroidOnly & $tmpl.android)
-					
-					$data.forms.push($folder.fullName)
-					
-					//______________________________________________________
-				: ($tmpl.ios & $tmpl.android)
-					
-					$data.forms.push($folder.fullName)
-					
-					//______________________________________________________
-			End case 
-		End for each 
-		
-	Else 
-		
-		For each ($folder; $internal.folders())
-			
-			$data.forms.push($folder.fullName)
-			
-		End for each 
-	End if 
+		Case of 
+				
+				//______________________________________________________
+			: ($forIosOnly & $tmpl.ios)
+				
+				$data.forms.push($folder.fullName)
+				
+				//______________________________________________________
+			: ($forAndroidOnly & $tmpl.android)
+				
+				$data.forms.push($folder.fullName)
+				
+				//______________________________________________________
+			: ($tmpl.ios & $tmpl.android)
+				
+				$data.forms.push($folder.fullName)
+				
+				//______________________________________________________
+		End case 
+	End for each 
 	
 	// Search for templates into the host database
 	$userTemplates:=cs:C1710.path.new()["host"+$data.type+"Forms"]()
@@ -108,61 +98,48 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 		
 		For each ($folder; $userTemplates.folders())
 			
-			If (FEATURE.with("android"))
-				
-				$success:=True:C214
-				
-				$tmpl:=cs:C1710.tmpl.new("/"+$folder.fullName; $data.type)
-				
-				Case of 
-						
-						//______________________________________________________
-					: ($forIosOnly & $tmpl.ios)
-						
-						For each ($fileName; $manifest.mandatory) While ($success)
-							
-							$success:=$userTemplates.folder($folder.name).file($fileName).exists | \
-								$userTemplates.folder($folder.name).folder("ios").file($fileName).exists
-							
-						End for each 
-						
-						//______________________________________________________
-					: ($forAndroidOnly & $tmpl.android)
-						
-						$success:=$userTemplates.folder($folder.name).file("app/src/main/res/layout/layout.xml").exists | \
-							$userTemplates.folder($folder.name).folder("android").file("app/src/main/res/layout/layout.xml").exists
-						
-						//______________________________________________________
-					: ($tmpl.ios & $tmpl.android)
-						
-						For each ($fileName; $manifest.mandatory) While ($success)
-							
-							$success:=$userTemplates.folder($folder.name).file($fileName).exists | \
-								$userTemplates.folder($folder.name).folder("ios").file($fileName).exists
-							
-						End for each 
-						
-						$success:=$success & $userTemplates.folder($folder.name).file("app/src/main/res/layout/layout.xml").exists | \
-							$userTemplates.folder($folder.name).folder("android").file("app/src/main/res/layout/layout.xml").exists
-						
-						//______________________________________________________
-					Else 
-						
-						$success:=False:C215
-						
-						//______________________________________________________
-				End case 
-				
-			Else 
-				
-				For each ($fileName; $manifest.mandatory) While ($success)
+			$success:=True:C214
+			
+			$tmpl:=cs:C1710.tmpl.new("/"+$folder.fullName; $data.type)
+			
+			Case of 
 					
-					$success:=$userTemplates.folder($folder.name).file($fileName).exists | \
-						$userTemplates.folder($folder.name).folder("ios").file($fileName).exists
+					//______________________________________________________
+				: ($forIosOnly & $tmpl.ios)
 					
-				End for each 
-				
-			End if 
+					For each ($fileName; $manifest.mandatory) While ($success)
+						
+						$success:=$userTemplates.folder($folder.name).file($fileName).exists | \
+							$userTemplates.folder($folder.name).folder("ios").file($fileName).exists
+						
+					End for each 
+					
+					//______________________________________________________
+				: ($forAndroidOnly & $tmpl.android)
+					
+					$success:=$userTemplates.folder($folder.name).file("app/src/main/res/layout/layout.xml").exists | \
+						$userTemplates.folder($folder.name).folder("android").file("app/src/main/res/layout/layout.xml").exists
+					
+					//______________________________________________________
+				: ($tmpl.ios & $tmpl.android)
+					
+					For each ($fileName; $manifest.mandatory) While ($success)
+						
+						$success:=$userTemplates.folder($folder.name).file($fileName).exists | \
+							$userTemplates.folder($folder.name).folder("ios").file($fileName).exists
+						
+					End for each 
+					
+					$success:=$success & $userTemplates.folder($folder.name).file("app/src/main/res/layout/layout.xml").exists | \
+						$userTemplates.folder($folder.name).folder("android").file("app/src/main/res/layout/layout.xml").exists
+					
+					//______________________________________________________
+				Else 
+					
+					$success:=False:C215
+					
+					//______________________________________________________
+			End case 
 			
 			If ($success)
 				
@@ -180,80 +157,53 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			
 			If ($zip#Null:C1517)
 				
-				If (FEATURE.with("android"))
-					
-					$success:=True:C214
-					
-					$tmpl:=cs:C1710.tmpl.new("/"+$zip.root.name+".zip"; $data.type)
-					
-					Case of 
-							//______________________________________________________
-						: ($forIosOnly & $tmpl.ios)
-							
-							For each ($t; $manifest.mandatory) While ($success)
-								
-								$success:=$zip.root.file($t).exists | \
-									$zip.root.folder("ios").file($t).exists
-								
-							End for each 
-							
-							//______________________________________________________
-						: ($forAndroidOnly & $tmpl.android)
-							
-							$success:=$zip.root.file("app/src/main/res/layout/layout.xml").exists | \
-								$zip.root.folder("android").file("app/src/main/res/layout/layout.xml").exists
-							
-							//______________________________________________________
-						: ($tmpl.ios & $tmpl.android)
-							
-							For each ($t; $manifest.mandatory) While ($success)
-								
-								$success:=$zip.root.file($t).exists | \
-									$zip.root.folder("ios").file($t).exists
-								
-							End for each 
-							
-							$success:=$success & $zip.root.file("app/src/main/res/layout/layout.xml").exists | \
-								$zip.root.folder("android").file("app/src/main/res/layout/layout.xml").exists
-							
-							//______________________________________________________
-						Else 
-							
-							$success:=False:C215
-							
-							//______________________________________________________
-					End case 
-					
-					If ($success)
+				$success:=True:C214
+				
+				$tmpl:=cs:C1710.tmpl.new("/"+$zip.root.name+".zip"; $data.type)
+				
+				Case of 
 						
-						$c.push("/"+$template.fullName)
+						//______________________________________________________
+					: ($forIosOnly & $tmpl.ios)
 						
-					End if 
-					
-				Else 
-					
-					For each ($t; $manifest.mandatory) While ($success)
-						
-						$success:=$zip.root.file($t).exists
-						
-					End for each 
-					
-					If ($success)
-						
-						$manifest:=JSON Parse:C1218($zip.root.file("manifest.json").getText())
-						$success:=($manifest#Null:C1517)
-						
-						If ($success)
+						For each ($t; $manifest.mandatory) While ($success)
 							
-							$success:=String:C10(JSON Parse:C1218($zip.root.file("manifest.json").getText()).type)=($data.type+"form")
+							$success:=$zip.root.file($t).exists | \
+								$zip.root.folder("ios").file($t).exists
 							
-							If ($success)
-								
-								$c.push("/"+$template.fullName)
-								
-							End if 
-						End if 
-					End if 
+						End for each 
+						
+						//______________________________________________________
+					: ($forAndroidOnly & $tmpl.android)
+						
+						$success:=$zip.root.file("app/src/main/res/layout/layout.xml").exists | \
+							$zip.root.folder("android").file("app/src/main/res/layout/layout.xml").exists
+						
+						//______________________________________________________
+					: ($tmpl.ios & $tmpl.android)
+						
+						For each ($t; $manifest.mandatory) While ($success)
+							
+							$success:=$zip.root.file($t).exists | \
+								$zip.root.folder("ios").file($t).exists
+							
+						End for each 
+						
+						$success:=$success & $zip.root.file("app/src/main/res/layout/layout.xml").exists | \
+							$zip.root.folder("android").file("app/src/main/res/layout/layout.xml").exists
+						
+						//______________________________________________________
+					Else 
+						
+						$success:=False:C215
+						
+						//______________________________________________________
+				End case 
+				
+				If ($success)
+					
+					$c.push("/"+$template.fullName)
+					
 				End if 
 			End if 
 		End for each 

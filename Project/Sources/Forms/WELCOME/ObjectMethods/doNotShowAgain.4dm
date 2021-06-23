@@ -16,7 +16,7 @@ $Ptr_me:=OBJECT Get pointer:C1124(Object current:K67:2)
 Case of 
 		
 		//______________________________________________________
-	: (FEATURE.with("android"))
+	: (True:C214)
 		
 		// REMOVE THE SECOND PAGE OF HE FORM WHEN FEATURE WILL BE DELIVERED
 		

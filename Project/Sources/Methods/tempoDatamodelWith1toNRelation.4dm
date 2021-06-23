@@ -1,61 +1,58 @@
 //%attributes = {"invisible":true}
 var $t : Text
-var $b : Boolean
+var $withRelation : Boolean
 var $o; $table : Object
 
-If (FEATURE.with("android"))
+If (PROJECT.$android)
 	
-	If (PROJECT.$android)
+	If (Value type:C1509($1)=Is object:K8:27)
 		
-		If (Value type:C1509($1)=Is object:K8:27)
-			
-			$table:=PROJECT.dataModel[String:C10($1.tableNumber)]
-			
-		Else 
-			
-			$table:=PROJECT.dataModel[String:C10($1)]
-			
-		End if 
+		$table:=PROJECT.dataModel[String:C10($1.tableNumber)]
 		
-		If ($table#Null:C1517)
+	Else 
+		
+		$table:=PROJECT.dataModel[String:C10($1)]
+		
+	End if 
+	
+	If ($table#Null:C1517)
+		
+		For each ($o; OB Entries:C1720($table)) Until ($withRelation)
 			
-			For each ($o; OB Entries:C1720($table)) Until ($b)
+			If (Length:C16($o.key)#0)
 				
-				If (Length:C16($o.key)#0)
+				If (String:C10(Num:C11($o.key))#$o.key)\
+					 & (Value type:C1509($o.value)=Is object:K8:27)
 					
-					If (String:C10(Num:C11($o.key))#$o.key)\
-						 & (Value type:C1509($o.value)=Is object:K8:27)
+					$withRelation:=($o.value.relatedEntities#Null:C1517)
+					
+					If (Not:C34($withRelation))
 						
-						$b:=($o.value.relatedEntities#Null:C1517)
-						
-						If (Not:C34($b))
+						For each ($o; OB Entries:C1720($o.value)) Until ($withRelation)
 							
-							For each ($o; OB Entries:C1720($o.value)) Until ($b)
+							If (String:C10(Num:C11($o.key))#$o.key)\
+								 & (Value type:C1509($o.value)=Is object:K8:27)
 								
-								If (String:C10(Num:C11($o.key))#$o.key)\
-									 & (Value type:C1509($o.value)=Is object:K8:27)
-									
-									$b:=Bool:C1537($o.value.isToMany)
-									
-								End if 
-							End for each 
-						End if 
+								$withRelation:=Bool:C1537($o.value.isToMany)
+								
+							End if 
+						End for each 
 					End if 
 				End if 
-			End for each 
-		End if 
+			End if 
+		End for each 
+	End if 
+	
+	If ($withRelation)
 		
-		If ($b)
-			
-			CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "footer"; New object:C1471(\
-				"message"; "One to Many relations are coming soon for Android"; \
-				"type"; "android"))
-			
-		Else 
-			
-			CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "footer"; New object:C1471(\
-				"message"; ""))
-			
-		End if 
+		CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "footer"; New object:C1471(\
+			"message"; "One to Many relations are coming soon for Android"; \
+			"type"; "android"))
+		
+	Else 
+		
+		CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "footer"; New object:C1471(\
+			"message"; ""))
+		
 	End if 
 End if 
