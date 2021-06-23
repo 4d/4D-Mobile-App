@@ -44,78 +44,82 @@ FEATURE.alias("debug"; 8858)
 // Use old behaviour
 //featuresFlags._677:=True // Format fields when dumping data from rest (userless if iOS app could translate)
 
+If (True:C214)  // Delivered
+	
 /* _____________
 17R2 - REMOVED
 _____________*/
-FEATURE.delivered(89556; 1720)  // Reload embedded data from iOS application
-FEATURE.delivered(92293; 1720)  // Support user defined tables
-FEATURE.delivered(93674; 1720)  // Main menu
-FEATURE.delivered(8122017; 1720)  // Turn around bug close window
-FEATURE.delivered(96674; 1720)  // Archive app
-
+	FEATURE.delivered(89556; 1720)  // Reload embedded data from iOS application
+	FEATURE.delivered(92293; 1720)  // Support user defined tables
+	FEATURE.delivered(93674; 1720)  // Main menu
+	FEATURE.delivered(8122017; 1720)  // Turn around bug close window
+	FEATURE.delivered(96674; 1720)  // Archive app
+	
 /* _____________
 17R3 - REMOVED
 _____________*/
-FEATURE.delivered(100157; 1730)  // Template creation
-FEATURE.delivered(100353; 1730)  // Template creation: inject any sources
-FEATURE.delivered(100191; 1730)  // Data Formatter
-
+	FEATURE.delivered(100157; 1730)  // Template creation
+	FEATURE.delivered(100353; 1730)  // Template creation: inject any sources
+	FEATURE.delivered(100191; 1730)  // Data Formatter
+	
 /* _____________
 17R4 - REMOVED
 _____________*/
-FEATURE.delivered(98105; 1740)  // Multi-criteria Search
-FEATURE.delivered(100990; 1740)  // Custom Data Formatter
-FEATURE.delivered(100174; 1740)  // Restricted queries
-FEATURE.delivered(101725; 1740)  // Restricted queries: Use NSDataSet (beter way to store resources)
-FEATURE.delivered(103112; 1740)  // Restricted queries: Move dataSet into database in Mobile Projects
-FEATURE.delivered(102457; 1740)  // Data file access with /mobileapp key
-
+	FEATURE.delivered(98105; 1740)  // Multi-criteria Search
+	FEATURE.delivered(100990; 1740)  // Custom Data Formatter
+	FEATURE.delivered(100174; 1740)  // Restricted queries
+	FEATURE.delivered(101725; 1740)  // Restricted queries: Use NSDataSet (beter way to store resources)
+	FEATURE.delivered(103112; 1740)  // Restricted queries: Move dataSet into database in Mobile Projects
+	FEATURE.delivered(102457; 1740)  // Data file access with /mobileapp key
+	
 /* _____________
 17R5 - REMOVED
 _____________*/
-FEATURE.delivered(101637; 1750)  // Display n-1 relations
-FEATURE.delivered(103850; 1750)  // Reload data from iOS with N-1 relation (Generate core data model with real relation)
-FEATURE.delivered(103411; 1750)  // Incremental synchronization
-FEATURE.delivered(103505; 1750)  // Add, Update and Save Actions
-FEATURE.delivered("withNewFieldProperties"; 1750)  // Enable LR works on ds (redmine:98145 - Replace, for data structure access, EXPORT STRUCTURE by ds)
-FEATURE.delivered("withRecursiveLink"; 1750)  // Enable recursive link management
-FEATURE.delivered(98145; 1750)  // Replace, for data structure access, EXPORT STRUCTURE by ds
-
+	FEATURE.delivered(101637; 1750)  // Display n-1 relations
+	FEATURE.delivered(103850; 1750)  // Reload data from iOS with N-1 relation (Generate core data model with real relation)
+	FEATURE.delivered(103411; 1750)  // Incremental synchronization
+	FEATURE.delivered(103505; 1750)  // Add, Update and Save Actions
+	FEATURE.delivered("withNewFieldProperties"; 1750)  // Enable LR works on ds (redmine:98145 - Replace, for data structure access, EXPORT STRUCTURE by ds)
+	FEATURE.delivered("withRecursiveLink"; 1750)  // Enable recursive link management
+	FEATURE.delivered(98145; 1750)  // Replace, for data structure access, EXPORT STRUCTURE by ds
+	
 /* _____________
 17R6 - REMOVED
 _____________*/
-FEATURE.delivered(105413; 1760)  // [MOBILE] Actions with parameters
-FEATURE.delivered("parameterListOfValues"; 1760)  // Manage field formatters as list of values for parameters
-FEATURE.delivered("allowPictureAsActionParameters"; 1760)  // #107932 - [Mobile] Allow to use picture as action parameters
-
+	FEATURE.delivered(105413; 1760)  // [MOBILE] Actions with parameters
+	FEATURE.delivered("parameterListOfValues"; 1760)  // Manage field formatters as list of values for parameters
+	FEATURE.delivered("allowPictureAsActionParameters"; 1760)  // #107932 - [Mobile] Allow to use picture as action parameters
+	
 /* _____________
 1800 - REMOVED
 _____________*/
-FEATURE.delivered(105431; 1800)  // Display 1-n relations
-FEATURE.delivered(110882; 1800)  // Dump data into core data SQLLite database
-FEATURE.delivered("newDataModel"; 1800)
-
+	FEATURE.delivered(105431; 1800)  // Display 1-n relations
+	FEATURE.delivered(110882; 1800)  // Dump data into core data SQLLite database
+	FEATURE.delivered("newDataModel"; 1800)
+	
 /* _____________
 18R2 - REMOVED
 _____________*/
-FEATURE.delivered("repairStructureMoreVisible"; 1820)
-FEATURE.delivered(113164; 1820)  // Enable/disable image dump
-
+	FEATURE.delivered("repairStructureMoreVisible"; 1820)
+	FEATURE.delivered(113164; 1820)  // Enable/disable image dump
+	
 /* _____________
 18R3 - REMOVED
 _____________*/
-FEATURE.delivered(112225; 1830)  // Select/install/use custom templates
-
+	FEATURE.delivered(112225; 1830)  // Select/install/use custom templates
+	
 /* _____________
 18R4 - REMOVED
 _____________*/
-FEATURE.delivered(113016; 1840)  // Svg improvement in forms section
-FEATURE.delivered(107526; 1840)  // Push Notifications
-
+	FEATURE.delivered(113016; 1840)  // Svg improvement in forms section
+	FEATURE.delivered(107526; 1840)  // Push Notifications
+	
 /* _____________
 18R5 - REMOVED
 _____________*/
-FEATURE.delivered(117618; 1850)  // Deep Linking
+	FEATURE.delivered(117618; 1850)  // Deep Linking
+	
+End if 
 
 /* _____________
 18R6
@@ -128,39 +132,29 @@ FEATURE.unstable("searchWithBarCode")
 1900
 _____________*/
 FEATURE.unstable("withSimulatorClass")  // Use simctl class intead of _o_simulator
-FEATURE.unstable("android")  // Android support global flag
 FEATURE.unstable("wizards")  // Use a wizard instead of standard dialogs to create or open a project
-
-/* _____________
-1900 - BETA
-_____________*/
-FEATURE.unstable("androidBeta")  // Android support during beta phase
 
 /* _____________
 1920
 _____________*/
-
-FEATURE.unstable("ConnectedDevices")  // Add connected devices to the simulator tool
-
-FEATURE.unstable("iconActionMenu")  // Use action button for icon on product panel
+FEATURE.unstable("android")  // Android support global flag
+FEATURE.unstable("targetPannel")  // Use a separate pannel for the target OS
 FEATURE.unstable("dominantColor")  // Feature #127813: BackgroundColor picker
 
-FEATURE.unstable("targetPannel")  // Use a separate pannel for the target OS
+FEATURE.unstable("iconActionMenu")  // Use action button for icon on product panel
+FEATURE.unstable("plistClass")  // Use plist class instead of plist method
 
 FEATURE.unstable("sortAction")  // https://project.4d.com/issues/117660
+FEATURE.unstable("ConnectedDevices")  // Add connected devices to the simulator tool
 FEATURE.unstable("freeActionName")  // follow https://project.4d.com/issues/117660 but to please LE
-
-FEATURE.unstable("plistClass")  // Use plist class instead of plist method
 
 /* _____________
 1930
 _____________*/
-
-FEATURE.unstable("duplicateTemplate")  // Allow to duplicate template in host database and show on disk https://project.4d.com/issues/98054
-
-FEATURE.unstable("customActionFormatter")  // redmine #128195
-FEATURE.unstable("newFormatterChoiceList")  // menu to create formatter choice list directly , from data
-FEATURE.unstable("newActionFormatterChoiceList")  // menu to create action formatter choice list directly
+FEATURE.unstable("duplicateTemplate")  // Allow to duplicate template in host database and show on disk https:// Project.4d.com/issues/98054
+FEATURE.unstable("customActionFormatter")  // Redmine #128195
+FEATURE.unstable("newFormatterChoiceList")  // Menu to create formatter choice list directly , from data
+FEATURE.unstable("newActionFormatterChoiceList")  // Menu to create action formatter choice list directly
 
 // Mac M1 build for simu using arm64
 // FEATURE.unstable("simuARMOnAppleProcessor")
@@ -168,31 +162,18 @@ FEATURE.unstable("newActionFormatterChoiceList")  // menu to create action forma
 /* _____________
 WIP
 _____________*/
-
 FEATURE.wip("compressionOfTemplates")  // Use the archive "/RESOURCES/template.zip" instead of "templates" folder in builded component 
 //FEATURE.vdl("testCompression")
 
 // Share action with descrition
 FEATURE.wip("sharedActionWithDescription")  //[MOBILE] Add a description parameter to predefined share action
-
-// Enable widget actions
-FEATURE.wip("withWidgetActions")
-
-// Manage colors according to user system parameters
-FEATURE.wip("accentColors")
-
-// Manage format as archive
-FEATURE.wip("formatMarketPlace")
-
-// Support Collection of field injected into detail template https://project.4d.com/issues/114338
-FEATURE.wip(114338)
-
-// Allow to drop a multivalued field next to another existing dropped multivalued fields to have two fields next to each other
-FEATURE.alias("droppingNext"; 114338)
-
-// Work with Source class to test the data source
-FEATURE.wip("sourceClass")
-
+FEATURE.wip("withWidgetActions")  // Enable widget actions
+FEATURE.wip("accentColors")  // Manage colors according to user system parameters
+FEATURE.wip("formatMarketPlace")  // Manage format as archive
+FEATURE.wip(114338)  // Support Collection of field injected into detail template https://project.4d.com/issues/114338
+FEATURE.alias("droppingNext"; 114338)  // Allow to drop a multivalued field next to another existing dropped multivalued fields
+FEATURE.wip("sourceClass")  // Work with Source class to test the data source
+FEATURE.wip("iosSDKfromAWS")  // Download iOS SDK from AWS
 
 /* -------------------------------------
 OVERRIDE WITH LOCAL PREFERENCES

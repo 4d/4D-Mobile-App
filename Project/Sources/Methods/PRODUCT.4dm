@@ -31,8 +31,7 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 				
 			Else 
 				
-				If (FEATURE.with("androidBeta"))\
-					 | (Bool:C1537(PROJECT.$android))  // 🚧
+				If (Bool:C1537(PROJECT.$android))
 					
 					If (Is Windows:C1573)
 						

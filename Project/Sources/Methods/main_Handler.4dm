@@ -121,14 +121,14 @@ Case of
 		
 		ob_createPath(Form:C1466.main; "order"; Is collection:K8:32)
 		
-		$Ptr_names:=$Obj_form.tableNames.pointer()
-		$Ptr_IDs:=$Obj_form.tableNumbers.pointer()
+		$Ptr_names:=OBJECT Get pointer:C1124(Object named:K67:5; "table_names")
+		$Ptr_IDs:=OBJECT Get pointer:C1124(Object named:K67:5; "table_names")
 		
 		CLEAR VARIABLE:C89($Ptr_names->)
 		CLEAR VARIABLE:C89($Ptr_IDs->)
 		
-		$Ptr_mainNames:=$Obj_form.mainNames.pointer()
-		$Ptr_mainIDs:=$Obj_form.mainNumbers.pointer()
+		$Ptr_mainNames:=OBJECT Get pointer:C1124(Object named:K67:5; "main_names")
+		$Ptr_mainIDs:=OBJECT Get pointer:C1124(Object named:K67:5; "main_ids")
 		
 		CLEAR VARIABLE:C89($Ptr_mainNames->)
 		CLEAR VARIABLE:C89($Ptr_mainIDs->)

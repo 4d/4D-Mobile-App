@@ -325,7 +325,17 @@ FEATURES FLAGS
 ================================================================================================================================*/
 If (OB Is empty:C1297(FEATURE)) | $reset
 	
-	FEATURE_FLAGS(1860; $pref)
+	var $version : Integer
+	
+	$version:=1920  // Last delivered version number
+	
+	If (Structure file:C489=Structure file:C489(*))
+		
+		ASSERT:C1129(Num:C11(SHARED.ide.version)=$version; "You need to update the last delivered version number in COMPONENT_INIT")
+		
+	End if 
+	
+	FEATURE_FLAGS($version; $pref)
 	
 End if 
 
