@@ -198,6 +198,9 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 			
 			// Check
 			$Obj_param.file:=String:C10($Obj_param.template.source)+"sdk"+Folder separator:K24:12+String:C10($Obj_param.template.sdk.name)+".zip"
+			If (Test path name:C476(String:C10($Obj_param.file))#Is a document:K24:1)
+				$Obj_param.file:=String:C10($Obj_param.template.source)+".."+Folder separator:K24:12+"sdk"+Folder separator:K24:12+String:C10($Obj_param.template.sdk.name)+".zip"
+			End if 
 			
 			If (Test path name:C476(String:C10($Obj_param.file))#Is a document:K24:1)
 				
