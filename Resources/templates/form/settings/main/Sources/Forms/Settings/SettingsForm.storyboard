@@ -132,7 +132,7 @@
         <!--Settings-->
         <scene sceneID="tj2-SY-AHs">
             <objects>
-                <navigationController id="VB8-8p-VEb" sceneMemberID="viewController">
+                <navigationController id="VB8-8p-VEb" customClass="SettingsNavigationController" customModule="QMobileUI" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Settings" image="settings" selectedImage="settings" id="EUj-zC-yaB"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="8nh-eS-Zjo">
