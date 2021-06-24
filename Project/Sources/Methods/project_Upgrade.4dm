@@ -726,26 +726,34 @@ End if
 //=====================================================================
 //                       CHANGE ACTION PRESET
 //=====================================================================
-
-If ($project.actions#Null:C1517)  // XXX add ideVersion check? to not do it each times
-	var $action : Object
-	For each ($action; $project.actions)
-		If ($action.preset#Null:C1517)
-			Case of 
-				: ($action.preset="adding")
-					$action.preset:="add"
-					$isUpgraded:=True:C214
-				: ($action.preset="suppression")
-					$action.preset:="delete"
-					$isUpgraded:=True:C214
-				: ($action.preset="sharing")
-					$action.preset:="share"
-					$isUpgraded:=True:C214
-				: ($action.preset="edition")
-					$action.preset:="edit"
-					$isUpgraded:=True:C214
-			End case 
-		End if 
+If ($project.actions#Null:C1517)
+	
+	For each ($o; $project.actions.query("preset = adding"))
+		
+		$o.preset:="add"
+		$isUpgraded:=True:C214
+		
+	End for each 
+	
+	For each ($o; $project.actions.query("preset = suppression"))
+		
+		$o.preset:="delete"
+		$isUpgraded:=True:C214
+		
+	End for each 
+	
+	For each ($o; $project.actions.query("preset = sharing"))
+		
+		$o.preset:="share"
+		$isUpgraded:=True:C214
+		
+	End for each 
+	
+	For each ($o; $project.actions.query("preset = edition"))
+		
+		$o.preset:="edit"
+		$isUpgraded:=True:C214
+		
 	End for each 
 End if 
 
