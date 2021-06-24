@@ -1,1 +1,906 @@
-﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?><!--Translation file.This file is distributed under the same license as the product package.--><xliff version="1.0" xmlns:d4="http://www.4d.com/d4-ns">  <file datatype="x-STR#" original="undefined" source-language="en-US" target-language="cs">    <header>      <prop-group name="Xliff-Editor.4dbase">        <prop prop-type="version">2.0</prop>        <prop-group prop-type="version">2.0</prop-group>      </prop-group>    </header>    <body>      <group resname="messages">        <trans-unit id="1" resname="projectName">          <source>Project name</source>          <target>Název projektu</target>        </trans-unit>        <trans-unit id="2" resname="newProject">          <source>New project</source>          <target>Nový projekt</target>        </trans-unit>        <trans-unit id="3" resname="create">          <source>Create</source>          <target>Vytvořit</target>        </trans-unit>        <trans-unit id="4" resname="thisProjectAlreadyExist">          <source>This project already exists.Do you want to replace it?</source>          <target>Tento projekt již existuje.Chcete jej nahradit?</target>        </trans-unit>        <trans-unit id="GAtIydVCgYLbZUtSym8V1A" resname="selectTheProjectToOpen">          <source>Select the project to open</source>          <target>Vyberte projekt pro otevření</target>        </trans-unit>        <trans-unit id="JaEuN9xA2MbU2DIJ8g8pdg" resname="theProductFolderAlreadyExist">          <source>The project appears to have been modified.</source>          <target>Zdá se, že projekt byl změněn.</target>        </trans-unit>        <trans-unit id="k5CG7235I1Ig2eatHqdD+g" resname="creatingTheProjectFolder">          <source>Creating the project "{project}"</source>          <target>Vytváření projektu "{project}"</target>        </trans-unit>        <trans-unit id="G3DdvHXQf8087yYs371vtg" resname="decompressionOfTheSdk">          <source>Installing the SDK</source>          <target>Instaluji SDK</target>        </trans-unit>        <trans-unit id="vys84xoAdfaLGYjQAEZxuw" resname="workspaceCreation">          <source>Creating the WorkSpace</source>          <target>Vytváření WorkSpace</target>        </trans-unit>        <trans-unit id="Oj/j4LAeJ7x7neqOiGTtSg" resname="projectBuild">          <source>Building the project.This may take a few minutes…</source>          <target>Sestavování projektu.Může to trvat několik minut…</target>        </trans-unit>        <trans-unit id="7vcJzJw4w3xiLYjY231hdg" resname="launchingTheSimulator">          <source>Launching the simulator</source>          <target>Spouštění simulátoru</target>        </trans-unit>        <trans-unit id="hqqAV7m7CoahTHmn+iMSDg" resname="installingTheApplication">          <source>Installing the application</source>          <target>Instalování aplikace</target>        </trans-unit>        <trans-unit id="7Rg1FmmM3bgG24HCZ8IMGA" resname="launchingTheApplication">          <source>Launching the application</source>          <target>Spouštění aplikace</target>        </trans-unit>        <trans-unit id="HDtnFsLKsBHrwqpnAxC73w" resname="noDevices">          <source>No simulator device installed</source>          <target>Není instalováno žádné simulátorové zařízení</target>        </trans-unit>        <trans-unit id="KVwx0s0n82Z9VZfjfb6tdA" resname="4dMobileRequiresXcode">          <source>{product} requires the installation of Xcode.</source>          <target>{product} vyžaduje instalaci Xcode.</target>        </trans-unit>        <trans-unit id="S2lGEoShatzDd/IyptgEFA" resname="wouldYouLikeToInstallNow">          <source>Do you want to install {app}?</source>          <target>Chcete instalovat {app}?</target>        </trans-unit>        <trans-unit id="kkPpRMP8+S9EWkTjvJYw1w" resname="theProductNameIsMandatory">          <source>The product name is mandatory.</source>          <target>Název produktu je povinný.</target>        </trans-unit>        <trans-unit id="jZ6HTaOXF38tDv7PucMGdg" resname="pleaseGiveNameToYourProduct">          <source>Before proceeding, please give your product a name.</source>          <target>Než budete pokračovat dejte svému produktu název.</target>        </trans-unit>        <trans-unit id="mzyoW6/Gqwp8HOojFTMo/A" resname="allContentWillBeReplaced">          <source>All changes will be lost.Do you want to continue ?</source>          <target>Všechny změny budou ztraceny.Chcete pokračovat ?</target>        </trans-unit>        <trans-unit id="WtJQA9hkO4ZmMop6mgWuYw" resname="theWebServerIsNotStarted">          <source>The Web Server is not started.</source>          <target>Web server není spuštěn.</target>        </trans-unit>        <trans-unit id="ecFbAMsMrW7og6dA9ojb/Q" resname="DoYouWantToStartTheWebServer">          <source>Do you want to start the web server?</source>          <target>Chcete spustit web server?</target>        </trans-unit>        <trans-unit id="Y1nSZ24MNrfzuhNZz6Ivkg" resname="fixThePath">          <source>{product} wants to fix the path to the development tools</source>          <target>{product} chce opravit cestu k vývojářským nástrojům</target>        </trans-unit>        <trans-unit id="WB8LQ2cwYzmimw0Ky3/XSQ" resname="enterYourPasswordToAllowThis">          <source>Enter your password to allow this.</source>          <target>Zadejte své heslo, abyste to umožnili.</target>        </trans-unit>        <trans-unit id="KjwuhiuL+qrFRI0+LBhheA" resname="theDevelopmentToolsAreNotProperlyInstalled">          <source>The path to the development tools is not set correctly.</source>          <target>Cesta k vývojovým nástrojům není nastavena správně.</target>        </trans-unit>        <trans-unit id="Y9bAze8v2UN2kh+ZrwUu7A" resname="doYouWantToFixTheToolsPath">          <source>Want to fix the path?(macOS password required)</source>          <target>Chcete uložit cestu?(vyžaduje heslo macOS)</target>        </trans-unit>        <trans-unit id="Cw9h1MWUu45eT/HdtPd2qw" resname="failedToRepairThePathOfTheDevelopmentTools">          <source>Failed to repair the path to the development tools.</source>          <target>Oprava cesty k vývojovým nástrojům se nezdařila.</target>        </trans-unit>        <trans-unit id="OVuLwimuwoETKTQ3xWsBIA" resname="tryDoingThisFromTheXcodeApplication">          <source>Try doing this from the Xcode application.</source>          <target>Zkuste to provést z aplikace Xcode.</target>        </trans-unit>        <trans-unit id="D8vqVhesodXD5ITg/yx++w" resname="obsoleteVersionofApp">          <source>{product} needs version {version} or higher of {application}.</source>          <target>{product} potřebuje verzi {version} nebo vyšší {application}.</target>        </trans-unit>        <trans-unit id="/JS1iuAaRDVDTbXnYaHQ2g" resname="xcodeIsNotFullyFunctional">          <source>Xcode is not fully functional</source>          <target>Xcode není plně funkční.</target>        </trans-unit>        <trans-unit id="0ZaqweZVGFnx8f5+m4Jv/g" resname="wouldYouLikeToLaunchAppNow">          <source>Would you like to launch {application} now to complete its installation?</source>          <target>Chcete nyní spustit {application} k dokončení jeho instalace?</target>        </trans-unit>        <trans-unit id="OZdO2goSGiYdTW+aF+1yoQ" resname="theDatabaseStructureWasModified">          <source>The database structure was modified.</source>          <target>Struktura databáze byla změněna.</target>        </trans-unit>        <trans-unit id="CrlVBOBuLCg2xXhKdRR40A" resname="theDataModelIsNoMoreValidAndMustBeUpdated">          <source>The data model is no longer valid and must be updated.Would you want to update it now?</source>          <target>Model dat již není platný a musí být aktualizován.Chcete jej aktualizovat nyní?</target>        </trans-unit>        <trans-unit id="MA/m4T00dDQKa8N99ooXDQ" resname="reviewing">          <source>Review errors</source>          <target>Zkontrolujte chyby</target>        </trans-unit>        <trans-unit id="1RQAqM8gd2y4BdxkgCZ4jA" resname="update">          <source>Update the Project</source>          <target>Aktualizujte projekt</target>        </trans-unit>        <trans-unit id="8Ca9DawZkoaFpIurxGpcVQ" resname="updateTheProject">          <source>Update the Project</source>          <target>Aktualizujte projekt</target>        </trans-unit>        <trans-unit id="04YzK0niQjd6owbiCKmaWg" resname="aBackupWillBeCreatedIntoTheProjectFolder">          <source>A Backup will be created in the Project Folder.</source>          <target>Záloha bude vytvořena ve složce Project.</target>        </trans-unit>        <trans-unit id="bOAnFJFUn//ZwZHK4c0V0g" resname="theApplicationHasBeenSuccessfullyGenerated">          <source>The application "{app}" has been successfully generated.</source>          <target>Aplikace "{app}" byla generována úspěšně.</target>        </trans-unit>        <trans-unit id="SJcL0Fui9Pgko+EpaHrbhA" resname="youMustPublishAtLeastOneFieldToBeAbleToBuildYourApplication">          <source>You must publish at least one field to be able to build your application.</source>          <target>K sestavení aplikace musíte publikovat alespoň jedno pole.</target>        </trans-unit>        <trans-unit id="PCHmP5L20eXHETSF2g5nVA" resname="projectArchive">          <source>Project Archive.This may take a few minutes…</source>          <target>Archivace projektu.Může to trvat několik minut…</target>        </trans-unit>        <trans-unit id="XzRAwFR1k8v92FfdNDLJpA" resname="projectArchiveExport">          <source>Archive Export.This may take a few minutes…</source>          <target>Archivace exportu.Může to trvat několik minut…</target>        </trans-unit>        <trans-unit id="BUXRKOcSnokBUs14nxz/9A" resname="archiveCreationSuccessful">          <source>Archive creation successful</source>          <target>Vytvoření archivu bylo úspěšné</target>        </trans-unit>        <trans-unit id="PDwQrNiC1396rZNnf65/Bw" resname="wouldYouLikeToRevealInFinder">          <source>Would you like to reveal in Finder</source>          <target>Chcete zobrazit ve Finderu</target>        </trans-unit>        <trans-unit id="NyLcBi8GzierZ/4c5bcCsw" resname="projectCreationSuccessful">          <source>Project creation successful</source>          <target>Vytvoření projektu bylo úspěšné</target>        </trans-unit>        <trans-unit id="qWyrqkvRzUwguoP/yHwLwA" resname="appIsNotInstalled">          <source>{app} is not installed.</source>          <target>{app} není instalován.</target>        </trans-unit>        <trans-unit id="o5D0IMhrl9ckUQ69M69FsA" resname="appleConfigurator2Installation">          <source>Apple Configurator 2 installation…</source>          <target>Apple Configurator 2 instalace…</target>        </trans-unit>        <trans-unit id="Ky5nosbBA9C5eYj/dH78lA" resname="clicContinueWhenAppleConfigurator2IsInstalledOnYourMac">          <source>Clic "Continue" when Apple configurator 2 is installed on your Mac.</source>          <target>Klepněte "Pokračovat" pokud je Apple configurator 2 již na vašem Mac instalován.</target>        </trans-unit>        <trans-unit id="Yt5Us9e7SWqjyJriuoe+BQ" resname="noDeviceFound">          <source>No Device Found</source>          <target>Nenalezeno žádné zařízení</target>        </trans-unit>        <trans-unit id="Sp5dYmXcBeJY87r1n69syQ" resname="makeSureThatADeviceIsConnected">          <source> Make sure that a device is connected to your computer using a USB cable.</source>          <target> Zkontrolujte, zda je zařízení připojeno k počítači pomocí kabelu USB.</target>        </trans-unit>        <trans-unit id="0P8BRDlzntJyfCqvVZMM+w" resname="theApplicationHasBeenSuccessfullyInstalled">          <source>The "{app}" application has been successfully installed on the "{device}" device.</source>          <target>Aplikace "{app}" byla úspěšně instalována na zařízení "{device}".</target>        </trans-unit>        <trans-unit id="XtJe8Nn62ATPXraHip761w" resname="failedToStartTheWebServer">          <source>Failed to start the Web Server.</source>          <target>Start Web Serveru selhal.</target>        </trans-unit>        <trans-unit id="wNebbT76gPyAEts9DBlZ0Q" resname="someListeningPortsAreAlreadyUsed">          <source>Some listening ports are already used or unavailable.Check HTTP Port ({http}) or HTTPS Port ({https}).</source>          <target>Některé porty naslouchání jsou již používány nebo nejsou k dispozici.Zkontrolujte port HTTP ({http}) nebo port HTTPS ({https}).</target>        </trans-unit>        <trans-unit id="GgTK6TU3VUIgrqn4p6O5Xg" resname="preparations">          <source>Preparing for build</source>          <target>Příprava na sestavení</target>        </trans-unit>        <trans-unit id="OLNtikLFn5pTrZE52P43Hw" resname="theProjectNameCanNotBeEmpty">          <source>The project name can not be empty.Please enter a name or cancel.</source>          <target>Název projektu nemůže být prázdný.Vložte prosím název nebo zrušte.</target>        </trans-unit>        <trans-unit id="4+m6G2BYIrly0BRWiDmWhA" resname="someStructuralAdjustmentsAreNeeded">          <source>Some adjustments of the structure are needed for an optimized update of mobile data.</source>          <target>Pro optimalizovanou aktualizaci mobilních dat jsou zapotřebí některé úpravy struktury.</target>        </trans-unit>        <trans-unit id="0b/DeSQ/l928x1y4m1DHYQ" resname="doYouAllow4dToModifyStructure">          <source>Do you allow 4D to modify the database structure?</source>          <target>Chcete povolit 4D modifikovat strukturu databáze?</target>        </trans-unit>        <trans-unit id="+xLH0EtaFqJGDGsoxb5pUA" resname="noTableDefinedInTheMainMenu">          <source>No table defined in the main menu</source>          <target>V hlavní nabídce nebyla definována žádná tabulka</target>        </trans-unit>        <trans-unit id="x8lM2mcgtdUDV61P7LWlBA" resname="youMustSetAtLeastOneTableIntoTheMainMenu">          <source>You must set at least one table into the main menu</source>          <target>Do hlavní nabídky musíte nastavit alespoň jednu tabulku</target>        </trans-unit>        <trans-unit id="M1xrw5jeieA25jVgbDwYBg" resname="waitingForXcode">          <source>Checking Xcode…</source>          <target>Kontrola Xcode…</target>        </trans-unit>        <trans-unit id="nvzgdC+jpMFK7+d0f7I/iA" resname="theStructureOfTheProductionServerIsNotOptimizedForThisProject">          <source>The structure of the production server is not optimized for this project.</source>          <target>Struktura produkčního serveru není optimalizována pro tento projekt.</target>        </trans-unit>        <trans-unit id="45fpE/5i2+NXN4ayyC/9QQ" resname="youMustUpdateTheStructureOfTheProductionServer">          <source>You must update the structure of the production server before generating the application, otherwise the data to embed will not be generated.</source>          <target>Před generováním aplikace musíte obnovit strukturu produkčního serveru, jinak nebudou připojená data generována.</target>        </trans-unit>        <trans-unit id="yXUxy3XuQwnbobd49S/Ljw" resname="theProductionServerIsNotAvailable">          <source>The production server is not available</source>          <target>Produkční server není dostupný</target>        </trans-unit>        <trans-unit id="c6UEdn9DAW3lYI6K7g8jbg" resname="itIsNotPossibleToBuildTheProject">          <source>It is not possible to build the project</source>          <target>Není možno sestavit projekt</target>        </trans-unit>        <trans-unit id="Ild/z6I8YPxaZRLZLJH6Xg" resname="generationOfTheDatasetIsInProgress">          <source>A generation of the dataset is in progress</source>          <target>Probíhá generování souboru dat</target>        </trans-unit>        <trans-unit id="SXb1rafNPYpdc2aSZTooiw" resname="failedToLaunchTheSimulator">          <source>Failed to launch the Simulator</source>          <target>Simulátor se nepodařilo spustit</target>        </trans-unit>        <trans-unit id="JsdJZ42YxywOUyleDw/U+g" resname="failedToOpenSimulator">          <source>Failed to open Simulator</source>          <target>Simulátor se nepodařilo otevřít</target>        </trans-unit>        <trans-unit id="uFV/rBlD4yOSl3n/T9ZL/Q" resname="failedDecompressTheSdk">          <source>Failed decompress the sdk</source>          <target>Nepodařilo se dekomprimovat sdk</target>        </trans-unit>        <trans-unit id="5/RXjWPFGhzatJ6oPmh3MQ" resname="failedToArchive">          <source>Failed to create archive</source>          <target>Nepodařilo se otevřít archiv</target>        </trans-unit>        <trans-unit id="rxnRnwraz6tq4r2ChOJwJg" resname="theAliasMobileOriginalCan'tBeFound">          <source>The alias "mobile" can't be used because the original can't be found</source>          <target>Alias "mobile" nelze použít, protože originál nelze najít</target>        </trans-unit>        <trans-unit id="LqAIKjlMxhHw6lekwdN3zQ" resname="unableToGenerateApp">          <source>Unable to generate App</source>          <target>Není možné generovat App</target>        </trans-unit>        <trans-unit id="wEnpAnOeJPy4XbFyOw2k4A" resname="theprojectmustbelocatedrinthemobileprojectsfolder">          <source>For the build process, the project must be locatedin the "Mobile Projects" folder.</source>          <target>Pro proces sestavení, musí být projekt umístěnve složce "Mobile Projects".</target>        </trans-unit>        <trans-unit id="HeYnZhBnU9tF0D/pgopP9w" resname="theDirectoryIsLockedOrTheDiskIsFull">          <source>The directory is locked or the disk is full</source>          <target>Adresář je uzamčen nebo je disk plný</target>        </trans-unit>        <trans-unit id="a17UOx3+GN2qO71UajMEFQ" resname="4dMobileRequiresAndroidStudio">          <source>{product} requires the installation of Android Studio.</source>          <target>{product} požaduje instalaci Android Studio.</target>        </trans-unit>        <trans-unit id="KyW4EJdCSktxNdDMCOgiqg" resname="wouldYouLikeToUpdateNow">          <source>Do you want to update {app} now?</source>          <target>Chcete nyní aktualizovat {app}?</target>        </trans-unit>        <trans-unit id="x+ocRvyV7CLdA0UyVAyGgg" resname="androidStudioMustBeLaunchedAtLeastOnceToBeFullyInstalled">          <source>Android Studio must be launched at least once to be fully installed.</source>          <target>Aby byla aplikace Android Studio plně nainstalována, musí být spuštěna alespoň jednou.</target>        </trans-unit>        <trans-unit id="Bao4vvbxgtNljiP85l6wzg" resname="wantToLaunchAndroidStudio">          <source>Want to launch Android Studio?</source>          <target>Chcete spustit Android Studio?</target>        </trans-unit>        <trans-unit id="MvaD8Ajiw7DepAUsP3aBLw" resname="youMustFirstSelectASimulator">          <source>You must first select a simulator</source>          <target>Nejdřív musíte vybrat simulátor</target>        </trans-unit>        <trans-unit id="+ZiFXNZD3tMOFjrIELc+LQ" resname="downloadingSDK">          <source>Downloading 4D for {os} SDK</source>          <target>Stahování 4D for {os} SDK</target>        </trans-unit>        <trans-unit id="3CavNiVIwiCc2w9bpCzMCQ" resname="yourVersionOf4dMobileSdkUpToDate">          <source>Your version of 4D Mobile SDK for {os} is up to date.</source>          <target>Vaše verze 4D Mobile SDK for {os} je aktuální.</target>        </trans-unit>        <trans-unit id="hK09xxBMItxyMWDNk9ZZSA" resname="projectBuildFailure">          <source>Project Build Failure</source>          <target>Sestavování projektu selhalo</target>        </trans-unit>        <trans-unit id="0qFKoMgdXurDIHPMB1tlAw" resname="creatingADefaultDevice">          <source>Creating a default device…</source>          <target>Vytváření výchozího zařízení…</target>        </trans-unit>        <trans-unit id="AbyoEe/AfXVUTUsb6A0bpQ" resname="failedToCreateTheProject">          <source>Failed to create the project</source>          <target>Vytvoření projektu selhalo</target>        </trans-unit>        <trans-unit id="ZQF8S5BG3B4PNiA0zeWnSQ" resname="copyingResources">          <source>Copying resources</source>          <target>Kopírování zdrojů</target>        </trans-unit>        <trans-unit id="unFcSfKilo4GTsw9ovLL6A" resname="theIconIsMandatory">          <source>The icon is mandatory</source>          <target>Ikona je povinná</target>        </trans-unit>        <trans-unit id="P3yglsT6c6GhN9cCB4EYzw" resname="unzipping">          <source>Unzipping…</source>          <target>Rozbalení…</target>        </trans-unit>        <trans-unit id="q1uk4E78lBtlSo0fBLxZMA" resname="4dForAndroidNeedsToInstallHardwareAccelerationTools">          <source>4D for Android needs to install hardware acceleration tools to improve performance of the emulator.</source>          <target>4D for Android potřebuje ke zlepšení výkonu emulátoru instalovat hardwarové akcelerační nástroje.</target>        </trans-unit>        <trans-unit id="yHuDmKhBfPSl8P58q7UGqw" resname="doYouWantToInstallHaxm">          <source>Do you want to install "Intel® Hardware Accelerated Execution Manager" (HAXM)?            The installer will need your password.</source>          <target>Chcete instalovat "Intel® Hardware Accelerated Execution Manager" (HAXM)?            Instalátor bude potřebovat vaše heslo.</target>        </trans-unit>        <trans-unit id="mNW4LC0ot2agO/7t5C7+xg" resname="tooRecentVersion">          <source>{product} requires at most {application} version {version}.</source>          <target>{product} požaduje nanejvýš {application} verzi {version}.</target>        </trans-unit>        <trans-unit id="BZ1whUnnRogn3/l10w9DuA" resname="versionNotSupported">          <source>{application} version not supported</source>          <target>{application} verze není podporována</target>        </trans-unit>        <trans-unit id="RBMSAEl1dYEXrGrv7vUJAw" resname="switchTheActiveDevelopperDirectory">          <source>{product} wants to switch the active developper directory</source>          <target>{product} chce změnit aktivní adresář vývojáře</target>        </trans-unit>        <trans-unit id="0gTTip5aW5/aFxQRQsnepA" resname="needsSetXcodeAsActiveVersion">          <source>{product} needs set Xcode {version} as active version.</source>          <target>{product} potřebuje nastavit Xcode {version} jako aktivní verzi.</target>        </trans-unit>        <trans-unit id="OaQEoTk6jv1x9W+gTwHMNw" resname="doYouWantToSwitchTheActiveDevelopperDirectory">          <source>Do you want to switch the active developper directory?(macOS password required)</source>          <target>Chcete změnit aktivní adrasář vývojáře?(vyžadováno heslo macOS)</target>        </trans-unit>        <trans-unit id="ltAjeyMiy5vhwHNkK4Jhkw" resname="tooOldVersion">          <source>{product} requires at least {application} version {version}.</source>          <target>{product} vyžaduje alespoň {application} verzi {version}.</target>        </trans-unit>        <trans-unit id="d9Xn2sCIDZpN64qibzwjTA" resname="thePackageNameShouldUseOnlyLettersNumbersAndUnderscores">          <source>The package identifier should use only letters, numbers and underscores ({identifier}).</source>          <target>Identifikátor balíčku by měl používat pouze písmena, číslice a podtržítka ({identifier}).</target>        </trans-unit>        <trans-unit id="Hk/xDQGQxzJDO8xSatvc3w" resname="thePackageNameMustHaveAtLeast2SegmentsSeparatedByADot">          <source>The package name must have at least 2 segments separated by a dot ({packageName})</source>          <target>Název balíčku musí mít alespoň 2 segmenty oddělené tečkou ({packageName})</target>        </trans-unit>        <trans-unit id="CYizpP6c7kUsz3KZqQ+25g" resname="thePackageNameMustBeginWithALetter">          <source>The package name must begin with a letter ({packageName})</source>          <target>Název balíčku musí začínat písmenem ({packageName})</target>        </trans-unit>        <trans-unit id="MDtmzadlZicdL2ZiSF5k3A" resname="thePackageNameMustNotEndWithADot">          <source>The package name must not end with a dot ({packageName})</source>          <target>Název balíčku nesmí končit tečkou ({packageName})</target>        </trans-unit>        <trans-unit id="cRehBhjHNQ23ZXzrVix6tA" resname="aPackageNameSegmentMustStartWithALetter">          <source>A package name segment must start with a letter ({packageName})</source>          <target>Segment názvu balíčku musí začínat písmenem ({packageName})</target>        </trans-unit>        <trans-unit id="QR/6FwBbJ7oAADGwGjB+dg" resname="invalidProject">          <source>Invalid project</source>          <target state="new">Invalid project</target>        </trans-unit>        <trans-unit id="zkjipuH78V0sx3jDVx3eEw" resname="thisProjectCannotBeLoadedWith4dV19">          <source>This project cannot be used with 4D v19</source>          <target state="new">This project cannot be used with 4D v19</target>        </trans-unit>      </group>      <group resname="help-tips">        <trans-unit id="qnDfKORzzNOgWKvcsamlMA" resname="deviceList">          <source>Selecting the simulator for testing</source>          <target>Výběr simulátoru pro testování</target>        </trans-unit>        <trans-unit id="DL/ObXm8FfTezIx0ECRLWg" resname="youNeedXcodeToPerformThisOperation">          <source>You need xCode to perform this operation</source>          <target>K provedení této operace potřebujete xCode</target>        </trans-unit>        <trans-unit id="BMwBCCahahq6GxKXQWUfig" resname="youMustPublishAtLeastOneFieldToPerformThisOperation">          <source>You must publish at least one field to perform this operation</source>          <target>K provedení této operace potřebujete publikovat alespoň jedno pole</target>        </trans-unit>        <trans-unit id="/8T/65MWJzGzEGgx2jr/Mg" resname="defineYourTeamIdToPerformThisOperation">          <source>Define your Team ID to perform this operation</source>          <target>K provedení této operace definujte vaše týmové ID</target>        </trans-unit>      </group>      <group resname="common">        <trans-unit id="qgyPG6If+wmMrq/AQB32uw" resname="ok">          <source>OK</source>          <target>OK</target>        </trans-unit>        <trans-unit id="ad6IfyiNfmOykJkC44Cu7Q" resname="cancel">          <source>Cancel</source>          <target>Storno</target>        </trans-unit>        <trans-unit id="AztKs48IYq18Gb1nN/y8xQ" resname="notNow">          <source>Not now</source>          <target>Ne nyní</target>        </trans-unit>        <trans-unit id="xHbZr3ruNAekSYBmI+pMlg" resname="4dProductName" translate="no">          <source>4D Mobile</source>        </trans-unit>        <trans-unit id="NbSPF7WQGb4Eaqe+Rz6qCw" resname="search">          <source>Search</source>          <target>Hledat</target>        </trans-unit>        <trans-unit id="+f4N+SQfqds4LrZGQaZ2ng" resname="doubleClickToEdit">          <source>Double click to edit.</source>          <target>Pro úpravu poklepat.</target>        </trans-unit>        <trans-unit id="a44NaLWnfUIXH/PiwUazKw" resname="clickToSet">          <source>Click to set</source>          <target>Nastavit klepnutím</target>        </trans-unit>        <trans-unit id="CSAwPSxKMO05z08LNFA+MA" resname="project">          <source>Project</source>          <target>Projekt</target>        </trans-unit>        <trans-unit id="9B84h1H1Rj87SMihcR9ZOA" resname="unknown">          <source>Unknown</source>          <target>Neznámý</target>        </trans-unit>        <trans-unit id="JTMKcwTRjQddQeES+qSzOg" resname="continue">          <source>Continue</source>          <target>Poračovat</target>        </trans-unit>        <trans-unit id="+b3wof+tzoPXsivXKSayjw" resname="manualInstallation">          <source>Manual installation</source>          <target>Vlastní instalace</target>        </trans-unit>        <trans-unit id="B04Xa7zekU88zyJC3v6CqQ" resname="error:">          <source>Error: </source>          <target>Chyba: </target>        </trans-unit>        <trans-unit id="imV5I/sByaZ5+Hpw+Xx7Cg" resname="unknownErrorOccurred">          <source>Unknown error occurred</source>          <target>Vyskytla se neznámá chyba</target>        </trans-unit>        <trans-unit id="gW2TvIqGEGqJvzV5I1GgYA" resname="invalidUrl">          <source>Invalid URL</source>          <target>Neplatné URL</target>        </trans-unit>        <trans-unit id="qS1lLxFKj3ogvVz+g/lqQA" resname="comparators">          <source>Comparators</source>          <target>Komparátory</target>        </trans-unit>        <trans-unit id="oriDTP8u9qgJ39n39L5TCA" resname="operators">          <source>Operators</source>          <target>Operátory</target>        </trans-unit>        <trans-unit id="EvCgt7AueiHok2VZvRNyhw" resname="startWebServer">          <source>Start Web Server</source>          <target>Start Web Serveru</target>        </trans-unit>        <trans-unit id="DgNWXiQk3/ptkwL4VIn3cQ" resname="replacedFiles">          <source>Replaced Files {stamp}</source>          <target>RNahrazené soubory {stamp}</target>        </trans-unit>        <trans-unit id="LOWBV9k49Av1oJ8DiNPdMw" resname="rememberMyChoice">          <source>Remember my choice</source>          <target>Pamatovat mou volbu</target>        </trans-unit>        <trans-unit id="mHN1IxQOaKQx1RdZeCgt0Q" resname="allow">          <source>Allow</source>          <target>Povolit</target>        </trans-unit>        <trans-unit id="Sd8ZqffOjBc7iqkxmcmOwQ" resname="choose...">          <source>Choose…</source>          <target>Vybrat…</target>        </trans-unit>        <trans-unit id="H04h367zwAsynDhOHLcTjg" resname="#NA">          <source>n/a</source>          <target>nedost.</target>        </trans-unit>        <trans-unit id="gsRyVUAzRUBVA75hqwjbTQ" resname="convertedFiles">          <source>Converted Files {stamp}</source>          <target>Konvertované soubory {stamp}</target>        </trans-unit>        <trans-unit id="2zeau/YvEjNyCgp4G7qxAQ" resname="mandatory">          <source>Mandatory</source>          <target>Povinné</target>        </trans-unit>        <trans-unit id="iM3N8PGRjDksISszpikvcg" resname="placeholder">          <source>Placeholder</source>          <target>Zástupné symboly</target>        </trans-unit>        <trans-unit id="i43VrVGtG4H2zqpHiDEcKA" resname="minimum">          <source>Minimum</source>          <target>Minimum</target>        </trans-unit>        <trans-unit id="eNlT0g85ckhtBLO/XrN3ww" resname="maximum">          <source>Maximum</source>          <target>Maximum</target>        </trans-unit>        <trans-unit id="xCqmpOWrkjTSem1IhkN5lg" resname="listOf">          <source>List of {values}</source>          <target>Seznam {values}</target>        </trans-unit>        <trans-unit id="hUcnjer+ziVtKuVGciNSbg" resname="enable">          <source>enable</source>          <target>povolit</target>        </trans-unit>        <trans-unit id="2HdKZy1jIlAqLk92qHzC1g" resname="disable">          <source>disable</source>          <target>zakázat</target>        </trans-unit>        <trans-unit id="K3gmwpf7rjooqR9YIDapOw" resname="downloadInProgress">          <source>Download in progress…</source>          <target>Stahování v běhu…</target>        </trans-unit>        <trans-unit id="IZiKFZUjvCPggxO/k/UMtw" resname="back">          <source>Back</source>          <target>Zpět</target>        </trans-unit>        <trans-unit id="GJngBSPBZ95TrAslxxNmeg" resname="close">          <source>Close</source>          <target>Uzavřít</target>        </trans-unit>        <trans-unit id="dvzeko0zyv/E0PNHvumgTg" resname="fileNotFound">          <source>File not found</source>          <target>Soubor nenalezen</target>        </trans-unit>        <trans-unit id="cx0uA9XEqaA2pmrdT55vhg" resname="4dForIos" translate="no">          <source>4D for iOS</source>        </trans-unit>        <trans-unit id="ly/XLCqaoc5y94hc+Lh/zQ" resname="4dForAndroid" translate="no">          <source>4D for Android</source>        </trans-unit>        <trans-unit id="7ptGpjw+oksEwf7YU2JjEQ" resname="xcode" translate="no">          <source>Xcode</source>        </trans-unit>        <trans-unit id="xr1jlIgDks142oGz/c9efw" resname="androidStudio" translate="no">          <source>Android Studio</source>        </trans-unit>        <trans-unit id="N/3f21sCqhgbE2r+h2+1UA" resname="editorWindowTitle">          <source>Mobile Project: {name}</source>          <target>Mobilní projekt: {name}</target>        </trans-unit>        <trans-unit id="SnEbElOo6cxBwqKXT0osEg" resname="targetOs">          <source>Target OS</source>          <target>Cílový OS</target>        </trans-unit>        <trans-unit id="lP5NwUd02X/BqS+PJoOpkQ" resname="openAnotherProject">          <source>Open another project…</source>          <target>Otevřít jiný projekt…</target>        </trans-unit>        <trans-unit id="L1gdRTWNlUb2of/0UhFggw" resname="open">          <source>Open</source>          <target>Otevřít</target>        </trans-unit>        <trans-unit id="XyP2bYzcNiWl75T2OEKD4w" resname="missingFile">          <source>Missing file "{file}"</source>          <target>Chybějící soubor "{file}"</target>        </trans-unit>        <trans-unit id="0g8I65SK0Ef31qJvPuKjaA" resname="later">          <source>Later</source>          <target>Později</target>        </trans-unit>      </group>      <group resname="default values">        <trans-unit id="uvcuS+6kvyLtejaBCimjbw" resname="newApplication">          <source>My App</source>          <target>Má apl.</target>        </trans-unit>        <trans-unit id="cfN+o3Ry0FEUA9v7KXEX8w" resname="companyName">          <source>My Company</source>          <target>Má spol.</target>        </trans-unit>        <trans-unit id="jLVrTgRLGhDI6g7K8QSf3g" resname="allRightsReserved">          <source>All rights reserved</source>          <target>Všechna práva vyhrazena</target>        </trans-unit>      </group>      <group resname="ribbon">        <trans-unit id="wPk3fOduWHWqxodyjRkeUQ" resname="sections">          <source>SECTIONS</source>          <target>SEKCE</target>        </trans-unit>        <trans-unit id="UqKYec3CvUjCFEa1HYOzgw" resname="build">          <source>BUILD</source>          <target>SESTAVIT</target>        </trans-unit>        <trans-unit id="GZj+t33+YYRd8z4z1j/wWQ" resname="install">          <source>Install</source>          <target>Instalovat</target>        </trans-unit>        <trans-unit id="CG2B3VUN/dKKej4alWD0Ug" resname="openTheAvdManager">          <source>Open Android Studio...</source>          <target>Otevřete Android studio...</target>        </trans-unit>        <trans-unit id="OEnsaAYWrvOjjzmAPucY/A" resname="openTheXcodeSimulatorsManager">          <source>Open the Xcode Simulators manager...</source>          <target>Otevřete správce simulátorů Xcode...</target>        </trans-unit>      </group>      <group resname="ERRORS">        <trans-unit id="bED/fpei/FAE7MlOk9WbZA" resname="ERR_MOBL_1">          <source>Invalid session description object</source>          <target>Neplatný popis objektu sekce</target>        </trans-unit>        <trans-unit id="1Of+1DDAUQq7EPbrFH6DBg" resname="ERR_MOBL_2">          <source>Failed to delete session file</source>          <target>Soubor sekce se nepodařilo odstranit</target>        </trans-unit>        <trans-unit id="9jl8jT/JEPIfuEXfY8gH8Q" resname="ERR_MOBL_3">          <source>Failed to update session file</source>          <target>Nepodařilo se aktualizovat soubor sekce</target>        </trans-unit>      </group>      <group resname="field types">        <trans-unit id="iv0dHVnJVkl6o6hyL1strg" resname="alpha">          <source>Alpha</source>          <target>Alfa</target>        </trans-unit>        <trans-unit id="gNcNFThyLpRgwyrMMqFyAg" resname="text">          <source>Text</source>          <target>Text</target>        </trans-unit>        <trans-unit id="Yf58fdPwjxeBCeo3xh8smg" resname="real">          <source>Real</source>          <target>Realné</target>        </trans-unit>        <trans-unit id="NksW538eX7kJphdIEGi1Yg" resname="integer">          <source>Integer</source>          <target>Integer</target>        </trans-unit>        <trans-unit id="AoSGUuHBzj845Cox+QITbg" resname="longInteger">          <source>Long Integer</source>          <target>Long Integer</target>        </trans-unit>        <trans-unit id="zAH4zSPganDDisJT7I5fGw" resname="date">          <source>Date</source>          <target>Datum</target>        </trans-unit>        <trans-unit id="pdV7arlmpJFgBV9qELcd2Q" resname="time">          <source>Time</source>          <target>Čas</target>        </trans-unit>        <trans-unit id="tbl2k5AzDGXZyVW2N1NwKQ" resname="boolean">          <source>Boolean</source>          <target>Logické</target>        </trans-unit>        <trans-unit id="8tHv2xRz716PbS3NoFrh1A" resname="picture">          <source>Picture</source>          <target>Obrázek</target>        </trans-unit>        <trans-unit id="KCtdmuoCK0a9wahV405tpQ" resname="float">          <source>Float</source>          <target>Float</target>        </trans-unit>        <trans-unit id="ONO++64D+yaREKAsRXBitQ" resname="integer64Bits">          <source>Integer 64 bits</source>          <target>Integer 64 bitů</target>        </trans-unit>        <trans-unit id="llri5274v1KSR0zeld4Kgw" resname="number">          <source>Number</source>          <target>Číslo</target>        </trans-unit>        <trans-unit id="kcZOIC34bL5UORd8s7s4hA" resname="image">          <source>Image</source>          <target>Obrázek</target>        </trans-unit>        <trans-unit id="bboOmlR+Pe/wQz4KwDp9vA" resname="bool">          <source>Boolean</source>          <target>Logické</target>        </trans-unit>      </group>      <group resname="operators">        <trans-unit id="WyxljFphW4QKBl5U7Xpbzw" resname="equalTo">          <source>Equal to</source>          <target>rovná se</target>        </trans-unit>        <trans-unit id="Uu+RJQFIufjqlJmsqaYVaA" resname="notEqualTo">          <source>Not equal to</source>          <target>nerovná se</target>        </trans-unit>        <trans-unit id="R/BoLUeDPalcj1J9akOngA" resname="lessThan">          <source>Less than</source>          <target>menší než</target>        </trans-unit>        <trans-unit id="hwn2q47HEs/jDDPj2i/rPQ" resname="greaterThan">          <source>Greater than</source>          <target>větší než</target>        </trans-unit>        <trans-unit id="g5z+/Jfj4oEY6evpp6s7QQ" resname="lessThanOrEqualTo">          <source>Less than or equal to</source>          <target>menší než nebo rovno</target>        </trans-unit>        <trans-unit id="Ag74RXMGaIENVrjhkvklIA" resname="greaterThanOrEqualTo">          <source>Greater than or equal to</source>          <target>větší než nebo rovno</target>        </trans-unit>        <trans-unit id="5DAVYexMhygj6w9QXvILaQ" resname="containsKeyword">          <source>Contains keyword</source>          <target>obsahuje klíčové slovo</target>        </trans-unit>        <trans-unit id="vjV5UW+UCHkJ/emrPE4CMA" resname="parentheses">          <source>Parentheses</source>          <target>závorky</target>        </trans-unit>      </group>      <group resname="formats">        <trans-unit id="WO0Gq/SwjostSXxSgc47tw" resname="f_password">          <source>Password</source>          <target>Heslo</target>        </trans-unit>        <trans-unit id="xtMm6HmUhcLURdjTNGvIjw" resname="f_zipCode">          <source>Zip code</source>          <target>PSČ</target>        </trans-unit>        <trans-unit id="HtXxLxovqcaxUZ7bR+cOyA" resname="f_textArea">          <source>Text area</source>          <target>Textová oblast</target>        </trans-unit>        <trans-unit id="LNrHdITNPmVdN9g/tkSdPg" resname="f_name">          <source>Capitalized text</source>          <target>Text velkými písmeny</target>        </trans-unit>        <trans-unit id="6Knfh23wVHpZCZxHFKyt9A" resname="f_account">          <source>Account</source>          <target>Účet</target>        </trans-unit>        <trans-unit id="N91uUYKQbWOoDXT1tMhRIA" resname="f_standard">          <source>Standard</source>          <target>Standard</target>        </trans-unit>        <trans-unit id="bMb459OUgBKtjtlHIIzVrg" resname="f_scientific">          <source>Scientific</source>          <target>Vědecké</target>        </trans-unit>        <trans-unit id="ABuGtMhC4YZTQod62T/y2A" resname="f_energy">          <source>Energy</source>          <target>Energie</target>        </trans-unit>        <trans-unit id="aeLu3uRYc1HJ4Xtq/7aG3A" resname="f_mass">          <source>Mass</source>          <target>Hmotnost</target>        </trans-unit>        <trans-unit id="mYyio6TDBwSLV4eoyR0X9w" resname="f_hour">          <source>Hour</source>          <target>Hodina</target>        </trans-unit>        <trans-unit id="XcYe01x5171zJAlfcchE4w" resname="f_email">          <source>Mail address</source>          <target>E-mailová adresa</target>        </trans-unit>        <trans-unit id="Y0gV3NAwvspd8f+dJYbNXQ" resname="f_phone">          <source>Phone Number</source>          <target>Telefonní číslo</target>        </trans-unit>        <trans-unit id="Vkn2NAijDB1visYJnvqzzw" resname="f_url">          <source>URL</source>          <target>URL</target>        </trans-unit>        <trans-unit id="SXDKkuPR3L+2qYnNM+GhNg" resname="f_percent">          <source>Percentage</source>          <target>Procent</target>        </trans-unit>        <trans-unit id="Di2qNSU3vQGNCaqswVdKvA" resname="f_longDate">          <source>Long date</source>          <target>Datum dlouhé</target>        </trans-unit>        <trans-unit id="6oarzAAP5bBe9UYUCFr5pQ" resname="f_shortDate">          <source>Short date</source>          <target>Datum krátké</target>        </trans-unit>        <trans-unit id="cQEEOZ/6vobyon37x3ZSfg" resname="f_fullDate">          <source>Full date</source>          <target>Datum úplné</target>        </trans-unit>        <trans-unit id="27Sekublxso9s9EPsWXL3Q" resname="f_spellOut">          <source>Spell Out</source>          <target>Hláskovat</target>        </trans-unit>        <trans-unit id="rq4EhKk5zDWZyVtTilozBQ" resname="f_duration">          <source>Duration</source>          <target>Trvání</target>        </trans-unit>        <trans-unit id="ei+ffVhQIJCzbfRxgmOvpw" resname="f_image">          <source>Image</source>          <target>Obrázek</target>        </trans-unit>        <trans-unit id="a809iy7aOU7FaDXBdelU7g" resname="f_bool">          <source>Boolean</source>          <target>Logické</target>        </trans-unit>        <trans-unit id="VPCZEh7TWTTgeJfKLZK8Wg" resname="f_integer">          <source>Integer</source>          <target>Integer</target>        </trans-unit>        <trans-unit id="vr/gSzJ+tlkDTWk+nGWQ9w" resname="f_check">          <source>Check mark</source>          <target>Zaškrtávatko</target>        </trans-unit>        <trans-unit id="87pzjG/mUeg2Wof/6QOOPA" resname="f_barcode">          <source>Barcode</source>          <target>Čárový kód</target>        </trans-unit>        <trans-unit id="kvxca6ovlbth54S522FEKg" resname="f_signature">          <source>Signature</source>          <target>Podpis</target>        </trans-unit>      </group>      <group resname="tasks">        <trans-unit id="KFFcrqFjFKTy9jWBVmEh4w" resname="getDevices">          <source>Available devices</source>          <target>Dostupná zařízení</target>        </trans-unit>        <trans-unit id="cOn/py2JN/Rdwqqz3IBdDw" resname="checkDevTools">          <source>Checking dev environment</source>          <target>Kontrola vývového prostředí</target>        </trans-unit>        <trans-unit id="pF0XDVVhBND7cRyYvkr42g" resname="checkProject">          <source>Audit of the project</source>          <target>Audit projektu</target>        </trans-unit>      </group>    </body>  </file></xliff>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!--Translation file.
+This file is distributed under the same license as the product package.-->
+<xliff version="1.0" xmlns:d4="http://www.4d.com/d4-ns">
+
+  <file datatype="x-STR#" original="undefined" source-language="en-US" target-language="cs">
+    <header>
+      <prop-group name="Xliff-Editor.4dbase">
+        <prop prop-type="version">2.0</prop>
+        <prop-group prop-type="version">2.0</prop-group>
+      </prop-group>
+    </header>
+    <body>
+      <group resname="messages">
+        <trans-unit id="1" resname="projectName">
+          <source>Project name</source>
+          <target>Název projektu</target>
+        </trans-unit>
+        <trans-unit id="2" resname="newProject">
+          <source>New project</source>
+          <target>Nový projekt</target>
+        </trans-unit>
+        <trans-unit id="3" resname="create">
+          <source>Create</source>
+          <target>Vytvořit</target>
+        </trans-unit>
+        <trans-unit id="4" resname="thisProjectAlreadyExist">
+          <source>This project already exists.
+
+Do you want to replace it?</source>
+          <target>Tento projekt již existuje.
+
+Chcete jej nahradit?</target>
+        </trans-unit>
+        <trans-unit id="GAtIydVCgYLbZUtSym8V1A" resname="selectTheProjectToOpen">
+          <source>Select the project to open</source>
+          <target>Vyberte projekt pro otevření</target>
+        </trans-unit>
+        <trans-unit id="JaEuN9xA2MbU2DIJ8g8pdg" resname="theProductFolderAlreadyExist">
+          <source>The project appears to have been modified.</source>
+          <target>Zdá se, že projekt byl změněn.</target>
+        </trans-unit>
+        <trans-unit id="k5CG7235I1Ig2eatHqdD+g" resname="creatingTheProjectFolder">
+          <source>Creating the project "{project}"</source>
+          <target>Vytváření projektu "{project}"</target>
+        </trans-unit>
+        <trans-unit id="G3DdvHXQf8087yYs371vtg" resname="decompressionOfTheSdk">
+          <source>Installing the SDK</source>
+          <target>Instaluji SDK</target>
+        </trans-unit>
+        <trans-unit id="vys84xoAdfaLGYjQAEZxuw" resname="workspaceCreation">
+          <source>Creating the WorkSpace</source>
+          <target>Vytváření WorkSpace</target>
+        </trans-unit>
+        <trans-unit id="Oj/j4LAeJ7x7neqOiGTtSg" resname="projectBuild">
+          <source>Building the project.
+
+This may take a few minutes…</source>
+          <target>Sestavování projektu.
+
+Může to trvat několik minut…</target>
+        </trans-unit>
+        <trans-unit id="7vcJzJw4w3xiLYjY231hdg" resname="launchingTheSimulator">
+          <source>Launching the simulator</source>
+          <target>Spouštění simulátoru</target>
+        </trans-unit>
+        <trans-unit id="hqqAV7m7CoahTHmn+iMSDg" resname="installingTheApplication">
+          <source>Installing the application</source>
+          <target>Instalování aplikace</target>
+        </trans-unit>
+        <trans-unit id="7Rg1FmmM3bgG24HCZ8IMGA" resname="launchingTheApplication">
+          <source>Launching the application</source>
+          <target>Spouštění aplikace</target>
+        </trans-unit>
+        <trans-unit id="HDtnFsLKsBHrwqpnAxC73w" resname="noDevices">
+          <source>No simulator device installed</source>
+          <target>Není instalováno žádné simulátorové zařízení</target>
+        </trans-unit>
+        <trans-unit id="KVwx0s0n82Z9VZfjfb6tdA" resname="4dMobileRequiresXcode">
+          <source>{product} requires the installation of Xcode.</source>
+          <target>{product} vyžaduje instalaci Xcode.</target>
+        </trans-unit>
+        <trans-unit id="S2lGEoShatzDd/IyptgEFA" resname="wouldYouLikeToInstallNow">
+          <source>Do you want to install {app}?</source>
+          <target>Chcete instalovat {app}?</target>
+        </trans-unit>
+        <trans-unit id="kkPpRMP8+S9EWkTjvJYw1w" resname="theProductNameIsMandatory">
+          <source>The product name is mandatory.</source>
+          <target>Název produktu je povinný.</target>
+        </trans-unit>
+        <trans-unit id="jZ6HTaOXF38tDv7PucMGdg" resname="pleaseGiveNameToYourProduct">
+          <source>Before proceeding, please give your product a name.</source>
+          <target>Než budete pokračovat dejte svému produktu název.</target>
+        </trans-unit>
+        <trans-unit id="mzyoW6/Gqwp8HOojFTMo/A" resname="allContentWillBeReplaced">
+          <source>All changes will be lost.
+
+Do you want to continue ?</source>
+          <target>Všechny změny budou ztraceny.
+
+Chcete pokračovat ?</target>
+        </trans-unit>
+        <trans-unit id="WtJQA9hkO4ZmMop6mgWuYw" resname="theWebServerIsNotStarted">
+          <source>The Web Server is not started.</source>
+          <target>Web server není spuštěn.</target>
+        </trans-unit>
+        <trans-unit id="ecFbAMsMrW7og6dA9ojb/Q" resname="DoYouWantToStartTheWebServer">
+          <source>Do you want to start the web server?</source>
+          <target>Chcete spustit web server?</target>
+        </trans-unit>
+        <trans-unit id="Y1nSZ24MNrfzuhNZz6Ivkg" resname="fixThePath">
+          <source>{product} wants to fix the path to the development tools</source>
+          <target>{product} chce opravit cestu k vývojářským nástrojům</target>
+        </trans-unit>
+        <trans-unit id="WB8LQ2cwYzmimw0Ky3/XSQ" resname="enterYourPasswordToAllowThis">
+          <source>Enter your password to allow this.</source>
+          <target>Zadejte své heslo, abyste to umožnili.</target>
+        </trans-unit>
+        <trans-unit id="KjwuhiuL+qrFRI0+LBhheA" resname="theDevelopmentToolsAreNotProperlyInstalled">
+          <source>The path to the development tools is not set correctly.</source>
+          <target>Cesta k vývojovým nástrojům není nastavena správně.</target>
+        </trans-unit>
+        <trans-unit id="Y9bAze8v2UN2kh+ZrwUu7A" resname="doYouWantToFixTheToolsPath">
+          <source>Want to fix the path?
+
+(macOS password required)</source>
+          <target>Chcete uložit cestu?
+
+(vyžaduje heslo macOS)</target>
+        </trans-unit>
+        <trans-unit id="Cw9h1MWUu45eT/HdtPd2qw" resname="failedToRepairThePathOfTheDevelopmentTools">
+          <source>Failed to repair the path to the development tools.</source>
+          <target>Oprava cesty k vývojovým nástrojům se nezdařila.</target>
+        </trans-unit>
+        <trans-unit id="OVuLwimuwoETKTQ3xWsBIA" resname="tryDoingThisFromTheXcodeApplication">
+          <source>Try doing this from the Xcode application.</source>
+          <target>Zkuste to provést z aplikace Xcode.</target>
+        </trans-unit>
+        <trans-unit id="D8vqVhesodXD5ITg/yx++w" resname="obsoleteVersionofApp">
+          <source>{product} needs version {version} or higher of {application}.</source>
+          <target>{product} potřebuje verzi {version} nebo vyšší {application}.</target>
+        </trans-unit>
+        <trans-unit id="/JS1iuAaRDVDTbXnYaHQ2g" resname="xcodeIsNotFullyFunctional">
+          <source>Xcode is not fully functional</source>
+          <target>Xcode není plně funkční.</target>
+        </trans-unit>
+        <trans-unit id="0ZaqweZVGFnx8f5+m4Jv/g" resname="wouldYouLikeToLaunchAppNow">
+          <source>Would you like to launch {application} now to complete its installation?</source>
+          <target>Chcete nyní spustit {application} k dokončení jeho instalace?</target>
+        </trans-unit>
+        <trans-unit id="OZdO2goSGiYdTW+aF+1yoQ" resname="theDatabaseStructureWasModified">
+          <source>The database structure was modified.</source>
+          <target>Struktura databáze byla změněna.</target>
+        </trans-unit>
+        <trans-unit id="CrlVBOBuLCg2xXhKdRR40A" resname="theDataModelIsNoMoreValidAndMustBeUpdated">
+          <source>The data model is no longer valid and must be updated.
+
+Would you want to update it now?</source>
+          <target>Model dat již není platný a musí být aktualizován.
+
+Chcete jej aktualizovat nyní?</target>
+        </trans-unit>
+        <trans-unit id="MA/m4T00dDQKa8N99ooXDQ" resname="reviewing">
+          <source>Review errors</source>
+          <target>Zkontrolujte chyby</target>
+        </trans-unit>
+        <trans-unit id="1RQAqM8gd2y4BdxkgCZ4jA" resname="update">
+          <source>Update the Project</source>
+          <target>Aktualizujte projekt</target>
+        </trans-unit>
+        <trans-unit id="8Ca9DawZkoaFpIurxGpcVQ" resname="updateTheProject">
+          <source>Update the Project</source>
+          <target>Aktualizujte projekt</target>
+        </trans-unit>
+        <trans-unit id="04YzK0niQjd6owbiCKmaWg" resname="aBackupWillBeCreatedIntoTheProjectFolder">
+          <source>A Backup will be created in the Project Folder.</source>
+          <target>Záloha bude vytvořena ve složce Project.</target>
+        </trans-unit>
+        <trans-unit id="bOAnFJFUn//ZwZHK4c0V0g" resname="theApplicationHasBeenSuccessfullyGenerated">
+          <source>The application "{app}" has been successfully generated.</source>
+          <target>Aplikace "{app}" byla generována úspěšně.</target>
+        </trans-unit>
+        <trans-unit id="SJcL0Fui9Pgko+EpaHrbhA" resname="youMustPublishAtLeastOneFieldToBeAbleToBuildYourApplication">
+          <source>You must publish at least one field to be able to build your application.</source>
+          <target>K sestavení aplikace musíte publikovat alespoň jedno pole.</target>
+        </trans-unit>
+        <trans-unit id="PCHmP5L20eXHETSF2g5nVA" resname="projectArchive">
+          <source>Project Archive.
+
+This may take a few minutes…</source>
+          <target>Archivace projektu.
+
+Může to trvat několik minut…</target>
+        </trans-unit>
+        <trans-unit id="XzRAwFR1k8v92FfdNDLJpA" resname="projectArchiveExport">
+          <source>Archive Export.
+
+This may take a few minutes…</source>
+          <target>Archivace exportu.
+
+Může to trvat několik minut…</target>
+        </trans-unit>
+        <trans-unit id="BUXRKOcSnokBUs14nxz/9A" resname="archiveCreationSuccessful">
+          <source>Archive creation successful</source>
+          <target>Vytvoření archivu bylo úspěšné</target>
+        </trans-unit>
+        <trans-unit id="PDwQrNiC1396rZNnf65/Bw" resname="wouldYouLikeToRevealInFinder">
+          <source>Would you like to reveal in Finder</source>
+          <target>Chcete zobrazit ve Finderu</target>
+        </trans-unit>
+        <trans-unit id="NyLcBi8GzierZ/4c5bcCsw" resname="projectCreationSuccessful">
+          <source>Project creation successful</source>
+          <target>Vytvoření projektu bylo úspěšné</target>
+        </trans-unit>
+        <trans-unit id="qWyrqkvRzUwguoP/yHwLwA" resname="appIsNotInstalled">
+          <source>{app} is not installed.</source>
+          <target>{app} není instalován.</target>
+        </trans-unit>
+        <trans-unit id="o5D0IMhrl9ckUQ69M69FsA" resname="appleConfigurator2Installation">
+          <source>Apple Configurator 2 installation…</source>
+          <target>Apple Configurator 2 instalace…</target>
+        </trans-unit>
+        <trans-unit id="Ky5nosbBA9C5eYj/dH78lA" resname="clicContinueWhenAppleConfigurator2IsInstalledOnYourMac">
+          <source>Clic "Continue" when Apple configurator 2 is installed on your Mac.</source>
+          <target>Klepněte "Pokračovat" pokud je Apple configurator 2 již na vašem Mac instalován.</target>
+        </trans-unit>
+        <trans-unit id="Yt5Us9e7SWqjyJriuoe+BQ" resname="noDeviceFound">
+          <source>No Device Found</source>
+          <target>Nenalezeno žádné zařízení</target>
+        </trans-unit>
+        <trans-unit id="Sp5dYmXcBeJY87r1n69syQ" resname="makeSureThatADeviceIsConnected">
+          <source> Make sure that a device is connected to your computer using a USB cable.</source>
+          <target> Zkontrolujte, zda je zařízení připojeno k počítači pomocí kabelu USB.</target>
+        </trans-unit>
+        <trans-unit id="0P8BRDlzntJyfCqvVZMM+w" resname="theApplicationHasBeenSuccessfullyInstalled">
+          <source>The "{app}" application has been successfully installed on the "{device}" device.</source>
+          <target>Aplikace "{app}" byla úspěšně instalována na zařízení "{device}".</target>
+        </trans-unit>
+        <trans-unit id="XtJe8Nn62ATPXraHip761w" resname="failedToStartTheWebServer">
+          <source>Failed to start the Web Server.</source>
+          <target>Start Web Serveru selhal.</target>
+        </trans-unit>
+        <trans-unit id="wNebbT76gPyAEts9DBlZ0Q" resname="someListeningPortsAreAlreadyUsed">
+          <source>Some listening ports are already used or unavailable.
+Check HTTP Port ({http}) or HTTPS Port ({https}).</source>
+          <target>Některé porty naslouchání jsou již používány nebo nejsou k dispozici.
+Zkontrolujte port HTTP ({http}) nebo port HTTPS ({https}).</target>
+        </trans-unit>
+        <trans-unit id="GgTK6TU3VUIgrqn4p6O5Xg" resname="preparations">
+          <source>Preparing for build</source>
+          <target>Příprava na sestavení</target>
+        </trans-unit>
+        <trans-unit id="OLNtikLFn5pTrZE52P43Hw" resname="theProjectNameCanNotBeEmpty">
+          <source>The project name can not be empty.
+Please enter a name or cancel.</source>
+          <target>Název projektu nemůže být prázdný.
+Vložte prosím název nebo zrušte.</target>
+        </trans-unit>
+        <trans-unit id="4+m6G2BYIrly0BRWiDmWhA" resname="someStructuralAdjustmentsAreNeeded">
+          <source>Some adjustments of the structure are needed for an optimized update of mobile data.</source>
+          <target>Pro optimalizovanou aktualizaci mobilních dat jsou zapotřebí některé úpravy struktury.</target>
+        </trans-unit>
+        <trans-unit id="0b/DeSQ/l928x1y4m1DHYQ" resname="doYouAllow4dToModifyStructure">
+          <source>Do you allow 4D to modify the database structure?</source>
+          <target>Chcete povolit 4D modifikovat strukturu databáze?</target>
+        </trans-unit>
+        <trans-unit id="+xLH0EtaFqJGDGsoxb5pUA" resname="noTableDefinedInTheMainMenu">
+          <source>No table defined in the main menu</source>
+          <target>V hlavní nabídce nebyla definována žádná tabulka</target>
+        </trans-unit>
+        <trans-unit id="x8lM2mcgtdUDV61P7LWlBA" resname="youMustSetAtLeastOneTableIntoTheMainMenu">
+          <source>You must set at least one table into the main menu</source>
+          <target>Do hlavní nabídky musíte nastavit alespoň jednu tabulku</target>
+        </trans-unit>
+        <trans-unit id="M1xrw5jeieA25jVgbDwYBg" resname="waitingForXcode">
+          <source>Checking Xcode…</source>
+          <target>Kontrola Xcode…</target>
+        </trans-unit>
+        <trans-unit id="nvzgdC+jpMFK7+d0f7I/iA" resname="theStructureOfTheProductionServerIsNotOptimizedForThisProject">
+          <source>The structure of the production server is not optimized for this project.</source>
+          <target>Struktura produkčního serveru není optimalizována pro tento projekt.</target>
+        </trans-unit>
+        <trans-unit id="45fpE/5i2+NXN4ayyC/9QQ" resname="youMustUpdateTheStructureOfTheProductionServer">
+          <source>You must update the structure of the production server before generating the application, otherwise the data to embed will not be generated.</source>
+          <target>Před generováním aplikace musíte obnovit strukturu produkčního serveru, jinak nebudou připojená data generována.</target>
+        </trans-unit>
+        <trans-unit id="yXUxy3XuQwnbobd49S/Ljw" resname="theProductionServerIsNotAvailable">
+          <source>The production server is not available</source>
+          <target>Produkční server není dostupný</target>
+        </trans-unit>
+        <trans-unit id="c6UEdn9DAW3lYI6K7g8jbg" resname="itIsNotPossibleToBuildTheProject">
+          <source>It is not possible to build the project</source>
+          <target>Není možno sestavit projekt</target>
+        </trans-unit>
+        <trans-unit id="Ild/z6I8YPxaZRLZLJH6Xg" resname="generationOfTheDatasetIsInProgress">
+          <source>A generation of the dataset is in progress</source>
+          <target>Probíhá generování souboru dat</target>
+        </trans-unit>
+        <trans-unit id="SXb1rafNPYpdc2aSZTooiw" resname="failedToLaunchTheSimulator">
+          <source>Failed to launch the Simulator</source>
+          <target>Simulátor se nepodařilo spustit</target>
+        </trans-unit>
+        <trans-unit id="JsdJZ42YxywOUyleDw/U+g" resname="failedToOpenSimulator">
+          <source>Failed to open Simulator</source>
+          <target>Simulátor se nepodařilo otevřít</target>
+        </trans-unit>
+        <trans-unit id="uFV/rBlD4yOSl3n/T9ZL/Q" resname="failedDecompressTheSdk">
+          <source>Failed decompress the sdk</source>
+          <target>Nepodařilo se dekomprimovat sdk</target>
+        </trans-unit>
+        <trans-unit id="5/RXjWPFGhzatJ6oPmh3MQ" resname="failedToArchive">
+          <source>Failed to create archive</source>
+          <target>Nepodařilo se otevřít archiv</target>
+        </trans-unit>
+        <trans-unit id="rxnRnwraz6tq4r2ChOJwJg" resname="theAliasMobileOriginalCan'tBeFound">
+          <source>The alias "mobile" can't be used because the original can't be found</source>
+          <target>Alias "mobile" nelze použít, protože originál nelze najít</target>
+        </trans-unit>
+        <trans-unit id="LqAIKjlMxhHw6lekwdN3zQ" resname="unableToGenerateApp">
+          <source>Unable to generate App</source>
+          <target>Není možné generovat App</target>
+        </trans-unit>
+        <trans-unit id="wEnpAnOeJPy4XbFyOw2k4A" resname="theprojectmustbelocatedrinthemobileprojectsfolder">
+          <source>For the build process, the project must be located
+in the "Mobile Projects" folder.</source>
+          <target>Pro proces sestavení, musí být projekt umístěn
+ve složce "Mobile Projects".</target>
+        </trans-unit>
+        <trans-unit id="HeYnZhBnU9tF0D/pgopP9w" resname="theDirectoryIsLockedOrTheDiskIsFull">
+          <source>The directory is locked or the disk is full</source>
+          <target>Adresář je uzamčen nebo je disk plný</target>
+        </trans-unit>
+        <trans-unit id="a17UOx3+GN2qO71UajMEFQ" resname="4dMobileRequiresAndroidStudio">
+          <source>{product} requires the installation of Android Studio.</source>
+          <target>{product} požaduje instalaci Android Studio.</target>
+        </trans-unit>
+        <trans-unit id="KyW4EJdCSktxNdDMCOgiqg" resname="wouldYouLikeToUpdateNow">
+          <source>Do you want to update {app} now?</source>
+          <target>Chcete nyní aktualizovat {app}?</target>
+        </trans-unit>
+        <trans-unit id="x+ocRvyV7CLdA0UyVAyGgg" resname="androidStudioMustBeLaunchedAtLeastOnceToBeFullyInstalled">
+          <source>Android Studio must be launched at least once to be fully installed.</source>
+          <target>Aby byla aplikace Android Studio plně nainstalována, musí být spuštěna alespoň jednou.</target>
+        </trans-unit>
+        <trans-unit id="Bao4vvbxgtNljiP85l6wzg" resname="wantToLaunchAndroidStudio">
+          <source>Want to launch Android Studio?</source>
+          <target>Chcete spustit Android Studio?</target>
+        </trans-unit>
+        <trans-unit id="MvaD8Ajiw7DepAUsP3aBLw" resname="youMustFirstSelectASimulator">
+          <source>You must first select a simulator</source>
+          <target>Nejdřív musíte vybrat simulátor</target>
+        </trans-unit>
+        <trans-unit id="+ZiFXNZD3tMOFjrIELc+LQ" resname="downloadingSDK">
+          <source>Downloading 4D for {os} SDK</source>
+          <target>Stahování 4D for {os} SDK</target>
+        </trans-unit>
+        <trans-unit id="3CavNiVIwiCc2w9bpCzMCQ" resname="yourVersionOf4dMobileSdkUpToDate">
+          <source>Your version of 4D Mobile SDK for {os} is up to date.</source>
+          <target>Vaše verze 4D Mobile SDK for {os} je aktuální.</target>
+        </trans-unit>
+        <trans-unit id="hK09xxBMItxyMWDNk9ZZSA" resname="projectBuildFailure">
+          <source>Project Build Failure</source>
+          <target>Sestavování projektu selhalo</target>
+        </trans-unit>
+        <trans-unit id="0qFKoMgdXurDIHPMB1tlAw" resname="creatingADefaultDevice">
+          <source>Creating a default device…</source>
+          <target>Vytváření výchozího zařízení…</target>
+        </trans-unit>
+        <trans-unit id="AbyoEe/AfXVUTUsb6A0bpQ" resname="failedToCreateTheProject">
+          <source>Failed to create the project</source>
+          <target>Vytvoření projektu selhalo</target>
+        </trans-unit>
+        <trans-unit id="ZQF8S5BG3B4PNiA0zeWnSQ" resname="copyingResources">
+          <source>Copying resources</source>
+          <target>Kopírování zdrojů</target>
+        </trans-unit>
+        <trans-unit id="unFcSfKilo4GTsw9ovLL6A" resname="theIconIsMandatory">
+          <source>The icon is mandatory</source>
+          <target>Ikona je povinná</target>
+        </trans-unit>
+        <trans-unit id="P3yglsT6c6GhN9cCB4EYzw" resname="unzipping">
+          <source>Unzipping…</source>
+          <target>Rozbalení…</target>
+        </trans-unit>
+        <trans-unit id="q1uk4E78lBtlSo0fBLxZMA" resname="4dForAndroidNeedsToInstallHardwareAccelerationTools">
+          <source>4D for Android needs to install hardware acceleration tools to improve performance of the emulator.</source>
+          <target>4D for Android potřebuje ke zlepšení výkonu emulátoru instalovat hardwarové akcelerační nástroje.</target>
+        </trans-unit>
+        <trans-unit id="yHuDmKhBfPSl8P58q7UGqw" resname="doYouWantToInstallHaxm">
+          <source>Do you want to install "Intel® Hardware Accelerated Execution Manager" (HAXM)?
+            
+The installer will need your password.</source>
+          <target>Chcete instalovat "Intel® Hardware Accelerated Execution Manager" (HAXM)?
+            
+Instalátor bude potřebovat vaše heslo.</target>
+        </trans-unit>
+        <trans-unit id="mNW4LC0ot2agO/7t5C7+xg" resname="tooRecentVersion">
+          <source>{product} requires at most {application} version {version}.</source>
+          <target>{product} požaduje nanejvýš {application} verzi {version}.</target>
+        </trans-unit>
+        <trans-unit id="BZ1whUnnRogn3/l10w9DuA" resname="versionNotSupported">
+          <source>{application} version not supported</source>
+          <target>{application} verze není podporována</target>
+        </trans-unit>
+        <trans-unit id="RBMSAEl1dYEXrGrv7vUJAw" resname="switchTheActiveDevelopperDirectory">
+          <source>{product} wants to switch the active developper directory</source>
+          <target>{product} chce změnit aktivní adresář vývojáře</target>
+        </trans-unit>
+        <trans-unit id="0gTTip5aW5/aFxQRQsnepA" resname="needsSetXcodeAsActiveVersion">
+          <source>{product} needs set Xcode {version} as active version.</source>
+          <target>{product} potřebuje nastavit Xcode {version} jako aktivní verzi.</target>
+        </trans-unit>
+        <trans-unit id="OaQEoTk6jv1x9W+gTwHMNw" resname="doYouWantToSwitchTheActiveDevelopperDirectory">
+          <source>Do you want to switch the active developper directory?
+
+(macOS password required)</source>
+          <target>Chcete změnit aktivní adrasář vývojáře?
+
+(vyžadováno heslo macOS)</target>
+        </trans-unit>
+        <trans-unit id="ltAjeyMiy5vhwHNkK4Jhkw" resname="tooOldVersion">
+          <source>{product} requires at least {application} version {version}.</source>
+          <target>{product} vyžaduje alespoň {application} verzi {version}.</target>
+        </trans-unit>
+        <trans-unit id="d9Xn2sCIDZpN64qibzwjTA" resname="thePackageNameShouldUseOnlyLettersNumbersAndUnderscores">
+          <source>The package identifier should use only letters, numbers and underscores ({identifier}).</source>
+          <target>Identifikátor balíčku by měl používat pouze písmena, číslice a podtržítka ({identifier}).</target>
+        </trans-unit>
+        <trans-unit id="Hk/xDQGQxzJDO8xSatvc3w" resname="thePackageNameMustHaveAtLeast2SegmentsSeparatedByADot">
+          <source>The package name must have at least 2 segments separated by a dot ({packageName})</source>
+          <target>Název balíčku musí mít alespoň 2 segmenty oddělené tečkou ({packageName})</target>
+        </trans-unit>
+        <trans-unit id="CYizpP6c7kUsz3KZqQ+25g" resname="thePackageNameMustBeginWithALetter">
+          <source>The package name must begin with a letter ({packageName})</source>
+          <target>Název balíčku musí začínat písmenem ({packageName})</target>
+        </trans-unit>
+        <trans-unit id="MDtmzadlZicdL2ZiSF5k3A" resname="thePackageNameMustNotEndWithADot">
+          <source>The package name must not end with a dot ({packageName})</source>
+          <target>Název balíčku nesmí končit tečkou ({packageName})</target>
+        </trans-unit>
+        <trans-unit id="cRehBhjHNQ23ZXzrVix6tA" resname="aPackageNameSegmentMustStartWithALetter">
+          <source>A package name segment must start with a letter ({packageName})</source>
+          <target>Segment názvu balíčku musí začínat písmenem ({packageName})</target>
+        </trans-unit>
+        <trans-unit id="QR/6FwBbJ7oAADGwGjB+dg" resname="invalidProject">
+          <source>Invalid project</source>
+          <target>Neplatný projekt</target>
+        </trans-unit>
+        <trans-unit id="zkjipuH78V0sx3jDVx3eEw" resname="thisProjectCannotBeLoadedWith4dV19">
+          <source>This project cannot be used with 4D v19</source>
+          <target>Tento projekt nelze použít s 4D v19</target>
+        </trans-unit>
+      </group>
+      <group resname="help-tips">
+        <trans-unit id="qnDfKORzzNOgWKvcsamlMA" resname="deviceList">
+          <source>Selecting the simulator for testing</source>
+          <target>Výběr simulátoru pro testování</target>
+        </trans-unit>
+        <trans-unit id="DL/ObXm8FfTezIx0ECRLWg" resname="youNeedXcodeToPerformThisOperation">
+          <source>You need xCode to perform this operation</source>
+          <target>K provedení této operace potřebujete xCode</target>
+        </trans-unit>
+        <trans-unit id="BMwBCCahahq6GxKXQWUfig" resname="youMustPublishAtLeastOneFieldToPerformThisOperation">
+          <source>You must publish at least one field to perform this operation</source>
+          <target>K provedení této operace potřebujete publikovat alespoň jedno pole</target>
+        </trans-unit>
+        <trans-unit id="/8T/65MWJzGzEGgx2jr/Mg" resname="defineYourTeamIdToPerformThisOperation">
+          <source>Define your Team ID to perform this operation</source>
+          <target>K provedení této operace definujte vaše týmové ID</target>
+        </trans-unit>
+      </group>
+      <group resname="common">
+        <trans-unit id="qgyPG6If+wmMrq/AQB32uw" resname="ok">
+          <source>OK</source>
+          <target>OK</target>
+        </trans-unit>
+        <trans-unit id="ad6IfyiNfmOykJkC44Cu7Q" resname="cancel">
+          <source>Cancel</source>
+          <target>Storno</target>
+        </trans-unit>
+        <trans-unit id="AztKs48IYq18Gb1nN/y8xQ" resname="notNow">
+          <source>Not now</source>
+          <target>Ne nyní</target>
+        </trans-unit>
+        <trans-unit id="xHbZr3ruNAekSYBmI+pMlg" resname="4dProductName" translate="no">
+          <source>4D Mobile</source>
+        </trans-unit>
+        <trans-unit id="NbSPF7WQGb4Eaqe+Rz6qCw" resname="search">
+          <source>Search</source>
+          <target>Hledat</target>
+        </trans-unit>
+        <trans-unit id="+f4N+SQfqds4LrZGQaZ2ng" resname="doubleClickToEdit">
+          <source>Double click to edit.</source>
+          <target>Pro úpravu poklepat.</target>
+        </trans-unit>
+        <trans-unit id="a44NaLWnfUIXH/PiwUazKw" resname="clickToSet">
+          <source>Click to set</source>
+          <target>Nastavit klepnutím</target>
+        </trans-unit>
+        <trans-unit id="CSAwPSxKMO05z08LNFA+MA" resname="project">
+          <source>Project</source>
+          <target>Projekt</target>
+        </trans-unit>
+        <trans-unit id="9B84h1H1Rj87SMihcR9ZOA" resname="unknown">
+          <source>Unknown</source>
+          <target>Neznámý</target>
+        </trans-unit>
+        <trans-unit id="JTMKcwTRjQddQeES+qSzOg" resname="continue">
+          <source>Continue</source>
+          <target>Poračovat</target>
+        </trans-unit>
+        <trans-unit id="+b3wof+tzoPXsivXKSayjw" resname="manualInstallation">
+          <source>Manual installation</source>
+          <target>Vlastní instalace</target>
+        </trans-unit>
+        <trans-unit id="B04Xa7zekU88zyJC3v6CqQ" resname="error:">
+          <source>Error: </source>
+          <target>Chyba: </target>
+        </trans-unit>
+        <trans-unit id="imV5I/sByaZ5+Hpw+Xx7Cg" resname="unknownErrorOccurred">
+          <source>Unknown error occurred</source>
+          <target>Vyskytla se neznámá chyba</target>
+        </trans-unit>
+        <trans-unit id="gW2TvIqGEGqJvzV5I1GgYA" resname="invalidUrl">
+          <source>Invalid URL</source>
+          <target>Neplatné URL</target>
+        </trans-unit>
+        <trans-unit id="qS1lLxFKj3ogvVz+g/lqQA" resname="comparators">
+          <source>Comparators</source>
+          <target>Komparátory</target>
+        </trans-unit>
+        <trans-unit id="oriDTP8u9qgJ39n39L5TCA" resname="operators">
+          <source>Operators</source>
+          <target>Operátory</target>
+        </trans-unit>
+        <trans-unit id="EvCgt7AueiHok2VZvRNyhw" resname="startWebServer">
+          <source>Start Web Server</source>
+          <target>Start Web Serveru</target>
+        </trans-unit>
+        <trans-unit id="DgNWXiQk3/ptkwL4VIn3cQ" resname="replacedFiles">
+          <source>Replaced Files {stamp}</source>
+          <target>RNahrazené soubory {stamp}</target>
+        </trans-unit>
+        <trans-unit id="LOWBV9k49Av1oJ8DiNPdMw" resname="rememberMyChoice">
+          <source>Remember my choice</source>
+          <target>Pamatovat mou volbu</target>
+        </trans-unit>
+        <trans-unit id="mHN1IxQOaKQx1RdZeCgt0Q" resname="allow">
+          <source>Allow</source>
+          <target>Povolit</target>
+        </trans-unit>
+        <trans-unit id="Sd8ZqffOjBc7iqkxmcmOwQ" resname="choose...">
+          <source>Choose…</source>
+          <target>Vybrat…</target>
+        </trans-unit>
+        <trans-unit id="H04h367zwAsynDhOHLcTjg" resname="#NA">
+          <source>n/a</source>
+          <target>nedost.</target>
+        </trans-unit>
+        <trans-unit id="gsRyVUAzRUBVA75hqwjbTQ" resname="convertedFiles">
+          <source>Converted Files {stamp}</source>
+          <target>Konvertované soubory {stamp}</target>
+        </trans-unit>
+        <trans-unit id="2zeau/YvEjNyCgp4G7qxAQ" resname="mandatory">
+          <source>Mandatory</source>
+          <target>Povinné</target>
+        </trans-unit>
+        <trans-unit id="iM3N8PGRjDksISszpikvcg" resname="placeholder">
+          <source>Placeholder</source>
+          <target>Zástupné symboly</target>
+        </trans-unit>
+        <trans-unit id="i43VrVGtG4H2zqpHiDEcKA" resname="minimum">
+          <source>Minimum</source>
+          <target>Minimum</target>
+        </trans-unit>
+        <trans-unit id="eNlT0g85ckhtBLO/XrN3ww" resname="maximum">
+          <source>Maximum</source>
+          <target>Maximum</target>
+        </trans-unit>
+        <trans-unit id="xCqmpOWrkjTSem1IhkN5lg" resname="listOf">
+          <source>List of {values}</source>
+          <target>Seznam {values}</target>
+        </trans-unit>
+        <trans-unit id="hUcnjer+ziVtKuVGciNSbg" resname="enable">
+          <source>enable</source>
+          <target>povolit</target>
+        </trans-unit>
+        <trans-unit id="2HdKZy1jIlAqLk92qHzC1g" resname="disable">
+          <source>disable</source>
+          <target>zakázat</target>
+        </trans-unit>
+        <trans-unit id="K3gmwpf7rjooqR9YIDapOw" resname="downloadInProgress">
+          <source>Download in progress…</source>
+          <target>Stahování v běhu…</target>
+        </trans-unit>
+        <trans-unit id="IZiKFZUjvCPggxO/k/UMtw" resname="back">
+          <source>Back</source>
+          <target>Zpět</target>
+        </trans-unit>
+        <trans-unit id="GJngBSPBZ95TrAslxxNmeg" resname="close">
+          <source>Close</source>
+          <target>Uzavřít</target>
+        </trans-unit>
+        <trans-unit id="dvzeko0zyv/E0PNHvumgTg" resname="fileNotFound">
+          <source>File not found</source>
+          <target>Soubor nenalezen</target>
+        </trans-unit>
+        <trans-unit id="cx0uA9XEqaA2pmrdT55vhg" resname="4dForIos" translate="no">
+          <source>4D for iOS</source>
+        </trans-unit>
+        <trans-unit id="ly/XLCqaoc5y94hc+Lh/zQ" resname="4dForAndroid" translate="no">
+          <source>4D for Android</source>
+        </trans-unit>
+        <trans-unit id="7ptGpjw+oksEwf7YU2JjEQ" resname="xcode" translate="no">
+          <source>Xcode</source>
+        </trans-unit>
+        <trans-unit id="xr1jlIgDks142oGz/c9efw" resname="androidStudio" translate="no">
+          <source>Android Studio</source>
+        </trans-unit>
+        <trans-unit id="N/3f21sCqhgbE2r+h2+1UA" resname="editorWindowTitle">
+          <source>Mobile Project: {name}</source>
+          <target>Mobilní projekt: {name}</target>
+        </trans-unit>
+        <trans-unit id="SnEbElOo6cxBwqKXT0osEg" resname="targetOs">
+          <source>Target OS</source>
+          <target>Cílový OS</target>
+        </trans-unit>
+        <trans-unit id="lP5NwUd02X/BqS+PJoOpkQ" resname="openAnotherProject">
+          <source>Open another project…</source>
+          <target>Otevřít jiný projekt…</target>
+        </trans-unit>
+        <trans-unit id="L1gdRTWNlUb2of/0UhFggw" resname="open">
+          <source>Open</source>
+          <target>Otevřít</target>
+        </trans-unit>
+        <trans-unit id="XyP2bYzcNiWl75T2OEKD4w" resname="missingFile">
+          <source>Missing file "{file}"</source>
+          <target>Chybějící soubor "{file}"</target>
+        </trans-unit>
+        <trans-unit id="0g8I65SK0Ef31qJvPuKjaA" resname="later">
+          <source>Later</source>
+          <target>Později</target>
+        </trans-unit>
+      </group>
+      <group resname="default values">
+        <trans-unit id="uvcuS+6kvyLtejaBCimjbw" resname="newApplication">
+          <source>My App</source>
+          <target>Má apl.</target>
+        </trans-unit>
+        <trans-unit id="cfN+o3Ry0FEUA9v7KXEX8w" resname="companyName">
+          <source>My Company</source>
+          <target>Má spol.</target>
+        </trans-unit>
+        <trans-unit id="jLVrTgRLGhDI6g7K8QSf3g" resname="allRightsReserved">
+          <source>All rights reserved</source>
+          <target>Všechna práva vyhrazena</target>
+        </trans-unit>
+      </group>
+      <group resname="ribbon">
+        <trans-unit id="wPk3fOduWHWqxodyjRkeUQ" resname="sections">
+          <source>SECTIONS</source>
+          <target>SEKCE</target>
+        </trans-unit>
+        <trans-unit id="UqKYec3CvUjCFEa1HYOzgw" resname="build">
+          <source>BUILD</source>
+          <target>SESTAVIT</target>
+        </trans-unit>
+        <trans-unit id="GZj+t33+YYRd8z4z1j/wWQ" resname="install">
+          <source>Install</source>
+          <target>Instalovat</target>
+        </trans-unit>
+        <trans-unit id="CG2B3VUN/dKKej4alWD0Ug" resname="openTheAvdManager">
+          <source>Open Android Studio...</source>
+          <target>Otevřete Android studio...</target>
+        </trans-unit>
+        <trans-unit id="OEnsaAYWrvOjjzmAPucY/A" resname="openTheXcodeSimulatorsManager">
+          <source>Open the Xcode Simulators manager...</source>
+          <target>Otevřete správce simulátorů Xcode...</target>
+        </trans-unit>
+      </group>
+      <group resname="ERRORS">
+        <trans-unit id="bED/fpei/FAE7MlOk9WbZA" resname="ERR_MOBL_1">
+          <source>Invalid session description object</source>
+          <target>Neplatný popis objektu sekce</target>
+        </trans-unit>
+        <trans-unit id="1Of+1DDAUQq7EPbrFH6DBg" resname="ERR_MOBL_2">
+          <source>Failed to delete session file</source>
+          <target>Soubor sekce se nepodařilo odstranit</target>
+        </trans-unit>
+        <trans-unit id="9jl8jT/JEPIfuEXfY8gH8Q" resname="ERR_MOBL_3">
+          <source>Failed to update session file</source>
+          <target>Nepodařilo se aktualizovat soubor sekce</target>
+        </trans-unit>
+      </group>
+      <group resname="field types">
+        <trans-unit id="iv0dHVnJVkl6o6hyL1strg" resname="alpha">
+          <source>Alpha</source>
+          <target>Alfa</target>
+        </trans-unit>
+        <trans-unit id="gNcNFThyLpRgwyrMMqFyAg" resname="text">
+          <source>Text</source>
+          <target>Text</target>
+        </trans-unit>
+        <trans-unit id="Yf58fdPwjxeBCeo3xh8smg" resname="real">
+          <source>Real</source>
+          <target>Realné</target>
+        </trans-unit>
+        <trans-unit id="NksW538eX7kJphdIEGi1Yg" resname="integer">
+          <source>Integer</source>
+          <target>Integer</target>
+        </trans-unit>
+        <trans-unit id="AoSGUuHBzj845Cox+QITbg" resname="longInteger">
+          <source>Long Integer</source>
+          <target>Long Integer</target>
+        </trans-unit>
+        <trans-unit id="zAH4zSPganDDisJT7I5fGw" resname="date">
+          <source>Date</source>
+          <target>Datum</target>
+        </trans-unit>
+        <trans-unit id="pdV7arlmpJFgBV9qELcd2Q" resname="time">
+          <source>Time</source>
+          <target>Čas</target>
+        </trans-unit>
+        <trans-unit id="tbl2k5AzDGXZyVW2N1NwKQ" resname="boolean">
+          <source>Boolean</source>
+          <target>Logické</target>
+        </trans-unit>
+        <trans-unit id="8tHv2xRz716PbS3NoFrh1A" resname="picture">
+          <source>Picture</source>
+          <target>Obrázek</target>
+        </trans-unit>
+        <trans-unit id="KCtdmuoCK0a9wahV405tpQ" resname="float">
+          <source>Float</source>
+          <target>Float</target>
+        </trans-unit>
+        <trans-unit id="ONO++64D+yaREKAsRXBitQ" resname="integer64Bits">
+          <source>Integer 64 bits</source>
+          <target>Integer 64 bitů</target>
+        </trans-unit>
+        <trans-unit id="llri5274v1KSR0zeld4Kgw" resname="number">
+          <source>Number</source>
+          <target>Číslo</target>
+        </trans-unit>
+        <trans-unit id="kcZOIC34bL5UORd8s7s4hA" resname="image">
+          <source>Image</source>
+          <target>Obrázek</target>
+        </trans-unit>
+        <trans-unit id="bboOmlR+Pe/wQz4KwDp9vA" resname="bool">
+          <source>Boolean</source>
+          <target>Logické</target>
+        </trans-unit>
+      </group>
+      <group resname="operators">
+        <trans-unit id="WyxljFphW4QKBl5U7Xpbzw" resname="equalTo">
+          <source>Equal to</source>
+          <target>rovná se</target>
+        </trans-unit>
+        <trans-unit id="Uu+RJQFIufjqlJmsqaYVaA" resname="notEqualTo">
+          <source>Not equal to</source>
+          <target>nerovná se</target>
+        </trans-unit>
+        <trans-unit id="R/BoLUeDPalcj1J9akOngA" resname="lessThan">
+          <source>Less than</source>
+          <target>menší než</target>
+        </trans-unit>
+        <trans-unit id="hwn2q47HEs/jDDPj2i/rPQ" resname="greaterThan">
+          <source>Greater than</source>
+          <target>větší než</target>
+        </trans-unit>
+        <trans-unit id="g5z+/Jfj4oEY6evpp6s7QQ" resname="lessThanOrEqualTo">
+          <source>Less than or equal to</source>
+          <target>menší než nebo rovno</target>
+        </trans-unit>
+        <trans-unit id="Ag74RXMGaIENVrjhkvklIA" resname="greaterThanOrEqualTo">
+          <source>Greater than or equal to</source>
+          <target>větší než nebo rovno</target>
+        </trans-unit>
+        <trans-unit id="5DAVYexMhygj6w9QXvILaQ" resname="containsKeyword">
+          <source>Contains keyword</source>
+          <target>obsahuje klíčové slovo</target>
+        </trans-unit>
+        <trans-unit id="vjV5UW+UCHkJ/emrPE4CMA" resname="parentheses">
+          <source>Parentheses</source>
+          <target>závorky</target>
+        </trans-unit>
+      </group>
+      <group resname="formats">
+        <trans-unit id="WO0Gq/SwjostSXxSgc47tw" resname="f_password">
+          <source>Password</source>
+          <target>Heslo</target>
+        </trans-unit>
+        <trans-unit id="xtMm6HmUhcLURdjTNGvIjw" resname="f_zipCode">
+          <source>Zip code</source>
+          <target>PSČ</target>
+        </trans-unit>
+        <trans-unit id="HtXxLxovqcaxUZ7bR+cOyA" resname="f_textArea">
+          <source>Text area</source>
+          <target>Textová oblast</target>
+        </trans-unit>
+        <trans-unit id="LNrHdITNPmVdN9g/tkSdPg" resname="f_name">
+          <source>Capitalized text</source>
+          <target>Text velkými písmeny</target>
+        </trans-unit>
+        <trans-unit id="6Knfh23wVHpZCZxHFKyt9A" resname="f_account">
+          <source>Account</source>
+          <target>Účet</target>
+        </trans-unit>
+        <trans-unit id="N91uUYKQbWOoDXT1tMhRIA" resname="f_standard">
+          <source>Standard</source>
+          <target>Standard</target>
+        </trans-unit>
+        <trans-unit id="bMb459OUgBKtjtlHIIzVrg" resname="f_scientific">
+          <source>Scientific</source>
+          <target>Vědecké</target>
+        </trans-unit>
+        <trans-unit id="ABuGtMhC4YZTQod62T/y2A" resname="f_energy">
+          <source>Energy</source>
+          <target>Energie</target>
+        </trans-unit>
+        <trans-unit id="aeLu3uRYc1HJ4Xtq/7aG3A" resname="f_mass">
+          <source>Mass</source>
+          <target>Hmotnost</target>
+        </trans-unit>
+        <trans-unit id="mYyio6TDBwSLV4eoyR0X9w" resname="f_hour">
+          <source>Hour</source>
+          <target>Hodina</target>
+        </trans-unit>
+        <trans-unit id="XcYe01x5171zJAlfcchE4w" resname="f_email">
+          <source>Mail address</source>
+          <target>E-mailová adresa</target>
+        </trans-unit>
+        <trans-unit id="Y0gV3NAwvspd8f+dJYbNXQ" resname="f_phone">
+          <source>Phone Number</source>
+          <target>Telefonní číslo</target>
+        </trans-unit>
+        <trans-unit id="Vkn2NAijDB1visYJnvqzzw" resname="f_url">
+          <source>URL</source>
+          <target>URL</target>
+        </trans-unit>
+        <trans-unit id="SXDKkuPR3L+2qYnNM+GhNg" resname="f_percent">
+          <source>Percentage</source>
+          <target>Procent</target>
+        </trans-unit>
+        <trans-unit id="Di2qNSU3vQGNCaqswVdKvA" resname="f_longDate">
+          <source>Long date</source>
+          <target>Datum dlouhé</target>
+        </trans-unit>
+        <trans-unit id="6oarzAAP5bBe9UYUCFr5pQ" resname="f_shortDate">
+          <source>Short date</source>
+          <target>Datum krátké</target>
+        </trans-unit>
+        <trans-unit id="cQEEOZ/6vobyon37x3ZSfg" resname="f_fullDate">
+          <source>Full date</source>
+          <target>Datum úplné</target>
+        </trans-unit>
+        <trans-unit id="27Sekublxso9s9EPsWXL3Q" resname="f_spellOut">
+          <source>Spell Out</source>
+          <target>Hláskovat</target>
+        </trans-unit>
+        <trans-unit id="rq4EhKk5zDWZyVtTilozBQ" resname="f_duration">
+          <source>Duration</source>
+          <target>Trvání</target>
+        </trans-unit>
+        <trans-unit id="ei+ffVhQIJCzbfRxgmOvpw" resname="f_image">
+          <source>Image</source>
+          <target>Obrázek</target>
+        </trans-unit>
+        <trans-unit id="a809iy7aOU7FaDXBdelU7g" resname="f_bool">
+          <source>Boolean</source>
+          <target>Logické</target>
+        </trans-unit>
+        <trans-unit id="VPCZEh7TWTTgeJfKLZK8Wg" resname="f_integer">
+          <source>Integer</source>
+          <target>Integer</target>
+        </trans-unit>
+        <trans-unit id="vr/gSzJ+tlkDTWk+nGWQ9w" resname="f_check">
+          <source>Check mark</source>
+          <target>Zaškrtávatko</target>
+        </trans-unit>
+        <trans-unit id="87pzjG/mUeg2Wof/6QOOPA" resname="f_barcode">
+          <source>Barcode</source>
+          <target>Čárový kód</target>
+        </trans-unit>
+        <trans-unit id="kvxca6ovlbth54S522FEKg" resname="f_signature">
+          <source>Signature</source>
+          <target>Podpis</target>
+        </trans-unit>
+      </group>
+      <group resname="tasks">
+        <trans-unit id="KFFcrqFjFKTy9jWBVmEh4w" resname="getDevices">
+          <source>Available devices</source>
+          <target>Dostupná zařízení</target>
+        </trans-unit>
+        <trans-unit id="cOn/py2JN/Rdwqqz3IBdDw" resname="checkDevTools">
+          <source>Checking dev environment</source>
+          <target>Kontrola vývového prostředí</target>
+        </trans-unit>
+        <trans-unit id="pF0XDVVhBND7cRyYvkr42g" resname="checkProject">
+          <source>Audit of the project</source>
+          <target>Audit projektu</target>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+
+</xliff>
