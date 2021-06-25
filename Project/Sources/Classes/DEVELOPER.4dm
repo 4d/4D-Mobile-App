@@ -23,12 +23,41 @@ Function init()
 	
 	This:C1470.toBeInitialized:=False:C215
 	
-	// Widgets definition
-	This:C1470.name:=cs:C1710.widget.new("01_name")
-	This:C1470.team:=cs:C1710.widget.new("02_team").enable(Is macOS:C1572)
-	This:C1470.teamBorder:=cs:C1710.static.new("02_team.border")
-	This:C1470.teamMenu:=cs:C1710.button.new("teamPopup").enable(Is macOS:C1572)
-	This:C1470.teamHelp:=cs:C1710.button.new("02_team.help")
+	This:C1470.input("name"; "01_name")
+	This:C1470.input("team"; "02_team")
+	This:C1470.static("teamBorder"; "02_team.border")
+	This:C1470.button("teamMenu")
+	This:C1470.button("teamHelp")
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function onLoad()
+	
+	This:C1470.team.setValue(String:C10(PROJECT.organization.teamId))
+	
+	Case of 
+			
+			//…………………………………………………………………………………………
+		: (Is macOS:C1572)
+			
+			This:C1470.teamMenu.disable()
+			
+			// *LAUNCH GETTING TEAM IDS
+			This:C1470.callWorker("teamId"; New object:C1471(\
+				"action"; "list"; \
+				"provisioningProfiles"; True:C214; \
+				"certificate"; True:C214; \
+				"caller"; This:C1470.window; \
+				"callerMethod"; This:C1470.callback; \
+				"callerReturn"; "teamId"))
+			
+			//…………………………………………………………………………………………
+		: (Is Windows:C1573)
+			
+			This:C1470.team.disable()
+			This:C1470.teamMenu.disable()
+			
+			//…………………………………………………………………………………………
+	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 Function setTeamID($id : Text; $item : Text)

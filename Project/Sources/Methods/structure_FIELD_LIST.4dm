@@ -308,7 +308,7 @@ End if
 tempoDatamodelWith1toNRelation($context.currentTable)
 
 // Disable field publication if the table is missing
-OBJECT SET ENTERABLE:C238($Ptr_published->; Not:C34(editor_Locked))
+OBJECT SET ENTERABLE:C238($Ptr_published->; PROJECT.isNotLocked())
 
 // Sort if any
 If ($context.fieldSortByName)

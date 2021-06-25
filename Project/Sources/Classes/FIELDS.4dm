@@ -23,30 +23,129 @@ Function init()
 	
 	This:C1470.toBeInitialized:=False:C215
 	
-	// Widgets definition
-	This:C1470.fieldList:=cs:C1710.listbox.new("01_fields")
-	This:C1470.ids:=cs:C1710.widget.new("IDs")
-	This:C1470.names:=cs:C1710.widget.new("fields")
-	This:C1470.icons:=cs:C1710.widget.new("icons")
-	This:C1470.labels:=cs:C1710.widget.new("label")
-	This:C1470.shortLabels:=cs:C1710.widget.new("shortLabel")
-	This:C1470.formats:=cs:C1710.widget.new("format")
-	This:C1470.titles:=cs:C1710.widget.new("title")
+	This:C1470.listbox("fieldList"; "01_fields")
+	This:C1470.widget("ids")
+	This:C1470.widget("names")
+	This:C1470.widget("icons")
+	This:C1470.widget("labels")
+	This:C1470.widget("shortLabels")
+	This:C1470.widget("formats")
+	This:C1470.static("formatLabel")
+	This:C1470.widget("titles")
 	
-	This:C1470.formatLabel:=cs:C1710.static.new("format.label")
-	This:C1470.picker:=cs:C1710.widget.new("iconGrid")
 	
-	This:C1470.tabSelector:=cs:C1710.widget.new("tab.selector")
+	This:C1470.widget("picker")
+	
+	This:C1470.widget("tabSelector")
 	This:C1470.tabSelector.data:=0
 	
-	This:C1470.selectorFields:=cs:C1710.button.new("tab.fields")
-	This:C1470.selectorRelations:=cs:C1710.button.new("tab.relations")
-	This:C1470.selectors:=cs:C1710.group.new(This:C1470.selectorFields; This:C1470.selectorRelations)
+	var $group : cs:C1710.group
+	$group:=This:C1470.group("selectors")
+	This:C1470.button("selectorFields").addToGroup($group)
+	This:C1470.button("selectorRelations").addToGroup($group)
 	
-	This:C1470.empty:=cs:C1710.static.new("empty")
-	This:C1470.resources:=cs:C1710.button.new("resources")
+	This:C1470.static("empty")
+	This:C1470.button("resources")
 	
-	This:C1470.form:=Form:C1466.$dialog[This:C1470.name]  // ????????????????????????????
+	// Link to the TABLES panel
+	This:C1470.tableLink:=Formula:C1597(panel("TABLES").currentTableNumber)
+	
+	//This.form:=Form.$dialog[This.name]  // ????????????????????????????
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function onLoad()
+	
+	// This trick remove the horizontal gap
+	This:C1470.fieldList.setScrollbars(False:C215; 2)
+	
+	// Place the tabs according to the localization
+	This:C1470.selectors.distributeLeftToRight()
+	
+	// Place the download button
+	This:C1470.resources.setTitle(EDITOR.str.setText("downloadMoreResources").localized(Lowercase:C14(Get localized string:C991("formatters"))))
+	This:C1470.resources.bestSize(Align right:K42:4)
+	
+	// Initialize the Fields/Relations tab
+	This:C1470.setTab()
+	
+	// Update widget pointers after a reload
+	This:C1470.ids.updatePointer()
+	This:C1470.names.updatePointer()
+	This:C1470.icons.updatePointer()
+	This:C1470.labels.updatePointer()
+	This:C1470.shortLabels.updatePointer()
+	This:C1470.formats.updatePointer()
+	This:C1470.titles.updatePointer()
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	// Update UI
+Function update()
+	
+	This:C1470.tableNumber:=This:C1470.tableLink.call()
+	This:C1470.updateFieldList()
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	// Updates the list of fields/relation according to the selected table
+Function updateFieldList
+	
+	var $i : Integer
+	var $enterable : Boolean
+	var $o : Object
+	
+	$o:=This:C1470.getFieldList()
+	
+	If ($o.success)
+		
+		This:C1470.empty.setTitle(Choose:C955(Num:C11(This:C1470.tabSelector.data); "noFieldPublishedForThisTable"; "noPublishedRelationForThisTable"))
+		
+		COLLECTION TO ARRAY:C1562($o.ids; This:C1470.ids.pointer->)
+		COLLECTION TO ARRAY:C1562($o.paths; This:C1470.names.pointer->)
+		COLLECTION TO ARRAY:C1562($o.labels; This:C1470.labels.pointer->)
+		COLLECTION TO ARRAY:C1562($o.shortLabels; This:C1470.shortLabels.pointer->)
+		COLLECTION TO ARRAY:C1562($o.icons; This:C1470.icons.pointer->)
+		COLLECTION TO ARRAY:C1562($o.formats; This:C1470.formats.pointer->)
+		COLLECTION TO ARRAY:C1562($o.formats; This:C1470.titles.pointer->)
+		
+		For ($i; 0; $o.count-1; 1)
+			
+			LISTBOX SET ROW COLOR:C1270(*; This:C1470.names.name; $i+1; $o.nameColors[$i]; lk font color:K53:24)
+			LISTBOX SET ROW COLOR:C1270(*; This:C1470.formats.name; $i+1; $o.formatColors[$i]; lk font color:K53:24)
+			
+		End for 
+		
+		// Sort by names
+		LISTBOX SORT COLUMNS:C916(*; This:C1470.fieldList.name; 2; >)
+		
+		This:C1470.fieldList.show(Num:C11($o.count)>0)
+		
+	Else 
+		
+		This:C1470.empty.setTitle("selectATableToDisplayItsFields")
+		
+		This:C1470.fieldList.clear()
+		This:C1470.fieldList.hide()
+		
+	End if 
+	
+	$enterable:=PROJECT.isNotLocked()
+	This:C1470.labels.enterable($enterable)
+	This:C1470.shortLabels.enterable($enterable)
+	This:C1470.formats.enterable($enterable)
+	This:C1470.titles.enterable($enterable)
+	
+	This:C1470.fieldList.unselect()
+	
+	editor_ui_LISTBOX(This:C1470.fieldList.name)
+	
+	If (Num:C11(This:C1470.tabSelector.data)=1)  // Relations
+		
+		tempoDatamodelWith1toNRelation(This:C1470.tableNumber)
+		
+	Else 
+		
+		androidLimitations(False:C215; "")
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Updates the list of fields/reports according to the selected table
@@ -400,64 +499,6 @@ Function getFieldList()->$result : Object
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-	// Updates the list of fields/relation according to the selected table
-Function updateFieldList
-	
-	var $o : Object
-	var $i : Integer
-	
-	$o:=This:C1470.getFieldList()
-	
-	If ($o.success)
-		
-		This:C1470.empty.setTitle(Choose:C955(Num:C11(This:C1470.tabSelector.data); "noFieldPublishedForThisTable"; "noPublishedRelationForThisTable"))
-		
-		COLLECTION TO ARRAY:C1562($o.ids; This:C1470.ids.pointer->)
-		COLLECTION TO ARRAY:C1562($o.paths; This:C1470.names.pointer->)
-		COLLECTION TO ARRAY:C1562($o.labels; This:C1470.labels.pointer->)
-		COLLECTION TO ARRAY:C1562($o.shortLabels; This:C1470.shortLabels.pointer->)
-		COLLECTION TO ARRAY:C1562($o.icons; This:C1470.icons.pointer->)
-		COLLECTION TO ARRAY:C1562($o.formats; This:C1470.formats.pointer->)
-		COLLECTION TO ARRAY:C1562($o.formats; This:C1470.titles.pointer->)
-		
-		For ($i; 0; $o.count-1; 1)
-			
-			LISTBOX SET ROW COLOR:C1270(*; This:C1470.names.name; $i+1; $o.nameColors[$i]; lk font color:K53:24)
-			LISTBOX SET ROW COLOR:C1270(*; This:C1470.formats.name; $i+1; $o.formatColors[$i]; lk font color:K53:24)
-			
-		End for 
-		
-		// Sort by names
-		LISTBOX SORT COLUMNS:C916(*; This:C1470.fieldList.name; 2; >)
-		
-		This:C1470.fieldList.show(Num:C11($o.count)>0)
-		
-	Else 
-		
-		This:C1470.empty.setTitle("selectATableToDisplayItsFields")
-		
-		This:C1470.fieldList.clear()
-		This:C1470.fieldList.hide()
-		
-	End if 
-	
-	editor_Locked(This:C1470.labels.name; This:C1470.shortLabels.name; This:C1470.formats.name; This:C1470.titles.name)
-	
-	This:C1470.fieldList.unselect()
-	
-	editor_ui_LISTBOX(This:C1470.fieldList.name)
-	
-	If (Num:C11(This:C1470.tabSelector.data)=1)  // Relations
-		
-		tempoDatamodelWith1toNRelation(This:C1470.tableNumber)
-		
-	Else 
-		
-		androidLimitations(False:C215; "")
-		
-	End if 
-	
-	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Manages the UI of the tab Fields/Relations
 Function setTab()
 	
@@ -659,7 +700,7 @@ Function updateForms($field : Object; $row : Integer)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Show the icon picker
-Function iconPicker($e : Object)
+Function doShowIconPicker($e : Object)
 	
 	var $c : Collection
 	var $field; $o : Object
@@ -699,7 +740,7 @@ Function iconPicker($e : Object)
 		
 		$o.row:=$e.row
 		$o.left:=This:C1470.fieldList.cellBox.right
-		$o.top:=-56
+		$o.top:=-40
 		$o.action:="fieldIcons"
 		$o.background:=0x00FFFFFF
 		$o.backgroundStroke:=EDITOR.strokeColor
@@ -708,7 +749,7 @@ Function iconPicker($e : Object)
 		$o.hidePromptSeparator:=True:C214
 		$o.forceRedraw:=True:C214
 		//%W-533.3
-		$o.prompt:=cs:C1710.str.new("chooseAnIconForTheField").localized((This:C1470.fieldList.columns["fields"].pointer)->{$e.row})
+		$o.prompt:=cs:C1710.str.new("chooseAnIconForTheField").localized((This:C1470.fieldList.columns["names"].pointer)->{$e.row})
 		//%W+533.3
 		
 		This:C1470.callMeBack("pickerShow"; $o)
@@ -716,6 +757,21 @@ Function iconPicker($e : Object)
 	Else 
 		
 		$o.inited:=False:C215
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function doGetResources()
+	
+	If (FEATURE.with("formatMarketPlace"))
+		
+		// Show browser
+		This:C1470.callMeBack("initBrowser"; New object:C1471(\
+			"url"; Get localized string:C991("res_formatters")))
+		
+	Else 
+		
+		OPEN URL:C673(Get localized string:C991("res_formatters"); *)
 		
 	End if 
 	

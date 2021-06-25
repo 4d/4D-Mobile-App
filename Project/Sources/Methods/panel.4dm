@@ -12,5 +12,8 @@ Else
 	
 End if 
 
-
-
+If ($definition#Null:C1517)
+	
+	$definition.event:=FORM Event:C1606
+	
+End if 

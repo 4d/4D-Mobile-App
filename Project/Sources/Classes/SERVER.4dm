@@ -23,14 +23,31 @@ Function init()
 	
 	This:C1470.toBeInitialized:=False:C215
 	
-	// Widgets definition
-	This:C1470.productionURL:=cs:C1710.widget.new("02_prodURL")
-	This:C1470.webSettings:=cs:C1710.button.new("webSettings")
-	This:C1470.webSettingsLabel:=cs:C1710.static.new("webSettings.label")
-	This:C1470.webSettingsGroup:=cs:C1710.group.new(This:C1470.webSettingsLabel; This:C1470.webSettings)
+	This:C1470.input("productionURL"; "02_prodURL")
+	
+	var $group : cs:C1710.group
+	$group:=This:C1470.group("webSettingsGroup")
+	This:C1470.static("webSettingsLabel"; "webSettings.label").addToGroup($group)
+	This:C1470.button("webSettings").addToGroup($group)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-Function settings
+Function onLoad()
+	
+	This:C1470.webSettings.bestSize()
+	This:C1470.webSettingsGroup.distributeLeftToRight()
+	
+	var $o : Object
+	$o:=New object:C1471(\
+		"buffer"; New object:C1471(\
+		"deepLinking"; New object:C1471(); \
+		"server"; New object:C1471(\
+		"authentication"; New object:C1471; \
+		"urls"; New object:C1471)))
+	
+	ob_MERGE(Form:C1466; $o.buffer)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function doSettings()
 	
 	OPEN SETTINGS WINDOW:C903("/Database/Web/Config")
 	

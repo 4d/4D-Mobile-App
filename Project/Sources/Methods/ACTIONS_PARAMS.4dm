@@ -14,27 +14,7 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			
 			androidLimitations(True:C214)
 			
-			// This trick remove the horizontal gap
-			$ƒ.parameters.setScrollbars(0; 2)
-			
-			// Set the initial display
-			If ($ƒ.action#Null:C1517)
-				
-				$ƒ.add.enable()
-				
-			Else 
-				
-				$ƒ.noSelection.show()
-				$ƒ.noTable.hide()
-				$ƒ.withSelection.hide()
-				$ƒ.noParameters.hide()
-				
-			End if 
-			
-			$ƒ.dropCursor.setColors(Highlight menu background color:K23:7)
-			
-			// Add the events that we cannot select in the form properties 😇
-			$ƒ.appendEvents(On Alternative Click:K2:36)
+			$ƒ.onLoad()
 			
 			//______________________________________________________
 		: ($e.code=On Timer:K2:25)
@@ -76,7 +56,7 @@ Else   // <== WIDGETS METHOD
 					$ƒ.refresh()
 					
 					//_____________________________________
-				: (editor_Locked)\
+				: (PROJECT.isLocked())\
 					 | (Num:C11($e.row)=0)
 					
 					// <NOTHING MORE TO DO>

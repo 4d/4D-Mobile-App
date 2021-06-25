@@ -1,26 +1,23 @@
-var $0 : Integer
+#DECLARE()->$allow : Integer
 
+var $allow : Integer
 var $x : Blob
 var $e; $ƒ; $me; $o : Object
 
 $ƒ:=panel()
 $e:=$ƒ.event
-$me:=$ƒ.actions
+
+$e.row:=Drop position:C608
 
 Case of 
 		
 		//______________________________________________________
-	: (editor_Locked)
+	: (PROJECT.isLocked())
 		
-		$0:=-1
-		
-		//______________________________________________________
-	: (Num:C11($e.row)=0)
-		
-		// <NOTHING MORE TO DO>
+		$allow:=-1
 		
 		//______________________________________________________
-	: ($e.code=On Drag Over:K2:13)  // Manage drag & drop cursor
+	: ($e.code=On Drag Over:K2:13)
 		
 		// Get the pastboard
 		GET PASTEBOARD DATA:C401("com.4d.private.4dmobile.action"; $x)
@@ -30,52 +27,55 @@ Case of
 			BLOB TO VARIABLE:C533($x; $o)
 			SET BLOB SIZE:C606($x; 0)
 			
-			$o.tgt:=Drop position:C608
+			$me:=$ƒ.actions
 			
-			If ($o.tgt=-1)  // After the last line
+			If ($e.row=-1)  // After the last line
 				
 				If ($o.src#$me.rowsNumber())  // Not if the source was the last line
 					
-					$o:=$me.cellCoordinates(1; $me.rowsNumber()).cellBox
+					$o:=$me.getRowCoordinates($me.rowsNumber())
 					$o.top:=$o.bottom
 					$o.right:=$me.coordinates.right
 					
-					$ƒ.dropCursor.setCoordinates($o.left; $o.top; $o.right; $o.bottom)
-					$ƒ.dropCursor.show()
-					
 				Else 
 					
-					$0:=-1  // Reject drop
-					$ƒ.dropCursor.hide()
+					$allow:=-1  // Reject drop
 					
 				End if 
 				
 			Else 
 				
-				If ($o.src#$o.tgt)\
-					 & ($o.tgt#($o.src+1))  // Not the same or the next one
+				If ($o.src#$e.row)\
+					 & ($e.row#($o.src+1))  // Not the same or the next one
 					
-					$o:=$me.cellCoordinates(1; $o.tgt).cellBox
+					$o:=$me.getRowCoordinates($e.row)
 					$o.bottom:=$o.top
 					$o.right:=$me.coordinates.right
 					
-					$ƒ.dropCursor.setCoordinates($o.left; $o.top; $o.right; $o.bottom)
-					$ƒ.dropCursor.show()
-					
 				Else 
 					
-					$0:=-1  // Reject drop
-					$ƒ.dropCursor.hide()
+					$allow:=-1  // Reject drop
 					
 				End if 
 			End if 
 			
 		Else 
 			
-			$0:=-1  // Reject drop
-			$ƒ.dropCursor.hide()
+			$allow:=-1  // Reject drop
 			
 		End if 
 		
 		//______________________________________________________
 End case 
+
+If ($allow=-1)
+	
+	SET CURSOR:C469(9019)
+	$ƒ.dropCursor.hide()
+	
+Else 
+	
+	$ƒ.dropCursor.setCoordinates($o.left; $o.top; $o.right; $o.bottom)
+	$ƒ.dropCursor.show()
+	
+End if 

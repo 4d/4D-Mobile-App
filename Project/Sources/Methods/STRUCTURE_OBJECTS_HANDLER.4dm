@@ -316,7 +316,7 @@ Case of
 								
 								If ($column=3)
 									
-									If (Not:C34(editor_Locked))
+									If (PROJECT.isNotLocked())
 										
 										$structure:=cs:C1710.structure.new()
 										
@@ -787,7 +787,7 @@ Case of
 		//==================================================
 	: ($e.objectName="space.shortcut")
 		
-		If (Not:C34(editor_Locked))
+		If (PROJECT.isNotLocked())
 			
 			// Check/uncheck the selection
 			If (OBJECT Get name:C1087(Object with focus:K67:3)=$form.fieldList)

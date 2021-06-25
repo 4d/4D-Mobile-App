@@ -20,29 +20,88 @@ Class constructor
 	//=== === === === === === === === === === === === === === === === === === === === === 
 Function init()
 	
+	var $group : cs:C1710.group
+	
 	This:C1470.toBeInitialized:=False:C215
 	
-	// Widgets definition
-	This:C1470.noPublishedTable:=cs:C1710.widget.new("noPublishedTable")
-	This:C1470.actions:=cs:C1710.listbox.new("actions").updateDefinition()
-	This:C1470.actionsBorder:=cs:C1710.static.new("actions.border")
+	This:C1470.static("noPublishedTable")
 	
-	This:C1470.add:=cs:C1710.button.new("actions.add")
-	This:C1470.remove:=cs:C1710.button.new("actions.remove")
+	This:C1470.listbox("actions")
+	This:C1470.static("actionsBorder"; "actions.border")
 	
-	This:C1470.databaseMethod:=cs:C1710.button.new("actionMethod")
-	This:C1470.databaseMethodLabel:=cs:C1710.static.new("actionMethod.label")
-	This:C1470.databaseMethodGroup:=cs:C1710.group.new(This:C1470.databaseMethod; This:C1470.databaseMethodLabel)
+	This:C1470.button("add")
+	This:C1470.button("remove")
 	
-	This:C1470.iconPicker:=cs:C1710.widget.new("iconGrid")
-	This:C1470.dropCursor:=cs:C1710.static.new("dropCursor")  //.setColors(Highlight menu background color)
+	$group:=This:C1470.group("databaseMethodGroup")
+	This:C1470.button("databaseMethod").addToGroup($group)
+	This:C1470.static("databaseMethodLabel"; "databaseMethod.label").addToGroup($group)
+	
+	This:C1470.widget("iconPicker")
+	This:C1470.static("dropCursor")
 	
 	// Link to the ACTIONS_PARAMS panel
 	This:C1470.parametersLink:=Formula:C1597(panel("ACTIONS_PARAMS"))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
+Function onLoad()
+	
+	// This trick remove the horizontal gap
+	This:C1470.actions.setScrollbars(0; 2)
+	
+	// Set the initial display
+	If (_and(Formula:C1597(Form:C1466.dataModel#Null:C1517); Formula:C1597(Not:C34(OB Is empty:C1297(Form:C1466.dataModel)))))
+		
+		This:C1470.actions.show().updateDefinition()
+		This:C1470.noPublishedTable.hide()
+		
+		This:C1470.add.enable()
+		This:C1470.databaseMethod.enable()
+		
+		This:C1470.dropCursor.setColors(Highlight menu background color:K23:7)
+		
+		If (_and(Formula:C1597(Form:C1466.actions#Null:C1517); Formula:C1597(Form:C1466.actions.length>0)))
+			
+			// Select last used action (or the first one)
+			If (This:C1470.$current#Null:C1517)
+				
+				var $indx : Integer
+				$indx:=Form:C1466.actions.indexOf(This:C1470.$current)
+				This:C1470.actions.select($indx+1)
+				
+			Else 
+				
+				This:C1470.actions.select(1)
+				
+			End if 
+			
+			This:C1470.updateParameters()
+			
+		End if 
+		
+		This:C1470.actions.focus()
+		
+	Else 
+		
+		This:C1470.actions.hide()
+		This:C1470.noPublishedTable.show()
+		
+		This:C1470.add.disable()
+		This:C1470.databaseMethod.disable()
+		
+	End if 
+	
+	// Preload the icons
+	This:C1470.callMeBack("loadActionIcons")
+	
+	// Give the focus to the actions listbox
+	This:C1470.actions.focus()
+	
+	// Add the events that we cannot select in the form properties 😇
+	This:C1470.appendEvents(New collection:C1472(On Alternative Click:K2:36; On Before Data Entry:K2:39))
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Load project actions
-Function load()
+Function loadActions()
 	
 	var $icon : Picture
 	var $action : Object
@@ -378,20 +437,37 @@ Function doAddMenu()
 						//-------------------------------------------
 					: ($menu.sort)
 						
+/*
+						
+						
+A REPORTER EN 19R2
+						
+						
+						
+*/
+						
 						$action.parameters:=New collection:C1472
 						
-						$fields:=catalog("fields"; New object:C1471("tableName"; $table[""].name)).fields
-						$field:=$fields.query("fieldNumber = :1"; $menu.fieldNumber).pop()
-						$field:=$table[String:C10($field.fieldNumber)]
+						$field:=$table[String:C10($menu.fieldNumber)]
 						
 						$parameter:=New object:C1471(\
 							"fieldNumber"; $field.fieldNumber; \
 							"defaultField"; EDITOR.str.setText($field.name).lowerCamelCase(); \
 							"name"; $field.name; \
-							"type"; Choose:C955($field.fieldType=Is time:K8:8; "time"; $field.valueType); \
+							"type"; PROJECT.fieldType2type($field.fieldType); \
 							"format"; "ascending")
 						
 						$action.parameters.push($parameter)
+						
+/*
+						
+						
+						
+						
+						
+						
+*/
+						
 						
 						//-------------------------------------------
 					Else 
@@ -627,10 +703,12 @@ Function doOnDrop()
 				
 			End if 
 		End if 
+		
+		PROJECT.save()
+		
 	End if 
 	
 	This:C1470.dropCursor.hide()
-	
 	This:C1470.actions.touch()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
@@ -682,7 +760,7 @@ Function _addAction($action : Object)
 		This:C1470.updateParameters($action)
 		
 		// Warning edit stop code execution -> must be delegate
-		//EDIT ITEM(*;$Obj_form.name;Form.actions.length)
+		// EDIT ITEM(*;$Obj_form.name;Form.actions.length)
 		
 		This:C1470.refresh()
 		

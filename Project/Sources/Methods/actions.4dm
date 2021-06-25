@@ -14,63 +14,9 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			
 			androidLimitations(True:C214; "Actions are coming soon for Android")
 			
-			// This trick remove the horizontal gap
-			$ƒ.actions.setScrollbars(0; 2)
+			$ƒ.loadActions()
 			
-			// Load project actions
-			$ƒ.load()
-			
-			// Set the initial display
-			If (_and(Formula:C1597(Form:C1466.dataModel#Null:C1517); Formula:C1597(Not:C34(OB Is empty:C1297(Form:C1466.dataModel)))))
-				
-				$ƒ.actions.show()
-				$ƒ.noPublishedTable.hide()
-				
-				$ƒ.add.enable()
-				$ƒ.databaseMethod.enable()
-				
-				If (_and(Formula:C1597(Form:C1466.actions#Null:C1517); Formula:C1597(Form:C1466.actions.length>0)))
-					
-					// Select last used action (or the first one)
-					If ($ƒ.$current#Null:C1517)
-						
-						var $indx : Integer
-						$indx:=Form:C1466.actions.indexOf($ƒ.$current)
-						$ƒ.actions.select($indx+1)
-						
-					Else 
-						
-						$ƒ.actions.select(1)
-						
-					End if 
-					
-					
-					//$ƒ.callMeBack("selectParameters")
-					
-					$ƒ.updateParameters()
-					
-				End if 
-				
-				$ƒ.actions.focus()
-				
-			Else 
-				
-				$ƒ.actions.hide()
-				$ƒ.noPublishedTable.show()
-				
-				$ƒ.add.disable()
-				$ƒ.databaseMethod.disable()
-				
-			End if 
-			
-			// Preload the icons
-			$ƒ.callMeBack("loadActionIcons")
-			
-			// Give the focus to the actions listbox
-			$ƒ.actions.focus()
-			
-			// Add the events that we cannot select in the form properties 😇
-			$ƒ.appendEvents(New collection:C1472(On Alternative Click:K2:36; On Before Data Entry:K2:39))
+			$ƒ.onLoad()
 			
 			//______________________________________________________
 		: ($e.code=On Timer:K2:25)
@@ -125,7 +71,7 @@ Else   // <== WIDGETS METHOD
 					End if 
 					
 					//_____________________________________
-				: (editor_Locked) | (Num:C11($e.row)=0)
+				: (PROJECT.isLocked()) | (Num:C11($e.row)=0)
 					
 					// <NOTHING MORE TO DO>
 					

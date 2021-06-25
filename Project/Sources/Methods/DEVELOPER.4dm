@@ -24,22 +24,7 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			//______________________________________________________
 		: ($e.code=On Load:K2:1)
 			
-			$ƒ.team.setValue(String:C10(PROJECT.organization.teamId))
-			
-			If (Is macOS:C1572)
-				
-				$ƒ.teamMenu.disable()
-				
-				// *LAUNCH GETTING TEAM IDS
-				$ƒ.callWorker("teamId"; New object:C1471(\
-					"action"; "list"; \
-					"provisioningProfiles"; True:C214; \
-					"certificate"; True:C214; \
-					"caller"; $ƒ.window; \
-					"callerMethod"; $ƒ.callback; \
-					"callerReturn"; "teamId"))
-				
-			End if 
+			$ƒ.onLoad()
 			
 			//______________________________________________________
 	End case 

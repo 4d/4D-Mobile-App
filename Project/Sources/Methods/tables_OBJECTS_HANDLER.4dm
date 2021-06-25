@@ -91,7 +91,7 @@ Case of
 					Else 
 						
 						If ($Lon_column=$Obj_form.iconColumn)\
-							 & (Not:C34(editor_Locked))
+							 & (PROJECT.isNotLocked())
 							
 							LISTBOX GET CELL COORDINATES:C1330(*; $Obj_form.tableList; $Lon_column; $Lon_row; $Lon_left; $Lon_top; $Lon_right; $Lon_bottom)
 							
@@ -107,7 +107,7 @@ Case of
 							$Obj_picker.row:=$Lon_row
 							
 							$Obj_picker.left:=$Lon_right
-							$Obj_picker.top:=-56
+							$Obj_picker.top:=-40
 							
 							$Obj_picker.action:="tableIcons"
 							$Obj_picker.background:=0x00FFFFFF
@@ -190,7 +190,7 @@ Case of
 				editor_ui_LISTBOX($Txt_me; False:C215)
 				
 				//______________________________________________________
-			: (editor_Locked)
+			: (PROJECT.isLocked())
 				
 				// NOTHING MORE TO DO
 				

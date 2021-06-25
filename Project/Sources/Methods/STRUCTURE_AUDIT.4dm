@@ -459,7 +459,7 @@ If ($cacheFile.exists)
 		If ($isUnsynchronized)
 			
 			// Display alert only one time
-			If (Not:C34(editor_Locked))
+			If (PROJECT.isNotLocked())
 				
 				POST_MESSAGE(New object:C1471(\
 					"target"; Current form window:C827; \

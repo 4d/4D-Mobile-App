@@ -157,7 +157,7 @@ Case of
 			End if 
 		End for each 
 		
-		If (editor_Locked)
+		If (PROJECT.isLocked())
 			
 			OBJECT SET DRAG AND DROP OPTIONS:C1183(*; $Obj_form.tables.name; False:C215; False:C215; False:C215; False:C215)
 			$Obj_form.tables.setProperty(lk selection mode:K53:35; lk none:K53:57)
@@ -197,7 +197,7 @@ Case of
 		//=========================================================
 	: ($Obj_in.action="buttons")  // Manage activation/inactivation of the buttons
 		
-		If (editor_Locked)
+		If (PROJECT.isLocked())
 			
 			$Obj_form.addOne.disable()
 			$Obj_form.addAll.disable()

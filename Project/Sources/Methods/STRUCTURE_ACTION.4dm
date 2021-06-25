@@ -89,7 +89,7 @@ Case of
 			
 			//$Obj_popup.shortcut(Char(Space);Command key mask)
 			
-			If (editor_Locked)
+			If (PROJECT.isLocked())
 				
 				$Obj_popup.disable()
 				
@@ -118,7 +118,7 @@ Case of
 		
 		//#93984
 		If ($Lon_number=0)\
-			 | (editor_Locked)
+			 | (PROJECT.isLocked())
 			
 			$Obj_popup.disable()
 			

@@ -1,6 +1,6 @@
 Class extends form
 
-//=== === === === === === === === === === === === === === === === === === === === === 
+// === === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	
 	Super:C1705("editor_CALLBACK")
@@ -18,13 +18,13 @@ Class constructor
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	// === === === === === === === === === === === === === === === === === === === === ===
 Function init()
 	
 	This:C1470.toBeInitialized:=False:C215
 	
-	// Widgets definition
-	This:C1470.name:=cs:C1710.widget.new("10_name")
-	This:C1470.nameHelp:=cs:C1710.button.new("10_name.help")
-	This:C1470.identifier:=cs:C1710.widget.new("30_identifier")
-	This:C1470.identifierHelp:=cs:C1710.button.new("30_identifier.help")
+	This:C1470.input("name"; "01_name")
+	This:C1470.button("nameHelp")
+	
+	This:C1470.input("identifier"; "02_identifier")
+	This:C1470.button("identifierHelp")

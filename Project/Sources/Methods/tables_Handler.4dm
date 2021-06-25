@@ -165,7 +165,7 @@ Case of
 			
 		End if 
 		
-		editor_Locked($Obj_form.labels; $Obj_form.shortLabels)
+		_o_editor_Locked($Obj_form.labels; $Obj_form.shortLabels)
 		
 		editor_ui_LISTBOX($Obj_form.tableList)
 		

@@ -2,8 +2,7 @@ Class constructor
 	
 	This:C1470.handler:="mobileapp"
 	This:C1470.method:=HTTP GET method:K71:1
-	This:C1470.headers:=New collection:C1472(New object:C1471(\
-		"X-MobileApp"; "1"))
+	This:C1470.headers:=New collection:C1472(New object:C1471("X-MobileApp"; "1"))
 	This:C1470.timeout:=60
 	
 	This:C1470.path:=""

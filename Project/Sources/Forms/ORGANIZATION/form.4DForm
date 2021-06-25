@@ -50,7 +50,7 @@
 					"text": ":xliff:orgIdentifier",
 					"class": "label"
 				},
-				"10_name": {
+				"01_name": {
 					"type": "input",
 					"top": 36,
 					"left": 23,
@@ -66,7 +66,7 @@
 						"onDataChange"
 					]
 				},
-				"30_identifier": {
+				"02_identifier": {
 					"type": "input",
 					"top": 36,
 					"left": 495,
@@ -82,7 +82,7 @@
 						"onDataChange"
 					]
 				},
-				"10_name.help": {
+				"nameHelp": {
 					"type": "button",
 					"top": 5,
 					"left": 444,
@@ -96,7 +96,7 @@
 					"method": "ORGANIZATION",
 					"focusable": false
 				},
-				"30_identifier.help": {
+				"identifierHelp": {
 					"type": "button",
 					"top": 5,
 					"left": 915,
@@ -112,8 +112,8 @@
 				}
 			},
 			"entryOrder": [
-				"10_name",
-				"30_identifier"
+				"01_name",
+				"02_identifier"
 			]
 		}
 	],
@@ -129,5 +129,5 @@
 			"View 1": {}
 		}
 	},
-	"geometryStamp": 17
+	"geometryStamp": 21
 }

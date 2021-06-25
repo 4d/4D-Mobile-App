@@ -5,17 +5,11 @@
 // Created 12-5-2017 by Vincent de Lachaux
 // ----------------------------------------------------
 // Declarations
-var $0 : Object
+#DECLARE($eventCode : Integer; $eventCode2 : Integer; $eventCodeN : Integer)->$e : Object
 var ${1} : Integer
-
-If (False:C215)
-	C_OBJECT:C1216(panel_Form_common; $0)
-	C_LONGINT:C283(panel_Form_common; ${1})
-End if 
 
 var $focused : Text
 var $height; $i; $type; $width : Integer
-var $e : Object
 var $retainedEvents : Collection
 
 ARRAY TEXT:C222($entryOrder; 0)
@@ -143,7 +137,3 @@ If ($retainedEvents.indexOf($e.code)=-1)
 	$e.code:=0
 	
 End if 
-
-// ----------------------------------------------------
-// Return
-$0:=$e

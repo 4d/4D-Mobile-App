@@ -76,7 +76,15 @@ Function addMember($member)->$this : cs:C1710.group
 			//___________________________
 		: (Value type:C1509($member)=Is object:K8:27)
 			
-			This:C1470.members.push($member)
+			If (OB Instance of:C1731($member; cs:C1710.group))
+				
+				This:C1470.members:=This:C1470.members.combine($member.members)
+				
+			Else 
+				
+				This:C1470.members.push($member)
+				
+			End if 
 			
 			//___________________________
 		: (Value type:C1509($member)=Is text:K8:3)  // Comma separated list of object names

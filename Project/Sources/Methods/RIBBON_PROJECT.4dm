@@ -50,7 +50,7 @@ Case of
 			"studioAvailable"; Bool:C1537(EDITOR.studio.applicationAvailable); \
 			"iosFolder"; $folder.folder("iOS"); \
 			"androidFolder"; $folder.folder("android").folder(PROJECT.product.name); \
-			"isLocked"; editor_Locked; \
+			"isLocked"; PROJECT.isLocked(); \
 			"openWithXcode"; False:C215; \
 			"openWithStudio"; False:C215)
 		

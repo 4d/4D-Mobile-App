@@ -23,12 +23,39 @@ Function init()
 	
 	This:C1470.toBeInitialized:=False:C215
 	
-	// Widgets definition
-	This:C1470.ios:=cs:C1710.button.new("ios")
-	This:C1470.android:=cs:C1710.button.new("android")
-	This:C1470.os:=cs:C1710.group.new(This:C1470.ios; This:C1470.android)
+	var $group : cs:C1710.group
+	$group:=This:C1470.group("os")
+	This:C1470.button("ios").addToGroup($group)
+	This:C1470.button("android").addToGroup($group)
 	
-	This:C1470.preview:=cs:C1710.static.new("target.preview")
+	This:C1470.static("preview")
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function onLoad()
+	
+	This:C1470.preview.show(Num:C11(Application version:C493)<1920)
+	
+	If (Is Windows:C1573)
+		
+		This:C1470.android.setPicture("#images/os/Android-32.png")\
+			.setBackgroundPicture()\
+			.setNumStates(1)
+		
+		If (Form:C1466.$ios)
+			
+			This:C1470.ios.setPicture("#images/os/iOS-32.png")
+			
+		Else 
+			
+			This:C1470.ios.setPicture("#images/os/iOS-24.png")
+			
+		End if 
+		
+		This:C1470.ios.disable()\
+			.setBackgroundPicture()\
+			.setNumStates(1)
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
 	// Manage UI for the target

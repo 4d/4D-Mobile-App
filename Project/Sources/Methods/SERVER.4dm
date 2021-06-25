@@ -8,14 +8,12 @@
 // SERVER pannel management
 // ----------------------------------------------------
 // Declarations
-var $f : Object
-var $e : Object
-var $o : Object
+var $e; $ƒ : Object
 
 // ----------------------------------------------------
 // Initialisations
-$f:=panel_Definition
-$e:=$f.event
+$ƒ:=panel_Definition
+$e:=$ƒ.event
 
 // ----------------------------------------------------
 If ($e.objectName=Null:C1517)  // <== Form method
@@ -27,17 +25,7 @@ If ($e.objectName=Null:C1517)  // <== Form method
 			//______________________________________________________
 		: ($e.code=On Load:K2:1)
 			
-			$f.webSettings.bestSize()
-			$f.webSettingsGroup.distributeLeftToRight()
-			
-			$o:=New object:C1471(\
-				"buffer"; New object:C1471(\
-				"deepLinking"; New object:C1471(); \
-				"server"; New object:C1471(\
-				"authentication"; New object:C1471; \
-				"urls"; New object:C1471)))
-			
-			ob_MERGE(Form:C1466; $o.buffer)
+			$ƒ.onLoad()
 			
 			//______________________________________________________
 	End case 
@@ -47,36 +35,15 @@ Else   // <== Widgets method
 	Case of 
 			
 			//==================================================
-		: ($f.productionURL.catch($e))
+		: ($ƒ.productionURL.catch($e; On Data Change:K2:15))
 			
-			Case of 
-					
-					//_____________________________________
-				: ($e.code=On Data Change:K2:15)
-					
-					PROJECT.save()
-					
-					// Verify the web server configuration
-					EDITOR.callMeBack("checkingServerConfiguration")
-					
-					//_____________________________________
-				: ($e.code=On Getting Focus:K2:7)\
-					 | ($e.code=On Losing Focus:K2:8)
-					
-					//#TURNAROUND - THE EVENT SHOULD NOT BE TRIGGERED
-					
-					//_____________________________________
-				Else 
-					
-					ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+$e.description+")")
-					
-					//_____________________________________
-			End case 
+			// Verify the web server configuration
+			EDITOR.callMeBack("checkingServerConfiguration")
 			
 			//==================================================
-		: ($f.webSettings.catch($e))
+		: ($ƒ.webSettings.catch($e; On Clicked:K2:4))
 			
-			$f.settings()
+			$ƒ.doSettings()
 			
 			//==================================================
 	End case 

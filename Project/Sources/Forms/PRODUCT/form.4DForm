@@ -30,7 +30,7 @@
 		},
 		{
 			"objects": {
-				"target.preview": {
+				"preview": {
 					"type": "text",
 					"text": "Preview",
 					"top": 93,
@@ -122,7 +122,7 @@
 					"height": 33,
 					"class": "border"
 				},
-				"id": {
+				"productID": {
 					"type": "input",
 					"top": 98,
 					"left": 23,
@@ -291,7 +291,7 @@
 					"focusable": false,
 					"textPlacement": "bottom"
 				},
-				"icon.action": {
+				"iconAction": {
 					"type": "button",
 					"text": "",
 					"top": 7,
@@ -352,12 +352,12 @@
 				"10_name",
 				"11_version",
 				"icon",
-				"id",
+				"productID",
 				"30_copyright",
 				"android",
 				"ios",
 				"icon.alert",
-				"icon.action",
+				"iconAction",
 				"color.button"
 			]
 		}
@@ -374,5 +374,5 @@
 		}
 	},
 	"method": "PRODUCT",
-	"geometryStamp": 564
+	"geometryStamp": 567
 }

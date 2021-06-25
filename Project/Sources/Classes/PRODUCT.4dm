@@ -23,39 +23,178 @@ Function init()
 	
 	This:C1470.toBeInitialized:=False:C215
 	
-	// Widgets definition
-	This:C1470.productName:=cs:C1710.widget.new("10_name")
+	This:C1470.input("productName"; "10_name")
 	This:C1470.productNameAlert:=cs:C1710.attention.new("name.alert")
 	
-	This:C1470.productVersion:=cs:C1710.widget.new("11_version")
+	This:C1470.input("productVersion"; "11_version")
 	
-	This:C1470.productID:=cs:C1710.widget.new("id")
+	This:C1470.input("productID")
 	
-	This:C1470.productCopyright:=cs:C1710.widget.new("30_copyright")
+	This:C1470.input("productCopyright"; "30_copyright")
 	
-	This:C1470.icon:=cs:C1710.widget.new("icon")
+	This:C1470.widget("icon")
+	This:C1470.button("iconAction")
 	This:C1470.iconAlert:=cs:C1710.attention.new("icon.alert")
-	This:C1470.iconAction:=cs:C1710.button.new("icon.action")
 	
-	This:C1470.target:=cs:C1710.static.new("target.label")
-	This:C1470.ios:=cs:C1710.button.new("ios")
-	This:C1470.android:=cs:C1710.button.new("android")
-	This:C1470.os:=cs:C1710.group.new(This:C1470.target; This:C1470.ios; This:C1470.android)
+	var $group : cs:C1710.group
+	$group:=This:C1470.group("os")
+	This:C1470.static("target"; "target.label").addToGroup($group)
+	This:C1470.button("ios").addToGroup($group)
+	This:C1470.button("android").addToGroup($group)
 	
-	This:C1470.preview:=cs:C1710.static.new("target.preview")
+	This:C1470.static("preview")
 	
-	This:C1470.color:=cs:C1710.static.new("color")
-	This:C1470.colorBorder:=cs:C1710.static.new("color.border")
-	This:C1470.colorLabel:=cs:C1710.static.new("color.label")
-	This:C1470.colorButton:=cs:C1710.button.new("color.button")
-	This:C1470.dominantColor:=cs:C1710.group.new(This:C1470.color; This:C1470.colorBorder; This:C1470.colorLabel; This:C1470.colorButton)
+	$group:=This:C1470.group("dominantColor")
+	This:C1470.static("color").addToGroup($group)
+	This:C1470.static("colorBorder"; "color.border").addToGroup($group)
+	This:C1470.static("colorLabel"; "color.label").addToGroup($group)
+	This:C1470.button("colorButton"; "color.button").addToGroup($group)
 	
 	This:C1470.mainColor:=""
 	This:C1470.iconColor:=Null:C1517
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
+Function onLoad()
+	
+	If (FEATURE.with("targetPannel"))
+		
+		This:C1470.os.hide()
+		This:C1470.preview.hide()
+		This:C1470.dominantColor.moveVertically(-125)
+		
+	Else 
+		
+		If (Bool:C1537(PROJECT.$android))
+			
+			If (Is Windows:C1573)
+				
+				If (Form:C1466.$ios)
+					
+					This:C1470.android.setPicture("#images/os/Android-32.png")\
+						.setBackgroundPicture()\
+						.setNumStates(1)
+					
+					This:C1470.preview.show()
+					
+					This:C1470.ios.disable()
+					
+					This:C1470.ios.setPicture("#images/os/iOS-32.png")\
+						.setBackgroundPicture()\
+						.setNumStates(1)
+					
+				Else 
+					
+					This:C1470.os.hide()
+					This:C1470.preview.hide()
+					
+				End if 
+			End if 
+			
+		Else 
+			
+			This:C1470.target.hide()
+			This:C1470.ios.hide()
+			This:C1470.android.hide()
+			
+			This:C1470.preview.hide()
+			
+		End if 
+	End if 
+	
+	If (FEATURE.with("dominantColor"))
+		
+		If (PROJECT.ui.dominantColor#Null:C1517)
+			
+			This:C1470.mainColor:=cs:C1710.color.new(PROJECT.ui.dominantColor).main
+			
+		End if 
+		
+	Else 
+		
+		This:C1470.dominantColor.hide()
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function update()
+	
+	This:C1470.checkName(Form:C1466.product.name)
+	This:C1470.displayIcon()
+	
+	If (FEATURE.with("dominantColor"))
+		
+		This:C1470.color.setColors(This:C1470.mainColor; This:C1470.mainColor)
+		
+		If (This:C1470.iconColor=Null:C1517)
+			
+			This:C1470.iconColor:=cs:C1710.color.new(cs:C1710.bmp.new(OBJECT Get value:C1743("icon")).getDominantColor()).main
+			
+		End if 
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function doColorMenu()
+	
+	var $color : cs:C1710.color
+	var $menu : cs:C1710.menu
+	
+	$menu:=cs:C1710.menu.new()\
+		.append("useTheSystemColorSelector"; "picker")\
+		.append("useTheMainColorOfTheIcon"; "fromIcon").enable(cs:C1710.color.new(This:C1470.mainColor).main#Num:C11(This:C1470.iconColor))\
+		.popup(This:C1470.colorBorder)
+	
+	If ($menu.selected)
+		
+		Case of 
+				
+				//________________________
+			: ($menu.choice="picker")
+				
+				$color:=cs:C1710.color.new(Select RGB color:C956(This:C1470.mainColor))
+				
+				//________________________
+			: ($menu.choice="fromIcon")
+				
+				$color:=cs:C1710.color.new(cs:C1710.bmp.new(OBJECT Get value:C1743("icon")).getDominantColor())
+				This:C1470.iconColor:=$color.main
+				
+/*//________________________
+// Not validated by PO because new feature could add a more consequente panel
+// With other ways to enter css color, maybe feature flag for dev, deactivate it
+//________________________________________
+: ($menu.choice="_o_cssColor")
+var $requested : Text
+$requested:=Request(Get localized string("enterAWebColor"))
+If (Length($requested)>0)
+$color:=cs.color.new($requested)
+If ($color.isValid())
+This.iconColor:=$color.main
+Else
+ALERT(Get localized string("invalidWebColor"))
+End if
+End if
+*/
+				
+				//________________________
+		End case 
+		
+		If ($color#Null:C1517)
+			
+			If ($color.isValid())
+				
+				This:C1470.mainColor:=$color.main
+				PROJECT.ui.dominantColor:=$color.css.components
+				PROJECT.save()
+				
+				This:C1470.color.setColors(This:C1470.mainColor; This:C1470.mainColor)
+				
+			End if 
+		End if 
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Manage the icon's action button
-Function iconMenu()
+Function doIconMenu()
 	
 	var $p : Picture
 	var $menu : Object

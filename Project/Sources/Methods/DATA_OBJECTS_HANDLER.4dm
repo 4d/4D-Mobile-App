@@ -159,7 +159,7 @@ Case of
 				UI.tips.defaultDelay()
 				
 				//______________________________________________________
-			: (editor_Locked)
+			: (PROJECT.isLocked())
 				
 				// NOTHING MORE TO DO
 				

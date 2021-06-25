@@ -32,7 +32,7 @@
 	"pages": [
 		{
 			"objects": {
-				"empty": {
+				"noSelection": {
 					"type": "text",
 					"top": 6,
 					"left": 16,
@@ -182,7 +182,7 @@
 						}
 					]
 				},
-				"parameters.add": {
+				"add": {
 					"type": "button",
 					"top": 262,
 					"left": 16,
@@ -199,7 +199,7 @@
 					"popupPlacement": "separated",
 					"focusable": false
 				},
-				"parameters.remove": {
+				"remove": {
 					"type": "button",
 					"top": 262,
 					"left": 43,
@@ -498,7 +498,7 @@
 					"visibility": "hidden",
 					"class": "label"
 				},
-				"00_info": {
+				"field": {
 					"type": "input",
 					"left": 86,
 					"top": 268,
@@ -510,17 +510,6 @@
 					"textAlign": "right",
 					"class": "comment",
 					"contextMenu": "none"
-				},
-				"dropCursor": {
-					"type": "line",
-					"top": 192,
-					"left": 28,
-					"width": 30,
-					"height": 0,
-					"strokeWidth": 2,
-					"stroke": "#ff0000",
-					"visibility": "hidden",
-					"startPoint": "topLeft"
 				},
 				"03_sortOrder.border": {
 					"type": "rectangle",
@@ -578,6 +567,17 @@
 					],
 					"visibility": "hidden",
 					"focusable": false
+				},
+				"dropCursor": {
+					"type": "line",
+					"top": 192,
+					"left": 28,
+					"width": 30,
+					"height": 0,
+					"strokeWidth": 2,
+					"stroke": "#ff0000",
+					"visibility": "hidden",
+					"startPoint": "topLeft"
 				}
 			},
 			"entryOrder": [
@@ -592,9 +592,9 @@
 				"07_default",
 				"09_min",
 				"10_max",
-				"parameters.add",
-				"parameters.remove",
-				"00_info",
+				"add",
+				"remove",
+				"field",
 				"03_sortOrder",
 				"03_sortOrder.popup"
 			]
@@ -643,7 +643,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 196,
+	"geometryStamp": 200,
 	"editor": {
 		"groups": {
 			"Group": [

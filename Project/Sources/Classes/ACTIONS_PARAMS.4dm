@@ -22,101 +22,130 @@ Class constructor
 	//=== === === === === === === === === === === === === === === === === === === === === 
 Function init()
 	
+	var $group : cs:C1710.group
+	
 	This:C1470.toBeInitialized:=False:C215
 	
-	This:C1470.noSelection:=cs:C1710.static.new("empty")
-	This:C1470.noAction:=cs:C1710.static.new("noAction")
-	This:C1470.noTable:=cs:C1710.static.new("noTable")
-	This:C1470.noParameters:=cs:C1710.static.new("noParameters")
+	This:C1470.static("noSelection")
+	This:C1470.static("noAction")
+	This:C1470.static("noTable")
+	This:C1470.static("noParameters")
 	
-	This:C1470.parameters:=cs:C1710.listbox.new("01_Parameters").updateDefinition()
-	This:C1470.parametersBorder:=cs:C1710.static.new("01_Parameters.border")
-	This:C1470.remove:=cs:C1710.button.new("parameters.remove")
-	This:C1470.add:=cs:C1710.button.new("parameters.add")
-	This:C1470.parameterGroup:=cs:C1710.group.new(This:C1470.parameters; This:C1470.parametersBorder; This:C1470.remove; This:C1470.add)
+	$group:=This:C1470.group("parameterGroup")
+	This:C1470.listbox("parameters"; "01_Parameters").addToGroup($group)
+	This:C1470.static("parametersBorder"; "01_Parameters.border").addToGroup($group)
+	This:C1470.button("add").addToGroup($group)
+	This:C1470.button("remove").addToGroup($group)
 	
-	This:C1470.paramName:=cs:C1710.input.new("02_name")
-	This:C1470.paramNameBorder:=cs:C1710.static.new("02_name.border")
-	This:C1470.paramNameLabel:=cs:C1710.static.new("02_name.label")
-	This:C1470.paramNameGroup:=cs:C1710.group.new(This:C1470.paramName; This:C1470.paramNameBorder; This:C1470.paramNameLabel)
+	$group:=This:C1470.group("paramNameGroup")
+	This:C1470.input("paramName"; "02_name").addToGroup($group)
+	This:C1470.static("paramNameBorder"; "02_name.border").addToGroup($group)
+	This:C1470.static("paramNameLabel"; "02_name.label").addToGroup($group)
 	
-	This:C1470.mandatory:=cs:C1710.button.new("02_mandatory")
+	This:C1470.button("mandatory"; "02_mandatory")
 	
-	This:C1470.label:=cs:C1710.input.new("03_label")
-	This:C1470.labelBorder:=cs:C1710.static.new("03_label.border")
-	This:C1470.labelLabel:=cs:C1710.static.new("03_label.label")
-	This:C1470.labelGroup:=cs:C1710.group.new(This:C1470.label; This:C1470.labelBorder; This:C1470.labelLabel)
+	$group:=This:C1470.group("labelGroup")
+	This:C1470.input("label"; "03_label").addToGroup($group)
+	This:C1470.static("labelBorder"; "03_label.border").addToGroup($group)
+	This:C1470.static("labelLabel"; "02_name.label").addToGroup($group)
 	
-	This:C1470.short:=cs:C1710.input.new("04_shortLabel")
-	This:C1470.shortBorder:=cs:C1710.static.new("04_shortLabel.border")
-	This:C1470.shortLabel:=cs:C1710.static.new("04_shortLabel.label")
-	This:C1470.shortGroup:=cs:C1710.group.new(This:C1470.short; This:C1470.shortBorder; This:C1470.shortLabel)
+	$group:=This:C1470.group("shortGroup")
+	This:C1470.input("short"; "04_shortLabel").addToGroup($group)
+	This:C1470.static("shortBorder"; "04_shortLabel.border").addToGroup($group)
+	This:C1470.static("shortLabel"; "04_shortLabel.label").addToGroup($group)
 	
-	This:C1470.format:=cs:C1710.input.new("05_type")
-	This:C1470.formatBorder:=cs:C1710.static.new("05_type.border")
-	This:C1470.formatLabel:=cs:C1710.static.new("05_type.label")
-	This:C1470.formatPopup:=cs:C1710.button.new("05_type.popup")
-	This:C1470.formatPopupBorder:=cs:C1710.static.new("05_type.popup.border")
-	This:C1470.formatGroup:=cs:C1710.group.new(This:C1470.format; This:C1470.formatBorder; This:C1470.formatLabel; This:C1470.formatPopup; This:C1470.formatPopupBorder)
+	$group:=This:C1470.group("formatGroup")
+	This:C1470.input("format"; "05_type").addToGroup($group)
+	This:C1470.static("formatBorder"; "05_type.border").addToGroup($group)
+	This:C1470.static("formatLabel"; "05_type.label").addToGroup($group)
+	This:C1470.button("formatPopup"; "05_type.popup").addToGroup($group)
+	This:C1470.static("formatPopupBorder"; "05_type.popup.border").addToGroup($group)
 	
-	This:C1470.sortOrder:=cs:C1710.input.new("03_sortOrder")
-	This:C1470.sortOrderBorder:=cs:C1710.static.new("03_sortOrder.border")
-	This:C1470.sortOrderLabel:=cs:C1710.static.new("03_sortOrder.label")
-	This:C1470.sortOrderPopup:=cs:C1710.button.new("03_sortOrder.popup")
-	This:C1470.sortOrderPopupBorder:=cs:C1710.static.new("03_sortOrder.popup.border")
-	This:C1470.sortOrderGroup:=cs:C1710.group.new(This:C1470.sortOrder; This:C1470.sortOrderBorder; This:C1470.sortOrderLabel; This:C1470.sortOrderPopup; This:C1470.sortOrderPopupBorder)
+	$group:=This:C1470.group("sortOrderGroup")
+	This:C1470.input("sortOrder"; "03_sortOrder").addToGroup($group)
+	This:C1470.static("sortOrderBorder"; "03_sortOrder.border").addToGroup($group)
+	This:C1470.static("sortOrderLabel"; "03_sortOrder.label").addToGroup($group)
+	This:C1470.button("sortOrderPopup"; "03_sortOrder.popup").addToGroup($group)
+	This:C1470.static("sortOrderPopupBorder"; "03_sortOrder.popup.border").addToGroup($group)
 	
-	This:C1470.placeholder:=cs:C1710.input.new("06_placeholder")
-	This:C1470.placeholderBorder:=cs:C1710.static.new("06_placeholder.border")
-	This:C1470.placeholderLabel:=cs:C1710.static.new("06_placeholder.label")
-	This:C1470.placeholderGroup:=cs:C1710.group.new(This:C1470.placeholder; This:C1470.placeholderBorder; This:C1470.placeholderLabel)
+	$group:=This:C1470.group("placeholderGroup")
+	This:C1470.input("placeholder"; "06_placeholder").addToGroup($group)
+	This:C1470.static("placeholderBorder"; "06_placeholder.border").addToGroup($group)
+	This:C1470.static("placeholderLabel"; "06_placeholder.label").addToGroup($group)
 	
-	This:C1470.defaultValue:=cs:C1710.input.new("07_default")
-	This:C1470.defaultValueBorder:=cs:C1710.static.new("07_default.border")
-	This:C1470.defaultValueLabel:=cs:C1710.static.new("07_default.label")
-	This:C1470.defaultValueGroup:=cs:C1710.group.new(This:C1470.defaultValue; This:C1470.defaultValueBorder; This:C1470.defaultValueLabel)
+	$group:=This:C1470.group("defaultValueGroup")
+	This:C1470.input("defaultValue"; "07_default").addToGroup($group)
+	This:C1470.static("defaultValueBorder"; "07_default.border").addToGroup($group)
+	This:C1470.static("defaultValueLabel"; "07_default.label").addToGroup($group)
 	
-	This:C1470.min:=cs:C1710.input.new("09_min")
-	This:C1470.minBorder:=cs:C1710.static.new("09_min.border")
-	This:C1470.minLabel:=cs:C1710.static.new("09_min.label")
-	This:C1470.minGroup:=cs:C1710.group.new(This:C1470.min; This:C1470.minBorder; This:C1470.minLabel)
+	$group:=This:C1470.group("minGroup")
+	This:C1470.input("min"; "09_min").addToGroup($group)
+	This:C1470.static("minBorder"; "09_min.border").addToGroup($group)
+	This:C1470.static("minLabel"; "09_min.label").addToGroup($group)
 	
-	This:C1470.max:=cs:C1710.input.new("10_max")
-	This:C1470.maxBorder:=cs:C1710.static.new("10_max.border")
-	This:C1470.maxLabel:=cs:C1710.static.new("10_max.label")
-	This:C1470.maxGroup:=cs:C1710.group.new(This:C1470.max; This:C1470.maxBorder; This:C1470.maxLabel)
+	$group:=This:C1470.group("maxGroup")
+	This:C1470.input("max"; "10_max").addToGroup($group)
+	This:C1470.static("maxBorder"; "10_max.border").addToGroup($group)
+	This:C1470.static("maxLabel"; "10_max.label").addToGroup($group)
 	
-	This:C1470.field:=cs:C1710.input.new("00_info")
-	This:C1470.description:=cs:C1710.input.new("01_description")
+	This:C1470.input("field")
+	This:C1470.input("description"; "01_description")
 	
-	This:C1470.dropCursor:=cs:C1710.static.new("dropCursor").setColors(Highlight menu background color:K23:7)
+	This:C1470.static("dropCursor")
 	
-	This:C1470.number:=cs:C1710.group.new()\
-		.addMember(This:C1470.minGroup.members)\
-		.addMember(This:C1470.maxGroup.members)
+	This:C1470.group("number"; \
+		This:C1470.minGroup; \
+		This:C1470.maxGroup)
 	
-	This:C1470.properties:=cs:C1710.group.new()\
-		.addMember(This:C1470.paramNameGroup.members)\
-		.addMember(This:C1470.mandatory)\
-		.addMember(This:C1470.labelGroup.members)\
-		.addMember(This:C1470.shortGroup.members)\
-		.addMember(This:C1470.formatGroup.members)\
-		.addMember(This:C1470.placeholderGroup.members)\
-		.addMember(This:C1470.defaultValueGroup.members)\
-		.addMember(This:C1470.number.members)\
-		.addMember(This:C1470.sortOrderGroup.members)
+	This:C1470.group("properties"; \
+		This:C1470.paramNameGroup; \
+		This:C1470.mandatory; \
+		This:C1470.labelGroup; \
+		This:C1470.shortGroup; \
+		This:C1470.formatGroup; \
+		This:C1470.placeholderGroup; \
+		This:C1470.defaultValueGroup; \
+		This:C1470.number; \
+		This:C1470.sortOrderGroup)
 	
-	This:C1470.withSelection:=cs:C1710.group.new()\
-		.addMember(This:C1470.parameterGroup.members)\
-		.addMember(This:C1470.properties.members)
+	This:C1470.group("withSelection"; \
+		This:C1470.parameterGroup; \
+		This:C1470.properties)
 	
-	This:C1470.linked:=cs:C1710.group.new()\
-		.addMember(This:C1470.paramName)\
-		.addMember(This:C1470.label)\
-		.addMember(This:C1470.short)\
-		.addMember(This:C1470.placeholder)\
-		.addMember(This:C1470.defaultValue)\
-		.addMember(This:C1470.description)
+	This:C1470.group("linked"; \
+		This:C1470.paramName; \
+		This:C1470.label; \
+		This:C1470.short; \
+		This:C1470.placeholder; \
+		This:C1470.defaultValue; \
+		This:C1470.description)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function onLoad()
+	
+	// This trick remove the horizontal gap
+	This:C1470.parameters.setScrollbars(0; 2).updateDefinition()
+	
+	This:C1470.dropCursor.setColors(Highlight menu background color:K23:7)
+	
+	// Set the initial display
+	If (This:C1470.action#Null:C1517)
+		
+		This:C1470.add.enable()
+		
+	Else 
+		
+		This:C1470.noSelection.show()
+		This:C1470.noTable.hide()
+		This:C1470.withSelection.hide()
+		This:C1470.noParameters.hide()
+		
+	End if 
+	
+	This:C1470.dropCursor.setColors(Highlight menu background color:K23:7)
+	
+	// Add the events that we cannot select in the form properties 😇
+	This:C1470.appendEvents(On Alternative Click:K2:36)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 Function saveContext($current : Object)
@@ -221,7 +250,7 @@ Function update()
 					
 					This:C1470.goToPage(2)
 					
-					If (FEATURE.with("sharedActionWithDescription"))  //& False
+					If (FEATURE.with("sharedActionWithDescription"))
 						
 						This:C1470.description.show()
 						This:C1470.description.focus()
@@ -233,18 +262,35 @@ Function update()
 					End if 
 					
 					//______________________________________________________
-				: ($action.parameters=Null:C1517) | (Num:C11($action.parameters.length)=0)
+				: ($action.parameters=Null:C1517)\
+					 | (Num:C11($action.parameters.length)=0)
 					
 					This:C1470.goToPage(1)
-					This:C1470.withSelection.show()
-					This:C1470.properties.hide()
-					This:C1470.sortOrderGroup.hide()
+					
+					If ($action.tableNumber=Null:C1517)  // No target table
+						
+						This:C1470.noTable.show()
+						This:C1470.properties.hide()
+						This:C1470.remove.disable()
+						This:C1470.add.disable()
+						
+					Else 
+						
+						This:C1470.withSelection.show()
+						This:C1470.properties.hide()
+						This:C1470.sortOrderGroup.hide()
+						This:C1470.add.enable()
+						
+					End if 
 					
 					//______________________________________________________
 				: (String:C10($action.preset)="sort")
 					
 					This:C1470.goToPage(1)
 					This:C1470.withSelection.show()
+					
+					This:C1470.add.enable()
+					This:C1470.remove.enable($current#Null:C1517)
 					
 					If ($current=Null:C1517)
 						
@@ -269,7 +315,7 @@ Function update()
 				Else 
 					
 					This:C1470.goToPage(1)
-					This:C1470.withSelection.show()
+					
 					This:C1470.sortOrderGroup.hide()
 					
 					If ($action.tableNumber=Null:C1517)  // No target table
@@ -281,18 +327,18 @@ Function update()
 						
 					Else 
 						
+						This:C1470.withSelection.show()
 						This:C1470.add.enable()
+						This:C1470.remove.enable($current#Null:C1517)
 						
 						If ($current=Null:C1517)  // No current parameter
 							
 							This:C1470.properties.hide()
-							This:C1470.remove.disable()
 							
 						Else 
 							
 							If ($action.parameters.length>0)
 								
-								This:C1470.remove.enable()
 								This:C1470.properties.show()
 								This:C1470.sortOrderGroup.hide()
 								
@@ -661,7 +707,6 @@ Function doAddParameterMenu()
 		Else   // Add a field
 			
 			$field:=$c.query("fieldNumber = :1"; Num:C11($menu.choice)).pop()
-			
 			
 			If ($isSortAction)
 				
@@ -1260,10 +1305,12 @@ Function doOnDrop()
 				
 			End if 
 		End if 
+		
+		PROJECT.save()
+		
 	End if 
 	
 	This:C1470.dropCursor.hide()
-	
 	This:C1470.parameters.touch()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 

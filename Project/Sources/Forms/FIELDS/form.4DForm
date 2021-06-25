@@ -9,8 +9,11 @@
 	"markerFooter": 240,
 	"events": [
 		"onLoad",
+		"onClick",
 		"onUnload",
-		"onTimer"
+		"onTimer",
+		"onMouseEnter",
+		"onMouseLeave"
 	],
 	"pageFormat": {
 		"paperName": "A4",
@@ -20,7 +23,7 @@
 	"pages": [
 		{
 			"objects": {
-				"tab.fields": {
+				"selectorFields": {
 					"type": "radio",
 					"top": 9,
 					"left": 19,
@@ -35,11 +38,10 @@
 						"onMouseEnter",
 						"onMouseLeave"
 					],
-					"method": "FIELDS",
 					"focusable": false,
 					"fontWeight": "bold"
 				},
-				"tab.relations": {
+				"selectorRelations": {
 					"type": "radio",
 					"top": 9,
 					"left": 90,
@@ -53,11 +55,10 @@
 						"onMouseEnter",
 						"onMouseLeave"
 					],
-					"method": "FIELDS",
 					"focusable": false,
 					"fontWeight": "bold"
 				},
-				"tab.selector": {
+				"tabSelector": {
 					"type": "rectangle",
 					"top": 31,
 					"left": 19,
@@ -119,7 +120,7 @@
 					"hideExtraBlankRows": false,
 					"columns": [
 						{
-							"name": "IDs",
+							"name": "ids",
 							"width": 20,
 							"minWidth": 20,
 							"maxWidth": 20,
@@ -150,7 +151,7 @@
 							}
 						},
 						{
-							"name": "fields",
+							"name": "names",
 							"width": 250,
 							"minWidth": 250,
 							"maxWidth": 250,
@@ -206,7 +207,7 @@
 							"method": "FIELDS"
 						},
 						{
-							"name": "shortLabel",
+							"name": "shortLabels",
 							"width": 215,
 							"minWidth": 215,
 							"maxWidth": 215,
@@ -235,7 +236,7 @@
 							"method": "FIELDS"
 						},
 						{
-							"name": "label",
+							"name": "labels",
 							"width": 215,
 							"minWidth": 215,
 							"maxWidth": 215,
@@ -265,7 +266,7 @@
 							"method": "FIELDS"
 						},
 						{
-							"name": "format",
+							"name": "formats",
 							"width": 70,
 							"minWidth": 10,
 							"styledText": true,
@@ -276,7 +277,7 @@
 								"onAlternateClick",
 								"onBeforeDataEntry"
 							],
-							"method": "ObjectMethods/format.4dm",
+							"method": "ObjectMethods/formats.4dm",
 							"header": {
 								"name": "Header6",
 								"text": "Header6",
@@ -300,7 +301,7 @@
 								"name": "Header7",
 								"text": "Header7"
 							},
-							"name": "title",
+							"name": "titles",
 							"width": 164,
 							"minWidth": 10,
 							"styledText": false,
@@ -317,7 +318,7 @@
 						}
 					]
 				},
-				"iconGrid": {
+				"picker": {
 					"type": "subform",
 					"top": 436,
 					"left": 38,
@@ -362,7 +363,7 @@
 					"textAlign": "left",
 					"text": ":xliff:shortLabels"
 				},
-				"format.label": {
+				"formatLabel": {
 					"type": "text",
 					"top": 46,
 					"left": 756,
@@ -395,7 +396,6 @@
 						"onClick"
 					],
 					"focusable": false,
-					"method": "FIELDS",
 					"text": "__XXXX__",
 					"textDecoration": "underline",
 					"stroke": "#1BA1E5"
@@ -408,7 +408,7 @@
 		"kind": "form"
 	},
 	"method": "FIELDS",
-	"geometryStamp": 14,
+	"geometryStamp": 25,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

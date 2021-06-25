@@ -29,7 +29,7 @@
 		},
 		{
 			"objects": {
-				"target.preview": {
+				"preview": {
 					"type": "text",
 					"text": "Preview",
 					"top": 73,
@@ -100,5 +100,5 @@
 		}
 	},
 	"method": "TARGET",
-	"geometryStamp": 567
+	"geometryStamp": 568
 }

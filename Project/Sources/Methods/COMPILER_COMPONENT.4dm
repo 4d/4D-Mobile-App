@@ -22,7 +22,6 @@ COMPILER_editor
 COMPILER_project
 
 // Panels
-COMPILER_ORGANIZATION
 COMPILER_PRODUCT
 COMPILER_DEVELOPER
 
@@ -51,11 +50,6 @@ COMPILER_mobile
 COMPILER_err
 
 If (False:C215)
-	
-	// ----------------------------------------------------
-	//C_OBJECT(path; $0)
-	//C_TEXT(path; $1)
-	//C_OBJECT(path; $2)
 	
 	// ----------------------------------------------------
 	C_OBJECT:C1216(BUILD; $1)

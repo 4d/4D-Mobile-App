@@ -201,7 +201,6 @@
 			"editor_GET_DEVICES",
 			"editor_HANDLER",
 			"editor_LoadIcons",
-			"editor_Locked",
 			"editor_MESSAGE_CALLBACK",
 			"editor_OBJECTS_HANDLER",
 			"EDITOR_ON_ACTIVATE",
@@ -279,7 +278,6 @@
 	},
 	"01] ORGANIZATION": {
 		"methods": [
-			"COMPILER_ORGANIZATION",
 			"ORGANIZATION"
 		],
 		"forms": [

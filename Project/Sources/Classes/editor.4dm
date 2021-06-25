@@ -209,6 +209,7 @@ Function init()
 	// Create the context, id any
 	If (Form:C1466.$dialog=Null:C1517)
 		
+		RECORD.info("🛑 CREATE $dialog (EDITOR)")
 		Form:C1466.$dialog:=New object:C1471
 		
 	End if 

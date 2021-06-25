@@ -8,26 +8,20 @@
 // Callbacks management for the "FIELDS" panel
 // ----------------------------------------------------
 // Declarations
-var $1 : Object
-
-If (False:C215)
-	C_OBJECT:C1216(FIELDS_CALLBACK; $1)
-End if 
+#DECLARE($params : Object)
 
 var $action : Text
 var $p : Picture
-var $field; $ƒ; $params : Object
-var $c : Collection
+var $ƒ : Object
 
 If (Count parameters:C259>=1)
 	
-	$params:=$1
-	$action:=String:C10($1.action)
+	$action:=String:C10($params.action)
 	
 End if 
 
-$ƒ:=Form:C1466.$dialog[Current form name:C1298]
-$ƒ.tableNumber:=Num:C11(Form:C1466.$dialog.TABLES.currentTableNumber)
+$ƒ:=panel
+$ƒ.tableNumber:=Num:C11($ƒ.tableLink.call())
 
 // ----------------------------------------------------
 Case of 

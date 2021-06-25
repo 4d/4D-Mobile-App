@@ -118,7 +118,7 @@ Case of
 				//______________________________________________________
 			: ($Obj_form.eventCode=On Row Moved:K2:32)
 				
-				If (editor_Locked)
+				If (PROJECT.isLocked())
 					
 					// Unable to set "movable rows" to false, so redraw
 					$Obj_context.UI()

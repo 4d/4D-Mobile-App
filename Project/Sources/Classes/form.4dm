@@ -30,6 +30,11 @@ Function init()
 	ASSERT:C1129(False:C215; "👀 init() must be overriden by the subclass!")
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
+Function onLoad()
+	
+	ASSERT:C1129(False:C215; "👀 onLoad() must be overriden by the subclass!")
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function saveContext()
 	
 	ASSERT:C1129(False:C215; "👀 saveContext() must overriden done by the subclass!")
@@ -38,6 +43,97 @@ Function saveContext()
 Function restoreContext()
 	
 	ASSERT:C1129(False:C215; "👀 restore() must be overriden by the subclass!")
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function static($name : Text; $widgetName : Text)->$widget : Object
+	
+	If (Count parameters:C259>=2)
+		
+		This:C1470._instantiate("static"; $name; $widgetName)
+		
+	Else 
+		
+		This:C1470._instantiate("static"; $name)
+		
+	End if 
+	
+	$widget:=This:C1470[$name]
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function button($name : Text; $widgetName : Text)->$widget : Object
+	
+	If (Count parameters:C259>=2)
+		
+		This:C1470._instantiate("button"; $name; $widgetName)
+		
+	Else 
+		
+		This:C1470._instantiate("button"; $name)
+		
+	End if 
+	
+	$widget:=This:C1470[$name]
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function widget($name : Text; $widgetName : Text)->$widget : Object
+	
+	If (Count parameters:C259>=2)
+		
+		This:C1470._instantiate("widget"; $name; $widgetName)
+		
+	Else 
+		
+		This:C1470._instantiate("widget"; $name)
+		
+	End if 
+	
+	$widget:=This:C1470[$name]
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function input($name : Text; $widgetName : Text)->$widget : Object
+	
+	If (Count parameters:C259>=2)
+		
+		This:C1470._instantiate("input"; $name; $widgetName)
+		
+	Else 
+		
+		This:C1470._instantiate("input"; $name)
+		
+	End if 
+	
+	$widget:=This:C1470[$name]
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function listbox($name : Text; $widgetName : Text)->$widget : Object
+	
+	If (Count parameters:C259>=2)
+		
+		This:C1470._instantiate("listbox"; $name; $widgetName)
+		
+	Else 
+		
+		This:C1470._instantiate("listbox"; $name)
+		
+	End if 
+	
+	$widget:=This:C1470[$name]
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function group($name : Text; $member; $member2; $memberN)->$widget : Object
+	
+	var ${2}
+	var $i : Integer
+	
+	This:C1470[$name]:=cs:C1710.group.new()
+	
+	For ($i; 2; Count parameters:C259; 1)
+		
+		This:C1470[$name].addMember(${$i})
+		
+	End for 
+	
+	$widget:=This:C1470[$name]
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// 🛠 IN WORKS
@@ -64,7 +160,7 @@ Function getWidgets()
 				 | ($type=Object type 3D radio button:K79:24)\
 				 | ($type=Object type picture button:K79:20)
 				
-				This:C1470[$name]:=cs:C1710.button($name)
+				This:C1470._instantiate("button"; $name)
 				
 				//______________________________________________________
 			: ($type=Object type static text:K79:2)\
@@ -74,7 +170,7 @@ Function getWidgets()
 				 | ($type=Object type rounded rectangle:K79:34)\
 				 | ($type=Object type oval:K79:35)
 				
-				This:C1470[$name]:=cs:C1710.static($name)
+				This:C1470._instantiate("static"; $name)
 				
 				//______________________________________________________
 			: (False:C215)
@@ -502,6 +598,23 @@ Function goTo($widget : Text)
 Function removeFocus()
 	
 	GOTO OBJECT:C206(*; "")
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function _instantiate($class : Text; $key : Text; $name : Text)
+	
+	If (Asserted:C1132(Count parameters:C259>=2; "Missing parameter"))
+		
+		If (Count parameters:C259=2)
+			
+			// Default: object name as the widget name
+			This:C1470[$key]:=cs:C1710[$class].new($key)
+			
+		Else 
+			
+			This:C1470[$key]:=cs:C1710[$class].new($name)
+			
+		End if 
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// [PRIVATE] set form events

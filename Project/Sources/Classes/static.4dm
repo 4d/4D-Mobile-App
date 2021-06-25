@@ -25,6 +25,16 @@ Class constructor($name : Text)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === ===
+	// Adds this widget to a group
+Function addToGroup($group : Object)
+	
+	If (Asserted:C1132(OB Instance of:C1731($group; cs:C1710.group); "The parameter isn't a group"))
+		
+		$group.addMember(This:C1470)
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === ===
 Function hide()->$this : cs:C1710.static
 	
 	OBJECT SET VISIBLE:C603(*; This:C1470.name; False:C215)

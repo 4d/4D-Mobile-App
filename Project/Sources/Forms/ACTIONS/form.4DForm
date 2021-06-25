@@ -278,7 +278,7 @@
 					"textAlign": "left",
 					"text": ":xliff:names"
 				},
-				"actions.add": {
+				"add": {
 					"type": "button",
 					"top": 264,
 					"left": 15,
@@ -294,7 +294,7 @@
 					],
 					"focusable": false
 				},
-				"actions.remove": {
+				"remove": {
 					"type": "button",
 					"top": 264,
 					"left": 42,
@@ -328,7 +328,7 @@
 					"textAlign": "left",
 					"text": ":xliff:scope"
 				},
-				"actionMethod": {
+				"databaseMethod": {
 					"type": "button",
 					"top": 270,
 					"left": 858,
@@ -340,7 +340,7 @@
 					"focusable": false,
 					"text": "Create"
 				},
-				"actionMethod.label": {
+				"databaseMethod.label": {
 					"type": "text",
 					"top": 272,
 					"left": 494,
@@ -370,7 +370,7 @@
 					"textAlign": "left",
 					"text": ":xliff:shortLabels"
 				},
-				"iconGrid": {
+				"iconPicker": {
 					"type": "subform",
 					"top": 319,
 					"left": 17,
@@ -393,8 +393,8 @@
 					"height": 0,
 					"strokeWidth": 2,
 					"stroke": "#ff0000",
-					"visibility": "hidden",
-					"startPoint": "topLeft"
+					"startPoint": "topLeft",
+					"visibility": "hidden"
 				}
 			}
 		}
@@ -403,7 +403,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 57,
+	"geometryStamp": 66,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

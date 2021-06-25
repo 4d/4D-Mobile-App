@@ -7,8 +7,7 @@
 // FIELDS pannel management
 // ----------------------------------------------------
 // Declarations
-var $e; $field; $ƒ; $o : Object
-var $c : Collection
+var $e; $field; $ƒ : Object
 
 // ----------------------------------------------------
 // Initialisations
@@ -24,37 +23,14 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			//______________________________________________________
 		: ($e.code=On Load:K2:1)
 			
-			// This trick remove the horizontal gap
-			$ƒ.fieldList.setScrollbars(False:C215; 2)
-			
-			// Place the tabs according to the localization
-			$ƒ.selectors.distributeLeftToRight()
-			
-			// Place the download button
-			$ƒ.resources.setTitle(cs:C1710.str.new("downloadMoreResources").localized(Lowercase:C14(Get localized string:C991("formatters"))))
-			$ƒ.resources.bestSize(Align right:K42:4)
-			
-			// Update widget pointers after a reload
-			$ƒ.ids.updatePointer()
-			$ƒ.names.updatePointer()
-			$ƒ.icons.updatePointer()
-			$ƒ.labels.updatePointer()
-			$ƒ.shortLabels.updatePointer()
-			$ƒ.formats.updatePointer()
-			$ƒ.titles.updatePointer()
-			
-			// Initialize the Fields/Relations tab
-			$ƒ.setTab()
-			
-			// Preload the icons
-			//$ƒ.loadIcons()
-			
-			$ƒ.tableNumber:=Num:C11(Form:C1466.$dialog.TABLES.currentTableNumber)
+			$ƒ.onLoad()
 			
 			//______________________________________________________
 		: ($e.code=On Timer:K2:25)
 			
-			$ƒ.tableNumber:=Num:C11(Form:C1466.$dialog.TABLES.currentTableNumber)
+			$ƒ.update()
+			
+			$ƒ.tableNumber:=$ƒ.tableLink.call()
 			$ƒ.updateFieldList()
 			
 			//______________________________________________________
@@ -69,7 +45,7 @@ Else   // <== WIDGETS METHOD
 			//==============================================
 		: ($ƒ.fieldList.catch())
 			
-			$ƒ.tableNumber:=Num:C11(Form:C1466.$dialog.TABLES.currentTableNumber)
+			$ƒ.tableNumber:=$ƒ.tableLink.call()
 			$ƒ.fieldList.updateDefinition()
 			
 			Case of 
@@ -107,7 +83,6 @@ Else   // <== WIDGETS METHOD
 					editor_ui_LISTBOX($e.name; False:C215)
 					
 					//_______________________________
-					//: (editor_Locked)
 				: (PROJECT.isLocked())
 					
 					// <NOTHING MORE TO DO>
@@ -138,13 +113,14 @@ Else   // <== WIDGETS METHOD
 							//........................................
 						: ($e.columnName=$ƒ.icons.name)
 							
-							$ƒ.iconPicker($e)  // Open the fields icons picker
+							$ƒ.doShowIconPicker($e)
 							
 							//........................................
 						: ($e.columnName=$ƒ.shortLabels.name)\
 							 | ($e.columnName=$ƒ.labels.name)
 							
 							If (Is editing text:C1744)
+								
 								If (Contextual click:C713)  // Propose the tags to be inserted
 									
 									If ($ƒ.popup=Null:C1517)  // Stop re-antrance
@@ -195,19 +171,20 @@ Else   // <== WIDGETS METHOD
 					
 					$ƒ.updateForms($field; $e.row)
 					
-					// PROJECT IS ALWAYS SAVED ON DATA CHANGE
-					
 					//_______________________________
 				: ($e.code=On Before Data Entry:K2:39)
 					
 					If ($e.columnName=$ƒ.formats.name)
 						
 						If (Shift down:C543)
+							
 							$ƒ.formatShowOnDisk($e)
+							
 						Else 
+							
 							$ƒ.formatMenu($e)
+							
 						End if 
-						
 					End if 
 					
 					$ƒ.inEdition:=$ƒ.fieldList
@@ -285,19 +262,9 @@ Else   // <== WIDGETS METHOD
 			End case 
 			
 			//==============================================
-		: ($ƒ.resources.catch())
+		: ($ƒ.resources.catch($e; On Clicked:K2:4))
 			
-			If (FEATURE.with("formatMarketPlace"))
-				
-				// Show browser
-				$ƒ.call("initBrowser"; New object:C1471(\
-					"url"; Get localized string:C991("res_formatters")))
-				
-			Else 
-				
-				OPEN URL:C673(Get localized string:C991("res_formatters"); *)
-				
-			End if 
+			$ƒ.doGetResources()
 			
 			//________________________________________
 	End case 

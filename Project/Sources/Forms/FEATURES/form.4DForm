@@ -10,7 +10,6 @@
 	"events": [
 		"onLoad",
 		"onClick",
-		"onUnload",
 		"onTimer",
 		"onMouseEnter",
 		"onMouseLeave"

@@ -47,7 +47,7 @@
 					"dragging": "none",
 					"class": "input"
 				},
-				"02_team.help": {
+				"teamHelp": {
 					"type": "button",
 					"top": 5,
 					"left": 915,
@@ -87,7 +87,7 @@
 					"fill": "transparent",
 					"class": "border"
 				},
-				"teamPopup": {
+				"teamMenu": {
 					"type": "button",
 					"top": 28,
 					"left": 488,
@@ -132,7 +132,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 16,
+	"geometryStamp": 18,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

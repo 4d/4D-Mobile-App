@@ -483,7 +483,7 @@ Function cleanup($dirtyObject : Object)->$cleanObject : Object
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
-	// Tests if the project is locked and, if so, makes the provided widgets accessible or not
+	// Tests if the project is locked
 Function isLocked()->$isLocked : Boolean
 	
 	If (This:C1470.structure#Null:C1517)
@@ -495,6 +495,12 @@ Function isLocked()->$isLocked : Boolean
 		$isLocked:=Bool:C1537(This:C1470.$project.structure.unsynchronized)
 		
 	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	// Tests if the project is not locked and
+Function isNotLocked()->$isNotLocked : Boolean
+	
+	$isNotLocked:=Not:C34(This:C1470.isLocked())
 	
 	//====================================
 Function updateActions
