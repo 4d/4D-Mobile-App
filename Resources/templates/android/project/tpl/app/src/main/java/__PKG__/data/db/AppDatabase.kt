@@ -12,7 +12,7 @@ import androidx.room.TypeConverters
 import com.qmobile.qmobiledatastore.dao.BaseDao
 import com.qmobile.qmobiledatastore.dao.RelationBaseDao
 import com.qmobile.qmobiledatastore.data.RoomRelation
-import com.qmobile.qmobiledatastore.db.AppDatabaseInterface
+import com.qmobile.qmobiledatastore.db.DaoProvider
 import {{package}}.data.converter.Converters
 {{#tableNames}}
 import {{package}}.data.dao.entity.{{name}}Dao
@@ -32,7 +32,7 @@ import {{package}}.data.model.entity.{{name}}
 @TypeConverters(Converters::class)
 abstract class AppDatabase :
     RoomDatabase(),
-    AppDatabaseInterface {
+    DaoProvider {
 
     {{#tableNames}}
     abstract fun dao{{name}}(): {{name}}Dao

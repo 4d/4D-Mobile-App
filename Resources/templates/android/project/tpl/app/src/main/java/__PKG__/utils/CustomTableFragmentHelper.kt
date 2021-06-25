@@ -6,17 +6,27 @@
 
 package {{package}}.utils
 
+import android.os.Bundle
+import android.view.View
 import androidx.databinding.ViewDataBinding
+import androidx.navigation.findNavController
 import com.qmobile.qmobileapi.model.entity.EntityModel
-import com.qmobile.qmobiledatasync.utils.FragmentUtil
+import com.qmobile.qmobiledatasync.utils.GenericTableFragmentHelper
 import com.qmobile.qmobiledatasync.viewmodel.EntityViewModel
 import com.qmobile.qmobileui.BR
+import com.qmobile.qmobileui.detail.EntityDetailFragment
 import {{package}}.R
 {{#tableNames_navigation}}
 import {{package}}.databinding.FragmentDetail{{nameCamelCase}}Binding
 {{/tableNames_navigation}}
 {{#tableNames_navigation}}
 import {{package}}.databinding.RecyclerviewItem{{nameCamelCase}}Binding
+{{/tableNames_navigation}}
+{{#tableNames_navigation}}
+import {{package}}.detail.EntityFragment{{name}}
+{{/tableNames_navigation}}
+{{#tableNames_navigation}}
+import {{package}}.list.EntityListFragment{{name}}Directions
 {{/tableNames_navigation}}
 {{#tableNames}}
 import {{package}}.viewmodel.entity.EntityViewModel{{name}}
@@ -25,8 +35,38 @@ import {{package}}.viewmodel.entity.EntityViewModel{{name}}
 /**
  * Provides different elements depending of the generated type
  */
-class FragmentUtilImpl :
-    FragmentUtil {
+class CustomTableFragmentHelper :
+    GenericTableFragmentHelper {
+
+    /**
+     * Navigates from ListView to ViewPager (which displays one DetailView)
+     */
+    override fun navigateFromListToViewPager(view: View, position: Int, tableName: String) {
+        val action = when (tableName) {
+            {{#tableNames_navigation}}
+            "{{name}}" -> EntityListFragment{{name}}Directions.actionListToViewpager(position, tableName)
+            {{/tableNames_navigation}}
+            else -> null
+        }
+        action?.let { view.findNavController().navigate(action) }
+    }
+
+    /**
+     * Gets the appropriate detail fragment
+     */
+    override fun getDetailFragment(itemId: String, tableName: String): EntityDetailFragment {
+        val detailFragment = when (tableName) {
+            {{#tableNames_navigation}}
+            "{{name}}" -> EntityFragment{{name}}()
+            {{/tableNames_navigation}}
+            else -> throw java.lang.IllegalArgumentException()
+        }
+        detailFragment.arguments = Bundle().apply {
+            putString("itemId", itemId)
+            putString("tableName", tableName)
+        }
+        return detailFragment
+    }
 
     /**
      * Sets the appropriate EntityViewModel

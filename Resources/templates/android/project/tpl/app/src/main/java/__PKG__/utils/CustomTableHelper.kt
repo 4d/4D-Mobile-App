@@ -16,7 +16,7 @@ import com.qmobile.qmobileapi.network.ApiService
 import com.qmobile.qmobiledatasync.relation.Relation
 import com.qmobile.qmobiledatasync.relation.RelationHelper
 import com.qmobile.qmobiledatasync.relation.RelationTypeEnum
-import com.qmobile.qmobiledatasync.utils.FromTableForViewModel
+import com.qmobile.qmobiledatasync.utils.GenericTableHelper
 import com.qmobile.qmobiledatasync.viewmodel.EntityListViewModel
 import com.qmobile.qmobiledatasync.viewmodel.EntityViewModel
 {{#tableNames}}
@@ -35,7 +35,7 @@ import kotlin.reflect.full.declaredMemberProperties
 /**
  * Provides different elements depending of the generated type
  */
-class FromTableForViewModelImpl : FromTableForViewModel {
+class CustomTableHelper : GenericTableHelper {
 
     private var mapper: ObjectMapper = ObjectMapper()
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)

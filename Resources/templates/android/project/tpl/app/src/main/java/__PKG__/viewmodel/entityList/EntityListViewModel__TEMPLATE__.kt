@@ -33,7 +33,7 @@ class EntityListViewModel{{tableName}}(
 
     {{#relations}}
     private val {{relation_name}}{{relation_source}}Has{{relation_target}}RelationDao: RelationBaseDao<RoomRelation> =
-        BaseApp.appDatabaseInterface.getRelationDao(tableName, "{{relation_target}}")
+        BaseApp.daoProvider.getRelationDao(tableName, "{{relation_target}}")
     {{/relations}}
 
     override fun getRelationsInfo(

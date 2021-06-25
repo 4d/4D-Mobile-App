@@ -30,7 +30,7 @@ private fun <T : EntityModel> getPropertyListString(
     application: Application
 ): String {
     val entityModelProperties = EntityModel::class.declaredMemberProperties.map { it.name }
-    val tableNames = BaseApp.fromTableForViewModel.tableNames()
+    val tableNames = BaseApp.genericTableHelper.tableNames()
     val properties: Collection<*>
     val constructorParameters: List<KParameter>?
     when (tableName) {

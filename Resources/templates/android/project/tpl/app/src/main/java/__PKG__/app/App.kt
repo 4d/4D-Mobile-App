@@ -15,9 +15,8 @@ import com.qmobile.qmobileui.utils.QMobileUiUtil
 import {{package}}.BuildConfig
 import {{package}}.R
 import {{package}}.data.db.AppDatabase
-import {{package}}.utils.FragmentUtilImpl
-import {{package}}.utils.FromTableForViewModelImpl
-import {{package}}.utils.NavigationImpl
+import {{package}}.utils.CustomTableFragmentHelper
+import {{package}}.utils.CustomTableHelper
 import {{package}}.utils.getPropertyListFromTable
 import org.json.JSONObject
 import timber.log.Timber
@@ -52,11 +51,10 @@ class App : BaseApp() {
         )
 
         // Sets interfaces to get data coming from outside the SDK
-        appDatabaseInterface =
+        daoProvider =
             AppDatabaseFactory.getAppDatabase(applicationContext, AppDatabase::class.java)
-        fromTableForViewModel = FromTableForViewModelImpl()
-        navigationInterface = NavigationImpl()
-        fragmentUtil = FragmentUtilImpl()
+        genericTableHelper = CustomTableHelper()
+        genericTableFragmentHelper = CustomTableFragmentHelper()
 
         // As a first step, we gather information about the app and build information
         saveEnvironmentInfo()
@@ -99,7 +97,7 @@ class App : BaseApp() {
 
     private fun saveTableProperties() {
         AuthInfoHelper.getInstance(this).apply {
-            for (tableName in fromTableForViewModel.tableNames()) {
+            for (tableName in genericTableHelper.tableNames()) {
                 val properties = getPropertyListFromTable(tableName, this@App)
                 setProperties(tableName, properties)
             }

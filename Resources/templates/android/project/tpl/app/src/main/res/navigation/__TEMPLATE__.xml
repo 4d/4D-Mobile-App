@@ -12,7 +12,7 @@
 
     <fragment
         android:id="@+id/{{tableName_lowercase}}List"
-        android:name="com.qmobile.qmobileui.list.EntityListFragment"
+        android:name="{{package}}.list.EntityListFragment{{tableName}}"
         android:label="{{tableName_original}}"
         tools:layout="@layout/fragment_list">
 
