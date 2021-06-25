@@ -193,7 +193,7 @@ If (OB Is empty:C1297(SHARED)) | $reset
 		If (Is macOS:C1572)
 			
 			// Invalid the cache
-			$folder:=sdk(New object:C1471("action"; "cacheFolder"))
+			$folder:=cs:C1710.path.new().cacheSdkAppleUnzipped()
 			
 			If ($folder.exists)
 				

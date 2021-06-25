@@ -36,7 +36,6 @@ _____________*/
 //featuresFlags._406:=True // do not add compiled frameworks to workspace
 //featuresFlags._475:=True // deactivate code signing on framework
 //featuresFlags._234:=True // Add in coreData model Record abstract entity
-//featuresFlags._568:=True // use previous project build SDK as new SDK (ie. fast sdk move, bug exists)
 FEATURE.debug(8858)  // Activates a debug mode for UI
 FEATURE.alias("debug"; 8858)
 //FEATURE.wip("devGallery")  // Allow to dev with local http gallery

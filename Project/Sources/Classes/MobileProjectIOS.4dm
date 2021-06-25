@@ -20,12 +20,10 @@ Class constructor($project : Object)
 	// Keep the last used project
 	This:C1470.paths.userCache().file("lastBuild.ios.4dmobile").setText(JSON Stringify:C1217(This:C1470.project; *))
 	
-	
 	This:C1470.sdk:=sdk(New object:C1471(\
 		"action"; "install"; \
 		"file"; This:C1470.paths.sdk().platformPath+"ios.zip"; \
-		"target"; This:C1470.input.path; \
-		"cache"; sdk(New object:C1471("action"; "cacheFolder")).platformPath))
+		"target"; This:C1470.input.path))
 	
 	This:C1470.success:=This:C1470.sdk.success
 	

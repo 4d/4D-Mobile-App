@@ -53,10 +53,6 @@ End if
 If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 	
 	Case of 
-			//______________________________________________________
-		: ($Obj_param.action="cacheFolder")
-			
-			$Obj_result:=cs:C1710.path.new().cacheSdkAppleUnzipped()
 			
 			//______________________________________________________
 		: ($Obj_param.action="install")
@@ -65,118 +61,41 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 				
 				$Obj_result.file:=$Obj_param.file
 				
-				// If not exist try to download it
-				If (Test path name:C476($Obj_param.file)#Is a document:K24:1)
-					
-					If (String:C10($Obj_param.url)#"")
-						
-						// Download it if url defined
-						
-/* START TRAPPING ERRORS */$errors:=err.capture()
-						
-						$Lon_httpResponse:=HTTP Get:C1157($Obj_param.url; $x)
-						
-						If (($Lon_httpResponse<300)\
-							 & (Num:C11($errors.lastError().error)=0))
-							
-							CREATE FOLDER:C475($Obj_param.file; *)
-							BLOB TO DOCUMENT:C526($Obj_param.file; $x)
-							$Obj_result.downloadedFrom:=$Obj_param.url
-							
-							$Lon_httpResponse:=HTTP Get:C1157($Obj_param.url+".md5"; $x)
-							
-							If (($Lon_httpResponse<300)\
-								 & (Num:C11($errors.lastError().error)=0))
-								
-								BLOB TO DOCUMENT:C526($Obj_param.file+".md5"; $x)
-								
-								// Could check md5 here
-								
-							End if 
-							
-						Else 
-							
-							$Obj_result.httpResponse:=$Lon_httpResponse
-							
-						End if 
-						
-/* STOP TRAPPING ERRORS */$errors.release()
-						
-					End if 
-				End if 
-				
 				// Check if there is a source version SDK, if yes use it instead
 				$Txt_buffer:=Replace string:C233($Obj_param.file; "zip"; "src.zip")
-				
 				If (Test path name:C476($Txt_buffer)=Is a document:K24:1)
-					
 					$Obj_param.file:=$Txt_buffer
-					
 				End if 
-				
-				//
 				
 				// Finally unzip if SDK exist
 				If (Test path name:C476($Obj_param.file)=Is a document:K24:1)
 					
 					$Obj_result.success:=False:C215
 					
-					If (Bool:C1537(FEATURE._568))  // FAST SDK MOVE
+					$Obj_param.cacheFolder:=cs:C1710.path.new().cacheSdkAppleUnzipped()
+					$Obj_param.cache:=$Obj_param.cacheFolder.platformPath  // for zip
+					If ($Obj_param.cacheFolder.exists)
 						
-						// Check if we can just move a cached sdk from previous build
-						// efficient only if same disk volume
-						$Txt_buffer:=cs:C1710.path.new().home.folder("Library/Caches/.sdk/"+SHARED.thirdParty).platformPath
+						// If zip version and cache folder different, remove the cache
+						$Obj_result.fileVersion:=sdk(New object:C1471(\
+							"action"; "sdkVersion"; \
+							"file"; $Obj_param.file))
 						
-						If (Test path name:C476($Txt_buffer)=Is a folder:K24:2)
+						$Obj_result.cacheVersion:=sdk(New object:C1471(\
+							"action"; "sdkVersion"; \
+							"file"; $Obj_param.cacheFolder.platformPath))
+						
+						If (Num:C11(String:C10($Obj_result.cacheVersion.build))<Num:C11(String:C10($Obj_result.fileVersion.build)))
 							
-							$Txt_cmd:="mv -f "+str_singleQuoted(Convert path system to POSIX:C1106($Txt_buffer))\
-								+" "+str_singleQuoted(Convert path system to POSIX:C1106($Obj_param.target))
+							$Obj_param.cacheFolder.delete(Delete with contents:K24:24)
 							
-							LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
-							
-							If (Asserted:C1132(OK=1; "LEP failed: "+$Txt_cmd))
-								
-								If (Length:C16($Txt_error)=0)
-									
-									$Obj_result.success:=True:C214
-									
-								Else 
-									
-									$Obj_result.error:=$Txt_error
-									
-								End if 
-							End if 
 						End if 
 					End if 
 					
-					If (Not:C34($Obj_result.success))
-						
-						// Unzip the SDK
-						$Obj_param.cacheFolder:=sdk(New object:C1471("action"; "cacheFolder"))
-						$Obj_param.cache:=$Obj_param.cacheFolder.platformPath  // Just copy if cache exist, else unzip
-						
-						If ($Obj_param.cacheFolder.exists)
-							
-							// If zip version and cache folder different, remove the cache
-							$Obj_result.fileVersion:=sdk(New object:C1471(\
-								"action"; "sdkVersion"; \
-								"file"; $Obj_param.file))
-							
-							$Obj_result.cacheVersion:=sdk(New object:C1471(\
-								"action"; "sdkVersion"; \
-								"file"; $Obj_param.cache))
-							
-							If (String:C10($Obj_result.cacheVersion.version)#String:C10($Obj_result.fileVersion.version))
-								
-								$Obj_param.cacheFolder.delete(Delete with contents:K24:24)
-								
-							End if 
-						End if 
-						
-						$Obj_result:=_o_unzip($Obj_param)
-						$Obj_result.file:=$Obj_param.file
-						
-					End if 
+					// Unzip the SDK
+					$Obj_result:=_o_unzip($Obj_param)
+					$Obj_result.file:=$Obj_param.file
+					
 				End if 
 				
 				If ($Obj_result.success)
@@ -399,41 +318,52 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 			
 			$Obj_result.version:=""
 			
+			var $sdkVersionFile : Object
+			$sdkVersionFile:=New object:C1471("exists"; False:C215)
+			
 			Case of 
 					
 					// ----------------------------------------
 				: (Test path name:C476($Obj_param.file)=Is a document:K24:1)
 					
-					// suppose zip
-					$Obj_result:=_o_unzip(New object:C1471(\
-						"file"; $Obj_param.file; \
-						"members"; "sdkVersion"))
-					$Obj_result.version:=$Obj_result.out
+					$sdkVersionFile:=ZIP Read archive:C1637(File:C1566($Obj_param.file; fk platform path:K87:2)).root.file("sdkVersion")  // suppose zip
 					
 					// ----------------------------------------
 				: (Test path name:C476($Obj_param.file)=Is a folder:K24:2)
 					
-					If (Test path name:C476($Obj_param.file+"sdkVersion")=Is a document:K24:1)
-						
-						$Obj_result.version:=Document to text:C1236($Obj_param.file+"sdkVersion")
-						$Obj_result.success:=True:C214
-						
-					Else 
-						
-						$Obj_result.errors:=New collection:C1472("SDK folder "+$Obj_param.file+" do not contains sdkVersion file")
-						
-					End if 
-					
-					// ----------------------------------------
-				Else 
-					
-					$Obj_result.errors:=New collection:C1472("No valid cache folder provided")
+					$sdkVersionFile:=Folder:C1567($Obj_param.file; fk platform path:K87:2).file("sdkVersion")
 					
 					// ----------------------------------------
 			End case 
 			
-			$Obj_result.version:=Replace string:C233($Obj_result.version; Char:C90(Line feed:K15:40); "")
-			$Obj_result.version:=Replace string:C233($Obj_result.version; Char:C90(Carriage return:K15:38); "")
+			If ($sdkVersionFile.exists)
+				
+				$Obj_result.version:=$sdkVersionFile.getText()
+				$Obj_result.version:=Replace string:C233($Obj_result.version; Char:C90(Line feed:K15:40); "")
+				$Obj_result.version:=Replace string:C233($Obj_result.version; Char:C90(Carriage return:K15:38); "")
+				
+				var $colTemp : Collection
+				$colTemp:=Split string:C1554($Obj_result.version; "@")
+				If ($colTemp.length>1)
+					$Obj_result.branch:=$colTemp[0]
+					$colTemp:=Split string:C1554($colTemp[1]; ".")
+					If ($colTemp.length>0)
+						$Obj_result.build:=$colTemp[0]
+						If ($colTemp.length>4)
+							$Obj_result.api:=$colTemp[1]
+							$Obj_result.dataStore:=$colTemp[2]
+							$Obj_result.dataSync:=$colTemp[3]
+							$Obj_result.ui:=$colTemp[4]
+						End if 
+					End if 
+					$Obj_result.success:=True:C214
+				End if 
+				
+			Else 
+				
+				$Obj_result.errors:=New collection:C1472("SDK folder "+String:C10($Obj_param.file)+" do not contains sdkVersion file")
+				
+			End if 
 			
 			//________________________________________
 		Else 

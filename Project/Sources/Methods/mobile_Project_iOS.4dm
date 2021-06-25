@@ -348,8 +348,7 @@ If ($in.create)
 	$out.sdk:=sdk(New object:C1471(\
 		"action"; "install"; \
 		"file"; $path.sdk().platformPath+"ios.zip"; \
-		"target"; $in.path; \
-		"cache"; sdk(New object:C1471("action"; "cacheFolder")).platformPath))
+		"target"; $in.path))
 	
 	$tags.sdkVersion:=String:C10($out.sdk.version)
 	
