@@ -85,6 +85,7 @@ Case of
 		dataModel(New object:C1471(\
 			"action"; "xcdatamodel"; \
 			"dataModel"; $Obj_project.dataModel; \
+			"actions"; $Obj_project.actions; \
 			"flat"; False:C215; \
 			"relationship"; True:C214; \
 			"path"; $Txt_path+"Structures.xcdatamodeld"))
@@ -126,6 +127,7 @@ Case of
 		$Obj_result:=dataModel(New object:C1471(\
 			"action"; "xcdatamodel"; \
 			"dataModel"; $Obj_project.dataModel; \
+			"actions"; $Obj_project.actions; \
 			"flat"; False:C215; \
 			"relationship"; True:C214; \
 			"path"; $Txt_path+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"))

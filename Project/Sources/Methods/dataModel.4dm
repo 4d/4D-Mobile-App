@@ -20,7 +20,7 @@ C_TEXT:C284($File_; $t; $tt; $Txt_buffer; $Txt_field; $Txt_fieldName)
 C_TEXT:C284($Txt_fieldNumber; $Txt_inverseName; $Txt_relationName; $Txt_tableName; $Txt_tableNumber; $Txt_value)
 C_OBJECT:C1216($o; $Obj_buffer; $Obj_dataModel; $Obj_field; $Obj_in)
 C_OBJECT:C1216($Obj_out; $Obj_path; $Obj_relationTable; $Obj_table)
-C_COLLECTION:C1488($Col_fields; $Col_tables)
+C_COLLECTION:C1488($Col_fields; $Col_tables; $actions)
 
 ARRAY TEXT:C222($tTxt_fields; 0)
 ARRAY TEXT:C222($tTxt_relationFields; 0)
@@ -84,6 +84,11 @@ Case of
 				
 				$Obj_dataModel:=OB Copy:C1225($Obj_in.dataModel)
 				
+			End if 
+			
+			$actions:=$Obj_in.actions
+			If ($actions=Null:C1517)
+				$actions:=$Obj_in.project.actions
 			End if 
 			
 			//If ($Obj_in.dataModel#Null)
@@ -239,6 +244,8 @@ Case of
 							
 							If (OK=1)
 								
+								C_TEXT:C284($Dom_fetchIndex; $Dom_fetchIndexElement)
+								
 								If ($o.primaryKey#Null:C1517)
 									
 									$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
@@ -247,7 +254,6 @@ Case of
 									
 									If (Length:C16(String:C10($o.primaryKey))>0)
 										
-										C_TEXT:C284($Dom_fetchIndex; $Dom_fetchIndexElement)
 										$Dom_fetchIndex:=DOM Create XML element:C865($Dom_entity; "fetchIndex"; "name"; "byPrimaryKey")
 										$Dom_fetchIndexElement:=DOM Create XML element:C865($Dom_fetchIndex; "fetchIndexElement"; \
 											"property"; formatString("field-name"; String:C10($o.primaryKey)); "type"; "binary"; "order"; "ascending")
@@ -259,6 +265,26 @@ Case of
 										
 									End if 
 									
+								End if 
+								
+								// Add fetch index for sort action
+								If ($actions#Null:C1517)
+									var $action; $parameter : Object
+									For each ($action; $actions)
+										If (String:C10($action.preset)="sort")
+											If ($action.parameters#Null:C1517)
+												If (Num:C11($action.tableNumber)=$Lon_tableID)
+													$Dom_fetchIndex:=DOM Create XML element:C865($Dom_entity; "fetchIndex"; "name"; formatString("field-name"; String:C10($action.name)))
+													For each ($parameter; $action.parameters)
+														
+														$Dom_fetchIndexElement:=DOM Create XML element:C865($Dom_fetchIndex; "fetchIndexElement"; \
+															"property"; formatString("field-name"; String:C10($parameter.name)); "type"; "binary"; "order"; Choose:C955(String:C10($parameter.format)="ascending"; "ascending"; "descending"))
+														
+													End for each 
+												End if 
+											End if 
+										End if 
+									End for each 
 								End if 
 								
 								// Development #113102

@@ -499,6 +499,7 @@ Case of
 				dataModel(New object:C1471(\
 					"action"; "xcdatamodel"; \
 					"dataModel"; PROJECT.dataModel; \
+					"actions"; PROJECT.actions; \
 					"flat"; False:C215; \
 					"relationship"; True:C214; \
 					"dataSet"; dataSet(New object:C1471("action"; "readCatalog"; "project"; $project)).catalog; \

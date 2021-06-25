@@ -494,6 +494,7 @@ If ($in.create)
 		$out.coreData:=dataModel(New object:C1471(\
 			"action"; "xcdatamodel"; \
 			"dataModel"; $project.dataModel; \
+			"actions"; $project.actions; \
 			"flat"; False:C215; \
 			"relationship"; True:C214; \
 			"path"; $in.path+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"))
