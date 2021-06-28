@@ -21,7 +21,7 @@ var $file : 4D:C1709.File
 var $process : cs:C1710.process
 
 var SHARED : Object  // Common values
-var UI : Object  // UI constants
+var _o_UI : Object  // UI constants
 
 var FEATURE : Object  // Feature flags
 

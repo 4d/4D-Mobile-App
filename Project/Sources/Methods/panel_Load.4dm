@@ -35,7 +35,7 @@ End if
 
 If (OB Is empty:C1297(Form:C1466.$dialog[$form]))
 	
-	// Instantiate the corresponding dialog class instance
+	// Instantiate the corresponding dialog class
 	RECORD.info("🚧 Create "+$form+"'s class (panel_Definition)")
 	Form:C1466.$dialog[$form]:=cs:C1710[$form].new()
 	
@@ -49,5 +49,5 @@ $definition:=Form:C1466.$dialog[$form]
 // Always return the current event
 $definition.event:=FORM Event:C1606
 
-//and the focused widget
+// And the focused widget
 $definition.focused:=OBJECT Get name:C1087(Object with focus:K67:3)

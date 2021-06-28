@@ -57,7 +57,7 @@ C_OBJECT:C1216(file_Menu; $1)
 C_OBJECT:C1216(dev_Menu; $1)
 
 //__________________________________________________
-C_OBJECT:C1216(call_MESSAGE_DISPATCH; $1)
+C_OBJECT:C1216(form_spreadToSubforms; $1)
 
 //__________________________________________________
 C_OBJECT:C1216(project_SKIN; $1)

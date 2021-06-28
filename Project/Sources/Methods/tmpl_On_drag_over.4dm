@@ -149,28 +149,8 @@ If (Length:C16($cible)>0)
 						
 					Else 
 						
-						If (FEATURE.with("moreRelations"))  // Accept 1-N relation
-							
-							$0:=0
-							
-						Else 
-							
-							If ($dropped.fieldType#8859)  // Not 1-N relation
-								
-								$0:=0
-								
-							Else 
-								
-								// Accept only on multi-valued fields
-								SVG GET ATTRIBUTE:C1056(*; $preview; $cible; "4D-isOfClass-multivalued"; $t)
-								
-								If (JSON Parse:C1218($t; Is boolean:K8:9))
-									
-									$0:=0
-									
-								End if 
-							End if 
-						End if 
+						$0:=0
+						
 					End if 
 					
 					//————————————————————————————————————

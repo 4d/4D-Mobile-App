@@ -1,6 +1,6 @@
 Class extends form
 
-//=== === === === === === === === === === === === === === === === === === === === === 
+//=== === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	
 	Super:C1705("editor_CALLBACK")
@@ -41,43 +41,76 @@ Class constructor
 		
 	End if 
 	
-	//This._update()
+	This:C1470.scroll:=450
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function init()
 	
 	This:C1470.toBeInitialized:=False:C215
 	
-	// Widgets definition
-	This:C1470.tableWidget:=cs:C1710.picture.new("tables")
+	This:C1470.button("noPublishedTable")
 	
-	This:C1470.tableButtonNext:=cs:C1710.button.new("next")
-	This:C1470.tableButtonPrevious:=cs:C1710.button.new("previous")
+	This:C1470.picture("tableWidget")
 	
-	This:C1470.tableNext:=cs:C1710.static.new("next@")
-	This:C1470.tablePrevious:=cs:C1710.static.new("previous@")
+	var $group : cs:C1710.group
+	$group:=This:C1470.group("tableNext")
+	This:C1470.button("next").addToGroup($group)
+	This:C1470.static("next.limit").addToGroup($group)
 	
-	This:C1470.tablist:=cs:C1710.button.new("tab.list")
-	This:C1470.tabdetail:=cs:C1710.button.new("tab.detail")
-	This:C1470.tabSelector:=cs:C1710.widget.new("tab.selector")
+	$group:=This:C1470.group("tablePrevious")
+	This:C1470.button("previous").addToGroup($group)
+	This:C1470.static("previous.limit").addToGroup($group)
 	
-	This:C1470.noPublishedTable:=cs:C1710.widget.new("noPublishedTable")
+	$group:=This:C1470.group("selectors")
+	This:C1470.button("tablist"; "tab.list").addToGroup($group)
+	This:C1470.button("tabdetail"; "tab.detail").addToGroup($group)
+	This:C1470.static("tabSelector"; "tab.selector")
 	
-	This:C1470.fieldList:=cs:C1710.listbox.new("01_fields")
+	This:C1470.listbox("fieldList"; "01_fields")
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function onLoad()
+	
+	// This trick remove the horizontal gap
+	This:C1470.fieldList.setScrollbar(0; 2)
+	
+	var $offset : Integer
+	$offset:=This:C1470.tablist.bestSize(Align left:K42:2).coordinates.right+10
+	This:C1470.tabdetail.bestSize(Align left:K42:2).setCoordinates($offset)
+	
+	This:C1470.tabSelector.getCoordinates()
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function _update()
 	
 	This:C1470.template:=Form:C1466.$dialog[Current form name:C1298].template
 	This:C1470.manifest:=This:C1470.choose(This:C1470.template=Null:C1517; Formula:C1597(Null:C1517); Formula:C1597(This:C1470.template.manifest))
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function setTab()
+	
+	var $ref; $tgt : Object
+	
+	This:C1470.selectors.setFontStyle(Plain:K14:1)
+	$ref:=This:C1470["tab"+This:C1470.typeForm()].setFontStyle(Bold:K14:2).coordinates
+	$tgt:=This:C1470.tabSelector.coordinates
+	This:C1470.tabSelector.setCoordinates($ref.left; $tgt.top; $ref.right; $tgt.bottom)
+	
+	//OBJECT SET FONT STYLE(*; $form.selectors.name; Plain)
+	//$t:="tab."+This.typeForm()
+	//OBJECT SET FONT STYLE(*; $t; Bold)
+	//$t:=Replace string($t; "."; "")
+	//$o:=$form[$t].getCoordinates().coordinates
+	//$o1:=$form.tabSelector.getCoordinates()
+	//$o1.setCoordinates($o.left; $o1.coordinates.top; $o.right; $o1.coordinates.bottom)
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Redraw the preview
 Function draw()
 	
 	tmpl_DRAW(This:C1470.form)
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Define a field in the form
 Function addField($field : Object; $fields : Collection)
 	var $index : Integer
@@ -121,7 +154,7 @@ Function addField($field : Object; $fields : Collection)
 		End if 
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Construct the table's field list
 Function fieldList($table : Variant)->$result : Object
 	var $attribute; $key; $tableID : Text
@@ -182,34 +215,29 @@ Function fieldList($table : Variant)->$result : Object
 						//……………………………………………………………………………………………………………
 					: (PROJECT.isRelationToOne($tableModel[$key]))
 						
-						If (FEATURE.with("moreRelations"))
-							
-							$field:=New object:C1471(\
-								"name"; $key; \
-								"path"; $key; \
-								"fieldType"; 8858; \
-								"relatedDataClass"; $tableModel[$key].relatedDataclass; \
-								"inverseName"; $tableModel[$key].inverseName; \
-								"label"; PROJECT.label($key); \
-								"shortLabel"; PROJECT.shortLabel($key); \
-								"relatedTableNumber"; $tableModel[$key].relatedTableNumber; \
-								"$added"; True:C214)
-							
-							// #TEMPO [
-							$field.id:=0
-							//]
-							
-							//******* Il faut vérifier que la relation existe toujours *******
-							
-							
-							$subLevel:=$subLevel+10
-							
-							$field.$label:=$field.path
-							$field.$level:=$subLevel
-							
-							$result.fields.push($field)
-							
-						End if 
+						$field:=New object:C1471(\
+							"name"; $key; \
+							"path"; $key; \
+							"fieldType"; 8858; \
+							"relatedDataClass"; $tableModel[$key].relatedDataclass; \
+							"inverseName"; $tableModel[$key].inverseName; \
+							"label"; PROJECT.label($key); \
+							"shortLabel"; PROJECT.shortLabel($key); \
+							"relatedTableNumber"; $tableModel[$key].relatedTableNumber; \
+							"$added"; True:C214)
+						
+						// #TEMPO [
+						$field.id:=0
+						//]
+						
+						//******* Il faut vérifier que la relation existe toujours *******
+						
+						$subLevel:=$subLevel+10
+						
+						$field.$label:=$field.path
+						$field.$level:=$subLevel
+						
+						$result.fields.push($field)
 						
 						For each ($attribute; $tableModel[$key])
 							
@@ -235,11 +263,6 @@ Function fieldList($table : Variant)->$result : Object
 									$field.$level:=$subLevel+1
 									
 									$result.fields.push($field)
-									
-									//______________________________________________________
-								: (Not:C34(FEATURE.with("moreRelations")))
-									
-									// <NOT DELIVERED>
 									
 									//______________________________________________________
 								Else 
@@ -306,28 +329,25 @@ Function fieldList($table : Variant)->$result : Object
 							
 						Else 
 							
-							If (FEATURE.with("moreRelations"))
-								
-								$field:=New object:C1471(\
-									"name"; $key; \
-									"path"; $key; \
-									"fieldType"; 8859; \
-									"relatedDataClass"; $tableModel[$key].relatedDataclass; \
-									"relatedTableNumber"; $tableModel[$key].relatedTableNumber; \
-									"inverseName"; $tableModel[$key].inverseName; \
-									"label"; PROJECT.label($tableModel[$key].label); \
-									"shortLabel"; PROJECT.label($tableModel[$key].shortLabel); \
-									"isToMany"; True:C214)
-								
-								// #TEMPO [
-								$field.id:=0
-								//]
-								
-								$field.$label:=$field.path
-								
-								$result.fields.push($field)
-								
-							End if 
+							$field:=New object:C1471(\
+								"name"; $key; \
+								"path"; $key; \
+								"fieldType"; 8859; \
+								"relatedDataClass"; $tableModel[$key].relatedDataclass; \
+								"relatedTableNumber"; $tableModel[$key].relatedTableNumber; \
+								"inverseName"; $tableModel[$key].inverseName; \
+								"label"; PROJECT.label($tableModel[$key].label); \
+								"shortLabel"; PROJECT.label($tableModel[$key].shortLabel); \
+								"isToMany"; True:C214)
+							
+							// #TEMPO [
+							$field.id:=0
+							//]
+							
+							$field.$label:=$field.path
+							
+							$result.fields.push($field)
+							
 						End if 
 						
 						$field.$level:=0
@@ -336,19 +356,12 @@ Function fieldList($table : Variant)->$result : Object
 				End case 
 			End for each 
 			
-			If (FEATURE.with("moreRelations"))
-				
-				$result.fields:=$result.fields.orderBy("$level, path")
-				
-			Else 
-				
-				$result.fields:=$result.fields.orderBy("path")
-				
-			End if 
+			$result.fields:=$result.fields.orderBy("$level, path")
+			
 		End if 
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Attach a form (Call back from widget)
 Function setTemplate($browser : Object)
 	
@@ -415,10 +428,10 @@ Function setTemplate($browser : Object)
 				$o:=New object:C1471(\
 					"url"; $url)
 				
-				//Else 
+				//Else
 				//$o:=New object(\
-					"url"; Get localized string("res_"+This.typeForm()+"Forms"))
-				//End if 
+																																								"url"; Get localized string("res_"+This.typeForm()+"Forms"))
+				//End if
 				
 				This:C1470.form.form.call(New collection:C1472("initBrowser"; $o))
 				
@@ -554,13 +567,13 @@ Function setTemplate($browser : Object)
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Open the template selector
 Function templatePicker($formType : Text)
 	
 	views_LAYOUT_PICKER($formType)
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Building the table selector
 Function tableWidget($dataModel : Object; $options : Object)->$widget : Picture
 	
@@ -765,13 +778,13 @@ Function tableWidget($dataModel : Object; $options : Object)->$widget : Picture
 	
 	$widget:=$svg.picture()
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Return the selected form type as text ("list" | "detail")
 Function typeForm()->$formType : Text
 	
 	$formType:=Choose:C955(Num:C11(Form:C1466.$dialog[Current form name:C1298].selector)=2; "detail"; "list")
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Ensure that there is an entry in "list" and "detail" for each table in the data model
 Function createFormObjects($datamodel : Object)
 	

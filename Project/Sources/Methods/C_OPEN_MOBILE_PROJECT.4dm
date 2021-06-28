@@ -35,8 +35,7 @@ COMPILER_COMPONENT
 If (FEATURE.with("wizards"))
 	
 	$data:=New object:C1471(\
-		"$callback"; "editor_CALLBACK"; \
-		"$mainWindow"; Open form window:C675("EDITOR"; Plain form window:K39:10; Horizontally centered:K39:1; At the top:K39:5; *))
+		"_window"; Open form window:C675("PROJECT_EDITOR"; Plain form window:K39:10; Horizontally centered:K39:1; At the top:K39:5; *))
 	
 	If (Count parameters:C259>=1)
 		
@@ -163,32 +162,21 @@ If (FEATURE.with("wizards"))
 			
 		End for each 
 		
-		//If (Value type($manifest.info.target)=Is collection)
-		
-		//EDITOR.ios:=$manifest.info.target.indexOf("iOS")#-1
-		//EDITOR.android:=$manifest.info.target.indexOf("android")#-1
-		
-		//Else 
-		
-		//EDITOR.ios:=$manifest.info.target="iOS"
-		//EDITOR.android:=$manifest.info.target="android"
-		
-		//End if 
-		
 		// Open the project editor
 		If (DATABASE.isMatrix)
 			
-			DIALOG:C40("EDITOR"; $data)
+			DIALOG:C40("PROJECT_EDITOR"; $data)
+			CLOSE WINDOW:C154(EDITOR.window)
 			
 		Else 
 			
-			DIALOG:C40("EDITOR"; $data; *)
+			DIALOG:C40("PROJECT_EDITOR"; $data; *)
 			
 		End if 
 		
 	Else 
 		
-		CLOSE WINDOW:C154($data.$mainWindow)
+		CLOSE WINDOW:C154(EDITOR.window)
 		
 	End if 
 	
@@ -222,7 +210,7 @@ Else
 	If (OK=1)
 		
 		// Open the project editor
-		$window:=Open form window:C675("EDITOR"; Plain form window:K39:10; Horizontally centered:K39:1; At the top:K39:5; *)
+		$window:=Open form window:C675("PROJECT_EDITOR"; Plain form window:K39:10; Horizontally centered:K39:1; At the top:K39:5; *)
 		
 		$formData:=New object:C1471(\
 			"project"; $pathName; \
@@ -230,12 +218,12 @@ Else
 		
 		If (DATABASE.isMatrix)
 			
-			DIALOG:C40("EDITOR"; $formData)
+			DIALOG:C40("PROJECT_EDITOR"; $formData)
 			CLOSE WINDOW:C154($window)
 			
 		Else 
 			
-			DIALOG:C40("EDITOR"; $formData; *)
+			DIALOG:C40("PROJECT_EDITOR"; $formData; *)
 			
 		End if 
 	End if 

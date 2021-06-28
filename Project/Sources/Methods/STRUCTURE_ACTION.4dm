@@ -61,7 +61,7 @@ Case of
 		//________________________________________
 	: ($Obj_context.focus=$Obj_form.fields)
 		
-		$Ptr_me:=UI.pointer($Obj_form.fieldList)
+		$Ptr_me:=_o_UI.pointer($Obj_form.fieldList)
 		$Lon_number:=Size of array:C274($Ptr_me->)
 		
 		$Lon_row:=Find in array:C230($Ptr_me->; True:C214)
@@ -72,7 +72,7 @@ Case of
 		$Obj_popup.append(":xliff:onlyPublishedFields"; "published"; Bool:C1537($Obj_context.fieldFilterPublished))
 		$Obj_popup.line()
 		
-		$Ptr_published:=UI.pointer($Obj_form.published)
+		$Ptr_published:=_o_UI.pointer($Obj_form.published)
 		
 		If ($Lon_number>0)\
 			 & ($Lon_row>0)
@@ -187,8 +187,8 @@ If ($Obj_popup.popup().selected)
 		: ($Obj_popup.choice="publish")\
 			 | ($Obj_popup.choice="unpublish")
 			
-			$Ptr_me:=UI.pointer($Obj_form.fieldList)
-			$Ptr_published:=UI.pointer($Obj_form.published)
+			$Ptr_me:=_o_UI.pointer($Obj_form.fieldList)
+			$Ptr_published:=_o_UI.pointer($Obj_form.published)
 			$Boo_value:=($Obj_popup.choice="publish")
 			
 			// For each selected items
@@ -209,7 +209,7 @@ If ($Obj_popup.popup().selected)
 		: ($Obj_popup.choice="publishAll")\
 			 | ($Obj_popup.choice="unpublishAll")
 			
-			$Ptr_published:=UI.pointer($Obj_form.published)
+			$Ptr_published:=_o_UI.pointer($Obj_form.published)
 			$Boo_value:=($Obj_popup.choice="publishAll")
 			
 			For ($Lon_i; 1; Size of array:C274($Ptr_published->); 1)

@@ -169,14 +169,14 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Mouse Enter:K2:33)
 				
-				UI.tips.enable()
-				UI.tips.setDuration(UI.tips.delay*2)
-				UI.tips.instantly()
+				_o_UI.tips.enable()
+				_o_UI.tips.setDuration(_o_UI.tips.delay*2)
+				_o_UI.tips.instantly()
 				
 				//______________________________________________________
 			: ($e.code=On Mouse Leave:K2:34)
 				
-				UI.tips.defaultDelay()
+				_o_UI.tips.defaultDelay()
 				
 				//______________________________________________________
 			: ($e.code=On Mouse Move:K2:35)
@@ -396,16 +396,16 @@ Case of
 //==================================================
 		
 : ($Obj_form.form.currentWidget=$Obj_form.actionList)
- Case of
-  //______________________________________________________
+Case of
+//______________________________________________________
 : ($Obj_form.form.eventCode=On Begin Drag Over)
 $o:=$Obj_context.currentAction
-  // Put into the conatianer
+// Put into the conatianer
 VARIABLE TO BLOB($o;$x)
 APPEND DATA TO PASTEBOARD("com.4d.private.4dmobile.action";$x)
 SET BLOB SIZE($x;0)
-  // Create the drag icon
- SVG_SET_OPTIONS (SVG_Get_options  ?+ 12)
+// Create the drag icon
+SVG_SET_OPTIONS (SVG_Get_options  ?+ 12)
 $t:=SVG_New
 SVG_SET_TEXT_RENDERING ($t;"geometricPrecision")
 SVG_SET_SHAPE_RENDERING ($t;"crispEdges")
@@ -415,32 +415,32 @@ SVG_New_embedded_image ($t;$o.$icon;2;2)
 SVG_New_text ($t;$o.name+" ";26;4;"Sans-serif";13)
 SVG EXPORT TO PICTURE($t;$p;Own XML data source)
 SET DRAG ICON($p)
- Else
+Else
 ASSERT(False;"Form event activated unnecessarily ("+String($Obj_form.form.eventCode)+")")
-  //______________________________________________________
- End case
+//______________________________________________________
+End case
 ==================================================
 : ($Obj_form.form.currentWidget=$Obj_form.actionDrop)
- Case of
-  //______________________________________________________
+Case of
+//______________________________________________________
 : ($Obj_form.form.eventCode=On Drag Over)
-  // Accept drag if a field is drag over
+// Accept drag if a field is drag over
 GET PASTEBOARD DATA("com.4d.private.4dmobile.action";$x)
- If (Bool(OK))
+If (Bool(OK))
 BLOB TO VARIABLE($x;$o)
 SET BLOB SIZE($x;0)
 If (String($o.target)#"widget")
 $Obj_target:=Form[$Obj_context.typeForm()][$Obj_context.tableNum()]
 If (_or (New formula($Obj_target.actions=Null);New formula($Obj_target.actions.extract("name").indexOf(String($o.name))=-1)))
 $0:=0  //    Accept drop
- End if
- End if
- End if
-  //______________________________________________________
+End if
+End if
+End if
+//______________________________________________________
 : ($Obj_form.form.eventCode=On Drop)
-  // Get the pastboard
+// Get the pastboard
 GET PASTEBOARD DATA("com.4d.private.4dmobile.action";$x)
- If (Bool(OK))
+If (Bool(OK))
 BLOB TO VARIABLE($x;$o)
 SET BLOB SIZE($x;0)
 $Obj_target:=Form[$Obj_context.typeForm()][$Obj_context.tableNum()]
@@ -448,22 +448,22 @@ ob_createPath (Form[$Obj_context.typeForm()][$Obj_context.tableNum()];"actions";
 If ($Obj_target.actions.extract("name").indexOf(String($o.name))=-1)  //    Don't add action twice
 $Ptr_me:=OBJECT Get pointer(Object current)
 $Ptr_me->:=$Ptr_me->+$o.$icon
-  // Update project
+// Update project
 OB REMOVE($o;"target")
 For each ($t;$o)
 If ($t[[1]]="$")
 OB REMOVE($o;$t)
- End if
- End for each
+End if
+End for each
 $Obj_target.actions.push($o)
- End if
-  // Save project
- project.save()
- End if
- Else
+End if
+// Save project
+project.save()
+End if
+Else
 ASSERT(False;"Form event activated unnecessarily ("+String($Obj_form.form.eventCode)+")")
-  //______________________________________________________
- End case
+//______________________________________________________
+End case
 */
 		
 		//==================================================
@@ -614,9 +614,9 @@ ASSERT(False;"Form event activated unnecessarily ("+String($Obj_form.form.eventC
 				//______________________________________________________
 			: ($e.code=On Mouse Enter:K2:33)
 				
-				UI.tips.enable()
-				UI.tips.setDuration(UI.tips.delay*2)
-				UI.tips.instantly()
+				_o_UI.tips.enable()
+				_o_UI.tips.setDuration(_o_UI.tips.delay*2)
+				_o_UI.tips.instantly()
 				
 				//______________________________________________________
 			: ($e.code=On Mouse Leave:K2:34)
@@ -632,7 +632,7 @@ ASSERT(False;"Form event activated unnecessarily ("+String($Obj_form.form.eventC
 					
 				End if 
 				
-				UI.tips.defaultDelay()
+				_o_UI.tips.defaultDelay()
 				
 				//______________________________________________________
 			: ($e.code=On Mouse Move:K2:35)
@@ -721,12 +721,13 @@ ASSERT(False;"Form event activated unnecessarily ("+String($Obj_form.form.eventC
 		End case 
 		
 		//==================================================
-	: ($e.objectName=$form.tableButtonNext.name)\
-		 | ($e.objectName=$form.tableButtonPrevious.name)
+	: ($e.objectName=$form.next.name)\
+		 | ($e.objectName=$form.previous.name)
 		
 		VIEWS_Handler(New object:C1471(\
 			"action"; "scroll-table"; \
-			"direction"; Choose:C955($e.objectName=$form.tableButtonPrevious.name; "previous"; "next")))
+			"direction"; Choose:C955($e.objectName=$form.previous.name; "previous"; "next")))
+		
 		//==================================================
 	: ($e.objectName=$form.scrollBar.name)
 		

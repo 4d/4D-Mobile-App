@@ -75,7 +75,7 @@ Case of
 				
 				SET TIMER:C645(0)
 				
-				For each ($panel; panel_Objects)
+				For each ($panel; panels)
 					
 					EXECUTE METHOD IN SUBFORM:C1085($panel; "panel_UI"; *; (OBJECT Get pointer:C1124(Object named:K67:5; "UI"))->)
 					

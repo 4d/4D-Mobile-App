@@ -17,14 +17,14 @@ Class constructor
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function init()
 	
 	var $group : cs:C1710.group
 	
 	This:C1470.toBeInitialized:=False:C215
 	
-	This:C1470.static("noPublishedTable")
+	This:C1470.button("noPublishedTable")
 	
 	This:C1470.listbox("actions")
 	This:C1470.static("actionsBorder"; "actions.border")
@@ -42,7 +42,7 @@ Function init()
 	// Link to the ACTIONS_PARAMS panel
 	This:C1470.parametersLink:=Formula:C1597(panel("ACTIONS_PARAMS"))
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function onLoad()
 	
 	// This trick remove the horizontal gap
@@ -99,7 +99,7 @@ Function onLoad()
 	// Add the events that we cannot select in the form properties 😇
 	This:C1470.appendEvents(New collection:C1472(On Alternative Click:K2:36; On Before Data Entry:K2:39))
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Load project actions
 Function loadActions()
 	
@@ -138,12 +138,12 @@ Function loadActions()
 		End for each 
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function loadIcons()
 	
 	This:C1470.iconPicker.setValue(editor_LoadIcons(New object:C1471("target"; "actionIcons")))
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Update UI
 Function update()
 	
@@ -161,7 +161,7 @@ Function update()
 	
 	This:C1470.databaseMethodGroup.distributeRigthToLeft(New object:C1471("spacing"; 20))
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Update parameters panel, if present
 Function updateParameters($action : Object)
 	
@@ -186,7 +186,7 @@ Function updateParameters($action : Object)
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function doNewAction()
 	
 	var $t : Text
@@ -240,7 +240,7 @@ Function doNewAction()
 	
 	This:C1470._addAction($action)
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function doAddMenu()
 	
 	var $t : Text
@@ -560,7 +560,7 @@ A REPORTER EN 19R2
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function doRemoveAction()
 	
 	var $index : Integer
@@ -573,7 +573,7 @@ Function doRemoveAction()
 	This:C1470.actions.doSafeSelect($index+1)  // Collection index to listbox index
 	This:C1470.refresh()
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Display published table menu
 Function doTableMenu()
 	
@@ -598,7 +598,7 @@ Function doTableMenu()
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Display scope menu
 Function doScopeMenu()
 	
@@ -648,7 +648,7 @@ Function doScopeMenu()
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Initialization of the internal D&D for actions
 Function doBeginDrag()
 	
@@ -663,7 +663,7 @@ Function doBeginDrag()
 	APPEND DATA TO PASTEBOARD:C403("com.4d.private.4dmobile.action"; $x)
 	SET BLOB SIZE:C606($x; 0)
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Internal drop for actions
 Function doOnDrop()
 	
@@ -711,7 +711,7 @@ Function doOnDrop()
 	This:C1470.dropCursor.hide()
 	This:C1470.actions.touch()
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Open the icons picker
 Function doShowIconPicker()
 	
@@ -738,7 +738,7 @@ Function doShowIconPicker()
 	
 	This:C1470.callMeBack("pickerShow"; $o)
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function _addAction($action : Object)
 	
 	If ($action#Null:C1517)  // An action was created
@@ -766,7 +766,7 @@ Function _addAction($action : Object)
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Create, if any, & Open the "On Mobile Action" Database method
 Function doOpenDatabaseMethod()
 	
@@ -818,7 +818,7 @@ Function doOpenDatabaseMethod()
 	// Open method
 	METHOD OPEN PATH:C1213($methods{0}; *)
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Text displayed in the Tables column
 Function tableLabel($data : Object)->$label : Text
 	
@@ -833,13 +833,13 @@ Function tableLabel($data : Object)->$label : Text
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Text displayed in the Scope column
 Function scopeLabel($data : Object)->$label : Text
 	
 	$label:=Get localized string:C991(String:C10($data.scope))
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// <Background Color Expression> ******************** VERY SIMILAR TO ACTIONS_PARAMS.backgroundColor() ********************
 Function backgroundColor($current : Object)->$color
 	
@@ -864,7 +864,7 @@ Function backgroundColor($current : Object)->$color
 		End if 
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// <Meta info expression>
 Function metaInfo($current : Object)->$result
 	

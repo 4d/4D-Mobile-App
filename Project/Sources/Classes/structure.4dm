@@ -412,11 +412,6 @@ Function relatedCatalog
 						
 						$0.fields.push($o)
 						
-						//…………………………………………………………………………………………………
-					: (Not:C34(FEATURE.with("moreRelations")))
-						
-						// <NOT YET DELIVERED>
-						
 						//___________________________________________
 					: (This:C1470.isRelatedEntity($o))  // N -> 1 relation
 						

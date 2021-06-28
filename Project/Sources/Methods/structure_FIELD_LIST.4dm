@@ -41,9 +41,9 @@ Else
 End if 
 
 // ----------------------------------------------------
-$Ptr_fields:=UI.pointer($form.fields)
-$Ptr_icons:=UI.pointer($form.icons)
-$Ptr_published:=UI.pointer($form.published)
+$Ptr_fields:=_o_UI.pointer($form.fields)
+$Ptr_icons:=_o_UI.pointer($form.icons)
+$Ptr_published:=_o_UI.pointer($form.published)
 
 var $dataModel : Object
 $dataModel:=Form:C1466.dataModel
@@ -58,7 +58,7 @@ If (Size of array:C274($Ptr_fields->)>0)
 	$context.fieldName:=$Ptr_fields->{$row}
 	
 	// Keep the selection
-	$Ptr_list:=UI.pointer($form.fieldList)
+	$Ptr_list:=_o_UI.pointer($form.fieldList)
 	
 	For ($i; 1; LISTBOX Get number of rows:C915(*; $form.fieldList); 1)
 		

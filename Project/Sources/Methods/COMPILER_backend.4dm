@@ -37,11 +37,6 @@ If (False:C215)
 	C_OBJECT:C1216(formatters; $0)
 	C_OBJECT:C1216(formatters; $1)
 	
-	//__________________________________________________
-	//C_PICTURE(getIcon; $0)
-	//C_TEXT(getIcon; $1)
-	//C_TEXT(getIcon ;$2)
-	
 	//______________________________________________________
 	C_OBJECT:C1216(net; $0)
 	C_OBJECT:C1216(net; $1)
@@ -69,11 +64,6 @@ If (False:C215)
 	//______________________________________________________
 	C_OBJECT:C1216(template; $0)
 	C_OBJECT:C1216(template; $1)
-	
-	//______________________________________________________
-	C_OBJECT:C1216(_o_templates; $0)
-	C_OBJECT:C1216(_o_templates; $1)
-	C_OBJECT:C1216(_o_templates; $2)
 	
 	//______________________________________________________
 	C_OBJECT:C1216(TemplateInstanceFactory; $0)

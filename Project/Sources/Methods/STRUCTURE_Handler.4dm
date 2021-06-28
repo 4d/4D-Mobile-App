@@ -48,7 +48,7 @@ If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
 		"fields"; "fields"; \
 		"fieldFilter"; "fields.filter"; \
 		"published"; "published"; \
-		"publishedPtr"; UI.pointer("published"); \
+		"publishedPtr"; _o_UI.pointer("published"); \
 		"icons"; "icons"; \
 		"search"; "search"; \
 		"action"; "action"; \
@@ -123,8 +123,7 @@ Case of
 				// Align checkbox & help according to the translation
 				widget($form.allowHelp).moveHorizontally(widget($form.allow).bestSize().coordinates.right+5)
 				
-				//#MARK_TODO: Nous devrions trouver un moyen plus élégant!
-				CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "description"; New object:C1471(\
+				EDITOR.updateHeader(New object:C1471(\
 					"show"; Not:C34(Bool:C1537(Form:C1466.$project.structure.dataModel))))
 				
 				//______________________________________________________
@@ -273,7 +272,7 @@ Case of
 		PROJECT.addTable($context.currentTable)
 		
 		// Highlight the table name
-		$index:=Find in array:C230((UI.pointer($form.tableList))->; True:C214)
+		$index:=Find in array:C230((_o_UI.pointer($form.tableList))->; True:C214)
 		LISTBOX SET ROW FONT STYLE:C1268(*; $form.tableList; $index; Bold:K14:2)
 		
 		//=========================================================

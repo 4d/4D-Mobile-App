@@ -192,15 +192,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			//________________________________________
 		: ($entryPoint="templates")
 			
-			If (FEATURE.with("templateClass"))
-				
-				$response:=TemplateInstanceFactory($parameters).run()
-				
-			Else 
-				
-				EXECUTE METHOD:C1007("_o_templates"; $response; $parameters)
-				
-			End if 
+			$response:=TemplateInstanceFactory($parameters).run()
 			
 			//______________________________________________________
 		: ($entryPoint="storyboard")

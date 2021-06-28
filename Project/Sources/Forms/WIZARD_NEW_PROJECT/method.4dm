@@ -22,8 +22,8 @@ Case of
 		//__________________________________________________________________________________________
 	: ($e.code=On Load:K2:1)
 		
-		var EDITOR : cs:C1710.EDITOR
-		EDITOR:=cs:C1710.EDITOR.new()
+		var EDITOR : cs:C1710.PROJECT_EDITOR
+		EDITOR:=cs:C1710.PROJECT_EDITOR.new()
 		
 		Form:C1466._message:=cs:C1710.subform.new("message").setValue(New object:C1471)
 		
@@ -92,7 +92,7 @@ Case of
 		
 		If (Is Windows:C1573 | Not:C34(FEATURE.with("android")))
 			
-			Form:C1466._new.resizeVertically(-120).moveVertically(50)
+			Form:C1466._new.moveAndResizeVertically(50; -120)
 			Form:C1466._listbox:=cs:C1710.listbox.new("list")
 			Form:C1466._listbox.resizeVertically(50).setRowsHeight(Choose:C955(Is macOS:C1572; 6; 5); lk lines:K53:23)
 			

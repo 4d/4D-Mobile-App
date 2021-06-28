@@ -1,6 +1,6 @@
 Class extends form
 
-//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	
 	Super:C1705("editor_CALLBACK")
@@ -18,7 +18,7 @@ Class constructor
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function init()
 	
 	This:C1470.toBeInitialized:=False:C215
@@ -53,7 +53,7 @@ Function init()
 	This:C1470.mainColor:=""
 	This:C1470.iconColor:=Null:C1517
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function onLoad()
 	
 	If (FEATURE.with("targetPannel"))
@@ -115,7 +115,7 @@ Function onLoad()
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function update()
 	
 	This:C1470.checkName(Form:C1466.product.name)
@@ -132,7 +132,7 @@ Function update()
 		End if 
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function doColorMenu()
 	
 	var $color : cs:C1710.color
@@ -192,7 +192,7 @@ End if
 		End if 
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Manage the icon's action button
 Function doIconMenu()
 	
@@ -244,7 +244,7 @@ Function doIconMenu()
 		End if 
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Display the App icon
 Function displayIcon
 	
@@ -282,7 +282,7 @@ Function displayIcon
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Choose an icon file
 Function browseIcon
 	
@@ -382,8 +382,8 @@ Function getIcon($pathname : Text)
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
-	// Update assets according to the target systems 
+	//=== === === === === === === === === === === === === === === === === === === === ===
+	// Update assets according to the target systems
 Function setIcon($picture : Picture)
 	
 	If (Is macOS:C1572)
@@ -418,19 +418,19 @@ Function setIcon($picture : Picture)
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Open the iOS icons folder
 Function openAppleIconFolder
 	
 	SHOW ON DISK:C922(PROJECT._folder.folder("Assets.xcassets/AppIcon.appiconset").platformPath; *)
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Open the iOS icons folder
 Function openAndroidIconFolder
 	
 	SHOW ON DISK:C922(PROJECT._folder.folder("Android").platformPath; *)
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Check the product name constraints
 Function checkName($name : Text)
 	
@@ -491,7 +491,7 @@ Function checkName($name : Text)
 			//______________________________________________________
 	End case 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Manage UI for the target
 Function displayTarget
 	

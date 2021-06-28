@@ -86,6 +86,7 @@ Case of
 		APPEND TO ARRAY:C911($tLon_events; On Activate:K2:9)
 		APPEND TO ARRAY:C911($tLon_events; On Getting Focus:K2:7)
 		APPEND TO ARRAY:C911($tLon_events; On Losing Focus:K2:8)
+		APPEND TO ARRAY:C911($tLon_events; On Resize:K2:27)
 		
 		OBJECT SET EVENTS:C1239(*; ""; $tLon_events; Enable events others unchanged:K42:38)
 		//}

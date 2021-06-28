@@ -58,7 +58,7 @@ Case of
 			: ($Lon_formEvent=On Selection Change:K2:29)\
 				 | ($Lon_formEvent=On Clicked:K2:4)
 				
-				$Ptr_ids:=UI.pointer($Obj_form.ids)
+				$Ptr_ids:=_o_UI.pointer($Obj_form.ids)
 				
 				$Obj_context.currentTableNumber:=Num:C11($Ptr_ids->{$Lon_row})
 				
@@ -95,7 +95,7 @@ Case of
 							
 							LISTBOX GET CELL COORDINATES:C1330(*; $Obj_form.tableList; $Lon_column; $Lon_row; $Lon_left; $Lon_top; $Lon_right; $Lon_bottom)
 							
-							$Obj_picker:=(UI.pointer($Obj_form.iconGrid))->
+							$Obj_picker:=(_o_UI.pointer($Obj_form.iconGrid))->
 							
 							$Obj_picker.item:=$Obj_picker.pathnames.indexOf($Obj_context.currentTable.icon)
 							
@@ -116,7 +116,7 @@ Case of
 							$Obj_picker.promptBackColor:=EDITOR.strokeColor
 							$Obj_picker.hidePromptSeparator:=True:C214
 							$Obj_picker.forceRedraw:=True:C214
-							$Obj_picker.prompt:=cs:C1710.str.new("chooseAnIconForTheTable").localized((UI.pointer($Obj_form.tables))->{$Lon_row})
+							$Obj_picker.prompt:=cs:C1710.str.new("chooseAnIconForTheTable").localized((_o_UI.pointer($Obj_form.tables))->{$Lon_row})
 							
 							// Display selector
 							CALL FORM:C1391($Obj_form.window; "editor_CALLBACK"; "pickerShow"; $Obj_picker)
@@ -135,8 +135,8 @@ Case of
 				//______________________________________________________
 			: ($Lon_formEvent=On Mouse Enter:K2:33)
 				
-				UI.tips.enable()
-				UI.tips.instantly()
+				_o_UI.tips.enable()
+				_o_UI.tips.instantly()
 				
 				//______________________________________________________
 			: ($Lon_formEvent=On Mouse Move:K2:35)
@@ -177,7 +177,7 @@ Case of
 				//______________________________________________________
 			: ($Lon_formEvent=On Mouse Leave:K2:34)
 				
-				UI.tips.defaultDelay()
+				_o_UI.tips.defaultDelay()
 				
 				//______________________________________________________
 			: ($Lon_formEvent=On Getting Focus:K2:7)
@@ -211,12 +211,12 @@ Case of
 			: ($Lon_formEvent=On Data Change:K2:15)
 				
 				// Update data model
-				If ($Ptr_me=UI.pointer($Obj_form.labels))\
-					 | ($Ptr_me=UI.pointer($Obj_form.shortLabels))
+				If ($Ptr_me=_o_UI.pointer($Obj_form.labels))\
+					 | ($Ptr_me=_o_UI.pointer($Obj_form.shortLabels))
 					
-					$Ptr_ids:=UI.pointer($Obj_form.ids)
+					$Ptr_ids:=_o_UI.pointer($Obj_form.ids)
 					
-					If ($Ptr_me=UI.pointer($Obj_form.labels))
+					If ($Ptr_me=_o_UI.pointer($Obj_form.labels))
 						
 						$Obj_context.currentTable[""].label:=$Ptr_me->{$Lon_row}
 						

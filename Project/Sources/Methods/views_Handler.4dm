@@ -35,32 +35,32 @@ End if
 
 $form:=New object:C1471(\
 "$"; editor_Panel_init; \
-"form"; UI.form("editor_CALLBACK").get(); \
-"tableWidget"; UI.picture("tables"); \
-"tableNext"; UI.static("next@"); \
-"tablePrevious"; UI.static("previous@"); \
-"tableButtonNext"; UI.button("next"); \
-"tableButtonPrevious"; UI.button("previous"); \
-"tablist"; UI.button("tab.list"); \
-"tabdetail"; UI.button("tab.detail"); \
-"tabSelector"; UI.widget("tab.selector"); \
-"noPublishedTable"; UI.widget("noPublishedTable"); \
-"fieldList"; UI.listbox("01_fields"); \
-"fieldGroup"; UI.static("01_fields@"); \
-"preview"; UI.picture("preview"); \
-"previewGroup"; UI.static("preview@"); \
-"fields"; UI.widget("fields"); \
-"ids"; UI.widget("field_ids"); \
-"icons"; UI.widget("icons"); \
-"names"; UI.widget("names"); \
-"selectorList"; UI.button("tab.list"); \
-"selectorDetail"; UI.button("tab.detail"); \
-"selectors"; UI.static("tab.@"); \
+"form"; _o_UI.form("editor_CALLBACK").get(); \
+"tableWidget"; _o_UI.picture("tableWidget"); \
+"tableNext"; _o_UI.static("next@"); \
+"tablePrevious"; _o_UI.static("previous@"); \
+"tableButtonNext"; _o_UI.button("next"); \
+"tableButtonPrevious"; _o_UI.button("previous"); \
+"tablist"; _o_UI.button("tab.list"); \
+"tabdetail"; _o_UI.button("tab.detail"); \
+"tabSelector"; _o_UI.widget("tab.selector"); \
+"noPublishedTable"; _o_UI.widget("noPublishedTable"); \
+"fieldList"; _o_UI.listbox("01_fields"); \
+"fieldGroup"; _o_UI.static("01_fields@"); \
+"preview"; _o_UI.picture("preview"); \
+"previewGroup"; _o_UI.static("preview@"); \
+"fields"; _o_UI.widget("fields"); \
+"ids"; _o_UI.widget("field_ids"); \
+"icons"; _o_UI.widget("icons"); \
+"names"; _o_UI.widget("names"); \
+"selectorList"; _o_UI.button("tab.list"); \
+"selectorDetail"; _o_UI.button("tab.detail"); \
+"selectors"; _o_UI.static("tab.@"); \
 "drag"; Formula:C1597(tmpl_On_drag_over); \
 "drop"; Formula:C1597(tmpl_ON_DROP); \
 "cancel"; Formula:C1597(tmpl_REMOVE); \
 "tips"; Formula:C1597(tmpl_TIPS); \
-"scrollBar"; UI.thermometer("preview.scrollBar"))
+"scrollBar"; _o_UI.thermometer("preview.scrollBar"))
 
 $context:=$form.$
 
@@ -116,7 +116,7 @@ Case of
 		//=========================================================
 	: ($IN=Null:C1517)  // Form method
 		
-		$codeEvent:=_o_panel_Form_common(On Load:K2:1; On Timer:K2:25)
+		$codeEvent:=_o_panel_Form_common(On Load:K2:1; On Timer:K2:25; On Resize:K2:27)
 		
 		$datamodel:=PROJECT.dataModel
 		
@@ -314,6 +314,11 @@ Case of
 				End case 
 				
 				//______________________________________________________
+			: ($codeEvent=On Resize:K2:27)
+				
+				ui_SET_GEOMETRY
+				
+				//______________________________________________________
 		End case 
 		
 		If (Bool:C1537($context.update))
@@ -326,16 +331,7 @@ Case of
 				
 				COLLECTION TO ARRAY:C1562($o.fields; ($form.fields.pointer())->)
 				COLLECTION TO ARRAY:C1562($o.fields; ($form.ids.pointer())->; "id")
-				
-				If (FEATURE.with("moreRelations"))
-					
-					COLLECTION TO ARRAY:C1562($o.fields; ($form.names.pointer())->; "$label")
-					
-				Else 
-					
-					COLLECTION TO ARRAY:C1562($o.fields; ($form.names.pointer())->; "path")
-					
-				End if 
+				COLLECTION TO ARRAY:C1562($o.fields; ($form.names.pointer())->; "$label")
 				
 				ASSERT:C1129($o.fields.length=Size of array:C274(($form.ids.pointer())->))
 				ASSERT:C1129($o.fields.length=Size of array:C274(($form.names.pointer())->))

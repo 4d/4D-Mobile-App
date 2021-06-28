@@ -12,13 +12,13 @@ var $e; $ƒ : Object
 
 // ----------------------------------------------------
 // Initialisations
-$ƒ:=panel_Definition
+$ƒ:=panel_Load
 $e:=$ƒ.event
 
 // ----------------------------------------------------
 If ($e.objectName=Null:C1517)  // <== Form method
 	
-	$e:=panel_Form_common(On Load:K2:1)
+	$e:=panel_Common(On Load:K2:1)
 	
 	Case of 
 			

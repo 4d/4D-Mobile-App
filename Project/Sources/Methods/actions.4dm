@@ -1,11 +1,11 @@
 //%attributes = {"invisible":true}
 var $e; $ƒ : Object
 
-$ƒ:=panel_Definition
+$ƒ:=panel_Load
 
 If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 	
-	$e:=panel_Form_common(On Load:K2:1; On Timer:K2:25)
+	$e:=panel_Common(On Load:K2:1; On Timer:K2:25; On Resize:K2:27)
 	
 	Case of 
 			
@@ -15,7 +15,6 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			androidLimitations(True:C214; "Actions are coming soon for Android")
 			
 			$ƒ.loadActions()
-			
 			$ƒ.onLoad()
 			
 			//______________________________________________________
@@ -24,6 +23,11 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			androidLimitations(True:C214)
 			
 			$ƒ.update()
+			
+			//______________________________________________________
+		: ($e.code=On Resize:K2:27)
+			
+			ui_SET_GEOMETRY($ƒ.context.constraints.rules)
 			
 			//______________________________________________________
 	End case 

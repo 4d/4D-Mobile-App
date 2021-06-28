@@ -526,7 +526,7 @@ $o:=cs:C1710.ob.new(Form:C1466)
 $o.createPath("structure").structure.unsynchronized:=$isUnsynchronized
 $o.createPath("status").structure.dataModel:=Not:C34($isUnsynchronized)
 
-CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "description"; New object:C1471(\
+EDITOR.updateHeader(New object:C1471(\
 "show"; $isUnsynchronized))
 
 // Refresh UI

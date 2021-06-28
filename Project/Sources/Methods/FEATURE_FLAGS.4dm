@@ -121,11 +121,11 @@ _____________*/
 End if 
 
 /* _____________
-18R6
+18R6 - REMOVED
 _____________*/
-FEATURE.unstable(117601)  // Relation management optimisation
-FEATURE.unstable("templateClass")  // use MainTemplate class instead of _o_templates
-FEATURE.unstable("searchWithBarCode")
+FEATURE.delivered(117601; 1860)  // Relation management optimisation
+FEATURE.delivered("templateClass"; 1860)
+FEATURE.delivered("searchWithBarCode"; 1860)
 
 /* _____________
 1900
@@ -161,6 +161,8 @@ FEATURE.unstable("newActionFormatterChoiceList")  // Menu to create action forma
 /* _____________
 WIP
 _____________*/
+FEATURE.wip("taskIndicator")  // UI for background tasks executing
+
 FEATURE.wip("compressionOfTemplates")  // Use the archive "/RESOURCES/template.zip" instead of "templates" folder in builded component 
 //FEATURE.vdl("testCompression")
 
@@ -277,4 +279,5 @@ End if
 /* _____________
 ALIAS
 _____________*/
-FEATURE.alias("moreRelations"; 117601)
+
+

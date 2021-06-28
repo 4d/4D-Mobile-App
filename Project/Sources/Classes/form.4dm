@@ -45,82 +45,136 @@ Function restoreContext()
 	ASSERT:C1129(False:C215; "👀 restore() must be overriden by the subclass!")
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-Function static($name : Text; $widgetName : Text)->$widget : Object
+	// Create a static object instance
+Function static($name : Text; $widgetName : Text)->$widget : cs:C1710.static
 	
 	If (Count parameters:C259>=2)
 		
-		This:C1470._instantiate("static"; $name; $widgetName)
+		This:C1470.instantiate("static"; $name; $widgetName)
 		
 	Else 
 		
-		This:C1470._instantiate("static"; $name)
+		This:C1470.instantiate("static"; $name)
 		
 	End if 
 	
 	$widget:=This:C1470[$name]
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-Function button($name : Text; $widgetName : Text)->$widget : Object
+	// Create a button object instance
+Function button($name : Text; $widgetName : Text)->$widget : cs:C1710.button
 	
 	If (Count parameters:C259>=2)
 		
-		This:C1470._instantiate("button"; $name; $widgetName)
+		This:C1470.instantiate("button"; $name; $widgetName)
 		
 	Else 
 		
-		This:C1470._instantiate("button"; $name)
+		This:C1470.instantiate("button"; $name)
 		
 	End if 
 	
 	$widget:=This:C1470[$name]
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-Function widget($name : Text; $widgetName : Text)->$widget : Object
+	// Create a widget object instance
+Function widget($name : Text; $widgetName : Text)->$widget : cs:C1710.widget
 	
 	If (Count parameters:C259>=2)
 		
-		This:C1470._instantiate("widget"; $name; $widgetName)
+		This:C1470.instantiate("widget"; $name; $widgetName)
 		
 	Else 
 		
-		This:C1470._instantiate("widget"; $name)
+		This:C1470.instantiate("widget"; $name)
 		
 	End if 
 	
 	$widget:=This:C1470[$name]
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-Function input($name : Text; $widgetName : Text)->$widget : Object
+	// Create a input object instance
+Function input($name : Text; $widgetName : Text)->$widget : cs:C1710.input
 	
 	If (Count parameters:C259>=2)
 		
-		This:C1470._instantiate("input"; $name; $widgetName)
+		This:C1470.instantiate("input"; $name; $widgetName)
 		
 	Else 
 		
-		This:C1470._instantiate("input"; $name)
+		This:C1470.instantiate("input"; $name)
 		
 	End if 
 	
 	$widget:=This:C1470[$name]
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-Function listbox($name : Text; $widgetName : Text)->$widget : Object
+	// Create a thermometer object instance
+Function thermometer($name : Text; $widgetName : Text)->$widget : cs:C1710.thermometer
 	
 	If (Count parameters:C259>=2)
 		
-		This:C1470._instantiate("listbox"; $name; $widgetName)
+		This:C1470.instantiate("thermometer"; $name; $widgetName)
 		
 	Else 
 		
-		This:C1470._instantiate("listbox"; $name)
+		This:C1470.instantiate("thermometer"; $name)
 		
 	End if 
 	
 	$widget:=This:C1470[$name]
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-Function group($name : Text; $member; $member2; $memberN)->$widget : Object
+	// Create a listbox object instance
+Function listbox($name : Text; $widgetName : Text)->$widget : cs:C1710.listbox
+	
+	If (Count parameters:C259>=2)
+		
+		This:C1470.instantiate("listbox"; $name; $widgetName)
+		
+	Else 
+		
+		This:C1470.instantiate("listbox"; $name)
+		
+	End if 
+	
+	$widget:=This:C1470[$name]
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	// Create a picture object instance
+Function picture($name : Text; $widgetName : Text)->$widget : cs:C1710.picture
+	
+	If (Count parameters:C259>=2)
+		
+		This:C1470.instantiate("picture"; $name; $widgetName)
+		
+	Else 
+		
+		This:C1470.instantiate("picture"; $name)
+		
+	End if 
+	
+	$widget:=This:C1470[$name]
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	// Create a subform object instance
+Function subform($name : Text; $widgetName : Text)->$widget : cs:C1710.subform
+	
+	If (Count parameters:C259>=2)
+		
+		This:C1470.instantiate("subform"; $name; $widgetName)
+		
+	Else 
+		
+		This:C1470.instantiate("subform"; $name)
+		
+	End if 
+	
+	$widget:=This:C1470[$name]
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	// Create a group instance
+Function group($name : Text; $member; $member2; $memberN)->$widget : cs:C1710.group
 	
 	var ${2}
 	var $i : Integer
@@ -160,7 +214,7 @@ Function getWidgets()
 				 | ($type=Object type 3D radio button:K79:24)\
 				 | ($type=Object type picture button:K79:20)
 				
-				This:C1470._instantiate("button"; $name)
+				This:C1470.instantiate("button"; $name)
 				
 				//______________________________________________________
 			: ($type=Object type static text:K79:2)\
@@ -170,7 +224,7 @@ Function getWidgets()
 				 | ($type=Object type rounded rectangle:K79:34)\
 				 | ($type=Object type oval:K79:35)
 				
-				This:C1470._instantiate("static"; $name)
+				This:C1470.instantiate("static"; $name)
 				
 				//______________________________________________________
 			: (False:C215)
@@ -479,6 +533,11 @@ Function callChild($subform : Text; $method : Text; $param; $param1; $paramN)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
+Function spreadToChilds($param : Object)
+	
+	form_spreadToSubforms($param)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Send an event to the subform container
 Function callParent($event : Integer)
 	
@@ -600,20 +659,29 @@ Function removeFocus()
 	GOTO OBJECT:C206(*; "")
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-Function _instantiate($class : Text; $key : Text; $name : Text)
+Function instantiate($class : Text; $key : Text; $name : Text)
 	
-	If (Asserted:C1132(Count parameters:C259>=2; "Missing parameter"))
+	If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 		
-		If (Count parameters:C259=2)
-			
-			// Default: object name as the widget name
-			This:C1470[$key]:=cs:C1710[$class].new($key)
-			
-		Else 
-			
-			This:C1470[$key]:=cs:C1710[$class].new($name)
-			
-		End if 
+		Case of 
+				
+				//______________________________________________________
+			: (Count parameters:C259=3)
+				
+				This:C1470[$key]:=cs:C1710[$class].new($name)
+				
+				//______________________________________________________
+			: (Count parameters:C259=2)  // Use key as the widget name
+				
+				This:C1470[$key]:=cs:C1710[$class].new($key)
+				
+				//______________________________________________________
+			: (Count parameters:C259=1)  // A tool init
+				
+				This:C1470[$class]:=cs:C1710[$class].new()
+				
+				//______________________________________________________
+		End case 
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 

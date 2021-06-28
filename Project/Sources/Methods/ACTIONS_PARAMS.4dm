@@ -1,11 +1,11 @@
 //%attributes = {"invisible":true}
 var $e; $ƒ : Object
 
-$ƒ:=panel_Definition
+$ƒ:=panel_Load
 
 If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 	
-	$e:=panel_Form_common(On Load:K2:1; On Timer:K2:25)
+	$e:=panel_Common(On Load:K2:1; On Timer:K2:25)
 	
 	Case of 
 			

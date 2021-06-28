@@ -2,8 +2,8 @@
 If (False:C215)
 	
 	// ----------------------------------------------------
-	C_TEXT:C284(editor_CALLBACK; $1)
-	C_OBJECT:C1216(editor_CALLBACK; $2)
+	C_TEXT:C284(EDITOR_CALLBACK; $1)
+	C_OBJECT:C1216(EDITOR_CALLBACK; $2)
 	
 	// ----------------------------------------------------
 	C_OBJECT:C1216(editor_CREATE_PROJECT; $1)
@@ -22,7 +22,7 @@ If (False:C215)
 	C_OBJECT:C1216(editor_PROCESS_MESSAGES; $3)
 	
 	// ----------------------------------------------------
-	C_OBJECT:C1216(editor_SET_DESCRIPTION; $1)
+	C_OBJECT:C1216(editor_UPDATE_HEADER; $1)
 	
 	// ----------------------------------------------------
 	C_OBJECT:C1216(editor_MESSAGE_CALLBACK; $1)
@@ -31,17 +31,9 @@ If (False:C215)
 	C_TEXT:C284(editor_RESUME; $1)
 	C_OBJECT:C1216(editor_RESUME; $2)
 	
-	
-	
-	
-	
 	// ----------------------------------------------------
 	C_OBJECT:C1216(editor_Panel_init; $0)
 	C_TEXT:C284(editor_Panel_init; $1)
-	
-	
-	// ----------------------------------------------------
-	C_OBJECT:C1216(editor_HANDLER; $1)
 	
 	// ----------------------------------------------------
 	C_OBJECT:C1216(editor_LoadIcons; $0)

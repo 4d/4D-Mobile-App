@@ -40,7 +40,7 @@ Else
 End if 
 
 // ----------------------------------------------------
-$tablesPtr:=UI.pointer($form.tables)
+$tablesPtr:=_o_UI.pointer($form.tables)
 CLEAR VARIABLE:C89($tablesPtr->)
 
 $catalog:=PROJECT.getCatalog()
@@ -177,7 +177,7 @@ Else
 	
 	OB REMOVE:C1226($ƒ; "currentTable")
 	
-	CLEAR VARIABLE:C89((UI.pointer($form.fields))->)
+	CLEAR VARIABLE:C89((_o_UI.pointer($form.fields))->)
 	
 	SET TIMER:C645(-1)
 	

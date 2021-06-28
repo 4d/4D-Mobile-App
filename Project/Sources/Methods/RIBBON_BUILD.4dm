@@ -28,7 +28,7 @@ Case of
 /*
 If (PROJECT._buildTarget#Null)
 			
-Case of 
+Case of
 			
 //______________________________________________________
 : ((PROJECT._buildTarget="ios") & Bool(Not(Bool(EDITOR.xCode.ready))))
@@ -41,15 +41,15 @@ OBJECT SET HELP TIP(*; $e.objectName; ".Xcode is not ready")
 : (False)
 			
 //______________________________________________________
-Else 
+Else
 			
 // A "Case of" statement should never omit "Else"
 //______________________________________________________
-End case 
+End case
 			
-Else 
+Else
 			
-Case of 
+Case of
 			
 //______________________________________________________
 : (PROJECT.$ios & Bool(Not(Bool(EDITOR.xCode.ready))))
@@ -66,12 +66,12 @@ SET DATABASE PARAMETER(Tips delay; 1)
 OBJECT SET HELP TIP(*; $e.objectName; ".Android studio is not ready")
 			
 //______________________________________________________
-Else 
+Else
 			
 // A "Case of" statement should never omit "Else"
 //______________________________________________________
-End case 
-End if 
+End case
+End if
 */
 			
 		End if 
@@ -96,7 +96,7 @@ End if
 		Else 
 			
 			POST_MESSAGE(New object:C1471(\
-				"target"; Form:C1466.editor.$mainWindow; \
+				"target"; EDITOR.window; \
 				"action"; "show"; \
 				"type"; "alert"; \
 				"title"; "youMustFirstSelectASimulator"))

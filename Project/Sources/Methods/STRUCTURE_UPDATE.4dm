@@ -45,7 +45,7 @@ $published:=New collection:C1472
 
 // ----------------------------------------------------
 // GET THE PUBLISHED FIELD NAMES LIST
-ARRAY TO COLLECTION:C1563($published; ($form.publishedPtr)->; "published"; (UI.pointer($form.fields))->; "name")
+ARRAY TO COLLECTION:C1563($published; ($form.publishedPtr)->; "published"; (_o_UI.pointer($form.fields))->; "name")
 
 If ($published.extract("published").countValues(0)=$published.length)\
  & ($published.extract("published").indexOf(2)=-1)\
@@ -56,7 +56,7 @@ If ($published.extract("published").countValues(0)=$published.length)\
 	PROJECT.removeTable($currentTable.tableNumber)
 	
 	// UI - De-emphasize the table name
-	$indx:=Find in array:C230((UI.pointer($form.tableList))->; True:C214)
+	$indx:=Find in array:C230((_o_UI.pointer($form.tableList))->; True:C214)
 	LISTBOX SET ROW FONT STYLE:C1268(*; $form.tableList; $indx; Plain:K14:1)
 	
 Else 
@@ -69,7 +69,7 @@ Else
 		$table:=PROJECT.addTable($currentTable)
 		
 		// UI - Emphasize the table name
-		$indx:=Find in array:C230((UI.pointer($form.tableList))->; True:C214)
+		$indx:=Find in array:C230((_o_UI.pointer($form.tableList))->; True:C214)
 		LISTBOX SET ROW FONT STYLE:C1268(*; $form.tableList; $indx; Bold:K14:2)
 		
 	End if 
@@ -170,7 +170,7 @@ Else
 		PROJECT.removeTable($currentTable.tableNumber)
 		
 		// UI - De-emphasize the table name
-		$indx:=Find in array:C230((UI.pointer($form.tableList))->; True:C214)
+		$indx:=Find in array:C230((_o_UI.pointer($form.tableList))->; True:C214)
 		LISTBOX SET ROW FONT STYLE:C1268(*; $form.tableList; $indx; Plain:K14:1)
 		
 	End if 

@@ -11,12 +11,12 @@ var $e; $ƒ : Object
 
 // ----------------------------------------------------
 // Initialisations
-$ƒ:=panel_Definition
+$ƒ:=panel_Load
 
 // ----------------------------------------------------
 If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 	
-	$e:=panel_Form_common()
+	$e:=panel_Common()
 	
 Else   // <== WIDGETS METHOD
 	

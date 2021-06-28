@@ -15,8 +15,8 @@ var $1 : Text
 var $2 : Object
 
 If (False:C215)
-	C_TEXT:C284(editor_CALLBACK; $1)
-	C_OBJECT:C1216(editor_CALLBACK; $2)
+	C_TEXT:C284(EDITOR_CALLBACK; $1)
+	C_OBJECT:C1216(EDITOR_CALLBACK; $2)
 End if 
 
 var $selector : Text
@@ -40,7 +40,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 		"window"; Current form window:C827; \
 		"callback"; Current method name:C684; \
 		"currentForm"; Current form name:C1298; \
-		"editor"; "EDITOR"; \
+		"editor"; "PROJECT_EDITOR"; \
 		"project"; "PROJECT"; \
 		"developer"; "DEVELOPER"; \
 		"structure"; "STRUCTURE"; \
@@ -53,8 +53,8 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 		"dataSource"; "SOURCE"; \
 		"actions"; "ACTIONS"; \
 		"actionParameters"; "ACTIONS_PARAMS"; \
-		"ribbon"; "ribbon"; \
-		"footer"; "footer")
+		"ribbon"; "RIBBON"; \
+		"footer"; "FOOTER")
 	
 Else 
 	

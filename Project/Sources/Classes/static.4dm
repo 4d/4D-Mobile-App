@@ -410,6 +410,29 @@ Function resizeVertically($offset : Integer)->$this : cs:C1710.static
 	$this:=This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === ===
+Function moveAndResizeVertically($offset : Integer; $resize : Integer)->$this : cs:C1710.static
+	
+	var $bottom; $left; $right; $top : Integer
+	
+	OBJECT GET COORDINATES:C663(*; This:C1470.name; $left; $top; $right; $bottom)
+	
+	$left:=$left+$offset
+	
+	If (Count parameters:C259>=2)
+		
+		$right:=$right+$resize
+		
+	End if 
+	
+	This:C1470.setCoordinates(New object:C1471(\
+		"left"; $left; \
+		"top"; $top; \
+		"right"; $right; \
+		"bottom"; $bottom))
+	
+	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === ===
 Function setDimension($width : Integer; $height : Integer)->$this : cs:C1710.static
 	
 	var $o : Object

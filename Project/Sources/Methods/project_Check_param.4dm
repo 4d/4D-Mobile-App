@@ -5,7 +5,7 @@
 // Created 28-8-2017 by Vincent de Lachaux
 // ----------------------------------------------------
 // Description:
-// 
+//
 // ----------------------------------------------------
 // Declarations
 #DECLARE($in : Object)->$result : Object
@@ -133,7 +133,7 @@ If ($result.success & Bool:C1537($in.build))
 					//………………………………………………………………………………………………………
 				: (PROJECT.isField($field))
 					
-					// 
+					//
 					
 					//………………………………………………………………………………………………………
 				: (Value type:C1509($dataModel[$table][$field])#Is object:K8:27)
@@ -143,7 +143,7 @@ If ($result.success & Bool:C1537($in.build))
 					//………………………………………………………………………………………………………
 				: (PROJECT.isRelationToOne($dataModel[$table][$field]))  // N -> 1 relation
 					
-					// 
+					//
 					
 					//………………………………………………………………………………………………………
 				: (PROJECT.isRelationToMany($dataModel[$table][$field]))  // 1 -> N relation

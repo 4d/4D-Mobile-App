@@ -15,7 +15,7 @@ Case of
 		//=========================================================
 	: ($response.action="teamID")  // Call back from provisioningProfiles
 		
-		panel_Definition("DEVELOPER").updateTeamID($response)
+		panel("DEVELOPER").updateTeamID($response)
 		
 		
 		//=========================================================

@@ -119,7 +119,7 @@ Case of
 		 | ($Txt_me=$Obj_form.doNotExportImages)
 		
 		PROJECT.save()
-		UI.refresh()
+		_o_UI.refresh()
 		
 		//==================================================
 	: ($Txt_me=$Obj_form.local)

@@ -1,6 +1,6 @@
 Class extends form
 
-//=== === === === === === === === === === === === === === === === === === === === === 
+//=== === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	
 	Super:C1705("editor_CALLBACK")
@@ -18,7 +18,7 @@ Class constructor
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function init()
 	
 	This:C1470.toBeInitialized:=False:C215
@@ -52,7 +52,7 @@ Function init()
 	
 	//This.form:=Form.$dialog[This.name]  // ????????????????????????????
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function onLoad()
 	
 	// This trick remove the horizontal gap
@@ -77,14 +77,14 @@ Function onLoad()
 	This:C1470.formats.updatePointer()
 	This:C1470.titles.updatePointer()
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Update UI
 Function update()
 	
 	This:C1470.tableNumber:=This:C1470.tableLink.call()
 	This:C1470.updateFieldList()
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Updates the list of fields/relation according to the selected table
 Function updateFieldList
 	
@@ -147,7 +147,7 @@ Function updateFieldList
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Updates the list of fields/reports according to the selected table
 Function getFieldList()->$result : Object
 	
@@ -358,82 +358,79 @@ Function getFieldList()->$result : Object
 							
 						Else 
 							
-							If (FEATURE.with("moreRelations"))
-								
-								$field:=$table[$key]
-								
-								$result.formatColors.push(Foreground color:K23:1)
-								$result.nameColors.push(Foreground color:K23:1)
-								
-								$result.ids.push(Null:C1517)
-								$result.names.push($key)
-								$result.paths.push($key)
-								$result.types.push(-1)
-								
+							$field:=$table[$key]
+							
+							$result.formatColors.push(Foreground color:K23:1)
+							$result.nameColors.push(Foreground color:K23:1)
+							
+							$result.ids.push(Null:C1517)
+							$result.names.push($key)
+							$result.paths.push($key)
+							$result.types.push(-1)
+							
 /* TEMPO */$result.tableNumbers.push(Num:C11($tableID))
+							
+							If (String:C10($field.label)="")
 								
-								If (String:C10($field.label)="")
-									
-									$field.label:=PROJECT.label($key)
-									
-								End if 
-								
-								$result.labels.push($field.label)
-								
-								If (String:C10($field.shortLabel)="")
-									
-									$field.shortLabel:=$field.label
-									
-								End if 
-								
-								$result.shortLabels.push($field.shortLabel)
-								$result.iconPaths.push(String:C10($field.icon))
-								$result.icons.push(PROJECT.getIcon(String:C10($field.icon)))
-								$result.formats.push($field.format)
-								
-								If (PROJECT.isLink($table[$key]))
-									
-									// N -> 1 -> N relation
-									
-									For each ($subKey; $table[$key])
-										
-										If (Value type:C1509($table[$key][$subKey])=Is object:K8:27)
-											
-											If (Bool:C1537($table[$key][$subKey].isToMany))
-												
-												$field:=$table[$key][$subKey]
-												
-												$result.formatColors.push(Foreground color:K23:1)
-												$result.nameColors.push(Foreground color:K23:1)
-												
-												$result.tableNumbers.push(Num:C11($tableID))
-												
-												$result.ids.push(Null:C1517)
-												$result.names.push($field.path)
-												$result.paths.push($field.path)
-												$result.types.push(-1)
-												
-												$result.labels.push($field.label)
-												$result.shortLabels.push($field.shortLabel)
-												$result.iconPaths.push(String:C10($field.icon))
-												$result.icons.push(PROJECT.getIcon(String:C10($field.icon)))
-												
-												$result.formats.push($field.format)
-												
-											End if 
-										End if 
-									End for each 
-									
-								Else 
-									
-									If (Form:C1466.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)
-										
-										$result.nameColors[$result.names.length-1]:=EDITOR.errorColor  // Missing or invalid
-										
-									End if 
-								End if 
+								$field.label:=PROJECT.label($key)
 								
 							End if 
+							
+							$result.labels.push($field.label)
+							
+							If (String:C10($field.shortLabel)="")
+								
+								$field.shortLabel:=$field.label
+								
+							End if 
+							
+							$result.shortLabels.push($field.shortLabel)
+							$result.iconPaths.push(String:C10($field.icon))
+							$result.icons.push(PROJECT.getIcon(String:C10($field.icon)))
+							$result.formats.push($field.format)
+							
+							If (PROJECT.isLink($table[$key]))
+								
+								// N -> 1 -> N relation
+								
+								For each ($subKey; $table[$key])
+									
+									If (Value type:C1509($table[$key][$subKey])=Is object:K8:27)
+										
+										If (Bool:C1537($table[$key][$subKey].isToMany))
+											
+											$field:=$table[$key][$subKey]
+											
+											$result.formatColors.push(Foreground color:K23:1)
+											$result.nameColors.push(Foreground color:K23:1)
+											
+											$result.tableNumbers.push(Num:C11($tableID))
+											
+											$result.ids.push(Null:C1517)
+											$result.names.push($field.path)
+											$result.paths.push($field.path)
+											$result.types.push(-1)
+											
+											$result.labels.push($field.label)
+											$result.shortLabels.push($field.shortLabel)
+											$result.iconPaths.push(String:C10($field.icon))
+											$result.icons.push(PROJECT.getIcon(String:C10($field.icon)))
+											
+											$result.formats.push($field.format)
+											
+										End if 
+									End if 
+								End for each 
+								
+							Else 
+								
+								If (Form:C1466.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)
+									
+									$result.nameColors[$result.names.length-1]:=EDITOR.errorColor  // Missing or invalid
+									
+								End if 
+							End if 
+							
 						End if 
 						
 						//……………………………………………………………………………………………………………
@@ -498,7 +495,7 @@ Function getFieldList()->$result : Object
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Manages the UI of the tab Fields/Relations
 Function setTab()
 	
@@ -537,27 +534,24 @@ Function setTab()
 	// Update field list
 	This:C1470.updateFieldList()
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Returns the field associated with the line
 Function field($row : Integer)->$field : Object
 	
 	var $c : Collection
 	var $t : Text
 	
-	If (FEATURE.with("moreRelations"))
+	If (Num:C11(This:C1470.tabSelector.data)=1)
 		
-		If (Num:C11(This:C1470.tabSelector.data)=1)
+		//%W-533.3
+		$c:=Split string:C1554((This:C1470.fieldList.columns["fields"].pointer)->{$row}; ".")
+		//%W+533.3
+		
+		If ($c.length>1)
 			
-			//%W-533.3
-			$c:=Split string:C1554((This:C1470.fieldList.columns["fields"].pointer)->{$row}; ".")
-			//%W+533.3
+			// 1 -> 1 -> N
+			$field:=Form:C1466.dataModel[String:C10(This:C1470.tableNumber)][String:C10($c[0])][String:C10($c[1])]
 			
-			If ($c.length>1)
-				
-				// 1 -> 1 -> N
-				$field:=Form:C1466.dataModel[String:C10(This:C1470.tableNumber)][String:C10($c[0])][String:C10($c[1])]
-				
-			End if 
 		End if 
 	End if 
 	
@@ -586,7 +580,7 @@ Function field($row : Integer)->$field : Object
 		End if 
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Display tips on the field list
 Function setHelpTip($e : Object)
 	
@@ -642,7 +636,7 @@ Function setHelpTip($e : Object)
 	
 	This:C1470.fieldList.setHelpTip($t)
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Update forms
 Function updateForms($field : Object; $row : Integer)
 	
@@ -698,7 +692,7 @@ Function updateForms($field : Object; $row : Integer)
 		End if 
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Show the icon picker
 Function doShowIconPicker($e : Object)
 	
@@ -760,7 +754,7 @@ Function doShowIconPicker($e : Object)
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function doGetResources()
 	
 	If (FEATURE.with("formatMarketPlace"))
@@ -775,7 +769,7 @@ Function doGetResources()
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Show format on disk
 Function formatShowOnDisk($e : Object)
 	
@@ -808,7 +802,7 @@ Function formatShowOnDisk($e : Object)
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Manage the format menu according to the field type
 Function formatMenu($e : Object)
 	
@@ -958,7 +952,7 @@ Function formatMenu($e : Object)
 	
 	editor_ui_LISTBOX(This:C1470.fieldList.name)
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Manage the tags menu for label & shortlabel
 Function tagMenu($e : Object; $values : Collection)
 	

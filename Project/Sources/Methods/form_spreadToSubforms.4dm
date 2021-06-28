@@ -1,6 +1,6 @@
 //%attributes = {"invisible":true}
 // ----------------------------------------------------
-// Project method : call_MESSAGE_DISPATCH
+// Project method : form_spreadToSubforms
 // ID[2EA9710049454153B1F0AF42D2215894]
 // Created 15-5-2017 by Vincent de Lachaux
 // ----------------------------------------------------
@@ -11,7 +11,7 @@
 #DECLARE($message : Object)
 
 If (False:C215)
-	C_OBJECT:C1216(call_MESSAGE_DISPATCH; $1)
+	C_OBJECT:C1216(form_spreadToSubforms; $1)
 End if 
 
 var $i : Integer
@@ -32,7 +32,7 @@ For ($i; 1; Size of array:C274($widgets); 1)
 			
 		End if 
 		
-		EXECUTE METHOD IN SUBFORM:C1085($widgets{$i}; "call_MESSAGE_DISPATCH"; *; $message)
+		EXECUTE METHOD IN SUBFORM:C1085($widgets{$i}; "form_spreadToSubforms"; *; $message)
 		
 	End if 
 End for 

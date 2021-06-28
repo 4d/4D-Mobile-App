@@ -231,7 +231,7 @@ End if
 
 If (Form:C1466#Null:C1517)
 	
-	CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "description"; New object:C1471(\
+	EDITOR.updateHeader(New object:C1471(\
 		"show"; Not:C34($audit.success)))
 	
 End if 

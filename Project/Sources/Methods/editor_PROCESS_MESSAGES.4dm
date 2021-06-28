@@ -39,36 +39,36 @@ Case of
 			
 		End if 
 		
-		OBJECT SET VALUE:C1742("footer"; $in)
+		EDITOR.footer.setValue($in)
+		//OBJECT SET VALUE("footer"; $in)
 		
 		//______________________________________________________
 	: ($message="description")  // Update UI of the TITLE subform
 		
-		EXECUTE METHOD IN SUBFORM:C1085("description"; "editor_SET_DESCRIPTION"; *; $in)
+		EDITOR.updateHeader($in)
 		
 		//______________________________________________________
-	: ($message="setURL")
+	: ($message="setURL")  // **** SEEMS TO BE OBSOLETE *****
 		
-		(OBJECT Get pointer:C1124(Object named:K67:5; "browser"))->:=$in
+		EDITOR.browser.setValue($in)
 		
 		//______________________________________________________
 	: ($message="hideBrowser")
 		
-		OBJECT SET SUBFORM:C1138(*; "browser"; "EMPTY")
-		OBJECT SET VISIBLE:C603(*; "browser"; False:C215)
+		EDITOR.browser.setSubform("EMPTY")
+		EDITOR.browser.hide()
 		
 		//______________________________________________________
 	: ($message="showBrowser")
 		
-		OBJECT SET VISIBLE:C603(*; "browser"; True:C214)
+		EDITOR.browser.show()
 		
 		//______________________________________________________
 	: ($message="initBrowser")
 		
-		OBJECT SET VISIBLE:C603(*; "browser"; True:C214)
-		OBJECT SET SUBFORM:C1138(*; "browser"; "BROWSER")
-		
-		EDITOR.callMeBack("setURL"; $in)
+		EDITOR.browser.show()
+		EDITOR.browser.setSubform("BROWSER")
+		EDITOR.browser.setValue($in)  //EDITOR.callMeBack("setURL"; $in)
 		
 		//______________________________________________________
 	: ($message="projectAuditResult")
@@ -88,8 +88,7 @@ Case of
 		//______________________________________________________
 	: ($message="checkProject")  // Callback from 'structure'
 		
-		// Update task list
-		EDITOR.removeTask($message)
+		EDITOR.removeTask($message)  // Update task list
 		
 		If ($in.success)
 			
@@ -106,14 +105,9 @@ Case of
 		//______________________________________________________
 	: ($message="getDevices")  // Callback from 'editor_GET_DEVICES'
 		
-		// Update task list
-		EDITOR.removeTask($message)
-		
-		// Store the result
-		EDITOR.devices:=$in
-		
-		// Touch
-		OBJECT SET VALUE:C1742($form.ribbon; OBJECT Get value:C1743($form.ribbon))
+		EDITOR.removeTask($message)  // Update task list
+		EDITOR.devices:=$in  // Store the result
+		EDITOR.ribbon.touch()
 		
 		//______________________________________________________
 	: ($message="syncDataModel")
@@ -124,11 +118,8 @@ Case of
 	: ($message="goToPage")
 		
 		EDITOR.goToPage($in.page)
-		
-		Form:C1466.$dialog[$form.editor].ribbon.page:=EDITOR.currentPage
-		
-		// Touch the ribbon subform
-		(OBJECT Get pointer:C1124(Object named:K67:5; "ribbon"))->:=Form:C1466.$dialog[$form.editor].ribbon
+		EDITOR.context.ribbon.page:=EDITOR.currentPage
+		EDITOR.ribbon.touch()
 		
 		Case of 
 				
@@ -151,9 +142,8 @@ Case of
 		// Update task list
 		EDITOR.removeTask($message)
 		
-		If ($in#Null:C1517)
+		If ($in#Null:C1517)  // Store the result
 			
-			// Store the result
 			EDITOR.studio:=$in.studio
 			EDITOR.xCode:=$in.xCode
 			
@@ -168,9 +158,7 @@ Case of
 	: ($message="updateRibbon")
 		
 		EDITOR.teamId:=(Length:C16(String:C10(PROJECT.organization.teamId))>0)
-		
-		// Touch
-		OBJECT SET VALUE:C1742($form.ribbon; OBJECT Get value:C1743($form.ribbon))
+		EDITOR.ribbon.touch()
 		
 		//______________________________________________________
 	: ($message="build@")

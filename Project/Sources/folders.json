@@ -61,6 +61,7 @@
 			"_o_color",
 			"_o_doc_getFromPath",
 			"_o_doc_LoadJsonFile",
+			"_o_editor_Locked",
 			"_o_editor_OPEN_PROJECT",
 			"_o_editor_PROJECT_AUDIT",
 			"_o_env_System_path",
@@ -77,7 +78,6 @@
 			"_o_storyboard",
 			"_o_storyboard_fix_id",
 			"_o_structure",
-			"_o_templates",
 			"_o_tempoFieldType",
 			"_o_tmpl_form",
 			"_o_ui_BEST_SIZE",
@@ -185,40 +185,6 @@
 			"structure"
 		]
 	},
-	"[EDITOR]": {
-		"groups": [
-			"[BROWSER]",
-			"[PANELS]",
-			"[PROJECT]",
-			"FOOTER",
-			"RIBON"
-		],
-		"methods": [
-			"COMPILER_editor",
-			"editor_CALLBACK",
-			"editor_CHECK_INSTALLATION",
-			"editor_CREATE_PROJECT",
-			"editor_GET_DEVICES",
-			"editor_HANDLER",
-			"editor_LoadIcons",
-			"editor_MESSAGE_CALLBACK",
-			"editor_OBJECTS_HANDLER",
-			"EDITOR_ON_ACTIVATE",
-			"editor_Panel_init",
-			"editor_PROCESS_MESSAGES",
-			"editor_RESUME",
-			"editor_SET_DESCRIPTION",
-			"editor_ui_LISTBOX"
-		],
-		"forms": [
-			"EDITOR",
-			"TITLE"
-		],
-		"classes": [
-			"EDITOR",
-			"MobileProject"
-		]
-	},
 	"[PANELS]": {
 		"groups": [
 			"00] TARGET",
@@ -239,6 +205,36 @@
 		],
 		"forms": [
 			"EMPTY"
+		]
+	},
+	"[PROJECT_EDITOR]": {
+		"groups": [
+			"[BROWSER]",
+			"[PANELS]",
+			"[PROJECT]",
+			"FOOTER",
+			"RIBON"
+		],
+		"methods": [
+			"COMPILER_editor",
+			"EDITOR_CALLBACK",
+			"editor_CHECK_INSTALLATION",
+			"editor_CREATE_PROJECT",
+			"editor_GET_DEVICES",
+			"editor_LoadIcons",
+			"editor_MESSAGE_CALLBACK",
+			"editor_Panel_init",
+			"editor_PROCESS_MESSAGES",
+			"editor_RESUME",
+			"editor_ui_LISTBOX",
+			"PROJECT_EDITOR"
+		],
+		"forms": [
+			"PROJECT_EDITOR",
+			"TITLE"
+		],
+		"classes": [
+			"PROJECT_EDITOR"
 		]
 	},
 	"[PROJECT]": {
@@ -495,7 +491,8 @@
 			"xloc"
 		],
 		"classes": [
-			"formater"
+			"formater",
+			"MobileProject"
 		]
 	},
 	"classes": {
@@ -725,7 +722,6 @@
 			"xml (thread-safe)"
 		],
 		"methods": [
-			"call_MESSAGE_DISPATCH",
 			"LOG_EVENT",
 			"noError"
 		]
@@ -796,20 +792,20 @@
 			"COMPILER_panel",
 			"panel",
 			"panel_COLLAPSE_EXPAND",
+			"panel_Common",
 			"panel_Count",
-			"panel_Definition",
 			"panel_Find_by_name",
-			"panel_Form_common",
 			"panel_GOTO",
 			"panel_INIT",
 			"panel_LAST",
-			"panel_Objects",
+			"panel_Load",
 			"panel_OPEN",
 			"panel_REFRESH",
 			"panel_SET_FOCUS",
 			"panel_State",
 			"panel_TOUCH",
-			"panel_UI"
+			"panel_UI",
+			"panels"
 		],
 		"forms": [
 			"panel_template"
@@ -888,7 +884,6 @@
 		"methods": [
 			"RIBBON",
 			"RIBBON_BUILD",
-			"RIBBON_CONTAINER",
 			"RIBBON_HANDLER",
 			"RIBBON_PROJECT",
 			"RIBBON_SIMULATOR"

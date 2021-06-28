@@ -617,7 +617,7 @@ Case of
 		//______________________________________________________
 	: ($selector="refresh")  // Refresh displayed panels
 		
-		For each ($t; panel_Objects)
+		For each ($t; panels)
 			
 			EXECUTE METHOD IN SUBFORM:C1085($t; "panel_REFRESH")
 			

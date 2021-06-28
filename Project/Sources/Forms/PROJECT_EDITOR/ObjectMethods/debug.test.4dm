@@ -1,0 +1,1 @@
+EDITOR.doAlert("Hello world")

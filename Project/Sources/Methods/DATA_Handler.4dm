@@ -120,12 +120,12 @@ Case of
 				
 				GOTO OBJECT:C206(*; $Obj_form.list)
 				
-				UI.tips.enable()
+				_o_UI.tips.enable()
 				
 				//______________________________________________________
 			: ($Lon_formEvent=On Timer:K2:25)
 				
-				UI.tips.enable()
+				_o_UI.tips.enable()
 				
 				androidLimitations(False:C215; "")
 				
@@ -149,7 +149,7 @@ Case of
 						
 						If (Bool:C1537($Obj_context.current.filter.validated))
 							
-							UI.tips.defaultDelay()
+							_o_UI.tips.defaultDelay()
 							
 							If (Bool:C1537($Obj_context.current.filter.parameters))
 								
@@ -186,7 +186,7 @@ Case of
 						
 						If ($Obj_form.focus#$Obj_form.filter)
 							
-							UI.tips.instantly()
+							_o_UI.tips.instantly()
 							
 						End if 
 						

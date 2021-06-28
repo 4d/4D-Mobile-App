@@ -20,7 +20,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
 	Case of 
 			//______________________________________________________
-		: (Current form name:C1298="EDITOR")
+		: (Current form name:C1298="PROJECT_EDITOR")
 			
 			$widget:=EDITOR.message
 			
@@ -85,9 +85,9 @@ Else
 				
 				Case of 
 						//______________________________________________________
-					: (Current form name:C1298="EDITOR")
+					: (Current form name:C1298="PROJECT_EDITOR")
 						
-						EDITOR.messageObjects.hide()
+						EDITOR.messageGroup.hide()
 						
 						//______________________________________________________
 					: (Current form name:C1298="WIZARD_NEW_PROJECT")

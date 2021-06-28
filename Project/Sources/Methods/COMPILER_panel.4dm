@@ -6,12 +6,15 @@ If (False:C215)
 	C_TEXT:C284(panel; $1)
 	
 	//______________________________________________________
-	C_OBJECT:C1216(panel_Definition; $0)
-	C_TEXT:C284(panel_Definition; $1)
+	C_COLLECTION:C1488(panels; $0)
 	
 	//______________________________________________________
-	C_OBJECT:C1216(panel_Form_common; $0)
-	C_LONGINT:C283(panel_Form_common; ${1})
+	C_OBJECT:C1216(panel_Load; $0)
+	C_TEXT:C284(panel_Load; $1)
+	
+	//______________________________________________________
+	C_OBJECT:C1216(panel_Common; $0)
+	C_LONGINT:C283(panel_Common; ${1})
 	
 	//______________________________________________________
 	C_OBJECT:C1216(panel_INIT; $1)
@@ -23,9 +26,6 @@ If (False:C215)
 	
 	//______________________________________________________
 	C_LONGINT:C283(panel_COLLAPSE_EXPAND; $1)
-	
-	//______________________________________________________
-	C_COLLECTION:C1488(panel_Objects; $0)
 	
 	//______________________________________________________
 	C_LONGINT:C283(panel_Count; $0)

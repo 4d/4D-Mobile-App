@@ -24,7 +24,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"method": "editor_HANDLER",
+	"method": "PROJECT_EDITOR",
 	"pages": [
 		{
 			"objects": {
@@ -50,7 +50,7 @@
 					"doubleClickInRowAction": "editSubrecord",
 					"selectionMode": "multiple",
 					"printFrame": "variable",
-					"method": "RIBBON_CONTAINER"
+					"method": "PROJECT_EDITOR"
 				},
 				"description": {
 					"type": "subform",
@@ -68,7 +68,7 @@
 					"selectionMode": "multiple",
 					"printFrame": "variable"
 				},
-				"tasks": {
+				"taskIndicator": {
 					"type": "progress",
 					"left": 810,
 					"top": 10,
@@ -98,6 +98,19 @@
 					"stroke": "#FFFFFF",
 					"dragging": "none",
 					"fill": "transparent"
+				},
+				"debug.test": {
+					"type": "button",
+					"text": "Button",
+					"top": 13,
+					"left": 701,
+					"width": 71,
+					"height": 18,
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/debug.test.4dm",
+					"focusable": false
 				}
 			}
 		},
@@ -162,7 +175,7 @@
 					"method": "BROWSER_CONTAINER",
 					"bottom": 870
 				},
-				"message.back": {
+				"messageBack": {
 					"type": "picture",
 					"top": 0,
 					"left": 0,
@@ -174,7 +187,7 @@
 					"pictureFormat": "tiled",
 					"picture": "/RESOURCES/images/common/background.png"
 				},
-				"message.button": {
+				"messageButton": {
 					"type": "button",
 					"top": 0,
 					"left": 0,
@@ -198,8 +211,8 @@
 					"doubleClickInRowAction": "editSubrecord",
 					"selectionMode": "multiple",
 					"printFrame": "variable",
-					"method": "editor_OBJECTS_HANDLER",
-					"events": []
+					"events": [],
+					"method": "PROJECT_EDITOR"
 				},
 				"footer": {
 					"type": "subform",
@@ -242,15 +255,15 @@
 		}
 	],
 	"editor": {
-		"activeView": "Project",
+		"activeView": "default",
 		"defaultView": "default",
 		"views": {
 			"default": {},
 			"message": {
 				"visible": false,
 				"objects": [
-					"message.back",
-					"message.button",
+					"messageBack",
+					"messageButton",
 					"message"
 				]
 			},
@@ -284,7 +297,7 @@
 			}
 		}
 	},
-	"geometryStamp": 193,
+	"geometryStamp": 211,
 	"width": 970,
 	"height": 870
 }

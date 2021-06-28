@@ -11,7 +11,8 @@
 		"onLoad",
 		"onDataChange",
 		"onUnload",
-		"onTimer"
+		"onTimer",
+		"onResize"
 	],
 	"pageFormat": {
 		"paperName": "A4",
@@ -21,7 +22,7 @@
 	"pages": [
 		{
 			"objects": {
-				"tables": {
+				"tableWidget": {
 					"type": "input",
 					"top": 40,
 					"left": 19,
@@ -480,5 +481,5 @@
 			}
 		}
 	},
-	"geometryStamp": 11
+	"geometryStamp": 12
 }

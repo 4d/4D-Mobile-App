@@ -39,16 +39,16 @@ $Obj_form:=New object:C1471(\
 "eventCode"; Form event code:C388; \
 "currentWidget"; OBJECT Get name:C1087(Object current:K67:2); \
 "focusedWidget"; OBJECT Get name:C1087(Object with focus:K67:3); \
-"tables"; UI.listbox("01_available"); \
-"tableNames"; UI.widget("table_names"); \
-"tableNumbers"; UI.widget("table_ids"); \
-"mains"; UI.listbox("02_displayed"); \
-"mainNames"; UI.widget("main_names"); \
-"mainNumbers"; UI.widget("main_ids"); \
-"addOne"; UI.button("b.add.one"); \
-"addAll"; UI.button("b.add.all"); \
-"removeOne"; UI.button("b.remove.one"); \
-"removeAll"; UI.button("b.remove.all")\
+"tables"; _o_UI.listbox("01_available"); \
+"tableNames"; _o_UI.widget("table_names"); \
+"tableNumbers"; _o_UI.widget("table_ids"); \
+"mains"; _o_UI.listbox("02_displayed"); \
+"mainNames"; _o_UI.widget("main_names"); \
+"mainNumbers"; _o_UI.widget("main_ids"); \
+"addOne"; _o_UI.button("b.add.one"); \
+"addAll"; _o_UI.button("b.add.all"); \
+"removeOne"; _o_UI.button("b.remove.one"); \
+"removeAll"; _o_UI.button("b.remove.all")\
 )
 
 $Obj_context:=$Obj_form.ui
@@ -122,7 +122,7 @@ Case of
 		ob_createPath(Form:C1466.main; "order"; Is collection:K8:32)
 		
 		$Ptr_names:=OBJECT Get pointer:C1124(Object named:K67:5; "table_names")
-		$Ptr_IDs:=OBJECT Get pointer:C1124(Object named:K67:5; "table_names")
+		$Ptr_IDs:=OBJECT Get pointer:C1124(Object named:K67:5; "table_ids")
 		
 		CLEAR VARIABLE:C89($Ptr_names->)
 		CLEAR VARIABLE:C89($Ptr_IDs->)
@@ -206,8 +206,8 @@ Case of
 			
 		Else 
 			
-			$Lon_available:=Size of array:C274(($Obj_form.tableNames.pointer())->)
-			$Lon_published:=Size of array:C274(($Obj_form.mainNames.pointer())->)
+			$Lon_available:=Size of array:C274((OBJECT Get pointer:C1124(Object named:K67:5; "table_names"))->)
+			$Lon_published:=Size of array:C274((OBJECT Get pointer:C1124(Object named:K67:5; "main_names"))->)
 			
 			$Obj_form.addOne.setEnabled(($Lon_available>$Lon_published) & ($Obj_form.tables.selected()>0))
 			$Obj_form.addAll.setEnabled($Lon_available>$Lon_published)

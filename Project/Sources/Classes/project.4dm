@@ -6,7 +6,7 @@ Class constructor($project : Object)
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function init($project : Object)
 	
 	var $key : Text
@@ -20,7 +20,7 @@ Function init($project : Object)
 		End if 
 	End for each 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function load($project)->$this : cs:C1710.project
 	
 	var $o : Object
@@ -88,8 +88,6 @@ Function load($project)->$this : cs:C1710.project
 			
 		End if 
 		
-		This:C1470.$worker:=Form:C1466.$worker
-		This:C1470.$mainWindow:=Form:C1466.$mainWindow
 		This:C1470.$project:=Form:C1466
 		
 		This:C1470.prepare()
@@ -102,7 +100,7 @@ Function load($project)->$this : cs:C1710.project
 	
 	$this:=This:C1470
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Prepare the project folder according to the target systems
 Function prepare($icon : Picture)
 	
@@ -174,7 +172,7 @@ Function prepare($icon : Picture)
 		End if 
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Create the "Assets.xcassets/AppIcon.appiconset" resources
 Function AppIconSet($icon : Picture)
 	
@@ -256,7 +254,7 @@ Function AppIconSet($icon : Picture)
 		End if 
 	End for each 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Create the "Android" resources
 Function AndroidIconSet($icon : Picture)
 	
@@ -314,7 +312,7 @@ Function AndroidIconSet($icon : Picture)
 		End if 
 	End for each 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Save the project
 Function save()
 	
@@ -323,7 +321,7 @@ Function save()
 	$file:=This:C1470._folder.file("project.4dmobileapp")
 	$file.setText(JSON Stringify:C1217(This:C1470.cleaned(); *))
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Populate the target value into the project                                                                         #MARK_TODO : SHOULD BE TREATED INTO THE EDITOR CLASS
 Function setTarget($checkDevTools : Boolean; $target : Text)
 	
@@ -397,7 +395,7 @@ Function setTarget($checkDevTools : Boolean; $target : Text)
 		End if 
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns a cleaned project
 Function cleaned()->$project : Object
 	
@@ -454,7 +452,7 @@ Function cleaned()->$project : Object
 		
 	End for each 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Cleaning inner objects
 Function cleanup($dirtyObject : Object)->$cleanObject : Object
 	
@@ -482,7 +480,7 @@ Function cleanup($dirtyObject : Object)->$cleanObject : Object
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Tests if the project is locked
 Function isLocked()->$isLocked : Boolean
 	
@@ -496,7 +494,7 @@ Function isLocked()->$isLocked : Boolean
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Tests if the project is not locked and
 Function isNotLocked()->$isNotLocked : Boolean
 	
@@ -595,7 +593,7 @@ Function addToMain
 		End if 
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the collection of the tables of the data model
 Function tables($datamodel : Object)->$tables : Collection
 	
@@ -612,7 +610,7 @@ Function tables($datamodel : Object)->$tables : Collection
 	
 	$tables:=$tables.filter("col_formula"; Formula:C1597($1.result:=Match regex:C1019("^\\d+$"; $1.value.key; 1)))
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the collection of the fields of a table data model
 Function fields($table : Variant)->$fields : Collection
 	
@@ -650,7 +648,7 @@ Function fields($table : Variant)->$fields : Collection
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the collection of the storage  fields of a table data model
 Function storageFields($table : Variant)->$fields : Collection
 	
@@ -731,19 +729,19 @@ Function isRelationToMany
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if the 4D Type is a Numeric type
 Function isNumeric($type : Integer)->$isNumeric : Boolean
 	
 	$isNumeric:=(New collection:C1472(Is integer:K8:5; Is longint:K8:6; Is integer 64 bits:K8:25; Is real:K8:4; _o_Is float:K8:26).indexOf($type)#-1)
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if the 4D Type is a String type
 Function isString($type : Integer)->$isNumeric : Boolean
 	
 	$isNumeric:=(New collection:C1472(Is alpha field:K8:1; Is text:K8:3).indexOf($type)#-1)
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if the field is sortable
 Function isSortable($field : Object)->$sortable : Boolean
 	
@@ -759,7 +757,7 @@ Function isSortable($field : Object)->$sortable : Boolean
 		End if 
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if the resource comes from the host's database.
 Function isCustomResource($resource : Text)->$custom : Boolean
 	
@@ -767,8 +765,8 @@ Function isCustomResource($resource : Text)->$custom : Boolean
 	$custom:=($resource[[1]]="/")
 	//%W+533.1
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
-	// Returns the collection of table's sortable field 
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns the collection of table's sortable field
 Function getSortableFields($table; $ordered : Boolean)->$fields : Collection
 	
 	var $field; $model : Object
@@ -827,7 +825,7 @@ Function getSortableFields($table; $ordered : Boolean)->$fields : Collection
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//Add a table to the data model
 Function addTable($table : Object)->$tableModel : Object
 	
@@ -993,7 +991,7 @@ Function isStorage
 		End if 
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function fieldType2type($fieldType : Integer)->$type : Text
 	
 	var $c : Collection
@@ -1016,7 +1014,7 @@ Function fieldType2type($fieldType : Integer)->$type : Text
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function getIcon($relativePath : Text)->$icon : Picture
 	
 	var $file : 4D:C1709.File
@@ -1064,7 +1062,7 @@ Function isLink
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Check if a field is still available in the table catalog
 Function fieldAvailable($tableID : Variant; $field : Object)->$available : Boolean
 	
@@ -1133,7 +1131,7 @@ Function fieldAvailable($tableID : Variant; $field : Object)->$available : Boole
 		End if 
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Update all form definition according to the datamodel
 	// Ie. remove from forms, the fields that are no more published
 Function updateFormDefinitions()
@@ -1224,7 +1222,7 @@ Function updateFormDefinitions()
 		End if 
 	End for each 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//Performs the project audit                                                                                          #MARK_TODO : remove $project.status.project
 Function audit($audits : Object)->$audit : Object
 	

@@ -5,7 +5,7 @@
 // Created 13-6-2017 by Vincent de Lachaux
 // ----------------------------------------------------
 // Description:
-// 
+//
 // ----------------------------------------------------
 // Declarations
 var $data; $o : Object
@@ -25,8 +25,7 @@ If (FEATURE.with("wizards"))
 		"$name"; Get localized string:C991("newProject"); \
 		"$ios"; Is macOS:C1572; \
 		"$android"; Is Windows:C1573; \
-		"$callback"; "editor_CALLBACK"; \
-		"$mainWindow"; Open form window:C675("EDITOR"; Plain form window:K39:10; Horizontally centered:K39:1; At the top:K39:5; *))
+		"_window"; Open form window:C675("PROJECT_EDITOR"; Plain form window:K39:10; Horizontally centered:K39:1; At the top:K39:5; *))
 	
 	DIALOG:C40("WIZARD_NEW_PROJECT"; $data)
 	
@@ -46,23 +45,24 @@ If (FEATURE.with("wizards"))
 			// Open the project editor
 			If (DATABASE.isMatrix)
 				
-				DIALOG:C40("EDITOR"; $data)
+				DIALOG:C40("PROJECT_EDITOR"; $data)
+				CLOSE WINDOW:C154(EDITOR.window)
 				
 			Else 
 				
-				DIALOG:C40("EDITOR"; $data; *)
+				DIALOG:C40("PROJECT_EDITOR"; $data; *)
 				
 			End if 
 			
 		Else 
 			
-			CLOSE WINDOW:C154($data.$mainWindow)
+			CLOSE WINDOW:C154(EDITOR.window)
 			
 		End if 
 		
 	Else 
 		
-		CLOSE WINDOW:C154($data.$mainWindow)
+		CLOSE WINDOW:C154(EDITOR.window)
 		
 	End if 
 	
@@ -199,16 +199,16 @@ Else
 			$file.setText($json)
 			
 			// Open the project editor
-			$w:=Open form window:C675("EDITOR"; Plain form window:K39:10; Horizontally centered:K39:1; At the top:K39:5; *)
+			$w:=Open form window:C675("PROJECT_EDITOR"; Plain form window:K39:10; Horizontally centered:K39:1; At the top:K39:5; *)
 			
 			If (DATABASE.isMatrix)
 				
-				DIALOG:C40("EDITOR"; $formData)
+				DIALOG:C40("PROJECT_EDITOR"; $formData)
 				CLOSE WINDOW:C154($w)
 				
 			Else 
 				
-				DIALOG:C40("EDITOR"; $formData; *)
+				DIALOG:C40("PROJECT_EDITOR"; $formData; *)
 				
 			End if 
 			

@@ -60,7 +60,7 @@ Case of
 				Else 
 					
 					// Keep the current selected table
-					$t:=(UI.pointer($form.tables))->{$row}
+					$t:=(_o_UI.pointer($form.tables))->{$row}
 					$context.currentTable:=PROJECT.getCatalog().query("name = :1"; $t).pop()
 					
 				End if 
@@ -81,7 +81,7 @@ Case of
 						
 						LISTBOX SELECT ROW:C912(*; $e.objectName; $row; lk replace selection:K53:1)
 						
-						$t:=(UI.pointer($form.tables))->{$row}
+						$t:=(_o_UI.pointer($form.tables))->{$row}
 						$o:=PROJECT.getCatalog().query("name = :1"; $t).pop()
 						
 						If (Not:C34(ob_equal($o; $context.currentTable)))
@@ -94,7 +94,7 @@ Case of
 							
 						End if 
 						
-						$Ptr_published:=UI.pointer($form.published)
+						$Ptr_published:=_o_UI.pointer($form.published)
 						$Lon_unpublished:=Count in array:C907($Ptr_published->; 0)
 						
 						$menu:=cs:C1710.menu.new()
@@ -145,7 +145,7 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Mouse Enter:K2:33)
 				
-				UI.tips.instantly(100)
+				_o_UI.tips.instantly(100)
 				
 				//______________________________________________________
 			: ($e.code=On Mouse Move:K2:35)
@@ -155,7 +155,7 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Mouse Leave:K2:34)
 				
-				UI.tips.default()
+				_o_UI.tips.default()
 				
 				//______________________________________________________
 			: ($e.code=On Getting Focus:K2:7)
@@ -185,7 +185,7 @@ Case of
 				OBJECT SET VISIBLE:C603(*; $form.action; True:C214)
 				//]
 				
-				$Ptr_:=UI.pointer($form.search)
+				$Ptr_:=_o_UI.pointer($form.search)
 				$Ptr_->value:=String:C10($context.tableFilter)
 				$Ptr_->:=$Ptr_->  // Touch
 				
@@ -302,7 +302,7 @@ Case of
 				Else 
 					
 					// Keep the current field name
-					$context.fieldName:=(UI.pointer($form.fields))->{$row}
+					$context.fieldName:=(_o_UI.pointer($form.fields))->{$row}
 					
 					If ($e.code=On Clicked:K2:4)
 						
@@ -544,7 +544,7 @@ Case of
 				If ($column=1)
 					
 					// Keep current
-					$context.fieldName:=(UI.pointer($form.fields))->{$row}
+					$context.fieldName:=(_o_UI.pointer($form.fields))->{$row}
 					
 					// Three-state checkbox
 					If ($Ptr_me->{$row}=2)
@@ -575,7 +575,7 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Mouse Enter:K2:33)
 				
-				UI.tips.instantly(100)
+				_o_UI.tips.instantly(100)
 				
 				//______________________________________________________
 			: ($e.code=On Mouse Move:K2:35)
@@ -586,7 +586,7 @@ Case of
 			: ($e.code=On Mouse Leave:K2:34)
 				
 				OBJECT SET HELP TIP:C1181(*; $e.objectName; "")
-				UI.tips.default()
+				_o_UI.tips.default()
 				
 				//______________________________________________________
 			: ($e.code=On Getting Focus:K2:7)
@@ -615,7 +615,7 @@ Case of
 				OBJECT SET VISIBLE:C603(*; $form.action; True:C214)
 				//]
 				
-				$Ptr_:=UI.pointer($form.search)
+				$Ptr_:=_o_UI.pointer($form.search)
 				$Ptr_->value:=String:C10($context.fieldFilter)
 				$Ptr_->:=$Ptr_->  // Touch
 				
@@ -793,13 +793,13 @@ Case of
 			If (OBJECT Get name:C1087(Object with focus:K67:3)=$form.fieldList)
 				
 				// Check the selection
-				$Ptr_me:=UI.pointer($form.fieldList)
+				$Ptr_me:=_o_UI.pointer($form.fieldList)
 				$row:=Find in array:C230($Ptr_me->; True:C214)
 				
 				If ($row>0)
 					
 					// Get the value of the first selected item
-					$Ptr_published:=UI.pointer($form.published)
+					$Ptr_published:=_o_UI.pointer($form.published)
 					$b:=Bool:C1537($Ptr_published->{$row})
 					
 					// Apply to all selected items

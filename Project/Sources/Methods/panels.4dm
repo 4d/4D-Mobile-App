@@ -11,7 +11,7 @@
 var $0 : Collection
 
 If (False:C215)
-	C_COLLECTION:C1488(panel_Objects; $0)
+	C_COLLECTION:C1488(panels; $0)
 End if 
 
 var $index : Integer

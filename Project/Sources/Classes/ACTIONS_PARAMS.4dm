@@ -19,7 +19,7 @@ Class constructor
 	
 	This:C1470.path:=cs:C1710.path.new()
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function init()
 	
 	var $group : cs:C1710.group
@@ -47,7 +47,7 @@ Function init()
 	$group:=This:C1470.group("labelGroup")
 	This:C1470.input("label"; "03_label").addToGroup($group)
 	This:C1470.static("labelBorder"; "03_label.border").addToGroup($group)
-	This:C1470.static("labelLabel"; "02_name.label").addToGroup($group)
+	This:C1470.static("labelLabel"; "03_label.label").addToGroup($group)
 	
 	$group:=This:C1470.group("shortGroup")
 	This:C1470.input("short"; "04_shortLabel").addToGroup($group)
@@ -120,7 +120,7 @@ Function init()
 		This:C1470.defaultValue; \
 		This:C1470.description)
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function onLoad()
 	
 	// This trick remove the horizontal gap
@@ -147,7 +147,7 @@ Function onLoad()
 	// Add the events that we cannot select in the form properties 😇
 	This:C1470.appendEvents(On Alternative Click:K2:36)
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function saveContext($current : Object)
 	
 	If (Count parameters:C259>=1)
@@ -160,7 +160,7 @@ Function saveContext($current : Object)
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function restoreContext()
 	
 	var $index : Integer
@@ -203,7 +203,7 @@ Function restoreContext()
 			//_______________________________________
 	End case 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Update UI
 Function update()
 	
@@ -248,15 +248,14 @@ Function update()
 					//______________________________________________________
 				: (String:C10($action.preset)="share")
 					
-					This:C1470.goToPage(2)
-					
 					If (FEATURE.with("sharedActionWithDescription"))
 						
-						This:C1470.description.show()
+						This:C1470.goToPage(2)
 						This:C1470.description.focus()
 						
 					Else 
 						
+						This:C1470.goToPage(1)
 						This:C1470.noParameters.show()
 						
 					End if 
@@ -287,27 +286,25 @@ Function update()
 				: (String:C10($action.preset)="sort")
 					
 					This:C1470.goToPage(1)
+					
 					This:C1470.withSelection.show()
 					
 					This:C1470.add.enable()
-					This:C1470.remove.enable($current#Null:C1517)
+					
+					This:C1470.properties.hide()
 					
 					If ($current=Null:C1517)
 						
-						This:C1470.properties.hide()
+						This:C1470.remove.disable()
 						
 					Else 
 						
-						This:C1470.mandatory.hide()
-						This:C1470.formatGroup.hide()
-						This:C1470.placeholderGroup.hide()
-						This:C1470.defaultValueGroup.hide()
-						This:C1470.number.hide()
-						This:C1470.labelGroup.hide()
-						This:C1470.shortGroup.hide()
+						This:C1470.remove.enable()
 						
+						This:C1470.paramNameGroup.show()
 						This:C1470.sortOrderGroup.show()
-						This:C1470.paramName.disable()
+						
+						This:C1470.paramName.disable()  // The name isn't editable
 						
 					End if 
 					
@@ -315,8 +312,6 @@ Function update()
 				Else 
 					
 					This:C1470.goToPage(1)
-					
-					This:C1470.sortOrderGroup.hide()
 					
 					If ($action.tableNumber=Null:C1517)  // No target table
 						
@@ -477,14 +472,14 @@ Function update()
 		End if 
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// "format": "descending or "ascending"
 Function sortOrderValue()->$value : Text
 	
 	$value:=Get localized string:C991(This:C1470.current.format)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-	// Format choice 
+	// Format choice
 Function doSortOrderMenu()
 	
 	var $menu : cs:C1710.menu
@@ -501,17 +496,17 @@ Function doSortOrderMenu()
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function minValue()->$value : Text
 	
 	$value:=String:C10(This:C1470.ruleValue("min"))
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function maxValue()->$value : Text
 	
 	$value:=String:C10(This:C1470.ruleValue("max"))
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function mandatoryValue()->$value : Boolean
 	
 	If (This:C1470.current.rules#Null:C1517)
@@ -520,7 +515,7 @@ Function mandatoryValue()->$value : Boolean
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function ruleValue($type : Text)->$value
 	
 	If (This:C1470.current.rules#Null:C1517)
@@ -535,7 +530,7 @@ Function ruleValue($type : Text)->$value
 		End if 
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function formatValue()->$value : Text
 	
 	var $current : Object
@@ -565,7 +560,7 @@ Function formatValue()->$value : Text
 			//________________________________________
 	End case 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function commentValue()->$value : Text
 	
 	var $current : Object
@@ -584,7 +579,7 @@ Function commentValue()->$value : Text
 		End if 
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Add a user parameter except for sort when adding is not possible
 Function doAddParameter()
 	
@@ -598,7 +593,7 @@ Function doAddParameter()
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Add a user parameter
 Function doNewParameter()
 	
@@ -612,7 +607,7 @@ Function doNewParameter()
 	
 	This:C1470._addParameter($parameter)
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Add a field linked parameter
 Function doAddParameterMenu()
 	
@@ -758,7 +753,7 @@ Function doAddParameterMenu()
 			//______________________________________________________
 	End case 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Remove action button
 Function _addParameter($parameter : Object)
 	
@@ -803,7 +798,7 @@ Function _addParameter($parameter : Object)
 	This:C1470.parameters.reveal(This:C1470.parameters.rowsNumber()+Num:C11(This:C1470.parameters.rowsNumber()=0))
 	This:C1470.refresh()
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Remove action button
 Function doRemoveParameter()
 	
@@ -818,7 +813,7 @@ Function doRemoveParameter()
 	This:C1470.saveContext()
 	This:C1470.refresh()
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Mandatory checkbox
 Function doMandatory()
 	
@@ -864,7 +859,7 @@ Function doMandatory()
 	PROJECT.save()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-	// Format list 
+	// Format list
 Function getFormats()->$formats : Object
 	
 	var $type : Text
@@ -937,7 +932,7 @@ Function getFormats()->$formats : Object
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-	// Format choice 
+	// Format choice
 Function doFormatMenu()
 	
 	var $currentFormat; $format; $label; $newType; $type : Text
@@ -1069,7 +1064,7 @@ Function doFormatMenu()
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function doRule($name : Text)
 	
 	var $value : Variant
@@ -1129,7 +1124,7 @@ Function doRule($name : Text)
 	
 	PROJECT.save()
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function doDefaultValue()
 	
 	var $value : Text
@@ -1250,7 +1245,7 @@ Function doDefaultValue()
 	//This.refresh()
 	PROJECT.save()
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Initialization of the internal D&D for actions
 Function doBeginDrag()
 	
@@ -1265,7 +1260,7 @@ Function doBeginDrag()
 	APPEND DATA TO PASTEBOARD:C403("com.4d.private.4dmobile.parameter"; $x)
 	SET BLOB SIZE:C606($x; 0)
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Internal drop for actions
 Function doOnDrop()
 	
@@ -1313,7 +1308,7 @@ Function doOnDrop()
 	This:C1470.dropCursor.hide()
 	This:C1470.parameters.touch()
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Set help tip
 Function setHelpTip()  //($e : Object)
 	
@@ -1341,7 +1336,7 @@ Function setHelpTip()  //($e : Object)
 	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-	// Format tool tip 
+	// Format tool tip
 Function formatToolTip($format : Text)->$tip
 	
 	var $manifest : 4D:C1709.File
@@ -1358,7 +1353,7 @@ Function formatToolTip($format : Text)->$tip
 		End if 
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// <Background Color Expression> ******************** VERY SIMILAR TO ACTIONS.backgroundColor() ********************
 Function backgroundColor($current : Object)->$color
 	
@@ -1383,7 +1378,7 @@ Function backgroundColor($current : Object)->$color
 		End if 
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// <Meta info expression>
 Function metaInfo($current : Object)->$result
 	

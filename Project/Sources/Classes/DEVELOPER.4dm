@@ -1,6 +1,6 @@
 Class extends form
 
-//=== === === === === === === === === === === === === === === === === === === === === 
+//=== === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	
 	Super:C1705("editor_CALLBACK")
@@ -18,7 +18,7 @@ Class constructor
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function init()
 	
 	This:C1470.toBeInitialized:=False:C215
@@ -29,7 +29,7 @@ Function init()
 	This:C1470.button("teamMenu")
 	This:C1470.button("teamHelp")
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function onLoad()
 	
 	This:C1470.team.setValue(String:C10(PROJECT.organization.teamId))
@@ -59,7 +59,7 @@ Function onLoad()
 			//…………………………………………………………………………………………
 	End case 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function setTeamID($id : Text; $item : Text)
 	var $label; $teamId : Text
 	var $team : Object
@@ -91,7 +91,7 @@ Function setTeamID($id : Text; $item : Text)
 	// *UPDATE RIBBON'S BUTTONS
 	EDITOR.updateRibbon()
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Call back from provisioningProfiles
 Function updateTeamID($response : Object)
 	var $o; $team : Object

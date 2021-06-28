@@ -363,25 +363,12 @@ If ($in.create)
 		$out.formatters:=formatters(New object:C1471("action"; "getByName")).formatters
 		
 		// Duplicate the template {
-		If (FEATURE.with("templateClass"))  // Add feature flag if test not possible with new code
-			
-			$out.template:=cs:C1710.MainTemplate.new(New object:C1471(\
-				"template"; $template; \
-				"path"; $in.path; \
-				"tags"; $tags; \
-				"formatters"; $out.formatters; \
-				"project"; $project)).run()
-			
-		Else 
-			
-			$out.template:=_o_templates(New object:C1471(\
-				"template"; $template; \
-				"path"; $in.path; \
-				"tags"; $tags; \
-				"formatters"; $out.formatters; \
-				"project"; $project))
-			
-		End if 
+		$out.template:=cs:C1710.MainTemplate.new(New object:C1471(\
+			"template"; $template; \
+			"path"; $in.path; \
+			"tags"; $tags; \
+			"formatters"; $out.formatters; \
+			"project"; $project)).run()
 		
 		ob_error_combine($out; $out.template)
 		

@@ -1242,3 +1242,20 @@ Function jsonSimplify()->$formatted : Text
 	$formatted:=Replace string:C233($formatted; "[\n"; "")
 	$formatted:=Replace string:C233($formatted; "\n]"; "")
 	
+	//=======================================================================================================
+	// Enforcing Standard Password Compliance
+Function passwordCompliance($length : Integer)->$compliant : Boolean
+	
+	If (Count parameters:C259>=1)
+		
+		// At least $length characters with at least one number, one lower case, one upper case and one special character
+		$compliant:=Match regex:C1019("(?m-si)^(?=.{"+String:C10($length)+",})(?=.*[[:digit:]])(?=.*[[:lower:]])(?=.*[[:upper:]])(?=.*[[:punct:]]).*$"; This:C1470.value; 1)
+		
+	Else 
+		
+		// At least 8 characters with at least one number, one lower case, one upper case and one special character
+		$compliant:=Match regex:C1019("(?m-si)^(?=.{8,})(?=.*[[:digit:]])(?=.*[[:lower:]])(?=.*[[:upper:]])(?=.*[[:punct:]]).*$"; This:C1470.value; 1)
+		
+	End if 
+	
+	

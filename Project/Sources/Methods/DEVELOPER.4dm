@@ -12,12 +12,12 @@ var $menu : cs:C1710.menu
 
 // ----------------------------------------------------
 // Initialisations
-$ƒ:=panel_Definition
+$ƒ:=panel_Load
 
 // ----------------------------------------------------
 If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 	
-	$e:=panel_Form_common(On Load:K2:1)
+	$e:=panel_Common(On Load:K2:1)
 	
 	Case of 
 			

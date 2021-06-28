@@ -11,12 +11,12 @@ var $e; $field; $ƒ : Object
 
 // ----------------------------------------------------
 // Initialisations
-$ƒ:=panel_Definition
+$ƒ:=panel_Load
 
 // ----------------------------------------------------
 If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 	
-	$e:=panel_Form_common(On Load:K2:1; On Timer:K2:25)
+	$e:=panel_Common(On Load:K2:1; On Timer:K2:25)
 	
 	Case of 
 			
@@ -58,7 +58,7 @@ Else   // <== WIDGETS METHOD
 					//_______________________________
 				: ($e.code=On Mouse Enter:K2:33)
 					
-					UI.tips.instantly()
+					_o_UI.tips.instantly()
 					
 					//_______________________________
 				: ($e.code=On Mouse Move:K2:35)
@@ -68,7 +68,7 @@ Else   // <== WIDGETS METHOD
 					//_______________________________
 				: ($e.code=On Mouse Leave:K2:34)
 					
-					UI.tips.default()
+					_o_UI.tips.default()
 					
 					//_______________________________
 				: ($e.code=On Getting Focus:K2:7)

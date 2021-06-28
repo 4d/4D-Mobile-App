@@ -221,7 +221,7 @@ Function update
 							End if 
 							
 							//______________________________________________________
-						: (This:C1470.listform) & (FEATURE.with("moreRelations"))
+						: (This:C1470.listform)
 							
 							// Add the types -8858 & -8859 to forbid the deposit of a relation
 							// on the"searchableField" & "sectionField fields"
@@ -338,11 +338,6 @@ Function update
 							End if 
 							
 							//______________________________________________________
-						: (Not:C34(FEATURE.with("moreRelations")))
-							
-							//
-							
-							//______________________________________________________
 						: (This:C1470.listform)
 							
 							// Update the manifest
@@ -374,47 +369,45 @@ Function update
 		
 		If (This:C1470.success)
 			
-			If (FEATURE.with("moreRelations"))  // Mark static fields & refuse 1 to N relation into static field for detail forms
+			// Mark static fields & refuse 1 to N relation into static field for detail forms
+			$count:=Num:C11(This:C1470.manifest.fields.count)
+			
+			For ($i; 1; $count; 1)
 				
-				$count:=Num:C11(This:C1470.manifest.fields.count)
+				$node:=This:C1470.findById("f"+String:C10($i))
 				
-				For ($i; 1; $count; 1)
+				If (This:C1470.success)
 					
-					$node:=This:C1470.findById("f"+String:C10($i))
+					This:C1470.addClass("static"; $node)
 					
-					If (This:C1470.success)
+					If (This:C1470.detailform)
 						
-						This:C1470.addClass("static"; $node)
+						$t:=This:C1470.getBinding($node)
 						
-						If (This:C1470.detailform)
+						If ($t="all")
 							
-							$t:=This:C1470.getBinding($node)
+							This:C1470.setAttribute("ios:type"; "-8859"; $node)
 							
-							If ($t="all")
+						Else 
+							
+							$c:=Split string:C1554($t; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
+							
+							If ($c.every("col_formula"; Formula:C1597($1.result:=($1.value<0))))
 								
-								This:C1470.setAttribute("ios:type"; "-8859"; $node)
+								$c.push(-8859)
+								This:C1470.setAttribute("ios:type"; $c.join(","); $node)
 								
 							Else 
 								
-								$c:=Split string:C1554($t; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
+								// <NOTHING MORE TO DO>
 								
-								If ($c.every("col_formula"; Formula:C1597($1.result:=($1.value<0))))
-									
-									$c.push(-8859)
-									This:C1470.setAttribute("ios:type"; $c.join(","); $node)
-									
-								Else 
-									
-									// <NOTHING MORE TO DO>
-									
-								End if 
 							End if 
 						End if 
 					End if 
-				End for 
-			End if 
+				End if 
+			End for 
 			
-			If (This:C1470.listform) & (FEATURE.with("searchWithBarCode"))
+			If (This:C1470.listform)
 				
 				// Move the magnifying glass to front to allow interaction.
 				
@@ -774,7 +767,7 @@ Function appendOneField($index : Integer; $field : Object; $context : Object; $b
 	$height:=Num:C11(This:C1470.oneField.manifest.height)  // Returns the widget height
 	
 	//============================================================================
-	// 
+	//
 Function getCookery()->$cookery : Text
 	var $node : Text
 	

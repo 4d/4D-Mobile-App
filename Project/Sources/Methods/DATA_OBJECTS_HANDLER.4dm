@@ -81,8 +81,8 @@ Case of
 				//______________________________________________________
 			: ($event.code=On Mouse Enter:K2:33)
 				
-				UI.tips.enable()
-				UI.tips.instantly()
+				_o_UI.tips.enable()
+				_o_UI.tips.instantly()
 				
 				//______________________________________________________
 			: ($event.code=On Mouse Move:K2:35)
@@ -156,7 +156,7 @@ Case of
 				//______________________________________________________
 			: ($event.code=On Mouse Leave:K2:34)
 				
-				UI.tips.defaultDelay()
+				_o_UI.tips.defaultDelay()
 				
 				//______________________________________________________
 			: (PROJECT.isLocked())
@@ -405,12 +405,12 @@ Case of
 				
 				If (Length:C16($t)>0)
 					
-					UI.tips.instantly()
+					_o_UI.tips.instantly()
 					OBJECT SET HELP TIP:C1181(*; $form.filter; Get localized string:C991("notValidatedFilter"))
 					
 				Else 
 					
-					UI.tips.defaultDelay()
+					_o_UI.tips.defaultDelay()
 					OBJECT SET HELP TIP:C1181(*; $form.filter; "")
 					
 				End if 

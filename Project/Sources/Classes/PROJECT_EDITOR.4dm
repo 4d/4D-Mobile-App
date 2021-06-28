@@ -8,8 +8,11 @@ Class constructor
 	
 	This:C1470.design()
 	
-	// ⚠️ The initialization is done later since the opening/creation wizards are used
-	//This.init()
+	If (Not:C34(FEATURE.with("wizards")))
+		
+		// This.init() ⚠️ The initialization is done later since the opening/creation wizards are used
+		
+	End if 
 	
 	// Load preferences
 	This:C1470.preferences:=cs:C1710.preferences.new().user("4D Mobile App.preferences")
@@ -20,12 +23,15 @@ Class constructor
 	This:C1470.pendingTasks:=New collection:C1472
 	
 	// Initialize tools
-	This:C1470.str:=cs:C1710.str.new()
-	This:C1470.path:=cs:C1710.path.new()
+	var $t : Text
 	
-	This:C1470.tips:=cs:C1710.tips.new()
+	For each ($t; New collection:C1472("str"; "path"; "tips"))
+		
+		This:C1470.instantiate($t)
+		
+	End for each 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Definition of the editor pages and panels used
 Function design()
 	
@@ -186,25 +192,27 @@ Function design()
 		"title"; Get localized string:C991("page_action_params"); \
 		"form"; "ACTIONS_PARAMS"))
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function init()
 	
 	This:C1470.toBeInitialized:=False:C215
 	
-	// Widgets definition
-	This:C1470.ribbon:=cs:C1710.subform.new("ribbon")
-	This:C1470.description:=cs:C1710.subform.new("description")
-	This:C1470.project:=cs:C1710.subform.new("project")
-	This:C1470.footer:=cs:C1710.subform.new("footer")
+	This:C1470.subform("ribbon")
+	This:C1470.subform("description")
+	This:C1470.subform("project")
+	This:C1470.subform("footer")
 	
-	This:C1470.taskIndicator:=cs:C1710.thermometer.new("tasks").barber().start()
-	This:C1470.taskDescription:=cs:C1710.static.new("taskDescription")
-	This:C1470.taskUI:=cs:C1710.group.new(This:C1470.taskIndicator; This:C1470.taskDescription)
+	var $group : cs:C1710.group
+	$group:=This:C1470.group("taskUI")
+	This:C1470.thermometer("taskIndicator").addToGroup($group)
+	This:C1470.static("taskDescription").addToGroup($group)
 	
-	This:C1470.browser:=cs:C1710.subform.new("browser")
+	This:C1470.subform("browser")
 	
-	This:C1470.message:=cs:C1710.subform.new("message")
-	This:C1470.messageObjects:=cs:C1710.group.new("message,message.button,message.back")
+	$group:=This:C1470.group("messageGroup")
+	This:C1470.subform("message").addToGroup($group)
+	This:C1470.button("messageButton").addToGroup($group)
+	This:C1470.static("messageBack").addToGroup($group)
 	
 	// Create the context, id any
 	If (Form:C1466.$dialog=Null:C1517)
@@ -223,13 +231,31 @@ Function init()
 	
 	This:C1470.context:=Form:C1466.$dialog[This:C1470.name]
 	
-	// Initializations
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function onLoad()
+	
+	If (FEATURE.with("wizards"))
+		
+		This:C1470.init()
+		
+	End if 
+	
+	This:C1470.project.setScrollbars(0; 2)
+	This:C1470.taskIndicator.barber().start()
 	This:C1470.message.setValue(New object:C1471)
 	
 	// DEV items
 	OBJECT SET VISIBLE:C603(*; "debug.@"; Bool:C1537(DATABASE.isMatrix))
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	// Launch the worker
+	This:C1470.callWorker("COMPILER_COMPONENT")
+	
+	This:C1470.tips.default()
+	
+	This:C1470.goToPage("general")
+	This:C1470.project.focus()
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Pre-loading of constant resources
 Function preload()
 	
@@ -258,7 +284,7 @@ Function preload()
 	
 	OBSOLETE
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// [Warning] Executed every time the editor is activated to adapt UI to the color scheme
 Function updateColorScheme()
 	
@@ -367,7 +393,7 @@ Function updateColorScheme()
 	//This.colors.errorColor:=$color.setColor(This.errorColor)
 	//This.colors.warningColor:=$color.setColor(This.warningColor)
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function goToPage($page : Text)
 	
 	var $o : Object
@@ -421,15 +447,15 @@ Function goToPage($page : Text)
 			
 		End if 
 		
-		This:C1470.refresh()  // Update geometry
+		This:C1470.updateHeader($o)
 		
-		This:C1470.callChild("description"; "editor_SET_DESCRIPTION"; $o)
+		This:C1470.refresh()  // Update geometry
 		
 		This:C1470.project.focus()
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function addTask($task : Text)
 	
 	var $t : Text
@@ -443,16 +469,9 @@ Function addTask($task : Text)
 		
 	End if 
 	
-	If (Num:C11(Application version:C493)>1900)  //🚧
-		
-		$t:=Get localized string:C991($task)
-		This:C1470.currentTask:=Choose:C955(Length:C16($t)>0; $t; $task)
-		
-		This:C1470.taskUI.show(This:C1470.message.isHidden())
-		
-	End if 
+	This:C1470.showTask()
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function removeTask($task : Text)
 	
 	var $indx : Integer
@@ -468,9 +487,17 @@ Function removeTask($task : Text)
 		
 	End if 
 	
-	If (Num:C11(Application version:C493)>1900)  // 🚧
+	This:C1470.showTask()
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+	// Display the task indicator, if applicable
+Function showTask()
+	
+	var $t; $task : Text
+	
+	If (FEATURE.with("taskIndicator"))  // 🚧
 		
-		If (This:C1470.pendingTasks.length>0)
+		If (This:C1470.countTasks()>0)
 			
 			$task:=This:C1470.pendingTasks[0].name
 			$t:=Get localized string:C991($task)
@@ -486,50 +513,53 @@ Function removeTask($task : Text)
 		End if 
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
+	// Returns the number of tasks in the stack (include current running task)
 Function countTasks()->$number : Integer
 	
 	$number:=This:C1470.pendingTasks.length
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
+	// Returns True if a task is running or into the stack
 Function taskInProgress($taskID : Text)->$response : Boolean
 	
 	$response:=(This:C1470.pendingTasks.extract("name").indexOf($taskID)#-1)
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
+	// Returns True if a task isn't running or into the stack
 Function taskNotInProgress($taskID : Text)->$response : Boolean
 	
 	$response:=(This:C1470.pendingTasks.extract("name").indexOf($taskID)=-1)
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function hidePicker()
 	
 	This:C1470.callMeBack("pickerHide")
 	
 	RECORD.info("hidePicker()")
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function hideBrowser()
 	
 	This:C1470.callMeBack("hideBrowser")
 	
 	RECORD.info("hideBrowser()")
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function updateRibbon()
 	
 	This:C1470.callMeBack("updateRibbon")
 	
 	RECORD.info("updateRibbon()")
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function refreshViews()
 	
 	This:C1470.callMeBack("refreshViews")
 	
 	RECORD.info("refreshViews()")
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function checkDevTools()
 	
 	This:C1470.addTask("checkDevTools")
@@ -554,7 +584,7 @@ Function checkProject()
 	// Launch project verifications
 	This:C1470.callMeBack("projectAudit")
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function getDevices()
 	
 	This:C1470.addTask("getDevices")
@@ -564,24 +594,23 @@ Function getDevices()
 		"studio"; This:C1470.studio\
 		))
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function setHeader()
 	
 	This:C1470.description.setValue(This:C1470.currentPage)
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function updateHeader($data : Object)
+	
+	This:C1470.callChild(This:C1470.description.name; "editor_UPDATE_HEADER"; $data)
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Refresh displayed panels
 Function refreshPanels()
 	
-	var $panel : Text
+	This:C1470.callChild(This:C1470.project.name; "PROJECT_ON_ACTIVATE")
 	
-	For each ($panel; panel_Objects)
-		
-		This:C1470.callChild($panel; "panel_REFRESH")
-		
-	End for each 
-	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function doAlert($content; $additional : Text)
 	
 	If (Count parameters:C259>=2)
@@ -616,7 +645,7 @@ Function doAlert($content; $additional : Text)
 		End if 
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function downloadSDK($server : Text; $target : Text; $silent : Boolean)
 	
 	This:C1470.addTask("downloadSDK")
@@ -631,4 +660,140 @@ Function downloadSDK($server : Text; $target : Text; $silent : Boolean)
 		
 	End if 
 	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function messageContainer($e : Object)
+	
+	var $offset : Integer
+	var $coordinates; $data; $display : Object
+	
+	Case of 
+			
+			//______________________________________________________
+		: ($e.code<0)  // <SUBFORM EVENTS>
+			
+			var $data; $display : Object
+			
+			$data:=This:C1470.message.getValue()
+			$display:=$data.ƒ
+			
+			Case of 
+					
+					//…………………………………………………………………………………………………
+				: ($e.code=-2)\
+					 | ($e.code=-1)  // Close
+					
+					This:C1470.messageGroup.hide()
+					
+					$display.restore($data)
+					
+					// Restore original size
+					This:C1470.message.setDimension($display.width; $display.height)
+					
+					//…………………………………………………………………………………………………
+				: ($e.code=-8858)  // Resize
+					
+					var $offset : Integer
+					var $coordinates; $display : Object
+					
+					$coordinates:=This:C1470.message.getCoordinates()
+					$coordinates.bottom:=$coordinates.bottom+$display.offset
+					
+					// Limit to the window's height
+					$offset:=This:C1470.message.getParent().dimensions.height-$coordinates.bottom-20
+					
+					If ($offset<0)
+						
+						$coordinates.bottom:=$coordinates.bottom+$offset
+						$display.background.coordinates.bottom:=$display.background.coordinates.bottom+$offset
+						$display.additional.coordinates.bottom:=$display.additional.coordinates.bottom+$offset
+						$display.offset:=$display.offset+$offset
+						$display.scrollbar:=True:C214
+						
+					Else 
+						
+						$display.scrollbar:=False:C215
+						
+					End if 
+					
+					This:C1470.message.setCoordinates($coordinates)
+					$display.update($data)
+					
+					//…………………………………………………………………………………………………
+			End case 
+			
+			//______________________________________________________
+	End case 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function ribbonContainer($e : Object)
+	
+	var $offset : Integer
+	var $button; $me : Object
+	
+	$e.code:=Abs:C99($e.code)
+	$me:=This:C1470.ribbon.getValue()
+	
+	Case of 
+			
+			//…………………………………………………………………………………………………
+		: ($e.code=1)  // Hide/show toolbar
+			
+			// Height offset opened/closed
+			$offset:=Choose:C955($me.state="open"; -100; 100)
+			This:C1470.ribbon.resizeVertically($offset)
+			This:C1470.description.moveAndResizeVertically($offset)
+			This:C1470.project.moveAndResizeVertically($offset)
+			This:C1470.browser.moveAndResizeVertically($offset)
+			
+			// Keep the status
+			$me.state:=Choose:C955($me.state="open"; "close"; "open")
+			This:C1470.ribbon.setValue($me)
+			
+			//…………………………………………………………………………………………………
+		: ($e.code=151)  // Build & Run
+			
+			PROJECT.save()
+			
+			BUILD(New object:C1471(\
+				"caller"; EDITOR.window; \
+				"project"; PROJECT; \
+				"create"; True:C214; \
+				"build"; Not:C34(Shift down:C543); \
+				"run"; Not:C34(Shift down:C543); \
+				"verbose"; Bool:C1537(Form:C1466.verbose)))
+			
+			//…………………………………………………………………………………………………
+		: ($e.code=153)  // Install
+			
+			If (Not:C34(Bool:C1537(EDITOR.build)))
+				
+				PROJECT.save()
+				
+				BUILD(New object:C1471(\
+					"caller"; EDITOR.window; \
+					"project"; PROJECT; \
+					"create"; Not:C34(Shift down:C543); \
+					"build"; Not:C34(Shift down:C543); \
+					"archive"; True:C214; \
+					"verbose"; Bool:C1537(Form:C1466.verbose)))
+				
+			End if 
+			
+			//…………………………………………………………………………………………………
+		: ($e.code>100)  // Section menu
+			
+			$button:=EDITOR.context.ribbon.pages.query("button = :1"; String:C10($e.code)).pop()
+			
+			EDITOR.goToPage($button.name)
+			
+			$me.page:=$button.name
+			This:C1470.ribbon.setValue($me)
+			
+			//…………………………………………………………………………………………………
+		Else 
+			
+			ASSERT:C1129(False:C215; "Unknown call from subform ("+String:C10($e.code)+")")
+			
+			//…………………………………………………………………………………………………
+	End case 
 	
