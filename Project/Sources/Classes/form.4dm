@@ -473,29 +473,41 @@ Function callWorker($method; $param; $param1; $paramN)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Executes a project method in the context of a subform (without returned value)
-	// .executeInSubform ( subform : Text ; method : Text )
-	// .executeInSubform ( subform : Text ; method : Text ; param : Collection )
-	// .executeInSubform ( subform : Text ; method : Text ; param1, param2, …, paramN )
-Function callChild($subform : Text; $method : Text; $param; $param1; $paramN)
+	// .executeInSubform ( subform : Object | Text ; method : Text )
+	// .executeInSubform ( subform : Object | Text ; method : Text ; param : Collection )
+	// .executeInSubform ( subform : Object | Text ; method : Text ; param1, param2, …, paramN )
+Function callChild($subform; $method : Text; $param; $param1; $paramN)
 	
 	C_VARIANT:C1683(${3})
 	
-	var $code : Text
+	var $code; $target : Text
 	var $i : Integer
 	var $parameters : Collection
+	
+	If (Value type:C1509($subform)=Is object:K8:27)
+		
+		// We assume it's a subform object
+		ASSERT:C1129($subform.name#Null:C1517)
+		$target:=$subform.name
+		
+	Else 
+		
+		$target:=String:C10($subform)
+		
+	End if 
 	
 	ARRAY TEXT:C222($widgets; 0)
 	FORM GET OBJECTS:C898($widgets; Form all pages:K67:7)
 	
-	If (Find in array:C230($widgets; $subform)>0)
+	If (Find in array:C230($widgets; $target)>0)
 		
 		If (Count parameters:C259=2)
 			
-			EXECUTE METHOD IN SUBFORM:C1085($subform; $method)
+			EXECUTE METHOD IN SUBFORM:C1085($target; $method)
 			
 		Else 
 			
-			$code:="<!--#4DCODE EXECUTE METHOD IN SUBFORM:C1085(\""+$subform+"\"; \""+$method+"\";*"
+			$code:="<!--#4DCODE EXECUTE METHOD IN SUBFORM:C1085(\""+$target+"\"; \""+$method+"\";*"
 			
 			If (Value type:C1509($3)=Is collection:K8:32)
 				
@@ -528,7 +540,7 @@ Function callChild($subform : Text; $method : Text; $param; $param1; $paramN)
 		
 	Else 
 		
-		ASSERT:C1129(Structure file:C489=Structure file:C489(*); "Subform not found: "+$subform)
+		ASSERT:C1129(Structure file:C489=Structure file:C489(*); "Subform not found: "+$target)
 		
 	End if 
 	

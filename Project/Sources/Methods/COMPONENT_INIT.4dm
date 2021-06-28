@@ -327,7 +327,7 @@ If (OB Is empty:C1297(FEATURE)) | $reset
 	
 	var $version : Integer
 	
-	$version:=1930  // Last delivered version number
+	$version:=1930  // Current branch version number
 	
 	If (Structure file:C489=Structure file:C489(*))
 		

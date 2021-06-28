@@ -32,6 +32,22 @@ End if
 $form:=New object:C1471(\
 "window"; Current form window:C827)
 
+If (Form:C1466#Null:C1517)
+	
+	If (Form:C1466.$dialog#Null:C1517)
+		
+		If (Form:C1466.$dialog.PROJECT=Null:C1517)
+			
+			Form:C1466.$dialog.PROJECT:=cs:C1710.PROJECT_FORM.new()
+			
+		End if 
+		
+		var $ƒ : Object
+		$ƒ:=Form:C1466.$dialog.PROJECT
+		
+	End if 
+End if 
+
 // ----------------------------------------------------
 Case of 
 		

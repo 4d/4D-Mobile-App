@@ -17,16 +17,17 @@ If (False:C215)
 End if 
 
 var $name : Text
-var $audit; $audits; $datamodel; $detail; $field; $list; $metadata; $table : Object
+var $result; $toCheck; $datamodel; $detail; $field; $list; $metadata; $table : Object
 var $errors : Collection
 var $hostFormaters; $hostIcons : 4D:C1709.Folder
 var $path : cs:C1710.path
 var $str : cs:C1710.str
 var $tmpl : cs:C1710.tmpl
 
+
 // ----------------------------------------------------
 // Initialisations
-$audits:=New object:C1471(\
+$toCheck:=New object:C1471(\
 "list"; True:C214; \
 "detail"; True:C214; \
 "icons"; True:C214; \
@@ -42,11 +43,11 @@ If (Count parameters:C259>=1)
 	
 	If ($1.target#Null:C1517)
 		
-		$audits.list:=($1.target.indexOf("lists")#-1)
-		$audits.detail:=($1.target.indexOf("details")#-1)
-		$audits.icons:=($1.target.indexOf("icons")#-1)
-		$audits.formatters:=($1.target.indexOf("formatters")#-1)
-		$audits.filters:=($1.target.indexOf("filters")#-1)
+		$toCheck.list:=($1.target.indexOf("lists")#-1)
+		$toCheck.detail:=($1.target.indexOf("details")#-1)
+		$toCheck.icons:=($1.target.indexOf("icons")#-1)
+		$toCheck.formatters:=($1.target.indexOf("formatters")#-1)
+		$toCheck.filters:=($1.target.indexOf("filters")#-1)
 		
 	End if 
 	
@@ -72,7 +73,7 @@ If ($datamodel#Null:C1517)
 	
 	For each ($table; PROJECT.tables($datamodel))
 		
-		If ($audits.list)  // ① CHECK LIST FORMS
+		If ($toCheck.list)  // ① CHECK LIST FORMS
 			
 			If ($list[$table.key].form#Null:C1517)
 				
@@ -90,7 +91,7 @@ If ($datamodel#Null:C1517)
 			End if 
 		End if 
 		
-		If ($audits.detail)  // ② CHECK DETAIL FORMS
+		If ($toCheck.detail)  // ② CHECK DETAIL FORMS
 			
 			$name:=String:C10($detail[$table.key].form)
 			$name:=$name*Num:C11($name#"null")  // Reject null value
@@ -109,10 +110,10 @@ If ($datamodel#Null:C1517)
 			End if 
 		End if 
 		
-		If ($audits.icons)\
-			 | ($audits.formatters)
+		If ($toCheck.icons)\
+			 | ($toCheck.formatters)
 			
-			If ($audits.icons)  // ③ CHECK TABLE ICONS
+			If ($toCheck.icons)  // ③ CHECK TABLE ICONS
 				
 				$name:=String:C10($datamodel[$table.key][""].icon)
 				
@@ -135,7 +136,7 @@ If ($datamodel#Null:C1517)
 			
 			For each ($field; PROJECT.fields($table.key))
 				
-				If ($audits.icons)  // ④ CHECK FIELD ICONS
+				If ($toCheck.icons)  // ④ CHECK FIELD ICONS
 					
 					$name:=String:C10($datamodel[$table.key][$field.key].icon)
 					
@@ -161,7 +162,7 @@ If ($datamodel#Null:C1517)
 					End if 
 				End if 
 				
-				If ($audits.formatters)  // ⑤ CHECK FORMATERS
+				If ($toCheck.formatters)  // ⑤ CHECK FORMATERS
 					
 					$name:=String:C10($datamodel[$table.key][$field.key].format)
 					
@@ -196,7 +197,7 @@ If ($datamodel#Null:C1517)
 			End for each 
 		End if 
 		
-		If ($audits.filters)  // ⑥ CHECK FILTERS
+		If ($toCheck.filters)  // ⑥ CHECK FILTERS
 			
 			$metadata:=$datamodel[$table.key][""]
 			
@@ -218,12 +219,12 @@ End if
 
 If ($errors.length=0)
 	
-	$audit:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; True:C214)
 	
 Else 
 	
-	$audit:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; $errors)
 	
@@ -232,10 +233,10 @@ End if
 If (Form:C1466#Null:C1517)
 	
 	EDITOR.updateHeader(New object:C1471(\
-		"show"; Not:C34($audit.success)))
+		"show"; Not:C34($result.success)))
 	
 End if 
 
 // ----------------------------------------------------
 // Return
-$0:=$audit
+$0:=$result

@@ -60,12 +60,25 @@ Else   // <== WIDGETS METHOD
 					$ƒ.actions.setColors(Foreground color:K23:1)
 					$ƒ.actionsBorder.setColors(EDITOR.selectedColor)
 					
+					If (Bool:C1537($ƒ.actions.inEdition))
+						
+						$ƒ.updateParameters()
+						
+					End if 
+					
 					//_____________________________________
 				: ($e.code=On Losing Focus:K2:8)
 					
 					If (Bool:C1537($ƒ.actions.inEdition))  // Focus is lost after editing a cell
 						
 						OB REMOVE:C1226($ƒ.actions; "inEdition")
+						
+						If ($e.columnName="shorts")
+							
+							// Update parameters panel
+							$ƒ.updateParameters()
+							
+						End if 
 						
 					Else 
 						

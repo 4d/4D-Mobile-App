@@ -16,7 +16,7 @@ Class constructor($objectName : Text; $datasource)
 	This:C1470.parent:=This:C1470.getParent()
 	
 	//=== === === === === === === === === === === === === === === === === === ===
-Function getParent()->$dimensions : Object
+Function getParent()->$parent : Object
 	
 	var $height; $width : Integer
 	
@@ -26,11 +26,22 @@ it returns the current size of the form window.
 */
 	OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $height)
 	
-	$dimensions:=New object:C1471(\
+	$parent:=New object:C1471(\
 		"name"; Current form name:C1298; \
 		"dimensions"; New object:C1471(\
 		"width"; $width; \
 		"height"; $height))
+	
+	//=== === === === === === === === === === === === === === === === === === ===
+Function getParentDimensions()->$dimensions : Object
+	
+	var $height; $width : Integer
+	
+	OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $height)
+	
+	$dimensions:=New object:C1471(\
+		"width"; $width; \
+		"height"; $height)
 	
 	//=== === === === === === === === === === === === === === === === === === ===
 Function callParent($eventCode : Integer)
@@ -47,11 +58,11 @@ Function alignHorizontally($alignment : Integer; $reference)
 	
 	If (Count parameters:C259=1)
 		
-		$parent:=This:C1470.getParent().dimensions
+		$parent:=This:C1470.getParentDimensions()
 		
 	Else 
 		
-		// #TO_DO
+		ASSERT:C1129(False:C215; "#TO_DO")
 		
 	End if 
 	
@@ -69,7 +80,7 @@ Function alignHorizontally($alignment : Integer; $reference)
 			//______________________________________________________
 		Else 
 			
-			// #TO_DO
+			ASSERT:C1129(False:C215; "#TO_DO")
 			
 			//______________________________________________________
 	End case 

@@ -69,12 +69,24 @@
 					"type": "text",
 					"top": 11,
 					"left": 16,
-					"width": 449,
+					"width": 869,
 					"height": 16,
 					"visibility": "hidden",
 					"sizingX": "grow",
 					"textAlign": "left",
 					"text": "zzzzzzzzzzz"
+				},
+				"noTable": {
+					"type": "text",
+					"top": 11,
+					"left": 16,
+					"width": 360,
+					"height": 16,
+					"visibility": "hidden",
+					"sizingX": "grow",
+					"text": "No target table defined",
+					"class": "label",
+					"stroke": "#ff0000"
 				}
 			}
 		},
@@ -380,17 +392,6 @@
 					"visibility": "hidden",
 					"class": "label"
 				},
-				"noTable": {
-					"type": "text",
-					"top": 40,
-					"left": 28,
-					"width": 360,
-					"height": 16,
-					"visibility": "hidden",
-					"sizingX": "grow",
-					"text": "No target table defined",
-					"class": "label"
-				},
 				"02_mandatory": {
 					"type": "checkbox",
 					"text": ":xliff:mandatory",
@@ -511,7 +512,7 @@
 				},
 				"field": {
 					"type": "input",
-					"left": 86,
+					"left": 88,
 					"top": 298,
 					"width": 379,
 					"height": 17,
@@ -614,7 +615,7 @@
 			"objects": {
 				"description.border": {
 					"type": "rectangle",
-					"top": 38,
+					"top": 35,
 					"left": 16,
 					"width": 920,
 					"height": 33,
@@ -623,7 +624,7 @@
 				},
 				"01_description": {
 					"type": "input",
-					"top": 46,
+					"top": 43,
 					"left": 23,
 					"width": 903,
 					"height": 17,
@@ -645,7 +646,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 234,
+	"geometryStamp": 272,
 	"editor": {
 		"groups": {
 			"Group": [

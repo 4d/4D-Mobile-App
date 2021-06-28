@@ -1,16 +1,32 @@
 //%attributes = {"invisible":true}
-#DECLARE($action : Text; $data : Object)
+#DECLARE($action : Text; $data : Object)->$result : Object
 
 var $ƒ : Object
 
-$ƒ:=panel
+If (Form:C1466.$dialog.PROJECT=Null:C1517)
+	
+	Form:C1466.$dialog.PROJECT:=cs:C1710.PROJECT_FORM.new()
+	
+End if 
+
+$ƒ:=Form:C1466.$dialog.PROJECT
 
 Case of 
 		
 		//=========================================================
-	: ($action="loadActionIcons")  // Preload the icons
+	: ($action="projectAudit")  // Audit the project
 		
-		$ƒ.loadIcons()
+		If (Num:C11(EDITOR.window)#0)
+			
+			// Send result
+			EDITOR.callMeBack("projectAuditResult"; PROJECT.audit())
+			
+		Else 
+			
+			// Test purpose - Return result
+			$result:=PROJECT.audit($data)
+			
+		End if 
 		
 		//=========================================================
 	: ($action="IconPickerResume")  // Return from the icons' picker

@@ -61,13 +61,35 @@ Case of
 				If ($c#Null:C1517)
 					
 					OBJECT GET SUBFORM:C1139(*; $e.objectName; $ptr; $t)
-					$index:=$c.extract("form").indexOf($t)+1
+					$index:=$c.extract("form").indexOf($t)  //+1
 					
-					If ($index=$c.length)  // Last panel
-						
-						EXECUTE METHOD IN SUBFORM:C1085($e.objectName; "panel_LAST")
-						
-					End if 
+					var $panel : Object
+					$panel:=$c[$index]
+					
+					Case of 
+							//______________________________________________________
+						: (Bool:C1537($panel.noSeparator))  //& False
+							
+							EXECUTE METHOD IN SUBFORM:C1085($e.objectName; "panel_LAST")
+							
+							//______________________________________________________
+						: (($index+1)=$c.length)  // Last panel
+							
+							EXECUTE METHOD IN SUBFORM:C1085($e.objectName; "panel_LAST")
+							
+							//______________________________________________________
+						Else 
+							
+							// A "Case of" statement should never omit "Else"
+							
+							//______________________________________________________
+					End case 
+					
+					//If ($index=$c.length)  // Last panel
+					
+					//EXECUTE METHOD IN SUBFORM($e.objectName; "panel_LAST")
+					
+					//End if 
 				End if 
 				
 				//______________________________________________________

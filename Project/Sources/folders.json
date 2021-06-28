@@ -245,6 +245,7 @@
 			"project_Check_param",
 			"project_Defaults",
 			"project_Fix",
+			"PROJECT_FORM_CALLBACK",
 			"PROJECT_Handler",
 			"PROJECT_OBJECT_HANDLER",
 			"PROJECT_ON_ACTIVATE",
@@ -258,7 +259,7 @@
 			"PROJECT"
 		],
 		"classes": [
-			"project"
+			"PROJECT_FORM"
 		]
 	},
 	"00] TARGET": {
@@ -492,7 +493,8 @@
 		],
 		"classes": [
 			"formater",
-			"MobileProject"
+			"MobileProject",
+			"project"
 		]
 	},
 	"classes": {

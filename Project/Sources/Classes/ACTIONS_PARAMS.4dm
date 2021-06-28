@@ -253,7 +253,7 @@ Function update()
 						
 						This:C1470.goToPage(2)
 						This:C1470.title.setTitle("description").show()
-						This:C1470.description.focus()
+						//This.description.focus()
 						
 					Else 
 						
@@ -263,33 +263,13 @@ Function update()
 					End if 
 					
 					//______________________________________________________
-				: ($action.parameters=Null:C1517)\
-					 | (Num:C11($action.parameters.length)=0)
-					
-					This:C1470.goToPage(1)
-					
-					If ($action.tableNumber=Null:C1517)  // No target table
-						
-						This:C1470.noTable.show()
-						This:C1470.properties.hide()
-						This:C1470.remove.disable()
-						This:C1470.add.disable()
-						
-					Else 
-						
-						This:C1470.title.setTitle("actionParameters").show()
-						This:C1470.withSelection.show()
-						This:C1470.properties.hide()
-						This:C1470.sortOrderGroup.hide()
-						This:C1470.add.enable()
-						
-					End if 
-					
-					//______________________________________________________
 				: (String:C10($action.preset)="sort")
 					
 					This:C1470.goToPage(1)
-					This:C1470.title.setTitle("sortCriteria").show()
+					This:C1470.title.setTitle(\
+						EDITOR.str.setText("sortCriteria")\
+						.localized(New collection:C1472($action.shortLabel; Table name:C256($action.tableNumber)))\
+						).show()
 					This:C1470.withSelection.show()
 					
 					This:C1470.add.enable()
@@ -324,7 +304,10 @@ Function update()
 						
 					Else 
 						
-						This:C1470.title.setTitle("actionParameters").show()
+						This:C1470.title.setTitle(\
+							EDITOR.str.setText("actionParameters")\
+							.localized(New collection:C1472($action.shortLabel; Table name:C256($action.tableNumber)))\
+							).show()
 						This:C1470.withSelection.show()
 						This:C1470.add.enable()
 						This:C1470.remove.enable($current#Null:C1517)

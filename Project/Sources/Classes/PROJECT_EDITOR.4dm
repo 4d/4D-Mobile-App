@@ -186,11 +186,13 @@ Function design()
 	
 	$o.panels.push(New object:C1471(\
 		"form"; "ACTIONS"; \
-		"noTitle"; True:C214))
+		"noTitle"; True:C214; \
+		"noSeparator"; True:C214))
 	
 	$o.panels.push(New object:C1471(\
 		"title"; Get localized string:C991("page_action_params"); \
-		"form"; "ACTIONS_PARAMS"))
+		"form"; "ACTIONS_PARAMS"; \
+		"noTitle"; True:C214))
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function init()
@@ -217,7 +219,7 @@ Function init()
 	// Create the context, id any
 	If (Form:C1466.$dialog=Null:C1517)
 		
-		RECORD.info("🛑 CREATE $dialog (EDITOR)")
+		RECORD.info("📍 CREATE $dialog (PROJECT_EDITOR)")
 		Form:C1466.$dialog:=New object:C1471
 		
 	End if 
@@ -439,11 +441,11 @@ Function goToPage($page : Text)
 		
 		If (FEATURE.with("wizards"))
 			
-			This:C1470.callChild("PROJECT"; "panel_INIT"; $o; PROJECT)
+			This:C1470.callChild(This:C1470.project; "panel_INIT"; $o; PROJECT)
 			
 		Else 
 			
-			This:C1470.callChild("PROJECT"; "panel_INIT"; $o)
+			This:C1470.callChild(This:C1470.project; "panel_INIT"; $o)
 			
 		End if 
 		
@@ -602,13 +604,13 @@ Function setHeader()
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function updateHeader($data : Object)
 	
-	This:C1470.callChild(This:C1470.description.name; "editor_UPDATE_HEADER"; $data)
+	This:C1470.callChild(This:C1470.description; "editor_UPDATE_HEADER"; $data)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Refresh displayed panels
 Function refreshPanels()
 	
-	This:C1470.callChild(This:C1470.project.name; "PROJECT_ON_ACTIVATE")
+	This:C1470.callChild(This:C1470.project; "PROJECT_ON_ACTIVATE")
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function doAlert($content; $additional : Text)
@@ -699,7 +701,7 @@ Function messageContainer($e : Object)
 					$coordinates.bottom:=$coordinates.bottom+$display.offset
 					
 					// Limit to the window's height
-					$offset:=This:C1470.message.getParent().dimensions.height-$coordinates.bottom-20
+					$offset:=This:C1470.message.getParentDimensions().height-$coordinates.bottom-20
 					
 					If ($offset<0)
 						

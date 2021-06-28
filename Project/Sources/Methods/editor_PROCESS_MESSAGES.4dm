@@ -8,7 +8,7 @@
 // Management of messages addressed to the main form
 // ----------------------------------------------------
 // Declarations
-#DECLARE($message : Text; $form : Object; $in : Object)
+#DECLARE($message : Text; $data : Object)
 
 var $t; $title : Text
 var $o : Object
@@ -19,38 +19,21 @@ Case of
 		//______________________________________________________
 	: ($message="footer")
 		
-		var $l; $left; $top; $right; $bottom : Integer
-		OBJECT GET COORDINATES:C663(*; $form.footer; $left; $top; $right; $bottom)
-		
-		If (Length:C16(String:C10($in.message))>0)  // Show
-			
-			$bottom:=$top
-			OBJECT GET COORDINATES:C663(*; "project"; $left; $top; $right; $l)
-			OBJECT SET COORDINATES:C1248(*; "project"; $left; $top; $right; $bottom)
-			
-			OBJECT SET VISIBLE:C603(*; $form.footer; True:C214)
-			
-		Else   // Hide
-			
-			OBJECT GET COORDINATES:C663(*; "project"; $left; $top; $right; $l)
-			OBJECT SET COORDINATES:C1248(*; "project"; $left; $top; $right; $bottom)
-			
-			OBJECT SET VISIBLE:C603(*; $form.footer; False:C215)
-			
-		End if 
-		
-		EDITOR.footer.setValue($in)
-		//OBJECT SET VALUE("footer"; $in)
+		var $offset
+		$offset:=Choose:C955(Length:C16(String:C10($data.message))>0; -20; 20)  // Show/Hide
+		EDITOR.project.resizeVertically($offset)
+		EDITOR.footer.show($offset<0)
+		EDITOR.footer.setValue($data)
 		
 		//______________________________________________________
 	: ($message="description")  // Update UI of the TITLE subform
 		
-		EDITOR.updateHeader($in)
+		EDITOR.updateHeader($data)
 		
 		//______________________________________________________
 	: ($message="setURL")  // **** SEEMS TO BE OBSOLETE *****
 		
-		EDITOR.browser.setValue($in)
+		EDITOR.browser.setValue($data)
 		
 		//______________________________________________________
 	: ($message="hideBrowser")
@@ -68,7 +51,7 @@ Case of
 		
 		EDITOR.browser.show()
 		EDITOR.browser.setSubform("BROWSER")
-		EDITOR.browser.setValue($in)  //EDITOR.callMeBack("setURL"; $in)
+		EDITOR.browser.setValue($data)  //EDITOR.callMeBack("setURL"; $in)
 		
 		//______________________________________________________
 	: ($message="projectAuditResult")
@@ -81,7 +64,7 @@ Case of
 			
 			PROJECT_Handler(New object:C1471(\
 				"action"; $message; \
-				"audit"; $in))
+				"audit"; $data))
 			
 		End if 
 		
@@ -90,9 +73,9 @@ Case of
 		
 		EDITOR.removeTask($message)  // Update task list
 		
-		If ($in.success)
+		If ($data.success)
 			
-			STRUCTURE_AUDIT($in.value)
+			STRUCTURE_AUDIT($data.value)
 			
 		Else 
 			
@@ -106,7 +89,7 @@ Case of
 	: ($message="getDevices")  // Callback from 'editor_GET_DEVICES'
 		
 		EDITOR.removeTask($message)  // Update task list
-		EDITOR.devices:=$in  // Store the result
+		EDITOR.devices:=$data  // Store the result
 		EDITOR.ribbon.touch()
 		
 		//______________________________________________________
@@ -117,21 +100,21 @@ Case of
 		//______________________________________________________
 	: ($message="goToPage")
 		
-		EDITOR.goToPage($in.page)
+		EDITOR.goToPage($data.page)
 		EDITOR.context.ribbon.page:=EDITOR.currentPage
 		EDITOR.ribbon.touch()
 		
 		Case of 
 				
 				//………………………………………………………………………………
-			: ($in.panel#Null:C1517)
+			: ($data.panel#Null:C1517)
 				
-				EDITOR.callMeBack("goTo"; $in)
+				EDITOR.callMeBack("goTo"; $data)
 				
 				//………………………………………………………………………………
-			: ($in.tab#Null:C1517)
+			: ($data.tab#Null:C1517)
 				
-				EDITOR.callMeBack("selectTab"; $in)
+				EDITOR.callMeBack("selectTab"; $data)
 				
 				//………………………………………………………………………………
 		End case 
@@ -142,10 +125,10 @@ Case of
 		// Update task list
 		EDITOR.removeTask($message)
 		
-		If ($in#Null:C1517)  // Store the result
+		If ($data#Null:C1517)  // Store the result
 			
-			EDITOR.studio:=$in.studio
-			EDITOR.xCode:=$in.xCode
+			EDITOR.studio:=$data.studio
+			EDITOR.xCode:=$data.xCode
 			
 			If (EDITOR.devices=Null:C1517)  // First time -> Update the device list
 				
@@ -179,12 +162,12 @@ Case of
 		
 		If ($message="build")
 			
-			$title:=Get localized string:C991(Choose:C955($in.param.project._buildTarget="ios"; "4dForIos"; "4dForAndroid"))
+			$title:=Get localized string:C991(Choose:C955($data.param.project._buildTarget="ios"; "4dForIos"; "4dForAndroid"))
 			
 			Case of 
 					
 					//…………………………………………………………………………………………………………………………
-				: (Not:C34($in.success))
+				: (Not:C34($data.success))
 					
 					// Could show the issue
 					If (Not:C34(Is compiled mode:C492))
@@ -194,56 +177,56 @@ Case of
 					End if 
 					
 					//…………………………………………………………………………………………………………………………
-				: (Bool:C1537($in.param.archive))
+				: (Bool:C1537($data.param.archive))
 					
-					If (Bool:C1537($in.param.manualInstallation))
+					If (Bool:C1537($data.param.manualInstallation))
 						
-						DISPLAY NOTIFICATION:C910($title; cs:C1710.str.new("theApplicationHasBeenSuccessfullyGenerated").localized($in.param.project.product.name))
+						DISPLAY NOTIFICATION:C910($title; EDITOR.str.setText("theApplicationHasBeenSuccessfullyGenerated").localized($data.param.project.product.name))
 						
 					Else 
 						
-						DISPLAY NOTIFICATION:C910($title; cs:C1710.str.new("theApplicationHasBeenSuccessfullyInstalled").localized(New collection:C1472($in.param.project.product.name; $in.param.project._device.name)))
+						DISPLAY NOTIFICATION:C910($title; EDITOR.str.setText("theApplicationHasBeenSuccessfullyInstalled").localized(New collection:C1472($data.param.project.product.name; $data.param.project._device.name)))
 						
 					End if 
 					
 					//…………………………………………………………………………………………………………………………
 				Else 
 					
-					DISPLAY NOTIFICATION:C910($title; cs:C1710.str.new("theApplicationHasBeenSuccessfullyGenerated").localized($in.param.project.product.name))
+					DISPLAY NOTIFICATION:C910($title; EDITOR.str.setText("theApplicationHasBeenSuccessfullyGenerated").localized($data.param.project.product.name))
 					
 					// Keep a digest of the sources
 					var $file : 4D:C1709.File
 					
-					If ($in.param.project._buildTarget="iOS")
+					If ($data.param.project._buildTarget="iOS")
 						
-						$file:=cs:C1710.path.new().userCache().file($in.param.project._name+".ios.fingerprint")
+						$file:=EDITOR.path.userCache().file($data.param.project._name+".ios.fingerprint")
 						
-						If ($in.param.appFolder.folder("iOS/Sources").exists)
+						If ($data.param.appFolder.folder("iOS/Sources").exists)
 							
-							$file.setText(cs:C1710.tools.new().folderDigest($in.param.appFolder.folder("iOS/Sources")))
+							$file.setText(cs:C1710.tools.new().folderDigest($data.param.appFolder.folder("iOS/Sources")))
 							
 						End if 
 						
 					Else 
 						
-						$file:=cs:C1710.path.new().userCache().file($in.param.project._name+".android.fingerprint")
+						$file:=EDITOR.path.userCache().file($data.param.project._name+".android.fingerprint")
 						
 						//#MARK_TODO
 						
 					End if 
 					
-					If (Bool:C1537($in.param.create)\
-						 & Not:C34(Bool:C1537($in.param.archive))\
-						 & Not:C34(Bool:C1537($in.param.build))\
-						 & Not:C34(Bool:C1537($in.param.run)))
+					If (Bool:C1537($data.param.create)\
+						 & Not:C34(Bool:C1537($data.param.archive))\
+						 & Not:C34(Bool:C1537($data.param.build))\
+						 & Not:C34(Bool:C1537($data.param.run)))
 						
 						POST_MESSAGE(New object:C1471(\
-							"target"; Choose:C955((Num:C11(Form:C1466.window)>0); Form:C1466.window; $form.window); \
+							"target"; EDITOR.window; \
 							"action"; "show"; \
 							"type"; "confirm"; \
 							"title"; "projectCreationSuccessful"; \
 							"additional"; "wouldYouLikeToRevealInFinder"; \
-							"okFormula"; Formula:C1597(SHOW ON DISK:C922(String:C10($in.param.path)))))
+							"okFormula"; Formula:C1597(SHOW ON DISK:C922(String:C10($data.param.path)))))
 						
 					End if 
 					
@@ -262,7 +245,7 @@ Case of
 		
 		// Relaunch the build process
 		BUILD(New object:C1471(\
-			"caller"; Current form window:C827; \
+			"caller"; EDITOR.window; \
 			"project"; $o; \
 			"create"; True:C214; \
 			"build"; True:C214; \
@@ -273,15 +256,15 @@ Case of
 	: ($message="allowStructureModification")
 		
 		// Get the project
-		$o:=(OBJECT Get pointer:C1124(Object named:K67:5; "project"))->
+		$o:=(OBJECT Get pointer:C1124(Object named:K67:5; "project"))->pr
 		
 		// Set the temporary authorization
 		$o.$_allowStructureAdjustments:=True:C214
 		
-		If (Bool:C1537($in.value))  // Remember my choice
+		If (Bool:C1537($data.value))  // Remember my choice
 			
 			// Set the option & save
-			$o.allowStructureAdjustments:=Bool:C1537($in.value)
+			$o.allowStructureAdjustments:=Bool:C1537($data.value)
 			PROJECT.save()
 			
 		End if 
@@ -299,7 +282,7 @@ Case of
 	Else 
 		
 		// Pass to PROJECT subform
-		EXECUTE METHOD IN SUBFORM:C1085($form.project; $form.callback; *; $message; $in)
+		EDITOR.callChild(EDITOR.project; EDITOR.callback; $message; $data)
 		
 		//______________________________________________________
 End case 

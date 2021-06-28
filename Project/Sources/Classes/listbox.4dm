@@ -272,11 +272,12 @@ Function cellCoordinates($column : Integer; $row : Integer)->$coordinates : Obje
 Function popup($menu : cs:C1710.menu; $default : Text)->$choice : cs:C1710.menu
 	
 	var $bottom; $left : Integer
+	var $coordinates : Object
 	
-	This:C1470.cellCoordinates()
+	$coordinates:=This:C1470.cellCoordinates()
 	
-	$left:=This:C1470.cellBox.left
-	$bottom:=This:C1470.cellBox.bottom
+	$left:=$coordinates.left
+	$bottom:=$coordinates.bottom
 	
 	CONVERT COORDINATES:C1365($left; $bottom; XY Current form:K27:5; XY Current window:K27:6)
 	

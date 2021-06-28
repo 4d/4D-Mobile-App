@@ -114,7 +114,7 @@ If ($e.objectName=Null:C1517)  // <== FORM METHOD
 				"action"; "forms"; \
 				"onResize"; True:C214)
 			
-			EDITOR.callChild(EDITOR.project.name; EDITOR.callback; "pickerHide"; $o)
+			EDITOR.callChild(EDITOR.project; EDITOR.callback; "pickerHide"; $o)
 			
 			// Footer
 			$o:=EDITOR.footer.updateCoordinates().coordinates

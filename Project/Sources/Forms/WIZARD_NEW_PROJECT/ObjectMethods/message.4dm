@@ -43,7 +43,7 @@ Case of
 				$coordinates.bottom:=$coordinates.bottom+$display.offset
 				
 				// Limit to the window's height
-				$offset:=$widget.getParent().dimensions.height-$coordinates.bottom-20
+				$offset:=$widget.getParentDimensions().height-$coordinates.bottom-20
 				
 				If ($offset<0)
 					
