@@ -30,6 +30,7 @@ Function init()
 	This:C1470.static("noAction")
 	This:C1470.static("noTable")
 	This:C1470.static("noParameters")
+	This:C1470.static("title")
 	
 	$group:=This:C1470.group("parameterGroup")
 	This:C1470.listbox("parameters"; "01_Parameters").addToGroup($group)
@@ -214,6 +215,8 @@ Function update()
 	This:C1470.noTable.hide()
 	This:C1470.withSelection.hide()
 	This:C1470.noParameters.hide()
+	This:C1470.noAction.hide()
+	This:C1470.title.hide()
 	
 	This:C1470.paramName.enable()
 	
@@ -223,8 +226,6 @@ Function update()
 		This:C1470.noAction.show()
 		
 	Else 
-		
-		This:C1470.noAction.hide()
 		
 		$action:=This:C1470.action
 		$current:=This:C1470.current
@@ -251,6 +252,7 @@ Function update()
 					If (FEATURE.with("sharedActionWithDescription"))
 						
 						This:C1470.goToPage(2)
+						This:C1470.title.setTitle("description").show()
 						This:C1470.description.focus()
 						
 					Else 
@@ -275,6 +277,7 @@ Function update()
 						
 					Else 
 						
+						This:C1470.title.setTitle("actionParameters").show()
 						This:C1470.withSelection.show()
 						This:C1470.properties.hide()
 						This:C1470.sortOrderGroup.hide()
@@ -286,11 +289,10 @@ Function update()
 				: (String:C10($action.preset)="sort")
 					
 					This:C1470.goToPage(1)
-					
+					This:C1470.title.setTitle("sortCriteria").show()
 					This:C1470.withSelection.show()
 					
 					This:C1470.add.enable()
-					
 					This:C1470.properties.hide()
 					
 					If ($current=Null:C1517)
@@ -322,6 +324,7 @@ Function update()
 						
 					Else 
 						
+						This:C1470.title.setTitle("actionParameters").show()
 						This:C1470.withSelection.show()
 						This:C1470.add.enable()
 						This:C1470.remove.enable($current#Null:C1517)

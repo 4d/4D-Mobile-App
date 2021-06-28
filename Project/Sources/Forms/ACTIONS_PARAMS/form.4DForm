@@ -3,7 +3,7 @@
 	"memorizeGeometry": true,
 	"inheritedForm": "panel_template",
 	"width": 960,
-	"height": 301,
+	"height": 330,
 	"markerHeader": 5,
 	"markerBody": 200,
 	"markerBreak": 264,
@@ -34,7 +34,7 @@
 			"objects": {
 				"noSelection": {
 					"type": "text",
-					"top": 6,
+					"top": 11,
 					"left": 16,
 					"width": 449,
 					"height": 16,
@@ -45,7 +45,7 @@
 				},
 				"noAction": {
 					"type": "text",
-					"top": 6,
+					"top": 11,
 					"left": 16,
 					"width": 449,
 					"height": 16,
@@ -56,7 +56,7 @@
 				},
 				"noParameters": {
 					"type": "text",
-					"top": 6,
+					"top": 11,
 					"left": 16,
 					"width": 449,
 					"height": 16,
@@ -64,6 +64,17 @@
 					"sizingX": "grow",
 					"textAlign": "left",
 					"text": ":xliff:thisActionDoesNotUseParameter"
+				},
+				"title": {
+					"type": "text",
+					"top": 11,
+					"left": 16,
+					"width": 449,
+					"height": 16,
+					"visibility": "hidden",
+					"sizingX": "grow",
+					"textAlign": "left",
+					"text": "zzzzzzzzzzz"
 				}
 			}
 		},
@@ -71,7 +82,7 @@
 			"objects": {
 				"05_type.border": {
 					"type": "rectangle",
-					"top": 152,
+					"top": 182,
 					"left": 488,
 					"width": 204,
 					"height": 33,
@@ -80,7 +91,7 @@
 				},
 				"05_type.popup.border": {
 					"type": "rectangle",
-					"top": 152,
+					"top": 182,
 					"left": 488,
 					"width": 33,
 					"height": 33,
@@ -89,7 +100,7 @@
 				},
 				"01_Parameters.border": {
 					"type": "rectangle",
-					"top": 5,
+					"top": 35,
 					"left": 16,
 					"width": 451,
 					"height": 251,
@@ -98,7 +109,7 @@
 				},
 				"02_name.border": {
 					"type": "rectangle",
-					"top": 28,
+					"top": 58,
 					"left": 488,
 					"width": 204,
 					"height": 33,
@@ -107,7 +118,7 @@
 				},
 				"02_name": {
 					"type": "input",
-					"top": 36,
+					"top": 66,
 					"left": 495,
 					"width": 189,
 					"height": 17,
@@ -121,7 +132,7 @@
 				},
 				"01_Parameters": {
 					"type": "listbox",
-					"top": 7,
+					"top": 37,
 					"left": 17,
 					"width": 448,
 					"height": 248,
@@ -184,7 +195,7 @@
 				},
 				"add": {
 					"type": "button",
-					"top": 262,
+					"top": 292,
 					"left": 16,
 					"width": 28,
 					"height": 28,
@@ -201,7 +212,7 @@
 				},
 				"remove": {
 					"type": "button",
-					"top": 262,
+					"top": 292,
 					"left": 43,
 					"width": 28,
 					"height": 28,
@@ -216,7 +227,7 @@
 				},
 				"03_label.border": {
 					"type": "rectangle",
-					"top": 90,
+					"top": 120,
 					"left": 488,
 					"width": 204,
 					"height": 33,
@@ -225,7 +236,7 @@
 				},
 				"03_label": {
 					"type": "input",
-					"top": 98,
+					"top": 128,
 					"left": 495,
 					"width": 189,
 					"height": 17,
@@ -239,7 +250,7 @@
 				},
 				"04_shortLabel.border": {
 					"type": "rectangle",
-					"top": 90,
+					"top": 120,
 					"left": 734,
 					"width": 204,
 					"height": 33,
@@ -248,7 +259,7 @@
 				},
 				"04_shortLabel": {
 					"type": "input",
-					"top": 98,
+					"top": 128,
 					"left": 741,
 					"width": 189,
 					"height": 17,
@@ -262,7 +273,7 @@
 				},
 				"05_type": {
 					"type": "input",
-					"top": 160,
+					"top": 190,
 					"left": 527,
 					"width": 157,
 					"height": 17,
@@ -281,7 +292,7 @@
 				},
 				"02_name.label": {
 					"type": "text",
-					"top": 5,
+					"top": 35,
 					"left": 488,
 					"width": 140,
 					"height": 17,
@@ -291,7 +302,7 @@
 				},
 				"03_label.label": {
 					"type": "text",
-					"top": 68,
+					"top": 98,
 					"left": 488,
 					"width": 140,
 					"height": 17,
@@ -301,7 +312,7 @@
 				},
 				"04_shortLabel.label": {
 					"type": "text",
-					"top": 68,
+					"top": 98,
 					"left": 734,
 					"width": 140,
 					"height": 17,
@@ -311,7 +322,7 @@
 				},
 				"05_type.label": {
 					"type": "text",
-					"top": 130,
+					"top": 160,
 					"left": 488,
 					"width": 140,
 					"height": 17,
@@ -321,7 +332,7 @@
 				},
 				"05_type.popup": {
 					"type": "button",
-					"top": 152,
+					"top": 182,
 					"left": 488,
 					"width": 33,
 					"height": 33,
@@ -336,7 +347,7 @@
 				},
 				"07_default.border": {
 					"type": "rectangle",
-					"top": 214,
+					"top": 244,
 					"left": 488,
 					"width": 204,
 					"height": 33,
@@ -345,7 +356,7 @@
 				},
 				"07_default": {
 					"type": "input",
-					"top": 222,
+					"top": 252,
 					"left": 495,
 					"width": 189,
 					"height": 17,
@@ -361,7 +372,7 @@
 				},
 				"07_default.label": {
 					"type": "text",
-					"top": 192,
+					"top": 222,
 					"left": 488,
 					"width": 140,
 					"height": 17,
@@ -371,7 +382,7 @@
 				},
 				"noTable": {
 					"type": "text",
-					"top": 10,
+					"top": 40,
 					"left": 28,
 					"width": 360,
 					"height": 16,
@@ -383,7 +394,7 @@
 				"02_mandatory": {
 					"type": "checkbox",
 					"text": ":xliff:mandatory",
-					"top": 35,
+					"top": 65,
 					"left": 734,
 					"width": 128,
 					"height": 18,
@@ -397,7 +408,7 @@
 				},
 				"06_placeholder.border": {
 					"type": "rectangle",
-					"top": 152,
+					"top": 182,
 					"left": 734,
 					"width": 204,
 					"height": 33,
@@ -406,7 +417,7 @@
 				},
 				"06_placeholder": {
 					"type": "input",
-					"top": 160,
+					"top": 190,
 					"left": 741,
 					"width": 189,
 					"height": 17,
@@ -420,7 +431,7 @@
 				},
 				"06_placeholder.label": {
 					"type": "text",
-					"top": 130,
+					"top": 160,
 					"left": 734,
 					"width": 140,
 					"height": 17,
@@ -430,7 +441,7 @@
 				},
 				"09_min.border": {
 					"type": "rectangle",
-					"top": 214,
+					"top": 244,
 					"left": 734,
 					"width": 93,
 					"height": 33,
@@ -439,7 +450,7 @@
 				},
 				"09_min": {
 					"type": "input",
-					"top": 222,
+					"top": 252,
 					"left": 741,
 					"width": 78,
 					"height": 17,
@@ -455,7 +466,7 @@
 				},
 				"09_min.label": {
 					"type": "text",
-					"top": 192,
+					"top": 222,
 					"left": 734,
 					"width": 93,
 					"height": 16,
@@ -465,7 +476,7 @@
 				},
 				"10_max.border": {
 					"type": "rectangle",
-					"top": 214,
+					"top": 244,
 					"left": 845,
 					"width": 93,
 					"height": 33,
@@ -474,7 +485,7 @@
 				},
 				"10_max": {
 					"type": "input",
-					"top": 222,
+					"top": 252,
 					"left": 852,
 					"width": 78,
 					"height": 17,
@@ -490,7 +501,7 @@
 				},
 				"10_max.label": {
 					"type": "text",
-					"top": 192,
+					"top": 222,
 					"left": 845,
 					"width": 93,
 					"height": 16,
@@ -501,7 +512,7 @@
 				"field": {
 					"type": "input",
 					"left": 86,
-					"top": 268,
+					"top": 298,
 					"width": 379,
 					"height": 17,
 					"focusable": false,
@@ -513,7 +524,7 @@
 				},
 				"03_sortOrder.border": {
 					"type": "rectangle",
-					"top": 90,
+					"top": 120,
 					"left": 488,
 					"width": 204,
 					"height": 33,
@@ -522,7 +533,7 @@
 				},
 				"03_sortOrder.popup.border": {
 					"type": "rectangle",
-					"top": 90,
+					"top": 120,
 					"left": 488,
 					"width": 33,
 					"height": 33,
@@ -531,7 +542,7 @@
 				},
 				"03_sortOrder": {
 					"type": "input",
-					"top": 98,
+					"top": 128,
 					"left": 527,
 					"width": 157,
 					"height": 17,
@@ -545,7 +556,7 @@
 				},
 				"03_sortOrder.label": {
 					"type": "text",
-					"top": 68,
+					"top": 98,
 					"left": 488,
 					"width": 140,
 					"height": 17,
@@ -555,7 +566,7 @@
 				},
 				"03_sortOrder.popup": {
 					"type": "button",
-					"top": 90,
+					"top": 120,
 					"left": 488,
 					"width": 33,
 					"height": 33,
@@ -570,7 +581,7 @@
 				},
 				"dropCursor": {
 					"type": "line",
-					"top": 192,
+					"top": 222,
 					"left": 28,
 					"width": 30,
 					"height": 0,
@@ -601,18 +612,9 @@
 		},
 		{
 			"objects": {
-				"description.label": {
-					"type": "text",
-					"text": ":xliff:description",
-					"top": 6,
-					"left": 16,
-					"width": 190,
-					"height": 16,
-					"visibility": "visible"
-				},
 				"description.border": {
 					"type": "rectangle",
-					"top": 28,
+					"top": 38,
 					"left": 16,
 					"width": 920,
 					"height": 33,
@@ -621,7 +623,7 @@
 				},
 				"01_description": {
 					"type": "input",
-					"top": 36,
+					"top": 46,
 					"left": 23,
 					"width": 903,
 					"height": 17,
@@ -643,7 +645,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 200,
+	"geometryStamp": 234,
 	"editor": {
 		"groups": {
 			"Group": [
