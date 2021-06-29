@@ -401,10 +401,14 @@
 	"11] MAIN": {
 		"methods": [
 			"COMPILER_main",
+			"MAIN",
 			"main_Handler",
 			"main_OBJECTS_HANDLER"
 		],
 		"forms": [
+			"MAIN"
+		],
+		"classes": [
 			"MAIN"
 		]
 	},

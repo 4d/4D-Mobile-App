@@ -384,6 +384,61 @@ Function getProperty($property : Integer; $column : Text)->$value : Variant
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function highlight($enabled : Boolean)->$this : cs:C1710.listbox
+	
+	var $highlight : Boolean
+	
+	If (Count parameters:C259>=1)
+		
+		$highlight:=$enabled
+		
+	End if 
+	
+	This:C1470.setProperty(lk hide selection highlight:K53:41; Choose:C955($highlight; lk yes:K53:69; lk no:K53:68))
+	
+	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function noHighlight()->$this : cs:C1710.listbox
+	
+	$this:=This:C1470.highlight(False:C215)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function movableRows($enabled : Boolean)->$this : cs:C1710.listbox
+	
+	var $movable : Boolean
+	
+	If (Count parameters:C259>=1)
+		
+		$movable:=$enabled
+		
+	End if 
+	
+	This:C1470.setProperty(lk movable rows:K53:76; Choose:C955($movable; lk yes:K53:69; lk no:K53:68))
+	
+	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function notMovableRows()->$this : cs:C1710.listbox
+	
+	$this:=This:C1470.movableRows(False:C215)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function notSelectable()->$this : cs:C1710.listbox
+	
+	$this:=This:C1470.setProperty(lk selection mode:K53:35; lk none:K53:57)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function singleSelectable()->$this : cs:C1710.listbox
+	
+	$this:=This:C1470.setProperty(lk selection mode:K53:35; lk single:K53:58)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function multipleSelectable()->$this : cs:C1710.listbox
+	
+	$this:=This:C1470.setProperty(lk selection mode:K53:35; lk multiple:K53:59)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function setProperty($property : Integer; $value)->$this : cs:C1710.listbox
 	
 	LISTBOX SET PROPERTY:C1440(*; This:C1470.name; $property; $value)

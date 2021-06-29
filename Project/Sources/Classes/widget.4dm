@@ -217,6 +217,94 @@ Function notEnterable
 	$0:=This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === ===
+Function draggable($enabled : Boolean; $automatic : Boolean)->$this : cs:C1710.widget
+	
+	var $automaticDrag; $automaticDrop; $draggable; $droppable : Boolean
+	
+	OBJECT GET DRAG AND DROP OPTIONS:C1184(*; This:C1470.name; $draggable; $automaticDrag; $droppable; $automaticDrop)
+	
+	Case of 
+			
+			//______________________________________________________
+		: (Count parameters:C259>=2)
+			
+			$draggable:=$enabled
+			$automaticDrag:=$automatic
+			
+			//______________________________________________________
+		: (Count parameters:C259>=1)
+			
+			$draggable:=$enabled
+			$automaticDrag:=False:C215
+			
+			//______________________________________________________
+		Else 
+			
+			$draggable:=True:C214
+			$automaticDrag:=False:C215
+			
+			//______________________________________________________
+	End case 
+	
+	OBJECT SET DRAG AND DROP OPTIONS:C1183(*; This:C1470.name; $draggable; $automaticDrag; $droppable; $automaticDrop)
+	
+	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === ===
+Function notDraggable()->$this : cs:C1710.widget
+	
+	var $automaticDrag; $automaticDrop; $draggable; $droppable : Boolean
+	
+	OBJECT GET DRAG AND DROP OPTIONS:C1184(*; This:C1470.name; $draggable; $automaticDrag; $droppable; $automaticDrop)
+	OBJECT SET DRAG AND DROP OPTIONS:C1183(*; This:C1470.name; False:C215; False:C215; $droppable; $automaticDrop)
+	
+	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === ===
+Function droppable($enabled : Boolean; $automatic : Boolean)->$this : cs:C1710.widget
+	
+	var $automaticDrag; $automaticDrop; $draggable; $droppable : Boolean
+	
+	OBJECT GET DRAG AND DROP OPTIONS:C1184(*; This:C1470.name; $draggable; $automaticDrag; $droppable; $automaticDrop)
+	
+	Case of 
+			
+			//______________________________________________________
+		: (Count parameters:C259>=2)
+			
+			$droppable:=$enabled
+			$automaticDrop:=$automatic
+			
+			//______________________________________________________
+		: (Count parameters:C259>=1)
+			
+			$droppable:=$enabled
+			$automaticDrop:=False:C215
+			
+			//______________________________________________________
+		Else 
+			
+			$droppable:=True:C214
+			$automaticDrop:=False:C215
+			
+			//______________________________________________________
+	End case 
+	
+	OBJECT SET DRAG AND DROP OPTIONS:C1183(*; This:C1470.name; $draggable; $automaticDrag; $droppable; $automaticDrop)
+	
+	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === ===
+Function notDroppable()->$this : cs:C1710.widget
+	
+	var $automaticDrag; $automaticDrop; $draggable; $droppable : Boolean
+	
+	OBJECT GET DRAG AND DROP OPTIONS:C1184(*; This:C1470.name; $draggable; $automaticDrag; $droppable; $automaticDrop)
+	OBJECT SET DRAG AND DROP OPTIONS:C1183(*; This:C1470.name; $draggable; $automaticDrag; False:C215; False:C215)
+	
+	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === ===
 Function getValue()->$value
 	
 	$value:=OBJECT Get value:C1743(This:C1470.name)
