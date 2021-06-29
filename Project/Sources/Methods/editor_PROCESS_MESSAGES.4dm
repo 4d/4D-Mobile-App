@@ -282,7 +282,15 @@ Case of
 	Else 
 		
 		// Pass to PROJECT subform
-		EDITOR.callChild(EDITOR.project; EDITOR.callback; $message; $data)
+		If (Count parameters:C259>=2)
+			
+			EDITOR.callChild(EDITOR.project; EDITOR.callback; $message; $data)
+			
+		Else 
+			
+			EDITOR.callChild(EDITOR.project; EDITOR.callback; $message)
+			
+		End if 
 		
 		//______________________________________________________
 End case 
