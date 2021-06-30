@@ -87,7 +87,8 @@
         "shortDescription",
         "private",
         "public",
-        "init"
+        "init",
+        "internal"
     ],
     "definitions": {
         "falseOrTrue": {
