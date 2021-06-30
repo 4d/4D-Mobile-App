@@ -51,6 +51,9 @@ If ($studio.success)
 	
 End if 
 
+var $withUI : Boolean
+$withUI:=($studio.window) | Not:C34(Bool:C1537($inƒ.silent))
+
 If ($out.applicationAvailable)
 	
 	// *CHECK VERSION
@@ -77,19 +80,22 @@ If ($out.applicationAvailable)
 			// *CHECK HAXM
 			If (Not:C34($studio.sdkFolder().folder("extras/intel/Hardware_Accelerated_Execution_Manager").exists))
 				
-				$signal:=await_MESSAGE(New object:C1471(\
-					"target"; $in.caller; \
-					"action"; "show"; \
-					"type"; "confirm"; \
-					"title"; "4dForAndroidNeedsToInstallHardwareAccelerationTools"; \
-					"additional"; "doYouWantToInstallHaxm"; \
-					"cancel"; "later"; \
-					"help"; Formula:C1597(OPEN URL:C673("https://github.com/intel/haxm/blob/master/README.md"; *))))
-				
-				If ($signal.validate)
+				If ($withUI)
 					
-					$studio.installHAXM()
+					$signal:=await_MESSAGE(New object:C1471(\
+						"target"; $in.caller; \
+						"action"; "show"; \
+						"type"; "confirm"; \
+						"title"; "4dForAndroidNeedsToInstallHardwareAccelerationTools"; \
+						"additional"; "doYouWantToInstallHaxm"; \
+						"cancel"; "later"; \
+						"help"; Formula:C1597(OPEN URL:C673("https://github.com/intel/haxm/blob/master/README.md"; *))))
 					
+					If ($signal.validate)
+						
+						$studio.installHAXM()
+						
+					End if 
 				End if 
 			End if 
 			
@@ -115,17 +121,43 @@ If ($out.applicationAvailable)
 			
 		Else 
 			
+			If ($withUI)
+				
+				$signal:=await_MESSAGE(New object:C1471(\
+					"target"; $in.caller; \
+					"action"; "show"; \
+					"type"; "confirm"; \
+					"title"; "androidStudioMustBeLaunchedAtLeastOnceToBeFullyInstalled"; \
+					"additional"; New collection:C1472("wouldYouLikeToLaunchAppNow"; "androidStudio"); \
+					"cancel"; "later"))
+				
+				If ($signal.validate)
+					
+					$studio.open()
+					
+				Else 
+					
+					$out.canceled:=True:C214  // Remember this so as not to ask again
+					
+				End if 
+			End if 
+		End if 
+		
+	Else 
+		
+		If ($withUI)
+			
 			$signal:=await_MESSAGE(New object:C1471(\
 				"target"; $in.caller; \
 				"action"; "show"; \
 				"type"; "confirm"; \
-				"title"; "androidStudioMustBeLaunchedAtLeastOnceToBeFullyInstalled"; \
-				"additional"; New collection:C1472("wouldYouLikeToLaunchAppNow"; "androidStudio"); \
+				"title"; New collection:C1472("obsoleteVersionofApp"; "4dForAndroid"; SHARED.studioMinVersion; "androidStudio"); \
+				"additional"; New collection:C1472("wouldYouLikeToUpdateNow"; "androidStudio"); \
 				"cancel"; "later"))
 			
 			If ($signal.validate)
 				
-				$studio.open()
+				OPEN URL:C673(Get localized string:C991("downloadAndroidStudio"); *)
 				
 			Else 
 				
@@ -133,31 +165,11 @@ If ($out.applicationAvailable)
 				
 			End if 
 		End if 
-		
-	Else 
-		
-		$signal:=await_MESSAGE(New object:C1471(\
-			"target"; $in.caller; \
-			"action"; "show"; \
-			"type"; "confirm"; \
-			"title"; New collection:C1472("obsoleteVersionofApp"; "4dForAndroid"; SHARED.studioMinVersion; "androidStudio"); \
-			"additional"; New collection:C1472("wouldYouLikeToUpdateNow"; "androidStudio"); \
-			"cancel"; "later"))
-		
-		If ($signal.validate)
-			
-			OPEN URL:C673(Get localized string:C991("downloadAndroidStudio"); *)
-			
-		Else 
-			
-			$out.canceled:=True:C214  // Remember this so as not to ask again
-			
-		End if 
 	End if 
 	
 Else 
 	
-	If ($studio.window) | Not:C34(Bool:C1537($inƒ.silent))
+	If ($withUI)
 		
 		$signal:=await_MESSAGE(New object:C1471(\
 			"target"; $inƒ.caller; \
