@@ -39,6 +39,12 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 		"ribbon"; "RIBBON"; \
 		"footer"; "FOOTER")
 	
+	var $currentForm : Text
+	$currentForm:=Current form name:C1298
+	
+	var $isProjectForm : Boolean
+	$isProjectForm:=($currentForm="PROJECT")
+	
 Else 
 	
 	ABORT:C156
@@ -66,7 +72,7 @@ Case of
 				$width:=$width-5
 				$height:=$height-5
 				
-				OBJECT GET COORDINATES:C663(*; panel_Find_by_name($ƒ.tableProperties); $left; $top; $right; $bottom)
+				OBJECT GET COORDINATES:C663(*; panel_Find($ƒ.tableProperties); $left; $top; $right; $bottom)
 				
 				$left:=Num:C11($data.left)
 				$top:=$top+Num:C11($data.top)
@@ -81,7 +87,7 @@ Case of
 				$width:=$width-15
 				$height:=$height-15
 				
-				OBJECT GET COORDINATES:C663(*; panel_Find_by_name($ƒ.views); $left; $top; $right; $bottom)
+				OBJECT GET COORDINATES:C663(*; panel_Find($ƒ.views); $left; $top; $right; $bottom)
 				
 				$left:=18
 				$top:=$top+165
@@ -95,7 +101,7 @@ Case of
 				$width:=$width-5
 				$height:=$height-5
 				
-				OBJECT GET COORDINATES:C663(*; panel_Find_by_name($ƒ.tableProperties); $left; $top; $right; $bottom)
+				OBJECT GET COORDINATES:C663(*; panel_Find($ƒ.tableProperties); $left; $top; $right; $bottom)
 				
 				$left:=Num:C11($data.left)
 				$top:=$top+Num:C11($data.top)
@@ -138,9 +144,14 @@ Case of
 			Case of 
 					
 					//……………………………………………………………………………………………
+				: (Count parameters:C259=1)
+					
+					// <NOTHING MORE TO DO>
+					
+					//……………………………………………………………………………………………
 				: (String:C10($data.action)="forms")
 					
-					$panel:=panel_Find_by_name($ƒ.views)
+					$panel:=panel_Find($ƒ.views)
 					
 					//……………………………………………………………………………………………
 				Else 
@@ -152,7 +163,7 @@ Case of
 			
 			If (Length:C16($panel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($panel; $ƒ.callback; *; $selector; $data)
+				EDITOR.callChild($panel; Current method name:C684; $selector; $data)
 				
 			End if 
 			
@@ -173,7 +184,7 @@ Case of
 		//______________________________________________________
 	: ($selector="pickerResume")  // Return the picture grid widget result to the caller
 		
-		If ($ƒ.currentForm=$ƒ.project)
+		If ($isProjectForm)
 			
 			// Hide the picture grid widget
 			OBJECT SET VISIBLE:C603(*; "picker@"; False:C215)
@@ -187,22 +198,22 @@ Case of
 					//……………………………………………………………………………………………
 				: ($selector="tableIcons")
 					
-					$panel:=panel_Find_by_name($ƒ.tableProperties)
+					$panel:=panel_Find($ƒ.tableProperties)
 					
 					//……………………………………………………………………………………………
 				: ($selector="fieldIcons")
 					
-					$panel:=panel_Find_by_name($ƒ.fieldProperties)
+					$panel:=panel_Find($ƒ.fieldProperties)
 					
 					//……………………………………………………………………………………………
 				: ($selector="forms")
 					
-					$panel:=panel_Find_by_name($ƒ.views)
+					$panel:=panel_Find($ƒ.views)
 					
 					//……………………………………………………………………………………………
 				: ($selector="actionIcons")
 					
-					$panel:=panel_Find_by_name($ƒ.actions)
+					$panel:=panel_Find($ƒ.actions)
 					
 					//……………………………………………………………………………………………
 				Else 
@@ -214,7 +225,7 @@ Case of
 			
 			If (Length:C16($panel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($panel; $ƒ.callback; *; "pickerResume"; $data)
+				EDITOR.callChild($panel; Current method name:C684; "pickerResume"; $data)
 				
 			End if 
 			
@@ -223,22 +234,22 @@ Case of
 			Case of 
 					
 					//……………………………………………………………………………………………
-				: ($ƒ.currentForm=$ƒ.tableProperties)
+				: ($currentForm=$ƒ.tableProperties)
 					
 					tables_Handler($data)
 					
 					//……………………………………………………………………………………………
-				: ($ƒ.currentForm=$ƒ.fieldProperties)
+				: ($currentForm=$ƒ.fieldProperties)
 					
 					FIELDS_CALLBACK($data)
 					
 					//……………………………………………………………………………………………
-				: ($ƒ.currentForm=$ƒ.views)
+				: ($currentForm=$ƒ.views)
 					
 					VIEWS_Handler($data)
 					
 					//……………………………………………………………………………………………
-				: ($ƒ.currentForm=$ƒ.actions)
+				: ($currentForm=$ƒ.actions)
 					
 					ACTIONS_CALLBACK("IconPickerResume"; $data)
 					
@@ -260,21 +271,20 @@ Case of
 		//______________________________________________________
 	: ($selector="mainMenu")  // Update Main menu panel
 		
-		If ($ƒ.currentForm=$ƒ.project)
+		If ($isProjectForm)
 			
 			// Pass to target panel
-			$panel:=panel_Find_by_name($ƒ.mainMenu)
+			$panel:=panel_Find($ƒ.mainMenu)
 			
 			If (Length:C16($panel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($panel; $ƒ.callback; *; $selector)
+				EDITOR.callChild($panel; Current method name:C684; $selector)
 				
 			End if 
 			
 		Else 
 			
 			main_Handler(New object:C1471("action"; "update"))
-			
 			main_Handler(New object:C1471("action"; "order"))
 			
 		End if 
@@ -282,14 +292,14 @@ Case of
 		//______________________________________________________
 	: ($selector="tableProperties")  // Update table properties panel
 		
-		If ($ƒ.currentForm=$ƒ.project)
+		If ($isProjectForm)
 			
 			// Pass to target panel
-			$panel:=panel_Find_by_name($ƒ.tableProperties)
+			$panel:=panel_Find($ƒ.tableProperties)
 			
 			If (Length:C16($panel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($panel; $ƒ.callback; *; $selector)
+				EDITOR.callChild($panel; Current method name:C684; $selector)
 				
 			End if 
 			
@@ -302,14 +312,14 @@ Case of
 		//______________________________________________________
 	: ($selector="tableIcons")  // Preload the table icons
 		
-		If ($ƒ.currentForm=$ƒ.project)
+		If ($isProjectForm)
 			
 			// Pass to target panel
-			$panel:=panel_Find_by_name($ƒ.tableProperties)
+			$panel:=panel_Find($ƒ.tableProperties)
 			
 			If (Length:C16($panel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($panel; $ƒ.callback; *; $selector; $data)
+				EDITOR.callChild($panel; Current method name:C684; $selector)
 				
 			End if 
 			
@@ -322,14 +332,14 @@ Case of
 		//______________________________________________________
 	: ($selector="fieldProperties")  // Update field properties panel
 		
-		If ($ƒ.currentForm=$ƒ.project)
+		If ($isProjectForm)
 			
 			// Pass to target panel
-			$panel:=panel_Find_by_name($ƒ.fieldProperties)
+			$panel:=panel_Find($ƒ.fieldProperties)
 			
 			If (Length:C16($panel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($panel; $ƒ.callback; *; $selector)
+				EDITOR.callChild($panel; Current method name:C684; $selector)
 				
 			End if 
 			
@@ -342,14 +352,14 @@ Case of
 		//______________________________________________________
 	: ($selector="loadActionIcons")  // Preload the actions icons
 		
-		If ($ƒ.currentForm=$ƒ.project)
+		If ($isProjectForm)
 			
 			// Pass to target panel
-			$panel:=panel_Find_by_name($ƒ.actions)
+			$panel:=panel_Find($ƒ.actions)
 			
 			If (Length:C16($panel)>0)
 				
-				EDITOR.callChild($panel; "ACTIONS_CALLBACK"; $selector; $data)
+				EDITOR.callChild($panel; "ACTIONS_CALLBACK"; $selector)
 				
 			End if 
 		End if 
@@ -359,14 +369,15 @@ Case of
 		
 		OB REMOVE:C1226(Form:C1466.$project; "dataSetGeneration")
 		
-		If ($ƒ.currentForm=$ƒ.project)
+		If ($isProjectForm)
 			
 			// Pass to target panel
-			$panel:=panel_Find_by_name($ƒ.dataSource)
+			$panel:=panel_Find($ƒ.dataSource)
 			
 			If (Length:C16($panel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($panel; $ƒ.callback; *; $selector)
+				EDITOR.callChild($panel; Current method name:C684; $selector)
+				
 				
 			End if 
 			
@@ -379,14 +390,14 @@ Case of
 		//______________________________________________________
 	: ($selector="update_data")  // Update data panel after a dataset generation
 		
-		If ($ƒ.currentForm=$ƒ.project)
+		If ($isProjectForm)
 			
 			// Pass to target panel
-			$panel:=panel_Find_by_name($ƒ.data)
+			$panel:=panel_Find($ƒ.data)
 			
 			If (Length:C16($panel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($panel; $ƒ.callback; *; $selector)
+				EDITOR.callChild($panel; Current method name:C684; $selector)
 				
 			End if 
 			
@@ -399,14 +410,14 @@ Case of
 		//______________________________________________________
 	: ($selector="checkingServerConfiguration")  // Verify the web server configuration
 		
-		If ($ƒ.currentForm=$ƒ.project)
+		If ($isProjectForm)
 			
 			// Pass to target panel
-			$panel:=panel_Find_by_name($ƒ.dataSource)
+			$panel:=panel_Find($ƒ.dataSource)
 			
 			If (Length:C16($panel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($panel; $ƒ.callback; *; $selector)
+				EDITOR.callChild($panel; Current method name:C684; $selector)
 				
 			End if 
 			
@@ -419,14 +430,14 @@ Case of
 		//______________________________________________________
 	: ($selector="teamId")
 		
-		If ($ƒ.currentForm=$ƒ.project)
+		If ($isProjectForm)
 			
 			// Pass to target panel
-			$panel:=panel_Find_by_name($ƒ.developer)
+			$panel:=panel_Find($ƒ.developer)
 			
 			If (Length:C16($panel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($panel; $ƒ.callback; *; $selector; $data)
+				EDITOR.callChild($panel; Current method name:C684; $selector; $data)
 				
 			End if 
 			
@@ -443,10 +454,10 @@ Case of
 	: ($selector="tableList")\
 		 | ($selector="fieldList")
 		
-		If ($ƒ.currentForm=$ƒ.project)
+		If ($isProjectForm)
 			
 			// Pass to target panel
-			$panel:=panel_Find_by_name($ƒ.structure)
+			$panel:=panel_Find($ƒ.structure)
 			
 			If (Length:C16($panel)>0)
 				
@@ -456,7 +467,7 @@ Case of
 					
 				Else 
 					
-					EXECUTE METHOD IN SUBFORM:C1085($panel; $ƒ.callback; *; $selector; $data)
+					EDITOR.callChild($panel; Current method name:C684; $selector; $data)
 					
 				End if 
 			End if 
@@ -484,7 +495,7 @@ Case of
 				//…………………………………………………………………………………………………………
 			: ($panel=$ƒ.structure)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($data.panel; "structure_Handler"; *; New object:C1471("action"; $selector))
+				EDITOR.callChild($panel; "structure_Handler"; New object:C1471("action"; $selector))
 				
 				//…………………………………………………………………………………………………………
 		End case 
@@ -492,13 +503,13 @@ Case of
 		//______________________________________________________
 	: ($selector="resizePanel")
 		
-		$panel:=panel_Find_by_name($data.panel; ->$indx)
+		$panel:=panel_Find($data.panel; ->$indx)
 		
 		If (Length:C16($panel)>0)
 			
 			// Resize the current panel
 			OBJECT MOVE:C664(*; $panel; 0; 0; 0; $data.offset)
-			EXECUTE METHOD IN SUBFORM:C1085($panel; "structure_Handler"; *; New object:C1471("action"; "geometry"; "target"; $data.panel))
+			EDITOR.callChild($panel; "structure_Handler"; New object:C1471("action"; "geometry"; "target"; $data.panel))
 			
 			// Move all the following panels
 			For ($i; $indx+1; panel_Count; 1)
@@ -512,19 +523,19 @@ Case of
 		//______________________________________________________
 	: ($selector="goTo")
 		
-		If ($ƒ.currentForm=$ƒ.project)
+		If ($isProjectForm)
 			
 			If (Asserted:C1132($data.panel#Null:C1517))
 				
 				// Pass to target panel
-				$panel:=panel_Find_by_name($data.panel; ->$indx)
+				$panel:=panel_Find($data.panel; ->$indx)
 				
 				If (Length:C16($panel)>0)
 					
 					// Open the panel, if any
 					panel_OPEN($indx)
 					
-					EXECUTE METHOD IN SUBFORM:C1085($panel; $ƒ.callback; *; $selector; $data)
+					EDITOR.callChild($panel; Current method name:C684; $selector; $data)
 					
 				End if 
 			End if 
@@ -559,7 +570,7 @@ Case of
 							End if 
 							
 							// Update field properties panel
-							CALL FORM:C1391($ƒ.window; $ƒ.callback; "fieldProperties")
+							CALL FORM:C1391($ƒ.window; Current method name:C684; "fieldProperties")
 							
 							//___________________________
 						: ($data.panel="DATA")
@@ -586,17 +597,17 @@ Case of
 		//______________________________________________________
 	: ($selector="selectTab")
 		
-		If ($ƒ.currentForm=$ƒ.project)
+		If ($isProjectForm)
 			
 			// Pass to target panel
-			$panel:=panel_Find_by_name($ƒ.views; ->$indx)
+			$panel:=panel_Find($ƒ.views; ->$indx)
 			
 			If (Length:C16($panel)>0)
 				
 				// Open the panel, if any
 				panel_OPEN($indx)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($panel; $ƒ.callback; *; $selector; $data)
+				EDITOR.callChild($panel; Current method name:C684; $selector; $data)
 				
 			End if 
 			
@@ -610,14 +621,14 @@ Case of
 		//______________________________________________________
 	: ($selector="setForm")  // Set form from browser
 		
-		If ($ƒ.currentForm=$ƒ.project)
+		If ($isProjectForm)
 			
 			// Pass to target panel
-			$panel:=panel_Find_by_name($ƒ.views)
+			$panel:=panel_Find($ƒ.views)
 			
 			If (Length:C16($panel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($panel; $ƒ.callback; *; $selector; $data)
+				EDITOR.callChild($panel; Current method name:C684; $selector; $data)
 				
 			End if 
 			
@@ -632,21 +643,21 @@ Case of
 		
 		For each ($t; panels)
 			
-			EXECUTE METHOD IN SUBFORM:C1085($t; "panel_REFRESH")
+			EDITOR.callChild($t; "panel_REFRESH")
 			
 		End for each 
 		
 		//______________________________________________________
 	: ($selector="refreshViews")  // Update VIEWS panel
 		
-		If ($ƒ.currentForm=$ƒ.project)
+		If ($isProjectForm)
 			
 			// Pass to target panel
-			$panel:=panel_Find_by_name($ƒ.views)
+			$panel:=panel_Find($ƒ.views)
 			
 			If (Length:C16($panel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($panel; $ƒ.callback; *; $selector; $data)
+				EDITOR.callChild($panel; Current method name:C684; $selector; $data)
 				
 			End if 
 			
@@ -669,14 +680,14 @@ Case of
 		//______________________________________________________
 	: ($selector="refreshParameters")  // Update ACTIONS PARAMETERS panel
 		
-		If ($ƒ.currentForm=$ƒ.project)
+		If ($isProjectForm)
 			
 			// Pass to target panel
-			$panel:=panel_Find_by_name($ƒ.actionParameters)
+			$panel:=panel_Find($ƒ.actionParameters)
 			
 			If (Length:C16($panel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($panel; "panel_REFRESH")
+				EDITOR.callChild($panel; "panel_REFRESH")
 				
 			End if 
 		End if 
@@ -684,14 +695,14 @@ Case of
 		//______________________________________________________
 	: ($selector="refreshServer")  // Update SERVER panel
 		
-		If ($ƒ.currentForm=$ƒ.project)
+		If ($isProjectForm)
 			
 			// Pass to target panel
-			$panel:=panel_Find_by_name($ƒ.server)
+			$panel:=panel_Find($ƒ.server)
 			
 			If (Length:C16($panel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($panel; $ƒ.callback; *; $selector; $data)
+				EDITOR.callChild($panel; Current method name:C684; $selector; $data)
 				
 			End if 
 			
@@ -704,14 +715,14 @@ Case of
 		//______________________________________________________
 	: ($selector="testServer")  // Server checking response
 		
-		If ($ƒ.currentForm=$ƒ.project)
+		If ($isProjectForm)
 			
 			// Pass to target panel
-			$panel:=panel_Find_by_name($ƒ.dataSource)
+			$panel:=panel_Find($ƒ.dataSource)
 			
 			If (Length:C16($panel)>0)
 				
-				EXECUTE METHOD IN SUBFORM:C1085($panel; $ƒ.callback; *; $selector; $data)
+				EDITOR.callChild($panel; Current method name:C684; $selector; $data)
 				
 			End if 
 			

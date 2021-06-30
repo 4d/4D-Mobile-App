@@ -85,7 +85,7 @@ If (Num:C11($e.row)>0)
 					Case of 
 							
 							//______________________________________________________
-						: ($e.objectName=$1.form.tableList) & ($e.row<=Size of array:C274((_o_UI.pointer($1.form.tableList))->))  // TABLE LIST
+						: ($e.objectName=$1.form.tableList) & ($e.row<=Size of array:C274((OBJECT Get pointer:C1124(Object named:K67:5; $1.form.tableList))->))  // TABLE LIST
 							
 							If ($unsynchronizedTableFields.length=1)
 								
@@ -99,11 +99,11 @@ If (Num:C11($e.row)>0)
 							End if 
 							
 							//______________________________________________________
-						: ($e.objectName=$1.form.fieldList) & ($e.row<=Size of array:C274((_o_UI.pointer($1.form.fields))->))  // FIELD LIST
+						: ($e.objectName=$1.form.fieldList) & ($e.row<=Size of array:C274((OBJECT Get pointer:C1124(Object named:K67:5; $1.form.fields))->))  // FIELD LIST
 							
 							// Get the desynchronized item, if applicable
 							//%W-533.3
-							$o:=$unsynchronizedTableFields.query("name = :1 OR parent = :1"; (_o_UI.pointer($1.form.fields))->{$e.row}).pop()
+							$o:=$unsynchronizedTableFields.query("name = :1 OR parent = :1"; (OBJECT Get pointer:C1124(Object named:K67:5; $1.form.fields))->{$e.row}).pop()
 							//%W+533.3
 							
 							If (Length:C16(String:C10($o.fieldTips))#0)
@@ -130,15 +130,15 @@ If (Num:C11($e.row)>0)
 			Case of 
 					
 					//______________________________________________________
-				: ($e.objectName=$1.form.tableList) & ($e.row<=Size of array:C274((_o_UI.pointer($1.form.tableList))->))
+				: ($e.objectName=$1.form.tableList) & ($e.row<=Size of array:C274((OBJECT Get pointer:C1124(Object named:K67:5; $1.form.tableList))->))
 					
 					//$tips:=".published fields:\r"+$table.field.extract("name").join("\", \"")
 					
 					//______________________________________________________
-				: ($e.objectName=$1.form.fieldList) & ($e.row<=Size of array:C274((_o_UI.pointer($1.form.fields))->))
+				: ($e.objectName=$1.form.fieldList) & ($e.row<=Size of array:C274((OBJECT Get pointer:C1124(Object named:K67:5; $1.form.fields))->))
 					
 					//%W-533.3
-					$field:=$table.field.query("name = :1"; (_o_UI.pointer($1.form.fields))->{$e.row}).pop()
+					$field:=$table.field.query("name = :1"; (OBJECT Get pointer:C1124(Object named:K67:5; $1.form.fields))->{$e.row}).pop()
 					
 					//%W+533.3
 					
@@ -171,7 +171,7 @@ If (Num:C11($e.row)>0)
 								If (Form:C1466.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)
 									
 									//%W-533.3
-									If (Bool:C1537((_o_UI.pointer($1.form.published))->{$e.row}))
+									If (Bool:C1537((OBJECT Get pointer:C1124(Object named:K67:5; $1.form.published))->{$e.row}))
 										//%W+533.3
 										
 										// Error
@@ -232,7 +232,7 @@ If (Num:C11($e.row)>0)
 	Else 
 		
 		// TABLE NOT IN CATALOG
-		If ($e.row<=Size of array:C274((_o_UI.pointer($1.form.tableList))->))
+		If ($e.row<=Size of array:C274((OBJECT Get pointer:C1124(Object named:K67:5; $1.form.tableList))->))
 			
 			//%W-533.3
 			$tips:=EDITOR.alert+" "+$str.setText("theTableIsNoLongerAvailable").localized((OBJECT Get pointer:C1124(Object named:K67:5; "tables"))->{$e.row})

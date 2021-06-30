@@ -48,7 +48,7 @@ If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
 		"fields"; "fields"; \
 		"fieldFilter"; "fields.filter"; \
 		"published"; "published"; \
-		"publishedPtr"; _o_UI.pointer("published"); \
+		"publishedPtr"; OBJECT Get pointer:C1124(Object named:K67:5; "published"); \
 		"icons"; "icons"; \
 		"search"; "search"; \
 		"action"; "action"; \
@@ -272,7 +272,7 @@ Case of
 		PROJECT.addTable($context.currentTable)
 		
 		// Highlight the table name
-		$index:=Find in array:C230((_o_UI.pointer($form.tableList))->; True:C214)
+		$index:=Find in array:C230((OBJECT Get pointer:C1124(Object named:K67:5; $form.tableList))->; True:C214)
 		LISTBOX SET ROW FONT STYLE:C1268(*; $form.tableList; $index; Bold:K14:2)
 		
 		//=========================================================

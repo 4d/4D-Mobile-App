@@ -2,10 +2,6 @@
 // Define classes & methods
 _o_UI:=New object:C1471
 
-// ••••••••••• OBSOLETE OR NOT IN THE RIGHT PLACE •••••••••••
-_o_UI.pointer:=Formula:C1597(OBJECT Get pointer:C1124(Object named:K67:5; $1))
-_o_UI.refresh:=Formula:C1597(SET TIMER:C645(-1))
-
 // =========================== HELP TIPS ===========================
 _o_UI.tips:=tips()
 

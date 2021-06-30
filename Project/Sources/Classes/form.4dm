@@ -305,7 +305,7 @@ Function callMeBack($param; $param1; $paramN)
 			
 		Else 
 			
-			$code:="<!--#4DCODE CALL FORM:C1391("+String:C10(This:C1470.window)+"; \""+This:C1470.callback+"\""
+			$code:="CALL FORM:C1391("+String:C10(This:C1470.window)+"; \""+This:C1470.callback+"\""
 			
 			If (Value type:C1509($1)=Is collection:K8:32)
 				
@@ -330,9 +330,9 @@ Function callMeBack($param; $param1; $paramN)
 				End for 
 			End if 
 			
-			$code:=$code+")-->"
+			$code:=$code+")"
 			
-			PROCESS 4D TAGS:C816($code; $code; $parameters)
+			Formula from string:C1601($code).call(Null:C1517; $parameters)
 			
 		End if 
 		
@@ -361,7 +361,7 @@ Function callMe($method : Text; $param1; $paramN)
 		
 	Else 
 		
-		$code:="<!--#4DCODE CALL FORM:C1391("+String:C10(This:C1470.window)+"; \""+$method+"\""
+		$code:="CALL FORM:C1391("+String:C10(This:C1470.window)+"; \""+$method+"\""
 		
 		If (Value type:C1509($2)=Is collection:K8:32)
 			
@@ -385,9 +385,9 @@ Function callMe($method : Text; $param1; $paramN)
 			End for 
 		End if 
 		
-		$code:=$code+")-->"
+		$code:=$code+")"
 		
-		PROCESS 4D TAGS:C816($code; $code; $parameters)
+		Formula from string:C1601($code).call(Null:C1517; $parameters)
 		
 	End if 
 	
@@ -435,7 +435,7 @@ Function callWorker($method; $param; $param1; $paramN)
 			
 		Else 
 			
-			$code:="<!--#4DCODE CALL WORKER:C1389(\""+This:C1470.worker+"\"; \""+$method+"\""
+			$code:="CALL WORKER:C1389(\""+This:C1470.worker+"\"; \""+$method+"\""
 			
 			If (Value type:C1509($2)=Is collection:K8:32)
 				
@@ -459,9 +459,9 @@ Function callWorker($method; $param; $param1; $paramN)
 				End for 
 			End if 
 			
-			$code:=$code+")-->"
+			$code:=$code+")"
 			
-			PROCESS 4D TAGS:C816($code; $code; $parameters)
+			Formula from string:C1601($code).call(Null:C1517; $parameters)
 			
 		End if 
 		
@@ -507,7 +507,7 @@ Function callChild($subform; $method : Text; $param; $param1; $paramN)
 			
 		Else 
 			
-			$code:="<!--#4DCODE EXECUTE METHOD IN SUBFORM:C1085(\""+$target+"\"; \""+$method+"\";*"
+			$code:="EXECUTE METHOD IN SUBFORM:C1085(\""+$target+"\"; \""+$method+"\";*"
 			
 			If (Value type:C1509($3)=Is collection:K8:32)
 				
@@ -532,9 +532,9 @@ Function callChild($subform; $method : Text; $param; $param1; $paramN)
 				End for 
 			End if 
 			
-			$code:=$code+")-->"
+			$code:=$code+")"
 			
-			PROCESS 4D TAGS:C816($code; $code; $parameters)
+			Formula from string:C1601($code).call(Null:C1517; $parameters)
 			
 		End if 
 		
@@ -720,7 +720,7 @@ Function _setEvents($events; $mode : Integer)
 			//______________________________________________________
 		Else 
 			
-			ASSERT:C1129(False:C215; "The event parameter must be a n integer or a collection")
+			ASSERT:C1129(False:C215; "The event parameter must be an number or a collection")
 			
 			//______________________________________________________
 	End case 

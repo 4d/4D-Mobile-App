@@ -114,11 +114,11 @@ Case of
 		
 		If ($o.success)
 			
-			COLLECTION TO ARRAY:C1562($o.ids; (_o_UI.pointer($Obj_form.ids))->)
-			COLLECTION TO ARRAY:C1562($o.names; (_o_UI.pointer($Obj_form.tables))->)
-			COLLECTION TO ARRAY:C1562($o.labels; (_o_UI.pointer($Obj_form.labels))->)
-			COLLECTION TO ARRAY:C1562($o.shortLabels; (_o_UI.pointer($Obj_form.shortLabels))->)
-			COLLECTION TO ARRAY:C1562($o.icons; (_o_UI.pointer($Obj_form.icons))->)
+			COLLECTION TO ARRAY:C1562($o.ids; (OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.ids))->)
+			COLLECTION TO ARRAY:C1562($o.names; (OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.tables))->)
+			COLLECTION TO ARRAY:C1562($o.labels; (OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.labels))->)
+			COLLECTION TO ARRAY:C1562($o.shortLabels; (OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.shortLabels))->)
+			COLLECTION TO ARRAY:C1562($o.icons; (OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.icons))->)
 			
 			If ($o.ids.length>0)
 				
@@ -142,7 +142,7 @@ Case of
 				LISTBOX SORT COLUMNS:C916(*; $Obj_form.tableList; 2; >)
 				
 				// Select current table
-				$Lon_x:=Find in array:C230((_o_UI.pointer($Obj_form.ids))->; String:C10($Obj_context.currentTableNumber))
+				$Lon_x:=Find in array:C230((OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.ids))->; String:C10($Obj_context.currentTableNumber))
 				LISTBOX SELECT ROW:C912(*; $Obj_form.tableList; Choose:C955($Lon_x<0; 1; $Lon_x); lk replace selection:K53:1)
 				
 			Else 
@@ -172,7 +172,7 @@ Case of
 		//=========================================================
 	: ($Obj_in.action="tableIcons")  // Call back from widget
 		
-		$Ptr_ids:=_o_UI.pointer($Obj_form.ids)
+		$Ptr_ids:=OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.ids)
 		
 		If ($Obj_in.item>0)\
 			 & ($Obj_in.item<=$Obj_in.pathnames.length)
@@ -183,7 +183,7 @@ Case of
 			//%W+533.3
 			
 			// Update UI
-			$Ptr_ids:=_o_UI.pointer($Obj_form.icons)
+			$Ptr_ids:=OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.icons)
 			
 			If ($Obj_in.pictures[$Obj_in.item-1]#Null:C1517)
 				
@@ -207,7 +207,7 @@ Case of
 	: ($Obj_in.action="icons")  // Preload the icons
 		
 		$Obj_in.target:="tableIcons"
-		(_o_UI.pointer($Obj_form.iconGrid))->:=editor_LoadIcons($Obj_in)
+		(OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.iconGrid))->:=editor_LoadIcons($Obj_in)
 		
 		//=========================================================
 	: ($Obj_in.action="select")  // Set the selected table

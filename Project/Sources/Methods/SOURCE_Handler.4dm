@@ -107,13 +107,13 @@ Case of
 				
 				If ($Obj_form.ui.remote())
 					
-					(_o_UI.pointer($Obj_form.server))->:=1
-					(_o_UI.pointer($Obj_form.local))->:=0
+					(OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.server))->:=1
+					(OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.local))->:=0
 					
 				Else 
 					
-					(_o_UI.pointer($Obj_form.server))->:=0
-					(_o_UI.pointer($Obj_form.local))->:=1
+					(OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.server))->:=0
+					(OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.local))->:=1
 					
 				End if 
 				
@@ -255,7 +255,7 @@ Case of
 			
 			$Obj_form.ui.serverStatus:=$Obj_result
 			
-			_o_UI.refresh()
+			SET TIMER:C645(-1)
 			
 		End if 
 		
@@ -671,7 +671,7 @@ $regex.match[1].data:="127.0.0.1"
 		
 		$Obj_form.ui.serverStatus:=$Obj_result
 		
-		_o_UI.refresh()
+		SET TIMER:C645(-1)
 		
 		//=========================================================
 	: ($Obj_in.action="dataset")  // End dataset generation

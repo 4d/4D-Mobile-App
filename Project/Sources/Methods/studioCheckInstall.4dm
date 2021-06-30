@@ -38,7 +38,7 @@ End if
 
 $out:=New object:C1471(\
 "platform"; Choose:C955(Is macOS:C1572; Mac OS:K25:2; Windows:K25:3); \
-"studioAvailable"; False:C215; \
+"applicationAvailable"; False:C215; \
 "ready"; False:C215)
 
 // ----------------------------------------------------

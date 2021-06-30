@@ -119,7 +119,7 @@ Case of
 		 | ($Txt_me=$Obj_form.doNotExportImages)
 		
 		PROJECT.save()
-		_o_UI.refresh()
+		SET TIMER:C645(-1)
 		
 		//==================================================
 	: ($Txt_me=$Obj_form.local)

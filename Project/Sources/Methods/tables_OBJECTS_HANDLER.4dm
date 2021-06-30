@@ -58,7 +58,7 @@ Case of
 			: ($Lon_formEvent=On Selection Change:K2:29)\
 				 | ($Lon_formEvent=On Clicked:K2:4)
 				
-				$Ptr_ids:=_o_UI.pointer($Obj_form.ids)
+				$Ptr_ids:=OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.ids)
 				
 				$Obj_context.currentTableNumber:=Num:C11($Ptr_ids->{$Lon_row})
 				
@@ -95,7 +95,7 @@ Case of
 							
 							LISTBOX GET CELL COORDINATES:C1330(*; $Obj_form.tableList; $Lon_column; $Lon_row; $Lon_left; $Lon_top; $Lon_right; $Lon_bottom)
 							
-							$Obj_picker:=(_o_UI.pointer($Obj_form.iconGrid))->
+							$Obj_picker:=(OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.iconGrid))->
 							
 							$Obj_picker.item:=$Obj_picker.pathnames.indexOf($Obj_context.currentTable.icon)
 							
@@ -116,7 +116,7 @@ Case of
 							$Obj_picker.promptBackColor:=EDITOR.strokeColor
 							$Obj_picker.hidePromptSeparator:=True:C214
 							$Obj_picker.forceRedraw:=True:C214
-							$Obj_picker.prompt:=cs:C1710.str.new("chooseAnIconForTheTable").localized((_o_UI.pointer($Obj_form.tables))->{$Lon_row})
+							$Obj_picker.prompt:=cs:C1710.str.new("chooseAnIconForTheTable").localized((OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.tables))->{$Lon_row})
 							
 							// Display selector
 							CALL FORM:C1391($Obj_form.window; "editor_CALLBACK"; "pickerShow"; $Obj_picker)
@@ -211,12 +211,12 @@ Case of
 			: ($Lon_formEvent=On Data Change:K2:15)
 				
 				// Update data model
-				If ($Ptr_me=_o_UI.pointer($Obj_form.labels))\
-					 | ($Ptr_me=_o_UI.pointer($Obj_form.shortLabels))
+				If ($Ptr_me=OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.labels))\
+					 | ($Ptr_me=OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.shortLabels))
 					
-					$Ptr_ids:=_o_UI.pointer($Obj_form.ids)
+					$Ptr_ids:=OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.ids)
 					
-					If ($Ptr_me=_o_UI.pointer($Obj_form.labels))
+					If ($Ptr_me=OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.labels))
 						
 						$Obj_context.currentTable[""].label:=$Ptr_me->{$Lon_row}
 						
