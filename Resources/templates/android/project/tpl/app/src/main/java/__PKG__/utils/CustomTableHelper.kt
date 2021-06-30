@@ -107,7 +107,7 @@ class CustomTableHelper : GenericTableHelper {
             {{/tableNames}}
             else -> throw IllegalArgumentException()
         }
-        for (property in properties.toList()) {
+        properties.toList().forEach eachProperty@{ property ->
             val manyToOneRelation = RelationHelper.isManyToOneRelation(
                 property,
                 application,
@@ -121,7 +121,7 @@ class CustomTableHelper : GenericTableHelper {
                         relationType = RelationTypeEnum.MANY_TO_ONE
                     )
                 )
-                continue
+                return@eachProperty
             }
             val oneToManyRelation =
                 RelationHelper.isOneToManyRelation(property, application, tableNames())

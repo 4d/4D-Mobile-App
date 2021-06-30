@@ -97,7 +97,7 @@ class App : BaseApp() {
 
     private fun saveTableProperties() {
         AuthInfoHelper.getInstance(this).apply {
-            for (tableName in genericTableHelper.tableNames()) {
+            genericTableHelper.tableNames().forEach { tableName ->
                 val properties = getPropertyListFromTable(tableName, this@App)
                 setProperties(tableName, properties)
             }

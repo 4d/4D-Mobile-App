@@ -15,7 +15,7 @@ fun JSONObject.getSafeArray(key: String): JSONArray? {
     return try {
         this.getJSONArray(key)
     } catch (e: JSONException) {
-        return null
+        null
     }
 }
 
@@ -23,7 +23,7 @@ fun JSONObject.getSafeInt(key: String): Int? {
     return try {
         this.getInt(key)
     } catch (e: JSONException) {
-        return null
+        null
     }
 }
 
@@ -31,7 +31,7 @@ fun JSONObject.getSafeString(key: String): String? {
     return try {
         this.getString(key)
     } catch (e: JSONException) {
-        return null
+        null
     }
 }
 
@@ -45,7 +45,7 @@ fun JSONObject.getSafeObject(key: String): JSONObject? {
     return try {
         this.getJSONObject(key)
     } catch (e: JSONException) {
-        return null
+        null
     }
 }
 
@@ -53,7 +53,7 @@ fun JSONObject.getSafeBoolean(key: String): Boolean? {
     return try {
         this.getBoolean(key)
     } catch (e: JSONException) {
-        return null
+        null
     }
 }
 
@@ -61,7 +61,7 @@ fun JSONArray.getSafeString(position: Int): String? {
     return try {
         this.getString(position)
     } catch (e: JSONException) {
-        return null
+        null
     }
 }
 

@@ -44,7 +44,7 @@ private fun <T : EntityModel> getPropertyListString(
         else -> throw IllegalArgumentException()
     }
     val names = mutableListOf<String>()
-    for (property in properties.toList()) {
+    properties.toList().forEach { property ->
         val propertyName: String = property.name
 
         val serializedName: String? = constructorParameters?.find { it.name == propertyName }
