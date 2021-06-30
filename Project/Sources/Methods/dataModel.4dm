@@ -273,14 +273,16 @@ Case of
 									For each ($action; $actions)
 										If (String:C10($action.preset)="sort")
 											If ($action.parameters#Null:C1517)
-												If (Num:C11($action.tableNumber)=$Lon_tableID)
-													$Dom_fetchIndex:=DOM Create XML element:C865($Dom_entity; "fetchIndex"; "name"; formatString("field-name"; String:C10($action.name)))
-													For each ($parameter; $action.parameters)
-														
-														$Dom_fetchIndexElement:=DOM Create XML element:C865($Dom_fetchIndex; "fetchIndexElement"; \
-															"property"; formatString("field-name"; String:C10($parameter.name)); "type"; "binary"; "order"; Choose:C955(String:C10($parameter.format)="ascending"; "ascending"; "descending"))
-														
-													End for each 
+												If ($action.parameters.length>0)
+													If (Num:C11($action.tableNumber)=$Lon_tableID)
+														$Dom_fetchIndex:=DOM Create XML element:C865($Dom_entity; "fetchIndex"; "name"; formatString("field-name"; String:C10($action.name)))
+														For each ($parameter; $action.parameters)
+															
+															$Dom_fetchIndexElement:=DOM Create XML element:C865($Dom_fetchIndex; "fetchIndexElement"; \
+																"property"; formatString("field-name"; String:C10($parameter.name)); "type"; "binary"; "order"; Choose:C955(String:C10($parameter.format)="ascending"; "ascending"; "descending"))
+															
+														End for each 
+													End if 
 												End if 
 											End if 
 										End if 
