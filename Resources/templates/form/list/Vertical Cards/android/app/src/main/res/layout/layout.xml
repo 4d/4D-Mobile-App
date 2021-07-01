@@ -26,13 +26,13 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/__SPECIFIC_ID_1__"
+                android:id="@+id/___SPECIFIC_ID_1___"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:contentDescription="Image"
                 android:elevation="4dp"
                 android:scaleType="centerCrop"
-                app:imageUrl="__IMAGE_1__"
+                app:imageUrl="___IMAGE_1___"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -44,13 +44,13 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/gradient_top_to_bottom"
                 android:elevation="4dp"
-                app:layout_constraintBottom_toBottomOf="@+id/__SPECIFIC_ID_1__"
-                app:layout_constraintEnd_toEndOf="@+id/__SPECIFIC_ID_1__"
-                app:layout_constraintStart_toStartOf="@+id/__SPECIFIC_ID_1__"
-                app:layout_constraintTop_toTopOf="@+id/__SPECIFIC_ID_1__" />
+                app:layout_constraintBottom_toBottomOf="@+id/___SPECIFIC_ID_1___"
+                app:layout_constraintEnd_toEndOf="@+id/___SPECIFIC_ID_1___"
+                app:layout_constraintStart_toStartOf="@+id/___SPECIFIC_ID_1___"
+                app:layout_constraintTop_toTopOf="@+id/___SPECIFIC_ID_1___" />
 
             <TextView
-                android:id="@+id/__SPECIFIC_ID_2__"
+                android:id="@+id/___SPECIFIC_ID_2___"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -60,18 +60,18 @@
                 android:elevation="4dp"
                 android:maxLines="2"
                 android:scrollbars="none"
-                android:text="__TEXT_2__"
+                android:text="___TEXT_2___"
                 android:textAlignment="textStart"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
                 android:textColor="@color/white"
-                app:layout_constraintBottom_toTopOf="@id/__SPECIFIC_ID_3__"
-                app:layout_constraintEnd_toEndOf="@+id/__SPECIFIC_ID_1__"
-                app:layout_constraintStart_toStartOf="@+id/__SPECIFIC_ID_1__"
-                app:layout_constraintTop_toTopOf="@+id/__SPECIFIC_ID_1__"
+                app:layout_constraintBottom_toTopOf="@id/___SPECIFIC_ID_3___"
+                app:layout_constraintEnd_toEndOf="@+id/___SPECIFIC_ID_1___"
+                app:layout_constraintStart_toStartOf="@+id/___SPECIFIC_ID_1___"
+                app:layout_constraintTop_toTopOf="@+id/___SPECIFIC_ID_1___"
                 tools:text="My field 2" />
 
             <TextView
-                android:id="@+id/__SPECIFIC_ID_3__"
+                android:id="@+id/___SPECIFIC_ID_3___"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -80,13 +80,13 @@
                 android:elevation="4dp"
                 android:maxLines="2"
                 android:scrollbars="none"
-                android:text="__TEXT_3__"
+                android:text="___TEXT_3___"
                 android:textAlignment="textStart"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                 android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="@+id/__SPECIFIC_ID_1__"
-                app:layout_constraintStart_toStartOf="@+id/__SPECIFIC_ID_1__"
-                app:layout_constraintTop_toBottomOf="@+id/__SPECIFIC_ID_2__"
+                app:layout_constraintEnd_toEndOf="@+id/___SPECIFIC_ID_1___"
+                app:layout_constraintStart_toStartOf="@+id/___SPECIFIC_ID_1___"
+                app:layout_constraintTop_toBottomOf="@+id/___SPECIFIC_ID_2___"
                 tools:text="My field 3" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

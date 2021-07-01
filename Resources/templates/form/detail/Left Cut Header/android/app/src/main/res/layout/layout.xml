@@ -30,12 +30,12 @@
                 android:layout_height="wrap_content">
 
                 <com.qmobile.qmobileui.ui.parallax.VerticalScrollParallaxImageView
-                    android:id="@+id/__SPECIFIC_ID_1__"
+                    android:id="@+id/___SPECIFIC_ID_1___"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
                     android:contentDescription="Image"
                     android:scaleType="centerCrop"
-                    app:imageUrl="__IMAGE_1__"
+                    app:imageUrl="___IMAGE_1___"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -53,24 +53,24 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/__SPECIFIC_ID_2__"
+                    android:id="@+id/___SPECIFIC_ID_2___"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:scrollbars="none"
-                    android:text="__TEXT_2__"
+                    android:text="___TEXT_2___"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                     android:textColor="?colorOnSurface"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/__SPECIFIC_ID_1__"
+                    app:layout_constraintBottom_toBottomOf="@+id/___SPECIFIC_ID_1___"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     tools:text="My field 2" />
 
                 <TextView
-                    android:id="@+id/__SPECIFIC_ID_3__"
+                    android:id="@+id/___SPECIFIC_ID_3___"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -78,12 +78,12 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
                     android:scrollbars="none"
-                    android:text="__TEXT_3__"
+                    android:text="___TEXT_3___"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                     android:textColor="?colorPrimaryVariant"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/__SPECIFIC_ID_2__"
+                    app:layout_constraintTop_toBottomOf="@+id/___SPECIFIC_ID_2___"
                     tools:text="My field 3" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -111,14 +111,14 @@
                     <!--IF_IS_RELATION-->
                     <!-- IF THE DROPPED FIELD IS A RELATION, A BUTTON WILL BE DISPLAYED -->
                     <Button
-                        android:id="@+id/__BUTTON_ID__"
+                        android:id="@+id/___BUTTON_ID___"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="8dp"
-                        android:text="__BUTTON__"
+                        android:text="___BUTTON___"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -130,17 +130,17 @@
                     <!-- IF THE DROPPED FIELD IS NOT A RELATION, IT WILL EITHER BE AN
                     IMAGE VIEW OR A TEXT VIEW, AND IT WILL HAVE A LABEL IN A TEXT VIEW -->
                     <TextView
-                        android:id="@+id/__LABEL_ID__"
+                        android:id="@+id/___LABEL_ID___"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:scrollbars="none"
-                        android:text="__FIELD_LABEL__"
+                        android:text="___FIELD_LABEL___"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                         android:textColor="?colorPrimary"
-                        app:layout_constraintBottom_toTopOf="@+id/__VALUE_ID__"
+                        app:layout_constraintBottom_toTopOf="@+id/___VALUE_ID___"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -149,7 +149,7 @@
                     <!--IF_IS_IMAGE-->
                     <!-- IF THE DROPPED FIELD IS AN IMAGE -->
                     <ImageView
-                        android:id="@+id/__VALUE_ID__"
+                        android:id="@+id/___VALUE_ID___"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -157,23 +157,23 @@
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="8dp"
                         android:contentDescription="Image"
-                        app:imageUrl="__IMAGE__"
+                        app:imageUrl="___IMAGE___"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/__LABEL_ID__" />
+                        app:layout_constraintTop_toBottomOf="@+id/___LABEL_ID___" />
                     <!--END_IF_IS_IMAGE-->
                     <!--IF_IS_NOT_IMAGE-->
                     <!-- IF THE DROPPED FIELD IS NOT AN IMAGE, THEN IT WILL BE A TEXT VIEW -->
                     <TextView
-                        android:id="@+id/__VALUE_ID__"
+                        android:id="@+id/___VALUE_ID___"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="8dp"
                         android:scrollbars="none"
-                        android:text="__TEXT__"
+                        android:text="___TEXT___"
                         android:textAlignment="textStart"
                         android:textAllCaps="false"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
@@ -181,7 +181,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/__LABEL_ID__"
+                        app:layout_constraintTop_toBottomOf="@+id/___LABEL_ID___"
                         tools:text="My field" />
                     <!--END_IF_IS_NOT_IMAGE-->
 

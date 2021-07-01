@@ -19,37 +19,37 @@
         <!-- START EDITING HERE -->
 
         <TextView
-            android:id="@+id/__SPECIFIC_ID_1__"
+            android:id="@+id/___SPECIFIC_ID_1___"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:scrollbars="none"
-            android:text="__TEXT_1__"
+            android:text="___TEXT_1___"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             android:textColor="?colorPrimary"
-            app:layout_constraintBottom_toTopOf="@+id/__SPECIFIC_ID_2__"
+            app:layout_constraintBottom_toTopOf="@+id/___SPECIFIC_ID_2___"
             app:layout_constraintEnd_toStartOf="@+id/item_arrow"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="My field 1" />
 
         <TextView
-            android:id="@+id/__SPECIFIC_ID_2__"
+            android:id="@+id/___SPECIFIC_ID_2___"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:scrollbars="none"
-            android:text="__TEXT_2__"
+            android:text="___TEXT_2___"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             android:textColor="?colorOnSurface"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/item_arrow"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/__SPECIFIC_ID_1__"
+            app:layout_constraintTop_toBottomOf="@+id/___SPECIFIC_ID_1___"
             tools:text="My field 2" />
 
         <ImageView

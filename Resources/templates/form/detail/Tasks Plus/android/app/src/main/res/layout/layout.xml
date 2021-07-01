@@ -32,7 +32,7 @@
                 android:paddingBottom="24dp">
 
                 <TextView
-                    android:id="@+id/__SPECIFIC_ID_1__"
+                    android:id="@+id/___SPECIFIC_ID_1___"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -40,18 +40,18 @@
                     android:layout_marginEnd="4dp"
                     android:scrollbars="none"
                     android:singleLine="true"
-                    android:text="__TEXT_1__"
+                    android:text="___TEXT_1___"
                     android:textAlignment="textEnd"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
                     android:textColor="?colorOnPrimary"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toStartOf="@+id/__SPECIFIC_ID_2__"
+                    app:layout_constraintEnd_toStartOf="@+id/___SPECIFIC_ID_2___"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="My field 1" />
 
                 <TextView
-                    android:id="@+id/__SPECIFIC_ID_2__"
+                    android:id="@+id/___SPECIFIC_ID_2___"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
@@ -59,17 +59,17 @@
                     android:layout_marginEnd="8dp"
                     android:scrollbars="none"
                     android:singleLine="true"
-                    android:text="__TEXT_2__"
+                    android:text="___TEXT_2___"
                     android:textAlignment="textStart"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
                     android:textColor="?colorOnPrimary"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/__SPECIFIC_ID_1__"
+                    app:layout_constraintStart_toEndOf="@+id/___SPECIFIC_ID_1___"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="My field 2" />
 
                 <TextView
-                    android:id="@+id/__LABEL_SPECIFIC_ID_3__"
+                    android:id="@+id/___LABEL_SPECIFIC_ID_3___"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -77,29 +77,29 @@
                     android:layout_marginEnd="8dp"
                     android:scrollbars="none"
                     android:singleLine="true"
-                    android:text="__FIELD_LABEL_3__"
+                    android:text="___FIELD_LABEL_3___"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                     android:textColor="?colorOnPrimary"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/__SPECIFIC_ID_1__"
+                    app:layout_constraintTop_toBottomOf="@+id/___SPECIFIC_ID_1___"
                     tools:text="My field 3 label" />
 
                 <!--suppress AndroidDomInspection -->
                 <com.google.android.material.progressindicator.CircularProgressIndicator
-                    android:id="@+id/__SPECIFIC_ID_3__"
+                    android:id="@+id/___SPECIFIC_ID_3___"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="2dp"
                     android:layout_marginEnd="8dp"
-                    android:progress="__PROGRESS_3__"
+                    android:progress="___PROGRESS_3___"
                     app:indicatorColor="?colorOnPrimary"
                     app:indicatorSize="75dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/__LABEL_SPECIFIC_ID_3__"
+                    app:layout_constraintTop_toBottomOf="@+id/___LABEL_SPECIFIC_ID_3___"
                     app:trackColor="#60999999"
                     app:trackThickness="8dp" />
 
@@ -109,18 +109,18 @@
                     android:gravity="center"
                     android:scrollbars="none"
                     android:singleLine="true"
-                    android:text="__TEXT_3__"
+                    android:text="___TEXT_3___"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                     android:textColor="?colorOnPrimary"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/__SPECIFIC_ID_3__"
-                    app:layout_constraintEnd_toEndOf="@id/__SPECIFIC_ID_3__"
-                    app:layout_constraintStart_toStartOf="@+id/__SPECIFIC_ID_3__"
-                    app:layout_constraintTop_toTopOf="@+id/__SPECIFIC_ID_3__"
+                    app:layout_constraintBottom_toBottomOf="@+id/___SPECIFIC_ID_3___"
+                    app:layout_constraintEnd_toEndOf="@id/___SPECIFIC_ID_3___"
+                    app:layout_constraintStart_toStartOf="@+id/___SPECIFIC_ID_3___"
+                    app:layout_constraintTop_toTopOf="@+id/___SPECIFIC_ID_3___"
                     tools:text="3" />
 
                 <TextView
-                    android:id="@+id/__LABEL_SPECIFIC_ID_4__"
+                    android:id="@+id/___LABEL_SPECIFIC_ID_4___"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -128,17 +128,17 @@
                     android:layout_marginEnd="8dp"
                     android:scrollbars="none"
                     android:singleLine="true"
-                    android:text="__FIELD_LABEL_4__"
+                    android:text="___FIELD_LABEL_4___"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                     android:textColor="?colorOnPrimary"
-                    app:layout_constraintEnd_toStartOf="@+id/__LABEL_SPECIFIC_ID_5__"
+                    app:layout_constraintEnd_toStartOf="@+id/___LABEL_SPECIFIC_ID_5___"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/__SPECIFIC_ID_3__"
+                    app:layout_constraintTop_toBottomOf="@+id/___SPECIFIC_ID_3___"
                     tools:text="My field 4 label" />
 
                 <TextView
-                    android:id="@+id/__LABEL_SPECIFIC_ID_5__"
+                    android:id="@+id/___LABEL_SPECIFIC_ID_5___"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -146,17 +146,17 @@
                     android:layout_marginEnd="8dp"
                     android:scrollbars="none"
                     android:singleLine="true"
-                    android:text="__FIELD_LABEL_5__"
+                    android:text="___FIELD_LABEL_5___"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                     android:textColor="?colorOnPrimary"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/__LABEL_SPECIFIC_ID_4__"
-                    app:layout_constraintTop_toBottomOf="@+id/__SPECIFIC_ID_3__"
+                    app:layout_constraintStart_toEndOf="@id/___LABEL_SPECIFIC_ID_4___"
+                    app:layout_constraintTop_toBottomOf="@+id/___SPECIFIC_ID_3___"
                     tools:text="My field 5 label" />
 
                 <TextView
-                    android:id="@+id/__SPECIFIC_ID_4__"
+                    android:id="@+id/___SPECIFIC_ID_4___"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -164,18 +164,18 @@
                     android:layout_marginEnd="8dp"
                     android:scrollbars="none"
                     android:singleLine="true"
-                    android:text="__TEXT_4__"
+                    android:text="___TEXT_4___"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                     android:textColor="?colorOnPrimary"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toStartOf="@id/__SPECIFIC_ID_5__"
+                    app:layout_constraintEnd_toStartOf="@id/___SPECIFIC_ID_5___"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/__LABEL_SPECIFIC_ID_4__"
+                    app:layout_constraintTop_toBottomOf="@+id/___LABEL_SPECIFIC_ID_4___"
                     tools:text="My field 4" />
 
                 <TextView
-                    android:id="@+id/__SPECIFIC_ID_5__"
+                    android:id="@+id/___SPECIFIC_ID_5___"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -183,18 +183,18 @@
                     android:layout_marginEnd="8dp"
                     android:scrollbars="none"
                     android:singleLine="true"
-                    android:text="__TEXT_5__"
+                    android:text="___TEXT_5___"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                     android:textColor="?colorOnPrimary"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/__SPECIFIC_ID_4__"
-                    app:layout_constraintTop_toBottomOf="@+id/__LABEL_SPECIFIC_ID_5__"
+                    app:layout_constraintStart_toEndOf="@+id/___SPECIFIC_ID_4___"
+                    app:layout_constraintTop_toBottomOf="@+id/___LABEL_SPECIFIC_ID_5___"
                     tools:text="My field 5" />
 
                 <TextView
-                    android:id="@+id/__LABEL_SPECIFIC_ID_6__"
+                    android:id="@+id/___LABEL_SPECIFIC_ID_6___"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -202,17 +202,17 @@
                     android:layout_marginEnd="8dp"
                     android:scrollbars="none"
                     android:singleLine="true"
-                    android:text="__FIELD_LABEL_6__"
+                    android:text="___FIELD_LABEL_6___"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                     android:textColor="?colorOnPrimary"
-                    app:layout_constraintEnd_toStartOf="@+id/__LABEL_SPECIFIC_ID_7__"
+                    app:layout_constraintEnd_toStartOf="@+id/___LABEL_SPECIFIC_ID_7___"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/__SPECIFIC_ID_4__"
+                    app:layout_constraintTop_toBottomOf="@+id/___SPECIFIC_ID_4___"
                     tools:text="My field 6 label" />
 
                 <TextView
-                    android:id="@+id/__LABEL_SPECIFIC_ID_7__"
+                    android:id="@+id/___LABEL_SPECIFIC_ID_7___"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -220,17 +220,17 @@
                     android:layout_marginEnd="8dp"
                     android:scrollbars="none"
                     android:singleLine="true"
-                    android:text="__FIELD_LABEL_7__"
+                    android:text="___FIELD_LABEL_7___"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                     android:textColor="?colorOnPrimary"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/__LABEL_SPECIFIC_ID_6__"
-                    app:layout_constraintTop_toBottomOf="@+id/__SPECIFIC_ID_5__"
+                    app:layout_constraintStart_toEndOf="@id/___LABEL_SPECIFIC_ID_6___"
+                    app:layout_constraintTop_toBottomOf="@+id/___SPECIFIC_ID_5___"
                     tools:text="My field 7 label" />
 
                 <TextView
-                    android:id="@+id/__SPECIFIC_ID_6__"
+                    android:id="@+id/___SPECIFIC_ID_6___"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -238,18 +238,18 @@
                     android:layout_marginEnd="8dp"
                     android:scrollbars="none"
                     android:singleLine="true"
-                    android:text="__TEXT_6__"
+                    android:text="___TEXT_6___"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                     android:textColor="?colorOnPrimary"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toStartOf="@id/__SPECIFIC_ID_7__"
+                    app:layout_constraintEnd_toStartOf="@id/___SPECIFIC_ID_7___"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/__LABEL_SPECIFIC_ID_6__"
+                    app:layout_constraintTop_toBottomOf="@+id/___LABEL_SPECIFIC_ID_6___"
                     tools:text="My field 6" />
 
                 <TextView
-                    android:id="@+id/__SPECIFIC_ID_7__"
+                    android:id="@+id/___SPECIFIC_ID_7___"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -257,14 +257,14 @@
                     android:layout_marginEnd="8dp"
                     android:scrollbars="none"
                     android:singleLine="true"
-                    android:text="__TEXT_7__"
+                    android:text="___TEXT_7___"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                     android:textColor="?colorOnPrimary"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/__SPECIFIC_ID_6__"
-                    app:layout_constraintTop_toBottomOf="@+id/__LABEL_SPECIFIC_ID_7__"
+                    app:layout_constraintStart_toEndOf="@+id/___SPECIFIC_ID_6___"
+                    app:layout_constraintTop_toBottomOf="@+id/___LABEL_SPECIFIC_ID_7___"
                     tools:text="My field 7" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -292,14 +292,14 @@
                     <!--IF_IS_RELATION-->
                     <!-- IF THE DROPPED FIELD IS A RELATION, A BUTTON WILL BE DISPLAYED -->
                     <Button
-                        android:id="@+id/__BUTTON_ID__"
+                        android:id="@+id/___BUTTON_ID___"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="8dp"
-                        android:text="__BUTTON__"
+                        android:text="___BUTTON___"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -311,17 +311,17 @@
                     <!-- IF THE DROPPED FIELD IS NOT A RELATION, IT WILL EITHER BE AN
                     IMAGE VIEW OR A TEXT VIEW, AND IT WILL HAVE A LABEL IN A TEXT VIEW -->
                     <TextView
-                        android:id="@+id/__LABEL_ID__"
+                        android:id="@+id/___LABEL_ID___"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:scrollbars="none"
-                        android:text="__FIELD_LABEL__"
+                        android:text="___FIELD_LABEL___"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                         android:textColor="?colorPrimary"
-                        app:layout_constraintBottom_toTopOf="@+id/__VALUE_ID__"
+                        app:layout_constraintBottom_toTopOf="@+id/___VALUE_ID___"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -330,7 +330,7 @@
                     <!--IF_IS_IMAGE-->
                     <!-- IF THE DROPPED FIELD IS AN IMAGE -->
                     <ImageView
-                        android:id="@+id/__VALUE_ID__"
+                        android:id="@+id/___VALUE_ID___"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -338,23 +338,23 @@
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="8dp"
                         android:contentDescription="Image"
-                        app:imageUrl="__IMAGE__"
+                        app:imageUrl="___IMAGE___"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/__LABEL_ID__" />
+                        app:layout_constraintTop_toBottomOf="@+id/___LABEL_ID___" />
                     <!--END_IF_IS_IMAGE-->
                     <!--IF_IS_NOT_IMAGE-->
                     <!-- IF THE DROPPED FIELD IS NOT AN IMAGE, THEN IT WILL BE A TEXT VIEW -->
                     <TextView
-                        android:id="@+id/__VALUE_ID__"
+                        android:id="@+id/___VALUE_ID___"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="8dp"
                         android:scrollbars="none"
-                        android:text="__TEXT__"
+                        android:text="___TEXT___"
                         android:textAlignment="textStart"
                         android:textAllCaps="false"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
@@ -362,7 +362,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/__LABEL_ID__"
+                        app:layout_constraintTop_toBottomOf="@+id/___LABEL_ID___"
                         tools:text="My field" />
                     <!--END_IF_IS_NOT_IMAGE-->
 
