@@ -46,15 +46,15 @@ Function restoreContext()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Create a static object instance
-Function static($name : Text; $widgetName : Text)->$widget : cs:C1710.static
+Function formObject($name : Text; $widgetName : Text)->$widget : cs:C1710.formObject
 	
 	If (Count parameters:C259>=2)
 		
-		This:C1470.instantiate("static"; $name; $widgetName)
+		This:C1470.instantiate("formObject"; $name; $widgetName)
 		
 	Else 
 		
-		This:C1470.instantiate("static"; $name)
+		This:C1470.instantiate("formObject"; $name)
 		
 	End if 
 	

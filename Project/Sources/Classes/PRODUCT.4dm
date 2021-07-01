@@ -38,16 +38,16 @@ Function init()
 	
 	var $group : cs:C1710.group
 	$group:=This:C1470.group("os")
-	This:C1470.static("target"; "target.label").addToGroup($group)
+	This:C1470.formObject("target"; "target.label").addToGroup($group)
 	This:C1470.button("ios").addToGroup($group)
 	This:C1470.button("android").addToGroup($group)
 	
-	This:C1470.static("preview")
+	This:C1470.formObject("preview")
 	
 	$group:=This:C1470.group("dominantColor")
-	This:C1470.static("color").addToGroup($group)
-	This:C1470.static("colorBorder"; "color.border").addToGroup($group)
-	This:C1470.static("colorLabel"; "color.label").addToGroup($group)
+	This:C1470.formObject("color").addToGroup($group)
+	This:C1470.formObject("colorBorder"; "color.border").addToGroup($group)
+	This:C1470.formObject("colorLabel"; "color.label").addToGroup($group)
 	This:C1470.button("colorButton"; "color.button").addToGroup($group)
 	
 	This:C1470.mainColor:=""

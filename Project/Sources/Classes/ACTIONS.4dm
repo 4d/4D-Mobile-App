@@ -27,17 +27,17 @@ Function init()
 	This:C1470.button("noPublishedTable")
 	
 	This:C1470.listbox("actions")
-	This:C1470.static("actionsBorder"; "actions.border")
+	This:C1470.formObject("actionsBorder"; "actions.border")
 	
 	This:C1470.button("add")
 	This:C1470.button("remove")
 	
 	$group:=This:C1470.group("databaseMethodGroup")
 	This:C1470.button("databaseMethod").addToGroup($group)
-	This:C1470.static("databaseMethodLabel"; "databaseMethod.label").addToGroup($group)
+	This:C1470.formObject("databaseMethodLabel"; "databaseMethod.label").addToGroup($group)
 	
 	This:C1470.widget("iconPicker")
-	This:C1470.static("dropCursor")
+	This:C1470.formObject("dropCursor")
 	
 	// Link to the ACTIONS_PARAMS panel
 	This:C1470.parametersLink:=Formula:C1597(panel("ACTIONS_PARAMS"))
@@ -246,54 +246,92 @@ Function doAddMenu()
 	var $t : Text
 	var $icon : Picture
 	var $i : Integer
-	var $action; $field; $parameter; $table : Object
+	var $action; $field; $o; $parameter; $table : Object
 	var $c; $fields : Collection
-	var $addMenu; $deleteMenu; $editMenu; $fieldsMenu; $menu; $shareMenu; $sortMenu : cs:C1710.menu
+	var $addMenu; $deleteMenu; $editMenu; $fieldsMenu; $menu; \
+		$newMenu; $shareMenu; $sortMenu : cs:C1710.menu
 	
-	$menu:=cs:C1710.menu.new()\
-		.append(":xliff:newAction"; "new")\
-		.line()
-	
-	$addMenu:=cs:C1710.menu.new()
-	$menu.append(":xliff:addActionFor"; $addMenu)
-	
-	$editMenu:=cs:C1710.menu.new()
-	$menu.append(":xliff:editActionFor"; $editMenu)
-	
-	$deleteMenu:=cs:C1710.menu.new()
-	$menu.append(":xliff:deleteActionFor"; $deleteMenu)
-	
-	$shareMenu:=cs:C1710.menu.new()
-	$menu.append(":xliff:shareActionFor"; $shareMenu)
-	
-	If (FEATURE.with("sortAction"))
-		
-		$sortMenu:=cs:C1710.menu.new()
-		$menu.append(":xliff:sortActionFor"; $sortMenu)
-		
-	End if 
+	// Extract datamodel to collection
+	$c:=New collection:C1472
 	
 	For each ($t; Form:C1466.dataModel)
 		
-		$addMenu.append(Form:C1466.dataModel[$t][""].name; "add_"+$t)
-		$editMenu.append(Form:C1466.dataModel[$t][""].name; "edit_"+$t)
-		$deleteMenu.append(Form:C1466.dataModel[$t][""].name; "delete_"+$t)
-		$shareMenu.append(Form:C1466.dataModel[$t][""].name; "share_"+$t)
+		$c.push(New object:C1471("tableID"; $t; "tableName"; Form:C1466.dataModel[$t][""].name))
+		
+	End for each 
+	
+	If ($c.length>1)
+		
+		$newMenu:=cs:C1710.menu.new()
+		$addMenu:=cs:C1710.menu.new()
+		$editMenu:=cs:C1710.menu.new()
+		$deleteMenu:=cs:C1710.menu.new()
+		$shareMenu:=cs:C1710.menu.new()
+		$sortMenu:=cs:C1710.menu.new()
+		
+		$menu:=cs:C1710.menu.new()\
+			.append(":xliff:newActionFor"; $newMenu)\
+			.line()\
+			.append(":xliff:addActionFor"; $addMenu)\
+			.append(":xliff:editActionFor"; $editMenu)\
+			.append(":xliff:deleteActionFor"; $deleteMenu)\
+			.append(":xliff:shareActionFor"; $shareMenu)
+		
+		If (FEATURE.with("sortAction"))
+			
+			$menu.append(":xliff:sortActionFor"; $sortMenu)
+			
+		End if 
+		
+		For each ($o; $c)
+			
+			$newMenu.append($o.tableName; "new_"+$o.tableID)
+			$addMenu.append($o.tableName; "add_"+$o.tableID)
+			$editMenu.append($o.tableName; "edit_"+$o.tableID)
+			$deleteMenu.append($o.tableName; "delete_"+$o.tableID)
+			$shareMenu.append($o.tableName; "share_"+$o.tableID)
+			
+			If (FEATURE.with("sortAction"))
+				
+				$fieldsMenu:=cs:C1710.menu.new()
+				
+				For each ($field; PROJECT.getSortableFields(Form:C1466.dataModel[$o.tableID]; True:C214))
+					
+					$fieldsMenu.append($field.name; "sort_"+$o.tableID+","+String:C10($field.fieldNumber))
+					
+				End for each 
+				
+				$sortMenu.append($o.tableName; $fieldsMenu)
+				
+			End if 
+		End for each 
+		
+	Else 
+		
+		$o:=$c[0]
+		
+		$menu:=cs:C1710.menu.new()\
+			.append(":xliff:newAction"; "new")\
+			.line()\
+			.append(":xliff:addAction"; "add_"+$o.tableID)\
+			.append(":xliff:editAction"; "edit_"+$o.tableID)\
+			.append(":xliff:deleteAction"; "delete_"+$o.tableID)\
+			.append(":xliff:shareAction"; "share_"+$o.tableID)
 		
 		If (FEATURE.with("sortAction"))
 			
 			$fieldsMenu:=cs:C1710.menu.new()
 			
-			For each ($field; PROJECT.getSortableFields(Form:C1466.dataModel[$t]; True:C214))
+			For each ($field; PROJECT.getSortableFields(Form:C1466.dataModel[$o.tableID]; True:C214))
 				
-				$fieldsMenu.append($field.name; "sort_"+$t+","+String:C10($field.fieldNumber))
+				$fieldsMenu.append($field.name; "sort_"+$o.tableID+","+String:C10($field.fieldNumber))
 				
 			End for each 
 			
-			$sortMenu.append(Form:C1466.dataModel[$t][""].name; $fieldsMenu)
+			$menu.append(":xliff:sortAction"; $fieldsMenu)
 			
 		End if 
-	End for each 
+	End if 
 	
 	$menu.popup(This:C1470.add)
 	
@@ -806,13 +844,14 @@ Function doOpenDatabaseMethod()
 		
 		If ($file.exists)
 			
+			// Delete actions performed locally on the mobile
 			var $c : Collection
 			$c:=Form:C1466.actions.query("preset != sort")
+			
 			PROCESS 4D TAGS:C816($file.getText(); $code; $c.extract("name"); $c.extract("label"))
 			METHOD SET CODE:C1194($methods{0}; $code; *)
 			
 		End if 
-		
 	End if 
 	
 	// Open method

@@ -21,21 +21,24 @@ Class constructor
 	//=== === === === === === === === === === === === === === === === === === === === === 
 Function init()
 	
+	var $group : cs:C1710.group
+	
 	This:C1470.toBeInitialized:=False:C215
 	
-	// Widgets definition
-	This:C1470.loginRequired:=cs:C1710.button.new("01_login")
+	// * LOGIN
+	This:C1470.button("loginRequired"; "01_login")
 	
-	This:C1470.authenticationLabel:=cs:C1710.static.new("authentication.label")
-	This:C1470.authenticationButton:=cs:C1710.button.new("authentication")
+	$group:=This:C1470.group("authenticationGroup")
+	This:C1470.formObject("authenticationLabel"; "authentication.label").addToGroup($group)
+	This:C1470.button("authenticationButton"; "authentication").addToGroup($group)
 	
-	This:C1470.authenticationGroup:=cs:C1710.group.new(\
-		This:C1470.authenticationLabel; \
-		This:C1470.authenticationButton)
+	// * PUSH NOTIFICATION
+	This:C1470.button("pushNotification"; "02_pushNotification")
 	
-	This:C1470.pushNotification:=cs:C1710.button.new("02_pushNotification")
+	$group:=This:C1470.group("certificateGroup")
+	This:C1470.formObject("certificateLabel").addToGroup($group)
+	This:C1470.widget("certificate"; "certificatePicker").addToGroup($group)
 	
-	This:C1470.certificate:=cs:C1710.widget.new("certificatePicker")
 	This:C1470.certificate.picker:=cs:C1710.pathPicker.new(String:C10(Form:C1466.server.pushCertificate); New object:C1471(\
 		"options"; Package open:K24:8+Use sheet window:K24:11; \
 		"fileTypes"; ".p8"; \
@@ -45,28 +48,20 @@ Function init()
 		"message"; Get localized string:C991("selectACertificate"); \
 		"placeHolder"; Get localized string:C991("selectACertificate")+"…"))
 	
-	This:C1470.certificateLabel:=cs:C1710.static.new("certificateLabel")
-	This:C1470.certificateGroup:=cs:C1710.group.new(\
-		This:C1470.certificateLabel; \
-		This:C1470.certificate)
+	// * DEEP LINKING
+	This:C1470.button("deepLinking"; "03_deepLinking")
 	
-	This:C1470.deepLinking:=cs:C1710.button.new("03_deepLinking")
+	$group:=This:C1470.group("deepLinkingGroup")
+	This:C1470.input("deepScheme"; "03_urlScheme.input").addToGroup($group)
+	This:C1470.formObject("deepSchemeLabel"; "urlScheme.label").addToGroup($group)
+	This:C1470.formObject("deepSchemeBorder"; "urlScheme.border").addToGroup($group)
 	
-	This:C1470.deepScheme:=cs:C1710.input.new("03_urlScheme.input")
-	This:C1470.deepSchemeLabel:=cs:C1710.static.new("urlScheme.label")
 	This:C1470.deepSchemeAlert:=cs:C1710.attention.new("urlScheme.alert")
+	$group.addMember(This:C1470.deepSchemeAlert)
 	
-	This:C1470.deepLink:=cs:C1710.input.new("04_associatedDomain.input")
-	This:C1470.deepLinkLabel:=cs:C1710.static.new("associatedDomain.label")
-	
-	This:C1470.deepLinkingGroup:=cs:C1710.group.new(\
-		This:C1470.deepSchemeLabel; \
-		cs:C1710.static.new("urlScheme.border"); \
-		This:C1470.deepScheme; \
-		This:C1470.deepLinkLabel; \
-		This:C1470.deepSchemeAlert; \
-		cs:C1710.static.new("associatedDomain.border"); \
-		This:C1470.deepLink)
+	This:C1470.input("deepLink"; "04_associatedDomain.input").addToGroup($group)
+	This:C1470.formObject("deepLinkLabel"; "associatedDomain.label").addToGroup($group)
+	This:C1470.formObject("deepLinkBorder"; "associatedDomain.border").addToGroup($group)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 Function checkAuthenticationMethod

@@ -17,20 +17,20 @@ Class constructor
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function init()
 	
 	This:C1470.toBeInitialized:=False:C215
 	
-	This:C1470.static("noPublishedTable")
+	This:C1470.formObject("noPublishedTable")
 	
 	var $group : cs:C1710.group
 	$group:=This:C1470.group("withDataModel")
 	This:C1470.listbox("tables"; "01_available").addToGroup($group)
-	This:C1470.static("tablesBorder"; "01_available.border").addToGroup($group)
+	This:C1470.formObject("tablesBorder"; "01_available.border").addToGroup($group)
 	
 	This:C1470.listbox("mains"; "02_displayed").addToGroup($group)
-	This:C1470.static("mainsBorder"; "02_displayed.border").addToGroup($group)
+	This:C1470.formObject("mainsBorder"; "02_displayed.border").addToGroup($group)
 	
 	This:C1470.button("addOne"; "b.add.one").addToGroup($group)
 	This:C1470.button("addAll"; "b.add.all").addToGroup($group)
@@ -49,17 +49,17 @@ Function onLoad()
 	// Give the focus to the tables listbox
 	This:C1470.tables.focus()
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function saveContext($current : Object)
 	
 	//
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function restoreContext()
 	
 	//
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function update()
 	
 	// Available tables
@@ -138,7 +138,7 @@ Function update()
 	
 	This:C1470.updateButtons()
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function updateButtons()
 	
 	If (PROJECT.isLocked())

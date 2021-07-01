@@ -91,18 +91,34 @@ Function unselect($row : Integer)->$this : cs:C1710.listbox
 	$this:=This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Selects the given row if possible (useful to maintain a selection after a deletion).
+	// Selects the given row if possible, else the most appropiate one
+	// Useful to maintain a selection after a deletion
 Function doSafeSelect($row : Integer)
 	
-	If ($row<=This:C1470.rowsNumber())
-		
-		This:C1470.select($row)
-		
-	Else 
-		
-		This:C1470.unselect()
-		
-	End if 
+	var $rowNumber : Integer
+	
+	$rowNumber:=This:C1470.rowsNumber()
+	
+	Case of 
+			
+			//______________________________
+		: ($row<=$rowNumber)
+			
+			This:C1470.select($row)
+			
+			//______________________________
+		: ($rowNumber>0)
+			
+			This:C1470.select($rowNumber)
+			
+			//______________________________
+			
+		Else 
+			
+			This:C1470.unselect()
+			
+			//______________________________
+	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Gives the number of selected rows

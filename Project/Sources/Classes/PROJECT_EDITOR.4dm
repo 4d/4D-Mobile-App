@@ -207,14 +207,14 @@ Function init()
 	var $group : cs:C1710.group
 	$group:=This:C1470.group("taskUI")
 	This:C1470.thermometer("taskIndicator").addToGroup($group)
-	This:C1470.static("taskDescription").addToGroup($group)
+	This:C1470.formObject("taskDescription").addToGroup($group)
 	
 	This:C1470.subform("browser")
 	
 	$group:=This:C1470.group("messageGroup")
 	This:C1470.subform("message").addToGroup($group)
 	This:C1470.button("messageButton").addToGroup($group)
-	This:C1470.static("messageBack").addToGroup($group)
+	This:C1470.formObject("messageBack").addToGroup($group)
 	
 	// Create the context, id any
 	If (Form:C1466.$dialog=Null:C1517)

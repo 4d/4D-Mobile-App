@@ -1,4 +1,4 @@
-Class extends static
+Class extends formObject
 
 //=== === === === === === === === === === === === === === === === === === ===
 Class constructor($name : Text; $datasource)

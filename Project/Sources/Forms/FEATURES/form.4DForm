@@ -51,7 +51,6 @@
 					"events": [
 						"onClick"
 					],
-					"method": "FEATURES",
 					"focusable": false,
 					"dataSourceTypeHint": "boolean",
 					"dataSource": "Form:C1466.server.authentication.email"
@@ -67,7 +66,6 @@
 					"events": [
 						"onClick"
 					],
-					"method": "FEATURES",
 					"focusable": false
 				},
 				"authentication.label": {
@@ -90,7 +88,6 @@
 					"events": [
 						"onClick"
 					],
-					"method": "FEATURES",
 					"focusable": false,
 					"dataSourceTypeHint": "boolean",
 					"dataSource": "Form:C1466.server.pushNotification"
@@ -107,7 +104,6 @@
 						"onDataChange"
 					],
 					"focusable": false,
-					"method": "FEATURES",
 					"visibility": "hidden"
 				},
 				"certificateLabel": {
@@ -130,7 +126,6 @@
 					"events": [
 						"onClick"
 					],
-					"method": "FEATURES",
 					"focusable": false,
 					"dataSourceTypeHint": "boolean",
 					"dataSource": "Form:C1466.deepLinking.enabled"
@@ -153,7 +148,6 @@
 					"height": 17,
 					"dataSource": "Form:C1466.deepLinking.urlScheme",
 					"placeholder": "myappscheme://",
-					"method": "FEATURES",
 					"events": [
 						"onDataChange"
 					],
@@ -178,7 +172,6 @@
 					"width": 305,
 					"height": 17,
 					"dataSource": "Form:C1466.deepLinking.associatedDomain",
-					"method": "FEATURES",
 					"events": [
 						"onDataChange"
 					],

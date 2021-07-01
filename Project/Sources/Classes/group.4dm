@@ -61,7 +61,7 @@ Class constructor($members : Variant)
 			//___________________________
 	End case 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function addMember($member)->$this : cs:C1710.group
 	
 	var $t : Text
@@ -400,7 +400,7 @@ Function alignLeft($reference)->$this : cs:C1710.group
 				//______________________________________________________
 			: (Value type:C1509($reference)=Is text:K8:3)
 				
-				$left:=cs:C1710.static.new($reference).coordinates.left
+				$left:=cs:C1710.formObject.new($reference).coordinates.left
 				
 				//______________________________________________________
 			Else 
@@ -451,7 +451,7 @@ Function alignRight($reference)->$this : cs:C1710.group
 				//______________________________________________________
 			: (Value type:C1509($reference)=Is text:K8:3)
 				
-				$right:=cs:C1710.static.new($reference).coordinates.right
+				$right:=cs:C1710.formObject.new($reference).coordinates.right
 				
 				//______________________________________________________
 			Else 
@@ -477,7 +477,7 @@ Function alignRight($reference)->$this : cs:C1710.group
 	$this:=This:C1470
 	
 	//════════════════════════════════════════════
-Function show($visible : Boolean)->$this : Object
+Function show($visible : Boolean)->$this : cs:C1710.group
 	
 	var $o : Object
 	
@@ -501,7 +501,7 @@ Function show($visible : Boolean)->$this : Object
 	$this:=This:C1470
 	
 	//════════════════════════════════════════════
-Function hide->$this : Object
+Function hide->$this : cs:C1710.group
 	
 	var $o : Object
 	
@@ -514,7 +514,7 @@ Function hide->$this : Object
 	$this:=This:C1470
 	
 	//════════════════════════════════════════════
-Function enable($enabled : Boolean)->$this : Object
+Function enable($enabled : Boolean)->$this : cs:C1710.group
 	
 	var $o : Object
 	
@@ -538,7 +538,7 @@ Function enable($enabled : Boolean)->$this : Object
 	$this:=This:C1470
 	
 	//════════════════════════════════════════════
-Function disable->$this : Object
+Function disable->$this : cs:C1710.group
 	
 	var $o : Object
 	
@@ -551,7 +551,7 @@ Function disable->$this : Object
 	$this:=This:C1470
 	
 	//════════════════════════════════════════════
-Function setFontStyle($style : Integer)->$this : Object
+Function setFontStyle($style : Integer)->$this : cs:C1710.group
 	
 	var $o : Object
 	

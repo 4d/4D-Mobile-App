@@ -28,7 +28,7 @@ Function init()
 	This:C1470.button("ios").addToGroup($group)
 	This:C1470.button("android").addToGroup($group)
 	
-	This:C1470.static("preview")
+	This:C1470.formObject("preview")
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function onLoad()

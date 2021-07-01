@@ -102,7 +102,7 @@ If (Num:C11($tableID)>0)
 				
 			End if 
 			
-			cs:C1710.static.new("preview.label")\
+			cs:C1710.formObject.new("preview.label")\
 				.setTitle(String:C10($tmpl.title))\
 				.setColors(Choose:C955((Form:C1466.$android & Not:C34($tmpl.android)) | (Form:C1466.$ios & Not:C34($tmpl.ios)); EDITOR.errorRGB; EDITOR.selectedColor))
 			

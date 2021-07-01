@@ -436,9 +436,9 @@ Case of
 		
 		$b:=OB Instance of:C1731($o; $result)
 		
-		$o:=cs:C1710.static.new("toto")
+		$o:=cs:C1710.formObject.new("toto")
 		$result:=OB Class:C1730($o)
-		$b:=OB Instance of:C1731($o; cs:C1710.static)
+		$b:=OB Instance of:C1731($o; cs:C1710.formObject)
 		
 		//________________________________________
 	: (True:C214)

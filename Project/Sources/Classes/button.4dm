@@ -18,7 +18,7 @@ Tryes to underline the first capital letter or,
 if not found the first letter, corresponding to
 the associated key shortcut
 */
-Function highlightShortcut()->$this : Object
+Function highlightShortcut()->$this : cs:C1710.button
 	
 	C_LONGINT:C283($index; $lModifier)
 	C_TEXT:C284($key; $t)
@@ -54,17 +54,17 @@ Function highlightShortcut()->$this : Object
 	$this:=This:C1470
 	
 	//═════════════════════════════════════════════════
-Function setLinkedPopupMenu()->$this : Object
+Function setLinkedPopupMenu()->$this : cs:C1710.button
 	
 	$this:=This:C1470.setPopupMenu("linked")
 	
 	//═════════════════════════════════════════════════
-Function setSeparatePopupMenu()->$this : Object
+Function setSeparatePopupMenu()->$this : cs:C1710.button
 	
 	$this:=This:C1470.setPopupMenu("separate")
 	
 	//═════════════════════════════════════════════════
-Function setNoPopupMenu()->$this : Object
+Function setNoPopupMenu()->$this : cs:C1710.button
 	
 	$this:=This:C1470.setPopupMenu("none")
 	
@@ -78,7 +78,7 @@ else, possible values are:
 • 1 or "linked": With linked pop-up menu
 • 2 or "separate": With separate pop-up menu
 */
-Function setPopupMenu($value : Variant)->$this : Object
+Function setPopupMenu($value : Variant)->$this : cs:C1710.button
 	
 	If (This:C1470.type=Object type 3D button:K79:17)
 		
@@ -235,7 +235,7 @@ A hack to force a button to be boolean type
 ⚠️ Obsolete in project mode because you can
 choose the type for the checkboxes
 */
-Function asBoolean->$this : Object
+Function asBoolean->$this : cs:C1710.button
 	
 	If (This:C1470.type=Object type checkbox:K79:26)
 		If (This:C1470.assignable)

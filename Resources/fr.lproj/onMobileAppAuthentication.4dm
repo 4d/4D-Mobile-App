@@ -1,10 +1,11 @@
-﻿var $0 : Object
-var $1 : Object
+﻿#DECLARE($request : Object)->$response : Object
 
-var $request; $response : Object
+/*
+	$request = Informations fournies par l'application mobile
+	$response = Informations retournées à l'application mobile
+*/
 
-$request:=$1  // Informations fournies par l'application mobile
-$response:=Créer objet:C1471  // Informations retournées à l'application mobile
+$response:=Créer objet:C1471
 
   // Vérifier l'email de l'utilisateur
 Si ($request.email=Null:C1517)
@@ -21,5 +22,3 @@ Si ($response.success)
 Sinon
 	$response.statusText:="Désolé, vous n'êtes pas autorisé à utiliser cette application"
 Fin de si
-
-$0:=$response

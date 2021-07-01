@@ -78,15 +78,15 @@ If (Form:C1466.pages[$l]=Null:C1517)
 				.setShortcut("c"; Command key mask:K16:1)\
 				.highlightShortcut()
 			
-			Form:C1466.blackRect:=cs:C1710.static.new("Rectangle2")
-			Form:C1466.greenRect:=cs:C1710.static.new("Rectangle4")
-			Form:C1466.blueRect:=cs:C1710.static.new("Rectangle6")
-			Form:C1466.redRect:=cs:C1710.static.new("Rectangle3")
-			Form:C1466.yellowRect:=cs:C1710.static.new("Rectangle1")
-			Form:C1466.grapRect:=cs:C1710.static.new("Rectangle5")
+			Form:C1466.blackRect:=cs:C1710.formObject.new("Rectangle2")
+			Form:C1466.greenRect:=cs:C1710.formObject.new("Rectangle4")
+			Form:C1466.blueRect:=cs:C1710.formObject.new("Rectangle6")
+			Form:C1466.redRect:=cs:C1710.formObject.new("Rectangle3")
+			Form:C1466.yellowRect:=cs:C1710.formObject.new("Rectangle1")
+			Form:C1466.grapRect:=cs:C1710.formObject.new("Rectangle5")
 			
 			$c:=New collection:C1472
-			$c.push(cs:C1710.static.new("Text8").setTitle("CommonMenuFile"))  // Set title with a resname
+			$c.push(cs:C1710.formObject.new("Text8").setTitle("CommonMenuFile"))  // Set title with a resname
 			$c.push(cs:C1710.button.new("Button4").setTitle("Hello"))  // Set title with a string
 			$c.push(cs:C1710.button.new("Button5").disable())
 			Form:C1466.group1:=cs:C1710.group.new($c)

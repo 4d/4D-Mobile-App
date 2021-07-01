@@ -1,7 +1,7 @@
-//=== === === === === === === === === === === === === === === === === === === === === 
+//=== === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	
-	This:C1470.background:=cs:C1710.static.new("background")
+	This:C1470.background:=cs:C1710.formObject.new("background")
 	This:C1470.title:=cs:C1710.widget.new("title")
 	This:C1470.additional:=cs:C1710.scrollable.new("additional")
 	This:C1470.ok:=cs:C1710.button.new("ok").setTitle("ok")
@@ -42,7 +42,7 @@ Class constructor
 	
 	This:C1470.reset()
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function reset()
 	
 	// Reset the values and visibility
@@ -65,7 +65,7 @@ Function reset()
 		
 	End for each 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function restore($data : Object)
 	
 	// Restore the tips
@@ -74,7 +74,7 @@ Function restore($data : Object)
 	This:C1470.virginize()
 	This:C1470.reset()
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function virginize()
 	
 	var $key : Text
@@ -95,7 +95,7 @@ Function virginize()
 		
 	End for each 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function display()
 	
 	var $height; $offset; $width : Integer
@@ -257,7 +257,7 @@ Function display()
 	SET TIMER:C645(-1)  // To update form geometry
 	CALL SUBFORM CONTAINER:C1086(-8858)  // To update widget size
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function update($data : Object)
 	
 	var $o : Object
@@ -335,7 +335,7 @@ Function update($data : Object)
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function doValidate()
 	
 	Form:C1466.accept:=(Form:C1466.type#"alert")
@@ -401,7 +401,7 @@ Function doValidate()
 	
 	CALL SUBFORM CONTAINER:C1086(-1)
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function doCancel()
 	
 	Form:C1466.accept:=False:C215
@@ -453,7 +453,7 @@ Function doCancel()
 	
 	CALL SUBFORM CONTAINER:C1086(-2)
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function doHelp()
 	
 	If (Form:C1466.help#Null:C1517)

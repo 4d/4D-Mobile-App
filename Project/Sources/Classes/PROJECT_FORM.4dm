@@ -20,7 +20,7 @@ Class constructor
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function init()
 	
-	This:C1470.static("background")
+	This:C1470.formObject("background")
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function onLoad()

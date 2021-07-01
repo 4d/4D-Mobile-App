@@ -55,16 +55,16 @@ Function init()
 	var $group : cs:C1710.group
 	$group:=This:C1470.group("tableNext")
 	This:C1470.button("next").addToGroup($group)
-	This:C1470.static("next.limit").addToGroup($group)
+	This:C1470.formObject("next.limit").addToGroup($group)
 	
 	$group:=This:C1470.group("tablePrevious")
 	This:C1470.button("previous").addToGroup($group)
-	This:C1470.static("previous.limit").addToGroup($group)
+	This:C1470.formObject("previous.limit").addToGroup($group)
 	
 	$group:=This:C1470.group("selectors")
 	This:C1470.button("tablist"; "tab.list").addToGroup($group)
 	This:C1470.button("tabdetail"; "tab.detail").addToGroup($group)
-	This:C1470.static("tabSelector"; "tab.selector")
+	This:C1470.formObject("tabSelector"; "tab.selector")
 	
 	This:C1470.listbox("fieldList"; "01_fields")
 	
@@ -430,7 +430,7 @@ Function setTemplate($browser : Object)
 				
 				//Else
 				//$o:=New object(\
-																																								"url"; Get localized string("res_"+This.typeForm()+"Forms"))
+																																													"url"; Get localized string("res_"+This.typeForm()+"Forms"))
 				//End if
 				
 				This:C1470.form.form.call(New collection:C1472("initBrowser"; $o))

@@ -1,6 +1,6 @@
 Class extends form
 
-//=== === === === === === === === === === === === === === === === === === === === === 
+//=== === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	
 	Super:C1705("editor_CALLBACK")
@@ -18,7 +18,7 @@ Class constructor
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function init()
 	
 	This:C1470.toBeInitialized:=False:C215
@@ -27,10 +27,10 @@ Function init()
 	
 	var $group : cs:C1710.group
 	$group:=This:C1470.group("webSettingsGroup")
-	This:C1470.static("webSettingsLabel"; "webSettings.label").addToGroup($group)
+	This:C1470.formObject("webSettingsLabel"; "webSettings.label").addToGroup($group)
 	This:C1470.button("webSettings").addToGroup($group)
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function onLoad()
 	
 	This:C1470.webSettings.bestSize()
@@ -46,7 +46,7 @@ Function onLoad()
 	
 	ob_MERGE(Form:C1466; $o.buffer)
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function doSettings()
 	
 	OPEN SETTINGS WINDOW:C903("/Database/Web/Config")

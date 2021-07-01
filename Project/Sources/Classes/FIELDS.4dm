@@ -30,7 +30,7 @@ Function init()
 	This:C1470.widget("labels")
 	This:C1470.widget("shortLabels")
 	This:C1470.widget("formats")
-	This:C1470.static("formatLabel")
+	This:C1470.formObject("formatLabel")
 	This:C1470.widget("titles")
 	
 	
@@ -44,7 +44,7 @@ Function init()
 	This:C1470.button("selectorFields").addToGroup($group)
 	This:C1470.button("selectorRelations").addToGroup($group)
 	
-	This:C1470.static("empty")
+	This:C1470.formObject("empty")
 	This:C1470.button("resources")
 	
 	// Link to the TABLES panel

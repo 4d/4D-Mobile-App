@@ -1,5 +1,5 @@
 /*═══════════════════*/
-Class extends static
+Class extends formObject
 /*═══════════════════*/
 
 Class constructor

@@ -82,7 +82,6 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			$ƒ.deepLinking.enable(Is macOS:C1572 & PROJECT.$ios)
 			$ƒ.deepLinkingGroup.enable(Is macOS:C1572 & PROJECT.$ios)
 			
-			
 			//______________________________________________
 	End case 
 	
@@ -91,22 +90,6 @@ Else   // <== WIDGETS METHOD
 	$e:=$ƒ.event
 	
 	Case of 
-			
-			//==============================================
-		: ($ƒ.certificate.catch($e; On Data Change:K2:15))
-			
-			If ($ƒ.certificate.picker.target#Null:C1517)
-				
-				If (Bool:C1537($ƒ.certificate.picker.target.exists))
-					
-					If ($ƒ.certificate.picker.path#String:C10(Form:C1466.server.pushCertificate))
-						
-						Form:C1466.server.pushCertificate:=cs:C1710.doc.new($ƒ.certificate.picker.target).relativePath
-						PROJECT.save()
-						
-					End if 
-				End if 
-			End if 
 			
 			//==============================================
 		: ($ƒ.loginRequired.catch($e; On Clicked:K2:4))
@@ -128,6 +111,22 @@ Else   // <== WIDGETS METHOD
 			PROJECT.save()
 			
 			SET TIMER:C645(-1)
+			
+			//==============================================
+		: ($ƒ.certificate.catch($e; On Data Change:K2:15))
+			
+			If ($ƒ.certificate.picker.target#Null:C1517)
+				
+				If (Bool:C1537($ƒ.certificate.picker.target.exists))
+					
+					If ($ƒ.certificate.picker.path#String:C10(Form:C1466.server.pushCertificate))
+						
+						Form:C1466.server.pushCertificate:=cs:C1710.doc.new($ƒ.certificate.picker.target).relativePath
+						PROJECT.save()
+						
+					End if 
+				End if 
+			End if 
 			
 			//==============================================
 		: ($ƒ.deepLinking.catch($e; On Clicked:K2:4))

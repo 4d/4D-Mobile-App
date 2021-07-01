@@ -23,7 +23,7 @@ Case of
 		
 		Form:C1466._browse:=cs:C1710.button.new("browse").bestSize(Align left:K42:2)
 		Form:C1466._open:=cs:C1710.button.new("open").bestSize(Align right:K42:4; 70).disable()
-		Form:C1466._selection:=cs:C1710.static.new("focus")
+		Form:C1466._selection:=cs:C1710.formObject.new("focus")
 		
 		Form:C1466._centered:=cs:C1710.group.new("list,open,message,separator")
 		Form:C1466._leftAlign:=cs:C1710.group.new("list,browse")

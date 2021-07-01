@@ -25,7 +25,7 @@ Function init()
 	
 	This:C1470.input("name"; "01_name")
 	This:C1470.input("team"; "02_team")
-	This:C1470.static("teamBorder"; "02_team.border")
+	This:C1470.formObject("teamBorder"; "02_team.border")
 	This:C1470.button("teamMenu")
 	This:C1470.button("teamHelp")
 	
