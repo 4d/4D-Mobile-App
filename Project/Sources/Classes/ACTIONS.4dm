@@ -187,7 +187,7 @@ Function updateParameters($action : Object)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function doNewAction()
+Function doNewAction($tableNumber : Integer)
 	
 	var $t : Text
 	var $i; $index : Integer
@@ -225,16 +225,23 @@ Function doNewAction()
 		"label"; $t; \
 		"$icon"; $icon)
 	
-	// Auto define the target table if only one is published
-	For each ($t; Form:C1466.dataModel) While ($i<2)
+	If (Count parameters:C259=0)
 		
-		$i:=$i+1
+		// Auto define the target table if only one is published
+		For each ($t; Form:C1466.dataModel) While ($i<2)
+			
+			$i:=$i+1
+			
+		End for each 
+		If ($i=1)
+			
+			$action.tableNumber:=Num:C11($t)
+			
+		End if 
 		
-	End for each 
-	
-	If ($i=1)
+	Else 
 		
-		$action.tableNumber:=Num:C11($t)
+		$action.tableNumber:=$tableNumber
 		
 	End if 
 	
@@ -343,6 +350,12 @@ Function doAddMenu()
 			: ($menu.choice="new")
 				
 				This:C1470.doNewAction()
+				
+				//______________________________________________________
+			: ($menu.choice="new_@")
+				
+				$t:=Replace string:C233($menu.choice; "new_"; "")
+				This:C1470.doNewAction(Num:C11($t))
 				
 				//______________________________________________________
 			Else 
@@ -475,15 +488,6 @@ Function doAddMenu()
 						//-------------------------------------------
 					: ($menu.sort)
 						
-/*
-						
-						
-A REPORTER EN 19R2
-						
-						
-						
-*/
-						
 						$action.parameters:=New collection:C1472
 						
 						$field:=$table[String:C10($menu.fieldNumber)]
@@ -496,16 +500,6 @@ A REPORTER EN 19R2
 							"format"; "ascending")
 						
 						$action.parameters.push($parameter)
-						
-/*
-						
-						
-						
-						
-						
-						
-*/
-						
 						
 						//-------------------------------------------
 					Else 
@@ -591,11 +585,10 @@ A REPORTER EN 19R2
 						//-------------------------------------------
 				End case 
 				
+				This:C1470._addAction($action)
+				
 				//______________________________________________________
 		End case 
-		
-		This:C1470._addAction($action)
-		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===

@@ -217,6 +217,7 @@ Function update()
 	This:C1470.noParameters.hide()
 	This:C1470.noAction.hide()
 	This:C1470.title.hide()
+	This:C1470.field.hide()
 	
 	This:C1470.paramName.enable()
 	
@@ -253,7 +254,6 @@ Function update()
 						
 						This:C1470.goToPage(2)
 						This:C1470.title.setTitle("description").show()
-						//This.description.focus()
 						
 					Else 
 						
@@ -285,7 +285,7 @@ Function update()
 						
 						This:C1470.paramNameGroup.show()
 						This:C1470.sortOrderGroup.show()
-						
+						This:C1470.field.show()  // Linked to a field
 						This:C1470.paramName.disable()  // The name isn't editable
 						
 					End if 
@@ -796,7 +796,8 @@ Function doRemoveParameter()
 	
 	This:C1470.parameters.focus()
 	This:C1470.parameters.doSafeSelect($index+1)  // Collection index to listbox index
-	This:C1470.saveContext()
+	This:C1470.current:=Null:C1517
+	This:C1470.saveContext(This:C1470.current)
 	This:C1470.refresh()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
