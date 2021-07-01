@@ -32,7 +32,7 @@ do
   FRAMEWORK_OUT="$(eval echo \${SCRIPT_OUTPUT_FILE_${i}})"
   SYMBOL_PATH=$(dirname "$FRAMEWORK")
 
-  // Read executable name
+  # Read executable name
   FRAMEWORK_EXECUTABLE_NAME=$(defaults read "$FRAMEWORK/Info.plist" CFBundleExecutable)
 
   if [ -z "${FRAMEWORK_EXECUTABLE_NAME}" ]
