@@ -63,6 +63,69 @@ Function init()
 	This:C1470.formObject("deepLinkLabel"; "associatedDomain.label").addToGroup($group)
 	This:C1470.formObject("deepLinkBorder"; "associatedDomain.border").addToGroup($group)
 	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function onLoad()
+	
+	This:C1470.loginRequired.bestSize()
+	This:C1470.authenticationGroup.distributeLeftToRight()\
+		.show(Form:C1466.server.authentication.email)
+	
+	This:C1470.pushNotification.bestSize()
+	This:C1470.certificateGroup.distributeLeftToRight()\
+		.show(Form:C1466.server.pushNotification)
+	
+	This:C1470.deepLinking.bestSize()
+	This:C1470.deepLinkingGroup.show(Form:C1466.deepLinking.enabled)
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+	// Update UI
+Function update()
+	
+	This:C1470.authenticationGroup.show(Form:C1466.server.authentication.email)
+	This:C1470.certificateGroup.show(Form:C1466.server.pushNotification)
+	This:C1470.deepLinkingGroup.show(Form:C1466.deepLinking.enabled)
+	
+	This:C1470.certificate.touch()
+	This:C1470.checkAuthenticationMethod()
+	
+	If (Form:C1466.deepLinking.enabled)
+		
+		This:C1470.validateScheme()
+		
+	End if 
+	
+	Case of 
+			
+			//______________________________________________________
+		: (Bool:C1537(Form:C1466.server.pushNotification))\
+			 & (Bool:C1537(Form:C1466.deepLinking.enabled))
+			
+			androidLimitations(False:C215; "Push notifications and Deep Linking are coming soon for Android")
+			
+			//______________________________________________________
+		: (Bool:C1537(Form:C1466.server.pushNotification))
+			
+			androidLimitations(False:C215; "Push notifications is coming soon for Android")
+			
+			//______________________________________________________
+		: (Bool:C1537(Form:C1466.deepLinking.enabled))
+			
+			androidLimitations(False:C215; "Deep Linking is coming soon for Android")
+			
+			//______________________________________________________
+		Else 
+			
+			androidLimitations(False:C215; "Push notifications and Deep Linking are coming soon for Android")
+			
+			//______________________________________________________
+	End case 
+	
+	This:C1470.pushNotification.enable(Is macOS:C1572 & PROJECT.$ios)
+	This:C1470.certificateGroup.enable(Is macOS:C1572 & PROJECT.$ios)
+	This:C1470.certificate.picker.browse:=(Is macOS:C1572 & PROJECT.$ios)
+	This:C1470.deepLinking.enable(Is macOS:C1572 & PROJECT.$ios)
+	This:C1470.deepLinkingGroup.enable(Is macOS:C1572 & PROJECT.$ios)
+	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 Function checkAuthenticationMethod
 	

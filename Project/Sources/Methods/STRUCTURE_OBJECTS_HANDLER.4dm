@@ -828,76 +828,53 @@ Case of
 			"action"; "search"))
 		
 		//==================================================
-	: ($e.objectName="splitter")  // **********************************************
-		
-		Case of 
-				
-				//______________________________________________________
-			: ($e.code=On Clicked:K2:4)
-				
-				// Determine the offset
-				OBJECT GET COORDINATES:C663(*; $e.objectName; $left; $top; $right; $bottom)
-				OBJECT GET COORDINATES:C663(*; "_viewport"; $l; $Lon_targetTop; $l; $Lon_targetBottom)
-				
-				$Lon_vOffset:=$bottom-$Lon_targetBottom
-				
-				If (($Lon_targetBottom+$Lon_vOffset-$Lon_targetTop)<=200)
-					
-					// < Minimum height
-					CLEAR VARIABLE:C89($Lon_vOffset)
-					
-					OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $height)
-					$bottom:=$height-10
-					OBJECT SET COORDINATES:C1248(*; "splitter"; 0; $bottom; $width; $bottom+1)
-					
-				Else 
-					
-					// Hide the bottom line
-					OBJECT SET VISIBLE:C603(*; "bottom.line"; False:C215)
-					
-					CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "resizePanel"; New object:C1471(\
-						"panel"; Current form name:C1298; \
-						"offset"; $Lon_vOffset))
-					
-				End if 
-				
-				//______________________________________________________
-			: ($e.code=On Mouse Leave:K2:34)
-				
-				GET MOUSE:C468($l; $l; $Lon_button)
-				
-				If ($Lon_button#1)
-					
-					OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $height)
-					$bottom:=$height-10
-					OBJECT SET COORDINATES:C1248(*; "splitter"; 0; $bottom; $width; $bottom+1)
-					
-				End if 
-				
-				If ($Lon_button=0)
-					
-					//  // Place and show the bottom line
-					//OBJECT GET COORDINATES(*;"bottom.line";$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
-					//$Lon_top:=$Lon_top+$Lon_vOffset
-					//$Lon_bottom:=$Lon_top
-					//OBJECT SET COORDINATES(*;"bottom.line";$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
-					// OBJECT SET VISIBLE(*;"bottom.line";True)
-					
-					//  // Force redraw of the window
-					//$Lon_windowRef:=Current form window
-					//GET WINDOW RECT($Lon_left;$Lon_top;$Lon_right;$Lon_bottom;$Lon_windowRef)
-					//SET WINDOW RECT($Lon_left;$Lon_top;$Lon_right+1;$Lon_bottom;$Lon_windowRef)
-					//SET WINDOW RECT($Lon_left;$Lon_top;$Lon_right;$Lon_bottom;$Lon_windowRef)
-					
-				End if 
-				
-				//______________________________________________________
-			Else 
-				
-				ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+$e.description+")")
-				
-				//______________________________________________________
-		End case 
+		//: ($e.objectName="splitter")  // **********************************************
+		//Case of 
+		////______________________________________________________
+		//: ($e.code=On Clicked)
+		//// Determine the offset
+		//OBJECT GET COORDINATES(*; $e.objectName; $left; $top; $right; $bottom)
+		//OBJECT GET COORDINATES(*; "_viewport"; $l; $Lon_targetTop; $l; $Lon_targetBottom)
+		//$Lon_vOffset:=$bottom-$Lon_targetBottom
+		//If (($Lon_targetBottom+$Lon_vOffset-$Lon_targetTop)<=200)
+		//// < Minimum height
+		//CLEAR VARIABLE($Lon_vOffset)
+		//OBJECT GET SUBFORM CONTAINER SIZE($width; $height)
+		//$bottom:=$height-10
+		//OBJECT SET COORDINATES(*; "splitter"; 0; $bottom; $width; $bottom+1)
+		//Else 
+		//// Hide the bottom line
+		//OBJECT SET VISIBLE(*; "bottom.line"; False)
+		//CALL FORM(Current form window; "editor_CALLBACK"; "resizePanel"; New object(\
+			"panel"; Current form name; \
+			"offset"; $Lon_vOffset))
+		//End if 
+		////______________________________________________________
+		//: ($e.code=On Mouse Leave)
+		//GET MOUSE($l; $l; $Lon_button)
+		//If ($Lon_button#1)
+		//OBJECT GET SUBFORM CONTAINER SIZE($width; $height)
+		//$bottom:=$height-10
+		//OBJECT SET COORDINATES(*; "splitter"; 0; $bottom; $width; $bottom+1)
+		//End if 
+		//If ($Lon_button=0)
+		////  // Place and show the bottom line
+		////OBJECT GET COORDINATES(*;"bottom.line";$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+		////$Lon_top:=$Lon_top+$Lon_vOffset
+		////$Lon_bottom:=$Lon_top
+		////OBJECT SET COORDINATES(*;"bottom.line";$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
+		//// OBJECT SET VISIBLE(*;"bottom.line";True)
+		////  // Force redraw of the window
+		////$Lon_windowRef:=Current form window
+		////GET WINDOW RECT($Lon_left;$Lon_top;$Lon_right;$Lon_bottom;$Lon_windowRef)
+		////SET WINDOW RECT($Lon_left;$Lon_top;$Lon_right+1;$Lon_bottom;$Lon_windowRef)
+		////SET WINDOW RECT($Lon_left;$Lon_top;$Lon_right;$Lon_bottom;$Lon_windowRef)
+		//End if 
+		////______________________________________________________
+		//Else 
+		//ASSERT(False; "Form event activated unnecessarily ("+$e.description+")")
+		////______________________________________________________
+		//End case 
 		
 		//==================================================
 	Else 

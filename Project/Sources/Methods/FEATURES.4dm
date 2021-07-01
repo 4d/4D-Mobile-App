@@ -23,64 +23,12 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			//______________________________________________
 		: ($e.code=On Load:K2:1)
 			
-			$ƒ.loginRequired.bestSize()
-			$ƒ.authenticationGroup.distributeLeftToRight()\
-				.show(Form:C1466.server.authentication.email)
-			
-			$ƒ.pushNotification.bestSize()
-			$ƒ.certificateGroup.distributeLeftToRight()\
-				.show(Form:C1466.server.pushNotification)
-			
-			$ƒ.deepLinking.bestSize()
-			$ƒ.deepLinkingGroup.show(Form:C1466.deepLinking.enabled)
+			$ƒ.onLoad()
 			
 			//______________________________________________
 		: ($e.code=On Timer:K2:25)
 			
-			$ƒ.authenticationGroup.show(Form:C1466.server.authentication.email)
-			$ƒ.certificateGroup.show(Form:C1466.server.pushNotification)
-			$ƒ.deepLinkingGroup.show(Form:C1466.deepLinking.enabled)
-			
-			$ƒ.certificate.touch()
-			$ƒ.checkAuthenticationMethod()
-			
-			If (Form:C1466.deepLinking.enabled)
-				
-				$ƒ.validateScheme()
-				
-			End if 
-			
-			Case of 
-					
-					//______________________________________________________
-				: (Bool:C1537(Form:C1466.server.pushNotification))\
-					 & (Bool:C1537(Form:C1466.deepLinking.enabled))
-					
-					androidLimitations(False:C215; "Push notifications and Deep Linking are coming soon for Android")
-					
-					//______________________________________________________
-				: (Bool:C1537(Form:C1466.server.pushNotification))
-					
-					androidLimitations(False:C215; "Push notifications is coming soon for Android")
-					
-					//______________________________________________________
-				: (Bool:C1537(Form:C1466.deepLinking.enabled))
-					
-					androidLimitations(False:C215; "Deep Linking is coming soon for Android")
-					
-					//______________________________________________________
-				Else 
-					
-					androidLimitations(False:C215; "Push notifications and Deep Linking are coming soon for Android")
-					
-					//______________________________________________________
-			End case 
-			
-			$ƒ.pushNotification.enable(Is macOS:C1572 & PROJECT.$ios)
-			$ƒ.certificateGroup.enable(Is macOS:C1572 & PROJECT.$ios)
-			$ƒ.certificate.picker.browse:=(Is macOS:C1572 & PROJECT.$ios)
-			$ƒ.deepLinking.enable(Is macOS:C1572 & PROJECT.$ios)
-			$ƒ.deepLinkingGroup.enable(Is macOS:C1572 & PROJECT.$ios)
+			$ƒ.update()
 			
 			//______________________________________________
 	End case 
@@ -95,8 +43,9 @@ Else   // <== WIDGETS METHOD
 		: ($ƒ.loginRequired.catch($e; On Clicked:K2:4))
 			
 			Form:C1466.server.authentication.email:=Bool:C1537(Form:C1466.server.authentication.email)
-			$ƒ.authenticationGroup.show(Form:C1466.server.authentication.email)
 			PROJECT.save()
+			
+			$ƒ.authenticationGroup.show(Form:C1466.server.authentication.email)
 			
 			//==============================================
 		: ($ƒ.authenticationButton.catch($e; On Clicked:K2:4))
@@ -107,10 +56,10 @@ Else   // <== WIDGETS METHOD
 		: ($ƒ.pushNotification.catch($e; On Clicked:K2:4))
 			
 			Form:C1466.server.pushNotification:=Bool:C1537(Form:C1466.server.pushNotification)
-			$ƒ.certificateGroup.show(Form:C1466.server.pushNotification)
 			PROJECT.save()
 			
-			SET TIMER:C645(-1)
+			$ƒ.certificateGroup.show(Form:C1466.server.pushNotification)
+			$ƒ.refresh()
 			
 			//==============================================
 		: ($ƒ.certificate.catch($e; On Data Change:K2:15))
@@ -159,7 +108,7 @@ Else   // <== WIDGETS METHOD
 			
 			PROJECT.save()
 			
-			SET TIMER:C645(-1)
+			$ƒ.refresh()
 			
 			//==============================================
 		: ($ƒ.deepScheme.catch($e; On Data Change:K2:15))
