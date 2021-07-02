@@ -207,7 +207,7 @@
 							"method": "FIELDS"
 						},
 						{
-							"name": "shortLabels",
+							"name": "shortLabel",
 							"width": 215,
 							"minWidth": 215,
 							"maxWidth": 215,
@@ -236,7 +236,7 @@
 							"method": "FIELDS"
 						},
 						{
-							"name": "labels",
+							"name": "label",
 							"width": 215,
 							"minWidth": 215,
 							"maxWidth": 215,
@@ -266,7 +266,7 @@
 							"method": "FIELDS"
 						},
 						{
-							"name": "formats",
+							"name": "format",
 							"width": 70,
 							"minWidth": 10,
 							"styledText": true,
@@ -277,7 +277,7 @@
 								"onAlternateClick",
 								"onBeforeDataEntry"
 							],
-							"method": "ObjectMethods/formats.4dm",
+							"method": "ObjectMethods/format.4dm",
 							"header": {
 								"name": "Header6",
 								"text": "Header6",
@@ -408,7 +408,7 @@
 		"kind": "form"
 	},
 	"method": "FIELDS",
-	"geometryStamp": 25,
+	"geometryStamp": 28,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
