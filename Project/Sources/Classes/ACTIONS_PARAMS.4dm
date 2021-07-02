@@ -37,6 +37,8 @@ Function init()
 	This:C1470.formObject("parametersBorder"; "01_Parameters.border").addToGroup($group)
 	This:C1470.button("add").addToGroup($group)
 	This:C1470.button("remove").addToGroup($group)
+	This:C1470.formObject("columNameLabel").addToGroup($group)
+	This:C1470.formObject("columnRelatedLabel").addToGroup($group)
 	
 	$group:=This:C1470.group("paramNameGroup")
 	This:C1470.input("paramName"; "02_name").addToGroup($group)
@@ -121,6 +123,12 @@ Function init()
 		This:C1470.defaultValue; \
 		This:C1470.description)
 	
+	If (FEATURE.with("predictiveEntryInActionParam"))
+		
+		This:C1470.subform("predicting")
+		
+	End if 
+	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function onLoad()
 	
@@ -147,6 +155,12 @@ Function onLoad()
 	
 	// Add the events that we cannot select in the form properties 😇
 	This:C1470.appendEvents(On Alternative Click:K2:36)
+	
+	If (FEATURE.with("predictiveEntryInActionParam"))
+		
+		This:C1470.appendEvents(On After Keystroke:K2:26)
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function saveContext($current : Object)

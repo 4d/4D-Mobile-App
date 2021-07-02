@@ -3,7 +3,7 @@
 	"memorizeGeometry": true,
 	"inheritedForm": "panel_template",
 	"width": 960,
-	"height": 330,
+	"height": 335,
 	"markerHeader": 5,
 	"markerBody": 200,
 	"markerBreak": 264,
@@ -41,7 +41,8 @@
 					"visibility": "hidden",
 					"sizingX": "grow",
 					"textAlign": "left",
-					"text": ":xliff:selectAnActionToDisplayItsParameters"
+					"text": ":xliff:selectAnActionToDisplayItsParameters",
+					"fontSize": 16
 				},
 				"noAction": {
 					"type": "text",
@@ -52,7 +53,8 @@
 					"visibility": "hidden",
 					"sizingX": "grow",
 					"textAlign": "left",
-					"text": ":xliff:createAnActionToBeAbleToAddParameters"
+					"text": ":xliff:createAnActionToBeAbleToAddParameters",
+					"fontSize": 16
 				},
 				"noParameters": {
 					"type": "text",
@@ -63,7 +65,8 @@
 					"visibility": "hidden",
 					"sizingX": "grow",
 					"textAlign": "left",
-					"text": ":xliff:thisActionDoesNotUseParameter"
+					"text": ":xliff:thisActionDoesNotUseParameter",
+					"fontSize": 16
 				},
 				"title": {
 					"type": "text",
@@ -74,7 +77,8 @@
 					"visibility": "hidden",
 					"sizingX": "grow",
 					"textAlign": "left",
-					"text": "zzzzzzzzzzz"
+					"text": "zzzzzzzzzzz",
+					"fontSize": 16
 				},
 				"noTable": {
 					"type": "text",
@@ -86,7 +90,8 @@
 					"sizingX": "grow",
 					"text": "No target table defined",
 					"class": "label",
-					"stroke": "#ff0000"
+					"stroke": "#ff0000",
+					"fontSize": 16
 				}
 			}
 		},
@@ -94,7 +99,7 @@
 			"objects": {
 				"05_type.border": {
 					"type": "rectangle",
-					"top": 182,
+					"top": 187,
 					"left": 488,
 					"width": 204,
 					"height": 33,
@@ -103,7 +108,7 @@
 				},
 				"05_type.popup.border": {
 					"type": "rectangle",
-					"top": 182,
+					"top": 187,
 					"left": 488,
 					"width": 33,
 					"height": 33,
@@ -112,16 +117,16 @@
 				},
 				"01_Parameters.border": {
 					"type": "rectangle",
-					"top": 35,
+					"top": 63,
 					"left": 16,
 					"width": 451,
-					"height": 251,
+					"height": 228,
 					"visibility": "hidden",
 					"class": "border"
 				},
 				"02_name.border": {
 					"type": "rectangle",
-					"top": 58,
+					"top": 63,
 					"left": 488,
 					"width": 204,
 					"height": 33,
@@ -130,7 +135,7 @@
 				},
 				"02_name": {
 					"type": "input",
-					"top": 66,
+					"top": 71,
 					"left": 495,
 					"width": 189,
 					"height": 17,
@@ -139,15 +144,16 @@
 					"hideFocusRing": true,
 					"dragging": "none",
 					"events": [
-						"onDataChange"
+						"onDataChange",
+						"onAfterKeystroke"
 					]
 				},
 				"01_Parameters": {
 					"type": "listbox",
-					"top": 37,
+					"top": 65,
 					"left": 17,
 					"width": 448,
-					"height": 248,
+					"height": 225,
 					"visibility": "hidden",
 					"listboxType": "collection",
 					"movableRows": false,
@@ -176,11 +182,13 @@
 					"dragging": "custom",
 					"dropping": "custom",
 					"hideSystemHighlight": true,
+					"verticalLineStroke": "#c0c0c0",
+					"hideExtraBlankRows": false,
 					"columns": [
 						{
 							"name": "names",
 							"dataSource": "This:C1470.name",
-							"width": 433,
+							"width": 219,
 							"minWidth": 10,
 							"maxWidth": 32000,
 							"enterable": false,
@@ -202,12 +210,24 @@
 								"textAlign": "left",
 								"verticalAlign": "middle"
 							}
+						},
+						{
+							"header": {
+								"name": "Header2",
+								"text": "Header2"
+							},
+							"name": "Column1",
+							"footer": {
+								"name": "Footer2"
+							},
+							"dataSource": "Field name:C257(panel.action.tableNumber; This:C1470.fieldNumber)",
+							"width": 246
 						}
 					]
 				},
 				"add": {
 					"type": "button",
-					"top": 292,
+					"top": 297,
 					"left": 16,
 					"width": 28,
 					"height": 28,
@@ -224,7 +244,7 @@
 				},
 				"remove": {
 					"type": "button",
-					"top": 292,
+					"top": 297,
 					"left": 43,
 					"width": 28,
 					"height": 28,
@@ -239,7 +259,7 @@
 				},
 				"03_label.border": {
 					"type": "rectangle",
-					"top": 120,
+					"top": 125,
 					"left": 488,
 					"width": 204,
 					"height": 33,
@@ -248,7 +268,7 @@
 				},
 				"03_label": {
 					"type": "input",
-					"top": 128,
+					"top": 133,
 					"left": 495,
 					"width": 189,
 					"height": 17,
@@ -262,7 +282,7 @@
 				},
 				"04_shortLabel.border": {
 					"type": "rectangle",
-					"top": 120,
+					"top": 125,
 					"left": 734,
 					"width": 204,
 					"height": 33,
@@ -271,7 +291,7 @@
 				},
 				"04_shortLabel": {
 					"type": "input",
-					"top": 128,
+					"top": 133,
 					"left": 741,
 					"width": 189,
 					"height": 17,
@@ -285,7 +305,7 @@
 				},
 				"05_type": {
 					"type": "input",
-					"top": 190,
+					"top": 195,
 					"left": 527,
 					"width": 157,
 					"height": 17,
@@ -304,7 +324,7 @@
 				},
 				"02_name.label": {
 					"type": "text",
-					"top": 35,
+					"top": 40,
 					"left": 488,
 					"width": 140,
 					"height": 17,
@@ -314,7 +334,7 @@
 				},
 				"03_label.label": {
 					"type": "text",
-					"top": 98,
+					"top": 103,
 					"left": 488,
 					"width": 140,
 					"height": 17,
@@ -324,7 +344,7 @@
 				},
 				"04_shortLabel.label": {
 					"type": "text",
-					"top": 98,
+					"top": 103,
 					"left": 734,
 					"width": 140,
 					"height": 17,
@@ -334,7 +354,7 @@
 				},
 				"05_type.label": {
 					"type": "text",
-					"top": 160,
+					"top": 165,
 					"left": 488,
 					"width": 140,
 					"height": 17,
@@ -344,7 +364,7 @@
 				},
 				"05_type.popup": {
 					"type": "button",
-					"top": 182,
+					"top": 187,
 					"left": 488,
 					"width": 33,
 					"height": 33,
@@ -359,7 +379,7 @@
 				},
 				"07_default.border": {
 					"type": "rectangle",
-					"top": 244,
+					"top": 249,
 					"left": 488,
 					"width": 204,
 					"height": 33,
@@ -368,7 +388,7 @@
 				},
 				"07_default": {
 					"type": "input",
-					"top": 252,
+					"top": 257,
 					"left": 495,
 					"width": 189,
 					"height": 17,
@@ -384,7 +404,7 @@
 				},
 				"07_default.label": {
 					"type": "text",
-					"top": 222,
+					"top": 227,
 					"left": 488,
 					"width": 140,
 					"height": 17,
@@ -395,7 +415,7 @@
 				"02_mandatory": {
 					"type": "checkbox",
 					"text": ":xliff:mandatory",
-					"top": 65,
+					"top": 70,
 					"left": 734,
 					"width": 128,
 					"height": 18,
@@ -409,7 +429,7 @@
 				},
 				"06_placeholder.border": {
 					"type": "rectangle",
-					"top": 182,
+					"top": 187,
 					"left": 734,
 					"width": 204,
 					"height": 33,
@@ -418,7 +438,7 @@
 				},
 				"06_placeholder": {
 					"type": "input",
-					"top": 190,
+					"top": 195,
 					"left": 741,
 					"width": 189,
 					"height": 17,
@@ -432,7 +452,7 @@
 				},
 				"06_placeholder.label": {
 					"type": "text",
-					"top": 160,
+					"top": 165,
 					"left": 734,
 					"width": 140,
 					"height": 17,
@@ -442,7 +462,7 @@
 				},
 				"09_min.border": {
 					"type": "rectangle",
-					"top": 244,
+					"top": 249,
 					"left": 734,
 					"width": 93,
 					"height": 33,
@@ -451,7 +471,7 @@
 				},
 				"09_min": {
 					"type": "input",
-					"top": 252,
+					"top": 257,
 					"left": 741,
 					"width": 78,
 					"height": 17,
@@ -467,7 +487,7 @@
 				},
 				"09_min.label": {
 					"type": "text",
-					"top": 222,
+					"top": 227,
 					"left": 734,
 					"width": 93,
 					"height": 16,
@@ -477,7 +497,7 @@
 				},
 				"10_max.border": {
 					"type": "rectangle",
-					"top": 244,
+					"top": 249,
 					"left": 845,
 					"width": 93,
 					"height": 33,
@@ -486,7 +506,7 @@
 				},
 				"10_max": {
 					"type": "input",
-					"top": 252,
+					"top": 257,
 					"left": 852,
 					"width": 78,
 					"height": 17,
@@ -502,7 +522,7 @@
 				},
 				"10_max.label": {
 					"type": "text",
-					"top": 222,
+					"top": 227,
 					"left": 845,
 					"width": 93,
 					"height": 16,
@@ -513,7 +533,7 @@
 				"field": {
 					"type": "input",
 					"left": 88,
-					"top": 298,
+					"top": 303,
 					"width": 379,
 					"height": 17,
 					"focusable": false,
@@ -525,7 +545,7 @@
 				},
 				"03_sortOrder.border": {
 					"type": "rectangle",
-					"top": 120,
+					"top": 125,
 					"left": 488,
 					"width": 204,
 					"height": 33,
@@ -534,7 +554,7 @@
 				},
 				"03_sortOrder.popup.border": {
 					"type": "rectangle",
-					"top": 120,
+					"top": 125,
 					"left": 488,
 					"width": 33,
 					"height": 33,
@@ -543,7 +563,7 @@
 				},
 				"03_sortOrder": {
 					"type": "input",
-					"top": 128,
+					"top": 133,
 					"left": 527,
 					"width": 157,
 					"height": 17,
@@ -557,7 +577,7 @@
 				},
 				"03_sortOrder.label": {
 					"type": "text",
-					"top": 98,
+					"top": 103,
 					"left": 488,
 					"width": 140,
 					"height": 17,
@@ -567,7 +587,7 @@
 				},
 				"03_sortOrder.popup": {
 					"type": "button",
-					"top": 120,
+					"top": 125,
 					"left": 488,
 					"width": 33,
 					"height": 33,
@@ -582,7 +602,7 @@
 				},
 				"dropCursor": {
 					"type": "line",
-					"top": 222,
+					"top": 227,
 					"left": 28,
 					"width": 30,
 					"height": 0,
@@ -590,6 +610,34 @@
 					"stroke": "#ff0000",
 					"visibility": "hidden",
 					"startPoint": "topLeft"
+				},
+				"predicting": {
+					"type": "subform",
+					"left": 488,
+					"top": 371,
+					"width": 150,
+					"height": 101,
+					"detailForm": "PREDICTIVE_ENTRY",
+					"focusable": false,
+					"visibility": "hidden"
+				},
+				"columnRelatedLabel": {
+					"type": "text",
+					"top": 40,
+					"left": 236,
+					"width": 140,
+					"height": 17,
+					"text": ":xliff:relatedFields",
+					"class": "label"
+				},
+				"columNameLabel": {
+					"type": "text",
+					"top": 40,
+					"left": 16,
+					"width": 140,
+					"height": 17,
+					"text": ":xliff:names",
+					"class": "label"
 				}
 			},
 			"entryOrder": [
@@ -608,7 +656,8 @@
 				"remove",
 				"field",
 				"03_sortOrder",
-				"03_sortOrder.popup"
+				"03_sortOrder.popup",
+				"predicting"
 			]
 		},
 		{
@@ -646,7 +695,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 272,
+	"geometryStamp": 346,
 	"editor": {
 		"groups": {
 			"Group": [
@@ -660,7 +709,12 @@
 		"activeView": "View 1",
 		"defaultView": "View 1",
 		"views": {
-			"View 1": {}
+			"View 1": {},
+			"widgets": {
+				"objects": [
+					"predicting"
+				]
+			}
 		}
 	}
 }

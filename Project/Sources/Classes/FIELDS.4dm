@@ -881,7 +881,7 @@ Function formatMenu($e : Object)
 			)
 			$menu.line()
 			
-			$menu.append("New choice list ..."/*TODO newFormatterChoiceList localize*/; "$new"; False:C215)
+			$menu.append(".New choice list ..."/*TODO newFormatterChoiceList localize*/; "$new"; False:C215)
 			
 		End if 
 		
@@ -889,9 +889,10 @@ Function formatMenu($e : Object)
 	
 	If (This:C1470.fieldList.popup($menu).selected)
 		
-		If ($menu.choice="$new")  // FEATURE.with("newFormatterChoiceList")
+		If ($menu.choice="$new")
 			
-			$menu.choice:=Request:C163("Name of the format"/*TODO newFormatterChoiceList localize*/)
+			$menu.choice:=Request:C163(".Name of the format"/*TODO newFormatterChoiceList localize*/)
+			
 			If (Length:C16($menu.choice)#0)
 				
 				$menu.choice:="/"+$menu.choice
@@ -913,7 +914,6 @@ Function formatMenu($e : Object)
 				OPEN URL:C673($manifestFile.platformPath)
 				
 			End if 
-			
 		End if 
 		
 		If (Length:C16($menu.choice)#0)

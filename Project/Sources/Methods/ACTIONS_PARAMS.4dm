@@ -155,6 +155,38 @@ Else   // <== WIDGETS METHOD
 			End case 
 			
 			//==================================================
+		: ($ƒ.paramName.catch($e; On After Keystroke:K2:26))
+			
+			If (FEATURE.with("predictiveEntryInActionParam"))
+				
+				var $o; $table : Object
+				var $t : Text
+				
+				$o:=$ƒ.predicting.getValue()
+				
+				If ($o=Null:C1517)  //init
+					
+					$o:=New object:C1471
+					$o.values:=New collection:C1472
+					$table:=Form:C1466.dataModel[String:C10($ƒ.action.tableNumber)]
+					
+					For each ($t; $table)
+						
+						If (PROJECT.isField($t))
+							
+							$table[$t].fieldNumber:=Num:C11($t)
+							$o.values.push($table[$t].name)
+							
+						End if 
+					End for each 
+				End if 
+				
+				$o.editedText:=Get edited text:C655
+				$ƒ.predicting.setValue($o)
+				
+			End if 
+			
+			//==================================================
 		: ($e.code=On Data Change:K2:15)\
 			 & ($ƒ.linked.belongsTo($e.objectName))  // Linked widgets
 			

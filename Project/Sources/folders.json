@@ -369,7 +369,8 @@
 			"COMPILER_ACTIONS_PARAMS"
 		],
 		"forms": [
-			"ACTIONS_PARAMS"
+			"ACTIONS_PARAMS",
+			"PREDICTIVE_ENTRY"
 		],
 		"classes": [
 			"ACTIONS_PARAMS"
@@ -664,6 +665,9 @@
 		]
 	},
 	"form": {
+		"methods": [
+			"form_spreadToSubforms"
+		],
 		"forms": [
 			"HDI_WIDGET_CLASSES"
 		],
@@ -671,6 +675,7 @@
 			"attention",
 			"button",
 			"form",
+			"formObject",
 			"group",
 			"input",
 			"listbox",
@@ -799,6 +804,7 @@
 			"panel_COLLAPSE_EXPAND",
 			"panel_Common",
 			"panel_Count",
+			"panel_Find",
 			"panel_GOTO",
 			"panel_INIT",
 			"panel_LAST",

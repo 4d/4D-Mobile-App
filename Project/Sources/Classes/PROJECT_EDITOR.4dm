@@ -186,8 +186,7 @@ Function design()
 	
 	$o.panels.push(New object:C1471(\
 		"form"; "ACTIONS"; \
-		"noTitle"; True:C214; \
-		"noSeparator"; True:C214))
+		"noTitle"; True:C214))  //;"noSeparator"; True))
 	
 	$o.panels.push(New object:C1471(\
 		"title"; Get localized string:C991("page_action_params"); \

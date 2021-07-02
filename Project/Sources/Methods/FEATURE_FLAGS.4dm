@@ -155,6 +155,8 @@ FEATURE.unstable("customActionFormatter")  // Redmine #128195
 FEATURE.unstable("newFormatterChoiceList")  // Menu to create formatter choice list directly , from data
 FEATURE.unstable("newActionFormatterChoiceList")  // Menu to create action formatter choice list directly
 
+FEATURE.unstable("predictiveEntryInActionParam")  // Allow to modify action name with predictive entry
+
 // Mac M1 build for simu using arm64
 // FEATURE.unstable("simuARMOnAppleProcessor")
 
