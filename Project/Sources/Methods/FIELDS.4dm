@@ -169,8 +169,7 @@ Else   // <== WIDGETS METHOD
 					$field[Choose:C955($e.columnName="title"; "format"; $e.columnName)]:=(OBJECT Get pointer:C1124(Object named:K67:5; $e.columnName))->{$e.row}
 					//%W+533.3
 					
-					//Form.dataModel[String($ƒ.tableNumber)][String($field.fieldNumber)]:=$field
-					//PROJECT.save()
+					PROJECT.save()
 					
 					$ƒ.updateForms($field; $e.row)
 					
