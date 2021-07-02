@@ -702,7 +702,7 @@ Case of
 			
 			If (Length:C16($panel)>0)
 				
-				EDITOR.callChild($panel; Current method name:C684; $selector; $data)
+				EDITOR.callChild($panel; Current method name:C684; $selector)
 				
 			End if 
 			

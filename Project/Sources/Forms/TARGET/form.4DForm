@@ -29,17 +29,6 @@
 		},
 		{
 			"objects": {
-				"preview": {
-					"type": "text",
-					"text": "Preview",
-					"top": 73,
-					"left": 17,
-					"width": 65,
-					"height": 16,
-					"textAlign": "center",
-					"stroke": "#1BA1E5",
-					"textAngle": 0
-				},
 				"ios": {
 					"type": "checkbox",
 					"text": "iOS",
@@ -100,5 +89,5 @@
 		}
 	},
 	"method": "TARGET",
-	"geometryStamp": 568
+	"geometryStamp": 571
 }

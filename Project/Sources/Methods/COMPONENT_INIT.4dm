@@ -331,8 +331,15 @@ If (OB Is empty:C1297(FEATURE)) | $reset
 	
 	If (Structure file:C489=Structure file:C489(*))
 		
-		ASSERT:C1129(Num:C11(SHARED.ide.version)=$version; "You need to update the last delivered version number in COMPONENT_INIT")
-		
+		If (Num:C11(SHARED.ide.version)#$version)
+			
+			ALERT:C41("You need to update the last delivered version number in COMPONENT_INIT")
+			//%T-
+			METHOD OPEN PATH:C1213(Current method name:C684; 268)
+			//%T+
+			ABORT:C156
+			
+		End if 
 	End if 
 	
 	FEATURE_FLAGS($version; $pref)

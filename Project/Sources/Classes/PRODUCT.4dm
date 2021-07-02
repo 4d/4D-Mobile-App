@@ -42,8 +42,6 @@ Function init()
 	This:C1470.button("ios").addToGroup($group)
 	This:C1470.button("android").addToGroup($group)
 	
-	This:C1470.formObject("preview")
-	
 	$group:=This:C1470.group("dominantColor")
 	This:C1470.formObject("color").addToGroup($group)
 	This:C1470.formObject("colorBorder"; "color.border").addToGroup($group)
@@ -59,7 +57,6 @@ Function onLoad()
 	If (FEATURE.with("targetPannel"))
 		
 		This:C1470.os.hide()
-		This:C1470.preview.hide()
 		This:C1470.dominantColor.moveVertically(-125)
 		
 	Else 
@@ -74,8 +71,6 @@ Function onLoad()
 						.setBackgroundPicture()\
 						.setNumStates(1)
 					
-					This:C1470.preview.show()
-					
 					This:C1470.ios.disable()
 					
 					This:C1470.ios.setPicture("#images/os/iOS-32.png")\
@@ -85,7 +80,6 @@ Function onLoad()
 				Else 
 					
 					This:C1470.os.hide()
-					This:C1470.preview.hide()
 					
 				End if 
 			End if 
@@ -95,8 +89,6 @@ Function onLoad()
 			This:C1470.target.hide()
 			This:C1470.ios.hide()
 			This:C1470.android.hide()
-			
-			This:C1470.preview.hide()
 			
 		End if 
 	End if 

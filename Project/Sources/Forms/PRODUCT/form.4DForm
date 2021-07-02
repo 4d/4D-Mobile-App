@@ -30,17 +30,6 @@
 		},
 		{
 			"objects": {
-				"preview": {
-					"type": "text",
-					"text": "Preview",
-					"top": 93,
-					"left": 666,
-					"width": 65,
-					"height": 16,
-					"textAlign": "center",
-					"stroke": "#1BA1E5",
-					"textAngle": 0
-				},
 				"11_version.border": {
 					"type": "rectangle",
 					"top": 28,
@@ -374,5 +363,5 @@
 		}
 	},
 	"method": "PRODUCT",
-	"geometryStamp": 567
+	"geometryStamp": 568
 }

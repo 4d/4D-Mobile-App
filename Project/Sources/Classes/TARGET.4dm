@@ -28,12 +28,8 @@ Function init()
 	This:C1470.button("ios").addToGroup($group)
 	This:C1470.button("android").addToGroup($group)
 	
-	This:C1470.formObject("preview")
-	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function onLoad()
-	
-	This:C1470.preview.show(Num:C11(Application version:C493)<1920)
 	
 	If (Is Windows:C1573)
 		
