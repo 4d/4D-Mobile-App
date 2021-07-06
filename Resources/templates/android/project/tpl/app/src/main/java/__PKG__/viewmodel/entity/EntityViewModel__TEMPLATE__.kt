@@ -6,13 +6,9 @@
 
 package {{package}}.viewmodel.entity
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.qmobile.qmobileapi.model.entity.EntityModel
 import com.qmobile.qmobileapi.network.ApiService
-import com.qmobile.qmobiledatastore.dao.RelationBaseDao
 import com.qmobile.qmobiledatastore.data.RoomRelation
-import com.qmobile.qmobiledatasync.app.BaseApp
 import com.qmobile.qmobiledatasync.viewmodel.EntityViewModel
 {{#tableNames}}
 import {{package}}.data.model.entity.{{name}}
@@ -34,15 +30,6 @@ class EntityViewModel{{tableName}}(
     }
 
     /**
-     * DAO
-     */
-
-    {{#relations}}
-    private val {{relation_name}}{{relation_source}}Has{{relation_target}}RelationDao: RelationBaseDao<RoomRelation> =
-        BaseApp.daoProvider.getRelationDao(tableName, "{{relation_target}}")
-    {{/relations}}
-
-    /**
      * LiveData
      */
 
@@ -59,17 +46,5 @@ class EntityViewModel{{tableName}}(
             {{/relations}}
             else -> return
         }
-    }
-
-    override fun getRelationsInfo(
-        entity: EntityModel
-    ): Map<String, LiveData<RoomRelation>> {
-        val map = mutableMapOf<String, LiveData<RoomRelation>>()
-        {{#relations}}
-        (entity as? {{tableName}})?.__{{relation_name}}Key?.let {
-            map["{{relation_name}}"] = {{relation_name}}{{relation_source}}Has{{relation_target}}RelationDao.getManyToOneRelation(relationId = it)
-        }
-        {{/relations}}
-        return map
     }
 }

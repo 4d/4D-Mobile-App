@@ -7,12 +7,14 @@
 package {{package}}.utils
 
 import android.app.Application
+import androidx.lifecycle.LiveData
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.qmobile.qmobileapi.model.entity.EntityModel
 import com.qmobile.qmobileapi.network.ApiService
+import com.qmobile.qmobiledatastore.data.RoomRelation
 import com.qmobile.qmobiledatasync.relation.Relation
 import com.qmobile.qmobiledatasync.relation.RelationHelper
 import com.qmobile.qmobiledatasync.relation.RelationTypeEnum
@@ -190,4 +192,37 @@ class CustomTableHelper : GenericTableHelper {
             {{/tableNames}}
             else -> throw IllegalArgumentException()
         }
+
+    /**
+     * Retrieves the table name of a related field
+     */
+    override fun getRelatedTableName(sourceTableName: String, relationName: String): String {
+        {{#tableNames_relations}}
+        if (sourceTableName == "{{relation_source}}" && relationName == "{{relation_name}}")
+            return "{{relation_target}}"
+        {{/tableNames_relations}}
+        throw IllegalArgumentException()
+    }
+
+    /**
+     * Provides the relation map extracted from an entity
+     */
+    override fun getRelationsInfo(
+        tableName: String,
+        entity: EntityModel
+    ): Map<String, LiveData<RoomRelation>> {
+        val map = mutableMapOf<String, LiveData<RoomRelation>>()
+        {{#tableNames_relations}}
+        if (tableName == "{{relation_source}}") {
+            (entity as? {{relation_source}})?.__{{relation_name}}Key?.let {
+                map["{{relation_name}}"] = RelationHelper.getManyToOneRelation(
+                    relationId = it,
+                    sourceTableName = tableName,
+                    relationName = "{{relation_name}}"
+                )
+            }
+        }
+        {{/tableNames_relations}}
+        return map
+    }
 }
