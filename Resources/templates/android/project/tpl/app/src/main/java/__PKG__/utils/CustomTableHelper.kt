@@ -6,7 +6,6 @@
 
 package {{package}}.utils
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -15,7 +14,6 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.qmobile.qmobileapi.model.entity.EntityModel
 import com.qmobile.qmobileapi.network.ApiService
 import com.qmobile.qmobiledatastore.data.RoomRelation
-import com.qmobile.qmobiledatasync.relation.Relation
 import com.qmobile.qmobiledatasync.relation.RelationHelper
 import com.qmobile.qmobiledatasync.relation.RelationTypeEnum
 import com.qmobile.qmobiledatasync.utils.GenericTableHelper
@@ -31,6 +29,7 @@ import {{package}}.viewmodel.entity.EntityViewModel{{name}}
 {{#tableNames}}
 import {{package}}.viewmodel.entityList.EntityListViewModel{{name}}
 {{/tableNames}}
+import kotlin.reflect.KParameter
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.declaredMemberProperties
 
@@ -94,53 +93,6 @@ class CustomTableHelper : GenericTableHelper {
     }
 
     /**
-     * Returns the list of relations of the given table
-     */
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : EntityModel> getRelations(
-        tableName: String,
-        application: Application
-    ): MutableList<Relation> {
-        val relations = mutableListOf<Relation>()
-        val properties: Collection<*>
-        properties = when (tableName) {
-            {{#tableNames}}
-            "{{name}}" -> {{name}}::class.declaredMemberProperties as Collection<KProperty1<T, *>>
-            {{/tableNames}}
-            else -> throw IllegalArgumentException()
-        }
-        properties.toList().forEach eachProperty@{ property ->
-            val manyToOneRelation = RelationHelper.isManyToOneRelation(
-                property,
-                application,
-                tableNames()
-            )
-            if (manyToOneRelation != null) {
-                relations.add(
-                    Relation(
-                        relationName = property.name,
-                        className = manyToOneRelation,
-                        relationType = RelationTypeEnum.MANY_TO_ONE
-                    )
-                )
-                return@eachProperty
-            }
-            val oneToManyRelation =
-                RelationHelper.isOneToManyRelation(property, application, tableNames())
-            if (oneToManyRelation != null) {
-                relations.add(
-                    Relation(
-                        relationName = property.name,
-                        className = oneToManyRelation,
-                        relationType = RelationTypeEnum.ONE_TO_MANY
-                    )
-                )
-            }
-        }
-        return relations
-    }
-
-    /**
      * Provides the appropriate EntityListViewModel
      */
     override fun entityListViewModelFromTable(
@@ -193,6 +145,27 @@ class CustomTableHelper : GenericTableHelper {
             else -> throw IllegalArgumentException()
         }
 
+    /**
+     * Uses Kotlin reflection to retrieve type properties
+     */
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : EntityModel> getReflectedProperties(
+        tableName: String
+    ): Pair<Collection<KProperty1<T, *>>, List<KParameter>?> {
+        val constructorParameters: List<KParameter>?
+        val properties: Collection<*>
+        when (tableName) {
+            {{#tableNames}}
+            "{{name}}" -> {
+                properties = {{name}}::class.declaredMemberProperties as Collection<KProperty1<T, *>>
+                constructorParameters = {{name}}::class.constructors.find { it.parameters.size > 1 }?.parameters
+            }
+            {{/tableNames}}
+            else -> throw IllegalArgumentException()
+        }
+        return Pair(properties, constructorParameters)
+    }
+    
     /**
      * Retrieves the table name of a related field
      */
