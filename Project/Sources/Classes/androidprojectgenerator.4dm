@@ -401,7 +401,7 @@ Function willRequireFieldIcons
 								
 								If ($relatedField.value.icon#"")
 									
-									If ($field.value.inverseName=Null:C1517)  // ignore relations here
+									If ($relatedField.value.inverseName=Null:C1517)  // ignore relations here
 										
 										$0:=True:C214
 										
