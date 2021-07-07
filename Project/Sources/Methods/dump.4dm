@@ -585,12 +585,18 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 																End if 
 															End if 
 														End if 
-														var $destinationFile : 4D:C1709.File
-														$destinationFile:=$ouputFolder.file($File_name+$format)
-														If ($destinationFile.exists)
-															$destinationFile.delete()
+														
+														If ($format#"best")
+															
+															var $destinationFile : 4D:C1709.File
+															$destinationFile:=$ouputFolder.file($File_name+$format)
+															If ($destinationFile.exists)
+																$destinationFile.delete()
+															End if 
+															
+															$ouputFolder.file($File_name+"best").rename($File_name+$format)
+															
 														End if 
-														$ouputFolder.file($File_name+"best").rename($File_name+$format)
 													End if 
 													
 													$File_name:=$File_name+$format
