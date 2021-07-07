@@ -120,9 +120,9 @@ Class constructor
 	This:C1470.version:=This:C1470._version(This:C1470.cmd)
 	
 	This:C1470.timeOut:=30000  // 30 seconds
-	This:C1470.bootTimeOut:=6000  // 1 minutes
-	This:C1470.packageListTimeOut:=24000  // 4 minutes
-	This:C1470.appStartTimeOut:=6000
+	This:C1470.bootTimeOut:=60000  // 1 minute
+	This:C1470.packageListTimeOut:=240000  // 4 minutes
+	This:C1470.appStartTimeOut:=60000
 	
 	This:C1470._adbStartRetried:=False:C215
 	
@@ -866,7 +866,7 @@ Function waitForDevicePackageList
 	
 	If ($stepTime>This:C1470.packageListTimeOut)  // Timeout
 		
-		$0.errors.push("(timeout when getting package list)")
+		$0.errors.push("(timeout reached when getting package list)")
 		
 		// Else : all ok 
 	End if 
@@ -922,7 +922,7 @@ Function waitUninstallApp
 	
 	If ($stepTime>This:C1470.timeOut)  // Timeout
 		
-		$0.errors.push("(timeout when uninstalling the app)")
+		$0.errors.push("(timeout reached when uninstalling the app)")
 		
 		// Else : all ok 
 	End if 
@@ -956,7 +956,7 @@ Function waitInstallApp
 	
 	If ($stepTime>This:C1470.timeOut)  // Timeout
 		
-		$0.errors.push("(timeout when uninstalling the app)")
+		$0.errors.push("(timeout reached when installing the app)")
 		
 		// Else : all ok 
 	End if 
