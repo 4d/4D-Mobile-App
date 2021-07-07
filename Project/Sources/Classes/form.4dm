@@ -697,6 +697,19 @@ Function instantiate($class : Text; $key : Text; $name : Text)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
+Function postKeyDown($keyCode : Integer; $modifier : Integer)
+	
+	If (Count parameters:C259>=2)
+		
+		POST EVENT:C467(Key down event:K17:4; $keyCode; Tickcount:C458; 0; 0; $modifier; Current process:C322)
+		
+	Else 
+		
+		POST EVENT:C467(Key down event:K17:4; $keyCode; Tickcount:C458; 0; 0; 0; Current process:C322)
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// [PRIVATE] set form events
 Function _setEvents($events; $mode : Integer)
 	

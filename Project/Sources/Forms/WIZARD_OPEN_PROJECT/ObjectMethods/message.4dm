@@ -34,7 +34,7 @@ Case of
 				$display.restore($data)
 				
 				// Restore original size
-				$widget.setDimension($display.width; $display.height)
+				$widget.setDimensions($display.width; $display.height)
 				
 				//…………………………………………………………………………………………………
 			: ($e.code=-8858)  // Resize

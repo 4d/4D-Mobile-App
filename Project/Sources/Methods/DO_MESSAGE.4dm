@@ -100,7 +100,7 @@ Else
 				$display.restore($data)
 				
 				// Restore original size
-				$widget.setDimension($display.width; $display.height)
+				$widget.setDimensions($display.width; $display.height)
 				
 			End if 
 			

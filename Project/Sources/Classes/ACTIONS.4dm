@@ -225,6 +225,17 @@ Function doNewAction($tableNumber : Integer)
 		"label"; $t; \
 		"$icon"; $icon)
 	
+	If (FEATURE.with("predictiveEntryInActionParam"))
+		
+		$action.parameters:=New collection:C1472
+		$action.parameters.push(New object:C1471(\
+			"name"; Get localized string:C991("newParameter"); \
+			"label"; Get localized string:C991("addParameter"); \
+			"shortLabel"; Get localized string:C991("addParameter"); \
+			"type"; "string"))
+		
+	End if 
+	
 	If (Count parameters:C259=0)
 		
 		// Auto define the target table if only one is published
@@ -233,6 +244,7 @@ Function doNewAction($tableNumber : Integer)
 			$i:=$i+1
 			
 		End for each 
+		
 		If ($i=1)
 			
 			$action.tableNumber:=Num:C11($t)
@@ -524,12 +536,25 @@ Function doAddMenu()
 										
 										$field:=$fields.query("name = :1"; $table[$t].name).pop()
 										
-										$parameter:=New object:C1471(\
-											"fieldNumber"; $field.fieldNumber; \
-											"name"; EDITOR.str.setText($table[$t].name).lowerCamelCase(); \
-											"label"; $table[$t].label; \
-											"shortLabel"; $table[$t].shortLabel; \
-											"type"; Choose:C955($field.fieldType=Is time:K8:8; "time"; $field.valueType))
+										If (FEATURE.with("predictiveEntryInActionParam"))
+											
+											$parameter:=New object:C1471(\
+												"fieldNumber"; $field.fieldNumber; \
+												"name"; $field.name; \
+												"label"; $table[$t].label; \
+												"shortLabel"; $table[$t].shortLabel; \
+												"type"; Choose:C955($field.fieldType=Is time:K8:8; "time"; $field.valueType))
+											
+										Else 
+											
+											$parameter:=New object:C1471(\
+												"fieldNumber"; $field.fieldNumber; \
+												"name"; EDITOR.str.setText($table[$t].name).lowerCamelCase(); \
+												"label"; $table[$t].label; \
+												"shortLabel"; $table[$t].shortLabel; \
+												"type"; Choose:C955($field.fieldType=Is time:K8:8; "time"; $field.valueType))
+											
+										End if 
 										
 										If ($menu.edit)
 											

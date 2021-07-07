@@ -688,7 +688,7 @@ Function messageContainer($e : Object)
 					$display.restore($data)
 					
 					// Restore original size
-					This:C1470.message.setDimension($display.width; $display.height)
+					This:C1470.message.setDimensions($display.width; $display.height)
 					
 					//…………………………………………………………………………………………………
 				: ($e.code=-8858)  // Resize

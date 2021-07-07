@@ -10,6 +10,8 @@
 	"windowMaxWidth": 32767,
 	"windowMaxHeight": 32767,
 	"events": [
+		"onDoubleClick",
+		"onSelectionChange",
 		"onBoundVariableChange"
 	],
 	"destination": "detailScreen",
@@ -19,24 +21,39 @@
 		},
 		{
 			"objects": {
+				"border": {
+					"type": "rectangle",
+					"top": 0,
+					"left": 0,
+					"width": 153,
+					"height": 63,
+					"class": "border",
+					"bottom": 63,
+					"sizingX": "grow",
+					"sizingY": "grow",
+					"strokeWidth": 1
+				},
 				"predicting": {
 					"type": "listbox",
-					"left": 0,
-					"top": 0,
+					"left": 2,
+					"top": 1,
 					"width": 150,
-					"height": 101,
+					"height": 62,
 					"events": [
-						"onClick",
+						"onDoubleClick",
 						"onSelectionChange"
 					],
 					"sizingX": "grow",
 					"sizingY": "grow",
 					"listboxType": "collection",
-					"dataSource": "Form:C1466.selected",
+					"dataSource": "Form:C1466.found",
 					"currentItemSource": "Form:C1466.current",
-					"currentItemPositionSource": "Form:C1466.item",
+					"currentItemPositionSource": "Form:C1466.index",
 					"selectedItemsSource": "Form:C1466.selected",
 					"focusable": false,
+					"fill": "transparent",
+					"right": 152,
+					"scrollbarVertical": "automatic",
 					"columns": [
 						{
 							"header": {
@@ -56,7 +73,7 @@
 			}
 		}
 	],
-	"geometryStamp": 15,
+	"geometryStamp": 165,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
@@ -64,5 +81,8 @@
 			"View 1": {}
 		}
 	},
-	"method": "method.4dm"
+	"method": "method.4dm",
+	"formSizeAnchor": "border",
+	"rightMargin": 0,
+	"bottomMargin": 0
 }

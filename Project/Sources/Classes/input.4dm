@@ -1,53 +1,69 @@
-
-/*═══════════════════*/
 Class extends widget
-/*═══════════════════*/
 
-Class constructor
-	
-	C_TEXT:C284($1)
-	C_VARIANT:C1683($2)
-	
+Class constructor($name : Text; $datasource)
 	
 	If (Count parameters:C259>=2)
 		
-		Super:C1705($1; $2)
+		Super:C1705($name; $datasource)
 		
 	Else 
 		
-		Super:C1705($1)
+		Super:C1705($name)
 		
 	End if 
 	
-/*════════════════════════════════════════════
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function highlight($startSel : Integer; $endSel : Integer)
+	
+	Case of 
+			
+			//______________________________________________________
+		: (Count parameters:C259=0)  // Select all
+			
+			HIGHLIGHT TEXT:C210(*; This:C1470.name; 1; MAXLONG:K35:2)
+			
+			//______________________________________________________
+		: (Count parameters:C259=1)  // From $startSel to end
+			
+			HIGHLIGHT TEXT:C210(*; This:C1470.name; $startSel; MAXLONG:K35:2)
+			
+			//______________________________________________________
+		Else   // From $startSel to $endSel
+			
+			HIGHLIGHT TEXT:C210(*; This:C1470.name; $startSel; $endSel)
+			
+			//______________________________________________________
+	End case 
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+/*
 .setFilter(int) -> This
 .setFilter(text) -> This
-══════════════════════════*/
-Function setFilter
+*/
+Function setFilter($filter; $separator : Text)->$this : cs:C1710.input
 	
-	C_VARIANT:C1683($1)
-	C_TEXT:C284($2; $t)
+	var $t : Text
 	
-	If (Value type:C1509($1)=Is longint:K8:6)\
-		 | (Value type:C1509($1)=Is real:K8:4)
+	If (Value type:C1509($filter)=Is longint:K8:6)\
+		 | (Value type:C1509($filter)=Is real:K8:4)
 		
 		// Predefined formats
 		
 		Case of 
 				
 				//………………………………………………………………………
-			: ($1=Is integer:K8:5)\
-				 | ($1=Is longint:K8:6)\
-				 | ($1=Is integer 64 bits:K8:25)
+			: ($filter=Is integer:K8:5)\
+				 | ($filter=Is longint:K8:6)\
+				 | ($filter=Is integer 64 bits:K8:25)
 				
 				OBJECT SET FILTER:C235(*; This:C1470.name; "&\"0-9;-;+\"")
 				
 				//………………………………………………………………………
-			: ($1=Is real:K8:4)
+			: ($filter=Is real:K8:4)
 				
 				If (Count parameters:C259>=2)  // Separator
 					
-					$t:=$2
+					$t:=$separator
 					
 				Else 
 					
@@ -58,11 +74,11 @@ Function setFilter
 				OBJECT SET FILTER:C235(*; This:C1470.name; "&\"0-9;"+$t+";.;-;+\"")
 				
 				//………………………………………………………………………
-			: ($1=Is time:K8:8)
+			: ($filter=Is time:K8:8)
 				
 				If (Count parameters:C259>=2)  // Separator
 					
-					$t:=$2
+					$t:=$separator
 					
 				Else 
 					
@@ -73,11 +89,11 @@ Function setFilter
 				OBJECT SET FILTER:C235(*; This:C1470.name; "&\"0-9;"+$t+";:\"")
 				
 				//………………………………………………………………………
-			: ($1=Is date:K8:7)
+			: ($filter=Is date:K8:7)
 				
 				If (Count parameters:C259>=2)  // Separator
 					
-					$t:=$2
+					$t:=$separator
 					
 				Else 
 					
@@ -97,18 +113,13 @@ Function setFilter
 		
 	Else 
 		
-		OBJECT SET FILTER:C235(*; This:C1470.name; String:C10($1))
+		OBJECT SET FILTER:C235(*; This:C1470.name; String:C10($filter))
 		
 	End if 
 	
-	C_OBJECT:C1216($0)
-	$0:=This:C1470
+	$this:=This:C1470
 	
-/*════════════════════════════════════════════
-.getFilter() -> text
-══════════════════════════*/
-Function getFilter
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function getFilter()->$filter : Text
 	
-	C_TEXT:C284($0)
-	
-	$0:=OBJECT Get filter:C1073(*; This:C1470.name)
+	$filter:=OBJECT Get filter:C1073(*; This:C1470.name)

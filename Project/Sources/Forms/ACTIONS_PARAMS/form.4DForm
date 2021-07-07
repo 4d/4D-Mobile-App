@@ -117,10 +117,10 @@
 				},
 				"01_Parameters.border": {
 					"type": "rectangle",
-					"top": 63,
+					"top": 43,
 					"left": 16,
 					"width": 451,
-					"height": 228,
+					"height": 241,
 					"visibility": "hidden",
 					"class": "border"
 				},
@@ -144,16 +144,18 @@
 					"hideFocusRing": true,
 					"dragging": "none",
 					"events": [
+						"onLosingFocus",
 						"onDataChange",
 						"onAfterKeystroke"
-					]
+					],
+					"multiline": "yes"
 				},
 				"01_Parameters": {
 					"type": "listbox",
-					"top": 65,
+					"top": 45,
 					"left": 17,
 					"width": 448,
-					"height": 225,
+					"height": 238,
 					"visibility": "hidden",
 					"listboxType": "collection",
 					"movableRows": false,
@@ -182,13 +184,12 @@
 					"dragging": "custom",
 					"dropping": "custom",
 					"hideSystemHighlight": true,
-					"verticalLineStroke": "#c0c0c0",
-					"hideExtraBlankRows": false,
+					"verticalLineStroke": "transparent",
 					"columns": [
 						{
 							"name": "names",
 							"dataSource": "This:C1470.name",
-							"width": 219,
+							"width": 400,
 							"minWidth": 10,
 							"maxWidth": 32000,
 							"enterable": false,
@@ -210,18 +211,6 @@
 								"textAlign": "left",
 								"verticalAlign": "middle"
 							}
-						},
-						{
-							"header": {
-								"name": "Header2",
-								"text": "Header2"
-							},
-							"name": "Column1",
-							"footer": {
-								"name": "Footer2"
-							},
-							"dataSource": "Field name:C257(panel.action.tableNumber; This:C1470.fieldNumber)",
-							"width": 246
 						}
 					]
 				},
@@ -533,7 +522,7 @@
 				"field": {
 					"type": "input",
 					"left": 88,
-					"top": 303,
+					"top": 297,
 					"width": 379,
 					"height": 17,
 					"focusable": false,
@@ -602,7 +591,7 @@
 				},
 				"dropCursor": {
 					"type": "line",
-					"top": 227,
+					"top": 207,
 					"left": 28,
 					"width": 30,
 					"height": 0,
@@ -613,31 +602,38 @@
 				},
 				"predicting": {
 					"type": "subform",
-					"left": 488,
-					"top": 371,
-					"width": 150,
-					"height": 101,
+					"left": 28,
+					"top": 370,
+					"width": 153,
+					"height": 64,
 					"detailForm": "PREDICTIVE_ENTRY",
 					"focusable": false,
-					"visibility": "hidden"
+					"visibility": "hidden",
+					"method": "ObjectMethods/predicting.4dm"
 				},
-				"columnRelatedLabel": {
-					"type": "text",
-					"top": 40,
-					"left": 236,
-					"width": 140,
-					"height": 17,
-					"text": ":xliff:relatedFields",
-					"class": "label"
+				"namePopupBorder": {
+					"type": "rectangle",
+					"top": 63,
+					"left": 488,
+					"width": 33,
+					"height": 33,
+					"visibility": "hidden",
+					"class": "border"
 				},
-				"columNameLabel": {
-					"type": "text",
-					"top": 40,
-					"left": 16,
-					"width": 140,
-					"height": 17,
-					"text": ":xliff:names",
-					"class": "label"
+				"namePopup": {
+					"type": "button",
+					"top": 63,
+					"left": 488,
+					"width": 33,
+					"height": 33,
+					"icon": "/RESOURCES/images/common/down.png",
+					"iconFrames": 4,
+					"style": "custom",
+					"events": [
+						"onClick"
+					],
+					"visibility": "hidden",
+					"focusable": false
 				}
 			},
 			"entryOrder": [
@@ -657,7 +653,8 @@
 				"field",
 				"03_sortOrder",
 				"03_sortOrder.popup",
-				"predicting"
+				"predicting",
+				"namePopup"
 			]
 		},
 		{
@@ -695,7 +692,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 346,
+	"geometryStamp": 498,
 	"editor": {
 		"groups": {
 			"Group": [

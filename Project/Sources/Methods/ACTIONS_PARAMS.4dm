@@ -29,7 +29,6 @@ Else   // <== WIDGETS METHOD
 	$e:=$ƒ.event
 	
 	Case of 
-			
 			//==============================================
 		: ($ƒ.parameters.catch())
 			
@@ -87,7 +86,7 @@ Else   // <== WIDGETS METHOD
 			//==============================================
 		: ($ƒ.add.catch($e; On Alternative Click:K2:36))
 			
-			$ƒ.doAddParameterMenu()
+			$ƒ.doAddParameterMenu($ƒ.add)
 			
 			//==============================================
 		: ($ƒ.remove.catch($e; On Clicked:K2:4))
@@ -137,7 +136,8 @@ Else   // <== WIDGETS METHOD
 		: ($ƒ.format.catch())
 			
 			Case of 
-					//_____________________________________
+					
+					//_______________________________
 				: ($e.code=On Mouse Enter:K2:33)
 					
 					EDITOR.tips.instantly()
@@ -152,39 +152,54 @@ Else   // <== WIDGETS METHOD
 					
 					EDITOR.tips.restore()
 					
+					//________________________________________
 			End case 
 			
 			//==================================================
-		: ($ƒ.paramName.catch($e; On After Keystroke:K2:26))
+		: (Not:C34(FEATURE.with("predictiveEntryInActionParam")))
 			
-			If (FEATURE.with("predictiveEntryInActionParam"))
+			If ($e.code=On Data Change:K2:15)\
+				 & ($ƒ.linked.belongsTo($e.objectName))  // Linked widgets
 				
-				var $o; $table : Object
-				var $t : Text
-				
-				$o:=$ƒ.predicting.getValue()
-				
-				If ($o=Null:C1517)  //init
-					
-					$o:=New object:C1471
-					$o.values:=New collection:C1472
-					$table:=Form:C1466.dataModel[String:C10($ƒ.action.tableNumber)]
-					
-					For each ($t; $table)
-						
-						If (PROJECT.isField($t))
-							
-							$table[$t].fieldNumber:=Num:C11($t)
-							$o.values.push($table[$t].name)
-							
-						End if 
-					End for each 
-				End if 
-				
-				$o.editedText:=Get edited text:C655
-				$ƒ.predicting.setValue($o)
+				PROJECT.save()
 				
 			End if 
+			
+			//==============================================
+		: ($ƒ.predicting.catch())\
+			 & ($e.code<0)
+			
+			Case of 
+					
+					//_________________________
+				: ($e.code=-1)  // Validate
+					
+					$ƒ._updateParamater($ƒ.predicting.getValue().choice.value)
+					$ƒ.postKeyDown(Tab:K15:37)
+					$ƒ.refresh()
+					
+					//_________________________
+				: ($e.code=-2)  // Show
+					
+					$ƒ.predicting.show()
+					
+					//_________________________
+				: ($e.code=-3)  // Hide
+					
+					$ƒ.predicting.hide()
+					
+					//_________________________
+			End case 
+			
+			//==================================================
+		: ($ƒ.paramName.catch())
+			
+			$ƒ.doName($e)
+			
+			//==================================================
+		: ($ƒ.namePopup.catch($e; On Clicked:K2:4))
+			
+			$ƒ.doAddParameterMenu($ƒ.namePopup; True:C214)
 			
 			//==================================================
 		: ($e.code=On Data Change:K2:15)\

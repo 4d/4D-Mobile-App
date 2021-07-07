@@ -119,7 +119,7 @@ Function update()
 			.unselect()
 		
 		This:C1470.mains.notSelectable()\
-			.notMovableRows()\
+			.nonMovableLines()\
 			.notDraggable()\
 			.notDroppable()\
 			.unselect()
@@ -130,7 +130,7 @@ Function update()
 			.draggable()
 		
 		This:C1470.mains.singleSelectable()\
-			.movableRows()\
+			.movableLines()\
 			.draggable()\
 			.droppable()
 		

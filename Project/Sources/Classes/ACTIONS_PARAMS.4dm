@@ -37,8 +37,6 @@ Function init()
 	This:C1470.formObject("parametersBorder"; "01_Parameters.border").addToGroup($group)
 	This:C1470.button("add").addToGroup($group)
 	This:C1470.button("remove").addToGroup($group)
-	This:C1470.formObject("columNameLabel").addToGroup($group)
-	This:C1470.formObject("columnRelatedLabel").addToGroup($group)
 	
 	$group:=This:C1470.group("paramNameGroup")
 	This:C1470.input("paramName"; "02_name").addToGroup($group)
@@ -127,6 +125,10 @@ Function init()
 		
 		This:C1470.subform("predicting")
 		
+		$group:=This:C1470.group("sortMenu")
+		This:C1470.button("namePopup").addToGroup($group)
+		This:C1470.formObject("namePopupBorder").addToGroup($group)
+		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
@@ -158,7 +160,13 @@ Function onLoad()
 	
 	If (FEATURE.with("predictiveEntryInActionParam"))
 		
+		This:C1470.predicting.setCoordinates(This:C1470.paramNameBorder.coordinates.left; This:C1470.paramNameBorder.coordinates.bottom)
+		This:C1470.predicting.setDimensions(This:C1470.paramNameBorder.dimensions.width)
 		This:C1470.appendEvents(On After Keystroke:K2:26)
+		This:C1470.appendEvents(On Before Keystroke:K2:6)
+		//This.appendEvents(-1)
+		//This.appendEvents(-2)
+		//This.appendEvents(-3)
 		
 	End if 
 	
@@ -184,14 +192,22 @@ Function restoreContext()
 	Case of 
 			
 			//_______________________________________
-		: (This:C1470.action=Null:C1517) | (This:C1470.action.parameters=Null:C1517)
+		: (This:C1470.action=Null:C1517)\
+			 | (This:C1470.action.parameters=Null:C1517)
 			
 			// <NOTHING MORE TO DO>
 			
 			//_______________________________________
-		: (OB Keys:C1719(This:C1470).indexOf("$current")=-1)  // first display
+		: (OB Keys:C1719(This:C1470).indexOf("$current")=-1)  // First display
 			
 			This:C1470.parameters.select(1)
+			
+			If (FEATURE.with("predictiveEntryInActionParam"))
+				
+				This:C1470.paramName.focus()
+				//This.paramName.highlight()
+				
+			End if 
 			
 			//_______________________________________
 		Else 
@@ -200,6 +216,13 @@ Function restoreContext()
 				
 				$index:=This:C1470.action.parameters.indexOf(This:C1470.current)
 				This:C1470.parameters.select($index+1)
+				
+				If (FEATURE.with("predictiveEntryInActionParam"))
+					
+					This:C1470.paramName.focus()
+					//This.paramName.highlight()
+					
+				End if 
 				
 			Else 
 				
@@ -212,6 +235,10 @@ Function restoreContext()
 					$index:=This:C1470.action.parameters.indexOf(This:C1470.$current)
 					This:C1470.parameters.select($index+1)
 					
+					If (FEATURE.with("predictiveEntryInActionParam"))
+						This:C1470.paramName.focus()
+						//This.paramName.highlight()
+					End if 
 				End if 
 			End if 
 			
@@ -232,6 +259,20 @@ Function update()
 	This:C1470.noAction.hide()
 	This:C1470.title.hide()
 	This:C1470.field.hide()
+	
+	If (FEATURE.with("predictiveEntryInActionParam"))
+		
+		This:C1470.predicting.hide()
+		
+		If (This:C1470.namePopup.isVisible())
+			
+			This:C1470.sortMenu.hide()
+			
+			// Restore position
+			This:C1470.paramName.moveAndResizeHorizontally(-33; 33)
+			
+		End if 
+	End if 
 	
 	This:C1470.paramName.enable()
 	
@@ -282,8 +323,7 @@ Function update()
 					This:C1470.goToPage(1)
 					This:C1470.title.setTitle(\
 						EDITOR.str.setText("sortCriteria")\
-						.localized(New collection:C1472($action.shortLabel; Table name:C256($action.tableNumber)))\
-						).show()
+						.localized(New collection:C1472($action.shortLabel; Table name:C256($action.tableNumber)))).show()
 					This:C1470.withSelection.show()
 					
 					This:C1470.add.enable()
@@ -302,6 +342,12 @@ Function update()
 						This:C1470.field.show()  // Linked to a field
 						This:C1470.paramName.disable()  // The name isn't editable
 						
+						If (FEATURE.with("predictiveEntryInActionParam"))
+							
+							This:C1470.sortMenu.show()
+							This:C1470.paramName.moveAndResizeHorizontally(33; -33)
+							
+						End if 
 					End if 
 					
 					//______________________________________________________
@@ -320,8 +366,7 @@ Function update()
 						
 						This:C1470.title.setTitle(\
 							EDITOR.str.setText("actionParameters")\
-							.localized(New collection:C1472($action.shortLabel; Table name:C256($action.tableNumber)))\
-							).show()
+							.localized(New collection:C1472($action.shortLabel; Table name:C256($action.tableNumber)))).show()
 						This:C1470.withSelection.show()
 						This:C1470.add.enable()
 						This:C1470.remove.enable($current#Null:C1517)
@@ -470,6 +515,9 @@ Function update()
 					//______________________________________________________
 			End case 
 		End if 
+		
+		This:C1470.restoreContext()
+		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
@@ -606,10 +654,12 @@ Function doNewParameter()
 		"type"; "string")
 	
 	This:C1470._addParameter($parameter)
+	This:C1470.paramName.focus()
+	This:C1470.paramName.highlight()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Add a field linked parameter
-Function doAddParameterMenu()
+Function doAddParameterMenu($target : Object; $update : Boolean)
 	
 	var $t : Text
 	var $isSortAction : Boolean
@@ -684,7 +734,7 @@ Function doAddParameterMenu()
 		
 	End if 
 	
-	$menu.popup(This:C1470.add)
+	$menu.popup($target)
 	
 	Case of 
 			
@@ -694,9 +744,15 @@ Function doAddParameterMenu()
 			// <NOTHING MORE TO DO>
 			
 			//______________________________________________________
-		: ($menu.choice="new")  // Add a user parpameter
+		: ($menu.choice="new")  // Add a user parameter
 			
 			This:C1470.doNewParameter()
+			
+			//______________________________________________________
+		: (Count parameters:C259=2)  // Change linked field
+			
+			$field:=$c.query("fieldNumber = :1"; Num:C11($menu.choice)).pop()
+			This:C1470._updateParamater($field.name)
 			
 			//______________________________________________________
 		Else   // Add a field
@@ -754,7 +810,7 @@ Function doAddParameterMenu()
 	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-	// Remove action button
+	// [PRIVATE]
 Function _addParameter($parameter : Object)
 	
 	var $label : Text
@@ -1310,6 +1366,162 @@ Function doOnDrop()
 	This:C1470.parameters.touch()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
+Function doName($e : Object)
+	
+	Case of 
+			
+			//______________________________________________________
+		: ($e.code=On Before Keystroke:K2:6)  // Filtering
+			
+			var $value : Text
+			var $charCode; $indx : Integer
+			
+			$charCode:=Character code:C91(Keystroke:C390)
+			$indx:=New collection:C1472(Return key:K12:27; Escape:K15:39; Up arrow key:K12:18; Down arrow key:K12:19).indexOf($charCode)
+			
+			If ($indx>=0)
+				
+				Case of 
+						
+						//_________________________
+					: ($indx=0)  // Return key
+						
+						This:C1470.callChild(This:C1470.predicting; "predictingEvent"; $charCode)
+						$value:=String:C10(This:C1470.predicting.getValue().choice.value)
+						
+						If (Length:C16($value)>0)
+							
+							This:C1470._updateParamater($value)
+							
+						Else 
+							
+							This:C1470._updateParamater(Get edited text:C655)
+							
+						End if 
+						
+						This:C1470.postKeyDown(Tab:K15:37)
+						This:C1470.update()
+						
+						//_________________________
+					: ($indx=1)  // Escape
+						
+						This:C1470.callChild(This:C1470.predicting; "predictingEvent"; $charCode)
+						$value:=String:C10(This:C1470.predicting.getValue().choice.value)
+						This:C1470.predicting.hide()
+						
+						//_________________________
+					: (This:C1470.predicting.isHidden())
+						
+						// <NOTHING MORE TO DO>
+						
+						//_________________________
+					Else   // Arrow keys
+						
+						This:C1470.callChild(This:C1470.predicting; "predictingEvent"; $charCode)
+						$value:=String:C10(This:C1470.predicting.getValue().choice.value)
+						This:C1470.paramName.setValue($value)
+						
+						//_________________________
+				End case 
+			End if 
+			
+			//______________________________________________________
+		: ($e.code=On After Keystroke:K2:26)  // Update predicting
+			
+			var $key : Text
+			var $table : Object
+			var $c : Collection
+			
+			$table:=Form:C1466.dataModel[String:C10(This:C1470.action.tableNumber)]
+			$c:=New collection:C1472
+			
+			For each ($key; $table)
+				
+				If (PROJECT.isField($key))
+					
+					If (This:C1470.action.parameters.query("fieldNumber = :1"; Num:C11($key)).pop()=Null:C1517)\
+						 | ($table[$key].name=This:C1470.current.name)
+						
+						$c.push($table[$key].name)
+						
+					End if 
+				End if 
+			End for each 
+			
+			This:C1470.predicting.setValue(New object:C1471(\
+				"search"; Get edited text:C655; \
+				"values"; $c; \
+				"withValue"; True:C214))
+			
+			//______________________________________________________
+		: ($e.code=On Losing Focus:K2:8)
+			
+			This:C1470.predicting.hide()
+			
+			$value:=This:C1470.paramName.getValue()
+			
+			If (Length:C16($value)=0)
+				
+				BEEP:C151
+				This:C1470._updateParamater(Get localized string:C991("newParameter"))
+				
+				This:C1470.paramName.focus()
+				
+			End if 
+			
+			//______________________________________________________
+		: ($e.code=On Data Change:K2:15)
+			
+			$value:=This:C1470.paramName.getValue()
+			
+			If (Length:C16($value)>0)
+				
+				This:C1470._updateParamater($value)
+				
+			End if 
+			
+			//______________________________________________________
+	End case 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function _updateParamater($name : Text)->$success : Boolean
+	
+	var $key : Text
+	var $table : Object
+	
+	$table:=Form:C1466.dataModel[String:C10(This:C1470.action.tableNumber)]
+	
+	For each ($key; $table) Until ($success)
+		
+		If (PROJECT.isField($key))
+			
+			$success:=($table[$key].name=$name)
+			
+			If ($success)
+				
+				This:C1470.current.fieldNumber:=Num:C11($key)
+				This:C1470.current.name:=$table[$key].name
+				This:C1470.current.label:=$table[$key].label
+				This:C1470.current.shortLabel:=$table[$key].shortLabel
+				This:C1470.current.type:=PROJECT.fieldType2type($table[$key].fieldType)
+				
+			End if 
+		End if 
+	End for each 
+	
+	If (Not:C34($success))
+		
+		// Keep the user entry
+		// & remove field link
+		This:C1470.current.name:=$name
+		OB REMOVE:C1226(This:C1470.current; "fieldNumber")
+		
+	End if 
+	
+	This:C1470.paramName.setValue(This:C1470.current.name)
+	PROJECT.save()
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Set help tip
 Function setHelpTip()  //($e : Object)
 	
@@ -1389,7 +1601,7 @@ Function metaInfo($current : Object)->$result
 		"cell"; New object:C1471(\
 		"names"; New object:C1471))
 	
-	If ($current.action.parameters.query("name = :1"; $current.name).pop()#Null:C1517)
+	If (This:C1470.action.parameters.query("name = :1"; $current.name).length>1)
 		
 		// Selected item
 		$result.cell.names.stroke:=EDITOR.errorRGB

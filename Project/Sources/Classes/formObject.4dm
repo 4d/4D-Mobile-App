@@ -410,7 +410,7 @@ Function resizeVertically($offset : Integer)->$this : cs:C1710.formObject
 	$this:=This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === ===
-Function moveAndResizeVertically($offset : Integer; $resize : Integer)->$this : cs:C1710.formObject
+Function moveAndResizeHorizontally($offset : Integer; $resize : Integer)->$this : cs:C1710.formObject
 	
 	var $bottom; $left; $right; $top : Integer
 	
@@ -433,7 +433,30 @@ Function moveAndResizeVertically($offset : Integer; $resize : Integer)->$this : 
 	$this:=This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === ===
-Function setDimension($width : Integer; $height : Integer)->$this : cs:C1710.formObject
+Function moveAndResizeVertically($offset : Integer; $resize : Integer)->$this : cs:C1710.formObject
+	
+	var $bottom; $left; $right; $top : Integer
+	
+	OBJECT GET COORDINATES:C663(*; This:C1470.name; $left; $top; $right; $bottom)
+	
+	$top:=$top+$offset
+	
+	If (Count parameters:C259>=2)
+		
+		$bottom:=$bottom+$resize
+		
+	End if 
+	
+	This:C1470.setCoordinates(New object:C1471(\
+		"left"; $left; \
+		"top"; $top; \
+		"right"; $right; \
+		"bottom"; $bottom))
+	
+	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === ===
+Function setDimensions($width : Integer; $height : Integer)->$this : cs:C1710.formObject
 	
 	var $o : Object
 	

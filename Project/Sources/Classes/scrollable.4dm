@@ -76,7 +76,7 @@ Function setScrollPosition($vertical : Integer; $horizontal : Integer)->$this : 
 	//=== === === === === === === === === === === === === === === === === === === === === 
 Function getScrollbars
 	
-	var $horizontal; $vertical : Boolean
+	var $horizontal; $vertical : Integer
 	
 	OBJECT GET SCROLLBAR:C1076(*; This:C1470.name; $horizontal; $vertical)
 	
