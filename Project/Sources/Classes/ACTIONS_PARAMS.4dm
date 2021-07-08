@@ -989,6 +989,23 @@ Function getFormats()->$formats : Object
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
+	// Show current format on disk
+Function formatShowOnDisk
+	var $format : Text
+	var $folder : 4D:C1709.Folder
+	
+	$format:=String:C10(This:C1470.current.format)
+	
+	If (PROJECT.isCustomResource($format))
+		
+		$folder:=This:C1470.path.hostActionParameterFormatters(True:C214).folder(Delete string:C232($format; 1; 1))
+		If ($folder.exists)
+			SHOW ON DISK:C922($folder.platformPath)
+		End if 
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Format choice
 Function doFormatMenu()
 	
@@ -1186,7 +1203,7 @@ Function doFormatMenu()
 						Case of 
 							: ($menu.choice="choiceList")
 								
-								$formatObject.choiceList:=New object:C1471()
+								$formatObject.choiceList:=cs:C1710.formater.new().defaultChoiceList($formatObject.type[0]; False:C215)
 								
 							: ($menu.choice="dataSource")
 								
@@ -1205,7 +1222,7 @@ Function doFormatMenu()
 							$manifestFile.setText(JSON Stringify:C1217($formatObject; *))
 							$current.format:="/"+$formatObject.name  // set as custom/host resource
 							
-							// TODO newActionFormatterChoiceList maybe affect also $current.type
+							// TODO newActionFormatterChoiceList maybe affect also $current.type, and some notify maybe
 							
 							If ($menu.choice="choiceList")
 								OPEN URL:C673($manifestFile.platformPath)  // Open JSON file, but we could open a custom format editor instead

@@ -101,7 +101,15 @@ Else   // <== WIDGETS METHOD
 			//==============================================
 		: ($ƒ.formatPopup.catch($e; On Clicked:K2:4))
 			
-			$ƒ.doFormatMenu()
+			If (Shift down:C543)
+				
+				$ƒ.formatShowOnDisk()
+				
+			Else 
+				
+				$ƒ.doFormatMenu()
+				
+			End if 
 			
 			//==============================================
 		: ($ƒ.sortOrderPopup.catch($e; On Clicked:K2:4))

@@ -288,19 +288,12 @@ Function create($type : Variant; $data : Collection)->$manifestFile : 4D:C1709.F
 				"$comment"; "Map database values to some display values using choiceList"; \
 				"binding"; "localizedText")
 			
+			$manifest.choiceList:=This:C1470.defaultChoiceList($typeString; True:C214)
 			Case of 
 				: (($typeString="bool") | ($typeString="boolean"))
-					$manifest.choiceList:=New object:C1471("0"; "False"; "1"; "True")
 					$manifest.type:=New collection:C1472("boolean")
 					$manifest.$doc:="https://developer.4d.com/4d-for-ios/docs/en/creating-data-formatter.html#integer-to-string"
 				: (($typeString="number") | ($typeString="integer") | ($typeString="real"))
-					$manifest.choiceList:=New object:C1471("0"; "zero"; "1"; "the one"; "3"; "san")
-					$manifest.type:=New collection:C1472("real"; "integer")
-					$manifest.$doc:="https://developer.4d.com/4d-for-ios/docs/en/creating-data-formatter.html#integer-to-string"
-				: (($typeString="string") | ($typeString="text"))
-					$manifest.choiceList:=New object:C1471("value1"; "Displayed value1"; "value2"; "Displayed value2")
-					$manifest.type:=New collection:C1472("text")
-					$manifest.$doc:="https://developer.4d.com/4d-for-ios/docs/en/creating-data-formatter.html#text-formatters"
 					If (Count parameters:C259>1)
 						$manifest.choiceList:=New object:C1471()
 						var $datum : Variant
@@ -308,6 +301,18 @@ Function create($type : Variant; $data : Collection)->$manifestFile : 4D:C1709.F
 							$manifest.choiceList[String:C10($datum)]:=String:C10($datum)
 						End for each 
 					End if 
+					$manifest.type:=New collection:C1472("real"; "integer")
+					$manifest.$doc:="https://developer.4d.com/4d-for-ios/docs/en/creating-data-formatter.html#integer-to-string"
+				: (($typeString="string") | ($typeString="text"))
+					If (Count parameters:C259>1)
+						$manifest.choiceList:=New object:C1471()
+						var $datum : Variant
+						For each ($datum; $data)
+							$manifest.choiceList[String:C10($datum)]:=String:C10($datum)
+						End for each 
+					End if 
+					$manifest.type:=New collection:C1472("text")
+					$manifest.$doc:="https://developer.4d.com/4d-for-ios/docs/en/creating-data-formatter.html#text-formatters"
 				Else 
 					ASSERT:C1129(dev_Matrix; "Missing binding for type "+String:C10($typeString)+" to create formatter")
 			End case 
@@ -317,6 +322,36 @@ Function create($type : Variant; $data : Collection)->$manifestFile : 4D:C1709.F
 			
 		End if 
 	End if 
+	
+	//============================================================================
+	// Return a default choice list according to type and wanted return type
+Function defaultChoiceList($typeString : Text; $isObject : Boolean)->$choiceList : Variant
+	Case of 
+		: (($typeString="bool") | ($typeString="boolean"))
+			If ($isObject)
+				$choiceList:=New object:C1471("0"; "False"; "1"; "True")
+			Else 
+				$choiceList:=New collection:C1472("False"; "True")
+			End if 
+		: (($typeString="number") | ($typeString="integer") | ($typeString="real"))
+			If ($isObject)
+				$choiceList:=New object:C1471("0"; "zero"; "1"; "one"; "2"; "two")
+			Else 
+				$choiceList:=New collection:C1472("zero"; "one"; "two")
+			End if 
+		: (($typeString="string") | ($typeString="text"))
+			If ($isObject)
+				$choiceList:=New object:C1471("value1"; "Displayed value1"; "value2"; "Displayed value2")
+			Else 
+				$choiceList:=New collection:C1472("Choice 1"; "Choice 2"; "Choice 3")
+			End if 
+		Else 
+			If ($isObject)
+				$choiceList:=New object:C1471()
+			Else 
+				$choiceList:=New collection:C1472()
+			End if 
+	End case 
 	
 	//============================================================================
 	// Return toolTip for custom format
