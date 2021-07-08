@@ -154,6 +154,13 @@ Case of
 					"apple"; New collection:C1472)
 				
 			End if 
+			
+		Else 
+			
+			$out.plugged:=New object:C1471(\
+				"android"; New collection:C1472; \
+				"apple"; New collection:C1472)
+			
 		End if 
 		
 		//______________________________________________________
