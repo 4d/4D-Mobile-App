@@ -177,12 +177,15 @@ Else   // <== WIDGETS METHOD
 		: ($ƒ.predicting.catch())\
 			 & ($e.code<0)
 			
+			var $o : Object
+			$o:=$ƒ.predicting.getValue()
+			
 			Case of 
 					
 					//_________________________
 				: ($e.code=-1)  // Validate
 					
-					$ƒ._updateParamater($ƒ.predicting.getValue().choice.value)
+					$ƒ.updateParamater($o.choice.value)
 					$ƒ.postKeyDown(Tab:K15:37)
 					$ƒ.refresh()
 					
@@ -190,6 +193,17 @@ Else   // <== WIDGETS METHOD
 				: ($e.code=-2)  // Show
 					
 					$ƒ.predicting.show()
+					
+					var $height : Integer
+					$height:=$o.ƒ.bestSize()
+					
+					If (($ƒ.predicting.coordinates.top+$height)>$ƒ.dimensions().height)
+						
+						$height:=$ƒ.dimensions().height-$ƒ.predicting.coordinates.top
+						
+					End if 
+					
+					$ƒ.predicting.setHeight($height)
 					
 					//_________________________
 				: ($e.code=-3)  // Hide

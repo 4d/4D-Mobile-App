@@ -369,8 +369,7 @@
 			"COMPILER_ACTIONS_PARAMS"
 		],
 		"forms": [
-			"ACTIONS_PARAMS",
-			"PREDICTIVE_ENTRY"
+			"ACTIONS_PARAMS"
 		],
 		"classes": [
 			"ACTIONS_PARAMS"
@@ -846,6 +845,18 @@
 			"PICTURE_GRID"
 		]
 	},
+	"Predicting": {
+		"methods": [
+			"COMPILER_PREDICTING",
+			"PREDICTING"
+		],
+		"forms": [
+			"PREDICTIVE_ENTRY"
+		],
+		"classes": [
+			"PREDICTING"
+		]
+	},
 	"Proposals": {
 		"forms": [
 			"PROPOSALS"
@@ -1006,6 +1017,7 @@
 			"Message",
 			"pathPicker",
 			"Picture grid",
+			"Predicting",
 			"Proposals",
 			"Search"
 		]

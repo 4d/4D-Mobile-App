@@ -652,7 +652,7 @@ Function saveProperties()
 	This:C1470.properties.headerHeight:=LISTBOX Get headers height:C1144(*; This:C1470.name; $unit)
 	This:C1470.properties.headerHeightUnit:=$unit
 	
-	This:C1470.properties.rowHeight:=LISTBOX Get rows height:C836(*; This:C1470.name)
+	This:C1470.properties.rowHeight:=LISTBOX Get rows height:C836(*; This:C1470.name; lk pixels:K53:22)
 	This:C1470.properties.autoRowHeight:=LISTBOX Get property:C917(*; This:C1470.name; lk auto row height:K53:72)
 	This:C1470.properties.rowHeightUnit:=LISTBOX Get property:C917(*; This:C1470.name; lk row height unit:K53:42)
 	This:C1470.properties.rowMaxHeight:=LISTBOX Get property:C917(*; This:C1470.name; lk row max height:K53:74)

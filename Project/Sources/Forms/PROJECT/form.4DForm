@@ -129,8 +129,8 @@
 				},
 				"picker.close": {
 					"type": "button",
-					"top": 83,
-					"left": 127,
+					"top": 66,
+					"left": 31,
 					"width": 64,
 					"height": 46,
 					"visibility": "hidden",
@@ -145,8 +145,8 @@
 				},
 				"picker": {
 					"type": "subform",
-					"top": 83,
-					"left": 28,
+					"top": 66,
+					"left": 115,
 					"width": 72,
 					"height": 46,
 					"visibility": "hidden",
@@ -175,5 +175,5 @@
 		}
 	},
 	"method": "PROJECT_Handler",
-	"geometryStamp": 89
+	"geometryStamp": 93
 }

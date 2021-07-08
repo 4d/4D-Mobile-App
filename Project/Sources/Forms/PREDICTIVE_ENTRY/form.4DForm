@@ -17,11 +17,8 @@
 	"destination": "detailScreen",
 	"pages": [
 		{
-			"objects": {}
-		},
-		{
 			"objects": {
-				"border": {
+				"background": {
 					"type": "rectangle",
 					"top": 0,
 					"left": 0,
@@ -31,8 +28,13 @@
 					"bottom": 63,
 					"sizingX": "grow",
 					"sizingY": "grow",
-					"strokeWidth": 1
-				},
+					"strokeWidth": 1,
+					"fill": "#fffacd"
+				}
+			}
+		},
+		{
+			"objects": {
 				"predicting": {
 					"type": "listbox",
 					"left": 2,
@@ -73,7 +75,7 @@
 			}
 		}
 	],
-	"geometryStamp": 165,
+	"geometryStamp": 183,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
@@ -81,8 +83,8 @@
 			"View 1": {}
 		}
 	},
-	"method": "method.4dm",
-	"formSizeAnchor": "border",
 	"rightMargin": 0,
-	"bottomMargin": 0
+	"bottomMargin": 0,
+	"method": "PREDICTING",
+	"formSizeAnchor": "background"
 }

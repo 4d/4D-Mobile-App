@@ -474,6 +474,32 @@ Function setDimensions($width : Integer; $height : Integer)->$this : cs:C1710.fo
 	
 	$this:=This:C1470
 	
+	//=== === === === === === === === === === === === === === === === === === ===
+Function setHeight($height : Integer)->$this : cs:C1710.formObject
+	
+	var $o : Object
+	
+	$o:=This:C1470.getCoordinates()
+	$o.bottom:=$o.top+$height
+	
+	OBJECT SET COORDINATES:C1248(*; This:C1470.name; $o.left; $o.top; $o.right; $o.bottom)
+	This:C1470.updateCoordinates($o.left; $o.top; $o.right; $o.bottom)
+	
+	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === ===
+Function setWidth($width : Integer)->$this : cs:C1710.formObject
+	
+	var $o : Object
+	
+	$o:=This:C1470.getCoordinates()
+	$o.right:=$o.left+$width
+	
+	OBJECT SET COORDINATES:C1248(*; This:C1470.name; $o.left; $o.top; $o.right; $o.bottom)
+	This:C1470.updateCoordinates($o.left; $o.top; $o.right; $o.bottom)
+	
+	$this:=This:C1470
+	
 Function setColors($foreground : Variant; $background : Variant; $altBackground : Variant)->$this : cs:C1710.formObject
 	
 	Case of 
@@ -511,6 +537,11 @@ Function setColors($foreground : Variant; $background : Variant; $altBackground 
 	End case 
 	
 	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === ===
+Function getForegroundColor()->$color : Text
+	
+	OBJECT GET RGB COLORS:C1074(*; This:C1470.name; $color)
 	
 	//=== === === === === === === === === === === === === === === === === === ===
 Function updateCoordinates($left : Integer; $top : Integer; $right : Integer; $bottom : Integer)->$this : Object

@@ -97,18 +97,14 @@ Case of
 				//……………………………………………………………………………………………
 			: (String:C10($data.action)="actionIcons")
 				
-				$width:=$width-5
-				$width:=$width-5
-				$height:=$height-5
-				
 				OBJECT GET COORDINATES:C663(*; panel_Find($ƒ.tableProperties); $left; $top; $right; $bottom)
+				
+				$width:=$width-5
 				
 				$left:=Num:C11($data.left)
 				$top:=$top+Num:C11($data.top)
-				$right:=$width
-				$bottom:=$height
-				
-				$width:=$width-$left
+				$right:=Num:C11($data.right)
+				$bottom:=$height-5
 				
 				//……………………………………………………………………………………………
 			Else 

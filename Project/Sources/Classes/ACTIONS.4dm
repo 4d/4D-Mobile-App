@@ -779,8 +779,11 @@ Function doShowIconPicker()
 	
 	$o.row:=This:C1470.actions.row
 	
-	$o.left:=This:C1470.actions.cellBox.right
+	// Update current cell coordinates
+	//This.actions.cellCoordinates($e.column; $e.row)
+	$o.left:=This:C1470.actionsBorder.coordinates.left
 	$o.top:=34
+	$o.right:=This:C1470.actionsBorder.coordinates.right
 	
 	$o.action:="actionIcons"
 	
@@ -790,6 +793,7 @@ Function doShowIconPicker()
 	$o.promptBackColor:=EDITOR.strokeColor
 	$o.hidePromptSeparator:=True:C214
 	$o.forceRedraw:=True:C214
+	
 	$o.prompt:=EDITOR.str.setText("chooseAnIconForTheAction").localized(String:C10(This:C1470.current.name))
 	
 	This:C1470.callMeBack("pickerShow"; $o)

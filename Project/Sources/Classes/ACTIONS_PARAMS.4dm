@@ -160,8 +160,11 @@ Function onLoad()
 	
 	If (FEATURE.with("predictiveEntryInActionParam"))
 		
-		This:C1470.predicting.setCoordinates(This:C1470.paramNameBorder.coordinates.left; This:C1470.paramNameBorder.coordinates.bottom)
-		This:C1470.predicting.setDimensions(This:C1470.paramNameBorder.dimensions.width)
+		This:C1470.predicting.setWidth(This:C1470.paramNameBorder.dimensions.width)\
+			.setCoordinates(This:C1470.paramNameBorder.coordinates.left; This:C1470.paramNameBorder.coordinates.bottom-1)
+		
+		This:C1470.predicting.setValue(New object:C1471("withValue"; True:C214; "bakgroundColor"; 0x00E9F7FE))
+		
 		This:C1470.appendEvents(On After Keystroke:K2:26)
 		This:C1470.appendEvents(On Before Keystroke:K2:6)
 		//This.appendEvents(-1)
@@ -752,7 +755,7 @@ Function doAddParameterMenu($target : Object; $update : Boolean)
 		: (Count parameters:C259=2)  // Change linked field
 			
 			$field:=$c.query("fieldNumber = :1"; Num:C11($menu.choice)).pop()
-			This:C1470._updateParamater($field.name)
+			This:C1470.updateParamater($field.name)
 			
 			//______________________________________________________
 		Else   // Add a field
@@ -1530,29 +1533,37 @@ Function doName($e : Object)
 			//______________________________________________________
 		: ($e.code=On Before Keystroke:K2:6)  // Filtering
 			
-			var $value : Text
+			var $editedText; $value : Text
 			var $charCode; $indx : Integer
 			
 			$charCode:=Character code:C91(Keystroke:C390)
-			$indx:=New collection:C1472(Return key:K12:27; Escape:K15:39; Up arrow key:K12:18; Down arrow key:K12:19).indexOf($charCode)
+			$editedText:=Replace string:C233(Get edited text:C655; Char:C90(At sign:K15:46); "")
+			$editedText:=Replace string:C233($editedText; Char:C90(Return key:K12:27); "")
+			$indx:=New collection:C1472(Return key:K12:27; Escape:K15:39; Up arrow key:K12:18; Down arrow key:K12:19; Right arrow key:K12:17; Left arrow key:K12:16).indexOf($charCode)
 			
 			If ($indx>=0)
 				
 				Case of 
 						
 						//_________________________
+					: (This:C1470.predicting.isHidden())
+						
+						FILTER KEYSTROKE:C389("")
+						This:C1470.paramName.setValue($editedText)
+						
+						//_________________________
 					: ($indx=0)  // Return key
 						
-						This:C1470.callChild(This:C1470.predicting; "predictingEvent"; $charCode)
+						This:C1470.callChild(This:C1470.predicting; "PREDICTING_FILTER"; $charCode)
 						$value:=String:C10(This:C1470.predicting.getValue().choice.value)
 						
 						If (Length:C16($value)>0)
 							
-							This:C1470._updateParamater($value)
+							This:C1470.updateParamater($value)
 							
 						Else 
 							
-							This:C1470._updateParamater(Get edited text:C655)
+							This:C1470.updateParamater($editedText)
 							
 						End if 
 						
@@ -1562,21 +1573,21 @@ Function doName($e : Object)
 						//_________________________
 					: ($indx=1)  // Escape
 						
-						This:C1470.callChild(This:C1470.predicting; "predictingEvent"; $charCode)
-						$value:=String:C10(This:C1470.predicting.getValue().choice.value)
+						This:C1470.callChild(This:C1470.predicting; "PREDICTING_FILTER"; $charCode)
 						This:C1470.predicting.hide()
 						
 						//_________________________
-					: (This:C1470.predicting.isHidden())
+					: ($indx>=4)  // Left, right 
 						
-						// <NOTHING MORE TO DO>
+						//FILTER KEYSTROKE("")
+						This:C1470.paramName.setValue($editedText)
 						
 						//_________________________
 					Else   // Arrow keys
 						
-						This:C1470.callChild(This:C1470.predicting; "predictingEvent"; $charCode)
-						$value:=String:C10(This:C1470.predicting.getValue().choice.value)
-						This:C1470.paramName.setValue($value)
+						This:C1470.current.name:=$editedText
+						This:C1470.callChild(This:C1470.predicting; "PREDICTING_FILTER"; $charCode)
+						This:C1470.paramName.highlight()
 						
 						//_________________________
 				End case 
@@ -1586,11 +1597,14 @@ Function doName($e : Object)
 		: ($e.code=On After Keystroke:K2:26)  // Update predicting
 			
 			var $key : Text
-			var $table : Object
+			var $o; $table : Object
 			var $c : Collection
 			
 			$table:=Form:C1466.dataModel[String:C10(This:C1470.action.tableNumber)]
-			$c:=New collection:C1472
+			
+			$o:=This:C1470.predicting.getValue()
+			$o.search:=Get edited text:C655
+			$o.values:=New collection:C1472
 			
 			For each ($key; $table)
 				
@@ -1599,31 +1613,31 @@ Function doName($e : Object)
 					If (This:C1470.action.parameters.query("fieldNumber = :1"; Num:C11($key)).pop()=Null:C1517)\
 						 | ($table[$key].name=This:C1470.current.name)
 						
-						$c.push($table[$key].name)
+						$o.values.push($table[$key].name)
 						
 					End if 
 				End if 
 			End for each 
 			
-			This:C1470.predicting.setValue(New object:C1471(\
-				"search"; Get edited text:C655; \
-				"values"; $c; \
-				"withValue"; True:C214))
+			This:C1470.predicting.setValue($o)
 			
 			//______________________________________________________
 		: ($e.code=On Losing Focus:K2:8)
 			
 			This:C1470.predicting.hide()
 			
+			If (This:C1470.current#Null:C1517)
+				
 			$value:=This:C1470.paramName.getValue()
 			
 			If (Length:C16($value)=0)
 				
 				BEEP:C151
-				This:C1470._updateParamater(Get localized string:C991("newParameter"))
+					This:C1470.updateParamater(Get localized string:C991("newParameter"))
 				
 				This:C1470.paramName.focus()
 				
+			End if 
 			End if 
 			
 			//______________________________________________________
@@ -1633,7 +1647,7 @@ Function doName($e : Object)
 			
 			If (Length:C16($value)>0)
 				
-				This:C1470._updateParamater($value)
+				This:C1470.updateParamater($value)
 				
 			End if 
 			
@@ -1641,7 +1655,7 @@ Function doName($e : Object)
 	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function _updateParamater($name : Text)->$success : Boolean
+Function updateParamater($name : Text)->$success : Boolean
 	
 	var $key : Text
 	var $table : Object

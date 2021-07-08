@@ -121,7 +121,7 @@
 					"top": 190,
 					"left": 0,
 					"width": 954,
-					"height": 680,
+					"height": 679,
 					"visibility": "hidden",
 					"sizingX": "grow",
 					"sizingY": "grow",
@@ -132,7 +132,7 @@
 					"selectionMode": "multiple",
 					"printFrame": "variable",
 					"scrollbarHorizontal": "hidden",
-					"bottom": 870,
+					"bottom": 869,
 					"events": [
 						"onGettingFocus"
 					]
@@ -297,7 +297,7 @@
 			}
 		}
 	},
-	"geometryStamp": 212,
+	"geometryStamp": 213,
 	"width": 970,
 	"height": 870
 }

@@ -735,15 +735,18 @@ Function doShowIconPicker($e : Object)
 		$o.row:=$e.row
 		$o.left:=This:C1470.fieldList.cellBox.right
 		$o.top:=-40
+		
 		$o.action:="fieldIcons"
+		
 		$o.background:=0x00FFFFFF
 		$o.backgroundStroke:=EDITOR.strokeColor
 		$o.promptColor:=0x00FFFFFF
 		$o.promptBackColor:=EDITOR.strokeColor
 		$o.hidePromptSeparator:=True:C214
 		$o.forceRedraw:=True:C214
+		
 		//%W-533.3
-		$o.prompt:=cs:C1710.str.new("chooseAnIconForTheField").localized((This:C1470.fieldList.columns["names"].pointer)->{$e.row})
+		$o.prompt:=EDITOR.str.setText("chooseAnIconForTheField").localized((This:C1470.fieldList.columns["names"].pointer)->{$e.row})
 		//%W+533.3
 		
 		This:C1470.callMeBack("pickerShow"; $o)
