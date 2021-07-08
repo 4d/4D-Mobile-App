@@ -152,17 +152,16 @@ FEATURE.unstable("freeActionName")  // follow https://project.4d.com/issues/1176
 _____________*/
 FEATURE.unstable("predictiveEntryInActionParam")  // Name of the action parameters and sorting criteria can be modified (#128898)
 
-FEATURE.unstable("duplicateTemplate")  // Allow to duplicate template in host database and show on disk https:// Project.4d.com/issues/98054
 FEATURE.unstable("customActionFormatter")  // Redmine #128195
+
 FEATURE.unstable("newFormatterChoiceList")  // Menu to create formatter choice list directly , from data
 FEATURE.unstable("newActionFormatterChoiceList")  // Menu to create action formatter choice list directly
-
-// Mac M1 build for simu using arm64
-// FEATURE.unstable("simuARMOnAppleProcessor")
 
 /* _____________
 WIP
 _____________*/
+// FEATURE.wip("simuARMOnAppleProcessor") // Mac M1 build for simu using arm64
+FEATURE.wip("duplicateTemplate")  // Allow to duplicate template in host database and show on disk https:// Project.4d.com/issues/98054
 FEATURE.wip("taskIndicator")  // UI for background tasks executing
 
 FEATURE.wip("compressionOfTemplates")  // Use the archive "/RESOURCES/template.zip" instead of "templates" folder in builded component 

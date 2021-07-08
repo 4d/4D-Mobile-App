@@ -993,9 +993,12 @@ Function getFormats()->$formats : Object
 Function doFormatMenu()
 	
 	var $currentFormat; $format; $label; $newType; $type : Text
+	var $tableNumber; $fieldNumber : Text
 	var $hasCustom : Boolean
 	var $index : Integer
 	var $current; $formats; $subMenu : Object
+	var $table; $tablesMenu; $field; $fieldsMenu; $dataSource; $formatObject : Object
+	var $folder; $manifestFile : Object
 	var $menu : cs:C1710.menu
 	
 	$current:=This:C1470.current
@@ -1010,7 +1013,8 @@ Function doFormatMenu()
 		
 		$menu.append(":xliff:byDefault"; "null"; $current.format=Null:C1517).line()
 		
-		For each ($format; $formats[Choose:C955($current.type="text"; "string"; $current.type)])
+		$type:=Choose:C955($current.type="text"; "string"; $current.type)
+		For each ($format; $formats[$type])
 			
 			If (PROJECT.isCustomResource($format))
 				
@@ -1029,6 +1033,48 @@ Function doFormatMenu()
 				
 			End if 
 		End for each 
+		
+		If (FEATURE.with("newActionFormatterChoiceList"))
+			
+			If (($type#"image") & ($type#"date") & ($type#"time"))  // TODO newActionFormatterChoiceList make an include list instead
+				$menu.line()
+				
+				$formatObject:=New object:C1471("type"; New collection:C1472($type))
+				$menu.append(".New choice list"/*TODO newActionFormatterChoiceList localize*/; "$new:choiceList:"+JSON Stringify:C1217($formatObject))
+				
+				$tablesMenu:=cs:C1710.menu.new()
+				
+				For each ($tableNumber; PROJECT.dataModel)
+					
+					$table:=PROJECT.dataModel[$tableNumber]
+					$fieldsMenu:=cs:C1710.menu.new()
+					
+					For each ($fieldNumber; $table)
+						
+						If (PROJECT.isField($fieldNumber))
+							
+							$field:=$table[$fieldNumber]
+							
+							If (PROJECT.fieldType2type($field.fieldType)=$type)  // OPTI : use reverse convertion on current type instead
+								
+								$formatObject:=New object:C1471("type"; New collection:C1472($type); "choiceList"; New object:C1471("dataSource"; New object:C1471("dataClass"; $table[""].name; "field"; $field.name)))
+								$fieldsMenu.append($field.name; "$new:dataSource:"+JSON Stringify:C1217($formatObject))
+								
+							End if 
+						End if 
+					End for each 
+					
+					If ($fieldsMenu.itemCount()>0)
+						$tablesMenu.append($table[""].name; $fieldsMenu)
+					End if 
+				End for each 
+				
+				If ($tablesMenu.itemCount()>0)
+					$menu.append(".New from dataClass"/*TODO newActionFormatterChoiceList localize*/; $tablesMenu)
+				End if 
+				
+			End if 
+		End if 
 		
 	Else 
 		
@@ -1061,6 +1107,47 @@ Function doFormatMenu()
 					End if 
 				End for each 
 				
+				If (FEATURE.with("newActionFormatterChoiceList"))
+					
+					If (($type#"image") & ($type#"date") & ($type#"time"))  // TODO newActionFormatterChoiceList make an include list instead
+						
+						$subMenu.line()
+						
+						$formatObject:=New object:C1471("type"; New collection:C1472($type))
+						$subMenu.append(".New choice list"/*TODO newActionFormatterChoiceList localize*/; "$new:choiceList:"+JSON Stringify:C1217($formatObject))
+						
+						$tablesMenu:=cs:C1710.menu.new()
+						
+						For each ($tableNumber; PROJECT.dataModel)
+							
+							$table:=PROJECT.dataModel[$tableNumber]
+							$fieldsMenu:=cs:C1710.menu.new()
+							
+							For each ($fieldNumber; $table)
+								
+								If (PROJECT.isField($fieldNumber))
+									
+									$field:=$table[$fieldNumber]
+									
+									If (PROJECT.fieldType2type($field.fieldType)=$type)  // OPTI : use reverse convertion on current type instead
+										
+										$formatObject:=New object:C1471("type"; New collection:C1472($type); "choiceList"; New object:C1471("dataSource"; New object:C1471("dataClass"; $table[""].name; "field"; $field.name)))
+										$fieldsMenu.append($field.name; "$new:dataSource:"+JSON Stringify:C1217($formatObject))
+										
+									End if 
+								End if 
+							End for each 
+							
+							If ($fieldsMenu.itemCount()>0)
+								$tablesMenu.append($table[""].name; $fieldsMenu)
+							End if 
+						End for each 
+						
+						If ($tablesMenu.itemCount()>0)
+							$subMenu.append(".New from dataClass"/*TODO newActionFormatterChoiceList localize*/; $tablesMenu)
+						End if 
+					End if 
+				End if 
 				$menu.append(":xliff:"+$label; $subMenu)
 				
 			Else 
@@ -1074,46 +1161,99 @@ Function doFormatMenu()
 	// Position according to the box
 	If ($menu.popup(This:C1470.formatBorder).selected)
 		
-		If ($menu.choice="null")
-			
-			OB REMOVE:C1226($current; "format")
-			
-		Else 
-			
-			$current.format:=$menu.choice
-			
-			If ($current.defaultField=Null:C1517)  // User parameter
+		Case of 
+			: ($menu.choice="null")
 				
-				For each ($type; $formats) Until ($index#-1)
+				OB REMOVE:C1226($current; "format")
+				
+				
+			: (Position:C15("$new:"; $menu.choice)=1)
+				
+				$menu.choice:=Delete string:C232($menu.choice; 1; Length:C16("$new:"))
+				$formatObject:=JSON Parse:C1218(Substring:C12($menu.choice; Position:C15(":"; $menu.choice)+1))
+				$menu.choice:=Substring:C12($menu.choice; 1; Position:C15(":"; $menu.choice)-1)
+				
+				$format:=Request:C163(".Name of the format"/*TODO newActionFormatterChoiceList localize*/)
+				
+				If (Length:C16($format)>0)
 					
-					$index:=$formats[$type].indexOf($current.format)
+					$formatObject.name:=formatString("field-name"; $format)  // TODO format the name ; compatible with Folder
 					
-					If ($index#-1)
+					$folder:=This:C1470.path.hostActionParameterFormatters(True:C214).folder($formatObject.name)
+					
+					If (Not:C34($folder.exists))
 						
-						$newType:=Choose:C955($type="string"; "text"; $type)
+						Case of 
+							: ($menu.choice="choiceList")
+								
+								$formatObject.choiceList:=New object:C1471()
+								
+							: ($menu.choice="dataSource")
+								
+								// already filled
+								
+							Else 
+								
+								$formatObject:=Null:C1517
+								
+						End case 
 						
+						If ($formatObject#Null:C1517)
+							
+							$folder.create()
+							$manifestFile:=$folder.file("manifest.json")
+							$manifestFile.setText(JSON Stringify:C1217($formatObject; *))
+							$current.format:="/"+$formatObject.name  // set as custom/host resource
+							
+							// TODO newActionFormatterChoiceList maybe affect also $current.type
+							
+							If ($menu.choice="choiceList")
+								OPEN URL:C673($manifestFile.platformPath)  // Open JSON file, but we could open a custom format editor instead
+							End if 
+							
+						End if 
+						
+					Else 
+						ALERT:C41("A format with that name exists")
 					End if 
-				End for each 
-				
-				If ($index=-1)
-					
-					$newType:=$current.format
-					
 				End if 
 				
-				If ($current.type#$newType)  // The type is changed
+			Else 
+				
+				$current.format:=$menu.choice
+				
+				If ($current.defaultField=Null:C1517)  // User parameter
 					
-					$current.type:=$newType
-					OB REMOVE:C1226($current; "default")
-					
-					If (This:C1470.defaultValue.focused)
+					For each ($type; $formats) Until ($index#-1)
 						
-						This:C1470.goTo(This:C1470.parameters.name)
+						$index:=$formats[$type].indexOf($current.format)
+						
+						If ($index#-1)
+							
+							$newType:=Choose:C955($type="string"; "text"; $type)
+							
+						End if 
+					End for each 
+					
+					If ($index=-1)
+						
+						$newType:=$current.format
 						
 					End if 
+					
+					If ($current.type#$newType)  // The type is changed
+						
+						$current.type:=$newType
+						OB REMOVE:C1226($current; "default")
+						
+						If (This:C1470.defaultValue.focused)
+							
+							This:C1470.goTo(This:C1470.parameters.name)
+							
+						End if 
+					End if 
 				End if 
-			End if 
-		End if 
+		End case 
 		
 		PROJECT.save()
 		
