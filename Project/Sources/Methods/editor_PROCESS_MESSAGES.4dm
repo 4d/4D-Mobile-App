@@ -20,9 +20,27 @@ Case of
 	: ($message="footer")
 		
 		var $offset
-		$offset:=Choose:C955(Length:C16(String:C10($data.message))>0; -20; 20)  // Show/Hide
-		EDITOR.project.resizeVertically($offset)
-		EDITOR.footer.show($offset<0)
+		$offset:=Choose:C955(Length:C16(String:C10($data.message))>0; -20; 20)  // Default is hide
+		
+		If ($offset<0)  // Show
+			
+			If (EDITOR.footer.isHidden())
+				
+				EDITOR.project.resizeVertically($offset)
+				EDITOR.footer.show()
+				
+			End if 
+			
+		Else   // Hide
+			
+			If (EDITOR.footer.isVisible())
+				
+				EDITOR.project.resizeVertically($offset)
+				EDITOR.footer.hide()
+				
+			End if 
+		End if 
+		
 		EDITOR.footer.setValue($data)
 		
 		//______________________________________________________
