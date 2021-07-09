@@ -6,7 +6,6 @@
 
 package {{package}}.utils
 
-import android.os.Bundle
 import android.view.View
 import androidx.databinding.ViewDataBinding
 import androidx.navigation.findNavController
@@ -31,6 +30,7 @@ import {{package}}.list.EntityListFragment{{name}}Directions
 {{#tableNames}}
 import {{package}}.viewmodel.entity.EntityViewModel{{name}}
 {{/tableNames}}
+import java.lang.IllegalArgumentException
 
 /**
  * Provides different elements depending of the generated type
@@ -54,19 +54,13 @@ class CustomTableFragmentHelper :
     /**
      * Gets the appropriate detail fragment
      */
-    override fun getDetailFragment(itemId: String, tableName: String): EntityDetailFragment {
-        val detailFragment = when (tableName) {
+    override fun getDetailFragment(itemId: String, tableName: String): EntityDetailFragment =
+        when (tableName) {
             {{#tableNames_navigation}}
             "{{name}}" -> EntityFragment{{name}}()
             {{/tableNames_navigation}}
-            else -> throw java.lang.IllegalArgumentException()
+            else -> throw IllegalArgumentException()
         }
-        detailFragment.arguments = Bundle().apply {
-            putString("itemId", itemId)
-            putString("tableName", tableName)
-        }
-        return detailFragment
-    }
 
     /**
      * Sets the appropriate EntityViewModel
@@ -80,7 +74,7 @@ class CustomTableFragmentHelper :
             {{#tableNames_navigation}}
             is FragmentDetail{{nameCamelCase}}Binding -> viewDataBinding.viewModel = entityViewModel as EntityViewModel{{name}}
             {{/tableNames_navigation}}
-            else -> throw java.lang.IllegalArgumentException()
+            else -> throw IllegalArgumentException()
         }
     }
 
@@ -128,14 +122,13 @@ class CustomTableFragmentHelper :
     override fun getDrawableForFormatter(formatName: String, imageName: String): Pair<Int, Int>? {
         return when {
             {{#custom_formatter_images}}
-            formatName == "{{formatterName}}" && imageName == "{{imageName}}" -> {
+            formatName == "{{formatterName}}" && imageName == "{{imageName}}" ->
                 {{#darkModeExists}}
                 Pair(R.drawable.{{resourceName}}, R.drawable.{{resourceNameDarkMode}})
                 {{/darkModeExists}}
                 {{^darkModeExists}}
                 Pair(R.drawable.{{resourceName}}, 0)
                 {{/darkModeExists}}
-            }
             {{/custom_formatter_images}}
             else -> null
         }

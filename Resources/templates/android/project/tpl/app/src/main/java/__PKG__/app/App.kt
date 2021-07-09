@@ -17,7 +17,6 @@ import {{package}}.R
 import {{package}}.data.db.AppDatabase
 import {{package}}.utils.CustomTableFragmentHelper
 import {{package}}.utils.CustomTableHelper
-import {{package}}.utils.getPropertyListFromTable
 import org.json.JSONObject
 import timber.log.Timber
 import java.io.File
@@ -98,7 +97,7 @@ class App : BaseApp() {
     private fun saveTableProperties() {
         AuthInfoHelper.getInstance(this).apply {
             genericTableHelper.tableNames().forEach { tableName ->
-                val properties = getPropertyListFromTable(tableName, this@App)
+                val properties = genericTableHelper.getPropertyListFromTable(tableName, this@App)
                 setProperties(tableName, properties)
             }
         }

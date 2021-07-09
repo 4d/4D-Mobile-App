@@ -6,6 +6,7 @@
 
 package {{package}}.utils
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -169,13 +170,13 @@ class CustomTableHelper : GenericTableHelper {
     /**
      * Retrieves the table name of a related field
      */
-    override fun getRelatedTableName(sourceTableName: String, relationName: String): String {
-        {{#tableNames_relations}}
-        if (sourceTableName == "{{relation_source}}" && relationName == "{{relation_name}}")
-            return "{{relation_target}}"
-        {{/tableNames_relations}}
-        throw IllegalArgumentException()
-    }
+    override fun getRelatedTableName(sourceTableName: String, relationName: String): String =
+        when {
+            {{#tableNames_relations}}
+            sourceTableName == "{{relation_source}}" && relationName == "{{relation_name}}" -> "{{relation_target}}"
+            {{/tableNames_relations}}
+            else -> throw IllegalArgumentException()
+        }
 
     /**
      * Provides the relation map extracted from an entity
@@ -187,15 +188,24 @@ class CustomTableHelper : GenericTableHelper {
         val map = mutableMapOf<String, LiveData<RoomRelation>>()
         {{#tableNames_relations}}
         if (tableName == "{{relation_source}}") {
-            (entity as? {{relation_source}})?.__{{relation_name}}Key?.let {
-                map["{{relation_name}}"] = RelationHelper.getManyToOneRelation(
-                    relationId = it,
-                    sourceTableName = tableName,
-                    relationName = "{{relation_name}}"
-                )
+            (entity as? {{relation_source}})?.__{{relation_name}}Key?.let { relationId ->
+                RelationHelper.addRelation("{{relation_name}}", relationId, tableName, map)
             }
         }
         {{/tableNames_relations}}
         return map
+    }
+
+    /**
+     * Returns list of table properties as a String, separated by commas, without EntityModel
+     * inherited properties
+     */
+    override fun getPropertyListFromTable(tableName: String, application: Application): String {
+        return when (tableName) {
+            {{#tableNames}}
+            "{{name}}" -> RelationHelper.getPropertyListString<{{name}}>(tableName, application)
+            {{/tableNames}}
+            else -> throw IllegalArgumentException()
+        }
     }
 }
