@@ -1152,7 +1152,11 @@ Function doFormatMenu()
 						
 					Else 
 						
-						ALERT:C41("A format with that name exists")
+						POST_MESSAGE(New object:C1471(\
+							"target"; Current form window:C827; \
+							"action"; "show"; \
+							"type"; "alert"; \
+							"title"; Get localized string:C991("thereIsAlreadyAFormatWithThisName")))
 						
 					End if 
 				End if 
