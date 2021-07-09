@@ -1,4 +1,4 @@
-#DECLARE($request : Object)->$response : Object
+﻿#DECLARE($request : Object)->$response : Object
 
 /*
 	$request = Informations fournies par l'application mobile
