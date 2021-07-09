@@ -592,6 +592,11 @@ Function trimLeading
 	If (Count parameters:C259>=1)
 		
 		$pattern:="(?m-si)^(TRIM*)"
+		If ($1=".")
+			
+			$1:="\\."
+			
+		End if 
 		$pattern:=Replace string:C233($pattern; "TRIM"; $1; *)
 		
 	Else 
@@ -622,6 +627,12 @@ Function trimTrailing
 	If (Count parameters:C259>=1)
 		
 		$pattern:="(?m-si)^(TRIM*)"
+		If ($1=".")
+			
+			$1:="\\."
+			
+		End if 
+		
 		$pattern:=Replace string:C233($pattern; "TRIM"; $1; *)
 		
 	Else 
@@ -652,6 +663,11 @@ Function trim
 	If (Count parameters:C259>=1)
 		
 		$pattern:="(?m-si)^(TRIM*)"
+		If ($1=".")
+			
+			$1:="\\."
+			
+		End if 
 		$pattern:=Replace string:C233($pattern; "TRIM"; $1; *)
 		
 	Else 
@@ -1258,4 +1274,63 @@ Function passwordCompliance($length : Integer)->$compliant : Boolean
 		
 	End if 
 	
+	//=======================================================================================================
+Function suitableWithFileName()->$suitable : Text
+	
+/*
+All non-permitted characters are removed. Example: way*fast becomes wayfast:
+  < (less than) 
+  > (greater than) 
+  : (colon) 
+  " (right quotation mark) 
+  | (vertical bar or pipe) 
+  ? (question mark) 
+  * (asterisk) 
+  . (period) or space at the begin or end of the file or folder name
+*/
+	
+	var $pos; $len : Integer
+	
+	$suitable:=This:C1470.value
+	
+	While (Match regex:C1019("(?mi-s)((?:^[\\.\\s]+)|(?:[\\.\\s]+$)|(?:[:\\\\*?\"<>|/]+))+"; $suitable; 1; $pos; $len))
+		
+		$suitable:=Delete string:C232($suitable; $pos; $len)
+		
+	End while 
+	
+/*
+Windows reserved names 
+com1, com2, com3, com4, com5, com6, com7, com8, com9
+lpt1, lpt2, lpt3, lpt4, lpt5, lpt6, lpt7, lpt8, lpt9
+con, nul, prn
+*/
+	
+	If (New collection:C1472(\
+		"com1"; \
+		"com2"; \
+		"com3"; \
+		"com4"; \
+		"com5"; \
+		"com6"; \
+		"com7"; \
+		"com8"; \
+		"com9"; \
+		"lpt1"; \
+		"lpt2"; \
+		"lpt3"; \
+		"lpt4"; \
+		"lpt5"; \
+		"lpt6"; \
+		"lpt7"; \
+		"lpt8"; \
+		"lpt9"; \
+		"con"; \
+		"nul"; \
+		"prn")\
+		.indexOf($suitable)>-1)
+		
+		$suitable:="_"+$suitable
+		
+	End if 
 	

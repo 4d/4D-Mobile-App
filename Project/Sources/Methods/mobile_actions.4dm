@@ -258,6 +258,7 @@ Case of
 			
 			C_OBJECT:C1216($Obj_dataModel; $Path_manifest; $Obj_manifest)
 			C_TEXT:C284($t)
+			
 			$Obj_dataModel:=$Obj_in.project.dataModel
 			
 			For each ($Obj_action; $Obj_in.project.actions)
@@ -267,6 +268,7 @@ Case of
 					For each ($Obj_parameters; $Obj_action.parameters)
 						
 						Case of 
+								
 								//%W-533.1
 							: (_and(Formula:C1597(FEATURE.with("customActionFormatter")); \
 								Formula:C1597(Length:C16(String:C10($Obj_parameters.format))>0); \
@@ -275,14 +277,20 @@ Case of
 								
 								var $manifestFile : 4D:C1709.File
 								$manifestFile:=cs:C1710.path.new().hostActionParameterFormatters().folder(Substring:C12($Obj_parameters.format; 2)).file("manifest.json")
+								
 								If ($manifestFile.exists)
+									
 									var $manifestData : Object
 									$manifestData:=JSON Parse:C1218($manifestFile.getText())
 									
 									If ($manifestData.choiceList#Null:C1517)
+										
 										$Obj_parameters.choiceList:=$manifestData.choiceList
+										
 										If ($manifestData.format#Null:C1517)
-											$Obj_parameters.format:=$manifestData.format  // could take from manifest another way to display choice list
+											
+											$Obj_parameters.format:=$manifestData.format  // Could take from manifest another way to display choice list
+											
 										End if 
 									End if 
 								End if 
@@ -330,11 +338,15 @@ Case of
 												Else 
 													
 													If (Value type:C1509($Obj_manifest.choiceList)=Is object:K8:27)
-														$Obj_parameters.choiceList:=OB Entries:C1720($Obj_manifest.choiceList)  // to keep order
+														
+														// To keep order
+														$Obj_parameters.choiceList:=OB Entries:C1720($Obj_manifest.choiceList)
+														
 													Else 
+														
 														$Obj_parameters.choiceList:=$Obj_manifest.choiceList
+														
 													End if 
-													
 												End if 
 											End if 
 										End if 
@@ -361,10 +373,15 @@ Case of
 	: ($Txt_action="hasAction")
 		
 		If ($Obj_in.project.actions#Null:C1517)
+			
 			$Obj_out.value:=$Obj_in.project.actions.length>0
+			
 		Else 
+			
 			$Obj_out.value:=False:C215
+			
 		End if 
+		
 		$Obj_out.success:=True:C214
 		
 		//______________________________________________________

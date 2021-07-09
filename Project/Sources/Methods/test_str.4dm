@@ -492,4 +492,17 @@ $o.setText($t)
 ASSERT:C1129($o.lastOccurrenceOf("é")=13)
 ASSERT:C1129($o.lastOccurrenceOf("é"; True:C214)=12)
 
+
+ASSERT:C1129($o.setText(".monFichier").suitableWithFileName()="monFichier")
+ASSERT:C1129($o.setText("mon/fichier").suitableWithFileName()="monFichier")
+ASSERT:C1129($o.setText("mon\\fichier").suitableWithFileName()="monFichier")
+ASSERT:C1129($o.setText("mon:fichier").suitableWithFileName()="monFichier")
+ASSERT:C1129($o.setText("mon*fichier").suitableWithFileName()="monFichier")
+ASSERT:C1129($o.setText("mon?fichier").suitableWithFileName()="monFichier")
+ASSERT:C1129($o.setText("mon\"fichier").suitableWithFileName()="monFichier")
+ASSERT:C1129($o.setText("mon<fichier").suitableWithFileName()="monFichier")
+ASSERT:C1129($o.setText("mon>fichier").suitableWithFileName()="monFichier")
+ASSERT:C1129($o.setText("mon|fichier").suitableWithFileName()="monFichier")
+ASSERT:C1129($o.setText("..m/o\\n:F*i?c\"h<i>e|r  ").suitableWithFileName()="monFichier")
+
 FINALLY

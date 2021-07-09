@@ -408,7 +408,7 @@ Function property($property : Text; $value : Variant; $index : Integer)->$this :
 	
 	If (Count parameters:C259>=3)
 		
-		SET MENU ITEM PARAMETER:C1004(This:C1470.ref; $index; $property; $value)
+		SET MENU ITEM PROPERTY:C973(This:C1470.ref; $index; $property; $value)
 		
 	Else 
 		
@@ -417,6 +417,11 @@ Function property($property : Text; $value : Variant; $index : Integer)->$this :
 	End if 
 	
 	$this:=This:C1470
+	
+	// ===============================================
+Function getProperty($property : Text; $index : Integer)->$value
+	
+	GET MENU ITEM PROPERTY:C972(This:C1470.ref; $index; $property; $value)
 	
 	// ===============================================
 	// Sets the check mark of a menu item
@@ -502,11 +507,27 @@ Function icon($icon : Text; $index : Integer)->$this : cs:C1710.menu
 	
 	If (Count parameters:C259>1)
 		
-		SET MENU ITEM ICON:C984(This:C1470.ref; $2; $path)
+		SET MENU ITEM ICON:C984(This:C1470.ref; $index; $path)
 		
 	Else 
 		
 		SET MENU ITEM ICON:C984(This:C1470.ref; -1; $path)
+		
+	End if 
+	
+	$this:=This:C1470
+	
+	// ===============================================
+	// Changes the font style of the menu item
+Function setStyle($tyle : Integer; $index : Integer)->$this : cs:C1710.menu
+	
+	If (Count parameters:C259>1)
+		
+		SET MENU ITEM STYLE:C425(This:C1470.ref; $index; $tyle)
+		
+	Else 
+		
+		SET MENU ITEM STYLE:C425(This:C1470.ref; -1; $tyle)
 		
 	End if 
 	
@@ -529,10 +550,6 @@ Function setBar()
 	// ===============================================
 	// Display the current menu as a pop-up menu
 Function popup($where : Variant; $x : Variant; $y : Integer)->$this : cs:C1710.menu
-	
-	C_VARIANT:C1683($1)
-	C_VARIANT:C1683($2)
-	C_LONGINT:C283($3)
 	
 	This:C1470._cleanup()
 	
