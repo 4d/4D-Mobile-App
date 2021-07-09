@@ -848,7 +848,8 @@
 	"Predicting": {
 		"methods": [
 			"COMPILER_PREDICTING",
-			"PREDICTING"
+			"PREDICTING",
+			"PREDICTING_FILTER"
 		],
 		"forms": [
 			"PREDICTIVE_ENTRY"

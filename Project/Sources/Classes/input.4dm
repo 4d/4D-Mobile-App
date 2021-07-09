@@ -23,9 +23,17 @@ Function highlight($startSel : Integer; $endSel : Integer)
 			HIGHLIGHT TEXT:C210(*; This:C1470.name; 1; MAXLONG:K35:2)
 			
 			//______________________________________________________
-		: (Count parameters:C259=1)  // From $startSel to end
+		: (Count parameters:C259=1)
 			
-			HIGHLIGHT TEXT:C210(*; This:C1470.name; $startSel; MAXLONG:K35:2)
+			If ($startSel=-1)
+				
+				This:C1470.highlightLastToEnd()
+				
+			Else   // From $startSel to end
+				
+				HIGHLIGHT TEXT:C210(*; This:C1470.name; $startSel; MAXLONG:K35:2)
+				
+			End if 
 			
 			//______________________________________________________
 		Else   // From $startSel to $endSel
@@ -34,6 +42,34 @@ Function highlight($startSel : Integer; $endSel : Integer)
 			
 			//______________________________________________________
 	End case 
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+	// From the last character entered to the end
+Function highlightLastToEnd()
+	
+	HIGHLIGHT TEXT:C210(*; This:C1470.name; This:C1470.highlightingStart()+1; MAXLONG:K35:2)
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function highlighted()->$highlight : Object
+	
+	var $end; $start : Integer
+	GET HIGHLIGHT:C209(*; This:C1470.name; $start; $end)
+	
+	$highlight:=New object:C1471(\
+		"start"; $start; \
+		"end"; $end)
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function highlightingStart()->$pos : Integer
+	
+	var $end : Integer
+	GET HIGHLIGHT:C209(*; This:C1470.name; $pos; $end)
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function highlightingEnd()->$pos : Integer
+	
+	var $start : Integer
+	GET HIGHLIGHT:C209(*; This:C1470.name; $start; $pos)
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 /*

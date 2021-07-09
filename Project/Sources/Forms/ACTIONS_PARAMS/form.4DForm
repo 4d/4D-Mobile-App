@@ -609,6 +609,9 @@
 					"detailForm": "PREDICTIVE_ENTRY",
 					"focusable": false,
 					"visibility": "hidden",
+					"events": [
+						"onLoad"
+					],
 					"method": "ObjectMethods/predicting.4dm"
 				},
 				"namePopupBorder": {

@@ -76,6 +76,8 @@ If ($e.objectName=Null:C1517)  // <== FORM METHOD
 						
 					Else 
 						
+						$index:=1
+						
 						If (Bool:C1537(Form:C1466.withValue))
 							
 							If (Form:C1466.found.query("value = :1"; Form:C1466.search).pop()=Null:C1517)\
@@ -86,25 +88,13 @@ If ($e.objectName=Null:C1517)  // <== FORM METHOD
 									"value"; Form:C1466.search))
 								
 								// And select the first found item
-								Form:C1466.ƒ.predicting.select(2)
-								Form:C1466.choice:=Form:C1466.found[1]
-								
-							Else 
-								
-								// Select the first item
-								Form:C1466.ƒ.predicting.select(1)
-								Form:C1466.choice:=Form:C1466.found[0]
+								$index:=2
 								
 							End if 
-							
-						Else 
-							
-							// Select the first item
-							Form:C1466.ƒ.predicting.select(1)
-							Form:C1466.choice:=Form:C1466.found[0]
-							
 						End if 
 						
+						Form:C1466.ƒ.predicting.select($index)
+						Form:C1466.choice:=Form:C1466.found[$index-1]
 						Form:C1466.ƒ.open()
 						
 					End if 
@@ -128,6 +118,6 @@ If ($e.objectName=Null:C1517)  // <== FORM METHOD
 	
 Else   // <== WIDGETS METHOD
 	
-	//
+	// 
 	
 End if 

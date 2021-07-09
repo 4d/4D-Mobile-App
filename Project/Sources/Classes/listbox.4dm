@@ -15,6 +15,17 @@ Class constructor($name : Text; $datasource)
 	
 	ASSERT:C1129(This:C1470.type=Object type listbox:K79:8)
 	
+	This:C1470.isCollection:=Is nil pointer:C315(OBJECT Get data source:C1265(*; This:C1470.name))
+	This:C1470.isArray:=Not:C34(This:C1470.isCollection)
+	
+	If (This:C1470.isCollection)
+		
+		This:C1470.item:=Null:C1517
+		This:C1470.itemPosition:=0
+		This:C1470.items:=Null:C1517
+		
+	End if 
+	
 	// Backup design properties
 	This:C1470.saveProperties()
 	
@@ -161,50 +172,47 @@ Function updateDefinition()->$this : cs:C1710.listbox
 	
 	var $i : Integer
 	
-	ARRAY BOOLEAN:C223($areVisible; 0x0000)
+	ARRAY BOOLEAN:C223($isVisible; 0x0000)
 	ARRAY POINTER:C280($columnsPtr; 0x0000)
 	ARRAY POINTER:C280($footersPtr; 0x0000)
 	ARRAY POINTER:C280($headersPtr; 0x0000)
 	ARRAY POINTER:C280($stylesPtr; 0x0000)
-	ARRAY TEXT:C222($columnNames; 0x0000)
-	ARRAY TEXT:C222($footerNames; 0x0000)
-	ARRAY TEXT:C222($headerNames; 0x0000)
+	ARRAY TEXT:C222($columns; 0x0000)
+	ARRAY TEXT:C222($footers; 0x0000)
+	ARRAY TEXT:C222($headers; 0x0000)
 	
 	LISTBOX GET ARRAYS:C832(*; This:C1470.name; \
-		$columnNames; $headerNames; \
+		$columns; $headers; \
 		$columnsPtr; $headersPtr; \
-		$areVisible; \
+		$isVisible; \
 		$stylesPtr; \
-		$footerNames; $footersPtr)
+		$footers; $footersPtr)
 	
 	This:C1470.definition:=New collection:C1472
 	
 	ARRAY TO COLLECTION:C1563(This:C1470.definition; \
-		$columnNames; "name"; \
-		$headerNames; "header"; \
-		$footerNames; "footer")
+		$columns; "name"; \
+		$headers; "header"; \
+		$footers; "footer")
 	
 	This:C1470.columns:=New object:C1471
 	
-	For ($i; 1; Size of array:C274($columnNames); 1)
+	For ($i; 1; Size of array:C274($columns); 1)
 		
-		This:C1470.columns[$columnNames{$i}]:=New object:C1471(\
+		This:C1470.columns[$columns{$i}]:=New object:C1471(\
 			"number"; $i; \
-			"visible"; $areVisible{$i}; \
+			"visible"; $isVisible{$i}; \
 			"height"; LISTBOX Get row height:C1408(*; This:C1470.name; $i); \
-			"fontColor"; LISTBOX Get row color:C1658(*; This:C1470.name; $i; lk font color:K53:24); \
-			"backgroundColor"; LISTBOX Get row color:C1658(*; This:C1470.name; $i; lk background color:K53:25); \
-			"backgroundColor"; LISTBOX Get row font style:C1269(*; This:C1470.name; $i); \
-			"wordwrap"; LISTBOX Get property:C917(*; $columnNames{$i}; lk allow wordwrap:K53:39); \
-			"autoRowHeight"; LISTBOX Get property:C917(*; $columnNames{$i}; lk auto row height:K53:72); \
-			"maxWidth"; LISTBOX Get property:C917(*; $columnNames{$i}; lk column max width:K53:51); \
-			"minWidth"; LISTBOX Get property:C917(*; $columnNames{$i}; lk column min width:K53:50); \
-			"resizable"; LISTBOX Get property:C917(*; $columnNames{$i}; lk column resizable:K53:40); \
-			"displayType"; LISTBOX Get property:C917(*; $columnNames{$i}; lk display type:K53:46); \
-			"fontColorExpression"; LISTBOX Get property:C917(*; $columnNames{$i}; lk font color expression:K53:48); \
-			"fontStyleExpression"; LISTBOX Get property:C917(*; $columnNames{$i}; lk font style expression:K53:49); \
-			"multiStyle"; LISTBOX Get property:C917(*; $columnNames{$i}; lk multi style:K53:71); \
-			"truncate"; LISTBOX Get property:C917(*; $columnNames{$i}; lk truncate:K53:37); \
+			"wordwrap"; LISTBOX Get property:C917(*; $columns{$i}; lk allow wordwrap:K53:39); \
+			"autoRowHeight"; LISTBOX Get property:C917(*; $columns{$i}; lk auto row height:K53:72); \
+			"maxWidth"; LISTBOX Get property:C917(*; $columns{$i}; lk column max width:K53:51); \
+			"minWidth"; LISTBOX Get property:C917(*; $columns{$i}; lk column min width:K53:50); \
+			"resizable"; LISTBOX Get property:C917(*; $columns{$i}; lk column resizable:K53:40); \
+			"displayType"; LISTBOX Get property:C917(*; $columns{$i}; lk display type:K53:46); \
+			"fontColorExpression"; LISTBOX Get property:C917(*; $columns{$i}; lk font color expression:K53:48); \
+			"fontStyleExpression"; LISTBOX Get property:C917(*; $columns{$i}; lk font style expression:K53:49); \
+			"multiStyle"; LISTBOX Get property:C917(*; $columns{$i}; lk multi style:K53:71); \
+			"truncate"; LISTBOX Get property:C917(*; $columns{$i}; lk truncate:K53:37); \
 			"pointer"; $columnsPtr{$i})
 		
 	End for 
@@ -671,4 +679,22 @@ Function saveProperties()
 	This:C1470.properties.verScrollbar:=$vertical
 	This:C1470.properties.horScrollbarHeight:=LISTBOX Get property:C917(*; This:C1470.name; lk hor scrollbar height:K53:7)
 	This:C1470.properties.verScrollbarWidth:=LISTBOX Get property:C917(*; This:C1470.name; lk ver scrollbar width:K53:9)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// ⚠️ ONLY WORKS WITH ARRAY TYPE LIST BOXES
+Function setRowFontStyle($row : Integer; $tyle : Integer)
+	
+	If (Asserted:C1132(This:C1470.isArray; "setRowFontStyle() only works with array type list boxes!"))
+		
+		If (Count parameters:C259>=2)
+			
+			LISTBOX SET ROW FONT STYLE:C1268(*; This:C1470.name; $row; $tyle)
+			
+		Else 
+			
+			// Default is plain
+			LISTBOX SET ROW FONT STYLE:C1268(*; This:C1470.name; $row; Plain:K14:1)
+			
+		End if 
+	End if 
 	

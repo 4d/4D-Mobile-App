@@ -28,8 +28,7 @@
 					"bottom": 63,
 					"sizingX": "grow",
 					"sizingY": "grow",
-					"strokeWidth": 1,
-					"fill": "#fffacd"
+					"strokeWidth": 1
 				}
 			}
 		},
@@ -52,10 +51,11 @@
 					"currentItemSource": "Form:C1466.current",
 					"currentItemPositionSource": "Form:C1466.index",
 					"selectedItemsSource": "Form:C1466.selected",
-					"focusable": false,
 					"fill": "transparent",
 					"right": 152,
+					"selectionMode": "single",
 					"scrollbarVertical": "automatic",
+					"focusable": false,
 					"columns": [
 						{
 							"header": {
@@ -68,7 +68,10 @@
 							},
 							"dataSource": "This:C1470.value",
 							"resizable": false,
-							"enterable": false
+							"enterable": false,
+							"events": [
+								"onDoubleClick"
+							]
 						}
 					]
 				}
