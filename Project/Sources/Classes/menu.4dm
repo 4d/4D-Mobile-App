@@ -412,6 +412,10 @@ Function parameter($param : Text; $index : Integer)->$this : cs:C1710.menu
 	
 	// ===============================================
 	// Associates a property to a menu item
+/*
+⚠️ ONE CAN SET A PROPERTY FOR ALL MENU TYPE (MENU BAR OR POPUP)
+   BUT  UNIQUELY RETRIEVE IT FOR THE MENU BAR ITEMS
+*/
 Function property($property : Text; $value : Variant; $index : Integer)->$this : cs:C1710.menu
 	
 	If (Count parameters:C259>=3)
@@ -478,7 +482,7 @@ Function setData($name : Text; $value : Variant; $index : Integer)->$this : cs:C
 	$this:=This:C1470
 	
 	// ===============================================
-	// Retrive data associated to selected menu item
+	// Retrieve data associated to selected menu item
 Function getData($name : Text)->$value
 	
 	var $o : Object
