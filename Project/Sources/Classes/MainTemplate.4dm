@@ -273,12 +273,15 @@ Function afterChildren
 	$0:=$Obj_out
 	
 	
-Function getCatalogExcludePattern
-	C_TEXT:C284($0)
-	$0:="*"  // nothing, even hidden files must be copyed for this template
+Function getCatalogExcludePattern()->$pattern : Text
+	$pattern:="*"  // nothing, even hidden files must be copyed for this template
 	
-Function doRun
-	C_OBJECT:C1216($0)
-	$0:=Super:C1706.doRun()  // copy files
-	$0:=ob_deepMerge($0; This:C1470.updateAssets())
+Function doRun()->$result : Object
+	$result:=Super:C1706.doRun()  // copy files
 	
+	$result:=ob_deepMerge($result; This:C1470.updateAssets())
+	
+	// Add choice lists if any to action parameters
+	var $subResult : Object
+	$subResult:=mobile_actions("addChoiceList"; This:C1470.input)
+	ob_error_combine($result; $subResult)

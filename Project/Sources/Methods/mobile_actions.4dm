@@ -275,22 +275,48 @@ Case of
 								Formula:C1597(String:C10($Obj_parameters.format[[1]])="/")))
 								//%W+533.1
 								
-								var $manifestFile : 4D:C1709.File
-								$manifestFile:=cs:C1710.path.new().hostActionParameterFormatters().folder(Substring:C12($Obj_parameters.format; 2)).file("manifest.json")
-								
-								If ($manifestFile.exists)
+								$Path_manifest:=cs:C1710.path.new().hostActionParameterFormatters().folder(Substring:C12($Obj_parameters.format; 2)).file("manifest.json")
+								If ($Path_manifest.exists)
+									$Obj_manifest:=JSON Parse:C1218($Path_manifest.getText())
 									
-									var $manifestData : Object
-									$manifestData:=JSON Parse:C1218($manifestFile.getText())
-									
-									If ($manifestData.choiceList#Null:C1517)
+									If ($Obj_manifest.choiceList#Null:C1517)
 										
-										$Obj_parameters.choiceList:=$manifestData.choiceList
+										$Obj_parameters.choiceList:=$Obj_manifest.choiceList
 										
-										If ($manifestData.format#Null:C1517)
+										If (Value type:C1509($Obj_parameters.choiceList)=Is object:K8:27)
+											If ($Obj_parameters["dataSource"]=Null:C1517)  // ie. normal source
+												$Obj_parameters.choiceList:=OB Entries:C1720($Obj_parameters.choiceList)  // to try to keep order
+											End if 
+										End if 
+										
+										If ($Obj_manifest.format#Null:C1517)
+											$Obj_parameters.format:=$Obj_manifest.format  // could take from manifest another way to display choice list
+										End if 
+										If ($Obj_manifest.binding#Null:C1517)
+											$Obj_parameters.binding:=$Obj_manifest.binding  // imageNamed for instance
+										End if 
+										
+										If (String:C10($Obj_manifest.binding)="imageNamed")
+											If ((String:C10($Obj_manifest.format)="sheet") | (String:C10($Obj_manifest.format)="picker"))
+												ob_warning_add($Obj_out; "Image format not compatible with sheet or picker")
+											End if 
 											
-											$Obj_parameters.format:=$manifestData.format  // Could take from manifest another way to display choice list
-											
+											// generate images
+											var $destination : 4D:C1709.Folder
+											$destination:=Folder:C1567($Obj_in.path; fk platform path:K87:2).folder("Resources/Assets.xcassets/ActionParametersFormatters")
+											$Obj_manifest.isHost:=True:C214
+											$Obj_manifest.path:=cs:C1710.path.new().hostActionParameterFormatters().folder(Substring:C12($Obj_parameters.format; 2)).platformPath
+											If (Not:C34($destination.folder(Substring:C12($Obj_parameters.format; 2)).exists))
+												
+												var $oResult : Object
+												$oResult:=asset(New object:C1471(\
+													"action"; "formatter"; \
+													"formatter"; $Obj_manifest; \
+													"target"; $destination.platformPath))
+												
+												ob_error_combine($Obj_out; $oResult)
+												
+											End if 
 										End if 
 									End if 
 								End if 

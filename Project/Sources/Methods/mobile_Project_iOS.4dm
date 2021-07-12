@@ -39,9 +39,6 @@ $out:=New object:C1471(\
 // Optional parameters
 If (Count parameters:C259>=1)
 	
-	// Add choice lists if any to action parameters
-	mobile_actions("addChoiceList"; $in)
-	
 	// Cache the last build for debug purpose
 	
 	// Remove circular references
