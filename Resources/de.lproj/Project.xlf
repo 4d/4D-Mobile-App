@@ -1424,23 +1424,23 @@ Dies kann einige Minuten dauern</target>
         </trans-unit>
         <trans-unit id="4SCP3AyU7uqD5y7pCy7XjQ" resname="relatedFields">
           <source>Related fields</source>
-          <target>Verkn√ºpfte Felder</target>
+          <target>Verknüpfte Felder</target>
         </trans-unit>
         <trans-unit id="4FSGb1UzLkavNwp5p9W7bg" resname="newChoiceList">
           <source>Create a choice list…</source>
-          <target state="new">Create a choice list…</target>
+          <target>Erzeuge eine Auswahlliste…</target>
         </trans-unit>
         <trans-unit id="9IdfKGtTiFSwBjHFtPRa2Q" resname="fromDataclass">
           <source>From field</source>
-          <target state="new">From field</target>
+          <target>Vom Feld</target>
         </trans-unit>
         <trans-unit id="IjYrUoBQj1PKjNLqwTNbzw" resname="formatName">
           <source>Name of the format</source>
-          <target state="new">Name of the format</target>
+          <target>Formatname</target>
         </trans-unit>
         <trans-unit id="VixtwUfZjMmZefcNyn14SA" resname="thereIsAlreadyAFormatWithThisName">
           <source>There is already a format with this name</source>
-          <target state="new">There is already a format with this name</target>
+          <target>Es gibt bereits ein Format mit diesem Name</target>
         </trans-unit>
       </group>
       <group resname="Features">
