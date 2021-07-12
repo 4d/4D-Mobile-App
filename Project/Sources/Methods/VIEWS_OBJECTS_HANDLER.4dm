@@ -122,8 +122,8 @@ Case of
 						End if 
 						
 						// Select the item
-						SVG SET ATTRIBUTE:C1055(*; $e.objectName; $tableID; \
-							"fill"; Choose:C955(EDITOR.isDark; "slategray"; EDITOR.selectedFillColor))
+						//SVG SET ATTRIBUTE(*; $e.objectName; $tableID; \
+							"fill"; Choose(EDITOR.isDark; "slategray"; EDITOR.selectedFillColor))
 						
 						$context.draw:=True:C214
 						$context.update:=True:C214
@@ -184,6 +184,7 @@ Case of
 				$tableID:=SVG Find element ID by coordinates:C1054(*; $e.objectName; MOUSEX; MOUSEY)
 				SVG GET ATTRIBUTE:C1056(*; $e.objectName; $tableID; "tips"; $t)
 				OBJECT SET HELP TIP:C1181(*; $e.objectName; $t)
+				SET CURSOR:C469(9000*Num:C11($tableID#""))
 				
 				//______________________________________________________
 			Else 
@@ -641,7 +642,7 @@ End case
 				
 				If ($context.current="magnifyingGlass")
 					
-					SET CURSOR:C469(9000)
+					SET CURSOR:C469(9015)
 					
 				Else 
 					

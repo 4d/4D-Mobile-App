@@ -1098,15 +1098,15 @@ Function doFormatMenu()
 				OB REMOVE:C1226($current; "format")
 				
 				//________________________________________
-			: (Position:C15("$new:"; $menu.choice)=1)
+			: (Position:C15("$new"; $menu.choice)=1)
 				
-				$menu.choice:=Delete string:C232($menu.choice; 1; Length:C16("$new:"))
-				$formatObject:=JSON Parse:C1218(Substring:C12($menu.choice; Position:C15(":"; $menu.choice)+1))
-				$menu.choice:=Substring:C12($menu.choice; 1; Position:C15(":"; $menu.choice)-1)
+				$format:=Request:C163(Get localized string:C991("formatName"))
 				
-				$format:=Request:C163("formatName")
-				
-				If (Length:C16($format)>0)
+				If (Bool:C1537(OK))\
+					 & (Length:C16($format)>0)
+					
+					$type:=$menu.getData("type")
+					$formatObject:=$menu.getData("format")
 					
 					$formatObject.name:=EDITOR.str.setText($format).suitableWithFileName()
 					$folder:=This:C1470.path.hostActionParameterFormatters(True:C214).folder($formatObject.name)
@@ -1116,12 +1116,12 @@ Function doFormatMenu()
 						Case of 
 								
 								//----------------------------------------
-							: ($menu.choice="choiceList")
+							: ($type="choiceList")
 								
 								$formatObject.choiceList:=cs:C1710.formater.new().defaultChoiceList($formatObject.type[0]; False:C215)
 								
 								//----------------------------------------
-							: ($menu.choice="dataSource")
+							: ($type="dataSource")
 								
 								// Already filled
 								
@@ -1142,7 +1142,7 @@ Function doFormatMenu()
 							
 							// #MARK_TODO newActionFormatterChoiceList maybe affect also $current.type, and some notify maybe
 							
-							If ($menu.choice="choiceList")
+							If ($type="choiceList")
 								
 								// Open JSON file, but we could open a custom format editor instead
 								OPEN URL:C673($manifestFile.platformPath)
@@ -1233,7 +1233,7 @@ Function _appendFormat($data : Object)->$custom : Boolean
 	// [INTERNAL]
 Function _actionFormatterChoiceList($menu : cs:C1710.menu; $type : Text)
 	
-	If (($type#"image") & ($type#"date") & ($type#"time"))  // TODO newActionFormatterChoiceList make an include list instead
+	If (New collection:C1472("date"; "time"; "image").indexOf($type)=-1)  // TODO newActionFormatterChoiceList make an include list instead
 		
 		var $fieldID; $tableID : Text
 		var $field; $format; $table : Object
@@ -1241,8 +1241,12 @@ Function _actionFormatterChoiceList($menu : cs:C1710.menu; $type : Text)
 		
 		$menu.line()
 		
-		$format:=New object:C1471("type"; New collection:C1472($type))
-		$menu.append("newChoiceList"; "$new:choiceList:"+JSON Stringify:C1217($format))
+		$format:=New object:C1471(\
+			"type"; New collection:C1472($type))
+		
+		$menu.append("newChoiceList"; "$new")\
+			.setData("type"; "choiceList")\
+			.setData("format"; $format)
 		
 		$tableMenu:=cs:C1710.menu.new()
 		
@@ -1261,9 +1265,14 @@ Function _actionFormatterChoiceList($menu : cs:C1710.menu; $type : Text)
 						
 						$format:=New object:C1471(\
 							"type"; New collection:C1472($type); \
-							"choiceList"; New object:C1471("dataSource"; New object:C1471("dataClass"; $table[""].name; "field"; $field.name)))
+							"choiceList"; New object:C1471(\
+							"dataSource"; New object:C1471("dataClass"; \
+							$table[""].name; "field"; \
+							$field.name)))
 						
-						$fieldsMenu.append($field.name; "$new:dataSource:"+JSON Stringify:C1217($format))
+						$fieldsMenu.append($field.name; "$new·"+$tableID+"·"+$fieldID)\
+							.setData("type"; "dataSource")\
+							.setData("format"; $format)
 						
 					End if 
 				End if 
@@ -1727,19 +1736,26 @@ Function setHelpTip()  //($e : Object)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Format tool tip
-Function formatToolTip($format : Text)->$tip
+Function formatToolTip($format : Text)->$tip : Text
 	
+	var $o : Object
 	var $manifest : 4D:C1709.File
 	
 	If (PROJECT.isCustomResource($format))
 		
 		$manifest:=EDITOR.path.hostActionParameterFormatters().folder(Delete string:C232($format; 1; 1)).file("manifest.json")
 		
-		// TODO If zip formatter, fix file path(read in zip SHARED.archiveExtension)
+		// #MARK_TODO If zip formatter, fix file path(read in zip SHARED.archiveExtension)
+		
 		If ($manifest.exists)
 			
-			$tip:=EDITOR.str.setText(JSON Stringify:C1217(JSON Parse:C1218($manifest.getText()).choiceList; *)).jsonSimplify()
+			$o:=JSON Parse:C1218($manifest.getText())
 			
+			If ($o.choiceList#Null:C1517)
+				
+				$tip:=EDITOR.str.setText(JSON Stringify:C1217($o.choiceList; *)).jsonSimplify()
+				
+			End if 
 		End if 
 	End if 
 	

@@ -111,7 +111,7 @@ If ($e.objectName=Null:C1517)  // <== FORM METHOD
 			//______________________________________________________
 		: ($e.code=On Selection Change:K2:29)
 			
-			Form:C1466.choice:=Form:C1466.current
+			//Form.choice:=Form.current
 			
 			//______________________________________________________
 	End case 

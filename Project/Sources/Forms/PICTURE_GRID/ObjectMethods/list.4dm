@@ -130,22 +130,33 @@ Case of
 						If ($o.target[$index-1]#Null:C1517)
 							
 							var $tips : Text
+							
 							If ($o.target[$index-1].tips#Null:C1517)
+								
+								// Prefer target
 								$tips:=String:C10($o.target[$index-1].tips)
+								
 							Else 
+								
 								$tips:=String:C10($o.tips)
+								
 							End if 
+							
 							If (Length:C16($tips)>0)
+								
 								OBJECT SET HELP TIP:C1181(*; $event.objectName; Get localized string:C991($tips))
 								$lCursor:=Num:C11($o.cursor)
-								$o.clickable:=True:C214  // maybe check clickable before instead of tips
+								$o.clickable:=True:C214  // Maybe check clickable before instead of tips
+								
 							Else 
+								
 								$o.clickable:=$o.formula#Null:C1517
+								
 							End if 
+							
 							$bContinue:=False:C215  // Done
 							
 						End if 
-						
 					End if 
 				End for each 
 				
@@ -157,6 +168,7 @@ Case of
 				
 				If (Form:C1466.pathnames[$index-1]=Null:C1517)
 					
+					SET CURSOR:C469(9000)
 					OBJECT SET HELP TIP:C1181(*; $event.objectName; Get localized string:C991("findAndDownloadMoreResources"))
 					
 				Else 

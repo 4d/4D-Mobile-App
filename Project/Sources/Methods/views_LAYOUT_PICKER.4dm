@@ -262,7 +262,7 @@ $picker.hotZones.push(New object:C1471(\
 "height"; 16; \
 "target"; $picker.infos; \
 "formula"; Formula:C1597(tmpl_INFOS); \
-"cursor"; 9000))
+"cursor"; 9015))
 
 /* Contextual menu */
 $picker.contextual:=New object:C1471(\

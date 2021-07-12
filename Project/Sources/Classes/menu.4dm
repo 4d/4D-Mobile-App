@@ -9,6 +9,7 @@ Class constructor
 	This:C1470.selected:=False:C215
 	This:C1470.choice:=""
 	This:C1470.submenus:=New collection:C1472
+	This:C1470.data:=New collection:C1472
 	
 	If (Count parameters:C259>=1)
 		
@@ -168,6 +169,13 @@ Function append($item : Variant; $param : Variant; $mark : Boolean)->$this : cs:
 						
 						// Keep the sub-menu structure
 						This:C1470.submenus.push($param)
+						
+						// Keep datas, if any
+						For each ($o; $param.data)
+							
+							This:C1470.data.push($o)
+							
+						End for each 
 						
 						If ($param.autoRelease)
 							
@@ -419,9 +427,72 @@ Function property($property : Text; $value : Variant; $index : Integer)->$this :
 	$this:=This:C1470
 	
 	// ===============================================
+	// Returns a property of a menu item
 Function getProperty($property : Text; $index : Integer)->$value
 	
 	GET MENU ITEM PROPERTY:C972(This:C1470.ref; $index; $property; $value)
+	
+	// ===============================================
+	// Associates data to a menu item
+Function setData($name : Text; $value : Variant; $index : Integer)->$this : cs:C1710.menu
+	
+	var $ref : Text
+	var $o : Object
+	
+	Case of 
+			
+			//_____________________________
+		: (Count parameters:C259=3)
+			
+			$ref:=Get menu item parameter:C1003(This:C1470.ref; $index)
+			
+			//_____________________________
+		: (Count parameters:C259=2)
+			
+			$ref:=Get menu item parameter:C1003(This:C1470.ref; -1)
+			
+			//_____________________________
+		Else 
+			
+			ASSERT:C1129(False:C215; "Missing parameter")
+			
+			//_____________________________
+	End case 
+	
+	$o:=This:C1470.data.query("ref = :1 & name = :2"; $ref; $name).pop()
+	
+	If ($o=Null:C1517)
+		
+		This:C1470.data.push(New object:C1471(\
+			"ref"; $ref; \
+			"name"; $name; \
+			"value"; $value))
+		
+	Else 
+		
+		// Change the current data value
+		$o.value:=$value
+		
+	End if 
+	
+	$this:=This:C1470
+	
+	// ===============================================
+	// Retrive data associated to selected menu item
+Function getData($name : Text)->$value
+	
+	var $o : Object
+	
+	If (Asserted:C1132(This:C1470.selected))
+		
+		$o:=This:C1470.data.query("name = :1"; $name).pop()
+		
+		If ($o#Null:C1517)
+			
+			$value:=$o.value
+			
+		End if 
+	End if 
 	
 	// ===============================================
 	// Sets the check mark of a menu item
@@ -601,6 +672,13 @@ Function popup($where : Variant; $x : Variant; $y : Integer)->$this : cs:C1710.m
 	
 	This:C1470.selected:=(Length:C16(This:C1470.choice)>0)
 	
+	If (This:C1470.selected)
+		
+		// Get associated data if any
+		This:C1470.data:=This:C1470.data.query("ref=:1"; This:C1470.choice)
+		
+	End if 
+	
 	If (This:C1470.autoRelease)
 		
 		This:C1470.release()
@@ -614,6 +692,19 @@ Function popup($where : Variant; $x : Variant; $y : Integer)->$this : cs:C1710.m
 Function itemCount()->$number : Integer
 	
 	$number:=Count menu items:C405(This:C1470.ref)
+	
+	// ===============================================
+Function menuSelected()->$selected : Object
+	
+	var $menuSelected : Integer
+	var $menuRef : Text
+	
+	$menuSelected:=Menu selected:C152($menuRef)
+	
+	$selected:=New object:C1471(\
+		"ref"; $menuRef; \
+		"menu"; $menuSelected\65536; \
+		"item"; $menuSelected%65536)
 	
 	// ===============================================
 	// Default File menu

@@ -867,7 +867,7 @@ Function formatMenu($e : Object)
 		
 		For each ($o; $formatters.orderBy("name"))
 			
-			$menu.append($o.name; $o.source.name; $format=$o.source.name)
+			$menu.append($o.name; $o.source.name; $format=$o.source.name).setStyle(Italic:K14:3)
 			
 		End for each 
 	End if 
@@ -884,7 +884,7 @@ Function formatMenu($e : Object)
 			)
 			$menu.line()
 			
-			$menu.append(".New choice list ..."/*TODO newFormatterChoiceList localize*/; "$new"; False:C215)
+			$menu.append("newChoiceList"; "$new"; False:C215)
 			
 		End if 
 		
@@ -894,9 +894,10 @@ Function formatMenu($e : Object)
 		
 		If ($menu.choice="$new")
 			
-			$menu.choice:=Request:C163(".Name of the format"/*TODO newFormatterChoiceList localize*/)
+			$menu.choice:=Request:C163(Get localized string:C991("formatName"))
 			
-			If (Length:C16($menu.choice)#0)
+			If (Bool:C1537(OK))\
+				 & (Length:C16($menu.choice)#0)
 				
 				$menu.choice:="/"+$menu.choice
 				$o:=cs:C1710.formater.new($menu.choice)
@@ -947,7 +948,6 @@ Function formatMenu($e : Object)
 			PROJECT.save()
 			
 		End if 
-		
 	End if 
 	
 	This:C1470.fieldList.focus()

@@ -710,6 +710,24 @@ Function postKeyDown($keyCode : Integer; $modifier : Integer)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
+Function setCursor($cursor : Integer)
+	
+	If (Count parameters:C259>=1)
+		
+		SET CURSOR:C469($cursor)
+		
+	Else 
+		
+		SET CURSOR:C469
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function restoreCursor()
+	
+	SET CURSOR:C469
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// [PRIVATE] set form events
 Function _setEvents($events; $mode : Integer)
 	
