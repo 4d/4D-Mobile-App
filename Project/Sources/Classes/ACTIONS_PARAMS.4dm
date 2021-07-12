@@ -928,7 +928,7 @@ Function getFormats()->$formats : Object
 	
 	If (FEATURE.with("customActionFormatter"))
 		
-		$folder:=This:C1470.path.hostActionParameterFormatters()
+		$folder:=This:C1470.path.hostActionParameterFormatters(False:C215)
 		
 		If ($folder.exists)
 			
@@ -945,6 +945,12 @@ Function getFormats()->$formats : Object
 						// Transform as collection
 						$manifestData.type:=New collection:C1472($manifestData.type)
 						
+					End if 
+					
+					If ($manifestData.choiceList#Null:C1517)
+						If ($manifestData.format=Null:C1517)
+							$manifestData.format:="push"  // push/segmented/popover/sheet/picker
+						End if 
 					End if 
 					
 					If (Value type:C1509($manifestData.type)=Is collection:K8:32)
@@ -974,9 +980,9 @@ Function getFormats()->$formats : Object
 							If ($formats[$type]#Null:C1517)
 								
 								// ENHANCE: could add maybe object instead of string, to add some other info like helptype or custom label
-								If ($formats[$type].indexOf("/"+$folder.name)<0)
+								If ($formats[$type].indexOf($manifestData)<0)
 									
-									$formats[$type].push("/"+$folder.name)
+									$formats[$type].push($manifestData)
 									
 								End if 
 							End if 
@@ -1011,7 +1017,7 @@ Function formatShowOnDisk
 	// Format choice
 Function doFormatMenu()
 	
-	var $currentFormat; $format; $label; $newType; $type : Text
+	var $currentFormat; $label; $newType; $type : Text
 	var $tableNumber; $fieldNumber : Text
 	var $hasCustom : Boolean
 	var $index : Integer
@@ -1019,6 +1025,7 @@ Function doFormatMenu()
 	var $table; $tablesMenu; $field; $fieldsMenu; $dataSource; $formatObject : Object
 	var $folder; $manifestFile : Object
 	var $menu : cs:C1710.menu
+	var $format : Variant
 	
 	$current:=This:C1470.current
 	$currentFormat:=String:C10($current.format)
@@ -1209,18 +1216,40 @@ Function doFormatMenu()
 	// [INTERNAL]
 Function _appendFormat($data : Object)->$custom : Boolean
 	
-	If (PROJECT.isCustomResource($data.format))
+	If (_or(Formula:C1597(Value type:C1509($data.format)=Is object:K8:27); Formula:C1597(PROJECT.isCustomResource($data.format))))
 		
 		If (Not:C34($data.custom))
 			
 			$data.menu.line()  // Separate custom by a line
 			$data.custom:=True:C214
 			
+			$data.menu.append("Multiple choice"; "").disable()
+			
 		End if 
-		
-		$data.menu.append(Delete string:C232($data.format; 1; 1); $data.format; $data.currentFormat=$data.format)\
-			.setStyle(Italic:K14:3)
-		
+		If (Value type:C1509($data.format)=Is object:K8:27)
+			
+			If ($data.format.format=Null:C1517)
+				$data.menu.append($data.format.name; ("/"+$data.format.name); ($data.currentFormat=("/"+$data.format.name)))\
+					.setStyle(Italic:K14:3)
+			Else 
+				var $formatMenuName : Text
+				$formatMenuName:=cs:C1710.str.new($data.format.format).uperCamelCase()
+				var $formaMenu : Object
+				$formaMenu:=$data.menu.findSubMenu($formatMenuName)
+				If ($formaMenu=Null:C1517)
+					$formaMenu:=cs:C1710.menu.new()
+					$data.menu.append($formatMenuName; $formaMenu)
+				End if 
+				
+				$formaMenu.append($data.format.name; "/"+$data.format.name; $data.currentFormat=("/"+$data.format.name))\
+					.setStyle(Italic:K14:3)
+				
+			End if 
+			
+		Else 
+			$data.menu.append(Delete string:C232($data.format; 1; 1); $data.format; $data.currentFormat=$data.format)\
+				.setStyle(Italic:K14:3)
+		End if 
 	Else 
 		
 		$data.menu.append(":xliff:f_"+$data.format; $data.format; $data.currentFormat=$data.format)

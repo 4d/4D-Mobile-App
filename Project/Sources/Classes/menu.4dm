@@ -884,6 +884,24 @@ Function items()->$items : Collection
 	End for 
 	
 	// ===============================================
+	// Returns sub menu if exists
+Function findSubMenu($name : Text)->$submenu : Object
+	C_LONGINT:C283($i)
+	
+	ARRAY TEXT:C222($labels; 0x0000)
+	ARRAY TEXT:C222($references; 0x0000)
+	GET MENU ITEMS:C977(This:C1470.ref; $labels; $references)
+	
+	For ($i; 1; Size of array:C274($labels); 1)
+		
+		If ($labels{$i}=$name)
+			$submenu:=cs:C1710.menu.new($references{$i})
+			$i:=MAXLONG:K35:2-1  // Break
+		End if 
+		
+	End for 
+	
+	// ===============================================
 Function getReference
 	
 	C_TEXT:C284($0)
