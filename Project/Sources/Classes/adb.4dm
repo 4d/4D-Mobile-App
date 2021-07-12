@@ -1040,7 +1040,7 @@ Function _packageList($serial : Text; $options)->$packages : Collection
 		
 	Else 
 		
-		This:C1470._pushError("Timeout when getting package list")
+		This:C1470._pushError("(timeout reached when getting package list)")
 		
 	End if 
 	
