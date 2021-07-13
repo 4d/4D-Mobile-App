@@ -596,6 +596,29 @@ Function getDevices()
 		))
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
+Function getDevice($udid : Text)->$device : Object
+	
+	$device:=This:C1470.devices.apple.query("udid = :1"; $udid).pop()
+	
+	If ($device=Null:C1517)
+		
+		$device:=This:C1470.devices.plugged.apple.query("udid = :1"; $udid).pop()
+		
+	End if 
+	
+	If ($device=Null:C1517)
+		
+		$device:=This:C1470.devices.android.query("udid = :1"; $udid).pop()
+		
+	End if 
+	
+	If ($device=Null:C1517)
+		
+		$device:=This:C1470.devices.plugged.android.query("udid = :1"; $udid).pop()
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function setHeader()
 	
 	This:C1470.description.setValue(This:C1470.currentPage)

@@ -464,7 +464,7 @@ Function userPackageList($serial : Text)->$packages : Collection
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Install an APK on a connected device giving its path or File object
-Function installApp($apk; $serial : Text)
+Function installApp($apk; $serial : Text)->$this : cs:C1710.adb
 	
 	var $file : 4D:C1709.File
 	
@@ -528,6 +528,8 @@ Function installApp($apk; $serial : Text)
 			
 		End if 
 	End if 
+	
+	$this:=This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Uninstalling app from connected device

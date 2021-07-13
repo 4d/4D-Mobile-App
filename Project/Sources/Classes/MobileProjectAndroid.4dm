@@ -58,6 +58,7 @@ Class constructor($project : Object)
 	This:C1470.activity:="com.qmobile.qmobileui.activity.loginactivity.LoginActivity"
 	
 	This:C1470.avdName:=$project.project._simulator
+	//This.device:=$project.project._device
 	This:C1470.serial:=""
 	
 	// Class for create()
@@ -285,59 +286,64 @@ Function run()->$result : Object
 	
 	var $o : Object
 	
-	$result:=New object:C1471(\
-		"success"; False:C215; \
-		"errors"; New collection:C1472)
-	
 	If (Not:C34(This:C1470.isOnError))
 		
-		// * CREATE AVD IF DOESN'T EXIST
-		This:C1470.postStep("launchingTheSimulator")
-		
-		// * START & WAIT EMULATOR
-		$o:=This:C1470.emulator.start(This:C1470.avdName)
-		
-		If ($o.success)
+		If (This:C1470.input.project._device.type="device")\
+			 & FEATURE.with("ConnectedDevices")
 			
-			$o:=This:C1470.adb.waitForBoot(This:C1470.avdName)
-			
-			//$o:=This.adb.getSerial(This.avdName)
-			
-			If ($o.success)
-				
-				This:C1470.serial:=$o.serial
-				
-				// * INSTALL APP
-				This:C1470.postStep("installingTheApplication")
-				
-				$o:=This:C1470.adb.forceInstallApp(This:C1470.serial; This:C1470.project.package; This:C1470.apk)
-				
-				If ($o.success)
-					
-					// * LAUNCH APP
-					This:C1470.postStep("launchingTheApplication")
-					
-					$o:=This:C1470.adb.waitStartApp(This:C1470.serial; This:C1470.project.package; This:C1470.activity)
-					
-				End if 
-			End if 
-		End if 
-		
-		If ($o.success)
-			
-			$result.success:=True:C214
+			$result:=This:C1470.install()
 			
 		Else 
 			
-			This:C1470.isOnError:=True:C214
+			$result:=New object:C1471(\
+				"success"; False:C215; \
+				"errors"; New collection:C1472)
 			
-			$o.errors.insert(0; "")  // Insert a blank line before non localized error descriptions
-			$o.errors.insert(0; Get localized string:C991("failedToLaunchTheSimulator"))
+			// * CREATE AVD IF DOESN'T EXIST
+			This:C1470.postStep("launchingTheSimulator")
 			
-			This:C1470.postErrors($o.errors)
+			// * START & WAIT EMULATOR
+			$o:=This:C1470.emulator.start(This:C1470.avdName)
 			
-			$result.errors.combine($o.errors)
+			If ($o.success)
+				
+				$o:=This:C1470.adb.waitForBoot(This:C1470.avdName)
+				
+				If ($o.success)
+					
+					This:C1470.serial:=$o.serial
+					
+					// * INSTALL APP
+					This:C1470.postStep("installingTheApplication")
+					
+					$o:=This:C1470.adb.forceInstallApp(This:C1470.serial; This:C1470.project.package; This:C1470.apk)
+					
+					If ($o.success)
+						
+						// * LAUNCH APP
+						This:C1470.postStep("launchingTheApplication")
+						
+						$o:=This:C1470.adb.waitStartApp(This:C1470.serial; This:C1470.project.package; This:C1470.activity)
+						
+					End if 
+				End if 
+			End if 
 			
+			If ($o.success)
+				
+				$result.success:=True:C214
+				
+			Else 
+				
+				This:C1470.isOnError:=True:C214
+				
+				$o.errors.insert(0; "")  // Insert a blank line before non localized error descriptions
+				$o.errors.insert(0; Get localized string:C991("failedToLaunchTheSimulator"))
+				This:C1470.postErrors($o.errors)
+				
+				$result.errors.combine($o.errors)
+				
+			End if 
 		End if 
 	End if 
 	
@@ -349,26 +355,28 @@ Function install()->$result : Object
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	var $device : Object
+	var $device; $o : Object
+	var $appName : Text
+	
 	$device:=This:C1470.project.project._device
+	$appName:=This:C1470.input.project._name
 	
 	If (This:C1470.adb.isDeviceConnected($device.udid))
 		
-		This:C1470.adb.installApp(This:C1470.apk.path; $device.udid)
+		This:C1470.adb.uninstallApp($appName; $device.udid)
 		
-		If (This:C1470.adb.success)
+		$o:=This:C1470.adb.installApp(This:C1470.apk.path; $device.udid)
+		$result.success:=$o.success
+		
+		If (Not:C34($result.success))
 			
-			$result.success:=True:C214
-			
-		Else 
-			
-			This:C1470.postError(This:C1470.adb.installApp(This:C1470.apk.path; $device.udid).lastError)
+			This:C1470.postError($o.lastError)
 			
 		End if 
 		
 	Else 
 		
-		This:C1470.postError("The device \""+$device.name+"\" is not connected")
+		This:C1470.postError(".The device \""+$device.name+"\" is not connected")
 		
 	End if 
 	

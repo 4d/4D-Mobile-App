@@ -297,6 +297,7 @@ Case of
 			End case 
 			
 			Case of   // * GET THE LAST SIMULATOR USED, IF KNOWN
+					
 					//______________________________________________________
 				: (EDITOR.ios & EDITOR.android)
 					
@@ -342,18 +343,18 @@ Case of
 				If (EDITOR.devices.apple#Null:C1517)\
 					 & (EDITOR.devices.plugged.apple#Null:C1517)
 					
-					$device:=EDITOR.devices.apple.copy().combine(EDITOR.devices.plugged.apple).query("udid = :1"; $lastDevice).pop()
+					PROJECT._device:=EDITOR.devices.apple.copy().combine(EDITOR.devices.plugged.apple).query("udid = :1"; $lastDevice).pop()
 					
 				End if 
 				
-				If ($device#Null:C1517)
+				If (PROJECT._device#Null:C1517)
 					
 					If (EDITOR.ios)
 						
-						$form.simulator.setTitle($device.name)
+						$form.simulator.setTitle(PROJECT._device.name)
 						EDITOR.currentDevice:=$lastDevice
 						PROJECT._buildTarget:="ios"
-						PROJECT._simulator:=$device.udid
+						PROJECT._simulator:=PROJECT._device.udid
 						
 					Else 
 						
@@ -368,18 +369,18 @@ Case of
 					If (EDITOR.devices.android#Null:C1517)\
 						 & (EDITOR.devices.plugged.android#Null:C1517)
 						
-						$device:=EDITOR.devices.android.copy().combine(EDITOR.devices.plugged.android).query("udid = :1"; $lastDevice).pop()
+						PROJECT._device:=EDITOR.devices.android.copy().combine(EDITOR.devices.plugged.android).query("udid = :1"; $lastDevice).pop()
 						
 					End if 
 					
-					If ($device#Null:C1517)
+					If (PROJECT._device#Null:C1517)
 						
 						If (EDITOR.android)
 							
-							$form.simulator.setTitle($device.name)
+							$form.simulator.setTitle(PROJECT._device.name)
 							EDITOR.currentDevice:=$lastDevice
 							PROJECT._buildTarget:="android"
-							PROJECT._simulator:=$device.udid
+							PROJECT._simulator:=PROJECT._device.udid
 							
 						Else 
 							
@@ -403,6 +404,7 @@ Case of
 				$form.simulator.setTitle("unknown")
 				OB REMOVE:C1226(PROJECT; "_buildTarget")
 				OB REMOVE:C1226(PROJECT; "_simulator")
+				OB REMOVE:C1226(PROJECT; "_device")
 				
 			End if 
 			

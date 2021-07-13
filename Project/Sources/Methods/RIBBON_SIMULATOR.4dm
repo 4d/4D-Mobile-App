@@ -125,6 +125,7 @@ Case of
 					
 				End if 
 			End if 
+			
 		Else 
 			
 			If (EDITOR.studio.ready)
@@ -292,6 +293,7 @@ Case of
 				PROJECT.$ios:=True:C214  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++
 				
 				EDITOR.ios:=True:C214
+				PROJECT._device:=$device
 				PROJECT._simulator:=$device.udid
 				PROJECT.setTarget(True:C214; "ios")
 				
@@ -306,6 +308,7 @@ Case of
 				PROJECT.$ios:=True:C214  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++
 				
 				EDITOR.ios:=True:C214
+				PROJECT._device:=$device
 				PROJECT._simulator:=$device.udid
 				PROJECT.setTarget(True:C214; "ios")
 				
@@ -326,6 +329,7 @@ Case of
 				PROJECT.$android:=True:C214  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++
 				
 				EDITOR.android:=True:C214
+				PROJECT._device:=$device
 				PROJECT._simulator:=$device.udid
 				PROJECT.setTarget(True:C214; "android")
 				
