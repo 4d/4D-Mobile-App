@@ -719,6 +719,8 @@ If ($out.success)
 					"verbose"; $isDebug; \
 					"exportArchive"; True:C214; \
 					"teamID"; String:C10($in.project.organization.teamId); \
+					"stripSwiftSymbols"; Bool:C1537(SHARED.swift.Export.stripSwiftSymbols); \
+					"exportMethod"; String:C10(SHARED.swift.Export.method); \
 					"exportPath"; Convert path system to POSIX:C1106($in.path+"archive"+Folder separator:K24:12); \
 					"archivePath"; Convert path system to POSIX:C1106($in.path+"archive"+Folder separator:K24:12+$productName+".xcarchive")))
 				

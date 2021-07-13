@@ -147,6 +147,7 @@ If (OB Is empty:C1297(SHARED)) | $reset
 	// Project config
 	SHARED.swift:=New object:C1471(\
 		"Version"; "5.3"; \
+		"Export"; New object:C1471("stripSwiftSymbols"; False:C215; "method"; "development"); \
 		"Flags"; New object:C1471("Debug"; ""; "Release"; ""); \
 		"OptimizationLevel"; New object:C1471(\
 		"Debug"; "-Onone"; \

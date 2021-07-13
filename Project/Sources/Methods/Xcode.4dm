@@ -1190,7 +1190,7 @@ Case of
 					
 					$Obj_param.exportOptionsPlist:=String:C10($Obj_param.exportPath)+"Options.plist"
 					
-					TEXT TO DOCUMENT:C1237(Convert path POSIX to system:C1107($Obj_param.exportOptionsPlist); $Txt_buffer)
+					File:C1566($Obj_param.exportOptionsPlist).setText($Txt_buffer; "UTF-8"; Document with LF:K24:22)
 					
 				End if 
 				
