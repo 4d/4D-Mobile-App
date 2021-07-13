@@ -504,12 +504,24 @@ Function doAddMenu()
 						
 						$field:=$table[String:C10($menu.fieldNumber)]
 						
-						$parameter:=New object:C1471(\
-							"fieldNumber"; $field.fieldNumber; \
-							"defaultField"; EDITOR.str.setText($field.name).lowerCamelCase(); \
-							"name"; $field.name; \
-							"type"; PROJECT.fieldType2type($field.fieldType); \
-							"format"; "ascending")
+						If (FEATURE.with("predictiveEntryInActionParam"))
+							
+							$parameter:=New object:C1471(\
+								"fieldNumber"; $field.fieldNumber; \
+								"name"; $field.name; \
+								"type"; PROJECT.fieldType2type($field.fieldType); \
+								"format"; "ascending")
+							
+						Else 
+							
+							$parameter:=New object:C1471(\
+								"fieldNumber"; $field.fieldNumber; \
+								"defaultField"; EDITOR.str.setText($field.name).lowerCamelCase(); \
+								"name"; $field.name; \
+								"type"; PROJECT.fieldType2type($field.fieldType); \
+								"format"; "ascending")
+							
+						End if 
 						
 						$action.parameters.push($parameter)
 						

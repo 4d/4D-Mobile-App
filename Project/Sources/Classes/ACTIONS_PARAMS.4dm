@@ -757,26 +757,52 @@ Function doAddParameterMenu($target : Object; $update : Boolean)
 			
 			$field:=$c.query("fieldNumber = :1"; Num:C11($menu.choice)).pop()
 			
-			If ($isSortAction)
+			If (FEATURE.with("predictiveEntryInActionParam"))
 				
-				$parameter:=New object:C1471(\
-					"fieldNumber"; $field.fieldNumber; \
-					"defaultField"; formatString("field-name"; $field.name); \
-					"name"; $field.name)
+				If ($isSortAction)
+					
+					$parameter:=New object:C1471(\
+						"fieldNumber"; $field.fieldNumber; \
+						"name"; $field.name)
+					
+				Else 
+					
+					$parameter:=New object:C1471(\
+						"fieldNumber"; $field.fieldNumber; \
+						"name"; $field.name; \
+						"label"; $field.label; \
+						"shortLabel"; $field.shortLabel)
+					
+					If (Bool:C1537($field.mandatory))
+						
+						$parameter.rules:=New collection:C1472("mandatory")
+						
+					End if 
+				End if 
 				
 			Else 
 				
-				$parameter:=New object:C1471(\
-					"fieldNumber"; $field.fieldNumber; \
-					"label"; $field.label; \
-					"shortLabel"; $field.shortLabel; \
-					"defaultField"; formatString("field-name"; $field.name); \
-					"name"; EDITOR.str.setText($field.name).lowerCamelCase())
-				
-				If (Bool:C1537($field.mandatory))
+				If ($isSortAction)
 					
-					$parameter.rules:=New collection:C1472("mandatory")
+					$parameter:=New object:C1471(\
+						"fieldNumber"; $field.fieldNumber; \
+						"defaultField"; formatString("field-name"; $field.name); \
+						"name"; $field.name)
 					
+				Else 
+					
+					$parameter:=New object:C1471(\
+						"fieldNumber"; $field.fieldNumber; \
+						"label"; $field.label; \
+						"shortLabel"; $field.shortLabel; \
+						"defaultField"; formatString("field-name"; $field.name); \
+						"name"; EDITOR.str.setText($field.name).lowerCamelCase())
+					
+					If (Bool:C1537($field.mandatory))
+						
+						$parameter.rules:=New collection:C1472("mandatory")
+						
+					End if 
 				End if 
 			End if 
 			
@@ -1649,8 +1675,8 @@ Function doName($e : Object)
 						//_________________________
 					Else   // Arrow keys
 						
-						This:C1470.callChild(This:C1470.predicting; "PREDICTING_FILTER"; $charCode)
 						This:C1470.current.name:=$editedText
+						This:C1470.callChild(This:C1470.predicting; "PREDICTING_FILTER"; $charCode)
 						This:C1470.paramName.highlightLastToEnd()
 						
 						//_________________________
