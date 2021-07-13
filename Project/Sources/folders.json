@@ -141,6 +141,7 @@
 		],
 		"classes": [
 			"cfgutil",
+			"MobileProjectIOS",
 			"simctl",
 			"Xcode"
 		]
