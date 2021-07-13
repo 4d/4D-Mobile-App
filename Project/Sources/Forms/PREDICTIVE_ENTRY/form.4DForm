@@ -11,7 +11,6 @@
 	"windowMaxHeight": 32767,
 	"events": [
 		"onDoubleClick",
-		"onSelectionChange",
 		"onBoundVariableChange"
 	],
 	"destination": "detailScreen",
@@ -41,8 +40,7 @@
 					"width": 150,
 					"height": 62,
 					"events": [
-						"onDoubleClick",
-						"onSelectionChange"
+						"onDoubleClick"
 					],
 					"sizingX": "grow",
 					"sizingY": "grow",

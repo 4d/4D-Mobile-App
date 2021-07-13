@@ -1,33 +1,29 @@
 //%attributes = {"invisible":true}
-var $e : Object
+var $e; $ƒ : Object
 
 $e:=FORM Event:C1606
 
+If (Form:C1466#Null:C1517)
+	
+	If (Form:C1466.ƒ=Null:C1517)
+		
+		Form:C1466.ƒ:=cs:C1710.PREDICTING.new()
+		
+	End if 
+End if 
+
+$ƒ:=Form:C1466.ƒ
+
 If ($e.objectName=Null:C1517)  // <== FORM METHOD
 	
-	If (Form:C1466#Null:C1517)
-		
-		If (Form:C1466.ƒ=Null:C1517)
-			
-			Form:C1466.ƒ:=cs:C1710.PREDICTING.new()
-			
-		End if 
-	End if 
-	
 	Case of 
-			
-			//______________________________________________________
-		: ($e.code=On Double Clicked:K2:5)
-			
-			Form:C1466.choice:=Form:C1466.current
-			Form:C1466.ƒ.validate()
 			
 			//______________________________________________________
 		: ($e.code=On Bound Variable Change:K2:52)
 			
 			If (Form:C1466.bakgroundColor#Null:C1517)
 				
-				Form:C1466.ƒ.background.setColors(Form:C1466.ƒ.background.getForegroundColor(); Form:C1466.bakgroundColor)
+				$ƒ.background.setColors($ƒ.background.getForegroundColor(); Form:C1466.bakgroundColor)
 				
 			End if 
 			
@@ -72,7 +68,7 @@ If ($e.objectName=Null:C1517)  // <== FORM METHOD
 						 & (Bool:C1537(Form:C1466.automaticSelectionOfASingleValue))
 						
 						Form:C1466.choice:=Form:C1466.found[0]
-						Form:C1466.ƒ.validate()
+						$ƒ.validate()
 						
 					Else 
 						
@@ -93,31 +89,34 @@ If ($e.objectName=Null:C1517)  // <== FORM METHOD
 							End if 
 						End if 
 						
-						Form:C1466.ƒ.predicting.select($index)
+						$ƒ.predicting.select($index)
 						Form:C1466.choice:=Form:C1466.found[$index-1]
-						Form:C1466.ƒ.open()
+						$ƒ.open()
 						
 					End if 
 					
-					Form:C1466.ƒ.predicting.data:=Form:C1466.found
+					$ƒ.predicting.data:=Form:C1466.found
 					
 				Else 
 					
-					Form:C1466.ƒ.close()
+					$ƒ.close()
 					
 				End if 
 			End if 
-			
-			//______________________________________________________
-		: ($e.code=On Selection Change:K2:29)
-			
-			//Form.choice:=Form.current
 			
 			//______________________________________________________
 	End case 
 	
 Else   // <== WIDGETS METHOD
 	
-	// 
-	
+	Case of 
+			
+			//______________________________________________________
+		: ($ƒ.predicting.catch())
+			
+			Form:C1466.choice:=Form:C1466.current
+			$ƒ.validate()
+			
+			//________________________________________
+	End case 
 End if 

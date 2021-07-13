@@ -154,16 +154,13 @@ Function getFieldList()->$result : Object
 	var $subKey; $key; $label; $tableID : Text
 	var $field; $table : Object
 	
-	var $str : cs:C1710.str
-	var $formatters : cs:C1710.path
+	var $formatters : 4D:C1709.Folder
 	var $formater : cs:C1710.formater
 	
 	$result:=New object:C1471(\
 		"success"; Form:C1466.dataModel#Null:C1517)
 	
 	$tableID:=String:C10(This:C1470.tableNumber)
-	
-	$str:=cs:C1710.str.new()
 	
 	// ----------------------------------------------------
 	If ($result.success)
@@ -172,7 +169,7 @@ Function getFieldList()->$result : Object
 		
 		If ($result.success)
 			
-			$formatters:=cs:C1710.path.new().hostFormatters()
+			$formatters:=EDITOR.path.hostFormatters()
 			
 			$result.ids:=New collection:C1472
 			$result.names:=New collection:C1472
@@ -252,13 +249,13 @@ Function getFieldList()->$result : Object
 								
 							Else 
 								
-								$label:=$str.setText("_"+$field.format).localized()
+								$label:=EDITOR.str.setText("_"+$field.format).localized()
 								
 							End if 
 							
 						Else 
 							
-							$label:=$str.setText("_"+String:C10(SHARED.defaultFieldBindingTypes[$field.fieldType])).localized()
+							$label:=EDITOR.str.setText("_"+String:C10(SHARED.defaultFieldBindingTypes[$field.fieldType])).localized()
 							
 						End if 
 						
@@ -324,13 +321,13 @@ Function getFieldList()->$result : Object
 												
 											Else 
 												
-												$label:=$str.setText("_"+$field.format).localized()
+												$label:=EDITOR.str.setText("_"+$field.format).localized()
 												
 											End if 
 											
 										Else 
 											
-											$label:=$str.setText("_"+String:C10(SHARED.defaultFieldBindingTypes[$field.fieldType])).localized()
+											$label:=EDITOR.str.setText("_"+String:C10(SHARED.defaultFieldBindingTypes[$field.fieldType])).localized()
 											
 										End if 
 										
@@ -584,10 +581,7 @@ Function field($row : Integer)->$field : Object
 	// Display tips on the field list
 Function setHelpTip($e : Object)
 	
-	var $t : Text
-	var $str : cs:C1710.str
-	
-	$str:=cs:C1710.str.new()  // init class
+	var $tips : Text
 	
 	// ----------------------------------------------------
 	If (Num:C11($e.row)#0)
@@ -597,31 +591,35 @@ Function setHelpTip($e : Object)
 				//………………………………………………………………………………
 			: ($e.columnName=This:C1470.icons.name)
 				
-				$t:=$str.setText("clickToSet").localized()
+				$tips:=EDITOR.str.setText("clickToSet").localized()
 				
 				//………………………………………………………………………………
 			: ($e.columnName=This:C1470.shortLabels.name)
 				
-				$t:=$str.setText("doubleClickToEdit").localized()+"\r - "+$str.setText("shouldBe10CharOrLess").localized()
+				$tips:=EDITOR.str.setText("doubleClickToEdit").localized()+"\r - "+EDITOR.str.setText("shouldBe10CharOrLess").localized()
 				
 				//………………………………………………………………………………
 			: ($e.columnName=This:C1470.labels.name)
 				
-				$t:=$str.setText("doubleClickToEdit").localized()+"\r - "+$str.setText("shouldBe25CharOrLess").localized()
+				$tips:=EDITOR.str.setText("doubleClickToEdit").localized()+"\r - "+EDITOR.str.setText("shouldBe25CharOrLess").localized()
 				
 				//………………………………………………………………………………
 			: ($e.columnName=This:C1470.titles.name)
 				
-				$t:=$str.setText("doubleClickToEdit").localized()
+				$tips:=EDITOR.str.setText("doubleClickToEdit").localized()
 				
 				//………………………………………………………………………………
 			: ($e.columnName=This:C1470.formats.name)
 				
 				var $field : Object
 				$field:=This:C1470.field($e.row)
+				
 				If ($field#Null:C1517)
+					
 					If (Length:C16(String:C10($field.format))#0)
-						$t:=cs:C1710.formater.new($field.format).toolTip()
+						
+						$tips:=cs:C1710.formater.new($field.format).toolTip("hostFormatters")
+						
 					End if 
 				End if 
 				
@@ -634,7 +632,7 @@ Function setHelpTip($e : Object)
 		
 	End if 
 	
-	This:C1470.fieldList.setHelpTip($t)
+	This:C1470.fieldList.setHelpTip($tips)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Update forms
@@ -813,14 +811,12 @@ Function formatMenu($e : Object)
 	var $field; $o : Object
 	var $formatters : Collection
 	var $menu : cs:C1710.menu
-	var $str : cs:C1710.str
 	var $formatter : cs:C1710.formater
 	
 	// Get the field definition
 	$field:=This:C1470.field($e.row)
 	
 	$menu:=cs:C1710.menu.new()
-	$str:=cs:C1710.str.new()
 	$formatter:=cs:C1710.formater.new()
 	
 	// Get current format
@@ -853,7 +849,7 @@ Function formatMenu($e : Object)
 			
 		Else 
 			
-			$menu.append($str.setText("_"+$t).localized(); $t; $format=$t)
+			$menu.append(EDITOR.str.setText("_"+$t).localized(); $t; $format=$t)
 			
 		End if 
 	End for each 
@@ -935,7 +931,7 @@ Function formatMenu($e : Object)
 				
 			Else 
 				
-				Self:C308->{$e.row}:=$str.setText("_"+$menu.choice).localized()
+				Self:C308->{$e.row}:=EDITOR.str.setText("_"+$menu.choice).localized()
 				
 			End if 
 			//%W+533.3

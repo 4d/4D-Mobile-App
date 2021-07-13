@@ -235,7 +235,7 @@ Function isValid($format : Variant)->$valid : Boolean
 	
 	//============================================================================
 	// Create a formatter with text choiceList
-Function create($type : Variant; $data : Collection)->$manifestFile : 4D:C1709.File
+Function create($type : Variant; $data : Collection)->$file : 4D:C1709.File
 	
 	var $name : Text
 	$name:=This:C1470.name
@@ -276,9 +276,9 @@ Function create($type : Variant; $data : Collection)->$manifestFile : 4D:C1709.F
 		var $formatFolder : 4D:C1709.Folder
 		$formatFolder:=cs:C1710.path.new().hostFormatters(True:C214).folder($name)
 		
-		$manifestFile:=$formatFolder.file("manifest.json")
+		$file:=$formatFolder.file("manifest.json")
 		
-		If (Not:C34($manifestFile.exists))  // else could assert if exists but ..
+		If (Not:C34($file.exists))  // else could assert if exists but ..
 			
 			$formatFolder.create()
 			
@@ -317,7 +317,7 @@ Function create($type : Variant; $data : Collection)->$manifestFile : 4D:C1709.F
 					ASSERT:C1129(dev_Matrix; "Missing binding for type "+String:C10($typeString)+" to create formatter")
 			End case 
 			
-			$manifestFile.setText(JSON Stringify:C1217($manifest; *))
+			$file.setText(JSON Stringify:C1217($manifest; *))
 			This:C1470.sources()
 			
 		End if 
@@ -355,26 +355,44 @@ Function defaultChoiceList($typeString : Text; $isObject : Boolean)->$choiceList
 	
 	//============================================================================
 	// Return toolTip for custom format
-Function toolTip()->$tip
-	$tip:=""
-	//%W-533.1
-	If (This:C1470.name[[1]]="/")
-		//%W+533.1
-		var $manifestFile : 4D:C1709.File
-		$manifestFile:=cs:C1710.path.new().hostFormatters(False:C215).folder(Substring:C12(This:C1470.name; 2)).file("manifest.json")
-		// TODO If zip formatter, fix file path(read in zip SHARED.archiveExtension)
-		If ($manifestFile.exists)
-			$tip:=cs:C1710.str.new(JSON Stringify:C1217(JSON Parse:C1218($manifestFile.getText()).choiceList; *)).jsonSimplify()
+Function toolTip($target)->$tip : Text
+	
+	var $bind; $o : Object
+	var $file : 4D:C1709.File
+	
+	If (PROJECT.isCustomResource(This:C1470.name))
+		
+		$file:=EDITOR.path[$target]().folder(Delete string:C232(This:C1470.name; 1; 1)).file("manifest.json")
+		
+		// #MARK_TODO : If zip formatter, fix file path (read in zip SHARED.archiveExtension)
+		
+		If ($file.exists)
+			
+			$o:=JSON Parse:C1218($file.getText())
+			
+			If ($o.choiceList#Null:C1517)
+				
+				$tip:=cs:C1710.str.new(JSON Stringify:C1217($o.choiceList; *)).jsonSimplify()
+				
+			End if 
 		End if 
+		
 	Else 
-		// tips: edit resources.json to add "tips" to formatters in fieldBindingTypes
+		
+		// #MARK_TODO : edit resources.json to add "tips" to formatters in fieldBindingTypes
+		
 		If (SHARED.resources.formattersByName=Null:C1517)
-			SHARED.resources.formattersByName:=New object:C1471()
-			var $bind : Object
+			
+			SHARED.resources.formattersByName:=New object:C1471
+			
 			For each ($bind; SHARED.resources.fieldBindingTypes\
 				.reduce("col_formula"; New collection:C1472(); Formula:C1597($1.accumulator.combine(Choose:C955($1.value=Null:C1517; New collection:C1472(); $1.value)))))
+				
 				SHARED.resources.formattersByName[$bind.name]:=$bind
+				
 			End for each 
 		End if 
+		
 		$tip:=String:C10(SHARED.resources.formattersByName[This:C1470.name].tips)
+		
 	End if 

@@ -1787,26 +1787,7 @@ Function setHelpTip()  //($e : Object)
 	// Format tool tip
 Function formatToolTip($format : Text)->$tip : Text
 	
-	var $o : Object
-	var $manifest : 4D:C1709.File
-	
-	If (PROJECT.isCustomResource($format))
-		
-		$manifest:=EDITOR.path.hostActionParameterFormatters().folder(Delete string:C232($format; 1; 1)).file("manifest.json")
-		
-		// #MARK_TODO If zip formatter, fix file path(read in zip SHARED.archiveExtension)
-		
-		If ($manifest.exists)
-			
-			$o:=JSON Parse:C1218($manifest.getText())
-			
-			If ($o.choiceList#Null:C1517)
-				
-				$tip:=EDITOR.str.setText(JSON Stringify:C1217($o.choiceList; *)).jsonSimplify()
-				
-			End if 
-		End if 
-	End if 
+	$tip:=cs:C1710.formater.new($format).toolTip("hostActionParameterFormatters")
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// <Background Color Expression> ******************** VERY SIMILAR TO ACTIONS.backgroundColor() ********************

@@ -16,6 +16,7 @@ Function init()
 	This:C1470.listbox("predicting").setScrollbars(0; 2)
 	This:C1470.formObject("background")
 	
+	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function validate()
 	
