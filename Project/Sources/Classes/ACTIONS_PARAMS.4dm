@@ -1223,7 +1223,7 @@ Function _appendFormat($data : Object)->$custom : Boolean
 			$data.menu.line()  // Separate custom by a line
 			$data.custom:=True:C214
 			
-			$data.menu.append("Multiple choice"; "").disable()
+			$data.menu.append(".Choice List"; "").disable()
 			
 		End if 
 		If (Value type:C1509($data.format)=Is object:K8:27)
@@ -1241,9 +1241,29 @@ Function _appendFormat($data : Object)->$custom : Boolean
 					$data.menu.append($formatMenuName; $formaMenu)
 				End if 
 				
-				$formaMenu.append($data.format.name; "/"+$data.format.name; $data.currentFormat=("/"+$data.format.name))\
-					.setStyle(Italic:K14:3)
-				
+				$type:=""
+				If ($data.format.choiceList#Null:C1517)
+					$type:=".choiceList"
+					If (Value type:C1509($data.format.choiceList)=Is object:K8:27)  // could be collection, accessing "dataSource" will failed
+						If ($data.format.choiceList.dataSource#Null:C1517)
+							$type:=".dataSource"
+						End if 
+					End if 
+				End if 
+				If (Length:C16($type)>0)
+					$typeMenu:=$formaMenu.findSubMenu($type)
+					If ($typeMenu=Null:C1517)
+						$typeMenu:=cs:C1710.menu.new()
+						$formaMenu.append($type; $typeMenu)
+					End if 
+					
+					$typeMenu.append($data.format.name; "/"+$data.format.name; $data.currentFormat=("/"+$data.format.name))\
+						.setStyle(Italic:K14:3)
+				Else 
+					
+					$formaMenu.append($data.format.name; "/"+$data.format.name; $data.currentFormat=("/"+$data.format.name))\
+						.setStyle(Italic:K14:3)
+				End if 
 			End if 
 			
 		Else 
