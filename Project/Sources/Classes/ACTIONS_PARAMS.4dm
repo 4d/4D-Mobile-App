@@ -1234,13 +1234,13 @@ Function _appendFormat($data : Object)->$custom : Boolean
 			Else 
 				var $formatMenuName : Text
 				$formatMenuName:=cs:C1710.str.new($data.format.format).uperCamelCase()
-				var $formaMenu : Object
+				var $formaMenu; $typeMenu : Object
 				$formaMenu:=$data.menu.findSubMenu($formatMenuName)
 				If ($formaMenu=Null:C1517)
 					$formaMenu:=cs:C1710.menu.new()
 					$data.menu.append($formatMenuName; $formaMenu)
 				End if 
-				
+				var $type : Text
 				$type:=""
 				If ($data.format.choiceList#Null:C1517)
 					$type:=".choiceList"
