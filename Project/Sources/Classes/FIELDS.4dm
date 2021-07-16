@@ -866,7 +866,7 @@ Function doFormatMenu($e : Object)
 			)
 			$menu.line()
 			
-			$menu.append("newChoiceList"; "$new"; False:C215)
+			$menu.append("newChoiceList"; "$new")
 			
 		End if 
 		

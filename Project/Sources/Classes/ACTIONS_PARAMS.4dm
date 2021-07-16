@@ -1242,63 +1242,97 @@ Function doFormatMenu()
 	// [INTERNAL]
 Function _appendFormat($data : Object)->$custom : Boolean
 	
-	If (_or(Formula:C1597(Value type:C1509($data.format)=Is object:K8:27); Formula:C1597(PROJECT.isCustomResource($data.format))))
+	var $name : Text
+	var $format : Variant
+	var $menuFormat; $menuType : cs:C1710.menu
+	
+	$format:=$data.format
+	
+	If (_or(Formula:C1597(Value type:C1509($format)=Is object:K8:27); Formula:C1597(PROJECT.isCustomResource($format))))
 		
 		If (Not:C34($data.custom))
 			
 			$data.menu.line()  // Separate custom by a line
 			$data.custom:=True:C214
 			
-			$data.menu.append(".Choice List"; "").disable()
+			//
+			$data.menu.append(".Choice List").disable()  //#MARK_LOCALIZE
 			
 		End if 
-		If (Value type:C1509($data.format)=Is object:K8:27)
+		
+		If (Value type:C1509($format)=Is object:K8:27)
 			
-			If ($data.format.format=Null:C1517)
-				$data.menu.append($data.format.name; ("/"+$data.format.name); ($data.currentFormat=("/"+$data.format.name)))\
+			If ($format.format=Null:C1517)
+				
+				$data.menu.append($format.name; ("/"+$format.name); ($data.currentFormat=("/"+$format.name)))\
 					.setStyle(Italic:K14:3)
+				
 			Else 
-				var $formatMenuName : Text
-				$formatMenuName:=cs:C1710.str.new($data.format.format).uperCamelCase()
-				var $formaMenu; $typeMenu : Object
-				$formaMenu:=$data.menu.findSubMenu($formatMenuName)
-				If ($formaMenu=Null:C1517)
-					$formaMenu:=cs:C1710.menu.new()
-					$data.menu.append($formatMenuName; $formaMenu)
+				
+				$name:=cs:C1710.str.new($format.format).uperCamelCase()
+				
+				
+				// ⛔️ WARNING: MEMORY LEAK - THE MENU WILL NOT BE RELEASED
+				// ⛔️ MUST RETURN SUB-MENU REFERENCE, NOT A NEW INSTANCE
+				$menuFormat:=$data.menu.findSubMenu($name)
+				
+				If ($menuFormat=Null:C1517)
+					
+					$menuFormat:=cs:C1710.menu.new()
+					$data.menu.append($name; $menuFormat)
+					
 				End if 
+				
 				var $type : Text
-				$type:=""
-				If ($data.format.choiceList#Null:C1517)
-					$type:=".choiceList"
-					If (Value type:C1509($data.format.choiceList)=Is object:K8:27)  // could be collection, accessing "dataSource" will failed
-						If ($data.format.choiceList.dataSource#Null:C1517)
-							$type:=".dataSource"
+				If ($format.choiceList#Null:C1517)
+					
+					$type:=".choiceList"  //#MARK_LOCALIZE
+					
+					If (Value type:C1509($format.choiceList)=Is object:K8:27)  // could be collection, accessing "dataSource" will failed
+						
+						If ($format.choiceList.dataSource#Null:C1517)
+							
+							$type:=".dataSource"  //#MARK_LOCALIZE
+							
 						End if 
 					End if 
 				End if 
+				
 				If (Length:C16($type)>0)
-					$typeMenu:=$formaMenu.findSubMenu($type)
-					If ($typeMenu=Null:C1517)
-						$typeMenu:=cs:C1710.menu.new()
-						$formaMenu.append($type; $typeMenu)
+					
+					// ⛔️ WARNING: MEMORY LEAK - THE MENU WILL NOT BE RELEASED
+					// ⛔️ MUST RETURN SUB-MENU REFERENCE, NOT A NEW INSTANCE
+					$menuType:=$menuFormat.findSubMenu($type)
+					
+					If ($menuType=Null:C1517)
+						
+						// First instance: creating
+						$menuType:=cs:C1710.menu.new()
+						$menuFormat.append($type; $menuType)
+						
 					End if 
 					
-					$typeMenu.append($data.format.name; "/"+$data.format.name; $data.currentFormat=("/"+$data.format.name))\
+					$menuType.append($format.name; "/"+$format.name; $data.currentFormat=("/"+$format.name))\
 						.setStyle(Italic:K14:3)
+					
 				Else 
 					
-					$formaMenu.append($data.format.name; "/"+$data.format.name; $data.currentFormat=("/"+$data.format.name))\
+					$menuFormat.append($format.name; "/"+$format.name; $data.currentFormat=("/"+$format.name))\
 						.setStyle(Italic:K14:3)
+					
 				End if 
 			End if 
 			
 		Else 
-			$data.menu.append(Delete string:C232($data.format; 1; 1); $data.format; $data.currentFormat=$data.format)\
+			
+			$data.menu.append(Delete string:C232($format; 1; 1); $format; $data.currentFormat=$format)\
 				.setStyle(Italic:K14:3)
+			
 		End if 
+		
 	Else 
 		
-		$data.menu.append(":xliff:f_"+$data.format; $data.format; $data.currentFormat=$data.format)
+		$data.menu.append(":xliff:f_"+$format; $format; $data.currentFormat=$format)
 		
 	End if 
 	

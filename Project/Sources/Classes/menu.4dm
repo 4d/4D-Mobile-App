@@ -280,6 +280,13 @@ Function append($item : Variant; $param : Variant; $mark : Boolean)->$this : cs:
 	$this:=This:C1470
 	
 	// ===============================================
+Function add($ref : Text; $text : Text; $param : Variant; $mark : Boolean)
+	
+	
+	
+	
+	
+	// ===============================================
 	// Adds a line to the menu
 Function line()->$this : cs:C1710.menu
 	
@@ -864,67 +871,37 @@ Function defaultMinimalMenuBar()->$this : cs:C1710.menu
 	$this:=This:C1470
 	
 	// ===============================================
-	// Returns menu items as collection
-Function items()->$items : Collection
+	// Returns a menu item from its title or index
+Function item($item; $ref : Text)->$menuItem : Object
 	
-	C_LONGINT:C283($i)
+	var $indx : Integer
+	var $value
 	
-	ARRAY TEXT:C222($labels; 0x0000)
-	ARRAY TEXT:C222($references; 0x0000)
-	GET MENU ITEMS:C977(This:C1470.ref; $labels; $references)
+	ARRAY TEXT:C222($titles; 0)
+	ARRAY TEXT:C222($references; 0)
 	
-	$items:=New collection:C1472
-	
-	For ($i; 1; Size of array:C274($labels); 1)
+	If (Count parameters:C259>=2)
 		
-		$items.push(New object:C1471(\
-			"item"; $labels{$i}; \
-			"ref"; $references{$i}))
+		GET MENU ITEMS:C977($ref; $titles; $references)
 		
-	End for 
-	
-	// ===============================================
-	// Returns sub menu if exists
-Function findSubMenu($name : Text)->$submenu : Object
-	C_LONGINT:C283($i)
-	
-	ARRAY TEXT:C222($labels; 0x0000)
-	ARRAY TEXT:C222($references; 0x0000)
-	GET MENU ITEMS:C977(This:C1470.ref; $labels; $references)
-	
-	For ($i; 1; Size of array:C274($labels); 1)
+	Else 
 		
-		If ($labels{$i}=$name)
-			$submenu:=cs:C1710.menu.new($references{$i})
-			$i:=MAXLONG:K35:2-1  // Break
-		End if 
+		GET MENU ITEMS:C977(This:C1470.ref; $titles; $references)
 		
-	End for 
-	
-	// ===============================================
-Function getReference
-	
-	C_TEXT:C284($0)
-	C_VARIANT:C1683($1)
-	
-	C_LONGINT:C283($indx)
-	
-	ARRAY TEXT:C222($aT_titles; 0)
-	ARRAY TEXT:C222($aT_refs; 0)
-	GET MENU ITEMS:C977(This:C1470.ref; $aT_titles; $aT_refs)
+	End if 
 	
 	Case of 
 			
 			//______________________________________________________
-		: (Value type:C1509($1)=Is text:K8:3)
+		: (Value type:C1509($item)=Is text:K8:3)  // -> withTitle
 			
-			$indx:=Find in array:C230($aT_titles; $1)
+			$indx:=Find in array:C230($titles; $item)
 			
 			//______________________________________________________
-		: (Value type:C1509($1)=Is longint:K8:6)\
-			 | (Value type:C1509($1)=Is real:K8:4)
+		: (Value type:C1509($item)=Is longint:K8:6)\
+			 | (Value type:C1509($item)=Is real:K8:4)  // -> at
 			
-			$indx:=$1
+			$indx:=$item
 			
 			//______________________________________________________
 		Else 
@@ -934,11 +911,109 @@ Function getReference
 			//______________________________________________________
 	End case 
 	
-	If (Asserted:C1132($indx>0; "Item \""+String:C10($1)+"\" not found"))
+	If (Asserted:C1132($indx>0; "Item \""+String:C10($item)+"\" not found"))
 		
-		$0:=$aT_refs{$indx}
+		$menuItem:=New object:C1471(\
+			"title"; Get menu item:C422(This:C1470.ref; $indx); \
+			"key"; Get menu item key:C424(This:C1470.ref; $indx); \
+			"mark"; Get menu item mark:C428(This:C1470.ref; $indx); \
+			"method"; Get menu item method:C981(This:C1470.ref; $indx); \
+			"modifiers"; Get menu item modifiers:C980(This:C1470.ref; $indx); \
+			"parameter"; Get menu item parameter:C1003(This:C1470.ref; $indx); \
+			"style"; Get menu item style:C426(This:C1470.ref; $indx); \
+			"withSubMenu"; Length:C16($references{$indx})>0; \
+			"subMenuReference"; $references{$indx}; \
+			"isSeparator"; This:C1470.isSeparatorItem($indx)\
+			)
+		
+		$menuItem.data:=This:C1470.data.query("ref = :1"; $menuItem.parameter)
+		
+		GET MENU ITEM PROPERTY:C972(This:C1470.ref; $indx; Associated standard action:K56:1; $value)
+		$menuItem.standardAction:=$value
+		
+		GET MENU ITEM PROPERTY:C972(This:C1470.ref; $indx; Access privileges:K56:3; $value)
+		$menuItem.accessPrivileges:=$value
 		
 	End if 
+	
+	// ===============================================
+	// Returns a collection of the first level menu items
+Function items()->$items : Collection
+	
+	var $i : Integer
+	
+	$items:=New collection:C1472
+	
+	For ($i; 1; This:C1470.itemCount(); 1)
+		
+		$items.push(This:C1470.item($i))
+		
+	End for 
+	
+	// ===============================================
+	// Returns the sub-menu's object from its title
+Function findSubMenu($withTitle : Text)->$submenu : cs:C1710.menu
+	
+	var $i : Integer
+	
+	ARRAY TEXT:C222($titles; 0x0000)
+	ARRAY TEXT:C222($references; 0x0000)
+	GET MENU ITEMS:C977(This:C1470.ref; $titles; $references)
+	
+	For ($i; 1; Size of array:C274($titles); 1)
+		
+		If ($titles{$i}=$withTitle)
+			
+			// ⛔️ WARNING: MEMORY LEAK - THE MENU WILL NOT BE RELEASED
+			// ⛔️ MUST RETURN SUB-MENU REFERENCE, NOT A NEW INSTANCE
+			$submenu:=cs:C1710.menu.new($references{$i})
+			$i:=MAXLONG:K35:2-1  // Break
+			
+		End if 
+	End for 
+	
+	// ===============================================
+Function itemSubMenuRef($withTitle : Text)->$reference : Text
+	
+	var $indx : Integer
+	
+	ARRAY TEXT:C222($titles; 0x0000)
+	ARRAY TEXT:C222($references; 0x0000)
+	GET MENU ITEMS:C977(This:C1470.ref; $titles; $references)
+	
+	$indx:=Find in array:C230($titles; $withTitle)
+	
+	If ($indx#-1)
+		
+		$reference:=$references{$indx}
+		
+	End if 
+	
+	// ===============================================
+Function isSeparatorItem($item : Integer)->$isSeparator : Boolean
+	
+	var $value
+	
+	Case of 
+			
+			//________________________________________
+		: (Get menu item:C422(This:C1470.ref; $item)="(-@")
+			
+			$isSeparator:=True:C214
+			
+			//________________________________________
+		: (Get menu item:C422(This:C1470.ref; $item)="-@")
+			
+			$isSeparator:=True:C214
+			
+			//________________________________________
+		Else 
+			
+			GET MENU ITEM PROPERTY:C972(This:C1470.ref; $item; "4D_separator"; $value)
+			$isSeparator:=($value#0)
+			
+			//________________________________________
+	End case 
 	
 	// ===============================================
 	// Remove duplicates (lines or items)
