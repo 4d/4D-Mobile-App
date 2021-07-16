@@ -6,34 +6,34 @@
 
 package {{package}}.app
 
-import com.qmobile.qmobileapi.auth.AuthInfoHelper
+import com.qmobile.qmobileapi.utils.SharedPreferencesHolder
 import com.qmobile.qmobiledatastore.db.AppDatabaseFactory
 import com.qmobile.qmobiledatasync.app.BaseApp
-import com.qmobile.qmobileui.model.QMobileUiConstants
-import com.qmobile.qmobileui.utils.LogLevelController
-import com.qmobile.qmobileui.utils.QMobileUiUtil
+import com.qmobile.qmobiledatasync.utils.RuntimeDataHolder
 import {{package}}.BuildConfig
 import {{package}}.R
 import {{package}}.data.db.AppDatabase
 import {{package}}.utils.CustomTableFragmentHelper
 import {{package}}.utils.CustomTableHelper
-import org.json.JSONObject
-import timber.log.Timber
-import java.io.File
 
 class App : BaseApp() {
 
     override fun onCreate() {
         super.onCreate()
 
-        // QMobileUtil init
-        QMobileUiUtil.builder(context = this)
+        // Sets interfaces to get data coming from outside the SDK
+        daoProvider =
+            AppDatabaseFactory.getAppDatabase(applicationContext, AppDatabase::class.java)
+        genericTableHelper = CustomTableHelper()
+        genericTableFragmentHelper = CustomTableFragmentHelper()
 
-       // Setup logging
-        if (BuildConfig.DEBUG) {
-            LogLevelController.initialize(QMobileUiUtil.appUtilities.logLevel)
-            Timber.i("[LOG LEVEL] ${QMobileUiUtil.appUtilities.logLevel}")
+        // Init SharedPreferences, persisting data
+        sharedPreferencesHolder = SharedPreferencesHolder.getInstance(this).apply {
+            init(BuildConfig.APPLICATION_ID, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
         }
+
+        // Init runtime data holder
+        runtimeDataHolder = RuntimeDataHolder.init(this, BuildConfig.DEBUG)
 
         // Sets the drawable resource id for login page logo
         loginLogoDrawable = R.drawable.logo
@@ -48,58 +48,5 @@ class App : BaseApp() {
             {{/tableNames_navigation}}
             R.navigation.settings
         )
-
-        // Sets interfaces to get data coming from outside the SDK
-        daoProvider =
-            AppDatabaseFactory.getAppDatabase(applicationContext, AppDatabase::class.java)
-        genericTableHelper = CustomTableHelper()
-        genericTableFragmentHelper = CustomTableFragmentHelper()
-
-        // As a first step, we gather information about the app and build information
-        saveEnvironmentInfo()
-        AuthInfoHelper.getInstance(this).setQueries(QMobileUiUtil.appUtilities.queryJson)
-        saveTableProperties()
-
-        // Get list of embedded images
-        embeddedFiles =
-            QMobileUiUtil.listAllFilesInAsset(QMobileUiConstants.EMBEDDED_PICTURES_PARENT
-                    + File.separator + QMobileUiConstants.EMBEDDED_PICTURES)
-                .filter { !it.endsWith(QMobileUiConstants.JSON_EXT) }
-    }
-
-    /**
-     * Gets information on the app, device, team etc, and fills it in SharedPreferences
-     */
-    private fun saveEnvironmentInfo() {
-
-        AuthInfoHelper.getInstance(this).apply {
-            appInfo = JSONObject().apply {
-                put(
-                    "id",
-                    BuildConfig.APPLICATION_ID
-                ) // com.qmobile.sample4dapp
-                put("name", BuildConfig.VERSION_NAME) // 1.0
-                put("version", BuildConfig.VERSION_CODE) // 1
-            }
-            device = QMobileUiUtil.deviceUtility.deviceInfo
-            team = QMobileUiUtil.appUtilities.teams
-            language = QMobileUiUtil.deviceUtility.language
-            guestLogin = QMobileUiUtil.appUtilities.guestLogin
-            if (remoteUrl.isEmpty())
-                remoteUrl = QMobileUiUtil.appUtilities.remoteUrl
-            sdkVersion = QMobileUiUtil.appUtilities.sdkVersion
-            dumpedTables = QMobileUiUtil.appUtilities.dumpedTables
-            initialGlobalStamp = QMobileUiUtil.appUtilities.initialGlobalStamp
-            relationAvailable = QMobileUiUtil.appUtilities.relationAvailable
-        }
-    }
-
-    private fun saveTableProperties() {
-        AuthInfoHelper.getInstance(this).apply {
-            genericTableHelper.tableNames().forEach { tableName ->
-                val properties = genericTableHelper.getPropertyListFromTable(tableName, this@App)
-                setProperties(tableName, properties)
-            }
-        }
     }
 }

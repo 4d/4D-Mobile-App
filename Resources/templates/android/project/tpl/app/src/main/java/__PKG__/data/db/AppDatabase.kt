@@ -57,15 +57,16 @@ abstract class AppDatabase :
     }
 
     @Throws(IllegalArgumentException::class)
-    @Suppress("UNCHECKED_CAST", "ReturnCount")
+    @Suppress("UNCHECKED_CAST")
     override fun getRelationDao(
         tableName: String,
         relatedTableName: String
-    ): RelationBaseDao<RoomRelation> {
-        {{#tableNames_relations_distinct}}
-        if (tableName == "{{relation_source}}" && relatedTableName == "{{relation_target}}")
-            return dao{{relation_source}}Has{{relation_target}}Relation() as RelationBaseDao<RoomRelation>
-        {{/tableNames_relations_distinct}}
-        throw IllegalArgumentException()
-    }
+    ): RelationBaseDao<RoomRelation> =
+        when {
+            {{#tableNames_relations_distinct}}
+            tableName == "{{relation_source}}" && relatedTableName == "{{relation_target}}" ->
+                dao{{relation_source}}Has{{relation_target}}Relation() as RelationBaseDao<RoomRelation>
+            {{/tableNames_relations_distinct}}
+            else -> throw IllegalArgumentException()
+        }        
 }
