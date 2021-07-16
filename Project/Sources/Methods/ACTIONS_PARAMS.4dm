@@ -103,7 +103,7 @@ Else   // <== WIDGETS METHOD
 			
 			If (Shift down:C543)
 				
-				$ƒ.formatShowOnDisk()
+				$ƒ.showFormatOnDisk()
 				
 			Else 
 				

@@ -77,6 +77,11 @@ Function onLoad()
 	This:C1470.formats.updatePointer()
 	This:C1470.titles.updatePointer()
 	
+	// Add the events that we cannot select in the form properties 😇
+	This:C1470.appendEvents(New collection:C1472(\
+		On Data Change:K2:15; \
+		On Before Data Entry:K2:39))
+	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Update UI
 Function update()
@@ -753,7 +758,7 @@ Function doGetResources()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Show format on disk
-Function formatShowOnDisk($e : Object)
+Function showFormatOnDisk($e : Object)
 	
 	var $format : Text
 	var $field; $o : Object
@@ -786,7 +791,7 @@ Function formatShowOnDisk($e : Object)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Manage the format menu according to the field type
-Function formatMenu($e : Object)
+Function doFormatMenu($e : Object)
 	
 	var $format; $t : Text
 	var $field; $o : Object
@@ -903,26 +908,28 @@ Function formatMenu($e : Object)
 			$field.format:=$menu.choice
 			
 			// Update me
+			var $ptr : Pointer
+			$ptr:=OBJECT Get pointer:C1124(Object named:K67:5; $e.columnName)
+			
 			//%W-533.3
 			If (PROJECT.isCustomResource($menu.choice))
 				
 				// User resources
 				$o:=$formatters.query("source.name = :1"; $menu.choice).pop()
-				Self:C308->{$e.row}:=$o.source.label
+				$ptr->{$e.row}:=$o.source.label
 				
 			Else 
 				
-				Self:C308->{$e.row}:=EDITOR.str.setText("_"+$menu.choice).localized()
+				$ptr->{$e.row}:=EDITOR.str.setText("_"+$menu.choice).localized()
 				
 			End if 
 			//%W+533.3
 			
 			This:C1470.updateForms($field; $e.row)
+			PROJECT.save()
 			
 			// Remove error color if any
 			LISTBOX SET ROW COLOR:C1270(*; This:C1470.formats.name; $e.row; Foreground color:K23:1; lk font color:K53:24)
-			
-			PROJECT.save()
 			
 		End if 
 	End if 
@@ -934,7 +941,7 @@ Function formatMenu($e : Object)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Manage the tags menu for label & shortlabel
-Function tagMenu($e : Object; $values : Collection)
+Function doTagMenu($e : Object; $values : Collection)
 	
 	var $t : Text
 	var $isSelected : Boolean
@@ -983,8 +990,10 @@ Function tagMenu($e : Object; $values : Collection)
 			
 		End if 
 		
+		var $ptr : Pointer
+		$ptr:=OBJECT Get pointer:C1124(Object named:K67:5; $e.columnName)
 		//%W-533.3
-		Self:C308->{Self:C308->}:=$t
+		$ptr->{$ptr->}:=$t
 		//%W+533.3
 		
 		This:C1470.field($e.row)[$e.columnName]:=$t

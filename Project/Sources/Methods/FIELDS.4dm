@@ -96,7 +96,9 @@ Else   // <== WIDGETS METHOD
 						 | ($e.columnName=$ƒ.shortLabels.name)\
 						 | ($e.columnName=$ƒ.titles.name)
 						
-						EDIT ITEM:C870(Self:C308->; Self:C308->)
+						var $ptr : Pointer
+						$ptr:=OBJECT Get pointer:C1124(Object named:K67:5; $e.columnName)
+						EDIT ITEM:C870($ptr->; $ptr->)
 						
 					End if 
 					
@@ -126,7 +128,7 @@ Else   // <== WIDGETS METHOD
 									If ($ƒ.popup=Null:C1517)  // Stop re-antrance
 										
 										$ƒ.popup:=True:C214
-										$ƒ.tagMenu($e; New collection:C1472("length"))
+										$ƒ.doTagMenu($e; New collection:C1472("length"))
 										
 									Else 
 										
@@ -145,7 +147,7 @@ Else   // <== WIDGETS METHOD
 									If ($ƒ.popup=Null:C1517)  // Stop re-antrance
 										
 										$ƒ.popup:=True:C214
-										$ƒ.tagMenu($e; New collection:C1472("name"))
+										$ƒ.doTagMenu($e; New collection:C1472("name"))
 										
 									Else 
 										
@@ -180,11 +182,11 @@ Else   // <== WIDGETS METHOD
 						
 						If (Shift down:C543)
 							
-							$ƒ.formatShowOnDisk($e)
+							$ƒ.showFormatOnDisk($e)
 							
 						Else 
 							
-							$ƒ.formatMenu($e)
+							$ƒ.doFormatMenu($e)
 							
 						End if 
 					End if 
@@ -196,35 +198,24 @@ Else   // <== WIDGETS METHOD
 					
 					Case of 
 							
-							//........................................
-						: ($e.row=Null:C1517)
+							//……………………………………………………………………
+						: ($e.row=Null:C1517)\
+							 | (Keystroke:C390#"%")
 							
-							// NO SELECTION
+							// <NOTHING MORE TO DO>
 							
-							//........................................
+							//……………………………………………………………………
 						: ($e.columnName=$ƒ.shortLabels.name)\
 							 | ($e.columnName=$ƒ.labels.name)
 							
-							If (Keystroke:C390="%")
-								
-								FILTER KEYSTROKE:C389("")
-								
-								$ƒ.tagMenu($e; New collection:C1472("length"))  // Propose the tags to be inserted
-								
-							End if 
+							$ƒ.doTagMenu($e; New collection:C1472("length"))  // Propose the tags to be inserted
 							
-							//........................................
+							//……………………………………………………………………
 						: ($e.columnName=$ƒ.titles.name)
 							
-							If (Keystroke:C390="%")
-								
-								FILTER KEYSTROKE:C389("")
-								
-								$ƒ.tagMenu($e; New collection:C1472("name"))  // Propose the tags to be inserted
-								
-							End if 
+							$ƒ.doTagMenu($e; New collection:C1472("name"))  // Propose the tags to be inserted
 							
-							//........................................
+							//……………………………………………………………………
 					End case 
 					
 					//_______________________________

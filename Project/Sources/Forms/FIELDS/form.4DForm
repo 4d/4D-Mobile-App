@@ -10,8 +10,12 @@
 	"events": [
 		"onLoad",
 		"onClick",
+		"onDoubleClick",
+		"onBeforeKeystroke",
+		"onDataChange",
 		"onUnload",
 		"onTimer",
+		"onSelectionChange",
 		"onMouseEnter",
 		"onMouseLeave"
 	],
@@ -114,7 +118,6 @@
 						"onMouseLeave",
 						"onMouseMove"
 					],
-					"method": "FIELDS",
 					"hideSystemHighlight": true,
 					"fill": "automatic",
 					"hideExtraBlankRows": false,
@@ -203,8 +206,7 @@
 								"fill": "#FFFFFF",
 								"textAlign": "left",
 								"verticalAlign": "middle"
-							},
-							"method": "FIELDS"
+							}
 						},
 						{
 							"name": "shortLabel",
@@ -233,8 +235,7 @@
 								"fill": "#FFFFFF",
 								"textAlign": "left",
 								"verticalAlign": "middle"
-							},
-							"method": "FIELDS"
+							}
 						},
 						{
 							"name": "label",
@@ -263,8 +264,7 @@
 								"fill": "#FFFFFF",
 								"textAlign": "left",
 								"verticalAlign": "middle"
-							},
-							"method": "FIELDS"
+							}
 						},
 						{
 							"name": "format",
@@ -310,7 +310,6 @@
 							"events": [
 								"onDoubleClick"
 							],
-							"method": "FIELDS",
 							"footer": {
 								"name": "Footer7"
 							},
@@ -321,8 +320,8 @@
 				},
 				"picker": {
 					"type": "subform",
-					"top": 436,
-					"left": 38,
+					"top": 411,
+					"left": 16,
 					"width": 95,
 					"height": 14,
 					"visibility": "hidden",
@@ -409,7 +408,7 @@
 		"kind": "form"
 	},
 	"method": "FIELDS",
-	"geometryStamp": 28,
+	"geometryStamp": 29,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

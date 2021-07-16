@@ -1021,7 +1021,7 @@ Function getFormats()->$formats : Object
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Show current format on disk
-Function formatShowOnDisk
+Function showFormatOnDisk
 	
 	var $format : Text
 	var $folder : 4D:C1709.Folder
@@ -1668,7 +1668,7 @@ Function doName($e : Object)
 						This:C1470.predicting.hide()
 						
 						//_________________________
-					: ($indx>=4)  // Left, right 
+					: ($indx>=4)  // Left, right
 						
 						This:C1470.current.name:=$editedText
 						
