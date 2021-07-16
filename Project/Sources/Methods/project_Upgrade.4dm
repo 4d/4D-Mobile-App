@@ -723,38 +723,41 @@ If (FEATURE.with("dominantColor")) & ($project.ui.dominantColor=Null:C1517)
 	End if 
 End if 
 
-//=====================================================================
-//                       CHANGE ACTION PRESET
-//=====================================================================
-If ($project.actions#Null:C1517)
+If (FEATURE.with("sortAction"))
+	//=====================================================================
+	//                       CHANGE ACTION PRESET
+	//=====================================================================
 	
-	For each ($o; $project.actions.query("preset = adding"))
+	If ($project.actions#Null:C1517)
 		
-		$o.preset:="add"
-		$isUpgraded:=True:C214
+		For each ($o; $project.actions.query("preset = adding"))
+			
+			$o.preset:="add"
+			$isUpgraded:=True:C214
+			
+		End for each 
 		
-	End for each 
-	
-	For each ($o; $project.actions.query("preset = suppression"))
+		For each ($o; $project.actions.query("preset = suppression"))
+			
+			$o.preset:="delete"
+			$isUpgraded:=True:C214
+			
+		End for each 
 		
-		$o.preset:="delete"
-		$isUpgraded:=True:C214
+		For each ($o; $project.actions.query("preset = sharing"))
+			
+			$o.preset:="share"
+			$isUpgraded:=True:C214
+			
+		End for each 
 		
-	End for each 
-	
-	For each ($o; $project.actions.query("preset = sharing"))
-		
-		$o.preset:="share"
-		$isUpgraded:=True:C214
-		
-	End for each 
-	
-	For each ($o; $project.actions.query("preset = edition"))
-		
-		$o.preset:="edit"
-		$isUpgraded:=True:C214
-		
-	End for each 
+		For each ($o; $project.actions.query("preset = edition"))
+			
+			$o.preset:="edit"
+			$isUpgraded:=True:C214
+			
+		End for each 
+	End if 
 End if 
 
 // Set the current version

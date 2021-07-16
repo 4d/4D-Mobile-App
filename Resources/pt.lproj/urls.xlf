@@ -1,72 +1,1 @@
-﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<xliff version="1.0" xmlns:d4="http://www.4d.com/d4-ns">
-
-  <file datatype="plaintext" original="Undefined" source-language="en" target-language="pt">
-    <header>
-      <prop-group name="Xliff-Editor.4dbase">
-        <prop prop-type="version">2.0</prop>
-      </prop-group>
-    </header>
-    <body>
-      <group resname="help">
-        <trans-unit id="PYPEJMe7LMCOQbIq88r5WQ" resname="help_properties">
-          <source>https://developer.4d.com/4d-for-ios/docs/en/data.html#properties-panel</source>
-          <target>https://developer.4d.com/4d-for-ios/docs/en/data.html#properties-panel</target>
-        </trans-unit>
-        <trans-unit id="JhISM2h76ANvQsxYncRSHA" resname="help_source">
-          <source>https://developer.4d.com/4d-for-ios/docs/en/data.html#data-source-panel</source>
-          <target>https://developer.4d.com/4d-for-ios/docs/en/data.html#data-source-panel</target>
-        </trans-unit>
-        <trans-unit id="aBtjE/IExFmw9L5BJWaWbg" resname="help_general">
-          <source>https://developer.4d.com/4d-for-ios/docs/en/general.html</source>
-          <target>https://developer.4d.com/4d-for-ios/docs/en/general.html</target>
-        </trans-unit>
-      </group>
-      <group resname="appstore">
-        <trans-unit id="GS85lw7WEHprKtApYdjrLQ" resname="appstore_xcode" translate="no">
-          <source>macappstore://itunes.apple.com/app/id497799835?mt=12</source>
-        </trans-unit>
-        <trans-unit id="rq6lggivNjgtKeb3PNumXw" resname="appstore_configurator" translate="no">
-          <source>"macappstore://itunes.apple.com/app/id1037126344?mt=12</source>
-        </trans-unit>
-      </group>
-      <group resname="doc">
-        <trans-unit id="+1f57CpXwc/flZvE8BZ9Xg" resname="doc_orgIdentifier" translate="no">
-          <source>https://developer.apple.com/library/content/documentation/IDEs/Conceptual/AppDistributionGuide/ConfiguringYourApp/ConfiguringYourApp.html</source>
-        </trans-unit>
-        <trans-unit id="b0yfk9Cur90GdqjAXTA9lg" resname="doc_orgName" translate="no">
-          <source>https://developer.apple.com/library/content/documentation/IDEs/Conceptual/AppDistributionGuide/ConfiguringYourApp/ConfiguringYourApp.html</source>
-        </trans-unit>
-        <trans-unit id="C93LrKlnBPbeb/dbq+nr9w" resname="doc_team" translate="no">
-          <source>https://developer.apple.com/account/#/membership/</source>
-        </trans-unit>
-        <trans-unit id="k8TM2fVQX72CNn1qyhp3LA" resname="doc_incremental" translate="no">
-          <source>https://developer.4d.com/4d-for-ios/docs/en/structure.html#incremental-reload</source>
-        </trans-unit>
-        <trans-unit id="uKxk4eky4AFTNAJ85aukOg" resname="doc_structureAdjustment" translate="no">
-          <source>https://developer.4d.com/4d-for-ios/docs/en/structure.html#incremental-reload</source>
-        </trans-unit>
-      </group>
-      <group resname="resources">
-        <trans-unit id="hc6UvbBYTqc4FW1t+iJClg" resname="res_detailForms" translate="no">
-          <source>https://4d-for-ios.github.io/gallery/#/type/form-detail/picker/1</source>
-        </trans-unit>
-        <trans-unit id="qvUJE0+P15/BHjKotO120g" resname="res_listForms" translate="no">
-          <source>https://4d-for-ios.github.io/gallery/#/type/form-list/picker/1</source>
-        </trans-unit>
-        <trans-unit id="dYTGeghNiYmf5fP7cs6LnA" resname="res_formatters" translate="no">
-          <source>https://4d-for-ios.github.io/gallery/#/type/formatter/picker/1</source>
-        </trans-unit>
-        <trans-unit id="6XdJpJexFQAHc6Y6S6lIHA" resname="res_loginForms" translate="no">
-          <source>https://4d-for-ios.github.io/gallery/#/type/form-login/picker/1</source>
-        </trans-unit>
-      </group>
-      <group resname="android">
-        <trans-unit id="8qKLaaE3geRg5Vyo9fAS9Q" resname="downloadAndroidStudio" translate="no">
-          <source>https://developer.android.com/studio</source>
-        </trans-unit>
-      </group>
-    </body>
-  </file>
-
-</xliff>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?><xliff version="1.0" xmlns:d4="http://www.4d.com/d4-ns">  <file datatype="plaintext" original="Undefined" source-language="en" target-language="pt">    <header>      <prop-group name="Xliff-Editor.4dbase">        <prop prop-type="version">2.0</prop>      </prop-group>    </header>    <body>      <group resname="help">        <trans-unit id="PYPEJMe7LMCOQbIq88r5WQ" resname="help_properties">          <source>https://developer.4d.com/4d-for-ios/docs/en/data.html#properties-panel</source>          <target>https://developer.4d.com/4d-for-ios/docs/en/data.html#properties-panel</target>        </trans-unit>        <trans-unit id="JhISM2h76ANvQsxYncRSHA" resname="help_source">          <source>https://developer.4d.com/4d-for-ios/docs/en/data.html#data-source-panel</source>          <target>https://developer.4d.com/4d-for-ios/docs/en/data.html#data-source-panel</target>        </trans-unit>        <trans-unit id="aBtjE/IExFmw9L5BJWaWbg" resname="help_general">          <source>https://developer.4d.com/4d-for-ios/docs/en/general.html</source>          <target>https://developer.4d.com/4d-for-ios/docs/en/general.html</target>        </trans-unit>      </group>      <group resname="appstore">        <trans-unit id="GS85lw7WEHprKtApYdjrLQ" resname="appstore_xcode" translate="no">          <source>macappstore://itunes.apple.com/app/id497799835?mt=12</source>        </trans-unit>        <trans-unit id="rq6lggivNjgtKeb3PNumXw" resname="appstore_configurator" translate="no">          <source>"macappstore://itunes.apple.com/app/id1037126344?mt=12</source>        </trans-unit>      </group>      <group resname="doc">        <trans-unit id="+1f57CpXwc/flZvE8BZ9Xg" resname="doc_orgIdentifier" translate="no">          <source>https://developer.apple.com/library/content/documentation/IDEs/Conceptual/AppDistributionGuide/ConfiguringYourApp/ConfiguringYourApp.html</source>        </trans-unit>        <trans-unit id="b0yfk9Cur90GdqjAXTA9lg" resname="doc_orgName" translate="no">          <source>https://developer.apple.com/library/content/documentation/IDEs/Conceptual/AppDistributionGuide/ConfiguringYourApp/ConfiguringYourApp.html</source>        </trans-unit>        <trans-unit id="C93LrKlnBPbeb/dbq+nr9w" resname="doc_team" translate="no">          <source>https://developer.apple.com/account/#/membership/</source>        </trans-unit>        <trans-unit id="k8TM2fVQX72CNn1qyhp3LA" resname="doc_incremental" translate="no">          <source>https://developer.4d.com/4d-for-ios/docs/en/structure.html#incremental-reload</source>        </trans-unit>        <trans-unit id="uKxk4eky4AFTNAJ85aukOg" resname="doc_structureAdjustment" translate="no">          <source>https://developer.4d.com/4d-for-ios/docs/en/structure.html#incremental-reload</source>        </trans-unit>      </group>      <group resname="resources">        <trans-unit id="hc6UvbBYTqc4FW1t+iJClg" resname="res_detailForms" translate="no">          <source>https://4d-for-ios.github.io/gallery/#/type/form-detail/picker/1</source>        </trans-unit>        <trans-unit id="qvUJE0+P15/BHjKotO120g" resname="res_listForms" translate="no">          <source>https://4d-for-ios.github.io/gallery/#/type/form-list/picker/1</source>        </trans-unit>        <trans-unit id="dYTGeghNiYmf5fP7cs6LnA" resname="res_formatters" translate="no">          <source>https://4d-go-mobile.github.io/gallery/#/type/formatter/picker/1</source>        </trans-unit>        <trans-unit id="6XdJpJexFQAHc6Y6S6lIHA" resname="res_loginForms" translate="no">          <source>https://4d-for-ios.github.io/gallery/#/type/form-login/picker/1</source>        </trans-unit>      </group>      <group resname="android">        <trans-unit id="8qKLaaE3geRg5Vyo9fAS9Q" resname="downloadAndroidStudio" translate="no">          <source>https://developer.android.com/studio</source>        </trans-unit>      </group>    </body>  </file></xliff>

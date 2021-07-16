@@ -169,10 +169,9 @@ Else   // <== WIDGETS METHOD
 					$field[Choose:C955($e.columnName="title"; "format"; $e.columnName)]:=(OBJECT Get pointer:C1124(Object named:K67:5; $e.columnName))->{$e.row}
 					//%W+533.3
 					
-					PROJECT.save()
-					
 					$ƒ.updateForms($field; $e.row)
 					
+					PROJECT.save()
 					
 					//_______________________________
 				: ($e.code=On Before Data Entry:K2:39)

@@ -635,37 +635,18 @@ Function setHelpTip($e : Object)
 	This:C1470.fieldList.setHelpTip($tips)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-	// Update forms
+	// Update forms if any
 Function updateForms($field : Object; $row : Integer)
 	
-	// Update forms if any
+	This:C1470._updateForms("detail"; $field; $row)
+	This:C1470._updateForms("list"; $field; $row)
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+	// [PRIVATE] Update forms
+Function _updateForms($type : Text; $field : Object; $row : Integer)
+	
 	var $o : Object
-	$o:=Form:C1466.detail[String:C10(This:C1470.tableNumber)]
-	
-	If ($o#Null:C1517)
-		
-		If ($field.name=Null:C1517)  //relation
-			
-			//%W-533.3
-			$o:=$o.fields.query("name = :1"; This:C1470.names.pointer->{$row}).pop()
-			//%W+533.3
-			
-		Else 
-			
-			$o:=$o.fields.query("name = :1"; $field.name).pop()
-			
-		End if 
-		
-		If ($o#Null:C1517)
-			
-			$o.label:=$field.label
-			$o.shortLabel:=$field.shortLabel
-			$o.format:=$field.format
-			
-		End if 
-	End if 
-	
-	$o:=Form:C1466.list[String:C10(This:C1470.tableNumber)]
+	$o:=Form:C1466[$type][String:C10(This:C1470.tableNumber)]
 	
 	If ($o#Null:C1517)
 		

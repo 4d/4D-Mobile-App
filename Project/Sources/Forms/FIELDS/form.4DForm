@@ -217,7 +217,8 @@
 							"events": [
 								"onClick",
 								"onDoubleClick",
-								"onBeforeKeystroke"
+								"onBeforeKeystroke",
+								"onDataChange"
 							],
 							"header": {
 								"name": "Header3",
