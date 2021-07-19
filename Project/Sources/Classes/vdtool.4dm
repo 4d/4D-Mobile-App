@@ -21,7 +21,7 @@ Class constructor()
 		Else 
 			
 			$androidStudio:=Folder:C1567($studio.exe.platformPath; fk platform path:K87:2).parent.parent.platformPath
-			This:C1470.classPath:=This:C1470.classPath+";"+$androidStudio+"lib\\*:"+$androidStudio+"plugins\\android\\lib\\*:"+$androidStudio+"plugins\\android-layoutlib\\lib\\*"
+			This:C1470.classPath:=This:C1470.classPath+";"+$androidStudio+"lib\\*;"+$androidStudio+"plugins\\android\\lib\\*;"+$androidStudio+"plugins\\android-layoutlib\\lib\\*"
 			
 		End if 
 		
