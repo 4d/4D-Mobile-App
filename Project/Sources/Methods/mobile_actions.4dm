@@ -12,10 +12,15 @@ C_OBJECT:C1216($0)
 C_TEXT:C284($1)
 C_OBJECT:C1216($2)
 
-C_LONGINT:C283($Lon_parameters)
-C_TEXT:C284($t; $Txt_action)
-C_OBJECT:C1216($o; $Obj_action; $Obj_parameters; $Obj_in; $Obj_out)
-C_BOOLEAN:C305($Boo_hasImage)
+var $Lon_parameters : Integer
+var $t; $Txt_action : Text
+var $o; $oResult; $Obj_in; $Obj_out : Object
+var $action; $parameter; $manifest; $dataModel : Object
+var $hasImage; $isObject : Boolean
+var $format : Variant/*Text or Object*/
+var $folder; $formatFolder : 4D:C1709.Folder
+var $formats : Collection
+
 
 If (False:C215)
 	C_OBJECT:C1216(mobile_actions; $0)
@@ -59,34 +64,67 @@ Case of
 		
 		If (Value type:C1509($Obj_in.project.actions)=Is collection:K8:32)
 			
-			For each ($Obj_action; $Obj_in.project.actions) Until ($Boo_hasImage)
+			For each ($action; $Obj_in.project.actions) Until ($hasImage)
 				
-				If (Value type:C1509($Obj_action.parameters)=Is collection:K8:32)
+				If (Value type:C1509($action.parameters)=Is collection:K8:32)
 					
-					For each ($Obj_parameters; $Obj_action.parameters) Until ($Boo_hasImage)
+					For each ($parameter; $action.parameters) Until ($hasImage)
 						
-						If (String:C10($Obj_parameters.type)="image")
-							
-							$Boo_hasImage:=True:C214
-							
-						End if 
+						Case of 
+							: (String:C10($parameter.type)="image")
+								
+								$hasImage:=True:C214
+								
+							: (String:C10($parameter.format)="barcode")
+								
+								$hasImage:=True:C214  // Maybe separate and want only camera and not photo...
+								
+						End case 
 						
-						If (String:C10($Obj_parameters.format)="barcode")
-							
-							$Boo_hasImage:=True:C214  // Maybe separate and want only camera and not photo...
-							
-						End if 
 					End for each 
 				End if 
 			End for each 
 		End if 
 		
-		If ($Boo_hasImage)
+		If ($hasImage)
 			
 			$Obj_out.capabilities.photo:=True:C214
 			$Obj_out.capabilities.camera:=True:C214
 			
 		End if 
+		
+		If (FEATURE.with("customActionFormatterWithCode"))
+			// read capabilities from manifest files
+			
+			$formats:=$Obj_in.formats  // to implement a cache passed by caller
+			If ($formats=Null:C1517)
+				$formats:=mobile_actions("hostFormatList"; $Obj_in).formats
+			End if 
+			
+			$folder:=cs:C1710.path.new().hostActionParameterFormatters()
+			For each ($format; $formats)
+				Case of 
+					: (Value type:C1509($format)=Is text:K8:3)
+						$formatFolder:=$folder.folder(Substring:C12($format; 2))
+						$manifest:=ob_parseFile($formatFolder.file("manifest.json")).value
+					: (Value type:C1509($format)=Is object:K8:27)
+						$formatFolder:=$format.folder
+						$manifest:=$format
+					Else 
+						$manifest:=New object:C1471
+						ASSERT:C1129(dev_Matrix; "Wrong type of format")
+				End case 
+				
+				If ($manifest.capabilities#Null:C1517)
+					
+					$Obj_out.capabilities:=capabilities(New object:C1471("action"; "mergeObjects"; "value"; New collection:C1472($Obj_out.capabilities; $manifest.capabilities))).value
+					
+				End if 
+				
+			End for each 
+			
+		End if 
+		
 		
 		$Obj_out.success:=True:C214
 		
@@ -97,26 +135,26 @@ Case of
 		
 		$Obj_out.actions:=mobile_actions("filter"; $Obj_in).actions
 		
-		For each ($Obj_action; $Obj_out.actions)
+		For each ($action; $Obj_out.actions)
 			
-			For each ($t; $Obj_action)
+			For each ($t; $action)
 				
 				If ($t[[1]]="$")
 					
-					OB REMOVE:C1226($Obj_action; $t)
+					OB REMOVE:C1226($action; $t)
 					
 				End if 
 			End for each 
 			
-			If (Length:C16(String:C10($Obj_action.icon))>0)
+			If (Length:C16(String:C10($action.icon))>0)
 				
-				$Obj_action.icon:="action_"+$Obj_action.name
+				$action.icon:="action_"+$action.name
 				
 			End if 
 			
-			If ($Obj_action.label=Null:C1517)
+			If ($action.label=Null:C1517)
 				
-				$Obj_action.label:=$Obj_action.name
+				$action.label:=$action.name
 				
 			End if 
 		End for each 
@@ -180,25 +218,25 @@ Case of
 					
 					$Obj_out.path:=asset(New object:C1471("action"; "path"; "path"; $Obj_in.target)).path+"Actions"+Folder separator:K24:12
 					
-					For each ($Obj_action; $Obj_in.actions)
+					For each ($action; $Obj_in.actions)
 						
 						$o:=mobile_actions("iconPath"; New object:C1471(\
-							"action"; $Obj_action))
+							"action"; $action))
 						
 						Case of 
 								
 								//……………………………………………………
 							: (Bool:C1537($o.exists))
 								
-								$Obj_out.results[$Obj_action.name]:=asset(New object:C1471(\
+								$Obj_out.results[$action.name]:=asset(New object:C1471(\
 									"action"; "create"; \
 									"type"; "imageset"; \
 									"source"; $o.platformPath; \
-									"tags"; New object:C1471("name"; "action_"+$Obj_action.name); \
+									"tags"; New object:C1471("name"; "action_"+$action.name); \
 									"target"; $Obj_out.path; \
 									"size"; 32))
 								
-								ob_error_combine($Obj_out; $Obj_out.results[$Obj_action.name])
+								ob_error_combine($Obj_out; $Obj_out.results[$action.name])
 								
 								//……………………………………………………
 							: ($o.success)
@@ -256,63 +294,56 @@ Case of
 		// Add choice lists if any to action parameters
 		If ($Obj_in.project.actions#Null:C1517)
 			
-			C_OBJECT:C1216($Obj_dataModel; $Path_manifest; $Obj_manifest)
-			C_TEXT:C284($t)
 			
-			$Obj_dataModel:=$Obj_in.project.dataModel
+			$dataModel:=$Obj_in.project.dataModel
 			
-			For each ($Obj_action; $Obj_in.project.actions)
+			For each ($action; $Obj_in.project.actions)
 				
-				If ($Obj_action.parameters#Null:C1517)
+				If ($action.parameters#Null:C1517)
 					
-					For each ($Obj_parameters; $Obj_action.parameters)
+					For each ($parameter; $action.parameters)
 						
 						Case of 
 								
-								//%W-533.1
 							: (_and(Formula:C1597(FEATURE.with("customActionFormatter")); \
-								Formula:C1597(Length:C16(String:C10($Obj_parameters.format))>0); \
-								Formula:C1597(String:C10($Obj_parameters.format[[1]])="/")))
-								//%W+533.1
+								Formula:C1597(PROJECT.isCustomResource(String:C10($parameter.format)))))
 								
-								$Path_manifest:=cs:C1710.path.new().hostActionParameterFormatters().folder(Substring:C12($Obj_parameters.format; 2)).file("manifest.json")
-								If ($Path_manifest.exists)
-									$Obj_manifest:=JSON Parse:C1218($Path_manifest.getText())
+								$manifest:=ob_parseFile(cs:C1710.path.new().hostActionParameterFormatters().folder(Substring:C12($parameter.format; 2)).file("manifest.json"))
+								If ($manifest.success)
+									$manifest:=$manifest.value
 									
-									If ($Obj_manifest.choiceList#Null:C1517)
+									If ($manifest.choiceList#Null:C1517)
 										
-										$Obj_parameters.choiceList:=$Obj_manifest.choiceList
+										$parameter.choiceList:=$manifest.choiceList
 										
-										If (Value type:C1509($Obj_parameters.choiceList)=Is object:K8:27)
-											If ($Obj_parameters["dataSource"]=Null:C1517)  // ie. normal source
-												$Obj_parameters.choiceList:=OB Entries:C1720($Obj_parameters.choiceList)  // to try to keep order
+										If (Value type:C1509($parameter.choiceList)=Is object:K8:27)
+											If ($parameter["dataSource"]=Null:C1517)  // ie. normal source
+												$parameter.choiceList:=OB Entries:C1720($parameter.choiceList)  // to try to keep order
 											End if 
 										End if 
 										
-										If ($Obj_manifest.format#Null:C1517)
-											$Obj_parameters.format:=$Obj_manifest.format  // could take from manifest another way to display choice list
+										If ($manifest.format#Null:C1517)
+											$parameter.format:=$manifest.format  // could take from manifest another way to display choice list
 										End if 
-										If ($Obj_manifest.binding#Null:C1517)
-											$Obj_parameters.binding:=$Obj_manifest.binding  // imageNamed for instance
+										If ($manifest.binding#Null:C1517)
+											$parameter.binding:=$manifest.binding  // imageNamed for instance
 										End if 
 										
-										If (String:C10($Obj_manifest.binding)="imageNamed")
-											If ((String:C10($Obj_manifest.format)="sheet") | (String:C10($Obj_manifest.format)="picker"))
+										If (String:C10($manifest.binding)="imageNamed")
+											If ((String:C10($manifest.format)="sheet") | (String:C10($manifest.format)="picker"))
 												ob_warning_add($Obj_out; "Image format not compatible with sheet or picker")
 											End if 
 											
 											// generate images
-											var $destination : 4D:C1709.Folder
-											$destination:=Folder:C1567($Obj_in.path; fk platform path:K87:2).folder("Resources/Assets.xcassets/ActionParametersFormatters")
-											$Obj_manifest.isHost:=True:C214
-											$Obj_manifest.path:=cs:C1710.path.new().hostActionParameterFormatters().folder(Substring:C12($Obj_parameters.format; 2)).platformPath
-											If (Not:C34($destination.folder(Substring:C12($Obj_parameters.format; 2)).exists))
+											$folder:=Folder:C1567($Obj_in.path; fk platform path:K87:2).folder("Resources/Assets.xcassets/ActionParametersFormatters")
+											$manifest.isHost:=True:C214
+											$manifest.path:=cs:C1710.path.new().hostActionParameterFormatters().folder(Substring:C12($parameter.format; 2)).platformPath
+											If (Not:C34($folder.folder(Substring:C12($parameter.format; 2)).exists))
 												
-												var $oResult : Object
 												$oResult:=asset(New object:C1471(\
 													"action"; "formatter"; \
-													"formatter"; $Obj_manifest; \
-													"target"; $destination.platformPath))
+													"formatter"; $manifest; \
+													"target"; $folder.platformPath))
 												
 												ob_error_combine($Obj_out; $oResult)
 												
@@ -321,37 +352,36 @@ Case of
 									End if 
 								End if 
 								
-							: ($Obj_parameters.fieldNumber#Null:C1517)  // Linked to a field
+							: ($parameter.fieldNumber#Null:C1517)  // Linked to a field
 								
-								$t:=String:C10($Obj_dataModel[String:C10($Obj_action.tableNumber)][String:C10($Obj_parameters.fieldNumber)].format)
+								$t:=String:C10($dataModel[String:C10($action.tableNumber)][String:C10($parameter.fieldNumber)].format)
 								
 								If (Length:C16($t)>0)
 									
 									If ($t[[1]]="/")
 										
 										// User
-										$Path_manifest:=COMPONENT_Pathname("host_formatters").file(Substring:C12($t; 2)+"/manifest.json")
-										
-										If ($Path_manifest.exists)
+										$manifest:=ob_parseFile(COMPONENT_Pathname("host_formatters").file(Substring:C12($t; 2)+"/manifest.json"))
+										If ($manifest.success)
 											
-											$Obj_manifest:=JSON Parse:C1218($Path_manifest.getText())
+											$manifest:=$manifest.value
 											
-											If ($Obj_manifest.choiceList#Null:C1517)
+											If ($manifest.choiceList#Null:C1517)
 												
-												If ($Obj_parameters.type="bool")  // Kep only 2 values
+												If ($parameter.type="bool")  // Kep only 2 values
 													
 													Case of 
 															
 															//______________________________________________________
-														: (Value type:C1509($Obj_manifest.choiceList)=Is collection:K8:32)
+														: (Value type:C1509($manifest.choiceList)=Is collection:K8:32)
 															
-															$Obj_manifest.choiceList.resize(2)
-															$Obj_parameters.choiceList:=$Obj_manifest.choiceList
+															$manifest.choiceList.resize(2)
+															$parameter.choiceList:=$manifest.choiceList
 															
 															//______________________________________________________
-														: (Value type:C1509($Obj_manifest.choiceList)=Is object:K8:27)
+														: (Value type:C1509($manifest.choiceList)=Is object:K8:27)
 															
-															$Obj_parameters.choiceList:=New collection:C1472($Obj_manifest.choiceList["0"]; $Obj_manifest.choiceList["1"])
+															$parameter.choiceList:=New collection:C1472($manifest.choiceList["0"]; $manifest.choiceList["1"])
 															
 															//______________________________________________________
 														Else 
@@ -363,14 +393,14 @@ Case of
 													
 												Else 
 													
-													If (Value type:C1509($Obj_manifest.choiceList)=Is object:K8:27)
+													If (Value type:C1509($manifest.choiceList)=Is object:K8:27)
 														
 														// To keep order
-														$Obj_parameters.choiceList:=OB Entries:C1720($Obj_manifest.choiceList)
+														$parameter.choiceList:=OB Entries:C1720($manifest.choiceList)
 														
 													Else 
 														
-														$Obj_parameters.choiceList:=$Obj_manifest.choiceList
+														$parameter.choiceList:=$manifest.choiceList
 														
 													End if 
 												End if 
@@ -379,11 +409,11 @@ Case of
 										
 									Else 
 										
-										$Obj_manifest:=SHARED.resources.definitions
+										$manifest:=SHARED.resources.definitions
 										
-										If ($Obj_manifest[$t].choiceList#Null:C1517)
+										If ($manifest[$t].choiceList#Null:C1517)
 											
-											$Obj_parameters.choiceList:=$Obj_manifest[$t].choiceList
+											$parameter.choiceList:=$manifest[$t].choiceList
 											
 										End if 
 									End if 
@@ -409,6 +439,83 @@ Case of
 		End if 
 		
 		$Obj_out.success:=True:C214
+		
+		//______________________________________________________
+	: ($Txt_action="hostFormatList")
+		// list all custom format from project
+		
+		$isObject:=Bool:C1537($Obj_in.read)  // parse manifest or not
+		If ($isObject)
+			$folder:=cs:C1710.path.new().hostActionParameterFormatters()
+		End if 
+		
+		$Obj_out.formats:=New collection:C1472
+		If ($Obj_in.project.actions#Null:C1517)
+			For each ($action; $Obj_in.project.actions)
+				For each ($parameter; $action.parameters)
+					If (PROJECT.isCustomResource(String:C10($parameter.format)))
+						If ($isObject)
+							$formatFolder:=$folder.folder(Substring:C12($format; 2))
+							$manifest:=ob_parseFile($formatFolder.file("manifest.json")).value
+							$manifest.folder:=$formatFolder
+							$Obj_out.formats.push($manifest)
+						Else 
+							$Obj_out.formats.push($parameter.format)
+						End if 
+					End if 
+				End for each 
+			End for each 
+			$Obj_out.formats:=$Obj_out.formats.distinct()
+		End if 
+		
+		$Obj_out.success:=True:C214
+		
+		//______________________________________________________
+	: ($Txt_action="injectHost")  // for customActionFormatterWithCode
+		
+		$formats:=$Obj_in.formats  // to implement a cache passed by caller
+		If ($formats=Null:C1517)
+			$formats:=mobile_actions("hostFormatList"; $Obj_in).formats
+		End if 
+		
+		$folder:=cs:C1710.path.new().hostActionParameterFormatters()
+		
+		For each ($format; $formats)
+			
+			Case of 
+				: (Value type:C1509($format)=Is text:K8:3)
+					$formatFolder:=$folder.folder(Substring:C12($format; 2))
+					$manifest:=ob_parseFile($formatFolder.file("manifest.json")).value
+				: (Value type:C1509($format)=Is object:K8:27)
+					$formatFolder:=$format.folder
+					$manifest:=$format
+				Else 
+					ASSERT:C1129(dev_Matrix; "Wront type of format")
+			End case 
+			
+			If (Bool:C1537($manifest.inject))
+				If ($formatFolder.folder("ios").exists)
+					$formatFolder:=$formatFolder.folder("ios")
+				End if 
+				
+/*var $Col_catalog : Collection
+$Col_catalog:=doc_catalog(This.template.source; This.getCatalogExcludePattern())*/
+				var $copyFilesResult : Object
+				$copyFilesResult:=template(New object:C1471(\
+					"source"; $formatFolder.platformPath; \
+					"target"; $Obj_in.path; \
+					"tags"; $Obj_in.tags\
+					))
+				
+				$copyFilesResult:=XcodeProjInject(New object:C1471(\
+					"node"; $copyFilesResult; \
+					"mapping"; $Obj_in.projfile.mapping; \
+					"proj"; $Obj_in.projfile.value; \
+					"target"; $Obj_in.path; \
+					"uuid"; $Obj_in.template.uuid))
+				
+			End if 
+		End for each 
 		
 		//______________________________________________________
 	Else 

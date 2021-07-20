@@ -157,6 +157,8 @@ FEATURE.unstable("customActionFormatter")  // Redmine #128195
 FEATURE.unstable("newFormatterChoiceList")  // Menu to create formatter choice list directly , from data
 FEATURE.unstable("newActionFormatterChoiceList")  // Menu to create action formatter choice list directly
 
+FEATURE.wip("customActionFormatterWithCode")
+
 /* _____________
 WIP
 _____________*/

@@ -282,6 +282,17 @@ Function doRun()->$result : Object
 	$result:=ob_deepMerge($result; This:C1470.updateAssets())
 	
 	// Add choice lists if any to action parameters
-	var $subResult : Object
-	$subResult:=mobile_actions("addChoiceList"; This:C1470.input)
-	ob_error_combine($result; $subResult)
+	$result.choiceList:=mobile_actions("addChoiceList"; This:C1470.input)
+	ob_error_combine($result; $result.choiceList)
+	
+	If (FEATURE.with("customActionFormatterWithCode"))
+		
+		var $input : Object
+		$input:=OB Copy:C1225(This:C1470.input)
+		$input.projfile:=This:C1470.getXcodeProj()
+		
+		$result.injectHost:=mobile_actions("injectHost"; $input)
+		ob_error_combine($result; $result.injectHost)
+		
+	End if 
+	
