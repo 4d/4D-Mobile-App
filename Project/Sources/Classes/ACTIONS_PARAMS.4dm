@@ -1069,6 +1069,7 @@ Function doFormatMenu()
 			
 			$hasCustom:=This:C1470._appendFormat(New object:C1471(\
 				"menu"; $menu; \
+				"type"; $type; \
 				"format"; $format; \
 				"custom"; $hasCustom; \
 				"currentFormat"; $currentFormat))
@@ -1098,6 +1099,7 @@ Function doFormatMenu()
 					
 					$hasCustom:=This:C1470._appendFormat(New object:C1471(\
 						"menu"; $subMenu; \
+						"type"; $type; \
 						"format"; $format; \
 						"custom"; $hasCustom; \
 						"currentFormat"; $currentFormat))
@@ -1199,23 +1201,26 @@ Function doFormatMenu()
 				
 				$current.format:=$menu.choice
 				
-				If ($current.defaultField=Null:C1517)  // User parameter
-					
-					For each ($type; $formats) Until ($index#-1)
+				$newType:=$menu.getData("type")
+				If ($newType=Null:C1517)
+					If ($current.defaultField=Null:C1517)  // User parameter
 						
-						$index:=$formats[$type].indexOf($current.format)
-						
-						If ($index#-1)
+						For each ($type; $formats) Until ($index#-1)
 							
-							$newType:=Choose:C955($type="string"; "text"; $type)
+							$index:=$formats[$type].indexOf($current.format)
+							
+							If ($index#-1)
+								
+								$newType:=Choose:C955($type="string"; "text"; $type)
+								
+							End if 
+						End for each 
+						
+						If ($index=-1)
+							
+							$newType:=$current.format
 							
 						End if 
-					End for each 
-					
-					If ($index=-1)
-						
-						$newType:=$current.format
-						
 					End if 
 					
 					If ($current.type#$newType)  // The type is changed
@@ -1255,78 +1260,19 @@ Function _appendFormat($data : Object)->$custom : Boolean
 			$data.menu.line()  // Separate custom by a line
 			$data.custom:=True:C214
 			
-			//
-			$data.menu.append(".Choice List").disable()  //#MARK_LOCALIZE
-			
 		End if 
 		
 		If (Value type:C1509($format)=Is object:K8:27)
 			
-			If ($format.format=Null:C1517)
-				
-				$data.menu.append($format.name; ("/"+$format.name); ($data.currentFormat=("/"+$format.name)))\
-					.setStyle(Italic:K14:3)
-				
-			Else 
-				
-				$name:=cs:C1710.str.new($format.format).uperCamelCase()
-				
-				
-				// ⛔️ WARNING: MEMORY LEAK - THE MENU WILL NOT BE RELEASED
-				// ⛔️ MUST RETURN SUB-MENU REFERENCE, NOT A NEW INSTANCE
-				$menuFormat:=$data.menu.findSubMenu($name)
-				
-				If ($menuFormat=Null:C1517)
-					
-					$menuFormat:=cs:C1710.menu.new()
-					$data.menu.append($name; $menuFormat)
-					
-				End if 
-				
-				var $type : Text
-				If ($format.choiceList#Null:C1517)
-					
-					$type:=".choiceList"  //#MARK_LOCALIZE
-					
-					If (Value type:C1509($format.choiceList)=Is object:K8:27)  // could be collection, accessing "dataSource" will failed
-						
-						If ($format.choiceList.dataSource#Null:C1517)
-							
-							$type:=".dataSource"  //#MARK_LOCALIZE
-							
-						End if 
-					End if 
-				End if 
-				
-				If (Length:C16($type)>0)
-					
-					// ⛔️ WARNING: MEMORY LEAK - THE MENU WILL NOT BE RELEASED
-					// ⛔️ MUST RETURN SUB-MENU REFERENCE, NOT A NEW INSTANCE
-					$menuType:=$menuFormat.findSubMenu($type)
-					
-					If ($menuType=Null:C1517)
-						
-						// First instance: creating
-						$menuType:=cs:C1710.menu.new()
-						$menuFormat.append($type; $menuType)
-						
-					End if 
-					
-					$menuType.append($format.name; "/"+$format.name; $data.currentFormat=("/"+$format.name))\
-						.setStyle(Italic:K14:3)
-					
-				Else 
-					
-					$menuFormat.append($format.name; "/"+$format.name; $data.currentFormat=("/"+$format.name))\
-						.setStyle(Italic:K14:3)
-					
-				End if 
-			End if 
+			$data.menu.append($format.name; ("/"+$format.name); ($data.currentFormat=("/"+$format.name)))\
+				.setStyle(Italic:K14:3)\
+				.setData("type"; $data.type)
 			
-		Else 
+		Else   // text
 			
 			$data.menu.append(Delete string:C232($format; 1; 1); $format; $data.currentFormat=$format)\
-				.setStyle(Italic:K14:3)
+				.setStyle(Italic:K14:3)\
+				.setData("type"; $data.type)
 			
 		End if 
 		

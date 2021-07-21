@@ -951,28 +951,6 @@ Function items()->$items : Collection
 	End for 
 	
 	// ===============================================
-	// Returns the sub-menu's object from its title
-Function findSubMenu($withTitle : Text)->$submenu : cs:C1710.menu
-	
-	var $i : Integer
-	
-	ARRAY TEXT:C222($titles; 0x0000)
-	ARRAY TEXT:C222($references; 0x0000)
-	GET MENU ITEMS:C977(This:C1470.ref; $titles; $references)
-	
-	For ($i; 1; Size of array:C274($titles); 1)
-		
-		If ($titles{$i}=$withTitle)
-			
-			// ⛔️ WARNING: MEMORY LEAK - THE MENU WILL NOT BE RELEASED
-			// ⛔️ MUST RETURN SUB-MENU REFERENCE, NOT A NEW INSTANCE
-			$submenu:=cs:C1710.menu.new($references{$i})
-			$i:=MAXLONG:K35:2-1  // Break
-			
-		End if 
-	End for 
-	
-	// ===============================================
 Function itemSubMenuRef($withTitle : Text)->$reference : Text
 	
 	var $indx : Integer
