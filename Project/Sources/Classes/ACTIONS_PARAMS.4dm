@@ -194,8 +194,12 @@ Function restoreContext()
 	Case of 
 			
 			//_______________________________________
-		: (This:C1470.action=Null:C1517)\
-			 | (This:C1470.action.parameters=Null:C1517)
+		: (This:C1470.action=Null:C1517)
+			
+			// <NOTHING MORE TO DO>
+			
+			//_______________________________________
+		: (This:C1470.action.parameters=Null:C1517)
 			
 			// <NOTHING MORE TO DO>
 			
