@@ -6,6 +6,7 @@
 
 package {{package}}.viewmodel.entity
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.qmobile.qmobileapi.network.ApiService
 import com.qmobile.qmobiledatastore.data.RoomRelation
@@ -34,14 +35,15 @@ class EntityViewModel{{tableName}}(
      */
 
     {{#relations}}
-    val {{relation_name}} = MutableLiveData<{{relation_target}}?>()
+    private val _{{relation_name}} = MutableLiveData<{{relation_target}}?>()
+    val {{relation_name}}: LiveData<{{relation_target}}?> = _{{relation_name}}
     {{/relations}}
 
     override fun setRelationToLayout(relationName: String, roomRelation: RoomRelation) {
         when (relationName) {
             {{#relations}}
             "{{relation_name}}" -> {
-                {{relation_name}}.postValue((roomRelation as {{relation_source}}And{{relation_target}}).first)
+                _{{relation_name}}.postValue((roomRelation as {{relation_source}}And{{relation_target}}).first)
             }
             {{/relations}}
             else -> return
