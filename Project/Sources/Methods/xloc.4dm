@@ -154,8 +154,37 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 				Else 
 					
 					// Get choice list in object format
-					$Obj_:=formatters(New object:C1471("action"; "objectify"; "value"; $Obj_in.formatter.choiceList)).value
 					
+					var $choiceList : Variant
+					$choiceList:=$Obj_in.formatter.choiceList
+					If (Value type:C1509($choiceList)=Is object:K8:27)
+						
+						// special case for boolean defined by false/true string
+						var $isBooleanType : Boolean
+						$isBooleanType:=False:C215
+						Case of 
+							: (Value type:C1509($Obj_in.formatter.type)=Is text:K8:3)
+								$isBooleanType:=$Obj_in.formatter.type="boolean"
+							: (Value type:C1509($Obj_in.formatter.type)=Is collection:K8:32)
+								If ($Obj_in.formatter.type.length=1)
+									$isBooleanType:=$Obj_in.formatter.type[0]="boolean"
+								End if 
+								// Else false
+						End case 
+						If ($isBooleanType)
+							If ($choiceList["0"]=Null:C1517)
+								$choiceList["0"]:=$choiceList["false"]
+							End if 
+							If ($choiceList["1"]=Null:C1517)
+								$choiceList["1"]:=$choiceList["true"]
+							End if 
+						End if 
+						
+						$Obj_:=$choiceList
+						
+					Else 
+						$Obj_:=formatters(New object:C1471("action"; "objectify"; "value"; $choiceList)).value
+					End if 
 					
 					$Obj_comment:=formatters(New object:C1471("action"; "objectify"; "value"; $Obj_in.formatter.choiceListComment))
 					
