@@ -761,9 +761,13 @@ Function isSortable($field : Object)->$sortable : Boolean
 	// Returns True if the resource comes from the host's database.
 Function isCustomResource($resource : Text)->$custom : Boolean
 	
-	//%W-533.1
-	$custom:=($resource[[1]]="/")
-	//%W+533.1
+	If (Length:C16($resource)>0)
+		//%W-533.1
+		$custom:=($resource[[1]]="/")
+		//%W+533.1
+	Else 
+		$custom:=False:C215
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the collection of table's sortable field
