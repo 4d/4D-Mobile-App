@@ -87,7 +87,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 			$Obj_out.success:=True:C214
 			
 			//______________________________________________________
-		: ($Obj_in.action="formatter")
+		: ($Obj_in.action="formatter") | ($Obj_in.action="input")
 			
 			Case of 
 					
@@ -183,7 +183,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 						
 						For each ($Txt_buffer; $Obj_)
 							
-							$Txt_value:=$Obj_formatter.name+"_"+$Txt_buffer
+							If ($Obj_in.action="input")
+								$Txt_value:="input_"+$Obj_formatter.name+"_"+$Txt_buffer
+							Else 
+								$Txt_value:=$Obj_formatter.name+"_"+$Txt_buffer
+							End if 
 							
 							$File_source:=$Dir_source+$Obj_[$Txt_buffer]
 							

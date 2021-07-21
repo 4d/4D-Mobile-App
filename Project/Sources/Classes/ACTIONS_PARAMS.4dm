@@ -958,7 +958,7 @@ Function getFormats()->$formats : Object
 	
 	If (FEATURE.with("customActionFormatter"))
 		
-		$folder:=This:C1470.path.hostActionParameterFormatters(False:C215)
+		$folder:=This:C1470.path.hostInputControls(False:C215)
 		
 		If ($folder.exists)
 			
@@ -1034,7 +1034,7 @@ Function showFormatOnDisk
 	
 	If (PROJECT.isCustomResource($format))
 		
-		$folder:=This:C1470.path.hostActionParameterFormatters(True:C214).folder(Delete string:C232($format; 1; 1))
+		$folder:=This:C1470.path.hostInputControls(True:C214).folder(Delete string:C232($format; 1; 1))
 		
 		If ($folder.exists)
 			
@@ -1148,7 +1148,7 @@ Function doFormatMenu()
 					$formatObject:=$menu.getData("format")
 					
 					$formatObject.name:=EDITOR.str.setText($format).suitableWithFileName()
-					$folder:=This:C1470.path.hostActionParameterFormatters(True:C214).folder($formatObject.name)
+					$folder:=This:C1470.path.hostInputControls(True:C214).folder($formatObject.name)
 					
 					If (Not:C34($folder.exists))
 						
@@ -1797,7 +1797,7 @@ Function setHelpTip()  //($e : Object)
 	// Format tool tip
 Function formatToolTip($format : Text)->$tip : Text
 	
-	$tip:=cs:C1710.formater.new($format).toolTip("hostActionParameterFormatters")
+	$tip:=cs:C1710.formater.new($format).toolTip("hostInputControls")
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// <Background Color Expression> ******************** VERY SIMILAR TO ACTIONS.backgroundColor() ********************

@@ -101,7 +101,7 @@ Case of
 				$formats:=mobile_actions("hostFormatList"; $Obj_in).formats
 			End if 
 			
-			$folder:=cs:C1710.path.new().hostActionParameterFormatters()
+			$folder:=cs:C1710.path.new().hostInputControls()
 			For each ($format; $formats)
 				Case of 
 					: (Value type:C1509($format)=Is text:K8:3)
@@ -148,7 +148,7 @@ Case of
 			
 			If (Length:C16(String:C10($action.icon))>0)
 				
-				$action.icon:="action_"+$action.name
+				$action.icon:=$action.name
 				
 			End if 
 			
@@ -232,7 +232,7 @@ Case of
 									"action"; "create"; \
 									"type"; "imageset"; \
 									"source"; $o.platformPath; \
-									"tags"; New object:C1471("name"; "action_"+$action.name); \
+									"tags"; New object:C1471("name"; $action.name); \
 									"target"; $Obj_out.path; \
 									"size"; 32))
 								
@@ -308,7 +308,7 @@ Case of
 							: (_and(Formula:C1597(FEATURE.with("customActionFormatter")); \
 								Formula:C1597(PROJECT.isCustomResource(String:C10($parameter.format)))))
 								
-								$manifest:=ob_parseFile(cs:C1710.path.new().hostActionParameterFormatters().folder(Substring:C12($parameter.format; 2)).file("manifest.json"))
+								$manifest:=ob_parseFile(cs:C1710.path.new().hostInputControls().folder(Substring:C12($parameter.format; 2)).file("manifest.json"))
 								If ($manifest.success)
 									$manifest:=$manifest.value
 									
@@ -335,13 +335,13 @@ Case of
 											End if 
 											
 											// generate images
-											$folder:=Folder:C1567($Obj_in.path; fk platform path:K87:2).folder("Resources/Assets.xcassets/ActionParametersFormatters")
+											$folder:=Folder:C1567($Obj_in.path; fk platform path:K87:2).folder("Resources/Assets.xcassets/Action/Input")
 											$manifest.isHost:=True:C214
-											$manifest.path:=cs:C1710.path.new().hostActionParameterFormatters().folder(Substring:C12($parameter.format; 2)).platformPath
+											$manifest.path:=cs:C1710.path.new().hostInputControls().folder(Substring:C12($parameter.format; 2)).platformPath
 											If (Not:C34($folder.folder(Substring:C12($parameter.format; 2)).exists))
 												
 												$oResult:=asset(New object:C1471(\
-													"action"; "formatter"; \
+													"action"; "input"; \
 													"formatter"; $manifest; \
 													"target"; $folder.platformPath))
 												
@@ -446,7 +446,7 @@ Case of
 		
 		$isObject:=Bool:C1537($Obj_in.read)  // parse manifest or not
 		If ($isObject)
-			$folder:=cs:C1710.path.new().hostActionParameterFormatters()
+			$folder:=cs:C1710.path.new().hostInputControls()
 		End if 
 		
 		$Obj_out.formats:=New collection:C1472
@@ -478,7 +478,7 @@ Case of
 			$formats:=mobile_actions("hostFormatList"; $Obj_in).formats
 		End if 
 		
-		$folder:=cs:C1710.path.new().hostActionParameterFormatters()
+		$folder:=cs:C1710.path.new().hostInputControls()
 		
 		For each ($format; $formats)
 			

@@ -476,7 +476,7 @@ Function hostFormatters($create : Boolean)->$folder : 4D:C1709.Folder  // Format
 	$folder:=This:C1470.target
 	
 /*========================================================*/
-Function hostActionParameterFormatters($create : Boolean)->$folder : 4D:C1709.Folder  // Action Parameter Formatters folder
+Function hostInputControls($create : Boolean)->$folder : 4D:C1709.Folder  // Action Parameter input controls folder
 	
 	This:C1470.target:=This:C1470.host().folder("inputControls")
 	
