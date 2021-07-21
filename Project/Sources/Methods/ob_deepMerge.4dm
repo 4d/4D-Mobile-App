@@ -97,65 +97,15 @@ For each ($Txt_property; $Obj_source)
 					
 				: ($overwrite)
 					
-					$Obj_target[$Txt_property]:=New collection:C1472.resize($Obj_source[$Txt_property].length)
+					If (Value type:C1509($Obj_target[$Txt_property])#Is collection:K8:32)
+						
+						$Obj_target[$Txt_property]:=New collection:C1472
+						
+					End if 
 					
-					For ($Lon_i; 0; $Obj_source[$Txt_property].length-1; 1)
-						
-						$Lon_sourceType:=Value type:C1509($Obj_source[$Txt_property][$Lon_i])
-						
-						Case of 
-								
-								//______________________________________________________
-							: ($Lon_sourceType=Is object:K8:27)
-								
-								$Lon_targetType:=Value type:C1509($Obj_target[$Txt_property][$Lon_i])
-								
-								Case of 
-										
-										//______________________________________________________
-									: ($Obj_target[$Txt_property][$Lon_i]=Null:C1517)
-										
-										$Obj_target[$Txt_property][$Lon_i]:=OB Copy:C1225($Obj_source[$Txt_property][$Lon_i])
-										
-										//______________________________________________________
-									: ($Lon_targetType=Is object:K8:27)
-										
-										$Obj_target[$Txt_property][$Lon_i]:=ob_deepMerge(\
-											$Obj_target[$Txt_property][$Lon_i]; \
-											OB Copy:C1225($Obj_source[$Txt_property][$Lon_i]); \
-											$overwrite)
-										
-										//______________________________________________________
-									: ($Lon_targetType=Is collection:K8:32)
-										
-										If (Not:C34($Obj_target[$Txt_property][$Lon_i].equal($Obj_target[$Txt_property][$Lon_i]; ck diacritical:K85:3)))
-											
-											//#MARK_TODO
-											
-										End if 
-										
-										//______________________________________________________
-									Else 
-										
-										$Obj_target[$Txt_property][$Lon_i]:=$Obj_source[$Txt_property][$Lon_i]
-										
-										//______________________________________________________
-								End case 
-								
-								//______________________________________________________
-							: ($Lon_sourceType=Is collection:K8:32)
-								
-								//#MARK_TODO
-								
-								//______________________________________________________
-							Else 
-								
-								$Obj_target[$Txt_property]:=$Obj_source[$Txt_property]
-								
-								//______________________________________________________
-						End case 
-					End for 
-					// Else ignore, not overwrite
+					$Obj_target[$Txt_property]:=$Obj_target[$Txt_property].concat($Obj_source[$Txt_property].copy())
+					
+					// Else ignore, do not overwrite
 			End case 
 			
 			//________________________________________
@@ -166,8 +116,7 @@ For each ($Txt_property; $Obj_source)
 					$Obj_target[$Txt_property]:=$Obj_source[$Txt_property]
 				: ($Obj_target[$Txt_property]=Null:C1517)
 					$Obj_target[$Txt_property]:=$Obj_source[$Txt_property]
-				Else 
-					// ignore, do not override
+					// Else ignore, do not override
 			End case 
 			//________________________________________
 	End case 
