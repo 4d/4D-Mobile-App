@@ -379,19 +379,19 @@ Case of
 					"MKDirectionsApplicationSupportedModes"; $Obj_in.mapModes))
 				
 				//collection(\
-																									"MKDirectionsModeBike";\
-																									"MKDirectionsModeBus";\
-																									"MKDirectionsModeCar";\
-																									"MKDirectionsModeFerry";\
-																									"MKDirectionsModeOther";\
-																									"MKDirectionsModePedestrian";\
-																									"MKDirectionsModePlane";\
-																									"MKDirectionsModeRideShare";\
-																									"MKDirectionsModeStreetCar";\
-																									"MKDirectionsModeSubway";\
-																									"MKDirectionsModeTaxi";\
-																									"MKDirectionsModeTrain"\
-																									)
+																														"MKDirectionsModeBike";\
+																														"MKDirectionsModeBus";\
+																														"MKDirectionsModeCar";\
+																														"MKDirectionsModeFerry";\
+																														"MKDirectionsModeOther";\
+																														"MKDirectionsModePedestrian";\
+																														"MKDirectionsModePlane";\
+																														"MKDirectionsModeRideShare";\
+																														"MKDirectionsModeStreetCar";\
+																														"MKDirectionsModeSubway";\
+																														"MKDirectionsModeTaxi";\
+																														"MKDirectionsModeTrain"\
+																														)
 				
 			End if 
 		End if 
@@ -438,14 +438,13 @@ Case of
 			
 		End if 
 		
-		If (Bool:C1537($Obj_in.photo)\
-			 | (Length:C16(String:C10($Obj_in.photo))>0))
+		If (Bool:C1537($Obj_in.photo))
 			
-			If (Bool:C1537($Obj_in.photo))
-				
-				$Obj_in.photo:="$(PRODUCT_NAME) lets you use your photo to share it. It needs access to the photo library."
-				
-			End if 
+			$Obj_in.photo:="$(PRODUCT_NAME) lets you use your photo to share it. It needs access to the photo library."
+			
+		End if 
+		
+		If ((Value type:C1509($Obj_in.photo)=Is text:K8:3) & (Length:C16(String:C10($Obj_in.photo))>0))
 			
 			$Obj_out.info.push(New object:C1471(\
 				"NSPhotoLibraryUsageDescription"; String:C10($Obj_in.photo)))
@@ -484,8 +483,15 @@ Case of
 			
 		End if 
 		
+		If (Value type:C1509($Obj_in.service)=Is text:K8:3)
+			
+			$Obj_out.settings.push(New object:C1471(\
+				"application.services"; New collection:C1472($Obj_in.service)))
+			
+		End if 
+		
 		//________________________________________
-		$Obj_out.success:=($Obj_out.info.length>0) | ($Obj_out.entitlements.length>0)  // Else nothings added
+		$Obj_out.success:=($Obj_out.info.length>0) | ($Obj_out.entitlements.length>0) | ($Obj_out.settings.length>0)  // Else nothings added
 		
 		//________________________________________
 	Else 
