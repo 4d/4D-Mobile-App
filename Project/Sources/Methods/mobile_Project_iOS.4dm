@@ -356,8 +356,9 @@ If ($in.create)
 		// ----------------------------------------------------
 		$ui.step("workspaceCreation")
 		
-		// I need a map, string -> format
+		// I need a map, string -> format to be able to support folder name different from manifest name
 		$out.formatters:=formatters(New object:C1471("action"; "getByName")).formatters
+		$out.inputControls:=mobile_actions("getByName").inputControls
 		
 		// Duplicate the template {
 		$out.template:=cs:C1710.MainTemplate.new(New object:C1471(\
@@ -365,6 +366,7 @@ If ($in.create)
 			"path"; $in.path; \
 			"tags"; $tags; \
 			"formatters"; $out.formatters; \
+			"inputControls"; $out.inputControls; \
 			"project"; $project)).run()
 		
 		ob_error_combine($out; $out.template)
@@ -531,11 +533,13 @@ If ($in.create)
 		// Generate action asset
 		$out.actionAssets:=mobile_actions("assets"; New object:C1471(\
 			"project"; $project; \
+			"inputControls"; $out.inputControls; \
 			"target"; $in.path))
 		ob_error_combine($out; $out.actionAssets)
 		
 		$out.actionCapabilities:=mobile_actions("capabilities"; New object:C1471(\
 			"project"; $project; \
+			"inputControls"; $out.inputControls; \
 			"target"; $in.path))
 		
 		$out.computedCapabilities:=New object:C1471(\

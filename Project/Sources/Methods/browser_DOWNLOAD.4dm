@@ -31,6 +31,12 @@ Case of
 		$out.selector:="formatter"
 		
 		//……………………………………………………………………………………
+	: ($out.form="input-control-@")
+		
+		$out.folder:=cs:C1710.path.new().hostInputControls(True:C214)
+		$out.selector:="inputControls"
+		
+		//……………………………………………………………………………………
 	Else 
 		
 		TRACE:C157

@@ -98,6 +98,8 @@ Case of
 			
 			$formats:=$Obj_in.formats  // to implement a cache passed by caller
 			If ($formats=Null:C1517)
+				$Obj_in:=OB Copy:C1225($Obj_in)
+				$Obj_in.read:=True:C214
 				$formats:=mobile_actions("hostFormatList"; $Obj_in).formats
 			End if 
 			
@@ -308,9 +310,13 @@ Case of
 							: (_and(Formula:C1597(FEATURE.with("customActionFormatter")); \
 								Formula:C1597(PROJECT.isCustomResource(String:C10($parameter.format)))))
 								
-								$manifest:=ob_parseFile(cs:C1710.path.new().hostInputControls().folder(Substring:C12($parameter.format; 2)).file("manifest.json"))
-								If ($manifest.success)
-									$manifest:=$manifest.value
+								$format:=Substring:C12($parameter.format; 2)
+								$manifest:=$Obj_in.inputControls[$format]
+								If ($manifest=Null:C1517)
+									// clean must be obsolete if not needed
+									$manifest:=ob_parseFile(cs:C1710.path.new().hostInputControls().folder($format).file("manifest.json")).value
+								End if 
+								If ($manifest#Null:C1517)
 									
 									If ($manifest.choiceList#Null:C1517)
 										
@@ -337,8 +343,13 @@ Case of
 											// generate images
 											$folder:=Folder:C1567($Obj_in.path; fk platform path:K87:2).folder("Resources/Assets.xcassets/Action/Input")
 											$manifest.isHost:=True:C214
-											$manifest.path:=cs:C1710.path.new().hostInputControls().folder(Substring:C12($parameter.format; 2)).platformPath
-											If (Not:C34($folder.folder(Substring:C12($parameter.format; 2)).exists))
+											If ($manifest.folder=Null:C1517)
+												// obsolete?
+												$manifest.path:=cs:C1710.path.new().hostInputControls().folder($format).platformPath
+											Else 
+												$manifest.path:=$manifest.folder.platformPath
+											End if 
+											If (Not:C34($folder.folder($format).exists))
 												
 												$oResult:=asset(New object:C1471(\
 													"action"; "input"; \
@@ -441,11 +452,32 @@ Case of
 		$Obj_out.success:=True:C214
 		
 		//______________________________________________________
+	: ($Txt_action="getByName")
+		
+		$Obj_out.inputControls:=New object:C1471
+		
+		$folder:=cs:C1710.path.new().hostInputControls()
+		If ($folder.exists)
+			For each ($formatFolder; $folder.folders())
+				$manifest:=ob_parseFile($formatFolder.file("manifest.json")).value
+				If ($manifest#Null:C1517)
+					$manifest.folder:=$formatFolder
+					$manifest.isHost:=True:C214
+					If (Value type:C1509($manifest.name)=Is text:K8:3)
+						$Obj_out.inputControls[$manifest.name]:=$manifest
+					End if 
+				End if 
+			End for each 
+		End if 
+		
+		$Obj_out.success:=True:C214
+		
+		//______________________________________________________
 	: ($Txt_action="hostFormatList")
 		// list all custom format from project
 		
 		$isObject:=Bool:C1537($Obj_in.read)  // parse manifest or not
-		If ($isObject)
+		If (Asserted:C1132($isObject; "without is object, folder could not be found"))
 			$folder:=cs:C1710.path.new().hostInputControls()
 		End if 
 		
@@ -453,12 +485,28 @@ Case of
 		If ($Obj_in.project.actions#Null:C1517)
 			For each ($action; $Obj_in.project.actions)
 				For each ($parameter; $action.parameters)
-					If (PROJECT.isCustomResource(String:C10($parameter.format)))
+					$format:=String:C10($parameter.format)
+					If (PROJECT.isCustomResource($format))
 						If ($isObject)
-							$formatFolder:=$folder.folder(Substring:C12($format; 2))
-							$manifest:=ob_parseFile($formatFolder.file("manifest.json")).value
-							$manifest.folder:=$formatFolder
-							$Obj_out.formats.push($manifest)
+							$format:=Substring:C12($format; 2)
+							If ($Obj_in.inputControls#Null:C1517)  // ASSERT it.?
+								$manifest:=$Obj_in.inputControls[$format]
+							Else 
+								ASSERT:C1129(dev_assert; "input control map not passed, we could not find some control")
+							End if 
+							
+							If ($manifest=Null:C1517)
+								$formatFolder:=$folder.folder($format)
+								$manifest:=ob_parseFile($formatFolder.file("manifest.json")).value
+								If ($manifest#Null:C1517)
+									$manifest.folder:=$formatFolder
+								End if 
+							End if 
+							
+							If ($manifest#Null:C1517)
+								$Obj_out.formats.push($manifest)
+							End if 
+							$manifest:=Null:C1517
 						Else 
 							$Obj_out.formats.push($parameter.format)
 						End if 
@@ -475,6 +523,8 @@ Case of
 		
 		$formats:=$Obj_in.formats  // to implement a cache passed by caller
 		If ($formats=Null:C1517)
+			$Obj_in:=OB Copy:C1225($Obj_in)
+			$Obj_in.read:=True:C214
 			$formats:=mobile_actions("hostFormatList"; $Obj_in).formats
 		End if 
 		
