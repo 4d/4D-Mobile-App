@@ -31,4 +31,24 @@
     <style name="ThemeOverlay.Actionbar" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
         <item name="android:textColorPrimary">?attr/colorOnPrimary</item>
     </style>
+        
+    <style name="Theme.MyApplication.CustomCard.Card" parent="Theme.MyApplication">
+        <item name="cardBackgroundColor">@color/card_cell_background_light</item>
+    </style>
+
+    <style name="Theme.MyApplication.CustomCard.Card.Alt1" parent="Theme.MyApplication">
+        <item name="cardBackgroundColor">@color/card_cell_footer_background_light</item>
+    </style>
+
+    <style name="Theme.MyApplication.CustomCard.Background" parent="Theme.MyApplication">
+        <item name="background">@color/background_light</item>
+    </style>
+
+    <style name="Theme.MyApplication.CustomCard.Background.Alt1" parent="Theme.MyApplication">
+        <item name="background">@color/card_cell_background_light</item>
+    </style>
+
+    <style name="Theme.MyApplication.CustomCard.Footer" parent="Theme.MyApplication">
+        <item name="background">@color/card_cell_background_light</item>
+    </style>
 </resources>

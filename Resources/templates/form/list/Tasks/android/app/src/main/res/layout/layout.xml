@@ -63,7 +63,7 @@
             android:scrollbars="none"
             android:text="___TEXT_1___"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="?colorPrimary"
+            android:textColor="?colorOnSurface"
             app:layout_constraintBottom_toTopOf="@+id/___SPECIFIC_ID_2___"
             app:layout_constraintEnd_toStartOf="@id/item_arrow"
             app:layout_constraintStart_toEndOf="@+id/___SPECIFIC_ID_4___"
