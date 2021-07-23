@@ -135,7 +135,7 @@ Case of
 		
 		$Obj_out.success:=True:C214
 		
-		$Obj_out.actions:=mobile_actions("filter"; $Obj_in).actions
+		$Obj_out.actions:=mobile_actions("filter"; $Obj_in).actions  // it make copy
 		
 		For each ($action; $Obj_out.actions)
 			
@@ -159,6 +159,18 @@ Case of
 				$action.label:=$action.name
 				
 			End if 
+			
+			If (FEATURE.with("customActionFormatter"))
+				// remove slash from json injected for action format
+				If ($action.parameters#Null:C1517)
+					For each ($parameter; $action.parameters)
+						If (PROJECT.isCustomResource($parameter.format))
+							$parameter.format:=Delete string:C232($parameter.format; 1; 1)
+						End if 
+					End for each 
+				End if 
+			End if 
+			
 		End for each 
 		
 		//______________________________________________________
@@ -484,34 +496,36 @@ Case of
 		$Obj_out.formats:=New collection:C1472
 		If ($Obj_in.project.actions#Null:C1517)
 			For each ($action; $Obj_in.project.actions)
-				For each ($parameter; $action.parameters)
-					$format:=String:C10($parameter.format)
-					If (PROJECT.isCustomResource($format))
-						If ($isObject)
-							$format:=Substring:C12($format; 2)
-							If ($Obj_in.inputControls#Null:C1517)  // ASSERT it.?
-								$manifest:=$Obj_in.inputControls[$format]
-							Else 
-								ASSERT:C1129(dev_assert; "input control map not passed, we could not find some control")
-							End if 
-							
-							If ($manifest=Null:C1517)
-								$formatFolder:=$folder.folder($format)
-								$manifest:=ob_parseFile($formatFolder.file("manifest.json")).value
-								If ($manifest#Null:C1517)
-									$manifest.folder:=$formatFolder
+				If ($action.parameters#Null:C1517)
+					For each ($parameter; $action.parameters)
+						$format:=String:C10($parameter.format)
+						If (PROJECT.isCustomResource($format))
+							If ($isObject)
+								$format:=Delete string:C232($format; 1; 1)
+								If ($Obj_in.inputControls#Null:C1517)  // ASSERT it.?
+									$manifest:=$Obj_in.inputControls[$format]
+								Else 
+									ASSERT:C1129(dev_assert; "input control map not passed, we could not find some control")
 								End if 
+								
+								If ($manifest=Null:C1517)
+									$formatFolder:=$folder.folder($format)
+									$manifest:=ob_parseFile($formatFolder.file("manifest.json")).value
+									If ($manifest#Null:C1517)
+										$manifest.folder:=$formatFolder
+									End if 
+								End if 
+								
+								If ($manifest#Null:C1517)
+									$Obj_out.formats.push($manifest)
+								End if 
+								$manifest:=Null:C1517
+							Else 
+								$Obj_out.formats.push($parameter.format)
 							End if 
-							
-							If ($manifest#Null:C1517)
-								$Obj_out.formats.push($manifest)
-							End if 
-							$manifest:=Null:C1517
-						Else 
-							$Obj_out.formats.push($parameter.format)
 						End if 
-					End if 
-				End for each 
+					End for each 
+				End if 
 			End for each 
 			$Obj_out.formats:=$Obj_out.formats.distinct()
 		End if 
