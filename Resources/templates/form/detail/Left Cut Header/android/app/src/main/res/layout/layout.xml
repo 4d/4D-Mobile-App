@@ -27,7 +27,8 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp">
 
                 <com.qmobile.qmobileui.ui.parallax.VerticalScrollParallaxImageView
                     android:id="@+id/___SPECIFIC_ID_1___"
@@ -80,7 +81,7 @@
                     android:scrollbars="none"
                     android:text="___TEXT_3___"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                    android:textColor="?colorPrimaryVariant"
+                    android:textColor="?colorPrimary"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/___SPECIFIC_ID_2___"
@@ -101,7 +102,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="4dp"
-                android:layout_marginVertical="2dp"
+                android:layout_marginVertical="8dp"
                 card_view:cardCornerRadius="12dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -136,10 +137,11 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
+                        android:padding="6dp"
                         android:scrollbars="none"
                         android:text="___FIELD_LABEL___"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                        android:textColor="?colorPrimary"
+                        android:textColor="?colorOnSurface"
                         app:layout_constraintBottom_toTopOf="@+id/___VALUE_ID___"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -172,6 +174,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="8dp"
+                        android:padding="6dp"
                         android:scrollbars="none"
                         android:text="___TEXT___"
                         android:textAlignment="textStart"

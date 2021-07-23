@@ -51,7 +51,6 @@
                     app:layout_constraintStart_toStartOf="@+id/background_image"
                     app:layout_constraintTop_toTopOf="@+id/background_image" />
 
-
                 <ImageView
                     android:id="@+id/___SPECIFIC_ID_1___"
                     android:layout_width="74dp"
@@ -69,7 +68,7 @@
 
                 <TextView
                     android:id="@+id/___SPECIFIC_ID_2___"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
@@ -90,7 +89,7 @@
 
                 <TextView
                     android:id="@+id/___SPECIFIC_ID_3___"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
@@ -121,9 +120,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginHorizontal="4dp"
-                android:layout_marginVertical="2dp"
-                card_view:cardCornerRadius="4dp">
+                android:layout_marginHorizontal="6dp"
+                android:layout_marginVertical="8dp"
+                card_view:cardCornerRadius="12dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -157,6 +156,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
+                        android:padding="6dp"
                         android:scrollbars="none"
                         android:text="___FIELD_LABEL___"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
@@ -193,6 +193,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="8dp"
+                        android:padding="6dp"
                         android:scrollbars="none"
                         android:text="___TEXT___"
                         android:textAlignment="textStart"

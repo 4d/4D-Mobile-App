@@ -28,7 +28,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="280dp"
-                android:background="?colorPrimaryVariant">
+                android:background="?colorPrimary">
 
                 <TextView
                     android:id="@+id/___SPECIFIC_ID_1___"
@@ -126,7 +126,7 @@
                         android:scrollbars="none"
                         android:text="___FIELD_LABEL___"
                         android:textAlignment="center"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:textColor="?colorOnSurface"
                         app:layout_constraintBottom_toTopOf="@+id/___VALUE_ID___"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -176,7 +176,7 @@
                         android:text="___TEXT___"
                         android:textAlignment="textStart"
                         android:textAllCaps="false"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                         android:textColor="?colorOnSurface"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

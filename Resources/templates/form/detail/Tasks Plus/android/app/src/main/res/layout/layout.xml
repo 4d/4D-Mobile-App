@@ -28,7 +28,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?colorPrimaryVariant"
+                android:background="?colorPrimary"
                 android:paddingBottom="24dp">
 
                 <TextView
@@ -96,7 +96,7 @@
                     android:layout_marginEnd="8dp"
                     android:progress="___PROGRESS_3___"
                     app:indicatorColor="?colorOnPrimary"
-                    app:indicatorSize="75dp"
+                    app:indicatorSize="120dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/___LABEL_SPECIFIC_ID_3___"
@@ -282,7 +282,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="4dp"
-                android:layout_marginVertical="2dp"
+                android:layout_marginVertical="8dp"
+                android:outlineSpotShadowColor="?colorOnSurface"
                 card_view:cardCornerRadius="4dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -317,10 +318,12 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
+                        android:padding="6dp"
                         android:scrollbars="none"
                         android:text="___FIELD_LABEL___"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                        android:textColor="?colorPrimary"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        android:textColor="?colorOnSurface"
+                        android:textStyle="bold"
                         app:layout_constraintBottom_toTopOf="@+id/___VALUE_ID___"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -353,11 +356,12 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="8dp"
+                        android:padding="6dp"
                         android:scrollbars="none"
                         android:text="___TEXT___"
                         android:textAlignment="textStart"
                         android:textAllCaps="false"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                         android:textColor="?colorOnSurface"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
