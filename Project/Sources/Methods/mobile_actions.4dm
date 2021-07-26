@@ -119,7 +119,7 @@ Case of
 				
 				If ($manifest.capabilities#Null:C1517)
 					
-					$Obj_out.capabilities:=capabilities(New object:C1471("action"; "mergeObjects"; "value"; New collection:C1472($Obj_out.capabilities; $manifest.capabilities))).value
+					$Obj_out.capabilities:=capabilities(New object:C1471("action"; "mergeObjects"; "value"; New collection:C1472($Obj_out.capabilities; capabilities(New object:C1471("action"; "natify"; "value"; $manifest.capabilities))))).value
 					
 				End if 
 				
