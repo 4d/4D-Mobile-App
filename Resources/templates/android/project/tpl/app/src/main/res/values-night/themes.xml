@@ -4,7 +4,7 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">{{theme_color_primary}}</item>
         <item name="colorPrimaryVariant">{{theme_color_primary_darker}}</item>
-        <item name="colorOnPrimary">@android:color/black</item>
+        <item name="colorOnPrimary">{{theme_color_on_primary}}</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/brown_light</item>
         <item name="colorSecondaryVariant">@color/brown_light</item>
