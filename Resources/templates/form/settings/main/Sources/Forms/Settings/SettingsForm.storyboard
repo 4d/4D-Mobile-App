@@ -91,7 +91,7 @@
                                                     <rect key="frame" x="181" y="7" width="52" height="30"/>
                                                     <state key="normal" title="Log out"/>
                                                     <connections>
-                                                        <segue destination="lCY-Sn-Tbh" kind="show" identifier="confirmLogOut" id="OsB-Bi-L5c"/>
+                                                        <segue destination="lCY-Sn-Tbh" kind="presentation" identifier="confirmLogOut" customClass="PresentOverCurrentContextSegue" customModule="IBAnimatable" id="OsB-Bi-L5c"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
