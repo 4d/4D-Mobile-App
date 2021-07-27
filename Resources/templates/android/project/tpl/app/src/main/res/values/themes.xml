@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.MyApplication" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.MyApplication" parent="Theme.QMobileApp">
         <!-- Primary brand color. -->
         <item name="colorPrimary">{{theme_color_primary}}</item>
         <item name="colorPrimaryVariant">{{theme_color_primary_darker}}</item>
@@ -8,47 +8,13 @@
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/brown_light</item>
         <item name="colorSecondaryVariant">@color/brown_700</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorOnSecondary">@android:color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="actionBarTheme">@style/ThemeOverlay.Actionbar</item>
     </style>
 
-    <style name="Theme.MyApplication.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="Theme.MyApplication.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="Theme.MyApplication.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-    <style name="LoginTheme" parent="Theme.MyApplication.NoActionBar">
+    <style name="Theme.QMobileApp.LoginTheme" parent="Theme.QMobileApp.NoActionBar">
         <item name="android:windowBackground">@drawable/launch_screen</item>
-    </style>
-
-    <style name="ThemeOverlay.Actionbar" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
-        <item name="android:textColorPrimary">?attr/colorOnPrimary</item>
-    </style>
-        
-    <style name="Theme.MyApplication.CustomCard.Card" parent="Theme.MyApplication">
-        <item name="cardBackgroundColor">@color/card_cell_background_light</item>
-    </style>
-
-    <style name="Theme.MyApplication.CustomCard.Card.Alt1" parent="Theme.MyApplication">
-        <item name="cardBackgroundColor">@color/card_cell_footer_background_light</item>
-    </style>
-
-    <style name="Theme.MyApplication.CustomCard.Background" parent="Theme.MyApplication">
-        <item name="background">@color/background_light</item>
-    </style>
-
-    <style name="Theme.MyApplication.CustomCard.Background.Alt1" parent="Theme.MyApplication">
-        <item name="background">@color/card_cell_background_light</item>
-    </style>
-
-    <style name="Theme.MyApplication.CustomCard.Footer" parent="Theme.MyApplication">
-        <item name="background">@color/card_cell_background_light</item>
     </style>
 </resources>
