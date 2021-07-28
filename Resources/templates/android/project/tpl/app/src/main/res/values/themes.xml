@@ -14,7 +14,9 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="Theme.QMobileApp.LoginTheme" parent="Theme.QMobileApp.NoActionBar">
+    <style name="Theme.MyApplication.LoginTheme" parent="Theme.MyApplication">
         <item name="android:windowBackground">@drawable/launch_screen</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 </resources>
