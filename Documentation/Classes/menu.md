@@ -64,6 +64,7 @@ $m:=cs.menu.new()\
 |.**enable** () → `cs.menu`<br/>.**enable** ( enabled : Boolean {; itemIndex : Integer } ) → `cs.menu`| Defines the activated status of a menu item
 |.**icon** ( icon : `Text` {; itemIndex : `Integer` } ) → `cs.menu`| Modifies the icon associated with a menu item
 |.**itemCount** () → number : `Integer`|  Returns the number of menu items present in the menu
+|.**items** () → items : `Collection`|  Returns menu items as collection of {item,ref}
 |.**line** () → `cs.menu` | Adds a line to the menu
 |.**mark** ( {checked : `Boolean` {;  itemIndex : `Integer` }} ) → `cs.menu` | Sets the checked or unchecked status of a menu item
 |.**method** ( methodName : `Text` {;  itemIndex : `Integer` } ) → `cs.menu` | Defines the project method associated with a menu item
