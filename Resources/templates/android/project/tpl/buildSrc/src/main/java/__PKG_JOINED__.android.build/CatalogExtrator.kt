@@ -58,6 +58,14 @@ fun getCatalog(tableName: String): DataClass? {
                                             "relatedEntity" -> field.isManyToOneRelation = true
                                             "relatedEntities" -> field.isOneToManyRelation = true
                                         }
+                                        if (field.isManyToOneRelation) {
+                                            attribute.getSafeString("type")
+                                                ?.let { relatedOriginalTableName ->
+                                                    field.relatedOriginalTableName =
+                                                        relatedOriginalTableName
+                                                }
+                                        }
+
                                     }
                                     fields.add(field)
                                 } else {

@@ -9,18 +9,25 @@ package {{package}}.android.build
 import {{package}}.android.build.database.SqlQuery
 import {{package}}.android.build.database.StaticDataInitializer
 import {{package}}.android.build.database.StaticDatabase
+import {{package}}.android.build.model.DataClass
 import {{package}}.android.build.model.Field
 import {{package}}.android.build.utils.*
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
+import org.json.JSONObject
 import java.io.File
 
 open class CreateDatabaseTask : DefaultTask() {
 
     private val tableNames = 
         mapOf<String, String>({{#tableNames}}"{{name}}" to "{{name_original}}"{{^-last}}, {{/-last}}{{/tableNames}})
+
+    private val propertyListMap = mutableMapOf<String, List<String>>()
+    private val relatedEntitiesMapList =
+        mutableListOf<MutableMap<String, MutableList<JSONObject>>>()
+    private val dataClassList = mutableListOf<DataClass>()
 
     private var initialGlobalStamp = 0
     private val dumpedTables = mutableListOf<String>()
@@ -59,6 +66,80 @@ open class CreateDatabaseTask : DefaultTask() {
                 )?.let { sqlQuery ->
                     queryList.add(sqlQuery)
                 }
+                
+                dataClassList.add(dataClass)
+            }
+        }
+        queryList.addAll(getSqlQueriesForRelatedTables(staticDataInitializer))
+
+        return filterUnique(queryList)
+    }
+
+    private fun filterUnique(queries: MutableList<SqlQuery>): MutableList<SqlQuery> {
+
+        val newQueries = mutableListOf<SqlQuery>()
+
+        queries.forEach { sqlQuery ->
+
+            var keyPropertyIndex = propertyListMap[sqlQuery.tableName]?.indexOf("__KEY") ?: 0
+            if (keyPropertyIndex == -1) keyPropertyIndex = 0
+
+            sqlQuery.parameters.forEach { array ->
+                val key = array[keyPropertyIndex]
+                key?.let {
+                    val siblingQueries = queries
+                        .filter { it.query == sqlQuery.query } // all queries for the same table
+
+                    val newArray = arrayOfNulls<Any>(array.size)
+                    array.indices.forEach { index ->
+                        newArray[index] = array[index]
+                        siblingQueries.forEach { siblingQuery ->
+
+                            siblingQuery.parameters.forEach { arr -> // each line of parameters (one entity)
+                                if (arr[keyPropertyIndex] == key && newArray[index] == null) {
+                                    newArray[index] = arr[index]
+                                }
+                            }
+                        }
+                    }
+
+                    val newQuery = SqlQuery(sqlQuery.query, listOf(newArray), sqlQuery.tableName)
+                    if (newQueries
+                            .filter { it.query == newQuery.query }
+                            .firstOrNull {
+                                it.parameters.firstOrNull()?.get(keyPropertyIndex) == key
+                            } == null
+                    ) {
+                        newQueries.add(newQuery)
+                    }
+                }
+            }
+        }
+        return newQueries
+    }
+
+    private fun getSqlQueriesForRelatedTables(staticDataInitializer: StaticDataInitializer): List<SqlQuery> {
+        val queryList = mutableListOf<SqlQuery>()
+        relatedEntitiesMapList.forEach { relatedEntitiesMap ->
+            for ((originalTableName, jsonEntityList) in relatedEntitiesMap) {
+                val tableName =
+                    tableNames.filter { it.value == originalTableName }.keys.firstOrNull()
+                val relatedTableFields = dataClassList.find { it.name == originalTableName }?.fields
+                if (tableName != null && relatedTableFields != null) {
+
+                    jsonEntityList.forEach { jsonEntity ->
+
+                        val sqlQueryBuilder = SqlQueryBuilder(jsonEntity, relatedTableFields)
+
+                        getQueryFromSqlQueryBuilder(
+                            sqlQueryBuilder,
+                            tableName,
+                            staticDataInitializer
+                        )?.let { query ->
+                            queryList.add(query)
+                        }
+                    }
+                }
             }
         }
         return queryList
@@ -91,14 +172,12 @@ open class CreateDatabaseTask : DefaultTask() {
                 entities?.let {
                     val sqlQueryBuilder = SqlQueryBuilder(it, fields)
 
-                    val propertyList = sqlQueryBuilder.hashMap.toSortedMap().keys.toList()
+                    relatedEntitiesMapList.add(sqlQueryBuilder.relatedEntitiesMap)
 
-                    println("[$tableName] ${sqlQueryBuilder.outputEntities.size} entities extracted")
-
-                    return staticDataInitializer.getQuery(
+                    return getQueryFromSqlQueryBuilder(
+                        sqlQueryBuilder,
                         tableName,
-                        propertyList,
-                        sqlQueryBuilder.outputEntities
+                        staticDataInitializer
                     )
                 }
                 println("[$tableName] Couldn't find entities to extract")
@@ -109,5 +188,23 @@ open class CreateDatabaseTask : DefaultTask() {
             println("[$tableName] No data file found")
         }
         return null
+    }
+
+    private fun getQueryFromSqlQueryBuilder(
+        sqlQueryBuilder: SqlQueryBuilder,
+        tableName: String,
+        staticDataInitializer: StaticDataInitializer
+    ): SqlQuery? {
+
+        val propertyList = sqlQueryBuilder.hashMap.toSortedMap().keys.toList()
+        propertyListMap[tableName] = propertyList
+
+        println("[$tableName] ${sqlQueryBuilder.outputEntities.size} entities extracted")
+
+        return staticDataInitializer.getQuery(
+            tableName,
+            propertyList,
+            sqlQueryBuilder.outputEntities
+        )
     }
 }

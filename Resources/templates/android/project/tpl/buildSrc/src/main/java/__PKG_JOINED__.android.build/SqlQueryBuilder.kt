@@ -12,27 +12,50 @@ import {{package}}.android.build.utils.getSafeString
 import org.json.JSONArray
 import org.json.JSONObject
 
-class SqlQueryBuilder(inputEntities: JSONArray, private val fields: List<Field>) {
+class SqlQueryBuilder(entry: Any, private val fields: List<Field>) {
+    /**
+     * inputEntities can be a JSONArray, or a JSONObject.
+     * It is a JSONArray when it receives a list of entities
+     * It is a JSONObject when it's a related entity decoded from another table entities
+     */
 
     val outputEntities = arrayListOf<Array<Any?>>()
     val hashMap = mutableMapOf<String, Any?>()
+    val relatedEntitiesMap = mutableMapOf<String, MutableList<JSONObject>>()
 
     init {
 
-        for (i in 0 until inputEntities.length()) {
+        when (entry) {
+            is JSONArray -> {
+                for (i in 0 until entry.length()) {
 
-            hashMap["__KEY"] = null
-            hashMap["__TIMESTAMP"] = null
-            hashMap["__STAMP"] = null
-            fields.forEach { field ->
-                hashMap[field.name.fieldAdjustment()] = null
-                if (field.isManyToOneRelation)
-                    hashMap["__${field.name.fieldAdjustment()}Key"] = null
+                    hashMap["__KEY"] = null
+                    hashMap["__TIMESTAMP"] = null
+                    hashMap["__STAMP"] = null
+                    fields.forEach { field ->
+                        hashMap[field.name.fieldAdjustment()] = null
+                        if (field.isManyToOneRelation)
+                            hashMap["__${field.name.fieldAdjustment()}Key"] = null
+                    }
+
+                    val inputEntity = entry.getJSONObject(i)
+                    val outputEntity = extractEntity(inputEntity)
+                    outputEntities.add(outputEntity)
+                }
             }
+            is JSONObject -> {
+                hashMap["__KEY"] = null
+                hashMap["__TIMESTAMP"] = null
+                hashMap["__STAMP"] = null
+                fields.forEach { field ->
+                    hashMap[field.name.fieldAdjustment()] = null
+                    if (field.isManyToOneRelation)
+                        hashMap["__${field.name.fieldAdjustment()}Key"] = null
+                }
 
-            val inputEntity = inputEntities.getJSONObject(i)
-            val outputEntity = extractEntity(inputEntity)
-            outputEntities.add(outputEntity)
+                val outputEntity = extractEntity(entry)
+                outputEntities.add(outputEntity)
+            }
         }
     }
 
@@ -52,8 +75,17 @@ class SqlQueryBuilder(inputEntities: JSONArray, private val fields: List<Field>)
                         field.isManyToOneRelation -> {
                             val neededObject = hashMap[key.fieldAdjustment()]
                             if (neededObject is JSONObject) {
-                                hashMap["__${key.fieldAdjustment()}Key"] = neededObject.getSafeString("__KEY")
+                                hashMap["__${key.fieldAdjustment()}Key"] =
+                                    neededObject.getSafeString("__KEY")
                                 hashMap[key.fieldAdjustment()] = null
+
+                                // add the relation in a new SqlQuery
+                                field.relatedOriginalTableName?.let { originalTableName ->
+                                    if (!relatedEntitiesMap.containsKey(originalTableName)) {
+                                        relatedEntitiesMap[originalTableName] = mutableListOf()
+                                    }
+                                    relatedEntitiesMap[originalTableName]?.add(neededObject)
+                                }
                             }
                         }
                         field.isOneToManyRelation -> {
@@ -70,7 +102,6 @@ class SqlQueryBuilder(inputEntities: JSONArray, private val fields: List<Field>)
             outputEntity[k] = value
             k++
         }
-
         return outputEntity
     }
 }

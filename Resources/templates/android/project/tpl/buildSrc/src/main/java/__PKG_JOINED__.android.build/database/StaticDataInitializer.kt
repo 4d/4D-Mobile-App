@@ -6,7 +6,7 @@
 
 package {{package}}.android.build.database
 
-data class SqlQuery(val query: String, val parameters: List<Array<out Any?>>)
+data class SqlQuery(val query: String, var parameters: List<Array<out Any?>>, val tableName: String)
 
 class StaticDataInitializer {
 
@@ -17,7 +17,8 @@ class StaticDataInitializer {
     ): SqlQuery? {
         return SqlQuery(
             "INSERT INTO $tableName (${propertyNameList.joinToString()}) VALUES (${propertyNameList.joinToString { "?" }})",
-            results
+            results,
+            tableName
         )
     }
 }
