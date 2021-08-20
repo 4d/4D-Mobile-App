@@ -37,8 +37,7 @@
 			"_catalog",
 			"01_LASTBUILD",
 			"dev_test_android",
-			"dev_tests_iOS",
-			"ON_EVENT_CALL"
+			"dev_tests_iOS"
 		],
 		"forms": [
 			"_VIEWS_WITH_actionList",
