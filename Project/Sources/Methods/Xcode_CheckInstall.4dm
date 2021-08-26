@@ -62,8 +62,8 @@ If ($Xcode.success)
 	$Xcode.getRequirements()
 	$requestedVersion:=$Xcode.requirement
 	
-	// **** POUR LE TEST ****
-	//$requestedVersion:="12.4+"
+	// *** POUR LE TEST ***
+	//$requestedVersion:="12.5.1"
 	
 	$Xcode.checkRequiredVersion($requestedVersion)
 	

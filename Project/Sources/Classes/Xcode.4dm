@@ -201,20 +201,27 @@ Function checkRequiredVersion($version : Text)
 		// Keep the best one
 		$instances:=$instances.orderBy("version desc")
 		
-		$pathname:=""
+		CLEAR VARIABLE:C89($pathname)
+		
 		If (This:C1470.application#Null:C1517)
+			
 			$pathname:=String:C10(This:C1470.application.path)
+			
 		End if 
 		
 		var $currentInstances : Collection
 		$currentInstances:=$instances.filter("col_formula"; Formula:C1597($1.result:=(($1.value.version=$instances[0].version) & (($1.value.pathname+"/")=$pathname))))
-		If ($currentInstances.length=1)
-			// already a correct version with same value on current path, no need to ask
-			// This could happen if you two instance of macOS installed on two partitions
-		Else 
-			This:C1470.setPath($instances[0].pathname; $instances[0].version)
-		End if 
 		
+		If ($currentInstances.length=1)
+			
+			// Already a correct version with same value on current path, no need to ask
+			// This could happen if you two instance of macOS installed on two partitions
+			
+		Else 
+			
+			This:C1470.setPath($instances[0].pathname; $instances[0].version)
+			
+		End if 
 	End if 
 	
 	//====================================================================
