@@ -112,6 +112,11 @@ Else   // <== WIDGETS METHOD
 			End if 
 			
 			//==============================================
+		: ($ƒ.dataSourcePopup.catch($e; On Clicked:K2:4))
+			
+			$ƒ.doDataSourceMenu()
+			
+			//==============================================
 		: ($ƒ.sortOrderPopup.catch($e; On Clicked:K2:4))
 			
 			$ƒ.doSortOrderMenu()

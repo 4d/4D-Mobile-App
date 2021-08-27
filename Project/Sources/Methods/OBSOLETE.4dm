@@ -3,7 +3,9 @@
 _o_UI:=New object:C1471
 
 // =========================== HELP TIPS ===========================
-_o_UI.tips:=tips()
+var $o : Object
+$o:=tips
+_o_UI.tips:=$o
 
 // ============================= FORMS =============================
 _o_UI.form:=Formula:C1597(currentForm($1))

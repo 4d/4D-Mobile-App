@@ -94,6 +94,14 @@ Function init()
 	
 	This:C1470.formObject("dropCursor")
 	
+	//#128195 - [MOBILE] Custom input controls
+	$group:=This:C1470.group("dataSourceGroup")
+	This:C1470.input("dataSource"; "07_dataSource").addToGroup($group)
+	This:C1470.formObject("dataSourceBorder"; "07_dataSource.border").addToGroup($group)
+	This:C1470.formObject("dataSourceLabel"; "07_dataSource.label").addToGroup($group)
+	This:C1470.button("dataSourcePopup"; "07_dataSource.popup").addToGroup($group)
+	This:C1470.formObject("dataSourcePopupBorder"; "07_dataSource.popup.border").addToGroup($group)
+	
 	This:C1470.group("number"; \
 		This:C1470.minGroup; \
 		This:C1470.maxGroup)
@@ -107,7 +115,8 @@ Function init()
 		This:C1470.placeholderGroup; \
 		This:C1470.defaultValueGroup; \
 		This:C1470.number; \
-		This:C1470.sortOrderGroup)
+		This:C1470.sortOrderGroup; \
+		This:C1470.dataSourceGroup)
 	
 	This:C1470.group("withSelection"; \
 		This:C1470.parameterGroup; \
@@ -169,6 +178,12 @@ Function onLoad()
 		
 		This:C1470.appendEvents(On After Keystroke:K2:26)
 		This:C1470.appendEvents(On Before Keystroke:K2:6)
+		
+	End if 
+	
+	If (FEATURE.with("customActionFormatter"))
+		
+		This:C1470.formatLabel.setTitle("inputControl")
 		
 	End if 
 	
@@ -248,7 +263,7 @@ Function restoreContext()
 	// Update UI
 Function update()
 	
-	var $withDefault : Boolean
+	var $withDataSource; $withDefault : Boolean
 	var $action; $current : Object
 	
 	This:C1470.noSelection.hide()
@@ -378,8 +393,11 @@ Function update()
 							
 							If ($action.parameters.length>0)
 								
+								$withDataSource:=(Position:C15("/"; String:C10($current.format))=1)
+								
 								This:C1470.properties.show()
 								This:C1470.sortOrderGroup.hide()
+								This:C1470.dataSourceGroup.hide()
 								
 								This:C1470.defaultValueGroup.show($current.fieldNumber=Null:C1517)  // User parameter
 								This:C1470.field.show($current.fieldNumber#Null:C1517)  // Linked to a field
@@ -390,12 +408,19 @@ Function update()
 								This:C1470.min.setValue(String:C10(This:C1470.ruleValue("min")))
 								This:C1470.max.setValue(String:C10(This:C1470.ruleValue("max")))
 								
-								This:C1470.placeholderGroup.show($current.type#"bool")
-								
-								If ($current.type#"image")
+								If ($withDataSource)
 									
-									$withDefault:=Choose:C955(String:C10($action.preset)#"edit"; True:C214; ($current.fieldNumber=Null:C1517))
+									This:C1470.placeholderGroup.hide()
 									
+								Else 
+									
+									This:C1470.placeholderGroup.show($current.type#"bool")
+									
+									If ($current.type#"image")
+										
+										$withDefault:=Choose:C955(String:C10($action.preset)#"edit"; True:C214; ($current.fieldNumber=Null:C1517))
+										
+									End if 
 								End if 
 								
 								If ($withDefault)
@@ -500,6 +525,7 @@ Function update()
 								Else 
 									
 									This:C1470.defaultValueGroup.hide()
+									This:C1470.dataSourceGroup.show($withDataSource)
 									
 								End if 
 								
@@ -596,6 +622,11 @@ Function formatValue()->$value : Text
 			$value:=Get localized string:C991($value)
 			
 			//________________________________________
+		: (Position:C15("/"; String:C10($current.format))=1)
+			
+			$value:=Substring:C12($current.format; 2)
+			
+			//________________________________________
 		: (PROJECT.isCustomResource($current.format))  // Host custom action parameter format
 			
 			$value:=Substring:C12($current.format; 2)
@@ -627,6 +658,38 @@ Function commentValue()->$value : Text
 				.localized(String:C10(Form:C1466.dataModel[String:C10(This:C1470.action.tableNumber)][String:C10($current.fieldNumber)].name))
 			
 		End if 
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function dataSourceValue()->$value : Text
+	
+	var $current; $manifest : Object
+	var $file : 4D:C1709.File
+	
+	$current:=This:C1470.current
+	$file:=This:C1470.path.hostInputControls().file(String:C10(Delete string:C232($current.source; 1; 1))+"/manifest.json")
+	
+	If ($file.exists)
+		
+		$manifest:=JSON Parse:C1218($file.getText())
+		$value:=$manifest.name
+		
+		If (($manifest.choiceList.dataSource=Null:C1517) | (String:C10($manifest.choiceList.dataSource.dataClass)=Table name:C256(This:C1470.action.tableNumber)))\
+			 & ($current.format=("/"+Choose:C955($manifest.format=Null:C1517; "push"; $manifest.format)))
+			
+			This:C1470.dataSource.setColors(Foreground color:K23:1)
+			
+		Else   // ERROR
+			
+			This:C1470.dataSource.setColors("red")
+			
+		End if 
+		
+	Else   // ERROR
+		
+		$value:=String:C10($current.source)
+		This:C1470.dataSource.setColors("red")
+		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
@@ -945,83 +1008,59 @@ Function doMandatory()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Format list
-Function getFormats()->$formats : Object
-	
-	var $type : Text
-	var $index : Integer
-	var $manifestData : Object
-	var $c : Collection
-	var $manifest : 4D:C1709.File
-	var $folder : 4D:C1709.Folder
-	
-	$formats:=JSON Parse:C1218(File:C1566("/RESOURCES/actionParameters.json").getText()).formats
-	
-	If (FEATURE.with("customActionFormatter"))
-		
-		$folder:=This:C1470.path.hostInputControls(False:C215)
-		
-		If ($folder.exists)
-			
-			For each ($folder; $folder.folders())
-				
-				$manifest:=$folder.file("manifest.json")
-				
-				If ($manifest.exists)
-					
-					$manifestData:=JSON Parse:C1218($manifest.getText())
-					
-					If (Value type:C1509($manifestData.type)=Is text:K8:3)
-						
-						// Transform as collection
-						$manifestData.type:=New collection:C1472($manifestData.type)
-						
-					End if 
-					
-					If ($manifestData.choiceList#Null:C1517)
-						If ($manifestData.format=Null:C1517)
-							$manifestData.format:="push"  // push/segmented/popover/sheet/picker
-						End if 
-					End if 
-					
-					If (Value type:C1509($manifestData.type)=Is collection:K8:32)
-						
-						$c:=New collection:C1472(\
-							"text"; \
-							"real"; \
-							"integer"; \
-							"boolean"; \
-							"picture")
-						
-						For each ($type; $manifestData.type)
-							
-							$index:=$c.indexOf($type)
-							
-							If ($index>=0)
-								
-								$type:=Choose:C955($index; \
-									"string"; \
-									"number"; \
-									"number"; \
-									"bool"; \
-									"image")
-								
-							End if 
-							
-							If ($formats[$type]#Null:C1517)
-								
-								// ENHANCE: could add maybe object instead of string, to add some other info like helptype or custom label
-								If ($formats[$type].indexOf($manifestData)<0)
-									
-									$formats[$type].push($manifestData)
-									
-								End if 
-							End if 
-						End for each 
-					End if 
-				End if 
-			End for each 
-		End if 
-	End if 
+	//Function getFormats()->$formats : Object
+	//var $type : Text
+	//var $index : Integer
+	//var $manifestData : Object
+	//var $c : Collection
+	//var $manifest : 4D.File
+	//var $folder : 4D.Folder
+	//$formats:=JSON Parse(File("/RESOURCES/actionParameters.json").getText()).formats
+	//If (FEATURE.with("customActionFormatter")) 
+	//$folder:=This.path.hostInputControls(False)
+	//If ($folder.exists)
+	//For each ($folder; $folder.folders())
+	//$manifest:=$folder.file("manifest.json")
+	//If ($manifest.exists)
+	//$manifestData:=JSON Parse($manifest.getText())
+	//If (Value type($manifestData.type)=Is text)
+	//// Transform as collection
+	//$manifestData.type:=New collection($manifestData.type)
+	//End if 
+	//If ($manifestData.choiceList#Null)
+	//If ($manifestData.format=Null)
+	//$manifestData.format:="push"  // Push/segmented/popover/sheet/picker
+	//End if 
+	//End if 
+	//If (Value type($manifestData.type)=Is collection)
+	//$c:=New collection(\
+		"text"; \
+		"real"; \
+		"integer"; \
+		"boolean"; \
+		"picture")
+	//For each ($type; $manifestData.type)
+	//$index:=$c.indexOf($type)
+	//If ($index>=0)
+	//$type:=Choose($index; \
+		"string"; \
+		"number"; \
+		"number"; \
+		"bool"; \
+		"image")
+	//End if 
+	//If ($formats[$type]#Null)
+	//// ENHANCE: could add maybe object instead of string, to add some other info like helptype or custom label
+	//If ($formats[$type].indexOf($manifestData)<0)
+	//$formats[$type].push($manifestData)
+	//End if 
+	//End if 
+	//End for each 
+	//End if 
+	//End if 
+	//End for each 
+	//End if 
+	//End if
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Show current format on disk
@@ -1059,7 +1098,9 @@ Function doFormatMenu()
 	
 	$current:=This:C1470.current
 	$currentFormat:=String:C10($current.format)
-	$formats:=This:C1470.getFormats()
+	
+	//$formats:=This.getFormats()
+	$formats:=JSON Parse:C1218(File:C1566("/RESOURCES/actionParameters.json").getText()).formats
 	
 	$menu:=cs:C1710.menu.new()
 	
@@ -1135,6 +1176,7 @@ Function doFormatMenu()
 			: ($menu.choice="null")
 				
 				OB REMOVE:C1226($current; "format")
+				OB REMOVE:C1226($current; "source")
 				
 				//________________________________________
 			: (Position:C15("$new"; $menu.choice)=1)
@@ -1201,12 +1243,20 @@ Function doFormatMenu()
 				End if 
 				
 				//________________________________________
-			Else 
+			: (Position:C15("/"; $menu.choice)=1)
 				
 				$current.format:=$menu.choice
 				
+				//________________________________________
+			Else 
+				
+				$current.format:=$menu.choice
+				OB REMOVE:C1226($current; "source")
+				
 				$newType:=$menu.getData("type")
+				
 				If ($newType=Null:C1517)
+					
 					If ($current.defaultField=Null:C1517)  // User parameter
 						
 						For each ($type; $formats) Until ($index#-1)
@@ -1245,6 +1295,117 @@ Function doFormatMenu()
 		
 		PROJECT.save()
 		
+		This:C1470.update()
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+	// Data source choice
+Function doDataSourceMenu()
+	
+	var $current; $manifest; $o : Object
+	var $t : Text
+	var $controls; $subset : Collection
+	var $file : 4D:C1709.File
+	var $control; $folder : 4D:C1709.Folder
+	var $menu : cs:C1710.menu
+	
+	$current:=This:C1470.current
+	
+	$menu:=cs:C1710.menu.new()
+	
+	// Search for custom input controls
+	$folder:=This:C1470.path.hostInputControls()
+	
+	If ($folder.exists)
+		
+		$controls:=New collection:C1472
+		
+		For each ($control; $folder.folders())
+			
+			$file:=$control.files().query("fullName=:1"; "manifest.json").pop()
+			
+			If ($file#Null:C1517)
+				
+				$manifest:=JSON Parse:C1218($file.getText())
+				
+				$controls.push(New object:C1471(\
+					"dynamic"; $manifest.choiceList.dataSource#Null:C1517; \
+					"name"; $manifest.name; \
+					"source"; $file.parent.name; \
+					"format"; Choose:C955($manifest.format#Null:C1517; $manifest.format; "push"); \
+					"choiceList"; $manifest.choiceList\
+					))
+				
+			End if 
+		End for each 
+		
+		// Create a subset with the selected input control format of the current parameter
+		$controls:=$controls.query("format = :1"; Delete string:C232($current.format; 1; 1))
+		
+		// Add static choice lists, if any
+		$subset:=$controls.query("dynamic = :1"; False:C215)
+		
+		If ($subset.length>0)
+			
+			$menu.append("choiceList").disable()
+			
+			For each ($o; $subset)
+				
+				$t:="/"+$o.source
+				$menu.append("    "+$o.name; $t; String:C10($current.source)=$t)\
+					.setData("choiceList"; $o.choiceList)
+				
+			End for each 
+			
+			$menu.line()
+			
+		End if 
+		
+		// Add the lists of data sources for this data class, if any.
+		$t:=Table name:C256(This:C1470.action.tableNumber)
+		$subset:=$controls.query("dynamic = :1 AND choiceList.dataSource.dataClass = :2"; True:C214; $t)
+		
+		If ($subset.length>0)
+			
+			$menu.append("fromDataclass").disable()
+			
+			For each ($o; $subset)
+				
+				$t:="/"+$o.source
+				$menu.append("    "+$o.name; $t; String:C10($current.source)=$t)\
+					.setData("choiceList"; $o.choiceList)
+				
+			End for each 
+			
+			$menu.line()
+			
+		End if 
+	End if 
+	
+	// Allow to create a custom input control
+	$menu.append("newChoiceList"; "new")
+	
+	// Position according to the box
+	If ($menu.popup(This:C1470.dataSourceBorder).selected)
+		
+		Case of 
+				
+				//______________________________________________________
+			: ($menu.choice="new")
+				
+				//#TO_DO
+				
+				//______________________________________________________
+			Else 
+				
+				$current.source:=$menu.choice
+				$current.choiceList:=$menu.getData("choiceList")
+				
+				PROJECT.save()
+				
+				//______________________________________________________
+		End case 
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
@@ -1300,54 +1461,70 @@ Function _actionFormatterChoiceList($menu : cs:C1710.menu; $type : Text)
 		
 		$menu.line()
 		
-		$format:=New object:C1471(\
-			"type"; New collection:C1472($type))
-		
-		$menu.append("newChoiceList"; "$new")\
-			.setData("type"; "choiceList")\
-			.setData("format"; $format)
-		
-		$tableMenu:=cs:C1710.menu.new()
-		
-		For each ($tableID; PROJECT.dataModel)
+		If (FEATURE.with("customActionFormatter"))
 			
-			$table:=PROJECT.dataModel[$tableID]
-			$fieldsMenu:=cs:C1710.menu.new()
-			
-			For each ($fieldID; $table)
+			var $t : Text
+			For each ($t; New collection:C1472("push"; "segmented"; "popover"; "sheet"; "picker"))
 				
-				If (PROJECT.isField($fieldID))
+				$format:=New object:C1471(\
+					"type"; New collection:C1472($t))
+				
+				$menu.append($t; "/"+$t; String:C10(This:C1470.current.format)=("/"+$t))\
+					.setData("format"; $format)
+				
+			End for each 
+			
+		Else 
+			
+			$format:=New object:C1471(\
+				"type"; New collection:C1472($type))
+			
+			$menu.append("newChoiceList"; "$new")\
+				.setData("type"; "choiceList")\
+				.setData("format"; $format)
+			
+			$tableMenu:=cs:C1710.menu.new()
+			
+			For each ($tableID; PROJECT.dataModel)
+				
+				$table:=PROJECT.dataModel[$tableID]
+				$fieldsMenu:=cs:C1710.menu.new()
+				
+				For each ($fieldID; $table)
 					
-					$field:=$table[$fieldID]
-					
-					If (PROJECT.fieldType2type($field.fieldType)=$type)  // OPTI : use reverse convertion on current type instead
+					If (PROJECT.isField($fieldID))
 						
-						$format:=New object:C1471(\
-							"type"; New collection:C1472($type); \
-							"choiceList"; New object:C1471(\
-							"dataSource"; New object:C1471("dataClass"; \
-							$table[""].name; "field"; \
-							$field.name)))
+						$field:=$table[$fieldID]
 						
-						$fieldsMenu.append($field.name; "$new·"+$tableID+"·"+$fieldID)\
-							.setData("type"; "dataSource")\
-							.setData("format"; $format)
-						
+						If (PROJECT.fieldType2type($field.fieldType)=$type)  // OPTI : use reverse convertion on current type instead
+							
+							$format:=New object:C1471(\
+								"type"; New collection:C1472($type); \
+								"choiceList"; New object:C1471(\
+								"dataSource"; New object:C1471("dataClass"; \
+								$table[""].name; "field"; \
+								$field.name)))
+							
+							$fieldsMenu.append($field.name; "$new·"+$tableID+"·"+$fieldID)\
+								.setData("type"; "dataSource")\
+								.setData("format"; $format)
+							
+						End if 
 					End if 
+				End for each 
+				
+				If ($fieldsMenu.itemCount()>0)
+					
+					$tableMenu.append($table[""].name; $fieldsMenu)
+					
 				End if 
 			End for each 
 			
-			If ($fieldsMenu.itemCount()>0)
+			If ($tableMenu.itemCount()>0)
 				
-				$tableMenu.append($table[""].name; $fieldsMenu)
+				$menu.append("fromDataclass"; $tableMenu)
 				
 			End if 
-		End for each 
-		
-		If ($tableMenu.itemCount()>0)
-			
-			$menu.append("fromDataclass"; $tableMenu)
-			
 		End if 
 	End if 
 	

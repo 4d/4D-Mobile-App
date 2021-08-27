@@ -13,7 +13,11 @@ Class constructor($title : Text)
 	This:C1470.isVisible:=True:C214
 	
 	// Unfortunately there is no way to create an invisible progress
-	This:C1470.id:=Progress New
+	
+	//This.id:=Progress New
+	var $id : Integer
+	$id:=Progress New
+	This:C1470.id:=$id
 	
 	If (Count parameters:C259>=1)
 		

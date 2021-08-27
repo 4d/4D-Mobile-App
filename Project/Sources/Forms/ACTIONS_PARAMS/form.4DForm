@@ -637,6 +637,68 @@
 					],
 					"visibility": "hidden",
 					"focusable": false
+				},
+				"07_dataSource.border": {
+					"type": "rectangle",
+					"top": 249,
+					"left": 488,
+					"width": 204,
+					"height": 33,
+					"visibility": "hidden",
+					"class": "border"
+				},
+				"07_dataSource.popup.border": {
+					"type": "rectangle",
+					"top": 249,
+					"left": 488,
+					"width": 33,
+					"height": 33,
+					"visibility": "hidden",
+					"class": "border"
+				},
+				"07_dataSource": {
+					"type": "input",
+					"top": 257,
+					"left": 527,
+					"width": 157,
+					"height": 17,
+					"visibility": "hidden",
+					"dataSource": "panel.dataSourceValue()",
+					"hideFocusRing": true,
+					"dragging": "none",
+					"focusable": false,
+					"class": "infos",
+					"contextMenu": "none",
+					"events": [
+						"onMouseEnter",
+						"onMouseLeave",
+						"onMouseMove"
+					]
+				},
+				"07_dataSource.label": {
+					"type": "text",
+					"top": 227,
+					"left": 488,
+					"width": 140,
+					"height": 17,
+					"text": ":xliff:dataSource",
+					"visibility": "hidden",
+					"class": "label"
+				},
+				"07_dataSource.popup": {
+					"type": "button",
+					"top": 249,
+					"left": 488,
+					"width": 33,
+					"height": 33,
+					"icon": "/RESOURCES/images/common/down.png",
+					"iconFrames": 4,
+					"style": "custom",
+					"events": [
+						"onClick"
+					],
+					"visibility": "hidden",
+					"focusable": false
 				}
 			},
 			"entryOrder": [
@@ -657,7 +719,9 @@
 				"03_sortOrder",
 				"03_sortOrder.popup",
 				"predicting",
-				"namePopup"
+				"namePopup",
+				"07_dataSource",
+				"07_dataSource.popup"
 			]
 		},
 		{
@@ -695,7 +759,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 498,
+	"geometryStamp": 536,
 	"editor": {
 		"groups": {
 			"Group": [
@@ -713,6 +777,23 @@
 			"widgets": {
 				"objects": [
 					"predicting"
+				]
+			},
+			"dataSource": {
+				"objects": [
+					"07_dataSource.border",
+					"07_dataSource.popup.border",
+					"07_dataSource",
+					"07_dataSource.label",
+					"07_dataSource.popup"
+				]
+			},
+			"sort": {
+				"visible": false,
+				"objects": [
+					"Group",
+					"namePopupBorder",
+					"namePopup"
 				]
 			}
 		}
