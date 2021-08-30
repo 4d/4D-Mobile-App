@@ -264,7 +264,7 @@ Function AndroidIconSet($icon : Picture)
 	var $height; $pos; $width : Integer
 	var $heightFactor; $widthFactor : Real
 	var $o : Object
-	var $folder : 4D:C1709.file
+	var $folder : 4D:C1709.Folder
 	var $file : 4D:C1709.File
 	
 	PICTURE PROPERTIES:C457($icon; $width; $height)

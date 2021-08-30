@@ -286,7 +286,6 @@
 		"views": {
 			"View 1": {},
 			"message": {
-				"visible": false,
 				"objects": [
 					"message.back",
 					"message.button",
