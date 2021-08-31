@@ -11,14 +11,15 @@
 #DECLARE($entryPoint : Text; $parameters : Object)->$response : Object
 
 If (False:C215)
-	C_OBJECT:C1216(mobileUnit; $0)
 	C_TEXT:C284(mobileUnit; $1)
 	C_OBJECT:C1216(mobileUnit; $2)
+	C_OBJECT:C1216(mobileUnit; $0)
 End if 
 
 var $t : Text
-var $b : Boolean
+var $b; $run : Boolean
 var $o : Object
+var $file : 4D:C1709.File
 
 // ----------------------------------------------------
 // Initialisations
@@ -133,9 +134,6 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			
 			If ($response=Null:C1517)  // No error
 				
-				var $file : 4D:C1709.File
-				var $run : Boolean
-				
 				$run:=True:C214
 				
 				If (Is macOS:C1572)
@@ -213,7 +211,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 				
 				$response:=New object:C1471(\
 					"success"; True:C214; \
-					"value"; COMPONENT_Pathname($parameters.target).platformPath)
+					"value"; _o_COMPONENT_Pathname($parameters.target).platformPath)
 				
 			End if 
 			

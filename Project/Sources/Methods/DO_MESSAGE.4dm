@@ -12,7 +12,7 @@
 
 var $action; $key : Text
 var $data; $display : Object
-var $widget : cs:C1710.widgetMessage
+var $widget : cs:C1710.subform
 
 // ----------------------------------------------------
 // Initialisations

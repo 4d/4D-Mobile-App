@@ -1,17 +1,14 @@
-Class constructor
-	
-	C_TEXT:C284($1)
-	C_VARIANT:C1683($2)
+Class constructor($id : Text; $options : Variant)
 	
 	If (Count parameters:C259>=1)
 		
 		If (Count parameters:C259>=2)
 			
-			This:C1470[$1]($2)
+			This:C1470[$id]($options)
 			
 		Else 
 			
-			This:C1470[$1]()
+			This:C1470[$id]()
 			
 		End if 
 		
@@ -22,6 +19,7 @@ Class constructor
 		
 	End if 
 	
+	// ⚠️ In some cases (Surface), the Home folder is not the parent of the desktop folder.
 	This:C1470.home:=Folder:C1567(Split string:C1554(Folder:C1567(fk desktop folder:K87:19).path; "/").resize(3).join("/"))
 	
 /*========================================================*/

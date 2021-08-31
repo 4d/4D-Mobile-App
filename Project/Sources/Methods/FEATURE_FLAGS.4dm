@@ -155,6 +155,8 @@ FEATURE.unstable("predictiveEntryInActionParam")  // Name of the action paramete
 FEATURE.unstable("customActionFormatter")  // Redmine #128195 custom input control for action parameter
 FEATURE.unstable("customActionFormatterWithCode")  // Redmine #129036 custom input control for action parameter with ios code
 
+FEATURE.unstable("computedProperties")  // Redmine #128514 [CS] Computed properties
+
 // to wip?
 FEATURE.unstable("newFormatterChoiceList")  // Menu to create formatter choice list directly , from data
 FEATURE.unstable("newActionFormatterChoiceList")  // Menu to create action formatter choice list directly
@@ -166,7 +168,7 @@ _____________*/
 FEATURE.wip("duplicateTemplate")  // Allow to duplicate template in host database and show on disk https:// Project.4d.com/issues/98054
 FEATURE.wip("taskIndicator")  // UI for background tasks executing
 
-FEATURE.wip("compressionOfTemplates")  // Use the archive "/RESOURCES/template.zip" instead of "templates" folder in builded component 
+FEATURE.wip("compressionOfTemplates")  // Use the archive "/RESOURCES/template.zip" instead of "templates" folder in builded component
 //FEATURE.vdl("testCompression")
 
 // Share action with descrition
@@ -282,5 +284,3 @@ End if
 /* _____________
 ALIAS
 _____________*/
-
-

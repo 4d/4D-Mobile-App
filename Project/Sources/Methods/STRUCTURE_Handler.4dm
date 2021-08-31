@@ -398,6 +398,21 @@ Case of
 				APPEND TO ARRAY:C911(($IN.fields)->; $IN.field.name)
 				
 				//…………………………………………………………………………………………………
+			: ($IN.field.type=-3)  // Computed
+				
+				If ($IN.field.fieldType<=EDITOR.fieldIcons.length)
+					
+					$published:=Num:C11($dataModel[String:C10($IN.table.tableNumber)][String:C10($IN.field.name)]#Null:C1517)
+					
+					APPEND TO ARRAY:C911(($IN.published)->; $published)
+					APPEND TO ARRAY:C911(($IN.icons)->; EDITOR.fieldIcons[$IN.field.fieldType])
+					APPEND TO ARRAY:C911(($IN.fields)->; $IN.field.name)
+					
+				End if 
+				
+				//LISTBOX SET ROW FONT STYLE(*; $form.fieldList; Size of array(($IN.fields)->); Plain)
+				
+				//…………………………………………………………………………………………………
 			Else 
 				
 				If ($IN.field.fieldType<=EDITOR.fieldIcons.length)

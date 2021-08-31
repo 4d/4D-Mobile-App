@@ -136,14 +136,14 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 							//........................................
 						: (Bool:C1537($Obj_formatter.isHost))  // with /, host formatters? XXX maybe find another way to identifiy it
 							
-							$Dir_source:=Choose:C955(Length:C16(String:C10($Obj_formatter.path))>0; $Obj_formatter.path; COMPONENT_Pathname("host_formatters").platformPath+$Obj_formatter.name+Folder separator:K24:12)
+							$Dir_source:=Choose:C955(Length:C16(String:C10($Obj_formatter.path))>0; $Obj_formatter.path; _o_COMPONENT_Pathname("host_formatters").platformPath+$Obj_formatter.name+Folder separator:K24:12)
 							
 							$Dir_source:=$Dir_source+"images"+Folder separator:K24:12
 							
 							//........................................
 						Else 
 							
-							$Dir_source:=COMPONENT_Pathname("formatterImages").platformPath
+							$Dir_source:=_o_COMPONENT_Pathname("formatterImages").platformPath
 							
 							//........................................
 					End case 
@@ -269,7 +269,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 								
 							End if 
 							
-							$Folder_buffer:=COMPONENT_Pathname("templates").folder("asset").folder($Obj_in.type).folder($Obj_in.format)
+							$Folder_buffer:=_o_COMPONENT_Pathname("templates").folder("asset").folder($Obj_in.type).folder($Obj_in.format)
 							$Txt_buffer:=$Folder_buffer.platformPath
 							$Obj_out.success:=$Folder_buffer.exists
 							
@@ -278,7 +278,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 							
 							If ($Obj_in.space#Null:C1517)
 								
-								$Folder_buffer:=COMPONENT_Pathname("templates").folder("asset").folder($Obj_in.type).folder($Obj_in.space)
+								$Folder_buffer:=_o_COMPONENT_Pathname("templates").folder("asset").folder($Obj_in.type).folder($Obj_in.space)
 								$Txt_buffer:=$Folder_buffer.platformPath
 								
 								If ($Obj_in.tags.alpha=Null:C1517)
@@ -299,7 +299,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 							//........................................
 						: ($Obj_in.type="dataset")
 							
-							$Folder_buffer:=COMPONENT_Pathname("templates").folder("asset").folder($Obj_in.type)
+							$Folder_buffer:=_o_COMPONENT_Pathname("templates").folder("asset").folder($Obj_in.type)
 							$Txt_buffer:=$Folder_buffer.platformPath
 							$Obj_out.success:=$Folder_buffer.exists
 							
@@ -312,7 +312,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 							//........................................
 						: ($Obj_in.type="folder")
 							
-							$Folder_buffer:=COMPONENT_Pathname("templates").folder("asset").folder($Obj_in.type)
+							$Folder_buffer:=_o_COMPONENT_Pathname("templates").folder("asset").folder($Obj_in.type)
 							$Txt_buffer:=$Folder_buffer.platformPath
 							$Obj_out.success:=$Folder_buffer.exists
 							

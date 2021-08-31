@@ -162,7 +162,7 @@ Function manageChildren
 			
 			// Read its manifest
 			C_OBJECT:C1216($Path_manifest)
-			$Path_manifest:=COMPONENT_Pathname("templates").folder($Txt_template).file("manifest.json")
+			$Path_manifest:=_o_COMPONENT_Pathname("templates").folder($Txt_template).file("manifest.json")
 			If ($Path_manifest.exists)
 				
 				$o.template:=JSON Parse:C1218($Path_manifest.getText())

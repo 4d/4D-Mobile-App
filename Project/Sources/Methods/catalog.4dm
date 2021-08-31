@@ -8,20 +8,20 @@
 //
 // ----------------------------------------------------
 // Declarations
-C_OBJECT:C1216($0)
-C_TEXT:C284($1)
-C_OBJECT:C1216($2)
-
-C_LONGINT:C283($l; $Lon_parameters)
-C_TEXT:C284($Txt_action; $Txt_field)
-C_OBJECT:C1216($o; $Obj_datastore; $Obj_in; $Obj_out; $Obj_table)
-C_COLLECTION:C1488($Col_tables)
+var $0 : Object
+var $1 : Text
+var $2 : Object
 
 If (False:C215)
 	C_OBJECT:C1216(catalog; $0)
 	C_TEXT:C284(catalog; $1)
 	C_OBJECT:C1216(catalog; $2)
 End if 
+
+var $Txt_action; $Txt_field : Text
+var $Lon_parameters : Integer
+var $o; $Obj_datastore; $Obj_in; $Obj_out; $Obj_table : Object
+var $Col_tables : Collection
 
 // ----------------------------------------------------
 // Initialisations
@@ -122,10 +122,19 @@ Case of
 						: ($Obj_table[$Txt_field].kind="relatedEntities")  // 1 -> N relation
 							
 							// <NOT YET  MANAGED>
-							//______________________________________________________
-						Else 
 							
-							// <NOTHING MORE TO DO>
+							//…………………………………………………………………………………………………
+						: (Not:C34(FEATURE.with("computedProperties")))
+							
+							// <NOT YET  MANAGED>
+							
+							//______________________________________________________
+						: ($Obj_table[$Txt_field].kind="calculated")  // Computed properties
+							
+							$o:=OB Copy:C1225($Obj_table[$Txt_field])
+							$o.type:=-3
+							$Obj_out.fields.push($o)
+							
 							//______________________________________________________
 					End case 
 				End for each 
@@ -260,10 +269,19 @@ Case of
 							
 							// <NOT YET  MANAGED>
 							
-							//______________________________________________________
-						Else 
+							//…………………………………………………………………………………………………
+						: (Not:C34(FEATURE.with("computedProperties")))
 							
-							// <NOTHING MORE TO DO>
+							// <NOT YET  MANAGED>
+							
+							//______________________________________________________
+						: ($Obj_table[$Txt_field].kind="calculated")  // Computed properties
+							
+							$o:=OB Copy:C1225($Obj_table[$Txt_field])
+							$o.path:=$o.name
+							$o.valueType:=$o.type
+							$o.type:=-3
+							
 							//______________________________________________________
 					End case 
 				End for each 

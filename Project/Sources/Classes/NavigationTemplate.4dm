@@ -105,8 +105,8 @@ Function createIconAssets
 		$Obj_out.assets:=New collection:C1472  // result of asset operations
 		
 		C_OBJECT:C1216($Path_root; $Path_hostRoot)
-		$Path_root:=COMPONENT_Pathname("fieldIcons")
-		$Path_hostRoot:=COMPONENT_Pathname("host_fieldIcons")
+		$Path_root:=_o_COMPONENT_Pathname("fieldIcons")
+		$Path_hostRoot:=_o_COMPONENT_Pathname("host_fieldIcons")
 		
 		C_OBJECT:C1216($Obj_table)
 		For each ($Obj_table; This:C1470.input.tags.navigationTables)

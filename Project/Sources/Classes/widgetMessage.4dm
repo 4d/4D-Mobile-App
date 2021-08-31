@@ -1,6 +1,8 @@
 //=== === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	
+	Super:C1705()
+	
 	This:C1470.background:=cs:C1710.formObject.new("background")
 	This:C1470.title:=cs:C1710.widget.new("title")
 	This:C1470.additional:=cs:C1710.scrollable.new("additional")

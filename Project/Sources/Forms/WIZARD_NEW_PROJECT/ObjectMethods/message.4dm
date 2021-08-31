@@ -1,6 +1,6 @@
 var $offset : Integer
 var $coordinates; $data; $display; $e : Object
-var $widget : cs:C1710.widgetMessage
+var $widget : cs:C1710.subform
 
 $e:=FORM Event:C1606
 $widget:=Form:C1466._message

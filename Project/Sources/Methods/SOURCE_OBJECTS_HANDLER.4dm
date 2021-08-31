@@ -72,7 +72,7 @@ Case of
 		Else 
 			
 			// Default location
-			$File_key:=COMPONENT_Pathname("key").platformPath
+			$File_key:=_o_COMPONENT_Pathname("key").platformPath
 			
 		End if 
 		

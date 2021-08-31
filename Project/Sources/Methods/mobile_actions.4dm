@@ -292,12 +292,12 @@ Case of
 				//……………………………………………………………………………………………………………
 			: (String:C10($Obj_in.action.icon)[[1]]="/")  // host icons
 				
-				$Obj_out:=COMPONENT_Pathname("host_actionIcons").file(Delete string:C232($Obj_in.action.icon; 1; 1))
+				$Obj_out:=_o_COMPONENT_Pathname("host_actionIcons").file(Delete string:C232($Obj_in.action.icon; 1; 1))
 				
 				//……………………………………………………………………………………………………………
 			Else 
 				
-				$Obj_out:=COMPONENT_Pathname("actionIcons").file($Obj_in.action.icon)
+				$Obj_out:=_o_COMPONENT_Pathname("actionIcons").file($Obj_in.action.icon)
 				
 				//……………………………………………………………………………………………………………
 		End case 
@@ -384,7 +384,7 @@ Case of
 									If ($t[[1]]="/")
 										
 										// User
-										$manifest:=ob_parseFile(COMPONENT_Pathname("host_formatters").file(Substring:C12($t; 2)+"/manifest.json"))
+										$manifest:=ob_parseFile(_o_COMPONENT_Pathname("host_formatters").file(Substring:C12($t; 2)+"/manifest.json"))
 										If ($manifest.success)
 											
 											$manifest:=$manifest.value

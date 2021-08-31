@@ -104,7 +104,7 @@ Case of
 		End for each 
 		
 		// Host formatters
-		$oResources:=COMPONENT_Pathname("host_formatters")
+		$oResources:=_o_COMPONENT_Pathname("host_formatters")
 		
 		If ($oResources.exists)
 			
@@ -145,7 +145,7 @@ Case of
 			
 			$oOUT.formatters:=New collection:C1472
 			
-			$oResources:=COMPONENT_Pathname("host_formatters")
+			$oResources:=_o_COMPONENT_Pathname("host_formatters")
 			
 			If ($oResources.exists)
 				
@@ -368,7 +368,7 @@ Case of
 							For each ($t; New collection:C1472("Sources"; "Resources"))  // Only Sources and "Resources" folder are imported
 								
 								If ($oFormatter.folder=Null:C1517)
-									$folder:=COMPONENT_Pathname("host_formatters").folder($oFormatter.name).folder($t)  // code could failed if name in manifest not equal to directory
+									$folder:=_o_COMPONENT_Pathname("host_formatters").folder($oFormatter.name).folder($t)  // code could failed if name in manifest not equal to directory
 								Else 
 									$folder:=$oFormatter.folder.folder($t)
 								End if 

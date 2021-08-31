@@ -576,10 +576,10 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		$o:=db.exposedDatastore()
-		$o:=db("object;blob").exposedDatastore()
+		$o:=_o_db.exposedDatastore()
+		$o:=_o_db("object;blob").exposedDatastore()
 		
-		$o:=db("object;blob")
+		$o:=_o_db("object;blob")
 		
 		$o1:=$o.table("Commands")
 		$o1:=$o.table(5)

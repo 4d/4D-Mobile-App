@@ -116,7 +116,7 @@ Case of
 		//     User actions    //
 		//=======================
 		
-		$folder:=COMPONENT_Pathname("host_actions")
+		$folder:=_o_COMPONENT_Pathname("host_actions")
 		
 		If ($folder.exists)
 			

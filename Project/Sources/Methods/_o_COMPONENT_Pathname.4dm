@@ -17,8 +17,8 @@ C_TEXT:C284($Txt_target)
 C_OBJECT:C1216($o; $Obj_path)
 
 If (False:C215)
-	C_OBJECT:C1216(COMPONENT_Pathname; $0)
-	C_TEXT:C284(COMPONENT_Pathname; $1)
+	C_OBJECT:C1216(_o_COMPONENT_Pathname; $0)
+	C_TEXT:C284(_o_COMPONENT_Pathname; $1)
 End if 
 
 // ----------------------------------------------------
@@ -102,7 +102,7 @@ Case of
 		//______________________________________________________
 	: ($Txt_target="host_forms")
 		
-		$Obj_path:=COMPONENT_Pathname("host")
+		$Obj_path:=_o_COMPONENT_Pathname("host")
 		
 		If ($Obj_path.exists)
 			
@@ -113,7 +113,7 @@ Case of
 		//______________________________________________________
 	: ($Txt_target="host_listForms")
 		
-		$Obj_path:=COMPONENT_Pathname("host_forms")
+		$Obj_path:=_o_COMPONENT_Pathname("host_forms")
 		
 		If ($Obj_path.exists)
 			
@@ -124,7 +124,7 @@ Case of
 		//______________________________________________________
 	: ($Txt_target="host_detailForms")
 		
-		$Obj_path:=COMPONENT_Pathname("host_forms")
+		$Obj_path:=_o_COMPONENT_Pathname("host_forms")
 		
 		If ($Obj_path.exists)
 			
@@ -135,7 +135,7 @@ Case of
 		//______________________________________________________
 	: ($Txt_target="host_loginForms")
 		
-		$Obj_path:=COMPONENT_Pathname("host_forms")
+		$Obj_path:=_o_COMPONENT_Pathname("host_forms")
 		
 		If ($Obj_path.exists)
 			
@@ -148,7 +148,7 @@ Case of
 		 | ($Txt_target="host_fieldIcons")\
 		 | ($Txt_target="host_actionIcons")
 		
-		$Obj_path:=COMPONENT_Pathname("host")
+		$Obj_path:=_o_COMPONENT_Pathname("host")
 		
 		If ($Obj_path.exists)
 			
@@ -159,7 +159,7 @@ Case of
 		//______________________________________________________
 	: ($Txt_target="host_formatters")
 		
-		$Obj_path:=COMPONENT_Pathname("host")
+		$Obj_path:=_o_COMPONENT_Pathname("host")
 		
 		If ($Obj_path.exists)
 			

@@ -222,7 +222,7 @@ Function afterChildren
 			"template"; New object:C1471(\
 			"name"; "pushNotification"; \
 			"inject"; True:C214; \
-			"source"; COMPONENT_Pathname("templates").folder("pushNotification").platformPath; \
+			"source"; _o_COMPONENT_Pathname("templates").folder("pushNotification").platformPath; \
 			"parent"; $Obj_template); \
 			"project"; This:C1470.input.project; \
 			"path"; This:C1470.input.path; \

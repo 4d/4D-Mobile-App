@@ -9,7 +9,7 @@ Class constructor
 	End if 
 	This:C1470.type:="detailform"
 	
-	This:C1470.relationFolder:=COMPONENT_Pathname("templates").folder("relation")
+	This:C1470.relationFolder:=_o_COMPONENT_Pathname("templates").folder("relation")
 	
 Function run
 	C_OBJECT:C1216($0; $Obj_out)
@@ -183,7 +183,7 @@ Function run
 						$Dom_relation.isDefault:=False:C215
 						$Dom_relation.doNotClose:=True:C214
 						
-					: ($Folder_template.file("relationButton.xml").exists)  // there is 
+					: ($Folder_template.file("relationButton.xml").exists)  // there is
 						
 						$Dom_relation:=xml("load"; $Folder_template.file("relationButton.xml"))
 						$Dom_relation.isDefault:=False:C215

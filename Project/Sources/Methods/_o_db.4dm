@@ -19,9 +19,9 @@ C_OBJECT:C1216($o; $Obj_catalog; $Obj_field; $Obj_table)
 C_COLLECTION:C1488($c; $cc)
 
 If (False:C215)
-	C_OBJECT:C1216(db; $0)
-	C_TEXT:C284(db; $1)
-	C_OBJECT:C1216(db; $2)
+	C_OBJECT:C1216(_o_db; $0)
+	C_TEXT:C284(_o_db; $1)
+	C_OBJECT:C1216(_o_db; $2)
 End if 
 
 // ----------------------------------------------------
@@ -33,10 +33,10 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 		"stampField"; "__GlobalStamp"; \
 		"exclude"; New collection:C1472; \
 		"datastore"; Null:C1517; \
-		"pushError"; Formula:C1597(db("pushError"; New object:C1471("container"; $1; "message"; $2; "type"; $3))); \
-		"exposedDatastore"; Formula:C1597(db("exposedDatastore"; New object:C1471("table"; $1; "sorted"; $2))); \
-		"table"; Formula:C1597(db("table"; New object:C1471("table"; $1))); \
-		"field"; Formula:C1597(db("field"; New object:C1471("table"; $1; "field"; $2)))\
+		"pushError"; Formula:C1597(_o_db("pushError"; New object:C1471("container"; $1; "message"; $2; "type"; $3))); \
+		"exposedDatastore"; Formula:C1597(_o_db("exposedDatastore"; New object:C1471("table"; $1; "sorted"; $2))); \
+		"table"; Formula:C1597(_o_db("table"; New object:C1471("table"; $1))); \
+		"field"; Formula:C1597(_o_db("field"; New object:C1471("table"; $1; "field"; $2)))\
 		)
 	
 	If (Count parameters:C259>=1)

@@ -115,6 +115,6 @@ Function pathname
 	
 	$0:=New object:C1471(\
 		"success"; True:C214; \
-		"value"; COMPONENT_Pathname($1.target).platformPath)
+		"value"; _o_COMPONENT_Pathname($1.target).platformPath)
 	
 	//______________________________________________________

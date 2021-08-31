@@ -221,12 +221,11 @@
 	},
 	"geometryStamp": 384,
 	"editor": {
-		"activeView": "View 1",
+		"activeView": "message",
 		"defaultView": "View 1",
 		"views": {
 			"View 1": {},
 			"message": {
-				"visible": false,
 				"objects": [
 					"message.back",
 					"message.button",

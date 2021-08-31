@@ -64,8 +64,8 @@ If (False:C215)
 	C_TEXT:C284(COMPONENT_Infos; $1)
 	
 	// ----------------------------------------------------
-	C_OBJECT:C1216(COMPONENT_Pathname; $0)
-	C_TEXT:C284(COMPONENT_Pathname; $1)
+	C_OBJECT:C1216(_o_COMPONENT_Pathname; $0)
+	C_TEXT:C284(_o_COMPONENT_Pathname; $1)
 	
 	// ----------------------------------------------------
 End if 
