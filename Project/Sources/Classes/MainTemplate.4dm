@@ -279,23 +279,22 @@ Function getCatalogExcludePattern()->$pattern : Text
 Function doRun()->$result : Object
 	$result:=Super:C1706.doRun()  // copy files
 	
-	var $input : Object
-	$input:=OB Copy:C1225(This:C1470.input)
-	$input.projfile:=This:C1470.getXcodeProj()
-	$input.read:=True:C214
+	This:C1470.input:=OB Copy:C1225(This:C1470.input)
+	This:C1470.input.projfile:=This:C1470.getXcodeProj()
+	This:C1470.input.read:=True:C214
 	
 	$result:=ob_deepMerge($result; This:C1470.updateAssets())
 	
-	$input.formats:=mobile_actions("hostFormatList"; $input).formats  // will cache formats for next step
+	This:C1470.input.formats:=mobile_actions("hostFormatList"; This:C1470.input).formats  // will cache formats for next step
 	
 	// Add choice lists if any to action parameters
-	$result.choiceList:=mobile_actions("addChoiceList"; $input)
+	$result.choiceList:=mobile_actions("addChoiceList"; This:C1470.input)
 	ob_error_combine($result; $result.choiceList)
 	
 	If (FEATURE.with("customActionFormatterWithCode"))
 		
 		// Inject source code or resources
-		$result.injectHost:=mobile_actions("injectHost"; $input)
+		$result.injectHost:=mobile_actions("injectHost"; This:C1470.input)
 		ob_error_combine($result; $result.injectHost)
 		
 	End if 
