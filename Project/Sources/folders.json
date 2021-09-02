@@ -54,6 +54,7 @@
 			"NO_PUBLISHED_TABLES"
 		],
 		"classes": [
+			"Employes",
 			"EmployesEntity"
 		]
 	},
