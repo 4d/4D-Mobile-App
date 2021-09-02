@@ -410,6 +410,8 @@ Case of
 					
 				End if 
 				
+				//LISTBOX SET ROW FONT STYLE(*; $form.fieldList; Size of array(($IN.fields)->); Plain)
+				
 				//…………………………………………………………………………………………………
 			Else 
 				

@@ -410,7 +410,7 @@ Function update()
 								
 								If ($withDataSource)
 									
-									//This.placeholderGroup.hide()
+									This:C1470.placeholderGroup.hide()
 									
 								Else 
 									
@@ -1034,20 +1034,20 @@ Function doMandatory()
 	//End if 
 	//If (Value type($manifestData.type)=Is collection)
 	//$c:=New collection(\
-				"text"; \
-				"real"; \
-				"integer"; \
-				"boolean"; \
-				"picture")
+		"text"; \
+		"real"; \
+		"integer"; \
+		"boolean"; \
+		"picture")
 	//For each ($type; $manifestData.type)
 	//$index:=$c.indexOf($type)
 	//If ($index>=0)
 	//$type:=Choose($index; \
-				"string"; \
-				"number"; \
-				"number"; \
-				"bool"; \
-				"image")
+		"string"; \
+		"number"; \
+		"number"; \
+		"bool"; \
+		"image")
 	//End if 
 	//If ($formats[$type]#Null)
 	//// ENHANCE: could add maybe object instead of string, to add some other info like helptype or custom label

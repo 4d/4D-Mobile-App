@@ -12,12 +12,6 @@
 // Declarations
 #DECLARE($message : Object; $id : Text)->$response : Object
 
-If (False:C215)
-	C_OBJECT:C1216(await_MESSAGE; $1)
-	C_TEXT:C284(await_MESSAGE; $2)
-	C_OBJECT:C1216(await_MESSAGE; $0)
-End if 
-
 var $name : Text
 var $mode; $state; $winRef : Integer
 var $time : Time

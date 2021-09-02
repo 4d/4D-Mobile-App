@@ -283,6 +283,7 @@ Function androidForms  // android forms folder
 	
 	C_OBJECT:C1216($0)
 	
+	//This.target:=Folder(Folder("/RESOURCES/templates/android/form").platformPath; fk platform path)
 	This:C1470.target:=Folder:C1567(Folder:C1567("/RESOURCES/templates/form").platformPath; fk platform path:K87:2)
 	This:C1470.exists:=This:C1470.target.exists
 	

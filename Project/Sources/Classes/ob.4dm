@@ -24,7 +24,8 @@ Class constructor($content)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Set the container content
-Function setContent($content : Variant)->$object : Object
+Function setContent($content)->$object : Object
+	
 	This:C1470.success:=True:C214
 	
 	If (Count parameters:C259>=1)
