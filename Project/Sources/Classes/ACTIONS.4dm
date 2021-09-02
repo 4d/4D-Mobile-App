@@ -97,7 +97,7 @@ Function onLoad()
 	This:C1470.actions.focus()
 	
 	// Add the events that we cannot select in the form properties 😇
-	This:C1470.appendEvents(New collection:C1472(On Alternative Click:K2:36; On Before Data Entry:K2:39))
+	This:C1470.appendEvents(New collection:C1472(On Alternative Click:K2:36; On Before Data Entry:K2:39; On Data Change:K2:15))
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Load project actions
@@ -947,7 +947,8 @@ Function metaInfo($current : Object)->$result
 		"fontWeight"; "normal"; \
 		"cell"; New object:C1471(\
 		"tables"; New object:C1471; \
-		"names"; New object:C1471))
+		"names"; New object:C1471; \
+		"shorts"; New object:C1471))
 	
 	// Mark not or missing assigned table
 	If (Form:C1466.dataModel[String:C10($current.tableNumber)]=Null:C1517)
@@ -981,3 +982,8 @@ Function metaInfo($current : Object)->$result
 		$result.cell.names.stroke:=Choose:C955(EDITOR.isDark; "white"; "black")
 		
 	End if 
+	
+	// Redmine:#129995 : The short label value of a sort action shall be greyed and not
+	// editable from the action section of the project editor
+	$result.cell.shorts.stroke:=Choose:C955(String:C10($current.preset)="sort"; "gray"; "black")
+	

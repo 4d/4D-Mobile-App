@@ -160,7 +160,8 @@
 							"textAlign": "left",
 							"verticalAlign": "middle",
 							"events": [
-								"onDoubleClick"
+								"onDoubleClick",
+								"onBeforeDataEntry"
 							],
 							"header": {
 								"name": "Header4",
@@ -173,7 +174,8 @@
 								"timeFormat": "hh_mm_ss",
 								"textAlign": "left",
 								"verticalAlign": "middle"
-							}
+							},
+							"method": "ObjectMethods/shorts.4dm"
 						},
 						{
 							"name": "labels",
@@ -185,7 +187,8 @@
 							"textAlign": "left",
 							"verticalAlign": "middle",
 							"events": [
-								"onDoubleClick"
+								"onDoubleClick",
+								"onDataChange"
 							],
 							"header": {
 								"name": "Header6",

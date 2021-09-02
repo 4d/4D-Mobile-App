@@ -154,6 +154,17 @@ Else   // <== WIDGETS METHOD
 					$ƒ.dropCursor.hide()
 					
 					//_____________________________________
+				: ($e.code=On Data Change:K2:15)
+					
+					If (String:C10($ƒ.current.preset)="sort")
+						
+						// Redmine:#129995 : The value of the short label that is displayed shall be equal
+						// To the value that is available for the long label
+						$ƒ.current.shortLabel:=$ƒ.current.label
+						
+					End if 
+					
+					//_____________________________________
 			End case 
 			
 			//==============================================
