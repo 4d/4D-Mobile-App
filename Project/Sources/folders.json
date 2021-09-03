@@ -52,10 +52,6 @@
 			"ITUNE",
 			"LAUNCHSCREEN",
 			"NO_PUBLISHED_TABLES"
-		],
-		"classes": [
-			"Employes",
-			"EmployesEntity"
 		]
 	},
 	"_o_OBSOLETES": {
