@@ -1,0 +1,12 @@
+
+/* Class = "UILabel"; text = "Are you sure you want to log out ?"; ObjectID = "8mX-Hn-Puh"; */
+"8mX-Hn-Puh.text" = "Are you sure you want to log out?";
+
+/* Class = "UILabel"; text = "Are you sure you want to log out ?"; ObjectID = "8mX-Hn-Puh"; */
+"8mX-Hn-Puh.warningPendingTask.text" = "Warning ! - Content : Pending tasks will be deleted.\nAre you sure you want to log out?";
+
+/* Class = "UIButton"; normalTitle = "CANCEL"; ObjectID = "vds-no-Gaz"; */
+"vds-no-Gaz.normalTitle" = "CANCEL";
+
+/* Class = "UIButton"; normalTitle = "Log out"; ObjectID = "zmv-KV-Sin"; */
+"zmv-KV-Sin.normalTitle" = "Log out";

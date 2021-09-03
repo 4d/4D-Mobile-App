@@ -1,0 +1,12 @@
+
+/* Class = "UILabel"; text = "Are you sure you want to log out ?"; ObjectID = "8mX-Hn-Puh"; */
+"8mX-Hn-Puh.text" = "Voulez-vous vraiment vous déconnecter?";
+
+/* Class = "UILabel"; text = "Are you sure you want to log out ?"; ObjectID = "8mX-Hn-Puh"; */
+"8mX-Hn-Puh.warningPendingTask.text" = "Attention ! Les tâches non envoyées seront perdues.\nVoulez-vous vraiment vous déconnecter?";
+
+/* Class = "UIButton"; normalTitle = "CANCEL"; ObjectID = "vds-no-Gaz"; */
+"vds-no-Gaz.normalTitle" = "Annuler";
+
+/* Class = "UIButton"; normalTitle = "Log out"; ObjectID = "zmv-KV-Sin"; */
+"zmv-KV-Sin.normalTitle" = "Se déconnecter";
