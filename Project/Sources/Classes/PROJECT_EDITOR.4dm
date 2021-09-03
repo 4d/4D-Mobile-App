@@ -1,6 +1,8 @@
 Class extends form
 
-Class constructor
+Class constructor()
+	
+	var $t : Text
 	
 	Super:C1705("editor_CALLBACK")
 	
@@ -23,8 +25,6 @@ Class constructor
 	This:C1470.pendingTasks:=New collection:C1472
 	
 	// Initialize tools
-	var $t : Text
-	
 	For each ($t; New collection:C1472("str"; "path"; "tips"))
 		
 		This:C1470.instantiate($t)
@@ -196,6 +196,8 @@ Function design()
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function init()
 	
+	var $group : cs:C1710.group
+	
 	This:C1470.toBeInitialized:=False:C215
 	
 	This:C1470.subform("ribbon")
@@ -203,7 +205,6 @@ Function init()
 	This:C1470.subform("project")
 	This:C1470.subform("footer")
 	
-	var $group : cs:C1710.group
 	$group:=This:C1470.group("taskUI")
 	This:C1470.thermometer("taskIndicator").addToGroup($group)
 	This:C1470.formObject("taskDescription").addToGroup($group)
@@ -459,8 +460,6 @@ Function goToPage($page : Text)
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function addTask($task : Text)
 	
-	var $t : Text
-	
 	If (This:C1470.pendingTasks.query("name = :1"; $task).pop()=Null:C1517)
 		
 		RECORD.info("START: "+$task)
@@ -476,7 +475,6 @@ Function addTask($task : Text)
 Function removeTask($task : Text)
 	
 	var $indx : Integer
-	var $t; $task : Text
 	
 	$indx:=This:C1470.pendingTasks.extract("name").indexOf($task)
 	

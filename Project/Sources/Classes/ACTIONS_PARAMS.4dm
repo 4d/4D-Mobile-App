@@ -408,13 +408,10 @@ Function update()
 								This:C1470.min.setValue(String:C10(This:C1470.ruleValue("min")))
 								This:C1470.max.setValue(String:C10(This:C1470.ruleValue("max")))
 								
-								If ($withDataSource)
-									
-									//This.placeholderGroup.hide()
-									
-								Else 
-									
-									This:C1470.placeholderGroup.show($current.type#"bool")
+								
+								This:C1470.placeholderGroup.show($current.type#"bool")
+								
+								If (Not:C34($withDataSource))
 									
 									If ($current.type#"image")
 										
@@ -1034,33 +1031,20 @@ Function doMandatory()
 	//End if 
 	//If (Value type($manifestData.type)=Is collection)
 	//$c:=New collection(\
-				"text"; \
-				"real"; \
-				"integer"; \
-				"boolean"; \
-				"picture")
+						"text"; \
+						"real"; \
+						"integer"; \
+						"boolean"; \
+						"picture")
 	//For each ($type; $manifestData.type)
 	//$index:=$c.indexOf($type)
 	//If ($index>=0)
 	//$type:=Choose($index; \
-				"string"; \
-				"number"; \
-				"number"; \
-				"bool"; \
-				"image")
-	//End if 
-	//If ($formats[$type]#Null)
-	//// ENHANCE: could add maybe object instead of string, to add some other info like helptype or custom label
-	//If ($formats[$type].indexOf($manifestData)<0)
-	//$formats[$type].push($manifestData)
-	//End if 
-	//End if 
-	//End for each 
-	//End if 
-	//End if 
-	//End for each 
-	//End if 
-	//End if
+						"string"; \
+						"number"; \
+						"number"; \
+						"bool"; \
+						"image")
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Show current format on disk
