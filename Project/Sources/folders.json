@@ -213,6 +213,7 @@
 			"[PANELS]",
 			"[PROJECT]",
 			"FOOTER",
+			"LISTE_EDITOR",
 			"RIBON"
 		],
 		"methods": [
@@ -733,6 +734,11 @@
 		"methods": [
 			"LOG_EVENT",
 			"noError"
+		]
+	},
+	"LISTE_EDITOR": {
+		"forms": [
+			"LISTE_EDITOR"
 		]
 	},
 	"Localization": {
