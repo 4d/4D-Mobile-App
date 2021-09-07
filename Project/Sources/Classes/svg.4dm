@@ -184,7 +184,7 @@ Function picture($exportType : Variant; $keepStructure : Boolean)->$picture : Pi
 	
 	//———————————————————————————————————————————————————————————
 	// Writes the content of the SVG tree into a disk file
-Function exportText($file : 4D:C1709.file; $keepStructure : Boolean)->$this : cs:C1710.xml
+Function exportText($file : 4D:C1709.File; $keepStructure : Boolean)->$this : cs:C1710.xml
 	
 	If (Count parameters:C259=2)
 		
@@ -200,7 +200,7 @@ Function exportText($file : 4D:C1709.file; $keepStructure : Boolean)->$this : cs
 	
 	//———————————————————————————————————————————————————————————
 	// Writes the contents of the SVG tree into a picture file
-Function exportPicture($file : 4D:C1709.file; $keepStructure : Boolean)->$this : cs:C1710.xml
+Function exportPicture($file : 4D:C1709.File; $keepStructure : Boolean)->$this : cs:C1710.xml
 	
 	var $picture : Picture
 	

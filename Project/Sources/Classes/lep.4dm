@@ -813,7 +813,7 @@ ATTRIB [+R | -R] [+A | -A ] [+S | -S] [+H | -H] [+I | -I]
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//Set write accesses to a directory with all its sub-folders and files
-Function unlockDirectory($cible : 4D:C1709.folder)->$this : cs:C1710.lep
+Function unlockDirectory($cible : 4D:C1709.Folder)->$this : cs:C1710.lep
 	
 	If (Bool:C1537($cible.exists))
 		

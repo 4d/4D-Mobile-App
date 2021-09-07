@@ -19,10 +19,9 @@ var $p : Picture
 var $forAndroidOnly; $forIosOnly; $isSelected; $success : Boolean
 var $i; $indx : Integer
 var $x : Blob
-var $data; $manifest; $o; $picker : Object
+var $data; $manifest; $o; $picker; $template : Object
 var $c : Collection
 var $error : cs:C1710.error
-var $template : 4D:C1709.File
 var $folder; $internal; $userTemplates : 4D:C1709.Folder
 var $zip : 4D:C1709.ZipArchive
 var $str : cs:C1710.str

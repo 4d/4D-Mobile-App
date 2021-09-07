@@ -43,7 +43,7 @@ Class constructor($file : 4D:C1709.File)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function read($file : 4D:C1709.file)->$plist : cs:C1710.plist
+Function read($file : 4D:C1709.File)->$plist : cs:C1710.plist
 	
 	var $inputStream; $outputStream; $errorStream : Text
 	var $x : Blob

@@ -15,6 +15,14 @@ Class constructor($objectName : Text; $datasource)
 	
 	This:C1470.parent:=This:C1470.getParent()
 	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//⚠️
+Function getCoordinates()->$coordinates : Object
+	
+	$coordinates:=Super:C1706.getCoordinates()
+	
+	This:C1470.getSubform()
+	
 	//=== === === === === === === === === === === === === === === === === === ===
 Function getParent()->$parent : Object
 	

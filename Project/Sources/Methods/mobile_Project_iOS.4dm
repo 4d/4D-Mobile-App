@@ -23,9 +23,9 @@ var $isDebug; $success; $verbose : Boolean
 var $start : Integer
 var $appManifest; $Dir_template; $fixes; $isSearchable; $log; $Obj_result_build; $Obj_result_device; $project : Object
 var $server; $tags; $template; $ui : Object
+var $certificateFile : 4D:C1709.File
 var $appFolder; $cacheFolder; $destinationFolder : 4D:C1709.Folder
 var $debugLog : cs:C1710.debugLog
-var $certificateFile : cs:C1710.doc
 var $path : cs:C1710.path
 var $simctl : cs:C1710.simctl
 

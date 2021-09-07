@@ -98,6 +98,13 @@
 			"tester_net"
 		]
 	},
+	"(____FOR_TESTS)": {
+		"classes": [
+			"Employes",
+			"EmployesEntity",
+			"EmployesSelection"
+		]
+	},
 	"[ android ]": {
 		"methods": [
 			"COMPILER_android",
@@ -1044,5 +1051,9 @@
 			"xml_refToObject"
 		]
 	},
-	"trash": {}
+	"trash": {
+		"groups": [
+			"(____FOR_TESTS)"
+		]
+	}
 }

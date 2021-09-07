@@ -14,7 +14,7 @@ var $fieldID; $relatedID; $t; $tableID : Text
 var $type : Integer
 var $exposedDatastore; $field; $info; $o; $table; $template : Object
 var $c; $catalog; $fieldTypes; $types : Collection
-var $file : 4D:C1709.file
+var $file : 4D:C1709.File
 var $internalFolder; $userFolder : 4D:C1709.Folder
 var $path : cs:C1710.path
 var $plist : cs:C1710.plist

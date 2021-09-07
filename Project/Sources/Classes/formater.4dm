@@ -38,8 +38,7 @@ Function getByType($type : Integer; $host : Boolean)->$formatters : Collection
 	var $hostƒ : Boolean
 	var $archive; $errors; $manifest; $o : Object
 	var $c : Collection
-	var $resources : cs:C1710.path
-	var $formator : 4D:C1709.Folder
+	var $formator; $resources : 4D:C1709.Folder
 	
 	If (Count parameters:C259>=2)
 		

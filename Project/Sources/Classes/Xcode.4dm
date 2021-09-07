@@ -421,7 +421,7 @@ Function installTools
 	var $pid : Text
 	var $o : Object
 	
-	$o:=This:C1470.lepPid("xcode-select --install")
+	$o:=This:C1470.lep("xcode-select --install")
 	
 	If ($o.success)  // wait for end of process
 		

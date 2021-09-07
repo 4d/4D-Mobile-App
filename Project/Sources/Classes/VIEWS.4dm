@@ -84,7 +84,17 @@ Function onLoad()
 Function _update()
 	
 	This:C1470.template:=Form:C1466.$dialog[Current form name:C1298].template
-	This:C1470.manifest:=This:C1470.choose(This:C1470.template=Null:C1517; Formula:C1597(Null:C1517); Formula:C1597(This:C1470.template.manifest))
+	
+	If (This:C1470.template=Null:C1517)
+		
+		//This.manifest:=This.choose(This.template=Null; Formula(Null); Formula(This.template.manifest))
+		This:C1470.manifest:=Null:C1517
+		
+	Else 
+		
+		This:C1470.manifest:=This:C1470.template.manifest
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function setTab()
@@ -430,7 +440,7 @@ Function setTemplate($browser : Object)
 				
 				//Else
 				//$o:=New object(\
-																																													"url"; Get localized string("res_"+This.typeForm()+"Forms"))
+																																																		"url"; Get localized string("res_"+This.typeForm()+"Forms"))
 				//End if
 				
 				This:C1470.form.form.call(New collection:C1472("initBrowser"; $o))

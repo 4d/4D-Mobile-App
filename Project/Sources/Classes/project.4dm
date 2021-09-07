@@ -879,20 +879,19 @@ Function removeTable
 	This:C1470.removeFromMain($1)
 	
 	//====================================
-Function getCatalog
-	var $0 : Collection
+Function getCatalog()->$catalog : Collection
 	
 	Case of 
 			
 			//____________________________________
 		: (This:C1470.$project#Null:C1517)
 			
-			$0:=This:C1470.$project.$catalog
+			$catalog:=This:C1470.$project.$catalog
 			
 			//____________________________________
 		: (This:C1470.$catalog#Null:C1517)
 			
-			$0:=This:C1470.$catalog
+			$catalog:=This:C1470.$catalog
 			
 			//____________________________________
 		Else 

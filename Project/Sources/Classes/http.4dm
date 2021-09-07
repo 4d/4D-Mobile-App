@@ -89,7 +89,7 @@ Function setURL($url)->$this : cs:C1710.http
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// To set the response type
-Function setResponseType($type : Integer; $file : 4D:C1709.file)->$this : cs:C1710.http
+Function setResponseType($type : Integer; $file : 4D:C1709.File)->$this : cs:C1710.http
 	
 	This:C1470.responseType:=$type
 	
@@ -444,8 +444,8 @@ Function get()->$this : cs:C1710.http
 		//If (This.success)
 		
 		//ARRAY TO COLLECTION(This.headers; \
-						$headerNames; "name"; \
-						$headerValues; "value")
+									$headerNames; "name"; \
+									$headerValues; "value")
 		
 		//This._response($t; $x)
 		

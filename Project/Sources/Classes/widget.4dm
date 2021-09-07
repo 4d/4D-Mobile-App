@@ -143,41 +143,6 @@ Function setPicture($proxy : Text)->$this : cs:C1710.widget
 	
 	$this:=This:C1470
 	
-	//________________________________________________________________
-	// ⚠️ 
-Function getCoordinates()->$coordinates : Object
-	
-	$coordinates:=Super:C1706.getCoordinates()
-	
-	Case of 
-			
-			//…………………………………………………………………………………………………
-		: (This:C1470.type=Object type picture input:K79:5)
-			
-			This:C1470.getScrollPosition()
-			This:C1470.getDimensions()
-			
-			//…………………………………………………………………………………………………
-		: (This:C1470.type=Object type listbox:K79:8)
-			
-			This:C1470.getScrollPosition()
-			This:C1470.getScrollbars()
-			This:C1470.updateDefinition()
-			This:C1470.updateCell()
-			
-			//…………………………………………………………………………………………………
-		: (This:C1470.type=Object type subform:K79:40)
-			
-			This:C1470.getSubform()
-			
-			//…………………………………………………………………………………………………
-		Else 
-			
-			//ASSERT(False; "Non implemented for: "+String(This.type))
-			
-			//…………………………………………………………………………………………………
-	End case 
-	
 /*══════════════════════════*/
 Function getEnterable
 	
@@ -479,7 +444,7 @@ Function catch
 		
 		If (This:C1470.callback#Null:C1517)
 			
-			This:C1470.callback()
+			This:C1470.callback.call()
 			
 		End if 
 	End if 
@@ -512,7 +477,7 @@ Function execute
 	
 	If (Asserted:C1132(This:C1470.callback#Null:C1517; "No callback method define"))
 		
-		This:C1470.callback()
+		This:C1470.callback.call()
 		
 	End if 
 	
@@ -573,29 +538,19 @@ Function getShortcut
 /*══════════════════════════
 .setShortcut(text{;int} ) -> This
 ══════════════════════════*/
-Function setShortcut
-	
-	C_TEXT:C284($1)  // key
-	C_LONGINT:C283($2)  // modifier
+Function setShortcut($key : Text; $modifier : Integer)->$this : cs:C1710.widget
 	
 	If (Count parameters:C259>=2)
 		
-		OBJECT SET SHORTCUT:C1185(*; This:C1470.name; $1; $2)
+		OBJECT SET SHORTCUT:C1185(*; This:C1470.name; $key; $modifier)
 		
 	Else 
 		
-		OBJECT SET SHORTCUT:C1185(*; This:C1470.name; $1)
+		OBJECT SET SHORTCUT:C1185(*; This:C1470.name; $key)
 		
 	End if 
 	
-	If (OB Instance of:C1731(This:C1470; cs:C1710.button))
-		
-		This:C1470.highlightShortcut()
-		
-	End if 
-	
-	C_OBJECT:C1216($0)
-	$0:=This:C1470
+	$this:=This:C1470
 	
 /*══════════════════════════
 .focus() -> This

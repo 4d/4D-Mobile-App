@@ -296,11 +296,12 @@ If (OB Is empty:C1297(SHARED)) | $reset
 	
 	If ($file.exists)
 		
-		$file:=JSON Resolve pointers:C1478(JSON Parse:C1218(File:C1566("/RESOURCES/Resources.json").getText()))
+		var $result : Object
+		$result:=JSON Resolve pointers:C1478(JSON Parse:C1218($file.getText()))
 		
-		If ($file.success)
+		If ($result.success)
 			
-			SHARED.resources:=$file.value
+			SHARED.resources:=$result.value
 			
 		Else 
 			

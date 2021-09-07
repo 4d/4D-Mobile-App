@@ -21,7 +21,7 @@ var $p : Picture
 var $i; $iconHeight; $iconWidth; $length : Integer
 var $params : Object
 var $host; $icons; $pathnames : Collection
-var $folder : cs:C1710.path
+var $folder : 4D:C1709.Folder
 
 // ----------------------------------------------------
 // Initialisations

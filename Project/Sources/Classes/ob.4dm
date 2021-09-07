@@ -25,6 +25,7 @@ Class constructor($content)
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Set the container content
 Function setContent($content : Variant)->$object : Object
+	
 	This:C1470.success:=True:C214
 	
 	If (Count parameters:C259>=1)
@@ -65,7 +66,7 @@ Function setContent($content : Variant)->$object : Object
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Load from a json file
-Function load($file : 4D:C1709.file)->$object : Object
+Function load($file : 4D:C1709.File)->$object : Object
 	
 	var $methodCalledOnError : Text
 	
@@ -109,7 +110,7 @@ Function load($file : 4D:C1709.file)->$object : Object
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Save to json file
-Function save($file : 4D:C1709.file)
+Function save($file : 4D:C1709.File)
 	
 	//#MARK_TODO
 	

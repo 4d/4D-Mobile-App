@@ -146,7 +146,7 @@ Function copyEmbeddedDataLib
 	//
 Function copyResources
 	var $0 : Object
-	var $1 : 4D:C1709.File  // 4D Mobile Project
+	var $1 : 4D:C1709.Folder  // 4D Mobile Project
 	var $androidAssets; $currentFolder : 4D:C1709.Folder
 	var $currentFile; $copyDest : 4D:C1709.File
 	
@@ -211,7 +211,7 @@ Function copyResources
 	//
 Function copyDataSet
 	var $0 : Object
-	var $1 : 4D:C1709.File  // 4D Mobile Project
+	var $1 : 4D:C1709.Folder  // 4D Mobile Project
 	var $xcassets; $copyDest : 4D:C1709.Folder
 	
 	$0:=New object:C1471(\

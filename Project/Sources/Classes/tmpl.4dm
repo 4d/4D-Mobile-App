@@ -101,8 +101,7 @@ Class constructor($name : Text; $type : Text)
 	
 /* ============================================================================*/
 	// Update the template if any
-Function update
-	var $0 : Object
+Function update()->$this : cs:C1710.tmpl
 	
 	var $dom; $node; $root; $t : Text
 	var $succes : Boolean
@@ -435,7 +434,7 @@ Function update
 		End if 
 	End if 
 	
-	$0:=This:C1470
+	$this:=This:C1470
 	
 /* ============================================================================*/
 Function getBinding($node : Text)->$binding : Text
@@ -444,10 +443,9 @@ Function getBinding($node : Text)->$binding : Text
 	
 	//============================================================================
 	// Return the embedded cancel button used into the templates
-Function cancel
-	var $0 : Text
+Function cancel()->$embedded : Text
 	
-	$0:="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAuJJREFUSA3tlEtoU1EQhptHI4lp8FUMlIIPpH"+\
+	$embedded:="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAuJJREFUSA3tlEtoU1EQhptHI4lp8FUMlIIPpH"+\
 		"ZRixTdFYIIUrCBkJTQlCpEjFJw4UYRFaObVnEjWbhQqRgLtiG6koAiIiiKG0UkiRXrShHbQtNiJEnT+E3hykFyb+LGheTAMOf8Z2b+mblzT1NTYzU68L91wPS3Bfn9/l1ms7nf"+\
 		"ZDLtxHcN8oX9E5vN9jQej/+oN17dxAMDAx0Qnl9ZWfESfBr5ipSQDRB3oOeR6NTUVBJdc9VFDOk+gscrlcoMEc9R3ZuJiYlFie7xeKytra1bSOoIxxFsriNnE4lEWe71Vk1"+\
 		"iqRTnZ0gCOUXAn3rBAoHAQRK8y/0YdmN6doJbjC6lGqfTeY1gQnaIYAUj+3Q6Pd3V1TVHxRc6OzsfZjKZWT17s96F4LSwmyD95XL5DKRFwaLRqHl4eHit7GXREVtfX58M2ep"+\
@@ -459,7 +457,7 @@ Function cancel
 	
 	//============================================================================
 	// Return the source folder of the template (could be a zip)
-Function getSources($name : Text; $type : Text)->$template : 4D:C1709.folder
+Function getSources($name : Text; $type : Text)->$template : 4D:C1709.Folder
 	
 	var $formName; $formType; $item : Text
 	var $success : Boolean
@@ -987,7 +985,6 @@ Function reorder($tableID : Text)  //#WIP
 Function enrich($fields : Collection; $previouslyUsedForms : Object)
 	var $3 : Text
 	var $form; $formNotToUse : Text
-	var $use : Boolean
 	var $o : Object
 	
 	If (Count parameters:C259>=3)

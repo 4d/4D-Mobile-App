@@ -9,10 +9,9 @@
 // ----------------------------------------------------
 // Declarations
 var $formName; $url : Text
-var $e : Object
+var $archive; $e : Object
 var $c : Collection
 var $destination : 4D:C1709.Folder
-var $archive : 4D:C1709.ZipArchive
 var $http : cs:C1710.http
 var $progress : cs:C1710.progress
 

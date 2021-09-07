@@ -85,7 +85,7 @@ Function openURL
 			//……………………………………………………………………………………………………
 		: (Value type:C1509($1)=Is object:K8:27)
 			
-			If (OB Instance of:C1731($1; 4D:C1709.file))
+			If (OB Instance of:C1731($1; 4D:C1709.File))
 				
 				This:C1470.url:="file:///"+$1.path
 				

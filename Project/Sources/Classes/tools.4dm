@@ -363,7 +363,7 @@ Function choose($requirement)->$choosed
 	
 	//====================================================================
 	// Returns a digest signature of the contents of a folder
-Function folderDigest($folder : 4D:C1709.folder)->$digest : Text
+Function folderDigest($folder : 4D:C1709.Folder)->$digest : Text
 	
 	var $o : Object
 	var $x : Blob

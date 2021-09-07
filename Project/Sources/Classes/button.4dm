@@ -14,6 +14,25 @@ Class constructor($name : Text; $datasource)
 	End if 
 	
 /*═════════════════════════════════════════════════
+⚠️ .setShortcut(text{;int} ) -> This
+*/
+Function setShortcut($key : Text; $modifier : Integer)->$this : cs:C1710.widget
+	
+	If (Count parameters:C259>=2)
+		
+		Super:C1705($key; $modifier)
+		
+	Else 
+		
+		Super:C1705($key)
+		
+	End if 
+	
+	This:C1470.highlightShortcut()
+	
+	$this:=This:C1470
+	
+/*═════════════════════════════════════════════════
 Tryes to underline the first capital letter or,
 if not found the first letter, corresponding to
 the associated key shortcut

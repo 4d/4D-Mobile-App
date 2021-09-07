@@ -30,6 +30,17 @@ Class constructor($name : Text; $datasource)
 	This:C1470.saveProperties()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// ⚠️ 
+Function getCoordinates()->$coordinates : Object
+	
+	$coordinates:=Super:C1706.getCoordinates()
+	
+	This:C1470.getScrollPosition()
+	This:C1470.getScrollbars()
+	This:C1470.updateDefinition()
+	This:C1470.updateCell()
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Select row(s)
 Function select($row : Integer)->$this : cs:C1710.listbox
 	

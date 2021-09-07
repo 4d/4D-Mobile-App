@@ -27,10 +27,10 @@ Function run
 	
 	If (This:C1470.path.exists)
 		
-		C_TEXT:C284($Txt_buffer)
-		$Txt_buffer:=This:C1470.path.getText()
+		C_TEXT:C284($t)
+		$t:=This:C1470.path.getText()
 		
-		If (Length:C16($Txt_buffer)>0)  // a custom template or not well described one (do not warn about it but we could read by reading file)
+		If (Length:C16($t)>0)  // a custom template or not well described one (do not warn about it but we could read by reading file)
 			
 			C_OBJECT:C1216($Obj_element)
 			$Obj_element:=New object:C1471(\
@@ -42,7 +42,7 @@ Function run
 				
 				If ($Obj_tags.table[$Obj_element[$Txt_cmd]]#Null:C1517)  // there is selection action
 					
-					If (Position:C15($Txt_cmd; $Txt_buffer)=0)
+					If (Position:C15($Txt_cmd; $t)=0)
 						
 						ob_warning_add($Obj_out; "List template storyboard '"+This:C1470.path.path+"'do not countains action tag "+$Txt_cmd)
 						
@@ -136,25 +136,26 @@ Function run
 		
 	End if 
 	
-Function xmlAppendSearchWithBarCode
-	C_OBJECT:C1216($Dom_; $0)
-	C_OBJECT:C1216($Dom_root; $1)
-	$Dom_root:=$1
+Function xmlAppendSearchWithBarCode($root : Object)->$node : Object
 	
-	$Dom_:=$Dom_root.findByXPath("//*/userDefinedRuntimeAttribute[@keyPath='searchableField']")
-	If ($Dom_.success)
-		C_OBJECT:C1216($Dom_parent)
-		$Dom_parent:=$Dom_.parent()
+	var $t : Text
+	var $parent : Object
+	
+	$node:=$root.findByXPath("//*/userDefinedRuntimeAttribute[@keyPath='searchableField']")
+	
+	If ($node.success)
 		
-		C_TEXT:C284($Txt_buffer)
-		If (Not:C34($Dom_parent.findByXPath("[@keyPath=searchUsingCodeScanner]").success))
-			$Txt_buffer:="<userDefinedRuntimeAttribute type=\"boolean\" keyPath=\"searchUsingCodeScanner\" value=\"YES\"/>"
-			$Dom_parent.append(xml("parse"; New object:C1471("variable"; $Txt_buffer)))
+		$parent:=$node.parent()
+		
+		If (Not:C34($parent.findByXPath("[@keyPath=searchUsingCodeScanner]").success))
+			
+			$t:="<userDefinedRuntimeAttribute type=\"boolean\" keyPath=\"searchUsingCodeScanner\" value=\"YES\"/>"
+			$parent.append(xml("parse"; New object:C1471("variable"; $t)))
+			
 		Else 
-			$Dom_.success:=False:C215  // nothing done , so nothing to do (like write file)
+			
+			$node.success:=False:C215  // Nothing done , so nothing to do (like write file)
+			
 		End if 
-		
 	End if 
-	
-	$0:=$Dom_
 	

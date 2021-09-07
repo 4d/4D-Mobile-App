@@ -8,7 +8,7 @@
 // 
 // ----------------------------------------------------
 // Declarations
-#DECLARE ($oIN : Object)
+#DECLARE($oIN : Object)
 
 If (False:C215)
 	C_OBJECT:C1216(tmpl_REORDER; $1)
@@ -20,7 +20,7 @@ var $indx; $Lon_keyType : Integer
 var $cache; $o; $oAttributes; $oField; $oIN : Object
 var $c; $affected; $binding : Collection
 var $structure : cs:C1710.structure
-var $template : cs:C1710.Template
+var $template : cs:C1710.tmpl
 
 $template:=$oIN.template
 

@@ -167,7 +167,7 @@ Function updateParameters($action : Object)
 	
 	var $o : Object
 	
-	$o:=This:C1470.parametersLink()
+	$o:=This:C1470.parametersLink.call()
 	
 	If ($o#Null:C1517)
 		

@@ -24,11 +24,13 @@ Class constructor
 	This:C1470.size:=0
 	
 /*════════════════════════════════════════════*/
-Function getCoordinates
+	// ⚠️ 
+Function getCoordinates()->$coordinates : Object
 	
-	Super:C1706.getCoordinates()
+	$coordinates:=Super:C1706.getCoordinates()
+	
 	This:C1470.getScrollbars()
-	
+	This:C1470.getScrollPosition()
 	This:C1470.getDimensions()
 	
 Function getDimensions
