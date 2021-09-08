@@ -61,7 +61,7 @@ Case of
 	: ($IN.action="catalog")  // Return the exposed datastore
 		
 		// -------------------------------------------------------------------------------------------
-		// If 'name' or 'tableNumber is not null, the result is limited to the corresponding table
+		// If 'name' or 'tableNumber is not null, 
 		// -------------------------------------------------------------------------------------------
 		
 		// Build Exposed Datastore:
@@ -73,7 +73,7 @@ Case of
 		// ! A relation N -> 1 is not referenced if the field isn't exposed with 4D Mobile services !
 		// -------------------------------------------------------------------------------------------
 		
-		$datastore:=_4D_Build Exposed Datastore:C1598
+		$datastore:=ds:C1482  //_4D_Build Exposed Datastore
 		
 		$OUT.success:=($datastore#Null:C1517)
 		
@@ -123,10 +123,13 @@ Case of
 							
 							For each ($fieldName; $datastore[$tableName])
 								
+								//ASSERT($fieldName#"computedName")
+								
 								If ($fieldName#SHARED.stampField.name)
 									
 									$field:=$datastore[$tableName][$fieldName]
 									
+									//#TO_DO : $table.field.query("name = :1"; $fieldname).pop()
 									$l:=$table.field.extract("name").indexOf($fieldName)
 									
 									If ($l>=0)
@@ -211,9 +214,12 @@ Case of
 												 & ($field.fieldType#Is BLOB:K8:12)\
 												 & ($field.fieldType#Is subtable:K8:11)
 												
-												$field.valueType:=$field.type
-												$field.type:=-3
-												$table.field.push($field)
+												$table.field.push(New object:C1471(\
+													"name"; $fieldName; \
+													"kind"; $field.kind; \
+													"type"; -3; \
+													"fieldType"; $field.fieldType; \
+													"valueType"; $field.type))
 												
 											End if 
 											
@@ -561,7 +567,7 @@ Case of
 							//For each ($Txt_field;$Obj_relatedDataClass)
 							
 							//If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																																																								
+																																																																								
 							//If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
 							//$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])

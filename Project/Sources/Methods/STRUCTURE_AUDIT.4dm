@@ -435,6 +435,11 @@ If ($cacheFile.exists)
 									End if 
 									
 									//______________________________________________________
+								: (PROJECT.isComputedAttribute($item.value))
+									
+									//#TO_DO
+									
+									//______________________________________________________
 								Else 
 									
 									ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")

@@ -729,6 +729,11 @@ Function isRelationToMany
 		
 	End if 
 	
+	//==================================================================
+Function isComputedAttribute($field : Object)->$is : Boolean
+	
+	$is:=(String:C10($field.kind)="calculated") | (Num:C11($field.type)=-3)
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if the 4D Type is a Numeric type
 Function isNumeric($type : Integer)->$isNumeric : Boolean
@@ -774,7 +779,6 @@ Function isCustomResource($resource : Text)->$custom : Boolean
 Function getSortableFields($table; $ordered : Boolean)->$fields : Collection
 	
 	var $field; $model : Object
-	var $c : Collection
 	
 	$fields:=New collection:C1472
 	
@@ -801,18 +805,38 @@ Function getSortableFields($table; $ordered : Boolean)->$fields : Collection
 				//______________________________________________________
 		End case 
 		
-		$c:=OB Entries:C1720($model).filter("col_formula"; Formula:C1597($1.result:=Match regex:C1019("^\\d+$"; $1.value.key; 1)))
 		
-		For each ($field; $c)
+		
+		If (FEATURE.with("computedProperties"))
 			
-			If (This:C1470.isSortable($field.value))
+			For each ($field; OB Entries:C1720($model))
 				
-				$field.value.fieldNumber:=Num:C11($field.key)
-				$fields.push($field.value)
+				If ($field.value.fieldType#Null:C1517)
+					
+					If (This:C1470.isSortable($field.value))
+						
+						//$field.value.fieldNumber:=Num($field.key)
+						$fields.push($field.value)
+						
+					End if 
+				End if 
+			End for each 
+			
+		Else 
+			
+			var $c : Collection
+			$c:=OB Entries:C1720($model).filter("col_formula"; Formula:C1597($1.result:=Match regex:C1019("^\\d+$"; $1.value.key; 1)))
+			
+			For each ($field; $c)
 				
-			End if 
-		End for each 
-		
+				If (This:C1470.isSortable($field.value))
+					
+					$field.value.fieldNumber:=Num:C11($field.key)
+					$fields.push($field.value)
+					
+				End if 
+			End for each 
+		End if 
 		If (Count parameters:C259>=2)
 			
 			If ($ordered)

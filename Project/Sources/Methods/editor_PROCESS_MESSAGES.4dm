@@ -97,9 +97,7 @@ Case of
 			
 		Else 
 			
-			ASSERT:C1129(False:C215)
-			
-			// Display an error message ?
+			ASSERT:C1129(False:C215)  // Display an error message ?
 			
 		End if 
 		

@@ -207,6 +207,7 @@ Case of
 							If ($o.success)
 								
 								For each ($o; $o.fields)
+									//For each ($o; $o.fields.orderBy("name asc"))
 									
 									$t:=$o.path
 									

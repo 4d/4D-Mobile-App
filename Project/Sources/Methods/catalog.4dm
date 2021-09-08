@@ -18,9 +18,9 @@ If (False:C215)
 	C_OBJECT:C1216(catalog; $2)
 End if 
 
-var $Txt_action; $Txt_field : Text
+var $Txt_action; $fieldName : Text
 var $Lon_parameters : Integer
-var $o; $Obj_datastore; $Obj_in; $Obj_out; $Obj_table : Object
+var $o; $Obj_datastore; $Obj_in; $Obj_out; $table : Object
 var $Col_tables : Collection
 
 // ----------------------------------------------------
@@ -55,7 +55,7 @@ Case of
 		//______________________________________________________
 	: ($Txt_action="datastore")
 		
-		$Obj_datastore:=_4D_Build Exposed Datastore:C1598
+		$Obj_datastore:=ds:C1482  //_4D_Build Exposed Datastore
 		
 		$Obj_out.success:=($Obj_datastore#Null:C1517)
 		
@@ -93,8 +93,8 @@ Case of
 			
 			If ($Obj_out.success)
 				
-				$Obj_table:=$Obj_datastore[$Obj_in.tableName]
-				$Obj_out.success:=($Obj_table#Null:C1517)
+				$table:=$Obj_datastore[$Obj_in.tableName]
+				$Obj_out.success:=($table#Null:C1517)
 				
 			End if 
 			
@@ -102,24 +102,24 @@ Case of
 				
 				$Obj_out.fields:=New collection:C1472
 				
-				For each ($Txt_field; $Obj_table)
+				For each ($fieldName; $table)
 					
 					Case of 
 							
 							//______________________________________________________
-						: ($Obj_table[$Txt_field].kind="storage")  // Field
+						: ($table[$fieldName].kind="storage")  // Field
 							
-							$o:=OB Copy:C1225($Obj_table[$Txt_field])
+							$o:=OB Copy:C1225($table[$fieldName])
 							$o.typeLegacy:=$o.fieldType
 							$Obj_out.fields.push($o)
 							
 							//______________________________________________________
-						: ($Obj_table[$Txt_field].kind="relatedEntity")  // N -> 1 relation
+						: ($table[$fieldName].kind="relatedEntity")  // N -> 1 relation
 							
-							$Obj_out.fields.push(OB Copy:C1225($Obj_table[$Txt_field]))
+							$Obj_out.fields.push(OB Copy:C1225($table[$fieldName]))
 							
 							//______________________________________________________
-						: ($Obj_table[$Txt_field].kind="relatedEntities")  // 1 -> N relation
+						: ($table[$fieldName].kind="relatedEntities")  // 1 -> N relation
 							
 							// <NOT YET  MANAGED>
 							
@@ -129,9 +129,9 @@ Case of
 							// <NOT YET  MANAGED>
 							
 							//______________________________________________________
-						: ($Obj_table[$Txt_field].kind="calculated")  // Computed properties
+						: ($table[$fieldName].kind="calculated")  // Computed properties
 							
-							$o:=OB Copy:C1225($Obj_table[$Txt_field])
+							$o:=OB Copy:C1225($table[$fieldName])
 							$o.type:=-3
 							$Obj_out.fields.push($o)
 							
@@ -181,8 +181,8 @@ Case of
 			
 			If ($Obj_out.success)
 				
-				$Obj_table:=$Obj_datastore[$Obj_in.tableName]
-				$Obj_out.success:=($Obj_table#Null:C1517)
+				$table:=$Obj_datastore[$Obj_in.tableName]
+				$Obj_out.success:=($table#Null:C1517)
 				
 			End if 
 			
@@ -191,19 +191,19 @@ Case of
 				$Col_tables.push($Obj_in.tableName)
 				$Obj_out.fields:=New collection:C1472
 				
-				For each ($Txt_field; $Obj_table)
+				For each ($fieldName; $table)
 					
 					Case of 
 							
 							//______________________________________________________
-						: ($Obj_table[$Txt_field].name=SHARED.stampField.name)
+						: ($table[$fieldName].name=SHARED.stampField.name)
 							
 							// DON'T DISPLAY STAMP FIELD
 							
 							//______________________________________________________
-						: ($Obj_table[$Txt_field].kind="storage")  // Field
+						: ($table[$fieldName].kind="storage")  // Field
 							
-							$o:=OB Copy:C1225($Obj_table[$Txt_field])
+							$o:=OB Copy:C1225($table[$fieldName])
 							$o.path:=$o.name
 							
 							// #TEMPO [
@@ -215,19 +215,19 @@ Case of
 							$Obj_out.fields.push($o)
 							
 							//______________________________________________________
-						: ($Obj_table[$Txt_field].kind="relatedEntity")  // N -> 1 relation
+						: ($table[$fieldName].kind="relatedEntity")  // N -> 1 relation
 							
 							If (Num:C11($Obj_in.level)=0)
 								
-								If ($Col_tables.indexOf($Obj_table[$Txt_field].relatedDataClass)=-1)\
-									 | ($Obj_table[$Txt_field].relatedDataClass=$Obj_in.tableName)
+								If ($Col_tables.indexOf($table[$fieldName].relatedDataClass)=-1)\
+									 | ($table[$fieldName].relatedDataClass=$Obj_in.tableName)
 									
-									If ($Obj_table[$Txt_field].relatedDataClass=$Obj_in.tableName)  // Recursive relation
+									If ($table[$fieldName].relatedDataClass=$Obj_in.tableName)  // Recursive relation
 										
-										err_PUSH($Obj_out; "Recursive relation \""+$Txt_field+"\" on ["+String:C10($Obj_in.tableName)+"]"; Information message:K38:1)
+										err_PUSH($Obj_out; "Recursive relation \""+$fieldName+"\" on ["+String:C10($Obj_in.tableName)+"]"; Information message:K38:1)
 										
 										$o:=catalog("fields"; New object:C1471(\
-											"tableName"; $Obj_table[$Txt_field].relatedDataClass; \
+											"tableName"; $table[$fieldName].relatedDataClass; \
 											"datastore"; $Obj_datastore; \
 											"tables"; $Col_tables; \
 											"level"; 1))  // <================================== [RECURSIVE CALL]
@@ -235,7 +235,7 @@ Case of
 									Else 
 										
 										$o:=catalog("fields"; New object:C1471(\
-											"tableName"; $Obj_table[$Txt_field].relatedDataClass; \
+											"tableName"; $table[$fieldName].relatedDataClass; \
 											"datastore"; $Obj_datastore; \
 											"tables"; $Col_tables))  // <================================== [RECURSIVE CALL]
 										
@@ -247,7 +247,7 @@ Case of
 										
 										For each ($o; $o.fields)
 											
-											$o.path:=$Obj_table[$Txt_field].name+"."+$o.path
+											$o.path:=$table[$fieldName].name+"."+$o.path
 											$Obj_out.fields.push($o)
 											
 										End for each 
@@ -259,13 +259,13 @@ Case of
 									
 									// <CIRCULAR REFERENCES>
 									
-									err_PUSH($Obj_out; "Circular relation ["+String:C10($Obj_in.tableName)+"] -> ["+String:C10($Obj_table[$Txt_field].relatedDataClass)+"]"; Warning message:K38:2)
+									err_PUSH($Obj_out; "Circular relation ["+String:C10($Obj_in.tableName)+"] -> ["+String:C10($table[$fieldName].relatedDataClass)+"]"; Warning message:K38:2)
 									
 								End if 
 							End if 
 							
 							//______________________________________________________
-						: ($Obj_table[$Txt_field].kind="relatedEntities")  // 1 -> N relation
+						: ($table[$fieldName].kind="relatedEntities")  // 1 -> N relation
 							
 							// <NOT YET  MANAGED>
 							
@@ -275,12 +275,18 @@ Case of
 							// <NOT YET  MANAGED>
 							
 							//______________________________________________________
-						: ($Obj_table[$Txt_field].kind="calculated")  // Computed properties
+						: ($table[$fieldName].kind="calculated")  // Computed properties
 							
-							$o:=OB Copy:C1225($Obj_table[$Txt_field])
+							$o:=OB Copy:C1225($table[$fieldName])
 							$o.path:=$o.name
 							$o.valueType:=$o.type
 							$o.type:=-3
+							
+							// #TEMPO [
+							$o.typeLegacy:=$o.fieldType
+							//]
+							
+							$Obj_out.fields.push($o)
 							
 							//______________________________________________________
 					End case 

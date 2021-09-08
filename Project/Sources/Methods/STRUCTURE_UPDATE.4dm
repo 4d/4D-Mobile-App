@@ -128,6 +128,23 @@ Else
 					End if 
 					
 					//………………………………………………………………………………………………………
+				: (PROJECT.isComputedAttribute($table[$t]))  // Computed attribute
+					
+					$found:=(String:C10($o.name)=$t)
+					
+					If ($found)
+						
+						$field:=$currentTable.field[$currentTable.field.extract("name").indexOf($t)]
+						
+					End if 
+					
+					
+					//………………………………………………………………………………………………………
+				Else 
+					
+					ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
+					
+					//………………………………………………………………………………………………………
 			End case 
 		End for each 
 		

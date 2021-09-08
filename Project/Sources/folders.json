@@ -9,6 +9,13 @@
 			"test_"
 		]
 	},
+	"____FOR_TESTS": {
+		"classes": [
+			"Employes",
+			"EmployesEntity",
+			"EmployesSelection"
+		]
+	},
 	"__IN WORKS": {
 		"methods": [
 			"_w_actions",
@@ -96,13 +103,6 @@
 			"COMPILER_UNUSED",
 			"net",
 			"tester_net"
-		]
-	},
-	"(____FOR_TESTS)": {
-		"classes": [
-			"Employes",
-			"EmployesEntity",
-			"EmployesSelection"
 		]
 	},
 	"[ android ]": {
@@ -1051,9 +1051,5 @@
 			"xml_refToObject"
 		]
 	},
-	"trash": {
-		"groups": [
-			"(____FOR_TESTS)"
-		]
-	}
+	"trash": {}
 }

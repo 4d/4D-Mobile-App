@@ -311,8 +311,8 @@ Case of
 		//=========================================================
 	: ($IN.action="appendField")
 		
-		var $dataModel : Object
-		$dataModel:=Form:C1466.dataModel
+		//var $dataModel : Object
+		//$dataModel:=Form.dataModel
 		
 		var $dataModel : Object
 		$dataModel:=PROJECT.dataModel

@@ -313,7 +313,7 @@ If (Num:C11($project.info.version)<=4)
 		$types[Is BLOB:K8:12]:="blob"
 		$types[Is object:K8:27]:="object"
 		
-		$exposedDatastore:=_4D_Build Exposed Datastore:C1598
+		$exposedDatastore:=ds:C1482  //_4D_Build Exposed Datastore
 		$catalog:=New collection:C1472
 		
 		//TRACE
@@ -373,6 +373,7 @@ If (Num:C11($project.info.version)<=4)
 									
 									$table[$o.key][$relatedID].fieldType:=$fieldTypes[$type]
 									$table[$o.key][$relatedID].type:=$types[$table[$o.key][$relatedID].fieldType]
+									
 								End if 
 							End if 
 						End for each 

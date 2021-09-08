@@ -153,9 +153,9 @@
 		</field>
 		<primary_key field_name="ID" field_uuid="0A26D100922E475A92C49657B6C02271"/>
 		<table_extra input_form="Input" output_form="Output">
-			<editor_table_info displayable_fields_count="6">
+			<editor_table_info displayable_fields_count="8">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="14.92578125" top="662.53125" width="140" height="167.33203125"/>
+				<coordinates left="14.92578125" top="662.53125" width="138.70056152344" height="218.55700683594"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -180,7 +180,7 @@
 		<table_extra input_form="Input" output_form="Output">
 			<editor_table_info fields_ordering="1" displayable_fields_count="4">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="227" top="680.671875" width="140" height="125.33203125"/>
+				<coordinates left="223.94409179688" top="680.11706542969" width="140" height="125.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>

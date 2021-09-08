@@ -152,10 +152,10 @@ FEATURE.unstable("freeActionName")  // follow https://project.4d.com/issues/1176
 _____________*/
 FEATURE.unstable("predictiveEntryInActionParam")  // Name of the action parameters and sorting criteria can be modified (#128898)
 
-FEATURE.unstable("customActionFormatter")  // Redmine #128195 custom input control for action parameter
-FEATURE.unstable("customActionFormatterWithCode")  // Redmine #129036 custom input control for action parameter with ios code
+FEATURE.unstable("customActionFormatter")  // #128195 custom input control for action parameter
+FEATURE.unstable("customActionFormatterWithCode")  // #129036 custom input control for action parameter with ios code
 
-FEATURE.unstable("computedProperties")  // Redmine #128514 [CS] Computed properties
+FEATURE.unstable("computedProperties")  // #130206 [MOBILE] Use computed attributes
 
 // to wip?
 FEATURE.unstable("newFormatterChoiceList")  // Menu to create formatter choice list directly , from data
