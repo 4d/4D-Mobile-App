@@ -1005,46 +1005,79 @@ Function doMandatory()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Format list
-	//Function getFormats()->$formats : Object
-	//var $type : Text
-	//var $index : Integer
-	//var $manifestData : Object
-	//var $c : Collection
-	//var $manifest : 4D.File
-	//var $folder : 4D.Folder
-	//$formats:=JSON Parse(File("/RESOURCES/actionParameters.json").getText()).formats
-	//If (FEATURE.with("customActionFormatter")) 
-	//$folder:=This.path.hostInputControls(False)
-	//If ($folder.exists)
-	//For each ($folder; $folder.folders())
-	//$manifest:=$folder.file("manifest.json")
-	//If ($manifest.exists)
-	//$manifestData:=JSON Parse($manifest.getText())
-	//If (Value type($manifestData.type)=Is text)
-	//// Transform as collection
-	//$manifestData.type:=New collection($manifestData.type)
-	//End if 
-	//If ($manifestData.choiceList#Null)
-	//If ($manifestData.format=Null)
-	//$manifestData.format:="push"  // Push/segmented/popover/sheet/picker
-	//End if 
-	//End if 
-	//If (Value type($manifestData.type)=Is collection)
-	//$c:=New collection(\
-						"text"; \
-						"real"; \
-						"integer"; \
-						"boolean"; \
-						"picture")
-	//For each ($type; $manifestData.type)
-	//$index:=$c.indexOf($type)
-	//If ($index>=0)
-	//$type:=Choose($index; \
-						"string"; \
-						"number"; \
-						"number"; \
-						"bool"; \
-						"image")
+Function getFormats()->$formats : Object
+	
+	var $type : Text
+	var $index : Integer
+	var $manifestData : Object
+	var $c : Collection
+	var $manifest : 4D:C1709.File
+	var $folder : 4D:C1709.Folder
+	
+	$formats:=JSON Parse:C1218(File:C1566("/RESOURCES/actionParameters.json").getText()).formats
+	
+	If (FEATURE.with("customActionFormatterWithCode"))
+		
+		$folder:=This:C1470.path.hostInputControls(False:C215)
+		
+		If ($folder.exists)
+			
+			For each ($folder; $folder.folders())
+				
+				$manifest:=$folder.file("manifest.json")
+				
+				If ($manifest.exists)
+					
+					$manifestData:=JSON Parse:C1218($manifest.getText())
+					
+					If ($manifestData.choiceList=Null:C1517)  // We do not want choice list formatter, only custom one without data source.
+						
+						If (Value type:C1509($manifestData.type)=Is text:K8:3)  // Be gentle, transform as collection.
+							
+							$manifestData.type:=New collection:C1472($manifestData.type)
+							
+						End if 
+						
+						If (Value type:C1509($manifestData.type)=Is collection:K8:32)
+							
+							// Add to each type, the compatible formatter
+							$c:=New collection:C1472(\
+								"text"; \
+								"real"; \
+								"integer"; \
+								"boolean"; \
+								"picture")
+							
+							For each ($type; $manifestData.type)
+								
+								$index:=$c.indexOf($type)
+								
+								If ($index>=0)
+									
+									$type:=Choose:C955($index; \
+										"string"; \
+										"number"; \
+										"number"; \
+										"bool"; \
+										"image")
+									
+								End if 
+								
+								If ($formats[$type]#Null:C1517)
+									
+									If ($formats[$type].indexOf("/"+$manifestData.name)<0)
+										
+										$formats[$type].push("/"+$manifestData.name)
+										
+									End if 
+								End if 
+							End for each 
+						End if 
+					End if 
+				End if 
+			End for each 
+		End if 
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Show current format on disk
@@ -1083,8 +1116,7 @@ Function doFormatMenu()
 	$current:=This:C1470.current
 	$currentFormat:=String:C10($current.format)
 	
-	//$formats:=This.getFormats()
-	$formats:=JSON Parse:C1218(File:C1566("/RESOURCES/actionParameters.json").getText()).formats
+	$formats:=This:C1470.getFormats()
 	
 	$menu:=cs:C1710.menu.new()
 	
