@@ -343,8 +343,17 @@ Function doAddMenu()
 			
 			For each ($field; PROJECT.getSortableFields(Form:C1466.dataModel[$o.tableID]; True:C214))
 				
-				$fieldsMenu.append($field.name; "sort_"+$o.tableID+","+String:C10($field.fieldNumber))
+				var PROJECT : cs:C1710.project
 				
+				If (PROJECT.isComputedAttribute($field))
+					
+					$fieldsMenu.append($field.name; "sort_"+$o.tableID+","+$field.name)
+					
+				Else 
+					
+					$fieldsMenu.append($field.name; "sort_"+$o.tableID+","+String:C10($field.fieldNumber))
+					
+				End if 
 			End for each 
 			
 			$menu.append(":xliff:sortAction"; $fieldsMenu)
@@ -390,7 +399,7 @@ Function doAddMenu()
 					
 					$c:=Split string:C1554($t; ",")
 					$menu.table:=$c[0]
-					$menu.fieldNumber:=Num:C11($c[1])
+					$menu.fieldIdentifier:=$c[1]
 					
 				Else 
 					
@@ -502,20 +511,31 @@ Function doAddMenu()
 						
 						$action.parameters:=New collection:C1472
 						
-						$field:=$table[String:C10($menu.fieldNumber)]
+						$field:=$table[$menu.fieldIdentifier]
 						
 						If (FEATURE.with("predictiveEntryInActionParam"))
 							
-							$parameter:=New object:C1471(\
-								"fieldNumber"; $field.fieldNumber; \
-								"name"; $field.name; \
-								"type"; PROJECT.fieldType2type($field.fieldType); \
-								"format"; "ascending")
+							If ($field.fieldNumber#Null:C1517)  // Field
+								
+								$parameter:=New object:C1471(\
+									"fieldNumber"; $field.fieldNumber; \
+									"name"; $field.name; \
+									"type"; PROJECT.fieldType2type($field.fieldType); \
+									"format"; "ascending")
+								
+							Else   // Computed attribute
+								
+								$parameter:=New object:C1471(\
+									"name"; $field.name; \
+									"type"; PROJECT.fieldType2type($field.fieldType); \
+									"format"; "ascending")
+								
+							End if 
 							
 						Else 
 							
 							$parameter:=New object:C1471(\
-								"fieldNumber"; $field.fieldNumber; \
+								"fieldNumber"; Num:C11($field.fieldIdentifier); \
 								"defaultField"; EDITOR.str.setText($field.name).lowerCamelCase(); \
 								"name"; $field.name; \
 								"type"; PROJECT.fieldType2type($field.fieldType); \
@@ -614,6 +634,11 @@ Function doAddMenu()
 								: (PROJECT.isRelation($table[$t]))
 									
 									//
+									
+									//……………………………………………………………………
+								: (PROJECT.isComputedAttribute($table[$t]))
+									
+									//#TO_DO - Add if writable (pour le moment on ignore)
 									
 									//……………………………………………………………………
 							End case 

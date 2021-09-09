@@ -104,22 +104,23 @@ Case of
 				
 				For each ($fieldName; $table)
 					
+					$o:=OB Copy:C1225($table[$fieldName])
+					
 					Case of 
 							
 							//______________________________________________________
-						: ($table[$fieldName].kind="storage")  // Field
+						: ($o.kind="storage")  // Field
 							
-							$o:=OB Copy:C1225($table[$fieldName])
 							$o.typeLegacy:=$o.fieldType
 							$Obj_out.fields.push($o)
 							
 							//______________________________________________________
-						: ($table[$fieldName].kind="relatedEntity")  // N -> 1 relation
+						: ($o.kind="relatedEntity")  // N -> 1 relation
 							
-							$Obj_out.fields.push(OB Copy:C1225($table[$fieldName]))
+							$Obj_out.fields.push($o)
 							
 							//______________________________________________________
-						: ($table[$fieldName].kind="relatedEntities")  // 1 -> N relation
+						: ($o.kind="relatedEntities")  // 1 -> N relation
 							
 							// <NOT YET  MANAGED>
 							
@@ -129,9 +130,8 @@ Case of
 							// <NOT YET  MANAGED>
 							
 							//______________________________________________________
-						: ($table[$fieldName].kind="calculated")  // Computed properties
+						: ($o.kind="calculated")  // Computed properties
 							
-							$o:=OB Copy:C1225($table[$fieldName])
 							$o.type:=-3
 							$Obj_out.fields.push($o)
 							

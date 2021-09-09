@@ -272,6 +272,71 @@ Function getFieldList()->$result : Object
 						// <NOTHING MORE TO DO>
 						
 						//……………………………………………………………………………………………………………
+					: (PROJECT.isComputedAttribute($table[$key]))\
+						 & (Num:C11(This:C1470.tabSelector.data)=0)
+						
+						$result.formatColors.push(Foreground color:K23:1)
+						$result.nameColors.push(Foreground color:K23:1)
+						
+						$field:=$table[$key]
+						
+						$result.ids.push(0)
+						$result.names.push($field.name)
+						$result.paths.push($field.name)
+						$result.types.push($field.fieldType)
+						
+/* TEMPO */$result.tableNumbers.push(Num:C11($tableID))
+						
+						If ($field.label=Null:C1517)
+							
+							$field.label:=PROJECT.label($field.name)
+							
+						End if 
+						
+						$result.labels.push($field.label)
+						
+						If ($field.shortLabel=Null:C1517)
+							
+							$field.shortLabel:=$field.label
+							
+						End if 
+						
+						$result.shortLabels.push($field.shortLabel)
+						$result.iconPaths.push(String:C10($field.icon))
+						$result.icons.push(PROJECT.getIcon(String:C10($field.icon)))
+						
+						If ($field.format#Null:C1517)
+							
+							$formater:=cs:C1710.formater.new($field.format)
+							
+							If ($formater.host)
+								
+								If (Not:C34($formater.isValid()))
+									
+									$label:=$formater.label
+									$result.formatColors[$result.formats.length]:=EDITOR.errorColor  // Missing or invalid
+									
+								Else 
+									
+									$label:=$formater.source.name
+									
+								End if 
+								
+							Else 
+								
+								$label:=EDITOR.str.setText("_"+$field.format).localized()
+								
+							End if 
+							
+						Else 
+							
+							$label:=EDITOR.str.setText("_"+String:C10(SHARED.defaultFieldBindingTypes[$field.fieldType])).localized()
+							
+						End if 
+						
+						$result.formats.push($label)
+						
+						//……………………………………………………………………………………………………………
 					: (PROJECT.isRelationToOne($table[$key]))
 						
 						If (Num:C11(This:C1470.tabSelector.data)=0)

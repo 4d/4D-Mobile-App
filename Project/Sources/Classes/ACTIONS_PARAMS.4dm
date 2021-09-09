@@ -695,7 +695,7 @@ Function doAddParameter()
 	
 	If (String:C10(This:C1470.action.preset)="sort")
 		
-		This:C1470.doAddParameterMenu()
+		This:C1470.doAddParameterMenu(This:C1470.add)
 		
 	Else 
 		
@@ -764,18 +764,43 @@ Function doAddParameterMenu($target : Object; $update : Boolean)
 			
 			For each ($t; $table)
 				
-				If (PROJECT.isField($t))
-					
-					If (Not:C34($isSortAction) | PROJECT.isSortable($table[$t]))
+				$field:=$table[$t]
+				
+				Case of 
+						
+						//______________________________________________________
+					: (PROJECT.isField($t))
 						
 						If (This:C1470.action.parameters.query("fieldNumber = :1"; Num:C11($t)).pop()=Null:C1517)
 							
-							$table[$t].fieldNumber:=Num:C11($t)
-							$c.push($table[$t])
-							
+							If (PROJECT.isSortable($field))
+								
+								$field.fieldNumber:=Num:C11($t)
+								$c.push($field)
+								
+							End if 
 						End if 
-					End if 
-				End if 
+						
+						//______________________________________________________
+					: (Not:C34($isSortAction))
+						
+						// Calculated attributes are ignored for actions other than sorting
+						
+						//______________________________________________________
+					: (PROJECT.isComputedAttribute($field))
+						
+						If (This:C1470.action.parameters.query("name = :1"; $field.name).pop()=Null:C1517)
+							
+							If (PROJECT.isSortable($field))
+								
+								$c.push($field)
+								
+							End if 
+						End if 
+						
+						//______________________________________________________
+				End case 
+				
 			End for each 
 		End if 
 		
@@ -785,8 +810,15 @@ Function doAddParameterMenu($target : Object; $update : Boolean)
 			
 			For each ($field; $c)
 				
-				$menu.append($field.name; String:C10($field.fieldNumber))
-				
+				If ($field.fieldNumber#Null:C1517)
+					
+					$menu.append($field.name; String:C10($field.fieldNumber))
+					
+				Else 
+					
+					$menu.append($field.name; $field.name)
+					
+				End if 
 			End for each 
 		End if 
 		
@@ -819,11 +851,23 @@ Function doAddParameterMenu($target : Object; $update : Boolean)
 			//______________________________________________________
 		Else   // Add a field
 			
-			$field:=$c.query("fieldNumber = :1"; Num:C11($menu.choice)).pop()
+			If (Match regex:C1019("^^\\d+$"; $menu.choice; 1))
+				
+				$field:=$c.query("fieldNumber = :1"; Num:C11($menu.choice)).pop()
+				
+			Else 
+				
+				// Computed
+				$field:=$c.query("name = :1"; $menu.choice).pop()
+				
+			End if 
 			
 			If (FEATURE.with("predictiveEntryInActionParam"))
 				
 				If ($isSortAction)
+					
+					// An attribute is not created if the value is null
+					// So $parameter.fieldNumber will not be created if $field.fieldNumber doesn't exists
 					
 					$parameter:=New object:C1471(\
 						"fieldNumber"; $field.fieldNumber; \

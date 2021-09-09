@@ -754,8 +754,7 @@ Function isSortable($field : Object)->$sortable : Boolean
 		
 		If ($field.fieldType#Is object:K8:27)\
 			 & ($field.fieldType#Is BLOB:K8:12)\
-			 & ($field.fieldType#Is picture:K8:10)\
-			 & ($field.fieldType#Is subtable:K8:11)  // Exclude object and blob fields [AND SUBTABLE]
+			 & ($field.fieldType#Is picture:K8:10)
 			
 			$sortable:=True:C214
 			
@@ -805,8 +804,6 @@ Function getSortableFields($table; $ordered : Boolean)->$fields : Collection
 				//______________________________________________________
 		End case 
 		
-		
-		
 		If (FEATURE.with("computedProperties"))
 			
 			For each ($field; OB Entries:C1720($model))
@@ -815,7 +812,12 @@ Function getSortableFields($table; $ordered : Boolean)->$fields : Collection
 					
 					If (This:C1470.isSortable($field.value))
 						
-						//$field.value.fieldNumber:=Num($field.key)
+						If ($field.value.type=-3)
+							
+							OB REMOVE:C1226($field.value; "fieldNumber")
+							
+						End if 
+						
 						$fields.push($field.value)
 						
 					End if 

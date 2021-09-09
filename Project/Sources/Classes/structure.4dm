@@ -251,7 +251,7 @@ Function fieldDefinition($table; $fieldPath : Text)->$field : Object
 		
 		$c:=Split string:C1554($fieldPath; ".")
 		
-		$field:=$tableCatalog.field.query("name=:1"; $c[0]).pop()
+		$field:=$tableCatalog.field.query("name = :1"; $c[0]).pop()
 		This:C1470.success:=($field#Null:C1517)
 		
 		If (This:C1470.success)
@@ -339,26 +339,22 @@ Function fieldDefinition($table; $fieldPath : Text)->$field : Object
 	
 	//==================================================================
 	// Return related entity catalog
-Function relatedCatalog
-	var $0 : Object
-	var $1 : Text  // Table name
-	var $2 : Text  // RelatedEntity
-	var $3 : Boolean
+Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Boolean)->$result : Object
 	
 	var $fieldName : Text
 	var $withRecursiveLinks : Boolean
 	var $field; $o; $related; $relatedDataClass; $relatedField : Object
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; False:C215)
 	
 	If (Count parameters:C259>=3)
 		
-		$withRecursiveLinks:=$3
+		$withRecursiveLinks:=$recursive
 		
 	End if 
 	
-	$field:=This:C1470.datastore[$1][$2]
+	$field:=This:C1470.datastore[$tableName][$relationName]
 	
 	Case of 
 			
@@ -370,12 +366,12 @@ Function relatedCatalog
 			//…………………………………………………………………………………………………
 		: (This:C1470.isRelatedEntity($field))  // N -> 1 relation
 			
-			$0.success:=True:C214
-			$0.fields:=New collection:C1472
-			$0.relatedEntity:=$field.name
-			$0.relatedTableNumber:=This:C1470.datastore[$field.relatedDataClass].getInfo().tableNumber
-			$0.relatedDataClass:=$field.relatedDataClass
-			$0.inverseName:=$field.inverseName
+			$result.success:=True:C214
+			$result.fields:=New collection:C1472
+			$result.relatedEntity:=$field.name
+			$result.relatedTableNumber:=This:C1470.datastore[$field.relatedDataClass].getInfo().tableNumber
+			$result.relatedDataClass:=$field.relatedDataClass
+			$result.inverseName:=$field.inverseName
 			
 			$relatedDataClass:=This:C1470.datastore[$field.relatedDataClass]
 			
@@ -393,38 +389,53 @@ Function relatedCatalog
 						
 						$o.path:=$o.name
 						$o.type:=This:C1470.__fielddType($o.fieldType)
-						
-						$o.relatedTableNumber:=$0.relatedTableNumber
-						
-						$0.fields.push($o)
+						$o.relatedTableNumber:=$result.relatedTableNumber
+						$result.fields.push($o)
 						
 						//___________________________________________
 					: (This:C1470.isRelatedEntity($o))  // N -> 1 relation
 						
-						If (Choose:C955($withRecursiveLinks; True:C214; ($o.relatedDataClass#$1)))
+						If (Choose:C955($withRecursiveLinks; True:C214; ($o.relatedDataClass#$tableName)))
 							
 							For each ($relatedField; Form:C1466.$project.$catalog.query("name = :1"; $o.relatedDataClass).pop().field)
 								
-								If (This:C1470.isStorage($relatedField))
-									
-									$related:=This:C1470.fieldDefinition(This:C1470.tableNumber($o.relatedDataClass); $relatedField.name)
-									
-									If ($related#Null:C1517)
+								Case of 
 										
+										//______________________________________________________
+									: (This:C1470.isStorage($relatedField))
+										
+										$related:=This:C1470.fieldDefinition(This:C1470.tableNumber($o.relatedDataClass); $relatedField.name)
+										
+										If ($related#Null:C1517)
+											
+											$related.path:=$o.name+"."+$related.name
+											$result.fields.push($related)
+											
+										End if 
+										
+										//______________________________________________________
+									: (This:C1470.isComputedAttribute($relatedField))
+										
+										$related:=OB Copy:C1225($relatedField)
 										$related.path:=$o.name+"."+$related.name
-										$0.fields.push($related)
+										$related.tableNumber:=$result.relatedTableNumber
+										$result.fields.push($related)
 										
-									End if 
-								End if 
+										//______________________________________________________
+									Else 
+										
+										// A "Case of" statement should never omit "Else"
+										//______________________________________________________
+								End case 
 							End for each 
 						End if 
 						
 						//…………………………………………………………………………………………………
 					: (This:C1470.isRelatedEntities($o))  // 1 -> N relation
 						
-						If (Choose:C955($withRecursiveLinks; True:C214; ($o.relatedDataClass#$1)))
+						If (Choose:C955($withRecursiveLinks; True:C214; ($o.relatedDataClass#$tableName)))
 							
-							$0.fields.push(New object:C1471(\
+							$result.fields.push(New object:C1471(\
 								"name"; $o.name; \
 								"path"; $o.name; \
 								"fieldType"; 8859; \
@@ -445,6 +456,11 @@ Function relatedCatalog
 			// <NOT YET  MANAGED>
 			
 			//…………………………………………………………………………………………………
+		: (This:C1470.isComputedAttribute($field))
+			
+			//
+			
+			//…………………………………………………………………………………………………
 		Else 
 			
 			// <NOTHING MORE TO DO>
@@ -453,21 +469,20 @@ Function relatedCatalog
 	End case 
 	
 	//==================================================================
-	// Return a table catalog
+	// Returns a table catalog
 Function tableCatalog($name : Text)->$tableCatalog : Object
 	
 	$tableCatalog:=This:C1470.catalog[This:C1470.catalog.indices("name = :1"; $name)[0]]
 	
 	//==================================================================
-Function tableNumber  // Table number from name
-	var $1 : Text
-	var $0 : Integer
+	// Returns table number from name
+Function tableNumber($tableName : Text)->$tableNumber : Integer
 	
-	This:C1470.success:=This:C1470.datastore[$1]#Null:C1517
+	This:C1470.success:=This:C1470.datastore[$tableName]#Null:C1517
 	
 	If (This:C1470.success)
 		
-		$0:=This:C1470.datastore[$1].getInfo().tableNumber
+		$tableNumber:=This:C1470.datastore[$tableName].getInfo().tableNumber
 		
 	End if 
 	
