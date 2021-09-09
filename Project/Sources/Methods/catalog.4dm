@@ -55,7 +55,7 @@ Case of
 		//______________________________________________________
 	: ($Txt_action="datastore")
 		
-		$Obj_datastore:=ds:C1482  //_4D_Build Exposed Datastore
+		$Obj_datastore:=_4D_Build Exposed Datastore:C1598
 		
 		$Obj_out.success:=($Obj_datastore#Null:C1517)
 		

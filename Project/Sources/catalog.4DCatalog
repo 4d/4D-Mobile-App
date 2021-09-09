@@ -143,7 +143,7 @@
 		<field name="managerID" uuid="E75E6ABE82C746F581998E13F6ED82CD" type="4" never_null="true" id="4">
 			<field_extra position="5"/>
 		</field>
-		<field name="Avatar" uuid="3B9DF20CCA7442878ADB63D714CB4C87" type="12" never_null="true" id="5" hide_in_REST="true"/>
+		<field name="Avatar" uuid="3B9DF20CCA7442878ADB63D714CB4C87" type="12" never_null="true" id="5"/>
 		<field name="__GlobalStamp" uuid="B7AD222132BA40B0AA61029B788464FC" type="5" id="6">
 			<field_extra>
 				<editor_field_info>

@@ -41,9 +41,8 @@ Function doRun
 	
 	$0:=$Obj_out
 	
-Function storyboard
-	C_OBJECT:C1216($0)
-	$0:=cs:C1710.DetailFormStoryboard.new()
+Function storyboard()->$result : Object
+	$result:=cs:C1710.DetailFormStoryboard.new()
 	
 Function createIconAssets
 	C_OBJECT:C1216($Obj_out; $0)

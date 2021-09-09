@@ -73,7 +73,7 @@ Case of
 		// ! A relation N -> 1 is not referenced if the field isn't exposed with 4D Mobile services !
 		// -------------------------------------------------------------------------------------------
 		
-		$datastore:=ds:C1482  //_4D_Build Exposed Datastore
+		$datastore:=_4D_Build Exposed Datastore:C1598
 		
 		$OUT.success:=($datastore#Null:C1517)
 		
@@ -567,7 +567,7 @@ Case of
 							//For each ($Txt_field;$Obj_relatedDataClass)
 							
 							//If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																																																																								
+																																																																																
 							//If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
 							//$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])

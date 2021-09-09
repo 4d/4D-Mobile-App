@@ -313,7 +313,7 @@ If (Num:C11($project.info.version)<=4)
 		$types[Is BLOB:K8:12]:="blob"
 		$types[Is object:K8:27]:="object"
 		
-		$exposedDatastore:=ds:C1482  //_4D_Build Exposed Datastore
+		$exposedDatastore:=_4D_Build Exposed Datastore:C1598
 		$catalog:=New collection:C1472
 		
 		//TRACE

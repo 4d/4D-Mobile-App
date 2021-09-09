@@ -461,30 +461,28 @@ Function imageAssetFix
 	End if 
 	
 /* fix potential duplicated id elements, due to copy paste in storyboard (as requested by PO) */
-Function fixDomChildID($Obj_element : Object)
-	var $0 : Object
-	var $1 : Object
+Function fixDomChildID($element : Object)->$result : Object
 	
 	var $t; $Txt_tag; $Txt_tagFullPrefix; $Txt_tagInterfix; $Txt_tagPrefix : Text
 	var $Boo_haveWrongTag : Boolean
 	var $Lon_current; $Lon_ids : Integer
-	var $Obj_child; $Obj_element; $Obj_nodeByIds; $Obj_result; $Obj_tag; $Obj_tagMapping : Object
+	var $Obj_child; $Obj_nodeByIds; $Obj_tag; $Obj_tagMapping : Object
 	
-	$Obj_result:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; False:C215)
 	
-	$Obj_result.children:=$Obj_element.dom.children(True:C214)
-	$Obj_result.element:=$Obj_element
+	$result.children:=$element.dom.children(True:C214)
+	$result.element:=$element
 	
 	$Txt_tagPrefix:="TAG-"
 	$Txt_tagInterfix:="FD"
 	
-	If ($Obj_result.children.success)
+	If ($result.children.success)
 		
 		// get node by id (suppose no duplicate id)
 		$Obj_nodeByIds:=New object:C1471()
 		
-		$Obj_tag:=$Obj_element.dom.getAttribute("id")
+		$Obj_tag:=$element.dom.getAttribute("id")
 		If ($Obj_tag.success)
 			If (Position:C15($Txt_tagPrefix; $Obj_tag.value)#1)  // has prefix, check interfix
 				$Obj_nodeByIds[$Obj_tag.value]:=$Obj_child  // no tag prefix, will be replaced too
@@ -494,7 +492,7 @@ Function fixDomChildID($Obj_element : Object)
 			
 		End if 
 		
-		For each ($Obj_child; $Obj_result.children.elements)
+		For each ($Obj_child; $result.children.elements)
 			
 			$Obj_tag:=$Obj_child.getAttribute("id")
 			If ($Obj_tag.success)
@@ -531,7 +529,7 @@ Function fixDomChildID($Obj_element : Object)
 		End for each 
 		
 		// Make the tag id replacement
-		$t:=$Obj_element.dom.export().variable
+		$t:=$element.dom.export().variable
 		For each ($Txt_tag; $Obj_tagMapping)
 			
 			$t:=Replace string:C233($t; $Txt_tag; $Obj_tagMapping[$Txt_tag])
@@ -540,18 +538,16 @@ Function fixDomChildID($Obj_element : Object)
 		
 		// Recreate a new node
 		If ($Boo_haveWrongTag)  //or $Obj_tagMapping key size  OPTI: if we do nothing, do not return new node (just edit the current one and add idCount)
-			$Obj_element.originalDom:=$Obj_element.dom  // store old one (useful to get parent or replace)
-			$Obj_element.insertInto:=$Obj_element.originalDom.parent()
-			$Obj_element.dom:=xml("parse"; New object:C1471("variable"; $t))
-			$Obj_element.tagInterfix:=$Txt_tagInterfix
+			$element.originalDom:=$element.dom  // store old one (useful to get parent or replace)
+			$element.insertInto:=$element.originalDom.parent()
+			$element.dom:=xml("parse"; New object:C1471("variable"; $t))
+			$element.tagInterfix:=$Txt_tagInterfix
 		End if 
 		
-		$Obj_element.idCount:=$Lon_ids  // TODO check if need +1 or -1 or not
-		$Obj_result.success:=Bool:C1537($Obj_element.dom.success)
+		$element.idCount:=$Lon_ids  // TODO check if need +1 or -1 or not
+		$result.success:=Bool:C1537($element.dom.success)
 		
 	End if 
-	
-	$0:=$Obj_result
 	
 	
 	// MARK : Form (extract to StoryboardForm?)
@@ -686,7 +682,7 @@ Function injectElement
 	End for each 
 	
 	
-Function xmlAppendRelationAttributeForField
+Function xmlAppendRelationAttributeForField()->$response : Object
 	C_LONGINT:C283($Lon_j; $1)
 	$Lon_j:=$1
 	C_OBJECT:C1216($Dom_root; $2)

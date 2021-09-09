@@ -14,7 +14,7 @@ Class constructor
 	//==================================================================
 Function exposedDatastore()->$datastore : Object
 	
-	$datastore:=ds:C1482  // _4D_Build Exposed Datastore
+	$datastore:=_4D_Build Exposed Datastore:C1598
 	
 	//==================================================================
 	// If $query is a table name or number, the catalog is that of the corresponding 

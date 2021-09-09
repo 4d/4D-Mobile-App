@@ -16,6 +16,5 @@ Function doRun
 	
 	$0.success:=ob_error_has($0)
 	
-Function storyboard
-	C_OBJECT:C1216($0)
-	$0:=cs:C1710.ListFormStoryboard.new()
+Function storyboard->$result : Object
+	$result:=cs:C1710.ListFormStoryboard.new()

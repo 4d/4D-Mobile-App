@@ -201,6 +201,5 @@ Function createIconAssets
 	
 	$0:=$Obj_out
 	
-Function storyboard
-	C_OBJECT:C1216($0)
-	$0:=cs:C1710.NavigationStoryboard.new()
+Function storyboard()->$result : Object
+	$result:=cs:C1710.NavigationStoryboard.new()
