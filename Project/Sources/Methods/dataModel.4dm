@@ -1,26 +1,25 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-// ----------------------------------------------------
-// Project method : dataModel
-// ID[66DCDF904F5B4EBAB7B0CD7FE481ED86]
-// Created 17-10-2017 by Vincent de Lachaux
-// ----------------------------------------------------
-// Description:
-//
+// Manager model with some possible "action"
+// - xcdatamodel:  Dump the data mode as iOS xcdatamodel
+// - tableCollection &amp; fieldCollection: to transform object models to collection
+// - tableNames &amp; fieldNames: get only names
+// - pictureFields: fieldNames but for only picture?
+// - fields: flatten fields on key path
+#DECLARE($Obj_in : Object)->$Obj_out : Object
+
 // ----------------------------------------------------
 // Declarations
-C_OBJECT:C1216($0)
-C_OBJECT:C1216($1)
-
-C_BOOLEAN:C305($Boo_4dType; $Boo_found)
-C_LONGINT:C283($Lon_attributs; $Lon_field; $Lon_field2; $Lon_fieldID; $Lon_parameters; $Lon_relatedTableID)
-C_LONGINT:C283($Lon_relationField; $Lon_table; $Lon_table2; $Lon_tableID; $Lon_type)
-C_POINTER:C301($Ptr_field)
-C_TEXT:C284($Dom_attribute; $Dom_elements; $Dom_entity; $Dom_model; $Dom_node; $Dom_userInfo)
-C_TEXT:C284($File_; $t; $tt; $Txt_buffer; $Txt_field; $Txt_fieldName)
-C_TEXT:C284($Txt_fieldNumber; $Txt_inverseName; $Txt_relationName; $Txt_tableName; $Txt_tableNumber; $Txt_value)
-C_OBJECT:C1216($o; $Obj_buffer; $Obj_dataModel; $Obj_field; $Obj_in)
-C_OBJECT:C1216($Obj_out; $Obj_path; $Obj_relationTable; $Obj_table)
-C_COLLECTION:C1488($Col_fields; $Col_tables; $actions)
+var $Boo_4dType; $Boo_found : Boolean
+var $Lon_attributs; $Lon_field; $Lon_field2; $Lon_fieldID; $Lon_parameters; $Lon_relatedTableID : Integer
+var $Lon_relationField; $Lon_table; $Lon_table2; $Lon_tableID; $Lon_type : Integer
+var $Ptr_field : Pointer
+var $Dom_attribute; $Dom_elements; $Dom_entity; $Dom_model; $Dom_node; $Dom_userInfo : Text
+var $File_; $t; $tt; $Txt_buffer; $Txt_field; $Txt_fieldName : Text
+var $Txt_fieldNumber; $Txt_inverseName; $Txt_relationName; $Txt_tableName; $Txt_tableNumber; $Txt_value : Text
+var $o; $Obj_buffer; $Obj_dataModel; $Obj_field; $Obj_in : Object
+var $Obj_out; $Obj_path; $Obj_relationTable; $Obj_table : Object
+var $relatedField : Variant
+var $Col_fields; $Col_tables; $actions : Collection
 
 ARRAY TEXT:C222($tTxt_fields; 0)
 ARRAY TEXT:C222($tTxt_relationFields; 0)
@@ -33,27 +32,9 @@ End if
 
 // ----------------------------------------------------
 // Initialisations
-$Lon_parameters:=Count parameters:C259
 
-If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
-	
-	// NO PARAMETERS REQUIRED
-	
-	// Optional parameters
-	If ($Lon_parameters>=1)
-		
-		$Obj_in:=$1
-		
-	End if 
-	
-	$Obj_out:=New object:C1471(\
-		"success"; False:C215)
-	
-Else 
-	
-	ABORT:C156
-	
-End if 
+$Obj_out:=New object:C1471(\
+"success"; False:C215)
 
 // ----------------------------------------------------
 Case of 
@@ -326,7 +307,7 @@ Case of
 											// <NOTHING MORE TO DO>
 											
 											//………………………………………………………………………………………………………………………
-										: (PROJECT.isField($tTxt_fields{$Lon_field}))
+										: (PROJECT.isField($tTxt_fields{$Lon_field}) | PROJECT.isComputedAttribute($Obj_table[$tTxt_fields{$Lon_field}]))
 											
 											If (Value type:C1509($Obj_table[$tTxt_fields{$Lon_field}])=Is object:K8:27)
 												
@@ -395,10 +376,12 @@ Case of
 													
 													For ($Lon_relationField; 1; Size of array:C274($tTxt_relationFields); 1)
 														
+														$relatedField:=$Obj_table[$Txt_relationName][$tTxt_relationFields{$Lon_relationField}]
+														
 														Case of 
 																
 																//……………………………………………………
-															: (PROJECT.isField($tTxt_relationFields{$Lon_relationField}))
+															: (PROJECT.isField($tTxt_relationFields{$Lon_relationField}) | PROJECT.isComputedAttribute($relatedField))
 																
 																$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")
 																
@@ -1397,10 +1380,6 @@ Case of
 		
 		//________________________________________
 End case 
-
-// ----------------------------------------------------
-// Return
-$0:=$Obj_out
 
 // ----------------------------------------------------
 // End
