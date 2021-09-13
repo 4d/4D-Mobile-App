@@ -19,6 +19,8 @@ Class constructor
 	
 	This:C1470.path:=cs:C1710.path.new()
 	
+	This:C1470.customInputControls:=New collection:C1472("push"; "segmented"; "popover"; "sheet"; "picker")
+	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function init()
 	
@@ -262,7 +264,7 @@ Function restoreContext()
 	// Update UI
 Function update()
 	
-	var $withDataSource; $withDefault : Boolean
+	var $isLinked; $withDataSource; $withDefault : Boolean
 	var $action; $current : Object
 	
 	This:C1470.noSelection.hide()
@@ -394,29 +396,47 @@ Function update()
 							
 							If ($action.parameters.length>0)
 								
-								$withDataSource:=(Position:C15("/"; String:C10($current.format))=1)
-								
 								This:C1470.properties.show()
 								This:C1470.sortOrderGroup.hide()
 								This:C1470.dataSourceGroup.hide()
 								
-								This:C1470.defaultValueGroup.show($current.fieldNumber=Null:C1517)  // User parameter
-								This:C1470.field.show($current.fieldNumber#Null:C1517)  // Linked to a field
+								$isLinked:=(PROJECT.getCatalog().query("tableNumber = :1"; $action.tableNumber).pop().field.query("name = :1"; $current.name).pop()#Null:C1517)
+								
+								If ($isLinked)
+									
+									This:C1470.field.show()
+									This:C1470.field.setValue(EDITOR.str.setText("thisParameterIsLinkedToTheField").localized($current.name))
+									This:C1470.defaultValueGroup.show()  // User parameter
+									
+								Else 
+									
+									This:C1470.field.hide()
+									This:C1470.defaultValueGroup.hide()
+									
+								End if 
 								
 								This:C1470.number.show(String:C10($current.type)="number")
-								
 								This:C1470.mandatory.setValue(This:C1470.mandatoryValue())
 								This:C1470.min.setValue(String:C10(This:C1470.ruleValue("min")))
 								This:C1470.max.setValue(String:C10(This:C1470.ruleValue("max")))
 								
-								
 								This:C1470.placeholderGroup.show($current.type#"bool")
 								
-								If (Not:C34($withDataSource))
+								If (Position:C15("/"; String:C10($current.format))=1)
+									
+									$withDataSource:=This:C1470._withDataSource(Delete string:C232($current.format; 1; 1))
+									
+								End if 
+								
+								If ($withDataSource)
+									
+									This:C1470.dataSourceGroup.show()
+									
+								Else 
 									
 									If ($current.type#"image")
 										
-										$withDefault:=Choose:C955(String:C10($action.preset)#"edit"; True:C214; ($current.fieldNumber=Null:C1517))
+										$withDefault:=Choose:C955(String:C10($action.preset)#"edit"; True:C214; Not:C34($isLinked))
 										
 									End if 
 								End if 
@@ -424,7 +444,6 @@ Function update()
 								If ($withDefault)
 									
 									This:C1470.defaultValueGroup.show()
-									
 									This:C1470.defaultValue.setValue(String:C10($current.default))
 									
 									Case of 
@@ -523,7 +542,7 @@ Function update()
 								Else 
 									
 									This:C1470.defaultValueGroup.hide()
-									This:C1470.dataSourceGroup.show($withDataSource)
+									This:C1470.dataSourceGroup.show()
 									
 								End if 
 								
@@ -622,7 +641,18 @@ Function formatValue()->$value : Text
 			//________________________________________
 		: (Position:C15("/"; String:C10($current.format))=1)
 			
-			$value:=Substring:C12($current.format; 2)
+			var $file : 4D:C1709.File
+			$file:=This:C1470.path.hostInputControls().file(Delete string:C232($current.format; 1; 1)+"/manifest.json")
+			
+			If ($file.exists)
+				
+				$value:=JSON Parse:C1218($file.getText()).name
+				
+			Else 
+				
+				$value:=Substring:C12($current.format; 2)
+				
+			End if 
 			
 			//________________________________________
 		: (PROJECT.isCustomResource($current.format))  // Host custom action parameter format
@@ -638,25 +668,6 @@ Function formatValue()->$value : Text
 			
 			//________________________________________
 	End case 
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-Function commentValue()->$value : Text
-	
-	var $current : Object
-	$current:=This:C1470.current
-	
-	//$action:=This.action
-	
-	If (Num:C11($current.fieldNumber)#0)  // One parameter selected
-		
-		If (Num:C11(This:C1470.action.tableNumber)#0)
-			
-			$value:=EDITOR.str\
-				.setText("thisParameterIsLinkedToTheField")\
-				.localized(String:C10(Form:C1466.dataModel[String:C10(This:C1470.action.tableNumber)][String:C10($current.fieldNumber)].name))
-			
-		End if 
-	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function dataSourceValue()->$value : Text
@@ -750,12 +761,14 @@ Function doAddParameterMenu($target : Object; $update : Boolean)
 			
 			For each ($t; $table)
 				
-				If (PROJECT.isField($t))
+				$field:=$table[$t]
+				
+				If (PROJECT.isField($t)) | (PROJECT.isComputedAttribute($field))
 					
-					If (Not:C34($isSortAction) | PROJECT.isSortable($table[$t]))
+					If (Not:C34($isSortAction) | PROJECT.isSortable($field))
 						
-						$table[$t].fieldNumber:=Num:C11($t)
-						$c.push($table[$t])
+						$field.fieldNumber:=Num:C11($t)
+						$c.push($field)
 						
 					End if 
 				End if 
@@ -765,14 +778,16 @@ Function doAddParameterMenu($target : Object; $update : Boolean)
 			
 			For each ($t; $table)
 				
-				If (PROJECT.isField($t))
+				$field:=$table[$t]
+				
+				If (PROJECT.isField($t)) | (PROJECT.isComputedAttribute($field))
 					
-					If (Not:C34($isSortAction) | PROJECT.isSortable($table[$t]))
+					If (Not:C34($isSortAction) | PROJECT.isSortable($field))
 						
-						If (This:C1470.action.parameters.query("fieldNumber = :1"; Num:C11($t)).pop()=Null:C1517)
+						If (This:C1470.action.parameters.query("name = :1"; $field.name).pop()=Null:C1517)
 							
-							$table[$t].fieldNumber:=Num:C11($t)
-							$c.push($table[$t])
+							$field.fieldNumber:=Num:C11($t)
+							$c.push($field)
 							
 						End if 
 					End if 
@@ -786,7 +801,7 @@ Function doAddParameterMenu($target : Object; $update : Boolean)
 			
 			For each ($field; $c)
 				
-				$menu.append($field.name; String:C10($field.fieldNumber))
+				$menu.append($field.name; $field.name)
 				
 			End for each 
 		End if 
@@ -814,13 +829,13 @@ Function doAddParameterMenu($target : Object; $update : Boolean)
 			//______________________________________________________
 		: (Count parameters:C259=2)  // Change linked field
 			
-			$field:=$c.query("fieldNumber = :1"; Num:C11($menu.choice)).pop()
+			$field:=$c.query("name = :1"; $menu.choice).pop()
 			This:C1470.updateParamater($field.name)
 			
 			//______________________________________________________
 		Else   // Add a field
 			
-			$field:=$c.query("fieldNumber = :1"; Num:C11($menu.choice)).pop()
+			$field:=$c.query("name = :1"; $menu.choice).pop()
 			
 			If (FEATURE.with("predictiveEntryInActionParam"))
 				
@@ -1006,46 +1021,88 @@ Function doMandatory()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Format list
-	//Function getFormats()->$formats : Object
-	//var $type : Text
-	//var $index : Integer
-	//var $manifestData : Object
-	//var $c : Collection
-	//var $manifest : 4D.File
-	//var $folder : 4D.Folder
-	//$formats:=JSON Parse(File("/RESOURCES/actionParameters.json").getText()).formats
-	//If (FEATURE.with("customActionFormatter")) 
-	//$folder:=This.path.hostInputControls(False)
-	//If ($folder.exists)
-	//For each ($folder; $folder.folders())
-	//$manifest:=$folder.file("manifest.json")
-	//If ($manifest.exists)
-	//$manifestData:=JSON Parse($manifest.getText())
-	//If (Value type($manifestData.type)=Is text)
-	//// Transform as collection
-	//$manifestData.type:=New collection($manifestData.type)
-	//End if 
-	//If ($manifestData.choiceList#Null)
-	//If ($manifestData.format=Null)
-	//$manifestData.format:="push"  // Push/segmented/popover/sheet/picker
-	//End if 
-	//End if 
-	//If (Value type($manifestData.type)=Is collection)
-	//$c:=New collection(\
+Function getFormats()->$formats : Object
+	
+	var $type : Text
+	var $index : Integer
+	var $manifest : Object
+	var $c : Collection
+	var $file : 4D:C1709.File
+	var $folder : 4D:C1709.Folder
+	
+	$formats:=JSON Parse:C1218(File:C1566("/RESOURCES/actionParameters.json").getText()).formats
+	
+	If (FEATURE.with("customActionFormatterWithCode"))
+		
+		$folder:=This:C1470.path.hostInputControls()
+		
+		If ($folder.exists)
+			
+			For each ($folder; $folder.folders())
+				
+				$file:=$folder.file("manifest.json")
+				
+				If ($file.exists)
+					
+					$manifest:=JSON Parse:C1218($file.getText())
+					
+					// We do not want choice list formatter, only custom one without data source.
+					If ($manifest.choiceList=Null:C1517)
+						
+						// OK, I'll be nice to you and make it a collection.
+						If (Value type:C1509($manifest.type)=Is text:K8:3)
+							
+							$manifest.type:=New collection:C1472($manifest.type)
+							
+						End if 
+						
+						If (Value type:C1509($manifest.type)=Is collection:K8:32)
+							
+							// Add to each type, the compatible formatter
+							$c:=New collection:C1472(\
 								"text"; \
 								"real"; \
 								"integer"; \
 								"boolean"; \
 								"picture")
-	//For each ($type; $manifestData.type)
-	//$index:=$c.indexOf($type)
-	//If ($index>=0)
-	//$type:=Choose($index; \
-								"string"; \
-								"number"; \
-								"number"; \
-								"bool"; \
-								"image")
+							
+							For each ($type; $manifest.type)
+								
+								$index:=$c.indexOf($type)
+								
+								If ($index>=0)
+									
+									$type:=Choose:C955($index; \
+										"string"; \
+										"number"; \
+										"number"; \
+										"bool"; \
+										"image")
+									
+								End if 
+								
+								If ($formats[$type]#Null:C1517)
+									
+									If ($formats[$type].indexOf("/"+$folder.name)<0)
+										
+										$formats[$type].push("/"+$folder.name)
+										
+									End if 
+									
+								Else   // IGNORE
+								End if 
+							End for each 
+							
+						Else   // Not a valid formatter
+						End if 
+					Else   // Nothing to do
+					End if 
+				Else   // Not a valid formatter
+				End if 
+			End for each 
+		Else   // No user formatter
+		End if 
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Show current format on disk
@@ -1084,8 +1141,8 @@ Function doFormatMenu()
 	$current:=This:C1470.current
 	$currentFormat:=String:C10($current.format)
 	
-	//$formats:=This.getFormats()
-	$formats:=JSON Parse:C1218(File:C1566("/RESOURCES/actionParameters.json").getText()).formats
+	$formats:=This:C1470.getFormats()
+	//$formats:=JSON Parse(File("/RESOURCES/actionParameters.json").getText()).formats
 	
 	$menu:=cs:C1710.menu.new()
 	
@@ -1232,6 +1289,12 @@ Function doFormatMenu()
 				
 				$current.format:=$menu.choice
 				
+				If (Not:C34(This:C1470._withDataSource(Delete string:C232($menu.choice; 1; 1))))
+					
+					OB REMOVE:C1226($current; "source")
+					
+				End if 
+				
 				//________________________________________
 			Else 
 				
@@ -1266,6 +1329,7 @@ Function doFormatMenu()
 						
 						$current.type:=$newType
 						OB REMOVE:C1226($current; "default")
+						OB REMOVE:C1226($current; "source")
 						
 						If (This:C1470.defaultValue.focused)
 							
@@ -1282,6 +1346,26 @@ Function doFormatMenu()
 		
 		This:C1470.update()
 		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function _withDataSource($format : Text)->$with : Boolean
+	
+	var $manifest : Object
+	var $file : 4D:C1709.File
+	
+	$with:=This:C1470.customInputControls.indexOf($format)>=0
+	
+	If (Not:C34($with))
+		
+		$file:=This:C1470.path.hostInputControls().file($format+"/manifest.json")
+		
+		If ($file.exists)
+			
+			$manifest:=JSON Parse:C1218($file.getText())
+			$with:=$manifest.choiceList#Null:C1517
+			
+		End if 
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
@@ -1449,7 +1533,7 @@ Function _actionFormatterChoiceList($menu : cs:C1710.menu; $type : Text)
 		If (FEATURE.with("customActionFormatter"))
 			
 			var $t : Text
-			For each ($t; New collection:C1472("push"; "segmented"; "popover"; "sheet"; "picker"))
+			For each ($t; This:C1470.customInputControls)
 				
 				$format:=New object:C1471(\
 					"type"; New collection:C1472($t))

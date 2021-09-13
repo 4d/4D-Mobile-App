@@ -126,6 +126,7 @@ Case of
 		
 		If ($validated)
 			
+			// Set and continue
 			EDITOR.callMeBack("allowStructureModification"; Form:C1466.option)
 			
 		Else 

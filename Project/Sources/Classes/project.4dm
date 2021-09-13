@@ -500,7 +500,7 @@ Function isNotLocked()->$isNotLocked : Boolean
 	
 	$isNotLocked:=Not:C34(This:C1470.isLocked())
 	
-	//====================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function updateActions
 	var $indx : Integer
 	var $dataModel; $parameter; $table : Object
@@ -685,51 +685,48 @@ Function storageFields($table : Variant)->$fields : Collection
 		
 	End if 
 	
-	//====================================
-Function isField
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function isField($attribute : Variant)->$is : Boolean
 	
-	var $0 : Boolean
-	var $1 : Variant
+	Case of 
+			
+			//______________________________________________________
+		: (Value type:C1509($attribute)=Is text:K8:3)
+			
+			$is:=Match regex:C1019("(?m-si)^\\d+$"; $attribute; 1; *)
+			
+			//______________________________________________________
+		: (Value type:C1509($attribute)=Is object:K8:27)
+			
+			// #TO_DO
+			
+			//______________________________________________________
+	End case 
 	
-	If (Value type:C1509($1)=Is text:K8:3)
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function isRelation($attribute : Variant)->$is : Boolean
+	
+	$is:=((This:C1470.isRelationToOne($attribute)) | (This:C1470.isRelationToMany($attribute)))
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function isRelationToOne($attribute : Variant)->$is : Boolean
+	
+	If (Value type:C1509($attribute)=Is object:K8:27)
 		
-		$0:=Match regex:C1019("(?m-si)^\\d+$"; $1; 1; *)
-		
-	End if 
-	
-	//====================================
-Function isRelation
-	
-	var $0 : Boolean
-	var $1 : Variant
-	
-	$0:=((This:C1470.isRelationToOne($1)) | (This:C1470.isRelationToMany($1)))
-	
-	//====================================
-Function isRelationToOne
-	
-	var $0 : Boolean
-	var $1 : Variant
-	
-	If (Value type:C1509($1)=Is object:K8:27)
-		
-		$0:=($1.relatedDataClass#Null:C1517) & (Not:C34(Bool:C1537($1.isToMany)))
-		
-	End if 
-	
-	//====================================
-Function isRelationToMany
-	
-	var $0 : Boolean
-	var $1 : Variant  // Field
-	
-	If (Value type:C1509($1)=Is object:K8:27)
-		
-		$0:=(($1.relatedEntities#Null:C1517) | (String:C10($1.kind)="relatedEntities")) | (Bool:C1537($1.isToMany))
+		$is:=($attribute.relatedDataClass#Null:C1517) & (Not:C34(Bool:C1537($attribute.isToMany)))
 		
 	End if 
 	
-	//==================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function isRelationToMany($attribute : Variant)->$is : Boolean
+	
+	If (Value type:C1509($attribute)=Is object:K8:27)
+		
+		$is:=(($attribute.relatedEntities#Null:C1517) | (String:C10($attribute.kind)="relatedEntities")) | (Bool:C1537($attribute.isToMany))
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function isComputedAttribute($field : Object)->$is : Boolean
 	
 	$is:=(String:C10($field.kind)="calculated") | (Num:C11($field.type)=-3)
@@ -904,7 +901,7 @@ Function removeTable
 	// Update main
 	This:C1470.removeFromMain($1)
 	
-	//====================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function getCatalog()->$catalog : Collection
 	
 	Case of 

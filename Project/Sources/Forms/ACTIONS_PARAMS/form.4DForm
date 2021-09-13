@@ -522,13 +522,11 @@
 				"field": {
 					"type": "input",
 					"left": 88,
-					"top": 297,
-					"width": 379,
+					"top": 303,
+					"width": 850,
 					"height": 17,
 					"focusable": false,
 					"visibility": "hidden",
-					"dataSource": "panel.commentValue()",
-					"textAlign": "right",
 					"class": "comment",
 					"contextMenu": "none"
 				},
@@ -759,7 +757,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 536,
+	"geometryStamp": 540,
 	"editor": {
 		"groups": {
 			"Group": [

@@ -253,7 +253,6 @@ Case of
 		//______________________________________________________
 	: ($message="ignoreServerStructureAdjustement")
 		
-		// Get the project
 		PROJECT.$_ignoreServerStructureAdjustement:=True:C214
 		
 		// Relaunch the build process

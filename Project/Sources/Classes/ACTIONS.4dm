@@ -567,62 +567,8 @@ Function doAddMenu()
 									If ($table[$t].name#$table[""].primaryKey)  // DO NOT ADD A PRIMARY KEY
 										
 										$field:=$fields.query("name = :1"; $table[$t].name).pop()
+										$action.parameters.push(This:C1470._addParameter($field; $table[$t]; $menu.edit))
 										
-										If (FEATURE.with("predictiveEntryInActionParam"))
-											
-											$parameter:=New object:C1471(\
-												"fieldNumber"; $field.fieldNumber; \
-												"name"; $field.name; \
-												"label"; $table[$t].label; \
-												"shortLabel"; $table[$t].shortLabel; \
-												"type"; Choose:C955($field.fieldType=Is time:K8:8; "time"; $field.valueType))
-											
-										Else 
-											
-											$parameter:=New object:C1471(\
-												"fieldNumber"; $field.fieldNumber; \
-												"name"; EDITOR.str.setText($table[$t].name).lowerCamelCase(); \
-												"label"; $table[$t].label; \
-												"shortLabel"; $table[$t].shortLabel; \
-												"type"; Choose:C955($field.fieldType=Is time:K8:8; "time"; $field.valueType))
-											
-										End if 
-										
-										If ($menu.edit)
-											
-											$parameter.defaultField:=formatString("field-name"; $table[$t].name)
-											
-										End if 
-										
-										If ($parameter#Null:C1517)
-											
-											If (Bool:C1537($field.mandatory))
-												
-												$parameter.rules:=New collection:C1472("mandatory")
-												
-											End if 
-											
-											// Preset formats
-											Case of 
-													
-													//................................
-												: ($field.fieldType=Is integer:K8:5)\
-													 | ($field.fieldType=Is longint:K8:6)\
-													 | ($field.fieldType=Is integer 64 bits:K8:25)
-													
-													$parameter.format:="integer"
-													
-													//................................
-												: ($parameter.type="date")
-													
-													$parameter.format:="shortDate"
-													
-													//................................
-											End case 
-											
-											$action.parameters.push($parameter)
-											
-										End if 
 									End if 
 									
 									//……………………………………………………………………
@@ -638,7 +584,13 @@ Function doAddMenu()
 									//……………………………………………………………………
 								: (PROJECT.isComputedAttribute($table[$t]))
 									
-									//#TO_DO - Add if writable (pour le moment on ignore)
+									$field:=$fields.query("name = :1"; $table[$t].name).pop()
+									
+									If (Not:C34(Bool:C1537($field.readOnly)))
+										
+										$action.parameters.push(This:C1470._addParameter($field; $table[$t]; $menu.edit))
+										
+									End if 
 									
 									//……………………………………………………………………
 							End case 
@@ -652,6 +604,59 @@ Function doAddMenu()
 				//______________________________________________________
 		End case 
 	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function _addParameter($fieldDefinition : Object; $field : Object; $edit : Boolean)->$parameter : Object
+	
+	If (FEATURE.with("predictiveEntryInActionParam"))
+		
+		$parameter:=New object:C1471(\
+			"name"; $fieldDefinition.name; \
+			"label"; $field.label; \
+			"shortLabel"; $field.shortLabel; \
+			"type"; Choose:C955($fieldDefinition.fieldType=Is time:K8:8; "time"; $fieldDefinition.valueType); \
+			"fieldNumber"; $fieldDefinition.fieldNumber)
+		
+	Else 
+		
+		$parameter:=New object:C1471(\
+			"name"; EDITOR.str.setText($field.name).lowerCamelCase(); \
+			"label"; $field.label; \
+			"shortLabel"; $field.shortLabel; \
+			"type"; Choose:C955($fieldDefinition.fieldType=Is time:K8:8; "time"; $fieldDefinition.valueType); \
+			"fieldNumber"; $fieldDefinition.fieldNumber)
+		
+	End if 
+	
+	If ($edit)
+		
+		$parameter.defaultField:=formatString("field-name"; $field.name)
+		
+	End if 
+	
+	If (Bool:C1537($field.mandatory))
+		
+		$parameter.rules:=New collection:C1472("mandatory")
+		
+	End if 
+	
+	// Preset formats
+	Case of 
+			
+			//................................
+		: ($field.fieldType=Is integer:K8:5)\
+			 | ($field.fieldType=Is longint:K8:6)\
+			 | ($field.fieldType=Is integer 64 bits:K8:25)
+			
+			$parameter.format:="integer"
+			
+			//................................
+		: ($parameter.type="date")
+			
+			$parameter.format:="shortDate"
+			
+			//................................
+	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function doRemoveAction()
