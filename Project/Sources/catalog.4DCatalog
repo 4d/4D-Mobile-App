@@ -345,6 +345,33 @@
 			</editor_table_info>
 		</table_extra>
 	</table>
+	<table name="Offices" uuid="9530473090624E829F824BFFA4F81FC0" id="19">
+		<field name="ID" uuid="87AFAE6B7DD645E283CC7951EF00451E" type="4" unique="true" autosequence="true" not_null="true" id="1"/>
+		<field name="Name" uuid="906C31FD4251452FBA249C3E1CDEBE26" type="10" never_null="true" id="2"/>
+		<field name="location" uuid="7D9FB2C26CFC483DA09DCD8666CBD128" type="21" blob_switch_size="2147483647" never_null="true" id="3"/>
+		<field name="__GlobalStamp" uuid="6DA87EADF09C4F9DA8977887D71C511C" type="5" never_null="true" id="4"/>
+		<primary_key field_name="ID" field_uuid="87AFAE6B7DD645E283CC7951EF00451E"/>
+		<table_extra>
+			<editor_table_info displayable_fields_count="6">
+				<color red="255" green="255" blue="255" alpha="0"/>
+				<coordinates left="420.80187988282" top="873.4848022461" width="120" height="167.33203125"/>
+			</editor_table_info>
+		</table_extra>
+	</table>
+	<table name="EmployesOffices" uuid="DE40BD82B9154CEB8926B7B9CC6B43D5" id="20">
+		<field name="ID" uuid="D8E83F00B3F54EC2B7AB21C3AC0978F4" type="4" unique="true" autosequence="true" not_null="true" id="1"/>
+		<field name="officeID" uuid="59DA89D690934C6A92C73C86402A86CE" type="4" never_null="true" id="2"/>
+		<field name="employeeID" uuid="9DDD8593B07D4FF99077255CD0CE6FA6" type="4" never_null="true" id="3"/>
+		<field name="since" uuid="1BD8A98D4E4E40EBB409FC7EAF42BC3A" type="8" never_null="true" id="4"/>
+		<field name="__GlobalStamp" uuid="19840AA68D2B477CB74348C07EF93FCA" type="5" never_null="true" id="5"/>
+		<primary_key field_name="ID" field_uuid="D8E83F00B3F54EC2B7AB21C3AC0978F4"/>
+		<table_extra>
+			<editor_table_info displayable_fields_count="6">
+				<color red="255" green="255" blue="255" alpha="0"/>
+				<coordinates left="193.00732421875" top="869.25775146484" width="120" height="167.33203125"/>
+			</editor_table_info>
+		</table_extra>
+	</table>
 	<relation uuid="558D9845ABB949E8B3E946F29688441A" name_Nto1="theme" name_1toN="commands" auto_load_Nto1="true" auto_load_1toN="false" foreign_key="false" state="1" integrity="reject">
 		<related_field kind="source">
 			<field_ref uuid="3CB8EAC487694A26BC2443332F55E7C9" name="themeID">
@@ -566,6 +593,40 @@
 			</editor_relation_info>
 		</relation_extra>
 	</relation>
+	<relation uuid="D66418839FFD4E9A9B73584399E8AEBE" name_Nto1="office" name_1toN="office_return" auto_load_Nto1="false" auto_load_1toN="false" foreign_key="false" state="1">
+		<related_field kind="source">
+			<field_ref uuid="59DA89D690934C6A92C73C86402A86CE" name="officeID">
+				<table_ref uuid="DE40BD82B9154CEB8926B7B9CC6B43D5" name="EmployesOffices"/>
+			</field_ref>
+		</related_field>
+		<related_field kind="destination">
+			<field_ref uuid="87AFAE6B7DD645E283CC7951EF00451E" name="ID">
+				<table_ref uuid="9530473090624E829F824BFFA4F81FC0" name="Offices"/>
+			</field_ref>
+		</related_field>
+		<relation_extra entry_wildchar="false" entry_create="false" choice_field="0" entry_autofill="false">
+			<editor_relation_info via_point_x="-1" via_point_y="-1" prefers_left="false" smartlink="true">
+				<color red="30" green="30" blue="30" alpha="0"/>
+			</editor_relation_info>
+		</relation_extra>
+	</relation>
+	<relation uuid="2B679824C8044660935893D0331C22FC" name_Nto1="employee" name_1toN="employee_return" auto_load_Nto1="false" auto_load_1toN="false" foreign_key="false" state="1">
+		<related_field kind="source">
+			<field_ref uuid="9DDD8593B07D4FF99077255CD0CE6FA6" name="employeeID">
+				<table_ref uuid="DE40BD82B9154CEB8926B7B9CC6B43D5" name="EmployesOffices"/>
+			</field_ref>
+		</related_field>
+		<related_field kind="destination">
+			<field_ref uuid="0A26D100922E475A92C49657B6C02271" name="ID">
+				<table_ref uuid="F199D0D03F864B939EF3CD9CF9BC0F24" name="Employes"/>
+			</field_ref>
+		</related_field>
+		<relation_extra entry_wildchar="false" entry_create="false" choice_field="0" entry_autofill="false">
+			<editor_relation_info via_point_x="-1" via_point_y="-1" prefers_left="true" smartlink="true">
+				<color red="30" green="30" blue="30" alpha="0"/>
+			</editor_relation_info>
+		</relation_extra>
+	</relation>
 	<index kind="regular" unique_keys="true" name="__DeletedRecordsID" uuid="087E845AFDA04D079B50B07795433E0E" type="7">
 		<field_ref uuid="F571BF97D0374372AFF27AF54428C96E" name="ID">
 			<table_ref uuid="EF6C85E841E14777A16BC7CB97DA5B12" name="__DeletedRecords"/>
@@ -636,6 +697,11 @@
 			<table_ref uuid="677711DF5FAF4C00A69092ED84B50A2D" name="ALL_TYPES"/>
 		</field_ref>
 	</index>
+	<index kind="regular" unique_keys="true" uuid="78E38520D2C44697BFB64E9A6651266D" type="7">
+		<field_ref uuid="87AFAE6B7DD645E283CC7951EF00451E" name="ID">
+			<table_ref uuid="9530473090624E829F824BFFA4F81FC0" name="Offices"/>
+		</field_ref>
+	</index>
 	<index kind="regular" uuid="7A46666A5BC648F18B76CBBDD66979CA" type="7">
 		<field_ref uuid="71E3A10C4FE043E5A2230A1784DA66A5" name="Long Integer field">
 			<table_ref uuid="677711DF5FAF4C00A69092ED84B50A2D" name="ALL_TYPES"/>
@@ -659,6 +725,11 @@
 	<index kind="regular" name="__GlobalStamp_commands" uuid="943C95744F96409CB88F9F77ACD0700A" type="7">
 		<field_ref uuid="501862F4C19B42699963B626C8722E85" name="__GlobalStamp">
 			<table_ref uuid="4AED578B39014B59AB3054B0278F6453" name="Commands"/>
+		</field_ref>
+	</index>
+	<index kind="regular" unique_keys="true" uuid="98043E014ADA49FA93D3A9E496C0A581" type="7">
+		<field_ref uuid="D8E83F00B3F54EC2B7AB21C3AC0978F4" name="ID">
+			<table_ref uuid="DE40BD82B9154CEB8926B7B9CC6B43D5" name="EmployesOffices"/>
 		</field_ref>
 	</index>
 	<index kind="regular" unique_keys="true" uuid="A69F840ED60F4163A118DB2901544CB7" type="7">
