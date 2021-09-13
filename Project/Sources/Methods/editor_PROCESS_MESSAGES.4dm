@@ -254,15 +254,12 @@ Case of
 	: ($message="ignoreServerStructureAdjustement")
 		
 		// Get the project
-		$o:=(OBJECT Get pointer:C1124(Object named:K67:5; "project"))->
-		
-		// Set the temporary authorization
-		$o.$_ignoreServerStructureAdjustement:=True:C214
+		PROJECT.$_ignoreServerStructureAdjustement:=True:C214
 		
 		// Relaunch the build process
 		BUILD(New object:C1471(\
 			"caller"; EDITOR.window; \
-			"project"; $o; \
+			"project"; PROJECT; \
 			"create"; True:C214; \
 			"build"; True:C214; \
 			"run"; True:C214; \
@@ -271,16 +268,12 @@ Case of
 		//______________________________________________________
 	: ($message="allowStructureModification")
 		
-		// Get the project
-		$o:=(OBJECT Get pointer:C1124(Object named:K67:5; "project"))->pr
-		
-		// Set the temporary authorization
-		$o.$_allowStructureAdjustments:=True:C214
+		PROJECT.$_allowStructureAdjustments:=True:C214
 		
 		If (Bool:C1537($data.value))  // Remember my choice
 			
 			// Set the option & save
-			$o.allowStructureAdjustments:=Bool:C1537($data.value)
+			PROJECT.allowStructureAdjustments:=True:C214
 			PROJECT.save()
 			
 		End if 
@@ -288,7 +281,7 @@ Case of
 		// Relaunch the build process
 		BUILD(New object:C1471(\
 			"caller"; Current form window:C827; \
-			"project"; $o; \
+			"project"; PROJECT; \
 			"create"; True:C214; \
 			"build"; True:C214; \
 			"run"; True:C214; \
