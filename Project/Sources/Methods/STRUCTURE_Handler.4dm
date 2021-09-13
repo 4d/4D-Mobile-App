@@ -431,29 +431,14 @@ Case of
 		//=========================================================
 	: ($IN.action="update")
 		
-		If (FEATURE.with("wizards"))
-			
-			// Update ribbon
-			EDITOR.updateRibbon()
-			
-			// Update structure dependencies, if any
-			EDITOR.callMeBack("tableList")
-			EDITOR.callMeBack("fieldList")
-			EDITOR.callMeBack("tableProperties")
-			EDITOR.callMeBack("mainMenu")
-			
-		Else 
-			
-			// Update ribbon
-			CALL FORM:C1391($form.window; $form.callback; "updateRibbon")
-			
-			// Update structure dependencies, if any
-			CALL FORM:C1391($form.window; $form.callback; "tableList"; PROJECT)
-			CALL FORM:C1391($form.window; $form.callback; "fieldList"; PROJECT)
-			CALL FORM:C1391($form.window; $form.callback; "tableProperties"; PROJECT)
-			CALL FORM:C1391($form.window; $form.callback; "mainMenu")
-			
-		End if 
+		// Update ribbon
+		EDITOR.updateRibbon()
+		
+		// Update structure dependencies, if any
+		EDITOR.callMeBack("tableList")
+		EDITOR.callMeBack("fieldList")
+		EDITOR.callMeBack("tableProperties")
+		EDITOR.callMeBack("mainMenu")
 		
 		//=========================================================
 	Else 

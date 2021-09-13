@@ -234,7 +234,6 @@ Function restoreContext()
 				If (FEATURE.with("predictiveEntryInActionParam"))
 					
 					This:C1470.paramName.focus()
-					//This.paramName.highlight()
 					
 				End if 
 				
@@ -251,7 +250,7 @@ Function restoreContext()
 					
 					If (FEATURE.with("predictiveEntryInActionParam"))
 						This:C1470.paramName.focus()
-						//This.paramName.highlight()
+						
 					End if 
 				End if 
 			End if 
@@ -359,6 +358,8 @@ Function update()
 						If (FEATURE.with("predictiveEntryInActionParam"))
 							
 							This:C1470.sortMenu.show()
+							
+							//[BUG] We must backup the original position to not resize at each update
 							This:C1470.paramName.moveAndResizeHorizontally(33; -33)
 							
 						End if 
@@ -695,7 +696,7 @@ Function doAddParameter()
 	
 	If (String:C10(This:C1470.action.preset)="sort")
 		
-		This:C1470.doAddParameterMenu(This:C1470.add)
+		This:C1470.doAddParameterMenu()
 		
 	Else 
 		
@@ -764,43 +765,18 @@ Function doAddParameterMenu($target : Object; $update : Boolean)
 			
 			For each ($t; $table)
 				
-				$field:=$table[$t]
-				
-				Case of 
-						
-						//______________________________________________________
-					: (PROJECT.isField($t))
+				If (PROJECT.isField($t))
+					
+					If (Not:C34($isSortAction) | PROJECT.isSortable($table[$t]))
 						
 						If (This:C1470.action.parameters.query("fieldNumber = :1"; Num:C11($t)).pop()=Null:C1517)
 							
-							If (PROJECT.isSortable($field))
-								
-								$field.fieldNumber:=Num:C11($t)
-								$c.push($field)
-								
-							End if 
-						End if 
-						
-						//______________________________________________________
-					: (Not:C34($isSortAction))
-						
-						// Calculated attributes are ignored for actions other than sorting
-						
-						//______________________________________________________
-					: (PROJECT.isComputedAttribute($field))
-						
-						If (This:C1470.action.parameters.query("name = :1"; $field.name).pop()=Null:C1517)
+							$table[$t].fieldNumber:=Num:C11($t)
+							$c.push($table[$t])
 							
-							If (PROJECT.isSortable($field))
-								
-								$c.push($field)
-								
-							End if 
 						End if 
-						
-						//______________________________________________________
-				End case 
-				
+					End if 
+				End if 
 			End for each 
 		End if 
 		
@@ -810,15 +786,8 @@ Function doAddParameterMenu($target : Object; $update : Boolean)
 			
 			For each ($field; $c)
 				
-				If ($field.fieldNumber#Null:C1517)
-					
-					$menu.append($field.name; String:C10($field.fieldNumber))
-					
-				Else 
-					
-					$menu.append($field.name; $field.name)
-					
-				End if 
+				$menu.append($field.name; String:C10($field.fieldNumber))
+				
 			End for each 
 		End if 
 		
@@ -851,23 +820,11 @@ Function doAddParameterMenu($target : Object; $update : Boolean)
 			//______________________________________________________
 		Else   // Add a field
 			
-			If (Match regex:C1019("^^\\d+$"; $menu.choice; 1))
-				
-				$field:=$c.query("fieldNumber = :1"; Num:C11($menu.choice)).pop()
-				
-			Else 
-				
-				// Computed
-				$field:=$c.query("name = :1"; $menu.choice).pop()
-				
-			End if 
+			$field:=$c.query("fieldNumber = :1"; Num:C11($menu.choice)).pop()
 			
 			If (FEATURE.with("predictiveEntryInActionParam"))
 				
 				If ($isSortAction)
-					
-					// An attribute is not created if the value is null
-					// So $parameter.fieldNumber will not be created if $field.fieldNumber doesn't exists
 					
 					$parameter:=New object:C1471(\
 						"fieldNumber"; $field.fieldNumber; \
@@ -1049,79 +1006,46 @@ Function doMandatory()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Format list
-Function getFormats()->$formats : Object
-	
-	var $type : Text
-	var $index : Integer
-	var $manifestData : Object
-	var $c : Collection
-	var $manifest : 4D:C1709.File
-	var $folder : 4D:C1709.Folder
-	
-	$formats:=JSON Parse:C1218(File:C1566("/RESOURCES/actionParameters.json").getText()).formats
-	
-	If (FEATURE.with("customActionFormatterWithCode"))
-		
-		$folder:=This:C1470.path.hostInputControls(False:C215)
-		
-		If ($folder.exists)
-			
-			For each ($folder; $folder.folders())
-				
-				$manifest:=$folder.file("manifest.json")
-				
-				If ($manifest.exists)
-					
-					$manifestData:=JSON Parse:C1218($manifest.getText())
-					
-					If ($manifestData.choiceList=Null:C1517)  // We do not want choice list formatter, only custom one without data source.
-						
-						If (Value type:C1509($manifestData.type)=Is text:K8:3)  // Be gentle, transform as collection.
-							
-							$manifestData.type:=New collection:C1472($manifestData.type)
-							
-						End if 
-						
-						If (Value type:C1509($manifestData.type)=Is collection:K8:32)
-							
-							// Add to each type, the compatible formatter
-							$c:=New collection:C1472(\
+	//Function getFormats()->$formats : Object
+	//var $type : Text
+	//var $index : Integer
+	//var $manifestData : Object
+	//var $c : Collection
+	//var $manifest : 4D.File
+	//var $folder : 4D.Folder
+	//$formats:=JSON Parse(File("/RESOURCES/actionParameters.json").getText()).formats
+	//If (FEATURE.with("customActionFormatter")) 
+	//$folder:=This.path.hostInputControls(False)
+	//If ($folder.exists)
+	//For each ($folder; $folder.folders())
+	//$manifest:=$folder.file("manifest.json")
+	//If ($manifest.exists)
+	//$manifestData:=JSON Parse($manifest.getText())
+	//If (Value type($manifestData.type)=Is text)
+	//// Transform as collection
+	//$manifestData.type:=New collection($manifestData.type)
+	//End if 
+	//If ($manifestData.choiceList#Null)
+	//If ($manifestData.format=Null)
+	//$manifestData.format:="push"  // Push/segmented/popover/sheet/picker
+	//End if 
+	//End if 
+	//If (Value type($manifestData.type)=Is collection)
+	//$c:=New collection(\
 								"text"; \
 								"real"; \
 								"integer"; \
 								"boolean"; \
 								"picture")
-							
-							For each ($type; $manifestData.type)
-								
-								$index:=$c.indexOf($type)
-								
-								If ($index>=0)
-									
-									$type:=Choose:C955($index; \
-										"string"; \
-										"number"; \
-										"number"; \
-										"bool"; \
-										"image")
-									
-								End if 
-								
-								If ($formats[$type]#Null:C1517)
-									
-									If ($formats[$type].indexOf("/"+$manifestData.name)<0)
-										
-										$formats[$type].push("/"+$manifestData.name)
-										
-									End if 
-								End if 
-							End for each 
-						End if 
-					End if 
-				End if 
-			End for each 
-		End if 
-	End if 
+	//For each ($type; $manifestData.type)
+	//$index:=$c.indexOf($type)
+	//If ($index>=0)
+	//$type:=Choose($index; \
+								"string"; \
+								"number"; \
+								"number"; \
+								"bool"; \
+								"image")
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Show current format on disk
@@ -1160,7 +1084,8 @@ Function doFormatMenu()
 	$current:=This:C1470.current
 	$currentFormat:=String:C10($current.format)
 	
-	$formats:=This:C1470.getFormats()
+	//$formats:=This.getFormats()
+	$formats:=JSON Parse:C1218(File:C1566("/RESOURCES/actionParameters.json").getText()).formats
 	
 	$menu:=cs:C1710.menu.new()
 	
@@ -1389,15 +1314,14 @@ Function doDataSourceMenu()
 				
 				$manifest:=JSON Parse:C1218($file.getText())
 				
-				If ($manifest.choiceList#Null:C1517)
-					$controls.push(New object:C1471(\
-						"dynamic"; $manifest.choiceList.dataSource#Null:C1517; \
-						"name"; $manifest.name; \
-						"source"; $file.parent.name; \
-						"format"; Choose:C955($manifest.format#Null:C1517; $manifest.format; "push"); \
-						"choiceList"; $manifest.choiceList\
-						))
-				End if 
+				$controls.push(New object:C1471(\
+					"dynamic"; $manifest.choiceList.dataSource#Null:C1517; \
+					"name"; $manifest.name; \
+					"source"; $file.parent.name; \
+					"format"; Choose:C955($manifest.format#Null:C1517; $manifest.format; "push"); \
+					"choiceList"; $manifest.choiceList\
+					))
+				
 			End if 
 		End for each 
 		

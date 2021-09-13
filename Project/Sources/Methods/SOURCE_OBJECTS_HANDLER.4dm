@@ -81,38 +81,15 @@ Case of
 		
 		Form:C1466.$project.dataSetGeneration:=True:C214
 		
-		If (FEATURE.with("wizards"))
-			
-			CALL WORKER:C1389(EDITOR.worker; "dataSet"; New object:C1471(\
-				"caller"; EDITOR.window; \
-				"action"; "create"; \
-				"eraseIfExists"; True:C214; \
-				"project"; PROJECT; \
-				"digest"; True:C214; \
-				"coreDataSet"; True:C214; \
-				"key"; $File_key; \
-				"dataSet"; True:C214))
-			
-		Else 
-			
-			$Obj_project:=New object:C1471
-			$Obj_project.product:=Form:C1466.product
-			$Obj_project.dataModel:=Form:C1466.dataModel
-			$Obj_project.$project:=Form:C1466.$project
-			$Obj_project.dataSource:=Form:C1466.dataSource
-			$Obj_project.server:=Form:C1466.server
-			
-			CALL WORKER:C1389(EDITOR.worker; "dataSet"; New object:C1471(\
-				"caller"; EDITOR.window; \
-				"action"; "create"; \
-				"eraseIfExists"; True:C214; \
-				"project"; $Obj_project; \
-				"digest"; True:C214; \
-				"coreDataSet"; True:C214; \
-				"key"; $File_key; \
-				"dataSet"; True:C214))
-			
-		End if 
+		CALL WORKER:C1389(EDITOR.worker; "dataSet"; New object:C1471(\
+			"caller"; EDITOR.window; \
+			"action"; "create"; \
+			"eraseIfExists"; True:C214; \
+			"project"; PROJECT; \
+			"digest"; True:C214; \
+			"coreDataSet"; True:C214; \
+			"key"; $File_key; \
+			"dataSet"; True:C214))
 		
 		//==================================================
 	: ($Txt_me=$Obj_form.doNotGenerate)\

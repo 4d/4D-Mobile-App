@@ -10,12 +10,6 @@ Class constructor()
 	
 	This:C1470.design()
 	
-	If (Not:C34(FEATURE.with("wizards")))
-		
-		// This.init() ⚠️ The initialization is done later since the opening/creation wizards are used
-		
-	End if 
-	
 	// Load preferences
 	This:C1470.preferences:=cs:C1710.preferences.new().user("4D Mobile App.preferences")
 	
@@ -236,11 +230,7 @@ Function init()
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function onLoad()
 	
-	If (FEATURE.with("wizards"))
-		
-		This:C1470.init()
-		
-	End if 
+	This:C1470.init()
 	
 	This:C1470.project.setScrollbars(0; 2)
 	This:C1470.taskIndicator.barber().start()
@@ -439,15 +429,7 @@ Function goToPage($page : Text)
 		
 		Form:C1466.$page:=$o
 		
-		If (FEATURE.with("wizards"))
-			
-			This:C1470.callChild(This:C1470.project; "panel_INIT"; $o; PROJECT)
-			
-		Else 
-			
-			This:C1470.callChild(This:C1470.project; "panel_INIT"; $o)
-			
-		End if 
+		This:C1470.callChild(This:C1470.project; "panel_INIT"; $o; PROJECT)
 		
 		This:C1470.updateHeader($o)
 		

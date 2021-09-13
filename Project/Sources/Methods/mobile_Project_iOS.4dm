@@ -821,231 +821,93 @@ If ($out.success)
 			$ui.step("launchingTheSimulator")
 			$log.information("Launching the Simulator")
 			
-			If (FEATURE.with("withSimulatorClass"))
+			$out.device:=$simctl.device($in.project._simulator)
+			
+			If ($out.device#Null:C1517)
 				
-				$out.device:=$simctl.device($in.project._simulator)
-				
-				If ($out.device#Null:C1517)
+				If (Not:C34($simctl.isDeviceBooted($out.device.udid)))
 					
-					If (Not:C34($simctl.isDeviceBooted($out.device.udid)))
+					$simctl.bootDevice($out.device.udid; True:C214)
+					$simctl.bringSimulatorAppToFront()
+					
+					DELAY PROCESS:C323(Current process:C322; 60*5)
+					LAUNCH EXTERNAL PROCESS:C811("osascript -e 'tell app \"4D\" to activate'")
+					
+				End if 
+				
+				$simctl.bringSimulatorAppToFront()
+				
+				If ($simctl.isDeviceBooted($out.device.udid))
+					
+					$ui.step("installingTheApplication")
+					
+					If ($simctl.isAppInstalled($project.product.bundleIdentifier; $out.device.udid))
 						
-						$simctl.bootDevice($out.device.udid; True:C214)
-						$simctl.bringSimulatorAppToFront()
+						$log.information("Uninstall the App")
 						
-						DELAY PROCESS:C323(Current process:C322; 60*5)
-						LAUNCH EXTERNAL PROCESS:C811("osascript -e 'tell app \"4D\" to activate'")
+						// Quit App
+						$simctl.terminateApp($project.product.bundleIdentifier; $out.device.udid)
+						
+						// Better user impression because the simulator display the installation
+						DELAY PROCESS:C323(Current process:C322; 10)
+						
+						// Uninstall App
+						$simctl.uninstallApp($project.product.bundleIdentifier; $out.device.udid)
 						
 					End if 
 					
-					$simctl.bringSimulatorAppToFront()
+					$log.information("Install the App")
 					
-					If ($simctl.isDeviceBooted($out.device.udid))
+					// Install App
+					$simctl.installApp($in.product; $out.device.udid)
+					
+					If (Not:C34($simctl.success))
 						
-						$ui.step("installingTheApplication")
-						
-						If ($simctl.isAppInstalled($project.product.bundleIdentifier; $out.device.udid))
+						// Redmine #102346: RETRY, if any
+						If (Position:C15("MIInstallerErrorDomain, code=35"; $simctl.lastError)>0)
 							
-							$log.information("Uninstall the App")
-							
-							// Quit App
-							$simctl.terminateApp($project.product.bundleIdentifier; $out.device.udid)
-							
-							// Better user impression because the simulator display the installation
-							DELAY PROCESS:C323(Current process:C322; 10)
-							
-							// Uninstall App
-							$simctl.uninstallApp($project.product.bundleIdentifier; $out.device.udid)
+							$simctl.installApp($in.product; $out.device.udid)
 							
 						End if 
+					End if 
+					
+					If ($simctl.success)
 						
-						$log.information("Install the App")
+						// Launch App
+						$ui.step("launchingTheApplication")
+						$log.information("Launching the App")
 						
-						// Install App
-						$simctl.installApp($in.product; $out.device.udid)
-						
-						If (Not:C34($simctl.success))
-							
-							// Redmine #102346: RETRY, if any
-							If (Position:C15("MIInstallerErrorDomain, code=35"; $simctl.lastError)>0)
-								
-								$simctl.installApp($in.product; $out.device.udid)
-								
-							End if 
-						End if 
+						$simctl.launchApp($project.product.bundleIdentifier; $out.device.udid)
 						
 						If ($simctl.success)
 							
-							// Launch App
-							$ui.step("launchingTheApplication")
-							$log.information("Launching the App")
-							
-							$simctl.launchApp($project.product.bundleIdentifier; $out.device.udid)
-							
-							If ($simctl.success)
-								
-								$simctl.bringSimulatorAppToFront()
-								
-							Else 
-								
-								$ui.alert($simctl.lastError)
-								$log.information("Failed to launch the App ("+$simctl.lastError+")")
-								
-							End if 
+							$simctl.bringSimulatorAppToFront()
 							
 						Else 
 							
 							$ui.alert($simctl.lastError)
-							$log.error("Failed to install the App ("+$simctl.lastError+")")
+							$log.information("Failed to launch the App ("+$simctl.lastError+")")
 							
 						End if 
 						
 					Else 
 						
-						$ui.alert("failedToOpenSimulator")
-						$log.error("device not booted")
+						$ui.alert($simctl.lastError)
+						$log.error("Failed to install the App ("+$simctl.lastError+")")
 						
 					End if 
 					
 				Else 
 					
 					$ui.alert("failedToOpenSimulator")
-					$log.error("device not found")
+					$log.error("device not booted")
 					
 				End if 
 				
 			Else 
 				
-				If (_o_simulator(New object:C1471(\
-					"action"; "open"; \
-					"editorToFront"; Bool:C1537($in.testing); \
-					"bringToFront"; Not:C34(Bool:C1537($in.testing)))).success)
-					// Wait for a booted simulator
-					$start:=Milliseconds:C459
-					Repeat 
-						IDLE:C311
-						DELAY PROCESS:C323(Current process:C322; 60)
-						$Obj_result_device:=_o_simulator(New object:C1471(\
-							"action"; "devices"; \
-							"filter"; "booted"))
-						$out.device:=$Obj_result_device
-						If ($Obj_result_device.success)
-							$success:=($Obj_result_device.devices.length>0)
-						End if 
-					Until ($success)\
-						 | (Not:C34($Obj_result_device.success))\
-						 | ((Milliseconds:C459-$start)>SHARED.simulatorTimeout)
-					If ($success)
-						POST_MESSAGE(New object:C1471(\
-							"target"; $in.caller; \
-							"additional"; "installingTheApplication"))
-						If ($verbose)
-							CALL FORM:C1391($in.caller; "LOG_EVENT"; New object:C1471(\
-								"message"; "Uninstall the App"; \
-								"importance"; Information message:K38:1))
-						End if 
-						// Quit app
-						$out.simulator:=_o_simulator(New object:C1471(\
-							"action"; "terminate"; \
-							"identifier"; $project.product.bundleIdentifier))
-						// Better user impression because the simulator display the installation
-						DELAY PROCESS:C323(Current process:C322; 10)
-						// Uninstall app
-						$out.simulator:=_o_simulator(New object:C1471(\
-							"action"; "uninstall"; \
-							"identifier"; $project.product.bundleIdentifier))
-						If ($out.simulator.success)
-							If ($verbose)
-								CALL FORM:C1391($in.caller; "LOG_EVENT"; New object:C1471(\
-									"message"; "Install the App"; \
-									"importance"; Information message:K38:1))
-							End if 
-							// Install app
-							$out.simulator:=_o_simulator(New object:C1471(\
-								"action"; "install"; \
-								"identifier"; $in.product))
-							If (Not:C34($out.simulator.success))
-								// redmine #102346
-								If (Value type:C1509($out.simulator.errors)=Is collection:K8:32)
-									If (Position:C15("MIInstallerErrorDomain, code=35"; String:C10($out.simulator.errors[0]))>0)
-										$out.simulator:=_o_simulator(New object:C1471(\
-											"action"; "install"; \
-											"identifier"; $in.product))
-									End if 
-								End if 
-							End if 
-							If ($out.simulator.success)
-								POST_MESSAGE(New object:C1471(\
-									"target"; $in.caller; \
-									"additional"; "launchingTheApplication"))
-								If ($verbose)
-									CALL FORM:C1391($in.caller; "LOG_EVENT"; New object:C1471(\
-										"message"; "Launching the App"; \
-										"importance"; Information message:K38:1))
-								End if 
-								// Launch app
-								$out.simulator:=_o_simulator(New object:C1471(\
-									"action"; "launch"; \
-									"identifier"; $project.product.bundleIdentifier))
-								If (Not:C34($out.simulator.success))
-									// Failed to launch app
-									POST_MESSAGE(New object:C1471(\
-										"type"; "alert"; \
-										"target"; $in.caller; \
-										"additional"; String:C10($out.simulator.error)))
-									If ($verbose)
-										CALL FORM:C1391($in.caller; "LOG_EVENT"; New object:C1471(\
-											"message"; "Failed to launch the App ("+$out.simulator.error+")"; \
-											"importance"; Error message:K38:3))
-									End if 
-								End if 
-							Else 
-								// Failed to install app
-								POST_MESSAGE(New object:C1471(\
-									"type"; "alert"; \
-									"target"; $in.caller; \
-									"additional"; String:C10($out.simulator.error)))
-								If ($verbose)
-									CALL FORM:C1391($in.caller; "LOG_EVENT"; New object:C1471(\
-										"message"; "Failed to install the App ("+$out.simulator.error+")"; \
-										"importance"; Error message:K38:3))
-								End if 
-							End if 
-						Else 
-							// Failed to uninstall app
-							POST_MESSAGE(New object:C1471(\
-								"type"; "alert"; \
-								"target"; $in.caller; \
-								"additional"; String:C10($out.simulator.error)))
-							If ($verbose)
-								CALL FORM:C1391($in.caller; "LOG_EVENT"; New object:C1471(\
-									"message"; "Failed to uninstall the App ("+$out.simulator.error+")"; \
-									"importance"; Error message:K38:3))
-							End if 
-						End if 
-					Else 
-						// Failed to launch device
-						POST_MESSAGE(New object:C1471(\
-							"type"; "alert"; \
-							"target"; $in.caller; \
-							"additional"; "failedToLaunchTheSimulator"))
-						If ($verbose)
-							CALL FORM:C1391($in.caller; "LOG_EVENT"; New object:C1471(\
-								"message"; "Failed to launch simulator"; \
-								"importance"; Error message:K38:3))
-						End if 
-					End if 
-				Else 
-					// Failed to open simulator
-					POST_MESSAGE(New object:C1471(\
-						"type"; "alert"; \
-						"target"; $in.caller; \
-						"additional"; "failedToOpenSimulator"))
-					If ($verbose)
-						CALL FORM:C1391($in.caller; "LOG_EVENT"; New object:C1471(\
-							"message"; "Failed to open the Simulator"; \
-							"importance"; Error message:K38:3))
-					End if 
-				End if 
+				$ui.alert("failedToOpenSimulator")
+				$log.error("device not found")
 				
 			End if 
 			

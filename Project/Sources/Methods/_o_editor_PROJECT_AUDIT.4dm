@@ -11,32 +11,13 @@
 
 // ----------------------------------------------------
 // Initialisations
-If (FEATURE.with("wizards"))
-	
-	// Launch checking the structure
-	EDITOR.callWorker("_o_structure"; New object:C1471(\
-		"action"; "catalog"; \
-		"caller"; EDITOR.window))
-	
-	// Launch project verifications
-	EDITOR.callMeBack("projectAudit")
-	
-Else 
-	
-	var $worker : Text
-	var $window : Integer
-	$window:=Current form window:C827
-	$worker:="4D Mobile ("+String:C10($window)+")"
-	
-	// Launch checking the structure
-	CALL WORKER:C1389($worker; "_o_structure"; New object:C1471(\
-		"action"; "catalog"; \
-		"caller"; $window))
-	
-	// Launch project verifications
-	CALL FORM:C1391($window; "editor_CALLBACK"; "projectAudit")
-	
-End if 
 
+// Launch checking the structure
+EDITOR.callWorker("_o_structure"; New object:C1471(\
+"action"; "catalog"; \
+"caller"; EDITOR.window))
+
+// Launch project verifications
+EDITOR.callMeBack("projectAudit")
 // ----------------------------------------------------
 // End

@@ -457,30 +457,17 @@ Case of
 			
 			If (Length:C16($panel)>0)
 				
-				If (FEATURE.with("wizards"))
-					
-					EDITOR.callChild($panel; EDITOR.callback; $selector)
-					
-				Else 
-					
-					EDITOR.callChild($panel; Current method name:C684; $selector; $data)
-					
-				End if 
+				EDITOR.callChild($panel; EDITOR.callback; $selector)
+				
 			End if 
 			
 		Else 
 			
-			If (FEATURE.with("wizards"))
-				
-				STRUCTURE_Handler(New object:C1471("action"; $selector; "value"; PROJECT))
-				
-			Else 
-				
-				STRUCTURE_Handler(New object:C1471("action"; $selector; "value"; $data))
-				
-			End if 
+			STRUCTURE_Handler(New object:C1471(\
+				"action"; $selector; \
+				"value"; PROJECT))
+			
 		End if 
-		
 		//______________________________________________________
 	: ($selector="onLosingFocus")
 		

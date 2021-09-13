@@ -228,30 +228,6 @@
 					"visibility": "hidden"
 				}
 			}
-		},
-		{
-			"objects": {
-				"welcome": {
-					"type": "subform",
-					"top": 0,
-					"left": 0,
-					"width": 970,
-					"height": 870,
-					"sizingX": "grow",
-					"sizingY": "grow",
-					"dataSourceTypeHint": "object",
-					"detailForm": "WELCOME",
-					"focusable": false,
-					"deletableInList": false,
-					"doubleClickInRowAction": "editSubrecord",
-					"selectionMode": "multiple",
-					"printFrame": "variable",
-					"borderStyle": "sunken",
-					"method": "ObjectMethods/welcome.4dm",
-					"dataSource": "Form:C1466.$meta",
-					"bottom": 870
-				}
-			}
 		}
 	],
 	"editor": {
@@ -297,7 +273,7 @@
 			}
 		}
 	},
-	"geometryStamp": 213,
+	"geometryStamp": 216,
 	"width": 970,
 	"height": 870
 }

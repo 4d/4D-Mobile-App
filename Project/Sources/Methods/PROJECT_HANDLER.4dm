@@ -102,12 +102,6 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Bound Variable Change:K2:52)
 				
-				If (Not:C34(FEATURE.with("wizards")))
-					
-					Form:C1466.$worker:=Form:C1466.$project.$worker
-					
-				End if 
-				
 				var $height; $width : Integer
 				
 				OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $height)

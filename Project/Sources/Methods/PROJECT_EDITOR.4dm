@@ -10,17 +10,11 @@ If ($e.objectName=Null:C1517)  // <== FORM METHOD
 			//______________________________________________________
 		: ($e.code=On Load:K2:1)
 			
-			If (FEATURE.with("wizards"))\
-				 & (EDITOR#Null:C1517)
+			If (EDITOR#Null:C1517)
 				
 				// We come from a wizard,
 				// so we need to update the form name
 				EDITOR.name:=Current form name:C1298
-				
-			Else 
-				
-				// Direct open: we need to create the EDITOR
-				EDITOR:=cs:C1710.PROJECT_EDITOR.new()
 				
 			End if 
 			

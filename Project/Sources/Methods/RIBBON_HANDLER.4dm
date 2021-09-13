@@ -230,15 +230,8 @@ Case of
 		// * UPDATE THE SECTION BUTTONS
 		For each ($page; $form.pages)
 			
-			If (FEATURE.with("wizards"))
-				
-				OBJECT SET VALUE:C1742($page.button; Num:C11($page.name=EDITOR.currentPage))
-				
-			Else 
-				
-				OBJECT SET VALUE:C1742($page.button; Num:C11($page.name=Form:C1466.page))
-				
-			End if 
+			OBJECT SET VALUE:C1742($page.button; Num:C11($page.name=EDITOR.currentPage))
+			
 		End for each 
 		
 		$form.simulator.setColors("dimgray")

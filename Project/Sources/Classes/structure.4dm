@@ -12,14 +12,32 @@ Class constructor
 	This:C1470.catalog:=This:C1470.exposedCatalog()
 	
 	//==================================================================
-Function exposedDatastore()->$datastore : Object
+Function exposedDatastore
+	var $0 : Object
 	
-	$datastore:=_4D_Build Exposed Datastore:C1598
+	$0:=_4D_Build Exposed Datastore:C1598
 	
 	//==================================================================
-	// If $query is a table name or number, the catalog is that of the corresponding 
-	// table if it is found.
-Function exposedCatalog($query : Variant; $sorted : Boolean)->$catalog : Collection
+Function exposedCatalog
+/*
+-------------------------------------------------------------------------------------------
+	
+If 'name' or 'tableNumber is not null, the result is limited to the corresponding table
+	
+-------------------------------------------------------------------------------------------
+	
+Build Exposed Datastore:
+• Only references tables with a single primary key. Tables without a primary key or with composite primary keys are not referenced.
+• Only references tables & fields exposed with 4D Mobile services.
+• BLOB type attributes are not managed in the datastore.
+	
+-------------------------------------------------------------------------------------------
+! A relation N -> 1 is not referenced if the field isn't exposed with 4D Mobile services !
+-------------------------------------------------------------------------------------------
+*/
+	var $0 : Collection
+	var $1 : Variant  // Table name or table number
+	var $2 : Boolean  // Sorted
 	
 	var $fieldName; $tableName : Text
 	var $found; $oneTable : Boolean
@@ -30,34 +48,36 @@ Function exposedCatalog($query : Variant; $sorted : Boolean)->$catalog : Collect
 	
 	If (This:C1470.success)
 		
-		$catalog:=New collection:C1472
+		$0:=New collection:C1472
 		
 		$oneTable:=(Count parameters:C259>=1)
 		
 		For each ($tableName; This:C1470.datastore) Until ($found)
 			
-			// Do not process the table of deleted records
-			If ($tableName#This:C1470.deletedRecordsTableName)
-				
-				$table:=This:C1470.datastore[$tableName].getInfo()
+			$table:=This:C1470.datastore[$tableName].getInfo()
+			
+			If ($tableName#This:C1470.deletedRecordsTableName)  // DON'T DISPLAY DELETED RECORDS TABLE
 				
 				If ($oneTable)
 					
 					Case of 
 							
 							//…………………………………………………………………………………………………
-						: (Value type:C1509($query)=Is text:K8:3)  // Table name
+						: (Value type:C1509($1)=Is text:K8:3)
 							
-							$found:=($tableName=$query)
+							$found:=($tableName=$1)
 							
 							//…………………………………………………………………………………………………
-						: (Value type:C1509($query)=Is longint:K8:6)\
-							 | (Value type:C1509($query)=Is real:K8:4)  // Table number
+						: (Value type:C1509($1)=Is longint:K8:6)\
+							 | (Value type:C1509($1)=Is real:K8:4)
 							
-							$found:=($table.tableNumber=$query)
+							$found:=($table.tableNumber=$1)
 							
 							//…………………………………………………………………………………………………
 					End case 
+				End if 
+				
+				If ($oneTable)
 					
 					This:C1470.success:=$found
 					
@@ -67,7 +87,7 @@ Function exposedCatalog($query : Variant; $sorted : Boolean)->$catalog : Collect
 					
 					If (Not:C34($oneTable)) | $found
 						
-						$catalog.push($table)
+						$0.push($table)
 						
 						$table.field:=New collection:C1472
 						
@@ -111,6 +131,7 @@ Function exposedCatalog($query : Variant; $sorted : Boolean)->$catalog : Collect
 										$field.id:=$field.fieldNumber
 										$field.valueType:=$field.type
 										$field.type:=This:C1470.__fielddType($field.fieldType)
+										
 										// ]
 										
 										$table.field.push($field)
@@ -145,23 +166,13 @@ Function exposedCatalog($query : Variant; $sorted : Boolean)->$catalog : Collect
 											"isToMany"; True:C214))
 										
 										//…………………………………………………………………………………………………
-									: (This:C1470.isComputedAttribute($field))
-										
-										$table.field.push(New object:C1471(\
-											"name"; $fieldName; \
-											"kind"; $field.kind; \
-											"type"; -3; \
-											"fieldType"; $field.fieldType; \
-											"valueType"; $field.type))
-										
-										//…………………………………………………………………………………………………
 								End case 
 							End if 
 						End for each 
 						
 						If (Count parameters:C259>=2)
 							
-							If ($sorted)
+							If ($2)
 								
 								$table.field:=$table.field.orderBy("name asc")
 								
@@ -176,9 +187,9 @@ Function exposedCatalog($query : Variant; $sorted : Boolean)->$catalog : Collect
 			
 			If (Count parameters:C259>=2)
 				
-				If ($sorted)
+				If ($2)
 					
-					$catalog:=$catalog.orderBy("name asc")
+					$0:=$0.orderBy("name asc")
 					
 				End if 
 			End if 
@@ -187,43 +198,46 @@ Function exposedCatalog($query : Variant; $sorted : Boolean)->$catalog : Collect
 			
 			If ($oneTable)
 				
-				This:C1470.errors.push("Table not found: "+String:C10($query))
+				This:C1470.errors.push("Table not found: "+String:C10($1))
 				
 			End if 
 		End if 
 	End if 
 	
 	//==================================================================
-Function isComputedAttribute($field : Object)->$is : Boolean
+Function isStorage
+	var $0 : Boolean
+	var $1 : Object
 	
-	If (String:C10($field.kind)="calculated")
+	If (String:C10($1.kind)="storage")
 		
-		$is:=This:C1470._allowPublication($field)
-		
-	End if 
-	
-	//==================================================================
-Function isStorage($field : Object)->$is : Boolean
-	
-	If (String:C10($field.kind)="storage")
-		
-		// Don't allow stamp field
-		If ($field.name#This:C1470.stampFieldName)
+		// Don't display stamp field
+		If ($1.name#This:C1470.stampFieldName)
 			
-			$is:=This:C1470._allowPublication($field)
-			
+			// Exclude object and blob fields [AND SUBTABLE]
+			If ($1.fieldType#Is object:K8:27)\
+				 & ($1.fieldType#Is BLOB:K8:12)\
+				 & ($1.fieldType#Is subtable:K8:11)
+				
+				$0:=True:C214
+				
+			End if 
 		End if 
 	End if 
 	
 	//==================================================================
-Function isRelatedEntity($field : Object)->$is : Boolean
+Function isRelatedEntity
+	var $0 : Boolean
+	var $1 : Object
 	
-	$is:=($field.kind="relatedEntity")
+	$0:=($1.kind="relatedEntity")
 	
 	//==================================================================
-Function isRelatedEntities($field : Object)->$is : Boolean
+Function isRelatedEntities
+	var $0 : Boolean
+	var $1 : Object
 	
-	$is:=($field.kind="relatedEntities")
+	$0:=($1.kind="relatedEntities")
 	
 	//==================================================================
 Function fieldDefinition($table; $fieldPath : Text)->$field : Object
@@ -251,7 +265,7 @@ Function fieldDefinition($table; $fieldPath : Text)->$field : Object
 		
 		$c:=Split string:C1554($fieldPath; ".")
 		
-		$field:=$tableCatalog.field.query("name = :1"; $c[0]).pop()
+		$field:=$tableCatalog.field.query("name=:1"; $c[0]).pop()
 		This:C1470.success:=($field#Null:C1517)
 		
 		If (This:C1470.success)
@@ -339,22 +353,26 @@ Function fieldDefinition($table; $fieldPath : Text)->$field : Object
 	
 	//==================================================================
 	// Return related entity catalog
-Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Boolean)->$result : Object
+Function relatedCatalog
+	var $0 : Object
+	var $1 : Text  // Table name
+	var $2 : Text  // RelatedEntity
+	var $3 : Boolean
 	
 	var $fieldName : Text
 	var $withRecursiveLinks : Boolean
 	var $field; $o; $related; $relatedDataClass; $relatedField : Object
 	
-	$result:=New object:C1471(\
+	$0:=New object:C1471(\
 		"success"; False:C215)
 	
 	If (Count parameters:C259>=3)
 		
-		$withRecursiveLinks:=$recursive
+		$withRecursiveLinks:=$3
 		
 	End if 
 	
-	$field:=This:C1470.datastore[$tableName][$relationName]
+	$field:=This:C1470.datastore[$1][$2]
 	
 	Case of 
 			
@@ -366,12 +384,12 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 			//…………………………………………………………………………………………………
 		: (This:C1470.isRelatedEntity($field))  // N -> 1 relation
 			
-			$result.success:=True:C214
-			$result.fields:=New collection:C1472
-			$result.relatedEntity:=$field.name
-			$result.relatedTableNumber:=This:C1470.datastore[$field.relatedDataClass].getInfo().tableNumber
-			$result.relatedDataClass:=$field.relatedDataClass
-			$result.inverseName:=$field.inverseName
+			$0.success:=True:C214
+			$0.fields:=New collection:C1472
+			$0.relatedEntity:=$field.name
+			$0.relatedTableNumber:=This:C1470.datastore[$field.relatedDataClass].getInfo().tableNumber
+			$0.relatedDataClass:=$field.relatedDataClass
+			$0.inverseName:=$field.inverseName
 			
 			$relatedDataClass:=This:C1470.datastore[$field.relatedDataClass]
 			
@@ -389,53 +407,38 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 						
 						$o.path:=$o.name
 						$o.type:=This:C1470.__fielddType($o.fieldType)
-						$o.relatedTableNumber:=$result.relatedTableNumber
-						$result.fields.push($o)
+						
+						$o.relatedTableNumber:=$0.relatedTableNumber
+						
+						$0.fields.push($o)
 						
 						//___________________________________________
 					: (This:C1470.isRelatedEntity($o))  // N -> 1 relation
 						
-						If (Choose:C955($withRecursiveLinks; True:C214; ($o.relatedDataClass#$tableName)))
+						If (Choose:C955($withRecursiveLinks; True:C214; ($o.relatedDataClass#$1)))
 							
 							For each ($relatedField; Form:C1466.$project.$catalog.query("name = :1"; $o.relatedDataClass).pop().field)
 								
-								Case of 
+								If (This:C1470.isStorage($relatedField))
+									
+									$related:=This:C1470.fieldDefinition(This:C1470.tableNumber($o.relatedDataClass); $relatedField.name)
+									
+									If ($related#Null:C1517)
 										
-										//______________________________________________________
-									: (This:C1470.isStorage($relatedField))
-										
-										$related:=This:C1470.fieldDefinition(This:C1470.tableNumber($o.relatedDataClass); $relatedField.name)
-										
-										If ($related#Null:C1517)
-											
-											$related.path:=$o.name+"."+$related.name
-											$result.fields.push($related)
-											
-										End if 
-										
-										//______________________________________________________
-									: (This:C1470.isComputedAttribute($relatedField))
-										
-										$related:=OB Copy:C1225($relatedField)
 										$related.path:=$o.name+"."+$related.name
-										$related.tableNumber:=$result.relatedTableNumber
-										$result.fields.push($related)
+										$0.fields.push($related)
 										
-										//______________________________________________________
-									Else 
-										
-										// A "Case of" statement should never omit "Else"
-										//______________________________________________________
-								End case 
+									End if 
+								End if 
 							End for each 
 						End if 
 						
 						//…………………………………………………………………………………………………
 					: (This:C1470.isRelatedEntities($o))  // 1 -> N relation
 						
-						If (Choose:C955($withRecursiveLinks; True:C214; ($o.relatedDataClass#$tableName)))
+						If (Choose:C955($withRecursiveLinks; True:C214; ($o.relatedDataClass#$1)))
 							
-							$result.fields.push(New object:C1471(\
+							$0.fields.push(New object:C1471(\
 								"name"; $o.name; \
 								"path"; $o.name; \
 								"fieldType"; 8859; \
@@ -456,11 +459,6 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 			// <NOT YET  MANAGED>
 			
 			//…………………………………………………………………………………………………
-		: (This:C1470.isComputedAttribute($field))
-			
-			//
-			
-			//…………………………………………………………………………………………………
 		Else 
 			
 			// <NOTHING MORE TO DO>
@@ -469,20 +467,21 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 	End case 
 	
 	//==================================================================
-	// Returns a table catalog
+	// Return a table catalog
 Function tableCatalog($name : Text)->$tableCatalog : Object
 	
 	$tableCatalog:=This:C1470.catalog[This:C1470.catalog.indices("name = :1"; $name)[0]]
 	
 	//==================================================================
-	// Returns table number from name
-Function tableNumber($tableName : Text)->$tableNumber : Integer
+Function tableNumber  // Table number from name
+	var $1 : Text
+	var $0 : Integer
 	
-	This:C1470.success:=This:C1470.datastore[$tableName]#Null:C1517
+	This:C1470.success:=This:C1470.datastore[$1]#Null:C1517
 	
 	If (This:C1470.success)
 		
-		$tableNumber:=This:C1470.datastore[$tableName].getInfo().tableNumber
+		$0:=This:C1470.datastore[$1].getInfo().tableNumber
 		
 	End if 
 	
@@ -586,18 +585,6 @@ Function addField($table : Object; $field : Object)
 				"inverseName"; $field.inverseName)
 			
 			//………………………………………………………………………………………………………
-		: ($type=-3)  // Computed attribute
-			
-			$table[$field.name]:=New object:C1471(\
-				"name"; $field.name; \
-				"label"; PROJECT.label($field.name); \
-				"shortLabel"; PROJECT.label($field.name); \
-				"fieldType"; $field.fieldType)
-			
-			// #TEMPO
-			$table[$field.name].type:=$field.type
-			
-			//………………………………………………………………………………………………………
 		Else 
 			
 			// Add the field to data model
@@ -636,18 +623,6 @@ Function removeField($table : Object; $fieldOrKey : Variant)
 	Else 
 		
 		OB REMOVE:C1226($table; String:C10($fieldOrKey))
-		
-	End if 
-	
-	//==================================================================
-	// Returns True if a field could be published
-Function _allowPublication($field : Object)->$allow : Boolean
-	
-	If ($field.name#This:C1470.stampFieldName)
-		
-		$allow:=($field.fieldType#Is BLOB:K8:12)\
-			 & ($field.fieldType#Is subtable:K8:11)\
-			 & ($field.fieldType#Is object:K8:27)
 		
 	End if 
 	

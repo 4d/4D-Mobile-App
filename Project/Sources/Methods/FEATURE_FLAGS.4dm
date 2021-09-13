@@ -128,10 +128,10 @@ FEATURE.delivered("templateClass"; 1860)
 FEATURE.delivered("searchWithBarCode"; 1860)
 
 /* _____________
-1900
+1900 - REMOVED
 _____________*/
-FEATURE.unstable("withSimulatorClass")  // Use simctl class intead of _o_simulator
-FEATURE.unstable("wizards")  // Use a wizard instead of standard dialogs to create or open a project
+FEATURE.delivered("withSimulatorClass")  // Use simctl class intead of _o_simulator
+FEATURE.delivered("wizards")  // Use a wizard instead of standard dialogs to create or open a project
 
 /* _____________
 1920

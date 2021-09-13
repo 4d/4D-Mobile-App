@@ -12,8 +12,7 @@
 	"____FOR_TESTS": {
 		"classes": [
 			"Employes",
-			"EmployesEntity",
-			"EmployesSelection"
+			"EmployesEntity"
 		]
 	},
 	"__IN WORKS": {
@@ -69,7 +68,6 @@
 			"_o_doc_getFromPath",
 			"_o_doc_LoadJsonFile",
 			"_o_editor_Locked",
-			"_o_editor_OPEN_PROJECT",
 			"_o_editor_PROJECT_AUDIT",
 			"_o_env_System_path",
 			"_o_http",
