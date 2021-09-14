@@ -437,7 +437,52 @@ If ($cacheFile.exists)
 									//______________________________________________________
 								: (PROJECT.isComputedAttribute($item.value))
 									
-									//#TO_DO
+									$field:=$table.value[$item.key]
+									$field.current:=$tableCatalog.field.query("name = :1"; $item.key).pop()
+									$field.missing:=$field.current=Null:C1517
+									
+									If (Not:C34($field.missing))
+										
+										If (Value type:C1509($field.type)=Is text:K8:3)
+											
+											// Compare to value Type
+											$field.typeMismatch:=$field.type#$field.current.valueType
+											
+										Else 
+											
+											$field.typeMismatch:=$field.fieldType#$field.current.fieldType
+											
+										End if 
+									End if 
+									
+									If ($field.missing | Bool:C1537($field.typeMismatch))
+										
+										// THE FIELD IS NO LONGER AVAILABLE
+										// OR THE TYPE HAS BEEN CHANGED
+										
+										$isTableUnsynchronized:=True:C214
+										
+										Case of 
+												
+												//______________________________________________________
+											: ($field.missing)
+												
+												$field.tableTips:=$str.setText("theFieldNameIsMissing").localized($field.name)
+												$field.fieldTips:=$str.setText("theFieldIsMissing").localized()
+												
+												//______________________________________________________
+											: (Bool:C1537($field.typeMismatch))
+												
+												$field.tableTips:=$str.setText("theFieldNameTypeWasModified").localized($field.name)
+												$field.fieldTips:=$str.setText("theFieldTypeWasModified").localized()
+												
+												//______________________________________________________
+										End case 
+										
+										// Append faulty field
+										$unsynchronizedFields.push($field)
+										
+									End if 
 									
 									//______________________________________________________
 								Else 

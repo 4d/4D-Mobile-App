@@ -205,6 +205,12 @@ Function append($item : Variant; $param : Variant; $mark : Boolean)->$this : cs:
 							SET MENU ITEM MARK:C208(This:C1470.ref; -1; Char:C90(18)*Num:C11($mark))
 							
 						End if 
+						
+					Else 
+						
+						// Set the parameter to the same value as the text of the element
+						SET MENU ITEM PARAMETER:C1004(This:C1470.ref; -1; $t)
+						
 					End if 
 				End if 
 			Else 

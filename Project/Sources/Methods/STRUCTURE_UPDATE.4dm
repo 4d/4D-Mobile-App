@@ -8,7 +8,7 @@
 // Updating the data model and project dependencies
 // ----------------------------------------------------
 // Declarations
-var $1 : Object
+#DECLARE($form : Object)
 
 If (False:C215)
 	C_OBJECT:C1216(STRUCTURE_UPDATE; $1)
@@ -17,34 +17,20 @@ End if
 var $t : Text
 var $found : Boolean
 var $indx : Integer
-var $context; $currentTable; $dataModel; $field; $form; $o; $table : Object
+var $context; $currentTable; $field; $o; $table : Object
 var $published : Collection
 var $structure : cs:C1710.structure
 
 // ----------------------------------------------------
 // Initialisations
-If (Count parameters:C259>=1)
-	
-	$form:=$1
-	
-Else 
-	
-	$form:=STRUCTURE_Handler(New object:C1471(\
-		"action"; "init"))
-	
-End if 
-
-$dataModel:=Form:C1466.dataModel
-
 $context:=$form.form
 $currentTable:=$context.currentTable
 
 $structure:=cs:C1710.structure.new()
 
-$published:=New collection:C1472
-
 // ----------------------------------------------------
 // GET THE PUBLISHED FIELD NAMES LIST
+$published:=New collection:C1472
 ARRAY TO COLLECTION:C1563($published; ($form.publishedPtr)->; "published"; (OBJECT Get pointer:C1124(Object named:K67:5; $form.fields))->; "name")
 
 If ($published.extract("published").countValues(0)=$published.length)\
@@ -61,7 +47,7 @@ If ($published.extract("published").countValues(0)=$published.length)\
 	
 Else 
 	
-	$table:=$dataModel[String:C10($currentTable.tableNumber)]
+	$table:=PROJECT.dataModel[String:C10($currentTable.tableNumber)]
 	
 	If ($table=Null:C1517)
 		
@@ -92,13 +78,10 @@ Else
 					//………………………………………………………………………………………………………
 				: (PROJECT.isField($t))
 					
-					$found:=(String:C10($table[$t].name)=$o.name)
+					ASSERT:C1129(PROJECT.isField($table[$t]))
 					
-					If ($found)
-						
-						$field:=$currentTable.field[$currentTable.field.extract("name").indexOf($o.name)]
-						
-					End if 
+					$found:=(String:C10($table[$t].name)=$o.name)
+					$t:=$o.name
 					
 					//………………………………………………………………………………………………………
 				: (Value type:C1509($table[$t])#Is object:K8:27)
@@ -110,34 +93,15 @@ Else
 					
 					$found:=(String:C10($o.name)=$t) & (Num:C11($o.published)#2)  // Not mixed
 					
-					If ($found)
-						
-						$field:=$currentTable.field.query("name=:1"; $t).pop()
-						
-					End if 
-					
 					//………………………………………………………………………………………………………
 				: (PROJECT.isRelationToMany($table[$t]))  // 1 -> N relation
 					
 					$found:=(String:C10($o.name)=$t)
 					
-					If ($found)
-						
-						$field:=$currentTable.field[$currentTable.field.extract("name").indexOf($t)]
-						
-					End if 
-					
 					//………………………………………………………………………………………………………
 				: (PROJECT.isComputedAttribute($table[$t]))  // Computed attribute
 					
 					$found:=(String:C10($o.name)=$t)
-					
-					If ($found)
-						
-						$field:=$currentTable.field[$currentTable.field.extract("name").indexOf($t)]
-						
-					End if 
-					
 					
 					//………………………………………………………………………………………………………
 				Else 
@@ -148,7 +112,11 @@ Else
 			End case 
 		End for each 
 		
-		If (Not:C34($found))
+		If ($found)
+			
+			$field:=$currentTable.field.query("name = :1"; $t).pop()
+			
+		Else 
 			
 			// Get from cache
 			$field:=$currentTable.field.query("name = :1"; $o.name).pop()

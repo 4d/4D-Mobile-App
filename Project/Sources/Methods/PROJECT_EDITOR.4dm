@@ -10,11 +10,18 @@ If ($e.objectName=Null:C1517)  // <== FORM METHOD
 			//______________________________________________________
 		: ($e.code=On Load:K2:1)
 			
+			var EDITOR : cs:C1710.PROJECT_EDITOR
+			
 			If (EDITOR#Null:C1517)
 				
 				// We come from a wizard,
 				// so we need to update the form name
 				EDITOR.name:=Current form name:C1298
+				
+			Else 
+				
+				// Direct launch (dev mode)
+				EDITOR:=cs:C1710.PROJECT_EDITOR.new()
 				
 			End if 
 			

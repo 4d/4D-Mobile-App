@@ -739,10 +739,10 @@ Function doAddParameterMenu($target : Object; $update : Boolean)
 	var $isSortAction : Boolean
 	var $field; $parameter; $table : Object
 	var $c : Collection
+	var $isComputedAttribute : 4D:C1709.Function
 	var $menu : cs:C1710.menu
 	
 	$isSortAction:=String:C10(This:C1470.action.preset)="sort"
-	
 	$menu:=cs:C1710.menu.new()
 	
 	If (Not:C34($isSortAction))
@@ -755,6 +755,18 @@ Function doAddParameterMenu($target : Object; $update : Boolean)
 		
 		$table:=Form:C1466.dataModel[String:C10(This:C1470.action.tableNumber)]
 		
+		If ((String:C10(This:C1470.action.preset)="edit")\
+			 | (String:C10(This:C1470.action.preset)="add"))
+			
+			// Filtering attributes writable
+			$isComputedAttribute:=Formula:C1597(PROJECT.isComputedAttribute($1; $table[""].name))
+			
+		Else 
+			
+			$isComputedAttribute:=Formula:C1597(PROJECT.isComputedAttribute($1))
+			
+		End if 
+		
 		$c:=New collection:C1472
 		
 		If (This:C1470.action.parameters=Null:C1517)
@@ -763,7 +775,7 @@ Function doAddParameterMenu($target : Object; $update : Boolean)
 				
 				$field:=$table[$t]
 				
-				If (PROJECT.isField($t)) | (PROJECT.isComputedAttribute($field))
+				If (PROJECT.isField($t)) | ($isComputedAttribute.call(Null:C1517; $field))
 					
 					If (Not:C34($isSortAction) | PROJECT.isSortable($field))
 						
@@ -780,7 +792,7 @@ Function doAddParameterMenu($target : Object; $update : Boolean)
 				
 				$field:=$table[$t]
 				
-				If (PROJECT.isField($t)) | (PROJECT.isComputedAttribute($field))
+				If (PROJECT.isField($t)) | ($isComputedAttribute.call(Null:C1517; $field))
 					
 					If (Not:C34($isSortAction) | PROJECT.isSortable($field))
 						
@@ -1928,9 +1940,10 @@ Function doName($e : Object)
 			
 			For each ($key; $table)
 				
-				If (PROJECT.isField($key))
+				If (PROJECT.isField($key))\
+					 | (PROJECT.isComputedAttribute($table[$key]; $table[""].name))
 					
-					If (This:C1470.action.parameters.query("fieldNumber = :1"; Num:C11($key)).pop()=Null:C1517)\
+					If (This:C1470.action.parameters.query("name = :1"; $table[$key].name).pop()=Null:C1517)\
 						 | ($table[$key].name=This:C1470.current.name)
 						
 						$o.values.push($table[$key].name)

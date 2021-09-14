@@ -194,15 +194,6 @@ Function exposedCatalog($query : Variant; $sorted : Boolean)->$catalog : Collect
 	End if 
 	
 	//==================================================================
-Function isComputedAttribute($field : Object)->$is : Boolean
-	
-	If (String:C10($field.kind)="calculated")
-		
-		$is:=This:C1470._allowPublication($field)
-		
-	End if 
-	
-	//==================================================================
 Function isStorage($field : Object)->$is : Boolean
 	
 	If (String:C10($field.kind)="storage")
@@ -224,6 +215,15 @@ Function isRelatedEntity($field : Object)->$is : Boolean
 Function isRelatedEntities($field : Object)->$is : Boolean
 	
 	$is:=($field.kind="relatedEntities")
+	
+	//==================================================================
+Function isComputedAttribute($field : Object)->$is : Boolean
+	
+	If (String:C10($field.kind)="calculated")
+		
+		$is:=This:C1470._allowPublication($field)
+		
+	End if 
 	
 	//==================================================================
 Function fieldDefinition($table; $fieldPath : Text)->$field : Object
@@ -445,6 +445,8 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 								"isToMany"; True:C214))
 							
 						End if 
+						//…………………………………………………………………………………………………
+					: (This:C1470.isComputedAttribute($o))  // Computed
 						
 						//___________________________________________
 				End case 
@@ -456,7 +458,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 			// <NOT YET  MANAGED>
 			
 			//…………………………………………………………………………………………………
-		: (This:C1470.isComputedAttribute($field))
+		: (This:C1470.isComputedAttribute($field))  // Computed
 			
 			//
 			

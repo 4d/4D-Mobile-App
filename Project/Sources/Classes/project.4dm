@@ -548,11 +548,9 @@ Function updateActions
 		End if 
 	End if 
 	
-	//====================================
-Function removeFromMain
-	var $1 : Variant
-	
-	var $l : Integer
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function removeFromMain($table)
+	var $index : Integer
 	var $main : Object
 	
 	$main:=This:C1470.main
@@ -563,32 +561,30 @@ Function removeFromMain
 		
 	Else 
 		
-		$l:=$main.order.indexOf(String:C10($1))
+		$index:=$main.order.indexOf(String:C10($table))
 		
-		If ($l#-1)
+		If ($index#-1)
 			
-			$main.order.remove($l)
+			$main.order.remove($index)
 			
 		End if 
 	End if 
 	
-	//====================================
-Function addToMain
-	var $1 : Variant
-	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function addToMain($table)
 	var $main : Object
 	
 	$main:=This:C1470.main
 	
 	If ($main.order=Null:C1517)
 		
-		$main.order:=New collection:C1472(String:C10($1))
+		$main.order:=New collection:C1472(String:C10($table))
 		
 	Else 
 		
-		If ($main.order.indexOf(String:C10($1))=-1)
+		If ($main.order.indexOf(String:C10($table))=-1)
 			
-			$main.order.push(String:C10($1))
+			$main.order.push(String:C10($table))
 			
 		End if 
 	End if 
@@ -698,7 +694,7 @@ Function isField($attribute : Variant)->$is : Boolean
 			//______________________________________________________
 		: (Value type:C1509($attribute)=Is object:K8:27)
 			
-			// #TO_DO
+			$is:=($attribute.fieldType#Null:C1517)
 			
 			//______________________________________________________
 	End case 
@@ -727,9 +723,36 @@ Function isRelationToMany($attribute : Variant)->$is : Boolean
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function isComputedAttribute($field : Object)->$is : Boolean
+Function isComputedAttribute($field : Object; $tableName : Text)->$is : Boolean
+	
+	var $o : Object
+	var $c : Collection
 	
 	$is:=(String:C10($field.kind)="calculated") | (Num:C11($field.type)=-3)
+	
+	If ($is & (Count parameters:C259>=2))
+		
+		$is:=False:C215
+		
+		// Filter writable (not readOnly) computed attrbutes
+		$c:=This:C1470.getCatalog()
+		
+		If ($c#Null:C1517)
+			
+			$o:=$c.query("name = :1"; $tableName).pop()
+			
+			If ($o#Null:C1517)
+				
+				$o:=$o.field.query("name = :1"; $field.name).pop()
+				
+				If ($o#Null:C1517)
+					
+					$is:=Not:C34(Bool:C1537($o.readOnly))
+					
+				End if 
+			End if 
+		End if 
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if the 4D Type is a Numeric type
@@ -885,21 +908,18 @@ Function addTable($table : Object)->$tableModel : Object
 	
 	This:C1470.dataModel[String:C10($table.tableNumber)]:=$tableModel
 	
-/* ===================================
-Delete the table from the data model
-====================================*/
-Function removeTable
-	var $0 : Collection
-	var $1 : Variant
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Delete the table from the data model
+Function removeTable($table)
 	
 	If (This:C1470.dataModel#Null:C1517)
 		
-		OB REMOVE:C1226(This:C1470.dataModel; String:C10($1))
+		OB REMOVE:C1226(This:C1470.dataModel; String:C10($table))
 		
 	End if 
 	
 	// Update main
-	This:C1470.removeFromMain($1)
+	This:C1470.removeFromMain($table)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function getCatalog()->$catalog : Collection
