@@ -2090,3 +2090,4 @@ Function metaInfo($current : Object)->$result
 		$result.cell.names.stroke:=Choose:C955(EDITOR.isDark; "white"; "black")
 		
 	End if 
+	
