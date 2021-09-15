@@ -1415,6 +1415,30 @@ Function doDataSourceMenu()
 				
 				//MARK:#TO_DO
 				
+				var $name : Text
+				var $w : Integer
+				var $current; $data; $folder; $formatObject : Object
+				
+				$data:=New object:C1471
+				$data.name:="New List"
+				$data.type:=$current.type
+				$data.format:=Delete string:C232($current.format; 1; 1)
+				$data.choiceList:=New object:C1471
+				
+				$w:=Open form window:C675("LISTE_EDITOR"; Movable form dialog box:K39:8; Horizontally centered:K39:1; Vertically centered:K39:4)
+				DIALOG:C40("LISTE_EDITOR"; $data)
+				
+				If (Bool:C1537(OK))
+					
+					$name:=$data.name
+					$folder:=This:C1470.path.hostInputControls(True:C214).folder($formatObject.name)
+					
+				Else   // A "If" statement should never omit "Else"
+					
+				End if 
+				
+				CLOSE WINDOW:C154($w)
+				
 				//$format:=Request(Get localized string("formatName"))
 				
 				//If (Bool(OK))\

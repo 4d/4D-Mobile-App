@@ -12,21 +12,7 @@
 	"rightMargin": 20,
 	"bottomMargin": 20,
 	"events": [
-		"onLoad",
-		"onPageChange",
-		"onValidate",
-		"onClick",
-		"onDoubleClick",
-		"onOutsideCall",
-		"onBeginDragOver",
-		"onDragOver",
-		"onDrop",
-		"onAfterKeystroke",
-		"onMenuSelect",
-		"onPluginArea",
-		"onAfterEdit",
-		"onTimer",
-		"onBoundVariableChange"
+		"onLoad"
 	],
 	"windowTitle": "window title",
 	"destination": "detailScreen",
@@ -50,7 +36,6 @@
 					"left": 39,
 					"width": 204,
 					"height": 33,
-					"visibility": "hidden",
 					"class": "border"
 				},
 				"name": {
@@ -59,7 +44,6 @@
 					"left": 46,
 					"width": 189,
 					"height": 17,
-					"visibility": "hidden",
 					"dataSource": "Form:C1466.name",
 					"hideFocusRing": true,
 					"dragging": "none",
@@ -77,42 +61,127 @@
 					"width": 140,
 					"height": 17,
 					"text": ":xliff:name",
-					"visibility": "hidden",
 					"class": "label"
 				},
 				"static": {
 					"type": "radio",
-					"text": ".Static",
-					"top": 60,
-					"left": 320,
-					"width": 108,
+					"text": ":xliff:choiceList",
+					"top": 169,
+					"left": 39,
+					"width": 168,
 					"height": 23,
 					"events": [
 						"onClick"
 					],
-					"radioGroup": "type"
+					"radioGroup": "source"
 				},
 				"data": {
 					"type": "radio",
-					"text": "",
-					"top": 90,
-					"left": 320,
-					"width": 108,
+					"text": ":xliff:fromDataclass",
+					"top": 169,
+					"left": 185,
+					"width": 168,
 					"height": 23,
 					"events": [
 						"onClick"
 					],
-					"radioGroup": "type"
+					"radioGroup": "source"
+				},
+				"push": {
+					"type": "radio",
+					"text": "push",
+					"top": 121,
+					"left": 39,
+					"width": 76,
+					"height": 23,
+					"events": [
+						"onClick"
+					],
+					"radioGroup": "format"
+				},
+				"segmented": {
+					"type": "radio",
+					"text": "segmented",
+					"top": 121,
+					"left": 111,
+					"width": 111,
+					"height": 23,
+					"events": [
+						"onClick"
+					],
+					"radioGroup": "format"
+				},
+				"popover": {
+					"type": "radio",
+					"text": "popover",
+					"top": 121,
+					"left": 213,
+					"width": 91,
+					"height": 23,
+					"events": [
+						"onClick"
+					],
+					"radioGroup": "format"
+				},
+				"sheet": {
+					"type": "radio",
+					"text": "sheet",
+					"top": 121,
+					"left": 304,
+					"width": 71,
+					"height": 23,
+					"events": [
+						"onClick"
+					],
+					"radioGroup": "format"
+				},
+				"picker": {
+					"type": "radio",
+					"text": "picker",
+					"top": 121,
+					"left": 388,
+					"width": 71,
+					"height": 23,
+					"events": [
+						"onClick"
+					],
+					"radioGroup": "format"
+				},
+				"List Box": {
+					"type": "listbox",
+					"left": 44,
+					"top": 202,
+					"width": 237,
+					"height": 335,
+					"events": [
+						"onClick",
+						"onHeaderClick",
+						"onDataChange",
+						"onSelectionChange"
+					],
+					"columns": [
+						{
+							"header": {
+								"text": "Header1",
+								"name": "Header1"
+							},
+							"name": "Column1",
+							"footer": {
+								"name": "Footer1"
+							}
+						}
+					]
 				}
 			}
 		}
 	],
-	"geometryStamp": 26,
+	"geometryStamp": 60,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
 		"views": {
 			"View 1": {}
 		}
-	}
+	},
+	"method": "method.4dm"
 }
