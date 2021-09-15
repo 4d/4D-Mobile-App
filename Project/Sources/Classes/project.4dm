@@ -681,6 +681,22 @@ Function storageFields($table : Variant)->$fields : Collection
 		
 	End if 
 	
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function isLinkedToField($fieldName : Text; $tableName : Text)->$is : Boolean
+	
+	var $field; $table : Object
+	
+	$table:=This:C1470.getCatalog().query("name = :1"; $tableName).pop()
+	
+	If ($table#Null:C1517)
+		
+		$field:=$table.field.query("name = :1"; $fieldName).pop()
+		
+	End if 
+	
+	$is:=$field#Null:C1517
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function isField($attribute : Variant)->$is : Boolean
 	

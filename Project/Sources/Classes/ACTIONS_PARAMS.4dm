@@ -20,6 +20,8 @@ Class constructor
 	This:C1470.path:=cs:C1710.path.new()
 	
 	This:C1470.customInputControls:=New collection:C1472("push"; "segmented"; "popover"; "sheet"; "picker")
+	This:C1470.formatWithoutPlaceholder:=New collection:C1472("/segmented"; "/picker")
+	This:C1470.typeWithoutPlaceholder:=New collection:C1472("bool")
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function init()
@@ -420,8 +422,6 @@ Function update()
 								This:C1470.min.setValue(String:C10(This:C1470.ruleValue("min")))
 								This:C1470.max.setValue(String:C10(This:C1470.ruleValue("max")))
 								
-								This:C1470.placeholderGroup.show($current.type#"bool")
-								
 								If (Position:C15("/"; String:C10($current.format))=1)
 									
 									$withDataSource:=This:C1470._withDataSource(Delete string:C232($current.format; 1; 1))
@@ -431,8 +431,11 @@ Function update()
 								If ($withDataSource)
 									
 									This:C1470.dataSourceGroup.show()
+									This:C1470.placeholderGroup.show(This:C1470.formatWithoutPlaceholder.indexOf($current.format)=-1)
 									
 								Else 
+									
+									This:C1470.placeholderGroup.show(This:C1470.typeWithoutPlaceholder.indexOf($current.type)=-1)
 									
 									If ($current.type#"image")
 										
@@ -683,8 +686,7 @@ Function dataSourceValue()->$value : Text
 		$manifest:=JSON Parse:C1218($file.getText())
 		$value:=$manifest.name
 		
-		If (($manifest.choiceList.dataSource=Null:C1517) | (String:C10($manifest.choiceList.dataSource.dataClass)=Table name:C256(This:C1470.action.tableNumber)))\
-			 & ($current.format=("/"+Choose:C955($manifest.format=Null:C1517; "push"; $manifest.format)))
+		If ($current.format=("/"+Choose:C955($manifest.format=Null:C1517; "push"; $manifest.format)))
 			
 			This:C1470.dataSource.setColors(Foreground color:K23:1)
 			
@@ -1141,24 +1143,22 @@ Function showFormatOnDisk
 Function doFormatMenu()
 	
 	var $currentFormat; $label; $newType; $type : Text
-	var $tableNumber; $fieldNumber : Text
 	var $hasCustom : Boolean
 	var $index : Integer
-	var $current; $formats; $subMenu : Object
-	var $table; $tablesMenu; $field; $fieldsMenu; $dataSource; $formatObject : Object
-	var $folder; $manifestFile : Object
-	var $menu : cs:C1710.menu
 	var $format : Variant
+	var $current; $field; $formats; $subMenu; $table : Object
+	var $menu : cs:C1710.menu
 	
 	$current:=This:C1470.current
 	$currentFormat:=String:C10($current.format)
 	
 	$formats:=This:C1470.getFormats()
-	//$formats:=JSON Parse(File("/RESOURCES/actionParameters.json").getText()).formats
-	
 	$menu:=cs:C1710.menu.new()
 	
-	If ($current.fieldNumber#Null:C1517)  // Action linked to a field
+	$table:=PROJECT.getCatalog().query("name = :1"; Table name:C256(This:C1470.action.tableNumber)).pop()
+	$field:=$table.field.query("name = :1"; $current.name).pop()
+	
+	If (PROJECT.isLinkedToField($current.name; Table name:C256(This:C1470.action.tableNumber)))  // Action linked to a field
 		
 		$menu.append(":xliff:byDefault"; "null"; $current.format=Null:C1517).line()
 		
@@ -1188,8 +1188,9 @@ Function doFormatMenu()
 			If ($formats[$type].length>0)
 				
 				$label:=Choose:C955($type="string"; "text"; $type)
+				
 				$subMenu:=cs:C1710.menu.new()\
-					.append(":xliff:"+$label; $label)\
+					.append(":xliff:default"; $label; $currentFormat=$label).setData("type"; $label)\
 					.line()
 				
 				$hasCustom:=False:C215  // To have a line by type
@@ -1235,66 +1236,66 @@ Function doFormatMenu()
 				//________________________________________
 			: (Position:C15("$new"; $menu.choice)=1)
 				
-				$format:=Request:C163(Get localized string:C991("formatName"))
+				//$format:=Request(Get localized string("formatName"))
 				
-				If (Bool:C1537(OK))\
-					 & (Length:C16($format)>0)
-					
-					$type:=$menu.getData("type")
-					$formatObject:=$menu.getData("format")
-					
-					$formatObject.name:=EDITOR.str.setText($format).suitableWithFileName()
-					$folder:=This:C1470.path.hostInputControls(True:C214).folder($formatObject.name)
-					
-					If (Not:C34($folder.exists))
-						
-						Case of 
-								
-								//----------------------------------------
-							: ($type="choiceList")
-								
-								$formatObject.choiceList:=cs:C1710.formater.new().defaultChoiceList($formatObject.type[0]; False:C215)
-								
-								//----------------------------------------
-							: ($type="dataSource")
-								
-								// Already filled
-								
-								//----------------------------------------
-							Else 
-								
-								$formatObject:=Null:C1517
-								
-								//----------------------------------------
-						End case 
-						
-						If ($formatObject#Null:C1517)
-							
-							$folder.create()
-							$manifestFile:=$folder.file("manifest.json")
-							$manifestFile.setText(JSON Stringify:C1217($formatObject; *))
-							$current.format:="/"+$formatObject.name  // Set as custom/host resource
-							
-							// #MARK_TODO newActionFormatterChoiceList maybe affect also $current.type, and some notify maybe
-							
-							If ($type="choiceList")
-								
-								// Open JSON file, but we could open a custom format editor instead
-								OPEN URL:C673($manifestFile.platformPath)
-								
-							End if 
-						End if 
-						
-					Else 
-						
-						POST_MESSAGE(New object:C1471(\
-							"target"; Current form window:C827; \
-							"action"; "show"; \
-							"type"; "alert"; \
-							"title"; Get localized string:C991("thereIsAlreadyAFormatWithThisName")))
-						
-					End if 
-				End if 
+				//If (Bool(OK))\
+					& (Length($format)>0)
+				
+				//$type:=$menu.getData("type")
+				//$formatObject:=$menu.getData("format")
+				
+				//$formatObject.name:=EDITOR.str.setText($format).suitableWithFileName()
+				//$folder:=This.path.hostInputControls(True).folder($formatObject.name)
+				
+				//If (Not($folder.exists))
+				
+				//Case of
+				
+				////----------------------------------------
+				//: ($type="choiceList")
+				
+				//$formatObject.choiceList:=cs.formater.new().defaultChoiceList($formatObject.type[0]; False)
+				
+				////----------------------------------------
+				//: ($type="dataSource")
+				
+				//// Already filled
+				
+				////----------------------------------------
+				//Else
+				
+				//$formatObject:=Null
+				
+				////----------------------------------------
+				//End case
+				
+				//If ($formatObject#Null)
+				
+				//$folder.create()
+				//$manifestFile:=$folder.file("manifest.json")
+				//$manifestFile.setText(JSON Stringify($formatObject; *))
+				//$current.format:="/"+$formatObject.name  // Set as custom/host resource
+				
+				//// #MARK_TODO newActionFormatterChoiceList maybe affect also $current.type, and some notify maybe
+				
+				//If ($type="choiceList")
+				
+				//// Open JSON file, but we could open a custom format editor instead
+				//OPEN URL($manifestFile.platformPath)
+				
+				//End if
+				//End if
+				
+				//Else
+				
+				//POST_MESSAGE(New object(\
+					"target"; Current form window; \
+					"action"; "show"; \
+					"type"; "alert"; \
+					"title"; Get localized string("thereIsAlreadyAFormatWithThisName")))
+				
+				//End if
+				//End if
 				
 				//________________________________________
 			: (Position:C15("/"; $menu.choice)=1)
@@ -1313,7 +1314,7 @@ Function doFormatMenu()
 				$current.format:=$menu.choice
 				OB REMOVE:C1226($current; "source")
 				
-				$newType:=$menu.getData("type")
+				$newType:=$menu.getData("type"; $menu.choice)
 				
 				If ($newType=Null:C1517)
 					
@@ -1336,20 +1337,21 @@ Function doFormatMenu()
 							
 						End if 
 					End if 
+				End if 
+				
+				If ($current.type#$newType)  // The type is changed
 					
-					If ($current.type#$newType)  // The type is changed
+					$current.type:=$newType
+					OB REMOVE:C1226($current; "default")
+					OB REMOVE:C1226($current; "source")
+					
+					If (This:C1470.defaultValue.focused)
 						
-						$current.type:=$newType
-						OB REMOVE:C1226($current; "default")
-						OB REMOVE:C1226($current; "source")
+						This:C1470.goTo(This:C1470.parameters.name)
 						
-						If (This:C1470.defaultValue.focused)
-							
-							This:C1470.goTo(This:C1470.parameters.name)
-							
-						End if 
 					End if 
 				End if 
+				//End if
 				
 				//________________________________________
 		End case 
@@ -1420,7 +1422,9 @@ Function doDataSourceMenu()
 						"choiceList"; $manifest.choiceList\
 						))
 					
+				Else   //INVALID
 				End if 
+			Else   //INVALID
 			End if 
 		End for each 
 		
@@ -1447,7 +1451,7 @@ Function doDataSourceMenu()
 		End if 
 		
 		// Add the lists of data sources for this data class, if any.
-		$subset:=$controls.query("choiceList.dataSource.dataClass = :1"; Table name:C256(This:C1470.action.tableNumber))
+		$subset:=$controls.query("choiceList.dataSource.dataClass != null")
 		
 		If ($subset.length>0)
 			
@@ -1477,7 +1481,8 @@ Function doDataSourceMenu()
 				//______________________________________________________
 			: ($menu.choice="new")
 				
-				//#TO_DO
+				//MARK:#TO_DO
+				
 				
 				//______________________________________________________
 			Else 

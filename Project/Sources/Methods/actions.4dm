@@ -73,7 +73,7 @@ Else   // <== WIDGETS METHOD
 						
 						OB REMOVE:C1226($ƒ.actions; "inEdition")
 						
-						If ($e.columnName="shorts")
+						If (String:C10($e.columnName)="shorts")
 							
 							// Update parameters panel
 							$ƒ.updateParameters()

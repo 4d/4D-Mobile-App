@@ -496,13 +496,21 @@ Function setData($name : Text; $value : Variant; $index : Integer)->$this : cs:C
 	
 	// ===============================================
 	// Retrieve data associated to selected menu item
-Function getData($name : Text)->$value
+Function getData($name : Text; $ref : Text)->$value
 	
 	var $o : Object
 	
 	If (Asserted:C1132(This:C1470.selected))
 		
-		$o:=This:C1470.data.query("name = :1"; $name).pop()
+		If (Count parameters:C259>=2)
+			
+			$o:=This:C1470.data.query("name = :1 & ref = :2"; $name; $ref).pop()
+			
+		Else 
+			
+			$o:=This:C1470.data.query("name = :1"; $name).pop()
+			
+		End if 
 		
 		If ($o#Null:C1517)
 			
@@ -692,7 +700,7 @@ Function popup($where : Variant; $x : Variant; $y : Integer)->$this : cs:C1710.m
 	If (This:C1470.selected)
 		
 		// Get associated data if any
-		This:C1470.data:=This:C1470.data.query("ref=:1"; This:C1470.choice)
+		//This.data:=This.data.query("ref=:1"; This.choice)
 		
 	End if 
 	
