@@ -322,7 +322,7 @@ Case of
 							: (_and(Formula:C1597(FEATURE.with("customActionFormatter")); \
 								Formula:C1597(PROJECT.isCustomResource(String:C10($parameter.format)))))
 								
-								$format:=Substring:C12($parameter.format; 2)
+								$format:=Choose:C955($parameter.source=Null:C1517; Substring:C12($parameter.format; 2); Substring:C12($parameter.source; 2))
 								$manifest:=$Obj_in.inputControls[$format]
 								If ($manifest=Null:C1517)
 									// clean must be obsolete if not needed
@@ -498,7 +498,7 @@ Case of
 			For each ($action; $Obj_in.project.actions)
 				If ($action.parameters#Null:C1517)
 					For each ($parameter; $action.parameters)
-						$format:=String:C10($parameter.format)
+						$format:=Choose:C955($parameter.source=Null:C1517; String:C10($parameter.format); String:C10($parameter.source))
 						If (PROJECT.isCustomResource($format))
 							If ($isObject)
 								$format:=Delete string:C232($format; 1; 1)
