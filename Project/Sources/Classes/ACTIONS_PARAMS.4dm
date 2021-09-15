@@ -1097,9 +1097,9 @@ Function getFormats()->$formats : Object
 								
 								If ($formats[$type]#Null:C1517)
 									
-									If ($formats[$type].indexOf("/"+$folder.name)<0)
+									If ($formats[$type].indexOf("/"+$manifest.name)<0)
 										
-										$formats[$type].push("/"+$folder.name)
+										$formats[$type].push("/"+$manifest.name)
 										
 									End if 
 									
@@ -1348,13 +1348,15 @@ Function doDataSourceMenu()
 				
 				$manifest:=JSON Parse:C1218($file.getText())
 				
-				$controls.push(New object:C1471(\
-					"dynamic"; $manifest.choiceList.dataSource#Null:C1517; \
-					"name"; $manifest.name; \
-					"source"; $file.parent.name; \
-					"format"; Choose:C955($manifest.format#Null:C1517; $manifest.format; "push"); \
-					"choiceList"; $manifest.choiceList\
-					))
+				If ($manifest.choiceList#Null:C1517)
+					$controls.push(New object:C1471(\
+						"dynamic"; _and(Formula:C1597(Value type:C1509($manifest.choiceList)=Is object:K8:27); Formula:C1597($manifest.choiceList.dataSource#Null:C1517)); \
+						"name"; $manifest.name; \
+						"source"; $file.parent.name; \
+						"format"; Choose:C955($manifest.format#Null:C1517; $manifest.format; "push"); \
+						"choiceList"; $manifest.choiceList\
+						))
+				End if 
 				
 			Else   //INVALID
 			End if 
@@ -1541,15 +1543,11 @@ Function _appendFormat($data : Object)->$custom : Boolean
 			
 		Else   // text
 			
-			$file:=This:C1470.path.hostInputControls().file(Delete string:C232($format; 1; 1)+"/manifest.json")
 			
-			If ($file.exists)
-				
-				$data.menu.append(JSON Parse:C1218($file.getText()).name; $format; $data.currentFormat=$format)\
-					.setStyle(Italic:K14:3)\
-					.setData("type"; $data.type)
-				
-			End if 
+			$data.menu.append(Delete string:C232($format; 1; 1); $format; $data.currentFormat=$format)\
+				.setStyle(Italic:K14:3)\
+				.setData("type"; $data.type)
+			
 		End if 
 		
 	Else 
