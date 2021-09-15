@@ -335,7 +335,7 @@ Case of
 										$parameter.choiceList:=$manifest.choiceList
 										
 										If (Value type:C1509($parameter.choiceList)=Is object:K8:27)
-											If ($parameter["dataSource"]=Null:C1517)  // ie. normal source
+											If ($parameter.choiceList.dataSource=Null:C1517)  // ie. normal source
 												$parameter.choiceList:=OB Entries:C1720($parameter.choiceList)  // to try to keep order
 											End if 
 										End if 
