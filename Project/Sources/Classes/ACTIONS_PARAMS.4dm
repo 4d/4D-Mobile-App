@@ -1410,14 +1410,17 @@ Function doDataSourceMenu()
 				
 				$manifest:=JSON Parse:C1218($file.getText())
 				
-				$controls.push(New object:C1471(\
-					"dynamic"; $manifest.choiceList.dataSource#Null:C1517; \
-					"name"; $manifest.name; \
-					"source"; $file.parent.name; \
-					"format"; Choose:C955($manifest.format#Null:C1517; $manifest.format; "push"); \
-					"choiceList"; $manifest.choiceList\
-					))
-				
+				If ($manifest.choiceList#Null:C1517)
+					
+					$controls.push(New object:C1471(\
+						"dynamic"; $manifest.choiceList.dataSource#Null:C1517; \
+						"name"; $manifest.name; \
+						"source"; $file.parent.name; \
+						"format"; Choose:C955($manifest.format#Null:C1517; $manifest.format; "push"); \
+						"choiceList"; $manifest.choiceList\
+						))
+					
+				End if 
 			End if 
 		End for each 
 		
