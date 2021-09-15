@@ -1444,8 +1444,7 @@ Function doDataSourceMenu()
 		End if 
 		
 		// Add the lists of data sources for this data class, if any.
-		$t:=Table name:C256(This:C1470.action.tableNumber)
-		$subset:=$controls.query("dynamic = :1 AND choiceList.dataSource.dataClass = :2"; True:C214; $t)
+		$subset:=$controls.query("choiceList.dataSource.dataClass = :1"; Table name:C256(This:C1470.action.tableNumber))
 		
 		If ($subset.length>0)
 			
