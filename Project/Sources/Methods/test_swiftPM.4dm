@@ -1,5 +1,7 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-C_OBJECT:C1216($Obj_framework; $Obj_in; $Obj_out; $Obj_target; $Obj_targetPath)
+var $Obj_in; $Obj_out; $Obj_target; $Obj_targetPath : Object
+var $Obj_framework : 4D:C1709.Folder
+
 //_____________________________________________________________
 TRY
 //_____________________________________________________________
@@ -8,8 +10,6 @@ $Obj_framework:=cs:C1710.path.new().cacheSdkApple().parent.folder("sdk")
 
 If ($Obj_framework.exists)
 	// Else maybe unzip it later...
-	
-	
 	
 	$Obj_in:=New object:C1471("action"; "describe"; "path"; $Obj_framework)
 	$Obj_out:=swiftPM($Obj_in)

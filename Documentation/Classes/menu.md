@@ -39,6 +39,7 @@ End if
 | .**metacharacters** | Boolean | Indicates whether metacharacters are considered as standard characters.| **Null** |
 | .**selected** | Boolean | Indicates whether, after displaying the context menu, an item has been selected. | **False** |
 | .**choice** | Text | The reference of the selected context menu item, if any. | "" |
+| .**data** | Collection | Associated data of the selected item reference, if any. | [] |
 
 \* 🚨 If `.autoRelease` is set to **False** (or if you don't call a function that automatically release the memory), once you no longer need the menu, remember to call the function `.release()` in order to free up the memory.
 
@@ -64,7 +65,9 @@ $m:=cs.menu.new()\
 |.**enable** () → `cs.menu`<br/>.**enable** ( enabled : Boolean {; itemIndex : Integer } ) → `cs.menu`| Defines the activated status of a menu item
 |.**icon** ( icon : `Text` {; itemIndex : `Integer` } ) → `cs.menu`| Modifies the icon associated with a menu item
 |.**itemCount** () → number : `Integer`|  Returns the number of menu items present in the menu
-|.**items** () → items : `Collection`|  Returns menu items as collection of {item,ref}
+|.**item** ( item `Text` \| `Integer` {; reference : `Text`}) → item : `Object`|  Returns a menu item properties from its title or index
+|.**isSeparatorItem** ( item `Integer` ) → is : `Boolean`|  Returns True if the item is a separator
+|.**items** () → items : `Collection`|  Returns a collection of the first level menu items {item,ref}
 |.**line** () → `cs.menu` | Adds a line to the menu
 |.**mark** ( {checked : `Boolean` {;  itemIndex : `Integer` }} ) → `cs.menu` | Sets the checked or unchecked status of a menu item
 |.**method** ( methodName : `Text` {;  itemIndex : `Integer` } ) → `cs.menu` | Defines the project method associated with a menu item
@@ -74,6 +77,9 @@ $m:=cs.menu.new()\
 |.**release** () | Removes the menu from memory
 |.**setBar** () | Replaces the current menu bar with the current menu \*
 |.**shortcut** ( key  : `Text` \| `Object` {; itemIndex : `Integer` }} ) → `cs.menu` | Replaces the shortcut key associated with the menu item
+| | |
+|.**setData** ( name  : `Text`; value : `Variant` {; itemIndex : `Integer` } ) → `cs.menu` |  Associates data to a menu item
+|.**getData** ( name  : `Text` ) → value : `Variant` |  Retrieve data by name
 
 \* After the execution, if `.autoRelease`is True, the memory is automatically released
 
@@ -85,5 +91,6 @@ $m:=cs.menu.new()\
 | `cs.menu.new().edit()`| To get a default edit menu
 | `cs.menu.new().fonts( { withStyles : Boolean } )`| To get a menu of fonts with or without styles
 | `cs.menu.new().windows()`| To get a menu of open windows
+| `cs.menu.new().defaultMinimalMenuBar()`| To get a default minimal menu bar
 
 

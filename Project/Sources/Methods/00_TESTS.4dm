@@ -22,19 +22,6 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		$t:=Select document:C905(1; ".svg"; ""; 0)
-		
-		If (Bool:C1537(OK))
-			
-			var $icon; $picture : Picture
-			READ PICTURE FILE:C678(DOCUMENT; $picture)
-			CREATE THUMBNAIL:C679($picture; $icon; 10; 10; Scaled to fit:K6:2)  // XXX Scaled to fit prop centered?
-			
-		End if 
-		
-		//________________________________________
-	: (True:C214)
-		
 		$o:=cs:C1710.color.new("rgb(212,143,69)").rgb
 		
 		//________________________________________

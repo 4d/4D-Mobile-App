@@ -525,7 +525,6 @@ If ($in.create)
 		// ----------------------------------------------------
 		// Others (maybe move to templates, main management
 		// ----------------------------------------------------
-		
 		$debugLog:=cs:C1710.debugLog.new(SHARED.debugLog)
 		
 		$debugLog.start()

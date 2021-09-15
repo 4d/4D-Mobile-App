@@ -13,23 +13,21 @@
 //
 // ----------------------------------------------------
 // Declarations
-var $1 : Collection
+#DECLARE($currentCatalog : Collection)
 
 If (False:C215)
 	C_COLLECTION:C1488(STRUCTURE_AUDIT; $1)
 End if 
 
 var $isTableUnsynchronized; $isUnsynchronized : Boolean
-var $cache; $current; $field; $cacheFile; $item; $linkedField; $linkedItem; $o; $relatedField; $relatedItem : Object
-var $structure; $table; $tableCatalog : Object
-var $cachedCatalog; $currentCatalog; $linkedCatalog; $relatedCatalog; $unsynchronizedFields; $unsynchronizedTableFields : Collection
+var $cache; $current; $field; $item; $linkedField; $linkedItem; $o; $relatedField; $relatedItem; $structure : Object
+var $table; $tableCatalog : Object
+var $cachedCatalog; $linkedCatalog; $relatedCatalog; $unsynchronizedFields; $unsynchronizedTableFields : Collection
+var $cacheFile : 4D:C1709.File
 var $str : cs:C1710.str
 
 // ----------------------------------------------------
 // Initialisations
-$currentCatalog:=$1
-
-//cs.ob.new(PROJECT).createPath("$dialog")
 If (PROJECT.$dialog=Null:C1517)
 	
 	PROJECT.$dialog:=New object:C1471

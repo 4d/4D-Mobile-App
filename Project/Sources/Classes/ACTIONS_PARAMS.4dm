@@ -1234,70 +1234,6 @@ Function doFormatMenu()
 				OB REMOVE:C1226($current; "source")
 				
 				//________________________________________
-			: (Position:C15("$new"; $menu.choice)=1)
-				
-				//$format:=Request(Get localized string("formatName"))
-				
-				//If (Bool(OK))\
-					& (Length($format)>0)
-				
-				//$type:=$menu.getData("type")
-				//$formatObject:=$menu.getData("format")
-				
-				//$formatObject.name:=EDITOR.str.setText($format).suitableWithFileName()
-				//$folder:=This.path.hostInputControls(True).folder($formatObject.name)
-				
-				//If (Not($folder.exists))
-				
-				//Case of
-				
-				////----------------------------------------
-				//: ($type="choiceList")
-				
-				//$formatObject.choiceList:=cs.formater.new().defaultChoiceList($formatObject.type[0]; False)
-				
-				////----------------------------------------
-				//: ($type="dataSource")
-				
-				//// Already filled
-				
-				////----------------------------------------
-				//Else
-				
-				//$formatObject:=Null
-				
-				////----------------------------------------
-				//End case
-				
-				//If ($formatObject#Null)
-				
-				//$folder.create()
-				//$manifestFile:=$folder.file("manifest.json")
-				//$manifestFile.setText(JSON Stringify($formatObject; *))
-				//$current.format:="/"+$formatObject.name  // Set as custom/host resource
-				
-				//// #MARK_TODO newActionFormatterChoiceList maybe affect also $current.type, and some notify maybe
-				
-				//If ($type="choiceList")
-				
-				//// Open JSON file, but we could open a custom format editor instead
-				//OPEN URL($manifestFile.platformPath)
-				
-				//End if
-				//End if
-				
-				//Else
-				
-				//POST_MESSAGE(New object(\
-					"target"; Current form window; \
-					"action"; "show"; \
-					"type"; "alert"; \
-					"title"; Get localized string("thereIsAlreadyAFormatWithThisName")))
-				
-				//End if
-				//End if
-				
-				//________________________________________
 			: (Position:C15("/"; $menu.choice)=1)
 				
 				$current.format:=$menu.choice
@@ -1412,18 +1348,14 @@ Function doDataSourceMenu()
 				
 				$manifest:=JSON Parse:C1218($file.getText())
 				
-				If ($manifest.choiceList#Null:C1517)
-					
-					$controls.push(New object:C1471(\
-						"dynamic"; $manifest.choiceList.dataSource#Null:C1517; \
-						"name"; $manifest.name; \
-						"source"; $file.parent.name; \
-						"format"; Choose:C955($manifest.format#Null:C1517; $manifest.format; "push"); \
-						"choiceList"; $manifest.choiceList\
-						))
-					
-				Else   //INVALID
-				End if 
+				$controls.push(New object:C1471(\
+					"dynamic"; $manifest.choiceList.dataSource#Null:C1517; \
+					"name"; $manifest.name; \
+					"source"; $file.parent.name; \
+					"format"; Choose:C955($manifest.format#Null:C1517; $manifest.format; "push"); \
+					"choiceList"; $manifest.choiceList\
+					))
+				
 			Else   //INVALID
 			End if 
 		End for each 
@@ -1483,6 +1415,67 @@ Function doDataSourceMenu()
 				
 				//MARK:#TO_DO
 				
+				//$format:=Request(Get localized string("formatName"))
+				
+				//If (Bool(OK))\
+					& (Length($format)>0)
+				
+				//$type:=$menu.getData("type")
+				//$formatObject:=$menu.getData("format")
+				
+				//$formatObject.name:=EDITOR.str.setText($format).suitableWithFileName()
+				//$folder:=This.path.hostInputControls(True).folder($formatObject.name)
+				
+				//If (Not($folder.exists))
+				
+				//Case of
+				
+				////----------------------------------------
+				//: ($type="choiceList")
+				
+				//$formatObject.choiceList:=cs.formater.new().defaultChoiceList($formatObject.type[0]; False)
+				
+				////----------------------------------------
+				//: ($type="dataSource")
+				
+				//// Already filled
+				
+				////----------------------------------------
+				//Else
+				
+				//$formatObject:=Null
+				
+				////----------------------------------------
+				//End case
+				
+				//If ($formatObject#Null)
+				
+				//$folder.create()
+				//$manifestFile:=$folder.file("manifest.json")
+				//$manifestFile.setText(JSON Stringify($formatObject; *))
+				//$current.format:="/"+$formatObject.name  // Set as custom/host resource
+				
+				//// #MARK_TODO newActionFormatterChoiceList maybe affect also $current.type, and some notify maybe
+				
+				//If ($type="choiceList")
+				
+				//// Open JSON file, but we could open a custom format editor instead
+				//OPEN URL($manifestFile.platformPath)
+				
+				//End if
+				//End if
+				
+				//Else
+				
+				//POST_MESSAGE(New object(\
+					"target"; Current form window; \
+					"action"; "show"; \
+					"type"; "alert"; \
+					"title"; Get localized string("thereIsAlreadyAFormatWithThisName")))
+				
+				//End if
+				//End if
+				
 				
 				//______________________________________________________
 			Else 
@@ -1503,6 +1496,7 @@ Function _appendFormat($data : Object)->$custom : Boolean
 	var $name : Text
 	var $format : Variant
 	var $menuFormat; $menuType : cs:C1710.menu
+	var $file : 4D:C1709.File
 	
 	$format:=$data.format
 	
@@ -1523,10 +1517,15 @@ Function _appendFormat($data : Object)->$custom : Boolean
 			
 		Else   // text
 			
-			$data.menu.append(Delete string:C232($format; 1; 1); $format; $data.currentFormat=$format)\
-				.setStyle(Italic:K14:3)\
-				.setData("type"; $data.type)
+			$file:=This:C1470.path.hostInputControls().file(Delete string:C232($format; 1; 1)+"/manifest.json")
 			
+			If ($file.exists)
+				
+				$data.menu.append(JSON Parse:C1218($file.getText()).name; $format; $data.currentFormat=$format)\
+					.setStyle(Italic:K14:3)\
+					.setData("type"; $data.type)
+				
+			End if 
 		End if 
 		
 	Else 
