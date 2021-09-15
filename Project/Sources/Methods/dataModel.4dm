@@ -1143,35 +1143,41 @@ Case of
 						
 						$Obj_buffer:=$Obj_in.table[$Txt_field]
 						
-						If ($Obj_buffer.relatedEntities#Null:C1517)  // To remove if relatedEntities deleted and relatedDataClass already filled #109019
+						If (PROJECT.isComputedAttribute($Obj_buffer))
 							
-							$Obj_buffer.relatedDataClass:=$Obj_buffer.relatedEntities
+							$Obj_out.fields.push($Txt_field)
 							
-						End if 
-						
-						If ($Obj_buffer.relatedDataClass#Null:C1517)  // Is is a link?
-							
-							If ($Obj_out.expand.indexOf($Txt_field)<0)
+						Else 
+							If ($Obj_buffer.relatedEntities#Null:C1517)  // To remove if relatedEntities deleted and relatedDataClass already filled #109019
 								
-								$Obj_out.expand.push($Txt_field)
+								$Obj_buffer.relatedDataClass:=$Obj_buffer.relatedEntities
 								
 							End if 
 							
-							For each ($Txt_fieldNumber; $Obj_buffer)
+							If ($Obj_buffer.relatedDataClass#Null:C1517)  // Is is a link?
 								
-								If (Match regex:C1019("(?m-si)^\\d+$"; $Txt_fieldNumber; 1; *))  // fieldNumber
+								If ($Obj_out.expand.indexOf($Txt_field)<0)
 									
-									$Obj_out.fields.push($Txt_field+"."+$Obj_buffer[$Txt_fieldNumber].name)
-									
-								Else 
-									
-									// Ignore (primary key, etc...)
+									$Obj_out.expand.push($Txt_field)
 									
 								End if 
-							End for each 
-							
-							// Else  Ignore
-							
+								
+								For each ($Txt_fieldNumber; $Obj_buffer)
+									
+									If (Match regex:C1019("(?m-si)^\\d+$"; $Txt_fieldNumber; 1; *))  // fieldNumber
+										
+										$Obj_out.fields.push($Txt_field+"."+$Obj_buffer[$Txt_fieldNumber].name)
+										
+									Else 
+										
+										// Ignore (primary key, etc...)
+										
+									End if 
+								End for each 
+								
+								// Else  Ignore
+								
+							End if 
 						End if 
 						
 						//………………………………………………………………………………………………………………………
