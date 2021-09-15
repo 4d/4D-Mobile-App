@@ -469,6 +469,9 @@ Function _getJava()
 		If (This:C1470.macOS)
 			
 			$javaHome:=This:C1470.exe.folder("Contents/jre/jdk/Contents/Home")
+			If (Not:C34($javaHome.exists))
+				$javaHome:=This:C1470.exe.folder("Contents/jre/Contents/Home")
+			End if 
 			
 		Else 
 			
