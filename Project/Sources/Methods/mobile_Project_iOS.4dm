@@ -525,9 +525,15 @@ If ($in.create)
 		// ----------------------------------------------------
 		// Others (maybe move to templates, main management
 		// ----------------------------------------------------
-		$debugLog:=cs:C1710.debugLog.new(SHARED.debugLog)
+		var $isdebug : Boolean
+		$isdebug:=Not:C34(Is compiled mode:C492)
 		
-		$debugLog.start()
+		If ($isdebug)
+			
+			$debugLog:=cs:C1710.debugLog.new(SHARED.debugLog)
+			$debugLog.start()
+			
+		End if 
 		
 		// Generate action asset
 		$out.actionAssets:=mobile_actions("assets"; New object:C1471(\
@@ -614,7 +620,11 @@ If ($in.create)
 			"templates"; $out.template)))
 		ob_error_combine($out; $out.capabilities)
 		
-		$debugLog.stop()
+		If ($isdebug)
+			
+			$debugLog.stop()
+			
+		End if 
 		
 		// ----------------------------------------------------
 		// DEV FEATURES
