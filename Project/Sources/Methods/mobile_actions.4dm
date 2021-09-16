@@ -344,6 +344,8 @@ Case of
 										
 										If ($manifest.format#Null:C1517)
 											$parameter.format:=$manifest.format  // could take from manifest another way to display choice list
+										Else 
+											$parameter.format:="push"
 										End if 
 										If ($manifest.binding#Null:C1517)
 											$parameter.binding:=$manifest.binding  // imageNamed for instance
