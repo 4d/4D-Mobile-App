@@ -206,8 +206,7 @@
 					"width": 435,
 					"height": 49,
 					"visibility": "hidden",
-					"dataSource": "Form:C1466.$dialog.DATA.current.filter.string",
-					"placeholder": ":xliff:leaveBlankToNotFilterData",
+					"dataSource": "panel.current.filter.string",
 					"dragging": "none",
 					"dropping": "none",
 					"events": [
@@ -216,7 +215,8 @@
 						"onDataChange",
 						"onAfterEdit"
 					],
-					"method": "DATA_OBJECTS_HANDLER"
+					"method": "DATA_OBJECTS_HANDLER",
+					"placeholder": ":xliff:leaveBlankToNotFilterData"
 				},
 				"query.options": {
 					"type": "input",

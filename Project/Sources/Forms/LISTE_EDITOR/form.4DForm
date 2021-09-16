@@ -12,7 +12,9 @@
 	"rightMargin": 20,
 	"bottomMargin": 20,
 	"events": [
-		"onLoad"
+		"onLoad",
+		"onClick",
+		"onTimer"
 	],
 	"windowTitle": "window title",
 	"destination": "detailScreen",
@@ -30,11 +32,11 @@
 					"height": 555,
 					"borderRadius": 10
 				},
-				"02_name.border": {
+				"name.border": {
 					"type": "rectangle",
 					"top": 60,
 					"left": 39,
-					"width": 204,
+					"width": 345,
 					"height": 33,
 					"class": "border"
 				},
@@ -42,7 +44,7 @@
 					"type": "input",
 					"top": 68,
 					"left": 46,
-					"width": 189,
+					"width": 329,
 					"height": 17,
 					"dataSource": "Form:C1466.name",
 					"hideFocusRing": true,
@@ -54,7 +56,7 @@
 					],
 					"multiline": "yes"
 				},
-				"02_name.label": {
+				"name.label": {
 					"type": "text",
 					"top": 37,
 					"left": 39,
@@ -66,99 +68,117 @@
 				"static": {
 					"type": "radio",
 					"text": ":xliff:choiceList",
-					"top": 169,
-					"left": 39,
-					"width": 168,
+					"top": 204,
+					"left": 59,
+					"width": 148,
 					"height": 23,
 					"events": [
 						"onClick"
 					],
-					"radioGroup": "source"
+					"radioGroup": "source",
+					"dataSourceTypeHint": "boolean",
+					"focusable": false
 				},
-				"data": {
+				"datasource": {
 					"type": "radio",
 					"text": ":xliff:fromDataclass",
-					"top": 169,
-					"left": 185,
-					"width": 168,
+					"top": 229,
+					"left": 59,
+					"width": 148,
 					"height": 23,
 					"events": [
 						"onClick"
 					],
-					"radioGroup": "source"
+					"radioGroup": "source",
+					"dataSourceTypeHint": "boolean",
+					"focusable": false
 				},
 				"push": {
 					"type": "radio",
 					"text": "push",
-					"top": 121,
-					"left": 39,
+					"top": 133,
+					"left": 59,
 					"width": 76,
 					"height": 23,
 					"events": [
 						"onClick"
 					],
-					"radioGroup": "format"
+					"radioGroup": "format",
+					"dataSourceTypeHint": "boolean",
+					"focusable": false
 				},
 				"segmented": {
 					"type": "radio",
 					"text": "segmented",
-					"top": 121,
-					"left": 111,
+					"top": 133,
+					"left": 132,
 					"width": 111,
 					"height": 23,
 					"events": [
 						"onClick"
 					],
-					"radioGroup": "format"
+					"radioGroup": "format",
+					"dataSourceTypeHint": "boolean",
+					"focusable": false
 				},
 				"popover": {
 					"type": "radio",
 					"text": "popover",
-					"top": 121,
-					"left": 213,
+					"top": 133,
+					"left": 234,
 					"width": 91,
 					"height": 23,
 					"events": [
 						"onClick"
 					],
-					"radioGroup": "format"
+					"radioGroup": "format",
+					"dataSourceTypeHint": "boolean",
+					"focusable": false
 				},
 				"sheet": {
 					"type": "radio",
 					"text": "sheet",
-					"top": 121,
-					"left": 304,
+					"top": 133,
+					"left": 325,
 					"width": 71,
 					"height": 23,
 					"events": [
 						"onClick"
 					],
-					"radioGroup": "format"
+					"radioGroup": "format",
+					"dataSourceTypeHint": "boolean",
+					"focusable": false
 				},
 				"picker": {
 					"type": "radio",
 					"text": "picker",
-					"top": 121,
-					"left": 388,
+					"top": 133,
+					"left": 409,
 					"width": 71,
 					"height": 23,
 					"events": [
 						"onClick"
 					],
-					"radioGroup": "format"
+					"radioGroup": "format",
+					"dataSourceTypeHint": "boolean",
+					"focusable": false
 				},
-				"List Box": {
+				"choicelist": {
 					"type": "listbox",
-					"left": 44,
-					"top": 202,
-					"width": 237,
-					"height": 335,
+					"left": 262,
+					"top": 282,
+					"width": 255,
+					"height": 196,
 					"events": [
 						"onClick",
 						"onHeaderClick",
 						"onDataChange",
 						"onSelectionChange"
 					],
+					"visibility": "hidden",
+					"borderStyle": "system",
+					"listboxType": "collection",
+					"dataSource": "Form:C1466._choiceList",
 					"columns": [
 						{
 							"header": {
@@ -168,14 +188,149 @@
 							"name": "Column1",
 							"footer": {
 								"name": "Footer1"
-							}
+							},
+							"dataSource": "This:C1470.key",
+							"width": 120
+						},
+						{
+							"header": {
+								"name": "Header2",
+								"text": "Header2"
+							},
+							"name": "Column2",
+							"footer": {
+								"name": "Footer2"
+							},
+							"dataSource": "This:C1470.value"
 						}
 					]
+				},
+				"dataSource.label": {
+					"type": "text",
+					"top": 176,
+					"left": 39,
+					"width": 140,
+					"height": 17,
+					"text": ":xliff:source",
+					"class": "label"
+				},
+				"type.label": {
+					"type": "text",
+					"top": 111,
+					"left": 39,
+					"width": 140,
+					"height": 17,
+					"text": ":xliff:type",
+					"class": "label"
+				},
+				"value.label": {
+					"type": "text",
+					"top": 261,
+					"left": 262,
+					"width": 110,
+					"height": 16,
+					"text": ".Value",
+					"class": "label"
+				},
+				"add": {
+					"type": "button",
+					"top": 490,
+					"left": 261,
+					"width": 28,
+					"height": 28,
+					"visibility": "hidden",
+					"icon": "/RESOURCES/images/common/plus.png",
+					"iconFrames": 4,
+					"style": "bevel",
+					"events": [
+						"onClick",
+						"onAlternateClick"
+					],
+					"focusable": false
+				},
+				"remove": {
+					"type": "button",
+					"top": 490,
+					"left": 288,
+					"width": 28,
+					"height": 28,
+					"visibility": "hidden",
+					"icon": "/RESOURCES/images/common/minus.png",
+					"iconFrames": 4,
+					"style": "bevel",
+					"events": [
+						"onClick"
+					],
+					"focusable": false
+				},
+				"label": {
+					"type": "radio",
+					"text": ":xliff:label",
+					"top": 232,
+					"left": 260,
+					"width": 92,
+					"height": 16,
+					"events": [
+						"onClick"
+					],
+					"radioGroup": "binding",
+					"dataSourceTypeHint": "boolean",
+					"focusable": false,
+					"visibility": "hidden"
+				},
+				"image": {
+					"type": "radio",
+					"text": ":xliff:image",
+					"top": 232,
+					"left": 372,
+					"width": 87,
+					"height": 16,
+					"events": [
+						"onClick"
+					],
+					"radioGroup": "binding",
+					"dataSourceTypeHint": "boolean",
+					"focusable": false,
+					"visibility": "hidden"
+				},
+				"label.label": {
+					"type": "text",
+					"top": 261,
+					"left": 384,
+					"width": 110,
+					"height": 16,
+					"text": ":xliff:label",
+					"class": "label"
+				},
+				"binding.label": {
+					"type": "text",
+					"top": 207,
+					"left": 240,
+					"width": 140,
+					"height": 17,
+					"text": ".Binding",
+					"class": "label",
+					"visibility": "hidden"
 				}
-			}
+			},
+			"entryOrder": [
+				"name",
+				"push",
+				"segmented",
+				"popover",
+				"sheet",
+				"picker",
+				"static",
+				"choicelist",
+				"datasource",
+				"add",
+				"remove",
+				"label",
+				"image"
+			]
 		}
 	],
-	"geometryStamp": 60,
+	"geometryStamp": 252,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
@@ -183,5 +338,5 @@
 			"View 1": {}
 		}
 	},
-	"method": "method.4dm"
+	"method": "LISTE_EDITOR"
 }

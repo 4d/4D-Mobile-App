@@ -742,8 +742,14 @@
 		]
 	},
 	"LISTE_EDITOR": {
+		"methods": [
+			"LISTE_EDITOR"
+		],
 		"forms": [
 			"LISTE_EDITOR"
+		],
+		"classes": [
+			"LIST_EDITOR"
 		]
 	},
 	"Localization": {

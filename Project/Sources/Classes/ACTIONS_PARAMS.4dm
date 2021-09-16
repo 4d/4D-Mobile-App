@@ -402,7 +402,7 @@ Function update()
 								This:C1470.sortOrderGroup.hide()
 								This:C1470.dataSourceGroup.hide()
 								
-								$isLinked:=(PROJECT.getCatalog().query("tableNumber = :1"; $action.tableNumber).pop().field.query("name = :1"; $current.name).pop()#Null:C1517)
+								$isLinked:=PROJECT.isFieldAttribute($current.name; Table name:C256($action.tableNumber))
 								
 								If ($isLinked)
 									
@@ -1146,7 +1146,7 @@ Function doFormatMenu()
 	var $hasCustom : Boolean
 	var $index : Integer
 	var $format : Variant
-	var $current; $field; $formats; $subMenu; $table : Object
+	var $current; $formats; $subMenu : Object
 	var $menu : cs:C1710.menu
 	
 	$current:=This:C1470.current
@@ -1155,10 +1155,7 @@ Function doFormatMenu()
 	$formats:=This:C1470.getFormats()
 	$menu:=cs:C1710.menu.new()
 	
-	$table:=PROJECT.getCatalog().query("name = :1"; Table name:C256(This:C1470.action.tableNumber)).pop()
-	$field:=$table.field.query("name = :1"; $current.name).pop()
-	
-	If (PROJECT.isLinkedToField($current.name; Table name:C256(This:C1470.action.tableNumber)))  // Action linked to a field
+	If (PROJECT.isFieldAttribute($current.name; Table name:C256(This:C1470.action.tableNumber)))  // Action linked to a field
 		
 		$menu.append(":xliff:byDefault"; "null"; $current.format=Null:C1517).line()
 		
@@ -1236,7 +1233,10 @@ Function doFormatMenu()
 				//________________________________________
 			: (Position:C15("/"; $menu.choice)=1)
 				
-				$current.format:=$menu.choice
+				var $data : Object
+				$data:=$menu.getData("data"; $menu.choice)
+				$current.format:=$data.format
+				$current.type:=$data.type
 				
 				If (Not:C34(This:C1470._withDataSource(Delete string:C232($menu.choice; 1; 1))))
 					
@@ -1422,6 +1422,8 @@ Function doDataSourceMenu()
 				var $current; $data; $folder; $formatObject : Object
 				
 				$data:=New object:C1471
+				$data.$comment:="Map database values to some display values using choiceList"
+				$data.$doc:="https://developer.4d.com/4d-for-ios/docs/en/creating-data-formatter.html#text-formatters"
 				$data.name:="New List"
 				$data.type:=$current.type
 				$data.format:=Delete string:C232($current.format; 1; 1)
@@ -1440,68 +1442,45 @@ Function doDataSourceMenu()
 				End if 
 				
 				CLOSE WINDOW:C154($w)
-				
 				//$format:=Request(Get localized string("formatName"))
-				
 				//If (Bool(OK))\
 					& (Length($format)>0)
-				
 				//$type:=$menu.getData("type")
 				//$formatObject:=$menu.getData("format")
-				
 				//$formatObject.name:=EDITOR.str.setText($format).suitableWithFileName()
 				//$folder:=This.path.hostInputControls(True).folder($formatObject.name)
-				
 				//If (Not($folder.exists))
-				
 				//Case of
-				
 				////----------------------------------------
 				//: ($type="choiceList")
-				
 				//$formatObject.choiceList:=cs.formater.new().defaultChoiceList($formatObject.type[0]; False)
-				
 				////----------------------------------------
 				//: ($type="dataSource")
-				
 				//// Already filled
-				
 				////----------------------------------------
 				//Else
-				
 				//$formatObject:=Null
-				
 				////----------------------------------------
 				//End case
-				
 				//If ($formatObject#Null)
-				
 				//$folder.create()
 				//$manifestFile:=$folder.file("manifest.json")
 				//$manifestFile.setText(JSON Stringify($formatObject; *))
 				//$current.format:="/"+$formatObject.name  // Set as custom/host resource
-				
 				//// #MARK_TODO newActionFormatterChoiceList maybe affect also $current.type, and some notify maybe
-				
 				//If ($type="choiceList")
-				
 				//// Open JSON file, but we could open a custom format editor instead
 				//OPEN URL($manifestFile.platformPath)
-				
 				//End if
 				//End if
-				
 				//Else
-				
 				//POST_MESSAGE(New object(\
 					"target"; Current form window; \
 					"action"; "show"; \
 					"type"; "alert"; \
 					"title"; Get localized string("thereIsAlreadyAFormatWithThisName")))
-				
 				//End if
 				//End if
-				
 				
 				//______________________________________________________
 			Else 
@@ -1565,32 +1544,39 @@ Function _actionFormatterChoiceList($menu : cs:C1710.menu; $type : Text)
 	If (New collection:C1472("date"; "time"; "image").indexOf($type)=-1)  // TODO newActionFormatterChoiceList make an include list instead
 		
 		var $fieldID; $tableID : Text
-		var $field; $format; $table : Object
+		var $field; $data; $table : Object
 		var $fieldsMenu; $tableMenu : cs:C1710.menu
 		
 		$menu.line()
 		
 		If (FEATURE.with("customActionFormatter"))
 			
-			var $t : Text
-			For each ($t; This:C1470.customInputControls)
+			var $control : Text
+			For each ($control; This:C1470.customInputControls)
 				
-				$format:=New object:C1471(\
-					"type"; New collection:C1472($t))
+				$data:=New object:C1471(\
+					"format"; "/"+$control; \
+					"type"; $type)
 				
-				$menu.append($t; "/"+$t; String:C10(This:C1470.current.format)=("/"+$t))\
-					.setData("format"; $format)
+				var $parameter : Text
+				$parameter:="/"+$control+"/"+$type
+				
+				var $selected : Boolean
+				$selected:=$parameter=(String:C10(This:C1470.current.format)+"/"+This:C1470.current.type)
+				
+				$menu.append($control; $parameter; $selected)\
+					.setData("data"; $data)
 				
 			End for each 
 			
 		Else 
 			
-			$format:=New object:C1471(\
+			$data:=New object:C1471(\
 				"type"; New collection:C1472($type))
 			
 			$menu.append("newChoiceList"; "$new")\
 				.setData("type"; "choiceList")\
-				.setData("format"; $format)
+				.setData("format"; $data)
 			
 			$tableMenu:=cs:C1710.menu.new()
 			
@@ -1607,7 +1593,7 @@ Function _actionFormatterChoiceList($menu : cs:C1710.menu; $type : Text)
 						
 						If (PROJECT.fieldType2type($field.fieldType)=$type)  // OPTI : use reverse convertion on current type instead
 							
-							$format:=New object:C1471(\
+							$data:=New object:C1471(\
 								"type"; New collection:C1472($type); \
 								"choiceList"; New object:C1471(\
 								"dataSource"; New object:C1471("dataClass"; \
@@ -1616,7 +1602,7 @@ Function _actionFormatterChoiceList($menu : cs:C1710.menu; $type : Text)
 							
 							$fieldsMenu.append($field.name; "$new·"+$tableID+"·"+$fieldID)\
 								.setData("type"; "dataSource")\
-								.setData("format"; $format)
+								.setData("format"; $data)
 							
 						End if 
 					End if 

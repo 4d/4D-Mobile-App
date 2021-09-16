@@ -13,7 +13,7 @@
 // ----------------------------------------------------
 // Declarations
 var $publishedCount; $relatedCount; $tableIndex; $Win_current : Integer
-var $cache; $currentTable; $datastore; $field; $item; $linkedItem; $relatedField; $relatedItem; $tableModel : Object
+var $cache; $currentField; $datastore; $field; $item; $linkedItem; $relatedField; $relatedItem; $tableModel : Object
 var $unsynchronizedTableFields : Collection
 var $file : 4D:C1709.File
 var $backup : 4D:C1709.Folder
@@ -50,7 +50,7 @@ For each ($unsynchronizedTableFields; PROJECT.$dialog.unsynchronizedTableFields)
 			
 			For each ($item; PROJECT.fields($tableModel))
 				
-				$currentTable:=$tableModel[$item.key]
+				$currentField:=$tableModel[$item.key]
 				
 				Case of 
 						
@@ -80,14 +80,14 @@ For each ($unsynchronizedTableFields; PROJECT.$dialog.unsynchronizedTableFields)
 									: (PROJECT.isString($field.fieldType))\
 										 & (PROJECT.isString($field.current.fieldType))  // 🆗
 										
-										$currentTable.fieldType:=$field.current.fieldType
+										$currentField.fieldType:=$field.current.fieldType
 										$publishedCount:=$publishedCount+1
 										
 										//………………………………………………………………………………………………………………
 									: (PROJECT.isNumeric($field.fieldType))\
 										 & (PROJECT.isNumeric($field.current.fieldType))  // 🆗
 										
-										$currentTable.fieldType:=$field.current.fieldType
+										$currentField.fieldType:=$field.current.fieldType
 										$publishedCount:=$publishedCount+1
 										
 										//………………………………………………………………………………………………………………
@@ -101,7 +101,7 @@ For each ($unsynchronizedTableFields; PROJECT.$dialog.unsynchronizedTableFields)
 								//______________________________________________________
 							: ($field.nameMismatch)  // 🆗 update the name
 								
-								$currentTable.name:=$field.current.name
+								$currentField.name:=$field.current.name
 								$publishedCount:=$publishedCount+1
 								
 								//______________________________________________________
@@ -126,7 +126,7 @@ For each ($unsynchronizedTableFields; PROJECT.$dialog.unsynchronizedTableFields)
 							
 							$relatedCount:=0
 							
-							For each ($relatedItem; PROJECT.fields($currentTable[$item.key]))
+							For each ($relatedItem; PROJECT.fields($currentField[$item.key]))
 								
 								$relatedField:=$relatedItem.value
 								
@@ -147,7 +147,7 @@ For each ($unsynchronizedTableFields; PROJECT.$dialog.unsynchronizedTableFields)
 												//______________________________________________________
 											: ($field.missing)  // ❌ THE FIELD DOESN'T EXIST ANYMORE
 												
-												OB REMOVE:C1226($currentTable[$item.key]; $relatedItem.key)
+												OB REMOVE:C1226($currentField[$item.key]; $relatedItem.key)
 												
 												//______________________________________________________
 											: ($field.typeMismatch)  // ❓ if the new type is compatible
@@ -158,20 +158,20 @@ For each ($unsynchronizedTableFields; PROJECT.$dialog.unsynchronizedTableFields)
 													: (PROJECT.isString($field.fieldType))\
 														 & (PROJECT.isString($field.current.fieldType))  // 🆗
 														
-														$currentTable[$item.key][$relatedItem.key].fieldType:=$field.current.fieldType
+														$currentField[$item.key][$relatedItem.key].fieldType:=$field.current.fieldType
 														$relatedCount:=$relatedCount+1
 														
 														//………………………………………………………………………………………………………………
 													: (PROJECT.isNumeric($field.fieldType))\
 														 & (PROJECT.isNumeric($field.current.fieldType))  // 🆗
 														
-														$currentTable[$item.key][$relatedItem.key].fieldType:=$field.current.fieldType
+														$currentField[$item.key][$relatedItem.key].fieldType:=$field.current.fieldType
 														$relatedCount:=$relatedCount+1
 														
 														//………………………………………………………………………………………………………………
 													Else   // ❌ INCOMPATIBLE TYPE
 														
-														OB REMOVE:C1226($currentTable[$item.key]; $relatedItem.key)
+														OB REMOVE:C1226($currentField[$item.key]; $relatedItem.key)
 														
 														//………………………………………………………………………………………………………………
 												End case 
@@ -179,7 +179,7 @@ For each ($unsynchronizedTableFields; PROJECT.$dialog.unsynchronizedTableFields)
 												//______________________________________________________
 											: ($field.nameMismatch)  // 🆗 update the name
 												
-												$currentTable[$item.key][$relatedItem.key].name:=$field.current.name
+												$currentField[$item.key][$relatedItem.key].name:=$field.current.name
 												$relatedCount:=$relatedCount+1
 												
 												//______________________________________________________
@@ -206,7 +206,7 @@ For each ($unsynchronizedTableFields; PROJECT.$dialog.unsynchronizedTableFields)
 												//______________________________________________________
 											: ($field.missing)  // ❌ THE RELATION DOESN'T EXIST ANYMORE
 												
-												OB REMOVE:C1226($currentTable; $relatedItem.key)
+												OB REMOVE:C1226($currentField; $relatedItem.key)
 												
 												//______________________________________________________
 											Else 
@@ -234,7 +234,7 @@ For each ($unsynchronizedTableFields; PROJECT.$dialog.unsynchronizedTableFields)
 													//______________________________________________________
 												: ($field.missing)  // ❌ THE RELATION DOESN'T EXIST ANYMORE
 													
-													OB REMOVE:C1226($currentTable; $linkedItem.key)
+													OB REMOVE:C1226($currentField; $linkedItem.key)
 													
 													//______________________________________________________
 												Else 
@@ -265,6 +265,7 @@ For each ($unsynchronizedTableFields; PROJECT.$dialog.unsynchronizedTableFields)
 					: (PROJECT.isRelationToMany($item.value))  // 1 -> N relation
 						
 						If ($datastore[$tableModel[$item.key].relatedEntities]=Null:C1517)  // ❌ REMOVE THE MISSING TABLE
+							
 							OB REMOVE:C1226($tableModel; String:C10($item.key))
 							
 						Else 
@@ -272,6 +273,66 @@ For each ($unsynchronizedTableFields; PROJECT.$dialog.unsynchronizedTableFields)
 							$publishedCount:=$publishedCount+1
 							
 						End if 
+						
+						//______________________________________________________
+					: (PROJECT.isComputedAttribute($item.value))  // 1 -> N relation
+						
+						$field:=$unsynchronizedTableFields.query("name = :1"; $item.key).pop()
+						
+						Case of 
+								
+								//______________________________________________________
+							: ($field=Null:C1517)  // 😇 We can go dancing
+								
+								$publishedCount:=$publishedCount+1
+								
+								//______________________________________________________
+							: ($field.missing)  // ❌ THE FIELD DOESN'T EXIST ANYMORE
+								
+								OB REMOVE:C1226($tableModel; $item.key)
+								
+								//______________________________________________________
+							: ($field.typeMismatch)  // ❓ if the new type is compatible
+								
+								Case of 
+										
+										//………………………………………………………………………………………………………………
+									: (PROJECT.isString($field.fieldType))\
+										 & (PROJECT.isString($field.current.fieldType))  // 🆗
+										
+										$currentField.fieldType:=$field.current.fieldType
+										$publishedCount:=$publishedCount+1
+										
+										//………………………………………………………………………………………………………………
+									: (PROJECT.isNumeric($field.fieldType))\
+										 & (PROJECT.isNumeric($field.current.fieldType))  // 🆗
+										
+										$currentField.fieldType:=$field.current.fieldType
+										$publishedCount:=$publishedCount+1
+										
+										//………………………………………………………………………………………………………………
+									Else   // ❌ INCOMPATIBLE TYPE
+										
+										OB REMOVE:C1226($tableModel; $item.key)
+										
+										//………………………………………………………………………………………………………………
+								End case 
+								
+								//______________________________________________________
+							: ($field.nameMismatch)  // 🆗 update the name
+								
+								$currentField.name:=$field.current.name
+								$publishedCount:=$publishedCount+1
+								
+								//______________________________________________________
+							Else 
+								
+								ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
+								
+								//______________________________________________________
+								
+						End case 
+						
 						
 						//______________________________________________________
 					Else 

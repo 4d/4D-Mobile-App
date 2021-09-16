@@ -681,22 +681,6 @@ Function storageFields($table : Variant)->$fields : Collection
 		
 	End if 
 	
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function isLinkedToField($fieldName : Text; $tableName : Text)->$is : Boolean
-	
-	var $field; $table : Object
-	
-	$table:=This:C1470.getCatalog().query("name = :1"; $tableName).pop()
-	
-	If ($table#Null:C1517)
-		
-		$field:=$table.field.query("name = :1"; $fieldName).pop()
-		
-	End if 
-	
-	$is:=$field#Null:C1517
-	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function isField($attribute : Variant)->$is : Boolean
 	
@@ -714,6 +698,22 @@ Function isField($attribute : Variant)->$is : Boolean
 			
 			//______________________________________________________
 	End case 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns True if it is a storage or calculated attribute
+Function isFieldAttribute($fieldName : Text; $tableName : Text)->$is : Boolean
+	
+	var $field; $table : Object
+	
+	$table:=This:C1470.getCatalog().query("name = :1"; $tableName).pop()
+	
+	If ($table#Null:C1517)
+		
+		$field:=$table.field.query("name = :1"; $fieldName).pop()
+		
+	End if 
+	
+	$is:=$field#Null:C1517
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function isRelation($attribute : Variant)->$is : Boolean
@@ -737,6 +737,29 @@ Function isRelationToMany($attribute : Variant)->$is : Boolean
 		$is:=(($attribute.relatedEntities#Null:C1517) | (String:C10($attribute.kind)="relatedEntities")) | (Bool:C1537($attribute.isToMany))
 		
 	End if 
+	
+	
+	//====================================
+Function isLink
+	var $0 : Boolean
+	var $1 : Object
+	
+	var $t : Text
+	
+	If (True:C214)
+		
+		For each ($t; OB Keys:C1719($1)) Until ($0)
+			
+			$0:=Value type:C1509($1[$t])=Is object:K8:27
+			
+		End for each 
+		
+	Else 
+		
+		$0:=OB Entries:C1720($1).filter("col_formula"; Formula:C1597($1.result:=(Value type:C1509($1.value)=Is object:K8:27))).length>0
+		
+	End if 
+	
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function isComputedAttribute($field : Object; $tableName : Text)->$is : Boolean
@@ -1037,21 +1060,6 @@ Function labelList  // List of x
 	
 	$0:=This:C1470.label(Replace string:C233(Get localized string:C991("listOf"); "{values}"; $1))
 	
-	//====================================
-Function isStorage
-	var $0 : Boolean
-	var $1 : Object
-	
-	If (String:C10($1.kind)="storage")
-		
-		If ($1.fieldType#Is object:K8:27)\
-			 & ($1.fieldType#Is BLOB:K8:12)\
-			 & ($1.fieldType#Is subtable:K8:11)  // Exclude object and blob fields [AND SUBTABLE]
-			
-			$0:=True:C214
-			
-		End if 
-	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function fieldType2type($fieldType : Integer)->$type : Text
@@ -1100,27 +1108,6 @@ Function getIcon($relativePath : Text)->$icon : Picture
 		
 		READ PICTURE FILE:C678($file.platformPath; $icon)
 		CREATE THUMBNAIL:C679($icon; $icon; 24; 24; Scaled to fit:K6:2)
-		
-	End if 
-	
-	//====================================
-Function isLink
-	var $0 : Boolean
-	var $1 : Object
-	
-	var $t : Text
-	
-	If (True:C214)
-		
-		For each ($t; OB Keys:C1719($1)) Until ($0)
-			
-			$0:=Value type:C1509($1[$t])=Is object:K8:27
-			
-		End for each 
-		
-	Else 
-		
-		$0:=OB Entries:C1720($1).filter("col_formula"; Formula:C1597($1.result:=(Value type:C1509($1.value)=Is object:K8:27))).length>0
 		
 	End if 
 	

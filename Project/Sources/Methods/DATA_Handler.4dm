@@ -137,7 +137,7 @@ Case of
 					
 					OBJECT SET VISIBLE:C603(*; $Obj_form.validate; False:C215)
 					OBJECT SET HELP TIP:C1181(*; $Obj_form.filter; "")
-					OBJECT SET RGB COLORS:C628(*; $Obj_form.filter; Foreground color:K23:1; Background color none:K23:10)
+					OBJECT SET RGB COLORS:C628(*; $Obj_form.filter; Foreground color:K23:1)
 					OBJECT SET VISIBLE:C603(*; $Obj_form.embedded; True:C214)
 					OBJECT SET VISIBLE:C603(*; $Obj_form.method; False:C215)
 					
@@ -168,7 +168,7 @@ Case of
 							
 						Else 
 							
-							OBJECT SET RGB COLORS:C628(*; $Obj_form.filter; EDITOR.errorColor; Background color none:K23:10)
+							OBJECT SET RGB COLORS:C628(*; $Obj_form.filter; EDITOR.errorColor)
 							
 							If (Length:C16(String:C10($Obj_context.current.filter.error))>0)
 								
