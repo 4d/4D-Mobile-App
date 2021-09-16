@@ -1352,7 +1352,7 @@ Function doDataSourceMenu()
 					$controls.push(New object:C1471(\
 						"dynamic"; _and(Formula:C1597(Value type:C1509($manifest.choiceList)=Is object:K8:27); Formula:C1597($manifest.choiceList.dataSource#Null:C1517)); \
 						"name"; $manifest.name; \
-						"source"; $file.parent.name; \
+						"source"; $manifest.name; \
 						"format"; Choose:C955($manifest.format#Null:C1517; $manifest.format; "push"); \
 						"choiceList"; $manifest.choiceList\
 						))
