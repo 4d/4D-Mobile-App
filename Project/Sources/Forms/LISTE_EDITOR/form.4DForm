@@ -14,6 +14,7 @@
 	"events": [
 		"onLoad",
 		"onClick",
+		"onDataChange",
 		"onTimer"
 	],
 	"windowTitle": "window title",
@@ -24,11 +25,11 @@
 		},
 		{
 			"objects": {
-				"Rectangle": {
+				"background": {
 					"type": "rectangle",
 					"top": 20,
 					"left": 20,
-					"width": 539,
+					"width": 485,
 					"height": 555,
 					"borderRadius": 10
 				},
@@ -36,7 +37,7 @@
 					"type": "rectangle",
 					"top": 60,
 					"left": 39,
-					"width": 345,
+					"width": 441,
 					"height": 33,
 					"class": "border"
 				},
@@ -44,19 +45,18 @@
 					"type": "input",
 					"top": 68,
 					"left": 46,
-					"width": 329,
+					"width": 424,
 					"height": 17,
 					"dataSource": "Form:C1466.name",
 					"hideFocusRing": true,
 					"dragging": "none",
 					"events": [
-						"onLosingFocus",
-						"onDataChange",
-						"onAfterKeystroke"
+						"onDataChange"
 					],
-					"multiline": "yes"
+					"multiline": "yes",
+					"placeholder": ":xliff:name"
 				},
-				"name.label": {
+				"_name": {
 					"type": "text",
 					"top": 37,
 					"left": 39,
@@ -82,8 +82,8 @@
 				"datasource": {
 					"type": "radio",
 					"text": ":xliff:fromDataclass",
-					"top": 229,
-					"left": 59,
+					"top": 204,
+					"left": 231,
 					"width": 148,
 					"height": 23,
 					"events": [
@@ -111,7 +111,7 @@
 					"type": "radio",
 					"text": "segmented",
 					"top": 133,
-					"left": 132,
+					"left": 131,
 					"width": 111,
 					"height": 23,
 					"events": [
@@ -153,7 +153,7 @@
 					"type": "radio",
 					"text": "picker",
 					"top": 133,
-					"left": 409,
+					"left": 416,
 					"width": 71,
 					"height": 23,
 					"events": [
@@ -163,22 +163,22 @@
 					"dataSourceTypeHint": "boolean",
 					"focusable": false
 				},
-				"choicelist": {
+				"choiceList": {
 					"type": "listbox",
-					"left": 262,
-					"top": 282,
-					"width": 255,
-					"height": 196,
+					"left": 62,
+					"top": 323,
+					"width": 418,
+					"height": 137,
 					"events": [
 						"onClick",
 						"onHeaderClick",
 						"onDataChange",
 						"onSelectionChange"
 					],
-					"visibility": "hidden",
 					"borderStyle": "system",
 					"listboxType": "collection",
 					"dataSource": "Form:C1466._choiceList",
+					"selectionMode": "single",
 					"columns": [
 						{
 							"header": {
@@ -201,11 +201,12 @@
 							"footer": {
 								"name": "Footer2"
 							},
-							"dataSource": "This:C1470.value"
+							"dataSource": "This:C1470.value",
+							"resizable": false
 						}
 					]
 				},
-				"dataSource.label": {
+				"_dataSource": {
 					"type": "text",
 					"top": 176,
 					"left": 39,
@@ -214,7 +215,7 @@
 					"text": ":xliff:source",
 					"class": "label"
 				},
-				"type.label": {
+				"_type": {
 					"type": "text",
 					"top": 111,
 					"left": 39,
@@ -223,10 +224,10 @@
 					"text": ":xliff:type",
 					"class": "label"
 				},
-				"value.label": {
+				"_value": {
 					"type": "text",
-					"top": 261,
-					"left": 262,
+					"top": 302,
+					"left": 62,
 					"width": 110,
 					"height": 16,
 					"text": ".Value",
@@ -234,11 +235,10 @@
 				},
 				"add": {
 					"type": "button",
-					"top": 490,
-					"left": 261,
+					"top": 474,
+					"left": 62,
 					"width": 28,
 					"height": 28,
-					"visibility": "hidden",
 					"icon": "/RESOURCES/images/common/plus.png",
 					"iconFrames": 4,
 					"style": "bevel",
@@ -250,11 +250,10 @@
 				},
 				"remove": {
 					"type": "button",
-					"top": 490,
-					"left": 288,
+					"top": 474,
+					"left": 89,
 					"width": 28,
 					"height": 28,
-					"visibility": "hidden",
 					"icon": "/RESOURCES/images/common/minus.png",
 					"iconFrames": 4,
 					"style": "bevel",
@@ -266,8 +265,8 @@
 				"label": {
 					"type": "radio",
 					"text": ":xliff:label",
-					"top": 232,
-					"left": 260,
+					"top": 271,
+					"left": 62,
 					"width": 92,
 					"height": 16,
 					"events": [
@@ -275,14 +274,13 @@
 					],
 					"radioGroup": "binding",
 					"dataSourceTypeHint": "boolean",
-					"focusable": false,
-					"visibility": "hidden"
+					"focusable": false
 				},
 				"image": {
 					"type": "radio",
 					"text": ":xliff:image",
-					"top": 232,
-					"left": 372,
+					"top": 271,
+					"left": 206,
 					"width": 87,
 					"height": 16,
 					"events": [
@@ -290,52 +288,187 @@
 					],
 					"radioGroup": "binding",
 					"dataSourceTypeHint": "boolean",
-					"focusable": false,
-					"visibility": "hidden"
+					"focusable": false
 				},
-				"label.label": {
+				"_label": {
 					"type": "text",
-					"top": 261,
-					"left": 384,
+					"top": 302,
+					"left": 183,
 					"width": 110,
 					"height": 16,
 					"text": ":xliff:label",
 					"class": "label"
 				},
-				"binding.label": {
+				"_binding": {
 					"type": "text",
-					"top": 207,
-					"left": 240,
+					"top": 242,
+					"left": 62,
 					"width": 140,
 					"height": 17,
 					"text": ".Binding",
-					"class": "label",
-					"visibility": "hidden"
+					"class": "label"
+				},
+				"ok": {
+					"type": "button",
+					"text": ":xliff:ok",
+					"top": 532,
+					"left": 401,
+					"width": 79,
+					"height": 22,
+					"events": [
+						"onClick"
+					],
+					"focusable": false,
+					"defaultButton": true,
+					"action": "accept"
+				},
+				"cancel": {
+					"type": "button",
+					"text": ":xliff:cancel",
+					"top": 532,
+					"left": 302,
+					"width": 79,
+					"height": 22,
+					"events": [
+						"onClick"
+					],
+					"focusable": false,
+					"action": "cancel"
+				},
+				"_table": {
+					"type": "text",
+					"top": 242,
+					"left": 62,
+					"width": 68,
+					"height": 17,
+					"text": ":xliff:tables",
+					"borderStyle": "none",
+					"class": "label"
+				},
+				"dataclasses": {
+					"type": "listbox",
+					"left": 61,
+					"top": 271,
+					"width": 196,
+					"height": 231,
+					"events": [
+						"onClick",
+						"onHeaderClick",
+						"onDataChange",
+						"onSelectionChange"
+					],
+					"borderStyle": "system",
+					"listboxType": "collection",
+					"dataSource": "Form:C1466._dataclasses",
+					"selectionMode": "single",
+					"columns": [
+						{
+							"header": {
+								"text": "Header1",
+								"name": "Header3"
+							},
+							"name": "dataclass.name",
+							"footer": {
+								"name": "Footer3"
+							},
+							"dataSource": "This:C1470.name",
+							"width": 181,
+							"resizable": false,
+							"enterable": false
+						}
+					]
+				},
+				"attributes": {
+					"type": "listbox",
+					"left": 273,
+					"top": 271,
+					"width": 208,
+					"height": 231,
+					"events": [
+						"onClick",
+						"onHeaderClick",
+						"onDataChange",
+						"onSelectionChange"
+					],
+					"borderStyle": "system",
+					"listboxType": "collection",
+					"dataSource": "Form:C1466._attributes",
+					"selectionMode": "single",
+					"columns": [
+						{
+							"header": {
+								"text": "Header1",
+								"name": "Header5"
+							},
+							"name": "attribute.name",
+							"footer": {
+								"name": "Footer5"
+							},
+							"dataSource": "This:C1470.name",
+							"width": 192,
+							"enterable": false
+						}
+					]
+				},
+				"_fields": {
+					"type": "text",
+					"top": 242,
+					"left": 272,
+					"width": 72,
+					"height": 17,
+					"text": ":xliff:fields",
+					"borderStyle": "none",
+					"class": "label"
 				}
 			},
 			"entryOrder": [
 				"name",
+				"static",
+				"datasource",
 				"push",
 				"segmented",
 				"popover",
 				"sheet",
 				"picker",
-				"static",
-				"choicelist",
-				"datasource",
+				"choiceList",
 				"add",
 				"remove",
 				"label",
-				"image"
+				"image",
+				"ok",
+				"cancel",
+				"dataclasses",
+				"attributes"
 			]
 		}
 	],
-	"geometryStamp": 252,
+	"geometryStamp": 383,
 	"editor": {
-		"activeView": "View 1",
+		"activeView": "choicelist",
 		"defaultView": "View 1",
 		"views": {
-			"View 1": {}
+			"View 1": {},
+			"dataclasses": {
+				"visible": false,
+				"objects": [
+					"_table",
+					"dataclasses",
+					"attributes",
+					"_fields"
+				]
+			},
+			"choicelist": {
+				"objects": [
+					"choiceList",
+					"_value",
+					"add",
+					"remove",
+					"label",
+					"image",
+					"_label",
+					"_binding"
+				]
+			}
 		}
 	},
 	"method": "LISTE_EDITOR"

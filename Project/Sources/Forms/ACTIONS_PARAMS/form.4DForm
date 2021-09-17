@@ -697,6 +697,38 @@
 					],
 					"visibility": "hidden",
 					"focusable": false
+				},
+				"revealDatasource": {
+					"type": "button",
+					"text": "",
+					"top": 257,
+					"left": 698,
+					"width": 16,
+					"height": 16,
+					"events": [
+						"onClick"
+					],
+					"style": "toolbar",
+					"icon": "/RESOURCES/images/common/show.png",
+					"visibility": "hidden",
+					"focusable": false,
+					"iconFrames": 4
+				},
+				"revealFormat": {
+					"type": "button",
+					"text": "",
+					"top": 195,
+					"left": 698,
+					"width": 16,
+					"height": 16,
+					"events": [
+						"onClick"
+					],
+					"style": "toolbar",
+					"icon": "/RESOURCES/images/common/show.png",
+					"visibility": "hidden",
+					"focusable": false,
+					"iconFrames": 4
 				}
 			},
 			"entryOrder": [
@@ -719,7 +751,9 @@
 				"predicting",
 				"namePopup",
 				"07_dataSource",
-				"07_dataSource.popup"
+				"07_dataSource.popup",
+				"revealDatasource",
+				"revealFormat"
 			]
 		},
 		{
@@ -757,7 +791,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 540,
+	"geometryStamp": 560,
 	"editor": {
 		"groups": {
 			"Group": [
@@ -783,7 +817,8 @@
 					"07_dataSource.popup.border",
 					"07_dataSource",
 					"07_dataSource.label",
-					"07_dataSource.popup"
+					"07_dataSource.popup",
+					"revealDatasource"
 				]
 			},
 			"sort": {

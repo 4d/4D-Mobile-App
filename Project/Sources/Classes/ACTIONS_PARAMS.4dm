@@ -65,6 +65,7 @@ Function init()
 	This:C1470.formObject("formatLabel"; "05_type.label").addToGroup($group)
 	This:C1470.button("formatPopup"; "05_type.popup").addToGroup($group)
 	This:C1470.formObject("formatPopupBorder"; "05_type.popup.border").addToGroup($group)
+	This:C1470.button("revealFormat").addToGroup($group)
 	
 	$group:=This:C1470.group("sortOrderGroup")
 	This:C1470.input("sortOrder"; "03_sortOrder").addToGroup($group)
@@ -105,6 +106,7 @@ Function init()
 	This:C1470.formObject("dataSourceLabel"; "07_dataSource.label").addToGroup($group)
 	This:C1470.button("dataSourcePopup"; "07_dataSource.popup").addToGroup($group)
 	This:C1470.formObject("dataSourcePopupBorder"; "07_dataSource.popup.border").addToGroup($group)
+	This:C1470.button("revealDatasource").addToGroup($group)
 	
 	This:C1470.group("number"; \
 		This:C1470.minGroup; \
@@ -431,10 +433,12 @@ Function update()
 								If ($withDataSource)
 									
 									This:C1470.dataSourceGroup.show()
+									This:C1470.revealDatasource.show(String:C10($current.source)="/@")
 									This:C1470.placeholderGroup.show(This:C1470.formatWithoutPlaceholder.indexOf($current.format)=-1)
 									
 								Else 
 									
+									This:C1470.revealDatasource.hide()
 									This:C1470.placeholderGroup.show(This:C1470.typeWithoutPlaceholder.indexOf($current.type)=-1)
 									
 									If ($current.type#"image")
@@ -442,112 +446,114 @@ Function update()
 										$withDefault:=Choose:C955(String:C10($action.preset)#"edit"; True:C214; Not:C34($isLinked))
 										
 									End if 
-								End if 
-								
-								If ($withDefault)
 									
-									This:C1470.defaultValueGroup.show()
-									This:C1470.defaultValue.setValue(String:C10($current.default))
-									
-									Case of 
-											
-											//…………………………………………………………………………………………………………………………………………
-										: ($current.type="number")
-											
-											Case of 
+									If ($withDefault)
+										
+										This:C1470.defaultValueGroup.show()
+										This:C1470.defaultValue.setValue(String:C10($current.default))
+										
+										Case of 
+												
+												//…………………………………………………………………………………………………………………………………………
+											: ($current.type="number")
+												
+												Case of 
+														
+														//________________________________________
+													: (String:C10($current.format)="integer")
+														
+														This:C1470.defaultValue.setFilter(Is integer:K8:5)
+														
+														//________________________________________
+													: (String:C10($current.format)="spellOut")
+														
+														This:C1470.defaultValue.setFilter(Is integer:K8:5)
+														
+														//________________________________________
+													Else 
+														
+														This:C1470.defaultValue.setFilter(Is real:K8:4)
+														
+														//________________________________________
+												End case 
+												
+												//…………………………………………………………………………………………………………………………………………
+											: ($current.type="date")
+												
+												// Should accept "today", "yesterday", "tomorrow"
+												GET SYSTEM FORMAT:C994(Date separator:K60:10; $t)
+												This:C1470.defaultValue.setFilter("&\"0-9;"+$t+";-;/;"+EDITOR.str.setText("todayyesterdaytomorrow").distinctLetters(";")+"\"")
+												
+												var $t
+												$t:=String:C10(This:C1470.defaultValue.getValue())
+												
+												If (Position:C15($t; "todayyesterdaytomorrow")=0)
 													
-													//________________________________________
-												: (String:C10($current.format)="integer")
+													var $rgx : cs:C1710.regex
+													$rgx:=cs:C1710.regex.new($t; "(?m-si)^(\\d{2})!(\\d{2})!(\\d{4})$").match()
 													
-													This:C1470.defaultValue.setFilter(Is integer:K8:5)
+													If ($rgx.success)
+														
+														This:C1470.defaultValue.setValue(String:C10(Add to date:C393(!00-00-00!; Num:C11($rgx.matches[3].data); Num:C11($rgx.matches[2].data); Num:C11($rgx.matches[1].data))))
+														
+													End if 
+												End if 
+												
+												//…………………………………………………………………………………………………………………………………………
+											: ($current.type="time")
+												
+												This:C1470.defaultValue.setFilter(Is time:K8:8)
+												
+												//…………………………………………………………………………………………………………………………………………
+											: ($current.type="string")
+												
+												This:C1470.defaultValue.setFilter(Is text:K8:3)
+												
+												//…………………………………………………………………………………………………………………………………………
+											: ($current.type="bool")
+												
+												If (String:C10($current.format)="check")
 													
-													//________________________________________
-												: (String:C10($current.format)="spellOut")
+													If ($current.default#Null:C1517)
+														
+														If (Value type:C1509($current.default)=Is boolean:K8:9)
+															
+															This:C1470.defaultValue.setValue(Choose:C955($current.default; "checked"; "unchecked"))
+															
+														End if 
+													End if 
 													
-													This:C1470.defaultValue.setFilter(Is integer:K8:5)
+													// Should accept "checked", "unchecked", 0 or 1
+													This:C1470.defaultValue.setFilter("&\"0;1;"+cs:C1710.str.new("unchecked").distinctLetters(";")+"\"")
 													
-													//________________________________________
 												Else 
 													
-													This:C1470.defaultValue.setFilter(Is real:K8:4)
-													
-													//________________________________________
-											End case 
-											
-											//…………………………………………………………………………………………………………………………………………
-										: ($current.type="date")
-											
-											// Should accept "today", "yesterday", "tomorrow"
-											GET SYSTEM FORMAT:C994(Date separator:K60:10; $t)
-											This:C1470.defaultValue.setFilter("&\"0-9;"+$t+";-;/;"+EDITOR.str.setText("todayyesterdaytomorrow").distinctLetters(";")+"\"")
-											
-											var $t
-											$t:=String:C10(This:C1470.defaultValue.getValue())
-											
-											If (Position:C15($t; "todayyesterdaytomorrow")=0)
-												
-												var $rgx : cs:C1710.regex
-												$rgx:=cs:C1710.regex.new($t; "(?m-si)^(\\d{2})!(\\d{2})!(\\d{4})$").match()
-												
-												If ($rgx.success)
-													
-													This:C1470.defaultValue.setValue(String:C10(Add to date:C393(!00-00-00!; Num:C11($rgx.matches[3].data); Num:C11($rgx.matches[2].data); Num:C11($rgx.matches[1].data))))
-													
-												End if 
-											End if 
-											
-											//…………………………………………………………………………………………………………………………………………
-										: ($current.type="time")
-											
-											This:C1470.defaultValue.setFilter(Is time:K8:8)
-											
-											//…………………………………………………………………………………………………………………………………………
-										: ($current.type="string")
-											
-											This:C1470.defaultValue.setFilter(Is text:K8:3)
-											
-											//…………………………………………………………………………………………………………………………………………
-										: ($current.type="bool")
-											
-											If (String:C10($current.format)="check")
-												
-												If ($current.default#Null:C1517)
-													
-													If (Value type:C1509($current.default)=Is boolean:K8:9)
+													If ($current.default#Null:C1517)
 														
-														This:C1470.defaultValue.setValue(Choose:C955($current.default; "checked"; "unchecked"))
-														
+														If (Value type:C1509($current.default)=Is boolean:K8:9)
+															
+															This:C1470.defaultValue.setValue(Choose:C955($current.default; "true"; "false"))
+															
+														End if 
 													End if 
-												End if 
-												
-												// Should accept "checked", "unchecked", 0 or 1
-												This:C1470.defaultValue.setFilter("&\"0;1;"+cs:C1710.str.new("unchecked").distinctLetters(";")+"\"")
-												
-											Else 
-												
-												If ($current.default#Null:C1517)
 													
-													If (Value type:C1509($current.default)=Is boolean:K8:9)
-														
-														This:C1470.defaultValue.setValue(Choose:C955($current.default; "true"; "false"))
-														
-													End if 
+													// Should accept "true", "false", 0 or 1
+													This:C1470.defaultValue.setFilter("&\"0;1;"+cs:C1710.str.new("truefalse").distinctLetters(";")+"\"")
+													
 												End if 
 												
-												// Should accept "true", "false", 0 or 1
-												This:C1470.defaultValue.setFilter("&\"0;1;"+cs:C1710.str.new("truefalse").distinctLetters(";")+"\"")
-												
-											End if 
-											
-											//…………………………………………………………………………………………………………………………………………
-									End case 
-									
-								Else 
-									
-									This:C1470.defaultValueGroup.hide()
-									This:C1470.dataSourceGroup.show()
-									
+												//…………………………………………………………………………………………………………………………………………
+										End case 
+										
+									Else 
+										
+										This:C1470.defaultValueGroup.hide()
+										
+									End if 
 								End if 
+								
+								$t:=String:C10($current.format)
+								This:C1470.revealFormat.show((Position:C15("/"; $t)=1) & (This:C1470.customInputControls.indexOf(Delete string:C232($t; 1; 1))=-1))
 								
 							Else 
 								
@@ -642,7 +648,7 @@ Function formatValue()->$value : Text
 			$value:=Get localized string:C991($value)
 			
 			//________________________________________
-		: (Position:C15("/"; String:C10($current.format))=1)
+		: (PROJECT.isCustomResource($current.format))  // Host custom action parameter format
 			
 			var $file : 4D:C1709.File
 			$file:=This:C1470.path.hostInputControls().file(Delete string:C232($current.format; 1; 1)+"/manifest.json")
@@ -653,14 +659,10 @@ Function formatValue()->$value : Text
 				
 			Else 
 				
-				$value:=Substring:C12($current.format; 2)
+				// Source folder name
+				$value:=Delete string:C232($current.format; 1; 1)
 				
 			End if 
-			
-			//________________________________________
-		: (PROJECT.isCustomResource($current.format))  // Host custom action parameter format
-			
-			$value:=Substring:C12($current.format; 2)
 			
 			//________________________________________
 		Else 
@@ -675,32 +677,62 @@ Function formatValue()->$value : Text
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function dataSourceValue()->$value : Text
 	
-	var $current; $manifest : Object
-	var $file : 4D:C1709.File
+	$value:=Delete string:C232(This:C1470.current.source; 1; 1)
 	
-	$current:=This:C1470.current
-	$file:=This:C1470.path.hostInputControls().file(String:C10(Delete string:C232($current.source; 1; 1))+"/manifest.json")
-	
-	If ($file.exists)
+	If (This:C1470.sourceFolder($value; True:C214).exists)
 		
-		$manifest:=JSON Parse:C1218($file.getText())
-		$value:=$manifest.name
+		This:C1470.dataSource.setColors(Foreground color:K23:1)
 		
-		If ($current.format=("/"+Choose:C955($manifest.format=Null:C1517; "push"; $manifest.format)))
-			
-			This:C1470.dataSource.setColors(Foreground color:K23:1)
-			
-		Else   // ERROR
-			
-			This:C1470.dataSource.setColors("red")
-			
-		End if 
+	Else 
 		
-	Else   // ERROR
-		
-		$value:=String:C10($current.source)
 		This:C1470.dataSource.setColors("red")
 		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+	// Returns the source folder of a host resource
+Function sourceFolder($name : Text; $control : Boolean)->$source : 4D:C1709.Folder
+	
+	var $found : Boolean
+	var $manifest : Object
+	var $file : 4D:C1709.File
+	var $folder : 4D:C1709.Folder
+	
+	$source:=Folder:C1567("❓")
+	$folder:=This:C1470.path.hostInputControls()
+	
+	If ($folder.exists)
+		
+		For each ($folder; $folder.folders()) Until ($found)
+			
+			$file:=$folder.files().query("fullName=:1"; "manifest.json").pop()
+			
+			If ($file#Null:C1517)
+				
+				$manifest:=JSON Parse:C1218($file.getText())
+				$found:=($manifest.name=$name)
+				
+				If (Count parameters:C259>=2)
+					
+					If ($control)
+						
+						$found:=$found & (Delete string:C232(This:C1470.current.format; 1; 1)=Choose:C955($manifest.format#Null:C1517; $manifest.format; "push"))
+						
+					End if 
+				End if 
+				
+				If ($found)
+					
+					$source:=$folder
+					
+				End if 
+				
+			Else   // Invalid
+				
+			End if 
+		End for each 
+		
+	Else   // No host resources
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
@@ -1155,7 +1187,7 @@ Function doFormatMenu()
 	$formats:=This:C1470.getFormats()
 	$menu:=cs:C1710.menu.new()
 	
-	If (PROJECT.isFieldAttribute($current.name; Table name:C256(This:C1470.action.tableNumber)))  // Action linked to a field
+	If (PROJECT.isFieldAttribute($current.name; Table name:C256(This:C1470.action.tableNumber)))
 		
 		$menu.append(":xliff:byDefault"; "null"; $current.format=Null:C1517).line()
 		
@@ -1220,7 +1252,7 @@ Function doFormatMenu()
 	End if 
 	
 	// Position according to the box
-	If ($menu.popup(This:C1470.formatBorder).selected)
+	If ($menu.popup(This:C1470.formatBorder; $current.type).selected)
 		
 		Case of 
 				
@@ -1229,14 +1261,13 @@ Function doFormatMenu()
 				
 				OB REMOVE:C1226($current; "format")
 				OB REMOVE:C1226($current; "source")
+				OB REMOVE:C1226($current; "choiceList")
 				
 				//________________________________________
 			: (Position:C15("/"; $menu.choice)=1)
 				
-				var $data : Object
-				$data:=$menu.getData("data"; $menu.choice)
-				$current.format:=$data.format
-				$current.type:=$data.type
+				$current.format:=$menu.getData("format"; $menu.choice)
+				$current.type:=$menu.getData("type"; $menu.choice)
 				
 				If (Not:C34(This:C1470._withDataSource(Delete string:C232($menu.choice; 1; 1))))
 					
@@ -1248,7 +1279,6 @@ Function doFormatMenu()
 			Else 
 				
 				$current.format:=$menu.choice
-				OB REMOVE:C1226($current; "source")
 				
 				$newType:=$menu.getData("type"; $menu.choice)
 				
@@ -1277,9 +1307,17 @@ Function doFormatMenu()
 				
 				If ($current.type#$newType)  // The type is changed
 					
-					$current.type:=$newType
+					$current.type:=$newType  //Choose($newType="text"; "string"; $newType)
+					
+					If ($current.format=$current.type)
+						
+						OB REMOVE:C1226($current; "format")
+						
+					End if 
+					
 					OB REMOVE:C1226($current; "default")
 					OB REMOVE:C1226($current; "source")
+					OB REMOVE:C1226($current; "choiceList")
 					
 					If (This:C1470.defaultValue.focused)
 						
@@ -1323,14 +1361,14 @@ Function _withDataSource($format : Text)->$with : Boolean
 Function doDataSourceMenu()
 	
 	var $current; $manifest; $o : Object
-	var $t : Text
+	var $parameter; $tab : Text
 	var $controls; $subset : Collection
 	var $file : 4D:C1709.File
 	var $control; $folder : 4D:C1709.Folder
 	var $menu : cs:C1710.menu
 	
+	$tab:="    "
 	$current:=This:C1470.current
-	
 	$menu:=cs:C1710.menu.new()
 	
 	// Search for custom input controls
@@ -1349,6 +1387,7 @@ Function doDataSourceMenu()
 				$manifest:=JSON Parse:C1218($file.getText())
 				
 				If ($manifest.choiceList#Null:C1517)
+					
 					$controls.push(New object:C1471(\
 						"dynamic"; _and(Formula:C1597(Value type:C1509($manifest.choiceList)=Is object:K8:27); Formula:C1597($manifest.choiceList.dataSource#Null:C1517)); \
 						"name"; $manifest.name; \
@@ -1356,6 +1395,7 @@ Function doDataSourceMenu()
 						"format"; Choose:C955($manifest.format#Null:C1517; $manifest.format; "push"); \
 						"choiceList"; $manifest.choiceList\
 						))
+					
 				End if 
 				
 			Else   //INVALID
@@ -1374,9 +1414,10 @@ Function doDataSourceMenu()
 			
 			For each ($o; $subset)
 				
-				$t:="/"+$o.source
-				$menu.append("    "+$o.name; $t; String:C10($current.source)=$t)\
-					.setData("choiceList"; $o.choiceList)
+				$parameter:="/"+$o.source
+				$menu.append($tab+$o.name; $parameter; String:C10($current.source)=$parameter)\
+					.setData("choiceList"; $o.choiceList)\
+					.setData("source"; "/"+$o.name)
 				
 			End for each 
 			
@@ -1393,9 +1434,10 @@ Function doDataSourceMenu()
 			
 			For each ($o; $subset)
 				
-				$t:="/"+$o.source
-				$menu.append("    "+$o.name; $t; String:C10($current.source)=$t)\
-					.setData("choiceList"; $o.choiceList)
+				$parameter:="/"+$o.source
+				$menu.append($tab+$o.name; $parameter; String:C10($current.source)=$parameter)\
+					.setData("choiceList"; $o.choiceList)\
+					.setData("source"; "/"+$o.name)
 				
 			End for each 
 			
@@ -1416,92 +1458,84 @@ Function doDataSourceMenu()
 			: ($menu.choice="new")
 				
 				//MARK:#TO_DO
-				
-				var $name : Text
-				var $w : Integer
-				var $current; $data; $folder; $formatObject : Object
-				
-				$data:=New object:C1471
-				$data.$comment:="Map database values to some display values using choiceList"
-				$data.$doc:="https://developer.4d.com/4d-for-ios/docs/en/creating-data-formatter.html#text-formatters"
-				$data.name:="New List"
-				$data.type:=$current.type
-				$data.format:=Delete string:C232($current.format; 1; 1)
-				$data.choiceList:=New object:C1471
-				
-				$w:=Open form window:C675("LISTE_EDITOR"; Movable form dialog box:K39:8; Horizontally centered:K39:1; Vertically centered:K39:4)
-				DIALOG:C40("LISTE_EDITOR"; $data)
-				
-				If (Bool:C1537(OK))
-					
-					$name:=$data.name
-					$folder:=This:C1470.path.hostInputControls(True:C214).folder($formatObject.name)
-					
-				Else   // A "If" statement should never omit "Else"
-					
-				End if 
-				
-				CLOSE WINDOW:C154($w)
-				//$format:=Request(Get localized string("formatName"))
-				//If (Bool(OK))\
-					& (Length($format)>0)
-				//$type:=$menu.getData("type")
-				//$formatObject:=$menu.getData("format")
-				//$formatObject.name:=EDITOR.str.setText($format).suitableWithFileName()
-				//$folder:=This.path.hostInputControls(True).folder($formatObject.name)
-				//If (Not($folder.exists))
-				//Case of
-				////----------------------------------------
-				//: ($type="choiceList")
-				//$formatObject.choiceList:=cs.formater.new().defaultChoiceList($formatObject.type[0]; False)
-				////----------------------------------------
-				//: ($type="dataSource")
-				//// Already filled
-				////----------------------------------------
-				//Else
-				//$formatObject:=Null
-				////----------------------------------------
-				//End case
-				//If ($formatObject#Null)
-				//$folder.create()
-				//$manifestFile:=$folder.file("manifest.json")
-				//$manifestFile.setText(JSON Stringify($formatObject; *))
-				//$current.format:="/"+$formatObject.name  // Set as custom/host resource
-				//// #MARK_TODO newActionFormatterChoiceList maybe affect also $current.type, and some notify maybe
-				//If ($type="choiceList")
-				//// Open JSON file, but we could open a custom format editor instead
-				//OPEN URL($manifestFile.platformPath)
-				//End if
-				//End if
-				//Else
-				//POST_MESSAGE(New object(\
-					"target"; Current form window; \
-					"action"; "show"; \
-					"type"; "alert"; \
-					"title"; Get localized string("thereIsAlreadyAFormatWithThisName")))
-				//End if
-				//End if
+				This:C1470.doNewList()
 				
 				//______________________________________________________
 			Else 
 				
-				$current.source:=$menu.choice
-				$current.choiceList:=$menu.getData("choiceList")
+				$current.source:=$menu.getData("source"; $menu.choice)
 				
 				PROJECT.save()
+				
+				This:C1470.update()
 				
 				//______________________________________________________
 		End case 
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
+Function doNewList()
+	
+	var $key; $name : Text
+	var $current; $data; $o : Object
+	var $file : 4D:C1709.File
+	var $folder : 4D:C1709.Folder
+	
+	$current:=This:C1470.current
+	
+	$data:=New object:C1471
+	$data._window:=Open form window:C675("LISTE_EDITOR"; Movable form dialog box:K39:8; Horizontally centered:K39:1; Vertically centered:K39:4)
+	$data._host:=This:C1470.path.hostInputControls(True:C214)
+	$data.$comment:="Map database values to some display values using choiceList"
+	$data.$doc:="https://developer.4d.com/4d-for-ios/docs/en/creating-data-formatter.html#text-formatters"
+	$data.name:=""
+	$data.type:=$current.type
+	$data.format:=Delete string:C232($current.format; 1; 1)
+	$data.choiceList:=New object:C1471
+	
+	DIALOG:C40("LISTE_EDITOR"; $data)
+	
+	If (Bool:C1537(OK))
+		
+		$folder:=$data._folder
+		
+		If ($folder.exists)
+			
+			BEEP:C151
+			
+		Else 
+			
+			// Create the source folder
+			$folder.create()
+			
+			// Create the manifest
+			$file:=$folder.file("manifest.json")
+			
+			$o:=OB Copy:C1225($data)
+			
+			For each ($key; $o)
+				
+				If ($key[[1]]="_")
+					
+					OB REMOVE:C1226($o; $key)
+					
+				End if 
+			End for each 
+			
+			$file.setText(JSON Stringify:C1217($o; *))
+			
+		End if 
+		
+	Else   // <NOTHING MORE TO DO>
+	End if 
+	
+	CLOSE WINDOW:C154($data._window)
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// [INTERNAL]
 Function _appendFormat($data : Object)->$custom : Boolean
 	
-	var $name : Text
 	var $format : Variant
-	var $menuFormat; $menuType : cs:C1710.menu
-	var $file : 4D:C1709.File
 	
 	$format:=$data.format
 	
@@ -1517,15 +1551,12 @@ Function _appendFormat($data : Object)->$custom : Boolean
 		If (Value type:C1509($format)=Is object:K8:27)
 			
 			$data.menu.append($format.name; ("/"+$format.name); ($data.currentFormat=("/"+$format.name)))\
-				.setStyle(Italic:K14:3)\
-				.setData("type"; $data.type)
+				.setStyle(Italic:K14:3)
 			
 		Else   // text
 			
-			
 			$data.menu.append(Delete string:C232($format; 1; 1); $format; $data.currentFormat=$format)\
-				.setStyle(Italic:K14:3)\
-				.setData("type"; $data.type)
+				.setStyle(Italic:K14:3)
 			
 		End if 
 		
@@ -1535,6 +1566,10 @@ Function _appendFormat($data : Object)->$custom : Boolean
 		
 	End if 
 	
+	$data.menu\
+		.setData("type"; $data.type)\
+		.setData("format"; $format)
+	
 	$custom:=$data.custom
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
@@ -1543,33 +1578,29 @@ Function _actionFormatterChoiceList($menu : cs:C1710.menu; $type : Text)
 	
 	If (New collection:C1472("date"; "time"; "image").indexOf($type)=-1)  // TODO newActionFormatterChoiceList make an include list instead
 		
-		var $fieldID; $tableID : Text
-		var $field; $data; $table : Object
-		var $fieldsMenu; $tableMenu : cs:C1710.menu
-		
 		$menu.line()
 		
 		If (FEATURE.with("customActionFormatter"))
 			
-			var $control : Text
+			var $control; $parameter : Text
+			var $selected : Boolean
+			
 			For each ($control; This:C1470.customInputControls)
 				
-				$data:=New object:C1471(\
-					"format"; "/"+$control; \
-					"type"; $type)
-				
-				var $parameter : Text
 				$parameter:="/"+$control+"/"+$type
-				
-				var $selected : Boolean
 				$selected:=$parameter=(String:C10(This:C1470.current.format)+"/"+This:C1470.current.type)
 				
 				$menu.append($control; $parameter; $selected)\
-					.setData("data"; $data)
+					.setData("type"; $type)\
+					.setData("format"; "/"+$control)
 				
 			End for each 
 			
 		Else 
+			
+			var $fieldID; $tableID : Text
+			var $field; $data; $table : Object
+			var $fieldsMenu; $tableMenu : cs:C1710.menu
 			
 			$data:=New object:C1471(\
 				"type"; New collection:C1472($type))

@@ -1,11 +1,13 @@
 //%attributes = {}
-C_LONGINT:C283($i; $l; $Lon_indx; $Lon_tableNumber)
-C_OBJECT:C1216($o)
-C_COLLECTION:C1488($c)
+var $i; $l; $Lon_indx; $Lon_tableNumber; $start : Integer
+var $o : Object
+var $c : Collection
 
 TRY
 
 COMPONENT_INIT
+
+$start:=Milliseconds:C459
 
 //_____________________________________________________________
 $o:=_o_structure(New object:C1471(\
@@ -208,3 +210,9 @@ If (Asserted:C1132($o.success))
 End if 
 
 FINALLY
+
+If (Structure file:C489=Structure file:C489(*))
+	
+	ALERT:C41(String:C10(Milliseconds:C459-$start))
+	
+End if 

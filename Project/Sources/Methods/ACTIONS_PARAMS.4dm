@@ -230,6 +230,16 @@ Else   // <== WIDGETS METHOD
 			$ƒ.doAddParameterMenu($ƒ.namePopup; True:C214)
 			
 			//==================================================
+		: ($ƒ.revealFormat.catch($e; On Clicked:K2:4))
+			
+			SHOW ON DISK:C922($ƒ.sourceFolder(Delete string:C232($ƒ.current.format; 1; 1)).platformPath)
+			
+			//==================================================
+		: ($ƒ.revealDatasource.catch($e; On Clicked:K2:4))
+			
+			SHOW ON DISK:C922($ƒ.sourceFolder(Delete string:C232($ƒ.current.source; 1; 1); True:C214).platformPath)
+			
+			//==================================================
 		: ($e.code=On Data Change:K2:15)\
 			 & ($ƒ.linked.belongsTo($e.objectName))  // Linked widgets
 			

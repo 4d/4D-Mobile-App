@@ -1,11 +1,13 @@
 //%attributes = {}
 var $node; $t : Text
+var $start : Integer
 var $o : Object
 var $c : Collection
-
 var $xml : cs:C1710.xml
 
 TRY
+
+$start:=Milliseconds:C459
 
 //======================================================================================
 // Create from scratch
@@ -157,12 +159,11 @@ $node:=$xml.findByXPath("/document/scenes")
 ASSERT:C1129($xml.success; ".findByXPath(\"/document/scenes\")")
 ASSERT:C1129($node#("0"*32))
 
-If (False:C215)  //BUG?
+If (False:C215)  // BUG?
 	
 	// Elements of the node with the attribute "id"
 	$c:=$xml.findByAttribute($node; "id")
 	ASSERT:C1129($c.length=34; ".findByAttribute($node;\"id\")")
-	
 End if 
 
 $c:=$xml.findByAttribute($node; "id"; "39w-Zo-jTU")
@@ -271,3 +272,9 @@ ASSERT:C1129($xml.success; ".setAttribute()")
 ASSERT:C1129($t="him"; ".getAttribute()")
 
 FINALLY
+
+If (Structure file:C489=Structure file:C489(*))
+	
+	ALERT:C41(String:C10(Milliseconds:C459-$start))
+	
+End if 

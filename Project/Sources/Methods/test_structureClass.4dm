@@ -7,6 +7,8 @@ TRY
 
 COMPONENT_INIT
 
+$start:=Milliseconds:C459
+
 //=============================================================
 //=                        catalog                            =
 //=============================================================
@@ -473,3 +475,9 @@ If (False:C215)  //============================================================ 
 End if 
 
 FINALLY
+
+If (Structure file:C489=Structure file:C489(*))
+	
+	ALERT:C41(String:C10(Milliseconds:C459-$start))
+	
+End if 

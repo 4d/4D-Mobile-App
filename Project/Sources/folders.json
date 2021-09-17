@@ -12,8 +12,7 @@
 	"____FOR_TESTS": {
 		"classes": [
 			"Employes",
-			"EmployesEntity",
-			"EmployesSelection"
+			"EmployesEntity"
 		]
 	},
 	"__IN WORKS": {
@@ -234,6 +233,7 @@
 			"editor_PROCESS_MESSAGES",
 			"editor_RESUME",
 			"editor_ui_LISTBOX",
+			"editor_UPDATE_HEADER",
 			"PROJECT_EDITOR"
 		],
 		"forms": [
@@ -601,9 +601,11 @@
 			"ALL_TYPES",
 			"Commands",
 			"Employes",
+			"EmployesOffices",
 			"NAME WITH SPACE",
 			"NO FIELDS",
 			"NOT EXPOSED",
+			"Offices",
 			"Only primary key",
 			"Service",
 			"Table_1",
