@@ -613,7 +613,7 @@ Function injectElement
 	
 	
 	C_COLLECTION:C1488($Col_elements)
-	If (Num:C11($Obj_field.id)=0)  // relation to N field
+	If ((Num:C11($Obj_field.id)=0) & (Num:C11($Obj_field.type)#-3/*Computed*/))  // relation to N field
 		
 		$Col_elements:=$Obj_template.relation.elements
 		

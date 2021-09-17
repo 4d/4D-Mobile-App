@@ -70,7 +70,7 @@ Function run
 		C_BOOLEAN:C305($Boo_hasRelation)
 		$Boo_hasRelation:=False:C215
 		For each ($Obj_field; $Col_fields) Until ($Boo_hasRelation)
-			If (Num:C11($Obj_field.id)=0)  // relation to N field
+			If ((Num:C11($Obj_field.id)=0) & (Num:C11($Obj_field.type)#-3/*Computed*/))  // relation to N field
 				$Boo_hasRelation:=True:C214
 			End if 
 		End for each 
