@@ -153,7 +153,7 @@ Function run
 			$Boo_hasRelation:=False:C215
 			C_OBJECT:C1216($Obj_field)
 			For each ($Obj_field; $Obj_tags.table.fields; Num:C11($Obj_template.fields.count)) Until ($Boo_hasRelation)
-				If ((Num:C11($Obj_field.id)=0) & (Num:C11($Obj_field.type)#-3/*Computed*/))  // relation to N field
+				If (This:C1470.isRelationField($Obj_field))  // relation to N field
 					$Boo_hasRelation:=True:C214
 				End if 
 			End for each 
@@ -344,7 +344,7 @@ Function run
 		// Manage relation in header fields (before stack view and diplicated element)
 		$Lon_j:=1
 		For each ($Obj_field; $Col_fields)
-			If (Num:C11($Obj_field.id)=0)  // relation to N field
+			If (This:C1470.isRelationField($Obj_field))  // relation to N field
 				
 				If (This:C1470.xmlAppendRelationAttributeForField($Lon_j; $Dom_root; Bool:C1537($Obj_field.isToMany)).success)
 					$Boo_buffer:=True:C214  // we make modification
@@ -356,7 +356,7 @@ Function run
 		
 		$Lon_j:=1
 		For each ($Obj_field; $Col_fields)
-			If (Num:C11($Obj_field.id)=0)  // relation to N field
+			If (This:C1470.isRelationField($Obj_field))  // relation to N field
 				
 				This:C1470.injectSegue($Lon_j; $Dom_root; $Obj_field; $Obj_tags; $Obj_template; $Obj_out)
 				

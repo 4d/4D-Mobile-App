@@ -593,6 +593,10 @@ Function relationSegue($relation : Object)
 	
 	$0:=$Txt_buffer
 	
+Function isRelationField($field : Object)->$is : Boolean
+	$is:=((Num:C11($field.id)=0) & (Num:C11($field.type)#-3/*Computed*/))
+	
+	
 Function injectElement
 	C_OBJECT:C1216($Obj_field; $1; $Obj_tags; $2; $Obj_template; $3; $Obj_out; $6)
 	C_LONGINT:C283($Lon_j; $4)
@@ -613,7 +617,7 @@ Function injectElement
 	
 	
 	C_COLLECTION:C1488($Col_elements)
-	If ((Num:C11($Obj_field.id)=0) & (Num:C11($Obj_field.type)#-3/*Computed*/))  // relation to N field
+	If (This:C1470.isRelationField($Obj_field))  // relation to N field
 		
 		$Col_elements:=$Obj_template.relation.elements
 		
