@@ -8,7 +8,7 @@ Case of
 		//______________________________________________________
 	: ($e.code=On Load:K2:1)
 		
-		Form:C1466.list:=cs:C1710.proposalsbox.new("proposals Box")
+		Form:C1466.list:=cs:C1710.listbox.new("List Box")
 		
 		$count:=Form:C1466.proposals.length
 		

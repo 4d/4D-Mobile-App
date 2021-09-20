@@ -13,7 +13,7 @@ Class constructor
 	
 	This:C1470.allowedTypes:=New collection:C1472("string"; "bool"; "date"; "number"; "image")
 	
-	If (FEATURE.with("allowObjectFiledPublication"))
+	If (FEATURE.with("objectFieldManagement"))
 		
 		This:C1470.allowedTypes.push("object")
 		

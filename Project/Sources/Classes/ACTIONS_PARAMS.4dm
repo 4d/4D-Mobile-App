@@ -410,12 +410,10 @@ Function update()
 									
 									This:C1470.field.show()
 									This:C1470.field.setValue(EDITOR.str.setText("thisParameterIsLinkedToTheField").localized($current.name))
-									This:C1470.defaultValueGroup.show()  // User parameter
 									
 								Else 
 									
 									This:C1470.field.hide()
-									This:C1470.defaultValueGroup.hide()
 									
 								End if 
 								
@@ -435,6 +433,7 @@ Function update()
 									This:C1470.dataSourceGroup.show()
 									This:C1470.revealDatasource.show(String:C10($current.source)="/@")
 									This:C1470.placeholderGroup.show(This:C1470.formatWithoutPlaceholder.indexOf($current.format)=-1)
+									This:C1470.defaultValueGroup.hide()
 									
 								Else 
 									
@@ -737,11 +736,11 @@ Function sourceFolder($name : Text; $control : Boolean)->$source : 4D:C1709.Fold
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Add a user parameter except for sort when adding is not possible
-Function doAddParameter()
+Function doAddParameter($target : Object)
 	
 	If (String:C10(This:C1470.action.preset)="sort")
 		
-		This:C1470.doAddParameterMenu()
+		This:C1470.doAddParameterMenu($target)
 		
 	Else 
 		
@@ -1446,8 +1445,12 @@ Function doDataSourceMenu()
 		End if 
 	End if 
 	
-	// Allow to create a custom input control
-	$menu.append("newChoiceList"; "new")
+	If (FEATURE.with("listEditor"))
+		
+		// Allow to create a custom input control
+		$menu.append("newChoiceList"; "new")
+		
+	End if 
 	
 	// Position according to the box
 	If ($menu.popup(This:C1470.dataSourceBorder).selected)

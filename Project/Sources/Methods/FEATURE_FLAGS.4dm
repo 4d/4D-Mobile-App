@@ -150,16 +150,12 @@ FEATURE.unstable("freeActionName")  // follow https://project.4d.com/issues/1176
 /* _____________
 1930
 _____________*/
-FEATURE.unstable("predictiveEntryInActionParam")  // Name of the action parameters and sorting criteria can be modified (#128898)
+FEATURE.unstable("predictiveEntryInActionParam")  // #128898 Name of the action parameters and sorting criteria can be modified
 
 FEATURE.unstable("customActionFormatter")  // #128195 custom input control for action parameter
 FEATURE.unstable("customActionFormatterWithCode")  // #129036 custom input control for action parameter with ios code
 
 FEATURE.unstable("computedProperties")  // #130206 [MOBILE] Use computed attributes
-
-// to wip?
-FEATURE.unstable("newFormatterChoiceList")  // Menu to create formatter choice list directly , from data
-FEATURE.unstable("newActionFormatterChoiceList")  // Menu to create action formatter choice list directly
 
 /* _____________
 1940
@@ -176,7 +172,6 @@ FEATURE.wip("taskIndicator")  // UI for background tasks executing
 FEATURE.wip("compressionOfTemplates")  // Use the archive "/RESOURCES/template.zip" instead of "templates" folder in builded component
 //FEATURE.vdl("testCompression")
 
-// Share action with descrition
 FEATURE.wip("sharedActionWithDescription")  //[MOBILE] Add a description parameter to predefined share action
 FEATURE.wip("withWidgetActions")  // Enable widget actions
 FEATURE.wip("accentColors")  // Manage colors according to user system parameters
@@ -186,9 +181,11 @@ FEATURE.alias("droppingNext"; 114338)  // Allow to drop a multivalued field next
 FEATURE.wip("sourceClass")  // Work with Source class to test the data source
 FEATURE.wip("iosSDKfromAWS")  // Download iOS SDK from AWS
 
-FEATURE.wip("withListEditor")  // 
+FEATURE.wip("newFormatterChoiceList")  // Menu to create formatter choice list directly , from data
+FEATURE.wip("newActionFormatterChoiceList")  // Menu to create action formatter choice list directly
 
-FEATURE.wip("allowObjectFiledPublication")  // Manage object fields
+FEATURE.wip("listEditor")  // Allow to create custom Data Source Input Control
+FEATURE.wip("objectFieldManagement")  //[MOBILE] Object fields Management 
 
 /* -------------------------------------
 OVERRIDE WITH LOCAL PREFERENCES

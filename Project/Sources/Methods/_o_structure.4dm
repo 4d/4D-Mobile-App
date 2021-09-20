@@ -154,17 +154,26 @@ Case of
 											//…………………………………………………………………………………………………
 										: ($field.kind="storage")
 											
-											// storage (or scalar) attribute, i.e. attribute storing a value, not a reference to another attribute
+											// Storage (or scalar) attribute, i.e. attribute storing a value, not a reference to another attribute
+											var $allowed : Boolean
 											
-											If ($field.fieldType#Is object:K8:27)\
-												 & ($field.fieldType#Is BLOB:K8:12)\
-												 & ($field.fieldType#Is subtable:K8:11)  // Exclude object and blob fields [AND SUBTABLE]
+											If (FEATURE.with("objectFieldManagement"))
+												
+												$allowed:=(New collection:C1472("string"; "bool"; "date"; "number"; "image"; "object").indexOf($field.type)>=0)
+												
+											Else 
+												
+												$allowed:=(New collection:C1472("string"; "bool"; "date"; "number"; "image").indexOf($field.type)>=0)
+												
+											End if 
+											
+											If ($allowed)
 												
 												// #TEMPO [
 												$field.id:=$field.fieldNumber
 												$field.valueType:=$field.type
 												$field.type:=_o_tempoFieldType($field.fieldType)
-												//]
+												// ]
 												
 												$table.field.push($field)
 												
@@ -209,14 +218,25 @@ Case of
 											
 											If (Bool:C1537($field.exposed))
 												
-												
-												
-												If (New collection:C1472("string"; "bool"; "date"; "number"; "image").indexOf($field.type)>=0)
+												If (FEATURE.with("objectFieldManagement"))
 													
-													$field.valueType:=$field.type
-													$field.type:=-3
-													$table.field.push($field)
+													If (New collection:C1472("string"; "bool"; "date"; "number"; "image"; "object").indexOf($field.type)>=0)
+														
+														$field.valueType:=$field.type
+														$field.type:=-3
+														$table.field.push($field)
+														
+													End if 
 													
+												Else 
+													
+													If (New collection:C1472("string"; "bool"; "date"; "number"; "image").indexOf($field.type)>=0)
+														
+														$field.valueType:=$field.type
+														$field.type:=-3
+														$table.field.push($field)
+														
+													End if 
 												End if 
 											End if 
 											
@@ -564,7 +584,7 @@ Case of
 							//For each ($Txt_field;$Obj_relatedDataClass)
 							
 							//If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																																																																								
+																																																																																
 							//If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
 							//$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])
