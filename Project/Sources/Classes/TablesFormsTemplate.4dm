@@ -165,7 +165,7 @@ Function doRun
 					Case of 
 							
 							//……………………………………………………………………………………………………………
-						: (Num:C11($Obj_field.id)#0)
+						: ((Num:C11($Obj_field.id)#0) | (PROJECT.isComputedAttribute($Obj_field)))
 							
 							$Obj_field:=OB Copy:C1225($Obj_field)
 							$Obj_field.originalName:=$Obj_field.name
