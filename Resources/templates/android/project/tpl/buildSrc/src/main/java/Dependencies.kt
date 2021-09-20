@@ -40,7 +40,7 @@ object Versions {
     const val preference = "1.1.1"
     const val retrofit = "2.9.0"
     const val robolectric = "4.5.1"
-    const val room = "2.3.0"
+    const val room = "2.4.0-alpha04"
     const val rules = "1.3.0"
     const val runner = "1.3.0"
     const val rx_android = "2.1.1"
