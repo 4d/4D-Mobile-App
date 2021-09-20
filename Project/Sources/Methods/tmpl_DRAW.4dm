@@ -67,7 +67,7 @@ If (Num:C11($tableID)>0)
 			$t:=Replace string:C233($t; "&quot;"; "\"")
 			PROCESS 4D TAGS:C816($t; $t; $tmpl.title; $tmpl.cancel())
 			
-			$svg:=cs:C1710.svg.new().parse($t).scale(0.97)
+			$svg:=cs:C1710.svg.new($t).scale(0.97)
 			
 			If (Asserted:C1132($svg.success; "Failed to parse template \""+$t+"\""))
 				

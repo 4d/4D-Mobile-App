@@ -75,20 +75,17 @@ WARNING: "localhost" may not find the server if the computer is connected to a n
 		End case 
 	End if 
 	
-Function status
+Function status($callback : 4D:C1709.Function)->$response
 	
 	This:C1470.sendRequest()
 	
-	var $1 : Object  // Callback formula
-	
 	If (Count parameters:C259>=1)
 		
-		$1.call(This:C1470.response)
+		$callback.call(This:C1470.response)
 		
 	Else 
 		
-		var $0 : Object
-		$0:=This:C1470.response
+		$response:=This:C1470.response
 		
 	End if 
 	

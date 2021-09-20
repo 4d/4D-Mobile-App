@@ -348,19 +348,20 @@
 				"dataclasses": {
 					"type": "listbox",
 					"left": 61,
-					"top": 271,
+					"top": 263,
 					"width": 196,
-					"height": 231,
+					"height": 239,
 					"events": [
-						"onClick",
-						"onHeaderClick",
-						"onDataChange",
 						"onSelectionChange"
 					],
 					"borderStyle": "system",
 					"listboxType": "collection",
 					"dataSource": "Form:C1466._dataclasses",
 					"selectionMode": "single",
+					"focusable": false,
+					"currentItemSource": "Form:C1466._dataclassesItem",
+					"currentItemPositionSource": "Form:C1466._dataclassesItemPosition",
+					"selectedItemsSource": "Form:C1466._dataclassesItems",
 					"columns": [
 						{
 							"header": {
@@ -381,19 +382,20 @@
 				"attributes": {
 					"type": "listbox",
 					"left": 273,
-					"top": 271,
+					"top": 263,
 					"width": 208,
-					"height": 231,
+					"height": 239,
 					"events": [
-						"onClick",
-						"onHeaderClick",
-						"onDataChange",
 						"onSelectionChange"
 					],
 					"borderStyle": "system",
 					"listboxType": "collection",
 					"dataSource": "Form:C1466._attributes",
 					"selectionMode": "single",
+					"currentItemSource": "Form:C1466._attributesItem",
+					"currentItemPositionSource": "Form:C1466._attributesItemPosition",
+					"selectedItemsSource": "Form:C1466._attributesItems",
+					"focusable": false,
 					"columns": [
 						{
 							"header": {
@@ -442,7 +444,7 @@
 			]
 		}
 	],
-	"geometryStamp": 383,
+	"geometryStamp": 401,
 	"editor": {
 		"activeView": "choicelist",
 		"defaultView": "View 1",

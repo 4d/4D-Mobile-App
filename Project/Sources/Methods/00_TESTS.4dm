@@ -62,12 +62,6 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		var $log : cs:C1710.log
-		$log:=cs:C1710.log.new()
-		
-		//________________________________________
-	: (True:C214)
-		
 		var $svg : cs:C1710.svg
 		$svg:=cs:C1710.svg.new()
 		$svg.group("main").stroke(4).translate(10; 10).scale(2)
@@ -133,7 +127,6 @@ Case of
 			
 		End if 
 		
-		$o.sync()
 		$o.launch("/bin/ls -l"; "/Users")
 		$c:=Split string:C1554(String:C10($o.outputStream); "\n")
 		

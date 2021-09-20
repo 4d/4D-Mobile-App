@@ -329,7 +329,7 @@ If (OB Is empty:C1297(FEATURE)) | $reset
 	
 	var $version : Integer
 	
-	$version:=1930  // Current branch version number
+	$version:=1940  // Current branch version number
 	
 	If (Structure file:C489=Structure file:C489(*))\
 		 & (Num:C11(SHARED.ide.version)#$version)

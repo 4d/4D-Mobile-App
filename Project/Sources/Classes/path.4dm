@@ -86,7 +86,7 @@ Function preferences($fileName : Text)->$target : Object
                     INTERNAL
 	
 ========================================================*/
-Function cacheSdkApple()->$zip : 4D:C1709.ZipArchive
+Function cacheSdkApple()->$zip : 4D:C1709.ZipFile
 	
 	$zip:=This:C1470.cacheSDK().folder(Application version:C493+"/iOS/").file("sdk.zip")
 	

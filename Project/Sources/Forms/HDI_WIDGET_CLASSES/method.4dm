@@ -99,9 +99,9 @@ If (Form:C1466.pages[$l]=Null:C1517)
 			Form:C1466.clickMe:=cs:C1710.button.new("Button1")\
 				.setShortcut("m"; Command key mask:K16:1)\
 				.highlightShortcut()\
-				.disable()\
 				.setHelpTip("Click on \"Execute\" to activate me")\
-				.setCallback(Formula:C1597(ALERT:C41("You have clicked on me."+"\rMy name is: "+This:C1470.name+"\rMy title is: "+This:C1470.title()+"\r\rNow, click again to see...")))
+				.setCallback(Formula:C1597(ALERT:C41("You have clicked on me."+"\rMy name is: "+This:C1470.name+"\rMy title is: "+This:C1470.title()+"\r\rNow, click again to see...")))\
+				.disable()
 			
 			//=========================================
 			//  Keep coordinates for the reset button

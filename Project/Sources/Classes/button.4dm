@@ -16,7 +16,7 @@ Class constructor($name : Text; $datasource)
 /*═════════════════════════════════════════════════
 ⚠️ .setShortcut(text{;int} ) -> This
 */
-Function setShortcut($key : Text; $modifier : Integer)->$this : cs:C1710.widget
+Function setShortcut($key : Text; $modifier : Integer)->$this : cs:C1710.button
 	
 	If (Count parameters:C259>=2)
 		

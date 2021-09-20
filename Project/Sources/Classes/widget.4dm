@@ -453,22 +453,19 @@ Function catch
 .setCallback(formula) -> This
 .setCallback(text) -> This
 ══════════════════════════*/
-Function setCallback
+Function setCallback($formula)->$this : cs:C1710.widget
 	
-	C_VARIANT:C1683($1)
-	
-	If (Value type:C1509($1)=Is object:K8:27)
+	If (Value type:C1509($formula)=Is object:K8:27)
 		
-		This:C1470.callback:=$1
+		This:C1470.callback:=$formula
 		
 	Else 
 		
-		This:C1470.callback:=Formula from string:C1601(String:C10($1))
+		This:C1470.callback:=Formula from string:C1601(String:C10($formula))
 		
 	End if 
 	
-	C_OBJECT:C1216($0)
-	$0:=This:C1470
+	$this:=This:C1470
 	
 /*══════════════════════════
 .execute()
