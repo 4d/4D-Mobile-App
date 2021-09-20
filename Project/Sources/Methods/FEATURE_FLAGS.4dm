@@ -162,6 +162,11 @@ FEATURE.unstable("newFormatterChoiceList")  // Menu to create formatter choice l
 FEATURE.unstable("newActionFormatterChoiceList")  // Menu to create action formatter choice list directly
 
 /* _____________
+1940
+_____________*/
+FEATURE.unstable("androidActions")  //[Mobile] Feature flag pour activer les actions dans le projet mobile
+
+/* _____________
 WIP
 _____________*/
 // FEATURE.wip("simuARMOnAppleProcessor") // Mac M1 build for simu using arm64
@@ -180,6 +185,10 @@ FEATURE.wip(114338)  // Support Collection of field injected into detail templat
 FEATURE.alias("droppingNext"; 114338)  // Allow to drop a multivalued field next to another existing dropped multivalued fields
 FEATURE.wip("sourceClass")  // Work with Source class to test the data source
 FEATURE.wip("iosSDKfromAWS")  // Download iOS SDK from AWS
+
+FEATURE.wip("withListEditor")  // 
+
+FEATURE.wip("allowObjectFiledPublication")  // Manage object fields
 
 /* -------------------------------------
 OVERRIDE WITH LOCAL PREFERENCES

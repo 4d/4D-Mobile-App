@@ -12,7 +12,11 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			//______________________________________________________
 		: ($e.code=On Load:K2:1)
 			
-			androidLimitations(True:C214; "Actions are coming soon for Android")
+			If (Not:C34(FEATURE.with("androidActions")))
+				
+				androidLimitations(True:C214; "Actions are coming soon for Android")
+				
+			End if 
 			
 			$ƒ.loadActions()
 			$ƒ.onLoad()
@@ -20,7 +24,11 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			//______________________________________________________
 		: ($e.code=On Timer:K2:25)
 			
-			androidLimitations(True:C214)
+			If (Not:C34(FEATURE.with("androidActions")))
+				
+				androidLimitations(True:C214)
+				
+			End if 
 			
 			$ƒ.update()
 			

@@ -12,7 +12,11 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			//______________________________________________________
 		: ($e.code=On Load:K2:1)
 			
-			androidLimitations(True:C214)
+			If (Not:C34(FEATURE.with("androidActions")))
+				
+				androidLimitations(True:C214)
+				
+			End if 
 			
 			$ƒ.onLoad()
 			
