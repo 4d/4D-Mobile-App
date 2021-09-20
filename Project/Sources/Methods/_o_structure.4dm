@@ -209,9 +209,9 @@ Case of
 											
 											If (Bool:C1537($field.exposed))
 												
-												If ($field.fieldType#Is object:K8:27)\
-													 & ($field.fieldType#Is BLOB:K8:12)\
-													 & ($field.fieldType#Is subtable:K8:11)
+												
+												
+												If (New collection:C1472("string"; "bool"; "date"; "number"; "image").indexOf($field.type)>=0)
 													
 													$field.valueType:=$field.type
 													$field.type:=-3
@@ -564,7 +564,7 @@ Case of
 							//For each ($Txt_field;$Obj_relatedDataClass)
 							
 							//If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																																																																
+																																																																								
 							//If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
 							//$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])

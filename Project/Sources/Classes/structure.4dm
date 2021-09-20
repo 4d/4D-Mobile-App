@@ -11,6 +11,14 @@ Class constructor
 	This:C1470.datastore:=This:C1470.exposedDatastore()
 	This:C1470.catalog:=This:C1470.exposedCatalog()
 	
+	This:C1470.allowedTypes:=New collection:C1472("string"; "bool"; "date"; "number"; "image")
+	
+	If (FEATURE.with("allowObjectFiledPublication"))
+		
+		This:C1470.allowedTypes.push("object")
+		
+	End if 
+	
 	//==================================================================
 Function exposedDatastore()->$datastore : Object
 	
@@ -647,9 +655,7 @@ Function _allowPublication($field : Object)->$allow : Boolean
 	
 	If ($field.name#This:C1470.stampFieldName)
 		
-		$allow:=($field.fieldType#Is BLOB:K8:12)\
-			 & ($field.fieldType#Is subtable:K8:11)\
-			 & ($field.fieldType#Is object:K8:27)
+		$allow:=(This:C1470.allowedTypes.indexOf($field.type)>=0)
 		
 	End if 
 	
