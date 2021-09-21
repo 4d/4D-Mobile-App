@@ -40,12 +40,13 @@ object Versions {
     const val preference = "1.1.1"
     const val retrofit = "2.9.0"
     const val robolectric = "4.5.1"
-    const val room = "2.4.0-alpha04"
+    const val room = "2.3.0"
     const val rules = "1.3.0"
     const val runner = "1.3.0"
     const val rx_android = "2.1.1"
     const val rxjava2 = "2.2.21"
     const val sqlite = "2.1.0"
+    const val sqlite_jdbc = "3.34.0"
     const val support = "1.2.0"
     const val swiperefreshlayout = "1.1.0"
     const val timber = "4.7.1"
@@ -103,6 +104,7 @@ object Libs {
     const val androidx_room_runtime = "androidx.room:room-runtime:${Versions.room}"
     const val androidx_room_compiler = "androidx.room:room-compiler:${Versions.room}"
     const val sqlite = "androidx.sqlite:sqlite-ktx:${Versions.sqlite}"
+    const val sqlite_jdbc = "org.xerial:sqlite-jdbc:${Versions.sqlite_jdbc}"
 
     // Glide
     const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
