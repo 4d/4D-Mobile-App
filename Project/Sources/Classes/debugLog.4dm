@@ -4,8 +4,6 @@
 * @param parameters: object with key "recording"
 */
 
-Class extends process
-
 /*
 Called from a preemptive process, this class triggers an error when .stop() is executed.
 https:// Project.4d.com/issues/130543
@@ -17,6 +15,7 @@ Another solution will be to call a not preemptive worker with a project method
 
 Class constructor
 	C_OBJECT:C1216($1)
+	
 	This:C1470.parameters:=$1
 	This:C1470.restoreParameters:=New object:C1471
 	
@@ -63,17 +62,17 @@ Function _set
 	C_OBJECT:C1216($1)
 	ASSERT:C1129($1#Null:C1517)
 	
-	If (This:C1470.cooperative)  // ⚠️ Get database parameter & SET DATABASE PARAMETER are NOT threadSafe
+	//If (This.cooperative)  // ⚠️ Get database parameter & SET DATABASE PARAMETER are NOT threadSafe
+	
+	If ($1.recording#Null:C1517)
 		
-		If ($1.recording#Null:C1517)
-			
-			SET DATABASE PARAMETER:C642(Debug log recording:K37:34; This:C1470.parameters.recording)
-			
-		End if 
+		SET DATABASE PARAMETER:C642(Debug log recording:K37:34; This:C1470.parameters.recording)
 		
-		If ($1.currentProcess#Null:C1517)
-			
-			SET DATABASE PARAMETER:C642(Current process debug log recording:K37:97; This:C1470.parameters.currentProcess)
-			
-		End if 
 	End if 
+	
+	If ($1.currentProcess#Null:C1517)
+		
+		SET DATABASE PARAMETER:C642(Current process debug log recording:K37:97; This:C1470.parameters.currentProcess)
+		
+	End if 
+	//End if 

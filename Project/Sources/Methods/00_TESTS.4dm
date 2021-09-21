@@ -18,6 +18,106 @@ End if
 COMPILER_COMPONENT
 
 Case of 
+		//________________________________________
+	: (True:C214)
+		
+		$folder:=Folder:C1567(Application file:C491; fk platform path:K87:2)
+		
+		If (Is macOS:C1572)
+			
+			$folder:=$folder.folder("Contents")
+			
+		End if 
+		
+		$file:=$folder.file("Resources/gram.4dsyntax")
+		
+		$c:=Split string:C1554($file.getText(); "\r"; sk trim spaces:K86:2)
+		
+		$o:=New object:C1471
+		
+		For ($i; 1; $c.length; 1)
+			
+			$t:=Command name:C538($i)
+			
+			If (Length:C16($t)#0)\
+				 & ($t#"_4D")
+				
+				$o[String:C10($i)]:=New object:C1471(\
+					"name"; $t; \
+					"count"; 0)
+				
+			End if 
+		End for 
+		
+		METHOD GET PATHS:C1163(Path all objects:K72:16; $tTxt_)
+		$pattern:="(([[:letter:][_]][[:letter:][:number:][. _]]+(?<![. ])):C(\\d{1,4}))"
+		$cUserdCommands:=New collection:C1472
+		
+		For ($i; 1; Size of array:C274($tTxt_); 1)
+			
+			If (Current method path:C1201#$tTxt_{$i})
+				
+				METHOD GET CODE:C1190($tTxt_{$i}; DOCUMENT; Code with tokens:K72:18)
+				
+				//For each ($tt; Split string(DOCUMENT; "\r"; sk trim spaces).shift())
+				
+				For each ($tt; Split string:C1554(DOCUMENT; "\r"; sk trim spaces:K86:2))  //.shift())
+					
+					Case of 
+							
+							//________________________________________
+						: (Match regex:C1019("\\s*"; $tt))
+							
+							//________________________________________
+						: (Match regex:C1019("^//.*"; $tt))
+							
+							//________________________________________
+						Else 
+							
+							ARRAY LONGINT:C221($tLon_position; 0x0000)
+							ARRAY LONGINT:C221($tLon_length; 0x0000)
+							$index:=1
+							
+							While (Match regex:C1019($pattern; $tt; $index; $tLon_position; $tLon_length))
+								
+								$t:=Substring:C12($tt; $tLon_position{3}; $tLon_length{3})
+								
+								If ($o[$t]#Null:C1517)
+									
+									If ($o[$t].name=Substring:C12($tt; $tLon_position{2}; $tLon_length{2}))
+										
+										If ($o[$t].count=0)
+											
+											$cUserdCommands.push($o[$t])
+											
+										End if 
+										
+										$o[$t].count:=$o[$t].count+1
+										
+									End if 
+								End if 
+								
+								$index:=$tLon_position{1}+$tLon_length{1}
+								
+							End while 
+							
+							//________________________________________
+					End case 
+				End for each 
+			End if 
+		End for 
+		
+		$cUserdCommands:=$cUserdCommands.orderBy("count desc")
+		
+		$c:=New collection:C1472
+		For each ($o; $cUserdCommands)
+			
+			//$ratio:=""  //"\t"+string(100*$o.count/$total)
+			$c.push($o.name+"\t"+String:C10($o.count))  //+$ratio)
+			
+		End for each 
+		
+		SET TEXT TO PASTEBOARD:C523($c.join("\r"))
 		
 		//________________________________________
 	: (True:C214)
@@ -174,255 +274,6 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		// Test code rewriting
-		If (False:C215)
-			
-			$o:=cs:C1710.source.new()
-			$Obj_template:=Rest(New object:C1471(\
-				"action"; "url"))
-			ASSERT:C1129($o.url=$Obj_template.url)
-			
-			$o:=cs:C1710.source.new("localhost")
-			$Obj_template:=Rest(New object:C1471(\
-				"action"; "url"; "url"; "localhost"))
-			ASSERT:C1129($o.url=$Obj_template.url)
-			
-		End if 
-		
-		// Test response
-		$o:=cs:C1710.source.new("localhost")
-		
-		$result:=$o.status()
-		
-		SET TEXT TO PASTEBOARD:C523(JSON Stringify:C1217($result; *))
-		
-		Case of 
-				
-				//______________________________________________________
-			: ($result.success)
-				
-				// TVB
-				
-				//______________________________________________________
-			: (Num:C11($result.httpError)=30)
-				
-				ALERT:C41(Get localized string:C991("theServerIsNotReady"))  // Server unavailable/Serveur inaccessible
-				
-				//______________________________________________________
-			: ($result.code=401)
-				
-				$ok:=($result.errors.query("errCode=1907").pop()#Null:C1517)
-				
-				If ($ok)
-					
-					// The key.mobileapp file should be created
-					If (WEB Get server info:C1531.started)  // Local
-						
-						// Get file
-						$file:=Folder:C1567(fk mobileApps folder:K87:18).file("key.mobileapp")
-						$ok:=$file.exists
-						
-						If ($ok)
-							
-							$o.url:="127.0.0.1:"+String:C10(WEB Get server info:C1531.options.webPortID)
-							$o.headers.push(New object:C1471("Authorization"; "Bearer "+$file.getText()))
-							$ok:=$o.status().success
-							
-							SET TEXT TO PASTEBOARD:C523(JSON Stringify:C1217($o.response; *))
-							
-						Else 
-							
-							ALERT:C41(Get localized string:C991("failedToGenerateAuthorizationKey"))
-							
-						End if 
-						
-					Else 
-						
-						// Server -> The user must select the file retrieved
-						
-						$file:=File:C1566("/Volumes/Transcend 2To/keyMobile/Data/MobileApps/key.mobileapp")
-						$ok:=$file.exists
-						
-						If ($ok)
-							
-							$o.url:="127.0.0.1:"+String:C10(WEB Get server info:C1531.options.webPortID)
-							$o.headers.push(New object:C1471("Authorization"; "Bearer "+$file.getText()))
-							$ok:=$o.status().success
-							
-							SET TEXT TO PASTEBOARD:C523(JSON Stringify:C1217($o.response; *))
-							
-						Else 
-							
-							ALERT:C41(Get localized string:C991("locateTheKey"))
-							
-						End if 
-						
-					End if 
-					
-				Else 
-					
-					// ERROR
-					
-				End if 
-				//______________________________________________________
-			Else 
-				
-				// A "Case of" statement should never omit "Else"
-				//______________________________________________________
-		End case 
-		
-		//$t:=JSON Stringify($o;*)
-		//SET TEXT TO PASTEBOARD($t)
-		
-		//http://127.0.0.1/mobileapp/
-		//$Lon_error:=HTTP Request(HTTP GET method;Rest (New object("action";"devurl";"handler";"mobileapp")).url;"";$Txt_result)
-		
-		//________________________________________
-	: (True:C214)
-		
-		$root:=DOM Create XML Ref:C861("root")
-		
-		If (False:C215)
-			
-			$t:=DOM Create XML element:C865($root; "element_1"; "id"; 1)
-			$t:=DOM Create XML element:C865($root; "element_2"; "id"; 2)
-			$t:=DOM Create XML element:C865($root; "element_3"; "id"; 3)
-			
-		Else 
-			
-			//ACI0100854 - DOM Create XML element - Creates elements in inverse order
-			
-			$t:=DOM Create XML element:C865($root; "rect"; "id"; 1)
-			$t:=DOM Create XML element:C865($root; "rect"; "id"; 2)
-			$t:=DOM Create XML element:C865($root; "rect"; "id"; 3)
-			
-		End if 
-		
-		DOM EXPORT TO VAR:C863($root; $t)
-		DOM CLOSE XML:C722($root)
-		
-		SET TEXT TO PASTEBOARD:C523($t)
-		
-		//________________________________________
-	: (True:C214)
-		
-		$c:=New collection:C1472(\
-			New object:C1471("name"; "Dupont"); \
-			New object:C1471("name"; "Durant"); \
-			New object:C1471("name"; "Dupond"); \
-			New object:C1471("name"; "Martin"))
-		
-		For each ($i; $c.indices("name = Dupon@").reverse())
-			
-			$c.remove($i)
-			
-		End for each 
-		
-		//________________________________________
-	: (True:C214)
-		
-		//________________________________________
-	: (True:C214)
-		
-		$folder:=Folder:C1567(Application file:C491; fk platform path:K87:2)
-		
-		If (Is macOS:C1572)
-			
-			$folder:=$folder.folder("Contents")
-			
-		End if 
-		
-		$file:=$folder.file("Resources/gram.4dsyntax")
-		
-		$c:=Split string:C1554($file.getText(); "\r"; sk trim spaces:K86:2)
-		
-		$o:=New object:C1471
-		
-		For ($i; 1; $c.length; 1)
-			
-			$t:=Command name:C538($i)
-			
-			If (Length:C16($t)#0)\
-				 & ($t#"_4D")
-				
-				$o[String:C10($i)]:=New object:C1471(\
-					"name"; $t; \
-					"count"; 0)
-				
-			End if 
-		End for 
-		
-		METHOD GET PATHS:C1163(Path all objects:K72:16; $tTxt_)
-		$pattern:="(([[:letter:][_]][[:letter:][:number:][. _]]+(?<![. ])):C(\\d{1,4}))"
-		$cUserdCommands:=New collection:C1472
-		
-		For ($i; 1; Size of array:C274($tTxt_); 1)
-			
-			If (Current method path:C1201#$tTxt_{$i})
-				
-				METHOD GET CODE:C1190($tTxt_{$i}; DOCUMENT; Code with tokens:K72:18)
-				
-				For each ($tt; Split string:C1554(DOCUMENT; "\r"; sk trim spaces:K86:2).shift())
-					
-					Case of 
-							
-							//________________________________________
-						: (Match regex:C1019("\\s*"; $tt))
-							
-							//________________________________________
-						: (Match regex:C1019("^//.*"; $tt))
-							
-							//________________________________________
-						Else 
-							
-							ARRAY LONGINT:C221($tLon_position; 0x0000)
-							ARRAY LONGINT:C221($tLon_length; 0x0000)
-							$index:=1
-							
-							While (Match regex:C1019($pattern; $tt; $index; $tLon_position; $tLon_length))
-								
-								$t:=Substring:C12($tt; $tLon_position{3}; $tLon_length{3})
-								
-								If ($o[$t]#Null:C1517)
-									
-									If ($o[$t].name=Substring:C12($tt; $tLon_position{2}; $tLon_length{2}))
-										
-										If ($o[$t].count=0)
-											
-											$cUserdCommands.push($o[$t])
-											
-										End if 
-										
-										$o[$t].count:=$o[$t].count+1
-										
-									End if 
-								End if 
-								
-								$index:=$tLon_position{1}+$tLon_length{1}
-								
-							End while 
-							
-							//________________________________________
-					End case 
-				End for each 
-			End if 
-		End for 
-		
-		$cUserdCommands:=$cUserdCommands.orderBy("count desc")
-		
-		$c:=New collection:C1472
-		For each ($o; $cUserdCommands)
-			
-			//$ratio:=""  //"\t"+string(100*$o.count/$total)
-			$c.push($o.name+"\t"+String:C10($o.count))  //+$ratio)
-			
-		End for each 
-		
-		SET TEXT TO PASTEBOARD:C523($c.join("\r"))
-		
-		//________________________________________
-	: (True:C214)
-		
 		$o:=Folder:C1567("/RESOURCES")
 		
 		$result:=OB Class:C1730($o)
@@ -544,19 +395,6 @@ Case of
 		
 		//this command list all loaded component with path
 		//$c:=WEB Servers list
-		//________________________________________
-	: (True:C214)
-		
-		$o:=_4D_Build Exposed Datastore:C1598["Commands"]
-		
-		$o1:=$o.getInfo()
-		
-		$c:=New collection:C1472
-		For each ($t; $o)
-			
-			$c.push($o[$t])
-			
-		End for each 
 		
 		//________________________________________
 	: (False:C215)  // Unsandbox
@@ -566,23 +404,6 @@ Case of
 		
 		$o2:=Folder:C1567(Folder:C1567(fk database folder:K87:14).platformPath; fk platform path:K87:2)
 		
-		//________________________________________
-	: (True:C214)
-		
-		$o:=_o_db.exposedDatastore()
-		$o:=_o_db("object;blob").exposedDatastore()
-		
-		$o:=_o_db("object;blob")
-		
-		$o1:=$o.table("Commands")
-		$o1:=$o.table(5)
-		$o1:=$o.table(55)
-		$o1:=$o.table("hello")
-		$o1:=$o.table("Table_1")
-		$o1:=$o.table("Table_3")
-		
-		$o1:=$o.field("Commands"; 4)
-		$o1:=$o.field("Commands"; "theme")
 		//________________________________________
 	: (True:C214)
 		
@@ -678,8 +499,6 @@ Case of
 				$o.themeID:=$o2[0].ID
 				
 			End if 
-			
-			$o.save()
 			
 		End for each 
 		

@@ -221,7 +221,7 @@ Case of
 		$emu:=cs:C1710.androidEmulator.new()
 		
 		var $listOfEmu : Collection
-		$listOfEmu:=$emu.list().emulators
+		//$listOfEmu:=$emu.list().emulators
 		
 		If (Asserted:C1132($listOfEmu.length>0; "No emu"))
 			
@@ -231,8 +231,8 @@ Case of
 			var $adb : cs:C1710.adb
 			$adb:=cs:C1710.adb.new()
 			
-			$result:=$adb.kill($listOfEmu[0])  // seems to no work
-			$result:=$adb.killServer()  // seems to no work
+			//$result:=$adb.kill($listOfEmu[0])  // seems to no work
+			//$result:=$adb.killServer()  // seems to no work
 			
 		End if 
 		

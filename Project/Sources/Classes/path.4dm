@@ -96,7 +96,7 @@ Function cacheSdkAppleUnzipped()->$folder : 4D:C1709.Folder
 	$folder:=This:C1470.cacheSDK().folder(Application version:C493+"/iOS/sdk")
 	
 /*========================================================*/
-Function cacheSdkAndroid()->$zip : 4D:C1709.ZipArchive
+Function cacheSdkAndroid()->$zip : 4D:C1709.ZipFile
 	
 	$zip:=This:C1470.cacheSDK().folder(Application version:C493+"/Android/").file("sdk.zip")
 	

@@ -12,7 +12,8 @@
 	"____FOR_TESTS": {
 		"classes": [
 			"Employes",
-			"EmployesEntity"
+			"EmployesEntity",
+			"EmployesSelection"
 		]
 	},
 	"__IN WORKS": {
