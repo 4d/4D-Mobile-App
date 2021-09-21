@@ -758,6 +758,9 @@ Function ribbonContainer($e : Object)
 			
 			PROJECT.save()
 			
+			This:C1470.hideBrowser()
+			This:C1470.hidePicker()
+			
 			BUILD(New object:C1471(\
 				"caller"; EDITOR.window; \
 				"project"; PROJECT; \
