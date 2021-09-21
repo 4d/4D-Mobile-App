@@ -767,7 +767,7 @@ Function isComputedAttribute($field : Object; $tableName : Text)->$is : Boolean
 	var $o : Object
 	var $c : Collection
 	
-	$is:=(String:C10($field.kind)="calculated") | (Num:C11($field.type)=-3)
+	$is:=(String:C10($field.kind)="calculated") | (Bool:C1537($field.computed)) | (Num:C11($field.type)=-3)
 	
 	If ($is & (Count parameters:C259>=2))
 		
@@ -871,7 +871,7 @@ Function getSortableFields($table; $ordered : Boolean)->$fields : Collection
 					
 					If (This:C1470.isSortable($field.value))
 						
-						If ($field.value.type=-3)
+						If (Bool:C1537($field.value.computed)) | ($field.value.type=-3)
 							
 							OB REMOVE:C1226($field.value; "fieldNumber")
 							

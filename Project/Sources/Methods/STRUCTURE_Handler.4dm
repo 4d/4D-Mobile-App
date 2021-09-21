@@ -383,7 +383,7 @@ Case of
 				APPEND TO ARRAY:C911(($IN.fields)->; $IN.field.name)
 				
 				//…………………………………………………………………………………………………
-			: ($IN.field.type=-2)  // 1 -> N relation
+			: (Bool:C1537($IN.field.isToMany))  // 1 -> N relation //($IN.field.type=-2)  
 				
 				//*******************************************************************************************
 				$published:=Num:C11($dataModel[String:C10($IN.table.tableNumber)][String:C10($IN.field.name)]#Null:C1517)
@@ -398,7 +398,7 @@ Case of
 				APPEND TO ARRAY:C911(($IN.fields)->; $IN.field.name)
 				
 				//…………………………………………………………………………………………………
-			: ($IN.field.type=-3)  // Computed
+			: ($IN.field.kind="calculated")  // Computed //($IN.field.type=-3)  
 				
 				If ($IN.field.fieldType<=EDITOR.fieldIcons.length)
 					

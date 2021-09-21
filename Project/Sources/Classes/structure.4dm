@@ -602,7 +602,8 @@ Function addField($table : Object; $field : Object)
 				"name"; $field.name; \
 				"label"; PROJECT.label($field.name); \
 				"shortLabel"; PROJECT.label($field.name); \
-				"fieldType"; $field.fieldType)
+				"fieldType"; $field.fieldType; \
+				"computed"; True:C214)
 			
 			// #TEMPO
 			$table[$field.name].type:=$field.type

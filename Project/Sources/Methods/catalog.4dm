@@ -132,6 +132,7 @@ Case of
 							//______________________________________________________
 						: ($o.kind="calculated")  // Computed properties
 							
+							$o.computed:=True:C214
 							$o.type:=-3
 							$Obj_out.fields.push($o)
 							
@@ -280,6 +281,7 @@ Case of
 							$o:=OB Copy:C1225($table[$fieldName])
 							$o.path:=$o.name
 							$o.valueType:=$o.type
+							$o.computed:=True:C214
 							$o.type:=-3
 							
 							// #TEMPO [
