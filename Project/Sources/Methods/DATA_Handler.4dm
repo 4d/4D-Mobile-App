@@ -232,7 +232,7 @@ Case of
 			
 			$o:=cs:C1710.lep.new()\
 				.setOutputType(Is object:K8:27)\
-				.launch(cs:C1710.path.new().scripts().file("sqlite3_sizes.sh"); $file.path)
+				.launch(cs:C1710.path.new().scripts().file("sqlite3_sizes.sh"); "'"+$file.path+"'")
 			
 			If ($o.success)
 				

@@ -966,12 +966,34 @@ Function log()
 	$log.push("\r\rSTATUS:")
 	$log.push(Choose:C955(This:C1470.success; "success"; "failed"))
 	
-	If (Length:C16(This:C1470.outputStream)>0)
-		
-		$log.push("\r\rOUTPUT:")
-		$log.push(This:C1470.outputStream)
-		
-	End if 
+	Case of 
+		: ((Value type:C1509(This:C1470.outputStream)=Is object:K8:27) | (Value type:C1509(This:C1470.outputStream)=Is collection:K8:32))
+			
+			$log.push("\r\rOUTPUT:")
+			$log.push(JSON Stringify:C1217(This:C1470.outputStream))
+			
+		: (Value type:C1509(This:C1470.outputStream)=Is boolean:K8:9)
+			
+			$log.push("\r\rOUTPUT:")
+			$log.push(Choose:C955(This:C1470.outputStream; "true"; "false"))
+			
+		: ((Value type:C1509(This:C1470.outputStream)=Is longint:K8:6)\
+			 | (Value type:C1509(This:C1470.outputStream)=Is integer:K8:5)\
+			 | (Value type:C1509(This:C1470.outputStream)=Is integer 64 bits:K8:25)\
+			 | (Value type:C1509(This:C1470.outputStream)=Is real:K8:4))
+			
+			$log.push("\r\rOUTPUT:")
+			$log.push(String:C10(This:C1470.outputStream))
+			
+		Else 
+			
+			If (Length:C16(This:C1470.outputStream)>0)
+				
+				$log.push("\r\rOUTPUT:")
+				$log.push(This:C1470.outputStream)
+				
+			End if 
+	End case 
 	
 	If (Length:C16(This:C1470.errorStream)>0)
 		
