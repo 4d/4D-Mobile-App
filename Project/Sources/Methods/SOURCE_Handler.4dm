@@ -681,6 +681,14 @@ $regex.match[1].data:="127.0.0.1"
 		
 		CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "update_data")
 		
+		If ($Obj_in.data#Null:C1517)
+			If (Not:C34($Obj_in.data.success))
+				If ($Obj_in.data.errors#Null:C1517)
+					POST_MESSAGE(New object:C1471("action"; "show"; "type"; "alert"; "target"; $Obj_in.data.caller; "additional"; $Obj_in.data.errors.join("\n")))
+				End if 
+			End if 
+		End if 
+		
 		//=========================================================
 		
 	Else 

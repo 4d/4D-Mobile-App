@@ -507,6 +507,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 							"headers"; $Obj_headers; \
 							"output"; $File_+Choose:C955(Bool:C1537($Obj_in.dataSet); $Txt_assets+"Data"; "JSON"); \
 							"dataSet"; $Obj_in.dataSet; \
+							"caller"; $Obj_in.caller; \
 							"debug"; Bool:C1537($Obj_in.debug); \
 							"dataModel"; $Obj_dataModel))
 						
@@ -555,18 +556,18 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 						//If (Bool($Obj_in.picture))
 						//If ($Boo_verbose)
 						//CALL FORM($Obj_in.caller; "LOG_EVENT"; New object(\
-							"message"; "Dump Pictures"; \
-							"importance"; Information message))
+														"message"; "Dump Pictures"; \
+														"importance"; Information message))
 						//End if 
 						//$Obj_out.picture:=dump(New object(\
-							"action"; "pictures"; \
-							"url"; $Obj_in.url; \
-							"headers"; $Obj_headers; \
-							"rest"; True; "cache"; $File_+Choose(Bool($Obj_in.dataSet); $Txt_assets+"Data"; "JSON"); \
-							"dataSet"; $Obj_in.dataSet; \
-							"debug"; Bool($Obj_in.debug); \
-							"output"; $File_+Choose(Bool($Obj_in.dataSet); $Txt_assets+"Pictures"; "Resources"+Folder separator+"Pictures"); \
-							"dataModel"; $Obj_dataModel))
+														"action"; "pictures"; \
+														"url"; $Obj_in.url; \
+														"headers"; $Obj_headers; \
+														"rest"; True; "cache"; $File_+Choose(Bool($Obj_in.dataSet); $Txt_assets+"Data"; "JSON"); \
+														"dataSet"; $Obj_in.dataSet; \
+														"debug"; Bool($Obj_in.debug); \
+														"output"; $File_+Choose(Bool($Obj_in.dataSet); $Txt_assets+"Pictures"; "Resources"+Folder separator+"Pictures"); \
+														"dataModel"; $Obj_dataModel))
 						//ob_error_combine($Obj_out; $Obj_out.picture)
 						//$Obj_out.success:=$Obj_out.success & $Obj_out.picture.success
 						//End if 
@@ -583,10 +584,16 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 								"relationship"; True:C214; \
 								"path"; $File_+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"))  // XXX maybe output in temp directory and pass it to coreDataSet
 							
+							ob_error_combine($Obj_out; $Obj_out.coreData)
+							
 							$Obj_out.coreDataSet:=dataSet(New object:C1471(\
 								"action"; "coreData"; \
 								"removeAsset"; True:C214; \
 								"path"; $File_))
+							
+							ob_error_combine($Obj_out; $Obj_out.coreDataSet)
+							
+							$Obj_out.success:=Not:C34(ob_error_has($Obj_out))
 							
 						End if 
 						
@@ -603,14 +610,14 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 					End if 
 					
 				Else 
+					$Obj_out.success:=False:C215
+					$Obj_out.errors:=New collection:C1472("Web server not running")
 					
 					If ($Boo_verbose)
 						
 						CALL FORM:C1391($Obj_in.caller; "LOG_EVENT"; New object:C1471(\
 							"message"; "Web server not running"; \
 							"importance"; Error message:K38:3))
-						
-						$Obj_out.errors:=New collection:C1472("Web server not running")
 						
 					End if 
 				End if 
@@ -704,8 +711,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 					
 					// out return an error message
 					$Obj_out.success:=False:C215
-					ob_error_add($Obj_out; $Txt_out)
-					
+					If (Length:C16($Txt_out)>0)
+						ob_error_add($Obj_out; $Txt_out)
+					Else 
+						ob_error_add($Obj_out; "No output when dumping into mobile database")
+					End if 
 				End if 
 				
 				If ((Length:C16($Txt_error)>0))  // add always error from command output if any, but do not presume if success or not
@@ -776,6 +786,7 @@ End if
 // Return
 If (Bool:C1537($Obj_in.caller))
 	
+	$Obj_out.caller:=$Obj_in.caller
 	CALL FORM:C1391($Obj_in.caller; "editor_CALLBACK"; "dataSet"; $Obj_out)
 	
 End if 

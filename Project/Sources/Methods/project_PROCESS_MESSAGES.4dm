@@ -372,14 +372,14 @@ Case of
 			
 			If (Length:C16($panel)>0)
 				
-				EDITOR.callChild($panel; Current method name:C684; $selector)
+				EDITOR.callChild($panel; Current method name:C684; $selector; $data)
 				
 				
 			End if 
 			
 		Else 
 			
-			SOURCE_Handler(New object:C1471("action"; "dataset"))
+			SOURCE_Handler(New object:C1471("action"; "dataset"; "data"; $data))
 			
 		End if 
 		
