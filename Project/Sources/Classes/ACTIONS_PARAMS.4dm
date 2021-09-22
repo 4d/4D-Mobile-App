@@ -19,9 +19,10 @@ Class constructor
 	
 	This:C1470.path:=cs:C1710.path.new()
 	
+	This:C1470.typesWithoutPlaceholder:=New collection:C1472("bool")
 	This:C1470.customInputControls:=New collection:C1472("push"; "segmented"; "popover"; "sheet"; "picker")
-	This:C1470.formatWithoutPlaceholder:=New collection:C1472("/segmented"; "/picker")
-	This:C1470.typeWithoutPlaceholder:=New collection:C1472("bool")
+	This:C1470.typesAllowingCustomInputControls:=New collection:C1472("string"; "bool"; "number")
+	This:C1470.customInputControlsWithoutPlaceholder:=New collection:C1472("/segmented"; "/picker")
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function init()
@@ -432,13 +433,13 @@ Function update()
 									
 									This:C1470.dataSourceGroup.show()
 									This:C1470.revealDatasource.show(String:C10($current.source)="/@")
-									This:C1470.placeholderGroup.show(This:C1470.formatWithoutPlaceholder.indexOf($current.format)=-1)
+									This:C1470.placeholderGroup.show(This:C1470.customInputControlsWithoutPlaceholder.indexOf($current.format)=-1)
 									This:C1470.defaultValueGroup.hide()
 									
 								Else 
 									
 									This:C1470.revealDatasource.hide()
-									This:C1470.placeholderGroup.show(This:C1470.typeWithoutPlaceholder.indexOf($current.type)=-1)
+									This:C1470.placeholderGroup.show(This:C1470.typesWithoutPlaceholder.indexOf($current.type)=-1)
 									
 									If ($current.type#"image")
 										
@@ -1579,7 +1580,7 @@ Function _appendFormat($data : Object)->$custom : Boolean
 	// [INTERNAL]
 Function _actionFormatterChoiceList($menu : cs:C1710.menu; $type : Text)
 	
-	If (New collection:C1472("date"; "time"; "image").indexOf($type)=-1)  // TODO newActionFormatterChoiceList make an include list instead
+	If (This:C1470.typesAllowingCustomInputControls.indexOf($type)>=0)
 		
 		$menu.line()
 		

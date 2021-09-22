@@ -154,6 +154,7 @@ FEATURE.unstable("predictiveEntryInActionParam")  // #128898 Name of the action 
 
 FEATURE.unstable("customActionFormatter")  // #128195 custom input control for action parameter
 FEATURE.unstable("customActionFormatterWithCode")  // #129036 custom input control for action parameter with ios code
+FEATURE.unstable("newActionFormatterChoiceList")  // Menu to create action formatter choice list directly
 
 FEATURE.unstable("computedProperties")  // #130206 [MOBILE] Use computed attributes
 
@@ -182,8 +183,6 @@ FEATURE.wip("sourceClass")  // Work with Source class to test the data source
 FEATURE.wip("iosSDKfromAWS")  // Download iOS SDK from AWS
 
 FEATURE.wip("newFormatterChoiceList")  // Menu to create formatter choice list directly , from data
-FEATURE.wip("newActionFormatterChoiceList")  // Menu to create action formatter choice list directly
-
 FEATURE.wip("listEditor")  // Allow to create custom Data Source Input Control
 FEATURE.wip("objectFieldManagement")  //[MOBILE] Object fields Management 
 
