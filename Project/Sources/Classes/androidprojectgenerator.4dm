@@ -586,6 +586,13 @@ Function handleFieldIcon
 		
 	End if 
 	
+	// Computed fields has no id
+	If (Bool:C1537($field.computed))
+		
+		$field.id:=$field.name
+		
+	End if 
+	
 	// Get defined icon
 	If ($field.icon#Null:C1517)
 		
