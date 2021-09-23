@@ -1589,6 +1589,8 @@ Function _actionFormatterChoiceList($menu : cs:C1710.menu; $type : Text)
 			var $control; $parameter : Text
 			var $selected : Boolean
 			
+			$menu.append("selectionControls").disable()
+			
 			For each ($control; This:C1470.customInputControls)
 				
 				$parameter:="/"+$control+"/"+$type
