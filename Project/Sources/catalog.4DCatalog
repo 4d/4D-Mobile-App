@@ -53,11 +53,11 @@
 		<table_extra input_form="Input" output_form="Output">
 			<editor_table_info displayable_fields_count="3">
 				<color red="255" green="38" blue="0" alpha="255"/>
-				<coordinates left="393.25" top="0" width="121" height="104.33203125"/>
+				<coordinates left="1192.6631469727" top="389.58932495117" width="121" height="104.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
-	<table name="NAME WITH SPACE" uuid="3120CDD2F97047FA997AAE7D8080DD90" id="3" prevent_journaling="true">
+	<table name="NO PRIMARY KEY" uuid="3120CDD2F97047FA997AAE7D8080DD90" id="3" prevent_journaling="true">
 		<field name="UIID" uuid="3D442F0B73CB4FEC875BA5E068599BD1" type="10" unique="true" autogenerate="true" store_as_UUID="true" not_null="true" id="1">
 			<field_extra multi_line="false">
 				<editor_field_info>
@@ -82,7 +82,7 @@
 		<table_extra input_form="Input" output_form="Output">
 			<editor_table_info displayable_fields_count="7">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="227" top="183" width="239" height="188.33203125"/>
+				<coordinates left="1191.815612793" top="185.59985351562" width="239" height="188.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -187,13 +187,19 @@
 	<table name="とてもとても長いフィールド" uuid="49B3FBDD5F7247559052EF4FA3386A5D" id="8">
 		<field name="ID" uuid="C8BFA0F3AF484D53BE28A57224357568" type="4" unique="true" autosequence="true" not_null="true" id="1"/>
 		<field name="とてもとても長いフィールド" uuid="FB306BA6B814494794ABFF8EC05B954E" type="1" never_null="true" id="2"/>
-		<field name="Field_3" uuid="B5404EF87EF84309B8102778905CFC05" type="10" limiting_length="255" never_null="true" id="3"/>
+		<field name="NOT EXPOSED" uuid="B5404EF87EF84309B8102778905CFC05" type="10" limiting_length="255" never_null="true" id="3" hide_in_REST="true">
+			<field_extra>
+				<editor_field_info>
+					<color red="216" green="30" blue="5" alpha="255"/>
+				</editor_field_info>
+			</field_extra>
+		</field>
 		<field name="$" uuid="2CA48E5DA87845B1930AF18DCE645DC7" type="10" limiting_length="255" never_null="true" id="4"/>
 		<primary_key field_name="ID" field_uuid="C8BFA0F3AF484D53BE28A57224357568"/>
 		<table_extra input_form="Input" output_form="Output">
 			<editor_table_info displayable_fields_count="4">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="649" top="184.5" width="205" height="125.33203125"/>
+				<coordinates left="648.05029296875" top="183.48370361328" width="205" height="125.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -363,6 +369,18 @@
 			<editor_table_info displayable_fields_count="6">
 				<color red="255" green="255" blue="255" alpha="0"/>
 				<coordinates left="193.00732421875" top="869.25775146484" width="120" height="167.33203125"/>
+			</editor_table_info>
+		</table_extra>
+	</table>
+	<table name="COMPOSITE PRIMARY KEY" uuid="4BBF8D8EC82D417789D72BD09FAABEFA" id="21" prevent_journaling="true">
+		<field name="primaryKey_1" uuid="6C252095AE96468EAF6C2A7A1652F17C" type="10" limiting_length="255" never_null="true" id="2"/>
+		<field name="primaryKey_2" uuid="B0666F63300B49A789A656F24D07BBDE" type="10" limiting_length="255" never_null="true" id="3"/>
+		<primary_key field_name="primaryKey_1" field_uuid="6C252095AE96468EAF6C2A7A1652F17C"/>
+		<primary_key field_name="primaryKey_2" field_uuid="B0666F63300B49A789A656F24D07BBDE"/>
+		<table_extra>
+			<editor_table_info displayable_fields_count="6">
+				<color red="255" green="255" blue="255" alpha="0"/>
+				<coordinates left="1191.6356201172" top="0" width="269.05310058594" height="171.37194824219"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -701,6 +719,14 @@
 			<table_ref uuid="6A24BB0C42844B26AA22357C0545137E" name="Table_1"/>
 		</field_ref>
 	</index>
+	<index kind="regular" unique_keys="true" uuid="7C845DCE20314CC49AB7FF70AC23B500" type="1">
+		<field_ref uuid="6C252095AE96468EAF6C2A7A1652F17C" name="primaryKey_1">
+			<table_ref uuid="4BBF8D8EC82D417789D72BD09FAABEFA" name="COMPOSITE PRIMARY KEY"/>
+		</field_ref>
+		<field_ref uuid="B0666F63300B49A789A656F24D07BBDE" name="primaryKey_2">
+			<table_ref uuid="4BBF8D8EC82D417789D72BD09FAABEFA" name="COMPOSITE PRIMARY KEY"/>
+		</field_ref>
+	</index>
 	<index kind="regular" uuid="846B2AC9634646BD8026EE56940334E5" type="7">
 		<field_ref uuid="3446D143AA2B4BEFB57C38620EE2C14F" name="Field_3">
 			<table_ref uuid="30E13DEEB95C4BABA4D0449FDF2C55DC" name="Table_3"/>
@@ -743,7 +769,7 @@
 	</index>
 	<index kind="regular" unique_keys="true" uuid="B679FC035D724BD6AE7D1B9F4158E9A2" type="1">
 		<field_ref uuid="3D442F0B73CB4FEC875BA5E068599BD1" name="UIID">
-			<table_ref uuid="3120CDD2F97047FA997AAE7D8080DD90" name="NAME WITH SPACE"/>
+			<table_ref uuid="3120CDD2F97047FA997AAE7D8080DD90" name="NO PRIMARY KEY"/>
 		</field_ref>
 	</index>
 	<index kind="regular" unique_keys="true" uuid="BC9E8CBD06FB47D2B1A49F538729255D" type="7">
