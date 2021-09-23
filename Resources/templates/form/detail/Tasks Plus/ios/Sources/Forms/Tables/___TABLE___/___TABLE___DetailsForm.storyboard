@@ -25,6 +25,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="yeb-5T-Sqp">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" name="BackgroundColor"/>
                         <color key="tintColor" name="ForegroundColor"/>
                         <color key="barTintColor" name="BackgroundColor"/>
                         <textAttributes key="titleTextAttributes">
@@ -67,7 +68,7 @@
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TAG-FD-004" customClass="AnimatableView" customModule="IBAnimatable">
                                                                 <rect key="frame" x="0.0" y="0.0" width="390" height="102"/>
                                                                 <subviews>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="___FIELD_LABEL___" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TAG-FD-002" customClass="IconLabel" customModule="Tasks" customModuleProvider="target">
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="___FIELD_LABEL___" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TAG-FD-002" customClass="IconLabel" customModule="___PRODUCT___" customModuleProvider="target">
                                                                         <rect key="frame" x="12" y="18" width="366" height="25.5"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="21"/>
