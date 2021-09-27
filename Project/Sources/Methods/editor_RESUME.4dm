@@ -18,7 +18,8 @@ End if
 
 var $callback; $databasePatgname; $message; $selector : Text
 var $target : Integer
-var $cancel; $errors; $in; $ok; $params; $webServerInfos : Object
+var $cancel; $in; $ok; $params; $webServerInfos : Object
+var $error : cs:C1710.error
 
 // ----------------------------------------------------
 // Initialisations
@@ -114,13 +115,26 @@ Case of
 	: ($selector="build_startWebServer")\
 		 | ($selector="startWebServer")
 		
-/* START TRAPPING ERRORS */
-		$errors:=err.capture()
-		WEB START SERVER:C617
-		$errors.release()
-/* STOP TRAPPING ERRORS */
+		var $status : Object
+		var $web : 4D:C1709.WebServer
 		
-		If (OK=1)
+		$web:=WEB Server:C1674
+		
+		If (Not:C34($web.isRunning))
+			
+/* START TRAPPING ERRORS */$error:=cs:C1710.error.new("capture")
+			$status:=$web.start()
+/* STOP TRAPPING ERRORS */$error.release()
+			
+		Else 
+			
+			// Already started
+			$status:=New object:C1471(\
+				"success"; True:C214)
+			
+		End if 
+		
+		If ($status.success)
 			
 			If ($selector="build_startWebServer")
 				
@@ -137,17 +151,7 @@ Case of
 					//______________________________________________________
 				: ($webServerInfos.security.HTTPEnabled)
 					
-					// Port conflict?
-					If (Num:C11($errors.lastError().error)=-1)
-						
-						$message:=cs:C1710.str.new("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($webServerInfos.options.webPortID); String:C10($webServerInfos.options.webHTTPSPortID)))
-						
-					Else 
-						
-						// Display error number
-						$message:=Get localized string:C991("error:")+String:C10($errors.lastError().error)
-						
-					End if 
+					$message:=$status.errors[0].message
 					
 					//______________________________________________________
 				: ($webServerInfos.security.HTTPSEnabled)
@@ -162,16 +166,8 @@ Case of
 						
 					Else 
 						
-						If (Num:C11($errors.lastError().error)=-1)
-							
-							$message:=cs:C1710.str.new("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($webServerInfos.options.webPortID); String:C10($webServerInfos.options.webHTTPSPortID)))
-							
-						Else 
-							
-							// Display error number
-							$message:=Get localized string:C991("error:")+String:C10($errors.lastError().error)
-							
-						End if 
+						$message:=$status.errors[0].message
+						
 					End if 
 					
 					//______________________________________________________
@@ -233,7 +229,17 @@ Case of
 		//______________________________________________________
 	: ($selector="stopWebServer")
 		
-		WEB STOP SERVER:C618
+		var $status : Object
+		var $web : 4D:C1709.WebServer
+		
+		$web:=WEB Server:C1674
+		
+		If ($web.isRunning)
+			
+			$status:=$web.stop()
+			
+		End if 
+		
 		CALL FORM:C1391($target; $callback; "testServer"; $in)
 		
 		//______________________________________________________

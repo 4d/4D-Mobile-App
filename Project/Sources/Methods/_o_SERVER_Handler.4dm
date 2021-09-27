@@ -285,13 +285,28 @@ Case of
 			
 			If ($Lon_enabled=1)
 				
-/* START TRAPPING ERRORS */$errors:=err.capture()
-				WEB START SERVER:C617
-/* STOP TRAPPING ERRORS */$errors.release()
+				var $status : Object
+				var $web : 4D:C1709.WebServer
 				
-				If (OK=1)
+				$web:=WEB Server:C1674
+				
+				If (Not:C34($web.isRunning))
 					
-					WEB STOP SERVER:C618
+/* START TRAPPING ERRORS */$errors:=err.capture()
+					$status:=$web.start()
+/* STOP TRAPPING ERRORS */$errors.release()
+					
+				Else 
+					
+					// Already started
+					$status:=New object:C1471(\
+						"success"; True:C214)
+					
+				End if 
+				
+				If ($status.success)
+					
+					$web.stop()
 					
 					$Obj_out.configuration.status:="OK"
 					
@@ -309,16 +324,8 @@ Case of
 						
 					Else 
 						
-						If (Num:C11($errors.lastError().error)=-1)
-							
-							// Port conflict ?
-							$Obj_out.configuration.message:=cs:C1710.str.new("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($Obj_out.options.webPortID); String:C10($Obj_out.options.webHTTPSPortID)))
-							
-						Else 
-							
-							$Obj_out.configuration.message:=Get localized string:C991("error:")+String:C10($errors.lastError().error)
-							
-						End if 
+						$Obj_out.configuration.message:=$status.errors[0].message
+						
 					End if 
 				End if 
 				

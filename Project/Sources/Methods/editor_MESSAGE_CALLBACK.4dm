@@ -33,15 +33,26 @@ Case of
 		
 		If ($validated)
 			
-/* START TRAPPING ERRORS */
-			$error:=cs:C1710.error.new("capture")
+			var $status : Object
+			var $web : 4D:C1709.WebServer
 			
-			WEB START SERVER:C617
+			$web:=WEB Server:C1674
 			
-			$error.release()
-/* STOP TRAPPING ERRORS */
+			If (Not:C34($web.isRunning))
+				
+/* START TRAPPING ERRORS */$error:=cs:C1710.error.new("capture")
+				$status:=$web.start()
+/* STOP TRAPPING ERRORS */$error.release()
+				
+			Else 
+				
+				// Already started
+				$status:=New object:C1471(\
+					"success"; True:C214)
+				
+			End if 
 			
-			If (Bool:C1537(OK))
+			If ($status.success)
 				
 				BUILD($1.build)  // Relaunch the build process
 				
@@ -54,17 +65,7 @@ Case of
 						//______________________________________________________
 					: ($webServerInfos.security.HTTPEnabled)
 						
-						// Port conflict?
-						If (Num:C11($error.lastError().error)=-1)
-							
-							$t:=cs:C1710.str.new("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($webServerInfos.options.webPortID); String:C10($webServerInfos.options.webHTTPSPortID)))
-							
-						Else 
-							
-							// Display error number
-							$t:=Get localized string:C991("error:")+String:C10($error.lastError().error)
-							
-						End if 
+						$t:=$status.errors[0].message
 						
 						//______________________________________________________
 					: ($webServerInfos.security.HTTPSEnabled)
@@ -80,16 +81,8 @@ Case of
 							
 						Else 
 							
-							If (Num:C11($error.lastError().error)=-1)
-								
-								$t:=cs:C1710.str.new.setText("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($webServerInfos.options.webPortID); String:C10($webServerInfos.options.webHTTPSPortID)))
-								
-							Else 
-								
-								// Display error number
-								$t:=Get localized string:C991("error:")+String:C10($error.lastError().error)
-								
-							End if 
+							$t:=$status.errors[0].message
+							
 						End if 
 						
 						//______________________________________________________

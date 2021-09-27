@@ -7,7 +7,8 @@ WEB GET VARIABLES:C683($anames; $avalues)
 
 
 If (Size of array:C274($anames)=0)
-	WEB START SERVER:C617
+	
+	WEB Server:C1674.start()
 	
 	// normal code, run the test
 	<>testData:=cs:C1710.DevTestData.new(New object:C1471("Employes"; ds:C1482.Employes; "Service"; ds:C1482.Service))

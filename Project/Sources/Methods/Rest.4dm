@@ -20,7 +20,8 @@ End if
 var $query; $queryValue : Text
 var $caller; $i; $port; $timeout : Integer
 var $x : Blob
-var $errors; $in; $out; $requestResult; $webServerInfos : Object
+var $in; $out; $requestResult; $webServerInfos : Object
+var $error : cs:C1710.error
 
 ARRAY TEXT:C222($headerNames; 0)
 ARRAY TEXT:C222($headerValues; 0)
@@ -234,9 +235,9 @@ WARNING: "localhost" may not find the server if the computer is connected to a n
 				
 			End if 
 			
-/* START TRAPPING ERRORS */$errors:=err.capture()
+/* START TRAPPING ERRORS */$error:=cs:C1710.error.new("capture")
 			$out.code:=HTTP Request:C1158($in.method; $out.url; ($in.content); $requestResult; $headerNames; $headerValues)
-/* STOP TRAPPING ERRORS */$errors.release()
+/* STOP TRAPPING ERRORS */$error.release()
 			
 			If ($timeout#0)
 				
@@ -246,9 +247,9 @@ WARNING: "localhost" may not find the server if the computer is connected to a n
 			
 			$out.response:=$requestResult
 			
-			If (Num:C11($errors.lastError().error)#0)
+			If ($error.lastError()#Null:C1517)
 				
-				$out.httpError:=$errors.lastError().error
+				$out.httpError:=$error.lastError().error
 				
 			End if 
 			
@@ -457,12 +458,12 @@ WARNING: "localhost" may not find the server if the computer is connected to a n
 		
 		/// Do the request
 		
-/* START TRAPPING ERRORS */$errors:=err.capture()
+/* START TRAPPING ERRORS */$error:=cs:C1710.error.new("capture")
 		$out.code:=HTTP Request:C1158(HTTP GET method:K71:1; $in.url; ""; $x; $headerNames; $headerValues)
-/* STOP TRAPPING ERRORS */$errors.release()
+/* STOP TRAPPING ERRORS */$error.release()
 		
 		/// Check result
-		If ($errors.lastError()=Null:C1517)
+		If ($error.lastError()=Null:C1517)
 			
 			// Write to file
 			$port:=BLOB size:C605($x)
@@ -483,9 +484,9 @@ WARNING: "localhost" may not find the server if the computer is connected to a n
 			
 		Else 
 			
-			$out.httpError:=Num:C11($errors.lastError().error)
+			$out.httpError:=Num:C11($error.lastError().error)
 			
-/* START HIDING ERRORS */$errors:=err.hide()
+/* START HIDING ERRORS */$error:=cs:C1710.error.new("hide")
 			
 			$out.response:=BLOB to text:C555($x; UTF8 text without length:K22:17)
 			
@@ -499,8 +500,7 @@ WARNING: "localhost" may not find the server if the computer is connected to a n
 					
 				End if 
 			End if 
-			
-/* STOP HIDING ERRORS */$errors.show()
+/* STOP HIDING ERRORS */$error.release()
 			
 		End if 
 		

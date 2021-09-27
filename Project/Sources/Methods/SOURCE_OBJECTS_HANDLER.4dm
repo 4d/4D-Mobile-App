@@ -11,7 +11,7 @@
 C_LONGINT:C283($Lon_formEvent; $Lon_parameters)
 C_POINTER:C301($Ptr_me)
 C_TEXT:C284($File_key; $Txt_buffer; $Txt_me)
-C_OBJECT:C1216($errors; $Obj_context; $Obj_form; $Obj_project; $Obj_server)
+C_OBJECT:C1216($Obj_context; $Obj_form; $Obj_project; $Obj_server)
 
 
 // ----------------------------------------------------
@@ -168,11 +168,27 @@ Case of
 					//______________________________________________________
 				: ($Obj_context.serverStatus.action="startWebServer")
 					
-/* START TRAPPING ERRORS */$errors:=err.capture()
-					WEB START SERVER:C617
-/* STOP TRAPPING ERRORS */$errors.release()
+					var $status : Object
+					var $web : 4D:C1709.WebServer
 					
-					If (Bool:C1537(OK))
+					$web:=WEB Server:C1674
+					
+					If (Not:C34($web.isRunning))
+						
+						var $error : cs:C1710.error
+/* START TRAPPING ERRORS */$error:=cs:C1710.error.new("capture")
+						$status:=$web.start()
+/* STOP TRAPPING ERRORS */$error.release()
+						
+					Else 
+						
+						// Already started
+						$status:=New object:C1471(\
+							"success"; True:C214)
+						
+					End if 
+					
+					If ($status.success)
 						
 						$Obj_context.testServer()
 						
@@ -180,16 +196,8 @@ Case of
 						
 						$Obj_server:=WEB Get server info:C1531
 						
-						If (Num:C11($errors.lastError().error)=-1)
-							
-							// Port conflict ?
-							$Obj_server.message:=cs:C1710.str.new("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($Obj_server.options.webPortID); String:C10($Obj_server.options.webHTTPSPortID)))
-							
-						Else 
-							
-							$Obj_server.message:=Get localized string:C991("error:")+String:C10(Num:C11($errors.lastError().error))
-							
-						End if 
+						$Obj_server.message:=$status.errors[0].message
+						
 					End if 
 					
 					If (String:C10($Obj_server.message)#"")

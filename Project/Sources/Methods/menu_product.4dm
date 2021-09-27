@@ -97,9 +97,9 @@ Case of
 			"action"; "erase"; \
 			"project"; PROJECT))
 		
-		If (Not:C34(WEB Is server running:C1313))
+		If (Not:C34(WEB Get server info:C1531.started))
 			
-			WEB START SERVER:C617
+			WEB Server:C1674.start()
 			
 		End if 
 		
@@ -133,9 +133,9 @@ Case of
 			"relationship"; True:C214; \
 			"path"; $pathname+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"))
 		
-		If (Not:C34(WEB Is server running:C1313))
+		If (Not:C34(WEB Get server info:C1531.started))
 			
-			WEB START SERVER:C617
+			WEB Server:C1674.start()
 			
 		End if 
 		
