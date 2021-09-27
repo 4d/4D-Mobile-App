@@ -68,6 +68,8 @@ Case of
 				
 			End if 
 			
+			$ƒ.updateForms($ƒ.field($params.row); $params.row)
+			
 			PROJECT.save()
 			
 		End if 

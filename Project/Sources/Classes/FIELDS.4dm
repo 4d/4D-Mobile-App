@@ -738,6 +738,15 @@ Function _updateForms($type : Text; $field : Object; $row : Integer)
 			$o.shortLabel:=$field.shortLabel
 			$o.format:=$field.format
 			
+			If (Length:C16(String:C10($field.icon))>0)
+				
+				$o.icon:=$field.icon
+				
+			Else 
+				
+				OB REMOVE:C1226($o; "icon")
+				
+			End if 
 		End if 
 	End if 
 	
