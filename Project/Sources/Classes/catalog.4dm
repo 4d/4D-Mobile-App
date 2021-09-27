@@ -3,16 +3,19 @@ Class constructor
 	This:C1470.success:=True:C214
 	
 	//==================================================================
-Function buildExposedDatastore()->$datastore : Object
+Function buildExposedDatastore($localID : Integer)->$datastore : Object
 	
 	var $key : Text
-	var $infos; $o; $table : Object
+	var $o; $table : Object
+	var $ds : cs:C1710.DataStore
 	
 	$datastore:=New object:C1471
 	
-	For each ($key; ds:C1482)
+	$ds:=ds:C1482
+	
+	For each ($key; $ds)
 		
-		$o:=ds:C1482[$key].getInfo()
+		$o:=$ds[$key].getInfo()
 		
 		Case of 
 				
@@ -27,7 +30,7 @@ Function buildExposedDatastore()->$datastore : Object
 				$table:=New object:C1471
 				$table[""]:=$o
 				
-				For each ($o; OB Entries:C1720(ds:C1482[$key]))
+				For each ($o; OB Entries:C1720($ds[$key]))
 					
 					If (Bool:C1537($o.value.exposed))
 						
@@ -49,12 +52,9 @@ Function buildExposedDatastore()->$datastore : Object
 Function buildExposedCatalog()->$catalog : Collection
 	
 	var $key : Text
-	var $attribute; $datastore; $entry; $field; $o; $table : Object
+	var $attribute; $entry; $field; $o; $table : Object
 	
-	$catalog:=New collection:C1472
-	$datastore:=ds:C1482
-	
-	For each ($entry; OB Entries:C1720($datastore))
+	For each ($entry; OB Entries:C1720(ds:C1482))
 		
 		$o:=ds:C1482[$entry.key].getInfo()
 		
