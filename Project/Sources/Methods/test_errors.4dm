@@ -1,11 +1,11 @@
 //%attributes = {}
 C_OBJECT:C1216($o)
 
-COMPONENT_INIT 
+COMPONENT_INIT
 
-TRY 
+TRY
 
-$o:=err ("NO_ERROR")
+$o:=_o_err("NO_ERROR")
 ASSERT:C1129(Method called on error:C704="NO_ERROR")
 
 $o.install("xml_NO_ERROR")
@@ -90,7 +90,7 @@ ASSERT:C1129(Method called on error:C704="xml_NO_ERROR")
 $o.deinstall()
 ASSERT:C1129(Length:C16(Method called on error:C704)=0)
 
-FINALLY 
+FINALLY
 
 If (Structure file:C489=Structure file:C489(*))
 	

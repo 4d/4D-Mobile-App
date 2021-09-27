@@ -586,7 +586,7 @@ Case of
 							//For each ($Txt_field;$Obj_relatedDataClass)
 							
 							//If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																																																																																								
+																								
 							//If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
 							//$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])
@@ -994,7 +994,7 @@ Case of
 		
 		EXPORT STRUCTURE:C1311($xml)
 		
-/* START HIDING ERRORS */$errors:=err.hide()
+/* START HIDING ERRORS */$errors:=_o_err.hide()
 		$root:=DOM Parse XML variable:C720($xml)
 		
 		If (OK=1)
@@ -1123,7 +1123,7 @@ Case of
 				
 				$onErrCall:=Method called on error:C704
 				
-/* START TRAPPING ERRORS */$errors:=err.capture()
+/* START TRAPPING ERRORS */$errors:=_o_err.capture()
 				
 				// Create table if any
 				DOCUMENT:="CREATE TABLE IF NOT EXISTS "+String:C10(SHARED.deletedRecordsTable.name)+" ("
@@ -1247,7 +1247,7 @@ Case of
 			$onErrCall:=Method called on error:C704
 			
 /* START TRAPPING ERRORS */
-			$errors:=err.capture()
+			$errors:=_o_err.capture()
 			
 			$t:=String:C10($IN.tableName)
 			

@@ -55,7 +55,7 @@ If ($t_formName[[1]]="/")  // Host database resources
 	
 	If (Path to object:C1547($t_formName).extension=SHARED.archiveExtension)  // Archive
 		
-/* START HIDING ERRORS */$error:=err.hide()
+/* START HIDING ERRORS */$error:=_o_err.hide()
 		$archive:=ZIP Read archive:C1637($path["host"+$t_typeForm+"Forms"]().file($t_formName))
 /* STOP HIDING ERRORS */$error.show()
 		

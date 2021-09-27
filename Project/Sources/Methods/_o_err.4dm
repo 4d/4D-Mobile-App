@@ -16,9 +16,9 @@ C_TEXT:C284($t)
 C_OBJECT:C1216($o)
 
 If (False:C215)
-	C_OBJECT:C1216(err; $0)
-	C_TEXT:C284(err; $1)
-	C_OBJECT:C1216(err; $2)
+	C_OBJECT:C1216(_o_err; $0)
+	C_TEXT:C284(_o_err; $1)
+	C_OBJECT:C1216(_o_err; $2)
 End if 
 
 // ----------------------------------------------------
@@ -35,17 +35,17 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 		"stack"; New collection:C1472; \
 		"current"; ""; \
 		"lastError"; Formula:C1597(lastError); \
-		"hide"; Formula:C1597(err("hide")); \
+		"hide"; Formula:C1597(_o_err("hide")); \
 		"show"; Formula:C1597(This:C1470.deinstall()); \
-		"capture"; Formula:C1597(err("capture")); \
+		"capture"; Formula:C1597(_o_err("capture")); \
 		"Continue"; Formula:C1597(ERROR=0); \
 		"reset"; Formula:C1597(lastError:=Null:C1517); \
 		"release"; Formula:C1597(This:C1470.deinstall()); \
 		"TRY"; Formula:C1597(TRY($1)); \
 		"FINALLY"; Formula:C1597(FINALLY($1)); \
-		"install"; Formula:C1597(err("install"; New object:C1471("method"; String:C10($1)))); \
-		"deinstall"; Formula:C1597(err("deinstall")); \
-		"remove"; Formula:C1597(err("remove"))\
+		"install"; Formula:C1597(_o_err("install"; New object:C1471("method"; String:C10($1)))); \
+		"deinstall"; Formula:C1597(_o_err("deinstall")); \
+		"remove"; Formula:C1597(_o_err("remove"))\
 		)
 	
 	If (Count parameters:C259>=1)

@@ -18,6 +18,7 @@ C_TEXT:C284($t; $tFieldID; $tTable)
 C_OBJECT:C1216($archive; $errors; $folder; $o; $oField; $oFormatter)
 C_OBJECT:C1216($oIN; $oOUT; $oResources; $oResult)
 C_COLLECTION:C1488($c)
+var $error : cs:C1710.error
 
 If (False:C215)
 	C_OBJECT:C1216(formatters; $0)
@@ -114,12 +115,17 @@ Case of
 				$manifest:=$o.file("manifest.json")
 				
 				If (False:C215)  // FEATURE.wip("formatMarketPlace")  // Support zip when listing
+					
 					If ($o.extension=SHARED.archiveExtension)
-/* START HIDING ERRORS */$errors:=err.hide()
+						
+/* START HIDING ERRORS */$error:=cs:C1710.error.new("hide")
 						$archive:=ZIP Read archive:C1637($o)
-/* STOP HIDING ERRORS */$errors.show()
+/* STOP HIDING ERRORS */$error.release()
+						
 						If ($archive#Null:C1517)
+							
 							$manifest:=$archive.root
+							
 						End if 
 					End if 
 				End if 
@@ -193,7 +199,7 @@ Case of
 					End if 
 				End for each 
 				
-				$errors:=err.hide()
+/* START HIDING ERRORS */$error:=cs:C1710.error.new("hide")
 				
 				For each ($oFormatter; $oResources.files().query("extension = :1"; SHARED.archiveExtension))
 					
@@ -224,7 +230,7 @@ Case of
 					End if 
 				End for each 
 				
-				$errors.show()
+/* STOP HIDING ERRORS */$error.release()
 				
 			End if 
 			

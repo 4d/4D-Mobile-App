@@ -109,7 +109,9 @@ If (Asserted:C1132($project#Null:C1517))
 						
 					End if 
 					
-					If ($file.exists)
+					$success:=Not:C34($file.exists)
+					
+					If (Not:C34($success))
 						
 						$success:=(cs:C1710.tools.new().folderDigest($data.appFolder.folder("Sources"))=$file.getText())
 						

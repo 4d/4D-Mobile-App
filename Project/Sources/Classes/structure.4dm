@@ -8,9 +8,6 @@ Class constructor
 	
 	This:C1470.success:=True:C214
 	
-	This:C1470.datastore:=This:C1470.exposedDatastore()
-	This:C1470.catalog:=This:C1470.exposedCatalog()
-	
 	This:C1470.allowedTypes:=New collection:C1472("string"; "bool"; "date"; "number"; "image")
 	
 	If (FEATURE.with("objectFieldManagement"))
@@ -18,6 +15,9 @@ Class constructor
 		This:C1470.allowedTypes.push("object")
 		
 	End if 
+	
+	This:C1470.datastore:=This:C1470.exposedDatastore()
+	This:C1470.catalog:=This:C1470.exposedCatalog()
 	
 	//==================================================================
 Function exposedDatastore()->$datastore : Object

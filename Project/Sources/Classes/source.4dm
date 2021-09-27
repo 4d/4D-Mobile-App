@@ -87,12 +87,16 @@ Function status($callback : 4D:C1709.Function)->$response
 		
 	End if 
 	
-Function sendRequest
+Function sendRequest()
 	
+	var $t : Text
 	var $l : Integer
 	var $o : Object
-	var $e : Object
-	var $t : Text
+	var $c : Collection
+	var $error : cs:C1710.error
+	
+	ARRAY TEXT:C222($tTxt_headerNames; 0)
+	ARRAY TEXT:C222($tTxt_headerValues; 0)
 	
 	If (This:C1470.url=Null:C1517)
 		
@@ -119,10 +123,7 @@ Function sendRequest
 	//#TO_DO
 	
 	// Manage headers
-	ARRAY TEXT:C222($tTxt_headerNames; 0)
-	ARRAY TEXT:C222($tTxt_headerValues; 0)
 	
-	var $c : Collection
 	For each ($o; This:C1470.request.headers)
 		
 		$c:=OB Entries:C1720($o)
@@ -137,18 +138,16 @@ Function sendRequest
 	HTTP GET OPTION:C1159(HTTP timeout:K71:10; $l)
 	HTTP SET OPTION:C1160(HTTP timeout:K71:10; This:C1470.timeout)
 	
-/* START TRAPPING ERRORS */
-	$e:=err.capture()
+/* START TRAPPING ERRORS */$error:=cs:C1710.error.new("capture")
 	This:C1470.response.code:=HTTP Request:C1158(This:C1470.method; This:C1470.request.url; ""; $o; $tTxt_headerNames; $tTxt_headerValues)
-	$e.release()
-/* STOP TRAPPING ERRORS */
+/* STOP TRAPPING ERRORS */$error.release()
 	
 	// Restore timeout
 	HTTP SET OPTION:C1160(HTTP timeout:K71:10; $l)
 	
-	If (Num:C11($e.lastError().error)#0)
+	If ($error.lastError()#Null:C1517)
 		
-		This:C1470.response.httpError:=$e.lastError().error
+		This:C1470.response.httpError:=$error.lastError().error
 		
 	End if 
 	

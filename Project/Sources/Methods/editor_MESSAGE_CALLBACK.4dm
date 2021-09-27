@@ -16,7 +16,6 @@ End if
 
 var $description; $t : Text
 var $validated : Boolean
-var $webServerInfos : Object
 var $c : Collection
 var $error : cs:C1710.error
 
@@ -58,40 +57,7 @@ Case of
 				
 			Else 
 				
-				$webServerInfos:=WEB Get server info:C1531
-				
-				Case of 
-						
-						//______________________________________________________
-					: ($webServerInfos.security.HTTPEnabled)
-						
-						$t:=$status.errors[0].message
-						
-						//______________________________________________________
-					: ($webServerInfos.security.HTTPSEnabled)
-						
-						// Port conflict? or certificates are missing?
-						
-						$c:=Folder:C1567(fk database folder:K87:14; *).files()
-						
-						If ($c.query("fullName = :1"; "cert.pem").pop()=Null:C1517)\
-							 | ($c.query("fullName = :1"; "key.pem").pop()=Null:C1517)
-							
-							$t:=Get localized string:C991("checkThatTheCertificatesAreProperlyInstalled")
-							
-						Else 
-							
-							$t:=$status.errors[0].message
-							
-						End if 
-						
-						//______________________________________________________
-					Else 
-						
-						$t:=Get localized string:C991("httpsServerIsNotEnabledInWebConfigurationSettings")
-						
-						//______________________________________________________
-				End case 
+				$t:=$status.errors[0].message
 				
 				POST_MESSAGE(New object:C1471(\
 					"target"; Current form window:C827; \

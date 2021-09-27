@@ -292,7 +292,7 @@ Case of
 				
 				If (Not:C34($web.isRunning))
 					
-/* START TRAPPING ERRORS */$errors:=err.capture()
+/* START TRAPPING ERRORS */$errors:=_o_err.capture()
 					$status:=$web.start()
 /* STOP TRAPPING ERRORS */$errors.release()
 					

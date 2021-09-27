@@ -294,6 +294,12 @@ If (Num:C11($tableID)>0)
 															
 															$label:=Choose:C955($field.path#Null:C1517; $field.path; $field.name)
 															
+															If (ds:C1482[Table name:C256(Num:C11(panel.tableNumber))][$field.name]=Null:C1517)
+																
+																$svg.addClass("error"; $node)
+																
+															End if 
+															
 															//______________________________________________________
 													End case 
 													

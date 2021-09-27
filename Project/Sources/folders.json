@@ -12,8 +12,7 @@
 	"____FOR_TESTS": {
 		"classes": [
 			"Employes",
-			"EmployesEntity",
-			"EmployesSelection"
+			"EmployesEntity"
 		]
 	},
 	"__IN WORKS": {
@@ -66,11 +65,13 @@
 			"_NEW_MOBILE_PROJECT",
 			"_o_color",
 			"_o_COMPONENT_Pathname",
+			"_o_db",
 			"_o_doc_getFromPath",
 			"_o_doc_LoadJsonFile",
 			"_o_editor_Locked",
 			"_o_editor_PROJECT_AUDIT",
 			"_o_env_System_path",
+			"_o_err",
 			"_o_http",
 			"_o_panel_Form_common",
 			"_o_panel_SET_CONSTRAINTS",
@@ -92,9 +93,6 @@
 			"OBSOLETE",
 			"TEMPO_1",
 			"TURN_AROUND_Field_name"
-		],
-		"forms": [
-			"WELCOME"
 		]
 	},
 	"_UNUSED": {
@@ -656,7 +654,6 @@
 			"CATCH",
 			"COMPILER_err",
 			"Continue",
-			"err",
 			"err_COMBINE",
 			"err_PUSH",
 			"errors_CAPTURE",

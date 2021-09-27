@@ -287,7 +287,8 @@ For each ($unsynchronizedTableFields; PROJECT.$dialog.unsynchronizedTableFields)
 								$publishedCount:=$publishedCount+1
 								
 								//______________________________________________________
-							: ($field.missing)  // ❌ THE FIELD DOESN'T EXIST ANYMORE
+							: ($field.missing)\
+								 | ($field.nameMismatch)  // ❌ THE FIELD DOESN'T EXIST ANYMORE
 								
 								OB REMOVE:C1226($tableModel; $item.key)
 								
@@ -319,12 +320,6 @@ For each ($unsynchronizedTableFields; PROJECT.$dialog.unsynchronizedTableFields)
 								End case 
 								
 								//______________________________________________________
-							: ($field.nameMismatch)  // 🆗 update the name
-								
-								$currentField.name:=$field.current.name
-								$publishedCount:=$publishedCount+1
-								
-								//______________________________________________________
 							Else 
 								
 								ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
@@ -332,7 +327,6 @@ For each ($unsynchronizedTableFields; PROJECT.$dialog.unsynchronizedTableFields)
 								//______________________________________________________
 								
 						End case 
-						
 						
 						//______________________________________________________
 					Else 

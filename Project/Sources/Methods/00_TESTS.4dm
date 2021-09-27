@@ -21,6 +21,45 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
+		var $status : Object
+		var $error : cs:C1710.error
+		var $web : 4D:C1709.WebServer
+		
+		$web:=WEB Server:C1674
+		
+		If (Not:C34($web.isRunning))
+			
+/* START TRAPPING ERRORS */$error:=cs:C1710.error.new("capture")
+			$status:=$web.start()
+/* STOP TRAPPING ERRORS */$error.release()
+			
+		Else 
+			
+			// Already started
+			$status:=New object:C1471(\
+				"success"; True:C214)
+			
+		End if 
+		
+		If ($status.success)
+			
+			// 👍
+			
+		Else 
+			
+			var $errorMessage : Text
+			$errorMessage:=$status.errors[0].message
+			
+		End if 
+		
+		//________________________________________
+	: (True:C214)
+		
+		$o:=ds:C1482.str("hello world")
+		
+		//________________________________________
+	: (True:C214)
+		
 		$folder:=Folder:C1567(Application file:C491; fk platform path:K87:2)
 		
 		If (Is macOS:C1572)
