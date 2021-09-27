@@ -67,9 +67,7 @@ WARNING: "localhost" may not find the server if the computer is connected to a n
 				//________________________________________
 			Else 
 				
-				var $l : Integer
-				WEB GET OPTION:C1209(Web Port ID:K73:14; $l)
-				This:C1470.url:="http://127.0.0.1:"+String:C10($l)+"/"+This:C1470.handler+"/"
+				This:C1470.url:="http://127.0.0.1:"+String:C10(WEB Get server info:C1531.options.webPortID)+"/"+This:C1470.handler+"/"
 				
 				//________________________________________
 		End case 

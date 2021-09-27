@@ -8,51 +8,47 @@
 //
 // ----------------------------------------------------
 // Declarations
-C_TEXT:C284($1)
-C_OBJECT:C1216($2)
-
-C_LONGINT:C283($Lon_http; $Lon_https; $Lon_parameters; $Win_me)
-C_TEXT:C284($Dir_database; $kTxt_callbackMethod; $Txt_message; $Txt_selector)
-C_OBJECT:C1216($errors; $Obj_buffer; $Obj_cancel; $Obj_in; $Obj_ok; $Obj_params)
-C_OBJECT:C1216($Obj_xcode)
+var $1 : Text
+var $2 : Object
 
 If (False:C215)
 	C_TEXT:C284(editor_RESUME; $1)
 	C_OBJECT:C1216(editor_RESUME; $2)
 End if 
 
+var $callback; $databasePatgname; $message; $selector : Text
+var $target : Integer
+var $cancel; $errors; $in; $ok; $params; $webServerInfos : Object
+
 // ----------------------------------------------------
 // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
+If (Asserted:C1132(Count parameters:C259>=0; "Missing parameter"))
 	
 	// NO PARAMETERS REQUIRED
 	
 	// Optional parameters
-	If ($Lon_parameters>=1)
+	If (Count parameters:C259>=1)
 		
-		$Txt_selector:=$1
+		$selector:=$1
 		
-		//#ACI0098517
+		// #ACI0098517
 		//If ($Txt_selector="{@}")
-		If (Match regex:C1019("(?m-si)^\\{.*\\}$"; $Txt_selector; 1))
+		If (Match regex:C1019("(?m-si)^\\{.*\\}$"; $selector; 1))
 			
-			$Obj_in:=JSON Parse:C1218($Txt_selector)
-			
-			$Txt_selector:=String:C10($Obj_in.action)
+			$in:=JSON Parse:C1218($selector)
+			$selector:=String:C10($in.action)
 			
 		End if 
 		
-		If ($Lon_parameters>=2)
+		If (Count parameters:C259>=2)
 			
-			$Obj_params:=$2
+			$params:=$2
 			
 		End if 
 	End if 
 	
-	$Win_me:=Current form window:C827
-	$kTxt_callbackMethod:="editor_CALLBACK"
+	$target:=Current form window:C827
+	$callback:="editor_CALLBACK"
 	
 Else 
 	
@@ -64,59 +60,59 @@ End if
 Case of 
 		
 		//______________________________________________________
-	: (Length:C16($Txt_selector)=0)
+	: (Length:C16($selector)=0)
 		
 		// NOTHING MORE TO DO
 		
 		//______________________________________________________
-	: ($Txt_selector="page_@")
+	: ($selector="page_@")
 		
-		If ($Obj_in#Null:C1517)
+		If ($in#Null:C1517)
 			
-			$Obj_in.action:="goToPage"
-			$Obj_in.page:=Delete string:C232($Txt_selector; 1; 5)
+			$in.action:="goToPage"
+			$in.page:=Delete string:C232($selector; 1; 5)
 			
-			EDITOR.callMeBack("goToPage"; $Obj_in)
+			EDITOR.callMeBack("goToPage"; $in)
 			
 		Else 
 			
 			EDITOR.callMeBack("goToPage"; New object:C1471(\
-				"page"; Delete string:C232($Txt_selector; 1; 5)\
+				"page"; Delete string:C232($selector; 1; 5)\
 				))
 			
 		End if 
 		
 		//______________________________________________________
-	: ($Txt_selector="build_stop")  // #MARK_TO_REMOVE
+	: ($selector="build_stop")  // #MARK_TO_REMOVE
 		
-		EDITOR.callMeBack($Txt_selector)
+		EDITOR.callMeBack($selector)
 		
 		//______________________________________________________
-	: ($Txt_selector="build_deleteProductFolder")  // #MARK_TO_REMOVE
+	: ($selector="build_deleteProductFolder")  // #MARK_TO_REMOVE
 		
-		If (Asserted:C1132($Obj_in.build#Null:C1517))
+		If (Asserted:C1132($in.build#Null:C1517))
 			
-			If (Asserted:C1132(Test path name:C476($Obj_in.build.path)=Is a folder:K24:2))
+			If (Asserted:C1132(Test path name:C476($in.build.path)=Is a folder:K24:2))
 				
 				Xcode(New object:C1471(\
 					"action"; "safeDelete"; \
-					"path"; $Obj_in.build.path))
+					"path"; $in.build.path))
 				
-				BUILD($Obj_in.build)  // Relaunch the build process
+				BUILD($in.build)  // Relaunch the build process
 				
 			End if 
 		End if 
 		
 		//______________________________________________________
-	: ($Txt_selector="build_ignoreServer")
+	: ($selector="build_ignoreServer")
 		
-		$Obj_in.build.ignoreServer:=True:C214
+		$in.build.ignoreServer:=True:C214
 		
-		BUILD($Obj_in.build)  // Relaunch the build process
+		BUILD($in.build)  // Relaunch the build process
 		
 		//______________________________________________________
-	: ($Txt_selector="build_startWebServer")\
-		 | ($Txt_selector="startWebServer")
+	: ($selector="build_startWebServer")\
+		 | ($selector="startWebServer")
 		
 /* START TRAPPING ERRORS */
 		$errors:=err.capture()
@@ -126,57 +122,54 @@ Case of
 		
 		If (OK=1)
 			
-			If ($Txt_selector="build_startWebServer")
+			If ($selector="build_startWebServer")
 				
-				BUILD($Obj_in.build)  // Relaunch the build process
+				BUILD($in.build)  // Relaunch the build process
 				
 			End if 
 			
 		Else 
 			
-			$Obj_buffer:=WEB Get server info:C1531
-			
-			WEB GET OPTION:C1209(Web HTTP enabled:K73:28; $Lon_http)
-			WEB GET OPTION:C1209(Web HTTPS enabled:K73:29; $Lon_https)
+			$webServerInfos:=WEB Get server info:C1531
 			
 			Case of 
 					
 					//______________________________________________________
-				: ($Lon_http=1)
+				: ($webServerInfos.security.HTTPEnabled)
 					
 					// Port conflict?
 					If (Num:C11($errors.lastError().error)=-1)
 						
-						$Txt_message:=cs:C1710.str.new("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($Obj_buffer.options.webPortID); String:C10($Obj_buffer.options.webHTTPSPortID)))
+						$message:=cs:C1710.str.new("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($webServerInfos.options.webPortID); String:C10($webServerInfos.options.webHTTPSPortID)))
 						
 					Else 
 						
 						// Display error number
-						$Txt_message:=Get localized string:C991("error:")+String:C10($errors.lastError().error)
+						$message:=Get localized string:C991("error:")+String:C10($errors.lastError().error)
 						
 					End if 
 					
 					//______________________________________________________
-				: ($Lon_https=1)
+				: ($webServerInfos.security.HTTPSEnabled)
 					
 					// Port conflict? or certificates are missing?
-					$Dir_database:=Get 4D folder:C485(Database folder:K5:14; *)
+					$databasePatgname:=Get 4D folder:C485(Database folder:K5:14; *)
 					
-					If (Test path name:C476($Dir_database+"cert.pem")#Is a document:K24:1)\
-						 | (Test path name:C476($Dir_database+"key.pem")#Is a document:K24:1)
+					If (Test path name:C476($databasePatgname+"cert.pem")#Is a document:K24:1)\
+						 | (Test path name:C476($databasePatgname+"key.pem")#Is a document:K24:1)
 						
-						$Txt_message:=Get localized string:C991("checkThatTheCertificatesAreProperlyInstalled")
+						$message:=Get localized string:C991("checkThatTheCertificatesAreProperlyInstalled")
 						
 					Else 
 						
 						If (Num:C11($errors.lastError().error)=-1)
 							
-							$Txt_message:=cs:C1710.str.new("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($Obj_buffer.options.webPortID); String:C10($Obj_buffer.options.webHTTPSPortID)))
+							$message:=cs:C1710.str.new("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($webServerInfos.options.webPortID); String:C10($webServerInfos.options.webHTTPSPortID)))
 							
 						Else 
 							
 							// Display error number
-							$Txt_message:=Get localized string:C991("error:")+String:C10($errors.lastError().error)
+							$message:=Get localized string:C991("error:")+String:C10($errors.lastError().error)
 							
 						End if 
 					End if 
@@ -184,75 +177,69 @@ Case of
 					//______________________________________________________
 				Else 
 					
-					$Txt_message:=Get localized string:C991("httpsServerIsNotEnabledInWebConfigurationSettings")
+					$message:=Get localized string:C991("httpsServerIsNotEnabledInWebConfigurationSettings")
 					
 					//______________________________________________________
 			End case 
 			
 			POST_MESSAGE(New object:C1471(\
-				"target"; $Win_me; \
+				"target"; $target; \
 				"action"; "show"; \
 				"type"; "alert"; \
 				"title"; Get localized string:C991("failedToStartTheWebServer"); \
-				"additional"; $Txt_message))
+				"additional"; $message))
 			
 		End if 
 		
 		//______________________________________________________
-	: ($Txt_selector="build_waitingForConfigurator")
+	: ($selector="build_waitingForConfigurator")
 		
 		// Open App Store
 		device(New object:C1471(\
 			"action"; "appStore"))
 		
 		// Warning build is into in.build
-		$Obj_ok:=New object:C1471(\
+		$ok:=New object:C1471(\
 			"action"; "build_configuratorInstalled"; \
-			"build"; $Obj_in.build)
+			"build"; $in.build)
 		
-		$Obj_cancel:=New object:C1471(\
+		$cancel:=New object:C1471(\
 			"action"; "build_manualInstallation"; \
-			"build"; $Obj_in.build)
+			"build"; $in.build)
 		
 		POST_MESSAGE(New object:C1471(\
-			"target"; $Win_me; \
+			"target"; $target; \
 			"action"; "show"; \
 			"type"; "confirm"; \
 			"title"; Get localized string:C991("appleConfigurator2Installation"); \
 			"additional"; Get localized string:C991("clicContinueWhenAppleConfigurator2IsInstalledOnYourMac"); \
 			"ok"; Get localized string:C991("continue"); \
-			"okAction"; JSON Stringify:C1217($Obj_ok); \
-			"cancelAction"; JSON Stringify:C1217($Obj_cancel)))
+			"okAction"; JSON Stringify:C1217($ok); \
+			"cancelAction"; JSON Stringify:C1217($cancel)))
 		
 		//______________________________________________________
-	: ($Txt_selector="build_configuratorInstalled")\
-		 | ($Txt_selector="build_manualInstallation")
+	: ($selector="build_configuratorInstalled")\
+		 | ($selector="build_manualInstallation")
 		
-		$Obj_in.build.manualInstallation:=($Txt_selector="build_manualInstallation")
+		$in.build.manualInstallation:=($selector="build_manualInstallation")
 		
-		CALL FORM:C1391($Win_me; "BUILD"; $Obj_in.build)  // Relaunch the build process
-		
-		//______________________________________________________
-	: ($Txt_selector="projectFixErrors")
-		
-		CALL FORM:C1391($Win_me; $kTxt_callbackMethod; $Txt_selector; $Obj_in)
+		CALL FORM:C1391($target; "BUILD"; $in.build)  // Relaunch the build process
 		
 		//______________________________________________________
-	: ($Txt_selector="stopWebServer")
+	: ($selector="projectFixErrors")
+		
+		CALL FORM:C1391($target; $callback; $selector; $in)
+		
+		//______________________________________________________
+	: ($selector="stopWebServer")
 		
 		WEB STOP SERVER:C618
-		CALL FORM:C1391($Win_me; $kTxt_callbackMethod; "testServer"; $Obj_in)
+		CALL FORM:C1391($target; $callback; "testServer"; $in)
 		
 		//______________________________________________________
 	Else 
 		
-		ASSERT:C1129(False:C215; "Unknown entry point: \""+$Txt_selector+"\"")
+		ASSERT:C1129(False:C215; "Unknown entry point: \""+$selector+"\"")
 		
 		//______________________________________________________
 End case 
-
-// ----------------------------------------------------
-// Return
-// <NONE>
-// ----------------------------------------------------
-// End

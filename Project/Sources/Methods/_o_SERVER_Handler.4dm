@@ -241,7 +241,8 @@ Case of
 		$Obj_out.configuration:=New object:C1471
 		
 		// Get the current values for communication over HTTPS.
-		WEB GET OPTION:C1209(Web HTTPS enabled:K73:29; $Lon_enabled)
+		//WEB GET OPTION(Web HTTPS enabled; $Lon_enabled)
+		$Lon_enabled:=Num:C11($Obj_out.security.HTTPSEnabled)
 		
 		If ($Obj_out.started)  // Web server is launched
 			

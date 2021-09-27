@@ -10,40 +10,28 @@
 // #THREAD-SAFE
 // ----------------------------------------------------
 // Declarations
-C_OBJECT:C1216($0)
-C_OBJECT:C1216($1)
-
-C_BLOB:C604($Blb_buffer)
-C_LONGINT:C283($Lon_i; $Lon_parameters; $Lon_port; $Lon_timeout; $Win_caller)
-C_TEXT:C284($Txt_query; $Txt_queryValue)
-C_OBJECT:C1216($errors; $Obj_param; $Obj_requestResult; $Obj_result; $Obj_server)
-
-ARRAY TEXT:C222($tTxt_headerNames; 0)
-ARRAY TEXT:C222($tTxt_headerValues; 0)
-ARRAY TEXT:C222($tTxt_names; 0)
+#DECLARE($in : Object)->$out : Object
 
 If (False:C215)
 	C_OBJECT:C1216(Rest; $0)
 	C_OBJECT:C1216(Rest; $1)
 End if 
 
+var $query; $queryValue : Text
+var $caller; $i; $port; $timeout : Integer
+var $x : Blob
+var $errors; $in; $out; $requestResult; $webServerInfos : Object
+
+ARRAY TEXT:C222($headerNames; 0)
+ARRAY TEXT:C222($headerValues; 0)
+ARRAY TEXT:C222($properties; 0)
+
 // ----------------------------------------------------
 // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
+If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
-	//Required parameters
-	$Obj_param:=$1
-	
-	//Optional parameters
-	If ($Lon_parameters>=2)
-		
-		// <NONE>
-		
-	End if 
-	
-	$Obj_result:=New object:C1471(\
+	// Required parameters
+	$out:=New object:C1471(\
 		"success"; False:C215)
 	
 Else 
@@ -56,14 +44,14 @@ End if
 Case of 
 		
 		//______________________________________________________
-	: ($Obj_param.action=Null:C1517)
+	: ($in.action=Null:C1517)
 		
 		ASSERT:C1129(False:C215)
 		
 		//______________________________________________________
-	: ($Obj_param.action="devurl")
+	: ($in.action="devurl")
 		
-		$Obj_server:=WEB Get server info:C1531
+		$webServerInfos:=WEB Get server info:C1531
 		
 /*
 WARNING: "localhost" may not find the server if the computer is connected to a network.
@@ -73,432 +61,441 @@ WARNING: "localhost" may not find the server if the computer is connected to a n
 		Case of 
 				
 				//________________________________________
-			: (Bool:C1537($Obj_server.security.HTTPEnabled))  // Priority for http
+			: (Bool:C1537($webServerInfos.security.HTTPEnabled))  // Priority for http
 				
-				$Obj_result.url:="http://127.0.0.1:"+String:C10($Obj_server.options.webPortID)
+				$out.url:="http://127.0.0.1:"+String:C10($webServerInfos.options.webPortID)
 				
 				//________________________________________
-			: (Bool:C1537($Obj_server.security.HTTPSEnabled))  // Only https, use it
+			: (Bool:C1537($webServerInfos.security.HTTPSEnabled))  // Only https, use it
 				
-				$Obj_result.url:="https://127.0.0.1:"+String:C10($Obj_server.options.webHTTPSPortID)
+				$out.url:="https://127.0.0.1:"+String:C10($webServerInfos.options.webHTTPSPortID)
 				
 				//________________________________________
 			Else 
 				
-				WEB GET OPTION:C1209(Web Port ID:K73:14; $Lon_port)
-				$Obj_result.url:="http://127.0.0.1:"+String:C10($Lon_port)
+				$out.url:="http://127.0.0.1:"+String:C10($webServerInfos.options.webPortID)
 				
 				//________________________________________
 		End case 
 		
-		If ($Obj_param.handler=Null:C1517)
+		If ($in.handler=Null:C1517)
 			
-			$Obj_param.handler:="mobileapp"
+			$in.handler:="mobileapp"
 			
 		End if 
 		
-		$Obj_result.url:=$Obj_result.url+"/"+$Obj_param.handler+"/"
-		$Obj_result.success:=True:C214
+		$out.url:=$out.url+"/"+$in.handler+"/"
+		$out.success:=True:C214
 		
 		//______________________________________________________
-	: ($Obj_param.action="url")
+	: ($in.action="url")
 		
-		If (Length:C16(String:C10($Obj_param.url))=0)
+		If (Length:C16(String:C10($in.url))=0)
 			
-			$Obj_result:=Rest(New object:C1471(\
-				"action"; "devurl"; "handler"; $Obj_param.handler))
+			$out:=Rest(New object:C1471(\
+				"action"; "devurl"; "handler"; $in.handler))
 			
 		Else 
 			
 			// Add missing / if necessary
-			$Obj_result.url:=$Obj_param.url
+			$out.url:=$in.url
 			
-			If (Substring:C12($Obj_result.url; Length:C16($Obj_result.url))#"/")
+			If (Substring:C12($out.url; Length:C16($out.url))#"/")
 				
-				$Obj_result.url:=$Obj_result.url+"/"
+				$out.url:=$out.url+"/"
 				
 			End if 
 			
 			// Add missing handler if needed
-			If ($Obj_param.handler=Null:C1517)
+			If ($in.handler=Null:C1517)
 				
-				$Obj_param.handler:="mobileapp"
-				
-			End if 
-			
-			If (Not:C34(Match regex:C1019($Obj_param.handler+"/$"; $Obj_result.url; 1)))
-				
-				$Obj_result.url:=$Obj_result.url+$Obj_param.handler+"/"
+				$in.handler:="mobileapp"
 				
 			End if 
 			
-			$Obj_result.success:=True:C214
+			If (Not:C34(Match regex:C1019($in.handler+"/$"; $out.url; 1)))
+				
+				$out.url:=$out.url+$in.handler+"/"
+				
+			End if 
+			
+			$out.success:=True:C214
 			
 /*
 WARNING: "localhost" may not find the server if the computer is connected to a network.
 127.0.0.1, on the other hand, will connect directly without going out to the network.
 */
 			
-			$Obj_result.url:=Replace string:C233($Obj_result.url; "localhost"; "127.0.0.1")
+			$out.url:=Replace string:C233($out.url; "localhost"; "127.0.0.1")
 			
 		End if 
 		
 		//______________________________________________________
-	: ($Obj_param.action="request")
+	: ($in.action="request")
 		
-		$Obj_param.action:="url"
-		$Obj_result:=Rest($Obj_param)  //Get & format url, devurl if not in param
+		$in.action:="url"
+		$out:=Rest($in)  // Get & format url, devurl if not in param
 		
-		If ($Obj_result.success)
+		If ($out.success)
 			
-			If ($Obj_param.method=Null:C1517)
+			If ($in.method=Null:C1517)
 				
-				$Obj_param.method:=HTTP GET method:K71:1
+				$in.method:=HTTP GET method:K71:1
 				
 			End if 
 			
-			If ($Obj_param.path=Null:C1517)
+			If ($in.path=Null:C1517)
 				
-				$Obj_param.path:=""
+				$in.path:=""
 				
 			End if 
 			
-			If ($Obj_param.contentObject=Null:C1517)
+			If ($in.contentObject=Null:C1517)
 				
-				If ($Obj_param.content=Null:C1517)
+				If ($in.content=Null:C1517)
 					
-					$Obj_param.content:=""
+					$in.content:=""
 					
 				End if 
 				
 			Else 
 				
-				$Obj_param.content:=JSON Stringify:C1217($Obj_param.contentObject)
+				$in.content:=JSON Stringify:C1217($in.contentObject)
 				
 			End if 
 			
-			$Obj_result.url:=$Obj_result.url+$Obj_param.path
+			$out.url:=$out.url+$in.path
 			
 			//If $Obj_param.query"null"
-			//  ?dsf-
-			//End if
+			// ?dsf-
+			// End if
 			
 			// Manage query parameters
-			If ($Obj_param.query#Null:C1517)
+			If ($in.query#Null:C1517)
 				
-				OB GET PROPERTY NAMES:C1232($Obj_param.query; $tTxt_names)  //;$tLon_types)
+				OB GET PROPERTY NAMES:C1232($in.query; $properties)  //;$tLon_types)
 				
-				For ($Lon_i; 1; Size of array:C274($tTxt_names); 1)
+				For ($i; 1; Size of array:C274($properties); 1)
 					
-					$Txt_queryValue:=$Obj_param.query[$tTxt_names{$Lon_i}]
+					$queryValue:=$in.query[$properties{$i}]
 					
-					If ($Lon_i#1)
+					If ($i#1)
 						
-						$Txt_query:=$Txt_query+"&"
+						$query:=$query+"&"
 						
 					End if 
 					
-					If (Bool:C1537($Obj_param.queryEncode))
+					If (Bool:C1537($in.queryEncode))
 						
 						// Encode value
-						If ((Position:C15("\""; $Txt_queryValue)>0) & (Position:C15("'"; $Txt_queryValue)=0))
+						If ((Position:C15("\""; $queryValue)>0)\
+							 & (Position:C15("'"; $queryValue)=0))
 							
-							$Txt_query:=$Txt_query+$tTxt_names{$Lon_i}+"='"+str_URLEncode($Txt_queryValue)+"'"  // use ' if filter contains = and no '
+							$query:=$query+$properties{$i}+"='"+str_URLEncode($queryValue)+"'"  // Use ' if filter contains = and no '
 							
 						Else 
 							
-							$Txt_query:=$Txt_query+$tTxt_names{$Lon_i}+"=\""+str_URLEncode($Txt_queryValue)+"\""
+							$query:=$query+$properties{$i}+"=\""+str_URLEncode($queryValue)+"\""
 							
 						End if 
 						
 					Else 
 						
-						$Txt_query:=$Txt_query+$tTxt_names{$Lon_i}+"=\""+$Txt_queryValue+"\""
+						$query:=$query+$properties{$i}+"=\""+$queryValue+"\""
 						
 					End if 
 				End for 
 				
-				$Obj_result.url:=Choose:C955(Position:C15("?"; $Obj_result.url)>0; $Obj_result.url+"&"+$Txt_query; $Obj_result.url+"?"+$Txt_query)
+				$out.url:=Choose:C955(Position:C15("?"; $out.url)>0; $out.url+"&"+$query; $out.url+"?"+$query)
 				
 			End if 
 			
 			// Manage headers
-			If ($Obj_param.headers=Null:C1517)
+			If ($in.headers=Null:C1517)
 				
-				$Obj_param.headers:=New object:C1471()
+				$in.headers:=New object:C1471(\
+					)
 				
 			End if 
 			
-			OB GET PROPERTY NAMES:C1232($Obj_param.headers; $tTxt_headerNames)
-			ARRAY TEXT:C222($tTxt_headerValues; Size of array:C274($tTxt_headerNames))
+			OB GET PROPERTY NAMES:C1232($in.headers; $headerNames)
+			ARRAY TEXT:C222($headerValues; Size of array:C274($headerNames))
 			
-			For ($Lon_i; 1; Size of array:C274($tTxt_headerNames); 1)
+			For ($i; 1; Size of array:C274($headerNames); 1)
 				
-				$tTxt_headerValues{$Lon_i}:=OB Get:C1224($Obj_param.headers; $tTxt_headerNames{$Lon_i})
+				$headerValues{$i}:=OB Get:C1224($in.headers; $headerNames{$i})
 				
 			End for 
 			
-			If (Num:C11($Obj_param.timeout)#0)
+			If (Num:C11($in.timeout)#0)
 				
-				HTTP GET OPTION:C1159(HTTP timeout:K71:10; $Lon_timeout)
-				HTTP SET OPTION:C1160(HTTP timeout:K71:10; $Obj_param.timeout)
+				HTTP GET OPTION:C1159(HTTP timeout:K71:10; $timeout)
+				HTTP SET OPTION:C1160(HTTP timeout:K71:10; $in.timeout)
 				
 			End if 
 			
 /* START TRAPPING ERRORS */$errors:=err.capture()
-			$Obj_result.code:=HTTP Request:C1158($Obj_param.method; $Obj_result.url; ($Obj_param.content); $Obj_requestResult; $tTxt_headerNames; $tTxt_headerValues)
+			$out.code:=HTTP Request:C1158($in.method; $out.url; ($in.content); $requestResult; $headerNames; $headerValues)
 /* STOP TRAPPING ERRORS */$errors.release()
 			
-			If ($Lon_timeout#0)
+			If ($timeout#0)
 				
-				HTTP SET OPTION:C1160(HTTP timeout:K71:10; $Lon_timeout)
+				HTTP SET OPTION:C1160(HTTP timeout:K71:10; $timeout)
 				
 			End if 
 			
-			$Obj_result.response:=$Obj_requestResult
+			$out.response:=$requestResult
 			
 			If (Num:C11($errors.lastError().error)#0)
 				
-				$Obj_result.httpError:=$errors.lastError().error
+				$out.httpError:=$errors.lastError().error
 				
 			End if 
 			
-			If ($Obj_requestResult=Null:C1517)
+			If ($requestResult=Null:C1517)
 				
-				$Obj_result.success:=Choose:C955($Obj_result.httpError=Null:C1517; $Obj_result.code<300; False:C215)
+				$out.success:=Choose:C955($out.httpError=Null:C1517; $out.code<300; False:C215)
 				
 			Else 
 				
-				If (Value type:C1509($Obj_requestResult.success)=Is boolean:K8:9)
+				If (Value type:C1509($requestResult.success)=Is boolean:K8:9)
 					
-					$Obj_result.success:=$Obj_requestResult.success
-					
-				End if 
-				
-				If ($Obj_requestResult.__ERROR#Null:C1517)
-					
-					$Obj_result.success:=False:C215
-					$Obj_result.errors:=$Obj_requestResult.__ERROR
+					$out.success:=$requestResult.success
 					
 				End if 
 				
-				If ($Obj_requestResult.__ERRORS#Null:C1517)
+				If ($requestResult.__ERROR#Null:C1517)
 					
-					$Obj_result.success:=False:C215
-					$Obj_result.errors:=$Obj_requestResult.__ERRORS
+					$out.success:=False:C215
+					$out.errors:=$requestResult.__ERROR
+					
+				End if 
+				
+				If ($requestResult.__ERRORS#Null:C1517)
+					
+					$out.success:=False:C215
+					$out.errors:=$requestResult.__ERRORS
 					
 				End if 
 			End if 
 			
-			$Obj_result.headers:=New object:C1471
+			$out.headers:=New object:C1471
 			
-			For ($Lon_i; 1; Size of array:C274($tTxt_headerNames); 1)
+			For ($i; 1; Size of array:C274($headerNames); 1)
 				
-				$Obj_result.headers[$tTxt_headerNames{$Lon_i}]:=$tTxt_headerValues{$Lon_i}
+				$out.headers[$headerNames{$i}]:=$headerValues{$i}
 				
 			End for 
 		End if 
 		
 		//______________________________________________________
-	: ($Obj_param.action="status")
+	: ($in.action="status")
 		
-		$Obj_param.action:="request"
-		$Obj_param.path:=""
+		$in.action:="request"
+		$in.path:=""
 		
-		If ($Obj_param.caller#Null:C1517)
+		If ($in.caller#Null:C1517)
 			
-			$Win_caller:=$Obj_param.caller
-			OB REMOVE:C1226($Obj_param; "caller")
-			
-		End if 
-		
-		$Obj_result:=Rest($Obj_param)
-		
-		If ($Win_caller#0)
-			
-			CALL FORM:C1391($Win_caller; "editor_CALLBACK"; "testServer"; $Obj_result)
+			$caller:=$in.caller
+			OB REMOVE:C1226($in; "caller")
 			
 		End if 
 		
-		//______________________________________________________
-	: ($Obj_param.action="info")
+		$out:=Rest($in)
 		
-		$Obj_param.action:="request"
-		$Obj_param.path:="$info"
-		$Obj_result:=Rest($Obj_param)
-		
-		//______________________________________________________
-	: ($Obj_param.action="progressinfo")
-		
-		$Obj_param.action:="request"
-		$Obj_param.path:="$info/ProgressInfo"
-		$Obj_result:=Rest($Obj_param)
-		
-		//______________________________________________________
-	: ($Obj_param.action="sessioninfo")
-		
-		$Obj_param.action:="request"
-		$Obj_param.path:="$info/sessioninfo"
-		$Obj_result:=Rest($Obj_param)
-		
-		//______________________________________________________
-	: ($Obj_param.action="entitySet")
-		
-		$Obj_param.action:="request"
-		$Obj_param.path:="$info/entityset"
-		$Obj_result:=Rest($Obj_param)
-		
-		//______________________________________________________
-	: ($Obj_param.action="catalog")
-		
-		$Obj_param.action:="request"
-		$Obj_param.path:="$catalog"
-		$Obj_result:=Rest($Obj_param)
-		
-		//______________________________________________________
-	: ($Obj_param.action="tables")
-		
-		$Obj_param.action:="request"
-		$Obj_param.path:="$catalog/$all"
-		$Obj_result:=Rest($Obj_param)
-		
-		//______________________________________________________
-	: ($Obj_param.action="table")
-		
-		If ($Obj_param.table=Null:C1517)
+		If ($caller#0)
 			
-			$Obj_result.errors:=New collection:C1472("Missing parameters table")
-			$Obj_result.success:=False:C215
+			CALL FORM:C1391($caller; "editor_CALLBACK"; "testServer"; $out)
+			
+		End if 
+		
+		//______________________________________________________
+	: ($in.action="info")
+		
+		$in.action:="request"
+		$in.path:="$info"
+		$out:=Rest($in)
+		
+		//______________________________________________________
+	: ($in.action="progressinfo")
+		
+		$in.action:="request"
+		$in.path:="$info/ProgressInfo"
+		$out:=Rest($in)
+		
+		//______________________________________________________
+	: ($in.action="sessioninfo")
+		
+		$in.action:="request"
+		$in.path:="$info/sessioninfo"
+		$out:=Rest($in)
+		
+		//______________________________________________________
+	: ($in.action="entitySet")
+		
+		$in.action:="request"
+		$in.path:="$info/entityset"
+		$out:=Rest($in)
+		
+		//______________________________________________________
+	: ($in.action="catalog")
+		
+		$in.action:="request"
+		$in.path:="$catalog"
+		$out:=Rest($in)
+		
+		//______________________________________________________
+	: ($in.action="tables")
+		
+		$in.action:="request"
+		$in.path:="$catalog/$all"
+		$out:=Rest($in)
+		
+		//______________________________________________________
+	: ($in.action="table")
+		
+		If ($in.table=Null:C1517)
+			
+			$out.errors:=New collection:C1472("Missing parameters table")
+			$out.success:=False:C215
 			
 		Else 
 			
-			$Obj_param.action:="request"
-			$Obj_param.path:="$catalog/"+$Obj_param.table
-			$Obj_result:=Rest($Obj_param)
+			$in.action:="request"
+			$in.path:="$catalog/"+$in.table
+			$out:=Rest($in)
 			
 		End if 
 		
 		//______________________________________________________
-	: ($Obj_param.action="records")
+	: ($in.action="records")
 		
-		If ($Obj_param.table=Null:C1517)
+		If ($in.table=Null:C1517)
 			
-			$Obj_result.errors:=New collection:C1472("Missing parameters table")
-			$Obj_result.success:=False:C215
+			$out.errors:=New collection:C1472("Missing parameters table")
+			$out.success:=False:C215
 			
 		Else 
 			
-			$Obj_param.action:="request"
-			$Obj_param.path:=$Obj_param.table
+			$in.action:="request"
+			$in.path:=$in.table
 			
-			If ($Obj_param.id#Null:C1517)
+			If ($in.id#Null:C1517)
 				
-				$Obj_param.path:=$Obj_param.path+"("+$Obj_param.id+")"
+				$in.path:=$in.path+"("+$in.id+")"
 				
 			End if 
 			
-			// special case for fields
-			If (Value type:C1509($Obj_param.fields)=Is text:K8:3)
-				// support all text mode
-				$Obj_param.fields:=Split string:C1554($Obj_param.fields; ",")
+			// Special case for fields
+			If (Value type:C1509($in.fields)=Is text:K8:3)
+				
+				// Support all text mode
+				$in.fields:=Split string:C1554($in.fields; ",")
+				
 			End if 
 			
-			If (Value type:C1509($Obj_param.fields)=Is collection:K8:32)
+			If (Value type:C1509($in.fields)=Is collection:K8:32)
 				
-				If (Bool:C1537($Obj_param.fieldsAsPath))
+				If (Bool:C1537($in.fieldsAsPath))
 					
-					$Obj_param.path:=$Obj_param.path+"/"+$Obj_param.fields.join(",")
+					$in.path:=$in.path+"/"+$in.fields.join(",")
 					
 				Else 
 					
-					If ($Obj_param.query=Null:C1517)
-						$Obj_param.query:=New object:C1471()
+					If ($in.query=Null:C1517)
+						
+						$in.query:=New object:C1471(\
+							)
+						
 					End if 
 					
-					$Obj_param.query["$attributes"]:=$Obj_param.fields.join(",")
+					$in.query["$attributes"]:=$in.fields.join(",")
 					
 				End if 
 			End if 
 			
-			$Obj_result:=Rest($Obj_param)
+			$out:=Rest($in)
 			
 		End if 
 		
 		//______________________________________________________
-	: ($Obj_param.action="authenticate")
+	: ($in.action="authenticate")
 		
-		$Obj_param.action:="request"
-		$Obj_param.path:="authenticate"
-		$Obj_result:=Rest($Obj_param)
-		
-		//______________________________________________________
-	: ($Obj_param.action="verify")
-		
-		$Obj_param.action:="request"
-		$Obj_param.path:="$verify"
-		$Obj_result:=Rest($Obj_param)
+		$in.action:="request"
+		$in.path:="authenticate"
+		$out:=Rest($in)
 		
 		//______________________________________________________
-	: ($Obj_param.action="image")
+	: ($in.action="verify")
+		
+		$in.action:="request"
+		$in.path:="$verify"
+		$out:=Rest($in)
+		
+		//______________________________________________________
+	: ($in.action="image")
 		
 		// XXX parameters checking: url, target
 		
 		// Get image using http request
 		
 		/// Compute headers
-		If ($Obj_param.headers=Null:C1517)
-			$Obj_param.headers:=New object:C1471()
-		End if 
-		OB GET PROPERTY NAMES:C1232($Obj_param.headers; $tTxt_headerNames)
-		ARRAY TEXT:C222($tTxt_headerValues; Size of array:C274($tTxt_headerNames))
-		
-		For ($Lon_i; 1; Size of array:C274($tTxt_headerNames); 1)
+		If ($in.headers=Null:C1517)
 			
-			$tTxt_headerValues{$Lon_i}:=OB Get:C1224($Obj_param.headers; $tTxt_headerNames{$Lon_i})
+			$in.headers:=New object:C1471
+			
+		End if 
+		
+		OB GET PROPERTY NAMES:C1232($in.headers; $headerNames)
+		ARRAY TEXT:C222($headerValues; Size of array:C274($headerNames))
+		
+		For ($i; 1; Size of array:C274($headerNames); 1)
+			
+			$headerValues{$i}:=OB Get:C1224($in.headers; $headerNames{$i})
 			
 		End for 
 		
 		/// Do the request
 		
 /* START TRAPPING ERRORS */$errors:=err.capture()
-		$Obj_result.code:=HTTP Request:C1158(HTTP GET method:K71:1; $Obj_param.url; ""; $Blb_buffer; $tTxt_headerNames; $tTxt_headerValues)
+		$out.code:=HTTP Request:C1158(HTTP GET method:K71:1; $in.url; ""; $x; $headerNames; $headerValues)
 /* STOP TRAPPING ERRORS */$errors.release()
 		
 		/// Check result
 		If ($errors.lastError()=Null:C1517)
 			
 			// Write to file
-			$Lon_port:=BLOB size:C605($Blb_buffer)
+			$port:=BLOB size:C605($x)
 			
-			If ($Lon_port>0)
+			If ($port>0)
 				
-				$Obj_result.contentSize:=$Lon_port
+				$out.contentSize:=$port
 				
-				CREATE FOLDER:C475($Obj_param.target; *)
+				CREATE FOLDER:C475($in.target; *)
 				
-				BLOB TO DOCUMENT:C526($Obj_param.target; $Blb_buffer)
+				BLOB TO DOCUMENT:C526($in.target; $x)
 				
 			Else 
 				
-				$Obj_result.warnings:=New collection:C1472("Picture file empty")
+				$out.warnings:=New collection:C1472("Picture file empty")
 				
 			End if 
 			
 		Else 
 			
-			$Obj_result.httpError:=Num:C11($errors.lastError().error)
+			$out.httpError:=Num:C11($errors.lastError().error)
 			
 /* START HIDING ERRORS */$errors:=err.hide()
 			
-			$Obj_result.response:=BLOB to text:C555($Blb_buffer; UTF8 text without length:K22:17)
+			$out.response:=BLOB to text:C555($x; UTF8 text without length:K22:17)
 			
-			If (Length:C16(String:C10($Obj_result.response))>0)
+			If (Length:C16(String:C10($out.response))>0)
 				
-				$Obj_result.response:=JSON Parse:C1218($Obj_result.response)
+				$out.response:=JSON Parse:C1218($out.response)
 				
-				If ($Obj_result.response.__ERROR#Null:C1517)
+				If ($out.response.__ERROR#Null:C1517)
 					
-					$Obj_result.errors:=$Obj_result.response.__ERROR
+					$out.errors:=$out.response.__ERROR
 					
 				End if 
 			End if 
@@ -508,23 +505,22 @@ WARNING: "localhost" may not find the server if the computer is connected to a n
 		End if 
 		
 		/// Output headers
-		$Obj_result.headers:=New object:C1471
+		$out.headers:=New object:C1471
 		
-		For ($Lon_i; 1; Size of array:C274($tTxt_headerNames); 1)
+		For ($i; 1; Size of array:C274($headerNames); 1)
 			
-			$Obj_result.headers[$tTxt_headerNames{$Lon_i}]:=$tTxt_headerValues{$Lon_i}
+			$out.headers[$headerNames{$i}]:=$headerValues{$i}
 			
 		End for 
 		
 		// Result
-		$Obj_result.success:=Choose:C955($Obj_result.httpError=Null:C1517; $Obj_result.code<300; False:C215)
+		$out.success:=Choose:C955($out.httpError=Null:C1517; $out.code<300; False:C215)
 		
 		//________________________________________
+		
 	Else 
 		
-		ASSERT:C1129(False:C215; "Unknown entry point: \""+$Obj_param.action+"\"")
+		ASSERT:C1129(False:C215; "Unknown entry point: \""+$in.action+"\"")
 		
 		//________________________________________
 End case 
-
-$0:=$Obj_result

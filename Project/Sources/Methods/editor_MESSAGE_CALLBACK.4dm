@@ -16,10 +16,8 @@ End if
 
 var $description; $t : Text
 var $validated : Boolean
-var $http; $https : Integer
-var $o : Object
+var $webServerInfos : Object
 var $c : Collection
-
 var $error : cs:C1710.error
 
 // ----------------------------------------------------
@@ -49,20 +47,17 @@ Case of
 				
 			Else 
 				
-				$o:=WEB Get server info:C1531
-				
-				WEB GET OPTION:C1209(Web HTTP enabled:K73:28; $http)
-				WEB GET OPTION:C1209(Web HTTPS enabled:K73:29; $https)
+				$webServerInfos:=WEB Get server info:C1531
 				
 				Case of 
 						
 						//______________________________________________________
-					: (Bool:C1537($http))
+					: ($webServerInfos.security.HTTPEnabled)
 						
 						// Port conflict?
 						If (Num:C11($error.lastError().error)=-1)
 							
-							$t:=cs:C1710.str.new("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($o.options.webPortID); String:C10($o.options.webHTTPSPortID)))
+							$t:=cs:C1710.str.new("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($webServerInfos.options.webPortID); String:C10($webServerInfos.options.webHTTPSPortID)))
 							
 						Else 
 							
@@ -72,7 +67,7 @@ Case of
 						End if 
 						
 						//______________________________________________________
-					: (Bool:C1537($https))
+					: ($webServerInfos.security.HTTPSEnabled)
 						
 						// Port conflict? or certificates are missing?
 						
@@ -87,7 +82,7 @@ Case of
 							
 							If (Num:C11($error.lastError().error)=-1)
 								
-								$t:=cs:C1710.str.new.setText("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($o.options.webPortID); String:C10($o.options.webHTTPSPortID)))
+								$t:=cs:C1710.str.new.setText("someListeningPortsAreAlreadyUsed").localized(New collection:C1472(String:C10($webServerInfos.options.webPortID); String:C10($webServerInfos.options.webHTTPSPortID)))
 								
 							Else 
 								
@@ -171,4 +166,3 @@ End case
 
 // ----------------------------------------------------
 // End
-
