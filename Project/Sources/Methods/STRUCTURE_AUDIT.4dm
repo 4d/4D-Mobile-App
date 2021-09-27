@@ -438,6 +438,7 @@ If ($cacheFile.exists)
 									$field:=$table.value[$item.key]
 									$field.current:=$tableCatalog.field.query("name = :1"; $item.key).pop()
 									$field.missing:=$field.current=Null:C1517
+									$field.nameMismatch:=Not:C34($str.setText($field.name).equal($field.current.name))
 									
 									If (Not:C34($field.missing))
 										
@@ -453,7 +454,7 @@ If ($cacheFile.exists)
 										End if 
 									End if 
 									
-									If ($field.missing | Bool:C1537($field.typeMismatch))
+									If ($field.missing | $field.nameMismatch | Bool:C1537($field.typeMismatch))
 										
 										// THE FIELD IS NO LONGER AVAILABLE
 										// OR THE TYPE HAS BEEN CHANGED
@@ -467,6 +468,12 @@ If ($cacheFile.exists)
 												
 												$field.tableTips:=$str.setText("theFieldNameIsMissing").localized($field.name)
 												$field.fieldTips:=$str.setText("theFieldIsMissing").localized()
+												
+												//______________________________________________________
+											: ($field.nameMismatch)
+												
+												$field.tableTips:=$str.setText("theFieldNameWasRenamed").localized(New collection:C1472($field.name; $field.current.name))
+												$field.fieldTips:=$str.setText("theFieldWasRenamed").localized($field.current.name)
 												
 												//______________________________________________________
 											: (Bool:C1537($field.typeMismatch))
