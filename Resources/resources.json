@@ -248,7 +248,20 @@
         null,
         {
             "$ref": "#/definitions/numberBinding"
-        }
+        },
+        null,
+        null,
+        [
+            {
+                "name": "jsonPrettyPrinted"
+            },
+            {
+                "name": "json"
+            },
+            {
+                "name": "jsonValues"
+            }
+        ]
     ],
     "iOSCategories": [
         "Books",

@@ -65,6 +65,7 @@ Function getByType($type : Integer; $host : Boolean)->$formatters : Collection
 			$c[Is time:K8:8]:="time"
 			$c[Is text:K8:3]:="text"
 			$c[Is picture:K8:10]:="picture"
+			$c[Is object:K8:27]:="object"
 			
 			For each ($formator; $resources.folders())
 				
