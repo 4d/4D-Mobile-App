@@ -11,7 +11,7 @@
 var $fieldID; $t : Text
 var $b : Boolean
 var $bottom; $column; $count; $height; $i; $indx; $l; $left; $Lon_button; $Lon_targetBottom : Integer
-var $Lon_targetTop; $Lon_unpublished; $Lon_vOffset; $right; $row; $top; $width; $Win_hdl : Integer
+var $Lon_targetTop; $Lon_unpublished; $Lon_vOffset; $right; $row; $top; $width : Integer
 var $Ptr_; $Ptr_me; $Ptr_published : Pointer
 var $context; $e; $form; $linkDataModel; $menu; $o; $relatedCatalog; $tableDataModel : Object
 var $c : Collection
@@ -319,7 +319,6 @@ Case of
 									If (PROJECT.isNotLocked())
 										
 										$structure:=cs:C1710.structure.new()
-										
 										$relatedCatalog:=$structure.relatedCatalog($context.currentTable.name; $context.fieldName; True:C214)
 										
 										If ($relatedCatalog.success)  // Open field picker
@@ -334,37 +333,49 @@ Case of
 											End if 
 											
 											$tableDataModel:=$dataModel[String:C10($context.currentTable.tableNumber)]
-											
 											$linkDataModel:=$tableDataModel[$relatedCatalog.relatedEntity]
 											
-											For each ($o; $relatedCatalog.fields)
+											var $field : Object
+											
+											For each ($field; $relatedCatalog.fields)
 												
-												If (Bool:C1537($o.isToMany))  //1 -> N
-													
-													$o.published:=($linkDataModel[$o.name]#Null:C1517)
-													
-												Else 
-													
-													$fieldID:=String:C10($o.fieldNumber)
-													$c:=Split string:C1554($o.path; ".")
-													
-													If ($c.length=1)
+												Case of 
 														
-														$o.published:=($linkDataModel[$fieldID]#Null:C1517)
+														//______________________________________________________
+													: (Bool:C1537($field.isToMany))  // 1 -> N
 														
+														$field.published:=($linkDataModel[$field.name]#Null:C1517)
+														
+														//______________________________________________________
+													: (Bool:C1537($field.computed))
+														
+														$field.published:=($linkDataModel[$field.name]#Null:C1517)
+														
+														//______________________________________________________
 													Else 
 														
-														// Enhance_relation
-														$o.published:=($linkDataModel[$c[0]][$fieldID]#Null:C1517)
+														$fieldID:=String:C10($field.fieldNumber)
+														$c:=Split string:C1554($field.path; ".")
 														
-													End if 
-												End if 
+														If ($c.length=1)
+															
+															$field.published:=($linkDataModel[$fieldID]#Null:C1517)
+															
+														Else 
+															
+															// Enhance_relation
+															$field.published:=($linkDataModel[$c[0]][$fieldID]#Null:C1517)
+															
+														End if 
+														
+														//______________________________________________________
+												End case 
 												
-												$o.icon:=EDITOR.fieldIcons[$o.fieldType]
+												$field.icon:=EDITOR.fieldIcons[$field.fieldType]
 												
 											End for each 
 											
-											$Win_hdl:=Open form window:C675("RELATED"; Sheet form window:K39:12; *)
+											$relatedCatalog.window:=Open form window:C675("RELATED"; Sheet form window:K39:12; *)
 											DIALOG:C40("RELATED"; $relatedCatalog)
 											
 											If ($relatedCatalog.success)  // Dialog was validated
@@ -388,31 +399,36 @@ Case of
 														
 														If ($o.published)
 															
-															If ($tableDataModel[$context.fieldName]=Null:C1517)
+															var $target : Object
+															$target:=$tableDataModel[$context.fieldName]
+															
+															If ($target=Null:C1517)
 																
 																// Create the relation
-																$tableDataModel[$context.fieldName]:=New object:C1471(\
+																$target:=New object:C1471(\
 																	"relatedDataClass"; $relatedCatalog.relatedDataClass; \
 																	"inverseName"; $relatedCatalog.inverseName; \
 																	"relatedTableNumber"; $relatedCatalog.relatedTableNumber)
+																
+																$tableDataModel[$context.fieldName]:=$target
 																
 															End if 
 															
 															// Create the field, if any
 															If ($c.length>1)
 																
-																If ($tableDataModel[$context.fieldName][$c[0]]=Null:C1517)
+																If ($target[$c[0]]=Null:C1517)
 																	
-																	$tableDataModel[$context.fieldName][$c[0]]:=New object:C1471(\
+																	$target[$c[0]]:=New object:C1471(\
 																		"relatedDataClass"; $o.tableName; \
 																		"inverseName"; $context.currentTable.field.query("name=:1"; $context.fieldName).pop().inverseName; \
 																		"relatedTableNumber"; $o.tableNumber)
 																	
 																End if 
 																
-																If ($tableDataModel[$context.fieldName][$c[0]][$fieldID]=Null:C1517)
+																If ($target[$c[0]][$fieldID]=Null:C1517)
 																	
-																	$tableDataModel[$context.fieldName][$c[0]][$fieldID]:=New object:C1471(\
+																	$target[$c[0]][$fieldID]:=New object:C1471(\
 																		"name"; $o.name; \
 																		"path"; $o.path; \
 																		"label"; PROJECT.label($o.name); \
@@ -424,80 +440,117 @@ Case of
 																
 															Else 
 																
-																If (Bool:C1537($o.isToMany))
-																	
-																	If ($tableDataModel[$context.fieldName][$o.name]=Null:C1517)
+																Case of 
+																		//______________________________________________________
+																	: (Bool:C1537($o.isToMany))
 																		
-																		$tableDataModel[$context.fieldName][$o.name]:=New object:C1471(\
-																			"name"; $o.name; \
-																			"relatedDataClass"; $o.relatedDataClass; \
-																			"relatedTableNumber"; $o.relatedTableNumber; \
-																			"path"; $context.fieldName+"."+$o.path; \
-																			"label"; PROJECT.labelList($o.name); \
-																			"shortLabel"; PROJECT.label($o.name); \
-																			"inverseName"; $o.inverseName; \
-																			"isToMany"; True:C214)
+																		If ($target[$o.name]=Null:C1517)
+																			
+																			$target[$o.name]:=New object:C1471(\
+																				"name"; $o.name; \
+																				"relatedDataClass"; $o.relatedDataClass; \
+																				"relatedTableNumber"; $o.relatedTableNumber; \
+																				"path"; $context.fieldName+"."+$o.path; \
+																				"label"; PROJECT.labelList($o.name); \
+																				"shortLabel"; PROJECT.label($o.name); \
+																				"inverseName"; $o.inverseName; \
+																				"isToMany"; True:C214)
+																			
+																		End if 
 																		
-																	End if 
-																	
-																Else 
-																	
-																	If ($tableDataModel[$context.fieldName][$fieldID]=Null:C1517)
+																		//______________________________________________________
+																	: (Bool:C1537($o.computed))
 																		
-																		$tableDataModel[$context.fieldName][$fieldID]:=New object:C1471(\
-																			"name"; $o.name; \
-																			"path"; $o.path; \
-																			"label"; PROJECT.label($o.name); \
-																			"shortLabel"; PROJECT.shortLabel($o.name); \
-																			"type"; $o.type; \
-																			"fieldType"; $o.fieldType)
+																		If ($target[$o.name]=Null:C1517)
+																			
+																			$target[$o.name]:=New object:C1471(\
+																				"name"; $o.name; \
+																				"path"; $o.path; \
+																				"label"; PROJECT.label($o.name); \
+																				"shortLabel"; PROJECT.shortLabel($o.name); \
+																				"fieldType"; $o.fieldType; \
+																				"computed"; True:C214)
+																			
+																		End if 
 																		
-																	End if 
-																End if 
+																		//______________________________________________________
+																	Else 
+																		
+																		If ($target[$fieldID]=Null:C1517)
+																			
+																			$target[$fieldID]:=New object:C1471(\
+																				"name"; $o.name; \
+																				"path"; $o.path; \
+																				"label"; PROJECT.label($o.name); \
+																				"shortLabel"; PROJECT.shortLabel($o.name); \
+																				"type"; $o.type; \
+																				"fieldType"; $o.fieldType)
+																			
+																		End if 
+																		
+																		//______________________________________________________
+																End case 
 															End if 
 															
 														Else 
 															
 															// Remove the field, if any
-															If (Bool:C1537($o.isToMany))
-																
-																If ($linkDataModel[$o.name]#Null:C1517)
+															
+															Case of 
+																	//______________________________________________________
+																: (Bool:C1537($o.isToMany))
 																	
-																	OB REMOVE:C1226($linkDataModel; $o.name)
+																	If ($linkDataModel[$o.name]#Null:C1517)
+																		
+																		OB REMOVE:C1226($linkDataModel; $o.name)
+																		
+																	End if 
 																	
-																End if 
-																
-															Else 
-																
-																If ($tableDataModel[$context.fieldName]#Null:C1517)
+																	//______________________________________________________
+																: ($target=Null:C1517)
+																	
+																	// <NOTHING MORE TO DO>
+																	
+																	//______________________________________________________
+																: (Bool:C1537($o.computed))
+																	
+																	If ($target[$o.name]#Null:C1517)
+																		
+																		OB REMOVE:C1226($target; $o.name)
+																		
+																	End if 
+																	
+																	//______________________________________________________
+																Else 
 																	
 																	If ($c.length>1)
 																		
-																		If ($tableDataModel[$context.fieldName][$c[0]][String:C10($o.fieldNumber)]#Null:C1517)
+																		If ($target[$c[0]][String:C10($o.fieldNumber)]#Null:C1517)
 																			
-																			OB REMOVE:C1226($tableDataModel[$context.fieldName][$c[0]]; String:C10($o.fieldNumber))
+																			OB REMOVE:C1226($target[$c[0]]; String:C10($o.fieldNumber))
 																			
 																			// Remove the link if no more fields are published
-																			If (OB Entries:C1720($tableDataModel[$context.fieldName][$c[0]]).filter("col_formula"; Formula:C1597($1.result:=Match regex:C1019("^\\d+$"; $1.value.key; 1))).length=0)
+																			If (OB Entries:C1720($target[$c[0]]).filter("col_formula"; Formula:C1597($1.result:=Match regex:C1019("^\\d+$"; $1.value.key; 1))).length=0)
 																				
-																				OB REMOVE:C1226($tableDataModel[$context.fieldName]; $c[0])
+																				OB REMOVE:C1226($target; $c[0])
 																				
 																			End if 
 																		End if 
 																		
 																	Else 
 																		
-																		If ($tableDataModel[$context.fieldName][$fieldID].path#Null:C1517)
+																		If ($target[$fieldID].path#Null:C1517)
 																			
-																			If ($tableDataModel[$context.fieldName][$fieldID].path=$o.path)
+																			If ($target[$fieldID].path=$o.path)
 																				
-																				OB REMOVE:C1226($tableDataModel[$context.fieldName]; $fieldID)
+																				OB REMOVE:C1226($target; $fieldID)
 																				
 																			End if 
 																		End if 
 																	End if 
-																End if 
-															End if 
+																	
+																	//______________________________________________________
+															End case 
 														End if 
 													End for each 
 													
@@ -846,8 +899,8 @@ Case of
 		//// Hide the bottom line
 		//OBJECT SET VISIBLE(*; "bottom.line"; False)
 		//CALL FORM(Current form window; "editor_CALLBACK"; "resizePanel"; New object(\
-			"panel"; Current form name; \
-			"offset"; $Lon_vOffset))
+						"panel"; Current form name; \
+						"offset"; $Lon_vOffset))
 		//End if 
 		////______________________________________________________
 		//: ($e.code=On Mouse Leave)

@@ -363,6 +363,53 @@ If ($cacheFile.exists)
 													End for each 
 													
 													//______________________________________________________
+												: (PROJECT.isComputedAttribute($relatedField))
+													
+													$relatedField.parent:=$item.key
+													$relatedField.current:=$relatedCatalog.query("name = :1"; $relatedItem.key).pop()
+													$relatedField.missing:=$relatedField.current=Null:C1517
+													$relatedField.nameMismatch:=Not:C34($str.setText($relatedField.name).equal($relatedField.current.name))
+													$relatedField.typeMismatch:=$relatedField.type#Num:C11($relatedField.current.type)
+													
+													If ($relatedField.missing | $relatedField.nameMismatch | $relatedField.typeMismatch)
+														
+														// TRUE IF THE RELATED FIELD IS NO LONGER AVAILABLE
+														// OR IF THE NAME (non diacritical) OR TYPE HAS BEEN CHANGED
+														
+														Case of 
+																
+																//______________________________________________________
+															: ($relatedField.missing)
+																
+																$relatedField.tableTips:=$str.setText("theFieldNameIsMissing").localized($relatedField.name)
+																$relatedField.fieldTips:=$relatedField.tableTips
+																
+																//______________________________________________________
+															: ($relatedField.nameMismatch)
+																
+																$relatedField.tableTips:=$str.setText("theFieldNameWasRenamed").localized(New collection:C1472($relatedField.name; $relatedField.current.name))
+																$relatedField.fieldTips:=$relatedField.tableTips
+																
+																//______________________________________________________
+															: (Bool:C1537($relatedField.typeMismatch))
+																
+																$relatedField.tableTips:=$str.setText("theFieldNameTypeWasModified").localized()
+																$relatedField.fieldTips:=$relatedField.tableTips
+																
+																//______________________________________________________
+														End case 
+														
+														$isTableUnsynchronized:=True:C214
+														cs:C1710.ob.new($field).createPath("unsynchronizedFields"; Is collection:K8:32).unsynchronizedFields.push($relatedField)
+														
+														If ($unsynchronizedFields.query("fieldTips= :1"; $relatedField.fieldTips).length=0)
+															
+															$unsynchronizedFields.push($relatedField)
+															
+														End if 
+													End if 
+													
+													//______________________________________________________
 												Else 
 													
 													ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")

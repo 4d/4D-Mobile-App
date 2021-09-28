@@ -275,6 +275,17 @@ Function fieldList($table : Variant)->$result : Object
 									$result.fields.push($field)
 									
 									//______________________________________________________
+								: (PROJECT.isComputedAttribute($tableModel[$key][$attribute]))
+									
+									$field:=OB Copy:C1225($tableModel[$key][$attribute])
+									
+									$field.$label:=$linkPrefix+$field.name
+									$field.path:=$key+"."+$field.name
+									$field.$level:=$subLevel+1
+									
+									$result.fields.push($field)
+									
+									//______________________________________________________
 								Else 
 									
 									$field:=OB Copy:C1225($tableModel[$key][$attribute])
@@ -451,7 +462,7 @@ Function setTemplate($browser : Object)
 				
 				//Else
 				//$o:=New object(\
-																																																							"url"; Get localized string("res_"+This.typeForm()+"Forms"))
+																																																												"url"; Get localized string("res_"+This.typeForm()+"Forms"))
 				//End if
 				
 				This:C1470.form.form.call(New collection:C1472("initBrowser"; $o))

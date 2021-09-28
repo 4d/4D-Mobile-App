@@ -363,16 +363,36 @@ If (Num:C11($tableID)>0)
 																	
 																End if 
 															End if 
+															
+														Else 
+															
+															//MARK:TODO
+															
 														End if 
 														
 													Else 
 														
-														If ($dataClass[$field.name]=Null:C1517)\
-															 | (PROJECT.dataModel[$tableID][$field.name]=Null:C1517)
+														var $c : Collection
+														$c:=Split string:C1554($field.path; ".")
+														
+														If ($c.length=1)
 															
-															$class:="label error"
-															$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($field.name))
+															If ($dataClass[$field.name]=Null:C1517)\
+																 | (PROJECT.dataModel[$tableID][$field.name]=Null:C1517)
+																
+																$class:="label error"
+																$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($field.name))
+																
+															End if 
 															
+														Else 
+															
+															If (ds:C1482[$dataClass[$c[0]].relatedDataClass][$c[1]]=Null:C1517)
+																
+																$class:="label error"
+																$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($c[1]))
+																
+															End if 
 														End if 
 													End if 
 													

@@ -425,14 +425,25 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 									: (This:C1470.isComputedAttribute($relatedField))
 										
 										$related:=OB Copy:C1225($relatedField)
-										$related.path:=$o.name+"."+$related.name
+										$related.path:=$o.name
 										$related.tableNumber:=$result.relatedTableNumber
 										$result.fields.push($related)
 										
 										//______________________________________________________
+									: (This:C1470.isRelatedEntity($field))
+										
+										// NOT MANAGED
+										
+										//______________________________________________________
+									: (This:C1470.isRelatedEntities($field))
+										
+										// NOT MANAGED
+										
+										//______________________________________________________
 									Else 
 										
-										// A "Case of" statement should never omit "Else"
+										ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
+										
 										//______________________________________________________
 								End case 
 							End for each 
@@ -453,8 +464,23 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 								"isToMany"; True:C214))
 							
 						End if 
+						
 						//…………………………………………………………………………………………………
 					: (This:C1470.isComputedAttribute($o))  // Computed
+						
+						
+						// #TEMPO
+						$o.valueType:=$o.type
+						$o.path:=$o.name
+						$o.type:=-3
+						$o.computed:=True:C214
+						$o.relatedTableNumber:=$result.relatedTableNumber
+						$result.fields.push($o)
+						
+						//…………………………………………………………………………………………………
+					Else 
+						
+						//ASSERT(Not(DATABASE.isMatrix); "😰 I wonder why I'm here")
 						
 						//___________________________________________
 				End case 
@@ -473,7 +499,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 			//…………………………………………………………………………………………………
 		Else 
 			
-			// <NOTHING MORE TO DO>
+			ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
 			
 			//…………………………………………………………………………………………………
 	End case 

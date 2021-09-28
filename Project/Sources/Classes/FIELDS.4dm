@@ -359,10 +359,7 @@ Function getFieldList()->$result : Object
 										$field:=$table[$key][$subKey]
 										$field.id:=Num:C11($subKey)
 										
-/* TEMPO */$result.tableNumbers.push(_o_structure(New object:C1471(\
-"action"; "tableNumber"; \
-"name"; $table[$key].relatedDataClass)).tableNumber)
-										
+										$result.tableNumbers.push(ds:C1482[$table[$key].relatedDataClass].getInfo().tableNumber)
 										$result.ids.push($field.id)
 										$result.names.push($field.name)
 										$result.paths.push($key+"."+$field.name)
@@ -371,6 +368,55 @@ Function getFieldList()->$result : Object
 										$result.shortLabels.push($field.shortLabel)
 										$result.iconPaths.push(String:C10($field.icon))
 										$result.icons.push(PROJECT.getIcon(String:C10($field.icon)))
+										
+										If ($field.format#Null:C1517)
+											
+											$formater:=cs:C1710.formater.new($field.format)
+											
+											If ($formater.host)
+												
+												If (Not:C34($formater.isValid()))
+													
+													$label:=$formater.label
+													$result.formatColors[$result.formats.length]:=EDITOR.errorColor  // Missing or invalid
+													
+												Else 
+													
+													$label:=$formater.source.name
+													
+												End if 
+												
+											Else 
+												
+												$label:=EDITOR.str.setText("_"+$field.format).localized()
+												
+											End if 
+											
+										Else 
+											
+											$label:=EDITOR.str.setText("_"+String:C10(SHARED.defaultFieldBindingTypes[$field.fieldType])).localized()
+											
+										End if 
+										
+										$result.formats.push($label)
+										
+										//______________________________________________________
+									: (PROJECT.isComputedAttribute($table[$key][$subKey]))
+										
+										$field:=$table[$key][$subKey]
+										
+										$result.tableNumbers.push(ds:C1482[$table[$key].relatedDataClass].getInfo().tableNumber)
+										$result.ids.push(-3)
+										$result.names.push($field.name)
+										$result.paths.push($key+"."+$field.name)
+										$result.types.push($field.fieldType)
+										$result.labels.push($field.label)
+										$result.shortLabels.push($field.shortLabel)
+										$result.iconPaths.push(String:C10($field.icon))
+										$result.icons.push(PROJECT.getIcon(String:C10($field.icon)))
+										
+										$result.formatColors.push(Foreground color:K23:1)
+										$result.nameColors.push(Foreground color:K23:1)
 										
 										If ($field.format#Null:C1517)
 											
@@ -628,7 +674,15 @@ Function field($row : Integer)->$field : Object
 		
 		If ($c.length>1)  // RelatedDataclass
 			
-			$field:=Form:C1466.dataModel[String:C10(This:C1470.tableNumber)][$c[0]][String:C10((This:C1470.ids.pointer)->{$row})]
+			If (Num:C11((This:C1470.ids.pointer)->{$row})=-3)  // Computed attribute
+				
+				$field:=Form:C1466.dataModel[String:C10(This:C1470.tableNumber)][$c[0]][$c[1]]
+				
+			Else 
+				
+				$field:=Form:C1466.dataModel[String:C10(This:C1470.tableNumber)][$c[0]][String:C10((This:C1470.ids.pointer)->{$row})]
+				
+			End if 
 			
 		Else 
 			
