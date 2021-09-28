@@ -137,7 +137,7 @@ Function init()
 		This:C1470.defaultValue; \
 		This:C1470.description)
 	
-	If (FEATURE.with("predictiveEntryInActionParam"))
+	If (FEATURE.with("predictiveEntryInActionParam"))  //🚧
 		
 		This:C1470.subform("predicting")
 		
@@ -174,7 +174,7 @@ Function onLoad()
 	// Add the events that we cannot select in the form properties 😇
 	This:C1470.appendEvents(On Alternative Click:K2:36)
 	
-	If (FEATURE.with("predictiveEntryInActionParam"))
+	If (FEATURE.with("predictiveEntryInActionParam"))  //🚧
 		
 		This:C1470.predicting.setWidth(This:C1470.paramNameBorder.dimensions.width)\
 			.setCoordinates(This:C1470.paramNameBorder.coordinates.left; This:C1470.paramNameBorder.coordinates.bottom-1)
@@ -188,7 +188,7 @@ Function onLoad()
 		
 	End if 
 	
-	If (FEATURE.with("customActionFormatter"))
+	If (FEATURE.with("customActionFormatter"))  //🚧
 		
 		This:C1470.formatLabel.setTitle("inputControl")
 		
@@ -238,7 +238,7 @@ Function restoreContext()
 				$index:=This:C1470.action.parameters.indexOf(This:C1470.current)
 				This:C1470.parameters.select($index+1)
 				
-				If (FEATURE.with("predictiveEntryInActionParam"))
+				If (FEATURE.with("predictiveEntryInActionParam"))  //🚧
 					
 					This:C1470.paramName.focus()
 					
@@ -255,7 +255,7 @@ Function restoreContext()
 					$index:=This:C1470.action.parameters.indexOf(This:C1470.$current)
 					This:C1470.parameters.select($index+1)
 					
-					If (FEATURE.with("predictiveEntryInActionParam"))
+					If (FEATURE.with("predictiveEntryInActionParam"))  //🚧
 						This:C1470.paramName.focus()
 						
 					End if 
@@ -280,7 +280,7 @@ Function update()
 	This:C1470.title.hide()
 	This:C1470.field.hide()
 	
-	If (FEATURE.with("predictiveEntryInActionParam"))
+	If (FEATURE.with("predictiveEntryInActionParam"))  //🚧
 		
 		This:C1470.predicting.hide()
 		
@@ -325,7 +325,7 @@ Function update()
 					//______________________________________________________
 				: (String:C10($action.preset)="share")
 					
-					If (FEATURE.with("sharedActionWithDescription"))
+					If (FEATURE.with("sharedActionWithDescription"))  //🚧
 						
 						This:C1470.goToPage(2)
 						This:C1470.title.setTitle("description").show()
@@ -362,7 +362,7 @@ Function update()
 						This:C1470.field.show()  // Linked to a field
 						This:C1470.paramName.disable()  // The name isn't editable
 						
-						If (FEATURE.with("predictiveEntryInActionParam"))
+						If (FEATURE.with("predictiveEntryInActionParam"))  //🚧
 							
 							This:C1470.sortMenu.show()
 							
@@ -883,7 +883,7 @@ Function doAddParameterMenu($target : Object; $update : Boolean)
 			
 			$field:=$c.query("name = :1"; $menu.choice).pop()
 			
-			If (FEATURE.with("predictiveEntryInActionParam"))
+			If (FEATURE.with("predictiveEntryInActionParam"))  //🚧
 				
 				If ($isSortAction)
 					
@@ -1078,7 +1078,7 @@ Function getFormats()->$formats : Object
 	
 	$formats:=JSON Parse:C1218(File:C1566("/RESOURCES/actionParameters.json").getText()).formats
 	
-	If (FEATURE.with("customActionFormatterWithCode"))
+	If (FEATURE.with("customActionFormatterWithCode"))  //🚧
 		
 		$folder:=This:C1470.path.hostInputControls()
 		
@@ -1204,7 +1204,7 @@ Function doFormatMenu()
 			
 		End for each 
 		
-		If (FEATURE.with("newActionFormatterChoiceList"))
+		If (FEATURE.with("newActionFormatterChoiceList"))  //🚧
 			
 			This:C1470._actionFormatterChoiceList($menu; $type)
 			
@@ -1235,7 +1235,7 @@ Function doFormatMenu()
 					
 				End for each 
 				
-				If (FEATURE.with("newActionFormatterChoiceList"))
+				If (FEATURE.with("newActionFormatterChoiceList"))  //🚧
 					
 					This:C1470._actionFormatterChoiceList($subMenu; $type)
 					
@@ -1446,7 +1446,7 @@ Function doDataSourceMenu()
 		End if 
 	End if 
 	
-	If (FEATURE.with("listEditor"))
+	If (FEATURE.with("listEditor"))  //🚧
 		
 		// Allow to create a custom input control
 		$menu.append("newChoiceList"; "new")
@@ -1461,7 +1461,6 @@ Function doDataSourceMenu()
 				//______________________________________________________
 			: ($menu.choice="new")
 				
-				//MARK:#TO_DO
 				This:C1470.doNewList()
 				
 				//______________________________________________________
@@ -1478,6 +1477,7 @@ Function doDataSourceMenu()
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
+	//MARK:WIP 
 Function doNewList()
 	
 	var $key; $name : Text
@@ -1584,7 +1584,7 @@ Function _actionFormatterChoiceList($menu : cs:C1710.menu; $type : Text)
 		
 		$menu.line()
 		
-		If (FEATURE.with("customActionFormatter"))
+		If (FEATURE.with("customActionFormatter"))  //🚧
 			
 			var $control; $parameter : Text
 			var $selected : Boolean
@@ -1660,7 +1660,7 @@ Function _actionFormatterChoiceList($menu : cs:C1710.menu; $type : Text)
 		End if 
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === ===
+	// === === === === === === === === === === === === === === === === === === === === ===
 Function doRule($name : Text)
 	
 	var $value : Variant

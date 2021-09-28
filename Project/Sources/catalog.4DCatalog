@@ -41,7 +41,7 @@
 		<table_extra input_form="Form1" output_form="Form2">
 			<editor_table_info fields_ordering="2" displayable_fields_count="10">
 				<color red="237" green="211" blue="181" alpha="255"/>
-				<coordinates left="16.58984375" top="379.1875" width="153" height="251.33203125"/>
+				<coordinates left="0" top="379.1875" width="153" height="251.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -53,7 +53,7 @@
 		<table_extra input_form="Input" output_form="Output">
 			<editor_table_info displayable_fields_count="3">
 				<color red="255" green="38" blue="0" alpha="255"/>
-				<coordinates left="436.96990966801" top="0" width="121" height="104.33203125"/>
+				<coordinates left="423.85754394531" top="0" width="121" height="104.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -82,7 +82,7 @@
 		<table_extra input_form="Input" output_form="Output">
 			<editor_table_info displayable_fields_count="7">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="588.190612793" top="195.04699707031" width="239" height="188.33203125"/>
+				<coordinates left="649" top="196.53088378906" width="239" height="188.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -96,7 +96,7 @@
 		<table_extra input_form="Input" output_form="Output">
 			<editor_table_info displayable_fields_count="5">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="428.92578125" top="680.484375" width="98.27734375" height="159.0546875"/>
+				<coordinates left="423.85754394531" top="680.484375" width="98.27734375" height="159.0546875"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -126,7 +126,7 @@
 		<table_extra input_form="Input" output_form="Form1">
 			<editor_table_info displayable_fields_count="15">
 				<color red="175" green="188" blue="191" alpha="255"/>
-				<coordinates left="14" top="0" width="153" height="356.33203125"/>
+				<coordinates left="0" top="0" width="153" height="356.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -153,9 +153,9 @@
 		</field>
 		<primary_key field_name="ID" field_uuid="0A26D100922E475A92C49657B6C02271"/>
 		<table_extra input_form="Input" output_form="Output">
-			<editor_table_info displayable_fields_count="8">
+			<editor_table_info displayable_fields_count="6">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="14.92578125" top="662.53125" width="138.70056152344" height="218.55700683594"/>
+				<coordinates left="216.6845703125" top="827.93493652344" width="138.70056152344" height="175.48889160157"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -180,7 +180,7 @@
 		<table_extra input_form="Input" output_form="Output">
 			<editor_table_info fields_ordering="1" displayable_fields_count="4">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="223.94409179688" top="680.11706542969" width="140" height="125.33203125"/>
+				<coordinates left="423.85754394531" top="863.88439941407" width="140" height="125.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -199,7 +199,7 @@
 		<table_extra input_form="Input" output_form="Output">
 			<editor_table_info displayable_fields_count="4">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="352.349609375" top="141.13343811035" width="205" height="125.33203125"/>
+				<coordinates left="423.85754394531" top="141.13343811035" width="205" height="125.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -217,7 +217,7 @@
 		<table_extra input_form="" output_form="">
 			<editor_table_info displayable_fields_count="3">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="833.12109375" top="443.41796875" width="140" height="104.33203125"/>
+				<coordinates left="833" top="443" width="140" height="104.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -227,7 +227,7 @@
 		<table_extra input_form="Input" output_form="Output">
 			<editor_table_info fields_ordering="1" displayable_fields_count="1">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="219.7936706543" top="4.6144714355469" width="125" height="62.33203125"/>
+				<coordinates left="216.6845703125" top="0" width="125" height="62.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -247,7 +247,7 @@
 		<table_extra input_form="" output_form="">
 			<editor_table_info fields_ordering="1" displayable_fields_count="1">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="452.66177368164" top="298.95483398438" width="107.8515625" height="64.09765625"/>
+				<coordinates left="423.85754394531" top="298.95483398438" width="107.8515625" height="64.09765625"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -266,7 +266,7 @@
 		<table_extra input_form="Form2" output_form="Form1">
 			<editor_table_info displayable_fields_count="4">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="227" top="443" width="140" height="125.33203125"/>
+				<coordinates left="216.6845703125" top="443" width="140" height="125.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -278,7 +278,7 @@
 		<table_extra input_form="Input" output_form="Output">
 			<editor_table_info displayable_fields_count="3">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="834.046875" top="781.75" width="107" height="104.33203125"/>
+				<coordinates left="833" top="781.75" width="107" height="104.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -308,7 +308,7 @@
 		<table_extra input_form="" output_form="">
 			<editor_table_info displayable_fields_count="3">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="428" top="443" width="103" height="104.33203125"/>
+				<coordinates left="423.85754394531" top="443" width="103" height="104.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -339,9 +339,9 @@
 		<field name="__PrimaryKey" uuid="C087A5F4AA344B98ADF3C93561C94F45" type="10" limiting_length="255" id="5"/>
 		<primary_key field_name="ID" field_uuid="02F6BC569ACD40C49F507B226C7EF53F"/>
 		<table_extra>
-			<editor_table_info fields_ordering="1" displayable_fields_count="6">
-				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="40" top="1028" width="120" height="167.33203125"/>
+			<editor_table_info fields_ordering="1" displayable_fields_count="5">
+				<color red="255" green="38" blue="0" alpha="255"/>
+				<coordinates left="1066.1666870117" top="0" width="192.77905273438" height="155.77716064453"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -349,12 +349,18 @@
 		<field name="ID" uuid="87AFAE6B7DD645E283CC7951EF00451E" type="4" unique="true" autosequence="true" not_null="true" id="1"/>
 		<field name="Name" uuid="906C31FD4251452FBA249C3E1CDEBE26" type="10" never_null="true" id="2"/>
 		<field name="location" uuid="7D9FB2C26CFC483DA09DCD8666CBD128" type="21" blob_switch_size="2147483647" never_null="true" id="3"/>
-		<field name="__GlobalStamp" uuid="6DA87EADF09C4F9DA8977887D71C511C" type="5" never_null="true" id="4"/>
+		<field name="__GlobalStamp" uuid="6DA87EADF09C4F9DA8977887D71C511C" type="5" never_null="true" id="4">
+			<field_extra>
+				<editor_field_info>
+					<color red="216" green="30" blue="5" alpha="255"/>
+				</editor_field_info>
+			</field_extra>
+		</field>
 		<primary_key field_name="ID" field_uuid="87AFAE6B7DD645E283CC7951EF00451E"/>
 		<table_extra>
-			<editor_table_info displayable_fields_count="6">
+			<editor_table_info displayable_fields_count="4">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="420.80187988282" top="873.4848022461" width="120" height="167.33203125"/>
+				<coordinates left="216.6845703125" top="638.43823242188" width="151.1494140625" height="140.19342041016"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -363,12 +369,18 @@
 		<field name="officeID" uuid="59DA89D690934C6A92C73C86402A86CE" type="4" never_null="true" id="2"/>
 		<field name="employeeID" uuid="9DDD8593B07D4FF99077255CD0CE6FA6" type="4" never_null="true" id="3"/>
 		<field name="since" uuid="1BD8A98D4E4E40EBB409FC7EAF42BC3A" type="8" never_null="true" id="4"/>
-		<field name="__GlobalStamp" uuid="19840AA68D2B477CB74348C07EF93FCA" type="5" never_null="true" id="5"/>
+		<field name="__GlobalStamp" uuid="19840AA68D2B477CB74348C07EF93FCA" type="5" never_null="true" id="5">
+			<field_extra>
+				<editor_field_info>
+					<color red="216" green="30" blue="5" alpha="255"/>
+				</editor_field_info>
+			</field_extra>
+		</field>
 		<primary_key field_name="ID" field_uuid="D8E83F00B3F54EC2B7AB21C3AC0978F4"/>
 		<table_extra>
-			<editor_table_info displayable_fields_count="6">
+			<editor_table_info displayable_fields_count="5">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="193.00732421875" top="869.25775146484" width="120" height="167.33203125"/>
+				<coordinates left="0" top="693.47332763671" width="142.39007568359" height="165.66552734375"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -380,7 +392,7 @@
 		<table_extra>
 			<editor_table_info displayable_fields_count="6">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="587.21643066408" top="2.5033264160156" width="269.05310058594" height="171.37194824219"/>
+				<coordinates left="649" top="0" width="269.05310058594" height="171.37194824219"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -727,6 +739,11 @@
 			<table_ref uuid="4BBF8D8EC82D417789D72BD09FAABEFA" name="COMPOSITE PRIMARY KEY"/>
 		</field_ref>
 	</index>
+	<index kind="regular" uuid="8190770A42FC4F4695B579645E8E9748" type="7">
+		<field_ref uuid="19840AA68D2B477CB74348C07EF93FCA" name="__GlobalStamp">
+			<table_ref uuid="DE40BD82B9154CEB8926B7B9CC6B43D5" name="EmployesOffices"/>
+		</field_ref>
+	</index>
 	<index kind="regular" uuid="846B2AC9634646BD8026EE56940334E5" type="7">
 		<field_ref uuid="3446D143AA2B4BEFB57C38620EE2C14F" name="Field_3">
 			<table_ref uuid="30E13DEEB95C4BABA4D0449FDF2C55DC" name="Table_3"/>
@@ -790,6 +807,11 @@
 	<index kind="regular" name="__GlobalStamp_themes" uuid="C3E26F19348C4CCEA75E0AB9FB309863" type="7">
 		<field_ref uuid="AA7DF745B9C449249750BEC33C40DAE9" name="__GlobalStamp">
 			<table_ref uuid="ACFEC38FF2024206A414930D622441CA" name="Themes"/>
+		</field_ref>
+	</index>
+	<index kind="regular" uuid="C50C7E9CDF4643E1B5C97A71CF0D69C7" type="7">
+		<field_ref uuid="6DA87EADF09C4F9DA8977887D71C511C" name="__GlobalStamp">
+			<table_ref uuid="9530473090624E829F824BFFA4F81FC0" name="Offices"/>
 		</field_ref>
 	</index>
 	<index kind="regular" unique_keys="true" uuid="C5AA3ABD456646B7B1EDE899FAE4D27C" type="7">

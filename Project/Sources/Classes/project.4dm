@@ -795,15 +795,15 @@ Function isComputedAttribute($field : Object; $tableName : Text)->$is : Boolean
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if the 4D Type is a Numeric type
-Function isNumeric($type : Integer)->$isNumeric : Boolean
+Function isNumeric($type : Integer)->$is : Boolean
 	
-	$isNumeric:=(New collection:C1472(Is integer:K8:5; Is longint:K8:6; Is integer 64 bits:K8:25; Is real:K8:4; _o_Is float:K8:26).indexOf($type)#-1)
+	$is:=(New collection:C1472(Is integer:K8:5; Is longint:K8:6; Is integer 64 bits:K8:25; Is real:K8:4; _o_Is float:K8:26).indexOf($type)#-1)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if the 4D Type is a String type
-Function isString($type : Integer)->$isNumeric : Boolean
+Function isString($type : Integer)->$is : Boolean
 	
-	$isNumeric:=(New collection:C1472(Is alpha field:K8:1; Is text:K8:3).indexOf($type)#-1)
+	$is:=(New collection:C1472(Is alpha field:K8:1; Is text:K8:3).indexOf($type)#-1)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if the field is sortable
