@@ -346,10 +346,10 @@ Case of
 				
 				COLLECTION TO ARRAY:C1562($c; ($form.icons.pointer())->)
 				
-				var $structure : cs:C1710.structure
-				$structure:=cs:C1710.structure.new()
-				
 				// Highlight errors
+				var $dataClass : 4D:C1709.DataClass
+				$dataClass:=ds:C1482[Table name:C256(Num:C11($context.tableNumber))]
+				
 				For ($i; 1; Size of array:C274(($form.fields.pointer())->); 1)
 					
 					LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; lk inherited:K53:26; lk font color:K53:24)
@@ -370,6 +370,14 @@ Case of
 						Else 
 							
 							LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.selectedColor; lk font color:K53:24)
+							
+						End if 
+						
+					Else 
+						
+						If ($dataClass[$o.name]=Null:C1517)
+							
+							LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color:K53:24)
 							
 						End if 
 					End if 

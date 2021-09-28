@@ -8,7 +8,7 @@
 //
 // ----------------------------------------------------
 // Declarations
-var $1 : Object
+#DECLARE($form : Object)
 
 If (False:C215)
 	C_OBJECT:C1216(tmpl_DRAW; $1)
@@ -18,7 +18,7 @@ var $background; $binding; $class; $formName; $formType; $key; $label; $name; $n
 var $style; $t; $tableID; $tips : Text
 var $found; $isToMany; $isToOne; $stop : Boolean
 var $avalaibleWidth; $count; $height; $indx : Integer
-var $context; $field; $form; $manifest; $o; $relation; $target : Object
+var $context; $field; $manifest; $o; $relation; $target : Object
 var $nodes : Collection
 var $svg : cs:C1710.svg
 var $tmpl : cs:C1710.tmpl
@@ -31,8 +31,6 @@ var $tmpl : cs:C1710.tmpl
 // Optional parameters
 If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
-	$form:=$1
-	
 	$context:=$form.$
 	$tableID:=$context.tableNum()
 	
@@ -42,6 +40,9 @@ End if
 TRY
 
 If (Num:C11($tableID)>0)
+	
+	var $dataClass : 4D:C1709.DataClass
+	$dataClass:=ds:C1482[Table name:C256(Num:C11($context.tableNumber))]
 	
 	$formType:=$context.typeForm()
 	$formName:=String:C10(Form:C1466[$formType][$tableID].form)
@@ -294,12 +295,6 @@ If (Num:C11($tableID)>0)
 															
 															$label:=Choose:C955($field.path#Null:C1517; $field.path; $field.name)
 															
-															If (ds:C1482[Table name:C256(Num:C11(panel.tableNumber))][$field.name]=Null:C1517)
-																
-																$svg.addClass("error"; $node)
-																
-															End if 
-															
 															//______________________________________________________
 													End case 
 													
@@ -372,8 +367,13 @@ If (Num:C11($tableID)>0)
 														
 													Else 
 														
-														$class:="label"
-														
+														If ($dataClass[$field.name]=Null:C1517)\
+															 | (PROJECT.dataModel[$tableID][$field.name]=Null:C1517)
+															
+															$class:="label error"
+															$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($field.name))
+															
+														End if 
 													End if 
 													
 													// Set class & tips

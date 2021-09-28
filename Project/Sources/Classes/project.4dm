@@ -1060,11 +1060,12 @@ Function labelList  // List of x
 	
 	$0:=This:C1470.label(Replace string:C233(Get localized string:C991("listOf"); "{values}"; $1))
 	
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function fieldType2type($fieldType : Integer)->$type : Text
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Convert legacy type (integer) to orda type (text)
+Function fieldType2type($legacyFieldType : Integer)->$fieldType : Text
 	
 	var $c : Collection
+	
 	$c:=New collection:C1472
 	$c[Is integer 64 bits:K8:25]:="number"
 	$c[Is alpha field:K8:1]:="string"
@@ -1078,9 +1079,9 @@ Function fieldType2type($fieldType : Integer)->$type : Text
 	$c[Is time:K8:8]:="time"
 	$c[Is date:K8:7]:="date"
 	
-	If (Asserted:C1132($fieldType<=$c.length))
+	If (Asserted:C1132($legacyFieldType<=$c.length))
 		
-		$type:=$c[$fieldType]
+		$fieldType:=$c[$legacyFieldType]
 		
 	End if 
 	
