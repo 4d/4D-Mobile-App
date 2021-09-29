@@ -44,6 +44,9 @@ If (Num:C11($tableID)>0)
 	var $dataClass : 4D:C1709.DataClass
 	$dataClass:=ds:C1482[Table name:C256(Num:C11($context.tableNumber))]
 	
+	var $tableModel : Object
+	$tableModel:=PROJECT.dataModel[$tableID]
+	
 	$formType:=$context.typeForm()
 	$formName:=String:C10(Form:C1466[$formType][$tableID].form)
 	
@@ -252,10 +255,10 @@ If (Num:C11($tableID)>0)
 															//______________________________________________________
 														: ($isToOne)
 															
-															$tips:=PROJECT.dataModel[$tableID][$field.name].label
+															$tips:=$tableModel[$field.name].label
 															$label:=cs:C1710.str.new(EDITOR.toOne).concat($field.name)
 															
-															$relation:=PROJECT.dataModel[$tableID]
+															$relation:=$tableModel
 															
 															If (Match regex:C1019("(?m-si)^%.*%$"; String:C10($relation[$field.name].format); 1))
 																
@@ -378,7 +381,7 @@ If (Num:C11($tableID)>0)
 														If ($c.length=1)
 															
 															If ($dataClass[$field.name]=Null:C1517)\
-																 | (PROJECT.dataModel[$tableID][$field.name]=Null:C1517)
+																 | (($tableModel[$field.name]=Null:C1517) & ($tableModel[String:C10($field.id)]=Null:C1517))
 																
 																$class:="label error"
 																$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($field.name))

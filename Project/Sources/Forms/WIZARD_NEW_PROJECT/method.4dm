@@ -92,11 +92,13 @@ Case of
 		
 		If (Is Windows:C1573 | Not:C34(FEATURE.with("android")))
 			
-			Form:C1466._new.moveAndResizeVertically(50; -120)
+			Form:C1466._new.moveAndResizeVertically(50; -90)
 			Form:C1466._listbox:=cs:C1710.listbox.new("list")
 			Form:C1466._listbox.resizeVertically(50).setRowsHeight(Choose:C955(Is macOS:C1572; 6; 5); lk lines:K53:23)
 			
 		End if 
+		
+		Form:C1466._new.show()
 		
 		SET TIMER:C645(-1)
 		

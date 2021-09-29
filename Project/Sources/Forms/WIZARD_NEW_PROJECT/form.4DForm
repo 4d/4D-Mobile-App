@@ -147,7 +147,8 @@
 					"events": [
 						"onGettingFocus"
 					],
-					"dataSource": ""
+					"dataSource": "",
+					"visibility": "hidden"
 				},
 				"message.back": {
 					"type": "picture",
@@ -219,13 +220,14 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 384,
+	"geometryStamp": 385,
 	"editor": {
-		"activeView": "message",
+		"activeView": "View 1",
 		"defaultView": "View 1",
 		"views": {
 			"View 1": {},
 			"message": {
+				"visible": false,
 				"objects": [
 					"message.back",
 					"message.button",
