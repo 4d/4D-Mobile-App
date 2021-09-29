@@ -651,14 +651,13 @@ Function setTab()
 	// Returns the field associated with the line
 Function field($row : Integer)->$field : Object
 	
-	var $c : Collection
 	var $t : Text
+	var $c : Collection
 	
 	If (Num:C11(This:C1470.tabSelector.data)=1)
 		
-		//%W-533.3
-		$c:=Split string:C1554((This:C1470.fieldList.columns["fields"].pointer)->{$row}; ".")
-		//%W+533.3
+		$t:=(This:C1470.fieldList.columns["names"].pointer)->{$row}
+		$c:=Split string:C1554($t; ".")
 		
 		If ($c.length>1)
 			
@@ -670,7 +669,8 @@ Function field($row : Integer)->$field : Object
 	
 	If ($field=Null:C1517)
 		
-		$c:=Split string:C1554((This:C1470.names.pointer)->{$row}; ".")
+		$t:=(This:C1470.names.pointer)->{$row}
+		$c:=Split string:C1554($t; ".")
 		
 		If ($c.length>1)  // RelatedDataclass
 			
@@ -776,9 +776,7 @@ Function _updateForms($type : Text; $field : Object; $row : Integer)
 		
 		If ($field.name=Null:C1517)  //relation
 			
-			//%W-533.3
-			$o:=$o.fields.query("name = :1"; This:C1470.names.pointer->{$row}).pop()
-			//%W+533.3
+			$o:=$o.fields.query("name = :1"; (This:C1470.names.pointer)->{$row}).pop()
 			
 		Else 
 			

@@ -168,7 +168,7 @@ Else   // <== WIDGETS METHOD
 					
 					// Update data model
 					//%W-533.3
-					$field[Choose:C955($e.columnName="title"; "format"; $e.columnName)]:=(OBJECT Get pointer:C1124(Object named:K67:5; $e.columnName))->{$e.row}
+					$field[Choose:C955($e.columnName="title"; "format"; $e.columnName)]:=($ƒ.fieldList.columns["shortLabel"].pointer)->{$e.row}
 					//%W+533.3
 					
 					$ƒ.updateForms($field; $e.row)

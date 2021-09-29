@@ -369,7 +369,7 @@ If ($cacheFile.exists)
 													$relatedField.current:=$relatedCatalog.query("name = :1"; $relatedItem.key).pop()
 													$relatedField.missing:=$relatedField.current=Null:C1517
 													$relatedField.nameMismatch:=Not:C34($str.setText($relatedField.name).equal($relatedField.current.name))
-													$relatedField.typeMismatch:=$relatedField.type#Num:C11($relatedField.current.type)
+													$relatedField.typeMismatch:=$relatedField.fieldType#Num:C11($relatedField.current.fieldType)
 													
 													If ($relatedField.missing | $relatedField.nameMismatch | $relatedField.typeMismatch)
 														
