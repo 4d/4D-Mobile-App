@@ -66,12 +66,14 @@ private fun String.lowerCustomProperties() =
         this
     else
         if (this.startsWith("__") && this.endsWith("Key"))
-            this.removeSuffix("Key").toLowerCase(Locale.getDefault()) + "Key"
+            this.removeSuffix("Key").lowercase(Locale.getDefault()) + "Key"
         else
-            this.toLowerCase(Locale.getDefault())
+            this.lowercase(Locale.getDefault())
 
 private fun String.decapitalizeExceptID() = 
-    if (this == "ID") this.toLowerCase(Locale.getDefault()) else this.decapitalize(Locale.getDefault())
+    if (this == "ID") this.lowercase(Locale.getDefault()) else this.replaceFirstChar {
+        it.lowercase(Locale.getDefault())
+    }
 
 private val REGEX_UNACCENT = "\\p{InCombiningDiacriticalMarks}+".toRegex()
 

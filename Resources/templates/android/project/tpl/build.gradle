@@ -9,14 +9,12 @@ buildscript {
         // in the individual module build.gradle files
     }
     repositories {
-        google()
         maven { url file(project.sdkPath) }
     }
 }
 
 allprojects {
     repositories {
-        google()
         maven { url file(project.sdkPath) }
     }
 }
