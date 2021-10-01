@@ -5,7 +5,6 @@
     "postBuild": {
         "InfoPlist": true,
         "buildNumber": true,
-        "owner": "4D SAS",
         "copy": [
             "4D Mobile App.htm"
         ]
