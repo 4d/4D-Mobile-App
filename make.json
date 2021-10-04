@@ -3,8 +3,6 @@
         "4D Progress"
     ],
     "postBuild": {
-        "InfoPlist": true,
-        "buildNumber": true,
         "copy": [
             "4D Mobile App.htm"
         ]
