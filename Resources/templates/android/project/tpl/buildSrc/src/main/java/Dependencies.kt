@@ -105,6 +105,7 @@ object Libs {
     const val androidx_room_runtime = "androidx.room:room-runtime:${Versions.room}"
     const val androidx_room_compiler = "androidx.room:room-compiler:${Versions.room_compiler}"
     const val sqlite = "androidx.sqlite:sqlite-ktx:${Versions.sqlite}"
+    const val sqlite_jdbc = "org.xerial:sqlite-jdbc:${Versions.sqlite_jdbc}"
 
     // Glide
     const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
