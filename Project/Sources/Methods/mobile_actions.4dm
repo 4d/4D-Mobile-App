@@ -377,6 +377,10 @@ Case of
 											End if 
 										End if 
 									End if 
+									
+									If ($manifest.rules#Null:C1517)
+										$parameter.rules:=$manifest.rules
+									End if 
 								End if 
 								
 							: ($parameter.fieldNumber#Null:C1517)  // Linked to a field
