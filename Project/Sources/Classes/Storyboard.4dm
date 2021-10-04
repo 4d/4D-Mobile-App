@@ -594,8 +594,7 @@ Function relationSegue($relation : Object)
 	$0:=$Txt_buffer
 	
 Function isRelationField($field : Object)->$is : Boolean
-	$is:=((Num:C11($field.id)=0) & (Num:C11($field.type)#-3/*Computed*/))
-	
+	$is:=PROJECT.isRelation($field)
 	
 Function injectElement
 	C_OBJECT:C1216($Obj_field; $1; $Obj_tags; $2; $Obj_template; $3; $Obj_out; $6)

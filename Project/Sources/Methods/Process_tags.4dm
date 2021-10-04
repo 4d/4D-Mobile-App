@@ -472,7 +472,7 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 					Choose:C955(Bool:C1537($Obj_tags.field.isToMany); "YES"; "NO")\
 					))
 				
-				If ((Num:C11($Obj_tags.field.id)=0) & (Num:C11($Obj_tags.field.type)#-3/*Computed*/))  // isRelation
+				If (PROJECT.isRelation($Obj_tags.field))
 					
 					// If use field as relation, remove these lines if use ($Obj_tags.relation#Null)
 					$Col_oldStrings.push("___DESTINATION___")
