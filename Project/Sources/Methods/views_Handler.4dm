@@ -357,7 +357,7 @@ Case of
 					$o:=($form.fields.pointer())->{$i}
 					
 					If ($o.fieldType=8858)\
-						 | ($o.fieldType=8859)  // relation
+						 | ($o.fieldType=8859)  // Relation
 						
 						If (Not:C34(Bool:C1537($o.$added)))
 							
@@ -375,7 +375,16 @@ Case of
 						
 					Else 
 						
-						If ($dataClass[$o.name]=Null:C1517)
+						$c:=Split string:C1554($o.path; ".")
+						$o:=$dataClass
+						
+						For each ($t; $c)
+							
+							$o:=$o[$t]
+							
+						End for each 
+						
+						If ($o=Null:C1517)
 							
 							LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color:K53:24)
 							

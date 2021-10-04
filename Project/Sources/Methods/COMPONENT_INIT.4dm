@@ -113,14 +113,7 @@ If (OB Is empty:C1297(SHARED)) | $reset
 		"version"; COMPONENT_Infos("componentVersion"); \
 		"build"; Num:C11(COMPONENT_Infos("componentBuild")))
 	
-	$o:=xml_fileToObject(Get 4D folder:C485(Database folder:K5:14)+"Info.plist").value.plist.dict
-	$l:=$o.key.extract("$").indexOf("CFBundleVersion")
-	
-	If ($l#-1)
-		
-		SHARED.componentBuild:=String:C10($o.string[$l].$)
-		
-	End if 
+	SHARED.componentBuild:=SHARED.component.build
 	
 	SHARED.extension:=".4dmobileapp"
 	SHARED.archiveExtension:=".zip"

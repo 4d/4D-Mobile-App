@@ -62,7 +62,16 @@ Case of
 		If (File:C1566("/PACKAGE/Info.plist").exists)
 			
 			$o:=plist_toObject(File:C1566("/PACKAGE/Info.plist").getText())
-			$info:=$o.CFBundleVersion.string
+			
+			If ($o.CFBundleVersion.string#Null:C1517)
+				
+				$info:=$o.CFBundleVersion.string
+				
+			Else 
+				
+				$info:=COMPONENT_Infos("ideBuildVersion")
+				
+			End if 
 			
 		Else 
 			
@@ -77,7 +86,21 @@ Case of
 			
 			$o:=plist_toObject(File:C1566("/PACKAGE/Info.plist").getText())
 			
-			$info:=$o.CFBundleShortVersionString.string+" ("+$o.CFBundleVersion.string+")"
+			If ($o.CFBundleShortVersionString.string#Null:C1517)
+				
+				$info:=$o.CFBundleShortVersionString.string
+				
+				If ($o.CFBundleVersion.string#Null:C1517)
+					
+					$info:=$info+" ("+$o.CFBundleVersion.string+")"
+					
+				End if 
+				
+			Else 
+				
+				$info:=COMPONENT_Infos("ideVersion")+" ("+COMPONENT_Infos("ideBuildVersion")+")"
+				
+			End if 
 			
 		Else 
 			
