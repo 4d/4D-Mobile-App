@@ -346,7 +346,7 @@ Case of
 				
 				COLLECTION TO ARRAY:C1562($c; ($form.icons.pointer())->)
 				
-				// Highlight errors
+				// *HIGHLIGHT ERRORS
 				var $dataClass : 4D:C1709.DataClass
 				$dataClass:=ds:C1482[Table name:C256(Num:C11($context.tableNumber))]
 				
@@ -356,40 +356,38 @@ Case of
 					
 					$o:=($form.fields.pointer())->{$i}
 					
-					If ($o.fieldType=8858)\
-						 | ($o.fieldType=8859)  // Relation
-						
-						If (Not:C34(Bool:C1537($o.$added)))
+					Case of 
 							
-							If ($datamodel[String:C10($o.relatedTableNumber)]=Null:C1517)
+							//______________________________________________________
+						: ($o.fieldType=8858)\
+							 | ($o.fieldType=8859)  // Relation
+							
+							If (Not:C34(Bool:C1537($o.$added)))
 								
-								LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color:K53:24)
+								If ($datamodel[String:C10($o.relatedTableNumber)]=Null:C1517)
+									
+									LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color:K53:24)
+									
+								End if 
+								
+							Else 
+								
+								LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.selectedColor; lk font color:K53:24)
 								
 							End if 
 							
+							//______________________________________________________
+						: (PROJECT.isAvailable($dataClass; $o.path))
+							
+							// <NOTHING MORE TO DO>
+							
+							//______________________________________________________
 						Else 
-							
-							LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.selectedColor; lk font color:K53:24)
-							
-						End if 
-						
-					Else 
-						
-						$c:=Split string:C1554($o.path; ".")
-						$o:=$dataClass
-						
-						For each ($t; $c)
-							
-							$o:=$o[$t]
-							
-						End for each 
-						
-						If ($o=Null:C1517)
 							
 							LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color:K53:24)
 							
-						End if 
-					End if 
+							//______________________________________________________
+					End case 
 				End for 
 				
 				$form.fieldGroup.show()
