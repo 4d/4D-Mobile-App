@@ -246,6 +246,7 @@ Function copyDataSet
 Function copyIcons
 	var $0 : Object
 	var $1 : Object  // Datamodel object
+	var $2 : Collection  // Actions collection
 	
 	var $tableIcons : 4D:C1709.Folder
 	
@@ -318,6 +319,34 @@ Function copyIcons
 			End for each 
 			
 		End for each 
+		
+		// Actions images
+		If ($2#Null:C1517)
+			
+			var $shouldCreateMissingActionIcon : Boolean
+			
+			$shouldCreateMissingActionIcon:=This:C1470.willRequireActionIcons($2)
+			
+			var $action : Object
+			
+			For each ($action; $2)
+				
+				// Check for action icon
+				var $Obj_handleAction : Object
+				
+				$Obj_handleAction:=This:C1470.handleActionIcon($action; $shouldCreateMissingActionIcon)
+				
+				If (Not:C34($Obj_handleAction.success))
+					
+					$0.success:=False:C215
+					$0.errors.combine($Obj_handleAction.errors)
+					
+					// Else : all ok
+				End if 
+				
+			End for each 
+			// Else : no action defined
+		End if 
 		
 		// Convert SVG to XML
 		This:C1470.vdtool.convert(This:C1470.drawableFolder; This:C1470.drawableFolder)
@@ -423,6 +452,35 @@ Function willRequireFieldIcons
 		End if 
 		
 	End for each 
+	
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function willRequireActionIcons
+	var $0 : Boolean
+	var $1 : Collection  // actions collection
+	var $action : Object
+	
+	$0:=False:C215
+	
+	For each ($action; $1)  // For each action
+		
+		If ($action.icon#Null:C1517)
+			
+			If (Value type:C1509($action.icon)=Is text:K8:3)
+				
+				If ($action.icon#"")
+					
+					$0:=True:C214
+					
+				End if 
+				
+			End if 
+			
+		End if 
+		
+	End for each 
+	
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
@@ -679,6 +737,90 @@ Function handleFieldIcon
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
+Function handleActionIcon
+	var $0 : Object
+	var $1 : Object  // Action object
+	var $2 : Boolean  // if should create icon if missing
+	
+	var $currentFile : 4D:C1709.File
+	var $shouldCreateMissingActionIcon : Boolean
+	var $action : Object
+	
+	$0:=New object:C1471(\
+		"success"; True:C214; \
+		"errors"; New collection:C1472)
+	
+	$action:=$1
+	$shouldCreateMissingActionIcon:=$2
+	
+	// Get defined icon
+	If ($action.icon#Null:C1517)
+		
+		If (Value type:C1509($action.icon)=Is text:K8:3)
+			
+			var $iconPath : Text
+			
+			$iconPath:=$action.icon
+			
+			If ($iconPath#"")
+				
+				$currentFile:=This:C1470.path.icon($iconPath)
+				
+				// Else : icon empty
+			End if 
+			
+			// Else : field.icon is not Text
+		End if 
+		
+		// Else : no icon
+	End if 
+	
+	// Create icon if missing
+	If ((Not:C34(Bool:C1537($currentFile.exists))) & ($shouldCreateMissingActionIcon=True:C214))
+		
+		var $Obj_createIcon : Object
+		
+		$Obj_createIcon:=This:C1470.createIconAssets($action)
+		
+		If ($Obj_createIcon.success)
+			
+			$currentFile:=$Obj_createIcon.icon
+			
+		Else 
+			
+			$0.success:=False:C215
+			$0.errors.combine($Obj_createIcon.errors)
+			
+		End if 
+		
+		// Else : already handled
+	End if 
+	
+	// Copy icon
+	If (Bool:C1537($currentFile.exists))
+		
+		var $Obj_copy : Object
+		var $newName : Text
+		
+		$newName:=$currentFile.name
+		
+		$newName:=Replace string:C233($newName; "qmobile_android_missing_icon"; "action_icon_"+String:C10($action.name))
+		
+		$Obj_copy:=This:C1470.copyIcon($currentFile; $newName)
+		
+		If (Not:C34($Obj_copy.success))
+			
+			$0.success:=False:C215
+			$0.errors.combine($Obj_copy.errors)
+			
+			// Else : all ok
+		End if 
+		
+		// Else : already handled
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
 Function copyIcon
 	var $0 : Object
 	var $1 : Object  // icon file
@@ -811,7 +953,7 @@ Function adjustIconName
 	//
 Function createIconAssets
 	var $0 : Object
-	var $1 : Object  // Table or Field object metadata or related field
+	var $1 : Object  // Table or Field or Action object metadata or related field
 	
 	$0:=New object:C1471(\
 		"icon"; New object:C1471; \
