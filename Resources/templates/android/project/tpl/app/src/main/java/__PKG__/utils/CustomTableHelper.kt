@@ -22,8 +22,10 @@ import com.qmobile.qmobiledatasync.viewmodel.EntityListViewModel
 import com.qmobile.qmobiledatasync.viewmodel.EntityViewModel
 {{#tableNames}}
 import {{package}}.data.model.entity.{{name}}
-import {{package}}.data.model.entity.{{name}}ManyToOneRelationMask
 {{/tableNames}}
+{{#tableNames_with_relations}}
+import {{package}}.data.model.entity.{{name}}ManyToOneRelationMask
+{{/tableNames_with_relations}}
 {{#tableNames}}
 import {{package}}.viewmodel.entity.EntityViewModel{{name}}
 {{/tableNames}}

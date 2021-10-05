@@ -12,7 +12,9 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.qmobile.qmobileapi.model.entity.Entities
 import com.qmobile.qmobileapi.model.entity.EntityModel
+{{#has_any_relation}}
 import com.qmobile.qmobileapi.model.entity.ManyToOneRelationMask
+{{/has_any_relation}}
 import com.qmobile.qmobileapi.model.entity.Photo
 import com.qmobile.qmobiledatastore.data.RoomData
 import java.sql.Time
@@ -34,6 +36,7 @@ class {{tableName}}(
     @JsonCreator
     private constructor() : this(__KEY = "")
 }
+{{#has_any_relation}}
 
 @Suppress("ConstructorParameterNaming", "LongParameterList")
 class {{tableName}}ManyToOneRelationMask(
@@ -41,3 +44,4 @@ class {{tableName}}ManyToOneRelationMask(
     val {{relation_name}}: ManyToOneRelationMask? = null{{^-last}}, {{/-last}}
     {{/relations}}
 )
+{{/has_any_relation}}
