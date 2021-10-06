@@ -17,9 +17,9 @@ import {{package}}.data.converter.Converters
 {{#tableNames}}
 import {{package}}.data.dao.entity.{{name}}Dao
 {{/tableNames}}
-{{#relations}}
+{{#relations_import}}
 import {{package}}.data.dao.relation.{{relation_source}}Has{{relation_target}}RelationDao
-{{/relations}}
+{{/relations_import}}
 {{#tableNames}}
 import {{package}}.data.model.entity.{{name}}
 {{/tableNames}}
@@ -38,9 +38,9 @@ abstract class AppDatabase :
     abstract fun dao{{name}}(): {{name}}Dao
     {{/tableNames}}
 
-    {{#relations}}
+    {{#relations_import}}
     abstract fun dao{{relation_source}}Has{{relation_target}}Relation(): {{relation_source}}Has{{relation_target}}RelationDao
-    {{/relations}}
+    {{/relations_import}}
 
     /**
      * Gets the appropriate DAO object
@@ -63,10 +63,10 @@ abstract class AppDatabase :
         relatedTableName: String
     ): RelationBaseDao<RoomRelation> =
         when {
-            {{#tableNames_relations_distinct}}
+            {{#relations}}
             tableName == "{{relation_source}}" && relatedTableName == "{{relation_target}}" ->
                 dao{{relation_source}}Has{{relation_target}}Relation() as RelationBaseDao<RoomRelation>
-            {{/tableNames_relations_distinct}}
+            {{/relations}}
             else -> throw IllegalArgumentException()
         }        
 }

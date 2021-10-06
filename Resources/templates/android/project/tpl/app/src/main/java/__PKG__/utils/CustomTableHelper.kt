@@ -16,7 +16,6 @@ import com.qmobile.qmobileapi.model.entity.EntityModel
 import com.qmobile.qmobileapi.network.ApiService
 import com.qmobile.qmobiledatastore.data.RoomRelation
 import com.qmobile.qmobiledatasync.relation.RelationHelper
-import com.qmobile.qmobiledatasync.relation.RelationTypeEnum
 import com.qmobile.qmobiledatasync.utils.GenericTableHelper
 import com.qmobile.qmobiledatasync.viewmodel.EntityListViewModel
 import com.qmobile.qmobiledatasync.viewmodel.EntityViewModel
@@ -70,7 +69,7 @@ class CustomTableHelper : GenericTableHelper {
         fetchedFromRelation: Boolean
     ): EntityModel? {
         var entity: EntityModel? = null
-        {{#tableNames_relations}}
+        {{#relations}}
         if (tableName == "{{relation_source}}") {
             if (entity == null) {
                 entity = mapper.readValue<{{relation_source}}>(jsonString)
@@ -84,7 +83,7 @@ class CustomTableHelper : GenericTableHelper {
             }
             entity.{{relation_name}} = null
         }
-        {{/tableNames_relations}}
+        {{/relations}}
         {{#tableNames_without_relations}}
         if (tableName == "{{name}}") {
             if (entity == null) {
@@ -174,9 +173,9 @@ class CustomTableHelper : GenericTableHelper {
      */
     override fun getRelatedTableName(sourceTableName: String, relationName: String): String =
         when {
-            {{#tableNames_relations}}
+            {{#relations}}
             sourceTableName == "{{relation_source}}" && relationName == "{{relation_name}}" -> "{{relation_target}}"
-            {{/tableNames_relations}}
+            {{/relations}}
             else -> throw IllegalArgumentException()
         }
 
@@ -188,13 +187,13 @@ class CustomTableHelper : GenericTableHelper {
         entity: EntityModel
     ): Map<String, LiveData<RoomRelation>> {
         val map = mutableMapOf<String, LiveData<RoomRelation>>()
-        {{#tableNames_relations}}
+        {{#relations}}
         if (tableName == "{{relation_source}}") {
             (entity as? {{relation_source}})?.__{{relation_name}}Key?.let { relationId ->
                 RelationHelper.addRelation("{{relation_name}}", relationId, tableName, map)
             }
         }
-        {{/tableNames_relations}}
+        {{/relations}}
         return map
     }
 
