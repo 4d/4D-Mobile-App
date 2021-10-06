@@ -579,7 +579,7 @@ Function fieldBinding($field : Object; $formatter : Object)->$binding : Object
 			$binding.errors:=New collection:C1472("field must be specified to fill binding type")
 			
 			// ----------------------------------------
-		: ($field.type=Null:C1517)
+		: ($field.fieldType=Null:C1517)
 			
 			$binding.errors:=New collection:C1472("field must be have a type to fill binding type")
 			
