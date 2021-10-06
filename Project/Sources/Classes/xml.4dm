@@ -1,9 +1,12 @@
 Class constructor($variable)
 	
-	This:C1470.autoClose:=True:C214
+	This:C1470.root:=Null:C1517
 	This:C1470.file:=Null:C1517
 	This:C1470.xml:=Null:C1517
-	This:C1470.success:=True:C214
+	
+	This:C1470.success:=False:C215
+	This:C1470.autoClose:=True:C214
+	
 	This:C1470.errors:=New collection:C1472
 	
 	If (Count parameters:C259>=1)
@@ -17,64 +20,68 @@ Class constructor($variable)
 	End if 
 	
 	//———————————————————————————————————————————————————————————
-Function _reset
-	
-	This:C1470.close()
-	
-	This:C1470.autoClose:=True:C214
-	This:C1470.file:=Null:C1517
-	This:C1470.xml:=Null:C1517
-	This:C1470.success:=True:C214
-	This:C1470.errors:=New collection:C1472
-	
-	//———————————————————————————————————————————————————————————
 	// Creates a XML tree in memory
-Function new($root : Text)->$this : cs:C1710.xml
+Function newRef($root : Text)->$this : cs:C1710.xml
 	
 	var ${2} : Text
-	
 	var $t : Text
-	var $i; $countParam : Integer
+	var $countParam; $i : Integer
 	
 	$countParam:=Count parameters:C259
 	
 	OK:=0
 	
-	If ($countParam>=1)
-		
-		If ($countParam>=2)
+	This:C1470._reset()
+	
+	Case of 
 			
-			If (($countParam%2)#0)
-				
-				This:C1470.errors.push(Current method name:C684+" -  Unbalanced key/value pairs")
-				
-			Else 
-				
-				$t:=":C861("
-				
-				For ($i; 1; $countParam; 2)
-					
-					$t:=$t+(";"*Num:C11($i>1))+"\""+${$i}+"\";\""+${$i+1}+"\""
-					
-				End for 
-				
-				$t:=$t+")"
-				
-			End if 
+			//______________________________________________________
+		: ($countParam=0)
 			
-			This:C1470.root:=Formula from string:C1601($t).call()
+			This:C1470.root:=DOM Create XML Ref:C861("root")
 			
-		Else 
+			//______________________________________________________
+		: ($countParam=1)  // -> root
 			
 			This:C1470.root:=DOM Create XML Ref:C861($root)
 			
-		End if 
-		
-	Else 
-		
-		This:C1470.root:=DOM Create XML Ref:C861("root")
-		
-	End if 
+			//______________________________________________________
+		: ($countParam=2)  // -> root + namespace
+			
+			This:C1470.root:=DOM Create XML Ref:C861($root; $2)
+			
+			//______________________________________________________
+		: (($countParam%2)=0)  // -> root + namespace's pairs
+			
+			$t:=":C861("
+			
+			For ($i; 1; $countParam; 2)
+				
+				$t:=$t+(";"*Num:C11($i>1))+"\""+${$i}+"\";\""+${$i+1}+"\""
+				
+			End for 
+			
+			$t:=$t+")"
+			
+			This:C1470.root:=Formula from string:C1601($t).call()
+			
+			//______________________________________________________
+		Else   // -> root + namespace + namespace's pairs
+			
+			$t:=":C861("+$root+";"+$1
+			
+			For ($i; 2; $countParam; 2)
+				
+				$t:=$t+";\""+${$i}+"\";\""+${$i+1}+"\""
+				
+			End for 
+			
+			$t:=$t+")"
+			
+			This:C1470.root:=Formula from string:C1601($t).call()
+			
+			//______________________________________________________
+	End case 
 	
 	This:C1470.success:=Bool:C1537(OK)
 	
@@ -510,13 +517,13 @@ Function getContent($keepStructure : Boolean)->$content : Blob
 	// 
 Function toObject($withAdresses : Boolean)->$object : Object
 	
-	If (Count parameters:C259=2)
+	If (Count parameters:C259>=1)
 		
-		$object:=xml_elementToObject(This:C1470.root; $withAdresses)
+		$object:=This:C1470._elementToObject(This:C1470.root; $withAdresses)
 		
 	Else 
 		
-		$object:=xml_elementToObject(This:C1470.root)
+		$object:=This:C1470._elementToObject(This:C1470.root)
 		
 	End if 
 	
@@ -835,7 +842,7 @@ Function firstChild($node : Text; $name : Text)->$reference : Text
 	
 	// —————————————————————————————————————————————————————————————————————————————————
 	// Returns a reference to the last “child”
-	// If the node's reference isn't passed, return the first child of the root
+	// If the node's reference isn't passed, return the last child of the root
 	// If a name is passed, looks for the last child with that name
 Function lastChild($node : Text; $name : Text)->$reference : Text
 	var $elementName : Text
@@ -1018,7 +1025,7 @@ Function getName($node : Text)->$name : Text
 	
 	// —————————————————————————————————————————————————————————————————————————————————
 	// Modifies the name of the element set by $node
-Function setName($node : Text; $name : Text)
+Function setName($node : Text; $name : Text)->$this : cs:C1710.xml
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 2))
 		
@@ -1030,12 +1037,11 @@ Function setName($node : Text; $name : Text)
 		End if 
 	End if 
 	
-	var $0 : Object
-	$0:=This:C1470
+	$this:=This:C1470
 	
 	// —————————————————————————————————————————————————————————————————————————————————
 	// Removes the element set by $node
-Function remove($node : Text)
+Function remove($node : Text)->$this : cs:C1710.xml
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
 		
@@ -1047,12 +1053,12 @@ Function remove($node : Text)
 		End if 
 	End if 
 	
-	var $0 : Object
-	$0:=This:C1470
+	$this:=This:C1470
 	
 	// —————————————————————————————————————————————————————————————————————————————————
 	// Returns the value of the XML element designated by $node
-Function getValue($node : Text)->$value : Variant
+Function getValue($node : Text)->$value
+	
 	var $CDATA; $elementValue : Text
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
@@ -1102,25 +1108,31 @@ Function getAttribute($node : Text; $attribute : Text)->$value
 	
 	// —————————————————————————————————————————————————————————————————————————————————
 	// If exists, returns an attribute value & remove it
-Function attributePop($node : Text; $attribute : Text)->$value
+Function popAttribute($node : Text; $attribute : Text)->$value
 	
 	var $o : Object
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 2))
 		
 		$o:=OB Entries:C1720(This:C1470.getAttributes($node)).query("key = :1"; $attribute).pop()
+		This:C1470.success:=($o#Null:C1517)
 		
-		If ($o#Null:C1517)
+		If (This:C1470.success)
 			
 			$value:=$o.value
+			
 			DOM REMOVE XML ATTRIBUTE:C1084($node; $attribute)
+			
+		Else 
+			
+			This:C1470.errors.push(Current method name:C684+" -  Attribute \""+$attribute+"\" not found")
 			
 		End if 
 	End if 
-	
 	// —————————————————————————————————————————————————————————————————————————————————
 	// Returns a node attributes as object
 Function getAttributes($node : Text)->$attributes : Object
+	
 	var $key; $nodeƒ; $t; $value : Text
 	var $i : Integer
 	
@@ -1183,6 +1195,9 @@ Function setAttribute($node : Text; $name : Text; $value)->$this : cs:C1710.xml
 	// Set a node attributes from an object or a collection (key/value pairs)
 Function setAttributes($node : Text; $attributes; $value)->$this : cs:C1710.xml
 	
+	var $t : Text
+	var $o : Object
+	
 	If (This:C1470._requiredParams(Count parameters:C259; 2))
 		
 		If (This:C1470._requiredRef($node))
@@ -1201,8 +1216,6 @@ Function setAttributes($node : Text; $attributes; $value)->$this : cs:C1710.xml
 					//______________________________________________________
 				: (Value type:C1509($attributes)=Is object:K8:27)
 					
-					var $t : Text
-					
 					For each ($t; $attributes) While (This:C1470.success)
 						
 						DOM SET XML ATTRIBUTE:C866($node; \
@@ -1219,8 +1232,6 @@ Function setAttributes($node : Text; $attributes; $value)->$this : cs:C1710.xml
 					
 					//______________________________________________________
 				: (Value type:C1509($attributes)=Is collection:K8:32)
-					
-					var $o : Object
 					
 					For each ($o; $attributes) While (This:C1470.success)
 						
@@ -1250,7 +1261,7 @@ Function setAttributes($node : Text; $attributes; $value)->$this : cs:C1710.xml
 	
 	// —————————————————————————————————————————————————————————————————————————————————
 	// Removes, if it exists, the attribute designated by $name from the XML $node
-Function removeAttribute($node : Text; $attribute : Text)
+Function removeAttribute($node : Text; $attribute : Text)->$this : cs:C1710.xml
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
 		
@@ -1275,12 +1286,11 @@ Function removeAttribute($node : Text; $attribute : Text)
 		
 	End if 
 	
-	var $0 : Object
-	$0:=This:C1470
+	$this:=This:C1470
 	
 	// —————————————————————————————————————————————————————————————————————————————————
 	// Modifies the value of the element set by $node
-Function setValue($node : Text; $value : Variant; $inCDATA : Boolean)
+Function setValue($node : Text; $value : Variant; $inCDATA : Boolean)->$this : cs:C1710.xml
 	
 	If (Count parameters:C259=3)
 		
@@ -1302,8 +1312,7 @@ Function setValue($node : Text; $value : Variant; $inCDATA : Boolean)
 	
 	This:C1470.success:=Bool:C1537(OK)
 	
-	var $0 : Object
-	$0:=This:C1470
+	$this:=This:C1470
 	
 	// —————————————————————————————————————————————————————————————————————————————————
 Function isNull($reference : Text)->$response : Boolean
@@ -1314,6 +1323,12 @@ Function isNull($reference : Text)->$response : Boolean
 Function isNotNull($reference : Text)->$response : Boolean
 	
 	$response:=Not:C34(This:C1470.isNull($reference))
+	
+	// —————————————————————————————————————————————————————————————————————————————————
+	// Tests if the passed text is compliant with a XML reference
+Function isReference($text : Text)->$response : Boolean
+	
+	$response:=Match regex:C1019("[[:xdigit:]]{32}"; $text; 1)
 	
 	// —————————————————————————————————————————————————————————————————————————————————
 Function _requiredRef($reference : Text)->$response : Boolean
@@ -1340,12 +1355,6 @@ Function _requiredParams($count; $number)->$response : Boolean
 	End if 
 	
 	This:C1470.success:=$response
-	
-	// —————————————————————————————————————————————————————————————————————————————————
-	// Tests if the passed text is compliant with a XML reference
-Function isReference($text : Text)->$response : Boolean
-	
-	$response:=Match regex:C1019("[[:xdigit:]]{32}"; $text; 1)
 	
 	// —————————————————————————————————————————————————————————————————————————————————
 Function _convert($textValue : Text)->$value
@@ -1409,3 +1418,136 @@ Function _pushError($desription : Text)
 	
 	This:C1470.success:=False:C215
 	This:C1470.errors.push(Get call chain:C1662[1].name+" - "+$desription)
+	
+	//———————————————————————————————————————————————————————————
+Function _reset
+	
+	This:C1470.close()
+	
+	This:C1470.file:=Null:C1517
+	This:C1470.xml:=Null:C1517
+	
+	This:C1470.autoClose:=True:C214
+	
+	This:C1470.errors:=New collection:C1472
+	
+	// —————————————————————————————————————————————————————————————————————————————————
+Function _elementToObject($ref : Text; $withAdresses : Boolean)->$object : Object
+	
+	var $node; $key; $name; $tValue : Text
+	var $withRef : Boolean
+	var $count; $i : Integer
+	
+	If (Count parameters:C259>=2)
+		
+		$withRef:=$withAdresses
+		
+	End if 
+	
+	$object:=New object:C1471
+	
+	// DOM reference
+	If ($withRef)
+		
+		$object["@"]:=$ref
+		
+	End if 
+	
+	// Attributes
+	For ($i; 1; DOM Count XML attributes:C727($ref); 1)
+		
+		DOM GET XML ATTRIBUTE BY INDEX:C729($ref; $i; $key; $tValue)
+		
+		Case of   // Value types
+				
+				//______________________________________________________
+			: (Length:C16($key)=0)
+				
+				// Skip malformed node
+				
+				//______________________________________________________
+			: (Match regex:C1019("(?m-si)^\\d+\\.*\\d*$"; $tValue; 1))  // Numeric
+				
+				$object[$key]:=Num:C11($tValue; ".")
+				
+				//______________________________________________________
+			: (Match regex:C1019("(?mi-s)^true|false$"; $tValue; 1))  // Boolean
+				
+				$object[$key]:=($tValue="true")
+				
+				//______________________________________________________
+			Else   // Text
+				
+				$object[$key]:=$tValue
+				
+				//______________________________________________________
+		End case 
+	End for 
+	
+	// Value
+	DOM GET XML ELEMENT VALUE:C731($ref; $tValue)
+	
+	If (Match regex:C1019("[^\\s]+"; $tValue; 1))
+		
+		$object["$"]:=$tValue
+		
+	End if 
+	
+	// Childs
+	$node:=DOM Get first child XML element:C723($ref; $name)
+	
+	If (OK=1)
+		
+		// Many one?
+		$count:=DOM Count XML elements:C726($ref; $name)
+		
+		If ($count>1)
+			
+			$object[$name]:=New collection:C1472
+			
+			For ($i; 1; $count; 1)
+				
+				$object[$name].push(This:C1470._elementToObject(DOM Get XML element:C725($ref; $name; $i); $withRef))
+				
+			End for 
+			
+		Else 
+			
+			$object[$name]:=This:C1470._elementToObject($node; $withRef)
+			
+		End if 
+		
+		// Next one
+		$node:=DOM Get next sibling XML element:C724($node; $name)
+		
+		While (OK=1)
+			
+			// Already treated?
+			If ($object[$name]=Null:C1517)
+				
+				// Many one?
+				$count:=DOM Count XML elements:C726($ref; $name)
+				
+				If ($count>1)
+					
+					$object[$name]:=New collection:C1472
+					
+					For ($i; 1; $count; 1)
+						
+						$object[$name].push(This:C1470._elementToObject(DOM Get XML element:C725($ref; $name; $i); $withRef))
+						
+					End for 
+					
+				Else 
+					
+					$object[$name]:=This:C1470._elementToObject($node; $withRef)
+					
+				End if 
+			End if 
+			
+			// Next one
+			$node:=DOM Get next sibling XML element:C724($node; $name)
+			
+		End while 
+	End if 
+	

@@ -709,7 +709,6 @@
 		"methods": [
 			"HTU_logs",
 			"HTU_progress",
-			"HTU_svg class",
 			"htuProgressDoSomething"
 		]
 	},

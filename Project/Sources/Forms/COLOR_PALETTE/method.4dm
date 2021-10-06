@@ -12,7 +12,9 @@ Case of
 		
 		$c:=JSON Parse:C1218(File:C1566("/RESOURCES/colors.json").getText()).indexed
 		
-		$svg:=cs:C1710.svg.new().setAttributes(New object:C1471("stroke-width"; 1; "stroke-width"; 1; "stroke"; "white"))
+		$svg:=cs:C1710.svg.new().setAttributes(New object:C1471(\
+			"stroke-width"; 1; \
+			"stroke"; "white"))
 		
 		For ($i; 0; 15; 1)  // Each row
 			
@@ -21,9 +23,7 @@ Case of
 			For ($j; 1; 16; 1)  // Each column
 				
 				$indx:=($i*16)+$j
-				
 				$svg.rect(11; 11).position($x; $y).id(String:C10($indx)).fill($c[$indx-1])
-				
 				$x:=$x+11
 				
 			End for 
@@ -34,4 +34,5 @@ Case of
 		
 		OBJECT SET VALUE:C1742("colorIndexed"; $svg.picture())
 		
+		//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 End case 

@@ -12,7 +12,7 @@ $start:=Milliseconds:C459
 //======================================================================================
 // Create from scratch
 $xml:=cs:C1710.xml.new()
-$xml.new()
+$xml.newRef()
 ASSERT:C1129($xml.success; ".new()")
 
 // Export to an internal variable
@@ -137,7 +137,7 @@ $xml.close()
 
 //======================================================================================
 // Create from file
-$o:=Folder:C1567(fk resources folder:K87:11).file("templates/form/list/Simple Table/Sources/Forms/Tables/___TABLE___/___TABLE___ListForm.storyboard")
+$o:=Folder:C1567(fk resources folder:K87:11).file("templates/form/list/Simple Table/iOS/Sources/Forms/Tables/___TABLE___/___TABLE___ListForm.storyboard")
 $xml:=cs:C1710.xml.new($o)
 ASSERT:C1129($xml.success; ".new(File)")
 
@@ -211,7 +211,7 @@ ASSERT:C1129($c.length=3; ".findByName()")
 $xml.close()
 
 //======================================================================================
-$xml:=cs:C1710.xml.new().new()
+$xml:=cs:C1710.xml.new().newRef()
 ASSERT:C1129($xml.success; ".new()")
 
 $node:=DOM Create XML element:C865($xml.root; "document"; \

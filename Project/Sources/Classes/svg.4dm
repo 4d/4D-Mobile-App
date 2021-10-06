@@ -11,7 +11,7 @@ Class constructor($content)
 		Super:C1705()
 		
 		// Create an empty canvas
-		This:C1470.new()
+		This:C1470.newCanvas()
 		
 	End if 
 	
@@ -34,7 +34,7 @@ DOCUMENTS & STRUCTURE
 	//———————————————————————————————————————————————————————————
 	// Close the current tree if any & create a new svg default structure.
 	// ⚠️ Overrides the method of the inherited class
-Function new($attributes : Object)->$this : cs:C1710.svg
+Function newCanvas($attributes : Object)->$this : cs:C1710.svg
 	
 	var $root; $t : Text
 	
@@ -2207,14 +2207,14 @@ SHORTCUTS & UTILITIES
 	
 	//———————————————————————————————————————————————————————————
 	// Adds item to parent item
-Function attachTo($parent)->$this : cs:C1710.svg
+Function attachTo($parent : Variant)->$this : cs:C1710.svg
 	
-	var $t; $source : Text
+	var $id; $source : Text
 	
 	$source:=This:C1470.latest
 	
 	// Keeps id and removes it, if any, to avoid duplicate one
-	$t:=String:C10(This:C1470.attributePop($source; "id"))
+	$id:=String:C10(This:C1470.popAttribute($source; "id"))
 	
 	If (Count parameters:C259>=1)
 		
@@ -2230,9 +2230,9 @@ Function attachTo($parent)->$this : cs:C1710.svg
 	This:C1470.remove($source)
 	
 	// Restore id, if any
-	If (Length:C16($t)>0)
+	If (Length:C16($id)>0)
 		
-		This:C1470.id($t)
+		This:C1470.id($id)
 		
 	End if 
 	
@@ -2971,7 +2971,7 @@ Function moveVertically($y : Real; $applyTo)->$this : cs:C1710.svg
 	Else 
 		
 		// Auto
-		This:C1470.translate($0; $y; This:C1470._getTarget())
+		This:C1470.translate($applyTo; $y; This:C1470._getTarget())
 		
 	End if 
 	

@@ -123,9 +123,9 @@ Function draw()
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Define a field in the form
 Function addField($field : Object; $fields : Collection)
-	var $index : Integer
+	
 	var $ok : Boolean
-	var $o : Object
+	var $index : Integer
 	
 	$field:=PROJECT.cleanup($field)
 	
@@ -462,7 +462,7 @@ Function setTemplate($browser : Object)
 				
 				//Else
 				//$o:=New object(\
-																																																												"url"; Get localized string("res_"+This.typeForm()+"Forms"))
+																																																																	"url"; Get localized string("res_"+This.typeForm()+"Forms"))
 				//End if
 				
 				This:C1470.form.form.call(New collection:C1472("initBrowser"; $o))

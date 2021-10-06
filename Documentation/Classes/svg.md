@@ -1,75 +1,7 @@
 ## [s]CALABLE [v]ECTOR [g]GRAPHICS
 
-After creating and using the 4D SVG component, I became aware of the need to build a new API much smaller, faster and closer to the SVG format and my use to manage the user interface. 
-
 The goal of this class is to reduce the complexity of code to create and manipulate svg images/documents.
 This class will be augmented according to my needs but you are strongly encouraged to participate yourself through pull request.
-
-## Code sample
-Using the 4D SVG component to create and manipulate SVG elements requires knowledge of many commands and becomes difficult to understand and maintain. Creating a simple SVG requires many lines of code:
-
-```4d
-// Create a new canvas
-var $root : Text
-$root:=SVG_New
-	
-// Create a "background" layer at the root level
-var $background : Text 
-$background:=SVG_New_group($root)
-	
-// Create a "foreground" layer, at the root level, and apply a translation
-var $foreground : Text
-$foreground:=SVG_New_group($root)
-SVG_SET_TRANSFORM_TRANSLATE($foreground; 45; 45)
-	
-// Create a yellow square into the "foreground" layer
-var $rect : Text
-$rect:=SVG_New_rect($foreground; 2.5; 2.5; 20; 20)
-SVG_SET_FILL_BRUSH($rect; "yellow")
-SVG_SET_STROKE_BRUSH($rect; "yellow")
-	
-// Add, into the "background" layer, a blue circle without fill & with a border of 4 pixels
-var $circle : Text
-$circle:=SVG_New_circle($background; 100; 100; 50)
-SVG_SET_FILL_BRUSH($circle; "none")
-SVG_SET_STROKE_BRUSH($circle; "blue")
-SVG_SET_STROKE_WIDTH($circle; 4)
-	
-// Create a red square into the "background" layer
-$rect:=SVG_New_rect($background; 10; 10; 100; 100)
-SVG_SET_FILL_BRUSH($rect; "red")
-SVG_SET_STROKE_BRUSH($rect; "red")
-	
-// Show the result into the SVG viewer
-SVGTool_SHOW_IN_VIEWER($root)
-	
-// Do not forget to release the memory !
-SVG_CLEAR($root)
-```
-The `svg` class simplifies the creation and manipulation of the SVG elements thanks to a set of simple functions and some automatisms, and decrease the number of variables needed. Here is the equivalent code to get the same result (<mark>only 8 lines of easily understandable code versus 21 complicated lines with the component</mark>):
-
-```4d
-var $svg : cs.svg	// Create a new canvas$svg:=cs.svg.new()	// Create a "background" & '"foreground" group & apply a translation to the last one// [Layers are automatically created at the root level]$svg.layer("background"; "foreground").translate(45; 45)	// Create a yellow square & memorize its reference as "original"// [The object is automatically added to the latest created/used "container" ("foreground")]$svg.square(20).position(2.5; 2.5).color("yellow").push("original")	// Set "background" layer for the next operationsIf ($svg.with("background"))
-		// Add, a blue circle without fill & with a border of 4 pixels	$svg.circle(50).color("blue").position(100; 100).fill(False).stroke(4)			// Clone the "original" square, colore it red, change its dimensions	$svg.clone("original").color("red").position(10; 10).size(100; 100)
-		End if 	// Show the result into the SVG viewer// [The memory is automatically freed]$svg.preview()
-```
-The svg tree created:
-
-```xml
-<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
-<svg xmlns="http://www.w3.org/2000/svg" fill="none" font-family="'lucida grande','segoe UI',sans-serif" font-size="12" preserveAspectRatio="none" shape-rendering="crispEdges" stroke="black" text-rendering="geometricPrecision" viewport-fill="none" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <g id="background">
-    <circle cx="0" cy="0" fill="none" r="50" stroke="blue" stroke-width="4" transform="translate(100,100)"/>
-    <rect fill="yellow" height="100" stroke="yellow" width="100" x="10" y="10"/>
-  </g>
-  <g id="foreground" transform="translate(45,45)">
-    <rect fill="blue" height="20" stroke="blue" width="20" x="2.5" y="2.5"/>
-  </g>
-</svg>
-```
-The result image:
-
-<img src="svg.png">
 
 ## Summary
 
@@ -80,13 +12,13 @@ The result image:
 |Properties|Type|Description|Initial value|
 |---------|:----:|------|:------:|
 |**.root**|Text|The DOM tree reference in memory of the document virtual structure|**Null**|
-|**.autoClose**|Boolean|Indicates whether the XML tree should be automatically closed after a call to one of the functions: `.exportPicture()`, `.exportText()`, `.picture()`, `.content()`, `.save()` or `.preview()`|**True\*** 🚨|
+|**.autoClose**|Boolean|Indicates whether the XML tree should be automatically closed after a call to one of the functions: `.exportPicture()`, `.exportText()`, `.picture()`, `.getText()`, `.save()` or `.preview()`|**True\*** 🚨|
 |**.file**|**4D**.File|The disk file of the last `.save()` or `.load()`call|**Null**|
 |**.success**|Boolean|Indicates whether a function call was successfully executed|
 |**.errors**|Collection|The list of errors encoutered, if so|[ ]|
 |**.latest**|Text|The DOM reference of the last element created|**Null**|
 |**.graphic**|Picture|The image generated by the last call to the `.picture()` function.|**Null**|
-|**.xml**|Text|The SVG tree as text generated during the last call to the `.content()` function.|**Null**|
+|**.xml**|Text|The SVG tree as text generated during the last call to the `.getText()` function.|**Null**|
 |**.store**|Collection|The element references memorized (see below)|[ ]|
 
 \* 🚨 If `.autoClose` is set to **False** (or if you don't call a function that automatically closes the structure), once you no longer need the structure, remember to call the function `.close()` in order to free up the memory.
@@ -163,7 +95,7 @@ The result image:
 |.**content** ( { keepStructure : `Boolean` } ) → `Text`  | Returns the SVG tree as text & populates the `.xml` property if success.
 |.**exportPicture** ( file : `4D.file` {; keepStructure : `Boolean`} ) → `cs.svg` | Saves the SVG tree as a picture file.
 |.**exportText** ( file : `4D.file` {; keepStructure : `Boolean`} ) → `cs.svg` | Writes the content of the SVG tree into a disk file.
-|.**new** ( { attributes : `Object` } ) → `cs.svg` | Close the current tree if any & create a new svg default structure.
+|.**newCanvas** ( { attributes : `Object` } ) → `cs.svg` | Close the current tree if any & create a new svg default structure.
 |.**close** () → `cs.svg` | Frees the memory taken up by the SVG tree \*
 |.**save** ( { keepStructure : `Boolean` } ) → `cs.svg` | Saves the content of the SVG tree into the initially loaded file or the last created file by calling `exportText()`
 |.**group** ( { id : `Text` {; attachTo }} ) → `cs.svg` | To define a group
@@ -183,7 +115,7 @@ The result image:
 |.**fill** ( value `Text` \| `Boolean` \| `Object` {; applyTo } ) → `cs.svg` | Sets the fill attributes
 |.**stroke** ( value `Text` \| `Boolean` \| `Real` \| `Object` {; applyTo } ) → `cs.svg` | Sets the stroke attributes
 |.**font** ( attributes : `Object` {; applyTo } ) → `cs.svg` | Sets the font attributes
-|.**sizes** ( { width : `Real`; height : `Real` {; unit : `Text` }} ) → `cs.svg` | Sets the dimensions
+|.**size** ( { width : `Real`; height : `Real` {; unit : `Text` }} ) → `cs.svg` | Sets the dimensions
 |.**position** ( x : `Real` {; y : `Real` }{; unit : `Text` } ) → `cs.svg` | Sets the position
 |.**moveHorizontally** ( x : `Real` {; applyTo } ) → `cs.svg` | Moves horizontally
 |.**moveVertically** ( y : `Real` {; applyTo } ) → `cs.svg` | Moves vertically
@@ -200,7 +132,7 @@ The result image:
 |.**layer** ( name : `Text` ) → `cs.svg` | Creates one or more group at the root of the SVG structure
 |.**push** ( name : `Text` ) → `cs.svg` | Keeps the dom reference into the store associated with the given name
 |.**fetch** ( name : `Text` ) → dom : `Text` | Retrieve a stored dom reference associated with the given name
-|.**useOf** ( name : `Text` ) → `Boolean` | Defines an element for the next operations
+|.**with** ( name : `Text` ) → `Boolean` | Defines an element for the next operations
 |.**preview** ( { keepStructure : `Boolean` } ) | Display the SVG image & tree into the SVG Viewer if the component 4D SVG is available.
 
 

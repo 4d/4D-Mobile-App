@@ -362,18 +362,17 @@ Case of
 						: ($o.fieldType=8858)\
 							 | ($o.fieldType=8859)  // Relation
 							
-							If (Not:C34(Bool:C1537($o.$added)))
+							If (Bool:C1537($o.$added))  // Relation name
 								
-								If ($datamodel[String:C10($o.relatedTableNumber)]=Null:C1517)
+								LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.selectedColor; lk font color:K53:24)
+								
+							Else 
+								
+								If ($datamodel[String:C10($o.relatedTableNumber)]=Null:C1517)  //related table is not published
 									
 									LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color:K53:24)
 									
 								End if 
-								
-							Else 
-								
-								LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.selectedColor; lk font color:K53:24)
-								
 							End if 
 							
 							//______________________________________________________
