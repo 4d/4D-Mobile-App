@@ -9,6 +9,7 @@ package {{package}}.list
 import android.os.Bundle
 import com.qmobile.qmobileui.list.EntityListFragment
 
+@Suppress("ClassName")
 class EntityListFragment{{tableName}} : EntityListFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

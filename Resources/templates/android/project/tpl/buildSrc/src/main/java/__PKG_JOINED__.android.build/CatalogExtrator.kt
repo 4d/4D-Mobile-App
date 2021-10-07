@@ -17,7 +17,7 @@ import {{package}}.android.build.utils.retrieveJSONObject
 import java.io.File
 
 {{#tableNames}}
-val fields{{name}} = listOf<String>({{{concat_fields}}})
+val fields{{name}}: List<String> = listOf({{{concat_fields}}})
 {{/tableNames}}
 
 fun getCatalog(tableName: String): DataClass? {

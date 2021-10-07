@@ -17,7 +17,8 @@
         tools:targetApi="n">
         <activity
             android:name="com.qmobile.qmobileui.activity.loginactivity.LoginActivity"
-            android:theme="@style/Theme.MyApplication.LoginTheme">
+            android:theme="@style/Theme.MyApplication.LoginTheme"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />

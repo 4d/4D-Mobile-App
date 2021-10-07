@@ -11,6 +11,7 @@ import com.qmobile.qmobiledatasync.viewmodel.EntityListViewModel
 import {{package}}.data.model.entity.{{tableName}}
 import timber.log.Timber
 
+@Suppress("ClassName")
 class EntityListViewModel{{tableName}}(
 
     tableName: String,

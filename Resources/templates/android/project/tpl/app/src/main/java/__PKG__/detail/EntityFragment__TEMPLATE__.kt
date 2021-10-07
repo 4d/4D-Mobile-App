@@ -10,6 +10,7 @@ import android.os.Bundle
 import com.qmobile.qmobileui.detail.EntityDetailFragment
 import {{package}}.databinding.FragmentDetail{{tableName_nameCamelCase}}Binding
 
+@Suppress("ClassName")
 class EntityFragment{{tableName}} : EntityDetailFragment() {
 
     private val dataBinding get() = super.binding as FragmentDetail{{tableName_nameCamelCase}}Binding

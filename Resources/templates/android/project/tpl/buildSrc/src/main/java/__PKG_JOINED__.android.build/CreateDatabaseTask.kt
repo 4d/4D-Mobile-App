@@ -21,8 +21,8 @@ import java.io.File
 
 open class CreateDatabaseTask : DefaultTask() {
 
-    private val tableNames = 
-        mapOf<String, String>({{#tableNames}}"{{name}}" to "{{name_original}}"{{^-last}}, {{/-last}}{{/tableNames}})
+    private val tableNames: Map<String, String> = 
+        mapOf({{#tableNames}}"{{name}}" to "{{name_original}}"{{^-last}}, {{/-last}}{{/tableNames}})
 
     private val propertyListMap = mutableMapOf<String, List<String>>()
     private val relatedEntitiesMapList =
@@ -130,14 +130,14 @@ open class CreateDatabaseTask : DefaultTask() {
                     jsonEntityList.forEach { jsonEntity ->
 
                         val sqlQueryBuilder = SqlQueryBuilder(jsonEntity, relatedTableFields)
-
-                        getQueryFromSqlQueryBuilder(
-                            sqlQueryBuilder,
-                            tableName,
-                            staticDataInitializer
-                        )?.let { query ->
-                            queryList.add(query)
-                        }
+                        
+                        queryList.add(
+                            getQueryFromSqlQueryBuilder(
+                                sqlQueryBuilder,
+                                tableName,
+                                staticDataInitializer
+                            )
+                        )
                     }
                 }
             }
@@ -194,7 +194,7 @@ open class CreateDatabaseTask : DefaultTask() {
         sqlQueryBuilder: SqlQueryBuilder,
         tableName: String,
         staticDataInitializer: StaticDataInitializer
-    ): SqlQuery? {
+    ): SqlQuery {
 
         val propertyList = sqlQueryBuilder.hashMap.toSortedMap().keys.toList()
         propertyListMap[tableName] = propertyList

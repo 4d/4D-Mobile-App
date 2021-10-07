@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">{{app_name_with_caps}}</string>
+
+    <!--    Bottom Navigation -->
+    <string name="title_table_settings">Settings</string>
+    {{#tableNames_navigation}}
+    <string name="tableName_{{nameLowerCase}}">{{label}}</string>
+    <string name="tableName_origin_{{nameLowerCase}}">{{name}}</string>
+    {{/tableNames_navigation}}
+
+</resources>

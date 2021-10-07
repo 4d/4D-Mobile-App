@@ -20,7 +20,7 @@ import java.util.Date
 /**
  * Type converters to allow Room to reference complex data types.
  */
-@Suppress("TooManyFunctions")
+@Suppress("TooManyFunctions", "FunctionName")
 class Converters {
 
     private val gson = Gson()

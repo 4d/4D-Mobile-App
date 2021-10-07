@@ -19,6 +19,7 @@ import {{package}}.data.model.relation.{{relation_source}}And{{relation_target}}
 {{/relations_import}}
 import timber.log.Timber
 
+@Suppress("ClassName")
 class EntityViewModel{{tableName}}(
     tableName: String,
     id: String,
@@ -40,6 +41,7 @@ class EntityViewModel{{tableName}}(
     {{/relations}}
 
     override fun setRelationToLayout(relationName: String, roomRelation: RoomRelation) {
+    {{#has_any_relation}}
         when (relationName) {
             {{#relations}}
             "{{relation_name}}" -> {
@@ -48,5 +50,9 @@ class EntityViewModel{{tableName}}(
             {{/relations}}
             else -> return
         }
+    {{/has_any_relation}}
+    {{^has_any_relation}}
+        // No relation
+    {{/has_any_relation}}
     }
 }

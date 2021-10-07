@@ -11,7 +11,7 @@ dependencies {
 }
 
 task detekt(type: JavaExec) {
-    main = "io.gitlab.arturbosch.detekt.cli.Main"
+    mainClass.set("io.gitlab.arturbosch.detekt.cli.Main")
     classpath = configurations.detekt
     def input = "$projectDir/src/main/java"
     def config = "$rootDir/buildscripts/default-detekt-config.yml"

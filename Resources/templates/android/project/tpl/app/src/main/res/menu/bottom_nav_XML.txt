@@ -9,11 +9,11 @@
 {{#tableNames_navigation}}
     <item
         android:id="@+id/{{nameLowerCase}}"
-        android:contentDescription="{{name}}"
+        android:contentDescription="@string/tableName_origin_{{nameLowerCase}}"
         {{#hasIcon}}
         android:icon="@drawable/{{icon}}"
         {{/hasIcon}}
-        android:title="{{label}}" />
+        android:title="@string/tableName_{{nameLowerCase}}" />
 
 {{/tableNames_navigation}}
     <item

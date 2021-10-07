@@ -20,7 +20,7 @@ import com.qmobile.qmobiledatastore.data.RoomData
 import java.sql.Time
 import java.util.Date
 
-@Suppress("ConstructorParameterNaming", "LongParameterList", "ObjectPropertyNaming")
+@Suppress("ConstructorParameterNaming", "LongParameterList", "ObjectPropertyNaming", "ClassName")
 @Entity
 class {{tableName}}(
     {{#fields}}
