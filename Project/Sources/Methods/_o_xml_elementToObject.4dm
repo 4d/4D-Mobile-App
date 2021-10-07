@@ -13,18 +13,18 @@ C_TEXT:C284($1)
 C_BOOLEAN:C305($2)
 
 C_BOOLEAN:C305($withRef)
-C_LONGINT:C283($count;$i)
-C_TEXT:C284($dom;$key;$name;$node;$tValue)
+C_LONGINT:C283($count; $i)
+C_TEXT:C284($dom; $key; $name; $node; $tValue)
 
 If (False:C215)
-	C_OBJECT:C1216(xml_elementToObject;$0)
-	C_TEXT:C284(xml_elementToObject;$1)
-	C_BOOLEAN:C305(xml_elementToObject;$2)
+	C_OBJECT:C1216(_o_xml_elementToObject; $0)
+	C_TEXT:C284(_o_xml_elementToObject; $1)
+	C_BOOLEAN:C305(_o_xml_elementToObject; $2)
 End if 
 
 // ----------------------------------------------------
 // Initialisations
-If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
+If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
 	// Required parameters
 	$node:=$1
@@ -53,9 +53,9 @@ If ($withRef)
 End if 
 
 // Attributes
-For ($i;1;DOM Count XML attributes:C727($node);1)
+For ($i; 1; DOM Count XML attributes:C727($node); 1)
 	
-	DOM GET XML ATTRIBUTE BY INDEX:C729($node;$i;$key;$tValue)
+	DOM GET XML ATTRIBUTE BY INDEX:C729($node; $i; $key; $tValue)
 	
 	Case of   // Value types
 			
@@ -65,12 +65,12 @@ For ($i;1;DOM Count XML attributes:C727($node);1)
 			// Skip malformed node
 			
 			//______________________________________________________
-		: (Match regex:C1019("(?m-si)^\\d+\\.*\\d*$";$tValue;1))  // Numeric
+		: (Match regex:C1019("(?m-si)^\\d+\\.*\\d*$"; $tValue; 1))  // Numeric
 			
-			$0[$key]:=Num:C11($tValue;".")
+			$0[$key]:=Num:C11($tValue; ".")
 			
 			//______________________________________________________
-		: (Match regex:C1019("(?mi-s)^true|false$";$tValue;1))  // Boolean
+		: (Match regex:C1019("(?mi-s)^true|false$"; $tValue; 1))  // Boolean
 			
 			$0[$key]:=($tValue="true")
 			
@@ -85,40 +85,40 @@ End for
 
 
 // Value
-DOM GET XML ELEMENT VALUE:C731($node;$tValue)
+DOM GET XML ELEMENT VALUE:C731($node; $tValue)
 
-If (Match regex:C1019("[^\\s]+";$tValue;1))
+If (Match regex:C1019("[^\\s]+"; $tValue; 1))
 	
 	$0["$"]:=$tValue
 	
 End if 
 
 // Childs
-$dom:=DOM Get first child XML element:C723($node;$name)
+$dom:=DOM Get first child XML element:C723($node; $name)
 
 If (OK=1)
 	
 	// Many one?
-	$count:=DOM Count XML elements:C726($node;$name)
+	$count:=DOM Count XML elements:C726($node; $name)
 	
 	If ($count>1)  // Yes
 		
 		$0[$name]:=New collection:C1472
 		
-		For ($i;1;$count;1)
+		For ($i; 1; $count; 1)
 			
-			$0[$name].push(xml_elementToObject(DOM Get XML element:C725($node;$name;$i);$withRef))
+			$0[$name].push(_o_xml_elementToObject(DOM Get XML element:C725($node; $name; $i); $withRef))
 			
 		End for 
 		
 	Else   // No
 		
-		$0[$name]:=xml_elementToObject($dom;$withRef)
+		$0[$name]:=_o_xml_elementToObject($dom; $withRef)
 		
 	End if 
 	
 	// Next one
-	$dom:=DOM Get next sibling XML element:C724($dom;$name)
+	$dom:=DOM Get next sibling XML element:C724($dom; $name)
 	
 	While (OK=1)
 		
@@ -126,27 +126,27 @@ If (OK=1)
 		If ($0[$name]=Null:C1517)
 			
 			// Many one?
-			$count:=DOM Count XML elements:C726($node;$name)
+			$count:=DOM Count XML elements:C726($node; $name)
 			
 			If ($count>1)  // Yes
 				
 				$0[$name]:=New collection:C1472
 				
-				For ($i;1;$count;1)
+				For ($i; 1; $count; 1)
 					
-					$0[$name].push(xml_elementToObject(DOM Get XML element:C725($node;$name;$i);$withRef))
+					$0[$name].push(_o_xml_elementToObject(DOM Get XML element:C725($node; $name; $i); $withRef))
 					
 				End for 
 				
 			Else   // No
 				
-				$0[$name]:=xml_elementToObject($dom;$withRef)
+				$0[$name]:=_o_xml_elementToObject($dom; $withRef)
 				
 			End if 
 		End if 
 		
 		// Next one
-		$dom:=DOM Get next sibling XML element:C724($dom;$name)
+		$dom:=DOM Get next sibling XML element:C724($dom; $name)
 		
 	End while 
 End if 

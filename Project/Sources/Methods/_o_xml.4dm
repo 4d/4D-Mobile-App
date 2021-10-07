@@ -12,53 +12,53 @@ C_TEXT:C284($1)
 C_OBJECT:C1216($2)
 
 If (False:C215)
-	C_OBJECT:C1216(xml;$0)
-	C_TEXT:C284(xml;$1)
-	C_OBJECT:C1216(xml;$2)
+	C_OBJECT:C1216(_o_xml; $0)
+	C_TEXT:C284(_o_xml; $1)
+	C_OBJECT:C1216(_o_xml; $2)
 End if 
 
 C_OBJECT:C1216($o)
 C_BLOB:C604($x)
-C_TEXT:C284($t;$tt)
+C_TEXT:C284($t; $tt)
 
 // ----------------------------------------------------
 If (This:C1470[""]=Null:C1517)  // Constructor
 	
 	$o:=New object:C1471(\
-		"";"xml";\
-		"root";Formula:C1597(xml("root"));\
-		"create";Formula:C1597(xml("create";New object:C1471("name";$1)));\
-		"parent";Formula:C1597(xml("parent"));\
-		"parentWithName";Formula:C1597(xml("parentWithName";New object:C1471("name";$1)));\
-		"firstChild";Formula:C1597(xml("firstChild"));\
-		"lastChild";Formula:C1597(xml("lastChild"));\
-		"children";Formula:C1597(xml("children";New object:C1471("recursive";$1)));\
-		"nextSibling";Formula:C1597(xml("nextSibling"));\
-		"previousSibling";Formula:C1597(xml("previousSibling"));\
-		"findByXPath";Formula:C1597(xml("findByXPath";New object:C1471("xpath";$1)));\
-		"findOrCreate";Formula:C1597(xml("findOrCreate";New object:C1471("element";$1)));\
-		"findMany";Formula:C1597(xml("findMany";New object:C1471("xpath";$1)));\
-		"findById";Formula:C1597(xml("findById";New object:C1471("id";$1)));\
-		"findByName";Formula:C1597(xml("findByName";New object:C1471("name";$1)));\
-		"findByAttribute";Formula:C1597(xml("findByAttribute";New object:C1471("name";$1;"value";$2;"nodeName";$3)));\
-		"append";Formula:C1597(xml("append";New object:C1471("element";$1)));\
-		"insertAt";Formula:C1597(xml("insertAt";New object:C1471("element";$1;"childIndex";$2)));\
-		"insertFirst";Formula:C1597(xml("insertAt";New object:C1471("element";$1;"childIndex";1)));\
-		"attributes";Formula:C1597(xml("attributes"));\
-		"getAttribute";Formula:C1597(xml("getAttribute";New object:C1471("name";$1)));\
-		"setAttribute";Formula:C1597(xml("setAttribute";New object:C1471("name";$1;"value";$2)));\
-		"setAttributes";Formula:C1597(xml("setAttributes";$1));\
-		"removeAttribute";Formula:C1597(xml("removeAttribute";New object:C1471("attribName";$1)));\
-		"getValue";Formula:C1597(xml("getValue"));\
-		"setValue";Formula:C1597(xml("setValue";New object:C1471("value";$1)));\
-		"setOption";Formula:C1597(xml("setOption";New object:C1471("selector";$1;"value";$2)));\
-		"toObject";Formula:C1597(xml("toObject"));\
-		"setName";Formula:C1597(xml("setName";New object:C1471("name";$1)));\
-		"getName";Formula:C1597(xml("getName"));\
-		"remove";Formula:C1597(xml("remove"));\
-		"export";Formula:C1597(xml("export"));\
-		"save";Formula:C1597(xml("save";$1));\
-		"close";Formula:C1597(xml("close"))\
+		""; "xml"; \
+		"root"; Formula:C1597(_o_xml("root")); \
+		"create"; Formula:C1597(_o_xml("create"; New object:C1471("name"; $1))); \
+		"parent"; Formula:C1597(_o_xml("parent")); \
+		"parentWithName"; Formula:C1597(_o_xml("parentWithName"; New object:C1471("name"; $1))); \
+		"firstChild"; Formula:C1597(_o_xml("firstChild")); \
+		"lastChild"; Formula:C1597(_o_xml("lastChild")); \
+		"children"; Formula:C1597(_o_xml("children"; New object:C1471("recursive"; $1))); \
+		"nextSibling"; Formula:C1597(_o_xml("nextSibling")); \
+		"previousSibling"; Formula:C1597(_o_xml("previousSibling")); \
+		"findByXPath"; Formula:C1597(_o_xml("findByXPath"; New object:C1471("xpath"; $1))); \
+		"findOrCreate"; Formula:C1597(_o_xml("findOrCreate"; New object:C1471("element"; $1))); \
+		"findMany"; Formula:C1597(_o_xml("findMany"; New object:C1471("xpath"; $1))); \
+		"findById"; Formula:C1597(_o_xml("findById"; New object:C1471("id"; $1))); \
+		"findByName"; Formula:C1597(_o_xml("findByName"; New object:C1471("name"; $1))); \
+		"findByAttribute"; Formula:C1597(_o_xml("findByAttribute"; New object:C1471("name"; $1; "value"; $2; "nodeName"; $3))); \
+		"append"; Formula:C1597(_o_xml("append"; New object:C1471("element"; $1))); \
+		"insertAt"; Formula:C1597(_o_xml("insertAt"; New object:C1471("element"; $1; "childIndex"; $2))); \
+		"insertFirst"; Formula:C1597(_o_xml("insertAt"; New object:C1471("element"; $1; "childIndex"; 1))); \
+		"attributes"; Formula:C1597(_o_xml("attributes")); \
+		"getAttribute"; Formula:C1597(_o_xml("getAttribute"; New object:C1471("name"; $1))); \
+		"setAttribute"; Formula:C1597(_o_xml("setAttribute"; New object:C1471("name"; $1; "value"; $2))); \
+		"setAttributes"; Formula:C1597(_o_xml("setAttributes"; $1)); \
+		"removeAttribute"; Formula:C1597(_o_xml("removeAttribute"; New object:C1471("attribName"; $1))); \
+		"getValue"; Formula:C1597(_o_xml("getValue")); \
+		"setValue"; Formula:C1597(_o_xml("setValue"; New object:C1471("value"; $1))); \
+		"setOption"; Formula:C1597(_o_xml("setOption"; New object:C1471("selector"; $1; "value"; $2))); \
+		"toObject"; Formula:C1597(_o_xml("toObject")); \
+		"setName"; Formula:C1597(_o_xml("setName"; New object:C1471("name"; $1))); \
+		"getName"; Formula:C1597(_o_xml("getName")); \
+		"remove"; Formula:C1597(_o_xml("remove")); \
+		"export"; Formula:C1597(_o_xml("export")); \
+		"save"; Formula:C1597(_o_xml("save"; $1)); \
+		"close"; Formula:C1597(_o_xml("close"))\
 		)
 	
 	Case of 
@@ -70,7 +70,7 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 				
 				If (Length:C16(String:C10($2.namespace))>0)
 					
-					$t:=DOM Create XML Ref:C861($2.root;$2.namespace)
+					$t:=DOM Create XML Ref:C861($2.root; $2.namespace)
 					
 				Else 
 					
@@ -159,7 +159,7 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 			Case of 
 					
 					//----------------------------------------
-				: (Length:C16(Replace string:C233($t;"0";""))=0)
+				: (Length:C16(Replace string:C233($t; "0"; ""))=0)
 					
 					$o.errors:=New collection:C1472("Invalid XML element.")
 					
@@ -185,7 +185,7 @@ Else
 	
 	$o:=This:C1470
 	
-	If (Asserted:C1132($o#Null:C1517;"OOPS, this method must be called from a member method"))
+	If (Asserted:C1132($o#Null:C1517; "OOPS, this method must be called from a member method"))
 		
 		If ($o.elementRef=Null:C1517)
 			
@@ -213,12 +213,12 @@ Else
 							//----------------------------------------
 						: (Value type:C1509($2)=Is object:K8:27)  // suppose file
 							
-							DOM EXPORT TO FILE:C862($o.elementRef;$2.platformPath)
+							DOM EXPORT TO FILE:C862($o.elementRef; $2.platformPath)
 							
 							//----------------------------------------
 						: ($o.file#Null:C1517)  // use file from "load"
 							
-							DOM EXPORT TO FILE:C862($o.elementRef;$o.file.platformPath)
+							DOM EXPORT TO FILE:C862($o.elementRef; $o.file.platformPath)
 							
 							//----------------------------------------
 						Else 
@@ -237,42 +237,42 @@ Else
 					//=================================================================
 				: ($1="removeAttribute")
 					
-					DOM REMOVE XML ATTRIBUTE:C1084($o.elementRef;$2.attribName)
+					DOM REMOVE XML ATTRIBUTE:C1084($o.elementRef; $2.attribName)
 					$o.success:=Bool:C1537(OK)
 					
 					//=================================================================
 				: ($1="setName")
 					
-					DOM SET XML ELEMENT NAME:C867($o.elementRef;$2.name)
+					DOM SET XML ELEMENT NAME:C867($o.elementRef; $2.name)
 					$o.success:=Bool:C1537(OK)
 					
 					//=================================================================
 				: ($1="getName")
 					
-					DOM GET XML ELEMENT NAME:C730($o.elementRef;$tt)
+					DOM GET XML ELEMENT NAME:C730($o.elementRef; $tt)
 					$o.name:=$tt
 					$o.success:=Bool:C1537(OK)
 					
 					//=================================================================
 				: ($1="setAttribute")
 					
-					DOM SET XML ATTRIBUTE:C866($o.elementRef;\
-						$2.name;$2.value)
+					DOM SET XML ATTRIBUTE:C866($o.elementRef; \
+						$2.name; $2.value)
 					$o:=New object:C1471(\
-						"success";Bool:C1537(OK))
+						"success"; Bool:C1537(OK))
 					
 					//=================================================================
 				: ($1="setAttributes")
 					
-					For each ($tt;$2)
+					For each ($tt; $2)
 						
-						DOM SET XML ATTRIBUTE:C866($o.elementRef;\
-							$tt;$2[$tt])
+						DOM SET XML ATTRIBUTE:C866($o.elementRef; \
+							$tt; $2[$tt])
 						
 					End for each 
 					
 					$o:=New object:C1471(\
-						"success";Bool:C1537(OK))
+						"success"; Bool:C1537(OK))
 					
 					//=================================================================
 				: ($1="getAttribute")
@@ -284,11 +284,11 @@ Else
 					ON ERR CALL:C155("xml_NO_ERROR")
 					//) {
 					
-					DOM GET XML ATTRIBUTE BY NAME:C728($o.elementRef;$2.name;$tt)
+					DOM GET XML ATTRIBUTE BY NAME:C728($o.elementRef; $2.name; $tt)
 					
 					$o:=New object:C1471(\
-						"value";$tt;\
-						"success";Bool:C1537(OK))
+						"value"; $tt; \
+						"success"; Bool:C1537(OK))
 					
 					
 					// } CATCH {
@@ -302,38 +302,38 @@ Else
 				: ($1="attributes")
 					
 					$o:=New object:C1471(\
-						"attributes";xml_attributes($o.elementRef);\
-						"success";True:C214)
+						"attributes"; xml_attributes($o.elementRef); \
+						"success"; True:C214)
 					
 					// use a level because could have an attribute named success...
 					
 					//=================================================================
 				: ($1="getValue")
 					
-					DOM GET XML ELEMENT VALUE:C731($o.elementRef;$tt)  // HERE only text, variant will be better
+					DOM GET XML ELEMENT VALUE:C731($o.elementRef; $tt)  // HERE only text, variant will be better
 					$o:=New object:C1471(\
-						"success";Bool:C1537(OK);\
-						"value";$tt)
+						"success"; Bool:C1537(OK); \
+						"value"; $tt)
 					
 					//=================================================================
 				: ($1="setValue")
 					
-					DOM SET XML ELEMENT VALUE:C868($o.elementRef;$2.value)
+					DOM SET XML ELEMENT VALUE:C868($o.elementRef; $2.value)
 					$o:=New object:C1471(\
-						"success";Bool:C1537(OK))
+						"success"; Bool:C1537(OK))
 					
 					//=================================================================
 				: ($1="setOption")
 					
-					XML SET OPTIONS:C1090($o.elementRef;$2.selector;$2.value)
+					XML SET OPTIONS:C1090($o.elementRef; $2.selector; $2.value)
 					
 					$o:=New object:C1471(\
-						"success";True:C214)
+						"success"; True:C214)
 					
 					//=================================================================
 				: ($1="export")
 					
-					DOM EXPORT TO VAR:C863($o.elementRef;$tt)
+					DOM EXPORT TO VAR:C863($o.elementRef; $tt)
 					$o.success:=Bool:C1537(OK)
 					$o.variable:=$tt
 					
@@ -343,25 +343,25 @@ Else
 					//=================================================================
 				: ($1="toObject")
 					
-					$o:=xml_elementToObject($o.elementRef)
+					$o:=_o_xml_elementToObject($o.elementRef)
 					
 					//=================================================================
 				: ($1="findById")
 					
-					$t:=DOM Find XML element by ID:C1010($o.elementRef;$2.id)
+					$t:=DOM Find XML element by ID:C1010($o.elementRef; $2.id)
 					
 					//=================================================================
 				: ($1="findByXPath")
 					
-					$t:=xml_findElement($o.elementRef;$2.xpath).reference
+					$t:=xml_findElement($o.elementRef; $2.xpath).reference
 					
 					//=================================================================
 				: ($1="findOrCreate")
 					
 					$t:=$o.elementRef
-					DOM GET XML ELEMENT NAME:C730($t;$tt)
+					DOM GET XML ELEMENT NAME:C730($t; $tt)
 					
-					$o:=xml_findElement($t;$2.element)  // a new $o will be created after, $t filled
+					$o:=xml_findElement($t; $2.element)  // a new $o will be created after, $t filled
 					If ($o.success)
 						
 						$t:=$o.reference
@@ -369,25 +369,25 @@ Else
 					Else 
 						
 						//$t:=DOM Create XML element($t;$2.element)  // Will work only with simple xpath ie. subnode name
-						$t:=DOM Create XML element:C865($t;$2.element)
+						$t:=DOM Create XML element:C865($t; $2.element)
 					End if 
 					
 					//=================================================================
 				: ($1="findMany")
 					
-					ARRAY TEXT:C222($tDom_dicts;0x0000)
-					$tDom_dicts{0}:=DOM Find XML element:C864($o.elementRef;$2.xpath;$tDom_dicts)
+					ARRAY TEXT:C222($tDom_dicts; 0x0000)
+					$tDom_dicts{0}:=DOM Find XML element:C864($o.elementRef; $2.xpath; $tDom_dicts)
 					
 					$o:=New object:C1471(\
-						"elements";New collection:C1472;\
-						"success";Bool:C1537(OK))
+						"elements"; New collection:C1472; \
+						"success"; Bool:C1537(OK))
 					
 					This:C1470[""]:=Null:C1517
 					C_LONGINT:C283($Lon_ii)
 					
-					For ($Lon_ii;1;Size of array:C274($tDom_dicts);1)
+					For ($Lon_ii; 1; Size of array:C274($tDom_dicts); 1)
 						
-						$o.elements.push(xml($tDom_dicts{$Lon_ii}))
+						$o.elements.push(_o_xml($tDom_dicts{$Lon_ii}))
 						
 					End for 
 					
@@ -397,15 +397,15 @@ Else
 				: ($1="findByName")
 					
 					$o:=New object:C1471(\
-						"elements";New collection:C1472;\
-						"parent";$o;\
-						"success";True:C214)
+						"elements"; New collection:C1472; \
+						"parent"; $o; \
+						"success"; True:C214)
 					
 					This:C1470[""]:=Null:C1517
 					
-					For each ($tt;xml_findByName($o.parent.elementRef;$2.name))
+					For each ($tt; xml_findByName($o.parent.elementRef; $2.name))
 						
-						$o.elements.push(xml($tt))
+						$o.elements.push(_o_xml($tt))
 						
 					End for each 
 					
@@ -415,15 +415,15 @@ Else
 				: ($1="findByAttribute")
 					
 					$o:=New object:C1471(\
-						"elements";New collection:C1472;\
-						"parent";$o;\
-						"success";True:C214)
+						"elements"; New collection:C1472; \
+						"parent"; $o; \
+						"success"; True:C214)
 					
 					This:C1470[""]:=Null:C1517
 					
-					For each ($tt;xml_findByAttribute($o.parent.elementRef;$2))
+					For each ($tt; xml_findByAttribute($o.parent.elementRef; $2))
 						
-						$o.elements.push(xml($tt))
+						$o.elements.push(_o_xml($tt))
 						
 					End for each 
 					
@@ -432,7 +432,7 @@ Else
 					//=================================================================
 				: ($1="create")
 					
-					$t:=DOM Create XML element:C865($o.elementRef;$2.name)
+					$t:=DOM Create XML element:C865($o.elementRef; $2.name)
 					
 					//=================================================================
 				: ($1="parent")
@@ -469,20 +469,20 @@ Else
 					//=================================================================
 				: ($1="children")
 					
-					ARRAY LONGINT:C221($tLon_types;0x0000)
-					ARRAY TEXT:C222($tTxt_refs;0x0000)
+					ARRAY LONGINT:C221($tLon_types; 0x0000)
+					ARRAY TEXT:C222($tTxt_refs; 0x0000)
 					
-					DOM GET XML CHILD NODES:C1081($o.elementRef;$tLon_types;$tTxt_refs)
+					DOM GET XML CHILD NODES:C1081($o.elementRef; $tLon_types; $tTxt_refs)
 					$t:=""
 					$o.elements:=New collection:C1472()
 					
 					C_LONGINT:C283($i)
-					For ($i;1;Size of array:C274($tLon_types);1)
+					For ($i; 1; Size of array:C274($tLon_types); 1)
 						If ($tLon_types{$i}=11)
 							
 							This:C1470[""]:=Null:C1517
 							C_OBJECT:C1216($Obj_child)
-							$Obj_child:=xml($tTxt_refs{$i})
+							$Obj_child:=_o_xml($tTxt_refs{$i})
 							$o.elements.push($Obj_child)
 							This:C1470[""]:="_xml"
 							
@@ -527,13 +527,13 @@ Else
 									//........................................
 								: ($2.element.elementRef#Null:C1517)  // could check also _is xml
 									
-									$t:=DOM Append XML element:C1082($o.elementRef;$2.element.elementRef)
+									$t:=DOM Append XML element:C1082($o.elementRef; $2.element.elementRef)
 									
 									//........................................
 								: ((Bool:C1537($2.element.isFile))\
 									 & ($2.element.platformPath#Null:C1517))  // is file?
 									
-									$t:=DOM Append XML element:C1082($o.elementRef;DOM Parse XML source:C719($2.element.platformPath))
+									$t:=DOM Append XML element:C1082($o.elementRef; DOM Parse XML source:C719($2.element.platformPath))
 									
 									//........................................
 								Else 
@@ -547,13 +547,13 @@ Else
 						: (Value type:C1509($2.element)=Is text:K8:3)
 							
 							$tt:=$2.element
-							$t:=DOM Append XML element:C1082($o.elementRef;DOM Parse XML variable:C720($tt))
+							$t:=DOM Append XML element:C1082($o.elementRef; DOM Parse XML variable:C720($tt))
 							
 							//----------------------------------------
 						: (Value type:C1509($2.element)=Is BLOB:K8:12)
 							
 							$x:=$2.element
-							$t:=DOM Append XML element:C1082($o.elementRef;DOM Parse XML variable:C720($x))
+							$t:=DOM Append XML element:C1082($o.elementRef; DOM Parse XML variable:C720($x))
 							
 							//----------------------------------------
 						Else 
@@ -589,13 +589,13 @@ Else
 									//........................................
 								: ($2.element.elementRef#Null:C1517)  // could check also _is xml
 									
-									$t:=DOM Insert XML element:C1083($o.elementRef;$2.element.elementRef;$2.childIndex)
+									$t:=DOM Insert XML element:C1083($o.elementRef; $2.element.elementRef; $2.childIndex)
 									
 									//........................................
 								: ((Bool:C1537($2.element.isFile))\
 									 & ($2.element.platformPath#Null:C1517))  // is file?
 									
-									$t:=DOM Insert XML element:C1083($o.elementRef;DOM Parse XML source:C719($2.element.platformPath);$2.childIndex)
+									$t:=DOM Insert XML element:C1083($o.elementRef; DOM Parse XML source:C719($2.element.platformPath); $2.childIndex)
 									
 									//........................................
 								Else 
@@ -609,13 +609,13 @@ Else
 						: (Value type:C1509($2.element)=Is text:K8:3)
 							
 							$tt:=$2.element
-							$t:=DOM Insert XML element:C1083($o.elementRef;DOM Parse XML variable:C720($tt);$2.childIndex)
+							$t:=DOM Insert XML element:C1083($o.elementRef; DOM Parse XML variable:C720($tt); $2.childIndex)
 							
 							//----------------------------------------
 						: (Value type:C1509($2.element)=Is BLOB:K8:12)
 							
 							$x:=$2.element
-							$t:=DOM Insert XML element:C1083($o.elementRef;DOM Parse XML variable:C720($x);$2.childIndex)
+							$t:=DOM Insert XML element:C1083($o.elementRef; DOM Parse XML variable:C720($x); $2.childIndex)
 							
 							//----------------------------------------
 						Else 
@@ -635,7 +635,7 @@ Else
 					//=================================================================
 				Else 
 					
-					ASSERT:C1129(False:C215;"Unknown entry point: \""+$1+"\"")
+					ASSERT:C1129(False:C215; "Unknown entry point: \""+$1+"\"")
 					
 					//=================================================================
 			End case 
@@ -643,7 +643,7 @@ Else
 			If (Length:C16($t)>0)  // Result in a new node
 				
 				This:C1470[""]:=Null:C1517
-				$o:=xml($t)
+				$o:=_o_xml($t)
 				This:C1470[""]:="_xml"
 				
 			End if 

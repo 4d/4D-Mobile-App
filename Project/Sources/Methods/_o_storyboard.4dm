@@ -180,7 +180,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 				
 				// Load as object
 				
-				$Obj_out:=xml_fileToObject($Obj_in.path)
+				$Obj_out:=_o_xml_fileToObject($Obj_in.path)
 				
 			Else 
 				
@@ -203,7 +203,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 			
 			If ($File_.exists)
 				
-				$Dom_root:=xml("load"; $File_)
+				$Dom_root:=_o_xml("load"; $File_)
 				
 				// Look up first all the elements. Dom could be modifyed
 				For each ($Obj_element; $Obj_in.template.elements)
@@ -410,7 +410,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 			C_OBJECT:C1216($Folder_template)
 			$Folder_template:=Folder:C1567($Obj_in.template.source; fk platform path:K87:2)
 			$File_:=$Folder_template.file(String:C10($Obj_in.template.storyboard))
-			$Dom_root:=xml("load"; $File_)
+			$Dom_root:=_o_xml("load"; $File_)
 			
 			If ($Dom_root.success)
 				
@@ -653,13 +653,13 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 								
 							: ($Folder_template.file("relationButton.xml").exists)
 								
-								$Dom_relation:=xml("load"; $Folder_template.file("relationButton.xml"))
+								$Dom_relation:=_o_xml("load"; $Folder_template.file("relationButton.xml"))
 								$Dom_relation.isDefault:=False:C215
 								
 							: ($Folder_template.file("relationButton.xib").exists)
 								
 								//$Dom_relation:=xml("load";$Folder_template.file("relationButton.xib")).findByXPath("document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
-								$Dom_relation:=xml("load"; $Folder_template.file("relationButton.xib")).findByXPath("/document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
+								$Dom_relation:=_o_xml("load"; $Folder_template.file("relationButton.xib")).findByXPath("/document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
 								$Dom_relation.isDefault:=False:C215
 								
 							Else 
@@ -670,7 +670,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 									
 									//$Dom_relation:=xml("load";$Folder_relation.file("relationButton.xib")).findByXPath("document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
 									
-									$Dom_relation:=xml("load"; $Folder_relation.file("relationButton.xib")).findByXPath("/document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
+									$Dom_relation:=_o_xml("load"; $Folder_relation.file("relationButton.xib")).findByXPath("/document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
 									//$Dom_relation:=xml ("load";$Folder_relation.file("relationButton.xml"))
 									$Dom_relation.isDefault:=True:C214
 									
@@ -729,14 +729,14 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 						
 						// 2- scene
 						//$Obj_element:=New object(\
-																																																																													"insertInto";$Dom_root.findByXPath("document/scenes");\
-																																																																													"dom";xml("load";$Folder_relation.file("storyboardScene.xml"));\
-																																																																													"idCount";3;\
-																																																																													"tagInterfix";"SN";\
-																																																																													"insertMode";"append")
+																																																																																											"insertInto";$Dom_root.findByXPath("document/scenes");\
+																																																																																											"dom";xml("load";$Folder_relation.file("storyboardScene.xml"));\
+																																																																																											"idCount";3;\
+																																																																																											"tagInterfix";"SN";\
+																																																																																											"insertMode";"append")
 						$Obj_element:=New object:C1471(\
 							"insertInto"; $Dom_root.findByXPath("/document/scenes"); \
-							"dom"; xml("load"; $Folder_relation.file("storyboardScene.xml")); \
+							"dom"; _o_xml("load"; $Folder_relation.file("storyboardScene.xml")); \
 							"idCount"; 3; \
 							"tagInterfix"; "SN"; \
 							"insertMode"; "append")
@@ -788,7 +788,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 						
 						If ($Obj_element.insertInto.success)
 							$Obj_element.insertInto:=$Obj_element.insertInto.findOrCreate("connections")  // Find its <connections> children, if not exist create it
-							$Obj_element.dom:=xml("parse"; New object:C1471("variable"; $Txt_buffer))
+							$Obj_element.dom:=_o_xml("parse"; New object:C1471("variable"; $Txt_buffer))
 							$Obj_in.template.relation.elements.push($Obj_element)
 							
 						Else 
@@ -1135,7 +1135,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 					If ($File_.extension=".storyboard")
 						
 						// read file
-						$Dom_root:=xml("load"; $File_)
+						$Dom_root:=_o_xml("load"; $File_)
 						
 						// find named colors
 						$Boo_buffer:=False:C215
@@ -1245,7 +1245,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 					If ($File_.extension=".storyboard")
 						
 						// read file
-						$Dom_root:=xml("load"; $File_)
+						$Dom_root:=_o_xml("load"; $File_)
 						$Boo_buffer:=False:C215
 						
 						// find named colors

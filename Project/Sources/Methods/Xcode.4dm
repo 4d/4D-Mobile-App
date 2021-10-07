@@ -224,21 +224,21 @@ Case of
 			If ((Length:C16($Txt_error)=0)\
 				 & (Length:C16($Txt_out)#0))
 				
-				$col_Paths:=New collection:C1472
+				$Col_paths:=New collection:C1472
 				
 				$Lon_x:=Position:C15("\n"; $Txt_out)
 				
 				While ($Lon_x#0)
 					
 					$Txt_buffer:=Substring:C12($Txt_out; 1; $Lon_x-1)
-					$col_Paths.push($Txt_buffer)
+					$Col_paths.push($Txt_buffer)
 					$Txt_out:=Substring:C12($Txt_out; $Lon_x+1)
 					$Lon_x:=Position:C15("\n"; $Txt_out)
 					
 				End while 
 				
 				$Obj_result.success:=True:C214
-				$Obj_result.paths:=$col_Paths
+				$Obj_result.paths:=$Col_paths
 				
 			Else 
 				
@@ -622,7 +622,7 @@ Case of
 			End if 
 			
 			$File_path:=$File_path.file("contents.xcworkspacedata")
-			$Dom_root:=xml("load"; $File_path)
+			$Dom_root:=_o_xml("load"; $File_path)
 			
 			If ($Dom_root.success)
 				

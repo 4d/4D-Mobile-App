@@ -78,7 +78,7 @@ Function run
 		If ($Boo_hasRelation | $Boo_enableBarcode)
 			
 			C_OBJECT:C1216($Dom_root; $Dom_child; $Dom_)
-			$Dom_root:=xml("load"; This:C1470.path)
+			$Dom_root:=_o_xml("load"; This:C1470.path)
 			
 			// Edit for relations
 			If ($Boo_hasRelation)
@@ -150,7 +150,7 @@ Function xmlAppendSearchWithBarCode($root : Object)->$node : Object
 		If (Not:C34($parent.findByXPath("[@keyPath=searchUsingCodeScanner]").success))
 			
 			$t:="<userDefinedRuntimeAttribute type=\"boolean\" keyPath=\"searchUsingCodeScanner\" value=\"YES\"/>"
-			$parent.append(xml("parse"; New object:C1471("variable"; $t)))
+			$parent.append(_o_xml("parse"; New object:C1471("variable"; $t)))
 			
 		Else 
 			

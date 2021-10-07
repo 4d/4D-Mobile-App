@@ -26,7 +26,7 @@ Function run
 	This:C1470.checkStoryboardPath($Obj_template)  // set default path if not defined
 	
 	C_OBJECT:C1216($Dom_root; $Dom_child; $Dom_)
-	$Dom_root:=xml("load"; This:C1470.path)
+	$Dom_root:=_o_xml("load"; This:C1470.path)
 	
 	If ($Dom_root.success)
 		
@@ -185,12 +185,12 @@ Function run
 						
 					: ($Folder_template.file("relationButton.xml").exists)  // there is
 						
-						$Dom_relation:=xml("load"; $Folder_template.file("relationButton.xml"))
+						$Dom_relation:=_o_xml("load"; $Folder_template.file("relationButton.xml"))
 						$Dom_relation.isDefault:=False:C215
 						
 					: ($Folder_template.file("relationButton.xib").exists)
 						
-						$Dom_relation:=xml("load"; $Folder_template.file("relationButton.xib")).findByXPath("/document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
+						$Dom_relation:=_o_xml("load"; $Folder_template.file("relationButton.xib")).findByXPath("/document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
 						$Dom_relation.isDefault:=False:C215
 						
 					: (let(->$Dom_relation; Formula:C1597($Obj_element.dom.findById("TAG-RL-001")); Formula:C1597($1.success)))  // using tag id injected in storyboard
@@ -200,7 +200,7 @@ Function run
 						
 					Else   // else us default one
 						
-						$Dom_relation:=xml("load"; This:C1470.relationFolder.file("relationButton.xib")).findByXPath("/document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
+						$Dom_relation:=_o_xml("load"; This:C1470.relationFolder.file("relationButton.xib")).findByXPath("/document/objects/view")  // XXX the root must be close, or we must free memory or parent element here?
 						$Dom_relation.isDefault:=True:C214
 						
 				End case 
@@ -238,7 +238,7 @@ Function run
 				
 				$Obj_element:=New object:C1471(\
 					"insertInto"; $Dom_root.findByXPath("/document/scenes"); \
-					"dom"; xml("load"; This:C1470.relationFolder.file("storyboardScene.xml")); \
+					"dom"; _o_xml("load"; This:C1470.relationFolder.file("storyboardScene.xml")); \
 					"idCount"; 3; \
 					"tagInterfix"; "SN"; \
 					"insertMode"; "append")
@@ -267,7 +267,7 @@ Function run
 				
 				If ($Obj_element.insertInto.success)
 					$Obj_element.insertInto:=$Obj_element.insertInto.findOrCreate("connections")  // Find its <connections> children, if not exist create it
-					$Obj_element.dom:=xml("parse"; New object:C1471("variable"; $Txt_buffer))
+					$Obj_element.dom:=_o_xml("parse"; New object:C1471("variable"; $Txt_buffer))
 					$Obj_template.relation.elements.push($Obj_element)
 					
 				Else 

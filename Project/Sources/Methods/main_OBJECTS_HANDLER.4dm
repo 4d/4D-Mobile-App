@@ -212,7 +212,7 @@ Case of
 		$Ptr_names:=$Obj_form.tableNames.pointer()
 		$Ptr_IDs:=$Obj_form.tableNumbers.pointer()
 		
-		If ($Obj_form.currentWidget=$obj_form.addOne.name)
+		If ($Obj_form.currentWidget=$Obj_form.addOne.name)
 			
 			$Lon_x:=Find in array:C230(($Obj_form.tables.pointer())->; True:C214)
 			

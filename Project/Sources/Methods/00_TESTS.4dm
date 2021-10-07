@@ -663,13 +663,6 @@ Case of
 		$Boo_reset:=$t%"Hello"  // True
 		$Boo_reset:=$t%".world"  // False
 		$Boo_reset:=$t%"@.world"  // False
-		
-		//________________________________________
-	: (True:C214)
-		
-		//$Obj_buffer:=xml_fileToObject (Get 4D folder(Database folder)+"Info.plist")
-		$Lon_build:=Num:C11(xml_fileToObject(Get 4D folder:C485(Database folder:K5:14)+"Info.plist").value.plist.dict.string[5].$)
-		
 		//________________________________________
 	: (True:C214)
 		

@@ -586,7 +586,7 @@ Case of
 							//For each ($Txt_field;$Obj_relatedDataClass)
 							
 							//If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																								
+								
 							//If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
 							//$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])
@@ -1001,7 +1001,7 @@ Case of
 			
 			$OUT:=New object:C1471(\
 				"success"; True:C214; \
-				"value"; xml_refToObject($root))
+				"value"; _o_xml_refToObject($root))
 			
 			DOM CLOSE XML:C722($root)
 			

@@ -295,7 +295,7 @@ Function colorAssetFix
 	$File_:=This:C1470.path
 	
 	// read file
-	$root:=xml("load"; $File_)
+	$root:=_o_xml("load"; $File_)
 	
 	// find named colors
 	$asModification:=False:C215
@@ -398,7 +398,7 @@ Function imageAssetFix
 		"success"; False:C215)
 	
 	// Read file
-	$root:=xml("load"; This:C1470.path)
+	$root:=_o_xml("load"; This:C1470.path)
 	
 	If ($root.success)
 		
@@ -540,7 +540,7 @@ Function fixDomChildID($element : Object)->$result : Object
 		If ($Boo_haveWrongTag)  //or $Obj_tagMapping key size  OPTI: if we do nothing, do not return new node (just edit the current one and add idCount)
 			$element.originalDom:=$element.dom  // store old one (useful to get parent or replace)
 			$element.insertInto:=$element.originalDom.parent()
-			$element.dom:=xml("parse"; New object:C1471("variable"; $t))
+			$element.dom:=_o_xml("parse"; New object:C1471("variable"; $t))
 			$element.tagInterfix:=$Txt_tagInterfix
 		End if 
 		
@@ -704,19 +704,19 @@ Function xmlAppendRelationAttributeForField()->$response : Object
 		C_TEXT:C284($Txt_buffer)
 		If (Not:C34($Dom_parent.findByXPath("[@keyPath=relationFormat]").success))
 			$Txt_buffer:="<userDefinedRuntimeAttribute type=\"string\" keyPath=\"relationFormat\" value=\"___FIELD_"+String:C10($Lon_j)+"_FORMAT___\"/>"
-			$Dom_parent.append(xml("parse"; New object:C1471("variable"; $Txt_buffer)))
+			$Dom_parent.append(_o_xml("parse"; New object:C1471("variable"; $Txt_buffer)))
 		End if 
 		If (Not:C34($Dom_parent.findByXPath("[@keyPath=relationName]").success))
 			$Txt_buffer:="<userDefinedRuntimeAttribute type=\"string\" keyPath=\"relationName\" value=\"___FIELD_"+String:C10($Lon_j)+"___\"/>"
-			$Dom_parent.append(xml("parse"; New object:C1471("variable"; $Txt_buffer)))
+			$Dom_parent.append(_o_xml("parse"; New object:C1471("variable"; $Txt_buffer)))
 		End if 
 		If (Not:C34($Dom_parent.findByXPath("[@keyPath=relationLabel]").success))
 			$Txt_buffer:="<userDefinedRuntimeAttribute type=\"string\" keyPath=\"relationLabel\" value=\"___FIELD_"+String:C10($Lon_j)+"_LABEL___\"/>"
-			$Dom_parent.append(xml("parse"; New object:C1471("variable"; $Txt_buffer)))
+			$Dom_parent.append(_o_xml("parse"; New object:C1471("variable"; $Txt_buffer)))
 		End if 
 		If (Not:C34($Dom_parent.findByXPath("[@keyPath=relationIsToMany]").success))
 			$Txt_buffer:="<userDefinedRuntimeAttribute type=\"boolean\" keyPath=\"relationIsToMany\" value=\""+Choose:C955($IsToMany; "YES"; "NO")+"\"/>"
-			$Dom_parent.append(xml("parse"; New object:C1471("variable"; $Txt_buffer)))
+			$Dom_parent.append(_o_xml("parse"; New object:C1471("variable"; $Txt_buffer)))
 		End if 
 		
 	End if 
@@ -753,7 +753,7 @@ Function injectSegue
 		C_OBJECT:C1216($Obj_element)
 		$Obj_element:=New object:C1471(\
 			"insertInto"; $Dom_root.findByXPath("/document/scenes"); \
-			"dom"; xml("load"; This:C1470.relationFolder.file("storyboardScene.xml")); \
+			"dom"; _o_xml("load"; This:C1470.relationFolder.file("storyboardScene.xml")); \
 			"idCount"; 3; \
 			"tagInterfix"; "SN"; \
 			"insertMode"; "append")
@@ -768,7 +768,7 @@ Function injectSegue
 		C_TEXT:C284($Txt_buffer)
 		$Txt_buffer:=This:C1470.relationSegue($Obj_template.relation)
 		$Obj_element.insertInto:=$Obj_element.insertInto.findOrCreate("connections")  // Find its <connections> children, if not exist create it
-		$Obj_element.dom:=xml("parse"; New object:C1471("variable"; $Txt_buffer))
+		$Obj_element.dom:=_o_xml("parse"; New object:C1471("variable"; $Txt_buffer))
 		$Obj_template.relation.elements.push($Obj_element)
 		
 		This:C1470.injectElement($Obj_field; $Obj_tags; $Obj_template; $Lon_j; False:C215; $Obj_out)

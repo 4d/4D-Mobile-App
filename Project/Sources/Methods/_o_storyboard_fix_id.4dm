@@ -118,7 +118,7 @@ If ($Obj_result.children.success)
 	If ($Boo_haveWrongTag)  //or $Obj_tagMapping key size  OPTI: if we do nothing, do not return new node (just edit the current one and add idCount)
 		$Obj_element.originalDom:=$Obj_element.dom  // store old one (useful to get parent or replace)
 		$Obj_element.insertInto:=$Obj_element.originalDom.parent()
-		$Obj_element.dom:=xml("parse"; New object:C1471("variable"; $Txt_buffer))
+		$Obj_element.dom:=_o_xml("parse"; New object:C1471("variable"; $Txt_buffer))
 		$Obj_element.tagInterfix:=$Txt_tagInterfix
 	End if 
 	

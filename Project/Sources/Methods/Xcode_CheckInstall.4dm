@@ -211,7 +211,7 @@ If ($Xcode.success)
 		
 		If (Not:C34(Bool:C1537($inƒ.silent)))
 			
-			If ($xcode.versionCompare($requestedVersion; $xcode.version)=1)  // # TO OLD VERSION
+			If ($Xcode.versionCompare($requestedVersion; $Xcode.version)=1)  // # TO OLD VERSION
 				
 				$signal:=await_MESSAGE(New object:C1471(\
 					"target"; $inƒ.caller; \

@@ -90,6 +90,10 @@
 			"_o_tmpl_form",
 			"_o_ui_BEST_SIZE",
 			"_o_unzip",
+			"_o_xml",
+			"_o_xml_elementToObject",
+			"_o_xml_fileToObject",
+			"_o_xml_refToObject",
 			"_OPEN_MOBILE_PROJECT",
 			"OBSOLETE",
 			"TEMPO_1",
@@ -101,6 +105,14 @@
 			"COMPILER_UNUSED",
 			"net",
 			"tester_net"
+		]
+	},
+	"(HDI_COLOR)": {
+		"forms": [
+			"(COLOR_HSL)",
+			"(COLOR_PALETTE)",
+			"(COLOR_RGB)",
+			"(HDI_COLOR)"
 		]
 	},
 	"[ android ]": {
@@ -694,17 +706,6 @@
 			"widget"
 		]
 	},
-	"HDI_COLOR": {
-		"methods": [
-			"HDI_COLOR"
-		],
-		"forms": [
-			"COLOR_HSL",
-			"COLOR_PALETTE",
-			"COLOR_RGB",
-			"HDI_COLOR"
-		]
-	},
 	"HTUs": {
 		"methods": [
 			"HTU_logs",
@@ -1044,17 +1045,17 @@
 		"methods": [
 			"COMPILER_xml",
 			"test_xml",
-			"xml",
 			"xml_attributes",
-			"xml_elementToObject",
 			"xml_encode",
-			"xml_fileToObject",
 			"xml_findByAttribute",
 			"xml_findByName",
 			"xml_findElement",
-			"xml_NO_ERROR",
-			"xml_refToObject"
+			"xml_NO_ERROR"
 		]
 	},
-	"trash": {}
+	"trash": {
+		"groups": [
+			"(HDI_COLOR)"
+		]
+	}
 }
