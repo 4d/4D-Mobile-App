@@ -1,4 +1,4 @@
-﻿#--------------------------------
+#--------------------------------
 # Ignore invisible files/folders
 #--------------------------------
 .*
@@ -60,3 +60,7 @@ Libraries/
 Resources/templates.zip
 DEV/
 ClientCertificatesFolder/
+Project/Sources/Forms/Form1/
+Project/Sources/Classes/EmployesEntity.4dm
+Project/Sources/Forms/Form1
+Project/Sources/Methods/Method*.4dm
