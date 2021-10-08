@@ -48,6 +48,8 @@ Class constructor($project : Object)
 	If (This:C1470.hasRelations=False:C215)
 		This:C1470.project.hasRelations:=False:C215
 	End if 
+	This:C1470.hasActions:=FEATURE.with("androidActions")
+	This:C1470.project.hasActions:=This:C1470.hasActions
 	
 	This:C1470.checkPackage()
 	
