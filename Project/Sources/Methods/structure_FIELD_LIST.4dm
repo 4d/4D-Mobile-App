@@ -221,6 +221,39 @@ If ($row>0)
 					
 				End for each 
 				
+				If (FEATURE.with(129953))
+					
+					var $relatedDataClasses : 4D:C1709.DataClass
+					
+					For each ($field; $table.field.query("isToMany = true & relatedDataClass != :1"; $table.name))
+						
+						$relatedDataClasses:=ds:C1482[ds:C1482[$table.name][$field.name].relatedDataClass]
+						
+						var $t : Text
+						For each ($t; $relatedDataClasses)
+							
+							If ($relatedDataClasses[$t].kind="relatedEntity")\
+								 & (String:C10($relatedDataClasses[$t].relatedDataClass)#$table.name)
+								
+								$o:=New object:C1471(\
+									"oneToOne"; True:C214; \
+									"name"; $t; \
+									"path"; New collection:C1472($field.name; $t).join(".")\
+									)
+								
+								STRUCTURE_Handler(New object:C1471(\
+									"action"; "appendField"; \
+									"table"; $table; \
+									"field"; $o; \
+									"fields"; $Ptr_fields; \
+									"published"; $Ptr_published; \
+									"icons"; $Ptr_icons))
+								
+							End if 
+						End for each 
+					End for each 
+				End if 
+				
 				//______________________________________________________
 		End case 
 		

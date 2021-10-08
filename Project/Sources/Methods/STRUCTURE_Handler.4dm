@@ -317,6 +317,8 @@ Case of
 		var $dataModel : Object
 		$dataModel:=PROJECT.dataModel
 		
+		var $type : Integer
+		
 		Case of 
 				
 			: (False:C215)
@@ -325,6 +327,12 @@ Case of
 				$structure:=cs:C1710.structure.new()
 				
 				$structure.addField($IN.table; $IN.field)
+				
+				//…………………………………………………………………………………………………
+			: (Bool:C1537($IN.field.oneToOne))  // 1 -> N -> 1 
+				
+				$published:=Num:C11($dataModel[String:C10($IN.table.tableNumber)][String:C10($IN.field.name)]#Null:C1517)
+				$type:=8860
 				
 				//…………………………………………………………………………………………………
 			: ($IN.field.type=-1)  // N -> 1 relation
@@ -378,9 +386,7 @@ Case of
 					End if 
 				End if 
 				
-				APPEND TO ARRAY:C911(($IN.published)->; $published)
-				APPEND TO ARRAY:C911(($IN.icons)->; EDITOR.fieldIcons[8858])
-				APPEND TO ARRAY:C911(($IN.fields)->; $IN.field.name)
+				$type:=8858
 				
 				//…………………………………………………………………………………………………
 			: (Bool:C1537($IN.field.isToMany))  // 1 -> N relation //($IN.field.type=-2)  
@@ -392,10 +398,7 @@ Case of
 				// REGARDER DANS : Form.$dialog.unsynchronizedTableFields[String($Obj_in.table.tableNumber)]
 				//
 				//*******************************************************************************************
-				
-				APPEND TO ARRAY:C911(($IN.published)->; $published)
-				APPEND TO ARRAY:C911(($IN.icons)->; EDITOR.fieldIcons[8859])
-				APPEND TO ARRAY:C911(($IN.fields)->; $IN.field.name)
+				$type:=8859
 				
 				//…………………………………………………………………………………………………
 			: ($IN.field.kind="calculated")  // Computed //($IN.field.type=-3)  
@@ -403,10 +406,7 @@ Case of
 				If ($IN.field.fieldType<=EDITOR.fieldIcons.length)
 					
 					$published:=Num:C11($dataModel[String:C10($IN.table.tableNumber)][String:C10($IN.field.name)]#Null:C1517)
-					
-					APPEND TO ARRAY:C911(($IN.published)->; $published)
-					APPEND TO ARRAY:C911(($IN.icons)->; EDITOR.fieldIcons[$IN.field.fieldType])
-					APPEND TO ARRAY:C911(($IN.fields)->; $IN.field.name)
+					$type:=$IN.field.fieldType
 					
 				End if 
 				
@@ -416,17 +416,19 @@ Case of
 				If ($IN.field.fieldType<=EDITOR.fieldIcons.length)
 					
 					$published:=Num:C11($dataModel[String:C10($IN.table.tableNumber)][String:C10($IN.field.id)]#Null:C1517)
-					
-					APPEND TO ARRAY:C911(($IN.published)->; $published)
-					APPEND TO ARRAY:C911(($IN.icons)->; EDITOR.fieldIcons[$IN.field.fieldType])
-					APPEND TO ARRAY:C911(($IN.fields)->; $IN.field.name)
+					$type:=$IN.field.fieldType
 					
 				End if 
 				
-				LISTBOX SET ROW FONT STYLE:C1268(*; $form.fieldList; Size of array:C274(($IN.fields)->); Plain:K14:1)
 				
 				//…………………………………………………………………………………………………
 		End case 
+		
+		APPEND TO ARRAY:C911(($IN.published)->; $published)
+		APPEND TO ARRAY:C911(($IN.icons)->; EDITOR.fieldIcons[$type])
+		APPEND TO ARRAY:C911(($IN.fields)->; $IN.field.name)
+		
+		LISTBOX SET ROW FONT STYLE:C1268(*; $form.fieldList; Size of array:C274(($IN.fields)->); Plain:K14:1)
 		
 		//=========================================================
 	: ($IN.action="update")

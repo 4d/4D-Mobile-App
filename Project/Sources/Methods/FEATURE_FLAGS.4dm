@@ -118,20 +118,20 @@ _____________*/
 _____________*/
 	FEATURE.delivered(117618; 1850)  // Deep Linking
 	
-End if 
-
 /* _____________
 18R6 - REMOVED
 _____________*/
-FEATURE.delivered(117601; 1860)  // Relation management optimisation
-FEATURE.delivered("templateClass"; 1860)
-FEATURE.delivered("searchWithBarCode"; 1860)
-
+	FEATURE.delivered(117601; 1860)  // Relation management optimisation
+	FEATURE.delivered("templateClass"; 1860)
+	FEATURE.delivered("searchWithBarCode"; 1860)
+	
 /* _____________
 1900 - REMOVED
 _____________*/
-FEATURE.delivered("withSimulatorClass")  // Use simctl class intead of _o_simulator
-FEATURE.delivered("wizards")  // Use a wizard instead of standard dialogs to create or open a project
+	FEATURE.delivered("withSimulatorClass")  // Use simctl class intead of _o_simulator
+	FEATURE.delivered("wizards")  // Use a wizard instead of standard dialogs to create or open a project
+	
+End if 
 
 /* _____________
 1920
@@ -162,6 +162,9 @@ FEATURE.unstable("computedProperties")  // #130206 [MOBILE] Use computed attribu
 1940
 _____________*/
 FEATURE.unstable("androidActions")  //[Mobile] Feature flag pour activer les actions dans le projet mobile
+
+
+FEATURE.wip(129953)  //[MOBILE] Handle Many-one-Many relations
 
 /* _____________
 WIP
@@ -289,3 +292,4 @@ End if
 /* _____________
 ALIAS
 _____________*/
+FEATURE.alias("many-one-many"; 129953)
