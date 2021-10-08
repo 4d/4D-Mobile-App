@@ -564,7 +564,8 @@ Function doAddMenu()
 									//……………………………………………………………………
 								: (PROJECT.isField($t))
 									
-									If ($table[$t].name#$table[""].primaryKey)  // DO NOT ADD A PRIMARY KEY
+									If ($table[$t].name#$table[""].primaryKey)\
+										 & ($table[$t].fieldType#Is object:K8:27)  // DO NOT ADD A PRIMARY KEY
 										
 										$field:=$fields.query("name = :1"; $table[$t].name).pop()
 										$action.parameters.push(This:C1470._addParameter($field; $table[$t]; $menu.edit))
