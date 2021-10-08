@@ -372,6 +372,11 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 			// <NOTHING MORE TO DO>
 			
 			//…………………………………………………………………………………………………
+		: (This:C1470.isStorage($field))
+			
+			
+			
+			//…………………………………………………………………………………………………
 		: (This:C1470.isRelatedEntity($field))  // N -> 1 relation
 			
 			$result.success:=True:C214
