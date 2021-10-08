@@ -1998,11 +1998,14 @@ Function doName($e : Object)
 				If (PROJECT.isField($key))\
 					 | (PROJECT.isComputedAttribute($table[$key]; $table[""].name))
 					
-					If (This:C1470.action.parameters.query("name = :1"; $table[$key].name).pop()=Null:C1517)\
-						 | ($table[$key].name=This:C1470.current.name)
+					If ($table[$key].fieldType#Is object:K8:27)
 						
-						$o.values.push($table[$key].name)
-						
+						If (This:C1470.action.parameters.query("name = :1"; $table[$key].name).pop()=Null:C1517)\
+							 | ($table[$key].name=This:C1470.current.name)
+							
+							$o.values.push($table[$key].name)
+							
+						End if 
 					End if 
 				End if 
 			End for each 
@@ -2054,16 +2057,19 @@ Function updateParamater($name : Text)->$success : Boolean
 		
 		If (PROJECT.isField($key))
 			
-			$success:=($table[$key].name=$name)
-			
-			If ($success)
+			If ($table[$key].fieldType#Is object:K8:27)
 				
-				This:C1470.current.fieldNumber:=Num:C11($key)
-				This:C1470.current.name:=$table[$key].name
-				This:C1470.current.label:=$table[$key].label
-				This:C1470.current.shortLabel:=$table[$key].shortLabel
-				This:C1470.current.type:=PROJECT.fieldType2type($table[$key].fieldType)
+				$success:=($table[$key].name=$name)
 				
+				If ($success)
+					
+					This:C1470.current.fieldNumber:=Num:C11($key)
+					This:C1470.current.name:=$table[$key].name
+					This:C1470.current.label:=$table[$key].label
+					This:C1470.current.shortLabel:=$table[$key].shortLabel
+					This:C1470.current.type:=PROJECT.fieldType2type($table[$key].fieldType)
+					
+				End if 
 			End if 
 		End if 
 	End for each 
