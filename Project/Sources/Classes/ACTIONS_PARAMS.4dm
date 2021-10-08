@@ -826,15 +826,19 @@ Function doAddParameterMenu($target : Object; $update : Boolean)
 				
 				$field:=$table[$t]
 				
-				If (PROJECT.isField($t)) | ($isComputedAttribute.call(Null:C1517; $field))
+				If (PROJECT.isField($t))\
+					 | ($isComputedAttribute.call(Null:C1517; $field))
 					
-					If (Not:C34($isSortAction) | PROJECT.isSortable($field))
+					If ($field.fieldType#Is object:K8:27)
 						
-						If (This:C1470.action.parameters.query("name = :1"; $field.name).pop()=Null:C1517)
+						If (Not:C34($isSortAction) | PROJECT.isSortable($field))
 							
-							$field.fieldNumber:=Num:C11($t)
-							$c.push($field)
-							
+							If (This:C1470.action.parameters.query("name = :1"; $field.name).pop()=Null:C1517)
+								
+								$field.fieldNumber:=Num:C11($t)
+								$c.push($field)
+								
+							End if 
 						End if 
 					End if 
 				End if 

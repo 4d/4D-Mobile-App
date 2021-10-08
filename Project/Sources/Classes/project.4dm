@@ -1102,6 +1102,7 @@ Function fieldType2type($legacyFieldType : Integer)->$fieldType : Text
 	$c[Is real:K8:4]:="number"
 	$c[Is time:K8:8]:="time"
 	$c[Is date:K8:7]:="date"
+	$c[Is object:K8:27]:="object"
 	
 	If (Asserted:C1132($legacyFieldType<=$c.length))
 		

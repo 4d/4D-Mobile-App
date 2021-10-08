@@ -995,7 +995,6 @@ Function doFormatMenu($e : Object)
 			$menu.append("newChoiceList"; "$new")
 			
 		End if 
-		
 	End if 
 	
 	If (This:C1470.fieldList.popup($menu).selected)
