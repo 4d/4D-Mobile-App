@@ -31,32 +31,30 @@ class Converters {
 
     {{#tableNames}}
     @TypeConverter
-    fun customTableObjectToStringEntities{{name}}(obj: Entities<{{name}}>?): String =
+    fun customTableObjectToStringEntities{{name}}(obj: Entities<{{type}}>?): String =
         ConverterUtils.customTableObjectToString(gson, obj)
 
     {{/tableNames}}
-
     {{#types_and_tables}}
     @TypeConverter
-    fun customTableObjectToString{{name}}(obj: {{name}}?): String =
+    fun customTableObjectToString{{name}}(obj: {{type}}?): String =
         ConverterUtils.customTableObjectToString(gson, obj)
 
     {{/types_and_tables}}
 
     /**
-     * Converts custom table Json String to Photo Object
+     * Converts custom table Json String to table Object
      */
 
     {{#tableNames}}
     @TypeConverter
-    fun customTableStringToObjectEntities{{name}}(str: String?): Entities<{{name}}>? =
+    fun customTableStringToObjectEntities{{name}}(str: String?): Entities<{{type}}>? =
         ConverterUtils.customTableStringToObject(gson, str)
 
     {{/tableNames}}
-
     {{#types_and_tables}}
     @TypeConverter
-    fun customTableStringToObject{{name}}(str: String?): {{name}}? =
+    fun customTableStringToObject{{name}}(str: String?): {{type}}? =
         ConverterUtils.customTableStringToObject(gson, str)
 
     {{/types_and_tables}}

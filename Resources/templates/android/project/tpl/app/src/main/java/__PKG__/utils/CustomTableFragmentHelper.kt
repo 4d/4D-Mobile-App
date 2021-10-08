@@ -12,9 +12,13 @@ import androidx.navigation.findNavController
 import com.qmobile.qmobileapi.model.entity.EntityModel
 import com.qmobile.qmobiledatasync.utils.GenericTableFragmentHelper
 import com.qmobile.qmobiledatasync.viewmodel.EntityViewModel
+{{#has_many_to_one_relation}}
 import com.qmobile.qmobileui.BR
+{{/has_many_to_one_relation}}
 import com.qmobile.qmobileui.detail.EntityDetailFragment
+{{#has_custom_formatter_images}}
 import {{package}}.R
+{{/has_custom_formatter_images}}
 {{#tableNames_navigation}}
 import {{package}}.databinding.FragmentDetail{{nameCamelCase}}Binding
 {{/tableNames_navigation}}

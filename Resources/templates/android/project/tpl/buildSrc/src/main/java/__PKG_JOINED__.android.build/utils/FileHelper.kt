@@ -48,18 +48,21 @@ private fun getAppInfoFile(): File? {
  * Field / Table name adjustments
  */
 
-private fun String.condense() = this.replace("\\s".toRegex(), "")
+private fun String.condense() =
+    if (!this.startsWith("Map<"))
+        this.replace("\\s".toRegex(), "")
+    else
+        this
 
 fun String.fieldAdjustment() =
     this.condense().replaceSpecialChars().lowerCustomProperties().validateWordDecapitalized()
 
-private fun String.replaceSpecialChars(): String {
-    return if (this.contains("Entities<")) {
-        this.unaccent().replace("[^a-zA-Z0-9._<>]".toRegex(), "_")
-    } else {
-        this.unaccent().replace("[^a-zA-Z0-9._]".toRegex(), "_")
+private fun String.replaceSpecialChars(): String =
+    when {
+        this.contains("Entities<") -> this.unaccent().replace("[^a-zA-Z0-9._<>]".toRegex(), "_")
+        this.contains("Map<") -> this.unaccent().replace("[^a-zA-Z0-9._<>, ]".toRegex(), "_")
+        else -> this.unaccent().replace("[^a-zA-Z0-9._]".toRegex(), "_")
     }
-}
 
 private fun String.lowerCustomProperties() =
     if (this in arrayOf("__KEY", "__STAMP", "__GlobalStamp", "__TIMESTAMP"))

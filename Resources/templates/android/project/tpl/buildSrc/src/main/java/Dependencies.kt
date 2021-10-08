@@ -4,8 +4,6 @@
  * Copyright (c) {{date_year}} {{author}}. All rights reserved.
  */
 
-import org.gradle.api.JavaVersion
-
 object Versions {
     // QMobile libraries
     const val qmobileapi = "0.0.1"

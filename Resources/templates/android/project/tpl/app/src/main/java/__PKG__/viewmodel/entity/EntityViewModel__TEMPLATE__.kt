@@ -6,8 +6,10 @@
 
 package {{package}}.viewmodel.entity
 
+{{#table_has_any_relation}}
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+{{/table_has_any_relation}}
 import com.qmobile.qmobileapi.network.ApiService
 import com.qmobile.qmobiledatastore.data.RoomRelation
 import com.qmobile.qmobiledatasync.viewmodel.EntityViewModel
@@ -41,7 +43,7 @@ class EntityViewModel{{tableName}}(
     {{/relations}}
 
     override fun setRelationToLayout(relationName: String, roomRelation: RoomRelation) {
-    {{#has_any_relation}}
+    {{#table_has_any_relation}}
         when (relationName) {
             {{#relations}}
             "{{relation_name}}" -> {
@@ -50,9 +52,9 @@ class EntityViewModel{{tableName}}(
             {{/relations}}
             else -> return
         }
-    {{/has_any_relation}}
-    {{^has_any_relation}}
+    {{/table_has_any_relation}}
+    {{^table_has_any_relation}}
         // No relation
-    {{/has_any_relation}}
+    {{/table_has_any_relation}}
     }
 }
