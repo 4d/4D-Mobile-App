@@ -186,7 +186,7 @@ class CustomTableHelper : GenericTableHelper {
         tableName: String,
         entity: EntityModel
     ): Map<String, LiveData<RoomRelation>> {
-        {{#has_any_relations}}
+        {{#has_any_relation}}
         val map = mutableMapOf<String, LiveData<RoomRelation>>()
         {{#relations}}
         if (tableName == "{{relation_source}}") {
@@ -196,10 +196,10 @@ class CustomTableHelper : GenericTableHelper {
         }
         {{/relations}}
         return map
-        {{/has_any_relations}}
-        {{^has_any_relations}}
+        {{/has_any_relation}}
+        {{^has_any_relation}}
         return mutableMapOf()
-        {{/has_any_relations}}
+        {{/has_any_relation}}
     }
 
     /**
