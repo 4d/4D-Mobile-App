@@ -7,10 +7,11 @@
 package {{package}}.data.converter
 
 import androidx.room.TypeConverter
-import com.google.gson.Gson
 import com.qmobile.qmobileapi.model.entity.Entities
 import com.qmobile.qmobileapi.model.entity.Photo
-import com.qmobile.qmobiledatastore.utils.ConverterUtils
+import com.qmobile.qmobileapi.utils.parseToString
+import com.qmobile.qmobileapi.utils.parseToType
+import com.qmobile.qmobiledatasync.app.BaseApp
 {{#tableNames}}
 import {{package}}.data.model.entity.{{name}}
 {{/tableNames}}
@@ -23,8 +24,6 @@ import java.util.Date
 @Suppress("TooManyFunctions", "FunctionName")
 class Converters {
 
-    private val gson = Gson()
-
     /**
      * Converts custom table Object to Json String
      */
@@ -32,13 +31,13 @@ class Converters {
     {{#tableNames}}
     @TypeConverter
     fun customTableObjectToStringEntities{{name}}(obj: Entities<{{type}}>?): String =
-        ConverterUtils.customTableObjectToString(gson, obj)
+        BaseApp.mapper.parseToString(obj)
 
     {{/tableNames}}
     {{#types_and_tables}}
     @TypeConverter
     fun customTableObjectToString{{name}}(obj: {{type}}?): String =
-        ConverterUtils.customTableObjectToString(gson, obj)
+        BaseApp.mapper.parseToString(obj)
 
     {{/types_and_tables}}
 
@@ -49,13 +48,13 @@ class Converters {
     {{#tableNames}}
     @TypeConverter
     fun customTableStringToObjectEntities{{name}}(str: String?): Entities<{{type}}>? =
-        ConverterUtils.customTableStringToObject(gson, str)
+        BaseApp.mapper.parseToType(str)
 
     {{/tableNames}}
     {{#types_and_tables}}
     @TypeConverter
     fun customTableStringToObject{{name}}(str: String?): {{type}}? =
-        ConverterUtils.customTableStringToObject(gson, str)
+        BaseApp.mapper.parseToType(str)
 
     {{/types_and_tables}}
 }

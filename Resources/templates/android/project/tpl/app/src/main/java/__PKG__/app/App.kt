@@ -6,6 +6,9 @@
 
 package {{package}}.app
 
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.qmobile.qmobileapi.utils.SharedPreferencesHolder
 import com.qmobile.qmobiledatastore.db.AppDatabaseFactory
 import com.qmobile.qmobiledatasync.app.BaseApp
@@ -26,6 +29,10 @@ class App : BaseApp() {
             AppDatabaseFactory.getAppDatabase(applicationContext, AppDatabase::class.java)
         genericTableHelper = CustomTableHelper()
         genericTableFragmentHelper = CustomTableFragmentHelper()
+        mapper = ObjectMapper()
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            .registerKotlinModule()
+        //    .registerModule(KotlinModule(nullIsSameAsDefault = true))
 
         // Init SharedPreferences, persisting data
         sharedPreferencesHolder = SharedPreferencesHolder.getInstance(this).apply {

@@ -8,13 +8,11 @@ package {{package}}.utils
 
 import android.app.Application
 import androidx.lifecycle.LiveData
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.qmobile.qmobileapi.model.entity.EntityModel
 import com.qmobile.qmobileapi.network.ApiService
 import com.qmobile.qmobiledatastore.data.RoomRelation
+import com.qmobile.qmobiledatasync.app.BaseApp
 import com.qmobile.qmobiledatasync.relation.RelationHelper
 import com.qmobile.qmobiledatasync.utils.GenericTableHelper
 import com.qmobile.qmobiledatasync.viewmodel.EntityListViewModel
@@ -40,19 +38,14 @@ import kotlin.reflect.full.declaredMemberProperties
  */
 class CustomTableHelper : GenericTableHelper {
 
-    private var mapper: ObjectMapper = ObjectMapper()
-        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-        .registerKotlinModule()
-
     /**
      * Provides the list of table names
      */
-    override fun tableNames(): List<String> = mutableListOf<String>().apply {
-        {{#tableNames}}
-        add("{{name}}")
-        {{/tableNames}}
-    }
+    override fun tableNames(): List<String> = listOf({{#tableNames}}"{{name}}"{{^-last}}, {{/-last}}{{/tableNames}})
 
+    /**
+     * Provides the original table name. May contain spaces for example
+     */
     override fun originalTableName(tableName: String): String = when (tableName) {
         {{#tableNames}}
         "{{name}}" -> "{{name_original}}"
@@ -72,11 +65,11 @@ class CustomTableHelper : GenericTableHelper {
         {{#relations}}
         if (tableName == "{{relation_source}}") {
             if (entity == null) {
-                entity = mapper.readValue<{{relation_source}}>(jsonString)
+                entity = BaseApp.mapper.readValue<Service>(jsonString)
             }
             if (fetchedFromRelation) {
                 val entityManyToOneRelationMask =
-                    mapper.readValue<{{relation_source}}ManyToOneRelationMask>(jsonString)
+                    BaseApp.mapper.readValue<ServiceManyToOneRelationMask>(jsonString)
                 (entity as {{relation_source}}?)?.__{{relation_name}}Key = entityManyToOneRelationMask.{{relation_name}}?.__deferred?.__KEY
             } else {
                 (entity as {{relation_source}}?)?.__{{relation_name}}Key = entity.{{relation_name}}?.__KEY
@@ -87,7 +80,7 @@ class CustomTableHelper : GenericTableHelper {
         {{#tableNames_without_relations}}
         if (tableName == "{{name}}") {
             if (entity == null) {
-                entity = mapper.readValue<{{name}}>(jsonString)
+                entity = BaseApp.mapper.readValue<Office>(jsonString)
             }
         }
         {{/tableNames_without_relations}}
