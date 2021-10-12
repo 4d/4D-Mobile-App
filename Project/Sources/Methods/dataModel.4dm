@@ -742,7 +742,7 @@ Case of
 							// just check if we must add new fields
 							For ($Lon_field2; 1; Size of array:C274($tTxt_relationFields); 1)
 								
-								If (Match regex:C1019("(?m-si)^\\d+$"; $tTxt_relationFields{$Lon_field2}; 1; *))
+								If (Value type:C1509($Obj_table[$Txt_relationName][$tTxt_relationFields{$Lon_field2}])=Is object:K8:27)
 									
 									If (($Obj_relationTable[$tTxt_relationFields{$Lon_field2}])=Null:C1517)
 										
