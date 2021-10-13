@@ -65,11 +65,11 @@ class CustomTableHelper : GenericTableHelper {
         {{#relations}}
         if (tableName == "{{relation_source}}") {
             if (entity == null) {
-                entity = BaseApp.mapper.readValue<Service>(jsonString)
+                entity = BaseApp.mapper.readValue<{{relation_source}}>(jsonString)
             }
             if (fetchedFromRelation) {
                 val entityManyToOneRelationMask =
-                    BaseApp.mapper.readValue<ServiceManyToOneRelationMask>(jsonString)
+                    BaseApp.mapper.readValue<{{relation_source}}ManyToOneRelationMask>(jsonString)
                 (entity as {{relation_source}}?)?.__{{relation_name}}Key = entityManyToOneRelationMask.{{relation_name}}?.__deferred?.__KEY
             } else {
                 (entity as {{relation_source}}?)?.__{{relation_name}}Key = entity.{{relation_name}}?.__KEY
@@ -80,7 +80,7 @@ class CustomTableHelper : GenericTableHelper {
         {{#tableNames_without_relations}}
         if (tableName == "{{name}}") {
             if (entity == null) {
-                entity = BaseApp.mapper.readValue<Office>(jsonString)
+                entity = BaseApp.mapper.readValue<{{name}}>(jsonString)
             }
         }
         {{/tableNames_without_relations}}
