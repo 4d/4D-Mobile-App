@@ -514,11 +514,12 @@ Case of
 													
 													For ($Lon_relationField; 1; Size of array:C274($tTxt_relationFields); 1)
 														
-														If (Match regex:C1019("(?m-si)^\\d+$"; $tTxt_relationFields{$Lon_relationField}; 1; *))  // field if
+														If (Value type:C1509($Obj_table[$Txt_relationName][$tTxt_relationFields{$Lon_relationField}])=Is object:K8:27)  // field if
 															
 															$Txt_buffer:=$Obj_table[$Txt_relationName][$tTxt_relationFields{$Lon_relationField}].name
-															$Col_fields.push($Txt_buffer)
-															
+															If (Length:C16($Txt_buffer)>0)
+																$Col_fields.push($Txt_buffer)
+															End if 
 															// Else  // not a field
 															
 														End if 
@@ -1164,15 +1165,24 @@ Case of
 								
 								For each ($Txt_fieldNumber; $Obj_buffer)
 									
-									If (Match regex:C1019("(?m-si)^\\d+$"; $Txt_fieldNumber; 1; *))  // fieldNumber
-										
-										$Obj_out.fields.push($Txt_field+"."+$Obj_buffer[$Txt_fieldNumber].name)
-										
-									Else 
-										
-										// Ignore (primary key, etc...)
-										
-									End if 
+									Case of 
+										: (Match regex:C1019("(?m-si)^\\d+$"; $Txt_fieldNumber; 1; *))  // fieldNumber
+											
+											$Obj_out.fields.push($Txt_field+"."+$Obj_buffer[$Txt_fieldNumber].name)
+											
+										: (Value type:C1509($Obj_buffer[$Txt_fieldNumber])=Is object:K8:27)
+											
+											If (PROJECT.isComputedAttribute($Obj_buffer[$Txt_fieldNumber]))
+												
+												$Obj_out.fields.push($Txt_field+"."+$Obj_buffer[$Txt_fieldNumber].name)
+												
+											End if 
+											
+										Else 
+											
+											// Ignore (primary key, etc...)
+											
+									End case 
 								End for each 
 								
 								// Else  Ignore
