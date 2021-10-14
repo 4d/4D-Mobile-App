@@ -221,7 +221,7 @@ If ($row>0)
 					
 				End for each 
 				
-				If (FEATURE.with(129953))
+				If (FEATURE.with("many-one-many"))
 					
 					var $relatedDataClasses : 4D:C1709.DataClass
 					
@@ -237,8 +237,8 @@ If ($row>0)
 								
 								$o:=New object:C1471(\
 									"oneToOne"; True:C214; \
-									"name"; $t; \
-									"path"; New collection:C1472($field.name; $t).join(".")\
+									"name"; $relatedDataClasses[$t].relatedDataClass; \
+									"path"; New collection:C1472($field.name; $t; $relatedDataClasses[$t].relatedDataClass).join(".")\
 									)
 								
 								STRUCTURE_Handler(New object:C1471(\
