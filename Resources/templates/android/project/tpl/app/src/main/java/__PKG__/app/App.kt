@@ -8,6 +8,7 @@ package {{package}}.app
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.qmobile.qmobileapi.utils.SharedPreferencesHolder
 import com.qmobile.qmobiledatastore.db.AppDatabaseFactory
@@ -32,6 +33,7 @@ class App : BaseApp() {
         mapper = ObjectMapper()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             .registerKotlinModule()
+            .enable(SerializationFeature.INDENT_OUTPUT)
         //    .registerModule(KotlinModule(nullIsSameAsDefault = true))
 
         // Init SharedPreferences, persisting data
