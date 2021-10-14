@@ -223,7 +223,7 @@ Function plugged($androidDeploymentTarget : Text)->$devices : Collection
 		
 		For each ($t; Split string:C1554(String:C10(This:C1470.outputStream); "\n"))
 			
-			If (Match regex:C1019("(?m-si)^([^\\t]*)\\t(device|unauthorized)$"; $t; 1; $pos; $len))
+			If (Match regex:C1019("(?m-si)^(?!emulator)([^\\t]*)\\t(device|unauthorized)$"; $t; 1; $pos; $len))
 				
 				$serial:=Substring:C12($t; $pos{1}; $len{1})
 				$keep:=True:C214
