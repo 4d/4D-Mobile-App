@@ -770,9 +770,10 @@ Function updateForms($field : Object; $row : Integer)
 Function _updateForms($type : Text; $field : Object; $row : Integer)
 	
 	var $o : Object
+	
 	$o:=Form:C1466[$type][String:C10(This:C1470.tableNumber)]
 	
-	If ($o#Null:C1517)
+	If ($o.fields#Null:C1517)
 		
 		If ($field.name=Null:C1517)  //relation
 			
