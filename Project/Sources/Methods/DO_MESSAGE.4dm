@@ -71,9 +71,10 @@ Else
 				
 			End for each 
 			
+			$data.ƒ:=$display
+			
 			$widget.setValue($data)
 			
-			//$widget.show()
 			OBJECT SET VISIBLE:C603(*; "message@"; Not:C34(OB Is empty:C1297($data)))
 			
 			//______________________________________________________
@@ -96,13 +97,13 @@ Else
 						
 						//______________________________________________________
 				End case 
-				
-				$display.restore($data)
-				
-				// Restore original size
-				$widget.setDimensions($display.width; $display.height)
-				
 			End if 
+			
+			$display.restore($data)
+			
+			// Restore original size
+			$widget.setDimensions($display.width; $display.height)
+			
 			
 			//______________________________________________________
 		: ($action="reset")
@@ -110,6 +111,8 @@ Else
 			$data.title:=""
 			$data.additional:=""
 			$widget.setValue($data)
+			
+			$display.restore($data)
 			
 			//________________________________________
 		Else   // Update
