@@ -16,7 +16,6 @@ import com.qmobile.qmobiledatasync.utils.RuntimeDataHolder
 import {{package}}.BuildConfig
 import {{package}}.R
 import {{package}}.data.db.AppDatabase
-import {{package}}.utils.CustomNavigationResolver
 import {{package}}.utils.CustomTableFragmentHelper
 import {{package}}.utils.CustomTableHelper
 
@@ -30,7 +29,7 @@ class App : BaseApp() {
             AppDatabaseFactory.getAppDatabase(applicationContext, AppDatabase::class.java)
         genericTableHelper = CustomTableHelper()
         genericTableFragmentHelper = CustomTableFragmentHelper()
-        genericNavigationResolver = CustomNavigationResolver()
+        
         mapper = ObjectMapper()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             .registerKotlinModule()
