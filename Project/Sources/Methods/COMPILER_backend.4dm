@@ -16,6 +16,10 @@ If (False:C215)
 	C_OBJECT:C1216(dataModel; $0)
 	C_OBJECT:C1216(dataModel; $1)
 	
+	//__________________________________________________________
+	C_OBJECT:C1216(xcDataModel; $0)
+	C_OBJECT:C1216(xcDataModel; $1)
+	
 	//______________________________________________________
 	C_OBJECT:C1216(dataSet; $0)
 	C_OBJECT:C1216(dataSet; $1)

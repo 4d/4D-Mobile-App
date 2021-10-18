@@ -490,7 +490,7 @@ Case of
 				
 				$pathName:=Temporary folder:C486+Folder separator:K24:12+"Structures.xcdatamodeld"
 				
-				dataModel(New object:C1471(\
+				xcDataModel(New object:C1471(\
 					"action"; "xcdatamodel"; \
 					"dataModel"; PROJECT.dataModel; \
 					"actions"; PROJECT.actions; \

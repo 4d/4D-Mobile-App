@@ -477,7 +477,7 @@ If ($in.create)
 		ob_error_combine($out; $out.dumpCopy)
 		//}
 		
-		$out.coreData:=dataModel(New object:C1471(\
+		$out.coreData:=xcDataModel(New object:C1471(\
 			"action"; "xcdatamodel"; \
 			"dataModel"; $project.dataModel; \
 			"actions"; $project.actions; \

@@ -80,7 +80,7 @@ Case of
 		
 		$pathname:=Temporary folder:C486+Folder separator:K24:12+Generate UUID:C1066+Folder separator:K24:12
 		
-		dataModel(New object:C1471(\
+		xcDataModel(New object:C1471(\
 			"action"; "xcdatamodel"; \
 			"dataModel"; PROJECT.dataModel; \
 			"actions"; PROJECT.actions; \
@@ -125,7 +125,7 @@ Case of
 		
 		$pathname:=Temporary folder:C486+Folder separator:K24:12+Generate UUID:C1066+Folder separator:K24:12
 		
-		$o:=dataModel(New object:C1471(\
+		$o:=xcDataModel(New object:C1471(\
 			"action"; "xcdatamodel"; \
 			"dataModel"; PROJECT.dataModel; \
 			"actions"; PROJECT.actions; \
