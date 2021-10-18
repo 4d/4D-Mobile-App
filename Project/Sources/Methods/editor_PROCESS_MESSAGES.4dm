@@ -176,9 +176,12 @@ Case of
 			End if 
 		End for each 
 		
+		var $project : Object
+		$project:=$data.param.project
+		
 		If ($message="build")
 			
-			$title:=Get localized string:C991(Choose:C955($data.param.project._buildTarget="ios"; "4dForIos"; "4dForAndroid"))
+			$title:=Get localized string:C991(Choose:C955($project._buildTarget="ios"; "4dForIos"; "4dForAndroid"))
 			
 			Case of 
 					
@@ -197,25 +200,41 @@ Case of
 					
 					If (Bool:C1537($data.param.manualInstallation))
 						
-						DISPLAY NOTIFICATION:C910($title; EDITOR.str.setText("theApplicationHasBeenSuccessfullyGenerated").localized($data.param.project.product.name))
+						DISPLAY NOTIFICATION:C910($title; \
+							EDITOR.str.setText("theApplicationHasBeenSuccessfullyGenerated")\
+							.localized($project.product.name))
 						
 					Else 
 						
-						DISPLAY NOTIFICATION:C910($title; EDITOR.str.setText("theApplicationHasBeenSuccessfullyInstalled").localized(New collection:C1472($data.param.project.product.name; $data.param.project._device.name)))
+						DISPLAY NOTIFICATION:C910($title; \
+							EDITOR.str.setText("theApplicationHasBeenSuccessfullyInstalled")\
+							.localized(New collection:C1472($project.product.name; $project._device.name)))
 						
 					End if 
 					
 					//…………………………………………………………………………………………………………………………
 				Else 
 					
-					DISPLAY NOTIFICATION:C910($title; EDITOR.str.setText("theApplicationHasBeenSuccessfullyGenerated").localized($data.param.project.product.name))
+					If ($project._device.type="device")
+						
+						DISPLAY NOTIFICATION:C910($title; \
+							EDITOR.str.setText("theApplicationHasBeenSuccessfullyInstalled")\
+							.localized(New collection:C1472($project.product.name; $project._device.name)))
+						
+					Else 
+						
+						DISPLAY NOTIFICATION:C910($title; \
+							EDITOR.str.setText("theApplicationHasBeenSuccessfullyGenerated")\
+							.localized($project.product.name))
+						
+					End if 
 					
 					// Keep a digest of the sources
 					var $file : 4D:C1709.File
 					
-					If ($data.param.project._buildTarget="iOS")
+					If ($project._buildTarget="iOS")
 						
-						$file:=EDITOR.path.userCache().file($data.param.project._name+".ios.fingerprint")
+						$file:=EDITOR.path.userCache().file($project._name+".ios.fingerprint")
 						
 						If ($data.param.appFolder.folder("iOS/Sources").exists)
 							
@@ -225,7 +244,7 @@ Case of
 						
 					Else 
 						
-						$file:=EDITOR.path.userCache().file($data.param.project._name+".android.fingerprint")
+						$file:=EDITOR.path.userCache().file($project._name+".android.fingerprint")
 						
 						//#MARK_TODO
 						

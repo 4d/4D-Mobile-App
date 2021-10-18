@@ -45,7 +45,7 @@ Class constructor($project : Object)
 	This:C1470.project.remote_url:=This:C1470.remoteUrl()
 	This:C1470.project.package:=This:C1470.project.project.product.bundleIdentifier
 	This:C1470.hasRelations:=True:C214
-	If (This:C1470.hasRelations=False:C215)
+	If (This:C1470.hasRelations=False:C215)  // ?????? Vu la ligne du dessus, n'ai jamais vérifié
 		This:C1470.project.hasRelations:=False:C215
 	End if 
 	This:C1470.hasActions:=FEATURE.with("androidActions")
@@ -107,7 +107,6 @@ Function setJavaHome
 Function setAndroidHome
 	
 	This:C1470.setEnvVarToAll(New object:C1471("ANDROID_HOME"; This:C1470.project.sdk))
-	
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
@@ -297,7 +296,17 @@ Function run()->$result : Object
 		If (This:C1470.input.project._device.type="device")\
 			 & FEATURE.with("ConnectedDevices")
 			
+			// * INSTALL APP
 			$result:=This:C1470.install()
+			
+			If ($result.success)
+				
+				// * LAUNCH APP
+				This:C1470.postStep("launchingTheApplication")
+				
+				$result:=This:C1470.adb.launchApp(This:C1470.input.project.product.bundleIdentifier)
+				
+			End if 
 			
 		Else 
 			
@@ -354,7 +363,7 @@ Function run()->$result : Object
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Installing the APK on a connected device
+	/// Installing the APK on a connected device
 Function install()->$result : Object
 	
 	$result:=New object:C1471(\
@@ -362,14 +371,14 @@ Function install()->$result : Object
 		"errors"; New collection:C1472)
 	
 	var $device; $o : Object
-	var $appName : Text
 	
 	$device:=This:C1470.project.project._device
-	$appName:=This:C1470.input.project._name
 	
 	If (This:C1470.adb.isDeviceConnected($device.udid))
 		
-		This:C1470.adb.uninstallApp($appName; $device.udid)
+		This:C1470.postStep("installingTheApplication")
+		
+		This:C1470.adb.uninstallApp(This:C1470.input.project.product.bundleIdentifier; $device.udid)
 		
 		$o:=This:C1470.adb.installApp(This:C1470.apk.path; $device.udid)
 		$result.success:=$o.success
@@ -382,7 +391,7 @@ Function install()->$result : Object
 		
 	Else 
 		
-		This:C1470.postError(".The device \""+$device.name+"\" is not connected")
+		This:C1470.postError(Replace string:C233(Get localized string:C991("theDeviceIsNotReachable"); "{device}"; $device.name))
 		
 	End if 
 	
@@ -390,8 +399,8 @@ Function install()->$result : Object
 	//
 Function remoteUrl()->$result : Text
 	
+	var $host; $http; $port : Text
 	var $info : Object
-	var $http; $host; $port : Text
 	
 	$info:=WEB Get server info:C1531()
 	$http:=Choose:C955($info.security.HTTPSEnabled; "https"; "http")
@@ -401,10 +410,8 @@ Function remoteUrl()->$result : Text
 	$result:=$http+"://"+$host+":"+$port
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	//
+	/// Format and check the package name
 Function checkPackage()
-	
-	// * FORMAT THE PACKAGE NAME
 	
 /*
 @ https://developer.android.com/studio/build/application-id

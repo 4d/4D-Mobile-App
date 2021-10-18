@@ -313,14 +313,28 @@ Function bootedDevices()->$bootedDevices : Collection
 	// Return a device from its UDID or name
 Function device($simulator : Text)->$device : Object
 	
+	var $c : Collection
+	
 	ASSERT:C1129(Count parameters:C259>=1)
 	
-	$device:=This:C1470.availableDevices().query("udid = :1"; $simulator).pop()
+	$c:=This:C1470.availableDevices()
+	$device:=$c.query("udid = :1"; $simulator).pop()
 	
 	If ($device=Null:C1517)
 		
-		$device:=This:C1470.availableDevices().query("name = :1"; $simulator).pop()
+		$device:=$c.query("name = :1"; $simulator).pop()
 		
+		If ($device=Null:C1517)
+			
+			$c:=This:C1470.plugged()
+			$device:=$c.query("udid = :1"; $simulator).pop()
+			
+			If ($device=Null:C1517)
+				
+				$device:=$c.query("name = :1"; $simulator).pop()
+				
+			End if 
+		End if 
 	End if 
 	
 	If ($device#Null:C1517)

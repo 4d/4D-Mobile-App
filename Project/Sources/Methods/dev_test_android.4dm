@@ -28,6 +28,15 @@ Case of
 			$packages:=$adb.packageList($serial)
 			$packages:=$adb.userPackageList($serial)
 			
+			If ($packages.indexOf("com.d4pop.quickopen")>=0)
+				
+				//$adb.waitUninstallApp($serial; "com.d4pop.quickopen")
+				$adb.launchApp("com.d4pop.quickopen")
+				
+				
+				
+			End if 
+			
 		End if 
 		
 		//______________________________________________________

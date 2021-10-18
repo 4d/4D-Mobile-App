@@ -828,8 +828,27 @@ If ($out.success)
 	
 	Case of 
 			
+		: ($in.project._device.type="device")\
+			 & FEATURE.with("ConnectedDevices")
+			
+			$in.product:=$out.build.app
+			$out.device:=$simctl.device($in.project._simulator)
+			
+			If ($out.device#Null:C1517)
+				
+				
+				
+			Else 
+				
+				$ui.alert(Replace string:C233(Get localized string:C991("theDeviceIsNotReachable"); "{device}"; $in.project._simulator.name))
+				$log.error("device not found")
+				
+			End if 
+			
 			//______________________________________________________
 		: (Bool:C1537($in.run))
+			
+			$out.device:=$simctl.device($in.project._simulator)
 			
 			$in.product:=$out.build.app
 			
@@ -936,7 +955,7 @@ If ($out.success)
 				"name"; Path to object:C1547($pathname).name; \
 				"extension"; ".ipa"))
 			
-			If ($in.manualInstallation)
+			If (Bool:C1537($in.manualInstallation))
 				
 				// Open xCode devices window
 				cs:C1710.Xcode.new().showDevicesWindow()

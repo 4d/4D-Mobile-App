@@ -283,7 +283,7 @@ Function setValue($value)->$this : cs:C1710.widget
 	$this:=This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === ===
-Function clear->$this : cs:C1710.widge
+Function clear->$this : cs:C1710.widget
 	
 	var $type : Integer
 	$type:=Value type:C1509(OBJECT Get value:C1743(This:C1470.name))

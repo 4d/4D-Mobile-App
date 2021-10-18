@@ -11,7 +11,7 @@
 #DECLARE($message : Object)
 
 var $action; $key : Text
-var $data; $display : Object
+var $data; $ƒ : Object
 var $widget : cs:C1710.subform
 
 // ----------------------------------------------------
@@ -39,7 +39,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	End case 
 	
 	$data:=$widget.getValue()
-	$display:=$data.ƒ
+	$ƒ:=$data.ƒ
 	
 Else 
 	
@@ -71,7 +71,7 @@ Else
 				
 			End for each 
 			
-			$data.ƒ:=$display
+			$data.ƒ:=$ƒ
 			
 			$widget.setValue($data)
 			
@@ -99,10 +99,10 @@ Else
 				End case 
 			End if 
 			
-			$display.restore($data)
+			$ƒ.restore($data)
 			
 			// Restore original size
-			$widget.setDimensions($display.width; $display.height)
+			$widget.setDimensions($ƒ.width; $ƒ.height)
 			
 			
 			//______________________________________________________
@@ -112,7 +112,7 @@ Else
 			$data.additional:=""
 			$widget.setValue($data)
 			
-			$display.restore($data)
+			$ƒ.restore($data)
 			
 			//________________________________________
 		Else   // Update

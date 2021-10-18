@@ -127,7 +127,7 @@ Class constructor
 	This:C1470._adbStartRetried:=False:C215
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns a collection of attached devices ID (connected and authorized devices or booted simulators)
+	/// Returns a collection of attached devices ID (connected and authorized devices or booted simulators)
 	// if 'androidDeploymentTarget' is passed, keeps only devices where the version of Android is higher or equal
 Function availableDevices($androidDeploymentTarget : Text)->$devices : Collection
 	
@@ -176,7 +176,7 @@ Function availableDevices($androidDeploymentTarget : Text)->$devices : Collectio
 		End for each 
 	End if 
 	
-	// wait-for-device
+	/// wait-for-device
 Function waiForDevice()->$pluggedDevice : Boolean
 	
 	Repeat 
@@ -194,7 +194,7 @@ Function waiForDevice()->$pluggedDevice : Boolean
 	$pluggedDevice:=This:C1470.success
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// List of connected devices
+	/// List of connected devices
 	// if 'androidDeploymentTarget' is passed, keeps only devices where the version of Android is higher or equal
 Function plugged($androidDeploymentTarget : Text)->$devices : Collection
 	
@@ -252,7 +252,7 @@ Function plugged($androidDeploymentTarget : Text)->$devices : Collection
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Test if a device is connacted from its UUID
+	/// Test if a device is connacted from its UUID
 Function isDeviceConnected($serial)->$connected : Boolean
 	
 	This:C1470._devices(True:C214)
@@ -264,7 +264,7 @@ Function isDeviceConnected($serial)->$connected : Boolean
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns the Android version of a connected device or a booted emulator from its UUID
+	/// Returns the Android version of a connected device or a booted emulator from its UUID
 Function getDeviceAndroidVersion($serial : Text)->$version : Text
 	
 	This:C1470.launch(This:C1470.cmd+" -s "+$serial+" shell getprop ro.build.version.release")
@@ -280,7 +280,7 @@ Function getDeviceAndroidVersion($serial : Text)->$version : Text
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns the name of a connected device or a booted emulator from its UUID
+	/// Returns the name of a connected device or a booted emulator from its UUID
 Function getDeviceSDKVersion($serial : Text)->$version : Text
 	
 	This:C1470.launch(This:C1470.cmd+" -s "+$serial+" shell getprop ro.system.build.version.sdk")
@@ -296,7 +296,7 @@ Function getDeviceSDKVersion($serial : Text)->$version : Text
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns the name of a connected device from its serial
+	/// Returns the name of a connected device from its serial
 Function getDeviceName($serial : Text)->$name : Text
 	
 	// https://stackoverflow.com/questions/54810404/is-there-a-way-to-get-the-device-name-using-adb-for-example-if-the-device-name
@@ -313,7 +313,7 @@ Function getDeviceName($serial : Text)->$name : Text
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns a connected device or emulator properties from its serial
+	/// Returns a connected device or emulator properties from its serial
 Function getDeviceProperties($serial : Text)->$properties : Object
 	
 	var $buffer; $key; $subkey; $t : Text
@@ -437,34 +437,26 @@ Function getDeviceProperties($serial : Text)->$properties : Object
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Test if an app is installed on a connected device
-Function isAppInstalled($appName : Text; $serial : Text)->$installed : Boolean
+	/// Test if an app is installed on a connected device
+Function isAppInstalled($package : Text; $serial : Text)->$installed : Boolean
 	
-	var $c : Collection
-	
-	$c:=This:C1470.userPackageList($serial)
-	
-	If (This:C1470.success)
-		
-		$installed:=($c.indexOf(This:C1470._packageName($appName))#-1)
-		
-	End if 
+	$installed:=This:C1470.userPackageList($serial).indexOf($package)>=0
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns a collection of package names for a connected device
+	/// Returns a collection of package names for a connected device
 Function packageList($serial : Text)->$packages : Collection
 	
 	$packages:=This:C1470._packageList($serial)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns a collection of 3rd party package names for a connected device
+	/// Returns a collection of 3rd party package names for a connected device
 Function userPackageList($serial : Text)->$packages : Collection
 	
 	$packages:=This:C1470._packageList($serial; "-3")
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Install an APK on a connected device giving its path or File object
-Function installApp($apk; $serial : Text)->$this : cs:C1710.adb
+	/// Install an APK on a connected device giving its path or File object
+Function installApp($apk; $serial : Text; $test : Boolean)->$this : cs:C1710.adb
 	
 	var $file : 4D:C1709.File
 	
@@ -498,21 +490,18 @@ Function installApp($apk; $serial : Text)->$this : cs:C1710.adb
 	
 	If (This:C1470.success)
 		
-		// -r: Replace existing application.
+		// -r: Reinstall an existing app, keeping its data.
+		// -t: Allow test APKs to be installed.
 		
 		If (Count parameters:C259>=1)
 			
 			// -s <serial number>
-			//This.launch(This.cmd+" -s "+$serial+" install "+This.quoted($file.path))
-			
-			This:C1470.launch(This:C1470.cmd+" -s "+$serial+" install -r "+This:C1470.quoted($file.path))
+			This:C1470.launch(This:C1470.cmd+" -s "+$serial+" install -r "+Choose:C955($test; "-t "; "")+This:C1470.quoted($file.path))
 			
 		Else 
 			
 			// - directs command to the only connected USB device...
-			//This.launch(This.cmd+" -d install "+This.quoted($file.path))
-			
-			This:C1470.launch(This:C1470.cmd+" -d install -r "+This:C1470.quoted($file.path))
+			This:C1470.launch(This:C1470.cmd+" -d install -r "+Choose:C955($test; "-t "; "")+This:C1470.quoted($file.path))
 			
 		End if 
 		
@@ -524,7 +513,7 @@ Function installApp($apk; $serial : Text)->$this : cs:C1710.adb
 			
 		Else 
 			
-			This:C1470._pushError("Not a valid file: "+$apk)
+			This:C1470._pushError("Not a valid pathname: "+$apk)
 			
 		End if 
 	End if 
@@ -532,16 +521,29 @@ Function installApp($apk; $serial : Text)->$this : cs:C1710.adb
 	$this:=This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Uninstalling app from connected device
-Function uninstallApp($appName : Text; $serial : Text)
+	/// Uninstalling app from a connected device
+Function uninstallApp($bundleIdentifier : Text; $serial : Text)
 	
-	This:C1470.launch(This:C1470.cmd+" -s "+$serial+" uninstall "+This:C1470._packageName($appName))
-	
-	If (Not:C34(This:C1470.success))
+	If (This:C1470.userPackageList($serial).indexOf($bundleIdentifier)>=0)
 		
-		This:C1470.launch(This:C1470.cmd+" -s "+$serial+" shell pm uninstall --user 0 "+This:C1470._packageName($appName))
+		This:C1470.launch(This:C1470.cmd+" -s "+$serial+" uninstall "+Lowercase:C14($bundleIdentifier))
 		
+		If (Not:C34(This:C1470.success))
+			
+			This:C1470.launch(This:C1470.cmd+" -s "+$serial+" shell pm uninstall "+Lowercase:C14($bundleIdentifier))
+			
+		End if 
 	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function launchApp($bundleIdentifier : Text)->$this : cs:C1710.adb
+	
+	//monkey -p com.package.name -v 1
+	This:C1470.resultInErrorStream:=True:C214
+	This:C1470.launch(This:C1470.cmd+" shell monkey -p "+Lowercase:C14($bundleIdentifier)+" -v 1")
+	This:C1470.resultInErrorStream:=False:C215
+	
+	$this:=This:C1470
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// list info on one package
@@ -552,7 +554,7 @@ Function getAppProperties($appName : Text; $serial : Text)
 	//#TO_DO
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Wait until the emulator is started
+	/// Wait until the emulator is started
 Function waitForBoot($avdName : Text)->$result : Object
 	
 	$result:=New object:C1471(\
@@ -589,7 +591,7 @@ Function waitForBoot($avdName : Text)->$result : Object
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Search a booted avd by name
+	/// Search a booted avd by name
 Function getSerial($avdName : Text)->$result : Object
 	
 	var $devices; $device : Object
@@ -765,6 +767,8 @@ Function forceInstallApp
 		$0.errors:=$Obj_uninstallAppIfInstalled.errors
 	End if 
 	
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function waitStartApp
 	var $0 : Object
 	var $1 : Text  // emulator serial
@@ -800,7 +804,9 @@ Function waitStartApp
 		// Else : all ok 
 	End if 
 	
-Function uninstallAppIfInstalled
+Function uninstallAppIfInstalled($package : Text; $serial : Text)
+	
+	
 	var $0 : Object
 	var $1 : Text  // emulator serial
 	var $2 : Text  // package name (app name)
@@ -910,14 +916,17 @@ Function waitUninstallApp
 	
 	Repeat 
 		
-		IDLE:C311
-		DELAY PROCESS:C323(Current process:C322; 120)
-		
 		This:C1470.launch(This:C1470.cmd+" -s \""+$1+"\" uninstall \""+$2+"\"")
-		
 		$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 		
-		$stepTime:=Milliseconds:C459-$startTime
+		If (Not:C34($0.success))
+			
+			IDLE:C311
+			DELAY PROCESS:C323(Current process:C322; 120)
+			
+			$stepTime:=Milliseconds:C459-$startTime
+			
+		End if 
 		
 	Until ($0.success=True:C214)\
 		 | ($stepTime>This:C1470.timeOut)
@@ -998,41 +1007,32 @@ Function _packageName($appName : Text)->$pakageName : Text
 	// [PRIVATE] - Run shell pm list packages
 Function _packageList($serial : Text; $options)->$packages : Collection
 	
-	var $start; $step : Integer
-	var $success : Boolean
 	var $t : Text
+	var $spendTime : Integer
 	
-	$start:=Milliseconds:C459
+	This:C1470.countTimeInit()
 	
 	Repeat 
 		
 		If (Count parameters:C259=1)
 			
-			This:C1470.launch(This:C1470.cmd+" -s \""+$serial+"\" shell pm list packages")
-			
+			This:C1470.launch(This:C1470.cmd+" -s "+$serial+" shell pm list packages")
 			
 		Else 
 			
-			This:C1470.launch(This:C1470.cmd+" -s \""+$serial+"\" shell pm list packages "+$options)
+			This:C1470.launch(This:C1470.cmd+" -s "+$serial+" shell pm list packages "+$options)
 			
 		End if 
 		
-		$success:=This:C1470.success & (Length:C16(This:C1470.outputStream)>0)
+		This:C1470.success:=This:C1470.success & (Length:C16(This:C1470.outputStream)>0)
+		$spendTime:=This:C1470.delay(Not:C34(This:C1470.success))
 		
-		If (Not:C34($success))
-			
-			IDLE:C311
-			DELAY PROCESS:C323(Current process:C322; 60)
-			IDLE:C311
-			
-		End if 
-		
-	Until ($success)\
-		 | ((Milliseconds:C459-$start)>This:C1470.packageListTimeOut)
+	Until (This:C1470.success)\
+		 | ($spendTime>This:C1470.packageListTimeOut)
 	
-	If ($success)
-		
-		$packages:=New collection:C1472
+	$packages:=New collection:C1472
+	
+	If (This:C1470.success)
 		
 		For each ($t; Split string:C1554(This:C1470.outputStream; "\n"))
 			

@@ -27,7 +27,34 @@ Function reset()->$this : cs:C1710.lep
 	This:C1470.setOutputType()
 	This:C1470.setEnvironnementVariable()
 	
+	This:C1470.countTimeInit()
+	
 	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Pause current process if the condition is true, in any case returns the time spent. 
+Function delay($condition : Boolean; $delay : Integer)->$duration : Integer
+	
+	If ($condition)
+		
+		IDLE:C311
+		DELAY PROCESS:C323(Current process:C322; Choose:C955($delay=0; 60; $delay))
+		
+	End if 
+	
+	$duration:=This:C1470.timeSpent
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Initialization of the counting of the time spent
+Function countTimeInit()
+	
+	This:C1470.start:=Milliseconds:C459
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns the time spend in millisecondes since the last countTimeInit() call
+Function get timeSpent()->$duration : Integer
+	
+	$duration:=Milliseconds:C459-This:C1470.start
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function setCharSet($charset : Text)->$this : cs:C1710.lep
