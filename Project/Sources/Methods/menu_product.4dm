@@ -80,13 +80,13 @@ Case of
 		
 		$pathname:=Temporary folder:C486+Folder separator:K24:12+Generate UUID:C1066+Folder separator:K24:12
 		
-		xcDataModel(New object:C1471(\
-			"action"; "xcdatamodel"; \
+		cs:C1710.xcDataModel.new(New object:C1471(\
 			"dataModel"; PROJECT.dataModel; \
-			"actions"; PROJECT.actions; \
+			"actions"; PROJECT.actions)).run(\
+			/*path*/$pathname+"Structures.xcdatamodeld"; \
+			/*options*/New object:C1471(\
 			"flat"; False:C215; \
-			"relationship"; True:C214; \
-			"path"; $pathname+"Structures.xcdatamodeld"))
+			"relationship"; True:C214))
 		
 		SHOW ON DISK:C922($pathname)
 		
@@ -125,13 +125,13 @@ Case of
 		
 		$pathname:=Temporary folder:C486+Folder separator:K24:12+Generate UUID:C1066+Folder separator:K24:12
 		
-		$o:=xcDataModel(New object:C1471(\
-			"action"; "xcdatamodel"; \
+		$o:=cs:C1710.xcDataModel.new(New object:C1471(\
 			"dataModel"; PROJECT.dataModel; \
-			"actions"; PROJECT.actions; \
+			"actions"; PROJECT.actions)).run(\
+			/*path*/$pathname+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"; \
+			/*options*/New object:C1471(\
 			"flat"; False:C215; \
-			"relationship"; True:C214; \
-			"path"; $pathname+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"))
+			"relationship"; True:C214))
 		
 		If (Not:C34(WEB Get server info:C1531.started))
 			

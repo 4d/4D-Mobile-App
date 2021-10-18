@@ -490,14 +490,11 @@ Case of
 				
 				$pathName:=Temporary folder:C486+Folder separator:K24:12+"Structures.xcdatamodeld"
 				
-				xcDataModel(New object:C1471(\
-					"action"; "xcdatamodel"; \
+				cs:C1710.xcDataModel.new(New object:C1471(\
 					"dataModel"; PROJECT.dataModel; \
-					"actions"; PROJECT.actions; \
+					"actions"; PROJECT.actions)).run($pathName; New object:C1471(\
 					"flat"; False:C215; \
-					"relationship"; True:C214; \
-					"dataSet"; dataSet(New object:C1471("action"; "readCatalog"; "project"; $project)).catalog; \
-					"path"; $pathName))
+					"relationship"; True:C214))
 				
 				SHOW ON DISK:C922($pathName)
 				

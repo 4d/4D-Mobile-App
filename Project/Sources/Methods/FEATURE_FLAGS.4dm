@@ -162,9 +162,10 @@ FEATURE.unstable("computedProperties")  // #130206 [MOBILE] Use computed attribu
 1940
 _____________*/
 FEATURE.unstable("androidActions")  //[Mobile] Feature flag pour activer les actions dans le projet mobile
+FEATURE.unstable("objectFieldManagement")  //[MOBILE] Object fields Management 
 
 
-FEATURE.wip(129953)  //[MOBILE] Handle Many-one-Many relations
+//FEATURE.wip(129953)  //[MOBILE] Handle Many-one-Many relations
 
 /* _____________
 WIP
@@ -187,7 +188,7 @@ FEATURE.wip("iosSDKfromAWS")  // Download iOS SDK from AWS
 
 FEATURE.wip("newFormatterChoiceList")  // Menu to create formatter choice list directly , from data
 FEATURE.wip("listEditor")  // Allow to create custom Data Source Input Control
-FEATURE.wip("objectFieldManagement")  //[MOBILE] Object fields Management 
+// FEATURE.wip("xcDataModelClass")  // Use class to create core data model ie. xcDataModel (useful to refactor for alias)
 
 /* -------------------------------------
 OVERRIDE WITH LOCAL PREFERENCES
