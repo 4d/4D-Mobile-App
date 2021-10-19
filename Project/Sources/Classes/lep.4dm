@@ -48,13 +48,13 @@ Function delay($condition : Boolean; $delay : Integer)->$duration : Integer
 	// Initialization of the counting of the time spent
 Function countTimeInit()
 	
-	This:C1470.start:=Milliseconds:C459
+	This:C1470.startTime:=Milliseconds:C459
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the time spend in millisecondes since the last countTimeInit() call
 Function get timeSpent()->$duration : Integer
 	
-	$duration:=Milliseconds:C459-This:C1470.start
+	$duration:=Milliseconds:C459-This:C1470.startTime
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function setCharSet($charset : Text)->$this : cs:C1710.lep
