@@ -703,6 +703,9 @@ End if
 
 If ($out.success)
 	
+	var $isRealdevice : Boolean
+	$isRealdevice:=($in.project._device.type="device") & FEATURE.with("ConnectedDevices")
+	
 	If (Bool:C1537($in.build))
 		
 		If (Bool:C1537($in.archive))
@@ -760,14 +763,63 @@ If ($out.success)
 			$ui.step("projectBuild")
 			$log.information("Building project")
 			
-			$Obj_result_build:=Xcode(New object:C1471(\
-				"action"; "build"; \
-				"scheme"; $productName; \
-				"destination"; $in.path; \
-				"sdk"; $in.sdk; \
-				"verbose"; $isDebug; \
-				"test"; Bool:C1537($in.test); \
-				"target"; Convert path system to POSIX:C1106($in.path+"build"+Folder separator:K24:12)))
+			If ($isRealdevice)
+				
+				$Obj_result_build:=Xcode(New object:C1471(\
+					"action"; "build"; \
+					"scheme"; $productName; \
+					"destination"; $in.path; \
+					"sdk"; "iphoneos"; \
+					"verbose"; $isDebug; \
+					"configuration"; "Release"; \
+					"archive"; True:C214; \
+					"allowProvisioningUpdates"; True:C214; \
+					"allowProvisioningDeviceRegistration"; True:C214; \
+					"archivePath"; Convert path system to POSIX:C1106($in.path+"archive"+Folder separator:K24:12+$productName+".xcarchive")))
+				
+				$cacheFolder.file("lastArchive.xlog").setText(String:C10($Obj_result_build.out))
+				
+				ob_error_combine($out; $Obj_result_build)
+				
+				If ($Obj_result_build.success)
+					
+					// And export
+					$ui.step("projectArchiveExport")
+					$log.information("Exporting project archive")
+					
+					$Obj_result_build:=Xcode(New object:C1471(\
+						"action"; "build"; \
+						"verbose"; $isDebug; \
+						"exportArchive"; True:C214; \
+						"teamID"; String:C10($in.project.organization.teamId); \
+						"stripSwiftSymbols"; Bool:C1537(SHARED.swift.Export.stripSwiftSymbols); \
+						"exportMethod"; String:C10(SHARED.swift.Export.method); \
+						"exportPath"; Convert path system to POSIX:C1106($in.path+"archive"+Folder separator:K24:12); \
+						"archivePath"; Convert path system to POSIX:C1106($in.path+"archive"+Folder separator:K24:12+$productName+".xcarchive")))
+					
+					$path.userCache().file("lastExportArchive.xlog").setText(String:C10($Obj_result_build.out))
+					
+					ob_error_combine($out; $Obj_result_build)
+					
+				Else 
+					
+					// Failed to archive
+					$ui.alert("failedToArchive")
+					
+				End if 
+				
+			Else 
+				
+				$Obj_result_build:=Xcode(New object:C1471(\
+					"action"; "build"; \
+					"scheme"; $productName; \
+					"destination"; $in.path; \
+					"sdk"; $in.sdk; \
+					"verbose"; $isDebug; \
+					"test"; Bool:C1537($in.test); \
+					"target"; Convert path system to POSIX:C1106($in.path+"build"+Folder separator:K24:12)))
+				
+			End if 
 			
 			ob_error_combine($out; $Obj_result_build)
 			
@@ -828,24 +880,116 @@ If ($out.success)
 	
 	Case of 
 			
-		: ($in.project._device.type="device")\
-			 & FEATURE.with("ConnectedDevices")
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+		: (Bool:C1537($in.archive)) | $isRealdevice
 			
-			$in.product:=$out.build.app
-			$out.device:=$simctl.device($in.project._simulator)
+			// Calculate the ipa file pathname
+			$pathname:=Convert path POSIX to system:C1107($Obj_result_build.archivePath)
+			$pathname:=Object to path:C1548(New object:C1471(\
+				"parentFolder"; Path to object:C1547($pathname).parentFolder; \
+				"name"; Path to object:C1547($pathname).name; \
+				"extension"; ".ipa"))
 			
-			If ($out.device#Null:C1517)
-				
-				
-				
-			Else 
-				
-				$ui.alert(Replace string:C233(Get localized string:C991("theDeviceIsNotReachable"); "{device}"; $in.project._simulator.name))
-				$log.error("device not found")
-				
-			End if 
+			Case of 
+					
+					//======================================
+				: ($isRealdevice)
+					
+					// Install the archive on the device
+					$ui.step("installingTheApplication")
+					
+					//var $cfgutil : cs.cfgutil
+					//$cfgutil:=cs.cfgutil.new()
+					//If ($cfgutil.success)
+					//$pluggedDevices:=$cfgutil.plugged()
+					//If ($pluggedDevices.length>0)
+					//$device:=$pluggedDevices.query("UDID = :1"; $in.project._simulator)
+					//If ($device#Null)
+					//$o:=device(New object(\
+						"action"; "removeApp"; \
+						"identifier"; $in.project.product.bundleIdentifier; \
+						"ecid"; $ecid))
+					//$out.device:=device(New object(\
+						"action"; "installApp"; \
+						"path"; $pathname; \
+						"ecid"; $ecid))
+					//End if
+					//End if 
+					//End if 
+					
+					$o:=device(New object:C1471(\
+						"action"; "ecid"; \
+						"udid"; $in.project._simulator))
+					
+					If ($o.success)
+						
+						var $ecid : Text
+						$ecid:=$o.value
+						
+						$o:=device(New object:C1471(\
+							"action"; "removeApp"; \
+							"identifier"; $in.project.product.bundleIdentifier; \
+							"ecid"; $ecid))
+						
+						$out.device:=device(New object:C1471(\
+							"action"; "installApp"; \
+							"path"; $pathname; \
+							"ecid"; $ecid))
+						
+						ob_error_combine($out; $out.device)
+						
+						If ($out.device.success)
+							
+							$simctl.launchApp($project.product.bundleIdentifier; $in.project._simulator)
+							
+						Else 
+							
+							$ui.alert($out.device.errors.join("\r"))
+							
+						End if 
+						
+					Else 
+						
+						ob_error_combine($out; $o)
+						
+					End if 
+					
+					//======================================
+				: (Bool:C1537($in.manualInstallation))
+					
+					// Open xCode devices window
+					cs:C1710.Xcode.new().showDevicesWindow()
+					
+					// Show archive on disk ?
+					POST_MESSAGE(New object:C1471(\
+						"target"; $in.caller; \
+						"type"; "confirm"; \
+						"title"; "archiveCreationSuccessful"; \
+						"additional"; "wouldYouLikeToRevealInFinder"; \
+						"okFormula"; Formula:C1597(SHOW ON DISK:C922(String:C10($pathname)))))
+					
+					//======================================
+				Else 
+					
+					// Install the archive on the device
+					$ui.step("installingTheApplication")
+					
+					$out.device:=device(New object:C1471(\
+						"action"; "installApp"; \
+						"path"; $pathname))
+					
+					ob_error_combine($out; $out.device)
+					
+					If (Not:C34($out.device.success))
+						
+						$ui.alert($out.device.errors.join("\r"))
+						
+					End if 
+					
+					//======================================
+			End case 
 			
-			//______________________________________________________
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		: (Bool:C1537($in.run))
 			
 			$out.device:=$simctl.device($in.project._simulator)
@@ -945,48 +1089,7 @@ If ($out.success)
 				
 			End if 
 			
-			//______________________________________________________
-		: (Bool:C1537($in.archive))
-			
-			// Calculate the ipa file pathname
-			$pathname:=Convert path POSIX to system:C1107($Obj_result_build.archivePath)
-			$pathname:=Object to path:C1548(New object:C1471(\
-				"parentFolder"; Path to object:C1547($pathname).parentFolder; \
-				"name"; Path to object:C1547($pathname).name; \
-				"extension"; ".ipa"))
-			
-			If (Bool:C1537($in.manualInstallation))
-				
-				// Open xCode devices window
-				cs:C1710.Xcode.new().showDevicesWindow()
-				
-				// Show archive on disk ?
-				POST_MESSAGE(New object:C1471(\
-					"target"; $in.caller; \
-					"type"; "confirm"; \
-					"title"; "archiveCreationSuccessful"; \
-					"additional"; "wouldYouLikeToRevealInFinder"; \
-					"okFormula"; Formula:C1597(SHOW ON DISK:C922(String:C10($pathname)))))
-				
-			Else 
-				
-				// Install the archive on the device
-				$ui.step("installingTheApplication")
-				
-				$out.device:=device(New object:C1471(\
-					"action"; "installApp"; \
-					"path"; $pathname))
-				
-				ob_error_combine($out; $out.device)
-				
-				If (Not:C34($out.device.success))
-					
-					$ui.alert($out.device.errors.join("\r"))
-					
-				End if 
-			End if 
-			
-			//______________________________________________________
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	End case 
 End if 
 
