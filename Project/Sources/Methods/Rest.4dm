@@ -21,6 +21,8 @@ var $query; $queryValue : Text
 var $caller; $i; $port; $timeout : Integer
 var $x : Blob
 var $in; $out; $requestResult; $webServerInfos : Object
+var $requestResultAsBlob : Blob
+var $requestResultAsText : Text
 var $error : cs:C1710.error
 
 ARRAY TEXT:C222($headerNames; 0)
@@ -236,7 +238,14 @@ WARNING: "localhost" may not find the server if the computer is connected to a n
 			End if 
 			
 /* START TRAPPING ERRORS */$error:=cs:C1710.error.new("capture")
-			$out.code:=HTTP Request:C1158($in.method; $out.url; ($in.content); $requestResult; $headerNames; $headerValues)
+			Case of 
+				: (Num:C11($in.reponseType)=Is BLOB:K8:12)
+					$out.code:=HTTP Request:C1158($in.method; $out.url; ($in.content); $requestResultAsBlob; $headerNames; $headerValues)
+				: (Num:C11($in.reponseType)=Is text:K8:3)
+					$out.code:=HTTP Request:C1158($in.method; $out.url; ($in.content); $requestResultAsText; $headerNames; $headerValues)
+				Else 
+					$out.code:=HTTP Request:C1158($in.method; $out.url; ($in.content); $requestResult; $headerNames; $headerValues)
+			End case 
 /* STOP TRAPPING ERRORS */$error.release()
 			
 			If ($timeout#0)
@@ -245,7 +254,14 @@ WARNING: "localhost" may not find the server if the computer is connected to a n
 				
 			End if 
 			
-			$out.response:=$requestResult
+			Case of 
+				: (Num:C11($in.reponseType)=Is BLOB:K8:12)
+					$out.response:=$requestResultAsBlob
+				: (Num:C11($in.reponseType)=Is text:K8:3)
+					$out.response:=$requestResultAsText
+				Else 
+					$out.response:=$requestResult
+			End case 
 			
 			If ($error.lastError()#Null:C1517)
 				

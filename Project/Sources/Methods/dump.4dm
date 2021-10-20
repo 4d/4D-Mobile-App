@@ -302,7 +302,18 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 								
 							End if 
 							
-							$Obj_rest.write:=ob_writeToDocument($Obj_rest.response; $File_output; True:C214)
+							Case of 
+								: (Value type:C1509($Obj_rest.response)=Is BLOB:K8:12)
+									File:C1566($File_output; fk platform path:K87:2).setContent($Obj_rest.response)
+									$Obj_rest.write:=New object:C1471("success"; True:C214)
+								: (Value type:C1509($Obj_rest.response)=Is text:K8:3)
+									File:C1566($File_output; fk platform path:K87:2).setText($Obj_rest.response)
+									$Obj_rest.write:=New object:C1471("success"; True:C214)
+								: (Value type:C1509($Obj_rest.response)=Is object:K8:27)
+									$Obj_rest.write:=ob_writeToDocument($Obj_rest.response; $File_output; True:C214)
+								Else 
+									$Obj_rest.write:=New object:C1471("success"; False:C215; "errors"; New collection:C1472("No dumped data of correct type"+String:C10(Value type:C1509($Obj_rest.response))))
+							End case 
 							ob_error_combine($Obj_out; $Obj_rest.write)
 							If (Not:C34($Obj_rest.write.success))
 								
