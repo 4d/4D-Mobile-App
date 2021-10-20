@@ -83,7 +83,6 @@ If (Asserted:C1132($in.project#Null:C1517))
 	End if 
 	
 	// Cleanup
-	
 	For each ($t; $project)
 		
 		If ($t[[1]]="$")
@@ -703,9 +702,6 @@ End if
 
 If ($out.success)
 	
-	var $isRealdevice : Boolean
-	$isRealdevice:=($in.project._device.type="device") & FEATURE.with("ConnectedDevices")
-	
 	If (Bool:C1537($in.build))
 		
 		If (Bool:C1537($in.archive))
@@ -763,7 +759,7 @@ If ($out.success)
 			$ui.step("projectBuild")
 			$log.information("Building project")
 			
-			If ($isRealdevice)
+			If ($in.realDevice)
 				
 				$Obj_result_build:=Xcode(New object:C1471(\
 					"action"; "build"; \
@@ -881,76 +877,63 @@ If ($out.success)
 	Case of 
 			
 			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-		: (Bool:C1537($in.archive)) | $isRealdevice
+		: (Bool:C1537($in.archive)) | $in.realDevice
 			
-			// Calculate the ipa file pathname
-			$pathname:=Convert path POSIX to system:C1107($Obj_result_build.archivePath)
-			$pathname:=Object to path:C1548(New object:C1471(\
-				"parentFolder"; Path to object:C1547($pathname).parentFolder; \
-				"name"; Path to object:C1547($pathname).name; \
-				"extension"; ".ipa"))
 			
 			Case of 
 					
 					//======================================
-				: ($isRealdevice)
+				: ($in.realDevice)
 					
 					// Install the archive on the device
 					$ui.step("installingTheApplication")
 					
-					//var $cfgutil : cs.cfgutil
-					//$cfgutil:=cs.cfgutil.new()
-					//If ($cfgutil.success)
-					//$pluggedDevices:=$cfgutil.plugged()
-					//If ($pluggedDevices.length>0)
-					//$device:=$pluggedDevices.query("UDID = :1"; $in.project._simulator)
-					//If ($device#Null)
-					//$o:=device(New object(\
-						"action"; "removeApp"; \
-						"identifier"; $in.project.product.bundleIdentifier; \
-						"ecid"; $ecid))
-					//$out.device:=device(New object(\
-						"action"; "installApp"; \
-						"path"; $pathname; \
-						"ecid"; $ecid))
-					//End if
-					//End if 
-					//End if 
+					var $cfgutil : cs:C1710.cfgutil
+					$cfgutil:=cs:C1710.cfgutil.new()
 					
-					$o:=device(New object:C1471(\
-						"action"; "ecid"; \
-						"udid"; $in.project._simulator))
-					
-					If ($o.success)
+					If ($cfgutil.success)
 						
-						var $ecid : Text
-						$ecid:=$o.value
+						var $attachedDevices : Collection
+						$attachedDevices:=$cfgutil.plugged()
 						
-						$o:=device(New object:C1471(\
-							"action"; "removeApp"; \
-							"identifier"; $in.project.product.bundleIdentifier; \
-							"ecid"; $ecid))
-						
-						$out.device:=device(New object:C1471(\
-							"action"; "installApp"; \
-							"path"; $pathname; \
-							"ecid"; $ecid))
-						
-						ob_error_combine($out; $out.device)
-						
-						If ($out.device.success)
+						If ($attachedDevices.length>0)
 							
-							$simctl.launchApp($project.product.bundleIdentifier; $in.project._simulator)
+							var $device : Object
+							$device:=$attachedDevices[0]
+							
+							$cfgutil.uninstallApp($device; $in.project.product.bundleIdentifier)
+							
+							If ($cfgutil.success)
+								
+								$cfgutil.installApp($device; File:C1566(Replace string:C233($Obj_result_build.archivePath; ".xcarchive"; ".ipa")))
+								
+								If ($cfgutil.success)
+									
+									$ui.alert(cs:C1710.str.new("theApplicationHasBeenSuccessfullyInstalled").localized(New collection:C1472($productName; $device.name)))
+									
+								Else 
+									
+									$ui.alert($cfgutil.errors.join("\r"))
+									
+								End if 
+								
+							Else 
+								
+								$ui.alert($cfgutil.errors.join("\r"))
+								
+							End if 
 							
 						Else 
 							
-							$ui.alert($out.device.errors.join("\r"))
+							$ui.alert($cfgutil.errors.join("\r"))
 							
 						End if 
 						
+						ob_error_combine($out; $cfgutil)
+						
 					Else 
 						
-						ob_error_combine($out; $o)
+						$ui.alert(cs:C1710.str.new("appIsNotInstalled").localized($cfgutil.appName))
 						
 					End if 
 					
@@ -974,7 +957,14 @@ If ($out.success)
 					// Install the archive on the device
 					$ui.step("installingTheApplication")
 					
-					$out.device:=device(New object:C1471(\
+					// Calculate the ipa file pathname
+					$pathname:=Convert path POSIX to system:C1107($Obj_result_build.archivePath)
+					$pathname:=Object to path:C1548(New object:C1471(\
+						"parentFolder"; Path to object:C1547($pathname).parentFolder; \
+						"name"; Path to object:C1547($pathname).name; \
+						"extension"; ".ipa"))
+					
+					$out.device:=_o_device(New object:C1471(\
 						"action"; "installApp"; \
 						"path"; $pathname))
 					

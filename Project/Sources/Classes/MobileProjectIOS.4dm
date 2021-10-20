@@ -28,6 +28,7 @@ Class constructor($project : Object)
 	This:C1470.success:=This:C1470.sdk.success
 	
 	This:C1470.simctl:=cs:C1710.simctl.new()
+	This:C1470.cfgutil:=cs:C1710.cfgutil.new()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Creating the project

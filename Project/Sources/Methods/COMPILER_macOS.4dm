@@ -62,8 +62,8 @@ If (False:C215)
 	C_OBJECT:C1216(colors; $1)
 	
 	//__________________________________________________
-	C_OBJECT:C1216(device; $0)
-	C_OBJECT:C1216(device; $1)
+	C_OBJECT:C1216(_o_device; $0)
+	C_OBJECT:C1216(_o_device; $1)
 	
 	//__________________________________________________
 	C_OBJECT:C1216(certificate; $0)

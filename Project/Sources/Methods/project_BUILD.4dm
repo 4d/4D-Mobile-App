@@ -45,6 +45,8 @@ If (Asserted:C1132($project#Null:C1517))
 		$project.product.bundleIdentifier:=formatString("bundleApp"; $project.organization.id+"."+$project.product.name)
 		$data.appFolder:=EDITOR.path.products().folder($project.product.name)
 		
+		$data.realDevice:=(($project._device.type="device") & FEATURE.with("ConnectedDevices"))
+		
 		If ($data.path=Null:C1517)
 			
 			If ($data.appFolder.exists)
@@ -354,88 +356,111 @@ If (Asserted:C1132($project#Null:C1517))
 		
 		If ($success)
 			
-			If (Bool:C1537($data.archive))
+			If (Bool:C1537($data.archive))\
+				 | $data.realDevice
 				
 				Case of 
+						
+						//______________________________________________________
+					: (Bool:C1537($data.manualInstallation))
+						
+						$success:=True:C214
+						
 						//______________________________________________________
 					: ($project._buildTarget="iOS")
 						
-						$success:=Bool:C1537($data.manualInstallation)
+						var $cfgutil : cs:C1710.cfgutil
+						$cfgutil:=cs:C1710.cfgutil.new()
 						
-						If (Not:C34($success))
+						If (Not:C34(Bool:C1537($data.configurator)))
 							
-							If (Not:C34(Bool:C1537($data.configurator)))
-								
-								// Verify that Apple Configurator 2 application is installed
-								$data.configurator:=device(New object:C1471("action"; "appPath")).success
-								
-							End if 
+							// Verify that Apple Configurator 2 application is installed
+							$data.configurator:=$cfgutil.success
 							
-							$success:=Bool:C1537($data.configurator)
+						End if 
+						
+						$success:=Bool:C1537($data.configurator)
+						
+						If ($success)
 							
-							If ($success)
+							// Verify that at least one device is plugged
+							$success:=($cfgutil.plugged(True:C214).length>0)
+							
+							If (Not:C34($success))
 								
-								// Verify that at least one device is plugged
-								$success:=device(New object:C1471("action"; "plugged")).success
-								
-								If (Not:C34($success))
-									
-									var $manual : Object
-									$data:=cs:C1710.project.new($data).cleaned()
-									$manual:=OB Copy:C1225($data)
-									$manual.manualInstallation:=True:C214
-									
-									POST_MESSAGE(New object:C1471(\
-										"target"; EDITOR.window; \
-										"action"; "show"; \
-										"type"; "confirm"; \
-										"title"; Get localized string:C991("noDeviceFound"); \
-										"additional"; Get localized string:C991("makeSureThatADeviceIsConnected"); \
-										"ok"; Get localized string:C991("continue"); \
-										"okFormula"; Formula:C1597(EDITOR.callMe("BUILD"; $data)); \
-										"cancel"; Get localized string:C991("manualInstallation"); \
-										"cancelFormula"; Formula:C1597(EDITOR.callMe("BUILD"; $manual))\
-										))
-									
-								End if 
-								
-							Else 
-								
+								var $manual : Object
 								$data:=cs:C1710.project.new($data).cleaned()
-								
-								// Ask for installation
-								$Obj_ok:=New object:C1471(\
-									"action"; "build_waitingForConfigurator"; \
-									"build"; $data)
-								
-								$Obj_cancel:=New object:C1471(\
-									"action"; "build_manualInstallation"; \
-									"build"; $data)
-								
-								$t:=device(New object:C1471("action"; "appName")).value
+								$manual:=OB Copy:C1225($data)
+								$manual.manualInstallation:=True:C214
 								
 								POST_MESSAGE(New object:C1471(\
 									"target"; EDITOR.window; \
 									"action"; "show"; \
 									"type"; "confirm"; \
-									"title"; New collection:C1472("appIsNotInstalled"; $t); \
-									"additional"; New collection:C1472("wouldYouLikeToInstallNow"; $t); \
-									"okAction"; JSON Stringify:C1217($Obj_ok); \
+									"title"; Get localized string:C991("noDeviceFound"); \
+									"additional"; Get localized string:C991("makeSureThatADeviceIsConnected"); \
+									"ok"; Get localized string:C991("continue"); \
+									"okFormula"; Formula:C1597(EDITOR.callMe("BUILD"; $data)); \
 									"cancel"; Get localized string:C991("manualInstallation"); \
-									"cancelAction"; JSON Stringify:C1217($Obj_cancel)))
+									"cancelFormula"; Formula:C1597(EDITOR.callMe("BUILD"; $manual))\
+									))
 								
 							End if 
+							
+						Else 
+							
+							$data:=cs:C1710.project.new($data).cleaned()
+							
+							// Ask for installation
+							$Obj_ok:=New object:C1471(\
+								"action"; "build_waitingForConfigurator"; \
+								"build"; $data)
+							
+							$Obj_cancel:=New object:C1471(\
+								"action"; "build_manualInstallation"; \
+								"build"; $data)
+							
+							POST_MESSAGE(New object:C1471(\
+								"target"; EDITOR.window; \
+								"action"; "show"; \
+								"type"; "confirm"; \
+								"title"; New collection:C1472("appIsNotInstalled"; $cfgutil.appName); \
+								"additional"; New collection:C1472("wouldYouLikeToInstallNow"; $cfgutil.appName); \
+								"okAction"; JSON Stringify:C1217($Obj_ok); \
+								"cancel"; Get localized string:C991("manualInstallation"); \
+								"cancelAction"; JSON Stringify:C1217($Obj_cancel)))
+							
 						End if 
 						
 						//______________________________________________________
 					: ($project._buildTarget="android")
 						
-						// check if android device plugged
+						var $adb : cs:C1710.adb
+						$adb:=cs:C1710.adb.new()
 						
-						//______________________________________________________
-					Else 
+						// Verify that the device is plugged
+						$success:=$adb.isDeviceConnected($project._device.udid)
 						
-						// A "Case of" statement should never omit "Else"
+						If (Not:C34($success))
+							
+							var $manual : Object
+							$data:=cs:C1710.project.new($data).cleaned()
+							$manual:=OB Copy:C1225($data)
+							$manual.manualInstallation:=True:C214
+							
+							POST_MESSAGE(New object:C1471(\
+								"target"; EDITOR.window; \
+								"action"; "show"; \
+								"type"; "confirm"; \
+								"title"; Get localized string:C991("noDeviceFound"); \
+								"additional"; Get localized string:C991("makeSureThatADeviceIsConnected"); \
+								"ok"; Get localized string:C991("continue"); \
+								"okFormula"; Formula:C1597(EDITOR.callMe("BUILD"; $data)); \
+								"cancel"; Get localized string:C991("manualInstallation"); \
+								"cancelFormula"; Formula:C1597(EDITOR.callMe("BUILD"; $manual))\
+								))
+							
+						End if 
 						
 						//______________________________________________________
 				End case 

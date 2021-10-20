@@ -293,8 +293,10 @@ Function run()->$result : Object
 	
 	If (Not:C34(This:C1470.isOnError))
 		
-		If (This:C1470.input.project._device.type="device")\
-			 & FEATURE.with("ConnectedDevices")
+		var $project : Object
+		$project:=This:C1470.input.project
+		
+		If (This:C1470.input.realDevice)
 			
 			// * INSTALL APP
 			$result:=This:C1470.install()
@@ -304,7 +306,9 @@ Function run()->$result : Object
 				// * LAUNCH APP
 				This:C1470.postStep("launchingTheApplication")
 				
-				$result:=This:C1470.adb.launchApp(This:C1470.input.project.product.bundleIdentifier)
+				$result:=This:C1470.adb.launchApp($project.product.bundleIdentifier)
+				
+				This:C1470.postError(cs:C1710.str.new("theApplicationHasBeenSuccessfullyInstalled").localized(New collection:C1472($project.product.name; $project._device.name)))
 				
 			End if 
 			

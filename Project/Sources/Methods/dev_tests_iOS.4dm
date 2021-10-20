@@ -6,9 +6,74 @@ var $simctl : cs:C1710.simctl
 
 COMPILER_COMPONENT
 
-//$simctl:=cs.simctl.new(SHARED.iosDeploymentTarget)
-
 Case of 
+		
+		//______________________________________________________
+	: (True:C214)
+		
+		var $pluggedDevices : Collection
+		
+		var $cfgutil : cs:C1710.cfgutil
+		$cfgutil:=cs:C1710.cfgutil.new()
+		
+		If ($cfgutil.success)
+			
+			$pluggedDevices:=$cfgutil.plugged()
+			
+			If ($pluggedDevices.length>0)
+				
+				$device:=$pluggedDevices[0]
+				
+				If ($cfgutil.isDeviceConnected($device))
+					
+					var $ecid : Text
+					$ecid:=$cfgutil.ecid($device)
+					
+					var $value : Text
+					$value:=$cfgutil.properties("installedApps"; $device)  //""
+					
+					//$value:=$cfgutil.properties()  // Possible names of properties
+					//$value:=$cfgutil.properties("ECID")
+					//$value:=$cfgutil.properties("UDID")
+					//$value:=$cfgutil.properties("deviceClass")  // IPhone
+					//$value:=$cfgutil.properties("deviceType")  // IPhone13,2
+					//$value:=$cfgutil.properties("name")  // IPhone Vincent
+					//$value:=$cfgutil.properties("provisioningProfiles")  //""
+					
+				End if 
+			End if 
+			
+			
+		Else 
+			
+			//ALERT("Apple Configurator 2 not found")
+			
+			var $simctl : cs:C1710.simctl
+			$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
+			
+			$pluggedDevices:=$simctl.plugged()
+			
+			If ($pluggedDevices.length>0)
+				
+				$device:=$pluggedDevices[0]
+				
+				//If ($simctl.isAppInstalled("com.myCompany.My-App-7"; $device.udid))
+				
+				// End if
+				
+				
+				
+			End if 
+		End if 
+		
+		
+		//$pluggedDevices:=$simctl.plugged()
+		//$device:=$pluggedDevices[0]
+		
+		//If ($simctl.isAppInstalled("com.myCompany.My-App-7"; $device.udid))
+		
+		// End if
+		
 		//______________________________________________________
 	: (True:C214)
 		
@@ -20,20 +85,6 @@ Case of
 		
 		var $plist : cs:C1710.plist
 		$plist:=cs:C1710.plist.new(File:C1566("/Users/vdl/Desktop/TO BE TRASHED/test.plist"))
-		
-		
-		//______________________________________________________
-	: (True:C214)
-		
-		//var $cfgutil : cs.cfgutil
-		//$cfgutil:=cs.cfgutil.new()
-		
-		//var $pluggedDevices : Collection
-		//$pluggedDevices:=$cfgutil.plugged()
-		
-		var $pluggedDevices : Collection
-		$pluggedDevices:=$simctl.plugged()
-		$simctl.launch("xcrun simctl list")
 		
 		//______________________________________________________
 	: (True:C214)
@@ -61,17 +112,18 @@ Case of
 		//______________________________________________________
 	: (True:C214)
 		
+		
+		$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
 		$device:=$simctl.defaultDevice()
 		$simctl.setDefaultDevice("none")
 		$o:=$simctl.defaultDevice()
 		$simctl.setDefaultDevice($device.udid; True:C214)
 		$o:=$simctl.defaultDevice()
 		
-		
-		
 		//______________________________________________________
 	: (True:C214)
 		
+		$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
 		$simctl.bootDevice("iPhone 12 Pro Max")
 		
 		If (Shift down:C543)
@@ -87,6 +139,7 @@ Case of
 		//______________________________________________________
 	: (True:C214)
 		
+		$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
 		If ($simctl.bootedDevices().query("name = :1"; "iPhone 12 Pro Max").pop()=Null:C1517)
 			
 			$simctl.bootDevice("iPhone 12 Pro Max")
@@ -123,6 +176,8 @@ Case of
 		//______________________________________________________
 	: (True:C214)
 		
+		$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
+		
 		// Shutdown, if any,  "iPhone 12 Pro Max" device and waits it's shutdown
 		$simctl.shutdownDevice("iPhone 12 Pro Max"; True:C214)
 		
@@ -132,6 +187,7 @@ Case of
 		//______________________________________________________
 	: (True:C214)
 		
+		$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
 		// Quit simulator App after shutdown all booted devices
 		$simctl.quitSimulatorApp(True:C214)
 		
@@ -142,6 +198,7 @@ Case of
 		//______________________________________________________
 	: (True:C214)
 		
+		$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
 		$folder:=$simctl.deviceFolder("iPhone 12 Pro Max")
 		$device:=$simctl.device("iPhone 12 Pro Max")
 		ASSERT:C1129($simctl.deviceFolder($device.udid; True:C214).path=$folder.path)
@@ -149,6 +206,7 @@ Case of
 		//______________________________________________________
 	: (True:C214)
 		
+		$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
 		$iPhones:=$simctl.deviceTypes("iPhone")
 		$iPads:=$simctl.deviceTypes("iPad")
 		

@@ -13,13 +13,192 @@ Class constructor
 	
 	Super:C1705()
 	
-	This:C1470.exe:=This:C1470.getExe("Apple Configurator 2.app")
+	This:C1470.devices:=New collection:C1472
+	This:C1470.cacheDuration:=30  // Number of seconds during which the list of plugged devices is not refreshed
+	This:C1470.cacheStamp:=0
+	
+	This:C1470.appName:="Apple Configurator 2"
+	This:C1470.exe:=This:C1470._getExe(This:C1470.appName)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function getExe($bundleName : Text)->$exe : 4D:C1709.File
+	/// List all attached devices
+Function plugged($refresh : Boolean)->$devices : Collection
+	
+	var $ecid : Text
+	var $o : Object
+	
+	If (This:C1470.exe.exists)
+		
+		If ((Milliseconds:C459-This:C1470.cacheStamp)>(This:C1470.cacheDuration*1000)) | $refresh
+			
+			This:C1470.devices:=New collection:C1472
+			
+			This:C1470.launch(This:C1470.singleQuoted(This:C1470.exe.path)+" --format JSON list")
+			This:C1470.success:=Bool:C1537(OK) & Match regex:C1019("(?msi)^\\{.*\\}$"; This:C1470.outputStream; 1)
+			
+			If (This:C1470.success)
+				
+				$o:=This:C1470._manageResponse()  //JSON Parse(This.outputStream)
+				
+				If ($o.Devices#Null:C1517)
+					
+					For each ($ecid; $o.Devices)
+						
+						This:C1470.devices.push($o.Output[$ecid])
+						
+					End for each 
+				End if 
+			End if 
+			
+			This:C1470.cacheStamp:=Milliseconds:C459
+			
+		End if 
+	End if 
+	
+	$devices:=This:C1470.devices
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	/// Returns True if the device is attached
+	// MARK: #TODO : accept text (udid, name,…)
+Function isDeviceConnected($device : Object)->$connected : Boolean
+	
+	$connected:=This:C1470.plugged().query("ECID = :1"; String:C10($device.ECID)+String:C10($device.ecid)).pop()#Null:C1517
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	/// Returns ecid of a device
+	// MARK: #TODO : accept text (udid, name,…)
+Function ecid($device : Object)->$ecid : Text
+	
+	var $udid : Text
+	var $o : Object
+	var $devices : Collection
+	
+	This:C1470.success:=This:C1470.exe.exists
+	
+	If (This:C1470.success)
+		
+		ASSERT:C1129(($device.udid#Null:C1517) | ($device.UDID#Null:C1517))
+		
+		$udid:=String:C10($device.udid)+String:C10($device.UDID)
+		
+		$devices:=This:C1470.plugged()
+		
+		If (This:C1470.success)
+			
+			For each ($o; $devices) Until (Length:C16($ecid)=0)
+				
+				If ($o.UDID=$udid)
+					
+					$ecid:=$o.ECID
+					
+				End if 
+			End for each 
+		End if 
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	/// Installs the given IPA file on the attached device
+Function installApp($device : Object; $apk : 4D:C1709.File)->$this : cs:C1710.cfgutil
+	
+	var $cmd : Text
+	
+	This:C1470.success:=This:C1470.exe.exists
+	
+	Case of 
+			
+			//______________________________________________________
+		: (This:C1470.success)
+			
+			$cmd:=This:C1470.singleQuoted(This:C1470.exe.path)\
+				+" --format JSON"\
+				+" -e "+String:C10($device.ECID)+String:C10($device.ecid)\
+				+" install-app "+This:C1470.singleQuoted($apk.path)
+			
+			This:C1470.launch($cmd)
+			This:C1470.success:=Bool:C1537(OK) & Match regex:C1019("(?msi)^\\{.*\\}$"; This:C1470.outputStream; 1)
+			
+			If (This:C1470.success)
+				
+				This:C1470._manageResponse()
+				
+			End if 
+			
+			//______________________________________________________
+		Else 
+			
+			This:C1470._pushError("Not implemented without apple configurator")  // #MARK_LOCALIZE
+			
+			//______________________________________________________
+	End case 
+	
+	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	/// Removes the app with the given bundle identifier from attached device
+Function uninstallApp($device : Object; $bundleIdentifier : Text)->$this : cs:C1710.cfgutil
+	
+	var $cmd : Text
+	
+	This:C1470.success:=This:C1470.exe.exists
+	
+	Case of 
+			
+			//______________________________________________________
+		: (This:C1470.success)
+			
+			$cmd:=This:C1470.singleQuoted(This:C1470.exe.path)\
+				+" --format JSON"\
+				+" -e "+String:C10($device.ECID)+String:C10($device.ecid)\
+				+" remove-app "+This:C1470.singleQuoted($bundleIdentifier)
+			
+			This:C1470.launch($cmd)
+			This:C1470.success:=Bool:C1537(OK) & Match regex:C1019("(?msi)^\\{.*\\}$"; This:C1470.outputStream; 1)
+			
+			If (This:C1470.success)
+				
+				This:C1470._manageResponse()
+				
+			End if 
+			
+			//______________________________________________________
+		Else 
+			
+			This:C1470._pushError("Not implemented without apple configurator")  // #MARK_LOCALIZE
+			
+			//______________________________________________________
+	End case 
+	
+	$this:=This:C1470
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	/// Fetch various properties of a device
+	/// To see the possible names of properties, don't pass the $property parameter
+	/// the first detected device will be selected.
+Function properties($property : Text; $device : Object)->$value : Text
+	
+	var $cmd : Text
+	
+	$cmd:=This:C1470.singleQuoted(This:C1470.exe.path)\
+		+" --format text"
+	
+	If ($device#Null:C1517)
+		
+		$cmd:=$cmd+" -e "+String:C10($device.ECID)+String:C10($device.ecid)
+		
+	End if 
+	
+	$cmd:=$cmd+" get "+Choose:C955($property=""; "supportedPropertyNames"; $property)
+	
+	This:C1470.launch($cmd)
+	
+	$value:=This:C1470.outputStream
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	/// [PRIVATE]
+Function _getExe($bundleName : Text)->$exe : 4D:C1709.File
 	
 	var $bundle : 4D:C1709.Folder
-	$bundle:=Folder:C1567("Applications/"+$bundleName)
+	$bundle:=Folder:C1567("Applications/"+$bundleName+".app")
 	
 	If (Not:C34($bundle.exists))
 		
@@ -53,6 +232,7 @@ Function getExe($bundleName : Text)->$exe : 4D:C1709.File
 			 & (Length:C16(This:C1470.outputStream)>0)
 			
 			$exe:=File:C1566(This:C1470.outputStream)
+			This:C1470.success:=$exe.exists
 			
 		Else 
 			
@@ -62,71 +242,34 @@ Function getExe($bundleName : Text)->$exe : 4D:C1709.File
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function plugged()->$devices : Collection
+	/// [PRIVATE]
+Function _manageResponse()->$response : Object
 	
-	var $ecid : Text
-	var $o : Object
-	var $index; $start : Integer
+	$response:=JSON Parse:C1218(This:C1470.outputStream)
 	
-	$devices:=New collection:C1472
-	
-	If (Bool:C1537(This:C1470.exe))
-		
-		// ⚠️ Ne semble plus fonctionner depuis la màj de Xcode 12.4
-		This:C1470.launch(This:C1470.singleQuoted(This:C1470.exe.path)+" --format JSON list")
-		
-		If (This:C1470.success)
+	Case of 
 			
-			$o:=JSON Parse:C1218(This:C1470.outputStream)
+			//======================================
+		: (String:C10($response.Type)="Error")
 			
-			If ($o.Devices#Null:C1517)
-				
-				For each ($ecid; $o.Devices)
-					
-					$devices.push($o.Output[$ecid])
-					
-				End for each 
-			End if 
-		End if 
-		
-	Else 
-		
-		// Other option if no 'cfgutil'
-		// ⚠️ 'instruments' is now deprecated in favor of 'xcrun xctrace'
-		This:C1470.resultInErrorStream:=True:C214
-		This:C1470.launch("xcrun xctrace list devices")
-		This:C1470.resultInErrorStream:=False:C215
-		
-		If (This:C1470.success)
+			This:C1470.success:=False:C215
+			This:C1470.errors.pop()
+			This:C1470._pushError($response.Message)
 			
-			$index:=Position:C15("== Simulators =="; This:C1470.outputStream)
+			//======================================
+		: (String:C10($response.Type)="CommandOutput")
 			
-			If ($index>0)
-				
-				This:C1470.outputStream:=Substring:C12(This:C1470.outputStream; 1; $index-1)
-				
-			End if 
+			This:C1470.lastError:=""
+			This:C1470.errors.pop()
 			
-			ARRAY LONGINT:C221($pos; 0)
-			ARRAY LONGINT:C221($len; 0)
-			
-			$start:=1
-			
-			//While (Match regex("(?m-si)^([^(]*)\\s\\(([0-9\\.]+\\)\\s\\(([[:xdigit:]]{8}-[[:xdigit:]]{16}))\\)$"; This.outputStream; $start; $pos; $len))
-			While (Match regex:C1019("(?-msi)((?:iPhone|iPad)\\s[^(]*)\\(([^)]*)\\)\\s\\(([^)]*)\\)"; This:C1470.outputStream; $start; $pos; $len))
-				
-				$devices.push(New object:C1471(\
-					"name"; Substring:C12(This:C1470.outputStream; $pos{1}; $len{1}); \
-					"os"; Substring:C12(This:C1470.outputStream; $pos{2}; $len{2}); \
-					"udid"; Substring:C12(This:C1470.outputStream; $pos{3}; $len{3})))
-				
-				$start:=$pos{3}+$len{3}
-				
-			End while 
-			
+			//======================================
 		Else 
 			
-			// #ERROR
+			This:C1470.success:=False:C215
+			This:C1470._pushError("Unknown output type: "+String:C10($response.Type))  // #MARK_LOCALIZE
 			
-		End if 
-	End if 
+			
+			//======================================
+	End case 
+	
+	

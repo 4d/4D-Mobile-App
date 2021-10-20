@@ -15,8 +15,8 @@ C_TEXT:C284($kTxt_bundleName; $Txt_buffer; $Txt_cmd; $Txt_error; $Txt_in; $Txt_o
 C_OBJECT:C1216($Obj_; $Obj_in; $Obj_out)
 
 If (False:C215)
-	C_OBJECT:C1216(device; $0)
-	C_OBJECT:C1216(device; $1)
+	C_OBJECT:C1216(_o_device; $0)
+	C_OBJECT:C1216(_o_device; $1)
 End if 
 
 // ----------------------------------------------------
@@ -74,7 +74,7 @@ Case of
 			
 		Else 
 			
-			$Obj_out:=device(New object:C1471("action"; "appConfiguratorPaths"))  // Using spotlight
+			$Obj_out:=_o_device(New object:C1471("action"; "appConfiguratorPaths"))  // Using spotlight
 			
 			If ($Obj_out.success)
 				
@@ -143,7 +143,7 @@ Case of
 			
 		Else 
 			
-			$Obj_out:=device(New object:C1471("action"; "appPath"))
+			$Obj_out:=_o_device(New object:C1471("action"; "appPath"))
 			
 			If ($Obj_out.success)
 				
@@ -178,7 +178,7 @@ Case of
 	: ($Obj_in.action="plugged")
 		
 		// Get devices plugged
-		$Obj_out:=device(New object:C1471("action"; "appPath"))
+		$Obj_out:=_o_device(New object:C1471("action"; "appPath"))
 		
 		If ($Obj_out.success)
 			
@@ -329,7 +329,7 @@ Case of
 		
 		If (Test path name:C476(String:C10($Obj_in.path))=Is a document:K24:1)  // Check if folder or archive file
 			
-			$Obj_:=device(New object:C1471("action"; "appPath"))
+			$Obj_:=_o_device(New object:C1471("action"; "appPath"))
 			
 			Case of 
 					
@@ -361,7 +361,7 @@ Case of
 							// ........................................
 						: (Length:C16(String:C10($Obj_in.udid))>0)
 							
-							$Obj_out:=device(New object:C1471("action"; "ecid"; "udid"; $Obj_in.udid))
+							$Obj_out:=_o_device(New object:C1471("action"; "ecid"; "udid"; $Obj_in.udid))
 							
 							If ($Obj_out.success)
 								
@@ -471,7 +471,7 @@ Case of
 		
 		If (Length:C16(String:C10($Obj_in.identifier))>0)  // identifier
 			
-			$Obj_:=device(New object:C1471("action"; "appPath"))
+			$Obj_:=_o_device(New object:C1471("action"; "appPath"))
 			
 			Case of 
 					
@@ -503,7 +503,7 @@ Case of
 							// ........................................
 						: (Length:C16(String:C10($Obj_in.udid))>0)
 							
-							$Obj_out:=device(New object:C1471("action"; "ecid"; "udid"; $Obj_in.udid))
+							$Obj_out:=_o_device(New object:C1471("action"; "ecid"; "udid"; $Obj_in.udid))
 							
 							If ($Obj_out.success)
 								
@@ -609,7 +609,7 @@ Case of
 		//______________________________________________________
 	: ($Obj_in.action="activate")
 		
-		$Obj_:=device(New object:C1471("action"; "appPath"))
+		$Obj_:=_o_device(New object:C1471("action"; "appPath"))
 		
 		If ($Obj_.success)
 			
@@ -638,7 +638,7 @@ Case of
 					// ........................................
 				: (Length:C16(String:C10($Obj_in.udid))>0)
 					
-					$Obj_out:=device(New object:C1471("action"; "ecid"; "udid"; $Obj_in.udid))
+					$Obj_out:=_o_device(New object:C1471("action"; "ecid"; "udid"; $Obj_in.udid))
 					
 					If ($Obj_out.success)
 						

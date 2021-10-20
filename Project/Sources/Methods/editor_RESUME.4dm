@@ -191,8 +191,7 @@ Case of
 	: ($selector="build_waitingForConfigurator")
 		
 		// Open App Store
-		device(New object:C1471(\
-			"action"; "appStore"))
+		OPEN URL:C673(Get localized string:C991("appstore_configurator"); *)
 		
 		// Warning build is into in.build
 		$ok:=New object:C1471(\
