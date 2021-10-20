@@ -1149,8 +1149,8 @@ Snadno vytvářejte a nasazujte vlastní nativní mobilní aplikace.</target>
           <target>Měna €</target>
         </trans-unit>
         <trans-unit id="bkNRMW8GaDxwVuc08Y8mpQ" resname="_currencyYen">
-          <source>Currency ¬•</source>
-          <target>Měna ¬•</target>
+          <source>Currency ¥</source>
+          <target>Měna ¥</target>
         </trans-unit>
         <trans-unit id="zRWqV3+vgKbwjYKmYMBiTw" resname="_jsonPrettyPrinted">
           <source>JSON Pretty Print</source>
