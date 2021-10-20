@@ -224,7 +224,7 @@ If (OB Is empty:C1297(SHARED)) | $reset
 	SHARED.defaultFieldBindingTypes[Is time:K8:8]:="mediumTime"
 	SHARED.defaultFieldBindingTypes[Is text:K8:3]:="text"
 	SHARED.defaultFieldBindingTypes[Is picture:K8:10]:="restImage"
-	SHARED.defaultFieldBindingTypes[Is object:K8:27]:="jsonPrettyPrinted"
+	SHARED.defaultFieldBindingTypes[Is object:K8:27]:="yaml"
 	SHARED.defaultFieldBindingTypes[8858]:="relation"
 	SHARED.defaultFieldBindingTypes[8859]:="relation"
 	

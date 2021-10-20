@@ -1156,13 +1156,9 @@ Snadno vytvářejte a nasazujte vlastní nativní mobilní aplikace.</target>
           <source>JSON Pretty Print</source>
           <target>JSON pěkný tisk</target>
         </trans-unit>
-        <trans-unit id="/opYg4rG93/74xOwqt0D5A" resname="_json">
-          <source>JSON</source>
-          <target>JSON</target>
-        </trans-unit>
-        <trans-unit id="u4O1o5UConYGSIyJB4oiVA" resname="_jsonValues">
-          <source>JSON values</source>
-          <target>JSON hodnoty</target>
+        <trans-unit id="/opYg4rG93/74xOwqt0D5A" resname="_yaml">
+          <source>YAML</source>
+          <target>YAML</target>
         </trans-unit>
       </group>
       <group resname="Data">

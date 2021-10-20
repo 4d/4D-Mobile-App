@@ -253,13 +253,10 @@
         null,
         [
             {
+                "name": "yaml"
+            },
+            {
                 "name": "jsonPrettyPrinted"
-            },
-            {
-                "name": "json"
-            },
-            {
-                "name": "jsonValues"
             }
         ]
     ],
