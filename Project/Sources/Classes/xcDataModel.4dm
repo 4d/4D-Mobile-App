@@ -4,836 +4,838 @@ Class constructor($project : Object)
 	This:C1470.dataModel:=OB Copy:C1225($project.dataModel)
 	This:C1470.actions:=$project.actions
 	
-Function run($path : Text; $options : Object)->$Obj_out : Object
-	$Obj_out:=New object:C1471()
+Function run($path : Text; $options : Object)->$out : Object
+	$out:=New object:C1471()
+	If ($options.definition=Null:C1517)
+		$options.definition:=New object:C1471  // cache
+	End if 
 	
-	var $Obj_dataModel : Object
-	$Obj_dataModel:=This:C1470.dataModel
+	var $result; $table; $tableInfo : Object
+	var $Txt_table : Text
+	var $index : Integer
+	var $Dom_model; $Dom_node; $Dom_elements : Text
 	
-	If ($Obj_dataModel#Null:C1517)
+	If (This:C1470.dataModel#Null:C1517)
 		
-		var $Dom_model : Text
 		$Dom_model:=DOM Create XML Ref:C861("model")
 		
-		If (OK=1)
+		// Create XML document
+		XML SET OPTIONS:C1090($Dom_model; XML indentation:K45:34; XML with indentation:K45:35)
+		
+		DOM SET XML ATTRIBUTE:C866($Dom_model; \
+			"type"; "com.apple.IDECoreDataModeler.DataModel"; \
+			"documentVersion"; "1.0"; \
+			"lastSavedToolsVersion"; "14903"; \
+			"systemVersion"; "18G87"; \
+			"minimumToolsVersion"; "Automatic"; \
+			"sourceLanguage"; "Swift"; \
+			"userDefinedModelVersionIdentifier"; "")
+		
+		// Create elements nodes
+		$Dom_elements:=DOM Create XML element:C865($Dom_model; "elements")
+		
+		$index:=0
+		For each ($Txt_table; This:C1470.dataModel)
+			$table:=This:C1470.dataModel[$Txt_table]
+			$tableInfo:=$table[""]
 			
-			XML SET OPTIONS:C1090($Dom_model; XML indentation:K45:34; XML with indentation:K45:35)
+			$Dom_node:=DOM Create XML element:C865($Dom_elements; "element"; \
+				"name"; $Txt_tableName; \
+				"positionX"; 200*$index; \
+				"positionY"; 100; \
+				"width"; 150; \
+				"height"; 45+(15*OB Keys:C1719($table).length))
 			
-			DOM SET XML ATTRIBUTE:C866($Dom_model; \
-				"type"; "com.apple.IDECoreDataModeler.DataModel"; \
-				"documentVersion"; "1.0"; \
-				"lastSavedToolsVersion"; "14903"; \
-				"systemVersion"; "18G87"; \
-				"minimumToolsVersion"; "Automatic"; \
-				"sourceLanguage"; "Swift"; \
-				"userDefinedModelVersionIdentifier"; "")
+			$index:=$index+1
+		End for each 
+		
+		If (Bool:C1537(FEATURE._234))
 			
-			var $Dom_elements : Text
-			$Dom_elements:=DOM Create XML element:C865($Dom_model; "elements")
+			// Parent abtract Record entity in model, with common private fields
+			var $Txt_tableName : Text
+			$Txt_tableName:="Record"
 			
-			If (OK=1)
+			ARRAY TEXT:C222($tTxt_entityAttributes; 4)
+			$tTxt_entityAttributes{1}:="name"
+			$tTxt_entityAttributes{2}:="representedClassName"
+			$tTxt_entityAttributes{3}:="syncable"
+			$tTxt_entityAttributes{4}:="codeGenerationType"
+			
+			ARRAY TEXT:C222($tTxt_entityValues; 4)
+			$tTxt_entityValues{1}:=$Txt_tableName
+			$tTxt_entityValues{2}:=$Txt_tableName
+			$tTxt_entityValues{3}:="YES"
+			$tTxt_entityValues{4}:="class"
+			
+			var $Dom_entity : Text
+			$Dom_entity:=DOM Create XML element arrays:C1097($Dom_model; "entity"; $tTxt_entityAttributes; $tTxt_entityValues)
+			DOM SET XML ATTRIBUTE:C866($Dom_entity; \
+				"isAbstract"; "YES")
+			
+			var $Dom_attribute : Text
+			$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")
+			DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+				"name"; "qmobile__STAMP"; \
+				"attributeType"; "Integer 64")
+			
+			$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")
+			DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+				"name"; "qmobile__TIMESTAMP"; \
+				"attributeType"; "Date")
+			
+			$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")
+			DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+				"name"; "qmobile__KEY"; \
+				"attributeType"; "String")
+			
+			var $Dom_node : Text
+			$Dom_node:=DOM Create XML element:C865($Dom_elements; "element"; \
+				"name"; $Txt_tableName; \
+				"positionX"; 200; \
+				"positionY"; 0; \
+				"width"; 150; \
+				"height"; 45+(15*3))
+			
+		End if 
+		
+		// Add missing relations
+		If (Bool:C1537($options.relationship))
+			
+			$result:=This:C1470._relations($options)
+			ob_error_combine($out; $result)
+			
+		End if 
+		
+		// Add missing primary keys
+		$result:=This:C1470._primaryKeys()
+		ob_error_combine($out; $result)
+		
+		// Create entities nodes
+		For each ($Txt_table; This:C1470.dataModel)
+			$table:=This:C1470.dataModel[$Txt_table]
+			$result:=This:C1470.createEntity($options; $Dom_model; Num:C11($Txt_table); $table)
+			ob_error_combine($out; $result)
+		End for each 
+		
+		// Then write XML result to file
+		var $File_ : Text
+		$File_:=$path
+		
+		var $Obj_path : Object
+		$Obj_path:=Path to object:C1547($File_)
+		
+		Case of 
 				
-				ARRAY TEXT:C222($tTxt_entityAttributes; 4)
-				$tTxt_entityAttributes{1}:="name"
-				$tTxt_entityAttributes{2}:="representedClassName"
-				$tTxt_entityAttributes{3}:="syncable"
-				$tTxt_entityAttributes{4}:="codeGenerationType"
+				//………………………………………………………………………………………………
+			: ($Obj_path.extension=".xcdatamodeld")
 				
-				ARRAY TEXT:C222($tTxt_entityValues; 4)
-				$tTxt_entityValues{1}:=""
-				$tTxt_entityValues{2}:=""
-				$tTxt_entityValues{3}:="YES"
-				$tTxt_entityValues{4}:="class"
+				$File_:=$File_+Folder separator:K24:12+$Obj_path.name+".xcdatamodel"+Folder separator:K24:12+"contents"
 				
-				If (Bool:C1537(FEATURE._234))
+				//………………………………………………………………………………………………
+			: ($Obj_path.extension=".xcdatamodel")
+				
+				$File_:=$File_+Folder separator:K24:12+"contents"
+				
+				//………………………………………………………………………………………………
+		End case 
+		
+		CREATE FOLDER:C475($File_; *)
+		
+		DOM EXPORT TO FILE:C862($Dom_model; $File_)
+		
+		$out.success:=Bool:C1537(OK)
+		$out.path:=$File_
+		
+		DOM CLOSE XML:C722($Dom_model)  // Modify the system variable OK!
+		
+	Else 
+		
+		ASSERT:C1129(dev_Matrix; "No data model passed to xcDataModel")
+		RECORD.warning("dataModel is null to generate xcDataModel (core data ios)")
+		
+	End if 
+	
+	// create Entity node
+	// $Dom_model: parent node
+	// $table table data
+Function createEntity($options : Object; $Dom_model : Text; $Lon_tableID : Integer; $table : Object)->$out : Object
+	var $result : Object  // result of external function call
+	
+	var $tableInfo : Object
+	$tableInfo:=$table[""]
+	
+	var $Txt_tableName : Text
+	$Txt_tableName:=formatString("table-name"; $tableInfo.name)
+	
+	ARRAY TEXT:C222($tTxt_entityAttributes; 4)
+	$tTxt_entityAttributes{1}:="name"
+	$tTxt_entityAttributes{2}:="representedClassName"
+	$tTxt_entityAttributes{3}:="syncable"
+	$tTxt_entityAttributes{4}:="codeGenerationType"
+	
+	ARRAY TEXT:C222($tTxt_entityValues; 4)
+	$tTxt_entityValues{1}:=$Txt_tableName
+	$tTxt_entityValues{2}:=$Txt_tableName
+	$tTxt_entityValues{3}:="YES"
+	$tTxt_entityValues{4}:="class"
+	
+	var $Dom_userInfo; $Dom_entity; $Dom_userInfo; $Dom_node; $Dom_attribute; $Dom_userInfo : Text
+	$Dom_entity:=DOM Create XML element arrays:C1097($Dom_model; "entity"; $tTxt_entityAttributes; $tTxt_entityValues)
+	
+	If (Bool:C1537(FEATURE._234))
+		
+		DOM SET XML ATTRIBUTE:C866($Dom_entity; \
+			"parentEntity"; "Record")
+		
+	End if 
+	
+	$Dom_userInfo:=DOM Create XML element:C865($Dom_entity; "userInfo")
+	
+	// If table name has been formatted for core data, add the key mapping key
+	If (Not:C34(str_equal($Txt_tableName; $tableInfo.name)))
+		
+		$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+			"key"; "keyMapping"; \
+			"value"; $tableInfo.name)
+		
+	End if 
+	
+	// If table must not be sync by it self, add info about it
+	If (Length:C16(String:C10($tableInfo.slave))>0)
+		
+		// Only accessible via relations
+		$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+			"key"; "slave"; \
+			"value"; String:C10($tableInfo.slave))
+		
+	End if 
+	
+	// Has or not the global stamp fields
+	$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+		"key"; "globalStamp"; \
+		"value"; Choose:C955(Bool:C1537(_o_structure(New object:C1471(\
+		"action"; "hasField"; \
+		"table"; $tableInfo.name; \
+		"field"; SHARED.stampField.name)).value); "YES"; "NO"))
+	
+	// Add primary key info and add fetch index
+	If ($tableInfo.primaryKey#Null:C1517)
+		
+		$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+			"key"; "primaryKey"; \
+			"value"; String:C10($tableInfo.primaryKey))
+		
+		If (Length:C16(String:C10($tableInfo.primaryKey))>0)
+			
+			var $Dom_fetchIndex; $Dom_fetchIndexElement : Text
+			
+			$Dom_fetchIndex:=DOM Create XML element:C865($Dom_entity; "fetchIndex"; "name"; "byPrimaryKey")
+			$Dom_fetchIndexElement:=DOM Create XML element:C865($Dom_fetchIndex; "fetchIndexElement"; \
+				"property"; formatString("field-name"; String:C10($tableInfo.primaryKey)); "type"; "binary"; "order"; "ascending")
+			
+			C_TEXT:C284($Dom_uniquenessConstraints; $Dom_uniquenessConstraint; $Dom_constraint)
+			$Dom_uniquenessConstraints:=DOM Create XML element:C865($Dom_entity; "uniquenessConstraints")
+			$Dom_uniquenessConstraint:=DOM Create XML element:C865($Dom_uniquenessConstraints; "uniquenessConstraint")
+			$Dom_constraint:=DOM Create XML element:C865($Dom_uniquenessConstraint; "constraint"; "value"; formatString("field-name"; String:C10($tableInfo.primaryKey)))
+			
+		End if 
+	End if 
+	
+	// Add fetch index for sort action too
+	// TODO extract to function
+	If (This:C1470.actions#Null:C1517)
+		var $action; $parameter : Object
+		For each ($action; This:C1470.actions)
+			If (String:C10($action.preset)="sort")
+				If ($action.parameters#Null:C1517)
+					If ($action.parameters.length>0)
+						If (Num:C11($action.tableNumber)=$Lon_tableID)
+							$Dom_fetchIndex:=DOM Create XML element:C865($Dom_entity; "fetchIndex"; "name"; formatString("field-name"; String:C10($action.name)))
+							For each ($parameter; $action.parameters)
+								
+								$Dom_fetchIndexElement:=DOM Create XML element:C865($Dom_fetchIndex; "fetchIndexElement"; \
+									"property"; formatString("field-name"; String:C10($parameter.name)); "type"; "binary"; "order"; Choose:C955(String:C10($parameter.format)="ascending"; "ascending"; "descending"))
+								
+							End for each 
+						End if 
+					End if 
+				End if 
+			End if 
+		End for each 
+	End if 
+	
+	// Add information about data filter, only if validated
+	If ($tableInfo.filter#Null:C1517)
+		
+		If (Bool:C1537($tableInfo.filter.validated))  // Is filter is validated?
+			
+			$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+				"key"; "filter"; \
+				"value"; String:C10($tableInfo.filter.string))
+			
+		Else 
+			
+			ob_warning_add($out; "Filter '"+String:C10($tableInfo.filter.string)+"' of table '"+$Txt_tableName+"' not validated")
+			RECORD.warning("Filter '"+String:C10($tableInfo.filter.string)+"' of table '"+$Txt_tableName+"' not validated")
+			
+		End if 
+	End if 
+	
+	var $Txt_field; $Txt_originalFieldName; $Txt_fieldName : Text
+	
+	For each ($Txt_field; $table)
+		
+		Case of 
+				
+				//………………………………………………………………………………………………………………………
+			: (Length:C16($Txt_field)=0)  // Properties
+				
+				// <NOTHING MORE TO DO>
+				
+				//………………………………………………………………………………………………………………………
+			: (PROJECT.isField($Txt_field) | PROJECT.isComputedAttribute($table[$Txt_field]))
+				
+				var $Lon_type : Integer
+				var $Boo_4dType : Boolean
+				
+				If (Value type:C1509($table[$Txt_field])=Is object:K8:27)
 					
-					// Parent abtract Record entity in model, with common private fields
-					var $Txt_tableName : Text
-					$Txt_tableName:="Record"
+					$Txt_originalFieldName:=String:C10($table[$Txt_field].name)
+					$Lon_type:=$table[$Txt_field].fieldType
 					
-					$tTxt_entityValues{1}:=$Txt_tableName
-					$tTxt_entityValues{2}:=$Txt_tableName
+				Else 
 					
-					var $Dom_entity : Text
-					$Dom_entity:=DOM Create XML element arrays:C1097($Dom_model; "entity"; $tTxt_entityAttributes; $tTxt_entityValues)
-					DOM SET XML ATTRIBUTE:C866($Dom_entity; \
-						"isAbstract"; "YES")
-					
-					var $Dom_attribute : Text
-					$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")
-					DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
-						"name"; "qmobile__STAMP"; \
-						"attributeType"; "Integer 64")
-					
-					$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")
-					DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
-						"name"; "qmobile__TIMESTAMP"; \
-						"attributeType"; "Date")
-					
-					$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")
-					DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
-						"name"; "qmobile__KEY"; \
-						"attributeType"; "String")
-					
-					var $Dom_node : Text
-					$Dom_node:=DOM Create XML element:C865($Dom_elements; "element"; \
-						"name"; $Txt_tableName; \
-						"positionX"; 200; \
-						"positionY"; 0; \
-						"width"; 150; \
-						"height"; 45+(15*3))
+					var $Lon_fieldID : Integer
+					ASSERT:C1129(dev_Matrix; "Please avoid to have missing info in dataModel and rely and Field, fiel name method")
+					$Lon_fieldID:=Num:C11($Txt_field)
+					var $Ptr_field : Pointer
+					$Ptr_field:=Field:C253($Lon_tableID; $Lon_fieldID)
+					$Txt_originalFieldName:=Field name:C257($Ptr_field)
+					$Lon_type:=Type:C295($Ptr_field->)
+					$Boo_4dType:=True:C214
 					
 				End if 
 				
-				If (Bool:C1537($options.relationship))  // core data relation ship table
+				If (Length:C16($Txt_fieldName)>0)
 					
-					var $Obj_buffer : Object
-					$Obj_buffer:=This:C1470._relation(New object:C1471(\
-						"dataModel"; $Obj_dataModel; \
+					$Txt_fieldName:=formatString("field-name"; $Txt_originalFieldName)
+					
+					$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")  // XXX merge with next instruction
+					
+					DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+						"name"; $Txt_fieldName; \
+						"optional"; "YES"; \
+						"indexed"; "NO"; \
+						"syncable"; "YES")
+					
+					$Dom_userInfo:=DOM Create XML element:C865($Dom_attribute; "userInfo")
+					
+					If (Not:C34(str_equal($Txt_fieldName; $Txt_originalFieldName)))
+						
+						$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+							"key"; "keyMapping"; \
+							"value"; $Txt_originalFieldName)
+						
+					End if 
+					
+					// add xml attribut for type
+					This:C1470._field($Dom_attribute; $Dom_userInfo; $Lon_type)
+					
+				End if 
+				
+				//……………………………………………………………………………………………………………
+			: (Value type:C1509($table[$Txt_field])#Is object:K8:27)
+				
+				// <NOTHING MORE TO DO>
+				
+				//………………………………………………………………………………………………………………………
+			: (PROJECT.isRelation($table[$Txt_field]))
+				
+				var $Txt_relationName : Text
+				$Txt_relationName:=$Txt_field
+				
+				Case of 
+						
+						//__________________________________
+					: (Bool:C1537($options.flat))  // mode flat: one typed core data attribute by related fields
+						
+						ASSERT:C1129(dev_Matrix; "Flat mode no more supported and coded")
+/*ARRAY TEXT($tTxt_relationFields; 0)
+OB GET PROPERTY NAMES($table[$Txt_relationName]; $tTxt_relationFields)
+						
+var $Lon_relationField : Integer
+var $relatedField : Object
+						
+For ($Lon_relationField; 1; Size of array($tTxt_relationFields); 1)
+						
+$relatedField:=$table[$Txt_relationName][$tTxt_relationFields{$Lon_relationField}]
+						
+Case of 
+						
+//……………………………………………………
+: (PROJECT.isField($tTxt_relationFields{$Lon_relationField}) | PROJECT.isComputedAttribute($relatedField))
+						
+$Dom_attribute:=DOM Create XML element($Dom_entity; "attribute")
+						
+$Txt_buffer:=$table[$Txt_relationName][$tTxt_relationFields{$Lon_relationField}].name
+$Txt_fieldName:=formatString("field-name"; $Txt_relationName+"."+$Txt_buffer)
+						
+						DOM SET XML ATTRIBUTE($Dom_attribute; \
+							"name"; $Txt_fieldName; \
+							"optional"; "YES"; \
+							"indexed"; "NO"; \
+							"syncable"; "YES")
+						
+$Dom_userInfo:=DOM Create XML element($Dom_attribute; "userInfo")
+						
+If (Not(str_equal($Txt_fieldName; $Txt_relationName+"."+$Txt_buffer)))
+						
+						$Dom_node:=DOM Create XML element($Dom_userInfo; "entry"; \
+							"key"; "keyMapping"; \
+							"value"; $Txt_relationName+"."+$Txt_buffer)
+						
+End if 
+						
+$Lon_type:=$table[$Txt_relationName][$tTxt_relationFields{$Lon_relationField}].fieldType
+						
+// CLEAN call this method with $Lon_type not converted, and do a method which support that?
+This._field($Dom_attribute; $Dom_userInfo; $Lon_type)
+						
+						
+//……………………………………………………
+Else 
+						
+// not a field
+						
+//……………………………………………………
+End case 
+End for */
+						
+						//__________________________________
+					: (Bool:C1537($options.relationship))  // core data relation ship table
+						
+						var $Txt_formattedRelationName; $Txt_inverseName : Text
+						$Txt_formattedRelationName:=formatString("field-name"; $Txt_relationName)
+						
+						$Txt_inverseName:=String:C10($table[$Txt_relationName].inverseName)
+						
+						If (Length:C16($Txt_inverseName)=0)
+							
+							If (dev_Matrix)
+								
+								ASSERT:C1129(False:C215; "Missing inverseName")
+								
+							End if 
+							
+							$result:=_o_structure(New object:C1471(\
+								"action"; "inverseRelationName"; \
+								"table"; $table.name; \
+								"definition"; $options.definition; \
+								"relation"; $Txt_relationName))
+							
+							If ($result.success)
+								
+								$Txt_inverseName:=$result.value
+								$options.definition:=$result.definition  // cache purpose
+								$out.definition:=$result.definition
+								
+							End if 
+						End if 
+						
+						// relation mode
+						If (PROJECT.isRelationToMany($table[$Txt_relationName]))  // to N
+							
+							// we must have {type:TABLENAMESelection,relatedDataClass:TABLENAME}
+							
+							$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "relationship"; \
+								"name"; $Txt_formattedRelationName; \
+								"destinationEntity"; formatString("table-name"; $table[$Txt_relationName].relatedDataClass); \
+								"inverseEntity"; formatString("table-name"; $table[$Txt_relationName].relatedDataClass); \
+								"inverseName"; formatString("field-name"; $Txt_inverseName); \
+								"toMany"; "YES"; \
+								"optional"; "YES"; \
+								"syncable"; "YES"; \
+								"deletionRule"; "Nullify")
+							
+						Else   // to 1
+							
+							$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "relationship"; \
+								"name"; $Txt_formattedRelationName; \
+								"destinationEntity"; formatString("table-name"; $table[$Txt_relationName].relatedDataClass); \
+								"inverseEntity"; formatString("table-name"; $table[$Txt_relationName].relatedDataClass); \
+								"inverseName"; formatString("field-name"; $Txt_inverseName); \
+								"maxCount"; "1"; \
+								"optional"; "YES"; \
+								"syncable"; "YES"; \
+								"deletionRule"; "Nullify")
+							
+							// XXX: inverse name?
+							// XXX: if we have a relation, we must ensure that the destination table will be created with all wanted fields
+							// or we must add it artificially
+							
+						End if 
+						
+						$Dom_userInfo:=DOM Create XML element:C865($Dom_attribute; "userInfo")
+						
+						If (Not:C34(str_equal($Txt_formattedRelationName; $Txt_relationName)))
+							
+							$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+								"key"; "keyMapping"; \
+								"value"; $Txt_relationName)
+							
+						End if 
+						
+						If (Length:C16(String:C10($table[$Txt_relationName].format))>0)
+							
+							$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+								"key"; "format"; \
+								"value"; String:C10($table[$Txt_relationName].format))
+							
+						End if 
+						
+						// Get all fields to put in expand userInfo
+						var $Col_fields : Collection
+						$Col_fields:=New collection:C1472()
+						var $Txt_buffer : Text
+						OB GET PROPERTY NAMES:C1232($table[$Txt_relationName]; $tTxt_relationFields)
+						var $Lon_relationField : Integer
+						For ($Lon_relationField; 1; Size of array:C274($tTxt_relationFields); 1)
+							
+							If (Value type:C1509($table[$Txt_relationName][$tTxt_relationFields{$Lon_relationField}])=Is object:K8:27)  // field if
+								
+								$Txt_buffer:=$table[$Txt_relationName][$tTxt_relationFields{$Lon_relationField}].name
+								If (Length:C16($Txt_buffer)>0)
+									$Col_fields.push($Txt_buffer)
+								End if 
+								// Else  // not a field
+								
+							End if 
+						End for 
+						
+						// Without forgot the primaryKey
+						var $primaryKey : Text
+						$primaryKey:=This:C1470.dataModel[String:C10($table[$Txt_relationName].relatedTableNumber)][""].primaryKey
+						
+						If (Length:C16($primaryKey)>0)
+							
+							If ($Col_fields.indexOf($primaryKey)<0)
+								
+								$Col_fields.push($primaryKey)
+								
+							End if 
+						End if 
+						
+						If ($Col_fields.length>0)
+							
+							$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+								"key"; "expand"; \
+								"value"; $Col_fields.join(","))
+							
+						End if 
+						
+						//__________________________________
+					Else   // mode with one attribute core data for all related fields
+						ASSERT:C1129(dev_Matrix; "Using relation is now mandatory when generating core data model")
+						
+/*
+// attribute mode
+$Dom_attribute:=DOM Create XML element($Dom_entity; "attribute")
+						
+If (OK=1)
+						
+var $Txt_fieldName : Text
+$Txt_fieldName:=formatString("field-name"; $Txt_relationName)
+						
+						DOM SET XML ATTRIBUTE($Dom_attribute; \
+							"name"; $Txt_fieldName; \
+							"attributeType"; "Transformable"; \
+							"valueTransformerName"; "NSSecureUnarchiveFromData"; \
+							"optional"; "YES"; \
+							"indexed"; "NO"; \
+							"syncable"; "YES")
+						
+$Dom_userInfo:=DOM Create XML element($Dom_attribute; "userInfo")
+						
+If (Not(str_equal($Txt_fieldName; $Txt_relationName)))
+						
+						$Dom_node:=DOM Create XML element($Dom_userInfo; "entry"; \
+							"key"; "keyMapping"; \
+							"value"; $Txt_relationName)
+						
+End if 
+						
+						$Dom_node:=DOM Create XML element($Dom_userInfo; "entry"; \
+							"key"; "path"; \
+							"value"; $table[$Txt_relationName].relatedDataClass)
+						
+End if 
+*/
+						//__________________________________
+				End case 
+				
+				//……………………………………………………………………………………………………………
+			: ($table[$Txt_field].relatedEntities#Null:C1517)  // XXX do not edit here without care
+				
+				ASSERT:C1129(False:C215; "Must not be here if relatedDataClass correctly filled")
+				
+				//………………………………………………………………………………………………………………………
+			Else 
+				
+				// simple attribute
+				
+				//………………………………………………………………………………………………………………………
+		End case 
+		
+		
+	End for each   // end fields
+	
+	
+	// MARK: - relation
+Function _relation($table : Object; $options : Object)->$out : Object
+	$out:=New object:C1471()
+	var $Txt_field : Text
+	var $Obj_field; $Obj_relationTable; $Obj_relationTableInfo; $tableInfo : Object
+	
+	$tableInfo:=$table[""]
+	
+	For each ($Txt_field; $table)
+		
+		Case of 
+				//………………………………………………………………………………………………………………………
+			: (Length:C16($Txt_field)=0)
+				// skip : table metadata
+				
+				//………………………………………………………………………………………………………………………
+			: (Match regex:C1019("(?m-si)^\\d+$"; $Txt_field; 1; *))
+				// ignore field
+				
+				//………………………………………………………………………………………………………………………
+			: ((Value type:C1509($table[$Txt_field])=Is object:K8:27))
+				
+				$Obj_field:=$table[$Txt_field]
+				
+				var $Boo_found : Boolean
+				var $Txt_relationName : Text
+				
+				If ($Obj_field.relatedEntities#Null:C1517)  // To remove if relatedEntities deleted and relatedDataClass already filled #109019
+					
+					$Obj_field.relatedDataClass:=$table[$Txt_relationName].relatedEntities
+					ASSERT:C1129(dev_Matrix; "Code must have relatedEntities or relatedDataclass????")
+					
+				End if 
+				
+				If ($Obj_field.relatedDataClass#Null:C1517)  // Is is a link?
+					
+					// if this relatedDataClass in model?
+					
+					If (Not:C34(This:C1470.hasRelation($Txt_field)))  // not found we must add a new table in model
+						
+						$Obj_relationTable:=New object:C1471(\
+							""; New object:C1471(\
+							"name"; $table[$Txt_relationName].relatedDataClass))
+						
+						$Obj_relationTableInfo:=$Obj_relationTable[""]
+						
+						var $Obj_buffer : Object
+						$Obj_buffer:=_o_structure(New object:C1471(\
+							"action"; "tableInfo"; \
+							"name"; $Obj_relationTableInfo.name))
+						
+						If ($Obj_buffer.success)
+							
+							$Obj_relationTableInfo.primaryKey:=$Obj_buffer.tableInfo.primaryKey
+							$Obj_relationTableInfo.slave:=$table[""].name
+							
+							var $Lon_relatedTableID : Integer
+							$Lon_relatedTableID:=$Obj_buffer.tableInfo.tableNumber
+							// TODO ? APPEND TO ARRAY($tTxt_tables; String($Lon_relatedTableID))
+							
+							This:C1470.dataModel[String:C10($Lon_relatedTableID)]:=$Obj_relationTable
+							$out.hasBeenEdited:=True:C214
+							
+						Else 
+							
+							ob_error_add($out; "Unknown related table "+String:C10($Obj_relationTableInfo.name))
+							
+						End if 
+					End if 
+					
+					// just check if we must add new fields
+					var $Lon_field2 : Integer
+					OB GET PROPERTY NAMES:C1232($table[$Txt_relationName]; $tTxt_relationFields)
+					For ($Lon_field2; 1; Size of array:C274($tTxt_relationFields); 1)
+						
+						If (Value type:C1509($table[$Txt_relationName][$tTxt_relationFields{$Lon_field2}])=Is object:K8:27)
+							
+							If (($Obj_relationTable[$tTxt_relationFields{$Lon_field2}])=Null:C1517)
+								
+								$Obj_relationTable[$tTxt_relationFields{$Lon_field2}]:=$table[$Txt_relationName][$tTxt_relationFields{$Lon_field2}]  // name & type
+								$out.hasBeenEdited:=True:C214
+								
+							End if 
+						End if 
+					End for 
+					
+					// Get inverse field
+					$Obj_buffer:=_o_structure(New object:C1471(\
+						"action"; "inverseRelatedFields"; \
+						"table"; $tableInfo.name; \
+						"relation"; $Txt_relationName; \
 						"definition"; $options.definition))
 					
 					If ($Obj_buffer.success)
 						
-						$Obj_dataModel:=$Obj_buffer.dataModel
-						$Obj_out.definition:=$Obj_buffer.definition
-						
+						var $Obj_field : Object
+						For each ($Obj_field; $Obj_buffer.fields)  // CLEAN must only have one
+							
+							// Create the inverse field
+							If ($Obj_relationTable[$Obj_field.name]=Null:C1517)
+								
+								$Obj_relationTable[$Obj_field.name]:=New object:C1471(\
+									"kind"; $Obj_field.kind; \
+									"type"; $Obj_field.fieldType; \
+									"inverseName"; $Txt_relationName; \
+									"relatedTableNumber"; $Obj_field.relatedTableNumber; \
+									"relatedDataClass"; $Obj_field.relatedDataClass)
+								
+							End if 
+							
+							$Obj_relationTable[$Obj_field.name].inverseName:=$Txt_relationName
+							
+							$out.hasBeenEdited:=True:C214
+							
+						End for each 
 					End if 
-				End if   // end pre-parsing for relationship
-				
-				$Obj_buffer:=This:C1470._primaryKey()
-				
-				If ($Obj_buffer.success)
-					
-					$Obj_dataModel:=$Obj_buffer.dataModel
-					
 				End if 
 				
-				// For each table
-				OB GET PROPERTY NAMES:C1232($Obj_dataModel; $tTxt_tables)  // #CLEAN use for each
-				
-				var $Lon_table; $Lon_tableID : Integer
-				var $Obj_table : Object
-				For ($Lon_table; 1; Size of array:C274($tTxt_tables); 1)
-					
-					$Lon_tableID:=Num:C11($tTxt_tables{$Lon_table})
-					$Obj_table:=$Obj_dataModel[$tTxt_tables{$Lon_table}]
-					
-					var $Txt_buffer : Text
-					$Txt_buffer:=$Obj_table[""].name
-					$Txt_tableName:=formatString("table-name"; $Txt_buffer)
-					
-					$tTxt_entityValues{1}:=$Txt_tableName
-					$tTxt_entityValues{2}:=$Txt_tableName
-					
-					$Dom_entity:=DOM Create XML element arrays:C1097($Dom_model; "entity"; $tTxt_entityAttributes; $tTxt_entityValues)
-					
-					If (Bool:C1537(FEATURE._234))
-						
-						DOM SET XML ATTRIBUTE:C866($Dom_entity; \
-							"parentEntity"; "Record")
-						
-					End if 
-					
-					var $Dom_userInfo : Text
-					$Dom_userInfo:=DOM Create XML element:C865($Dom_entity; "userInfo")
-					
-					If (Not:C34(str_equal($Txt_tableName; $Txt_buffer)))
-						
-						$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
-							"key"; "keyMapping"; \
-							"value"; $Txt_buffer)
-						
-					End if 
-					
-					var $o : Object
-					$o:=$Obj_table[""]
-					
-					If (Length:C16(String:C10($o.slave))>0)
-						
-						// Only accessible via relations
-						$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
-							"key"; "slave"; \
-							"value"; String:C10($o.slave))
-						
-					End if 
-					//}
-					
-					// Has or not the global stamp fields
-					$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
-						"key"; "globalStamp"; \
-						"value"; Choose:C955(Bool:C1537(_o_structure(New object:C1471(\
-						"action"; "hasField"; \
-						"table"; $o.name; \
-						"field"; SHARED.stampField.name)).value); "YES"; "NO"))
-					
-					If (OK=1)
-						
-						C_TEXT:C284($Dom_fetchIndex; $Dom_fetchIndexElement)
-						
-						If ($o.primaryKey#Null:C1517)
-							
-							$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
-								"key"; "primaryKey"; \
-								"value"; String:C10($o.primaryKey))
-							
-							If (Length:C16(String:C10($o.primaryKey))>0)
-								
-								$Dom_fetchIndex:=DOM Create XML element:C865($Dom_entity; "fetchIndex"; "name"; "byPrimaryKey")
-								$Dom_fetchIndexElement:=DOM Create XML element:C865($Dom_fetchIndex; "fetchIndexElement"; \
-									"property"; formatString("field-name"; String:C10($o.primaryKey)); "type"; "binary"; "order"; "ascending")
-								
-								C_TEXT:C284($Dom_uniquenessConstraints; $Dom_uniquenessConstraint; $Dom_constraint)
-								$Dom_uniquenessConstraints:=DOM Create XML element:C865($Dom_entity; "uniquenessConstraints")
-								$Dom_uniquenessConstraint:=DOM Create XML element:C865($Dom_uniquenessConstraints; "uniquenessConstraint")
-								$Dom_constraint:=DOM Create XML element:C865($Dom_uniquenessConstraint; "constraint"; "value"; formatString("field-name"; String:C10($o.primaryKey)))
-								
-							End if 
-							
-						End if 
-						
-						// Add fetch index for sort action
-						// TODO extract to function
-						If (This:C1470.actions#Null:C1517)
-							var $action; $parameter : Object
-							For each ($action; This:C1470.actions)
-								If (String:C10($action.preset)="sort")
-									If ($action.parameters#Null:C1517)
-										If ($action.parameters.length>0)
-											If (Num:C11($action.tableNumber)=$Lon_tableID)
-												$Dom_fetchIndex:=DOM Create XML element:C865($Dom_entity; "fetchIndex"; "name"; formatString("field-name"; String:C10($action.name)))
-												For each ($parameter; $action.parameters)
-													
-													$Dom_fetchIndexElement:=DOM Create XML element:C865($Dom_fetchIndex; "fetchIndexElement"; \
-														"property"; formatString("field-name"; String:C10($parameter.name)); "type"; "binary"; "order"; Choose:C955(String:C10($parameter.format)="ascending"; "ascending"; "descending"))
-													
-												End for each 
-											End if 
-										End if 
-									End if 
-								End if 
-							End for each 
-						End if 
-						
-						// Development #113102
-						If ($o.filter#Null:C1517)  // Is filter is available?
-							
-							If (Bool:C1537($o.filter.validated))  // Is filter is validated?
-								
-								$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
-									"key"; "filter"; \
-									"value"; String:C10($o.filter.string))
-								
-							Else 
-								
-								ob_warning_add($Obj_out; "Filter '"+String:C10($o.filter.string)+"' of table '"+$Txt_tableName+"' not validated")
-								
-							End if 
-						End if 
-						
-						OB GET PROPERTY NAMES:C1232($Obj_table; $tTxt_fields)
-						
-						var $Lon_attributs : Integer
-						$Lon_attributs:=Size of array:C274($tTxt_fields)
-						
-						$Dom_node:=DOM Create XML element:C865($Dom_elements; "element"; \
-							"name"; $Txt_tableName; \
-							"positionX"; 200*$Lon_table; \
-							"positionY"; 100; \
-							"width"; 150; \
-							"height"; 45+(15*$Lon_attributs))
-						
-						var $Lon_field : Integer
-						For ($Lon_field; 1; $Lon_attributs; 1)
-							
-							Case of 
-									
-									//………………………………………………………………………………………………………………………
-								: (Length:C16($tTxt_fields{$Lon_field})=0)  // Properties
-									
-									// <NOTHING MORE TO DO>
-									
-									//………………………………………………………………………………………………………………………
-								: (PROJECT.isField($tTxt_fields{$Lon_field}) | PROJECT.isComputedAttribute($Obj_table[$tTxt_fields{$Lon_field}]))
-									
-									var $Lon_type : Integer
-									var $Lon_fieldID : Integer
-									var $Ptr_field : Pointer
-									var $Boo_4dType : Boolean
-									If (Value type:C1509($Obj_table[$tTxt_fields{$Lon_field}])=Is object:K8:27)
-										
-										$Txt_buffer:=String:C10($Obj_table[$tTxt_fields{$Lon_field}].name)
-										$Lon_type:=$Obj_table[$tTxt_fields{$Lon_field}].fieldType
-										
-									Else 
-										
-										$Lon_fieldID:=Num:C11($tTxt_fields{$Lon_field})
-										$Ptr_field:=Field:C253($Lon_tableID; $Lon_fieldID)
-										$Txt_buffer:=Field name:C257($Ptr_field)
-										$Lon_type:=Type:C295($Ptr_field->)
-										$Boo_4dType:=True:C214
-										
-									End if 
-									
-									If (Length:C16($Txt_buffer)>0)
-										
-										$Txt_fieldName:=formatString("field-name"; $Txt_buffer)
-										
-										$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")  // XXX merge with next instruction
-										
-										DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
-											"name"; $Txt_fieldName; \
-											"optional"; "YES"; \
-											"indexed"; "NO"; \
-											"syncable"; "YES")
-										
-										$Dom_userInfo:=DOM Create XML element:C865($Dom_attribute; "userInfo")
-										
-										If (Not:C34(str_equal($Txt_fieldName; $Txt_buffer)))
-											
-											$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
-												"key"; "keyMapping"; \
-												"value"; $Txt_buffer)
-											
-										End if 
-										
-										// add xml attribut for type
-										This:C1470._field($Dom_attribute; $Dom_userInfo; $Lon_type)
-										
-									End if 
-									
-									//……………………………………………………………………………………………………………
-								: (Value type:C1509($Obj_table[$tTxt_fields{$Lon_field}])#Is object:K8:27)
-									
-									// <NOTHING MORE TO DO>
-									
-									//………………………………………………………………………………………………………………………
-								: (PROJECT.isRelation($Obj_table[$tTxt_fields{$Lon_field}]))
-									
-									var $Txt_relationName : Text
-									$Txt_relationName:=$tTxt_fields{$Lon_field}
-									
-									Case of 
-											
-											//__________________________________
-										: (Bool:C1537($options.flat))  // mode flat: one typed core data attribute by related fields
-											
-											ARRAY TEXT:C222($tTxt_relationFields; 0)
-											OB GET PROPERTY NAMES:C1232($Obj_table[$Txt_relationName]; $tTxt_relationFields)
-											
-											var $Lon_relationField : Integer
-											var $relatedField : Object
-											For ($Lon_relationField; 1; Size of array:C274($tTxt_relationFields); 1)
-												
-												$relatedField:=$Obj_table[$Txt_relationName][$tTxt_relationFields{$Lon_relationField}]
-												
-												Case of 
-														
-														//……………………………………………………
-													: (PROJECT.isField($tTxt_relationFields{$Lon_relationField}) | PROJECT.isComputedAttribute($relatedField))
-														
-														$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")
-														
-														If (OK=1)
-															
-															$Txt_buffer:=$Obj_table[$Txt_relationName][$tTxt_relationFields{$Lon_relationField}].name
-															$Txt_fieldName:=formatString("field-name"; $Txt_relationName+"."+$Txt_buffer)
-															
-															DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
-																"name"; $Txt_fieldName; \
-																"optional"; "YES"; \
-																"indexed"; "NO"; \
-																"syncable"; "YES")
-															
-															$Dom_userInfo:=DOM Create XML element:C865($Dom_attribute; "userInfo")
-															
-															If (Not:C34(str_equal($Txt_fieldName; $Txt_relationName+"."+$Txt_buffer)))
-																
-																$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
-																	"key"; "keyMapping"; \
-																	"value"; $Txt_relationName+"."+$Txt_buffer)
-																
-															End if 
-															
-															$Lon_type:=$Obj_table[$Txt_relationName][$tTxt_relationFields{$Lon_relationField}].fieldType
-															
-															// CLEAN call this method with $Lon_type not converted, and do a method which support that?
-															This:C1470._field($Dom_attribute; $Dom_userInfo; $Lon_type)
-															
-														End if 
-														
-														//……………………………………………………
-													Else 
-														
-														// not a field
-														
-														//……………………………………………………
-												End case 
-											End for 
-											
-											//__________________________________
-										: (Bool:C1537($options.relationship))  // core data relation ship table
-											
-											$Txt_buffer:=formatString("field-name"; $Txt_relationName)
-											
-											var $Txt_inverseName : Text
-											$Txt_inverseName:=String:C10($Obj_table[$Txt_relationName].inverseName)
-											
-											If (Length:C16($Txt_inverseName)=0)
-												
-												If (dev_Matrix)
-													
-													ASSERT:C1129(False:C215; "Missing inverseName")
-													
-												End if 
-												
-												$Obj_buffer:=_o_structure(New object:C1471(\
-													"action"; "inverseRelationName"; \
-													"table"; $Obj_table.name; \
-													"definition"; $Obj_out.definition; \
-													"relation"; $Txt_relationName))
-												
-												If ($Obj_buffer.success)
-													
-													$Txt_inverseName:=$Obj_buffer.value
-													$options.definition:=$Obj_buffer.definition  // cache purpose
-													$Obj_out.definition:=$Obj_buffer.definition
-													
-												End if 
-											End if 
-											
-											// relation mode
-											If (PROJECT.isRelationToMany($Obj_table[$Txt_relationName]))  // to N
-												
-												// we must have {type:TABLENAMESelection,relatedDataClass:TABLENAME}
-												
-												$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "relationship"; \
-													"name"; $Txt_buffer; \
-													"destinationEntity"; formatString("table-name"; $Obj_table[$Txt_relationName].relatedDataClass); \
-													"inverseEntity"; formatString("table-name"; $Obj_table[$Txt_relationName].relatedDataClass); \
-													"inverseName"; formatString("field-name"; $Txt_inverseName); \
-													"toMany"; "YES"; \
-													"optional"; "YES"; \
-													"syncable"; "YES"; \
-													"deletionRule"; "Nullify")
-												
-											Else   // to 1
-												
-												$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "relationship"; \
-													"name"; $Txt_buffer; \
-													"destinationEntity"; formatString("table-name"; $Obj_table[$Txt_relationName].relatedDataClass); \
-													"inverseEntity"; formatString("table-name"; $Obj_table[$Txt_relationName].relatedDataClass); \
-													"inverseName"; formatString("field-name"; $Txt_inverseName); \
-													"maxCount"; "1"; \
-													"optional"; "YES"; \
-													"syncable"; "YES"; \
-													"deletionRule"; "Nullify")
-												
-												// XXX: inverse name?
-												// XXX: if we have a relation, we must ensure that the destination table will be created with all wanted fields
-												// or we must add it artificially
-												
-											End if 
-											
-											$Dom_userInfo:=DOM Create XML element:C865($Dom_attribute; "userInfo")
-											
-											If (Not:C34(str_equal($Txt_buffer; $Txt_relationName)))
-												
-												$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
-													"key"; "keyMapping"; \
-													"value"; $Txt_relationName)
-												
-											End if 
-											
-											If (Length:C16(String:C10($Obj_table[$Txt_relationName].format))>0)
-												
-												$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
-													"key"; "format"; \
-													"value"; String:C10($Obj_table[$Txt_relationName].format))
-												
-											End if 
-											
-											// Get all fields to put in expand userInfo
-											var $Col_fields : Collection
-											$Col_fields:=New collection:C1472()
-											OB GET PROPERTY NAMES:C1232($Obj_table[$Txt_relationName]; $tTxt_relationFields)
-											
-											For ($Lon_relationField; 1; Size of array:C274($tTxt_relationFields); 1)
-												
-												If (Value type:C1509($Obj_table[$Txt_relationName][$tTxt_relationFields{$Lon_relationField}])=Is object:K8:27)  // field if
-													
-													$Txt_buffer:=$Obj_table[$Txt_relationName][$tTxt_relationFields{$Lon_relationField}].name
-													If (Length:C16($Txt_buffer)>0)
-														$Col_fields.push($Txt_buffer)
-													End if 
-													// Else  // not a field
-													
-												End if 
-											End for 
-											
-											// Without forgot the primaryKey
-											$Txt_buffer:=$Obj_dataModel[String:C10($Obj_table[$Txt_relationName].relatedTableNumber)][""].primaryKey
-											
-											If (Length:C16($Txt_buffer)>0)
-												
-												If ($Col_fields.indexOf($Txt_buffer)<0)
-													
-													$Col_fields.push($Txt_buffer)
-													
-												End if 
-											End if 
-											
-											If ($Col_fields.length>0)
-												
-												$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
-													"key"; "expand"; \
-													"value"; $Col_fields.join(","))
-												
-											End if 
-											
-											//__________________________________
-										Else   // mode with one attribute core data for all related fields
-											
-											// attribute mode
-											$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")
-											
-											If (OK=1)
-												
-												var $Txt_fieldName : Text
-												$Txt_fieldName:=formatString("field-name"; $Txt_relationName)
-												
-												DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
-													"name"; $Txt_fieldName; \
-													"attributeType"; "Transformable"; \
-													"valueTransformerName"; "NSSecureUnarchiveFromData"; \
-													"optional"; "YES"; \
-													"indexed"; "NO"; \
-													"syncable"; "YES")
-												
-												$Dom_userInfo:=DOM Create XML element:C865($Dom_attribute; "userInfo")
-												
-												If (Not:C34(str_equal($Txt_fieldName; $Txt_relationName)))
-													
-													$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
-														"key"; "keyMapping"; \
-														"value"; $Txt_relationName)
-													
-												End if 
-												
-												$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
-													"key"; "path"; \
-													"value"; $Obj_table[$Txt_relationName].relatedDataClass)
-												
-											End if 
-											
-											//__________________________________
-									End case 
-									
-									//……………………………………………………………………………………………………………
-								: ($Obj_table[$tTxt_fields{$Lon_field}].relatedEntities#Null:C1517)  // XXX do not edit here without care
-									
-									ASSERT:C1129(False:C215; "Must not be here if relatedDataClass correctly filled")
-									
-									//………………………………………………………………………………………………………………………
-								Else 
-									
-									// simple attribute
-									
-									//………………………………………………………………………………………………………………………
-							End case 
-							
-							If (OK=0)
-								
-								$Lon_field:=MAXLONG:K35:2-1  // Break
-								
-							End if 
-						End for   // end fields
-					End if 
-					
-					If (OK=0)
-						
-						$Lon_table:=MAXLONG:K35:2-1  // Break
-						
-					End if 
-				End for   // end tables
-			End if 
-			
-			var $File_ : Text
-			$File_:=$path
-			
-			var $Obj_path : Object
-			$Obj_path:=Path to object:C1547($File_)
-			
-			Case of 
-					
-					//………………………………………………………………………………………………
-				: ($Obj_path.extension=".xcdatamodeld")
-					
-					$File_:=$File_+Folder separator:K24:12+$Obj_path.name+".xcdatamodel"+Folder separator:K24:12+"contents"
-					
-					//………………………………………………………………………………………………
-				: ($Obj_path.extension=".xcdatamodel")
-					
-					$File_:=$File_+Folder separator:K24:12+"contents"
-					
-					//………………………………………………………………………………………………
-			End case 
-			
-			CREATE FOLDER:C475($File_; *)
-			
-			DOM EXPORT TO FILE:C862($Dom_model; $File_)
-			
-			$Obj_out.success:=Bool:C1537(OK)
-			$Obj_out.path:=$File_
-			
-			DOM CLOSE XML:C722($Dom_model)  // Modify the system variable OK!
-			
+				//………………………………………………………………………………………………………………………
+		End case 
+	End for each 
+	
+Function _relations($options : Object)->$out : Object
+	$out:=New object:C1471()
+	
+	var $Txt_table : Text
+	var $result : Object
+	For each ($Txt_table; This:C1470.dataModel)
+		$result:=This:C1470._relation(This:C1470.dataModel[$Txt_table]; $options)
+		
+		$out.hasBeenEdited:=Bool:C1537($out.hasBeenEdited) | Bool:C1537($result.hasBeenEdited)
+		ob_error_combine($out; $result)
+		
+	End for each 
+	
+	
+	
+	// MARK: - utility
+Function hasRelation($relationName : Text)->$Boo_found : Boolean
+	$Boo_found:=False:C215
+	var $Txt_table : Text
+	var $table : Object
+	var $tableInfo : Object
+	
+	For each ($Txt_table; This:C1470.dataModel) Until ($Boo_found)
+		$table:=This:C1470.dataModel[$Txt_table]
+		$tableInfo:=$table[""]
+		If ($tableInfo.name=$table[$relationName].relatedDataClass)
+			$Boo_found:=True:C214
 		End if 
+	End for each 
+	
+Function hasField($table : Object; $name : Text)->$has : Boolean
+	var $Txt_field : Text
+	var $Obj_field : Object
+	$has:=False:C215
+	For each ($Txt_field; $table) Until ($has)
+		$Obj_field:=$table[$Txt_field]
+		If ($Obj_field.name=$name)
+			$has:=True:C214
+		End if 
+	End for each 
+	
+	
+	// MARK: - primary key
+	
+	// Add missing primary key for table
+Function _primaryKey($table : Object)->$out : Object
+	var $result; $tableInfo : Object
+	
+	$tableInfo:=$table[""]
+	$out:=New object:C1471()
+	$out.hasBeenEdited:=False:C215
+	
+	If ($tableInfo.primaryKey#Null:C1517)
 		
-	Else 
+		var $Txt_fieldName : Text
+		Case of 
+				//………………………………………………………………………………………………………………………
+			: (Value type:C1509($tableInfo.primaryKey)=Is object:K8:27)
+				
+				// Pass as object
+				$Txt_fieldName:=JSON Stringify:C1217($tableInfo.primaryKey)
+				
+				//………………………………………………………………………………………………………………………
+			: (Value type:C1509($tableInfo.primaryKey)=Is text:K8:3)
+				
+				$Txt_fieldName:=String:C10($tableInfo.primaryKey)
+				
+				//………………………………………………………………………………………………………………………
+			Else 
+				// SAFETY CODE if not passed...
+				ASSERT:C1129(dev_Matrix; "primary key seems to not be passed with dataModel")
+				
+				$result:=_o_structure(New object:C1471(\
+					"action"; "tableInfo"; \
+					"name"; $tableInfo.name))
+				
+				$Txt_fieldName:=Choose:C955($result.success; $result.tableInfo.primaryKey; "")
+				
+				//………………………………………………………………………………………………………………………
+		End case 
 		
-		RECORD.warning("$Obj_in.project.dataModel is null")
-		
+		If (Not:C34(This:C1470.hasField($table; $Txt_fieldName)))  // if not add missing primary key field
+			
+			// cs.structure.new().fieldDefinition($tableInfo.name; $Txt_fieldName) ???
+			
+			$result:=_o_structure(New object:C1471(\
+				"action"; "createField"; \
+				"table"; $tableInfo.name; \
+				"field"; $Txt_fieldName))
+			
+			If ($result.success)
+				
+				$table[String:C10($result.value.id)]:=$result.value
+				$out.hasBeenEdited:=True:C214
+				
+			Else 
+				
+				ob_error_combine($out; $result)
+				
+			End if 
+		End if 
 	End if 
 	
-Function _relation($Obj_in : Object)->$Obj_out : Object
-	var $Obj_dataModel : Object
-	$Obj_dataModel:=$Obj_in.dataModel
-	
-	$Obj_out:=New object:C1471()
-	
-	var $Txt_table : Text
-	var $Obj_table : Object
-	
-	For each ($Obj_table; $Obj_dataModel)
-		$Obj_table:=$Obj_dataModel[$Txt_table]
-		
-		var $Txt_field : Text
-		var $Obj_field : Object
-		For each ($Txt_field; $Obj_table)
-			
-			Case of 
-					
-					//………………………………………………………………………………………………………………………
-				: (Match regex:C1019("(?m-si)^\\d+$"; $Txt_field; 1; *))
-					
-					// ignore field
-					
-					//………………………………………………………………………………………………………………………
-				: ((Value type:C1509($Obj_table[$Txt_field])=Is object:K8:27))
-					$Obj_field:=$Obj_table[$Txt_field]
-					
-					var $Boo_found : Boolean
-					var $Txt_relationName : Text
-					$Txt_relationName:=$Txt_field  // link name (or primaryKey, etc...)
-					
-					If ($Obj_table[$Txt_relationName].relatedEntities#Null:C1517)  // To remove if relatedEntities deleted and relatedDataClass already filled #109019
-						
-						$Obj_table[$Txt_relationName].relatedDataClass:=$Obj_table[$Txt_relationName].relatedEntities
-						
-					End if 
-					
-					If ($Obj_table[$Txt_relationName].relatedDataClass#Null:C1517)  // Is is a link?
-						
-						// if this relatedDataClass in model?
-						$Boo_found:=False:C215
-						
-						For each ($Txt_table; $Obj_dataModel) Until ($Boo_found)
-							// ASK : why not just check  $Obj_dataModel[$Obj_table[$Txt_relationName].relatedDataClass] ?
-							var $Obj_relationTable : Object
-							$Obj_relationTable:=$Obj_dataModel[$Txt_table]
-							
-							var $Obj_relationTableInfo : Object
-							If ($Obj_relationTable[""]#Null:C1517)
-								$Obj_relationTableInfo:=$Obj_relationTable[""]
-							Else 
-								$Obj_relationTableInfo:=$Obj_relationTable  // DEAD CODE?
-							End if 
-							
-							If ($Obj_relationTableInfo.name=$Obj_table[$Txt_relationName].relatedDataClass)
-								$Boo_found:=True:C214
-							End if 
-						End for each 
-						
-						OB GET PROPERTY NAMES:C1232($Obj_table[$Txt_relationName]; $tTxt_relationFields)
-						
-						If (Not:C34($Boo_found))  // not found we must add a new table in model
-							
-							$Obj_relationTable:=New object:C1471(\
-								""; New object:C1471(\
-								"name"; $Obj_table[$Txt_relationName].relatedDataClass))
-							
-							$Obj_relationTableInfo:=$Obj_relationTable[""]
-							
-							var $Obj_buffer : Object
-							$Obj_buffer:=_o_structure(New object:C1471(\
-								"action"; "tableInfo"; \
-								"name"; $Obj_relationTableInfo.name))
-							
-							If ($Obj_buffer.success)
-								
-								$Obj_relationTableInfo.primaryKey:=$Obj_buffer.tableInfo.primaryKey
-								$Obj_relationTableInfo.slave:=$Obj_table[""].name
-								
-								var $Lon_relatedTableID : Integer
-								$Lon_relatedTableID:=$Obj_buffer.tableInfo.tableNumber
-								// TODO ? APPEND TO ARRAY($tTxt_tables; String($Lon_relatedTableID))
-								
-								$Obj_dataModel[String:C10($Lon_relatedTableID)]:=$Obj_relationTable
-								$Obj_out.hasBeenEdited:=True:C214
-								
-							Else 
-								
-								ob_error_add($Obj_out; "Unknown related table "+String:C10($Obj_relationTableInfo.name))
-								
-							End if 
-						End if 
-						
-						// just check if we must add new fields
-						var $Lon_field2 : Integer
-						For ($Lon_field2; 1; Size of array:C274($tTxt_relationFields); 1)
-							
-							If (Value type:C1509($Obj_table[$Txt_relationName][$tTxt_relationFields{$Lon_field2}])=Is object:K8:27)
-								
-								If (($Obj_relationTable[$tTxt_relationFields{$Lon_field2}])=Null:C1517)
-									
-									$Obj_relationTable[$tTxt_relationFields{$Lon_field2}]:=$Obj_table[$Txt_relationName][$tTxt_relationFields{$Lon_field2}]  // name & type
-									$Obj_out.hasBeenEdited:=True:C214
-									
-								End if 
-							End if 
-						End for 
-						
-						// Get inverse field
-						$Obj_buffer:=_o_structure(New object:C1471(\
-							"action"; "inverseRelatedFields"; \
-							"table"; $Obj_table[""].name; \
-							"relation"; $Txt_relationName; \
-							"definition"; $Obj_in.definition))
-						
-						If ($Obj_buffer.success)
-							
-							$Obj_in.definition:=$Obj_buffer.definition  // cache purpose
-							
-							var $Obj_field : Object
-							For each ($Obj_field; $Obj_buffer.fields)  // CLEAN must only have one
-								
-								// Create the inverse field
-								If ($Obj_relationTable[$Obj_field.name]=Null:C1517)
-									
-									$Obj_relationTable[$Obj_field.name]:=New object:C1471(\
-										"kind"; $Obj_field.kind; \
-										"type"; $Obj_field.fieldType; \
-										"inverseName"; $Txt_relationName; \
-										"relatedTableNumber"; $Obj_field.relatedTableNumber; \
-										"relatedDataClass"; $Obj_field.relatedDataClass)
-									
-								End if 
-								
-								$Obj_relationTable[$Obj_field.name].inverseName:=$Txt_relationName
-								
-								$Obj_out.hasBeenEdited:=True:C214
-								
-							End for each 
-						End if 
-					End if 
-					
-					//………………………………………………………………………………………………………………………
-			End case 
-		End for each 
-	End for each 
-	
-	$Obj_out.dataModel:=$Obj_dataModel
-	$Obj_out.success:=Bool:C1537($Obj_out.hasBeenEdited)
-	
-	// -
-	
 	// Add missing primary keys
-Function _primaryKey()->$Obj_out : Object
-	$Obj_out:=New object:C1471
-	var $Obj_dataModel : Object
-	var $Boo_found : Boolean
+Function _primaryKeys()->$out : Object
+	$out:=New object:C1471
 	
-	$Obj_dataModel:=This:C1470.dataModel
+	var $result : Object
 	
 	var $Txt_table : Text
-	var $Obj_table : Object
-	For each ($Obj_table; $Obj_dataModel)
-		$Obj_table:=$Obj_dataModel[$Txt_table]
+	var $table : Object
+	For each ($Txt_table; This:C1470.dataModel)
+		$table:=This:C1470.dataModel[$Txt_table]
 		
-		var $tableInfo : Object
-		$tableInfo:=$Obj_table[""]
+		$result:=This:C1470._primaryKey($table)
+		ob_error_combine($out; $result)
 		
-		If ($tableInfo.primaryKey#Null:C1517)
-			
-			// Find if primary key is in model
-			CLEAR VARIABLE:C89($Boo_found)
-			
-			var $Txt_fieldName : Text
-			Case of 
-					
-					//………………………………………………………………………………………………………………………
-				: (Value type:C1509($tableInfo.primaryKey)=Is object:K8:27)
-					
-					// Pass as object
-					$Txt_fieldName:=JSON Stringify:C1217($tableInfo.primaryKey)
-					
-					//………………………………………………………………………………………………………………………
-				: (Value type:C1509($tableInfo.primaryKey)=Is text:K8:3)
-					
-					$Txt_fieldName:=String:C10($tableInfo.primaryKey)
-					
-					//………………………………………………………………………………………………………………………
-				Else 
-					// SAFETY CODE if not passed...
-					ASSERT:C1129(dev_Matrix; "primary key seems to not be passed with dataModel")
-					
-					var $Obj_buffer : Object
-					$Obj_buffer:=_o_structure(New object:C1471(\
-						"action"; "tableInfo"; \
-						"name"; $tableInfo.name))
-					
-					$Txt_fieldName:=Choose:C955($Obj_buffer.success; $Obj_buffer.tableInfo.primaryKey; "")
-					
-					//………………………………………………………………………………………………………………………
-			End case 
-			
-			$Boo_found:=False:C215
-			
-			var $Txt_field : Text
-			var $Obj_field : Object
-			For each ($Txt_field; $Obj_table) Until ($Boo_found)
-				$Obj_field:=$Obj_table[$Txt_field]
-				If ($Obj_field.name=$Txt_fieldName)
-					$Boo_found:=True:C214
-				End if 
-			End for each 
-			
-			If (Not:C34($Boo_found))  // if not add missing primary key field
-				
-				$Obj_buffer:=_o_structure(New object:C1471(\
-					"action"; "createField"; \
-					"table"; $tableInfo.name; \
-					"field"; $Txt_fieldName))
-				
-				If ($Obj_buffer.success)
-					
-					$Obj_field:=$Obj_buffer.value
-					$Obj_table[String:C10($Obj_field.id)]:=$Obj_field
-					$Obj_out.hasBeenEdited:=True:C214
-					
-				Else 
-					
-					ob_error_combine($Obj_out; $Obj_buffer)
-					
-				End if 
-			End if 
-		End if 
+		$out.hasBeenEdited:=Bool:C1537($out.hasBeenEdited) | Bool:C1537($result.hasBeenEdited)
+		
 	End for each 
 	
-	$Obj_out.dataModel:=$Obj_dataModel
-	$Obj_out.success:=Bool:C1537($Obj_out.hasBeenEdited)
+	$out.success:=Bool:C1537($out.hasBeenEdited)
 	
-	// -
+	// MARK: - scallar
 	
 	// Create node for core data attribute ie. scalar field
 Function _field($Dom_attribute : Text; $Dom_userInfo : Text; $Lon_type : Integer)
