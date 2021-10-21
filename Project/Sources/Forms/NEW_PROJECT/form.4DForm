@@ -14,17 +14,6 @@
 		},
 		{
 			"objects": {
-				"target.preview": {
-					"type": "text",
-					"text": "Preview",
-					"top": 139,
-					"left": 125,
-					"width": 65,
-					"height": 16,
-					"textAlign": "center",
-					"stroke": "#1BA1E5",
-					"textAngle": 0
-				},
 				"10_name.border": {
 					"type": "rectangle",
 					"top": 26,
@@ -123,7 +112,7 @@
 			}
 		}
 	],
-	"geometryStamp": 479,
+	"geometryStamp": 480,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
