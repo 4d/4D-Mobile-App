@@ -67,6 +67,7 @@
 			"_o_color",
 			"_o_COMPONENT_Pathname",
 			"_o_db",
+			"_o_device",
 			"_o_doc_getFromPath",
 			"_o_doc_LoadJsonFile",
 			"_o_editor_Locked",
@@ -150,6 +151,7 @@
 			"teamId",
 			"test_capabilities",
 			"test_swiftPM",
+			"xcDataModel",
 			"Xcode",
 			"Xcode_CheckInstall",
 			"XcodeProj",
@@ -159,6 +161,7 @@
 			"cfgutil",
 			"MobileProjectIOS",
 			"simctl",
+			"xcDataModel",
 			"Xcode"
 		]
 	},
@@ -234,7 +237,6 @@
 		],
 		"methods": [
 			"COMPILER_editor",
-			"EDITOR_CALLBACK",
 			"editor_CHECK_INSTALLATION",
 			"editor_CREATE_PROJECT",
 			"editor_GET_DEVICES",
@@ -370,7 +372,6 @@
 	},
 	"07] ACTIONS": {
 		"methods": [
-			"ACTIONS",
 			"ACTIONS_CALLBACK",
 			"COMPILER_ACTIONS"
 		],

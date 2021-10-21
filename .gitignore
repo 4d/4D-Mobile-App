@@ -43,25 +43,25 @@ Thumbs.db
 #--------------------------------
 # Added by user 
 #--------------------------------
+DEV/
 Project/Sources/DatabaseMethods/onMobileAppAction.4dm
 Project/Sources/DatabaseMethods/onMobileAppAuthentication.4dm
-Resources/php.ini
 Project/Trash/
+Resources/php.ini
+Resources/images/library/
+Resources/sdk
+sdk
+Resources/templates.zip
+Resources/mobile
+Resources/mobile/
+WebFolder/
 Mobile Projects/
 !.swiftlint.yml
-WebFolder/
-images/library/
 MobileApps/
-Resources/mobile
 xcuserdata/
 *.bbprojectd/
-Resources/sdk/Versions/1.0.zip
 Libraries/
-Resources/templates.zip
-Resources/sdk/
-DEV/
 ClientCertificatesFolder/
-Project/Sources/Forms/Form1/
-Project/Sources/Classes/Employes*
-Project/Sources/Forms/Form1
 Project/Sources/Methods/Method*.4dm
+Project/Sources/Forms/Form1/
+Project/Sources/Classes/Employes*.4dm
