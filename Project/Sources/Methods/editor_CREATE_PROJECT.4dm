@@ -45,22 +45,14 @@ So we have to rename the project to avoid any conflict.
 		
 		If (Is macOS:C1572)
 			
-			If (FEATURE.with("android"))
+			If (Bool:C1537($data.$ios) & Bool:C1537($data.$android))
 				
-				If (Bool:C1537($data.$ios) & Bool:C1537($data.$android))
-					
-					$project.info.target:=New collection:C1472("iOS"; "android")
-					
-				Else 
-					
-					// Default is iOS
-					$project.info.target:=Choose:C955(Bool:C1537($data.$android); "android"; "iOS")
-					
-				End if 
+				$project.info.target:=New collection:C1472("iOS"; "android")
 				
 			Else 
 				
-				$project.info.target:="iOS"
+				// Default is iOS
+				$project.info.target:=Choose:C955(Bool:C1537($data.$android); "android"; "iOS")
 				
 			End if 
 			

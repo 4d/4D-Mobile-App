@@ -37,11 +37,6 @@ Function init()
 	This:C1470.iconAlert:=cs:C1710.attention.new("icon.alert")
 	
 	var $group : cs:C1710.group
-	$group:=This:C1470.group("os")
-	This:C1470.formObject("target"; "target.label").addToGroup($group)
-	This:C1470.button("ios").addToGroup($group)
-	This:C1470.button("android").addToGroup($group)
-	
 	$group:=This:C1470.group("dominantColor")
 	This:C1470.formObject("color").addToGroup($group)
 	This:C1470.formObject("colorBorder"; "color.border").addToGroup($group)
@@ -54,56 +49,9 @@ Function init()
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function onLoad()
 	
-	If (FEATURE.with("targetPannel"))
+	If (PROJECT.ui.dominantColor#Null:C1517)
 		
-		This:C1470.os.hide()
-		This:C1470.dominantColor.moveVertically(-125)
-		
-	Else 
-		
-		If (Bool:C1537(PROJECT.$android))
-			
-			If (Is Windows:C1573)
-				
-				If (Form:C1466.$ios)
-					
-					This:C1470.android.setPicture("#images/os/Android-32.png")\
-						.setBackgroundPicture()\
-						.setNumStates(1)
-					
-					This:C1470.ios.disable()
-					
-					This:C1470.ios.setPicture("#images/os/iOS-32.png")\
-						.setBackgroundPicture()\
-						.setNumStates(1)
-					
-				Else 
-					
-					This:C1470.os.hide()
-					
-				End if 
-			End if 
-			
-		Else 
-			
-			This:C1470.target.hide()
-			This:C1470.ios.hide()
-			This:C1470.android.hide()
-			
-		End if 
-	End if 
-	
-	If (FEATURE.with("dominantColor"))
-		
-		If (PROJECT.ui.dominantColor#Null:C1517)
-			
-			This:C1470.mainColor:=cs:C1710.color.new(PROJECT.ui.dominantColor).main
-			
-		End if 
-		
-	Else 
-		
-		This:C1470.dominantColor.hide()
+		This:C1470.mainColor:=cs:C1710.color.new(PROJECT.ui.dominantColor).main
 		
 	End if 
 	
@@ -113,15 +61,12 @@ Function update()
 	This:C1470.checkName(Form:C1466.product.name)
 	This:C1470.displayIcon()
 	
-	If (FEATURE.with("dominantColor"))
+	This:C1470.color.setColors(This:C1470.mainColor; This:C1470.mainColor)
+	
+	If (This:C1470.iconColor=Null:C1517)
 		
-		This:C1470.color.setColors(This:C1470.mainColor; This:C1470.mainColor)
+		This:C1470.iconColor:=cs:C1710.color.new(cs:C1710.bmp.new(OBJECT Get value:C1743("icon")).getDominantColor()).main
 		
-		If (This:C1470.iconColor=Null:C1517)
-			
-			This:C1470.iconColor:=cs:C1710.color.new(cs:C1710.bmp.new(OBJECT Get value:C1743("icon")).getDominantColor()).main
-			
-		End if 
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
@@ -266,7 +211,7 @@ Function displayIcon
 	
 	This:C1470.icon.setValue($picture)
 	
-	If (FEATURE.with("dominantColor")) & (String:C10(This:C1470.mainColor)="")
+	If (String:C10(This:C1470.mainColor)="")
 		
 		This:C1470.mainColor:=cs:C1710.color.new(cs:C1710.bmp.new($picture).getDominantColor()).css.components
 		PROJECT.ui.dominantColor:=This:C1470.mainColor
@@ -398,17 +343,8 @@ Function setIcon($picture : Picture)
 		
 	End if 
 	
-	
-	If (FEATURE.with("dominantColor"))
-		
-		This:C1470.iconColor:=cs:C1710.color.new(cs:C1710.bmp.new($picture).getDominantColor()).css.components
-		This:C1470.refresh()
-		
-	Else 
-		
-		This:C1470.displayIcon()
-		
-	End if 
+	This:C1470.iconColor:=cs:C1710.color.new(cs:C1710.bmp.new($picture).getDominantColor()).css.components
+	This:C1470.refresh()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Open the iOS icons folder
@@ -482,11 +418,4 @@ Function checkName($name : Text)
 			
 			//______________________________________________________
 	End case 
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-	// Manage UI for the target
-Function displayTarget
-	
-	This:C1470.ios.setValue(EDITOR.ios)
-	This:C1470.android.setValue(EDITOR.android)
 	

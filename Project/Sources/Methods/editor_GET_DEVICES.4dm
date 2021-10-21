@@ -29,7 +29,7 @@ Case of
 	: (Is macOS:C1572)
 		
 		$withXcode:=Bool:C1537($in.xCode.ready)
-		$withStudio:=Bool:C1537($in.studio.ready) & (FEATURE.with("android"))
+		$withStudio:=Bool:C1537($in.studio.ready)
 		
 		If ($withXcode)
 			
@@ -52,11 +52,19 @@ Case of
 					"android"; $avd.availableDevices(); \
 					"apple"; $simctl.availableDevices())
 				
+				$out.plugged:=New object:C1471(\
+					"android"; cs:C1710.adb.new().plugged(); \
+					"apple"; $simctl.plugged())
+				
 				//______________________________________________________
 			: ($withStudio)
 				
 				$out:=New object:C1471(\
 					"android"; $avd.availableDevices(); \
+					"apple"; New collection:C1472)
+				
+				$out.plugged:=New object:C1471(\
+					"android"; cs:C1710.adb.new().plugged(); \
 					"apple"; New collection:C1472)
 				
 				//______________________________________________________
@@ -66,6 +74,10 @@ Case of
 					"android"; New collection:C1472; \
 					"apple"; $simctl.availableDevices())
 				
+				$out.plugged:=New object:C1471(\
+					"android"; New collection:C1472; \
+					"apple"; $simctl.plugged())
+				
 				//______________________________________________________
 			Else 
 				
@@ -73,52 +85,12 @@ Case of
 					"android"; New collection:C1472; \
 					"apple"; New collection:C1472)
 				
+				$out.plugged:=New object:C1471(\
+					"android"; New collection:C1472; \
+					"apple"; New collection:C1472)
+				
 				//______________________________________________________
 		End case 
-		
-		If (FEATURE.with("ConnectedDevices"))
-			
-			Case of 
-					
-					//______________________________________________________
-				: ($withStudio & $withXcode)
-					
-					$out.plugged:=New object:C1471(\
-						"android"; cs:C1710.adb.new().plugged(); \
-						"apple"; $simctl.plugged())
-					
-					
-					//______________________________________________________
-				: ($withStudio)
-					
-					$out.plugged:=New object:C1471(\
-						"android"; cs:C1710.adb.new().plugged(); \
-						"apple"; New collection:C1472)
-					
-					//______________________________________________________
-				: ($withXcode)
-					
-					$out.plugged:=New object:C1471(\
-						"android"; New collection:C1472; \
-						"apple"; $simctl.plugged())
-					
-					//______________________________________________________
-				Else 
-					
-					$out:=New object:C1471(\
-						"android"; New collection:C1472; \
-						"apple"; New collection:C1472)
-					
-					//______________________________________________________
-			End case 
-			
-		Else 
-			
-			$out.plugged:=New object:C1471(\
-				"android"; New collection:C1472; \
-				"apple"; New collection:C1472)
-			
-		End if 
 		
 		//______________________________________________________
 	: (Is Windows:C1573)
@@ -131,31 +103,15 @@ Case of
 				"android"; cs:C1710.avd.new().availableDevices(); \
 				"apple"; New collection:C1472)
 			
+			$out.plugged:=New object:C1471(\
+				"android"; cs:C1710.adb.new().plugged(); \
+				"apple"; New collection:C1472)
+			
 		Else 
 			
 			$out:=New object:C1471(\
 				"android"; New collection:C1472; \
 				"apple"; New collection:C1472)
-			
-		End if 
-		
-		If (FEATURE.with("ConnectedDevices"))
-			
-			If ($withStudio)
-				
-				$out.plugged:=New object:C1471(\
-					"android"; cs:C1710.adb.new().plugged(); \
-					"apple"; New collection:C1472)
-				
-			Else 
-				
-				$out.plugged:=New object:C1471(\
-					"android"; New collection:C1472; \
-					"apple"; New collection:C1472)
-				
-			End if 
-			
-		Else 
 			
 			$out.plugged:=New object:C1471(\
 				"android"; New collection:C1472; \

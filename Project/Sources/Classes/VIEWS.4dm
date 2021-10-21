@@ -428,8 +428,6 @@ Function setTemplate($browser : Object)
 			Else 
 				
 				// * SHOW BROWSER
-				//If (FEATURE.with("android"))
-				
 				$url:="https://4d-go-mobile.github.io/gallery/"
 				
 				If (FEATURE.with("devGallery"))
@@ -459,11 +457,6 @@ Function setTemplate($browser : Object)
 				
 				$o:=New object:C1471(\
 					"url"; $url)
-				
-				//Else
-				//$o:=New object(\
-																																																																	"url"; Get localized string("res_"+This.typeForm()+"Forms"))
-				//End if
 				
 				This:C1470.form.form.call(New collection:C1472("initBrowser"; $o))
 				

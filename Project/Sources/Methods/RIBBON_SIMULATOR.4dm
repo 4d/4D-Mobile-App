@@ -33,15 +33,11 @@ Case of
 		$menu:=cs:C1710.menu.new()
 		
 		$lastDevice:=EDITOR.preferences.get("lastDevice")
-		$tab:="       "*Num:C11(FEATURE.with("android"))
+		$tab:="       "
 		
 		If (Is macOS:C1572)
 			
-			If (FEATURE.with("android"))
-				
-				$menu.append("iOS").icon("images/os/iOS-24.png").disable()
-				
-			End if 
+			$menu.append("iOS").icon("images/os/iOS-24.png").disable()
 			
 			If (EDITOR.xCode.ready)
 				
@@ -78,52 +74,48 @@ Case of
 				
 			End if 
 			
+			$menu.line()
 			
-			If (FEATURE.with("android"))
+			$menu.append("Android").icon("images/os/android-24.png").disable()
+			
+			If (EDITOR.studio.ready)
 				
-				$menu.line()
+				If (EDITOR.devices.plugged.android.length>0)
+					
+					For each ($device; EDITOR.devices.plugged.android)
+						
+						$menu.append($tab+$device.name; $device.udid)\
+							.mark($device.udid=$lastDevice)
+						
+					End for each 
+					
+					$menu.line()
+					
+				End if 
 				
-				$menu.append("Android").icon("images/os/android-24.png").disable()
-				
-				If (EDITOR.studio.ready)
+				If (EDITOR.devices.android.length>0)
 					
-					If (EDITOR.devices.plugged.android.length>0)
+					For each ($device; EDITOR.devices.android.orderBy("name"))
 						
-						For each ($device; EDITOR.devices.plugged.android)
-							
-							$menu.append($tab+$device.name; $device.udid)\
-								.mark($device.udid=$lastDevice)
-							
-						End for each 
+						$menu.append($tab+$device.name; $device.udid)\
+							.mark(($device.udid=$lastDevice) & PROJECT.$android).enable(Not:C34($device.missingSystemImage))
 						
-						$menu.line()
-						
-					End if 
+					End for each 
 					
-					If (EDITOR.devices.android.length>0)
-						
-						For each ($device; EDITOR.devices.android.orderBy("name"))
-							
-							$menu.append($tab+$device.name; $device.udid)\
-								.mark(($device.udid=$lastDevice) & PROJECT.$android).enable(Not:C34($device.missingSystemImage))
-							
-						End for each 
-						
-						$menu.line()
-						
-					Else 
-						
-						$menu.append($tab+Get localized string:C991("createASimulator"); "createAVD").line()
-						
-					End if 
-					
-					$menu.append($tab+Get localized string:C991("openTheAvdManager"); "avdManager")
+					$menu.line()
 					
 				Else 
 					
-					$menu.append($tab+Replace string:C233(Get localized string:C991("checkTheInstallationOf"); "{app}"; "Android Studio"); "checkAndroidInstallation")
+					$menu.append($tab+Get localized string:C991("createASimulator"); "createAVD").line()
 					
 				End if 
+				
+				$menu.append($tab+Get localized string:C991("openTheAvdManager"); "avdManager")
+				
+			Else 
+				
+				$menu.append($tab+Replace string:C233(Get localized string:C991("checkTheInstallationOf"); "{app}"; "Android Studio"); "checkAndroidInstallation")
+				
 			End if 
 			
 		Else 
@@ -313,7 +305,7 @@ Case of
 				PROJECT.setTarget(True:C214; "ios")
 				
 				//______________________________________________________
-			: (FEATURE.with("android"))  // 🚧
+			Else 
 				
 				$device:=EDITOR.devices.android.query("udid = :1"; $menu.choice).pop()
 				
@@ -332,11 +324,6 @@ Case of
 				PROJECT._device:=$device
 				PROJECT._simulator:=$device.udid
 				PROJECT.setTarget(True:C214; "android")
-				
-				//______________________________________________________
-			Else 
-				
-				ASSERT:C1129(Not:C34(DATABASE.isMatrix))
 				
 				//______________________________________________________
 		End case 

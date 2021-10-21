@@ -11,20 +11,17 @@ $0:=-1
 Case of 
 		
 		//______________________________________________________
-	: ($e.code=On Getting Focus:K2:7)\
-		 & (FEATURE.with("iconActionMenu"))
+	: ($e.code=On Getting Focus:K2:7)
 		
 		$ƒ.iconAction.show()
 		
 		//______________________________________________________
-	: ($e.code=On Losing Focus:K2:8)\
-		 & (FEATURE.with("iconActionMenu"))
+	: ($e.code=On Losing Focus:K2:8)
 		
 		$ƒ.iconAction.hide()
 		
 		//______________________________________________________
-	: ($e.code=On Clicked:K2:4)\
-		 & (Not:C34(FEATURE.with("iconActionMenu")))
+	: ($e.code=On Clicked:K2:4)
 		
 		$ƒ.iconMenu()
 		

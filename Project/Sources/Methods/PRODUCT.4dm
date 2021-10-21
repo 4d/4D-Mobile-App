@@ -33,10 +33,7 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			//______________________________________________________
 		: ($e.code=On Bound Variable Change:K2:52)
 			
-			PROJECT.setTarget()
-			
 			// Update UI
-			$ƒ.displayTarget()
 			$ƒ.refresh()
 			
 			//______________________________________________________
@@ -81,58 +78,9 @@ Else   // <== WIDGETS METHOD
 			// ❗️MANAGED INTO OBJECT METHOD BECAUSE OF THE DRAG AND DROP
 			
 			//==============================================
-		: ($ƒ.iconAction.catch($e; On Clicked:K2:4))\
-			 & (FEATURE.with("iconActionMenu"))
+		: ($ƒ.iconAction.catch($e; On Clicked:K2:4))
 			
 			$ƒ.doIconMenu()
-			
-			//==============================================
-		: ($ƒ.ios.catch())\
-			 | ($ƒ.android.catch())
-			
-			Case of 
-					
-					//______________________________________________________
-				: (Is Windows:C1573)
-					
-					// <NOTHING MORE TO DO>
-					
-					//______________________________________________________
-				: ($e.code=On Clicked:K2:4)
-					
-					If (Is macOS:C1572)\
-						 & ($e.objectName=$ƒ.android.name)\
-						 & Not:C34(Form:C1466.$ios)\
-						 & Not:C34(Form:C1466.$android)
-						
-						// Force iOS
-						PROJECT.setTarget(True:C214; "ios")
-						
-					Else 
-						
-						PROJECT.setTarget(OBJECT Get value:C1743($e.objectName); $e.objectName)
-						
-					End if 
-					
-					// Update UI
-					$ƒ.displayTarget()
-					$ƒ.displayIcon()
-					EDITOR.updateRibbon()
-					
-					//______________________________________________________
-				: ($e.code=On Mouse Enter:K2:33)
-					
-					// Highlights
-					$ƒ[$e.objectName].setColors(EDITOR.selectedColor)
-					
-					//______________________________________________________
-				: ($e.code=On Mouse Leave:K2:34)
-					
-					// Restore
-					$ƒ[$e.objectName].setColors(Foreground color:K23:1)
-					
-					//______________________________________________________
-			End case 
 			
 			//________________________________________
 	End case 

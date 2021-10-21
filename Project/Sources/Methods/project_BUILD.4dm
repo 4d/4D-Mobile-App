@@ -45,7 +45,7 @@ If (Asserted:C1132($project#Null:C1517))
 		$project.product.bundleIdentifier:=formatString("bundleApp"; $project.organization.id+"."+$project.product.name)
 		$data.appFolder:=EDITOR.path.products().folder($project.product.name)
 		
-		$data.realDevice:=(($project._device.type="device") & FEATURE.with("ConnectedDevices"))
+		$data.realDevice:=($project._device.type="device")
 		
 		If ($data.path=Null:C1517)
 			

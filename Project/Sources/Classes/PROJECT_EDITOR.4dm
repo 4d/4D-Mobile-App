@@ -40,13 +40,9 @@ Function design()
 	
 	$o:=This:C1470.pages.general
 	
-	If (FEATURE.with("targetPannel"))
-		
-		$o.panels.push(New object:C1471(\
-			"title"; Get localized string:C991("targetOs"); \
-			"form"; "TARGET"))
-		
-	End if 
+	$o.panels.push(New object:C1471(\
+		"title"; Get localized string:C991("targetOs"); \
+		"form"; "TARGET"))
 	
 	$o.panels.push(New object:C1471(\
 		"title"; Get localized string:C991("organization"); \

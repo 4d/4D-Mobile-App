@@ -20,17 +20,6 @@ Class constructor($project : Object)
 		
 	End for each 
 	
-	If (Not:C34(Feature.with("dominantColor")))
-		
-		If (Is macOS:C1572)
-			
-			This:C1470._o_setTheme()
-			
-			// Else : * NOT IMPLEMENTED FOR WINDOWS (Objective-c code)
-			
-		End if 
-	End if 
-	
 	This:C1470.project.sdk:=This:C1470.androidProcess.androidSDKFolder().path
 	This:C1470.project.cache_4d_sdk:=This:C1470.paths.cacheSdkAndroidUnzipped().path
 	This:C1470.project.path:=Convert path system to POSIX:C1106(This:C1470.project.path)
@@ -497,24 +486,3 @@ a Java package name, such as com.example.myapp.
 Function _o_themeImageFile()->$file : 4D:C1709.File
 	$file:=This:C1470.input.project._folder.file("android/main/ic_launcher-playstore.png")
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	//
-Function _o_setTheme()
-	var $theme : Object
-	
-	$theme:=This:C1470._o_themeFromImageFile()
-	
-	If ($theme.success)
-		
-		This:C1470.project.colors:=New object:C1471
-		
-		This:C1470.project.colors.backgroundColor:="#"\
-			+Replace string:C233(String:C10($theme.BackgroundColor.red; "&x"); "0x00"; "")\
-			+Replace string:C233(String:C10($theme.BackgroundColor.green; "&x"); "0x00"; "")\
-			+Replace string:C233(String:C10($theme.BackgroundColor.blue; "&x"); "0x00"; "")
-		
-		This:C1470.project.colors.foregroundColor:="#"\
-			+Replace string:C233(String:C10($theme.ForegroundColor.white; "&x"); "0x00"; "")
-		
-		// Else : could not retrieve a theme color from logo image
-	End if 

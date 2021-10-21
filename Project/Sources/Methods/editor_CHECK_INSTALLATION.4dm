@@ -27,42 +27,35 @@ Case of
 		$android:=Bool:C1537($in.android)
 		$ios:=Bool:C1537($in.ios)
 		
-		If (FEATURE.with("android"))
+		If (Not:C34(Bool:C1537($studio.ready)))\
+			 & (Not:C34(Bool:C1537($studio.canceled)))
 			
-			If (Not:C34(Bool:C1537($studio.ready)))\
-				 & (Not:C34(Bool:C1537($studio.canceled)))
-				
-				$in.silent:=Not:C34($android)  // Silent mode if not Android target
-				$studio:=studioCheckInstall($in)
-				
-			End if 
+			$in.silent:=Not:C34($android)  // Silent mode if not Android target
+			$studio:=studioCheckInstall($in)
 			
-			If ($studio.ready)
+		End if 
+		
+		If ($studio.ready)
+			
+			If ($android)
 				
-				If ($android)
+				$fileManifest:=cs:C1710.path.new().cacheSdkAndroid().parent.file("manifest.json")
+				
+				If (Not:C34($fileManifest.exists))\
+					 | ($fileManifest.modificationDate#Current date:C33)
 					
-					$fileManifest:=cs:C1710.path.new().cacheSdkAndroid().parent.file("manifest.json")
+					// Get the last 4D Mobile Android SDK from AWS server if any
+					CALL WORKER:C1389(1; "downloadSDK"; "aws"; "android"; False:C215; $in.caller)
 					
-					If (Not:C34($fileManifest.exists))\
-						 | ($fileManifest.modificationDate#Current date:C33)
-						
-						// Get the last 4D Mobile Android SDK from AWS server if any
-						CALL WORKER:C1389(1; "downloadSDK"; "aws"; "android"; False:C215; $in.caller)
-						
-					End if 
 				End if 
-				
-			Else 
-				
-				$studio.canceled:=Bool:C1537($studio.canceled)
-				
 			End if 
 			
 		Else 
 			
-			$studio:=New object:C1471("ready"; False:C215)
+			$studio.canceled:=Bool:C1537($studio.canceled)
 			
 		End if 
+		
 		
 		If (Not:C34(Bool:C1537($xcode.ready)))\
 			 & (Not:C34(Bool:C1537($xcode.alreadyNotified)))

@@ -294,13 +294,9 @@ Function doAddMenu()
 			.append(":xliff:addActionFor"; $addMenu)\
 			.append(":xliff:editActionFor"; $editMenu)\
 			.append(":xliff:deleteActionFor"; $deleteMenu)\
-			.append(":xliff:shareActionFor"; $shareMenu)
+			.append(":xliff:shareActionFor"; $shareMenu)\
+			.append(":xliff:sortActionFor"; $sortMenu)
 		
-		If (FEATURE.with("sortAction"))
-			
-			$menu.append(":xliff:sortActionFor"; $sortMenu)
-			
-		End if 
 		
 		For each ($o; $c)
 			
@@ -310,19 +306,16 @@ Function doAddMenu()
 			$deleteMenu.append($o.tableName; "delete_"+$o.tableID)
 			$shareMenu.append($o.tableName; "share_"+$o.tableID)
 			
-			If (FEATURE.with("sortAction"))
+			$fieldsMenu:=cs:C1710.menu.new()
+			
+			For each ($field; PROJECT.getSortableFields(Form:C1466.dataModel[$o.tableID]; True:C214))
 				
-				$fieldsMenu:=cs:C1710.menu.new()
+				$fieldsMenu.append($field.name; "sort_"+$o.tableID+","+String:C10($field.fieldNumber))
 				
-				For each ($field; PROJECT.getSortableFields(Form:C1466.dataModel[$o.tableID]; True:C214))
-					
-					$fieldsMenu.append($field.name; "sort_"+$o.tableID+","+String:C10($field.fieldNumber))
-					
-				End for each 
-				
-				$sortMenu.append($o.tableName; $fieldsMenu)
-				
-			End if 
+			End for each 
+			
+			$sortMenu.append($o.tableName; $fieldsMenu)
+			
 		End for each 
 		
 	Else 
@@ -337,28 +330,25 @@ Function doAddMenu()
 			.append(":xliff:deleteAction"; "delete_"+$o.tableID)\
 			.append(":xliff:shareAction"; "share_"+$o.tableID)
 		
-		If (FEATURE.with("sortAction"))
+		$fieldsMenu:=cs:C1710.menu.new()
+		
+		For each ($field; PROJECT.getSortableFields(Form:C1466.dataModel[$o.tableID]; True:C214))
 			
-			$fieldsMenu:=cs:C1710.menu.new()
+			var PROJECT : cs:C1710.project
 			
-			For each ($field; PROJECT.getSortableFields(Form:C1466.dataModel[$o.tableID]; True:C214))
+			If (PROJECT.isComputedAttribute($field))
 				
-				var PROJECT : cs:C1710.project
+				$fieldsMenu.append($field.name; "sort_"+$o.tableID+","+$field.name)
 				
-				If (PROJECT.isComputedAttribute($field))
-					
-					$fieldsMenu.append($field.name; "sort_"+$o.tableID+","+$field.name)
-					
-				Else 
-					
-					$fieldsMenu.append($field.name; "sort_"+$o.tableID+","+String:C10($field.fieldNumber))
-					
-				End if 
-			End for each 
-			
-			$menu.append(":xliff:sortAction"; $fieldsMenu)
-			
-		End if 
+			Else 
+				
+				$fieldsMenu.append($field.name; "sort_"+$o.tableID+","+String:C10($field.fieldNumber))
+				
+			End if 
+		End for each 
+		
+		$menu.append(":xliff:sortAction"; $fieldsMenu)
+		
 	End if 
 	
 	$menu.popup(This:C1470.add)

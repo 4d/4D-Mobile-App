@@ -74,17 +74,11 @@ Case of
 		//______________________________________________________
 	: ($message="projectAuditResult")
 		
-		If (FEATURE.with("android"))  //🚧
-			
-			//
-			
-		Else 
-			
-			PROJECT_Handler(New object:C1471(\
-				"action"; $message; \
-				"audit"; $data))
-			
-		End if 
+		ASSERT:C1129(Not:C34(DATABASE.isMatrix))
+		
+		//PROJECT_Handler(New object(\
+						"action"; $message; \
+						"audit"; $data))
 		
 		//______________________________________________________
 	: ($message="checkProject")  // Callback from 'structure'

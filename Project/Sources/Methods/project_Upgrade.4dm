@@ -35,25 +35,12 @@ Else
 	
 End if 
 
-If (FEATURE.with("android"))
+If ($project.targetBackup#Null:C1517)
 	
-	If ($project.targetBackup#Null:C1517)
-		
-		// Restore
-		$project.info.target:=$project.targetBackup
-		OB REMOVE:C1226($project; "targetBackup")
-		
-	End if 
+	// Restore
+	$project.info.target:=$project.targetBackup
+	OB REMOVE:C1226($project; "targetBackup")
 	
-Else 
-	
-	If ($project.targetBackup=Null:C1517)
-		
-		// Backup
-		$project.targetBackup:=$project.info.target
-		$project.info.target:="ios"  // Keep ios only
-		
-	End if 
 End if 
 
 // ----------------------------------------------------
@@ -678,7 +665,7 @@ End if
 //=====================================================================
 //                        ADD DOMINANT COLOR
 //=====================================================================
-If (FEATURE.with("dominantColor")) & ($project.ui.dominantColor=Null:C1517)
+If ($project.ui.dominantColor=Null:C1517)
 	
 	//
 	If (Count parameters:C259>=2)
@@ -710,41 +697,38 @@ If (FEATURE.with("dominantColor")) & ($project.ui.dominantColor=Null:C1517)
 	End if 
 End if 
 
-If (FEATURE.with("sortAction"))
-	//=====================================================================
-	//                       CHANGE ACTION PRESET
-	//=====================================================================
+//=====================================================================
+//                       CHANGE ACTION PRESET
+//=====================================================================
+If ($project.actions#Null:C1517)
 	
-	If ($project.actions#Null:C1517)
+	For each ($o; $project.actions.query("preset = adding"))
 		
-		For each ($o; $project.actions.query("preset = adding"))
-			
-			$o.preset:="add"
-			$isUpgraded:=True:C214
-			
-		End for each 
+		$o.preset:="add"
+		$isUpgraded:=True:C214
 		
-		For each ($o; $project.actions.query("preset = suppression"))
-			
-			$o.preset:="delete"
-			$isUpgraded:=True:C214
-			
-		End for each 
+	End for each 
+	
+	For each ($o; $project.actions.query("preset = suppression"))
 		
-		For each ($o; $project.actions.query("preset = sharing"))
-			
-			$o.preset:="share"
-			$isUpgraded:=True:C214
-			
-		End for each 
+		$o.preset:="delete"
+		$isUpgraded:=True:C214
 		
-		For each ($o; $project.actions.query("preset = edition"))
-			
-			$o.preset:="edit"
-			$isUpgraded:=True:C214
-			
-		End for each 
-	End if 
+	End for each 
+	
+	For each ($o; $project.actions.query("preset = sharing"))
+		
+		$o.preset:="share"
+		$isUpgraded:=True:C214
+		
+	End for each 
+	
+	For each ($o; $project.actions.query("preset = edition"))
+		
+		$o.preset:="edit"
+		$isUpgraded:=True:C214
+		
+	End for each 
 End if 
 
 // Set the current version

@@ -70,39 +70,12 @@ Else
 			
 			$project:=JSON Parse:C1218($file.getText())
 			
-			If (FEATURE.with("android"))
+			If ($project.info.target#Null:C1517)
 				
-				If ($project.info.target#Null:C1517)
-					
-					$c.push($file)
-					
-				End if 
+				$c.push($file)
 				
-			Else 
-				
-				Case of 
-						
-						//______________________________________________________
-					: (Value type:C1509($project.info.target)=Is collection:K8:32)
-						
-						If ($project.info.target.indexOf("android")=-1)
-							
-							$c.push($file)
-							
-						End if 
-						
-						//______________________________________________________
-					: (Value type:C1509($project.info.target)=Is text:K8:3)
-						
-						If ($project.info.target#"android")
-							
-							$c.push($file)
-							
-						End if 
-						
-						//______________________________________________________
-				End case 
 			End if 
+			
 		End if 
 	End for each 
 	

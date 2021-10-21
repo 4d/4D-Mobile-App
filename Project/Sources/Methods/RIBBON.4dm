@@ -218,67 +218,58 @@ Case of
 				//……………………………………………………………………………………………………………………
 			Else 
 				
-				If (FEATURE.with("android"))
+				If ($button=153)  // Install
 					
-					If ($button=153)  // Install
-						
-						androidLimitations(False:C215; "")
-						
-						var $device : Object
-						var $target
-						
-						$target:=Null:C1517
-						
-						Case of 
-								
-								//______________________________________________________
-							: (EDITOR.currentDevice=Null:C1517)
-								
-								// <NOTHING MORE TO DO>
-								
-								//______________________________________________________
-							: (Is Windows:C1573)
+					androidLimitations(False:C215; "")
+					
+					var $device : Object
+					var $target
+					
+					$target:=Null:C1517
+					
+					Case of 
+							
+							//______________________________________________________
+						: (EDITOR.currentDevice=Null:C1517)
+							
+							// <NOTHING MORE TO DO>
+							
+							//______________________________________________________
+						: (Is Windows:C1573)
+							
+							$device:=EDITOR.devices.plugged.android.query("udid = :1"; EDITOR.currentDevice).pop()
+							$target:=Choose:C955($device#Null:C1517; "android"; Null:C1517)
+							
+							//______________________________________________________
+						: (Is macOS:C1572)
+							
+							$device:=EDITOR.devices.plugged.apple.query("udid = :1"; EDITOR.currentDevice).pop()
+							$target:=Choose:C955($device#Null:C1517; "ios"; Null:C1517)
+							
+							If ($target=Null:C1517)
 								
 								$device:=EDITOR.devices.plugged.android.query("udid = :1"; EDITOR.currentDevice).pop()
 								$target:=Choose:C955($device#Null:C1517; "android"; Null:C1517)
 								
-								//______________________________________________________
-							: (Is macOS:C1572)
-								
-								$device:=EDITOR.devices.plugged.apple.query("udid = :1"; EDITOR.currentDevice).pop()
-								$target:=Choose:C955($device#Null:C1517; "ios"; Null:C1517)
-								
-								If ($target=Null:C1517)
-									
-									$device:=EDITOR.devices.plugged.android.query("udid = :1"; EDITOR.currentDevice).pop()
-									$target:=Choose:C955($device#Null:C1517; "android"; Null:C1517)
-									
-								End if 
-								
-								//______________________________________________________
-						End case 
+							End if 
+							
+							//______________________________________________________
+					End case 
+					
+					If ($target=Null:C1517)
 						
-						If ($target=Null:C1517)
-							
-							POST_MESSAGE(New object:C1471(\
-								"target"; EDITOR.window; \
-								"action"; "show"; \
-								"type"; "alert"; \
-								"title"; ".You must first select a connected device"))
-							
-						Else 
-							
-							PROJECT._device:=$device
-							
-							PROJECT._simulator:=$device.udid
-							PROJECT._buildTarget:=$target
-							
-							// Pass to the parent
-							CALL SUBFORM CONTAINER:C1086(-$button)
-							
-						End if 
+						POST_MESSAGE(New object:C1471(\
+							"target"; EDITOR.window; \
+							"action"; "show"; \
+							"type"; "alert"; \
+							"title"; ".You must first select a connected device"))
 						
 					Else 
+						
+						PROJECT._device:=$device
+						
+						PROJECT._simulator:=$device.udid
+						PROJECT._buildTarget:=$target
 						
 						// Pass to the parent
 						CALL SUBFORM CONTAINER:C1086(-$button)

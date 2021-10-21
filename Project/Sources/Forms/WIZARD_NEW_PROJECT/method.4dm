@@ -90,7 +90,7 @@ Case of
 		
 		Form:C1466._centered:=cs:C1710.group.new("list,continue,newProject,message")
 		
-		If (Is Windows:C1573 | Not:C34(FEATURE.with("android")))
+		If (Is Windows:C1573)
 			
 			Form:C1466._new.moveAndResizeVertically(50; -90)
 			Form:C1466._listbox:=cs:C1710.listbox.new("list")

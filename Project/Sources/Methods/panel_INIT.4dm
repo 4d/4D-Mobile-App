@@ -97,14 +97,14 @@ For each ($o; $definition.panels)
 		OBJECT GET COORDINATES:C663(*; $title; $left; $top; $right; $bottom)
 		$height:=$bottom-$top
 		
-		$top:=Choose:C955(FEATURE.with("targetPannel"); $vOffset+10; $vOffset+30)
+		$top:=$vOffset+10
 		
 		$bottom:=$top+$height
 		OBJECT SET COORDINATES:C1248(*; $title; $left; $top; $right; $bottom)
 		
 		OBJECT GET COORDINATES:C663(*; $help; $left; $top; $right; $bottom)
 		$height:=$bottom-$top
-		$top:=Choose:C955(FEATURE.with("targetPannel"); $vOffset+10; $vOffset+30)
+		$top:=$vOffset+10
 		$top:=$vOffset+10
 		$bottom:=$top+$height
 		OBJECT SET COORDINATES:C1248(*; $help; $left; $top; $right; $bottom)
@@ -134,7 +134,7 @@ For each ($o; $definition.panels)
 		
 		ui_ALIGN_ON_BEST_SIZE(Align left:K42:2; $title; $help)
 		
-		$top:=Choose:C955(FEATURE.with("targetPannel"); $vOffset+40; $vOffset+60)
+		$top:=$vOffset+40
 		
 	End if 
 	

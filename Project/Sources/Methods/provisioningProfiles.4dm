@@ -120,40 +120,16 @@ Case of
 				
 				If (Length:C16($outputStream)>0)
 					
-					If (FEATURE.with("plistClass"))  // & False
-						
-						$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"mp.plist")
-						$file.setText($outputStream)
-						$plist:=cs:C1710.plist.new($file)
-						
-						$response:=New object:C1471(\
-							"success"; $plist.success; \
-							"value"; $plist.content)
-						
-						$file.delete()
-						
-					Else 
-						
-						var $Txt_plist; $Txt_posix : Text
-						$Txt_plist:=Temporary folder:C486+Generate UUID:C1066+"mp.plist"
-						TEXT TO DOCUMENT:C1237($Txt_plist; $outputStream)
-						$Txt_posix:=Convert path system to POSIX:C1106($Txt_plist)
-						
-						// Remove data not convertible to JSON https:// Juzhax.com/2013/12/invalid-object-in-plist-for-destination-format/
-						_o_plist(New object:C1471("action"; "remove"; "domain"; $Txt_posix; "key"; "ExpirationDate"))  // date
-						_o_plist(New object:C1471("action"; "remove"; "domain"; $Txt_posix; "key"; "CreationDate"))  // date
-						_o_plist(New object:C1471("action"; "remove"; "domain"; $Txt_posix; "key"; "DeveloperCertificates"))  // data
-						_o_plist(New object:C1471("action"; "remove"; "domain"; $Txt_posix; "key"; "DER-Encoded-Profile"))  // data
-						
-						// Read it and convert it
-						$response:=_o_plist(New object:C1471("action"; "object"; "domain"; $Txt_posix))
-						
-						If (Test path name:C476($Txt_plist)=Is a document:K24:1)
-							
-							DELETE DOCUMENT:C159($Txt_plist)
-							
-						End if 
-					End if 
+					$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"mp.plist")
+					$file.setText($outputStream)
+					$plist:=cs:C1710.plist.new($file)
+					
+					$response:=New object:C1471(\
+						"success"; $plist.success; \
+						"value"; $plist.content)
+					
+					$file.delete()
+					
 				End if 
 			End if 
 		End if 

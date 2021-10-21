@@ -229,57 +229,6 @@
 						"onClick"
 					]
 				},
-				"target.label": {
-					"type": "text",
-					"top": 5,
-					"left": 666,
-					"width": 89,
-					"height": 16,
-					"text": ":xliff:targetOs",
-					"visibility": "visible",
-					"class": "label"
-				},
-				"ios": {
-					"type": "checkbox",
-					"text": "iOS",
-					"top": 27,
-					"left": 752,
-					"width": 65,
-					"height": 86,
-					"events": [
-						"onClick",
-						"onMouseEnter",
-						"onMouseLeave"
-					],
-					"style": "custom",
-					"icon": "/RESOURCES/images/os/iOS.png",
-					"dataSource": "Form:C1466.$ios",
-					"dataSourceTypeHint": "boolean",
-					"focusable": false,
-					"customBackgroundPicture": "/RESOURCES/images/checkBox-back.svg",
-					"iconFrames": 4
-				},
-				"android": {
-					"type": "checkbox",
-					"text": "Android",
-					"top": 27,
-					"left": 666,
-					"width": 65,
-					"height": 86,
-					"events": [
-						"onClick",
-						"onMouseEnter",
-						"onMouseLeave"
-					],
-					"style": "custom",
-					"icon": "/RESOURCES/images/os/Android.png",
-					"dataSource": "Form:C1466.$android",
-					"dataSourceTypeHint": "boolean",
-					"customBackgroundPicture": "/RESOURCES/images/checkBox-back.svg",
-					"iconFrames": 4,
-					"focusable": false,
-					"textPlacement": "bottom"
-				},
 				"iconAction": {
 					"type": "button",
 					"text": "",
@@ -298,8 +247,8 @@
 				},
 				"color.label": {
 					"type": "text",
-					"top": 130,
-					"left": 666,
+					"top": 5,
+					"left": 665,
 					"width": 129,
 					"height": 17,
 					"text": ":xliff:dominantColor",
@@ -308,16 +257,16 @@
 				},
 				"color.border": {
 					"type": "rectangle",
-					"top": 152,
-					"left": 666,
+					"top": 27,
+					"left": 665,
 					"width": 33,
 					"height": 33,
 					"class": "border"
 				},
 				"color": {
 					"type": "rectangle",
-					"top": 154,
-					"left": 668,
+					"top": 29,
+					"left": 667,
 					"width": 29,
 					"height": 29,
 					"stroke": "transparent",
@@ -325,8 +274,8 @@
 				},
 				"color.button": {
 					"type": "button",
-					"top": 152,
-					"left": 666,
+					"top": 27,
+					"left": 665,
 					"width": 33,
 					"height": 33,
 					"events": [
@@ -343,8 +292,6 @@
 				"icon",
 				"productID",
 				"30_copyright",
-				"android",
-				"ios",
 				"icon.alert",
 				"iconAction",
 				"color.button"
@@ -363,5 +310,5 @@
 		}
 	},
 	"method": "PRODUCT",
-	"geometryStamp": 568
+	"geometryStamp": 580
 }

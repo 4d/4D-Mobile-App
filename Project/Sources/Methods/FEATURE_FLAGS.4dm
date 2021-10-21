@@ -43,7 +43,7 @@ FEATURE.alias("debug"; 8858)
 // Use old behaviour
 //featuresFlags._677:=True // Format fields when dumping data from rest (userless if iOS app could translate)
 
-If (True:C214)  // Delivered
+If (True:C214)  // DELIVERED
 	
 /* _____________
 17R2 - REMOVED
@@ -131,21 +131,19 @@ _____________*/
 	FEATURE.delivered("withSimulatorClass")  // Use simctl class intead of _o_simulator
 	FEATURE.delivered("wizards")  // Use a wizard instead of standard dialogs to create or open a project
 	
-End if 
-
+	
 /* _____________
-1920
+1920 - REMOVED
 _____________*/
-FEATURE.unstable("android")  // Android support global flag
-FEATURE.unstable("targetPannel")  // Use a separate pannel for the target OS
-FEATURE.unstable("dominantColor")  // Feature #127813: BackgroundColor picker
-
-FEATURE.unstable("iconActionMenu")  // Use action button for icon on product panel
-FEATURE.unstable("plistClass")  // Use plist class instead of plist method
-
-FEATURE.unstable("sortAction")  // https://project.4d.com/issues/117660
-FEATURE.unstable("ConnectedDevices")  // Add connected devices to the simulator tool
-FEATURE.unstable("freeActionName")  // follow https://project.4d.com/issues/117660 but to please LE
+	FEATURE.delivered("android"; 1920)  // Android support global flag
+	FEATURE.delivered("targetPannel"; 1920)  // Use a separate pannel for the target OS
+	FEATURE.delivered("dominantColor"; 1920)  // Feature #127813: BackgroundColor picker
+	FEATURE.delivered("iconActionMenu"; 1920)  // Use action button for icon on product panel
+	FEATURE.delivered("plistClass"; 1920)  // Use plist class instead of plist method
+	FEATURE.delivered("sortAction"; 1920)  // https://project.4d.com/issues/117660
+	FEATURE.delivered("ConnectedDevices"; 1920)  // Add connected devices to the simulator tool
+	
+End if 
 
 /* _____________
 1930
@@ -155,7 +153,6 @@ FEATURE.unstable("predictiveEntryInActionParam")  // #128898 Name of the action 
 FEATURE.unstable("customActionFormatter")  // #128195 custom input control for action parameter
 FEATURE.unstable("customActionFormatterWithCode")  // #129036 custom input control for action parameter with ios code
 FEATURE.unstable("newActionFormatterChoiceList")  // Menu to create action formatter choice list directly
-
 FEATURE.unstable("computedProperties")  // #130206 [MOBILE] Use computed attributes
 
 /* _____________
