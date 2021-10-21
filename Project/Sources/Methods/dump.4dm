@@ -253,6 +253,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 						// Do the rest request
 						$Obj_rest:=Rest(New object:C1471(\
 							"action"; "records"; \
+							"reponseType"; Is text:K8:3; \
 							"url"; $Obj_in.url; \
 							"headers"; $Obj_in.headers; \
 							"table"; $o.name; \
@@ -260,11 +261,26 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 							"queryEncode"; True:C214; \
 							"query"; $Obj_query))
 						
-						If (Value type:C1509($Obj_rest.response)=Is object:K8:27)
-							
-							$Obj_rest.globalStamp:=$Obj_rest.response.__GlobalStamp  // XXX check table name in https://project.4d.com/issues/90770
-							
-						End if 
+						// Getting global stamp (maybe no more necessary , except for debug, all is done by swift code)
+						Case of 
+							: (Value type:C1509($Obj_rest.response)=Is object:K8:27)
+								
+								$Obj_rest.globalStamp:=$Obj_rest.response.__GlobalStamp
+								
+							: (Value type:C1509($Obj_rest.response)=Is text:K8:3)
+								var $posBegin; $posEnd : Integer
+								$posBegin:=Position:C15("__GlobalStamp"; $Obj_rest.response)
+								If ($posBegin>0)
+									$posEnd:=Position:C15("\""; $Obj_rest.response; $posBegin+15)
+									$Obj_rest.globalStamp:=Num:C11(Substring:C12($Obj_rest.response; $posBegin+15; $posEnd-($posBegin+15)-1))
+								End if 
+								
+								// XXX if blob, decode some first byte to string? (or keep text)
+							Else 
+								
+								ASSERT:C1129(dev_Matrix; "Cannot decode global stamp with data type "+String:C10(Value type:C1509($Obj_rest.response)))
+								
+						End case 
 						
 						$Obj_result[$o.name]:=$Obj_rest
 						
