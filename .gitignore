@@ -58,9 +58,10 @@ xcuserdata/
 Resources/sdk/Versions/1.0.zip
 Libraries/
 Resources/templates.zip
+Resources/sdk/
 DEV/
 ClientCertificatesFolder/
 Project/Sources/Forms/Form1/
-Project/Sources/Classes/EmployesEntity.4dm
+Project/Sources/Classes/Employes*
 Project/Sources/Forms/Form1
 Project/Sources/Methods/Method*.4dm
