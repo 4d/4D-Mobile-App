@@ -11,10 +11,10 @@ If (False:C215)
 	C_TEXT:C284(str_fullVersion; $1)
 	
 	//_____________________________
-	C_TEXT:C284(str_date; $0)
-	C_TEXT:C284(str_date; $1)
-	C_DATE:C307(str_date; $2)
-	C_TIME:C306(str_date; $3)
+	C_TEXT:C284(_o_str_date; $0)
+	C_TEXT:C284(_o_str_date; $1)
+	C_DATE:C307(_o_str_date; $2)
+	C_TIME:C306(_o_str_date; $3)
 	
 	//_____________________________
 	C_BOOLEAN:C305(str_equal; $0)

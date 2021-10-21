@@ -11,7 +11,7 @@
 var $1 : Object
 
 If (False:C215)
-	C_OBJECT:C1216(project_REPAIR; $1)
+	C_OBJECT:C1216(_o_project_REPAIR; $1)
 End if 
 
 var $actionIndex; $parameterIndex; $type : Integer

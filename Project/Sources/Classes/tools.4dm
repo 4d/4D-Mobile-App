@@ -385,4 +385,3 @@ Function folderDigest($folder : 4D:C1709.Folder)->$digest : Text
 	
 	$digest:=Generate digest:C1147($digest; SHA1 digest:K66:2)
 	
-	

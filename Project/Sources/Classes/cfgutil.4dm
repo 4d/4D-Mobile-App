@@ -172,9 +172,73 @@ Function uninstallApp($device : Object; $bundleIdentifier : Text)->$this : cs:C1
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Fetch various properties of a device
-	/// To see the possible names of properties, don't pass the $property parameter
-	/// the first detected device will be selected.
+	/// - To see the possible names of properties, don't pass the $property parameter
+	/// - If device is omitted, the first detected device will be used
 Function properties($property : Text; $device : Object)->$value : Text
+	
+/** Supported property names:
+ - acceptsSupervision
+ - activationState
+ - appDiskUsage
+ - audioDiskUsage
+ - backupWillBeEncrypted
+ - batteryCurrentCapacity
+ - batteryIsCharging
+ - bluetoothAddress
+ - booksDiskUsage
+ - bootedState
+ - buildVersion
+ - cloudBackupsAreEnabled
+ - color
+ - configurationProfiles
+ - deviceClass
+ - deviceType
+ - documentsDiskUsage
+ - ECID
+ - enclosureColor
+ - ethernetAddress
+ - firmwareVersion
+ - freeDiskSpace
+ - hasTelephonyCapability
+ - ICCID
+ - ICCID2
+ - IMEI
+ - IMEI2
+ - installedApps
+ - isPaired
+ - isRestorable
+ - isSupervised
+ - language
+ - locale
+ - locationID
+ - logsDiskUsage
+ - name
+ - organizationAddress
+ - organizationDepartment
+ - organizationEmail
+ - organizationMagic
+ - organizationName
+ - organizationPhone
+ - otherDiskUsage
+ - pairingAllowed
+ - passcodeProtected
+ - phoneNumber
+ - phoneNumber2
+ - photosDiskUsage
+ - portNumber
+ - provisioningProfiles
+ - serialNumber
+ - stationNumber
+ - supportedLanguages
+ - supportedLocales
+ - supportedPropertyNames
+ - tags
+ - totalDiskCapacity
+ - totalSpaceAvailable
+ - UDID
+ - videoDiskUsage
+ - wifiAddress
+*/
 	
 	var $cmd : Text
 	
@@ -183,11 +247,11 @@ Function properties($property : Text; $device : Object)->$value : Text
 	
 	If ($device#Null:C1517)
 		
-		$cmd:=$cmd+" -e "+String:C10($device.ECID)+String:C10($device.ecid)
+		$cmd:=$cmd+" --ecid "+String:C10($device.ECID)+String:C10($device.ecid)
 		
 	End if 
 	
-	$cmd:=$cmd+" get "+Choose:C955($property=""; "supportedPropertyNames"; $property)
+	$cmd:=$cmd+" get-property "+Choose:C955($property=""; "supportedPropertyNames"; $property)
 	
 	This:C1470.launch($cmd)
 	
