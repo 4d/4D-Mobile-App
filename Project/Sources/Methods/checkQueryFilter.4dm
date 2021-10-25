@@ -13,7 +13,7 @@
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
-C_OBJECT:C1216($errors; $o; $oIN; $oOUT)
+C_OBJECT:C1216($o; $oIN; $oOUT)
 var $error : cs:C1710.error
 
 If (False:C215)
@@ -120,7 +120,7 @@ Else
 		
 		$oOUT.success:=Bool:C1537($oOUT.filter.parameters)
 		
-		$oOUT.errors:=$errors.lastError().stack
+		$oOUT.errors:=$error.lastError().stack
 		
 		// Build the error message
 		$oOUT.filter.error:=""
