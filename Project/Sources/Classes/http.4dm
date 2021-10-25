@@ -444,8 +444,8 @@ Function get()->$this : cs:C1710.http
 		//If (This.success)
 		
 		//ARRAY TO COLLECTION(This.headers; \
-									$headerNames; "name"; \
-									$headerValues; "value")
+												$headerNames; "name"; \
+												$headerValues; "value")
 		
 		//This._response($t; $x)
 		
@@ -854,7 +854,8 @@ Function _errorCodeMessage($errorCode : Integer)->$message : Text
 	
 	If (Count parameters:C259>=1)
 		
-		If ($errorCode<$errorMessages.length)
+		If ($errorCode>=0)\
+			 & ($errorCode<$errorMessages.length)
 			
 			$message:=String:C10($errorMessages[$errorCode])
 			
