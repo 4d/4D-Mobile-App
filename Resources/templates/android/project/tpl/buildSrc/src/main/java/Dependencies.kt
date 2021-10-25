@@ -135,6 +135,7 @@ object Libs {
 
     // Jackson
     const val jackson = "com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson}"
+    const val jackson_yaml = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${Versions.jackson}"
 
     // Rx
     const val rxandroid = "io.reactivex.rxjava2:rxandroid:${Versions.rx_android}"
