@@ -1018,5 +1018,5 @@ Function metaInfo($current : Object)->$result
 	
 	// Redmine:#129995 : The short label value of a sort action shall be greyed and not
 	// editable from the action section of the project editor
-	$result.cell.shorts.stroke:=Choose:C955(String:C10($current.preset)="sort"; "gray"; "black")
+	$result.cell.shorts.stroke:=Choose:C955(String:C10($current.preset)="sort"; "silver"; Choose:C955(EDITOR.isDark; "white"; "black"))
 	
