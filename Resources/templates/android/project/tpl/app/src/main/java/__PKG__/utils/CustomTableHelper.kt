@@ -6,23 +6,19 @@
 
 package {{package}}.utils
 
-import android.app.Application
-import androidx.lifecycle.LiveData
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.qmobile.qmobileapi.model.entity.EntityModel
 import com.qmobile.qmobileapi.network.ApiService
-import com.qmobile.qmobiledatastore.data.RoomRelation
 import com.qmobile.qmobiledatasync.app.BaseApp
-import com.qmobile.qmobiledatasync.relation.RelationHelper
 import com.qmobile.qmobiledatasync.utils.GenericTableHelper
 import com.qmobile.qmobiledatasync.viewmodel.EntityListViewModel
 import com.qmobile.qmobiledatasync.viewmodel.EntityViewModel
 {{#tableNames}}
 import {{package}}.data.model.entity.{{name}}
 {{/tableNames}}
-{{#tableNames_with_relations}}
+{{#tableNames_with_many_to_one_relations}}
 import {{package}}.data.model.entity.{{name}}ManyToOneRelationMask
-{{/tableNames_with_relations}}
+{{/tableNames_with_many_to_one_relations}}
 {{#tableNames}}
 import {{package}}.viewmodel.entity.EntityViewModel{{name}}
 {{/tableNames}}
@@ -50,7 +46,7 @@ class CustomTableHelper : GenericTableHelper {
         {{#tableNames}}
         "{{name}}" -> "{{name_original}}"
         {{/tableNames}}
-        else -> throw IllegalArgumentException()
+        else -> throw IllegalArgumentException("Missing original table name for table: $tableName")
     }
 
     /**
@@ -62,7 +58,7 @@ class CustomTableHelper : GenericTableHelper {
         fetchedFromRelation: Boolean
     ): EntityModel? {
         var entity: EntityModel? = null
-        {{#relations}}
+        {{#relations_many_to_one}}
         if (tableName == "{{relation_source}}") {
             if (entity == null) {
                 entity = BaseApp.mapper.readValue<{{relation_source}}>(jsonString)
@@ -76,14 +72,14 @@ class CustomTableHelper : GenericTableHelper {
             }
             entity.{{relation_name}} = null
         }
-        {{/relations}}
-        {{#tableNames_without_relations}}
+        {{/relations_many_to_one}}
+        {{#tableNames_without_many_to_one_relation}}
         if (tableName == "{{name}}") {
             if (entity == null) {
                 entity = BaseApp.mapper.readValue<{{name}}>(jsonString)
             }
         }
-        {{/tableNames_without_relations}}
+        {{/tableNames_without_many_to_one_relation}}
         return entity
     }
 
@@ -98,7 +94,7 @@ class CustomTableHelper : GenericTableHelper {
             {{#tableNames}}
             "{{name}}" -> EntityListViewModel{{name}}(tableName, apiService)
             {{/tableNames}}
-            else -> throw IllegalArgumentException()
+            else -> throw IllegalArgumentException("Missing entityListViewModel for table: $tableName")
         }
 
     /**
@@ -113,7 +109,7 @@ class CustomTableHelper : GenericTableHelper {
             {{#tableNames}}
             "{{name}}" -> EntityViewModel{{name}}(tableName, id, apiService)
             {{/tableNames}}
-            else -> throw IllegalArgumentException()
+            else -> throw IllegalArgumentException("Missing entityViewModel for table: $tableName")
         }
 
     /**
@@ -125,7 +121,7 @@ class CustomTableHelper : GenericTableHelper {
             {{#tableNames}}
             "{{name}}" -> EntityListViewModel{{name}}::class.java as Class<EntityListViewModel<EntityModel>>
             {{/tableNames}}
-            else -> throw IllegalArgumentException()
+            else -> throw IllegalArgumentException("Missing entityListViewModel class for table: $tableName")
         }
 
     /**
@@ -137,7 +133,7 @@ class CustomTableHelper : GenericTableHelper {
             {{#tableNames}}
             "{{name}}" -> EntityViewModel{{name}}::class.java as Class<EntityViewModel<EntityModel>>
             {{/tableNames}}
-            else -> throw IllegalArgumentException()
+            else -> throw IllegalArgumentException("Missing entityViewModel class table: $tableName")
         }
 
     /**
@@ -156,55 +152,8 @@ class CustomTableHelper : GenericTableHelper {
                 constructorParameters = {{name}}::class.constructors.find { it.parameters.size > 1 }?.parameters
             }
             {{/tableNames}}
-            else -> throw IllegalArgumentException()
+            else -> throw IllegalArgumentException("Missing reflected properties for table: $tableName")
         }
         return Pair(properties, constructorParameters)
-    }
-    
-    /**
-     * Retrieves the table name of a related field
-     */
-    override fun getRelatedTableName(sourceTableName: String, relationName: String): String =
-        when {
-            {{#relations}}
-            sourceTableName == "{{relation_source}}" && relationName == "{{relation_name}}" -> "{{relation_target}}"
-            {{/relations}}
-            else -> throw IllegalArgumentException()
-        }
-
-    /**
-     * Provides the relation map extracted from an entity
-     */
-    override fun getRelationsInfo(
-        tableName: String,
-        entity: EntityModel
-    ): Map<String, LiveData<RoomRelation>> {
-        {{#has_any_relation}}
-        val map = mutableMapOf<String, LiveData<RoomRelation>>()
-        {{#relations}}
-        if (tableName == "{{relation_source}}") {
-            (entity as? {{relation_source}})?.__{{relation_name}}Key?.let { relationId ->
-                RelationHelper.addRelation("{{relation_name}}", relationId, tableName, map)
-            }
-        }
-        {{/relations}}
-        return map
-        {{/has_any_relation}}
-        {{^has_any_relation}}
-        return mutableMapOf()
-        {{/has_any_relation}}
-    }
-
-    /**
-     * Returns list of table properties as a String, separated by commas, without EntityModel
-     * inherited properties
-     */
-    override fun getPropertyListFromTable(tableName: String, application: Application): String {
-        return when (tableName) {
-            {{#tableNames}}
-            "{{name}}" -> RelationHelper.getPropertyListString<{{name}}>(tableName, application)
-            {{/tableNames}}
-            else -> throw IllegalArgumentException()
-        }
     }
 }

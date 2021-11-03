@@ -12,13 +12,29 @@
 
     <fragment
         android:id="@+id/{{tableName_lowercase}}List"
-        android:name="{{package}}.list.EntityListFragment{{tableName}}"
+        android:name="com.qmobile.qmobileui.list.EntityListFragment"
         android:label="{{tableName_original}}"
         tools:layout="@layout/fragment_list">
 
         <action
             android:id="@+id/action_list_to_viewpager"
             app:destination="@id/{{tableName_lowercase}}ViewPager"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_list_to_list_relation"
+            app:destination="@id/relationList"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_list_to_detail_relation"
+            app:destination="@id/relationDetail"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -36,12 +52,120 @@
         android:name="com.qmobile.qmobileui.detail.viewpager.EntityViewPagerFragment"
         android:label="{{tableName_original}}">
 
+        <action
+            android:id="@+id/action_detail_to_list_relation"
+            app:destination="@id/relationList"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_detail_to_detail_relation"
+            app:destination="@id/relationDetail"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+
         <argument
-            android:name="position"
-            app:argType="integer" />
+            android:name="key"
+            app:argType="string" />
 
         <argument
             android:name="tableName"
+            app:argType="string" />
+
+        <argument
+            android:name="query"
+            app:argType="string" />
+
+        <argument
+            android:name="destinationTable"
+            app:argType="string" />
+
+        <argument
+            android:name="currentItemId"
+            app:argType="string" />
+
+        <argument
+            android:name="inverseName"
+            app:argType="string" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/relationList"
+        android:name="com.qmobile.qmobileui.list.EntityListFragment"
+        android:label="{{tableName_original}}"
+        tools:layout="@layout/fragment_list">
+
+        <action
+            android:id="@+id/action_list_to_viewpager"
+            app:destination="@id/{{tableName_lowercase}}ViewPager"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_list_to_list_relation"
+            app:destination="@id/relationList"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_list_to_detail_relation"
+            app:destination="@id/relationDetail"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <argument
+            android:name="destinationTable"
+            app:argType="string" />
+
+        <argument
+            android:name="currentItemId"
+            app:argType="string" />
+
+        <argument
+            android:name="inverseName"
+            app:argType="string" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/relationDetail"
+        android:name="com.qmobile.qmobileui.detail.EntityDetailFragment"
+        android:label="{{tableName_original}}">
+
+        <action
+            android:id="@+id/action_detail_to_list_relation"
+            app:destination="@id/relationList"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_detail_to_detail_relation"
+            app:destination="@id/relationDetail"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <argument
+            android:name="tableName"
+            app:argType="string" />
+
+        <argument
+            android:name="itemId"
             app:argType="string" />
 
     </fragment>

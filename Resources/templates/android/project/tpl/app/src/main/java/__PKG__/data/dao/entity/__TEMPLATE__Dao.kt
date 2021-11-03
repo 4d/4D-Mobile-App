@@ -8,6 +8,7 @@ package {{package}}.data.dao.entity
 
 import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.RawQuery
@@ -35,5 +36,8 @@ abstract class {{tableName}}Dao :
     abstract override suspend fun deleteAll()
 
     @RawQuery(observedEntities = [{{tableName}}::class])
-    abstract override fun getAllDynamicQuery(sqLiteQuery: SupportSQLiteQuery): DataSource.Factory<Int, {{tableName}}>
+    abstract override fun getAllPagedList(sqLiteQuery: SupportSQLiteQuery): DataSource.Factory<Int, {{tableName}}>
+
+    @RawQuery(observedEntities = [{{tableName}}::class])
+    abstract override fun getAllPagingData(sqLiteQuery: SupportSQLiteQuery): PagingSource<Int, {{tableName}}>
 }

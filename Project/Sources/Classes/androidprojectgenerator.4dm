@@ -403,11 +403,7 @@ Function willRequireFieldIcons
 					
 					If ($field.value.icon#"")
 						
-						If ($field.value.inverseName=Null:C1517)  // ignore relations here
-							
-							$0:=True:C214
-							
-						End if 
+						$0:=True:C214
 						
 					End if 
 					
@@ -430,11 +426,7 @@ Function willRequireFieldIcons
 								
 								If ($relatedField.value.icon#"")
 									
-									If ($relatedField.value.inverseName=Null:C1517)  // ignore relations here
-										
-										$0:=True:C214
-										
-									End if 
+									$0:=True:C214
 									
 								End if 
 								
@@ -638,9 +630,23 @@ Function handleFieldIcon
 		
 		$field:=$2.value
 		
+		// For 1-N relation, set key as id
+		If ($field.id=Null:C1517)
+			
+			$field.id:=$2.key
+			
+		End if 
+		
 	Else   // related field
 		
 		$field:=$2
+		
+		// For 1-N relation, set name as id
+		If ($field.id=Null:C1517)
+			
+			$field.id:=$2.name
+			
+		End if 
 		
 	End if 
 	
@@ -676,24 +682,19 @@ Function handleFieldIcon
 	// Create icon if missing
 	If ((Not:C34(Bool:C1537($currentFile.exists))) & ($shouldCreateMissingIcon=True:C214))
 		
-		If ($field.id#Null:C1517)
+		var $Obj_createIcon : Object
+		
+		$Obj_createIcon:=This:C1470.createIconAssets($field)
+		
+		If ($Obj_createIcon.success)
 			
-			var $Obj_createIcon : Object
+			$currentFile:=$Obj_createIcon.icon
 			
-			$Obj_createIcon:=This:C1470.createIconAssets($field)
+		Else 
 			
-			If ($Obj_createIcon.success)
-				
-				$currentFile:=$Obj_createIcon.icon
-				
-			Else 
-				
-				$0.success:=False:C215
-				$0.errors.combine($Obj_createIcon.errors)
-				
-			End if 
+			$0.success:=False:C215
+			$0.errors.combine($Obj_createIcon.errors)
 			
-			// Else : don't handle missing icon on related field and relation's related field
 		End if 
 		
 		// Else : already handled
@@ -707,19 +708,14 @@ Function handleFieldIcon
 		
 		$newName:=$currentFile.name
 		
-		If ($field.id#Null:C1517)
+		If ($4>0)  // related field
 			
-			If ($4>0)  // related field
-				
-				$newName:=Replace string:C233($newName; "qmobile_android_missing_icon"; "related_field_icon_"+$1+"_"+String:C10($4)+"_"+String:C10($field.id))
-				
-			Else   // direct field
-				
-				$newName:=Replace string:C233($newName; "qmobile_android_missing_icon"; "field_icon_"+$1+"_"+String:C10($field.id))
-				
-			End if 
+			$newName:=Replace string:C233($newName; "qmobile_android_missing_icon"; "related_field_icon_"+$1+"_"+String:C10($4)+"_"+String:C10($field.id))
 			
-			// Else : don't handle missing icon on related field and relation's related field
+		Else   // direct field
+			
+			$newName:=Replace string:C233($newName; "qmobile_android_missing_icon"; "field_icon_"+$1+"_"+String:C10($field.id))
+			
 		End if 
 		
 		$Obj_copy:=This:C1470.copyIcon($currentFile; $newName)

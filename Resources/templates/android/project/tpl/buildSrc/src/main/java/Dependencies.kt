@@ -34,7 +34,7 @@ object Versions {
     const val multidex = "2.0.1"
     const val navigation = "2.3.5"
     const val okhttp = "5.0.0-alpha.2"
-    const val paging = "2.1.2"
+    const val paging3 = "3.0.1"
     const val preference = "1.1.1"
     const val retrofit = "2.9.0"
     const val robolectric = "4.6.1"
@@ -49,6 +49,7 @@ object Versions {
     const val support = "1.2.0"
     const val swiperefreshlayout = "1.1.0"
     const val timber = "5.0.1"
+    const val viewpager2 = "1.0.0"
 }
 
 object Config {
@@ -96,6 +97,7 @@ object Libs {
     const val material = "com.google.android.material:material:${Versions.design}"
     const val swiperefreshlayout =
         "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swiperefreshlayout}"
+    const val viewpager2 = "androidx.viewpager2:viewpager2:${Versions.viewpager2}"
 
     // Room
     const val androidx_room = "androidx.room:room-ktx:${Versions.room}"
@@ -124,7 +126,7 @@ object Libs {
     const val okhttp_mockwebserver = "com.squareup.okhttp3:mockwebserver:${Versions.okhttp}"
 
     // Paging
-    const val androidx_paging = "androidx.paging:paging-runtime-ktx:${Versions.paging}"
+    const val androidx_paging3 = "androidx.paging:paging-runtime:${Versions.paging3}"
 
     // Retrofit
     const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"

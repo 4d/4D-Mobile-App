@@ -14,15 +14,11 @@ import {{package}}.data.model.entity.{{relation_source}}
 import {{package}}.data.model.entity.{{relation_target}}
 {{/relation_same_type}}
 
-@Suppress("ConstructorParameterNaming")
-class {{relation_source}}And{{relation_target}}(
-    @Embedded override val first: {{relation_target}}?,
+class {{relation_source}}And{{relation_target}}With{{relation_name_cap}}Key(
+    @Embedded override val toOne: {{relation_target}}?,
     @Relation(
         parentColumn = "__KEY",
         entityColumn = "__{{relation_name}}Key"
     )
-    var _second: List<{{relation_source}}> = emptyList()
-) : RoomRelation {
-    override val second: {{relation_source}}?
-        get() = _second.firstOrNull()
-}
+    override val toMany: List<{{relation_source}}>
+) : RoomRelation

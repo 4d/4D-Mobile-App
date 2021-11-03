@@ -18,7 +18,7 @@ import {{package}}.data.converter.Converters
 import {{package}}.data.dao.entity.{{name}}Dao
 {{/tableNames}}
 {{#relations_import}}
-import {{package}}.data.dao.relation.{{relation_source}}Has{{relation_target}}RelationDao
+import {{package}}.data.dao.relation.{{relation_source}}Has{{relation_target}}With{{relation_name_cap}}KeyDao
 {{/relations_import}}
 {{#tableNames}}
 import {{package}}.data.model.entity.{{name}}
@@ -40,7 +40,7 @@ abstract class AppDatabase :
     {{/tableNames}}
 
     {{#relations_import}}
-    abstract fun dao{{relation_source}}Has{{relation_target}}Relation(): {{relation_source}}Has{{relation_target}}RelationDao
+    abstract fun dao{{relation_source}}Has{{relation_target}}With{{relation_name_cap}}Key(): {{relation_source}}Has{{relation_target}}With{{relation_name_cap}}KeyDao
     {{/relations_import}}
 
     /**
@@ -48,12 +48,12 @@ abstract class AppDatabase :
      */
     @Throws(IllegalArgumentException::class)
     @Suppress("UNCHECKED_CAST")
-    override fun <T> getDao(tableName: String): BaseDao<T> {
+    override fun < T: Any> getDao(tableName: String): BaseDao<T> {
         return when (tableName) {
             {{#tableNames}}
             "{{name}}" -> dao{{name}}() as BaseDao<T>
             {{/tableNames}}
-            else -> throw IllegalArgumentException()
+            else -> throw IllegalArgumentException("Missing dao for table: $tableName")
         }
     }
 
@@ -61,13 +61,17 @@ abstract class AppDatabase :
     @Suppress("UNCHECKED_CAST")
     override fun getRelationDao(
         tableName: String,
-        relatedTableName: String
+        relatedTableName: String,
+        relationName: String
     ): RelationBaseDao<RoomRelation> =
         when {
-            {{#relations}}
-            tableName == "{{relation_source}}" && relatedTableName == "{{relation_target}}" ->
-                dao{{relation_source}}Has{{relation_target}}Relation() as RelationBaseDao<RoomRelation>
-            {{/relations}}
-            else -> throw IllegalArgumentException()
+            {{#relations_import}}
+            tableName == "{{relation_source}}" && relatedTableName == "{{relation_target}}" && relationName == "{{relation_name}}" ->
+                dao{{relation_source}}Has{{relation_target}}With{{relation_name_cap}}Key() as RelationBaseDao<RoomRelation>
+            {{/relations_import}}
+            else -> throw IllegalArgumentException(
+                "Missing relation dao for tableName: $tableName, " +
+                    "relatedTableName: $relatedTableName, relationName: $relationName"
+            )
         }        
 }

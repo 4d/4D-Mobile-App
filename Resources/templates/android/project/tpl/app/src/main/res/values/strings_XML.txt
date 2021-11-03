@@ -5,7 +5,7 @@
     <string name="title_table_settings">Settings</string>
     {{#tableNames_navigation}}
     <string name="tableName_{{nameLowerCase}}">{{label}}</string>
-    <string name="tableName_origin_{{nameLowerCase}}">{{name}}</string>
+    <string name="tableName_origin_{{nameLowerCase}}">{{name_original}}</string>
     {{/tableNames_navigation}}
 
 </resources>

@@ -14,9 +14,9 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.qmobile.qmobileapi.model.entity.Entities
 {{/table_has_one_to_many_field}}
 import com.qmobile.qmobileapi.model.entity.EntityModel
-{{#table_has_any_relation}}
+{{#table_has_any_many_to_one_relation}}
 import com.qmobile.qmobileapi.model.entity.ManyToOneRelationMask
-{{/table_has_any_relation}}
+{{/table_has_any_many_to_one_relation}}
 import com.qmobile.qmobileapi.model.entity.Photo
 import com.qmobile.qmobiledatastore.data.RoomData
 {{#table_has_time_field}}
@@ -42,12 +42,12 @@ class {{tableName}}(
     @JsonCreator
     private constructor() : this(__KEY = "")
 }
-{{#table_has_any_relation}}
+{{#table_has_any_many_to_one_relation}}
 
 @Suppress("ConstructorParameterNaming", "LongParameterList")
 class {{tableName}}ManyToOneRelationMask(
-    {{#relations}}
+    {{#relations_many_to_one}}
     val {{relation_name}}: ManyToOneRelationMask? = null{{^-last}}, {{/-last}}
-    {{/relations}}
+    {{/relations_many_to_one}}
 )
-{{/table_has_any_relation}}
+{{/table_has_any_many_to_one_relation}}

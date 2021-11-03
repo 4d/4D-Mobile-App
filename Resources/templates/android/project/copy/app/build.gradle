@@ -31,7 +31,7 @@ dependencies {
     kapt Libs.androidx_room_compiler
 
     // Paging
-    implementation Libs.androidx_paging
+    implementation Libs.androidx_paging3
 
     // Navigation
     implementation Libs.androidx_navigation_fragment

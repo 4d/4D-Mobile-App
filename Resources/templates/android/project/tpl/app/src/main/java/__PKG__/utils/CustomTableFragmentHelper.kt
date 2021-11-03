@@ -6,15 +6,14 @@
 
 package {{package}}.utils
 
-import android.view.View
 import androidx.databinding.ViewDataBinding
-import androidx.navigation.findNavController
 import com.qmobile.qmobileapi.model.entity.EntityModel
+import com.qmobile.qmobiledatasync.utils.CustomEntityListFragment
 import com.qmobile.qmobiledatasync.utils.GenericTableFragmentHelper
 import com.qmobile.qmobiledatasync.viewmodel.EntityViewModel
-{{#has_many_to_one_relation}}
+{{#has_relation}}
 import com.qmobile.qmobileui.BR
-{{/has_many_to_one_relation}}
+{{/has_relation}}
 import com.qmobile.qmobileui.detail.EntityDetailFragment
 {{#has_custom_formatter_images}}
 import {{package}}.R
@@ -29,12 +28,11 @@ import {{package}}.databinding.RecyclerviewItem{{nameCamelCase}}Binding
 import {{package}}.detail.EntityFragment{{name}}
 {{/tableNames_navigation}}
 {{#tableNames_navigation}}
-import {{package}}.list.EntityListFragment{{name}}Directions
+import {{package}}.list.EntityListFragment{{name}}
 {{/tableNames_navigation}}
 {{#tableNames}}
 import {{package}}.viewmodel.entity.EntityViewModel{{name}}
 {{/tableNames}}
-import java.lang.IllegalArgumentException
 
 /**
  * Provides different elements depending of the generated type
@@ -43,33 +41,19 @@ class CustomTableFragmentHelper :
     GenericTableFragmentHelper {
 
     /**
-     * Navigates from ListView to ViewPager (which displays one DetailView)
-     */
-    override fun navigateFromListToViewPager(view: View, position: Int, tableName: String) {
-        val action = when (tableName) {
-            {{#tableNames_navigation}}
-            "{{name}}" -> EntityListFragment{{name}}Directions.actionListToViewpager(position, tableName)
-            {{/tableNames_navigation}}
-            else -> null
-        }
-        action?.let { view.findNavController().navigate(action) }
-    }
-
-    /**
      * Gets the appropriate detail fragment
      */
-    override fun getDetailFragment(itemId: String, tableName: String): EntityDetailFragment =
+    override fun getDetailFragment(tableName: String): EntityDetailFragment =
         when (tableName) {
             {{#tableNames_navigation}}
             "{{name}}" -> EntityFragment{{name}}()
             {{/tableNames_navigation}}
-            else -> throw IllegalArgumentException()
+            else -> throw IllegalArgumentException("Missing detail fragment for table: $tableName")
         }
 
     /**
      * Sets the appropriate EntityViewModel
      */
-    @Suppress("UNCHECKED_CAST")
     override fun setEntityViewModel(
         viewDataBinding: ViewDataBinding,
         entityViewModel: EntityViewModel<EntityModel>
@@ -78,7 +62,7 @@ class CustomTableFragmentHelper :
             {{#tableNames_navigation}}
             is FragmentDetail{{nameCamelCase}}Binding -> viewDataBinding.viewModel = entityViewModel as EntityViewModel{{name}}
             {{/tableNames_navigation}}
-            else -> throw IllegalArgumentException()
+            else -> throw IllegalArgumentException("Missing viewDataBinding: $viewDataBinding")
         }
     }
 
@@ -128,7 +112,10 @@ class CustomTableFragmentHelper :
             {{#custom_formatter_images}}
             formatName == "{{formatterName}}" && imageName == "{{imageName}}" ->
                 {{#darkModeExists}}
-                Pair(R.drawable.{{resourceName}}, R.drawable.{{resourceNameDarkMode}})
+                Pair(
+                    R.drawable.{{resourceName}},
+                    R.drawable.{{resourceNameDarkMode}}
+                )
                 {{/darkModeExists}}
                 {{^darkModeExists}}
                 Pair(R.drawable.{{resourceName}}, 0)
@@ -136,5 +123,18 @@ class CustomTableFragmentHelper :
             {{/custom_formatter_images}}
             else -> null
         }
+    }
+
+    /**
+     * Provides the custom list fragment as list forms are given as a base fragment_list
+     */
+    override fun getCustomEntityListFragment(
+        tableName: String,
+        binding: ViewDataBinding
+    ): CustomEntityListFragment = when (tableName) {
+        {{#tableNames_navigation}}
+        "{{name}}" -> EntityListFragment{{name}}(binding)
+        {{/tableNames_navigation}}
+        else -> throw IllegalArgumentException("Missing custom entity list fragment for table  $tableName")
     }
 }
