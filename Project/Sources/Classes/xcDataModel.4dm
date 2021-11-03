@@ -316,7 +316,7 @@ Function createEntity($options : Object; $Dom_model : Text; $Lon_tableID : Integ
 					
 				End if 
 				
-				If (Length:C16($Txt_fieldName)>0)
+				If (Length:C16($Txt_originalFieldName)>0)
 					
 					$Txt_fieldName:=formatString("field-name"; $Txt_originalFieldName)
 					
@@ -371,7 +371,7 @@ For ($Lon_relationField; 1; Size of array($tTxt_relationFields); 1)
 $relatedField:=$table[$Txt_relationName][$tTxt_relationFields{$Lon_relationField}]
 						
 Case of 
-						
+			
 //……………………………………………………
 : (PROJECT.isField($tTxt_relationFields{$Lon_relationField}) | PROJECT.isComputedAttribute($relatedField))
 						
@@ -380,19 +380,19 @@ $Dom_attribute:=DOM Create XML element($Dom_entity; "attribute")
 $Txt_buffer:=$table[$Txt_relationName][$tTxt_relationFields{$Lon_relationField}].name
 $Txt_fieldName:=formatString("field-name"; $Txt_relationName+"."+$Txt_buffer)
 						
-						DOM SET XML ATTRIBUTE($Dom_attribute; \
-							"name"; $Txt_fieldName; \
-							"optional"; "YES"; \
-							"indexed"; "NO"; \
-							"syncable"; "YES")
+												DOM SET XML ATTRIBUTE($Dom_attribute; \
+														"name"; $Txt_fieldName; \
+														"optional"; "YES"; \
+														"indexed"; "NO"; \
+														"syncable"; "YES")
 						
 $Dom_userInfo:=DOM Create XML element($Dom_attribute; "userInfo")
 						
 If (Not(str_equal($Txt_fieldName; $Txt_relationName+"."+$Txt_buffer)))
 						
-						$Dom_node:=DOM Create XML element($Dom_userInfo; "entry"; \
-							"key"; "keyMapping"; \
-							"value"; $Txt_relationName+"."+$Txt_buffer)
+												$Dom_node:=DOM Create XML element($Dom_userInfo; "entry"; \
+														"key"; "keyMapping"; \
+														"value"; $Txt_relationName+"."+$Txt_buffer)
 						
 End if 
 						
@@ -409,8 +409,7 @@ Else
 						
 //……………………………………………………
 End case 
-End for */
-						
+End for*/
 						//__________________________________
 					: (Bool:C1537($options.relationship))  // core data relation ship table
 						
@@ -546,27 +545,27 @@ If (OK=1)
 var $Txt_fieldName : Text
 $Txt_fieldName:=formatString("field-name"; $Txt_relationName)
 						
-						DOM SET XML ATTRIBUTE($Dom_attribute; \
-							"name"; $Txt_fieldName; \
-							"attributeType"; "Transformable"; \
-							"valueTransformerName"; "NSSecureUnarchiveFromData"; \
-							"optional"; "YES"; \
-							"indexed"; "NO"; \
-							"syncable"; "YES")
+																								DOM SET XML ATTRIBUTE($Dom_attribute; \
+																												"name"; $Txt_fieldName; \
+																												"attributeType"; "Transformable"; \
+																												"valueTransformerName"; "NSSecureUnarchiveFromData"; \
+																												"optional"; "YES"; \
+																												"indexed"; "NO"; \
+																												"syncable"; "YES")
 						
 $Dom_userInfo:=DOM Create XML element($Dom_attribute; "userInfo")
 						
 If (Not(str_equal($Txt_fieldName; $Txt_relationName)))
 						
-						$Dom_node:=DOM Create XML element($Dom_userInfo; "entry"; \
-							"key"; "keyMapping"; \
-							"value"; $Txt_relationName)
+																								$Dom_node:=DOM Create XML element($Dom_userInfo; "entry"; \
+																												"key"; "keyMapping"; \
+																												"value"; $Txt_relationName)
 						
 End if 
 						
-						$Dom_node:=DOM Create XML element($Dom_userInfo; "entry"; \
-							"key"; "path"; \
-							"value"; $table[$Txt_relationName].relatedDataClass)
+																								$Dom_node:=DOM Create XML element($Dom_userInfo; "entry"; \
+																												"key"; "path"; \
+																												"value"; $table[$Txt_relationName].relatedDataClass)
 						
 End if 
 */
@@ -616,6 +615,7 @@ Function _relation($table : Object; $options : Object)->$out : Object
 				
 				var $Boo_found : Boolean
 				var $Txt_relationName : Text
+				$Txt_relationName:=$Txt_field  // CLEAN maybe remove var
 				
 				If ($Obj_field.relatedEntities#Null:C1517)  // To remove if relatedEntities deleted and relatedDataClass already filled #109019
 					
@@ -628,18 +628,19 @@ Function _relation($table : Object; $options : Object)->$out : Object
 					
 					// if this relatedDataClass in model?
 					
-					If (Not:C34(This:C1470.hasRelation($Txt_field)))  // not found we must add a new table in model
+					$Obj_relationTable:=This:C1470.getDataClass($Obj_field.relatedDataClass)
+					If ($Obj_relationTable=Null:C1517)  // not found we must add a new table in model
 						
 						$Obj_relationTable:=New object:C1471(\
 							""; New object:C1471(\
-							"name"; $table[$Txt_relationName].relatedDataClass))
+							"name"; $Obj_field.relatedDataClass))
 						
 						$Obj_relationTableInfo:=$Obj_relationTable[""]
 						
 						var $Obj_buffer : Object
 						$Obj_buffer:=_o_structure(New object:C1471(\
 							"action"; "tableInfo"; \
-							"name"; $Obj_relationTableInfo.name))
+							"name"; $Obj_field.relatedDataClass))
 						
 						If ($Obj_buffer.success)
 							
@@ -680,7 +681,7 @@ Function _relation($table : Object; $options : Object)->$out : Object
 					$Obj_buffer:=_o_structure(New object:C1471(\
 						"action"; "inverseRelatedFields"; \
 						"table"; $tableInfo.name; \
-						"relation"; $Txt_relationName; \
+						"relation"; $Txt_field; \
 						"definition"; $options.definition))
 					
 					If ($Obj_buffer.success)
@@ -726,19 +727,17 @@ Function _relations($options : Object)->$out : Object
 	End for each 
 	
 	
-	
 	// MARK: - utility
-Function hasRelation($relationName : Text)->$Boo_found : Boolean
-	$Boo_found:=False:C215
+Function getDataClass($dataClassName : Text)->$dataClass : Object
 	var $Txt_table : Text
 	var $table : Object
 	var $tableInfo : Object
 	
-	For each ($Txt_table; This:C1470.dataModel) Until ($Boo_found)
+	For each ($Txt_table; This:C1470.dataModel) Until ($dataClass#Null:C1517)
 		$table:=This:C1470.dataModel[$Txt_table]
 		$tableInfo:=$table[""]
-		If ($tableInfo.name=$table[$relationName].relatedDataClass)
-			$Boo_found:=True:C214
+		If ($tableInfo.name=$dataClassName)
+			$dataClass:=$table
 		End if 
 	End for each 
 	

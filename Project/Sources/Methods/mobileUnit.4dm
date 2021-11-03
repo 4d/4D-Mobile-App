@@ -233,6 +233,17 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 				"error"; "Command unavailable for this Windows platform")
 			
 			//________________________________________
+		: (FEATURE.wip("xcDataModelClass") & \
+			(($entryPoint="dataModel")\
+			 | ($entryPoint="xcDataModel")))
+			
+			$response:=cs:C1710.xcDataModel.new($parameters).run(\
+				/*path*/$parameters.path; \
+				/*options*/$parameters)
+			
+			EXECUTE METHOD:C1007($entryPoint; $response; $parameters)
+			
+			//________________________________________
 		: ($entryPoint="xcode")\
 			 | ($entryPoint="xcodeProj")\
 			 | ($entryPoint="plist")\
@@ -242,6 +253,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			 | ($entryPoint="simulator")\
 			 | ($entryPoint="dataSet")\
 			 | ($entryPoint="dataModel")\
+			 | ($entryPoint="xcDataModel")\
 			 | ($entryPoint="storyboard")\
 			 | ($entryPoint="TEMPLATE")\
 			 | ($entryPoint="sdk")\
