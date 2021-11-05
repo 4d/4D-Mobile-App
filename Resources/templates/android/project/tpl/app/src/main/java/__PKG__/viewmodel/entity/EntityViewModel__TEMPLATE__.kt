@@ -56,7 +56,12 @@ class EntityViewModel{{tableName}}(
             }
             {{/relations_many_to_one}}
             {{#relations_one_to_many}}
+            {{#isSubRelation}}
+            "{{originalSubRelationName}}" -> {
+            {{/isSubRelation}}
+            {{^isSubRelation}}
             "{{relation_name}}" -> {
+            {{/isSubRelation}}
                 _{{relation_name}}.postValue((roomRelation as {{relation_target}}And{{relation_source}}With{{inverse_name_cap}}Key).toMany)
             }
             {{/relations_one_to_many}}

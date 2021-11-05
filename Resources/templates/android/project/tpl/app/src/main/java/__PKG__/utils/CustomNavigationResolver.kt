@@ -9,6 +9,7 @@ package {{package}}.utils
 import androidx.databinding.ViewDataBinding
 import androidx.navigation.findNavController
 import com.qmobile.qmobileapi.model.entity.EntityModel
+import com.qmobile.qmobiledatastore.data.RoomData
 import com.qmobile.qmobiledatasync.utils.GenericNavigationResolver
 import com.qmobile.qmobileui.detail.viewpager.EntityViewPagerFragmentDirections
 import com.qmobile.qmobileui.list.EntityListFragmentDirections
@@ -61,7 +62,8 @@ class CustomNavigationResolver : GenericNavigationResolver {
         viewDataBinding: ViewDataBinding,
         relationName: String,
         parentItemId: String,
-        entity: EntityModel
+        entity: EntityModel,
+        anyRelatedEntity: RoomData?
     ) {
         {{#has_any_relations_one_to_many_for_list}}
         when {
@@ -72,7 +74,8 @@ class CustomNavigationResolver : GenericNavigationResolver {
                     val action = EntityListFragmentDirections.actionListToListRelation(
                         destinationTable = "{{relation_target}}",
                         currentItemId = destParentId,
-                        inverseName = "{{inverse_name}}"
+                        inverseName = "{{inverse_name}}",
+                        navbarTitle = "{{navbarTitle}}"
                     )
                     viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnClickListener {
                         viewDataBinding.root.findNavController().navigate(action)
@@ -83,7 +86,8 @@ class CustomNavigationResolver : GenericNavigationResolver {
                 val action = EntityListFragmentDirections.actionListToListRelation(
                     destinationTable = "{{relation_target}}",
                     currentItemId = parentItemId,
-                    inverseName = "{{inverse_name}}"
+                    inverseName = "{{inverse_name}}",
+                    navbarTitle = "{{navbarTitle}}"
                 )
                 viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnClickListener {
                     viewDataBinding.root.findNavController().navigate(action)
@@ -110,7 +114,8 @@ class CustomNavigationResolver : GenericNavigationResolver {
                 (entity as? {{relation_source}})?.__{{relation_name}}Key?.let { relationId ->
                     val action = EntityListFragmentDirections.actionListToDetailRelation(
                         tableName = "{{relation_target}}",
-                        itemId = relationId
+                        itemId = relationId,
+                        navbarTitle = ""
                     )
                     viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnClickListener {
                         viewDataBinding.root.findNavController().navigate(action)
@@ -129,7 +134,8 @@ class CustomNavigationResolver : GenericNavigationResolver {
         viewDataBinding: ViewDataBinding,
         relationName: String,
         parentItemId: String,
-        entity: EntityModel
+        entity: EntityModel,
+        anyRelatedEntity: RoomData?
     ) {
         {{#has_any_relations_one_to_many_for_detail}}
         when {
@@ -140,7 +146,8 @@ class CustomNavigationResolver : GenericNavigationResolver {
                     val action = EntityViewPagerFragmentDirections.actionDetailToListRelation(
                         destinationTable = "{{relation_target}}",
                         currentItemId = destParentId,
-                        inverseName = "{{inverse_name}}"
+                        inverseName = "{{inverse_name}}",
+                        navbarTitle = "{{navbarTitle}}"
                     )
                     viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnClickListener {
                         viewDataBinding.root.findNavController().navigate(action)
@@ -151,7 +158,8 @@ class CustomNavigationResolver : GenericNavigationResolver {
                 val action = EntityViewPagerFragmentDirections.actionDetailToListRelation(
                     destinationTable = "{{relation_target}}",
                     currentItemId = parentItemId,
-                    inverseName = "{{inverse_name}}"
+                    inverseName = "{{inverse_name}}",
+                    navbarTitle = "{{navbarTitle}}"
                 )
                 viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnClickListener {
                     viewDataBinding.root.findNavController().navigate(action)
@@ -178,7 +186,8 @@ class CustomNavigationResolver : GenericNavigationResolver {
                 (entity as? {{relation_source}})?.__{{relation_name}}Key?.let { relationId ->
                     val action = EntityViewPagerFragmentDirections.actionDetailToDetailRelation(
                         tableName = "{{relation_target}}",
-                        itemId = relationId
+                        itemId = relationId,
+                        navbarTitle = ""
                     )
                     viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnClickListener {
                         viewDataBinding.root.findNavController().navigate(action)

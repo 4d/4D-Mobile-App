@@ -31,7 +31,12 @@ class CustomRelationHelper : GenericRelationHelper {
             sourceTableName == "{{relation_source}}" && relationName == "{{relation_name}}" -> "{{relation_target}}"
             {{/relations_many_to_one}}
             {{#relations_one_to_many}}
+            {{#isSubRelation}}
+            sourceTableName == "{{relation_source}}" && relationName == "{{originalSubRelationName}}" -> "{{relation_target}}"
+            {{/isSubRelation}}
+            {{^isSubRelation}}
             sourceTableName == "{{relation_source}}" && relationName == "{{relation_name}}" -> "{{relation_target}}"
+            {{/isSubRelation}}
             {{/relations_one_to_many}}
             else -> throw IllegalArgumentException(
                 "Missing related tableName for sourceTableName: $sourceTableName, " +
@@ -76,6 +81,20 @@ class CustomRelationHelper : GenericRelationHelper {
         val map = mutableMapOf<String, LiveData<RoomRelation>>()
         // One to Many relations
         {{#relations_one_to_many}}
+        {{#isSubRelation}}
+        if (tableName == "{{relation_target}}") {
+            (entity as? {{relation_target}})?.__{{inverse_name}}Key?.let { relationId ->
+                map["{{originalSubRelationName}}"] = RelationHelper.addRelation(
+                    relationName = "{{originalSubRelationName}}",
+                    relationId = relationId,
+                    sourceTableName = "{{relation_source}}", 
+                    inverseName = "{{inverse_name}}",
+                    relationType = RelationTypeEnum.ONE_TO_MANY
+                )
+            }
+        }
+        {{/isSubRelation}}
+        {{^isSubRelation}}
         if (tableName == "{{relation_source}}") {
             (entity as? {{relation_source}})?.let {
                 map["{{relation_name}}"] = RelationHelper.addRelation(
@@ -87,6 +106,7 @@ class CustomRelationHelper : GenericRelationHelper {
                 )
             }
         }
+        {{/isSubRelation}}
         {{/relations_one_to_many}}
         return map
         {{/has_any_one_to_many_relation}}

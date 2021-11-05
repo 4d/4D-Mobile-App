@@ -85,8 +85,14 @@ class CustomTableFragmentHelper :
         relatedEntity: Any
     ) {
         {{#tableNames_layout_relations}}
+        {{#isSubRelation}}
+        if (viewDataBinding is RecyclerviewItem{{relation_target}}Binding) {
+            if (relationName == "{{originalSubRelationName}}") {
+        {{/isSubRelation}}
+        {{^isSubRelation}}
         if (viewDataBinding is RecyclerviewItem{{relation_source}}Binding) {
             if (relationName == "{{relation_name}}") {
+        {{/isSubRelation}}
                 viewDataBinding.setVariable(BR.{{relation_name}}, relatedEntity)
             }
         }
@@ -98,7 +104,12 @@ class CustomTableFragmentHelper :
      */
     override fun unsetRelationBinding(viewDataBinding: ViewDataBinding) {
         {{#tableNames_layout_relations}}
+        {{#isSubRelation}}
+        if (viewDataBinding is RecyclerviewItem{{relation_target}}Binding) {
+        {{/isSubRelation}}
+        {{^isSubRelation}}
         if (viewDataBinding is RecyclerviewItem{{relation_source}}Binding) {
+        {{/isSubRelation}}
             viewDataBinding.setVariable(BR.{{relation_name}}, null)
         }
         {{/tableNames_layout_relations}}

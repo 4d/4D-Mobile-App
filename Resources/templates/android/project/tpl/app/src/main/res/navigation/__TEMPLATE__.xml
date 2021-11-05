@@ -98,7 +98,7 @@
     <fragment
         android:id="@+id/relationList"
         android:name="com.qmobile.qmobileui.list.EntityListFragment"
-        android:label="{{tableName_original}}"
+        android:label="{navbarTitle}"
         tools:layout="@layout/fragment_list">
 
         <action
@@ -137,12 +137,16 @@
             android:name="inverseName"
             app:argType="string" />
 
+        <argument
+            android:name="navbarTitle"
+            app:argType="string" />
+
     </fragment>
 
     <fragment
         android:id="@+id/relationDetail"
         android:name="com.qmobile.qmobileui.detail.EntityDetailFragment"
-        android:label="{{tableName_original}}">
+        android:label="{navbarTitle}">
 
         <action
             android:id="@+id/action_detail_to_list_relation"
@@ -166,6 +170,10 @@
 
         <argument
             android:name="itemId"
+            app:argType="string" />
+
+        <argument
+            android:name="navbarTitle"
             app:argType="string" />
 
     </fragment>
