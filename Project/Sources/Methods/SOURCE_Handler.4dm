@@ -190,6 +190,9 @@ Case of
 					
 				End if 
 				
+				(OBJECT Get pointer:C1124(Object named:K67:5; "dataGeneration"))->:=Num:C11(Bool:C1537(Form:C1466.$project.dataSetGeneration))
+				OBJECT SET VISIBLE:C603(*; "dataGeneration@"; Bool:C1537(Form:C1466.$project.dataSetGeneration))
+				
 				//______________________________________________________
 		End case 
 		
@@ -676,8 +679,7 @@ $regex.match[1].data:="127.0.0.1"
 		//=========================================================
 	: ($Obj_in.action="dataset")  // End dataset generation
 		
-		(OBJECT Get pointer:C1124(Object named:K67:5; "dataGeneration"))->:=0
-		OBJECT SET VISIBLE:C603(*; "dataGeneration@"; False:C215)
+		SET TIMER:C645(-1)
 		
 		CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "update_data")
 		

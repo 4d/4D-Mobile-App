@@ -74,11 +74,11 @@ Case of
 		//______________________________________________________
 	: ($message="projectAuditResult")
 		
-		ASSERT:C1129(Not:C34(DATABASE.isMatrix))
+	  ASSERT(Not(DATABASE.isMatrix))
 		
-		//PROJECT_Handler(New object(\
-						"action"; $message; \
-						"audit"; $data))
+		PROJECT_Handler(New object:C1471(\
+			"action"; $message; \
+			"audit"; $data))
 		
 		//______________________________________________________
 	: ($message="checkProject")  // Callback from 'structure'

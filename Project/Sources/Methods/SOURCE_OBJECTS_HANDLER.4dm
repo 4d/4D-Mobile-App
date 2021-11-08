@@ -50,46 +50,50 @@ Case of
 		//==================================================
 	: ($Txt_me=$Obj_form.generate)
 		
-		If (Form:C1466.dataSource.source="server")
+		If (Not:C34(Bool:C1537(Form:C1466.$project.dataSetGeneration)))  // No reentry
 			
-			//ACI0100868
-			//$File_key:=doc_Absolute_path (Form.dataSource.keyPath;Get 4D folder(MobileApps folder;*))
-			$File_key:=doc_Absolute_path(Form:C1466.dataSource.keyPath)
+			Form:C1466.$project.dataSetGeneration:=True:C214
 			
-			//===============================================================
-			//#RUSTINE: ne devrait plus être nécessaire
-			If (Test path name:C476($File_key)#Is a document:K24:1)
+			If (Form:C1466.dataSource.source="server")
 				
-				LOG_EVENT(New object:C1471(\
-					"message"; Form:C1466.dataSource.keyPath+" ->"+$File_key))
+				//ACI0100868
+				//$File_key:=doc_Absolute_path (Form.dataSource.keyPath;Get 4D folder(MobileApps folder;*))
+				$File_key:=doc_Absolute_path(Form:C1466.dataSource.keyPath)
 				
-				$File_key:=Convert path POSIX to system:C1107(Form:C1466.dataSource.keyPath)
+				//===============================================================
+				//#RUSTINE: ne devrait plus être nécessaire
+				If (Test path name:C476($File_key)#Is a document:K24:1)
+					
+					LOG_EVENT(New object:C1471(\
+						"message"; Form:C1466.dataSource.keyPath+" ->"+$File_key))
+					
+					$File_key:=Convert path POSIX to system:C1107(Form:C1466.dataSource.keyPath)
+					
+				End if 
+				
+				//===============================================================
+				
+			Else 
+				
+				// Default location
+				$File_key:=_o_COMPONENT_Pathname("key").platformPath
 				
 			End if 
 			
-			//===============================================================
+			CALL WORKER:C1389(EDITOR.worker; "dataSet"; New object:C1471(\
+				"caller"; EDITOR.window; \
+				"action"; "create"; \
+				"eraseIfExists"; True:C214; \
+				"project"; PROJECT; \
+				"digest"; True:C214; \
+				"coreDataSet"; True:C214; \
+				"key"; $File_key; \
+				"dataSet"; True:C214))
 			
-		Else 
+			SET TIMER:C645(-1)
 			
-			// Default location
-			$File_key:=_o_COMPONENT_Pathname("key").platformPath
-			
+		Else   // A generation is already in works
 		End if 
-		
-		(OBJECT Get pointer:C1124(Object named:K67:5; "dataGeneration"))->:=1
-		OBJECT SET VISIBLE:C603(*; "dataGeneration@"; True:C214)
-		
-		Form:C1466.$project.dataSetGeneration:=True:C214
-		
-		CALL WORKER:C1389(EDITOR.worker; "dataSet"; New object:C1471(\
-			"caller"; EDITOR.window; \
-			"action"; "create"; \
-			"eraseIfExists"; True:C214; \
-			"project"; PROJECT; \
-			"digest"; True:C214; \
-			"coreDataSet"; True:C214; \
-			"key"; $File_key; \
-			"dataSet"; True:C214))
 		
 		//==================================================
 	: ($Txt_me=$Obj_form.doNotGenerate)\
