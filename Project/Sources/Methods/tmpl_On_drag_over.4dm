@@ -93,6 +93,19 @@ If (Length:C16($cible)>0)
 				SVG GET ATTRIBUTE:C1056(*; $preview; $cible; "4D-isOfClass-droppable"; $t)
 				$isDroppable:=JSON Parse:C1218($t; Is boolean:K8:9)
 				
+				// Reject object fields for search and sections 
+				If ($isDroppable)
+					
+					SVG GET ATTRIBUTE:C1056(*; $preview; $cible; "ios:bind"; $t)
+					
+					If ($t="sectionField")\
+						 | ($t="searchableField")
+						
+						$isDroppable:=$dropped.fieldType#Is object:K8:27
+						
+					End if 
+				End if 
+				
 				If ($isDroppable)
 					
 					$isInsertion:=($dropped.fromIndex#(Num:C11(Replace string:C233($cible; "e"; ""))-1))
