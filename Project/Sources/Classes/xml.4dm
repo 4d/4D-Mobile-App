@@ -53,7 +53,7 @@ Function newRef($root : Text)->$this : cs:C1710.xml
 			//______________________________________________________
 		: (($countParam%2)=0)  // -> root + namespace's pairs
 			
-			$t:=":C861("
+			$t:="DOM Create XML Ref:C861("
 			
 			For ($i; 1; $countParam; 2)
 				
@@ -68,7 +68,7 @@ Function newRef($root : Text)->$this : cs:C1710.xml
 			//______________________________________________________
 		Else   // -> root + namespace + namespace's pairs
 			
-			$t:=":C861("+$root+";"+$1
+			$t:="DOM Create XML Ref:C861("+$root+";"+$1
 			
 			For ($i; 2; $countParam; 2)
 				

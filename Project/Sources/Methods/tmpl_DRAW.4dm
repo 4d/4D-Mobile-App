@@ -68,6 +68,10 @@ If (Num:C11($tableID)>0)
 			// Load the template
 			
 			$t:=$tmpl.update().svg
+			
+			//MARK:TURN AROUND - Put something before :C 
+			$t:=Replace string:C233($t; ":C"; "4d:C")
+			
 			$t:=Replace string:C233($t; "&quot;"; "\"")
 			PROCESS 4D TAGS:C816($t; $t; $tmpl.title; $tmpl.cancel())
 			
@@ -361,7 +365,7 @@ If (Num:C11($tableID)>0)
 																
 																If ($relation[$field.name].format=Null:C1517)
 																	
-																	$class:="label error"
+																	$class:=$class+" error"
 																	$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theLinkedTableIsNotPublished").localized($relation[$field.name].relatedEntities))
 																	
 																End if 
@@ -383,18 +387,26 @@ If (Num:C11($tableID)>0)
 															If ($dataClass[$field.name]=Null:C1517)\
 																 | (($tableModel[$field.name]=Null:C1517) & ($tableModel[String:C10($field.id)]=Null:C1517))
 																
-																$class:="label error"
+																$class:=$class+" error"
 																$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($field.name))
 																
 															End if 
 															
 														Else 
 															
-															If (ds:C1482[$dataClass[$c[0]].relatedDataClass][$c[1]]=Null:C1517)
+															If ($dataClass[$c[0]]=Null:C1517)
 																
-																$class:="label error"
+																$class:=$class+" error"
 																$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($c[1]))
 																
+															Else 
+																
+																If (ds:C1482[$dataClass[$c[0]].relatedDataClass][$c[1]]=Null:C1517)
+																	
+																	$class:=$class+" error"
+																	$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($c[1]))
+																	
+																End if 
 															End if 
 														End if 
 													End if 

@@ -133,9 +133,9 @@ If (False:C215)  // Tools
 	//C_OBJECT(menu;$2)
 	
 	//______________________________________________________
-	C_OBJECT:C1216(process; $0)
-	C_TEXT:C284(process; $1)
-	C_OBJECT:C1216(process; $2)
+	C_OBJECT:C1216(_o_process; $0)
+	C_TEXT:C284(_o_process; $1)
+	C_OBJECT:C1216(_o_process; $2)
 	
 	//______________________________________________________
 	//C_OBJECT(_o_str; $0)
