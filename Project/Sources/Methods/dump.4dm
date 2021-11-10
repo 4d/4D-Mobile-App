@@ -267,12 +267,29 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 								
 								$Obj_rest.globalStamp:=$Obj_rest.response.__GlobalStamp
 								
+								If (Num:C11($Obj_rest.response.__SENT)<=0)
+									$Lon_i:=MAXLONG:K35:2-1  // BREAK
+									$Obj_rest.success:=False:C215
+								End if 
+								
 							: (Value type:C1509($Obj_rest.response)=Is text:K8:3)
 								var $posBegin; $posEnd : Integer
 								$posBegin:=Position:C15("__GlobalStamp"; $Obj_rest.response)
 								If ($posBegin>0)
 									$posEnd:=Position:C15("\""; $Obj_rest.response; $posBegin+15)
 									$Obj_rest.globalStamp:=Num:C11(Substring:C12($Obj_rest.response; $posBegin+15; $posEnd-($posBegin+15)-1))
+								End if 
+								
+								$posBegin:=Position:C15("__SENT"; $Obj_rest.response)
+								If ($posBegin>0)
+									$posEnd:=Position:C15(","; $Obj_rest.response; $posBegin+7)
+									If ($posEnd<1)
+										$posEnd:=Position:C15("}"; $Obj_rest.response; $posBegin+7)
+									End if 
+									If (Num:C11(Substring:C12($Obj_rest.response; $posBegin+8; $posEnd-($posBegin+7)-1))<=0)
+										$Lon_i:=MAXLONG:K35:2-1  // BREAK
+										$Obj_rest.success:=True:C214
+									End if 
 								End if 
 								
 								// XXX if blob, decode some first byte to string? (or keep text)
@@ -286,63 +303,66 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 						
 						ob_error_combine($Obj_out; $Obj_rest)
 						
-						If ($Obj_rest.success)
-							
-							$File_output:=$Obj_in.output+$o.name
-							
-							If (Bool:C1537($Obj_in.dataSet))
+						Case of 
+							: ($Lon_i=(MAXLONG:K35:2-1))  // TODO even if empty create data? or $Lon_i=1 before?
+								// ignore
+							: ($Obj_rest.success)
 								
-								$File_output:=$File_output+".dataset"+Folder separator:K24:12+$o.name
+								$File_output:=$Obj_in.output+$o.name
 								
-							End if 
-							
-							If ($Lon_i#1)
+								If (Bool:C1537($Obj_in.dataSet))
+									
+									$File_output:=$File_output+".dataset"+Folder separator:K24:12+$o.name
+									
+								End if 
 								
-								$File_output:=$File_output+"."+String:C10($Lon_i)
+								If ($Lon_i#1)
+									
+									$File_output:=$File_output+"."+String:C10($Lon_i-1)
+									
+								End if 
 								
-							End if 
-							
-							$File_output:=$File_output+".data.json"
-							
-							// Make sure the folder exist
-							CREATE FOLDER:C475($File_output; *)
-							
-							If (Bool:C1537($Obj_in.dataSet))
+								$File_output:=$File_output+".data.json"
 								
-								asset(New object:C1471("action"; "create"; "type"; "dataset"; \
-									"target"; $Obj_in.output; \
-									"tags"; New object:C1471(\
-									"name"; $o.name; \
-									"fileName"; $o.name+".data.json"; \
-									"uti"; "public.json")))
+								// Make sure the folder exist
+								CREATE FOLDER:C475($File_output; *)
 								
-							End if 
-							
-							Case of 
-								: (Value type:C1509($Obj_rest.response)=Is BLOB:K8:12)
-									File:C1566($File_output; fk platform path:K87:2).setContent($Obj_rest.response)
-									$Obj_rest.write:=New object:C1471("success"; True:C214)
-								: (Value type:C1509($Obj_rest.response)=Is text:K8:3)
-									File:C1566($File_output; fk platform path:K87:2).setText($Obj_rest.response)
-									$Obj_rest.write:=New object:C1471("success"; True:C214)
-								: (Value type:C1509($Obj_rest.response)=Is object:K8:27)
-									$Obj_rest.write:=ob_writeToDocument($Obj_rest.response; $File_output; True:C214)
-								Else 
-									$Obj_rest.write:=New object:C1471("success"; False:C215; "errors"; New collection:C1472("No dumped data of correct type"+String:C10(Value type:C1509($Obj_rest.response))))
-							End case 
-							ob_error_combine($Obj_out; $Obj_rest.write)
-							If (Not:C34($Obj_rest.write.success))
+								If (Bool:C1537($Obj_in.dataSet))
+									
+									asset(New object:C1471("action"; "create"; "type"; "dataset"; \
+										"target"; $Obj_in.output; \
+										"tags"; New object:C1471(\
+										"name"; $o.name; \
+										"fileName"; $o.name+".data.json"; \
+										"uti"; "public.json")))
+									
+								End if 
 								
-								$Obj_rest.success:=False:C215
-								$Obj_out.success:=False:C215
+								Case of 
+									: (Value type:C1509($Obj_rest.response)=Is BLOB:K8:12)
+										File:C1566($File_output; fk platform path:K87:2).setContent($Obj_rest.response)
+										$Obj_rest.write:=New object:C1471("success"; True:C214)
+									: (Value type:C1509($Obj_rest.response)=Is text:K8:3)
+										File:C1566($File_output; fk platform path:K87:2).setText($Obj_rest.response)
+										$Obj_rest.write:=New object:C1471("success"; True:C214)
+									: (Value type:C1509($Obj_rest.response)=Is object:K8:27)
+										$Obj_rest.write:=ob_writeToDocument($Obj_rest.response; $File_output; True:C214)
+									Else 
+										$Obj_rest.write:=New object:C1471("success"; False:C215; "errors"; New collection:C1472("No dumped data of correct type"+String:C10(Value type:C1509($Obj_rest.response))))
+								End case 
+								ob_error_combine($Obj_out; $Obj_rest.write)
+								If (Not:C34($Obj_rest.write.success))
+									
+									$Obj_rest.success:=False:C215
+									$Obj_out.success:=False:C215
+									
+								End if 
 								
-							End if 
-							
-						Else 
-							
-							$Obj_out.success:=False:C215  // global success is false
-							
-						End if 
+							Else 
+								
+								$Obj_out.success:=False:C215  // global success is false
+								
+						End case 
 					End for 
 				End if 
 				

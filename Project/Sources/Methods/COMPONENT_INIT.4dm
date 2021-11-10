@@ -179,8 +179,8 @@ If (OB Is empty:C1297(SHARED)) | $reset
 	// Data dump
 	SHARED.data:=New object:C1471(\
 		"dump"; New object:C1471(\
-		"limit"; 1000000; \
-		"page"; 1))
+		"limit"; 100000; \
+		"page"; MAXINT:K35:1))
 	
 	If (SHARED.component.build#Num:C11($pref.lastBuild)) | $reset
 		
