@@ -144,7 +144,11 @@ Function updateFieldList
 	
 	If (Num:C11(This:C1470.tabSelector.data)=1)  // Relations
 		
-		tempoDatamodelWith1toNRelation(This:C1470.tableNumber)
+		If (Not:C34(FEATURE.with("android1ToNRelations")))
+			
+			tempoDatamodelWith1toNRelation(This:C1470.tableNumber)
+			
+		End if 
 		
 	Else 
 		

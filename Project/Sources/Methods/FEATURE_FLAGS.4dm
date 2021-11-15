@@ -161,6 +161,7 @@ _____________*/
 FEATURE.unstable("androidActions")  //[Mobile] Feature flag pour activer les actions dans le projet mobile
 FEATURE.unstable("objectFieldManagement")  //[MOBILE] Object fields Management 
 
+FEATURE.unstable("android1ToNRelations")  //[ANDROID] 1 to N relations
 
 //FEATURE.wip(129953)  //[MOBILE] Handle Many-one-Many relations
 

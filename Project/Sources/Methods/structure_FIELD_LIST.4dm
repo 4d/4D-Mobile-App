@@ -338,7 +338,11 @@ If ($row>0)
 	End if 
 End if 
 
-tempoDatamodelWith1toNRelation($context.currentTable)
+If (Not:C34(FEATURE.with("android1ToNRelations")))
+	
+	tempoDatamodelWith1toNRelation($context.currentTable)
+	
+End if 
 
 // Disable field publication if the table is missing
 OBJECT SET ENTERABLE:C238($Ptr_published->; PROJECT.isNotLocked())
