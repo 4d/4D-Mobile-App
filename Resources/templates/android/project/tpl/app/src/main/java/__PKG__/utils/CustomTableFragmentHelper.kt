@@ -142,10 +142,10 @@ class CustomTableFragmentHelper :
     override fun getCustomEntityListFragment(
         tableName: String,
         binding: ViewDataBinding
-    ): CustomEntityListFragment = when (tableName) {
+    ): CustomEntityListFragment? = when (tableName) {
         {{#tableNames_navigation}}
         "{{name}}" -> EntityListFragment{{name}}(binding)
         {{/tableNames_navigation}}
-        else -> throw IllegalArgumentException("Missing custom entity list fragment for table  $tableName")
+        else -> null
     }
 }

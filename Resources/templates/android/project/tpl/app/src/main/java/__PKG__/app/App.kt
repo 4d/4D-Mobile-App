@@ -54,9 +54,9 @@ class App : BaseApp() {
 
         // Sets navigation graphs id list for navigation
         navGraphIds = listOf(
-            {{#tableNames_navigation}}
+            {{#tableNames_navigation_for_navbar}}
             R.navigation.{{nameLowerCase}},
-            {{/tableNames_navigation}}
+            {{/tableNames_navigation_for_navbar}}
             R.navigation.settings
         )
     }

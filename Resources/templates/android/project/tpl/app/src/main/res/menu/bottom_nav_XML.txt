@@ -6,7 +6,7 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-{{#tableNames_navigation}}
+{{#tableNames_navigation_for_navbar}}
     <item
         android:id="@+id/{{nameLowerCase}}"
         android:contentDescription="@string/tableName_origin_{{nameLowerCase}}"
@@ -15,7 +15,7 @@
         {{/hasIcon}}
         android:title="@string/tableName_{{nameLowerCase}}" />
 
-{{/tableNames_navigation}}
+{{/tableNames_navigation_for_navbar}}
     <item
         android:id="@+id/settings"
         android:contentDescription="@string/title_table_settings"
