@@ -10,16 +10,16 @@
 // #THREAD-SAFE
 // ----------------------------------------------------
 // Declarations
-C_OBJECT:C1216($0)
-C_OBJECT:C1216($1)
-
-C_OBJECT:C1216($o; $oIN; $oOUT)
-var $error : cs:C1710.error
+var $0 : Object
+var $1 : Object
 
 If (False:C215)
 	C_OBJECT:C1216(checkQueryFilter; $0)
 	C_OBJECT:C1216(checkQueryFilter; $1)
 End if 
+
+var $o; $oIN; $oOUT : Object
+var $error : cs:C1710.error
 
 // ----------------------------------------------------
 // Initialisations

@@ -74,7 +74,7 @@ Case of
 		//______________________________________________________
 	: ($message="projectAuditResult")
 		
-	  ASSERT(Not(DATABASE.isMatrix))
+		//ASSERT(Not(DATABASE.isMatrix))
 		
 		PROJECT_Handler(New object:C1471(\
 			"action"; $message; \

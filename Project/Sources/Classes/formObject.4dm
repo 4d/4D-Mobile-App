@@ -26,13 +26,15 @@ Class constructor($name : Text)
 	
 	//=== === === === === === === === === === === === === === === === === === ===
 	// Adds this widget to a group
-Function addToGroup($group : Object)
+Function addToGroup($group : cs:C1710.group)->$this : Object
 	
 	If (Asserted:C1132(OB Instance of:C1731($group; cs:C1710.group); "The parameter isn't a group"))
 		
 		$group.addMember(This:C1470)
 		
 	End if 
+	
+	$this:=This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === ===
 Function hide()->$this : cs:C1710.formObject
@@ -89,9 +91,9 @@ Function disable()->$this : cs:C1710.formObject
 	$this:=This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === ===
-Function isEnabled()->$visible : Boolean
+Function isEnabled()->$enabled : Boolean
 	
-	$visible:=OBJECT Get enabled:C1079(*; This:C1470.name)
+	$enabled:=OBJECT Get enabled:C1079(*; This:C1470.name)
 	
 	//=== === === === === === === === === === === === === === === === === === ===
 Function setTitle($title : Text)->$this : cs:C1710.formObject
@@ -125,6 +127,13 @@ Function setTitle($title : Text)->$this : cs:C1710.formObject
 Function title()->$title : Text
 	
 	$title:=OBJECT Get title:C1068(*; This:C1470.name)
+	
+	//=== === === === === === === === === === === === === === === === === === ===
+Function setFont($font : Text)->$this : cs:C1710.formObject
+	
+	OBJECT SET FONT:C164(*; This:C1470.name; $font)
+	
+	$this:=This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === ===
 Function setFontStyle($style : Integer)->$this : cs:C1710.formObject

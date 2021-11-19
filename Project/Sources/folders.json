@@ -12,26 +12,38 @@
 	"____FOR_TESTS": {
 		"classes": [
 			"Employes",
-			"EmployesEntity",
-			"EmployesSelection"
+			"EmployesEntity"
 		]
 	},
 	"__IN WORKS": {
 		"methods": [
+			"_o_process",
 			"_w_actions",
 			"00_NEW",
 			"00_OPEN",
 			"00_TESTS",
 			"androidLimitations",
 			"COMPILER_TEMPO",
+			"instantiate",
 			"internalTests",
-			"tempoDatamodelWith1toNRelation"
+			"Method444",
+			"nvl",
+			"object",
+			"publishedTableList",
+			"tempoDatamodelWith1toNRelation",
+			"tempoSVGLineHeight"
 		],
 		"forms": [
+			"_w_VIEWS",
 			"UI"
 		],
 		"classes": [
-			"unit4D"
+			"catalog",
+			"DataStore",
+			"dateTime",
+			"ob",
+			"unit4D",
+			"with"
 		]
 	},
 	"_[DEV]": {
@@ -111,14 +123,7 @@
 			"tester_net"
 		]
 	},
-	"(HDI_COLOR)": {
-		"forms": [
-			"(COLOR_HSL)",
-			"(COLOR_PALETTE)",
-			"(COLOR_RGB)",
-			"(HDI_COLOR)"
-		]
-	},
+	"(HDI_COLOR)": {},
 	"[ android ]": {
 		"methods": [
 			"COMPILER_android",
@@ -240,6 +245,7 @@
 		],
 		"methods": [
 			"COMPILER_editor",
+			"EDITOR_CALLBACK",
 			"editor_CHECK_INSTALLATION",
 			"editor_CREATE_PROJECT",
 			"editor_GET_DEVICES",
@@ -374,6 +380,7 @@
 	},
 	"07] ACTIONS": {
 		"methods": [
+			"ACTIONS",
 			"ACTIONS_CALLBACK",
 			"COMPILER_ACTIONS"
 		],
@@ -689,9 +696,6 @@
 		"methods": [
 			"form_spreadToSubforms"
 		],
-		"forms": [
-			"HDI_WIDGET_CLASSES"
-		],
 		"classes": [
 			"attention",
 			"button",
@@ -901,7 +905,6 @@
 			"ob findPropertyValues",
 			"ob MERGE",
 			"picture",
-			"process",
 			"static",
 			"subform",
 			"thermometer",

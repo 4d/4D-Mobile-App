@@ -21,7 +21,7 @@ Class constructor()
 	// Initialize tools
 	For each ($t; New collection:C1472("str"; "path"; "tips"))
 		
-		This:C1470.instantiate($t)
+		This:C1470._instantiate($t)
 		
 	End for each 
 	
