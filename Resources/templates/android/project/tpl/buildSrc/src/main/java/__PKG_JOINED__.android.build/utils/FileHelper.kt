@@ -28,10 +28,17 @@ fun getCatalogPath(tableName: String): String = assetsPath() + File.separator + 
         "$tableName.${CATALOG_DATASET_SUFFIX}" + File.separator +
         "$tableName.${CATALOG_JSON_SUFFIX}"
 
-fun getDataPath(tableName: String): String = assetsPath() + File.separator + XCASSETS_PATH_KEY +
-        File.separator + DATA_PATH_KEY + File.separator +
-        "$tableName.$DATA_DATASET_SUFFIX" + File.separator +
-        "$tableName.$DATA_JSON_SUFFIX"
+fun getDataPath(tableName: String, index: Int? = null): String {
+    val path = assetsPath() + File.separator + XCASSETS_PATH_KEY +
+            File.separator + DATA_PATH_KEY + File.separator +
+            "$tableName.$DATA_DATASET_SUFFIX" + File.separator +
+            "$tableName."
+    return if (index == null) {
+        path + DATA_JSON_SUFFIX
+    } else {
+        "$path$index.$DATA_JSON_SUFFIX"
+    }
+}
 
 private fun getAppInfoPath(): String = assetsPath() + File.separator + APP_INFO_FILENAME
 

@@ -58,14 +58,14 @@ open class CreateDatabaseTask : DefaultTask() {
         for ((tableName, tableNameOriginal) in tableNames) {
             getCatalog(tableNameOriginal)?.let { dataClass ->
 
-                getSqlQueriesForTable(
-                    tableName,
-                    tableNameOriginal,
-                    dataClass.fields,
-                    staticDataInitializer
-                )?.let { sqlQuery ->
-                    queryList.add(sqlQuery)
-                }
+                queryList.addAll(
+                    getSqlQueriesForTable(
+                        tableName,
+                        tableNameOriginal,
+                        dataClass.fields,
+                        staticDataInitializer
+                    )
+                )
                 
                 dataClassList.add(dataClass)
             }
@@ -150,43 +150,88 @@ open class CreateDatabaseTask : DefaultTask() {
         tableNameOriginal: String,
         fields: List<Field>,
         staticDataInitializer: StaticDataInitializer
-    ): SqlQuery? {
+    ): List<SqlQuery> {
+
+        val sqlQueryList = mutableListOf<SqlQuery>()
 
         val filePath = getDataPath(tableNameOriginal)
+        val entitySqlQueriesFile = File(filePath)
 
         println("[$tableName] Reading data at path $filePath")
 
-        val entitySqlQueriesFile = File(filePath)
         if (entitySqlQueriesFile.exists()) {
-
-            val jsonString = entitySqlQueriesFile.readFile()
-
-            if (jsonString.isNotEmpty()) {
-                val jsonObj = retrieveJSONObject(jsonString)
-                val entities = jsonObj.getSafeArray("__ENTITIES")
-                jsonObj.getSafeInt("__GlobalStamp")?.let { globalStamp ->
-                    dumpedTables.add(tableName)
-                    if (globalStamp > initialGlobalStamp) initialGlobalStamp = globalStamp
-                }
-
-                entities?.let {
-                    val sqlQueryBuilder = SqlQueryBuilder(it, fields)
-
-                    relatedEntitiesMapList.add(sqlQueryBuilder.relatedEntitiesMap)
-
-                    return getQueryFromSqlQueryBuilder(
-                        sqlQueryBuilder,
-                        tableName,
-                        staticDataInitializer
-                    )
-                }
-                println("[$tableName] Couldn't find entities to extract")
-            } else {
-                println("[$tableName] Empty data file")
+            getSqlQueriesForTableFromFile(
+                tableName,
+                entitySqlQueriesFile,
+                fields,
+                staticDataInitializer
+            )?.let {
+                sqlQueryList.add(it)
             }
         } else {
             println("[$tableName] No data file found")
         }
+
+        var i = 0
+        do {
+            val pageFilePath = getDataPath(tableNameOriginal, ++i)
+            val pageEntitySqlQueriesFile = File(pageFilePath)
+
+            println("[$tableName] Reading data at path $pageFilePath")
+
+            if (pageEntitySqlQueriesFile.exists()) {
+                getSqlQueriesForTableFromFile(
+                    tableName,
+                    pageEntitySqlQueriesFile,
+                    fields,
+                    staticDataInitializer
+                )?.let {
+                    sqlQueryList.add(it)
+                }
+            } else {
+                println("[$tableName] No data file found")
+            }
+        } while (pageEntitySqlQueriesFile.exists())
+
+        return sqlQueryList
+    }
+
+    private fun getSqlQueriesForTableFromFile(
+        tableName: String,
+        entitySqlQueriesFile: File,
+        fields: List<Field>,
+        staticDataInitializer: StaticDataInitializer
+    ): SqlQuery? {
+
+        val jsonString = entitySqlQueriesFile.readFile()
+
+        if (jsonString.isNotEmpty()) {
+            val jsonObj = retrieveJSONObject(jsonString)
+            val entities = jsonObj.getSafeArray("__ENTITIES")
+
+            jsonObj.getSafeInt("__GlobalStamp")?.let { globalStamp ->
+                dumpedTables.add(tableName)
+                if (globalStamp > initialGlobalStamp) initialGlobalStamp = globalStamp
+            }
+
+            entities?.let {
+                val sqlQueryBuilder = SqlQueryBuilder(it, fields)
+
+                relatedEntitiesMapList.add(sqlQueryBuilder.relatedEntitiesMap)
+
+                return getQueryFromSqlQueryBuilder(
+                    sqlQueryBuilder,
+                    tableName,
+                    staticDataInitializer
+                )
+            }
+
+            println("[$tableName] Couldn't find entities to extract")
+
+        } else {
+            println("[$tableName] Empty data file")
+        }
+
         return null
     }
 
