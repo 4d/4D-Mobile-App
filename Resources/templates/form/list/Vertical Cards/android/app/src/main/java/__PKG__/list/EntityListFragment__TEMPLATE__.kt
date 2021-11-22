@@ -7,17 +7,19 @@
 package {{package}}.list
 
 import android.os.Bundle
+import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DividerItemDecoration
-import com.qmobile.qmobileui.list.EntityListFragment
+import com.qmobile.qmobiledatasync.utils.CustomEntityListFragment
+import com.qmobile.qmobileui.databinding.FragmentListBinding
 
-class EntityListFragment{{tableName}} : EntityListFragment() {
+class EntityListFragment{{tableName}}(private val binding: ViewDataBinding) : CustomEntityListFragment {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        for (i in 0 until binding.fragmentListRecyclerView.itemDecorationCount) {
-            if (binding.fragmentListRecyclerView.getItemDecorationAt(i) is DividerItemDecoration)
-                binding.fragmentListRecyclerView.removeItemDecorationAt(i)
+        (binding as? FragmentListBinding)?.let {
+            for (i in 0 until binding.fragmentListRecyclerView.itemDecorationCount) {
+                if (binding.fragmentListRecyclerView.getItemDecorationAt(i) is DividerItemDecoration)
+                    binding.fragmentListRecyclerView.removeItemDecorationAt(i)
+            }
         }
     }
 }
