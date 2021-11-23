@@ -168,7 +168,15 @@ Else   // <== WIDGETS METHOD
 					
 					// Update data model
 					//%W-533.3
-					$field[Choose:C955($e.columnName="title"; "format"; $e.columnName)]:=($ƒ.fieldList.columns["shortLabel"].pointer)->{$e.row}
+					If ($e.columnName="titles")
+						
+						$field["format"]:=($ƒ.fieldList.columns[$e.columnName].pointer)->{$e.row}
+						
+					Else 
+						
+						$field[$e.columnName]:=($ƒ.fieldList.columns[$e.columnName].pointer)->{$e.row}
+						
+					End if 
 					//%W+533.3
 					
 					$ƒ.updateForms($field; $e.row)
