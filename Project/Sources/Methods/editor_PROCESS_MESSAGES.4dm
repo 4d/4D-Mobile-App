@@ -17,6 +17,15 @@ var $o : Object
 Case of 
 		
 		//______________________________________________________
+	: ($message="dataSetInWorks")
+		
+		If (EDITOR.message.isVisible())
+			
+			ASSERT:C1129(False:C215)
+			
+		End if 
+		
+		//______________________________________________________
 	: ($message="footer")
 		
 		var $offset

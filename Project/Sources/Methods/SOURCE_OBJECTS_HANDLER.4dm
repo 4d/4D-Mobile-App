@@ -8,41 +8,19 @@
 //
 // ----------------------------------------------------
 // Declarations
-C_LONGINT:C283($Lon_formEvent; $Lon_parameters)
-C_POINTER:C301($Ptr_me)
-C_TEXT:C284($File_key; $Txt_buffer; $Txt_me)
-C_OBJECT:C1216($Obj_context; $Obj_form; $Obj_project; $Obj_server)
-
+var $File_key; $Txt_buffer; $Txt_me : Text
+var $o; $Obj_context; $Obj_form; $Obj_server; $status : Object
+var $web : 4D:C1709.WebServer
+var $error : cs:C1710.error
 
 // ----------------------------------------------------
 // Initialisations
-$Lon_parameters:=Count parameters:C259
+$Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
 
-If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
-	
-	// NO PARAMETERS REQUIRED
-	
-	// Optional parameters
-	If ($Lon_parameters>=1)
-		
-		// <NONE>
-		
-	End if 
-	
-	$Lon_formEvent:=Form event code:C388
-	$Txt_me:=OBJECT Get name:C1087(Object current:K67:2)
-	$Ptr_me:=OBJECT Get pointer:C1124(Object current:K67:2)
-	
-	$Obj_form:=SOURCE_Handler(New object:C1471(\
-		"action"; "init"))
-	
-	$Obj_context:=$Obj_form.ui
-	
-Else 
-	
-	ABORT:C156
-	
-End if 
+$Obj_form:=SOURCE_Handler(New object:C1471(\
+"action"; "init"))
+
+$Obj_context:=$Obj_form.ui
 
 // ----------------------------------------------------
 Case of 
@@ -58,7 +36,6 @@ Case of
 				
 				//ACI0100868
 				//$File_key:=doc_Absolute_path (Form.dataSource.keyPath;Get 4D folder(MobileApps folder;*))
-				$File_key:=doc_Absolute_path(Form:C1466.dataSource.keyPath)
 				
 				//===============================================================
 				//#RUSTINE: ne devrait plus être nécessaire
@@ -80,17 +57,25 @@ Case of
 				
 			End if 
 			
-			CALL WORKER:C1389(EDITOR.worker; "dataSet"; New object:C1471(\
-				"caller"; EDITOR.window; \
-				"action"; "create"; \
-				"eraseIfExists"; True:C214; \
-				"project"; PROJECT; \
-				"digest"; True:C214; \
-				"coreDataSet"; True:C214; \
-				"key"; $File_key; \
-				"dataSet"; True:C214))
-			
-			SET TIMER:C645(-1)
+			If (FEATURE.with("cancelableGeneration"))
+				
+				EDITOR.doGenerate($File_key)
+				
+			Else 
+				
+				CALL WORKER:C1389(EDITOR.worker; "dataSet"; New object:C1471(\
+					"caller"; EDITOR.window; \
+					"action"; "create"; \
+					"eraseIfExists"; True:C214; \
+					"project"; PROJECT; \
+					"digest"; True:C214; \
+					"coreDataSet"; True:C214; \
+					"key"; $File_key; \
+					"dataSet"; True:C214))
+				
+				SET TIMER:C645(-1)
+				
+			End if 
 			
 		Else   // A generation is already in works
 		End if 
@@ -121,7 +106,6 @@ Case of
 		If (Length:C16(String:C10(Form:C1466.server.urls.production))>0)
 			
 			// Generate the key
-			C_OBJECT:C1216($o)
 			$o:=Rest(New object:C1471(\
 				"action"; "request"; \
 				"handler"; "mobileapp"; \
@@ -152,7 +136,6 @@ Case of
 						Else 
 							
 							// 18R2-
-							Form:C1466.dataSource.keyPath:=Replace string:C233(doc_Relative_path(DOCUMENT); Folder separator:K24:12; "/")
 							
 						End if 
 						
@@ -172,14 +155,10 @@ Case of
 					//______________________________________________________
 				: ($Obj_context.serverStatus.action="startWebServer")
 					
-					var $status : Object
-					var $web : 4D:C1709.WebServer
-					
 					$web:=WEB Server:C1674
 					
 					If (Not:C34($web.isRunning))
 						
-						var $error : cs:C1710.error
 /* START TRAPPING ERRORS */$error:=cs:C1710.error.new("capture")
 						$status:=$web.start()
 /* STOP TRAPPING ERRORS */$error.release()
@@ -233,9 +212,3 @@ Case of
 		
 		//==================================================
 End case 
-
-// ----------------------------------------------------
-// Return
-// <NONE>
-// ----------------------------------------------------
-// End

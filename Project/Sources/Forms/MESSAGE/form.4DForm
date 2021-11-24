@@ -121,6 +121,31 @@
 					"events": [
 						"onClick"
 					]
+				},
+				"thermometer": {
+					"type": "progress",
+					"left": 86,
+					"top": 98,
+					"width": 234,
+					"height": 28,
+					"max": 100,
+					"visibility": "hidden"
+				},
+				"cancelable": {
+					"type": "button",
+					"top": 4,
+					"left": 376,
+					"width": 30,
+					"height": 30,
+					"events": [
+						"onClick"
+					],
+					"icon": "/RESOURCES/images/Buttons/LightGrey/Cancel.png",
+					"iconFrames": 4,
+					"style": "toolbar",
+					"method": "ObjectMethods/cancelable.4dm",
+					"visibility": "hidden",
+					"focusable": false
 				}
 			}
 		}
@@ -129,7 +154,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 231,
+	"geometryStamp": 307,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

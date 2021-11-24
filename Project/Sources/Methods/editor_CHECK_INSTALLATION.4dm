@@ -45,8 +45,15 @@ Case of
 					 | ($fileManifest.modificationDate#Current date:C33)
 					
 					// Get the last 4D Mobile Android SDK from AWS server if any
-					CALL WORKER:C1389(1; "downloadSDK"; "aws"; "android"; False:C215; $in.caller)
-					
+					If (DATABASE.isMatrix)
+						
+						//CALL WORKER("downloadSDK"; "downloadSDK"; "aws"; "android"; False; $in.caller)
+						
+					Else 
+						
+						CALL WORKER:C1389(1; "downloadSDK"; "aws"; "android"; False:C215; $in.caller)
+						
+					End if 
 				End if 
 			End if 
 			
@@ -80,8 +87,15 @@ Case of
 						 | ($fileManifest.modificationDate#Current date:C33)
 						
 						// Get the last 4D Mobile Android SDK from AWS server if any
-						CALL WORKER:C1389(1; "downloadSDK"; "aws"; "ios"; False:C215; $in.caller)
-						
+						If (DATABASE.isMatrix)
+							
+							//CALL WORKER("downloadSDK"; "downloadSDK"; "aws"; "ios"; False; $in.caller)
+							
+						Else 
+							
+							CALL WORKER:C1389(1; "downloadSDK"; "aws"; "ios"; False:C215; $in.caller)
+							
+						End if 
 					End if 
 				End if 
 			End if 
@@ -118,8 +132,15 @@ Case of
 					 | ($fileManifest.modificationDate#Current date:C33)
 					
 					// Get the last 4D Mobile Android SDK from AWS server if any
-					CALL WORKER:C1389(1; "downloadSDK"; "aws"; "android"; False:C215; $in.caller)
-					
+					If (DATABASE.isMatrix)
+						
+						//CALL WORKER("downloadSDK"; "downloadSDK"; "aws"; "android"; False; $in.caller)
+						
+					Else 
+						
+						CALL WORKER:C1389(1; "downloadSDK"; "aws"; "android"; False:C215; $in.caller)
+						
+					End if 
 				End if 
 			End if 
 		End if 

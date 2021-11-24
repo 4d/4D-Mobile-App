@@ -37,3 +37,6 @@ Form:C1466.tablist:=widget("tab.list")
 Form:C1466.tabdetail:=widget("tab.detail")
 
 group("Button;Button1").distributeHorizontally(New object:C1471("start"; 20; "gap"; 10))
+
+Form:C1466.input:=cs:C1710.input.new("Input")
+Form:C1466.input.password:=True:C214

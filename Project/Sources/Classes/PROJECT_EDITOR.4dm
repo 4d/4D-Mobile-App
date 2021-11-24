@@ -611,6 +611,64 @@ Function refreshPanels()
 	This:C1470.callChild(This:C1470.project; "PROJECT_ON_ACTIVATE")
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
+Function doGenerate($keyPathname : Text)
+	
+	var $ƒ : 4D:C1709.Function
+	
+	$ƒ:=Formula:C1597(CALL WORKER:C1389(EDITOR.worker; "dataSet"; New object:C1471(\
+		"caller"; EDITOR.window; \
+		"action"; "create"; \
+		"eraseIfExists"; True:C214; \
+		"project"; PROJECT; \
+		"digest"; True:C214; \
+		"coreDataSet"; True:C214; \
+		"key"; $keyPathname; \
+		"dataSet"; True:C214)))
+	
+	POST_MESSAGE(New object:C1471(\
+		"target"; This:C1470.window; \
+		"action"; "show"; \
+		"type"; "cancelableProgress"; \
+		"title"; "dataSetGeneration"; \
+		"autostart"; $ƒ\
+		))
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function doCancelableProgress($content; $additional : Text)
+	
+	If (Count parameters:C259>=2)
+		
+		POST_MESSAGE(New object:C1471(\
+			"target"; This:C1470.window; \
+			"action"; "show"; \
+			"type"; "cancelableProgress"; \
+			"title"; String:C10($content); \
+			"additional"; $additional\
+			))
+		
+	Else 
+		
+		If (Value type:C1509($content)=Is object:K8:27)
+			
+			$content.target:=This:C1470.window
+			$content.action:="show"
+			$content.type:="cancelableProgress"
+			
+			POST_MESSAGE($content)
+			
+		Else 
+			
+			POST_MESSAGE(New object:C1471(\
+				"target"; This:C1470.window; \
+				"action"; "show"; \
+				"type"; "cancelableProgress"; \
+				"title"; String:C10($content)\
+				))
+			
+		End if 
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function doAlert($content; $additional : Text)
 	
 	If (Count parameters:C259>=2)
@@ -643,21 +701,6 @@ Function doAlert($content; $additional : Text)
 				))
 			
 		End if 
-	End if 
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-Function downloadSDK($server : Text; $target : Text; $silent : Boolean)
-	
-	This:C1470.addTask("downloadSDK")
-	
-	If (Count parameters:C259>=3)
-		
-		CALL WORKER:C1389(1; "downloadSDK"; $server; "android"; $silent; This:C1470.window)
-		
-	Else 
-		
-		CALL WORKER:C1389(1; "downloadSDK"; $server; "android"; False:C215; This:C1470.window)
-		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===

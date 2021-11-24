@@ -1,1 +1,1 @@
-EDITOR.doAlert("Hello world")
+EDITOR.doCancelableProgress("dataSetGeneration")

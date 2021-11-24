@@ -509,7 +509,8 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 							"dataSet"; $Obj_in.dataSet; \
 							"caller"; $Obj_in.caller; \
 							"debug"; Bool:C1537($Obj_in.debug); \
-							"dataModel"; $Obj_dataModel))
+							"dataModel"; $Obj_dataModel; \
+							"caller"; $Obj_in.caller))
 						
 						ob_error_combine($Obj_out; $Obj_out.data)
 						

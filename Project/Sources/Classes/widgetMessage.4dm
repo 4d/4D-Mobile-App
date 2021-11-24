@@ -14,6 +14,11 @@ Class constructor
 	
 	This:C1470.buttonGroup:=cs:C1710.group.new(This:C1470.ok; This:C1470.cancel).distributeRigthToLeft()
 	
+	This:C1470.cancelableGroup:=cs:C1710.group.new("cancelable")
+	This:C1470.thermometer:=cs:C1710.thermometer.new("thermometer").barber().addToGroup(This:C1470.cancelableGroup)
+	This:C1470.cancelable:=cs:C1710.button.new("cancelable").addToGroup(This:C1470.cancelableGroup)
+	
+	
 	This:C1470.widgets:=New collection:C1472
 	This:C1470.widgets.push(This:C1470.background)
 	This:C1470.widgets.push(This:C1470.title)
@@ -23,6 +28,8 @@ Class constructor
 	This:C1470.widgets.push(This:C1470.optional)
 	This:C1470.widgets.push(This:C1470.helper)
 	This:C1470.widgets.push(This:C1470.progress)
+	This:C1470.widgets.push(This:C1470.thermometer)
+	This:C1470.widgets.push(This:C1470.cancelable)
 	
 	This:C1470.backup:=New collection:C1472
 	
@@ -55,6 +62,8 @@ Function reset()
 	This:C1470.progress.hide()
 	This:C1470.optional.hide()
 	This:C1470.helper.hide()
+	
+	This:C1470.cancelableGroup.hide()
 	
 	This:C1470.scrollbar:=False:C215
 	This:C1470.offset:=0
@@ -208,12 +217,12 @@ Function display()
 				//……………………………………………………………………………………………………………………
 			: ($o.key="ok")
 				
-				Form:C1466.ƒ.ok.setTitle(This:C1470.str.setText($o.value).localized()).show()
+				This:C1470.ok.setTitle(This:C1470.str.setText($o.value).localized()).show()
 				
 				//……………………………………………………………………………………………………………………
 			: ($o.key="cancel")
 				
-				Form:C1466.ƒ.cancel.setTitle(This:C1470.str.setText($o.value).localized()).show()
+				This:C1470.cancel.setTitle(This:C1470.str.setText($o.value).localized()).show()
 				
 				//……………………………………………………………………………………………………………………
 			: ($o.key="type")
@@ -223,20 +232,26 @@ Function display()
 				Case of 
 						
 						// ---------------------------------------
+					: ($o.value="cancelableProgress")
+						
+						This:C1470.thermometer.start()
+						This:C1470.cancelableGroup.show()
+						
+						// ---------------------------------------
 					: ($o.value="progress")
 						
-						Form:C1466.ƒ.progress.show().start()
+						This:C1470.progress.show().start()
 						
 						// ---------------------------------------
 					: ($o.value="alert")
 						
-						Form:C1466.ƒ.ok.show()
+						This:C1470.ok.show()
 						
 						// ---------------------------------------
 					: ($o.value="confirm")
 						
-						Form:C1466.ƒ.ok.show()
-						Form:C1466.ƒ.cancel.show()
+						This:C1470.ok.show()
+						This:C1470.cancel.setTitle("cancel").show()
 						
 						// ---------------------------------------
 				End case 
@@ -244,12 +259,12 @@ Function display()
 				//……………………………………………………………………………………………………………………
 			: ($o.key="option")
 				
-				Form:C1466.ƒ.optional.setTitle(This:C1470.str.setText(String:C10($o.value.label)).localized()).show()
+				This:C1470.optional.setTitle(This:C1470.str.setText(String:C10($o.value.label)).localized()).show()
 				
 				//……………………………………………………………………………………………………………………
 			: ($o.key="help")
 				
-				Form:C1466.ƒ.helper.show()
+				This:C1470.helper.show()
 				
 				//……………………………………………………………………………………………………………………
 		End case 
@@ -294,6 +309,12 @@ Function update($data : Object)
 			
 			// ---------------------------------------
 		: ($data.type=Null:C1517)
+			
+			// ---------------------------------------
+		: ($data.type="cancelableProgress")
+			
+			This:C1470.thermometer.start()
+			This:C1470.cancelableGroup.show()
 			
 			// ---------------------------------------
 		: ($data.type="progress")
@@ -464,4 +485,33 @@ Function doHelp()
 		
 	End if 
 	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function doStop()
 	
+	Form:C1466.accept:=False:C215
+	
+	Case of 
+			
+			//______________________________________________________
+		: (Form:C1466.signal#Null:C1517)
+			
+			Form:C1466.signal.trigger()
+			
+			If (Form:C1466.signal.description#Null:C1517)
+				
+				If (Form:C1466.CALLBACK#Null:C1517)
+					
+					Form:C1466.CALLBACK.call(Null:C1517; Form:C1466)
+					
+				End if 
+			End if 
+			
+			//______________________________________________________
+		: (Form:C1466.cancelFormula#Null:C1517)
+			
+			Form:C1466.stopFormula.call()
+			
+			//______________________________________________________
+	End case 
+	
+	CALL SUBFORM CONTAINER:C1086(-2)

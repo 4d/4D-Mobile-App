@@ -276,10 +276,13 @@
 				},
 				"Input": {
 					"type": "input",
-					"left": 453,
-					"top": 606,
-					"width": 202,
-					"height": 17
+					"left": 515,
+					"top": 537,
+					"width": 157,
+					"height": 17,
+					"fontFamily": "Apple Chancery",
+					"fontSize": 13,
+					"textDecoration": "none"
 				},
 				"Button2": {
 					"type": "button",
@@ -306,6 +309,18 @@
 						"onClick"
 					],
 					"method": "ObjectMethods/Button4.4dm"
+				},
+				"Button5": {
+					"type": "button",
+					"text": "view",
+					"top": 539,
+					"left": 682,
+					"width": 78,
+					"height": 19,
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/Button5.4dm"
 				}
 			},
 			"entryOrder": [
@@ -321,7 +336,8 @@
 				"Radio Button1",
 				"Input",
 				"Button2",
-				"Button4"
+				"Button4",
+				"Button5"
 			]
 		}
 	],
@@ -329,7 +345,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 24,
+	"geometryStamp": 30,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

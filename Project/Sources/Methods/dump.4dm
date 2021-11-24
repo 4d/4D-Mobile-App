@@ -182,6 +182,15 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 				
 				$Obj_table:=$Obj_dataModel[$Txt_tableNumber]
 				
+				If (FEATURE.with("cancelableGeneration"))
+					
+					If ($Obj_in.caller#Null:C1517)
+						
+						CALL FORM:C1391($Obj_in.caller; "editor_CALLBACK"; "dataSetInWorks"; $Obj_table)
+						
+					End if 
+				End if 
+				
 				// Create the query string for rest
 				$Obj_query:=New object:C1471(\
 					"$limit"; String:C10(SHARED.data.dump.limit))
@@ -371,6 +380,12 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 			End for each   // end table
 			
 			$Obj_out.results:=$Obj_result
+			
+			If (FEATURE.with("cancelableGeneration"))
+				
+				
+				
+			End if 
 			
 			//______________________________________________________
 		: ($Obj_in.action="pictures")
