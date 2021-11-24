@@ -211,17 +211,16 @@ Else   // <== WIDGETS METHOD
 							 | (Keystroke:C390#"%")
 							
 							// <NOTHING MORE TO DO>
-							
 							//……………………………………………………………………
 						: ($e.columnName=$ƒ.shortLabels.name)\
 							 | ($e.columnName=$ƒ.labels.name)
 							
-							$ƒ.doTagMenu($e; New collection:C1472("length"))  // Propose the tags to be inserted
+							$ƒ.doTagMenu($e; New collection:C1472("name"))
 							
 							//……………………………………………………………………
 						: ($e.columnName=$ƒ.titles.name)
 							
-							$ƒ.doTagMenu($e; New collection:C1472("name"))  // Propose the tags to be inserted
+							$ƒ.doTagMenu($e; New collection:C1472("length"))
 							
 							//……………………………………………………………………
 					End case 

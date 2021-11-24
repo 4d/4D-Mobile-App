@@ -106,7 +106,8 @@ If (Length:C16($cible)>0)
 										
 										// Keep the droped relation & add/update the format
 										$relation:=$table[$cDroped[0]]
-										$relation.format:="%"+$cCurrent[1]+"%"
+										$relation.label:="%"+$cCurrent[1]+"%"
+										$relation.shortLabel:="%"+$cCurrent[1]+"%"
 										
 									End if 
 								End if 
@@ -153,7 +154,8 @@ If (Length:C16($cible)>0)
 												"shortLabel"; $current.shortLabel; \
 												"path"; $cDroped[0])
 											
-											$relation.format:="%"+$cDroped[1]+"%"
+											$relation.label:="%"+$cDroped[1]+"%"
+											$relation.shortLabel:="%"+$cDroped[1]+"%"
 											
 										End if 
 									End if 

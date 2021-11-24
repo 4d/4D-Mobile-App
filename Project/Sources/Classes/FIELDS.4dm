@@ -1098,6 +1098,8 @@ Function doTagMenu($e : Object; $values : Collection)
 	
 	If ($menu.selected)
 		
+		FILTER KEYSTROKE:C389("")
+		
 		$t:=Get edited text:C655
 		GET HIGHLIGHT:C209(*; $e.columnName; $start; $end)
 		
@@ -1109,14 +1111,12 @@ Function doTagMenu($e : Object; $values : Collection)
 			// and select the added chain.
 			$t:=Substring:C12($t; 1; $start-1)+$menu.choice+Substring:C12($t; $end)
 			$end:=$end+Length:C16($menu.choice)
-			HIGHLIGHT TEXT:C210(*; $e.columnName; $start; $end)
 			
 		Else 
 			
 			$t:=Substring:C12($t; 1; $start-1)+$menu.choice+Substring:C12($t; $end)
 			$end:=$start+Length:C16($menu.choice)
-			
-			HIGHLIGHT TEXT:C210(*; $e.columnName; $end; $end)
+			$start:=$end
 			
 		End if 
 		
@@ -1126,6 +1126,16 @@ Function doTagMenu($e : Object; $values : Collection)
 		$ptr->{$ptr->}:=$t
 		//%W+533.3
 		
-		This:C1470.field($e.row)[$e.columnName]:=$t
+		If ($e.columnName="titles")
+			
+			This:C1470.field($e.row)["format"]:=$t
+			
+		Else 
+			
+			This:C1470.field($e.row)[$e.columnName]:=$t
+			
+		End if 
+		
+		HIGHLIGHT TEXT:C210(*; $e.columnName; $start; $end)
 		
 	End if 

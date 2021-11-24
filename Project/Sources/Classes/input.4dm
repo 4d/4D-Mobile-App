@@ -163,3 +163,31 @@ Function setFilter($filter; $separator : Text)->$this : cs:C1710.input
 Function getFilter()->$filter : Text
 	
 	$filter:=OBJECT Get filter:C1073(*; This:C1470.name)
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function get password()->$isPassword : Boolean
+	
+	$isPassword:=(OBJECT Get font:C1069(*; This:C1470.name)="%password")
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function set password($isPassword : Boolean)
+	
+	$isPassword:=Choose:C955($isPassword=Null:C1517; True:C214; $isPassword)
+	
+	If ($isPassword)
+		
+		If (This:C1470.font=Null:C1517)
+			
+			// Retain the original font
+			This:C1470.font:=OBJECT Get font:C1069(*; This:C1470.name)
+			
+		End if 
+		
+		This:C1470.setFont("%password")
+		
+	Else 
+		
+		This:C1470.setFont(This:C1470.font)
+		
+	End if 
+	

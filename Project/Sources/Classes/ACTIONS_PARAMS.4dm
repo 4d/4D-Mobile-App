@@ -1921,8 +1921,8 @@ Function doName($e : Object)
 			
 			$charCode:=Character code:C91(Keystroke:C390)
 			$editedText:=Replace string:C233(Get edited text:C655; Char:C90(At sign:K15:46); "")
-			$editedText:=Replace string:C233($editedText; Char:C90(Return key:K12:27); "")
-			$indx:=New collection:C1472(Return key:K12:27; Escape:K15:39; Up arrow key:K12:18; Down arrow key:K12:19; Right arrow key:K12:17; Left arrow key:K12:16).indexOf($charCode)
+			$editedText:=Replace string:C233($editedText; Char:C90(ReturnKey:K12:27); "")
+			$indx:=New collection:C1472(ReturnKey:K12:27; Escape:K15:39; Up arrow key:K12:18; Down arrow key:K12:19; Right arrow key:K12:17; Left arrow key:K12:16).indexOf($charCode)
 			
 			If ($indx>=0)
 				

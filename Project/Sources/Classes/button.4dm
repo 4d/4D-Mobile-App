@@ -9,8 +9,15 @@ Class constructor($name : Text; $datasource)
 		
 	Else 
 		
-		Super:C1705($name)
-		
+		If (Count parameters:C259>=1)
+			
+			Super:C1705($name)
+			
+		Else 
+			
+			Super:C1705()
+			
+		End if 
 	End if 
 	
 /*═════════════════════════════════════════════════

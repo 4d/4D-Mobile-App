@@ -6,7 +6,15 @@ Class constructor
 	var $1 : Text
 	var $2 : Variant
 	
-	Super:C1705($1)
+	If (Count parameters:C259>=1)
+		
+		Super:C1705($1)
+		
+	Else 
+		
+		Super:C1705()
+		
+	End if 
 	
 	This:C1470.success:=False:C215
 	This:C1470.errors:=New collection:C1472

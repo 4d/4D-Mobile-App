@@ -8,7 +8,7 @@ FILTER KEYSTROKE:C389("")
 Case of 
 		
 		//______________________________________________________
-	: ($keystroke=Return key:K12:27)
+	: ($keystroke=ReturnKey:K12:27)
 		
 		Form:C1466.choice:=Form:C1466.current
 		
