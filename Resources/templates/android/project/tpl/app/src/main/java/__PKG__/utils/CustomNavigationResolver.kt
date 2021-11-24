@@ -68,7 +68,7 @@ class CustomNavigationResolver : GenericNavigationResolver {
         {{#has_any_relations_one_to_many_for_list}}
         when {
             {{#relations_one_to_many_for_list}}
-            viewDataBinding is RecyclerviewItem{{relation_source}}Binding && relationName == "{{relation_name}}" -> {
+            viewDataBinding is RecyclerviewItem{{relation_source_camelCase}}Binding && relationName == "{{relation_name_original}}" -> {
                 {{#isSubRelation}}
                 (entity as? {{relation_source}})?.__{{inverse_name}}Key?.let { destParentId ->
                     val action = EntityListFragmentDirections.actionListToListRelation(
@@ -110,7 +110,7 @@ class CustomNavigationResolver : GenericNavigationResolver {
         {{#has_any_relations_many_to_one_for_list}}
         when {
             {{#relations_many_to_one_for_list}}
-            viewDataBinding is RecyclerviewItem{{relation_source}}Binding && relationName == "{{relation_name}}" -> {
+            viewDataBinding is RecyclerviewItem{{relation_source_camelCase}}Binding && relationName == "{{relation_name_original}}" -> {
                 (entity as? {{relation_source}})?.__{{relation_name}}Key?.let { relationId ->
                     val action = EntityListFragmentDirections.actionListToDetailRelation(
                         tableName = "{{relation_target}}",
@@ -140,7 +140,7 @@ class CustomNavigationResolver : GenericNavigationResolver {
         {{#has_any_relations_one_to_many_for_detail}}
         when {
             {{#relations_one_to_many_for_detail}}
-            viewDataBinding is FragmentDetail{{relation_source}}Binding && relationName == "{{relation_name}}" -> {
+            viewDataBinding is FragmentDetail{{relation_source_camelCase}}Binding && relationName == "{{relation_name_original}}" -> {
                 {{#isSubRelation}}
                 (entity as? {{relation_source}})?.__{{inverse_name}}Key?.let { destParentId ->
                     val action = EntityViewPagerFragmentDirections.actionDetailToListRelation(
@@ -182,7 +182,7 @@ class CustomNavigationResolver : GenericNavigationResolver {
         {{#has_any_relations_many_to_one_for_detail}}
         when {
             {{#relations_many_to_one_for_detail}}
-            viewDataBinding is FragmentDetail{{relation_source}}Binding && relationName == "{{relation_name}}" -> {
+            viewDataBinding is FragmentDetail{{relation_source_camelCase}}Binding && relationName == "{{relation_name_original}}" -> {
                 (entity as? {{relation_source}})?.__{{relation_name}}Key?.let { relationId ->
                     val action = EntityViewPagerFragmentDirections.actionDetailToDetailRelation(
                         tableName = "{{relation_target}}",
