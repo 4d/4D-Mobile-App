@@ -57,9 +57,10 @@ Case of
 				
 			End if 
 			
-			If (FEATURE.with("cancelableGeneration"))
+			If (FEATURE.with("cancelableDatasetGeneration"))
 				
 				EDITOR.doGenerate($File_key)
+				SET TIMER:C645(-1)
 				
 			Else 
 				
@@ -77,7 +78,11 @@ Case of
 				
 			End if 
 			
+			
 		Else   // A generation is already in works
+			
+			SET TIMER:C645(-1)
+			
 		End if 
 		
 		//==================================================

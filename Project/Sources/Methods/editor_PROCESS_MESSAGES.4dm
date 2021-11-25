@@ -17,13 +17,84 @@ var $o : Object
 Case of 
 		
 		//______________________________________________________
-	: ($message="dataSetInWorks")
+	: ($message="dump")
 		
-		If (EDITOR.message.isVisible())
-			
-			ASSERT:C1129(False:C215)
-			
-		End if 
+		$o:=EDITOR.message.getValue()
+		
+		Case of 
+				
+				//______________________________________________________
+			: ($data.step="table")
+				
+				If (EDITOR.message.isVisible())
+					
+					If ($data.page#Null:C1517)
+						
+						$o.additional:=EDITOR.str.setText("dataRequest").localized($data.table.name)+" ("+String:C10($data.page)+")"
+						$o.additional:=$o.additional+"\r"+EDITOR.str.setText("dataConsiderToSetAFilter")
+						
+					Else 
+						
+						$o.additional:=EDITOR.str.setText("dataRequest").localized($data.table.name)
+						
+					End if 
+					
+					EDITOR.message.setValue($o)
+					
+				End if 
+				
+				//______________________________________________________
+			: ($data.step="asset")
+				
+				If (EDITOR.message.isVisible())
+					
+					If ($data.page#Null:C1517)
+						
+						$o.additional:=EDITOR.str.setText("dataCoreDataInjection").localized($data.table.name)+" ("+String:C10($data.page)+")"
+						$o.additional:=$o.additional+"\r"+EDITOR.str.setText("dataConsiderToSetAFilter").localized(String:C10(SHARED.data.dump.limit))
+						
+					Else 
+						
+						$o.additional:=EDITOR.str.setText("dataCoreDataInjection").localized($data.table.name)
+						
+					End if 
+					
+					EDITOR.message.setValue($o)
+					
+				End if 
+				
+				//______________________________________________________
+			: ($data.step="stop")
+				
+				If (EDITOR.message.isVisible())
+					
+					$o.additional:="cancelledOperation"
+					EDITOR.message.setValue($o)
+					
+				End if 
+				
+				//______________________________________________________
+			: ($data.step="end")
+				
+				If (Storage:C1525.flags#Null:C1517)
+					
+					Use (Storage:C1525.flags)
+						
+						OB REMOVE:C1226(Storage:C1525.flags; "stopGeneration")
+						
+					End use 
+				End if 
+				
+				DO_MESSAGE(New object:C1471(\
+					"action"; "close"))
+				
+				//______________________________________________________
+			Else 
+				
+				ASSERT:C1129(DATABASE.isMatrix)
+				
+				//______________________________________________________
+		End case 
 		
 		//______________________________________________________
 	: ($message="footer")
@@ -249,7 +320,7 @@ Case of
 						
 						$file:=EDITOR.path.userCache().file($project._name+".android.fingerprint")
 						
-						//#MARK_TODO
+						//mark: TO DO - Android fingerprint
 						
 					End if 
 					

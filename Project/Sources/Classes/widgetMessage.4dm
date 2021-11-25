@@ -488,30 +488,38 @@ Function doHelp()
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function doStop()
 	
-	Form:C1466.accept:=False:C215
+	CONFIRM:C162(Get localized string:C991("areYouSure"); Get localized string:C991("stop"))
 	
-	Case of 
-			
-			//______________________________________________________
-		: (Form:C1466.signal#Null:C1517)
-			
-			Form:C1466.signal.trigger()
-			
-			If (Form:C1466.signal.description#Null:C1517)
+	If (Bool:C1537(OK))
+		
+		Form:C1466.accept:=False:C215
+		
+		Case of 
 				
-				If (Form:C1466.CALLBACK#Null:C1517)
+				//______________________________________________________
+			: (Form:C1466.signal#Null:C1517)
+				
+				Form:C1466.signal.trigger()
+				
+				If (Form:C1466.signal.description#Null:C1517)
 					
-					Form:C1466.CALLBACK.call(Null:C1517; Form:C1466)
-					
+					If (Form:C1466.CALLBACK#Null:C1517)
+						
+						Form:C1466.CALLBACK.call(Null:C1517; Form:C1466)
+						
+					End if 
 				End if 
-			End if 
-			
-			//______________________________________________________
-		: (Form:C1466.cancelFormula#Null:C1517)
-			
-			Form:C1466.stopFormula.call()
-			
-			//______________________________________________________
-	End case 
-	
-	CALL SUBFORM CONTAINER:C1086(-2)
+				
+				//______________________________________________________
+			: (Form:C1466.stopFormula#Null:C1517)
+				
+				Form:C1466.stopFormula.call()
+				
+			Else 
+				
+				CALL SUBFORM CONTAINER:C1086(-2)  //close
+				
+				//______________________________________________________
+		End case 
+		
+	End if 

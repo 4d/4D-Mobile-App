@@ -125,7 +125,7 @@
 				"thermometer": {
 					"type": "progress",
 					"left": 86,
-					"top": 98,
+					"top": 112,
 					"width": 234,
 					"height": 28,
 					"max": 100,
@@ -154,7 +154,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 307,
+	"geometryStamp": 321,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

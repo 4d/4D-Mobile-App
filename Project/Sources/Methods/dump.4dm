@@ -8,742 +8,843 @@
 // dump rest info
 // ----------------------------------------------------
 // Declarations
-C_OBJECT:C1216($0)
-C_OBJECT:C1216($1)
-
-C_LONGINT:C283($Lon_i; $Lon_parameters)
-C_TEXT:C284($File_name; $File_output; $Txt_buffer; $Txt_handler; $Txt_id; $Txt_onError)
-C_TEXT:C284($Txt_tableNumber; $Txt_url; $Txt_version)
-C_OBJECT:C1216($o; $Obj_buffer; $Obj_dataModel; $Obj_field; $Obj_in; $Obj_out)
-C_OBJECT:C1216($Obj_query; $Obj_record; $Obj_rest; $Obj_result; $Obj_table)
-C_COLLECTION:C1488($Col_pictureFields)
+#DECLARE($in : Object)->$out : Object
 
 If (False:C215)
-	C_OBJECT:C1216(dump; $0)
 	C_OBJECT:C1216(dump; $1)
+	C_OBJECT:C1216(dump; $0)
 End if 
+
+var $File_name; $outputPathname; $format; $tableID; $Txt_buffer; $Txt_handler : Text
+var $Txt_id; $Txt_url; $Txt_version : Text
+var $imageFound : Boolean
+var $i; $posBegin; $posEnd : Integer
+var $dataModel; $delay; $meta; $Obj_buffer; $Obj_field; $Obj_record : Object
+var $query; $rest; $result; $table : Object
+var $Col_pictureFields : Collection
+var $destinationFile; $file : 4D:C1709.File
+var $ouputFolder : 4D:C1709.Folder
+var $error : cs:C1710.error
 
 // ----------------------------------------------------
 // Initialisations
-$Lon_parameters:=Count parameters:C259
+ASSERT:C1129($in#Null:C1517)
 
-If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
-	
-	// Required parameters
-	$Obj_in:=$1
-	
-	// Optional parameters
-	If ($Lon_parameters>=2)
-		
-		// <NONE>
-		
-	End if 
-	
-	$Obj_out:=New object:C1471(\
-		"success"; False:C215)
-	
-Else 
-	
-	ABORT:C156
-	
-End if 
+$out:=New object:C1471(\
+"success"; False:C215)
 
 // Check output
-If (Length:C16(String:C10($Obj_in.output))=0)
+If (Length:C16(String:C10($in.output))=0)
 	
-	$Obj_in.output:=Temporary folder:C486
+	$in.output:=Temporary folder:C486
 	
 Else 
 	
-	$Obj_in.output:=doc_checkFolderSeparator($Obj_in.output)
+	Folder:C1567($in.output; fk platform path:K87:2).create()
 	
-	If (Test path name:C476($Obj_in.output)#Is a folder:K24:2)
-		
-		CREATE FOLDER:C475($Obj_in.output; *)
-		
-	End if 
 End if 
 
 // dataModel
-$Obj_dataModel:=$Obj_in.dataModel
+$dataModel:=$in.dataModel
 
-If ($Obj_dataModel=Null:C1517)
+If ($dataModel=Null:C1517)
 	
-	$Obj_dataModel:=$Obj_in.project.dataModel
+	$dataModel:=$in.project.dataModel
 	
 End if 
 
 // ----------------------------------------------------
-If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
-	
-	Case of 
+Case of 
+		
+		//______________________________________________________
+	: ($in.action=Null:C1517)
+		
+		$out.errors:=New collection:C1472("Missing tag \"action\"")
+		
+		//______________________________________________________
+	: ($in.dataModel=Null:C1517)
+		
+		$out.errors:=New collection:C1472("`dataModel` must be specified when dumping")
+		
+		//______________________________________________________
+	: ($in.action="catalog")
+		
+		$out.success:=True:C214
+		
+		$result:=New object:C1471
+		
+		// For each table
+		For each ($tableID; $dataModel)
 			
-			//______________________________________________________
-		: ($Obj_in.dataModel=Null:C1517)
+			$table:=$dataModel[$tableID]
+			$meta:=$table[""]
 			
-			$Obj_out.errors:=New collection:C1472("`dataModel` must be specified when dumping")
-			$Obj_out.success:=False:C215
+			$rest:=Rest(New object:C1471(\
+				"action"; "table"; \
+				"url"; $in.url; \
+				"headers"; $in.headers; \
+				"table"; $meta.name))
 			
-			//______________________________________________________
-		: ($Obj_in.action="catalog")
-			
-			$Obj_out.success:=True:C214
-			
-			$Obj_result:=New object:C1471
-			
-			// For each table
-			For each ($Txt_tableNumber; $Obj_dataModel)
+			If (Value type:C1509($rest.headers)=Is object:K8:27)
 				
-				$Obj_table:=$Obj_dataModel[$Txt_tableNumber]
-				
-				$o:=$Obj_table[""]
-				
-				$Obj_rest:=Rest(New object:C1471(\
-					"action"; "table"; \
-					"url"; $Obj_in.url; \
-					"headers"; $Obj_in.headers; \
-					"table"; $o.name))
-				
-				If (Value type:C1509($Obj_rest.headers)=Is object:K8:27)
+				If ($in.headers["Cookie"]=Null:C1517)
 					
-					If ($Obj_in.headers["Cookie"]=Null:C1517)
-						
-						$Obj_in.headers["Cookie"]:=$Obj_rest.headers["Set-Cookie"]
-						
-					End if 
+					$in.headers["Cookie"]:=$rest.headers["Set-Cookie"]
+					
 				End if 
+			End if 
+			
+			If ($rest.success)
 				
-				If ($Obj_rest.success)
+				$outputPathname:=$in.output+$meta.name
+				
+				If (Bool:C1537($in.dataSet))
 					
-					$File_output:=$Obj_in.output+$o.name
-					
-					If (Bool:C1537($Obj_in.dataSet))
-						
-						$File_output:=$File_output+".catalog.dataset"+Folder separator:K24:12+$o.name
-						
-					End if 
-					
-					$File_output:=$File_output+".catalog.json"
-					
-					// Make sure the folder exist
-					CREATE FOLDER:C475($File_output; *)
-					
-					If (Bool:C1537($Obj_in.dataSet))
-						
-						asset(New object:C1471("action"; "create"; \
-							"type"; "dataset"; \
-							"target"; $Obj_in.output; \
-							"tags"; New object:C1471(\
-							"name"; $o.name+".catalog"; \
-							"fileName"; $o.name+".catalog.json"; \
-							"uti"; "public.json")))
-						
-					End if 
-					
-					$Txt_onError:=Method called on error:C704
-					ob_Lon_Error:=0
-					ON ERR CALL:C155("ob_noError")  // CLEAN use another handler?
-					
-					TEXT TO DOCUMENT:C1237($File_output; JSON Stringify:C1217($Obj_rest.response; *))
-					
-					ON ERR CALL:C155($Txt_onError)
-					
-					If (ob_Lon_Error#0)
-						
-						$Obj_rest.success:=False:C215
-						$Obj_rest.errorCode:=ob_Lon_Error
-						$Obj_out.success:=False:C215
-						
-					End if 
-					
-				Else 
-					
-					$Obj_out.success:=False:C215  // Global success is false
+					$outputPathname:=$outputPathname+".catalog.dataset"+Folder separator:K24:12+$meta.name
 					
 				End if 
 				
-				$Obj_result[$o.name]:=$Obj_rest
+				$outputPathname:=$outputPathname+".catalog.json"
 				
-				ob_error_combine($Obj_out; $Obj_rest)
+				// Make sure the folder exist
+				CREATE FOLDER:C475($outputPathname; *)
 				
-			End for each 
-			
-			$Obj_out.results:=$Obj_result
-			
-			//______________________________________________________
-		: ($Obj_in.action="data")
-			
-			$Obj_out.success:=True:C214
-			
-			$Obj_result:=New object:C1471
-			
-			// for each table in model
-			For each ($Txt_tableNumber; $Obj_dataModel)
-				
-				$Obj_table:=$Obj_dataModel[$Txt_tableNumber]
-				
-				If (FEATURE.with("cancelableGeneration"))
+				If (Bool:C1537($in.dataSet))
 					
-					If ($Obj_in.caller#Null:C1517)
-						
-						CALL FORM:C1391($Obj_in.caller; "editor_CALLBACK"; "dataSetInWorks"; $Obj_table)
-						
-					End if 
+					asset(New object:C1471("action"; "create"; \
+						"type"; "dataset"; \
+						"target"; $in.output; \
+						"tags"; New object:C1471(\
+						"name"; $meta.name+".catalog"; \
+						"fileName"; $meta.name+".catalog.json"; \
+						"uti"; "public.json")))
+					
 				End if 
+				
+/* START HIDING ERRORS */
+				$error:=cs:C1710.error.new()
+				$error.capture()
+				
+				TEXT TO DOCUMENT:C1237($outputPathname; JSON Stringify:C1217($rest.response; *))
+				
+/* STOP HIDING ERRORS */
+				$error.show()
+				
+				If ($error.withError())
+					
+					$rest.success:=False:C215
+					$rest.errorCode:=$error.lastError().error
+					$out.success:=False:C215
+					
+				End if 
+				
+			Else 
+				
+				$out.success:=False:C215  // Global success is false
+				
+			End if 
+			
+			$result[$meta.name]:=$rest
+			
+			ob_error_combine($out; $rest)
+			
+		End for each 
+		
+		$out.results:=$result
+		
+		//______________________________________________________
+	: ($in.action="data")
+		
+		If (FEATURE.with("cancelableDatasetGeneration"))
+			
+			$delay:=New object:C1471(\
+				"minimumDisplayTime"; 3*60; \
+				"start"; Tickcount:C458)
+			
+		End if 
+		
+		$result:=New object:C1471
+		
+		$out.success:=True:C214
+		
+		// for each table in model
+		For each ($tableID; $dataModel) While ($out.success)
+			
+			If (Not:C34(Bool:C1537(Storage:C1525.flags.stopGeneration)))
+				
+				$table:=$dataModel[$tableID]
+				$meta:=$table[""]
 				
 				// Create the query string for rest
-				$Obj_query:=New object:C1471(\
+				$query:=New object:C1471(\
 					"$limit"; String:C10(SHARED.data.dump.limit))
 				
-				$o:=$Obj_table[""]
-				
 				// Manage  Restricted queries and embedded option
-				If (Not:C34(Bool:C1537($o.embedded)))
+				If (Not:C34(Bool:C1537($meta.embedded)))
 					
-					// we do not want to dump
-					$Obj_query:=Null:C1517
+					// We do not want to dump
+					$query:=Null:C1517
 					
 				Else 
 					
-					If ($o.filter#Null:C1517)  // Is filter is available?
+					If ($meta.filter#Null:C1517)  // Is filter available?
 						
-						If (Bool:C1537($o.filter.validated))  // Is filter is validated?
+						If (Bool:C1537($meta.filter.validated))  // Is filter validated?
 							
-							If (Not:C34(Bool:C1537($o.filter.parameters)))  // There is user parameters?
+							If (Not:C34(Bool:C1537($meta.filter.parameters)))  // There is user parameters?
 								
-								$Obj_query["$filter"]:=String:C10($o.filter.string)
-								$Obj_query["$queryplan"]:="true"
+								$query["$filter"]:=String:C10($meta.filter.string)
+								$query["$queryplan"]:="true"
 								
 								If (SHARED.globalFilter#Null:C1517)
-									$Obj_query["$filter"]:="("+$Obj_query["$filter"]+") AND "+String:C10(SHARED.globalFilter)
+									
+									$query["$filter"]:="("+$query["$filter"]+") AND "+String:C10(SHARED.globalFilter)
+									
 								End if 
 								
 							Else 
 								
-								$Obj_query:=Null:C1517  // do not filter and dump
+								$query:=Null:C1517  // Do not filter and dump
 								
-								// note: core data building already warn if not valided
+								// Note: core data building already warn if not valided
 								
 							End if 
 						End if 
+						
 					Else 
+						
 						If (SHARED.globalFilter#Null:C1517)
-							$Obj_query["$filter"]:=String:C10(SHARED.globalFilter)
-							$Obj_query["$queryplan"]:="true"
+							
+							$query["$filter"]:=String:C10(SHARED.globalFilter)
+							$query["$queryplan"]:="true"
+							
 						End if 
 					End if 
 				End if 
 				
-				// If query defined, we must dump the table
-				If ($Obj_query#Null:C1517)
+				If ($query#Null:C1517)  // If query defined, we must dump the table
 					
-					// get field list name
+					If (FEATURE.with("cancelableDatasetGeneration"))\
+						 & ($in.caller#Null:C1517)
+						
+						// Display the table being processed
+						CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
+							"step"; "table"; \
+							"table"; $meta))
+						
+					End if 
+					
+					// Get field list name
 					$Obj_buffer:=dataModel(New object:C1471(\
 						"action"; "fieldNames"; \
-						"table"; $Obj_table))
+						"table"; $table))
 					
-					If (Bool:C1537($Obj_in.expand))  // if we want to use old way to do it, not optimized $expand
+					If (Bool:C1537($in.expand))  // If we want to use old way to do it, not optimized $expand
+						
 						If ($Obj_buffer.expand.length>0)
 							
-							$Obj_query["$expand"]:=$Obj_buffer.expand.join(",")
+							$query["$expand"]:=$Obj_buffer.expand.join(",")
 							
 						End if 
 					End if 
 					
 					// For each page (if page allowed)
-					For ($Lon_i; 1; SHARED.data.dump.page; 1)
+					For ($i; 1; SHARED.data.dump.page; 1)
 						
-						If ($Lon_i>1)
+						If ($i>1)
 							
-							$Obj_query["$skip"]:=String:C10(SHARED.data.dump.limit*($Lon_i-1))
+							If (FEATURE.with("cancelableDatasetGeneration"))\
+								 & ($i>2)\
+								 & ($in.caller#Null:C1517)
+								
+								// Notify user
+								CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
+									"step"; "table"; \
+									"table"; $meta; \
+									"page"; $i))
+								
+							End if 
+							
+							$query["$skip"]:=String:C10(SHARED.data.dump.limit*($i-1))
 							
 						End if 
 						
 						// Do the rest request
-						$Obj_rest:=Rest(New object:C1471(\
+						$rest:=Rest(New object:C1471(\
 							"action"; "records"; \
 							"reponseType"; Is text:K8:3; \
-							"url"; $Obj_in.url; \
-							"headers"; $Obj_in.headers; \
-							"table"; $o.name; \
+							"url"; $in.url; \
+							"headers"; $in.headers; \
+							"table"; $meta.name; \
 							"fields"; $Obj_buffer.fields; \
 							"queryEncode"; True:C214; \
-							"query"; $Obj_query))
+							"query"; $query))
 						
 						// Getting global stamp (maybe no more necessary , except for debug, all is done by swift code)
 						Case of 
-							: (Value type:C1509($Obj_rest.response)=Is object:K8:27)
 								
-								$Obj_rest.globalStamp:=$Obj_rest.response.__GlobalStamp
+								//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+							: (Value type:C1509($rest.response)=Is object:K8:27)
 								
-								If (Num:C11($Obj_rest.response.__SENT)<=0)
-									$Lon_i:=MAXLONG:K35:2-1  // BREAK
-									$Obj_rest.success:=False:C215
+								$rest.globalStamp:=$rest.response.__GlobalStamp
+								
+								If (Num:C11($rest.response.__SENT)<=0)
+									
+									$i:=MAXLONG:K35:2-1  // BREAK
+									$rest.success:=False:C215
+									
 								End if 
 								
-							: (Value type:C1509($Obj_rest.response)=Is text:K8:3)
-								var $posBegin; $posEnd : Integer
-								$posBegin:=Position:C15("__GlobalStamp"; $Obj_rest.response)
+								//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+							: (Value type:C1509($rest.response)=Is text:K8:3)
+								
+								$posBegin:=Position:C15("__GlobalStamp"; $rest.response)
+								
 								If ($posBegin>0)
-									$posEnd:=Position:C15("\""; $Obj_rest.response; $posBegin+15)
-									$Obj_rest.globalStamp:=Num:C11(Substring:C12($Obj_rest.response; $posBegin+15; $posEnd-($posBegin+15)-1))
+									
+									$posEnd:=Position:C15("\""; $rest.response; $posBegin+15)
+									$rest.globalStamp:=Num:C11(Substring:C12($rest.response; $posBegin+15; $posEnd-($posBegin+15)-1))
+									
 								End if 
 								
-								$posBegin:=Position:C15("__SENT"; $Obj_rest.response)
+								$posBegin:=Position:C15("__SENT"; $rest.response)
+								
 								If ($posBegin>0)
-									$posEnd:=Position:C15(","; $Obj_rest.response; $posBegin+7)
+									
+									$posEnd:=Position:C15(","; $rest.response; $posBegin+7)
+									
 									If ($posEnd<1)
-										$posEnd:=Position:C15("}"; $Obj_rest.response; $posBegin+7)
+										
+										$posEnd:=Position:C15("}"; $rest.response; $posBegin+7)
+										
 									End if 
-									If (Num:C11(Substring:C12($Obj_rest.response; $posBegin+8; $posEnd-($posBegin+7)-1))<=0)
-										$Lon_i:=MAXLONG:K35:2-1  // BREAK
-										$Obj_rest.success:=True:C214
+									
+									If (Num:C11(Substring:C12($rest.response; $posBegin+8; $posEnd-($posBegin+7)-1))<=0)
+										
+										$i:=MAXLONG:K35:2-1  // BREAK
+										$rest.success:=True:C214
+										
 									End if 
 								End if 
 								
 								// XXX if blob, decode some first byte to string? (or keep text)
+								
+								//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 							Else 
 								
-								ASSERT:C1129(dev_Matrix; "Cannot decode global stamp with data type "+String:C10(Value type:C1509($Obj_rest.response)))
+								ASSERT:C1129(dev_Matrix; "Cannot decode global stamp with data type "+String:C10(Value type:C1509($rest.response)))
 								
+								//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 						End case 
 						
-						$Obj_result[$o.name]:=$Obj_rest
+						$result[$meta.name]:=$rest
 						
-						ob_error_combine($Obj_out; $Obj_rest)
+						ob_error_combine($out; $rest)
 						
 						Case of 
-							: ($Lon_i=(MAXLONG:K35:2-1))  // TODO even if empty create data? or $Lon_i=1 before?
-								// ignore
-							: ($Obj_rest.success)
 								
-								$File_output:=$Obj_in.output+$o.name
+								//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+							: ($i=(MAXLONG:K35:2-1))  // TODO even if empty create data? or $i=1 before?
 								
-								If (Bool:C1537($Obj_in.dataSet))
+								// Ignore
+								
+								//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+							: ($rest.success)
+								
+								$outputPathname:=$in.output+$meta.name
+								
+								If (Bool:C1537($in.dataSet))
 									
-									$File_output:=$File_output+".dataset"+Folder separator:K24:12+$o.name
+									$outputPathname:=$outputPathname+".dataset"+Folder separator:K24:12+$meta.name
 									
 								End if 
 								
-								If ($Lon_i#1)
+								If ($i#1)
 									
-									$File_output:=$File_output+"."+String:C10($Lon_i-1)
+									$outputPathname:=$outputPathname+"."+String:C10($i-1)
 									
 								End if 
 								
-								$File_output:=$File_output+".data.json"
+								$outputPathname:=$outputPathname+".data.json"
 								
 								// Make sure the folder exist
-								CREATE FOLDER:C475($File_output; *)
+								CREATE FOLDER:C475($outputPathname; *)
 								
-								If (Bool:C1537($Obj_in.dataSet))
+								If (Not:C34(Bool:C1537(Storage:C1525.flags.stopGeneration)))
 									
-									asset(New object:C1471("action"; "create"; "type"; "dataset"; \
-										"target"; $Obj_in.output; \
-										"tags"; New object:C1471(\
-										"name"; $o.name; \
-										"fileName"; $o.name+".data.json"; \
-										"uti"; "public.json")))
-									
-								End if 
-								
-								Case of 
-									: (Value type:C1509($Obj_rest.response)=Is BLOB:K8:12)
-										File:C1566($File_output; fk platform path:K87:2).setContent($Obj_rest.response)
-										$Obj_rest.write:=New object:C1471("success"; True:C214)
-									: (Value type:C1509($Obj_rest.response)=Is text:K8:3)
-										File:C1566($File_output; fk platform path:K87:2).setText($Obj_rest.response)
-										$Obj_rest.write:=New object:C1471("success"; True:C214)
-									: (Value type:C1509($Obj_rest.response)=Is object:K8:27)
-										$Obj_rest.write:=ob_writeToDocument($Obj_rest.response; $File_output; True:C214)
-									Else 
-										$Obj_rest.write:=New object:C1471("success"; False:C215; "errors"; New collection:C1472("No dumped data of correct type"+String:C10(Value type:C1509($Obj_rest.response))))
-								End case 
-								ob_error_combine($Obj_out; $Obj_rest.write)
-								If (Not:C34($Obj_rest.write.success))
-									
-									$Obj_rest.success:=False:C215
-									$Obj_out.success:=False:C215
-									
-								End if 
-								
-							Else 
-								
-								$Obj_out.success:=False:C215  // global success is false
-								
-						End case 
-					End for 
-				End if 
-				
-				// Else table skipped
-				
-			End for each   // end table
-			
-			$Obj_out.results:=$Obj_result
-			
-			If (FEATURE.with("cancelableGeneration"))
-				
-				
-				
-			End if 
-			
-			//______________________________________________________
-		: ($Obj_in.action="pictures")
-			
-			If ($Obj_in.format=Null:C1517)
-				
-				$Obj_in.format:="best"
-				
-			End if 
-			
-			$Obj_out.success:=True:C214
-			
-			$Obj_out.results:=New object:C1471()
-			
-			// For each table
-			For each ($Txt_tableNumber; $Obj_dataModel)
-				
-				$Obj_table:=$Obj_dataModel[$Txt_tableNumber]
-				
-				$o:=$Obj_table[""]
-				
-				$Obj_buffer:=dataModel(New object:C1471(\
-					"action"; "pictureFields"; \
-					"table"; $Obj_table))
-				
-				// Check if there is image (XXX use some extract/filter function)
-				$Col_pictureFields:=$Obj_buffer.fields
-				
-				If ($Col_pictureFields=Null:C1517)
-					
-					$Col_pictureFields:=New collection:C1472()  // just to not failed, CLEAN check status instead
-					
-				End if 
-				
-				If ($Col_pictureFields.length>0)
-					
-					If (Bool:C1537($Obj_in.rest)\
-						 | (Length:C16(String:C10($Obj_in.url))>0))
-						
-						// ----------------------------------
-						// Get Image from REST server, default local one
-						// ----------------------------------
-						
-						// If cached rest result use it
-						$Txt_buffer:=String:C10($Obj_in.cache)+Folder separator:K24:12+$o.name
-						
-						If (Bool:C1537($Obj_in.dataSet))
-							
-							$Txt_buffer:=$Txt_buffer+".dataset"+Folder separator:K24:12+$o.name
-							
-						End if 
-						
-						$Txt_buffer:=$Txt_buffer+".data.json"
-						
-						If (Test path name:C476($Txt_buffer)=Is a document:K24:1)
-							
-							$Obj_rest:=ob_parseDocument($Txt_buffer)
-							$Obj_rest.response:=$Obj_rest.value
-							
-						Else 
-							
-							// No more supported, data file must be passed
-							$Obj_rest:=New object:C1471(\
-								"success"; False:C215)
-							
-						End if 
-						
-						// we have succeed to have rest result
-						If ($Obj_rest.success)
-							
-							// Rest server URL ? (to replace in image url
-							$Obj_in.action:="url"
-							$Obj_result:=Rest($Obj_in)
-							
-							$Obj_result.contentSize:=0
-							$Obj_result.count:=0
-							If (Bool:C1537($Obj_in.debug))
-								$Obj_out.files:=New collection:C1472()
-							End if 
-							
-							//$Txt_handler:=Choose(Bool(featuresFlags._102457);"mobileapp/";"rest/")
-							$Txt_handler:="mobileapp/"
-							
-							If (Position:C15($Txt_handler; $Obj_result.url)=0)
-								
-								$Obj_result.url:=$Obj_result.url+$Txt_handler
-								ASSERT:C1129(False:C215; "URL must contains "+$Txt_handler)
-								
-							End if 
-							
-							If (Value type:C1509($Obj_rest.response.__ENTITIES)=Is collection:K8:32)
-								
-								// For each records
-								For each ($Obj_record; $Obj_rest.response.__ENTITIES)
-									
-									// ... look for images
-									For each ($Obj_field; $Col_pictureFields)
+									If (Bool:C1537($in.dataSet))
 										
-										$Obj_buffer:=Null:C1517
-										$Txt_id:=$Obj_record.__KEY
-										
-										Case of 
-												
-												//----------------------------------------
-											: ($Obj_field.relatedField#Null:C1517)
-												
-												$Obj_buffer:=$Obj_record[$Obj_field.relatedField]
-												
-												If ($Obj_buffer#Null:C1517)
-													
-													If ($Obj_field.relatedDataClass#Null:C1517)
-														
-														$Txt_id:=$Obj_buffer.__KEY
-														
-													End if 
-													
-													$Obj_buffer:=$Obj_buffer[$Obj_field.name]
-													
-												End if 
-												
-												//----------------------------------------
-											: ($Obj_record[$Obj_field.name]#Null:C1517)
-												
-												$Obj_buffer:=$Obj_record[$Obj_field.name]
-												
-												//----------------------------------------
-										End case 
-										
-										If ($Obj_buffer#Null:C1517)
+										If (FEATURE.with("cancelableDatasetGeneration"))\
+											 & ($in.caller#Null:C1517)
 											
-											If (Bool:C1537($Obj_buffer.__deferred.image))
+											If ($i>2)
 												
-												// Get url for image
-												$Txt_url:=String:C10($Obj_buffer.__deferred.uri)
+												CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
+													"step"; "asset"; \
+													"table"; $meta; \
+													"page"; $i))
 												
-												//If (Bool(featuresFlags._102457))
+											Else 
 												
-												If (Position:C15("/mobileapp/"; $Txt_url)>0)
-													
-													$Txt_url:=Substring:C12($Txt_url; 12)  // remove /mobileapp/
-													
-												End if 
-												
-												//Else
-												//If (Position("/rest/";$Txt_url)>0)
-												//$Txt_url:=Substring($Txt_url;7)  // remove /rest/
-												//End if
-												//End if
-												
-												If (Length:C16(String:C10($Obj_in.format))#0)
-													If ($Obj_in.format#"best")
-														$Txt_url:=Replace string:C233($Txt_url; "imageformat=best"; "imageformat="+$Obj_in.format)
-													End if 
-												End if 
-												
-												$Txt_url:=$Obj_result.url+$Txt_url
-												$Txt_version:=Substring:C12($Txt_url; Position:C15("$version="; $Txt_url)+Length:C16("$version="))
-												
-												If (Position:C15("&"; $Txt_version)>0)
-													
-													$Txt_version:=Substring:C12($Txt_version; 1; Position:C15("&"; $Txt_version)-1)
-													
-												End if 
-												
-												$File_output:=$Obj_in.output
-												
-												Case of 
-														
-														//----------------------------------------
-													: ($Obj_field.relatedDataClass#Null:C1517)  // want to dump in relation?
-														
-														If (Bool:C1537($Obj_in.dataSet))
-															
-															$File_output:=$File_output+$Obj_field.relatedDataClass+Folder separator:K24:12+$Obj_field.relatedDataClass+"("+$Txt_id+")"+"_"+$Obj_field.name+"_"+$Txt_version+".imageset"+Folder separator:K24:12
-															
-														End if 
-														
-														$File_name:=$Obj_field.relatedDataClass+"("+$Txt_id+")"+"_"+$Obj_field.name+"_"+$Txt_version
-														
-														//----------------------------------------
-													: ($Obj_field.relatedField#Null:C1517)  // want to dump in current table as related field
-														
-														If (Bool:C1537($Obj_in.dataSet))
-															
-															$File_output:=$File_output+$o.name+Folder separator:K24:12+$o.name+"("+$Txt_id+")"+"_"+$Obj_field.relatedField+"."+$Obj_field.name+"_"+$Txt_version+".imageset"+Folder separator:K24:12
-															
-														End if 
-														
-														$File_name:=$o.name+"("+$Txt_id+")"+"_"+$Obj_field.relatedField+"."+$Obj_field.name+"_"+$Txt_version
-														
-														//----------------------------------------
-													Else 
-														
-														If (Bool:C1537($Obj_in.dataSet))
-															
-															$File_output:=$File_output+$o.name+Folder separator:K24:12+$o.name+"("+$Txt_id+")"+"_"+$Obj_field.name+"_"+$Txt_version+".imageset"+Folder separator:K24:12
-															
-														End if 
-														
-														$File_name:=$o.name+"("+$Txt_id+")"+"_"+$Obj_field.name+"_"+$Txt_version
-														
-														//----------------------------------------
-												End case 
-												
-												C_TEXT:C284($format)
-												$format:=$Obj_in.format
-												
-												var $ouputFolder : 4D:C1709.Folder
-												$ouputFolder:=Folder:C1567($File_output; fk platform path:K87:2)
-												If (Not:C34($ouputFolder.exists))
-													$ouputFolder.create()
-												End if 
-												
-												C_BOOLEAN:C305($imageFound)
-												$imageFound:=False:C215
-												If ($format="best")
-													var $file : 4D:C1709.File
-													For each ($file; $ouputFolder.files()) Until ($imageFound)
-														If (Position:C15($File_name; $file.name)=1)
-															$imageFound:=True:C214
-															$File_name:=$file.fullName
-														End if 
-													End for each 
-												Else 
-													$imageFound:=$ouputFolder.file($File_name+$format).exists
-												End if 
-												If (Not:C34($imageFound))
-													
-													$Obj_rest:=Rest(New object:C1471("action"; "image"; \
-														"headers"; $Obj_in.headers; \
-														"url"; $Txt_url; \
-														"target"; $File_output+$File_name+$format\
-														))
-													ob_error_combine($Obj_out; $Obj_rest)
-													
-													If ($Obj_rest.success)
-														If (Not:C34(Folder:C1567($File_output; fk platform path:K87:2).file($File_name+$format).exists))
-															$Obj_rest:=New object:C1471("success"; False:C215; "parent"; $Obj_rest)
-															ob_error_add($Obj_rest; "No image dumped into target "+$File_output+$File_name+$format)
-															ob_error_combine($Obj_out; $Obj_rest)
-														End if 
-													End if 
-												Else 
-													
-													// No need to dump. File already dumped.
-													$Obj_rest:=New object:C1471("success"; False:C215)
-													
-												End if 
-												
-												If ($Obj_rest.success)
-													
-													If ($format="best")
-														// find extension according to content type
-														If ($Obj_rest.headers["Content-Type"]#Null:C1517)
-															If (Position:C15("image/"; $Obj_rest.headers["Content-Type"])=1)
-																$format:="."+Replace string:C233($Obj_rest.headers["Content-Type"]; "image/"; "")
-																If (Position:C15("+"; $format)>0)
-																	$format:=Substring:C12($format; 1; Position:C15("+"; $format)-1)
-																End if 
-															End if 
-														End if 
-														
-														If ($format#"best")
-															
-															var $destinationFile : 4D:C1709.File
-															$destinationFile:=$ouputFolder.file($File_name+$format)
-															If ($destinationFile.exists)
-																$destinationFile.delete()
-															End if 
-															
-															$ouputFolder.file($File_name+"best").rename($File_name+$format)
-															
-														End if 
-													End if 
-													
-													$File_name:=$File_name+$format
-													
-													If (Bool:C1537($Obj_in.debug))
-														$Obj_result.files.push(New object:C1471(\
-															"path"; $File_output+$File_name; \
-															"contentSize"; Num:C11($Obj_rest.contentSize)))
-													End if 
-													
-													$Obj_result.contentSize:=$Obj_result.contentSize+Num:C11($Obj_rest.contentSize)
-													$Obj_result.count:=$Obj_result.count+1
-													
-													If (Bool:C1537($Obj_in.dataSet))
-														
-														TEXT TO DOCUMENT:C1237($File_output+"Contents.json"; \
-															JSON Stringify:C1217(New object:C1471(\
-															"info"; New object:C1471(\
-															"version"; 1; \
-															"author"; "xcode"\
-															); \
-															"images"; New collection:C1472(New object:C1471(\
-															"idiom"; "universal"; \
-															"filename"; $File_name)))))
-														
-													End if 
-													
-												Else 
-													
-													// Remove the image if wrong type
-													If (Not:C34(Is picture file:C1113($File_output+$File_name)))
-														
-														DELETE DOCUMENT:C159($File_output+$File_name)
-														
-														If (Bool:C1537($Obj_in.dataSet))
-															
-															DELETE FOLDER:C693($File_output)
-															
-														End if 
-													End if 
-												End if 
-												
-												// Else ignore
+												CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
+													"step"; "asset"; \
+													"table"; $meta))
 												
 											End if 
 										End if 
-									End for each 
-								End for each 
-							End if 
-							
-							If (Num:C11($Obj_result.contentSize)>0)
+										
+										asset(New object:C1471(\
+											"action"; "create"; \
+											"type"; "dataset"; \
+											"target"; $in.output; \
+											"tags"; New object:C1471(\
+											"name"; $meta.name; \
+											"fileName"; $meta.name+".data.json"; \
+											"uti"; "public.json")))
+										
+									End if 
+									
+									Case of 
+											
+											//======================================
+										: (Value type:C1509($rest.response)=Is BLOB:K8:12)
+											
+											File:C1566($outputPathname; fk platform path:K87:2).setContent($rest.response)
+											$rest.write:=New object:C1471(\
+												"success"; True:C214)
+											
+											//======================================
+										: (Value type:C1509($rest.response)=Is text:K8:3)
+											
+											File:C1566($outputPathname; fk platform path:K87:2).setText($rest.response)
+											$rest.write:=New object:C1471(\
+												"success"; True:C214)
+											
+											//======================================
+										: (Value type:C1509($rest.response)=Is object:K8:27)
+											
+											$rest.write:=ob_writeToDocument($rest.response; $outputPathname; True:C214)
+											
+											//======================================
+										Else 
+											
+											$rest.write:=New object:C1471(\
+												"success"; False:C215; \
+												"errors"; New collection:C1472("No dumped data of correct type"+String:C10(Value type:C1509($rest.response))))
+											
+											//======================================
+									End case 
+									
+									ob_error_combine($out; $rest.write)
+									
+									If (Not:C34($rest.write.success))
+										
+										$rest.success:=False:C215
+										$out.success:=False:C215
+										
+									End if 
+									
+								Else 
+									
+									$out.success:=False:C215  // Global success is false
+									
+								End if 
 								
-								$File_output:=$Obj_in.output+$o.name+Folder separator:K24:12
-								$File_output:=$File_output+"manifest.json"
-								TEXT TO DOCUMENT:C1237($File_output; \
-									JSON Stringify:C1217(New object:C1471(\
-									"contentSize"; Num:C11($Obj_result.contentSize); \
-									"count"; Num:C11($Obj_result.count))))
+								//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+							Else 
 								
-							End if 
+								$out.success:=False:C215  // Global success is false
+								
+								//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+						End case 
+						
+						If (Bool:C1537(Storage:C1525.flags.stopGeneration))
 							
-							$Obj_out.results[String:C10($o.name)]:=$Obj_result
+							$i:=MAXLONG:K35:2-1  // Break
 							
 						End if 
+					End for 
+				End if 
+				
+			Else 
+				
+				$out.success:=False:C215  // Global success is false
+				
+			End if 
+		End for each   // end table
+		
+		$out.results:=$result
+		
+		If (FEATURE.with("cancelableDatasetGeneration"))\
+			 & ($in.caller#Null:C1517)
+			
+			If (Bool:C1537(Storage:C1525.flags.stopGeneration))
+				
+				// Display cancelled message
+				CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
+					"step"; "stop"))
+				
+				// Reset to allow user read the message
+				$delay.start:=Tickcount:C458
+				
+			End if 
+			
+			$delay.duration:=Tickcount:C458-$delay.start
+			
+			If ($delay.duration<$delay.minimumDisplayTime)
+				
+				DELAY PROCESS:C323(Current process:C322; $delay.minimumDisplayTime-$delay.duration)
+				
+			End if 
+		End if 
+		
+		// Notify the end of the process
+		CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
+			"step"; "end"))
+		
+		//______________________________________________________
+	: ($in.action="pictures")
+		
+		If ($in.format=Null:C1517)
+			
+			$in.format:="best"
+			
+		End if 
+		
+		$out.success:=True:C214
+		
+		$out.results:=New object:C1471()
+		
+		// For each table
+		For each ($tableID; $dataModel)
+			
+			$table:=$dataModel[$tableID]
+			$meta:=$table[""]
+			
+			$Obj_buffer:=dataModel(New object:C1471(\
+				"action"; "pictureFields"; \
+				"table"; $table))
+			
+			// Check if there is image (XXX use some extract/filter function)
+			$Col_pictureFields:=$Obj_buffer.fields
+			
+			If ($Col_pictureFields=Null:C1517)
+				
+				$Col_pictureFields:=New collection:C1472()  // just to not failed, CLEAN check status instead
+				
+			End if 
+			
+			If ($Col_pictureFields.length>0)
+				
+				If (Bool:C1537($in.rest)\
+					 | (Length:C16(String:C10($in.url))>0))
+					
+					// ----------------------------------
+					// Get Image from REST server, default local one
+					// ----------------------------------
+					
+					// If cached rest result use it
+					$Txt_buffer:=String:C10($in.cache)+Folder separator:K24:12+$meta.name
+					
+					If (Bool:C1537($in.dataSet))
+						
+						$Txt_buffer:=$Txt_buffer+".dataset"+Folder separator:K24:12+$meta.name
+						
+					End if 
+					
+					$Txt_buffer:=$Txt_buffer+".data.json"
+					
+					If (Test path name:C476($Txt_buffer)=Is a document:K24:1)
+						
+						$rest:=ob_parseDocument($Txt_buffer)
+						$rest.response:=$rest.value
 						
 					Else 
 						
-						// DUMP without rest is not implemented. Could use ds, with query filters to do it?
+						// No more supported, data file must be passed
+						$rest:=New object:C1471(\
+							"success"; False:C215)
 						
 					End if 
+					
+					// we have succeed to have rest result
+					If ($rest.success)
+						
+						// Rest server URL ? (to replace in image url
+						$in.action:="url"
+						$result:=Rest($in)
+						
+						$result.contentSize:=0
+						$result.count:=0
+						If (Bool:C1537($in.debug))
+							$out.files:=New collection:C1472()
+						End if 
+						
+						//$Txt_handler:=Choose(Bool(featuresFlags._102457);"mobileapp/";"rest/")
+						$Txt_handler:="mobileapp/"
+						
+						If (Position:C15($Txt_handler; $result.url)=0)
+							
+							$result.url:=$result.url+$Txt_handler
+							ASSERT:C1129(False:C215; "URL must contains "+$Txt_handler)
+							
+						End if 
+						
+						If (Value type:C1509($rest.response.__ENTITIES)=Is collection:K8:32)
+							
+							// For each records
+							For each ($Obj_record; $rest.response.__ENTITIES)
+								
+								// ... look for images
+								For each ($Obj_field; $Col_pictureFields)
+									
+									$Obj_buffer:=Null:C1517
+									$Txt_id:=$Obj_record.__KEY
+									
+									Case of 
+											
+											//----------------------------------------
+										: ($Obj_field.relatedField#Null:C1517)
+											
+											$Obj_buffer:=$Obj_record[$Obj_field.relatedField]
+											
+											If ($Obj_buffer#Null:C1517)
+												
+												If ($Obj_field.relatedDataClass#Null:C1517)
+													
+													$Txt_id:=$Obj_buffer.__KEY
+													
+												End if 
+												
+												$Obj_buffer:=$Obj_buffer[$Obj_field.name]
+												
+											End if 
+											
+											//----------------------------------------
+										: ($Obj_record[$Obj_field.name]#Null:C1517)
+											
+											$Obj_buffer:=$Obj_record[$Obj_field.name]
+											
+											//----------------------------------------
+									End case 
+									
+									If ($Obj_buffer#Null:C1517)
+										
+										If (Bool:C1537($Obj_buffer.__deferred.image))
+											
+											// Get url for image
+											$Txt_url:=String:C10($Obj_buffer.__deferred.uri)
+											
+											//If (Bool(featuresFlags._102457))
+											
+											If (Position:C15("/mobileapp/"; $Txt_url)>0)
+												
+												$Txt_url:=Substring:C12($Txt_url; 12)  // remove /mobileapp/
+												
+											End if 
+											
+											//Else
+											//If (Position("/rest/";$Txt_url)>0)
+											//$Txt_url:=Substring($Txt_url;7)  // remove /rest/
+											//End if
+											//End if
+											
+											If (Length:C16(String:C10($in.format))#0)
+												If ($in.format#"best")
+													$Txt_url:=Replace string:C233($Txt_url; "imageformat=best"; "imageformat="+$in.format)
+												End if 
+											End if 
+											
+											$Txt_url:=$result.url+$Txt_url
+											$Txt_version:=Substring:C12($Txt_url; Position:C15("$version="; $Txt_url)+Length:C16("$version="))
+											
+											If (Position:C15("&"; $Txt_version)>0)
+												
+												$Txt_version:=Substring:C12($Txt_version; 1; Position:C15("&"; $Txt_version)-1)
+												
+											End if 
+											
+											$outputPathname:=$in.output
+											
+											Case of 
+													
+													//----------------------------------------
+												: ($Obj_field.relatedDataClass#Null:C1517)  // want to dump in relation?
+													
+													If (Bool:C1537($in.dataSet))
+														
+														$outputPathname:=$outputPathname+$Obj_field.relatedDataClass+Folder separator:K24:12+$Obj_field.relatedDataClass+"("+$Txt_id+")"+"_"+$Obj_field.name+"_"+$Txt_version+".imageset"+Folder separator:K24:12
+														
+													End if 
+													
+													$File_name:=$Obj_field.relatedDataClass+"("+$Txt_id+")"+"_"+$Obj_field.name+"_"+$Txt_version
+													
+													//----------------------------------------
+												: ($Obj_field.relatedField#Null:C1517)  // want to dump in current table as related field
+													
+													If (Bool:C1537($in.dataSet))
+														
+														$outputPathname:=$outputPathname+$meta.name+Folder separator:K24:12+$meta.name+"("+$Txt_id+")"+"_"+$Obj_field.relatedField+"."+$Obj_field.name+"_"+$Txt_version+".imageset"+Folder separator:K24:12
+														
+													End if 
+													
+													$File_name:=$meta.name+"("+$Txt_id+")"+"_"+$Obj_field.relatedField+"."+$Obj_field.name+"_"+$Txt_version
+													
+													//----------------------------------------
+												Else 
+													
+													If (Bool:C1537($in.dataSet))
+														
+														$outputPathname:=$outputPathname+$meta.name+Folder separator:K24:12+$meta.name+"("+$Txt_id+")"+"_"+$Obj_field.name+"_"+$Txt_version+".imageset"+Folder separator:K24:12
+														
+													End if 
+													
+													$File_name:=$meta.name+"("+$Txt_id+")"+"_"+$Obj_field.name+"_"+$Txt_version
+													
+													//----------------------------------------
+											End case 
+											
+											$format:=$in.format
+											
+											$ouputFolder:=Folder:C1567($outputPathname; fk platform path:K87:2)
+											If (Not:C34($ouputFolder.exists))
+												$ouputFolder.create()
+											End if 
+											
+											$imageFound:=False:C215
+											If ($format="best")
+												For each ($file; $ouputFolder.files()) Until ($imageFound)
+													If (Position:C15($File_name; $file.name)=1)
+														$imageFound:=True:C214
+														$File_name:=$file.fullName
+													End if 
+												End for each 
+											Else 
+												$imageFound:=$ouputFolder.file($File_name+$format).exists
+											End if 
+											If (Not:C34($imageFound))
+												
+												$rest:=Rest(New object:C1471("action"; "image"; \
+													"headers"; $in.headers; \
+													"url"; $Txt_url; \
+													"target"; $outputPathname+$File_name+$format\
+													))
+												ob_error_combine($out; $rest)
+												
+												If ($rest.success)
+													If (Not:C34(Folder:C1567($outputPathname; fk platform path:K87:2).file($File_name+$format).exists))
+														$rest:=New object:C1471("success"; False:C215; "parent"; $rest)
+														ob_error_add($rest; "No image dumped into target "+$outputPathname+$File_name+$format)
+														ob_error_combine($out; $rest)
+													End if 
+												End if 
+											Else 
+												
+												// No need to dump. File already dumped.
+												$rest:=New object:C1471("success"; False:C215)
+												
+											End if 
+											
+											If ($rest.success)
+												
+												If ($format="best")
+													// find extension according to content type
+													If ($rest.headers["Content-Type"]#Null:C1517)
+														If (Position:C15("image/"; $rest.headers["Content-Type"])=1)
+															$format:="."+Replace string:C233($rest.headers["Content-Type"]; "image/"; "")
+															If (Position:C15("+"; $format)>0)
+																$format:=Substring:C12($format; 1; Position:C15("+"; $format)-1)
+															End if 
+														End if 
+													End if 
+													
+													If ($format#"best")
+														
+														$destinationFile:=$ouputFolder.file($File_name+$format)
+														If ($destinationFile.exists)
+															$destinationFile.delete()
+														End if 
+														
+														$ouputFolder.file($File_name+"best").rename($File_name+$format)
+														
+													End if 
+												End if 
+												
+												$File_name:=$File_name+$format
+												
+												If (Bool:C1537($in.debug))
+													$result.files.push(New object:C1471(\
+														"path"; $outputPathname+$File_name; \
+														"contentSize"; Num:C11($rest.contentSize)))
+												End if 
+												
+												$result.contentSize:=$result.contentSize+Num:C11($rest.contentSize)
+												$result.count:=$result.count+1
+												
+												If (Bool:C1537($in.dataSet))
+													
+													TEXT TO DOCUMENT:C1237($outputPathname+"Contents.json"; \
+														JSON Stringify:C1217(New object:C1471(\
+														"info"; New object:C1471(\
+														"version"; 1; \
+														"author"; "xcode"\
+														); \
+														"images"; New collection:C1472(New object:C1471(\
+														"idiom"; "universal"; \
+														"filename"; $File_name)))))
+													
+												End if 
+												
+											Else 
+												
+												// Remove the image if wrong type
+												If (Not:C34(Is picture file:C1113($outputPathname+$File_name)))
+													
+													DELETE DOCUMENT:C159($outputPathname+$File_name)
+													
+													If (Bool:C1537($in.dataSet))
+														
+														DELETE FOLDER:C693($outputPathname)
+														
+													End if 
+												End if 
+											End if 
+											
+											// Else ignore
+											
+										End if 
+									End if 
+								End for each 
+							End for each 
+						End if 
+						
+						If (Num:C11($result.contentSize)>0)
+							
+							$outputPathname:=$in.output+$meta.name+Folder separator:K24:12
+							$outputPathname:=$outputPathname+"manifest.json"
+							TEXT TO DOCUMENT:C1237($outputPathname; \
+								JSON Stringify:C1217(New object:C1471(\
+								"contentSize"; Num:C11($result.contentSize); \
+								"count"; Num:C11($result.count))))
+							
+						End if 
+						
+						$out.results[String:C10($meta.name)]:=$result
+						
+					End if 
+					
+				Else 
+					
+					// DUMP without rest is not implemented. Could use ds, with query filters to do it?
+					
 				End if 
-			End for each 
-			
-			//________________________________________
-		Else 
-			
-			ASSERT:C1129(False:C215; "Unknown entry point: \""+$Obj_in.action+"\"")
-			
-			//________________________________________
-	End case 
-End if 
-
-// ----------------------------------------------------
-// Return
-$0:=$Obj_out
-
-// ----------------------------------------------------
-// End
+			End if 
+		End for each 
+		
+		//________________________________________
+	Else 
+		
+		ASSERT:C1129(False:C215; "Unknown entry point: \""+$in.action+"\"")
+		
+		//________________________________________
+End case 

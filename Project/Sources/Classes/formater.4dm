@@ -1,6 +1,6 @@
-//============================================================================
-// Management of data formatters
-//============================================================================
+/**
+Management of dat a formatters
+*/
 Class constructor($format : Text)
 	
 	This:C1470.name:=""
@@ -32,7 +32,7 @@ Class constructor($format : Text)
 	End if 
 	
 	//============================================================================
-	// Returns a collection of formaters for a field type
+	/// Returns a collection of formaters for a field type
 Function getByType($type : Integer; $host : Boolean)->$formatters : Collection
 	
 	var $hostƒ : Boolean

@@ -190,8 +190,21 @@ Case of
 					
 				End if 
 				
-				(OBJECT Get pointer:C1124(Object named:K67:5; "dataGeneration"))->:=Num:C11(Bool:C1537(Form:C1466.$project.dataSetGeneration))
-				OBJECT SET VISIBLE:C603(*; "dataGeneration@"; Bool:C1537(Form:C1466.$project.dataSetGeneration))
+				If (FEATURE.with("cancelableDatasetGeneration"))
+					
+					If (Bool:C1537(Form:C1466.$project.dataSetGeneration))
+						
+						// Disable the generate button during generation
+						ui_SET_ENABLED($Obj_form.generate; False:C215)
+						
+					End if 
+					
+				Else 
+					
+					(OBJECT Get pointer:C1124(Object named:K67:5; "dataGeneration"))->:=Num:C11(Bool:C1537(Form:C1466.$project.dataSetGeneration))
+					OBJECT SET VISIBLE:C603(*; "dataGeneration@"; Bool:C1537(Form:C1466.$project.dataSetGeneration))
+					
+				End if 
 				
 				//______________________________________________________
 		End case 
@@ -678,6 +691,8 @@ $regex.match[1].data:="127.0.0.1"
 		
 		//=========================================================
 	: ($Obj_in.action="dataset")  // End dataset generation
+		
+		OB REMOVE:C1226(Form:C1466.$project; "dataSetGeneration")
 		
 		SET TIMER:C645(-1)
 		

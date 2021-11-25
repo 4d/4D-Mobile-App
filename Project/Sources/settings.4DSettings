@@ -1,53 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?><preferences stamp="195">
+<?xml version="1.0" encoding="UTF-8"?><preferences stamp="2">
 	<com.4d>
-		<deployment>
-			<options/>
-		</deployment>
-		<general allow_user_settings="false" execute_host_database_event="true"/>
-		<compiler>
-			<options compilation_path="3" fat_binary="true" symbol_file="true"/>
-			<typage default_for_button="2"/>
-			<method_suffix arrays="" interprocess_arrays="" interprocess_variables="" methods="" variables=""/>
-		</compiler>
-		<interface>
-			<shortcuts>
-				<accept_input_form alt="false" command="false" ctrl="false" key_code="0" shift="false"/>
-				<cancel_input_form alt="false" command="false" ctrl="false" key_code="0" shift="false"/>
-				<add_subform alt="false" command="false" ctrl="false" key_code="0" shift="false"/>
-			</shortcuts>
-			<developper display_toolbar="true"/>
-		</interface>
-		<server>
-			<network>
-				<options publication_name="4D Mobile App" publish_at_startup="false" use_legacy_network_layer="false"/>
-				<sso/>
-			</network>
-		</server>
-		<web>
-			<standalone_server>
-				<configuration port_number="80">
-					<hosts>
-						<host html_root="./WebFolder/" id="0" name="default"/>
-					</hosts>
-				</configuration>
-				<rest/>
-				<webservices>
-					<server name="A_WebService"/>
-				</webservices>
-				<options>
-					<keep_alive requests_number="100"/>
-					<cache cache_max_size="524288"/>
-				</options>
-				<log tokens=""/>
-			</standalone_server>
-		</web>
-		<sql>
-			<publication port_number="19812"/>
-		</sql>
-		<php ip_address="127.0.0.1"/>
-		<database>
-			<cache percentage="50"/>
-			<misc standard_xpath="true" use_ast_interpreter="false"/>
-		</database>
+		<general execute_host_database_event="true"/>
 	</com.4d>
 </preferences>

@@ -629,9 +629,28 @@ Function doGenerate($keyPathname : Text)
 		"target"; This:C1470.window; \
 		"action"; "show"; \
 		"type"; "cancelableProgress"; \
-		"title"; "dataSetGeneration"; \
-		"autostart"; $ƒ\
+		"title"; "dataGeneration"; \
+		"autostart"; $ƒ; \
+		"stopFormula"; Formula:C1597(EDITOR.doStopDataGeneration())\
 		))
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function doStopDataGeneration()
+	
+	Use (Storage:C1525)
+		
+		If (Storage:C1525.flags=Null:C1517)
+			
+			Storage:C1525.flags:=New shared object:C1526
+			
+		End if 
+		
+		Use (Storage:C1525.flags)
+			
+			Storage:C1525.flags.stopGeneration:=True:C214
+			
+		End use 
+	End use 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function doCancelableProgress($content; $additional : Text)

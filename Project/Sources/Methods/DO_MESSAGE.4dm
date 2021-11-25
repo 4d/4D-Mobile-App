@@ -14,6 +14,8 @@ var $action; $key : Text
 var $data; $ƒ : Object
 var $widget : cs:C1710.subform
 
+//mark: #TODDO - Allow a text parameter for one action only
+
 // ----------------------------------------------------
 // Initialisations
 If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))

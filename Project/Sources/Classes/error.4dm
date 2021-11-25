@@ -71,6 +71,12 @@ Function noError()->$noError : Boolean
 	$noError:=(lastError=Null:C1517)
 	
 	//===================================================================================
+	// Returns true if errors were encountered during a capture phase
+Function withError()->$withError : Boolean
+	
+	$withError:=(lastError#Null:C1517)
+	
+	//===================================================================================
 	// Returns the last error encountered during a capture phase
 Function lastError()->$error : Object
 	

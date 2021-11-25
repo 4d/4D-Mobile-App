@@ -363,8 +363,6 @@ Case of
 		//______________________________________________________
 	: ($selector="dataSet")  // Dataset generation result
 		
-		OB REMOVE:C1226(Form:C1466.$project; "dataSetGeneration")
-		
 		If ($isProjectForm)
 			
 			// Pass to target panel

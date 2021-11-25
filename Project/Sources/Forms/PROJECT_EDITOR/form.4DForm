@@ -231,12 +231,11 @@
 		}
 	],
 	"editor": {
-		"activeView": "default",
+		"activeView": "message",
 		"defaultView": "default",
 		"views": {
 			"default": {},
 			"message": {
-				"visible": false,
 				"objects": [
 					"messageBack",
 					"messageButton",
