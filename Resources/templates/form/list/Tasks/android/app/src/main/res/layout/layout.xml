@@ -95,7 +95,6 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:clickable="false"
-            android:enabled="false"
             android:scrollbars="none"
             android:singleLine="true"
             android:text="___TEXT_3___"
