@@ -76,17 +76,21 @@ Case of
 				//______________________________________________________
 			: ($data.step="end")
 				
-				If (Storage:C1525.flags#Null:C1517)
+				If (Form:C1466.dataSetGeneration#Null:C1517)
 					
-					Use (Storage:C1525.flags)
+					If (Storage:C1525.flags#Null:C1517)
 						
-						OB REMOVE:C1226(Storage:C1525.flags; "stopGeneration")
-						
-					End use 
+						Use (Storage:C1525.flags)
+							
+							OB REMOVE:C1226(Storage:C1525.flags; "stopGeneration")
+							
+						End use 
+					End if 
+					
+					DO_MESSAGE(New object:C1471(\
+						"action"; "close"))
+					
 				End if 
-				
-				DO_MESSAGE(New object:C1471(\
-					"action"; "close"))
 				
 				//______________________________________________________
 			Else 

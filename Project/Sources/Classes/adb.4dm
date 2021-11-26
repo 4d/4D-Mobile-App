@@ -540,6 +540,8 @@ Function uninstallApp($bundleIdentifier : Text; $serial : Text)
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function launchApp($bundleIdentifier : Text)->$this : cs:C1710.adb
 	
+	$bundleIdentifier:=Replace string:C233($bundleIdentifier; "-"; "_")
+	
 	//monkey -p com.package.name -v 1
 	This:C1470.resultInErrorStream:=True:C214
 	This:C1470.launch(This:C1470.cmd+" shell monkey -p "+Lowercase:C14($bundleIdentifier)+" -v 1")
