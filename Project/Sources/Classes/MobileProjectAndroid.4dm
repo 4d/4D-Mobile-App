@@ -131,8 +131,12 @@ Function create()->$result : Object
 		
 		If ($o.success)
 			
-			// * BUILD EMBEDDED DATA LIBRARY
-			This:C1470.postStep("dataSetGeneration")
+			If (Not:C34(Bool:C1537(This:C1470.project.project.dataSource.doNotGenerateDataAtEachBuild)))
+				
+				// * BUILD EMBEDDED DATA LIBRARY
+				This:C1470.postStep("dataSetGeneration")
+				
+			End if 
 			
 			$o:=This:C1470.androidprojectgenerator.buildEmbeddedDataLib(This:C1470.project.package)
 			
