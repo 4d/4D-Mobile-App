@@ -121,7 +121,7 @@ Function update()->$this : cs:C1710.tmpl
 			If (Bool:C1537(OK))
 				
 				// Remove mobile picture
-				$node:=DOM Find XML element:C864($root; "/"+"/rect[contains(@class,'container')")
+				$node:=DOM Find XML element:C864($root; "/"+"/rect[contains(@class,'container')]")
 				
 				If (Bool:C1537(OK))
 					
@@ -151,7 +151,7 @@ Function update()->$this : cs:C1710.tmpl
 				If (Bool:C1537(OK))
 					
 					// Change the background
-					$node:=DOM Find XML element:C864($root; "/"+"/rect[contains(@class,'bgcontainer')")
+					$node:=DOM Find XML element:C864($root; "/"+"/rect[contains(@type,'bgcontainer')]")
 					
 					If (Bool:C1537(OK))
 						

@@ -1,5 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?><preferences stamp="2">
 	<com.4d>
 		<general execute_host_database_event="true"/>
+		<php ip_address="127.0.0.1"/>
+		<sql>
+			<publication port_number="19812"/>
+		</sql>
+		<web>
+			<standalone_server>
+				<configuration port_number="80"/>
+				<options>
+					<cache/>
+				</options>
+				<webservices>
+					<server name="A_WebService"/>
+				</webservices>
+			</standalone_server>
+		</web>
+		<server>
+			<network>
+				<options publication_name="4D Mobile App" publish_at_startup="false" use_legacy_network_layer="false"/>
+			</network>
+		</server>
+		<compiler>
+			<options compilation_path="3"/>
+			<typage default_for_button="2"/>
+			<method_suffix arrays="" interprocess_arrays="" interprocess_variables="" methods="" variables=""/>
+		</compiler>
+		<interface>
+			<shortcuts>
+				<accept_input_form alt="false" command="false" ctrl="false" key_code="0" shift="false"/>
+				<cancel_input_form alt="false" command="false" ctrl="false" key_code="0" shift="false"/>
+				<add_subform alt="false" command="false" ctrl="false" key_code="0" shift="false"/>
+			</shortcuts>
+		</interface>
+		<database>
+			<misc mac_use_lf="true" no_bom="true" standard_xpath="true"/>
+		</database>
 	</com.4d>
 </preferences>
