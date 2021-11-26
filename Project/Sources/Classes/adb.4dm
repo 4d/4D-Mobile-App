@@ -524,6 +524,8 @@ Function installApp($apk; $serial : Text; $test : Boolean)->$this : cs:C1710.adb
 	/// Uninstalling app from a connected device
 Function uninstallApp($bundleIdentifier : Text; $serial : Text)
 	
+	$bundleIdentifier:=Replace string:C233($bundleIdentifier; "-"; "_")
+	
 	If (This:C1470.userPackageList($serial).indexOf($bundleIdentifier)>=0)
 		
 		This:C1470.launch(This:C1470.cmd+" -s "+$serial+" uninstall "+Lowercase:C14($bundleIdentifier))
