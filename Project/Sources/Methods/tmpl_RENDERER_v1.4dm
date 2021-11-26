@@ -180,17 +180,37 @@ If (Asserted:C1132($svg.success; "Missing cookery element"))
 						
 						$name:=$o.name
 						
-						If (Num:C11($o.fieldType)=8859)  // 1-N relation
-							
-							$node:=$svg.findById($t+".label")
-							$svg.setAttribute("font-style"; "italic"; $node)
-							
-							If (PROJECT.dataModel[String:C10($o.relatedTableNumber)]=Null:C1517)  // Error
+						Case of 
+								//______________________________________________________
+							: (Num:C11($o.fieldType)=8859)  // 1-N relation
 								
-								$svg.setAttribute("class"; String:C10(xml_attributes($node).class)+" error"; $node)
+								$node:=$svg.findById($t+".label")
+								$svg.setAttribute("font-style"; "italic"; $node)
 								
-							End if 
-						End if 
+								If (PROJECT.dataModel[String:C10($o.relatedTableNumber)]=Null:C1517)  // Error
+									
+									$svg.setAttribute("class"; String:C10(xml_attributes($node).class)+" error"; $node)
+									
+								End if 
+								
+								//______________________________________________________
+							: (Bool:C1537($o.computed))
+								
+								If (PROJECT.dataModel[$context.tableNumber][$o.name]=Null:C1517)
+									
+									$node:=$svg.findById($t+".label")
+									$svg.setAttribute("class"; String:C10(xml_attributes($node).class)+" error"; $node)
+									
+								End if 
+								
+								//______________________________________________________
+							Else 
+								
+								// A "Case of" statement should never omit "Else"
+								
+								//______________________________________________________
+						End case 
+						
 						
 						// Keep the nex available index
 						$context.lastMultivaluedField:=$indx+1

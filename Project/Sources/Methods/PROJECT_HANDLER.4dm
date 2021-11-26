@@ -179,7 +179,6 @@ Case of
 					"action"; "projectFixErrors"; \
 					"audit"; EDITOR.projectAudit)
 				
-				
 				If (EDITOR.projectAudit.errors.length=1)
 					
 					$title:=EDITOR.projectAudit.errors[0].message
@@ -195,6 +194,17 @@ Case of
 								"action"; "page_views"; \
 								"tab"; EDITOR.projectAudit.errors[0].tab; \
 								"table"; EDITOR.projectAudit.errors[0].table)
+							
+							//________________________________________
+						: (EDITOR.projectAudit.errors[0].type="field")
+							
+							$additional:="doYouWantToFixYourProjectByDeletingThisField"
+							
+							$cancel:=New object:C1471(\
+								"action"; "page_views"; \
+								"tab"; EDITOR.projectAudit.errors[0].tab; \
+								"table"; EDITOR.projectAudit.errors[0].table)
+							
 							
 							//________________________________________
 						: (EDITOR.projectAudit.errors[0].type="icon")
@@ -256,6 +266,17 @@ Case of
 									"table"; EDITOR.projectAudit.errors[0].table)
 								
 								//________________________________________
+							: ($c[0]="field")
+								
+								$title:="someFieldsUsedInFormsAreMissingOrInvalid"
+								$additional:="doYouWantToFixYourProjectByDeletingTheseFields"
+								
+								$cancel:=New object:C1471(\
+									"action"; "page_views"; \
+									"panel"; EDITOR.projectAudit.errors[0].panel; \
+									"table"; EDITOR.projectAudit.errors[0].table)
+								
+								//________________________________________
 							: ($c[0]="icon")
 								
 								$title:="someIconsAreMissingOrInvalid"
@@ -300,7 +321,7 @@ Case of
 						
 					Else 
 						
-						$title:="someResourcesAreMissingOrInvalid"
+						$title:="someResourcesOrFieldsAreMissingOrInvalid"
 						$additional:="doYouWantToFixYourProjectByUsingTheDefaultResources"
 						
 						// Load the firts one
@@ -312,6 +333,14 @@ Case of
 								$cancel:=New object:C1471(\
 									"action"; "page_views"; \
 									"tab"; EDITOR.projectAudit.errors[0].tab; \
+									"table"; EDITOR.projectAudit.errors[0].table)
+								
+								//________________________________________
+							: (EDITOR.projectAudit.errors[0].type="field")
+								
+								$cancel:=New object:C1471(\
+									"action"; "page_views"; \
+									"panel"; EDITOR.projectAudit.errors[0].panel; \
 									"table"; EDITOR.projectAudit.errors[0].table)
 								
 								//________________________________________

@@ -357,59 +357,75 @@ If (Num:C11($tableID)>0)
 													
 													$svg.setValue($label; $node)
 													
-													If ($isToOne | $isToMany)  // Relation
-														
-														If (Split string:C1554($field.path; ".").length=1)
+													Case of 
 															
-															If (PROJECT.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)  // Error
-																
-																If ($relation[$field.name].format=Null:C1517)
-																	
-																	$class:=$class+" error"
-																	$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theLinkedTableIsNotPublished").localized($relation[$field.name].relatedEntities))
-																	
-																End if 
-															End if 
+															//______________________________________________________
+														: (Bool:C1537($field.computed))
 															
-														Else 
-															
-															//MARK:TODO
-															
-														End if 
-														
-													Else 
-														
-														var $c : Collection
-														$c:=Split string:C1554($field.path; ".")
-														
-														If ($c.length=1)
-															
-															If ($dataClass[$field.name]=Null:C1517)\
-																 | (($tableModel[$field.name]=Null:C1517) & ($tableModel[String:C10($field.id)]=Null:C1517))
+															If ($tableModel[$field.name]=Null:C1517)
 																
 																$class:=$class+" error"
 																$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($field.name))
 																
 															End if 
 															
-														Else 
+															//______________________________________________________
+														: ($isToOne | $isToMany)  // Relation
 															
-															If ($dataClass[$c[0]]=Null:C1517)
+															If (Split string:C1554($field.path; ".").length=1)
 																
-																$class:=$class+" error"
-																$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($c[1]))
+																If (PROJECT.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)  // Error
+																	
+																	If ($relation[$field.name].format=Null:C1517)
+																		
+																		$class:=$class+" error"
+																		$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theLinkedTableIsNotPublished").localized($relation[$field.name].relatedEntities))
+																		
+																	End if 
+																End if 
 																
 															Else 
 																
-																If (ds:C1482[$dataClass[$c[0]].relatedDataClass][$c[1]]=Null:C1517)
+																// MARK:TODO
+																
+															End if 
+															
+															//______________________________________________________
+														Else 
+															
+															var $c : Collection
+															$c:=Split string:C1554($field.path; ".")
+															
+															If ($c.length=1)
+																
+																If ($dataClass[$field.name]=Null:C1517)\
+																	 | (($tableModel[$field.name]=Null:C1517) & ($tableModel[String:C10($field.id)]=Null:C1517))
+																	
+																	$class:=$class+" error"
+																	$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($field.name))
+																	
+																End if 
+																
+															Else 
+																
+																If ($dataClass[$c[0]]=Null:C1517)
 																	
 																	$class:=$class+" error"
 																	$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($c[1]))
 																	
+																Else 
+																	
+																	If (ds:C1482[$dataClass[$c[0]].relatedDataClass][$c[1]]=Null:C1517)
+																		
+																		$class:=$class+" error"
+																		$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($c[1]))
+																		
+																	End if 
 																End if 
 															End if 
-														End if 
-													End if 
+															
+															//______________________________________________________
+													End case 
 													
 													// Set class & tips
 													$svg.class($class; $node)\

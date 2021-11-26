@@ -54,9 +54,9 @@ If (Count parameters:C259>=1)
 Else 
 	
 	// Normal behaviour is form
-	$datamodel:=Form:C1466.dataModel
-	$list:=Form:C1466.list
-	$detail:=Form:C1466.detail
+	$datamodel:=PROJECT.dataModel
+	$list:=PROJECT.list
+	$detail:=PROJECT.detail
 	
 End if 
 
@@ -87,6 +87,35 @@ If ($datamodel#Null:C1517)
 						"message"; $str.setText("theTemplateIsMissing").localized($name); \
 						"table"; $table.key))
 					
+				Else 
+					
+					// CHECK FORMS FIELDS
+					For each ($field; $list[$table.key].fields)
+						
+						Case of 
+								
+								//______________________________________________________
+							: ($field=Null:C1517)
+								
+								// <NOTHING MORE TO DO>
+								
+								//______________________________________________________
+							: (Bool:C1537($field.computed))  // Computed attribute
+								
+								If ($datamodel[$table.key][$field.name]=Null:C1517)
+									
+									// Missing
+									$errors.push(New object:C1471(\
+										"type"; "field"; \
+										"tab"; "list"; \
+										"message"; $str.setText("theFieldIsMissing").localized($field.name); \
+										"table"; $table.key))
+									
+								End if 
+								
+								//______________________________________________________
+						End case 
+					End for each 
 				End if 
 			End if 
 		End if 
@@ -105,6 +134,36 @@ If ($datamodel#Null:C1517)
 						"tab"; "detail"; \
 						"message"; $str.setText("theTemplateIsMissing").localized($name); \
 						"table"; $table.key))
+					
+				Else 
+					
+					// CHECK FORMS FIELDS
+					For each ($field; $list[$table.key].fields)
+						
+						Case of 
+								
+								//______________________________________________________
+							: ($field=Null:C1517)
+								
+								// <NOTHING MORE TO DO>
+								
+								//______________________________________________________
+							: (Bool:C1537($field.computed))  // Computed attribute
+								
+								If ($datamodel[$table.key][$field.name]=Null:C1517)
+									
+									// Missing
+									$errors.push(New object:C1471(\
+										"type"; "field"; \
+										"tab"; "detail"; \
+										"message"; $str.setText("theFieldIsMissing").localized($field.name); \
+										"table"; $table.key))
+									
+								End if 
+								
+								//______________________________________________________
+						End case 
+					End for each 
 					
 				End if 
 			End if 

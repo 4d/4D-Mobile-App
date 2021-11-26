@@ -37,6 +37,11 @@ PROJECT.repairProject()
 // Save project
 PROJECT.save()
 
+//EDITOR.callMeBack("projectAuditResult"; PROJECT.audit())
+
+// Launch project verifications
+EDITOR.callMeBack("projectAudit")
+
 // Update UI
 EDITOR.updateRibbon()
 EDITOR.refreshViews()
