@@ -27,6 +27,7 @@
                         <userDefinedRuntimeAttribute type="string" keyPath="relationFormat" value="___FIELD_FORMAT___"/>
                         <userDefinedRuntimeAttribute type="string" keyPath="relationName" value="___FIELD___"/>
                         <userDefinedRuntimeAttribute type="string" keyPath="relationLabel" value="___FIELD_LABEL___"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="relationShortLabel" value="___FIELD_SHORT_LABEL___"/>
                         <userDefinedRuntimeAttribute type="boolean" keyPath="relationIsToMany" value="___FIELD_IS_TO_MANY_RELATION___"/>
                         <userDefinedRuntimeAttribute type="boolean" keyPath="imageContextTemplate" value="YES"/>
                     </userDefinedRuntimeAttributes>
