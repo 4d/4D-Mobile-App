@@ -38,8 +38,8 @@ If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
 	$Obj_form:=New object:C1471(\
 		"window"; Current form window:C827; \
 		"ui"; editor_Panel_init; \
-		"local"; "source_local"; \
-		"server"; "source_server"; \
+		"local"; "local"; \
+		"server"; "server"; \
 		"doNotGenerate"; "doNotGenerate"; \
 		"doNotExportImages"; "doNotExportImages"; \
 		"generate"; "generate"; \
@@ -80,7 +80,7 @@ Case of
 				$Obj_form.ui.constraints:=New object:C1471
 				
 				_o_ui_BEST_SIZE(New object:C1471(\
-					"widgets"; New collection:C1472($Obj_form.generate; "dataGeneration"; "dataGeneration.label"); \
+					"widgets"; New collection:C1472($Obj_form.generate; "dataGeneration"; "dataGenerationLabel"); \
 					"alignment"; Align left:K42:2; \
 					"factor"; 1.15))
 				
@@ -100,24 +100,24 @@ Case of
 				
 				ui_SET_ENABLED($Obj_form.generate; False:C215)
 				
-				OBJECT SET TITLE:C194(*; "dataGeneration.label"; Replace string:C233(Get localized string:C991("dataSetGeneration"); "\n\n"; "\r"))
+				OBJECT SET TITLE:C194(*; "dataGenerationLabel"; Replace string:C233(Get localized string:C991("dataSetGeneration"); "\n\n"; "\r"))
 				
 				//______________________________________________________
 			: ($Lon_formEvent=On Timer:K2:25)
 				
 				If ($Obj_form.ui.remote())
 					
-					(OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.server))->:=1
-					(OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.local))->:=0
+					(OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.server))->:=True:C214
+					(OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.local))->:=False:C215
 					
 				Else 
 					
-					(OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.server))->:=0
-					(OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.local))->:=1
+					(OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.server))->:=False:C215
+					(OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.local))->:=True:C214
 					
 				End if 
 				
-				If (Bool:C1537($Obj_form.ui.serverInTest))
+				If (Bool:C1537($Obj_form.ui.doTestServer))
 					
 					(OBJECT Get pointer:C1124(Object named:K67:5; "serverInTest"))->:=1
 					OBJECT SET VISIBLE:C603(*; $Obj_form.serverStatus; False:C215)
@@ -222,7 +222,7 @@ Case of
 		//=========================================================
 	: ($Obj_in.action="testServer")
 		
-		$Obj_form.ui.serverInTest:=False:C215
+		$Obj_form.ui.doTestServer:=False:C215
 		
 		If ($Obj_form.ui.remote())
 			
@@ -285,7 +285,7 @@ Case of
 			BEEP:C151
 			
 			var $oSource : Object
-			$oSource:=cs:C1710.source.new()
+			$oSource:=cs:C1710.sources.new()
 			
 			If ($Obj_form.ui.remote())
 				
@@ -370,9 +370,9 @@ $regex.match[1].data:="127.0.0.1"
 							If ($file.exists)  // & Shift down
 								
 								// Test server
-								If (Not:C34(Bool:C1537($Obj_form.ui.serverInTest)))
+								If (Not:C34(Bool:C1537($Obj_form.ui.doTestServer)))
 									
-									$Obj_form.ui.serverInTest:=True:C214
+									$Obj_form.ui.doTestServer:=True:C214
 									
 									CALL WORKER:C1389(EDITOR.worker; "Rest"; New object:C1471(\
 										"caller"; EDITOR.window; \
@@ -536,9 +536,9 @@ $regex.match[1].data:="127.0.0.1"
 							If ($file.exists)  // & Shift down
 								
 								// Test server
-								If (Not:C34(Bool:C1537($Obj_form.ui.serverInTest)))
+								If (Not:C34(Bool:C1537($Obj_form.ui.doTestServer)))
 									
-									$Obj_form.ui.serverInTest:=True:C214
+									$Obj_form.ui.doTestServer:=True:C214
 									
 									CALL WORKER:C1389(EDITOR.worker; "Rest"; New object:C1471(\
 										"caller"; EDITOR.window; \

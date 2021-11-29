@@ -21,7 +21,7 @@
 		null,
 		{
 			"objects": {
-				"source_local": {
+				"local": {
 					"type": "radio",
 					"top": 5,
 					"left": 54,
@@ -33,9 +33,10 @@
 					"events": [
 						"onClick"
 					],
-					"method": "SOURCE_OBJECTS_HANDLER"
+					"method": "SOURCE_OBJECTS_HANDLER",
+					"dataSourceTypeHint": "boolean"
 				},
-				"source_server": {
+				"server": {
 					"type": "radio",
 					"top": 33,
 					"left": 54,
@@ -47,7 +48,8 @@
 					"events": [
 						"onClick"
 					],
-					"method": "SOURCE_OBJECTS_HANDLER"
+					"method": "SOURCE_OBJECTS_HANDLER",
+					"dataSourceTypeHint": "boolean"
 				},
 				"doNotGenerate": {
 					"type": "checkbox",
@@ -104,12 +106,12 @@
 					"height": 19,
 					"visibility": "hidden"
 				},
-				"serverInTest.label": {
+				"serverInTestLabel": {
 					"type": "text",
 					"top": 85,
-					"left": 91,
-					"width": 337,
-					"height": 17,
+					"left": 96,
+					"width": 332,
+					"height": 16,
 					"visibility": "hidden",
 					"text": ":xliff:checkingServerAvailability",
 					"class": "label"
@@ -122,7 +124,7 @@
 					"height": 19,
 					"visibility": "hidden"
 				},
-				"dataGeneration.label": {
+				"dataGenerationLabel": {
 					"type": "text",
 					"top": 63,
 					"left": 680,
@@ -149,8 +151,8 @@
 				}
 			},
 			"entryOrder": [
-				"source_local",
-				"source_server",
+				"local",
+				"server",
 				"serverStatus",
 				"doNotExportImages",
 				"doNotGenerate",
@@ -163,7 +165,7 @@
 		"kind": "form"
 	},
 	"method": "SOURCE_Handler",
-	"geometryStamp": 10,
+	"geometryStamp": 21,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

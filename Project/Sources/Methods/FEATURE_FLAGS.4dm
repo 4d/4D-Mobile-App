@@ -182,6 +182,7 @@ FEATURE.wip("formatMarketPlace")  // Manage format as archive
 FEATURE.wip(114338)  // Support Collection of field injected into detail template https://project.4d.com/issues/114338
 FEATURE.alias("droppingNext"; 114338)  // Allow to drop a multivalued field next to another existing dropped multivalued fields
 FEATURE.wip("sourceClass")  // Work with Source class to test the data source
+
 FEATURE.wip("iosSDKfromAWS")  // Download iOS SDK from AWS
 
 FEATURE.wip("newFormatterChoiceList")  // Menu to create formatter choice list directly , from data

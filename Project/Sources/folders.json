@@ -358,6 +358,7 @@
 	"05] SOURCE": {
 		"methods": [
 			"COMPILER_SOURCE",
+			"SOURCE",
 			"SOURCE_Handler",
 			"SOURCE_OBJECTS_HANDLER"
 		],
@@ -365,7 +366,8 @@
 			"SOURCE"
 		],
 		"classes": [
-			"source"
+			"SOURCE",
+			"sources"
 		]
 	},
 	"06] DATA": {
@@ -706,6 +708,7 @@
 			"listbox",
 			"picture",
 			"scrollable",
+			"stepper",
 			"subform",
 			"thermometer",
 			"webArea",

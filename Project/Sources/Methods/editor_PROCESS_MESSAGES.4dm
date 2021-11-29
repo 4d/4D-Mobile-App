@@ -24,6 +24,12 @@ Case of
 		Case of 
 				
 				//______________________________________________________
+			: ($data.step="catalog")
+				
+				$o.additional:=EDITOR.str.setText("dataCatalog").localized($data.table.name)
+				EDITOR.message.setValue($o)
+				
+				//______________________________________________________
 			: ($data.step="table")
 				
 				If (EDITOR.message.isVisible())

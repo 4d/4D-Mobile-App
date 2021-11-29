@@ -523,6 +523,15 @@ Function setHelpTip($helpTip : Text)->$this : cs:C1710.widget
 	$this:=This:C1470
 	
 /*══════════════════════════
+.removeHelpTip() -> This
+══════════════════════════*/
+Function removeHelpTip()->$this : cs:C1710.widget
+	
+	OBJECT SET HELP TIP:C1181(*; This:C1470.name; "")
+	
+	$this:=This:C1470
+	
+/*══════════════════════════
 .getShortcut() -> object
   {"key";text;"modifier";int)
 ══════════════════════════*/

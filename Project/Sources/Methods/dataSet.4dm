@@ -487,11 +487,13 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 						"dataSet"; $Obj_in.dataSet; \
 						"debug"; Bool:C1537($Obj_in.debug); \
 						"dataModel"; $Obj_dataModel))
+					
 					ob_error_combine($Obj_out; $Obj_out.catalog)
 					
-					If ($Obj_out.catalog.success)
+					If ($Obj_out.catalog.success)  // Do not dump data if catalog failed
 						
-						// Do not dump data if catalog failed
+						
+						//$Obj_out.catalog.results  contient une entrée (nom de la table) par table dans le data model
 						
 						If ($Boo_verbose)
 							
