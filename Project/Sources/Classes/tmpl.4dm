@@ -693,18 +693,11 @@ Function appendOneField($index : Integer; $field : Object; $context : Object; $b
 			
 			$relation:=Form:C1466.dataModel[$context.tableNumber]
 			
-			If ($relation[$field.name].format=Null:C1517)
+			If (Match regex:C1019("(?m-si)^%.*%$"; String:C10($relation[$field.name].label); 1))
 				
-				$label:=$field.name
-				
-			Else 
-				
-				If (Match regex:C1019("(?m-si)^%.*%$"; String:C10($relation[$field.name].format); 1))
-					
-					$name:=Substring:C12($relation[$field.name].format; 2; Length:C16($relation[$field.name].format)-2)
-					$label:=$field.name+" ("+$name+")"
-					
-				End if 
+				$name:=Substring:C12($relation[$field.name].label; 2; Length:C16($relation[$field.name].label)-2)
+				$label:=$field.name+" ("+$name+")"
+				$tips:=$field.name+"."+$name
 				
 				// Check that the discriminant field is published
 				For each ($key; $relation[$field.name]) Until ($found)
@@ -722,6 +715,11 @@ Function appendOneField($index : Integer; $field : Object; $context : Object; $b
 					$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
 					
 				End if 
+				
+			Else 
+				
+				$label:=$field.name
+				
 			End if 
 			
 			$label:=cs:C1710.str.new(EDITOR.toOne).concat($label)
@@ -753,7 +751,7 @@ Function appendOneField($index : Integer; $field : Object; $context : Object; $b
 		"offset"; 5+$offset; \
 		"style"; $style; \
 		"class"; $class; \
-		"tips"; cs:C1710.str.new($o.tips).xmlSafe()))
+		"tips"; cs:C1710.str.new($tips).xmlSafe()))
 	
 	// Append the widget
 	$xml:=cs:C1710.xml.new($t)
