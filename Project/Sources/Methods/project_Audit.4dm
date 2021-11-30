@@ -90,32 +90,36 @@ If ($datamodel#Null:C1517)
 				Else 
 					
 					// CHECK FORMS FIELDS
-					For each ($field; $list[$table.key].fields)
+					
+					If ($list[$table.key].fields#Null:C1517)
 						
-						Case of 
-								
-								//______________________________________________________
-							: ($field=Null:C1517)
-								
-								// <NOTHING MORE TO DO>
-								
-								//______________________________________________________
-							: (Bool:C1537($field.computed))  // Computed attribute
-								
-								If ($datamodel[$table.key][$field.name]=Null:C1517)
+						For each ($field; $list[$table.key].fields)
+							
+							Case of 
 									
-									// Missing
-									$errors.push(New object:C1471(\
-										"type"; "field"; \
-										"tab"; "list"; \
-										"message"; $str.setText("theFieldIsMissing").localized($field.name); \
-										"table"; $table.key))
+									//______________________________________________________
+								: ($field=Null:C1517)
 									
-								End if 
-								
-								//______________________________________________________
-						End case 
-					End for each 
+									// <NOTHING MORE TO DO>
+									
+									//______________________________________________________
+								: (Bool:C1537($field.computed))  // Computed attribute
+									
+									If ($datamodel[$table.key][$field.name]=Null:C1517)
+										
+										// Missing
+										$errors.push(New object:C1471(\
+											"type"; "field"; \
+											"tab"; "list"; \
+											"message"; $str.setText("theFieldIsMissing").localized($field.name); \
+											"table"; $table.key))
+										
+									End if 
+									
+									//______________________________________________________
+							End case 
+						End for each 
+					End if 
 				End if 
 			End if 
 		End if 
@@ -138,33 +142,35 @@ If ($datamodel#Null:C1517)
 				Else 
 					
 					// CHECK FORMS FIELDS
-					For each ($field; $list[$table.key].fields)
+					If ($detail[$table.key].fields#Null:C1517)
 						
-						Case of 
-								
-								//______________________________________________________
-							: ($field=Null:C1517)
-								
-								// <NOTHING MORE TO DO>
-								
-								//______________________________________________________
-							: (Bool:C1537($field.computed))  // Computed attribute
-								
-								If ($datamodel[$table.key][$field.name]=Null:C1517)
+						For each ($field; $detail[$table.key].fields)
+							
+							Case of 
 									
-									// Missing
-									$errors.push(New object:C1471(\
-										"type"; "field"; \
-										"tab"; "detail"; \
-										"message"; $str.setText("theFieldIsMissing").localized($field.name); \
-										"table"; $table.key))
+									//______________________________________________________
+								: ($field=Null:C1517)
 									
-								End if 
-								
-								//______________________________________________________
-						End case 
-					End for each 
-					
+									// <NOTHING MORE TO DO>
+									
+									//______________________________________________________
+								: (Bool:C1537($field.computed))  // Computed attribute
+									
+									If ($datamodel[$table.key][$field.name]=Null:C1517)
+										
+										// Missing
+										$errors.push(New object:C1471(\
+											"type"; "field"; \
+											"tab"; "detail"; \
+											"message"; $str.setText("theFieldIsMissing").localized($field.name); \
+											"table"; $table.key))
+										
+									End if 
+									
+									//______________________________________________________
+							End case 
+						End for each 
+					End if 
 				End if 
 			End if 
 		End if 

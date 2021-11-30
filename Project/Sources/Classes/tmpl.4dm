@@ -117,6 +117,7 @@ Function update()->$this : cs:C1710.tmpl
 			
 			$t:=This:C1470.svg
 			$root:=DOM Parse XML variable:C720($t)
+			OK:=(OK=0) ? Num:C11(This:C1470.isNotNull($root)) : 1
 			
 			If (Bool:C1537(OK))
 				
@@ -147,17 +148,20 @@ Function update()->$this : cs:C1710.tmpl
 				
 				// Try to adapt the old template to the renderer v2
 				$root:=DOM Parse XML variable:C720($t)
+				OK:=(OK=0) ? Num:C11(This:C1470.isNotNull($root)) : 1
 				
 				If (Bool:C1537(OK))
 					
 					// Change the background
-					$node:=DOM Find XML element:C864($root; "/"+"/rect[contains(@type,'bgcontainer')]")
+					$node:=DOM Find XML element:C864($root; "/"+"/rect[contains(@class,'bgcontainer')]")
+					OK:=(OK=0) ? Num:C11(This:C1470.isNotNull($node)) : 1
 					
 					If (Bool:C1537(OK))
 						
 						DOM REMOVE XML ELEMENT:C869($node)
 						
 						$node:=DOM Find XML element by ID:C1010($root; "bgcontainer")
+						OK:=(OK=0) ? Num:C11(This:C1470.isNotNull($node)) : 1
 						
 						If (Bool:C1537(OK))
 							
@@ -176,6 +180,7 @@ Function update()->$this : cs:C1710.tmpl
 								If (Bool:C1537(OK))
 									
 									$node:=DOM Insert XML element:C1083($node; $dom; 0)
+									OK:=(OK=0) ? Num:C11(This:C1470.isNotNull($node)) : 1
 									
 									If (Bool:C1537(OK))
 										
@@ -328,7 +333,6 @@ Function update()->$this : cs:C1710.tmpl
 								// Keep the updated template
 								DOM EXPORT TO VAR:C863($root; $t)
 								This:C1470.svg:=$t
-								//This.svg:=This.getText(False)
 								
 							Else 
 								

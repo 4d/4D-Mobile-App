@@ -532,6 +532,8 @@ If (Num:C11($project.info.version)<6)
 						$project.dataModel[$tableID][$fieldID].shortLabel:=$project.dataModel[$tableID][$fieldID].format
 						OB REMOVE:C1226($project.dataModel[$tableID][$fieldID]; "format")
 						
+						$isUpgraded:=True:C214
+						
 					End if 
 				End if 
 			End for each 
