@@ -8,7 +8,7 @@
 //
 // ----------------------------------------------------
 // Declarations
-var $File_key; $Txt_buffer; $Txt_me : Text
+var $keyPathname; $Txt_buffer; $Txt_me : Text
 var $o; $Obj_context; $Obj_form; $Obj_server; $status : Object
 var $web : 4D:C1709.WebServer
 var $error : cs:C1710.error
@@ -39,12 +39,12 @@ Case of
 				
 				//===============================================================
 				//#RUSTINE: ne devrait plus être nécessaire
-				If (Test path name:C476($File_key)#Is a document:K24:1)
+				If (Test path name:C476($keyPathname)#Is a document:K24:1)
 					
 					LOG_EVENT(New object:C1471(\
-						"message"; Form:C1466.dataSource.keyPath+" ->"+$File_key))
+						"message"; Form:C1466.dataSource.keyPath+" ->"+$keyPathname))
 					
-					$File_key:=Convert path POSIX to system:C1107(Form:C1466.dataSource.keyPath)
+					$keyPathname:=Convert path POSIX to system:C1107(Form:C1466.dataSource.keyPath)
 					
 				End if 
 				
@@ -53,13 +53,13 @@ Case of
 			Else 
 				
 				// Default location
-				$File_key:=_o_COMPONENT_Pathname("key").platformPath
+				$keyPathname:=EDITOR.path.key().platformPath
 				
 			End if 
 			
 			If (FEATURE.with("cancelableDatasetGeneration"))
 				
-				EDITOR.doGenerate($File_key)
+				EDITOR.doGenerate($keyPathname)
 				SET TIMER:C645(-1)
 				
 			Else 
@@ -71,7 +71,7 @@ Case of
 					"project"; PROJECT; \
 					"digest"; True:C214; \
 					"coreDataSet"; True:C214; \
-					"key"; $File_key; \
+					"key"; $keyPathname; \
 					"dataSet"; True:C214))
 				
 				SET TIMER:C645(-1)

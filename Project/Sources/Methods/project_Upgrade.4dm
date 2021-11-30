@@ -524,13 +524,15 @@ If (Num:C11($project.info.version)<6)
 			
 			For each ($fieldID; $project.dataModel[$tableID])
 				
-				If ($project.dataModel[$tableID][$fieldID].relatedDataClass#Null:C1517)  // N -> 1
+				$o:=$project.dataModel[$tableID][$fieldID]
+				
+				If ($o.relatedDataClass#Null:C1517)  // N -> 1
 					
-					If ($project.dataModel[$tableID][$fieldID].format#Null:C1517)
+					If ($o.format#Null:C1517)
 						
-						$project.dataModel[$tableID][$fieldID].label:=$project.dataModel[$tableID][$fieldID].format
-						$project.dataModel[$tableID][$fieldID].shortLabel:=$project.dataModel[$tableID][$fieldID].format
-						OB REMOVE:C1226($project.dataModel[$tableID][$fieldID]; "format")
+						$o.label:=$o.format
+						$o.shortLabel:=$o.format
+						OB REMOVE:C1226($o; "format")
 						
 						$isUpgraded:=True:C214
 						

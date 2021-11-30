@@ -267,27 +267,25 @@ If (Num:C11($tableID)>0)
 															If (Match regex:C1019("(?m-si)^%.*%$"; String:C10($relation[$field.name].shortLabel); 1))
 																
 																$name:=Substring:C12($relation[$field.name].shortLabel; 2; Length:C16($relation[$field.name].shortLabel)-2)
-																$label:=$label+" ("+$name+")"
 																
-															End if 
-															
-															If (Length:C16($name)>0)
-																
-																// Check that the discriminant field is published
-																For each ($key; $relation[$field.name]) Until ($found)
+																If (Length:C16($name)>0)
 																	
-																	If (Value type:C1509($relation[$field.name][$key])=Is object:K8:27)
+																	$label:=$label+" ("+$name+")"
+																	$tips:=$field.name+"."+$name
+																	
+																	// Check that the discriminant field is published
+																	For each ($o; OB Entries:C1720($relation[$field.name]).query("value.fieldType != null")) Until ($found)
 																		
-																		$found:=String:C10($relation[$field.name][$key].name)=$name
+																		$found:=String:C10($o.value.name)=$name
+																		
+																	End for each 
+																	
+																	If (Not:C34($found))
+																		
+																		$svg.addClass("error"; $node)
+																		$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
 																		
 																	End if 
-																End for each 
-																
-																If (Not:C34($found))
-																	
-																	$svg.addClass("error"; $node)
-																	$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
-																	
 																End if 
 															End if 
 															
@@ -348,10 +346,10 @@ If (Num:C11($tableID)>0)
 													
 													$o:=New object:C1471(\
 														"label"; $label; \
+														"tips"; $tips; \
 														"avalaibleWidth"; $avalaibleWidth)
 													
 													$tmpl.truncateLabelIfTooBig($o)
-													
 													$label:=$o.label
 													$tips:=$o.tips
 													
@@ -376,12 +374,9 @@ If (Num:C11($tableID)>0)
 																
 																If (PROJECT.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)  // Error
 																	
-																	If ($relation[$field.name].format=Null:C1517)
-																		
-																		$class:=$class+" error"
-																		$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theLinkedTableIsNotPublished").localized($relation[$field.name].relatedEntities))
-																		
-																	End if 
+																	$class:=$class+" error"
+																	$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theLinkedTableIsNotPublished").localized($relation[$field.name].relatedEntities))
+																	
 																End if 
 																
 															Else 
@@ -445,16 +440,12 @@ If (Num:C11($tableID)>0)
 												$height:=$height+$tmpl.appendOneField($indx; $field; $context; $background; $height)
 												
 											End if 
+										Else   // No binding
 										End if 
 									End if 
 								End if 
-								
-							Else 
-								
-								// <NOTHING MORE TO DO>
-								
+							Else   // <NOTHING MORE TO DO>
 							End if 
-							
 						End for each 
 						
 						$height:=$height+40

@@ -638,9 +638,10 @@ Function truncateLabelIfTooBig($o : Object)
 	var $font : Object
 	var $svg : cs:C1710.svg
 	
+	// Mark: Must be recovered from the css file
 	$font:=New object:C1471(\
 		"fontFamily"; "sans-serif"; \
-		"size"; 12)  // #TO_DO: Must be recovered from the css file
+		"size"; 12)
 	
 	$svg:=cs:C1710.svg.new()
 	
@@ -658,6 +659,8 @@ Function truncateLabelIfTooBig($o : Object)
 			
 		End while 
 		
+		$svg.close()
+		
 		// Add an ellipsis
 		$buffer:=$buffer+"…"
 		
@@ -668,9 +671,9 @@ Function truncateLabelIfTooBig($o : Object)
 	End if 
 	
 	//============================================================================
-	// Add a "one field" widget to the template
+	/// Add a "one field" widget to the template
 Function appendOneField($index : Integer; $field : Object; $context : Object; $background : Text; $offset : Integer)->$height : Integer
-	var $class; $key; $label; $name; $node; $style; $t; $tips : Text
+	var $class; $label; $name; $node; $style; $t; $tips : Text
 	var $found; $isToMany; $isToOne : Boolean
 	var $o; $relation : Object
 	var $xml : cs:C1710.xml
@@ -700,13 +703,10 @@ Function appendOneField($index : Integer; $field : Object; $context : Object; $b
 				$tips:=$field.name+"."+$name
 				
 				// Check that the discriminant field is published
-				For each ($key; $relation[$field.name]) Until ($found)
+				For each ($o; OB Entries:C1720($relation[$field.name]).query("value.fieldType != null")) Until ($found)
 					
-					If (Value type:C1509($relation[$field.name][$key])=Is object:K8:27)
-						
-						$found:=String:C10($relation[$field.name][$key].name)=$name
-						
-					End if 
+					$found:=String:C10($o.value.name)=$name
+					
 				End for each 
 				
 				If (Not:C34($found))
@@ -740,6 +740,7 @@ Function appendOneField($index : Integer; $field : Object; $context : Object; $b
 	
 	$o:=New object:C1471(\
 		"label"; $label; \
+		"tips"; $tips; \
 		"avalaibleWidth"; 180)
 	
 	This:C1470.truncateLabelIfTooBig($o)
@@ -751,7 +752,7 @@ Function appendOneField($index : Integer; $field : Object; $context : Object; $b
 		"offset"; 5+$offset; \
 		"style"; $style; \
 		"class"; $class; \
-		"tips"; cs:C1710.str.new($tips).xmlSafe()))
+		"tips"; cs:C1710.str.new($o.tips).xmlSafe()))
 	
 	// Append the widget
 	$xml:=cs:C1710.xml.new($t)
