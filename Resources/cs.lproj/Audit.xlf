@@ -1,1 +1,128 @@
-﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?><!--Translation file.  This file is distributed under the same license as the product package.--><xliff version="1.0" xmlns:d4="http://www.4d.com/d4-ns">  <file datatype="plaintext" original="Undefined" source-language="en" target-language="cs">    <header>      <prop-group name="Xliff-Editor.4dbase">        <prop prop-type="version">2.0</prop>      </prop-group>    </header>    <body>      <group resname="Errors">        <trans-unit id="rsac4QerO/Yu5rHH1mQ0tA" resname="theTemplateIsMissingOrInvalid">          <source>The template "{tmpl}" is missing or invalid</source>          <target>Vzor "{tmpl}" chybí nebo je neplatný.</target>        </trans-unit>        <trans-unit id="N3herDi6NW+t2kIuyjNt6A" resname="theTemplateIsMissing">          <source>The template "{tmpl}" is missing.</source>          <target>Vzor "{tmpl}" chybí.</target>        </trans-unit>        <trans-unit id="bBQuhy+qioOU30PgsSt3rw" resname="theTemplateIsInvalid">          <source>The template "{tmpl}" is invalid.</source>          <target>Vzor "{tmpl}" je neplatný.</target>        </trans-unit>        <trans-unit id="Ntziy+/6IKor0xsBBU7ITQ" resname="someTemplatesAreMissingOrInvalid">          <source>Some templates are missing or invalid.</source>          <target>Některé vzory chybí nebo jsou neplatné.</target>        </trans-unit>        <trans-unit id="boAgL5KJeH/e9RbohQkF3g" resname="someIconsAreMissingOrInvalid">          <source>Some icons are missing or invalid.</source>          <target>Některé ikony chybí nebo jsou neplatné.</target>        </trans-unit>        <trans-unit id="BA8doassoJpNBBCDL8JfxA" resname="someResourcesAreMissingOrInvalid">          <source>Some resources are missing or invalid.</source>          <target>Některé zdroje chybí nebo jsou neplatné.</target>        </trans-unit>        <trans-unit id="cE74Yghv+fjWOxigmRRuHA" resname="theTableIconIsMissing">          <source>The table icon "{icon}" is missing.</source>          <target>Ikona tabulky "{icon}" chybí.</target>        </trans-unit>        <trans-unit id="kgu2Zpnmvc3grUPoaT9oeQ" resname="theFieldIconIsMissing">          <source>The field icon "{icon}" is missing.</source>          <target>Ikona pole "{icon}" chybí.</target>        </trans-unit>        <trans-unit id="DzG5o/k8MLxtlK241sBA4g" resname="theFormatterIsMissingOrInvalid">          <source>The format "{formatter}" is missing or invalid.</source>          <target>Formát "{formatter}" chybí nebo je neplatný.</target>        </trans-unit>        <trans-unit id="SucD315615ij82O/T+XE3g" resname="someFormattersAreMissingOrInvalid">          <source>Some formats are missing or invalid.</source>          <target>Některé formáty chybí nebo jsou neplatné.</target>        </trans-unit>        <trans-unit id="3/V0JM30b2fl0XkhnBBK/g" resname="theFilterForTheTableIsNotValid">          <source>The filter for the "{tableName}" table is not valid.</source>          <target>Filtr pro tabulku "{tableName}" není platný.</target>        </trans-unit>        <trans-unit id="Aqp6nOh9Z6HmUK9IWnbsfQ" resname="someFiltersAreNotValidatedOrInvalid">          <source>Some filters are not validated or invalid.</source>          <target>SNěkteré filtry nebyly schváleny nebo jsou neplatné.</target>        </trans-unit>        <trans-unit id="Hu+PktVJBLRCHHsqMzqjaQ" resname="theFieldIsNoMorePublished">          <source>The field "{name}" is no more published</source>          <target>Pole "{name}" již není publikováno</target>        </trans-unit>        <trans-unit id="I1a+69XrDoHhwW3Vg6JIJQ" resname="oneOrMoreFieldsAreNoLongerPublished">          <source>One or more fields are no longer published</source>          <target>Jedno nebo více polí již není publikováno</target>        </trans-unit>        <trans-unit id="A05BzMhKlOhC2eMvb7+vyw" resname="theFieldIsMissing">          <source>The field "{field}" is no more published.</source>          <target state="new">The field "{field}" is no more published.</target>        </trans-unit>        <trans-unit id="DeBMVApaG2orvZGTfH+GzQ" resname="someFieldsUsedInFormsAreMissingOrInvalid">          <source>Some fields used in forms are missing</source>          <target state="new">Some fields used in forms are missing</target>        </trans-unit>        <trans-unit id="0ZoTS3t8tSggRcqMoH0Xpw" resname="someResourcesOrFieldsAreMissingOrInvalid">          <source>Some resources or fields are missing or invalid.</source>          <target state="new">Some resources or fields are missing or invalid.</target>        </trans-unit>      </group>      <group resname="Messages">        <trans-unit id="LQeNlEbk5pMfXCljSkquRg" resname="doYouWantToFixYourProjectByUsingTheDefaultTemplates">          <source>Do you want to fix project by using the default templates?</source>          <target>Chcete opravit projekt pomocí výchozích vzorů?</target>        </trans-unit>        <trans-unit id="uqbDxrhTRVficnh3OYNsgw" resname="doYouWantToFixYourProjectByUsingTheDefaultIcons">          <source>Do you want to fix project by using the default icons?</source>          <target>Chcete opravit projekt pomocí výchozích ikon?</target>        </trans-unit>        <trans-unit id="P3xST1SHglB1wYu439rwKg" resname="doYouWantToFixYourProjectByUsingTheDefaultResources">          <source>Do you want to fix project by using the default resources?</source>          <target>Chcete opravit projekt pomocí výchozích zdrojů?</target>        </trans-unit>        <trans-unit id="ATET5ogypqKl3CrpJrx44w" resname="doYouWantToFixYourProjectByUsingTheDefaultFormatter">          <source>Do you want to fix project by using the default formats?</source>          <target>Chcete opravit projekt pomocí výchozích formátů?</target>        </trans-unit>        <trans-unit id="f8NqufPfItzC6DujbO3kmQ" resname="wouldYouLikeToRemoveTheFilterToFixYourProject">          <source>Would you like to remove the filter to fix your project?</source>          <target>Chcete odstranit filtry k opravě projektu?</target>        </trans-unit>        <trans-unit id="qqNvZiLTP68d+4mfiOwj0g" resname="wouldYouLikeToRemoveTheInvalidOrNotValidatedFilters">          <source>Would you like to remove the invalid or not validated filters?</source>          <target>CHcete odstranit neplatné nebo neschválené filtry?</target>        </trans-unit>        <trans-unit id="+EcFUibbdBAvHbvETiZbnQ" resname="theDefinitionOfTheStructureIsInconsistent">          <source>The definition of the structure is inconsistent</source>          <target>Definice struktury je nekonzistentní</target>        </trans-unit>        <trans-unit id="8/bk3QvhY+ScZfjJN6CHOw" resname="youMustFixItBeforeBuildingTheApplication">          <source>You must fix it before building the application.</source>          <target>Před vytvořením aplikace ji musíte opravit.</target>        </trans-unit>        <trans-unit id="Rfj4J+t59u5GNtq1dADkLg" resname="doYouWantToFixYourProjectByDeletingTheseFields">          <source>Do you want to fix your project by deleting these fields?</source>          <target state="new">Do you want to fix your project by deleting these fields?</target>        </trans-unit>        <trans-unit id="fxpkdxt5KOZHO9XG8NqIOA" resname="doYouWantToFixYourProjectByDeletingThisField">          <source>Do you want to fix your project by deleting this field?</source>          <target state="new">Do you want to fix your project by deleting this field?</target>        </trans-unit>      </group>    </body>  </file></xliff>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!--Translation file.
+  This file is distributed under the same license as the product package.-->
+<xliff version="1.0" xmlns:d4="http://www.4d.com/d4-ns">
+
+  <file datatype="plaintext" original="Undefined" source-language="en" target-language="cs">
+    <header>
+      <prop-group name="Xliff-Editor.4dbase">
+        <prop prop-type="version">2.0</prop>
+      </prop-group>
+    </header>
+    <body>
+      <group resname="Errors">
+        <trans-unit id="rsac4QerO/Yu5rHH1mQ0tA" resname="theTemplateIsMissingOrInvalid">
+          <source>The template "{tmpl}" is missing or invalid</source>
+          <target>Vzor "{tmpl}" chybí nebo je neplatný.</target>
+        </trans-unit>
+        <trans-unit id="N3herDi6NW+t2kIuyjNt6A" resname="theTemplateIsMissing">
+          <source>The template "{tmpl}" is missing.</source>
+          <target>Vzor "{tmpl}" chybí.</target>
+        </trans-unit>
+        <trans-unit id="bBQuhy+qioOU30PgsSt3rw" resname="theTemplateIsInvalid">
+          <source>The template "{tmpl}" is invalid.</source>
+          <target>Vzor "{tmpl}" je neplatný.</target>
+        </trans-unit>
+        <trans-unit id="Ntziy+/6IKor0xsBBU7ITQ" resname="someTemplatesAreMissingOrInvalid">
+          <source>Some templates are missing or invalid.</source>
+          <target>Některé vzory chybí nebo jsou neplatné.</target>
+        </trans-unit>
+        <trans-unit id="boAgL5KJeH/e9RbohQkF3g" resname="someIconsAreMissingOrInvalid">
+          <source>Some icons are missing or invalid.</source>
+          <target>Některé ikony chybí nebo jsou neplatné.</target>
+        </trans-unit>
+        <trans-unit id="BA8doassoJpNBBCDL8JfxA" resname="someResourcesAreMissingOrInvalid">
+          <source>Some resources are missing or invalid.</source>
+          <target>Některé zdroje chybí nebo jsou neplatné.</target>
+        </trans-unit>
+        <trans-unit id="cE74Yghv+fjWOxigmRRuHA" resname="theTableIconIsMissing">
+          <source>The table icon "{icon}" is missing.</source>
+          <target>Ikona tabulky "{icon}" chybí.</target>
+        </trans-unit>
+        <trans-unit id="kgu2Zpnmvc3grUPoaT9oeQ" resname="theFieldIconIsMissing">
+          <source>The field icon "{icon}" is missing.</source>
+          <target>Ikona pole "{icon}" chybí.</target>
+        </trans-unit>
+        <trans-unit id="DzG5o/k8MLxtlK241sBA4g" resname="theFormatterIsMissingOrInvalid">
+          <source>The format "{formatter}" is missing or invalid.</source>
+          <target>Formát "{formatter}" chybí nebo je neplatný.</target>
+        </trans-unit>
+        <trans-unit id="SucD315615ij82O/T+XE3g" resname="someFormattersAreMissingOrInvalid">
+          <source>Some formats are missing or invalid.</source>
+          <target>Některé formáty chybí nebo jsou neplatné.</target>
+        </trans-unit>
+        <trans-unit id="3/V0JM30b2fl0XkhnBBK/g" resname="theFilterForTheTableIsNotValid">
+          <source>The filter for the "{tableName}" table is not valid.</source>
+          <target>Filtr pro tabulku "{tableName}" není platný.</target>
+        </trans-unit>
+        <trans-unit id="Aqp6nOh9Z6HmUK9IWnbsfQ" resname="someFiltersAreNotValidatedOrInvalid">
+          <source>Some filters are not validated or invalid.</source>
+          <target>SNěkteré filtry nebyly schváleny nebo jsou neplatné.</target>
+        </trans-unit>
+        <trans-unit id="Hu+PktVJBLRCHHsqMzqjaQ" resname="theFieldIsNoMorePublished">
+          <source>The field "{name}" is no more published</source>
+          <target>Pole "{name}" již není publikováno</target>
+        </trans-unit>
+        <trans-unit id="I1a+69XrDoHhwW3Vg6JIJQ" resname="oneOrMoreFieldsAreNoLongerPublished">
+          <source>One or more fields are no longer published</source>
+          <target>Jedno nebo více polí již není publikováno</target>
+        </trans-unit>
+        <trans-unit id="A05BzMhKlOhC2eMvb7+vyw" resname="theFieldIsMissing">
+          <source>The field "{field}" is no more published.</source>
+          <target>Pole "{field}" již není publikováno.</target>
+        </trans-unit>
+        <trans-unit id="DeBMVApaG2orvZGTfH+GzQ" resname="someFieldsUsedInFormsAreMissingOrInvalid">
+          <source>Some fields used in forms are missing</source>
+          <target>Některá pole užitá ve formuláři chybí</target>
+        </trans-unit>
+        <trans-unit id="0ZoTS3t8tSggRcqMoH0Xpw" resname="someResourcesOrFieldsAreMissingOrInvalid">
+          <source>Some resources or fields are missing or invalid.</source>
+          <target>Některé zdroje nebo pole chybí nebo jsou neplatné.</target>
+        </trans-unit>
+      </group>
+      <group resname="Messages">
+        <trans-unit id="LQeNlEbk5pMfXCljSkquRg" resname="doYouWantToFixYourProjectByUsingTheDefaultTemplates">
+          <source>Do you want to fix project by using the default templates?</source>
+          <target>Chcete opravit projekt pomocí výchozích vzorů?</target>
+        </trans-unit>
+        <trans-unit id="uqbDxrhTRVficnh3OYNsgw" resname="doYouWantToFixYourProjectByUsingTheDefaultIcons">
+          <source>Do you want to fix project by using the default icons?</source>
+          <target>Chcete opravit projekt pomocí výchozích ikon?</target>
+        </trans-unit>
+        <trans-unit id="P3xST1SHglB1wYu439rwKg" resname="doYouWantToFixYourProjectByUsingTheDefaultResources">
+          <source>Do you want to fix project by using the default resources?</source>
+          <target>Chcete opravit projekt pomocí výchozích zdrojů?</target>
+        </trans-unit>
+        <trans-unit id="ATET5ogypqKl3CrpJrx44w" resname="doYouWantToFixYourProjectByUsingTheDefaultFormatter">
+          <source>Do you want to fix project by using the default formats?</source>
+          <target>Chcete opravit projekt pomocí výchozích formátů?</target>
+        </trans-unit>
+        <trans-unit id="f8NqufPfItzC6DujbO3kmQ" resname="wouldYouLikeToRemoveTheFilterToFixYourProject">
+          <source>Would you like to remove the filter to fix your project?</source>
+          <target>Chcete odstranit filtry k opravě projektu?</target>
+        </trans-unit>
+        <trans-unit id="qqNvZiLTP68d+4mfiOwj0g" resname="wouldYouLikeToRemoveTheInvalidOrNotValidatedFilters">
+          <source>Would you like to remove the invalid or not validated filters?</source>
+          <target>CHcete odstranit neplatné nebo neschválené filtry?</target>
+        </trans-unit>
+        <trans-unit id="+EcFUibbdBAvHbvETiZbnQ" resname="theDefinitionOfTheStructureIsInconsistent">
+          <source>The definition of the structure is inconsistent</source>
+          <target>Definice struktury je nekonzistentní</target>
+        </trans-unit>
+        <trans-unit id="8/bk3QvhY+ScZfjJN6CHOw" resname="youMustFixItBeforeBuildingTheApplication">
+          <source>You must fix it before building the application.</source>
+          <target>Před vytvořením aplikace ji musíte opravit.</target>
+        </trans-unit>
+        <trans-unit id="Rfj4J+t59u5GNtq1dADkLg" resname="doYouWantToFixYourProjectByDeletingTheseFields">
+          <source>Do you want to fix your project by deleting these fields?</source>
+          <target>Chcete opravit svůj projekt odstraněním těchto polí??</target>
+        </trans-unit>
+        <trans-unit id="fxpkdxt5KOZHO9XG8NqIOA" resname="doYouWantToFixYourProjectByDeletingThisField">
+          <source>Do you want to fix your project by deleting this field?</source>
+          <target>Chcete opravit svůj projekt vymazaním těchto polí??</target>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+
+</xliff>
