@@ -514,6 +514,35 @@ If (Num:C11($project.info.version)<5)
 	
 End if 
 
+If (Num:C11($project.info.version)<6)
+	
+	// Mark: #132487 - Update old iOS project with Title and long/short label for N>1 relation
+	
+	If ($project.dataModel#Null:C1517)
+		
+		For each ($tableID; $project.dataModel)
+			
+			For each ($fieldID; $project.dataModel[$tableID])
+				
+				If ($project.dataModel[$tableID][$fieldID].relatedDataClass#Null:C1517)  // N -> 1
+					
+					If ($project.dataModel[$tableID][$fieldID].format#Null:C1517)
+						
+						$project.dataModel[$tableID][$fieldID].label:=$project.dataModel[$tableID][$fieldID].format
+						$project.dataModel[$tableID][$fieldID].shortLabel:=$project.dataModel[$tableID][$fieldID].format
+						OB REMOVE:C1226($project.dataModel[$tableID][$fieldID]; "format")
+						
+					End if 
+				End if 
+			End for each 
+		End for each 
+	End if 
+	
+	$project.info.version:=6
+	RECORD.warning("Upadted to version: "+String:C10($project.info.version))
+	
+End if 
+
 //=====================================================================
 //                         MISCELLANEOUS
 //=====================================================================
