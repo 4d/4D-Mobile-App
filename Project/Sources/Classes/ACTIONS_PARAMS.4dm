@@ -1193,9 +1193,17 @@ Function doFormatMenu()
 	
 	If (PROJECT.isFieldAttribute($current.name; Table name:C256(This:C1470.action.tableNumber)))
 		
-		$menu.append(":xliff:byDefault"; "null"; $current.format=Null:C1517).line()
-		
 		$type:=Choose:C955($current.type="text"; "string"; $current.type)
+		
+		If ($type="image")
+			
+			$menu.append(Get localized string:C991("byDefault")+Get localized string:C991("iosOnly"); "null"; $current.format=Null:C1517).line()
+			
+		Else 
+			
+			$menu.append(":xliff:byDefault"; "null"; $current.format=Null:C1517).line()
+			
+		End if 
 		
 		For each ($format; $formats[$type])
 			
@@ -1570,7 +1578,33 @@ Function _appendFormat($data : Object)->$custom : Boolean
 		
 	Else 
 		
-		$data.menu.append(":xliff:f_"+$format; $format; $data.currentFormat=$format)
+		//mark:#132599: Add tag iOS only for unsupported type
+		//$data.menu.append(":xliff:f_"+$format; $format; $data.currentFormat=$format)
+		var $label : Text
+		
+		Case of 
+				
+				//______________________________________________________
+			: ($data.type="string")\
+				 & ($data.format="barcode")
+				
+				$label:=Get localized string:C991("f_"+$format)+Get localized string:C991("iosOnly")
+				
+				//______________________________________________________
+			: ($data.type="image")\
+				 & ($data.format="signature")
+				
+				$label:=Get localized string:C991("f_"+$format)+Get localized string:C991("iosOnly")
+				
+				//______________________________________________________
+			Else 
+				
+				$label:=":xliff:f_"+$format
+				
+				//______________________________________________________
+		End case 
+		
+		$data.menu.append($label; $format; $data.currentFormat=$format)
 		
 	End if 
 	
@@ -1600,7 +1634,11 @@ Function _actionFormatterChoiceList($menu : cs:C1710.menu; $type : Text)
 				$parameter:="/"+$control+"/"+$type
 				$selected:=$parameter=(String:C10(This:C1470.current.format)+"/"+This:C1470.current.type)
 				
-				$menu.append($control; $parameter; $selected)\
+				//mark:#132599: Add tag iOS only for unsupported type
+				//$menu.append($control; $parameter; $selected)\
+					.setData("type"; $type)\
+					.setData("format"; "/"+$control)
+				$menu.append($control+Get localized string:C991("iosOnly"); $parameter; $selected)\
 					.setData("type"; $type)\
 					.setData("format"; "/"+$control)
 				
