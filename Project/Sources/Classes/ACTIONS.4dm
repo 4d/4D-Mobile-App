@@ -816,7 +816,8 @@ Function doOnDrop()
 	// Open the icons picker
 Function doShowIconPicker()
 	
-	var $o : Object
+	var $coordinates; $o : Object
+	
 	$o:=This:C1470.iconPicker.getValue()
 	
 	$o.item:=$o.pathnames.indexOf(String:C10(This:C1470.current.icon))
@@ -824,9 +825,9 @@ Function doShowIconPicker()
 	
 	$o.row:=This:C1470.actions.row
 	
-	// Update current cell coordinates
-	//This.actions.cellCoordinates($e.column; $e.row)
-	$o.left:=This:C1470.actionsBorder.coordinates.left
+	// Get current cell coordinates
+	$coordinates:=This:C1470.actions.cellCoordinates()
+	$o.left:=$coordinates.left
 	$o.top:=34
 	$o.right:=This:C1470.actionsBorder.coordinates.right
 	
