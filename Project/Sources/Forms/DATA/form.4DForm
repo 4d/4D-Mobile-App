@@ -285,6 +285,15 @@
 					"height": 16,
 					"text": ":xliff:dataSize",
 					"class": "label"
+				},
+				"result": {
+					"type": "input",
+					"left": 504,
+					"top": 145,
+					"width": 419,
+					"height": 193,
+					"enterable": false,
+					"fontSize": 12
 				}
 			}
 		}
@@ -294,7 +303,7 @@
 		"kind": "form"
 	},
 	"method": "DATA_Handler",
-	"geometryStamp": 43,
+	"geometryStamp": 49,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

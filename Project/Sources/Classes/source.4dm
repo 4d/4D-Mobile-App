@@ -117,16 +117,12 @@ Function update()
 				.disable()
 			
 		End if 
-		
-		
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function isRemote()->$remote : Boolean
 	
 	$remote:=(String:C10(Form:C1466.dataSource.source)="server")
-	
-	
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function testServer()

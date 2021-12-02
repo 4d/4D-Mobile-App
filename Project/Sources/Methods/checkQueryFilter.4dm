@@ -10,38 +10,31 @@
 // #THREAD-SAFE
 // ----------------------------------------------------
 // Declarations
-var $0 : Object
-var $1 : Object
+#DECLARE($in : Object)->$out : Object
 
 If (False:C215)
-	C_OBJECT:C1216(checkQueryFilter; $0)
 	C_OBJECT:C1216(checkQueryFilter; $1)
+	C_OBJECT:C1216(checkQueryFilter; $0)
 End if 
 
-var $o; $oIN; $oOUT : Object
+var $o : Object
+var $es : 4D:C1709.EntitySelection
 var $error : cs:C1710.error
 
 // ----------------------------------------------------
 // Initialisations
 If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
-	// Required parameters
-	$oIN:=$1
+	ASSERT:C1129(Length:C16(String:C10($in.table))>0)
+	ASSERT:C1129(Length:C16(String:C10($in.filter.string))>0)
 	
-	// Optional parameters
-	If (Count parameters:C259>=2)
-		
-		// <NONE>
-		
-	End if 
+	OB REMOVE:C1226($in.filter; "error")
+	OB REMOVE:C1226($in.filter; "errors")
+	OB REMOVE:C1226($in.filter; "parameters")
 	
-	$oOUT:=New object:C1471(\
-		"success"; False:C215)
-	
-	ASSERT:C1129($oIN.table#Null:C1517)  // XXX check not empty string
-	ASSERT:C1129($oIN.filter#Null:C1517)  // XXX check not empty string or change to object and change code to filter.string
-	
-	$oOUT.filter:=$oIN.filter
+	$out:=New object:C1471(\
+		"success"; False:C215; \
+		"filter"; $in.filter)
 	
 Else 
 	
@@ -51,102 +44,110 @@ End if
 
 // ----------------------------------------------------
 // Detect a query with parameters
-If (Match regex:C1019("(?m-si)(?:=|==|===|IS|!=|#|!==|IS NOT|>|<|>=|<=|%)\\s*(:)"; $oOUT.filter.string; 1))
-	
-	$oOUT.filter.parameters:=True:C214
-	
-Else 
-	
-	OB REMOVE:C1226($oOUT.filter; "parameters")
-	
-End if 
+$out.filter.parameters:=(Match regex:C1019("(?m-si)(?:=|==|===|IS|!=|#|!==|IS NOT|>|<|>=|<=|%)\\s*(:)"; $out.filter.string; 1))
 
-If (Bool:C1537($oIN.rest))
+If ($out.filter.parameters)
 	
-	If (Bool:C1537($oIN.selection))
-		
-		$oOUT:=Rest(New object:C1471(\
-			"action"; "records"; \
-			"table"; $oIN.table; \
-			"url"; $oIN.url; \
-			"handler"; $oIN.handler; \
-			"queryEncode"; True:C214; \
-			"query"; New object:C1471(\
-			"$filter"; $oIN.filter.string)))
-		
-	Else 
-		
-		// Limit to one - just check
-		$oOUT:=Rest(New object:C1471(\
-			"action"; "records"; \
-			"table"; $oIN.table; \
-			"url"; $oIN.url; \
-			"handler"; $oIN.handler; \
-			"queryEncode"; True:C214; \
-			"query"; New object:C1471(\
-			"$filter"; $oIN.filter.string; \
-			"$limit"; "1")))
-		
-	End if 
+	// Perform a syntax verification with a generic placeholder 
+	
+	//mark: - START TRAPPING ERRORS 
+	$error:=cs:C1710.error.new("capture")
+	
+	ds:C1482[$in.table].query($in.filter.string)  //; "@")
+	
+	$error.release()
+	//mark: - STOP TRAPPING ERRORS 
+	
+	$out.success:=Bool:C1537(Num:C11($error.lastError().error)=0)
 	
 Else 
 	
-	//============================================================
-	//  TEMPO - We should have a testQuery method
-	//============================================================
-	
-/* START TRAPPING ERRORS */$error:=cs:C1710.error.new("capture")
-	
-	If (Bool:C1537($oIN.selection))
+	If (Bool:C1537($in.rest))
 		
-		$oOUT.selection:=ds:C1482[$oIN.table].query($oIN.filter.string)
+		// Mark: - OBSOLETE ?
+		If (Bool:C1537($in.selection))
+			
+			$out:=Rest(New object:C1471(\
+				"action"; "records"; \
+				"table"; $in.table; \
+				"url"; $in.url; \
+				"handler"; $in.handler; \
+				"queryEncode"; True:C214; \
+				"query"; New object:C1471(\
+				"$filter"; $in.filter.string)))
+			
+		Else 
+			
+			// Limit to one - just check
+			$out:=Rest(New object:C1471(\
+				"action"; "records"; \
+				"table"; $in.table; \
+				"url"; $in.url; \
+				"handler"; $in.handler; \
+				"queryEncode"; True:C214; \
+				"query"; New object:C1471(\
+				"$filter"; $in.filter.string; \
+				"$limit"; "1")))
+			
+		End if 
+		
+		// Mark: -
 		
 	Else 
 		
-		ds:C1482[$oIN.table].query($oIN.filter.string)
+		//mark: - START TRAPPING ERRORS 
+		$error:=cs:C1710.error.new("capture")
 		
-	End if 
-	
-/* STOP TRAPPING ERRORS */$error.release()
-	
-	$oOUT.success:=Bool:C1537(Num:C11($error.lastError().error)=0)
-	
-	//============================================================
-	
-	OB REMOVE:C1226($oOUT.filter; "error")
-	OB REMOVE:C1226($oOUT.filter; "errors")
-	
-	If (Not:C34($oOUT.success))
-		
-		$oOUT.success:=Bool:C1537($oOUT.filter.parameters)
-		
-		$oOUT.errors:=$error.lastError().stack
-		
-		// Build the error message
-		$oOUT.filter.error:=""
-		
-		For each ($o; $oOUT.errors.query("component='dbmg'").reverse())
+		If (Bool:C1537($in.selection))
 			
-			If (Position:C15($o.desc; $oOUT.filter.error)=0)
+			$out.selection:=ds:C1482[$in.table].query($in.filter.string)
+			
+		Else 
+			
+			If (FEATURE.with("cancelableDatasetGeneration"))
 				
-				$oOUT.filter.error:=$oOUT.filter.error+$o.desc+"\r"
+				$es:=ds:C1482[$in.table].query($in.filter.string)
+				
+				If ($es#Null:C1517)
+					
+					$out.count:=Num:C11($es.length)
+					
+				End if 
+				
+			Else 
+				
+				ds:C1482[$in.table].query($in.filter.string)
 				
 			End if 
-		End for each 
+		End if 
 		
-		// Remove last carriage return
-		$oOUT.filter.error:=Delete string:C232($oOUT.filter.error; Length:C16($oOUT.filter.error); 1)
+		$error.release()
+		//mark: - STOP TRAPPING ERRORS 
+		
+		$out.success:=Bool:C1537(Num:C11($error.lastError().error)=0)
 		
 	End if 
 End if 
 
-// End if
+If (Not:C34($out.success))
+	
+	$out.errors:=$error.lastError().stack
+	
+	// Build the error message
+	$out.filter.error:=""
+	
+	For each ($o; $out.errors.query("component='dbmg'").reverse())
+		
+		If (Position:C15($o.desc; $out.filter.error)=0)
+			
+			$out.filter.error:=$out.filter.error+$o.desc+"\r"
+			
+		End if 
+	End for each 
+	
+	// Remove last carriage return
+	$out.filter.error:=Split string:C1554($out.filter.error; "\r"; sk ignore empty strings:K86:1).join("\r")
+	
+End if 
 
-$oOUT.filter.validated:=$oOUT.success
-
-// ----------------------------------------------------
-// Return
-$0:=$oOUT
-
-// ----------------------------------------------------
-// End
+$out.filter.validated:=Bool:C1537($out.success)

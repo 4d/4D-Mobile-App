@@ -349,6 +349,7 @@ Case of
 			"filter"; $oTable.filter))
 		
 		$oTable.filter:=$o.filter
+		$oTable.count:=Num:C11($o.count)
 		
 		Form:C1466.dataModel[String:C10($oTable.tableNumber)][""].filter:=$oTable.filter
 		

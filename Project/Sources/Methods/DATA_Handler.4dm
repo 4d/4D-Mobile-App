@@ -48,12 +48,12 @@ If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
 		"enter"; "enter.options"; \
 		"embedded"; "embedded.options"; \
 		"method"; "authenticationMethod.options"; \
-		"focus"; OBJECT Get name:C1087(Object with focus:K67:3))
+		"focus"; OBJECT Get name:C1087(Object with focus:K67:3); \
+		"result"; "result")
 	
 	$Obj_context:=$Obj_form.ui
 	
-	If (OB Is empty:C1297($Obj_context))\
-		 | (Structure file:C489=Structure file:C489(*))
+	If (OB Is empty:C1297($Obj_context))
 		
 		$Obj_context.help:=Get localized string:C991("help_properties")
 		
@@ -151,9 +151,17 @@ Case of
 							
 							_o_UI.tips.defaultDelay()
 							
+							OBJECT SET RGB COLORS:C628(*; $Obj_form.result; EDITOR.selectedFillColor)
+							
+							If (FEATURE.with("cancelableDatasetGeneration"))
+								
+								OBJECT SET VALUE:C1742("result"; ".Records: "+String:C10($Obj_context.current.count))
+								
+							End if 
+							
 							If (Bool:C1537($Obj_context.current.filter.parameters))
 								
-								OBJECT SET HELP TIP:C1181(*; $Obj_form.filter; $Obj_context.current.filter.error)
+								OBJECT SET HELP TIP:C1181(*; $Obj_form.filter; String:C10($Obj_context.current.filter.error))
 								
 								// Can't embed data
 								OBJECT SET VISIBLE:C603(*; $Obj_form.embedded; False:C215)
@@ -170,13 +178,31 @@ Case of
 							
 							OBJECT SET RGB COLORS:C628(*; $Obj_form.filter; EDITOR.errorColor)
 							
+							If (FEATURE.with("cancelableDatasetGeneration"))
+								
+								OBJECT SET RGB COLORS:C628(*; $Obj_form.result; EDITOR.errorColor)
+								
+							End if 
+							
 							If (Length:C16(String:C10($Obj_context.current.filter.error))>0)
 								
 								OBJECT SET HELP TIP:C1181(*; $Obj_form.filter; Get localized string:C991("error:")+$Obj_context.current.filter.error)
 								
+								If (FEATURE.with("cancelableDatasetGeneration"))
+									
+									OBJECT SET VALUE:C1742("result"; Get localized string:C991("error:")+$Obj_context.current.filter.error)
+									
+								End if 
+								
 							Else 
 								
 								OBJECT SET HELP TIP:C1181(*; $Obj_form.filter; Get localized string:C991("notValidatedFilter"))
+								
+								If (FEATURE.with("cancelableDatasetGeneration"))
+									
+									OBJECT SET VALUE:C1742("result"; Get localized string:C991("notValidatedFilter"))
+									
+								End if 
 								
 							End if 
 							
@@ -193,6 +219,22 @@ Case of
 					Else 
 						
 						$Obj_context.current.filterIcon:=Null:C1517
+						
+						If (FEATURE.with("cancelableDatasetGeneration"))
+							OBJECT SET RGB COLORS:C628(*; $Obj_form.result; EDITOR.selectedFillColor)
+							
+							If (Bool:C1537($Obj_context.current.embedded))
+								
+								OBJECT SET VALUE:C1742("result"; ".Records: "+String:C10(ds:C1482[$Obj_context.current.name].all().length))
+								
+							Else 
+								
+								OBJECT SET VALUE:C1742("result"; "")
+								
+							End if 
+							
+						End if 
+						
 						
 					End if 
 					

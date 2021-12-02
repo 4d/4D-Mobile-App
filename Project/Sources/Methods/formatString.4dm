@@ -184,35 +184,40 @@ Case of
 				
 				// Remove the forbidden at beginning characters
 				$lError:=Rgx_SubstituteText("(?mi-s)^[^[:alpha:]]*([^$]*)$"; "\\1"; ->$t_string; 0)
+				
+				// Replace dot by space
 				$t_string:=Replace string:C233($t_string; "."; " ")  // #98373
 				
 				// Replace accented characters with non accented one.
 				$t_string:=cs:C1710.str.new($t_string).unaccented()
 				
-				$t_string[[1]]:=Lowercase:C14($t_string[[1]])
-				
-				// Remove space {
-				GET TEXT KEYWORDS:C1141($t_string; $aTxt_words)
-				$number:=Size of array:C274($aTxt_words)
-				
-				If ($number>1)
+				If (Length:C16($t_string)>0)
 					
-					For ($i; 1; $number; 1)
+					$t_string[[1]]:=Lowercase:C14($t_string[[1]])
+					
+					// Remove space {
+					GET TEXT KEYWORDS:C1141($t_string; $aTxt_words)
+					$number:=Size of array:C274($aTxt_words)
+					
+					If ($number>1)
 						
-						If ($i>1)
+						For ($i; 1; $number; 1)
 							
-							$aTxt_words{$i}[[1]]:=Uppercase:C13($aTxt_words{$i}[[1]])
+							If ($i>1)
+								
+								$aTxt_words{$i}[[1]]:=Uppercase:C13($aTxt_words{$i}[[1]])
+								
+							End if 
 							
-						End if 
+							$t_formated:=$t_formated+$aTxt_words{$i}
+							
+						End for 
 						
-						$t_formated:=$t_formated+$aTxt_words{$i}
+					Else 
 						
-					End for 
-					
-				Else 
-					
-					$t_formated:=$t_string
-					
+						$t_formated:=$t_string
+						
+					End if 
 				End if 
 				//}
 				
