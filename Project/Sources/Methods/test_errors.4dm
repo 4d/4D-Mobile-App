@@ -3,7 +3,7 @@ C_OBJECT:C1216($o)
 
 COMPONENT_INIT
 
-TRY
+err_TRY
 
 $o:=_o_err("NO_ERROR")
 ASSERT:C1129(Method called on error:C704="NO_ERROR")
@@ -11,8 +11,8 @@ ASSERT:C1129(Method called on error:C704="NO_ERROR")
 $o.install("xml_NO_ERROR")
 ASSERT:C1129(Method called on error:C704="xml_NO_ERROR")
 
-$o.install("CATCH")
-ASSERT:C1129(Method called on error:C704="CATCH")
+$o.install("err_CATCH")
+ASSERT:C1129(Method called on error:C704="err_CATCH")
 
 $o.deinstall()
 ASSERT:C1129(Method called on error:C704="xml_NO_ERROR")
@@ -23,8 +23,8 @@ ASSERT:C1129(Method called on error:C704="NO_ERROR")
 $o.install("xml_NO_ERROR")
 ASSERT:C1129(Method called on error:C704="xml_NO_ERROR")
 
-$o.install("CATCH")
-ASSERT:C1129(Method called on error:C704="CATCH")
+$o.install("err_CATCH")
+ASSERT:C1129(Method called on error:C704="err_CATCH")
 
 $o.remove()
 ASSERT:C1129(Length:C16(Method called on error:C704)=0)
@@ -38,8 +38,8 @@ ASSERT:C1129(Method called on error:C704="NO_ERROR")
 $o.install("xml_NO_ERROR")
 ASSERT:C1129(Method called on error:C704="xml_NO_ERROR")
 
-$o.install("CATCH")
-ASSERT:C1129(Method called on error:C704="CATCH")
+$o.install("err_CATCH")
+ASSERT:C1129(Method called on error:C704="err_CATCH")
 
 $o.deinstall()
 ASSERT:C1129(Method called on error:C704="xml_NO_ERROR")
@@ -90,7 +90,7 @@ ASSERT:C1129(Method called on error:C704="xml_NO_ERROR")
 $o.deinstall()
 ASSERT:C1129(Length:C16(Method called on error:C704)=0)
 
-FINALLY
+err_FINALLY
 
 If (Structure file:C489=Structure file:C489(*))
 	

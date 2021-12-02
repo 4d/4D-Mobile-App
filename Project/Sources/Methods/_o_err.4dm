@@ -41,8 +41,8 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 		"Continue"; Formula:C1597(ERROR=0); \
 		"reset"; Formula:C1597(lastError:=Null:C1517); \
 		"release"; Formula:C1597(This:C1470.deinstall()); \
-		"TRY"; Formula:C1597(TRY($1)); \
-		"FINALLY"; Formula:C1597(FINALLY($1)); \
+		"TRY"; Formula:C1597(err_TRY($1)); \
+		"FINALLY"; Formula:C1597(err_FINALLY($1)); \
 		"install"; Formula:C1597(_o_err("install"; New object:C1471("method"; String:C10($1)))); \
 		"deinstall"; Formula:C1597(_o_err("deinstall")); \
 		"remove"; Formula:C1597(_o_err("remove"))\

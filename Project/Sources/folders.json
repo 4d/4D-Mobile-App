@@ -26,7 +26,6 @@
 			"COMPILER_TEMPO",
 			"instantiate",
 			"internalTests",
-			"Method444",
 			"nvl",
 			"object",
 			"publishedTableList",
@@ -245,7 +244,6 @@
 		],
 		"methods": [
 			"COMPILER_editor",
-			"EDITOR_CALLBACK",
 			"editor_CHECK_INSTALLATION",
 			"editor_CREATE_PROJECT",
 			"editor_GET_DEVICES",
@@ -382,7 +380,6 @@
 	},
 	"07] ACTIONS": {
 		"methods": [
-			"ACTIONS",
 			"ACTIONS_CALLBACK",
 			"COMPILER_ACTIONS"
 		],
@@ -675,18 +672,18 @@
 	},
 	"err": {
 		"methods": [
-			"CATCH",
 			"COMPILER_err",
-			"Continue",
+			"err_CATCH",
 			"err_COMBINE",
+			"err_Continue",
+			"err_FINALLY",
 			"err_PUSH",
+			"err_THROW",
+			"err_TRY",
 			"errors_CAPTURE",
 			"errors_HIDE",
-			"FINALLY",
 			"NO_ERROR",
-			"test_errors",
-			"THROW",
-			"TRY"
+			"test_errors"
 		]
 	},
 	"FOOTER": {

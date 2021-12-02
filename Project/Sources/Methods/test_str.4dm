@@ -3,7 +3,7 @@ C_LONGINT:C283($i)
 C_TEXT:C284($t; $tt; $Txt_in; $Txt_out)
 C_OBJECT:C1216($o)
 
-TRY
+err_TRY
 
 $o:=cs:C1710.str.new()
 ASSERT:C1129(Length:C16($o.value)=0)
@@ -505,4 +505,4 @@ ASSERT:C1129($o.setText("mon>fichier").suitableWithFileName()="monFichier")
 ASSERT:C1129($o.setText("mon|fichier").suitableWithFileName()="monFichier")
 ASSERT:C1129($o.setText("..m/o\\n:F*i?c\"h<i>e|r  ").suitableWithFileName()="monFichier")
 
-FINALLY
+err_FINALLY

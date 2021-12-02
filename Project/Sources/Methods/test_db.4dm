@@ -4,7 +4,7 @@ C_OBJECT:C1216($o; $Obj_db)
 
 COMPONENT_INIT
 
-TRY
+err_TRY
 
 $o:=_o_db.exposedDatastore()
 
@@ -132,4 +132,4 @@ If (Asserted:C1132($Lon_table#0))
 	End if 
 End if 
 
-FINALLY
+err_FINALLY

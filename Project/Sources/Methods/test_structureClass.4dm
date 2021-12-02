@@ -3,7 +3,7 @@ var $i; $start; $tableNumber : Integer
 var $o; $structure : Object
 var $c : Collection
 
-TRY
+err_TRY
 
 COMPONENT_INIT
 
@@ -474,7 +474,7 @@ If (False:C215)  //============================================================ 
 	End if 
 End if 
 
-FINALLY
+err_FINALLY
 
 If (Structure file:C489=Structure file:C489(*))
 	

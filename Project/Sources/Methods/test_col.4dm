@@ -2,7 +2,7 @@
 var $t : Text
 var $c : Collection
 
-TRY
+err_TRY
 
 // Col_formula
 $c:=New collection:C1472(Get 4D folder:C485(Current resources folder:K5:16); Get 4D folder:C485(Database folder:K5:14))
@@ -56,4 +56,4 @@ ASSERT:C1129(Not:C34($c.reduce("col_formula"; False:C215; Formula:C1597($1.accum
 $c:=New collection:C1472(False:C215; True:C214)
 ASSERT:C1129($c.reduce("col_formula"; False:C215; Formula:C1597($1.accumulator:=$1.accumulator | $1.value)))
 
-FINALLY
+err_FINALLY

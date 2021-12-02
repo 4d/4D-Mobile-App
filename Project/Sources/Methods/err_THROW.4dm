@@ -7,7 +7,7 @@
 #DECLARE($error : Object)
 
 If (False:C215)
-	C_OBJECT:C1216(THROW; $1)
+	C_OBJECT:C1216(err_THROW; $1)
 End if 
 
 //C_OBJECT(err)
@@ -17,7 +17,7 @@ If (Asserted:C1132(Count parameters:C259>0))
 	
 	//If ($o.component=Null)
 	//$o.component:=String(err.signature)
-	//End if 
+	//End if
 	
 	$error.deffered:=True:C214
 	

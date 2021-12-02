@@ -3,7 +3,7 @@ var $Obj_in; $Obj_out; $Obj_target; $Obj_targetPath : Object
 var $Obj_framework : 4D:C1709.Folder
 
 //_____________________________________________________________
-TRY
+err_TRY
 //_____________________________________________________________
 
 $Obj_framework:=cs:C1710.path.new().cacheSdkApple().parent.folder("sdk")
@@ -45,4 +45,4 @@ If ($Obj_framework.exists)
 End if 
 
 //_____________________________________________________________
-FINALLY
+err_FINALLY

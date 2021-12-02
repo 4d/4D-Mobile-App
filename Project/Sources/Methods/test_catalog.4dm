@@ -4,7 +4,7 @@ C_OBJECT:C1216($o)
 
 COMPONENT_INIT
 
-TRY
+err_TRY
 
 //_____________________________________________________________
 $o:=catalog("fields"; New object:C1471(\
@@ -160,4 +160,4 @@ If (Asserted:C1132($o.success))
 	End if 
 End if 
 
-FINALLY
+err_FINALLY

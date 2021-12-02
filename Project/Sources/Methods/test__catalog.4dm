@@ -4,7 +4,7 @@ C_OBJECT:C1216($o; $datastore)
 
 COMPONENT_INIT
 
-TRY
+err_TRY
 
 //_____________________________________________________________
 $o:=_catalog("UNIT_1")
@@ -72,4 +72,4 @@ ASSERT:C1129($o.result.infos.tableNumber=11)
 ASSERT:C1129($o.result.fields#Null:C1517)
 ASSERT:C1129($o.result.fields.length=1)
 
-FINALLY
+err_FINALLY

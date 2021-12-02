@@ -3,7 +3,7 @@
 var $pattern; $target : Text
 var $rgx : cs:C1710.regex
 
-TRY
+err_TRY
 
 $target:="Hello world"
 $pattern:="world"
@@ -91,5 +91,5 @@ ASSERT:C1129(Not:C34($rgx.success))
 ASSERT:C1129($rgx.matches.length=0)
 ASSERT:C1129($rgx.error=-1)
 
-FINALLY
+err_FINALLY
 

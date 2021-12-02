@@ -37,7 +37,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 End if 
 
 // ----------------------------------------------------
-TRY
+err_TRY
 
 If (Num:C11($tableID)>0)
 	
@@ -69,7 +69,7 @@ If (Num:C11($tableID)>0)
 			
 			$t:=$tmpl.update().svg
 			
-			//MARK:TURN AROUND - Put something before :C 
+			//MARK:TURN AROUND - Put something before :C
 			$t:=Replace string:C233($t; ":C"; "4d:C")
 			
 			$t:=Replace string:C233($t; "&quot;"; "\"")
@@ -558,7 +558,7 @@ If (Num:C11($tableID)>0)
 	End if 
 End if 
 
-FINALLY
+err_FINALLY
 
 // ----------------------------------------------------
 // Return

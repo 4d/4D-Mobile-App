@@ -1,7 +1,7 @@
 //%attributes = {}
 C_TEXT:C284($t)
 
-TRY
+err_TRY
 
 //%W-518.7
 C_OBJECT:C1216($o)
@@ -35,4 +35,4 @@ ASSERT:C1129(Not:C34(_bool($o.test)))  // Null
 $o.test:="hello world"
 ASSERT:C1129(_bool($o.test))  // Not null
 
-FINALLY
+err_FINALLY

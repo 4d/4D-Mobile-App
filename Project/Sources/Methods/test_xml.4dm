@@ -1,6 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
 
-TRY
+err_TRY
 
 // Create from scratch
 C_OBJECT:C1216($xml)
@@ -98,4 +98,4 @@ ASSERT:C1129($children.elements.length=108; "Incorrect number of children for xm
 // final close
 $xml.close()
 
-FINALLY
+err_FINALLY

@@ -22,6 +22,19 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
+		var $o : cs:C1710.dateTime
+		$o:=cs:C1710.dateTime.new()
+		
+		//%W-550.2
+		$t:=$o.stamp()
+		$t:=$o.stamp(!1958-08-08!)
+		$t:=$o.stamp(!1958-08-08!; ?12:10:30?)
+		
+		//%W+550.2
+		
+		//________________________________________
+	: (True:C214)
+		
 		var $status : Object
 		var $error : cs:C1710.error
 		var $web : 4D:C1709.WebServer
@@ -101,7 +114,7 @@ Case of
 				
 				//For each ($tt; Split string(DOCUMENT; "\r"; sk trim spaces).shift())
 				
-				For each ($tt; Split string:C1554(DOCUMENT; "\r"; sk trim spaces:K86:2))  //.shift())
+				For each ($tt; Split string:C1554(DOCUMENT; "\r"; sk trim spaces:K86:2))  // .shift())
 					
 					Case of 
 							
@@ -150,6 +163,7 @@ Case of
 		$cUserdCommands:=$cUserdCommands.orderBy("count desc")
 		
 		$c:=New collection:C1472
+		
 		For each ($o; $cUserdCommands)
 			
 			//$ratio:=""  //"\t"+string(100*$o.count/$total)
@@ -191,7 +205,6 @@ Case of
 		
 		$o:=Get system info:C1571
 		
-		
 		//________________________________________
 	: (True:C214)
 		
@@ -202,6 +215,7 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
+		//%W-550.2
 		$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file("Uninstall.txt")
 		$file.delete()
 		
@@ -215,6 +229,7 @@ Case of
 			
 			ARRAY LONGINT:C221($pos; 0)
 			ARRAY LONGINT:C221($len; 0)
+			
 			If (Match regex:C1019("(?m-si)\"DisplayName\"=\"Android Studio\"\\r\\n\"DisplayVersion\"=\"(4.1)\"(?:\\r\\n\"[^\"]*\"=\"[^\"]*\")*\\r\\n\"Displ"+\
 				"ayIcon\"=\"([^\"]*)\""; $t; 1; $pos; $len))
 				
@@ -222,9 +237,10 @@ Case of
 				$version:=Substring:C12($t; $pos{1}; $len{1})
 				$path:=Substring:C12($t; $pos{2}; $len{2})
 				
-				
 			End if 
 		End if 
+		
+		//%W+550.2
 		
 		//________________________________________
 	: (True:C214)
@@ -252,7 +268,6 @@ Case of
 		
 		$o.launch("/bin/ls -l"; "/Users")
 		$c:=Split string:C1554(String:C10($o.outputStream); "\n")
-		
 		
 		$o.reset()
 		$o.launch("ioreg -n IODisplayWrangler |grep -i IOPowerManagement")
@@ -296,10 +311,13 @@ Case of
 		
 		$root:=DOM Create XML Ref:C861("root")
 		
-		$node:=DOM Create XML element:C865($root; "element"; "class"; "test")
-		$node:=DOM Create XML element:C865($root; "element"; "class"; "blank test")
+		$node:=DOM Create XML element:C865($root; "element"; \
+			"class"; "test")
+		$node:=DOM Create XML element:C865($root; "element"; \
+			"class"; "blank test")
 		$node:=DOM Create XML element:C865($root; "element")
-		$node:=DOM Create XML element:C865($root; "element"; "class"; "blank test dark")
+		$node:=DOM Create XML element:C865($root; "element"; \
+			"class"; "blank test dark")
 		
 		// Select elements with attribute "class" strictly equal to "test"
 		$tTxt_{0}:=DOM Find XML element:C864($root; "element[@class='test']"; $tTxt_)
@@ -342,7 +360,7 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		///Volumes/Passport 500/Perforce/vincent.delachaux_MBP/4eDimension/main/4DComponents/Internal User Components/4D Mobile App/Resources/templates/form/detail/Blank Form/template.svg
+		/// Volumes/Passport 500/Perforce/vincent.delachaux_MBP/4eDimension/main/4DComponents/Internal User Components/4D Mobile App/Resources/templates/form/detail/Blank Form/template.svg
 		
 		$file:=File:C1566("/RESOURCES/templates/form/detail/Blank Form/template.svg")
 		PROCESS 4D TAGS:C816($file.getText(); $t)
@@ -368,6 +386,7 @@ Case of
 	: (True:C214)
 		
 		$o:=New object:C1471
+		
 		If ($null=Null:C1517)
 			
 			$o:=$null
@@ -388,14 +407,14 @@ Case of
 		
 		//$c.push($o)
 		
-		//End for each
+		// End for each
 		
 		//$o:=New object()
 		//$o.files:=$c
 		
 		//$zip:=ZIP Create archive($o;$folder)
 		
-		//this command list all loaded component with path
+		// This command list all loaded component with path
 		//$c:=WEB Servers list
 		
 		//________________________________________
@@ -409,7 +428,9 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		$c:=New collection:C1472(New object:C1471("min"; 5); "mandatory")
+		$c:=New collection:C1472(New object:C1471(\
+			"min"; 5); \
+			"mandatory")
 		
 		$l:=$c.indexOf("mandatory")
 		$l:=$c.countValues("mandatory")
@@ -424,7 +445,8 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		$o:=New object:C1471("pointer"; $r)
+		$o:=New object:C1471(\
+			"pointer"; $r)
 		
 		If ($o.pointer#Null:C1517)
 			
@@ -478,6 +500,7 @@ Case of
 			ASSERT:C1129(Undefined:C82($o.error))  // True
 			$o.error:="Hello world"
 			ASSERT:C1129(Not:C34(Undefined:C82($o.error)))  // False
+			
 			//%W+518.7
 		End if 
 		
@@ -514,7 +537,7 @@ Case of
 	: (False:C215)
 		
 		//$t:=Get 4D folder(Current resources folder)+"sdk"+Folder separator+"Versions"+Folder separator  // (unzip TRMosaicLayout.zip to test)
-		//$File_:=$t+"Carthage:Checkouts:TRMosaicLayout:_Pods.xcodeproj"  // a broken symbolic link
+		//$File_:=$t+"Carthage:Checkouts:TRMosaicLayout:_Pods.xcodeproj"  // A broken symbolic link
 		//$Boo_reset:=_o_doc_isAlias ($File_)
 		
 		$Boo_reset:=Folder:C1567(fk resources folder:K87:11).folder("sdk").folder("Versions").folder("Carthage").folder("Checkouts").folder("TRMosaicLayout").file("_Pods.xcodeproj").isAlias
@@ -556,7 +579,10 @@ Case of
 		
 		$o:=Path to object:C1547(Get 4D folder:C485(Database folder:K5:14; *))
 		
-		$Dir_root:=Object to path:C1548(New object:C1471("name"; $o.name+" Project"; "isFolder"; True:C214; "parentFolder"; $o.parentFolder))
+		$Dir_root:=Object to path:C1548(New object:C1471(\
+			"name"; $o.name+" Project"; \
+			"isFolder"; True:C214; \
+			"parentFolder"; $o.parentFolder))
 		
 		//________________________________________
 	: (False:C215)
@@ -590,15 +616,26 @@ Case of
 		//________________________________________
 	: (False:C215)  //"mobileapp/$catalog/"
 		
-		$Lon_error:=HTTP Request:C1158(HTTP GET method:K71:1; Rest(New object:C1471("action"; "devurl"; "handler"; "mobileapp")).url; ""; $Txt_result)
+		$Lon_error:=HTTP Request:C1158(HTTP GET method:K71:1; Rest(New object:C1471(\
+			"action"; "devurl"; \
+			"handler"; "mobileapp")).url; \
+			""; $Txt_result)
 		
 		//________________________________________
 	: (False:C215)
 		
-		$result:=Rest(New object:C1471("action"; "url"; "url"; "http:// Localhost"))
-		$result:=Rest(New object:C1471("action"; "url"; "url"; "http://localhost/"))
-		$result:=Rest(New object:C1471("action"; "url"; "url"; "http://localhost/rest"))
-		$result:=Rest(New object:C1471("action"; "url"; "url"; "http://localhost/rest/"))
+		$result:=Rest(New object:C1471(\
+			"action"; "url"; \
+			"url"; "http:// Localhost"))
+		$result:=Rest(New object:C1471(\
+			"action"; "url"; \
+			"url"; "http://localhost/"))
+		$result:=Rest(New object:C1471(\
+			"action"; "url"; \
+			"url"; "http://localhost/rest"))
+		$result:=Rest(New object:C1471(\
+			"action"; "url"; \
+			"url"; "http://localhost/rest/"))
 		
 		//________________________________________
 	: (True:C214)
@@ -618,19 +655,22 @@ Case of
 		
 		$Obj_formula:=Formula:C1597(1+2)
 		
-		$Obj_new:=New object:C1471("f"; $Obj_formula)
+		$Obj_new:=New object:C1471(\
+			"f"; $Obj_formula)
 		
-		$Lon_result:=$Obj_new.f()  // returns 3
+		$Lon_result:=$Obj_new.f()  // Returns 3
 		
 		$Lon_value:=10
-		$Obj_new:=New object:C1471("f"; Formula:C1597($Lon_value))
+		$Obj_new:=New object:C1471(\
+			"f"; Formula:C1597($Lon_value))
 		$Lon_value:=20
 		
-		$Lon_result:=$Obj_new.f()  // returns 10
+		$Lon_result:=$Obj_new.f()  // Returns 10
 		
 		//$Obj_new:=New object("formula";New formula($1+$2))
-		$Obj_new:=New object:C1471("f"; Formula from string:C1601("$1+$2"))
-		$Lon_result:=$Obj_new.f(10; 20)  // returns 30
+		$Obj_new:=New object:C1471(\
+			"f"; Formula from string:C1601("$1+$2"))
+		$Lon_result:=$Obj_new.f(10; 20)  // Returns 30
 		
 		$Txt_ormula:=Request:C163("Please type a formula")
 		
@@ -645,14 +685,16 @@ Case of
 		$Obj_formula:=Formula from string:C1601("Uppercase:C13($1)")
 		$Txt_result:=$Obj_formula.call(Null:C1517; "hello")  // returns "HELLO"
 		
-		$Obj_new:=New object:C1471("value"; 50)
+		$Obj_new:=New object:C1471(\
+			"value"; 50)
 		$Obj_formula:=Formula:C1597(This:C1470.value*2)
-		$Lon_result:=$Obj_formula.call($Obj_new)  // returns 100
+		$Lon_result:=$Obj_formula.call($Obj_new)  // Returns 100
 		
 		//________________________________________
 	: (True:C214)
 		
-		$o:=formatters(New object:C1471("action"; "getByName"))
+		$o:=formatters(New object:C1471(\
+			"action"; "getByName"))
 		
 		//________________________________________
 	: (True:C214)
@@ -663,6 +705,7 @@ Case of
 		$Boo_reset:=$t%"Hello"  // True
 		$Boo_reset:=$t%".world"  // False
 		$Boo_reset:=$t%"@.world"  // False
+		
 		//________________________________________
 	: (True:C214)
 		
@@ -704,7 +747,9 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		$Col_2:=New collection:C1472("manigest.json"; New object:C1471("Sources"; New collection:C1472("azeaze"; "azeazaze"; New object:C1471("Forms"; New collection:C1472()))))
+		$Col_2:=New collection:C1472("manigest.json"; New object:C1471(\
+			"Sources"; New collection:C1472("azeaze"; \
+			"azeazaze"; New object:C1471("Forms"; New collection:C1472()))))
 		$c:=findFirstPathComponentInCatalog($Col_2)
 		
 		ALERT:C41(JSON Stringify:C1217($c))

@@ -3,7 +3,7 @@ var $i; $l; $Lon_indx; $Lon_tableNumber; $start : Integer
 var $o : Object
 var $c : Collection
 
-TRY
+err_TRY
 
 COMPONENT_INIT
 
@@ -209,7 +209,7 @@ If (Asserted:C1132($o.success))
 	End if 
 End if 
 
-FINALLY
+err_FINALLY
 
 If (Structure file:C489=Structure file:C489(*))
 	

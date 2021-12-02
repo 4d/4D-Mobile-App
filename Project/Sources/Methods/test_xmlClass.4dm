@@ -5,7 +5,7 @@ var $o : Object
 var $c : Collection
 var $xml : cs:C1710.xml
 
-TRY
+err_TRY
 
 $start:=Milliseconds:C459
 
@@ -271,7 +271,7 @@ $t:=$xml.getAttribute($node; "author")
 ASSERT:C1129($xml.success; ".setAttribute()")
 ASSERT:C1129($t="him"; ".getAttribute()")
 
-FINALLY
+err_FINALLY
 
 If (Structure file:C489=Structure file:C489(*))
 	

@@ -6,7 +6,7 @@ C_COLLECTION:C1488($c)
 ARRAY LONGINT:C221($arrTypes; 0)
 ARRAY TEXT:C222($arrNames; 0)
 
-TRY
+err_TRY
 
 $c:=New collection:C1472(\
 New object:C1471("a"; New object:C1471("b"; 1); \
@@ -176,4 +176,4 @@ ASSERT:C1129(Size of array:C274($arrNames)=1)
 ASSERT:C1129($o.attribute="value")
 ASSERT:C1129($o.formula=Null:C1517)
 
-FINALLY
+err_FINALLY

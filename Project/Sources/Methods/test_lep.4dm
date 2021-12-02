@@ -3,7 +3,7 @@ var $t : Text
 var $folder; $env : Object
 var $lep : cs:C1710.lep
 
-TRY
+err_TRY
 
 $lep:=cs:C1710.lep.new()
 ASSERT:C1129($lep.success)
@@ -43,7 +43,7 @@ ASSERT:C1129($lep.success)
 ASSERT:C1129($folder.platformPath=$lep.getEnvironnementVariable("directory"))
 ASSERT:C1129($lep.success)
 
-FINALLY
+err_FINALLY
 
 If (Structure file:C489=Structure file:C489(*))
 	

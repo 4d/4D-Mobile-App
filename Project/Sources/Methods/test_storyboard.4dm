@@ -6,7 +6,7 @@ $Boo_shift:=Shift down:C543
 $Boo_onlyOne:=False:C215  // Test only the first template if true (debug purpose)
 
 If (Not:C34($Boo_shift))
-	TRY
+	err_TRY
 End if 
 
 If (SHARED=Null:C1517)
@@ -142,5 +142,5 @@ End if
 //_____________________________________________________________
 
 If (Not:C34($Boo_shift))
-	FINALLY
+	err_FINALLY
 End if 

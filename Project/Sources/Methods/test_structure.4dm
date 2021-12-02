@@ -3,7 +3,7 @@ var $i; $l; $Lon_tableNumber; $start : Integer
 var $o : Object
 var $c : Collection
 
-TRY
+err_TRY
 
 COMPONENT_INIT
 
@@ -342,7 +342,7 @@ End if
 
 //_____________________________________________________________
 
-FINALLY
+err_FINALLY
 
 If (Structure file:C489=Structure file:C489(*))
 	
