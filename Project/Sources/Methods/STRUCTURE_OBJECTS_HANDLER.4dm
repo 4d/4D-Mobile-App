@@ -185,9 +185,26 @@ Case of
 				OBJECT SET VISIBLE:C603(*; $form.action; True:C214)
 				//]
 				
-				$Ptr_:=OBJECT Get pointer:C1124(Object named:K67:5; $form.search)
-				$Ptr_->value:=String:C10($context.tableFilter)
-				$Ptr_->:=$Ptr_->  // Touch
+				var $o : Object
+				$o:=OBJECT Get value:C1743($form.search)
+				
+				If ($o=Null:C1517)
+					
+					$o:=New object:C1471
+					
+				End if 
+				
+				If ($context.tableFilter#Null:C1517)
+					
+					$o.value:=String:C10($context.tableFilter)
+					
+				Else 
+					
+					$o.value:=""
+					
+				End if 
+				
+				OBJECT SET VALUE:C1742($form.search; $o)
 				
 				STRUCTURE_Handler(New object:C1471(\
 					"action"; "fieldFilter"; \
@@ -899,8 +916,8 @@ Case of
 		//// Hide the bottom line
 		//OBJECT SET VISIBLE(*; "bottom.line"; False)
 		//CALL FORM(Current form window; "editor_CALLBACK"; "resizePanel"; New object(\
-						"panel"; Current form name; \
-						"offset"; $Lon_vOffset))
+																											"panel"; Current form name; \
+																											"offset"; $Lon_vOffset))
 		//End if 
 		////______________________________________________________
 		//: ($e.code=On Mouse Leave)
