@@ -57,7 +57,7 @@ $o.deinstall()
 ASSERT:C1129(Length:C16(Method called on error:C704)=0)
 
 $o.capture()
-ASSERT:C1129(Method called on error:C704="errors_CAPTURE")
+ASSERT:C1129(Method called on error:C704="err_CAPTURE")
 
 C_TEXT:C284($t)
 $t:=$o.$
@@ -68,7 +68,7 @@ $o.release()
 ASSERT:C1129(Length:C16(Method called on error:C704)=0)
 
 $o.hide()
-ASSERT:C1129(Method called on error:C704="errors_HIDE")
+ASSERT:C1129(Method called on error:C704="err_HIDE")
 
 $o.show()
 ASSERT:C1129(Length:C16(Method called on error:C704)=0)
@@ -77,7 +77,7 @@ $o.install("xml_NO_ERROR")
 ASSERT:C1129(Method called on error:C704="xml_NO_ERROR")
 
 $o.hide()
-ASSERT:C1129(Method called on error:C704="errors_HIDE")
+ASSERT:C1129(Method called on error:C704="err_HIDE")
 
 $o.reset()
 

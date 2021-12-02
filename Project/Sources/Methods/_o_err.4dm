@@ -96,9 +96,9 @@ Else
 			$o.stack.unshift(Method called on error:C704)
 			
 			// Install the method
-			ON ERR CALL:C155("errors_CAPTURE")
+			ON ERR CALL:C155("err_CAPTURE")
 			
-			$o.current:="errors_CAPTURE"
+			$o.current:="err_CAPTURE"
 			
 			//______________________________________________________
 		: ($1="hide")
@@ -107,9 +107,9 @@ Else
 			$o.stack.unshift(Method called on error:C704)
 			
 			// Install the method
-			ON ERR CALL:C155("errors_HIDE")
+			ON ERR CALL:C155("err_HIDE")
 			
-			$o.current:="errors_HIDE"
+			$o.current:="err_HIDE"
 			
 			//______________________________________________________
 		: ($1="deinstall")  // Deinstalls the last error-handling method and restore the previous one
