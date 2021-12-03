@@ -8,17 +8,13 @@
 //
 // ----------------------------------------------------
 // Declarations
-C_LONGINT:C283($0)
-
-C_BOOLEAN:C305($bCaret)
-C_LONGINT:C283($column; $end; $l; $Lon_x; $Lon_y; $row)
-C_LONGINT:C283($start)
-C_TEXT:C284($t; $tID; $tSelection; $tTip)
-C_OBJECT:C1216($context; $event; $form; $menu; $o; $oTable)
-
-If (False:C215)
-	C_LONGINT:C283(DATA_OBJECTS_HANDLER; $0)
-End if 
+var $selected; $t; $tID : Text
+var $withInsertion : Boolean
+var $column; $end; $l; $Lon_x; $Lon_y; $row : Integer
+var $start : Integer
+var $context; $e; $form; $o; $table : Object
+var $menu : cs:C1710.menu
+var $str : cs:C1710.str
 
 // ----------------------------------------------------
 // Initialisations
@@ -33,13 +29,13 @@ If (Asserted:C1132(Count parameters:C259>=0; "Missing parameter"))
 		
 	End if 
 	
-	$event:=FORM Event:C1606
+	$e:=FORM Event:C1606
 	
 	$form:=DATA_Handler(New object:C1471(\
 		"action"; "init"))
 	
 	$context:=$form.ui
-	$oTable:=$context.current
+	$table:=$context.current
 	
 Else 
 	
@@ -51,27 +47,27 @@ End if
 Case of 
 		
 		//==================================================
-	: ($event.objectName=$form.list)
+	: ($e.objectName=$form.list)
 		
 		Case of 
 				
 				//______________________________________________________
-			: ($event.code=On Getting Focus:K2:7)
+			: ($e.code=On Getting Focus:K2:7)
 				
 				$context.listboxUI()
 				
 				//______________________________________________________
-			: ($event.code=On Mouse Enter:K2:33)
+			: ($e.code=On Mouse Enter:K2:33)
 				
 				//______________________________________________________
-			: ($event.code=On Losing Focus:K2:8)
+			: ($e.code=On Losing Focus:K2:8)
 				
 				$context.listboxUI()
 				
 				$context.tables:=$context.tables
 				
 				//______________________________________________________
-			: ($event.code=On Selection Change:K2:29)
+			: ($e.code=On Selection Change:K2:29)
 				
 				$context.lastIndex:=$context.index
 				
@@ -79,18 +75,18 @@ Case of
 				SET TIMER:C645(-1)
 				
 				//______________________________________________________
-			: ($event.code=On Mouse Enter:K2:33)
+			: ($e.code=On Mouse Enter:K2:33) & Not:C34(FEATURE.with("cancelableDatasetGeneration"))
 				
 				_o_UI.tips.enable()
 				_o_UI.tips.instantly()
 				
 				//______________________________________________________
-			: ($event.code=On Mouse Move:K2:35)
+			: ($e.code=On Mouse Move:K2:35) & Not:C34(FEATURE.with("cancelableDatasetGeneration"))
 				
 				GET MOUSE:C468($Lon_x; $Lon_y; $l)
 				
 				//$oInfos:=LISTBOX Get info at(*;$Obj_form.list;$Lon_x;$Lon_y).element
-				LISTBOX GET CELL POSITION:C971(*; $event.objectName; $Lon_x; $Lon_y; $column; $row)
+				LISTBOX GET CELL POSITION:C971(*; $e.objectName; $Lon_x; $Lon_y; $column; $row)
 				
 				If ($row#0)
 					
@@ -104,11 +100,11 @@ Case of
 						If (Length:C16(String:C10($o.filter.string))=0)
 							
 							// No filter
-							$tTip:=Get localized string:C991("allDataWillBeIntegratedIntoTheApplication")
+							$t:=Get localized string:C991("allDataWillBeIntegratedIntoTheApplication")
 							
 						Else 
 							
-							$tTip:=Get localized string:C991("theFilteredDataWillBeIntegratedIntoTheApplication")
+							$t:=Get localized string:C991("theFilteredDataWillBeIntegratedIntoTheApplication")
 							
 						End if 
 						
@@ -121,11 +117,11 @@ Case of
 								If (Bool:C1537($o.filter.parameters))
 									
 									// User filter
-									$tTip:=Get localized string:C991("theDataWillBeFilteredAccordingToTheConnectedUserParameters")
+									$t:=Get localized string:C991("theDataWillBeFilteredAccordingToTheConnectedUserParameters")
 									
 								Else 
 									
-									$tTip:=Get localized string:C991("theFilteredDataWillBeLoadedIntoTheApplicationWhenConnecting")
+									$t:=Get localized string:C991("theFilteredDataWillBeLoadedIntoTheApplicationWhenConnecting")
 									
 								End if 
 								
@@ -134,27 +130,27 @@ Case of
 								If (Length:C16(String:C10($o.filter.error))>0)
 									
 									// Return the error encountered
-									$tTip:=Get localized string:C991("error:")+$o.filter.error
+									$t:=Get localized string:C991("error:")+$o.filter.error
 									
 								Else 
 									
-									$tTip:=Get localized string:C991("notValidatedFilter")
+									$t:=Get localized string:C991("notValidatedFilter")
 									
 								End if 
 							End if 
 							
 						Else 
 							
-							$tTip:=Get localized string:C991("allDataWillBeLoadedIntoTheApplicationWhenConnecting")
+							$t:=Get localized string:C991("allDataWillBeLoadedIntoTheApplicationWhenConnecting")
 							
 						End if 
 					End if 
 				End if 
 				
-				OBJECT SET HELP TIP:C1181(*; $form.list; $tTip)
+				OBJECT SET HELP TIP:C1181(*; $form.list; $t)
 				
 				//______________________________________________________
-			: ($event.code=On Mouse Leave:K2:34)
+			: ($e.code=On Mouse Leave:K2:34) & Not:C34(FEATURE.with("cancelableDatasetGeneration"))
 				
 				_o_UI.tips.defaultDelay()
 				
@@ -164,33 +160,36 @@ Case of
 				// NOTHING MORE TO DO
 				
 				//______________________________________________________
+			: (FEATURE.with("cancelableDatasetGeneration"))
+				
+				
+				//______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+$event.description+")")
+				ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+$e.description+")")
 				
 				//______________________________________________________
 		End case 
 		
 		//==================================================
-	: ($event.objectName=$form.queryWidget)
+	: ($e.objectName=$form.queryWidget)
 		
 		Case of 
 				
 				//______________________________________________________
-			: ($event.code=On Load:K2:1)
+			: ($e.code=On Load:K2:1)
 				
 				$t:=Document to text:C1236(Get 4D folder:C485(Current resources folder:K5:16)+"queryWidget.svg")
 				
 				PROCESS 4D TAGS:C816($t; $t; EDITOR.selectedFillColor; Get localized string:C991("fields"); Get localized string:C991("comparators"); Get localized string:C991("operators"); "🢓")
 				
-				OBJECT SET VALUE:C1742($event.objectName; cs:C1710.svg.new($t).picture())
-				
-				OBJECT SET VISIBLE:C603(*; $event.objectName; False:C215)
+				OBJECT SET VALUE:C1742($e.objectName; cs:C1710.svg.new($t).picture())
+				OBJECT SET VISIBLE:C603(*; $e.objectName; False:C215)
 				
 				//______________________________________________________
-			: ($event.code=On Clicked:K2:4)
+			: ($e.code=On Clicked:K2:4)
 				
-				$tID:=SVG Find element ID by coordinates:C1054(*; $event.objectName; MOUSEX; MOUSEY)
+				$tID:=SVG Find element ID by coordinates:C1054(*; $e.objectName; MOUSEX; MOUSEY)
 				
 				$menu:=cs:C1710.menu.new()
 				
@@ -202,7 +201,7 @@ Case of
 						: ($tID="fields")
 							
 							$o:=catalog("fields"; New object:C1471(\
-								"tableName"; $oTable.name))
+								"tableName"; $table.name))
 							
 							If ($o.success)
 								
@@ -275,50 +274,50 @@ Case of
 						
 						GET HIGHLIGHT:C209(*; $form.filter; $start; $end)
 						
-						If ($oTable[""].filter.string#Null:C1517)
+						If ($table[""].filter.string#Null:C1517)
 							
-							$tSelection:=Substring:C12($oTable[""].filter.string; $start; $end-$start)
+							$selected:=Substring:C12($table[""].filter.string; $start; $end-$start)
 							
 						End if 
 						
-						$bCaret:=(Position:C15("{sel}"; $menu.choice)>0)
+						$withInsertion:=(Position:C15("{sel}"; $menu.choice)>0)
 						
-						If ($bCaret)
+						If ($withInsertion)
 							
-							$menu.choice:=Replace string:C233($menu.choice; "{sel}"; $tSelection)
+							$menu.choice:=Replace string:C233($menu.choice; "{sel}"; $selected)
 							
 						End if 
 						
 						If ($start=$end)\
 							 & ($start#1)
 							
-							If (String:C10($oTable.filter.string)[[$start-1]]#" ")\
-								 & (String:C10($oTable.filter.string)[[$start-1]]#"(")
+							If (String:C10($table.filter.string)[[$start-1]]#" ")\
+								 & (String:C10($table.filter.string)[[$start-1]]#"(")
 								
-								$oTable.filter.string:=$oTable.filter.string+" "
+								$table.filter.string:=$table.filter.string+" "
 								$start:=$start+1
 								$end:=$end+1
 								
 							End if 
 						End if 
 						
-						$oTable.filter.validated:=False:C215
+						$table.filter.validated:=False:C215
 						
-						$o:=cs:C1710.str.new(String:C10($oTable.filter.string)).insert($menu.choice; $start; $end)
-						$oTable.filter.string:=$o.value
+						$str:=EDITOR.str.setText(String:C10($table.filter.string)).insert($menu.choice; $start; $end)
+						$table.filter.string:=$str.value
 						
-						Form:C1466.dataModel[String:C10($oTable.tableNumber)][""].filter:=$oTable.filter
+						Form:C1466.dataModel[String:C10($table.tableNumber)][""].filter:=$table.filter
 						
-						If ($bCaret)\
-							 & (Length:C16($tSelection)=0)
+						If ($withInsertion)\
+							 & (Length:C16($selected)=0)
 							
 							// Put the carret into
-							$o.begin:=$o.end-1
-							$o.end:=$o.end-1
+							$str.begin:=$str.end-1
+							$str.end:=$str.end-1
 							
 						End if 
 						
-						HIGHLIGHT TEXT:C210(*; $form.filter; $o.begin; $o.end)
+						HIGHLIGHT TEXT:C210(*; $form.filter; $str.begin; $str.end)
 						
 						$form.filter:=$form.filter
 						
@@ -333,42 +332,38 @@ Case of
 				//______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+$event.description+")")
+				ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+$e.description+")")
 				
 				//______________________________________________________
 		End case 
 		
 		//==================================================
-	: ($event.objectName=$form.validate)\
-		 | ($event.objectName=$form.enter)
+	: ($e.objectName=$form.validate)\
+		 | ($e.objectName=$form.enter)
 		
 		GOTO OBJECT:C206(*; $form.list)
 		
-		$o:=checkQueryFilter(New object:C1471(\
-			"table"; $oTable.name; \
-			"filter"; $oTable.filter))
+		PROJECT.checkQueryFilter($table)
 		
-		$oTable.filter:=$o.filter
-		$oTable.count:=Num:C11($o.count)
-		
-		Form:C1466.dataModel[String:C10($oTable.tableNumber)][""].filter:=$oTable.filter
-		
+		// Mark: check if necessary
 		PROJECT.save()
+		
 		$context.refresh()
 		
 		PROJECT.audit(New object:C1471("target"; New collection:C1472("filters")))
+		
 		EDITOR.updateRibbon()
 		
 		//==================================================
-	: ($event.objectName=$form.embedded)
+	: ($e.objectName=$form.embedded)
 		
-		If (Bool:C1537($oTable.embedded))
+		If (Bool:C1537($table.embedded))
 			
-			Form:C1466.dataModel[String:C10($oTable.tableNumber)][""].embedded:=True:C214
+			Form:C1466.dataModel[String:C10($table.tableNumber)][""].embedded:=True:C214
 			
 		Else 
 			
-			OB REMOVE:C1226(Form:C1466.dataModel[String:C10($oTable.tableNumber)][""]; "embedded")
+			OB REMOVE:C1226(Form:C1466.dataModel[String:C10($table.tableNumber)][""]; "embedded")
 			
 		End if 
 		
@@ -376,55 +371,58 @@ Case of
 		$context.update()
 		
 		//==================================================
-	: ($event.objectName=$form.filter)
+	: ($e.objectName=$form.filter)
 		
 		Case of 
 				
 				//______________________________________________________
-			: ($event.code=On Getting Focus:K2:7)
+			: ($e.code=On Getting Focus:K2:7)
 				
-				If ($oTable.filter=Null:C1517)
+				If ($table.filter=Null:C1517)
 					
-					$oTable.filter:=New object:C1471(\
+					$table.filter:=New object:C1471(\
 						"string"; "")
 					
-					$oTable.validated:=False:C215
+					$table.validated:=False:C215
 					
 				End if 
 				
 				// Keep current filter definition
-				$context.currentFilter:=OB Copy:C1225($oTable.filter)
+				$context.currentFilter:=OB Copy:C1225($table.filter)
 				
 				$context.refresh()
 				
 				//______________________________________________________
-			: ($event.code=On Losing Focus:K2:8)
+			: ($e.code=On Losing Focus:K2:8)
 				
 				$context.refresh()
 				
 				//______________________________________________________
-			: ($event.code=On Data Change:K2:15)
+			: ($e.code=On Data Change:K2:15)
 				
-				If (Length:C16($t)>0)
+				If (Not:C34(FEATURE.with("cancelableDatasetGeneration")))
 					
-					_o_UI.tips.instantly()
-					OBJECT SET HELP TIP:C1181(*; $form.filter; Get localized string:C991("notValidatedFilter"))
-					
-				Else 
-					
-					_o_UI.tips.defaultDelay()
-					OBJECT SET HELP TIP:C1181(*; $form.filter; "")
-					
+					If (Length:C16($t)>0)
+						
+						_o_UI.tips.instantly()
+						OBJECT SET HELP TIP:C1181(*; $form.filter; Get localized string:C991("notValidatedFilter"))
+						
+					Else 
+						
+						_o_UI.tips.defaultDelay()
+						OBJECT SET HELP TIP:C1181(*; $form.filter; "")
+						
+					End if 
 				End if 
 				
 				$context.refresh()
 				
 				//______________________________________________________
-			: ($event.code=On After Edit:K2:43)
+			: ($e.code=On After Edit:K2:43)
 				
 				$t:=Get edited text:C655
 				
-				$o:=Form:C1466.dataModel[String:C10($oTable.tableNumber)][""]
+				$o:=Form:C1466.dataModel[String:C10($table.tableNumber)][""]
 				
 				If (Value type:C1509($o.filter)#Is object:K8:27)
 					
@@ -459,11 +457,11 @@ Case of
 						End if 
 					End if 
 					
-					$oTable.filter:=$o.filter
+					$table.filter:=$o.filter
 					
 				Else 
 					
-					$oTable.filter.string:=""
+					$table.filter.string:=""
 					OB REMOVE:C1226($o; "filter")
 					
 				End if 
@@ -474,13 +472,13 @@ Case of
 				//______________________________________________________
 			Else 
 				
-				ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+$event.description+")")
+				ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+$e.description+")")
 				
 				//______________________________________________________
 		End case 
 		
 		//==================================================
-	: ($event.objectName=$form.method)
+	: ($e.objectName=$form.method)
 		
 		_o_SERVER_Handler(New object:C1471(\
 			"action"; "editAuthenticationMethod"))
@@ -488,19 +486,7 @@ Case of
 		//==================================================
 	Else 
 		
-		ASSERT:C1129(False:C215; "Unknown object: \""+$event.objectName+"\"")
+		ASSERT:C1129(False:C215; "Unknown object: \""+$e.objectName+"\"")
 		
 		//==================================================
 End case 
-
-If (Bool:C1537(FEATURE._8858))
-	
-	PROJECT.save()
-	
-End if 
-
-// ----------------------------------------------------
-// Return
-// <NONE>
-// ----------------------------------------------------
-// End

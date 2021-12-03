@@ -8,79 +8,61 @@
 //
 // ----------------------------------------------------
 // Declarations
-C_OBJECT:C1216($0)
-C_OBJECT:C1216($1)
-
-C_BLOB:C604($x)
-C_BOOLEAN:C305($b; $Boo_sqllite)
-C_LONGINT:C283($Lon_backgroundColor; $Lon_formEvent; $Lon_index; $Lon_parameters; $Lon_row; $Lon_size)
-C_TEXT:C284($Dir_root; $t)
-C_OBJECT:C1216($file; $o; $Obj_context; $Obj_form; $Obj_in; $Obj_out)
-C_OBJECT:C1216($Obj_table)
+#DECLARE($in : Object)->$out : Object
 
 If (False:C215)
-	C_OBJECT:C1216(DATA_Handler; $0)
 	C_OBJECT:C1216(DATA_Handler; $1)
+	C_OBJECT:C1216(DATA_Handler; $0)
 End if 
+
+var $pathname; $t : Text
+var $b; $withSQLlite : Boolean
+var $index; $size : Integer
+var $backgroundColor; $Lon_formEvent; $row : Integer
+var $x : Blob
+var $context; $filter; $form; $o; $table : Object
+var $file : 4D:C1709.File
+var $lep : cs:C1710.lep
 
 // ----------------------------------------------------
 // Initialisations
-$Lon_parameters:=Count parameters:C259
+$form:=New object:C1471(\
+"window"; Current form window:C827; \
+"ui"; editor_Panel_init; \
+"list"; "01_tables"; \
+"filter"; "02_filter.options"; \
+"queryWidget"; "query.options"; \
+"validate"; "validate.options"; \
+"enter"; "enter.options"; \
+"embedded"; "embedded.options"; \
+"method"; "authenticationMethod.options"; \
+"focus"; OBJECT Get name:C1087(Object with focus:K67:3); \
+"result"; "result")
 
-If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
+$context:=$form.ui
+
+If (OB Is empty:C1297($context))
 	
-	// NO PARAMETERS REQUIRED
+	$context.help:=Get localized string:C991("help_properties")
 	
-	// Optional parameters
-	If ($Lon_parameters>=1)
-		
-		$Obj_in:=$1
-		
-	End if 
+	// Define form methods
+	$context.listboxUI:=Formula:C1597(DATA_Handler(New object:C1471(\
+		"action"; "listboxUI")))
 	
-	$Obj_form:=New object:C1471(\
-		"window"; Current form window:C827; \
-		"ui"; editor_Panel_init; \
-		"list"; "01_tables"; \
-		"filter"; "02_filter.options"; \
-		"queryWidget"; "query.options"; \
-		"validate"; "validate.options"; \
-		"enter"; "enter.options"; \
-		"embedded"; "embedded.options"; \
-		"method"; "authenticationMethod.options"; \
-		"focus"; OBJECT Get name:C1087(Object with focus:K67:3); \
-		"result"; "result")
+	$context.listBackground:=Formula:C1597(DATA_Handler(New object:C1471(\
+		"action"; "background"; \
+		"this"; $1)))
 	
-	$Obj_context:=$Obj_form.ui
+	$context.text:=Formula:C1597(DATA_Handler(New object:C1471(\
+		"action"; "meta-infos")))
 	
-	If (OB Is empty:C1297($Obj_context))
-		
-		$Obj_context.help:=Get localized string:C991("help_properties")
-		
-		// Define form methods
-		$Obj_context.listboxUI:=Formula:C1597(DATA_Handler(New object:C1471(\
-			"action"; "listboxUI")))
-		
-		$Obj_context.listBackground:=Formula:C1597(DATA_Handler(New object:C1471(\
-			"action"; "background"; \
-			"this"; $1)))
-		
-		$Obj_context.text:=Formula:C1597(DATA_Handler(New object:C1471(\
-			"action"; "meta-infos")))
-		
-		$Obj_context.dumpSizes:=Formula:C1597(DATA_Handler(New object:C1471(\
-			"action"; "dumpSizes")))
-		
-		$Obj_context.refresh:=Formula:C1597(SET TIMER:C645(-1))
-		
-		$Obj_context.update:=Formula:C1597(DATA_Handler(New object:C1471(\
-			"action"; "update")))
-		
-	End if 
+	$context.dumpSizes:=Formula:C1597(DATA_Handler(New object:C1471(\
+		"action"; "dumpSizes")))
 	
-Else 
+	$context.refresh:=Formula:C1597(SET TIMER:C645(-1))
 	
-	ABORT:C156
+	$context.update:=Formula:C1597(DATA_Handler(New object:C1471(\
+		"action"; "update")))
 	
 End if 
 
@@ -88,7 +70,7 @@ End if
 Case of 
 		
 		//=========================================================
-	: ($Obj_in=Null:C1517)  // Form method
+	: ($in=Null:C1517)  // Form method
 		
 		$Lon_formEvent:=_o_panel_Form_common(On Load:K2:1; On Timer:K2:25)
 		
@@ -97,145 +79,201 @@ Case of
 				//______________________________________________________
 			: ($Lon_formEvent=On Load:K2:1)
 				
+				If (Not:C34(FEATURE.with("cancelableDatasetGeneration")))
+					
+					OBJECT SET COORDINATES:C1248(*; $form.method; 486; 104; 486+330; 104+22)
+					_o_UI.tips.enable()
+					
+				End if 
+				
 				// This trick remove the horizontal gap
-				OBJECT SET SCROLLBAR:C843(*; $Obj_form.list; 0; 2)
+				OBJECT SET SCROLLBAR:C843(*; $form.list; 0; 2)
 				
 				// Constraints definition
-				$Obj_context.constraints:=New object:C1471
+				$context.constraints:=New object:C1471
 				
 				_o_ui_BEST_SIZE(New object:C1471(\
-					"widgets"; New collection:C1472($Obj_form.embedded); \
+					"widgets"; New collection:C1472($form.embedded); \
 					"factor"; 1))
 				
 				_o_ui_BEST_SIZE(New object:C1471(\
-					"widgets"; New collection:C1472($Obj_form.method); \
+					"widgets"; New collection:C1472($form.method); \
 					"factor"; 1))
 				
 				_o_ui_BEST_SIZE(New object:C1471(\
-					"widgets"; New collection:C1472($Obj_form.validate); \
+					"widgets"; New collection:C1472($form.validate); \
 					"alignment"; Align right:K42:4; \
 					"factor"; 1))
 				
-				$Obj_context.update()
+				If ($context.tables=Null:C1517)\
+					 | (Num:C11(($context.tables.length))=0)
+					
+					$context.tables:=PROJECT.publishedTables()
+					
+					For each ($table; $context.tables)
+						
+						PROJECT.checkQueryFilter($table)
+						
+					End for each 
+					
+				End if 
 				
-				GOTO OBJECT:C206(*; $Obj_form.list)
+				$context.update()
 				
-				_o_UI.tips.enable()
+				GOTO OBJECT:C206(*; $form.list)
 				
 				//______________________________________________________
 			: ($Lon_formEvent=On Timer:K2:25)
 				
-				_o_UI.tips.enable()
+				//_o_UI.tips.enable()
 				
 				androidLimitations(False:C215; "")
 				
-				If ($Obj_context.current#Null:C1517)
+				If ($context.current#Null:C1517)
 					
 					OBJECT SET VISIBLE:C603(*; "@.options"; True:C214)
 					
-					OBJECT SET VISIBLE:C603(*; $Obj_form.queryWidget; Bool:C1537($Obj_form.focus=$Obj_form.filter))
+					OBJECT SET VISIBLE:C603(*; $form.queryWidget; Bool:C1537($form.focus=$form.filter))
 					
-					OBJECT SET VISIBLE:C603(*; $Obj_form.validate; False:C215)
-					OBJECT SET HELP TIP:C1181(*; $Obj_form.filter; "")
-					OBJECT SET RGB COLORS:C628(*; $Obj_form.filter; Foreground color:K23:1)
-					OBJECT SET VISIBLE:C603(*; $Obj_form.embedded; True:C214)
-					OBJECT SET VISIBLE:C603(*; $Obj_form.method; False:C215)
+					OBJECT SET RGB COLORS:C628(*; $form.filter; Foreground color:K23:1)
 					
-					OB REMOVE:C1226($Obj_context.current; "user")
+					OBJECT SET VISIBLE:C603(*; $form.validate; False:C215)
+					OBJECT SET VISIBLE:C603(*; $form.method; False:C215)
 					
-					If (Length:C16(String:C10($Obj_context.current.filter.string))>0)
+					If (FEATURE.with("cancelableDatasetGeneration"))
 						
-						$Obj_context.current.filterIcon:=EDITOR.filterIcon
+						OBJECT SET ENABLED:C1123(*; $form.embedded; True:C214)
 						
-						If (Bool:C1537($Obj_context.current.filter.validated))
+					Else 
+						
+						OBJECT SET VISIBLE:C603(*; $form.embedded; True:C214)
+						OBJECT SET HELP TIP:C1181(*; $form.filter; "")
+						
+					End if 
+					
+					OB REMOVE:C1226($context.current; "user")
+					
+					If (FEATURE.with("cancelableDatasetGeneration"))
+						
+						OBJECT SET RGB COLORS:C628(*; $form.result; EDITOR.selectedFillColor)
+						OBJECT SET VALUE:C1742("result"; "")
+						
+					End if 
+					
+					$filter:=$context.current.filter
+					
+					If (Length:C16(String:C10($filter.string))>0)
+						
+						$context.current.filterIcon:=EDITOR.filterIcon
+						
+						If (Bool:C1537($filter.validated))
 							
-							_o_UI.tips.defaultDelay()
+							//_o_UI.tips.defaultDelay()
 							
-							OBJECT SET RGB COLORS:C628(*; $Obj_form.result; EDITOR.selectedFillColor)
-							
-							If (FEATURE.with("cancelableDatasetGeneration"))
-								
-								OBJECT SET VALUE:C1742("result"; ".Records: "+String:C10($Obj_context.current.count))
-								
-							End if 
-							
-							If (Bool:C1537($Obj_context.current.filter.parameters))
-								
-								OBJECT SET HELP TIP:C1181(*; $Obj_form.filter; String:C10($Obj_context.current.filter.error))
+							If (Bool:C1537($filter.parameters))
 								
 								// Can't embed data
-								OBJECT SET VISIBLE:C603(*; $Obj_form.embedded; False:C215)
+								If (FEATURE.with("cancelableDatasetGeneration"))
+									
+									OBJECT SET ENABLED:C1123(*; $form.embedded; False:C215)
+									
+								Else 
+									
+									OBJECT SET HELP TIP:C1181(*; $form.filter; String:C10($filter.error))
+									
+									OBJECT SET VISIBLE:C603(*; $form.embedded; False:C215)
+									
+								End if 
 								
 								// Allow to edit the 'On Mobile App Authentification' method
-								OBJECT SET VISIBLE:C603(*; $Obj_form.method; True:C214)
+								OBJECT SET VISIBLE:C603(*; $form.method; True:C214)
 								
 								// Populate user icon
-								$Obj_context.current.filterIcon:=EDITOR.userIcon
-								
-							End if 
-							
-						Else 
-							
-							OBJECT SET RGB COLORS:C628(*; $Obj_form.filter; EDITOR.errorColor)
-							
-							If (FEATURE.with("cancelableDatasetGeneration"))
-								
-								OBJECT SET RGB COLORS:C628(*; $Obj_form.result; EDITOR.errorColor)
-								
-							End if 
-							
-							If (Length:C16(String:C10($Obj_context.current.filter.error))>0)
-								
-								OBJECT SET HELP TIP:C1181(*; $Obj_form.filter; Get localized string:C991("error:")+$Obj_context.current.filter.error)
+								$context.current.filterIcon:=EDITOR.userIcon
 								
 								If (FEATURE.with("cancelableDatasetGeneration"))
 									
-									OBJECT SET VALUE:C1742("result"; Get localized string:C991("error:")+$Obj_context.current.filter.error)
+									// Mark: TO LOCALISE
+									OBJECT SET VALUE:C1742("result"; "."+Get localized string:C991("theFilteredDataWillBeLoadedIntoTheApplicationWhenConnecting")+" depending on user information which you define in the Mobile App Authentication method.")
 									
 								End if 
 								
 							Else 
 								
-								OBJECT SET HELP TIP:C1181(*; $Obj_form.filter; Get localized string:C991("notValidatedFilter"))
+								If (FEATURE.with("cancelableDatasetGeneration"))
+									
+									If (Bool:C1537($context.current.embedded))
+										
+										OBJECT SET VALUE:C1742("result"; Get localized string:C991("theFilteredDataWillBeIntegratedIntoTheApplication")+" ("+String:C10($context.current.count)+")")
+										
+									Else 
+										
+										OBJECT SET VALUE:C1742("result"; Get localized string:C991("theFilteredDataWillBeLoadedIntoTheApplicationWhenConnecting")+" ("+String:C10($context.current.count)+")")
+										
+									End if 
+								End if 
+							End if 
+							
+						Else 
+							
+							OBJECT SET RGB COLORS:C628(*; $form.filter; EDITOR.errorColor)
+							
+							If (FEATURE.with("cancelableDatasetGeneration"))
+								
+								OBJECT SET RGB COLORS:C628(*; $form.result; EDITOR.errorColor)
+								
+							End if 
+							
+							If (Length:C16(String:C10($filter.error))>0)
+								
+								If (FEATURE.with("cancelableDatasetGeneration"))
+									
+									OBJECT SET VALUE:C1742("result"; Get localized string:C991("error:")+$filter.error)
+									
+								Else 
+									
+									OBJECT SET HELP TIP:C1181(*; $form.filter; Get localized string:C991("error:")+$filter.error)
+									
+								End if 
+								
+							Else 
 								
 								If (FEATURE.with("cancelableDatasetGeneration"))
 									
 									OBJECT SET VALUE:C1742("result"; Get localized string:C991("notValidatedFilter"))
 									
+								Else 
+									
+									OBJECT SET HELP TIP:C1181(*; $form.filter; Get localized string:C991("notValidatedFilter"))
+									
 								End if 
 								
 							End if 
 							
-							OBJECT SET VISIBLE:C603(*; $Obj_form.validate; True:C214)
+							OBJECT SET VISIBLE:C603(*; $form.validate; True:C214)
 							
 						End if 
 						
-						If ($Obj_form.focus#$Obj_form.filter)
-							
-							_o_UI.tips.instantly()
-							
-						End if 
+						//If ($form.focus#$form.filter)
+						//_o_UI.tips.instantly()
+						//End if 
 						
 					Else 
 						
-						$Obj_context.current.filterIcon:=Null:C1517
+						$context.current.filterIcon:=Null:C1517
 						
 						If (FEATURE.with("cancelableDatasetGeneration"))
-							OBJECT SET RGB COLORS:C628(*; $Obj_form.result; EDITOR.selectedFillColor)
 							
-							If (Bool:C1537($Obj_context.current.embedded))
+							If (Bool:C1537($context.current.embedded))
 								
-								OBJECT SET VALUE:C1742("result"; ".Records: "+String:C10(ds:C1482[$Obj_context.current.name].all().length))
+								OBJECT SET VALUE:C1742("result"; Get localized string:C991("allDataWillBeIntegratedIntoTheApplication")+" ("+String:C10(ds:C1482[$context.current.name].all().length)+")")
 								
 							Else 
 								
-								OBJECT SET VALUE:C1742("result"; "")
+								OBJECT SET VALUE:C1742("result"; Get localized string:C991("allDataWillBeLoadedIntoTheApplicationWhenConnecting")+" ("+String:C10(ds:C1482[$context.current.name].all().length)+")")
 								
 							End if 
-							
 						End if 
-						
-						
 					End if 
 					
 				Else 
@@ -245,165 +283,188 @@ Case of
 				End if 
 				
 				// Redraw list
-				$Obj_context.tables:=$Obj_context.tables
+				$context.tables:=$context.tables
 				
 				//______________________________________________________
 		End case 
 		
 		//=========================================================
-	: ($Obj_in.action=Null:C1517)  // Error
+	: ($in.action=Null:C1517)  // Error
 		
 		ASSERT:C1129(False:C215; "Missing parameter \"action\"")
 		
 		//=========================================================
-	: ($Obj_in.action="init")  // Return the form objects definition
+	: ($in.action="init")  // Return the form objects definition
 		
-		$Obj_out:=$Obj_form
+		$out:=$form
 		
 		//=========================================================
-	: ($Obj_in.action="dumpSizes")  // Get the dump size if available
+	: ($in.action="dumpSizes")  // Get the dump size if available
 		
-		$Obj_context.sqlite:=Null:C1517
+		$context.sqlite:=Null:C1517
 		
-		$Dir_root:=dataSet(New object:C1471("action"; "path"; \
+		$pathname:=dataSet(New object:C1471("action"; "path"; \
 			"project"; New object:C1471("product"; Form:C1466.product; "$project"; Form:C1466.$project))).path
 		
-		$file:=Folder:C1567($Dir_root; fk platform path:K87:2).file("Resources/Structures.sqlite")
+		$file:=Folder:C1567($pathname; fk platform path:K87:2).file("Resources/Structures.sqlite")
 		
 		If ($file.exists)
 			
-			$o:=cs:C1710.lep.new()\
+			$lep:=cs:C1710.lep.new()\
 				.setOutputType(Is object:K8:27)\
 				.launch(cs:C1710.path.new().scripts().file("sqlite3_sizes.sh"); "'"+$file.path+"'")
 			
-			If ($o.success)
+			If ($lep.success)
 				
-				$Obj_context.sqlite:=$o.outputStream
+				$context.sqlite:=$lep.outputStream
 				
 			End if 
 		End if 
 		
 		//=========================================================
-	: ($Obj_in.action="update")  // Display published tables according to data model
+	: ($in.action="update")  // Display published tables according to data model
 		
-		$Obj_context.dumpSizes()
+		// Update the table list if any
+		var $c : Collection
+		$c:=PROJECT.publishedTables()
 		
-		OBJECT SET VISIBLE:C603(*; $Obj_form.list; False:C215)
-		
-		$o:=publishedTableList(New object:C1471(\
-			"dataModel"; Form:C1466.dataModel; \
-			"asCollection"; True:C214))
-		
-		If ($o.success)
+		If ($c.length>0)
 			
-			$Dir_root:=dataSet(New object:C1471("action"; "path"; \
+			For each ($table; $c)
+				
+				If ($context.tables.query("tableNumber = :1"; Num:C11($table.tableNumber)).pop()=Null:C1517)
+					
+					// Add the table
+					$context.tables.push($table)
+					
+				End if 
+			End for each 
+			
+			For each ($table; $context.tables)
+				
+				If ($c.query("tableNumber = :1"; Num:C11($table.tableNumber)).pop()=Null:C1517)
+					
+					// Mark to remove
+					$table.toRemove:=True:C214
+					
+				End if 
+			End for each 
+			
+			$context.tables:=$context.tables.query("toRemove = null")
+			
+		Else 
+			
+			$context.tables:=New collection:C1472
+			
+		End if 
+		
+		$context.dumpSizes()
+		
+		OBJECT SET VISIBLE:C603(*; $form.list; False:C215)
+		
+		
+		If ($context.tables.length>0)
+			
+			$pathname:=dataSet(New object:C1471("action"; "path"; \
 				"project"; New object:C1471("product"; Form:C1466.product; "$project"; Form:C1466.$project))).path
 			
 			// Populate user icons if any
-			For each ($Obj_table; $o.tables)
+			For each ($table; $context.tables)
 				
-				$Lon_index:=$o.tables.indexOf($Obj_table)
+				$index:=$context.tables.indexOf($table)
 				
-				If (Length:C16(String:C10($Obj_table.filter.string))>0)
+				If (Length:C16(String:C10($table.filter.string))>0)
 					
-					$o.tables[$Lon_index].filterIcon:=Choose:C955(Bool:C1537($Obj_table.filter.parameters); EDITOR.userIcon; EDITOR.filterIcon)
+					$context.tables[$index].filterIcon:=Choose:C955(Bool:C1537($table.filter.parameters); EDITOR.userIcon; EDITOR.filterIcon)
 					
 				End if 
 				
-				If (Bool:C1537($Obj_table.embedded))\
-					 & (Not:C34(Bool:C1537($Obj_table.filter.parameters)))
+				If (Bool:C1537($table.embedded))\
+					 & (Not:C34(Bool:C1537($table.filter.parameters)))
 					
-					$Boo_sqllite:=($Obj_context.sqlite#Null:C1517)
+					$withSQLlite:=($context.sqlite#Null:C1517)
 					
-					If ($Boo_sqllite)
+					If ($withSQLlite)
 						
-						$t:=formatString("table-name"; $Obj_table.name)
+						$t:=formatString("table-name"; $table.name)
 						
-						If ($Obj_context.sqlite.tables["Z"+Uppercase:C13($t)]#Null:C1517)
+						If ($context.sqlite.tables["Z"+Uppercase:C13($t)]#Null:C1517)
 							
-							$Lon_size:=$Obj_context.sqlite.tables["Z"+Uppercase:C13($t)]  // Size of the data dump
+							$size:=$context.sqlite.tables["Z"+Uppercase:C13($t)]  // Size of the data dump
 							
-							If ($Lon_size>4096)
+							If ($size>4096)
 								
 								// Add pictures size if any
-								$file:=Folder:C1567(asset(New object:C1471("action"; "path"; "path"; $Dir_root)).path+"Pictures"+Folder separator:K24:12+$t+Folder separator:K24:12; fk platform path:K87:2).file("manifest.json")
+								$file:=Folder:C1567(asset(New object:C1471("action"; "path"; "path"; $pathname)).path+"Pictures"+Folder separator:K24:12+$t+Folder separator:K24:12; fk platform path:K87:2).file("manifest.json")
 								
 								If ($file.exists)
 									
-									$Lon_size:=$Lon_size+JSON Parse:C1218($file.getText()).contentSize
+									$size:=$size+JSON Parse:C1218($file.getText()).contentSize
 									
 								End if 
 								
-								$o.tables[$Lon_index].dumpSize:=doc_bytesToString($Lon_size)
-								
 							Else 
-								
-								$o.tables[$Lon_index].dumpSize:=Choose:C955($Lon_size>0; "< "+doc_bytesToString($Lon_size); Get localized string:C991("notAvailable"))
 								
 							End if 
 							
 						Else 
 							
-							$o.tables[$Lon_index].dumpSize:=Get localized string:C991("notAvailable")
+							$context.tables[$index].dumpSize:=Get localized string:C991("notAvailable")
 							
 						End if 
 						
 					Else 
 						
-						$Boo_sqllite:=False:C215
+						$withSQLlite:=False:C215
 						
 					End if 
 					
-					If (Not:C34($Boo_sqllite))
+					If (Not:C34($withSQLlite))
 						
-						$file:=Folder:C1567($Dir_root; fk platform path:K87:2).file("Resources/Assets.xcassets/Data/"+$Obj_table.name+".dataset/"+$Obj_table.name+".data.json")
+						$file:=Folder:C1567($pathname; fk platform path:K87:2).file("Resources/Assets.xcassets/Data/"+$table.name+".dataset/"+$table.name+".data.json")
 						
 						If ($file.exists)
 							
 							// Get document size
 							$x:=$file.getContent()
-							$Lon_size:=BLOB size:C605($x)
+							$size:=BLOB size:C605($x)
 							SET BLOB SIZE:C606($x; 0)
 							
-							$file:=Folder:C1567($Dir_root; fk platform path:K87:2).file("Resources/Assets.xcassets/Pictures/"+$Obj_table.name+"/manifest.json")
+							$file:=Folder:C1567($pathname; fk platform path:K87:2).file("Resources/Assets.xcassets/Pictures/"+$table.name+"/manifest.json")
 							
 							If ($file.exists)
 								
-								$Lon_size:=$Lon_size+JSON Parse:C1218($file.getText()).contentSize
+								$size:=$size+JSON Parse:C1218($file.getText()).contentSize
 								
 							End if 
 							
-							$o.tables[$Lon_index].dumpSize:=doc_bytesToString($Lon_size)
-							
 						Else 
 							
-							$o.tables[$Lon_index].dumpSize:=Get localized string:C991("notAvailable")
+							$context.tables[$index].dumpSize:=Get localized string:C991("notAvailable")
 							
 						End if 
 					End if 
 				End if 
 			End for each 
 			
-			$Obj_context.tables:=$o.tables
-			
-			If (Num:C11($o.tables.length)>0)
+			If (Num:C11($context.tables.length)>0)
 				
-				OBJECT SET VISIBLE:C603(*; $Obj_form.list; True:C214)
+				OBJECT SET VISIBLE:C603(*; $form.list; True:C214)
 				OBJECT SET VISIBLE:C603(*; "noPublishedTable"; False:C215)
-				GOTO OBJECT:C206(*; $Obj_form.list)
+				GOTO OBJECT:C206(*; $form.list)
 				
 				// Select the last used table or the first one if none
-				$Lon_row:=Choose:C955(Num:C11($Obj_context.lastIndex)=0; 1; Num:C11($Obj_context.lastIndex))
-				$Lon_row:=Choose:C955($Lon_row>$o.tables.length; 1; $Lon_row)
-				LISTBOX SELECT ROW:C912(*; $Obj_form.list; $Lon_row; lk replace selection:K53:1)
+				$row:=Choose:C955(Num:C11($context.lastIndex)=0; 1; Num:C11($context.lastIndex))
+				$row:=Choose:C955($row>$context.tables.length; 1; $row)
+				LISTBOX SELECT ROW:C912(*; $form.list; $row; lk replace selection:K53:1)
 				
-				OBJECT SET VISIBLE:C603(*; "01_tables.embeddedLabel"; $o.tables.query("embedded=:1"; True:C214).length>0)
+				OBJECT SET VISIBLE:C603(*; "01_tables.embeddedLabel"; $context.tables.query("embedded=:1"; True:C214).length>0)
 				
 			Else 
 				
-				$Obj_context.lastIndex:=0
+				$context.lastIndex:=0
 				
-				OBJECT SET VISIBLE:C603(*; $Obj_form.list; False:C215)
+				OBJECT SET VISIBLE:C603(*; $form.list; False:C215)
 				OBJECT SET VISIBLE:C603(*; "noPublishedTable"; True:C214)
 				
 				OBJECT SET VISIBLE:C603(*; "01_tables.embeddedLabel"; False:C215)
@@ -412,9 +473,9 @@ Case of
 			
 		Else 
 			
-			$Obj_context.lastIndex:=0
+			$context.lastIndex:=0
 			
-			OBJECT SET VISIBLE:C603(*; $Obj_form.list; False:C215)
+			OBJECT SET VISIBLE:C603(*; $form.list; False:C215)
 			OBJECT SET VISIBLE:C603(*; "noPublishedTable"; True:C214)
 			
 			OBJECT SET VISIBLE:C603(*; "01_tables.embeddedLabel"; False:C215)
@@ -422,45 +483,45 @@ Case of
 		End if 
 		
 		// Redraw list
-		$Obj_context.tables:=$Obj_context.tables
+		$context.tables:=$context.tables
 		
-		$Obj_context.listboxUI()
+		$context.listboxUI()
 		
 		SET TIMER:C645(-1)
 		
 		//=========================================================
-	: ($Obj_in.action="background")
+	: ($in.action="background")
 		
-		$Obj_out:=New object:C1471(\
+		$out:=New object:C1471(\
 			"color"; "transparent")  //0x00FFFFFF)
 		
-		If (Num:C11($Obj_context.index)#0)
+		If (Num:C11($context.index)#0)
 			
-			$b:=($Obj_form.focus=$Obj_form.list)
+			$b:=($form.focus=$form.list)
 			
-			If ($Obj_context.current.name=$Obj_in.this.name)
+			If ($context.current.name=$in.this.name)
 				
-				$Obj_out.color:=Choose:C955($b; EDITOR.backgroundSelectedColor; EDITOR.alternateSelectedColor)
+				$out.color:=Choose:C955($b; EDITOR.backgroundSelectedColor; EDITOR.alternateSelectedColor)
 				
 			Else 
 				
-				$Lon_backgroundColor:=Choose:C955($b; EDITOR.highlightColor; EDITOR.highlightColorNoFocus)
-				$Obj_out.color:=Choose:C955($b; $Lon_backgroundColor; "transparent")  //0x00FFFFFF)
+				$backgroundColor:=Choose:C955($b; EDITOR.highlightColor; EDITOR.highlightColorNoFocus)
+				$out.color:=Choose:C955($b; $backgroundColor; "transparent")  //0x00FFFFFF)
 				
 			End if 
 		End if 
 		
 		//=========================================================
-	: ($Obj_in.action="meta-infos")
+	: ($in.action="meta-infos")
 		
-		$Obj_out:=New object:C1471
+		$out:=New object:C1471
 		
-		$Obj_out.stroke:=Choose:C955(EDITOR.isDark; "white"; "black")  // Default
-		$Obj_out.fontWeight:="normal"
+		$out.stroke:=Choose:C955(EDITOR.isDark; "white"; "black")  // Default
+		$out.fontWeight:="normal"
 		
 		If (Bool:C1537(This:C1470.embedded))
 			
-			$Obj_out.fontWeight:="bold"
+			$out.fontWeight:="bold"
 			
 		End if 
 		
@@ -472,7 +533,7 @@ Case of
 					
 					If (Not:C34(Bool:C1537(This:C1470.filter.validated)))
 						
-						$Obj_out.stroke:=EDITOR.errorRGB
+						$out.stroke:=EDITOR.errorRGB
 						
 					End if 
 				End if 
@@ -480,35 +541,24 @@ Case of
 		End if 
 		
 		//=========================================================
-	: ($Obj_in.action="listboxUI")
+	: ($in.action="listboxUI")
 		
-		If ($Obj_form.focus=$Obj_form.list)
+		If ($form.focus=$form.list)
 			
-			OBJECT SET RGB COLORS:C628(*; $Obj_form.list; Foreground color:K23:1; EDITOR.highlightColor; EDITOR.highlightColor)
-			OBJECT SET RGB COLORS:C628(*; $Obj_form.list+".border"; EDITOR.selectedColor)
+			OBJECT SET RGB COLORS:C628(*; $form.list; Foreground color:K23:1; EDITOR.highlightColor; EDITOR.highlightColor)
+			OBJECT SET RGB COLORS:C628(*; $form.list+".border"; EDITOR.selectedColor)
 			
 		Else 
 			
-			OBJECT SET RGB COLORS:C628(*; $Obj_form.list; Foreground color:K23:1; 0x00FFFFFF; 0x00FFFFFF)
-			OBJECT SET RGB COLORS:C628(*; $Obj_form.list+".border"; EDITOR.backgroundUnselectedColor)
+			OBJECT SET RGB COLORS:C628(*; $form.list; Foreground color:K23:1; 0x00FFFFFF; 0x00FFFFFF)
+			OBJECT SET RGB COLORS:C628(*; $form.list+".border"; EDITOR.backgroundUnselectedColor)
 			
 		End if 
 		
 		//=========================================================
 	Else 
 		
-		ASSERT:C1129(False:C215; "Unknown entry point: \""+$Obj_in.action+"\"")
+		ASSERT:C1129(False:C215; "Unknown entry point: \""+$in.action+"\"")
 		
 		//=========================================================
 End case 
-
-// ----------------------------------------------------
-// Return
-If ($Obj_out#Null:C1517)
-	
-	$0:=$Obj_out
-	
-End if 
-
-// ----------------------------------------------------
-// End

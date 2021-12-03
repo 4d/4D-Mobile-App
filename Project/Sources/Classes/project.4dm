@@ -786,7 +786,6 @@ Function isLink
 		
 	End if 
 	
-	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function isComputedAttribute($field : Object; $tableName : Text)->$is : Boolean
 	
@@ -819,6 +818,107 @@ Function isComputedAttribute($field : Object; $tableName : Text)->$is : Boolean
 		End if 
 	End if 
 	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function checkQueryFilter($table : Object)
+	
+	var $success : Boolean
+	var $filter; $o; $out : Object
+	var $es : 4D:C1709.EntitySelection
+	var $error : cs:C1710.error
+	
+	If ($table.filter#Null:C1517)
+		
+		ASSERT:C1129(Length:C16(String:C10($table.filter.string))>0)
+		
+		$filter:=$table.filter
+		
+		OB REMOVE:C1226($filter; "error")
+		OB REMOVE:C1226($filter; "errors")
+		OB REMOVE:C1226($filter; "parameters")
+		
+		// Detect a query with parameters
+		$filter.parameters:=(Match regex:C1019("(?m-si)(?:=|==|===|IS|!=|#|!==|IS NOT|>|<|>=|<=|%)\\s*(:)"; $filter.string; 1))
+		
+		If ($filter.parameters)
+			
+			// Todo: Perform a syntax verification with a generic placeholder
+			
+			//$o:=New object
+			//For each ($t; Split string($filter.string; ":"); 1)
+			//$o[Split string($t; " ")[0]]:="*"
+			//End for each
+			////mark: - START TRAPPING ERRORS
+			//$error:=cs.error.new("capture")
+			//// Work only with indexed placeholders
+			//// Limited to 128 placeholders (4D limit)
+			////ds[$filter.table].query($filter.filter.string; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"\
+				; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"\
+				; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"\
+				; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"\
+				; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"\
+				; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"\
+				; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@")
+			//ds[$filter.table].query($filter.filter.string; $o)
+			//$error.release()
+			////mark: - STOP TRAPPING ERRORS
+			//$success:=Bool(Num($error.lastError().error)=0)
+			
+			$success:=True:C214
+			
+		Else 
+			
+			OB REMOVE:C1226($filter; "parameters")
+			
+			//mark: - START TRAPPING ERRORS
+			$error:=cs:C1710.error.new("capture")
+			
+			If (FEATURE.with("cancelableDatasetGeneration"))
+				
+				$es:=ds:C1482[$table.name].query($filter.string)
+				
+			Else 
+				
+				ds:C1482[$table.name].query($filter.string)
+				
+			End if 
+			
+			$error.release()
+			//mark: - STOP TRAPPING ERRORS
+			
+			If ($es#Null:C1517)
+				
+				$filter.count:=Num:C11($es.length)
+				
+			End if 
+			
+			$success:=Bool:C1537(Num:C11($error.lastError().error)=0)
+			
+		End if 
+		
+		If (Not:C34($success))
+			
+			$filter.errors:=$error.lastError().stack
+			
+			// Build the error message
+			$filter.error:=""
+			
+			For each ($o; $filter.errors.query("component='dbmg'").reverse())
+				
+				If (Position:C15($o.desc; $filter.error)=0)
+					
+					$filter.error:=$filter.error+$o.desc+"\r"
+					
+				End if 
+			End for each 
+			
+			// Remove last carriage return
+			$filter.error:=Split string:C1554($filter.error; "\r"; sk ignore empty strings:K86:1).join("\r")
+			
+		End if 
+		
+		$filter.validated:=$success
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if field is an alias
@@ -1364,7 +1464,7 @@ Function updateFormDefinitions()
 	End for each 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	//Performs the project audit                                                                                          #MARK_TODO : remove $project.status.project
+	/// Performs the project audit                                                                                          #MARK_TODO : remove $project.status.project
 Function audit($audits : Object)->$audit : Object
 	
 	If (Count parameters:C259>=1)
@@ -1378,6 +1478,52 @@ Function audit($audits : Object)->$audit : Object
 	End if 
 	
 	cs:C1710.ob.new(This:C1470).set("$project.status.project"; EDITOR.projectAudit.success)  //#TO_REMOVE
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	/// Returns the published tables as a collection
+Function publishedTables()->$tables : Collection
+	
+	var $tableID : Text
+	var $meta; $table : Object
+	
+	$tables:=New collection:C1472
+	
+	For each ($tableID; This:C1470.dataModel)
+		
+		$meta:=This:C1470.dataModel[$tableID][""]  // Table properties
+		
+		If ($meta.label=Null:C1517)
+			
+			$meta.label:=PROJECT.label($meta.name)
+			
+		End if 
+		
+		If ($meta.shortLabel=Null:C1517)
+			
+			$meta.shortLabel:=$meta.label
+			
+		End if 
+		
+		$table:=New object:C1471(\
+			"tableNumber"; Num:C11($tableID); \
+			"name"; $meta.name; \
+			"label"; $meta.label; \
+			"shortLabel"; $meta.shortLabel; \
+			"embedded"; Bool:C1537($meta.embedded); \
+			"iconPath"; String:C10($meta.icon); \
+			"icon"; PROJECT.getIcon(String:C10($meta.icon)))
+		
+		If ($meta.filter#Null:C1517)
+			
+			$table.filter:=Choose:C955(Value type:C1509($meta.filter)=Is text:K8:3; New object:C1471(\
+				"string"; $meta.filter); \
+				$meta.filter)
+			
+		End if 
+		
+		$tables.push($table)
+		
+	End for each 
 	
 	//================================================================================
 Function fieldDefinition

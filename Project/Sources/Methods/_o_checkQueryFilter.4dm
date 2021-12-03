@@ -10,11 +10,11 @@
 // #THREAD-SAFE
 // ----------------------------------------------------
 // Declarations
-#DECLARE($in : Object)->$out : Object
+#DECLARE($filter : Object)->$out : Object
 
 If (False:C215)
-	C_OBJECT:C1216(checkQueryFilter; $1)
-	C_OBJECT:C1216(checkQueryFilter; $0)
+	C_OBJECT:C1216(_o_checkQueryFilter; $1)
+	C_OBJECT:C1216(_o_checkQueryFilter; $0)
 End if 
 
 var $o : Object
@@ -25,16 +25,16 @@ var $error : cs:C1710.error
 // Initialisations
 If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
-	ASSERT:C1129(Length:C16(String:C10($in.table))>0)
-	ASSERT:C1129(Length:C16(String:C10($in.filter.string))>0)
+	ASSERT:C1129(Length:C16(String:C10($filter.table))>0)
+	ASSERT:C1129(Length:C16(String:C10($filter.filter.string))>0)
 	
-	OB REMOVE:C1226($in.filter; "error")
-	OB REMOVE:C1226($in.filter; "errors")
-	OB REMOVE:C1226($in.filter; "parameters")
+	OB REMOVE:C1226($filter.filter; "error")
+	OB REMOVE:C1226($filter.filter; "errors")
+	OB REMOVE:C1226($filter.filter; "parameters")
 	
 	$out:=New object:C1471(\
 		"success"; False:C215; \
-		"filter"; $in.filter)
+		"filter"; $filter.filter)
 	
 Else 
 	
@@ -48,12 +48,20 @@ $out.filter.parameters:=(Match regex:C1019("(?m-si)(?:=|==|===|IS|!=|#|!==|IS NO
 
 If ($out.filter.parameters)
 	
-	// Perform a syntax verification with a generic placeholder 
+	// Todo: Perform a syntax verification with a generic placeholder 
 	
 	//mark: - START TRAPPING ERRORS 
 	$error:=cs:C1710.error.new("capture")
 	
-	ds:C1482[$in.table].query($in.filter.string)  //; "@")
+	// Work only with indexed placeholders
+	// Limited to 128 placeholders (4D limit)
+	ds:C1482[$filter.table].query($filter.filter.string; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"\
+		; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"\
+		; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"\
+		; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"\
+		; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"\
+		; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"\
+		; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@")
 	
 	$error.release()
 	//mark: - STOP TRAPPING ERRORS 
@@ -62,51 +70,51 @@ If ($out.filter.parameters)
 	
 Else 
 	
-	If (Bool:C1537($in.rest))
+	If (Bool:C1537($filter.rest))
 		
-		// Mark: - OBSOLETE ?
-		If (Bool:C1537($in.selection))
+		// Mark: - <OBSOLETE>
+		If (Bool:C1537($filter.selection))
 			
 			$out:=Rest(New object:C1471(\
 				"action"; "records"; \
-				"table"; $in.table; \
-				"url"; $in.url; \
-				"handler"; $in.handler; \
+				"table"; $filter.table; \
+				"url"; $filter.url; \
+				"handler"; $filter.handler; \
 				"queryEncode"; True:C214; \
 				"query"; New object:C1471(\
-				"$filter"; $in.filter.string)))
+				"$filter"; $filter.filter.string)))
 			
 		Else 
 			
 			// Limit to one - just check
 			$out:=Rest(New object:C1471(\
 				"action"; "records"; \
-				"table"; $in.table; \
-				"url"; $in.url; \
-				"handler"; $in.handler; \
+				"table"; $filter.table; \
+				"url"; $filter.url; \
+				"handler"; $filter.handler; \
 				"queryEncode"; True:C214; \
 				"query"; New object:C1471(\
-				"$filter"; $in.filter.string; \
+				"$filter"; $filter.filter.string; \
 				"$limit"; "1")))
 			
 		End if 
 		
-		// Mark: -
+		// Mark: - <OBSOLETE/>
 		
 	Else 
 		
 		//mark: - START TRAPPING ERRORS 
 		$error:=cs:C1710.error.new("capture")
 		
-		If (Bool:C1537($in.selection))
+		If (Bool:C1537($filter.selection))
 			
-			$out.selection:=ds:C1482[$in.table].query($in.filter.string)
+			$out.selection:=ds:C1482[$filter.table].query($filter.filter.string)
 			
 		Else 
 			
 			If (FEATURE.with("cancelableDatasetGeneration"))
 				
-				$es:=ds:C1482[$in.table].query($in.filter.string)
+				$es:=ds:C1482[$filter.table].query($filter.filter.string)
 				
 				If ($es#Null:C1517)
 					
@@ -116,7 +124,7 @@ Else
 				
 			Else 
 				
-				ds:C1482[$in.table].query($in.filter.string)
+				ds:C1482[$filter.table].query($filter.filter.string)
 				
 			End if 
 		End if 
