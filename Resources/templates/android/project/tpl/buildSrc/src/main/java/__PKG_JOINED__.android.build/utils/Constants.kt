@@ -21,7 +21,7 @@ const val APP_PATH_KEY = "app"
 const val SRC_PATH_KEY = "src"
 const val MAIN_PATH_KEY = "main"
 const val ASSETS_PATH_KEY = "assets"
-const val XCASSETS_PATH_KEY = "Assets.xcassets"
+const val DATA_DUMP_PATH_KEY = "datadump"
 
 const val CATALOG_PATH_KEY = "Catalog"
 const val CATALOG_DATASET_SUFFIX = "catalog.dataset"

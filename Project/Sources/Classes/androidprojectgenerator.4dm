@@ -223,7 +223,7 @@ Function copyDataSet
 	
 	If ($xcassets.exists)
 		
-		$copyDest:=$xcassets.copyTo(Folder:C1567(This:C1470.projectPath+"app/src/main/assets"); fk overwrite:K87:5)
+		$copyDest:=$xcassets.copyTo(Folder:C1567(This:C1470.projectPath+"app/src/main/assets"); "datadump"; fk overwrite:K87:5)
 		
 		If ($copyDest.exists)
 			

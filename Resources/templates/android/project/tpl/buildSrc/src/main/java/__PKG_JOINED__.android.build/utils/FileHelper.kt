@@ -23,15 +23,13 @@ private fun assetsPath(): String =
     APP_PATH_KEY + File.separator + SRC_PATH_KEY + File.separator + MAIN_PATH_KEY +
             File.separator + ASSETS_PATH_KEY
 
-fun getCatalogPath(tableName: String): String = assetsPath() + File.separator + XCASSETS_PATH_KEY +
-        File.separator + CATALOG_PATH_KEY + File.separator +
-        "$tableName.${CATALOG_DATASET_SUFFIX}" + File.separator +
-        "$tableName.${CATALOG_JSON_SUFFIX}"
+fun getCatalogPath(tableName: String): String = assetsPath() + File.separator +
+        DATA_DUMP_PATH_KEY + File.separator + "$CATALOG_PATH_KEY$tableName.$CATALOG_DATASET_SUFFIX" +
+        File.separator + "$tableName.${CATALOG_JSON_SUFFIX}"
 
 fun getDataPath(tableName: String, index: Int? = null): String {
-    val path = assetsPath() + File.separator + XCASSETS_PATH_KEY +
-            File.separator + DATA_PATH_KEY + File.separator +
-            "$tableName.$DATA_DATASET_SUFFIX" + File.separator +
+    val path = assetsPath() + File.separator + DATA_DUMP_PATH_KEY + File.separator +
+            "$DATA_PATH_KEY$tableName.$DATA_DATASET_SUFFIX" + File.separator +
             "$tableName."
     return if (index == null) {
         path + DATA_JSON_SUFFIX
