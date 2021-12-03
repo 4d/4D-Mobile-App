@@ -112,7 +112,11 @@ Case of
 				
 				If ($rest.success)
 					
-					$outputPathname:=$in.output+$meta.name
+					If (Substring:C12($in.output; Length:C16($in.output); 1)=Folder separator:K24:12)
+						$outputPathname:=$in.output+$meta.name
+					Else 
+						$outputPathname:=$in.output+Folder separator:K24:12+$meta.name
+					End if 
 					
 					If (Bool:C1537($in.dataSet))
 						
@@ -398,7 +402,11 @@ Case of
 									//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 								: ($rest.success)
 									
-									$outputPathname:=$in.output+$meta.name
+									If (Substring:C12($in.output; Length:C16($in.output); 1)=Folder separator:K24:12)
+										$outputPathname:=$in.output+$meta.name
+									Else 
+										$outputPathname:=$in.output+Folder separator:K24:12+$meta.name
+									End if 
 									
 									If (Bool:C1537($in.dataSet))
 										
