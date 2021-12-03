@@ -714,6 +714,10 @@ Function xmlAppendRelationAttributeForField()->$response : Object
 			$Txt_buffer:="<userDefinedRuntimeAttribute type=\"string\" keyPath=\"relationLabel\" value=\"___FIELD_"+String:C10($Lon_j)+"_LABEL___\"/>"
 			$Dom_parent.append(_o_xml("parse"; New object:C1471("variable"; $Txt_buffer)))
 		End if 
+		If (Not:C34($Dom_parent.findByXPath("[@keyPath=relationShortLabel]").success))
+			$Txt_buffer:="<userDefinedRuntimeAttribute type=\"string\" keyPath=\"relationShortLabel\" value=\"___FIELD_"+String:C10($Lon_j)+"_SHORT_LABEL___\"/>"
+			$Dom_parent.append(_o_xml("parse"; New object:C1471("variable"; $Txt_buffer)))
+		End if 
 		If (Not:C34($Dom_parent.findByXPath("[@keyPath=relationIsToMany]").success))
 			$Txt_buffer:="<userDefinedRuntimeAttribute type=\"boolean\" keyPath=\"relationIsToMany\" value=\""+Choose:C955($IsToMany; "YES"; "NO")+"\"/>"
 			$Dom_parent.append(_o_xml("parse"; New object:C1471("variable"; $Txt_buffer)))
