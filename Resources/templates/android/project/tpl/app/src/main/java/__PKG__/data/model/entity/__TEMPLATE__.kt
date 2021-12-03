@@ -47,7 +47,7 @@ class {{tableName}}(
 @Suppress("ConstructorParameterNaming", "LongParameterList")
 class {{tableName}}ManyToOneRelationMask(
     {{#relations_many_to_one}}
-    val {{relation_name}}: ManyToOneRelationMask? = null{{^-last}}, {{/-last}}
+    @JsonProperty("{{relation_name_original}}") val {{relation_name}}: ManyToOneRelationMask? = null{{^-last}}, {{/-last}}
     {{/relations_many_to_one}}
 )
 {{/table_has_any_many_to_one_relation}}

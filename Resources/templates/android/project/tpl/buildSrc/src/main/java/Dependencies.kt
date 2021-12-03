@@ -28,7 +28,7 @@ object Versions {
     const val kotlin = "1.5.31"
     const val kotlin_coroutines = "1.5.2"
     const val leakcanary = "2.0"
-    const val lifecycle = "2.3.1"
+    const val lifecycle = "2.4.0"
     const val mockito = "4.1.0"
     const val mockk = "1.12.1"
     const val multidex = "2.0.1"
@@ -54,7 +54,7 @@ object Versions {
 
 object Config {
     const val buildTools = "30.0.2"
-    const val compileSdk = 30
+    const val compileSdk = 31
     const val minSdk = 21
     const val targetSdk = 30
 }
