@@ -574,6 +574,11 @@ Function focus
 	C_OBJECT:C1216($0)
 	$0:=This:C1470
 	
+/*═════════════════════════*/
+Function isFocused()->$focus : Boolean
+	
+	$focus:=(OBJECT Get name:C1087(Object with focus:K67:3)=This:C1470.name)
+	
 /*════════════════════════════════════════════════════
 .addEvent(collection | longint))-> This
 */

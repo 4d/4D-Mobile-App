@@ -821,10 +821,13 @@ Function isComputedAttribute($field : Object; $tableName : Text)->$is : Boolean
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function checkQueryFilter($table : Object)
 	
+	var $buffer : Text
 	var $success : Boolean
-	var $filter; $o; $out : Object
+	var $filter; $o : Object
 	var $es : 4D:C1709.EntitySelection
 	var $error : cs:C1710.error
+	
+	$table.total:=ds:C1482[$table.name].all().length
 	
 	If ($table.filter#Null:C1517)
 		
@@ -837,33 +840,27 @@ Function checkQueryFilter($table : Object)
 		OB REMOVE:C1226($filter; "parameters")
 		
 		// Detect a query with parameters
-		$filter.parameters:=(Match regex:C1019("(?m-si)(?:=|==|===|IS|!=|#|!==|IS NOT|>|<|>=|<=|%)\\s*(:)"; $filter.string; 1))
+		$filter.parameters:=(Match regex:C1019("(?m-si)(?:=|==|===|IS|!=|#|!==|IS NOT|>|<|>=|<=|%)\\s*:"; $filter.string; 1))
 		
 		If ($filter.parameters)
 			
-			// Todo: Perform a syntax verification with a generic placeholder
+			$buffer:=$filter.string
 			
-			//$o:=New object
-			//For each ($t; Split string($filter.string; ":"); 1)
-			//$o[Split string($t; " ")[0]]:="*"
-			//End for each
-			////mark: - START TRAPPING ERRORS
-			//$error:=cs.error.new("capture")
-			//// Work only with indexed placeholders
-			//// Limited to 128 placeholders (4D limit)
-			////ds[$filter.table].query($filter.filter.string; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"\
-				; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"\
-				; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"\
-				; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"\
-				; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"\
-				; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"\
-				; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@"; "@")
-			//ds[$filter.table].query($filter.filter.string; $o)
-			//$error.release()
-			////mark: - STOP TRAPPING ERRORS
-			//$success:=Bool(Num($error.lastError().error)=0)
-			
-			$success:=True:C214
+			If (Rgx_SubstituteText("(?mi-s)(=|==|===|IS|!=|#|!==|IS NOT|>|<|>=|<=|%)\\s*:[^\\s]*"; "\\1:1"; ->$buffer)=0)
+				
+				//mark: - START TRAPPING ERRORS
+				$error:=cs:C1710.error.new("capture")
+				ds:C1482[$table.name].query($buffer; "@")
+				$error.release()
+				//mark: - STOP TRAPPING ERRORS
+				
+				$success:=Bool:C1537(Num:C11($error.lastError().error)=0)
+				
+			Else 
+				
+				$success:=True:C214
+				
+			End if 
 			
 		Else 
 			
@@ -887,7 +884,7 @@ Function checkQueryFilter($table : Object)
 			
 			If ($es#Null:C1517)
 				
-				$filter.count:=Num:C11($es.length)
+				$table.count:=Num:C11($es.length)
 				
 			End if 
 			
@@ -916,8 +913,15 @@ Function checkQueryFilter($table : Object)
 			
 		End if 
 		
-		$filter.validated:=$success
-		
+		If (FEATURE.with("cancelableDatasetGeneration"))
+			
+			OB REMOVE:C1226($filter; "validated")
+			
+		Else 
+			
+			$filter.validated:=$success
+			
+		End if 
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===

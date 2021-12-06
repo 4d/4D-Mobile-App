@@ -76,7 +76,7 @@
 					"currentItemSource": "Form:C1466.$dialog.DATA.current",
 					"currentItemPositionSource": "Form:C1466.$dialog.DATA.index",
 					"selectedItemsSource": "Form:C1466.$dialog.DATA.selected",
-					"metaSource": "Form:C1466.$dialog.DATA.text.call()",
+					"metaSource": "Form:C1466.$dialog.DATA.text.call(This:C1470)",
 					"selectionMode": "single",
 					"scrollbarVertical": "visible",
 					"rowFillSource": "Form:C1466.$dialog.DATA.listBackground(This:C1470).color",
@@ -293,7 +293,8 @@
 					"width": 429,
 					"height": 46,
 					"enterable": false,
-					"fontSize": 12
+					"fontSize": 12,
+					"fill": "transparent"
 				}
 			}
 		}
@@ -303,7 +304,7 @@
 		"kind": "form"
 	},
 	"method": "DATA_Handler",
-	"geometryStamp": 70,
+	"geometryStamp": 74,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

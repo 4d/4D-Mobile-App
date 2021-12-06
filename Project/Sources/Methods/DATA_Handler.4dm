@@ -54,7 +54,8 @@ If (OB Is empty:C1297($context))
 		"this"; $1)))
 	
 	$context.text:=Formula:C1597(DATA_Handler(New object:C1471(\
-		"action"; "meta-infos")))
+		"action"; "meta-infos"; \
+		"this"; $1)))
 	
 	$context.dumpSizes:=Formula:C1597(DATA_Handler(New object:C1471(\
 		"action"; "dumpSizes")))
@@ -110,11 +111,9 @@ Case of
 					
 					$context.tables:=PROJECT.publishedTables()
 					
-					For each ($table; $context.tables)
-						
-						PROJECT.checkQueryFilter($table)
-						
-					End for each 
+					//For each ($table; $context.tables)
+					//PROJECT.checkQueryFilter($table)
+					//End for each 
 					
 				End if 
 				
@@ -135,28 +134,21 @@ Case of
 					
 					OBJECT SET VISIBLE:C603(*; $form.queryWidget; Bool:C1537($form.focus=$form.filter))
 					
+					//OBJECT SET VISIBLE(*; $form.validate; False)
+					OBJECT SET VISIBLE:C603(*; $form.method; False:C215)
+					OBJECT SET VISIBLE:C603(*; $form.embedded; True:C214)
+					
 					OBJECT SET RGB COLORS:C628(*; $form.filter; Foreground color:K23:1)
 					
-					OBJECT SET VISIBLE:C603(*; $form.validate; False:C215)
-					OBJECT SET VISIBLE:C603(*; $form.method; False:C215)
+					OBJECT SET HELP TIP:C1181(*; $form.filter; "")
 					
-					If (FEATURE.with("cancelableDatasetGeneration"))
-						
-						OBJECT SET ENABLED:C1123(*; $form.embedded; True:C214)
-						
-					Else 
-						
-						OBJECT SET VISIBLE:C603(*; $form.embedded; True:C214)
-						OBJECT SET HELP TIP:C1181(*; $form.filter; "")
-						
-					End if 
 					
 					OB REMOVE:C1226($context.current; "user")
 					
 					If (FEATURE.with("cancelableDatasetGeneration"))
 						
 						OBJECT SET RGB COLORS:C628(*; $form.result; EDITOR.selectedFillColor)
-						OBJECT SET VALUE:C1742("result"; "")
+						var $Comment : Text
 						
 					End if 
 					
@@ -166,22 +158,21 @@ Case of
 						
 						$context.current.filterIcon:=EDITOR.filterIcon
 						
-						If (Bool:C1537($filter.validated))
+						If (Bool:C1537($filter.validated)) | (FEATURE.with("cancelableDatasetGeneration"))
 							
-							//_o_UI.tips.defaultDelay()
+							$filter.parameters:=(Match regex:C1019("(?m-si)(?:=|==|===|IS|!=|#|!==|IS NOT|>|<|>=|<=|%)\\s*:"; $filter.string; 1))
 							
 							If (Bool:C1537($filter.parameters))
+								
+								OBJECT SET VISIBLE:C603(*; $form.embedded; False:C215)
 								
 								// Can't embed data
 								If (FEATURE.with("cancelableDatasetGeneration"))
 									
-									OBJECT SET ENABLED:C1123(*; $form.embedded; False:C215)
 									
 								Else 
 									
 									OBJECT SET HELP TIP:C1181(*; $form.filter; String:C10($filter.error))
-									
-									OBJECT SET VISIBLE:C603(*; $form.embedded; False:C215)
 									
 								End if 
 								
@@ -193,8 +184,20 @@ Case of
 								
 								If (FEATURE.with("cancelableDatasetGeneration"))
 									
+									
+									If (Length:C16(String:C10($filter.error))>0)
+										
+										OBJECT SET RGB COLORS:C628(*; $form.filter; EDITOR.errorColor)
+										OBJECT SET HELP TIP:C1181(*; $form.filter; Get localized string:C991("error:")+$filter.error)
+										
+									Else 
+										
+										
+									End if 
+									
 									// Mark: TO LOCALISE
-									OBJECT SET VALUE:C1742("result"; "."+Get localized string:C991("theFilteredDataWillBeLoadedIntoTheApplicationWhenConnecting")+" depending on user information which you define in the Mobile App Authentication method.")
+									$Comment:="."+Get localized string:C991("theFilteredDataWillBeLoadedIntoTheApplicationWhenConnecting")\
+										+" depending on user information which you define in the Mobile App Authentication method."
 									
 								End if 
 								
@@ -204,11 +207,17 @@ Case of
 									
 									If (Bool:C1537($context.current.embedded))
 										
-										OBJECT SET VALUE:C1742("result"; Get localized string:C991("theFilteredDataWillBeIntegratedIntoTheApplication")+" ("+String:C10($context.current.count)+")")
+										$Comment:=Get localized string:C991("theFilteredDataWillBeIntegratedIntoTheApplication")
 										
 									Else 
 										
-										OBJECT SET VALUE:C1742("result"; Get localized string:C991("theFilteredDataWillBeLoadedIntoTheApplicationWhenConnecting")+" ("+String:C10($context.current.count)+")")
+										$Comment:=Get localized string:C991("theFilteredDataWillBeLoadedIntoTheApplicationWhenConnecting")
+										
+									End if 
+									
+									If ($context.current.count#Null:C1517)
+										
+										$Comment:=$Comment+" ("+String:C10($context.current.count)+"/"+String:C10($context.current.total)+")"
 										
 									End if 
 								End if 
@@ -216,11 +225,13 @@ Case of
 							
 						Else 
 							
-							OBJECT SET RGB COLORS:C628(*; $form.filter; EDITOR.errorColor)
-							
 							If (FEATURE.with("cancelableDatasetGeneration"))
 								
-								OBJECT SET RGB COLORS:C628(*; $form.result; EDITOR.errorColor)
+								//OBJECT SET RGB COLORS(*; $form.result; EDITOR.errorColor)
+								
+							Else 
+								
+								OBJECT SET RGB COLORS:C628(*; $form.filter; EDITOR.errorColor)
 								
 							End if 
 							
@@ -228,7 +239,7 @@ Case of
 								
 								If (FEATURE.with("cancelableDatasetGeneration"))
 									
-									OBJECT SET VALUE:C1742("result"; Get localized string:C991("error:")+$filter.error)
+									$Comment:=Get localized string:C991("error:")+$filter.error
 									
 								Else 
 									
@@ -240,7 +251,7 @@ Case of
 								
 								If (FEATURE.with("cancelableDatasetGeneration"))
 									
-									OBJECT SET VALUE:C1742("result"; Get localized string:C991("notValidatedFilter"))
+									//$Comment:=Get localized string("notValidatedFilter")
 									
 								Else 
 									
@@ -254,10 +265,6 @@ Case of
 							
 						End if 
 						
-						//If ($form.focus#$form.filter)
-						//_o_UI.tips.instantly()
-						//End if 
-						
 					Else 
 						
 						$context.current.filterIcon:=Null:C1517
@@ -266,14 +273,26 @@ Case of
 							
 							If (Bool:C1537($context.current.embedded))
 								
-								OBJECT SET VALUE:C1742("result"; Get localized string:C991("allDataWillBeIntegratedIntoTheApplication")+" ("+String:C10(ds:C1482[$context.current.name].all().length)+")")
+								$Comment:=Get localized string:C991("allDataWillBeIntegratedIntoTheApplication")
 								
 							Else 
 								
-								OBJECT SET VALUE:C1742("result"; Get localized string:C991("allDataWillBeLoadedIntoTheApplicationWhenConnecting")+" ("+String:C10(ds:C1482[$context.current.name].all().length)+")")
+								$Comment:=Get localized string:C991("allDataWillBeLoadedIntoTheApplicationWhenConnecting")
+								
+							End if 
+							
+							If ($context.current.total#Null:C1517)
+								
+								$Comment:=$Comment+" ("+String:C10($context.current.total)+")"
 								
 							End if 
 						End if 
+					End if 
+					
+					If (FEATURE.with("cancelableDatasetGeneration"))
+						
+						OBJECT SET VALUE:C1742("result"; $Comment)
+						
 					End if 
 					
 				Else 
@@ -527,14 +546,25 @@ Case of
 		
 		If (This:C1470.filter#Null:C1517)
 			
-			If (Length:C16(String:C10(This:C1470.filter.string))>0)
+			If (FEATURE.with("cancelableDatasetGeneration"))
 				
-				If (Not:C34(Bool:C1537(This:C1470.filter.parameters)))
+				If (Length:C16(String:C10(This:C1470.filter.error))>0)
 					
-					If (Not:C34(Bool:C1537(This:C1470.filter.validated)))
+					$out.stroke:=EDITOR.errorRGB
+					
+				End if 
+				
+			Else 
+				
+				If (Length:C16(String:C10(This:C1470.filter.string))>0)
+					
+					If (Not:C34(Bool:C1537(This:C1470.filter.parameters)))
 						
-						$out.stroke:=EDITOR.errorRGB
-						
+						If (Not:C34(Bool:C1537(This:C1470.filter.validated)))
+							
+							$out.stroke:=EDITOR.errorRGB
+							
+						End if 
 					End if 
 				End if 
 			End if 
