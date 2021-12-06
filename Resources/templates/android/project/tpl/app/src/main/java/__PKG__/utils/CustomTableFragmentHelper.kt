@@ -77,6 +77,16 @@ class CustomTableFragmentHelper :
     }
 
     /**
+     * Provides if horizontal swipe on items is allowed
+     */
+    override fun isSwipeAllowed(tableName: String): Boolean = when (tableName) {
+        {{#tableNames_layout}}
+        "{{name}}" -> {{isSwipeAllowed}}
+        {{/tableNames_layout}}
+        else -> false
+    }
+
+    /**
      * Sets relations to the appropriate list form
      */
     override fun setRelationBinding(
