@@ -398,6 +398,7 @@ Case of
 		Else 
 			
 			DATA_Handler(New object:C1471("action"; "update"))
+			//DATA_CALLBACK("update")
 			
 		End if 
 		

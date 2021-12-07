@@ -343,7 +343,15 @@ Case of
 		
 		GOTO OBJECT:C206(*; $form.list)
 		
-		PROJECT.checkQueryFilter($table)
+		If (PROJECT.dataSource.source="server")
+			
+			PROJECT.checkRestQueryFilter($table)
+			
+		Else 
+			
+			PROJECT.checkLocalQueryFilter($table)
+			
+		End if 
 		
 		// Mark: check if necessary
 		PROJECT.save()

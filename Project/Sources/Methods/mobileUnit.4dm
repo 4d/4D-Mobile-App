@@ -281,6 +281,12 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 				
 			End if 
 			
+			If ($entryPoint="checkQueryFilter")
+				
+				$entryPoint:="_o_checkQueryFilter"
+				
+			End if 
+			
 			EXECUTE METHOD:C1007($entryPoint; $response; $parameters)
 			
 			//______________________________________________________

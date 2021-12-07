@@ -111,9 +111,7 @@ Case of
 					
 					$context.tables:=PROJECT.publishedTables()
 					
-					//For each ($table; $context.tables)
-					//PROJECT.checkQueryFilter($table)
-					//End for each 
+					PROJECT.checkLocalQueryFilter($table)
 					
 				End if 
 				
@@ -128,84 +126,162 @@ Case of
 				
 				androidLimitations(False:C215; "")
 				
-				If ($context.current#Null:C1517)
+				var $table : Object
+				$table:=$context.current
+				
+				If ($table#Null:C1517)
 					
 					OBJECT SET VISIBLE:C603(*; "@.options"; True:C214)
 					
 					OBJECT SET VISIBLE:C603(*; $form.queryWidget; Bool:C1537($form.focus=$form.filter))
 					
-					//OBJECT SET VISIBLE(*; $form.validate; False)
+					OBJECT SET VISIBLE:C603(*; $form.validate; String:C10($table.filter.string)#"")
 					OBJECT SET VISIBLE:C603(*; $form.method; False:C215)
 					OBJECT SET VISIBLE:C603(*; $form.embedded; True:C214)
 					
 					OBJECT SET RGB COLORS:C628(*; $form.filter; Foreground color:K23:1)
 					
-					OBJECT SET HELP TIP:C1181(*; $form.filter; "")
+					OB REMOVE:C1226($table; "user")
 					
+					var $Comment : Text
+					OBJECT SET VISIBLE:C603(*; $form.result; FEATURE.with("cancelableDatasetGeneration"))
+					OBJECT SET RGB COLORS:C628(*; $form.result; EDITOR.selectedFillColor)
 					
-					OB REMOVE:C1226($context.current; "user")
+					$filter:=$table.filter
 					
-					If (FEATURE.with("cancelableDatasetGeneration"))
-						
-						OBJECT SET RGB COLORS:C628(*; $form.result; EDITOR.selectedFillColor)
-						var $Comment : Text
-						
-					End if 
-					
-					$filter:=$context.current.filter
-					
-					If (Length:C16(String:C10($filter.string))>0)
-						
-						$context.current.filterIcon:=EDITOR.filterIcon
-						
-						If (Bool:C1537($filter.validated)) | (FEATURE.with("cancelableDatasetGeneration"))
+					Case of 
 							
-							$filter.parameters:=(Match regex:C1019("(?m-si)(?:=|==|===|IS|!=|#|!==|IS NOT|>|<|>=|<=|%)\\s*:"; $filter.string; 1))
+							//______________________________________________________
+						: (Length:C16(String:C10($filter.string))=0)  // No filter
 							
-							If (Bool:C1537($filter.parameters))
+							$table.filterIcon:=Null:C1517
+							
+							If ($table.total=Null:C1517)
 								
-								OBJECT SET VISIBLE:C603(*; $form.embedded; False:C215)
-								
-								// Can't embed data
-								If (FEATURE.with("cancelableDatasetGeneration"))
+								If (PROJECT.dataSource.source="server")
 									
+									var $rest : Object
+									$rest:=Rest(New object:C1471(\
+										"action"; "records"; \
+										"table"; $table.name; \
+										"url"; This:C1470.server.urls.production; \
+										"handler"; "mobileapp"))
+									
+									If ($rest.success)
+										
+										If ($rest.__COUNT#Null:C1517)
+											
+											$table.total:=Num:C11($rest.__COUNT)
+											
+										End if 
+									End if 
 									
 								Else 
 									
-									OBJECT SET HELP TIP:C1181(*; $form.filter; String:C10($filter.error))
+									$table.total:=ds:C1482[$table.name].all().length
 									
 								End if 
+							End if 
+							
+							If ($table.total=Null:C1517)
 								
-								// Allow to edit the 'On Mobile App Authentification' method
-								OBJECT SET VISIBLE:C603(*; $form.method; True:C214)
-								
-								// Populate user icon
-								$context.current.filterIcon:=EDITOR.userIcon
-								
-								If (FEATURE.with("cancelableDatasetGeneration"))
+								If (Bool:C1537($table.embedded))
 									
+									$Comment:=Get localized string:C991("allDataWillBeIntegratedIntoTheApplication")
 									
-									If (Length:C16(String:C10($filter.error))>0)
-										
-										OBJECT SET RGB COLORS:C628(*; $form.filter; EDITOR.errorColor)
-										OBJECT SET HELP TIP:C1181(*; $form.filter; Get localized string:C991("error:")+$filter.error)
-										
-									Else 
-										
-										
-									End if 
+								Else 
 									
-									// Mark: TO LOCALISE
-									$Comment:="."+Get localized string:C991("theFilteredDataWillBeLoadedIntoTheApplicationWhenConnecting")\
-										+" depending on user information which you define in the Mobile App Authentication method."
+									$Comment:=Get localized string:C991("allDataWillBeLoadedIntoTheApplicationWhenConnecting")
 									
 								End if 
 								
 							Else 
 								
-								If (FEATURE.with("cancelableDatasetGeneration"))
+								If ($table.total=0)
 									
-									If (Bool:C1537($context.current.embedded))
+									If (Bool:C1537($table.embedded))
+										
+										// MARK: TO LOCALISE
+										$Comment:=".No entity will be embedded into the application"
+										
+									Else 
+										
+										// MARK: TO LOCALISE
+										$Comment:=".No entity will be loaded into the application"
+										
+									End if 
+									
+								Else 
+									
+									If ($table.total>100000)
+										
+										If (Bool:C1537($table.embedded))
+											
+											// MARK: TO LOCALISE
+											$Comment:=".Number of entities that will be embedded into the application > 100 000"
+											
+										Else 
+											
+											// MARK: TO LOCALISE
+											$Comment:=".Number of entities that will be loaded into the application > 100 000"
+											
+										End if 
+										
+									Else 
+										
+										If (Bool:C1537($table.embedded))
+											
+											// MARK: TO LOCALISE
+											$Comment:=".Number of entities that will be embedded into the application: "+String:C10($table.total; "### ###")
+											
+										Else 
+											
+											// MARK: TO LOCALISE
+											$Comment:=".Number of entities that will be loaded into the application: "+String:C10($table.total; "### ###")
+											
+										End if 
+									End if 
+								End if 
+							End if 
+							
+							//______________________________________________________
+						: (Length:C16(String:C10($filter.error))>0)  // With errors
+							
+							OBJECT SET RGB COLORS:C628(*; $form.filter; EDITOR.errorColor)
+							OBJECT SET RGB COLORS:C628(*; $form.result; EDITOR.errorColor)
+							
+							$Comment:=Get localized string:C991("error:")+$filter.error
+							
+							//______________________________________________________
+						: (Not:C34(Bool:C1537($filter.validated)))  // Not validated
+							
+							OBJECT SET RGB COLORS:C628(*; $form.filter; EDITOR.errorColor)
+							OBJECT SET RGB COLORS:C628(*; $form.result; EDITOR.errorColor)
+							
+							$Comment:=Get localized string:C991("notValidatedFilter")
+							
+							//______________________________________________________
+						Else 
+							
+							$filter.parameters:=(Match regex:C1019("(?m-si)(?:=|==|===|IS|!=|#|!==|IS NOT|>|<|>=|<=|%)\\s*:"; $filter.string; 1))
+							
+							
+							If (Bool:C1537($filter.parameters))
+								
+								$table.filterIcon:=EDITOR.userIcon
+								
+								OBJECT SET VISIBLE:C603(*; $form.embedded; False:C215)
+								OBJECT SET VISIBLE:C603(*; $form.method; True:C214)
+								
+								// Mark: TO LOCALISE
+								$Comment:="."+Get localized string:C991("theFilteredDataWillBeLoadedIntoTheApplicationWhenConnecting")\
+									+" depending on user information which you define in the Mobile App Authentication method."
+								
+							Else 
+								
+								If ($table.count=Null:C1517)
+									
+									If (Bool:C1537($table.embedded))
 										
 										$Comment:=Get localized string:C991("theFilteredDataWillBeIntegratedIntoTheApplication")
 										
@@ -215,85 +291,56 @@ Case of
 										
 									End if 
 									
-									If ($context.current.count#Null:C1517)
+								Else 
+									
+									If ($table.count=0)
 										
-										$Comment:=$Comment+" ("+String:C10($context.current.count)+"/"+String:C10($context.current.total)+")"
+										If (Bool:C1537($table.embedded))
+											
+											// Mark: TO LOCALISE
+											$Comment:=".No entity will be embedded into the application"
+											
+										Else 
+											
+											// Mark: TO LOCALISE
+											$Comment:=".No entity will be loaded into the application"
+											
+										End if 
 										
+									Else 
+										
+										If (Bool:C1537($table.embedded))
+											
+											If ($table.count>100000)
+												
+												$Comment:=".Number of entities that will be embedded into the application > 100 000"
+												
+											Else 
+												
+												$Comment:=".Number of entities that will be embedded into the application: "+String:C10($table.count; "### ###")+" of "+String:C10($table.total; "### ### ### ### ###")
+												
+											End if 
+											
+										Else 
+											
+											If ($table.count>100000)
+												
+												$Comment:=".Number of entities that will be loaded into the application > 100 000"
+												
+											Else 
+												
+												$Comment:=".Number of entities that will be loaded into the application: "+String:C10($table.count; "### ###")+" of "+String:C10($table.total; "### ### ### ### ###")
+												
+											End if 
+										End if 
 									End if 
 								End if 
 							End if 
 							
-						Else 
-							
-							If (FEATURE.with("cancelableDatasetGeneration"))
-								
-								//OBJECT SET RGB COLORS(*; $form.result; EDITOR.errorColor)
-								
-							Else 
-								
-								OBJECT SET RGB COLORS:C628(*; $form.filter; EDITOR.errorColor)
-								
-							End if 
-							
-							If (Length:C16(String:C10($filter.error))>0)
-								
-								If (FEATURE.with("cancelableDatasetGeneration"))
-									
-									$Comment:=Get localized string:C991("error:")+$filter.error
-									
-								Else 
-									
-									OBJECT SET HELP TIP:C1181(*; $form.filter; Get localized string:C991("error:")+$filter.error)
-									
-								End if 
-								
-							Else 
-								
-								If (FEATURE.with("cancelableDatasetGeneration"))
-									
-									//$Comment:=Get localized string("notValidatedFilter")
-									
-								Else 
-									
-									OBJECT SET HELP TIP:C1181(*; $form.filter; Get localized string:C991("notValidatedFilter"))
-									
-								End if 
-								
-							End if 
-							
-							OBJECT SET VISIBLE:C603(*; $form.validate; True:C214)
-							
-						End if 
-						
-					Else 
-						
-						$context.current.filterIcon:=Null:C1517
-						
-						If (FEATURE.with("cancelableDatasetGeneration"))
-							
-							If (Bool:C1537($context.current.embedded))
-								
-								$Comment:=Get localized string:C991("allDataWillBeIntegratedIntoTheApplication")
-								
-							Else 
-								
-								$Comment:=Get localized string:C991("allDataWillBeLoadedIntoTheApplicationWhenConnecting")
-								
-							End if 
-							
-							If ($context.current.total#Null:C1517)
-								
-								$Comment:=$Comment+" ("+String:C10($context.current.total)+")"
-								
-							End if 
-						End if 
-					End if 
+							//______________________________________________________
+					End case 
 					
-					If (FEATURE.with("cancelableDatasetGeneration"))
-						
-						OBJECT SET VALUE:C1742("result"; $Comment)
-						
-					End if 
+					OBJECT SET VALUE:C1742("result"; $Comment)
 					
 				Else 
 					
@@ -531,41 +578,29 @@ Case of
 		End if 
 		
 		//=========================================================
-	: ($in.action="meta-infos")
+	: ($in.action="meta-infos")  //Table list meta info expression
 		
-		$out:=New object:C1471
-		
-		$out.stroke:=Choose:C955(EDITOR.isDark; "white"; "black")  // Default
-		$out.fontWeight:="normal"
+		// Default values
+		$out:=New object:C1471(\
+			"stroke"; Choose:C955(EDITOR.isDark; "white"; "black"); \
+			"fontWeight"; "normal"; \
+			"cell"; New object:C1471(\
+			"table_names"; New object:C1471))
 		
 		If (Bool:C1537(This:C1470.embedded))
 			
-			$out.fontWeight:="bold"
+			$out.cell.table_names.fontWeight:="bold"
 			
 		End if 
 		
 		If (This:C1470.filter#Null:C1517)
 			
-			If (FEATURE.with("cancelableDatasetGeneration"))
+			If (Length:C16(String:C10(This:C1470.filter.string))>0)
 				
-				If (Length:C16(String:C10(This:C1470.filter.error))>0)
+				If (Not:C34(Bool:C1537(This:C1470.filter.validated)))
 					
-					$out.stroke:=EDITOR.errorRGB
+					$out.cell.table_names.stroke:=EDITOR.errorRGB
 					
-				End if 
-				
-			Else 
-				
-				If (Length:C16(String:C10(This:C1470.filter.string))>0)
-					
-					If (Not:C34(Bool:C1537(This:C1470.filter.parameters)))
-						
-						If (Not:C34(Bool:C1537(This:C1470.filter.validated)))
-							
-							$out.stroke:=EDITOR.errorRGB
-							
-						End if 
-					End if 
 				End if 
 			End if 
 		End if 

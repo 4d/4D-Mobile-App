@@ -8,6 +8,8 @@ Class constructor($project : Object)
 		
 	End if 
 	
+	This:C1470.regexParameters:="(?mi-s)(=|==|===|IS|!=|#|!==|IS NOT|>|<|>=|<=|%)\\s*:[^\\s]*"
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function init($project : Object)
 	
@@ -819,7 +821,94 @@ Function isComputedAttribute($field : Object; $tableName : Text)->$is : Boolean
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function checkQueryFilter($table : Object)
+Function checkRestQueryFilter($table : Object)
+	
+	var $buffer : Text
+	var $success : Boolean
+	var $filter; $response : Object
+	
+	$filter:=$table.filter
+	
+	OB REMOVE:C1226($filter; "error")
+	OB REMOVE:C1226($filter; "errors")
+	OB REMOVE:C1226($filter; "code")
+	OB REMOVE:C1226($filter; "httpError")
+	OB REMOVE:C1226($filter; "parameters")
+	
+	OB REMOVE:C1226($table; "count")
+	
+	// Detect a query with parameters
+	$filter.parameters:=(Match regex:C1019(This:C1470.regexParameters; $filter.string; 1))
+	
+	If ($filter.parameters)
+		
+		$buffer:=$filter.string
+		
+		If (Rgx_SubstituteText(This:C1470.regexParameters; "\\1\"@\""; ->$buffer)=0)
+			
+			$response:=Rest(New object:C1471(\
+				"action"; "records"; \
+				"table"; $table.name; \
+				"url"; This:C1470.server.urls.production; \
+				"handler"; "mobileapp"; \
+				"queryEncode"; True:C214; \
+				"query"; New object:C1471("$filter"; $buffer; \
+				"$limit"; "1")))
+			
+		Else 
+			
+			$success:=True:C214
+			
+		End if 
+		
+	Else 
+		
+		OB REMOVE:C1226($filter; "parameters")
+		
+		$response:=Rest(New object:C1471(\
+			"action"; "records"; \
+			"table"; $table.name; \
+			"url"; This:C1470.server.urls.production; \
+			"handler"; "mobileapp"; \
+			"queryEncode"; True:C214; \
+			"query"; New object:C1471("$filter"; $filter.string)))
+		
+	End if 
+	
+	$success:=$response.success
+	
+	Case of 
+			
+			//______________________________________________________
+		: ($success)
+			
+			If ($response.__COUNT#Null:C1517)
+				
+				$table.count:=Num:C11($response.__COUNT)
+				
+			End if 
+			
+			//______________________________________________________
+		: ($response.code=0)  //server not reachable
+			
+			$filter.code:=$response.code
+			$filter.error:=".The server is not reachable"
+			
+			//______________________________________________________
+		: ($response.httpError#Null:C1517)  //?????
+			
+			$filter.httpError:=$response.httpError
+			$filter.error:=".Server error ("+String:C10($response.httpError)+")"
+			
+			
+			//______________________________________________________
+	End case 
+	
+	$filter.errors:=$response.errors
+	$filter.validated:=$success
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function checkLocalQueryFilter($table : Object)
 	
 	var $buffer : Text
 	var $success : Boolean
@@ -827,97 +916,91 @@ Function checkQueryFilter($table : Object)
 	var $es : 4D:C1709.EntitySelection
 	var $error : cs:C1710.error
 	
-	$table.total:=ds:C1482[$table.name].all().length
-	
-	If ($table.filter#Null:C1517)
+	If ($table#Null:C1517)
 		
-		ASSERT:C1129(Length:C16(String:C10($table.filter.string))>0)
+		$table.total:=ds:C1482[$table.name].all().length
 		
-		$filter:=$table.filter
-		
-		OB REMOVE:C1226($filter; "error")
-		OB REMOVE:C1226($filter; "errors")
-		OB REMOVE:C1226($filter; "parameters")
-		
-		// Detect a query with parameters
-		$filter.parameters:=(Match regex:C1019("(?m-si)(?:=|==|===|IS|!=|#|!==|IS NOT|>|<|>=|<=|%)\\s*:"; $filter.string; 1))
-		
-		If ($filter.parameters)
+		If ($table.filter#Null:C1517)
 			
-			$buffer:=$filter.string
+			ASSERT:C1129(Length:C16(String:C10($table.filter.string))>0)
 			
-			If (Rgx_SubstituteText("(?mi-s)(=|==|===|IS|!=|#|!==|IS NOT|>|<|>=|<=|%)\\s*:[^\\s]*"; "\\1:1"; ->$buffer)=0)
+			$filter:=$table.filter
+			
+			OB REMOVE:C1226($filter; "error")
+			OB REMOVE:C1226($filter; "errors")
+			OB REMOVE:C1226($filter; "code")
+			OB REMOVE:C1226($filter; "httpError")
+			OB REMOVE:C1226($filter; "parameters")
+			
+			OB REMOVE:C1226($table; "count")
+			
+			// Detect a query with parameters
+			$filter.parameters:=(Match regex:C1019(This:C1470.regexParameters; $filter.string; 1))
+			
+			If ($filter.parameters)
+				
+				$buffer:=$filter.string
+				
+				If (Rgx_SubstituteText(This:C1470.regexParameters; "\\1:1"; ->$buffer)=0)
+					
+					//mark: - START TRAPPING ERRORS
+					$error:=cs:C1710.error.new("capture")
+					ds:C1482[$table.name].query($buffer; "@")
+					$error.release()
+					//mark: - STOP TRAPPING ERRORS
+					
+					$success:=Bool:C1537(Num:C11($error.lastError().error)=0)
+					
+				Else 
+					
+					$success:=True:C214
+					
+				End if 
+				
+			Else 
+				
+				OB REMOVE:C1226($filter; "parameters")
 				
 				//mark: - START TRAPPING ERRORS
 				$error:=cs:C1710.error.new("capture")
-				ds:C1482[$table.name].query($buffer; "@")
+				
+				If (FEATURE.with("cancelableDatasetGeneration"))
+					
+					$table.count:=ds:C1482[$table.name].count($filter.string)
+					
+				Else 
+					
+					ds:C1482[$table.name].query($filter.string)
+					
+				End if 
+				
 				$error.release()
 				//mark: - STOP TRAPPING ERRORS
 				
 				$success:=Bool:C1537(Num:C11($error.lastError().error)=0)
 				
-			Else 
-				
-				$success:=True:C214
-				
 			End if 
 			
-		Else 
-			
-			OB REMOVE:C1226($filter; "parameters")
-			
-			//mark: - START TRAPPING ERRORS
-			$error:=cs:C1710.error.new("capture")
-			
-			If (FEATURE.with("cancelableDatasetGeneration"))
+			If (Not:C34($success))
 				
-				$es:=ds:C1482[$table.name].query($filter.string)
+				$filter.errors:=$error.lastError().stack
 				
-			Else 
+				// Build the error message
+				$filter.error:=""
 				
-				ds:C1482[$table.name].query($filter.string)
-				
-			End if 
-			
-			$error.release()
-			//mark: - STOP TRAPPING ERRORS
-			
-			If ($es#Null:C1517)
-				
-				$table.count:=Num:C11($es.length)
-				
-			End if 
-			
-			$success:=Bool:C1537(Num:C11($error.lastError().error)=0)
-			
-		End if 
-		
-		If (Not:C34($success))
-			
-			$filter.errors:=$error.lastError().stack
-			
-			// Build the error message
-			$filter.error:=""
-			
-			For each ($o; $filter.errors.query("component='dbmg'").reverse())
-				
-				If (Position:C15($o.desc; $filter.error)=0)
+				For each ($o; $filter.errors.query("component='dbmg'").reverse())
 					
-					$filter.error:=$filter.error+$o.desc+"\r"
-					
-				End if 
-			End for each 
-			
-			// Remove last carriage return
-			$filter.error:=Split string:C1554($filter.error; "\r"; sk ignore empty strings:K86:1).join("\r")
-			
-		End if 
-		
-		If (FEATURE.with("cancelableDatasetGeneration"))
-			
-			OB REMOVE:C1226($filter; "validated")
-			
-		Else 
+					If (Position:C15($o.desc; $filter.error)=0)
+						
+						$filter.error:=$filter.error+$o.desc+"\r"
+						
+					End if 
+				End for each 
+				
+				// Remove last carriage return
+				$filter.error:=Split string:C1554($filter.error; "\r"; sk ignore empty strings:K86:1).join("\r")
+				
+			End if 
 			
 			$filter.validated:=$success
 			

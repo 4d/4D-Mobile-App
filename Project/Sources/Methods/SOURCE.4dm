@@ -1,10 +1,6 @@
 //%attributes = {"invisible":true,"preemptive":"incapable"}
 // ----------------------------------------------------
-// Project method : PRODUCT
-// Created 16-9-2020 by Vincent de Lachaux
-// ----------------------------------------------------
-// Description:
-// PRODUCT pannel management
+// SOURCE pannel management
 // ----------------------------------------------------
 // Declarations
 var $e; $ƒ : Object
@@ -16,7 +12,7 @@ $ƒ:=panel_Load
 // ----------------------------------------------------
 If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 	
-	$e:=panel_Common(On Load:K2:1; On Bound Variable Change:K2:52)
+	$e:=panel_Common(On Load:K2:1; On Timer:K2:25)
 	
 	Case of 
 			

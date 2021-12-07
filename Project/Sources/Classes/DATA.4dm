@@ -47,7 +47,6 @@ Function init()
 	This:C1470.button("authenticationMethod.options"; "method").bestSize().addToGroup($group)
 	This:C1470.input("result").addToGroup($group)
 	
-	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function onLoad()
 	
@@ -205,3 +204,34 @@ Function displayFilter($current : Object)
 			End if 
 		End if 
 	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+	/// Table list meta info expression
+Function metaInfo($current : Object)->$result
+	
+	// Default values
+	$result:=New object:C1471(\
+		"stroke"; Choose:C955(EDITOR.isDark; "white"; "black"); \
+		"fontWeight"; "normal"; \
+		"cell"; New object:C1471(\
+		"table_names"; New object:C1471))
+	
+	If (Bool:C1537(This:C1470.embedded))
+		
+		$result.cell.table_names.fontWeight:="bold"
+		
+	End if 
+	
+	If (This:C1470.filter#Null:C1517)
+		
+		If (Length:C16(String:C10(This:C1470.filter.string))>0)
+			
+			If (Not:C34(Bool:C1537(This:C1470.filter.validated)))
+				
+				$result.cell.table_names.stroke:=EDITOR.errorRGB
+				
+			End if 
+		End if 
+	End if 
+	
+	

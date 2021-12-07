@@ -75,6 +75,7 @@
 	"_o_OBSOLETES": {
 		"methods": [
 			"_NEW_MOBILE_PROJECT",
+			"_o_checkQueryFilter",
 			"_o_color",
 			"_o_COMPONENT_Pathname",
 			"_o_db",
@@ -371,6 +372,8 @@
 	"06] DATA": {
 		"methods": [
 			"COMPILER_DATA",
+			"DATA",
+			"DATA_CALLBACK",
 			"DATA_Handler",
 			"DATA_OBJECTS_HANDLER"
 		],
