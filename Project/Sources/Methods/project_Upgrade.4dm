@@ -531,7 +531,6 @@ If (Num:C11($project.info.version)<6)
 					If ($o.format#Null:C1517)
 						
 						$o.label:=$o.format
-						$o.shortLabel:=$o.format
 						OB REMOVE:C1226($o; "format")
 						
 						$isUpgraded:=True:C214

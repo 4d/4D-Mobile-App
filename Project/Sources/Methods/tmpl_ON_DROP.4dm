@@ -104,14 +104,12 @@ If (Length:C16($cible)>0)
 									
 									If ($cCurrent[0]=$cDroped[0])  // Same related table
 										
-										// Keep the droped relation & add/update the format
+										// Keep the droped relation & update the long label
 										$relation:=$table[$cDroped[0]]
 										$relation.label:="%"+$cCurrent[1]+"%"
-										$relation.shortLabel:="%"+$cCurrent[1]+"%"
 										
 									End if 
 								End if 
-								
 							End if 
 							
 							//______________________________________________________
@@ -145,7 +143,7 @@ If (Length:C16($cible)>0)
 										
 										If ($cCurrent[0]=$cDroped[0])  // Same related table
 											
-											// Switch to relation & add/modify the format
+											// Switch to relation & update the long label
 											$dropped:=New object:C1471(\
 												"name"; $cDroped[0]; \
 												"fieldType"; 8858; \
@@ -155,7 +153,6 @@ If (Length:C16($cible)>0)
 												"path"; $cDroped[0])
 											
 											$relation.label:="%"+$cDroped[1]+"%"
-											$relation.shortLabel:="%"+$cDroped[1]+"%"
 											
 										End if 
 									End if 
