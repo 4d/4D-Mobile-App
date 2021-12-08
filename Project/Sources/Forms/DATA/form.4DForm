@@ -292,10 +292,9 @@
 					"top": 136,
 					"width": 429,
 					"height": 46,
-					"enterable": false,
-					"fontSize": 12,
 					"fill": "transparent",
-					"fontStyle": "italic"
+					"fontStyle": "italic",
+					"enterable": false
 				}
 			}
 		}
@@ -304,7 +303,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 74,
+	"geometryStamp": 80,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

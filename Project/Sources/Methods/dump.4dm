@@ -142,8 +142,7 @@ Case of
 					End if 
 					
 /* START HIDING ERRORS */
-					$error:=cs:C1710.error.new()
-					$error.capture()
+					$error:=cs:C1710.error.new("capture")
 					
 					TEXT TO DOCUMENT:C1237($outputPathname; JSON Stringify:C1217($rest.response; *))
 					

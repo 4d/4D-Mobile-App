@@ -73,71 +73,7 @@ Else   // <== WIDGETS METHOD
 					//______________________________________________________
 				: ($e.code=On Mouse Move:K2:35) & Not:C34(FEATURE.with("cancelableDatasetGeneration"))
 					
-					//GET MOUSE($Lon_x; $Lon_y; $l)
 					
-					////$oInfos:=LISTBOX Get info at(*;$Obj_form.list;$Lon_x;$Lon_y).element
-					//LISTBOX GET CELL POSITION(*; $e.objectName; $Lon_x; $Lon_y; $column; $row)
-					
-					//If ($row#0)
-					
-					//$o:=$context.tables[$row-1]
-					
-					//If (Bool($o.embedded))\
-						 & (Not(Bool($o.filter.parameters)))\
-						 & ((Bool($o.filter.validated))\
-						 | (Length(String($o.filter.string))=0))
-					
-					//If (Length(String($o.filter.string))=0)
-					
-					//// No filter
-					//$t:=Get localized string("allDataWillBeIntegratedIntoTheApplication")
-					
-					//Else 
-					
-					//$t:=Get localized string("theFilteredDataWillBeIntegratedIntoTheApplication")
-					
-					//End if 
-					
-					//Else 
-					
-					//If (Length(String($o.filter.string))>0)
-					
-					//If (Bool($o.filter.validated))
-					
-					//If (Bool($o.filter.parameters))
-					
-					//// User filter
-					//$t:=Get localized string("theDataWillBeFilteredAccordingToTheConnectedUserParameters")
-					
-					//Else 
-					
-					//$t:=Get localized string("theFilteredDataWillBeLoadedIntoTheApplicationWhenConnecting")
-					
-					//End if 
-					
-					//Else 
-					
-					//If (Length(String($o.filter.error))>0)
-					
-					//// Return the error encountered
-					//$t:=Get localized string("error:")+$o.filter.error
-					
-					//Else 
-					
-					//$t:=Get localized string("notValidatedFilter")
-					
-					//End if 
-					//End if 
-					
-					//Else 
-					
-					//$t:=Get localized string("allDataWillBeLoadedIntoTheApplicationWhenConnecting")
-					
-					//End if 
-					//End if 
-					//End if 
-					
-					//OBJECT SET HELP TIP(*; $form.list; $t)
 					
 					//______________________________________________________
 				: ($e.code=On Mouse Leave:K2:34) & Not:C34(FEATURE.with("cancelableDatasetGeneration"))

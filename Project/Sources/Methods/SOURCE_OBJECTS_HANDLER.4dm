@@ -42,7 +42,7 @@ Case of
 				If (Test path name:C476($keyPathname)#Is a document:K24:1)
 					
 					LOG_EVENT(New object:C1471(\
-						"message"; Form:C1466.dataSource.keyPath+" ->"+$keyPathname))
+						"message"; String:C10(Form:C1466.dataSource.keyPath)+" ->"+$keyPathname))
 					
 					$keyPathname:=Convert path POSIX to system:C1107(Form:C1466.dataSource.keyPath)
 					

@@ -349,8 +349,7 @@ If ($run)
 				RECORD.info("Unzipping: "+$sdk.path)
 				
 /* START HIDING ERRORS */
-				$error:=cs:C1710.error.new()
-				$error.hide()
+				$error:=cs:C1710.error.new("hide")
 				
 				$folder:=ZIP Read archive:C1637($sdk).root.copyTo($o.parent)
 				

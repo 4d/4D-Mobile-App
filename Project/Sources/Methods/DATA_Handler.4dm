@@ -67,6 +67,9 @@ If (OB Is empty:C1297($context))
 	
 End if 
 
+// Mark: WORK IN PROGRESS
+//$cs:=cs.DATA.new()
+
 // ----------------------------------------------------
 Case of 
 		
@@ -122,7 +125,9 @@ Case of
 				//______________________________________________________
 			: ($Lon_formEvent=On Timer:K2:25)
 				
-				//_o_UI.tips.enable()
+				// _o_UI.tips.enable()
+				
+				//$cs.update()
 				
 				androidLimitations(False:C215; "")
 				
@@ -187,11 +192,11 @@ Case of
 								
 								If (Bool:C1537($table.embedded))
 									
-									$Comment:=Get localized string:C991("allDataWillBeIntegratedIntoTheApplication")
+									$Comment:=EDITOR.str.setText("allDataEmbedded").localized()
 									
 								Else 
 									
-									$Comment:=Get localized string:C991("allDataWillBeLoadedIntoTheApplicationWhenConnecting")
+									$Comment:=EDITOR.str.setText("allDataLoaded").localized()
 									
 								End if 
 								
@@ -201,13 +206,11 @@ Case of
 									
 									If (Bool:C1537($table.embedded))
 										
-										// MARK: TO LOCALISE
-										$Comment:=".No entity will be embedded into the application"
+										$Comment:=EDITOR.str.setText("noEntityToEmbed").localized()
 										
 									Else 
 										
-										// MARK: TO LOCALISE
-										$Comment:=".No entity will be loaded into the application"
+										$Comment:=EDITOR.str.setText("noEntityToLoad").localized()
 										
 									End if 
 									
@@ -217,13 +220,11 @@ Case of
 										
 										If (Bool:C1537($table.embedded))
 											
-											// MARK: TO LOCALISE
-											$Comment:=".Number of entities that will be embedded into the application > 100 000"
+											$Comment:=EDITOR.str.setText("largeNumberOfEntitiesToEmbed").localized()
 											
 										Else 
 											
-											// MARK: TO LOCALISE
-											$Comment:=".Number of entities that will be loaded into the application > 100 000"
+											$Comment:=EDITOR.str.setText("largeNumberOfEntitiesToLoad").localized()
 											
 										End if 
 										
@@ -231,13 +232,11 @@ Case of
 										
 										If (Bool:C1537($table.embedded))
 											
-											// MARK: TO LOCALISE
-											$Comment:=".Number of entities that will be embedded into the application: "+String:C10($table.total; "### ###")
+											$Comment:=EDITOR.str.setText("entitiesToEmbed").localized(String:C10($table.total; "### ###"))
 											
 										Else 
 											
-											// MARK: TO LOCALISE
-											$Comment:=".Number of entities that will be loaded into the application: "+String:C10($table.total; "### ###")
+											$Comment:=EDITOR.str.setText("entitiesToLoad").localized(String:C10($table.total; "### ###"))
 											
 										End if 
 									End if 
@@ -250,7 +249,7 @@ Case of
 							OBJECT SET RGB COLORS:C628(*; $form.filter; EDITOR.errorColor)
 							OBJECT SET RGB COLORS:C628(*; $form.result; EDITOR.errorColor)
 							
-							$Comment:=Get localized string:C991("error:")+$filter.error
+							$Comment:=EDITOR.str.setText("error:").localized()+$filter.error
 							
 							//______________________________________________________
 						: (Not:C34(Bool:C1537($filter.validated)))  // Not validated
@@ -258,13 +257,12 @@ Case of
 							OBJECT SET RGB COLORS:C628(*; $form.filter; EDITOR.errorColor)
 							OBJECT SET RGB COLORS:C628(*; $form.result; EDITOR.errorColor)
 							
-							$Comment:=Get localized string:C991("notValidatedFilter")
+							$Comment:=EDITOR.str.setText("notValidatedFilter").localized()
 							
 							//______________________________________________________
 						Else 
 							
 							$filter.parameters:=(Match regex:C1019("(?m-si)(?:=|==|===|IS|!=|#|!==|IS NOT|>|<|>=|<=|%)\\s*:"; $filter.string; 1))
-							
 							
 							If (Bool:C1537($filter.parameters))
 								
@@ -273,9 +271,7 @@ Case of
 								OBJECT SET VISIBLE:C603(*; $form.embedded; False:C215)
 								OBJECT SET VISIBLE:C603(*; $form.method; True:C214)
 								
-								// Mark: TO LOCALISE
-								$Comment:="."+Get localized string:C991("theFilteredDataWillBeLoadedIntoTheApplicationWhenConnecting")\
-									+" depending on user information which you define in the Mobile App Authentication method."
+								$Comment:=EDITOR.str.setText("dataFilteringByUser").localized()
 								
 							Else 
 								
@@ -283,11 +279,11 @@ Case of
 									
 									If (Bool:C1537($table.embedded))
 										
-										$Comment:=Get localized string:C991("theFilteredDataWillBeIntegratedIntoTheApplication")
+										$Comment:=EDITOR.str.setText("dataEmbedded").localized()
 										
 									Else 
 										
-										$Comment:=Get localized string:C991("theFilteredDataWillBeLoadedIntoTheApplicationWhenConnecting")
+										$Comment:=EDITOR.str.setText("dataLoaded").localized()
 										
 									End if 
 									
@@ -297,13 +293,11 @@ Case of
 										
 										If (Bool:C1537($table.embedded))
 											
-											// Mark: TO LOCALISE
-											$Comment:=".No entity will be embedded into the application"
+											$Comment:=EDITOR.str.setText("noEntityToEmbed").localized()
 											
 										Else 
 											
-											// Mark: TO LOCALISE
-											$Comment:=".No entity will be loaded into the application"
+											$Comment:=EDITOR.str.setText("noEntityToLoad").localized()
 											
 										End if 
 										
@@ -313,11 +307,11 @@ Case of
 											
 											If ($table.count>100000)
 												
-												$Comment:=".Number of entities that will be embedded into the application > 100 000"
+												$Comment:=EDITOR.str.setText("largeNumberOfEntitiesToEmbed").localized()
 												
 											Else 
 												
-												$Comment:=".Number of entities that will be embedded into the application: "+String:C10($table.count; "### ###")+" of "+String:C10($table.total; "### ### ### ### ###")
+												$Comment:=EDITOR.str.setText("entitiesEmbeddedUponConnection").localized(New collection:C1472(String:C10($table.count; "### ###"); String:C10($table.total; "### ### ### ### ###")))
 												
 											End if 
 											
@@ -325,11 +319,11 @@ Case of
 											
 											If ($table.count>100000)
 												
-												$Comment:=".Number of entities that will be loaded into the application > 100 000"
+												$Comment:=EDITOR.str.setText("largeNumberOfEntitiesToLoad").localized()
 												
 											Else 
 												
-												$Comment:=".Number of entities that will be loaded into the application: "+String:C10($table.count; "### ###")+" of "+String:C10($table.total; "### ### ### ### ###")
+												$Comment:=EDITOR.str.setText("entitiesLoadedUponConnection").localized(New collection:C1472(String:C10($table.count; "### ###"); String:C10($table.total; "### ### ### ### ###")))
 												
 											End if 
 										End if 
@@ -428,7 +422,6 @@ Case of
 		
 		OBJECT SET VISIBLE:C603(*; $form.list; False:C215)
 		
-		
 		If ($context.tables.length>0)
 			
 			$pathname:=dataSet(New object:C1471("action"; "path"; \
@@ -461,7 +454,10 @@ Case of
 							If ($size>4096)
 								
 								// Add pictures size if any
-								$file:=Folder:C1567(asset(New object:C1471("action"; "path"; "path"; $pathname)).path+"Pictures"+Folder separator:K24:12+$t+Folder separator:K24:12; fk platform path:K87:2).file("manifest.json")
+								$file:=Folder:C1567(asset(New object:C1471(\
+									"action"; "path"; \
+									"path"; $pathname)).path+"Pictures"+Folder separator:K24:12+$t+Folder separator:K24:12; \
+									fk platform path:K87:2).file("manifest.json")
 								
 								If ($file.exists)
 									
@@ -578,7 +574,7 @@ Case of
 		End if 
 		
 		//=========================================================
-	: ($in.action="meta-infos")  //Table list meta info expression
+	: ($in.action="meta-infos")  // Table list meta info expression
 		
 		// Default values
 		$out:=New object:C1471(\

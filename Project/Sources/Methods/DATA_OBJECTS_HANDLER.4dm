@@ -100,11 +100,11 @@ Case of
 						If (Length:C16(String:C10($o.filter.string))=0)
 							
 							// No filter
-							$t:=Get localized string:C991("allDataWillBeIntegratedIntoTheApplication")
+							$t:=Get localized string:C991("allDataEmbedded")
 							
 						Else 
 							
-							$t:=Get localized string:C991("theFilteredDataWillBeIntegratedIntoTheApplication")
+							$t:=Get localized string:C991("dataEmbedded")
 							
 						End if 
 						
@@ -117,11 +117,11 @@ Case of
 								If (Bool:C1537($o.filter.parameters))
 									
 									// User filter
-									$t:=Get localized string:C991("theDataWillBeFilteredAccordingToTheConnectedUserParameters")
+									$t:=Get localized string:C991("dataFilteringByUser")
 									
 								Else 
 									
-									$t:=Get localized string:C991("theFilteredDataWillBeLoadedIntoTheApplicationWhenConnecting")
+									$t:=Get localized string:C991("dataLoaded")
 									
 								End if 
 								
@@ -141,7 +141,7 @@ Case of
 							
 						Else 
 							
-							$t:=Get localized string:C991("allDataWillBeLoadedIntoTheApplicationWhenConnecting")
+							$t:=Get localized string:C991("allDataLoaded")
 							
 						End if 
 					End if 

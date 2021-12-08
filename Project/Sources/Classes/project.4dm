@@ -966,7 +966,9 @@ Function checkLocalQueryFilter($table : Object)
 				
 				If (FEATURE.with("cancelableDatasetGeneration"))
 					
-					$table.count:=ds:C1482[$table.name].count($filter.string)
+					//$table.count:=ds[$table.name].count($filter.string)
+					var $es : 4D:C1709.EntitySelection
+					$es:=ds:C1482[$table.name].query($filter.string)
 					
 				Else 
 					
@@ -979,6 +981,11 @@ Function checkLocalQueryFilter($table : Object)
 				
 				$success:=Bool:C1537(Num:C11($error.lastError().error)=0)
 				
+				If ($success)
+					
+					$table.count:=$es.length
+					
+				End if 
 			End if 
 			
 			If (Not:C34($success))
