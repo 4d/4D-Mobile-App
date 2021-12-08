@@ -298,7 +298,7 @@ Case of
 							
 							If ($i>1)
 								
-								If ($withUI & ($i>2) & FEATURE.with("cancelableDatasetGeneration"))
+								If ($withUI & ($i>=2) & FEATURE.with("cancelableDatasetGeneration"))
 									
 									// Notify user
 									CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
@@ -432,7 +432,7 @@ Case of
 											
 											If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
 												
-												If ($i>2)
+												If ($i>=2)
 													
 													CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
 														"step"; "asset"; \
@@ -538,6 +538,9 @@ Case of
 				
 				// Reset to allow user read the message
 				$delay.start:=Tickcount:C458
+				
+				
+				$out.success:=False:C215
 				
 			End if 
 			

@@ -37,7 +37,7 @@ Case of
 					If ($data.page#Null:C1517)
 						
 						$o.additional:=EDITOR.str.setText("dataRequest").localized($data.table.name)+" ("+String:C10($data.page)+")"
-						$o.additional:=$o.additional+"\r"+EDITOR.str.setText("dataConsiderToSetAFilter")
+						$o.additional:=$o.additional+"\r"+EDITOR.str.setText("dataConsiderToSetAFilter").localized()
 						
 					Else 
 						
