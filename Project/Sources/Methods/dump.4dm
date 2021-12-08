@@ -341,7 +341,7 @@ Case of
 									If (Num:C11($rest.response.__SENT)<=0)
 										
 										$i:=MAXLONG:K35:2-1  // BREAK
-										$rest.success:=False:C215
+										$rest.noData:=True:C214
 										
 									End if 
 									
@@ -357,7 +357,7 @@ Case of
 										
 									End if 
 									
-									$posBegin:=Position:C15("__SENT"; $rest.response)
+									$posBegin:=Position:C15("__SENT"; $rest.response)  // FIXME: sent could appears inside file, not only in final place for this table
 									
 									If ($posBegin>0)
 										
@@ -372,7 +372,7 @@ Case of
 										If (Num:C11(Substring:C12($rest.response; $posBegin+8; $posEnd-($posBegin+7)-1))<=0)
 											
 											$i:=MAXLONG:K35:2-1  // BREAK
-											$rest.success:=True:C214
+											$rest.noData:=True:C214
 											
 										End if 
 									End if 
@@ -387,7 +387,11 @@ Case of
 									//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 							End case 
 							
-							$result[$meta.name]:=$rest
+							If ($result[$meta.name]=Null:C1517)
+								$result[$meta.name]:=New collection:C1472($rest)
+							Else 
+								$result[$meta.name].push($rest)
+							End if 
 							
 							ob_error_combine($out; $rest)
 							
@@ -397,6 +401,11 @@ Case of
 								: ($cancelled)  // TODO even if empty create data? or $i=1 before?
 									
 									// <NOTHING MORE TO DO>
+									
+									//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+								: (Bool:C1537($rest.noData))
+									
+									// Do nothing, normal
 									
 									//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 								: ($rest.success)
