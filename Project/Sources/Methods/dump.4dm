@@ -311,6 +311,22 @@ Case of
 								"queryEncode"; True:C214; \
 								"query"; $query))
 							
+							If ($rest.errors#Null:C1517)
+								If ($rest.errors.length>0)
+									If ($rest.errors[0]="Invalid internal state")
+										$rest:=Rest(New object:C1471(\
+											"action"; "records"; \
+											"reponseType"; Is text:K8:3; \
+											"url"; $in.url; \
+											"headers"; $in.headers; \
+											"table"; $meta.name; \
+											"fields"; $Obj_buffer.fields; \
+											"queryEncode"; True:C214; \
+											"query"; $query))
+									End if 
+								End if 
+							End if 
+							
 							$cancelled:=Bool:C1537(Storage:C1525.flags.stopGeneration)
 							
 							// Getting global stamp (maybe no more necessary , except for debug, all is done by swift code)
