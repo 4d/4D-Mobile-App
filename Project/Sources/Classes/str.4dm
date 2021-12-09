@@ -931,6 +931,22 @@ Function localized($replacements)->$localizedString : Text
 	End if 
 	
 	//=======================================================================================================
+	//  ⚠️ Returns the available localized string for the given "resname" and makes replacements, if any. 
+Function localize($resname : Text; $replacements)->$localizedString : Text
+	
+	This:C1470.setText($resname)
+	
+	If (Count parameters:C259>=2)
+		
+		$localizedString:=Super:C1706.localized(This:C1470.value; $replacements)
+		
+	Else 
+		
+		$localizedString:=Super:C1706.localized(This:C1470.value)
+		
+	End if 
+	
+	//=======================================================================================================
 	// Concatenates the values ​​given to the original string
 Function concat
 	var $0 : Text

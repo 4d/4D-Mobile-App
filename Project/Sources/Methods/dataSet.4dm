@@ -8,42 +8,32 @@
 // data set management
 // ----------------------------------------------------
 // Declarations
-C_OBJECT:C1216($0)
-C_OBJECT:C1216($1)
+#DECLARE($in : Object)->$out : Object
 
-C_BOOLEAN:C305($Boo_errorInOut; $Boo_verbose)
-C_LONGINT:C283($Lon_i; $Lon_parameters; $Lon_pos)
-C_TEXT:C284($cmd; $File_; $t; $Txt_assets; $Txt_error; $Txt_ID)
-C_TEXT:C284($Txt_in; $Txt_out; $Txt_tableNumber; $Txt_value)
-C_OBJECT:C1216($Obj_dataModel; $Obj_field; $Obj_file; $Obj_headers; $Obj_in; $Obj_out)
-C_OBJECT:C1216($Obj_table)
-C_COLLECTION:C1488($Col_fields; $Col_tables; $actions)
+If (False:C215)
+	C_OBJECT:C1216(dataSet; $1)
+	C_OBJECT:C1216(dataSet; $0)
+End if 
+
+var $cmd; $inputStream; $key; $outputStream; $pathname; $t : Text
+var $tableID; $Txt_assets; $Txt_error; $Txt_ID : Text
+var $verbose; $withPictures; $withUI : Boolean
+var $i : Integer
+var $dataModel; $delay; $field; $headers; $o; $table : Object
+var $actions; $fields; $tables : Collection
+var $file : 4D:C1709.File
+var $folder : 4D:C1709.Folder
 
 ARRAY TEXT:C222($tTxt_documents; 0)
 
-If (False:C215)
-	C_OBJECT:C1216(dataSet; $0)
-	C_OBJECT:C1216(dataSet; $1)
-End if 
-
 // ----------------------------------------------------
 // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
+If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
-	// Required parameters
-	$Obj_in:=$1
-	
-	// Optional parameters
-	If ($Lon_parameters>=2)
-		
-		// <NONE>
-		
-	End if 
-	
-	$Obj_out:=New object:C1471(\
+	$out:=New object:C1471(\
 		"success"; False:C215)
+	
+	$withUI:=$in.caller#Null:C1517
 	
 Else 
 	
@@ -51,13 +41,13 @@ Else
 	
 End if 
 
-$Boo_verbose:=Bool:C1537($Obj_in.verbose)
+$verbose:=Bool:C1537($in.verbose)
 
-If ($Obj_in.url=Null:C1517)
+If ($in.url=Null:C1517)
 	
-	If (String:C10($Obj_in.project.dataSource.source)="server")
+	If (String:C10($in.project.dataSource.source)="server")
 		
-		$Obj_in.url:=$Obj_in.project.server.urls.production
+		$in.url:=$in.project.server.urls.production
 		
 	Else 
 		
@@ -67,80 +57,80 @@ If ($Obj_in.url=Null:C1517)
 End if 
 
 // ----------------------------------------------------
-If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
+If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 	
 	Case of 
 			
 			//______________________________________________________
-		: ($Obj_in.action="path")
+		: ($in.action="path")
 			
 			Case of 
 					
 					//----------------------------------------
-				: (Value type:C1509($Obj_in.project)=Is object:K8:27)
+				: (Value type:C1509($in.project)=Is object:K8:27)
 					
 					Case of 
-						: ($Obj_in.project._folder#Null:C1517)
+						: ($in.project._folder#Null:C1517)
 							
-							$Obj_out.path:=$Obj_in.project._folder.folder("project.dataSet").platformPath
-							$Obj_out.success:=True:C214
+							$out.path:=$in.project._folder.folder("project.dataSet").platformPath
+							$out.success:=True:C214
 							
-						: (Value type:C1509($Obj_in.project.$project)#Is object:K8:27)
+						: (Value type:C1509($in.project.$project)#Is object:K8:27)
 							
-							$Obj_out.errors:=New collection:C1472("No product path defined to get dataset path")
-							$Obj_out.success:=False:C215
+							$out.errors:=New collection:C1472("No product path defined to get dataset path")
+							$out.success:=False:C215
 							
 						Else 
 							
 							// Just in case root not defined, recreate it with project path
-							If ($Obj_in.project.$project.root=Null:C1517)
+							If ($in.project.$project.root=Null:C1517)
 								
-								If ($Obj_in.project.$project.project#Null:C1517)
+								If ($in.project.$project.project#Null:C1517)
 									
-									$Obj_in.project.$project.root:=Path to object:C1547($Obj_in.project.$project.project).parentFolder
-									ASSERT:C1129(Length:C16($Obj_in.project.$project.root)>0; "It seems that profect folder do match file")
+									$in.project.$project.root:=Path to object:C1547($in.project.$project.project).parentFolder
+									ASSERT:C1129(Length:C16($in.project.$project.root)>0; "It seems that profect folder do match file")
 									
 								End if 
 							End if 
 							
-							If ($Obj_in.project.$project.project#Null:C1517)
+							If ($in.project.$project.project#Null:C1517)
 								
-								$Obj_out.path:=$Obj_in.project.$project.root+"project.dataSet"+Folder separator:K24:12
-								$Obj_out.success:=True:C214
+								$out.path:=$in.project.$project.root+"project.dataSet"+Folder separator:K24:12
+								$out.success:=True:C214
 								
 							Else 
 								
-								$Obj_out.errors:=New collection:C1472("No project file path")
-								$Obj_out.success:=False:C215
+								$out.errors:=New collection:C1472("No project file path")
+								$out.success:=False:C215
 								
 							End if 
 							
 					End case 
 					
 					//----------------------------------------
-				: (Value type:C1509($Obj_in.project)=Is text:K8:3)
+				: (Value type:C1509($in.project)=Is text:K8:3)
 					
 					// for test purpose, allow to inject file path
 					
 					Case of 
 							
 							//........................................
-						: (Test path name:C476($Obj_in.project)=Is a document:K24:1)
+						: (Test path name:C476($in.project)=Is a document:K24:1)
 							
-							$Obj_out.path:=Path to object:C1547($Obj_in.project).parentFolder+"project.dataSet"+Folder separator:K24:12
-							$Obj_out.success:=True:C214
+							$out.path:=Path to object:C1547($in.project).parentFolder+"project.dataSet"+Folder separator:K24:12
+							$out.success:=True:C214
 							
 							//........................................
-						: (Test path name:C476($Obj_in.project)=Is a folder:K24:2)
+						: (Test path name:C476($in.project)=Is a folder:K24:2)
 							
-							$Obj_out.path:=$Obj_in.project+"project.dataSet"+Folder separator:K24:12
-							$Obj_out.success:=True:C214
+							$out.path:=$in.project+"project.dataSet"+Folder separator:K24:12
+							$out.success:=True:C214
 							
 							//........................................
 						Else 
 							
-							$Obj_out.errors:=New collection:C1472($Obj_in.project+" do not exits. Project file is not correctly defined")
-							$Obj_out.success:=False:C215
+							$out.errors:=New collection:C1472($in.project+" do not exits. Project file is not correctly defined")
+							$out.success:=False:C215
 							
 							//........................................
 					End case 
@@ -148,122 +138,121 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 					//----------------------------------------
 				Else 
 					
-					$Obj_out.errors:=New collection:C1472("No product path defined to get dataset path")
-					$Obj_out.success:=False:C215
+					$out.errors:=New collection:C1472("No product path defined to get dataset path")
+					$out.success:=False:C215
 					
 					//----------------------------------------
 			End case 
 			
 			//______________________________________________________
-		: ($Obj_in.action="check")
+		: ($in.action="check")
 			
 			// / Check if exist, and if digest check also if same digest = same structure and url ...
-			If ($Obj_in.path=Null:C1517)
+			If ($in.path=Null:C1517)
 				
-				$Obj_in.action:="path"
-				$Obj_out:=dataSet($Obj_in)  // -> need project parameter
+				$in.action:="path"
+				$out:=dataSet($in)  // -> need project parameter
 				
 			Else 
 				
-				$Obj_out:=New object:C1471(\
+				$out:=New object:C1471(\
 					"success"; True:C214; \
-					"path"; String:C10($Obj_in.path))
+					"path"; String:C10($in.path))
 				
 			End if 
 			
-			$Obj_dataModel:=$Obj_in.dataModel
+			$dataModel:=$in.dataModel
 			
-			If ($Obj_dataModel=Null:C1517)
+			If ($dataModel=Null:C1517)
 				
-				$Obj_dataModel:=$Obj_in.project.dataModel  // compatibility issue (try to pass dataModel)
+				$dataModel:=$in.project.dataModel  // compatibility issue (try to pass dataModel)
 				
 			End if 
 			
-			If ($Obj_out.success)
+			If ($out.success)
 				
-				$Obj_out.exists:=Test path name:C476($Obj_out.path)=Is a folder:K24:2
+				$out.exists:=Test path name:C476($out.path)=Is a folder:K24:2
 				
-				If (Bool:C1537($Obj_in.digest))
+				If (Bool:C1537($in.digest))
 					
-					If (Test path name:C476($Obj_out.path+"dataSetDigest")=Is a document:K24:1)
+					If (Test path name:C476($out.path+"dataSetDigest")=Is a document:K24:1)
 						
-						$Obj_out.digest:=New object:C1471(\
+						$out.digest:=New object:C1471(\
 							"old"; dataSet(New object:C1471(\
 							"action"; "digest"; \
-							"dataModel"; $Obj_dataModel; \
-							"url"; $Obj_in.url)).digest; \
-							"new"; Document to text:C1236($Obj_out.path+"dataSetDigest"))
+							"dataModel"; $dataModel; \
+							"url"; $in.url)).digest; \
+							"new"; Document to text:C1236($out.path+"dataSetDigest"))
 						
-						$Obj_out.valid:=$Obj_out.digest.old=$Obj_out.digest.new
+						$out.valid:=$out.digest.old=$out.digest.new
 						
 					Else 
 						
-						$Obj_out.valid:=False:C215  // no digest file
+						$out.valid:=False:C215  // no digest file
 						
 					End if 
 					
 				Else 
 					
-					$Obj_out.valid:=True:C214  // check only path existance
+					$out.valid:=True:C214  // check only path existance
 					
 				End if 
 			End if 
 			
 			//______________________________________________________
-		: ($Obj_in.action="digest")
+		: ($in.action="digest")
 			
 			// Remove some info in table not concerned
-			$Col_tables:=New collection:C1472()
-			$Obj_dataModel:=$Obj_in.dataModel
+			$tables:=New collection:C1472()
+			$dataModel:=$in.dataModel
 			
 			Case of 
 					
 					//----------------------------------------
-				: ($Obj_dataModel=Null:C1517)
+				: ($dataModel=Null:C1517)
 					
-					$Obj_out.errors:=New collection:C1472("dataModel must be defined to create dataSet digest")
+					$out.errors:=New collection:C1472("dataModel must be defined to create dataSet digest")
 					
 					//----------------------------------------
 				Else 
 					
-					For each ($Txt_tableNumber; $Obj_dataModel)
+					For each ($tableID; $dataModel)
 						
-						$Obj_table:=$Obj_dataModel[$Txt_tableNumber]
+						$table:=$dataModel[$tableID]
 						
-						C_OBJECT:C1216($o)
-						$o:=$Obj_table[""]
+						$o:=$table[""]
 						
 						If (Bool:C1537($o.embedded))
 							
-							$Col_fields:=New collection:C1472()
+							$fields:=New collection:C1472()
 							
-							For each ($Txt_value; $Obj_table)
+							For each ($key; $table)
 								
 								Case of 
 										
 										//……………………………………………………………………………………………………………
-									: (Match regex:C1019("(?m-si)^\\d+$"; $Txt_value; 1; *))  // fieldNumber
+									: (Match regex:C1019("(?m-si)^\\d+$"; $key; 1; *))  // fieldNumber
 										
-										$Obj_field:=New object:C1471(\
-											"id"; $Obj_table[$Txt_value].id; \
-											"type"; $Obj_table[$Txt_value].fielType)
+										$field:=New object:C1471(\
+											"id"; $table[$key].id; \
+											"type"; $table[$key].fielType)
 										
-										$Col_fields.push($Obj_field)
+										$fields.push($field)
 										
 										//……………………………………………………………………………………………………………
-									: (Value type:C1509($Obj_dataModel[$Txt_tableNumber][$Txt_value])=Is object:K8:27)
+									: (Value type:C1509($dataModel[$tableID][$key])=Is object:K8:27)
 										
-										If ($Obj_table[$Txt_value].relatedDataClass#Null:C1517)  // Relation
+										If ($table[$key].relatedDataClass#Null:C1517)  // Relation
 											
-											For each ($Txt_ID; $Obj_table[$Txt_value])
+											For each ($Txt_ID; $table[$key])
 												
 												If (Match regex:C1019("(?m-si)^\\d+$"; $Txt_ID; 1; *))  // related fieldNumber
 													
-													$Obj_field:=New object:C1471(\
-														"id"; $Obj_table[$Txt_value][$Txt_ID].id; \
-														"type"; $Obj_table[$Txt_value][$Txt_ID].fielType)
+													$field:=New object:C1471(\
+														"id"; $table[$key][$Txt_ID].id; \
+														"type"; $table[$key][$Txt_ID].fielType)
 													
-													$Col_fields.push($Obj_field)
+													$fields.push($field)
 													
 												End if 
 											End for each 
@@ -276,147 +265,157 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 								End case 
 							End for each 
 							
-							$Col_tables.push(New object:C1471(\
-								"id"; $Txt_tableNumber; \
+							$tables.push(New object:C1471(\
+								"id"; $tableID; \
 								"filter"; $o.filter; \
-								"fields"; $Col_fields))
+								"fields"; $fields))
 							
 						End if 
 					End for each 
 					
 					// Information needed to check data digest
-					$Obj_out.digest:=Generate digest:C1147(JSON Stringify:C1217(New object:C1471(\
-						"tables"; $Col_tables; \
-						"url"; $Obj_in.url; \
+					$out.digest:=Generate digest:C1147(JSON Stringify:C1217(New object:C1471(\
+						"tables"; $tables; \
+						"url"; $in.url; \
 						"version"; 1)); \
 						0)
 					
-					$Obj_out.success:=True:C214
+					$out.success:=True:C214
 					
 					//----------------------------------------
 			End case 
 			
 			//______________________________________________________
-		: ($Obj_in.action="erase")
+		: ($in.action="erase")
 			
-			If ($Obj_in.path=Null:C1517)
+			If ($in.path=Null:C1517)
 				
-				$Obj_in.action:="path"
-				$Obj_out:=dataSet($Obj_in)
+				$in.action:="path"
+				$out:=dataSet($in)
 				
 			Else 
 				
-				$Obj_out:=New object:C1471(\
+				$out:=New object:C1471(\
 					"success"; True:C214; \
-					"path"; String:C10($Obj_in.path))
+					"path"; String:C10($in.path))
 				
 			End if 
 			
-			If ($Obj_out.success)
+			If ($out.success)
 				
-				If (Test path name:C476($Obj_out.path)=Is a folder:K24:2)
+				If (Test path name:C476($out.path)=Is a folder:K24:2)
 					
-					Folder:C1567($Obj_out.path; fk platform path:K87:2).delete(Delete with contents:K24:24)
+					Folder:C1567($out.path; fk platform path:K87:2).delete(Delete with contents:K24:24)
 					
 				Else 
 					
-					$Obj_out.errors:=New collection:C1472("Trying to erase dataSet without folder")
+					$out.errors:=New collection:C1472("Trying to erase dataSet without folder")
 					
 				End if 
 			End if 
 			
 			//______________________________________________________
-		: ($Obj_in.action="copy")
+		: ($in.action="copy")
 			
-			$Obj_in.action:="check"
-			$Obj_out:=dataSet($Obj_in)
+			$in.action:="check"
+			$out:=dataSet($in)
 			
-			If ($Obj_out.success)
+			If ($out.success)
 				
-				If (Test path name:C476($Obj_in.target)=Is a document:K24:1)
+				If (Test path name:C476($in.target)=Is a document:K24:1)
 					
-					$Obj_out.errors:=New collection:C1472("Destination "+$Obj_in.target+" is a document")
+					$out.errors:=New collection:C1472("Destination "+$in.target+" is a document")
 					
 				Else 
 					
-					$cmd:="cp -R "+str_singleQuoted(Convert path system to POSIX:C1106($Obj_out.path))+" "+str_singleQuoted(Convert path system to POSIX:C1106($Obj_in.target))
-					LAUNCH EXTERNAL PROCESS:C811($cmd; $Txt_in; $Txt_out; $Txt_error)
+					$cmd:="cp -R "+str_singleQuoted(Convert path system to POSIX:C1106($out.path))+" "+str_singleQuoted(Convert path system to POSIX:C1106($in.target))
+					LAUNCH EXTERNAL PROCESS:C811($cmd; $inputStream; $outputStream; $Txt_error)
 					
 					If (Asserted:C1132(OK=1; "copy failed: "+$cmd))
 						
 						If (Length:C16($Txt_error)#0)
 							
-							$Obj_out.errors:=New collection:C1472($Txt_error)
+							$out.errors:=New collection:C1472($Txt_error)
 							
 						Else 
 							
-							$Obj_out.success:=True:C214
+							$out.success:=True:C214
 							
 						End if 
 						
 					Else 
 						
-						$Obj_out.errors:=New collection:C1472("Unable to copy dataSet")
+						$out.errors:=New collection:C1472("Unable to copy dataSet")
 						
 					End if 
 				End if 
 			End if 
 			
 			//______________________________________________________
-		: ($Obj_in.action="create")  // later allow to do it with remove
+		: ($in.action="create")  // later allow to do it with remove
 			
-			If (($Obj_in.path=Null:C1517)\
-				 & (Value type:C1509($Obj_in.project)=Is object:K8:27))
+			If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
+				
+				$delay:=New object:C1471(\
+					"minimumDisplayTime"; 3*60; \
+					"start"; Tickcount:C458)
+				
+			End if 
+			
+			If (($in.path=Null:C1517)\
+				 & (Value type:C1509($in.project)=Is object:K8:27))
 				
 				// Check if we must erase if exist
-				If (Bool:C1537($Obj_in.eraseIfExists))
+				If (Bool:C1537($in.eraseIfExists))
 					
-					$Obj_out:=dataSet(New object:C1471(\
+					$out:=dataSet(New object:C1471(\
 						"action"; "check"; \
 						"digest"; False:C215; \
-						"project"; $Obj_in.project))
+						"project"; $in.project))
 					
-					If (Bool:C1537($Obj_out.exists))
+					If (Bool:C1537($out.exists))
 						
-						$Obj_out:=dataSet(New object:C1471(\
+						$out:=dataSet(New object:C1471(\
 							"action"; "erase"; \
-							"project"; $Obj_in.project))
+							"project"; $in.project))
 						
 					End if 
 				End if 
 				
 				// Manage default path
-				$Obj_in.path:=dataSet(New object:C1471(\
+				$in.path:=dataSet(New object:C1471(\
 					"action"; "path"; \
-					"project"; $Obj_in.project)).path
+					"project"; $in.project)).path
 				
 			End if 
 			
-			$Obj_dataModel:=$Obj_in.dataModel
-			$actions:=$Obj_in.actions
+			$dataModel:=$in.dataModel
+			$actions:=$in.actions
 			
-			If ($Obj_dataModel=Null:C1517)
+			If ($dataModel=Null:C1517)
 				
-				$Obj_dataModel:=$Obj_in.project.dataModel  // compatibility issue (try to pass dataModel)
+				$dataModel:=$in.project.dataModel  // compatibility issue (try to pass dataModel)
 				
 			End if 
+			
 			If ($actions=Null:C1517)
 				
-				$actions:=$Obj_in.project.actions  // compatibility issue (try to pass dataModel)
+				$actions:=$in.project.actions  // compatibility issue (try to pass dataModel)
 				
 			End if 
 			
-			// Data set name
-			$File_:=$Obj_in.path
-			CREATE FOLDER:C475($File_; *)
+			$folder:=Folder:C1567($in.path; fk platform path:K87:2)
+			$folder.create()
 			
-			If (Asserted:C1132(Test path name:C476($File_)=Is a folder:K24:2))
+			$out.path:=$folder.platformPath
+			
+			If (Asserted:C1132($folder.exists))
 				
-				If (WEB Get server info:C1531.started | (Length:C16(String:C10($Obj_in.url))>0))
+				If (WEB Get server info:C1531.started | (Length:C16(String:C10($in.url))>0))
 					
-					If ($Boo_verbose)
+					If ($verbose)
 						
-						CALL FORM:C1391($Obj_in.caller; "LOG_EVENT"; New object:C1471(\
+						CALL FORM:C1391($in.caller; "LOG_EVENT"; New object:C1471(\
 							"message"; "Dump Catalog"; \
 							"importance"; Information message:K38:1))
 						
@@ -427,187 +426,205 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 					Case of 
 							
 							//----------------------------------------
-						: (Value type:C1509($Obj_in.headers)=Is object:K8:27)
+						: (Value type:C1509($in.headers)=Is object:K8:27)
 							
-							$Obj_headers:=$Obj_in.headers
+							$headers:=$in.headers
 							
 							//----------------------------------------
 						: (dump_Headers#Null:C1517)  // a cache for each dump
 							
-							$Obj_headers:=dump_Headers
+							$headers:=dump_Headers
 							
 							//----------------------------------------
 						Else 
 							
-							$Obj_headers:=New object:C1471
-							dump_Headers:=$Obj_headers
+							$headers:=New object:C1471
+							dump_Headers:=$headers
 							
 							//----------------------------------------
 					End case 
 					
-					If ($Obj_headers["X-MobileApp"]=Null:C1517)
+					If ($headers["X-MobileApp"]=Null:C1517)
 						
-						$Obj_headers["X-MobileApp"]:="1"  // Help server to identify request type
+						$headers["X-MobileApp"]:="1"  // Help server to identify request type
 						
 					End if 
 					
-					$Obj_out.headers:=$Obj_headers
+					$out.headers:=$headers
 					
 					// Simply put file content in header (could instead encode/encrypt some information if   file allow it)
 					Case of 
 							
 							//----------------------------------------
-						: (Length:C16(String:C10($Obj_in.key))=0)
+						: (Length:C16(String:C10($in.key))=0)
 							
 							// Ignore
 							
 							//----------------------------------------
-						: (Test path name:C476($Obj_in.key)=Is a document:K24:1)
+						: (Test path name:C476($in.key)=Is a document:K24:1)
 							
-							$Obj_headers.Authorization:="Bearer "+Document to text:C1236($Obj_in.key)
+							$headers.Authorization:="Bearer "+Document to text:C1236($in.key)
 							
 							//----------------------------------------
-						: (Length:C16(Path to object:C1547(String:C10($Obj_in.key)).parentFolder)=0)  // normal string
+						: (Length:C16(Path to object:C1547(String:C10($in.key)).parentFolder)=0)  // normal string
 							
-							$Obj_headers.Authorization:="Bearer "+$Obj_in.key
+							$headers.Authorization:="Bearer "+$in.key
 							
 							//----------------------------------------
 						Else 
 							
-							ob_error_add($Obj_out; "Key file "+String:C10($Obj_in.key)+" do not exists")
+							ob_error_add($out; "Key file "+String:C10($in.key)+" do not exists")
 							
 							//----------------------------------------
 					End case 
 					
-					$Obj_out.catalog:=dump(New object:C1471(\
+					If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
+						
+						CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
+							"step"; "datagenerationPreparations"))
+						
+					End if 
+					
+					$out.catalog:=dump(New object:C1471(\
 						"action"; "catalog"; \
-						"url"; $Obj_in.url; \
-						"headers"; $Obj_headers; \
-						"output"; $File_+Choose:C955(Bool:C1537($Obj_in.dataSet); $Txt_assets+"Catalog"; "JSON"); \
-						"dataSet"; $Obj_in.dataSet; \
-						"debug"; Bool:C1537($Obj_in.debug); \
-						"dataModel"; $Obj_dataModel))
+						"url"; $in.url; \
+						"headers"; $headers; \
+						"output"; $out.path+Choose:C955(Bool:C1537($in.dataSet); $Txt_assets+"Catalog"; "JSON"); \
+						"dataSet"; $in.dataSet; \
+						"debug"; Bool:C1537($in.debug); \
+						"dataModel"; $dataModel; \
+						"caller"; $in.caller))
 					
-					ob_error_combine($Obj_out; $Obj_out.catalog)
+					ob_error_combine($out; $out.catalog)
 					
-					If ($Obj_out.catalog.success)  // Do not dump data if catalog failed
+					If ($out.catalog.success)  // Do not dump data if catalog failed
 						
-						
-						//$Obj_out.catalog.results  contient une entrée (nom de la table) par table dans le data model
-						
-						If ($Boo_verbose)
+						If ($verbose)
 							
-							CALL FORM:C1391($Obj_in.caller; "LOG_EVENT"; New object:C1471(\
+							CALL FORM:C1391($in.caller; "LOG_EVENT"; New object:C1471(\
 								"message"; "Dump Data"; \
 								"importance"; Information message:K38:1))
 							
 						End if 
 						
-						$Obj_out.data:=dump(New object:C1471(\
+						$out.data:=dump(New object:C1471(\
 							"action"; "data"; \
-							"url"; $Obj_in.url; \
-							"headers"; $Obj_headers; \
-							"output"; $File_+Choose:C955(Bool:C1537($Obj_in.dataSet); $Txt_assets+"Data"; "JSON"); \
-							"dataSet"; $Obj_in.dataSet; \
-							"caller"; $Obj_in.caller; \
-							"debug"; Bool:C1537($Obj_in.debug); \
-							"dataModel"; $Obj_dataModel; \
-							"caller"; $Obj_in.caller))
+							"url"; $in.url; \
+							"headers"; $headers; \
+							"output"; $out.path+Choose:C955(Bool:C1537($in.dataSet); $Txt_assets+"Data"; "JSON"); \
+							"dataSet"; $in.dataSet; \
+							"caller"; $in.caller; \
+							"debug"; Bool:C1537($in.debug); \
+							"dataModel"; $dataModel; \
+							"caller"; $in.caller))
 						
-						ob_error_combine($Obj_out; $Obj_out.data)
+						ob_error_combine($out; $out.data)
 						
-						$Obj_out.success:=$Obj_out.catalog.success & $Obj_out.data.success
+						$out.success:=$out.catalog.success & $out.data.success
 						
-						C_BOOLEAN:C305($Bool_withPictures)
-						$Bool_withPictures:=True:C214  // Default = with images
+						$withPictures:=True:C214  // Default = with images
 						
-						If ($Obj_in.picture#Null:C1517)
+						If ($in.picture#Null:C1517)
 							
-							$Bool_withPictures:=(Bool:C1537($Obj_in.picture))  // Test purpose
+							$withPictures:=(Bool:C1537($in.picture))  // Test purpose
 							
 						Else 
 							
-							$Bool_withPictures:=(Not:C34(Bool:C1537($Obj_in.project.dataSource.doNotExportImages)))
+							$withPictures:=(Not:C34(Bool:C1537($in.project.dataSource.doNotExportImages)))
 							
 						End if 
 						
-						If ($Bool_withPictures)
+						If ($withPictures)
 							
-							If ($Boo_verbose)
+							If ($verbose)
 								
-								CALL FORM:C1391($Obj_in.caller; "LOG_EVENT"; New object:C1471(\
+								CALL FORM:C1391($in.caller; "LOG_EVENT"; New object:C1471(\
 									"message"; "Dump Pictures"; \
 									"importance"; Information message:K38:1))
 								
 							End if 
 							
-							$Obj_out.picture:=dump(New object:C1471(\
-								"action"; "pictures"; \
-								"url"; $Obj_in.url; \
-								"headers"; $Obj_headers; \
-								"rest"; True:C214; "cache"; $File_+Choose:C955(Bool:C1537($Obj_in.dataSet); $Txt_assets+"Data"; "JSON"); \
-								"dataSet"; $Obj_in.dataSet; \
-								"debug"; Bool:C1537($Obj_in.debug); \
-								"output"; $File_+Choose:C955(Bool:C1537($Obj_in.dataSet); $Txt_assets+"Pictures"; "Resources"+Folder separator:K24:12+"Pictures"); \
-								"dataModel"; $Obj_dataModel))
-							ob_error_combine($Obj_out; $Obj_out.picture)
+							If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
+								
+								CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
+									"step"; "pictures"))
+								
+							End if 
 							
-							$Obj_out.success:=$Obj_out.success & $Obj_out.picture.success
+							$out.picture:=dump(New object:C1471(\
+								"action"; "pictures"; \
+								"url"; $in.url; \
+								"headers"; $headers; \
+								"rest"; True:C214; "cache"; $out.path+Choose:C955(Bool:C1537($in.dataSet); $Txt_assets+"Data"; "JSON"); \
+								"dataSet"; $in.dataSet; \
+								"debug"; Bool:C1537($in.debug); \
+								"output"; $out.path+Choose:C955(Bool:C1537($in.dataSet); $Txt_assets+"Pictures"; "Resources"+Folder separator:K24:12+"Pictures"); \
+								"dataModel"; $dataModel; \
+								"caller"; $in.caller))
+							
+							ob_error_combine($out; $out.picture)
+							
+							$out.success:=$out.success & $out.picture.success
 							
 						End if 
 						
-						$Obj_out.path:=$File_
-						
-						If (Bool:C1537($Obj_in.coreDataSet) & $Obj_out.success)
+						If (Bool:C1537($in.coreDataSet) & $out.success)
 							
 							If (FEATURE.with("xcDataModelClass"))
-								$Obj_out.coreData:=cs:C1710.xcDataModel.new(New object:C1471(\
-									"dataModel"; $Obj_dataModel; \
+								
+								$out.coreData:=cs:C1710.xcDataModel.new(New object:C1471(\
+									"dataModel"; $dataModel; \
 									"actions"; $actions)).run(\
-									/*path*/$File_+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"; \
+									/*path*/Folder:C1567($out.path; fk platform path:K87:2).file("Sources/Structures.xcdatamodeld").platformPath; \
 									/*options*/New object:C1471("flat"; False:C215; "relationship"; True:C214))
+								
 							Else 
-								$Obj_out.coreData:=xcDataModel(New object:C1471(\
+								
+								$out.coreData:=xcDataModel(New object:C1471(\
 									"action"; "xcdatamodel"; \
-									"dataModel"; $Obj_dataModel; \
+									"dataModel"; $dataModel; \
 									"actions"; $actions; \
 									"flat"; False:C215; \
 									"relationship"; True:C214; \
-									"path"; $File_+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"))  // XXX maybe output in temp directory and pass it to coreDataSet
+									"path"; Folder:C1567($out.path; fk platform path:K87:2).file("Sources/Structures.xcdatamodeld").platformPath))  // XXX maybe output in temp directory and pass it to coreDataSet
+								
 							End if 
 							
-							ob_error_combine($Obj_out; $Obj_out.coreData)
+							ob_error_combine($out; $out.coreData)
 							
-							$Obj_out.coreDataSet:=dataSet(New object:C1471(\
+							$out.coreDataSet:=dataSet(New object:C1471(\
 								"action"; "coreData"; \
 								"removeAsset"; True:C214; \
-								"path"; $File_))
+								"path"; $out.path; \
+								"caller"; $in.caller))
 							
-							ob_error_combine($Obj_out; $Obj_out.coreDataSet)
+							ob_error_combine($out; $out.coreDataSet)
 							
-							$Obj_out.success:=Not:C34(ob_error_has($Obj_out))
+							$out.success:=Not:C34(ob_error_has($out))
 							
 						End if 
 						
 						// Generate a digest according to structure
-						If (Bool:C1537($Obj_in.digest) & $Obj_out.success)
+						If (Bool:C1537($in.digest) & $out.success)
 							
-							$Obj_out.digest:=dataSet(New object:C1471(\
+							$out.digest:=dataSet(New object:C1471(\
 								"action"; "digest"; \
-								"dataModel"; $Obj_dataModel; \
-								"url"; $Obj_in.url)).digest
-							TEXT TO DOCUMENT:C1237($Obj_out.path+"dataSetDigest"; $Obj_out.digest)
+								"dataModel"; $dataModel; \
+								"url"; $in.url)).digest
+							
+							TEXT TO DOCUMENT:C1237($out.path+"dataSetDigest"; $out.digest)
 							
 						End if 
 					End if 
 					
 				Else 
-					$Obj_out.success:=False:C215
-					$Obj_out.errors:=New collection:C1472("Web server not running")
 					
-					If ($Boo_verbose)
+					$out.success:=False:C215
+					$out.errors:=New collection:C1472("Web server not running")
+					
+					If ($verbose)
 						
-						CALL FORM:C1391($Obj_in.caller; "LOG_EVENT"; New object:C1471(\
+						CALL FORM:C1391($in.caller; "LOG_EVENT"; New object:C1471(\
 							"message"; "Web server not running"; \
 							"importance"; Error message:K38:3))
 						
@@ -615,35 +632,59 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 				End if 
 			End if 
 			
-			//______________________________________________________
-		: ($Obj_in.action="readCatalog")
+			If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
+				
+				If (Bool:C1537(Storage:C1525.flags.stopGeneration))
+					
+					// Display cancelled message
+					CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
+						"step"; "cancelledOperation"))
+					
+					// Reset to allow user read the message
+					$delay.start:=Tickcount:C458
+					
+				End if 
+				
+				$delay.duration:=Tickcount:C458-$delay.start
+				
+				If ($delay.duration<$delay.minimumDisplayTime)
+					
+					DELAY PROCESS:C323(Current process:C322; $delay.minimumDisplayTime-$delay.duration)
+					
+				End if 
+			End if 
 			
-			If ((Value type:C1509($Obj_in.project)=Is object:K8:27))
+			// Notify the end of the process
+			CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
+				"step"; "end"))
+			
+			//______________________________________________________
+		: ($in.action="readCatalog")
+			
+			If ((Value type:C1509($in.project)=Is object:K8:27))
 				
-				$Obj_out.catalog:=New object:C1471
+				$out.catalog:=New object:C1471
 				
-				$Obj_in.path:=dataSet(New object:C1471(\
+				$in.path:=dataSet(New object:C1471(\
 					"action"; "path"; \
-					"project"; $Obj_in.project)).path
+					"project"; $in.project)).path
 				
-				$File_:=asset(New object:C1471("action"; "path"; "path"; $Obj_in.path)).path+"Catalog"
+				$pathname:=asset(New object:C1471("action"; "path"; "path"; $in.path)).path+"Catalog"
 				
-				If (Test path name:C476($File_)=Is a folder:K24:2)
+				If (Test path name:C476($pathname)=Is a folder:K24:2)
 					
-					DOCUMENT LIST:C474($File_; $tTxt_documents; Recursive parsing:K24:13+Absolute path:K24:14)
+					DOCUMENT LIST:C474($pathname; $tTxt_documents; Recursive parsing:K24:13+Absolute path:K24:14)
 					
-					For ($Lon_i; 1; Size of array:C274($tTxt_documents); 1)
+					For ($i; 1; Size of array:C274($tTxt_documents); 1)
 						
-						$Lon_pos:=Position:C15(".catalog.json"; $tTxt_documents{$Lon_i})
-						
-						If ($Lon_pos>0)
+						If (Position:C15(".catalog.json"; $tTxt_documents{$i})>0)
 							
-							$Obj_out.catalog[Path to object:C1547(Path to object:C1547($tTxt_documents{$Lon_i}).name).name]:=ob_parseDocument($tTxt_documents{$Lon_i}).value
+							$out.catalog[Path to object:C1547(Path to object:C1547($tTxt_documents{$i}).name).name]:=ob_parseDocument($tTxt_documents{$i}).value
 							
 						End if 
 					End for 
 					
-					$Obj_out.success:=True:C214
+					$out.success:=True:C214
 					
 				End if 
 				
@@ -652,114 +693,127 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 			End if 
 			
 			//______________________________________________________
-		: ($Obj_in.action="coreData")
+		: ($in.action="coreData")
 			
-			$cmd:=str_singleQuoted(cs:C1710.path.new().scripts().file("coredataimport").path)
-			
-			If ($Obj_in.posix=Null:C1517)\
-				 & ($Obj_in.path#Null:C1517)
+			If (Not:C34(Bool:C1537(Storage:C1525.flags.stopGeneration)))
 				
-				$Obj_in.posix:=Convert path system to POSIX:C1106($Obj_in.path)
-				
-			End if 
-			
-			If ($Obj_in.posix#Null:C1517)
-				
-				$cmd:=$cmd\
-					+" --asset "+str_singleQuoted($Obj_in.posix+"Resources/Assets.xcassets")\
-					+" --structure "+str_singleQuoted($Obj_in.posix+"Sources/Structures.xcdatamodeld")\
-					+" --output "+str_singleQuoted($Obj_in.posix+"Resources")
-				
-				LAUNCH EXTERNAL PROCESS:C811($cmd; $Txt_in; $Txt_out; $Txt_error)
-				
-				If (Asserted:C1132(OK=1; "LEP failed: "+$cmd))
+				If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
 					
-					$Boo_errorInOut:=(Position:C15("[Error]"; $Txt_out)>0)
+					CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
+						"step"; "coreDataInjection"))
 					
-					If (Not:C34($Boo_errorInOut))
+				End if 
+				
+				$cmd:=str_singleQuoted(cs:C1710.path.new().scripts().file("coredataimport").path)
+				
+				If ($in.posix=Null:C1517)\
+					 & ($in.path#Null:C1517)
+					
+					$in.posix:=Convert path system to POSIX:C1106($in.path)
+					
+				End if 
+				
+				If ($in.posix#Null:C1517)
+					
+					$cmd:=$cmd\
+						+" --asset "+str_singleQuoted($in.posix+"Resources/Assets.xcassets")\
+						+" --structure "+str_singleQuoted($in.posix+"Sources/Structures.xcdatamodeld")\
+						+" --output "+str_singleQuoted($in.posix+"Resources")
+					
+					LAUNCH EXTERNAL PROCESS:C811($cmd; $inputStream; $outputStream; $Txt_error)
+					
+					If (Asserted:C1132(OK=1; "LEP failed: "+$cmd))
 						
-						$Obj_out.success:=True:C214
-						
-						If (Bool:C1537($Obj_in.removeAsset))
+						If (Position:C15("[Error]"; $outputStream)=0)
 							
-							Folder:C1567($Obj_in.posix+"Resources/Assets.xcassets/Data"; fk posix path:K87:1).delete(Delete with contents:K24:24)
-							Folder:C1567($Obj_in.posix+"Resources/Assets.xcassets/Catalog"; fk posix path:K87:1).delete(Delete with contents:K24:24)
+							$out.success:=True:C214
 							
+							If (Bool:C1537($in.removeAsset))
+								
+								Folder:C1567($in.posix+"Resources/Assets.xcassets/Data"; fk posix path:K87:1).delete(Delete with contents:K24:24)
+								Folder:C1567($in.posix+"Resources/Assets.xcassets/Catalog"; fk posix path:K87:1).delete(Delete with contents:K24:24)
+								
+							End if 
+							
+						Else 
+							
+							For each ($t; Split string:C1554($outputStream; "\n"))
+								
+								If (Position:C15("[Error]"; $t)>0)
+									
+									ob_error_add($out; $t)
+									
+								End if 
+							End for each 
 						End if 
 						
 					Else 
 						
-						For each ($t; Split string:C1554($Txt_out; "\n"))
+						// Out return an error message
+						$out.success:=False:C215
+						
+						If (Length:C16($outputStream)>0)
 							
-							If (Position:C15("[Error]"; $t)>0)
-								
-								ob_error_add($Obj_out; $t)
-								
-							End if 
-						End for each 
+							ob_error_add($out; $outputStream)
+							
+						Else 
+							
+							ob_error_add($out; "No output when dumping into mobile database")
+							
+						End if 
+					End if 
+					
+					If ((Length:C16($Txt_error)>0))  // Add always error from command output if any, but do not presume if success or not
+						
+						ob_warning_add($out; $Txt_error)
+						
 					End if 
 					
 				Else 
 					
-					// out return an error message
-					$Obj_out.success:=False:C215
-					If (Length:C16($Txt_out)>0)
-						ob_error_add($Obj_out; $Txt_out)
-					Else 
-						ob_error_add($Obj_out; "No output when dumping into mobile database")
-					End if 
-				End if 
-				
-				If ((Length:C16($Txt_error)>0))  // add always error from command output if any, but do not presume if success or not
-					
-					ob_warning_add($Obj_out; $Txt_error)
+					$out.errors:=New collection:C1472("path or posix must be defined")
 					
 				End if 
-				
-			Else 
-				
-				$Obj_out.errors:=New collection:C1472("path or posix must be defined")
-				
 			End if 
 			
 			//________________________________________
-		: ($Obj_in.action="coreDataAddToProject")
+		: ($in.action="coreDataAddToProject")
 			
-			$Obj_file:=Folder:C1567($Obj_in.path; fk platform path:K87:2).file("Resources/Structures.sqlite")
+			$file:=Folder:C1567($in.path; fk platform path:K87:2).file("Resources/Structures.sqlite")
 			
-			If ($Obj_file.exists)
+			If ($file.exists)
 				
-				$Obj_out.projfile:=XcodeProj(New object:C1471(\
+				$out.projfile:=XcodeProj(New object:C1471(\
 					"action"; "read"; \
-					"path"; $Obj_in.path))
-				ob_error_combine($Obj_out; $Obj_out.projfile)
+					"path"; $in.path))
+				ob_error_combine($out; $out.projfile)
 				
-				If (Bool:C1537($Obj_out.projfile.success))
+				If (Bool:C1537($out.projfile.success))
 					
 					XcodeProj(New object:C1471(\
 						"action"; "mapping"; \
-						"projObject"; $Obj_out.projfile))
+						"projObject"; $out.projfile))
 					
-					$Obj_out.inject:=XcodeProjInject(New object:C1471(\
-						"path"; $Obj_file.platformPath; \
+					$out.inject:=XcodeProjInject(New object:C1471(\
+						"path"; $file.platformPath; \
 						"types"; New collection:C1472(); \
-						"mapping"; $Obj_out.projfile.mapping; \
-						"proj"; $Obj_out.projfile.value; \
-						"uuid"; $Obj_in.uuid; \
-						"target"; $Obj_in.path\
+						"mapping"; $out.projfile.mapping; \
+						"proj"; $out.projfile.value; \
+						"uuid"; $in.uuid; \
+						"target"; $in.path\
 						))
-					ob_error_combine($Obj_out; $Obj_out.inject)
+					ob_error_combine($out; $out.inject)
 					
-					If (Bool:C1537($Obj_out.inject.success))
+					If (Bool:C1537($out.inject.success))
 						
-						$Obj_out.projfile:=XcodeProj(New object:C1471(\
+						$out.projfile:=XcodeProj(New object:C1471(\
 							"action"; "write"; \
-							"object"; $Obj_out.projfile.value; \
-							"project"; $Obj_in.tags.product; \
-							"path"; $Obj_out.projfile.path))
-						ob_error_combine($Obj_out; $Obj_out.projfile)
+							"object"; $out.projfile.value; \
+							"project"; $in.tags.product; \
+							"path"; $out.projfile.path))
+						ob_error_combine($out; $out.projfile)
 						
-						$Obj_out.success:=$Obj_out.projfile.success
+						$out.success:=$out.projfile.success
 						
 					End if 
 				End if 
@@ -768,7 +822,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing tag \"action\""))
 			//________________________________________
 		Else 
 			
-			ASSERT:C1129(False:C215; "Unknown entry point: \""+$Obj_in.action+"\"")
+			ASSERT:C1129(False:C215; "Unknown entry point: \""+$in.action+"\"")
 			
 			//________________________________________
 	End case 
@@ -776,14 +830,9 @@ End if
 
 // ----------------------------------------------------
 // Return
-If (Bool:C1537($Obj_in.caller))
+If (Bool:C1537($in.caller))
 	
-	$Obj_out.caller:=$Obj_in.caller
-	CALL FORM:C1391($Obj_in.caller; "editor_CALLBACK"; "dataSet"; $Obj_out)
+	$out.caller:=$in.caller
+	CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dataSet"; $out)
 	
 End if 
-
-$0:=$Obj_out
-
-// ----------------------------------------------------
-// End

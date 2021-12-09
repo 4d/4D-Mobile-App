@@ -18,6 +18,8 @@ Class constructor
 		
 	End if 
 	
+	This:C1470.numbereFormat:="### ### ### ### ###"
+	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function init()
 	
@@ -55,10 +57,6 @@ Function onLoad()
 		
 		This:C1470.tables:=PROJECT.publishedTables()
 		
-		//For each ($table; This.tables)
-		//PROJECT.checkQueryFilter($table)
-		//End for each 
-		
 	End if 
 	
 	This:C1470.update()
@@ -77,10 +75,9 @@ Function update()
 	Else 
 		
 		This:C1470.properties.show()
+		This:C1470.method.hide()
 		This:C1470.queryWidget.show(This:C1470.filter.isFocused())
 		This:C1470.filter.setColors(Foreground color:K23:1)
-		This:C1470.method.hide()
-		This:C1470.embedded.show()
 		
 		OB REMOVE:C1226(This:C1470.current; "user")
 		
@@ -135,11 +132,11 @@ Function displayFilter($table : Object)
 				
 				If (Bool:C1537($table.embedded))
 					
-					$Comment:=EDITOR.str.setText("allDataEmbedded").localized()
+					$Comment:=EDITOR.str.localize("allDataEmbedded")
 					
 				Else 
 					
-					$Comment:=EDITOR.str.setText("allDataLoaded").localized()
+					$Comment:=EDITOR.str.localize("allDataLoaded")
 					
 				End if 
 				
@@ -149,11 +146,11 @@ Function displayFilter($table : Object)
 					
 					If (Bool:C1537($table.embedded))
 						
-						$Comment:=EDITOR.str.setText("noEntityToEmbed").localized()
+						$Comment:=EDITOR.str.localize("noEntityToEmbed")
 						
 					Else 
 						
-						$Comment:=EDITOR.str.setText("noEntityToLoad").localized()
+						$Comment:=EDITOR.str.localize("noEntityToLoad")
 						
 					End if 
 					
@@ -161,13 +158,15 @@ Function displayFilter($table : Object)
 					
 					If ($table.total>100000)
 						
+						This:C1470.result.setColors(EDITOR.warningColor)
+						
 						If (Bool:C1537($table.embedded))
 							
-							$Comment:=EDITOR.str.setText("largeNumberOfEntitiesToEmbed").localized()
+							$Comment:=EDITOR.str.localize("largeNumberOfEntitiesToEmbed")
 							
 						Else 
 							
-							$Comment:=EDITOR.str.setText("largeNumberOfEntitiesToLoad").localized()
+							$Comment:=EDITOR.str.localize("largeNumberOfEntitiesToLoad")
 							
 						End if 
 						
@@ -175,11 +174,11 @@ Function displayFilter($table : Object)
 						
 						If (Bool:C1537($table.embedded))
 							
-							$Comment:=EDITOR.str.setText("entitiesToEmbed").localized(String:C10($table.total; "### ###"))
+							$Comment:=EDITOR.str.localize("entitiesToEmbed"; String:C10($table.total; This:C1470.numbereFormat))
 							
 						Else 
 							
-							$Comment:=EDITOR.str.setText("entitiesToLoad").localized(String:C10($table.total; "### ###"))
+							$Comment:=EDITOR.str.localize("entitiesToLoad"; String:C10($table.total; This:C1470.numbereFormat))
 							
 						End if 
 					End if 
@@ -192,7 +191,7 @@ Function displayFilter($table : Object)
 			This:C1470.filter.setColors(EDITOR.errorColor)
 			This:C1470.result.setColors(EDITOR.errorColor)
 			
-			$Comment:=EDITOR.str.setText("error:").localized()+$filter.error
+			$Comment:=EDITOR.str.localize("error:")+$filter.error
 			
 			//______________________________________________________
 		: (Not:C34(Bool:C1537($filter.validated)))  // Not validated
@@ -200,7 +199,7 @@ Function displayFilter($table : Object)
 			This:C1470.filter.setColors(EDITOR.errorColor)
 			This:C1470.result.setColors(EDITOR.errorColor)
 			
-			$Comment:=EDITOR.str.setText("notValidatedFilter").localized()
+			$Comment:=EDITOR.str.localize("notValidatedFilter")
 			
 			//______________________________________________________
 		Else 
@@ -214,7 +213,7 @@ Function displayFilter($table : Object)
 				This:C1470.embedded.hide()
 				This:C1470.method.show()
 				
-				$Comment:=EDITOR.str.setText("dataFilteringByUser").localized()
+				$Comment:=EDITOR.str.localize("dataFilteringByUser")
 				
 			Else 
 				
@@ -222,11 +221,11 @@ Function displayFilter($table : Object)
 					
 					If (Bool:C1537($table.embedded))
 						
-						$Comment:=EDITOR.str.setText("dataEmbedded").localized()
+						$Comment:=EDITOR.str.localize("dataEmbedded")
 						
 					Else 
 						
-						$Comment:=EDITOR.str.setText("dataLoaded").localized()
+						$Comment:=EDITOR.str.localize("dataLoaded")
 						
 					End if 
 					
@@ -236,11 +235,11 @@ Function displayFilter($table : Object)
 						
 						If (Bool:C1537($table.embedded))
 							
-							$Comment:=EDITOR.str.setText("noEntityToEmbed").localized()
+							$Comment:=EDITOR.str.localize("noEntityToEmbed")
 							
 						Else 
 							
-							$Comment:=EDITOR.str.setText("noEntityToLoad").localized()
+							$Comment:=EDITOR.str.localize("noEntityToLoad")
 							
 						End if 
 						
@@ -250,11 +249,12 @@ Function displayFilter($table : Object)
 							
 							If ($table.count>100000)
 								
-								$Comment:=EDITOR.str.setText("largeNumberOfEntitiesToEmbed").localized()
+								This:C1470.result.setColors(EDITOR.warningColor)
+								$Comment:=EDITOR.str.localize("largeNumberOfEntitiesToEmbed")
 								
 							Else 
 								
-								$Comment:=EDITOR.str.setText("entitiesEmbeddedUponConnection").localized(String:C10($table.count; "### ###"); String:C10($table.total; "### ### ### ### ###"))
+								$Comment:=EDITOR.str.localize("entitiesEmbeddedUponConnection"; New collection:C1472(String:C10($table.count; This:C1470.numbereFormat); String:C10($table.total; This:C1470.numbereFormat)))
 								
 							End if 
 							
@@ -262,11 +262,12 @@ Function displayFilter($table : Object)
 							
 							If ($table.count>100000)
 								
-								$Comment:=EDITOR.str.setText("largeNumberOfEntitiesToLoad").localized()
+								This:C1470.result.setColors(EDITOR.warningColor)
+								$Comment:=EDITOR.str.localize("largeNumberOfEntitiesToLoad")
 								
 							Else 
 								
-								$Comment:=EDITOR.str.setText("entitiesLoadedUponConnection").localized(String:C10($table.count; "### ###"); String:C10($table.total; "### ### ### ### ###"))
+								$Comment:=EDITOR.str.localize("entitiesLoadedUponConnection"; New collection:C1472(String:C10($table.count; This:C1470.numbereFormat); String:C10($table.total; This:C1470.numbereFormat)))
 								
 							End if 
 						End if 

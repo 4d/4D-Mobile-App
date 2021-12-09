@@ -3,8 +3,7 @@ var $fieldName; $primaryKey; $url : Text
 var $picture : Picture
 var $withPicture : Boolean
 var $defaultHowMany; $defaultMaxStr; $howMany; $hs; $i; $maxStr : Integer
-var $x : Blob
-var $attribute; $status : Object
+var $attribute; $o; $status : Object
 var $dataClass; $defaultDataClass : 4D:C1709.DataClass
 var $entity : 4D:C1709.Entity
 var $err : cs:C1710.error
@@ -29,14 +28,14 @@ If (Asserted:C1132($dataClass#Null:C1517; "This class store do not exists"))
 	$maxStr:=($maxStr<=0) ? $defaultMaxStr : $maxStr
 	$primaryKey:=$dataClass.getInfo().primaryKey
 	
-	$url:="https://picsum.photos/200"
+	$url:="https://randomuser.me/api/?results="+String:C10($howMany)  //"https://picsum.photos/200"
 	HTTP SET OPTION:C1160(HTTP timeout:K71:10; 2)
 	
 /* START HIDING ERRORS */$err:=cs:C1710.error.new("capture")
-	$hs:=HTTP Get:C1157($url; $x)
+	$hs:=HTTP Get:C1157($url; $o)
 /* STOP HIDING ERRORS */$err.show()
 	
-	$withPicture:=$err.noError() && (BLOB size:C605($x)>0)
+	$withPicture:=$err.noError() && ($o.error=Null:C1517)
 	
 	For ($i; 1; $howMany; 1)
 		
@@ -89,8 +88,7 @@ If (Asserted:C1132($dataClass#Null:C1517; "This class store do not exists"))
 						//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 					: (($attribute.type="image") && $withPicture)
 						
-						$hs:=HTTP Get:C1157($url; $x)
-						BLOB TO PICTURE:C682($x; $picture)
+						HTTP Get:C1157($o.results[$i-1].picture.medium; $picture)
 						$entity[$fieldName]:=$picture
 						
 						//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
@@ -104,5 +102,7 @@ If (Asserted:C1132($dataClass#Null:C1517; "This class store do not exists"))
 		$status:=$entity.save()
 		
 	End for 
+	
+	BEEP:C151
 	
 End if 

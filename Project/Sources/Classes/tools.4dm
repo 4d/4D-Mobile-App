@@ -234,7 +234,7 @@ Function quoted
 	
 	//====================================================================
 	// ⛔️ Returns the localized string corresponding to the $1 resname & made replacement if any
-Function localized
+Function localized($resname : Text; $replacement; $replacementN : Text)->$localizedString : Text
 	var $0 : Text
 	var $1 : Text
 	var $2 : Variant
@@ -246,16 +246,16 @@ Function localized
 	
 	If (Count parameters:C259>=1)
 		
-		$t:=$1
+		$t:=$resname
 		
-		If (Length:C16($1)>0)\
-			 & (Length:C16($1)<=255)
+		If (Length:C16($resname)>0)\
+			 & (Length:C16($resname)<=255)
 			
 			//%W-533.1
-			If ($1[[1]]#Char:C90(1))
+			If ($resname[[1]]#Char:C90(1))
 				
-				$t:=Get localized string:C991($1)
-				$0:=Choose:C955(Length:C16($t)>0; $t; $1)  // Revert if no localization
+				$t:=Get localized string:C991($resname)
+				$localizedString:=Choose:C955(Length:C16($t)>0; $t; $resname)  // Revert if no localization
 				
 			End if 
 			//%W+533.1
@@ -264,28 +264,28 @@ Function localized
 		
 		If (Count parameters:C259>=2)
 			
-			If (Value type:C1509($2)=Is collection:K8:32)
+			If (Value type:C1509($replacement)=Is collection:K8:32)
 				
 				Repeat 
 					
-					$b:=$i<$2.length
+					$b:=$i<$replacement.length
 					
 					If ($b)
 						
-						$b:=Match regex:C1019("(?m-si)(\\{[\\w\\s]+\\})"; $0; 1; $position; $length)
+						$b:=Match regex:C1019("(?m-si)(\\{[\\w\\s]+\\})"; $localizedString; 1; $position; $length)
 						
 						If ($b)
 							
-							$t:=Get localized string:C991($2[$i])
-							$t:=Choose:C955(Length:C16($t)>0; $t; $2[$i])
+							$t:=Get localized string:C991($replacement[$i])
+							$t:=Choose:C955(Length:C16($t)>0; $t; $replacement[$i])
 							
-							If (Position:C15("</span>"; $0)>0)  // Multistyle
+							If (Position:C15("</span>"; $localizedString)>0)  // Multistyle
 								
 								$t:=This:C1470.multistyleCompatible($t)
 								
 							End if 
 							
-							$0:=Replace string:C233($0; Substring:C12($0; $position; $length); $t)
+							$localizedString:=Replace string:C233($localizedString; Substring:C12($localizedString; $position; $length); $t)
 							$i:=$i+1
 							
 						End if 
@@ -296,18 +296,18 @@ Function localized
 				
 				For ($i; 2; Count parameters:C259; 1)
 					
-					If (Match regex:C1019("(?m-si)(\\{[\\w\\s]+\\})"; $0; 1; $position; $length))
+					If (Match regex:C1019("(?m-si)(\\{[\\w\\s]+\\})"; $localizedString; 1; $position; $length))
 						
-						$t:=Get localized string:C991(String:C10($2))
-						$t:=Choose:C955(Length:C16($t)>0; $t; String:C10($2))
+						$t:=Get localized string:C991(String:C10(${$i}))
+						$t:=Choose:C955(Length:C16($t)>0; $t; String:C10(${$i}))
 						
-						If (Position:C15("</span>"; $0)>0)  // Multistyle
+						If (Position:C15("</span>"; $localizedString)>0)  // Multistyle
 							
 							$t:=This:C1470.multistyleCompatible($t)
 							
 						End if 
 						
-						$0:=Replace string:C233($0; Substring:C12($0; $position; $length); $t)
+						$localizedString:=Replace string:C233($localizedString; Substring:C12($localizedString; $position; $length); $t)
 						
 					End if 
 				End for 
@@ -315,13 +315,11 @@ Function localized
 			
 		Else 
 			
-			If (Length:C16($0)=0)
+			If (Length:C16($localizedString)=0)
 				
-				$0:=$1
+				$localizedString:=$resname
 				
 			End if 
-			
-			
 		End if 
 	End if 
 	

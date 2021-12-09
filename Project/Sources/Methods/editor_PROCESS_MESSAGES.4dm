@@ -23,10 +23,11 @@ Case of
 		
 		Case of 
 				
+				
 				//______________________________________________________
 			: ($data.step="catalog")
 				
-				$o.additional:=EDITOR.str.setText("dataCatalog").localized($data.table.name)
+				$o.additional:=EDITOR.str.localize("dataCatalog"; $data.table.name)
 				EDITOR.message.setValue($o)
 				
 				//______________________________________________________
@@ -34,74 +35,83 @@ Case of
 				
 				If (EDITOR.message.isVisible())
 					
-					If ($data.page#Null:C1517)
+					If ($data.page=Null:C1517)
 						
-						$o.additional:=EDITOR.str.setText("dataRequest").localized($data.table.name)+" ("+String:C10($data.page)+")"
-						$o.additional:=$o.additional+"\r"+EDITOR.str.setText("dataConsiderToSetAFilter").localized()
+						$o.additional:=EDITOR.str.localize("dataRequest"; $data.table.name)
 						
 					Else 
 						
-						$o.additional:=EDITOR.str.setText("dataRequest").localized($data.table.name)
+						$o.additional:=EDITOR.str.localize("dataRequest"; $data.table.name)+" ("+String:C10($data.page)+")"
+						$o.additional:=$o.additional+"\r"+EDITOR.str.localize("dataConsiderToSetAFilter")
 						
 					End if 
 					
 					EDITOR.message.setValue($o)
 					
 				End if 
+				
+				//______________________________________________________
+			: ($data.step="pictures")
+				
+				If ($data.id=Null:C1517)
+					
+					$o.additional:=EDITOR.str.localize("imageGeneration"; $data.table.name)
+					
+				Else 
+					
+					$o.additional:=EDITOR.str.localize("imageGeneration"; $data.table.name)+" ("+$data.id+")"
+					
+				End if 
+				
+				EDITOR.message.setValue($o)
 				
 				//______________________________________________________
 			: ($data.step="asset")
 				
 				If (EDITOR.message.isVisible())
 					
-					If ($data.page#Null:C1517)
+					If ($data.page=Null:C1517)
 						
-						$o.additional:=EDITOR.str.setText("dataCoreDataInjection").localized($data.table.name)+" ("+String:C10($data.page)+")"
-						$o.additional:=$o.additional+"\r"+EDITOR.str.setText("dataConsiderToSetAFilter").localized(String:C10(SHARED.data.dump.limit))
+						$o.additional:=EDITOR.str.localize("dataCoreDataInjection"; $data.table.name)
 						
 					Else 
 						
-						$o.additional:=EDITOR.str.setText("dataCoreDataInjection").localized($data.table.name)
+						$o.additional:=EDITOR.str.localize("dataCoreDataInjection"; $data.table.name)+" ("+String:C10($data.page)+")"
+						$o.additional:=$o.additional+"\r"+EDITOR.str.localize("dataConsiderToSetAFilter"; String:C10(SHARED.data.dump.limit))
 						
 					End if 
 					
 					EDITOR.message.setValue($o)
 					
 				End if 
-				
-				//______________________________________________________
-			: ($data.step="stop")
-				
-				If (EDITOR.message.isVisible())
-					
-					$o.additional:="cancelledOperation"
-					EDITOR.message.setValue($o)
-					
-				End if 
-				
 				//______________________________________________________
 			: ($data.step="end")
 				
-				If (Form:C1466.dataSetGeneration#Null:C1517)
+				//If (Form.dataSetGeneration#Null)
+				
+				If (Storage:C1525.flags#Null:C1517)
 					
-					If (Storage:C1525.flags#Null:C1517)
+					Use (Storage:C1525.flags)
 						
-						Use (Storage:C1525.flags)
-							
-							OB REMOVE:C1226(Storage:C1525.flags; "stopGeneration")
-							
-						End use 
-					End if 
-					
-					DO_MESSAGE(New object:C1471(\
-						"action"; "close"))
-					
+						OB REMOVE:C1226(Storage:C1525.flags; "stopGeneration")
+						
+					End use 
 				End if 
+				
+				DO_MESSAGE(New object:C1471(\
+					"action"; "close"))
+				
+				//End if 
 				
 				//______________________________________________________
 			Else 
 				
-				ASSERT:C1129(DATABASE.isMatrix)
+				If (EDITOR.message.isVisible())
+					
+					$o.additional:=EDITOR.str.localize($data.step)
+					EDITOR.message.setValue($o)
+					
+				End if 
 				
 				//______________________________________________________
 		End case 

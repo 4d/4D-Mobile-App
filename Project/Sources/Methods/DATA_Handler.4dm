@@ -192,11 +192,11 @@ Case of
 								
 								If (Bool:C1537($table.embedded))
 									
-									$Comment:=EDITOR.str.setText("allDataEmbedded").localized()
+									$Comment:=EDITOR.str.localize("allDataEmbedded")
 									
 								Else 
 									
-									$Comment:=EDITOR.str.setText("allDataLoaded").localized()
+									$Comment:=EDITOR.str.localize("allDataLoaded")
 									
 								End if 
 								
@@ -206,11 +206,11 @@ Case of
 									
 									If (Bool:C1537($table.embedded))
 										
-										$Comment:=EDITOR.str.setText("noEntityToEmbed").localized()
+										$Comment:=EDITOR.str.localize("noEntityToEmbed")
 										
 									Else 
 										
-										$Comment:=EDITOR.str.setText("noEntityToLoad").localized()
+										$Comment:=EDITOR.str.localize("noEntityToLoad")
 										
 									End if 
 									
@@ -218,13 +218,15 @@ Case of
 									
 									If ($table.total>100000)
 										
+										OBJECT SET RGB COLORS:C628(*; $form.result; EDITOR.warningColor)
+										
 										If (Bool:C1537($table.embedded))
 											
-											$Comment:=EDITOR.str.setText("largeNumberOfEntitiesToEmbed").localized()
+											$Comment:=EDITOR.str.localize("largeNumberOfEntitiesToEmbed")
 											
 										Else 
 											
-											$Comment:=EDITOR.str.setText("largeNumberOfEntitiesToLoad").localized()
+											$Comment:=EDITOR.str.localize("largeNumberOfEntitiesToLoad")
 											
 										End if 
 										
@@ -232,11 +234,11 @@ Case of
 										
 										If (Bool:C1537($table.embedded))
 											
-											$Comment:=EDITOR.str.setText("entitiesToEmbed").localized(String:C10($table.total; "### ###"))
+											$Comment:=EDITOR.str.localize("entitiesToEmbed"; String:C10($table.total; "### ###"))
 											
 										Else 
 											
-											$Comment:=EDITOR.str.setText("entitiesToLoad").localized(String:C10($table.total; "### ###"))
+											$Comment:=EDITOR.str.localize("entitiesToLoad"; String:C10($table.total; "### ###"))
 											
 										End if 
 									End if 
@@ -249,7 +251,7 @@ Case of
 							OBJECT SET RGB COLORS:C628(*; $form.filter; EDITOR.errorColor)
 							OBJECT SET RGB COLORS:C628(*; $form.result; EDITOR.errorColor)
 							
-							$Comment:=EDITOR.str.setText("error:").localized()+$filter.error
+							$Comment:=EDITOR.str.localize("error:")+$filter.error
 							
 							//______________________________________________________
 						: (Not:C34(Bool:C1537($filter.validated)))  // Not validated
@@ -257,7 +259,7 @@ Case of
 							OBJECT SET RGB COLORS:C628(*; $form.filter; EDITOR.errorColor)
 							OBJECT SET RGB COLORS:C628(*; $form.result; EDITOR.errorColor)
 							
-							$Comment:=EDITOR.str.setText("notValidatedFilter").localized()
+							$Comment:=EDITOR.str.localize("notValidatedFilter")
 							
 							//______________________________________________________
 						Else 
@@ -271,7 +273,7 @@ Case of
 								OBJECT SET VISIBLE:C603(*; $form.embedded; False:C215)
 								OBJECT SET VISIBLE:C603(*; $form.method; True:C214)
 								
-								$Comment:=EDITOR.str.setText("dataFilteringByUser").localized()
+								$Comment:=EDITOR.str.localize("dataFilteringByUser")
 								
 							Else 
 								
@@ -279,11 +281,11 @@ Case of
 									
 									If (Bool:C1537($table.embedded))
 										
-										$Comment:=EDITOR.str.setText("dataEmbedded").localized()
+										$Comment:=EDITOR.str.localize("dataEmbedded")
 										
 									Else 
 										
-										$Comment:=EDITOR.str.setText("dataLoaded").localized()
+										$Comment:=EDITOR.str.localize("dataLoaded")
 										
 									End if 
 									
@@ -293,11 +295,11 @@ Case of
 										
 										If (Bool:C1537($table.embedded))
 											
-											$Comment:=EDITOR.str.setText("noEntityToEmbed").localized()
+											$Comment:=EDITOR.str.localize("noEntityToEmbed")
 											
 										Else 
 											
-											$Comment:=EDITOR.str.setText("noEntityToLoad").localized()
+											$Comment:=EDITOR.str.localize("noEntityToLoad")
 											
 										End if 
 										
@@ -307,11 +309,12 @@ Case of
 											
 											If ($table.count>100000)
 												
-												$Comment:=EDITOR.str.setText("largeNumberOfEntitiesToEmbed").localized()
+												OBJECT SET RGB COLORS:C628(*; $form.result; EDITOR.warningColor)
+												$Comment:=EDITOR.str.localize("largeNumberOfEntitiesToEmbed")
 												
 											Else 
 												
-												$Comment:=EDITOR.str.setText("entitiesEmbeddedUponConnection").localized(New collection:C1472(String:C10($table.count; "### ###"); String:C10($table.total; "### ### ### ### ###")))
+												$Comment:=EDITOR.str.localize("entitiesEmbeddedUponConnection"; New collection:C1472(String:C10($table.count; "### ###"); String:C10($table.total; "### ### ### ### ###")))
 												
 											End if 
 											
@@ -319,11 +322,12 @@ Case of
 											
 											If ($table.count>100000)
 												
-												$Comment:=EDITOR.str.setText("largeNumberOfEntitiesToLoad").localized()
+												OBJECT SET RGB COLORS:C628(*; $form.result; EDITOR.warningColor)
+												$Comment:=EDITOR.str.localize("largeNumberOfEntitiesToLoad")
 												
 											Else 
 												
-												$Comment:=EDITOR.str.setText("entitiesLoadedUponConnection").localized(New collection:C1472(String:C10($table.count; "### ###"); String:C10($table.total; "### ### ### ### ###")))
+												$Comment:=EDITOR.str.localize("entitiesLoadedUponConnection"; New collection:C1472(String:C10($table.count; "### ###"); String:C10($table.total; "### ### ### ### ###")))
 												
 											End if 
 										End if 
