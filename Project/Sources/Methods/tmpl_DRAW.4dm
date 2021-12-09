@@ -264,7 +264,7 @@ If (Num:C11($tableID)>0)
 															
 															$relation:=$tableModel
 															
-															If (Match regex:C1019("(?m-si)^%.*%$"; String:C10($relation[$field.name].label); 1))
+															If (Match regex:C1019("(?m-si)^%[^%]*%$"; String:C10($relation[$field.name].label); 1))
 																
 																$name:=Substring:C12($relation[$field.name].label; 2; Length:C16($relation[$field.name].label)-2)
 																
