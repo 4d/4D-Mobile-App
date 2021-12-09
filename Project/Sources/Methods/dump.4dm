@@ -361,19 +361,20 @@ Case of
 										
 									End if 
 									
-									$posBegin:=Position:C15("__SENT"; $rest.response)  // FIXME: sent could appears inside file, not only in final place for this table
+									$Txt_buffer:=Substring:C12($rest.response; Length:C16($rest.response)-25)  // not only in final place ? XXX could do better?
+									$posBegin:=Position:C15("__SENT"; $Txt_buffer)
 									
 									If ($posBegin>0)
 										
-										$posEnd:=Position:C15(","; $rest.response; $posBegin+7)
+										$posEnd:=Position:C15(","; $Txt_buffer; $posBegin+7)
 										
 										If ($posEnd<1)
 											
-											$posEnd:=Position:C15("}"; $rest.response; $posBegin+7)
+											$posEnd:=Position:C15("}"; $Txt_buffer; $posBegin+7)
 											
 										End if 
 										
-										If (Num:C11(Substring:C12($rest.response; $posBegin+8; $posEnd-($posBegin+7)-1))<=0)
+										If (Num:C11(Substring:C12($Txt_buffer; $posBegin+8; $posEnd-($posBegin+7)-1))<=0)
 											
 											$i:=MAXLONG:K35:2-1  // BREAK
 											$rest.noData:=True:C214
