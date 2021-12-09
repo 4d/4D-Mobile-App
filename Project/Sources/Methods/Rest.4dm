@@ -266,6 +266,7 @@ WARNING: "localhost" may not find the server if the computer is connected to a n
 			If ($error.lastError()#Null:C1517)
 				
 				$out.httpError:=$error.lastError().error
+				$out.errors:=$error.lastError().stack.extract("desc")
 				
 			End if 
 			
