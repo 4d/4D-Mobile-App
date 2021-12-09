@@ -198,4 +198,13 @@ class CustomNavigationResolver : GenericNavigationResolver {
         }
         {{/has_any_relations_many_to_one_for_detail}}
     }
+
+    /**
+     * Navigates from list form to action form
+     */
+    override fun navigateToActionForm(viewDataBinding: ViewDataBinding, destinationTable: String) {
+        viewDataBinding.root.findNavController().navigate(
+            EntityListFragmentDirections.actionListToActionForm(destinationTable)
+        )
+    }
 }

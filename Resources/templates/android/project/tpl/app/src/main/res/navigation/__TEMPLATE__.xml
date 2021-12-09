@@ -40,6 +40,14 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
 
+        <action
+            android:id="@+id/action_list_to_action_form"
+            app:destination="@id/actionParametersFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
         <argument
             android:name="tableName"
             android:defaultValue="{{tableName}}"
@@ -68,6 +76,13 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
 
+        <action
+            android:id="@+id/action_list_to_action_form"
+            app:destination="@id/actionParametersFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
 
         <argument
             android:name="key"
@@ -125,6 +140,14 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
 
+        <action
+            android:id="@+id/action_list_to_action_form"
+            app:destination="@id/actionParametersFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
         <argument
             android:name="destinationTable"
             app:argType="string" />
@@ -164,6 +187,14 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
 
+        <action
+            android:id="@+id/action_list_to_action_form"
+            app:destination="@id/actionParametersFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
         <argument
             android:name="tableName"
             app:argType="string" />
@@ -176,6 +207,17 @@
             android:name="navbarTitle"
             app:argType="string" />
 
+    </fragment>
+
+    <fragment
+        android:id="@+id/actionParametersFragment"
+        android:name="com.qmobile.qmobileui.action.ActionParametersFragment"
+        android:label="Action Parameters">
+
+        <argument
+            android:name="tableName"
+            app:argType="string" />
+            
     </fragment>
 
 </navigation>
