@@ -358,16 +358,6 @@ If (Num:C11($tableID)>0)
 													Case of 
 															
 															//______________________________________________________
-														: (Bool:C1537($field.computed))
-															
-															If ($tableModel[$field.name]=Null:C1517)
-																
-																$class:=$class+" error"
-																$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($field.name))
-																
-															End if 
-															
-															//______________________________________________________
 														: ($isToOne | $isToMany)  // Relation
 															
 															If (Split string:C1554($field.path; ".").length=1)

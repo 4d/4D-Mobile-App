@@ -88,8 +88,7 @@ If (Asserted:C1132($dataClass#Null:C1517; "This class store do not exists"))
 						//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 					: (($attribute.type="image") && $withPicture)
 						
-						var $httpCode : Integer
-						$httpCode:=HTTP Get:C1157($o.results[$i-1].picture.medium; $picture)
+						$hs:=HTTP Get:C1157($o.results[$i-1].picture.medium; $picture)
 						$entity[$fieldName]:=$picture
 						
 						//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
