@@ -186,9 +186,8 @@ db eval {DROP TABLE temp.stat}
 set isCompressed 0
 set compressOverhead 0
 set depth 0
-set sql { SELECT name, tbl_name FROM sqlite_master WHERE rootpage>0 }
-foreach {name tblname} [concat sqlite_master sqlite_master [db eval $sql]] {
-
+set sql { SELECT name, tbl_name FROM sqlite_schema WHERE rootpage>0 }
+foreach {name tblname} [concat sqlite_schema sqlite_schema [db eval $sql]] {
   set is_index [expr {$name!=$tblname}]
   set is_without_rowid [is_without_rowid $name]
   db eval {
