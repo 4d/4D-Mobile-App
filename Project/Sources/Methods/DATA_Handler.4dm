@@ -438,7 +438,7 @@ Case of
 				
 				If (Length:C16(String:C10($table.filter.string))>0)
 					
-					$context.tables[$index].filterIcon:=Choose:C955(Bool:C1537($table.filter.parameters); EDITOR.userIcon; EDITOR.filterIcon)
+					$table.filterIcon:=Choose:C955(Bool:C1537($table.filter.parameters); EDITOR.userIcon; EDITOR.filterIcon)
 					
 				End if 
 				
@@ -451,9 +451,12 @@ Case of
 						
 						$t:=formatString("table-name"; $table.name)
 						
-						If ($context.sqlite.tables["Z"+Uppercase:C13($t)]#Null:C1517)
+						var $sqlID : Text
+						$sqlID:="Z"+Uppercase:C13($t)
+						
+						If ($context.sqlite.tables[$sqlID]#Null:C1517)
 							
-							$size:=$context.sqlite.tables["Z"+Uppercase:C13($t)]  // Size of the data dump
+							$size:=Num:C11($context.sqlite.tables[$sqlID])  // Size of the data dump
 							
 							If ($size>4096)
 								
@@ -465,28 +468,22 @@ Case of
 								
 								If ($file.exists)
 									
-									$size:=$size+JSON Parse:C1218($file.getText()).contentSize
+									$size:=$size+Num:C11(JSON Parse:C1218($file.getText()).contentSize)
 									
 								End if 
-								
-							Else 
-								
 							End if 
+							
+							$table.dumpSize:=doc_bytesToString($size)
 							
 						Else 
 							
-							$context.tables[$index].dumpSize:=Get localized string:C991("notAvailable")
+							$table.dumpSize:=Get localized string:C991("notAvailable")
 							
 						End if 
 						
 					Else 
 						
-						$withSQLlite:=False:C215
-						
-					End if 
-					
-					If (Not:C34($withSQLlite))
-						
+						// Mark: OBSOLETE ?
 						$file:=Folder:C1567($pathname; fk platform path:K87:2).file("Resources/Assets.xcassets/Data/"+$table.name+".dataset/"+$table.name+".data.json")
 						
 						If ($file.exists)
@@ -504,9 +501,11 @@ Case of
 								
 							End if 
 							
+							$table.dumpSize:=doc_bytesToString($size)
+							
 						Else 
 							
-							$context.tables[$index].dumpSize:=Get localized string:C991("notAvailable")
+							$table.dumpSize:=Get localized string:C991("notAvailable")
 							
 						End if 
 					End if 
