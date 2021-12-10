@@ -151,7 +151,7 @@ Function setPicture($proxy : Text)->$this : cs:C1710.button
 		: (Count parameters:C259=0)
 			
 			// Remove picture
-			Super:C1706.setFormat(";#")
+			Super:C1706.setPicture()
 			
 			//______________________________________________________
 		: (Position:C15("path:"; $proxy)=1)\
@@ -169,9 +169,6 @@ Function setPicture($proxy : Text)->$this : cs:C1710.button
 			
 			Super:C1706.setPicture("path:/RESOURCES"+$proxy)
 			
-			//Button;path:/RESOURCES/Images/light_on.png;;3;1;1;3;0;0;0;0;0;1
-			//Button;path:/RESOURCES/RESOURCES/Images/light_on.png
-			
 			//______________________________________________________
 		Else 
 			
@@ -181,7 +178,6 @@ Function setPicture($proxy : Text)->$this : cs:C1710.button
 	End case 
 	
 	$this:=This:C1470
-	
 	
 	//═════════════════════════════════════════════════
 	/// Returns the number of pixels delimiting the inside left and right margins of the button
@@ -272,7 +268,7 @@ Function is3DButton($message : Text)->$success : Boolean
 	
 	If (Length:C16($message)>0)
 		
-		ASSERT:C1129(False:C215; $message)
+		ASSERT:C1129($success; $message)
 		
 	End if 
 	

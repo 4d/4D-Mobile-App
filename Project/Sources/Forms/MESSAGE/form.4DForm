@@ -140,8 +140,8 @@
 					"events": [
 						"onClick"
 					],
-					"icon": "/RESOURCES/images/Buttons/LightGrey/Cancel.png",
-					"iconFrames": 4,
+					"icon": "/RESOURCES/images/widgets/message/close.svg",
+					"iconFrames": 1,
 					"style": "toolbar",
 					"method": "ObjectMethods/cancelable.4dm",
 					"visibility": "hidden",
@@ -154,7 +154,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 321,
+	"geometryStamp": 325,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

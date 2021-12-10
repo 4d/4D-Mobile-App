@@ -169,10 +169,6 @@ WARNING: "localhost" may not find the server if the computer is connected to a n
 			
 			$out.url:=$out.url+$in.path
 			
-			//If $Obj_param.query"null"
-			// ?dsf-
-			// End if
-			
 			// Manage query parameters
 			If ($in.query#Null:C1517)
 				
@@ -230,43 +226,64 @@ WARNING: "localhost" may not find the server if the computer is connected to a n
 				
 			End for 
 			
+			HTTP GET OPTION:C1159(HTTP timeout:K71:10; $timeout)
+			
 			If (Num:C11($in.timeout)#0)
 				
-				HTTP GET OPTION:C1159(HTTP timeout:K71:10; $timeout)
 				HTTP SET OPTION:C1160(HTTP timeout:K71:10; $in.timeout)
 				
 			End if 
 			
 /* START TRAPPING ERRORS */$error:=cs:C1710.error.new("capture")
+			
 			Case of 
+					
+					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 				: (Num:C11($in.reponseType)=Is BLOB:K8:12)
+					
 					$out.code:=HTTP Request:C1158($in.method; $out.url; ($in.content); $requestResultAsBlob; $headerNames; $headerValues)
+					
+					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 				: (Num:C11($in.reponseType)=Is text:K8:3)
+					
 					$out.code:=HTTP Request:C1158($in.method; $out.url; ($in.content); $requestResultAsText; $headerNames; $headerValues)
+					
+					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 				Else 
+					
 					$out.code:=HTTP Request:C1158($in.method; $out.url; ($in.content); $requestResult; $headerNames; $headerValues)
+					
+					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 			End case 
+			
 /* STOP TRAPPING ERRORS */$error.release()
 			
-			If ($timeout#0)
-				
-				HTTP SET OPTION:C1160(HTTP timeout:K71:10; $timeout)
-				
-			End if 
+			HTTP SET OPTION:C1160(HTTP timeout:K71:10; $timeout)
 			
 			Case of 
+					
+					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 				: (Num:C11($in.reponseType)=Is BLOB:K8:12)
+					
 					$out.response:=$requestResultAsBlob
+					
+					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 				: (Num:C11($in.reponseType)=Is text:K8:3)
+					
 					$out.response:=$requestResultAsText
+					
+					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 				Else 
+					
 					$out.response:=$requestResult
+					
+					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 			End case 
 			
 			If ($error.lastError()#Null:C1517)
 				
 				$out.httpError:=$error.lastError().error
-				$out.errors:=$error.lastError().stack.extract("desc")
+				$out.errors:=$error.errors()
 				
 			End if 
 			

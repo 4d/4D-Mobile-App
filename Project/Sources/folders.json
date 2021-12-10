@@ -1035,7 +1035,6 @@
 			"COMPILER_ui",
 			"ui_ALIGN_ON_BEST_SIZE",
 			"ui_MOVE",
-			"ui_SET_ENABLED",
 			"ui_SET_GEOMETRY"
 		]
 	},

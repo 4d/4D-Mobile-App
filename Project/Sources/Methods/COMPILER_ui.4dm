@@ -17,8 +17,8 @@ If (False:C215)
 	C_LONGINT:C283(ui_MOVE; $4)
 	
 	//______________________________________________________
-	C_TEXT:C284(ui_SET_ENABLED; $1)
-	C_BOOLEAN:C305(ui_SET_ENABLED; $2)
+	//C_TEXT(ui_SET_ENABLED; $1)
+	//C_BOOLEAN(ui_SET_ENABLED; $2)
 	
 	//______________________________________________________
 	C_OBJECT:C1216(ui_SET_GEOMETRY; $1)

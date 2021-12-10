@@ -13,7 +13,7 @@ Class constructor($shortcut : Text)
 	End if 
 	
 	//===================================================================================
-	// Installs the passed error-handling method
+	/// Installs the passed error-handling method
 Function install($method : Text)
 	
 	This:C1470._record()
@@ -32,7 +32,7 @@ Function install($method : Text)
 	CLEAR VARIABLE:C89(ERROR FORMULA)
 	
 	//===================================================================================
-	// Deinstalls the last error-handling method and restore the previous one
+	/// Deinstalls the last error-handling method and restore the previous one
 Function deinstall
 	var $t : Text
 	
@@ -52,7 +52,7 @@ Function deinstall
 	ON ERR CALL:C155($t)
 	
 	//===================================================================================
-	// Installs a local capture of the errors
+	/// Installs a local capture of the errors
 Function capture()
 	
 	lastError:=Null:C1517
@@ -65,22 +65,32 @@ Function capture()
 	This:C1470.current:="err_CAPTURE"
 	
 	//===================================================================================
-	// Returns true if no errors were encountered during a capture phase
+	/// Returns true if no errors were encountered during a capture phase
 Function noError()->$noError : Boolean
 	
 	$noError:=(lastError=Null:C1517)
 	
 	//===================================================================================
-	// Returns true if errors were encountered during a capture phase
+	/// Returns true if errors were encountered during a capture phase
 Function withError()->$withError : Boolean
 	
 	$withError:=(lastError#Null:C1517)
 	
 	//===================================================================================
-	// Returns the last error encountered during a capture phase
+	/// Returns the last error encountered during a capture phase
 Function lastError()->$error : Object
 	
 	$error:=lastError
+	
+	//===================================================================================
+	/// Returns the stack of error descriptions
+Function errors()->$desc : Collection
+	
+	If (lastError.stack#Null:C1517)
+		
+		$desc:=lastError.stack.extract("desc")
+		
+	End if 
 	
 	//===================================================================================
 Function release
@@ -92,7 +102,7 @@ Function release
 	End if 
 	
 	//===================================================================================
-	// Hide errors
+	/// Hide errors
 Function hide()->$this : cs:C1710.error
 	
 	This:C1470._record()
@@ -105,7 +115,7 @@ Function hide()->$this : cs:C1710.error
 	$this:=This:C1470
 	
 	//===================================================================================
-	// Removes the hide errors method
+	/// Removes the hide errors method
 Function show
 	
 	If (This:C1470.current="err_HIDE")\

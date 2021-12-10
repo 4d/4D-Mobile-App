@@ -183,372 +183,244 @@ Case of
 		//______________________________________________________
 	: ($in.action="data")
 		
-		$result:=New object:C1471
-		
 		$out.success:=True:C214
+		
+		$out.results:=New object:C1471
 		
 		For each ($tableID; $dataModel) While (Not:C34($cancelled))
 			
-			$cancelled:=Bool:C1537(Storage:C1525.flags.stopGeneration)
+			$query:=Null:C1517
 			
-			If ($cancelled)  // Stop it right now
-				
-				$out.success:=False:C215  // Global success is false ?
-				
-			Else 
-				
-				$table:=$dataModel[$tableID]
-				$meta:=$table[""]
+			$table:=$dataModel[$tableID]
+			$meta:=$table[""]
+			
+			If (Bool:C1537($meta.embedded))  // If the data is to be embedded
 				
 				// Create the query string for rest
 				$query:=New object:C1471(\
 					"$limit"; String:C10(SHARED.data.dump.limit))
 				
-				// Manage  Restricted queries and embedded option
-				If (Bool:C1537($meta.embedded))  // If the data is to be embedded
+				If ($meta.filter#Null:C1517)  // If there is a filter
 					
-					If ($meta.filter#Null:C1517)  // If there is a filter
+					If (Bool:C1537($meta.filter.validated))  // If the filter is validated
 						
-						If (Bool:C1537($meta.filter.validated))  // If the filter is validated
+						If (Bool:C1537($meta.filter.parameters))  // If there is user parameters
 							
-							If (Bool:C1537($meta.filter.parameters))  // If there is user parameters
-								
-								// Data will be loaded according to the user parameters
-								$query:=Null:C1517  // <NOTHING MORE TO DO>
-								
-							Else 
-								
-								$query["$filter"]:=String:C10($meta.filter.string)
-								$query["$queryplan"]:="true"
-								
-								If (SHARED.globalFilter#Null:C1517)
-									
-									// Add the global filter
-									$query["$filter"]:="("+$query["$filter"]+") AND "+String:C10(SHARED.globalFilter)
-									
-								End if 
-								
-							End if 
+							// Data will be loaded according to the user parameters
+							$query:=Null:C1517  // <NOTHING MORE TO DO>
 							
-						Else   // Filter not validated
+						Else 
 							
-						End if 
-						
-					Else 
-						
-						If (SHARED.globalFilter#Null:C1517)
-							
-							// Use the global filter
-							$query["$filter"]:=String:C10(SHARED.globalFilter)
+							$query["$filter"]:=String:C10($meta.filter.string)
 							$query["$queryplan"]:="true"
 							
+							If (SHARED.globalFilter#Null:C1517)
+								
+								// Add the global filter
+								$query["$filter"]:="("+$query["$filter"]+") AND "+String:C10(SHARED.globalFilter)
+								
+							End if 
 						End if 
 					End if 
 					
 				Else 
 					
-					// We do not want to dump
-					$query:=Null:C1517
+					If (SHARED.globalFilter#Null:C1517)
+						
+						// Use the global filter
+						$query["$filter"]:=String:C10(SHARED.globalFilter)
+						$query["$queryplan"]:="true"
+						
+					End if 
+				End if 
+			End if 
+			
+			$cancelled:=Bool:C1537(Storage:C1525.flags.stopGeneration)
+			
+			If ($query#Null:C1517) & (Not:C34($cancelled))  // If query defined, we must dump the table
+				
+				If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
+					
+					// Display the table being processed
+					CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
+						"step"; "table"; \
+						"table"; $meta))
 					
 				End if 
 				
-				If ($query#Null:C1517)  // If query defined, we must dump the table
+				// Get field list name
+				$Obj_buffer:=dataModel(New object:C1471(\
+					"action"; "fieldNames"; \
+					"table"; $table))
+				
+				If (Bool:C1537($in.expand))  // If we want to use old way to do it, not optimized $expand
 					
-					If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
+					If ($Obj_buffer.expand.length>0)
 						
-						// Display the table being processed
-						CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
-							"step"; "table"; \
-							"table"; $meta))
+						$query["$expand"]:=$Obj_buffer.expand.join(",")
 						
 					End if 
+				End if 
+				
+				// For each page (if page allowed)
+				For ($i; 1; SHARED.data.dump.page; 1)
 					
-					// Get field list name
-					$Obj_buffer:=dataModel(New object:C1471(\
-						"action"; "fieldNames"; \
-						"table"; $table))
+					$cancelled:=Bool:C1537(Storage:C1525.flags.stopGeneration)
 					
-					If (Bool:C1537($in.expand))  // If we want to use old way to do it, not optimized $expand
+					If (Not:C34($cancelled))
 						
-						If ($Obj_buffer.expand.length>0)
+						If ($i>1)
 							
-							$query["$expand"]:=$Obj_buffer.expand.join(",")
+							If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
+								
+								// Notify user
+								CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
+									"step"; "table"; \
+									"table"; $meta; \
+									"page"; $i))
+								
+							End if 
+							
+							$query["$skip"]:=String:C10(SHARED.data.dump.limit*($i-1))
 							
 						End if 
+						
+						// Do the rest request
+						$rest:=Rest(New object:C1471(\
+							"action"; "records"; \
+							"reponseType"; Is object:K8:27; \
+							"url"; $in.url; \
+							"headers"; $in.headers; \
+							"table"; $meta.name; \
+							"fields"; $Obj_buffer.fields; \
+							"queryEncode"; True:C214; \
+							"query"; $query))
+						
+						If ($rest.errors#Null:C1517)
+							
+							If ($rest.errors.length>0)
+								
+								If ($rest.errors[0]="Invalid internal state")
+									
+									$rest:=Rest(New object:C1471(\
+										"action"; "records"; \
+										"reponseType"; Is object:K8:27; \
+										"url"; $in.url; \
+										"headers"; $in.headers; \
+										"table"; $meta.name; \
+										"fields"; $Obj_buffer.fields; \
+										"queryEncode"; True:C214; \
+										"query"; $query))
+									
+								End if 
+							End if 
+						End if 
+						
+						// Getting global stamp (maybe no more necessary , except for debug, all is done by swift code)
+						$rest.globalStamp:=$rest.response.__GlobalStamp
+						
+						If ($out.results[$meta.name]=Null:C1517)
+							
+							$out.results[$meta.name]:=New collection:C1472($rest)
+							
+						Else 
+							
+							$out.results[$meta.name].push($rest)
+							
+						End if 
+						
+						ob_error_combine($out; $rest)
+						
 					End if 
 					
-					// For each page (if page allowed)
-					For ($i; 1; SHARED.data.dump.page; 1)
+					$out.success:=$rest.success
+					$cancelled:=Bool:C1537(Storage:C1525.flags.stopGeneration)
+					
+					If (Not:C34($cancelled))
 						
-						$cancelled:=Bool:C1537(Storage:C1525.flags.stopGeneration)
+						$outputPathname:=Folder:C1567($in.output; fk platform path:K87:2).file($meta.name).platformPath
 						
-						If (Not:C34($cancelled))
+						If (Bool:C1537($in.dataSet))
 							
-							If ($i>1)
+							$outputPathname:=$outputPathname+".dataset"+Folder separator:K24:12+$meta.name
+							
+						End if 
+						
+						If ($i#1)
+							
+							$outputPathname:=$outputPathname+"."+String:C10($i-1)
+							
+						End if 
+						
+						$outputPathname:=$outputPathname+".data.json"
+						
+						// Make sure the folder exist
+						CREATE FOLDER:C475($outputPathname; *)
+						
+					End if 
+					
+					$cancelled:=Bool:C1537(Storage:C1525.flags.stopGeneration)
+					
+					If (Not:C34($cancelled))
+						
+						If (Bool:C1537($in.dataSet))
+							
+							If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
 								
-								If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
+								If ($i>=2)
 									
-									// Notify user
 									CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
-										"step"; "table"; \
+										"step"; "asset"; \
 										"table"; $meta; \
 										"page"; $i))
 									
-								End if 
-								
-								$query["$skip"]:=String:C10(SHARED.data.dump.limit*($i-1))
-								
-							End if 
-							
-							// Do the rest request
-							$rest:=Rest(New object:C1471(\
-								"action"; "records"; \
-								"reponseType"; Is text:K8:3; \
-								"url"; $in.url; \
-								"headers"; $in.headers; \
-								"table"; $meta.name; \
-								"fields"; $Obj_buffer.fields; \
-								"queryEncode"; True:C214; \
-								"query"; $query))
-							
-							If ($rest.errors#Null:C1517)
-								If ($rest.errors.length>0)
-									If ($rest.errors[0]="Invalid internal state")
-										$rest:=Rest(New object:C1471(\
-											"action"; "records"; \
-											"reponseType"; Is text:K8:3; \
-											"url"; $in.url; \
-											"headers"; $in.headers; \
-											"table"; $meta.name; \
-											"fields"; $Obj_buffer.fields; \
-											"queryEncode"; True:C214; \
-											"query"; $query))
-									End if 
+								Else 
+									
+									CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
+										"step"; "asset"; \
+										"table"; $meta))
+									
 								End if 
 							End if 
 							
-							$cancelled:=Bool:C1537(Storage:C1525.flags.stopGeneration)
-							
-							// Getting global stamp (maybe no more necessary , except for debug, all is done by swift code)
-							Case of 
-									
-									//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-								: ($cancelled)
-									
-									// <NOTHING MORE TO DO>
-									
-									//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-								: (Value type:C1509($rest.response)=Is object:K8:27)
-									
-									$rest.globalStamp:=$rest.response.__GlobalStamp
-									
-									If (Num:C11($rest.response.__SENT)<=0)
-										
-										$i:=MAXLONG:K35:2-1  // BREAK
-										$rest.noData:=True:C214
-										
-									End if 
-									
-									//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-								: (Value type:C1509($rest.response)=Is text:K8:3)
-									
-									$posBegin:=Position:C15("__GlobalStamp"; $rest.response)
-									
-									If ($posBegin>0)
-										
-										$posEnd:=Position:C15("\""; $rest.response; $posBegin+15)
-										$rest.globalStamp:=Num:C11(Substring:C12($rest.response; $posBegin+15; $posEnd-($posBegin+15)-1))
-										
-									End if 
-									
-									$Txt_buffer:=Substring:C12($rest.response; Length:C16($rest.response)-25)  // not only in final place ? XXX could do better?
-									$posBegin:=Position:C15("__SENT"; $Txt_buffer)
-									
-									If ($posBegin>0)
-										
-										$posEnd:=Position:C15(","; $Txt_buffer; $posBegin+7)
-										
-										If ($posEnd<1)
-											
-											$posEnd:=Position:C15("}"; $Txt_buffer; $posBegin+7)
-											
-										End if 
-										
-										If (Num:C11(Substring:C12($Txt_buffer; $posBegin+8; $posEnd-($posBegin+7)-1))<=0)
-											
-											$i:=MAXLONG:K35:2-1  // BREAK
-											$rest.noData:=True:C214
-											
-										End if 
-									End if 
-									
-									// XXX if blob, decode some first byte to string? (or keep text)
-									
-									//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-								Else 
-									
-									ASSERT:C1129(dev_Matrix; "Cannot decode global stamp with data type "+String:C10(Value type:C1509($rest.response)))
-									
-									//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-							End case 
-							
-							If ($result[$meta.name]=Null:C1517)
-								
-								$result[$meta.name]:=New collection:C1472($rest)
-								
-							Else 
-								
-								$result[$meta.name].push($rest)
-								
-							End if 
-							
-							ob_error_combine($out; $rest)
-							
-							Case of 
-									
-									//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-								: ($cancelled)  // TODO even if empty create data? or $i=1 before?
-									
-									// <NOTHING MORE TO DO>
-									
-									//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-								: (Bool:C1537($rest.noData))
-									
-									// Do nothing, normal
-									
-									//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-								: ($rest.success)
-									
-									If (Substring:C12($in.output; Length:C16($in.output); 1)=Folder separator:K24:12)
-										
-										$outputPathname:=$in.output+$meta.name
-										
-									Else 
-										
-										$outputPathname:=$in.output+Folder separator:K24:12+$meta.name
-										
-									End if 
-									
-									If (Bool:C1537($in.dataSet))
-										
-										$outputPathname:=$outputPathname+".dataset"+Folder separator:K24:12+$meta.name
-										
-									End if 
-									
-									If ($i#1)
-										
-										$outputPathname:=$outputPathname+"."+String:C10($i-1)
-										
-									End if 
-									
-									$outputPathname:=$outputPathname+".data.json"
-									
-									// Make sure the folder exist
-									CREATE FOLDER:C475($outputPathname; *)
-									
-									$cancelled:=Bool:C1537(Storage:C1525.flags.stopGeneration)
-									
-									If (Not:C34($cancelled))
-										
-										If (Bool:C1537($in.dataSet))
-											
-											If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
-												
-												If ($i>=2)
-													
-													CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
-														"step"; "asset"; \
-														"table"; $meta; \
-														"page"; $i))
-													
-												Else 
-													
-													CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
-														"step"; "asset"; \
-														"table"; $meta))
-													
-												End if 
-											End if 
-											
-											asset(New object:C1471(\
-												"action"; "create"; \
-												"type"; "dataset"; \
-												"target"; $in.output; \
-												"tags"; New object:C1471(\
-												"name"; $meta.name; \
-												"fileName"; $meta.name+".data.json"; \
-												"uti"; "public.json")))
-											
-										End if 
-										
-										Case of 
-												
-												//======================================
-											: (Value type:C1509($rest.response)=Is BLOB:K8:12)
-												
-												File:C1566($outputPathname; fk platform path:K87:2).setContent($rest.response)
-												$rest.write:=New object:C1471(\
-													"success"; True:C214)
-												
-												//======================================
-											: (Value type:C1509($rest.response)=Is text:K8:3)
-												
-												File:C1566($outputPathname; fk platform path:K87:2).setText($rest.response)
-												$rest.write:=New object:C1471(\
-													"success"; True:C214)
-												
-												//======================================
-											: (Value type:C1509($rest.response)=Is object:K8:27)
-												
-												$rest.write:=ob_writeToDocument($rest.response; $outputPathname; True:C214)
-												
-												//======================================
-											Else 
-												
-												$rest.write:=New object:C1471(\
-													"success"; False:C215; \
-													"errors"; New collection:C1472("No dumped data of correct type"+String:C10(Value type:C1509($rest.response))))
-												
-												//======================================
-										End case 
-										
-										ob_error_combine($out; $rest.write)
-										
-										If (Not:C34($rest.write.success))
-											
-											$rest.success:=False:C215
-											$out.success:=False:C215
-											
-										End if 
-										
-									Else 
-										
-										$out.success:=False:C215  // Global success is false
-										
-									End if 
-									
-									//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-								Else 
-									
-									$out.success:=False:C215  // Global success is false
-									
-									//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-							End case 
+							asset(New object:C1471(\
+								"action"; "create"; \
+								"type"; "dataset"; \
+								"target"; $in.output; \
+								"tags"; New object:C1471(\
+								"name"; $meta.name; \
+								"fileName"; $meta.name+".data.json"; \
+								"uti"; "public.json")))
 							
 						End if 
 						
-						If ($cancelled)
+						$rest.write:=ob_writeToDocument($rest.response; $outputPathname; True:C214)
+						ob_error_combine($out; $rest.write)
+						
+						If (Not:C34($rest.write.success))
 							
-							$i:=MAXLONG:K35:2-1  // Break
+							$rest.success:=False:C215
+							$out.success:=False:C215
 							
 						End if 
+					End if 
+					
+					If ($cancelled)
 						
-					End for 
-				End if 
+						$out.success:=False:C215
+						$i:=MAXLONG:K35:2-1  // Break
+						
+					Else 
+						
+						If ((Num:C11($rest.response.__FIRST)+Num:C11($rest.response.__SENT))>=Num:C11($rest.response.__COUNT))
+							
+							$i:=MAXLONG:K35:2-1  // BREAK
+							
+						End if 
+					End if 
+				End for 
 			End if 
-		End for each   // End table
-		
-		$out.results:=$result
+		End for each 
 		
 		//______________________________________________________
 	: ($in.action="pictures")
