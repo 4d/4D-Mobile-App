@@ -2,7 +2,6 @@ Class constructor($shortcut : Text)
 	
 	var lastError : Object
 	
-	This:C1470.errors:=""
 	This:C1470.stack:=New collection:C1472
 	This:C1470.current:=""
 	
