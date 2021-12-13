@@ -45,6 +45,8 @@ If (Count parameters:C259>=1)
 	var $o : Object
 	$o:=OB Copy:C1225($in)
 	
+	OB REMOVE:C1226($o.project; "$dialog")
+	
 	If ($o.project.$project#Null:C1517)
 		
 		OB REMOVE:C1226($o.project.$project; "$dialog")
@@ -465,7 +467,8 @@ If ($in.create)
 				"dataSet"; True:C214; \
 				"key"; $pathname; \
 				"caller"; $in.caller; \
-				"verbose"; $verbose))
+				"verbose"; $verbose; \
+				"keepUI"; True:C214))
 			
 			ob_error_combine($out; $out.dump)
 			

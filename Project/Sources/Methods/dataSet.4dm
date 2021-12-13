@@ -652,11 +652,15 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 					DELAY PROCESS:C323(Current process:C322; $delay.minimumDisplayTime-$delay.duration)
 					
 				End if 
+				
+				If (Not:C34(Bool:C1537($in.keepUI)))
+					
+					// Notify the end of the process
+					CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
+						"step"; "end"))
+					
+				End if 
 			End if 
-			
-			// Notify the end of the process
-			CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
-				"step"; "end"))
 			
 			//______________________________________________________
 		: ($in.action="readCatalog")

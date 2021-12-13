@@ -924,8 +924,6 @@ Function checkLocalQueryFilter($table : Object)
 		
 		If ($table.filter#Null:C1517)
 			
-			ASSERT:C1129(Length:C16(String:C10($table.filter.string))>0)
-			
 			$filter:=$table.filter
 			
 			OB REMOVE:C1226($filter; "error")
