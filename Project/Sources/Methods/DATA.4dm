@@ -36,66 +36,51 @@ Else   // <== WIDGETS METHOD
 	Case of 
 			
 			//==============================================
+		: ($ƒ.filter.catch())
+			
+			$ƒ.doFilter($e)
+			
+			//==============================================
 		: ($ƒ.list.catch())
 			
-			Case of 
-					
-					//______________________________________________________
-				: ($e.code=On Getting Focus:K2:7)
-					
-					//$context.listboxUI()
-					
-					//______________________________________________________
-				: ($e.code=On Mouse Enter:K2:33)
-					
-					//______________________________________________________
-				: ($e.code=On Losing Focus:K2:8)
-					
-					//$context.listboxUI()
-					
-					//$context.tables:=$context.tables
-					
-					//______________________________________________________
-				: ($e.code=On Selection Change:K2:29)
-					
-					$ƒ.lastIndex:=$ƒ.index
-					
-					$ƒ.current:=$ƒ.tables[$ƒ.index-Num:C11($ƒ.index>0)]
-					
-					$ƒ.refresh()
-					
-					//______________________________________________________
-				: ($e.code=On Mouse Enter:K2:33) & Not:C34(FEATURE.with("cancelableDatasetGeneration"))
-					
-					//_o_UI.tips.enable()
-					//_o_UI.tips.instantly()
-					
-					//______________________________________________________
-				: ($e.code=On Mouse Move:K2:35) & Not:C34(FEATURE.with("cancelableDatasetGeneration"))
-					
-					
-					
-					//______________________________________________________
-				: ($e.code=On Mouse Leave:K2:34) & Not:C34(FEATURE.with("cancelableDatasetGeneration"))
-					
-					//_o_UI.tips.defaultDelay()
-					
-					//______________________________________________________
-				: (PROJECT.isLocked())
-					
-					// NOTHING MORE TO DO
-					
-					//______________________________________________________
-				: (FEATURE.with("cancelableDatasetGeneration"))
-					
-					
-					//______________________________________________________
-				Else 
-					
-					ASSERT:C1129(False:C215; "Form event activated unnecessarily ("+$e.description+")")
-					
-					//______________________________________________________
-			End case 
+			$ƒ.doList($e)
+			
+			//==============================================
+		: ($ƒ.method.catch($e; On Clicked:K2:4))
+			
+			EDITOR.editAuthenticationMethod()
+			
+			//==============================================
+		: ($ƒ.validate.catch($e; On Clicked:K2:4))\
+			 | ($ƒ.enter.catch($e; On Clicked:K2:4))
+			
+			$ƒ.list.focus()
+			
+			$ƒ.doValidateFilter()
+			
+			//==============================================
+		: ($ƒ.embedded.catch($e; On Clicked:K2:4))
+			
+			var $table : Object
+			$table:=$ƒ.current
+			
+			If (Bool:C1537($table.embedded))
+				
+				Form:C1466.dataModel[String:C10($table.tableNumber)][""].embedded:=True:C214
+				
+			Else 
+				
+				OB REMOVE:C1226(Form:C1466.dataModel[String:C10($table.tableNumber)][""]; "embedded")
+				
+			End if 
+			
+			PROJECT.save()
+			$ƒ.update()
+			
+			//==============================================
+		: ($ƒ.queryWidget.catch($e; On Clicked:K2:4))
+			
+			$ƒ.doQueryWidget()
 			
 			//________________________________________
 	End case 

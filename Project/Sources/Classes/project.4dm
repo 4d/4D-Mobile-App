@@ -842,6 +842,8 @@ Function checkRestQueryFilter($table : Object)
 	
 	If ($filter.parameters)
 		
+		OB REMOVE:C1226($filter; "embedded")
+		
 		$buffer:=$filter.string
 		
 		If (Rgx_SubstituteText(This:C1470.regexParameters; "\\1\"@\""; ->$buffer)=0)
@@ -938,6 +940,8 @@ Function checkLocalQueryFilter($table : Object)
 			$filter.parameters:=(Match regex:C1019(This:C1470.regexParameters; $filter.string; 1))
 			
 			If ($filter.parameters)
+				
+				OB REMOVE:C1226($filter; "embedded")
 				
 				$buffer:=$filter.string
 				

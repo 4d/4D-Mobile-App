@@ -371,11 +371,7 @@
 	},
 	"06] DATA": {
 		"methods": [
-			"COMPILER_DATA",
-			"DATA",
-			"DATA_CALLBACK",
-			"DATA_Handler",
-			"DATA_OBJECTS_HANDLER"
+			"DATA"
 		],
 		"forms": [
 			"DATA"
@@ -386,6 +382,7 @@
 	},
 	"07] ACTIONS": {
 		"methods": [
+			"ACTIONS",
 			"ACTIONS_CALLBACK",
 			"COMPILER_ACTIONS"
 		],

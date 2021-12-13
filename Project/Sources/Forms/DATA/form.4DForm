@@ -9,8 +9,12 @@
 	"markerFooter": 240,
 	"events": [
 		"onLoad",
-		"onUnload",
-		"onTimer"
+		"onClick",
+		"onLosingFocus",
+		"onGettingFocus",
+		"onTimer",
+		"onSelectionChange",
+		"onAfterEdit"
 	],
 	"pageFormat": {
 		"paperName": "A4",
@@ -41,7 +45,7 @@
 					],
 					"class": "link"
 				},
-				"authenticationMethod.options": {
+				"method": {
 					"type": "button",
 					"top": 193,
 					"left": 509,
@@ -52,10 +56,9 @@
 					"focusable": false,
 					"events": [
 						"onClick"
-					],
-					"method": "DATA_OBJECTS_HANDLER"
+					]
 				},
-				"01_tables.border": {
+				"listBorder": {
 					"type": "rectangle",
 					"top": 26,
 					"left": 16,
@@ -72,14 +75,14 @@
 					"listboxType": "collection",
 					"movableRows": false,
 					"rowHeight": "32px",
-					"dataSource": "Form:C1466.$dialog.DATA.tables",
-					"currentItemSource": "Form:C1466.$dialog.DATA.current",
-					"currentItemPositionSource": "Form:C1466.$dialog.DATA.index",
-					"selectedItemsSource": "Form:C1466.$dialog.DATA.selected",
-					"metaSource": "Form:C1466.$dialog.DATA.text.call(This:C1470)",
+					"dataSource": "panel_Load.tables",
+					"currentItemSource": "panel_Load.current",
+					"currentItemPositionSource": "panel_Load.index",
+					"selectedItemsSource": "panel_Load.selected",
+					"metaSource": "panel_Load.metaInfo(This:C1470)",
 					"selectionMode": "single",
 					"scrollbarVertical": "visible",
-					"rowFillSource": "Form:C1466.$dialog.DATA.listBackground(This:C1470).color",
+					"rowFillSource": "panel_Load.backgoundColor(This:C1470)",
 					"events": [
 						"onLosingFocus",
 						"onGettingFocus",
@@ -89,7 +92,6 @@
 						"onMouseMove"
 					],
 					"hideSystemHighlight": true,
-					"method": "DATA_OBJECTS_HANDLER",
 					"columns": [
 						{
 							"name": "table_names",
@@ -165,20 +167,19 @@
 						}
 					]
 				},
-				"embedded.options": {
+				"embedded": {
 					"type": "checkbox",
 					"top": 104,
 					"left": 486,
 					"width": 308,
 					"height": 22,
 					"visibility": "hidden",
-					"dataSource": "Form:C1466.$dialog.DATA.current.embedded",
+					"dataSource": "panel_Load.current.embedded",
 					"text": ":xliff:embedDataIntoTheBuildedApplication",
 					"focusable": false,
 					"events": [
 						"onClick"
 					],
-					"method": "DATA_OBJECTS_HANDLER",
 					"dataSourceTypeHint": "boolean"
 				},
 				"01_tables.label": {
@@ -190,7 +191,7 @@
 					"text": ":xliff:tables",
 					"class": "label"
 				},
-				"02_filter.border.options": {
+				"filterBorder": {
 					"type": "rectangle",
 					"top": 28,
 					"left": 488,
@@ -199,14 +200,14 @@
 					"visibility": "hidden",
 					"class": "border"
 				},
-				"02_filter.options": {
+				"02_filter": {
 					"type": "input",
 					"top": 36,
 					"left": 495,
 					"width": 435,
 					"height": 49,
 					"visibility": "hidden",
-					"dataSource": "panel.current.filter.string",
+					"dataSource": "panel_Load.current.filter.string",
 					"dragging": "none",
 					"dropping": "none",
 					"events": [
@@ -215,10 +216,9 @@
 						"onDataChange",
 						"onAfterEdit"
 					],
-					"method": "DATA_OBJECTS_HANDLER",
 					"placeholder": ":xliff:leaveBlankToNotFilterData"
 				},
-				"query.options": {
+				"queryWidget": {
 					"type": "input",
 					"top": 0,
 					"left": 616,
@@ -226,19 +226,16 @@
 					"height": 27,
 					"visibility": "hidden",
 					"dataSourceTypeHint": "picture",
-					"focusable": false,
-					"fill": "transparent",
-					"borderStyle": "none",
-					"enterable": false,
-					"contextMenu": "none",
-					"dragging": "none",
 					"events": [
-						"onLoad",
 						"onClick"
 					],
-					"method": "DATA_OBJECTS_HANDLER"
+					"fill": "transparent",
+					"dragging": "none",
+					"enterable": false,
+					"focusable": false,
+					"contextMenu": "none"
 				},
-				"02_filter.label.options": {
+				"filterLabel": {
 					"type": "text",
 					"top": 5,
 					"left": 488,
@@ -248,7 +245,7 @@
 					"text": ":xliff:queryFilter",
 					"class": "label"
 				},
-				"validate.options": {
+				"validate": {
 					"type": "button",
 					"top": 105,
 					"left": 835,
@@ -259,11 +256,10 @@
 					"events": [
 						"onClick"
 					],
-					"method": "DATA_OBJECTS_HANDLER",
 					"focusable": false,
 					"style": "regular"
 				},
-				"enter.options": {
+				"enter": {
 					"type": "button",
 					"top": 369,
 					"left": 17,
@@ -274,10 +270,9 @@
 					"events": [
 						"onClick"
 					],
-					"method": "DATA_OBJECTS_HANDLER",
 					"display": false
 				},
-				"01_tables.embeddedLabel": {
+				"dataSize": {
 					"type": "text",
 					"top": 5,
 					"left": 268,
@@ -303,7 +298,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 84,
+	"geometryStamp": 102,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
@@ -311,5 +306,5 @@
 			"View 1": {}
 		}
 	},
-	"method": "DATA_Handler"
+	"method": "DATA"
 }

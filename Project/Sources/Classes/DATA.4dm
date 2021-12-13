@@ -21,27 +21,43 @@ Class constructor
 	This:C1470.numbereFormat:="### ### ### ### ###"
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
+	/// Design definition
 Function init()
+	
+	var $group : cs:C1710.group
 	
 	This:C1470.toBeInitialized:=False:C215
 	
-	//table list
-	This:C1470.listbox("01_tables"; "list")
+	// Table list
+	$group:=This:C1470.group("tableGroup")
+	This:C1470.listbox("list"; "01_tables").addToGroup($group)
+	This:C1470.formObject("listBorder").addToGroup($group)
 	
-	//properties
-	var $group : cs:C1710.group
+	// Properties
 	$group:=This:C1470.group("properties")
-	This:C1470.formObject("02_filter.label.options").addToGroup($group)
-	This:C1470.picture("query.options"; "queryWidget").addToGroup($group)
-	This:C1470.input("02_filter.options"; "filter").addToGroup($group)
-	This:C1470.formObject("02_filter.border.options").addToGroup($group)
-	This:C1470.button("embedded.options"; "embedded").bestSize().addToGroup($group)
-	This:C1470.button("validate.options"; "validate").bestSize().addToGroup($group)
-	This:C1470.button("enter.options"; "enter").addToGroup($group)
-	This:C1470.button("authenticationMethod.options"; "method").bestSize().addToGroup($group)
+	
+	// Filter input assistance
+	This:C1470.picture("queryWidget").addToGroup($group)
+	
+	// Filter box
+	This:C1470.input("filter"; "02_filter").addToGroup($group)
+	This:C1470.formObject("filterLabel").addToGroup($group)
+	This:C1470.formObject("filterBorder").addToGroup($group)
+	
+	// Options
+	This:C1470.button("embedded").bestSize().addToGroup($group)
+	This:C1470.button("method").bestSize().addToGroup($group)
+	This:C1470.button("validate").bestSize().addToGroup($group)
+	This:C1470.button("enter").addToGroup($group)
 	This:C1470.input("result").addToGroup($group)
 	
+	This:C1470.widget("noPublishedTable")
+	
+	// ??
+	This:C1470.formObject("dataSize")
+	
 	// === === === === === === === === === === === === === === === === === === === === ===
+	/// Initializations at loading
 Function onLoad()
 	
 	If (Not:C34(FEATURE.with("cancelableDatasetGeneration")))
@@ -52,21 +68,54 @@ Function onLoad()
 	
 	This:C1470.list.setScrollbars(False:C215; 2)
 	
-	If (This:C1470.tables=Null:C1517)\
-		 | (Num:C11((This:C1470.tables.length))=0)
+	// Get/update the table list
+	This:C1470.tableList()
+	
+	If (This:C1470.tables.length>0)
 		
-		This:C1470.tables:=PROJECT.publishedTables()
+		This:C1470.tableGroup.show()
+		This:C1470.noPublishedTable.hide()
+		
+	Else 
+		
+		This:C1470.lastIndex:=0
+		
+		This:C1470.tableGroup.hide()
+		This:C1470.noPublishedTable.show()
+		
+		This:C1470.dataSize.hide()
 		
 	End if 
+	
+	// Init the query widget
+	var $t : Text
+	$t:=File:C1566("/RESOURCES/queryWidget.svg").getText()
+	PROCESS 4D TAGS:C816($t; $t; \
+		EDITOR.selectedFillColor; \
+		Get localized string:C991("fields"); \
+		Get localized string:C991("comparators"); \
+		Get localized string:C991("operators"); \
+		"🢓")
+	This:C1470.queryWidget.setValue(cs:C1710.svg.new($t).picture())
 	
 	This:C1470.update()
 	
 	This:C1470.list.focus()
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
+	/// Update of the user interface
 Function update()
 	
 	androidLimitations(False:C215; "")
+	
+	This:C1470.properties.enable(Not:C34(PROJECT.isLocked()))
+	
+	// Select the last used table or the first one if none
+	This:C1470.list.doSafeSelect(Choose:C955(Num:C11(This:C1470.lastIndex)=0; 1; Num:C11(This:C1470.lastIndex)))
+	
+	//This.dataSize.show(This.tables.query("embedded=:1"; True).length>0)
+	
+	This:C1470.getDataSize()
 	
 	If (This:C1470.current=Null:C1517)
 		
@@ -88,6 +137,161 @@ Function update()
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
+	/// Get/update the list of published tables
+Function tableList()
+	
+	var $table : Object
+	var $c : Collection
+	
+	$c:=PROJECT.publishedTables()
+	
+	If (This:C1470.tables=Null:C1517)
+		
+		This:C1470.tables:=$c
+		
+	Else 
+		
+		// Update the table list if any
+		If ($c.length>0)
+			
+			For each ($table; $c)
+				
+				If (This:C1470.tables.query("tableNumber = :1"; Num:C11($table.tableNumber)).pop()=Null:C1517)
+					
+					// Add the table
+					This:C1470.tables.push($table)
+					
+				End if 
+			End for each 
+			
+			For each ($table; This:C1470.tables)
+				
+				If ($c.query("tableNumber = :1"; Num:C11($table.tableNumber)).pop()=Null:C1517)
+					
+					// Mark to remove
+					$table.toRemove:=True:C214
+					
+				End if 
+			End for each 
+			
+			This:C1470.tables:=This:C1470.tables.query("toRemove = null")
+			
+		Else 
+			
+			This:C1470.tables:=$c
+			
+		End if 
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+	/// Get the dump sizes if available
+Function getDataSize()
+	
+	var $pathname; $sqlID; $t : Text
+	var $size : Integer
+	var $x : Blob
+	var $table : Object
+	var $file : 4D:C1709.File
+	var $lep : cs:C1710.lep
+	
+	This:C1470.sqlite:=Null:C1517
+	
+	$pathname:=dataSet(New object:C1471("action"; "path"; \
+		"project"; New object:C1471("product"; Form:C1466.product; "$project"; Form:C1466.$project))).path
+	
+	$file:=Folder:C1567($pathname; fk platform path:K87:2).file("Resources/Structures.sqlite")
+	
+	If ($file.exists)
+		
+		$lep:=cs:C1710.lep.new()\
+			.setOutputType(Is object:K8:27)\
+			.launch(cs:C1710.path.new().scripts().file("sqlite3_sizes.sh"); "'"+$file.path+"'")
+		
+		If ($lep.success)
+			
+			This:C1470.sqlite:=$lep.outputStream
+			
+		End if 
+	End if 
+	
+	// Update the table list
+	For each ($table; This:C1470.tables)
+		
+		If (Length:C16(String:C10($table.filter.string))>0)
+			
+			$table.filterIcon:=Choose:C955(Bool:C1537($table.filter.parameters); EDITOR.userIcon; EDITOR.filterIcon)
+			
+		End if 
+		
+		If (Bool:C1537($table.embedded))\
+			 & (Not:C34(Bool:C1537($table.filter.parameters)))
+			
+			If (This:C1470.sqlite#Null:C1517)
+				
+				$t:=formatString("table-name"; $table.name)
+				
+				$sqlID:="Z"+Uppercase:C13($t)
+				
+				If (This:C1470.sqlite.tables[$sqlID]#Null:C1517)
+					
+					$size:=Num:C11(This:C1470.sqlite.tables[$sqlID])  // Size of the data dump
+					
+					If ($size>4096)
+						
+						// Add pictures size if any
+						$file:=Folder:C1567(asset(New object:C1471(\
+							"action"; "path"; \
+							"path"; $pathname)).path+"Pictures"+Folder separator:K24:12+$t+Folder separator:K24:12; \
+							fk platform path:K87:2).file("manifest.json")
+						
+						If ($file.exists)
+							
+							$size:=$size+Num:C11(JSON Parse:C1218($file.getText()).contentSize)
+							
+						End if 
+					End if 
+					
+					$table.dumpSize:=doc_bytesToString($size)
+					
+				Else 
+					
+					$table.dumpSize:=Get localized string:C991("notAvailable")
+					
+				End if 
+				
+			Else 
+				
+				// Mark: OBSOLETE ?
+				$file:=Folder:C1567($pathname; fk platform path:K87:2).file("Resources/Assets.xcassets/Data/"+$table.name+".dataset/"+$table.name+".data.json")
+				
+				If ($file.exists)
+					
+					// Get document size
+					$x:=$file.getContent()
+					$size:=BLOB size:C605($x)
+					SET BLOB SIZE:C606($x; 0)
+					
+					$file:=Folder:C1567($pathname; fk platform path:K87:2).file("Resources/Assets.xcassets/Pictures/"+$table.name+"/manifest.json")
+					
+					If ($file.exists)
+						
+						$size:=$size+JSON Parse:C1218($file.getText()).contentSize
+						
+					End if 
+					
+					$table.dumpSize:=doc_bytesToString($size)
+					
+				Else 
+					
+					$table.dumpSize:=Get localized string:C991("notAvailable")
+					
+				End if 
+			End if 
+		End if 
+	End for each 
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+	/// Display filter status
 Function displayFilter($table : Object)
 	
 	var $Comment : Text
@@ -281,6 +485,350 @@ Function displayFilter($table : Object)
 	This:C1470.result.setValue($Comment)
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
+	/// Table list script
+Function doList($e : Object)
+	
+	Case of 
+			
+			//______________________________________________________
+		: ($e.code=On Getting Focus:K2:7)
+			
+			This:C1470.list.setColors(Foreground color:K23:1)
+			This:C1470.listBorder.setColors(EDITOR.selectedColor)
+			
+			//______________________________________________________
+		: ($e.code=On Losing Focus:K2:8)
+			
+			This:C1470.list.setColors(Foreground color:K23:1)
+			This:C1470.listBorder.setColors(EDITOR.backgroundUnselectedColor)
+			This:C1470.tables:=This:C1470.tables
+			
+			//______________________________________________________
+		: ($e.code=On Selection Change:K2:29)
+			
+			This:C1470.lastIndex:=This:C1470.index
+			This:C1470.current:=Choose:C955(This:C1470.index=0; Null:C1517; This:C1470.tables[This:C1470.index-Num:C11(This:C1470.index>0)])
+			
+			This:C1470.refresh()
+			
+			//______________________________________________________
+		: ($e.code=On Mouse Enter:K2:33)
+			
+			// _o_UI.tips.enable()
+			// _o_UI.tips.instantly()
+			
+			//______________________________________________________
+		: ($e.code=On Mouse Move:K2:35)
+			
+			// Set tips
+			
+			//______________________________________________________
+		: ($e.code=On Mouse Leave:K2:34)
+			
+			// _o_UI.tips.defaultDelay()
+			
+			//______________________________________________________
+		: (PROJECT.isLocked())
+			
+			// <NOTHING MORE TO DO>
+			
+			//______________________________________________________
+	End case 
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+	/// Filter input script
+Function doFilter($e : Object)
+	
+	var $t : Text
+	var $meta; $table : Object
+	
+	$table:=This:C1470.current
+	
+	Case of 
+			
+			//______________________________________________________
+		: ($e.code=On Getting Focus:K2:7)
+			
+			This:C1470.filterBorder.setColors(EDITOR.selectedColor)
+			
+			If ($table.filter=Null:C1517)
+				
+				$table.filter:=New object:C1471(\
+					"string"; "")
+				
+				$table.validated:=False:C215
+				
+			End if 
+			
+			// Keep current filter definition
+			This:C1470.currentFilter:=OB Copy:C1225($table.filter)
+			
+			This:C1470.refresh()
+			
+			//______________________________________________________
+		: ($e.code=On Losing Focus:K2:8)
+			
+			This:C1470.filterBorder.setColors(EDITOR.backgroundUnselectedColor)
+			
+			This:C1470.refresh()
+			
+			//______________________________________________________
+		: (PROJECT.isLocked())
+			
+			// <NOTHING MORE TO DO>
+			
+			//______________________________________________________
+		: ($e.code=On Data Change:K2:15)
+			
+			This:C1470.refresh()
+			
+			//______________________________________________________
+		: ($e.code=On After Edit:K2:43)
+			
+			$t:=Get edited text:C655
+			
+			$meta:=Form:C1466.dataModel[String:C10($table.tableNumber)][""]
+			
+			If (Value type:C1509($meta.filter)#Is object:K8:27)
+				
+				$meta.filter:=New object:C1471
+				
+			End if 
+			
+			If (Length:C16($t)>0)
+				
+				$meta.filter.string:=$t
+				
+				If ($t#This:C1470.currentFilter.string)
+					
+					$meta.filter.validated:=False:C215
+					$meta.filter.parameters:=False:C215
+					OB REMOVE:C1226($meta.filter; "error")
+					
+				Else 
+					
+					$meta.filter.validated:=This:C1470.currentFilter.validated
+					$meta.filter.parameters:=This:C1470.currentFilter.parameters
+					
+					If (This:C1470.currentFilter.error#Null:C1517)
+						
+						$meta.filter.error:=This:C1470.currentFilter.error
+						$meta.filter.errors:=This:C1470.currentFilter.errors
+						
+					Else 
+						
+						OB REMOVE:C1226($meta.filter; "error")
+						
+					End if 
+				End if 
+				
+				$table.filter:=$meta.filter
+				
+			Else 
+				
+				$table.filter.string:=""
+				OB REMOVE:C1226($meta; "filter")
+				
+			End if 
+			
+			PROJECT.save()
+			
+			This:C1470.refresh()
+			
+			//______________________________________________________
+	End case 
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+	/// Validate button script
+Function doValidateFilter()
+	
+	If (PROJECT.dataSource.source="server")
+		
+		PROJECT.checkRestQueryFilter(This:C1470.current)
+		
+	Else 
+		
+		PROJECT.checkLocalQueryFilter(This:C1470.current)
+		
+	End if 
+	
+	PROJECT.save()
+	
+	This:C1470.refresh()
+	
+	PROJECT.audit(New object:C1471(\
+		"target"; New collection:C1472("filters")))
+	
+	EDITOR.updateRibbon()
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+	/// Filter input assistance widget script
+Function doQueryWidget()
+	
+	var $ID : Text
+	var $withInsertion : Boolean
+	var $catalog; $field; $highligh; $table : Object
+	var $menu : cs:C1710.menu
+	var $str : cs:C1710.str
+	
+	$ID:=SVG Find element ID by coordinates:C1054(*; This:C1470.queryWidget.name; MOUSEX; MOUSEY)
+	$table:=This:C1470.current
+	
+	$menu:=cs:C1710.menu.new()
+	
+	If (Length:C16($ID)#0)
+		
+		Case of 
+				
+				//……………………………………………………………………………………………………………………………
+			: ($ID="fields")
+				
+				$catalog:=catalog("fields"; New object:C1471(\
+					"tableName"; $table.name))
+				
+				If ($catalog.success)
+					
+					For each ($field; $catalog.fields)
+						
+						If (Position:C15(" "; $field.path)>0)
+							
+							$menu.append($field.path; "'"+$field.path+"'")
+							
+						Else 
+							
+							$menu.append($field.path; $field.path)
+							
+						End if 
+						
+						If (EDITOR.isDark)
+							
+							$menu.icon("Images/dark/fieldsIcons/field_"+String:C10($field.typeLegacy; "00")+".png")
+							
+						Else 
+							
+							$menu.icon("Images/fieldsIcons/field_"+String:C10($field.typeLegacy; "00")+".png")
+							
+						End if 
+					End for each 
+				End if 
+				
+				//……………………………………………………………………………………………………………………………
+			: ($ID="comparator")
+				
+				$menu.append(":xliff:equalTo"; "= ")
+				$menu.append(":xliff:notEqualTo"; "!= ")
+				$menu.line()
+				
+				$menu.append("IS"; "=== ")
+				$menu.append("IS NOT"; "!== ")
+				$menu.line()
+				
+				$menu.append(":xliff:lessThan"; "< ")
+				$menu.append(":xliff:greaterThan"; "> ")
+				$menu.line()
+				
+				$menu.append(":xliff:lessThanOrEqualTo"; "<= ")
+				$menu.append(":xliff:greaterThanOrEqualTo"; ">= ")
+				$menu.line()
+				
+				$menu.append(":xliff:containsKeyword"; "% ")
+				
+				//……………………………………………………………………………………………………………………………
+			: ($ID="operator")
+				
+				$menu.append("AND"; "& ")
+				$menu.append("OR"; "| ")
+				$menu.line()
+				
+				$menu.append("NOT"; "NOT({sel})")
+				$menu.line()
+				
+				$menu.append("(…)"; "NOT(({sel}))")
+				
+				//……………………………………………………………………………………………………………………………
+		End case 
+		
+		$menu.popup()
+		
+		If ($menu.selected)
+			
+			$highligh:=This:C1470.filter.highlighted()
+			$withInsertion:=(Position:C15("{sel}"; $menu.choice)>0)
+			
+			If ($withInsertion)
+				
+				$menu.choice:=Replace string:C233($menu.choice; "{sel}"; $highligh.selection)
+				
+			End if 
+			
+			If ($highligh.noSelection)\
+				 & ($highligh.start#1)
+				
+				//%W-533.2
+				If (String:C10($table.filter.string)[[$highligh.start-1]]#" ")\
+					 & (String:C10($table.filter.string)[[$highligh.start-1]]#"(")
+					
+					$table.filter.string:=$table.filter.string+" "
+					$highligh.start:=$highligh.start+1
+					$highligh.end:=$highligh.end+1
+					
+				End if 
+				//%W+533.2
+			End if 
+			
+			$table.filter.validated:=False:C215
+			
+			$str:=EDITOR.str.setText(String:C10($table.filter.string)).insert($menu.choice; $highligh.start; $highligh.end)
+			$table.filter.string:=$str.value
+			
+			Form:C1466.dataModel[String:C10($table.tableNumber)][""].filter:=$table.filter
+			
+			If ($withInsertion)\
+				 & ($highligh.withSelection)
+				
+				// Put the carret into
+				//$str.begin:=$str.end-1
+				$str.end:=$str.end-1
+				
+			End if 
+			
+			This:C1470.filter.highlight($str.end; $str.end)
+			
+			This:C1470.filter.focus()
+			
+			PROJECT.save()
+			This:C1470.refresh()
+			
+		End if 
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+	/// Table list background color expression
+Function backgoundColor($current : Object)->$color
+	
+	If (This:C1470.current=Null:C1517)
+		
+		$color:="transparent"
+		
+	Else 
+		
+		var $selected : Boolean
+		$selected:=This:C1470.list.isFocused()
+		
+		If (This:C1470.current.name=$current.name)
+			
+			$color:=Choose:C955($selected; EDITOR.backgroundSelectedColor; EDITOR.alternateSelectedColor)
+			
+		Else 
+			
+			var $backgroundColor
+			$backgroundColor:=Choose:C955($selected; EDITOR.highlightColor; EDITOR.highlightColorNoFocus)
+			$color:=Choose:C955($selected; $backgroundColor; "transparent")
+			
+		End if 
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Table list meta info expression
 Function metaInfo($current : Object)->$meta
 	
@@ -291,22 +839,21 @@ Function metaInfo($current : Object)->$meta
 		"cell"; New object:C1471(\
 		"table_names"; New object:C1471))
 	
-	If (Bool:C1537(This:C1470.embedded))
+	If (Bool:C1537($current.embedded))\
+		 & Not:C34(Bool:C1537($current.filter.parameters))
 		
 		$meta.cell.table_names.fontWeight:="bold"
 		
 	End if 
 	
-	If (This:C1470.filter#Null:C1517)
+	If ($current.filter#Null:C1517)
 		
-		If (Length:C16(String:C10(This:C1470.filter.string))>0)
+		If (Length:C16(String:C10($current.filter.string))>0)
 			
-			If (Not:C34(Bool:C1537(This:C1470.filter.validated)))
+			If (Not:C34(Bool:C1537($current.filter.validated)))
 				
 				$meta.cell.table_names.stroke:=EDITOR.errorRGB
 				
 			End if 
 		End if 
 	End if 
-	
-	

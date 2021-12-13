@@ -64,6 +64,19 @@ Function capture()
 	This:C1470.current:="err_CAPTURE"
 	
 	//===================================================================================
+	/// Hide errors
+Function hide()->$this : cs:C1710.error
+	
+	This:C1470._record()
+	
+	// Install the method
+	ON ERR CALL:C155("err_HIDE")
+	
+	This:C1470.current:="err_HIDE"
+	
+	$this:=This:C1470
+	
+	//===================================================================================
 	/// Returns true if no errors were encountered during a capture phase
 Function noError()->$noError : Boolean
 	
@@ -99,19 +112,6 @@ Function release
 		This:C1470.deinstall()
 		
 	End if 
-	
-	//===================================================================================
-	/// Hide errors
-Function hide()->$this : cs:C1710.error
-	
-	This:C1470._record()
-	
-	// Install the method
-	ON ERR CALL:C155("err_HIDE")
-	
-	This:C1470.current:="err_HIDE"
-	
-	$this:=This:C1470
 	
 	//===================================================================================
 	/// Removes the hide errors method

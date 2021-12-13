@@ -139,43 +139,6 @@ Function checkAuthenticationMethod
 		.show(Form:C1466.server.authentication.email)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-Function editAuthenticationMethod
-	
-	var $file : Object
-	var $text : Text
-	
-	ARRAY TEXT:C222($methods; 0x0000)
-	METHOD GET PATHS:C1163(Path database method:K72:2; $methods; *)
-	$methods{0}:=METHOD Get path:C1164(Path database method:K72:2; "onMobileAppAuthentication")
-	
-	// Create method if not exist
-	If (Find in array:C230($methods; $methods{0})=-1)
-		
-		If (Command name:C538(1)="Somme")
-			
-			// FR language
-			$file:=File:C1566("/RESOURCES/fr.lproj/onMobileAppAuthentication.4dm")
-			
-		Else 
-			
-			$file:=File:C1566("/RESOURCES/onMobileAppAuthentication.4dm")
-			
-		End if 
-		
-		If ($file.exists)
-			
-			$text:=$file.getText()
-			METHOD SET CODE:C1194($methods{0}; $text; *)
-			
-		End if 
-	End if 
-	
-	// Open method
-	METHOD OPEN PATH:C1213($methods{0}; *)
-	
-	This:C1470.checkAuthenticationMethod()
-	
-	//=== === === === === === === === === === === === === === === === === === === === === 
 Function initScheme
 	
 	If (Length:C16(String:C10(Form:C1466.deepLinking.urlScheme))=0)

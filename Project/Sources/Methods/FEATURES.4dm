@@ -50,7 +50,8 @@ Else   // <== WIDGETS METHOD
 			//==============================================
 		: ($ƒ.authenticationButton.catch($e; On Clicked:K2:4))
 			
-			$ƒ.editAuthenticationMethod()
+			EDITOR.editAuthenticationMethod()
+			$ƒ.checkAuthenticationMethod()
 			
 			//==============================================
 		: ($ƒ.pushNotification.catch($e; On Clicked:K2:4))

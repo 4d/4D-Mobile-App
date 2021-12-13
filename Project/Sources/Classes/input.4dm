@@ -56,12 +56,26 @@ Function highlightLastToEnd()->$this : cs:C1710.input
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function highlighted()->$highlight : Object
 	
+	var $t : Text
 	var $end; $start : Integer
+	
 	GET HIGHLIGHT:C209(*; This:C1470.name; $start; $end)
 	
 	$highlight:=New object:C1471(\
 		"start"; $start; \
-		"end"; $end)
+		"end"; $end; \
+		"length"; $end-$start; \
+		"withSelection"; $end#$start; \
+		"noSelection"; $end=$start; \
+		"selection"; "")
+	
+	$t:=This:C1470.getValue()
+	
+	If (Length:C16($t)>0)
+		
+		$highlight.selection:=Substring:C12($t; $start; $highlight.length)
+		
+	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function highlightingStart()->$pos : Integer
