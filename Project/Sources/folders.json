@@ -325,9 +325,7 @@
 	},
 	"03] DEVELOPER": {
 		"methods": [
-			"COMPILER_DEVELOPER",
-			"DEVELOPER",
-			"DEVELOPER_CALLBACK"
+			"DEVELOPER"
 		],
 		"forms": [
 			"DEVELOPER"

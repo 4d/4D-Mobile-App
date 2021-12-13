@@ -190,6 +190,9 @@ FEATURE.wip("listEditor")  // Allow to create custom Data Source Input Control
 // FEATURE.wip("xcDataModelClass")  // Use class to create core data model ie. xcDataModel (useful to refactor for alias)
 
 
+FEATURE.wip("useTextRestResponse")
+
+
 /* -------------------------------------
 OVERRIDE WITH LOCAL PREFERENCES
 ________________________________________*/

@@ -144,6 +144,22 @@ Function loadIcons()
 	This:C1470.iconPicker.setValue(editor_LoadIcons(New object:C1471("target"; "actionIcons")))
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
+	/// Return from the icons' picker
+Function setIcon($data : Object)
+	
+	This:C1470.current.icon:=$data.pathnames[$data.item-1]
+	PROJECT.save()
+	
+	// Update UI
+	var $p : Picture
+	$p:=$data.pictures[$data.item-1]
+	CREATE THUMBNAIL:C679($p; $p; 24; 24; Scaled to fit:K6:2)
+	This:C1470.current.$icon:=$p
+	This:C1470.actions.touch()
+	
+	This:C1470.refresh()
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Update UI
 Function update()
 	

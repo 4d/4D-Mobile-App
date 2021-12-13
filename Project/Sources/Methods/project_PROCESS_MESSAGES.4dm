@@ -247,7 +247,7 @@ Case of
 					//……………………………………………………………………………………………
 				: ($currentForm=$ƒ.actions)
 					
-					ACTIONS_CALLBACK("IconPickerResume"; $data)
+					panel($ƒ.actions).setIcon($data)
 					
 					//……………………………………………………………………………………………
 			End case 
@@ -356,6 +356,7 @@ Case of
 			If (Length:C16($panel)>0)
 				
 				EDITOR.callChild($panel; "ACTIONS_CALLBACK"; $selector)
+				//panel($ƒ.actions).loadIcons()
 				
 			End if 
 		End if 
@@ -439,7 +440,7 @@ Case of
 			
 			If ($data.success)
 				
-				DEVELOPER_CALLBACK(New object:C1471("action"; $selector; "value"; $data.value))
+				panel($ƒ.developer).updateTeamID(New object:C1471("action"; $selector; "value"; $data.value))
 				
 			End if 
 		End if 

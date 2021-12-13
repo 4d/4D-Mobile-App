@@ -15,13 +15,13 @@ If (False:C215)
 	C_OBJECT:C1216(dump; $0)
 End if 
 
-var $File_name; $outputPathname; $format; $tableID; $Txt_buffer; $Txt_handler : Text
-var $Txt_id; $Txt_url; $Txt_version : Text
+var $File_name; $outputPathname; $format; $tableID; $t; $handler : Text
+var $ID; $url; $version : Text
 var $imageFound : Boolean
 var $i; $posBegin; $posEnd : Integer
-var $dataModel; $delay; $meta; $Obj_buffer; $Obj_field; $Obj_record : Object
+var $dataModel; $delay; $meta; $o; $field; $record : Object
 var $query; $rest; $result; $table : Object
-var $Col_pictureFields : Collection
+var $fields : Collection
 var $destinationFile; $file : 4D:C1709.File
 var $ouputFolder : 4D:C1709.Folder
 var $error : cs:C1710.error
@@ -249,17 +249,25 @@ Case of
 				End if 
 				
 				// Get field list name
-				$Obj_buffer:=dataModel(New object:C1471(\
+				$o:=dataModel(New object:C1471(\
 					"action"; "fieldNames"; \
 					"table"; $table))
 				
 				If (Bool:C1537($in.expand))  // If we want to use old way to do it, not optimized $expand
 					
-					If ($Obj_buffer.expand.length>0)
+					If ($o.expand.length>0)
 						
-						$query["$expand"]:=$Obj_buffer.expand.join(",")
+						$query["$expand"]:=$o.expand.join(",")
 						
 					End if 
+				End if 
+				
+				If (FEATURE.with("useTextRestResponse"))
+					
+					var $rgx : cs:C1710.regex
+					$rgx:=cs:C1710.regex.new()
+					$rgx.setPattern("(?mi-s),\"__GlobalStamp\":(\\d+),\"__COUNT\":(\\d+),\"__FIRST\":(\\d+).*,\"__SENT\":(\\d+).{1,10}$")
+					
 				End if 
 				
 				// For each page (if page allowed)
@@ -286,38 +294,82 @@ Case of
 						End if 
 						
 						// Do the rest request
-						$rest:=Rest(New object:C1471(\
-							"action"; "records"; \
-							"reponseType"; Is object:K8:27; \
-							"url"; $in.url; \
-							"headers"; $in.headers; \
-							"table"; $meta.name; \
-							"fields"; $Obj_buffer.fields; \
-							"queryEncode"; True:C214; \
-							"query"; $query))
-						
-						If ($rest.errors#Null:C1517)
+						If (FEATURE.with("useTextRestResponse"))
 							
-							If ($rest.errors.length>0)
+							$rest:=Rest(New object:C1471(\
+								"action"; "records"; \
+								"reponseType"; Is text:K8:3; \
+								"url"; $in.url; \
+								"headers"; $in.headers; \
+								"table"; $meta.name; \
+								"fields"; $o.fields; \
+								"queryEncode"; True:C214; \
+								"query"; $query))
+							
+							If ($rest.errors#Null:C1517)
 								
-								If ($rest.errors[0]="Invalid internal state")
+								If ($rest.errors.length>0)
 									
-									$rest:=Rest(New object:C1471(\
-										"action"; "records"; \
-										"reponseType"; Is object:K8:27; \
-										"url"; $in.url; \
-										"headers"; $in.headers; \
-										"table"; $meta.name; \
-										"fields"; $Obj_buffer.fields; \
-										"queryEncode"; True:C214; \
-										"query"; $query))
-									
+									If ($rest.errors[0]="Invalid internal state")
+										
+										$rest:=Rest(New object:C1471(\
+											"action"; "records"; \
+											"reponseType"; Is text:K8:3; \
+											"url"; $in.url; \
+											"headers"; $in.headers; \
+											"table"; $meta.name; \
+											"fields"; $o.fields; \
+											"queryEncode"; True:C214; \
+											"query"; $query))
+										
+									End if 
 								End if 
 							End if 
+							
+							$rgx.setTarget($rest.response).match()
+							
+							If ($rgx.success)
+								
+								$rest.globalStamp:=Num:C11($rgx.matches[1].data)
+								
+							End if 
+							
+						Else 
+							
+							$rest:=Rest(New object:C1471(\
+								"action"; "records"; \
+								"reponseType"; Is object:K8:27; \
+								"url"; $in.url; \
+								"headers"; $in.headers; \
+								"table"; $meta.name; \
+								"fields"; $o.fields; \
+								"queryEncode"; True:C214; \
+								"query"; $query))
+							
+							If ($rest.errors#Null:C1517)
+								
+								If ($rest.errors.length>0)
+									
+									If ($rest.errors[0]="Invalid internal state")
+										
+										$rest:=Rest(New object:C1471(\
+											"action"; "records"; \
+											"reponseType"; Is object:K8:27; \
+											"url"; $in.url; \
+											"headers"; $in.headers; \
+											"table"; $meta.name; \
+											"fields"; $o.fields; \
+											"queryEncode"; True:C214; \
+											"query"; $query))
+										
+									End if 
+								End if 
+							End if 
+							
+							// Getting global stamp (maybe no more necessary , except for debug, all is done by swift code)
+							$rest.globalStamp:=$rest.response.__GlobalStamp
+							
 						End if 
-						
-						// Getting global stamp (maybe no more necessary , except for debug, all is done by swift code)
-						$rest.globalStamp:=$rest.response.__GlobalStamp
 						
 						If ($out.results[$meta.name]=Null:C1517)
 							
@@ -412,10 +464,21 @@ Case of
 						
 					Else 
 						
-						If ((Num:C11($rest.response.__FIRST)+Num:C11($rest.response.__SENT))>=Num:C11($rest.response.__COUNT))
+						If (FEATURE.with("useTextRestResponse"))
 							
-							$i:=MAXLONG:K35:2-1  // BREAK
+							If ((Num:C11($rgx.matches[3].data)+Num:C11($rgx.matches[4].data))>=Num:C11($rgx.matches[2].data))
+								
+								$i:=MAXLONG:K35:2-1  // BREAK
+								
+							End if 
 							
+						Else 
+							
+							If ((Num:C11($rest.response.__FIRST)+Num:C11($rest.response.__SENT))>=Num:C11($rest.response.__COUNT))
+								
+								$i:=MAXLONG:K35:2-1  // BREAK
+								
+							End if 
 						End if 
 					End if 
 				End for 
@@ -443,20 +506,20 @@ Case of
 			
 			$table:=$dataModel[$tableID]
 			$meta:=$table[""]
-			$Obj_buffer:=dataModel(New object:C1471(\
+			$o:=dataModel(New object:C1471(\
 				"action"; "pictureFields"; \
 				"table"; $table))
 			
 			// Check if there is image (XXX use some extract/filter function)
-			$Col_pictureFields:=$Obj_buffer.fields
+			$fields:=$o.fields
 			
-			If ($Col_pictureFields=Null:C1517)
+			If ($fields=Null:C1517)
 				
-				$Col_pictureFields:=New collection:C1472()  // Just to not failed, CLEAN check status instead
+				$fields:=New collection:C1472()  // Just to not failed, CLEAN check status instead
 				
 			End if 
 			
-			If ($Col_pictureFields.length>0)
+			If ($fields.length>0)
 				
 				If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
 					
@@ -475,19 +538,19 @@ Case of
 					// ----------------------------------
 					
 					// If cached rest result use it
-					$Txt_buffer:=String:C10($in.cache)+Folder separator:K24:12+$meta.name
+					$t:=String:C10($in.cache)+Folder separator:K24:12+$meta.name
 					
 					If (Bool:C1537($in.dataSet))
 						
-						$Txt_buffer:=$Txt_buffer+".dataset"+Folder separator:K24:12+$meta.name
+						$t:=$t+".dataset"+Folder separator:K24:12+$meta.name
 						
 					End if 
 					
-					$Txt_buffer:=$Txt_buffer+".data.json"
+					$t:=$t+".data.json"
 					
-					If (Test path name:C476($Txt_buffer)=Is a document:K24:1)
+					If (Test path name:C476($t)=Is a document:K24:1)
 						
-						$rest:=ob_parseDocument($Txt_buffer)
+						$rest:=ob_parseDocument($t)
 						$rest.response:=$rest.value
 						
 					Else 
@@ -514,62 +577,62 @@ Case of
 							
 						End if 
 						
-						$Txt_handler:="mobileapp/"
+						$handler:="mobileapp/"
 						
-						If (Position:C15($Txt_handler; $result.url)=0)
+						If (Position:C15($handler; $result.url)=0)
 							
-							$result.url:=$result.url+$Txt_handler
-							ASSERT:C1129(False:C215; "URL must contains "+$Txt_handler)
+							$result.url:=$result.url+$handler
+							ASSERT:C1129(False:C215; "URL must contains "+$handler)
 							
 						End if 
 						
 						If (Value type:C1509($rest.response.__ENTITIES)=Is collection:K8:32)
 							
 							// For each records
-							For each ($Obj_record; $rest.response.__ENTITIES) While (Not:C34($cancelled))
+							For each ($record; $rest.response.__ENTITIES) While (Not:C34($cancelled))
 								
 								$cancelled:=Bool:C1537(Storage:C1525.flags.stopGeneration)
 								
 								If (Not:C34($cancelled))
 									
 									// ... look for images
-									For each ($Obj_field; $Col_pictureFields) While (Not:C34($cancelled))
+									For each ($field; $fields) While (Not:C34($cancelled))
 										
 										$cancelled:=Bool:C1537(Storage:C1525.flags.stopGeneration)
 										
 										If (Not:C34($cancelled))
 											
-											$Obj_buffer:=Null:C1517
-											$Txt_id:=$Obj_record.__KEY
+											$o:=Null:C1517
+											$ID:=$record.__KEY
 											
 											Case of 
 													
 													//----------------------------------------
-												: ($Obj_field.relatedField#Null:C1517)
+												: ($field.relatedField#Null:C1517)
 													
-													$Obj_buffer:=$Obj_record[$Obj_field.relatedField]
+													$o:=$record[$field.relatedField]
 													
-													If ($Obj_buffer#Null:C1517)
+													If ($o#Null:C1517)
 														
-														If ($Obj_field.relatedDataClass#Null:C1517)
+														If ($field.relatedDataClass#Null:C1517)
 															
-															$Txt_id:=$Obj_buffer.__KEY
+															$ID:=$o.__KEY
 															
 														End if 
 														
-														$Obj_buffer:=$Obj_buffer[$Obj_field.name]
+														$o:=$o[$field.name]
 														
 													End if 
 													
 													//----------------------------------------
-												: ($Obj_record[$Obj_field.name]#Null:C1517)
+												: ($record[$field.name]#Null:C1517)
 													
-													$Obj_buffer:=$Obj_record[$Obj_field.name]
+													$o:=$record[$field.name]
 													
 													//----------------------------------------
 											End case 
 											
-											If ($Obj_buffer#Null:C1517)
+											If ($o#Null:C1517)
 												
 												If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
 													
@@ -577,18 +640,18 @@ Case of
 													CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
 														"step"; "pictures"; \
 														"table"; $meta; \
-														"id"; $Txt_id))
+														"id"; $ID))
 													
 												End if 
 												
-												If (Bool:C1537($Obj_buffer.__deferred.image))
+												If (Bool:C1537($o.__deferred.image))
 													
 													// Get url for image
-													$Txt_url:=String:C10($Obj_buffer.__deferred.uri)
+													$url:=String:C10($o.__deferred.uri)
 													
-													If (Position:C15("/mobileapp/"; $Txt_url)>0)
+													If (Position:C15("/mobileapp/"; $url)>0)
 														
-														$Txt_url:=Substring:C12($Txt_url; 12)  // Remove /mobileapp/
+														$url:=Substring:C12($url; 12)  // Remove /mobileapp/
 														
 													End if 
 													
@@ -596,17 +659,17 @@ Case of
 														
 														If ($in.format#"best")
 															
-															$Txt_url:=Replace string:C233($Txt_url; "imageformat=best"; "imageformat="+$in.format)
+															$url:=Replace string:C233($url; "imageformat=best"; "imageformat="+$in.format)
 															
 														End if 
 													End if 
 													
-													$Txt_url:=$result.url+$Txt_url
-													$Txt_version:=Substring:C12($Txt_url; Position:C15("$version="; $Txt_url)+Length:C16("$version="))
+													$url:=$result.url+$url
+													$version:=Substring:C12($url; Position:C15("$version="; $url)+Length:C16("$version="))
 													
-													If (Position:C15("&"; $Txt_version)>0)
+													If (Position:C15("&"; $version)>0)
 														
-														$Txt_version:=Substring:C12($Txt_version; 1; Position:C15("&"; $Txt_version)-1)
+														$version:=Substring:C12($version; 1; Position:C15("&"; $version)-1)
 														
 													End if 
 													
@@ -615,37 +678,37 @@ Case of
 													Case of 
 															
 															//----------------------------------------
-														: ($Obj_field.relatedDataClass#Null:C1517)  // Want to dump in relation?
+														: ($field.relatedDataClass#Null:C1517)  // Want to dump in relation?
 															
 															If (Bool:C1537($in.dataSet))
 																
-																$outputPathname:=$outputPathname+$Obj_field.relatedDataClass+Folder separator:K24:12+$Obj_field.relatedDataClass+"("+$Txt_id+")"+"_"+$Obj_field.name+"_"+$Txt_version+".imageset"+Folder separator:K24:12
+																$outputPathname:=$outputPathname+$field.relatedDataClass+Folder separator:K24:12+$field.relatedDataClass+"("+$ID+")"+"_"+$field.name+"_"+$version+".imageset"+Folder separator:K24:12
 																
 															End if 
 															
-															$File_name:=$Obj_field.relatedDataClass+"("+$Txt_id+")"+"_"+$Obj_field.name+"_"+$Txt_version
+															$File_name:=$field.relatedDataClass+"("+$ID+")"+"_"+$field.name+"_"+$version
 															
 															//----------------------------------------
-														: ($Obj_field.relatedField#Null:C1517)  // Want to dump in current table as related field
+														: ($field.relatedField#Null:C1517)  // Want to dump in current table as related field
 															
 															If (Bool:C1537($in.dataSet))
 																
-																$outputPathname:=$outputPathname+$meta.name+Folder separator:K24:12+$meta.name+"("+$Txt_id+")"+"_"+$Obj_field.relatedField+"."+$Obj_field.name+"_"+$Txt_version+".imageset"+Folder separator:K24:12
+																$outputPathname:=$outputPathname+$meta.name+Folder separator:K24:12+$meta.name+"("+$ID+")"+"_"+$field.relatedField+"."+$field.name+"_"+$version+".imageset"+Folder separator:K24:12
 																
 															End if 
 															
-															$File_name:=$meta.name+"("+$Txt_id+")"+"_"+$Obj_field.relatedField+"."+$Obj_field.name+"_"+$Txt_version
+															$File_name:=$meta.name+"("+$ID+")"+"_"+$field.relatedField+"."+$field.name+"_"+$version
 															
 															//----------------------------------------
 														Else 
 															
 															If (Bool:C1537($in.dataSet))
 																
-																$outputPathname:=$outputPathname+$meta.name+Folder separator:K24:12+$meta.name+"("+$Txt_id+")"+"_"+$Obj_field.name+"_"+$Txt_version+".imageset"+Folder separator:K24:12
+																$outputPathname:=$outputPathname+$meta.name+Folder separator:K24:12+$meta.name+"("+$ID+")"+"_"+$field.name+"_"+$version+".imageset"+Folder separator:K24:12
 																
 															End if 
 															
-															$File_name:=$meta.name+"("+$Txt_id+")"+"_"+$Obj_field.name+"_"+$Txt_version
+															$File_name:=$meta.name+"("+$ID+")"+"_"+$field.name+"_"+$version
 															
 															//----------------------------------------
 													End case 
@@ -684,7 +747,7 @@ Case of
 														
 														$rest:=Rest(New object:C1471("action"; "image"; \
 															"headers"; $in.headers; \
-															"url"; $Txt_url; \
+															"url"; $url; \
 															"target"; $outputPathname+$File_name+$format\
 															))
 														ob_error_combine($out; $rest)
