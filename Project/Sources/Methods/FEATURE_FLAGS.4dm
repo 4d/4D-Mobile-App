@@ -161,7 +161,8 @@ _____________*/
 FEATURE.unstable("androidActions")  //[Mobile] Feature flag pour activer les actions dans le projet mobile
 FEATURE.unstable("objectFieldManagement")  //[MOBILE] Object fields Management 
 FEATURE.unstable("android1ToNRelations")  // [ANDROID] 1 to N relations
-FEATURE.unstable("cancelableDatasetGeneration")  // [MOBILE] Data generation
+FEATURE.unstable("cancelableDatasetGeneration")  // [MOBILE] Data generation 
+FEATURE.unstable("useTextRestResponse")  // [MOBILE] Data generation : for optis
 
 //FEATURE.wip(129953)  //[MOBILE] Handle Many-one-Many relations
 
@@ -189,7 +190,6 @@ FEATURE.wip("newFormatterChoiceList")  // Menu to create formatter choice list d
 FEATURE.wip("listEditor")  // Allow to create custom Data Source Input Control
 // FEATURE.wip("xcDataModelClass")  // Use class to create core data model ie. xcDataModel (useful to refactor for alias)
 
-//FEATURE.wip("useTextRestResponse")
 
 
 /* -------------------------------------
