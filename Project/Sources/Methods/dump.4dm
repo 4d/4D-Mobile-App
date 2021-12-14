@@ -187,6 +187,14 @@ Case of
 		
 		$out.results:=New object:C1471
 		
+		If (FEATURE.with("useTextRestResponse"))
+			
+			var $rgx : cs:C1710.regex
+			$rgx:=cs:C1710.regex.new()
+			$rgx.setPattern("(?mi-s),\"__GlobalStamp\":(\\d+),\"__COUNT\":(\\d+),\"__FIRST\":(\\d+).*,\"__SENT\":(\\d+).{1,10}$")
+			
+		End if 
+		
 		For each ($tableID; $dataModel) While (Not:C34($cancelled))
 			
 			$query:=Null:C1517
@@ -262,14 +270,6 @@ Case of
 					End if 
 				End if 
 				
-				If (FEATURE.with("useTextRestResponse"))
-					
-					var $rgx : cs:C1710.regex
-					$rgx:=cs:C1710.regex.new()
-					$rgx.setPattern("(?mi-s),\"__GlobalStamp\":(\\d+),\"__COUNT\":(\\d+),\"__FIRST\":(\\d+).*,\"__SENT\":(\\d+).{1,10}$")
-					
-				End if 
-				
 				// For each page (if page allowed)
 				For ($i; 1; SHARED.data.dump.page; 1)
 					
@@ -294,82 +294,31 @@ Case of
 						End if 
 						
 						// Do the rest request
-						If (FEATURE.with("useTextRestResponse"))
+						$rest:=Rest(New object:C1471(\
+							"action"; "records"; \
+							"reponseType"; Choose:C955(FEATURE.with("useTextRestResponse"); Is text:K8:3; Is object:K8:27); \
+							"url"; $in.url; \
+							"headers"; $in.headers; \
+							"table"; $meta.name; \
+							"fields"; $o.fields; \
+							"queryEncode"; True:C214; \
+							"query"; $query))
+						
+						If (($rest.errors#Null:C1517) && ($rest.errors.length>0) && ($rest.errors[0]="Invalid internal state"))
 							
 							$rest:=Rest(New object:C1471(\
 								"action"; "records"; \
-								"reponseType"; Is text:K8:3; \
+								"reponseType"; Choose:C955(FEATURE.with("useTextRestResponse"); Is text:K8:3; Is object:K8:27); \
 								"url"; $in.url; \
 								"headers"; $in.headers; \
 								"table"; $meta.name; \
 								"fields"; $o.fields; \
 								"queryEncode"; True:C214; \
 								"query"; $query))
-							
-							If ($rest.errors#Null:C1517)
-								
-								If ($rest.errors.length>0)
-									
-									If ($rest.errors[0]="Invalid internal state")
-										
-										$rest:=Rest(New object:C1471(\
-											"action"; "records"; \
-											"reponseType"; Is text:K8:3; \
-											"url"; $in.url; \
-											"headers"; $in.headers; \
-											"table"; $meta.name; \
-											"fields"; $o.fields; \
-											"queryEncode"; True:C214; \
-											"query"; $query))
-										
-									End if 
-								End if 
-							End if 
-							
-							$rgx.setTarget($rest.response).match()
-							
-							If ($rgx.success)
-								
-								$rest.globalStamp:=Num:C11($rgx.matches[1].data)
-								
-							End if 
-							
-						Else 
-							
-							$rest:=Rest(New object:C1471(\
-								"action"; "records"; \
-								"reponseType"; Is object:K8:27; \
-								"url"; $in.url; \
-								"headers"; $in.headers; \
-								"table"; $meta.name; \
-								"fields"; $o.fields; \
-								"queryEncode"; True:C214; \
-								"query"; $query))
-							
-							If ($rest.errors#Null:C1517)
-								
-								If ($rest.errors.length>0)
-									
-									If ($rest.errors[0]="Invalid internal state")
-										
-										$rest:=Rest(New object:C1471(\
-											"action"; "records"; \
-											"reponseType"; Is object:K8:27; \
-											"url"; $in.url; \
-											"headers"; $in.headers; \
-											"table"; $meta.name; \
-											"fields"; $o.fields; \
-											"queryEncode"; True:C214; \
-											"query"; $query))
-										
-									End if 
-								End if 
-							End if 
-							
-							// Getting global stamp (maybe no more necessary , except for debug, all is done by swift code)
-							$rest.globalStamp:=$rest.response.__GlobalStamp
 							
 						End if 
+						
+						// Analyse response
 						
 						If ($out.results[$meta.name]=Null:C1517)
 							
@@ -385,11 +334,16 @@ Case of
 						
 					End if 
 					
-					$out.success:=$rest.success
-					$cancelled:=Bool:C1537(Storage:C1525.flags.stopGeneration)
+					$cancelled:=Bool:C1537(Storage:C1525.flags.stopGeneration) | Not:C34($rest.success)/*we stop also in case of failure*/
 					
-					If (Not:C34($cancelled))
+					If ($cancelled)
 						
+						$out.success:=False:C215
+						$i:=MAXLONG:K35:2-1  // Break
+						
+					Else 
+						
+						// Write response to text
 						$outputPathname:=Folder:C1567($in.output; fk platform path:K87:2).file($meta.name).platformPath
 						
 						If (Bool:C1537($in.dataSet))
@@ -408,12 +362,6 @@ Case of
 						
 						// Make sure the folder exist
 						CREATE FOLDER:C475($outputPathname; *)
-						
-					End if 
-					
-					$cancelled:=Bool:C1537(Storage:C1525.flags.stopGeneration)
-					
-					If (Not:C34($cancelled))
 						
 						If (Bool:C1537($in.dataSet))
 							
@@ -446,7 +394,38 @@ Case of
 							
 						End if 
 						
-						$rest.write:=ob_writeToDocument($rest.response; $outputPathname; True:C214)
+						Case of 
+								
+								//======================================
+							: (Value type:C1509($rest.response)=Is BLOB:K8:12)
+								
+								File:C1566($outputPathname; fk platform path:K87:2).setContent($rest.response)
+								$rest.write:=New object:C1471(\
+									"success"; True:C214)
+								
+								//======================================
+							: (Value type:C1509($rest.response)=Is text:K8:3)
+								
+								File:C1566($outputPathname; fk platform path:K87:2).setText($rest.response)
+								$rest.write:=New object:C1471(\
+									"success"; True:C214)
+								
+								//======================================
+							: (Value type:C1509($rest.response)=Is object:K8:27)
+								
+								$rest.write:=ob_writeToDocument($rest.response; $outputPathname; True:C214)
+								
+								//======================================
+							Else 
+								
+								$rest.write:=New object:C1471(\
+									"success"; False:C215; \
+									"errors"; New collection:C1472("No dumped data of correct type"+String:C10(Value type:C1509($rest.response))))
+								
+								//======================================
+						End case 
+						
+						
 						ob_error_combine($out; $rest.write)
 						
 						If (Not:C34($rest.write.success))
@@ -457,30 +436,42 @@ Case of
 						End if 
 					End if 
 					
-					If ($cancelled)
-						
-						$out.success:=False:C215
-						$i:=MAXLONG:K35:2-1  // Break
-						
-					Else 
+					If ($rest.response#Null:C1517)
 						
 						If (FEATURE.with("useTextRestResponse"))
 							
-							If ((Num:C11($rgx.matches[3].data)+Num:C11($rgx.matches[4].data))>=Num:C11($rgx.matches[2].data))
+							$rgx.setTarget($rest.response).match()
+							
+							If ($rgx.success)
 								
-								$i:=MAXLONG:K35:2-1  // BREAK
+								$rest.globalStamp:=Num:C11($rgx.matches[1].data)
+								$rest.first:=Num:C11($rgx.matches[3].data)
+								$rest.sent:=Num:C11($rgx.matches[4].data)
+								$rest.count:=Num:C11($rgx.matches[2].data)
+								
+							Else 
+								
+								ASSERT:C1129(dev_Matrix; "Failed to mach regex to extract global stamp and other info")
 								
 							End if 
 							
 						Else 
 							
-							If ((Num:C11($rest.response.__FIRST)+Num:C11($rest.response.__SENT))>=Num:C11($rest.response.__COUNT))
-								
-								$i:=MAXLONG:K35:2-1  // BREAK
-								
-							End if 
+							$rest.globalStamp:=$rest.response.__GlobalStamp
+							$rest.first:=$rest.response.__FIRST
+							$rest.sent:=$rest.response.__SENT
+							$rest.count:=$rest.response.__COUNT
+							
 						End if 
+						
+						If ((Num:C11($rest.first)+Num:C11($rest.sent))>=Num:C11($rest.count))
+							
+							$i:=MAXLONG:K35:2-1  // BREAK
+							
+						End if 
+						
 					End if 
+					
 				End for 
 			End if 
 		End for each 
