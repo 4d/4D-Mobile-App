@@ -18,7 +18,7 @@ Class constructor()
 	
 	This:C1470.pendingTasks:=New collection:C1472
 	
-	// Initialize tools
+	// Initialize embedded classes
 	For each ($t; New collection:C1472("str"; "path"; "tips"))
 		
 		This:C1470._instantiate($t)
@@ -34,156 +34,191 @@ Function design()
 	This:C1470.pages:=New object:C1471
 	This:C1470.currentPage:=""
 	
-	//_____________________________________________________________________
-	This:C1470.pages.general:=New object:C1471(\
-		"panels"; New collection:C1472)
-	
-	$o:=This:C1470.pages.general
-	
-	$o.panels.push(New object:C1471(\
-		"title"; Get localized string:C991("targetOs"); \
-		"form"; "TARGET"))
-	
-	$o.panels.push(New object:C1471(\
-		"title"; Get localized string:C991("organization"); \
-		"form"; "ORGANIZATION"))
-	
-	$o.panels.push(New object:C1471(\
-		"title"; Get localized string:C991("product"); \
-		"form"; "PRODUCT"))
-	
-	$o.panels.push(New object:C1471(\
-		"title"; Get localized string:C991("developer"); \
-		"form"; "DEVELOPER"))
-	
-	//_____________________________________________________________________
-	This:C1470.pages.structure:=New object:C1471(\
-		"panels"; New collection:C1472)
-	
-	$o:=This:C1470.pages.structure
-	
-	$o.panels.push(New object:C1471(\
-		"title"; Get localized string:C991("publishedStructure"); \
-		"form"; "STRUCTURE"; \
-		"noTitle"; True:C214))
-	
-	$o.action:=New object:C1471(\
-		"title"; "syncDataModel"; \
-		"show"; False:C215; \
-		"formula"; Formula:C1597(POST_MESSAGE(New object:C1471(\
-		"target"; Current form window:C827; \
-		"action"; "show"; \
-		"type"; "confirm"; \
-		"title"; "updateTheProject"; \
-		"additional"; "aBackupWillBeCreatedIntoTheProjectFolder"; \
-		"ok"; "update"; \
-		"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "syncDataModel")))))\
-		)
-	
-	//_____________________________________________________________________
-	This:C1470.pages.properties:=New object:C1471(\
-		"panels"; New collection:C1472)
-	
-	$o:=This:C1470.pages.properties
-	
-	$o.panels.push(New object:C1471(\
-		"title"; Get localized string:C991("tablesProperties"); \
-		"form"; "TABLES"))
-	
-	$o.panels.push(New object:C1471(\
-		"title"; Get localized string:C991("fieldsProperties"); \
-		"form"; "FIELDS"; \
-		"noTitle"; True:C214))
-	
-	//_____________________________________________________________________
-	This:C1470.pages.main:=New object:C1471(\
-		"panels"; New collection:C1472)
-	
-	$o:=This:C1470.pages.main
-	
-	$o.panels.push(New object:C1471(\
-		"title"; Get localized string:C991("mainMenu"); \
-		"form"; "MAIN"; \
-		"noTitle"; True:C214))
-	
-	//_____________________________________________________________________
-	This:C1470.pages.views:=New object:C1471(\
-		"panels"; New collection:C1472)
-	
-	$o:=This:C1470.pages.views
-	
-	$o.panels.push(New object:C1471(\
-		"title"; Get localized string:C991("forms"); \
-		"form"; "VIEWS"; \
-		"noTitle"; True:C214))
-	
-	$o.action:=New object:C1471(\
-		"title"; ".Repair the project"; \
-		"show"; False:C215; \
-		"formula"; Formula:C1597(POST_MESSAGE(New object:C1471(\
-		"target"; Current form window:C827; \
-		"action"; "show"; \
-		"type"; "confirm"; \
-		"title"; "updateTheProject"; \
-		"additional"; "aBackupWillBeCreatedIntoTheProjectFolder"; \
-		"ok"; "update"; \
-		"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "syncDataModel")))))\
-		)
-	
-	//_____________________________________________________________________
-	This:C1470.pages.deployment:=New object:C1471(\
-		"panels"; New collection:C1472)
-	
-	$o:=This:C1470.pages.deployment
-	
-	$o.panels.push(New object:C1471(\
-		"title"; Get localized string:C991("server"); \
-		"form"; "SERVER"))
-	
-	$o.panels.push(New object:C1471(\
-		"title"; Get localized string:C991("features"); \
-		"form"; "FEATURES"))
-	
-	If (False:C215)
+	If (True:C214)  // GENERAL
+		
+		This:C1470.pages.general:=New object:C1471(\
+			"panels"; New collection:C1472)
+		
+		$o:=This:C1470.pages.general
 		
 		$o.panels.push(New object:C1471(\
-			"title"; "UI FOR DEMO PURPOSE"; \
-			"form"; "UI"))
+			"title"; Get localized string:C991("targetOs"); \
+			"form"; "TARGET"))
+		
+		$o.panels.push(New object:C1471(\
+			"title"; Get localized string:C991("organization"); \
+			"form"; "ORGANIZATION"))
+		
+		$o.panels.push(New object:C1471(\
+			"title"; Get localized string:C991("product"); \
+			"form"; "PRODUCT"))
+		
+		$o.panels.push(New object:C1471(\
+			"title"; Get localized string:C991("developer"); \
+			"form"; "DEVELOPER"))
 		
 	End if 
 	
-	//_____________________________________________________________________
-	This:C1470.pages.data:=New object:C1471(\
-		"panels"; New collection:C1472)
+	If (True:C214)  // STRUCTURE
+		
+		This:C1470.pages.structure:=New object:C1471(\
+			"panels"; New collection:C1472)
+		
+		$o:=This:C1470.pages.structure
+		
+		$o.panels.push(New object:C1471(\
+			"title"; Get localized string:C991("publishedStructure"); \
+			"form"; "STRUCTURE"; \
+			"noTitle"; True:C214))
+		
+		$o.action:=New object:C1471(\
+			"title"; "syncDataModel"; \
+			"show"; False:C215; \
+			"formula"; Formula:C1597(POST_MESSAGE(New object:C1471(\
+			"target"; Current form window:C827; \
+			"action"; "show"; \
+			"type"; "confirm"; \
+			"title"; "updateTheProject"; \
+			"additional"; "aBackupWillBeCreatedIntoTheProjectFolder"; \
+			"ok"; "update"; \
+			"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "syncDataModel")))))\
+			)
+		
+	End if 
 	
-	$o:=This:C1470.pages.data
+	If (True:C214)  // PROPERTIES
+		
+		This:C1470.pages.properties:=New object:C1471(\
+			"panels"; New collection:C1472)
+		
+		$o:=This:C1470.pages.properties
+		
+		$o.panels.push(New object:C1471(\
+			"title"; Get localized string:C991("tablesProperties"); \
+			"form"; "TABLES"))
+		
+		$o.panels.push(New object:C1471(\
+			"title"; Get localized string:C991("fieldsProperties"); \
+			"form"; "FIELDS"; \
+			"noTitle"; True:C214))
+		
+	End if 
 	
-	$o.panels.push(New object:C1471(\
-		"title"; Get localized string:C991("source"); \
-		"form"; "SOURCE"; \
-		"help"; True:C214))
+	If (True:C214)  // MAIN
+		
+		This:C1470.pages.main:=New object:C1471(\
+			"panels"; New collection:C1472)
+		
+		$o:=This:C1470.pages.main
+		
+		$o.panels.push(New object:C1471(\
+			"title"; Get localized string:C991("mainMenu"); \
+			"form"; "MAIN"; \
+			"noTitle"; True:C214))
+		
+	End if 
 	
-	$o.panels.push(New object:C1471(\
-		"title"; Get localized string:C991("properties"); \
-		"form"; "DATA"; \
-		"help"; True:C214))
+	If (True:C214)  // VIEWS
+		
+		This:C1470.pages.views:=New object:C1471(\
+			"panels"; New collection:C1472)
+		
+		$o:=This:C1470.pages.views
+		
+		$o.panels.push(New object:C1471(\
+			"title"; Get localized string:C991("forms"); \
+			"form"; "VIEWS"; \
+			"noTitle"; True:C214))
+		
+		$o.action:=New object:C1471(\
+			"title"; ".Repair the project"; \
+			"show"; False:C215; \
+			"formula"; Formula:C1597(POST_MESSAGE(New object:C1471(\
+			"target"; Current form window:C827; \
+			"action"; "show"; \
+			"type"; "confirm"; \
+			"title"; "updateTheProject"; \
+			"additional"; "aBackupWillBeCreatedIntoTheProjectFolder"; \
+			"ok"; "update"; \
+			"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "syncDataModel")))))\
+			)
+		
+	End if 
 	
-	//_____________________________________________________________________
-	This:C1470.pages.actions:=New object:C1471(\
-		"panels"; New collection:C1472)
+	If (True:C214)  // DEPLOYMENT
+		
+		This:C1470.pages.deployment:=New object:C1471(\
+			"panels"; New collection:C1472)
+		
+		$o:=This:C1470.pages.deployment
+		
+		$o.panels.push(New object:C1471(\
+			"title"; Get localized string:C991("server"); \
+			"form"; "SERVER"))
+		
+		$o.panels.push(New object:C1471(\
+			"title"; Get localized string:C991("features"); \
+			"form"; "FEATURES"))
+		
+		If (False:C215)
+			
+			$o.panels.push(New object:C1471(\
+				"title"; "UI FOR DEMO PURPOSE"; \
+				"form"; "UI"))
+			
+		End if 
+	End if 
 	
-	$o:=This:C1470.pages.actions
+	If (True:C214)  // DATA
+		
+		This:C1470.pages.data:=New object:C1471(\
+			"panels"; New collection:C1472)
+		
+		$o:=This:C1470.pages.data
+		
+		If (FEATURE.with(8858)) & False:C215
+			
+			$o.panels.push(New object:C1471(\
+				"title"; Get localized string:C991("source"); \
+				"form"; "SOURCE1"; \
+				"help"; True:C214))
+			
+		Else 
+			
+			$o.panels.push(New object:C1471(\
+				"title"; Get localized string:C991("source"); \
+				"form"; "SOURCE"; \
+				"help"; True:C214))
+			
+		End if 
+		
+		$o.panels.push(New object:C1471(\
+			"title"; Get localized string:C991("properties"); \
+			"form"; "DATA"; \
+			"help"; True:C214))
+		
+	End if 
 	
-	$o.panels.push(New object:C1471(\
-		"form"; "ACTIONS"; \
-		"noTitle"; True:C214))  //;"noSeparator"; True))
-	
-	$o.panels.push(New object:C1471(\
-		"title"; Get localized string:C991("page_action_params"); \
-		"form"; "ACTIONS_PARAMS"; \
-		"noTitle"; True:C214))
+	If (True:C214)  // ACTIONS
+		
+		This:C1470.pages.actions:=New object:C1471(\
+			"panels"; New collection:C1472)
+		
+		$o:=This:C1470.pages.actions
+		
+		$o.panels.push(New object:C1471(\
+			"form"; "ACTIONS"; \
+			"noTitle"; True:C214))  //;"noSeparator"; True))
+		
+		$o.panels.push(New object:C1471(\
+			"title"; Get localized string:C991("page_action_params"); \
+			"form"; "ACTIONS_PARAMS"; \
+			"noTitle"; True:C214))
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
+	/// Design definition
 Function init()
 	
 	var $group : cs:C1710.group
@@ -435,6 +470,7 @@ Function goToPage($page : Text)
 		
 	End if 
 	
+	//MARK:-TASKS
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function addTask($task : Text)
 	
@@ -508,6 +544,13 @@ Function taskNotInProgress($taskID : Text)->$response : Boolean
 	
 	$response:=(This:C1470.pendingTasks.extract("name").indexOf($taskID)=-1)
 	
+	//MARK:-UI
+	//=== === === === === === === === === === === === === === === === === === === === ===
+	// Refresh displayed panels
+Function refreshPanels()
+	
+	This:C1470.callChild(This:C1470.project; "PROJECT_ON_ACTIVATE")
+	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function hidePicker()
 	
@@ -537,64 +580,6 @@ Function refreshViews()
 	RECORD.info("refreshViews()")
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function checkDevTools()
-	
-	This:C1470.addTask("checkDevTools")
-	This:C1470.callWorker("editor_CHECK_INSTALLATION"; New object:C1471(\
-		"caller"; This:C1470.window; \
-		"xCode"; This:C1470.xCode; \
-		"studio"; This:C1470.studio; \
-		"android"; PROJECT.$android; \
-		"ios"; PROJECT.$ios\
-		))
-	
-	//===================================================================================
-Function checkProject()
-	
-	// Launch checking the structure
-	This:C1470.addTask("checkProject")
-	This:C1470.callWorker("_o_structure"; New object:C1471(\
-		"caller"; This:C1470.window; \
-		"action"; "catalog"\
-		))
-	
-	// Launch project verifications
-	This:C1470.callMeBack("projectAudit")
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-Function getDevices()
-	
-	This:C1470.addTask("getDevices")
-	This:C1470.callWorker("editor_GET_DEVICES"; New object:C1471(\
-		"caller"; This:C1470.window; \
-		"xCode"; This:C1470.xCode; \
-		"studio"; This:C1470.studio\
-		))
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-Function getDevice($udid : Text)->$device : Object
-	
-	$device:=This:C1470.devices.apple.query("udid = :1"; $udid).pop()
-	
-	If ($device=Null:C1517)
-		
-		$device:=This:C1470.devices.plugged.apple.query("udid = :1"; $udid).pop()
-		
-	End if 
-	
-	If ($device=Null:C1517)
-		
-		$device:=This:C1470.devices.android.query("udid = :1"; $udid).pop()
-		
-	End if 
-	
-	If ($device=Null:C1517)
-		
-		$device:=This:C1470.devices.plugged.android.query("udid = :1"; $udid).pop()
-		
-	End if 
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
 Function setHeader()
 	
 	This:C1470.description.setValue(This:C1470.currentPage)
@@ -604,124 +589,7 @@ Function updateHeader($data : Object)
 	
 	This:C1470.callChild(This:C1470.description; "editor_UPDATE_HEADER"; $data)
 	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-	// Refresh displayed panels
-Function refreshPanels()
-	
-	This:C1470.callChild(This:C1470.project; "PROJECT_ON_ACTIVATE")
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-Function doGenerate($keyPathname : Text)
-	
-	var $ƒ : 4D:C1709.Function
-	
-	$ƒ:=Formula:C1597(CALL WORKER:C1389(EDITOR.worker; "dataSet"; New object:C1471(\
-		"caller"; EDITOR.window; \
-		"action"; "create"; \
-		"eraseIfExists"; True:C214; \
-		"project"; PROJECT; \
-		"digest"; True:C214; \
-		"coreDataSet"; True:C214; \
-		"key"; $keyPathname; \
-		"dataSet"; True:C214)))
-	
-	POST_MESSAGE(New object:C1471(\
-		"target"; This:C1470.window; \
-		"action"; "show"; \
-		"type"; "cancelableProgress"; \
-		"title"; "dataGeneration"; \
-		"autostart"; $ƒ; \
-		"stopFormula"; Formula:C1597(EDITOR.doStopDataGeneration())\
-		))
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-Function doStopDataGeneration()
-	
-	Use (Storage:C1525)
-		
-		If (Storage:C1525.flags=Null:C1517)
-			
-			Storage:C1525.flags:=New shared object:C1526
-			
-		End if 
-		
-		Use (Storage:C1525.flags)
-			
-			Storage:C1525.flags.stopGeneration:=True:C214
-			
-		End use 
-	End use 
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-Function doCancelableProgress($content; $additional : Text)
-	
-	If (Count parameters:C259>=2)
-		
-		POST_MESSAGE(New object:C1471(\
-			"target"; This:C1470.window; \
-			"action"; "show"; \
-			"type"; "cancelableProgress"; \
-			"title"; String:C10($content); \
-			"additional"; $additional\
-			))
-		
-	Else 
-		
-		If (Value type:C1509($content)=Is object:K8:27)
-			
-			$content.target:=This:C1470.window
-			$content.action:="show"
-			$content.type:="cancelableProgress"
-			
-			POST_MESSAGE($content)
-			
-		Else 
-			
-			POST_MESSAGE(New object:C1471(\
-				"target"; This:C1470.window; \
-				"action"; "show"; \
-				"type"; "cancelableProgress"; \
-				"title"; String:C10($content)\
-				))
-			
-		End if 
-	End if 
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-Function doAlert($content; $additional : Text)
-	
-	If (Count parameters:C259>=2)
-		
-		POST_MESSAGE(New object:C1471(\
-			"target"; This:C1470.window; \
-			"action"; "show"; \
-			"type"; "alert"; \
-			"title"; String:C10($content); \
-			"additional"; $additional\
-			))
-		
-	Else 
-		
-		If (Value type:C1509($content)=Is object:K8:27)
-			
-			$content.target:=This:C1470.window
-			$content.action:="show"
-			$content.type:="alert"
-			
-			POST_MESSAGE($content)
-			
-		Else 
-			
-			POST_MESSAGE(New object:C1471(\
-				"target"; This:C1470.window; \
-				"action"; "show"; \
-				"type"; "alert"; \
-				"title"; String:C10($content)\
-				))
-			
-		End if 
-	End if 
-	
+	//MARK:-Widget methods
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function messageContainer($e : Object)
 	
@@ -861,6 +729,180 @@ Function ribbonContainer($e : Object)
 			
 			//…………………………………………………………………………………………………
 	End case 
+	
+	//MARK:-TOOLS
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function checkDevTools()
+	
+	This:C1470.addTask("checkDevTools")
+	This:C1470.callWorker("editor_CHECK_INSTALLATION"; New object:C1471(\
+		"caller"; This:C1470.window; \
+		"xCode"; This:C1470.xCode; \
+		"studio"; This:C1470.studio; \
+		"android"; PROJECT.$android; \
+		"ios"; PROJECT.$ios\
+		))
+	
+	//===================================================================================
+Function checkProject()
+	
+	// Launch checking the structure
+	This:C1470.addTask("checkProject")
+	This:C1470.callWorker("_o_structure"; New object:C1471(\
+		"caller"; This:C1470.window; \
+		"action"; "catalog"\
+		))
+	
+	// Launch project verifications
+	This:C1470.callMeBack("projectAudit")
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function getDevices()
+	
+	This:C1470.addTask("getDevices")
+	This:C1470.callWorker("editor_GET_DEVICES"; New object:C1471(\
+		"caller"; This:C1470.window; \
+		"xCode"; This:C1470.xCode; \
+		"studio"; This:C1470.studio\
+		))
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function getDevice($udid : Text)->$device : Object
+	
+	$device:=This:C1470.devices.apple.query("udid = :1"; $udid).pop()
+	
+	If ($device=Null:C1517)
+		
+		$device:=This:C1470.devices.plugged.apple.query("udid = :1"; $udid).pop()
+		
+	End if 
+	
+	If ($device=Null:C1517)
+		
+		$device:=This:C1470.devices.android.query("udid = :1"; $udid).pop()
+		
+	End if 
+	
+	If ($device=Null:C1517)
+		
+		$device:=This:C1470.devices.plugged.android.query("udid = :1"; $udid).pop()
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function doGenerate($keyPathname : Text)
+	
+	var $ƒ : 4D:C1709.Function
+	
+	$ƒ:=Formula:C1597(CALL WORKER:C1389(EDITOR.worker; "dataSet"; New object:C1471(\
+		"caller"; EDITOR.window; \
+		"action"; "create"; \
+		"eraseIfExists"; True:C214; \
+		"project"; PROJECT; \
+		"digest"; True:C214; \
+		"coreDataSet"; True:C214; \
+		"key"; $keyPathname; \
+		"dataSet"; True:C214)))
+	
+	POST_MESSAGE(New object:C1471(\
+		"target"; This:C1470.window; \
+		"action"; "show"; \
+		"type"; "cancelableProgress"; \
+		"title"; "dataGeneration"; \
+		"additional"; "datagenerationPreparations"; \
+		"autostart"; $ƒ; \
+		"stopFormula"; Formula:C1597(EDITOR.doStopDataGeneration()); \
+		"cancelMessage"; "doYouWantToCancelTheDataGenerationProcess"\
+		))
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function doStopDataGeneration()
+	
+	Use (Storage:C1525)
+		
+		If (Storage:C1525.flags=Null:C1517)
+			
+			Storage:C1525.flags:=New shared object:C1526
+			
+		End if 
+		
+		Use (Storage:C1525.flags)
+			
+			Storage:C1525.flags.stopGeneration:=True:C214
+			
+		End use 
+	End use 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function doCancelableProgress($content; $additional : Text)
+	
+	If (Count parameters:C259>=2)
+		
+		POST_MESSAGE(New object:C1471(\
+			"target"; This:C1470.window; \
+			"action"; "show"; \
+			"type"; "cancelableProgress"; \
+			"title"; String:C10($content); \
+			"additional"; $additional; \
+			"cancelMessage"; "doYouWantToCancelTheDataGenerationProcess"\
+			))
+		
+	Else 
+		
+		If (Value type:C1509($content)=Is object:K8:27)
+			
+			$content.target:=This:C1470.window
+			$content.action:="show"
+			$content.type:="cancelableProgress"
+			
+			POST_MESSAGE($content)
+			
+		Else 
+			
+			POST_MESSAGE(New object:C1471(\
+				"target"; This:C1470.window; \
+				"action"; "show"; \
+				"type"; "cancelableProgress"; \
+				"title"; String:C10($content)\
+				))
+			
+		End if 
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function doAlert($content; $additional : Text)
+	
+	If (Count parameters:C259>=2)
+		
+		POST_MESSAGE(New object:C1471(\
+			"target"; This:C1470.window; \
+			"action"; "show"; \
+			"type"; "alert"; \
+			"title"; String:C10($content); \
+			"additional"; $additional\
+			))
+		
+	Else 
+		
+		If (Value type:C1509($content)=Is object:K8:27)
+			
+			$content.target:=This:C1470.window
+			$content.action:="show"
+			$content.type:="alert"
+			
+			POST_MESSAGE($content)
+			
+		Else 
+			
+			POST_MESSAGE(New object:C1471(\
+				"target"; This:C1470.window; \
+				"action"; "show"; \
+				"type"; "alert"; \
+				"title"; String:C10($content)\
+				))
+			
+		End if 
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function editAuthenticationMethod()

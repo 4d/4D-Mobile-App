@@ -195,7 +195,21 @@ Case of
 			
 		End if 
 		
-		For each ($tableID; $dataModel) While (Not:C34($cancelled))
+		var $count; $page; $pages : Integer
+		
+		var $useTextRestResponse : Boolean
+		$useTextRestResponse:=FEATURE.with("useTextRestResponse")
+		
+		var $notify : 4D:C1709.Function
+		$notify:=Formula:C1597(CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; $1))
+		
+		var $targetFolder : 4D:C1709.Folder
+		$targetFolder:=Folder:C1567($in.output; fk platform path:K87:2)
+		
+		// Make sure the folder exist
+		$targetFolder.create()
+		
+		For each ($tableID; $dataModel) While ($out.success & Not:C34($cancelled))
 			
 			$query:=Null:C1517
 			
@@ -250,7 +264,7 @@ Case of
 				If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
 					
 					// Display the table being processed
-					CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
+					$notify.call(Null:C1517; New object:C1471(\
 						"step"; "table"; \
 						"table"; $meta))
 					
@@ -271,32 +285,49 @@ Case of
 				End if 
 				
 				// For each page (if page allowed)
-				For ($i; 1; SHARED.data.dump.page; 1)
+				For ($page; 1; SHARED.data.dump.page; 1)
 					
 					$cancelled:=Bool:C1537(Storage:C1525.flags.stopGeneration)
 					
 					If (Not:C34($cancelled))
 						
-						If ($i>1)
+						If ($page>1)
 							
 							If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
 								
+								If ($pages=0)
+									
+									If ($useTextRestResponse)
+										
+										$count:=Num:C11($rgx.matches[2].data)
+										
+									Else 
+										
+										$count:=Num:C11($rest.response.__COUNT)
+										
+									End if 
+									
+									$pages:=($count\SHARED.data.dump.limit)+Num:C11(($count%SHARED.data.dump.limit)>0)
+									
+								End if 
+								
 								// Notify user
-								CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
+								$notify.call(Null:C1517; New object:C1471(\
 									"step"; "table"; \
 									"table"; $meta; \
-									"page"; $i))
+									"page"; $page; \
+									"pages"; $pages))
 								
 							End if 
 							
-							$query["$skip"]:=String:C10(SHARED.data.dump.limit*($i-1))
+							$query["$skip"]:=String:C10(SHARED.data.dump.limit*($page-1))
 							
 						End if 
 						
 						// Do the rest request
 						$rest:=Rest(New object:C1471(\
 							"action"; "records"; \
-							"reponseType"; Choose:C955(FEATURE.with("useTextRestResponse"); Is text:K8:3; Is object:K8:27); \
+							"reponseType"; Choose:C955($useTextRestResponse; Is text:K8:3; Is object:K8:27); \
 							"url"; $in.url; \
 							"headers"; $in.headers; \
 							"table"; $meta.name; \
@@ -304,84 +335,96 @@ Case of
 							"queryEncode"; True:C214; \
 							"query"; $query))
 						
-						If (($rest.errors#Null:C1517) && ($rest.errors.length>0) && ($rest.errors[0]="Invalid internal state"))
+						If ($rest.errors#Null:C1517)
 							
-							$rest:=Rest(New object:C1471(\
-								"action"; "records"; \
-								"reponseType"; Choose:C955(FEATURE.with("useTextRestResponse"); Is text:K8:3; Is object:K8:27); \
-								"url"; $in.url; \
-								"headers"; $in.headers; \
-								"table"; $meta.name; \
-								"fields"; $o.fields; \
-								"queryEncode"; True:C214; \
-								"query"; $query))
-							
+							If ($rest.errors.length>0)
+								
+								If ($rest.errors[0]="Invalid internal state")
+									
+									$rest:=Rest(New object:C1471(\
+										"action"; "records"; \
+										"reponseType"; Choose:C955($useTextRestResponse; Is text:K8:3; Is object:K8:27); \
+										"url"; $in.url; \
+										"headers"; $in.headers; \
+										"table"; $meta.name; \
+										"fields"; $o.fields; \
+										"queryEncode"; True:C214; \
+										"query"; $query))
+									
+								End if 
+							End if 
 						End if 
 						
-						// Analyse response
-						
-						If ($out.results[$meta.name]=Null:C1517)
-							
-							$out.results[$meta.name]:=New collection:C1472($rest)
-							
-						Else 
-							
-							$out.results[$meta.name].push($rest)
-							
-						End if 
-						
+						$out.success:=$rest.success
 						ob_error_combine($out; $rest)
 						
+						If ($out.success)
+							
+							// Analyse response
+							If ($useTextRestResponse)
+								
+								$rgx.setTarget($rest.response).match()
+								
+								If ($rgx.success)
+									
+									$rest.globalStamp:=Num:C11($rgx.matches[1].data)
+									
+								End if 
+								
+							Else 
+								
+								$rest.globalStamp:=$rest.response.__GlobalStamp
+								
+							End if 
+							
+							If ($out.results[$meta.name]=Null:C1517)
+								
+								$out.results[$meta.name]:=New collection:C1472($rest)
+								
+							Else 
+								
+								$out.results[$meta.name].push($rest)
+								
+							End if 
+						End if 
 					End if 
 					
-					$cancelled:=Bool:C1537(Storage:C1525.flags.stopGeneration) | Not:C34($rest.success)/*we stop also in case of failure*/
+					$cancelled:=Bool:C1537(Storage:C1525.flags.stopGeneration)
 					
-					If ($cancelled)
+					If ($out.success & Not:C34($cancelled))
 						
-						$out.success:=False:C215
-						$i:=MAXLONG:K35:2-1  // Break
-						
-					Else 
-						
-						// Write response to text
-						$outputPathname:=Folder:C1567($in.output; fk platform path:K87:2).file($meta.name).platformPath
+						$outputPathname:=$targetFolder.file($meta.name).platformPath
 						
 						If (Bool:C1537($in.dataSet))
 							
 							$outputPathname:=$outputPathname+".dataset"+Folder separator:K24:12+$meta.name
 							
-						End if 
-						
-						If ($i#1)
-							
-							$outputPathname:=$outputPathname+"."+String:C10($i-1)
-							
-						End if 
-						
-						$outputPathname:=$outputPathname+".data.json"
-						
-						// Make sure the folder exist
-						CREATE FOLDER:C475($outputPathname; *)
-						
-						If (Bool:C1537($in.dataSet))
-							
 							If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
 								
-								If ($i>=2)
+								If ($page>=2)
 									
-									CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
+									$notify.call(Null:C1517; New object:C1471(\
 										"step"; "asset"; \
 										"table"; $meta; \
-										"page"; $i))
+										"page"; $page; \
+										"pages"; $pages))
 									
 								Else 
 									
-									CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
+									$notify.call(Null:C1517; New object:C1471(\
 										"step"; "asset"; \
 										"table"; $meta))
 									
 								End if 
 							End if 
+							
+							If ($page#1)
+								
+								$outputPathname:=$outputPathname+"."+String:C10($page-1)
+								
+							End if 
+							
+							$outputPathname:=$outputPathname+".data.json"
 							
 							asset(New object:C1471(\
 								"action"; "create"; \
@@ -420,11 +463,10 @@ Case of
 								
 								$rest.write:=New object:C1471(\
 									"success"; False:C215; \
-									"errors"; New collection:C1472("No dumped data of correct type"+String:C10(Value type:C1509($rest.response))))
+									"errors"; New collection:C1472("No dumped data of correct type: "+String:C10(Value type:C1509($rest.response))))
 								
 								//======================================
 						End case 
-						
 						
 						ob_error_combine($out; $rest.write)
 						
@@ -436,42 +478,31 @@ Case of
 						End if 
 					End if 
 					
-					If ($rest.response#Null:C1517)
+					// Resume
+					If (Not:C34($out.success) | $cancelled)
 						
-						If (FEATURE.with("useTextRestResponse"))
+						$out.success:=False:C215
+						$page:=MAXLONG:K35:2-1  // Break
+						
+					Else 
+						
+						If ($useTextRestResponse)
 							
-							$rgx.setTarget($rest.response).match()
-							
-							If ($rgx.success)
+							If ((Num:C11($rgx.matches[3].data)+Num:C11($rgx.matches[4].data))>=Num:C11($rgx.matches[2].data))
 								
-								$rest.globalStamp:=Num:C11($rgx.matches[1].data)
-								$rest.first:=Num:C11($rgx.matches[3].data)
-								$rest.sent:=Num:C11($rgx.matches[4].data)
-								$rest.count:=Num:C11($rgx.matches[2].data)
-								
-							Else 
-								
-								ASSERT:C1129(dev_Matrix; "Failed to mach regex to extract global stamp and other info")
+								$page:=MAXLONG:K35:2-1  // BREAK
 								
 							End if 
 							
 						Else 
 							
-							$rest.globalStamp:=$rest.response.__GlobalStamp
-							$rest.first:=$rest.response.__FIRST
-							$rest.sent:=$rest.response.__SENT
-							$rest.count:=$rest.response.__COUNT
-							
+							If ((Num:C11($rest.response.__FIRST)+Num:C11($rest.response.__SENT))>=Num:C11($rest.response.__COUNT))
+								
+								$page:=MAXLONG:K35:2-1  // BREAK
+								
+							End if 
 						End if 
-						
-						If ((Num:C11($rest.first)+Num:C11($rest.sent))>=Num:C11($rest.count))
-							
-							$i:=MAXLONG:K35:2-1  // BREAK
-							
-						End if 
-						
 					End if 
-					
 				End for 
 			End if 
 		End for each 

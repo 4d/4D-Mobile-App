@@ -70,16 +70,20 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 				: (Value type:C1509($in.project)=Is object:K8:27)
 					
 					Case of 
+							
+							//======================================
 						: ($in.project._folder#Null:C1517)
 							
 							$out.path:=$in.project._folder.folder("project.dataSet").platformPath
 							$out.success:=True:C214
 							
+							//======================================
 						: (Value type:C1509($in.project.$project)#Is object:K8:27)
 							
 							$out.errors:=New collection:C1472("No product path defined to get dataset path")
 							$out.success:=False:C215
 							
+							//======================================
 						Else 
 							
 							// Just in case root not defined, recreate it with project path
@@ -105,12 +109,11 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 								
 							End if 
 							
+							//======================================
 					End case 
 					
 					//----------------------------------------
-				: (Value type:C1509($in.project)=Is text:K8:3)
-					
-					// for test purpose, allow to inject file path
+				: (Value type:C1509($in.project)=Is text:K8:3)  // For test purpose, allow to inject file path
 					
 					Case of 
 							
@@ -421,6 +424,14 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 						
 					End if 
 					
+					If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
+						
+						$delay.start:=Tickcount:C458
+						
+						DELAY PROCESS:C323(Current process:C322; ($delay.minimumDisplayTime/2))
+						
+					End if 
+					
 					$Txt_assets:=asset(New object:C1471("action"; "path")).path
 					
 					Case of 
@@ -477,13 +488,6 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 							
 							//----------------------------------------
 					End case 
-					
-					If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
-						
-						CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
-							"step"; "datagenerationPreparations"))
-						
-					End if 
 					
 					$out.catalog:=dump(New object:C1471(\
 						"action"; "catalog"; \

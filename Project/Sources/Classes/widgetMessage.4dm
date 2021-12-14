@@ -131,11 +131,11 @@ Function display()
 				If (Value type:C1509(Form:C1466.title)=Is collection:K8:32)
 					
 					$c:=$o.value.copy()
-					$widget.setValue(This:C1470.str.setText($c.shift()).localized($c))
+					$widget.setValue(This:C1470.str.localize($c.shift(); $c))
 					
 				Else 
 					
-					$widget.setValue(This:C1470.str.setText($o.value).localized())
+					$widget.setValue(This:C1470.str.localize($o.value))
 					
 				End if 
 				
@@ -180,11 +180,11 @@ Function display()
 				If (Value type:C1509(Form:C1466.additional)=Is collection:K8:32)
 					
 					$c:=$o.value.copy()
-					$widget.setValue(This:C1470.str.setText($c.shift()).localized($c))
+					$widget.setValue(This:C1470.str.localize($c.shift(); $c))
 					
 				Else 
 					
-					$widget.setValue(This:C1470.str.setText($o.value).localized())
+					$widget.setValue(This:C1470.str.localize($o.value))
 					
 				End if 
 				
@@ -217,12 +217,12 @@ Function display()
 				//……………………………………………………………………………………………………………………
 			: ($o.key="ok")
 				
-				This:C1470.ok.setTitle(This:C1470.str.setText($o.value).localized()).show()
+				This:C1470.ok.setTitle(This:C1470.str.localize($o.value)).show()
 				
 				//……………………………………………………………………………………………………………………
 			: ($o.key="cancel")
 				
-				This:C1470.cancel.setTitle(This:C1470.str.setText($o.value).localized()).show()
+				This:C1470.cancel.setTitle(This:C1470.str.localize($o.value)).show()
 				
 				//……………………………………………………………………………………………………………………
 			: ($o.key="type")
@@ -259,7 +259,7 @@ Function display()
 				//……………………………………………………………………………………………………………………
 			: ($o.key="option")
 				
-				This:C1470.optional.setTitle(This:C1470.str.setText(String:C10($o.value.label)).localized()).show()
+				This:C1470.optional.setTitle(This:C1470.str.localize(String:C10($o.value.label))).show()
 				
 				//……………………………………………………………………………………………………………………
 			: ($o.key="help")
@@ -488,7 +488,17 @@ Function doHelp()
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function doStop()
 	
-	CONFIRM:C162(Get localized string:C991("areYouSure"); Get localized string:C991("stop"))
+	If (Form:C1466.cancelMessage#Null:C1517)
+		
+		CONFIRM:C162(This:C1470.str.localize(Form:C1466.cancelMessage))
+		
+	Else 
+		
+		CONFIRM:C162(This:C1470.str.localize("areYouSure"); This:C1470.str.localize("stop"))
+		
+	End if 
+	
+	
 	
 	If (Bool:C1537(OK))
 		

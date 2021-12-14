@@ -41,7 +41,7 @@ Case of
 						
 					Else 
 						
-						$o.additional:=EDITOR.str.localize("dataRequest"; $data.table.name)+" ("+String:C10($data.page)+")"
+						$o.additional:=EDITOR.str.localize("dataRequest"; $data.table.name)+" ("+String:C10($data.page)+"/"+String:C10($data.pages)+")"
 						$o.additional:=$o.additional+"\r"+EDITOR.str.localize("dataConsiderToSetAFilter")
 						
 					End if 
@@ -76,7 +76,7 @@ Case of
 						
 					Else 
 						
-						$o.additional:=EDITOR.str.localize("dataCoreDataInjection"; $data.table.name)+" ("+String:C10($data.page)+")"
+						$o.additional:=EDITOR.str.localize("dataCoreDataInjection"; $data.table.name)+" ("+String:C10($data.page)+"/"+String:C10($data.pages)+")"
 						$o.additional:=$o.additional+"\r"+EDITOR.str.localize("dataConsiderToSetAFilter"; String:C10(SHARED.data.dump.limit))
 						
 					End if 
@@ -84,10 +84,9 @@ Case of
 					EDITOR.message.setValue($o)
 					
 				End if 
+				
 				//______________________________________________________
 			: ($data.step="end")
-				
-				//If (Form.dataSetGeneration#Null)
 				
 				If (Storage:C1525.flags#Null:C1517)
 					
@@ -100,8 +99,6 @@ Case of
 				
 				DO_MESSAGE(New object:C1471(\
 					"action"; "close"))
-				
-				//End if 
 				
 				//______________________________________________________
 			Else 
