@@ -17,20 +17,19 @@ var $o : Object
 Case of 
 		
 		//______________________________________________________
-	: ($message="dump")
+	: ($message="dump")  // Cancellable data generation
 		
 		$o:=EDITOR.message.getValue()
 		
 		Case of 
 				
-				
-				//______________________________________________________
+				//======================================
 			: ($data.step="catalog")
 				
 				$o.additional:=EDITOR.str.localize("dataCatalog"; $data.table.name)
 				EDITOR.message.setValue($o)
 				
-				//______________________________________________________
+				//======================================
 			: ($data.step="table")
 				
 				If (EDITOR.message.isVisible())
@@ -50,7 +49,7 @@ Case of
 					
 				End if 
 				
-				//______________________________________________________
+				//======================================
 			: ($data.step="pictures")
 				
 				If ($data.id=Null:C1517)
@@ -65,7 +64,7 @@ Case of
 				
 				EDITOR.message.setValue($o)
 				
-				//______________________________________________________
+				//======================================
 			: ($data.step="asset")
 				
 				If (EDITOR.message.isVisible())
@@ -85,7 +84,7 @@ Case of
 					
 				End if 
 				
-				//______________________________________________________
+				//======================================
 			: ($data.step="end")
 				
 				If (Storage:C1525.flags#Null:C1517)
@@ -100,7 +99,7 @@ Case of
 				DO_MESSAGE(New object:C1471(\
 					"action"; "close"))
 				
-				//______________________________________________________
+				//======================================
 			Else 
 				
 				If (EDITOR.message.isVisible())
@@ -110,7 +109,7 @@ Case of
 					
 				End if 
 				
-				//______________________________________________________
+				//======================================
 		End case 
 		
 		//______________________________________________________
@@ -171,7 +170,7 @@ Case of
 		//______________________________________________________
 	: ($message="projectAuditResult")
 		
-		//ASSERT(Not(DATABASE.isMatrix))
+		// ASSERT(Not(DATABASE.isMatrix))
 		
 		PROJECT_Handler(New object:C1471(\
 			"action"; $message; \
@@ -253,8 +252,8 @@ Case of
 		//______________________________________________________
 	: ($message="build@")
 		
-		// build = Result of the build/archive action
-		// build_stop =  Cancel build process
+		// Build = Result of the build/archive action
+		// Build_stop =  Cancel build process
 		OB REMOVE:C1226(EDITOR; "build")
 		
 		// Remove the temporary authorizations, if any
@@ -337,7 +336,7 @@ Case of
 						
 						$file:=EDITOR.path.userCache().file($project._name+".android.fingerprint")
 						
-						//mark: TO DO - Android fingerprint
+						// Mark: TO DO - Android fingerprint
 						
 					End if 
 					

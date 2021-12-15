@@ -1,1 +1,1 @@
-EDITOR.doCancelableProgress("dataSetGeneration")
+EDITOR.doCancelableProgress(New object:C1471("title"; "dataSetGeneration"; "cancelMessage"; "Z'ETES CERTAINS?"))

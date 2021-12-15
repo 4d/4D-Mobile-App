@@ -177,10 +177,21 @@ If (OB Is empty:C1297(SHARED)) | $reset
 		"relationButton.xib"; "README.md"; "LICENSE.md"; "LICENSE"; "LICENSES.md"; "Package.swift"; "Package.resolved"; "Cartfile"; "Cartfile.resolved"))
 	
 	// Data dump
-	SHARED.data:=New object:C1471(\
-		"dump"; New object:C1471(\
-		"limit"; 10000; \
-		"page"; 10000))
+	If (Structure file:C489=Structure file:C489(*))  // TO test UI with less than 10000 records
+		
+		SHARED.data:=New object:C1471(\
+			"dump"; New object:C1471(\
+			"limit"; 100; \
+			"page"; 100))
+		
+	Else 
+		
+		SHARED.data:=New object:C1471(\
+			"dump"; New object:C1471(\
+			"limit"; 10000; \
+			"page"; 10000))
+		
+	End if 
 	
 	If (SHARED.component.build#Num:C11($pref.lastBuild)) | $reset
 		
@@ -323,7 +334,7 @@ If (OB Is empty:C1297(FEATURE)) | $reset
 	
 	var $version : Integer
 	
-	$version:=1940  // Current branch version number
+	$version:=1950  // Current branch version number
 	
 	If (Structure file:C489=Structure file:C489(*))\
 		 & (Num:C11(SHARED.ide.version)#$version)
@@ -331,7 +342,7 @@ If (OB Is empty:C1297(FEATURE)) | $reset
 		ALERT:C41("You need to update the last delivered version number in COMPONENT_INIT")
 		
 		//%T-
-		METHOD OPEN PATH:C1213(Current method name:C684; 268)
+		METHOD OPEN PATH:C1213(Current method name:C684; 271)
 		//%T+
 		
 		ABORT:C156
