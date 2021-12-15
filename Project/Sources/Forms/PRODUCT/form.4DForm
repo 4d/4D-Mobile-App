@@ -2,10 +2,6 @@
 	"inheritedForm": "panel_template",
 	"width": 960,
 	"height": 205,
-	"markerHeader": 15,
-	"markerBody": 200,
-	"markerBreak": 220,
-	"markerFooter": 240,
 	"events": [
 		"onLoad",
 		"onClick",
@@ -310,5 +306,6 @@
 		}
 	},
 	"method": "PRODUCT",
-	"geometryStamp": 580
+	"geometryStamp": 580,
+	"destination": "detailScreen"
 }

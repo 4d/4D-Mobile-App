@@ -23,7 +23,11 @@ Case of
 		//______________________________________________________
 	: ($e.code=On Clicked:K2:4)
 		
-		$ƒ.iconMenu()
+		If (Not:C34(FEATURE.with("iconActionMenu")))
+			
+			$ƒ.doIconMenu()
+			
+		End if 
 		
 		//______________________________________________________
 	: ($e.code=On Double Clicked:K2:5)

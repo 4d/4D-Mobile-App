@@ -24,6 +24,7 @@ Class constructor
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
+	/// Design definition
 Function init()
 	
 	This:C1470.toBeInitialized:=False:C215
@@ -43,12 +44,12 @@ Function init()
 	This:C1470.button("doNotExportImages")
 	This:C1470.button("doNotGenerate")
 	
-	var $group : cs:C1710.group
 	$group:=This:C1470.group("dataInGeneration")
 	This:C1470.stepper("dataGeneration").addToGroup($group)
 	This:C1470.formObject("dataGenerationLabel").addToGroup($group)
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
+	/// Initializations at loading
 Function onLoad()
 	
 	This:C1470.local.bestSize()
@@ -64,6 +65,7 @@ Function onLoad()
 	This:C1470.dataGenerationLabel.setTitle(Replace string:C233(Get localized string:C991("dataSetGeneration"); "\n\n"; "\r"))
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
+	/// Update of the user interface
 Function update()
 	
 	var $remote : Boolean
@@ -119,10 +121,79 @@ Function update()
 		End if 
 	End if 
 	
+	//MARK:-TOOLS
 	// === === === === === === === === === === === === === === === === === === === === ===
+	/// Returns True if datasource is server
 Function isRemote()->$remote : Boolean
 	
 	$remote:=(String:C10(Form:C1466.dataSource.source)="server")
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+	/// Returns True if datasource is server
+Function isLocal()->$local : Boolean
+	
+	$local:=(String:C10(Form:C1466.dataSource.source)="local")
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+	/// 
+Function doGenerate()
+	
+	var $keyPathname : Text
+	
+	If (Not:C34(This:C1470.dataGenerating))  // No reentry
+		
+		This:C1470.dataGenerating:=True:C214
+		
+		If (This:C1470.isRemote())
+			
+			//===============================================================
+			//#RUSTINE: ne devrait plus être nécessaire
+			If (Test path name:C476($keyPathname)#Is a document:K24:1)
+				
+				LOG_EVENT(New object:C1471(\
+					"message"; String:C10(Form:C1466.dataSource.keyPath)+" ->"+$keyPathname))
+				
+				$keyPathname:=Convert path POSIX to system:C1107(Form:C1466.dataSource.keyPath)
+				
+			End if 
+			
+			//===============================================================
+			
+		Else 
+			
+			// Default location
+			$keyPathname:=EDITOR.path.key().platformPath
+			
+		End if 
+		
+		If (FEATURE.with("cancelableDatasetGeneration"))
+			
+			EDITOR.doGenerate($keyPathname)
+			This:C1470.refresh()
+			
+		Else 
+			
+			CALL WORKER:C1389(EDITOR.worker; "dataSet"; New object:C1471(\
+				"caller"; EDITOR.window; \
+				"action"; "create"; \
+				"eraseIfExists"; True:C214; \
+				"project"; PROJECT; \
+				"digest"; True:C214; \
+				"coreDataSet"; True:C214; \
+				"key"; $keyPathname; \
+				"dataSet"; True:C214))
+			
+			SET TIMER:C645(-1)
+			
+		End if 
+		
+		
+	Else   // A generation is already in works
+		
+		This:C1470.refresh()
+		
+	End if 
+	
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function testServer()
