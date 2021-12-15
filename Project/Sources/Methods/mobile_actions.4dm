@@ -392,7 +392,7 @@ Case of
 									If ($t[[1]]="/")
 										
 										// User
-										$manifest:=ob_parseFile(_o_COMPONENT_Pathname("host_formatters").file(Substring:C12($t; 2)+"/manifest.json"))
+										$manifest:=ob_parseFile(cs:C1710.path.new().hostFormatters().file(Substring:C12($t; 2)+"/manifest.json"))
 										If ($manifest.success)
 											
 											$manifest:=$manifest.value

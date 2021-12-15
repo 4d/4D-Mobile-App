@@ -105,7 +105,7 @@ Case of
 		End for each 
 		
 		// Host formatters
-		$oResources:=_o_COMPONENT_Pathname("host_formatters")
+		$oResources:=cs:C1710.path.new().hostFormatters()
 		
 		If ($oResources.exists)
 			
@@ -151,7 +151,7 @@ Case of
 			
 			$oOUT.formatters:=New collection:C1472
 			
-			$oResources:=_o_COMPONENT_Pathname("host_formatters")
+			$oResources:=cs:C1710.path.new().hostFormatters()
 			
 			If ($oResources.exists)
 				
@@ -359,6 +359,8 @@ Case of
 			
 			$oOUT.children:=New collection:C1472()
 			
+			$oResources:=cs:C1710.path.new().hostFormatters()
+			
 			// Generate project files according to formats
 			For each ($oFormatter; $oIN.formatters)
 				
@@ -374,10 +376,14 @@ Case of
 							For each ($t; New collection:C1472("Sources"; "Resources"))  // Only Sources and "Resources" folder are imported
 								
 								If ($oFormatter.folder=Null:C1517)
-									$folder:=_o_COMPONENT_Pathname("host_formatters").folder($oFormatter.name).folder($t)  // code could failed if name in manifest not equal to directory
+									$folder:=$oResources.folder($oFormatter.name)  // code could failed if name in manifest not equal to directory it's just in case of
 								Else 
-									$folder:=$oFormatter.folder.folder($t)
+									$folder:=$oFormatter.folder
 								End if 
+								If ($folder.folder("ios").exists)
+									$folder:=$folder.folder("ios")
+								End if 
+								$folder:=$folder.folder($t)
 								
 								If ($folder.exists)
 									

@@ -136,7 +136,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 							//........................................
 						: (Bool:C1537($Obj_formatter.isHost))  // with /, host formatters? XXX maybe find another way to identifiy it
 							
-							$Dir_source:=Choose:C955(Length:C16(String:C10($Obj_formatter.path))>0; $Obj_formatter.path; _o_COMPONENT_Pathname("host_formatters").platformPath+$Obj_formatter.name+Folder separator:K24:12)
+							$Dir_source:=Choose:C955(Length:C16(String:C10($Obj_formatter.path))>0; $Obj_formatter.path; cs:C1710.path.new().hostFormatters().platformPath+$Obj_formatter.name+Folder separator:K24:12)
 							
 							$Dir_source:=$Dir_source+"images"+Folder separator:K24:12
 							

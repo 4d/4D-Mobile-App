@@ -159,6 +159,8 @@ Case of
 		//______________________________________________________
 	: ($Txt_target="host_formatters")
 		
+		ASSERT:C1129(dev_Matrix; "Deprecated host formatters folder access, use cs.path.new().hostFormatters()")
+		
 		$Obj_path:=_o_COMPONENT_Pathname("host")
 		
 		If ($Obj_path.exists)
