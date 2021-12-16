@@ -763,6 +763,9 @@ If ($project.actions#Null:C1517)
 	End for each 
 End if 
 
+
+OB REMOVE:C1226($project; "regexParameters")
+
 // Set the current version
 $project.info.componentBuild:=$info.componentBuild
 $project.info.ideVersion:=$info.ideVersion

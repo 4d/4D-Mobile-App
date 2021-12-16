@@ -8,7 +8,7 @@ Class constructor($project : Object)
 		
 	End if 
 	
-	This:C1470.regexParameters:="(?mi-s)(=|==|===|IS|!=|#|!==|IS NOT|>|<|>=|<=|%)\\s*:[^\\s]*"
+	This:C1470.$regexParameters:="(?mi-s)(=|==|===|IS|!=|#|!==|IS NOT|>|<|>=|<=|%)\\s*:[^\\s]*"
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function init($project : Object)
@@ -838,7 +838,7 @@ Function checkRestQueryFilter($table : Object)
 	OB REMOVE:C1226($table; "count")
 	
 	// Detect a query with parameters
-	$filter.parameters:=(Match regex:C1019(This:C1470.regexParameters; $filter.string; 1))
+	$filter.parameters:=(Match regex:C1019(This:C1470.$regexParameters; $filter.string; 1))
 	
 	If ($filter.parameters)
 		
@@ -846,7 +846,7 @@ Function checkRestQueryFilter($table : Object)
 		
 		$buffer:=$filter.string
 		
-		If (Rgx_SubstituteText(This:C1470.regexParameters; "\\1\"@\""; ->$buffer)=0)
+		If (Rgx_SubstituteText(This:C1470.$regexParameters; "\\1\"@\""; ->$buffer)=0)
 			
 			$response:=Rest(New object:C1471(\
 				"action"; "records"; \
@@ -935,7 +935,7 @@ Function checkLocalQueryFilter($table : Object)
 			OB REMOVE:C1226($table; "count")
 			
 			// Detect a query with parameters
-			$filter.parameters:=(Match regex:C1019(This:C1470.regexParameters; $filter.string; 1))
+			$filter.parameters:=(Match regex:C1019(This:C1470.$regexParameters; $filter.string; 1))
 			
 			If ($filter.parameters)
 				
@@ -943,7 +943,7 @@ Function checkLocalQueryFilter($table : Object)
 				
 				$buffer:=$filter.string
 				
-				If (Rgx_SubstituteText(This:C1470.regexParameters; "\\1:1"; ->$buffer)=0)
+				If (Rgx_SubstituteText(This:C1470.$regexParameters; "\\1:1"; ->$buffer)=0)
 					
 					//mark: - START TRAPPING ERRORS
 					$error:=cs:C1710.error.new("capture")

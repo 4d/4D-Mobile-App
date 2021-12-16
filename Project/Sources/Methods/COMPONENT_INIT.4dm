@@ -44,6 +44,7 @@ DATABASE.products:=DATABASE.root.parent.folder(DATABASE.structure.name+" - Mobil
 
 $process:=cs:C1710.process.new()
 
+
 // ----------------------------------------------------
 // Disable asserts in release mode
 SET ASSERT ENABLED:C1131(DATABASE.isInterpreted; *)
