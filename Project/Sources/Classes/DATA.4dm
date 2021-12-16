@@ -206,9 +206,33 @@ Function getDataSize()
 	
 	If ($file.exists)
 		
-		$lep:=cs:C1710.lep.new()\
-			.setOutputType(Is object:K8:27)\
-			.launch(cs:C1710.path.new().scripts().file("sqlite3_sizes.sh"); "'"+$file.path+"'")
+		If (Is macOS:C1572)
+			
+			var $len; $pos : Integer
+			If (Match regex:C1019("(?m-si)macOS\\s(\\d+)"; ENV.systemInfos.osVersion; 1; $pos; $len))
+				
+				If (Num:C11(Substring:C12(ENV.systemInfos.osVersion; $pos; $len))<12)
+					
+					$lep:=cs:C1710.lep.new()\
+						.setOutputType(Is object:K8:27)\
+						.launch(EDITOR.path.scripts().file("sqlite3_sizes_11.sh"); "'"+$file.path+"'")
+					
+				Else 
+					
+					$lep:=cs:C1710.lep.new()\
+						.setOutputType(Is object:K8:27)\
+						.launch(EDITOR.path.scripts().file("sqlite3_sizes.sh"); "'"+$file.path+"'")
+					
+				End if 
+			End if 
+			
+		Else 
+			
+			$lep:=cs:C1710.lep.new()\
+				.setOutputType(Is object:K8:27)\
+				.launch(EDITOR.path.scripts().file("sqlite3_sizes.sh"); "'"+$file.path+"'")
+			
+		End if 
 		
 		If ($lep.success)
 			
