@@ -212,6 +212,7 @@ Case of
 		For each ($tableID; $dataModel) While ($out.success & Not:C34($cancelled))
 			
 			$query:=Null:C1517
+			CLEAR VARIABLE:C89($pages)
 			
 			$table:=$dataModel[$tableID]
 			$meta:=$table[""]
