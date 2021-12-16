@@ -7,7 +7,7 @@ Class constructor
 	
 	This:C1470.context:=editor_Panel_init(This:C1470.name)
 	
-	If (OB Is empty:C1297(This:C1470.context)) | True:C214
+	If (OB Is empty:C1297(This:C1470.context))
 		
 		This:C1470.isSubform:=True:C214
 		
@@ -27,6 +27,9 @@ Function init()
 	var $group : cs:C1710.group
 	
 	This:C1470.toBeInitialized:=False:C215
+	
+	// Help URL
+	This:C1470.help:=Get localized string:C991("help_properties")
 	
 	// Table list
 	$group:=This:C1470.group("tableGroup")

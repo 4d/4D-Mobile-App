@@ -20,10 +20,6 @@ If (False:C215)
 	C_OBJECT:C1216(panel_INIT; $1)
 	C_OBJECT:C1216(panel_INIT; $2)
 	
-	
-	
-	
-	
 	//______________________________________________________
 	C_LONGINT:C283(panel_COLLAPSE_EXPAND; $1)
 	
@@ -34,6 +30,10 @@ If (False:C215)
 	C_TEXT:C284(panel_Find; $0)
 	C_TEXT:C284(panel_Find; $1)
 	C_POINTER:C301(panel_Find; $2)
+	
+	//______________________________________________________
+	C_LONGINT:C283(panel_FindByIndex; $1)
+	C_TEXT:C284(panel_FindByIndex; $0)
 	
 	//______________________________________________________
 	C_LONGINT:C283(_o_panel_Form_common; $0)

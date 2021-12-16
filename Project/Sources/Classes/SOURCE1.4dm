@@ -29,6 +29,9 @@ Function init()
 	
 	This:C1470.toBeInitialized:=False:C215
 	
+	// Help URL
+	This:C1470.help:=Get localized string:C991("help_source")
+	
 	This:C1470.button("local")
 	This:C1470.button("server")
 	

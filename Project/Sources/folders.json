@@ -12,7 +12,8 @@
 	"____FOR_TESTS": {
 		"classes": [
 			"Employes",
-			"EmployesEntity"
+			"EmployesEntity",
+			"EmployesSelection"
 		]
 	},
 	"__IN WORKS": {
@@ -360,10 +361,11 @@
 			"SOURCE_OBJECTS_HANDLER"
 		],
 		"forms": [
-			"SOURCE"
+			"SOURCE",
+			"SOURCE1"
 		],
 		"classes": [
-			"SOURCE",
+			"SOURCE1",
 			"sources"
 		]
 	},
@@ -380,7 +382,6 @@
 	},
 	"07] ACTIONS": {
 		"methods": [
-			"ACTIONS",
 			"ACTIONS_CALLBACK",
 			"COMPILER_ACTIONS"
 		],
@@ -829,6 +830,7 @@
 			"panel_Common",
 			"panel_Count",
 			"panel_Find",
+			"panel_FindByIndex",
 			"panel_GOTO",
 			"panel_INIT",
 			"panel_LAST",

@@ -11,7 +11,7 @@
 var $t : Text
 var $index : Integer
 var $ptr : Pointer
-var $e : Object
+var $e; $o; $panel : Object
 var $c : Collection
 
 // ----------------------------------------------------
@@ -26,26 +26,26 @@ Case of
 	: ($e.objectName="help.@")
 		
 		$c:=Split string:C1554($e.objectName; ".")
+		$t:=panel_FindByIndex(Num:C11($c[$c.length-1]))
 		
-		ARRAY TEXT:C222($widgets; 0x0000)
-		FORM GET OBJECTS:C898($widgets)
-		
-		$index:=Find in array:C230($widgets; "panel."+String:C10($c[$c.length-1]))
-		
-		If ($index>0)
+		If (Length:C16($t)>0)
 			
-			$t:=$e.objectName
-			OBJECT GET SUBFORM:C1139(*; $widgets{$index}; $ptr; $t)
+			$o:=panel_Load($t)
 			
-			If (Form:C1466.$dialog[$t].help#Null:C1517)
+			If ($o.help#Null:C1517)
 				
-				OPEN URL:C673(String:C10(Form:C1466.$dialog[$t].help); *)
+				OPEN URL:C673(String:C10($o.help); *)
 				
 			Else 
 				
 				ASSERT:C1129(False:C215; "help button without url!")
 				
 			End if 
+			
+		Else 
+			
+			//
+			
 		End if 
 		
 		//==================================================
@@ -63,7 +63,6 @@ Case of
 					OBJECT GET SUBFORM:C1139(*; $e.objectName; $ptr; $t)
 					$index:=$c.extract("form").indexOf($t)  //+1
 					
-					var $panel : Object
 					$panel:=$c[$index]
 					
 					Case of 
@@ -78,18 +77,7 @@ Case of
 							EXECUTE METHOD IN SUBFORM:C1085($e.objectName; "panel_LAST")
 							
 							//______________________________________________________
-						Else 
-							
-							// A "Case of" statement should never omit "Else"
-							
-							//______________________________________________________
 					End case 
-					
-					//If ($index=$c.length)  // Last panel
-					
-					//EXECUTE METHOD IN SUBFORM($e.objectName; "panel_LAST")
-					
-					//End if 
 				End if 
 				
 				//______________________________________________________
