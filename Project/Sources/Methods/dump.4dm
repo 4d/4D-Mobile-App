@@ -332,6 +332,7 @@ Case of
 							"headers"; $in.headers; \
 							"table"; $meta.name; \
 							"fields"; $o.fields; \
+							"timeout"; SHARED.data.dump.timeout; \
 							"queryEncode"; True:C214; \
 							"query"; $query))
 						
@@ -348,6 +349,7 @@ Case of
 										"headers"; $in.headers; \
 										"table"; $meta.name; \
 										"fields"; $o.fields; \
+										"timeout"; SHARED.data.dump.timeout; \
 										"queryEncode"; True:C214; \
 										"query"; $query))
 									

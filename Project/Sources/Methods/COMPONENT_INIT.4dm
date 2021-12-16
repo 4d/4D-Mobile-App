@@ -181,6 +181,7 @@ If (OB Is empty:C1297(SHARED)) | $reset
 		
 		SHARED.data:=New object:C1471(\
 			"dump"; New object:C1471(\
+			"timeout"; 1000; \
 			"limit"; 100; \
 			"page"; 100))
 		
@@ -188,6 +189,7 @@ If (OB Is empty:C1297(SHARED)) | $reset
 		
 		SHARED.data:=New object:C1471(\
 			"dump"; New object:C1471(\
+			"timeout"; 20000; \
 			"limit"; 10000; \
 			"page"; 10000))
 		
