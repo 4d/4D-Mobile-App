@@ -118,7 +118,7 @@ Function update()
 	
 	//This.dataSize.show(This.tables.query("embedded=:1"; True).length>0)
 	
-	This:C1470.getDataSize()
+	This:C1470.getSQLite()
 	
 	If (This:C1470.current=Null:C1517)
 		
@@ -188,17 +188,16 @@ Function tableList()
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Get the dump sizes if available
-Function getDataSize()
+Function getSQLite()
 	
 	This:C1470.sqlite:=Null:C1517
-	This:C1470.callWorker("getDataSize"; New object:C1471("caller"; This:C1470.window; "project"; PROJECT))
+	This:C1470.callWorker("getSQLite"; New object:C1471("caller"; This:C1470.window; "project"; PROJECT))
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function updateTableListWithDataSizes()
 	
-	var $pathname; $sqlID; $t : Text
+	var $sqlID; $name : Text
 	var $size : Integer
-	var $x : Blob
 	var $table : Object
 	var $file : 4D:C1709.File
 	
@@ -215,9 +214,9 @@ Function updateTableListWithDataSizes()
 			
 			If (This:C1470.sqlite#Null:C1517)
 				
-				$t:=formatString("table-name"; $table.name)
+				$name:=formatString("table-name"; $table.name)
 				
-				$sqlID:="Z"+Uppercase:C13($t)
+				$sqlID:="Z"+Uppercase:C13($name)
 				
 				If (This:C1470.sqlite.tables[$sqlID]#Null:C1517)
 					
@@ -226,10 +225,7 @@ Function updateTableListWithDataSizes()
 					If ($size>4096)
 						
 						// Add pictures size if any
-						$file:=Folder:C1567(asset(New object:C1471(\
-							"action"; "path"; \
-							"path"; $pathname)).path+"Pictures"+Folder separator:K24:12+$t+Folder separator:K24:12; \
-							fk platform path:K87:2).file("manifest.json")
+						$file:=PROJECT._folder.file("project.dataSet/Resources/Assets.xcassets/Pictures/"+$name+"/manifest.json")
 						
 						If ($file.exists)
 							
@@ -253,9 +249,7 @@ Function updateTableListWithDataSizes()
 				If ($file.exists)
 					
 					// Get document size
-					$x:=$file.getContent()
-					$size:=BLOB size:C605($x)
-					SET BLOB SIZE:C606($x; 0)
+					$size:=$file.size
 					
 					// Add pictures size if any
 					$file:=PROJECT._folder.file("Resources/Assets.xcassets/Pictures/"+$table.name+"/manifest.json")

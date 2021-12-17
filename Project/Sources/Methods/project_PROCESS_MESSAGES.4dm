@@ -10,10 +10,17 @@
 // Declarations
 #DECLARE($selector : Text; $data : Object)
 
-var $panel; $t : Text
-var $bottom; $height; $i; $indx; $left; $right; $top; $width : Integer
+If (False:C215)
+	C_TEXT:C284(project_PROCESS_MESSAGES; $1)
+	C_OBJECT:C1216(project_PROCESS_MESSAGES; $2)
+End if 
+
+var $container; $currentForm; $t : Text
+var $isProjectForm : Boolean
+var $bottom; $height; $i; $indx; $left; $right : Integer
+var $top; $width : Integer
 var $nilPtr : Pointer
-var $ƒ : Object
+var $ƒ; $panel : Object
 
 // ----------------------------------------------------
 // Initialisations
@@ -39,10 +46,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 		"ribbon"; "RIBBON"; \
 		"footer"; "FOOTER")
 	
-	var $currentForm : Text
 	$currentForm:=Current form name:C1298
-	
-	var $isProjectForm : Boolean
 	$isProjectForm:=($currentForm="PROJECT")
 	
 Else 
@@ -54,6 +58,7 @@ End if
 // ----------------------------------------------------
 Case of 
 		
+		//MARK:-PICKER
 		//______________________________________________________
 	: ($selector="pickerShow")  // Display the picture grid widget
 		
@@ -134,9 +139,8 @@ Case of
 			
 		End if 
 		
-		If (Current form name:C1298=$ƒ.project)
+		If (Current form name:C1298=$ƒ.project)  // Pass to target panel
 			
-			// Pass to target panel
 			Case of 
 					
 					//……………………………………………………………………………………………
@@ -147,7 +151,7 @@ Case of
 					//……………………………………………………………………………………………
 				: (String:C10($data.action)="forms")
 					
-					$panel:=panel_Find($ƒ.views)
+					$container:=panel_Find($ƒ.views)
 					
 					//……………………………………………………………………………………………
 				Else 
@@ -157,9 +161,9 @@ Case of
 					//……………………………………………………………………………………………
 			End case 
 			
-			If (Length:C16($panel)>0)
+			If (Length:C16($container)>0)
 				
-				EDITOR.callChild($panel; Current method name:C684; $selector; $data)
+				EDITOR.callChild($container; Current method name:C684; $selector; $data)
 				
 			End if 
 			
@@ -194,22 +198,22 @@ Case of
 					//……………………………………………………………………………………………
 				: ($selector="tableIcons")
 					
-					$panel:=panel_Find($ƒ.tableProperties)
+					$container:=panel_Find($ƒ.tableProperties)
 					
 					//……………………………………………………………………………………………
 				: ($selector="fieldIcons")
 					
-					$panel:=panel_Find($ƒ.fieldProperties)
+					$container:=panel_Find($ƒ.fieldProperties)
 					
 					//……………………………………………………………………………………………
 				: ($selector="forms")
 					
-					$panel:=panel_Find($ƒ.views)
+					$container:=panel_Find($ƒ.views)
 					
 					//……………………………………………………………………………………………
 				: ($selector="actionIcons")
 					
-					$panel:=panel_Find($ƒ.actions)
+					$container:=panel_Find($ƒ.actions)
 					
 					//……………………………………………………………………………………………
 				Else 
@@ -219,9 +223,9 @@ Case of
 					//……………………………………………………………………………………………
 			End case 
 			
-			If (Length:C16($panel)>0)
+			If (Length:C16($container)>0)
 				
-				EDITOR.callChild($panel; Current method name:C684; "pickerResume"; $data)
+				EDITOR.callChild($container; Current method name:C684; "pickerResume"; $data)
 				
 			End if 
 			
@@ -253,6 +257,67 @@ Case of
 			End case 
 		End if 
 		
+		//MARK:-DATASET
+		//______________________________________________________
+	: ($selector="dataSet")  // Dataset generation result
+		
+		If ($isProjectForm)  // Pass to target panel
+			
+			$container:=panel_Find($ƒ.dataSource)
+			
+			If (Length:C16($container)>0)
+				
+				EDITOR.callChild($container; Current method name:C684; $selector; $data)
+				
+			End if 
+			
+		Else 
+			
+			SOURCE_Handler(New object:C1471("action"; "dataset"; "data"; $data))
+			
+		End if 
+		
+		//______________________________________________________
+	: ($selector="update_data")  // Update data panel
+		
+		If ($isProjectForm)  // Pass to target panel
+			
+			$container:=panel_Find($ƒ.data)
+			
+			If (Length:C16($container)>0)
+				
+				EDITOR.callChild($container; Current method name:C684; $selector)
+				
+			End if 
+			
+		Else 
+			
+			panel_Load.update()
+			
+		End if 
+		
+		//______________________________________________________
+	: ($selector="datasetInformations")  // Callback from getSQLite method to update the data panel
+		
+		If ($isProjectForm)  // Pass to target panel
+			
+			$container:=panel_Find($ƒ.data)
+			
+			If (Length:C16($container)>0)
+				
+				EDITOR.callChild($container; Current method name:C684; $selector; $data)
+				
+			End if 
+			
+		Else 
+			
+			$panel:=panel_Load
+			
+			$panel.sqlite:=$data.database
+			$panel.updateTableListWithDataSizes()
+			
+		End if 
+		
 		//______________________________________________________
 	: ($selector="projectAudit")  // Verify the project integrity
 		
@@ -267,14 +332,13 @@ Case of
 		//______________________________________________________
 	: ($selector="mainMenu")  // Update Main menu panel
 		
-		If ($isProjectForm)
+		If ($isProjectForm)  // Pass to target panel
 			
-			// Pass to target panel
-			$panel:=panel_Find($ƒ.mainMenu)
+			$container:=panel_Find($ƒ.mainMenu)
 			
-			If (Length:C16($panel)>0)
+			If (Length:C16($container)>0)
 				
-				EDITOR.callChild($panel; Current method name:C684; $selector)
+				EDITOR.callChild($container; Current method name:C684; $selector)
 				
 			End if 
 			
@@ -288,14 +352,13 @@ Case of
 		//______________________________________________________
 	: ($selector="tableProperties")  // Update table properties panel
 		
-		If ($isProjectForm)
+		If ($isProjectForm)  // Pass to target panel
 			
-			// Pass to target panel
-			$panel:=panel_Find($ƒ.tableProperties)
+			$container:=panel_Find($ƒ.tableProperties)
 			
-			If (Length:C16($panel)>0)
+			If (Length:C16($container)>0)
 				
-				EDITOR.callChild($panel; Current method name:C684; $selector)
+				EDITOR.callChild($container; Current method name:C684; $selector)
 				
 			End if 
 			
@@ -308,14 +371,13 @@ Case of
 		//______________________________________________________
 	: ($selector="tableIcons")  // Preload the table icons
 		
-		If ($isProjectForm)
+		If ($isProjectForm)  // Pass to target panel
 			
-			// Pass to target panel
-			$panel:=panel_Find($ƒ.tableProperties)
+			$container:=panel_Find($ƒ.tableProperties)
 			
-			If (Length:C16($panel)>0)
+			If (Length:C16($container)>0)
 				
-				EDITOR.callChild($panel; Current method name:C684; $selector)
+				EDITOR.callChild($container; Current method name:C684; $selector)
 				
 			End if 
 			
@@ -328,14 +390,13 @@ Case of
 		//______________________________________________________
 	: ($selector="fieldProperties")  // Update field properties panel
 		
-		If ($isProjectForm)
+		If ($isProjectForm)  // Pass to target panel
 			
-			// Pass to target panel
-			$panel:=panel_Find($ƒ.fieldProperties)
+			$container:=panel_Find($ƒ.fieldProperties)
 			
-			If (Length:C16($panel)>0)
+			If (Length:C16($container)>0)
 				
-				EDITOR.callChild($panel; Current method name:C684; $selector)
+				EDITOR.callChild($container; Current method name:C684; $selector)
 				
 			End if 
 			
@@ -348,94 +409,28 @@ Case of
 		//______________________________________________________
 	: ($selector="loadActionIcons")  // Preload the actions icons
 		
-		If ($isProjectForm)
+		If ($isProjectForm)  // Pass to target panel
 			
-			// Pass to target panel
-			$panel:=panel_Find($ƒ.actions)
+			$container:=panel_Find($ƒ.actions)
 			
-			If (Length:C16($panel)>0)
+			If (Length:C16($container)>0)
 				
-				EDITOR.callChild($panel; "ACTIONS_CALLBACK"; $selector)
+				EDITOR.callChild($container; "ACTIONS_CALLBACK"; $selector)
 				//panel($ƒ.actions).loadIcons()
 				
 			End if 
 		End if 
 		
 		//______________________________________________________
-	: ($selector="dataSet")  // Dataset generation result
-		
-		If ($isProjectForm)
-			
-			// Pass to target panel
-			$panel:=panel_Find($ƒ.dataSource)
-			
-			If (Length:C16($panel)>0)
-				
-				EDITOR.callChild($panel; Current method name:C684; $selector; $data)
-				
-				
-			End if 
-			
-		Else 
-			
-			SOURCE_Handler(New object:C1471("action"; "dataset"; "data"; $data))
-			
-		End if 
-		
-		//______________________________________________________
-	: ($selector="update_data")  // Update data panel
-		
-		If ($isProjectForm)
-			
-			// Pass to target panel
-			$panel:=panel_Find($ƒ.data)
-			
-			If (Length:C16($panel)>0)
-				
-				EDITOR.callChild($panel; Current method name:C684; $selector)
-				
-			End if 
-			
-		Else 
-			
-			panel_Load.update()
-			
-		End if 
-		
-		//______________________________________________________
-	: ($selector="datasetInformations")  // Callback from getDataSize to update the data panel
-		
-		If ($isProjectForm)
-			
-			// Pass to target panel
-			$panel:=panel_Find($ƒ.data)
-			
-			If (Length:C16($panel)>0)
-				
-				EDITOR.callChild($panel; Current method name:C684; $selector; $data)
-				
-			End if 
-			
-		Else 
-			
-			var $panelClass : Object
-			$panelClass:=panel_Load
-			$panelClass.sqlite:=$data.database
-			$panelClass.updateTableListWithDataSizes()
-			
-		End if 
-		
-		//______________________________________________________
 	: ($selector="checkingServerConfiguration")  // Verify the web server configuration
 		
-		If ($isProjectForm)
+		If ($isProjectForm)  // Pass to target panel
 			
-			// Pass to target panel
-			$panel:=panel_Find($ƒ.dataSource)
+			$container:=panel_Find($ƒ.dataSource)
 			
-			If (Length:C16($panel)>0)
+			If (Length:C16($container)>0)
 				
-				EDITOR.callChild($panel; Current method name:C684; $selector)
+				EDITOR.callChild($container; Current method name:C684; $selector)
 				
 			End if 
 			
@@ -448,14 +443,13 @@ Case of
 		//______________________________________________________
 	: ($selector="teamId")
 		
-		If ($isProjectForm)
+		If ($isProjectForm)  // Pass to target panel
 			
-			// Pass to target panel
-			$panel:=panel_Find($ƒ.developer)
+			$container:=panel_Find($ƒ.developer)
 			
-			If (Length:C16($panel)>0)
+			If (Length:C16($container)>0)
 				
-				EDITOR.callChild($panel; Current method name:C684; $selector; $data)
+				EDITOR.callChild($container; Current method name:C684; $selector; $data)
 				
 			End if 
 			
@@ -472,14 +466,13 @@ Case of
 	: ($selector="tableList")\
 		 | ($selector="fieldList")
 		
-		If ($isProjectForm)
+		If ($isProjectForm)  // Pass to target panel
 			
-			// Pass to target panel
-			$panel:=panel_Find($ƒ.structure)
+			$container:=panel_Find($ƒ.structure)
 			
-			If (Length:C16($panel)>0)
+			If (Length:C16($container)>0)
 				
-				EDITOR.callChild($panel; EDITOR.callback; $selector)
+				EDITOR.callChild($container; EDITOR.callback; $selector)
 				
 			End if 
 			
@@ -493,14 +486,14 @@ Case of
 		//______________________________________________________
 	: ($selector="onLosingFocus")
 		
-		OBJECT GET SUBFORM:C1139(*; $data.panel; $nilPtr; $panel)
+		OBJECT GET SUBFORM:C1139(*; $data.panel; $nilPtr; $container)
 		
 		Case of 
 				
 				//…………………………………………………………………………………………………………
-			: ($panel=$ƒ.structure)
+			: ($container=$ƒ.structure)
 				
-				EDITOR.callChild($panel; "structure_Handler"; New object:C1471("action"; $selector))
+				EDITOR.callChild($container; "structure_Handler"; New object:C1471("action"; $selector))
 				
 				//…………………………………………………………………………………………………………
 		End case 
@@ -508,13 +501,13 @@ Case of
 		//______________________________________________________
 	: ($selector="resizePanel")
 		
-		$panel:=panel_Find($data.panel; ->$indx)
+		$container:=panel_Find($data.panel; ->$indx)
 		
-		If (Length:C16($panel)>0)
+		If (Length:C16($container)>0)
 			
 			// Resize the current panel
-			OBJECT MOVE:C664(*; $panel; 0; 0; 0; $data.offset)
-			EDITOR.callChild($panel; "structure_Handler"; New object:C1471("action"; "geometry"; "target"; $data.panel))
+			OBJECT MOVE:C664(*; $container; 0; 0; 0; $data.offset)
+			EDITOR.callChild($container; "structure_Handler"; New object:C1471("action"; "geometry"; "target"; $data.panel))
 			
 			// Move all the following panels
 			For ($i; $indx+1; panel_Count; 1)
@@ -530,17 +523,16 @@ Case of
 		
 		If ($isProjectForm)
 			
-			If (Asserted:C1132($data.panel#Null:C1517))
+			If (Asserted:C1132($data.panel#Null:C1517))  // Pass to target panel
 				
-				// Pass to target panel
-				$panel:=panel_Find($data.panel; ->$indx)
+				$container:=panel_Find($data.panel; ->$indx)
 				
-				If (Length:C16($panel)>0)
+				If (Length:C16($container)>0)
 					
 					// Open the panel, if any
 					panel_OPEN($indx)
 					
-					EDITOR.callChild($panel; Current method name:C684; $selector; $data)
+					EDITOR.callChild($container; Current method name:C684; $selector; $data)
 					
 				End if 
 			End if 
@@ -602,17 +594,15 @@ Case of
 		//______________________________________________________
 	: ($selector="selectTab")
 		
-		If ($isProjectForm)
+		If ($isProjectForm)  // Pass to target panel
+			$container:=panel_Find($ƒ.views; ->$indx)
 			
-			// Pass to target panel
-			$panel:=panel_Find($ƒ.views; ->$indx)
-			
-			If (Length:C16($panel)>0)
+			If (Length:C16($container)>0)
 				
 				// Open the panel, if any
 				panel_OPEN($indx)
 				
-				EDITOR.callChild($panel; Current method name:C684; $selector; $data)
+				EDITOR.callChild($container; Current method name:C684; $selector; $data)
 				
 			End if 
 			
@@ -626,14 +616,13 @@ Case of
 		//______________________________________________________
 	: ($selector="setForm")  // Set form from browser
 		
-		If ($isProjectForm)
+		If ($isProjectForm)  // Pass to target panel
 			
-			// Pass to target panel
-			$panel:=panel_Find($ƒ.views)
+			$container:=panel_Find($ƒ.views)
 			
-			If (Length:C16($panel)>0)
+			If (Length:C16($container)>0)
 				
-				EDITOR.callChild($panel; Current method name:C684; $selector; $data)
+				EDITOR.callChild($container; Current method name:C684; $selector; $data)
 				
 			End if 
 			
@@ -655,14 +644,13 @@ Case of
 		//______________________________________________________
 	: ($selector="refreshViews")  // Update VIEWS panel
 		
-		If ($isProjectForm)
+		If ($isProjectForm)  // Pass to target panel
 			
-			// Pass to target panel
-			$panel:=panel_Find($ƒ.views)
+			$container:=panel_Find($ƒ.views)
 			
-			If (Length:C16($panel)>0)
+			If (Length:C16($container)>0)
 				
-				EDITOR.callChild($panel; Current method name:C684; $selector; $data)
+				EDITOR.callChild($container; Current method name:C684; $selector; $data)
 				
 			End if 
 			
@@ -685,14 +673,13 @@ Case of
 		//______________________________________________________
 	: ($selector="refreshParameters")  // Update ACTIONS PARAMETERS panel
 		
-		If ($isProjectForm)
+		If ($isProjectForm)  // Pass to target panel
 			
-			// Pass to target panel
-			$panel:=panel_Find($ƒ.actionParameters)
+			$container:=panel_Find($ƒ.actionParameters)
 			
-			If (Length:C16($panel)>0)
+			If (Length:C16($container)>0)
 				
-				EDITOR.callChild($panel; "panel_REFRESH")
+				EDITOR.callChild($container; "panel_REFRESH")
 				
 			End if 
 		End if 
@@ -700,14 +687,13 @@ Case of
 		//______________________________________________________
 	: ($selector="refreshServer")  // Update SERVER panel
 		
-		If ($isProjectForm)
+		If ($isProjectForm)  // Pass to target panel
 			
-			// Pass to target panel
-			$panel:=panel_Find($ƒ.server)
+			$container:=panel_Find($ƒ.server)
 			
-			If (Length:C16($panel)>0)
+			If (Length:C16($container)>0)
 				
-				EDITOR.callChild($panel; Current method name:C684; $selector)
+				EDITOR.callChild($container; Current method name:C684; $selector)
 				
 			End if 
 			
@@ -720,14 +706,13 @@ Case of
 		//______________________________________________________
 	: ($selector="testServer")  // Server checking response
 		
-		If ($isProjectForm)
+		If ($isProjectForm)  // Pass to target panel
 			
-			// Pass to target panel
-			$panel:=panel_Find($ƒ.dataSource)
+			$container:=panel_Find($ƒ.dataSource)
 			
-			If (Length:C16($panel)>0)
+			If (Length:C16($container)>0)
 				
-				EDITOR.callChild($panel; Current method name:C684; $selector; $data)
+				EDITOR.callChild($container; Current method name:C684; $selector; $data)
 				
 			End if 
 			

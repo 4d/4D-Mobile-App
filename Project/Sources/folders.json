@@ -513,6 +513,7 @@
 			"findFirstPathComponentInCatalog",
 			"formatString",
 			"formatters",
+			"getSQLite",
 			"plist_toObject",
 			"Process_tags",
 			"Process_tags_on_file",

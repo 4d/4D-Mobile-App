@@ -698,7 +698,13 @@ Case of
 														
 													End if 
 													
-													$outputPathname:=$in.output
+													// Make sure the folder exist
+													var $targetFolder : 4D:C1709.Folder
+													$targetFolder:=Folder:C1567($in.output; fk platform path:K87:2)
+													$targetFolder.create()
+													
+													//TODO: Work with the File and Folder instead of the path to avoid the headache of folder separators. 
+													$outputPathname:=$targetFolder.platformPath
 													
 													Case of 
 															
@@ -896,7 +902,7 @@ Case of
 						
 						If (Num:C11($result.contentSize)>0)
 							
-							$outputPathname:=$in.output+$meta.name+Folder separator:K24:12
+							$outputPathname:=$in.output+Folder separator:K24:12+$meta.name+Folder separator:K24:12
 							$outputPathname:=$outputPathname+"manifest.json"
 							TEXT TO DOCUMENT:C1237($outputPathname; \
 								JSON Stringify:C1217(New object:C1471(\

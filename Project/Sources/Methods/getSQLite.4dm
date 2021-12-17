@@ -1,8 +1,8 @@
-//%attributes = {}
+//%attributes = {"invisible":true}
 #DECLARE($in : Object)
 
 If (False:C215)
-	C_OBJECT:C1216(getDataSize; $1)
+	C_OBJECT:C1216(getSQLite; $1)
 End if 
 
 var $osVersion : Text
