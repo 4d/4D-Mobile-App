@@ -41,7 +41,7 @@ Case of
 					Else 
 						
 						$o.additional:=EDITOR.str.localize("dataRequest"; $data.table.name)+" ("+String:C10($data.page)+"/"+String:C10($data.pages)+")"
-						$o.additional:=$o.additional+"\r"+EDITOR.str.localize("dataConsiderToSetAFilter")
+						$o.additional:=$o.additional+"\r\r"+EDITOR.str.localize("dataConsiderToSetAFilter")
 						
 					End if 
 					
@@ -76,7 +76,7 @@ Case of
 					Else 
 						
 						$o.additional:=EDITOR.str.localize("dataCoreDataInjection"; $data.table.name)+" ("+String:C10($data.page)+"/"+String:C10($data.pages)+")"
-						$o.additional:=$o.additional+"\r"+EDITOR.str.localize("dataConsiderToSetAFilter"; String:C10(SHARED.data.dump.limit))
+						$o.additional:=$o.additional+"\r\r"+EDITOR.str.localize("dataConsiderToSetAFilter"; String:C10(SHARED.data.dump.limit))
 						
 					End if 
 					
