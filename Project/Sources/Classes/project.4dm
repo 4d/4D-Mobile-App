@@ -1401,12 +1401,11 @@ Function getIcon($relativePath : Text)->$icon : Picture
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Check if a field is still available in the table catalog
-Function fieldAvailable($tableID : Variant; $field : Object)->$available : Boolean
+Function fieldAvailable($tableID; $field : Object)->$available : Boolean
 	
-	var $relatedTableNumber : Integer
-	var $o; $relatedCatalog; $tableCatalog : Object
-	var $c : Collection
 	var $fieldID : Text
+	var $relatedCatalog; $tableCatalog : Object
+	var $c : Collection
 	
 	// Accept num or string
 	$tableID:=String:C10($tableID)
@@ -1414,59 +1413,49 @@ Function fieldAvailable($tableID : Variant; $field : Object)->$available : Boole
 	
 	$c:=Split string:C1554($field.name; ".")
 	
-	If ($c.length=1)
-		
-		// Check the data class
-		If ($field.relatedTableNumber#Null:C1517)
+	Case of 
 			
-			// Relation = use name
-			$available:=(This:C1470.dataModel[$tableID][$field.name]#Null:C1517)
+			//______________________________________________________
+		: ($c.length=1)
 			
-		Else 
-			
-			// Field = use id
-			$available:=(This:C1470.dataModel[$tableID][$fieldID]#Null:C1517)
-			
-		End if 
-		
-	Else 
-		
-		// Check the related data class
-		$tableCatalog:=This:C1470.$project.$catalog.query("tableNumber = :1"; Num:C11($tableID)).pop()
-		
-		If ($tableCatalog#Null:C1517)  // The table exists
-			
-			$relatedTableNumber:=Num:C11($tableCatalog.field.query("name= :1"; $c[0]).pop().relatedTableNumber)
-			
-			If ($relatedTableNumber>0)
+			// Check the data class
+			If ($field.relatedTableNumber#Null:C1517)\
+				 | (Bool:C1537($field.computed))
 				
-				$relatedCatalog:=This:C1470.$project.$catalog.query("tableNumber = :1"; $relatedTableNumber).pop()
+				// Relation or computed attribute --> use name
+				$available:=(This:C1470.dataModel[$tableID][$field.name]#Null:C1517)
+				
+			Else 
+				
+				// Field --> use ID
+				$available:=(This:C1470.dataModel[$tableID][$fieldID]#Null:C1517)
+				
+			End if 
+			
+			//______________________________________________________
+		: ($c.length=2)
+			
+			// Check the related data class
+			$tableCatalog:=ds:C1482[Table name:C256(Num:C11($tableID))]
+			
+			If ($tableCatalog#Null:C1517)  // The table exists
+				
+				$relatedCatalog:=ds:C1482[$tableCatalog[$c[0]].relatedDataClass]
 				
 				If ($relatedCatalog#Null:C1517)  // The linked table exists
 					
-					If (This:C1470.dataModel[$tableID][$c[0]]#Null:C1517)  // The relation is published
-						
-						If (Num:C11($fieldID)#0)
-							
-							If ($relatedCatalog.field.query("id = :1"; Num:C11($fieldID)).pop()#Null:C1517)
-								
-								$available:=(This:C1470.dataModel[$tableID][$c[0]][$fieldID]#Null:C1517)
-								
-							End if 
-							
-						Else 
-							
-							If ($relatedCatalog.field.query("name = :1"; $c[1]).pop()#Null:C1517)
-								
-								$available:=(This:C1470.dataModel[$tableID][$c[0]][$c[1]]#Null:C1517)
-								
-							End if 
-						End if 
-					End if 
+					$available:=$relatedCatalog[$c[1]]#Null:C1517
+					
 				End if 
 			End if 
-		End if 
-	End if 
+			
+			//______________________________________________________
+		Else 
+			
+			// TODO: Allow more levels with recursivity
+			
+			//______________________________________________________
+	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Update all form definition according to the datamodel

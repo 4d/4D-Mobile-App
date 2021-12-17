@@ -12,8 +12,7 @@
 	"____FOR_TESTS": {
 		"classes": [
 			"Employes",
-			"EmployesEntity",
-			"EmployesSelection"
+			"EmployesEntity"
 		]
 	},
 	"__IN WORKS": {
@@ -246,7 +245,6 @@
 		],
 		"methods": [
 			"COMPILER_editor",
-			"editor_CALLBACK",
 			"editor_CHECK_INSTALLATION",
 			"editor_CREATE_PROJECT",
 			"editor_GET_DEVICES",

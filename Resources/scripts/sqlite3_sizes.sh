@@ -19,7 +19,7 @@ proc is_without_rowid {tname} {
   db eval "PRAGMA index_list = '$t'" o {
     if {$o(origin) == "pk"} {
       set n $o(name)
-      if {0==[db one { SELECT count(*) FROM sqlite_master WHERE name=$n }]} {
+      if {0==[db one { SELECT count(*) FROM sqlite_schema WHERE name=$n }]} {
         return 1
       }
     }
@@ -145,7 +145,7 @@ if {$flags(-debug)} {
   db trace ::dbtrace
 }
 
-db eval {SELECT count(*) FROM sqlite_master}
+db eval {SELECT count(*) FROM sqlite_schema}
 set pageSize [expr {wide([db one {PRAGMA page_size}])}]
 
 

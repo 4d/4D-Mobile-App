@@ -84,40 +84,29 @@ If ($datamodel#Null:C1517)
 					$errors.push(New object:C1471(\
 						"type"; "template"; \
 						"tab"; "list"; \
-						"message"; $str.setText("theTemplateIsMissing").localized($name); \
+						"message"; $str.localize("theTemplateIsMissing"; $name); \
 						"table"; $table.key))
 					
 				Else 
 					
 					// CHECK FORMS FIELDS
-					
 					If ($list[$table.key].fields#Null:C1517)
 						
 						For each ($field; $list[$table.key].fields)
 							
-							Case of 
+							If ($field#Null:C1517)
+								
+								If (Not:C34(PROJECT.fieldAvailable($table.key; $field)))
 									
-									//______________________________________________________
-								: ($field=Null:C1517)
+									// Missing
+									$errors.push(New object:C1471(\
+										"type"; "field"; \
+										"tab"; "list"; \
+										"message"; $str.localize("theFieldIsMissing"; $field.name); \
+										"table"; $table.key))
 									
-									// <NOTHING MORE TO DO>
-									
-									//______________________________________________________
-								: (Bool:C1537($field.computed))  // Computed attribute
-									
-									If ($datamodel[$table.key][$field.name]=Null:C1517)
-										
-										// Missing
-										$errors.push(New object:C1471(\
-											"type"; "field"; \
-											"tab"; "list"; \
-											"message"; $str.setText("theFieldIsMissing").localized($field.name); \
-											"table"; $table.key))
-										
-									End if 
-									
-									//______________________________________________________
-							End case 
+								End if 
+							End if 
 						End for each 
 					End if 
 				End if 
@@ -136,7 +125,7 @@ If ($datamodel#Null:C1517)
 					$errors.push(New object:C1471(\
 						"type"; "template"; \
 						"tab"; "detail"; \
-						"message"; $str.setText("theTemplateIsMissing").localized($name); \
+						"message"; $str.localize("theTemplateIsMissing"; $name); \
 						"table"; $table.key))
 					
 				Else 
@@ -162,7 +151,7 @@ If ($datamodel#Null:C1517)
 										$errors.push(New object:C1471(\
 											"type"; "field"; \
 											"tab"; "detail"; \
-											"message"; $str.setText("theFieldIsMissing").localized($field.name); \
+											"message"; $str.localize("theFieldIsMissing"; $field.name); \
 											"table"; $table.key))
 										
 									End if 
@@ -191,7 +180,7 @@ If ($datamodel#Null:C1517)
 						$errors.push(New object:C1471(\
 							"type"; "icon"; \
 							"panel"; "TABLES"; \
-							"message"; $str.setText("theTableIconIsMissing").localized($name); \
+							"message"; $str.localize("theTableIconIsMissing"; $name); \
 							"table"; $table.key; \
 							"tab"; "tableProperties"))
 						
@@ -214,7 +203,7 @@ If ($datamodel#Null:C1517)
 							$errors.push(New object:C1471(\
 								"type"; "icon"; \
 								"panel"; "TABLES"; \
-								"message"; $str.setText("theFieldIconIsMissing").localized($name); \
+								"message"; $str.localize("theFieldIconIsMissing"; $name); \
 								"table"; $table.key; \
 								"field"; $field.key))
 							
@@ -245,7 +234,7 @@ If ($datamodel#Null:C1517)
 								$errors.push(New object:C1471(\
 									"type"; "formatter"; \
 									"panel"; "TABLES"; \
-									"message"; $str.setText("theFormatterIsMissingOrInvalid").localized($name); \
+									"message"; $str.localize("theFormatterIsMissingOrInvalid"; $name); \
 									"table"; $table.key; \
 									"field"; $field.key))
 								
@@ -273,7 +262,7 @@ If ($datamodel#Null:C1517)
 					$errors.push(New object:C1471(\
 						"type"; "filter"; \
 						"panel"; "DATA"; \
-						"message"; $str.setText("theFilterForTheTableIsNotValid").localized(String:C10($metadata.name)); \
+						"message"; $str.localize("theFilterForTheTableIsNotValid"; String:C10($metadata.name)); \
 						"table"; $table.key))
 					
 				End if 

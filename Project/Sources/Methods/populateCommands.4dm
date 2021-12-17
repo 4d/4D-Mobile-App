@@ -79,7 +79,9 @@ Repeat
 				If ($et.length=0)
 					
 					$theme:=ds:C1482.Themes.new()
+					//%W-550.2
 					$theme.Name:=$themeName
+					//%W+550.2
 					$theme.save()
 					
 				Else 
@@ -88,7 +90,9 @@ Repeat
 					
 				End if 
 				
+				//%W-550.2
 				$command.themeID:=$theme.ID
+				//%W+550.2
 				
 			Else 
 				
@@ -146,7 +150,9 @@ If (Asserted:C1132(Test path name:C476($pathnameSyntaxINTL)=Is a document:K24:1;
 				$command.description:=Replace string:C233($command.description; "  "; " ")
 				$command.description:=Replace string:C233($command.description; "<em>"; "")
 				$command.description:=Replace string:C233($command.description; "</em>"; "")
+				//%W-533.1
 				$command.description[[1]]:=Uppercase:C13($command.description[[1]])
+				//%W+533.1
 				
 			End if 
 		End if 

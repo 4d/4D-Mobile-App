@@ -260,7 +260,7 @@ If (Num:C11($tableID)>0)
 														: ($isToOne)
 															
 															$tips:=$tableModel[$field.name].label
-															$label:=cs:C1710.str.new(EDITOR.toOne).concat($field.name)
+															$label:=EDITOR.str.setText(EDITOR.toOne).concat($field.name)
 															
 															$relation:=$tableModel
 															
@@ -283,7 +283,7 @@ If (Num:C11($tableID)>0)
 																	If (Not:C34($found))
 																		
 																		$svg.addClass("error"; $node)
-																		$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
+																		$tips:=EDITOR.str.setText(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
 																		
 																	End if 
 																End if 
@@ -293,12 +293,19 @@ If (Num:C11($tableID)>0)
 														: ($isToMany)  // Only available on list form
 															
 															$tips:=$field.label
-															$label:=cs:C1710.str.new(EDITOR.toMany).concat($field.name)
+															$label:=EDITOR.str.setText(EDITOR.toMany).concat($field.name)
 															
 															//______________________________________________________
 														Else 
 															
 															$label:=Choose:C955($field.path#Null:C1517; $field.path; $field.name)
+															
+															If (Not:C34(PROJECT.fieldAvailable($tableID; $field)))
+																
+																$svg.addClass("error"; $node)
+																$tips:=EDITOR.str.setText(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($label))
+																
+															End if 
 															
 															//______________________________________________________
 													End case 
@@ -365,7 +372,7 @@ If (Num:C11($tableID)>0)
 																If (PROJECT.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)  // Error
 																	
 																	$class:=$class+" error"
-																	$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theLinkedTableIsNotPublished").localized($relation[$field.name].relatedEntities))
+																	$tips:=EDITOR.str.setText(EDITOR.alert).concat(cs:C1710.str.new("theLinkedTableIsNotPublished").localized($relation[$field.name].relatedEntities))
 																	
 																End if 
 																
@@ -387,7 +394,7 @@ If (Num:C11($tableID)>0)
 																	 | (($tableModel[$field.name]=Null:C1517) & ($tableModel[String:C10($field.id)]=Null:C1517))
 																	
 																	$class:=$class+" error"
-																	$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($field.name))
+																	$tips:=EDITOR.str.setText(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($field.name))
 																	
 																End if 
 																
@@ -396,14 +403,14 @@ If (Num:C11($tableID)>0)
 																If ($dataClass[$c[0]]=Null:C1517)
 																	
 																	$class:=$class+" error"
-																	$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($c[1]))
+																	$tips:=EDITOR.str.setText(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($c[1]))
 																	
 																Else 
 																	
 																	If (ds:C1482[$dataClass[$c[0]].relatedDataClass][$c[1]]=Null:C1517)
 																		
 																		$class:=$class+" error"
-																		$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($c[1]))
+																		$tips:=EDITOR.str.setText(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($c[1]))
 																		
 																	End if 
 																End if 
@@ -413,8 +420,10 @@ If (Num:C11($tableID)>0)
 													End case 
 													
 													// Set class & tips
-													$svg.class($class; $node)\
-														.setAttribute("tips"; $tips; $node)
+													//$svg.class($class; $node).setAttribute("tips"; $tips; $node)
+													
+													// Set tips
+													$svg.setAttribute("tips"; $tips; $node)
 													
 													// Remove dotted lines
 													$svg.setAttribute("stroke-dasharray"; "none"; $svg.nextSibling($node))
@@ -517,7 +526,7 @@ If (Num:C11($tableID)>0)
 				
 				OBJECT SET VALUE:C1742("preview"; cs:C1710.svg.new()\
 					.size($form.preview.coordinates.width-20; $form.preview.coordinates.height)\
-					.textArea(cs:C1710.str.new("theTemplateIsMissingOrInvalid").localized(Replace string:C233($formName; "/"; ""))).size($form.preview.coordinates.width-50)\
+					.textArea(EDITOR.str.localize("theTemplateIsMissingOrInvalid"; Replace string:C233($formName; "/"; ""))).size($form.preview.coordinates.width-50)\
 					.position(20; 180).font(New object:C1471(\
 					"size"; 14; \
 					"color"; EDITOR.colors.errorColor.hex; \
@@ -549,10 +558,3 @@ If (Num:C11($tableID)>0)
 End if 
 
 err_FINALLY
-
-// ----------------------------------------------------
-// Return
-//$0:=$OUT
-
-// ----------------------------------------------------
-// End
