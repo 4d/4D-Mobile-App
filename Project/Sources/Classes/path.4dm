@@ -323,7 +323,6 @@ Function projects($create : Boolean)->$folder : 4D:C1709.Folder  // Projects fol
 		
 	End if 
 	
-	
 /*========================================================*/
 Function products($create : Boolean)->$folder : 4D:C1709.Folder  // Products folder
 	

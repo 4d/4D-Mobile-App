@@ -245,6 +245,7 @@
 		],
 		"methods": [
 			"COMPILER_editor",
+			"EDITOR_CALLBACK",
 			"editor_CHECK_INSTALLATION",
 			"editor_CREATE_PROJECT",
 			"editor_GET_DEVICES",

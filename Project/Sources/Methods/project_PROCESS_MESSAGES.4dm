@@ -383,7 +383,7 @@ Case of
 		End if 
 		
 		//______________________________________________________
-	: ($selector="update_data")  // Update data panel after a dataset generation
+	: ($selector="update_data")  // Update data panel
 		
 		If ($isProjectForm)
 			
@@ -399,6 +399,29 @@ Case of
 		Else 
 			
 			panel_Load.update()
+			
+		End if 
+		
+		//______________________________________________________
+	: ($selector="datasetInformations")  // Callback from getDataSize to update the data panel
+		
+		If ($isProjectForm)
+			
+			// Pass to target panel
+			$panel:=panel_Find($ƒ.data)
+			
+			If (Length:C16($panel)>0)
+				
+				EDITOR.callChild($panel; Current method name:C684; $selector; $data)
+				
+			End if 
+			
+		Else 
+			
+			var $panelClass : Object
+			$panelClass:=panel_Load
+			$panelClass.sqlite:=$data.database
+			$panelClass.updateTableListWithDataSizes()
 			
 		End if 
 		

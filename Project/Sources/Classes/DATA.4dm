@@ -190,59 +190,18 @@ Function tableList()
 	/// Get the dump sizes if available
 Function getDataSize()
 	
+	This:C1470.sqlite:=Null:C1517
+	This:C1470.callWorker("getDataSize"; New object:C1471("caller"; This:C1470.window; "project"; PROJECT))
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function updateTableListWithDataSizes()
+	
 	var $pathname; $sqlID; $t : Text
 	var $size : Integer
 	var $x : Blob
 	var $table : Object
 	var $file : 4D:C1709.File
-	var $lep : cs:C1710.lep
 	
-	This:C1470.sqlite:=Null:C1517
-	
-	$pathname:=dataSet(New object:C1471("action"; "path"; \
-		"project"; New object:C1471("product"; Form:C1466.product; "$project"; Form:C1466.$project))).path
-	
-	$file:=Folder:C1567($pathname; fk platform path:K87:2).file("Resources/Structures.sqlite")
-	
-	If ($file.exists)
-		
-		If (Is macOS:C1572)
-			
-			//MARK: #TURN AROUND
-			var $len; $pos : Integer
-			If (Match regex:C1019("(?m-si)macOS\\s(\\d+)"; ENV.systemInfos.osVersion; 1; $pos; $len))
-				
-				If (Num:C11(Substring:C12(ENV.systemInfos.osVersion; $pos; $len))<12)
-					
-					$lep:=cs:C1710.lep.new()\
-						.setOutputType(Is object:K8:27)\
-						.launch(EDITOR.path.scripts().file("sqlite3_sizes_11.sh"); "'"+$file.path+"'")
-					
-				Else 
-					
-					$lep:=cs:C1710.lep.new()\
-						.setOutputType(Is object:K8:27)\
-						.launch(EDITOR.path.scripts().file("sqlite3_sizes.sh"); "'"+$file.path+"'")
-					
-				End if 
-			End if 
-			
-		Else 
-			
-			$lep:=cs:C1710.lep.new()\
-				.setOutputType(Is object:K8:27)\
-				.launch(EDITOR.path.scripts().file("sqlite3_sizes.sh"); "'"+$file.path+"'")
-			
-		End if 
-		
-		If ($lep.success)
-			
-			This:C1470.sqlite:=$lep.outputStream
-			
-		End if 
-	End if 
-	
-	// Update the table list
 	For each ($table; This:C1470.tables)
 		
 		If (Length:C16(String:C10($table.filter.string))>0)
@@ -289,8 +248,7 @@ Function getDataSize()
 				
 			Else 
 				
-				// Mark: OBSOLETE ?
-				$file:=Folder:C1567($pathname; fk platform path:K87:2).file("Resources/Assets.xcassets/Data/"+$table.name+".dataset/"+$table.name+".data.json")
+				$file:=PROJECT._folder.file("project.dataSet/Resources/Assets.xcassets/Data/"+$table.name+".dataset/"+$table.name+".data.json")
 				
 				If ($file.exists)
 					
@@ -299,7 +257,8 @@ Function getDataSize()
 					$size:=BLOB size:C605($x)
 					SET BLOB SIZE:C606($x; 0)
 					
-					$file:=Folder:C1567($pathname; fk platform path:K87:2).file("Resources/Assets.xcassets/Pictures/"+$table.name+"/manifest.json")
+					// Add pictures size if any
+					$file:=PROJECT._folder.file("Resources/Assets.xcassets/Pictures/"+$table.name+"/manifest.json")
 					
 					If ($file.exists)
 						
@@ -317,6 +276,9 @@ Function getDataSize()
 			End if 
 		End if 
 	End for each 
+	
+	// Redraw
+	This:C1470.list.touch()
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Display filter status

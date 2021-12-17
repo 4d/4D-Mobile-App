@@ -61,7 +61,7 @@ Function load($project)->$this : cs:C1710.project
 	If (Bool:C1537($file.exists))
 		
 		// *SHORTCUTS
-		This:C1470._folder:=$file.parent
+		This:C1470._folder:=Folder:C1567($file.parent.platformPath; fk platform path:K87:2)
 		This:C1470._name:=This:C1470._folder.fullName
 		
 		$project:=JSON Parse:C1218($file.getText())
