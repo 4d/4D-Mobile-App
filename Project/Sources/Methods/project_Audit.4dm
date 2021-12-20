@@ -8,8 +8,7 @@
 //
 // ----------------------------------------------------
 // Declarations
-var $0 : Object
-var $1 : Object
+#DECLARE($in : Object)->$result : Object
 
 If (False:C215)
 	C_OBJECT:C1216(project_Audit; $0)
@@ -17,13 +16,12 @@ If (False:C215)
 End if 
 
 var $name : Text
-var $result; $toCheck; $datamodel; $detail; $field; $list; $metadata; $table : Object
+var $toCheck; $datamodel; $detail; $field; $list; $metadata; $table : Object
 var $errors : Collection
 var $hostFormaters; $hostIcons : 4D:C1709.Folder
 var $path : cs:C1710.path
 var $str : cs:C1710.str
 var $tmpl : cs:C1710.tmpl
-
 
 // ----------------------------------------------------
 // Initialisations
@@ -34,30 +32,29 @@ $toCheck:=New object:C1471(\
 "formatters"; True:C214; \
 "filters"; True:C214)
 
-If (Count parameters:C259>=1)
-	
-	// Allow passing value for test purpose.
-	$datamodel:=Choose:C955($1.dataModel#Null:C1517; $1.dataModel; Form:C1466.dataModel)
-	$list:=Choose:C955($1.list#Null:C1517; $1.list; Form:C1466.list)
-	$detail:=Choose:C955($1.detail#Null:C1517; $1.detail; Form:C1466.detail)
-	
-	If ($1.target#Null:C1517)
-		
-		$toCheck.list:=($1.target.indexOf("lists")#-1)
-		$toCheck.detail:=($1.target.indexOf("details")#-1)
-		$toCheck.icons:=($1.target.indexOf("icons")#-1)
-		$toCheck.formatters:=($1.target.indexOf("formatters")#-1)
-		$toCheck.filters:=($1.target.indexOf("filters")#-1)
-		
-	End if 
-	
-Else 
+If (Count parameters:C259=0)
 	
 	// Normal behaviour is form
 	$datamodel:=PROJECT.dataModel
 	$list:=PROJECT.list
 	$detail:=PROJECT.detail
 	
+Else 
+	
+	// Allow passing value for test purpose.
+	$datamodel:=Choose:C955($in.dataModel#Null:C1517; $in.dataModel; PROJECT.dataModel)
+	$list:=Choose:C955($in.list#Null:C1517; $in.list; PROJECT.list)
+	$detail:=Choose:C955($in.detail#Null:C1517; $in.detail; PROJECT.detail)
+	
+	If ($in.target#Null:C1517)
+		
+		$toCheck.list:=($in.target.indexOf("lists")#-1)
+		$toCheck.detail:=($in.target.indexOf("details")#-1)
+		$toCheck.icons:=($in.target.indexOf("icons")#-1)
+		$toCheck.formatters:=($in.target.indexOf("formatters")#-1)
+		$toCheck.filters:=($in.target.indexOf("filters")#-1)
+		
+	End if 
 End if 
 
 // ----------------------------------------------------
@@ -102,7 +99,7 @@ If ($datamodel#Null:C1517)
 									$errors.push(New object:C1471(\
 										"type"; "field"; \
 										"tab"; "list"; \
-										"message"; $str.localize("theFieldIsMissing"; $field.name); \
+										"message"; $str.localize("theFieldFieldIsMissing"; $field.name); \
 										"table"; $table.key))
 									
 								End if 
@@ -151,7 +148,7 @@ If ($datamodel#Null:C1517)
 										$errors.push(New object:C1471(\
 											"type"; "field"; \
 											"tab"; "detail"; \
-											"message"; $str.localize("theFieldIsMissing"; $field.name); \
+											"message"; $str.localize("theFieldFieldIsMissing"; $field.name); \
 											"table"; $table.key))
 										
 									End if 
@@ -221,6 +218,7 @@ If ($datamodel#Null:C1517)
 					$name:=String:C10($datamodel[$table.key][$field.key].format)
 					
 					Case of 
+							
 							//______________________________________________________
 						: (Length:C16($name)=0)
 							
@@ -290,7 +288,3 @@ If (Form:C1466#Null:C1517)
 		"show"; Not:C34($result.success)))
 	
 End if 
-
-// ----------------------------------------------------
-// Return
-$0:=$result

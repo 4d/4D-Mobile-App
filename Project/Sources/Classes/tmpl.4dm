@@ -676,6 +676,7 @@ Function appendOneField($index : Integer; $field : Object; $context : Object; $b
 	var $class; $label; $name; $node; $style; $t; $tips : Text
 	var $found; $isToMany; $isToOne : Boolean
 	var $o; $relation : Object
+	var $c : Collection
 	var $xml : cs:C1710.xml
 	
 	$isToOne:=($field.fieldType=8858)
@@ -734,6 +735,23 @@ Function appendOneField($index : Integer; $field : Object; $context : Object; $b
 		Else 
 			
 			$label:=$field.path
+			
+			$c:=Split string:C1554($label; ".")
+			
+			$found:=(PROJECT.dataModel[$context.tableNumber][$c[0]]#Null:C1517)
+			
+			If ($found & ($c.length>1))
+				
+				$found:=(PROJECT.dataModel[$context.tableNumber][$c[0]][$c[1]]#Null:C1517)
+				
+			End if 
+			
+			If (Not:C34($found))
+				
+				$class:="error"
+				$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($label))
+				
+			End if 
 			
 			//______________________________________________________
 	End case 

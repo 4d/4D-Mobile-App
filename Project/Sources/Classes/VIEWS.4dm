@@ -305,7 +305,6 @@ Function fieldList($table : Variant)->$result : Object
 											$c.push($o)
 											
 										End for each 
-										
 									End if 
 									
 									If ($c.length>0)
