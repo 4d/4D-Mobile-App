@@ -601,17 +601,31 @@ Function addField($table : Object; $field : Object)
 						
 					Else 
 						
-						If ($table[$field.name][$fieldID]=Null:C1517)
-							
-							$table[$field.name][$fieldID]:=New object:C1471(\
-								"name"; $relatedField.name; \
-								"path"; $relatedField.path; \
-								"label"; PROJECT.label($relatedField.name); \
-								"shortLabel"; PROJECT.shortLabel($relatedField.name); \
-								"type"; $relatedField.type; \
-								"fieldType"; $relatedField.fieldType)
-							
-						End if 
+						
+						Case of 
+								//______________________________________________________
+							: (Bool:C1537($relatedField.computed))
+								
+								//TODO: Publish the computed attributes
+								
+								//______________________________________________________
+							: ($table[$field.name][$fieldID]=Null:C1517)
+								
+								$table[$field.name][$fieldID]:=New object:C1471(\
+									"name"; $relatedField.name; \
+									"path"; $relatedField.path; \
+									"label"; PROJECT.label($relatedField.name); \
+									"shortLabel"; PROJECT.shortLabel($relatedField.name); \
+									"type"; $relatedField.type; \
+									"fieldType"; $relatedField.fieldType)
+								
+								//______________________________________________________
+							Else 
+								
+								// A "Case of" statement should never omit "Else"
+								
+								//______________________________________________________
+						End case 
 					End if 
 				End if 
 			End for each 
