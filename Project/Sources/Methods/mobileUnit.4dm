@@ -199,6 +199,11 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			EXECUTE METHOD:C1007("_o_storyboard"; $response; $parameters)
 			
 			//______________________________________________________
+		: ($entryPoint="device")
+			
+			EXECUTE METHOD:C1007("_o_device"; $response; $parameters)
+			
+			//______________________________________________________
 		: ($entryPoint="rest")\
 			 | ($entryPoint="dump")
 			
@@ -233,7 +238,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 				"error"; "Command unavailable for this Windows platform")
 			
 			//________________________________________
-		: (Bool:C1537(FEATURE.wip("xcDataModelClass")) & \
+		: (FEATURE.wip("xcDataModelClass") & \
 			(($entryPoint="dataModel")\
 			 | ($entryPoint="xcDataModel")))
 			
