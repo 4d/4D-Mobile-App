@@ -742,8 +742,15 @@ Function appendOneField($index : Integer; $field : Object; $context : Object; $b
 			
 			If ($found & ($c.length>1))
 				
-				$found:=(PROJECT.dataModel[$context.tableNumber][$c[0]][$c[1]]#Null:C1517)
-				
+				If (Bool:C1537($field.computed))
+					
+					$found:=(PROJECT.dataModel[$context.tableNumber][$c[0]][$c[1]]#Null:C1517)
+					
+				Else 
+					
+					$found:=(PROJECT.dataModel[$context.tableNumber][$c[0]][String:C10($field.fieldNumber)]#Null:C1517)
+					
+				End if 
 			End if 
 			
 			If (Not:C34($found))
