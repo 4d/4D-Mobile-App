@@ -238,13 +238,17 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 				"error"; "Command unavailable for this Windows platform")
 			
 			//________________________________________
-		: (FEATURE.wip("xcDataModelClass") & \
+		: (Bool:C1537(FEATURE.wip("xcDataModelClass")) & \
 			(($entryPoint="dataModel")\
 			 | ($entryPoint="xcDataModel")))
 			
 			$response:=cs:C1710.xcDataModel.new($parameters).run(\
 				/*path*/$parameters.path; \
 				/*options*/$parameters)
+			
+			//________________________________________
+		: (($entryPoint="dataModel")\
+			 | ($entryPoint="xcDataModel"))
 			
 			EXECUTE METHOD:C1007($entryPoint; $response; $parameters)
 			

@@ -188,7 +188,7 @@ FEATURE.wip("iosSDKfromAWS")  // Download iOS SDK from AWS
 
 FEATURE.wip("newFormatterChoiceList")  // Menu to create formatter choice list directly , from data
 FEATURE.wip("listEditor")  // Allow to create custom Data Source Input Control
-// FEATURE.wip("xcDataModelClass")  // Use class to create core data model ie. xcDataModel (useful to refactor for alias)
+FEATURE.wip("xcDataModelClass")  // Use class to create core data model ie. xcDataModel (useful to refactor for alias)
 
 
 
