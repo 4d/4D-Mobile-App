@@ -206,8 +206,8 @@ Case of
 			
 			If (Not:C34(Bool:C1537($result.success)))
 				
-				If (String:C10($result.errors[0].message)="The request is unauthorized")\
-					 | (String:C10($result.errors[0].message)="This request is forbidden")
+				If (String:C10($result.errors[0])="The request is unauthorized")\
+					 | (String:C10($result.errors[0])="This request is forbidden")
 					
 					$result.title:=Get localized string:C991("locateTheKey")
 					$result.type:=9
@@ -487,13 +487,19 @@ $regex.match[1].data:="127.0.0.1"
 						
 						If (Length:C16(String:C10(Form:C1466.dataSource.keyPath))>0)
 							
-							If (Test path name:C476($t)#Is a document:K24:1)
+							//%W-533.1
+							If (Form:C1466.dataSource.keyPath[[1]]="/")
 								
-								$t:=Convert path POSIX to system:C1107(Form:C1466.dataSource.keyPath)
+								// Relative path
+								$file:=Folder:C1567(Folder:C1567(fk database folder:K87:14; *).platformPath; fk platform path:K87:2)\
+									.file(Substring:C12(Form:C1466.dataSource.keyPath; 2))
+								
+							Else 
+								
+								$file:=File:C1566(Form:C1466.dataSource.keyPath)
 								
 							End if 
-							
-							$file:=File:C1566($t; fk platform path:K87:2)
+							//%W+533.1
 							
 							If ($file.exists)  // & Shift down
 								
