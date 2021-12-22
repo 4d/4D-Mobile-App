@@ -827,26 +827,47 @@ Function checkRestQueryFilter($table : Object)
 	var $success : Boolean
 	var $filter; $response : Object
 	
-	$filter:=$table.filter
-	
-	OB REMOVE:C1226($filter; "error")
-	OB REMOVE:C1226($filter; "errors")
-	OB REMOVE:C1226($filter; "code")
-	OB REMOVE:C1226($filter; "httpError")
-	OB REMOVE:C1226($filter; "parameters")
-	
-	OB REMOVE:C1226($table; "count")
-	
-	// Detect a query with parameters
-	$filter.parameters:=(Match regex:C1019(This:C1470.$regexParameters; $filter.string; 1))
-	
-	If ($filter.parameters)
+	If ($table.filter#Null:C1517)
 		
-		OB REMOVE:C1226($filter; "embedded")
+		$filter:=$table.filter
 		
-		$buffer:=$filter.string
+		OB REMOVE:C1226($filter; "error")
+		OB REMOVE:C1226($filter; "errors")
+		OB REMOVE:C1226($filter; "code")
+		OB REMOVE:C1226($filter; "httpError")
+		OB REMOVE:C1226($filter; "parameters")
 		
-		If (Rgx_SubstituteText(This:C1470.$regexParameters; "\\1\"@\""; ->$buffer)=0)
+		OB REMOVE:C1226($table; "count")
+		
+		// Detect a query with parameters
+		$filter.parameters:=(Match regex:C1019(This:C1470.$regexParameters; $filter.string; 1))
+		
+		If ($filter.parameters)
+			
+			OB REMOVE:C1226($filter; "embedded")
+			
+			$buffer:=$filter.string
+			
+			If (Rgx_SubstituteText(This:C1470.$regexParameters; "\\1\"@\""; ->$buffer)=0)
+				
+				$response:=Rest(New object:C1471(\
+					"action"; "records"; \
+					"table"; $table.name; \
+					"url"; This:C1470.server.urls.production; \
+					"handler"; "mobileapp"; \
+					"queryEncode"; True:C214; \
+					"query"; New object:C1471("$filter"; $buffer; \
+					"$limit"; "1")))
+				
+			Else 
+				
+				$success:=True:C214
+				
+			End if 
+			
+		Else 
+			
+			OB REMOVE:C1226($filter; "parameters")
 			
 			$response:=Rest(New object:C1471(\
 				"action"; "records"; \
@@ -854,60 +875,43 @@ Function checkRestQueryFilter($table : Object)
 				"url"; This:C1470.server.urls.production; \
 				"handler"; "mobileapp"; \
 				"queryEncode"; True:C214; \
-				"query"; New object:C1471("$filter"; $buffer; \
-				"$limit"; "1")))
-			
-		Else 
-			
-			$success:=True:C214
+				"query"; New object:C1471("$filter"; $filter.string)))
 			
 		End if 
 		
-	Else 
+		$success:=$response.success
 		
-		OB REMOVE:C1226($filter; "parameters")
+		Case of 
+				
+				//______________________________________________________
+			: ($success)
+				
+				If ($response.__COUNT#Null:C1517)
+					
+					$table.count:=Num:C11($response.__COUNT)
+					
+				End if 
+				
+				//______________________________________________________
+			: ($response.code=0)  //server not reachable
+				
+				$filter.code:=$response.code
+				$filter.error:=".The server is not reachable"
+				
+				//______________________________________________________
+			: ($response.httpError#Null:C1517)  //?????
+				
+				$filter.httpError:=$response.httpError
+				$filter.error:=".Server error ("+String:C10($response.httpError)+")"
+				
+				
+				//______________________________________________________
+		End case 
 		
-		$response:=Rest(New object:C1471(\
-			"action"; "records"; \
-			"table"; $table.name; \
-			"url"; This:C1470.server.urls.production; \
-			"handler"; "mobileapp"; \
-			"queryEncode"; True:C214; \
-			"query"; New object:C1471("$filter"; $filter.string)))
+		$filter.errors:=$response.errors
+		$filter.validated:=$success
 		
 	End if 
-	
-	$success:=$response.success
-	
-	Case of 
-			
-			//______________________________________________________
-		: ($success)
-			
-			If ($response.__COUNT#Null:C1517)
-				
-				$table.count:=Num:C11($response.__COUNT)
-				
-			End if 
-			
-			//______________________________________________________
-		: ($response.code=0)  //server not reachable
-			
-			$filter.code:=$response.code
-			$filter.error:=".The server is not reachable"
-			
-			//______________________________________________________
-		: ($response.httpError#Null:C1517)  //?????
-			
-			$filter.httpError:=$response.httpError
-			$filter.error:=".Server error ("+String:C10($response.httpError)+")"
-			
-			
-			//______________________________________________________
-	End case 
-	
-	$filter.errors:=$response.errors
-	$filter.validated:=$success
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function checkLocalQueryFilter($table : Object)
