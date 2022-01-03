@@ -740,6 +740,22 @@ Function appendOneField($index : Integer; $field : Object; $context : Object; $b
 			
 			$found:=(PROJECT.dataModel[$context.tableNumber][$c[0]]#Null:C1517)
 			
+			If (Not:C34($found))
+				
+				var $fields : Collection
+				$fields:=New collection:C1472
+				
+				var $key : Text
+				For each ($key; PROJECT.dataModel[$context.tableNumber])
+					
+					$fields.push(PROJECT.dataModel[$context.tableNumber][$key])
+					
+				End for each 
+				
+				$found:=$fields.query("name = :1"; $c[0]).pop()#Null:C1517
+				
+			End if 
+			
 			If ($found & ($c.length>1))
 				
 				If (Bool:C1537($field.computed))

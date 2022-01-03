@@ -1436,6 +1436,22 @@ Function fieldAvailable($tableID; $field : Object)->$available : Boolean
 				
 			End if 
 			
+			If (Not:C34($available))
+				
+				var $fields : Collection
+				$fields:=New collection:C1472
+				
+				var $key : Text
+				For each ($key; This:C1470.dataModel[$tableID])
+					
+					$fields.push(This:C1470.dataModel[$tableID][$key])
+					
+				End for each 
+				
+				$available:=$fields.query("name = :1"; $c[0])#Null:C1517
+				
+			End if 
+			
 			//______________________________________________________
 		: ($c.length=2)
 			
