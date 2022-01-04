@@ -132,29 +132,19 @@ If ($datamodel#Null:C1517)
 						
 						For each ($field; $detail[$table.key].fields)
 							
-							Case of 
+							If ($field#Null:C1517)
+								
+								If (Not:C34(PROJECT.fieldAvailable($table.key; $field)))
 									
-									//______________________________________________________
-								: ($field=Null:C1517)
+									// Missing
+									$errors.push(New object:C1471(\
+										"type"; "field"; \
+										"tab"; "detail"; \
+										"message"; $str.localize("theFieldFieldIsMissing"; $field.name); \
+										"table"; $table.key))
 									
-									// <NOTHING MORE TO DO>
-									
-									//______________________________________________________
-								: (Bool:C1537($field.computed))  // Computed attribute
-									
-									If ($datamodel[$table.key][$field.name]=Null:C1517)
-										
-										// Missing
-										$errors.push(New object:C1471(\
-											"type"; "field"; \
-											"tab"; "detail"; \
-											"message"; $str.localize("theFieldFieldIsMissing"; $field.name); \
-											"table"; $table.key))
-										
-									End if 
-									
-									//______________________________________________________
-							End case 
+								End if 
+							End if 
 						End for each 
 					End if 
 				End if 

@@ -1448,7 +1448,7 @@ Function fieldAvailable($tableID; $field : Object)->$available : Boolean
 					
 				End for each 
 				
-				$available:=$fields.query("name = :1"; $c[0])#Null:C1517
+				$available:=$fields.query("name = :1"; $c[0]).pop()#Null:C1517
 				
 			End if 
 			
