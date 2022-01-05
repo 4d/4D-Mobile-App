@@ -165,6 +165,8 @@ object Libs {
         "com.android.support.test.espresso:espresso-contrib:${Versions.espresso_contrib}"
     const val json = "org.json:json:${Versions.json}"
     const val junit = "junit:junit:${Versions.junit}"
+    const val kotlin_coroutines_test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.kotlin_coroutines}"
+    const val lifecycle_testing = "androidx.lifecycle:lifecycle-runtime-testing:${Versions.lifecycle}"
     const val mockito = "org.mockito:mockito-core:${Versions.mockito}"
     const val mockito_android = "org.mockito:mockito-android:${Versions.mockito}"
     const val mockk = "io.mockk:mockk:${Versions.mockk}"
