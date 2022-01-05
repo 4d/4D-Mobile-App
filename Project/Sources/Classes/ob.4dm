@@ -370,7 +370,8 @@ Function remove($property : Text; $object : Object)->$result : Object
 						
 					End if 
 					
-					$i+=1
+					//$i+=1
+					$i:=$i+1
 					
 				End for each 
 				
