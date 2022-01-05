@@ -1438,17 +1438,15 @@ Function fieldAvailable($tableID; $field : Object)->$available : Boolean
 			
 			If (Not:C34($available))
 				
-				var $fields : Collection
-				$fields:=New collection:C1472
+				//var $fields : Collection
+				//$fields:=New collection
+				//var $key : Text
+				//For each ($key; This.dataModel[$tableID])
+				//$fields.push(This.dataModel[$tableID][$key])
+				//End for each 
+				//$available:=$fields.query("name = :1"; $c[0]).pop()#Null
 				
-				var $key : Text
-				For each ($key; This:C1470.dataModel[$tableID])
-					
-					$fields.push(This:C1470.dataModel[$tableID][$key])
-					
-				End for each 
-				
-				$available:=$fields.query("name = :1"; $c[0]).pop()#Null:C1517
+				$available:=cs:C1710.ob.new(This:C1470.dataModel[$tableID]).toCollection().query("name = :1"; $c[0]).pop()#Null:C1517
 				
 			End if 
 			

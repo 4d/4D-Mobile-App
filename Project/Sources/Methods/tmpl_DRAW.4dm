@@ -14,7 +14,7 @@ If (False:C215)
 	C_OBJECT:C1216(tmpl_DRAW; $1)
 End if 
 
-var $background; $binding; $class; $formName; $formType; $key; $label; $name; $node; $parent : Text
+var $background; $binding; $formName; $formType; $key; $label; $name; $node; $parent : Text
 var $style; $t; $tableID; $tips : Text
 var $found; $isToMany; $isToOne; $stop : Boolean
 var $avalaibleWidth; $count; $height; $indx : Integer
@@ -213,7 +213,6 @@ If (Num:C11($tableID)>0)
 							If ($field#Null:C1517)
 								
 								CLEAR VARIABLE:C89($style)
-								CLEAR VARIABLE:C89($class)
 								CLEAR VARIABLE:C89($found)
 								CLEAR VARIABLE:C89($tips)
 								CLEAR VARIABLE:C89($isToOne)
@@ -235,7 +234,6 @@ If (Num:C11($tableID)>0)
 									
 									// Static
 									$t:=String:C10($indx)
-									$class:="label"
 									
 									// Get the bindind definition
 									If (let(->$node; Formula:C1597($svg.findById("f"+$t)); Formula:C1597($svg.success)))
@@ -371,7 +369,6 @@ If (Num:C11($tableID)>0)
 																
 																If (PROJECT.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)  // Error
 																	
-																	$class:=$class+" error"
 																	$tips:=EDITOR.str.setText(EDITOR.alert).concat(cs:C1710.str.new("theLinkedTableIsNotPublished").localized($relation[$field.name].relatedEntities))
 																	
 																End if 
@@ -393,7 +390,6 @@ If (Num:C11($tableID)>0)
 																If ($dataClass[$field.name]=Null:C1517)\
 																	 | (($tableModel[$field.name]=Null:C1517) & ($tableModel[String:C10($field.id)]=Null:C1517))
 																	
-																	$class:=$class+" error"
 																	$tips:=EDITOR.str.setText(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($field.name))
 																	
 																End if 
@@ -402,14 +398,12 @@ If (Num:C11($tableID)>0)
 																
 																If ($dataClass[$c[0]]=Null:C1517)
 																	
-																	$class:=$class+" error"
 																	$tips:=EDITOR.str.setText(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($c[1]))
 																	
 																Else 
 																	
 																	If (ds:C1482[$dataClass[$c[0]].relatedDataClass][$c[1]]=Null:C1517)
 																		
-																		$class:=$class+" error"
 																		$tips:=EDITOR.str.setText(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($c[1]))
 																		
 																	End if 
@@ -418,9 +412,6 @@ If (Num:C11($tableID)>0)
 															
 															//______________________________________________________
 													End case 
-													
-													// Set class & tips
-													//$svg.class($class; $node).setAttribute("tips"; $tips; $node)
 													
 													// Set tips
 													$svg.setAttribute("tips"; $tips; $node)

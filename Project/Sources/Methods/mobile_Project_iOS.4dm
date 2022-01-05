@@ -1091,7 +1091,8 @@ End if
 
 $ui.close()
 
-ob_writeToDocument($out; $cacheFolder.file("lastBuild.ios.json").platformPath; True:C214)
+// Save the last build log
+cs:C1710.ob.new($out).save($cacheFolder.file("lastBuild.ios.json"))
 
 $out.param:=$in
 
