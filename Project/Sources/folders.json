@@ -382,6 +382,7 @@
 	},
 	"07] ACTIONS": {
 		"methods": [
+			"ACTIONS",
 			"ACTIONS_CALLBACK",
 			"COMPILER_ACTIONS"
 		],
@@ -487,9 +488,11 @@
 			"UNIT_3"
 		],
 		"methods": [
+			"_test_alias",
 			"mobileUnit4D",
 			"test__catalog",
 			"test_catalog",
+			"test_ob_class",
 			"test_reconcile",
 			"test_storyboard",
 			"test_structure",
