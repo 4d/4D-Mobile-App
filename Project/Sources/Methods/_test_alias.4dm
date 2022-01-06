@@ -13,8 +13,10 @@ If (Shift down:C543)
 	If (Not:C34($employesFile.exists))
 		
 		var $code : Text
-		$code:="Class extends Entity\n"
-		$code+="\n"
+		//$code:="Class extends Entity\n"
+		//$code+="\n"
+		
+		$code:="Class extends Entity\n"+"\n"
 		
 		var $aliases : Collection
 		$aliases:=New collection:C1472("exposed Alias offices employee_return.office"; \
@@ -25,7 +27,8 @@ If (Shift down:C543)
 			"exposed Alias serviceName service.Name"; \
 			"exposed Alias nom Name")
 		
-		$code+=$aliases.join("\n")
+		//$code+=$aliases.join("\n")
+		$code:=$code+$aliases.join("\n")
 		
 		$employesFile.setText($code)
 		
