@@ -1591,42 +1591,47 @@ Function publishedTables()->$tables : Collection
 	
 	$tables:=New collection:C1472
 	
-	For each ($tableID; This:C1470.dataModel)
+	If (This:C1470.dataModel#Null:C1517)
 		
-		$meta:=This:C1470.dataModel[$tableID][""]  // Table properties
-		
-		If ($meta.label=Null:C1517)
+		For each ($tableID; This:C1470.dataModel)
 			
-			$meta.label:=PROJECT.label($meta.name)
+			$meta:=This:C1470.dataModel[$tableID][""]  // Table properties
 			
-		End if 
-		
-		If ($meta.shortLabel=Null:C1517)
+			If ($meta.label=Null:C1517)
+				
+				$meta.label:=PROJECT.label($meta.name)
+				
+			End if 
 			
-			$meta.shortLabel:=$meta.label
+			If ($meta.shortLabel=Null:C1517)
+				
+				$meta.shortLabel:=$meta.label
+				
+			End if 
 			
-		End if 
-		
-		$table:=New object:C1471(\
-			"tableNumber"; Num:C11($tableID); \
-			"name"; $meta.name; \
-			"label"; $meta.label; \
-			"shortLabel"; $meta.shortLabel; \
-			"embedded"; Bool:C1537($meta.embedded); \
-			"iconPath"; String:C10($meta.icon); \
-			"icon"; PROJECT.getIcon(String:C10($meta.icon)))
-		
-		If ($meta.filter#Null:C1517)
+			$table:=New object:C1471(\
+				"tableNumber"; Num:C11($tableID); \
+				"name"; $meta.name; \
+				"label"; $meta.label; \
+				"shortLabel"; $meta.shortLabel; \
+				"embedded"; Bool:C1537($meta.embedded); \
+				"iconPath"; String:C10($meta.icon); \
+				"icon"; PROJECT.getIcon(String:C10($meta.icon)))
 			
-			$table.filter:=Choose:C955(Value type:C1509($meta.filter)=Is text:K8:3; New object:C1471(\
-				"string"; $meta.filter); \
-				$meta.filter)
+			If ($meta.filter#Null:C1517)
+				
+				$table.filter:=Choose:C955(Value type:C1509($meta.filter)=Is text:K8:3; New object:C1471(\
+					"string"; $meta.filter); \
+					$meta.filter)
+				
+			End if 
 			
-		End if 
+			$tables.push($table)
+			
+		End for each 
 		
-		$tables.push($table)
-		
-	End for each 
+	Else   // <NOTHING MORE TO DO>
+	End if 
 	
 	//================================================================================
 Function fieldDefinition
