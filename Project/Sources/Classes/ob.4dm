@@ -20,8 +20,7 @@ Class constructor($content)
 		
 	End if 
 	
-	//MARK:- COMPUTED ATTRIBUTES
-	
+	//MARK:- 📌 COMPUTED ATTRIBUTES
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function get type()->$att : Integer
 	
@@ -63,8 +62,7 @@ Function get count()->$att : Integer
 		 ? (OB Keys:C1719(This:C1470.content).length)\
 		 : 0
 	
-	//MARK:- FUNCTIONS
-	
+	//MARK:- 📌 FUNCTIONS
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Set the root content
 Function setContent($content)->$object : Object
@@ -257,8 +255,9 @@ Function get($path)->$value
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Checks if the path exists and return True if so,
-	// even if not contain any contents (not same result as comparison to Null)
+/** Checks if the path exists and return True if so,
+even if not contain any contents (not same result as comparison to Null)
+*/
 Function exists($path)->$exists : Boolean
 	
 	var $i : Integer
@@ -280,7 +279,7 @@ Function exists($path)->$exists : Boolean
 			
 			If (This:C1470.type=Is object:K8:27)
 				
-				$members:=Choose:C955(Value type:C1509($path)=Is collection:K8:32; $path; Split string:C1554($path; "."))
+				$members:=Value type:C1509($path)=Is collection:K8:32 ? $path : Split string:C1554(String:C10($path); ".")
 				
 				$o:=New object:C1471
 				$schem:=$o
@@ -321,7 +320,7 @@ Function exists($path)->$exists : Boolean
 			Else 
 				
 				This:C1470.success:=False:C215
-				This:C1470._pushError("checkPath() is not yet available for collections")
+				This:C1470._pushError("exists() is not yet available for collections")
 				
 			End if 
 			
@@ -346,6 +345,8 @@ Function remove($property : Text; $object : Object)->$result : Object
 	var $i : Integer
 	var $v
 	
+	// MARK: ♻️ RECURSIVE
+	
 	$intra:=Count parameters:C259<2
 	$object:=$intra ? This:C1470.content : $object
 	
@@ -358,7 +359,6 @@ Function remove($property : Text; $object : Object)->$result : Object
 				//______________________________________________________
 			: (Value type:C1509($result[$key])=Is object:K8:27)
 				
-				// --> RECURSIVE
 				$result[$key]:=This:C1470.remove($property; $result[$key])
 				
 				//______________________________________________________
@@ -391,7 +391,7 @@ Function remove($property : Text; $object : Object)->$result : Object
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Return as a collection
+	/// Return object as a collection
 Function toCollection($target : Object)->$c : Collection
 	
 	var $key : Text
@@ -407,7 +407,7 @@ Function toCollection($target : Object)->$c : Collection
 	End for each 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Create a path in the object if it not exist
+	/// Create a path in the object if it not exist
 Function createPath($path; $type : Integer)->$object : Object
 	
 	var $valueType : Integer
@@ -435,22 +435,23 @@ Function createPath($path; $type : Integer)->$object : Object
 	$object:=This:C1470.content
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Sorts the properties of the object in alphabetical order (like in the debugger)
-Function tidy($object : Object)->$result : Object
+	/// Sorts the properties of the object in alphabetical order (like in the debugger)
+Function tidy($target : Object)->$result : Object
 	
 	var $intra : Boolean
 	var $o : Object
 	
+	// MARK: ♻️ RECURSIVE
+	
 	$intra:=Count parameters:C259=0
-	$object:=$intra ? This:C1470.content : $object
+	$target:=$intra ? This:C1470.content : $target
 	
 	$result:=New object:C1471
 	
-	For each ($o; OB Entries:C1720($object).orderBy("key"))
+	For each ($o; OB Entries:C1720($target).orderBy("key"))
 		
 		If (Value type:C1509($o.value)=Is object:K8:27)
 			
-			// --> RECURSIVE
 			$result[$o.key]:=This:C1470.tidy($o.value)
 			
 		Else 
@@ -468,23 +469,24 @@ Function tidy($object : Object)->$result : Object
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Removes all Null entries fom an object, except for the collections
-Function coalescence($object : Object)->$result : Object
+Function coalescence($target : Object)->$result : Object
 	
 	var $intra : Boolean
 	var $o : Object
 	
+	// MARK: ♻️ RECURSIVE
+	
 	$intra:=Count parameters:C259=0
-	$object:=$intra ? This:C1470.content : $object
+	$target:=$intra ? This:C1470.content : $target
 	
 	$result:=New object:C1471
 	
-	For each ($o; OB Entries:C1720($object))
+	For each ($o; OB Entries:C1720($target))
 		
 		If ($o.value#Null:C1517)
 			
 			If (Value type:C1509($o.value)=Is object:K8:27)
 				
-				// --> RECURSIVE
 				$result[$o.key]:=This:C1470.coalescence($o.value)
 				
 			Else 
@@ -503,40 +505,41 @@ Function coalescence($object : Object)->$result : Object
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the first non NULL element
-Function coalesce($object : Object)->$element
+Function coalesce($target : Object)->$element
 	
 	var $key : Text
 	
-	$object:=Count parameters:C259=0 ? This:C1470.content : $object
+	$target:=Count parameters:C259=0 ? This:C1470.content : $target
 	
-	For each ($key; $object) Until ($element#Null:C1517)
+	For each ($key; $target) Until ($element#Null:C1517)
 		
-		If ($object[$key]#Null:C1517)
+		If ($target[$key]#Null:C1517)
 			
-			$element:=$object[$key]
+			$element:=$target[$key]
 			
 		End if 
 	End for each 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Removes all empty object entries, except for the collections
-Function removeEmptyValues($object : Object)->$result : Object
+Function removeEmptyValues($target : Object)->$result : Object
 	
 	var $intra : Boolean
 	var $o : Object
 	
+	// MARK: ♻️ RECURSIVE
+	
 	$intra:=Count parameters:C259=0
-	$object:=$intra ? This:C1470.content : $object
+	$target:=$intra ? This:C1470.content : $target
 	
 	$result:=New object:C1471
 	
-	For each ($o; OB Entries:C1720($object))
+	For each ($o; OB Entries:C1720($target))
 		
 		If ($o.value#Null:C1517)
 			
 			If (Value type:C1509($o.value)=Is object:K8:27)
 				
-				// --> RECURSIVE
 				$result[$o.key]:=This:C1470.removeEmptyValues($o.value)
 				
 				If (OB Is empty:C1297($result[$o.key]))
@@ -561,9 +564,10 @@ Function removeEmptyValues($object : Object)->$result : Object
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Clone the content
-Function clone()->$clone : Object
+Function clone($target : Object)->$result : Object
 	
-	$clone:=OB Copy:C1225(This:C1470.content)
+	$target:=Count parameters:C259=0 ? This:C1470.content : $target
+	$result:=OB Copy:C1225($target)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 /** Copies the values ​​of all first level properties of the passed objects.
@@ -581,6 +585,8 @@ Function merge($object : Object; $target : Object)
 	var $intra : Boolean
 	var $key : Text
 	
+	// MARK: ♻️ RECURSIVE
+	
 	$intra:=Count parameters:C259<2
 	$target:=$intra ? This:C1470.content : $target
 	
@@ -594,7 +600,6 @@ Function merge($object : Object; $target : Object)
 			
 			If (Value type:C1509($object[$key])=Is object:K8:27)
 				
-				// --> RECURSIVE
 				This:C1470.merge($object[$key]; $target[$key])
 				
 			End if 
@@ -615,74 +620,104 @@ Function deepMerge
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Finds one or more properties and returns its value (s), if found
-Function findPropertyValues
+Function findPropertyValues($property : Text; $target : Object)->$values : Collection
 	
-	// TODO:TO BE DONE
+	var $key : Text
+	var $v
+	
+	// MARK: ♻️ RECURSIVE
+	
+	$target:=Count parameters:C259<2 ? This:C1470.content : $target
+	$values:=New collection:C1472
+	
+	For each ($key; $target)
+		
+		If ($key=$property)
+			
+			$values.push($target[$key])
+			
+		End if 
+		
+		Case of 
+				
+				//______________________________________________________
+			: (Value type:C1509($target[$key])=Is object:K8:27)
+				
+				$values.combine(This:C1470.findPropertyValues($property; $target[$key]))
+				
+				//______________________________________________________
+			: (Value type:C1509($target[$key])=Is collection:K8:32)
+				
+				For each ($v; $target[$key])
+					
+					If (Value type:C1509($v)=Is object:K8:27)
+						
+						$values.combine(This:C1470.findPropertyValues($property; $v))
+						
+					End if 
+				End for each 
+				
+				//______________________________________________________
+		End case 
+	End for each 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	/// Look in object hierarchy an object with a specific property
-Function inHierarchy($property : Text; $parent : Text; $target : Object)->$object : Object
+	/// Returns the first object found with a given property
+Function inHierarchy($property : Text; $target : Object)->$object : Object
 	
-	var $content : Object
+	var $key : Text
 	
-	If (Count parameters:C259<3)
-		
-		$content:=This:C1470.content
-		
-	Else 
-		
-		$content:=$target
-		
-	End if 
+	// MARK: ♻️ RECURSIVE
 	
+	$target:=(Count parameters:C259<2) ? This:C1470.content : $target
 	
 	Case of 
 			
 			//________________________________________
-		: ($content=Null:C1517)
+		: ($target=Null:C1517)
 			
 			$object:=Null:C1517
 			
 			//________________________________________
-		: ($content[$property]#Null:C1517)
+		: ($target[$property]#Null:C1517)
 			
-			$object:=$content
+			$object:=$target
 			
 			//________________________________________
 		Else 
 			
-			If (Count parameters:C259>1)
+			For each ($key; $target) Until ($object#Null:C1517)
 				
-				// --> RECURSIVE
-				$object:=This:C1470.inHierarchy($property; $parent; $content[$parent])
-				
-			Else 
-				
-				// --> RECURSIVE
-				$object:=This:C1470.inHierarchy($property; "parent"; $content["parent"])
-				
-			End if 
+				If (Value type:C1509($target[$key])=Is object:K8:27)
+					
+					$object:=This:C1470.inHierarchy($property; $target[$key])
+					
+				End if 
+			End for each 
 			
 			//________________________________________
 	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Returns a collection of objects containing the contents of the object as key / value property pairs.
-Function entries()->$entries : Collection
+Function entries($target : Object)->$entries : Collection
 	
-	$entries:=OB Entries:C1720(This:C1470.content)
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	/// Returns a collection of objects containing the contents of the object as key / value property pairs.
-Function keys()->$keys : Collection
-	
-	$keys:=OB Keys:C1719(This:C1470.content)
+	$target:=(Count parameters:C259<1) ? This:C1470.content : $target
+	$entries:=OB Entries:C1720($target)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Returns a collection of objects containing the contents of the object as key / value property pairs.
-Function values()->$values : Collection
+Function keys($target : Object)->$keys : Collection
 	
-	$values:=OB Values:C1718(This:C1470.content)
+	$target:=(Count parameters:C259<1) ? This:C1470.content : $target
+	$keys:=OB Keys:C1719($target)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	/// Returns a collection of objects containing the contents of the object as key / value property pairs.
+Function values($target : Object)->$values : Collection
+	
+	$target:=(Count parameters:C259<1) ? This:C1470.content : $target
+	$values:=OB Values:C1718($target)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Returns True if the content is of the given class
@@ -690,10 +725,9 @@ Function instanceOf($class : Object)->$success : Boolean
 	
 	$success:=OB Instance of:C1731(This:C1470.content; $class)
 	
-	//MARK:-PRIVATES
-	
+	//MARK:- 📌 PRIVATES
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// [PRIVATE] Compute the target path, Create and Set value if any
+	// Compute the target path, Create and Set value if any
 Function _path($path : Text; $set : Boolean; $value)->$result
 	
 	var $lastMember; $member : Text
@@ -845,7 +879,7 @@ Function _path($path : Text; $set : Boolean; $value)->$result
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// [PRIVATE] Returns an empty value according to the desired type
+	// Returns an empty value according to the desired type
 Function _emptyValue($type : Integer)->$value
 	
 	$value:=Null:C1517
@@ -911,7 +945,6 @@ Function _catchError($catch : Boolean)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// [PRIVATE]
 Function _pushError($message : Text)
 	
 	var $current : Object
