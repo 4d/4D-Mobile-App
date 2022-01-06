@@ -1100,6 +1100,6 @@ $out.param:=$in
 If ($ui.with)
 	
 	// Send result
-	CALL FORM:C1391($in.caller; "EDITOR_CALLBACK"; "build"; $out)
+	CALL FORM:C1391($in.caller; "editor_CALLBACK"; "build"; $out)
 	
 End if 

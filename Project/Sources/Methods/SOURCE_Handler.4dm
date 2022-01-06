@@ -63,10 +63,23 @@ Case of
 				// Constraints definition
 				$form.ui.constraints:=New object:C1471
 				
-				_o_ui_BEST_SIZE(New object:C1471(\
-					"widgets"; New collection:C1472($form.generate; "dataGeneration"; "dataGenerationLabel"); \
-					"alignment"; Align left:K42:2; \
-					"factor"; 1.15))
+				If (FEATURE.with("cancelableDatasetGeneration"))
+					
+					_o_ui_BEST_SIZE(New object:C1471(\
+						"widgets"; New collection:C1472($form.generate)))
+					
+					//TODO: align lastGeneration
+					
+				Else 
+					
+					_o_ui_BEST_SIZE(New object:C1471(\
+						"widgets"; New collection:C1472($form.generate; "dataGeneration"; "dataGenerationLabel"); \
+						"alignment"; Align left:K42:2; \
+						"factor"; 1.15))
+					
+					OBJECT SET TITLE:C194(*; "dataGenerationLabel"; Replace string:C233(Get localized string:C991("dataSetGeneration"); "\n\n"; "\r"))
+					
+				End if 
 				
 				_o_ui_BEST_SIZE(New object:C1471(\
 					"widgets"; New collection:C1472($form.local)))
@@ -80,7 +93,6 @@ Case of
 				$form.ui.testServer()
 				
 				OBJECT SET ENABLED:C1123(*; $form.generate; False:C215)
-				OBJECT SET TITLE:C194(*; "dataGenerationLabel"; Replace string:C233(Get localized string:C991("dataSetGeneration"); "\n\n"; "\r"))
 				
 				//______________________________________________________
 			: ($eventCode=On Timer:K2:25)
@@ -109,6 +121,7 @@ Case of
 					
 				Else 
 					
+					//MARK: UI update
 					(OBJECT Get pointer:C1124(Object named:K67:5; "serverInTest"))->:=0
 					OBJECT SET VISIBLE:C603(*; "serverInTest@"; False:C215)
 					
@@ -167,6 +180,10 @@ Case of
 				End if 
 				
 				If (FEATURE.with("cancelableDatasetGeneration"))
+					
+					$file:=PROJECT._folder.file("project.dataSet/Resources/Structures.sqlite")
+					OBJECT SET TITLE:C194(*; "lastGeneration"; EDITOR.str.localize("lastGeneration"; New collection:C1472(String:C10($file.modificationDate); Time string:C180($file.modificationTime))))
+					OBJECT SET VISIBLE:C603(*; "lastGeneration@"; $file.exists)
 					
 					If (Bool:C1537(Form:C1466.$project.dataSetGeneration))
 						

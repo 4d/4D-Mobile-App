@@ -143,7 +143,7 @@ Function notification()
 			"archive"; This:C1470.input.archive; \
 			"project"; This:C1470.input.project)
 		
-		CALL FORM:C1391(This:C1470.input.caller; "EDITOR_CALLBACK"; "build"; New object:C1471(\
+		CALL FORM:C1391(This:C1470.input.caller; "editor_CALLBACK"; "build"; New object:C1471(\
 			"success"; True:C214; \
 			"param"; $param))
 		

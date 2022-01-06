@@ -148,6 +148,17 @@
 					],
 					"dataSourceTypeHint": "boolean",
 					"method": "SOURCE_OBJECTS_HANDLER"
+				},
+				"lastGeneration": {
+					"type": "text",
+					"top": 65,
+					"left": 659,
+					"width": 279,
+					"height": 16,
+					"fontStyle": "italic",
+					"class": "comment",
+					"text": "/*____________________________________________*/",
+					"visibility": "hidden"
 				}
 			},
 			"entryOrder": [
@@ -165,7 +176,7 @@
 		"kind": "form"
 	},
 	"method": "SOURCE_Handler",
-	"geometryStamp": 21,
+	"geometryStamp": 37,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
