@@ -5,8 +5,6 @@ Class constructor($content)
 	
 	This:C1470.success:=True:C214
 	This:C1470.content:=Null:C1517
-	This:C1470.type:=Is object:K8:27
-	This:C1470.class:=4D:C1709.Class
 	This:C1470.prettyPrint:=True:C214
 	This:C1470.tidyJson:=True:C214
 	This:C1470.lastError:=""
@@ -25,39 +23,45 @@ Class constructor($content)
 	//MARK:- COMPUTED ATTRIBUTES
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function get isObject()->$is : Boolean
+Function get type()->$att : Integer
 	
-	$is:=This:C1470.type=Is object:K8:27
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function get isCollection()->$is : Boolean
-	
-	$is:=This:C1470.type=Is collection:K8:32
+	$att:=Value type:C1509(This:C1470.content)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function get isEmpty()->$empty : Boolean
+Function get isObject()->$att : Boolean
 	
-	If (This:C1470.type=Is object:K8:27)
-		
-		$empty:=OB Is empty:C1297(This:C1470.content)
-		
-	Else 
-		
-		// Test collection length
-		$empty:=(This:C1470.content.length=0)
-		
-	End if 
+	$att:=This:C1470.content#Null:C1517\
+		 ? (Value type:C1509(This:C1470.content)=Is object:K8:27)\
+		 : True:C214
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function get isShared()->$shared : Boolean
+Function get isCollection()->$att : Boolean
 	
-	$shared:=OB Is shared:C1759(This:C1470.content)
+	$att:=This:C1470.content#Null:C1517\
+		 ? (Value type:C1509(This:C1470.content)=Is collection:K8:32)\
+		 : False:C215
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function get isEmpty()->$att : Boolean
+	
+	$att:=This:C1470.content#Null:C1517\
+		 ? (Value type:C1509(This:C1470.content)=Is object:K8:27) ? OB Is empty:C1297(This:C1470.content) : (This:C1470.content.length=0)\
+		 : True:C214
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function get isShared()->$att : Boolean
+	
+	$att:=This:C1470.content#Null:C1517\
+		 ? (OB Is shared:C1759(This:C1470.content))\
+		 : False:C215
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// The count of first level keys
-Function get count()->$count : Integer
+Function get count()->$att : Integer
 	
-	$count:=OB Keys:C1719(This:C1470.content).length
+	$att:=This:C1470.content#Null:C1517\
+		 ? (OB Keys:C1719(This:C1470.content).length)\
+		 : 0
 	
 	//MARK:- FUNCTIONS
 	
@@ -106,8 +110,8 @@ Function setContent($content)->$object : Object
 		
 	End if 
 	
-	This:C1470.type:=Value type:C1509(This:C1470.content)
-	This:C1470.class:=OB Class:C1730(This:C1470.content)
+	//This.type:=Value type(This.content)
+	//This.class:=OB Class(This.content)
 	
 	$object:=This:C1470.content
 	
@@ -334,7 +338,7 @@ Function exists($path)->$exists : Boolean
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Deletes all intances of a property in the hierarchy
+	// Deletes all intances of a property in the hierarchy (Deep mode)
 Function remove($property : Text; $object : Object)->$result : Object
 	
 	var $key : Text
@@ -370,8 +374,7 @@ Function remove($property : Text; $object : Object)->$result : Object
 						
 					End if 
 					
-					//$i+=1
-					$i:=$i+1
+					$i+=1
 					
 				End for each 
 				
