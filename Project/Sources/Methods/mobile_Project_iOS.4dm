@@ -561,6 +561,12 @@ If ($in.create)
 		$out.computedCapabilities:=New object:C1471(\
 			"capabilities"; New object:C1471())
 		
+		// #133381 : add always photo & camera capabilities
+		// because Apple warn about it, because of code in SDK (QMobileUI mainly)
+		// (OR we need to split the SDK and have some injection only if camera or photo used, or inject code or not in final app)
+		$out.computedCapabilities.capabilities.photo:=True:C214
+		$out.computedCapabilities.capabilities.camera:=True:C214
+		
 		If (Bool:C1537($project.server.pushNotification))
 			
 			$out.computedCapabilities.capabilities.pushNotification:=True:C214
