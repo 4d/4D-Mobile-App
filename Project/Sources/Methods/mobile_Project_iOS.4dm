@@ -30,6 +30,7 @@ var $path : cs:C1710.path
 var $simctl : cs:C1710.simctl
 
 // NO PARAMETERS REQUIRED
+// MARK:-init
 $isDebug:=DATABASE.isInterpreted
 $cacheFolder:=cs:C1710.path.new().userCache()
 
@@ -141,6 +142,9 @@ If ($in.create=Null:C1517)
 	
 End if 
 
+
+// MARK:- create
+
 $ui.show(Get localized string:C991("product")+" - "+PROJECT.product.name)
 
 If ($in.create)
@@ -189,6 +193,7 @@ If ($in.create)
 		End for each 
 	End if 
 	
+	// MARK: tags
 	//===============================================================
 	// Create tags object for template {
 	$tags:=SHARED.tags
@@ -356,7 +361,7 @@ If ($in.create)
 	If ($out.sdk.success)
 		
 		// ----------------------------------------------------
-		// TEMPLATE
+		// MARK: TEMPLATE
 		// ----------------------------------------------------
 		$ui.step("workspaceCreation")
 		
@@ -390,7 +395,7 @@ If ($in.create)
 		doc_UNLOCK_DIRECTORY(New object:C1471("path"; $in.path))
 		
 		// ----------------------------------------------------
-		// STRUCTURE & DATA
+		//  MARK: STRUCTURE & DATA
 		// ----------------------------------------------------
 		
 		// Create catalog and data files {
@@ -534,7 +539,7 @@ If ($in.create)
 		End if 
 		
 		// ----------------------------------------------------
-		// Others (maybe move to templates, main management
+		// MARK: Others (maybe move to templates, main management
 		// ----------------------------------------------------
 		var $isdebug : Boolean
 		$isdebug:=Not:C34(Is compiled mode:C492)
@@ -644,7 +649,7 @@ If ($in.create)
 		End if 
 		
 		// ----------------------------------------------------
-		// DEV FEATURES
+		// MARK: DEV FEATURES
 		// ----------------------------------------------------
 		
 		// Add sources if any to workspace {
@@ -709,16 +714,14 @@ If ($in.create)
 End if 
 
 // ----------------------------------------------------
-// BUILD OR ARCHIVE & LAUNCH
+// MARK:- BUILD OR ARCHIVE & LAUNCH
 // ----------------------------------------------------
 
 If ($out.success)
 	
 	If (Bool:C1537($in.build))
-		
 		If (Bool:C1537($in.archive))
-			
-			// Archive
+			// MARK: Archive
 			$ui.step("projectArchive")
 			$log.information("Archiving project")
 			
@@ -766,8 +769,7 @@ If ($out.success)
 			End if 
 			
 		Else 
-			
-			// Build application
+			// MARK: Build application
 			$ui.step("projectBuild")
 			$log.information("Building project")
 			
@@ -882,6 +884,7 @@ If ($out.success)
 	
 End if 
 
+// MARK: RUN
 If ($out.success)
 	
 	// Save the signature of the sources folder
@@ -1097,6 +1100,8 @@ End if
 
 $ui.close()
 
+
+// MARK: save result
 // Save the last build log
 cs:C1710.ob.new($out).save($cacheFolder.file("lastBuild.ios.json"))
 

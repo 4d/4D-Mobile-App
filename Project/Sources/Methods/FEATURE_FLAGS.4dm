@@ -190,7 +190,7 @@ FEATURE.wip("newFormatterChoiceList")  // Menu to create formatter choice list d
 FEATURE.wip("listEditor")  // Allow to create custom Data Source Input Control
 FEATURE.wip("xcDataModelClass")  // Use class to create core data model ie. xcDataModel (useful to refactor for alias)
 
-
+// FEATURE.wip("iosBuildWithClass")  // Use cs.MobileProjectIOS class
 
 /* -------------------------------------
 OVERRIDE WITH LOCAL PREFERENCES

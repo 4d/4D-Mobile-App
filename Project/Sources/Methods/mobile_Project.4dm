@@ -8,9 +8,11 @@ If ((String:C10($data.project._buildTarget)="android")\
 	
 Else 
 	
-	//$result:=cs.MobileProjectIOS.new($data)
-	
 	// iOS
-	$result:=mobile_Project_iOS($data)
+	If (Bool:C1537(FEATURE.with("iosBuildWithClass")))
+		$result:=cs:C1710.MobileProjectIOS.new($data).main()
+	Else 
+		$result:=mobile_Project_iOS($data)
+	End if 
 	
 End if 

@@ -2,33 +2,20 @@ Class extends MobileProject
 
 //=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor($project : Object)
-	
 	Super:C1705($project)
 	
-	This:C1470.project:=OB Copy:C1225($project.project)
-	
-	// * CLEANING INNER $OBJECTS
-	var $o : Object
-	For each ($o; OB Entries:C1720(This:C1470.project).query("key=:1"; "$@"))
-		
-		OB REMOVE:C1226(This:C1470.project; $o.key)
-		
-	End for each 
-	
+	// Copy project (to not modify original project data)
+	This:C1470.project:=This:C1470._cleanCopyProject($project)
 	This:C1470.productName:=This:C1470.project._folder.name
 	
 	// Keep the last used project
 	This:C1470.paths.userCache().file("lastBuild.ios.4dmobile").setText(JSON Stringify:C1217(This:C1470.project; *))
 	
-	This:C1470.sdk:=sdk(New object:C1471(\
-		"action"; "install"; \
-		"file"; This:C1470.paths.sdk().platformPath+"ios.zip"; \
-		"target"; This:C1470.input.path))
-	
-	This:C1470.success:=This:C1470.sdk.success
-	
+	// Some utilities (mainly fake singleton)
 	This:C1470.simctl:=cs:C1710.simctl.new()
 	This:C1470.cfgutil:=cs:C1710.cfgutil.new()
+	
+	// MARK:- steps
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Creating the project
@@ -39,6 +26,14 @@ Function create()->$result : Object
 		"sdk"; This:C1470.sdk; \
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
+	
+	// SDK?
+	This:C1470.sdk:=sdk(New object:C1471(\
+		"action"; "install"; \
+		"file"; This:C1470.paths.sdk().platformPath+"ios.zip"; \
+		"target"; This:C1470.input.path))
+	
+	This:C1470.success:=This:C1470.sdk.success
 	
 	If (This:C1470.success)
 		
@@ -108,6 +103,8 @@ Function run()
 	// Installing the APK on a connected device
 Function install()
 	
+	// MARK:- private
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// [PRIVATE] - Check if we have to reload data
 Function _checkToReloadData()
@@ -151,6 +148,20 @@ Function _checkToReloadData()
 			End if 
 		End for each 
 	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// [PRIVATE] - copy and clean Project
+Function _cleanCopyProject($projectInput : Object)->$project : Object
+	$project:=OB Copy:C1225($projectInput.project)
+	
+	// * CLEANING INNER $OBJECTS
+	var $o : Object
+	For each ($o; OB Entries:C1720($project).query("key=:1"; "$@"))
+		
+		OB REMOVE:C1226($project; $o.key)
+		
+	End for each 
+	
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// [PRIVATE] - Create the app manifest
