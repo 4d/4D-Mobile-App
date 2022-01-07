@@ -2,7 +2,6 @@ Class extends MobileProject
 
 //=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor($project : Object)
-	
 	Super:C1705($project)
 	
 	This:C1470.isOnError:=False:C215
@@ -45,7 +44,6 @@ Class constructor($project : Object)
 	This:C1470.file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"projecteditor.json")
 	This:C1470.file.setText(JSON Stringify:C1217(This:C1470.project))
 	
-	This:C1470.logFolder:=This:C1470.paths.userCache()
 	This:C1470.file.copyTo(This:C1470.logFolder; "lastBuild.android.4dmobile"; fk overwrite:K87:5)
 	
 	This:C1470.version:="debug"
@@ -71,19 +69,16 @@ Class constructor($project : Object)
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
 Function init
-	
 	This:C1470.setJavaHome()
 	This:C1470.setAndroidHome()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function setEnvVarToAll
-	var $1 : Variant  // Object or Collection of objects
-	
-	This:C1470.androidprojectgenerator.setEnvironnementVariable($1)
-	This:C1470.gradlew.setEnvironnementVariable($1)
-	This:C1470.emulator.setEnvironnementVariable($1)
-	This:C1470.adb.setEnvironnementVariable($1)
+Function setEnvVarToAll($envVar : Variant/* Object or Collection of objects */)
+	This:C1470.androidprojectgenerator.setEnvironnementVariable($envVar)
+	This:C1470.gradlew.setEnvironnementVariable($envVar)
+	This:C1470.emulator.setEnvironnementVariable($envVar)
+	This:C1470.adb.setEnvironnementVariable($envVar)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//

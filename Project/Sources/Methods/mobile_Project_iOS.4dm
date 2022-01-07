@@ -279,7 +279,7 @@ If ($in.create)
 	// setting
 	$tags.hasAction:=Choose:C955(Bool:C1537(mobile_actions("hasAction"; $in).value); "true"; "false")  // plist bool format
 	
-	// App manifest =================================================
+	// MARK: App manifest =================================================
 	$appManifest:=New object:C1471(\
 		"application"; New object:C1471("id"; $project.product.bundleIdentifier; "name"; $project.product.name); \
 		"team"; New object:C1471("id"; $project.organization.teamId); \

@@ -4,6 +4,7 @@ Class constructor($project : Object)
 	This:C1470.success:=True:C214
 	This:C1470.errors:=New collection:C1472
 	This:C1470.lastError:=""
+	This:C1470.logFolder:=This:C1470.paths.userCache()
 	
 	This:C1470.debug:=Not:C34(Is compiled mode:C492)
 	This:C1470.caller:=This:C1470.input.caller
