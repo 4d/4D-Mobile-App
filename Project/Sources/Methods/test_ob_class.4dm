@@ -5,8 +5,10 @@ var $c : Collection
 var $file : 4D:C1709.File
 var $ob; $obj2 : cs:C1710.ob
 
+err_TRY
 
-//MARK: - ew()
+
+//MARK: - new()
 $ob:=cs:C1710.ob.new()
 ASSERT:C1129($ob.isEmpty)
 ASSERT:C1129($ob.isObject)
@@ -92,6 +94,8 @@ $o.deep.two.uuid:=12
 $o.deep.three.uuid:=13
 ASSERT:C1129(New collection:C1472(1; 2; 3; 11; 12; 13).equal($ob.findPropertyValues("uuid")))
 
+ASSERT:C1129($ob.findPropertyValues("dummy").length=0)
+
 //MARK: - toCollection()
 $c:=$ob.toCollection()
 ASSERT:C1129($c.length=$ob.count)
@@ -140,4 +144,140 @@ ASSERT:C1129($ob.isEmpty)
 ASSERT:C1129($ob.isObject)
 ASSERT:C1129(Not:C34($ob.isCollection))
 ASSERT:C1129($ob.count=0)
+
+//MARK: - assign()
+$ob.assign(New object:C1471("a"; 1))
+ASSERT:C1129($ob.get().a=1; "Must be created")
+
+$ob.assign(New object:C1471("b"; 2))
+ASSERT:C1129($ob.get().a=1; "Must be unchanged")
+ASSERT:C1129($ob.get().b=2; "Must be created")
+
+$ob.assign(New object:C1471("a"; 2; "b"; 3))
+ASSERT:C1129($ob.get().a=2; "Must be overriden")
+ASSERT:C1129($ob.get().b=3; "Must be overriden")
+
+$ob.assign()
+ASSERT:C1129($ob.get()=Null:C1517; "Must be overriden")
+
+$ob.assign(New object:C1471("a"; 1; "b"; 2))
+ASSERT:C1129($ob.get().a=1; "Must be created")
+ASSERT:C1129($ob.get().b=2; "Must be created")
+
+$ob.assign(Null:C1517)
+ASSERT:C1129($ob.get()=Null:C1517; "Must be overriden")
+
+//MARK: - merge()
+$o:=New object:C1471(\
+"build"; False:C215; \
+"run"; False:C215; \
+"sdk"; "iphonesimulator"; \
+"template"; "list"; \
+"testing"; False:C215; \
+"caller"; 0)
+
+$ob.setContent($o)
+
+var $o2 : Object
+$o2:=New object:C1471(\
+"build"; True:C214; \
+"caller"; 8858; \
+"create"; Pi:K30:1)
+
+$ob.merge($o2)
+
+$o:=$ob.get()
+
+For each ($t; $o2)
+	
+	ASSERT:C1129($o2[$t]#Null:C1517)
+	
+	Case of 
+			
+			//________________________________________
+		: (Position:C15($t; "create")>0)
+			
+			ASSERT:C1129($o2[$t]=$o[$t]; "Must be created")
+			
+			//________________________________________
+		: (Split string:C1554("build|caller"; "|").indexOf($t)#-1)
+			
+			ASSERT:C1129($o2[$t]#$o[$t]; "Must not be overridden")
+			
+			//________________________________________
+	End case 
+End for each 
+
+//MARK: - coalesce()
+$o:=New object:C1471(\
+"null"; Null:C1517; \
+"test"; New object:C1471("b"; 1))
+$ob.setContent($o)
+ASSERT:C1129(JSON Stringify:C1217($ob.coalesce())=JSON Stringify:C1217(New object:C1471("b"; 1)))
+
+$o:=New object:C1471(\
+"null"; Null:C1517; \
+"test"; New collection:C1472(1; 2; New object:C1471("b"; 1); 4; 5))
+$ob.setContent($o)
+ASSERT:C1129(New collection:C1472(1; 2; New object:C1471("b"; 1); 4; 5).equal($ob.coalesce()))
+
+$o:=New object:C1471(\
+"a"; Null:C1517; "b"; New object:C1471("aa"; Null:C1517; "hh"; Pi:K30:1); \
+"c"; Null:C1517; "d"; New collection:C1472(); \
+"e"; Null:C1517; "f"; True:C214; \
+"g"; Null:C1517; "h"; Pi:K30:1; \
+"i"; Null:C1517; "j"; "hello world")
+$ob.setContent($o)
+$ob.coalescence()
+ASSERT:C1129($ob.count=5)
+
+$o:=$ob.get()
+
+ASSERT:C1129($o.a=Null:C1517)
+ASSERT:C1129($o.c=Null:C1517)
+ASSERT:C1129($o.e=Null:C1517)
+ASSERT:C1129($o.g=Null:C1517)
+ASSERT:C1129($o.i=Null:C1517)
+
+ASSERT:C1129($o.b.aa=Null:C1517)
+ASSERT:C1129($o.b.hh#Null:C1517)
+
+ASSERT:C1129($o.d#Null:C1517)
+ASSERT:C1129($o.f#Null:C1517)
+ASSERT:C1129($o.h#Null:C1517)
+ASSERT:C1129($o.j#Null:C1517)
+
+
+//MARK: - deepMerge()
+$o:=New object:C1471(\
+"a"; New object:C1471("b"; 1); \
+"test"; New collection:C1472(1; 2; New object:C1471("b"; 1); 4; 5))
+$ob.setContent(New object:C1471)
+$ob.deepMerge($o)
+ASSERT:C1129(JSON Stringify:C1217($ob.get())=JSON Stringify:C1217($o))
+
+$o:=New object:C1471(\
+"a"; New object:C1471("c"; Pi:K30:1))
+$ob.deepMerge($o)
+$o:=$ob.get()
+ASSERT:C1129($o.a#Null:C1517)
+ASSERT:C1129($o.a.b=1)
+ASSERT:C1129($o.a.c=Pi:K30:1)
+ASSERT:C1129($o.test[0]=1)
+ASSERT:C1129($o.test[1]=2)
+ASSERT:C1129($o.test[2].b=1)
+ASSERT:C1129($o.test[3]=4)
+ASSERT:C1129($o.test[4]=5)
+
+$o:=New object:C1471(\
+"test"; New collection:C1472("c"; Pi:K30:1))
+$ob.deepMerge($o)
+
+err_FINALLY
+
+If (Structure file:C489=Structure file:C489(*))
+	
+	ALERT:C41("Done")
+	
+End if 
 

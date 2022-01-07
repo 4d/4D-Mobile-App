@@ -161,6 +161,7 @@ Case of
 				: ($Obj_context.serverStatus.action="startWebServer")
 					
 					$web:=WEB Server:C1674
+					ASSERT:C1129($web.isRunning=WEB Get server info:C1531.started)
 					
 					If (Not:C34($web.isRunning))
 						

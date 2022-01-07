@@ -108,9 +108,6 @@ Function setContent($content)->$object : Object
 		
 	End if 
 	
-	//This.type:=Value type(This.content)
-	//This.class:=OB Class(This.content)
-	
 	$object:=This:C1470.content
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -391,7 +388,7 @@ Function remove($property : Text; $object : Object)->$result : Object
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	/// Return object as a collection
+	/// Returns an object as a collection (does not explore in depth)
 Function toCollection($target : Object)->$c : Collection
 	
 	var $key : Text
@@ -570,13 +567,39 @@ Function clone($target : Object)->$result : Object
 	$result:=OB Copy:C1225($target)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-/** Copies the values ​​of all first level properties of the passed objects.
+/** Copies the values ​​of all first level properties of the passed object.
 - The common properties are overloaded according to the order of the parameters.
 - The Null values are ignored
 **/
-Function assign
+Function assign($object : Object; $target : Object)->$result : Object
 	
-	/// TODO:TO BE DONE
+	var $key : Text
+	var $intra : Boolean
+	
+	$intra:=Count parameters:C259<2
+	$target:=$intra ? This:C1470.content : $target
+	$result:=$target
+	
+	If ($object=Null:C1517)
+		
+		$result:=Null:C1517
+		
+	Else 
+		
+		$result:=$result=Null:C1517 ? New object:C1471 : $result
+		
+		For each ($key; $object)
+			
+			$result[$key]:=$object[$key]
+			
+		End for each 
+	End if 
+	
+	If ($intra)
+		
+		This:C1470.content:=$result
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Adds the missing properties of the passed objects.
@@ -613,10 +636,129 @@ Function merge($object : Object; $target : Object)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	/// Copy object properties from source to target [#WIP]
-Function deepMerge
+	/// Copy object properties from source to target [NOT FINALIZED]
+Function deepMerge($object : Object; $target : Object)->$result : Object
 	
-	// TODO:TO BE DONE
+	var $key : Text
+	var $intra : Boolean
+	var $i : Integer
+	var $v
+	
+	// MARK: ♻️ RECURSIVE
+	
+	$intra:=Count parameters:C259<2
+	$target:=$intra ? This:C1470.content : $target
+	$result:=$target=Null:C1517 ? New object:C1471 : $target
+	
+	If ($object#Null:C1517)
+		
+		For each ($key; $object)
+			
+			Case of 
+					
+					//……………………………………………………………………………………………………………………………
+				: (Value type:C1509($object[$key])=Is object:K8:27)
+					
+					If ($result[$key]=Null:C1517)
+						
+						$result[$key]:=OB Copy:C1225($object[$key])
+						
+					Else 
+						
+						If (Value type:C1509($result[$key])#Is object:K8:27)
+							
+							$result[$key]:=New object:C1471
+							
+						End if 
+						
+						$result[$key]:=This:C1470.deepMerge(OB Copy:C1225($object[$key]); $result[$key])
+						
+					End if 
+					
+					//……………………………………………………………………………………………………………………………
+				: (Value type:C1509($object[$key])=Is collection:K8:32)
+					
+					If ($result[$key]=Null:C1517)
+						
+						$result[$key]:=$object[$key].copy()
+						
+					Else 
+						
+						$result[$key]:=New collection:C1472.resize($object[$key].length)
+						
+						$i:=0
+						
+						For each ($v; $object[$key])
+							
+							Case of 
+									
+									//_________________________________
+								: (Value type:C1509($v)=Is object:K8:27)
+									
+									Case of 
+											
+											//..........................
+										: ($result[$key][$i]=Null:C1517)
+											
+											$result[$key][$i]:=OB Copy:C1225($v)
+											
+											//..........................
+										: (Value type:C1509($result[$key][$i])=Is object:K8:27)
+											
+											$result[$key][$i]:=This:C1470.deepMerge(OB Copy:C1225($v); $result[$key][$i])
+											
+											//..........................
+										: (Value type:C1509($result[$key][$i])=Is collection:K8:32)
+											
+											If (Not:C34($result[$key][$i].equal($result[$key][$i]; ck diacritical:K85:3)))
+												
+												// TODO:🚧 NOT FINALIZED
+												TRACE:C157
+												
+											End if 
+											
+											//..........................
+										Else 
+											
+											$result[$key][$i]:=$v
+											
+											//..........................
+									End case 
+									
+									//_________________________________
+								: (Value type:C1509($v)=Is collection:K8:32)
+									
+									// TODO:🚧 NOT FINALIZED
+									TRACE:C157
+									
+									//_________________________________
+								Else 
+									
+									$result[$key]:=$object[$key]
+									
+									//_________________________________
+							End case 
+							
+							$i+=1
+							
+						End for each 
+					End if 
+					
+					//……………………………………………………………………………………………………………………………
+				Else 
+					
+					$result[$key]:=$object[$key]
+					
+					//……………………………………………………………………………………………………………………………
+			End case 
+		End for each 
+	End if 
+	
+	If ($intra)
+		
+		This:C1470.content:=$result
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Finds one or more properties and returns its value (s), if found

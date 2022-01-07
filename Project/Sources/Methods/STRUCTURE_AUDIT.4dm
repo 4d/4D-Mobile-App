@@ -243,7 +243,6 @@ If ($cacheFile.exists)
 															
 															$isTableUnsynchronized:=True:C214
 															cs:C1710.ob.new($field).createPath("unsynchronizedFields"; Is collection:K8:32).unsynchronizedFields.push($relatedField)
-															//cs.ob.new($field).createPath("unsynchronizedFields"; Is collection).push($relatedField)
 															
 															If ($unsynchronizedFields.query("fieldTips= :1"; $relatedField.fieldTips).length=0)
 																
@@ -284,7 +283,6 @@ If ($cacheFile.exists)
 															
 															$isTableUnsynchronized:=True:C214
 															cs:C1710.ob.new($field).createPath("unsynchronizedFields"; Is collection:K8:32).unsynchronizedFields.push($relatedField)
-															//cs.ob.new($field).createPath("unsynchronizedFields"; Is collection).push($relatedField)
 															
 															If ($unsynchronizedFields.query("fieldTips= :1"; $relatedField.fieldTips).length=0)
 																
@@ -353,7 +351,6 @@ If ($cacheFile.exists)
 																
 																$isTableUnsynchronized:=True:C214
 																cs:C1710.ob.new($field).createPath("unsynchronizedFields"; Is collection:K8:32).unsynchronizedFields.push($linkedField)
-																//cs.ob.new($field).createPath("unsynchronizedFields"; Is collection).push($linkedField)
 																
 																If ($unsynchronizedFields.query("fieldTips= :1"; $linkedField.fieldTips).length=0)
 																	

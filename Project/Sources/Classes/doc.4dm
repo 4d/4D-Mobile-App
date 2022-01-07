@@ -9,6 +9,12 @@ Class constructor
 	This:C1470.path:=""
 	This:C1470.relativePath:=""
 	
+	This:C1470._filesystemPathnames:=New collection:C1472
+	This:C1470._filesystemPathnames.push(New object:C1471("constant"; fk data folder:K87:12; "path"; "/DATA/"))
+	This:C1470._filesystemPathnames.push(New object:C1471("constant"; fk database folder:K87:14; "path"; "/PACKAGE/"))
+	This:C1470._filesystemPathnames.push(New object:C1471("constant"; fk resources folder:K87:11; "path"; "/RESOURCES/"))
+	This:C1470._filesystemPathnames.push(New object:C1471("constant"; fk logs folder:K87:17; "path"; "/LOGS/"))
+	
 	If (Asserted:C1132(Count parameters:C259>0; Current method name:C684+": Missing parameter"))
 		
 		If (Count parameters:C259>=2)
@@ -111,6 +117,26 @@ Class constructor
 /*======================================================================*/
 	//Function digest()->$digest : Text
 	
+/*======================================================================*/
+Function get sandBoxed()->$path : Text
+	
+	$path:=This:C1470.path
+	
+	var $filesystem : Object
+	For each ($filesystem; This:C1470._filesystemPathnames)
+		
+		// Unsandboxed
+		var $t : Text
+		$t:=Folder:C1567(Folder:C1567($filesystem.constant; *).platformPath; fk platform path:K87:2).path
+		
+		If (Position:C15($t; $path; 1; *)=1)
+			
+			$path:=Replace string:C233($path; $t; $filesystem.path)
+			
+			return 
+			
+		End if 
+	End for each 
 	
 /*======================================================================*/
 Function __defaultReference

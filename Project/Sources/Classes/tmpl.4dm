@@ -673,6 +673,7 @@ Function truncateLabelIfTooBig($o : Object)
 	//============================================================================
 	/// Add a "one field" widget to the template
 Function appendOneField($index : Integer; $field : Object; $context : Object; $background : Text; $offset : Integer)->$height : Integer
+	
 	var $class; $label; $name; $node; $style; $t; $tips : Text
 	var $found; $isToMany; $isToOne : Boolean
 	var $o; $relation : Object
@@ -713,7 +714,7 @@ Function appendOneField($index : Integer; $field : Object; $context : Object; $b
 				If (Not:C34($found))
 					
 					$class:="error"
-					$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
+					$tips:=EDITOR.str.setText(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
 					
 				End if 
 				
@@ -723,13 +724,13 @@ Function appendOneField($index : Integer; $field : Object; $context : Object; $b
 				
 			End if 
 			
-			$label:=cs:C1710.str.new(EDITOR.toOne).concat($label)
+			$label:=EDITOR.str.setText(EDITOR.toOne).concat($label)
 			
 			//______________________________________________________
 		: ($isToMany)
 			
 			$tips:=$field.label
-			$label:=cs:C1710.str.new(EDITOR.toMany).concat($field.name)
+			$label:=EDITOR.str.setText(EDITOR.toMany).concat($field.name)
 			
 			//______________________________________________________
 		Else 
@@ -742,17 +743,7 @@ Function appendOneField($index : Integer; $field : Object; $context : Object; $b
 			
 			If (Not:C34($found))
 				
-				var $fields : Collection
-				$fields:=New collection:C1472
-				
-				var $key : Text
-				For each ($key; PROJECT.dataModel[$context.tableNumber])
-					
-					$fields.push(PROJECT.dataModel[$context.tableNumber][$key])
-					
-				End for each 
-				
-				$found:=$fields.query("name = :1"; $c[0]).pop()#Null:C1517
+				$found:=cs:C1710.ob.new(PROJECT.dataModel[$context.tableNumber]).toCollection().query("name = :1"; $c[0]).pop()#Null:C1517
 				
 			End if 
 			
@@ -772,7 +763,7 @@ Function appendOneField($index : Integer; $field : Object; $context : Object; $b
 			If (Not:C34($found))
 				
 				$class:="error"
-				$tips:=cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($label))
+				$tips:=EDITOR.str.setText(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($label))
 				
 			End if 
 			
@@ -789,7 +780,7 @@ Function appendOneField($index : Integer; $field : Object; $context : Object; $b
 	// Set ids, label & position
 	PROCESS 4D TAGS:C816(This:C1470.oneField.definition; $t; New object:C1471(\
 		"index"; $index; \
-		"name"; cs:C1710.str.new($o.label).xmlSafe(); \
+		"name"; EDITOR.str.setText($o.label).xmlSafe(); \
 		"offset"; 5+$offset; \
 		"style"; $style; \
 		"class"; $class; \
