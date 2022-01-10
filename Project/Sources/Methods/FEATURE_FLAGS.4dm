@@ -45,25 +45,19 @@ FEATURE.alias("debug"; 8858)
 
 If (True:C214)  // DELIVERED
 	
-/* _____________
-17R2 - REMOVED
-_____________*/
+	// Mark:-17R2
 	FEATURE.delivered(89556; 1720)  // Reload embedded data from iOS application
 	FEATURE.delivered(92293; 1720)  // Support user defined tables
 	FEATURE.delivered(93674; 1720)  // Main menu
 	FEATURE.delivered(8122017; 1720)  // Turn around bug close window
 	FEATURE.delivered(96674; 1720)  // Archive app
 	
-/* _____________
-17R3 - REMOVED
-_____________*/
+	// Mark:-17R3
 	FEATURE.delivered(100157; 1730)  // Template creation
 	FEATURE.delivered(100353; 1730)  // Template creation: inject any sources
 	FEATURE.delivered(100191; 1730)  // Data Formatter
 	
-/* _____________
-17R4 - REMOVED
-_____________*/
+	// Mark:-17R4
 	FEATURE.delivered(98105; 1740)  // Multi-criteria Search
 	FEATURE.delivered(100990; 1740)  // Custom Data Formatter
 	FEATURE.delivered(100174; 1740)  // Restricted queries
@@ -71,9 +65,7 @@ _____________*/
 	FEATURE.delivered(103112; 1740)  // Restricted queries: Move dataSet into database in Mobile Projects
 	FEATURE.delivered(102457; 1740)  // Data file access with /mobileapp key
 	
-/* _____________
-17R5 - REMOVED
-_____________*/
+	// Mark:-17R5
 	FEATURE.delivered(101637; 1750)  // Display n-1 relations
 	FEATURE.delivered(103850; 1750)  // Reload data from iOS with N-1 relation (Generate core data model with real relation)
 	FEATURE.delivered(103411; 1750)  // Incremental synchronization
@@ -82,93 +74,67 @@ _____________*/
 	FEATURE.delivered("withRecursiveLink"; 1750)  // Enable recursive link management
 	FEATURE.delivered(98145; 1750)  // Replace, for data structure access, EXPORT STRUCTURE by ds
 	
-/* _____________
-17R6 - REMOVED
-_____________*/
+	// Mark:-17R6
 	FEATURE.delivered(105413; 1760)  // [MOBILE] Actions with parameters
 	FEATURE.delivered("parameterListOfValues"; 1760)  // Manage field formatters as list of values for parameters
 	FEATURE.delivered("allowPictureAsActionParameters"; 1760)  // #107932 - [Mobile] Allow to use picture as action parameters
 	
-/* _____________
-1800 - REMOVED
-_____________*/
+	// Mark:-18.0
 	FEATURE.delivered(105431; 1800)  // Display 1-n relations
 	FEATURE.delivered(110882; 1800)  // Dump data into core data SQLLite database
 	FEATURE.delivered("newDataModel"; 1800)
 	
-/* _____________
-18R2 - REMOVED
-_____________*/
+	// Mark:-18R2
 	FEATURE.delivered("repairStructureMoreVisible"; 1820)
 	FEATURE.delivered(113164; 1820)  // Enable/disable image dump
 	
-/* _____________
-18R3 - REMOVED
-_____________*/
+	// Mark:-18R3
 	FEATURE.delivered(112225; 1830)  // Select/install/use custom templates
 	
-/* _____________
-18R4 - REMOVED
-_____________*/
+	// Mark:-18R4
 	FEATURE.delivered(113016; 1840)  // Svg improvement in forms section
 	FEATURE.delivered(107526; 1840)  // Push Notifications
 	
-/* _____________
-18R5 - REMOVED
-_____________*/
+	// Mark:-18R5
 	FEATURE.delivered(117618; 1850)  // Deep Linking
 	
-/* _____________
-18R6 - REMOVED
-_____________*/
+	// Mark:-18R6
 	FEATURE.delivered(117601; 1860)  // Relation management optimisation
 	FEATURE.delivered("templateClass"; 1860)
 	FEATURE.delivered("searchWithBarCode"; 1860)
 	
-/* _____________
-1900 - REMOVED
-_____________*/
-	FEATURE.delivered("withSimulatorClass")  // Use simctl class intead of _o_simulator
-	FEATURE.delivered("wizards")  // Use a wizard instead of standard dialogs to create or open a project
+	// Mark:-19.0
+	FEATURE.delivered("withSimulatorClass"; 1900)  // Use simctl class intead of _o_simulator
 	
+	FEATURE.delivered("wizards"; 1900)  // Use a wizard instead of standard dialogs to create or open a project
 	
-/* _____________
-1920 - REMOVED
-_____________*/
+	// Mark:-19R2
 	FEATURE.delivered("android"; 1920)  // Android support global flag
 	FEATURE.delivered("targetPannel"; 1920)  // Use a separate pannel for the target OS
 	FEATURE.delivered("dominantColor"; 1920)  // Feature #127813: BackgroundColor picker
 	FEATURE.delivered("iconActionMenu"; 1920)  // Use action button for icon on product panel
 	FEATURE.delivered("plistClass"; 1920)  // Use plist class instead of plist method
-	FEATURE.delivered("sortAction"; 1920)  // https://project.4d.com/issues/117660
+	FEATURE.delivered("sortAction"; 1920)  // https:// Project.4d.com/issues/117660
 	FEATURE.delivered("ConnectedDevices"; 1920)  // Add connected devices to the simulator tool
+	
+	// Mark:-19R3
+	FEATURE.delivered("predictiveEntryInActionParam"; 1930)  // #128898 Name of the action parameters and sorting criteria can be modified
+	FEATURE.delivered("customActionFormatterWithCode"; 1930)  // #129036 custom input control for action parameter with ios code
+	FEATURE.delivered("customActionFormatter"; 1930)  // #128195 custom input control for action parameter
+	FEATURE.delivered("newActionFormatterChoiceList"; 1930)  // Menu to create action formatter choice list directly
+	FEATURE.delivered("computedProperties"; 1930)  // #130206 [MOBILE] Use computed attributes
 	
 End if 
 
-/* _____________
-1930
-_____________*/
-FEATURE.unstable("predictiveEntryInActionParam")  // #128898 Name of the action parameters and sorting criteria can be modified
-
-FEATURE.unstable("customActionFormatter")  // #128195 custom input control for action parameter
-FEATURE.unstable("customActionFormatterWithCode")  // #129036 custom input control for action parameter with ios code
-FEATURE.unstable("newActionFormatterChoiceList")  // Menu to create action formatter choice list directly
-FEATURE.unstable("computedProperties")  // #130206 [MOBILE] Use computed attributes
-
-/* _____________
-1940
-_____________*/
+//mark:-19R4
 FEATURE.unstable("androidActions")  //[Mobile] Feature flag pour activer les actions dans le projet mobile
 FEATURE.unstable("objectFieldManagement")  //[MOBILE] Object fields Management 
 FEATURE.unstable("android1ToNRelations")  // [ANDROID] 1 to N relations
 FEATURE.unstable("cancelableDatasetGeneration")  // [MOBILE] Data generation 
 FEATURE.unstable("useTextRestResponse")  // [MOBILE] Data generation : for optis
 
-//FEATURE.wip(129953)  //[MOBILE] Handle Many-one-Many relations
-
-/* _____________
-WIP
-_____________*/
+//mark:-WIP
+FEATURE.wip(129953)  //[MOBILE] Handle Many-one-Many relations
 // FEATURE.wip("simuARMOnAppleProcessor") // Mac M1 build for simu using arm64
 FEATURE.wip("duplicateTemplate")  // Allow to duplicate template in host database and show on disk https:// Project.4d.com/issues/98054
 FEATURE.wip("taskIndicator")  // UI for background tasks executing

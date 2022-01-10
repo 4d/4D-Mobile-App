@@ -241,16 +241,12 @@ Function doNewAction($tableNumber : Integer)
 		"label"; $t; \
 		"$icon"; $icon)
 	
-	If (FEATURE.with("predictiveEntryInActionParam"))
-		
-		$action.parameters:=New collection:C1472
-		$action.parameters.push(New object:C1471(\
-			"name"; Get localized string:C991("newParameter"); \
-			"label"; Get localized string:C991("addParameter"); \
-			"shortLabel"; Get localized string:C991("addParameter"); \
-			"type"; "string"))
-		
-	End if 
+	$action.parameters:=New collection:C1472
+	$action.parameters.push(New object:C1471(\
+		"name"; Get localized string:C991("newParameter"); \
+		"label"; Get localized string:C991("addParameter"); \
+		"shortLabel"; Get localized string:C991("addParameter"); \
+		"type"; "string"))
 	
 	If (Count parameters:C259=0)
 		
@@ -519,30 +515,17 @@ Function doAddMenu()
 						
 						$field:=$table[$menu.fieldIdentifier]
 						
-						If (FEATURE.with("predictiveEntryInActionParam"))
-							
-							If ($field.fieldNumber#Null:C1517)  // Field
-								
-								$parameter:=New object:C1471(\
-									"fieldNumber"; $field.fieldNumber; \
-									"name"; $field.name; \
-									"type"; PROJECT.fieldType2type($field.fieldType); \
-									"format"; "ascending")
-								
-							Else   // Computed attribute
-								
-								$parameter:=New object:C1471(\
-									"name"; $field.name; \
-									"type"; PROJECT.fieldType2type($field.fieldType); \
-									"format"; "ascending")
-								
-							End if 
-							
-						Else 
+						If ($field.fieldNumber#Null:C1517)  // Field
 							
 							$parameter:=New object:C1471(\
-								"fieldNumber"; Num:C11($field.fieldIdentifier); \
-								"defaultField"; EDITOR.str.setText($field.name).lowerCamelCase(); \
+								"fieldNumber"; $field.fieldNumber; \
+								"name"; $field.name; \
+								"type"; PROJECT.fieldType2type($field.fieldType); \
+								"format"; "ascending")
+							
+						Else   // Computed attribute
+							
+							$parameter:=New object:C1471(\
 								"name"; $field.name; \
 								"type"; PROJECT.fieldType2type($field.fieldType); \
 								"format"; "ascending")
@@ -627,25 +610,12 @@ Function doAddMenu()
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function _addParameter($fieldDefinition : Object; $field : Object; $edit : Boolean)->$parameter : Object
 	
-	If (FEATURE.with("predictiveEntryInActionParam"))
-		
-		$parameter:=New object:C1471(\
-			"name"; $fieldDefinition.name; \
-			"label"; $field.label; \
-			"shortLabel"; $field.shortLabel; \
-			"type"; Choose:C955($fieldDefinition.fieldType=Is time:K8:8; "time"; $fieldDefinition.valueType); \
-			"fieldNumber"; $fieldDefinition.fieldNumber)
-		
-	Else 
-		
-		$parameter:=New object:C1471(\
-			"name"; EDITOR.str.setText($field.name).lowerCamelCase(); \
-			"label"; $field.label; \
-			"shortLabel"; $field.shortLabel; \
-			"type"; Choose:C955($fieldDefinition.fieldType=Is time:K8:8; "time"; $fieldDefinition.valueType); \
-			"fieldNumber"; $fieldDefinition.fieldNumber)
-		
-	End if 
+	$parameter:=New object:C1471(\
+		"name"; $fieldDefinition.name; \
+		"label"; $field.label; \
+		"shortLabel"; $field.shortLabel; \
+		"type"; Choose:C955($fieldDefinition.fieldType=Is time:K8:8; "time"; $fieldDefinition.valueType); \
+		"fieldNumber"; $fieldDefinition.fieldNumber)
 	
 	If ($edit)
 		

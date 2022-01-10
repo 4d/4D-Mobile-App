@@ -93,40 +93,35 @@ Case of
 			
 		End if 
 		
-		If (FEATURE.with("customActionFormatterWithCode"))
-			// read capabilities from manifest files
-			
-			$formats:=$Obj_in.formats  // to implement a cache passed by caller
-			If ($formats=Null:C1517)
-				$Obj_in:=OB Copy:C1225($Obj_in)
-				$Obj_in.read:=True:C214
-				$formats:=mobile_actions("hostFormatList"; $Obj_in).formats
-			End if 
-			
-			$folder:=cs:C1710.path.new().hostInputControls()
-			For each ($format; $formats)
-				Case of 
-					: (Value type:C1509($format)=Is text:K8:3)
-						$formatFolder:=$folder.folder(Substring:C12($format; 2))
-						$manifest:=ob_parseFile($formatFolder.file("manifest.json")).value
-					: (Value type:C1509($format)=Is object:K8:27)
-						$formatFolder:=$format.folder
-						$manifest:=$format
-					Else 
-						$manifest:=New object:C1471
-						ASSERT:C1129(dev_Matrix; "Wrong type of format")
-				End case 
-				
-				If ($manifest.capabilities#Null:C1517)
-					
-					$Obj_out.capabilities:=capabilities(New object:C1471("action"; "mergeObjects"; "value"; New collection:C1472($Obj_out.capabilities; capabilities(New object:C1471("action"; "natify"; "value"; $manifest.capabilities))))).value
-					
-				End if 
-				
-			End for each 
-			
+		// read capabilities from manifest files
+		$formats:=$Obj_in.formats  // to implement a cache passed by caller
+		If ($formats=Null:C1517)
+			$Obj_in:=OB Copy:C1225($Obj_in)
+			$Obj_in.read:=True:C214
+			$formats:=mobile_actions("hostFormatList"; $Obj_in).formats
 		End if 
 		
+		$folder:=cs:C1710.path.new().hostInputControls()
+		For each ($format; $formats)
+			Case of 
+				: (Value type:C1509($format)=Is text:K8:3)
+					$formatFolder:=$folder.folder(Substring:C12($format; 2))
+					$manifest:=ob_parseFile($formatFolder.file("manifest.json")).value
+				: (Value type:C1509($format)=Is object:K8:27)
+					$formatFolder:=$format.folder
+					$manifest:=$format
+				Else 
+					$manifest:=New object:C1471
+					ASSERT:C1129(dev_Matrix; "Wrong type of format")
+			End case 
+			
+			If ($manifest.capabilities#Null:C1517)
+				
+				$Obj_out.capabilities:=capabilities(New object:C1471("action"; "mergeObjects"; "value"; New collection:C1472($Obj_out.capabilities; capabilities(New object:C1471("action"; "natify"; "value"; $manifest.capabilities))))).value
+				
+			End if 
+			
+		End for each 
 		
 		$Obj_out.success:=True:C214
 		
@@ -160,15 +155,13 @@ Case of
 				
 			End if 
 			
-			If (FEATURE.with("customActionFormatter"))
-				// remove slash from json injected for action format
-				If ($action.parameters#Null:C1517)
-					For each ($parameter; $action.parameters)
-						If (PROJECT.isCustomResource($parameter.format))
-							$parameter.format:=Delete string:C232($parameter.format; 1; 1)
-						End if 
-					End for each 
-				End if 
+			// remove slash from json injected for action format
+			If ($action.parameters#Null:C1517)
+				For each ($parameter; $action.parameters)
+					If (PROJECT.isCustomResource($parameter.format))
+						$parameter.format:=Delete string:C232($parameter.format; 1; 1)
+					End if 
+				End for each 
 			End if 
 			
 		End for each 
@@ -321,8 +314,7 @@ Case of
 						
 						Case of 
 								
-							: (_and(Formula:C1597(FEATURE.with("customActionFormatter")); \
-								Formula:C1597(PROJECT.isCustomResource($format))))
+							: (PROJECT.isCustomResource($format))
 								
 								$format:=Delete string:C232($format; 1; 1)
 								$manifest:=$Obj_in.inputControls[$format]
@@ -541,7 +533,7 @@ Case of
 		$Obj_out.success:=True:C214
 		
 		//______________________________________________________
-	: ($Txt_action="injectHost")  // for customActionFormatterWithCode
+	: ($Txt_action="injectHost")  // for custom Action Formatters
 		
 		$formats:=$Obj_in.formats  // to implement a cache passed by caller
 		If ($formats=Null:C1517)

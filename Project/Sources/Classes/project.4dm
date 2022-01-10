@@ -1153,41 +1153,24 @@ Function getSortableFields($table; $ordered : Boolean)->$fields : Collection
 				//______________________________________________________
 		End case 
 		
-		If (FEATURE.with("computedProperties"))
+		For each ($field; OB Entries:C1720($model))
 			
-			For each ($field; OB Entries:C1720($model))
-				
-				If ($field.value.fieldType#Null:C1517)
-					
-					If (This:C1470.isSortable($field.value))
-						
-						If (Bool:C1537($field.value.computed)) | ($field.value.type=-3)
-							
-							OB REMOVE:C1226($field.value; "fieldNumber")
-							
-						End if 
-						
-						$fields.push($field.value)
-						
-					End if 
-				End if 
-			End for each 
-			
-		Else 
-			
-			var $c : Collection
-			$c:=OB Entries:C1720($model).filter("col_formula"; Formula:C1597($1.result:=Match regex:C1019("^\\d+$"; $1.value.key; 1)))
-			
-			For each ($field; $c)
+			If ($field.value.fieldType#Null:C1517)
 				
 				If (This:C1470.isSortable($field.value))
 					
-					$field.value.fieldNumber:=Num:C11($field.key)
+					If (Bool:C1537($field.value.computed)) | ($field.value.type=-3)
+						
+						OB REMOVE:C1226($field.value; "fieldNumber")
+						
+					End if 
+					
 					$fields.push($field.value)
 					
 				End if 
-			End for each 
-		End if 
+			End if 
+		End for each 
+		
 		If (Count parameters:C259>=2)
 			
 			If ($ordered)

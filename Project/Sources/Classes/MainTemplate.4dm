@@ -291,11 +291,7 @@ Function doRun()->$result : Object
 	$result.choiceList:=mobile_actions("addChoiceList"; This:C1470.input)
 	ob_error_combine($result; $result.choiceList)
 	
-	If (FEATURE.with("customActionFormatterWithCode"))
-		
-		// Inject source code or resources
-		$result.injectHost:=mobile_actions("injectHost"; This:C1470.input)
-		ob_error_combine($result; $result.injectHost)
-		
-	End if 
+	// Inject source code or resources
+	$result.injectHost:=mobile_actions("injectHost"; This:C1470.input)
+	ob_error_combine($result; $result.injectHost)
 	

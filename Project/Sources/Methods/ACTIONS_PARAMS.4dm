@@ -173,16 +173,6 @@ Else   // <== WIDGETS METHOD
 					//________________________________________
 			End case 
 			
-			//==================================================
-		: (Not:C34(FEATURE.with("predictiveEntryInActionParam")))
-			
-			If ($e.code=On Data Change:K2:15)\
-				 & ($ƒ.linked.belongsTo($e.objectName))  // Linked widgets
-				
-				PROJECT.save()
-				
-			End if 
-			
 			//==============================================
 		: ($ƒ.predicting.catch())\
 			 & ($e.code<0)

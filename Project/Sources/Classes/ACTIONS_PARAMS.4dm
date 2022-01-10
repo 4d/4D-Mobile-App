@@ -137,15 +137,11 @@ Function init()
 		This:C1470.defaultValue; \
 		This:C1470.description)
 	
-	If (FEATURE.with("predictiveEntryInActionParam"))  //🚧
-		
-		This:C1470.subform("predicting")
-		
-		$group:=This:C1470.group("sortMenu")
-		This:C1470.button("namePopup").addToGroup($group)
-		This:C1470.formObject("namePopupBorder").addToGroup($group)
-		
-	End if 
+	This:C1470.subform("predicting")
+	
+	$group:=This:C1470.group("sortMenu")
+	This:C1470.button("namePopup").addToGroup($group)
+	This:C1470.formObject("namePopupBorder").addToGroup($group)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function onLoad()
@@ -171,28 +167,17 @@ Function onLoad()
 	
 	This:C1470.dropCursor.setColors(Highlight menu background color:K23:7)
 	
+	This:C1470.predicting.setWidth(This:C1470.paramNameBorder.dimensions.width)\
+		.setCoordinates(This:C1470.paramNameBorder.coordinates.left; This:C1470.paramNameBorder.coordinates.bottom-1)
+	
+	This:C1470.predicting.setValue(New object:C1471(\
+		"withValue"; True:C214; \
+		"bakgroundColor"; 0x00E9F7FE))
+	
+	This:C1470.formatLabel.setTitle("inputControl")
+	
 	// Add the events that we cannot select in the form properties 😇
-	This:C1470.appendEvents(On Alternative Click:K2:36)
-	
-	If (FEATURE.with("predictiveEntryInActionParam"))  //🚧
-		
-		This:C1470.predicting.setWidth(This:C1470.paramNameBorder.dimensions.width)\
-			.setCoordinates(This:C1470.paramNameBorder.coordinates.left; This:C1470.paramNameBorder.coordinates.bottom-1)
-		
-		This:C1470.predicting.setValue(New object:C1471(\
-			"withValue"; True:C214; \
-			"bakgroundColor"; 0x00E9F7FE))
-		
-		This:C1470.appendEvents(On After Keystroke:K2:26)
-		This:C1470.appendEvents(On Before Keystroke:K2:6)
-		
-	End if 
-	
-	If (FEATURE.with("customActionFormatter"))  //🚧
-		
-		This:C1470.formatLabel.setTitle("inputControl")
-		
-	End if 
+	This:C1470.appendEvents(New collection:C1472(On Alternative Click:K2:36; On Before Keystroke:K2:6; On After Keystroke:K2:26))
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function saveContext($current : Object)
@@ -237,12 +222,7 @@ Function restoreContext()
 				
 				$index:=This:C1470.action.parameters.indexOf(This:C1470.current)
 				This:C1470.parameters.select($index+1)
-				
-				If (FEATURE.with("predictiveEntryInActionParam"))  //🚧
-					
-					This:C1470.paramName.focus()
-					
-				End if 
+				This:C1470.paramName.focus()
 				
 			Else 
 				
@@ -254,11 +234,8 @@ Function restoreContext()
 					
 					$index:=This:C1470.action.parameters.indexOf(This:C1470.$current)
 					This:C1470.parameters.select($index+1)
+					This:C1470.paramName.focus()
 					
-					If (FEATURE.with("predictiveEntryInActionParam"))  //🚧
-						This:C1470.paramName.focus()
-						
-					End if 
 				End if 
 			End if 
 			
@@ -279,19 +256,15 @@ Function update()
 	This:C1470.noAction.hide()
 	This:C1470.title.hide()
 	This:C1470.field.hide()
+	This:C1470.predicting.hide()
 	
-	If (FEATURE.with("predictiveEntryInActionParam"))  //🚧
+	If (This:C1470.namePopup.isVisible())
 		
-		This:C1470.predicting.hide()
+		This:C1470.sortMenu.hide()
 		
-		If (This:C1470.namePopup.isVisible())
-			
-			This:C1470.sortMenu.hide()
-			
-			// Restore position
-			This:C1470.paramName.moveAndResizeHorizontally(-33; 33)
-			
-		End if 
+		// Restore position
+		This:C1470.paramName.moveAndResizeHorizontally(-33; 33)
+		
 	End if 
 	
 	This:C1470.paramName.enable()
@@ -361,15 +334,11 @@ Function update()
 						This:C1470.sortOrderGroup.show()
 						This:C1470.field.show()  // Linked to a field
 						This:C1470.paramName.disable()  // The name isn't editable
+						This:C1470.sortMenu.show()
 						
-						If (FEATURE.with("predictiveEntryInActionParam"))  //🚧
-							
-							This:C1470.sortMenu.show()
-							
-							//[BUG] We must backup the original position to not resize at each update
-							This:C1470.paramName.moveAndResizeHorizontally(33; -33)
-							
-						End if 
+						//We must backup the original position to not resize at each update
+						This:C1470.paramName.moveAndResizeHorizontally(33; -33)
+						
 					End if 
 					
 					//______________________________________________________
@@ -887,52 +856,24 @@ Function doAddParameterMenu($target : Object; $update : Boolean)
 			
 			$field:=$c.query("name = :1"; $menu.choice).pop()
 			
-			If (FEATURE.with("predictiveEntryInActionParam"))  //🚧
+			If ($isSortAction)
 				
-				If ($isSortAction)
-					
-					$parameter:=New object:C1471(\
-						"fieldNumber"; $field.fieldNumber; \
-						"name"; $field.name)
-					
-				Else 
-					
-					$parameter:=New object:C1471(\
-						"fieldNumber"; $field.fieldNumber; \
-						"name"; $field.name; \
-						"label"; $field.label; \
-						"shortLabel"; $field.shortLabel)
-					
-					If (Bool:C1537($field.mandatory))
-						
-						$parameter.rules:=New collection:C1472("mandatory")
-						
-					End if 
-				End if 
+				$parameter:=New object:C1471(\
+					"fieldNumber"; $field.fieldNumber; \
+					"name"; $field.name)
 				
 			Else 
 				
-				If ($isSortAction)
+				$parameter:=New object:C1471(\
+					"fieldNumber"; $field.fieldNumber; \
+					"name"; $field.name; \
+					"label"; $field.label; \
+					"shortLabel"; $field.shortLabel)
+				
+				If (Bool:C1537($field.mandatory))
 					
-					$parameter:=New object:C1471(\
-						"fieldNumber"; $field.fieldNumber; \
-						"defaultField"; formatString("field-name"; $field.name); \
-						"name"; $field.name)
+					$parameter.rules:=New collection:C1472("mandatory")
 					
-				Else 
-					
-					$parameter:=New object:C1471(\
-						"fieldNumber"; $field.fieldNumber; \
-						"label"; $field.label; \
-						"shortLabel"; $field.shortLabel; \
-						"defaultField"; formatString("field-name"; $field.name); \
-						"name"; EDITOR.str.setText($field.name).lowerCamelCase())
-					
-					If (Bool:C1537($field.mandatory))
-						
-						$parameter.rules:=New collection:C1472("mandatory")
-						
-					End if 
 				End if 
 			End if 
 			
@@ -1081,77 +1022,73 @@ Function getFormats()->$formats : Object
 	var $folder : 4D:C1709.Folder
 	
 	$formats:=JSON Parse:C1218(File:C1566("/RESOURCES/actionParameters.json").getText()).formats
+	$folder:=This:C1470.path.hostInputControls()
 	
-	If (FEATURE.with("customActionFormatterWithCode"))  //🚧
+	If ($folder.exists)
 		
-		$folder:=This:C1470.path.hostInputControls()
-		
-		If ($folder.exists)
+		For each ($folder; $folder.folders())
 			
-			For each ($folder; $folder.folders())
+			$file:=$folder.file("manifest.json")
+			
+			If ($file.exists)
 				
-				$file:=$folder.file("manifest.json")
+				$manifest:=JSON Parse:C1218($file.getText())
 				
-				If ($file.exists)
+				// We do not want choice list formatter, only custom one without data source.
+				If ($manifest.choiceList=Null:C1517)
 					
-					$manifest:=JSON Parse:C1218($file.getText())
-					
-					// We do not want choice list formatter, only custom one without data source.
-					If ($manifest.choiceList=Null:C1517)
+					// OK, I'll be nice to you and make it a collection.
+					If (Value type:C1509($manifest.type)=Is text:K8:3)
 						
-						// OK, I'll be nice to you and make it a collection.
-						If (Value type:C1509($manifest.type)=Is text:K8:3)
-							
-							$manifest.type:=New collection:C1472($manifest.type)
-							
-						End if 
+						$manifest.type:=New collection:C1472($manifest.type)
 						
-						If (Value type:C1509($manifest.type)=Is collection:K8:32)
-							
-							// Add to each type, the compatible formatter
-							$c:=New collection:C1472(\
-								"text"; \
-								"real"; \
-								"integer"; \
-								"boolean"; \
-								"picture")
-							
-							For each ($type; $manifest.type)
-								
-								$index:=$c.indexOf($type)
-								
-								If ($index>=0)
-									
-									$type:=Choose:C955($index; \
-										"string"; \
-										"number"; \
-										"number"; \
-										"bool"; \
-										"image")
-									
-								End if 
-								
-								If ($formats[$type]#Null:C1517)
-									
-									If ($formats[$type].indexOf("/"+$manifest.name)<0)
-										
-										$formats[$type].push("/"+$manifest.name)
-										
-									End if 
-									
-								Else   // IGNORE
-								End if 
-							End for each 
-							
-						Else   // Not a valid formatter
-						End if 
-					Else   // Nothing to do
 					End if 
-				Else   // Not a valid formatter
+					
+					If (Value type:C1509($manifest.type)=Is collection:K8:32)
+						
+						// Add to each type, the compatible formatter
+						$c:=New collection:C1472(\
+							"text"; \
+							"real"; \
+							"integer"; \
+							"boolean"; \
+							"picture")
+						
+						For each ($type; $manifest.type)
+							
+							$index:=$c.indexOf($type)
+							
+							If ($index>=0)
+								
+								$type:=Choose:C955($index; \
+									"string"; \
+									"number"; \
+									"number"; \
+									"bool"; \
+									"image")
+								
+							End if 
+							
+							If ($formats[$type]#Null:C1517)
+								
+								If ($formats[$type].indexOf("/"+$manifest.name)<0)
+									
+									$formats[$type].push("/"+$manifest.name)
+									
+								End if 
+								
+							Else   // IGNORE
+							End if 
+						End for each 
+						
+					Else   // Not a valid formatter
+					End if 
+				Else   // Nothing to do
 				End if 
-			End for each 
-		Else   // No user formatter
-		End if 
+			Else   // Not a valid formatter
+			End if 
+		End for each 
+	Else   // No user formatter
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
@@ -1216,11 +1153,7 @@ Function doFormatMenu()
 			
 		End for each 
 		
-		If (FEATURE.with("newActionFormatterChoiceList"))  //🚧
-			
-			This:C1470._actionFormatterChoiceList($menu; $type)
-			
-		End if 
+		This:C1470._actionFormatterChoiceList($menu; $type)
 		
 	Else 
 		
@@ -1247,11 +1180,7 @@ Function doFormatMenu()
 					
 				End for each 
 				
-				If (FEATURE.with("newActionFormatterChoiceList"))  //🚧
-					
-					This:C1470._actionFormatterChoiceList($subMenu; $type)
-					
-				End if 
+				This:C1470._actionFormatterChoiceList($subMenu; $type)
 				
 				$menu.append(":xliff:"+$label; $subMenu)
 				
@@ -1578,7 +1507,7 @@ Function _appendFormat($data : Object)->$custom : Boolean
 		
 	Else 
 		
-		//mark:#132599: Add tag iOS only for unsupported type
+		//mark:-#132599: Add tag iOS only for unsupported type
 		//$data.menu.append(":xliff:f_"+$format; $format; $data.currentFormat=$format)
 		var $label : Text
 		
@@ -1618,88 +1547,26 @@ Function _appendFormat($data : Object)->$custom : Boolean
 	// [INTERNAL]
 Function _actionFormatterChoiceList($menu : cs:C1710.menu; $type : Text)
 	
+	var $control; $parameter : Text
+	var $selected : Boolean
+	
 	If (This:C1470.typesAllowingCustomInputControls.indexOf($type)>=0)
 		
 		$menu.line()
 		
-		If (FEATURE.with("customActionFormatter"))  //🚧
+		$menu.append("selectionControls").disable()
+		
+		For each ($control; This:C1470.customInputControls)
 			
-			var $control; $parameter : Text
-			var $selected : Boolean
+			$parameter:="/"+$control+"/"+$type
+			$selected:=$parameter=(String:C10(This:C1470.current.format)+"/"+This:C1470.current.type)
 			
-			$menu.append("selectionControls").disable()
+			//mark:-#132599: Add tag iOS only for unsupported type
+			$menu.append($control+Get localized string:C991("iosOnly"); $parameter; $selected)\
+				.setData("type"; $type)\
+				.setData("format"; "/"+$control)
 			
-			For each ($control; This:C1470.customInputControls)
-				
-				$parameter:="/"+$control+"/"+$type
-				$selected:=$parameter=(String:C10(This:C1470.current.format)+"/"+This:C1470.current.type)
-				
-				//mark:#132599: Add tag iOS only for unsupported type
-				//$menu.append($control; $parameter; $selected)\
-					.setData("type"; $type)\
-					.setData("format"; "/"+$control)
-				$menu.append($control+Get localized string:C991("iosOnly"); $parameter; $selected)\
-					.setData("type"; $type)\
-					.setData("format"; "/"+$control)
-				
-			End for each 
-			
-		Else 
-			
-			var $fieldID; $tableID : Text
-			var $field; $data; $table : Object
-			var $fieldsMenu; $tableMenu : cs:C1710.menu
-			
-			$data:=New object:C1471(\
-				"type"; New collection:C1472($type))
-			
-			$menu.append("newChoiceList"; "$new")\
-				.setData("type"; "choiceList")\
-				.setData("format"; $data)
-			
-			$tableMenu:=cs:C1710.menu.new()
-			
-			For each ($tableID; PROJECT.dataModel)
-				
-				$table:=PROJECT.dataModel[$tableID]
-				$fieldsMenu:=cs:C1710.menu.new()
-				
-				For each ($fieldID; $table)
-					
-					If (PROJECT.isField($fieldID))
-						
-						$field:=$table[$fieldID]
-						
-						If (PROJECT.fieldType2type($field.fieldType)=$type)  // OPTI : use reverse convertion on current type instead
-							
-							$data:=New object:C1471(\
-								"type"; New collection:C1472($type); \
-								"choiceList"; New object:C1471(\
-								"dataSource"; New object:C1471("dataClass"; \
-								$table[""].name; "field"; \
-								$field.name)))
-							
-							$fieldsMenu.append($field.name; "$new·"+$tableID+"·"+$fieldID)\
-								.setData("type"; "dataSource")\
-								.setData("format"; $data)
-							
-						End if 
-					End if 
-				End for each 
-				
-				If ($fieldsMenu.itemCount()>0)
-					
-					$tableMenu.append($table[""].name; $fieldsMenu)
-					
-				End if 
-			End for each 
-			
-			If ($tableMenu.itemCount()>0)
-				
-				$menu.append("fromDataclass"; $tableMenu)
-				
-			End if 
-		End if 
+		End for each 
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
