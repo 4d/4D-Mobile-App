@@ -111,7 +111,7 @@
 							],
 							"header": {
 								"name": "Header5",
-								"text": ":xliff:names",
+								"text": "",
 								"textAlign": "left",
 								"verticalAlign": "middle"
 							},
@@ -139,7 +139,7 @@
 							],
 							"header": {
 								"name": "Header3",
-								"text": ":xliff:icons",
+								"text": "",
 								"textAlign": "left",
 								"verticalAlign": "middle"
 							},
@@ -220,7 +220,7 @@
 							],
 							"header": {
 								"name": "Header1",
-								"text": ":xliff:tables",
+								"text": "",
 								"textAlign": "left",
 								"verticalAlign": "middle"
 							},
@@ -269,7 +269,7 @@
 					"height": 17,
 					"stroke": "#696969",
 					"textAlign": "left",
-					"text": ":xliff:icons"
+					"text": ":xliff:icon"
 				},
 				"names.label": {
 					"type": "text",
@@ -279,7 +279,7 @@
 					"height": 17,
 					"stroke": "#696969",
 					"textAlign": "left",
-					"text": ":xliff:names"
+					"text": ":xliff:name"
 				},
 				"add": {
 					"type": "button",
@@ -319,7 +319,7 @@
 					"height": 17,
 					"stroke": "#696969",
 					"textAlign": "left",
-					"text": ":xliff:tables"
+					"text": ":xliff:table"
 				},
 				"scopes.label": {
 					"type": "text",
@@ -361,7 +361,7 @@
 					"height": 17,
 					"stroke": "#696969",
 					"textAlign": "left",
-					"text": ":xliff:longLabels"
+					"text": ":xliff:label"
 				},
 				"shorts.label": {
 					"type": "text",
@@ -371,7 +371,7 @@
 					"height": 17,
 					"stroke": "#696969",
 					"textAlign": "left",
-					"text": ":xliff:shortLabels"
+					"text": ":xliff:shortLabel"
 				},
 				"iconPicker": {
 					"type": "subform",
@@ -406,7 +406,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 67,
+	"geometryStamp": 72,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

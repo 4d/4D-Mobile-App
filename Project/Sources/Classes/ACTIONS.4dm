@@ -49,7 +49,7 @@ Function onLoad()
 	This:C1470.actions.setScrollbars(0; 2)
 	
 	// Set the initial display
-	If (_and(Formula:C1597(Form:C1466.dataModel#Null:C1517); Formula:C1597(Not:C34(OB Is empty:C1297(Form:C1466.dataModel)))))
+	If ((Form:C1466.dataModel#Null:C1517) && Not:C34(OB Is empty:C1297(Form:C1466.dataModel)))
 		
 		This:C1470.actions.show().updateDefinition()
 		This:C1470.noPublishedTable.hide()
@@ -59,7 +59,7 @@ Function onLoad()
 		
 		This:C1470.dropCursor.setColors(Highlight menu background color:K23:7)
 		
-		If (_and(Formula:C1597(Form:C1466.actions#Null:C1517); Formula:C1597(Form:C1466.actions.length>0)))
+		If ((Form:C1466.actions#Null:C1517) && (Form:C1466.actions.length>0))
 			
 			// Select last used action (or the first one)
 			If (This:C1470.$current#Null:C1517)
@@ -173,7 +173,7 @@ Function update()
 	METHOD GET PATHS:C1163(Path database method:K72:2; $methods; *)
 	$success:=(Find in array:C230($methods; METHOD Get path:C1164(Path database method:K72:2; "onMobileAppAction"))>0)
 	This:C1470.databaseMethod.setTitle(Choose:C955($success; "edit..."; "create..."))
-	This:C1470.databaseMethod.enable($success | _and(Formula:C1597(Form:C1466.actions#Null:C1517); Formula:C1597(Form:C1466.actions.length>0)))
+	This:C1470.databaseMethod.enable($success | ((Form:C1466.actions#Null:C1517) && (Form:C1466.actions.length>0)))
 	
 	This:C1470.databaseMethodGroup.distributeRigthToLeft(New object:C1471("spacing"; 20))
 	

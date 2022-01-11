@@ -1,22 +1,10 @@
 /* background */
 rectangle {
 	color: #C0C0C0 !important;
-	background-color: white !important
+  fill: automatic;
 }
 
 /* browse button */
 #browse {
 	text: … !important;
-	color: grey !important;
-}
-
-/* label text */
-#label {
-	color: black !important;
-	font-size: 12px !important;
-}
-
-/* associated menu */
-#menu {
-	icon: url("Images/down.png") !important;
 }

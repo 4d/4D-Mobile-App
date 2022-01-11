@@ -179,9 +179,7 @@ If (Length:C16($cible)>0)
 						
 						// #MARK_TODO - Il doit y avoir des widget action qui ne sont pas compatible avec tous les types
 						
-						If (_or(\
-							Formula:C1597($dropped.target=Null:C1517); \
-							Formula:C1597(String:C10($dropped.target)="widget")))
+						If (($dropped.target=Null:C1517) || (String:C10($dropped.target)="widget"))
 							
 							$0:=0
 							

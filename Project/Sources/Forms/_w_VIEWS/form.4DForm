@@ -1,4 +1,4 @@
-﻿{
+{
 	"destination": "detailScreen",
 	"inheritedForm": "panel_template",
 	"width": 960,
@@ -219,10 +219,10 @@
 					"visibility": "hidden",
 					"stroke": "#04A9F4",
 					"textAlign": "center",
-					"fontFamily": ".SF NS Text",
 					"fontSize": 13,
 					"fontWeight": "bold",
-					"text": "xxx"
+					"text": "xxx",
+					"fontTheme": "normal"
 				},
 				"01_fields": {
 					"type": "listbox",
@@ -269,7 +269,6 @@
 							"stroke": "#FF0000",
 							"textAlign": "left",
 							"verticalAlign": "middle",
-							"fontFamily": ".SF NS Text",
 							"fontSize": 10,
 							"header": {
 								"name": "Header2",
@@ -282,7 +281,8 @@
 								"timeFormat": "hh_mm_ss",
 								"textAlign": "left",
 								"verticalAlign": "middle"
-							}
+							},
+							"fontTheme": "normal"
 						},
 						{
 							"name": "field_ids",
@@ -296,7 +296,6 @@
 							"stroke": "#FF9300",
 							"textAlign": "left",
 							"verticalAlign": "middle",
-							"fontFamily": ".SF NS Text",
 							"fontSize": 10,
 							"events": [
 								"onDataChange"
@@ -313,7 +312,8 @@
 								"timeFormat": "hh_mm_ss",
 								"textAlign": "left",
 								"verticalAlign": "middle"
-							}
+							},
+							"fontTheme": "normal"
 						},
 						{
 							"name": "icons",
@@ -526,6 +526,17 @@
 						"onDragOver"
 					],
 					"method": "VIEWS_OBJECTS_HANDLER"
+				},
+				"Button": {
+					"type": "button",
+					"text": "Button",
+					"top": 57,
+					"left": 556,
+					"width": 110,
+					"height": 31,
+					"events": [
+						"onClick"
+					]
 				}
 			}
 		}
@@ -534,5 +545,6 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"method": "VIEWS_Handler"
+	"method": "VIEWS_Handler",
+	"geometryStamp": 2
 }

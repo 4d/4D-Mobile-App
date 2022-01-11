@@ -268,7 +268,7 @@ Function is3DButton($message : Text)->$success : Boolean
 	
 	If (Length:C16($message)>0)
 		
-		ASSERT:C1129($success; $message)
+		//ASSERT($success; $message)
 		
 	End if 
 	

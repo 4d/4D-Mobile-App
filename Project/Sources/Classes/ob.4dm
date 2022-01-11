@@ -568,8 +568,7 @@ Function clone($target : Object)->$result : Object
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 /** Copies the values ​​of all first level properties of the passed object.
-- The common properties are overloaded according to the order of the parameters.
-- The Null values are ignored
+- The common properties are overloaded
 **/
 Function assign($object : Object; $target : Object)->$result : Object
 	

@@ -555,6 +555,10 @@ weitere Optionen hier klicken.</target>
           <source>Sort…</source>
           <target>Sortieren…</target>
         </trans-unit>
+        <trans-unit id="CnfqBxtH/VuFJqoLys/Uyw" resname="icon">
+          <source>Icon</source>
+          <target state="new">Icon</target>
+        </trans-unit>
       </group>
       <group resname="Pannels">
         <trans-unit id="7k+yWCBxtI1lrsMfZW9a3g" resname="organization">
@@ -1525,6 +1529,10 @@ Dies kann einige Minuten dauern</target>
         <trans-unit id="kDH2UATQUhDGpVBRuqjsOg" resname="selectionControls">
           <source>Selection controls</source>
           <target>Auswahlkontrollen</target>
+        </trans-unit>
+        <trans-unit id="0oD3rFDOiH6Mic+EH2nPmw" resname="value">
+          <source>Value</source>
+          <target state="new">Value</target>
         </trans-unit>
       </group>
       <group resname="Features">

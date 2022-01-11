@@ -122,7 +122,7 @@ Case of
 			
 			For each ($o; $folder.folders())
 				
-				If (_and(Formula:C1597($o.files().length>0); Formula:C1597($o.files().extract("fullname").indexOf("manifest.json")#-1)))
+				If (($o.files().length>0) && ($o.files().extract("fullname").indexOf("manifest.json")#-1))
 					
 					$oo:=JSON Parse:C1218($o.file("manifest.json").getText())
 					

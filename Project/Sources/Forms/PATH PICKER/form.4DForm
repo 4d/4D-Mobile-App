@@ -39,11 +39,11 @@
 					"type": "rectangle",
 					"top": 1,
 					"left": 1,
-					"width": 322,
+					"width": 323,
 					"height": 20,
 					"sizingX": "grow",
 					"class": "border",
-					"fill": "transparent"
+					"stroke": "transparent"
 				},
 				"text": {
 					"type": "input",
@@ -56,7 +56,6 @@
 					"dataSource": "Form:C1466.label",
 					"events": [],
 					"class": "label",
-					"fill": "transparent",
 					"focusable": false,
 					"enterable": false
 				},
@@ -124,7 +123,7 @@
 		"kind": "form"
 	},
 	"method": "PATH_PICKER",
-	"geometryStamp": 391,
+	"geometryStamp": 412,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

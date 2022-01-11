@@ -4,8 +4,34 @@ Class constructor
 	
 	Super:C1705()
 	
+	//todo: localize values?
+	This:C1470.formats:=New object:C1471
+	This:C1470.formats.values:=New collection:C1472("Push"; "Segmented"; "Popover"; "Sheet"; "Picker")
+	This:C1470.formats.binding:=New collection:C1472("push"; "segmented"; "popover"; "sheet"; "picker")
+	This:C1470.formats.currentValue:=Get localized string:C991("select")
+	This:C1470.formats.index:=-1
+	
+	//This.types:=New object
+	//This.types.values:=New collection("string"; "bool"; "number")
+	//This.types.binding:=New collection("string"; "bool"; "number")
+	//This.types.currentValue:=Get localized string("select")
+	//This.types.index:=-1
+	
 	This:C1470.init()
 	This:C1470.onLoad()
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function get format()->$value : Text
+	
+	If ((This:C1470.formats#Null:C1517)\
+		 && (This:C1470.formats.binding#Null:C1517)\
+		 && (This:C1470.formats.index#Null:C1517)\
+		 && Num:C11(This:C1470.formats.index)>=0\
+		 && Num:C11(This:C1470.formats.index)<This:C1470.formats.binding.length)
+		
+		$value:=This:C1470.formats.binding[Num:C11(This:C1470.formats.index)]
+		
+	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function init()
@@ -18,29 +44,24 @@ Function init()
 		
 		This:C1470.input("name")
 		
-		$group:=This:C1470.group("type")
-		This:C1470.button("push").addToGroup($group)
-		This:C1470.button("segmented").addToGroup($group)
-		This:C1470.button("popover").addToGroup($group)
-		This:C1470.button("sheet").addToGroup($group)
-		This:C1470.button("picker").addToGroup($group)
-		This:C1470.type.distributeLeftToRight()  // Adjust button size
+		This:C1470.widget("formatDropdown")
 		
 		$group:=This:C1470.group("source")
 		This:C1470.button("static").addToGroup($group)
 		This:C1470.button("datasource").addToGroup($group)
 		This:C1470.source.distributeLeftToRight()  // Adjust button size
 		
-		$group:=This:C1470.group("choiceList")
+		$group:=This:C1470.group("binding")
 		This:C1470.button("label").addToGroup($group)
 		This:C1470.button("image").addToGroup($group)
-		This:C1470.choiceList.distributeLeftToRight()  // Adjust button size
+		This:C1470.binding.distributeLeftToRight()  // Adjust button size
+		
 		This:C1470.formObject("_binding").addToGroup($group)
 		This:C1470.formObject("_value").addToGroup($group)
 		This:C1470.formObject("_label").addToGroup($group)
 		This:C1470.listbox("list"; "choiceList").setScrollbars(0; 2).addToGroup($group)
 		This:C1470.button("add").addToGroup($group)
-		This:C1470.button("remove").addToGroup($group)
+		This:C1470.button("remove").addToGroup($group).disable()
 		$group.hide()  // Hide all elements
 		
 		$group:=This:C1470.group("dataclass")
@@ -63,11 +84,6 @@ Function onLoad()
 	If (Form:C1466.choiceList=Null:C1517)  //#TEMPO
 		
 		Case of 
-				
-				//______________________________________________________
-			: (Not:C34(OB Is empty:C1297(Form:C1466.choiceList)))
-				
-				// <NOTHING MORE TO DO>
 				
 				//______________________________________________________
 			: ((Form:C1466.type="bool")\
@@ -96,24 +112,24 @@ Function onLoad()
 					"value2"; "Displayed value2")
 				
 				//______________________________________________________
-			Else 
-				
-				// A "Case of" statement should never omit "Else"
-				//______________________________________________________
 		End case 
 	End if 
 	
-	// Select the format radio button
-	This:C1470[Form:C1466.format].setValue(True:C214)
+	This:C1470.appendEvents(On Double Clicked:K2:5)
+	
+	// Select the format (push if not defined)
+	Form:C1466.format:=Form:C1466.format#Null:C1517 ? Form:C1466.format : "push"  // 
+	This:C1470.formats.index:=This:C1470.formats.binding.indexOf(Form:C1466.format)
+	This:C1470.formats.currentValue:=This:C1470.formats.values[This:C1470.formats.index]
 	
 	// Select the datasource type
 	This:C1470.static.setValue(Form:C1466.choiceList.dataSource=Null:C1517)
 	
-	// Choice list values
-	Form:C1466._choiceList:=OB Entries:C1720(Form:C1466.choiceList)
-	
-	// Set binding
+	// Select binding type
 	This:C1470.label.setValue(Form:C1466.binding=Null:C1517)
+	
+	// Populate the choice list values
+	Form:C1466._choiceList:=OB Entries:C1720(Form:C1466.choiceList)
 	
 	// Initialize database structure MARK:FILTER?
 	Form:C1466._dataclasses:=PROJECT.getCatalog()
@@ -141,6 +157,7 @@ Function update()
 		If (Form:C1466._folder.exists)
 			
 			BEEP:C151
+			//todo: DISPLAY AN ERROR
 			
 			OB REMOVE:C1226(Form:C1466; "_folder")
 			This:C1470.name.focus().highlight()
@@ -161,11 +178,13 @@ Function update()
 	
 	If (This:C1470.static.getValue())
 		
-		This:C1470.choiceList.show()
+		This:C1470.binding.show()
 		This:C1470.dataclass.hide()
 		
 		$isValid:=$isValid\
 			 & (Form:C1466._choiceList.length>0)
+		
+		This:C1470.remove.enable(This:C1470.list.item#Null:C1517)
 		
 	Else 
 		
@@ -178,7 +197,7 @@ Function update()
 			
 		End if 
 		
-		This:C1470.choiceList.hide()
+		This:C1470.binding.hide()
 		This:C1470.dataclass.show()
 		
 		$isValid:=$isValid\

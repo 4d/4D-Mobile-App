@@ -1,4 +1,4 @@
-﻿{
+{
 	"$4d": {
 		"version": "1",
 		"kind": "form"
@@ -52,11 +52,11 @@
 				},
 				"upArrow": {
 					"type": "button",
-					"text": "🠕",
+					"text": "↑",
 					"top": 0,
 					"left": 304,
-					"width": 30,
-					"height": 30,
+					"width": 23,
+					"height": 20,
 					"events": [
 						"onClick"
 					],
@@ -73,11 +73,11 @@
 				},
 				"downArrow": {
 					"type": "button",
-					"text": "🠧",
+					"text": "↓",
 					"top": 0,
-					"left": 337,
-					"width": 30,
-					"height": 30,
+					"left": 331,
+					"width": 23,
+					"height": 20,
 					"events": [
 						"onClick"
 					],
@@ -91,11 +91,19 @@
 					"stroke": "#ff6347",
 					"fontSize": 18,
 					"sizingY": "move"
+				},
+				"Text": {
+					"type": "text",
+					"text": "↓",
+					"top": 141,
+					"left": 457,
+					"width": 104,
+					"height": 46
 				}
 			}
 		}
 	],
-	"geometryStamp": 32,
+	"geometryStamp": 98,
 	"windowSizingX": "fixed",
 	"windowSizingY": "fixed",
 	"rightMargin": 0,
