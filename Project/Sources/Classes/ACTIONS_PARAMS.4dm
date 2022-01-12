@@ -1329,8 +1329,15 @@ Function doDataSourceMenu()
 				
 				If ($manifest.choiceList#Null:C1517)
 					
+					//$controls.push(New object(\
+						"dynamic"; (Value type($manifest.choiceList)=Is object) && ($manifest.choiceList.dataSource#Null); \
+						"name"; $manifest.name; \
+						"source"; $manifest.name; \
+						"format"; Choose($manifest.format#Null; $manifest.format; "push"); \
+						"choiceList"; $manifest.choiceList\
+						))
 					$controls.push(New object:C1471(\
-						"dynamic"; (Value type:C1509($manifest.choiceList)=Is object:K8:27) && ($manifest.choiceList.dataSource#Null:C1517); \
+						"dynamic"; _and(Formula:C1597(Value type:C1509($manifest.choiceList)=Is object:K8:27); Formula:C1597($manifest.choiceList.dataSource#Null:C1517)); \
 						"name"; $manifest.name; \
 						"source"; $manifest.name; \
 						"format"; Choose:C955($manifest.format#Null:C1517; $manifest.format; "push"); \
@@ -1484,9 +1491,8 @@ Function _appendFormat($data : Object)->$custom : Boolean
 	
 	$format:=$data.format
 	
-	//If (_or(Formula(Value type($format)=Is object); Formula(PROJECT.isCustomResource($format))))
-	
-	If ((Value type:C1509($format)=Is object:K8:27) || (PROJECT.isCustomResource($format)))
+	//If ((Value type($format)=Is object) || (PROJECT.isCustomResource($format)))
+	If (_or(Formula:C1597(Value type:C1509($format)=Is object:K8:27); Formula:C1597(PROJECT.isCustomResource($format))))
 		
 		If (Not:C34($data.custom))
 			

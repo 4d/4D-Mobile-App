@@ -100,7 +100,8 @@ If ($out.applicationAvailable)
 			End if 
 			
 			// *CHECK JAVA
-			$out.ready:=($studio.java#Null:C1517) && ($studio.java.exists)
+			//$out.ready:=($studio.java#Null) && ($studio.java.exists)
+			$out.ready:=_and(Formula:C1597($studio.java#Null:C1517); Formula:C1597($studio.java.exists))
 			
 			If ($out.ready)
 				

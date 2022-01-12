@@ -23,15 +23,15 @@ Class constructor
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function get format()->$value : Text
 	
-	If ((This:C1470.formats#Null:C1517)\
-		 && (This:C1470.formats.binding#Null:C1517)\
-		 && (This:C1470.formats.index#Null:C1517)\
-		 && Num:C11(This:C1470.formats.index)>=0\
-		 && Num:C11(This:C1470.formats.index)<This:C1470.formats.binding.length)
-		
-		$value:=This:C1470.formats.binding[Num:C11(This:C1470.formats.index)]
-		
-	End if 
+	//If ((This.formats#Null)\
+		 && (This.formats.binding#Null)\
+		 && (This.formats.index#Null)\
+		 && Num(This.formats.index)>=0\
+		 && Num(This.formats.index)<This.formats.binding.length)
+	
+	$value:=This:C1470.formats.binding[Num:C11(This:C1470.formats.index)]
+	
+	//End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function init()
