@@ -866,6 +866,44 @@ Function instanceOf($class : Object)->$success : Boolean
 	
 	$success:=OB Instance of:C1731(This:C1470.content; $class)
 	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function cleanup($pattern : Text; $target : Object)->$result : Object
+	
+	var $key : Text
+	var $intra : Boolean
+	var $c : Collection
+	
+	$intra:=Count parameters:C259<2
+	$target:=$intra ? This:C1470.content : $target
+	$result:=$target
+	
+	If (Count parameters:C259=0)
+		
+		$c:=New collection:C1472("_"; "$")
+		
+	Else 
+		
+		$c:=Split string:C1554($pattern; ",")
+		
+	End if 
+	
+	$result:=OB Copy:C1225($target)
+	
+	For each ($key; $result)
+		
+		If ($c.indexOf($key[[1]])#-1)
+			
+			OB REMOVE:C1226($result; $key)
+			
+		End if 
+	End for each 
+	
+	If ($intra)
+		
+		This:C1470.content:=$result
+		
+	End if 
+	
 	//MARK:- 📌 PRIVATES
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Compute the target path, Create and Set value if any

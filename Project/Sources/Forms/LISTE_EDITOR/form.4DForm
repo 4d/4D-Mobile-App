@@ -30,6 +30,15 @@
 					"height": 555,
 					"borderRadius": 10,
 					"class": "border"
+				},
+				"Line": {
+					"type": "line",
+					"top": 20,
+					"left": 262,
+					"width": 1,
+					"height": 555,
+					"stroke": "#1e90ff",
+					"startPoint": "bottomLeft"
 				}
 			}
 		},
@@ -38,16 +47,16 @@
 				"name.border": {
 					"type": "rectangle",
 					"top": 43,
-					"left": 204,
-					"width": 281,
+					"left": 184,
+					"width": 261,
 					"height": 33,
 					"class": "border"
 				},
 				"name": {
 					"type": "input",
 					"top": 51,
-					"left": 211,
-					"width": 264,
+					"left": 191,
+					"width": 244,
 					"height": 17,
 					"dataSource": "Form:C1466.name",
 					"hideFocusRing": true,
@@ -61,9 +70,9 @@
 				"_name": {
 					"type": "text",
 					"top": 52,
-					"left": 51,
-					"width": 140,
-					"height": 17,
+					"left": 75,
+					"width": 96,
+					"height": 16,
 					"text": ":xliff:name",
 					"class": "label",
 					"textAlign": "right"
@@ -72,7 +81,7 @@
 					"type": "radio",
 					"text": ":xliff:choiceList",
 					"top": 134,
-					"left": 206,
+					"left": 186,
 					"width": 111,
 					"height": 23,
 					"events": [
@@ -86,7 +95,7 @@
 					"type": "radio",
 					"text": ":xliff:fromDataclass",
 					"top": 134,
-					"left": 337,
+					"left": 317,
 					"width": 148,
 					"height": 23,
 					"events": [
@@ -98,7 +107,7 @@
 				},
 				"choiceList": {
 					"type": "listbox",
-					"left": 62,
+					"left": 54,
 					"top": 231,
 					"width": 418,
 					"height": 237,
@@ -122,7 +131,7 @@
 								"text": "Header1",
 								"name": "Header1"
 							},
-							"name": "Column1",
+							"name": "key",
 							"footer": {
 								"name": "Footer1"
 							},
@@ -134,21 +143,24 @@
 								"name": "Header2",
 								"text": "Header2"
 							},
-							"name": "Column2",
+							"name": "value",
 							"footer": {
 								"name": "Footer2"
 							},
 							"dataSource": "This:C1470.value",
-							"resizable": false
+							"resizable": false,
+							"width": 250,
+							"events": [],
+							"method": "ObjectMethods/value.4dm"
 						}
 					]
 				},
 				"_dataSource": {
 					"type": "text",
 					"top": 137,
-					"left": 51,
-					"width": 140,
-					"height": 17,
+					"left": 75,
+					"width": 96,
+					"height": 16,
 					"text": ":xliff:source",
 					"class": "label",
 					"textAlign": "right"
@@ -156,9 +168,9 @@
 				"formatLabel": {
 					"type": "text",
 					"top": 98,
-					"left": 51,
-					"width": 140,
-					"height": 17,
+					"left": 75,
+					"width": 96,
+					"height": 16,
 					"text": ":xliff:format",
 					"class": "label",
 					"textAlign": "right"
@@ -166,7 +178,7 @@
 				"_value": {
 					"type": "text",
 					"top": 210,
-					"left": 62,
+					"left": 54,
 					"width": 110,
 					"height": 16,
 					"text": ":xliff:value",
@@ -174,8 +186,8 @@
 				},
 				"add": {
 					"type": "button",
-					"top": 483,
-					"left": 62,
+					"top": 473,
+					"left": 53,
 					"width": 28,
 					"height": 28,
 					"icon": "/RESOURCES/images/common/plus.png",
@@ -189,8 +201,8 @@
 				},
 				"remove": {
 					"type": "button",
-					"top": 483,
-					"left": 89,
+					"top": 473,
+					"left": 80,
 					"width": 28,
 					"height": 28,
 					"icon": "/RESOURCES/images/common/minus.png",
@@ -205,7 +217,7 @@
 					"type": "radio",
 					"text": ":xliff:label",
 					"top": 174,
-					"left": 206,
+					"left": 186,
 					"width": 92,
 					"height": 16,
 					"events": [
@@ -219,7 +231,7 @@
 					"type": "radio",
 					"text": ":xliff:image",
 					"top": 174,
-					"left": 337,
+					"left": 317,
 					"width": 87,
 					"height": 16,
 					"events": [
@@ -232,7 +244,7 @@
 				"_label": {
 					"type": "text",
 					"top": 210,
-					"left": 183,
+					"left": 175,
 					"width": 110,
 					"height": 16,
 					"text": ":xliff:label",
@@ -241,10 +253,10 @@
 				"_binding": {
 					"type": "text",
 					"top": 174,
-					"left": 51,
-					"width": 140,
-					"height": 17,
-					"text": ".Binding",
+					"left": 75,
+					"width": 96,
+					"height": 16,
+					"text": ":xliff:type",
 					"class": "label",
 					"textAlign": "right"
 				},
@@ -364,7 +376,7 @@
 				},
 				"formatDropdown": {
 					"type": "dropdown",
-					"left": 204,
+					"left": 184,
 					"top": 96,
 					"width": 113,
 					"height": 20,
@@ -392,7 +404,7 @@
 			]
 		}
 	],
-	"geometryStamp": 579,
+	"geometryStamp": 620,
 	"editor": {
 		"groups": {
 			"Group": [
@@ -409,6 +421,10 @@
 				"label",
 				"image",
 				"_binding"
+			],
+			"Group3": [
+				"formatLabel",
+				"formatDropdown"
 			]
 		},
 		"activeView": "choicelist",
@@ -426,14 +442,14 @@
 			},
 			"choicelist": {
 				"objects": [
+					"Line",
 					"choiceList",
-					"formatLabel",
+					"Group3",
 					"_value",
 					"add",
 					"remove",
 					"Group2",
-					"_label",
-					"formatDropdown"
+					"_label"
 				]
 			}
 		}

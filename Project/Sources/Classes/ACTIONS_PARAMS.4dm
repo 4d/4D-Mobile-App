@@ -1329,6 +1329,8 @@ Function doDataSourceMenu()
 				
 				If ($manifest.choiceList#Null:C1517)
 					
+					
+					//mark:🐞 turn around
 					//$controls.push(New object(\
 						"dynamic"; (Value type($manifest.choiceList)=Is object) && ($manifest.choiceList.dataSource#Null); \
 						"name"; $manifest.name; \
@@ -1430,13 +1432,12 @@ Function doNewList()
 	
 	var $key; $name : Text
 	var $current; $data; $o : Object
-	var $file : 4D:C1709.File
-	var $folder : 4D:C1709.Folder
 	
 	$current:=This:C1470.current
 	
 	$data:=New object:C1471
-	$data._window:=Open form window:C675("LISTE_EDITOR"; Movable form dialog box:K39:8; Horizontally centered:K39:1; Vertically centered:K39:4)
+	//$data._window:=Open form window("LISTE_EDITOR"; Movable form dialog box; Horizontally centered; Vertically centered)
+	$data._window:=Open form window:C675("LISTE_EDITOR"; Plain form window:K39:10; Horizontally centered:K39:1; Vertically centered:K39:4)
 	$data._host:=This:C1470.path.hostInputControls(True:C214)
 	$data.$comment:="Map database values to some display values using choiceList"
 	$data.$doc:="https://developer.4d.com/4d-for-ios/docs/en/creating-data-formatter.html#text-formatters"
@@ -1449,36 +1450,46 @@ Function doNewList()
 	
 	If (Bool:C1537(OK))
 		
-		$folder:=$data._folder
+		// Create the source folder
+		$data._folder.create()
 		
-		If ($folder.exists)
-			
-			BEEP:C151
-			
-		Else 
-			
-			// Create the source folder
-			$folder.create()
-			
-			// Create the manifest
-			$file:=$folder.file("manifest.json")
-			
-			$o:=OB Copy:C1225($data)
-			
-			For each ($key; $o)
+		// Create the manifest
+		Case of 
 				
-				If ($key[[1]]="_") | ($key[[1]]="$")
+				//______________________________________________________
+			: ($data._static)
+				
+				$data.choiceList:=New object:C1471
+				
+				For each ($o; $data._choiceList)
 					
-					OB REMOVE:C1226($o; $key)
+					$data.choiceList[$o.key]:=$o.value
+					
+				End for each 
+				
+				If ($data.binding)
+					
+					
+					
+				Else 
+					
+					$data._folder.folder("images").delete(Delete with contents:K24:24)
 					
 				End if 
-			End for each 
-			
-			$file.setText(JSON Stringify:C1217($o; *))
-			
-		End if 
+				
+				//______________________________________________________
+			: (False:C215)
+				
+				//______________________________________________________
+			Else 
+				
+				// A "Case of" statement should never omit "Else"
+				
+				//______________________________________________________
+		End case 
 		
-	Else   // <NOTHING MORE TO DO>
+		$data._folder.file("manifest.json").setText(JSON Stringify:C1217(cs:C1710.ob.new().cleanup("_,$"; $data); *))
+		
 	End if 
 	
 	CLOSE WINDOW:C154($data._window)
@@ -1491,6 +1502,7 @@ Function _appendFormat($data : Object)->$custom : Boolean
 	
 	$format:=$data.format
 	
+	//mark:🐞 turn around
 	//If ((Value type($format)=Is object) || (PROJECT.isCustomResource($format)))
 	If (_or(Formula:C1597(Value type:C1509($format)=Is object:K8:27); Formula:C1597(PROJECT.isCustomResource($format))))
 		
@@ -1515,7 +1527,7 @@ Function _appendFormat($data : Object)->$custom : Boolean
 		
 	Else 
 		
-		//mark:-#132599: Add tag iOS only for unsupported type
+		//mark:-  🚧 #132599: Add tag iOS only for unsupported type
 		//$data.menu.append(":xliff:f_"+$format; $format; $data.currentFormat=$format)
 		var $label : Text
 		
@@ -1569,7 +1581,7 @@ Function _actionFormatterChoiceList($menu : cs:C1710.menu; $type : Text)
 			$parameter:="/"+$control+"/"+$type
 			$selected:=$parameter=(String:C10(This:C1470.current.format)+"/"+This:C1470.current.type)
 			
-			//mark:-#132599: Add tag iOS only for unsupported type
+			//mark:-  🚧 #132599: Add tag iOS only for unsupported type
 			$menu.append($control+Get localized string:C991("iosOnly"); $parameter; $selected)\
 				.setData("type"; $type)\
 				.setData("format"; "/"+$control)

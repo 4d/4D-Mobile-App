@@ -23,6 +23,8 @@ Class constructor
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function get format()->$value : Text
 	
+	
+	//mark:🐞 turn around
 	//If ((This.formats#Null)\
 		 && (This.formats.binding#Null)\
 		 && (This.formats.index#Null)\
@@ -156,8 +158,8 @@ Function update()
 		
 		If (Form:C1466._folder.exists)
 			
+			//todo:🚧 DISPLAY AN ERROR
 			BEEP:C151
-			//todo: DISPLAY AN ERROR
 			
 			OB REMOVE:C1226(Form:C1466; "_folder")
 			This:C1470.name.focus().highlight()
@@ -176,7 +178,10 @@ Function update()
 		
 	End if 
 	
-	If (This:C1470.static.getValue())
+	Form:C1466._static:=This:C1470.static.getValue()
+	Form:C1466.binding:=This:C1470.image.getValue()
+	
+	If (Form:C1466._static)
 		
 		This:C1470.binding.show()
 		This:C1470.dataclass.hide()
@@ -244,5 +249,64 @@ Function setDatasource()
 	End if 
 	
 	This:C1470.refresh()
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function doAdd()
+	
+	var $length : Integer
+	var $o : Object
+	
+	Form:C1466._choiceList:=Form:C1466._choiceList=Null:C1517 ? New collection:C1472 : Form:C1466._choiceList
+	$length:=Form:C1466._choiceList.length+1
+	
+	//mark:🌎 to localize
+	If (This:C1470.image.getValue())
+		
+		$o:=New object:C1471(\
+			"key"; "value "+String:C10($length); \
+			"value"; "Browse…")
+		
+	Else 
+		
+		$o:=New object:C1471(\
+			"key"; "value "+String:C10($length); \
+			"value"; "label "+String:C10($length))
+		
+	End if 
+	
+	$o.button:=New object:C1471("value"; "…"; "behavior"; "alternateButton")
+	
+	Form:C1466._choiceList.push($o)
+	
+	This:C1470.list.selectLastRow().edit()
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function doType()
+	
+	ARRAY LONGINT:C221($events; 0)
+	APPEND TO ARRAY:C911($events; On Before Data Entry:K2:39)
+	
+	If (This:C1470.image.getValue())
+		
+		This:C1470._label.setTitle("image")
+		OBJECT SET EVENTS:C1239(*; "value"; $events; Enable events others unchanged:K42:38)
+		
+	Else 
+		
+		This:C1470._label.setTitle("label")
+		OBJECT SET EVENTS:C1239(*; "value"; $events; Disable events others unchanged:K42:39)
+		
+	End if 
+	
+	This:C1470.refresh()
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function doImage()->$enterable : Integer
+	
+	$enterable:=-1  // 💪 We manage data entry
+	
+	BEEP:C151
+	
+	
 	
 	

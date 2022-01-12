@@ -36,7 +36,7 @@ Else   // <== WIDGETS METHOD
 			$ƒ.refresh()
 			
 			//==============================================
-		: ($ƒ._format.catch($e; On Data Change:K2:15))
+		: ($ƒ.formatDropdown.catch($e; On Data Change:K2:15))
 			
 			Form:C1466.format:=$ƒ.format
 			
@@ -45,6 +45,11 @@ Else   // <== WIDGETS METHOD
 			 | ($ƒ.datasource.catch())
 			
 			$ƒ.refresh()
+			
+			//==============================================
+		: ($ƒ.add.catch($e; On Clicked:K2:4))
+			
+			$ƒ.doAdd()
 			
 			//==============================================
 		: ($ƒ.list.catch($e))
@@ -79,8 +84,7 @@ Else   // <== WIDGETS METHOD
 		: ($ƒ.label.catch())\
 			 | ($ƒ.image.catch())
 			
-			$ƒ._label.setTitle(Choose:C955($ƒ.image.getValue(); "image"; "label"))
-			$ƒ.refresh()
+			$ƒ.doType()
 			
 			//==============================================
 	End case 
