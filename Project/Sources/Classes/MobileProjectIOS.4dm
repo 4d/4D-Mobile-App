@@ -48,23 +48,23 @@ Function create()->$result : Object
 	This:C1470._checkToReloadData()
 	
 	// Create tags object for template
-	This:C1470._createTags()
+	$result.tags:=This:C1470._createTags()
 	
 	// Create the app manifest
-	This:C1470._createManifest()
+	$result.manifest:=This:C1470._createManifest()
 	
 	// Target folder
 	var $destinationFolder : 4D:C1709.Folder
 	$destinationFolder:=Folder:C1567(This:C1470.input.path; fk platform path:K87:2)
 	$destinationFolder.create()
 	
+	// Cache the last build in generated project
+	This:C1470.input.appFolder:=Null:C1517  // cyclic
+	ob_writeToFile(This:C1470._cleanCopyProject(This:C1470.input); $destinationFolder.file("project.4dmobile"); True:C214)
+	
 	//===============================================================
 	This:C1470.postStep("decompressionOfTheSdk")
 	
-	// Cache the last build in generated project
-	ob_writeToFile(This:C1470.input; $destinationFolder.file("project.4dmobile"); True:C214)
-	
-	// SDK
 	$result.sdk:=sdk(New object:C1471(\
 		"action"; "install"; \
 		"file"; This:C1470.paths.sdk().platformPath+"ios.zip"; \
@@ -72,148 +72,245 @@ Function create()->$result : Object
 	
 	If (Not:C34($result.sdk.success))
 		This:C1470.success:=False:C215
+		$result.success:=False:C215
+		// Failed to unzip sdk
+		//$ui.alert("failedDecompressTheSdk")
+		//$log.error("Failed to unzip sdk")
+		
 		return   // guard stop
 	End if 
 	
-	
+	//===============================================================
+	This:C1470.postStep("workspaceCreation")
+	This:C1470._generateTemplates($result; $result.tags)
+	This:C1470._manageDataSet($result)
+	This:C1470._generateCapabilities($result)
+	This:C1470._devFeatures($result)
 	
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Building the App
-Function build()
+Function build()->$result : Object
+	
+	$result:=New object:C1471
+	$result.success:=False:C215
+	
+	var $in : Object
+	$in:=This:C1470.input
+	
+	var $Obj_result_build : Object
+	If ($in.realDevice)
+		
+		$Obj_result_build:=This:C1470._archive($result)  // real device need ipa
+		
+	Else 
+		
+		$Obj_result_build:=This:C1470._build($result)
+		
+	End if 
+	
+	
+	If ($Obj_result_build.app=Null:C1517)
+		
+		var $pathname : Text
+		$pathname:=$in.path+Convert path POSIX to system:C1107("build/Build/Products/Debug-iphonesimulator/")+This:C1470.productName+".app"
+		
+		If (Test path name:C476($pathname)=Is a folder:K24:2)
+			
+			$Obj_result_build.app:=Convert path system to POSIX:C1106($pathname)
+			
+		End if 
+	End if 
+	
+	If (Not:C34($Obj_result_build.success))
+		
+		This:C1470.postError(String:C10($Obj_result_build.error))
+		This:C1470.logError("Build Failed")
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Runing the App on a simulator
 Function run()->$result : Object
 	
-	var $o : Object
+	$result:=New object:C1471
 	
 	If (This:C1470.input.realDevice)
 		
-		$result:=This:C1470.install()
+		This:C1470.install($result)
 		
+	Else 
+		
+		This:C1470._runSimulator($result)
+		
+	End if 
+	
+Function _runSimulator($out : Object)
+	var $in; $simctl; $project : Object
+	$in:=This:C1470.input
+	$simctl:=This:C1470.simctl  // CLEAN: Maybe init only here
+	$project:=This:C1470.project
+	
+	$in.product:=$out.build.app
+	
+	This:C1470.postStep("launchingTheSimulator")
+	This:C1470.logInfo("Launching the Simulator")
+	
+	$out.device:=$simctl.device($in.project._simulator)
+	
+	If ($out.device=Null:C1517)
+		
+		This:C1470.postError("failedToOpenSimulator")
+		This:C1470.logError("device not found")
+		return   // guard
+	End if 
+	
+	// boot if not booted
+	If (Not:C34($simctl.isDeviceBooted($out.device.udid)))
+		
+		$simctl.bootDevice($out.device.udid; True:C214)
+		$simctl.bringSimulatorAppToFront()
+		
+		DELAY PROCESS:C323(Current process:C322; 60*5)
+		LAUNCH EXTERNAL PROCESS:C811("osascript -e 'tell app \"4D\" to activate'")
+		
+	End if 
+	
+	If (Not:C34($simctl.isDeviceBooted($out.device.udid)))
+		This:C1470.postError("failedToOpenSimulator")
+		This:C1470.logError("device not booted")
+		return   //guard
+	End if 
+	
+	$simctl.bringSimulatorAppToFront()
+	
+	This:C1470.postStep("installingTheApplication")
+	
+	If ($simctl.isAppInstalled($project.product.bundleIdentifier; $out.device.udid))
+		
+		This:C1470.logInfo("Uninstall the App")
+		
+		// Quit App
+		$simctl.terminateApp($project.product.bundleIdentifier; $out.device.udid)
+		
+		// Better user impression because the simulator display the installation
+		DELAY PROCESS:C323(Current process:C322; 10)
+		
+		// Uninstall App
+		$simctl.uninstallApp($project.product.bundleIdentifier; $out.device.udid)
+		
+	End if 
+	
+	This:C1470.logInfo("Install the App")
+	
+	// Install App
+	$simctl.installApp($in.product; $out.device.udid)
+	
+	If (Not:C34($simctl.success))
+		
+		// Redmine #102346: RETRY, if any
+		If (Position:C15("MIInstallerErrorDomain, code=35"; $simctl.lastError)>0)
+			
+			$simctl.installApp($in.product; $out.device.udid)
+			
+		End if 
+	End if 
+	
+	If (Not:C34($simctl.success))
+		This:C1470.postError($simctl.lastError)
+		This:C1470.logError("Failed to install the App ("+$simctl.lastError+")")
+		return   // guard
+	End if 
+	
+	// Launch App
+	This:C1470.postStep("launchingTheApplication")
+	This:C1470.logInfo("Launching the App")
+	
+	$simctl.launchApp($project.product.bundleIdentifier; $out.device.udid)
+	
+	If ($simctl.success)
+		
+		$simctl.bringSimulatorAppToFront()
+		
+	Else 
+		
+		This:C1470.postError($simctl.lastError)
+		This:C1470.logInfo("Failed to launch the App ("+$simctl.lastError+")")
 		
 	End if 
 	
 	
-Function _archive()
-/*
-$ui.step("projectArchive")
-$log.information("Archiving project")
+Function _archive($out : Object)->$Obj_result_build : Object
+	This:C1470.postStep("projectArchive")
+	This:C1470.logInfo("Archiving project")
 	
-		$Obj_result_build:=Xcode(New object(\
-				"action"; "build"; \
-				"scheme"; $productName; \
-				"destination"; $in.path; \
-				"sdk"; "iphoneos"; \
-				"verbose"; $isDebug; \
-				"configuration"; "Release"; \
-				"archive"; True; \
-				"allowProvisioningUpdates"; True; \
-				"allowProvisioningDeviceRegistration"; True; \
-				"archivePath"; Convert path system to POSIX($in.path+"archive"+Folder separator+$productName+".xcarchive")))
+	var $in : Object
+	$in:=This:C1470.input
 	
-$cacheFolder.file("lastArchive.xlog").setText(String($Obj_result_build.out))
+	$Obj_result_build:=Xcode(New object:C1471(\
+		"action"; "build"; \
+		"scheme"; This:C1470.productName; \
+		"destination"; $in.path; \
+		"sdk"; "iphoneos"; \
+		"verbose"; This:C1470.debug; \
+		"configuration"; "Release"; \
+		"archive"; True:C214; \
+		"allowProvisioningUpdates"; True:C214; \
+		"allowProvisioningDeviceRegistration"; True:C214; \
+		"archivePath"; Convert path system to POSIX:C1106($in.path+"archive"+Folder separator:K24:12+This:C1470.productName+".xcarchive")))
 	
-ob_error_combine($out; $Obj_result_build)
+	This:C1470.logFolder.file("lastArchive.xlog").setText(String:C10($Obj_result_build.out))
 	
-If ($Obj_result_build.success)
+	ob_error_combine($out; $Obj_result_build)
 	
-// And export
-$ui.step("projectArchiveExport")
-$log.information("Exporting project archive")
+	If ($Obj_result_build.success)
+		
+		// And export
+		This:C1470.postStep("projectArchiveExport")
+		This:C1470.logInfo("Exporting project archive")
+		
+		$Obj_result_build:=Xcode(New object:C1471(\
+			"action"; "build"; \
+			"verbose"; This:C1470.debug; \
+			"exportArchive"; True:C214; \
+			"teamID"; String:C10($in.project.organization.teamId); \
+			"stripSwiftSymbols"; Bool:C1537(SHARED.swift.Export.stripSwiftSymbols); \
+			"exportMethod"; String:C10(SHARED.swift.Export.method); \
+			"exportPath"; Convert path system to POSIX:C1106($in.path+"archive"+Folder separator:K24:12); \
+			"archivePath"; Convert path system to POSIX:C1106($in.path+"archive"+Folder separator:K24:12+This:C1470.productName+".xcarchive")))
+		
+		This:C1470.logFolder.file("lastExportArchive.xlog").setText(String:C10($Obj_result_build.out))
+		
+		ob_error_combine($out; $Obj_result_build)
+		
+	Else 
+		
+		// Failed to archive
+		// $ui.alert("failedToArchive")
+		
+	End if 
 	
-		$Obj_result_build:=Xcode(New object(\
-				"action"; "build"; \
-				"verbose"; $isDebug; \
-				"exportArchive"; True; \
-				"teamID"; String($in.project.organization.teamId); \
-				"stripSwiftSymbols"; Bool(SHARED.swift.Export.stripSwiftSymbols); \
-				"exportMethod"; String(SHARED.swift.Export.method); \
-				"exportPath"; Convert path system to POSIX($in.path+"archive"+Folder separator); \
-				"archivePath"; Convert path system to POSIX($in.path+"archive"+Folder separator+$productName+".xcarchive")))
 	
-$path.userCache().file("lastExportArchive.xlog").setText(String($Obj_result_build.out))
+Function _build($out : Object)->$Obj_result_build : Object
+	var $in : Object
+	$in:=This:C1470.input
 	
-ob_error_combine($out; $Obj_result_build)
+	// MARK: Build application
+	This:C1470.postStep("projectBuild")
+	This:C1470.logInfo("Building project")
 	
-Else 
+	$Obj_result_build:=Xcode(New object:C1471(\
+		"action"; "build"; \
+		"scheme"; This:C1470.productName; \
+		"destination"; $in.path; \
+		"sdk"; $in.sdk; \
+		"verbose"; This:C1470.debug; \
+		"test"; Bool:C1537($in.test); \
+		"target"; Convert path system to POSIX:C1106($in.path+"build"+Folder separator:K24:12)))
 	
-// Failed to archive
-$ui.alert("failedToArchive")
+	ob_error_combine($out; $Obj_result_build)
 	
-End if 
-*/
-	
-Function doBuild
-/*
-// MARK: Build application
-$ui.step("projectBuild")
-$log.information("Building project")
-	
-If ($in.realDevice)
-	
-		$Obj_result_build:=Xcode(New object(\
-				"action"; "build"; \
-				"scheme"; $productName; \
-				"destination"; $in.path; \
-				"sdk"; "iphoneos"; \
-				"verbose"; $isDebug; \
-				"configuration"; "Release"; \
-				"archive"; True; \
-				"allowProvisioningUpdates"; True; \
-				"allowProvisioningDeviceRegistration"; True; \
-				"archivePath"; Convert path system to POSIX($in.path+"archive"+Folder separator+$productName+".xcarchive")))
-	
-$cacheFolder.file("lastArchive.xlog").setText(String($Obj_result_build.out))
-	
-ob_error_combine($out; $Obj_result_build)
-	
-If ($Obj_result_build.success)
-	
-// And export
-$ui.step("projectArchiveExport")
-$log.information("Exporting project archive")
-	
-		$Obj_result_build:=Xcode(New object(\
-				"action"; "build"; \
-				"verbose"; $isDebug; \
-				"exportArchive"; True; \
-				"teamID"; String($in.project.organization.teamId); \
-				"stripSwiftSymbols"; Bool(SHARED.swift.Export.stripSwiftSymbols); \
-				"exportMethod"; String(SHARED.swift.Export.method); \
-				"exportPath"; Convert path system to POSIX($in.path+"archive"+Folder separator); \
-				"archivePath"; Convert path system to POSIX($in.path+"archive"+Folder separator+$productName+".xcarchive")))
-	
-$path.userCache().file("lastExportArchive.xlog").setText(String($Obj_result_build.out))
-	
-ob_error_combine($out; $Obj_result_build)
-	
-Else 
-	
-// Failed to archive
-$ui.alert("failedToArchive")
-	
-End if 
-	
-Else 
-	
-		$Obj_result_build:=Xcode(New object(\
-				"action"; "build"; \
-				"scheme"; $productName; \
-				"destination"; $in.path; \
-				"sdk"; $in.sdk; \
-				"verbose"; $isDebug; \
-				"test"; Bool($in.test); \
-				"target"; Convert path system to POSIX($in.path+"build"+Folder separator)))
-	
-End if 
-	
-ob_error_combine($out; $Obj_result_build)
-	
-$cacheFolder.file("lastBuild.xlog").setText(String($Obj_result_build.out))
-*/
-	
+	This:C1470.logFolder.file("lastBuild.xlog").setText(String:C10($Obj_result_build.out))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Installing the IPA on a connected device
@@ -279,11 +376,20 @@ Function _cleanCopyProject($projectInput : Object)->$project : Object
 	End for each 
 	
 	
+Function _getAppId()->$appId : Text
+	$appId:=This:C1470.project.organization.teamId+"."+This:C1470.project.product.bundleIdentifier
+	
+Function _getAppDataFolder()->$appFolder : 4D:C1709.Folder
+	$appFolder:=Folder:C1567(fk mobileApps folder:K87:18; *).folder(This:C1470._getAppId())
+	If (Not:C34($appFolder.exists))
+		$appFolder.create()
+	End if 
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// [PRIVATE] - Create the app manifest
-Function _createManifest()
+Function _createManifest()->$manifest : Object
 	
-	This:C1470.manifest:=New object:C1471(\
+	$manifest:=New object:C1471(\
 		"application"; New object:C1471(\
 		"id"; This:C1470.project.product.bundleIdentifier; \
 		"name"; This:C1470.project.product.name); \
@@ -291,449 +397,468 @@ Function _createManifest()
 		"id"; This:C1470.project.organization.teamId); \
 		"info"; This:C1470.project.info)
 	
-	This:C1470.manifest.id:=String:C10(This:C1470.manifest.team.id)+"."+This:C1470.manifest.application.id
+	$manifest.id:=String:C10($manifest.team.id)+"."+$manifest.application.id
 	
 	// • Deep linking
 	If (Bool:C1537(This:C1470.project.deepLinking.enabled))
 		
 		If (Length:C16(String:C10(This:C1470.project.deepLinking.urlScheme))>0)
 			
-			This:C1470.manifest.urlScheme:=String:C10(This:C1470.project.deepLinking.urlScheme)
-			This:C1470.manifest.urlScheme:=Replace string:C233(This:C1470.manifest.urlScheme; "://"; "")
+			$manifest.urlScheme:=String:C10(This:C1470.project.deepLinking.urlScheme)
+			$manifest.urlScheme:=Replace string:C233($manifest.urlScheme; "://"; "")
 			
 		End if 
 		
 		If (Length:C16(String:C10(This:C1470.project.deepLinking.associatedDomain))>0)
 			
-			This:C1470.manifest.associatedDomain:=String:C10(This:C1470.project.deepLinking.associatedDomain)
+			$manifest.associatedDomain:=String:C10(This:C1470.project.deepLinking.associatedDomain)
 			
 		End if 
 	End if 
 	
-	This:C1470.appFolder:=Folder:C1567(fk mobileApps folder:K87:18; *).folder(This:C1470.manifest.id)
-	This:C1470.appFolder.create()
-	This:C1470.appFolder.file("manifest.json").setText(JSON Stringify:C1217(This:C1470.manifest; *))
+	// Write to app data (to use with 4D Mobile App Server)
+	This:C1470._getAppDataFolder().file("manifest.json").setText(JSON Stringify:C1217($manifest; *))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// [PRIVATE] - Create tags object for template
-Function _createTags()
+Function _createTags()->$tags : Object
 	
-	This:C1470.tags:=OB Copy:C1225(SHARED.tags)  // Common project tags
+	$tags:=OB Copy:C1225(SHARED.tags)  // Common project tags
 	
-	This:C1470.tags.product:=This:C1470.productName
-	This:C1470.tags.packageName:=This:C1470.tags.product
+	$tags.product:=This:C1470.productName
+	$tags.packageName:=$tags.product
 	
 	// Project file tags
-	This:C1470.tags.bundleIdentifier:=This:C1470.project.product.bundleIdentifier
-	This:C1470.tags.company:=This:C1470.project.organization.name
+	$tags.bundleIdentifier:=This:C1470.project.product.bundleIdentifier
+	$tags.company:=This:C1470.project.organization.name
 	
 	If (Length:C16(This:C1470.project.organization.teamId)>0)
 		
-		This:C1470.tags.teamId:=This:C1470.project.organization.teamId
+		$tags.teamId:=This:C1470.project.organization.teamId
 		
 	End if 
 	
 	// • Info plist
-	This:C1470.tags.displayName:=This:C1470.project.product.name
-	This:C1470.tags.version:=This:C1470.project.product.version
-	This:C1470.tags.build:=This:C1470.fullVersion(This:C1470.tags.version)
+	$tags.displayName:=This:C1470.project.product.name
+	$tags.version:=This:C1470.project.product.version
+	$tags.build:=This:C1470.fullVersion(This:C1470.tags.version)
 	
-	This:C1470.tags.prodUrl:=This:C1470.project.server.urls.production
+	$tags.prodUrl:=This:C1470.project.server.urls.production
 	
-	If (Length:C16(This:C1470.tags.prodUrl)>0)
+	If (Length:C16($tags.prodUrl)>0)
 		
-		This:C1470.tags.prodUrl:=Replace string:C233(This:C1470.tags.prodUrl; "localhost"; "127.0.0.1")
+		$tags.prodUrl:=Replace string:C233($tags.prodUrl; "localhost"; "127.0.0.1")
 		
-		If (Not:C34(Match regex:C1019("(?i-ms)http[s]?://"; This:C1470.tags.prodUrl; 1)))
+		If (Not:C34(Match regex:C1019("(?i-ms)http[s]?://"; $tags.prodUrl; 1)))
 			
 			// Default to http
-			This:C1470.tags.prodUrl:="http://"+This:C1470.tags.prodUrl
+			$tags.prodUrl:="http://"+$tags.prodUrl
 			
 		End if 
 	End if 
 	
 	var $httpServer
 	$httpServer:=WEB Get server info:C1531
-	This:C1470.tags.serverHTTPSPort:=String:C10($httpServer.options.webHTTPSPortID)
-	This:C1470.tags.serverPort:=String:C10($httpServer.options.webPortID)
+	$tags.serverHTTPSPort:=String:C10($httpServer.options.webHTTPSPortID)
+	$tags.serverPort:=String:C10($httpServer.options.webPortID)
 	
 	Case of 
 			
 			//________________________________________
 		: (Bool:C1537($httpServer.security.HTTPEnabled))  // Priority for http
 			
-			This:C1470.tags.serverScheme:="http"
+			$tags.serverScheme:="http"
 			
 			//________________________________________
 		: (Bool:C1537($httpServer.security.HTTPSEnabled))  // Only https, use it
 			
-			This:C1470.tags.serverScheme:="https"
+			$tags.serverScheme:="https"
 			
 			//________________________________________
 		Else 
 			
-			This:C1470.tags.serverScheme:=""  // Default: let mobile app defined default?
+			$tags.serverScheme:=""  // Default: let mobile app defined default?
 			
 			//________________________________________
 	End case 
 	
-	This:C1470.tags.serverUrls:=$httpServer.options.webIPAddressToListen.join(","; ck ignore null or empty:K85:5)
+	$tags.serverUrls:=$httpServer.options.webIPAddressToListen.join(","; ck ignore null or empty:K85:5)
 	
-	This:C1470.tags.serverAuthenticationEmail:=Choose:C955(Bool:C1537(This:C1470.project.server.authentication.email); "true"; "false")  // plist bool format
-	This:C1470.tags.serverAuthenticationReloadData:=Choose:C955(Bool:C1537(This:C1470.project.server.authentication.reloadData); "true"; "false")  // plist bool format
+	$tags.serverAuthenticationEmail:=Choose:C955(Bool:C1537(This:C1470.project.server.authentication.email); "true"; "false")  // plist bool format
+	$tags.serverAuthenticationReloadData:=Choose:C955(Bool:C1537(This:C1470.project.server.authentication.reloadData); "true"; "false")  // plist bool format
 	
 	// • Source files tags
-	This:C1470.tags.copyright:=This:C1470.project.product.copyright
-	This:C1470.tags.fullname:=This:C1470.project.developer.name
-	This:C1470.tags.date:=String:C10(Current date:C33; Date RFC 1123:K1:11; Current time:C178); 
+	$tags.copyright:=This:C1470.project.product.copyright
+	$tags.fullname:=This:C1470.project.developer.name
+	$tags.date:=String:C10(Current date:C33; Date RFC 1123:K1:11; Current time:C178); 
 	
 	// • Scripts
-	This:C1470.tags.xCodeVersion:=This:C1470.project.$project.xCode.version
+	$tags.xCodeVersion:=This:C1470.project.$project.xCode.version
 	
 	// • Navigation tags
-	This:C1470.tags.navigationTitle:=This:C1470.project.main.navigationTitle
-	This:C1470.tags.navigationType:=This:C1470.project.main.navigationType
-	This:C1470.tags.navigationTransition:=This:C1470.project.ui.navigationTransition
+	$tags.navigationTitle:=This:C1470.project.main.navigationTitle
+	$tags.navigationType:=This:C1470.project.main.navigationType
+	$tags.navigationTransition:=This:C1470.project.ui.navigationTransition
 	
 	// • Launchscreen
-	This:C1470.tags.launchScreenBackgroundColor:=SHARED.infoPlist.storyboard.backgroundColor  // FR #93800: take from project configuration
+	$tags.launchScreenBackgroundColor:=SHARED.infoPlist.storyboard.backgroundColor  // FR #93800: take from project configuration
 	
 	// • Setting
-	This:C1470.tags.hasAction:=Choose:C955(Bool:C1537(mobile_actions("hasAction"; This:C1470.input).value); "true"; "false")  // plist bool format
+	$tags.hasAction:=Choose:C955(Bool:C1537(mobile_actions("hasAction"; This:C1470.input).value); "true"; "false")  // plist bool format
 	
 	// • SDK
-	This:C1470.tags.sdkVersion:=String:C10(This:C1470.sdk.version)
+	$tags.sdkVersion:=String:C10(This:C1470.sdk.version)
 	
 	
-Function _generateTemplates()
-	// ----------------------------------------------------
-	// MARK: TEMPLATE
-	// ----------------------------------------------------
-/*$ui.step("workspaceCreation")
+Function _generateTemplates($out : Object; $tags : Object)
+	var $template; $in; $project : Object
+	$in:=This:C1470.input
+	$project:=This:C1470.project
+	// ASSERT($project._folder#Null) // to optimize
 	
-// I need a map, string -> format to be able to support folder name different from manifest name
-$out.formatters:=formatters(New object("action"; "getByName")).formatters
-$out.inputControls:=mobile_actions("getByName").inputControls
+	var $Dir_template : 4D:C1709.Folder
+	$Dir_template:=This:C1470.paths.templates().folder($in.template)
+	If (Asserted:C1132($Dir_template.file("manifest.json").exists))
+		
+		$template:=ob_parseFile($Dir_template.file("manifest.json")).value
+		
+	End if 
 	
-// Duplicate the template {
-		$out.template:=cs.MainTemplate.new(New object(\
-				"template"; $template; \
-				"path"; $in.path; \
-				"tags"; $tags; \
-				"formatters"; $out.formatters; \
-				"inputControls"; $out.inputControls; \
-				"project"; $project)).run()
+	ASSERT:C1129($template.assets.path#Null:C1517)
+	ASSERT:C1129($template.sdk.version#Null:C1517)
 	
-ob_error_combine($out; $out.template)
+	If ($Dir_template.folder("ios").exists)  // or manifest design path of all sources of templates for ios target
+		$template.source:=$Dir_template.folder("ios").platformPath
+	Else 
+		$template.source:=$Dir_template.platformPath
+	End if 
+	$template.assets.target:=$in.path+Convert path POSIX to system:C1107($template.assets.path)+Folder separator:K24:12+$template.assets.name+Folder separator:K24:12
+	If ($project._folder=Null:C1517)
+		$template.assets.source:=This:C1470.paths.projects().platformPath+This:C1470.productName+Folder separator:K24:12+$template.assets.name+Folder separator:K24:12
+	Else 
+		$template.assets.source:=This:C1470.project._folder.platformPath+Folder separator:K24:12+$template.assets.name+Folder separator:K24:12
+		If (Not:C34(Test path name:C476($template.assets.source)=Is a folder:K24:2))
+			$template.assets.source:=This:C1470.paths.projects().platformPath+This:C1470.productName+Folder separator:K24:12+$template.assets.name+Folder separator:K24:12
+		End if 
+	End if 
 	
-$out.projfile:=$out.template.projfile
-ob_removeProperty($out.template; "projfile")  // redundant information
+	$out.rootTemplate:=$template
 	
-// Add some asset fix (could optimize by merging fix)
-$fixes:=cs.Storyboards.new(Folder($in.path+"Sources"+Folder separator+"Forms"; fk platform path))
-$out.colorAssetFix:=$fixes.colorAssetFix($out.template.theme)
-ob_error_combine($out; $out.colorAssetFix)
 	
-$out.imageAssetFix:=$fixes.imageAssetFix()
-ob_error_combine($out; $out.imageAssetFix)*/
+	// I need a map, string -> format to be able to support folder name different from manifest name
+	$out.formatters:=formatters(New object:C1471("action"; "getByName")).formatters
+	$out.inputControls:=mobile_actions("getByName").inputControls
+	
+	// Duplicate the template {
+	$out.template:=cs:C1710.MainTemplate.new(New object:C1471(\
+		"template"; $template; \
+		"path"; $in.path; \
+		"tags"; $tags; \
+		"formatters"; $out.formatters; \
+		"inputControls"; $out.inputControls; \
+		"project"; This:C1470.project)).run()
+	
+	ob_error_combine($out; $out.template)
+	
+	$out.projfile:=$out.template.projfile
+	ob_removeProperty($out.template; "projfile")  // redundant information
+	
+	// Add some asset fix (could optimize by merging fix)
+	var $fixes : Object
+	$fixes:=cs:C1710.Storyboards.new(Folder:C1567($in.path+"Sources"+Folder separator:K24:12+"Forms"; fk platform path:K87:2))
+	$out.colorAssetFix:=$fixes.colorAssetFix($out.template.theme)
+	ob_error_combine($out; $out.colorAssetFix)
+	
+	$out.imageAssetFix:=$fixes.imageAssetFix()
+	ob_error_combine($out; $out.imageAssetFix)
 	
 	// Set writable target directory with all its subfolders and files
 	//doc_UNLOCK_DIRECTORY(New object("path"; $in.path)) // ASK: move elsewhere
 	
-Function _manageDataSet
-	// ----------------------------------------------------
 	//  MARK: STRUCTURE & DATA
-	// ----------------------------------------------------
+Function _manageDataSet($out : Object)
+	var $in; $project; $tags; $template : Object
+	$in:=This:C1470.input
+	$project:=This:C1470.project
+	$tags:=$out.tags
+	$template:=$out.rootTemplate
 	
 	// Create catalog and data files {
-/*If ($in.structureAdjustments=Null)
+	If ($in.structureAdjustments=Null:C1517)
+		
+		$in.structureAdjustments:=Bool:C1537($in.test)  // default value for test
+		
+	End if 
 	
-$in.structureAdjustments:=Bool($in.test)  // default value for test
+	If (Bool:C1537($in.structureAdjustments))
+		
+		$out.structureAdjustments:=_o_structure(New object:C1471(\
+			"action"; "create"; \
+			"tables"; dataModel(New object:C1471(\
+			"action"; "tableNames"; \
+			"dataModel"; $project.dataModel; \
+			"relation"; True:C214)).values))
+		
+	End if 
 	
-End if 
+	$out.dump:=dataSet(New object:C1471(\
+		"action"; "check"; \
+		"digest"; True:C214; \
+		"project"; $project))
+	ob_error_combine($out; $out.dump)
 	
-If (Bool($in.structureAdjustments))
-	
-		$out.structureAdjustments:=_o_structure(New object(\
-				"action"; "create"; \
-				"tables"; dataModel(New object(\
-				"action"; "tableNames"; \
-				"dataModel"; $project.dataModel; \
-				"relation"; True)).values))
-	
-End if 
-	
-		$out.dump:=dataSet(New object(\
-				"action"; "check"; \
-				"digest"; True; \
-				"project"; $project))
-ob_error_combine($out; $out.dump)
-	
-If (Bool($out.dump.exists))
-	
-If (Not($out.dump.valid) | Not(Bool($project.dataSource.doNotGenerateDataAtEachBuild)))
-	
-		$out.dump:=dataSet(New object(\
+	If (Bool:C1537($out.dump.exists))
+		
+		If (Not:C34($out.dump.valid) | Not:C34(Bool:C1537($project.dataSource.doNotGenerateDataAtEachBuild)))
+			
+			$out.dump:=dataSet(New object:C1471(\
 				"action"; "erase"; \
 				"project"; $project))
+			
+		End if 
+	End if 
 	
-End if 
-End if 
+	$out.dump:=dataSet(New object:C1471(\
+		"action"; "check"; \
+		"digest"; False:C215; \
+		"project"; $project))
 	
-		$out.dump:=dataSet(New object(\
-				"action"; "check"; \
-				"digest"; False; \
-				"project"; $project))
+	If (Not:C34(Bool:C1537($out.dump.exists)))
+		
+		If (String:C10($in.dataSource.source)="server")
+			
+			// <NOTHING MORE TO DO>
+			
+		Else 
+			
+			var $pathname : Text
+			$pathname:=This:C1470.paths.key().platformPath
+			
+			If (Test path name:C476($pathname)#Is a document:K24:1)
+				
+				$out.keyPing:=Rest(New object:C1471(\
+					"action"; "status"; \
+					"handler"; "mobileapp"))
+				$out.keyPing.file:=New object:C1471(\
+					"path"; $pathname; \
+					"exists"; (Test path name:C476($pathname)=Is a document:K24:1))
+				
+				If (Not:C34($out.keyPing.file.exists))
+					
+					ob_error_add($out; "Local server key file do not exists and cannot be created")
+					
+				End if 
+			End if 
+		End if 
+		
+		$out.dump:=dataSet(New object:C1471(\
+			"action"; "create"; \
+			"project"; This:C1470.project; \
+			"digest"; True:C214; \
+			"dataSet"; True:C214; \
+			"key"; $pathname; \
+			"caller"; $in.caller; \
+			"verbose"; This:C1470.verbose; \
+			"keepUI"; True:C214))
+		
+		ob_error_combine($out; $out.dump)
+		
+	End if 
 	
-If (Not(Bool($out.dump.exists)))
+	// Then copy
+	$out.dumpCopy:=dataSet(New object:C1471(\
+		"action"; "copy"; \
+		"project"; $project; \
+		"target"; $in.path))
+	ob_error_combine($out; $out.dumpCopy)
+	//}
 	
-If (String($in.dataSource.source)="server")
+	If (FEATURE.with("xcDataModelClass"))
+		$out.coreData:=cs:C1710.xcDataModel.new($project).run(\
+			/*path*/$in.path+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"; \
+			/*options*/New object:C1471("flat"; False:C215; "relationship"; True:C214))
+	Else 
+		$out.coreData:=xcDataModel(New object:C1471(\
+			"action"; "xcdatamodel"; \
+			"dataModel"; $project.dataModel; \
+			"actions"; $project.actions; \
+			"flat"; False:C215; \
+			"relationship"; True:C214; \
+			"path"; $in.path+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"))
+	End if 
 	
-// <NOTHING MORE TO DO>
+	ob_error_combine($out; $out.coreData)
 	
-Else 
+	If (Not:C34(Bool:C1537($project.dataSource.doNotGenerateDataAtEachBuild)))
+		
+		This:C1470.postStep("dataSetGeneration")
+		
+	End if 
 	
-$pathname:=$path.key().platformPath
-	
-If (Test path name($pathname)#Is a document)
-	
-		$out.keyPing:=Rest(New object(\
-				"action"; "status"; \
-				"handler"; "mobileapp"))
-		$out.keyPing.file:=New object(\
-				"path"; $pathname; \
-				"exists"; (Test path name($pathname)=Is a document))
-	
-If (Not($out.keyPing.file.exists))
-	
-ob_error_add($out; "Local server key file do not exists and cannot be created")
-	
-End if 
-End if 
-End if 
-	
-		$out.dump:=dataSet(New object(\
-				"action"; "create"; \
-				"project"; $project; \
-				"digest"; True; \
-				"dataSet"; True; \
-				"key"; $pathname; \
-				"caller"; $in.caller; \
-				"verbose"; $verbose; \
-				"keepUI"; True))
-	
-ob_error_combine($out; $out.dump)
-	
-End if 
-	
-// Then copy
-		$out.dumpCopy:=dataSet(New object(\
-				"action"; "copy"; \
-				"project"; $project; \
-				"target"; $in.path))
-ob_error_combine($out; $out.dumpCopy)
-//}
-	
-If (FEATURE.with("xcDataModelClass"))
-		$out.coreData:=cs.xcDataModel.new($project).run(\
-				/*path*/$in.path+"Sources"+Folder separator+"Structures.xcdatamodeld"; \
-				/*options*/New object("flat"; False; "relationship"; True))
-Else 
-		$out.coreData:=xcDataModel(New object(\
-				"action"; "xcdatamodel"; \
-				"dataModel"; $project.dataModel; \
-				"actions"; $project.actions; \
-				"flat"; False; \
-				"relationship"; True; \
-				"path"; $in.path+"Sources"+Folder separator+"Structures.xcdatamodeld"))
-End if 
-	
-ob_error_combine($out; $out.coreData)
-	
-If (Not(Bool($project.dataSource.doNotGenerateDataAtEachBuild)))
-	
-$ui.step("dataSetGeneration")
-	
-End if 
-	
-If ($destinationFolder.folder("Resources/Assets.xcassets/Data").exists)  // If there JSON data (maybe use asset("action";"path"))
-	
-		$out.coreDataSet:=dataSet(New object(\
-				"action"; "coreData"; \
-				"removeAsset"; True; \
-				"path"; $in.path))
-	
-ob_error_combine($out; $out.coreDataSet)
-	
-If (Bool($out.coreDataSet.success))
-	
-		dataSet(New object(\
+	var $destinationFolder : 4D:C1709.Folder
+	$destinationFolder:=Folder:C1567(This:C1470.input.path; fk platform path:K87:2)
+	If ($destinationFolder.folder("Resources/Assets.xcassets/Data").exists)  // If there JSON data (maybe use asset("action";"path"))
+		
+		$out.coreDataSet:=dataSet(New object:C1471(\
+			"action"; "coreData"; \
+			"removeAsset"; True:C214; \
+			"path"; $in.path))
+		
+		ob_error_combine($out; $out.coreDataSet)
+		
+		If (Bool:C1537($out.coreDataSet.success))
+			
+			dataSet(New object:C1471(\
 				"action"; "coreDataAddToProject"; \
 				"uuid"; $template.uuid; \
 				"tags"; $tags; \
 				"path"; $in.path))
+			
+		End if 
+		
+	Else 
+		
+		dataSet(New object:C1471(\
+			"action"; "coreDataAddToProject"; \
+			"uuid"; $template.uuid; \
+			"tags"; $tags; \
+			"path"; $in.path))
+		
+	End if 
 	
-End if 
+Function _generateCapabilities($out : Object; $appFolder : 4D:C1709.Folder)
+	var $project; $in; $tags : Object
+	$project:=This:C1470.project
+	$tags:=$out.tags
+	$in:=This:C1470.input
 	
-Else 
+	$out.actionAssets:=mobile_actions("assets"; New object:C1471(\
+		"project"; $project; \
+		"inputControls"; $out.inputControls; \
+		"target"; $in.path))
+	ob_error_combine($out; $out.actionAssets)
 	
-		dataSet(New object(\
-				"action"; "coreDataAddToProject"; \
-				"uuid"; $template.uuid; \
-				"tags"; $tags; \
-				"path"; $in.path))
+	$out.actionCapabilities:=mobile_actions("capabilities"; New object:C1471(\
+		"project"; $project; \
+		"inputControls"; $out.inputControls; \
+		"target"; $in.path))
 	
-End if */
+	$out.computedCapabilities:=New object:C1471(\
+		"capabilities"; New object:C1471())
 	
-Function _generateCapabilities
-/*
-		$out.actionAssets:=mobile_actions("assets"; New object(\
-				"project"; $project; \
-				"inputControls"; $out.inputControls; \
-				"target"; $in.path))
-ob_error_combine($out; $out.actionAssets)
+	// #133381 : add always location & camera capabilities
+	// because Apple warn about it, because of code in SDK (QMobileUI mainly)
+	// (OR we need to split the SDK and have some injection if the feature is used, or inject code or not in final app)
+	$out.computedCapabilities.capabilities.location:=True:C214
+	$out.computedCapabilities.capabilities.camera:=True:C214
 	
-		$out.actionCapabilities:=mobile_actions("capabilities"; New object(\
-				"project"; $project; \
-				"inputControls"; $out.inputControls; \
-				"target"; $in.path))
+	If (Bool:C1537($project.server.pushNotification))
+		
+		$out.computedCapabilities.capabilities.pushNotification:=True:C214
+		
+		If (Length:C16(String:C10($project.server.pushCertificate))>0)
+			
+			var $certificateFile : Object
+			$certificateFile:=cs:C1710.doc.new($project.server.pushCertificate).target
+			
+			If ($certificateFile.exists)
+				
+				$certificateFile.copyTo(This:C1470._getAppDataFolder(); fk overwrite:K87:5)
+				
+			Else 
+				
+				ob_warning_add($out; "Certificate file "+String:C10($project.server.pushCertificate)+" is missing")
+				
+			End if 
+		End if 
+	End if 
 	
-		$out.computedCapabilities:=New object(\
-				"capabilities"; New object())
+	If (Bool:C1537($project.deepLinking.enabled))
+		
+		If (Length:C16(String:C10($project.deepLinking.urlScheme))>0)
+			
+			var $urlScheme : Text
+			$urlScheme:=String:C10($project.deepLinking.urlScheme)
+			$urlScheme:=Replace string:C233($urlScheme; "://"; "")
+			$out.computedCapabilities.capabilities.urlSchemes:=New collection:C1472($urlScheme)
+			
+		End if 
+		
+		If (Length:C16(String:C10($project.deepLinking.associatedDomain))>0)
+			
+			var $associatedDomain : Text
+			$associatedDomain:=String:C10($project.deepLinking.associatedDomain)
+			$associatedDomain:=Replace string:C233($associatedDomain; "https://"; "")
+			$associatedDomain:=Replace string:C233($associatedDomain; "http://"; "")
+			
+			If (($associatedDomain[[Length:C16($associatedDomain)]])="/")  // Strip last /
+				
+				$associatedDomain:=Substring:C12($associatedDomain; 1; Length:C16($associatedDomain)-1)
+				
+			End if 
+			
+			$out.computedCapabilities.capabilities.associatedDomain:=$associatedDomain
+			
+		End if 
+	End if 
 	
-// #133381 : add always location & camera capabilities
-// because Apple warn about it, because of code in SDK (QMobileUI mainly)
-// (OR we need to split the SDK and have some injection if the feature is used, or inject code or not in final app)
-$out.computedCapabilities.capabilities.location:=True
-$out.computedCapabilities.capabilities.camera:=True
+	var $isSearchable : Object
+	$isSearchable:=ob findPropertyValues($project; "searchableWithBarcode")
 	
-If (Bool($project.server.pushNotification))
+	If ($isSearchable.success)
+		
+		If ($isSearchable.value.reduce("col_formula"; False:C215; Formula:C1597($1.accumulator:=$1.accumulator | $1.value)))
+			
+			// XXX could check that we have positive value? $isSearchable
+			$out.computedCapabilities.capabilities.camera:=True:C214
+			
+		End if 
+	End if 
 	
-$out.computedCapabilities.capabilities.pushNotification:=True
+	// Manage app capabilities
+	$out.capabilities:=capabilities(\
+		New object:C1471("action"; "inject"; "target"; $in.path; "tags"; $tags; \
+		"value"; New object:C1471(\
+		"common"; SHARED; \
+		"project"; $project; \
+		"action"; $out.actionCapabilities; \
+		"computed"; $out.computedCapabilities; \
+		"templates"; $out.template)))
+	ob_error_combine($out; $out.capabilities)
 	
-If (Length(String($project.server.pushCertificate))>0)
+	// Internal feature to help to dev iOS project
+Function _devFeatures($out : Object)
 	
-$certificateFile:=cs.doc.new($project.server.pushCertificate).target
+	If (Bool:C1537(FEATURE._405))  // In feature until fix project launch with xcode
+		
+		Xcode(New object:C1471(\
+			"action"; "workspace-addsources"; \
+			"path"; This:C1470.input.path))
+	End if 
+	//}
 	
-If ($certificateFile.exists)
-	
-$certificateFile.copyTo($appFolder; fk overwrite)
-	
-Else 
-	
-ob_warning_add($out; "Certificate file "+String($project.server.pushCertificate)+" is missing")
-	
-End if 
-End if 
-End if 
-	
-If (Bool($project.deepLinking.enabled))
-	
-If (Length(String($project.deepLinking.urlScheme))>0)
-	
-$urlScheme:=String($project.deepLinking.urlScheme)
-$urlScheme:=Replace string($urlScheme; "://"; "")
-$out.computedCapabilities.capabilities.urlSchemes:=New collection($urlScheme)
-	
-End if 
-	
-If (Length(String($project.deepLinking.associatedDomain))>0)
-	
-$associatedDomain:=String($project.deepLinking.associatedDomain)
-$associatedDomain:=Replace string($associatedDomain; "https://"; "")
-$associatedDomain:=Replace string($associatedDomain; "http://"; "")
-	
-If (($associatedDomain[[Length($associatedDomain)]])="/")  // Strip last /
-	
-$associatedDomain:=Substring($associatedDomain; 1; Length($associatedDomain)-1)
-	
-End if 
-	
-$out.computedCapabilities.capabilities.associatedDomain:=$associatedDomain
-	
-End if 
-End if 
-	
-$isSearchable:=ob findPropertyValues($project; "searchableWithBarcode")
-	
-If ($isSearchable.success)
-	
-If ($isSearchable.value.reduce("col_formula"; False; Formula($1.accumulator:=$1.accumulator | $1.value)))
-	
-// XXX could check that we have positive value? $isSearchable
-$out.computedCapabilities.capabilities.camera:=True
-	
-End if 
-End if 
-	
-// Manage app capabilities
-		$out.capabilities:=capabilities(\
-				New object("action"; "inject"; "target"; $in.path; "tags"; $tags; \
-				"value"; New object(\
-				"common"; SHARED; \
-				"project"; $project; \
-				"action"; $out.actionCapabilities; \
-				"computed"; $out.computedCapabilities; \
-				"templates"; $out.template)))
-ob_error_combine($out; $out.capabilities)*/
-	
-Function _devFeatures
-/*If (Bool(FEATURE._405))  // In feature until fix project launch with xcode
-	
-		Xcode(New object(\
-				"action"; "workspace-addsources"; \
-				"path"; $in.path))
-	
-End if 
-//}
-	
-// Backup into git {
-If (Bool(FEATURE._917))
-	
-		git(New object(\
-				"action"; "config core.autocrlf"; \
-				"path"; $in.path))
-	
-		$out.git:=git(New object(\
-				"action"; "init"; \
-				"path"; $in.path))
-	
-If ($out.git.success)
-	
-		$out.git:=git(New object(\
+	// Backup into git {
+	If (Bool:C1537(FEATURE._917))
+		
+		git(New object:C1471(\
+			"action"; "config core.autocrlf"; \
+			"path"; This:C1470.input.path))
+		
+		$out.git:=git(New object:C1471(\
+			"action"; "init"; \
+			"path"; This:C1470.input.path))
+		
+		If ($out.git.success)
+			
+			$out.git:=git(New object:C1471(\
 				"action"; "add -A"; \
-				"path"; $in.path))
-	
-		$out.git:=git(New object(\
+				"path"; This:C1470.input.path))
+			
+			$out.git:=git(New object:C1471(\
 				"action"; "commit -m initial"; \
-				"path"; $in.path))
+				"path"; This:C1470.input.path))
+			
+		End if 
+	End if 
+	//}
 	
-End if 
-End if 
-//}
-	
-$out.tags:=$tags
-	
-$out.success:=Not(ob_error_has($out))  // XXX do it only at end (and remove this code, but must be tested)
-	
-If (Not($out.success))
-	
-$ui.alert(ob_error_string($out))
-	
-End if 
-	
-// End creation process
-	
-Else 
-	
-$out.success:=False
-	
-// Failed to unzip sdk
-$ui.alert("failedDecompressTheSdk")
-$log.error("Failed to unzip sdk")
-	
-End if 
-	
-DELAY PROCESS(Current process; 60*2)
-	
-End if */
