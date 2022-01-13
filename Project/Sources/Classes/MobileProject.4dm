@@ -1,17 +1,19 @@
 Class constructor($project : Object)
-	
 	This:C1470.input:=$project
+	
+	This:C1470.paths:=cs:C1710.path.new()
+	This:C1470.logFolder:=This:C1470.paths.userCache()
+	
 	This:C1470.success:=True:C214
 	This:C1470.errors:=New collection:C1472
 	This:C1470.lastError:=""
-	This:C1470.logFolder:=This:C1470.paths.userCache()
 	
 	This:C1470.debug:=Not:C34(Is compiled mode:C492)
+	
 	This:C1470.caller:=This:C1470.input.caller
 	This:C1470.withUI:=(This:C1470.caller#Null:C1517)
 	This:C1470.verbose:=Bool:C1537(This:C1470.input.verbose) & This:C1470.withUI
 	
-	This:C1470.paths:=cs:C1710.path.new()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Build and …
