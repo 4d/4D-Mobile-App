@@ -114,17 +114,24 @@
 					"events": [
 						"onClick",
 						"onDoubleClick",
+						"onDrop",
 						"onDataChange",
+						"onDragOver",
 						"onSelectionChange",
-						"onHeaderClick"
+						"onHeaderClick",
+						"onBeginDragOver"
 					],
-					"borderStyle": "system",
 					"listboxType": "collection",
 					"dataSource": "Form:C1466._choiceList",
 					"selectionMode": "single",
 					"currentItemSource": "Form:C1466.$.list.item",
 					"currentItemPositionSource": "Form:C1466.$.list.itemPosition",
 					"selectedItemsSource": "Form:C1466.$.list.items",
+					"dropping": "custom",
+					"borderStyle": "system",
+					"metaSource": "Form:C1466.$.staticMeta(This:C1470)",
+					"dragging": "custom",
+					"method": "ObjectMethods/choiceList.4dm",
 					"columns": [
 						{
 							"header": {
@@ -143,15 +150,18 @@
 								"name": "Header2",
 								"text": "Header2"
 							},
-							"name": "value",
+							"name": "values",
 							"footer": {
 								"name": "Footer2"
 							},
 							"dataSource": "This:C1470.value",
 							"resizable": false,
 							"width": 250,
-							"events": [],
-							"method": "ObjectMethods/value.4dm"
+							"events": [
+								"onDrop",
+								"onDragOver"
+							],
+							"method": "ObjectMethods/values.4dm"
 						}
 					]
 				},
@@ -383,8 +393,35 @@
 					"events": [
 						"onDataChange"
 					],
-					"dataSource": "Form:C1466.$.formats",
+					"dataSource": "Form:C1466.$.formatDropdown.data",
 					"focusable": false
+				},
+				"revealFolder": {
+					"type": "button",
+					"text": "",
+					"top": 52,
+					"left": 449,
+					"width": 16,
+					"height": 16,
+					"events": [
+						"onClick"
+					],
+					"style": "toolbar",
+					"icon": "/RESOURCES/images/common/show.png",
+					"visibility": "hidden",
+					"focusable": false,
+					"iconFrames": 4
+				},
+				"dropCursor": {
+					"type": "line",
+					"top": 453,
+					"left": 69,
+					"width": 30,
+					"height": 0,
+					"strokeWidth": 2,
+					"stroke": "#ff0000",
+					"visibility": "hidden",
+					"startPoint": "topLeft"
 				}
 			},
 			"entryOrder": [
@@ -400,11 +437,12 @@
 				"cancel",
 				"dataclasses",
 				"attributes",
-				"formatDropdown"
+				"formatDropdown",
+				"revealFolder"
 			]
 		}
 	],
-	"geometryStamp": 620,
+	"geometryStamp": 631,
 	"editor": {
 		"groups": {
 			"Group": [
@@ -449,7 +487,9 @@
 					"add",
 					"remove",
 					"Group2",
-					"_label"
+					"_label",
+					"revealFolder",
+					"dropCursor"
 				]
 			}
 		}

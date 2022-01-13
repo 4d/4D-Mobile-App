@@ -69,7 +69,7 @@ If (Num:C11($tableID)>0)
 			
 			$t:=$tmpl.update().svg
 			
-			//MARK:TURN AROUND - Put something before :C
+			//fixme: Put something before :C
 			$t:=Replace string:C233($t; ":C"; "4d:C")
 			
 			$t:=Replace string:C233($t; "&quot;"; "\"")

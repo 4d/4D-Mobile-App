@@ -33,7 +33,26 @@ Else   // <== WIDGETS METHOD
 			//==============================================
 		: ($ƒ.name.catch($e; On Data Change:K2:15))
 			
+			If (Length:C16(Form:C1466.name)>0)
+				
+				Form:C1466._folder:=Form:C1466._host.folder(EDITOR.str.setText(Form:C1466.name).suitableWithFileName())
+				$ƒ.revealFolder.show()
+				
+			Else 
+				
+				OB REMOVE:C1226(Form:C1466; "_folder")
+				$ƒ.revealFolder.hide()
+				$ƒ.name.focus()
+				
+			End if 
+			
 			$ƒ.refresh()
+			
+			//==============================================
+		: ($ƒ.revealFolder.catch($e; On Clicked:K2:4))
+			
+			Form:C1466._folder.create()
+			SHOW ON DISK:C922(Form:C1466._folder.platformPath)
 			
 			//==============================================
 		: ($ƒ.formatDropdown.catch($e; On Data Change:K2:15))
@@ -65,6 +84,15 @@ Else   // <== WIDGETS METHOD
 				: ($e.code=On Selection Change:K2:29)
 					
 					$ƒ.refresh()
+					
+					//_____________________________________
+				: ($e.code=On Begin Drag Over:K2:44)
+					
+					//$ƒ.doBeginDrag()
+					
+					//___________________________________________
+				: ($e.code=On Drag Over:K2:13) | ($e.code=On Drop:K2:12)
+					
 					
 					//___________________________________________
 				Else 

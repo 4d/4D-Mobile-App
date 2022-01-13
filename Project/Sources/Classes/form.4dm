@@ -24,6 +24,10 @@ Class constructor($method : Text)
 		
 	End if 
 	
+	//MARK:- COMPUTED ATTRIBUTES 📌
+	
+	
+	//MARK:- FUNCTIONS 📌
 	//=== === === === === === === === === === === === === === === === === === === === === 
 Function init()
 	
@@ -687,33 +691,6 @@ Function goTo($widget : Text)
 Function removeFocus()
 	
 	GOTO OBJECT:C206(*; "")
-	
-	//=== === === === === === === === === === === === === === === === === === === === === 
-Function _instantiate($class : Text; $key : Text; $name : Text)
-	
-	If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
-		
-		Case of 
-				
-				//______________________________________________________
-			: (Count parameters:C259=3)
-				
-				This:C1470[$key]:=cs:C1710[$class].new($name)
-				
-				//______________________________________________________
-			: (Count parameters:C259=2)  // Use key as the widget name
-				
-				This:C1470[$key]:=cs:C1710[$class].new($key)
-				
-				//______________________________________________________
-			: (Count parameters:C259=1)  // A tool init
-				
-				This:C1470[$class]:=cs:C1710[$class].new()
-				
-				//______________________________________________________
-		End case 
-	End if 
-	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 Function postKeyDown($keyCode : Integer; $modifier : Integer)
 	
@@ -744,6 +721,34 @@ Function setCursor($cursor : Integer)
 Function restoreCursor()
 	
 	SET CURSOR:C469
+	
+	//MARK:-PRIVATE 📌
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function _instantiate($class : Text; $key : Text; $name : Text)
+	
+	If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
+		
+		Case of 
+				
+				//______________________________________________________
+			: (Count parameters:C259=3)
+				
+				This:C1470[$key]:=cs:C1710[$class].new($name)
+				
+				//______________________________________________________
+			: (Count parameters:C259=2)  // Use key as the widget name
+				
+				This:C1470[$key]:=cs:C1710[$class].new($key)
+				
+				//______________________________________________________
+			: (Count parameters:C259=1)  // A tool init
+				
+				This:C1470[$class]:=cs:C1710[$class].new()
+				
+				//______________________________________________________
+		End case 
+	End if 
+	
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// [PRIVATE] set form events

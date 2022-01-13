@@ -22,6 +22,7 @@ FEATURE:=New object:C1471(\
 "delivered"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Num:C11(SHARED.ide.version)>=Num:C11($2))); \
 "debug"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Structure file:C489=Structure file:C489(*))); \
 "wip"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Structure file:C489=Structure file:C489(*))); \
+"pending"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Structure file:C489=Structure file:C489(*))); \
 "vdl"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Current system user:C484="vdelachaux")); \
 "alias"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=Bool:C1537(This:C1470[Choose:C955(Value type:C1509($2)=Is text:K8:3; $2; "_"+String:C10($2))])); \
 "main"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Application version:C493(*)="A@"))\
@@ -45,19 +46,21 @@ FEATURE.alias("debug"; 8858)
 
 If (True:C214)  // DELIVERED
 	
-	// Mark:-17R2
+	// Mark:-1️⃣7️⃣
+	
+	// Mark:-R2
 	FEATURE.delivered(89556; 1720)  // Reload embedded data from iOS application
 	FEATURE.delivered(92293; 1720)  // Support user defined tables
 	FEATURE.delivered(93674; 1720)  // Main menu
 	FEATURE.delivered(8122017; 1720)  // Turn around bug close window
 	FEATURE.delivered(96674; 1720)  // Archive app
 	
-	// Mark:-17R3
+	// Mark:-R3
 	FEATURE.delivered(100157; 1730)  // Template creation
 	FEATURE.delivered(100353; 1730)  // Template creation: inject any sources
 	FEATURE.delivered(100191; 1730)  // Data Formatter
 	
-	// Mark:-17R4
+	// Mark:-R4
 	FEATURE.delivered(98105; 1740)  // Multi-criteria Search
 	FEATURE.delivered(100990; 1740)  // Custom Data Formatter
 	FEATURE.delivered(100174; 1740)  // Restricted queries
@@ -65,7 +68,7 @@ If (True:C214)  // DELIVERED
 	FEATURE.delivered(103112; 1740)  // Restricted queries: Move dataSet into database in Mobile Projects
 	FEATURE.delivered(102457; 1740)  // Data file access with /mobileapp key
 	
-	// Mark:-17R5
+	// Mark:-R5
 	FEATURE.delivered(101637; 1750)  // Display n-1 relations
 	FEATURE.delivered(103850; 1750)  // Reload data from iOS with N-1 relation (Generate core data model with real relation)
 	FEATURE.delivered(103411; 1750)  // Incremental synchronization
@@ -74,41 +77,41 @@ If (True:C214)  // DELIVERED
 	FEATURE.delivered("withRecursiveLink"; 1750)  // Enable recursive link management
 	FEATURE.delivered(98145; 1750)  // Replace, for data structure access, EXPORT STRUCTURE by ds
 	
-	// Mark:-17R6
+	// Mark:-R6
 	FEATURE.delivered(105413; 1760)  // [MOBILE] Actions with parameters
 	FEATURE.delivered("parameterListOfValues"; 1760)  // Manage field formatters as list of values for parameters
 	FEATURE.delivered("allowPictureAsActionParameters"; 1760)  // #107932 - [Mobile] Allow to use picture as action parameters
 	
-	// Mark:-18.0
+	// Mark:-1️⃣8️⃣
 	FEATURE.delivered(105431; 1800)  // Display 1-n relations
 	FEATURE.delivered(110882; 1800)  // Dump data into core data SQLLite database
 	FEATURE.delivered("newDataModel"; 1800)
 	
-	// Mark:-18R2
+	// Mark:-R2
 	FEATURE.delivered("repairStructureMoreVisible"; 1820)
 	FEATURE.delivered(113164; 1820)  // Enable/disable image dump
 	
-	// Mark:-18R3
+	// Mark:-R3
 	FEATURE.delivered(112225; 1830)  // Select/install/use custom templates
 	
-	// Mark:-18R4
+	// Mark:-R4
 	FEATURE.delivered(113016; 1840)  // Svg improvement in forms section
 	FEATURE.delivered(107526; 1840)  // Push Notifications
 	
-	// Mark:-18R5
+	// Mark:-R5
 	FEATURE.delivered(117618; 1850)  // Deep Linking
 	
-	// Mark:-18R6
+	// Mark:-R6
 	FEATURE.delivered(117601; 1860)  // Relation management optimisation
 	FEATURE.delivered("templateClass"; 1860)
 	FEATURE.delivered("searchWithBarCode"; 1860)
 	
-	// Mark:-19.0
+	// Mark:-1️⃣9️⃣
 	FEATURE.delivered("withSimulatorClass"; 1900)  // Use simctl class intead of _o_simulator
 	
 	FEATURE.delivered("wizards"; 1900)  // Use a wizard instead of standard dialogs to create or open a project
 	
-	// Mark:-19R2
+	// Mark:-R2
 	FEATURE.delivered("android"; 1920)  // Android support global flag
 	FEATURE.delivered("targetPannel"; 1920)  // Use a separate pannel for the target OS
 	FEATURE.delivered("dominantColor"; 1920)  // Feature #127813: BackgroundColor picker
@@ -117,7 +120,7 @@ If (True:C214)  // DELIVERED
 	FEATURE.delivered("sortAction"; 1920)  // https:// Project.4d.com/issues/117660
 	FEATURE.delivered("ConnectedDevices"; 1920)  // Add connected devices to the simulator tool
 	
-	// Mark:-19R3
+	// Mark:-R3
 	FEATURE.delivered("predictiveEntryInActionParam"; 1930)  // #128898 Name of the action parameters and sorting criteria can be modified
 	FEATURE.delivered("customActionFormatterWithCode"; 1930)  // #129036 custom input control for action parameter with ios code
 	FEATURE.delivered("customActionFormatter"; 1930)  // #128195 custom input control for action parameter
@@ -126,37 +129,39 @@ If (True:C214)  // DELIVERED
 	
 End if 
 
-//mark:-19R4
+//mark:-R4
 FEATURE.unstable("androidActions")  //[Mobile] Feature flag pour activer les actions dans le projet mobile
 FEATURE.unstable("objectFieldManagement")  //[MOBILE] Object fields Management 
 FEATURE.unstable("android1ToNRelations")  // [ANDROID] 1 to N relations
 FEATURE.unstable("cancelableDatasetGeneration")  // [MOBILE] Data generation 
 FEATURE.unstable("useTextRestResponse")  // [MOBILE] Data generation : for optis
 
-//mark:-WIP
+//mark:-R5
+FEATURE.unstable("listEditor")  // Allow to create custom Data Source Input Control
+
+//mark:-🚧 WIP
 FEATURE.wip(129953)  //[MOBILE] Handle Many-one-Many relations
 // FEATURE.wip("simuARMOnAppleProcessor") // Mac M1 build for simu using arm64
 FEATURE.wip("duplicateTemplate")  // Allow to duplicate template in host database and show on disk https:// Project.4d.com/issues/98054
 FEATURE.wip("taskIndicator")  // UI for background tasks executing
 
-FEATURE.wip("compressionOfTemplates")  // Use the archive "/RESOURCES/template.zip" instead of "templates" folder in builded component
-//FEATURE.vdl("testCompression")
-
-FEATURE.wip("sharedActionWithDescription")  //[MOBILE] Add a description parameter to predefined share action
-FEATURE.wip("withWidgetActions")  // Enable widget actions
 FEATURE.wip("accentColors")  // Manage colors according to user system parameters
-FEATURE.wip("formatMarketPlace")  // Manage format as archive
-FEATURE.wip(114338)  // Support Collection of field injected into detail template https://project.4d.com/issues/114338
-FEATURE.alias("droppingNext"; 114338)  // Allow to drop a multivalued field next to another existing dropped multivalued fields
 FEATURE.wip("sourceClass")  // Work with Source class to test the data source
 
-FEATURE.wip("iosSDKfromAWS")  // Download iOS SDK from AWS
-
 FEATURE.wip("newFormatterChoiceList")  // Menu to create formatter choice list directly , from data
-FEATURE.wip("listEditor")  // Allow to create custom Data Source Input Control
 FEATURE.wip("xcDataModelClass")  // Use class to create core data model ie. xcDataModel (useful to refactor for alias)
 
 // FEATURE.wip("iosBuildWithClass")  // Use cs.MobileProjectIOS class
+
+//mark:-⛔ PENDING
+FEATURE.pending("compressionOfTemplates")  // Use the archive "/RESOURCES/template.zip" instead of "templates" folder in builded component
+//FEATURE.vdl("testCompression")
+FEATURE.pending("formatMarketPlace")  // Manage format as archive
+FEATURE.pending("sharedActionWithDescription")  //[MOBILE] Add a description parameter to predefined share action
+FEATURE.pending("withWidgetActions")  // Enable widget actions
+FEATURE.pending(114338)  // Support Collection of field injected into detail template https://project.4d.com/issues/114338
+FEATURE.alias("droppingNext"; 114338)  // Allow to drop a multivalued field next to another existing dropped multivalued fields
+FEATURE.pending("iosSDKfromAWS")  // Download iOS SDK from AWS
 
 /* -------------------------------------
 OVERRIDE WITH LOCAL PREFERENCES

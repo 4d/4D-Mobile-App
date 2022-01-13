@@ -27,7 +27,7 @@ If (Is macOS:C1572)
 		
 		If (Is macOS:C1572)
 			
-			//MARK: #TURN AROUND
+			//fixme: macOS <12
 			If (Match regex:C1019("(?m-si)macOS\\s(\\d+)"; $osVersion; 1; $pos; $len))
 				
 				If (Num:C11(Substring:C12($osVersion; $pos; $len))<12)

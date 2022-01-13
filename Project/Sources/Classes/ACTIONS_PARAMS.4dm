@@ -1330,14 +1330,14 @@ Function doDataSourceMenu()
 				If ($manifest.choiceList#Null:C1517)
 					
 					
-					//mark:🐞 turn around
+					//fixme:turn around 🐞
 					//$controls.push(New object(\
-						"dynamic"; (Value type($manifest.choiceList)=Is object) && ($manifest.choiceList.dataSource#Null); \
-						"name"; $manifest.name; \
-						"source"; $manifest.name; \
-						"format"; Choose($manifest.format#Null; $manifest.format; "push"); \
-						"choiceList"; $manifest.choiceList\
-						))
+																								"dynamic"; (Value type($manifest.choiceList)=Is object) && ($manifest.choiceList.dataSource#Null); \
+																								"name"; $manifest.name; \
+																								"source"; $manifest.name; \
+																								"format"; Choose($manifest.format#Null; $manifest.format; "push"); \
+																								"choiceList"; $manifest.choiceList\
+																								))
 					$controls.push(New object:C1471(\
 						"dynamic"; _and(Formula:C1597(Value type:C1509($manifest.choiceList)=Is object:K8:27); Formula:C1597($manifest.choiceList.dataSource#Null:C1517)); \
 						"name"; $manifest.name; \
@@ -1444,7 +1444,6 @@ Function doNewList()
 	$data.name:=""
 	$data.type:=$current.type
 	$data.format:=Delete string:C232($current.format; 1; 1)
-	//$data.choiceList:=New object
 	
 	DIALOG:C40("LISTE_EDITOR"; $data)
 	
@@ -1470,9 +1469,11 @@ Function doNewList()
 				If ($data.binding)
 					
 					
+					//todo:Delete unused pictures?
 					
 				Else 
 					
+					OB REMOVE:C1226($data; "binding")
 					$data._folder.folder("images").delete(Delete with contents:K24:24)
 					
 				End if 
@@ -1490,6 +1491,13 @@ Function doNewList()
 		
 		$data._folder.file("manifest.json").setText(JSON Stringify:C1217(cs:C1710.ob.new().cleanup("_,$"; $data); *))
 		
+		//todo: select the created input control
+		
+	Else 
+		
+		//todo:Delete the input control?
+		//$data._folder.delete(Delete with contents)
+		
 	End if 
 	
 	CLOSE WINDOW:C154($data._window)
@@ -1502,7 +1510,7 @@ Function _appendFormat($data : Object)->$custom : Boolean
 	
 	$format:=$data.format
 	
-	//mark:🐞 turn around
+	//fixme:turn around 🐞
 	//If ((Value type($format)=Is object) || (PROJECT.isCustomResource($format)))
 	If (_or(Formula:C1597(Value type:C1509($format)=Is object:K8:27); Formula:C1597(PROJECT.isCustomResource($format))))
 		
@@ -1527,7 +1535,7 @@ Function _appendFormat($data : Object)->$custom : Boolean
 		
 	Else 
 		
-		//mark:-  🚧 #132599: Add tag iOS only for unsupported type
+		//fixme:🚧 #132599: Add tag iOS only for unsupported type 
 		//$data.menu.append(":xliff:f_"+$format; $format; $data.currentFormat=$format)
 		var $label : Text
 		
@@ -1581,7 +1589,7 @@ Function _actionFormatterChoiceList($menu : cs:C1710.menu; $type : Text)
 			$parameter:="/"+$control+"/"+$type
 			$selected:=$parameter=(String:C10(This:C1470.current.format)+"/"+This:C1470.current.type)
 			
-			//mark:-  🚧 #132599: Add tag iOS only for unsupported type
+			//fixme:🚧 #132599: Add tag iOS only for unsupported type
 			$menu.append($control+Get localized string:C991("iosOnly"); $parameter; $selected)\
 				.setData("type"; $type)\
 				.setData("format"; "/"+$control)
