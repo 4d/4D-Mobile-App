@@ -112,6 +112,7 @@ Function selectLastRow()->$this : cs:C1710.listbox
 Function autoSelect()
 	
 	This:C1470.select(This:C1470.cellPosition().row)
+	This:C1470.touch()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Selects the given row if possible, else the most appropiate one

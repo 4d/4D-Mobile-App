@@ -25,6 +25,14 @@ Class constructor($name : Text)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === ===
+Function get colors()->$color : Object
+	
+	var $altBackground; $background; $foreground : Text
+	
+	OBJECT GET RGB COLORS:C1074(*; This:C1470.name; $foreground; $background; $altBackground)
+	$color:=New object:C1471("foreground"; $foreground; "background"; $background; "altBackground"; $altBackground)
+	
+	//=== === === === === === === === === === === === === === === === === === ===
 	// Adds this widget to a group
 Function addToGroup($group : cs:C1710.group)->$this : Object
 	

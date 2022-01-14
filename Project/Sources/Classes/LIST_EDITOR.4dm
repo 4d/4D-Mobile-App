@@ -32,24 +32,24 @@ Function init()
 		This:C1470.toBeInitialized:=False:C215
 		
 		This:C1470.input("name")
+		This:C1470.formObject("nameEdge")
 		This:C1470.button("revealFolder")
 		
-		//todo: Create a dropdown class
-		This:C1470.widget("formatDropdown")
-		This:C1470.formatDropdown.data:=New object:C1471
-		This:C1470.formatDropdown.data.binding:=New collection:C1472("push"; "segmented"; "popover"; "sheet"; "picker")
+		This:C1470.selector("formatDropdown")
+		This:C1470.formatDropdown.binding:=New collection:C1472("push"; "segmented"; "popover"; "sheet"; "picker")
 		
 		// Localization
-		This:C1470.formatDropdown.data.values:=New collection:C1472
+		var $c : Collection
+		$c:=New collection:C1472
 		
-		For each ($t; This:C1470.formatDropdown.data.binding)
+		For each ($t; This:C1470.formatDropdown.binding)
 			
-			This:C1470.formatDropdown.data.values.push(Get localized string:C991("_"+$t))
+			$c.push(Get localized string:C991("_"+$t))
 			
 		End for each 
 		
-		This:C1470.formatDropdown.data.currentValue:=Get localized string:C991("select")
-		This:C1470.formatDropdown.data.index:=-1
+		This:C1470.formatDropdown.values:=$c
+		This:C1470.formatDropdown.current:=Get localized string:C991("select")
 		
 		$group:=This:C1470.group("source")
 		This:C1470.button("static").addToGroup($group)
@@ -88,49 +88,13 @@ Function init()
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function onLoad()
 	
-	//todo:TEMPO 🚧
-	If (Form:C1466.choiceList=Null:C1517)
-		
-		Case of 
-				
-				//______________________________________________________
-			: ((Form:C1466.type="bool")\
-				 | (Form:C1466.type="boolean"))
-				
-				Form:C1466.choiceList:=New object:C1471(\
-					"0"; "False"; \
-					"1"; "True")
-				
-				//________________________________________
-			: ((Form:C1466.type="number")\
-				 | (Form:C1466.type="integer")\
-				 | (Form:C1466.type="real"))
-				
-				Form:C1466.choiceList:=New object:C1471(\
-					"0"; "zero"; \
-					"1"; "one"; \
-					"2"; "two")
-				
-				//________________________________________
-			: ((Form:C1466.type="string")\
-				 | (Form:C1466.type="text"))
-				
-				Form:C1466.choiceList:=New object:C1471(\
-					"value1"; "Displayed value1"; \
-					"value2"; "Displayed value2")
-				
-				//______________________________________________________
-		End case 
-	End if 
-	
 	This:C1470.appendEvents(On Double Clicked:K2:5)  // Allow double click to edit list items
 	
 	This:C1470.dropCursor.setColors(Highlight menu background color:K23:7)
 	
 	// Select the format (push if not defined)
 	Form:C1466.format:=Form:C1466.format#Null:C1517 ? Form:C1466.format : "push"
-	This:C1470.formatDropdown.data.index:=This:C1470.formatDropdown.data.binding.indexOf(Form:C1466.format)
-	This:C1470.formatDropdown.data.currentValue:=This:C1470.formatDropdown.data.values[This:C1470.formatDropdown.data.index]
+	This:C1470.formatDropdown.current:=Form:C1466.format
 	
 	// Select the datasource type
 	This:C1470.static.setValue(Form:C1466.choiceList.dataSource=Null:C1517)
@@ -138,17 +102,28 @@ Function onLoad()
 	// Select binding type
 	This:C1470.label.setValue(Form:C1466.binding=Null:C1517)
 	
-	// Populate the choice list values
-	Form:C1466._choiceList:=OB Entries:C1720(Form:C1466.choiceList)
+	// Define the format of the keys column
+	This:C1470.setValueType()
+	
+	// Populate the choice list values, if exists
+	Form:C1466._choiceList:=Form:C1466.choiceList#Null:C1517 ? OB Entries:C1720(Form:C1466.choiceList) : New collection:C1472
 	
 	// Initialize database structure MARK:FILTER?
-	Form:C1466._dataclasses:=PROJECT.getCatalog()
-	This:C1470.dataclasses.select(1)
-	Form:C1466._attributes:=Form:C1466._dataclasses[0].field
-	This:C1470.attributes.select(1)
+	//todo:Only if necessary
+	If (Value type:C1509(PROJECT)#Is undefined:K8:13)
+		
+		Form:C1466._dataclasses:=PROJECT.getCatalog()
+		This:C1470.dataclasses.select(1)
+		Form:C1466._attributes:=Form:C1466._dataclasses[0].field
+		This:C1470.attributes.select(1)
+		
+	End if 
 	
 	// Go to name box
 	This:C1470.name.focus().highlight()
+	
+	//fixme:In works
+	This:C1470.datasource.disable()
 	
 	This:C1470.refresh()
 	
@@ -159,6 +134,10 @@ Function update()
 	
 	SET TIMER:C645(0)
 	
+	// Name is mandatory
+	This:C1470.nameEdge.setColors((This:C1470.name.getValue()="") ? EDITOR.errorRGB : 0x00C0C0C0)
+	This:C1470.revealFolder.show((Form:C1466._folder#Null:C1517) && (Form:C1466._folder.exists))
+	
 	Form:C1466._static:=This:C1470.static.getValue()
 	Form:C1466.binding:=This:C1470.image.getValue()
 	
@@ -168,7 +147,10 @@ Function update()
 		This:C1470.dataclass.hide()
 		
 		$isValid:=(Form:C1466._choiceList.length>0)
-		This:C1470.remove.enable(This:C1470.list.item#Null:C1517)
+		This:C1470.remove.enable($isValid & (This:C1470.list.itemPosition>0))
+		
+		// Limit to 2 lines for booleans
+		This:C1470.add.enable(Form:C1466.type#"bool" || (Form:C1466._choiceList=Null:C1517 ? True:C214 : Form:C1466._choiceList.length<2))
 		
 	Else 
 		
@@ -187,9 +169,68 @@ Function update()
 		$isValid:=(Form:C1466.choiceList.dataSource.dataClass#Null:C1517)\
 			 & (Form:C1466.choiceList.dataSource.field#Null:C1517)
 		
+		This:C1470.add.enable()
+		
 	End if 
 	
 	This:C1470.ok.enable((Length:C16(Form:C1466.name)>0) & $isValid)
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+	//Define the format of the value column
+Function setValueType($type : Integer)
+	
+	var $t : Text
+	
+	$t:=LISTBOX Get column formula:C1202(*; "keys")
+	
+	If ($type=0)
+		
+		Case of 
+				
+				//______________________________________________________
+			: ((Form:C1466.type="bool")\
+				 | (Form:C1466.type="boolean"))
+				
+				$type:=Is boolean:K8:9
+				
+				//________________________________________
+			: ((Form:C1466.type="number")\
+				 | (Form:C1466.type="integer")\
+				 | (Form:C1466.type="real"))
+				
+				$type:=Is real:K8:4
+				
+				//________________________________________
+			: ((Form:C1466.type="string")\
+				 | (Form:C1466.type="text"))
+				
+				$type:=Is text:K8:3
+				
+				//______________________________________________________
+		End case 
+	End if 
+	
+	LISTBOX SET COLUMN FORMULA:C1203(*; "keys"; $t; $type)
+	
+	Case of 
+			
+			//______________________________________________________
+		: ($type=Is boolean:K8:9)
+			
+			OBJECT SET FORMAT:C236(*; "keys"; Get localized string:C991("trueFalse"))
+			
+			//________________________________________
+		: ($type=Is real:K8:4)
+			
+			OBJECT SET FORMAT:C236(*; "keys"; "")
+			
+			//________________________________________
+		: ($type=Is text:K8:3)
+			
+			OBJECT SET FORMAT:C236(*; "keys"; "")
+			
+			//______________________________________________________
+	End case 
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function setDatasource()
@@ -229,6 +270,46 @@ Function setDatasource()
 	This:C1470.refresh()
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
+Function doType()
+	
+	var $autoDrag; $autoDrop; $drag; $drop : Boolean
+	
+	If (This:C1470.image.getValue())
+		
+		If (Form:C1466._folder#Null:C1517)
+			
+			This:C1470._label.setTitle("image")
+			This:C1470.setValueType(Is text:K8:3)
+			
+			OBJECT GET DRAG AND DROP OPTIONS:C1184(*; "value"; $drag; $autoDrag; $drop; $autoDrop)
+			OBJECT SET DRAG AND DROP OPTIONS:C1183(*; "value"; True:C214; $autoDrag; True:C214; $autoDrop)
+			
+			Form:C1466._folder.folder("images").create()
+			
+		Else 
+			
+			BEEP:C151
+			
+			This:C1470.label.setValue(True:C214)
+			This:C1470.image.setValue(False:C215)
+			This:C1470.name.focus()
+			
+		End if 
+		
+	Else 
+		
+		This:C1470._label.setTitle("label")
+		This:C1470.setValueType()
+		
+		OBJECT GET DRAG AND DROP OPTIONS:C1184(*; "value"; $drag; $autoDrag; $drop; $autoDrop)
+		OBJECT SET DRAG AND DROP OPTIONS:C1183(*; "value"; $drag; $autoDrag; False:C215; $autoDrop)
+		
+	End if 
+	
+	This:C1470.list.touch()
+	This:C1470.refresh()
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
 Function doAdd()
 	
 	var $length : Integer
@@ -246,10 +327,37 @@ Function doAdd()
 		
 	Else 
 		
-		$o:=New object:C1471(\
-			"key"; "value "+String:C10($length); \
-			"value"; "label "+String:C10($length))
-		
+		Case of 
+				
+				//______________________________________________________
+			: ((Form:C1466.type="bool")\
+				 | (Form:C1466.type="boolean"))
+				
+				$o:=Form:C1466._choiceList.query("key = :1"; "false").pop()
+				
+				$o:=New object:C1471(\
+					"key"; $o=Null:C1517 ? "false" : "true"; \
+					"value"; Get localized string:C991("label")+String:C10($length; " ###0"))
+				
+				//________________________________________
+			: ((Form:C1466.type="number")\
+				 | (Form:C1466.type="integer")\
+				 | (Form:C1466.type="real"))
+				
+				$o:=New object:C1471(\
+					"key"; "value "+String:C10($length); \
+					"value"; Get localized string:C991("label")+String:C10($length; " ###0"))
+				
+				//________________________________________
+			: ((Form:C1466.type="string")\
+				 | (Form:C1466.type="text"))
+				
+				$o:=New object:C1471(\
+					"key"; Get localized string:C991("value")+String:C10($length; " ###0"); \
+					"value"; Get localized string:C991("label")+String:C10($length; " ###0"))
+				
+				//______________________________________________________
+		End case 
 	End if 
 	
 	$o.button:=New object:C1471("value"; "…"; "behavior"; "alternateButton")
@@ -257,31 +365,16 @@ Function doAdd()
 	Form:C1466._choiceList.push($o)
 	
 	This:C1470.list.selectLastRow().edit()
+	This:C1470.refresh()
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
-Function doType()
+Function doRemove()
 	
-	var $autoDrag; $autoDrop; $drag; $drop : Boolean
+	var $index : Integer
 	
-	If (This:C1470.image.getValue())
-		
-		This:C1470._label.setTitle("image")
-		
-		OBJECT GET DRAG AND DROP OPTIONS:C1184(*; "value"; $drag; $autoDrag; $drop; $autoDrop)
-		OBJECT SET DRAG AND DROP OPTIONS:C1183(*; "value"; True:C214; $autoDrag; True:C214; $autoDrop)
-		
-		Form:C1466._folder.folder("images").create()
-		
-	Else 
-		
-		This:C1470._label.setTitle("label")
-		
-		OBJECT GET DRAG AND DROP OPTIONS:C1184(*; "value"; $drag; $autoDrag; $drop; $autoDrop)
-		OBJECT SET DRAG AND DROP OPTIONS:C1183(*; "value"; $drag; $autoDrag; False:C215; $autoDrop)
-		
-	End if 
-	
-	This:C1470.list.touch()
+	$index:=Form:C1466._choiceList.indexOf(This:C1470.list.item)
+	Form:C1466._choiceList.remove($index; 1)
+	This:C1470.list.doSafeSelect($index+1)
 	This:C1470.refresh()
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
@@ -319,6 +412,9 @@ Function doStaticDragAndDrop()->$allowed : Integer
 						$file.copyTo($folder; fk overwrite:K87:5)
 						
 					End if 
+					
+					//todo:Convert to PNG?
+					//todo:Set dimensions?
 					
 					This:C1470.list.focus()  // Give focus to the list
 					This:C1470.list.autoSelect()  // Select, if any
@@ -376,7 +472,7 @@ Function doStaticDragAndDrop()->$allowed : Integer
 	//End if 
 	//Else 
 	//If ($o.src#$e.row)\
-		 & ($e.row#($o.src+1))  // Not the same or the next one
+						 & ($e.row#($o.src+1))  // Not the same or the next one
 	//$allowed:=0
 	//$o:=$list.getRowCoordinates($e.row)
 	//$o.bottom:=$o.top
@@ -427,7 +523,14 @@ Function staticMeta($this : Object)->$style
 		"stroke"; Choose:C955(EDITOR.isDark; "white"; "black"); \
 		"fontWeight"; "normal"; \
 		"cell"; New object:C1471(\
-		"values"; New object:C1471))
+		"values"; New object:C1471; \
+		"keys"; New object:C1471))
+	
+	If (Form:C1466._choiceList.query("key = :1"; $this.key).length>1)
+		
+		$style.cell.keys.stroke:=EDITOR.errorRGB
+		
+	End if 
 	
 	If (This:C1470.image.getValue())  // Test the file
 		
@@ -438,4 +541,4 @@ Function staticMeta($this : Object)->$style
 		End if 
 	End if 
 	
-	
+	// === === === === === === === === === === === === === === === === === === === === ===

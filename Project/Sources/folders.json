@@ -710,6 +710,7 @@
 			"listbox",
 			"picture",
 			"scrollable",
+			"selector",
 			"stepper",
 			"subform",
 			"thermometer",

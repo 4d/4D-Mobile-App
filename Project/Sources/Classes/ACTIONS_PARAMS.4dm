@@ -1332,12 +1332,12 @@ Function doDataSourceMenu()
 					
 					//fixme:turn around 🐞
 					//$controls.push(New object(\
-																								"dynamic"; (Value type($manifest.choiceList)=Is object) && ($manifest.choiceList.dataSource#Null); \
-																								"name"; $manifest.name; \
-																								"source"; $manifest.name; \
-																								"format"; Choose($manifest.format#Null; $manifest.format; "push"); \
-																								"choiceList"; $manifest.choiceList\
-																								))
+						"dynamic"; (Value type($manifest.choiceList)=Is object) && ($manifest.choiceList.dataSource#Null); \
+						"name"; $manifest.name; \
+						"source"; $manifest.name; \
+						"format"; Choose($manifest.format#Null; $manifest.format; "push"); \
+						"choiceList"; $manifest.choiceList\
+						))
 					$controls.push(New object:C1471(\
 						"dynamic"; _and(Formula:C1597(Value type:C1509($manifest.choiceList)=Is object:K8:27); Formula:C1597($manifest.choiceList.dataSource#Null:C1517)); \
 						"name"; $manifest.name; \
@@ -1436,8 +1436,16 @@ Function doNewList()
 	$current:=This:C1470.current
 	
 	$data:=New object:C1471
-	//$data._window:=Open form window("LISTE_EDITOR"; Movable form dialog box; Horizontally centered; Vertically centered)
-	$data._window:=Open form window:C675("LISTE_EDITOR"; Plain form window:K39:10; Horizontally centered:K39:1; Vertically centered:K39:4)
+	If (database.isMatrix)
+		
+		$data._window:=Open form window:C675("LISTE_EDITOR"; Plain form window:K39:10; Horizontally centered:K39:1; Vertically centered:K39:4)
+		
+	Else 
+		
+		$data._window:=Open form window:C675("LISTE_EDITOR"; Movable form dialog box:K39:8; Horizontally centered:K39:1; Vertically centered:K39:4)
+		
+	End if 
+	
 	$data._host:=This:C1470.path.hostInputControls(True:C214)
 	$data.$comment:="Map database values to some display values using choiceList"
 	$data.$doc:="https://developer.4d.com/4d-for-ios/docs/en/creating-data-formatter.html#text-formatters"
@@ -1453,45 +1461,39 @@ Function doNewList()
 		$data._folder.create()
 		
 		// Create the manifest
-		Case of 
+		If ($data._static)
+			
+			$data.choiceList:=New object:C1471
+			
+			For each ($o; $data._choiceList)
 				
-				//______________________________________________________
-			: ($data._static)
+				$data.choiceList[$o.key]:=$o.value
 				
-				$data.choiceList:=New object:C1471
+			End for each 
+			
+			If ($data.binding)
 				
-				For each ($o; $data._choiceList)
-					
-					$data.choiceList[$o.key]:=$o.value
-					
-				End for each 
+				//todo:Delete unused pictures?
 				
-				If ($data.binding)
-					
-					
-					//todo:Delete unused pictures?
-					
-				Else 
-					
-					OB REMOVE:C1226($data; "binding")
-					$data._folder.folder("images").delete(Delete with contents:K24:24)
-					
-				End if 
-				
-				//______________________________________________________
-			: (False:C215)
-				
-				//______________________________________________________
 			Else 
 				
-				// A "Case of" statement should never omit "Else"
+				OB REMOVE:C1226($data; "binding")
+				$data._folder.folder("images").delete(Delete with contents:K24:24)
 				
-				//______________________________________________________
-		End case 
+			End if 
+			
+		Else 
+			
+			OB REMOVE:C1226($data; "binding")
+			
+			
+			
+		End if 
 		
 		$data._folder.file("manifest.json").setText(JSON Stringify:C1217(cs:C1710.ob.new().cleanup("_,$"; $data); *))
 		
-		//todo: select the created input control
+		// Select the created input control
+		This:C1470.current.source:="/"+$data._folder.name
 		
 	Else 
 		

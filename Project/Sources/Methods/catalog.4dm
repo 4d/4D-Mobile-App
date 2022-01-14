@@ -124,11 +124,6 @@ Case of
 							
 							// <NOT YET  MANAGED>
 							
-							//…………………………………………………………………………………………………
-						: (Not:C34(FEATURE.with("computedProperties")))
-							
-							// <NOT YET  MANAGED>
-							
 							//______________________________________________________
 						: ($o.kind="calculated")  // Computed properties
 							
@@ -267,11 +262,6 @@ Case of
 							
 							//______________________________________________________
 						: ($table[$fieldName].kind="relatedEntities")  // 1 -> N relation
-							
-							// <NOT YET  MANAGED>
-							
-							//…………………………………………………………………………………………………
-						: (Not:C34(FEATURE.with("computedProperties")))
 							
 							// <NOT YET  MANAGED>
 							

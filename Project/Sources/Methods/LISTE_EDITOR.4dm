@@ -19,6 +19,11 @@ If ($e.objectName=Null:C1517)  // <== FORM METHOD
 			End if 
 			
 			//___________________________________________
+		: ($e.code=On Activate:K2:9)
+			
+			$ƒ.refresh()
+			
+			//___________________________________________
 		: ($e.code=On Timer:K2:25)
 			
 			$ƒ.update()
@@ -36,12 +41,12 @@ Else   // <== WIDGETS METHOD
 			If (Length:C16(Form:C1466.name)>0)
 				
 				Form:C1466._folder:=Form:C1466._host.folder(EDITOR.str.setText(Form:C1466.name).suitableWithFileName())
-				$ƒ.revealFolder.show()
 				
 			Else 
 				
+				BEEP:C151
+				
 				OB REMOVE:C1226(Form:C1466; "_folder")
-				$ƒ.revealFolder.hide()
 				$ƒ.name.focus()
 				
 			End if 
@@ -66,9 +71,16 @@ Else   // <== WIDGETS METHOD
 			$ƒ.refresh()
 			
 			//==============================================
-		: ($ƒ.add.catch($e; On Clicked:K2:4))
+		: ($ƒ.label.catch())\
+			 | ($ƒ.image.catch())
 			
-			$ƒ.doAdd()
+			$ƒ.doType()
+			
+			//==============================================
+		: ($ƒ.dataclasses.catch())\
+			 | ($ƒ.attributes.catch())
+			
+			$ƒ.setDatasource()
 			
 			//==============================================
 		: ($ƒ.list.catch($e))
@@ -80,10 +92,12 @@ Else   // <== WIDGETS METHOD
 					
 					$ƒ.list.edit($e)
 					
-					//___________________________________________
-				: ($e.code=On Selection Change:K2:29)
+					//_____________________________________
+				: ($e.code=On Data Change:K2:15)
 					
-					$ƒ.refresh()
+					
+					
+					$ƒ.list.autoSelect()
 					
 					//_____________________________________
 				: ($e.code=On Begin Drag Over:K2:44)
@@ -91,8 +105,8 @@ Else   // <== WIDGETS METHOD
 					//$ƒ.doBeginDrag()
 					
 					//___________________________________________
-				: ($e.code=On Drag Over:K2:13) | ($e.code=On Drop:K2:12)
-					
+				: ($e.code=On Drag Over:K2:13)\
+					 | ($e.code=On Drop:K2:12)
 					
 					//___________________________________________
 				Else 
@@ -103,16 +117,14 @@ Else   // <== WIDGETS METHOD
 			End case 
 			
 			//==============================================
-		: ($ƒ.dataclasses.catch())\
-			 | ($ƒ.attributes.catch())
+		: ($ƒ.add.catch($e; On Clicked:K2:4))
 			
-			$ƒ.setDatasource()
+			$ƒ.doAdd()
 			
 			//==============================================
-		: ($ƒ.label.catch())\
-			 | ($ƒ.image.catch())
+		: ($ƒ.remove.catch($e; On Clicked:K2:4))
 			
-			$ƒ.doType()
+			$ƒ.doRemove()
 			
 			//==============================================
 	End case 
