@@ -85,7 +85,6 @@ Function selectFirstRow()->$this : cs:C1710.listbox
 	If (LISTBOX Get number of rows:C915(*; This:C1470.name)>0)
 		
 		This:C1470.select(1)
-		OBJECT SET SCROLL POSITION:C906(*; This:C1470.name; 1)
 		
 	Else 
 		
@@ -103,7 +102,6 @@ Function selectLastRow()->$this : cs:C1710.listbox
 	
 	$row:=This:C1470.rowsNumber()
 	This:C1470.select($row)
-	OBJECT SET SCROLL POSITION:C906(*; This:C1470.name; $row)
 	
 	$this:=This:C1470
 	
@@ -122,6 +120,7 @@ Function doSafeSelect($row : Integer)->$this : cs:C1710.listbox
 	var $rowNumber : Integer
 	
 	$rowNumber:=This:C1470.rowsNumber()
+	LISTBOX SELECT ROW:C912(*; This:C1470.name; 0; lk remove from selection:K53:3)
 	
 	Case of 
 			

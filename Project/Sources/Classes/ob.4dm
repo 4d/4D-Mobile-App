@@ -6,7 +6,7 @@ Class constructor($content)
 	This:C1470.success:=True:C214
 	This:C1470.content:=Null:C1517
 	This:C1470.prettyPrint:=True:C214
-	This:C1470.tidyJson:=True:C214
+	This:C1470.tidyJson:=False:C215
 	This:C1470.lastError:=""
 	This:C1470.errors:=New collection:C1472
 	
@@ -155,14 +155,14 @@ Function load($file : 4D:C1709.File)->$object : Object
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Save to json file
-Function save($file : 4D:C1709.File)
+Function save($file : 4D:C1709.File; $prettyPrint : Boolean)
 	
 	ASSERT:C1129($file#Null:C1517 ? OB Instance of:C1731($file; 4D:C1709.File) : True:C214)
 	
 	$file:=$file=Null:C1517 ? This:C1470.file : $file
 	
 	This:C1470._catchError(True:C214)
-	$file.setText(This:C1470.stringify())
+	$file.setText(This:C1470.stringify(Count parameters:C259>=2 ? $prettyPrint : This:C1470.prettyPrint))
 	This:C1470._catchError()
 	
 	If (ERROR#0)

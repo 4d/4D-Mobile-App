@@ -166,7 +166,6 @@ FEATURE.pending("iosSDKfromAWS")  // Download iOS SDK from AWS
 /* -------------------------------------
 OVERRIDE WITH LOCAL PREFERENCES
 ________________________________________*/
-
 If ($preferences.features#Null:C1517)
 	
 	For each ($o; $preferences.features)
@@ -263,7 +262,5 @@ If ($preferences.features#Null:C1517)
 	End for each 
 End if 
 
-/* _____________
-ALIAS
-_____________*/
+//mark:-→ ALIAS
 FEATURE.alias("many-one-many"; 129953)

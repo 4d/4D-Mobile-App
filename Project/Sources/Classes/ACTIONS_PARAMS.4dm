@@ -1329,17 +1329,8 @@ Function doDataSourceMenu()
 				
 				If ($manifest.choiceList#Null:C1517)
 					
-					
-					//fixme:turn around 🐞
-					//$controls.push(New object(\
-						"dynamic"; (Value type($manifest.choiceList)=Is object) && ($manifest.choiceList.dataSource#Null); \
-						"name"; $manifest.name; \
-						"source"; $manifest.name; \
-						"format"; Choose($manifest.format#Null; $manifest.format; "push"); \
-						"choiceList"; $manifest.choiceList\
-						))
 					$controls.push(New object:C1471(\
-						"dynamic"; _and(Formula:C1597(Value type:C1509($manifest.choiceList)=Is object:K8:27); Formula:C1597($manifest.choiceList.dataSource#Null:C1517)); \
+						"dynamic"; (Value type:C1509($manifest.choiceList)=Is object:K8:27) && ($manifest.choiceList.dataSource#Null:C1517); \
 						"name"; $manifest.name; \
 						"source"; $manifest.name; \
 						"format"; Choose:C955($manifest.format#Null:C1517; $manifest.format; "push"); \
@@ -1347,8 +1338,6 @@ Function doDataSourceMenu()
 						))
 					
 				End if 
-				
-			Else   //INVALID
 			End if 
 		End for each 
 		
@@ -1371,6 +1360,13 @@ Function doDataSourceMenu()
 				
 			End for each 
 			
+			If (FEATURE.with("listEditor"))  //🚧
+				
+				// Allow to create a custom input control
+				$menu.append("newChoiceList"; "newChoiceList")
+				
+			End if 
+			
 			$menu.line()
 			
 		End if 
@@ -1391,16 +1387,16 @@ Function doDataSourceMenu()
 				
 			End for each 
 			
+			If (FEATURE.with("listEditor"))  //🚧
+				
+				// Allow to create a custom input control
+				$menu.append("newDatasource"; "newDataSource")
+				
+			End if 
+			
 			$menu.line()
 			
 		End if 
-	End if 
-	
-	If (FEATURE.with("listEditor"))  //🚧
-		
-		// Allow to create a custom input control
-		$menu.append("newChoiceList"; "new")
-		
 	End if 
 	
 	// Position according to the box
@@ -1409,9 +1405,18 @@ Function doDataSourceMenu()
 		Case of 
 				
 				//______________________________________________________
-			: ($menu.choice="new")
+			: ($menu.choice="newChoiceList")
 				
-				This:C1470.doNewList()
+				This:C1470._newUserControl(True:C214)
+				
+				//______________________________________________________
+			: ($menu.choice="newDataSource")
+				
+				This:C1470._newUserControl(False:C215)
+				
+			: (FEATURE.with("listEditor")) & Macintosh option down:C545
+				
+				This:C1470.editList()
 				
 				//______________________________________________________
 			Else 
@@ -1427,177 +1432,17 @@ Function doDataSourceMenu()
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-	//MARK:WIP 
-Function doNewList()
+Function editList()
 	
-	var $key; $name : Text
-	var $current; $data; $o : Object
+	//$form:=New object(\
+		"static"; $static; \
+		"host"; This.path.hostInputControls(True))
 	
-	$current:=This:C1470.current
+	//$form.folder:=This.path.hostInputControls()
+	//$manifest:=$form.folder.file("manifest.json")
 	
-	$data:=New object:C1471
-	If (database.isMatrix)
-		
-		$data._window:=Open form window:C675("LISTE_EDITOR"; Plain form window:K39:10; Horizontally centered:K39:1; Vertically centered:K39:4)
-		
-	Else 
-		
-		$data._window:=Open form window:C675("LISTE_EDITOR"; Movable form dialog box:K39:8; Horizontally centered:K39:1; Vertically centered:K39:4)
-		
-	End if 
 	
-	$data._host:=This:C1470.path.hostInputControls(True:C214)
-	$data.$comment:="Map database values to some display values using choiceList"
-	$data.$doc:="https://developer.4d.com/4d-for-ios/docs/en/creating-data-formatter.html#text-formatters"
-	$data.name:=""
-	$data.type:=$current.type
-	$data.format:=Delete string:C232($current.format; 1; 1)
 	
-	DIALOG:C40("LISTE_EDITOR"; $data)
-	
-	If (Bool:C1537(OK))
-		
-		// Create the source folder
-		$data._folder.create()
-		
-		// Create the manifest
-		If ($data._static)
-			
-			$data.choiceList:=New object:C1471
-			
-			For each ($o; $data._choiceList)
-				
-				$data.choiceList[$o.key]:=$o.value
-				
-			End for each 
-			
-			If ($data.binding)
-				
-				//todo:Delete unused pictures?
-				
-			Else 
-				
-				OB REMOVE:C1226($data; "binding")
-				$data._folder.folder("images").delete(Delete with contents:K24:24)
-				
-			End if 
-			
-		Else 
-			
-			OB REMOVE:C1226($data; "binding")
-			
-			
-			
-		End if 
-		
-		$data._folder.file("manifest.json").setText(JSON Stringify:C1217(cs:C1710.ob.new().cleanup("_,$"; $data); *))
-		
-		// Select the created input control
-		This:C1470.current.source:="/"+$data._folder.name
-		
-	Else 
-		
-		//todo:Delete the input control?
-		//$data._folder.delete(Delete with contents)
-		
-	End if 
-	
-	CLOSE WINDOW:C154($data._window)
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-	// [INTERNAL]
-Function _appendFormat($data : Object)->$custom : Boolean
-	
-	var $format : Variant
-	
-	$format:=$data.format
-	
-	//fixme:turn around 🐞
-	//If ((Value type($format)=Is object) || (PROJECT.isCustomResource($format)))
-	If (_or(Formula:C1597(Value type:C1509($format)=Is object:K8:27); Formula:C1597(PROJECT.isCustomResource($format))))
-		
-		If (Not:C34($data.custom))
-			
-			$data.menu.line()  // Separate custom by a line
-			$data.custom:=True:C214
-			
-		End if 
-		
-		If (Value type:C1509($format)=Is object:K8:27)
-			
-			$data.menu.append($format.name; ("/"+$format.name); ($data.currentFormat=("/"+$format.name)))\
-				.setStyle(Italic:K14:3)
-			
-		Else   // text
-			
-			$data.menu.append(Delete string:C232($format; 1; 1); $format; $data.currentFormat=$format)\
-				.setStyle(Italic:K14:3)
-			
-		End if 
-		
-	Else 
-		
-		//fixme:🚧 #132599: Add tag iOS only for unsupported type 
-		//$data.menu.append(":xliff:f_"+$format; $format; $data.currentFormat=$format)
-		var $label : Text
-		
-		Case of 
-				
-				//______________________________________________________
-			: ($data.type="string")\
-				 & ($data.format="barcode")
-				
-				$label:=Get localized string:C991("f_"+$format)+Get localized string:C991("iosOnly")
-				
-				//______________________________________________________
-			: ($data.type="image")\
-				 & ($data.format="signature")
-				
-				$label:=Get localized string:C991("f_"+$format)+Get localized string:C991("iosOnly")
-				
-				//______________________________________________________
-			Else 
-				
-				$label:=":xliff:f_"+$format
-				
-				//______________________________________________________
-		End case 
-		
-		$data.menu.append($label; $format; $data.currentFormat=$format)
-		
-	End if 
-	
-	$data.menu\
-		.setData("type"; $data.type)\
-		.setData("format"; $format)
-	
-	$custom:=$data.custom
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-	// [INTERNAL]
-Function _actionFormatterChoiceList($menu : cs:C1710.menu; $type : Text)
-	
-	var $control; $parameter : Text
-	var $selected : Boolean
-	
-	If (This:C1470.typesAllowingCustomInputControls.indexOf($type)>=0)
-		
-		$menu.line()
-		
-		$menu.append("selectionControls").disable()
-		
-		For each ($control; This:C1470.customInputControls)
-			
-			$parameter:="/"+$control+"/"+$type
-			$selected:=$parameter=(String:C10(This:C1470.current.format)+"/"+This:C1470.current.type)
-			
-			//fixme:🚧 #132599: Add tag iOS only for unsupported type
-			$menu.append($control+Get localized string:C991("iosOnly"); $parameter; $selected)\
-				.setData("type"; $type)\
-				.setData("format"; "/"+$control)
-			
-		End for each 
-	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function doRule($name : Text)
@@ -2098,5 +1943,196 @@ Function metaInfo($current : Object)->$result
 		
 		$result.cell.names.stroke:=Choose:C955(EDITOR.isDark; "white"; "black")
 		
+	End if 
+	
+	//MARK:-[PRIVATE] 
+Function _newUserControl($static : Boolean)
+	
+	var $current; $data; $form; $o : Object
+	var $c : Collection
+	
+	$current:=This:C1470.current
+	
+	$data:=New object:C1471(\
+		"$comment"; "Map database values to some display values using choiceList"; \
+		"$doc"; "https://developer.4d.com/4d-for-ios/docs/en/creating-data-formatter.html#text-formatters"; \
+		"name"; ""; \
+		"type"; $current.type; \
+		"binding"; False:C215; \
+		"format"; Delete string:C232($current.format; 1; 1))
+	
+	$form:=New object:C1471(\
+		"static"; $static; \
+		"host"; This:C1470.path.hostInputControls(True:C214))
+	
+	// Fixme:🚧 for the development stage
+	If (database.isMatrix)
+		
+		$form.window:=Open form window:C675("LISTE_EDITOR"; Plain form window:K39:10; Horizontally centered:K39:1; Vertically centered:K39:4)
+		
+	Else 
+		
+		$form.window:=Open form window:C675("LISTE_EDITOR"; Movable form dialog box:K39:8; Horizontally centered:K39:1; Vertically centered:K39:4)
+		
+	End if 
+	
+	$data.dial:=$form
+	DIALOG:C40("LISTE_EDITOR"; $data)
+	
+	If (Bool:C1537(OK))
+		
+		OB REMOVE:C1226($data; "dial")
+		
+		// Create the source folder
+		$form.folder.create()
+		
+		// Create the manifest
+		If ($data.$.static)
+			
+			$data.choiceList:=New object:C1471
+			
+			For each ($o; $data.$.choiceList)
+				
+				$data.choiceList[$o.key]:=$o.value
+				
+			End for each 
+			
+			If ($data.binding)
+				
+				// Delete unused images
+				$c:=cs:C1710.ob.new($data.choiceList).toCollection()
+				
+				For each ($o; $form.folder.folder("images").files())
+					
+					If ($c.indexOf($o.fullName)=-1)
+						
+						$o.delete()
+						
+					End if 
+				End for each 
+				
+			Else 
+				
+				OB REMOVE:C1226($data; "binding")
+				$form.folder.folder("images").delete(Delete with contents:K24:24)
+				
+			End if 
+			
+		Else 
+			
+			OB REMOVE:C1226($data; "binding")
+			$form.folder.folder("images").delete(Delete with contents:K24:24)
+			
+		End if 
+		
+		// Select the created input control
+		This:C1470.current.source:="/"+$form.folder.name
+		
+		// Save
+		OB REMOVE:C1226($data; "$")
+		cs:C1710.ob.new($data).save($form.folder.file("manifest.json"))
+		
+	Else 
+		
+		// Fixme:🚧 for the development stage
+		If (Not:C34(database.isMatrix))  // Test purpose
+			
+			$form.folder.delete(Delete with contents:K24:24)
+			
+		End if 
+	End if 
+	
+	CLOSE WINDOW:C154($form.window)
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function _appendFormat($data : Object)->$custom : Boolean
+	
+	var $format : Variant
+	
+	$format:=$data.format
+	
+	If ((Value type:C1509($format)=Is object:K8:27)\
+		 || (PROJECT.isCustomResource($format)))
+		
+		If (Not:C34($data.custom))
+			
+			$data.menu.line()  // Separate custom by a line
+			$data.custom:=True:C214
+			
+		End if 
+		
+		If (Value type:C1509($format)=Is object:K8:27)
+			
+			$data.menu.append($format.name; ("/"+$format.name); ($data.currentFormat=("/"+$format.name)))\
+				.setStyle(Italic:K14:3)
+			
+		Else   // text
+			
+			$data.menu.append(Delete string:C232($format; 1; 1); $format; $data.currentFormat=$format)\
+				.setStyle(Italic:K14:3)
+			
+		End if 
+		
+	Else 
+		
+		//fixme:🚧 #132599: Add tag iOS only for unsupported type 
+		//$data.menu.append(":xliff:f_"+$format; $format; $data.currentFormat=$format)
+		var $label : Text
+		
+		Case of 
+				
+				//______________________________________________________
+			: ($data.type="string")\
+				 & ($data.format="barcode")
+				
+				$label:=Get localized string:C991("f_"+$format)+Get localized string:C991("iosOnly")
+				
+				//______________________________________________________
+			: ($data.type="image")\
+				 & ($data.format="signature")
+				
+				$label:=Get localized string:C991("f_"+$format)+Get localized string:C991("iosOnly")
+				
+				//______________________________________________________
+			Else 
+				
+				$label:=":xliff:f_"+$format
+				
+				//______________________________________________________
+		End case 
+		
+		$data.menu.append($label; $format; $data.currentFormat=$format)
+		
+	End if 
+	
+	$data.menu\
+		.setData("type"; $data.type)\
+		.setData("format"; $format)
+	
+	$custom:=$data.custom
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function _actionFormatterChoiceList($menu : cs:C1710.menu; $type : Text)
+	
+	var $control; $parameter : Text
+	var $selected : Boolean
+	
+	If (This:C1470.typesAllowingCustomInputControls.indexOf($type)>=0)
+		
+		$menu.line()
+		
+		$menu.append("selectionControls").disable()
+		
+		For each ($control; This:C1470.customInputControls)
+			
+			$parameter:="/"+$control+"/"+$type
+			$selected:=$parameter=(String:C10(This:C1470.current.format)+"/"+This:C1470.current.type)
+			
+			//fixme:🚧 #132599: Add tag iOS only for unsupported type
+			$menu.append($control+Get localized string:C991("iosOnly"); $parameter; $selected)\
+				.setData("type"; $type)\
+				.setData("format"; "/"+$control)
+			
+		End for each 
 	End if 
 	

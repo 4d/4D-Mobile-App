@@ -50,4 +50,4 @@ $definition:=Form:C1466.$dialog[$form]
 $definition.event:=FORM Event:C1606
 
 // And the focused widget
-$definition.focused:=OBJECT Get name:C1087(Object with focus:K67:3)
+//$definition.focused:=OBJECT Get name(Object with focus)

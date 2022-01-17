@@ -15,8 +15,12 @@
 		"onLoad",
 		"onClick",
 		"onActivate",
+		"onDeactivate",
+		"onLosingFocus",
+		"onGettingFocus",
 		"onDataChange",
-		"onTimer"
+		"onTimer",
+		"onSelectionChange"
 	],
 	"windowTitle": "window title",
 	"destination": "detailScreen",
@@ -39,82 +43,159 @@
 					"width": 1,
 					"height": 555,
 					"stroke": "#1e90ff",
-					"startPoint": "bottomLeft"
-				}
-			}
-		},
-		{
-			"objects": {
+					"startPoint": "bottomLeft",
+					"visibility": "hidden"
+				},
 				"nameEdge": {
 					"type": "rectangle",
-					"top": 43,
-					"left": 184,
-					"width": 261,
+					"top": 40,
+					"left": 216,
+					"width": 221,
 					"height": 33,
 					"class": "border"
 				},
 				"name": {
 					"type": "input",
-					"top": 51,
-					"left": 191,
-					"width": 244,
+					"top": 48,
+					"left": 223,
+					"width": 204,
 					"height": 17,
 					"dataSource": "Form:C1466.name",
 					"hideFocusRing": true,
-					"dragging": "none",
 					"events": [
 						"onAfterEdit"
 					],
 					"multiline": "yes",
-					"placeholder": ":xliff:name"
+					"placeholder": ":xliff:controlName"
 				},
-				"_name": {
+				"name_": {
 					"type": "text",
-					"top": 52,
-					"left": 75,
+					"top": 49,
+					"left": 107,
 					"width": 96,
 					"height": 16,
 					"text": ":xliff:name",
 					"class": "label",
 					"textAlign": "right"
 				},
-				"static": {
-					"type": "radio",
-					"text": ":xliff:choiceList",
-					"top": 134,
-					"left": 186,
-					"width": 111,
-					"height": 23,
+				"format_": {
+					"type": "text",
+					"top": 103,
+					"left": 107,
+					"width": 96,
+					"height": 16,
+					"text": ":xliff:format",
+					"class": "label",
+					"textAlign": "right"
+				},
+				"formatDropdown": {
+					"type": "dropdown",
+					"left": 216,
+					"top": 101,
+					"width": 113,
+					"height": 20,
 					"events": [
-						"onClick"
+						"onDataChange"
 					],
-					"radioGroup": "source",
-					"dataSourceTypeHint": "boolean",
+					"dataSource": "Form:C1466.$.formatDropdown.data",
 					"focusable": false
 				},
-				"datasource": {
-					"type": "radio",
-					"text": ":xliff:fromDataclass",
-					"top": 134,
-					"left": 317,
-					"width": 148,
-					"height": 23,
+				"revealFolder": {
+					"type": "button",
+					"text": "",
+					"top": 49,
+					"left": 441,
+					"width": 16,
+					"height": 16,
 					"events": [
 						"onClick"
 					],
-					"radioGroup": "source",
-					"dataSourceTypeHint": "boolean",
-					"focusable": false
+					"style": "toolbar",
+					"icon": "/RESOURCES/images/common/show.png",
+					"visibility": "hidden",
+					"focusable": false,
+					"iconFrames": 4
+				},
+				"controlAlreadyExists": {
+					"type": "text",
+					"text": ":xliff:thisControlAlreadyExists",
+					"top": 75,
+					"left": 33,
+					"width": 404,
+					"height": 16,
+					"textAlign": "right",
+					"visibility": "hidden"
+				},
+				"Rectangle": {
+					"type": "rectangle",
+					"top": 19,
+					"left": 20,
+					"width": 34,
+					"height": 556,
+					"fill": "transparent",
+					"stroke": "#6495ed",
+					"visibility": "hidden"
+				},
+				"Rectangle1": {
+					"type": "rectangle",
+					"top": 19,
+					"left": 471,
+					"width": 34,
+					"height": 556,
+					"fill": "transparent",
+					"stroke": "#6495ed",
+					"visibility": "hidden"
+				},
+				"ok": {
+					"type": "button",
+					"text": ":xliff:ok",
+					"top": 533,
+					"left": 393,
+					"width": 79,
+					"height": 22,
+					"events": [
+						"onClick"
+					],
+					"focusable": false,
+					"defaultButton": true,
+					"action": "accept"
+				},
+				"cancel": {
+					"type": "button",
+					"text": ":xliff:cancel",
+					"top": 533,
+					"left": 294,
+					"width": 79,
+					"height": 22,
+					"events": [
+						"onClick"
+					],
+					"focusable": false,
+					"action": "cancel"
+				}
+			}
+		},
+		{
+			"objects": {
+				"choiceListBorder": {
+					"type": "rectangle",
+					"top": 196,
+					"left": 53,
+					"width": 419,
+					"height": 285,
+					"class": "border"
 				},
 				"choiceList": {
 					"type": "listbox",
-					"left": 54,
-					"top": 231,
-					"width": 418,
-					"height": 237,
+					"left": 53,
+					"top": 198,
+					"width": 417,
+					"height": 283,
 					"events": [
 						"onClick",
 						"onDoubleClick",
+						"onLosingFocus",
+						"onGettingFocus",
 						"onDrop",
 						"onDataChange",
 						"onDragOver",
@@ -123,16 +204,17 @@
 						"onBeginDragOver"
 					],
 					"listboxType": "collection",
-					"dataSource": "Form:C1466._choiceList",
+					"dataSource": "Form:C1466.$.choiceList",
 					"currentItemSource": "Form:C1466.$.list.item",
 					"currentItemPositionSource": "Form:C1466.$.list.itemPosition",
 					"selectedItemsSource": "Form:C1466.$.list.items",
 					"dropping": "custom",
-					"borderStyle": "system",
-					"metaSource": "Form:C1466.$.staticMeta(This:C1470)",
+					"metaSource": "Form:C1466.$.listMeta(This:C1470)",
 					"dragging": "custom",
 					"method": "ObjectMethods/choiceList.4dm",
 					"selectionMode": "single",
+					"rowFillSource": "Form:C1466.$.listBackgroundColor(This:C1470)",
+					"hideSystemHighlight": true,
 					"columns": [
 						{
 							"header": {
@@ -166,30 +248,10 @@
 						}
 					]
 				},
-				"_dataSource": {
+				"value_": {
 					"type": "text",
-					"top": 137,
-					"left": 75,
-					"width": 96,
-					"height": 16,
-					"text": ":xliff:source",
-					"class": "label",
-					"textAlign": "right"
-				},
-				"formatLabel": {
-					"type": "text",
-					"top": 98,
-					"left": 75,
-					"width": 96,
-					"height": 16,
-					"text": ":xliff:format",
-					"class": "label",
-					"textAlign": "right"
-				},
-				"_value": {
-					"type": "text",
-					"top": 210,
-					"left": 54,
+					"top": 177,
+					"left": 53,
 					"width": 110,
 					"height": 16,
 					"text": ":xliff:value",
@@ -197,7 +259,7 @@
 				},
 				"add": {
 					"type": "button",
-					"top": 473,
+					"top": 489,
 					"left": 53,
 					"width": 28,
 					"height": 28,
@@ -212,7 +274,7 @@
 				},
 				"remove": {
 					"type": "button",
-					"top": 473,
+					"top": 489,
 					"left": 80,
 					"width": 28,
 					"height": 28,
@@ -227,8 +289,8 @@
 				"label": {
 					"type": "radio",
 					"text": ":xliff:label",
-					"top": 174,
-					"left": 186,
+					"top": 141,
+					"left": 218,
 					"width": 92,
 					"height": 16,
 					"events": [
@@ -241,8 +303,8 @@
 				"image": {
 					"type": "radio",
 					"text": ":xliff:image",
-					"top": 174,
-					"left": 317,
+					"top": 141,
+					"left": 288,
 					"width": 87,
 					"height": 16,
 					"events": [
@@ -252,79 +314,83 @@
 					"dataSourceTypeHint": "boolean",
 					"focusable": false
 				},
-				"_label": {
+				"label_": {
 					"type": "text",
-					"top": 210,
-					"left": 175,
+					"top": 177,
+					"left": 174,
 					"width": 110,
 					"height": 16,
 					"text": ":xliff:label",
 					"class": "label"
 				},
-				"_binding": {
+				"binding_": {
 					"type": "text",
-					"top": 174,
-					"left": 75,
+					"top": 141,
+					"left": 107,
 					"width": 96,
 					"height": 16,
-					"text": ":xliff:type",
+					"text": ":xliff:linkedTo",
 					"class": "label",
 					"textAlign": "right"
 				},
-				"ok": {
-					"type": "button",
-					"text": ":xliff:ok",
-					"top": 532,
-					"left": 401,
-					"width": 79,
-					"height": 22,
-					"events": [
-						"onClick"
-					],
-					"focusable": false,
-					"defaultButton": true,
-					"action": "accept"
+				"dropCursor": {
+					"type": "line",
+					"top": 469,
+					"left": 69,
+					"width": 30,
+					"height": 0,
+					"strokeWidth": 2,
+					"stroke": "#ff0000",
+					"visibility": "hidden",
+					"startPoint": "topLeft"
+				}
+			},
+			"entryOrder": [
+				"choiceList",
+				"add",
+				"remove",
+				"label",
+				"image"
+			]
+		},
+		{
+			"objects": {
+				"datasourceBorder": {
+					"type": "rectangle",
+					"top": 160,
+					"left": 53,
+					"width": 419,
+					"height": 352,
+					"class": "border"
 				},
-				"cancel": {
-					"type": "button",
-					"text": ":xliff:cancel",
-					"top": 532,
-					"left": 302,
-					"width": 79,
-					"height": 22,
-					"events": [
-						"onClick"
-					],
-					"focusable": false,
-					"action": "cancel"
-				},
-				"_table": {
+				"table.label": {
 					"type": "text",
-					"top": 181,
-					"left": 66,
-					"width": 68,
-					"height": 17,
-					"text": ":xliff:tables",
+					"top": 139,
+					"left": 53,
+					"width": 128,
+					"height": 16,
+					"text": ":xliff:table",
 					"borderStyle": "none",
 					"class": "label"
 				},
 				"dataclasses": {
 					"type": "listbox",
-					"left": 65,
-					"top": 202,
-					"width": 196,
-					"height": 319,
+					"left": 53,
+					"top": 162,
+					"width": 210,
+					"height": 349,
 					"events": [
+						"onLosingFocus",
+						"onGettingFocus",
 						"onSelectionChange"
 					],
 					"borderStyle": "system",
 					"listboxType": "collection",
-					"dataSource": "Form:C1466._dataclasses",
+					"dataSource": "Form:C1466.dial.dataclasses",
 					"selectionMode": "single",
-					"focusable": false,
-					"currentItemSource": "Form:C1466._dataclassesItem",
-					"currentItemPositionSource": "Form:C1466._dataclassesItemPosition",
-					"selectedItemsSource": "Form:C1466._dataclassesItems",
+					"currentItemSource": "Form:C1466.$.dataclasses.item",
+					"currentItemPositionSource": "Form:C1466.$.dataclasses.itemPosition",
+					"selectedItemsSource": "Form:C1466.$.dataclasses.Items",
 					"columns": [
 						{
 							"header": {
@@ -344,21 +410,22 @@
 				},
 				"attributes": {
 					"type": "listbox",
-					"left": 277,
-					"top": 202,
-					"width": 208,
-					"height": 319,
+					"left": 264,
+					"top": 162,
+					"width": 206,
+					"height": 349,
 					"events": [
+						"onLosingFocus",
+						"onGettingFocus",
 						"onSelectionChange"
 					],
-					"borderStyle": "system",
 					"listboxType": "collection",
-					"dataSource": "Form:C1466._attributes",
+					"dataSource": "Form:C1466.dial.attributes",
 					"selectionMode": "single",
-					"currentItemSource": "Form:C1466._attributesItem",
-					"currentItemPositionSource": "Form:C1466._attributesItemPosition",
-					"selectedItemsSource": "Form:C1466._attributesItems",
-					"focusable": false,
+					"currentItemSource": "Form:C1466.$.attributes.item",
+					"currentItemPositionSource": "Form:C1466.$.attributes.itemPosition",
+					"selectedItemsSource": "Form:C1466.$.attributes.items",
+					"borderStyle": "system",
 					"columns": [
 						{
 							"header": {
@@ -375,119 +442,25 @@
 						}
 					]
 				},
-				"_fields": {
+				"field.label": {
 					"type": "text",
-					"top": 181,
-					"left": 276,
-					"width": 72,
-					"height": 17,
-					"text": ":xliff:fields",
+					"top": 139,
+					"left": 263,
+					"width": 123,
+					"height": 16,
+					"text": ":xliff:field",
 					"borderStyle": "none",
 					"class": "label"
-				},
-				"formatDropdown": {
-					"type": "dropdown",
-					"left": 184,
-					"top": 96,
-					"width": 113,
-					"height": 20,
-					"events": [
-						"onDataChange"
-					],
-					"dataSource": "Form:C1466.$.formatDropdown.data",
-					"focusable": false
-				},
-				"revealFolder": {
-					"type": "button",
-					"text": "",
-					"top": 52,
-					"left": 449,
-					"width": 16,
-					"height": 16,
-					"events": [
-						"onClick"
-					],
-					"style": "toolbar",
-					"icon": "/RESOURCES/images/common/show.png",
-					"visibility": "hidden",
-					"focusable": false,
-					"iconFrames": 4
-				},
-				"dropCursor": {
-					"type": "line",
-					"top": 453,
-					"left": 69,
-					"width": 30,
-					"height": 0,
-					"strokeWidth": 2,
-					"stroke": "#ff0000",
-					"visibility": "hidden",
-					"startPoint": "topLeft"
 				}
-			},
-			"entryOrder": [
-				"name",
-				"static",
-				"datasource",
-				"choiceList",
-				"add",
-				"remove",
-				"label",
-				"image",
-				"ok",
-				"cancel",
-				"dataclasses",
-				"attributes",
-				"formatDropdown",
-				"revealFolder"
-			]
+			}
 		}
 	],
-	"geometryStamp": 634,
+	"geometryStamp": 939,
 	"editor": {
-		"groups": {
-			"Group1": [
-				"static",
-				"datasource",
-				"_dataSource"
-			],
-			"Group2": [
-				"label",
-				"image",
-				"_binding"
-			],
-			"Group3": [
-				"formatLabel",
-				"formatDropdown"
-			]
-		},
-		"activeView": "choicelist",
+		"activeView": "View 1",
 		"defaultView": "View 1",
 		"views": {
-			"View 1": {},
-			"dataclasses": {
-				"visible": false,
-				"objects": [
-					"_table",
-					"dataclasses",
-					"attributes",
-					"_fields"
-				]
-			},
-			"choicelist": {
-				"objects": [
-					"Line",
-					"choiceList",
-					"Group3",
-					"_value",
-					"add",
-					"remove",
-					"Group2",
-					"_label",
-					"revealFolder",
-					"dropCursor"
-				]
-			}
+			"View 1": {}
 		}
 	},
 	"method": "LISTE_EDITOR"

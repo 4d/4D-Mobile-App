@@ -13,7 +13,7 @@ Class constructor($method : Text)
 	
 	This:C1470.isSubform:=False:C215
 	
-	This:C1470.focused:=Null:C1517
+	//This.focused:=Null
 	This:C1470.current:=Null:C1517
 	
 	This:C1470.widgets:=New object:C1471
@@ -24,10 +24,13 @@ Class constructor($method : Text)
 		
 	End if 
 	
-	//MARK:- COMPUTED ATTRIBUTES 📌
+	//MARK:-[COMPUTED ATTRIBUTES]
+Function get focused()->$widget  /// The name of the object that has the focus in the form
+	
+	$widget:=OBJECT Get name:C1087(Object with focus:K67:3)
 	
 	
-	//MARK:- FUNCTIONS 📌
+	//MARK:-[FUNCTIONS]
 	//=== === === === === === === === === === === === === === === === === === === === === 
 Function init()
 	
@@ -48,7 +51,7 @@ Function restoreContext()
 	
 	ASSERT:C1129(False:C215; "👀 restore() must be overriden by the subclass!")
 	
-	//MARK:- FORM OBJECTS CREATION
+	//MARK:-[FORM OBJECTS CREATION]
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Create a static object instance
 Function formObject($name : Text; $widgetName : Text)->$widget : cs:C1710.formObject
@@ -276,7 +279,7 @@ Function getWidgets()
 		
 	End for 
 	
-	//MARK:- WIDGETS 📌
+	//MARK:-[WIDGETS]
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Add form event(s) for the current form
 Function appendEvents($events)
@@ -722,6 +725,7 @@ Function postKeyDown($keyCode : Integer; $modifier : Integer)
 		
 	End if 
 	
+	//MARK:-[CURSOR]
 	//=== === === === === === === === === === === === === === === === === === === === === 
 Function setCursor($cursor : Integer)
 	
@@ -736,12 +740,86 @@ Function setCursor($cursor : Integer)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-Function restoreCursor()
+Function releaseCursor()
 	
 	SET CURSOR:C469
 	
-	//MARK:-PRIVATE 📌
 	//=== === === === === === === === === === === === === === === === === === === === === 
+Function setCursorNotAllowed($display : Boolean)
+	
+	If (Count parameters:C259=0 ? True:C214 : $display)
+		
+		SET CURSOR:C469(9019)
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function setCursorDragCopy($display : Boolean)
+	
+	If (Count parameters:C259=0 ? True:C214 : $display)
+		
+		SET CURSOR:C469(9016)
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function setCursorArrow($display : Boolean)
+	
+	If (Count parameters:C259=0 ? True:C214 : $display)
+		
+		SET CURSOR:C469(1303)
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function setCursorText($display : Boolean)
+	
+	If (Count parameters:C259=0 ? True:C214 : $display)
+		
+		SET CURSOR:C469(256)
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function setCursorCrosshair($display : Boolean)
+	
+	If (Count parameters:C259=0 ? True:C214 : $display)
+		
+		SET CURSOR:C469(1382)
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function setCursorWatch($display : Boolean)
+	
+	If (Count parameters:C259=0 ? True:C214 : $display)
+		
+		SET CURSOR:C469(260)
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function setCursorPointigHand($display : Boolean)
+	
+	If (Count parameters:C259=0 ? True:C214 : $display)
+		
+		SET CURSOR:C469(9000)
+		
+	End if 
+	
+	
+	
+	//MARK:-[PRIVATE]
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	//Function _cursor($id : Integer; $diplay : Boolean)
+	//If (Count parameters=0)
+	//SET CURSOR
+	//Else 
+	//If (Count parameters<2 ? True : $display)
+	//SET CURSOR($id)
+	//End if 
+	//End if
+	
 Function _instantiate($class : Text; $key : Text; $name : Text)
 	
 	If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
