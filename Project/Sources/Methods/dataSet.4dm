@@ -598,7 +598,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 							
 							$out.coreDataSet:=dataSet(New object:C1471(\
 								"action"; "coreData"; \
-								"removeAsset"; True:C214; \
+								"removeAsset"; Not:C34(Bool:C1537($in.project.$android)); \
 								"path"; $out.path; \
 								"caller"; $in.caller))
 							
