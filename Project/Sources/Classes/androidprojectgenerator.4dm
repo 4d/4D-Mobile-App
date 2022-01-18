@@ -1126,8 +1126,8 @@ Function copyFormatterKtFileToApp
 	var $1 : 4D:C1709.Folder  // Formatter folder
 	var $2 : Text  // package name
 	
-	var $formattersFolderInFormatter; $copyDest; $bindingFolder : 4D:C1709.Folder
-	var $bindingAdapterFile : 4D:C1709.File
+	var $formattersFolderInFormatter; $bindingFolder : 4D:C1709.Folder
+	var $bindingAdapterFile; $copyDest : 4D:C1709.File
 	var $packageName; $packageNamePath; $fileContent : Text
 	
 	$packageName:=$2
