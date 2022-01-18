@@ -729,8 +729,20 @@ Function isRelationToOne($attribute : Variant)->$is : Boolean
 	
 	If (Value type:C1509($attribute)=Is object:K8:27)
 		
-		$is:=($attribute.relatedDataClass#Null:C1517) & (Not:C34(Bool:C1537($attribute.isToMany)))
-		
+		Case of 
+				
+				//______________________________________________________
+			: (This:C1470.isAlias($attribute))
+				
+				// Mark: Possible ? What to do ?
+				
+				//______________________________________________________
+			Else 
+				
+				$is:=($attribute.relatedDataClass#Null:C1517) & (Not:C34(Bool:C1537($attribute.isToMany)))
+				
+				//______________________________________________________
+		End case 
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -767,27 +779,6 @@ Function isAvailable($dataClass : 4D:C1709.DataClass; $path : Variant)->$success
 	
 	$success:=($o#Null:C1517)
 	
-	//====================================
-Function isLink
-	var $0 : Boolean
-	var $1 : Object
-	
-	var $t : Text
-	
-	If (True:C214)
-		
-		For each ($t; OB Keys:C1719($1)) Until ($0)
-			
-			$0:=Value type:C1509($1[$t])=Is object:K8:27
-			
-		End for each 
-		
-	Else 
-		
-		$0:=OB Entries:C1720($1).filter("col_formula"; Formula:C1597($1.result:=(Value type:C1509($1.value)=Is object:K8:27))).length>0
-		
-	End if 
-	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function isComputedAttribute($field : Object; $tableName : Text)->$is : Boolean
 	
@@ -818,6 +809,38 @@ Function isComputedAttribute($field : Object; $tableName : Text)->$is : Boolean
 				End if 
 			End if 
 		End if 
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns True if field is an alias
+Function isAlias($attribute : Variant)->$is : Boolean
+	
+	If (Value type:C1509($attribute)=Is object:K8:27)
+		
+		$is:=(String:C10($attribute.kind)="alias")
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// ?? 
+Function isLink
+	var $0 : Boolean
+	var $1 : Object
+	
+	var $t : Text
+	
+	If (True:C214)
+		
+		For each ($t; OB Keys:C1719($1)) Until ($0)
+			
+			$0:=Value type:C1509($1[$t])=Is object:K8:27
+			
+		End for each 
+		
+	Else 
+		
+		$0:=OB Entries:C1720($1).filter("col_formula"; Formula:C1597($1.result:=(Value type:C1509($1.value)=Is object:K8:27))).length>0
+		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -1020,15 +1043,6 @@ Function checkLocalQueryFilter($table : Object)
 		End if 
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns True if field is an alias
-Function isAlias($attribute : Variant)->$is : Boolean
-	
-	If (Value type:C1509($attribute)=Is object:K8:27)
-		
-		$is:=(String:C10($attribute.kind)="alias")
-		
-	End if 
 	
 	// Returns alias destination if alias 
 	// CLEAN: maybe move to structure?

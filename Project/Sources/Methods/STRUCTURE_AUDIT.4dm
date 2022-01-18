@@ -409,6 +409,11 @@ If ($cacheFile.exists)
 														End if 
 														
 														//______________________________________________________
+													: (PROJECT.isAlias($relatedField))
+														
+														// Todo: MANAGE ALIAS
+														
+														//______________________________________________________
 													Else 
 														
 														ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
@@ -534,6 +539,11 @@ If ($cacheFile.exists)
 											$unsynchronizedFields.push($field)
 											
 										End if 
+										
+										//______________________________________________________
+									: (PROJECT.isAlias($item.value))
+										
+										// Todo: MANAGE ALIAS
 										
 										//______________________________________________________
 									Else 

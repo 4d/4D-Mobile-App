@@ -33,6 +33,7 @@ Function exposedCatalog($query : Variant; $sorted : Boolean)->$catalog : Collect
 	var $found; $oneTable : Boolean
 	var $l : Integer
 	var $field; $table : Object
+	var $inquiry : Object
 	
 	This:C1470.success:=(This:C1470.datastore#Null:C1517)
 	
@@ -45,137 +46,186 @@ Function exposedCatalog($query : Variant; $sorted : Boolean)->$catalog : Collect
 		For each ($tableName; This:C1470.datastore) Until ($found)
 			
 			// Do not process the table of deleted records
-			If ($tableName#This:C1470.deletedRecordsTableName)
+			$table:=This:C1470.datastore[$tableName].getInfo()
+			
+			If ($tableName=This:C1470.deletedRecordsTableName)
 				
-				$table:=This:C1470.datastore[$tableName].getInfo()
+				// DON'T DISPLAY DELETED RECORDS TABLE
 				
-				If ($oneTable)
-					
-					Case of 
-							
-							//…………………………………………………………………………………………………
-						: (Value type:C1509($query)=Is text:K8:3)  // Table name
-							
-							$found:=($tableName=$query)
-							
-							//…………………………………………………………………………………………………
-						: (Value type:C1509($query)=Is longint:K8:6)\
-							 | (Value type:C1509($query)=Is real:K8:4)  // Table number
-							
-							$found:=($table.tableNumber=$query)
-							
-							//…………………………………………………………………………………………………
-					End case 
-					
-					This:C1470.success:=$found
-					
-				End if 
+				continue
 				
-				If (This:C1470.success)
+			End if 
+			
+			If ($oneTable)
+				
+				Case of 
+						
+						//…………………………………………………………………………………………………
+					: (Value type:C1509($query)=Is text:K8:3)  // Table name
+						
+						$found:=($tableName=$query)
+						
+						//…………………………………………………………………………………………………
+					: (Value type:C1509($query)=Is longint:K8:6)\
+						 | (Value type:C1509($query)=Is real:K8:4)  // Table number
+						
+						$found:=($table.tableNumber=$query)
+						
+						//…………………………………………………………………………………………………
+				End case 
+				
+				This:C1470.success:=$found
+				
+			End if 
+			
+			If (This:C1470.success)
+				
+				If (Not:C34($oneTable)) | $found
 					
-					If (Not:C34($oneTable)) | $found
+					$catalog.push($table)
+					
+					$table.field:=New collection:C1472
+					
+					For each ($fieldName; This:C1470.datastore[$tableName])
 						
-						$catalog.push($table)
-						
-						$table.field:=New collection:C1472
-						
-						For each ($fieldName; This:C1470.datastore[$tableName])
+						If ($fieldName=This:C1470.stampFieldName)\
+							 || (Position:C15("."; $fieldName)>0)
 							
-							If ($fieldName#This:C1470.stampFieldName)  // DON'T DISPLAY STAMP FIELD
+/*
+DON'T DISPLAY STAMP FIELD
+DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
+*/
+							
+							continue
+							
+						End if 
+						
+						$field:=This:C1470.datastore[$tableName][$fieldName]
+						
+						$inquiry:=$table.field.query("name = :1"; $fieldName).pop()
+						
+						Case of 
 								
-								$field:=This:C1470.datastore[$tableName][$fieldName]
+								//…………………………………………………………………………………………………
+							: ($inquiry#Null:C1517 && str_equal($inquiry.name; $fieldName))
 								
-								$l:=$table.field.extract("name").indexOf($fieldName)
+								// NOT ALLOW DUPLICATE NAMES !
+								This:C1470.warnings.push("Name conflict for \""+$fieldName+"\"")
 								
-								If ($l>=0)
+								//…………………………………………………………………………………………………
+							: (This:C1470.isStorage($field))
+								
+								// Storage (or scalar) attribute, i.e. attribute storing a value, not a reference to another attribute
+								If (This:C1470.allowedTypes.indexOf($field.type)>=0)
 									
-									If (Not:C34(str_equal($fieldName; $table.field.extract("name")[$l])))
-										
-										$l:=-1
-										
-									End if 
+									// #TEMPO [
+									$field.id:=$field.fieldNumber
+									$field.valueType:=$field.type
+									$field.type:=This:C1470.__fielddType($field.fieldType)
+									
+									// ]
+									
+									$table.field.push($field)
+									
 								End if 
+								
+								//…………………………………………………………………………………………………
+							: (This:C1470.isRelatedEntity($field))
+								
+								// N -> 1 relation attribute (reference to an entity)
+								
+								If (This:C1470.datastore[$field.relatedDataClass]#Null:C1517)
+									
+									$table.field.push(New object:C1471(\
+										"name"; $fieldName; \
+										"inverseName"; $field.inverseName; \
+										"type"; -1; \
+										"relatedDataClass"; $field.relatedDataClass; \
+										"relatedTableNumber"; This:C1470.datastore[$field.relatedDataClass].getInfo().tableNumber))
+									
+								End if 
+								
+								//…………………………………………………………………………………………………
+							: (This:C1470.isRelatedEntities($field))
+								
+								// 1 -> N relation attribute (reference to an entity selection)
+								
+								$table.field.push(New object:C1471(\
+									"name"; $fieldName; \
+									"inverseName"; $field.inverseName; \
+									"type"; -2; \
+									"relatedDataClass"; $field.relatedDataClass; \
+									"relatedTableNumber"; This:C1470.datastore[$field.relatedDataClass].getInfo().tableNumber; \
+									"isToMany"; True:C214))
+								
+								//…………………………………………………………………………………………………
+							: (Not:C34(Bool:C1537($field.exposed)))
+								
+								// <IGNORE NOT EXPOSED ATTRIBUTES>
+								
+								//…………………………………………………………………………………………………
+							: (This:C1470.isComputedAttribute($field))
+								
+								If (This:C1470.allowedTypes.indexOf($field.type)>=0)
+									
+									$table.field.push(New object:C1471(\
+										"name"; $fieldName; \
+										"kind"; $field.kind; \
+										"type"; -3; \
+										"fieldType"; $field.fieldType; \
+										"valueType"; $field.type))
+									
+								End if 
+								
+								//…………………………………………………………………………………………………
+							: (Not:C34(FEATURE.with("alias")))
+								
+								// <NOT YET AVAILABLE>
+								
+								//…………………………………………………………………………………………………
+							: ($field.kind="alias")
 								
 								Case of 
 										
-										//…………………………………………………………………………………………………
-									: ($l#-1)
+										//______________________________________
+									: (This:C1470.allowedTypes.indexOf($field.type)>=0)  // Attribute
 										
-										// NOT ALLOW DUPLICATE NAMES !
-										This:C1470.warnings.push("Name conflict for \""+$fieldName+"\"")
-										
-										//…………………………………………………………………………………………………
-									: (Position:C15("."; $fieldName)>0)
-										
-										// NOT ALLOW FIELD OR RELATION NAME WITH DOT !
-										This:C1470.warnings.push("Invalid field name \""+$fieldName+"\"")
-										
-										//…………………………………………………………………………………………………
-									: (This:C1470.isStorage($field))
-										
-										// Storage (or scalar) attribute, i.e. attribute storing a value, not a reference to another attribute
-										
-										// #TEMPO [
-										$field.id:=$field.fieldNumber
-										$field.valueType:=$field.type
-										$field.type:=This:C1470.__fielddType($field.fieldType)
-										// ]
-										
-										$table.field.push($field)
-										
-										//…………………………………………………………………………………………………
-									: (This:C1470.isRelatedEntity($field))
-										
-										// N -> 1 relation attribute (reference to an entity)
-										
-										If (This:C1470.datastore[$field.relatedDataClass]#Null:C1517)
+										If (This:C1470.allowedTypes.indexOf($field.type)>=0)
 											
-											$table.field.push(New object:C1471(\
-												"name"; $fieldName; \
-												"inverseName"; $field.inverseName; \
-												"type"; -1; \
-												"relatedDataClass"; $field.relatedDataClass; \
-												"relatedTableNumber"; This:C1470.datastore[$field.relatedDataClass].getInfo().tableNumber))
+											$table.field.push($field)
 											
 										End if 
 										
-										//…………………………………………………………………………………………………
-									: (This:C1470.isRelatedEntities($field))
+										//______________________________________
+									: ($field.relatedDataClass#Null:C1517)  // Selection
 										
-										// 1 -> N relation attribute (reference to an entity selection)
+										$table.field.push($field)
 										
-										$table.field.push(New object:C1471(\
-											"name"; $fieldName; \
-											"inverseName"; $field.inverseName; \
-											"type"; -2; \
-											"relatedDataClass"; $field.relatedDataClass; \
-											"relatedTableNumber"; This:C1470.datastore[$field.relatedDataClass].getInfo().tableNumber; \
-											"isToMany"; True:C214))
+										//______________________________________
+									Else 
 										
-										//…………………………………………………………………………………………………
-									: (This:C1470.isComputedAttribute($field))
+										ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
 										
-										$table.field.push(New object:C1471(\
-											"name"; $fieldName; \
-											"kind"; $field.kind; \
-											"type"; -3; \
-											"fieldType"; $field.fieldType; \
-											"valueType"; $field.type))
-										
-										//…………………………………………………………………………………………………
+										//______________________________________
 								End case 
-							End if 
-						End for each 
+								
+								//…………………………………………………………………………………………………
+							Else 
+								
+								ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
+								
+								//…………………………………………………………………………………………………
+						End case 
+					End for each 
+					
+					//If (Count parameters>=2)
+					
+					If ($sorted)
 						
-						If (Count parameters:C259>=2)
-							
-							If ($sorted)
-								
-								$table.field:=$table.field.orderBy("name asc")
-								
-							End if 
-						End if 
+						$table.field:=$table.field.orderBy("name asc")
+						
 					End if 
+					//End if 
 				End if 
 			End if 
 		End for each 
@@ -228,6 +278,15 @@ Function isRelatedEntities($field : Object)->$is : Boolean
 Function isComputedAttribute($field : Object)->$is : Boolean
 	
 	If (String:C10($field.kind)="calculated")
+		
+		$is:=This:C1470._allowPublication($field)
+		
+	End if 
+	
+	//==================================================================
+Function isAlias($field : Object)->$is : Boolean
+	
+	If (String:C10($field.kind)="alias")
 		
 		$is:=This:C1470._allowPublication($field)
 		
@@ -498,6 +557,11 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 			
 			//…………………………………………………………………………………………………
 		: (This:C1470.isComputedAttribute($field))  // Computed
+			
+			//
+			
+			//…………………………………………………………………………………………………
+		: (This:C1470.isAlias($field))  // Alias
 			
 			//
 			

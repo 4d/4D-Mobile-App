@@ -137,9 +137,10 @@ FEATURE.unstable("cancelableDatasetGeneration")  // [MOBILE] Data generation
 FEATURE.unstable("useTextRestResponse")  // [MOBILE] Data generation : for optis
 
 //mark:-R5
-FEATURE.unstable("listEditor")  // Allow to create custom Data Source Input Control
+FEATURE.unstable("listEditor")  // [MOBILE] Create and edit an input control from the project editor
 
 //mark:-🚧 WIP
+FEATURE.wip(131225)  // [MOBILE] Use aliases
 FEATURE.wip(129953)  //[MOBILE] Handle Many-one-Many relations
 // FEATURE.wip("simuARMOnAppleProcessor") // Mac M1 build for simu using arm64
 FEATURE.wip("duplicateTemplate")  // Allow to duplicate template in host database and show on disk https:// Project.4d.com/issues/98054
@@ -264,3 +265,4 @@ End if
 
 //mark:-→ ALIAS
 FEATURE.alias("many-one-many"; 129953)
+FEATURE.alias("alias"; 131225)

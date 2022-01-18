@@ -221,6 +221,14 @@ If ($row>0)
 					
 				End for each 
 				
+				If (FEATURE.with("alias"))
+					
+					
+					
+					
+					
+				End if 
+				
 				If (FEATURE.with("many-one-many"))
 					
 					var $relatedDataClasses : 4D:C1709.DataClass

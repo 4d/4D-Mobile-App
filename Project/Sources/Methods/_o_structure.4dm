@@ -73,6 +73,15 @@ Case of
 		// ! A relation N -> 1 is not referenced if the field isn't exposed with 4D Mobile services !
 		// -------------------------------------------------------------------------------------------
 		
+		var $allowedTypes : Collection
+		$allowedTypes:=New collection:C1472("string"; "bool"; "date"; "number"; "image")
+		
+		If (FEATURE.with("objectFieldManagement"))
+			
+			$allowedTypes.push("object")
+			
+		End if 
+		
 		$datastore:=_4D_Build Exposed Datastore:C1598
 		
 		$OUT.success:=($datastore#Null:C1517)
@@ -87,178 +96,165 @@ Case of
 				
 				$table:=$datastore[$tableName].getInfo()
 				
-				If ($tableName#SHARED.deletedRecordsTable.name)
+				If ($tableName=SHARED.deletedRecordsTable.name)
 					
-					If ($oneTable)
-						
-						Case of 
-								
-								//______________________________________________________
-							: ($IN.name#Null:C1517)
-								
-								$found:=($tableName=$IN.name)
-								
-								//______________________________________________________
-							: ($IN.tableNumber#Null:C1517)
-								
-								$found:=($table.tableNumber=$IN.tableNumber)
-								
-								//______________________________________________________
-						End case 
-					End if 
+					// DON'T DISPLAY DELETED RECORDS TABLE
+					continue
 					
-					If ($oneTable)
-						
-						$OUT.success:=$found
-						
-					End if 
+				End if 
+				
+				If ($oneTable)
 					
-					If ($OUT.success)
+					$found:=($IN.name#Null:C1517) ? ($tableName=$IN.name) : ($table.tableNumber=$IN.tableNumber)
+					
+					$OUT.success:=$found
+					
+				End if 
+				
+				If ($OUT.success)
+					
+					If (Not:C34($oneTable)) | $found
 						
-						If (Not:C34($oneTable)) | $found
+						$OUT.value.push($table)
+						
+						$table.field:=New collection:C1472
+						
+						For each ($fieldName; $datastore[$tableName])
 							
-							$OUT.value.push($table)
-							
-							$table.field:=New collection:C1472
-							
-							For each ($fieldName; $datastore[$tableName])
+							If ($fieldName=SHARED.stampField.name)\
+								 || (Position:C15("."; $fieldName)>0)
 								
-								If ($fieldName#SHARED.stampField.name)
+/*
+DON'T DISPLAY STAMP FIELD
+DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
+*/
+								
+								continue
+								
+							End if 
+							
+							$field:=$datastore[$tableName][$fieldName]
+							
+							var $inquiry : Object
+							$inquiry:=$table.field.query("name = :1"; $fieldName).pop()
+							
+							Case of 
 									
-									$field:=$datastore[$tableName][$fieldName]
+									//…………………………………………………………………………………………………
+								: ($inquiry#Null:C1517 && str_equal($inquiry.name; $fieldName))
 									
-									$l:=$table.field.extract("name").indexOf($fieldName)
+									// NOT ALLOW DUPLICATE NAMES !
+									err_PUSH($OUT; "Name conflict for \""+$fieldName+"\""; Warning message:K38:2)
 									
-									If ($l>=0)
+									//…………………………………………………………………………………………………
+								: ($field.kind="storage")
+									
+									// Storage (or scalar) attribute, i.e. attribute storing a value, not a reference to another attribute
+									If ($allowedTypes.indexOf($field.type)>=0)
 										
-										If (Not:C34(str_equal($fieldName; $table.field.extract("name")[$l])))
-											
-											$l:=-1
-											
-										End if 
+										// #TEMPO [
+										$field.id:=$field.fieldNumber
+										$field.valueType:=$field.type
+										$field.type:=_o_tempoFieldType($field.fieldType)
+										// ]
+										
+										$table.field.push($field)
+										
 									End if 
+									
+									//…………………………………………………………………………………………………
+								: ($field.kind="relatedEntity")
+									
+									// N -> 1 relation attribute (reference to an entity)
+									
+									If ($datastore[$field.relatedDataClass]#Null:C1517)
+										
+										$table.field.push(New object:C1471(\
+											"name"; $fieldName; \
+											"inverseName"; $field.inverseName; \
+											"type"; -1; \
+											"relatedDataClass"; $field.relatedDataClass; \
+											"relatedTableNumber"; $datastore[$field.relatedDataClass].getInfo().tableNumber))
+										
+									End if 
+									
+									//…………………………………………………………………………………………………
+								: ($field.kind="relatedEntities")
+									
+									// 1 -> N relation attribute (reference to an entity selection)
+									
+									$table.field.push(New object:C1471(\
+										"name"; $fieldName; \
+										"inverseName"; $field.inverseName; \
+										"type"; -2; \
+										"relatedDataClass"; $field.relatedDataClass; \
+										"relatedTableNumber"; $datastore[$field.relatedDataClass].getInfo().tableNumber; \
+										"isToMany"; True:C214))
+									
+									//…………………………………………………………………………………………………
+								: (Not:C34(Bool:C1537($field.exposed)))
+									
+									// <IGNORE NOT EXPOSED ATTRIBUTES>
+									
+									//…………………………………………………………………………………………………
+								: ($field.kind="calculated")
+									
+									If ($allowedTypes.indexOf($field.type)>=0)
+										
+										$field.valueType:=$field.type
+										$field.type:=-3
+										$field.computed:=True:C214
+										$table.field.push($field)
+										
+									End if 
+									
+									//…………………………………………………………………………………………………
+								: (Not:C34(FEATURE.with("alias")))
+									
+									// <NOT YET AVAILABLE>
+									
+									//…………………………………………………………………………………………………
+								: ($field.kind="alias")
 									
 									Case of 
 											
-											//…………………………………………………………………………………………………
-										: ($l#-1)
+											//______________________________________
+										: ($allowedTypes.indexOf($field.type)>=0)  // Attribute
 											
-											// NOT ALLOW DUPLICATE NAMES !
-											err_PUSH($OUT; "Name conflict for \""+$fieldName+"\""; Warning message:K38:2)
-											
-											//…………………………………………………………………………………………………
-										: (Position:C15("."; $fieldName)>0)
-											
-											// NOT ALLOW FIELD OR RELATION NAME WITH DOT !
-											
-											//…………………………………………………………………………………………………
-										: ($field.kind="storage")
-											
-											// Storage (or scalar) attribute, i.e. attribute storing a value, not a reference to another attribute
-											var $allowed : Boolean
-											
-											If (FEATURE.with("objectFieldManagement"))
-												
-												$allowed:=(New collection:C1472("string"; "bool"; "date"; "number"; "image"; "object").indexOf($field.type)>=0)
-												
-											Else 
-												
-												$allowed:=(New collection:C1472("string"; "bool"; "date"; "number"; "image").indexOf($field.type)>=0)
-												
-											End if 
-											
-											If ($allowed)
-												
-												// #TEMPO [
-												$field.id:=$field.fieldNumber
-												$field.valueType:=$field.type
-												$field.type:=_o_tempoFieldType($field.fieldType)
-												// ]
+											If ($allowedTypes.indexOf($field.type)>=0)
 												
 												$table.field.push($field)
 												
 											End if 
 											
-											//…………………………………………………………………………………………………
-										: ($field.kind="relatedEntity")
+											//______________________________________
+										: ($field.relatedDataClass#Null:C1517)  // Selection
 											
-											// N -> 1 relation attribute (reference to an entity)
+											$table.field.push($field)
 											
-											If ($datastore[$field.relatedDataClass]#Null:C1517)
-												
-												$table.field.push(New object:C1471(\
-													"name"; $fieldName; \
-													"inverseName"; $field.inverseName; \
-													"type"; -1; \
-													"relatedDataClass"; $field.relatedDataClass; \
-													"relatedTableNumber"; $datastore[$field.relatedDataClass].getInfo().tableNumber))
-												
-											End if 
+											//______________________________________
+										Else 
 											
-											//…………………………………………………………………………………………………
-										: ($field.kind="relatedEntities")
+											ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
 											
-											// 1 -> N relation attribute (reference to an entity selection)
-											
-											$table.field.push(New object:C1471(\
-												"name"; $fieldName; \
-												"inverseName"; $field.inverseName; \
-												"type"; -2; \
-												"relatedDataClass"; $field.relatedDataClass; \
-												"relatedTableNumber"; $datastore[$field.relatedDataClass].getInfo().tableNumber; \
-												"isToMany"; True:C214))
-											
-											//…………………………………………………………………………………………………
-										: ($field.kind="calculated")
-											
-											If (Bool:C1537($field.exposed))
-												
-												If (FEATURE.with("objectFieldManagement"))
-													
-													If (New collection:C1472("string"; "bool"; "date"; "number"; "image"; "object").indexOf($field.type)>=0)
-														
-														$field.valueType:=$field.type
-														$field.type:=-3
-														$field.computed:=True:C214
-														$table.field.push($field)
-														
-													End if 
-													
-												Else 
-													
-													If (New collection:C1472("string"; "bool"; "date"; "number"; "image").indexOf($field.type)>=0)
-														
-														$field.valueType:=$field.type
-														$field.type:=-3
-														$field.computed:=True:C214
-														$table.field.push($field)
-														
-													End if 
-												End if 
-											End if 
-											
-											//…………………………………………………………………………………………………
+											//______________________________________
 									End case 
 									
+									//…………………………………………………………………………………………………
 								Else 
 									
-									// DON'T DISPLAY STAMP FIELD
+									ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
 									
-								End if 
-							End for each 
+									//…………………………………………………………………………………………………
+							End case 
+						End for each 
+						
+						If (Bool:C1537($IN.sorted))
 							
-							If (Bool:C1537($IN.sorted))
-								
-								$table.field:=$table.field.orderBy("name asc")
-								
-							End if 
+							$table.field:=$table.field.orderBy("name asc")
+							
 						End if 
 					End if 
-					
-				Else 
-					
-					// DON'T DISPLAY DELETED RECORDS TABLE
-					
 				End if 
 			End for each 
 			
@@ -581,7 +577,7 @@ Case of
 							//For each ($Txt_field;$Obj_relatedDataClass)
 							
 							//If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																
+																																								
 							//If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
 							//$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])
