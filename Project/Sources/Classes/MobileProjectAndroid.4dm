@@ -180,6 +180,13 @@ Function create()->$result : Object
 		
 		If ($o.success)
 			
+			// * COPY KOTLIN CUSTOM FORMATTER FILES
+			$o:=This:C1470.androidprojectgenerator.copyKotlinCustomFormatterFiles(This:C1470.project.project.dataModel; This:C1470.project.package)
+			
+		End if 
+		
+		If ($o.success)
+			
 			If (Not:C34(Bool:C1537(This:C1470.project.project.dataSource.doNotGenerateDataAtEachBuild)))
 				
 				$o:=This:C1470.androidprojectgenerator.copyDataSet(This:C1470.project.project._folder)

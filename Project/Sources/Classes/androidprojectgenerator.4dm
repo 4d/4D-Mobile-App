@@ -855,6 +855,7 @@ Function copyFormatterImage
 		
 		var $format; $formatName : Text
 		var $copyDest : 4D:C1709.File
+		var $copyFormatterImagesToApp : Object
 		
 		If (Value type:C1509($1.value.format)=Is text:K8:3)
 			
@@ -876,44 +877,59 @@ Function copyFormatterImage
 						
 						If ($customFormatterFolder.exists)
 							
-							$imagesFolderInFormatter:=$customFormatterFolder.folder("Images")
+							$copyFormatterImagesToApp:=This:C1470.copyFormatterImagesToApp($customFormatterFolder; $formatName)
 							
-							If ($imagesFolderInFormatter.exists)
+							If (Not:C34($copyFormatterImagesToApp.success))
 								
-								var $imageFile : 4D:C1709.File
+								$0.success:=False:C215
+								$0.errors.combine($copyFormatterImagesToApp.errors)
 								
-								For each ($imageFile; $imagesFolderInFormatter.files(fk ignore invisible:K87:22))
-									
-									var $correctedFormatName; $correctedImageName : Text
-									
-									$correctedFormatName:=Lowercase:C14($formatName)
-									Rgx_SubstituteText("[^a-z0-9]"; "_"; ->$correctedFormatName; 0)
-									
-									$correctedImageName:=Lowercase:C14($imageFile.name)
-									Rgx_SubstituteText("[^a-z0-9]"; "_"; ->$correctedImageName; 0)
-									
-									$correctedImageName:=$correctedFormatName+"_"+$correctedImageName+$imageFile.extension
-									
-									$copyDest:=$imageFile.copyTo(This:C1470.drawableFolder; $correctedImageName; fk overwrite:K87:5)
-									
-									If (Not:C34($copyDest.exists))  // Copy failed
-										
-										$0.success:=False:C215
-										$0.errors.push("Could not copy file to destination: "+$copyDest.path)
-										
-										//Else : all ok
-									End if 
-									
-								End for each 
-								
-								// Else : no image to copy
+								// Else : all ok
 							End if 
 							
 						Else 
 							
-							// custom folder does not exists
-							$0.success:=False:C215
-							$0.errors.push("Custom formatter \""+$format+"\" couldn't be found at path: "+$customFormatterFolder.path)
+							// Check for ZIP
+							var $customFormatterZipFile : 4D:C1709.File
+							
+							$customFormatterZipFile:=$formattersFolder.file($formatName)
+							
+							If ($customFormatterZipFile.exists)
+								
+								var $archive : 4D:C1709.ZipArchive
+								
+								$archive:=ZIP Read archive:C1637($customFormatterZipFile)
+								
+								var $unzipDest : 4D:C1709.Folder
+								
+								$unzipDest:=$archive.root.copyTo($customFormatterZipFile.parent; "android_temporary_"+$customFormatterZipFile.name; fk overwrite:K87:5)
+								
+								If ($unzipDest.exists)
+									
+									$copyFormatterImagesToApp:=This:C1470.copyFormatterImagesToApp($unzipDest; $formatName)
+									
+									If (Not:C34($copyFormatterImagesToApp.success))
+										
+										$0.success:=False:C215
+										$0.errors.combine($copyFormatterImagesToApp.errors)
+										
+										// Else : all ok
+									End if 
+									
+									$unzipDest.delete(Delete with contents:K24:24)
+									
+								Else 
+									// error
+									$0.success:=False:C215
+									$0.errors.push("Could not unzip to destination: "+$unzipDest.path)
+									
+								End if 
+								
+							Else 
+								// error
+								$0.success:=False:C215
+								$0.errors.push("Custom formatter \""+$format+"\" couldn't be found at path: "+$customFormatterFolder.path)
+							End if 
 							
 						End if 
 						
@@ -932,6 +948,222 @@ Function copyFormatterImage
 		// Else : no formatter
 	End if 
 	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function copyFormatterImagesToApp
+	var $0 : Object
+	var $1 : 4D:C1709.Folder  // Formatter folder
+	var $2 : Text  // format name
+	
+	var $imagesFolderInFormatter; $copyDest : 4D:C1709.Folder
+	var $imageFile : 4D:C1709.File
+	var $formatName : Text
+	
+	$formatName:=$2
+	
+	$0:=New object:C1471(\
+		"success"; True:C214; \
+		"errors"; New collection:C1472)
+	
+	$imagesFolderInFormatter:=$1.folder("Images")
+	
+	If ($imagesFolderInFormatter.exists)
+		
+		For each ($imageFile; $imagesFolderInFormatter.files(fk ignore invisible:K87:22))
+			
+			var $correctedFormatName; $correctedImageName : Text
+			
+			$correctedFormatName:=Lowercase:C14($formatName)
+			Rgx_SubstituteText("[^a-z0-9]"; "_"; ->$correctedFormatName; 0)
+			
+			$correctedImageName:=Lowercase:C14($imageFile.name)
+			Rgx_SubstituteText("[^a-z0-9]"; "_"; ->$correctedImageName; 0)
+			
+			$correctedImageName:=$correctedFormatName+"_"+$correctedImageName+$imageFile.extension
+			
+			$copyDest:=$imageFile.copyTo(This:C1470.drawableFolder; $correctedImageName; fk overwrite:K87:5)
+			
+			If (Not:C34($copyDest.exists))  // Copy failed
+				
+				$0.success:=False:C215
+				$0.errors.push("Could not copy file to destination: "+$copyDest.path)
+				
+				//Else : all ok
+			End if 
+			
+		End for each 
+		
+		// Else : no image to copy
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function copyKotlinCustomFormatterFiles
+	var $0 : Object
+	var $1 : Object  // Datamodel object
+	var $2 : Text  // Package name
+	
+	var $packageName; $packageNamePath; $format; $formatName; $fileContent : Text
+	$packageName:=$2
+	var $dataModel; $field; $copyFormatterKtFileToApp : Object
+	var $bindingAdapterFile; $copyDest : 4D:C1709.File
+	var $bindingFolder; $formattersFolder; $customFormatterFolder; $formattersFolderInFormatter : 4D:C1709.Folder
+	
+	$0:=New object:C1471(\
+		"success"; True:C214; \
+		"errors"; New collection:C1472)
+	
+	For each ($dataModel; OB Entries:C1720($1))
+		
+		For each ($field; OB Entries:C1720($dataModel.value))  // For each field in dataModel
+			
+			If ($field.key#"")
+				
+				If ($field.value.format#Null:C1517)
+					
+					If (Value type:C1509($field.value.format)=Is text:K8:3)
+						
+						$format:=$field.value.format
+						
+						If ($format#"")
+							
+							If (Substring:C12($format; 1; 1)="/")
+								
+								$formattersFolder:=This:C1470.path.hostFormatters()
+								
+								If ($formattersFolder.exists)
+									
+									$formatName:=Substring:C12($format; 2)
+									
+									$customFormatterFolder:=$formattersFolder.folder($formatName)
+									
+									If ($customFormatterFolder.exists)
+										
+										$copyFormatterKtFileToApp:=This:C1470.copyFormatterKtFileToApp($customFormatterFolder; $packageName)
+										
+										If (Not:C34($copyFormatterKtFileToApp.success))
+											
+											$0.success:=False:C215
+											$0.errors.combine($copyFormatterKtFileToApp.errors)
+											
+											// Else : all ok
+										End if 
+										
+									Else 
+										
+										// check for ZIP
+										
+										var $customFormatterZipFile : 4D:C1709.File
+										
+										$customFormatterZipFile:=$formattersFolder.file($formatName)
+										
+										If ($customFormatterZipFile.exists)
+											
+											var $archive : 4D:C1709.ZipArchive
+											
+											$archive:=ZIP Read archive:C1637($customFormatterZipFile)
+											
+											var $unzipDest : 4D:C1709.Folder
+											
+											$unzipDest:=$archive.root.copyTo($customFormatterZipFile.parent; "android_temporary_"+$customFormatterZipFile.name; fk overwrite:K87:5)
+											
+											If ($unzipDest.exists)
+												
+												$copyFormatterKtFileToApp:=This:C1470.copyFormatterKtFileToApp($unzipDest; $packageName)
+												
+												If (Not:C34($copyFormatterKtFileToApp.success))
+													
+													$0.success:=False:C215
+													$0.errors.combine($copyFormatterKtFileToApp.errors)
+													
+													// Else : all ok
+												End if 
+												
+												$unzipDest.delete(Delete with contents:K24:24)
+												
+											Else 
+												// error
+												$0.success:=False:C215
+												$0.errors.push("Could not unzip to destination: "+$unzipDest.path)
+												
+											End if 
+											
+										Else 
+											// error
+											$0.success:=False:C215
+											$0.errors.push("Custom formatter \""+$format+"\" couldn't be found at path: "+$customFormatterFolder.path)
+										End if 
+										
+										
+									End if 
+									
+									// Else : no formatters folder
+								End if 
+								
+								// Else : no custom formatter
+							End if 
+							
+							// Else : format empty
+						End if 
+						
+						// Else : field.format is not Text
+					End if 
+					
+					// Else : no formatter
+				End if 
+				
+				// Else : table metadata
+			End if 
+			
+		End for each 
+		
+	End for each 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function copyFormatterKtFileToApp
+	var $0 : Object
+	var $1 : 4D:C1709.Folder  // Formatter folder
+	var $2 : Text  // package name
+	
+	var $formattersFolderInFormatter; $copyDest; $bindingFolder : 4D:C1709.Folder
+	var $bindingAdapterFile : 4D:C1709.File
+	var $packageName; $packageNamePath; $fileContent : Text
+	
+	$packageName:=$2
+	$packageNamePath:=Replace string:C233($packageName; "."; "/")
+	
+	$0:=New object:C1471(\
+		"success"; True:C214; \
+		"errors"; New collection:C1472)
+	
+	$formattersFolderInFormatter:=$1.folder("android/Formatters")
+	
+	If ($formattersFolderInFormatter.exists)
+		
+		For each ($bindingAdapterFile; $formattersFolderInFormatter.files(fk ignore invisible:K87:22))
+			
+			$bindingFolder:=Folder:C1567(This:C1470.projectPath+"app/src/main/java/"+$packageNamePath+"/binding")
+			
+			$copyDest:=$bindingAdapterFile.copyTo($bindingFolder; $bindingAdapterFile.fullName; fk overwrite:K87:5)
+			
+			If ($copyDest.exists)
+				
+				// replace ___PACKAGE___ in file content
+				$fileContent:=$copyDest.getText()
+				$fileContent:=Replace string:C233($fileContent; "___PACKAGE___"; $packageName+".binding")
+				$copyDest.setText($fileContent)
+				
+			Else 
+				// Copy failed
+				$0.success:=False:C215
+				$0.errors.push("Could not copy file to destination: "+$copyDest.path)
+			End if 
+			
+		End for each 
+		
+		// Else : no Formatters folder inside kotlin custom data formatter
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
