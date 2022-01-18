@@ -218,6 +218,10 @@
             android:name="tableName"
             app:argType="string" />
             
+        <argument
+            android:name="navbarTitle"
+            app:argType="string" />
+
     </fragment>
 
 </navigation>
