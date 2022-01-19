@@ -186,20 +186,7 @@ Else   // <== WIDGETS METHOD
 					//_______________________________
 				: ($e.code=On Before Data Entry:K2:39)
 					
-					If ($e.columnName=$ƒ.formats.name)
-						
-						If (Shift down:C543)
-							
-							$ƒ.showFormatOnDisk($e)
-							
-						Else 
-							
-							$ƒ.doFormatMenu($e)
-							
-						End if 
-					End if 
-					
-					$ƒ.inEdition:=$ƒ.fieldList
+					// Done in the object's method
 					
 					//_______________________________
 				: ($e.code=On Before Keystroke:K2:6)

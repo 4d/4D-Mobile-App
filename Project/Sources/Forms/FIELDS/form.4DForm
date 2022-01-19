@@ -274,8 +274,6 @@
 							"textAlign": "left",
 							"verticalAlign": "middle",
 							"events": [
-								"onClick",
-								"onAlternateClick",
 								"onBeforeDataEntry"
 							],
 							"method": "ObjectMethods/format.4dm",
