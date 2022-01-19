@@ -4,7 +4,7 @@ Class constructor()
 	
 	var $t : Text
 	
-	Super:C1705("editor_CALLBACK")
+	Super:C1705(Formula:C1597(editor_CALLBACK).source)
 	
 	This:C1470.setWorker("4D Mobile ("+String:C10(This:C1470.window)+")")
 	
@@ -75,13 +75,13 @@ Function design()
 			"title"; "syncDataModel"; \
 			"show"; False:C215; \
 			"formula"; Formula:C1597(POST_MESSAGE(New object:C1471(\
-			"target"; Current form window:C827; \
+			"target"; This:C1470.window; \
 			"action"; "show"; \
 			"type"; "confirm"; \
 			"title"; "updateTheProject"; \
 			"additional"; "aBackupWillBeCreatedIntoTheProjectFolder"; \
 			"ok"; "update"; \
-			"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "syncDataModel")))))\
+			"okFormula"; Formula:C1597(CALL FORM:C1391(This:C1470.window; Formula:C1597(editor_CALLBACK).source; "syncDataModel")))))\
 			)
 		
 	End if 
@@ -134,13 +134,13 @@ Function design()
 			"title"; ".Repair the project"; \
 			"show"; False:C215; \
 			"formula"; Formula:C1597(POST_MESSAGE(New object:C1471(\
-			"target"; Current form window:C827; \
+			"target"; This:C1470.window; \
 			"action"; "show"; \
 			"type"; "confirm"; \
 			"title"; "updateTheProject"; \
 			"additional"; "aBackupWillBeCreatedIntoTheProjectFolder"; \
 			"ok"; "update"; \
-			"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "syncDataModel")))))\
+			"okFormula"; Formula:C1597(CALL FORM:C1391(This:C1470.window; Formula:C1597(editor_CALLBACK).source; "syncDataModel")))))\
 			)
 		
 	End if 
@@ -271,7 +271,7 @@ Function onLoad()
 	OBJECT SET VISIBLE:C603(*; "debug.@"; Bool:C1537(DATABASE.isMatrix))
 	
 	// Launch the worker
-	This:C1470.callWorker("COMPILER_COMPONENT")
+	This:C1470.callWorker(Formula:C1597(COMPILER_COMPONENT).source)
 	
 	This:C1470.tips.default()
 	
@@ -460,7 +460,7 @@ Function goToPage($page : Text)
 		
 		Form:C1466.$page:=$o
 		
-		This:C1470.callChild(This:C1470.project; "panel_INIT"; $o; PROJECT)
+		This:C1470.callChild(This:C1470.project; Formula:C1597(panel_INIT).source; $o; PROJECT)
 		
 		This:C1470.updateHeader($o)
 		
@@ -549,7 +549,7 @@ Function taskNotInProgress($taskID : Text)->$response : Boolean
 	// Refresh displayed panels
 Function refreshPanels()
 	
-	This:C1470.callChild(This:C1470.project; "PROJECT_ON_ACTIVATE")
+	This:C1470.callChild(This:C1470.project; Formula:C1597(PROJECT_ON_ACTIVATE).source)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function hidePicker()
@@ -587,7 +587,7 @@ Function setHeader()
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function updateHeader($data : Object)
 	
-	This:C1470.callChild(This:C1470.description; "editor_UPDATE_HEADER"; $data)
+	This:C1470.callChild(This:C1470.description; Formula:C1597(editor_UPDATE_HEADER).source; $data)
 	
 	//MARK:-Widget methods
 	//=== === === === === === === === === === === === === === === === === === === === ===
@@ -688,7 +688,7 @@ Function ribbonContainer($e : Object)
 			This:C1470.hidePicker()
 			
 			BUILD(New object:C1471(\
-				"caller"; EDITOR.window; \
+				"caller"; This:C1470.window; \
 				"project"; PROJECT; \
 				"create"; True:C214; \
 				"build"; Not:C34(Shift down:C543); \
@@ -703,7 +703,7 @@ Function ribbonContainer($e : Object)
 				PROJECT.save()
 				
 				BUILD(New object:C1471(\
-					"caller"; EDITOR.window; \
+					"caller"; This:C1470.window; \
 					"project"; PROJECT; \
 					"create"; Not:C34(Shift down:C543); \
 					"build"; Not:C34(Shift down:C543); \
@@ -735,7 +735,7 @@ Function ribbonContainer($e : Object)
 Function checkDevTools()
 	
 	This:C1470.addTask("checkDevTools")
-	This:C1470.callWorker("editor_CHECK_INSTALLATION"; New object:C1471(\
+	This:C1470.callWorker(Formula:C1597(editor_CHECK_INSTALLATION).source; New object:C1471(\
 		"caller"; This:C1470.window; \
 		"xCode"; This:C1470.xCode; \
 		"studio"; This:C1470.studio; \
@@ -748,7 +748,7 @@ Function checkProject()
 	
 	// Launch checking the structure
 	This:C1470.addTask("checkProject")
-	This:C1470.callWorker("_o_structure"; New object:C1471(\
+	This:C1470.callWorker(Formula:C1597(_o_structure).source; New object:C1471(\
 		"caller"; This:C1470.window; \
 		"action"; "catalog"\
 		))
@@ -760,7 +760,7 @@ Function checkProject()
 Function getDevices()
 	
 	This:C1470.addTask("getDevices")
-	This:C1470.callWorker("editor_GET_DEVICES"; New object:C1471(\
+	This:C1470.callWorker(Formula:C1597(editor_GET_DEVICES).source; New object:C1471(\
 		"caller"; This:C1470.window; \
 		"xCode"; This:C1470.xCode; \
 		"studio"; This:C1470.studio\
@@ -794,8 +794,8 @@ Function doGenerate($keyPathname : Text)
 	
 	var $ƒ : 4D:C1709.Function
 	
-	$ƒ:=Formula:C1597(CALL WORKER:C1389(EDITOR.worker; "dataSet"; New object:C1471(\
-		"caller"; EDITOR.window; \
+	$ƒ:=Formula:C1597(CALL WORKER:C1389(This:C1470.worker; Formula:C1597(dataSet).source; New object:C1471(\
+		"caller"; This:C1470.window; \
 		"action"; "create"; \
 		"eraseIfExists"; True:C214; \
 		"project"; PROJECT; \

@@ -69,12 +69,12 @@ Case of
 							//______________________________________________________
 						: (Bool:C1537($panel.noSeparator))  //& False
 							
-							EXECUTE METHOD IN SUBFORM:C1085($e.objectName; "panel_LAST")
+							EXECUTE METHOD IN SUBFORM:C1085($e.objectName; Formula:C1597(panel_LAST).source)
 							
 							//______________________________________________________
 						: (($index+1)=$c.length)  // Last panel
 							
-							EXECUTE METHOD IN SUBFORM:C1085($e.objectName; "panel_LAST")
+							EXECUTE METHOD IN SUBFORM:C1085($e.objectName; Formula:C1597(panel_LAST).source)
 							
 							//______________________________________________________
 					End case 
@@ -83,7 +83,7 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Losing Focus:K2:8)
 				
-				CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "onLosingFocus"; New object:C1471(\
+				CALL FORM:C1391(Current form window:C827; Formula:C1597(editor_CALLBACK).source; "onLosingFocus"; New object:C1471(\
 					"panel"; $e.objectName))
 				
 				//______________________________________________________
@@ -103,12 +103,12 @@ Case of
 					: ($e.code=-1)  // Close
 						
 						// Send result to the caller
-						CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "pickerResume"; Self:C308->)
+						CALL FORM:C1391(Current form window:C827; Formula:C1597(editor_CALLBACK).source; "pickerResume"; Self:C308->)
 						
 						//…………………………………………………………………………………………………
 					: ($e.code=-2)  // Update
 						
-						CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "pickerResume"; Self:C308->)
+						CALL FORM:C1391(Current form window:C827; Formula:C1597(editor_CALLBACK).source; "pickerResume"; Self:C308->)
 						
 						//…………………………………………………………………………………………………
 				End case 
@@ -124,7 +124,7 @@ Case of
 		//==================================================
 	: ($e.objectName="picker.close")
 		
-		CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "pickerHide"; (OBJECT Get pointer:C1124(Object named:K67:5; "picker"))->)
+		CALL FORM:C1391(Current form window:C827; Formula:C1597(editor_CALLBACK).source; "pickerHide"; (OBJECT Get pointer:C1124(Object named:K67:5; "picker"))->)
 		
 		//==================================================
 	Else 

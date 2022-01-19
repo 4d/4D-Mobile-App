@@ -56,7 +56,7 @@ Case of
 			"type"; "alert"; \
 			"title"; EDITOR.alert+" "+Get localized string:C991("theProductNameIsMandatory"); \
 			"additional"; "pleaseGiveNameToYourProduct"; \
-			"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "goToPage"; $o))))
+			"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; Formula:C1597(editor_CALLBACK).source; "goToPage"; $o))))
 		
 		//______________________________________________________
 	: (OB Get:C1224($project; "dataModel"; Is object:K8:27)=Null:C1517)\
@@ -70,7 +70,7 @@ Case of
 			"type"; "alert"; \
 			"title"; EDITOR.alert+" "+Get localized string:C991("noPublishedTable"); \
 			"additional"; "youMustPublishAtLeastOneFieldToBeAbleToBuildYourApplication"; \
-			"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "goToPage"; $o))))
+			"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; Formula:C1597(editor_CALLBACK).source; "goToPage"; $o))))
 		
 		//______________________________________________________
 	: ($project.main.order=Null:C1517)\
@@ -84,7 +84,7 @@ Case of
 			"type"; "alert"; \
 			"title"; EDITOR.alert+" "+Get localized string:C991("noTableDefinedInTheMainMenu"); \
 			"additional"; "youMustSetAtLeastOneTableIntoTheMainMenu"; \
-			"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "goToPage"; $o))))
+			"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; Formula:C1597(editor_CALLBACK).source; "goToPage"; $o))))
 		
 		//______________________________________________________
 	Else 
@@ -110,7 +110,7 @@ redmine:#117188
 			"type"; "alert"; \
 			"title"; EDITOR.alert+" "+Get localized string:C991("unableToGenerateApp"); \
 			"additional"; Get localized string:C991("theprojectmustbelocatedrinthemobileprojectsfolder"); \
-			"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "build_stop"))\
+			"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; Formula:C1597(editor_CALLBACK).source; "build_stop"))\
 			))
 		
 	End if 
@@ -173,7 +173,7 @@ If ($result.success & Bool:C1537($in.build))
 			"type"; "alert"; \
 			"title"; EDITOR.alert+" "+Get localized string:C991("theDefinitionOfTheStructureIsInconsistent"); \
 			"additional"; "- "+$result.errors.join("\r- ")+"\r\r\r"+Get localized string:C991("youMustFixItBeforeBuildingTheApplication"); \
-			"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "goToPage"; $o))))
+			"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; Formula:C1597(editor_CALLBACK).source; "goToPage"; $o))))
 		
 	End if 
 End if 

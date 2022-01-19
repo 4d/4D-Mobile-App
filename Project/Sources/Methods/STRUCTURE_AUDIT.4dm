@@ -584,7 +584,7 @@ If ($cacheFile.exists)
 					"cancel"; "reviewing"; \
 					"cancelAction"; "page_structure"; \
 					"ok"; "update"; \
-					"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "syncDataModel"))))
+					"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; Formula:C1597(editor_CALLBACK).source; "syncDataModel"))))
 				
 			End if 
 			

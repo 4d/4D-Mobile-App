@@ -173,6 +173,6 @@ FORM SET ENTRY ORDER:C1468($objectNames)
 OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $height)
 OBJECT SET COORDINATES:C1248(*; "_background"; 0; 0; $width; $bottom)
 
-CALL FORM:C1391(Current form window:C827; "project_SKIN"; $definition)
+CALL FORM:C1391(Current form window:C827; Formula:C1597(project_SKIN).source; $definition)
 
 GOTO OBJECT:C206(*; $objectNames{1})

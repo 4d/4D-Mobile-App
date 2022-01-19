@@ -86,10 +86,10 @@ Case of
 					"action"; "update"))
 				
 				// Preload the icons
-				CALL FORM:C1391($Obj_form.window; "editor_CALLBACK"; "tableIcons")
+				CALL FORM:C1391($Obj_form.window; Formula:C1597(editor_CALLBACK).source; "tableIcons")
 				
 				// Update field properties panel
-				CALL FORM:C1391($Obj_form.window; "editor_CALLBACK"; "fieldProperties")
+				CALL FORM:C1391($Obj_form.window; Formula:C1597(editor_CALLBACK).source; "fieldProperties")
 				
 				//______________________________________________________
 		End case 

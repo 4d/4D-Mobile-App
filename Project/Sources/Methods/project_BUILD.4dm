@@ -319,9 +319,9 @@ If (Asserted:C1132($project#Null:C1517))
 								"title"; "theStructureOfTheProductionServerIsNotOptimizedForThisProject"; \
 								"additional"; "youMustUpdateTheStructureOfTheProductionServer"; \
 								"help"; Formula:C1597(OPEN URL:C673(Get localized string:C991("doc_structureAdjustment"); *)); \
-								"cancelFormula"; Formula:C1597(CALL FORM:C1391(EDITOR.window; "editor_CALLBACK"; "build_stop")); \
+								"cancelFormula"; Formula:C1597(CALL FORM:C1391(EDITOR.window; Formula:C1597(editor_CALLBACK).source; "build_stop")); \
 								"ok"; Get localized string:C991("continue"); \
-								"okFormula"; Formula:C1597(CALL FORM:C1391(EDITOR.window; "editor_CALLBACK"; "ignoreServerStructureAdjustement"))))
+								"okFormula"; Formula:C1597(CALL FORM:C1391(EDITOR.window; Formula:C1597(editor_CALLBACK).source; "ignoreServerStructureAdjustement"))))
 							
 						End if 
 					End if 

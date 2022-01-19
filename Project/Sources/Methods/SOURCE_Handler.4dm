@@ -679,7 +679,7 @@ $regex.match[1].data:="127.0.0.1"
 		
 		SET TIMER:C645(-1)
 		
-		CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "update_data")
+		CALL FORM:C1391(Current form window:C827; Formula:C1597(editor_CALLBACK).source; "update_data")
 		
 		If ($in.data#Null:C1517)
 			

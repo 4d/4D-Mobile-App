@@ -16,7 +16,7 @@ If (False:C215)
 	C_OBJECT:C1216(editor_RESUME; $2)
 End if 
 
-var $callback; $databasePatgname; $message; $selector : Text
+var $databasePatgname; $message; $selector : Text
 var $target : Integer
 var $cancel; $in; $ok; $params; $webServerInfos : Object
 var $error : cs:C1710.error
@@ -49,7 +49,6 @@ If (Asserted:C1132(Count parameters:C259>=0; "Missing parameter"))
 	End if 
 	
 	$target:=Current form window:C827
-	$callback:="editor_CALLBACK"
 	
 Else 
 	
@@ -218,12 +217,12 @@ Case of
 		
 		$in.build.manualInstallation:=($selector="build_manualInstallation")
 		
-		CALL FORM:C1391($target; "BUILD"; $in.build)  // Relaunch the build process
+		CALL FORM:C1391($target; Formula:C1597(BUILD).source; $in.build)  // Relaunch the build process
 		
 		//______________________________________________________
 	: ($selector="projectFixErrors")
 		
-		CALL FORM:C1391($target; $callback; $selector; $in)
+		CALL FORM:C1391($target; Formula:C1597(editor_CALLBACK).source; $selector; $in)
 		
 		//______________________________________________________
 	: ($selector="stopWebServer")
@@ -239,7 +238,7 @@ Case of
 			
 		End if 
 		
-		CALL FORM:C1391($target; $callback; "testServer"; $in)
+		CALL FORM:C1391($target; Formula:C1597(editor_CALLBACK).source; "testServer"; $in)
 		
 		//______________________________________________________
 	Else 

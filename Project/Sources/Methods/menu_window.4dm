@@ -1,47 +1,47 @@
 //%attributes = {"invisible":true}
 C_TEXT:C284($Mnu_choice)
-C_LONGINT:C283($Win_me;$Lon_left;$Lon_top;$Lon_right;$Lon_bottom;$Lon_leftScreen;$Lon_topScreen;$Lon_rightScreen;$Lon_bottomScreen;$Lon_i;$Lon_screenCount)
+C_LONGINT:C283($Win_me; $Lon_left; $Lon_top; $Lon_right; $Lon_bottom; $Lon_leftScreen; $Lon_topScreen; $Lon_rightScreen; $Lon_bottomScreen; $Lon_i; $Lon_screenCount)
 
 $Mnu_choice:=Get selected menu item parameter:C1005
 $Win_me:=Current form window:C827
 
 Case of 
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: (Length:C16($Mnu_choice)=0)
 		
-		  // NOTHING MORE TO DO
+		// NOTHING MORE TO DO
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Mnu_choice="close")
 		
-		CALL FORM:C1391($Win_me;"win_CLOSE")
+		CALL FORM:C1391($Win_me; Formula:C1597(win_CLOSE).source)
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Mnu_choice="minimize")
 		
 		MINIMIZE WINDOW:C454($Win_me)
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Mnu_choice="maximize")
 		
 		MAXIMIZE WINDOW:C453($Win_me)
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Mnu_choice="hide")
 		
 		HIDE WINDOW:C436($Win_me)
 		
-		  //______________________________________________________
+		//______________________________________________________
 	: ($Mnu_choice="centered")
 		
-		GET WINDOW RECT:C443($Lon_left;$Lon_top;$Lon_right;$Lon_bottom;$Win_me)
+		GET WINDOW RECT:C443($Lon_left; $Lon_top; $Lon_right; $Lon_bottom; $Win_me)
 		
 		$Lon_i:=1
 		$Lon_screenCount:=Count screens:C437
 		
 		Repeat 
-			SCREEN COORDINATES:C438($Lon_leftScreen;$Lon_topScreen;$Lon_rightScreen;$Lon_bottomScreen;$Lon_i)
+			SCREEN COORDINATES:C438($Lon_leftScreen; $Lon_topScreen; $Lon_rightScreen; $Lon_bottomScreen; $Lon_i)
 			$Lon_i:=$Lon_i+1
 		Until (($Lon_rightScreen>=$Lon_right) | ($Lon_i>$Lon_screenCount))
 		
@@ -51,12 +51,12 @@ Case of
 		$Lon_top:=(($Lon_bottomScreen-$Lon_topScreen)-($Lon_bottom-$Lon_top))/2+$Lon_topScreen
 		$Lon_bottom:=$Lon_bottomScreen-$Lon_top
 		
-		SET WINDOW RECT:C444($Lon_left;$Lon_top;$Lon_right;$Lon_bottom;$Win_me)
+		SET WINDOW RECT:C444($Lon_left; $Lon_top; $Lon_right; $Lon_bottom; $Win_me)
 		
-		  //______________________________________________________
+		//______________________________________________________
 	Else 
 		
-		ASSERT:C1129(False:C215;"Unknown menu action ("+$Mnu_choice+")")
+		ASSERT:C1129(False:C215; "Unknown menu action ("+$Mnu_choice+")")
 		
-		  //______________________________________________________
+		//______________________________________________________
 End case 

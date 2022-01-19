@@ -6,7 +6,7 @@ _o_UI:=New object:C1471
 _o_UI.tips:=tips
 
 // ============================= FORMS =============================
-_o_UI.form:=Formula:C1597(currentForm($1))
+_o_UI.form:=Formula:C1597(_o_currentForm($1))
 
 // ============================= WIDGETS =============================
 _o_UI.static:=Formula:C1597(static($1))

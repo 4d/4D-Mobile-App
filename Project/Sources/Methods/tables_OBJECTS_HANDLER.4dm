@@ -119,14 +119,14 @@ Case of
 							$Obj_picker.prompt:=cs:C1710.str.new("chooseAnIconForTheTable").localized((OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.tables))->{$Lon_row})
 							
 							// Display selector
-							CALL FORM:C1391($Obj_form.window; "editor_CALLBACK"; "pickerShow"; $Obj_picker)
+							CALL FORM:C1391($Obj_form.window; Formula:C1597(editor_CALLBACK).source; "pickerShow"; $Obj_picker)
 							
 							
 						End if 
 					End if 
 					
 					// Update field properties panel
-					CALL FORM:C1391($Obj_form.window; "editor_CALLBACK"; "fieldProperties")
+					CALL FORM:C1391($Obj_form.window; Formula:C1597(editor_CALLBACK).source; "fieldProperties")
 					
 				End if 
 				

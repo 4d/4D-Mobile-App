@@ -211,7 +211,7 @@ Case of
 				
 				If ($button=1)
 					
-					CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "refresh")
+					CALL FORM:C1391(Current form window:C827; Formula:C1597(editor_CALLBACK).source; "refresh")
 					
 				End if 
 				

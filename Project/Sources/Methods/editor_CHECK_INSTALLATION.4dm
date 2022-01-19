@@ -155,6 +155,6 @@ End case
 
 If (Bool:C1537($in.caller))
 	
-	CALL FORM:C1391($in.caller; "editor_CALLBACK"; "checkDevTools"; $out)
+	CALL FORM:C1391($in.caller; Formula:C1597(editor_CALLBACK).source; "checkDevTools"; $out)
 	
 End if 

@@ -21,4 +21,4 @@ POST_MESSAGE(New object:C1471(\
 "type"; "progress"; \
 "title"; Get localized string:C991("product")+" - "+PROJECT.product.name+" ["+Choose:C955(PROJECT._buildTarget="android"; "Android"; "iOS")+"]"; \
 "additional"; Get localized string:C991("preparations"); \
-"autostart"; Formula:C1597(CALL FORM:C1391(EDITOR.window; "project_BUILD"; $data))))
+"autostart"; Formula:C1597(CALL FORM:C1391(EDITOR.window; Formula:C1597(project_BUILD).source; $data))))

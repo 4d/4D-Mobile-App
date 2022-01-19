@@ -92,9 +92,9 @@ If (False:C215)  // Tools
 	C_OBJECT:C1216(_o_color; $2)
 	
 	//______________________________________________________
-	C_OBJECT:C1216(currentForm; $0)
-	C_TEXT:C284(currentForm; $1)
-	C_OBJECT:C1216(currentForm; $2)
+	C_OBJECT:C1216(_o_currentForm; $0)
+	C_TEXT:C284(_o_currentForm; $1)
+	C_OBJECT:C1216(_o_currentForm; $2)
 	
 	//______________________________________________________
 	C_OBJECT:C1216(dat; $0)

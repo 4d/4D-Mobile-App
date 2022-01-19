@@ -152,7 +152,7 @@ Case of
 					//______________________________________________________
 				: ($Obj_context.serverStatus.action="goToProductionURL")
 					
-					CALL FORM:C1391($Obj_form.window; "editor_CALLBACK"; "goToPage"; New object:C1471(\
+					CALL FORM:C1391($Obj_form.window; Formula:C1597(editor_CALLBACK).source; "goToPage"; New object:C1471(\
 						"page"; "deployment"; \
 						"panel"; "SERVER"; \
 						"object"; "02_prodURL"))
