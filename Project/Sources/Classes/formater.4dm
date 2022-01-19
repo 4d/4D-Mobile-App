@@ -31,41 +31,38 @@ Class constructor($format : Text)
 		End if 
 	End if 
 	
+	This:C1470.typeBinding:=New collection:C1472
+	This:C1470.typeBinding[Is alpha field:K8:1]:="text"
+	This:C1470.typeBinding[Is boolean:K8:9]:="boolean"
+	This:C1470.typeBinding[Is integer:K8:5]:="integer"
+	This:C1470.typeBinding[Is longint:K8:6]:="integer"
+	This:C1470.typeBinding[Is integer 64 bits:K8:25]:="integer"
+	This:C1470.typeBinding[Is real:K8:4]:="real"
+	This:C1470.typeBinding[_o_Is float:K8:26]:="float"
+	This:C1470.typeBinding[Is date:K8:7]:="date"
+	This:C1470.typeBinding[Is time:K8:8]:="time"
+	This:C1470.typeBinding[Is text:K8:3]:="text"
+	This:C1470.typeBinding[Is picture:K8:10]:="picture"
+	This:C1470.typeBinding[Is object:K8:27]:="object"
+	
+	
 	//============================================================================
 	/// Returns a collection of formaters for a field type
 Function getByType($type : Integer; $host : Boolean)->$formatters : Collection
 	
-	var $hostƒ : Boolean
 	var $archive; $errors; $manifest; $o : Object
-	var $c : Collection
 	var $formator; $resources : 4D:C1709.Folder
+	var $android; $ios : Boolean
+	var $target : Collection
 	
-	If (Count parameters:C259>=2)
-		
-		$hostƒ:=$host
-		
-	End if 
+	$target:=Value type:C1509(PROJECT.info.target)=Is collection:K8:32 ? PROJECT.info.target : New collection:C1472(PROJECT.info.target)
 	
-	If ($hostƒ)
+	If ($host)
 		
 		$formatters:=New collection:C1472
 		$resources:=cs:C1710.path.new().hostFormatters()
 		
 		If ($resources.exists)
-			
-			$c:=New collection:C1472
-			$c[Is alpha field:K8:1]:="text"
-			$c[Is boolean:K8:9]:="boolean"
-			$c[Is integer:K8:5]:="integer"
-			$c[Is longint:K8:6]:="integer"
-			$c[Is integer 64 bits:K8:25]:="integer"
-			$c[Is real:K8:4]:="real"
-			$c[_o_Is float:K8:26]:="float"
-			$c[Is date:K8:7]:="date"
-			$c[Is time:K8:8]:="time"
-			$c[Is text:K8:3]:="text"
-			$c[Is picture:K8:10]:="picture"
-			$c[Is object:K8:27]:="object"
 			
 			For each ($formator; $resources.folders())
 				
@@ -74,20 +71,11 @@ Function getByType($type : Integer; $host : Boolean)->$formatters : Collection
 				If ($o.isValid())
 					
 					$manifest:=JSON Parse:C1218($o.source.file("manifest.json").getText())
+					$manifest.type:=(Value type:C1509($manifest.type)=Is collection:K8:32) ? $manifest.type : New collection:C1472($manifest.type)
 					
-					If (Value type:C1509($manifest.type)=Is collection:K8:32)
+					If ($manifest.type.indexOf(This:C1470.typeBinding[$type])#-1)
 						
-						If ($manifest.type.indexOf($c[$type])#-1)
-							
-							$formatters.push(New object:C1471(\
-								"name"; $o.label; \
-								"source"; $o))
-							
-						End if 
-						
-					Else 
-						
-						If ($manifest.type=$c[$type])
+						If (This:C1470.isForTarget($o; $target))
 							
 							$formatters.push(New object:C1471(\
 								"name"; $o.label; \
@@ -107,20 +95,11 @@ Function getByType($type : Integer; $host : Boolean)->$formatters : Collection
 				If ($o.isValid())
 					
 					$manifest:=JSON Parse:C1218($o.source.file("manifest.json").getText())
+					$manifest.type:=(Value type:C1509($manifest.type)=Is collection:K8:32) ? $manifest.type : New collection:C1472($manifest.type)
 					
-					If (Value type:C1509($manifest.type)=Is collection:K8:32)
+					If ($manifest.type.indexOf(This:C1470.typeBinding[$type])#-1)
 						
-						If ($manifest.type.indexOf($c[$type])#-1)
-							
-							$formatters.push(New object:C1471(\
-								"name"; $o.label; \
-								"source"; $o))
-							
-						End if 
-						
-					Else 
-						
-						If ($manifest.type=$c[$type])
+						If (This:C1470.isForTarget($o; $target))
 							
 							$formatters.push(New object:C1471(\
 								"name"; $o.label; \
@@ -138,6 +117,47 @@ Function getByType($type : Integer; $host : Boolean)->$formatters : Collection
 	Else 
 		
 		$formatters:=SHARED.resources.fieldBindingTypes[$type]
+		
+	End if 
+	
+	//============================================================================
+	// Tests the compatibility of the formatter with the target 
+Function isForTarget($formater : Object; $target : Collection)->$ok : Boolean
+	
+	If (False:C215)  //WIP
+		
+		var $all; $android; $ios : Boolean
+		var $c : Collection
+		
+		ASSERT:C1129($formater.name="/_All")
+		
+		$c:=$formater.source.folders()
+		
+		$android:=$c.query("name = android").pop()#Null:C1517
+		$ios:=($c.query("name = ios").pop()#Null:C1517) | (($c.query("name = ios").pop()=Null:C1517) & Not:C34($android))
+		$all:=($ios & $android) | (Not:C34($ios) & Not:C34($android))
+		
+		$ok:=$all
+		
+		If (Not:C34($ok)) & ($target.length=1)
+			
+			If ($target[0]="android")
+				
+				$ok:=$android
+				
+			Else 
+				
+				$ok:=$ios
+				
+			End if 
+			
+			//$ok:=($target[0]="android") ? $all || $android : $all || $ios
+			
+		End if 
+		
+	Else 
+		
+		$ok:=True:C214
 		
 	End if 
 	
@@ -237,6 +257,9 @@ Function isValid($format : Variant)->$valid : Boolean
 	// Create a formatter with text choiceList
 Function create($type : Variant; $data : Collection)->$file : 4D:C1709.File
 	
+	//todo:Obsolete?
+	ASSERT:C1129(False:C215)
+	
 	var $name : Text
 	$name:=This:C1470.name
 	If (Bool:C1537(This:C1470.host))
@@ -326,6 +349,10 @@ Function create($type : Variant; $data : Collection)->$file : 4D:C1709.File
 	//============================================================================
 	// Return a default choice list according to type and wanted return type
 Function defaultChoiceList($typeString : Text; $isObject : Boolean)->$choiceList : Variant
+	
+	//todo:Obsolete?
+	ASSERT:C1129(False:C215)
+	
 	Case of 
 		: (($typeString="bool") | ($typeString="boolean"))
 			If ($isObject)

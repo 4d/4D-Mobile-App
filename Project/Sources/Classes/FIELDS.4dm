@@ -894,6 +894,8 @@ Function showFormatOnDisk($e : Object)
 	var $format : Text
 	var $field; $o : Object
 	
+	$e:=$e=Null:C1517 ? FORM Event:C1606 : $e
+	
 	$field:=This:C1470.field($e.row)  // Get the field definition
 	
 	// Get current format
@@ -929,6 +931,8 @@ Function doFormatMenu($e : Object)
 	var $formatters : Collection
 	var $menu : cs:C1710.menu
 	var $formatter : cs:C1710.formater
+	
+	$e:=$e=Null:C1517 ? FORM Event:C1606 : $e
 	
 	// Get the field definition
 	$field:=This:C1470.field($e.row)

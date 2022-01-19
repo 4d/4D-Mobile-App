@@ -7,11 +7,11 @@ $ƒ:=panel
 
 If (Shift down:C543)
 	
-	$ƒ.showFormatOnDisk(FORM Event:C1606)
+	$ƒ.showFormatOnDisk()
 	
 Else 
 	
-	$ƒ.doFormatMenu(FORM Event:C1606)
+	$ƒ.doFormatMenu()
 	
 End if 
 
