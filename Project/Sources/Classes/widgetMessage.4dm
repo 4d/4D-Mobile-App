@@ -411,11 +411,11 @@ Function doValidate()
 			
 			If (Form:C1466.option#Null:C1517)
 				
-				EXECUTE METHOD:C1007("EDITOR_RESUME"; *; String:C10(Form:C1466.okAction); Form:C1466.option.value)
+				EXECUTE METHOD:C1007(Formula:C1597(editor_RESUME).source; *; String:C10(Form:C1466.okAction); Form:C1466.option.value)
 				
 			Else 
 				
-				EXECUTE METHOD:C1007("EDITOR_RESUME"; *; String:C10(Form:C1466.okAction))
+				EXECUTE METHOD:C1007(Formula:C1597(editor_RESUME).source; *; String:C10(Form:C1466.okAction))
 				
 			End if 
 			
