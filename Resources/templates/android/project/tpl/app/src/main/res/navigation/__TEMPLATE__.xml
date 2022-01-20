@@ -212,12 +212,24 @@
     <fragment
         android:id="@+id/actionParametersFragment"
         android:name="com.qmobile.qmobileui.action.ActionParametersFragment"
-        android:label="Action Parameters">
+        android:label="{navbarTitle}">
 
         <argument
             android:name="tableName"
             app:argType="string" />
-            
+
+        <argument
+            android:name="inverseName"
+            app:argType="string" />
+
+        <argument
+            android:name="currentItemId"
+            app:argType="string" />
+
+        <argument
+            android:name="fromRelation"
+            app:argType="boolean" />
+
         <argument
             android:name="navbarTitle"
             app:argType="string" />

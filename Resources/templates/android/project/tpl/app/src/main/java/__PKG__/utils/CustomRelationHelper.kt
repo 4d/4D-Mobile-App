@@ -44,6 +44,29 @@ class CustomRelationHelper : GenericRelationHelper {
             )
         }
 
+
+    /**
+     * Retrieves the inverse relation name
+     */
+    override fun getInverseRelationName(sourceTableName: String, relationName: String): String =
+        when {
+            {{#relations_many_to_one}}
+            sourceTableName == "{{relation_source}}" && relationName == "{{relation_name}}" -> "{{inverse_name}}"
+            {{/relations_many_to_one}}
+            {{#relations_one_to_many}}
+            {{#isSubRelation}}
+            sourceTableName == "{{relation_source}}" && relationName == "{{originalSubRelationName}}" -> "{{inverse_name}}"
+            {{/isSubRelation}}
+            {{^isSubRelation}}
+            sourceTableName == "{{relation_source}}" && relationName == "{{relation_name}}" -> "{{inverse_name}}"
+            {{/isSubRelation}}
+            {{/relations_one_to_many}}
+            else -> throw IllegalArgumentException(
+                "Missing inverse relation name for sourceTableName: $sourceTableName, " +
+                    "relationName: $relationName"
+            )
+        }
+
     /**
      * Provides the relation map extracted from an entity
      */
