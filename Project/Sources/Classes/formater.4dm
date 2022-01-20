@@ -52,7 +52,6 @@ Function getByType($type : Integer; $host : Boolean)->$formatters : Collection
 	
 	var $archive; $errors; $manifest; $o : Object
 	var $formator; $resources : 4D:C1709.Folder
-	var $android; $ios : Boolean
 	var $target : Collection
 	
 	$target:=Value type:C1509(PROJECT.info.target)=Is collection:K8:32 ? PROJECT.info.target : New collection:C1472(PROJECT.info.target)
@@ -71,11 +70,22 @@ Function getByType($type : Integer; $host : Boolean)->$formatters : Collection
 				If ($o.isValid())
 					
 					$manifest:=JSON Parse:C1218($o.source.file("manifest.json").getText())
-					$manifest.type:=(Value type:C1509($manifest.type)=Is collection:K8:32) ? $manifest.type : New collection:C1472($manifest.type)
+					$manifest.type:=(Value type:C1509($manifest.type)=Is collection:K8:32) ? $manifest.type : New collection:C1472(String:C10($manifest.type))
 					
 					If ($manifest.type.indexOf(This:C1470.typeBinding[$type])#-1)
 						
-						If (This:C1470.isForTarget($o; $target))
+						If ($manifest.target#Null:C1517)
+							
+							$manifest.target:=(Value type:C1509($manifest.target)=Is collection:K8:32) ? $manifest.target : New collection:C1472(String:C10($manifest.target))
+							
+						Else 
+							
+							This:C1470._setTarget($manifest; $o)
+							
+						End if 
+						
+						If (($manifest.target.length=2) & ($target.length=2))\
+							 | (($target.length=1) & ($manifest.target.indexOf($target[0])#-1))
 							
 							$formatters.push(New object:C1471(\
 								"name"; $o.label; \
@@ -99,7 +109,18 @@ Function getByType($type : Integer; $host : Boolean)->$formatters : Collection
 					
 					If ($manifest.type.indexOf(This:C1470.typeBinding[$type])#-1)
 						
-						If (This:C1470.isForTarget($o; $target))
+						If ($manifest.target#Null:C1517)
+							
+							$manifest.target:=(Value type:C1509($manifest.target)=Is collection:K8:32) ? $manifest.target : New collection:C1472(String:C10($manifest.target))
+							
+						Else 
+							
+							This:C1470._setTarget($manifest; $o)
+							
+						End if 
+						
+						If (($manifest.target.length=2) & ($target.length=2))\
+							 | (($target.length=1) & ($manifest.target.indexOf($target[0])#-1))
 							
 							$formatters.push(New object:C1471(\
 								"name"; $o.label; \
@@ -117,47 +138,6 @@ Function getByType($type : Integer; $host : Boolean)->$formatters : Collection
 	Else 
 		
 		$formatters:=SHARED.resources.fieldBindingTypes[$type]
-		
-	End if 
-	
-	//============================================================================
-	// Tests the compatibility of the formatter with the target 
-Function isForTarget($formater : Object; $target : Collection)->$ok : Boolean
-	
-	If (False:C215)  //WIP
-		
-		var $all; $android; $ios : Boolean
-		var $c : Collection
-		
-		ASSERT:C1129($formater.name="/_All")
-		
-		$c:=$formater.source.folders()
-		
-		$android:=$c.query("name = android").pop()#Null:C1517
-		$ios:=($c.query("name = ios").pop()#Null:C1517) | (($c.query("name = ios").pop()=Null:C1517) & Not:C34($android))
-		$all:=($ios & $android) | (Not:C34($ios) & Not:C34($android))
-		
-		$ok:=$all
-		
-		If (Not:C34($ok)) & ($target.length=1)
-			
-			If ($target[0]="android")
-				
-				$ok:=$android
-				
-			Else 
-				
-				$ok:=$ios
-				
-			End if 
-			
-			//$ok:=($target[0]="android") ? $all || $android : $all || $ios
-			
-		End if 
-		
-	Else 
-		
-		$ok:=True:C214
 		
 	End if 
 	
@@ -384,11 +364,12 @@ Function defaultChoiceList($typeString : Text; $isObject : Boolean)->$choiceList
 	// Return toolTip for custom format
 Function toolTip($target)->$tip : Text
 	
+	//fixme: UI function, so class is UI dependant
+	
 	var $bind; $o : Object
 	var $file : 4D:C1709.File
 	
 	If (PROJECT.isCustomResource(This:C1470.name))
-		
 		$file:=EDITOR.path[$target]().folder(Delete string:C232(This:C1470.name; 1; 1)).file("manifest.json")
 		
 		// #MARK_TODO : If zip formatter, fix file path (read in zip SHARED.archiveExtension)
@@ -423,3 +404,54 @@ Function toolTip($target)->$tip : Text
 		$tip:=String:C10(SHARED.resources.formattersByName[This:C1470.name].tips)
 		
 	End if 
+	
+	//mark:-[PRIVATE]
+	//============================================================================
+	// Create the "target" property according to the folders found 
+Function _setTarget($manifest : Object; $formater : cs:C1710.formater)
+	
+	var $android; $ios : Boolean
+	var $c : Collection
+	
+	$manifest.target:=New collection:C1472
+	
+	$c:=$formater.source.folders()
+	$android:=($c.query("name = android").pop()#Null:C1517)
+	$ios:=($c.query("name = ios").pop()#Null:C1517)
+	
+	Case of 
+			
+			//_______________________________________
+		: ($android & $ios)
+			
+			$manifest.target.push("ios")
+			$manifest.target.push("android")
+			
+			//_______________________________________
+		: ($android)
+			
+			$manifest.target.push("android")
+			
+			//_______________________________________
+		: ($ios)
+			
+			$manifest.target.push("ios")
+			
+			//_______________________________________
+		Else 
+			
+			If ($c.query("name = Sources").pop()#Null:C1517)
+				
+				// Old formatter structure
+				$manifest.target.push("ios")
+				
+			Else 
+				
+				// For all targets if format without code
+				$manifest.target.push("ios")
+				$manifest.target.push("android")
+				
+			End if 
+			
+			//_______________________________________
+	End case 
