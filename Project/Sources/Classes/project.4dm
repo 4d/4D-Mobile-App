@@ -1908,6 +1908,12 @@ Function _checkFieldForRepair($current : Object; $fromAudit : Object)->$succes :
 	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	/// Repairing the project
+Function fix($data : Object)->$result : Object
+	
+	$result:=project_Fix($data)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
 Function repairProject()
 	

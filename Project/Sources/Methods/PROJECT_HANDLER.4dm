@@ -404,7 +404,8 @@ Case of
 			
 		End if 
 		
-		$update:=project_Fix($IN)
+		//$update:=project_Fix($IN)
+		$update:=PROJECT.fix($IN)
 		
 		If (Num:C11($form.window)>0)
 			
@@ -438,8 +439,8 @@ Case of
 			$0:=$update
 			
 		End if 
-		//=========================================================
 		
+		//=========================================================
 	Else 
 		
 		ASSERT:C1129(False:C215; "Unknown entry point: \""+$IN.action+"\"")

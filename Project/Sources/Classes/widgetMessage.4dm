@@ -469,7 +469,7 @@ Function doCancel()
 			//______________________________________________________
 		: (Form:C1466.cancelAction#Null:C1517)  // #OLD_MECHANISM
 			
-			EXECUTE METHOD:C1007("EDITOR_RESUME"; *; Form:C1466.cancelAction)
+			EXECUTE METHOD:C1007(Formula:C1597(editor_RESUME).source; *; Form:C1466.cancelAction)
 			
 			//______________________________________________________
 	End case 

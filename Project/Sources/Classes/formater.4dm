@@ -133,6 +133,15 @@ Function sources($name : Text)->$sources : 4D:C1709.Folder
 				
 				$sources:=$archive.root
 				
+				// Deal with archives that have an additional folder in the root
+				// of the same name as the archive
+				$name:=Path to object:C1547($name).name  // Remove the extension
+				
+				If ($sources.folder($name).exists)
+					
+					$sources:=$sources.folder($name)
+					
+				End if 
 			End if 
 			
 		Else 
@@ -155,7 +164,7 @@ Function isValid($format)->$valid : Boolean
 	
 	var $o : Object
 	var $manifest : 4D:C1709.File
-	var $sources : 4D:C1709.Folder
+	var $sources : Object
 	
 	If (Count parameters:C259>=1)
 		
