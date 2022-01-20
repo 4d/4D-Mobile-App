@@ -58,7 +58,7 @@ Case of
 		$oOUT.errors:=New collection:C1472("No action provided when processing formatters")
 		ASSERT:C1129(dev_Matrix; "No action provided when processing formatters")
 		
-		//______________________________________________________
+		// MARK:- getByName
 	: ($oIN.action="getByName")
 		
 		$oResources:=SHARED.resources
@@ -144,7 +144,7 @@ Case of
 			End for each 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- getByType
 	: ($oIN.action="getByType")
 		
 		If (Bool:C1537($oIN.host))
@@ -241,7 +241,7 @@ Case of
 			
 		End if 
 		
-		//______________________________________________________
+		// MARK:- isValid
 	: ($oIN.action="isValid")
 		
 		If ($oIN.format#Null:C1517)
@@ -263,7 +263,7 @@ Case of
 			End if 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- doExtract
 	: ($oIN.action="doExtract")
 		
 		If ($oIN.result=Null:C1517)
@@ -330,7 +330,7 @@ Case of
 			End case 
 		End for each 
 		
-		//______________________________________________________
+		// MARK:- extract
 	: ($oIN.action="extract")  // Extract format from data model
 		
 		$oOUT.formatters:=New collection:C1472()
@@ -346,7 +346,7 @@ Case of
 			
 		End for each 
 		
-		//______________________________________________________
+		// MARK:- generate
 	: ($oIN.action="generate")
 		
 		If (Asserted:C1132(Value type:C1509($oIN.formatters)=Is collection:K8:32))
@@ -476,7 +476,7 @@ Case of
 			End for each 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- objectify
 	: ($oIN.action="objectify")
 		
 		$i:=0  // First index

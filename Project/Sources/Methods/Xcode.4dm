@@ -63,7 +63,7 @@ Case of
 		
 		ASSERT:C1129(dev_Matrix; "Missing the tag \"action\"")
 		
-		//______________________________________________________
+		// MARK:- appStore
 	: ($Obj_param.action="appStore")
 		
 		OPEN URL:C673(Get localized string:C991("appstore_xcode"); *)
@@ -90,7 +90,7 @@ Case of
 		$Obj_result.path:=Convert path POSIX to system:C1107($Txt_buffer)
 		$Obj_result.posix:=$Txt_buffer
 		
-		//______________________________________________________
+		// MARK:- path
 	: ($Obj_param.action="path")
 		
 		// return by default the default path,
@@ -137,7 +137,7 @@ Case of
 			
 		End if 
 		
-		//______________________________________________________
+		// MARK:- lastpath
 	: ($Obj_param.action="lastpath")
 		
 		$Obj_result:=Xcode(New object:C1471(\
@@ -170,7 +170,7 @@ Case of
 			End for each 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- masupgrade
 	: ($Obj_param.action="masupgrade")
 		
 		// work only with mas installed: brew install mas
@@ -191,7 +191,7 @@ Case of
 			End if 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- masaccount
 	: ($Obj_param.action="masaccount")
 		
 		// work only with mas installed: brew install mas
@@ -212,7 +212,7 @@ Case of
 			End if 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- paths
 	: ($Obj_param.action="paths")  // Get al installed xcode using spotlight
 		
 		$Txt_cmd:="mdfind \"kMDItemCFBundleIdentifier == 'com.apple.dt.Xcode'\""
@@ -247,7 +247,7 @@ Case of
 			End if 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- version
 	: ($Obj_param.action="version")
 		
 		Case of 
@@ -303,7 +303,7 @@ Case of
 			
 		End if 
 		
-		//______________________________________________________
+		// MARK:- xbuild-version
 	: ($Obj_param.action="xbuild-version")
 		
 		$Txt_cmd:="xcodebuild -version"
@@ -335,7 +335,7 @@ Case of
 			End if 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- swift-version
 	: ($Obj_param.action="swift-version")
 		
 		$Txt_cmd:="xcrun swift --version"
@@ -365,7 +365,7 @@ Case of
 			End if 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- find
 	: ($Obj_param.action="find")
 		
 		Case of 
@@ -431,7 +431,7 @@ Case of
 			
 		End if 
 		
-		//______________________________________________________
+		// MARK:- project-infos
 	: ($Obj_param.action="project-infos")
 		
 		$Obj_param.action:="find"
@@ -470,7 +470,7 @@ Case of
 			
 		End if 
 		
-		//______________________________________________________
+		// MARK:- workspace-infos
 	: ($Obj_param.action="workspace-infos")
 		
 		$Obj_param.action:="find"
@@ -504,7 +504,7 @@ Case of
 			End if 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- workspace-addsources
 	: ($Obj_param.action="workspace-addsources")
 		
 		// add all subprojects in third party group if source found
@@ -654,7 +654,7 @@ Case of
 			End if 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- project-object-infos
 	: ($Obj_param.action="project-object-infos")
 		
 		$Obj_param.action:="find"
@@ -669,7 +669,7 @@ Case of
 			
 		End if 
 		
-		//______________________________________________________
+		// MARK:- set-project-object-infos
 	: ($Obj_param.action="set-project-object-infos")
 		
 		$Obj_param.action:="find"
@@ -694,7 +694,7 @@ Case of
 			End if 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- open
 	: ($Obj_param.action="open")
 		
 		If ($Obj_param.path#Null:C1517)\
@@ -771,7 +771,7 @@ Case of
 			End if 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- couldOpen
 	: ($Obj_param.action="couldOpen")
 		
 		If ($Obj_param.path#Null:C1517)\
@@ -794,7 +794,7 @@ Case of
 			End if 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- safeDelete
 	: ($Obj_param.action="safeDelete")
 		
 		If (Test path name:C476($Obj_param.path)=Is a folder:K24:2)
@@ -828,7 +828,7 @@ Case of
 			
 		End if 
 		
-		//______________________________________________________
+		// MARK:- tools-path
 	: ($Obj_param.action="tools-path")
 		
 		$Txt_cmd:="xcode-select --print-path"
@@ -852,7 +852,7 @@ Case of
 			End if 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- showsdks
 	: ($Obj_param.action="showsdks")
 		
 		$Txt_cmd:="xcodebuild -showsdks"
@@ -871,7 +871,7 @@ Case of
 			End if 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- set-tool-path
 	: ($Obj_param.action="set-tool-path")
 		
 		If ($Obj_param.posix=Null:C1517)
@@ -947,7 +947,7 @@ Case of
 			
 		End if 
 		
-		//______________________________________________________
+		// MARK:- build
 	: ($Obj_param.action="build")
 		
 		If ($Obj_param.destination#Null:C1517)
@@ -1275,7 +1275,7 @@ Case of
 			End if 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- clean
 	: ($Obj_param.action="clean")
 		
 		If ($Obj_param.destination#Null:C1517)
@@ -1306,7 +1306,7 @@ Case of
 			End if 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- runFirstLaunch
 	: ($Obj_param.action="runFirstLaunch")  // Install packages and agree to the license.
 		
 		$Txt_cmd:="xcodebuild -runFirstLaunch"
@@ -1338,7 +1338,7 @@ Case of
 			End if 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- checkFirstLaunchStatus
 	: ($Obj_param.action="checkFirstLaunchStatus")  // Check if any First Launch tasks need to be performed.
 		
 		$Txt_in:="xcodebuild -checkFirstLaunchStatus"
@@ -1363,7 +1363,7 @@ Case of
 			
 		End if 
 		
-		//______________________________________________________
+		// MARK:- clean build
 	: ($Obj_param.action="clean build")
 		
 		$Obj_param.action:="clean"
@@ -1376,7 +1376,7 @@ Case of
 			
 		End if 
 		
-		//______________________________________________________
+		// MARK:- close
 	: ($Obj_param.action="close")
 		
 		$Txt_cmd:="/usr/bin/osascript"
@@ -1449,7 +1449,7 @@ Case of
 			End if 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- reveal
 	: ($Obj_param.action="reveal")
 		
 		$Txt_cmd:="/usr/bin/osascript"
@@ -1503,14 +1503,14 @@ Case of
 			End if 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- showDevicesWindow
 	: ($Obj_param.action="showDevicesWindow")
 		
 		OPEN URL:C673("xcdevice://ShowDevicesWindow"; *)
 		// LAUNCH EXTERNAL PROCESS("open xcdevice://showDevicesWindow")
 		$Obj_result.success:=True:C214
 		
-		//______________________________________________________
+		// MARK:- enableForDevelopment
 	: ($Obj_param.action="enableForDevelopment")
 		
 		If (String:C10($Obj_param.identifier)#"")
@@ -1524,7 +1524,7 @@ Case of
 			
 		End if 
 		
-		//______________________________________________________
+		// MARK:- openPrefs
 	: ($Obj_param.action="openPrefs")  // Quick Access to Preferences
 		
 		$Txt_buffer:="xcpref:// GeneralPrefs"
@@ -1539,7 +1539,7 @@ Case of
 		OPEN URL:C673($Txt_buffer)
 		$Obj_result.success:=True:C214
 		
-		//______________________________________________________
+		// MARK:- openXXXPrefs
 	: (Match regex:C1019("open(.*)Prefs"; $Obj_param.action; 1; $Lon_i; $Lon_x))
 		
 		$Obj_param.tag:=Substring:C12($Obj_param.action; $Lon_i+4; $Lon_x-8)

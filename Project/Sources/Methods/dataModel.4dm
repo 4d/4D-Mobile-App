@@ -43,7 +43,7 @@ Case of
 		
 		ASSERT:C1129(False:C215; "Missing parameter \"action\"")
 		
-		//______________________________________________________
+		// MARK:- tableCollection
 	: ($Obj_in.action="tableCollection")  // Get table as collection - CALLERS : templates
 		
 		Case of 
@@ -102,7 +102,7 @@ Case of
 				//………………………………………………………………………………………………………………………
 		End case 
 		
-		//______________________________________________________
+		// MARK:- fieldCollection
 	: ($Obj_in.action="fieldCollection")  // get field name and if, format in list and detail userChoice - CALLERS : templates
 		
 		$Obj_out.success:=($Obj_in.table#Null:C1517)
@@ -160,7 +160,7 @@ Case of
 			
 		End if 
 		
-		//______________________________________________________
+		// MARK:- fieldNames
 	: ($Obj_in.action="fieldNames")  // Get field names for dump with table (model format) - CALLERS : dump
 		
 		$Obj_out.success:=($Obj_in.table#Null:C1517)
@@ -284,7 +284,7 @@ Case of
 			
 		End if 
 		
-		//______________________________________________________
+		// MARK:- pictureFields
 	: ($Obj_in.action="pictureFields")  // get field names for dump with table (model format) - CALLERS : dump
 		
 		$Obj_out.success:=($Obj_in.table#Null:C1517)
@@ -343,7 +343,7 @@ Case of
 			
 		End if 
 		
-		//______________________________________________________
+		// MARK:- fields
 	: ($Obj_in.action="fields")  // Return a readonly flat table field list - CALLERS : views_Handler
 		
 		$Obj_dataModel:=$Obj_in.dataModel
@@ -397,7 +397,7 @@ Case of
 			End if 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- tableNames
 	: ($Obj_in.action="tableNames")  // CALLERS : mobile_Project
 		
 		$Obj_dataModel:=$Obj_in.dataModel

@@ -68,7 +68,7 @@ End if
 If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 	
 	Case of 
-			//______________________________________________________
+		// MARK:- dataModel
 		: ($Obj_in.action="dataModel")
 			Case of 
 					
@@ -129,7 +129,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 					
 			End case 
 			
-			//______________________________________________________
+		// MARK:- create
 		: (($Obj_in.action="create") | ($Obj_in.action="formatter"))
 			
 			Case of 

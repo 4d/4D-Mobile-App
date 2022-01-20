@@ -40,7 +40,7 @@ Case of
 		
 		ASSERT:C1129(False:C215)
 		
-		//______________________________________________________
+		// MARK:- list
 	: ($params.action="list")
 		
 		$response.value:=New collection:C1472()

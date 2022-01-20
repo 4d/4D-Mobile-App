@@ -51,7 +51,7 @@ Case of
 		
 		ASSERT:C1129(False:C215)
 		
-		//______________________________________________________
+		// MARK:- juicer
 	: ($Obj_in.action="juicer")
 		
 		$Txt_cmd:=str_singleQuoted(cs:C1710.path.new().scripts().file("colorjuicer").path)
@@ -120,7 +120,7 @@ Case of
 			
 		End if 
 		
-		//______________________________________________________
+		// MARK:- contrast
 	: ($Obj_in.action="contrast")
 		
 		If (Value type:C1509($Obj_in.color)=Is object:K8:27)
@@ -154,7 +154,7 @@ Case of
 			
 		End if 
 		
-		//______________________________________________________
+		// MARK:- rgbtohex
 	: ($Obj_in.action="rgbtohex")
 		
 		Case of 

@@ -66,7 +66,7 @@ Case of
 		
 		ASSERT:C1129(False:C215)
 		
-		//______________________________________________________
+		// MARK:- inject
 	: ($Obj_in.action="inject")  // inject in projects files
 		
 		If ($Obj_in.capabilities=Null:C1517)
@@ -127,12 +127,12 @@ Case of
 		
 		$Obj_out:=capabilities($Obj_params)
 		
-		//______________________________________________________
+		// MARK:- find
 	: ($Obj_in.action="find")  // from project 4d file, return the list of capabilities
 		
 		$Obj_out:=ob_findProperty($Obj_in.value; "capabilities")
 		$Obj_out.capabilities:=$Obj_out.value
-		//______________________________________________________
+		// MARK:- mergeObjects
 	: ($Obj_in.action="mergeObjects")  // from project 4d file, return the list of capabilities
 		
 		If (Value type:C1509($Obj_in.value)=Is collection:K8:32)
@@ -142,7 +142,7 @@ Case of
 			
 		End if 
 		
-		//______________________________________________________
+		// MARK:- read
 	: ($Obj_in.action="read")  // read files from project target
 		
 		Case of 
@@ -177,7 +177,7 @@ Case of
 				// ----------------------------------------
 		End case 
 		
-		//______________________________________________________
+		// MARK:- write
 	: ($Obj_in.action="write")
 		
 		$Obj_out:=capabilities(New object:C1471(\
@@ -231,7 +231,7 @@ Case of
 			
 		End if 
 		
-		//______________________________________________________
+		// MARK:- natify
 	: ($Obj_in.action="natify")  // transform simple key to real key
 		
 		// If (iOS)

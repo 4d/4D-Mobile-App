@@ -57,7 +57,7 @@ Case of
 		
 		ASSERT:C1129(False:C215)
 		
-		//______________________________________________________
+		// MARK:- catalog
 	: ($IN.action="catalog")  // Return the exposed datastore
 		
 		// -------------------------------------------------------------------------------------------
@@ -278,7 +278,7 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 			End if 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- fieldDefinition
 	: ($IN.action="fieldDefinition")  // Returns the field definition from the starting table number and its path
 		
 		ASSERT:C1129($IN.tableNumber#Null:C1517)
@@ -436,7 +436,7 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 			End if 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- relatedCatalog
 	: ($IN.action="relatedCatalog")  // Return related entity catalog
 		
 		ASSERT:C1129($IN.table#Null:C1517)
@@ -521,7 +521,7 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 				//…………………………………………………………………………………………………
 		End case 
 		
-		//______________________________________________________
+		// MARK:- inverseRelatedFields
 	: ($IN.action="inverseRelatedFields")  // on related data class, get related fields linked to current table CALLER: [dataModel]
 		
 		Case of 
@@ -594,7 +594,7 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 				//…………………………………………………………………………………………………
 		End case 
 		
-		//______________________________________________________
+		// MARK:- inverseRelationName
 	: ($IN.action="inverseRelationName")  //  [OBSOLETE]
 		
 		Case of 
@@ -675,7 +675,7 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 				//________________________________________
 		End case 
 		
-		//______________________________________________________
+		// MARK:- createField
 	: ($IN.action="createField")  // CALLER: [dataModel] (add missing primary key field)
 		
 		$datastore:=_4D_Build Exposed Datastore:C1598
@@ -702,7 +702,7 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 			End if 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- hasField
 	: ($IN.action="hasField")  // Check that table contains a field CALLER: [dataModel]
 		
 		Case of 
@@ -737,7 +737,7 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 				// ----------------------------------------
 		End case 
 		
-		//______________________________________________________
+		// MARK:- tableInfo
 	: ($IN.action="tableInfo")  // Return table.getInfo() from table name CALLER: [dataModel]
 		
 		If (Asserted:C1132($IN.name#Null:C1517; "missing 'name' key"))
@@ -753,7 +753,7 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 			End if 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- tableNumber
 	: ($IN.action="tableNumber")  // Return table number from table name
 		
 		If (Asserted:C1132($IN.name#Null:C1517; "missing 'name' key"))
@@ -769,7 +769,7 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 			End if 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- tmplType
 	: ($IN.action="tmplType")  // Type mapping for svg templates [OBSOLETE]
 		
 		// TODO cache this collection (COMPONENT_INIT?)
@@ -791,7 +791,7 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 		
 		$OUT.success:=$OUT.value#Null:C1517
 		
-		//______________________________________________________
+		// MARK:- entityType
 	: ($IN.action="entityType")  // Type mapping for enttity RECURSIVE - [OBSOLETE]
 		
 		$o:=New object:C1471
@@ -811,7 +811,7 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 		
 		$OUT.success:=$OUT.value#Null:C1517
 		
-		//______________________________________________________
+		// MARK:- tables
 	: ($IN.action="tables")  //  [OBSOLETE]
 		
 		If (Bool:C1537(FEATURE._98145))  //#MARK_TODO - CHANGE "tables" entrypoint to "catalog"
@@ -980,7 +980,7 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 			End if 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- definition
 	: ($IN.action="definition")  // A GARDER POUR LE MOMENT
 		
 		EXPORT STRUCTURE:C1311($xml)
@@ -1010,7 +1010,7 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 		
 		//ASSERT(False;"Not implemented: \""+$Obj_in.action+"\"")
 		
-		//______________________________________________________
+		// MARK:- verify@
 	: ($IN.action="verify@")
 		
 		Case of 
@@ -1084,7 +1084,7 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 				//______________________________________________________
 		End case 
 		
-		//______________________________________________________
+		// MARK:- create@
 	: ($IN.action="create@")
 		
 		Case of 
@@ -1227,7 +1227,7 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 				//______________________________________________________
 		End case 
 		
-		//______________________________________________________
+		// MARK:- addStamp
 	: ($IN.action="addStamp")
 		
 		$OUT.success:=($IN.tableName#Null:C1517)

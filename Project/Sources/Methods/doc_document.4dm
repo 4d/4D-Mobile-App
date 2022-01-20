@@ -63,7 +63,7 @@ Case of
 		
 		TRACE:C157
 		
-		  //______________________________________________________
+		// MARK:- properties
 	: ($Obj_document.action="properties")
 		
 		GET DOCUMENT PROPERTIES:C477($Obj_document.path;$Boo_locked;$Boo_invisible;$Dat_creation;$Gmt_creation;$Dat_modified;$Gmt_modified)
@@ -81,7 +81,7 @@ Case of
 		  //$Obj_document.isAlias:=Bool(OK)
 		$Obj_document.isAlias:=(Length:C16(doc_resolveAlias ($Obj_document.path))>0)
 		
-		  //______________________________________________________
+		// MARK:- isAlias
 	: ($Obj_document.action="isAlias")
 		
 		$Obj_document.success:=(Test path name:C476($Obj_document.path)=Is a document:K24:1)
@@ -100,7 +100,7 @@ Case of
 			
 		End if 
 		
-		  //______________________________________________________
+		// MARK:- volume
 	: ($Obj_document.action="volume")
 		
 		ARRAY LONGINT:C221($tLon_lengths;0x0000)
@@ -121,7 +121,7 @@ Case of
 			End for 
 		End if 
 		
-		  //______________________________________________________
+		// MARK:- copy
 	: ($Obj_document.action="copy")
 		
 		ASSERT:C1129($Obj_document.src#Null:C1517)
@@ -135,7 +135,7 @@ Case of
 			
 		End if 
 		
-		  //______________________________________________________
+		// MARK:- delete
 	: ($Obj_document.action="delete")
 		
 		$Obj_document.success:=(Test path name:C476($Obj_document.path)#Is a document:K24:1)
@@ -152,7 +152,7 @@ Case of
 			End if 
 		End if 
 		
-		  //______________________________________________________
+		// MARK:- unlock
 	: ($Obj_document.action="unlock")
 		
 		GET DOCUMENT PROPERTIES:C477($Obj_document.path;$Boo_locked;$Boo_invisible;$Dat_created;$Gmt_created;$Dat_modified;$Gmt_modified)

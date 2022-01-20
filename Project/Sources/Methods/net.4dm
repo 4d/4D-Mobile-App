@@ -58,7 +58,7 @@ Case of
 		
 		TRACE:C157
 		
-		//______________________________________________________
+		// MARK:- ping
 	: ($Obj_in.action="ping")
 		
 		If (Is macOS:C1572)\
@@ -104,7 +104,7 @@ Case of
 			
 		End if 
 		
-		//______________________________________________________
+		// MARK:- localhost
 	: ($Obj_in.action="localhost")
 		
 		If ($Obj_in.url="@localhost@")
@@ -114,7 +114,7 @@ Case of
 			
 		End if 
 		
-		//______________________________________________________
+		// MARK:- resolve
 	: ($Obj_in.action="resolve")
 		
 		$Obj_out.ip:=""

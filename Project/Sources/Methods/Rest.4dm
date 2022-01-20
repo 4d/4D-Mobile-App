@@ -51,7 +51,7 @@ Case of
 		
 		ASSERT:C1129(False:C215)
 		
-		//______________________________________________________
+		// MARK:- devurl
 	: ($in.action="devurl")
 		
 		$webServerInfos:=WEB Get server info:C1531
@@ -90,7 +90,7 @@ WARNING: "localhost" may not find the server if the computer is connected to a n
 		$out.url:=$out.url+"/"+$in.handler+"/"
 		$out.success:=True:C214
 		
-		//______________________________________________________
+		// MARK:- url
 	: ($in.action="url")
 		
 		If (Length:C16(String:C10($in.url))=0)
@@ -133,7 +133,7 @@ WARNING: "localhost" may not find the server if the computer is connected to a n
 			
 		End if 
 		
-		//______________________________________________________
+		// MARK:- request
 	: ($in.action="request")
 		
 		$in.action:="url"
@@ -323,7 +323,7 @@ WARNING: "localhost" may not find the server if the computer is connected to a n
 			End for 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- status
 	: ($in.action="status")
 		
 		$in.action:="request"
@@ -344,49 +344,49 @@ WARNING: "localhost" may not find the server if the computer is connected to a n
 			
 		End if 
 		
-		//______________________________________________________
+		// MARK:- info
 	: ($in.action="info")
 		
 		$in.action:="request"
 		$in.path:="$info"
 		$out:=Rest($in)
 		
-		//______________________________________________________
+		// MARK:- progressinfo
 	: ($in.action="progressinfo")
 		
 		$in.action:="request"
 		$in.path:="$info/ProgressInfo"
 		$out:=Rest($in)
 		
-		//______________________________________________________
+		// MARK:- sessioninfo
 	: ($in.action="sessioninfo")
 		
 		$in.action:="request"
 		$in.path:="$info/sessioninfo"
 		$out:=Rest($in)
 		
-		//______________________________________________________
+		// MARK:- entitySet
 	: ($in.action="entitySet")
 		
 		$in.action:="request"
 		$in.path:="$info/entityset"
 		$out:=Rest($in)
 		
-		//______________________________________________________
+		// MARK:- catalog
 	: ($in.action="catalog")
 		
 		$in.action:="request"
 		$in.path:="$catalog"
 		$out:=Rest($in)
 		
-		//______________________________________________________
+		// MARK:- tables
 	: ($in.action="tables")
 		
 		$in.action:="request"
 		$in.path:="$catalog/$all"
 		$out:=Rest($in)
 		
-		//______________________________________________________
+		// MARK:- table
 	: ($in.action="table")
 		
 		If ($in.table=Null:C1517)
@@ -402,7 +402,7 @@ WARNING: "localhost" may not find the server if the computer is connected to a n
 			
 		End if 
 		
-		//______________________________________________________
+		// MARK:- records
 	: ($in.action="records")
 		
 		If ($in.table=Null:C1517)
@@ -453,21 +453,21 @@ WARNING: "localhost" may not find the server if the computer is connected to a n
 			
 		End if 
 		
-		//______________________________________________________
+		// MARK:- authenticate
 	: ($in.action="authenticate")
 		
 		$in.action:="request"
 		$in.path:="authenticate"
 		$out:=Rest($in)
 		
-		//______________________________________________________
+		// MARK:- verify
 	: ($in.action="verify")
 		
 		$in.action:="request"
 		$in.path:="$verify"
 		$out:=Rest($in)
 		
-		//______________________________________________________
+		// MARK:- image
 	: ($in.action="image")
 		
 		// XXX parameters checking: url, target

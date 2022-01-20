@@ -47,7 +47,7 @@ Case of
 		
 		ASSERT:C1129(False:C215)
 		
-		//______________________________________________________
+		// MARK:- path
 	: ($params.action="path")
 		
 		$response.success:=True:C214
@@ -56,7 +56,7 @@ Case of
 		$response.posix:=$folder.path
 		$response.path:=$folder.platformPath
 		
-		//______________________________________________________
+		// MARK:- paths
 	: ($params.action="paths")
 		
 		$response:=provisioningProfiles(New object:C1471(\
@@ -78,7 +78,7 @@ Case of
 			End if 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- read
 	: ($params.action="read")
 		
 		If ($params.path=Null:C1517)
@@ -134,7 +134,7 @@ Case of
 			End if 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- clear
 	: ($params.action="clear")
 		
 		$response:=provisioningProfiles(New object:C1471("action"; "path"))

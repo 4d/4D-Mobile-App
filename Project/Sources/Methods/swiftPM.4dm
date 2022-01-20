@@ -51,7 +51,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 	Case of 
 			
 			
-			  //______________________________________________________
+		// MARK:- describe
 		: ($Obj_in.action="describe")
 			
 			If ($Obj_in.path#Null:C1517)
@@ -88,7 +88,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				
 			End if 
 			
-			  //______________________________________________________
+		// MARK:- package
 		: ($Obj_in.action="package")
 			
 			If ($Obj_in.path#Null:C1517)
@@ -125,7 +125,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				
 			End if 
 			
-			  //______________________________________________________
+		// MARK:- dependencies
 		: ($Obj_in.action="dependencies")
 			
 			If ($Obj_in.path#Null:C1517)
@@ -162,7 +162,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				
 			End if 
 			
-			  //______________________________________________________
+		// MARK:- toolsVersion
 		: ($Obj_in.action="toolsVersion")
 			
 			$Txt_cmd:="swift package tools-version"

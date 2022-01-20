@@ -59,7 +59,7 @@ Case of
 		
 		ASSERT:C1129(False:C215)
 		
-		  //______________________________________________________
+		// MARK:- codesigning
 	: ($Obj_param.action="codesigning")
 		
 		$Txt_cmd:="/usr/bin/security find-identity -v -p codesigning"
@@ -109,7 +109,7 @@ Case of
 			End if 
 		End if 
 		
-		  //______________________________________________________
+		// MARK:- pem
 	: ($Obj_param.action="pem")
 		
 		$Txt_cmd:="security find-certificate -c \""+String:C10($Obj_param.name)+"\" -p"
@@ -126,7 +126,7 @@ Case of
 			
 		End if 
 		
-		  //______________________________________________________
+		// MARK:- subject
 	: ($Obj_param.action="subject")
 		
 		

@@ -54,7 +54,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 	
 	Case of 
 			
-			//______________________________________________________
+			// MARK:- install
 		: ($Obj_param.action="install")
 			
 			If (String:C10($Obj_param.file)#"")
@@ -112,7 +112,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 				
 			End if 
 			
-			//______________________________________________________
+			// MARK:- installAdditionnalSDK
 		: ($Obj_param.action="installAdditionnalSDK")
 			
 			// Check
@@ -173,7 +173,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 				
 			End if 
 			
-			//________________________________________
+			// MARK:- inject
 		: ($Obj_param.action="inject")
 			
 			$Obj_param.projfile.mustSave:=True:C214
@@ -261,7 +261,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 				
 			End if 
 			
-			//______________________________________________________
+			// MARK:- cache
 		: ($Obj_param.action="cache")
 			
 			If (String:C10($Obj_param.path)#"")
@@ -313,7 +313,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 				
 			End if 
 			
-			//______________________________________________________
+			// MARK:- sdkVersion
 		: ($Obj_param.action="sdkVersion")
 			
 			$Obj_result.version:=""

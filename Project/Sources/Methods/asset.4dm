@@ -59,7 +59,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 	
 	Case of 
 			
-			//______________________________________________________
+		// MARK:- path
 		: ($Obj_in.action="path")
 			
 			$Txt_buffer:="Resources"+Folder separator:K24:12+"Assets.xcassets"+Folder separator:K24:12
@@ -86,7 +86,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 			
 			$Obj_out.success:=True:C214
 			
-			//______________________________________________________
+		// MARK:- formatter
 		: ($Obj_in.action="formatter") | ($Obj_in.action="input")
 			
 			Case of 
@@ -226,7 +226,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 					//----------------------------------------
 			End case 
 			
-			//______________________________________________________
+		// MARK:- create
 		: ($Obj_in.action="create")
 			
 			If (($Obj_in.tags=Null:C1517)\
@@ -638,7 +638,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 					//…………………………………………………………………………………………………………………
 			End case 
 			
-			//______________________________________________________
+		// MARK:- read
 		: ($Obj_in.action="read")
 			
 			If ($Obj_in.path#Null:C1517)
@@ -668,7 +668,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 				
 			End if 
 			
-			//______________________________________________________
+		// MARK:- list
 		: ($Obj_in.action="list")
 			
 			If ($Obj_in.path#Null:C1517)

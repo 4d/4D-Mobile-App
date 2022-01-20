@@ -71,7 +71,7 @@ Case of
 		
 		$out.errors:=New collection:C1472("`dataModel` must be specified when dumping")
 		
-		//______________________________________________________
+		// MARK:- catalog
 	: ($in.action="catalog")
 		
 		$result:=New object:C1471
@@ -180,7 +180,7 @@ Case of
 		
 		$out.results:=$result
 		
-		//______________________________________________________
+		// MARK:- data
 	: ($in.action="data")
 		
 		$out.success:=True:C214
@@ -510,7 +510,7 @@ Case of
 			End if 
 		End for each 
 		
-		//______________________________________________________
+		// MARK:- pictures
 	: ($in.action="pictures")
 		
 		If ($in.format=Null:C1517)

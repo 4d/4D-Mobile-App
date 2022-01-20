@@ -61,7 +61,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 	
 	Case of 
 			
-			//______________________________________________________
+		// MARK:- path
 		: ($in.action="path")
 			
 			Case of 
@@ -147,7 +147,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 					//----------------------------------------
 			End case 
 			
-			//______________________________________________________
+		// MARK:- check
 		: ($in.action="check")
 			
 			// / Check if exist, and if digest check also if same digest = same structure and url ...
@@ -202,7 +202,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 				End if 
 			End if 
 			
-			//______________________________________________________
+		// MARK:- digest
 		: ($in.action="digest")
 			
 			// Remove some info in table not concerned
@@ -288,7 +288,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 					//----------------------------------------
 			End case 
 			
-			//______________________________________________________
+		// MARK:- erase
 		: ($in.action="erase")
 			
 			If ($in.path=Null:C1517)
@@ -317,7 +317,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 				End if 
 			End if 
 			
-			//______________________________________________________
+		// MARK:- copy
 		: ($in.action="copy")
 			
 			$in.action:="check"
@@ -354,7 +354,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 				End if 
 			End if 
 			
-			//______________________________________________________
+		// MARK:- create
 		: ($in.action="create")  // later allow to do it with remove
 			
 			If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
@@ -666,7 +666,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 				End if 
 			End if 
 			
-			//______________________________________________________
+		// MARK:- readCatalog
 		: ($in.action="readCatalog")
 			
 			If ((Value type:C1509($in.project)=Is object:K8:27))
@@ -700,7 +700,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 				
 			End if 
 			
-			//______________________________________________________
+		// MARK:- coreData
 		: ($in.action="coreData")
 			
 			If (Not:C34(Bool:C1537(Storage:C1525.flags.stopGeneration)))
