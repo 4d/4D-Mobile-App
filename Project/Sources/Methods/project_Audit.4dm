@@ -39,6 +39,9 @@ If (Count parameters:C259=0)
 	$list:=PROJECT.list
 	$detail:=PROJECT.detail
 	
+	var $target : Collection
+	$target:=Value type:C1509(PROJECT.info.target)=Is collection:K8:32 ? PROJECT.info.target : New collection:C1472(PROJECT.info.target)
+	
 Else 
 	
 	// Allow passing value for test purpose.
@@ -217,12 +220,44 @@ If ($datamodel#Null:C1517)
 							//______________________________________________________
 						: (Position:C15("/"; $name)=1)  // Host resources
 							
-							If (Not:C34(cs:C1710.formater.new($name).isValid()))  // 👎 MISSING OR INVALID FORMATTER
+							var $formater : cs:C1710.formater
+							$formater:=cs:C1710.formater.new($name)
+							
+							If ($formater.isValid())
+								
+								var $manifest : Object
+								$manifest:=JSON Parse:C1218($formater.source.file("manifest.json").getText())
+								$manifest.type:=(Value type:C1509($manifest.type)=Is collection:K8:32) ? $manifest.type : New collection:C1472(String:C10($manifest.type))
+								
+								If ($manifest.target#Null:C1517)
+									
+									$manifest.target:=(Value type:C1509($manifest.target)=Is collection:K8:32) ? $manifest.target : New collection:C1472(String:C10($manifest.target))
+									
+								Else 
+									
+									$formater._setTarget($manifest; $formater)
+									
+								End if 
+								
+								If (Not:C34((($manifest.target.length=2) & ($target.length=2))\
+									 || (($target.length=1) & ($manifest.target.indexOf($target[0])#-1))))  // Not compatible with the target
+									
+									$errors.push(New object:C1471(\
+										"type"; "formatter"; \
+										"panel"; "TABLES"; \
+										"message"; $str.localize("theFormatIsNotValidForThisTarget"; $formater.label); \
+										"table"; $table.key; \
+										"field"; $field.key))
+									
+								End if 
+								
+								
+							Else   // 👎 MISSING OR INVALID FORMATTER
 								
 								$errors.push(New object:C1471(\
 									"type"; "formatter"; \
 									"panel"; "TABLES"; \
-									"message"; $str.localize("theFormatterIsMissingOrInvalid"; $name); \
+									"message"; $str.localize("theFormatterIsMissingOrInvalid"; $formater.label); \
 									"table"; $table.key; \
 									"field"; $field.key))
 								

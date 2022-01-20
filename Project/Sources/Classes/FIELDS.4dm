@@ -160,11 +160,10 @@ Function updateFieldList
 	// Updates the list of fields/reports according to the selected table
 Function getFieldList()->$result : Object
 	
-	var $subKey; $key; $label; $tableID : Text
+	var $key; $subKey; $tableID : Text
 	var $field; $table : Object
-	
+	var $target : Collection
 	var $formatters : 4D:C1709.Folder
-	var $formater : cs:C1710.formater
 	
 	$result:=New object:C1471(\
 		"success"; Form:C1466.dataModel#Null:C1517)
@@ -177,8 +176,6 @@ Function getFieldList()->$result : Object
 		$result.success:=(Form:C1466.dataModel[$tableID]#Null:C1517)
 		
 		If ($result.success)
-			
-			$formatters:=EDITOR.path.hostFormatters()
 			
 			$result.ids:=New collection:C1472
 			$result.names:=New collection:C1472
@@ -196,6 +193,8 @@ Function getFieldList()->$result : Object
 			
 			$table:=Form:C1466.dataModel[$tableID]
 			
+			$target:=Value type:C1509(PROJECT.info.target)=Is collection:K8:32 ? PROJECT.info.target : New collection:C1472(PROJECT.info.target)
+			
 			For each ($key; $table)
 				
 				Case of 
@@ -209,66 +208,27 @@ Function getFieldList()->$result : Object
 					: (PROJECT.isField($key))\
 						 & (Num:C11(This:C1470.tabSelector.data)=0)
 						
-						$result.formatColors.push(Foreground color:K23:1)
-						$result.nameColors.push(Foreground color:K23:1)
 						
 						$field:=$table[$key]
 						$field.id:=Num:C11($key)
+						
+						$field.label:=($field.label#Null:C1517) ? $field.label : PROJECT.label($field.name)
+						$field.shortLabel:=($field.shortLabel#Null:C1517) ? $field.shortLabel : $field.label
+						
+						
+						//mark:-
+/* TEMPO */$result.tableNumbers.push(Num:C11($tableID))
 						$result.ids.push($field.id)
 						$result.names.push($field.name)
 						$result.paths.push($field.name)
 						$result.types.push($field.type)
-						
-/* TEMPO */$result.tableNumbers.push(Num:C11($tableID))
-						
-						If ($field.label=Null:C1517)
-							
-							$field.label:=PROJECT.label($field.name)
-							
-						End if 
-						
 						$result.labels.push($field.label)
-						
-						If ($field.shortLabel=Null:C1517)
-							
-							$field.shortLabel:=$field.label
-							
-						End if 
-						
 						$result.shortLabels.push($field.shortLabel)
 						$result.iconPaths.push(String:C10($field.icon))
+						$result.formatColors.push(Foreground color:K23:1)
+						$result.nameColors.push(Foreground color:K23:1)
 						$result.icons.push(PROJECT.getIcon(String:C10($field.icon)))
-						
-						If ($field.format#Null:C1517)
-							
-							$formater:=cs:C1710.formater.new($field.format)
-							
-							If ($formater.host)
-								
-								If (Not:C34($formater.isValid()))
-									
-									$label:=$formater.label
-									$result.formatColors[$result.formats.length]:=EDITOR.errorColor  // Missing or invalid
-									
-								Else 
-									
-									$label:=$formater.source.name
-									
-								End if 
-								
-							Else 
-								
-								$label:=EDITOR.str.setText("_"+$field.format).localized()
-								
-							End if 
-							
-						Else 
-							
-							$label:=EDITOR.str.setText("_"+String:C10(SHARED.defaultFieldBindingTypes[$field.fieldType])).localized()
-							
-						End if 
-						
-						$result.formats.push($label)
+						$result.formats.push(This:C1470._computeFormat($field; $result; $target))
 						
 						//……………………………………………………………………………………………………………
 					: (Value type:C1509($table[$key])#Is object:K8:27)
@@ -279,66 +239,24 @@ Function getFieldList()->$result : Object
 					: (PROJECT.isComputedAttribute($table[$key]))\
 						 & (Num:C11(This:C1470.tabSelector.data)=0)
 						
-						$result.formatColors.push(Foreground color:K23:1)
-						$result.nameColors.push(Foreground color:K23:1)
-						
 						$field:=$table[$key]
 						
+						$field.label:=($field.label#Null:C1517) ? $field.label : PROJECT.label($field.name)
+						$field.shortLabel:=($field.shortLabel#Null:C1517) ? $field.shortLabel : $field.label
+						
+						//mark:-
+/* TEMPO */$result.tableNumbers.push(Num:C11($tableID))
 						$result.ids.push(0)
 						$result.names.push($field.name)
 						$result.paths.push($field.name)
 						$result.types.push($field.fieldType)
-						
-/* TEMPO */$result.tableNumbers.push(Num:C11($tableID))
-						
-						If ($field.label=Null:C1517)
-							
-							$field.label:=PROJECT.label($field.name)
-							
-						End if 
-						
 						$result.labels.push($field.label)
-						
-						If ($field.shortLabel=Null:C1517)
-							
-							$field.shortLabel:=$field.label
-							
-						End if 
-						
 						$result.shortLabels.push($field.shortLabel)
 						$result.iconPaths.push(String:C10($field.icon))
+						$result.formatColors.push(Foreground color:K23:1)
+						$result.nameColors.push(Foreground color:K23:1)
 						$result.icons.push(PROJECT.getIcon(String:C10($field.icon)))
-						
-						If ($field.format#Null:C1517)
-							
-							$formater:=cs:C1710.formater.new($field.format)
-							
-							If ($formater.host)
-								
-								If (Not:C34($formater.isValid()))
-									
-									$label:=$formater.label
-									$result.formatColors[$result.formats.length]:=EDITOR.errorColor  // Missing or invalid
-									
-								Else 
-									
-									$label:=$formater.source.name
-									
-								End if 
-								
-							Else 
-								
-								$label:=EDITOR.str.setText("_"+$field.format).localized()
-								
-							End if 
-							
-						Else 
-							
-							$label:=EDITOR.str.setText("_"+String:C10(SHARED.defaultFieldBindingTypes[$field.fieldType])).localized()
-							
-						End if 
-						
-						$result.formats.push($label)
+						$result.formats.push(This:C1470._computeFormat($field; $result; $target))
 						
 						//……………………………………………………………………………………………………………
 					: (PROJECT.isRelationToOne($table[$key]))
@@ -357,9 +275,6 @@ Function getFieldList()->$result : Object
 										//______________________________________________________
 									: (PROJECT.isField($subKey))
 										
-										$result.formatColors.push(Foreground color:K23:1)
-										$result.nameColors.push(Foreground color:K23:1)
-										
 										$field:=$table[$key][$subKey]
 										$field.id:=Num:C11($subKey)
 										
@@ -371,38 +286,10 @@ Function getFieldList()->$result : Object
 										$result.labels.push($field.label)
 										$result.shortLabels.push($field.shortLabel)
 										$result.iconPaths.push(String:C10($field.icon))
+										$result.formatColors.push(Foreground color:K23:1)
+										$result.nameColors.push(Foreground color:K23:1)
 										$result.icons.push(PROJECT.getIcon(String:C10($field.icon)))
-										
-										If ($field.format#Null:C1517)
-											
-											$formater:=cs:C1710.formater.new($field.format)
-											
-											If ($formater.host)
-												
-												If (Not:C34($formater.isValid()))
-													
-													$label:=$formater.label
-													$result.formatColors[$result.formats.length]:=EDITOR.errorColor  // Missing or invalid
-													
-												Else 
-													
-													$label:=$formater.source.name
-													
-												End if 
-												
-											Else 
-												
-												$label:=EDITOR.str.setText("_"+$field.format).localized()
-												
-											End if 
-											
-										Else 
-											
-											$label:=EDITOR.str.setText("_"+String:C10(SHARED.defaultFieldBindingTypes[$field.fieldType])).localized()
-											
-										End if 
-										
-										$result.formats.push($label)
+										$result.formats.push(This:C1470._computeFormat($field; $result; $target))
 										
 										//______________________________________________________
 									: (PROJECT.isComputedAttribute($table[$key][$subKey]))
@@ -417,41 +304,10 @@ Function getFieldList()->$result : Object
 										$result.labels.push($field.label)
 										$result.shortLabels.push($field.shortLabel)
 										$result.iconPaths.push(String:C10($field.icon))
-										$result.icons.push(PROJECT.getIcon(String:C10($field.icon)))
-										
 										$result.formatColors.push(Foreground color:K23:1)
 										$result.nameColors.push(Foreground color:K23:1)
-										
-										If ($field.format#Null:C1517)
-											
-											$formater:=cs:C1710.formater.new($field.format)
-											
-											If ($formater.host)
-												
-												If (Not:C34($formater.isValid()))
-													
-													$label:=$formater.label
-													$result.formatColors[$result.formats.length]:=EDITOR.errorColor  // Missing or invalid
-													
-												Else 
-													
-													$label:=$formater.source.name
-													
-												End if 
-												
-											Else 
-												
-												$label:=EDITOR.str.setText("_"+$field.format).localized()
-												
-											End if 
-											
-										Else 
-											
-											$label:=EDITOR.str.setText("_"+String:C10(SHARED.defaultFieldBindingTypes[$field.fieldType])).localized()
-											
-										End if 
-										
-										$result.formats.push($label)
+										$result.icons.push(PROJECT.getIcon(String:C10($field.icon)))
+										$result.formats.push(This:C1470._computeFormat($field; $result; $target))
 										
 										//______________________________________________________
 									Else 
@@ -460,7 +316,7 @@ Function getFieldList()->$result : Object
 										
 										If (Bool:C1537($field.isToMany))
 											
-											
+											//todo: many to may
 											
 										Else 
 											
@@ -470,7 +326,6 @@ Function getFieldList()->$result : Object
 										
 										//______________________________________________________
 								End case 
-								
 							End for each 
 							
 						Else 
@@ -768,44 +623,6 @@ Function updateForms($field : Object; $row : Integer)
 	
 	This:C1470._updateForms("detail"; $field; $row)
 	This:C1470._updateForms("list"; $field; $row)
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-	// [PRIVATE] Update forms
-Function _updateForms($type : Text; $field : Object; $row : Integer)
-	
-	var $o : Object
-	
-	$o:=Form:C1466[$type][String:C10(This:C1470.tableNumber)]
-	
-	If ($o.fields#Null:C1517)
-		
-		If ($field.name=Null:C1517)  //relation
-			
-			$o:=$o.fields.query("name = :1"; (This:C1470.names.pointer)->{$row}).pop()
-			
-		Else 
-			
-			$o:=$o.fields.query("name = :1"; $field.name).pop()
-			
-		End if 
-		
-		If ($o#Null:C1517)
-			
-			$o.label:=$field.label
-			$o.shortLabel:=$field.shortLabel
-			$o.format:=$field.format
-			
-			If (Length:C16(String:C10($field.icon))>0)
-				
-				$o.icon:=$field.icon
-				
-			Else 
-				
-				OB REMOVE:C1226($o; "icon")
-				
-			End if 
-		End if 
-	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Show the icon picker
@@ -1143,3 +960,100 @@ Function doTagMenu($e : Object; $values : Collection)
 		HIGHLIGHT TEXT:C210(*; $e.columnName; $start; $end)
 		
 	End if 
+	
+	// MARK:-[PRIVATE]
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function _computeFormat($field : Object; $result : Object)->$label : Text
+	
+	var $manifest : Object
+	var $target : Collection
+	var $formater : cs:C1710.formater
+	
+	If ($field.format#Null:C1517)
+		
+		$formater:=cs:C1710.formater.new($field.format)
+		
+		If ($formater.host)
+			
+			If ($formater.isValid())
+				
+				$label:=$formater.source.name
+				
+				$target:=Value type:C1509(PROJECT.info.target)=Is collection:K8:32 ? PROJECT.info.target : New collection:C1472(PROJECT.info.target)
+				
+				$manifest:=JSON Parse:C1218($formater.source.file("manifest.json").getText())
+				$manifest.type:=(Value type:C1509($manifest.type)=Is collection:K8:32) ? $manifest.type : New collection:C1472(String:C10($manifest.type))
+				
+				If ($manifest.target#Null:C1517)
+					
+					$manifest.target:=(Value type:C1509($manifest.target)=Is collection:K8:32) ? $manifest.target : New collection:C1472(String:C10($manifest.target))
+					
+				Else 
+					
+					$formater._setTarget($manifest; $formater)
+					
+				End if 
+				
+				If (Not:C34((($manifest.target.length=2) & ($target.length=2))\
+					 || (($target.length=1) & ($manifest.target.indexOf($target[0])#-1))))
+					
+					$result.formatColors[$result.formats.length]:=EDITOR.errorColor  // Not compatible with the target
+					
+				End if 
+				
+			Else 
+				
+				$label:=$formater.label
+				$result.formatColors[$result.formats.length]:=EDITOR.errorColor  // Missing or invalid
+				
+			End if 
+			
+		Else 
+			
+			$label:=EDITOR.str.setText("_"+$field.format).localized()
+			
+		End if 
+		
+	Else 
+		
+		$label:=EDITOR.str.setText("_"+String:C10(SHARED.defaultFieldBindingTypes[$field.fieldType])).localized()
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function _updateForms($type : Text; $field : Object; $row : Integer)
+	
+	var $o : Object
+	
+	$o:=Form:C1466[$type][String:C10(This:C1470.tableNumber)]
+	
+	If ($o.fields#Null:C1517)
+		
+		If ($field.name=Null:C1517)  //relation
+			
+			$o:=$o.fields.query("name = :1"; (This:C1470.names.pointer)->{$row}).pop()
+			
+		Else 
+			
+			$o:=$o.fields.query("name = :1"; $field.name).pop()
+			
+		End if 
+		
+		If ($o#Null:C1517)
+			
+			$o.label:=$field.label
+			$o.shortLabel:=$field.shortLabel
+			$o.format:=$field.format
+			
+			If (Length:C16(String:C10($field.icon))>0)
+				
+				$o.icon:=$field.icon
+				
+			Else 
+				
+				OB REMOVE:C1226($o; "icon")
+				
+			End if 
+		End if 
+	End if 
+	

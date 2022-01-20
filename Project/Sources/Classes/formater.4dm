@@ -45,14 +45,14 @@ Class constructor($format : Text)
 	This:C1470.typeBinding[Is picture:K8:10]:="picture"
 	This:C1470.typeBinding[Is object:K8:27]:="object"
 	
-	
 	//============================================================================
-	/// Returns a collection of formaters for a field type
+	/// Returns the available formatters for a field type
 Function getByType($type : Integer; $host : Boolean)->$formatters : Collection
 	
-	var $archive; $errors; $manifest; $o : Object
-	var $formator; $resources : 4D:C1709.Folder
+	var $errors; $manifest : Object
 	var $target : Collection
+	var $formator; $resources : 4D:C1709.Folder
+	var $o : cs:C1710.formater
 	
 	$target:=Value type:C1509(PROJECT.info.target)=Is collection:K8:32 ? PROJECT.info.target : New collection:C1472(PROJECT.info.target)
 	
@@ -63,7 +63,9 @@ Function getByType($type : Integer; $host : Boolean)->$formatters : Collection
 		
 		If ($resources.exists)
 			
-			For each ($formator; $resources.folders())
+			$errors:=cs:C1710.error.new().hide()
+			
+			For each ($formator; $resources.folders().combine($resources.files().query("extension = :1"; SHARED.archiveExtension)))
 				
 				$o:=cs:C1710.formater.new("/"+$formator.fullName)
 				
@@ -85,42 +87,7 @@ Function getByType($type : Integer; $host : Boolean)->$formatters : Collection
 						End if 
 						
 						If (($manifest.target.length=2) & ($target.length=2))\
-							 | (($target.length=1) & ($manifest.target.indexOf($target[0])#-1))
-							
-							$formatters.push(New object:C1471(\
-								"name"; $o.label; \
-								"source"; $o))
-							
-						End if 
-					End if 
-				End if 
-			End for each 
-			
-			$errors:=cs:C1710.error.new().hide()
-			
-			For each ($formator; $resources.files().query("extension = :1"; SHARED.archiveExtension))
-				
-				$o:=cs:C1710.formater.new("/"+$formator.fullName)
-				
-				If ($o.isValid())
-					
-					$manifest:=JSON Parse:C1218($o.source.file("manifest.json").getText())
-					$manifest.type:=(Value type:C1509($manifest.type)=Is collection:K8:32) ? $manifest.type : New collection:C1472($manifest.type)
-					
-					If ($manifest.type.indexOf(This:C1470.typeBinding[$type])#-1)
-						
-						If ($manifest.target#Null:C1517)
-							
-							$manifest.target:=(Value type:C1509($manifest.target)=Is collection:K8:32) ? $manifest.target : New collection:C1472(String:C10($manifest.target))
-							
-						Else 
-							
-							This:C1470._setTarget($manifest; $o)
-							
-						End if 
-						
-						If (($manifest.target.length=2) & ($target.length=2))\
-							 | (($target.length=1) & ($manifest.target.indexOf($target[0])#-1))
+							 || (($target.length=1) & ($manifest.target.indexOf($target[0])#-1))
 							
 							$formatters.push(New object:C1471(\
 								"name"; $o.label; \
@@ -143,37 +110,23 @@ Function getByType($type : Integer; $host : Boolean)->$formatters : Collection
 	
 	//============================================================================
 	// Returns the source folder (may be a zip)
-Function sources($format : Text)->$sources : 4D:C1709.Folder
+Function sources($name : Text)->$sources : 4D:C1709.Folder
 	
-	var $formatName; $formType; $item : Text
-	var $success : Boolean
-	var $o : Object
-	var $folder; $path : 4D:C1709.Folder
-	var $manifest : 4D:C1709.File
 	var $archive : 4D:C1709.ZipArchive
 	var $error : cs:C1710.error
 	
-	If (Count parameters:C259>=1)
-		
-		$formatName:=$format
-		
-	Else 
-		
-		// Interbnal
-		$formatName:=This:C1470.name
-		
-	End if 
+	$name:=(Count parameters:C259>=1) ? $name : This:C1470.name
 	
-	$sources:=Folder:C1567("😱")
+	$sources:=Folder:C1567("📁")
 	
-	If ($formatName[[1]]="/")  // Host database resources
+	If ($name[[1]]="/")  // Host database resources
 		
-		$formatName:=Delete string:C232($formatName; 1; 1)  // Remove initial slash
+		$name:=Delete string:C232($name; 1; 1)  // Remove initial slash
 		
-		If (Path to object:C1547($formatName).extension=SHARED.archiveExtension)  // Archive
+		If (Path to object:C1547($name).extension=SHARED.archiveExtension)  // Archive
 			
 			$error:=cs:C1710.error.new().hide()
-			$archive:=ZIP Read archive:C1637(cs:C1710.path.new().hostFormatters().file($formatName))
+			$archive:=ZIP Read archive:C1637(cs:C1710.path.new().hostFormatters().file($name))
 			$error.show()
 			
 			If ($archive#Null:C1517)
@@ -184,7 +137,7 @@ Function sources($format : Text)->$sources : 4D:C1709.Folder
 			
 		Else 
 			
-			$sources:=Folder:C1567(cs:C1710.path.new().hostFormatters().folder($formatName).platformPath; fk platform path:K87:2)
+			$sources:=Folder:C1567(cs:C1710.path.new().hostFormatters().folder($name).platformPath; fk platform path:K87:2)
 			
 		End if 
 		
@@ -197,8 +150,8 @@ Function sources($format : Text)->$sources : 4D:C1709.Folder
 	End if 
 	
 	//============================================================================
-	// Tests if the formatter exists and is well-formed
-Function isValid($format : Variant)->$valid : Boolean
+	/// Tests if the formatter exists and is well-formed
+Function isValid($format)->$valid : Boolean
 	
 	var $o : Object
 	var $manifest : 4D:C1709.File
@@ -225,16 +178,23 @@ Function isValid($format : Variant)->$valid : Boolean
 		$manifest:=$sources.file("manifest.json")
 		$valid:=$manifest.exists
 		
-		If ($valid)
-			
-			$o:=JSON Parse:C1218($manifest.getText())
-			$valid:=($o.type#Null:C1517) & ($o.binding#Null:C1517)
-			
-		End if 
+		//If ($valid)
+		//$o:=JSON Parse($manifest.getText())
+		//$valid:=($o.type#Null) & ($o.binding#Null)
+		//This.manifest:=JSON Parse(This.source.file("manifest.json").getText())
+		//This.manifest.type:=(Value type(This.manifest.type)=Is collection) ? This.manifest.type : New collection(String(This.manifest.type))
+		//If (This.manifest.target#Null)
+		//This.manifest.target:=(Value type(This.manifest.target)=Is collection) ? This.manifest.target : New collection(String(This.manifest.target))
+		//Else 
+		//This._setTarget(This.manifest; This)
+		//End if 
+		//End if 
+		
+		
 	End if 
 	
 	//============================================================================
-	// Create a formatter with text choiceList
+	/// Create a formatter with text choiceList
 Function create($type : Variant; $data : Collection)->$file : 4D:C1709.File
 	
 	//todo:Obsolete?
@@ -327,7 +287,7 @@ Function create($type : Variant; $data : Collection)->$file : 4D:C1709.File
 	End if 
 	
 	//============================================================================
-	// Return a default choice list according to type and wanted return type
+	/// Return a default choice list according to type and wanted return type
 Function defaultChoiceList($typeString : Text; $isObject : Boolean)->$choiceList : Variant
 	
 	//todo:Obsolete?
@@ -361,18 +321,19 @@ Function defaultChoiceList($typeString : Text; $isObject : Boolean)->$choiceList
 	End case 
 	
 	//============================================================================
-	// Return toolTip for custom format
+	/// Return toolTip for custom format
 Function toolTip($target)->$tip : Text
 	
-	//fixme: UI function, so class is UI dependant
+	// Fixme: UI function, so class is UI dependant
 	
 	var $bind; $o : Object
 	var $file : 4D:C1709.File
 	
 	If (PROJECT.isCustomResource(This:C1470.name))
+		
 		$file:=EDITOR.path[$target]().folder(Delete string:C232(This:C1470.name; 1; 1)).file("manifest.json")
 		
-		// #MARK_TODO : If zip formatter, fix file path (read in zip SHARED.archiveExtension)
+		// TODO: If zip formatter, fix file path (read in zip SHARED.archiveExtension)
 		
 		If ($file.exists)
 			
@@ -387,7 +348,7 @@ Function toolTip($target)->$tip : Text
 		
 	Else 
 		
-		// #MARK_TODO : edit resources.json to add "tips" to formatters in fieldBindingTypes
+		// TODO: Edit resources.json to add "tips" to formatters in fieldBindingTypes
 		
 		If (SHARED.resources.formattersByName=Null:C1517)
 			
@@ -405,9 +366,9 @@ Function toolTip($target)->$tip : Text
 		
 	End if 
 	
-	//mark:-[PRIVATE]
+	// MARK:-[PRIVATE]
 	//============================================================================
-	// Create the "target" property according to the folders found 
+	/// Create the "target" property according to the folders found
 Function _setTarget($manifest : Object; $formater : cs:C1710.formater)
 	
 	var $android; $ios : Boolean
