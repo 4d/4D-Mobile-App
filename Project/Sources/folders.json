@@ -527,7 +527,6 @@
 			"xloc"
 		],
 		"classes": [
-			"formater",
 			"MobileProject",
 			"project"
 		]
@@ -914,7 +913,6 @@
 			"static",
 			"subform",
 			"thermometer",
-			"tips",
 			"widget",
 			"window"
 		]

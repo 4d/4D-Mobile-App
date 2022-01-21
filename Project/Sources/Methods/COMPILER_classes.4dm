@@ -143,9 +143,9 @@ If (False:C215)  // Tools
 	//C_OBJECT(_o_str; $2)
 	
 	//______________________________________________________
-	C_OBJECT:C1216(tips; $0)
-	C_TEXT:C284(tips; $1)
-	C_OBJECT:C1216(tips; $2)
+	//C_OBJECT(_o_tips; $0)
+	//C_TEXT(_o_tips; $1)
+	//C_OBJECT(_o_tips; $2)
 	
 	//______________________________________________________
 	C_OBJECT:C1216(window; $0)

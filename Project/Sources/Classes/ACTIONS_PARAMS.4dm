@@ -1435,8 +1435,8 @@ Function doDataSourceMenu()
 Function editList()
 	
 	//$form:=New object(\
-		"static"; $static; \
-		"host"; This.path.hostInputControls(True))
+				"static"; $static; \
+				"host"; This.path.hostInputControls(True))
 	
 	//$form.folder:=This.path.hostInputControls()
 	//$manifest:=$form.folder.file("manifest.json")
@@ -1897,7 +1897,8 @@ Function setHelpTip()  //($e : Object)
 	// Format tool tip
 Function formatToolTip($format : Text)->$tip : Text
 	
-	$tip:=cs:C1710.formater.new($format).toolTip("hostInputControls")
+	//todo:Delete link with the formatter.toolTip
+	$tip:=cs:C1710.formatter.new($format).toolTip("hostInputControls")
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// <Background Color Expression> ******************** VERY SIMILAR TO ACTIONS.backgroundColor() ********************

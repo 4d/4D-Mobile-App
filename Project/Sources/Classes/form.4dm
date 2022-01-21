@@ -799,7 +799,7 @@ Function setCursorWatch($display : Boolean)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-Function setCursorPointigHand($display : Boolean)
+Function setCursorPointingHand($display : Boolean)
 	
 	If (Count parameters:C259=0 ? True:C214 : $display)
 		

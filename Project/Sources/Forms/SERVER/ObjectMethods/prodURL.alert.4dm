@@ -20,13 +20,12 @@ Case of
 		//______________________________________________________
 	: ($Lon_formEvent=On Mouse Enter:K2:33)
 		
-		_o_UI.tips.enable()
-		_o_UI.tips.instantly()
+		EDITOR.instantly()
 		
 		//______________________________________________________
 	: ($Lon_formEvent=On Mouse Leave:K2:34)
 		
-		_o_UI.tips.defaultDelay()
+		EDITOR.tips.restore()
 		
 		//______________________________________________________
 	Else 

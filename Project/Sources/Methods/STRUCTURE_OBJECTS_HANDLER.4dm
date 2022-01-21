@@ -145,7 +145,7 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Mouse Enter:K2:33)
 				
-				_o_UI.tips.instantly(100)
+				EDITOR.tips.instantly(100)
 				
 				//______________________________________________________
 			: ($e.code=On Mouse Move:K2:35)
@@ -155,7 +155,7 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Mouse Leave:K2:34)
 				
-				_o_UI.tips.default()
+				EDITOR.tips.restore()
 				
 				//______________________________________________________
 			: ($e.code=On Getting Focus:K2:7)
@@ -645,7 +645,7 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Mouse Enter:K2:33)
 				
-				_o_UI.tips.instantly(100)
+				EDITOR.tips.instantly(100)
 				
 				//______________________________________________________
 			: ($e.code=On Mouse Move:K2:35)
@@ -656,7 +656,8 @@ Case of
 			: ($e.code=On Mouse Leave:K2:34)
 				
 				OBJECT SET HELP TIP:C1181(*; $e.objectName; "")
-				_o_UI.tips.default()
+				
+				EDITOR.tips.restore()
 				
 				//______________________________________________________
 			: ($e.code=On Getting Focus:K2:7)
@@ -927,8 +928,8 @@ Case of
 		//// Hide the bottom line
 		//OBJECT SET VISIBLE(*; "bottom.line"; False)
 		//CALL FORM(Current form window; "editor_CALLBACK"; "resizePanel"; New object(\
-																														"panel"; Current form name; \
-																														"offset"; $Lon_vOffset))
+																																	"panel"; Current form name; \
+																																	"offset"; $Lon_vOffset))
 		//End if 
 		////______________________________________________________
 		//: ($e.code=On Mouse Leave)

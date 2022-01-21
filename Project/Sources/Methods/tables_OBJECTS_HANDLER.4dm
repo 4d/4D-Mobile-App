@@ -135,8 +135,7 @@ Case of
 				//______________________________________________________
 			: ($Lon_formEvent=On Mouse Enter:K2:33)
 				
-				_o_UI.tips.enable()
-				_o_UI.tips.instantly()
+				EDITOR.tips.instantly()
 				
 				//______________________________________________________
 			: ($Lon_formEvent=On Mouse Move:K2:35)
@@ -177,7 +176,7 @@ Case of
 				//______________________________________________________
 			: ($Lon_formEvent=On Mouse Leave:K2:34)
 				
-				_o_UI.tips.defaultDelay()
+				EDITOR.tips.restore()
 				
 				//______________________________________________________
 			: ($Lon_formEvent=On Getting Focus:K2:7)

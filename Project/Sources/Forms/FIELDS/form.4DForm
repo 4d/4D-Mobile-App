@@ -17,7 +17,8 @@
 		"onTimer",
 		"onSelectionChange",
 		"onMouseEnter",
-		"onMouseLeave"
+		"onMouseLeave",
+		"onMouseMove"
 	],
 	"pageFormat": {
 		"paperName": "A4",

@@ -123,7 +123,7 @@ Case of
 						
 						// Select the item
 						//SVG SET ATTRIBUTE(*; $e.objectName; $tableID; \
-							"fill"; Choose(EDITOR.isDark; "slategray"; EDITOR.selectedFillColor))
+														"fill"; Choose(EDITOR.isDark; "slategray"; EDITOR.selectedFillColor))
 						
 						$context.draw:=True:C214
 						$context.update:=True:C214
@@ -169,14 +169,12 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Mouse Enter:K2:33)
 				
-				_o_UI.tips.enable()
-				_o_UI.tips.setDuration(_o_UI.tips.delay*2)
-				_o_UI.tips.instantly()
+				EDITOR.tips.instantly(100)
 				
 				//______________________________________________________
 			: ($e.code=On Mouse Leave:K2:34)
 				
-				_o_UI.tips.defaultDelay()
+				EDITOR.tips.restore()
 				
 				//______________________________________________________
 			: ($e.code=On Mouse Move:K2:35)
@@ -615,9 +613,7 @@ End case
 				//______________________________________________________
 			: ($e.code=On Mouse Enter:K2:33)
 				
-				_o_UI.tips.enable()
-				_o_UI.tips.setDuration(_o_UI.tips.delay*2)
-				_o_UI.tips.instantly()
+				EDITOR.tips.instantly(100)
 				
 				//______________________________________________________
 			: ($e.code=On Mouse Leave:K2:34)
@@ -633,7 +629,7 @@ End case
 					
 				End if 
 				
-				_o_UI.tips.defaultDelay()
+				EDITOR.tips.restore()
 				
 				//______________________________________________________
 			: ($e.code=On Mouse Move:K2:35)

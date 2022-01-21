@@ -46,13 +46,13 @@ Class constructor($format : Text)
 	This:C1470.typeBinding[Is object:K8:27]:="object"
 	
 	//============================================================================
-	/// Returns the available formatters for a field type
+	/// Returns the embedded or host formatters available for a given field type.
 Function getByType($type : Integer; $host : Boolean)->$formatters : Collection
 	
 	var $errors; $manifest : Object
 	var $target : Collection
 	var $formator; $resources : 4D:C1709.Folder
-	var $o : cs:C1710.formater
+	var $o : cs:C1710.formatter
 	
 	$target:=Value type:C1509(PROJECT.info.target)=Is collection:K8:32 ? PROJECT.info.target : New collection:C1472(PROJECT.info.target)
 	
@@ -67,7 +67,7 @@ Function getByType($type : Integer; $host : Boolean)->$formatters : Collection
 			
 			For each ($formator; $resources.folders().combine($resources.files().query("extension = :1"; SHARED.archiveExtension)))
 				
-				$o:=cs:C1710.formater.new("/"+$formator.fullName)
+				$o:=cs:C1710.formatter.new("/"+$formator.fullName)
 				
 				If ($o.isValid())
 					
@@ -82,7 +82,7 @@ Function getByType($type : Integer; $host : Boolean)->$formatters : Collection
 							
 						Else 
 							
-							This:C1470._setTarget($manifest; $o)
+							This:C1470._createTarget($manifest; $o)
 							
 						End if 
 						
@@ -162,8 +162,6 @@ Function sources($name : Text)->$sources : 4D:C1709.Folder
 	/// Tests if the formatter exists and is well-formed
 Function isValid($format)->$valid : Boolean
 	
-	var $o : Object
-	var $manifest : 4D:C1709.File
 	var $sources : Object
 	
 	If (Count parameters:C259>=1)
@@ -184,21 +182,7 @@ Function isValid($format)->$valid : Boolean
 	If ($valid)  // Verify the structure validity
 		
 		// A manifest is mandatory
-		$manifest:=$sources.file("manifest.json")
-		$valid:=$manifest.exists
-		
-		//If ($valid)
-		//$o:=JSON Parse($manifest.getText())
-		//$valid:=($o.type#Null) & ($o.binding#Null)
-		//This.manifest:=JSON Parse(This.source.file("manifest.json").getText())
-		//This.manifest.type:=(Value type(This.manifest.type)=Is collection) ? This.manifest.type : New collection(String(This.manifest.type))
-		//If (This.manifest.target#Null)
-		//This.manifest.target:=(Value type(This.manifest.target)=Is collection) ? This.manifest.target : New collection(String(This.manifest.target))
-		//Else 
-		//This._setTarget(This.manifest; This)
-		//End if 
-		//End if 
-		
+		$valid:=$sources.file("manifest.json").exists
 		
 	End if 
 	
@@ -378,7 +362,7 @@ Function toolTip($target)->$tip : Text
 	// MARK:-[PRIVATE]
 	//============================================================================
 	/// Create the "target" property according to the folders found
-Function _setTarget($manifest : Object; $formater : cs:C1710.formater)
+Function _createTarget($manifest : Object; $formater : cs:C1710.formatter)
 	
 	var $android; $ios : Boolean
 	var $c : Collection

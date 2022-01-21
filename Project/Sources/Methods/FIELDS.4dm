@@ -58,7 +58,7 @@ Else   // <== WIDGETS METHOD
 					//_______________________________
 				: ($e.code=On Mouse Enter:K2:33)
 					
-					_o_UI.tips.instantly()
+					EDITOR.tips.instantly()
 					
 					//_______________________________
 				: ($e.code=On Mouse Move:K2:35)
@@ -68,7 +68,7 @@ Else   // <== WIDGETS METHOD
 					//_______________________________
 				: ($e.code=On Mouse Leave:K2:34)
 					
-					_o_UI.tips.default()
+					EDITOR.tips.restore()
 					
 					//_______________________________
 				: ($e.code=On Getting Focus:K2:7)

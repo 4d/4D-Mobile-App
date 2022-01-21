@@ -98,9 +98,7 @@ Case of
 		//______________________________________________________
 	: ($event.code=On Mouse Enter:K2:33)
 		
-		_o_UI.tips.enable()
-		_o_UI.tips.instantly()
-		_o_UI.tips.setDuration(45*5)
+		EDITOR.tips.setDuration(45*5)
 		
 		//______________________________________________________
 	: ($event.code=On Mouse Move:K2:35)
@@ -195,7 +193,7 @@ Case of
 		//______________________________________________________
 	: ($event.code=On Mouse Leave:K2:34)
 		
-		_o_UI.tips.defaultDelay()
+		EDITOR.tips.restore()
 		
 		//______________________________________________________
 	Else 

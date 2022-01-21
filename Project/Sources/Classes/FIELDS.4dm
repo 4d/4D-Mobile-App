@@ -564,7 +564,10 @@ Function field($row : Integer)->$field : Object
 	// Display tips on the field list
 Function setHelpTip($e : Object)
 	
-	var $tips : Text
+	var $field : Object
+	var $file : 4D:C1709.File
+	var $name; $tips : Text
+	var $o : Object
 	
 	// ----------------------------------------------------
 	If (Num:C11($e.row)#0)
@@ -594,14 +597,46 @@ Function setHelpTip($e : Object)
 				//………………………………………………………………………………
 			: ($e.columnName=This:C1470.formats.name)
 				
-				var $field : Object
 				$field:=This:C1470.field($e.row)
 				
-				If ($field#Null:C1517)
+				If ($field#Null:C1517) && (Length:C16(String:C10($field.format))#0)
 					
-					If (Length:C16(String:C10($field.format))#0)
+					var $formatter : cs:C1710.formatter
+					$formatter:=cs:C1710.formatter.new($field.format)
+					
+					If ($formatter.host)
 						
-						$tips:=cs:C1710.formater.new($field.format).toolTip("hostFormatters")
+						$file:=$formatter.source.file("manifest.json")
+						
+						If ($file.exists)
+							
+							$o:=JSON Parse:C1218($file.getText())
+							
+							If ($o.choiceList#Null:C1517)
+								
+								$tips:=cs:C1710.str.new(JSON Stringify:C1217($o.choiceList; *)).jsonSimplify()
+								
+							End if 
+						End if 
+						
+					Else 
+						
+						// TODO: Edit resources.json to add "tips" to formatters in fieldBindingTypes
+						
+						If (SHARED.resources.formattersByName=Null:C1517)
+							
+							SHARED.resources.formattersByName:=New object:C1471
+							
+							var $bind
+							For each ($bind; SHARED.resources.fieldBindingTypes\
+								.reduce("col_formula"; New collection:C1472(); Formula:C1597($1.accumulator.combine(Choose:C955($1.value=Null:C1517; New collection:C1472(); $1.value)))))
+								
+								SHARED.resources.formattersByName[$bind.name]:=$bind
+								
+							End for each 
+						End if 
+						
+						$tips:=String:C10(SHARED.resources.formattersByName[This:C1470.name].tips)
 						
 					End if 
 				End if 
@@ -731,7 +766,7 @@ Function showFormatOnDisk($e : Object)
 	End if 
 	
 	// Show on disk if host
-	$o:=cs:C1710.formater.new($format)
+	$o:=cs:C1710.formatter.new($format)
 	
 	If (Bool:C1537($o.host))
 		
@@ -747,7 +782,7 @@ Function doFormatMenu($e : Object)
 	var $field; $o : Object
 	var $formatters : Collection
 	var $menu : cs:C1710.menu
-	var $formatter : cs:C1710.formater
+	var $formatter : cs:C1710.formatter
 	
 	$e:=$e=Null:C1517 ? FORM Event:C1606 : $e
 	
@@ -755,7 +790,7 @@ Function doFormatMenu($e : Object)
 	$field:=This:C1470.field($e.row)
 	
 	$menu:=cs:C1710.menu.new()
-	$formatter:=cs:C1710.formater.new()
+	$formatter:=cs:C1710.formatter.new()
 	
 	// Get current format
 	If ($field.format=Null:C1517)
@@ -833,7 +868,7 @@ Function doFormatMenu($e : Object)
 				 & (Length:C16($menu.choice)#0)
 				
 				$menu.choice:="/"+$menu.choice
-				$o:=cs:C1710.formater.new($menu.choice)
+				$o:=cs:C1710.formatter.new($menu.choice)
 				
 				var $table : Object
 				$table:=Form:C1466.dataModel[String:C10(This:C1470.tableNumber)]
@@ -967,21 +1002,21 @@ Function _computeFormat($field : Object; $result : Object)->$label : Text
 	
 	var $manifest : Object
 	var $target : Collection
-	var $formater : cs:C1710.formater
+	var $formatter : cs:C1710.formatter
 	
 	If ($field.format#Null:C1517)
 		
-		$formater:=cs:C1710.formater.new($field.format)
+		$formatter:=cs:C1710.formatter.new($field.format)
 		
-		If ($formater.host)
+		If ($formatter.host)
 			
-			If ($formater.isValid())
+			If ($formatter.isValid())
 				
-				$label:=$formater.source.name
+				$label:=$formatter.source.name
 				
 				$target:=Value type:C1509(PROJECT.info.target)=Is collection:K8:32 ? PROJECT.info.target : New collection:C1472(PROJECT.info.target)
 				
-				$manifest:=JSON Parse:C1218($formater.source.file("manifest.json").getText())
+				$manifest:=JSON Parse:C1218($formatter.source.file("manifest.json").getText())
 				$manifest.type:=(Value type:C1509($manifest.type)=Is collection:K8:32) ? $manifest.type : New collection:C1472(String:C10($manifest.type))
 				
 				If ($manifest.target#Null:C1517)
@@ -990,7 +1025,7 @@ Function _computeFormat($field : Object; $result : Object)->$label : Text
 					
 				Else 
 					
-					$formater._setTarget($manifest; $formater)
+					$formatter._createTarget($manifest; $formatter)
 					
 				End if 
 				
@@ -1003,7 +1038,7 @@ Function _computeFormat($field : Object; $result : Object)->$label : Text
 				
 			Else 
 				
-				$label:=$formater.label
+				$label:=$formatter.label
 				$result.formatColors[$result.formats.length]:=EDITOR.errorColor  // Missing or invalid
 				
 			End if 

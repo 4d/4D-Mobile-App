@@ -220,8 +220,8 @@ If ($datamodel#Null:C1517)
 							//______________________________________________________
 						: (Position:C15("/"; $name)=1)  // Host resources
 							
-							var $formater : cs:C1710.formater
-							$formater:=cs:C1710.formater.new($name)
+							var $formater : cs:C1710.formatter
+							$formater:=cs:C1710.formatter.new($name)
 							
 							If ($formater.isValid())
 								
@@ -235,7 +235,7 @@ If ($datamodel#Null:C1517)
 									
 								Else 
 									
-									$formater._setTarget($manifest; $formater)
+									$formater._createTarget($manifest; $formater)
 									
 								End if 
 								
