@@ -515,17 +515,10 @@ Function fieldDefinition($table; $fieldPath : Text)->$field : Object
 Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Boolean)->$result : Object
 	
 	var $fieldName : Text
-	var $withRecursiveLinks : Boolean
 	var $field; $o; $related; $relatedDataClass; $relatedField : Object
 	
 	$result:=New object:C1471(\
 		"success"; False:C215)
-	
-	If (Count parameters:C259>=3)
-		
-		$withRecursiveLinks:=$recursive
-		
-	End if 
 	
 	$field:=This:C1470.datastore[$tableName][$relationName]
 	
@@ -562,7 +555,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 						//___________________________________________
 					: (This:C1470.isStorage($o))
 						
-						// #TEMPO
+						// MARK: TEMPO
 						$o.valueType:=$o.type
 						
 						$o.path:=$o.name
@@ -573,7 +566,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 						//___________________________________________
 					: (This:C1470.isRelatedEntity($o))  // N -> 1 relation
 						
-						If ($withRecursiveLinks ? True:C214 : ($o.relatedDataClass#$tableName))
+						If ($recursive ? True:C214 : ($o.relatedDataClass#$tableName))
 							
 							// FIXME: MUST NOT BE DEPENDANT OF Form
 							For each ($relatedField; Form:C1466.$project.$catalog.query("name = :1"; $o.relatedDataClass).pop().field)
@@ -593,6 +586,16 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 										End if 
 										
 										//______________________________________________________
+									: (This:C1470.isRelatedEntity($relatedField))
+										
+										// NOT MANAGED
+										
+										//______________________________________________________
+									: (This:C1470.isRelatedEntities($relatedField))
+										
+										// NOT MANAGED
+										
+										//______________________________________________________
 									: (This:C1470.isComputedAttribute($relatedField))
 										
 										$related:=OB Copy:C1225($relatedField)
@@ -600,15 +603,10 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 										$related.tableNumber:=$result.relatedTableNumber
 										$result.fields.push($related)
 										
-										//______________________________________________________
-									: (This:C1470.isRelatedEntity($field))
+										//…………………………………………………………………………………………………
+									: (This:C1470.isAlias($relatedField))  // Alias
 										
-										// NOT MANAGED
-										
-										//______________________________________________________
-									: (This:C1470.isRelatedEntities($field))
-										
-										// NOT MANAGED
+										//TODO: ZZZ
 										
 										//______________________________________________________
 									Else 
@@ -623,7 +621,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 						//…………………………………………………………………………………………………
 					: (This:C1470.isRelatedEntities($o))  // 1 -> N relation
 						
-						If (Choose:C955($withRecursiveLinks; True:C214; ($o.relatedDataClass#$tableName)))
+						If ($recursive ? True:C214 : ($o.relatedDataClass#$tableName))
 							
 							$result.fields.push(New object:C1471(\
 								"name"; $o.name; \
@@ -639,9 +637,9 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 						//…………………………………………………………………………………………………
 					: (This:C1470.isComputedAttribute($o))  // Computed
 						
-						
-						// #TEMPO
+						// MARK: TEMPO
 						$o.valueType:=$o.type
+						
 						$o.path:=$o.name
 						$o.type:=-3
 						$o.computed:=True:C214
@@ -649,9 +647,14 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 						$result.fields.push($o)
 						
 						//…………………………………………………………………………………………………
+					: (This:C1470.isAlias($o))  // Alias
+						
+						//TODO: ZZZ
+						
+						//…………………………………………………………………………………………………
 					Else 
 						
-						//ASSERT(Not(DATABASE.isMatrix); "😰 I wonder why I'm here")
+						ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
 						
 						//___________________________________________
 				End case 
@@ -665,12 +668,12 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 			//…………………………………………………………………………………………………
 		: (This:C1470.isComputedAttribute($field))  // Computed
 			
-			//
+			//TODO: ZZZ
 			
 			//…………………………………………………………………………………………………
 		: (This:C1470.isAlias($field))  // Alias
 			
-			//
+			//TODO: ZZZ
 			
 			//…………………………………………………………………………………………………
 		Else 
