@@ -7,6 +7,8 @@ var $structure : cs:C1710.structure
 err_TRY
 
 COMPONENT_INIT
+
+// Mark:- constructor
 $structure:=cs:C1710.structure.new()
 
 If (Asserted:C1132($structure.success; "cs.structure.new() failed"))
@@ -154,7 +156,6 @@ If (Asserted:C1132($table#Null:C1517))
 		ASSERT:C1129($field.relatedTableNumber=ds:C1482["UNIT_1"].getInfo().tableNumber)
 		
 	End if 
-	
 End if 
 
 // Mark:- fieldDefinition
