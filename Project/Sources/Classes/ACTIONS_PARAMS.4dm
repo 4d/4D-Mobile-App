@@ -1435,8 +1435,8 @@ Function doDataSourceMenu()
 Function editList()
 	
 	//$form:=New object(\
-				"static"; $static; \
-				"host"; This.path.hostInputControls(True))
+						"static"; $static; \
+						"host"; This.path.hostInputControls(True))
 	
 	//$form.folder:=This.path.hostInputControls()
 	//$manifest:=$form.folder.file("manifest.json")
@@ -1897,8 +1897,42 @@ Function setHelpTip()  //($e : Object)
 	// Format tool tip
 Function formatToolTip($format : Text)->$tip : Text
 	
-	//todo:Delete link with the formatter.toolTip
-	$tip:=cs:C1710.formatter.new($format).toolTip("hostInputControls")
+	var $o : Object
+	var $file : 4D:C1709.File
+	var $formatter : cs:C1710.formatter
+	
+	$formatter:=cs:C1710.formatter.new($format)
+	
+	If ($formatter.host)
+		
+		$file:=EDITOR.path.hostInputControls().folder(Delete string:C232($format; 1; 1)).file("manifest.json")
+		
+		If ($file.exists)
+			
+			$o:=JSON Parse:C1218($file.getText())
+			
+			If ($o.choiceList#Null:C1517)
+				
+				$tip:=EDITOR.str.setText(JSON Stringify:C1217($o.choiceList; *)).jsonSimplify()
+				
+			End if 
+		End if 
+		
+	Else 
+		
+		// TODO: Edit resources.json to add "tips" to formatters in fieldBindingTypes
+		
+		//If (SHARED.resources.formattersByName=Null)
+		//SHARED.resources.formattersByName:=New object
+		//var $bind
+		//For each ($bind; SHARED.resources.fieldBindingTypes\
+			.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
+		//SHARED.resources.formattersByName[$bind.name]:=$bind
+		//End for each
+		//End if
+		//$tips:=String(SHARED.resources.formattersByName[This.name].tips)
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// <Background Color Expression> ******************** VERY SIMILAR TO ACTIONS.backgroundColor() ********************
@@ -1955,12 +1989,36 @@ Function _newUserControl($static : Boolean)
 	$current:=This:C1470.current
 	
 	$data:=New object:C1471(\
-		"$comment"; "Map database values to some display values using choiceList"; \
-		"$doc"; "https://developer.4d.com/4d-for-ios/docs/en/creating-data-formatter.html#text-formatters"; \
-		"name"; ""; \
-		"type"; $current.type; \
-		"binding"; False:C215; \
-		"format"; Delete string:C232($current.format; 1; 1))
+		"$comment"; "Map database values to some display values using choiceList")
+	
+	Case of 
+			
+			//______________________________________________________
+		: (($current.type="bool")\
+			 | ($current.type="boolean"))
+			
+			$data.$doc:=Get localized string:C991("creatingDataFormatterIntegerToString")
+			
+			//________________________________________
+		: (($current.type="number")\
+			 | ($current.type="integer")\
+			 | ($current.type="real"))
+			
+			$data.$doc:=Get localized string:C991("creatingDataFormatterIntegerToString")
+			
+			//________________________________________
+		: (($current.type="string")\
+			 | ($current.type="text"))
+			
+			$data.$doc:=Get localized string:C991("creatingDataFormatterText")
+			
+			//______________________________________________________
+	End case 
+	
+	$data.name:=""
+	$data.type:=$current.type
+	$data.binding:=False:C215
+	$data.format:=Delete string:C232($current.format; 1; 1)
 	
 	$form:=New object:C1471(\
 		"static"; $static; \

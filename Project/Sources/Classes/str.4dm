@@ -413,11 +413,9 @@ Function urlDecode
 	
 	//=======================================================================================================
 	// Returns True if the string passed is exactly the same as the value.
-Function equal
-	var $0 : Boolean
-	var $1 : Text
+Function equal($to : Text)->$equal : Boolean
 	
-	$0:=New collection:C1472(This:C1470.value).equal(New collection:C1472($1); ck diacritical:K85:3)
+	$equal:=(Length:C16(This:C1470.value)=Length:C16($to)) && ((Length:C16(This:C1470.value)=0) | (Position:C15(This:C1470.value; $to; 1; *)=1))
 	
 	//=======================================================================================================
 	// Returns the list of distinct letters of the string.

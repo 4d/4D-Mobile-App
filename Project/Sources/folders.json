@@ -383,6 +383,7 @@
 	},
 	"07] ACTIONS": {
 		"methods": [
+			"ACTIONS",
 			"ACTIONS_CALLBACK",
 			"COMPILER_ACTIONS"
 		],
@@ -527,6 +528,7 @@
 			"xloc"
 		],
 		"classes": [
+			"formatter",
 			"MobileProject",
 			"project"
 		]

@@ -306,12 +306,11 @@
 				</editor_field_info>
 			</field_extra>
 		</field>
-		<field name="Field_3" uuid="2FD5F60ADDDA4E5E930B1DFF3B73EE01" type="10" limiting_length="255" never_null="true" id="3"/>
 		<primary_key field_name="ID" field_uuid="0A0571E2BC7848A190753D9A5736D8FE"/>
 		<table_extra input_form="" output_form="">
-			<editor_table_info displayable_fields_count="3">
+			<editor_table_info displayable_fields_count="5">
 				<color red="186" green="170" blue="158" alpha="255"/>
-				<coordinates left="423" top="443" width="103" height="104.33203125"/>
+				<coordinates left="423" top="443" width="115.89343261719" height="166.93585205078"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -549,23 +548,6 @@
 		<relation_extra entry_wildchar="false" entry_create="false" choice_field="0" entry_autofill="false">
 			<editor_relation_info via_point_x="-1" via_point_y="-1" prefers_left="false" smartlink="true">
 				<color red="249" green="130" blue="127" alpha="255"/>
-			</editor_relation_info>
-		</relation_extra>
-	</relation>
-	<relation uuid="1B6D34E1A404477DBFB1704FC653EDAE" name_Nto1="duplicate" name_1toN="Link_14_return" auto_load_Nto1="false" auto_load_1toN="false" foreign_key="false" state="1">
-		<related_field kind="source">
-			<field_ref uuid="2FD5F60ADDDA4E5E930B1DFF3B73EE01" name="Field_3">
-				<table_ref uuid="6A24BB0C42844B26AA22357C0545137E" name="Table_1"/>
-			</field_ref>
-		</related_field>
-		<related_field kind="destination">
-			<field_ref uuid="3446D143AA2B4BEFB57C38620EE2C14F" name="Field_3">
-				<table_ref uuid="30E13DEEB95C4BABA4D0449FDF2C55DC" name="Table_3"/>
-			</field_ref>
-		</related_field>
-		<relation_extra entry_wildchar="false" entry_create="false" choice_field="0" entry_autofill="false">
-			<editor_relation_info via_point_x="-1" via_point_y="-1" prefers_left="false" smartlink="true">
-				<color red="186" green="170" blue="158" alpha="255"/>
 			</editor_relation_info>
 		</relation_extra>
 	</relation>

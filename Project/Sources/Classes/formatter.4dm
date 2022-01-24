@@ -230,7 +230,7 @@ Function create($type : Variant; $data : Collection)->$file : 4D:C1709.File
 	If (Length:C16($name)>0)
 		
 		var $formatFolder : 4D:C1709.Folder
-		$formatFolder:=cs:C1710.path.new().hostFormatters(True:C214).folder($name)
+		$formatFolder:=EDITOR.path.hostFormatters(True:C214).folder($name)
 		
 		$file:=$formatFolder.file("manifest.json")
 		
@@ -248,7 +248,7 @@ Function create($type : Variant; $data : Collection)->$file : 4D:C1709.File
 			Case of 
 				: (($typeString="bool") | ($typeString="boolean"))
 					$manifest.type:=New collection:C1472("boolean")
-					$manifest.$doc:="https://developer.4d.com/4d-for-ios/docs/en/creating-data-formatter.html#integer-to-string"
+					$manifest.$doc:=Get localized string:C991("creatingDataFormatterIntegerToString")
 				: (($typeString="number") | ($typeString="integer") | ($typeString="real"))
 					If (Count parameters:C259>1)
 						$manifest.choiceList:=New object:C1471()
@@ -258,7 +258,7 @@ Function create($type : Variant; $data : Collection)->$file : 4D:C1709.File
 						End for each 
 					End if 
 					$manifest.type:=New collection:C1472("real"; "integer")
-					$manifest.$doc:="https://developer.4d.com/4d-for-ios/docs/en/creating-data-formatter.html#integer-to-string"
+					$manifest.$doc:=Get localized string:C991("creatingDataFormatterIntegerToString")
 				: (($typeString="string") | ($typeString="text"))
 					If (Count parameters:C259>1)
 						$manifest.choiceList:=New object:C1471()
@@ -268,7 +268,7 @@ Function create($type : Variant; $data : Collection)->$file : 4D:C1709.File
 						End for each 
 					End if 
 					$manifest.type:=New collection:C1472("text")
-					$manifest.$doc:="https://developer.4d.com/4d-for-ios/docs/en/creating-data-formatter.html#text-formatters"
+					$manifest.$doc:=Get localized string:C991("creatingDataFormatterText")
 				Else 
 					ASSERT:C1129(dev_Matrix; "Missing binding for type "+String:C10($typeString)+" to create formatter")
 			End case 
@@ -312,52 +312,6 @@ Function defaultChoiceList($typeString : Text; $isObject : Boolean)->$choiceList
 				$choiceList:=New collection:C1472()
 			End if 
 	End case 
-	
-	//============================================================================
-	/// Return toolTip for custom format
-Function toolTip($target)->$tip : Text
-	
-	// Fixme: UI function, so class is UI dependant
-	
-	var $bind; $o : Object
-	var $file : 4D:C1709.File
-	
-	If (PROJECT.isCustomResource(This:C1470.name))
-		
-		$file:=EDITOR.path[$target]().folder(Delete string:C232(This:C1470.name; 1; 1)).file("manifest.json")
-		
-		// TODO: If zip formatter, fix file path (read in zip SHARED.archiveExtension)
-		
-		If ($file.exists)
-			
-			$o:=JSON Parse:C1218($file.getText())
-			
-			If ($o.choiceList#Null:C1517)
-				
-				$tip:=cs:C1710.str.new(JSON Stringify:C1217($o.choiceList; *)).jsonSimplify()
-				
-			End if 
-		End if 
-		
-	Else 
-		
-		// TODO: Edit resources.json to add "tips" to formatters in fieldBindingTypes
-		
-		If (SHARED.resources.formattersByName=Null:C1517)
-			
-			SHARED.resources.formattersByName:=New object:C1471
-			
-			For each ($bind; SHARED.resources.fieldBindingTypes\
-				.reduce("col_formula"; New collection:C1472(); Formula:C1597($1.accumulator.combine(Choose:C955($1.value=Null:C1517; New collection:C1472(); $1.value)))))
-				
-				SHARED.resources.formattersByName[$bind.name]:=$bind
-				
-			End for each 
-		End if 
-		
-		$tip:=String:C10(SHARED.resources.formattersByName[This:C1470.name].tips)
-		
-	End if 
 	
 	// MARK:-[PRIVATE]
 	//============================================================================

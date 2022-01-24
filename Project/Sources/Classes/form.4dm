@@ -808,7 +808,6 @@ Function setCursorPointingHand($display : Boolean)
 	End if 
 	
 	
-	
 	//MARK:-[PRIVATE]
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	//Function _cursor($id : Integer; $diplay : Boolean)

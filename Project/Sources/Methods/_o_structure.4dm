@@ -8,8 +8,7 @@
 // Get database structure informations
 // ----------------------------------------------------
 // Declarations
-var $0 : Object
-var $1 : Object
+#DECLARE($IN : Object)->$OUT : Object
 
 If (False:C215)
 	C_OBJECT:C1216(_o_structure; $0)
@@ -27,8 +26,6 @@ var $c; $catalog; $fields; $filtered : Collection
 If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
 	// Required parameters
-	$IN:=$1
-	
 	$OUT:=New object:C1471(\
 		"success"; False:C215)
 	
@@ -577,7 +574,7 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 							//For each ($Txt_field;$Obj_relatedDataClass)
 							
 							//If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																																																								
+																																																																
 							//If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
 							//$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])
@@ -1313,11 +1310,4 @@ If (Bool:C1537($IN.caller))
 	
 	CALL FORM:C1391($IN.caller; "editor_CALLBACK"; "checkProject"; $OUT)
 	
-Else 
-	
-	$0:=$OUT
-	
 End if 
-
-// ----------------------------------------------------
-// End
