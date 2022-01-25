@@ -599,7 +599,7 @@ Function setHelpTip($e : Object)
 				
 				$field:=This:C1470.field($e.row)
 				
-				If ($field#Null:C1517) && (Length:C16(String:C10($field.format))#0)
+				If (($field#Null:C1517) && (Length:C16(String:C10($field.format))#0))
 					
 					var $formatter : cs:C1710.formatter
 					$formatter:=cs:C1710.formatter.new($field.format)

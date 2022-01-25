@@ -55,6 +55,15 @@ If (Asserted:C1132(Not:C34($structure.success); "should failed"))
 	End if 
 End if 
 
+// Mark:- tableDefinition
+$table:=$structure.tableDefinition(5)
+
+If (Asserted:C1132($structure.success))
+	
+	ASSERT:C1129(New collection:C1472($table).equal(New collection:C1472($structure.tableDefinition("ALL_TYPES"))))
+	
+End if 
+
 // Mark:- tableCatalog
 $table:=$structure.tableDefinition("UNIT_0")
 
@@ -169,7 +178,7 @@ If (Asserted:C1132(Not:C34($structure.success)))
 		
 		If (Asserted:C1132($structure.errors.length>0))
 			
-			ASSERT:C1129($structure.errors[0]="Table not found #8858")
+			ASSERT:C1129($structure.errors[0]="Table 8858 not found")
 			
 		End if 
 	End if 
@@ -233,13 +242,8 @@ If (Asserted:C1132($structure.success))
 		ASSERT:C1129($o.fieldType=Is integer:K8:5)
 		
 	End if 
-End if 
-
-$tableNumber:=$structure.tableNumber("UNIT_0")
-
-If (Asserted:C1132($structure.success))
 	
-	$o:=$structure.fieldDefinition($tableNumber; "r_2.Field_1_2")
+	$o:=$structure.fieldDefinition("UNIT_0"; "r_2.Field_1_2")
 	
 	If (Asserted:C1132($structure.success))
 		
@@ -255,11 +259,6 @@ If (Asserted:C1132($structure.success))
 		ASSERT:C1129($o.fieldType=Is integer:K8:5)
 		
 	End if 
-End if 
-
-$tableNumber:=$structure.tableNumber("UNIT_0")
-
-If (Asserted:C1132($structure.success))
 	
 	$o:=$structure.fieldDefinition($tableNumber; "r_1.r_1_2.Field_2_3")
 	
@@ -313,6 +312,5 @@ If (Asserted:C1132($structure.success))
 	
 End if 
 
-ASSERT:C1129(Structure file:C489#Structure file:C489(*); "DONE")
-
 err_FINALLY
+
