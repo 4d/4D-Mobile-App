@@ -26,7 +26,6 @@ import java.sql.Time
 import java.util.Date
 {{/table_has_date_field}}
 
-@Suppress("ConstructorParameterNaming", "LongParameterList", "ObjectPropertyNaming", "ClassName")
 @Entity
 class {{tableName}}(
     {{#fields}}
@@ -44,7 +43,6 @@ class {{tableName}}(
 }
 {{#table_has_any_many_to_one_relation}}
 
-@Suppress("ConstructorParameterNaming", "LongParameterList")
 class {{tableName}}ManyToOneRelationMask(
     {{#relations_many_to_one}}
     @JsonProperty("{{relation_name_original}}") val {{relation_name}}: ManyToOneRelationMask? = null{{^-last}}, {{/-last}}

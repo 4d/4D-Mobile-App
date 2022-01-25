@@ -21,7 +21,6 @@ import java.util.Date
 /**
  * Type converters to allow Room to reference complex data types.
  */
-@Suppress("TooManyFunctions", "FunctionName")
 class Converters {
 
     /**

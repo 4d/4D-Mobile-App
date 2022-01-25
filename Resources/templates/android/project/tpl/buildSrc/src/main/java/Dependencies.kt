@@ -16,7 +16,7 @@ object Versions {
     const val artifactory = "4.24.18"
     const val atsl_junit = "1.1.2"
     const val constraint_layout = "2.1.1"
-    const val design = "1.3.0"
+    const val design = "1.5.0"
     const val dynamic_toasts = "4.1.0"
     const val espresso = "3.2.0"
     const val espresso_contrib = "3.0.2"

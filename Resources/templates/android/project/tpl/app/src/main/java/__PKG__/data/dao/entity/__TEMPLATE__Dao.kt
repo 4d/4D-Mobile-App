@@ -16,7 +16,6 @@ import androidx.sqlite.db.SupportSQLiteQuery
 import com.qmobile.qmobiledatastore.dao.BaseDao
 import {{package}}.data.model.entity.{{tableName}}
 
-@Suppress("ClassName")
 @Dao
 abstract class {{tableName}}Dao :
     BaseDao<{{tableName}}>() {

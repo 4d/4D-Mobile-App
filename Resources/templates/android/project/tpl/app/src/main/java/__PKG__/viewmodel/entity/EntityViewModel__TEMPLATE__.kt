@@ -21,7 +21,6 @@ import {{package}}.data.model.relation.{{relation_source}}And{{relation_target}}
 {{/relations_import}}
 import timber.log.Timber
 
-@Suppress("ClassName")
 class EntityViewModel{{tableName}}(
     tableName: String,
     id: String,

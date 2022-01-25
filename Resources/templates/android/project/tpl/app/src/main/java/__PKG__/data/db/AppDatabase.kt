@@ -24,7 +24,6 @@ import {{package}}.data.dao.relation.{{relation_source}}Has{{relation_target}}Wi
 import {{package}}.data.model.entity.{{name}}
 {{/tableNames}}
 
-@Suppress("FunctionName")
 @Database(
     entities = [{{entity_classes}}],
     version = 1,
