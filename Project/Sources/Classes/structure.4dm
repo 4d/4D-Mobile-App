@@ -47,13 +47,15 @@ Note: The catalog property is filled in during the construction phase of the cla
 */
 Function exposedCatalog($query; $sorted : Boolean)->$catalog : Collection
 	
-	var $fieldName; $t; $tableName : Text
-	var $field; $inquiry; $o; $table : Object
-	var $str : cs:C1710.str
+	var $t; $tableName : Text
+	var $o; $table : Object
+	var $ds : cs:C1710.DataStore
+	
+	$ds:=ds:C1482
 	
 	$sorted:=(Value type:C1509($query)=Is boolean:K8:9) ? Bool:C1537($query) : $sorted
 	
-	This:C1470.success:=(This:C1470.datastore#Null:C1517)
+	This:C1470.success:=($ds#Null:C1517)
 	
 	If (This:C1470.success)
 		
@@ -66,7 +68,7 @@ Function exposedCatalog($query; $sorted : Boolean)->$catalog : Collection
 					//…………………………………………………………………………………………………
 				: (Value type:C1509($query)=Is text:K8:3)  // Table name
 					
-					$o:=This:C1470.datastore[$query]
+					$o:=$ds[$query]
 					
 					If ($o#Null:C1517)
 						
@@ -74,7 +76,7 @@ Function exposedCatalog($query; $sorted : Boolean)->$catalog : Collection
 						
 						If ($o.exposed)
 							
-							$table:=This:C1470.datastore[$t]
+							$table:=$ds[$t]
 							
 						Else 
 							
@@ -88,21 +90,21 @@ Function exposedCatalog($query; $sorted : Boolean)->$catalog : Collection
 						
 					End if 
 					
-					$table:=This:C1470.datastore[$query]
+					$table:=$ds[$query]
 					
 					//…………………………………………………………………………………………………
 				: (Value type:C1509($query)=Is longint:K8:6)\
 					 | (Value type:C1509($query)=Is real:K8:4)  // Table number
 					
-					For each ($t; This:C1470.datastore)
+					For each ($t; $ds)
 						
-						$o:=This:C1470.datastore[$t].getInfo()
+						$o:=$ds[$t].getInfo()
 						
 						If ($o.tableNumber=$query)
 							
 							If ($o.exposed)
 								
-								$table:=This:C1470.datastore[$t]
+								$table:=$ds[$t]
 								
 							Else 
 								
@@ -137,7 +139,7 @@ Function exposedCatalog($query; $sorted : Boolean)->$catalog : Collection
 			
 		Else 
 			
-			For each ($tableName; This:C1470.datastore)
+			For each ($tableName; $ds)
 				
 				If ($tableName=This:C1470.deletedRecordsTableName)
 					
@@ -146,11 +148,11 @@ Function exposedCatalog($query; $sorted : Boolean)->$catalog : Collection
 					
 				Else 
 					
-					$o:=This:C1470.datastore[$tableName].getInfo()
+					$o:=$ds[$tableName].getInfo()
 					
 					If ($o.exposed)
 						
-						$catalog.push(This:C1470.datastore[$tableName].getInfo())
+						$catalog.push($ds[$tableName].getInfo())
 						
 					End if 
 				End if 
@@ -164,8 +166,6 @@ Function exposedCatalog($query; $sorted : Boolean)->$catalog : Collection
 	End if 
 	
 	If (This:C1470.success)
-		
-		$str:=cs:C1710.str.new()
 		
 		For each ($table; $catalog)
 			
@@ -184,7 +184,6 @@ Function exposedCatalog($query; $sorted : Boolean)->$catalog : Collection
 			
 		End if 
 	End if 
-	
 	//==================================================================
 	/// Returns a table definition object from its name or number
 Function tableDefinition($identifier)->$table : Object
@@ -369,11 +368,12 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 	
 	var $fieldName : Text
 	var $field; $o; $related; $relatedDataClass; $relatedField : Object
+	var $ds : cs:C1710.DataStore
 	
 	$result:=New object:C1471(\
 		"success"; False:C215)
 	
-	$field:=This:C1470.datastore[$tableName][$relationName]
+	$field:=$ds[$tableName][$relationName]
 	
 	Case of 
 			
@@ -393,11 +393,11 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 			$result.success:=True:C214
 			$result.fields:=New collection:C1472
 			$result.relatedEntity:=$field.name
-			$result.relatedTableNumber:=This:C1470.datastore[$field.relatedDataClass].getInfo().tableNumber
+			$result.relatedTableNumber:=$ds[$field.relatedDataClass].getInfo().tableNumber
 			$result.relatedDataClass:=$field.relatedDataClass
 			$result.inverseName:=$field.inverseName
 			
-			$relatedDataClass:=This:C1470.datastore[$field.relatedDataClass]
+			$relatedDataClass:=$ds[$field.relatedDataClass]
 			
 			For each ($fieldName; $relatedDataClass)
 				
@@ -718,13 +718,15 @@ Function _fields($tableName : Text)->$fields : Collection
 	
 	var $fieldName; $tableName : Text
 	var $field; $inquiry : Object
+	var $ds : cs:C1710.DataStore
 	var $str : cs:C1710.str
+	
+	$ds:=ds:C1482
+	$str:=cs:C1710.str.new()
 	
 	$fields:=New collection:C1472
 	
-	$str:=cs:C1710.str.new()
-	
-	For each ($fieldName; This:C1470.datastore[$tableName])
+	For each ($fieldName; $ds[$tableName])
 		
 		If ($fieldName=This:C1470.stampFieldName)\
 			 || (Position:C15("."; $fieldName)>0)
@@ -741,14 +743,22 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 		// Get a field with the same name already exists
 		$inquiry:=$fields.query("name = :1"; $fieldName).pop()
 		
-		If (($inquiry#Null:C1517) && $str.setText($inquiry.name).equal($fieldName))
+		//FIXME: TURNAROUND
+		var $equal : Boolean
+		If ($inquiry#Null:C1517)
+			
+			$equal:=str_equal($inquiry.name; $fieldName)
+			
+		End if 
+		
+		If ($equal)  //(($inquiry#Null) && $str.setText($inquiry.name).equal($fieldName))
 			
 			// NOT ALLOW DUPLICATE NAMES !
 			This:C1470.warnings.push("Name conflict for \""+$fieldName+"\"")
 			
 		Else 
 			
-			$field:=This:C1470.datastore[$tableName][$fieldName]
+			$field:=$ds[$tableName][$fieldName]
 			
 			Case of 
 					
@@ -774,14 +784,14 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 					//…………………………………………………………………………………………………
 				: ($field.kind="relatedEntity")  // N -> 1 relation attribute (reference to an entity)
 					
-					If (This:C1470.datastore[$field.relatedDataClass]#Null:C1517)
+					If ($ds[$field.relatedDataClass]#Null:C1517)
 						
 						$fields.push(New object:C1471(\
 							"name"; $fieldName; \
 							"inverseName"; $field.inverseName; \
 							"type"; -1; \
 							"relatedDataClass"; $field.relatedDataClass; \
-							"relatedTableNumber"; This:C1470.datastore[$field.relatedDataClass].getInfo().tableNumber))
+							"relatedTableNumber"; $ds[$field.relatedDataClass].getInfo().tableNumber))
 						
 					End if 
 					
@@ -793,7 +803,7 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 						"inverseName"; $field.inverseName; \
 						"type"; -2; \
 						"relatedDataClass"; $field.relatedDataClass; \
-						"relatedTableNumber"; This:C1470.datastore[$field.relatedDataClass].getInfo().tableNumber; \
+						"relatedTableNumber"; $ds[$field.relatedDataClass].getInfo().tableNumber; \
 						"isToMany"; True:C214))
 					
 					//…………………………………………………………………………………………………
@@ -859,9 +869,7 @@ Function _allowPublication($field : Object)->$allow : Boolean
 	End if 
 	
 	//==================================================================
-Function __fielddType  // #TEMPORARY REMAPPING FOR THE FIELD TYPE
-	var $0 : Integer
-	var $1 : Integer
+Function __fielddType($old : Integer)->$type : Integer  // #TEMPORARY REMAPPING FOR THE FIELD TYPE
 	
 	var $c : Collection
 	
@@ -882,8 +890,5 @@ Function __fielddType  // #TEMPORARY REMAPPING FOR THE FIELD TYPE
 	
 	$c[5]:=10  // ACI0100285
 	
-	$0:=$c[$1]
-	
-	
-	
+	$type:=$c[$old]
 	

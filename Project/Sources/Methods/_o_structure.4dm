@@ -135,10 +135,18 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 							var $inquiry : Object
 							$inquiry:=$table.field.query("name = :1"; $fieldName).pop()
 							
+							//FIXME: TURNAROUND
+							var $equal : Boolean
+							If ($inquiry#Null:C1517)
+								
+								$equal:=str_equal($inquiry.name; $fieldName)
+								
+							End if 
+							
 							Case of 
 									
 									//…………………………………………………………………………………………………
-								: (($inquiry#Null:C1517) && str_equal($inquiry.name; $fieldName))
+								: ($equal)  //(($inquiry#Null) && str_equal($inquiry.name; $fieldName))
 									
 									// NOT ALLOW DUPLICATE NAMES !
 									err_PUSH($OUT; "Name conflict for \""+$fieldName+"\""; Warning message:K38:2)
@@ -574,7 +582,7 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 							//For each ($Txt_field;$Obj_relatedDataClass)
 							
 							//If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																																																																								
+																																																																																
 							//If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
 							//$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])
