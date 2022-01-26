@@ -405,7 +405,7 @@ Case of
 				$type:=8859
 				
 				//…………………………………………………………………………………………………
-			: ($IN.field.kind="calculated")  // Computed //($IN.field.type=-3)  
+			: ($IN.field.kind="calculated")  // Computed 
 				
 				If ($IN.field.fieldType<=EDITOR.fieldIcons.length)
 					

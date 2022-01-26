@@ -25,7 +25,7 @@
 		    <BuildClientArchive>False</BuildClientArchive>
       <MacCompiledDatabaseToWinIncludeIt>False</MacCompiledDatabaseToWinIncludeIt>
       <MacCompiledDatabaseToWin></MacCompiledDatabaseToWin>
-    </CS>
+      <ServerEmbedsProjectDirectoryFile>False</ServerEmbedsProjectDirectoryFile></CS>
 		  <BuildApplicationName>4D Mobile App</BuildApplicationName>
 		  <BuildMacDestFolder>::Build:</BuildMacDestFolder>
 		  <BuildWinDestFolder>..\Build/</BuildWinDestFolder>

@@ -153,10 +153,7 @@ FEATURE.wip("sourceClass")  // Work with Source class to test the data source
 FEATURE.wip("newFormatterChoiceList")  // Menu to create formatter choice list directly , from data
 FEATURE.wip("xcDataModelClass")  // Use class to create core data model ie. xcDataModel (useful to refactor for alias)
 
-
 FEATURE.vdl("modernStructure")
-
-
 
 // FEATURE.wip("iosBuildWithClass")  // Use cs.MobileProjectIOS class
 

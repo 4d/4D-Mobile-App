@@ -79,7 +79,7 @@ Case of
 			
 		End if 
 		
-		$datastore:=_4D_Build Exposed Datastore:C1598
+		$datastore:=ds:C1482  //_4D_Build Exposed Datastore
 		
 		$OUT.success:=($datastore#Null:C1517)
 		
@@ -93,7 +93,8 @@ Case of
 				
 				$table:=$datastore[$tableName].getInfo()
 				
-				If ($tableName=SHARED.deletedRecordsTable.name)
+				If ($tableName=SHARED.deletedRecordsTable.name)\
+					 || Not:C34($table.exposed)
 					
 					// DON'T DISPLAY DELETED RECORDS TABLE
 					continue
@@ -118,8 +119,11 @@ Case of
 						
 						For each ($fieldName; $datastore[$tableName])
 							
+							$field:=$datastore[$tableName][$fieldName]
+							
 							If ($fieldName=SHARED.stampField.name)\
-								 || (Position:C15("."; $fieldName)>0)
+								 || (Position:C15("."; $fieldName)>0)\
+								 || Not:C34(Bool:C1537($field.exposed))
 								
 /*
 DON'T DISPLAY STAMP FIELD
@@ -130,8 +134,6 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 								
 							End if 
 							
-							$field:=$datastore[$tableName][$fieldName]
-							
 							var $inquiry : Object
 							$inquiry:=$table.field.query("name = :1"; $fieldName).pop()
 							
@@ -140,6 +142,10 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 							If ($inquiry#Null:C1517)
 								
 								$equal:=str_equal($inquiry.name; $fieldName)
+								
+							Else 
+								
+								$equal:=False:C215
 								
 							End if 
 							
@@ -152,19 +158,37 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 									err_PUSH($OUT; "Name conflict for \""+$fieldName+"\""; Warning message:K38:2)
 									
 									//…………………………………………………………………………………………………
-								: ($field.kind="storage")
+								: ($field.kind="storage")\
+									 | ($field.kind="calculated")
 									
 									// Storage (or scalar) attribute, i.e. attribute storing a value, not a reference to another attribute
 									If ($allowedTypes.indexOf($field.type)>=0)
 										
-										// #TEMPO [
-										$field.id:=$field.fieldNumber
+										// Mark: #TEMPO
 										$field.valueType:=$field.type
-										$field.type:=_o_tempoFieldType($field.fieldType)
-										// ]
 										
-										$table.field.push($field)
-										
+										If ($field.kind="calculated")
+											
+											
+											If (Bool:C1537($field.exposed))
+												
+												// Mark: #TEMPO
+												$field.type:=-3
+												//$field.type:=_o_tempoFieldType($field.fieldType)
+												
+												$table.field.push($field)
+												
+											End if 
+											
+										Else 
+											
+											// Mark: #TEMPO
+											$field.id:=$field.fieldNumber
+											$field.type:=_o_tempoFieldType($field.fieldType)
+											
+											$table.field.push($field)
+											
+										End if 
 									End if 
 									
 									//…………………………………………………………………………………………………
@@ -202,16 +226,16 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 									// <IGNORE NOT EXPOSED ATTRIBUTES>
 									
 									//…………………………………………………………………………………………………
-								: ($field.kind="calculated")
+									//: ($field.kind="calculated")
 									
-									If ($allowedTypes.indexOf($field.type)>=0)
-										
-										$field.valueType:=$field.type
-										$field.type:=-3
-										$field.computed:=True:C214
-										$table.field.push($field)
-										
-									End if 
+									//If ($allowedTypes.indexOf($field.type)>=0)
+									
+									//$field.valueType:=$field.type
+									//$field.type:=-3
+									//$field.computed:=True
+									//$table.field.push($field)
+									
+									//End if 
 									
 									//…………………………………………………………………………………………………
 								: (Not:C34(FEATURE.with("alias")))
@@ -582,7 +606,7 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 							//For each ($Txt_field;$Obj_relatedDataClass)
 							
 							//If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																																																																																
+																																																																																																
 							//If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
 							//$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])

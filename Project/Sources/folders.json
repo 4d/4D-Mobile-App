@@ -11,8 +11,12 @@
 	},
 	"____FOR_TESTS": {
 		"classes": [
+			"ALL_TYPES",
+			"ALL_TYPESEntity",
+			"ALL_TYPESSelection",
 			"Employes",
-			"EmployesEntity"
+			"EmployesEntity",
+			"EmployesSelection"
 		]
 	},
 	"__IN WORKS": {
@@ -383,7 +387,6 @@
 	},
 	"07] ACTIONS": {
 		"methods": [
-			"ACTIONS",
 			"ACTIONS_CALLBACK",
 			"COMPILER_ACTIONS"
 		],

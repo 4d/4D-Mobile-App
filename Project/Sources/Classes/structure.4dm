@@ -254,7 +254,7 @@ Function tableName($identifier)->$name : Text
 	End if 
 	
 	//==================================================================
-	//fixme: MUST NOT BE INTO THIS CLASSE -> PROJECT
+	//fixme: ? MUST NOT BE INTO THIS CLASSE -> PROJECT
 	/// Returns a field definition object
 Function fieldDefinition($tableIdentifier; $fieldPath : Text)->$field : Object
 	
@@ -747,7 +747,11 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 		var $equal : Boolean
 		If ($inquiry#Null:C1517)
 			
-			$equal:=str_equal($inquiry.name; $fieldName)
+			$equal:=$str.setText($inquiry.name).equal($fieldName)
+			
+		Else 
+			
+			$equal:=False:C215
 			
 		End if 
 		
@@ -768,14 +772,25 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 					// <IGNORE NOT EXPOSED ATTRIBUTES>
 					
 					//…………………………………………………………………………………………………
-				: ($field.kind="storage")
+				: ($field.kind="storage") | ($field.kind="calculated")  // Computed attribute
 					
 					If (This:C1470.allowedTypes.indexOf($field.type)>=0)
 						
 						// Mark: #TEMPO
-						$field.id:=$field.fieldNumber
 						$field.valueType:=$field.type
-						$field.type:=This:C1470.__fielddType($field.fieldType)
+						
+						If ($field.kind="calculated")
+							
+							// Mark: #TEMPO
+							$field.type:=-3
+							
+						Else 
+							
+							// Mark: #TEMPO
+							$field.id:=$field.fieldNumber
+							$field.type:=This:C1470.__fielddType($field.fieldType)
+							
+						End if 
 						
 						$fields.push($field)
 						
@@ -807,18 +822,18 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 						"isToMany"; True:C214))
 					
 					//…………………………………………………………………………………………………
-				: ($field.kind="calculated")  // Computed attribute
+					//: ($field.kind="calculated")  // Computed attribute
 					
-					If (This:C1470.allowedTypes.indexOf($field.type)>=0)
-						
-						$fields.push(New object:C1471(\
-							"name"; $fieldName; \
-							"kind"; $field.kind; \
-							"type"; -3; \
-							"fieldType"; $field.fieldType; \
-							"valueType"; $field.type))
-						
-					End if 
+					//If (This.allowedTypes.indexOf($field.type)>=0)
+					
+					//$fields.push(New object(\
+																		"name"; $fieldName; \
+																		"kind"; $field.kind; \
+																		"type"; -3; \
+																		"fieldType"; $field.fieldType; \
+																		"valueType"; $field.type))
+					
+					//End if 
 					
 					//…………………………………………………………………………………………………
 				: (Not:C34(FEATURE.with("alias")))

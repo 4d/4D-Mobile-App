@@ -1,51 +1,80 @@
 Class constructor
 	
+	This:C1470.stampFieldName:="__GlobalStamp"
+	This:C1470.deletedRecordsTableName:="__DeletedRecords"
+	
+	This:C1470.allowedTypes:=New collection:C1472("string"; "bool"; "date"; "number"; "image"; "object")
+	
+	This:C1470.warnings:=New collection:C1472
+	This:C1470.errors:=New collection:C1472
+	
 	This:C1470.success:=True:C214
 	
 	//==================================================================
-Function buildExposedDatastore($localID : Integer)->$datastore : Object
+Function buildExposedDatastore($localID : Text)->$datastore : Object
 	
-	var $key : Text
-	var $o; $table : Object
+	var $tableName : Text
+	var $meta; $o; $table : Object
 	var $ds : cs:C1710.DataStore
 	
 	$datastore:=New object:C1471
 	
-	$ds:=ds:C1482
+	$ds:=$localID=Null:C1517 ? ds:C1482 : ds:C1482($localID)
 	
-	For each ($key; $ds)
+	For each ($tableName; $ds)
 		
-		$o:=$ds[$key].getInfo()
-		
-		Case of 
-				
-				//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-			: (Not:C34($o.exposed))
-				
-				// Table is not exposed
-				
-				//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-			Else 
-				
-				$table:=New object:C1471
-				$table[""]:=$o
-				
-				For each ($o; OB Entries:C1720($ds[$key]))
+		If ($tableName=This:C1470.deletedRecordsTableName)
+			
+			// DON'T DISPLAY DELETED RECORDS TABLE
+			continue
+			
+		Else 
+			
+			$meta:=$ds[$tableName].getInfo()
+			
+			Case of 
 					
-					If (Bool:C1537($o.value.exposed))
+					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+				: (Not:C34($meta.exposed))
+					
+					// Table is not exposed
+					
+					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+				Else 
+					
+					$table:=New object:C1471
+					$table[""]:=$meta
+					
+					For each ($o; OB Entries:C1720($ds[$tableName]))
 						
-						If ($o.value.type#"blob")
+						If ($o.key=This:C1470.stampFieldName)\
+							 || (Position:C15("."; $o.key)>0)
 							
-							$table[$o.key]:=$o.value
+/*
+DON'T DISPLAY STAMP FIELD
+DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
+*/
+							
+							continue
 							
 						End if 
-					End if 
-				End for each 
-				
-				$datastore[$key]:=$table
-				
-				//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-		End case 
+						
+						If (Bool:C1537($o.value.exposed))
+							
+							If (This:C1470.allowedTypes.indexOf($o.value.type)>=0)
+								
+								$table[$o.key]:=$o.value
+								
+							End if 
+						End if 
+					End for each 
+					
+					$datastore[$tableName]:=$table
+					
+					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+			End case 
+		End if 
+		
 	End for each 
 	
 	//==================================================================
@@ -53,6 +82,8 @@ Function buildExposedCatalog()->$catalog : Collection
 	
 	var $key : Text
 	var $attribute; $entry; $field; $o; $table : Object
+	
+	$catalog:=New collection:C1472
 	
 	For each ($entry; OB Entries:C1720(ds:C1482))
 		
