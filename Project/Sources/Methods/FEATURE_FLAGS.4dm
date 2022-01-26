@@ -141,7 +141,8 @@ FEATURE.unstable("listEditor")  // [MOBILE] Create and edit an input control fro
 
 //mark:-🚧 WIP
 FEATURE.wip(131225)  // [MOBILE] Use aliases
-FEATURE.wip(129953)  //[MOBILE] Handle Many-one-Many relations
+FEATURE.wip(129953)  // [MOBILE] Handle Many-one-Many relations
+FEATURE.wip(127558)  // [ANDROID] Data set
 // FEATURE.wip("simuARMOnAppleProcessor") // Mac M1 build for simu using arm64
 FEATURE.wip("duplicateTemplate")  // Allow to duplicate template in host database and show on disk https:// Project.4d.com/issues/98054
 FEATURE.wip("taskIndicator")  // UI for background tasks executing
@@ -269,5 +270,6 @@ If ($preferences.features#Null:C1517)
 End if 
 
 //mark:-→ ALIAS
+FEATURE.alias("androidDataSet"; 127558)
 FEATURE.alias("many-one-many"; 129953)
 FEATURE.alias("alias"; 131225)

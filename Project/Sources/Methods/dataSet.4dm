@@ -61,7 +61,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 	
 	Case of 
 			
-		// MARK:- path
+			// MARK:- path
 		: ($in.action="path")
 			
 			Case of 
@@ -147,7 +147,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 					//----------------------------------------
 			End case 
 			
-		// MARK:- check
+			// MARK:- check
 		: ($in.action="check")
 			
 			// / Check if exist, and if digest check also if same digest = same structure and url ...
@@ -202,7 +202,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 				End if 
 			End if 
 			
-		// MARK:- digest
+			// MARK:- digest
 		: ($in.action="digest")
 			
 			// Remove some info in table not concerned
@@ -288,7 +288,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 					//----------------------------------------
 			End case 
 			
-		// MARK:- erase
+			// MARK:- erase
 		: ($in.action="erase")
 			
 			If ($in.path=Null:C1517)
@@ -317,7 +317,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 				End if 
 			End if 
 			
-		// MARK:- copy
+			// MARK:- copy
 		: ($in.action="copy")
 			
 			$in.action:="check"
@@ -354,7 +354,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 				End if 
 			End if 
 			
-		// MARK:- create
+			// MARK:- create
 		: ($in.action="create")  // later allow to do it with remove
 			
 			If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
@@ -598,13 +598,36 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 							
 							$out.coreDataSet:=dataSet(New object:C1471(\
 								"action"; "coreData"; \
-								"removeAsset"; Not:C34(Bool:C1537($in.project.$android)); \
+								"removeAsset"; Not:C34(FEATURE.with("androidDataSet"))/*False*/; \
 								"path"; $out.path; \
 								"caller"; $in.caller))
 							
 							ob_error_combine($out; $out.coreDataSet)
 							
+						End if 
+						
+						If (FEATURE.with("androidDataSet"))
+							
+							If (Bool:C1537($in.androidDataSet) & $out.success)
+								
+								$out.androidDataSet:=dataSet(New object:C1471(\
+									"action"; "androidDataSet"; \
+									"path"; $out.path; \
+									"caller"; $in.caller))
+								
+								ob_error_combine($out; $out.androidDataSet)
+								
+							End if 
+							
 							$out.success:=Not:C34(ob_error_has($out))
+							
+							If ($out.success)
+								
+								dataSet(New object:C1471(\
+									"action"; "removeAsset"; \
+									"path"; $out.path))
+								
+							End if 
 							
 						End if 
 						
@@ -666,7 +689,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 				End if 
 			End if 
 			
-		// MARK:- readCatalog
+			// MARK:- readCatalog
 		: ($in.action="readCatalog")
 			
 			If ((Value type:C1509($in.project)=Is object:K8:27))
@@ -700,7 +723,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 				
 			End if 
 			
-		// MARK:- coreData
+			// MARK:- coreData
 		: ($in.action="coreData")
 			
 			If (Not:C34(Bool:C1537(Storage:C1525.flags.stopGeneration)))
@@ -784,7 +807,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 				End if 
 			End if 
 			
-			//________________________________________
+			// MARK:- coreDataAddToProject
 		: ($in.action="coreDataAddToProject")
 			
 			$file:=Folder:C1567($in.path; fk platform path:K87:2).file("Resources/Structures.sqlite")
@@ -826,6 +849,21 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 					End if 
 				End if 
 			End if 
+			
+			// MARK:- androidDataSet
+		: ($in.action="androidDataSet")
+			
+			// TODO:androidDataSet: uncomment and use correct function name, if more parameter needed see caller
+			// cs.MobileProjectAndroid.new($in.project).sqlDump($in)
+			
+			
+			// MARK:- removeAsset
+		: ($in.action="removeAsset")
+			
+			$folder:=Folder:C1567($in.path; fk platform path:K87:2)
+			
+			$folder.folder("Resources/Assets.xcassets/Data").delete(Delete with contents:K24:24)
+			$folder.folder("Resources/Assets.xcassets/Catalog").delete(Delete with contents:K24:24)
 			
 			//________________________________________
 		Else 
