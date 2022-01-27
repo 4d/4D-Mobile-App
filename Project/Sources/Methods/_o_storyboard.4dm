@@ -12,7 +12,7 @@ C_OBJECT:C1216($1)
 
 C_BOOLEAN:C305($Boo_buffer)
 C_LONGINT:C283($Lon_i; $Lon_j; $Lon_parameters; $Lon_ids; $Lon_length)
-C_OBJECT:C1216($Dom_; $Dom_child; $Dom_root); 
+C_OBJECT:C1216($Dom_; $Dom_child; $Dom_root)
 C_TEXT:C284($Txt_buffer; $Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
 C_OBJECT:C1216($File_; $Obj_color; $Obj_in; $Obj_out; $Obj_element; $Obj_table; $Obj_field; $Obj_tag; $Obj_storyboardID)
 C_COLLECTION:C1488($Col_; $Col_elements)
@@ -729,11 +729,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 						
 						// 2- scene
 						//$Obj_element:=New object(\
-																																																																																											"insertInto";$Dom_root.findByXPath("document/scenes");\
-																																																																																											"dom";xml("load";$Folder_relation.file("storyboardScene.xml"));\
-																																																																																											"idCount";3;\
-																																																																																											"tagInterfix";"SN";\
-																																																																																											"insertMode";"append")
+																																																																																																		"insertInto";$Dom_root.findByXPath("document/scenes");\
+																																																																																																		"dom";xml("load";$Folder_relation.file("storyboardScene.xml"));\
+																																																																																																		"idCount";3;\
+																																																																																																		"tagInterfix";"SN";\
+																																																																																																		"insertMode";"append")
 						$Obj_element:=New object:C1471(\
 							"insertInto"; $Dom_root.findByXPath("/document/scenes"); \
 							"dom"; _o_xml("load"; $Folder_relation.file("storyboardScene.xml")); \

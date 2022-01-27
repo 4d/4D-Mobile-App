@@ -490,7 +490,7 @@ Function _createTags()->$tags : Object
 	// • Source files tags
 	$tags.copyright:=This:C1470.project.product.copyright
 	$tags.fullname:=This:C1470.project.developer.name
-	$tags.date:=String:C10(Current date:C33; Date RFC 1123:K1:11; Current time:C178); 
+	$tags.date:=String:C10(Current date:C33; Date RFC 1123:K1:11; Current time:C178)
 	
 	// • Scripts
 	$tags.xCodeVersion:=This:C1470.project.$project.xCode.version
