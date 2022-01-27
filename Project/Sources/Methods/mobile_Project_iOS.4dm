@@ -436,6 +436,7 @@ If ($in.create)
 		$out.dump:=dataSet(New object:C1471(\
 			"action"; "check"; \
 			"digest"; False:C215; \
+			"coreDataSet"; FEATURE.with("androidDataSet"); \
 			"project"; $project))
 		
 		If (Not:C34(Bool:C1537($out.dump.exists)))

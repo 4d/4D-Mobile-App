@@ -282,7 +282,7 @@ Function postErrors($errors : Collection)
 	This:C1470.postError($c.join("\r"))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns a dump of the data made with the REST API
+	// Returns a dump of the data made with the REST API,  and create android db now
 Function dataSet()->$dump : Object
 	
 	var $pathname : Text
@@ -294,6 +294,7 @@ Function dataSet()->$dump : Object
 	$dump:=dataSet(New object:C1471(\
 		"action"; "check"; \
 		"digest"; True:C214; \
+		"androidDataSet"; FEATURE.with("androidDataSet"); \
 		"project"; $project))
 	
 	If (Bool:C1537($dump.exists))

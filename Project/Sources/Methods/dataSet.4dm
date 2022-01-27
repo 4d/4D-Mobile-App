@@ -200,6 +200,16 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 					$out.valid:=True:C214  // check only path existance
 					
 				End if 
+				
+				If ($out.valid && Bool:C1537($in.coreDataSet))
+					$out.valid:=Folder:C1567($out.path; fk platform path:K87:2).folder("Resources/Structures.sqlite").exists
+				End if 
+				
+				If ($out.valid && Bool:C1537($in.androidDataSet))
+					//TODO:androidDataSet: see if project.dataSet/android/static.db is correct path, maybe allow to get path by unique methods
+					$out.valid:=Folder:C1567($out.path; fk platform path:K87:2).folder("android/static.db").exists
+				End if 
+				
 			End if 
 			
 			// MARK:- digest
