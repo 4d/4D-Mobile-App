@@ -519,6 +519,22 @@ Function hostNavigationForms($create : Boolean)->$folder : 4D:C1709.Folder  // f
 	$folder:=This:C1470.target
 	
 /*========================================================*/
+Function androidDb($relativePath : Text)->$file : 4D:C1709.File
+	
+	var $currentFolder : 4D:C1709.Folder
+	$currentFolder:=Folder:C1567($relativePath; fk platform path:K87:2)
+	
+	If ($currentFolder.fullName="project.dataSet")
+		
+		$file:=$currentFolder.file("android/static.db")
+		
+	Else 
+		
+		$file:=$currentFolder.file("project.dataSet/android/static.db")
+		
+	End if 
+	
+/*========================================================*/
 Function key()->$file : 4D:C1709.File
 	
 	$file:=Folder:C1567(MobileApps folder:K5:47; *).file("key.mobileapp")

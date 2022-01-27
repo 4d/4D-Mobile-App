@@ -117,6 +117,7 @@ Function buildEmbeddedDataLib
 Function copyEmbeddedDataLib
 	var $0 : Object
 	var $copySrc; $copyDest : 4D:C1709.File
+	var $targetLibFolder : 4D:C1709.Folder
 	
 	$0:=New object:C1471(\
 		"success"; False:C215; \
@@ -125,6 +126,9 @@ Function copyEmbeddedDataLib
 	$copySrc:=File:C1566(This:C1470.projectPath+"buildSrc/libs/prepopulation.jar")
 	
 	If ($copySrc.exists)
+		
+		$targetLibFolder:=Folder:C1567(This:C1470.projectPath+"app/libs")
+		$targetLibFolder.create()
 		
 		$copyDest:=$copySrc.copyTo(Folder:C1567(This:C1470.projectPath+"app/libs"); fk overwrite:K87:5)
 		
@@ -209,21 +213,21 @@ Function copyResources
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function copyDataSet
+Function copyGeneratedDb
 	var $0 : Object
 	var $1 : 4D:C1709.Folder  // 4D Mobile Project
-	var $xcassets; $copyDest : 4D:C1709.Folder
+	var $dbFile; $copyDest : 4D:C1709.File
 	
 	$0:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	// Copy dataSet resources
-	$xcassets:=$1.folder("project.dataSet/Resources/Assets.xcassets")
+	// Copy db file
+	$dbFile:=This:C1470.path.androidDb($1.path)
 	
-	If ($xcassets.exists)
+	If ($dbFile.exists)
 		
-		$copyDest:=$xcassets.copyTo(Folder:C1567(This:C1470.projectPath+"app/src/main/assets"); "datadump"; fk overwrite:K87:5)
+		$copyDest:=$dbFile.copyTo(Folder:C1567(This:C1470.projectPath+"app/src/main/assets/databases"); fk overwrite:K87:5)
 		
 		If ($copyDest.exists)
 			
@@ -237,8 +241,38 @@ Function copyDataSet
 		End if 
 		
 	Else 
-		// Missing Assets.xcassets folder
-		$0.errors.push("Missing source directory for copy: "+$xcassets.path)
+		// Missing generated db file
+		$0.errors.push("Missing db file for copy: "+$dbFile.path)
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function copyDataSetPictures
+	var $0 : Object
+	var $1 : 4D:C1709.Folder  // 4D Mobile Project
+	var $picturesFolder; $copyDest : 4D:C1709.Folder
+	
+	$0:=New object:C1471(\
+		"success"; True:C214; \
+		"errors"; New collection:C1472)
+	
+	// Copy dataSet pictures
+	$picturesFolder:=$1.folder("project.dataSet/Resources/Assets.xcassets/Pictures")
+	
+	If ($picturesFolder.exists)
+		
+		$copyDest:=$picturesFolder.copyTo(Folder:C1567(This:C1470.projectPath+"app/src/main/assets"); fk overwrite:K87:5)
+		
+		If (Not:C34($copyDest.exists))
+			
+			// Copy failed
+			$0.success:=False:C215
+			$0.errors.push("Could not copy directory to destination: "+$copyDest.path)
+			
+			// Else : all ok
+		End if 
+		
+		// Else : no Pictures folder
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===

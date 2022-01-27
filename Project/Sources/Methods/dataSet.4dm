@@ -206,8 +206,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 				End if 
 				
 				If ($out.valid && Bool:C1537($in.androidDataSet))
-					//TODO:androidDataSet: see if project.dataSet/android/static.db is correct path, maybe allow to get path by unique methods
-					$out.valid:=Folder:C1567($out.path; fk platform path:K87:2).folder("android/static.db").exists
+					$out.valid:=cs:C1710.path.new().androidDb($out.path).exists
 				End if 
 				
 			End if 
@@ -630,6 +629,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 								$out.androidDataSet:=dataSet(New object:C1471(\
 									"action"; "androidDataSet"; \
 									"path"; $out.path; \
+									"project"; $in.project; \
 									"caller"; $in.caller))
 								
 								ob_error_combine($out; $out.androidDataSet)
@@ -870,8 +870,10 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 			// MARK:- androidDataSet
 		: ($in.action="androidDataSet")
 			
-			// TODO:androidDataSet: uncomment and use correct function name, if more parameter needed see caller
-			// cs.MobileProjectAndroid.new($in.project).sqlDump($in)
+			$out.androidPrepackaged:=cs:C1710.AndroidPrepackaged.new().generate($in.project)
+			ob_error_combine($out; $out.androidPrepackaged)
+			
+			$out.success:=$out.androidPrepackaged.success
 			
 			
 			// MARK:- removeAsset

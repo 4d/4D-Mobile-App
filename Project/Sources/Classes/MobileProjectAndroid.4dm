@@ -36,15 +36,19 @@ Class constructor($project : Object)
 	If (This:C1470.hasRelations=False:C215)  // ?????? Vu la ligne du dessus, n'ai jamais vérifié
 		This:C1470.project.hasRelations:=False:C215
 	End if 
-	This:C1470.hasActions:=FEATURE.with("androidActions")
-	This:C1470.project.hasActions:=This:C1470.hasActions
+	
+	This:C1470.project.hasActions:=FEATURE.with("androidActions")
+	This:C1470.project.hasDataSet:=FEATURE.with("androidDataSet")
 	
 	This:C1470.checkPackage()
 	
-	This:C1470.file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"projecteditor.json")
-	This:C1470.file.setText(JSON Stringify:C1217(This:C1470.project))
-	
-	This:C1470.file.copyTo(This:C1470.logFolder; "lastBuild.android.4dmobile"; fk overwrite:K87:5)
+	If (Not:C34(FEATURE.with("androidDataSet")))
+		
+		This:C1470.file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"projecteditor.json")
+		This:C1470.file.setText(JSON Stringify:C1217(This:C1470.project))
+		
+		This:C1470.file.copyTo(This:C1470.logFolder; "lastBuild.android.4dmobile"; fk overwrite:K87:5)
+	End if 
 	
 	This:C1470.version:="debug"
 	This:C1470.apk:=Folder:C1567(This:C1470.project.path).folder("app/build/outputs/apk").folder(This:C1470.version).file("app-"+This:C1470.version+".apk")
@@ -102,65 +106,146 @@ Function create()->$result : Object
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
+	$o:=New object:C1471("success"; True:C214)
+	
 	If (Not:C34(This:C1470.isOnError))
 		
-		// * GENERATE PROJECT FILES
-		This:C1470.postStep("workspaceCreation")
-		
-		$o:=This:C1470.androidprojectgenerator.generate(This:C1470.file)
-		
-		// Log outputs
-		This:C1470.logFolder.file("lastCreate.android.out.log").setText(String:C10($o.outputStream))
-		This:C1470.logFolder.file("lastCreate.android.err.log").setText(String:C10($o.errorStream))
-		
-		If ($o.success)
-			
-			// * GRADLEW ACCESS RIGHTS
-			If (Is macOS:C1572)  // No need to change permissions on Windows
-				
-				$o:=This:C1470.androidprojectgenerator.chmod()
-				
-			End if 
-			
-		End if 
-		
-		If ($o.success)
-			
-			If (Not:C34(Bool:C1537(This:C1470.project.project.dataSource.doNotGenerateDataAtEachBuild)))
-				
-				// * BUILD EMBEDDED DATA LIBRARY
-				This:C1470.postStep("dataSetGeneration")
-				
-			End if 
-			
-			$o:=This:C1470.androidprojectgenerator.buildEmbeddedDataLib(This:C1470.project.package)
-			
-		End if 
-		
-		If ($o.success)
-			
-			// * COPY EMBEDDED DATA LIBRARY
-			$o:=This:C1470.androidprojectgenerator.copyEmbeddedDataLib()
-			
-		End if 
-		
-		If ($o.success)
+		If (FEATURE.with("androidDataSet"))
 			
 			// * CREATE DATASET
 			
 			If (Not:C34(Bool:C1537(This:C1470.project.project.dataSource.doNotGenerateDataAtEachBuild)))
 				
+				This:C1470.postStep("dataSetGeneration")
+				
 				$o:=This:C1470.dataSet()
+				
 				If (Not:C34($o.success))
-					If ($o.errors=Null:C1517)
-						$o.push("Failed to dump data")
-					End if 
+					
+					$o.errors:=New collection:C1472
+					$o.errors.push("Failed to dump data")
+					
 				End if 
 				
 				// Else: asked to not generate data at each build
 			End if 
 			
+			If ($o.success)
+				
+				// Not in constructor, because we want to add $dumpedTables and $dumpedStamp that is generated after dataSet
+				
+				var $dumpInfoFile : 4D:C1709.File
+				$dumpInfoFile:=This:C1470.project.project._folder.file("project.dataSet/android/dump_info.json")
+				
+				If ($dumpInfoFile.exists)
+					
+					var $dumpInfoObj : Object
+					
+					$dumpInfoObj:=JSON Parse:C1218($dumpInfoFile.getText())
+					This:C1470.project.dumpedStamp:=$dumpInfoObj.dumped_stamp
+					This:C1470.project.dumpedTables:=$dumpInfoObj.dumped_tables
+					
+				End if 
+				
+				This:C1470.file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"projecteditor.json")
+				This:C1470.file.setText(JSON Stringify:C1217(This:C1470.project))
+				
+				This:C1470.file.copyTo(This:C1470.logFolder; "lastBuild.android.4dmobile"; fk overwrite:K87:5)
+				
+			End if 
+			
 		End if 
+		
+		
+		If ($o.success)
+			
+			// * GENERATE PROJECT FILES
+			This:C1470.postStep("workspaceCreation")
+			
+			$o:=This:C1470.androidprojectgenerator.generate(This:C1470.file)
+			
+			// Log outputs
+			This:C1470.logFolder.file("lastCreate.android.out.log").setText(String:C10($o.outputStream))
+			This:C1470.logFolder.file("lastCreate.android.err.log").setText(String:C10($o.errorStream))
+			
+			If ($o.success)
+				
+				// * GRADLEW ACCESS RIGHTS
+				If (Is macOS:C1572)  // No need to change permissions on Windows
+					
+					$o:=This:C1470.androidprojectgenerator.chmod()
+					
+				End if 
+				
+			End if 
+			
+		End if 
+		
+		
+		If (Not:C34(FEATURE.with("androidDataSet")))
+			
+			If ($o.success)
+				
+				If (Not:C34(Bool:C1537(This:C1470.project.project.dataSource.doNotGenerateDataAtEachBuild)))
+					
+					// * BUILD EMBEDDED DATA LIBRARY
+					This:C1470.postStep("dataSetGeneration")
+					
+				End if 
+				
+				$o:=This:C1470.androidprojectgenerator.buildEmbeddedDataLib(This:C1470.project.package)
+				
+			End if 
+			
+			If ($o.success)
+				
+				// * COPY EMBEDDED DATA LIBRARY
+				$o:=This:C1470.androidprojectgenerator.copyEmbeddedDataLib()
+				
+			End if 
+			
+			If ($o.success)
+				
+				// * CREATE DATASET
+				
+				If (Not:C34(Bool:C1537(This:C1470.project.project.dataSource.doNotGenerateDataAtEachBuild)))
+					
+					$o:=This:C1470.dataSet()
+					If (Not:C34($o.success))
+						If ($o.errors=Null:C1517)
+							$o.errors.push("Failed to dump data")
+						End if 
+					End if 
+					
+					If ($o.success)
+						
+						$o:=This:C1470.androidprojectgenerator.copyDataSet(This:C1470.project.project._folder)
+					End if 
+					
+					// Else: asked to not generate data at each build
+				End if 
+				
+			End if 
+			
+		End if 
+		
+		
+		If (FEATURE.with("androidDataSet"))
+			
+			If ($o.success)
+				
+				$o:=This:C1470.androidprojectgenerator.copyGeneratedDb(This:C1470.project.project._folder)
+				
+			End if 
+			
+			If ($o.success)
+				
+				$o:=This:C1470.androidprojectgenerator.copyDataSetPictures(This:C1470.project.project._folder)
+				
+			End if 
+			
+		End if 
+		
 		
 		If ($o.success)
 			
@@ -182,17 +267,6 @@ Function create()->$result : Object
 			
 			// * COPY KOTLIN CUSTOM FORMATTER FILES
 			$o:=This:C1470.androidprojectgenerator.copyKotlinCustomFormatterFiles(This:C1470.project.project.dataModel; This:C1470.project.package)
-			
-		End if 
-		
-		If ($o.success)
-			
-			If (Not:C34(Bool:C1537(This:C1470.project.project.dataSource.doNotGenerateDataAtEachBuild)))
-				
-				$o:=This:C1470.androidprojectgenerator.copyDataSet(This:C1470.project.project._folder)
-				
-				// Else: asked to not generate data at each build
-			End if 
 			
 		End if 
 		
@@ -242,18 +316,21 @@ Function build()->$result : Object
 		This:C1470.logFolder.file("lastBuild.android.out.log").setText(String:C10($o.outputStream))
 		This:C1470.logFolder.file("lastBuild.android.err.log").setText(String:C10($o.errorStream))
 		
-		If ($o.success)
+		If (Not:C34(FEATURE.with("androidDataSet")))
 			
-			// * CREATE EMBEDDED DATABASE
-			$o:=This:C1470.gradlew.createEmbeddedDatabase()
+			If ($o.success)
+				
+				// * CREATE EMBEDDED DATABASE
+				$o:=This:C1470.gradlew.createEmbeddedDatabase()
+				
+			End if 
 			
-		End if 
-		
-		If ($o.success)
-			
-			// * BUILD PROJECT WITH EMBEDDED DATA
-			$o:=This:C1470.gradlew.assembleDebug()
-			
+			If ($o.success)
+				
+				// * BUILD PROJECT WITH EMBEDDED DATA
+				$o:=This:C1470.gradlew.assembleDebug()
+				
+			End if 
 		End if 
 		
 		If ($o.success)

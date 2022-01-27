@@ -6,7 +6,9 @@ apply plugin: 'kotlin-kapt'
 apply from: "$rootDir/buildscripts/ktlint.gradle"
 apply from: "$rootDir/buildscripts/testlog.gradle"
 apply from: "$rootDir/buildscripts/detekt.gradle"
+{{^hasDataSet}}
 apply from: "$rootDir/buildscripts/prepopulation.gradle"
+{{/hasDataSet}}
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
