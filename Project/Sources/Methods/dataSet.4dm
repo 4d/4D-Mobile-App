@@ -572,6 +572,13 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 							
 						End if 
 						
+						If (FEATURE.with("androidDataSet"))
+							If (Bool:C1537($in.accordingToTarget))
+								$in.coreDataSet:=$in.project.info.target.indexOf("iOS")>-1  // Bool($in.project.$ios)
+								$in.androidDataSet:=$in.project.info.target.indexOf("android")>-1  // Bool($in.project.$android)
+							End if 
+						End if 
+						
 						If (Bool:C1537($in.coreDataSet) & $out.success)
 							
 							If (FEATURE.with("xcDataModelClass"))

@@ -182,7 +182,8 @@ Function doGenerate()
 				"eraseIfExists"; True:C214; \
 				"project"; PROJECT; \
 				"digest"; True:C214; \
-				"coreDataSet"; True:C214; \
+				"accordingToTarget"; FEATURE.with("androidDataSet"); \
+				"coreDataSet"; Not:C34(FEATURE.with("androidDataSet")); \
 				"key"; $keyPathname; \
 				"dataSet"; True:C214))
 			

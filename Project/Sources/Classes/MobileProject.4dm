@@ -349,6 +349,7 @@ Function dataSet()->$dump : Object
 			"digest"; True:C214; \
 			"dataSet"; True:C214; \
 			"key"; $pathname; \
+			"androidDataSet"; FEATURE.with("androidDataSet"); \
 			"caller"; This:C1470.input.caller; \
 			"verbose"; This:C1470.input.verbose))
 		
