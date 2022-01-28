@@ -3,6 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="{{package}}">
 
+    <queries>
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
+        </intent>
+    </queries>
+
     <!--    cleartext api 24+ -->
     <application
         android:name=".app.App"
@@ -32,6 +38,16 @@
         <meta-data
             android:name="com.qmobile.qmobileui.glide.AppGlideModule"
             android:value="AppGlideModule" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="{{package}}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true" >
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
     </application>
 
