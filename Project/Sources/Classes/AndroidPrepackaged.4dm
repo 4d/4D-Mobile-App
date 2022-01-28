@@ -36,88 +36,84 @@ Function setJavaHome
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
 	
-Function generate
-	var $0 : Object
-	var $1 : Object  // project definition
+Function generate($project : Object)->$result : Object
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; True:C214; \
 		"outputStream"; ""; \
 		"errorStream"; "")
 	
-	If (Not:C34(This:C1470.isOnError))
+	If (This:C1470.isOnError)
 		
-		var $projFile; $dbFile : 4D:C1709.File
-		var $assetsDir : 4D:C1709.Folder
+		// An error occurred during class init (This.studio.java or This.studio.javaHome was null)
+		$result.success:=False:C215
+		$result.errors:=New collection:C1472("Cannot generated Android database because java is missing")
 		
-		This:C1470.project:=OB Copy:C1225($1)
+		return 
 		
-		// * CLEANING INNER $OBJECTS
-		var $o : Object
-		For each ($o; OB Entries:C1720(This:C1470.project).query("key=:1"; "$@"))
-			
-			OB REMOVE:C1226(This:C1470.project; $o.key)
-			
-		End for each 
+	End if 
+	
+	var $projFile; $dbFile : 4D:C1709.File
+	var $assetsDir : 4D:C1709.Folder
+	
+	This:C1470.project:=OB Copy:C1225($project)
+	
+	// * CLEANING INNER $OBJECTS
+	var $o : Object
+	For each ($o; OB Entries:C1720(This:C1470.project).query("key=:1"; "$@"))
 		
-		$projFile:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"projecteditor.json")
-		$projFile.setText(JSON Stringify:C1217(This:C1470.project))
+		OB REMOVE:C1226(This:C1470.project; $o.key)
 		
-		$assetsDir:=This:C1470.project._folder.folder("project.dataSet/Resources/Assets.xcassets")
-		$dbFile:=This:C1470.path.androidDb(This:C1470.project._folder.path)
+	End for each 
+	
+	$projFile:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"projecteditor.json")
+	$projFile.setText(JSON Stringify:C1217(This:C1470.project))
+	
+	$assetsDir:=This:C1470.project._folder.folder("project.dataSet/Resources/Assets.xcassets")
+	$dbFile:=This:C1470.path.androidDb(This:C1470.project._folder.path)
+	
+	If (This:C1470.path.scripts().exists)
 		
-		If (This:C1470.path.scripts().exists)
+		This:C1470.setDirectory(This:C1470.path.scripts())
+		
+		This:C1470.launch(This:C1470.androidprepackageCmd\
+			+" createDatabase"\
+			+" --project-editor \""+$projFile.path\
+			+"\" --assets \""+$assetsDir.path\
+			+"\" --db-file \""+$dbFile.path\
+			+"\"")
+		
+		var $hasError; $hasException : Boolean
+		$hasError:=Bool:C1537((Position:C15("Error"; String:C10(This:C1470.errorStream))>0))
+		$hasException:=Bool:C1537((Position:C15("Exception"; String:C10(This:C1470.errorStream))>0))
+		
+		$result.success:=Not:C34($hasError | $hasException)
+		$result.outputStream:=This:C1470.outputStream
+		$result.errorStream:=This:C1470.errorStream
+		
+		// Log outputs
+		This:C1470.logFolder.file("lastPrepackage.android.out.log").setText(String:C10(This:C1470.outputStream))
+		This:C1470.logFolder.file("lastPrepackage.android.err.log").setText(String:C10(This:C1470.errorStream))
+		
+		If (Not:C34($result.success))
 			
-			This:C1470.setDirectory(This:C1470.path.scripts())
-			
-			This:C1470.launch(This:C1470.androidprepackageCmd\
-				+" createDatabase"\
-				+" --project-editor \""+$projFile.path\
-				+"\" --assets \""+$assetsDir.path\
-				+"\" --db-file \""+$dbFile.path\
-				+"\"")
-			
-			var $hasError; $hasException : Boolean
-			$hasError:=Bool:C1537((Position:C15("Error"; String:C10(This:C1470.errorStream))>0))
-			$hasException:=Bool:C1537((Position:C15("Exception"; String:C10(This:C1470.errorStream))>0))
-			
-			$0.success:=Not:C34($hasError | $hasException)
-			$0.outputStream:=This:C1470.outputStream
-			$0.errorStream:=This:C1470.errorStream
-			
-			// Log outputs
-			This:C1470.logFolder.file("lastPrepackage.android.out.log").setText(String:C10(This:C1470.outputStream))
-			This:C1470.logFolder.file("lastPrepackage.android.err.log").setText(String:C10(This:C1470.errorStream))
-			
-			If (Not:C34($0.success))
-				
-				$0.errors:=New collection:C1472
-				$0.errors.push("Failed to generate files")
-				$0.errors.push(This:C1470.errorStream)
-				
-			Else 
-				
-				If (Not:C34($dbFile.exists))
-					
-					$0.errors:=New collection:C1472
-					$0.errors.push("Failed to generate prepackaged database "+$dbFile.path)
-					
-					// Else : all ok 
-				End if 
-			End if 
+			$result.errors:=New collection:C1472
+			$result.errors.push("Failed to generate files")
+			$result.errors.push(This:C1470.errorStream)
 			
 		Else 
 			
-			$0.errors:=New collection:C1472
-			$0.errors.push("Missing scripts directory")
-			
+			If (Not:C34($dbFile.exists))
+				
+				$result.errors:=New collection:C1472("Failed to generate prepackaged database "+$dbFile.path)
+				
+				// Else : all ok 
+			End if 
 		End if 
 		
 	Else 
-		// An error occurred during class init (This.studio.java or This.studio.javaHome was null)
-		$0.success:=False:C215
-		$0.errors:=New collection:C1472
-		$0.errors.push("Cannot generated Android database because java is missing")
+		
+		$result.errors:=New collection:C1472("Missing scripts directory")
 		
 	End if 
 	
