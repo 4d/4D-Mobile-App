@@ -794,8 +794,15 @@ Function doGenerate($keyPathname : Text)
 	
 	var $ƒ : 4D:C1709.Function
 	
-	$ƒ:=Formula:C1597(CALL WORKER:C1389(This:C1470.worker; Formula:C1597(dataSet).source; New object:C1471(\
-		"caller"; This:C1470.window; \
+	var $worker : Text
+	var $window : Integer
+	$worker:=This:C1470.worker
+	$window:=This:C1470.window
+	
+	Current form window:C827
+	
+	$ƒ:=Formula:C1597(CALL WORKER:C1389($worker; Formula:C1597(dataSet).source; New object:C1471(\
+		"caller"; $window; \
 		"action"; "create"; \
 		"eraseIfExists"; True:C214; \
 		"project"; PROJECT; \
