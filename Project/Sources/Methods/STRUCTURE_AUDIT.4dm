@@ -87,7 +87,7 @@ If ($cacheFile.exists)
 									: (PROJECT.isField($item.key))
 										
 										$field:=$table.value[$item.key]
-										$field.current:=$tableCatalog.field.query("fieldNumber = :1"; Num:C11($item.key)).pop()
+										$field.current:=$tableCatalog.field.query("fieldNumber = :1 & kind = storage"; Num:C11($item.key)).pop()
 										$field.fieldNumber:=Num:C11($item.key)
 										$field.missing:=$field.current=Null:C1517
 										$field.nameMismatch:=Not:C34($str.setText($field.name).equal($field.current.name))

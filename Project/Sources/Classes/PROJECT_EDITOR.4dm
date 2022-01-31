@@ -31,6 +31,10 @@ Function design()
 	
 	var $o : Object
 	
+	
+	var $window : Integer
+	$window:=This:C1470.window
+	
 	This:C1470.pages:=New object:C1471
 	This:C1470.currentPage:=""
 	
@@ -75,13 +79,13 @@ Function design()
 			"title"; "syncDataModel"; \
 			"show"; False:C215; \
 			"formula"; Formula:C1597(POST_MESSAGE(New object:C1471(\
-			"target"; This:C1470.window; \
+			"target"; $window; \
 			"action"; "show"; \
 			"type"; "confirm"; \
 			"title"; "updateTheProject"; \
 			"additional"; "aBackupWillBeCreatedIntoTheProjectFolder"; \
 			"ok"; "update"; \
-			"okFormula"; Formula:C1597(CALL FORM:C1391(This:C1470.window; Formula:C1597(editor_CALLBACK).source; "syncDataModel")))))\
+			"okFormula"; Formula:C1597(CALL FORM:C1391($window; Formula:C1597(editor_CALLBACK).source; "syncDataModel")))))\
 			)
 		
 	End if 
@@ -134,13 +138,13 @@ Function design()
 			"title"; ".Repair the project"; \
 			"show"; False:C215; \
 			"formula"; Formula:C1597(POST_MESSAGE(New object:C1471(\
-			"target"; This:C1470.window; \
+			"target"; $window; \
 			"action"; "show"; \
 			"type"; "confirm"; \
 			"title"; "updateTheProject"; \
 			"additional"; "aBackupWillBeCreatedIntoTheProjectFolder"; \
 			"ok"; "update"; \
-			"okFormula"; Formula:C1597(CALL FORM:C1391(This:C1470.window; Formula:C1597(editor_CALLBACK).source; "syncDataModel")))))\
+			"okFormula"; Formula:C1597(CALL FORM:C1391($window; Formula:C1597(editor_CALLBACK).source; "syncDataModel")))))\
 			)
 		
 	End if 
@@ -734,9 +738,12 @@ Function ribbonContainer($e : Object)
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function checkDevTools()
 	
+	var $window : Integer
+	$window:=This:C1470.window
+	
 	This:C1470.addTask("checkDevTools")
 	This:C1470.callWorker(Formula:C1597(editor_CHECK_INSTALLATION).source; New object:C1471(\
-		"caller"; This:C1470.window; \
+		"caller"; $window; \
 		"xCode"; This:C1470.xCode; \
 		"studio"; This:C1470.studio; \
 		"android"; PROJECT.$android; \
@@ -746,10 +753,13 @@ Function checkDevTools()
 	//===================================================================================
 Function checkProject()
 	
+	var $window : Integer
+	$window:=This:C1470.window
+	
 	// Launch checking the structure
 	This:C1470.addTask("checkProject")
 	This:C1470.callWorker(Formula:C1597(_o_structure).source; New object:C1471(\
-		"caller"; This:C1470.window; \
+		"caller"; $window; \
 		"action"; "catalog"\
 		))
 	
@@ -759,9 +769,12 @@ Function checkProject()
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function getDevices()
 	
+	var $window : Integer
+	$window:=This:C1470.window
+	
 	This:C1470.addTask("getDevices")
 	This:C1470.callWorker(Formula:C1597(editor_GET_DEVICES).source; New object:C1471(\
-		"caller"; This:C1470.window; \
+		"caller"; $window; \
 		"xCode"; This:C1470.xCode; \
 		"studio"; This:C1470.studio\
 		))
@@ -811,7 +824,7 @@ Function doGenerate($keyPathname : Text)
 		"dataSet"; True:C214)))
 	
 	POST_MESSAGE(New object:C1471(\
-		"target"; This:C1470.window; \
+		"target"; $window; \
 		"action"; "show"; \
 		"type"; "cancelableProgress"; \
 		"title"; "dataGeneration"; \
