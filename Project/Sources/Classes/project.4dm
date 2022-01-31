@@ -1322,7 +1322,11 @@ Function label  // Format labels
 				
 			End for 
 			
-			$0:=Replace string:C233($0; "id"; "ID")
+			If ($0="id")
+				
+				$0:=Replace string:C233($0; "id"; "ID")
+				
+			End if 
 			
 			//______________________________________________________
 	End case 
