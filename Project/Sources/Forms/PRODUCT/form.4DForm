@@ -201,7 +201,6 @@
 					"dragging": "none",
 					"dropping": "custom",
 					"events": [
-						"onClick",
 						"onDoubleClick",
 						"onLosingFocus",
 						"onGettingFocus",

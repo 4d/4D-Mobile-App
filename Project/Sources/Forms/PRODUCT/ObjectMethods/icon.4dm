@@ -21,15 +21,6 @@ Case of
 		$ƒ.iconAction.hide()
 		
 		//______________________________________________________
-	: ($e.code=On Clicked:K2:4)
-		
-		If (Not:C34(FEATURE.with("iconActionMenu")))
-			
-			$ƒ.doIconMenu()
-			
-		End if 
-		
-		//______________________________________________________
 	: ($e.code=On Double Clicked:K2:5)
 		
 		$ƒ.browseIcon()
