@@ -22,6 +22,17 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
+		$t:=Select document:C905(Get 4D folder:C485(MobileApps folder:K5:47; *); "mobileapp"; Get localized string:C991("selectTheKeyFile"); Use sheet window:K24:11+Package open:K24:8)
+		
+		If (Bool:C1537(OK))
+			
+			DOCUMENT:=cs:C1710.doc.new(File:C1566(DOCUMENT; fk platform path:K87:2)).sandBoxed
+			
+		End if 
+		
+		//________________________________________
+	: (True:C214)
+		
 		var $o : cs:C1710.dateTime
 		$o:=cs:C1710.dateTime.new()
 		
@@ -705,15 +716,6 @@ Case of
 		$Boo_reset:=$t%"Hello"  // True
 		$Boo_reset:=$t%".world"  // False
 		$Boo_reset:=$t%"@.world"  // False
-		
-		//________________________________________
-	: (True:C214)
-		
-		$t:=Parse formula:C1576("CALL FORM($Obj_in.caller;\"project_BUILD\";$Obj_in)"; 4)
-		
-		$o1:=_4D_Build Exposed Datastore:C1598
-		$o:=Formula:C1597(project_BUILD($o1))
-		OB GET PROPERTY NAMES:C1232($o; $tTxt_)
 		
 		//________________________________________
 	: (True:C214)

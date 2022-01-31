@@ -23,5 +23,12 @@ If (False:C215)
 	// ----------------------------------------------------
 	C_OBJECT:C1216(STRUCTURE_UPDATE; $1)
 	
+	C_OBJECT:C1216(structure_RELATED; $1)
+	
+	C_TEXT:C284(structure_RELATED_CATALOG; $1)
+	C_TEXT:C284(structure_RELATED_CATALOG; $2)
+	C_BOOLEAN:C305(structure_RELATED_CATALOG; $3)
+	C_OBJECT:C1216(structure_RELATED_CATALOG; $0)
+	
 	// ----------------------------------------------------
 End if 

@@ -1,5 +1,10 @@
 //%attributes = {"invisible":true}
-var $t : Text
+var $1 : Object
+
+If (False:C215)
+	C_OBJECT:C1216(tempoDatamodelWith1toNRelation; $1)
+End if 
+
 var $withRelation : Boolean
 var $o; $table : Object
 
@@ -33,7 +38,7 @@ If (PROJECT.$android)
 							If (String:C10(Num:C11($o.key))#$o.key)\
 								 & (Value type:C1509($o.value)=Is object:K8:27)
 								
-								$withRelation:=Bool:C1537($o.value.isToMany)
+								$withRelation:=($o.value.kind="relatedEntities")
 								
 							End if 
 						End for each 

@@ -143,7 +143,7 @@ If (Num:C11($e.row)>0)
 						Case of 
 								
 								//…………………………………………………………………………………………………
-							: ($field.type=-1)  // N -> 1 relation
+							: ($field.kind="relatedEntity")  // N -> 1 relation
 								
 								// Related dataclass name
 								$tips:=$str.setText("nTo1Relation").localized($field.relatedDataClass)
@@ -162,7 +162,7 @@ If (Num:C11($e.row)>0)
 								//%W+533.3
 								
 								//…………………………………………………………………………………………………
-							: ($field.type=-2)  // 1 -> N relation
+							: ($field.kind="relatedEntities")  // 1 -> N relation
 								
 								If (Form:C1466.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)
 									

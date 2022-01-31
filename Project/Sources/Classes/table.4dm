@@ -1,0 +1,8 @@
+Class constructor
+	
+	This:C1470.name:=""
+	This:C1470.tableNumber:=0
+	This:C1470.exposed:=False:C215
+	This:C1470.primaryKey:=""
+	
+	This:C1470.field:=New collection:C1472

@@ -545,17 +545,20 @@ If ($cacheFile.exists)
 										
 										// Todo: MANAGE ALIAS
 										
+										//$field:=$table.value[$item.key]
+										//$field.current:=$tableCatalog.field.query("name = :1"; $item.key).pop()
+										//$field_2:=Formula from string("ds:C1482[\""+$table.value[""].name+"\"]."+$item.value.path).call()
+										//$field.missing:=$field.current=Null
+										
 										//______________________________________________________
 									Else 
 										
-										ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
+										//ASSERT(Not(DATABASE.isMatrix); "😰 I wonder why I'm here")
 										
 										//______________________________________________________
 								End case 
 							End for each 
 						End if 
-						
-						
 					End if 
 				End if 
 				

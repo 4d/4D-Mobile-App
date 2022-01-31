@@ -65,6 +65,7 @@ If (Size of array:C274($Ptr_fields->)>0)
 		If ($Ptr_list->{$i})
 			
 			$selectedItems.push($Ptr_fields->{$i})
+			// break  // if single selection
 			
 		End if 
 	End for 
@@ -221,19 +222,11 @@ If ($row>0)
 					
 				End for each 
 				
-				If (FEATURE.with("alias"))
-					
-					
-					
-					
-					
-				End if 
-				
 				If (FEATURE.with("many-one-many"))
 					
 					var $relatedDataClasses : 4D:C1709.DataClass
 					
-					For each ($field; $table.field.query("isToMany = true & relatedDataClass != :1"; $table.name))
+					For each ($field; $table.field.query("kind = relatedEntities & relatedDataClass != :1"; $table.name))
 						
 						$relatedDataClasses:=ds:C1482[ds:C1482[$table.name][$field.name].relatedDataClass]
 						
@@ -303,16 +296,33 @@ If ($row>0)
 					
 				Else 
 					
+					If (($field.kind="alias") & ($field.relatedDataClass#Null:C1517))
+						
+					End if 
+					
 					Case of 
 							
 							//______________________________________________________
-						: ($field.type=-1)
+						: ($field.kind="alias")
+							
+							$style:=Italic:K14:3
+							
+							If (($field.relatedDataClass#Null:C1517)\
+								 & ($field.valueType#"@Selection"))
+								
+								$style:=$style+Underline:K14:4
+								$color:=EDITOR.selectedColor
+								
+							End if 
+							
+							//______________________________________________________
+						: ($field.kind="relatedEntity")
 							
 							$style:=Underline:K14:4
 							$color:=EDITOR.selectedColor
 							
 							//______________________________________________________
-						: ($field.type=-2)
+						: ($field.kind="relatedEntities")
 							
 							If ($field.relatedTableNumber#$table.tableNumber)  // Not for a recursive relation
 								

@@ -112,7 +112,7 @@
 						{
 							"name": "name",
 							"dataSource": "This:C1470.path",
-							"width": 433,
+							"width": 350,
 							"minWidth": 10,
 							"maxWidth": 32000,
 							"resizable": false,
@@ -143,12 +143,12 @@
 					"events": [
 						"onClick"
 					],
-					"focusable": false,
 					"shortcutAccel": false,
 					"shortcutControl": false,
 					"shortcutShift": false,
 					"shortcutAlt": false,
-					"shortcutKey": "[Esc]"
+					"shortcutKey": "[Esc]",
+					"focusable": false
 				},
 				"ok": {
 					"type": "button",

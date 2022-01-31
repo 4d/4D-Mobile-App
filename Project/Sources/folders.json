@@ -11,12 +11,9 @@
 	},
 	"____FOR_TESTS": {
 		"classes": [
-			"ALL_TYPES",
 			"ALL_TYPESEntity",
-			"ALL_TYPESSelection",
 			"Employes",
-			"EmployesEntity",
-			"EmployesSelection"
+			"EmployesEntity"
 		]
 	},
 	"__IN WORKS": {
@@ -137,6 +134,7 @@
 		"classes": [
 			"adb",
 			"androidEmulator",
+			"AndroidPrepackaged",
 			"androidProcess",
 			"androidprojectgenerator",
 			"avd",
@@ -348,6 +346,8 @@
 			"structure_FIELD_LIST",
 			"STRUCTURE_Handler",
 			"STRUCTURE_OBJECTS_HANDLER",
+			"structure_RELATED",
+			"structure_RELATED_CATALOG",
 			"structure_REPAIR",
 			"structure_TABLE_LIST",
 			"STRUCTURE_TIPS",

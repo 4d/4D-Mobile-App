@@ -17,11 +17,8 @@ Case of
 		//______________________________________________________
 	: ($e.code=On Load:K2:1)
 		
-		_o_ui_BEST_SIZE(New object:C1471(\
-			"widgets"; New collection:C1472("ok"; "cancel"); \
-			"alignment"; Align right:K42:4))
-		
-		OBJECT SET TITLE:C194(*; "title"; Replace string:C233(Get localized string:C991("relatedTable"); "{entity}"; String:C10(Form:C1466.relatedDataClass)))
+		cs:C1710.group.new("ok,cancel").distributeRigthToLeft()
+		cs:C1710.formObject.new("title").setTitle(EDITOR.str.localize("relatedTable"; String:C10(Form:C1466.relatedDataClass)))
 		
 		SET TIMER:C645(-1)
 		

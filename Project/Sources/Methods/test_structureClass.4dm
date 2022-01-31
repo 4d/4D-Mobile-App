@@ -22,7 +22,6 @@ If (Asserted:C1132($structure.success; "cs.structure.new() failed"))
 		End if 
 	End if 
 	
-	ASSERT:C1129($structure.datastore#Null:C1517; "datastore should be defined")
 	ASSERT:C1129($structure.errors.length=0; "should not return an error")
 	ASSERT:C1129($structure.warnings.length>0; "should return one or more warnings")
 	

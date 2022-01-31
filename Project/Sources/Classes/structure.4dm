@@ -21,22 +21,88 @@ Class constructor($sorted : Boolean)
 		
 	End if 
 	
-	If (FEATURE.with("modernStructure"))
-		
-		This:C1470.datastore:=ds:C1482
-		
-	Else 
-		
-		This:C1470.datastore:=This:C1470.exposedDatastore()
-		
-	End if 
-	
+	This:C1470.datastore:=This:C1470.exposedDatastore()
 	This:C1470.catalog:=This:C1470.exposedCatalog($sorted)
 	
 	//==================================================================
+/** Returns a datastore like object of the exposed dataclass and attributes
+- Only references tables with a single primary key. Tables without a primary key or with composite primary keys are not referenced.
+- Only references tables & fields exposed as REST resource.
+- BLOB type attributes are not managed in the datastore.
+- A relation N -> 1 is not referenced if the field isn't exposed !
+- A relation 1 -> N is not referenced if the related dataclass isn't exposed !
+*/
 Function exposedDatastore()->$datastore : Object
 	
-	$datastore:=_4D_Build Exposed Datastore:C1598
+	If (FEATURE.with("modernStructure"))
+		
+		var $key : Text
+		var $o; $table : Object
+		var $ds : cs:C1710.DataStore
+		
+		$datastore:=New object:C1471
+		
+		$ds:=ds:C1482
+		
+		For each ($key; $ds)
+			
+			$o:=$ds[$key].getInfo()
+			
+			If ($key=This:C1470.deletedRecordsTableName)\
+				 || Not:C34($o.exposed)
+				
+				continue
+				
+			Else 
+				
+				$table:=New object:C1471
+				$table[""]:=$o
+				
+				For each ($o; OB Entries:C1720($ds[$key]))
+					
+					If ($o.value.kind="alias")
+						
+						var $target : Object
+						$target:=$o.value
+						
+						If ($target.exposed=Null:C1517)
+							
+							$target:=Formula from string:C1601("ds:C1482[\""+$key+"\"]."+$o.value.path).call()
+							
+						End if 
+						
+						If ($target.exposed)
+							
+							$table[$o.key]:=$o.value
+							
+						End if 
+						
+					Else 
+						
+						If ($o.key=This:C1470.stampFieldName)\
+							 || (Not:C34(Bool:C1537($o.value.exposed)))\
+							 || (This:C1470.allowedTypes.indexOf($o.value.type)=-1)
+							
+							continue
+							
+						Else 
+							
+							$table[$o.key]:=$o.value
+							
+						End if 
+					End if 
+				End for each 
+				
+				$datastore[$key]:=$table
+				
+			End if 
+		End for each 
+		
+	Else 
+		
+		$datastore:=_4D_Build Exposed Datastore:C1598
+		
+	End if 
 	
 	//==================================================================
 /* 
@@ -47,17 +113,18 @@ Note: The catalog property is filled in during the construction phase of the cla
 */
 Function exposedCatalog($query; $sorted : Boolean)->$catalog : Collection
 	
-	var $t; $tableName : Text
-	var $o; $table : Object
-	var $ds : cs:C1710.DataStore
+	var $tableName : Text
+	var $o : Object
+	var $table : cs:C1710.table
+	var $ds : Object  //4D.DataStoreImplementation
 	
-	$ds:=ds:C1482
-	
-	$sorted:=(Value type:C1509($query)=Is boolean:K8:9) ? Bool:C1537($query) : $sorted
+	$ds:=This:C1470.datastore  //ds
 	
 	This:C1470.success:=($ds#Null:C1517)
 	
 	If (This:C1470.success)
+		
+		$sorted:=(Value type:C1509($query)=Is boolean:K8:9) ? Bool:C1537($query) : $sorted
 		
 		$catalog:=New collection:C1472
 		
@@ -68,21 +135,12 @@ Function exposedCatalog($query; $sorted : Boolean)->$catalog : Collection
 					//…………………………………………………………………………………………………
 				: (Value type:C1509($query)=Is text:K8:3)  // Table name
 					
-					$o:=$ds[$query]
-					
-					If ($o#Null:C1517)
+					// FIXME:TURN AROUND
+					If ($ds[$query]#Null:C1517)\
+						 && (ds:C1482[$query].getInfo().exposed)
 						
-						$o:=$o.getInfo()
-						
-						If ($o.exposed)
-							
-							$table:=$ds[$t]
-							
-						Else 
-							
-							This:C1470.errors.push("The table "+String:C10($query)+" is not exposed!")
-							
-						End if 
+						//$table:=$ds[$query]
+						$catalog.push(ds:C1482[$query].getInfo())
 						
 					Else 
 						
@@ -90,21 +148,20 @@ Function exposedCatalog($query; $sorted : Boolean)->$catalog : Collection
 						
 					End if 
 					
-					$table:=$ds[$query]
-					
 					//…………………………………………………………………………………………………
 				: (Value type:C1509($query)=Is longint:K8:6)\
 					 | (Value type:C1509($query)=Is real:K8:4)  // Table number
 					
-					For each ($t; $ds)
+					For each ($tableName; $ds)
 						
-						$o:=$ds[$t].getInfo()
+						$o:=ds:C1482[$tableName].getInfo()
 						
 						If ($o.tableNumber=$query)
 							
 							If ($o.exposed)
 								
-								$table:=$ds[$t]
+								//$table:=$ds[$tableName]
+								$catalog.push(ds:C1482[$tableName].getInfo())
 								
 							Else 
 								
@@ -129,7 +186,9 @@ Function exposedCatalog($query; $sorted : Boolean)->$catalog : Collection
 			
 			If (This:C1470.success)
 				
-				$catalog.push($table.getInfo())
+				//%W-550.2
+				//$catalog.push($table.getInfo())
+				//%W+550.2
 				
 			Else 
 				
@@ -141,21 +200,26 @@ Function exposedCatalog($query; $sorted : Boolean)->$catalog : Collection
 			
 			For each ($tableName; $ds)
 				
-				If ($tableName=This:C1470.deletedRecordsTableName)
-					
-					// DON'T DISPLAY DELETED RECORDS TABLE
-					continue
-					
-				Else 
-					
-					$o:=$ds[$tableName].getInfo()
-					
-					If ($o.exposed)
-						
-						$catalog.push($ds[$tableName].getInfo())
-						
-					End if 
-				End if 
+				//$table:=$ds[$tableName].getInfo()
+				
+				$table:=ds:C1482[$tableName].getInfo()
+				
+				//If ($tableName=SHARED.deletedRecordsTable.name)\
+															 || Not($table.exposed)
+				
+				///*
+				//Don't keep:
+				//- not exposed table
+				//- deleted records table
+				//					
+				//*/
+				
+				//continue
+				
+				//End if 
+				
+				$catalog.push($table)
+				
 			End for each 
 		End if 
 		
@@ -184,6 +248,7 @@ Function exposedCatalog($query; $sorted : Boolean)->$catalog : Collection
 			
 		End if 
 	End if 
+	
 	//==================================================================
 	/// Returns a table definition object from its name or number
 Function tableDefinition($identifier)->$table : Object
@@ -324,7 +389,7 @@ Function fieldDefinition($tableIdentifier; $fieldPath : Text)->$field : Object
 	//==================================================================
 Function isStorage($field : Object)->$is : Boolean
 	
-	If (String:C10($field.kind)="storage")
+	If (($field#Null:C1517) && (String:C10($field.kind)="storage"))
 		
 		// Don't allow stamp field
 		If ($field.name#This:C1470.stampFieldName)
@@ -337,250 +402,324 @@ Function isStorage($field : Object)->$is : Boolean
 	//==================================================================
 Function isRelatedEntity($field : Object)->$is : Boolean
 	
-	$is:=($field.kind="relatedEntity")
+	$is:=($field#Null:C1517) && ($field.kind="relatedEntity")
 	
 	//==================================================================
 Function isRelatedEntities($field : Object)->$is : Boolean
 	
-	$is:=($field.kind="relatedEntities")
+	$is:=($field#Null:C1517) && ($field.kind="relatedEntities")
 	
 	//==================================================================
 Function isComputedAttribute($field : Object)->$is : Boolean
 	
-	If (String:C10($field.kind)="calculated")
-		
-		$is:=This:C1470._allowPublication($field)
-		
-	End if 
+	$is:=(($field#Null:C1517) && (String:C10($field.kind)="calculated"))
 	
 	//==================================================================
 Function isAlias($field : Object)->$is : Boolean
 	
-	If (String:C10($field.kind)="alias")
-		
-		$is:=This:C1470._allowPublication($field)
-		
-	End if 
+	$is:=(($field#Null:C1517) && (String:C10($field.kind)="alias"))
 	
 	//==================================================================
 	// Return related entity catalog
 Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Boolean)->$result : Object
 	
-	var $fieldName : Text
-	var $field; $o; $related; $relatedDataClass; $relatedField : Object
+	var $fields : Collection
 	var $ds : cs:C1710.DataStore
+	var $field : cs:C1710.field
 	
 	$result:=New object:C1471(\
 		"success"; False:C215)
 	
+	$ds:=ds:C1482
 	$field:=$ds[$tableName][$relationName]
 	
-	Case of 
+	If ($field.kind="relatedEntity")  // N -> 1 relation
+		
+		$result.success:=True:C214
+		$result.relatedEntity:=$field.name
+		$result.relatedTableNumber:=$ds[$field.relatedDataClass].getInfo().tableNumber
+		$result.relatedDataClass:=$field.relatedDataClass
+		$result.inverseName:=$field.inverseName
+		$result.fields:=New collection:C1472
+		
+		var $relatedDataClass : Object
+		$relatedDataClass:=$ds[$field.relatedDataClass]
+		
+		var $fieldName : Text
+		For each ($fieldName; $relatedDataClass)
 			
-			//…………………………………………………………………………………………………
-		: ($field=Null:C1517)
+			$field:=$relatedDataClass[$fieldName]
 			
-			// <NOTHING MORE TO DO>
-			
-			//…………………………………………………………………………………………………
-		: (This:C1470.isStorage($field))
-			
-			
-			
-			//…………………………………………………………………………………………………
-		: (This:C1470.isRelatedEntity($field))  // N -> 1 relation
-			
-			$result.success:=True:C214
-			$result.fields:=New collection:C1472
-			$result.relatedEntity:=$field.name
-			$result.relatedTableNumber:=$ds[$field.relatedDataClass].getInfo().tableNumber
-			$result.relatedDataClass:=$field.relatedDataClass
-			$result.inverseName:=$field.inverseName
-			
-			$relatedDataClass:=$ds[$field.relatedDataClass]
-			
-			For each ($fieldName; $relatedDataClass)
-				
-				$o:=$relatedDataClass[$fieldName]
-				
-				Case of 
-						
-						//___________________________________________
-					: (This:C1470.isStorage($o))
+			Case of 
+					
+					//______________________________________________________
+				: ($field.kind="storage")  // Storage attribute
+					
+					If ($field.name#"__GlobalStamp")\
+						 && (This:C1470.allowedTypes.indexOf($field.type)>=0)
 						
 						// MARK: TEMPO
-						$o.valueType:=$o.type
+						$field.valueType:=$field.type
+						$field.id:=$field.fieldNumber
+						$field.type:=This:C1470.__fielddType($field.fieldType)
 						
-						$o.path:=$o.name
-						$o.type:=This:C1470.__fielddType($o.fieldType)
-						$o.relatedTableNumber:=$result.relatedTableNumber
-						$result.fields.push($o)
+						$field.path:=$field.name
+						$field.relatedTableNumber:=$field.relatedTableNumber
 						
-						//___________________________________________
-					: (This:C1470.isRelatedEntity($o))  // N -> 1 relation
+						$result.fields.push($field)
 						
-						If ($recursive ? True:C214 : ($o.relatedDataClass#$tableName))
+					End if 
+					
+					//…………………………………………………………………………………………………
+				: ($field.kind="calculated")  // Calculated scalar attribute
+					
+					If (This:C1470.allowedTypes.indexOf($field.type)>=0)
+						
+						// MARK: #TEMPO
+						$field.valueType:=$field.type
+						$field.type:=-3
+						
+						$field.path:=New collection:C1472($relationName; $field.name).join(".")
+						$field.relatedTableNumber:=$result.relatedTableNumber
+						
+						$result.fields.push($field)
+						
+					End if 
+					
+					//…………………………………………………………………………………………………
+				: ($field.kind="alias")  // Alias
+					
+					// MARK: TEMPO
+					$field.valueType:=$field.type
+					//$field.type:=This.__fielddType($field.fieldType)
+					
+					$field.path:=$field.name
+					$field.relatedTableNumber:=$field.relatedTableNumber
+					
+					$result.fields.push($field)
+					
+					//___________________________________________
+				: ($field.kind="relatedEntity")  // N -> 1 relation attribute (reference to an entity)
+					
+					If ($recursive)
+						
+						var $relatedField; $related : cs:C1710.field
+						For each ($relatedField; This:C1470.catalog.query("name = :1"; $result.relatedDataClass).pop().field)
 							
-							// FIXME: MUST NOT BE DEPENDANT OF Form
-							For each ($relatedField; Form:C1466.$project.$catalog.query("name = :1"; $o.relatedDataClass).pop().field)
-								
-								Case of 
-										
-										//______________________________________________________
-									: (This:C1470.isStorage($relatedField))
-										
-										$related:=This:C1470.fieldDefinition(This:C1470.tableNumber($o.relatedDataClass); $relatedField.name)
-										
-										If ($related#Null:C1517)
-											
-											$related.path:=$o.name+"."+$related.name
-											$result.fields.push($related)
-											
-										End if 
-										
-										//______________________________________________________
-									: (This:C1470.isRelatedEntity($relatedField))
-										
-										// NOT MANAGED
-										
-										//______________________________________________________
-									: (This:C1470.isRelatedEntities($relatedField))
-										
-										// NOT MANAGED
-										
-										//______________________________________________________
-									: (This:C1470.isComputedAttribute($relatedField))
+							Case of 
+									
+									//______________________________________________________
+								: ($relatedField.kind="storage")  // Storage attribute
+									
+									If (This:C1470.allowedTypes.indexOf($relatedField.valueType)>=0)
 										
 										$related:=OB Copy:C1225($relatedField)
-										$related.path:=$o.name
-										$related.tableNumber:=$result.relatedTableNumber
+										$related.path:=New collection:C1472($field.name; $related.name).join(".")
+										$related.tableNumber:=This:C1470.tableNumber($result.relatedDataClass)
+										
 										$result.fields.push($related)
 										
-										//…………………………………………………………………………………………………
-									: (This:C1470.isAlias($relatedField))  // Alias
+									End if 
+									
+									//______________________________________________________
+								: ($relatedField.kind="calculated")  // Calculated scalar attribute
+									
+									If (This:C1470.allowedTypes.indexOf($relatedField.valueType)>=0)
 										
-										//TODO: ZZZ
+										$related:=OB Copy:C1225($relatedField)
+										$related.path:=New collection:C1472($field.name; $related.name).join(".")
+										$related.tableNumber:=This:C1470.tableNumber($result.relatedDataClass)
 										
-										//______________________________________________________
-									Else 
+										$result.fields.push($related)
 										
-										ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
-										
-										//______________________________________________________
-								End case 
-							End for each 
-						End if 
-						
-						//…………………………………………………………………………………………………
-					: (This:C1470.isRelatedEntities($o))  // 1 -> N relation
-						
-						If ($recursive ? True:C214 : ($o.relatedDataClass#$tableName))
-							
-							$result.fields.push(New object:C1471(\
-								"name"; $o.name; \
-								"path"; $o.name; \
-								"fieldType"; 8859; \
-								"relatedDataClass"; $o.relatedDataClass; \
-								"relatedTableNumber"; This:C1470.tableNumber($o.relatedDataClass); \
-								"inverseName"; $o.inverseName; \
-								"isToMany"; True:C214))
-							
-						End if 
-						
-						//…………………………………………………………………………………………………
-					: (This:C1470.isComputedAttribute($o))  // Computed
-						
-						// MARK: TEMPO
-						$o.valueType:=$o.type
-						
-						$o.path:=$o.name
-						$o.type:=-3
-						$o.computed:=True:C214
-						$o.relatedTableNumber:=$result.relatedTableNumber
-						$result.fields.push($o)
-						
-						//…………………………………………………………………………………………………
-					: (This:C1470.isAlias($o))  // Alias
-						
-						//TODO: ZZZ
-						
-						//…………………………………………………………………………………………………
-					Else 
-						
-						ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
-						
-						//___________________________________________
-				End case 
-			End for each 
+									End if 
+									
+									//______________________________________________________
+								: ($relatedField.kind="relatedEntity")
+									
+									// NOT MANAGED
+									
+									//______________________________________________________
+								: ($relatedField.kind="relatedEntities")
+									
+									// NOT MANAGED
+									
+									//…………………………………………………………………………………………………
+								: (Not:C34(FEATURE.with("alias")))
+									
+									// <NOT YET AVAILABLE>
+									
+									//…………………………………………………………………………………………………
+								: ($relatedField.kind="alias")  // Alias
+									
+									$related:=OB Copy:C1225($relatedField)
+									$related.path:=New collection:C1472($field.name; $related.name).join(".")
+									$related.tableNumber:=This:C1470.tableNumber($result.relatedDataClass)
+									
+									$result.fields.push($related)
+									
+									//______________________________________________________
+								Else 
+									
+									ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
+									
+									//______________________________________________________
+							End case 
+						End for each 
+					End if 
+					
+					//___________________________________________
+				: ($field.kind="relatedEntities")
+					
+					// <NOT YET  MANAGED>
+					
+					//______________________________________________________
+				Else 
+					
+					ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
+					
+					//______________________________________________________
+			End case 
 			
-			//…………………………………………………………………………………………………
-		: (This:C1470.isRelatedEntities($field))  // 1 -> N relation
 			
-			// <NOT YET  MANAGED>
-			
-			//…………………………………………………………………………………………………
-		: (This:C1470.isComputedAttribute($field))  // Computed
-			
-			//TODO: ZZZ
-			
-			//…………………………………………………………………………………………………
-		: (This:C1470.isAlias($field))  // Alias
-			
-			//TODO: ZZZ
-			
-			//…………………………………………………………………………………………………
-		Else 
-			
-			ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
-			
-			//…………………………………………………………………………………………………
-	End case 
+		End for each 
+		
+	Else 
+		
+		//ASSERT(Not(DATABASE.isMatrix); "😰 I wonder why I'm here")
+		
+	End if 
+	
+	//If (This.isRelatedEntity($field))  // N -> 1 relation
+	//$fields:=This._relatedFields($field; $relationName; $recursive)
+	//$result.success:=True
+	//$result.relatedEntity:=$field.name
+	//$result.relatedTableNumber:=$ds[$field.relatedDataClass].getInfo().tableNumber
+	//$result.relatedDataClass:=$field.relatedDataClass
+	//$result.inverseName:=$field.inverseName
+	//$result.fields:=$fields
+	//Else 
+	//ASSERT(Not(DATABASE.isMatrix); "😰 I wonder why I'm here")
+	//End if
 	
 	//==================================================================
 	// Adding a field to a table data model
-Function addField($table : Object; $field : Object)
+Function addField($table : Object; $field : cs:C1710.field)
+	
 	var $fieldID : Text
 	var $type : Integer
-	var $relatedCatalog; $relatedField : Object
-	var $c : Collection
+	var $o; $relatedCatalog; $relatedField : Object
+	var $path : Collection
 	
 	$type:=Num:C11($field.type)
 	
 	Case of 
 			
 			//………………………………………………………………………………………………………
-		: ($type=-1)  // N -> 1 relation
+		: ($field.kind="storage")  // Attribute
+			
+			$o:=New object:C1471(\
+				"kind"; $field.kind; \
+				"name"; $field.name; \
+				"label"; PROJECT.label($field.name); \
+				"shortLabel"; PROJECT.label($field.name); \
+				"valueType"; $field.valueType; \
+				"fieldType"; $field.fieldType)
+			
+			// mark:#TEMPO
+			$o.type:=$field.type
+			
+			$table[String:C10($field.id)]:=$o
+			
+			//………………………………………………………………………………………………………
+		: ($field.kind="alias")
+			
+			$o:=New object:C1471(\
+				"kind"; $field.kind; \
+				"name"; $field.name; \
+				"path"; $field.path; \
+				"label"; PROJECT.label($field.name); \
+				"shortLabel"; PROJECT.label($field.name); \
+				"valueType"; $field.valueType; \
+				"fieldType"; $field.fieldType)
+			
+			// mark:#TEMPO
+			$o.type:=$field.type
+			
+			$table[$field.name]:=$o
+			
+			//………………………………………………………………………………………………………
+		: ($field.kind="calculated")  // Computed attribute
+			
+			$o:=New object:C1471(\
+				"kind"; $field.kind; \
+				"name"; $field.name; \
+				"label"; PROJECT.label($field.name); \
+				"shortLabel"; PROJECT.label($field.name); \
+				"valueType"; $field.valueType; \
+				"fieldType"; $field.fieldType)
+			
+			// mark:#TEMPO
+			$o.type:=$field.type
+			$o.computed:=True:C214
+			
+			$table[$field.name]:=$o
+			
+			//………………………………………………………………………………………………………
+		: ($field.kind="relatedEntities")  // 1 -> N relation
+			
+			$o:=New object:C1471(\
+				"kind"; $field.kind; \
+				"label"; PROJECT.label(cs:C1710.str.new("listOf").localized($field.name)); \
+				"shortLabel"; PROJECT.label($field.name); \
+				"relatedEntities"; $field.relatedDataClass; \
+				"inverseName"; $field.inverseName)
+			
+			// mark:#TEMPO
+			$o.relatedTableNumber:=$field.relatedTableNumber
+			
+			$table[$field.name]:=$o
+			
+			//………………………………………………………………………………………………………
+		: ($field.kind="relatedEntity")  // N -> 1 relation
 			
 			// Add all related fields
 			$relatedCatalog:=This:C1470.relatedCatalog($table[""].name; $field.name; True:C214)
 			
-			$table[$field.name]:=New object:C1471(\
+			$o:=New object:C1471(\
+				"kind"; $field.kind; \
+				"label"; PROJECT.label($field.name); \
+				"shortLabel"; PROJECT.shortLabel($field.name); \
 				"relatedDataClass"; $relatedCatalog.relatedDataClass; \
-				"relatedTableNumber"; $relatedCatalog.relatedTableNumber; \
-				"inverseName"; $relatedCatalog.inverseName; \
-				"label"; PROJECT.label($relatedField.name); \
-				"shortLabel"; PROJECT.shortLabel($relatedField.name))
+				"inverseName"; $relatedCatalog.inverseName)
+			
+			// mark:#TEMPO
+			$o.relatedTableNumber:=$relatedCatalog.relatedTableNumber
+			
+			$table[$field.name]:=$o
 			
 			For each ($relatedField; $relatedCatalog.fields)
 				
 				$fieldID:=String:C10($relatedField.fieldNumber)
-				$c:=Split string:C1554($relatedField.path; ".")
+				
+				$path:=Split string:C1554($relatedField.path; ".")
 				
 				// Create the field, if any
-				If ($c.length>1)
+				If ($path.length>1)
 					
-					If ($table[$field.name][$c[0]]=Null:C1517)
+					If ($table[$path[0]]=Null:C1517)
 						
-						$table[$field.name][$c[0]]:=New object:C1471(\
+						$table[$path[0]]:=New object:C1471(\
 							"relatedDataClass"; $relatedField.tableName; \
 							"relatedTableNumber"; $relatedField.tableNumber; \
 							"inverseName"; This:C1470.tableDefinition($table[""].name).field.query("name=:1"; $field.name).pop().inverseName)
 						
 					End if 
 					
-					If ($table[$field.name][$c[0]][$fieldID]=Null:C1517)
+					If ($table[$path[0]][$fieldID]=Null:C1517)
 						
-						$table[$field.name][$c[0]][$fieldID]:=New object:C1471(\
+						$table[$path[0]][$fieldID]:=New object:C1471(\
+							"kind"; $relatedField.kind; \
 							"name"; $relatedField.name; \
 							"path"; $relatedField.path; \
 							"label"; PROJECT.label($relatedField.name); \
@@ -592,88 +731,84 @@ Function addField($table : Object; $field : Object)
 					
 				Else 
 					
-					If (Bool:C1537($relatedField.isToMany))
-						
-						If ($table[$field.name][$relatedField.name]=Null:C1517)
+					
+					Case of 
+							//______________________________________________________
+						: ($relatedField.kind="storage") && ($o[$fieldID]=Null:C1517)
 							
-							$table[$field.name][$relatedField.name]:=New object:C1471(\
+							$o[$fieldID]:=New object:C1471(\
+								"kind"; $relatedField.kind; \
 								"name"; $relatedField.name; \
-								"relatedDataClass"; $relatedField.relatedDataClass; \
-								"relatedTableNumber"; This:C1470.tableNumber($relatedField.relatedDataClass); \
-								"path"; $field.name+"."+$relatedField.path; \
-								"label"; PROJECT.labelList($relatedField.name); \
-								"shortLabel"; PROJECT.label($relatedField.name); \
-								"inverseName"; $relatedField.inverseName; \
-								"isToMany"; True:C214)
+								"path"; $relatedField.path; \
+								"label"; PROJECT.label($relatedField.name); \
+								"shortLabel"; PROJECT.shortLabel($relatedField.name); \
+								"type"; $relatedField.type; \
+								"fieldType"; $relatedField.fieldType)
 							
-						End if 
-						
-					Else 
-						
-						
-						Case of 
-								//______________________________________________________
-							: (Bool:C1537($relatedField.computed))
+							//______________________________________________________
+						: ($relatedField.kind="calculated") && ($o[$relatedField.name]=Null:C1517)
+							
+							$o[$relatedField.name]:=New object:C1471(\
+								"kind"; $relatedField.kind; \
+								"name"; $relatedField.name; \
+								"path"; $relatedField.path; \
+								"label"; PROJECT.label($relatedField.name); \
+								"shortLabel"; PROJECT.shortLabel($relatedField.name); \
+								"type"; $relatedField.type; \
+								"fieldType"; $relatedField.fieldType)
+							
+							//______________________________________________________
+						: ($relatedField.kind="alias") && ($o[$relatedField.name]=Null:C1517)
+							
+							$o[$relatedField.name]:=New object:C1471(\
+								"kind"; $relatedField.kind; \
+								"name"; $relatedField.name; \
+								"path"; $relatedField.path; \
+								"label"; PROJECT.label($relatedField.name); \
+								"shortLabel"; PROJECT.shortLabel($relatedField.name); \
+								"type"; $relatedField.type; \
+								"fieldType"; $relatedField.fieldType)
+							
+							
+							
+							//______________________________________________________
+						: (Bool:C1537($relatedField.isToMany))
+							
+							If ($o[$relatedField.name]=Null:C1517)
 								
-								//TODO: Publish the computed attributes
-								
-								//______________________________________________________
-							: ($table[$field.name][$fieldID]=Null:C1517)
-								
-								$table[$field.name][$fieldID]:=New object:C1471(\
+								$o[$relatedField.name]:=New object:C1471(\
 									"name"; $relatedField.name; \
-									"path"; $relatedField.path; \
-									"label"; PROJECT.label($relatedField.name); \
-									"shortLabel"; PROJECT.shortLabel($relatedField.name); \
-									"type"; $relatedField.type; \
-									"fieldType"; $relatedField.fieldType)
+									"relatedDataClass"; $relatedField.relatedDataClass; \
+									"relatedTableNumber"; This:C1470.tableNumber($relatedField.relatedDataClass); \
+									"path"; $field.name+"."+$relatedField.path; \
+									"label"; PROJECT.labelList($relatedField.name); \
+									"shortLabel"; PROJECT.label($relatedField.name); \
+									"inverseName"; $relatedField.inverseName; \
+									"isToMany"; True:C214)
 								
-								//______________________________________________________
-							Else 
-								
-								// A "Case of" statement should never omit "Else"
-								
-								//______________________________________________________
-						End case 
-					End if 
+							End if 
+							
+							
+							
+							//______________________________________________________
+						: (False:C215)
+							
+							
+							
+							//______________________________________________________
+						Else 
+							
+							// A "Case of" statement should never omit "Else"
+							
+							//______________________________________________________
+					End case 
 				End if 
 			End for each 
 			
 			//………………………………………………………………………………………………………
-		: ($type=-2)  // 1 -> N relation
-			
-			$table[$field.name]:=New object:C1471(\
-				"label"; PROJECT.label(cs:C1710.str.new("listOf").localized($field.name)); \
-				"shortLabel"; PROJECT.label($field.name); \
-				"relatedEntities"; $field.relatedDataClass; \
-				"relatedTableNumber"; $field.relatedTableNumber; \
-				"inverseName"; $field.inverseName)
-			
-			//………………………………………………………………………………………………………
-		: ($type=-3)  // Computed attribute
-			
-			$table[$field.name]:=New object:C1471(\
-				"name"; $field.name; \
-				"label"; PROJECT.label($field.name); \
-				"shortLabel"; PROJECT.label($field.name); \
-				"fieldType"; $field.fieldType; \
-				"computed"; True:C214)
-			
-			// #TEMPO
-			$table[$field.name].type:=$field.type
-			
-			//………………………………………………………………………………………………………
 		Else 
 			
-			// Add the field to data model
-			$table[String:C10($field.id)]:=New object:C1471(\
-				"name"; $field.name; \
-				"label"; PROJECT.label($field.name); \
-				"shortLabel"; PROJECT.label($field.name); \
-				"fieldType"; $field.fieldType)
-			
-			// #TEMPO
-			$table[String:C10($field.id)].type:=$field.type
+			ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
 			
 			//………………………………………………………………………………………………………
 	End case 
@@ -711,14 +846,15 @@ Function check
 	//#WIP
 	
 	// MARK:-[PRIVATE]
-	
 	//==================================================================
 	// Returns the collection of exposed fields of a table
 Function _fields($tableName : Text)->$fields : Collection
 	
-	var $fieldName; $tableName : Text
-	var $field; $inquiry : Object
+	var $fieldName : Text
+	var $equal : Boolean
+	var $inquiry : Object
 	var $ds : cs:C1710.DataStore
+	var $field : cs:C1710.field
 	var $str : cs:C1710.str
 	
 	$ds:=ds:C1482
@@ -728,12 +864,18 @@ Function _fields($tableName : Text)->$fields : Collection
 	
 	For each ($fieldName; $ds[$tableName])
 		
+		$field:=$ds[$tableName][$fieldName]
+		
 		If ($fieldName=This:C1470.stampFieldName)\
-			 || (Position:C15("."; $fieldName)>0)
+			 || (Position:C15("."; $fieldName)>0)\
+			 || Not:C34(Bool:C1537($field.exposed))
 			
 /*
-DON'T DISPLAY STAMP FIELD
-DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
+Don't keep:
+- not exposed field
+- stamp field
+- attribute name with dot
+			
 */
 			
 			continue
@@ -744,7 +886,6 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 		$inquiry:=$fields.query("name = :1"; $fieldName).pop()
 		
 		//FIXME: TURNAROUND
-		var $equal : Boolean
 		If ($inquiry#Null:C1517)
 			
 			$equal:=$str.setText($inquiry.name).equal($fieldName)
@@ -755,131 +896,279 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 			
 		End if 
 		
-		If ($equal)  //(($inquiry#Null) && $str.setText($inquiry.name).equal($fieldName))
-			
-			// NOT ALLOW DUPLICATE NAMES !
-			This:C1470.warnings.push("Name conflict for \""+$fieldName+"\"")
-			
-		Else 
-			
-			$field:=$ds[$tableName][$fieldName]
-			
-			Case of 
+		Case of 
+				
+				//…………………………………………………………………………………………………
+			: ($equal)  //(($inquiry#Null) && $str.setText($inquiry.name).equal($fieldName))
+				
+				// NOT ALLOW DUPLICATE NAMES !
+				This:C1470.warnings.push("Name conflict for the attribute \""+$fieldName+"\" of the dataclass \""+$tableName+"\"")
+				
+				//…………………………………………………………………………………………………
+			: ($field.kind="storage")  // Storage attribute
+				
+				If (This:C1470.allowedTypes.indexOf($field.type)>=0)
 					
-					//…………………………………………………………………………………………………
-				: (Not:C34(Bool:C1537($field.exposed)))
+					// Mark: #TEMPO
+					$field.valueType:=$field.type
+					$field.id:=$field.fieldNumber
+					$field.type:=This:C1470.__fielddType($field.fieldType)
 					
-					// <IGNORE NOT EXPOSED ATTRIBUTES>
+					$fields.push($field)
 					
-					//…………………………………………………………………………………………………
-				: ($field.kind="storage") | ($field.kind="calculated")  // Computed attribute
+				End if 
+				
+				//…………………………………………………………………………………………………
+			: ($field.kind="calculated")  // Calculated scalar attribute
+				
+				If (This:C1470.allowedTypes.indexOf($field.type)>=0)
 					
-					If (This:C1470.allowedTypes.indexOf($field.type)>=0)
+					// Mark: #TEMPO
+					$field.valueType:=$field.type
+					$field.type:=-3
+					
+					$fields.push($field)
+					
+				End if 
+				
+				//…………………………………………………………………………………………………
+			: ($field.kind="relatedEntity")  // N -> 1 relation attribute (reference to an entity)
+				
+				If ($ds[$field.relatedDataClass]#Null:C1517)
+					
+					$field.relatedTableNumber:=$ds[$field.relatedDataClass].getInfo().tableNumber
+					$field.isToOne:=True:C214
+					
+					// Mark: #TEMPO
+					$field.valueType:=$field.type
+					$field.type:=-1
+					
+					$fields.push($field)
+					
+				End if 
+				
+				//…………………………………………………………………………………………………
+			: ($field.kind="relatedEntities")  // 1 -> N relation attribute (reference to an entity selection)
+				
+				$field.relatedTableNumber:=$ds[$field.relatedDataClass].getInfo().tableNumber
+				$field.isToMany:=True:C214
+				
+				// Mark: #TEMPO
+				$field.valueType:=$field.type
+				$field.type:=-2
+				
+				$fields.push($field)
+				
+				//…………………………………………………………………………………………………
+			: (Not:C34(FEATURE.with("alias")))
+				
+				// <NOT YET AVAILABLE>
+				
+				//…………………………………………………………………………………………………
+			: ($field.kind="alias")
+				
+				Case of 
+						
+						//______________________________________
+					: (This:C1470.allowedTypes.indexOf($field.type)>=0)  // Scalar Attribute
 						
 						// Mark: #TEMPO
 						$field.valueType:=$field.type
-						
-						If ($field.kind="calculated")
-							
-							// Mark: #TEMPO
-							$field.type:=-3
-							
-						Else 
-							
-							// Mark: #TEMPO
-							$field.id:=$field.fieldNumber
-							$field.type:=This:C1470.__fielddType($field.fieldType)
-							
-						End if 
+						$field.id:=$field.fieldNumber
+						$field.type:=This:C1470.__fielddType($field.fieldType)
 						
 						$fields.push($field)
 						
-					End if 
-					
-					//…………………………………………………………………………………………………
-				: ($field.kind="relatedEntity")  // N -> 1 relation attribute (reference to an entity)
-					
-					If ($ds[$field.relatedDataClass]#Null:C1517)
+						//______________________________________
+					: ($field.relatedDataClass#Null:C1517)  // Relation
 						
-						$fields.push(New object:C1471(\
-							"name"; $fieldName; \
-							"inverseName"; $field.inverseName; \
-							"type"; -1; \
-							"relatedDataClass"; $field.relatedDataClass; \
-							"relatedTableNumber"; $ds[$field.relatedDataClass].getInfo().tableNumber))
+						$field.relatedTableNumber:=$ds[$field.relatedDataClass].getInfo().tableNumber
 						
-					End if 
-					
-					//…………………………………………………………………………………………………
-				: ($field.kind="relatedEntities")  // 1 -> N relation attribute (reference to an entity selection)
-					
-					$fields.push(New object:C1471(\
-						"name"; $fieldName; \
-						"inverseName"; $field.inverseName; \
-						"type"; -2; \
-						"relatedDataClass"; $field.relatedDataClass; \
-						"relatedTableNumber"; $ds[$field.relatedDataClass].getInfo().tableNumber; \
-						"isToMany"; True:C214))
-					
-					//…………………………………………………………………………………………………
-					//: ($field.kind="calculated")  // Computed attribute
-					
-					//If (This.allowedTypes.indexOf($field.type)>=0)
-					
-					//$fields.push(New object(\
-																		"name"; $fieldName; \
-																		"kind"; $field.kind; \
-																		"type"; -3; \
-																		"fieldType"; $field.fieldType; \
-																		"valueType"; $field.type))
-					
-					//End if 
-					
-					//…………………………………………………………………………………………………
-				: (Not:C34(FEATURE.with("alias")))
-					
-					// <NOT YET AVAILABLE>
-					
-					//…………………………………………………………………………………………………
-				: ($field.kind="alias")
+						$field.isToMany:=($field.type="@Selection")
+						$field.isToOne:=Not:C34($field.isToMany)
+						
+						// Mark: #TEMPO
+						$field.valueType:=$field.type
+						$field.type:=$field.isToMany ? -2 : -1
+						
+						$fields.push($field)
+						
+						//______________________________________
+					Else 
+						
+						ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
+						
+						//______________________________________
+				End case 
+				
+				//…………………………………………………………………………………………………
+			Else 
+				
+				ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
+				
+				//…………………………………………………………………………………………………
+		End case 
+	End for each 
+	
+	//==================================================================
+Function _relatedFields($field : cs:C1710.field; $relationName : Text; $recursive : Boolean)->$fields : Collection
+	
+	var $result : Object
+	var $related; $relatedField : cs:C1710.field
+	
+	$fields:=New collection:C1472
+	
+	Case of 
+			
+			//___________________________________________
+		: ($field.kind="storage")  // Storage attribute
+			
+			If (This:C1470.allowedTypes.indexOf($field.type)>=0)
+				
+				// MARK: TEMPO
+				$field.valueType:=$field.type
+				$field.id:=$field.fieldNumber
+				$field.type:=This:C1470.__fielddType($field.fieldType)
+				
+				$field.path:=New collection:C1472($relationName; $field.name).join(".")
+				$field.relatedTableNumber:=$result.relatedTableNumber
+				
+				$fields.push($field)
+				
+			End if 
+			
+			//…………………………………………………………………………………………………
+		: ($field.kind="calculated")  // Calculated scalar attribute
+			
+			If (This:C1470.allowedTypes.indexOf($field.type)>=0)
+				
+				// MARK: #TEMPO
+				$field.valueType:=$field.type
+				$field.type:=-3
+				
+				$field.path:=New collection:C1472($relationName; $field.name).join(".")
+				$field.relatedTableNumber:=$result.relatedTableNumber
+				
+				$fields.push($field)
+				
+			End if 
+			
+			//…………………………………………………………………………………………………
+		: ($field.kind="alias")  // 
+			
+			// TODO: manage alias
+			
+			//___________________________________________
+		: ($field.kind="relatedEntity")  // N -> 1 relation attribute (reference to an entity)
+			
+			If ($recursive)
+				
+				For each ($relatedField; This:C1470.catalog.query("name = :1"; $field.relatedDataClass).pop().field)
 					
 					Case of 
 							
-							//______________________________________
-						: ($field.relatedDataClass#Null:C1517)  // Selection
+							//______________________________________________________
+						: ($relatedField.kind="storage")  // Storage attribute
 							
-							$fields.push($field)
+							If (This:C1470.allowedTypes.indexOf($relatedField.valueType)>=0)
+								
+								$related:=OB Copy:C1225($relatedField)
+								$related.path:=New collection:C1472($field.name; $related.name).join(".")
+								$related.tableNumber:=This:C1470.tableNumber($field.relatedDataClass)
+								
+								$fields.push($related)
+								
+							End if 
 							
-							//______________________________________
-						: (This:C1470.allowedTypes.indexOf($field.type)>=0)  // Attribute
+							//______________________________________________________
+						: ($relatedField.kind="calculated")  // Calculated scalar attribute
 							
-							$fields.push($field)
+							If (This:C1470.allowedTypes.indexOf($relatedField.valueType)>=0)
+								
+								$related:=OB Copy:C1225($relatedField)
+								$related.path:=New collection:C1472($field.name; $related.name).join(".")
+								$related.tableNumber:=This:C1470.tableNumber($field.relatedDataClass)
+								
+								$fields.push($related)
+								
+							End if 
 							
-							//______________________________________
+							//______________________________________________________
+						: ($relatedField.kind="relatedEntity")
+							
+							// NOT MANAGED
+							
+							//______________________________________________________
+						: ($relatedField.kind="relatedEntities")
+							
+							// NOT MANAGED
+							
+							//…………………………………………………………………………………………………
+						: (Not:C34(FEATURE.with("alias")))
+							
+							// <NOT YET AVAILABLE>
+							
+							//…………………………………………………………………………………………………
+						: ($relatedField.kind="alias")  // Alias
+							
+							$related:=OB Copy:C1225($relatedField)
+							$related.path:=New collection:C1472($field.name; $related.name).join(".")
+							$related.tableNumber:=This:C1470.tableNumber($field.relatedDataClass)
+							
+							$fields.push($related)
+							
+							//______________________________________________________
 						Else 
 							
 							ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
 							
-							//______________________________________
+							//______________________________________________________
 					End case 
-					
-					//…………………………………………………………………………………………………
-				Else 
-					
-					ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
-					
-					//…………………………………………………………………………………………………
-			End case 
-		End if 
-	End for each 
+				End for each 
+			End if 
+			
+			//…………………………………………………………………………………………………
+		: ($field.kind="relatedEntities")  // 1 -> N relation
+			
+			If ($recursive)
+				
+				$related:=OB Copy:C1225($relatedField)
+				$related.path:=$related.name
+				$related.tableNumber:=$result.relatedTableNumber
+				
+				$fields.push($related)
+				
+			End if 
+			
+			//…………………………………………………………………………………………………
+		: (Not:C34(FEATURE.with("alias")))
+			
+			// <NOT YET AVAILABLE>
+			
+			//______________________________________________________
+		: ($relatedField.kind="alias")  // Alias
+			
+			$related:=OB Copy:C1225($relatedField)
+			$related.path:=$field.name+"."+$related.name
+			$related.tableNumber:=$result.relatedTableNumber
+			
+			$fields.push($related)
+			
+			//…………………………………………………………………………………………………
+		Else 
+			
+			ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
+			
+			//___________________________________________
+	End case 
 	
 	//==================================================================
 	// Returns True if a field could be published
-Function _allowPublication($field : Object)->$allow : Boolean
+Function _allowPublication($field : cs:C1710.field)->$allow : Boolean
 	
 	If ($field.name#This:C1470.stampFieldName)
 		
-		$allow:=(This:C1470.allowedTypes.indexOf($field.type)>=0)
+		$allow:=(This:C1470.allowedTypes.indexOf($field.valueType)>=0) || (This:C1470.allowedTypes.indexOf($field.type)>=0)
 		
 	End if 
 	

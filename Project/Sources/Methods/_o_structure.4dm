@@ -79,7 +79,7 @@ Case of
 			
 		End if 
 		
-		$datastore:=ds:C1482  //_4D_Build Exposed Datastore
+		$datastore:=_4D_Build Exposed Datastore:C1598
 		
 		$OUT.success:=($datastore#Null:C1517)
 		
@@ -96,7 +96,13 @@ Case of
 				If ($tableName=SHARED.deletedRecordsTable.name)\
 					 || Not:C34($table.exposed)
 					
-					// DON'T DISPLAY DELETED RECORDS TABLE
+/*
+Don't keep:
+- not exposed table
+- deleted records table
+					
+*/
+					
 					continue
 					
 				End if 
@@ -121,13 +127,16 @@ Case of
 							
 							$field:=$datastore[$tableName][$fieldName]
 							
-							If ($fieldName=SHARED.stampField.name)\
+							If ($field.kind#"alias") && (($fieldName=SHARED.stampField.name)\
 								 || (Position:C15("."; $fieldName)>0)\
-								 || Not:C34(Bool:C1537($field.exposed))
+								 || Not:C34(Bool:C1537($field.exposed)))
 								
 /*
-DON'T DISPLAY STAMP FIELD
-DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
+Don't keep:
+- not exposed field
+- stamp field
+- attribute name with dot
+								
 */
 								
 								continue
@@ -155,87 +164,62 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 								: ($equal)  //(($inquiry#Null) && str_equal($inquiry.name; $fieldName))
 									
 									// NOT ALLOW DUPLICATE NAMES !
-									err_PUSH($OUT; "Name conflict for \""+$fieldName+"\""; Warning message:K38:2)
+									err_PUSH($OUT; "Name conflict for the attribute \""+$fieldName+"\" of the dataclass \""+$tableName+"\""; Warning message:K38:2)
 									
 									//…………………………………………………………………………………………………
-								: ($field.kind="storage")\
-									 | ($field.kind="calculated")
+								: ($field.kind="storage")  // Storage attribute
 									
-									// Storage (or scalar) attribute, i.e. attribute storing a value, not a reference to another attribute
 									If ($allowedTypes.indexOf($field.type)>=0)
 										
 										// Mark: #TEMPO
 										$field.valueType:=$field.type
+										$field.id:=$field.fieldNumber
+										$field.type:=_o_tempoFieldType($field.fieldType)
 										
-										If ($field.kind="calculated")
-											
-											
-											If (Bool:C1537($field.exposed))
-												
-												// Mark: #TEMPO
-												$field.type:=-3
-												//$field.type:=_o_tempoFieldType($field.fieldType)
-												
-												$table.field.push($field)
-												
-											End if 
-											
-										Else 
-											
-											// Mark: #TEMPO
-											$field.id:=$field.fieldNumber
-											$field.type:=_o_tempoFieldType($field.fieldType)
-											
-											$table.field.push($field)
-											
-										End if 
+										$table.field.push($field)
+										
 									End if 
 									
 									//…………………………………………………………………………………………………
-								: ($field.kind="relatedEntity")
+								: ($field.kind="calculated")  // Calculated scalar attribute
 									
-									// N -> 1 relation attribute (reference to an entity)
+									If ($allowedTypes.indexOf($field.type)>=0)
+										
+										// Mark: #TEMPO
+										$field.valueType:=$field.type
+										$field.type:=-3
+										
+										$table.field.push($field)
+										
+									End if 
+									
+									//…………………………………………………………………………………………………
+								: ($field.kind="relatedEntity")  // N -> 1 relation attribute (reference to an entity)
 									
 									If ($datastore[$field.relatedDataClass]#Null:C1517)
 										
-										$table.field.push(New object:C1471(\
-											"name"; $fieldName; \
-											"inverseName"; $field.inverseName; \
-											"type"; -1; \
-											"relatedDataClass"; $field.relatedDataClass; \
-											"relatedTableNumber"; $datastore[$field.relatedDataClass].getInfo().tableNumber))
+										$field.relatedTableNumber:=$datastore[$field.relatedDataClass].getInfo().tableNumber
+										$field.isToOne:=True:C214
+										
+										// Mark: #TEMPO
+										$field.valueType:=$field.type
+										$field.type:=-1
+										
+										$table.field.push($field)
 										
 									End if 
 									
 									//…………………………………………………………………………………………………
-								: ($field.kind="relatedEntities")
+								: ($field.kind="relatedEntities")  // 1 -> N relation attribute (reference to an entity selection)
 									
-									// 1 -> N relation attribute (reference to an entity selection)
+									$field.relatedTableNumber:=$datastore[$field.relatedDataClass].getInfo().tableNumber
+									$field.isToMany:=True:C214
 									
-									$table.field.push(New object:C1471(\
-										"name"; $fieldName; \
-										"inverseName"; $field.inverseName; \
-										"type"; -2; \
-										"relatedDataClass"; $field.relatedDataClass; \
-										"relatedTableNumber"; $datastore[$field.relatedDataClass].getInfo().tableNumber; \
-										"isToMany"; True:C214))
+									// Mark: #TEMPO
+									$field.valueType:=$field.type
+									$field.type:=-2
 									
-									//…………………………………………………………………………………………………
-								: (Not:C34(Bool:C1537($field.exposed)))
-									
-									// <IGNORE NOT EXPOSED ATTRIBUTES>
-									
-									//…………………………………………………………………………………………………
-									//: ($field.kind="calculated")
-									
-									//If ($allowedTypes.indexOf($field.type)>=0)
-									
-									//$field.valueType:=$field.type
-									//$field.type:=-3
-									//$field.computed:=True
-									//$table.field.push($field)
-									
-									//End if 
+									$table.field.push($field)
 									
 									//…………………………………………………………………………………………………
 								: (Not:C34(FEATURE.with("alias")))
@@ -245,29 +229,46 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 									//…………………………………………………………………………………………………
 								: ($field.kind="alias")
 									
-									Case of 
-											
-											//______________________________________
-										: ($allowedTypes.indexOf($field.type)>=0)  // Attribute
-											
-											If ($allowedTypes.indexOf($field.type)>=0)
-												
-												$table.field.push($field)
-												
-											End if 
-											
-											//______________________________________
-										: ($field.relatedDataClass#Null:C1517)  // Selection
-											
-											$table.field.push($field)
-											
-											//______________________________________
-										Else 
-											
-											ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
-											
-											//______________________________________
-									End case 
+									var $target : Object
+									$target:=$field
+									
+									If ($target.exposed=Null:C1517)
+										
+										$target:=Formula from string:C1601("ds:C1482[\""+$table.name+"\"]."+$field.path).call()
+										
+									End if 
+									
+									If ($target.exposed)
+										
+										// Mark: #TEMPO
+										$field.valueType:=$field.type
+										
+										$table.field.push($field)
+										
+									End if 
+									
+									//Case of 
+									////______________________________________
+									//: ($allowedTypes.indexOf($field.type)>=0)  // Scalar Attribute
+									//// Mark: #TEMPO
+									//$field.valueType:=$field.type
+									//$field.id:=$field.fieldNumber
+									//$field.type:=_o_tempoFieldType($field.fieldType)
+									//$table.field.push($field)
+									////______________________________________
+									//: ($field.relatedDataClass#Null)  // Relation
+									//$field.relatedTableNumber:=$datastore[$field.relatedDataClass].getInfo().tableNumber
+									//$field.isToMany:=($field.type="@Selection")
+									//$field.isToOne:=Not($field.isToMany)
+									//// Mark: #TEMPO
+									//$field.valueType:=$field.type
+									//$field.type:=$field.isToMany ? -2 : -1
+									//$table.field.push($field)
+									////______________________________________
+									//Else 
+									//ASSERT(Not(DATABASE.isMatrix); "😰 I wonder why I'm here")
+									////______________________________________
+									//End case 
 									
 									//…………………………………………………………………………………………………
 								Else 
@@ -606,7 +607,7 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 							//For each ($Txt_field;$Obj_relatedDataClass)
 							
 							//If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																																																																																																
+																																																																																																																								
 							//If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
 							//$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])

@@ -313,35 +313,63 @@ Case of
 		OBJECT SET VISIBLE:C603(*; $form.action; False:C215)
 		
 		//=========================================================
+		//MARK:appendField
 	: ($IN.action="appendField")
-		
-		//var $dataModel : Object
-		//$dataModel:=Form.dataModel
 		
 		var $dataModel : Object
 		$dataModel:=PROJECT.dataModel
 		
 		var $type : Integer
 		
+		var $field : cs:C1710.field
+		$field:=$IN.field
+		
+		var $table : cs:C1710.table
+		$table:=$IN.table
+		
 		Case of 
 				
+				//TODO: WIP
 			: (False:C215)
 				
 				var $structure : cs:C1710.structure
 				$structure:=cs:C1710.structure.new()
 				
-				$structure.addField($IN.table; $IN.field)
+				$structure.addField($table; $field)
 				
 				//…………………………………………………………………………………………………
-			: (Bool:C1537($IN.field.oneToOne))  // 1 -> N -> 1 
+			: (Bool:C1537($field.oneToOne))  // 1 -> N -> 1 
 				
-				$published:=Num:C11($dataModel[String:C10($IN.table.tableNumber)][String:C10($IN.field.name)]#Null:C1517)
+				$published:=Num:C11($dataModel[String:C10($table.tableNumber)][String:C10($field.name)]#Null:C1517)
 				$type:=8860
 				
 				//…………………………………………………………………………………………………
-			: ($IN.field.type=-1)  // N -> 1 relation
+			: ($field.kind="alias")  //Alias
 				
-				$fieldModel:=$dataModel[String:C10($IN.table.tableNumber)][$IN.field.name]
+				//If ($field.relatedDataClass#Null)
+				//// TODO: Is it a bug 1-N-1 type is Selection
+				//$type:=($field.valueType#"@Selection") ? 8858 : 8859
+				//Else 
+				//$type:=$field.fieldType
+				//End if 
+				
+				$published:=Num:C11($dataModel[String:C10($table.tableNumber)][String:C10($field.name)]#Null:C1517)
+				
+				
+				//…………………………………………………………………………………………………
+			: ($field.kind="calculated")  // Computed  
+				
+				If ($field.fieldType<=EDITOR.fieldIcons.length)
+					
+					$published:=Num:C11($dataModel[String:C10($table.tableNumber)][String:C10($field.name)]#Null:C1517)
+					$type:=$field.fieldType
+					
+				End if 
+				
+				//…………………………………………………………………………………………………
+			: ($field.kind="relatedEntity")  // N -> 1 relation
+				
+				$fieldModel:=$dataModel[String:C10($table.tableNumber)][$field.name]
 				
 				If ($fieldModel#Null:C1517)
 					
@@ -350,37 +378,39 @@ Case of
 					var $structure : cs:C1710.structure
 					var $relatedCatalog : Object
 					$structure:=cs:C1710.structure.new()
-					$relatedCatalog:=$structure.relatedCatalog($IN.table.name; $IN.field.name; True:C214)
+					$relatedCatalog:=$structure.relatedCatalog($table.name; $field.name; True:C214)
 					
 					If ($relatedCatalog.success)
 						
-						For each ($field; $relatedCatalog.fields)
+						var $o : cs:C1710.field
+						For each ($o; $relatedCatalog.fields)
 							
 							Case of 
-									//______________________________________________________
-								: ($field.fieldType=8859)
-									
-									$published:=$published+Num:C11($fieldModel[String:C10($field.name)]=Null:C1517)
 									
 									//______________________________________________________
-								: ($field.fieldType=8858)
+								: ($o.fieldType=8859)
 									
-									$published:=$published+Num:C11($fieldModel[String:C10($field.name)]=Null:C1517)
+									$published+=Num:C11($fieldModel[String:C10($o.name)]=Null:C1517)
+									
+									//______________________________________________________
+								: ($o.fieldType=8858)
+									
+									$published+=Num:C11($fieldModel[String:C10($o.name)]=Null:C1517)
 									
 									//______________________________________________________
 								Else 
 									
-									$c:=Split string:C1554($field.path; "."; sk ignore empty strings:K86:1)
+									$c:=Split string:C1554($o.path; "."; sk ignore empty strings:K86:1)
 									
 									If ($c.length=1)
 										
 										// Field
-										$published:=$published+Num:C11($fieldModel[String:C10($field.fieldNumber)]=Null:C1517)
+										$published+=Num:C11($fieldModel[String:C10($o.fieldNumber)]=Null:C1517)
 										
 									Else 
 										
 										// Link
-										$published:=$published+Num:C11($fieldModel[$c[0]][String:C10($field.fieldNumber)]=Null:C1517)
+										$published+=Num:C11($fieldModel[$c[0]][String:C10($o.fieldNumber)]=Null:C1517)
 										
 									End if 
 									
@@ -393,10 +423,10 @@ Case of
 				$type:=8858
 				
 				//…………………………………………………………………………………………………
-			: (Bool:C1537($IN.field.isToMany))  // 1 -> N relation //($IN.field.type=-2)  
+			: ($field.kind="relatedEntities")  // 1 -> N relation //($field.type=-2)  
 				
 				//*******************************************************************************************
-				$published:=Num:C11($dataModel[String:C10($IN.table.tableNumber)][String:C10($IN.field.name)]#Null:C1517)
+				$published:=Num:C11($dataModel[String:C10($table.tableNumber)][String:C10($field.name)]#Null:C1517)
 				//
 				// C'EST FAUX SI LE LIEN A ÉTÉ RENOMMÉ
 				// REGARDER DANS : Form.$dialog.unsynchronizedTableFields[String($Obj_in.table.tableNumber)]
@@ -405,22 +435,12 @@ Case of
 				$type:=8859
 				
 				//…………………………………………………………………………………………………
-			: ($IN.field.kind="calculated")  // Computed 
-				
-				If ($IN.field.fieldType<=EDITOR.fieldIcons.length)
-					
-					$published:=Num:C11($dataModel[String:C10($IN.table.tableNumber)][String:C10($IN.field.name)]#Null:C1517)
-					$type:=$IN.field.fieldType
-					
-				End if 
-				
-				//…………………………………………………………………………………………………
 			Else 
 				
-				If ($IN.field.fieldType<=EDITOR.fieldIcons.length)
+				If ($field.fieldType<=EDITOR.fieldIcons.length)
 					
-					$published:=Num:C11($dataModel[String:C10($IN.table.tableNumber)][String:C10($IN.field.id)]#Null:C1517)
-					$type:=$IN.field.fieldType
+					$published:=Num:C11($dataModel[String:C10($table.tableNumber)][String:C10($field.id)]#Null:C1517)
+					$type:=$field.fieldType
 					
 				End if 
 				
@@ -430,7 +450,7 @@ Case of
 		
 		APPEND TO ARRAY:C911(($IN.published)->; $published)
 		APPEND TO ARRAY:C911(($IN.icons)->; EDITOR.fieldIcons[$type])
-		APPEND TO ARRAY:C911(($IN.fields)->; $IN.field.name)
+		APPEND TO ARRAY:C911(($IN.fields)->; $field.name)
 		
 		LISTBOX SET ROW FONT STYLE:C1268(*; $form.fieldList; Size of array:C274(($IN.fields)->); Plain:K14:1)
 		

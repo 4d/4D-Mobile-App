@@ -17,8 +17,10 @@ End if
 var $t : Text
 var $found : Boolean
 var $indx : Integer
-var $context; $currentTable; $field; $o; $table : Object
+var $context; $o : Object
 var $published : Collection
+var $table; $currentTable : cs:C1710.table
+var $field : cs:C1710.field
 var $structure : cs:C1710.structure
 
 // ----------------------------------------------------
@@ -34,9 +36,9 @@ $published:=New collection:C1472
 ARRAY TO COLLECTION:C1563($published; ($form.publishedPtr)->; "published"; (OBJECT Get pointer:C1124(Object named:K67:5; $form.fields))->; "name")
 
 If ($published.extract("published").countValues(0)=$published.length)\
- & ($published.extract("published").indexOf(2)=-1)\
- & (Length:C16(String:C10($context.fieldFilter))=0)\
- & (Not:C34(Bool:C1537($context.fieldFilterPublished)))
+ && ($published.extract("published").indexOf(2)=-1)\
+ && (Length:C16(String:C10($context.fieldFilter))=0)\
+ && (Not:C34(Bool:C1537($context.fieldFilterPublished)))
 	
 	// NO FIELD PUBLISHED
 	PROJECT.removeTable($currentTable.tableNumber)
@@ -68,6 +70,8 @@ Else
 		
 		For each ($t; $table) Until ($found)
 			
+			//ASSERT($o.name#"identifier")
+			
 			Case of 
 					
 					//………………………………………………………………………………………………………
@@ -77,8 +81,6 @@ Else
 					
 					//………………………………………………………………………………………………………
 				: (PROJECT.isField($t))
-					
-					ASSERT:C1129(PROJECT.isField($table[$t]))
 					
 					$found:=(String:C10($table[$t].name)=$o.name)
 					$t:=$o.name
@@ -111,7 +113,7 @@ Else
 					//………………………………………………………………………………………………………
 				Else 
 					
-					ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
+					//ASSERT(Not(DATABASE.isMatrix); "😰 I wonder why I'm here")
 					
 					//………………………………………………………………………………………………………
 			End case 
@@ -138,7 +140,16 @@ Else
 				//_____________________________________________________
 			: (Num:C11($o.published)=0) & $found  // REMOVED
 				
-				$structure.removeField($table; Choose:C955(Num:C11($field.type)<0; $o.name; $field.id))
+				If ($field.kind="alias")\
+					 || ($field.kind="computed")
+					
+					$structure.removeField($table; $field.name)
+					
+				Else 
+					
+					$structure.removeField($table; Choose:C955(Num:C11($field.type)<0; $o.name; $field.id))
+					
+				End if 
 				
 				//_____________________________________________________
 			: (Num:C11($o.published)=0)
