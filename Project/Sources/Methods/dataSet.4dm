@@ -334,33 +334,51 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 			
 			If ($out.success)
 				
-				If (Test path name:C476($in.target)=Is a document:K24:1)
+				If (FEATURE.with("androidDataSet"))
 					
-					$out.errors:=New collection:C1472("Destination "+$in.target+" is a document")
+					var $source; $target : 4D:C1709.Folder
+					
+					$target:=Folder:C1567($in.target; fk platform path:K87:2)
+					$source:=Folder:C1567($out.path; fk platform path:K87:2)
+					
+					For each ($pathname; New collection:C1472("Sources"; "Resources"))
+						
+						folder_copyMerge($source.folder($pathname); $target)
+						
+					End for each 
 					
 				Else 
 					
-					$cmd:="cp -R "+str_singleQuoted(Convert path system to POSIX:C1106($out.path))+" "+str_singleQuoted(Convert path system to POSIX:C1106($in.target))
-					LAUNCH EXTERNAL PROCESS:C811($cmd; $inputStream; $outputStream; $Txt_error)
-					
-					If (Asserted:C1132(OK=1; "copy failed: "+$cmd))
+					If (Test path name:C476($in.target)=Is a document:K24:1)
 						
-						If (Length:C16($Txt_error)#0)
-							
-							$out.errors:=New collection:C1472($Txt_error)
-							
-						Else 
-							
-							$out.success:=True:C214
-							
-						End if 
+						$out.errors:=New collection:C1472("Destination "+$in.target+" is a document")
 						
 					Else 
 						
-						$out.errors:=New collection:C1472("Unable to copy dataSet")
+						$cmd:="cp -R "+str_singleQuoted(Convert path system to POSIX:C1106($out.path))+" "+str_singleQuoted(Convert path system to POSIX:C1106($in.target))
+						LAUNCH EXTERNAL PROCESS:C811($cmd; $inputStream; $outputStream; $Txt_error)
 						
+						If (Asserted:C1132(OK=1; "copy failed: "+$cmd))
+							
+							If (Length:C16($Txt_error)#0)
+								
+								$out.errors:=New collection:C1472($Txt_error)
+								
+							Else 
+								
+								$out.success:=True:C214
+								
+							End if 
+							
+						Else 
+							
+							$out.errors:=New collection:C1472("Unable to copy dataSet")
+							
+						End if 
 					End if 
+					
 				End if 
+				
 			End if 
 			
 			// MARK:- create
