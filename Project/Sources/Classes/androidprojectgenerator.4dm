@@ -1039,7 +1039,7 @@ Function copyKotlinCustomFormatterFiles
 	
 	var $packageName; $packageNamePath; $format; $formatName; $fileContent : Text
 	$packageName:=$2
-	var $dataModel; $field; $copyFormatterKtFileToApp : Object
+	var $dataModel; $field; $copyFormatterFilesToApp : Object
 	var $bindingAdapterFile; $copyDest : 4D:C1709.File
 	var $bindingFolder; $formattersFolder; $customFormatterFolder; $formattersFolderInFormatter : 4D:C1709.Folder
 	
@@ -1073,12 +1073,12 @@ Function copyKotlinCustomFormatterFiles
 									
 									If ($customFormatterFolder.exists)
 										
-										$copyFormatterKtFileToApp:=This:C1470.copyFormatterKtFileToApp($customFormatterFolder; $packageName)
+										$copyFormatterFilesToApp:=This:C1470.copyFormatterFilesToApp($customFormatterFolder; $packageName)
 										
-										If (Not:C34($copyFormatterKtFileToApp.success))
+										If (Not:C34($copyFormatterFilesToApp.success))
 											
 											$0.success:=False:C215
-											$0.errors.combine($copyFormatterKtFileToApp.errors)
+											$0.errors.combine($copyFormatterFilesToApp.errors)
 											
 											// Else : all ok
 										End if 
@@ -1103,12 +1103,12 @@ Function copyKotlinCustomFormatterFiles
 											
 											If ($unzipDest.exists)
 												
-												$copyFormatterKtFileToApp:=This:C1470.copyFormatterKtFileToApp($unzipDest; $packageName)
+												$copyFormatterFilesToApp:=This:C1470.copyFormatterFilesToApp($unzipDest; $packageName)
 												
-												If (Not:C34($copyFormatterKtFileToApp.success))
+												If (Not:C34($copyFormatterFilesToApp.success))
 													
 													$0.success:=False:C215
-													$0.errors.combine($copyFormatterKtFileToApp.errors)
+													$0.errors.combine($copyFormatterFilesToApp.errors)
 													
 													// Else : all ok
 												End if 
@@ -1155,13 +1155,13 @@ Function copyKotlinCustomFormatterFiles
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function copyFormatterKtFileToApp
+Function copyFormatterFilesToApp
 	var $0 : Object
 	var $1 : 4D:C1709.Folder  // Formatter folder
 	var $2 : Text  // package name
 	
-	var $formattersFolderInFormatter; $bindingFolder : 4D:C1709.Folder
-	var $bindingAdapterFile; $copyDest : 4D:C1709.File
+	var $formattersFolderInFormatter; $bindingFolder; $resInFormatter; $mainFolder; $resCopyDest : 4D:C1709.Folder
+	var $bindingAdapterFile; $copyDest; $res : 4D:C1709.File
 	var $packageName; $packageNamePath; $fileContent : Text
 	
 	$packageName:=$2
@@ -1198,6 +1198,64 @@ Function copyFormatterKtFileToApp
 		
 		// Else : no Formatters folder inside kotlin custom data formatter
 	End if 
+	
+	var $Obj_copyFilesRecursively : Object
+	
+	$Obj_copyFilesRecursively:=This:C1470.copyFilesRecursively($1.folder("android/res"); Folder:C1567(This:C1470.projectPath+"app/src/main"))
+	
+	If (Not:C34($Obj_copyFilesRecursively.success))
+		
+		// Copy failed
+		$0.success:=False:C215
+		$0.errors.combine($Obj_copyFilesRecursively.errors)
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function copyFilesRecursively($entry : 4D:C1709.Folder; $target : 4D:C1709.Folder)->$result : Object
+	
+	$result:=New object:C1471(\
+		"success"; True:C214; \
+		"errors"; New collection:C1472)
+	
+	If ($entry.exists)
+		
+		var $file; $fileCopyDest : 4D:C1709.File
+		
+		For each ($file; $entry.files(fk ignore invisible:K87:22))
+			
+			$fileCopyDest:=$file.copyTo($target; fk overwrite:K87:5)
+			
+			If (Not:C34($fileCopyDest.exists))
+				
+				$result.success:=False:C215
+				$result.errors.push("Could not copy kotlin custom formatter resource file to destination: "+$fileCopyDest.path)
+				
+			End if 
+			
+		End for each 
+		
+		var $folder; $newTargetFolder : 4D:C1709.Folder
+		var $Obj_copyFilesRecursively : Object
+		
+		For each ($folder; $entry.folders(fk ignore invisible:K87:22))
+			
+			$newTargetFolder:=$target.folder($folder.name)
+			$newTargetFolder.create()
+			
+			$Obj_copyFilesRecursively:=This:C1470.copyFilesRecursively($folder; $newTargetFolder)
+			
+			If (Not:C34($Obj_copyFilesRecursively.success))
+				
+				break
+				
+			End if 
+			
+		End for each 
+		
+	End if 
+	
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
