@@ -51,6 +51,10 @@
 		  <RuntimeVL>
 			  <LastDataPathLookup>ByAppName</LastDataPathLookup>
 		</RuntimeVL>
-	</BuildApp>
+	  <ArrayExcludedModuleName>
+      <ItemsCount>0</ItemsCount>
+    </ArrayExcludedModuleName>
+  </BuildApp>
+
 
 </Preferences4D>

@@ -46,8 +46,7 @@ If ($cacheFile.exists)
 	$cachedCatalog:=$cache.structure.definition
 	
 	// Was the structure changed?
-	If (Not:C34($cachedCatalog.equal($currentCatalog)))\
-		 | (Bool:C1537(FEATURE._8858))
+	If (Not:C34($cachedCatalog.equal($currentCatalog)))  // | (Bool(FEATURE._8858))
 		
 		$unsynchronizedTableFields:=New collection:C1472
 		

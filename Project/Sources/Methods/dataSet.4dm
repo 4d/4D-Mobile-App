@@ -245,6 +245,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 										//……………………………………………………………………………………………………………
 									: (Match regex:C1019("(?m-si)^\\d+$"; $key; 1; *))  // fieldNumber
 										
+										// TODO: Change field.id to field.fieldNumber
 										$field:=New object:C1471(\
 											"id"; $table[$key].id; \
 											"type"; $table[$key].fielType)
@@ -260,6 +261,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 												
 												If (Match regex:C1019("(?m-si)^\\d+$"; $Txt_ID; 1; *))  // related fieldNumber
 													
+													// TODO: Change field.id to field.fieldNumber
 													$field:=New object:C1471(\
 														"id"; $table[$key][$Txt_ID].id; \
 														"type"; $table[$key][$Txt_ID].fielType)

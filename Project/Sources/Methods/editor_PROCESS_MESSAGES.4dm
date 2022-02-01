@@ -16,7 +16,7 @@ var $o : Object
 // ----------------------------------------------------
 Case of 
 		
-		//______________________________________________________
+		// MARK:-Steps of data generation
 	: ($message="dump")  // Cancellable data generation
 		
 		$o:=EDITOR.message.getValue()
@@ -52,6 +52,7 @@ Case of
 				//======================================
 			: ($data.step="pictures")
 				
+				// TODO: Change field.id to field.fieldNumber ?
 				If ($data.id=Null:C1517)
 					
 					$o.additional:=EDITOR.str.localize("imageGeneration"; $data.table.name)
@@ -112,6 +113,30 @@ Case of
 				//======================================
 		End case 
 		
+		// MARK:-Callback from "UPDATE_EXPOSED_CATALOG"
+	: ($message="checkProject")
+		
+		EDITOR.removeTask($message)  // Update task list
+		
+		If ($data.success)
+			
+			// Perform the structure audit
+			STRUCTURE_AUDIT($data.catalog)
+			
+		Else 
+			
+			// TODO: Display an error message ?
+			ASSERT:C1129(False:C215)
+			
+		End if 
+		
+		// MARK:-Callback from "GET_DEVICES"
+	: ($message="getDevices")
+		
+		EDITOR.removeTask($message)  // Update task list
+		EDITOR.devices:=$data  // Store the result
+		EDITOR.ribbon.touch()
+		
 		//______________________________________________________
 	: ($message="footer")
 		
@@ -149,6 +174,7 @@ Case of
 		
 		EDITOR.browser.setValue($data)
 		
+		// MARK:- BROWSER
 		//______________________________________________________
 	: ($message="hideBrowser")
 		
@@ -170,33 +196,9 @@ Case of
 		//______________________________________________________
 	: ($message="projectAuditResult")
 		
-		// ASSERT(Not(DATABASE.isMatrix))
-		
 		PROJECT_Handler(New object:C1471(\
 			"action"; $message; \
 			"audit"; $data))
-		
-		//______________________________________________________
-	: ($message="checkProject")  // Callback from 'structure'
-		
-		EDITOR.removeTask($message)  // Update task list
-		
-		If ($data.success)
-			
-			STRUCTURE_AUDIT($data.value)
-			
-		Else 
-			
-			ASSERT:C1129(False:C215)  // Display an error message ?
-			
-		End if 
-		
-		//______________________________________________________
-	: ($message="getDevices")  // Callback from 'editor_GET_DEVICES'
-		
-		EDITOR.removeTask($message)  // Update task list
-		EDITOR.devices:=$data  // Store the result
-		EDITOR.ribbon.touch()
 		
 		//______________________________________________________
 	: ($message="syncDataModel")
@@ -336,7 +338,7 @@ Case of
 						
 						$file:=EDITOR.path.userCache().file($project._name+".android.fingerprint")
 						
-						// Mark: TO DO - Android fingerprint
+						// TODO: Android fingerprint
 						
 					End if 
 					

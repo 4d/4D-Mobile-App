@@ -738,12 +738,9 @@ Function ribbonContainer($e : Object)
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function checkDevTools()
 	
-	var $window : Integer
-	$window:=This:C1470.window
-	
 	This:C1470.addTask("checkDevTools")
 	This:C1470.callWorker(Formula:C1597(editor_CHECK_INSTALLATION).source; New object:C1471(\
-		"caller"; $window; \
+		"caller"; This:C1470.window; \
 		"xCode"; This:C1470.xCode; \
 		"studio"; This:C1470.studio; \
 		"android"; PROJECT.$android; \
@@ -753,28 +750,19 @@ Function checkDevTools()
 	//===================================================================================
 Function checkProject()
 	
-	var $window : Integer
-	$window:=This:C1470.window
-	
-	// Launch checking the structure
+	// Launch of the update of the exposed catalog
 	This:C1470.addTask("checkProject")
-	This:C1470.callWorker(Formula:C1597(_o_structure).source; New object:C1471(\
-		"caller"; $window; \
-		"action"; "catalog"\
-		))
+	This:C1470.callWorker(Formula:C1597(editor_UPDATE_EXPOSED_CATALOG).source; This:C1470.window; This:C1470.callback)
 	
-	// Launch project verifications
+	// Launch of the project audit
 	This:C1470.callMeBack("projectAudit")
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function getDevices()
 	
-	var $window : Integer
-	$window:=This:C1470.window
-	
 	This:C1470.addTask("getDevices")
 	This:C1470.callWorker(Formula:C1597(editor_GET_DEVICES).source; New object:C1471(\
-		"caller"; $window; \
+		"caller"; This:C1470.window; \
 		"xCode"; This:C1470.xCode; \
 		"studio"; This:C1470.studio\
 		))

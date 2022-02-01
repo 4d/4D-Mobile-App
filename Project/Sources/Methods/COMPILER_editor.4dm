@@ -2,8 +2,8 @@
 If (False:C215)
 	
 	// ----------------------------------------------------
-	C_TEXT:C284(EDITOR_CALLBACK; $1)
-	C_OBJECT:C1216(EDITOR_CALLBACK; $2)
+	C_TEXT:C284(editor_CALLBACK; $1)
+	C_OBJECT:C1216(editor_CALLBACK; $2)
 	
 	// ----------------------------------------------------
 	C_OBJECT:C1216(editor_CREATE_PROJECT; $1)
@@ -30,6 +30,10 @@ If (False:C215)
 	// ----------------------------------------------------
 	C_TEXT:C284(editor_RESUME; $1)
 	C_OBJECT:C1216(editor_RESUME; $2)
+	
+	// ----------------------------------------------------
+	C_LONGINT:C283(editor_UPDATE_EXPOSED_CATALOG; $1)
+	C_TEXT:C284(editor_UPDATE_EXPOSED_CATALOG; $2)
 	
 	// ----------------------------------------------------
 	C_OBJECT:C1216(editor_Panel_init; $0)

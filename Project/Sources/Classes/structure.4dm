@@ -139,8 +139,8 @@ Function exposedCatalog($query; $sorted : Boolean)->$catalog : Collection
 					If ($ds[$query]#Null:C1517)\
 						 && (ds:C1482[$query].getInfo().exposed)
 						
-						//$table:=$ds[$query]
-						$catalog.push(ds:C1482[$query].getInfo())
+						$table:=ds:C1482[$query].getInfo()
+						$catalog.push($table)
 						
 					Else 
 						
@@ -160,8 +160,8 @@ Function exposedCatalog($query; $sorted : Boolean)->$catalog : Collection
 							
 							If ($o.exposed)
 								
-								//$table:=$ds[$tableName]
-								$catalog.push(ds:C1482[$tableName].getInfo())
+								$table:=ds:C1482[$tableName].getInfo()
+								$catalog.push($table)
 								
 							Else 
 								
@@ -200,24 +200,7 @@ Function exposedCatalog($query; $sorted : Boolean)->$catalog : Collection
 			
 			For each ($tableName; $ds)
 				
-				//$table:=$ds[$tableName].getInfo()
-				
 				$table:=ds:C1482[$tableName].getInfo()
-				
-				//If ($tableName=SHARED.deletedRecordsTable.name)\
-															 || Not($table.exposed)
-				
-				///*
-				//Don't keep:
-				//- not exposed table
-				//- deleted records table
-				//					
-				//*/
-				
-				//continue
-				
-				//End if 
-				
 				$catalog.push($table)
 				
 			End for each 
@@ -240,6 +223,10 @@ Function exposedCatalog($query; $sorted : Boolean)->$catalog : Collection
 				$table.field:=$table.field.orderBy("name asc")
 				
 			End if 
+			
+			//MARK: temporary add fields collection to replace field
+			$table.fields:=$table.field
+			
 		End for each 
 		
 		If ($sorted)

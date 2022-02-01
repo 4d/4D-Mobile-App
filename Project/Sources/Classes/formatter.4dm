@@ -72,12 +72,15 @@ Function getByType($type : Integer; $host : Boolean)->$formatters : Collection
 				If ($o.isValid())
 					
 					$manifest:=JSON Parse:C1218($o.source.file("manifest.json").getText())
+					
+					// Transform the type into a collection, if necessary
 					$manifest.type:=(Value type:C1509($manifest.type)=Is collection:K8:32) ? $manifest.type : New collection:C1472(String:C10($manifest.type))
 					
 					If ($manifest.type.indexOf(This:C1470.typeBinding[$type])#-1)
 						
 						If ($manifest.target#Null:C1517)
 							
+							// Transform the target into a collection, if necessary
 							$manifest.target:=(Value type:C1509($manifest.target)=Is collection:K8:32) ? $manifest.target : New collection:C1472(String:C10($manifest.target))
 							
 						Else 

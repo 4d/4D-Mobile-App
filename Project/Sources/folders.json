@@ -103,7 +103,6 @@
 			"_o_storyboard_fix_id",
 			"_o_str_date",
 			"_o_structure",
-			"_o_structure_REPAIR",
 			"_o_tempoFieldType",
 			"_o_tmpl_form",
 			"_o_ui_BEST_SIZE",
@@ -258,6 +257,7 @@
 			"editor_PROCESS_MESSAGES",
 			"editor_RESUME",
 			"editor_ui_LISTBOX",
+			"editor_UPDATE_EXPOSED_CATALOG",
 			"editor_UPDATE_HEADER",
 			"PROJECT_EDITOR"
 		],
@@ -387,6 +387,7 @@
 	},
 	"07] ACTIONS": {
 		"methods": [
+			"ACTIONS",
 			"ACTIONS_CALLBACK",
 			"COMPILER_ACTIONS"
 		],

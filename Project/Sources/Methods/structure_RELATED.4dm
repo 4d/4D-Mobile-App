@@ -1,4 +1,4 @@
-//%attributes = {"invisible":true}
+//%attributes = {}
 #DECLARE($form : Object; $row : Integer)
 
 

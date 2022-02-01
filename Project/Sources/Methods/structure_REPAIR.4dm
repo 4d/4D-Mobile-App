@@ -21,6 +21,7 @@ Else
 	
 End if 
 
+//FIXME: keep catalog from structure_audit or update_exposed_catalog response
 Form:C1466.$catalog:=_o_structure(New object:C1471("action"; "catalog")).value
 
 $cache.structure.definition:=Form:C1466.$catalog
@@ -36,8 +37,6 @@ PROJECT.repairProject()
 
 // Save project
 PROJECT.save()
-
-//EDITOR.callMeBack("projectAuditResult"; PROJECT.audit())
 
 // Launch project verifications
 EDITOR.callMeBack("projectAudit")

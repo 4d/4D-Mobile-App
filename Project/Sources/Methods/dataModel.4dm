@@ -118,9 +118,10 @@ Case of
 						//………………………………………………………………………………………………………………………
 					: (Match regex:C1019("(?m-si)^\\d+$"; $Txt_field; 1; *))
 						
+						// TODO: Change field.id to field.fieldNumber
 						$Obj_out.fields.push(New object:C1471(\
 							"name"; $Obj_in.table[$Txt_field].name; \
-							"id"; $Txt_field))  // TODO field.id change to fieldNumber
+							"id"; $Txt_field))
 						
 						//………………………………………………………………………………………………………………………
 					: ((Value type:C1509($Obj_in.table[$Txt_field])=Is object:K8:27))
@@ -365,6 +366,7 @@ Case of
 							//……………………………………………………………………………………………………………
 						: (PROJECT.isField($Txt_value))  // fieldNumber
 							
+							// TODO: Change field.id to field.fieldNumber
 							$Obj_field:=OB Copy:C1225($Obj_dataModel[$Obj_in.tableNumber][$Txt_value])
 							$Obj_field.path:=$Obj_field.name
 							$Obj_field.id:=Num:C11($Txt_value)
@@ -380,6 +382,7 @@ Case of
 								
 								If (Match regex:C1019("(?m-si)^\\d+$"; $t; 1; *))  // fieldNumber
 									
+									// TODO: Change field.id to field.fieldNumber
 									$Obj_field:=OB Copy:C1225($Obj_dataModel[$Obj_in.tableNumber][$Txt_value][$t])
 									$Obj_field.path:=$Txt_value+"."+$Obj_field.name
 									$Obj_field.id:=Num:C11($t)

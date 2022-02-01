@@ -1,8 +1,10 @@
 //[ALL_TYPES] Entitty Class
 Class extends Entity
 
-Alias identifier ID
+//MARK:-[ALIAS]
+exposed Alias identifier ID
 
+//MARK:-[COMPUTED]
 // +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++
 exposed Function get computedInteger()->$result : Integer
 	

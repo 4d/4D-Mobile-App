@@ -54,6 +54,19 @@ If (Asserted:C1132(Not:C34($structure.success); "should failed"))
 	End if 
 End if 
 
+// Check the consistency of the catalog and the datastore
+var $o : Object
+var $fields : Collection
+
+$fields:=$structure.catalog.query("name = :1"; "ALL_TYPES").pop().fields
+
+For each ($o; OB Entries:C1720($structure.datastore["ALL_TYPES"]).query("key!=''"))
+	
+	ASSERT:C1129($fields.query("name = :1"; $o.key).pop()#Null:C1517)
+	
+End for each 
+
+
 // Mark:- tableDefinition
 $table:=$structure.tableDefinition(5)
 
