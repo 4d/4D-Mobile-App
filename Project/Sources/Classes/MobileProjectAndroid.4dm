@@ -118,7 +118,7 @@ Function create()->$result : Object
 		
 		// * CREATE DATASET
 		
-		If (Not:C34(Bool:C1537(This:C1470.project.project.dataSource.doNotGenerateDataAtEachBuild)))
+		If (This:C1470.mustDoDataSet())
 			
 			This:C1470.postStep("dataSetGeneration")
 			
@@ -214,7 +214,7 @@ Function create()->$result : Object
 			
 			If (Not:C34(Bool:C1537(This:C1470.project.project.dataSource.doNotGenerateDataAtEachBuild)))
 				
-				$o:=This:C1470.dataSet()
+				$o:=This:C1470.dataSetLegacy()
 				If (Not:C34($o.success))
 					If ($o.errors=Null:C1517)
 						$o.errors.push("Failed to dump data")

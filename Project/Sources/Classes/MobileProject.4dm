@@ -283,7 +283,7 @@ Function postErrors($errors : Collection)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns a dump of the data made with the REST API,  and create android db now
-Function dataSet()->$dump : Object
+Function dataSetLegacy()->$dump : Object  // TODO: to remove with Not(FEATURE.with("androidDataSet"))
 	
 	var $pathname : Text
 	var $project : Object
@@ -315,11 +315,12 @@ Function dataSet()->$dump : Object
 		"project"; $project))
 	
 	// We will make a dump, but for local dump we need a key
-	If (Not:C34(Bool:C1537(This:C1470.dump.exists)))
+	If (Not:C34(Bool:C1537($dump.exists)))
 		
 		If (String:C10(This:C1470.input.project.dataSource.source)="server")
 			
 			// Ping the server to ensure the key is created?
+			// or get local file path?
 			
 		Else 
 			
@@ -353,6 +354,90 @@ Function dataSet()->$dump : Object
 			"androidDataSet"; FEATURE.with("androidDataSet"); \
 			"caller"; This:C1470.input.caller; \
 			"verbose"; This:C1470.input.verbose))
+		
+	End if 
+	
+	//==============================================================================
+	// Returns a dump of the data made with the REST API,  and create android db now
+Function dataSet()->$dump : Object
+	
+	var $pathname : Text
+	var $project : Object
+	
+	$project:=This:C1470.input.project  // to check
+	
+	If (String:C10(This:C1470.input.project.dataSource.source)="server")
+		
+		// Ping the server to ensure the key is created?
+		// or get local file path?
+		
+	Else 
+		
+		$pathname:=This:C1470.paths.key().platformPath
+		
+		If (Not:C34(This:C1470.paths.key().exists))
+			
+			This:C1470.keyPing:=Rest(New object:C1471(\
+				"action"; "status"; \
+				"handler"; "mobileapp"))
+			
+			This:C1470.keyPing.file:=New object:C1471(\
+				"path"; $pathname; \
+				"exists"; This:C1470.paths.key().exists)
+			
+			If (Not:C34(This:C1470.keyPing.file.exists))
+				
+				// TODO manage error
+				// ob_error_add($out; "Local server key file do not exists and cannot be created")
+				
+			End if 
+		End if 
+	End if 
+	
+	$dump:=dataSet(New object:C1471(\
+		"action"; "create"; \
+		"project"; $project; \
+		"digest"; True:C214; \
+		"dataSet"; True:C214; \
+		"key"; $pathname; \
+		"androidDataSet"; FEATURE.with("androidDataSet"); \
+		"caller"; This:C1470.input.caller; \
+		"verbose"; This:C1470.input.verbose))
+	
+	
+	// Return true if must be generated each time or data set not valid (according to project checksum)
+Function mustDoDataSet()->$doIt : Boolean
+	$doIt:=Not:C34(Bool:C1537(This:C1470.project.project.dataSource.doNotGenerateDataAtEachBuild))
+	
+	If (Not:C34($doIt))
+		
+		var $project; $dump : Object
+		$project:=This:C1470.input.project  // to check
+		
+		// Erase if needed (data has changed, or must be generated at each build)
+		$dump:=dataSet(New object:C1471(\
+			"action"; "check"; \
+			"digest"; True:C214; \
+			"androidDataSet"; FEATURE.with("androidDataSet"); \
+			"project"; $project))
+		
+		If (Bool:C1537($dump.exists))
+			
+			If (Not:C34($dump.valid))
+				
+				$dump:=dataSet(New object:C1471(\
+					"action"; "erase"; \
+					"project"; $project))
+				
+				$doIt:=True:C214  // not valid dump do it
+				
+			End if 
+			
+		Else 
+			
+			$doIt:=True:C214  // no dump do it
+			
+		End if 
 		
 	End if 
 	
