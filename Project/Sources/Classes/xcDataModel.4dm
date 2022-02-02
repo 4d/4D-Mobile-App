@@ -698,7 +698,7 @@ Function _primaryKey($table : Object)->$out : Object
 		
 		If (Not:C34(This:C1470.hasField($table; $Txt_fieldName)))  // if not add missing primary key field
 			
-			// cs.structure.new().fieldDefinition($tableInfo.name; $Txt_fieldName) ???
+			// cs.ExposedStructure.new().fieldDefinition($tableInfo.name; $Txt_fieldName) ???
 			
 			$result:=_o_structure(New object:C1471(\
 				"action"; "createField"; \

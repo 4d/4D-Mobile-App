@@ -80,7 +80,6 @@
 			"_o_color",
 			"_o_COMPONENT_Pathname",
 			"_o_currentForm",
-			"_o_db",
 			"_o_device",
 			"_o_doc_getFromPath",
 			"_o_doc_LoadJsonFile",
@@ -210,8 +209,8 @@
 			"WIZARD_OPEN_PROJECT"
 		],
 		"classes": [
-			"path",
-			"structure"
+			"ExposedStructure",
+			"path"
 		]
 	},
 	"[PANELS]": {
@@ -347,7 +346,6 @@
 			"STRUCTURE_Handler",
 			"STRUCTURE_OBJECTS_HANDLER",
 			"structure_RELATED",
-			"structure_RELATED_CATALOG",
 			"structure_REPAIR",
 			"structure_TABLE_LIST",
 			"STRUCTURE_TIPS",
@@ -502,7 +500,6 @@
 			"test_storyboard",
 			"test_structure",
 			"test_structureCatalog",
-			"test_structureClass",
 			"test_xmlClass",
 			"unitTestSuites"
 		]
@@ -1028,7 +1025,6 @@
 	"Tests": {
 		"methods": [
 			"test_dat",
-			"test_db",
 			"test_lep",
 			"test_ob",
 			"test_regex",

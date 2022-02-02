@@ -1,4 +1,4 @@
-﻿{
+{
 	"destination": "detailScreen",
 	"width": 517,
 	"height": 1097,
@@ -28,7 +28,7 @@
 					"height": 1097,
 					"sizingX": "grow",
 					"sizingY": "grow",
-					"dataSource": "cs:C1710.structure.new().catalog",
+					"dataSource": "cs:C1710.ExposedStructure.new().catalog",
 					"dataSourceTypeHint": "object",
 					"fontFamily": "monaco",
 					"fontSize": 11,

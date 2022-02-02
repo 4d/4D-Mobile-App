@@ -59,7 +59,7 @@ If (Num:C11($e.row)>0)
 	
 	If ($table#Null:C1517)
 		
-		$unsynchronizedTableFields:=Form:C1466.$dialog.unsynchronizedTableFields
+		$unsynchronizedTableFields:=Form:C1466.$dialog.unsynchronizedTables
 		
 		If ($unsynchronizedTableFields.length>$table.tableNumber)
 			

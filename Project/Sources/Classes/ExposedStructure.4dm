@@ -21,27 +21,38 @@ Class constructor($sorted : Boolean)
 		
 	End if 
 	
-	This:C1470.datastore:=This:C1470.exposedDatastore()
-	This:C1470.catalog:=This:C1470.exposedCatalog($sorted)
+	This:C1470.sorted:=(Count parameters:C259>=1) ? $sorted : False:C215
+	
+	This:C1470.update()
+	
+	//==================================================================
+	/// Update the datastore & the catalog
+Function update()
+	
+	This:C1470.datastore:=This:C1470.getDatastore()
+	This:C1470.catalog:=This:C1470.getCatalog()
 	
 	//==================================================================
 /** Returns a datastore like object of the exposed dataclass and attributes
-- Only references tables with a single primary key. Tables without a primary key or with composite primary keys are not referenced.
+- Only references tables with a single primary key (tables without a primary key or with composite primary keys are not referenced).
 - Only references tables & fields exposed as REST resource.
 - BLOB type attributes are not managed in the datastore.
 - A relation N -> 1 is not referenced if the field isn't exposed !
 - A relation 1 -> N is not referenced if the related dataclass isn't exposed !
+	
+Note: The datastore property is filled in during the construction phase of the class.
+      Thus, this function must only be called to obtain an updated datastore.
 */
-Function exposedDatastore()->$datastore : Object
+Function getDatastore()->$datastore : Object
 	
 	If (FEATURE.with("modernStructure"))
 		
 		var $key : Text
-		var $o; $table : Object
+		var $o : Object
+		var $table : cs:C1710.table
 		var $ds : cs:C1710.DataStore
 		
 		$datastore:=New object:C1471
-		
 		$ds:=ds:C1482
 		
 		For each ($key; $ds)
@@ -60,36 +71,16 @@ Function exposedDatastore()->$datastore : Object
 				
 				For each ($o; OB Entries:C1720($ds[$key]))
 					
-					If ($o.value.kind="alias")
+					If ($o.key=This:C1470.stampFieldName)\
+						 || (Not:C34(Bool:C1537($o.value.exposed)))\
+						 || (This:C1470.allowedTypes.indexOf($o.value.type)=-1)
 						
-						var $target : Object
-						$target:=$o.value
-						
-						If ($target.exposed=Null:C1517)
-							
-							$target:=Formula from string:C1601("ds:C1482[\""+$key+"\"]."+$o.value.path).call()
-							
-						End if 
-						
-						If ($target.exposed)
-							
-							$table[$o.key]:=$o.value
-							
-						End if 
+						continue
 						
 					Else 
 						
-						If ($o.key=This:C1470.stampFieldName)\
-							 || (Not:C34(Bool:C1537($o.value.exposed)))\
-							 || (This:C1470.allowedTypes.indexOf($o.value.type)=-1)
-							
-							continue
-							
-						Else 
-							
-							$table[$o.key]:=$o.value
-							
-						End if 
+						$table[$o.key]:=$o.value
+						
 					End if 
 				End for each 
 				
@@ -105,41 +96,45 @@ Function exposedDatastore()->$datastore : Object
 	End if 
 	
 	//==================================================================
-/* 
-If $query is a table name or number, the catalog is that table's if found.
+/** Returns a collection of all project's dataclasses and their attributes
+	
+- If $query is a dataclasses name or number, the catalog is that dataclasses's if found.
 	
 Note: The catalog property is filled in during the construction phase of the class.
       Thus, this function must only be called to obtain an updated catalog.
 */
-Function exposedCatalog($query; $sorted : Boolean)->$catalog : Collection
+Function getCatalog($query; $sorted : Boolean)->$catalog : Collection
 	
 	var $tableName : Text
 	var $o : Object
 	var $table : cs:C1710.table
-	var $ds : Object  //4D.DataStoreImplementation
+	var $datastore : Object
+	var $ds : cs:C1710.DataStore
 	
-	$ds:=This:C1470.datastore  //ds
+	$datastore:=This:C1470.datastore
+	$ds:=ds:C1482
 	
-	This:C1470.success:=($ds#Null:C1517)
+	This:C1470.success:=($datastore#Null:C1517)
 	
 	If (This:C1470.success)
 		
-		$sorted:=(Value type:C1509($query)=Is boolean:K8:9) ? Bool:C1537($query) : $sorted
+		$sorted:=(Value type:C1509($query)=Is boolean:K8:9) ? Bool:C1537($query) : This:C1470.sorted
 		
 		$catalog:=New collection:C1472
 		
-		If (Count parameters:C259>=0) && (Value type:C1509($query)#Is boolean:K8:9)
+		If (Count parameters:C259>=1) && (Value type:C1509($query)#Is boolean:K8:9)
+			
+			// Query on dataclasses name or number
 			
 			Case of 
 					
 					//…………………………………………………………………………………………………
 				: (Value type:C1509($query)=Is text:K8:3)  // Table name
 					
-					// FIXME:TURN AROUND
-					If ($ds[$query]#Null:C1517)\
-						 && (ds:C1482[$query].getInfo().exposed)
+					If ($datastore[$query]#Null:C1517)\
+						 && ($ds[$query].getInfo().exposed)
 						
-						$table:=ds:C1482[$query].getInfo()
+						$table:=$ds[$query].getInfo()
 						$catalog.push($table)
 						
 					Else 
@@ -152,15 +147,15 @@ Function exposedCatalog($query; $sorted : Boolean)->$catalog : Collection
 				: (Value type:C1509($query)=Is longint:K8:6)\
 					 | (Value type:C1509($query)=Is real:K8:4)  // Table number
 					
-					For each ($tableName; $ds)
+					For each ($tableName; $datastore)
 						
-						$o:=ds:C1482[$tableName].getInfo()
+						$o:=$ds[$tableName].getInfo()
 						
 						If ($o.tableNumber=$query)
 							
 							If ($o.exposed)
 								
-								$table:=ds:C1482[$tableName].getInfo()
+								$table:=$ds[$tableName].getInfo()
 								$catalog.push($table)
 								
 							Else 
@@ -184,13 +179,7 @@ Function exposedCatalog($query; $sorted : Boolean)->$catalog : Collection
 			
 			This:C1470.success:=($table#Null:C1517)
 			
-			If (This:C1470.success)
-				
-				//%W-550.2
-				//$catalog.push($table.getInfo())
-				//%W+550.2
-				
-			Else 
+			If (Not:C34(This:C1470.success))
 				
 				This:C1470.errors.push("Table not found: "+String:C10($query))
 				
@@ -198,9 +187,10 @@ Function exposedCatalog($query; $sorted : Boolean)->$catalog : Collection
 			
 		Else 
 			
-			For each ($tableName; $ds)
+			// All dataclasses
+			For each ($tableName; $datastore)
 				
-				$table:=ds:C1482[$tableName].getInfo()
+				$table:=$ds[$tableName].getInfo()
 				$catalog.push($table)
 				
 			End for each 
@@ -238,25 +228,25 @@ Function exposedCatalog($query; $sorted : Boolean)->$catalog : Collection
 	
 	//==================================================================
 	/// Returns a table definition object from its name or number
-Function tableDefinition($identifier)->$table : Object
+Function table($query)->$table : cs:C1710.table
 	
 	Case of 
 			
 			//______________________________________________________
-		: (Value type:C1509($identifier)=Is text:K8:3)
+		: (Value type:C1509($query)=Is text:K8:3)
 			
-			$table:=This:C1470.catalog.query("name = :1"; $identifier).pop()
+			$table:=This:C1470.catalog.query("name = :1"; $query).pop()
 			
 			//______________________________________________________
-		: (Value type:C1509($identifier)=Is real:K8:4)\
-			 | (Value type:C1509($identifier)=Is longint:K8:6)
+		: (Value type:C1509($query)=Is real:K8:4)\
+			 | (Value type:C1509($query)=Is longint:K8:6)
 			
-			$table:=This:C1470.catalog.query("tableNumber = :1"; Num:C11($identifier)).pop()
+			$table:=This:C1470.catalog.query("tableNumber = :1"; Num:C11($query)).pop()
 			
 			//______________________________________________________
 		Else 
 			
-			This:C1470.errors.push("The table parameter must be a Text or a Number")
+			This:C1470.errors.push("The query parameter must be a Text or a Number ("+String:C10(Value type:C1509($query))+")")
 			
 			//______________________________________________________
 	End case 
@@ -265,25 +255,25 @@ Function tableDefinition($identifier)->$table : Object
 	
 	//==================================================================
 	/// Returns Info of the table from its name or number.
-Function tableInfos($identifier)->$tableInfos : Object
+Function tableInfos($query)->$infos : Object
 	
 	var $table : Object
 	
-	$table:=This:C1470.tableDefinition($identifier)
+	$table:=This:C1470.table($query)
 	
 	If (This:C1470.success)
 		
-		$tableInfos:=$table.getInfo()
+		$infos:=ds:C1482[$table.name].getInfo()
 		
 	End if 
 	
 	//==================================================================
 	/// Returns the table number from its name or number
-Function tableNumber($identifier)->$number : Integer
+Function tableNumber($query)->$number : Integer
 	
 	var $table : Object
 	
-	$table:=This:C1470.tableDefinition($identifier)
+	$table:=This:C1470.table($query)
 	
 	If (This:C1470.success)
 		
@@ -293,11 +283,11 @@ Function tableNumber($identifier)->$number : Integer
 	
 	//==================================================================
 	/// Returns the table name from its name or number
-Function tableName($identifier)->$name : Text
+Function tableName($query)->$name : Text
 	
 	var $table : Object
 	
-	$table:=This:C1470.tableDefinition($identifier)
+	$table:=This:C1470.table($query)
 	
 	If (This:C1470.success)
 		
@@ -306,14 +296,14 @@ Function tableName($identifier)->$name : Text
 	End if 
 	
 	//==================================================================
-	//fixme: ? MUST NOT BE INTO THIS CLASSE -> PROJECT
 	/// Returns a field definition object
+	// FIXME: ? MUST NOT BE INTO THIS CLASSE -> PROJECT
 Function fieldDefinition($tableIdentifier; $fieldPath : Text)->$field : Object
 	
 	var $table : Object
 	var $c : Collection
 	
-	$table:=This:C1470.tableDefinition($tableIdentifier)
+	$table:=This:C1470.table($tableIdentifier)
 	
 	If (This:C1470.success)
 		
@@ -699,7 +689,7 @@ Function addField($table : Object; $field : cs:C1710.field)
 						$table[$path[0]]:=New object:C1471(\
 							"relatedDataClass"; $relatedField.tableName; \
 							"relatedTableNumber"; $relatedField.tableNumber; \
-							"inverseName"; This:C1470.tableDefinition($table[""].name).field.query("name=:1"; $field.name).pop().inverseName)
+							"inverseName"; This:C1470.table($table[""].name).field.query("name=:1"; $field.name).pop().inverseName)
 						
 					End if 
 					

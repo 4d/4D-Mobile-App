@@ -7,12 +7,10 @@ var $count : Integer
 var $context; $dataModel; $linkDataModel; $relatedCatalog; $tableDataModel; $target : Object
 var $c : Collection
 var $field : cs:C1710.field
-var $structure : cs:C1710.structure
 
 $context:=$form.form
 
-$structure:=cs:C1710.structure.new()
-$relatedCatalog:=$structure.relatedCatalog($context.currentTable.name; $context.fieldName; True:C214)
+$relatedCatalog:=Form:C1466.$project.ExposedStructure.relatedCatalog($context.currentTable.name; $context.fieldName; True:C214)
 
 If ($relatedCatalog.success)  // Open field picker
 	

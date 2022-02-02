@@ -16,7 +16,7 @@ If (False:C215)
 End if 
 
 var $item : Text
-var $isFound; $withError : Boolean
+var $withError : Boolean
 var $color; $column; $i; $row; $style : Integer
 var $Ptr_fields; $Ptr_icons; $Ptr_list; $Ptr_published : Pointer
 var $context; $field; $form; $o; $table : Object
@@ -87,30 +87,44 @@ If ($row>0)
 	
 	If ($table#Null:C1517)
 		
+		var $tableID : Text
+		$tableID:=String:C10($table.tableNumber)
+		
 		Case of 
 				
-				//______________________________________________________
+				//MARK:Filter by name & published
+				//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 			: (Length:C16(String:C10($context.fieldFilter))>0)\
-				 & (Bool:C1537($context.fieldFilterPublished))  // Filter by name & only published
+				 & (Bool:C1537($context.fieldFilterPublished))
 				
-				For each ($field; $table.field)
+				For each ($field; $table.fields)
 					
 					If (Position:C15($context.fieldFilter; $field.name)>0)
 						
-						If (PROJECT.isRelationToOne($field))
-							
-							//#MARK_TO_OPTIMIZE
-							$o:=_o_structure(New object:C1471(\
-								"action"; "catalog"; \
-								"tableNumber"; $field.relatedTableNumber))
-							
-							If ($o.success)
+						//TODO: Factorize
+						Case of 
 								
-								For each ($o; $o.value[0].field) Until ($isFound)
+								//======================================
+							: ($field.kind="storage")
+								
+								If ($dataModel[$tableID][String:C10($field.fieldNumber)]#Null:C1517)
 									
-									$isFound:=($dataModel[String:C10($table.tableNumber)][$field.name][String:C10($o.id)]#Null:C1517)
+									STRUCTURE_Handler(New object:C1471(\
+										"action"; "appendField"; \
+										"table"; $table; \
+										"field"; $field; \
+										"fields"; $Ptr_fields; \
+										"published"; $Ptr_published; \
+										"icons"; $Ptr_icons))
 									
-									If ($isFound)
+								End if 
+								
+								//======================================
+							: ($field.kind="relatedEntity")  // N -> 1 relation
+								
+								For each ($o; Form:C1466.$project.ExposedStructure.getCatalog($table.name))
+									
+									If ($dataModel[$tableID][$field.name][String:C10($o.id)]#Null:C1517)
 										
 										STRUCTURE_Handler(New object:C1471(\
 											"action"; "appendField"; \
@@ -120,31 +134,36 @@ If ($row>0)
 											"published"; $Ptr_published; \
 											"icons"; $Ptr_icons))
 										
+										break
+										
 									End if 
 								End for each 
-							End if 
-							
-						Else 
-							
-							If ($dataModel[String:C10($table.tableNumber)][String:C10($field.id)]#Null:C1517)
 								
-								STRUCTURE_Handler(New object:C1471(\
-									"action"; "appendField"; \
-									"table"; $table; \
-									"field"; $field; \
-									"fields"; $Ptr_fields; \
-									"published"; $Ptr_published; \
-									"icons"; $Ptr_icons))
+								//======================================
+							Else 
 								
-							End if 
-						End if 
+								If ($dataModel[$tableID][String:C10($field.name)]#Null:C1517)
+									
+									STRUCTURE_Handler(New object:C1471(\
+										"action"; "appendField"; \
+										"table"; $table; \
+										"field"; $field; \
+										"fields"; $Ptr_fields; \
+										"published"; $Ptr_published; \
+										"icons"; $Ptr_icons))
+									
+								End if 
+								
+								//======================================
+						End case 
 					End if 
 				End for each 
 				
-				//______________________________________________________
-			: (Length:C16(String:C10($context.fieldFilter))>0)  // Filter by name
+				//MARK:Filter by name
+				//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+			: (Length:C16(String:C10($context.fieldFilter))>0)
 				
-				For each ($field; $table.field)
+				For each ($field; $table.fields)
 					
 					If (Position:C15($context.fieldFilter; $field.name)>0)
 						
@@ -159,25 +178,36 @@ If ($row>0)
 					End if 
 				End for each 
 				
-				//______________________________________________________
-			: (Bool:C1537($context.fieldFilterPublished))  // Only published
+				//MARK:Filter by published
+				//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+			: (Bool:C1537($context.fieldFilterPublished))
 				
-				For each ($field; $table.field)
+				For each ($field; $table.fields)
 					
-					If (PROJECT.isRelationToOne($field))
-						
-						//#MARK_TO_OPTIMIZE
-						$o:=_o_structure(New object:C1471(\
-							"action"; "catalog"; \
-							"tableNumber"; $field.relatedTableNumber))
-						
-						If ($o.success)
+					//TODO: Factorize
+					Case of 
 							
-							For each ($o; $o.value[0].field) Until ($isFound)
+							//======================================
+						: ($field.kind="storage")
+							
+							If ($dataModel[$tableID][String:C10($field.fieldNumber)]#Null:C1517)
 								
-								$isFound:=($dataModel[String:C10($table.tableNumber)][$field.name][String:C10($o.id)]#Null:C1517)
+								STRUCTURE_Handler(New object:C1471(\
+									"action"; "appendField"; \
+									"table"; $table; \
+									"field"; $field; \
+									"fields"; $Ptr_fields; \
+									"published"; $Ptr_published; \
+									"icons"; $Ptr_icons))
 								
-								If ($isFound)
+							End if 
+							
+							//======================================
+						: ($field.kind="relatedEntity")  // N -> 1 relation
+							
+							For each ($o; Form:C1466.$project.ExposedStructure.getCatalog($table.name))
+								
+								If ($dataModel[$tableID][$field.name][String:C10($o.id)]#Null:C1517)
 									
 									STRUCTURE_Handler(New object:C1471(\
 										"action"; "appendField"; \
@@ -187,30 +217,35 @@ If ($row>0)
 										"published"; $Ptr_published; \
 										"icons"; $Ptr_icons))
 									
+									break
+									
 								End if 
 							End for each 
-						End if 
-						
-					Else 
-						
-						If ($dataModel[String:C10($table.tableNumber)][String:C10($field.id)]#Null:C1517)
 							
-							STRUCTURE_Handler(New object:C1471(\
-								"action"; "appendField"; \
-								"table"; $table; \
-								"field"; $field; \
-								"fields"; $Ptr_fields; \
-								"published"; $Ptr_published; \
-								"icons"; $Ptr_icons))
+							//======================================
+						Else 
 							
-						End if 
-					End if 
+							If ($dataModel[$tableID][String:C10($field.name)]#Null:C1517)
+								
+								STRUCTURE_Handler(New object:C1471(\
+									"action"; "appendField"; \
+									"table"; $table; \
+									"field"; $field; \
+									"fields"; $Ptr_fields; \
+									"published"; $Ptr_published; \
+									"icons"; $Ptr_icons))
+								
+							End if 
+							
+							//======================================
+					End case 
 				End for each 
 				
-				//______________________________________________________
-			Else   // No filter
+				//MARK:No filter
+				//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+			Else 
 				
-				For each ($field; $table.field)
+				For each ($field; $table.fields)
 					
 					STRUCTURE_Handler(New object:C1471(\
 						"action"; "appendField"; \
@@ -226,11 +261,12 @@ If ($row>0)
 					
 					var $relatedDataClasses : 4D:C1709.DataClass
 					
-					For each ($field; $table.field.query("kind = relatedEntities & relatedDataClass != :1"; $table.name))
+					For each ($field; $table.fields.query("kind = relatedEntities & relatedDataClass != :1"; $table.name))
 						
 						$relatedDataClasses:=ds:C1482[ds:C1482[$table.name][$field.name].relatedDataClass]
 						
 						var $t : Text
+						
 						For each ($t; $relatedDataClasses)
 							
 							If ($relatedDataClasses[$t].kind="relatedEntity")\
@@ -255,24 +291,22 @@ If ($row>0)
 					End for each 
 				End if 
 				
-				//______________________________________________________
+				//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		End case 
 		
-		// ----------------------
-		//       HIGHLIGHT
-		// ----------------------
-		If (Form:C1466.$dialog.unsynchronizedTableFields#Null:C1517)
+		// MARK: HIGHLIGHT 
+		If (Form:C1466.$dialog.unsynchronizedTables#Null:C1517)
 			
-			If (Form:C1466.$dialog.unsynchronizedTableFields.length>$table.tableNumber)
+			If (Form:C1466.$dialog.unsynchronizedTables.length>$table.tableNumber)
 				
-				$unsynchronized:=Form:C1466.$dialog.unsynchronizedTableFields[$table.tableNumber]
+				$unsynchronized:=Form:C1466.$dialog.unsynchronizedTables[$table.tableNumber]
 				
 			End if 
 		End if 
 		
 		CLEAR VARIABLE:C89($row)
 		
-		For each ($field; $table.field)
+		For each ($field; $table.fields)
 			
 			If (Find in array:C230($Ptr_fields->; $field.name)>0)  // In list
 				
@@ -327,7 +361,7 @@ If ($row>0)
 							If ($field.relatedTableNumber#$table.tableNumber)  // Not for a recursive relation
 								
 								If ($dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)\
-									 & ($dataModel[String:C10($table.tableNumber)][$field.name]#Null:C1517)
+									 & ($dataModel[$tableID][$field.name]#Null:C1517)
 									
 									$color:=EDITOR.errorColor
 									

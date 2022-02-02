@@ -1255,12 +1255,12 @@ Function getCatalog()->$catalog : Collection
 			//____________________________________
 		: (This:C1470.$project#Null:C1517)
 			
-			$catalog:=This:C1470.$project.$catalog
+			$catalog:=This:C1470.$project.ExposedStructure.catalog
 			
 			//____________________________________
-		: (This:C1470.$catalog#Null:C1517)
+		: (This:C1470.ExposedStructure#Null:C1517)
 			
-			$catalog:=This:C1470.$catalog
+			$catalog:=This:C1470.ExposedStructure.catalog
 			
 			//____________________________________
 		Else 

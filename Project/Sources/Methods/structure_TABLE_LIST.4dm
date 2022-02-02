@@ -101,7 +101,7 @@ End case
 // ----------------------
 //  HIGHLIGHT ERRORS
 // ----------------------
-$c:=Form:C1466.$dialog.unsynchronizedTableFields
+$c:=Form:C1466.$dialog.unsynchronizedTables
 
 For each ($table; $catalog)
 	

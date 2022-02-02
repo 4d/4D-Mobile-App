@@ -8,23 +8,22 @@
 // Check the structure of the tables and fields used in the data model
 // Against the latest valid version of the catalog.
 // ----------------------------------------------------
-//
-// EXECUTION SPACE IS THE FORM EDITOR
-//
-// ----------------------------------------------------
 // Declarations
-#DECLARE($currentCatalog : Collection)
+#DECLARE($in : cs:C1710.ExposedStructure)
 
 If (False:C215)
-	C_COLLECTION:C1488(STRUCTURE_AUDIT; $1)
+	C_OBJECT:C1216(STRUCTURE_AUDIT; $1)
 End if 
 
 var $isTableUnsynchronized; $isUnsynchronized : Boolean
 var $cache; $current; $field; $item; $linkedField; $linkedItem; $o; $relatedField; $relatedItem; $structure : Object
 var $table; $tableCatalog : Object
-var $cachedCatalog; $linkedCatalog; $relatedCatalog; $unsynchronizedFields; $unsynchronizedTableFields : Collection
+var $cachedCatalog; $linkedCatalog; $relatedCatalog; $unsynchronizedFields; $unsynchronizedTables : Collection
 var $cacheFile : 4D:C1709.File
 var $str : cs:C1710.str
+
+var $currentCatalog : Collection
+$currentCatalog:=$in.catalog
 
 // ----------------------------------------------------
 // Initialisations
@@ -46,9 +45,9 @@ If ($cacheFile.exists)
 	$cachedCatalog:=$cache.structure.definition
 	
 	// Was the structure changed?
-	If (Not:C34($cachedCatalog.equal($currentCatalog)))  // | (Bool(FEATURE._8858))
+	If (Not:C34($cachedCatalog.equal($currentCatalog)))
 		
-		$unsynchronizedTableFields:=New collection:C1472
+		$unsynchronizedTables:=New collection:C1472
 		
 		// Verify the compliance of the data model with the current catalog
 		If (PROJECT.dataModel#Null:C1517)
@@ -70,7 +69,7 @@ If ($cacheFile.exists)
 					
 				Else 
 					
-					If ($table.value[""].name#Null:C1517)  // *** *** *** *** *** *** *** *** WIP *** *** *** *** *** *** *** *** 
+					If ($table.value[""].name#Null:C1517)
 						
 						// Check TABLE NAME & PRIMARY KEY
 						$isTableUnsynchronized:=($tableCatalog.name#$table.value[""].name)\
@@ -566,7 +565,7 @@ If ($cacheFile.exists)
 					$isUnsynchronized:=True:C214
 					
 					// THE FIELD COLLECTION IS EMPTY IF THE TABLE IS MISSING
-					$unsynchronizedTableFields[Num:C11($table.key)]:=$unsynchronizedFields
+					$unsynchronizedTables[Num:C11($table.key)]:=$unsynchronizedFields
 					
 				End if 
 			End for each 
@@ -596,7 +595,7 @@ If ($cacheFile.exists)
 			Form:C1466.$catalog:=$currentCatalog
 			
 			// The changes has no influence on the data model -> Update the cache
-			$structure:=Choose:C955($cache.structure=Null:C1517; New object:C1471; $cache.structure)
+			$structure:=$cache.structure=Null:C1517 ? New object:C1471 : $cache.structure
 			$structure.definition:=$currentCatalog
 			$structure.digest:=Generate digest:C1147(JSON Stringify:C1217($currentCatalog); SHA1 digest:K66:2)
 			$cache.structure:=$structure
@@ -605,12 +604,12 @@ If ($cacheFile.exists)
 		End if 
 		
 		// Keep state
-		PROJECT.$dialog.unsynchronizedTableFields:=$unsynchronizedTableFields
+		PROJECT.$dialog.unsynchronizedTables:=$unsynchronizedTables
 		
 	Else 
 		
 		// Reset
-		PROJECT.$dialog.unsynchronizedTableFields:=New collection:C1472
+		PROJECT.$dialog.unsynchronizedTables:=New collection:C1472
 		
 	End if 
 	

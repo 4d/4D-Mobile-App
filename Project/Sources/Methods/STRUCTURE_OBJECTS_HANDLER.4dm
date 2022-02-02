@@ -15,7 +15,6 @@ var $Lon_targetTop; $Lon_unpublished; $Lon_vOffset; $right; $row; $top; $width :
 var $Ptr_; $Ptr_me; $Ptr_published : Pointer
 var $context; $e; $form; $linkDataModel; $menu; $o; $relatedCatalog; $tableDataModel : Object
 var $c : Collection
-var $structure : cs:C1710.structure
 
 // ----------------------------------------------------
 // Initialisations
@@ -662,8 +661,8 @@ Case of
 		//// Hide the bottom line
 		//OBJECT SET VISIBLE(*; "bottom.line"; False)
 		//CALL FORM(Current form window; "editor_CALLBACK"; "resizePanel"; New object(\
-																																										"panel"; Current form name; \
-																																										"offset"; $Lon_vOffset))
+																																																"panel"; Current form name; \
+																																																"offset"; $Lon_vOffset))
 		//End if 
 		////______________________________________________________
 		//: ($e.code=On Mouse Leave)

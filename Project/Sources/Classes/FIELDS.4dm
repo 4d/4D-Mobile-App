@@ -406,6 +406,30 @@ Function getFieldList()->$result : Object
 						End if 
 						
 						//……………………………………………………………………………………………………………
+					: (FEATURE.with("alias"))\
+						 && (Num:C11(This:C1470.tabSelector.data)=0)\
+						 && (PROJECT.isAlias($table[$key]))
+						
+						$field:=$table[$key]
+						
+						$field.label:=($field.label#Null:C1517) ? $field.label : PROJECT.label($field.name)
+						$field.shortLabel:=($field.shortLabel#Null:C1517) ? $field.shortLabel : $field.label
+						
+						//mark:-
+/* TEMPO */$result.tableNumbers.push(Num:C11($tableID))
+						$result.ids.push(0)
+						$result.names.push($field.name)
+						$result.paths.push($field.name)
+						$result.types.push($field.fieldType)
+						$result.labels.push($field.label)
+						$result.shortLabels.push($field.shortLabel)
+						$result.iconPaths.push(String:C10($field.icon))
+						$result.formatColors.push(Foreground color:K23:1)
+						$result.nameColors.push(Foreground color:K23:1)
+						$result.icons.push(PROJECT.getIcon(String:C10($field.icon)))
+						$result.formats.push(This:C1470._computeFormat($field; $result; $target))
+						
+						//……………………………………………………………………………………………………………
 					: (Num:C11(This:C1470.tabSelector.data)=0)
 						
 						//……………………………………………………………………………………………………………

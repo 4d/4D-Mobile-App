@@ -118,10 +118,13 @@ Case of
 		
 		EDITOR.removeTask($message)  // Update task list
 		
+		// Keep the current result
+		Form:C1466.ExposedStructure:=$data  // cs.ExposedStructure
+		
 		If ($data.success)
 			
 			// Perform the structure audit
-			STRUCTURE_AUDIT($data.catalog)
+			STRUCTURE_AUDIT($data)
 			
 		Else 
 			

@@ -332,10 +332,7 @@ Case of
 				//TODO: WIP
 			: (False:C215)
 				
-				var $structure : cs:C1710.structure
-				$structure:=cs:C1710.structure.new()
-				
-				$structure.addField($table; $field)
+				Form:C1466.$project.ExposedStructure.addField($table; $field)
 				
 				//…………………………………………………………………………………………………
 			: (Bool:C1537($field.oneToOne))  // 1 -> N -> 1 
@@ -344,17 +341,13 @@ Case of
 				$type:=8860
 				
 				//…………………………………………………………………………………………………
-			: ($field.kind="alias")  //Alias
+			: ($field.kind="alias")  // Alias
 				
-				//If ($field.relatedDataClass#Null)
-				//// TODO: Is it a bug 1-N-1 type is Selection
-				//$type:=($field.valueType#"@Selection") ? 8858 : 8859
-				//Else 
-				//$type:=$field.fieldType
-				//End if 
-				
-				$published:=Num:C11($dataModel[String:C10($table.tableNumber)][String:C10($field.name)]#Null:C1517)
-				
+				If ($field.fieldType<=EDITOR.fieldIcons.length)
+					
+					$published:=Num:C11($dataModel[String:C10($table.tableNumber)][String:C10($field.name)]#Null:C1517)
+					
+				End if 
 				
 				//…………………………………………………………………………………………………
 			: ($field.kind="calculated")  // Computed  
@@ -375,10 +368,8 @@ Case of
 					
 					$published:=1  // All related fields are published
 					
-					var $structure : cs:C1710.structure
 					var $relatedCatalog : Object
-					$structure:=cs:C1710.structure.new()
-					$relatedCatalog:=$structure.relatedCatalog($table.name; $field.name; True:C214)
+					$relatedCatalog:=Form:C1466.$project.ExposedStructure.relatedCatalog($table.name; $field.name; True:C214)
 					
 					If ($relatedCatalog.success)
 						

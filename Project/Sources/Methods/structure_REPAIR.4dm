@@ -1,8 +1,9 @@
 //%attributes = {"invisible":true}
 var $cache; $file : Object
+var $catalog : Collection
 
 //MARK: Audit result should be in EDITOR not into PROJECT.$dialog
-PROJECT.repairStructure(PROJECT.$dialog.unsynchronizedTableFields)
+PROJECT.repairStructure(PROJECT.$dialog.unsynchronizedTables)
 
 // Update status & cache
 OB REMOVE:C1226(PROJECT.$dialog; "unsynchronizedTableFields")
@@ -21,11 +22,10 @@ Else
 	
 End if 
 
-//FIXME: keep catalog from structure_audit or update_exposed_catalog response
-Form:C1466.$catalog:=_o_structure(New object:C1471("action"; "catalog")).value
+$catalog:=Form:C1466.$project.ExposedStructure.catalog
 
-$cache.structure.definition:=Form:C1466.$catalog
-$cache.structure.digest:=Generate digest:C1147(JSON Stringify:C1217(Form:C1466.$catalog); SHA1 digest:K66:2)
+$cache.structure.definition:=$catalog
+$cache.structure.digest:=Generate digest:C1147(JSON Stringify:C1217($catalog); SHA1 digest:K66:2)
 
 $file.setText(JSON Stringify:C1217($cache; *))
 

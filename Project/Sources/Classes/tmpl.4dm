@@ -821,7 +821,6 @@ Function reorder($tableID : Text)  //#WIP
 	var $indx; $Lon_keyType : Integer
 	var $attributes; $cache; $field; $o; $oIN : Object
 	var $affected; $bind; $c : Collection
-	var $structure : cs:C1710.structure
 	
 	If (This:C1470.root=Null:C1517)
 		
@@ -852,9 +851,6 @@ Function reorder($tableID : Text)  //#WIP
 		
 		//**********************************************************
 		// Reorganize the binded fields
-		
-		$structure:=cs:C1710.structure.new()
-		
 		For each ($element; $bind)
 			
 			CLEAR VARIABLE:C89($isCompatible)
@@ -897,7 +893,7 @@ Function reorder($tableID : Text)  //#WIP
 								
 								If ($field#Null:C1517)
 									
-									$isCompatible:=This:C1470.isTypeAccepted($c; $structure.fieldDefinition(Num:C11($tableID); $field.path).fieldType)
+									$isCompatible:=This:C1470.isTypeAccepted($c; Form:C1466.$project.ExposedStructure.fieldDefinition(Num:C11($tableID); $field.path).fieldType)
 									
 								End if 
 							End for each 

@@ -19,7 +19,6 @@ var $isCompatible; $isMultiCriteria : Boolean
 var $indx; $Lon_keyType : Integer
 var $cache; $o; $oAttributes; $oField; $oIN : Object
 var $c; $affected; $binding : Collection
-var $structure : cs:C1710.structure
 var $template : cs:C1710.tmpl
 
 $template:=$oIN.template
@@ -29,8 +28,6 @@ If (False:C215)  // #WORK_IN_PROGRESS
 	$template.reorder($oIN.tableNumber)
 	
 Else 
-	
-	$structure:=cs:C1710.structure.new()
 	
 	If ($template#Null:C1517)
 		
@@ -112,7 +109,7 @@ Else
 											
 											If ($oField#Null:C1517)
 												
-												$o:=$structure.fieldDefinition(Num:C11($oIN.tableNumber); $oField.path)
+												$o:=Form:C1466.$project.ExposedStructure.fieldDefinition(Num:C11($oIN.tableNumber); $oField.path)
 												$isCompatible:=$template.isTypeAccepted($c; $o.fieldType)
 												
 											End if 

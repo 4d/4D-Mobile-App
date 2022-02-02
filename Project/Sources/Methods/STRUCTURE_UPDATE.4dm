@@ -21,14 +21,14 @@ var $context; $o : Object
 var $published : Collection
 var $table; $currentTable : cs:C1710.table
 var $field : cs:C1710.field
-var $structure : cs:C1710.structure
+var $structure : cs:C1710.ExposedStructure
 
 // ----------------------------------------------------
 // Initialisations
 $context:=$form.form
 $currentTable:=$context.currentTable
 
-$structure:=cs:C1710.structure.new()
+$structure:=cs:C1710.ExposedStructure.new()
 
 // ----------------------------------------------------
 // GET THE PUBLISHED FIELD NAMES LIST

@@ -5,4 +5,5 @@ Class constructor
 	This:C1470.exposed:=False:C215
 	This:C1470.primaryKey:=""
 	
-	This:C1470.field:=New collection:C1472
+	//This.field:=New collection
+	This:C1470.fields:=New collection:C1472
