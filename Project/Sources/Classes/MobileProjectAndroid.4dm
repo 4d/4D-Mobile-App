@@ -305,57 +305,59 @@ Function build()->$result : Object
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
+	If (This:C1470.isOnError)
+		
+		return 
+		
+	End if 
+	
 	This:C1470.gradlew.setEnvironnementVariable("currentDirectory"; This:C1470.project.path)
 	
-	If (Not:C34(This:C1470.isOnError))
+	// * BUILD PROJECT
+	This:C1470.postStep("projectBuild")
+	
+	$o:=This:C1470.gradlew.assembleDebug()
+	
+	// Log outputs
+	This:C1470.logFolder.file("lastBuild.android.out.log").setText(String:C10($o.outputStream))
+	This:C1470.logFolder.file("lastBuild.android.err.log").setText(String:C10($o.errorStream))
+	
+	If (Not:C34(FEATURE.with("androidDataSet")))
 		
-		// * BUILD PROJECT
-		This:C1470.postStep("projectBuild")
-		
-		$o:=This:C1470.gradlew.assembleDebug()
-		
-		// Log outputs
-		This:C1470.logFolder.file("lastBuild.android.out.log").setText(String:C10($o.outputStream))
-		This:C1470.logFolder.file("lastBuild.android.err.log").setText(String:C10($o.errorStream))
-		
-		If (Not:C34(FEATURE.with("androidDataSet")))
+		If ($o.success)
 			
-			If ($o.success)
-				
-				// * CREATE EMBEDDED DATABASE
-				$o:=This:C1470.gradlew.createEmbeddedDatabase()
-				
-			End if 
+			// * CREATE EMBEDDED DATABASE
+			$o:=This:C1470.gradlew.createEmbeddedDatabase()
 			
-			If ($o.success)
-				
-				// * BUILD PROJECT WITH EMBEDDED DATA
-				$o:=This:C1470.gradlew.assembleDebug()
-				
-			End if 
 		End if 
 		
 		If ($o.success)
 			
-			// * CHECK APK
-			$o:=This:C1470.gradlew.checkAPKExists(This:C1470.apk)
+			// * BUILD PROJECT WITH EMBEDDED DATA
+			$o:=This:C1470.gradlew.assembleDebug()
 			
 		End if 
+	End if 
+	
+	If ($o.success)
 		
-		If (Not:C34($o.success))
-			
-			This:C1470.isOnError:=True:C214
-			
-			$o.errors.insert(0; "projectBuildFailure")
-			
-			This:C1470.postErrors($o.errors)
-			$result.errors.combine($o.errors)
-			
-		Else 
-			
-			$result.success:=True:C214
-			
-		End if 
+		// * CHECK APK
+		$o:=This:C1470.gradlew.checkAPKExists(This:C1470.apk)
+		
+	End if 
+	
+	If (Not:C34($o.success))
+		
+		This:C1470.isOnError:=True:C214
+		
+		$o.errors.insert(0; "projectBuildFailure")
+		
+		This:C1470.postErrors($o.errors)
+		$result.errors.combine($o.errors)
+		
+	Else 
+		
+		$result.success:=True:C214
 		
 	End if 
 	
@@ -365,78 +367,81 @@ Function run()->$result : Object
 	
 	var $o : Object
 	
-	If (Not:C34(This:C1470.isOnError))
+	If (This:C1470.isOnError)
 		
-		var $project : Object
-		$project:=This:C1470.input.project
+		return 
 		
-		If (This:C1470.input.realDevice)
+	End if 
+	
+	var $project : Object
+	$project:=This:C1470.input.project
+	
+	If (This:C1470.input.realDevice)
+		
+		// * INSTALL APP
+		$result:=This:C1470.install()
+		
+		If ($result.success)
 			
-			// * INSTALL APP
-			$result:=This:C1470.install()
+			// * LAUNCH APP
+			This:C1470.postStep("launchingTheApplication")
 			
-			If ($result.success)
-				
-				// * LAUNCH APP
-				This:C1470.postStep("launchingTheApplication")
-				
-				$result:=This:C1470.adb.launchApp($project.product.bundleIdentifier)
-				
-				This:C1470.postError(cs:C1710.str.new("theApplicationHasBeenSuccessfullyInstalled").localized(New collection:C1472($project.product.name; $project._device.name)))
-				
-			End if 
+			$result:=This:C1470.adb.launchApp($project.product.bundleIdentifier)
 			
-		Else 
+			This:C1470.postError(cs:C1710.str.new("theApplicationHasBeenSuccessfullyInstalled").localized(New collection:C1472($project.product.name; $project._device.name)))
 			
-			$result:=New object:C1471(\
-				"success"; False:C215; \
-				"errors"; New collection:C1472)
+		End if 
+		
+	Else 
+		
+		$result:=New object:C1471(\
+			"success"; False:C215; \
+			"errors"; New collection:C1472)
+		
+		// * CREATE AVD IF DOESN'T EXIST
+		This:C1470.postStep("launchingTheSimulator")
+		
+		// * START & WAIT EMULATOR
+		$o:=This:C1470.emulator.start(This:C1470.avdName)
+		
+		If ($o.success)
 			
-			// * CREATE AVD IF DOESN'T EXIST
-			This:C1470.postStep("launchingTheSimulator")
-			
-			// * START & WAIT EMULATOR
-			$o:=This:C1470.emulator.start(This:C1470.avdName)
+			$o:=This:C1470.adb.waitForBoot(This:C1470.avdName)
 			
 			If ($o.success)
 				
-				$o:=This:C1470.adb.waitForBoot(This:C1470.avdName)
+				This:C1470.serial:=$o.serial
+				
+				// * INSTALL APP
+				This:C1470.postStep("installingTheApplication")
+				
+				$o:=This:C1470.adb.forceInstallApp(This:C1470.serial; This:C1470.project.package; This:C1470.apk)
 				
 				If ($o.success)
 					
-					This:C1470.serial:=$o.serial
+					// * LAUNCH APP
+					This:C1470.postStep("launchingTheApplication")
 					
-					// * INSTALL APP
-					This:C1470.postStep("installingTheApplication")
+					$o:=This:C1470.adb.waitStartApp(This:C1470.serial; This:C1470.project.package; This:C1470.activity)
 					
-					$o:=This:C1470.adb.forceInstallApp(This:C1470.serial; This:C1470.project.package; This:C1470.apk)
-					
-					If ($o.success)
-						
-						// * LAUNCH APP
-						This:C1470.postStep("launchingTheApplication")
-						
-						$o:=This:C1470.adb.waitStartApp(This:C1470.serial; This:C1470.project.package; This:C1470.activity)
-						
-					End if 
 				End if 
 			End if 
+		End if 
+		
+		If ($o.success)
 			
-			If ($o.success)
-				
-				$result.success:=True:C214
-				
-			Else 
-				
-				This:C1470.isOnError:=True:C214
-				
-				$o.errors.insert(0; "")  // Insert a blank line before non localized error descriptions
-				$o.errors.insert(0; Get localized string:C991("failedToLaunchTheSimulator"))
-				This:C1470.postErrors($o.errors)
-				
-				$result.errors.combine($o.errors)
-				
-			End if 
+			$result.success:=True:C214
+			
+		Else 
+			
+			This:C1470.isOnError:=True:C214
+			
+			$o.errors.insert(0; "")  // Insert a blank line before non localized error descriptions
+			$o.errors.insert(0; Get localized string:C991("failedToLaunchTheSimulator"))
+			This:C1470.postErrors($o.errors)
+			
+			$result.errors.combine($o.errors)
+			
 		End if 
 	End if 
 	

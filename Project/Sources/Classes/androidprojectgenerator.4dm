@@ -213,6 +213,40 @@ Function copyResources
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
+	//Function copyDataSet
+	//var $0 : Object
+	//var $1 : 4D.Folder  // 4D Mobile Project
+	//var $xcassets; $copyDest : 4D.Folder
+	
+	//$0:=New object(\
+		"success"; False; \
+		"errors"; New collection)
+	
+	//// Copy dataSet resources
+	//$xcassets:=$1.folder("project.dataSet/Resources/Assets.xcassets")
+	
+	//If ($xcassets.exists)
+	
+	//$copyDest:=$xcassets.copyTo(Folder(This.projectPath+"app/src/main/assets"); "datadump"; fk overwrite)
+	
+	//If ($copyDest.exists)
+	
+	//$0.success:=True
+	
+	//Else 
+	//// Copy failed
+	//$0.success:=False
+	//$0.errors.push("Could not copy directory to destination: "+$copyDest.path)
+	
+	//End if 
+	
+	//Else 
+	//// Missing Assets.xcassets folder
+	//$0.errors.push("Missing source directory for copy: "+$xcassets.path)
+	//End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
 Function copyGeneratedDb
 	var $0 : Object
 	var $1 : 4D:C1709.Folder  // 4D Mobile Project
@@ -236,7 +270,7 @@ Function copyGeneratedDb
 		Else 
 			// Copy failed
 			$0.success:=False:C215
-			$0.errors.push("Could not copy directory to destination: "+$copyDest.path)
+			$0.errors.push("Could not copy db file to destination: "+$copyDest.path)
 			
 		End if 
 		
