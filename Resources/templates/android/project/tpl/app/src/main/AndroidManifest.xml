@@ -3,13 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="{{package}}">
 
-    <queries>
-        <intent>
-            <action android:name="android.media.action.IMAGE_CAPTURE" />
-        </intent>
-    </queries>
+    {{#permissions}}
+    {{permission}}
 
-    <!--    cleartext api 24+ -->
+    {{/permissions}}
     <application
         android:name=".app.App"
         android:allowBackup="false"
@@ -23,8 +20,8 @@
         tools:targetApi="n">
         <activity
             android:name="com.qmobile.qmobileui.activity.loginactivity.LoginActivity"
-            android:theme="@style/Theme.MyApplication.LoginTheme"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.MyApplication.LoginTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />

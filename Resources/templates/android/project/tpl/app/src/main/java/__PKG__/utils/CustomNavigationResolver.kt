@@ -13,6 +13,7 @@ import com.qmobile.qmobiledatastore.data.RoomData
 import com.qmobile.qmobiledatasync.utils.GenericNavigationResolver
 import com.qmobile.qmobileui.detail.viewpager.EntityViewPagerFragmentDirections
 import com.qmobile.qmobileui.list.EntityListFragmentDirections
+import com.qmobile.qmobileui.ui.setOnSingleClickListener
 {{#tableNames}}
 import {{package}}.data.model.entity.{{name}}
 {{/tableNames}}
@@ -77,7 +78,7 @@ class CustomNavigationResolver : GenericNavigationResolver {
                         inverseName = "{{inverse_name}}",
                         navbarTitle = "{{navbarTitle}}"
                     )
-                    viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnClickListener {
+                    viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnSingleClickListener {
                         viewDataBinding.root.findNavController().navigate(action)
                     }
                 }
@@ -89,7 +90,7 @@ class CustomNavigationResolver : GenericNavigationResolver {
                     inverseName = "{{inverse_name}}",
                     navbarTitle = "{{navbarTitle}}"
                 )
-                viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnClickListener {
+                viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnSingleClickListener {
                     viewDataBinding.root.findNavController().navigate(action)
                 }
                 {{/isSubRelation}}
@@ -117,7 +118,7 @@ class CustomNavigationResolver : GenericNavigationResolver {
                         itemId = relationId,
                         navbarTitle = ""
                     )
-                    viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnClickListener {
+                    viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnSingleClickListener {
                         viewDataBinding.root.findNavController().navigate(action)
                     }
                 }
@@ -149,7 +150,7 @@ class CustomNavigationResolver : GenericNavigationResolver {
                         inverseName = "{{inverse_name}}",
                         navbarTitle = "{{navbarTitle}}"
                     )
-                    viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnClickListener {
+                    viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnSingleClickListener {
                         viewDataBinding.root.findNavController().navigate(action)
                     }
                 }
@@ -161,7 +162,7 @@ class CustomNavigationResolver : GenericNavigationResolver {
                     inverseName = "{{inverse_name}}",
                     navbarTitle = "{{navbarTitle}}"
                 )
-                viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnClickListener {
+                viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnSingleClickListener {
                     viewDataBinding.root.findNavController().navigate(action)
                 }
                 {{/isSubRelation}}
@@ -189,7 +190,7 @@ class CustomNavigationResolver : GenericNavigationResolver {
                         itemId = relationId,
                         navbarTitle = ""
                     )
-                    viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnClickListener {
+                    viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnSingleClickListener {
                         viewDataBinding.root.findNavController().navigate(action)
                     }
                 }
