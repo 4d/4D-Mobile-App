@@ -11,9 +11,7 @@
 	},
 	"____FOR_TESTS": {
 		"classes": [
-			"ALL_TYPESEntity",
-			"Employes",
-			"EmployesEntity"
+			"ALL_TYPESEntity"
 		]
 	},
 	"__IN WORKS": {
@@ -209,7 +207,6 @@
 			"WIZARD_OPEN_PROJECT"
 		],
 		"classes": [
-			"ExposedStructure",
 			"path"
 		]
 	},
@@ -256,7 +253,6 @@
 			"editor_PROCESS_MESSAGES",
 			"editor_RESUME",
 			"editor_ui_LISTBOX",
-			"editor_UPDATE_EXPOSED_CATALOG",
 			"editor_UPDATE_HEADER",
 			"PROJECT_EDITOR"
 		],
@@ -348,9 +344,6 @@
 		],
 		"forms": [
 			"RELATED",
-			"STRUCTURE"
-		],
-		"classes": [
 			"STRUCTURE"
 		]
 	},
@@ -495,6 +488,7 @@
 			"test_catalog",
 			"test_ob_class",
 			"test_reconcile",
+			"test_sqliteSizes",
 			"test_storyboard",
 			"test_structure",
 			"test_structureCatalog",
@@ -529,7 +523,9 @@
 		"classes": [
 			"formatter",
 			"MobileProject",
-			"project"
+			"project",
+			"sqlite3",
+			"sqliteSizes"
 		]
 	},
 	"classes": {
