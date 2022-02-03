@@ -25,6 +25,9 @@ $Ptr_me:=OBJECT Get pointer:C1124(Object current:K67:2)
 $form:=STRUCTURE_Handler(New object:C1471(\
 "action"; "init"))
 
+var $class : cs:C1710.STRUCTURE
+$class:=cs:C1710.STRUCTURE.new($form)
+
 $context:=$form.form
 
 // ----------------------------------------------------
@@ -65,7 +68,7 @@ Case of
 				End if 
 				
 				// Update field list
-				structure_FIELD_LIST($form)
+				$class.fieldList()
 				
 				//______________________________________________________
 			: ($e.code=On Clicked:K2:4)
@@ -89,7 +92,7 @@ Case of
 							$context.currentTable:=$o
 							
 							// Update field list
-							structure_FIELD_LIST($form)
+							$class.fieldList()
 							
 						End if 
 						
@@ -128,7 +131,7 @@ Case of
 										
 									End for 
 									
-									STRUCTURE_UPDATE($form)
+									$class.updateProject()
 									
 									//………………………………………………………………………………………
 								Else 
@@ -174,7 +177,7 @@ Case of
 				
 				OBJECT SET RGB COLORS:C628(*; $e.objectName; Foreground color:K23:1; EDITOR.highlightColor; EDITOR.highlightColor)
 				
-				structure_FIELD_LIST($form)
+				$class.fieldList()
 				
 				ui_MOVE($form.search; $e.objectName; Align right:K42:4; 30)
 				ui_MOVE($form.action; $e.objectName; Align right:K42:4; 0)
@@ -205,15 +208,14 @@ Case of
 				
 				OBJECT SET VALUE:C1742($form.search; $o)
 				
-				STRUCTURE_Handler(New object:C1471(\
-					"action"; "fieldFilter"; \
-					"showIfNotEmpty"; True:C214))
+				$t:=$class.fieldFilterLabel()
+				ST SET TEXT:C1115(*; $form.fieldFilter; $t; ST Start text:K78:15; ST End text:K78:16)
+				OBJECT SET VISIBLE:C603(*; $form.fieldFilter; Length:C16($t)>0)
 				
 				//______________________________________________________
 			: ($e.code=On Losing Focus:K2:8)
 				
-				STRUCTURE_Handler(New object:C1471(\
-					"action"; "tableFilter"))
+				ST SET TEXT:C1115(*; $form.tableFilter; $class.tableFilterLabel(); ST Start text:K78:15; ST End text:K78:16)
 				
 				OBJECT SET VISIBLE:C603(*; $form.tableFilter; True:C214)
 				OBJECT SET RGB COLORS:C628(*; $e.objectName; Foreground color:K23:1; 0x00FFFFFF; 0x00FFFFFF)
@@ -266,16 +268,14 @@ Case of
 							
 							$context.tableFilter:=""
 							
-							STRUCTURE_Handler(New object:C1471(\
-								"action"; "tableList"))
+							$class.tableList()
 							
 							//………………………………………………………………………………………
 						: ($menu.choice="published")  // Add-remove published filter
 							
 							$context.tableFilterPublished:=Not:C34(Bool:C1537($context.tableFilterPublished))
 							
-							STRUCTURE_Handler(New object:C1471(\
-								"action"; "tableList"))
+							$class.tableList()
 							
 							//………………………………………………………………………………………
 						Else 
@@ -285,8 +285,7 @@ Case of
 							//………………………………………………………………………………………
 					End case 
 					
-					STRUCTURE_Handler(New object:C1471(\
-						"action"; "tableFilter"))
+					ST SET TEXT:C1115(*; $form.tableFilter; $class.tableFilterLabel(); ST Start text:K78:15; ST End text:K78:16)
 					
 				End if 
 				
@@ -332,8 +331,30 @@ Case of
 							If ($row>0)\
 								 && ($column=3)
 								
-								structure_RELATED($form; $row)
+								var $catalog : Collection
+								var $field : cs:C1710.field
 								
+								$catalog:=PROJECT.getCatalog()
+								$field:=$catalog.query("name = :1"; $context.currentTable.name).pop().fields.query("name = :1"; $context.fieldName).pop()
+								
+								If ($field.kind="relatedEntity")
+									
+									OBJECT Get pointer:C1124(Object named:K67:5; $form.published)->{$row}:=$class.doFieldPicker()
+									
+								Else 
+									
+									If (Macintosh command down:C546 | Shift down:C543)
+										
+										// ??
+										
+									Else 
+										
+										// Invert published status
+										($form.publishedPtr)->{$row}:=1-($form.publishedPtr)->{$row}
+										$class.updateProject()
+										
+									End if 
+								End if 
 							End if 
 						End if 
 					End if 
@@ -366,7 +387,7 @@ Case of
 					End if 
 					
 					//#MARK_TODO - use CALL FORM to avoid three-state display
-					STRUCTURE_UPDATE($form)
+					$class.updateProject()
 					
 					If ($Ptr_me->{$row}=0)
 						
@@ -437,8 +458,7 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Losing Focus:K2:8)
 				
-				STRUCTURE_Handler(New object:C1471(\
-					"action"; "fieldFilter"))
+				ST SET TEXT:C1115(*; $form.fieldFilter; $class.fieldFilterLabel(); ST Start text:K78:15; ST End text:K78:16)
 				
 				OBJECT SET VISIBLE:C603(*; $form.fields+".filter"; True:C214)
 				OBJECT SET RGB COLORS:C628(*; $e.objectName; Foreground color:K23:1; 0x00FFFFFF; 0x00FFFFFF)
@@ -476,7 +496,6 @@ Case of
 					End if 
 					
 					$menu.append("onlyPublishedFields"; "published").mark(Bool:C1537($context.fieldFilterPublished))
-					
 					$menu.popup()
 					
 					Case of 
@@ -490,15 +509,15 @@ Case of
 						: ($menu.choice="name")  // Remove name filter
 							
 							$context.fieldFilter:=""
-							
-							structure_FIELD_LIST($form)
+							$class.fieldList()
+							ST SET TEXT:C1115(*; $form.fieldFilter; $class.fieldFilterLabel(); ST Start text:K78:15; ST End text:K78:16)
 							
 							//………………………………………………………………………………………
 						: ($menu.choice="published")  // Add-remove published filter
 							
 							$context.fieldFilterPublished:=Not:C34(Bool:C1537($context.fieldFilterPublished))
-							
-							structure_FIELD_LIST($form)
+							$class.fieldList()
+							ST SET TEXT:C1115(*; $form.fieldFilter; $class.fieldFilterLabel(); ST Start text:K78:15; ST End text:K78:16)
 							
 							//………………………………………………………………………………………
 						Else 
@@ -507,10 +526,6 @@ Case of
 							
 							//………………………………………………………………………………………
 					End case 
-					
-					STRUCTURE_Handler(New object:C1471(\
-						"action"; "fieldFilter"))
-					
 				End if 
 				
 				//______________________________________________________
@@ -541,17 +556,14 @@ Case of
 								
 								$context.tableFilter:=$Ptr_me->value
 								
-								STRUCTURE_Handler(New object:C1471(\
-									"action"; "tableList"))
-								
-								STRUCTURE_Handler(New object:C1471(\
-									"action"; "tableFilter"))
+								$class.tableList()
+								ST SET TEXT:C1115(*; $form.tableFilter; $class.tableFilterLabel(); ST Start text:K78:15; ST End text:K78:16)
 								
 							Else   // Fields
 								
 								$context.fieldFilter:=$Ptr_me->value
 								
-								structure_FIELD_LIST($form)
+								$class.fieldList()
 								
 								If (Length:C16(String:C10($context.fieldFilter))>0)
 									
@@ -597,7 +609,7 @@ Case of
 		//==================================================
 	: ($e.objectName=$form.action)
 		
-		STRUCTURE_ACTION($form)
+		$class.doActionMenu()
 		
 		//==================================================
 	: ($e.objectName="space.shortcut")
@@ -632,7 +644,7 @@ Case of
 				End if 
 			End if 
 			
-			STRUCTURE_UPDATE($form)
+			$class.updateProject()
 			
 		End if 
 		
@@ -661,8 +673,8 @@ Case of
 		//// Hide the bottom line
 		//OBJECT SET VISIBLE(*; "bottom.line"; False)
 		//CALL FORM(Current form window; "editor_CALLBACK"; "resizePanel"; New object(\
-																																																"panel"; Current form name; \
-																																																"offset"; $Lon_vOffset))
+																																																						"panel"; Current form name; \
+																																																						"offset"; $Lon_vOffset))
 		//End if 
 		////______________________________________________________
 		//: ($e.code=On Mouse Leave)

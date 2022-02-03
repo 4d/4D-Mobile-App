@@ -18,7 +18,7 @@ Class constructor()
 	
 	This:C1470.pendingTasks:=New collection:C1472
 	
-	// Mark: Embedded classes
+	// Mark:Embedded classes
 	For each ($t; New collection:C1472("str"; "path"; "tips"))
 		
 		This:C1470._instantiate($t)
@@ -473,6 +473,7 @@ Function goToPage($page : Text)
 		This:C1470.project.focus()
 		
 	End if 
+	
 	
 	//MARK:-TASKS
 	//=== === === === === === === === === === === === === === === === === === === === ===

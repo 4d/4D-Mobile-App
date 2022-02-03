@@ -113,12 +113,13 @@ Case of
 				//======================================
 		End case 
 		
-		// MARK:-Callback from "UPDATE_EXPOSED_CATALOG"
+		// MARK:-UPDATE_EXPOSED_CATALOG callback
 	: ($message="checkProject")
 		
-		EDITOR.removeTask($message)  // Update task list
+		// Update task list
+		EDITOR.removeTask($message)
 		
-		// Keep the current result
+		// Keep the result
 		Form:C1466.ExposedStructure:=$data  // cs.ExposedStructure
 		
 		If ($data.success)
@@ -133,14 +134,40 @@ Case of
 			
 		End if 
 		
-		// MARK:-Callback from "GET_DEVICES"
+		
+		// MARK:-CHECK_INSTALLATION callback
+	: ($message="checkDevTools")
+		
+		// Update task list
+		EDITOR.removeTask($message)
+		
+		If ($data#Null:C1517)  // Store the result
+			
+			EDITOR.studio:=$data.studio
+			EDITOR.xCode:=$data.xCode
+			
+			If (EDITOR.devices=Null:C1517)  // First time -> Update the device list
+				
+				EDITOR.getDevices()
+				
+			End if 
+		End if 
+		
+		// MARK:-GET_DEVICES callback
 	: ($message="getDevices")
 		
-		EDITOR.removeTask($message)  // Update task list
-		EDITOR.devices:=$data  // Store the result
+		// Update task list
+		EDITOR.removeTask($message)
+		
+		// Keep the result
+		EDITOR.devices:=$data
+		
+		// Update UI
 		EDITOR.ribbon.touch()
 		
-		//______________________________________________________
+		// MARK:-[UI]
+		
+		// MARK:Show/Hide Footer
 	: ($message="footer")
 		
 		var $offset
@@ -167,18 +194,18 @@ Case of
 		
 		EDITOR.footer.setValue($data)
 		
-		//______________________________________________________
-	: ($message="description")  // Update UI of the TITLE subform
+		// MARK:Update TITLE subform
+	: ($message="description")
 		
 		EDITOR.updateHeader($data)
 		
-		//______________________________________________________
-	: ($message="setURL")  // **** SEEMS TO BE OBSOLETE *****
+		// MARK:Update RIBBON subform
+	: ($message="updateRibbon")
 		
-		EDITOR.browser.setValue($data)
+		EDITOR.teamId:=(Length:C16(String:C10(PROJECT.organization.teamId))>0)
+		EDITOR.ribbon.touch()
 		
-		// MARK:- BROWSER
-		//______________________________________________________
+		// MARK:-BROWSER
 	: ($message="hideBrowser")
 		
 		EDITOR.browser.setSubform("EMPTY")
@@ -194,7 +221,9 @@ Case of
 		
 		EDITOR.browser.show()
 		EDITOR.browser.setSubform("BROWSER")
-		EDITOR.browser.setValue($data)  //EDITOR.callMeBack("setURL"; $in)
+		EDITOR.browser.setValue($data)
+		
+		// MARK:- 
 		
 		//______________________________________________________
 	: ($message="projectAuditResult")
@@ -229,30 +258,6 @@ Case of
 				
 				//………………………………………………………………………………
 		End case 
-		
-		//______________________________________________________
-	: ($message="checkDevTools")  // Callback from 'editor_CHECK_INSTALLATION'
-		
-		// Update task list
-		EDITOR.removeTask($message)
-		
-		If ($data#Null:C1517)  // Store the result
-			
-			EDITOR.studio:=$data.studio
-			EDITOR.xCode:=$data.xCode
-			
-			If (EDITOR.devices=Null:C1517)  // First time -> Update the device list
-				
-				EDITOR.getDevices()
-				
-			End if 
-		End if 
-		
-		//______________________________________________________
-	: ($message="updateRibbon")
-		
-		EDITOR.teamId:=(Length:C16(String:C10(PROJECT.organization.teamId))>0)
-		EDITOR.ribbon.touch()
 		
 		//______________________________________________________
 	: ($message="build@")

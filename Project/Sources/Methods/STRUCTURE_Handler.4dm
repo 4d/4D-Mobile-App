@@ -24,51 +24,43 @@ End if
 
 // ----------------------------------------------------
 // Initialisations
-$Lon_parameters:=Count parameters:C259
 
-If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
+// Optional parameters
+If (Count parameters:C259>=1)
 	
-	// NO PARAMETERS REQUIRED
-	
-	// Optional parameters
-	If ($Lon_parameters>=1)
-		
-		$IN:=$1
-		
-	End if 
-	
-	$form:=New object:C1471(\
-		"window"; Current form window:C827; \
-		"callback"; "editor_CALLBACK"; \
-		"form"; editor_Panel_init; \
-		"tableList"; "01_tables"; \
-		"tables"; "tables"; \
-		"tableFilter"; "tables.filter"; \
-		"fieldList"; "02_fields"; \
-		"fields"; "fields"; \
-		"fieldFilter"; "fields.filter"; \
-		"published"; "published"; \
-		"publishedPtr"; OBJECT Get pointer:C1124(Object named:K67:5; "published"); \
-		"icons"; "icons"; \
-		"search"; "search"; \
-		"action"; "action"; \
-		"allow"; "allowStructureAjustment"; \
-		"allowHelp"; "allowStructureAjustment.help")
-	
-	$context:=$form.form
-	
-	If (OB Is empty:C1297($context))
-		
-		// Define locales functions
-		$context.setHelpTip:=Formula:C1597(STRUCTURE_TIPS(New object:C1471("target"; $1; "form"; $2)))
-		
-	End if 
-	
-Else 
-	
-	ABORT:C156
+	$IN:=$1
 	
 End if 
+
+$form:=New object:C1471(\
+"window"; Current form window:C827; \
+"callback"; "editor_CALLBACK"; \
+"form"; editor_Panel_init; \
+"tableList"; "01_tables"; \
+"tables"; "tables"; \
+"tableFilter"; "tables.filter"; \
+"fieldList"; "02_fields"; \
+"fields"; "fields"; \
+"fieldFilter"; "fields.filter"; \
+"published"; "published"; \
+"publishedPtr"; OBJECT Get pointer:C1124(Object named:K67:5; "published"); \
+"icons"; "icons"; \
+"search"; "search"; \
+"action"; "action"; \
+"allow"; "allowStructureAjustment"; \
+"allowHelp"; "allowStructureAjustment.help")
+
+$context:=$form.form
+
+If (OB Is empty:C1297($context))
+	
+	// Define locales functions
+	$context.setHelpTip:=Formula:C1597(STRUCTURE_TIPS(New object:C1471("target"; $1; "form"; $2)))
+	
+End if 
+
+var $class : cs:C1710.STRUCTURE
+$class:=cs:C1710.STRUCTURE.new($form)
 
 // ----------------------------------------------------
 Case of 
@@ -104,7 +96,7 @@ Case of
 				// Constraints definition
 				$context.constraints:=New object:C1471
 				
-				structure_TABLE_LIST($form)
+				$class.tableList()
 				
 				If (Num:C11(PROJECT.getCatalog().length)>=500)
 					
@@ -155,52 +147,7 @@ Case of
 		//=========================================================
 	: ($IN.action="tableList")
 		
-		structure_TABLE_LIST($form)
-		
-		//=========================================================
-	: ($IN.action="tableFilter")
-		
-		Case of 
-				
-				//………………………………………………………………………………………
-			: (Length:C16(String:C10($context.tableFilter))=0)\
-				 & (Not:C34(Bool:C1537($context.tableFilterPublished)))
-				
-				// NOTHING MORE TO DO
-				
-				//………………………………………………………………………………………
-			: (Length:C16(String:C10($context.tableFilter))>0)\
-				 & (Bool:C1537($context.tableFilterPublished))
-				
-				$t:=Get localized string:C991("filteredBy")\
-					+Char:C90(Space:K15:42)\
-					+"<span style=\"-d4-ref-user:'filter'\">"\
-					+Get localized string:C991("structName")\
-					+" ("+Get localized string:C991("published")+")"\
-					+"</span>"
-				
-				//………………………………………………………………………………………
-			: (Length:C16(String:C10($context.tableFilter))>0)
-				
-				$t:=Get localized string:C991("filteredBy")\
-					+Char:C90(Space:K15:42)\
-					+"<span style=\"-d4-ref-user:'filter'\">"\
-					+Get localized string:C991("structName")\
-					+"</span>"
-				
-				//………………………………………………………………………………………
-			: (Bool:C1537($context.tableFilterPublished))
-				
-				$t:=Get localized string:C991("filteredBy")\
-					+Char:C90(Space:K15:42)\
-					+"<span style=\"-d4-ref-user:'filter'\">"\
-					+Get localized string:C991("published")\
-					+"</span>"
-				
-				//………………………………………………………………………………………
-		End case 
-		
-		ST SET TEXT:C1115(*; $form.tableFilter; $t; ST Start text:K78:15; ST End text:K78:16)
+		$class.tableList()
 		
 		//=========================================================
 	: ($IN.action="fieldList")
@@ -217,58 +164,7 @@ Case of
 			
 		End if 
 		
-		structure_FIELD_LIST($form)
-		
-		//=========================================================
-	: ($IN.action="fieldFilter")
-		
-		Case of 
-				
-				//………………………………………………………………………………………
-			: (Length:C16(String:C10($context.fieldFilter))=0)\
-				 & (Not:C34(Bool:C1537($context.fieldFilterPublished)))
-				
-				// NOTHING MORE TO DO
-				
-				//………………………………………………………………………………………
-			: (Length:C16(String:C10($context.fieldFilter))>0)\
-				 & (Bool:C1537($context.fieldFilterPublished))
-				
-				$t:=Get localized string:C991("filteredBy")\
-					+Char:C90(Space:K15:42)\
-					+"<span style=\"-d4-ref-user:'filter'\">"\
-					+Get localized string:C991("structName")\
-					+" ("+Get localized string:C991("published")+")"\
-					+"</span>"
-				
-				//………………………………………………………………………………………
-			: (Length:C16(String:C10($context.fieldFilter))>0)
-				
-				$t:=Get localized string:C991("filteredBy")\
-					+Char:C90(Space:K15:42)\
-					+"<span style=\"-d4-ref-user:'filter'\">"\
-					+Get localized string:C991("structName")\
-					+"</span>"
-				
-				//………………………………………………………………………………………
-			: (Bool:C1537($context.fieldFilterPublished))
-				
-				$t:=Get localized string:C991("filteredBy")\
-					+Char:C90(Space:K15:42)\
-					+"<span style=\"-d4-ref-user:'filter'\">"\
-					+Get localized string:C991("published")\
-					+"</span>"
-				
-				//………………………………………………………………………………………
-		End case 
-		
-		ST SET TEXT:C1115(*; $form.fieldFilter; $t; ST Start text:K78:15; ST End text:K78:16)
-		
-		If (Bool:C1537($IN.showIfNotEmpty))
-			
-			OBJECT SET VISIBLE:C603(*; $form.fieldFilter; Length:C16($t)>0)
-			
-		End if 
+		$class.fieldList()
 		
 		//=========================================================
 	: ($IN.action="addTable")
@@ -311,139 +207,6 @@ Case of
 		
 		OBJECT SET VISIBLE:C603(*; $form.search; False:C215)
 		OBJECT SET VISIBLE:C603(*; $form.action; False:C215)
-		
-		//=========================================================
-		//MARK:appendField
-	: ($IN.action="appendField")
-		
-		var $dataModel : Object
-		$dataModel:=PROJECT.dataModel
-		
-		var $type : Integer
-		
-		var $field : cs:C1710.field
-		$field:=$IN.field
-		
-		var $table : cs:C1710.table
-		$table:=$IN.table
-		
-		Case of 
-				
-				//TODO: WIP
-			: (False:C215)
-				
-				Form:C1466.$project.ExposedStructure.addField($table; $field)
-				
-				//…………………………………………………………………………………………………
-			: (Bool:C1537($field.oneToOne))  // 1 -> N -> 1 
-				
-				$published:=Num:C11($dataModel[String:C10($table.tableNumber)][String:C10($field.name)]#Null:C1517)
-				$type:=8860
-				
-				//…………………………………………………………………………………………………
-			: ($field.kind="alias")  // Alias
-				
-				If ($field.fieldType<=EDITOR.fieldIcons.length)
-					
-					$published:=Num:C11($dataModel[String:C10($table.tableNumber)][String:C10($field.name)]#Null:C1517)
-					
-				End if 
-				
-				//…………………………………………………………………………………………………
-			: ($field.kind="calculated")  // Computed  
-				
-				If ($field.fieldType<=EDITOR.fieldIcons.length)
-					
-					$published:=Num:C11($dataModel[String:C10($table.tableNumber)][String:C10($field.name)]#Null:C1517)
-					$type:=$field.fieldType
-					
-				End if 
-				
-				//…………………………………………………………………………………………………
-			: ($field.kind="relatedEntity")  // N -> 1 relation
-				
-				$fieldModel:=$dataModel[String:C10($table.tableNumber)][$field.name]
-				
-				If ($fieldModel#Null:C1517)
-					
-					$published:=1  // All related fields are published
-					
-					var $relatedCatalog : Object
-					$relatedCatalog:=Form:C1466.$project.ExposedStructure.relatedCatalog($table.name; $field.name; True:C214)
-					
-					If ($relatedCatalog.success)
-						
-						var $o : cs:C1710.field
-						For each ($o; $relatedCatalog.fields)
-							
-							Case of 
-									
-									//______________________________________________________
-								: ($o.fieldType=8859)
-									
-									$published+=Num:C11($fieldModel[String:C10($o.name)]=Null:C1517)
-									
-									//______________________________________________________
-								: ($o.fieldType=8858)
-									
-									$published+=Num:C11($fieldModel[String:C10($o.name)]=Null:C1517)
-									
-									//______________________________________________________
-								Else 
-									
-									$c:=Split string:C1554($o.path; "."; sk ignore empty strings:K86:1)
-									
-									If ($c.length=1)
-										
-										// Field
-										$published+=Num:C11($fieldModel[String:C10($o.fieldNumber)]=Null:C1517)
-										
-									Else 
-										
-										// Link
-										$published+=Num:C11($fieldModel[$c[0]][String:C10($o.fieldNumber)]=Null:C1517)
-										
-									End if 
-									
-									//______________________________________________________
-							End case 
-						End for each 
-					End if 
-				End if 
-				
-				$type:=8858
-				
-				//…………………………………………………………………………………………………
-			: ($field.kind="relatedEntities")  // 1 -> N relation //($field.type=-2)  
-				
-				//*******************************************************************************************
-				$published:=Num:C11($dataModel[String:C10($table.tableNumber)][String:C10($field.name)]#Null:C1517)
-				//
-				// C'EST FAUX SI LE LIEN A ÉTÉ RENOMMÉ
-				// REGARDER DANS : Form.$dialog.unsynchronizedTableFields[String($Obj_in.table.tableNumber)]
-				//
-				//*******************************************************************************************
-				$type:=8859
-				
-				//…………………………………………………………………………………………………
-			Else 
-				
-				If ($field.fieldType<=EDITOR.fieldIcons.length)
-					
-					$published:=Num:C11($dataModel[String:C10($table.tableNumber)][String:C10($field.id)]#Null:C1517)
-					$type:=$field.fieldType
-					
-				End if 
-				
-				
-				//…………………………………………………………………………………………………
-		End case 
-		
-		APPEND TO ARRAY:C911(($IN.published)->; $published)
-		APPEND TO ARRAY:C911(($IN.icons)->; EDITOR.fieldIcons[$type])
-		APPEND TO ARRAY:C911(($IN.fields)->; $field.name)
-		
-		LISTBOX SET ROW FONT STYLE:C1268(*; $form.fieldList; Size of array:C274(($IN.fields)->); Plain:K14:1)
 		
 		//=========================================================
 	: ($IN.action="update")

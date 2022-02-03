@@ -340,19 +340,17 @@
 	"04] STRUCTURE": {
 		"methods": [
 			"COMPILER_STRUCTURES",
-			"STRUCTURE_ACTION",
 			"STRUCTURE_AUDIT",
-			"structure_FIELD_LIST",
 			"STRUCTURE_Handler",
 			"STRUCTURE_OBJECTS_HANDLER",
-			"structure_RELATED",
 			"structure_REPAIR",
-			"structure_TABLE_LIST",
-			"STRUCTURE_TIPS",
-			"STRUCTURE_UPDATE"
+			"STRUCTURE_TIPS"
 		],
 		"forms": [
 			"RELATED",
+			"STRUCTURE"
+		],
+		"classes": [
 			"STRUCTURE"
 		]
 	},

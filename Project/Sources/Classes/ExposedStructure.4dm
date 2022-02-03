@@ -580,15 +580,13 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 	//End if
 	
 	//==================================================================
+	// FIXME: Move to project class
 	// Adding a field to a table data model
 Function addField($table : Object; $field : cs:C1710.field)
 	
 	var $fieldID : Text
-	var $type : Integer
 	var $o; $relatedCatalog; $relatedField : Object
 	var $path : Collection
-	
-	$type:=Num:C11($field.type)
 	
 	Case of 
 			
@@ -791,6 +789,7 @@ Function addField($table : Object; $field : cs:C1710.field)
 	End case 
 	
 	//==================================================================
+	// FIXME: Move to project class
 	// Removing a field from a table data model
 Function removeField($table : Object; $fieldOrKey : Variant)
 	
@@ -1002,7 +1001,7 @@ Function _relatedFields($field : cs:C1710.field; $relationName : Text; $recursiv
 			
 			If (This:C1470.allowedTypes.indexOf($field.type)>=0)
 				
-				// MARK: TEMPO
+				// MARK: #TEMPO
 				$field.valueType:=$field.type
 				$field.id:=$field.fieldNumber
 				$field.type:=This:C1470.__fielddType($field.fieldType)
