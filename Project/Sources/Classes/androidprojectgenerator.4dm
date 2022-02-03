@@ -213,37 +213,37 @@ Function copyResources
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-	//Function copyDataSet
-	//var $0 : Object
-	//var $1 : 4D.Folder  // 4D Mobile Project
-	//var $xcassets; $copyDest : 4D.Folder
+Function copyDataSet
+	var $0 : Object
+	var $1 : 4D:C1709.Folder  // 4D Mobile Project
+	var $xcassets; $copyDest : 4D:C1709.Folder
 	
-	//$0:=New object(\
-		"success"; False; \
-		"errors"; New collection)
+	$0:=New object:C1471(\
+		"success"; False:C215; \
+		"errors"; New collection:C1472)
 	
-	//// Copy dataSet resources
-	//$xcassets:=$1.folder("project.dataSet/Resources/Assets.xcassets")
+	// Copy dataSet resources
+	$xcassets:=$1.folder("project.dataSet/Resources/Assets.xcassets")
 	
-	//If ($xcassets.exists)
-	
-	//$copyDest:=$xcassets.copyTo(Folder(This.projectPath+"app/src/main/assets"); "datadump"; fk overwrite)
-	
-	//If ($copyDest.exists)
-	
-	//$0.success:=True
-	
-	//Else 
-	//// Copy failed
-	//$0.success:=False
-	//$0.errors.push("Could not copy directory to destination: "+$copyDest.path)
-	
-	//End if 
-	
-	//Else 
-	//// Missing Assets.xcassets folder
-	//$0.errors.push("Missing source directory for copy: "+$xcassets.path)
-	//End if 
+	If ($xcassets.exists)
+		
+		$copyDest:=$xcassets.copyTo(Folder:C1567(This:C1470.projectPath+"app/src/main/assets"); "datadump"; fk overwrite:K87:5)
+		
+		If ($copyDest.exists)
+			
+			$0.success:=True:C214
+			
+		Else 
+			// Copy failed
+			$0.success:=False:C215
+			$0.errors.push("Could not copy directory to destination: "+$copyDest.path)
+			
+		End if 
+		
+	Else 
+		// Missing Assets.xcassets folder
+		$0.errors.push("Missing source directory for copy: "+$xcassets.path)
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
