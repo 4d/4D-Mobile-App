@@ -1,5 +1,9 @@
-Class constructor()
-	This:C1470.sqlite3:=cs:C1710.sqlite3.new()  // motor for sql
+Class constructor($sqlite3 : 4D:C1709.File)
+	If (Count parameters:C259>0)
+		This:C1470.sqlite3:=cs:C1710.sqlite3.new($sqlite3)
+	Else 
+		This:C1470.sqlite3:=cs:C1710.sqlite3.new()
+	End if 
 	
 	// Main public method to return stats on db file
 Function stats($dbFile : 4D:C1709.File)->$stats : Object
