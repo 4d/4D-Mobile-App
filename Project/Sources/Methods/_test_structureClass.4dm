@@ -23,7 +23,12 @@ If (Asserted:C1132($structure.success; "cs.ExposedStructure.new() failed"))
 	End if 
 	
 	ASSERT:C1129($structure.errors.length=0; "should not return an error")
-	ASSERT:C1129($structure.warnings.length>0; "should return one or more warnings")
+	
+	If (Asserted:C1132($structure.warnings.length>=2; "should return 2 or more warnings"))
+		
+		
+		
+	End if 
 	
 	// Check if a dataclass "__DeletedRecords" is not referenced
 	ASSERT:C1129($catalog.query("name = __DeletedRecords").pop()=Null:C1517)
@@ -49,10 +54,10 @@ If (Asserted:C1132($structure.success; "cs.ExposedStructure.new() failed"))
 	ASSERT:C1129($fields.query("name = 'Blob field'").pop()=Null:C1517)
 	
 	// Check if a relation N -> 1 is not referenced if the field isn't exposed
-	ASSERT:C1129($fields.query("name = toNonExposedField").pop()=Null:C1517)
+	ASSERT:C1129($fields.query("name = toNotExposedField").pop()=Null:C1517)
 	
 	// Check if a relation 1 -> N is not referenced if the related dataclass isn't exposed
-	ASSERT:C1129($fields.query("name = fromNotExposedDataclass").pop()=Null:C1517)
+	ASSERT:C1129($fields.query("name = ToNotExposedTable").pop()=Null:C1517)
 	
 End if 
 
@@ -87,7 +92,6 @@ If (Asserted:C1132(Not:C34($structure.success); "should failed"))
 End if 
 
 // Check the consistency of the catalog and the datastore
-
 $table:=$structure.catalog.query("name = :1"; "ALL_TYPES").pop()
 $fields:=$table.fields
 
