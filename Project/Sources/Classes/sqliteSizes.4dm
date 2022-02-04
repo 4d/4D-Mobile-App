@@ -23,7 +23,7 @@ Function stats($dbFile : 4D:C1709.File)->$stats : Object
 	$results:=This:C1470._dbstat()
 	
 	var $pageSize : Integer
-	$pageSize:=$results.extract("pgsize").max()  // suppose equal page size now but ...
+	$pageSize:=This:C1470._pageSize()  // $results.extract("pgsize").max()// suppose equal page size if max
 	
 	var $pgcnt : Integer
 	$pgcnt:=This:C1470._pageCount()
@@ -32,13 +32,8 @@ Function stats($dbFile : 4D:C1709.File)->$stats : Object
 	var $result : Object
 	For each ($result; $results)
 		If ($tablesMap[$result.name]#Null:C1517)
-			$stats.tables[$tablesMap[$result.name]]+=1
+			$stats.tables[$tablesMap[$result.name]]+=$result.pgsize
 		End if 
-		
-	End for each 
-	
-	For each ($table; $stats.tables)
-		$stats.tables[$table]:=($stats.tables[$table]*$stats.total)/$pgcnt
 	End for each 
 	
 	This:C1470.sqlite3.disconnect()
@@ -47,7 +42,13 @@ Function stats($dbFile : 4D:C1709.File)->$stats : Object
 	// MARK:- privates
 	
 Function _pageCount()->$pageCount : Integer
-	$pageCount:=Num:C11(This:C1470.sqlite3.execute("PRAGMA page_count;"))
+	$pageCount:=This:C1470._pragmaInteger("page_count")
+	
+Function _pageSize()->$pageSize : Integer
+	$pageSize:=This:C1470._pragmaInteger("page_size")
+	
+Function _pragmaInteger($key : Text)->$pageSize : Integer
+	$pageSize:=Num:C11(This:C1470.sqlite3.execute("PRAGMA "+$key+";"))
 	
 Function _tableMaps()->$map : Object
 	var $result; $line : Text
@@ -83,14 +84,14 @@ Function _dbstat()->$results : Collection
 				"pgsize"/*INTEGER,--Size of the page, in bytes*/; Num:C11($values[9])))
 			
 			//"path"/*TEXT,--Path to page from root*/; $values[1]; \
-								//"pageno"/*INTEGER,--Page number, or page count*/; Num($values[2]); \
-								//"pagetype"/*TEXT,--'internal', 'leaf', 'overflow', or NULL*/; $values[3]; \
-								//"ncell"/*INTEGER,--Cells on page(0 for overflow pages)*/; Num($values[4]); \
-								//"payload"/*INTEGER,--Bytes of payload on this page or btree*/; Num($values[5]); \
-								//"unused"/*INTEGER,--Bytes of unused space on this page or btree*/; Num($values[6]); \
-								//"mx_payload"/*INTEGER,--Largest payload size of all cells on this row*/; Num($values[7]); \
-								//"pgoffset"/*INTEGER,--Byte offset of the page in the database file*/; Num($values[8]); \
-								
+												//"pageno"/*INTEGER,--Page number, or page count*/; Num($values[2]); \
+												//"pagetype"/*TEXT,--'internal', 'leaf', 'overflow', or NULL*/; $values[3]; \
+												//"ncell"/*INTEGER,--Cells on page(0 for overflow pages)*/; Num($values[4]); \
+												//"payload"/*INTEGER,--Bytes of payload on this page or btree*/; Num($values[5]); \
+												//"unused"/*INTEGER,--Bytes of unused space on this page or btree*/; Num($values[6]); \
+												//"mx_payload"/*INTEGER,--Largest payload size of all cells on this row*/; Num($values[7]); \
+												//"pgoffset"/*INTEGER,--Byte offset of the page in the database file*/; Num($values[8]); \
+												
 		End if 
 	End for each 
 	
