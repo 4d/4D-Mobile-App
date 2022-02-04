@@ -763,7 +763,7 @@ Function doFieldPicker()->$count : Integer
 		
 	Else 
 		
-		ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
+		ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
 		
 	End if 
 	
@@ -878,7 +878,7 @@ Function updateProject()
 						//………………………………………………………………………………………………………
 					Else 
 						
-						//ASSERT(Not(DATABASE.isMatrix); "😰 I wonder why I'm here")
+						//ASSERT(DATABASE.isComponent; "😰 I wonder why I'm here")
 						
 						//………………………………………………………………………………………………………
 				End case 

@@ -723,27 +723,16 @@ Function isFieldAttribute($fieldName : Text; $tableName : Text)->$is : Boolean
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function isRelation($attribute : Variant)->$is : Boolean
 	
-	$is:=((This:C1470.isRelationToOne($attribute)) | (This:C1470.isRelationToMany($attribute)))
+	$is:=($attribute.relatedTableNumber#Null:C1517) || ((This:C1470.isRelationToOne($attribute)) || (This:C1470.isRelationToMany($attribute)))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function isRelationToOne($attribute : Variant)->$is : Boolean
 	
 	If (Value type:C1509($attribute)=Is object:K8:27)
 		
-		Case of 
-				
-				//______________________________________________________
-			: (This:C1470.isAlias($attribute))
-				
-				// Mark: Possible ? What to do ?
-				
-				//______________________________________________________
-			Else 
-				
-				$is:=($attribute.relatedDataClass#Null:C1517) & (Not:C34(Bool:C1537($attribute.isToMany)))
-				
-				//______________________________________________________
-		End case 
+		//$is:=($attribute.relatedDataClass#Null) & (Not(Bool($attribute.isToMany)))
+		$is:=String:C10($attribute.kind)="relatedEntity"
+		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -751,7 +740,8 @@ Function isRelationToMany($attribute : Variant)->$is : Boolean
 	
 	If (Value type:C1509($attribute)=Is object:K8:27)
 		
-		$is:=(($attribute.relatedEntities#Null:C1517) | (String:C10($attribute.kind)="relatedEntities")) | (Bool:C1537($attribute.isToMany))
+		//$is:=(($attribute.relatedEntities#Null) | (String($attribute.kind)="relatedEntities")) | (Bool($attribute.isToMany))
+		$is:=String:C10($attribute.kind)="relatedEntities"
 		
 	End if 
 	
@@ -1116,13 +1106,12 @@ Function isSortable($field : Object)->$sortable : Boolean
 	
 	If ($field.fieldType#Null:C1517)
 		
-		If ($field.fieldType#Is object:K8:27)\
-			 & ($field.fieldType#Is BLOB:K8:12)\
-			 & ($field.fieldType#Is picture:K8:10)
-			
-			$sortable:=True:C214
-			
-		End if 
+		$sortable:=($field.fieldType#Is object:K8:27)\
+			 && ($field.fieldType#Is BLOB:K8:12)\
+			 && ($field.fieldType#Is picture:K8:10)\
+			 && ($field.fieldType#38)\
+			 && ($field.fieldType#42)
+		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -1170,19 +1159,16 @@ Function getSortableFields($table; $ordered : Boolean)->$fields : Collection
 		
 		For each ($field; OB Entries:C1720($model))
 			
-			If ($field.value.fieldType#Null:C1517)
+			If (This:C1470.isSortable($field.value))
 				
-				If (This:C1470.isSortable($field.value))
+				If (Bool:C1537($field.value.computed)) | ($field.value.type=-3)
 					
-					If (Bool:C1537($field.value.computed)) | ($field.value.type=-3)
-						
-						OB REMOVE:C1226($field.value; "fieldNumber")
-						
-					End if 
-					
-					$fields.push($field.value)
+					OB REMOVE:C1226($field.value; "fieldNumber")
 					
 				End if 
+				
+				$fields.push($field.value)
+				
 			End if 
 		End for each 
 		
@@ -1831,7 +1817,7 @@ Function repairStructure($audit : Collection)
 							//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 						Else 
 							
-							ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
+							ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
 							
 							//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 					End case 
@@ -1908,7 +1894,7 @@ Function _checkFieldForRepair($current : Object; $fromAudit : Object)->$succes :
 			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		Else 
 			
-			ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
+			ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
 			
 			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	End case 

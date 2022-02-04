@@ -123,7 +123,7 @@ Case of
 						
 						// Select the item
 						//SVG SET ATTRIBUTE(*; $e.objectName; $tableID; \
-														"fill"; Choose(EDITOR.isDark; "slategray"; EDITOR.selectedFillColor))
+																					"fill"; Choose(EDITOR.isDark; "slategray"; EDITOR.selectedFillColor))
 						
 						$context.draw:=True:C214
 						$context.update:=True:C214
@@ -515,7 +515,7 @@ End case
 								//______________________________________________________
 							Else 
 								
-								ASSERT:C1129(Not:C34(DATABASE.isMatrix))
+								ASSERT:C1129(DATABASE.isComponent)
 								
 								//______________________________________________________
 						End case 

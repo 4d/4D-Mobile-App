@@ -346,7 +346,7 @@ Function fieldDefinition($tableIdentifier; $fieldPath : Text)->$field : Object
 					//______________________________________________________
 				Else 
 					
-					ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
+					ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
 					
 					//______________________________________________________
 			End case 
@@ -538,7 +538,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 									//______________________________________________________
 								Else 
 									
-									ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
+									ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
 									
 									//______________________________________________________
 							End case 
@@ -553,7 +553,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 					//______________________________________________________
 				Else 
 					
-					ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
+					ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
 					
 					//______________________________________________________
 			End case 
@@ -563,7 +563,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 		
 	Else 
 		
-		//ASSERT(Not(DATABASE.isMatrix); "😰 I wonder why I'm here")
+		//ASSERT(DATABASE.isComponent; "😰 I wonder why I'm here")
 		
 	End if 
 	
@@ -576,7 +576,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 	//$result.inverseName:=$field.inverseName
 	//$result.fields:=$fields
 	//Else 
-	//ASSERT(Not(DATABASE.isMatrix); "😰 I wonder why I'm here")
+	//ASSERT(DATABASE.isComponent; "😰 I wonder why I'm here")
 	//End if
 	
 	//==================================================================
@@ -783,7 +783,7 @@ Function addField($table : Object; $field : cs:C1710.field)
 			//………………………………………………………………………………………………………
 		Else 
 			
-			ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
+			ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
 			
 			//………………………………………………………………………………………………………
 	End case 
@@ -972,7 +972,7 @@ Don't keep:
 						//______________________________________
 					Else 
 						
-						ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
+						ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
 						
 						//______________________________________
 				End case 
@@ -980,7 +980,7 @@ Don't keep:
 				//…………………………………………………………………………………………………
 			Else 
 				
-				ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
+				ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
 				
 				//…………………………………………………………………………………………………
 		End case 
@@ -1096,7 +1096,7 @@ Function _relatedFields($field : cs:C1710.field; $relationName : Text; $recursiv
 							//______________________________________________________
 						Else 
 							
-							ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
+							ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
 							
 							//______________________________________________________
 					End case 
@@ -1133,7 +1133,7 @@ Function _relatedFields($field : cs:C1710.field; $relationName : Text; $recursiv
 			//…………………………………………………………………………………………………
 		Else 
 			
-			ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
+			ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
 			
 			//___________________________________________
 	End case 

@@ -266,14 +266,14 @@ Don't keep:
 									//$table.field.push($field)
 									////______________________________________
 									//Else 
-									//ASSERT(Not(DATABASE.isMatrix); "😰 I wonder why I'm here")
+									//ASSERT(DATABASE.isComponent; "😰 I wonder why I'm here")
 									////______________________________________
 									//End case 
 									
 									//…………………………………………………………………………………………………
 								Else 
 									
-									ASSERT:C1129(Not:C34(DATABASE.isMatrix); "😰 I wonder why I'm here")
+									ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
 									
 									//…………………………………………………………………………………………………
 							End case 
@@ -607,7 +607,7 @@ Don't keep:
 							//For each ($Txt_field;$Obj_relatedDataClass)
 							
 							//If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																																																																																																																								
+																																																																																																																																
 							//If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
 							//$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])

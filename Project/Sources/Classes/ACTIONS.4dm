@@ -321,15 +321,13 @@ Function doAddMenu()
 		
 		For each ($field; PROJECT.getSortableFields(Form:C1466.dataModel[$o.tableID]; True:C214))
 			
-			var PROJECT : cs:C1710.project
-			
-			If (PROJECT.isComputedAttribute($field))
+			If (PROJECT.isField($field))
 				
-				$fieldsMenu.append($field.name; "sort_"+$o.tableID+","+$field.name)
+				$fieldsMenu.append($field.name; "sort_"+$o.tableID+","+String:C10($field.fieldNumber))
 				
 			Else 
 				
-				$fieldsMenu.append($field.name; "sort_"+$o.tableID+","+String:C10($field.fieldNumber))
+				$fieldsMenu.append($field.name; "sort_"+$o.tableID+","+$field.name)
 				
 			End if 
 		End for each 
@@ -395,7 +393,7 @@ Function doAddMenu()
 						$menu.icon:="actions/Edit.svg"
 						$menu.scope:="currentRecord"
 						$menu.label:=Get localized string:C991("edit...")
-						$icon:=EDITOR.getIcon("actions/Edit.svg")
+						$icon:=EDITOR.getIcon($menu.icon)
 						
 						//……………………………………………………………………
 					: ($menu.add)
@@ -404,7 +402,7 @@ Function doAddMenu()
 						$menu.icon:="actions 2/Add.svg"
 						$menu.scope:="table"
 						$menu.label:=Get localized string:C991("add...")
-						$icon:=EDITOR.getIcon("actions 2/Add.svg")
+						$icon:=EDITOR.getIcon($menu.icon)
 						
 						//……………………………………………………………………
 					: ($menu.delete)
@@ -413,7 +411,7 @@ Function doAddMenu()
 						$menu.icon:="actions/Delete.svg"
 						$menu.scope:="currentRecord"
 						$menu.label:=Get localized string:C991("remove")
-						$icon:=EDITOR.getIcon("actions/Delete.svg")
+						$icon:=EDITOR.getIcon($menu.icon)
 						
 						//……………………………………………………………………
 					: ($menu.share)
@@ -422,7 +420,7 @@ Function doAddMenu()
 						$menu.icon:="actions/Send-basic.svg"
 						$menu.scope:="currentRecord"
 						$menu.label:=Get localized string:C991("share...")
-						$icon:=EDITOR.getIcon("actions/Send-basic.svg")
+						$icon:=EDITOR.getIcon($menu.icon)
 						$menu.description:=""
 						
 						//……………………………………………………………………
@@ -432,7 +430,7 @@ Function doAddMenu()
 						$menu.icon:="actions/Sort.svg"
 						$menu.scope:="table"
 						$menu.label:=Get localized string:C991("sort...")
-						$icon:=EDITOR.getIcon("actions/Sort.svg")
+						$icon:=EDITOR.getIcon($menu.icon)
 						
 						//……………………………………………………………………
 				End case 
@@ -512,23 +510,26 @@ Function doAddMenu()
 						
 						$action.parameters:=New collection:C1472
 						
-						$fields:=catalog("fields"; New object:C1471("tableName"; $table[""].name)).fields
+						var $catalog : Object
+						$catalog:=PROJECT.getCatalog().query("name = :1"; $table[""].name).pop()
+						$fields:=$catalog.fields
 						
 						For each ($t; $table)
 							
 							Case of 
 									
 									//……………………………………………………………………
-								: (Length:C16($t)=0)
+								: (Length:C16($t)=0)  //meta
 									
-									// <NOTHING MORE TO DO>
+									continue
 									
 									//……………………………………………………………………
 								: (PROJECT.isField($t))
 									
 									Case of 
+											
 											//======================================
-										: ($table[$t].name=$table[""].primaryKey)
+										: ($table[$t].name=$catalog.primaryKey)
 											
 											// DO NOT ADD A PRIMARY KEY
 											
@@ -547,11 +548,6 @@ Function doAddMenu()
 									End case 
 									
 									//……………………………………………………………………
-								: (Value type:C1509($table[$t])#Is object:K8:27)
-									
-									// <NOTHING MORE TO DO>
-									
-									//……………………………………………………………………
 								: (PROJECT.isRelation($table[$t]))
 									
 									//
@@ -568,8 +564,28 @@ Function doAddMenu()
 									End if 
 									
 									//……………………………………………………………………
+								: (PROJECT.isAlias($table[$t]))
+									
+									$field:=$fields.query("name = :1"; $table[$t].name).pop()
+									
+									If ($field.fieldType#38)\
+										 && ($field.fieldType#42)\
+										 && (Not:C34(Bool:C1537($field.readOnly)))
+										
+										$action.parameters.push(This:C1470._addParameter($field; $table[$t]; $menu.edit))
+										
+									End if 
+									
+									//……………………………………………………………………
+								Else 
+									
+									ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
+									
+									//……………………………………………………………………
 							End case 
 						End for each 
+						
+						$action.parameters:=$action.parameters.orderBy("name")
 						
 						//-------------------------------------------
 				End case 
@@ -782,7 +798,7 @@ Function doShowIconPicker()
 		$o:=This:C1470.iconPicker.getValue()
 		
 		$o.item:=$o.pathnames.indexOf(String:C10(This:C1470.current.icon))
-		$o.item:=$o.item+1  // Widget work with array
+		$o.item+=1  // ⚠️ Widget work with array
 		
 		$o.row:=This:C1470.actions.row
 		
@@ -808,6 +824,7 @@ Function doShowIconPicker()
 		
 		$o.promptColor:=0x00FFFFFF
 		$o.promptBackColor:=EDITOR.strokeColor
+		
 		$o.hidePromptSeparator:=True:C214
 		$o.forceRedraw:=True:C214
 		

@@ -52,6 +52,16 @@
 		},
 		{
 			"objects": {
+				"scopes.label": {
+					"type": "text",
+					"top": 11,
+					"left": 632,
+					"width": 60,
+					"height": 17,
+					"stroke": "#696969",
+					"textAlign": "left",
+					"text": ":xliff:scope"
+				},
 				"actions.border": {
 					"type": "rectangle",
 					"top": 33,
@@ -204,37 +214,9 @@
 							}
 						},
 						{
-							"name": "tables",
-							"dataSource": "panel.tableLabel(This:C1470)",
-							"width": 170,
-							"minWidth": 10,
-							"maxWidth": 420,
-							"resizable": false,
-							"requiredList": {
-								"$ref": "/SOURCES/lists.json#/empty"
-							},
-							"textAlign": "left",
-							"verticalAlign": "middle",
-							"events": [
-								"onBeforeDataEntry"
-							],
-							"header": {
-								"name": "Header1",
-								"text": "",
-								"textAlign": "left",
-								"verticalAlign": "middle"
-							},
-							"footer": {
-								"name": "Footer1",
-								"timeFormat": "hh_mm_ss",
-								"textAlign": "left",
-								"verticalAlign": "middle"
-							}
-						},
-						{
 							"name": "scopes",
 							"dataSource": "panel.scopeLabel(This:C1470)",
-							"width": 10,
+							"width": 120,
 							"minWidth": 10,
 							"maxWidth": 200,
 							"resizable": false,
@@ -254,6 +236,34 @@
 							},
 							"footer": {
 								"name": "Footer2",
+								"timeFormat": "hh_mm_ss",
+								"textAlign": "left",
+								"verticalAlign": "middle"
+							}
+						},
+						{
+							"name": "tables",
+							"dataSource": "panel.tableLabel(This:C1470)",
+							"width": 10,
+							"minWidth": 10,
+							"maxWidth": 420,
+							"resizable": false,
+							"requiredList": {
+								"$ref": "/SOURCES/lists.json#/empty"
+							},
+							"textAlign": "left",
+							"verticalAlign": "middle",
+							"events": [
+								"onBeforeDataEntry"
+							],
+							"header": {
+								"name": "Header1",
+								"text": "",
+								"textAlign": "left",
+								"verticalAlign": "middle"
+							},
+							"footer": {
+								"name": "Footer1",
 								"timeFormat": "hh_mm_ss",
 								"textAlign": "left",
 								"verticalAlign": "middle"
@@ -314,22 +324,12 @@
 				"tables.label": {
 					"type": "text",
 					"top": 11,
-					"left": 632,
+					"left": 752,
 					"width": 60,
 					"height": 17,
 					"stroke": "#696969",
 					"textAlign": "left",
 					"text": ":xliff:table"
-				},
-				"scopes.label": {
-					"type": "text",
-					"top": 11,
-					"left": 801,
-					"width": 60,
-					"height": 17,
-					"stroke": "#696969",
-					"textAlign": "left",
-					"text": ":xliff:scope"
 				},
 				"databaseMethod": {
 					"type": "button",
@@ -406,7 +406,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 72,
+	"geometryStamp": 99,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

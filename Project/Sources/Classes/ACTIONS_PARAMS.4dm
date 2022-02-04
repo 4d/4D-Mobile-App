@@ -1435,8 +1435,8 @@ Function doDataSourceMenu()
 Function editList()
 	
 	//$form:=New object(\
-						"static"; $static; \
-						"host"; This.path.hostInputControls(True))
+								"static"; $static; \
+								"host"; This.path.hostInputControls(True))
 	
 	//$form.folder:=This.path.hostInputControls()
 	//$manifest:=$form.folder.file("manifest.json")
@@ -1926,7 +1926,7 @@ Function formatToolTip($format : Text)->$tip : Text
 		//SHARED.resources.formattersByName:=New object
 		//var $bind
 		//For each ($bind; SHARED.resources.fieldBindingTypes\
-			.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
+						.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
 		//SHARED.resources.formattersByName[$bind.name]:=$bind
 		//End for each
 		//End if
@@ -2094,7 +2094,7 @@ Function _newUserControl($static : Boolean)
 	Else 
 		
 		// Fixme:🚧 for the development stage
-		If (Not:C34(database.isMatrix))  // Test purpose
+		If (DATABASE.isComponent)  // Test purpose
 			
 			$form.folder.delete(Delete with contents:K24:24)
 			
