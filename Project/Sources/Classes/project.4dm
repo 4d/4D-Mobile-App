@@ -326,7 +326,8 @@ Function save()
 	$file.setText(JSON Stringify:C1217(This:C1470.cleaned(); *))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Populate the target value into the project                                                                         #MARK_TODO : SHOULD BE TREATED INTO THE EDITOR CLASS
+	// TODO:Move to EDITOR class
+	// Populate the target value into the project
 Function setTarget($checkDevTools : Boolean; $target : Text)
 	
 	If (This:C1470.$ios & This:C1470.$android)
@@ -1384,7 +1385,7 @@ Function getIcon($relativePath : Text)->$icon : Picture
 	
 	If (Length:C16($relativePath)=0)
 		
-		$file:=File:C1566(EDITOR.noIcon; fk platform path:K87:2)
+		$file:=File:C1566("/RESOURCES/images/noIcon.svg")
 		
 	Else 
 		
@@ -1392,7 +1393,7 @@ Function getIcon($relativePath : Text)->$icon : Picture
 		
 		If (Not:C34($file.exists))
 			
-			$file:=File:C1566(EDITOR.errorIcon; fk platform path:K87:2)
+			$file:=File:C1566("/RESOURCES/images/errorIcon.svg")
 			
 		End if 
 	End if 
@@ -1560,7 +1561,8 @@ Function updateFormDefinitions()
 	End for each 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	/// Performs the project audit                                                                                          #MARK_TODO : remove $project.status.project
+	// TODO:Move to EDITOR class
+	/// Performs the project audit
 Function audit($audits : Object)->$audit : Object
 	
 	If (Count parameters:C259>=1)

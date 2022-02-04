@@ -110,8 +110,19 @@ Case of
 							$Obj_picker.top:=-40
 							
 							$Obj_picker.action:="tableIcons"
-							$Obj_picker.background:=0x00FFFFFF
-							$Obj_picker.backgroundStroke:=EDITOR.strokeColor
+							
+							If (EDITOR.isDark)
+								
+								$Obj_picker.background:="black"
+								$Obj_picker.backgroundStroke:="white"
+								
+							Else 
+								
+								$Obj_picker.background:="white"
+								$Obj_picker.backgroundStroke:=EDITOR.strokeColor
+								
+							End if 
+							
 							$Obj_picker.promptColor:=0x00FFFFFF
 							$Obj_picker.promptBackColor:=EDITOR.strokeColor
 							$Obj_picker.hidePromptSeparator:=True:C214

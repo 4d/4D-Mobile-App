@@ -44,6 +44,16 @@ Case of
 		
 		$bDisplay:=True:C214
 		
+		If (EDITOR.isDark)
+			
+			OBJECT SET RGB COLORS:C628(*; "selection"; "white"; "steelblue")
+			
+		Else 
+			
+			OBJECT SET RGB COLORS:C628(*; "selection"; EDITOR.selectedColor; "aliceblue")
+			
+		End if 
+		
 		//______________________________________________________
 	: ($event.code=On Unload:K2:2)
 		
@@ -109,7 +119,7 @@ If ($bDisplay)\
 				//______________________________________________________
 			: ($tProperty="background")
 				
-				OBJECT SET RGB COLORS:C628(*; "background"; Num:C11(Form:C1466.backgroundStroke); Num:C11(Form:C1466.background))
+				OBJECT SET RGB COLORS:C628(*; "background"; Form:C1466.backgroundStroke; Form:C1466.background)
 				
 				//______________________________________________________
 			: ($tProperty="noPicture")

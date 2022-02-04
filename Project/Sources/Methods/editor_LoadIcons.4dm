@@ -71,7 +71,28 @@ $icons:=New collection:C1472.resize($pathnames.length)
 
 For each ($path; $pathnames)
 	
-	READ PICTURE FILE:C678($path; $p)
+	If (EDITOR.isDark) && ($path="@.svg")
+		
+		var $svg : cs:C1710.svg
+		$svg:=cs:C1710.svg.new(File:C1566($path; fk platform path:K87:2))
+		
+		If ($svg.success)
+			
+			$svg.styleSheet(File:C1566("/RESOURCES/css/icon_dark.css"))
+			$p:=$svg.picture()
+			
+		Else 
+			
+			READ PICTURE FILE:C678($path; $p)
+			
+		End if 
+		
+	Else 
+		
+		READ PICTURE FILE:C678($path; $p)
+		
+	End if 
+	
 	CREATE THUMBNAIL:C679($p; $p; $iconWidth; $iconHeight; Scaled to fit:K6:2)
 	$icons[$i]:=$p
 	$pathnames[$i]:=Replace string:C233(Delete string:C232($path; 1; $length); Folder separator:K24:12; "/")  // Keep relative posix path
@@ -97,7 +118,28 @@ If ($folder.exists)
 	
 	For each ($path; $host)
 		
-		READ PICTURE FILE:C678($path; $p)
+		If (EDITOR.isDark) && ($path="@.svg")
+			
+			var $svg : cs:C1710.svg
+			$svg:=cs:C1710.svg.new(File:C1566($path; fk platform path:K87:2))
+			
+			If ($svg.success)
+				
+				$svg.styleSheet(File:C1566("/RESOURCES/css/icon_dark.css"))
+				$p:=$svg.picture()
+				
+			Else 
+				
+				READ PICTURE FILE:C678($path; $p)
+				
+			End if 
+			
+		Else 
+			
+			READ PICTURE FILE:C678($path; $p)
+			
+		End if 
+		
 		CREATE THUMBNAIL:C679($p; $p; $iconWidth; $iconHeight; Scaled to fit:K6:2)
 		$icons.push($p)
 		$pathnames.push("/"+Replace string:C233(Delete string:C232($path; 1; $length); Folder separator:K24:12; "/"))  // Keep relative posix path
@@ -108,7 +150,28 @@ End if
 // ----------------------------------------------------
 //                 Insert blank icon
 // ----------------------------------------------------
-READ PICTURE FILE:C678(EDITOR.noIcon; $p)
+If (EDITOR.isDark) && (EDITOR.noIcon="@.svg")
+	
+	var $svg : cs:C1710.svg
+	$svg:=cs:C1710.svg.new(File:C1566(EDITOR.noIcon; fk platform path:K87:2))
+	
+	If ($svg.success)
+		
+		$svg.styleSheet(File:C1566("/RESOURCES/css/icon_dark.css"))
+		$p:=$svg.picture()
+		
+	Else 
+		
+		READ PICTURE FILE:C678(EDITOR.noIcon; $p)
+		
+	End if 
+	
+Else 
+	
+	READ PICTURE FILE:C678(EDITOR.noIcon; $p)
+	
+End if 
+
 CREATE THUMBNAIL:C679($p; $p; $iconWidth-8; $iconHeight; Scaled to fit prop centered:K6:6)
 $pathnames.insert(0; "")
 $icons.insert(0; $p)

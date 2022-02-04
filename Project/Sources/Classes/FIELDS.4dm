@@ -62,7 +62,7 @@ Function onLoad()
 	This:C1470.selectors.distributeLeftToRight()
 	
 	// Place the download button
-	This:C1470.resources.setTitle(EDITOR.str.setText("downloadMoreResources").localized(Lowercase:C14(Get localized string:C991("formatters"))))
+	This:C1470.resources.setTitle(EDITOR.str.localize("downloadMoreResources"; Lowercase:C14(Get localized string:C991("formatters"))))
 	This:C1470.resources.bestSize(Align right:K42:4)
 	
 	// Initialize the Fields/Relations tab
@@ -227,7 +227,7 @@ Function getFieldList()->$result : Object
 						$result.iconPaths.push(String:C10($field.icon))
 						$result.formatColors.push(Foreground color:K23:1)
 						$result.nameColors.push(Foreground color:K23:1)
-						$result.icons.push(PROJECT.getIcon(String:C10($field.icon)))
+						$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
 						$result.formats.push(This:C1470._computeFormat($field; $result; $target))
 						
 						//……………………………………………………………………………………………………………
@@ -255,7 +255,7 @@ Function getFieldList()->$result : Object
 						$result.iconPaths.push(String:C10($field.icon))
 						$result.formatColors.push(Foreground color:K23:1)
 						$result.nameColors.push(Foreground color:K23:1)
-						$result.icons.push(PROJECT.getIcon(String:C10($field.icon)))
+						$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
 						$result.formats.push(This:C1470._computeFormat($field; $result; $target))
 						
 						//……………………………………………………………………………………………………………
@@ -288,7 +288,7 @@ Function getFieldList()->$result : Object
 										$result.iconPaths.push(String:C10($field.icon))
 										$result.formatColors.push(Foreground color:K23:1)
 										$result.nameColors.push(Foreground color:K23:1)
-										$result.icons.push(PROJECT.getIcon(String:C10($field.icon)))
+										$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
 										$result.formats.push(This:C1470._computeFormat($field; $result; $target))
 										
 										//______________________________________________________
@@ -306,7 +306,7 @@ Function getFieldList()->$result : Object
 										$result.iconPaths.push(String:C10($field.icon))
 										$result.formatColors.push(Foreground color:K23:1)
 										$result.nameColors.push(Foreground color:K23:1)
-										$result.icons.push(PROJECT.getIcon(String:C10($field.icon)))
+										$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
 										$result.formats.push(This:C1470._computeFormat($field; $result; $target))
 										
 										//______________________________________________________
@@ -358,7 +358,7 @@ Function getFieldList()->$result : Object
 							
 							$result.shortLabels.push($field.shortLabel)
 							$result.iconPaths.push(String:C10($field.icon))
-							$result.icons.push(PROJECT.getIcon(String:C10($field.icon)))
+							$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
 							$result.formats.push($field.format)
 							
 							If (PROJECT.isLink($table[$key]))
@@ -386,7 +386,7 @@ Function getFieldList()->$result : Object
 											$result.labels.push($field.label)
 											$result.shortLabels.push($field.shortLabel)
 											$result.iconPaths.push(String:C10($field.icon))
-											$result.icons.push(PROJECT.getIcon(String:C10($field.icon)))
+											$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
 											
 											$result.formats.push($field.format)
 											
@@ -426,7 +426,7 @@ Function getFieldList()->$result : Object
 						$result.iconPaths.push(String:C10($field.icon))
 						$result.formatColors.push(Foreground color:K23:1)
 						$result.nameColors.push(Foreground color:K23:1)
-						$result.icons.push(PROJECT.getIcon(String:C10($field.icon)))
+						$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
 						$result.formats.push(This:C1470._computeFormat($field; $result; $target))
 						
 						//……………………………………………………………………………………………………………
@@ -463,7 +463,7 @@ Function getFieldList()->$result : Object
 						
 						$result.shortLabels.push($field.shortLabel)
 						$result.iconPaths.push(String:C10($field.icon))
-						$result.icons.push(PROJECT.getIcon(String:C10($field.icon)))
+						$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
 						
 						If (Form:C1466.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)
 							
@@ -729,8 +729,18 @@ Function doShowIconPicker($e : Object)
 		
 		$o.action:="fieldIcons"
 		
-		$o.background:=0x00FFFFFF
-		$o.backgroundStroke:=EDITOR.strokeColor
+		If (EDITOR.isDark)
+			
+			$o.background:="black"
+			$o.backgroundStroke:="white"
+			
+		Else 
+			
+			$o.background:="white"
+			$o.backgroundStroke:=EDITOR.strokeColor
+			
+		End if 
+		
 		$o.promptColor:=0x00FFFFFF
 		$o.promptBackColor:=EDITOR.strokeColor
 		$o.hidePromptSeparator:=True:C214

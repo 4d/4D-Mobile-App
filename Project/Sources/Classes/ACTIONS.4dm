@@ -110,30 +110,9 @@ Function loadActions()
 	If (Form:C1466.actions#Null:C1517)
 		
 		// Compute icons
-		
 		For each ($action; Form:C1466.actions)
 			
-			If (Length:C16(String:C10($action.icon))=0)
-				
-				READ PICTURE FILE:C678(EDITOR.noIcon; $icon)
-				
-			Else 
-				
-				$file:=EDITOR.path.icon(String:C10($action.icon))
-				
-				If ($file.exists)
-					
-					READ PICTURE FILE:C678($file.platformPath; $icon)
-					
-				Else 
-					
-					READ PICTURE FILE:C678(EDITOR.errorIcon; $icon)
-					
-				End if 
-			End if 
-			
-			CREATE THUMBNAIL:C679($icon; $icon; 24; 24; Scaled to fit:K6:2)
-			$action.$icon:=$icon
+			$action.$icon:=EDITOR.getIcon($action.icon)
 			
 		End for each 
 	End if 
@@ -207,12 +186,8 @@ Function doNewAction($tableNumber : Integer)
 	
 	var $t : Text
 	var $i; $index : Integer
-	var $icon : Picture
 	var $action : Object
 	var $c : Collection
-	
-	READ PICTURE FILE:C678(EDITOR.noIcon; $icon)
-	CREATE THUMBNAIL:C679($icon; $icon; 24; 24; Scaled to fit:K6:2)
 	
 	$t:="action_"+String:C10($index)
 	
@@ -239,7 +214,7 @@ Function doNewAction($tableNumber : Integer)
 		"scope"; "table"; \
 		"shortLabel"; $t; \
 		"label"; $t; \
-		"$icon"; $icon)
+		"$icon"; EDITOR.getIcon(""))
 	
 	$action.parameters:=New collection:C1472
 	$action.parameters.push(New object:C1471(\
@@ -253,7 +228,7 @@ Function doNewAction($tableNumber : Integer)
 		// Auto define the target table if only one is published
 		For each ($t; Form:C1466.dataModel) While ($i<2)
 			
-			$i:=$i+1
+			$i+=1
 			
 		End for each 
 		
@@ -420,7 +395,7 @@ Function doAddMenu()
 						$menu.icon:="actions/Edit.svg"
 						$menu.scope:="currentRecord"
 						$menu.label:=Get localized string:C991("edit...")
-						READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/tableIcons/actions/Edit.svg").platformPath; $icon)
+						$icon:=EDITOR.getIcon("actions/Edit.svg")
 						
 						//……………………………………………………………………
 					: ($menu.add)
@@ -429,7 +404,7 @@ Function doAddMenu()
 						$menu.icon:="actions 2/Add.svg"
 						$menu.scope:="table"
 						$menu.label:=Get localized string:C991("add...")
-						READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/tableIcons/actions 2/Add.svg").platformPath; $icon)
+						$icon:=EDITOR.getIcon("actions 2/Add.svg")
 						
 						//……………………………………………………………………
 					: ($menu.delete)
@@ -438,7 +413,7 @@ Function doAddMenu()
 						$menu.icon:="actions/Delete.svg"
 						$menu.scope:="currentRecord"
 						$menu.label:=Get localized string:C991("remove")
-						READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/tableIcons/actions/Delete.svg").platformPath; $icon)
+						$icon:=EDITOR.getIcon("actions/Delete.svg")
 						
 						//……………………………………………………………………
 					: ($menu.share)
@@ -447,7 +422,7 @@ Function doAddMenu()
 						$menu.icon:="actions/Send-basic.svg"
 						$menu.scope:="currentRecord"
 						$menu.label:=Get localized string:C991("share...")
-						READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/tableIcons/actions/Send-basic.svg").platformPath; $icon)
+						$icon:=EDITOR.getIcon("actions/Send-basic.svg")
 						$menu.description:=""
 						
 						//……………………………………………………………………
@@ -457,12 +432,10 @@ Function doAddMenu()
 						$menu.icon:="actions/Sort.svg"
 						$menu.scope:="table"
 						$menu.label:=Get localized string:C991("sort...")
-						READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/tableIcons/actions/Sort.svg").platformPath; $icon)
+						$icon:=EDITOR.getIcon("actions/Sort.svg")
 						
 						//……………………………………………………………………
 				End case 
-				
-				CREATE THUMBNAIL:C679($icon; $icon; 24; 24; Scaled to fit:K6:2)
 				
 				$table:=Form:C1466.dataModel[$menu.table]
 				
@@ -804,31 +777,45 @@ Function doShowIconPicker()
 	
 	var $coordinates; $o : Object
 	
-	$o:=This:C1470.iconPicker.getValue()
-	
-	$o.item:=$o.pathnames.indexOf(String:C10(This:C1470.current.icon))
-	$o.item:=$o.item+1  // Widget work with array
-	
-	$o.row:=This:C1470.actions.row
-	
-	// Get current cell coordinates
-	$coordinates:=This:C1470.actions.cellCoordinates()
-	$o.left:=$coordinates.left
-	$o.top:=34
-	$o.right:=This:C1470.actionsBorder.coordinates.right
-	
-	$o.action:="actionIcons"
-	
-	$o.background:=0x00FFFFFF
-	$o.backgroundStroke:=EDITOR.strokeColor
-	$o.promptColor:=0x00FFFFFF
-	$o.promptBackColor:=EDITOR.strokeColor
-	$o.hidePromptSeparator:=True:C214
-	$o.forceRedraw:=True:C214
-	
-	$o.prompt:=EDITOR.str.setText("chooseAnIconForTheAction").localized(String:C10(This:C1470.current.name))
-	
-	This:C1470.callMeBack("pickerShow"; $o)
+	If (This:C1470.current#Null:C1517)
+		
+		$o:=This:C1470.iconPicker.getValue()
+		
+		$o.item:=$o.pathnames.indexOf(String:C10(This:C1470.current.icon))
+		$o.item:=$o.item+1  // Widget work with array
+		
+		$o.row:=This:C1470.actions.row
+		
+		// Get current cell coordinates
+		$coordinates:=This:C1470.actions.cellCoordinates()
+		$o.left:=$coordinates.left
+		$o.top:=34
+		$o.right:=This:C1470.actionsBorder.coordinates.right
+		
+		$o.action:="actionIcons"
+		
+		If (EDITOR.isDark)
+			
+			$o.background:="black"
+			$o.backgroundStroke:="white"
+			
+		Else 
+			
+			$o.background:="white"
+			$o.backgroundStroke:=EDITOR.strokeColor
+			
+		End if 
+		
+		$o.promptColor:=0x00FFFFFF
+		$o.promptBackColor:=EDITOR.strokeColor
+		$o.hidePromptSeparator:=True:C214
+		$o.forceRedraw:=True:C214
+		
+		$o.prompt:=EDITOR.str.setText("chooseAnIconForTheAction").localized(String:C10(This:C1470.current.name))
+		
+		This:C1470.callMeBack("pickerShow"; $o)
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function _addAction($action : Object)

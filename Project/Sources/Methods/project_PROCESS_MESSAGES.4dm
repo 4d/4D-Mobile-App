@@ -415,8 +415,7 @@ Case of
 			
 			If (Length:C16($container)>0)
 				
-				EDITOR.callChild($container; "ACTIONS_CALLBACK"; $selector)
-				//panel($ƒ.actions).loadIcons()
+				EDITOR.callChild($container; Formula:C1597(ACTIONS_CALLBACK).source; $selector)
 				
 			End if 
 		End if 

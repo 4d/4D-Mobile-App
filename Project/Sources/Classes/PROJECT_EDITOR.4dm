@@ -737,6 +737,55 @@ Function ribbonContainer($e : Object)
 	
 	//MARK:-TOOLS
 	//=== === === === === === === === === === === === === === === === === === === === ===
+Function getIcon($relativePath : Text)->$icon : Picture
+	
+	var $file : 4D:C1709.File
+	
+	If (Length:C16($relativePath)=0)
+		
+		$file:=File:C1566(EDITOR.noIcon; fk platform path:K87:2)
+		
+	Else 
+		
+		$file:=cs:C1710.path.new().icon($relativePath)
+		
+		If (Not:C34($file.exists))
+			
+			$file:=File:C1566(EDITOR.errorIcon; fk platform path:K87:2)
+			
+		End if 
+	End if 
+	
+	If ($file.exists)
+		
+		If (EDITOR.isDark) && ($file.extension=".svg")
+			
+			var $svg : cs:C1710.svg
+			$svg:=cs:C1710.svg.new($file)
+			
+			If ($svg.success)
+				
+				$svg.styleSheet(File:C1566("/RESOURCES/css/icon_dark.css"))
+				$icon:=$svg.picture()
+				
+			Else 
+				
+				READ PICTURE FILE:C678($file.platformPath; $icon)
+				
+			End if 
+			
+		Else 
+			
+			READ PICTURE FILE:C678($file.platformPath; $icon)
+			
+		End if 
+		
+		
+		CREATE THUMBNAIL:C679($icon; $icon; 24; 24; Scaled to fit:K6:2)
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function checkDevTools()
 	
 	This:C1470.addTask("checkDevTools")
