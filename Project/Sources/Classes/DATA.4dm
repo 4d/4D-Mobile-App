@@ -690,7 +690,7 @@ Function doQueryWidget()
 							
 						Else 
 							
-							$menu.icon("Images/fieldsIcons/field_"+String:C10($field.typeLegacy; "00")+".png")
+							$menu.icon("Images/light/fieldsIcons/field_"+String:C10($field.typeLegacy; "00")+".png")
 							
 						End if 
 					End for each 

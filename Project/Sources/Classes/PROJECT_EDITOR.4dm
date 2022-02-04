@@ -361,7 +361,7 @@ Function updateColorScheme()
 	Else 
 		
 		// * PRE-LOADING ICONS FOR FIELD TYPES
-		For each ($file; Folder:C1567("/RESOURCES/images/fieldsIcons").files(Ignore invisible:K24:16))
+		For each ($file; Folder:C1567("/RESOURCES/images/light/fieldsIcons").files(Ignore invisible:K24:16))
 			
 			READ PICTURE FILE:C678($file.platformPath; $icon)
 			This:C1470.fieldIcons[Num:C11(Replace string:C233($file.name; "field_"; ""))]:=$icon
