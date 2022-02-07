@@ -41,9 +41,9 @@
 		</field>
 		<primary_key field_name="ID" field_uuid="A3A83460686047C694B467689032AAD8"/>
 		<table_extra input_form="Form1" output_form="Form2">
-			<editor_table_info displayable_fields_count="14">
+			<editor_table_info displayable_fields_count="12">
 				<color red="237" green="211" blue="181" alpha="255"/>
-				<coordinates left="1.6695556640625" top="384.0869140625" width="159.21148681641" height="355.99090576172"/>
+				<coordinates left="1.6695556640625" top="384.0869140625" width="153" height="293.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -84,7 +84,7 @@
 		<table_extra input_form="Input" output_form="Output">
 			<editor_table_info displayable_fields_count="7">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="649" top="196.53088378906" width="239" height="188.33203125"/>
+				<coordinates left="623" top="118" width="239" height="188.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -98,7 +98,7 @@
 		<table_extra input_form="Input" output_form="Output">
 			<editor_table_info displayable_fields_count="5">
 				<color red="226" green="158" blue="214" alpha="255"/>
-				<coordinates left="423" top="797.40930175781" width="98.27734375" height="159.0546875"/>
+				<coordinates left="424.32995605469" top="596.02020263672" width="97" height="146.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -156,9 +156,9 @@
 		<field name="Gender" uuid="8D4495BAE2A0462D981A8AB8B2742F44" type="10" limiting_length="255" never_null="true" id="7"/>
 		<primary_key field_name="ID" field_uuid="0A26D100922E475A92C49657B6C02271"/>
 		<table_extra input_form="Input" output_form="Output">
-			<editor_table_info displayable_fields_count="16">
+			<editor_table_info displayable_fields_count="7">
 				<color red="150" green="216" blue="175" alpha="255"/>
-				<coordinates left="216.6845703125" top="944.85986328125" width="146.50476074219" height="389.46936035157"/>
+				<coordinates left="221.29174804688" top="862.47894287109" width="140" height="188.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -183,7 +183,7 @@
 		<table_extra input_form="Input" output_form="Output">
 			<editor_table_info fields_ordering="1" displayable_fields_count="4">
 				<color red="150" green="216" blue="175" alpha="255"/>
-				<coordinates left="423" top="987.09350585938" width="140" height="125.33203125"/>
+				<coordinates left="427.60717773438" top="904.71258544922" width="140" height="125.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -202,7 +202,7 @@
 		<table_extra input_form="Input" output_form="Output">
 			<editor_table_info displayable_fields_count="4">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="322.94226074219" top="145.56646728515" width="205" height="125.33203125"/>
+				<coordinates left="322.94226074219" top="118" width="205" height="125.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -220,7 +220,7 @@
 		<table_extra input_form="" output_form="">
 			<editor_table_info displayable_fields_count="3">
 				<color red="186" green="170" blue="158" alpha="255"/>
-				<coordinates left="833" top="443" width="140" height="104.33203125"/>
+				<coordinates left="623" top="442" width="140" height="104.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -230,7 +230,7 @@
 		<table_extra input_form="Input" output_form="Output">
 			<editor_table_info fields_ordering="1" displayable_fields_count="1">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="228.94442749024" top="301.62615966797" width="125" height="62.33203125"/>
+				<coordinates left="246.24105834962" top="287" width="125" height="62.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -242,7 +242,7 @@
 		<table_extra input_form="Input" output_form="Output">
 			<editor_table_info displayable_fields_count="3">
 				<color red="226" green="158" blue="214" alpha="255"/>
-				<coordinates left="649" top="834.87805175781" width="109" height="104.33203125"/>
+				<coordinates left="624.32995605469" top="633.48895263672" width="109" height="104.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -250,7 +250,7 @@
 		<table_extra input_form="" output_form="">
 			<editor_table_info fields_ordering="1" displayable_fields_count="1">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="414.71942138672" top="298.90173339844" width="107.8515625" height="64.09765625"/>
+				<coordinates left="423" top="287" width="95" height="62.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -269,7 +269,7 @@
 		<table_extra input_form="Form2" output_form="Form1">
 			<editor_table_info displayable_fields_count="4">
 				<color red="237" green="211" blue="181" alpha="255"/>
-				<coordinates left="218.35412597656" top="447.8994140625" width="140" height="125.33203125"/>
+				<coordinates left="218.35412597656" top="442" width="140" height="125.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -281,7 +281,7 @@
 		<table_extra input_form="Input" output_form="Output">
 			<editor_table_info displayable_fields_count="3">
 				<color red="226" green="158" blue="214" alpha="255"/>
-				<coordinates left="833" top="898.67492675781" width="107" height="104.33203125"/>
+				<coordinates left="834.32995605469" top="697.28582763672" width="107" height="104.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -293,7 +293,7 @@
 		<table_extra input_form="Input" output_form="Output">
 			<editor_table_info displayable_fields_count="3">
 				<color red="226" green="158" blue="214" alpha="255"/>
-				<coordinates left="1043.171875" top="944.06164550781" width="107" height="104.33203125"/>
+				<coordinates left="1044.5018310547" top="742.67254638672" width="107" height="104.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -308,9 +308,9 @@
 		</field>
 		<primary_key field_name="ID" field_uuid="0A0571E2BC7848A190753D9A5736D8FE"/>
 		<table_extra input_form="" output_form="">
-			<editor_table_info displayable_fields_count="5">
+			<editor_table_info displayable_fields_count="2">
 				<color red="186" green="170" blue="158" alpha="255"/>
-				<coordinates left="423" top="443" width="115.89343261719" height="166.93585205078"/>
+				<coordinates left="423" top="442" width="103" height="83.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -329,7 +329,7 @@
 		<table_extra input_form="" output_form="">
 			<editor_table_info displayable_fields_count="4">
 				<color red="186" green="170" blue="158" alpha="255"/>
-				<coordinates left="649" top="541.11328125" width="140" height="125.33203125"/>
+				<coordinates left="838.35888671875" top="442" width="140" height="125.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -343,7 +343,7 @@
 		<table_extra>
 			<editor_table_info fields_ordering="1" displayable_fields_count="5">
 				<color red="255" green="38" blue="0" alpha="255"/>
-				<coordinates left="1066.1666870117" top="0" width="192.77905273438" height="155.77716064453"/>
+				<coordinates left="904.4840698242" top="0" width="138" height="146.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -362,7 +362,7 @@
 		<table_extra>
 			<editor_table_info displayable_fields_count="4">
 				<color red="150" green="216" blue="175" alpha="255"/>
-				<coordinates left="216.6845703125" top="755.36315917969" width="151.1494140625" height="140.19342041016"/>
+				<coordinates left="221.29174804688" top="672.98223876953" width="140" height="125.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -382,7 +382,7 @@
 		<table_extra>
 			<editor_table_info displayable_fields_count="5">
 				<color red="150" green="216" blue="175" alpha="255"/>
-				<coordinates left="0" top="810.39825439452" width="142.39007568359" height="165.66552734375"/>
+				<coordinates left="4.607177734375" top="728.01733398436" width="140" height="146.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -392,9 +392,9 @@
 		<primary_key field_name="primaryKey_1" field_uuid="6C252095AE96468EAF6C2A7A1652F17C"/>
 		<primary_key field_name="primaryKey_2" field_uuid="B0666F63300B49A789A656F24D07BBDE"/>
 		<table_extra>
-			<editor_table_info displayable_fields_count="6">
+			<editor_table_info displayable_fields_count="2">
 				<color red="255" green="255" blue="255" alpha="0"/>
-				<coordinates left="649" top="0" width="269.05310058594" height="171.37194824219"/>
+				<coordinates left="623" top="0" width="199" height="83.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -428,7 +428,7 @@
 		</related_field>
 		<relation_extra entry_wildchar="false" entry_create="false" choice_field="0" entry_autofill="false">
 			<editor_relation_info via_point_x="-1" via_point_y="-1" prefers_left="false" smartlink="true">
-				<color red="255" green="38" blue="0" alpha="255"/>
+				<color red="0" green="143" blue="0" alpha="255"/>
 			</editor_relation_info>
 		</relation_extra>
 	</relation>
@@ -564,7 +564,7 @@
 		</related_field>
 		<relation_extra entry_wildchar="false" entry_create="false" choice_field="0" entry_autofill="false">
 			<editor_relation_info via_point_x="-1" via_point_y="-1" prefers_left="false" smartlink="true">
-				<color red="186" green="170" blue="158" alpha="255"/>
+				<color red="255" green="153" blue="63" alpha="255"/>
 			</editor_relation_info>
 		</relation_extra>
 	</relation>
@@ -598,7 +598,7 @@
 		</related_field>
 		<relation_extra entry_wildchar="false" entry_create="false" choice_field="0" entry_autofill="false">
 			<editor_relation_info via_point_x="-1" via_point_y="-1" prefers_left="false" smartlink="true">
-				<color red="186" green="170" blue="158" alpha="255"/>
+				<color red="255" green="153" blue="63" alpha="255"/>
 			</editor_relation_info>
 		</relation_extra>
 	</relation>

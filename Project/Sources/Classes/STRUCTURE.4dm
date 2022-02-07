@@ -774,13 +774,13 @@ Function doFieldPicker()->$count : Integer
 	/// Update the project according to the published fields
 Function updateProject()
 	
-	var $t : Text
+	var $key : Text
 	var $found : Boolean
 	var $indx : Integer
 	var $context; $form; $o : Object
 	var $published : Collection
-	var $table; $currentTable : cs:C1710.table
-	var $field : cs:C1710.field
+	var $tableModel; $currentTable : cs:C1710.table
+	var $field; $fieldModel : cs:C1710.field
 	var $structure : cs:C1710.ExposedStructure
 	
 	// ----------------------------------------------------
@@ -814,12 +814,12 @@ Function updateProject()
 		
 	Else 
 		
-		$table:=PROJECT.dataModel[String:C10($currentTable.tableNumber)]
+		$tableModel:=PROJECT.dataModel[String:C10($currentTable.tableNumber)]
 		
-		If ($table=Null:C1517)
+		If ($tableModel=Null:C1517)
 			
 			// Add the table to the data model
-			$table:=PROJECT.addTable($currentTable)
+			$tableModel:=PROJECT.addTable($currentTable)
 			
 			// UI - Emphasize the table name
 			$indx:=Find in array:C230((OBJECT Get pointer:C1124(Object named:K67:5; $form.tableList))->; True:C214)
@@ -833,65 +833,62 @@ Function updateProject()
 			// Search if the item exists in the data model
 			$found:=False:C215
 			
-			For each ($t; $table) Until ($found)
+			For each ($key; $tableModel) Until ($found)
 				
-				//ASSERT($o.name#"identifier")
-				
-				Case of 
-						
-						//………………………………………………………………………………………………………
-					: (Length:C16($t)=0)
-						
-						// <NOTHING MORE TO DO>
-						
-						//………………………………………………………………………………………………………
-					: (PROJECT.isField($t))
-						
-						$found:=(String:C10($table[$t].name)=$o.name)
-						$t:=$o.name
-						
-						//………………………………………………………………………………………………………
-					: (Value type:C1509($table[$t])#Is object:K8:27)
-						
-						// <NOTHING MORE TO DO>
-						
-						//………………………………………………………………………………………………………
-					: (PROJECT.isRelationToOne($table[$t]))  // N -> 1 relation
-						
-						$found:=(String:C10($o.name)=$t) & (Num:C11($o.published)#2)  // Not mixed
-						
-						//………………………………………………………………………………………………………
-					: (PROJECT.isRelationToMany($table[$t]))  // 1 -> N relation
-						
-						$found:=(String:C10($o.name)=$t)
-						
-						//………………………………………………………………………………………………………
-					: (PROJECT.isComputedAttribute($table[$t]))  // Computed attribute
-						
-						$found:=(String:C10($o.name)=$t)
-						
-						//………………………………………………………………………………………………………
-					: (PROJECT.isAlias($table[$t]))  // Computed attribute
-						
-						$found:=(String:C10($o.name)=$t)
-						
-						//………………………………………………………………………………………………………
-					Else 
-						
-						//ASSERT(DATABASE.isComponent; "😰 I wonder why I'm here")
-						
-						//………………………………………………………………………………………………………
-				End case 
+				If (Length:C16($key)=0)  // Metadata
+					
+					continue
+					
+				Else 
+					
+					$fieldModel:=$tableModel[$key]
+					
+					Case of 
+							
+							//………………………………………………………………………………………………………
+						: ($fieldModel.kind="storage")
+							
+							$found:=(String:C10($fieldModel.name)=$o.name)
+							$key:=$o.name
+							
+							//………………………………………………………………………………………………………
+						: ($fieldModel.kind="relatedEntity")  // N -> 1 relation
+							
+							$found:=(String:C10($o.name)=$key) & (Num:C11($o.published)#2)  // Not mixed
+							
+							//………………………………………………………………………………………………………
+						: ($fieldModel.kind="relatedEntities")  // 1 -> N relation
+							
+							$found:=(String:C10($o.name)=$key)
+							
+							//………………………………………………………………………………………………………
+						: ($fieldModel.kind="calculated")  // Computed attribute
+							
+							$found:=(String:C10($o.name)=$key)
+							
+							//………………………………………………………………………………………………………
+						: ($fieldModel.kind="alias")  // Computed attribute
+							
+							$found:=(String:C10($o.name)=$key)
+							
+							//………………………………………………………………………………………………………
+						Else 
+							
+							//ASSERT(DATABASE.isComponent; "😰 I wonder why I'm here")
+							
+							//………………………………………………………………………………………………………
+					End case 
+				End if 
 			End for each 
 			
 			If ($found)
 				
-				$field:=$currentTable.field.query("name = :1"; $t).pop()
+				$field:=$currentTable.fields.query("name = :1"; $key).pop()
 				
 			Else 
 				
 				// Get from cache
-				$field:=$currentTable.field.query("name = :1"; $o.name).pop()
+				$field:=$currentTable.fields.query("name = :1"; $o.name).pop()
 				
 			End if 
 			
@@ -900,7 +897,7 @@ Function updateProject()
 					//_____________________________________________________
 				: (Num:C11($o.published)=1) & Not:C34($found)  // ADDED
 					
-					$structure.addField($table; $field)
+					$structure.addField($tableModel; $field)
 					
 					//_____________________________________________________
 				: (Num:C11($o.published)=0) & $found  // REMOVED
@@ -908,11 +905,11 @@ Function updateProject()
 					If ($field.kind="alias")\
 						 || ($field.kind="computed")
 						
-						$structure.removeField($table; $field.name)
+						$structure.removeField($tableModel; $field.name)
 						
 					Else 
 						
-						$structure.removeField($table; Choose:C955(Num:C11($field.type)<0; $o.name; $field.id))
+						$structure.removeField($tableModel; Choose:C955(Num:C11($field.type)<0; $o.name; $field.id))
 						
 					End if 
 					
@@ -931,7 +928,7 @@ Function updateProject()
 		End for each 
 		
 		// REMOVE TABLE IF NO MORE PUBLISHED FIELDS
-		If (OB Keys:C1719($table).length=1)
+		If (OB Keys:C1719($tableModel).length=1)
 			
 			PROJECT.removeTable($currentTable.tableNumber)
 			

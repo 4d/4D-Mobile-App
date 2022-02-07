@@ -554,47 +554,6 @@ Function updateActions
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function removeFromMain($table)
-	var $index : Integer
-	var $main : Object
-	
-	$main:=This:C1470.main
-	
-	If ($main.order=Null:C1517)
-		
-		$main.order:=New collection:C1472
-		
-	Else 
-		
-		$index:=$main.order.indexOf(String:C10($table))
-		
-		If ($index#-1)
-			
-			$main.order.remove($index)
-			
-		End if 
-	End if 
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function addToMain($table)
-	var $main : Object
-	
-	$main:=This:C1470.main
-	
-	If ($main.order=Null:C1517)
-		
-		$main.order:=New collection:C1472(String:C10($table))
-		
-	Else 
-		
-		If ($main.order.indexOf(String:C10($table))=-1)
-			
-			$main.order.push(String:C10($table))
-			
-		End if 
-	End if 
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the collection of the tables of the data model
 Function tables($datamodel : Object)->$tables : Collection
 	
@@ -1190,13 +1149,14 @@ Function getSortableFields($table; $ordered : Boolean)->$fields : Collection
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//Add a table to the data model
-Function addTable($table : Object)->$tableModel : Object
+Function addTable($table : cs:C1710.table)->$tableModel : Object
 	
+	var $tableNumber : Integer
 	var $o : Object
 	
-	ASSERT:C1129($table.tableNumber#Null:C1517)
+	$tableNumber:=Num:C11($table.tableNumber)
 	
-	$o:=This:C1470.getCatalog().query("tableNumber = :1"; $table.tableNumber).pop()
+	$o:=This:C1470.getCatalog().query("tableNumber = :1"; $tableNumber).pop()
 	ASSERT:C1129($o#Null:C1517)
 	
 	// Put internal properties into a substructure
@@ -1217,9 +1177,58 @@ Function addTable($table : Object)->$tableModel : Object
 	End if 
 	
 	// Update main
-	This:C1470.addToMain($table.tableNumber)
+	This:C1470.addToMain($table)
 	
-	This:C1470.dataModel[String:C10($table.tableNumber)]:=$tableModel
+	This:C1470.dataModel[String:C10($tableNumber)]:=$tableModel
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function addToMain($table)
+	
+	var $tableID : Text
+	var $main : Object
+	
+	$main:=This:C1470.main
+	
+	Case of 
+			
+			//______________________________________________________
+		: (Value type:C1509($table)=Is object:K8:27)
+			
+			ASSERT:C1129($table.tableNumber#Null:C1517)
+			
+			$tableID:=String:C10($table.tableNumber)
+			
+			//______________________________________________________
+		: (Value type:C1509($table)=Is text:K8:3)
+			
+			$tableID:=$table
+			
+			//______________________________________________________
+		: (Value type:C1509($table)=Is longint:K8:6)\
+			 | (Value type:C1509($table)=Is real:K8:4)
+			
+			$tableID:=String:C10($table)
+			
+			//______________________________________________________
+		Else 
+			
+			ASSERT:C1129(False:C215)
+			
+			//______________________________________________________
+	End case 
+	
+	If ($main.order=Null:C1517)
+		
+		$main.order:=New collection:C1472($tableID)
+		
+	Else 
+		
+		If ($main.order.indexOf($tableID)=-1)
+			
+			$main.order.push($tableID)
+			
+		End if 
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Delete the table from the data model
@@ -1233,6 +1242,28 @@ Function removeTable($table)
 	
 	// Update main
 	This:C1470.removeFromMain($table)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function removeFromMain($table)
+	var $index : Integer
+	var $main : Object
+	
+	$main:=This:C1470.main
+	
+	If ($main.order=Null:C1517)
+		
+		$main.order:=New collection:C1472
+		
+	Else 
+		
+		$index:=$main.order.indexOf(String:C10($table))
+		
+		If ($index#-1)
+			
+			$main.order.remove($index)
+			
+		End if 
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function getCatalog()->$catalog : Collection

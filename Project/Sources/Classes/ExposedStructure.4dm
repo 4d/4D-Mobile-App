@@ -440,7 +440,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 						$field.id:=$field.fieldNumber
 						$field.type:=This:C1470.__fielddType($field.fieldType)
 						
-						$field.path:=$field.name
+						$field.path:=$field.name  //New collection($relationName; $field.name).join(".")
 						$field.relatedTableNumber:=$field.relatedTableNumber
 						
 						$result.fields.push($field)
@@ -468,20 +468,24 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 					
 					// MARK: TEMPO
 					$field.valueType:=$field.type
-					//$field.type:=This.__fielddType($field.fieldType)
 					
 					$field.path:=$field.name
-					$field.relatedTableNumber:=$field.relatedTableNumber
+					//$field.relatedTableNumber:=$field.relatedTableNumber
 					
 					$result.fields.push($field)
 					
 					//___________________________________________
 				: ($field.kind="relatedEntity")  // N -> 1 relation attribute (reference to an entity)
 					
-					If ($recursive)
+					If ($recursive)  //&& ($field.relatedDataClass#$tableName)
+						
+						$field.relatedTableNumber:=This:C1470.tableNumber($field.relatedDataClass)
+						//$field.relatedDataClass:=This.tableNumber($field.relatedDataClass)
+						
+						//$result.fields.push($field)
 						
 						var $relatedField; $related : cs:C1710.field
-						For each ($relatedField; This:C1470.catalog.query("name = :1"; $result.relatedDataClass).pop().field)
+						For each ($relatedField; This:C1470.catalog.query("name = :1"; $field.relatedDataClass).pop().fields)
 							
 							Case of 
 									
@@ -492,7 +496,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 										
 										$related:=OB Copy:C1225($relatedField)
 										$related.path:=New collection:C1472($field.name; $related.name).join(".")
-										$related.tableNumber:=This:C1470.tableNumber($result.relatedDataClass)
+										$related.tableNumber:=This:C1470.tableNumber($field.relatedDataClass)
 										
 										$result.fields.push($related)
 										
@@ -505,7 +509,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 										
 										$related:=OB Copy:C1225($relatedField)
 										$related.path:=New collection:C1472($field.name; $related.name).join(".")
-										$related.tableNumber:=This:C1470.tableNumber($result.relatedDataClass)
+										$related.tableNumber:=This:C1470.tableNumber($field.relatedDataClass)
 										
 										$result.fields.push($related)
 										
@@ -531,7 +535,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 									
 									$related:=OB Copy:C1225($relatedField)
 									$related.path:=New collection:C1472($field.name; $related.name).join(".")
-									$related.tableNumber:=This:C1470.tableNumber($result.relatedDataClass)
+									$related.tableNumber:=This:C1470.tableNumber($field.relatedDataClass)
 									
 									$result.fields.push($related)
 									
@@ -543,6 +547,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 									//______________________________________________________
 							End case 
 						End for each 
+						
 					End if 
 					
 					//___________________________________________
@@ -682,18 +687,18 @@ Function addField($table : Object; $field : cs:C1710.field)
 				// Create the field, if any
 				If ($path.length>1)
 					
-					If ($table[$path[0]]=Null:C1517)
+					If ($o[$path[0]]=Null:C1517)
 						
-						$table[$path[0]]:=New object:C1471(\
+						$o[$path[0]]:=New object:C1471(\
 							"relatedDataClass"; $relatedField.tableName; \
 							"relatedTableNumber"; $relatedField.tableNumber; \
 							"inverseName"; This:C1470.table($table[""].name).field.query("name=:1"; $field.name).pop().inverseName)
 						
 					End if 
 					
-					If ($table[$path[0]][$fieldID]=Null:C1517)
+					If ($o[$path[0]][$fieldID]=Null:C1517)
 						
-						$table[$path[0]][$fieldID]:=New object:C1471(\
+						$o[$path[0]][$fieldID]:=New object:C1471(\
 							"kind"; $relatedField.kind; \
 							"name"; $relatedField.name; \
 							"path"; $relatedField.path; \
@@ -706,8 +711,8 @@ Function addField($table : Object; $field : cs:C1710.field)
 					
 				Else 
 					
-					
 					Case of 
+							
 							//______________________________________________________
 						: ($relatedField.kind="storage") && ($o[$fieldID]=Null:C1517)
 							
@@ -732,6 +737,7 @@ Function addField($table : Object; $field : cs:C1710.field)
 								"type"; $relatedField.type; \
 								"fieldType"; $relatedField.fieldType)
 							
+							
 							//______________________________________________________
 						: ($relatedField.kind="alias") && ($o[$relatedField.name]=Null:C1517)
 							
@@ -744,31 +750,21 @@ Function addField($table : Object; $field : cs:C1710.field)
 								"type"; $relatedField.type; \
 								"fieldType"; $relatedField.fieldType)
 							
-							
-							
 							//______________________________________________________
-						: (Bool:C1537($relatedField.isToMany))
+						: ($relatedField.kind="relatedEntities") && ($o[$relatedField.name]=Null:C1517)
 							
-							If ($o[$relatedField.name]=Null:C1517)
-								
-								$o[$relatedField.name]:=New object:C1471(\
-									"name"; $relatedField.name; \
-									"relatedDataClass"; $relatedField.relatedDataClass; \
-									"relatedTableNumber"; This:C1470.tableNumber($relatedField.relatedDataClass); \
-									"path"; $field.name+"."+$relatedField.path; \
-									"label"; PROJECT.labelList($relatedField.name); \
-									"shortLabel"; PROJECT.label($relatedField.name); \
-									"inverseName"; $relatedField.inverseName; \
-									"isToMany"; True:C214)
-								
-							End if 
+							$o[$relatedField.name]:=New object:C1471(\
+								"kind"; $relatedField.kind; \
+								"name"; $relatedField.name; \
+								"path"; New collection:C1472($field.name; $relatedField.path).join("."); \
+								"label"; PROJECT.labelList($relatedField.name); \
+								"shortLabel"; PROJECT.label($relatedField.name); \
+								"inverseName"; $relatedField.inverseName; \
+								"relatedDataClass"; $relatedField.relatedDataClass; \
+								"relatedTableNumber"; This:C1470.tableNumber($relatedField.relatedDataClass))
 							
-							
-							
-							//______________________________________________________
-						: (False:C215)
-							
-							
+							// Mark: #TEMPO
+							$o[$relatedField.name].isToMany:=True:C214
 							
 							//______________________________________________________
 						Else 
