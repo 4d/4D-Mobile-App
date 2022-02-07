@@ -11,7 +11,8 @@
 	},
 	"____FOR_TESTS": {
 		"classes": [
-			"ALL_TYPESEntity"
+			"ALL_TYPESEntity",
+			"EmployesEntity"
 		]
 	},
 	"__IN WORKS": {

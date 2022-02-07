@@ -244,7 +244,7 @@
 					"top": 59,
 					"left": 465,
 					"width": 24,
-					"height": 24,
+					"height": 29,
 					"shortcutKey": "[right arrow]",
 					"icon": "/RESOURCES/images/common/next.png",
 					"iconFrames": 4,
@@ -259,7 +259,7 @@
 					"top": 148,
 					"left": 465,
 					"width": 24,
-					"height": 24,
+					"height": 29,
 					"shortcutKey": "[left arrow]",
 					"shortcutShift": true,
 					"focusable": false,
@@ -276,7 +276,7 @@
 					"top": 118,
 					"left": 465,
 					"width": 24,
-					"height": 24,
+					"height": 29,
 					"shortcutKey": "[left arrow]",
 					"focusable": false,
 					"icon": "/RESOURCES/images/common/previous.png",
@@ -292,7 +292,7 @@
 					"top": 88,
 					"left": 465,
 					"width": 24,
-					"height": 24,
+					"height": 29,
 					"shortcutKey": "[right arrow]",
 					"shortcutShift": true,
 					"focusable": false,
@@ -375,5 +375,13 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"method": "main_Handler"
+	"method": "main_Handler",
+	"geometryStamp": 8,
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	}
 }

@@ -528,7 +528,8 @@
 					"focusable": false,
 					"visibility": "hidden",
 					"class": "comment",
-					"contextMenu": "none"
+					"contextMenu": "none",
+					"fill": "transparent"
 				},
 				"03_sortOrder.border": {
 					"type": "rectangle",
