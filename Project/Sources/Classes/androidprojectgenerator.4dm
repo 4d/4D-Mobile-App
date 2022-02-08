@@ -1241,7 +1241,7 @@ Function copyFormatterFilesToApp
 	
 	var $Obj_copyFilesRecursively : Object
 	
-	$Obj_copyFilesRecursively:=This:C1470.copyFilesRecursively($1.folder("android/res"); Folder:C1567(This:C1470.projectPath+"app/src/main"))
+	$Obj_copyFilesRecursively:=This:C1470.copyFilesRecursively($1.folder("android/res"); Folder:C1567(This:C1470.projectPath+"app/src/main/res"))
 	
 	If (Not:C34($Obj_copyFilesRecursively.success))
 		
