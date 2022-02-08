@@ -485,7 +485,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 						
 						$relatedAttribute.relatedTableNumber:=This:C1470.tableNumber($relatedAttribute.relatedDataClass)
 						
-						For each ($relatedField; This:C1470.catalog.query("name = :1"; $relatedAttribute.relatedDataClass).pop().fields.orderBy("name"))
+						For each ($relatedField; This:C1470.catalog.query("name = :1"; $relatedAttribute.relatedDataClass).pop().fields)
 							
 							Case of 
 									
@@ -621,7 +621,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 			End case 
 		End for each 
 		
-		$result.fields:=$result.fields.orderBy("order asc")
+		//$result.fields:=$result.fields.orderBy("order asc")
 		
 	Else 
 		
