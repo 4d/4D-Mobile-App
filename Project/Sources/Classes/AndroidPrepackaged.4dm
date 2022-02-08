@@ -83,13 +83,19 @@ Function generate($project : Object)->$result : Object
 			+"\" --db-file \""+$dbFile.path\
 			+"\"")
 		
-		var $hasError; $hasException : Boolean
-		$hasError:=Bool:C1537((Position:C15("Error"; String:C10(This:C1470.errorStream))>0))
-		$hasException:=Bool:C1537((Position:C15("Exception"; String:C10(This:C1470.errorStream))>0))
+		var $exceptionPos; $errorPos : Integer
 		
-		$result.success:=Not:C34($hasError | $hasException)
-		$result.outputStream:=This:C1470.outputStream
-		$result.errorStream:=This:C1470.errorStream
+		$exceptionPos:=Position:C15("Exception"; String:C10(This:C1470.errorStream))
+		$errorPos:=Position:C15("Error"; String:C10(This:C1470.errorStream))
+		
+		If ($exceptionPos>0)
+			// Removes illegal capsule access warnings
+			This:C1470.errorStream:=Substring:C12(This:C1470.errorStream; $exceptionPos)
+		End if 
+		
+		$0.success:=Not:C34(($exceptionPos>0) | ($errorPos>0))
+		$0.outputStream:=This:C1470.outputStream
+		$0.errorStream:=This:C1470.errorStream
 		
 		// Log outputs
 		This:C1470.logFolder.file("lastPrepackage.android.out.log").setText(String:C10(This:C1470.outputStream))
