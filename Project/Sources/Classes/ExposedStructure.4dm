@@ -298,58 +298,90 @@ Function tableName($query)->$name : Text
 	//==================================================================
 	/// Returns a field definition object
 	// FIXME: ? MUST NOT BE INTO THIS CLASSE -> PROJECT
-Function fieldDefinition($tableIdentifier; $fieldPath : Text)->$field : Object
-	
-	var $table : Object
+	//==================================================================
+Function fieldDefinition($table; $fieldPath : Text)->$field : Object
+	var $tableNumber : Integer
+	var $field; $tableCatalog : Object
 	var $c : Collection
 	
-	$table:=This:C1470.table($tableIdentifier)
+	If (Value type:C1509($table)=Is longint:K8:6)\
+		 | (Value type:C1509($table)=Is real:K8:4)
+		
+		$tableNumber:=$table
+		
+	Else 
+		
+		$tableNumber:=This:C1470.tableNumber(String:C10($table))
+		
+	End if 
+	
+	$field:=New object:C1471
+	
+	$tableCatalog:=This:C1470.catalog.query("tableNumber=:1"; $tableNumber).pop()
+	This:C1470.success:=($tableCatalog#Null:C1517)
 	
 	If (This:C1470.success)
 		
 		$c:=Split string:C1554($fieldPath; ".")
 		
-		$field:=$table.field.query("name = :1"; $c[0]).pop()
+		$field:=$tableCatalog.field.query("name = :1"; $c[0]).pop()
 		This:C1470.success:=($field#Null:C1517)
 		
 		If (This:C1470.success)
 			
-			// Don't alter the original
-			$field:=OB Copy:C1225($field)
-			
-			Case of 
+			If ($c.length=1)
+				
+				$field.path:=$fieldPath
+				$field.tableNumber:=$tableNumber
+				$field.tableName:=Table name:C256($tableNumber)
+				
+				If ($field.type=-2)  // 1 to N relation
 					
-					//______________________________________________________
-				: ($c.length=1)
+					$field.fieldType:=8859
 					
+				End if 
+				
+			Else 
+				
+				$tableNumber:=$field.relatedTableNumber
+				
+				If ($c.length>2)
+					
+					$field:=This:C1470.fieldDefinition($tableNumber; $c.copy().remove(0).join("."))
 					$field.path:=$fieldPath
-					$field.tableNumber:=$table.tableNumber
-					$field.tableName:=$table.name
 					
-					// MARK: ??????
-					If ($field.type=-2)  // 1 to N relation
+				Else 
+					
+					$tableCatalog:=This:C1470.catalog.query("tableNumber=:1"; $tableNumber).pop()
+					This:C1470.success:=($tableCatalog#Null:C1517)
+					
+					If (This:C1470.success)
 						
-						$field.fieldType:=8859
+						$field:=$tableCatalog.field.query("name=:1"; $c[1]).pop()
+						This:C1470.success:=($field#Null:C1517)
+						
+						If (This:C1470.success)
+							
+							$field.path:=$fieldPath
+							$field.tableName:=Table name:C256($tableNumber)
+							$field.tableNumber:=$tableNumber
+							$field.name:=Choose:C955($field.relatedDataClass=Null:C1517; Field name:C257($tableNumber; $field.fieldNumber); $c[0])
+							$field.valueType:=$field.type
+							$field.type:=This:C1470.__fielddType($field.fieldType)
+							
+						Else 
+							
+							This:C1470.errors.push("Field "+$c[1]+" not found")
+							
+						End if 
 						
 					Else 
 						
-						//
+						This:C1470.errors.push("Related table not found #"+String:C10($tableNumber))
 						
 					End if 
-					
-					//______________________________________________________
-				: ($field.relatedTableNumber#Null:C1517)
-					
-					$field:=This:C1470.fieldDefinition($field.relatedTableNumber; $c.copy().remove(0).join("."))
-					$field.path:=$fieldPath
-					
-					//______________________________________________________
-				Else 
-					
-					ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
-					
-					//______________________________________________________
-			End case 
+				End if 
+			End if 
 			
 		Else 
 			
@@ -359,7 +391,7 @@ Function fieldDefinition($tableIdentifier; $fieldPath : Text)->$field : Object
 		
 	Else 
 		
-		This:C1470.errors.push("Table "+String:C10($tableIdentifier)+" not found")
+		This:C1470.errors.push("Table not found #"+String:C10($tableNumber))
 		
 	End if 
 	
@@ -400,9 +432,10 @@ Function isAlias($field : Object)->$is : Boolean
 	// Return related entity catalog
 Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Boolean)->$result : Object
 	
-	var $fields : Collection
+	var $fieldName : Text
 	var $ds : cs:C1710.DataStore
-	var $field : cs:C1710.field
+	var $field; $related; $relatedAttribute; $relatedField : cs:C1710.field
+	var $relatedDataClass : cs:C1710.table
 	
 	$result:=New object:C1471(\
 		"success"; False:C215)
@@ -410,7 +443,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 	$ds:=ds:C1482
 	$field:=$ds[$tableName][$relationName]
 	
-	If ($field.kind="relatedEntity")  // N -> 1 relation
+	If ($field.kind="relatedEntity")
 		
 		$result.success:=True:C214
 		$result.relatedEntity:=$field.name
@@ -419,108 +452,77 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 		$result.inverseName:=$field.inverseName
 		$result.fields:=New collection:C1472
 		
-		var $relatedDataClass : Object
 		$relatedDataClass:=$ds[$field.relatedDataClass]
 		
-		var $fieldName : Text
 		For each ($fieldName; $relatedDataClass)
 			
-			$field:=$relatedDataClass[$fieldName]
+			$relatedAttribute:=$relatedDataClass[$fieldName]
 			
 			Case of 
 					
 					//______________________________________________________
-				: ($field.kind="storage")  // Storage attribute
+				: ($relatedAttribute.kind="storage")
 					
-					If ($field.name#"__GlobalStamp")\
-						 && (This:C1470.allowedTypes.indexOf($field.type)>=0)
+					If ($relatedAttribute.name#"__GlobalStamp")\
+						 && (This:C1470.allowedTypes.indexOf($relatedAttribute.type)>=0)
 						
 						// MARK: TEMPO
-						$field.valueType:=$field.type
-						$field.id:=$field.fieldNumber
-						$field.type:=This:C1470.__fielddType($field.fieldType)
+						$relatedAttribute.valueType:=$relatedAttribute.type
 						
-						$field.path:=$field.name  //New collection($relationName; $field.name).join(".")
-						$field.relatedTableNumber:=$field.relatedTableNumber
+						$relatedAttribute.path:=$relatedAttribute.name
+						$relatedAttribute.type:=This:C1470.__fielddType($relatedAttribute.fieldType)
+						$relatedAttribute.relatedTableNumber:=$result.relatedTableNumber
 						
-						$result.fields.push($field)
-						
-					End if 
-					
-					//…………………………………………………………………………………………………
-				: ($field.kind="calculated")  // Calculated scalar attribute
-					
-					If (This:C1470.allowedTypes.indexOf($field.type)>=0)
-						
-						// MARK: #TEMPO
-						$field.valueType:=$field.type
-						$field.type:=-3
-						
-						$field.path:=New collection:C1472($relationName; $field.name).join(".")
-						$field.relatedTableNumber:=$result.relatedTableNumber
-						
-						$result.fields.push($field)
+						$relatedAttribute._order:=""
+						$result.fields.push($relatedAttribute)
 						
 					End if 
 					
-					//…………………………………………………………………………………………………
-				: ($field.kind="alias")  // Alias
+					//______________________________________________________
+				: ($relatedAttribute.kind="relatedEntity")
 					
-					// MARK: TEMPO
-					$field.valueType:=$field.type
-					
-					$field.path:=$field.name
-					//$field.relatedTableNumber:=$field.relatedTableNumber
-					
-					$result.fields.push($field)
-					
-					//___________________________________________
-				: ($field.kind="relatedEntity")  // N -> 1 relation attribute (reference to an entity)
-					
-					If ($recursive)  //&& ($field.relatedDataClass#$tableName)
+					If ($recursive || ($relatedAttribute.relatedDataClass#$tableName))
 						
-						$field.relatedTableNumber:=This:C1470.tableNumber($field.relatedDataClass)
-						//$field.relatedDataClass:=This.tableNumber($field.relatedDataClass)
+						$relatedAttribute.relatedTableNumber:=This:C1470.tableNumber($relatedAttribute.relatedDataClass)
 						
-						//$result.fields.push($field)
-						
-						var $relatedField; $related : cs:C1710.field
-						For each ($relatedField; This:C1470.catalog.query("name = :1"; $field.relatedDataClass).pop().fields)
+						For each ($relatedField; This:C1470.catalog.query("name = :1"; $relatedAttribute.relatedDataClass).pop().fields.orderBy("name"))
 							
 							Case of 
 									
-									//______________________________________________________
-								: ($relatedField.kind="storage")  // Storage attribute
+									//…………………………………………………………………………………………………
+								: ($relatedField.kind="storage")
 									
 									If (This:C1470.allowedTypes.indexOf($relatedField.valueType)>=0)
 										
-										$related:=OB Copy:C1225($relatedField)
-										$related.path:=New collection:C1472($field.name; $related.name).join(".")
+										$related:=This:C1470.fieldDefinition(This:C1470.tableNumber($relatedAttribute.relatedDataClass); $relatedField.name)
+										$related.path:=New collection:C1472($relatedAttribute.name; $related.name).join(".")
 										$related.tableNumber:=This:C1470.tableNumber($field.relatedDataClass)
 										
+										$related._order:=$relatedAttribute.name
 										$result.fields.push($related)
 										
 									End if 
 									
-									//______________________________________________________
-								: ($relatedField.kind="calculated")  // Calculated scalar attribute
+									//…………………………………………………………………………………………………
+								: ($relatedField.kind="calculated")
 									
 									If (This:C1470.allowedTypes.indexOf($relatedField.valueType)>=0)
 										
 										$related:=OB Copy:C1225($relatedField)
-										$related.path:=New collection:C1472($field.name; $related.name).join(".")
-										$related.tableNumber:=This:C1470.tableNumber($field.relatedDataClass)
+										$related.path:=$related.name
+										$related.tableNumber:=$result.relatedTableNumber
 										
+										$related._order:=New collection:C1472($relatedAttribute.name; $related.name).join(".")
 										$result.fields.push($related)
 										
 									End if 
 									
-									//______________________________________________________
+									//…………………………………………………………………………………………………
 								: ($relatedField.kind="relatedEntity")
 									
 									// NOT MANAGED
 									
-									//______________________________________________________
+									//…………………………………………………………………………………………………
 								: ($relatedField.kind="relatedEntities")
 									
 									// NOT MANAGED
@@ -531,29 +533,84 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 									// <NOT YET AVAILABLE>
 									
 									//…………………………………………………………………………………………………
-								: ($relatedField.kind="alias")  // Alias
+								: ($relatedField.kind="alias")
 									
 									$related:=OB Copy:C1225($relatedField)
-									$related.path:=New collection:C1472($field.name; $related.name).join(".")
+									$related.label:=New collection:C1472($relatedAttribute.name; $related.name).join(".")
 									$related.tableNumber:=This:C1470.tableNumber($field.relatedDataClass)
 									
+									$related._order:=$related.label
 									$result.fields.push($related)
 									
-									//______________________________________________________
+									//…………………………………………………………………………………………………
 								Else 
 									
 									ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
 									
-									//______________________________________________________
+									//…………………………………………………………………………………………………
 							End case 
 						End for each 
+					End if 
+					
+					//______________________________________________________
+				: ($relatedAttribute.kind="relatedEntities")
+					
+					If ($recursive || ($relatedAttribute.relatedDataClass#$tableName))
+						
+						$related:=New object:C1471(\
+							"kind"; "relatedEntities"; \
+							"name"; $relatedAttribute.name; \
+							"path"; $relatedAttribute.name; \
+							"relatedDataClass"; $relatedAttribute.relatedDataClass; \
+							"relatedTableNumber"; This:C1470.tableNumber($relatedAttribute.relatedDataClass); \
+							"inverseName"; $relatedAttribute.inverseName)
+						
+						// MARK: TEMPO
+						$related.fieldType:=8859
+						$related.isToMany:=True:C214
+						
+						$related._order:=$relatedAttribute.relatedDataClass
+						$result.fields.push($related)
 						
 					End if 
 					
-					//___________________________________________
-				: ($field.kind="relatedEntities")
+					//______________________________________________________
+				: ($relatedAttribute.kind="calculated")
 					
-					// <NOT YET  MANAGED>
+					If (This:C1470.allowedTypes.indexOf($relatedAttribute.type)>=0)
+						
+						$related:=OB Copy:C1225($relatedAttribute)
+						
+						// MARK: #TEMPO
+						$related.valueType:=$relatedAttribute.type
+						$related.type:=-3
+						
+						$related.path:=$related.name
+						$related.relatedTableNumber:=$result.relatedTableNumber
+						
+						$related._order:=""
+						$result.fields.push($related)
+						
+					End if 
+					
+					//______________________________________________________
+				: ($relatedAttribute.kind="alias")
+					
+					If (This:C1470.allowedTypes.indexOf($relatedAttribute.type)>=0)
+						
+						$related:=OB Copy:C1225($relatedAttribute)
+						
+						// MARK: TEMPO
+						$related.valueType:=$related.type
+						
+						$related.path:=$related.name
+						$related.type:=This:C1470.__fielddType($related.fieldType)
+						$related.relatedTableNumber:=$result.relatedTableNumber
+						
+						$related._order:=""
+						$result.fields.push($related)
+						
+					End if 
 					
 					//______________________________________________________
 				Else 
@@ -562,27 +619,15 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 					
 					//______________________________________________________
 			End case 
-			
-			
 		End for each 
+		
+		$result.fields:=$result.fields.orderBy("order asc")
 		
 	Else 
 		
-		//ASSERT(DATABASE.isComponent; "😰 I wonder why I'm here")
+		This:C1470.errors.push("The attribute \""+$relationName+"\" of dataclass \""+$tableName+"\" does not refer to an entity")
 		
 	End if 
-	
-	//If (This.isRelatedEntity($field))  // N -> 1 relation
-	//$fields:=This._relatedFields($field; $relationName; $recursive)
-	//$result.success:=True
-	//$result.relatedEntity:=$field.name
-	//$result.relatedTableNumber:=$ds[$field.relatedDataClass].getInfo().tableNumber
-	//$result.relatedDataClass:=$field.relatedDataClass
-	//$result.inverseName:=$field.inverseName
-	//$result.fields:=$fields
-	//Else 
-	//ASSERT(DATABASE.isComponent; "😰 I wonder why I'm here")
-	//End if
 	
 	//==================================================================
 	// FIXME: Move to project class

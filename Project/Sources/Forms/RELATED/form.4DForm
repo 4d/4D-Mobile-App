@@ -111,7 +111,7 @@
 						},
 						{
 							"name": "name",
-							"dataSource": "This:C1470.path",
+							"dataSource": "Choose:C955(This:C1470.label#Null:C1517; This:C1470.label; This:C1470.path)",
 							"width": 350,
 							"minWidth": 10,
 							"maxWidth": 32000,

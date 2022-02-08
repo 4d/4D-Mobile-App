@@ -526,7 +526,7 @@ Function doFieldPicker()->$count : Integer
 		
 		If (Bool:C1537($context.fieldSortByName))
 			
-			$relatedCatalog.fields:=$relatedCatalog.fields.orderBy("path")
+			$relatedCatalog.fields:=$relatedCatalog.fields.orderBy("path asc")
 			
 		End if 
 		
@@ -553,17 +553,16 @@ Function doFieldPicker()->$count : Integer
 					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 				Else 
 					
-					$fieldID:=String:C10($field.fieldNumber)
 					$c:=Split string:C1554($field.path; ".")
 					
 					If ($c.length=1)
 						
-						$field.published:=($linkDataModel[$fieldID]#Null:C1517)
+						$field.published:=($linkDataModel[String:C10($field.fieldNumber)]#Null:C1517)
 						
 					Else 
 						
 						// Enhance_relation
-						$field.published:=($linkDataModel[$c[0]][$fieldID]#Null:C1517)
+						$field.published:=($linkDataModel[$c[0]][String:C10($field.fieldNumber)]#Null:C1517)
 						
 					End if 
 					
@@ -593,7 +592,6 @@ Function doFieldPicker()->$count : Integer
 				
 				For each ($field; $relatedCatalog.fields)
 					
-					$fieldID:=String:C10($field.fieldNumber)
 					$c:=Split string:C1554($field.path; ".")
 					
 					If ($field.published)
@@ -613,7 +611,7 @@ Function doFieldPicker()->$count : Integer
 						End if 
 						
 						// Create the field, if any
-						If ($c.length>1)
+						If ($c.length>1) && ($field.kind#"alias")
 							
 							If ($target[$c[0]]=Null:C1517)
 								
@@ -624,60 +622,15 @@ Function doFieldPicker()->$count : Integer
 								
 							End if 
 							
-							If ($target[$c[0]][$fieldID]=Null:C1517)
-								
-								$target[$c[0]][$fieldID]:=New object:C1471(\
-									"name"; $field.name; \
-									"path"; $field.path; \
-									"label"; PROJECT.label($field.name); \
-									"shortLabel"; PROJECT.shortLabel($field.name); \
-									"type"; $field.type; \
-									"fieldType"; $field.fieldType)
-								
-							End if 
-							
-						Else 
-							
 							Case of 
 									
 									//______________________________________________________
-								: ($field.kind="relatedEntities")
+								: ($field.kind="storage")
 									
-									If ($target[$field.name]=Null:C1517)
+									If ($target[$c[0]][String:C10($field.fieldNumber)]=Null:C1517)
 										
-										$target[$field.name]:=New object:C1471(\
-											"name"; $field.name; \
-											"relatedDataClass"; $field.relatedDataClass; \
-											"relatedTableNumber"; $field.relatedTableNumber; \
-											"path"; $context.fieldName+"."+$field.path; \
-											"label"; PROJECT.labelList($field.name); \
-											"shortLabel"; PROJECT.label($field.name); \
-											"inverseName"; $field.inverseName; \
-											"isToMany"; True:C214)
-										
-									End if 
-									
-									//______________________________________________________
-								: ($field.kind="calculated")
-									
-									If ($target[$field.name]=Null:C1517)
-										
-										$target[$field.name]:=New object:C1471(\
-											"name"; $field.name; \
-											"path"; $field.path; \
-											"label"; PROJECT.label($field.name); \
-											"shortLabel"; PROJECT.shortLabel($field.name); \
-											"fieldType"; $field.fieldType; \
-											"computed"; True:C214)
-										
-									End if 
-									
-									//______________________________________________________
-								Else 
-									
-									If ($target[$fieldID]=Null:C1517)
-										
-										$target[$fieldID]:=New object:C1471(\
+										$target[$c[0]][String:C10($field.fieldNumber)]:=New object:C1471(\
+											"kind"; $field.kind; \
 											"name"; $field.name; \
 											"path"; $field.path; \
 											"label"; PROJECT.label($field.name); \
@@ -686,6 +639,114 @@ Function doFieldPicker()->$count : Integer
 											"fieldType"; $field.fieldType)
 										
 									End if 
+									
+									//______________________________________________________
+								: ($field.kind="alias")
+									
+									If ($target[$c[0]][$field.name]=Null:C1517)
+										
+										$target[$c[0]][$field.name]:=New object:C1471(\
+											"kind"; $field.kind; \
+											"name"; $field.name; \
+											"path"; $field.path; \
+											"label"; PROJECT.label($field.name); \
+											"shortLabel"; PROJECT.shortLabel($field.name); \
+											"type"; $field.type; \
+											"fieldType"; $field.fieldType)
+										
+									End if 
+									
+									//______________________________________________________
+								Else 
+									
+									// A "Case of" statement should never omit "Else"
+									
+									//______________________________________________________
+							End case 
+							
+						Else 
+							
+							Case of 
+									
+									//______________________________________________________
+								: ($field.kind="storage")
+									
+									If ($target[String:C10($field.fieldNumber)]=Null:C1517)
+										
+										var $o : Object
+										$o:=New object:C1471(\
+											"kind"; $field.kind; \
+											"name"; $field.name; \
+											"label"; PROJECT.label($field.name); \
+											"shortLabel"; PROJECT.shortLabel($field.name); \
+											"type"; $field.type; \
+											"fieldType"; $field.fieldType)
+										
+										$target[String:C10($field.fieldNumber)]:=$o
+										
+									End if 
+									
+									//______________________________________________________
+								: ($field.kind="relatedEntities")
+									
+									If ($target[$field.name]=Null:C1517)
+										
+										$o:=New object:C1471(\
+											"kind"; $field.kind; \
+											"name"; $field.name; \
+											"relatedDataClass"; $field.relatedDataClass; \
+											"inverseName"; $field.inverseName; \
+											"path"; New collection:C1472($context.fieldName; $field.path).join("."); \
+											"label"; PROJECT.labelList($field.name); \
+											"shortLabel"; PROJECT.label($field.name))
+										
+										//MARK:#TEMPO
+										$o.relatedTableNumber:=$field.relatedTableNumber
+										$o.isToMany:=True:C214
+										
+										$target[$field.name]:=$o
+										
+									End if 
+									
+									//______________________________________________________
+								: ($field.kind="calculated")
+									
+									If ($target[$field.name]=Null:C1517)
+										
+										$o:=New object:C1471(\
+											"kind"; $field.kind; \
+											"name"; $field.name; \
+											"label"; PROJECT.label($field.name); \
+											"shortLabel"; PROJECT.shortLabel($field.name); \
+											"fieldType"; $field.fieldType)
+										
+										//MARK:#TEMPO
+										$o.computed:=True:C214
+										
+										$target[$field.name]:=$o
+										
+									End if 
+									
+									//______________________________________________________
+								: ($field.kind="alias")
+									
+									If ($target[$field.name]=Null:C1517)
+										
+										$o:=New object:C1471(\
+											"kind"; $field.kind; \
+											"name"; $field.name; \
+											"path"; $field.path; \
+											"label"; PROJECT.label($field.name); \
+											"shortLabel"; PROJECT.shortLabel($field.name); \
+											"fieldType"; $field.fieldType)
+										
+										$target[$field.name]:=$o
+										
+									End if 
+									
+									//______________________________________________________
+								Else 
+									
 									
 									//______________________________________________________
 							End case 
@@ -756,9 +817,6 @@ Function doFieldPicker()->$count : Integer
 					
 				End if 
 			End if 
-			
-			//(This.publishedPtr)->{$row}:=$count
-			
 		End if 
 		
 	Else 
@@ -767,17 +825,16 @@ Function doFieldPicker()->$count : Integer
 		
 	End if 
 	
-	// STRUCTURE_UPDATE(This.form)
-	This:C1470.updateProject()
+	//This.updateProject(This.form; This.context)
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Update the project according to the published fields
-Function updateProject()
+Function updateProject($form; $context)
 	
 	var $key : Text
 	var $found : Boolean
 	var $indx : Integer
-	var $context; $form; $o : Object
+	var $o : Object
 	var $published : Collection
 	var $tableModel; $currentTable : cs:C1710.table
 	var $field; $fieldModel : cs:C1710.field
@@ -785,8 +842,9 @@ Function updateProject()
 	
 	// ----------------------------------------------------
 	// Initialisations
-	$form:=This:C1470.form
-	$context:=This:C1470.context
+	
+	$form:=$form=Null:C1517 ? This:C1470.form : $form
+	$context:=$context=Null:C1517 ? This:C1470.context : $context
 	
 	$currentTable:=$context.currentTable
 	
@@ -794,11 +852,13 @@ Function updateProject()
 	
 	// ----------------------------------------------------
 	// GET THE PUBLISHED FIELD NAMES LIST
+	
 	$published:=New collection:C1472
 	var $fieldPtr; $publishedPtr : Pointer
 	$publishedPtr:=This:C1470.publishedPtr
 	$fieldPtr:=OBJECT Get pointer:C1124(Object named:K67:5; $form.fields)
 	ARRAY TO COLLECTION:C1563($published; $publishedPtr->; "published"; $fieldPtr->; "name")
+	
 	
 	If ($published.extract("published").countValues(0)=$published.length)\
 		 && ($published.extract("published").indexOf(2)=-1)\
