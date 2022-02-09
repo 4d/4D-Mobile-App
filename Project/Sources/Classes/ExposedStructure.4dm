@@ -509,10 +509,10 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 									If (This:C1470.allowedTypes.indexOf($relatedField.valueType)>=0)
 										
 										$related:=OB Copy:C1225($relatedField)
-										$related.path:=$related.name
+										$related.path:=New collection:C1472($relatedAttribute.name; $related.name).join(".")
 										$related.tableNumber:=$result.relatedTableNumber
 										
-										$related._order:=New collection:C1472($relatedAttribute.name; $related.name).join(".")
+										$related._order:=$related.path
 										$result.fields.push($related)
 										
 									End if 

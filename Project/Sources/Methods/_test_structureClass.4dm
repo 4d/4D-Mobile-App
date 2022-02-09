@@ -259,7 +259,7 @@ If (Asserted:C1132(Not:C34($structure.success)))
 		
 		If (Asserted:C1132($structure.errors.length>0))
 			
-			ASSERT:C1129($structure.errors[0]="Table 8858 not found")
+			ASSERT:C1129($structure.errors[0]="Table not found #8858")
 			
 		End if 
 	End if 

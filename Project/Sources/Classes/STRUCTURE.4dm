@@ -511,18 +511,20 @@ Function fieldList()
 	/// Displays related field picker
 Function doFieldPicker()->$count : Integer
 	
-	var $fieldID : Text
-	var $context; $dataModel; $linkDataModel; $relatedCatalog; $tableDataModel; $target : Object
+	var $context; $currentDataModel; $relatedDataModel; $o; $relatedCatalog; $tableDataModel : Object
+	var $target : Object
 	var $c : Collection
 	var $field : cs:C1710.field
+	var $currentTable : cs:C1710.table
 	
 	$context:=This:C1470.context
+	$currentTable:=$context.currentTable
 	
-	$relatedCatalog:=This:C1470.ExposedStructure.relatedCatalog($context.currentTable.name; $context.fieldName; True:C214)
+	$relatedCatalog:=This:C1470.ExposedStructure.relatedCatalog($currentTable.name; $context.fieldName; True:C214)
 	
 	If ($relatedCatalog.success)  // Open field picker
 		
-		$dataModel:=Form:C1466.dataModel
+		$currentDataModel:=Form:C1466.dataModel
 		
 		If (Bool:C1537($context.fieldSortByName))
 			
@@ -530,45 +532,25 @@ Function doFieldPicker()->$count : Integer
 			
 		End if 
 		
-		$tableDataModel:=$dataModel[String:C10($context.currentTable.tableNumber)]
-		$linkDataModel:=$tableDataModel[$relatedCatalog.relatedEntity]
+		$tableDataModel:=$currentDataModel[String:C10($currentTable.tableNumber)]
+		$relatedDataModel:=$tableDataModel[$relatedCatalog.relatedEntity]
 		
 		For each ($field; $relatedCatalog.fields)
 			
-			Case of 
-					
-					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-				: ($field.kind="calculated")
-					
-					$field.published:=($linkDataModel[$field.name]#Null:C1517)
-					
-					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-				: ($field.kind="alias")
-					
-					$field.published:=($linkDataModel[$field.name]#Null:C1517)
-					
-					// TODO:Replace 8858 by 38 & 8859 by 42
-					$field.fieldType:=($field.fieldType=42) ? 8859 : ($field.fieldType=38) ? 8858 : $field.fieldType
-					
-					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-				Else 
-					
-					$c:=Split string:C1554($field.path; ".")
-					
-					If ($c.length=1)
-						
-						$field.published:=($linkDataModel[String:C10($field.fieldNumber)]#Null:C1517)
-						
-					Else 
-						
-						// Enhance_relation
-						$field.published:=($linkDataModel[$c[0]][String:C10($field.fieldNumber)]#Null:C1517)
-						
-					End if 
-					
-					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-			End case 
+			// Recover the publication status
+			$c:=Split string:C1554(($field.label=Null:C1517) ? $field.path : $field.label; ".")
 			
+			If ($c.length>1)
+				
+				$field.published:=($relatedDataModel[$c[0]][Choose:C955($field.kind="storage"; String:C10($field.fieldNumber); $field.name)]#Null:C1517)
+				
+			Else 
+				
+				$field.published:=($relatedDataModel[Choose:C955($field.kind="storage"; String:C10($field.fieldNumber); $field.name)]#Null:C1517)
+				
+			End if 
+			
+			// Set icon
 			$field.icon:=EDITOR.fieldIcons[$field.fieldType]
 			
 		End for each 
@@ -586,38 +568,39 @@ Function doFieldPicker()->$count : Integer
 				If ($tableDataModel=Null:C1517)\
 					 | OB Is empty:C1297($tableDataModel)
 					
-					$tableDataModel:=PROJECT.addTable($context.currentTable)
+					$tableDataModel:=PROJECT.addTable($currentTable)
 					
 				End if 
 				
 				For each ($field; $relatedCatalog.fields)
 					
-					$c:=Split string:C1554($field.path; ".")
+					$target:=$tableDataModel[$context.fieldName]
+					
+					$c:=Split string:C1554(($field.label=Null:C1517) ? $field.path : $field.label; ".")
 					
 					If ($field.published)
 						
-						$target:=$tableDataModel[$context.fieldName]
-						
 						If ($target=Null:C1517)
 							
-							// Create the relation
 							$target:=New object:C1471(\
+								"kind"; "relatedEntity"; \
 								"relatedDataClass"; $relatedCatalog.relatedDataClass; \
-								"inverseName"; $relatedCatalog.inverseName; \
-								"relatedTableNumber"; $relatedCatalog.relatedTableNumber)
+								"relatedTableNumber"; $relatedCatalog.relatedTableNumber; \
+								"inverseName"; $relatedCatalog.inverseName)
 							
 							$tableDataModel[$context.fieldName]:=$target
 							
 						End if 
 						
 						// Create the field, if any
-						If ($c.length>1) && ($field.kind#"alias")
+						If ($c.length>1)
 							
 							If ($target[$c[0]]=Null:C1517)
 								
 								$target[$c[0]]:=New object:C1471(\
+									"kind"; "relatedEntity"; \
 									"relatedDataClass"; $field.tableName; \
-									"inverseName"; $context.currentTable.field.query("name=:1"; $context.fieldName).pop().inverseName; \
+									"inverseName"; $currentTable.field.query("name=:1"; $context.fieldName).pop().inverseName; \
 									"relatedTableNumber"; $field.tableNumber)
 								
 							End if 
@@ -625,41 +608,55 @@ Function doFieldPicker()->$count : Integer
 							Case of 
 									
 									//______________________________________________________
+								: ($target[$c[0]][Choose:C955($field.kind="storage"; String:C10($field.fieldNumber); $field.name)]#Null:C1517)
+									
+									// THE FIELD IS ALREADY IN THE DATA MODEL
+									
+									//______________________________________________________
 								: ($field.kind="storage")
 									
-									If ($target[$c[0]][String:C10($field.fieldNumber)]=Null:C1517)
-										
-										$target[$c[0]][String:C10($field.fieldNumber)]:=New object:C1471(\
-											"kind"; $field.kind; \
-											"name"; $field.name; \
-											"path"; $field.path; \
-											"label"; PROJECT.label($field.name); \
-											"shortLabel"; PROJECT.shortLabel($field.name); \
-											"type"; $field.type; \
-											"fieldType"; $field.fieldType)
-										
-									End if 
+									$o:=New object:C1471(\
+										"kind"; $field.kind; \
+										"path"; $field.path; \
+										"label"; PROJECT.label($field.name); \
+										"shortLabel"; PROJECT.shortLabel($field.name); \
+										"type"; $field.type; \
+										"fieldType"; $field.fieldType)
+									
+									$target[$c[0]][String:C10($field.fieldNumber)]:=$o
 									
 									//______________________________________________________
 								: ($field.kind="alias")
 									
-									If ($target[$c[0]][$field.name]=Null:C1517)
-										
-										$target[$c[0]][$field.name]:=New object:C1471(\
-											"kind"; $field.kind; \
-											"name"; $field.name; \
-											"path"; $field.path; \
-											"label"; PROJECT.label($field.name); \
-											"shortLabel"; PROJECT.shortLabel($field.name); \
-											"type"; $field.type; \
-											"fieldType"; $field.fieldType)
-										
-									End if 
+									$o:=New object:C1471(\
+										"kind"; $field.kind; \
+										"path"; $field.path; \
+										"label"; PROJECT.label($field.name); \
+										"shortLabel"; PROJECT.shortLabel($field.name); \
+										"type"; $field.type; \
+										"fieldType"; $field.fieldType)
+									
+									$target[$c[0]][$field.name]:=$o
+									
+									//______________________________________________________
+								: ($field.kind="calculated")
+									
+									$o:=New object:C1471(\
+										"kind"; $field.kind; \
+										"path"; $field.path; \
+										"label"; PROJECT.label($field.name); \
+										"shortLabel"; PROJECT.shortLabel($field.name); \
+										"fieldType"; $field.fieldType)
+									
+									// MARK:#TEMPO
+									$o.computed:=True:C214
+									
+									$target[$c[0]][$field.name]:=$o
 									
 									//______________________________________________________
 								Else 
 									
-									// A "Case of" statement should never omit "Else"
+									ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
 									
 									//______________________________________________________
 							End case 
@@ -669,84 +666,70 @@ Function doFieldPicker()->$count : Integer
 							Case of 
 									
 									//______________________________________________________
+								: ($target[Choose:C955($field.kind="storage"; String:C10($field.fieldNumber); $field.name)]#Null:C1517)
+									
+									// THE FIELD IS ALREADY IN THE DATA MODEL
+									
+									//______________________________________________________
 								: ($field.kind="storage")
 									
-									If ($target[String:C10($field.fieldNumber)]=Null:C1517)
-										
-										var $o : Object
-										$o:=New object:C1471(\
-											"kind"; $field.kind; \
-											"name"; $field.name; \
-											"label"; PROJECT.label($field.name); \
-											"shortLabel"; PROJECT.shortLabel($field.name); \
-											"type"; $field.type; \
-											"fieldType"; $field.fieldType)
-										
-										$target[String:C10($field.fieldNumber)]:=$o
-										
-									End if 
+									$o:=New object:C1471(\
+										"kind"; $field.kind; \
+										"name"; $field.name; \
+										"label"; PROJECT.label($field.name); \
+										"shortLabel"; PROJECT.shortLabel($field.name); \
+										"type"; $field.type; \
+										"fieldType"; $field.fieldType)
+									
+									$target[String:C10($field.fieldNumber)]:=$o
 									
 									//______________________________________________________
 								: ($field.kind="relatedEntities")
 									
-									If ($target[$field.name]=Null:C1517)
-										
-										$o:=New object:C1471(\
-											"kind"; $field.kind; \
-											"name"; $field.name; \
-											"relatedDataClass"; $field.relatedDataClass; \
-											"inverseName"; $field.inverseName; \
-											"path"; New collection:C1472($context.fieldName; $field.path).join("."); \
-											"label"; PROJECT.labelList($field.name); \
-											"shortLabel"; PROJECT.label($field.name))
-										
-										//MARK:#TEMPO
-										$o.relatedTableNumber:=$field.relatedTableNumber
-										$o.isToMany:=True:C214
-										
-										$target[$field.name]:=$o
-										
-									End if 
+									$o:=New object:C1471(\
+										"kind"; $field.kind; \
+										"relatedDataClass"; $field.relatedDataClass; \
+										"relatedTableNumber"; $field.relatedTableNumber; \
+										"inverseName"; $field.inverseName; \
+										"path"; New collection:C1472($context.fieldName; $field.path).join("."); \
+										"label"; PROJECT.labelList($field.name); \
+										"shortLabel"; PROJECT.label($field.name))
+									
+									// MARK:#TEMPO
+									$o.isToMany:=True:C214
+									
+									$target[$field.name]:=$o
 									
 									//______________________________________________________
 								: ($field.kind="calculated")
 									
-									If ($target[$field.name]=Null:C1517)
-										
-										$o:=New object:C1471(\
-											"kind"; $field.kind; \
-											"name"; $field.name; \
-											"label"; PROJECT.label($field.name); \
-											"shortLabel"; PROJECT.shortLabel($field.name); \
-											"fieldType"; $field.fieldType)
-										
-										//MARK:#TEMPO
-										$o.computed:=True:C214
-										
-										$target[$field.name]:=$o
-										
-									End if 
+									$o:=New object:C1471(\
+										"kind"; $field.kind; \
+										"label"; PROJECT.label($field.name); \
+										"shortLabel"; PROJECT.shortLabel($field.name); \
+										"fieldType"; $field.fieldType)
+									
+									// MARK:#TEMPO
+									$o.computed:=True:C214
+									
+									$target[$field.name]:=$o
 									
 									//______________________________________________________
 								: ($field.kind="alias")
 									
-									If ($target[$field.name]=Null:C1517)
-										
-										$o:=New object:C1471(\
-											"kind"; $field.kind; \
-											"name"; $field.name; \
-											"path"; $field.path; \
-											"label"; PROJECT.label($field.name); \
-											"shortLabel"; PROJECT.shortLabel($field.name); \
-											"fieldType"; $field.fieldType)
-										
-										$target[$field.name]:=$o
-										
-									End if 
+									$o:=New object:C1471(\
+										"kind"; $field.kind; \
+										"path"; $field.path; \
+										"label"; PROJECT.label($field.name); \
+										"shortLabel"; PROJECT.shortLabel($field.name); \
+										"fieldType"; $field.fieldType)
+									
+									$target[$field.name]:=$o
 									
 									//______________________________________________________
 								Else 
 									
+									ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
 									
 									//______________________________________________________
 							End case 
@@ -755,24 +738,14 @@ Function doFieldPicker()->$count : Integer
 					Else 
 						
 						// Remove the field, if any
-						
 						Case of 
 								
 								//______________________________________________________
 							: ($field.kind="relatedEntities")
 								
-								If ($linkDataModel#Null:C1517)
+								If ($relatedDataModel#Null:C1517)
 									
-									OB REMOVE:C1226($linkDataModel; $field.name)
-									
-								End if 
-								
-								//______________________________________________________
-							: ($field.kind="calculated")
-								
-								If ($target#Null:C1517)
-									
-									OB REMOVE:C1226($target; $field.name)
+									OB REMOVE:C1226($relatedDataModel; $field.name)
 									
 								End if 
 								
@@ -781,13 +754,13 @@ Function doFieldPicker()->$count : Integer
 								
 								If ($c.length>1)
 									
-									If ($target[$c[0]][String:C10($field.fieldNumber)]#Null:C1517)
+									If ($target[$c[0]][($field.kind="storage") ? String:C10($field.fieldNumber) : $field.name]#Null:C1517)
 										
-										OB REMOVE:C1226($target[$c[0]]; String:C10($field.fieldNumber))
+										OB REMOVE:C1226($target[$c[0]]; Choose:C955($field.kind="storage"; String:C10($field.fieldNumber); $field.name))
 										
-										// Remove the link if no more fields are published
-										If (OB Entries:C1720($target[$c[0]]).filter("col_formula"; Formula:C1597($1.result:=Match regex:C1019("^\\d+$"; $1.value.key; 1))).length=0)
+										If (OB Keys:C1719($target[$c[0]]).length=3)  //description keys ("kind", "inverseName", "relatedTableNumber")
 											
+											// Empty -> remove
 											OB REMOVE:C1226($target; $c[0])
 											
 										End if 
@@ -795,13 +768,10 @@ Function doFieldPicker()->$count : Integer
 									
 								Else 
 									
-									If ($target[$fieldID].path#Null:C1517)
+									If ($target[($field.kind="storage") ? String:C10($field.fieldNumber) : $field.name]#Null:C1517)
 										
-										If ($target[$fieldID].path=$field.path)
-											
-											OB REMOVE:C1226($target; $fieldID)
-											
-										End if 
+										OB REMOVE:C1226($target; Choose:C955($field.kind="storage"; String:C10($field.fieldNumber); $field.name))
+										
 									End if 
 								End if 
 								
@@ -816,6 +786,18 @@ Function doFieldPicker()->$count : Integer
 					$count:=1+Num:C11($count#$relatedCatalog.fields.length)
 					
 				End if 
+				
+			Else 
+				
+				OB REMOVE:C1226($tableDataModel; $context.fieldName)
+				
+			End if 
+			
+			If (OB Entries:C1720($tableDataModel).query("key != ''").length=0)
+				
+				// Empty -> remove
+				PROJECT.removeTable($currentTable)
+				
 			End if 
 		End if 
 		
@@ -825,11 +807,9 @@ Function doFieldPicker()->$count : Integer
 		
 	End if 
 	
-	//This.updateProject(This.form; This.context)
-	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Update the project according to the published fields
-Function updateProject($form; $context)
+Function updateProject()
 	
 	var $key : Text
 	var $found : Boolean
@@ -840,15 +820,11 @@ Function updateProject($form; $context)
 	var $field; $fieldModel : cs:C1710.field
 	var $structure : cs:C1710.ExposedStructure
 	
-	// ----------------------------------------------------
-	// Initialisations
-	
-	$form:=$form=Null:C1517 ? This:C1470.form : $form
-	$context:=$context=Null:C1517 ? This:C1470.context : $context
-	
+	var $context; $form : Object
+	$form:=This:C1470.form
+	$context:=This:C1470.context
 	$currentTable:=$context.currentTable
-	
-	$structure:=cs:C1710.ExposedStructure.new()
+	$structure:=This:C1470.ExposedStructure
 	
 	// ----------------------------------------------------
 	// GET THE PUBLISHED FIELD NAMES LIST
@@ -858,7 +834,6 @@ Function updateProject($form; $context)
 	$publishedPtr:=This:C1470.publishedPtr
 	$fieldPtr:=OBJECT Get pointer:C1124(Object named:K67:5; $form.fields)
 	ARRAY TO COLLECTION:C1563($published; $publishedPtr->; "published"; $fieldPtr->; "name")
-	
 	
 	If ($published.extract("published").countValues(0)=$published.length)\
 		 && ($published.extract("published").indexOf(2)=-1)\

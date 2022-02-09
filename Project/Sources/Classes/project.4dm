@@ -1148,15 +1148,41 @@ Function getSortableFields($table; $ordered : Boolean)->$fields : Collection
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	//Add a table to the data model
-Function addTable($table : cs:C1710.table)->$tableModel : Object
+	/// Add a table to the data model
+Function addTable($table)->$tableModel : Object
 	
-	var $tableNumber : Integer
-	var $o : Object
+	var $tableID : Text
+	var $o : cs:C1710.table
 	
-	$tableNumber:=Num:C11($table.tableNumber)
+	Case of 
+			
+			//______________________________________________________
+		: (Value type:C1509($table)=Is object:K8:27)
+			
+			ASSERT:C1129($table.tableNumber#Null:C1517)
+			$tableID:=String:C10($table.tableNumber)
+			
+			//______________________________________________________
+		: (Value type:C1509($table)=Is text:K8:3)
+			
+			$tableID:=$table
+			
+			//______________________________________________________
+		: (Value type:C1509($table)=Is longint:K8:6)\
+			 | (Value type:C1509($table)=Is real:K8:4)
+			
+			$tableID:=String:C10($table)
+			
+			//______________________________________________________
+		Else 
+			
+			ASSERT:C1129(False:C215)
+			return 
+			
+			//______________________________________________________
+	End case 
 	
-	$o:=This:C1470.getCatalog().query("tableNumber = :1"; $tableNumber).pop()
+	$o:=This:C1470.getCatalog().query("tableNumber = :1"; Num:C11($tableID)).pop()
 	ASSERT:C1129($o#Null:C1517)
 	
 	// Put internal properties into a substructure
@@ -1176,18 +1202,60 @@ Function addTable($table : cs:C1710.table)->$tableModel : Object
 		
 	End if 
 	
+	This:C1470.dataModel[String:C10($tableID)]:=$tableModel
+	
 	// Update main
 	This:C1470.addToMain($table)
 	
-	This:C1470.dataModel[String:C10($tableNumber)]:=$tableModel
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	/// Delete the table from the data model
+Function removeTable($table)
+	
+	var $tableID : Text
+	
+	If (This:C1470.dataModel#Null:C1517)
+		
+		Case of 
+				
+				//______________________________________________________
+			: (Value type:C1509($table)=Is object:K8:27)
+				
+				ASSERT:C1129($table.tableNumber#Null:C1517)
+				$tableID:=String:C10($table.tableNumber)
+				
+				//______________________________________________________
+			: (Value type:C1509($table)=Is text:K8:3)
+				
+				$tableID:=$table
+				
+				//______________________________________________________
+			: (Value type:C1509($table)=Is longint:K8:6)\
+				 | (Value type:C1509($table)=Is real:K8:4)
+				
+				$tableID:=String:C10($table)
+				
+				//______________________________________________________
+			Else 
+				
+				ASSERT:C1129(False:C215)
+				return 
+				
+				//______________________________________________________
+		End case 
+		
+		OB REMOVE:C1226(This:C1470.dataModel; $tableID)
+		
+	End if 
+	
+	// Update main
+	This:C1470.removeFromMain($table)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	/// Add table to the Main Menu
 Function addToMain($table)
 	
 	var $tableID : Text
 	var $main : Object
-	
-	$main:=This:C1470.main
 	
 	Case of 
 			
@@ -1195,7 +1263,6 @@ Function addToMain($table)
 		: (Value type:C1509($table)=Is object:K8:27)
 			
 			ASSERT:C1129($table.tableNumber#Null:C1517)
-			
 			$tableID:=String:C10($table.tableNumber)
 			
 			//______________________________________________________
@@ -1213,9 +1280,12 @@ Function addToMain($table)
 		Else 
 			
 			ASSERT:C1129(False:C215)
+			return 
 			
 			//______________________________________________________
 	End case 
+	
+	$main:=This:C1470.main
 	
 	If ($main.order=Null:C1517)
 		
@@ -1231,22 +1301,40 @@ Function addToMain($table)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Delete the table from the data model
-Function removeTable($table)
-	
-	If (This:C1470.dataModel#Null:C1517)
-		
-		OB REMOVE:C1226(This:C1470.dataModel; String:C10($table))
-		
-	End if 
-	
-	// Update main
-	This:C1470.removeFromMain($table)
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	/// Remove table to the Main Menu
 Function removeFromMain($table)
+	
+	var $tableID : Text
 	var $index : Integer
 	var $main : Object
+	
+	Case of 
+			
+			//______________________________________________________
+		: (Value type:C1509($table)=Is object:K8:27)
+			
+			ASSERT:C1129($table.tableNumber#Null:C1517)
+			$tableID:=String:C10($table.tableNumber)
+			
+			//______________________________________________________
+		: (Value type:C1509($table)=Is text:K8:3)
+			
+			$tableID:=$table
+			
+			//______________________________________________________
+		: (Value type:C1509($table)=Is longint:K8:6)\
+			 | (Value type:C1509($table)=Is real:K8:4)
+			
+			$tableID:=String:C10($table)
+			
+			//______________________________________________________
+		Else 
+			
+			ASSERT:C1129(False:C215)
+			return 
+			
+			//______________________________________________________
+	End case 
 	
 	$main:=This:C1470.main
 	
@@ -1256,7 +1344,7 @@ Function removeFromMain($table)
 		
 	Else 
 		
-		$index:=$main.order.indexOf(String:C10($table))
+		$index:=$main.order.indexOf($tableID)
 		
 		If ($index#-1)
 			

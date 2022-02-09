@@ -15,6 +15,7 @@ var $Lon_targetTop; $Lon_unpublished; $Lon_vOffset; $right; $row; $top; $width :
 var $Ptr_; $Ptr_me; $Ptr_published : Pointer
 var $context; $e; $form; $linkDataModel; $menu; $o; $relatedCatalog; $tableDataModel : Object
 var $c : Collection
+var $field : cs:C1710.field
 
 // ----------------------------------------------------
 // Initialisations
@@ -324,18 +325,14 @@ Case of
 						
 						If (Right click:C712)
 							
-							//#MARK_TODO - CONTEXTUAL MENU PUBLISH/UNPBLISH {ALL}
+							// TODO: CONTEXTUAL MENU [UN]PUBLISH ALL
 							
 						Else 
 							
 							If ($row>0)\
 								 && ($column=3)
 								
-								var $catalog : Collection
-								var $field : cs:C1710.field
-								
-								$catalog:=PROJECT.getCatalog()
-								$field:=$catalog.query("name = :1"; $context.currentTable.name).pop().fields.query("name = :1"; $context.fieldName).pop()
+								$field:=PROJECT.getCatalog().query("name = :1"; $context.currentTable.name).pop().fields.query("name = :1"; $context.fieldName).pop()
 								
 								If ($field.kind="relatedEntity")
 									
@@ -673,8 +670,8 @@ Case of
 		//// Hide the bottom line
 		//OBJECT SET VISIBLE(*; "bottom.line"; False)
 		//CALL FORM(Current form window; "editor_CALLBACK"; "resizePanel"; New object(\
-																																																						"panel"; Current form name; \
-																																																						"offset"; $Lon_vOffset))
+																																																									"panel"; Current form name; \
+																																																									"offset"; $Lon_vOffset))
 		//End if 
 		////______________________________________________________
 		//: ($e.code=On Mouse Leave)

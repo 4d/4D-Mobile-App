@@ -15,14 +15,15 @@ If (False:C215)
 	C_OBJECT:C1216(STRUCTURE_AUDIT; $1)
 End if 
 
-var $isTableUnsynchronized; $isUnsynchronized : Boolean
-var $cache; $current; $field; $item; $linkedField; $linkedItem; $o; $relatedField; $relatedItem; $structure : Object
-var $table; $tableCatalog : Object
-var $cachedCatalog; $linkedCatalog; $relatedCatalog; $unsynchronizedFields; $unsynchronizedTables : Collection
+var $storeCache; $isTableUnsynchronized; $isUnsynchronized : Boolean
+var $cache; $current; $field; $item; $linkedField; $linkedItem : Object
+var $relatedField; $relatedItem; $structure; $tableCatalog : Object
+var $cachedCatalog; $currentCatalog; $linkedCatalog; $relatedCatalog; $unsynchronizedFields; $unsynchronizedTables : Collection
 var $cacheFile : 4D:C1709.File
+var $o : cs:C1710.ob
 var $str : cs:C1710.str
+var $table : cs:C1710.table
 
-var $currentCatalog : Collection
 $currentCatalog:=$in.catalog
 
 // ----------------------------------------------------
@@ -45,7 +46,8 @@ If ($cacheFile.exists)
 	$cachedCatalog:=$cache.structure.definition
 	
 	// Was the structure changed?
-	If (Not:C34($cachedCatalog.equal($currentCatalog)))
+	If (($cachedCatalog#Null:C1517)\
+		 && Not:C34($cachedCatalog.equal($currentCatalog)))
 		
 		$unsynchronizedTables:=New collection:C1472
 		
@@ -116,20 +118,20 @@ If ($cacheFile.exists)
 													//______________________________________________________
 												: ($field.missing)
 													
-													$field.tableTips:=$str.setText("theFieldNameIsMissing").localized($field.name)
-													$field.fieldTips:=$str.setText("theFieldIsMissing").localized()
+													$field.tableTips:=$str.localize("theFieldNameIsMissing"; $field.name)
+													$field.fieldTips:=$str.localize("theFieldIsMissing")
 													
 													//______________________________________________________
 												: ($field.nameMismatch)
 													
-													$field.tableTips:=$str.setText("theFieldNameWasRenamed").localized(New collection:C1472($field.name; $field.current.name))
-													$field.fieldTips:=$str.setText("theFieldWasRenamed").localized($field.current.name)
+													$field.tableTips:=$str.localize("theFieldNameWasRenamed"; New collection:C1472($field.name; $field.current.name))
+													$field.fieldTips:=$str.localize("theFieldWasRenamed"; $field.current.name)
 													
 													//______________________________________________________
 												: (Bool:C1537($field.typeMismatch))
 													
-													$field.tableTips:=$str.setText("theFieldNameTypeWasModified").localized($field.name)
-													$field.fieldTips:=$str.setText("theFieldTypeWasModified").localized()
+													$field.tableTips:=$str.localize("theFieldNameTypeWasModified"; $field.name)
+													$field.fieldTips:=$str.localize("theFieldTypeWasModified")
 													
 													//______________________________________________________
 											End case 
@@ -170,13 +172,13 @@ If ($cacheFile.exists)
 													//______________________________________________________
 												: (Bool:C1537($field.missingRelatedDataclass))
 													
-													$field.tableTips:=$str.setText("theRelatedTableIsNoLongerAvailable").localized($field.relatedDataClass)
+													$field.tableTips:=$str.localize("theRelatedTableIsNoLongerAvailable"; $field.relatedDataClass)
 													$field.fieldTips:=$field.tableTips
 													
 													//______________________________________________________
 												: ($field.missing)
 													
-													$field.tableTips:=$str.setText("theRelationIsNoLongerAvailable").localized($item.key)
+													$field.tableTips:=$str.localize("theRelationIsNoLongerAvailable"; $item.key)
 													$field.fieldTips:=$field.tableTips
 													
 													//______________________________________________________
@@ -221,19 +223,19 @@ If ($cacheFile.exists)
 																	//______________________________________________________
 																: ($relatedField.missing)
 																	
-																	$relatedField.tableTips:=$str.setText("theFieldNameIsMissing").localized($relatedField.name)
+																	$relatedField.tableTips:=$str.localize("theFieldNameIsMissing"; $relatedField.name)
 																	$relatedField.fieldTips:=$relatedField.tableTips
 																	
 																	//______________________________________________________
 																: ($relatedField.nameMismatch)
 																	
-																	$relatedField.tableTips:=$str.setText("theFieldNameWasRenamed").localized(New collection:C1472($relatedField.name; $relatedField.current.name))
+																	$relatedField.tableTips:=$str.localize("theFieldNameWasRenamed"; New collection:C1472($relatedField.name; $relatedField.current.name))
 																	$relatedField.fieldTips:=$relatedField.tableTips
 																	
 																	//______________________________________________________
 																: (Bool:C1537($relatedField.typeMismatch))
 																	
-																	$relatedField.tableTips:=$str.setText("theFieldNameTypeWasModified").localized()
+																	$relatedField.tableTips:=$str.localize("theFieldNameTypeWasModified")
 																	$relatedField.fieldTips:=$relatedField.tableTips
 																	
 																	//______________________________________________________
@@ -267,13 +269,13 @@ If ($cacheFile.exists)
 																	//______________________________________________________
 																: ($relatedField.missing)
 																	
-																	$relatedField.tableTips:=$str.setText("the1NRelationIsNoMoreAvailable").localized($relatedField.name)
+																	$relatedField.tableTips:=$str.localize("the1NRelationIsNoMoreAvailable"; $relatedField.name)
 																	$relatedField.fieldTips:=$relatedField.tableTips
 																	
 																	//______________________________________________________
 																: ($relatedField.nameMismatch)
 																	
-																	$relatedField.tableTips:=$str.setText("theFieldNameWasRenamed").localized(New collection:C1472($relatedItem.key; $relatedField.name))
+																	$relatedField.tableTips:=$str.localize("theFieldNameWasRenamed"; New collection:C1472($relatedItem.key; $relatedField.name))
 																	$relatedField.fieldTips:=$relatedField.tableTips
 																	
 																	//______________________________________________________
@@ -329,19 +331,19 @@ If ($cacheFile.exists)
 																		//______________________________________________________
 																	: ($linkedField.missing)
 																		
-																		$linkedField.tableTips:=$str.setText("theFieldNameIsMissing").localized($linkedField.name)
+																		$linkedField.tableTips:=$str.localize("theFieldNameIsMissing"; $linkedField.name)
 																		$linkedField.fieldTips:=$linkedField.tableTips
 																		
 																		//______________________________________________________
 																	: ($linkedField.nameMismatch)
 																		
-																		$linkedField.tableTips:=$str.setText("theFieldNameWasRenamed").localized(New collection:C1472($linkedField.name; $linkedField.current.name))
+																		$linkedField.tableTips:=$str.localize("theFieldNameWasRenamed"; New collection:C1472($linkedField.name; $linkedField.current.name))
 																		$linkedField.fieldTips:=$linkedField.tableTips
 																		
 																		//______________________________________________________
 																	: (Bool:C1537($linkedField.typeMismatch))
 																		
-																		$linkedField.tableTips:=$str.setText("theFieldNameTypeWasModified").localized()
+																		$linkedField.tableTips:=$str.localize("theFieldNameTypeWasModified")
 																		$linkedField.fieldTips:=$linkedField.tableTips
 																		
 																		//______________________________________________________
@@ -378,19 +380,19 @@ If ($cacheFile.exists)
 																	//______________________________________________________
 																: ($relatedField.missing)
 																	
-																	$relatedField.tableTips:=$str.setText("theFieldNameIsMissing").localized($relatedField.name)
+																	$relatedField.tableTips:=$str.localize("theFieldNameIsMissing"; $relatedField.name)
 																	$relatedField.fieldTips:=$relatedField.tableTips
 																	
 																	//______________________________________________________
 																: ($relatedField.nameMismatch)
 																	
-																	$relatedField.tableTips:=$str.setText("theFieldNameWasRenamed").localized(New collection:C1472($relatedField.name; $relatedField.current.name))
+																	$relatedField.tableTips:=$str.localize("theFieldNameWasRenamed"; New collection:C1472($relatedField.name; $relatedField.current.name))
 																	$relatedField.fieldTips:=$relatedField.tableTips
 																	
 																	//______________________________________________________
 																: (Bool:C1537($relatedField.typeMismatch))
 																	
-																	$relatedField.tableTips:=$str.setText("theFieldNameTypeWasModified").localized()
+																	$relatedField.tableTips:=$str.localize("theFieldNameTypeWasModified")
 																	$relatedField.fieldTips:=$relatedField.tableTips
 																	
 																	//______________________________________________________
@@ -452,19 +454,19 @@ If ($cacheFile.exists)
 													//______________________________________________________
 												: (Bool:C1537($field.missingRelatedDataclass))
 													
-													$field.tableTips:=$str.setText("theRelatedTableIsNoLongerAvailable").localized($field.relatedEntities)
+													$field.tableTips:=$str.localize("theRelatedTableIsNoLongerAvailable"; $field.relatedEntities)
 													$field.fieldTips:=$field.tableTips
 													
 													//______________________________________________________
 												: ($field.missing)
 													
-													$field.tableTips:=$str.setText("theRelatedFieldIsMissingOrHasBeenModified").localized($item.key)
+													$field.tableTips:=$str.localize("theRelatedFieldIsMissingOrHasBeenModified"; $item.key)
 													$field.fieldTips:=$field.tableTips
 													
 													//______________________________________________________
 												: ($field.nameMismatch)
 													
-													$field.tableTips:=$str.setText("theFieldNameWasRenamed").localized(New collection:C1472($field.name; $field.current.name))
+													$field.tableTips:=$str.localize("theFieldNameWasRenamed"; New collection:C1472($field.name; $field.current.name))
 													$field.fieldTips:=$field.tableTips
 													
 													//______________________________________________________
@@ -515,20 +517,20 @@ If ($cacheFile.exists)
 													//______________________________________________________
 												: ($field.missing)
 													
-													$field.tableTips:=$str.setText("theFieldNameIsMissing").localized($field.name)
-													$field.fieldTips:=$str.setText("theFieldIsMissing").localized()
+													$field.tableTips:=$str.localize("theFieldNameIsMissing"; $field.name)
+													$field.fieldTips:=$str.localize("theFieldIsMissing")
 													
 													//______________________________________________________
 												: ($field.nameMismatch)
 													
-													$field.tableTips:=$str.setText("theFieldNameWasRenamed").localized(New collection:C1472($field.name; $field.current.name))
-													$field.fieldTips:=$str.setText("theFieldWasRenamed").localized($field.current.name)
+													$field.tableTips:=$str.localize("theFieldNameWasRenamed"; New collection:C1472($field.name; $field.current.name))
+													$field.fieldTips:=$str.localize("theFieldWasRenamed"; $field.current.name)
 													
 													//______________________________________________________
 												: (Bool:C1537($field.typeMismatch))
 													
-													$field.tableTips:=$str.setText("theFieldNameTypeWasModified").localized($field.name)
-													$field.fieldTips:=$str.setText("theFieldTypeWasModified").localized()
+													$field.tableTips:=$str.localize("theFieldNameTypeWasModified"; $field.name)
+													$field.fieldTips:=$str.localize("theFieldTypeWasModified")
 													
 													//______________________________________________________
 											End case 
@@ -591,9 +593,6 @@ If ($cacheFile.exists)
 			
 		Else 
 			
-			// Keep the current catalog
-			Form:C1466.$catalog:=$currentCatalog
-			
 			// The changes has no influence on the data model -> Update the cache
 			$structure:=$cache.structure=Null:C1517 ? New object:C1471 : $cache.structure
 			$structure.definition:=$currentCatalog
@@ -611,21 +610,28 @@ If ($cacheFile.exists)
 		// Reset
 		PROJECT.$dialog.unsynchronizedTables:=New collection:C1472
 		
+		// Update the cache
+		$storeCache:=True:C214
+		
 	End if 
 	
 Else 
 	
 	// Create the cache
-	If ($currentCatalog#Null:C1517)
-		
-		$cache:=New object:C1471(\
-			"structure"; New object:C1471(\
-			"definition"; $currentCatalog; \
-			"digest"; Generate digest:C1147(JSON Stringify:C1217($currentCatalog); SHA1 digest:K66:2)))
-		
-		$cacheFile.setText(JSON Stringify:C1217($cache; *))
-		
-	End if 
+	$storeCache:=True:C214
+	
+End if 
+
+If ($storeCache\
+ & ($currentCatalog#Null:C1517))
+	
+	$cache:=New object:C1471(\
+		"structure"; New object:C1471(\
+		"definition"; $currentCatalog; \
+		"digest"; Generate digest:C1147(JSON Stringify:C1217($currentCatalog); SHA1 digest:K66:2)))
+	
+	$cacheFile.setText(JSON Stringify:C1217($cache; *))
+	
 End if 
 
 If (Not:C34($isUnsynchronized))\
