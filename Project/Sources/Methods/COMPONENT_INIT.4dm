@@ -381,14 +381,6 @@ End if
 /*================================================================================================================================
 AFTER FLAGS
 ================================================================================================================================*/
-If (FEATURE.with("accentColors"))
-	
-	// EDITOR.selectedColor:=Highlight menu background color
-	// EDITOR.highlightColor:=Highlight menu background color
-	// EDITOR.backgroundSelectedColor:=Highlight menu background color // 0x004BA6F8
-	// EDITOR.backgroundUnselectedColor:=Background color none // 0x005A5A5A
-	
-End if 
 
 SET ASSERT ENABLED:C1131(FEATURE.with("debug"); *)
 

@@ -1,59 +1,38 @@
 Class extends FormTemplate
 
-Class constructor
-	C_OBJECT:C1216($1)
-	Super:C1705($1)
+Class constructor($input : Object)
+	Super:C1705($input)
 	ASSERT:C1129(This:C1470.template.type="navigation")
 	
-Function doRun
-	C_OBJECT:C1216($0; $Obj_out)
+Function storyboard()->$result : Object
+	$result:=cs:C1710.NavigationStoryboard.new()
+	
+Function doRun()->$Obj_out : Object
 	$Obj_out:=Super:C1706.doRun()  // copy files
 	
-	C_OBJECT:C1216($Obj_template)
+	var $Obj_template : Object
 	$Obj_template:=This:C1470.template
 	
-	// Get navigation tables as tag
-	This:C1470.input.tags.navigationTables:=dataModel(New object:C1471(\
-		"action"; "tableCollection"; \
-		"dataModel"; This:C1470.input.project.dataModel; \
-		"tag"; True:C214; \
-		"tables"; This:C1470.input.project.main.order)).tables
+	// Get navigation tables or other items as tag
+	If (FEATURE.with("actionsInTabBar"))
+		This:C1470._actionsInTabBarProcess()
+	Else 
+		This:C1470.input.tags.navigationTables:=dataModel(New object:C1471(\
+			"action"; "tableCollection"; \
+			"dataModel"; This:C1470.input.project.dataModel; \
+			"tag"; True:C214; \
+			"tables"; This:C1470.input.project.main.order)).tables
+	End if 
 	
-	// Compute table row height, not very responsive. Check if possible with storyboard
-	C_LONGINT:C283($i)
-	$i:=This:C1470.input.tags.navigationTables.length
+	This:C1470._computeNavigationRowHeight()
 	
-	Case of 
-			
-			//……………………………………………………………………………………
-		: ($i>10)
-			
-			This:C1470.input.tags.navigationRowHeight:="-1"  // https://developer.apple.com/documentation/uikit/uitableviewautomaticdimension
-			
-			//……………………………………………………………………………………
-		: ($i<3)
-			
-			This:C1470.input.tags.navigationRowHeight:="300"
-			
-			//……………………………………………………………………………………
-		: ($i<4)
-			
-			This:C1470.input.tags.navigationRowHeight:="200"
-			
-			//……………………………………………………………………………………
-		Else 
-			
-			This:C1470.input.tags.navigationRowHeight:=String:C10(100+(100/$i))
-			
-			//……………………………………………………………………………………
-	End case 
-	
-	C_OBJECT:C1216($Obj_result)
-	$Obj_result:=This:C1470.createIconAssets()
+	var $Obj_result : Object
+	$Obj_result:=This:C1470._createIconAssets()
 	ob_error_combine($Obj_out; $Obj_result)
 	
+	// Tag to transmit to other templating processing
 	$Obj_out.tags:=New object:C1471(\
-		"navigationTables"; This:C1470.input.tags.navigationTables)  // Tag to transmit
+		"navigationTables"; This:C1470.input.tags.navigationTables)
 	
 	// Modify storyboards with navigation tables
 	$Obj_out.storyboard:=This:C1470.storyboard().run(This:C1470.template; Folder:C1567(This:C1470.input.path; fk platform path:K87:2); This:C1470.input.tags)
@@ -61,23 +40,129 @@ Function doRun
 	If (Not:C34($Obj_out.storyboard.success))
 		
 		$Obj_out.success:=False:C215
-		
 		ob_error_combine($Obj_out; $Obj_out.storyboard; "Storyboard for navigation template failed")
 		
 	End if 
 	
 	$0:=$Obj_out
 	
-Function createIconAssets
-	C_OBJECT:C1216($Obj_out; $0)
+	
+	// MARK: - items
+Function _actionsInTabBarProcess()
+	This:C1470.input.tags.navigationTables:=New collection:C1472
+	
+	If (This:C1470.input.project.dataModel=Null:C1517)
+		This:C1470.errors:=New collection:C1472("Missing `dataModel` property")
+		return   // guard
+	End if 
+	
+	var $dataModel; $table : Object
+	$dataModel:=This:C1470.input.project.dataModel
+	
+	var $Col_tables : Collection
+	If (Value type:C1509(This:C1470.input.project.main.order)=Is collection:K8:32)
+		
+		$Col_tables:=This:C1470.input.project.main.order
+		
+	Else 
+		
+		// all table in model
+		OB GET PROPERTY NAMES:C1232($dataModel; $tTxt_tables)
+		$Col_tables:=New collection:C1472()
+		ARRAY TO COLLECTION:C1563($Col_tables; $tTxt_tables)
+		
+	End if 
+	
+	This:C1470.input.tags.navigationTables:=New collection:C1472
+	
+	var $navigationItem : Variant
+	For each ($navigationItem; $Col_tables)
+		
+		Case of 
+			: (Value type:C1509($navigationItem)=Is text:K8:3)
+				
+				If ($dataModel[$navigationItem]#Null:C1517)
+					
+					$table:=OB Copy:C1225($dataModel[$navigationItem])  // to not alter caller
+					$table.tableNumber:=Num:C11($navigationItem)
+					
+					$table.originalName:=$table[""].name
+					$table.name:=formatString("table-name"; $table[""].name)
+					
+					This:C1470.input.tags.navigationTables.push($table)
+					
+				Else 
+					
+					// ASSERT(dev_Matrix ) // missing table in model?
+					
+				End if 
+				
+			: (Value type:C1509($navigationItem)=Is object:K8:27)
+				
+				$table:=OB Copy:C1225($navigationItem)  // to not alter caller
+				$table[""]:=$table  // to simulate meta data behaviour or table (but must be clean)
+				
+				// TODO:actionsInTabBar: create items for actions, maybe format according
+				This:C1470.input.tags.navigationTables.push($table)
+				
+		End case 
+		
+	End for each 
+	
+	// TODO:actionsInTabBar: create storyboards for each action item
+	var $o : Object
+	For each ($table; This:C1470.input.tags.navigationTables)
+		If ($table.actions#Null:C1517)  //TODO:test:actionsInTabBar:  or any criteria to see if action instead of table
+			
+			$o:=New object:C1471()
+			$o.tags:=New object:C1471("table"; $table)
+			$table.tableActions:=$table.actions  // tag ___TABLE_ACTIONS___ (or do a new tag system with only ACTIONS)
+			$o:=TemplateInstanceFactory($o).run()  // <================================== RECURSIVE
+			// XXX errors?
+			
+		End if 
+	End for each 
+	
+	
+	// Compute table row height, not very responsive. Check if possible with storyboard
+Function _computeNavigationRowHeight()
+	var $numberOfTabBarItems : Integer
+	$numberOfTabBarItems:=This:C1470.input.tags.navigationTables.length
+	
+	Case of 
+			
+			//……………………………………………………………………………………
+		: ($numberOfTabBarItems>10)
+			
+			This:C1470.input.tags.navigationRowHeight:="-1"  // https://developer.apple.com/documentation/uikit/uitableviewautomaticdimension
+			
+			//……………………………………………………………………………………
+		: ($numberOfTabBarItems<3)
+			
+			This:C1470.input.tags.navigationRowHeight:="300"
+			
+			//……………………………………………………………………………………
+		: ($numberOfTabBarItems<4)
+			
+			This:C1470.input.tags.navigationRowHeight:="200"
+			
+			//……………………………………………………………………………………
+		Else 
+			
+			This:C1470.input.tags.navigationRowHeight:=String:C10(100+(100/$numberOfTabBarItems))
+			
+			//……………………………………………………………………………………
+	End case 
+	
+Function _createIconAssets()->$Obj_out : Object
 	$Obj_out:=New object:C1471()
 	
 	// need asset?
-	C_BOOLEAN:C305($Boo_withIcons)
+	var $Boo_withIcons : Boolean
 	$Boo_withIcons:=Bool:C1537(This:C1470.template.assets.mandatory)\
 		 | (This:C1470.input.tags.navigationTables.query("icon != ''").length>0)
 	
-	C_OBJECT:C1216($Obj_table)
+	var $Obj_table; $Obj_metaData : Object
 	For each ($Obj_table; This:C1470.input.tags.navigationTables)
 		
 		If ($Boo_withIcons)
@@ -104,15 +189,20 @@ Function createIconAssets
 		
 		$Obj_out.assets:=New collection:C1472  // result of asset operations
 		
-		C_OBJECT:C1216($Path_root; $Path_hostRoot)
-		$Path_root:=_o_COMPONENT_Pathname("fieldIcons")
-		$Path_hostRoot:=_o_COMPONENT_Pathname("host_fieldIcons")
+		var $Path_root; $Path_hostRoot : Object
+		If (FEATURE.with("actionsInTabBar"))
+			$Path_root:=This:C1470.path.new().fieldIcons()
+			$Path_hostRoot:=This:C1470.path.new().hostIcons()
+		Else 
+			$Path_root:=_o_COMPONENT_Pathname("fieldIcons")
+			$Path_hostRoot:=_o_COMPONENT_Pathname("host_fieldIcons")
+		End if 
 		
-		C_OBJECT:C1216($Obj_table)
 		For each ($Obj_table; This:C1470.input.tags.navigationTables)
 			
-			C_OBJECT:C1216($Obj_metaData)
 			$Obj_metaData:=$Obj_table[""]
+			// TODO:actionsInTabBar: maybe info not in a subMetadata node here
+			
 			
 			If (Length:C16(String:C10($Obj_metaData.icon))=0)  // no icon defined
 				
@@ -168,7 +258,7 @@ Function createIconAssets
 				
 			Else 
 				
-				C_OBJECT:C1216($Path_icon)
+				var $Path_icon : Object
 				If (Position:C15("/"; $Obj_metaData.icon)=1)
 					
 					// User icon
@@ -180,7 +270,7 @@ Function createIconAssets
 					
 				End if 
 				
-				C_OBJECT:C1216($o)
+				var $o : Object
 				$o:=asset(New object:C1471(\
 					"action"; "create"; \
 					"type"; "imageset"; \
@@ -199,7 +289,3 @@ Function createIconAssets
 		
 	End if 
 	
-	$0:=$Obj_out
-	
-Function storyboard()->$result : Object
-	$result:=cs:C1710.NavigationStoryboard.new()

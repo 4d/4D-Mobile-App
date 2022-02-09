@@ -138,24 +138,24 @@ FEATURE.unstable("useTextRestResponse")  // [MOBILE] Data generation : for optis
 
 //mark:-R5
 FEATURE.unstable("listEditor")  // [MOBILE] Create and edit an input control from the project editor
+FEATURE.unstable("xcDataModelClass")  // Use class to create core data model ie. xcDataModel (useful to refactor for alias)
+FEATURE.unstable("iosBuildWithClass")  // Use cs.MobileProjectIOS class
 
 //mark:-🚧 WIP
 FEATURE.wip(131225)  // [MOBILE] Use aliases
 FEATURE.wip(129953)  // [MOBILE] Handle Many-one-Many relations
 FEATURE.wip(127558)  // [ANDROID] Data set
+FEATURE.wip(131983)  // [MOBILE] Launch an action from the Tab bar
+
 // FEATURE.wip("simuARMOnAppleProcessor") // Mac M1 build for simu using arm64
 FEATURE.wip("duplicateTemplate")  // Allow to duplicate template in host database and show on disk https:// Project.4d.com/issues/98054
+FEATURE.wip("newFormatterChoiceList")  // Menu to create formatter choice list directly , from data
+
 FEATURE.wip("taskIndicator")  // UI for background tasks executing
 
-FEATURE.wip("accentColors")  // Manage colors according to user system parameters
 FEATURE.wip("sourceClass")  // Work with Source class to test the data source
 
-FEATURE.wip("newFormatterChoiceList")  // Menu to create formatter choice list directly , from data
-FEATURE.wip("xcDataModelClass")  // Use class to create core data model ie. xcDataModel (useful to refactor for alias)
-
 FEATURE.vdl("modernStructure")
-
-// FEATURE.wip("iosBuildWithClass")  // Use cs.MobileProjectIOS class
 
 //mark:-⛔ PENDING
 FEATURE.pending("compressionOfTemplates")  // Use the archive "/RESOURCES/template.zip" instead of "templates" folder in builded component
@@ -267,6 +267,7 @@ If ($preferences.features#Null:C1517)
 End if 
 
 //mark:-→ ALIAS
+FEATURE.alias("actionsInTabBar"; 131983)
 FEATURE.alias("androidDataSet"; 127558)
 FEATURE.alias("many-one-many"; 129953)
 FEATURE.alias("alias"; 131225)

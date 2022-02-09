@@ -11,8 +11,7 @@
 	},
 	"____FOR_TESTS": {
 		"classes": [
-			"ALL_TYPESEntity",
-			"EmployesEntity"
+			"ALL_TYPESEntity"
 		]
 	},
 	"__IN WORKS": {
@@ -998,6 +997,7 @@
 	},
 	"templateFormClass": {
 		"classes": [
+			"ActionsMenuFormTemplate",
 			"DetailFormTemplate",
 			"FormTemplate",
 			"ListFormTemplate",

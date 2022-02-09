@@ -25,6 +25,8 @@ Case of
 		$instance:=cs:C1710.ListFormTemplate.new($input)
 	: ($type="tablesForms")
 		$instance:=cs:C1710.TablesFormsTemplate.new($input)
+	: ($type="actionsmenuform")
+		$instance:=cs:C1710.ActionsMenuFormTemplate.new($input)
 	Else 
 		// check if you need a special instance by settings type (no type currently: name = settings, pushnotif, ...)
 		$instance:=cs:C1710.Template.new($input)

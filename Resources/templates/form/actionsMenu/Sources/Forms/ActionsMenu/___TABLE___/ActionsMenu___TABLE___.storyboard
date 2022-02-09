@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Ogb-fa-BrX">
+    <device id="retina5_5" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="HelveticaNeue.ttc">
+            <string>HelveticaNeue</string>
+        </array>
+        <array key="HelveticaNeueLights.ttc">
+            <string>HelveticaNeue-Light</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--List Form-->
+        <scene sceneID="skp-Bg-beV">
+            <objects>
+                <tableViewController storyboardIdentifier="___TABLE___ListForm" id="Dxc-Bl-At2" userLabel="List Form" customClass="___TABLE___ListForm" customModule="___PRODUCT___" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Re1-1g-DVP" customClass="AnimatableTableView" customModule="IBAnimatable">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="___TABLE___" rowHeight="96" id="LNn-VU-5br" customClass="AnimatableTableViewCell" customModule="IBAnimatable">
+                                <rect key="frame" x="0.0" y="28" width="414" height="96"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="LNn-VU-5br" id="bUw-MO-Pjd">
+                                    <rect key="frame" x="0.0" y="0.0" width="382.66666666666669" height="96"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="i0R-XT-RM1">
+                                            <rect key="frame" x="0.0" y="0.0" width="382.66666666666669" height="96"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" ambiguous="YES" text="___FIELD_2_LABEL___" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MyS-wy-Ryn">
+                                                    <rect key="frame" x="16" y="56.666666666666657" width="366.66666666666669" height="20.333333333333343"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="string" keyPath="bindTo.record.___FIELD_2___" value="___FIELD_2_BINDING_TYPE___"/>
+                                                    </userDefinedRuntimeAttributes>
+                                                </label>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" ambiguous="YES" text="___FIELD_1_LABEL___" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g5c-4f-S1j">
+                                                    <rect key="frame" x="16" y="20" width="366.66666666666669" height="23.666666666666671"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                                                    <color key="textColor" name="BackgroundColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="string" keyPath="bindTo.record.___FIELD_1___" value="___FIELD_1_BINDING_TYPE___"/>
+                                                    </userDefinedRuntimeAttributes>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                            <constraints>
+                                                <constraint firstItem="MyS-wy-Ryn" firstAttribute="leading" secondItem="i0R-XT-RM1" secondAttribute="leading" constant="16" id="39w-Zo-jTU"/>
+                                                <constraint firstAttribute="trailing" secondItem="g5c-4f-S1j" secondAttribute="trailing" id="4kX-RR-Yx9"/>
+                                                <constraint firstItem="g5c-4f-S1j" firstAttribute="leading" secondItem="i0R-XT-RM1" secondAttribute="leading" constant="16" id="9B0-Jj-Vcd"/>
+                                                <constraint firstAttribute="trailing" secondItem="MyS-wy-Ryn" secondAttribute="trailing" id="ADQ-Ev-e8U"/>
+                                                <constraint firstAttribute="bottom" secondItem="MyS-wy-Ryn" secondAttribute="bottom" constant="18.999999999999957" id="Hxa-OT-EpE"/>
+                                                <constraint firstItem="MyS-wy-Ryn" firstAttribute="top" secondItem="g5c-4f-S1j" secondAttribute="bottom" constant="13.000000000000043" id="gIg-Rn-g7M"/>
+                                                <constraint firstItem="g5c-4f-S1j" firstAttribute="top" secondItem="i0R-XT-RM1" secondAttribute="top" constant="20" id="pZz-80-YfZ"/>
+                                            </constraints>
+                                        </view>
+                                    </subviews>
+                                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                    <constraints>
+                                        <constraint firstItem="i0R-XT-RM1" firstAttribute="leading" secondItem="bUw-MO-Pjd" secondAttribute="leading" id="6Pt-q7-Qdf"/>
+                                        <constraint firstAttribute="bottom" secondItem="i0R-XT-RM1" secondAttribute="bottom" id="EvJ-oc-3mJ"/>
+                                        <constraint firstItem="i0R-XT-RM1" firstAttribute="top" secondItem="bUw-MO-Pjd" secondAttribute="top" id="Qva-OQ-9TV"/>
+                                        <constraint firstAttribute="trailing" secondItem="i0R-XT-RM1" secondAttribute="trailing" id="f6O-Kk-zfA"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="fillColor">
+                                        <color key="value" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <segue destination="TmP-Gk-7ej" kind="showDetail" identifier="showDetails" id="lRt-3I-ZEi"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="string" keyPath="actions" value="___ENTITY_ACTIONS___"/>
+                        </userDefinedRuntimeAttributes>
+                        <connections>
+                            <outlet property="dataSource" destination="Dxc-Bl-At2" id="Nbk-b7-Ogd"/>
+                            <outlet property="delegate" destination="Dxc-Bl-At2" id="k5f-vV-EBw"/>
+                        </connections>
+                    </tableView>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="___TABLE_LABEL___" id="Md6-BR-hjc">
+                        <barButtonItem key="leftBarButtonItem" image="previous" id="oNP-za-8R3" userLabel="PreviousPage Button Item">
+                            <color key="tintColor" name="ForegroundColor"/>
+                            <connections>
+                                <action selector="previousPage:" destination="Dxc-Bl-At2" id="1zk-Aq-3yo"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="searchableField" value="___SEARCHABLE_FIELD___"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="sortField" value="___SORT_FIELD___"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="sectionFieldname" value="___SECTION_FIELD___"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="sectionFieldFormatter" value="___SECTION_FIELD_BINDING_TYPE___"/>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="showSectionBar" value="NO"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="actions" value="___TABLE_ACTIONS___"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <outlet property="searchBar" destination="eqo-z7-dF9" id="ZJt-km-6cn"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Jfs-ds-X4z" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <searchBar contentMode="redraw" id="eqo-z7-dF9">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <textInputTraits key="textInputTraits"/>
+                </searchBar>
+            </objects>
+            <point key="canvasLocation" x="513.04347826086962" y="111.68478260869566"/>
+        </scene>
+        <!--___TABLE___DetailsForm-->
+        <scene sceneID="pzT-Ts-eNA">
+            <objects>
+                <viewControllerPlaceholder storyboardName="___TABLE___DetailsForm" id="TmP-Gk-7ej" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZA2-Ia-mDc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1185" y="112"/>
+        </scene>
+        <!--___TABLE_SHORT_LABEL___-->
+        <scene sceneID="43G-ax-Y26">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Ogb-fa-BrX" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="___TABLE_SHORT_LABEL___" image="___TABLE_ICON___" selectedImage="___TABLE_ICON___" id="65z-ho-M8H"/>
+                    <toolbarItems/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="06B-nF-C5E">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="96"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" name="BackgroundColor"/>
+                        <color key="tintColor" name="ForegroundColor"/>
+                        <color key="barTintColor" name="BackgroundColor"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" name="ForegroundColor"/>
+                        </textAttributes>
+                        <textAttributes key="largeTitleTextAttributes">
+                            <color key="textColor" name="ForegroundColor"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="Dxc-Bl-At2" kind="relationship" relationship="rootViewController" id="h9W-QC-Suo"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="d9P-ml-O9s" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-361" y="112"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="___TABLE_ICON___" width="25" height="25"/>
+        <image name="previous" width="22" height="22"/>
+        <namedColor name="BackgroundColor">
+            <color red="1" green="0.35294117647058826" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="ForegroundColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </namedColor>
+    </resources>
+</document>

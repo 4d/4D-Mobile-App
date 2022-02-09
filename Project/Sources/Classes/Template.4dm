@@ -1,8 +1,6 @@
-Class constructor
-	C_OBJECT:C1216($1)
-	
-	This:C1470.input:=$1
-	This:C1470.template:=$1.template
+Class constructor($input : Object)
+	This:C1470.input:=$input
+	This:C1470.template:=$input.template
 	
 	// XXX make clean with errors?
 	ASSERT:C1129(Value type:C1509(This:C1470.input.project)=Is object:K8:27)
@@ -11,9 +9,9 @@ Class constructor
 	ASSERT:C1129(Value type:C1509(This:C1470.input.template)=Is object:K8:27)
 	ASSERT:C1129(Value type:C1509(This:C1470.input.template.source)=Is text:K8:3)
 	
-Function run
-	C_OBJECT:C1216($0; $Obj_out)
+	This:C1470.path:=cs:C1710.path.new()
 	
+Function run()->$Obj_out : Object
 	// ----------------------------------------------------
 	// Manage template files according to type
 	// ----------------------------------------------------
@@ -78,35 +76,28 @@ Function run
 	
 	$Obj_out.success:=Not:C34(ob_error_has($Obj_out))
 	
-	// ----------------------------------------------------
-	// Return
-	$0:=$Obj_out
-	
-	
-Function getCatalogExcludePattern
-	C_TEXT:C284($0)
-	
+Function getCatalogExcludePattern()->$pattern : Text
 	Case of 
 			
 			//……………………………………………………………………………………………………………
 		: (Value type:C1509(This:C1470.input.exclude)=Is text:K8:3)
 			
-			$0:=This:C1470.input.exclude
+			$pattern:=This:C1470.input.exclude
 			
 			//……………………………………………………………………………………………………………
 		: (Value type:C1509(This:C1470.input.exclude)=Is collection:K8:32)
 			
-			$0:=JSON Stringify:C1217(This:C1470.input.exclude)
+			$pattern:=JSON Stringify:C1217(This:C1470.input.exclude)
 			
 			//……………………………………………………………………………………………………………
 		: (Bool:C1537(This:C1470.template.inject))
 			
-			$0:=JSON Stringify:C1217(SHARED.template.exclude)
+			$pattern:=JSON Stringify:C1217(SHARED.template.exclude)
 			
 			//……………………………………………………………………………………………………………
 		Else 
 			
-			$0:="."  // ignore invisible files by default
+			$pattern:="."  // ignore invisible files by default
 			
 			//……………………………………………………………………………………………………………
 	End case 
