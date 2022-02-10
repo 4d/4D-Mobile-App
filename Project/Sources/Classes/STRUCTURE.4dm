@@ -341,6 +341,7 @@ Function fieldList()
 								 & (String:C10($relatedDataClasses[$t].relatedDataClass)#$table.name)
 								
 								$o:=New object:C1471(\
+									"kind"; "oneToOne"; \
 									"oneToOne"; True:C214; \
 									"name"; $relatedDataClasses[$t].relatedDataClass; \
 									"path"; New collection:C1472($field.name; $t; $relatedDataClasses[$t].relatedDataClass).join(".")\
@@ -511,9 +512,9 @@ Function fieldList()
 	/// Displays related field picker
 Function doFieldPicker()->$count : Integer
 	
-	var $context; $currentDataModel; $relatedDataModel; $o; $relatedCatalog; $tableDataModel : Object
+	var $context; $currentDataModel; $o; $relatedCatalog; $relatedDataModel; $tableDataModel : Object
 	var $target : Object
-	var $c : Collection
+	var $path : Collection
 	var $field : cs:C1710.field
 	var $currentTable : cs:C1710.table
 	
@@ -538,11 +539,11 @@ Function doFieldPicker()->$count : Integer
 		For each ($field; $relatedCatalog.fields)
 			
 			// Recover the publication status
-			$c:=Split string:C1554(($field.label=Null:C1517) ? $field.path : $field.label; ".")
+			$path:=Split string:C1554(($field.label=Null:C1517) ? $field.path : $field.label; ".")
 			
-			If ($c.length>1)
+			If ($path.length>1)
 				
-				$field.published:=($relatedDataModel[$c[0]][Choose:C955($field.kind="storage"; String:C10($field.fieldNumber); $field.name)]#Null:C1517)
+				$field.published:=($relatedDataModel[$path[0]][Choose:C955($field.kind="storage"; String:C10($field.fieldNumber); $field.name)]#Null:C1517)
 				
 			Else 
 				
@@ -576,7 +577,7 @@ Function doFieldPicker()->$count : Integer
 					
 					$target:=$tableDataModel[$context.fieldName]
 					
-					$c:=Split string:C1554(($field.label=Null:C1517) ? $field.path : $field.label; ".")
+					$path:=Split string:C1554(($field.label=Null:C1517) ? $field.path : $field.label; ".")
 					
 					If ($field.published)
 						
@@ -593,11 +594,11 @@ Function doFieldPicker()->$count : Integer
 						End if 
 						
 						// Create the field, if any
-						If ($c.length>1)
+						If ($path.length>1)
 							
-							If ($target[$c[0]]=Null:C1517)
+							If ($target[$path[0]]=Null:C1517)
 								
-								$target[$c[0]]:=New object:C1471(\
+								$target[$path[0]]:=New object:C1471(\
 									"kind"; "relatedEntity"; \
 									"relatedDataClass"; $field.tableName; \
 									"inverseName"; $currentTable.field.query("name=:1"; $context.fieldName).pop().inverseName; \
@@ -608,38 +609,58 @@ Function doFieldPicker()->$count : Integer
 							Case of 
 									
 									//______________________________________________________
-								: ($target[$c[0]][Choose:C955($field.kind="storage"; String:C10($field.fieldNumber); $field.name)]#Null:C1517)
+								: ($target[$path[0]][Choose:C955($field.kind="storage"; String:C10($field.fieldNumber); $field.name)]#Null:C1517)
 									
 									// THE FIELD IS ALREADY IN THE DATA MODEL
 									
 									//______________________________________________________
-								: ($field.kind="storage")
+								: ($field.kind="storage")  // Attribute
 									
 									$o:=New object:C1471(\
 										"kind"; $field.kind; \
+										"name"; $field.name; \
+										"fieldType"; $field.fieldType; \
 										"path"; $field.path; \
 										"label"; PROJECT.label($field.name); \
 										"shortLabel"; PROJECT.shortLabel($field.name); \
-										"type"; $field.type; \
-										"fieldType"; $field.fieldType)
+										"valueType"; $field.valueType)
 									
-									$target[$c[0]][String:C10($field.fieldNumber)]:=$o
+									// mark:#TEMPO
+									$o.type:=$field.type
+									
+									$target[$path[0]][String:C10($field.fieldNumber)]:=$o
 									
 									//______________________________________________________
-								: ($field.kind="alias")
+								: ($field.kind="alias")  // Alias
 									
 									$o:=New object:C1471(\
 										"kind"; $field.kind; \
-										"path"; $field.path; \
-										"label"; PROJECT.label($field.name); \
-										"shortLabel"; PROJECT.shortLabel($field.name); \
-										"type"; $field.type; \
-										"fieldType"; $field.fieldType)
+										"fieldType"; $field.fieldType; \
+										"path"; $field.path)
 									
-									$target[$c[0]][$field.name]:=$o
+									Case of 
+											
+											//______________________________________________________
+										: ($field.fieldType=42)  // Selection
+											
+											$o.label:=PROJECT.label(EDITOR.str.localize("listOf"; $field.name))
+											$o.shortLabel:=PROJECT.label($field.name)
+											
+											//______________________________________________________
+										Else 
+											
+											$o.label:=PROJECT.label($field.name)
+											$o.shortLabel:=PROJECT.label($field.name)
+											
+											//______________________________________________________
+									End case 
+									
+									$o.fieldType:=$field.fieldType
+									
+									$target[$path[0]][$field.name]:=$o
 									
 									//______________________________________________________
-								: ($field.kind="calculated")
+								: ($field.kind="calculated")  // Computed attribute
 									
 									$o:=New object:C1471(\
 										"kind"; $field.kind; \
@@ -651,7 +672,7 @@ Function doFieldPicker()->$count : Integer
 									// MARK:#TEMPO
 									$o.computed:=True:C214
 									
-									$target[$c[0]][$field.name]:=$o
+									$target[$path[0]][$field.name]:=$o
 									
 									//______________________________________________________
 								Else 
@@ -752,16 +773,16 @@ Function doFieldPicker()->$count : Integer
 								//______________________________________________________
 							Else 
 								
-								If ($c.length>1)
+								If ($path.length>1)
 									
-									If ($target[$c[0]][($field.kind="storage") ? String:C10($field.fieldNumber) : $field.name]#Null:C1517)
+									If ($target[$path[0]][($field.kind="storage") ? String:C10($field.fieldNumber) : $field.name]#Null:C1517)
 										
-										OB REMOVE:C1226($target[$c[0]]; Choose:C955($field.kind="storage"; String:C10($field.fieldNumber); $field.name))
+										OB REMOVE:C1226($target[$path[0]]; Choose:C955($field.kind="storage"; String:C10($field.fieldNumber); $field.name))
 										
-										If (OB Keys:C1719($target[$c[0]]).length=3)  //description keys ("kind", "inverseName", "relatedTableNumber")
+										If (OB Keys:C1719($target[$path[0]]).length=3)  //description keys ("kind", "inverseName", "relatedTableNumber")
 											
 											// Empty -> remove
-											OB REMOVE:C1226($target; $c[0])
+											OB REMOVE:C1226($target; $path[0])
 											
 										End if 
 									End if 
@@ -819,8 +840,9 @@ Function updateProject()
 	var $tableModel; $currentTable : cs:C1710.table
 	var $field; $fieldModel : cs:C1710.field
 	var $structure : cs:C1710.ExposedStructure
+	var $form : Object
+	var $context : Object
 	
-	var $context; $form : Object
 	$form:=This:C1470.form
 	$context:=This:C1470.context
 	$currentTable:=$context.currentTable
@@ -828,8 +850,8 @@ Function updateProject()
 	
 	// ----------------------------------------------------
 	// GET THE PUBLISHED FIELD NAMES LIST
-	
 	$published:=New collection:C1472
+	
 	var $fieldPtr; $publishedPtr : Pointer
 	$publishedPtr:=This:C1470.publishedPtr
 	$fieldPtr:=OBJECT Get pointer:C1124(Object named:K67:5; $form.fields)
@@ -841,7 +863,7 @@ Function updateProject()
 		 && (Not:C34(Bool:C1537($context.fieldFilterPublished)))
 		
 		// NO FIELD PUBLISHED
-		PROJECT.removeTable($currentTable.tableNumber)
+		PROJECT.removeTable($currentTable)
 		
 		// UI - De-emphasize the table name
 		$indx:=Find in array:C230((OBJECT Get pointer:C1124(Object named:K67:5; $form.tableList))->; True:C214)
@@ -849,7 +871,7 @@ Function updateProject()
 		
 	Else 
 		
-		$tableModel:=PROJECT.dataModel[String:C10($currentTable.tableNumber)]
+		$tableModel:=Form:C1466.dataModel[String:C10($currentTable.tableNumber)]
 		
 		If ($tableModel=Null:C1517)
 			
@@ -862,7 +884,7 @@ Function updateProject()
 			
 		End if 
 		
-		// For each item into the list
+		// For each item into the list…
 		For each ($o; $published)
 			
 			// Search if the item exists in the data model
@@ -887,29 +909,29 @@ Function updateProject()
 							$key:=$o.name
 							
 							//………………………………………………………………………………………………………
-						: ($fieldModel.kind="relatedEntity")  // N -> 1 relation
+						: ($fieldModel.kind="relatedEntity")
 							
 							$found:=(String:C10($o.name)=$key) & (Num:C11($o.published)#2)  // Not mixed
 							
 							//………………………………………………………………………………………………………
-						: ($fieldModel.kind="relatedEntities")  // 1 -> N relation
+						: ($fieldModel.kind="relatedEntities")
 							
 							$found:=(String:C10($o.name)=$key)
 							
 							//………………………………………………………………………………………………………
-						: ($fieldModel.kind="calculated")  // Computed attribute
+						: ($fieldModel.kind="calculated")
 							
 							$found:=(String:C10($o.name)=$key)
 							
 							//………………………………………………………………………………………………………
-						: ($fieldModel.kind="alias")  // Computed attribute
+						: ($fieldModel.kind="alias")
 							
 							$found:=(String:C10($o.name)=$key)
 							
 							//………………………………………………………………………………………………………
 						Else 
 							
-							//ASSERT(DATABASE.isComponent; "😰 I wonder why I'm here")
+							ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
 							
 							//………………………………………………………………………………………………………
 					End case 
@@ -949,23 +971,13 @@ Function updateProject()
 					End if 
 					
 					//_____________________________________________________
-				: (Num:C11($o.published)=0)
-					
-					// <NOTHING MORE TO DO>
-					
-					//_____________________________________________________
-				Else 
-					
-					// MIXED
-					
-					//_____________________________________________________
 			End case 
 		End for each 
 		
 		// REMOVE TABLE IF NO MORE PUBLISHED FIELDS
 		If (OB Keys:C1719($tableModel).length=1)
 			
-			PROJECT.removeTable($currentTable.tableNumber)
+			PROJECT.removeTable($currentTable)
 			
 			// UI - De-emphasize the table name
 			$indx:=Find in array:C230((OBJECT Get pointer:C1124(Object named:K67:5; $form.tableList))->; True:C214)
@@ -1286,40 +1298,20 @@ Function _appendField($table : cs:C1710.table; $field : cs:C1710.field)
 	Case of 
 			
 			//…………………………………………………………………………………………………
-		: (Bool:C1537($field.oneToOne))  // 1 -> N -> 1
+		: ($field.kind="storage") && ($type<=EDITOR.fieldIcons.length)
 			
-			$published:=Num:C11($dataModel[String:C10($table.tableNumber)][String:C10($field.name)]#Null:C1517)
-			
-			$type:=8860
+			$published:=Num:C11($dataModel[String:C10($table.tableNumber)][String:C10($field.id)]#Null:C1517)
 			
 			//…………………………………………………………………………………………………
-		: ($field.kind="storage")  // Alias
+		: ($field.kind="calculated") && ($type<=EDITOR.fieldIcons.length)
 			
-			If ($type<=EDITOR.fieldIcons.length)
-				
-				$published:=Num:C11($dataModel[String:C10($table.tableNumber)][String:C10($field.id)]#Null:C1517)
-				
-			End if 
+			$published:=Num:C11($dataModel[String:C10($table.tableNumber)][$field.name]#Null:C1517)
 			
 			//…………………………………………………………………………………………………
-		: ($field.kind="alias")  // Alias
+		: ($field.kind="alias") && ($type<=EDITOR.fieldIcons.length)
 			
-			If ($type<=EDITOR.fieldIcons.length)
-				
-				$published:=Num:C11($dataModel[String:C10($table.tableNumber)][String:C10($field.name)]#Null:C1517)
-				
-				$type:=($type=42) ? 8859 : ($type=38) ? 8858 : $type
-				
-			End if 
-			
-			//…………………………………………………………………………………………………
-		: ($field.kind="calculated")  // Computed
-			
-			If ($type<=EDITOR.fieldIcons.length)
-				
-				$published:=Num:C11($dataModel[String:C10($table.tableNumber)][String:C10($field.name)]#Null:C1517)
-				
-			End if 
+			$published:=Num:C11($dataModel[String:C10($table.tableNumber)][$field.name]#Null:C1517)
+			$type:=($type=42) ? 8859 : ($type=38) ? 8858 : $type
 			
 			//…………………………………………………………………………………………………
 		: ($field.kind="relatedEntity")  // N -> 1 relation
@@ -1356,34 +1348,41 @@ Function _appendField($table : cs:C1710.table; $field : cs:C1710.field)
 								End if 
 								
 								//______________________________________________________
-							: ($o.kind="alias")
-								
-								//______________________________________________________
-							: ($o.fieldType=8859)
-								
-								$published+=Num:C11($fieldModel[String:C10($o.name)]=Null:C1517)
-								
-								//______________________________________________________
-							: ($o.fieldType=8858)
-								
-								$published+=Num:C11($fieldModel[String:C10($o.name)]=Null:C1517)
-								
-								//______________________________________________________
-							Else 
+							: ($o.kind="computed")
 								
 								$c:=Split string:C1554($o.path; "."; sk ignore empty strings:K86:1)
 								
 								If ($c.length=1)
 									
 									// Field
-									$published+=Num:C11($fieldModel[String:C10($o.fieldNumber)]=Null:C1517)
+									$published+=Num:C11($fieldModel[$o.fieldName]=Null:C1517)
 									
 								Else 
 									
 									// Link
-									$published+=Num:C11($fieldModel[$c[0]][String:C10($o.fieldNumber)]=Null:C1517)
+									$published+=Num:C11($fieldModel[$c[0]][$o.fieldName]=Null:C1517)
 									
 								End if 
+								
+								//______________________________________________________
+							: ($o.kind="alias")
+								
+								$published+=Num:C11($fieldModel[$o.name]=Null:C1517)
+								
+								//______________________________________________________
+							: ($o.fieldType=8859)
+								
+								$published+=Num:C11($fieldModel[$o.name]=Null:C1517)
+								
+								//______________________________________________________
+							: ($o.fieldType=8858)
+								
+								$published+=Num:C11($fieldModel[$o.name]=Null:C1517)
+								
+								//______________________________________________________
+							Else 
+								
+								ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
 								
 								//______________________________________________________
 						End case 
@@ -1405,6 +1404,13 @@ Function _appendField($table : cs:C1710.table; $field : cs:C1710.field)
 			//
 			//*******************************************************************************************
 			$type:=8859
+			
+			//…………………………………………………………………………………………………
+		: (Bool:C1537($field.oneToOne))  // 1 -> N -> 1
+			
+			$published:=Num:C11($dataModel[String:C10($table.tableNumber)][$field.name]#Null:C1517)
+			
+			$type:=8860
 			
 			//…………………………………………………………………………………………………
 		Else 

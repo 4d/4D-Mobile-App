@@ -641,69 +641,16 @@ Function addField($table : Object; $field : cs:C1710.field)
 	Case of 
 			
 			//………………………………………………………………………………………………………
-		: ($field.kind="storage")  // Attribute
+		: ($field.kind="storage")
 			
-			$o:=New object:C1471(\
-				"kind"; $field.kind; \
-				"name"; $field.name; \
-				"label"; PROJECT.label($field.name); \
-				"shortLabel"; PROJECT.label($field.name); \
-				"valueType"; $field.valueType; \
-				"fieldType"; $field.fieldType)
-			
-			// mark:#TEMPO
-			$o.type:=$field.type
-			
-			$table[String:C10($field.id)]:=$o
+			$table[String:C10($field.id)]:=This:C1470._fieldModel($field)
 			
 			//………………………………………………………………………………………………………
-		: ($field.kind="alias")
+		: ($field.kind="alias")\
+			 | ($field.kind="calculated")\
+			 | ($field.kind="relatedEntities")
 			
-			$o:=New object:C1471(\
-				"kind"; $field.kind; \
-				"name"; $field.name; \
-				"path"; $field.path; \
-				"label"; PROJECT.label($field.name); \
-				"shortLabel"; PROJECT.label($field.name); \
-				"valueType"; $field.valueType; \
-				"fieldType"; $field.fieldType)
-			
-			// mark:#TEMPO
-			$o.type:=$field.type
-			
-			$table[$field.name]:=$o
-			
-			//………………………………………………………………………………………………………
-		: ($field.kind="calculated")  // Computed attribute
-			
-			$o:=New object:C1471(\
-				"kind"; $field.kind; \
-				"name"; $field.name; \
-				"label"; PROJECT.label($field.name); \
-				"shortLabel"; PROJECT.label($field.name); \
-				"valueType"; $field.valueType; \
-				"fieldType"; $field.fieldType)
-			
-			// mark:#TEMPO
-			$o.type:=$field.type
-			$o.computed:=True:C214
-			
-			$table[$field.name]:=$o
-			
-			//………………………………………………………………………………………………………
-		: ($field.kind="relatedEntities")  // 1 -> N relation
-			
-			$o:=New object:C1471(\
-				"kind"; $field.kind; \
-				"label"; PROJECT.label(cs:C1710.str.new("listOf").localized($field.name)); \
-				"shortLabel"; PROJECT.label($field.name); \
-				"relatedEntities"; $field.relatedDataClass; \
-				"inverseName"; $field.inverseName)
-			
-			// mark:#TEMPO
-			$o.relatedTableNumber:=$field.relatedTableNumber
-			
-			$table[$field.name]:=$o
+			$table[$field.name]:=This:C1470._fieldModel($field)
 			
 			//………………………………………………………………………………………………………
 		: ($field.kind="relatedEntity")  // N -> 1 relation
@@ -711,15 +658,7 @@ Function addField($table : Object; $field : cs:C1710.field)
 			// Add all related fields
 			$relatedCatalog:=This:C1470.relatedCatalog($table[""].name; $field.name; True:C214)
 			
-			$o:=New object:C1471(\
-				"kind"; $field.kind; \
-				"label"; PROJECT.label($field.name); \
-				"shortLabel"; PROJECT.shortLabel($field.name); \
-				"relatedDataClass"; $relatedCatalog.relatedDataClass; \
-				"inverseName"; $relatedCatalog.inverseName)
-			
-			// mark:#TEMPO
-			$o.relatedTableNumber:=$relatedCatalog.relatedTableNumber
+			$o:=This:C1470._fieldModel($field; $relatedCatalog)
 			
 			$table[$field.name]:=$o
 			
@@ -730,7 +669,7 @@ Function addField($table : Object; $field : cs:C1710.field)
 				$path:=Split string:C1554($relatedField.path; ".")
 				
 				// Create the field, if any
-				If ($path.length>1)
+				If ($path.length>1) & ($relatedField.kind#"alias")
 					
 					If ($o[$path[0]]=Null:C1517)
 						
@@ -741,18 +680,40 @@ Function addField($table : Object; $field : cs:C1710.field)
 						
 					End if 
 					
-					If ($o[$path[0]][$fieldID]=Null:C1517)
-						
-						$o[$path[0]][$fieldID]:=New object:C1471(\
-							"kind"; $relatedField.kind; \
-							"name"; $relatedField.name; \
-							"path"; $relatedField.path; \
-							"label"; PROJECT.label($relatedField.name); \
-							"shortLabel"; PROJECT.shortLabel($relatedField.name); \
-							"type"; $relatedField.type; \
-							"fieldType"; $relatedField.fieldType)
-						
-					End if 
+					Case of 
+							
+							//______________________________________________________
+						: ($relatedField.kind="storage") && ($o[$path[0]][$fieldID]=Null:C1517)
+							
+							$o[$path[0]][$fieldID]:=This:C1470._fieldModel($relatedField)
+							$o[$path[0]][$fieldID].path:=$relatedField.path
+							
+							//______________________________________________________
+						: ($relatedField.kind="calculated") && ($o[$path[0]][$relatedField.name]=Null:C1517)
+							
+							$o[$path[0]][$relatedField.name]:=This:C1470._fieldModel($relatedField)
+							$o[$path[0]][$relatedField.name].path:=$relatedField.path
+							
+							
+							//______________________________________________________
+						: ($relatedField.kind="alias") && ($o[$path[0]][$relatedField.name]=Null:C1517)
+							
+							$o[$path[0]][$relatedField.name]:=This:C1470._fieldModel($relatedField)
+							$o[$path[0]][$relatedField.name].path:=$relatedField.path
+							
+							//______________________________________________________
+						: ($relatedField.kind="relatedEntities") && ($o[$path[0]][$relatedField.name]=Null:C1517)
+							
+							$o[$path[0]][$relatedField.name]:=This:C1470._fieldModel($relatedField)
+							$o[$path[0]][$relatedField.name].path:=New collection:C1472($field.name; $relatedField.path).join(".")
+							
+							//______________________________________________________
+						Else 
+							
+							ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
+							
+							//______________________________________________________
+					End case 
 					
 				Else 
 					
@@ -761,60 +722,32 @@ Function addField($table : Object; $field : cs:C1710.field)
 							//______________________________________________________
 						: ($relatedField.kind="storage") && ($o[$fieldID]=Null:C1517)
 							
-							$o[$fieldID]:=New object:C1471(\
-								"kind"; $relatedField.kind; \
-								"name"; $relatedField.name; \
-								"path"; $relatedField.path; \
-								"label"; PROJECT.label($relatedField.name); \
-								"shortLabel"; PROJECT.shortLabel($relatedField.name); \
-								"type"; $relatedField.type; \
-								"fieldType"; $relatedField.fieldType)
+							$o[$fieldID]:=This:C1470._fieldModel($relatedField)
+							$o[$fieldID].path:=$relatedField.path
 							
 							//______________________________________________________
 						: ($relatedField.kind="calculated") && ($o[$relatedField.name]=Null:C1517)
 							
-							$o[$relatedField.name]:=New object:C1471(\
-								"kind"; $relatedField.kind; \
-								"name"; $relatedField.name; \
-								"path"; $relatedField.path; \
-								"label"; PROJECT.label($relatedField.name); \
-								"shortLabel"; PROJECT.shortLabel($relatedField.name); \
-								"type"; $relatedField.type; \
-								"fieldType"; $relatedField.fieldType)
+							$o[$relatedField.name]:=This:C1470._fieldModel($relatedField)
+							$o[$relatedField.name].path:=$relatedField.path
 							
 							
 							//______________________________________________________
 						: ($relatedField.kind="alias") && ($o[$relatedField.name]=Null:C1517)
 							
-							$o[$relatedField.name]:=New object:C1471(\
-								"kind"; $relatedField.kind; \
-								"name"; $relatedField.name; \
-								"path"; $relatedField.path; \
-								"label"; PROJECT.label($relatedField.name); \
-								"shortLabel"; PROJECT.shortLabel($relatedField.name); \
-								"type"; $relatedField.type; \
-								"fieldType"; $relatedField.fieldType)
+							$o[$relatedField.name]:=This:C1470._fieldModel($relatedField)
+							$o[$relatedField.name].path:=$relatedField.path
 							
 							//______________________________________________________
 						: ($relatedField.kind="relatedEntities") && ($o[$relatedField.name]=Null:C1517)
 							
-							$o[$relatedField.name]:=New object:C1471(\
-								"kind"; $relatedField.kind; \
-								"name"; $relatedField.name; \
-								"path"; New collection:C1472($field.name; $relatedField.path).join("."); \
-								"label"; PROJECT.labelList($relatedField.name); \
-								"shortLabel"; PROJECT.label($relatedField.name); \
-								"inverseName"; $relatedField.inverseName; \
-								"relatedDataClass"; $relatedField.relatedDataClass; \
-								"relatedTableNumber"; This:C1470.tableNumber($relatedField.relatedDataClass))
-							
-							// Mark: #TEMPO
-							$o[$relatedField.name].isToMany:=True:C214
+							$o[$relatedField.name]:=This:C1470._fieldModel($relatedField)
+							$o[$relatedField.name].path:=New collection:C1472($field.name; $relatedField.path).join(".")
 							
 							//______________________________________________________
 						Else 
 							
-							// A "Case of" statement should never omit "Else"
+							ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
 							
 							//______________________________________________________
 					End case 
@@ -863,6 +796,104 @@ Function check
 	//#WIP
 	
 	// MARK:-[PRIVATE]
+	
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function _fieldModel($field : cs:C1710.field; $relatedCatalog : Object)->$fieldModel : Object
+	
+	Case of 
+			
+			//………………………………………………………………………………………………………
+		: ($field.kind="storage")  // Attribute
+			
+			$fieldModel:=New object:C1471(\
+				"kind"; $field.kind; \
+				"name"; $field.name; \
+				"fieldType"; $field.fieldType; \
+				"label"; PROJECT.label($field.name); \
+				"shortLabel"; PROJECT.label($field.name); \
+				"valueType"; $field.valueType)
+			
+			// mark:#TEMPO
+			$fieldModel.type:=$field.type
+			
+			//………………………………………………………………………………………………………
+		: ($field.kind="alias")  // Alias
+			
+			$fieldModel:=New object:C1471(\
+				"kind"; $field.kind; \
+				"fieldType"; $field.fieldType; \
+				"path"; $field.path)
+			
+			Case of 
+					
+					//______________________________________________________
+				: ($field.fieldType=42)  // Selection
+					
+					$fieldModel.label:=PROJECT.label(EDITOR.str.localize("listOf"; $field.name))
+					$fieldModel.shortLabel:=PROJECT.label($field.name)
+					
+					//______________________________________________________
+				Else 
+					
+					$fieldModel.label:=PROJECT.label($field.name)
+					$fieldModel.shortLabel:=PROJECT.label($field.name)
+					
+					//______________________________________________________
+			End case 
+			
+			$fieldModel.fieldType:=$field.fieldType
+			
+			//………………………………………………………………………………………………………
+		: ($field.kind="calculated")  // Computed attribute
+			
+			$fieldModel:=New object:C1471(\
+				"kind"; $field.kind; \
+				"fieldType"; $field.fieldType; \
+				"label"; PROJECT.label($field.name); \
+				"shortLabel"; PROJECT.label($field.name); \
+				"valueType"; $field.valueType)
+			
+			// mark:#TEMPO
+			$fieldModel.type:=$field.type
+			$fieldModel.computed:=True:C214
+			
+			//………………………………………………………………………………………………………
+		: ($field.kind="relatedEntities")  // 1 -> N relation
+			
+			$fieldModel:=New object:C1471(\
+				"kind"; $field.kind; \
+				"label"; PROJECT.label(EDITOR.str.localize("listOf"; $field.name)); \
+				"shortLabel"; PROJECT.label($field.name); \
+				"relatedEntities"; $field.relatedDataClass; \
+				"inverseName"; $field.inverseName; \
+				"relatedDataClass"; $field.relatedDataClass)
+			
+			// mark:#TEMPO
+			$fieldModel.relatedTableNumber:=$field.relatedTableNumber
+			$fieldModel.isToMany:=True:C214
+			
+			//………………………………………………………………………………………………………
+		: ($field.kind="relatedEntity")  // N -> 1 relation
+			
+			$fieldModel:=New object:C1471(\
+				"kind"; $field.kind; \
+				"label"; PROJECT.label($field.name); \
+				"shortLabel"; PROJECT.shortLabel($field.name); \
+				"relatedDataClass"; $relatedCatalog.relatedDataClass; \
+				"inverseName"; $relatedCatalog.inverseName)
+			
+			// mark:#TEMPO
+			$fieldModel.relatedTableNumber:=$relatedCatalog.relatedTableNumber
+			
+			//………………………………………………………………………………………………………
+		Else 
+			
+			ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
+			
+			//………………………………………………………………………………………………………
+	End case 
+	
 	//==================================================================
 	// Returns the collection of exposed fields of a table
 Function _fields($tableName : Text)->$fields : Collection

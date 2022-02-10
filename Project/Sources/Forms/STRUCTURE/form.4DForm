@@ -24,8 +24,8 @@
 			"objects": {
 				"search.shortcut": {
 					"type": "button",
-					"top": 681,
-					"left": 39,
+					"top": 643,
+					"left": 12,
 					"width": 76,
 					"height": 17,
 					"sizingY": "move",
@@ -36,12 +36,14 @@
 					"method": "STRUCTURE_OBJECTS_HANDLER",
 					"events": [
 						"onClick"
-					]
+					],
+					"style": "flat",
+					"stroke": "#ff6347"
 				},
 				"space.shortcut": {
 					"type": "button",
-					"top": 706,
-					"left": 39,
+					"top": 668,
+					"left": 12,
 					"width": 76,
 					"height": 17,
 					"sizingY": "move",
@@ -56,7 +58,9 @@
 					"shortcutControl": false,
 					"shortcutShift": false,
 					"shortcutAlt": false,
-					"display": true
+					"display": true,
+					"style": "flat",
+					"stroke": "#ff6347"
 				}
 			}
 		},
@@ -339,7 +343,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 4,
+	"geometryStamp": 5,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

@@ -170,7 +170,6 @@ Function getFieldList()->$result : Object
 	
 	$tableID:=String:C10(This:C1470.tableNumber)
 	
-	// ----------------------------------------------------
 	If ($result.success)
 		
 		$result.success:=(Form:C1466.dataModel[$tableID]#Null:C1517)
@@ -215,8 +214,6 @@ Function getFieldList()->$result : Object
 						$field.label:=($field.label#Null:C1517) ? $field.label : PROJECT.label($field.name)
 						$field.shortLabel:=($field.shortLabel#Null:C1517) ? $field.shortLabel : $field.label
 						
-						
-						//mark:-
 /* TEMPO */$result.tableNumbers.push(Num:C11($tableID))
 						$result.ids.push($field.id)
 						$result.names.push($field.name)
@@ -241,14 +238,13 @@ Function getFieldList()->$result : Object
 						
 						$field:=$table[$key]
 						
-						$field.label:=($field.label#Null:C1517) ? $field.label : PROJECT.label($field.name)
+						$field.label:=($field.label#Null:C1517) ? $field.label : PROJECT.label($key)
 						$field.shortLabel:=($field.shortLabel#Null:C1517) ? $field.shortLabel : $field.label
 						
-						//mark:-
 /* TEMPO */$result.tableNumbers.push(Num:C11($tableID))
 						$result.ids.push(0)
-						$result.names.push($field.name)
-						$result.paths.push($field.name)
+						$result.names.push($key)
+						$result.paths.push($key)
 						$result.types.push($field.fieldType)
 						$result.labels.push($field.label)
 						$result.shortLabels.push($field.shortLabel)
@@ -407,27 +403,50 @@ Function getFieldList()->$result : Object
 						
 						//……………………………………………………………………………………………………………
 					: (FEATURE.with("alias"))\
-						 && (Num:C11(This:C1470.tabSelector.data)=0)\
 						 && (PROJECT.isAlias($table[$key]))
 						
 						$field:=$table[$key]
 						
-						$field.label:=($field.label#Null:C1517) ? $field.label : PROJECT.label($field.name)
-						$field.shortLabel:=($field.shortLabel#Null:C1517) ? $field.shortLabel : $field.label
+						var $show : Boolean
+						If (Num:C11(This:C1470.tabSelector.data)=0)
+							
+							$show:=($field.fieldType#38) & ($field.fieldType#42)
+							
+						Else 
+							
+							$show:=($field.fieldType=38) | ($field.fieldType=42)
+							
+						End if 
 						
-						//mark:-
+						If ($show)
+							
+							$field.label:=($field.label#Null:C1517) ? $field.label : PROJECT.label($key)
+							$field.shortLabel:=($field.shortLabel#Null:C1517) ? $field.shortLabel : $field.label
+							
 /* TEMPO */$result.tableNumbers.push(Num:C11($tableID))
-						$result.ids.push(0)
-						$result.names.push($field.name)
-						$result.paths.push($field.name)
-						$result.types.push($field.fieldType)
-						$result.labels.push($field.label)
-						$result.shortLabels.push($field.shortLabel)
-						$result.iconPaths.push(String:C10($field.icon))
-						$result.formatColors.push(Foreground color:K23:1)
-						$result.nameColors.push(Foreground color:K23:1)
-						$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
-						$result.formats.push(This:C1470._computeFormat($field; $result; $target))
+							$result.ids.push(0)
+							$result.names.push($key)
+							$result.paths.push($key)
+							$result.labels.push($field.label)
+							$result.shortLabels.push($field.shortLabel)
+							$result.iconPaths.push(String:C10($field.icon))
+							$result.formatColors.push(Foreground color:K23:1)
+							$result.nameColors.push(Foreground color:K23:1)
+							$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
+							
+							If (Num:C11(This:C1470.tabSelector.data)=0)
+								
+								$result.types.push($field.fieldType)
+								$result.formats.push(This:C1470._computeFormat($field; $result; $target))
+								
+							Else 
+								
+								$result.types.push(($field.type=42) ? -2 : -1)
+								
+							End if 
+							
+							
+						End if 
 						
 						//……………………………………………………………………………………………………………
 					: (Num:C11(This:C1470.tabSelector.data)=0)
@@ -601,22 +620,22 @@ Function setHelpTip($e : Object)
 				//………………………………………………………………………………
 			: ($e.columnName=This:C1470.icons.name)
 				
-				$tips:=EDITOR.str.setText("clickToSet").localized()
+				$tips:=EDITOR.str.localize("clickToSet")
 				
 				//………………………………………………………………………………
 			: ($e.columnName=This:C1470.shortLabels.name)
 				
-				$tips:=EDITOR.str.setText("doubleClickToEdit").localized()+"\r - "+EDITOR.str.setText("shouldBe10CharOrLess").localized()
+				$tips:=EDITOR.str.localize("doubleClickToEdit")+"\r - "+EDITOR.str.localize("shouldBe10CharOrLess")
 				
 				//………………………………………………………………………………
 			: ($e.columnName=This:C1470.labels.name)
 				
-				$tips:=EDITOR.str.setText("doubleClickToEdit").localized()+"\r - "+EDITOR.str.setText("shouldBe25CharOrLess").localized()
+				$tips:=EDITOR.str.localize("doubleClickToEdit")+"\r - "+EDITOR.str.localize("shouldBe25CharOrLess")
 				
 				//………………………………………………………………………………
 			: ($e.columnName=This:C1470.titles.name)
 				
-				$tips:=EDITOR.str.setText("doubleClickToEdit").localized()
+				$tips:=EDITOR.str.localize("doubleClickToEdit")
 				
 				//………………………………………………………………………………
 			: ($e.columnName=This:C1470.formats.name)
@@ -747,7 +766,7 @@ Function doShowIconPicker($e : Object)
 		$o.forceRedraw:=True:C214
 		
 		//%W-533.3
-		$o.prompt:=EDITOR.str.setText("chooseAnIconForTheField").localized((This:C1470.fieldList.columns["names"].pointer)->{$e.row})
+		$o.prompt:=EDITOR.str.localize("chooseAnIconForTheField"; (This:C1470.fieldList.columns["names"].pointer)->{$e.row})
 		//%W+533.3
 		
 		This:C1470.callMeBack("pickerShow"; $o)
@@ -856,7 +875,7 @@ Function doFormatMenu($e : Object)
 			
 		Else 
 			
-			$menu.append(EDITOR.str.setText("_"+$t).localized(); $t; $format=$t)
+			$menu.append(EDITOR.str.localize("_"+$t); $t; $format=$t)
 			
 		End if 
 	End for each 
@@ -940,7 +959,7 @@ Function doFormatMenu($e : Object)
 				
 			Else 
 				
-				$ptr->{$e.row}:=EDITOR.str.setText("_"+$menu.choice).localized()
+				$ptr->{$e.row}:=EDITOR.str.localize("_"+$menu.choice)
 				
 			End if 
 			//%W+533.3
@@ -1079,13 +1098,13 @@ Function _computeFormat($field : Object; $result : Object)->$label : Text
 			
 		Else 
 			
-			$label:=EDITOR.str.setText("_"+$field.format).localized()
+			$label:=EDITOR.str.localize("_"+$field.format)
 			
 		End if 
 		
 	Else 
 		
-		$label:=EDITOR.str.setText("_"+String:C10(SHARED.defaultFieldBindingTypes[$field.fieldType])).localized()
+		$label:=EDITOR.str.localize("_"+String:C10(SHARED.defaultFieldBindingTypes[$field.fieldType]))
 		
 	End if 
 	
