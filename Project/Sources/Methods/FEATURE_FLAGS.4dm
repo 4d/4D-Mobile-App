@@ -18,13 +18,13 @@ $preferences:=$2
 
 FEATURE:=New object:C1471(\
 "with"; Formula:C1597(Bool:C1537(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))])); \
-"unstable"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Num:C11(SHARED.ide.version)>=$stableVersion)); \
-"delivered"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Num:C11(SHARED.ide.version)>=Num:C11($2))); \
-"debug"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Structure file:C489=Structure file:C489(*))); \
-"wip"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Structure file:C489=Structure file:C489(*))); \
-"pending"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Structure file:C489=Structure file:C489(*))); \
+"isUnstable"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Num:C11(SHARED.ide.version)>=$stableVersion)); \
+"isDelivered"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Num:C11(SHARED.ide.version)>=Num:C11($2))); \
+"isDebug"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Structure file:C489=Structure file:C489(*))); \
+"isWIP"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Structure file:C489=Structure file:C489(*))); \
+"isPending"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=False:C215); \
 "vdl"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Current system user:C484="vdelachaux") | (Current system user:C484="Vincent de LACHAUX")); \
-"alias"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=Bool:C1537(This:C1470[Choose:C955(Value type:C1509($2)=Is text:K8:3; $2; "_"+String:C10($2))])); \
+"makeAlias"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=Bool:C1537(This:C1470[Choose:C955(Value type:C1509($2)=Is text:K8:3; $2; "_"+String:C10($2))])); \
 "main"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Application version:C493(*)="A@"))\
 )
 
@@ -37,8 +37,8 @@ _____________*/
 //featuresFlags._406:=True // do not add compiled frameworks to workspace
 //featuresFlags._475:=True // deactivate code signing on framework
 //featuresFlags._234:=True // Add in coreData model Record abstract entity
-FEATURE.debug(8858)  // Activates a debug mode for UI
-FEATURE.alias("debug"; 8858)
+FEATURE.isDebug(8858)  // Activates a debug mode for UI
+FEATURE.makeAlias("debug"; 8858)
 //FEATURE.wip("devGallery")  // Allow to dev with local http gallery
 
 // Use old behaviour
@@ -49,123 +49,123 @@ If (True:C214)  // DELIVERED
 	// Mark:-1️⃣7️⃣
 	
 	// Mark:-R2
-	FEATURE.delivered(89556; 1720)  // Reload embedded data from iOS application
-	FEATURE.delivered(92293; 1720)  // Support user defined tables
-	FEATURE.delivered(93674; 1720)  // Main menu
-	FEATURE.delivered(8122017; 1720)  // Turn around bug close window
-	FEATURE.delivered(96674; 1720)  // Archive app
+	FEATURE.isDelivered(89556; 1720)  // Reload embedded data from iOS application
+	FEATURE.isDelivered(92293; 1720)  // Support user defined tables
+	FEATURE.isDelivered(93674; 1720)  // Main menu
+	FEATURE.isDelivered(8122017; 1720)  // Turn around bug close window
+	FEATURE.isDelivered(96674; 1720)  // Archive app
 	
 	// Mark:-R3
-	FEATURE.delivered(100157; 1730)  // Template creation
-	FEATURE.delivered(100353; 1730)  // Template creation: inject any sources
-	FEATURE.delivered(100191; 1730)  // Data Formatter
+	FEATURE.isDelivered(100157; 1730)  // Template creation
+	FEATURE.isDelivered(100353; 1730)  // Template creation: inject any sources
+	FEATURE.isDelivered(100191; 1730)  // Data Formatter
 	
 	// Mark:-R4
-	FEATURE.delivered(98105; 1740)  // Multi-criteria Search
-	FEATURE.delivered(100990; 1740)  // Custom Data Formatter
-	FEATURE.delivered(100174; 1740)  // Restricted queries
-	FEATURE.delivered(101725; 1740)  // Restricted queries: Use NSDataSet (beter way to store resources)
-	FEATURE.delivered(103112; 1740)  // Restricted queries: Move dataSet into database in Mobile Projects
-	FEATURE.delivered(102457; 1740)  // Data file access with /mobileapp key
+	FEATURE.isDelivered(98105; 1740)  // Multi-criteria Search
+	FEATURE.isDelivered(100990; 1740)  // Custom Data Formatter
+	FEATURE.isDelivered(100174; 1740)  // Restricted queries
+	FEATURE.isDelivered(101725; 1740)  // Restricted queries: Use NSDataSet (beter way to store resources)
+	FEATURE.isDelivered(103112; 1740)  // Restricted queries: Move dataSet into database in Mobile Projects
+	FEATURE.isDelivered(102457; 1740)  // Data file access with /mobileapp key
 	
 	// Mark:-R5
-	FEATURE.delivered(101637; 1750)  // Display n-1 relations
-	FEATURE.delivered(103850; 1750)  // Reload data from iOS with N-1 relation (Generate core data model with real relation)
-	FEATURE.delivered(103411; 1750)  // Incremental synchronization
-	FEATURE.delivered(103505; 1750)  // Add, Update and Save Actions
-	FEATURE.delivered("withNewFieldProperties"; 1750)  // Enable LR works on ds (redmine:98145 - Replace, for data structure access, EXPORT STRUCTURE by ds)
-	FEATURE.delivered("withRecursiveLink"; 1750)  // Enable recursive link management
-	FEATURE.delivered(98145; 1750)  // Replace, for data structure access, EXPORT STRUCTURE by ds
+	FEATURE.isDelivered(101637; 1750)  // Display n-1 relations
+	FEATURE.isDelivered(103850; 1750)  // Reload data from iOS with N-1 relation (Generate core data model with real relation)
+	FEATURE.isDelivered(103411; 1750)  // Incremental synchronization
+	FEATURE.isDelivered(103505; 1750)  // Add, Update and Save Actions
+	FEATURE.isDelivered("withNewFieldProperties"; 1750)  // Enable LR works on ds (redmine:98145 - Replace, for data structure access, EXPORT STRUCTURE by ds)
+	FEATURE.isDelivered("withRecursiveLink"; 1750)  // Enable recursive link management
+	FEATURE.isDelivered(98145; 1750)  // Replace, for data structure access, EXPORT STRUCTURE by ds
 	
 	// Mark:-R6
-	FEATURE.delivered(105413; 1760)  // [MOBILE] Actions with parameters
-	FEATURE.delivered("parameterListOfValues"; 1760)  // Manage field formatters as list of values for parameters
-	FEATURE.delivered("allowPictureAsActionParameters"; 1760)  // #107932 - [Mobile] Allow to use picture as action parameters
+	FEATURE.isDelivered(105413; 1760)  // [MOBILE] Actions with parameters
+	FEATURE.isDelivered("parameterListOfValues"; 1760)  // Manage field formatters as list of values for parameters
+	FEATURE.isDelivered("allowPictureAsActionParameters"; 1760)  // #107932 - [Mobile] Allow to use picture as action parameters
 	
 	// Mark:-1️⃣8️⃣
-	FEATURE.delivered(105431; 1800)  // Display 1-n relations
-	FEATURE.delivered(110882; 1800)  // Dump data into core data SQLLite database
-	FEATURE.delivered("newDataModel"; 1800)
+	FEATURE.isDelivered(105431; 1800)  // Display 1-n relations
+	FEATURE.isDelivered(110882; 1800)  // Dump data into core data SQLLite database
+	FEATURE.isDelivered("newDataModel"; 1800)
 	
 	// Mark:-R2
-	FEATURE.delivered("repairStructureMoreVisible"; 1820)
-	FEATURE.delivered(113164; 1820)  // Enable/disable image dump
+	FEATURE.isDelivered("repairStructureMoreVisible"; 1820)
+	FEATURE.isDelivered(113164; 1820)  // Enable/disable image dump
 	
 	// Mark:-R3
-	FEATURE.delivered(112225; 1830)  // Select/install/use custom templates
+	FEATURE.isDelivered(112225; 1830)  // Select/install/use custom templates
 	
 	// Mark:-R4
-	FEATURE.delivered(113016; 1840)  // Svg improvement in forms section
-	FEATURE.delivered(107526; 1840)  // Push Notifications
+	FEATURE.isDelivered(113016; 1840)  // Svg improvement in forms section
+	FEATURE.isDelivered(107526; 1840)  // Push Notifications
 	
 	// Mark:-R5
-	FEATURE.delivered(117618; 1850)  // Deep Linking
+	FEATURE.isDelivered(117618; 1850)  // Deep Linking
 	
 	// Mark:-R6
-	FEATURE.delivered(117601; 1860)  // Relation management optimisation
-	FEATURE.delivered("templateClass"; 1860)
-	FEATURE.delivered("searchWithBarCode"; 1860)
+	FEATURE.isDelivered(117601; 1860)  // Relation management optimisation
+	FEATURE.isDelivered("templateClass"; 1860)
+	FEATURE.isDelivered("searchWithBarCode"; 1860)
 	
 	// Mark:-1️⃣9️⃣
-	FEATURE.delivered("withSimulatorClass"; 1900)  // Use simctl class intead of _o_simulator
+	FEATURE.isDelivered("withSimulatorClass"; 1900)  // Use simctl class intead of _o_simulator
 	
-	FEATURE.delivered("wizards"; 1900)  // Use a wizard instead of standard dialogs to create or open a project
+	FEATURE.isDelivered("wizards"; 1900)  // Use a wizard instead of standard dialogs to create or open a project
 	
 	// Mark:-R2
-	FEATURE.delivered("android"; 1920)  // Android support global flag
-	FEATURE.delivered("targetPannel"; 1920)  // Use a separate pannel for the target OS
-	FEATURE.delivered("dominantColor"; 1920)  // Feature #127813: BackgroundColor picker
-	FEATURE.delivered("iconActionMenu"; 1920)  // Use action button for icon on product panel
-	FEATURE.delivered("plistClass"; 1920)  // Use plist class instead of plist method
-	FEATURE.delivered("sortAction"; 1920)  // https:// Project.4d.com/issues/117660
-	FEATURE.delivered("ConnectedDevices"; 1920)  // Add connected devices to the simulator tool
+	FEATURE.isDelivered("android"; 1920)  // Android support global flag
+	FEATURE.isDelivered("targetPannel"; 1920)  // Use a separate pannel for the target OS
+	FEATURE.isDelivered("dominantColor"; 1920)  // Feature #127813: BackgroundColor picker
+	FEATURE.isDelivered("iconActionMenu"; 1920)  // Use action button for icon on product panel
+	FEATURE.isDelivered("plistClass"; 1920)  // Use plist class instead of plist method
+	FEATURE.isDelivered("sortAction"; 1920)  // https:// Project.4d.com/issues/117660
+	FEATURE.isDelivered("ConnectedDevices"; 1920)  // Add connected devices to the simulator tool
 	
 	// Mark:-R3
-	FEATURE.delivered("predictiveEntryInActionParam"; 1930)  // #128898 Name of the action parameters and sorting criteria can be modified
-	FEATURE.delivered("customActionFormatterWithCode"; 1930)  // #129036 custom input control for action parameter with ios code
-	FEATURE.delivered("customActionFormatter"; 1930)  // #128195 custom input control for action parameter
-	FEATURE.delivered("newActionFormatterChoiceList"; 1930)  // Menu to create action formatter choice list directly
-	FEATURE.delivered("computedProperties"; 1930)  // #130206 [MOBILE] Use computed attributes
+	FEATURE.isDelivered("predictiveEntryInActionParam"; 1930)  // #128898 Name of the action parameters and sorting criteria can be modified
+	FEATURE.isDelivered("customActionFormatterWithCode"; 1930)  // #129036 custom input control for action parameter with ios code
+	FEATURE.isDelivered("customActionFormatter"; 1930)  // #128195 custom input control for action parameter
+	FEATURE.isDelivered("newActionFormatterChoiceList"; 1930)  // Menu to create action formatter choice list directly
+	FEATURE.isDelivered("computedProperties"; 1930)  // #130206 [MOBILE] Use computed attributes
 	
 End if 
 
 //mark:-R4
-FEATURE.unstable("androidActions")  //[Mobile] Feature flag pour activer les actions dans le projet mobile
-FEATURE.unstable("objectFieldManagement")  //[MOBILE] Object fields Management 
-FEATURE.unstable("android1ToNRelations")  // [ANDROID] 1 to N relations
-FEATURE.unstable("cancelableDatasetGeneration")  // [MOBILE] Data generation 
-FEATURE.unstable("useTextRestResponse")  // [MOBILE] Data generation : for optis
+FEATURE.isUnstable("androidActions")  //[Mobile] Feature flag pour activer les actions dans le projet mobile
+FEATURE.isUnstable("objectFieldManagement")  //[MOBILE] Object fields Management 
+FEATURE.isUnstable("android1ToNRelations")  // [ANDROID] 1 to N relations
+FEATURE.isUnstable("cancelableDatasetGeneration")  // [MOBILE] Data generation 
+FEATURE.isUnstable("useTextRestResponse")  // [MOBILE] Data generation : for optis
 
 //mark:-R5
-FEATURE.unstable("listEditor")  // [MOBILE] Create and edit an input control from the project editor
-FEATURE.unstable("xcDataModelClass")  // Use class to create core data model ie. xcDataModel (useful to refactor for alias)
-FEATURE.unstable("iosBuildWithClass")  // Use cs.MobileProjectIOS class
+FEATURE.isUnstable("listEditor")  // [MOBILE] Create and edit an input control from the project editor
+FEATURE.isUnstable("xcDataModelClass")  // Use class to create core data model ie. xcDataModel (useful to refactor for alias)
+FEATURE.isUnstable("iosBuildWithClass")  // Use cs.MobileProjectIOS class
 
 //mark:-🚧 WIP
-FEATURE.wip(131225)  // [MOBILE] Use aliases
-FEATURE.wip(129953)  // [MOBILE] Handle Many-one-Many relations
-FEATURE.wip(127558)  // [ANDROID] Data set
-FEATURE.wip(131983)  // [MOBILE] Launch an action from the Tab bar
+FEATURE.isWIP(131225)  // [MOBILE] Use aliases
+FEATURE.isWIP(127558)  // [ANDROID] Data set
+FEATURE.isWIP(131983)  // [MOBILE] Launch an action from the Tab bar
 
-// FEATURE.wip("simuARMOnAppleProcessor") // Mac M1 build for simu using arm64
-FEATURE.wip("duplicateTemplate")  // Allow to duplicate template in host database and show on disk https:// Project.4d.com/issues/98054
-FEATURE.wip("newFormatterChoiceList")  // Menu to create formatter choice list directly , from data
+// FEATURE.isWIP("simuARMOnAppleProcessor") // Mac M1 build for simu using arm64
+FEATURE.isWIP("duplicateTemplate")  // Allow to duplicate template in host database and show on disk https:// Project.4d.com/issues/98054
+FEATURE.isWIP("newFormatterChoiceList")  // Menu to create formatter choice list directly , from data
 
-FEATURE.wip("taskIndicator")  // UI for background tasks executing
+FEATURE.isWIP("taskIndicator")  // UI for background tasks executing
 
-FEATURE.wip("sourceClass")  // Work with Source class to test the data source
+FEATURE.isWIP("sourceClass")  // Work with Source class to test the data source
 
 FEATURE.vdl("modernStructure")
 
 //mark:-⛔ PENDING
-FEATURE.pending("compressionOfTemplates")  // Use the archive "/RESOURCES/template.zip" instead of "templates" folder in builded component
+FEATURE.isPending(129953)  // [MOBILE] Handle Many-one-Many relations
+FEATURE.isPending("compressionOfTemplates")  // Use the archive "/RESOURCES/template.zip" instead of "templates" folder in builded component
 //FEATURE.vdl("testCompression")
-FEATURE.pending("formatMarketPlace")  // Manage format as archive
-FEATURE.pending("sharedActionWithDescription")  //[MOBILE] Add a description parameter to predefined share action
-FEATURE.pending("withWidgetActions")  // Enable widget actions
-FEATURE.pending(114338)  // Support Collection of field injected into detail template https://project.4d.com/issues/114338
-FEATURE.alias("droppingNext"; 114338)  // Allow to drop a multivalued field next to another existing dropped multivalued fields
-FEATURE.pending("iosSDKfromAWS")  // Download iOS SDK from AWS
+FEATURE.isPending("formatMarketPlace")  // Manage format as archive
+FEATURE.isPending("sharedActionWithDescription")  //[MOBILE] Add a description parameter to predefined share action
+FEATURE.isPending("withWidgetActions")  // Enable widget actions
+FEATURE.isPending(114338)  // Support Collection of field injected into detail template https://project.4d.com/issues/114338
+FEATURE.isPending("droppingNext"; 114338)  // Allow to drop a multivalued field next to another existing dropped multivalued fields
+FEATURE.isPending("iosSDKfromAWS")  // Download iOS SDK from AWS
 
 /* -------------------------------------
 OVERRIDE WITH LOCAL PREFERENCES
@@ -267,7 +267,7 @@ If ($preferences.features#Null:C1517)
 End if 
 
 //mark:-→ ALIAS
-FEATURE.alias("actionsInTabBar"; 131983)
-FEATURE.alias("androidDataSet"; 127558)
-FEATURE.alias("many-one-many"; 129953)
-FEATURE.alias("alias"; 131225)
+FEATURE.makeAlias("actionsInTabBar"; 131983)
+FEATURE.makeAlias("androidDataSet"; 127558)
+FEATURE.makeAlias("many-one-many"; 129953)
+FEATURE.makeAlias("alias"; 131225)

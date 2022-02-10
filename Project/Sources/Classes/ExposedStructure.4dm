@@ -653,7 +653,7 @@ Function addField($table : Object; $field : cs:C1710.field)
 			$table[$field.name]:=This:C1470._fieldModel($field)
 			
 			//………………………………………………………………………………………………………
-		: ($field.kind="relatedEntity")  // N -> 1 relation
+		: ($field.kind="relatedEntity")
 			
 			// Add all related fields
 			$relatedCatalog:=This:C1470.relatedCatalog($table[""].name; $field.name; True:C214)
@@ -694,7 +694,6 @@ Function addField($table : Object; $field : cs:C1710.field)
 							$o[$path[0]][$relatedField.name]:=This:C1470._fieldModel($relatedField)
 							$o[$path[0]][$relatedField.name].path:=$relatedField.path
 							
-							
 							//______________________________________________________
 						: ($relatedField.kind="alias") && ($o[$path[0]][$relatedField.name]=Null:C1517)
 							
@@ -710,7 +709,7 @@ Function addField($table : Object; $field : cs:C1710.field)
 							//______________________________________________________
 						Else 
 							
-							ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
+							//ASSERT(DATABASE.isComponent; "😰 I wonder why I'm here")
 							
 							//______________________________________________________
 					End case 
@@ -731,7 +730,6 @@ Function addField($table : Object; $field : cs:C1710.field)
 							$o[$relatedField.name]:=This:C1470._fieldModel($relatedField)
 							$o[$relatedField.name].path:=$relatedField.path
 							
-							
 							//______________________________________________________
 						: ($relatedField.kind="alias") && ($o[$relatedField.name]=Null:C1517)
 							
@@ -747,7 +745,7 @@ Function addField($table : Object; $field : cs:C1710.field)
 							//______________________________________________________
 						Else 
 							
-							ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
+							//ASSERT(DATABASE.isComponent; "😰 I wonder why I'm here")
 							
 							//______________________________________________________
 					End case 

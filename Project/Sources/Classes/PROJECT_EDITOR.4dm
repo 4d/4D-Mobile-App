@@ -25,6 +25,12 @@ Class constructor()
 		
 	End for each 
 	
+	//MARK:-[COMPUTED]
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function get unsynchronizedTables()->$sesult : Collection
+	
+	$sesult:=Form:C1466.$dialog.unsynchronizedTables
+	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Definition of the editor pages and panels used
 Function design()

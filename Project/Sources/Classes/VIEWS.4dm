@@ -166,14 +166,14 @@ Function addField($field : Object; $fields : Collection)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Construct the table's field list
-Function fieldList($table : Variant)->$result : Object
-	var $attribute; $key; $tableID : Text
+Function fieldList($table)->$result : Object
+	
+	var $attribute; $key; $linkPrefix; $tableID : Text
+	var $subLevel : Integer
 	var $field; $o; $subfield; $tableModel : Object
 	var $c : Collection
-	var $subLevel : Integer
-	var $linkPrefix : Text
 	
-	$linkPrefix:=Choose:C955(Is macOS:C1572; "└ "; "└ ")  //"├ " //" ┊"
+	$linkPrefix:=Choose:C955(Is macOS:C1572; "└╴ "; "└ ")  //"├ " //" ┊"
 	
 	ASSERT:C1129(Count parameters:C259>=1; "Missing parameter")
 	
@@ -194,22 +194,20 @@ Function fieldList($table : Variant)->$result : Object
 			
 			For each ($key; $tableModel)
 				
+				$field:=$tableModel[$key]
+				
 				Case of 
 						
 						//……………………………………………………………………………………………………………
-					: (Length:C16($key)=0)
-						
-						// table meta-data
-						
-						//……………………………………………………………………………………………………………
-					: (Value type:C1509($tableModel[$key])#Is object:K8:27)
+					: (Length:C16($key)=0)\
+						 || (Value type:C1509($tableModel[$key])#Is object:K8:27)
 						
 						// <NOTHING MORE TO DO>
 						
 						//……………………………………………………………………………………………………………
 					: (PROJECT.isField($key))
 						
-						$field:=OB Copy:C1225($tableModel[$key])
+						$field:=OB Copy:C1225($field)
 						
 						// #TEMPO [
 						$field.id:=Num:C11($key)
@@ -217,13 +215,30 @@ Function fieldList($table : Variant)->$result : Object
 						//]
 						
 						$field.path:=$field.name
-						$field.$label:=$field.path
+						$field.$label:=$field.name
 						$field.$level:=0
-						
 						$result.fields.push($field)
 						
 						//……………………………………………………………………………………………………………
-					: (PROJECT.isRelationToOne($tableModel[$key]))
+					: (PROJECT.isAlias($field))
+						
+						$field:=OB Copy:C1225($field)
+						$field.name:=$key
+						$field.$label:=$key
+						$field.$level:=0
+						$result.fields.push($field)
+						
+						//……………………………………………………………………………………………………………
+					: (PROJECT.isComputedAttribute($field))
+						
+						$field:=OB Copy:C1225($field)
+						$field.name:=$key
+						$field.$label:=$key
+						$field.$level:=0
+						$result.fields.push($field)
+						
+						//……………………………………………………………………………………………………………
+					: (PROJECT.isRelationToOne($field))
 						
 						$field:=New object:C1471(\
 							"name"; $key; \
@@ -244,7 +259,7 @@ Function fieldList($table : Variant)->$result : Object
 						
 						$subLevel:=$subLevel+10
 						
-						$field.$label:=$field.path
+						$field.$label:=$key
 						$field.$level:=$subLevel
 						
 						$result.fields.push($field)
@@ -279,8 +294,8 @@ Function fieldList($table : Variant)->$result : Object
 									
 									$field:=OB Copy:C1225($tableModel[$key][$attribute])
 									
-									$field.$label:=$linkPrefix+$field.name
-									$field.path:=$key+"."+$field.name
+									$field.$label:=$linkPrefix+$attribute
+									$field.path:=$key+"."+$attribute
 									$field.$level:=$subLevel+1
 									
 									$result.fields.push($field)
@@ -373,21 +388,10 @@ Function fieldList($table : Variant)->$result : Object
 						$field.$level:=0
 						
 						//……………………………………………………………………………………………………………
-					: (PROJECT.isComputedAttribute($tableModel[$key]))
-						
-						$field:=OB Copy:C1225($tableModel[$key])
-						
-						$field.path:=$field.name
-						$field.$label:=$field.path
-						$field.$level:=0
-						
-						$result.fields.push($field)
-						
-						//……………………………………………………………………………………………………………
 				End case 
 			End for each 
 			
-			$result.fields:=$result.fields.orderBy("$level, path")
+			$result.fields:=$result.fields.orderBy("$level, $label")
 			
 		End if 
 	End if 

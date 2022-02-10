@@ -136,32 +136,23 @@ Function tableList()
 	// ----------------------
 	// HIGHLIGHT ERRORS
 	// ----------------------
-	
 	For each ($table; $catalog)
 		
 		If (Find in array:C230($tablesPtr->; $table.name)>0)
 			
 			$row:=$row+1
 			
-			Case of 
-					
-					//______________________________________________________
-				: (Form:C1466.$dialog.unsynchronizedTables.length<=$table.tableNumber)
-					
-					LISTBOX SET ROW COLOR:C1270(*; $form.tableList; $row; lk inherited:K53:26; lk font color:K53:24)
-					
-					//______________________________________________________
-				: (Form:C1466.$dialog.unsynchronizedTables[$table.tableNumber]#Null:C1517)
-					
-					LISTBOX SET ROW COLOR:C1270(*; $form.tableList; $row; EDITOR.errorColor; lk font color:K53:24)
-					
-					//______________________________________________________
-				Else 
-					
-					LISTBOX SET ROW COLOR:C1270(*; $form.tableList; $row; lk inherited:K53:26; lk font color:K53:24)
-					
-					//______________________________________________________
-			End case 
+			If (EDITOR.unsynchronizedTables=Null:C1517)\
+				 || (EDITOR.unsynchronizedTables.length<=$table.tableNumber)\
+				 || (EDITOR.unsynchronizedTables[$table.tableNumber]=Null:C1517)
+				
+				LISTBOX SET ROW COLOR:C1270(*; $form.tableList; $row; lk inherited:K53:26; lk font color:K53:24)
+				
+			Else 
+				
+				LISTBOX SET ROW COLOR:C1270(*; $form.tableList; $row; EDITOR.errorColor; lk font color:K53:24)
+				
+			End if 
 			
 			// Highlight published table name
 			LISTBOX SET ROW FONT STYLE:C1268(*; $form.tableList; $row; Choose:C955($dataModel[String:C10($table.tableNumber)]=Null:C1517; Plain:K14:1; Bold:K14:2))
@@ -176,7 +167,7 @@ Function tableList()
 		
 	End if 
 	
-	// Select the first table if any [
+	// Select the first table if any
 	If ($ƒ.currentTable=Null:C1517)
 		
 		GOTO OBJECT:C206(*; $form.tableList)
@@ -916,7 +907,15 @@ Function updateProject()
 							//………………………………………………………………………………………………………
 						: ($fieldModel.kind="relatedEntities")
 							
-							$found:=(String:C10($o.name)=$key)
+							If (FEATURE.with("many-one-many"))
+								
+								
+								
+							Else 
+								
+								$found:=(String:C10($o.name)=$key)
+								
+							End if 
 							
 							//………………………………………………………………………………………………………
 						: ($fieldModel.kind="calculated")
@@ -960,7 +959,7 @@ Function updateProject()
 				: (Num:C11($o.published)=0) & $found  // REMOVED
 					
 					If ($field.kind="alias")\
-						 || ($field.kind="computed")
+						 || ($field.kind="calculated")
 						
 						$structure.removeField($tableModel; $field.name)
 						
@@ -1348,19 +1347,19 @@ Function _appendField($table : cs:C1710.table; $field : cs:C1710.field)
 								End if 
 								
 								//______________________________________________________
-							: ($o.kind="computed")
+							: ($o.kind="calculated")
 								
 								$c:=Split string:C1554($o.path; "."; sk ignore empty strings:K86:1)
 								
 								If ($c.length=1)
 									
 									// Field
-									$published+=Num:C11($fieldModel[$o.fieldName]=Null:C1517)
+									$published+=Num:C11($fieldModel[$o.name]=Null:C1517)
 									
 								Else 
 									
 									// Link
-									$published+=Num:C11($fieldModel[$c[0]][$o.fieldName]=Null:C1517)
+									$published+=Num:C11($fieldModel[$c[0]][$o.name]=Null:C1517)
 									
 								End if 
 								
