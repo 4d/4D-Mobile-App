@@ -1719,6 +1719,13 @@ Function doName($e : Object)
 			var $editedText; $value : Text
 			var $charCode; $indx : Integer
 			
+			// Store the current value
+			If (This:C1470.paramName.oldValue=Null:C1517)
+				
+				This:C1470.paramName.oldValue:=This:C1470.paramName.getValue()
+				
+			End if 
+			
 			$charCode:=Character code:C91(Keystroke:C390)
 			$editedText:=Replace string:C233(Get edited text:C655; Char:C90(At sign:K15:46); "")
 			$editedText:=Replace string:C233($editedText; Char:C90(ReturnKey:K12:27); "")
@@ -1795,16 +1802,41 @@ Function doName($e : Object)
 			
 			For each ($key; $table)
 				
-				If (PROJECT.isField($key))\
-					 | (PROJECT.isComputedAttribute($table[$key]; $table[""].name))
+				If (Length:C16($key)=0)
 					
-					If ($table[$key].fieldType#Is object:K8:27)
+					continue
+					
+				End if 
+				
+				var $field : cs:C1710.field
+				$field:=$table[$key]
+				
+				If ($field.kind="storage")\
+					 | ($field.kind="calculated")\
+					 | (($field.kind="alias") && ($field.fieldType#38) && ($field.fieldType#42))
+					
+					If ($field.fieldType#Is object:K8:27)
 						
-						If (This:C1470.action.parameters.query("name = :1"; $table[$key].name).pop()=Null:C1517)\
-							 | ($table[$key].name=This:C1470.current.name)
+						If ($field.kind="storage")
 							
-							$o.values.push($table[$key].name)
+							If (This:C1470.action.parameters.query("name = :1"; $field.name).pop()=Null:C1517)\
+								 | ($field.name=This:C1470.current.name)
+								
+								$o.values.push($field.name)
+								
+							End if 
 							
+						Else 
+							
+							If (Not:C34(Bool:C1537($field.readOnly)))
+								
+								If (This:C1470.action.parameters.query("name = :1"; $key).pop()=Null:C1517)\
+									 | ($key=This:C1470.current.name)
+									
+									$o.values.push($key)
+									
+								End if 
+							End if 
 						End if 
 					End if 
 				End if 
@@ -1823,13 +1855,16 @@ Function doName($e : Object)
 				
 				If (Length:C16($value)=0)
 					
-					BEEP:C151
-					This:C1470.updateParamater(Get localized string:C991("newParameter"))
+					// Restore previous value
+					This:C1470.updateParamater(This:C1470.paramName.oldValue)
 					
+					BEEP:C151
 					This:C1470.paramName.focus()
 					
 				End if 
 			End if 
+			
+			OB REMOVE:C1226(This:C1470.paramName; "oldValue")
 			
 			//______________________________________________________
 		: ($e.code=On Data Change:K2:15)
@@ -1846,30 +1881,58 @@ Function doName($e : Object)
 	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function updateParamater($name : Text)->$success : Boolean
+Function updateParamater($name : Text)
 	
-	var $key : Text
-	var $table : Object
+	var $identifier; $key : Text
+	var $success : Boolean
+	var $tableModel : Object
+	var $field : cs:C1710.field
 	
-	$table:=Form:C1466.dataModel[String:C10(This:C1470.action.tableNumber)]
+	$tableModel:=Form:C1466.dataModel[String:C10(This:C1470.action.tableNumber)]
 	
-	For each ($key; $table) Until ($success)
+	For each ($key; $tableModel) Until ($success)
 		
-		If (PROJECT.isField($key))
+		If (Length:C16($key)=0)
 			
-			If ($table[$key].fieldType#Is object:K8:27)
+			continue
+			
+		End if 
+		
+		$field:=$tableModel[$key]
+		
+		If ($field.fieldType#Null:C1517) && ($field.fieldType#Is object:K8:27)
+			
+			$identifier:=($field.name#Null:C1517 ? $field.name : $key)
+			
+			If ($field.kind="storage")\
+				 | ($field.kind="calculated")
 				
-				$success:=($table[$key].name=$name)
+				$success:=($identifier=$name)
 				
 				If ($success)
 					
 					This:C1470.current.fieldNumber:=Num:C11($key)
-					This:C1470.current.name:=$table[$key].name
-					This:C1470.current.label:=$table[$key].label
-					This:C1470.current.shortLabel:=$table[$key].shortLabel
-					This:C1470.current.type:=PROJECT.fieldType2type($table[$key].fieldType)
+					This:C1470.current.name:=$identifier
+					This:C1470.current.label:=$field.label
+					This:C1470.current.shortLabel:=$field.shortLabel
+					This:C1470.current.type:=PROJECT.fieldType2type($field.fieldType)
 					
 				End if 
+				
+			Else 
+				
+				$success:=($identifier=$name)
+				
+				If ($success)
+					
+					OB REMOVE:C1226(This:C1470.current; "fieldNumber")
+					This:C1470.current.name:=$identifier
+					This:C1470.current.label:=$field.label
+					This:C1470.current.shortLabel:=$field.shortLabel
+					This:C1470.current.type:=PROJECT.fieldType2type($field.fieldType)
+					
+				End if 
+				
 			End if 
 		End if 
 	End for each 

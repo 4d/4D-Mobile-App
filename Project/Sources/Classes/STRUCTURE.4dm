@@ -532,13 +532,16 @@ Function doFieldPicker()->$count : Integer
 			// Recover the publication status
 			$path:=Split string:C1554(($field.label=Null:C1517) ? $field.path : $field.label; ".")
 			
-			If ($path.length>1)
+			var $t : Text
+			$t:=Choose:C955($field.kind="storage"; String:C10($field.fieldNumber); $field.name)
+			
+			If ($field.kind#"alias") && ($path.length>1)
 				
-				$field.published:=($relatedDataModel[$path[0]][Choose:C955($field.kind="storage"; String:C10($field.fieldNumber); $field.name)]#Null:C1517)
+				$field.published:=($relatedDataModel[$path[0]][$t]#Null:C1517)
 				
 			Else 
 				
-				$field.published:=($relatedDataModel[Choose:C955($field.kind="storage"; String:C10($field.fieldNumber); $field.name)]#Null:C1517)
+				$field.published:=($relatedDataModel[$t]#Null:C1517)
 				
 			End if 
 			
