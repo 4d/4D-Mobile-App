@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="{{package}}">
 
+    <uses-feature android:name="android.hardware.camera"/>
+    <uses-permission android:name="android.permission.CAMERA" />
     {{#permissions}}
     {{permission}}
 
