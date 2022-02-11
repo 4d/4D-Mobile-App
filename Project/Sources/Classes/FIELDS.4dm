@@ -295,7 +295,7 @@ Function getFieldList()->$result : Object
 										$result.tableNumbers.push(ds:C1482[$table[$key].relatedDataClass].getInfo().tableNumber)
 										$result.ids.push(-3)
 										$result.names.push($field.name)
-										$result.paths.push($key+"."+$field.name)
+										$result.paths.push($key+"."+$subKey)
 										$result.types.push($field.fieldType)
 										$result.labels.push($field.label)
 										$result.shortLabels.push($field.shortLabel)
@@ -441,11 +441,9 @@ Function getFieldList()->$result : Object
 								
 							Else 
 								
-								$result.types.push(($field.type=42) ? -2 : -1)
+								$result.types.push(($field.fieldType=42) ? -2 : -1)
 								
 							End if 
-							
-							
 						End if 
 						
 						//……………………………………………………………………………………………………………

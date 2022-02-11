@@ -736,7 +736,7 @@ Function isComputedAttribute($field : Object; $tableName : Text)->$is : Boolean
 	var $catalog : Collection
 	
 	//$is:=(String($field.kind)="calculated") | (Bool($field.computed)) | (Num($field.type)=-3)
-	$is:=$field.kind="calculated"
+	$is:=($field.kind#Null:C1517) && ($field.kind="calculated")
 	
 	If ($is & (Count parameters:C259>=2))
 		
