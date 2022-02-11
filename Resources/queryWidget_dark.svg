@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<defs>
+    <symbol id="arrow">
+      <path d="M0,0 L10,10 L20,0z" fill="white" stroke="white" stroke-width="1" transform="scale(0.4,0.4)"/>
+    </symbol>
+  </defs>  
+  <g fill="$4DEVAL($1)" font-family="sans-serif" stroke="$4DEVAL($1)">  
+    <g id="fields" transform="translate(1,2)">
+      <rect fill="rgb(30,30,30)" height="22" stroke="rgb(196,196,196)" stroke-width="1" width="100" x="0" y="0" rx="2"/>
+      <textArea stroke="white" height="22" text-align="center" width="90" x="5" y="3">$4DEVAL($2)</textArea>
+      <use xlink:href="#arrow" x="86" y="12"/>
+    </g>    
+    <g id="comparator" transform="translate(105,2)">
+      <rect fill="rgb(30,30,30)" height="22" stroke="rgb(196,196,196)" stroke-width="1" width="110" x="0" y="0" rx="2"/>
+      <textArea stroke="white" height="22" text-align="center" width="100" x="5" y="3">$4DEVAL($3)</textArea>
+      <use xlink:href="#arrow" x="96" y="12"/>
+    </g>    
+    <g id="operator" transform="translate(220,2)">
+      <rect fill="rgb(30,30,30)" height="22" stroke="rgb(196,196,196)" stroke-width="1" width="100" x="0" y="0" rx="2"/>
+      <textArea stroke="white" height="22" text-align="center" width="90" x="5" y="3">$4DEVAL($4)</textArea>
+      <use xlink:href="#arrow" x="86" y="12"/>
+    </g>    
+  </g>  
+</svg>

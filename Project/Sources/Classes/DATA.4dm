@@ -92,13 +92,23 @@ Function onLoad()
 	
 	// Init the query widget
 	var $t : Text
-	$t:=File:C1566("/RESOURCES/queryWidget.svg").getText()
+	If (EDITOR.isDark)
+		
+		$t:=File:C1566("/RESOURCES/queryWidget_dark.svg").getText()
+		
+	Else 
+		
+		$t:=File:C1566("/RESOURCES/queryWidget.svg").getText()
+		
+	End if 
+	
 	PROCESS 4D TAGS:C816($t; $t; \
 		EDITOR.selectedFillColor; \
 		Get localized string:C991("fields"); \
 		Get localized string:C991("comparators"); \
 		Get localized string:C991("operators"); \
 		"🢓")
+	
 	This:C1470.queryWidget.setValue(cs:C1710.svg.new($t).picture())
 	
 	This:C1470.update()
