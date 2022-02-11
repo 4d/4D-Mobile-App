@@ -1117,14 +1117,19 @@ Function getSortableFields($table; $ordered : Boolean)->$fields : Collection
 				//______________________________________________________
 		End case 
 		
-		For each ($member; OB Entries:C1720($model))
+		For each ($member; OB Entries:C1720($model).query("key !=''"))
 			
 			If (This:C1470.isSortable($member.value))
 				
 				var $field : cs:C1710.field
 				$field:=OB Copy:C1225($member.value)
 				
-				If ($member.value.kind#"storage")
+				If ($member.value.kind="storage")
+					
+					// FIXME:remove ID
+					$field.fieldNumber:=($field.fieldNumber#Null:C1517) ? $field.fieldNumber : $field.id
+					
+				Else 
 					
 					$field.name:=$member.key
 					
@@ -1135,14 +1140,11 @@ Function getSortableFields($table; $ordered : Boolean)->$fields : Collection
 			End if 
 		End for each 
 		
-		If (Count parameters:C259>=2)
+		If ($ordered)
 			
-			If ($ordered)
-				
-				// Sort by name
-				$fields:=$fields.orderBy("name")
-				
-			End if 
+			// Sort by name
+			$fields:=$fields.orderBy("name")
+			
 		End if 
 		
 	Else 

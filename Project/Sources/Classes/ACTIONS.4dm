@@ -252,7 +252,7 @@ Function doAddMenu()
 	var $t : Text
 	var $icon : Picture
 	var $i : Integer
-	var $action; $catalog; $field; $o; $parameter; $table : Object
+	var $action; $catalog; $field; $o; $parameter; $tableModel : Object
 	var $c; $fields : Collection
 	var $addMenu; $deleteMenu; $editMenu; $fieldsMenu; $menu; $newMenu; $shareMenu; $sortMenu : cs:C1710.menu
 	
@@ -321,11 +321,10 @@ Function doAddMenu()
 		
 		For each ($field; PROJECT.getSortableFields(Form:C1466.dataModel[$o.tableID]; True:C214))
 			
-			//If (PROJECT.isField($field))
-			
 			If ($field.kind="storage")
 				
-				$fieldsMenu.append($field.name; "sort_"+$o.tableID+","+String:C10($field.fieldNumber))
+				// FIXME:remove ID
+				$fieldsMenu.append($field.name; "sort_"+$o.tableID+","+String:C10(($field.fieldNumber#Null:C1517) ? $field.fieldNumber : $field.id))
 				
 			Else 
 				
@@ -375,16 +374,16 @@ Function doAddMenu()
 				If ($menu.sort)
 					
 					$c:=Split string:C1554($t; ",")
-					$menu.table:=$c[0]
+					$menu.tableID:=$c[0]
 					$menu.fieldIdentifier:=$c[1]
 					
 				Else 
 					
-					$menu.table:=$t
+					$menu.tableID:=$t
 					
 				End if 
 				
-				$menu.tableNumber:=Num:C11($menu.table)
+				$menu.tableNumber:=Num:C11($menu.tableID)
 				
 				Case of 
 						
@@ -437,10 +436,10 @@ Function doAddMenu()
 						//……………………………………………………………………
 				End case 
 				
-				$table:=Form:C1466.dataModel[$menu.table]
+				$tableModel:=OB Copy:C1225(Form:C1466.dataModel[$menu.tableID])
 				
 				// Generate a unique name
-				$t:=EDITOR.str.setText(formatString("label"; $table[""].name)).uperCamelCase()
+				$t:=EDITOR.str.setText(formatString("label"; $tableModel[""].name)).uperCamelCase()
 				
 				$menu.name:=$menu.preset+$t
 				
@@ -490,13 +489,14 @@ Function doAddMenu()
 						
 						$action.parameters:=New collection:C1472
 						
-						$field:=$table[$menu.fieldIdentifier]
+						$field:=$tableModel[$menu.fieldIdentifier]
 						
-						If ($field.fieldNumber#Null:C1517)  // Field
+						If ($field.kind="storage")
 							
+							// FIXME:remove ID
 							$parameter:=New object:C1471(\
-								"fieldNumber"; $field.fieldNumber; \
-								"name"; $menu.name; \
+								"fieldNumber"; ($field.fieldNumber#Null:C1517) ? $field.fieldNumber : $field.id; \
+								"name"; $field.name; \
 								"type"; PROJECT.fieldType2type($field.fieldType); \
 								"format"; "ascending")
 							
@@ -515,10 +515,10 @@ Function doAddMenu()
 						
 						$action.parameters:=New collection:C1472
 						
-						$catalog:=PROJECT.getCatalog().query("name = :1"; $table[""].name).pop()
+						$catalog:=PROJECT.getCatalog().query("name = :1"; $tableModel[""].name).pop()
 						$fields:=$catalog.fields
 						
-						For each ($t; $table)
+						For each ($t; $tableModel)
 							
 							Case of 
 									
@@ -528,42 +528,42 @@ Function doAddMenu()
 									continue
 									
 									//……………………………………………………………………………………
-								: ($table[$t].kind="storage")
+								: ($tableModel[$t].kind="storage")
 									
 									Case of 
 											
 											//======================================
-										: ($table[$t].name=$catalog.primaryKey)
+										: ($tableModel[$t].name=$catalog.primaryKey)
 											
 											// DO NOT ADD A PRIMARY KEY
 											
 											//======================================
-										: ($table[$t].fieldType=Is object:K8:27)
+										: ($tableModel[$t].fieldType=Is object:K8:27)
 											
 											// DO NOT ADD OBJECT FIELD
 											
 											//======================================
 										Else 
 											
-											$field:=$fields.query("name = :1"; $table[$t].name).pop()
-											$action.parameters.push(This:C1470._addParameter($field; $table[$t]; $menu.edit))
+											$field:=$fields.query("name = :1"; $tableModel[$t].name).pop()
+											$action.parameters.push(This:C1470._addParameter($field; $tableModel[$t]; $menu.edit))
 											
 											//======================================
 									End case 
 									
 									//……………………………………………………………………………………
-								: ($table[$t].kind="calculated")
+								: ($tableModel[$t].kind="calculated")
 									
 									$field:=$fields.query("name = :1"; $t).pop()
 									
 									If (Not:C34(Bool:C1537($field.readOnly)))
 										
-										$action.parameters.push(This:C1470._addParameter($field; $table[$t]; $menu.edit))
+										$action.parameters.push(This:C1470._addParameter($field; $tableModel[$t]; $menu.edit))
 										
 									End if 
 									
 									//……………………………………………………………………………………
-								: ($table[$t].kind="alias")
+								: ($tableModel[$t].kind="alias")
 									
 									$field:=$fields.query("name = :1"; $t).pop()
 									
@@ -571,13 +571,13 @@ Function doAddMenu()
 										 && ($field.fieldType#42)\
 										 && (Not:C34(Bool:C1537($field.readOnly)))
 										
-										$action.parameters.push(This:C1470._addParameter($field; $table[$t]; $menu.edit))
+										$action.parameters.push(This:C1470._addParameter($field; $tableModel[$t]; $menu.edit))
 										
 									End if 
 									
 									//……………………………………………………………………………………
-								: ($table[$t].kind="relatedEntity")\
-									 | ($table[$t].kind="relatedEntities")
+								: ($tableModel[$t].kind="relatedEntity")\
+									 | ($tableModel[$t].kind="relatedEntities")
 									
 									// <NOTHING MORE TO DO>
 									
