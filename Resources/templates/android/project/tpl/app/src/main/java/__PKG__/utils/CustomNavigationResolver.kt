@@ -11,6 +11,7 @@ import androidx.navigation.findNavController
 import com.qmobile.qmobileapi.model.entity.EntityModel
 import com.qmobile.qmobiledatastore.data.RoomData
 import com.qmobile.qmobiledatasync.utils.GenericNavigationResolver
+import com.qmobile.qmobileui.action.ActionParametersFragmentDirections
 import com.qmobile.qmobileui.detail.viewpager.EntityViewPagerFragmentDirections
 import com.qmobile.qmobileui.list.EntityListFragmentDirections
 import com.qmobile.qmobileui.ui.setOnSingleClickListener
@@ -220,5 +221,11 @@ class CustomNavigationResolver : GenericNavigationResolver {
                 navBarTitle
             )
         ) 
+    }
+
+    override fun navigateToBarCodeScanner(viewDataBinding: ViewDataBinding, position: Int) {
+        viewDataBinding.root.findNavController().navigate(
+            ActionParametersFragmentDirections.actionParametersToScanner(position)
+        )
     }
 }

@@ -214,6 +214,14 @@
         android:name="com.qmobile.qmobileui.action.ActionParametersFragment"
         android:label="{navbarTitle}">
 
+        <action
+            android:id="@+id/action_parameters_to_scanner"
+            app:destination="@id/barCodeScannerFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
         <argument
             android:name="tableName"
             app:argType="string" />
@@ -233,6 +241,16 @@
         <argument
             android:name="navbarTitle"
             app:argType="string" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/barCodeScannerFragment"
+        android:name="com.qmobile.qmobileui.action.BarCodeScannerFragment">
+
+        <argument
+            android:name="position"
+            app:argType="integer" />
 
     </fragment>
 

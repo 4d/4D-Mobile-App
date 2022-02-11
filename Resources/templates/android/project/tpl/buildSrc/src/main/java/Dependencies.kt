@@ -15,11 +15,14 @@ object Versions {
     const val arch_core = "2.1.0"
     const val artifactory = "4.24.18"
     const val atsl_junit = "1.1.2"
+    const val barcode_scanning = "17.0.2"
+    const val camerax = "1.1.0-beta01"
     const val constraint_layout = "2.1.1"
     const val design = "1.5.0"
     const val dynamic_toasts = "4.1.0"
     const val espresso = "3.2.0"
     const val espresso_contrib = "3.0.2"
+    const val fragment_ktx = "1.4.1"
     const val glide = "4.12.0"
     const val glide_transformations = "4.3.0"
     const val jackson = "2.13.0"
@@ -82,6 +85,7 @@ object Libs {
 
     // Common
     const val androidx_appcompat = "androidx.appcompat:appcompat:${Versions.support}"
+    const val androidx_fragment_ktx = "androidx.fragment:fragment-ktx:${Versions.fragment_ktx}"
     const val androidx_preference_ktx = "androidx.preference:preference-ktx:${Versions.preference}"
     const val multidex = "androidx.multidex:multidex:${Versions.multidex}"
     const val kotlin_coroutines_android =
@@ -147,6 +151,12 @@ object Libs {
     const val androidx_navigation_fragment =
         "androidx.navigation:navigation-fragment-ktx:${Versions.navigation}"
     const val androidx_navigation_ui = "androidx.navigation:navigation-ui-ktx:${Versions.navigation}"
+
+    // CameraX
+    const val androidx_camera2 = "androidx.camera:camera-camera2:${Versions.camerax}"
+    const val androidx_camera_lifecycle = "androidx.camera:camera-lifecycle:${Versions.camerax}"
+    const val androidx_camera_view = "androidx.camera:camera-view:${Versions.camerax}"
+    const val barcode_scanning = "com.google.mlkit:barcode-scanning:${Versions.barcode_scanning}"
 
     // Utils
     const val dynamic_toasts = "com.pranavpandey.android:dynamic-toasts:${Versions.dynamic_toasts}"
