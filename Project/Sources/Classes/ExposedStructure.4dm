@@ -545,7 +545,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 									//…………………………………………………………………………………………………
 								Else 
 									
-									ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
+									oops
 									
 									//…………………………………………………………………………………………………
 							End case 
@@ -615,7 +615,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 					//______________________________________________________
 				Else 
 					
-					ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
+					oops
 					
 					//______________________________________________________
 			End case 
@@ -709,7 +709,7 @@ Function addField($table : Object; $field : cs:C1710.field)
 							//______________________________________________________
 						Else 
 							
-							//ASSERT(DATABASE.isComponent; "😰 I wonder why I'm here")
+							//oups
 							
 							//______________________________________________________
 					End case 
@@ -745,7 +745,7 @@ Function addField($table : Object; $field : cs:C1710.field)
 							//______________________________________________________
 						Else 
 							
-							//ASSERT(DATABASE.isComponent; "😰 I wonder why I'm here")
+							//oups
 							
 							//______________________________________________________
 					End case 
@@ -755,7 +755,7 @@ Function addField($table : Object; $field : cs:C1710.field)
 			//………………………………………………………………………………………………………
 		Else 
 			
-			ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
+			oops
 			
 			//………………………………………………………………………………………………………
 	End case 
@@ -887,7 +887,7 @@ Function _fieldModel($field : cs:C1710.field; $relatedCatalog : Object)->$fieldM
 			//………………………………………………………………………………………………………
 		Else 
 			
-			ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
+			oops
 			
 			//………………………………………………………………………………………………………
 	End case 
@@ -1042,7 +1042,7 @@ Don't keep:
 						//______________________________________
 					Else 
 						
-						ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
+						oops
 						
 						//______________________________________
 				End case 
@@ -1050,7 +1050,7 @@ Don't keep:
 				//…………………………………………………………………………………………………
 			Else 
 				
-				ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
+				oops
 				
 				//…………………………………………………………………………………………………
 		End case 
@@ -1166,7 +1166,7 @@ Function _relatedFields($field : cs:C1710.field; $relationName : Text; $recursiv
 							//______________________________________________________
 						Else 
 							
-							ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
+							oops
 							
 							//______________________________________________________
 					End case 
@@ -1203,7 +1203,7 @@ Function _relatedFields($field : cs:C1710.field; $relationName : Text; $recursiv
 			//…………………………………………………………………………………………………
 		Else 
 			
-			ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
+			oops
 			
 			//___________________________________________
 	End case 

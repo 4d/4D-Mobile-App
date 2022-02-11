@@ -263,7 +263,7 @@ Function update()
 		This:C1470.sortMenu.hide()
 		
 		// Restore position
-		This:C1470.paramName.moveAndResizeHorizontally(-33; 33)
+		This:C1470.paramName.moveAndResizeHorizontally(-33; 5)
 		
 	End if 
 	
@@ -315,8 +315,7 @@ Function update()
 					
 					This:C1470.goToPage(1)
 					This:C1470.title.setTitle(\
-						EDITOR.str.setText("sortCriteria")\
-						.localized(New collection:C1472($action.shortLabel; Table name:C256($action.tableNumber)))).show()
+						EDITOR.str.localize("sortCriteria"; New collection:C1472($action.shortLabel; Table name:C256($action.tableNumber)))).show()
 					This:C1470.withSelection.show()
 					
 					This:C1470.add.enable()
@@ -333,11 +332,12 @@ Function update()
 						This:C1470.paramNameGroup.show()
 						This:C1470.sortOrderGroup.show()
 						This:C1470.field.show()  // Linked to a field
+						
 						This:C1470.paramName.disable()  // The name isn't editable
 						This:C1470.sortMenu.show()
 						
 						//We must backup the original position to not resize at each update
-						This:C1470.paramName.moveAndResizeHorizontally(33; -33)
+						This:C1470.paramName.moveAndResizeHorizontally(33; -5)
 						
 					End if 
 					
@@ -356,8 +356,7 @@ Function update()
 					Else 
 						
 						This:C1470.title.setTitle(\
-							EDITOR.str.setText("actionParameters")\
-							.localized(New collection:C1472($action.shortLabel; Table name:C256($action.tableNumber)))).show()
+							EDITOR.str.localize("actionParameters"; New collection:C1472($action.shortLabel; Table name:C256($action.tableNumber)))).show()
 						This:C1470.withSelection.show()
 						This:C1470.add.enable()
 						This:C1470.remove.enable($current#Null:C1517)
@@ -379,7 +378,7 @@ Function update()
 								If ($isLinked)
 									
 									This:C1470.field.show()
-									This:C1470.field.setValue(EDITOR.str.setText("thisParameterIsLinkedToTheField").localized($current.name))
+									This:C1470.field.setValue(EDITOR.str.localize("thisParameterIsLinkedToTheField"; $current.name))
 									
 								Else 
 									
@@ -738,12 +737,12 @@ Function doNewParameter()
 	// Add a field linked parameter
 Function doAddParameterMenu($target : Object; $update : Boolean)
 	
-	var $t : Text
+	var $t; $type : Text
 	var $isSortAction : Boolean
-	var $field; $parameter; $table : Object
-	var $c : Collection
-	var $isComputedAttribute : 4D:C1709.Function
+	var $parameter; $table : Object
+	var $fields : Collection
 	var $menu : cs:C1710.menu
+	var $field : cs:C1710.field
 	
 	$isSortAction:=String:C10(This:C1470.action.preset)="sort"
 	$menu:=cs:C1710.menu.new()
@@ -758,32 +757,37 @@ Function doAddParameterMenu($target : Object; $update : Boolean)
 		
 		$table:=Form:C1466.dataModel[String:C10(This:C1470.action.tableNumber)]
 		
-		If ((String:C10(This:C1470.action.preset)="edit")\
-			 | (String:C10(This:C1470.action.preset)="add"))
-			
-			// Filtering attributes writable
-			$isComputedAttribute:=Formula:C1597(PROJECT.isComputedAttribute($1; $table[""].name))
-			
-		Else 
-			
-			$isComputedAttribute:=Formula:C1597(PROJECT.isComputedAttribute($1))
-			
-		End if 
-		
-		$c:=New collection:C1472
+		$fields:=New collection:C1472
 		
 		If (This:C1470.action.parameters=Null:C1517)
 			
 			For each ($t; $table)
 				
-				$field:=$table[$t]
+				If (Length:C16($t)=0)
+					
+					continue
+					
+				End if 
 				
-				If (PROJECT.isField($t)) | ($isComputedAttribute.call(Null:C1517; $field))
+				$field:=OB Copy:C1225($table[$t])
+				
+				If ($field.kind="storage")\
+					 || ($field.kind="calculated")\
+					 || (($field.kind="alias") && ($field.fieldType#38) && ($field.fieldType#42))
 					
 					If (Not:C34($isSortAction) | PROJECT.isSortable($field))
 						
-						$field.fieldNumber:=Num:C11($t)
-						$c.push($field)
+						If ($field.kind="storage")
+							
+							$field.fieldNumber:=Num:C11($t)
+							
+						Else 
+							
+							$field.name:=$t
+							
+						End if 
+						
+						$fields.push($field)
 						
 					End if 
 				End if 
@@ -793,34 +797,48 @@ Function doAddParameterMenu($target : Object; $update : Boolean)
 			
 			For each ($t; $table)
 				
-				$field:=$table[$t]
-				
-				If (PROJECT.isField($t))\
-					 | ($isComputedAttribute.call(Null:C1517; $field))
+				If (Length:C16($t)=0)
 					
-					If ($field.fieldType#Is object:K8:27)
+					continue
+					
+				End if 
+				
+				$field:=OB Copy:C1225($table[$t])
+				
+				If ($field.kind="storage")\
+					 || ($field.kind="calculated")\
+					 || (($field.kind="alias") && ($field.fieldType#38) && ($field.fieldType#42))
+					
+					If (Not:C34($isSortAction) | PROJECT.isSortable($field))
 						
-						If (Not:C34($isSortAction) | PROJECT.isSortable($field))
+						If (This:C1470.action.parameters.query("name = :1"; $field.name#Null:C1517 ? $field.name : $t).pop()=Null:C1517)
 							
-							If (This:C1470.action.parameters.query("name = :1"; $field.name).pop()=Null:C1517)
+							If ($field.kind="storage")
 								
 								$field.fieldNumber:=Num:C11($t)
-								$c.push($field)
+								
+							Else 
+								
+								$field.name:=$t
 								
 							End if 
+							
+							$fields.push($field)
+							
 						End if 
 					End if 
 				End if 
 			End for each 
 		End if 
 		
-		If ($c.length>0)
+		If ($fields.length>0)
 			
 			$menu.line()
 			
-			For each ($field; $c)
+			For each ($field; $fields)
 				
-				$menu.append($field.name; $field.name)
+				$t:=$field.name#Null:C1517 ? $field.name : $t
+				$menu.append($t; $t)
 				
 			End for each 
 		End if 
@@ -846,21 +864,22 @@ Function doAddParameterMenu($target : Object; $update : Boolean)
 			This:C1470.doNewParameter()
 			
 			//______________________________________________________
-		: (Count parameters:C259=2)  // Change linked field
+		: ($update)  // Change linked field
 			
-			$field:=$c.query("name = :1"; $menu.choice).pop()
+			$field:=$fields.query("name = :1"; $menu.choice).pop()
 			This:C1470.updateParamater($field.name)
 			
 			//______________________________________________________
 		Else   // Add a field
 			
-			$field:=$c.query("name = :1"; $menu.choice).pop()
+			$field:=$fields.query("name = :1"; $menu.choice).pop()
 			
 			If ($isSortAction)
 				
 				$parameter:=New object:C1471(\
 					"fieldNumber"; $field.fieldNumber; \
-					"name"; $field.name)
+					"name"; $field.name; \
+					"path"; $field.path)
 				
 			Else 
 				
@@ -875,9 +894,10 @@ Function doAddParameterMenu($target : Object; $update : Boolean)
 					$parameter.rules:=New collection:C1472("mandatory")
 					
 				End if 
+				
+				$type:=PROJECT.fieldType2type($field.fieldType)
+				
 			End if 
-			
-			$parameter.type:=PROJECT.fieldType2type($field.fieldType)
 			
 			Case of 
 					
@@ -887,12 +907,12 @@ Function doAddParameterMenu($target : Object; $update : Boolean)
 					$parameter.format:="ascending"
 					
 					//……………………………………………………………………
-				: ($parameter.type="date")
+				: ($type="date")
 					
 					$parameter.format:="mediumDate"
 					
 					//……………………………………………………………………
-				: ($parameter.type="time")
+				: ($type="time")
 					
 					$parameter.format:="hour"
 					
@@ -1435,8 +1455,8 @@ Function doDataSourceMenu()
 Function editList()
 	
 	//$form:=New object(\
-								"static"; $static; \
-								"host"; This.path.hostInputControls(True))
+										"static"; $static; \
+										"host"; This.path.hostInputControls(True))
 	
 	//$form.folder:=This.path.hostInputControls()
 	//$manifest:=$form.folder.file("manifest.json")
@@ -1864,6 +1884,8 @@ Function updateParamater($name : Text)->$success : Boolean
 	End if 
 	
 	This:C1470.paramName.setValue(This:C1470.current.name)
+	This:C1470.field.setValue(EDITOR.str.localize("thisParameterIsLinkedToTheField"; $name))
+	
 	PROJECT.save()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
@@ -1926,7 +1948,7 @@ Function formatToolTip($format : Text)->$tip : Text
 		//SHARED.resources.formattersByName:=New object
 		//var $bind
 		//For each ($bind; SHARED.resources.fieldBindingTypes\
-						.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
+									.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
 		//SHARED.resources.formattersByName[$bind.name]:=$bind
 		//End for each
 		//End if

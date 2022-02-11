@@ -243,13 +243,13 @@ Else
 			
 		Else 
 			
-			ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
+			oops
 			
 		End if 
 		
 	Else 
 		
-		ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
+		oops
 		
 	End if 
 End if 

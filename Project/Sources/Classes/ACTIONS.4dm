@@ -252,17 +252,18 @@ Function doAddMenu()
 	var $t : Text
 	var $icon : Picture
 	var $i : Integer
-	var $action; $field; $o; $parameter; $table : Object
+	var $action; $catalog; $field; $o; $parameter; $table : Object
 	var $c; $fields : Collection
-	var $addMenu; $deleteMenu; $editMenu; $fieldsMenu; $menu; \
-		$newMenu; $shareMenu; $sortMenu : cs:C1710.menu
+	var $addMenu; $deleteMenu; $editMenu; $fieldsMenu; $menu; $newMenu; $shareMenu; $sortMenu : cs:C1710.menu
 	
 	// Extract datamodel to collection
 	$c:=New collection:C1472
 	
 	For each ($t; Form:C1466.dataModel)
 		
-		$c.push(New object:C1471("tableID"; $t; "tableName"; Form:C1466.dataModel[$t][""].name))
+		$c.push(New object:C1471(\
+			"tableID"; $t; \
+			"tableName"; Form:C1466.dataModel[$t][""].name))
 		
 	End for each 
 	
@@ -283,7 +284,6 @@ Function doAddMenu()
 			.append(":xliff:deleteActionFor"; $deleteMenu)\
 			.append(":xliff:shareActionFor"; $shareMenu)\
 			.append(":xliff:sortActionFor"; $sortMenu)
-		
 		
 		For each ($o; $c)
 			
@@ -321,7 +321,9 @@ Function doAddMenu()
 		
 		For each ($field; PROJECT.getSortableFields(Form:C1466.dataModel[$o.tableID]; True:C214))
 			
-			If (PROJECT.isField($field))
+			//If (PROJECT.isField($field))
+			
+			If ($field.kind="storage")
 				
 				$fieldsMenu.append($field.name; "sort_"+$o.tableID+","+String:C10($field.fieldNumber))
 				
@@ -458,14 +460,14 @@ Function doAddMenu()
 				End if 
 				
 				$action:=New object:C1471(\
-					"preset"; $menu.preset; \
-					"icon"; $menu.icon; \
-					"$icon"; $icon; \
 					"tableNumber"; $menu.tableNumber; \
-					"scope"; $menu.scope; \
 					"name"; $menu.name; \
+					"preset"; $menu.preset; \
+					"scope"; $menu.scope; \
+					"icon"; $menu.icon; \
+					"label"; $menu.label; \
 					"shortLabel"; $menu.label; \
-					"label"; $menu.label)
+					"$icon"; $icon)
 				
 				Case of 
 						
@@ -477,7 +479,11 @@ Function doAddMenu()
 						//-------------------------------------------
 					: ($menu.share)
 						
-						$action.description:=$menu.description
+						If (FEATURE.with("sharedActionWithDescription"))
+							
+							$action.description:=$menu.description
+							
+						End if 
 						
 						//-------------------------------------------
 					: ($menu.sort)
@@ -490,15 +496,14 @@ Function doAddMenu()
 							
 							$parameter:=New object:C1471(\
 								"fieldNumber"; $field.fieldNumber; \
-								"name"; $field.name; \
+								"name"; $menu.name; \
 								"type"; PROJECT.fieldType2type($field.fieldType); \
 								"format"; "ascending")
 							
 						Else   // Computed attribute
 							
 							$parameter:=New object:C1471(\
-								"name"; $field.name; \
-								"type"; PROJECT.fieldType2type($field.fieldType); \
+								"name"; $menu.fieldIdentifier; \
 								"format"; "ascending")
 							
 						End if 
@@ -510,7 +515,6 @@ Function doAddMenu()
 						
 						$action.parameters:=New collection:C1472
 						
-						var $catalog : Object
 						$catalog:=PROJECT.getCatalog().query("name = :1"; $table[""].name).pop()
 						$fields:=$catalog.fields
 						
@@ -518,13 +522,13 @@ Function doAddMenu()
 							
 							Case of 
 									
-									//……………………………………………………………………
-								: (Length:C16($t)=0)  //meta
+									//……………………………………………………………………………………
+								: (Length:C16($t)=0)  // Meta
 									
 									continue
 									
-									//……………………………………………………………………
-								: (PROJECT.isField($t))
+									//……………………………………………………………………………………
+								: ($table[$t].kind="storage")
 									
 									Case of 
 											
@@ -547,15 +551,10 @@ Function doAddMenu()
 											//======================================
 									End case 
 									
-									//……………………………………………………………………
-								: (PROJECT.isRelation($table[$t]))
+									//……………………………………………………………………………………
+								: ($table[$t].kind="calculated")
 									
-									//
-									
-									//……………………………………………………………………
-								: (PROJECT.isComputedAttribute($table[$t]))
-									
-									$field:=$fields.query("name = :1"; $table[$t].name).pop()
+									$field:=$fields.query("name = :1"; $t).pop()
 									
 									If (Not:C34(Bool:C1537($field.readOnly)))
 										
@@ -563,10 +562,10 @@ Function doAddMenu()
 										
 									End if 
 									
-									//……………………………………………………………………
-								: (PROJECT.isAlias($table[$t]))
+									//……………………………………………………………………………………
+								: ($table[$t].kind="alias")
 									
-									$field:=$fields.query("name = :1"; $table[$t].name).pop()
+									$field:=$fields.query("name = :1"; $t).pop()
 									
 									If ($field.fieldType#38)\
 										 && ($field.fieldType#42)\
@@ -576,12 +575,18 @@ Function doAddMenu()
 										
 									End if 
 									
-									//……………………………………………………………………
+									//……………………………………………………………………………………
+								: ($table[$t].kind="relatedEntity")\
+									 | ($table[$t].kind="relatedEntities")
+									
+									// <NOTHING MORE TO DO>
+									
+									//……………………………………………………………………………………
 								Else 
 									
-									ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
+									oops
 									
-									//……………………………………………………………………
+									//……………………………………………………………………………………
 							End case 
 						End for each 
 						
@@ -597,14 +602,14 @@ Function doAddMenu()
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function _addParameter($fieldDefinition : Object; $field : Object; $edit : Boolean)->$parameter : Object
+Function _addParameter($fieldModel : Object; $field : Object; $edit : Boolean)->$parameter : Object
 	
 	$parameter:=New object:C1471(\
-		"name"; $fieldDefinition.name; \
+		"fieldNumber"; $fieldModel.fieldNumber; \
+		"name"; $fieldModel.name; \
 		"label"; $field.label; \
 		"shortLabel"; $field.shortLabel; \
-		"type"; Choose:C955($fieldDefinition.fieldType=Is time:K8:8; "time"; $fieldDefinition.valueType); \
-		"fieldNumber"; $fieldDefinition.fieldNumber)
+		"type"; Choose:C955($fieldModel.fieldType=Is time:K8:8; "time"; $fieldModel.valueType))
 	
 	If ($edit)
 		

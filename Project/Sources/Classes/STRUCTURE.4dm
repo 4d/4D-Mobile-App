@@ -668,7 +668,7 @@ Function doFieldPicker()->$count : Integer
 									//______________________________________________________
 								Else 
 									
-									ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
+									oops
 									
 									//______________________________________________________
 							End case 
@@ -741,7 +741,7 @@ Function doFieldPicker()->$count : Integer
 									//______________________________________________________
 								Else 
 									
-									ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
+									oops
 									
 									//______________________________________________________
 							End case 
@@ -815,7 +815,7 @@ Function doFieldPicker()->$count : Integer
 		
 	Else 
 		
-		ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
+		oops
 		
 	End if 
 	
@@ -930,7 +930,7 @@ Function updateProject()
 							//………………………………………………………………………………………………………
 						Else 
 							
-							ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
+							oops
 							
 							//………………………………………………………………………………………………………
 					End case 
@@ -1381,7 +1381,7 @@ Function _appendField($table : cs:C1710.table; $field : cs:C1710.field)
 								//______________________________________________________
 							Else 
 								
-								ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
+								oops
 								
 								//______________________________________________________
 						End case 

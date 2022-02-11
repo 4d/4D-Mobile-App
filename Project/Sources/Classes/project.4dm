@@ -733,24 +733,25 @@ Function isAvailable($dataClass : 4D:C1709.DataClass; $path : Variant)->$success
 Function isComputedAttribute($field : Object; $tableName : Text)->$is : Boolean
 	
 	var $o : Object
-	var $c : Collection
+	var $catalog : Collection
 	
-	$is:=(String:C10($field.kind)="calculated") | (Bool:C1537($field.computed)) | (Num:C11($field.type)=-3)
+	//$is:=(String($field.kind)="calculated") | (Bool($field.computed)) | (Num($field.type)=-3)
+	$is:=$field.kind="calculated"
 	
 	If ($is & (Count parameters:C259>=2))
 		
 		$is:=False:C215
 		
 		// Filter writable (not readOnly) computed attrbutes
-		$c:=This:C1470.getCatalog()
+		$catalog:=This:C1470.getCatalog()
 		
-		If ($c#Null:C1517)
+		If ($catalog#Null:C1517)
 			
-			$o:=$c.query("name = :1"; $tableName).pop()
+			$o:=$catalog.query("name = :1"; $tableName).pop()
 			
 			If ($o#Null:C1517)
 				
-				$o:=$o.field.query("name = :1"; $field.name).pop()
+				$o:=$o.fields.query("name = :1"; $field.name).pop()
 				
 				If ($o#Null:C1517)
 					
@@ -1089,7 +1090,7 @@ Function isCustomResource($resource : Text)->$custom : Boolean
 	// Returns the collection of table's sortable field
 Function getSortableFields($table; $ordered : Boolean)->$fields : Collection
 	
-	var $field; $model : Object
+	var $member; $model : Object
 	
 	$fields:=New collection:C1472
 	
@@ -1116,17 +1117,20 @@ Function getSortableFields($table; $ordered : Boolean)->$fields : Collection
 				//______________________________________________________
 		End case 
 		
-		For each ($field; OB Entries:C1720($model))
+		For each ($member; OB Entries:C1720($model))
 			
-			If (This:C1470.isSortable($field.value))
+			If (This:C1470.isSortable($member.value))
 				
-				If (Bool:C1537($field.value.computed)) | ($field.value.type=-3)
+				var $field : cs:C1710.field
+				$field:=OB Copy:C1225($member.value)
+				
+				If ($member.value.kind#"storage")
 					
-					OB REMOVE:C1226($field.value; "fieldNumber")
+					$field.name:=$member.key
 					
 				End if 
 				
-				$fields.push($field.value)
+				$fields.push($field)
 				
 			End if 
 		End for each 
@@ -1936,7 +1940,7 @@ Function repairStructure($audit : Collection)
 							//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 						Else 
 							
-							ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
+							oops
 							
 							//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 					End case 
@@ -2013,7 +2017,7 @@ Function _checkFieldForRepair($current : Object; $fromAudit : Object)->$succes :
 			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		Else 
 			
-			ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
+			oops
 			
 			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	End case 

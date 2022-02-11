@@ -416,7 +416,7 @@ If ($cacheFile.exists)
 														//______________________________________________________
 													Else 
 														
-														ASSERT:C1129(DATABASE.isComponent; "😰 I wonder why I'm here")
+														oops
 														
 														//______________________________________________________
 												End case 
@@ -553,7 +553,7 @@ If ($cacheFile.exists)
 										//______________________________________________________
 									Else 
 										
-										//ASSERT(DATABASE.isComponent; "😰 I wonder why I'm here")
+										//oups
 										
 										//______________________________________________________
 								End case 
