@@ -47,6 +47,7 @@ object Versions {
     const val runner = "1.3.0"
     const val rx_android = "2.1.1"
     const val rxjava2 = "2.2.21"
+    const val signature_pad ="1.3.1"
     const val sqlite = "2.1.0"
     const val sqlite_jdbc = "3.36.0.3"
     const val support = "1.2.0"
@@ -161,6 +162,7 @@ object Libs {
     // Utils
     const val dynamic_toasts = "com.pranavpandey.android:dynamic-toasts:${Versions.dynamic_toasts}"
     const val leakcanary = "com.squareup.leakcanary:leakcanary-android:${Versions.leakcanary}"
+    const val signature_pad = "com.github.gcacace:signature-pad:${Versions.signature_pad}"
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
 
     // Testing - Unit
