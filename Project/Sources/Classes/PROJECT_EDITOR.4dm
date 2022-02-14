@@ -351,18 +351,18 @@ Function updateColorScheme()
 		This:C1470.highlightColorNoFocus:=Background color:K23:2
 		
 		This:C1470.selectedColor:=0x0003A9F4
-		This:C1470.alternateSelectedColor:="lightslategray"
+		This:C1470.alternateSelectedColor:="cadetblue"
 		This:C1470.backgroundSelectedColor:=Highlight text background color:K23:5
 		This:C1470.backgroundUnselectedColor:=Highlight text background color:K23:5
 		
 		This:C1470.selectedFillColor:="darkgray"
 		This:C1470.unselectedFillColor:="black"
 		
-		This:C1470.errorColor:=0x00F28585
-		This:C1470.warningColor:=0x00F2B174
+		This:C1470.errorColor:=0x00E61C70
+		This:C1470.errorRGB:="rgb(230,28,112)"
 		
-		This:C1470.errorRGB:="red"
-		This:C1470.warningRGB:="orange"
+		This:C1470.warningColor:=0x00FF4500
+		This:C1470.warningRGB:="orangered"
 		
 	Else 
 		
@@ -394,9 +394,9 @@ Function updateColorScheme()
 		This:C1470.unselectedFillColor:="white"
 		
 		This:C1470.errorColor:=0x00FF0000
-		This:C1470.warningColor:=0x00F19135
-		
 		This:C1470.errorRGB:="red"
+		
+		This:C1470.warningColor:=0x00F19135
 		This:C1470.warningRGB:="darkorange"
 		
 	End if 
