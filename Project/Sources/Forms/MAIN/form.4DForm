@@ -235,9 +235,8 @@
 					"left": 17,
 					"width": 261,
 					"height": 17,
-					"stroke": "#696969",
-					"textAlign": "left",
-					"text": ":xliff:availableTables"
+					"text": ":xliff:availableTables",
+					"class": "label"
 				},
 				"b.add.one": {
 					"type": "button",
@@ -310,9 +309,8 @@
 					"left": 500,
 					"width": 150,
 					"height": 17,
-					"stroke": "#696969",
-					"textAlign": "left",
-					"text": ":xliff:selectedTables"
+					"text": ":xliff:selectedTables",
+					"class": "label"
 				},
 				"b.up": {
 					"type": "button",
@@ -376,7 +374,7 @@
 		"kind": "form"
 	},
 	"method": "main_Handler",
-	"geometryStamp": 8,
+	"geometryStamp": 12,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

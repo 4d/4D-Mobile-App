@@ -96,7 +96,15 @@ rectangle {
 
 .label {
 	text-align: left;
+	stroke: grey;
 }
+
+			@media (prefers-color-scheme: dark) {
+				.label {
+					stroke: silver;
+				}
+			}
+
 
  /* =====================================================
                         BUTTONS 

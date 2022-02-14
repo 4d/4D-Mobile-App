@@ -58,9 +58,8 @@
 					"left": 632,
 					"width": 60,
 					"height": 17,
-					"stroke": "#696969",
-					"textAlign": "left",
-					"text": ":xliff:scope"
+					"text": ":xliff:scope",
+					"class": "label"
 				},
 				"actions.border": {
 					"type": "rectangle",
@@ -277,9 +276,8 @@
 					"left": 157,
 					"width": 72,
 					"height": 17,
-					"stroke": "#696969",
-					"textAlign": "left",
-					"text": ":xliff:icon"
+					"text": ":xliff:icon",
+					"class": "label"
 				},
 				"names.label": {
 					"type": "text",
@@ -287,9 +285,8 @@
 					"left": 17,
 					"width": 60,
 					"height": 17,
-					"stroke": "#696969",
-					"textAlign": "left",
-					"text": ":xliff:name"
+					"text": ":xliff:name",
+					"class": "label"
 				},
 				"add": {
 					"type": "button",
@@ -327,9 +324,8 @@
 					"left": 752,
 					"width": 60,
 					"height": 17,
-					"stroke": "#696969",
-					"textAlign": "left",
-					"text": ":xliff:table"
+					"text": ":xliff:table",
+					"class": "label"
 				},
 				"databaseMethod": {
 					"type": "button",
@@ -349,9 +345,9 @@
 					"left": 494,
 					"width": 344,
 					"height": 17,
-					"stroke": "#808080",
 					"textAlign": "right",
-					"text": ":xliff:actionMethod"
+					"text": ":xliff:actionMethod",
+					"class": "label"
 				},
 				"labels.label": {
 					"type": "text",
@@ -359,9 +355,8 @@
 					"left": 417,
 					"width": 133,
 					"height": 17,
-					"stroke": "#696969",
-					"textAlign": "left",
-					"text": ":xliff:label"
+					"text": ":xliff:label",
+					"class": "label"
 				},
 				"shorts.label": {
 					"type": "text",
@@ -369,9 +364,8 @@
 					"left": 218,
 					"width": 133,
 					"height": 17,
-					"stroke": "#696969",
-					"textAlign": "left",
-					"text": ":xliff:shortLabel"
+					"text": ":xliff:shortLabel",
+					"class": "label"
 				},
 				"iconPicker": {
 					"type": "subform",
@@ -406,7 +400,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 99,
+	"geometryStamp": 113,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

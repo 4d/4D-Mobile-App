@@ -223,9 +223,8 @@
 					"width": 151,
 					"height": 17,
 					"visibility": "hidden",
-					"stroke": "#696969",
-					"textAlign": "left",
-					"text": ":xliff:fields"
+					"text": ":xliff:fields",
+					"class": "label"
 				},
 				"Line1": {
 					"type": "line",
@@ -481,5 +480,5 @@
 			}
 		}
 	},
-	"geometryStamp": 12
+	"geometryStamp": 14
 }

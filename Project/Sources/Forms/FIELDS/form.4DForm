@@ -338,9 +338,8 @@
 					"left": 267,
 					"width": 60,
 					"height": 17,
-					"stroke": "#696969",
-					"textAlign": "left",
-					"text": ":xliff:icons"
+					"text": ":xliff:icons",
+					"class": "label"
 				},
 				"labels.label": {
 					"type": "text",
@@ -348,9 +347,8 @@
 					"left": 541,
 					"width": 133,
 					"height": 17,
-					"stroke": "#696969",
-					"textAlign": "left",
-					"text": ":xliff:longLabels"
+					"text": ":xliff:longLabels",
+					"class": "label"
 				},
 				"shorts.label": {
 					"type": "text",
@@ -358,9 +356,8 @@
 					"left": 327,
 					"width": 133,
 					"height": 17,
-					"stroke": "#696969",
-					"textAlign": "left",
-					"text": ":xliff:shortLabels"
+					"text": ":xliff:shortLabels",
+					"class": "label"
 				},
 				"formatLabel": {
 					"type": "text",
@@ -368,9 +365,8 @@
 					"left": 756,
 					"width": 155,
 					"height": 17,
-					"stroke": "#696969",
-					"textAlign": "left",
-					"text": ":xliff:formatters"
+					"text": ":xliff:formatters",
+					"class": "label"
 				},
 				"filter.label": {
 					"type": "text",
@@ -378,9 +374,8 @@
 					"left": 16,
 					"width": 133,
 					"height": 17,
-					"stroke": "#696969",
-					"textAlign": "left",
-					"text": ":xliff:names"
+					"text": ":xliff:names",
+					"class": "label"
 				},
 				"resources": {
 					"type": "button",
@@ -407,7 +402,7 @@
 		"kind": "form"
 	},
 	"method": "FIELDS",
-	"geometryStamp": 29,
+	"geometryStamp": 39,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

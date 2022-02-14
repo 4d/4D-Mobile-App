@@ -40,9 +40,9 @@
 					"height": 16,
 					"visibility": "hidden",
 					"sizingX": "grow",
-					"textAlign": "left",
 					"text": ":xliff:selectAnActionToDisplayItsParameters",
-					"fontSize": 16
+					"fontSize": 16,
+					"class": "label"
 				},
 				"noAction": {
 					"type": "text",
@@ -52,9 +52,9 @@
 					"height": 16,
 					"visibility": "hidden",
 					"sizingX": "grow",
-					"textAlign": "left",
 					"text": ":xliff:createAnActionToBeAbleToAddParameters",
-					"fontSize": 16
+					"fontSize": 16,
+					"class": "label"
 				},
 				"noParameters": {
 					"type": "text",
@@ -64,9 +64,9 @@
 					"height": 16,
 					"visibility": "hidden",
 					"sizingX": "grow",
-					"textAlign": "left",
 					"text": ":xliff:thisActionDoesNotUseParameter",
-					"fontSize": 16
+					"fontSize": 16,
+					"class": "label"
 				},
 				"title": {
 					"type": "text",
@@ -76,9 +76,9 @@
 					"height": 16,
 					"visibility": "hidden",
 					"sizingX": "grow",
-					"textAlign": "left",
 					"text": "zzzzzzzzzzz",
-					"fontSize": 16
+					"fontSize": 16,
+					"class": "label"
 				},
 				"noTable": {
 					"type": "text",
@@ -792,7 +792,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 562,
+	"geometryStamp": 578,
 	"editor": {
 		"groups": {
 			"Group": [

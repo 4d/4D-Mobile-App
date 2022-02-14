@@ -218,9 +218,8 @@
 					"left": 267,
 					"width": 60,
 					"height": 17,
-					"stroke": "#696969",
-					"textAlign": "left",
-					"text": ":xliff:icons"
+					"text": ":xliff:icons",
+					"class": "label"
 				},
 				"labels.label": {
 					"type": "text",
@@ -228,9 +227,8 @@
 					"left": 541,
 					"width": 133,
 					"height": 17,
-					"stroke": "#696969",
-					"textAlign": "left",
-					"text": ":xliff:longLabels"
+					"text": ":xliff:longLabels",
+					"class": "label"
 				},
 				"shorts.label": {
 					"type": "text",
@@ -238,9 +236,8 @@
 					"left": 327,
 					"width": 133,
 					"height": 17,
-					"stroke": "#696969",
-					"textAlign": "left",
-					"text": ":xliff:shortLabels"
+					"text": ":xliff:shortLabels",
+					"class": "label"
 				},
 				"01_tables.label": {
 					"type": "text",
@@ -248,9 +245,8 @@
 					"left": 17,
 					"width": 68,
 					"height": 17,
-					"stroke": "#696969",
-					"textAlign": "left",
-					"text": ":xliff:names"
+					"text": ":xliff:names",
+					"class": "label"
 				},
 				"noPublishedTable": {
 					"type": "button",
@@ -285,5 +281,6 @@
 		"views": {
 			"View 1": {}
 		}
-	}
+	},
+	"geometryStamp": 8
 }
