@@ -611,8 +611,8 @@ Function doFieldPicker()->$count : Integer
 								: ($field.kind="storage")  // Attribute
 									
 									$o:=New object:C1471(\
-										"kind"; $field.kind; \
 										"name"; $field.name; \
+										"kind"; $field.kind; \
 										"fieldType"; $field.fieldType; \
 										"path"; $field.path; \
 										"label"; PROJECT.label($field.name); \
@@ -658,10 +658,10 @@ Function doFieldPicker()->$count : Integer
 									
 									$o:=New object:C1471(\
 										"kind"; $field.kind; \
+										"fieldType"; $field.fieldType; \
 										"path"; $field.path; \
 										"label"; PROJECT.label($field.name); \
-										"shortLabel"; PROJECT.shortLabel($field.name); \
-										"fieldType"; $field.fieldType)
+										"shortLabel"; PROJECT.shortLabel($field.name))
 									
 									// MARK:#TEMPO
 									$o.computed:=True:C214
@@ -689,12 +689,13 @@ Function doFieldPicker()->$count : Integer
 								: ($field.kind="storage")
 									
 									$o:=New object:C1471(\
-										"kind"; $field.kind; \
 										"name"; $field.name; \
+										"kind"; $field.kind; \
+										"fieldType"; $field.fieldType; \
+										"valueType"; $field.valueType; \
 										"label"; PROJECT.label($field.name); \
 										"shortLabel"; PROJECT.shortLabel($field.name); \
-										"type"; $field.type; \
-										"fieldType"; $field.fieldType)
+										"type"; $field.type)
 									
 									$target[String:C10($field.fieldNumber)]:=$o
 									
@@ -720,9 +721,10 @@ Function doFieldPicker()->$count : Integer
 									
 									$o:=New object:C1471(\
 										"kind"; $field.kind; \
+										"fieldType"; $field.fieldType; \
+										"valueType"; $field.valueType; \
 										"label"; PROJECT.label($field.name); \
-										"shortLabel"; PROJECT.shortLabel($field.name); \
-										"fieldType"; $field.fieldType)
+										"shortLabel"; PROJECT.shortLabel($field.name))
 									
 									// MARK:#TEMPO
 									$o.computed:=True:C214
@@ -734,10 +736,11 @@ Function doFieldPicker()->$count : Integer
 									
 									$o:=New object:C1471(\
 										"kind"; $field.kind; \
+										"fieldType"; $field.fieldType; \
+										"valueType"; $field.valueType; \
 										"path"; $field.path; \
 										"label"; PROJECT.label($field.name); \
-										"shortLabel"; PROJECT.shortLabel($field.name); \
-										"fieldType"; $field.fieldType)
+										"shortLabel"; PROJECT.shortLabel($field.name))
 									
 									$target[$field.name]:=$o
 									

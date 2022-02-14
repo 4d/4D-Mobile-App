@@ -170,10 +170,11 @@ Function fieldList($table)->$result : Object
 	
 	var $attribute; $key; $linkPrefix; $tableID : Text
 	var $subLevel : Integer
-	var $field; $o; $subfield; $tableModel : Object
+	var $o; $tableModel : Object
 	var $c : Collection
+	var $field; $subfield : cs:C1710.field
 	
-	$linkPrefix:=Choose:C955(Is macOS:C1572; "└╴ "; "└ ")  //"├ " //" ┊"
+	$linkPrefix:=Choose:C955(Is macOS:C1572; "└ "; "└ ")  //"├ " //" ┊"
 	
 	ASSERT:C1129(Count parameters:C259>=1; "Missing parameter")
 	
@@ -184,7 +185,7 @@ Function fieldList($table)->$result : Object
 	
 	If ($result.success)
 		
-		$tableModel:=Form:C1466.dataModel[$tableID]
+		$tableModel:=OB Copy:C1225(Form:C1466.dataModel[$tableID])
 		
 		$result.success:=($tableModel#Null:C1517)
 		
@@ -194,23 +195,23 @@ Function fieldList($table)->$result : Object
 			
 			For each ($key; $tableModel)
 				
+				If (Length:C16($key)=0)\
+					 || (Value type:C1509($tableModel[$key])#Is object:K8:27)
+					
+					continue
+					
+				End if 
+				
 				$field:=$tableModel[$key]
+				ASSERT:C1129($key#"employee_return")
 				
 				Case of 
 						
 						//……………………………………………………………………………………………………………
-					: (Length:C16($key)=0)\
-						 || (Value type:C1509($tableModel[$key])#Is object:K8:27)
+					: ($field.kind="storage")
 						
-						// <NOTHING MORE TO DO>
-						
-						//……………………………………………………………………………………………………………
-					: (PROJECT.isField($key))
-						
-						$field:=OB Copy:C1225($field)
 						
 						// #TEMPO [
-						$field.id:=Num:C11($key)
 						$field.fieldNumber:=Num:C11($key)
 						//]
 						
@@ -220,27 +221,27 @@ Function fieldList($table)->$result : Object
 						$result.fields.push($field)
 						
 						//……………………………………………………………………………………………………………
-					: (PROJECT.isAlias($field))
+					: ($field.kind="alias")
 						
-						$field:=OB Copy:C1225($field)
 						$field.name:=$key
 						$field.$label:=$key
 						$field.$level:=0
 						$result.fields.push($field)
 						
 						//……………………………………………………………………………………………………………
-					: (PROJECT.isComputedAttribute($field))
+					: ($field.kind="calculated")
 						
-						$field:=OB Copy:C1225($field)
 						$field.name:=$key
+						$field.path:=$key
 						$field.$label:=$key
 						$field.$level:=0
 						$result.fields.push($field)
 						
 						//……………………………………………………………………………………………………………
-					: (PROJECT.isRelationToOne($field))
+					: ($field.kind="relatedEntity")
 						
 						$field:=New object:C1471(\
+							"kind"; "relatedEntity"; \
 							"name"; $key; \
 							"path"; $key; \
 							"fieldType"; 8858; \
@@ -266,20 +267,22 @@ Function fieldList($table)->$result : Object
 						
 						For each ($attribute; $tableModel[$key])
 							
+							If (Value type:C1509($tableModel[$key][$attribute])#Is object:K8:27)
+								
+								continue
+								
+							End if 
+							
+							ASSERT:C1129($attribute#"employee_return")
+							
+							$field:=$tableModel[$key][$attribute]
+							
 							Case of 
 									
-									//______________________________________________________
-								: (Value type:C1509($tableModel[$key][$attribute])#Is object:K8:27)
-									
-									// <NOTHING MORE TO DO>
-									
-									//______________________________________________________
-								: (PROJECT.isField($attribute))
-									
-									$field:=OB Copy:C1225($tableModel[$key][$attribute])
+									//……………………………………………………………………………………………………………
+								: ($field.kind="storage")
 									
 									// #TEMPO [
-									$field.id:=Num:C11($attribute)
 									$field.fieldNumber:=Num:C11($attribute)
 									//]
 									
@@ -289,16 +292,29 @@ Function fieldList($table)->$result : Object
 									
 									$result.fields.push($field)
 									
-									//______________________________________________________
-								: (PROJECT.isComputedAttribute($tableModel[$key][$attribute]))
+									//……………………………………………………………………………………………………………
+								: ($field.kind="alias")
 									
-									$field:=OB Copy:C1225($tableModel[$key][$attribute])
+									$field.name:=$attribute
+									$field.$label:=$linkPrefix+$attribute
+									$field.path:=$key+"."+$field.path
+									$field.$level:=$subLevel+1
 									
+									$result.fields.push($field)
+									
+									//……………………………………………………………………………………………………………
+								: ($field.kind="calculated")
+									
+									$field.name:=$attribute
 									$field.$label:=$linkPrefix+$attribute
 									$field.path:=$key+"."+$attribute
 									$field.$level:=$subLevel+1
 									
 									$result.fields.push($field)
+									
+									//______________________________________________________
+								: ($field.kind="relatedEntities")
+									
 									
 									//______________________________________________________
 								Else 
@@ -343,49 +359,28 @@ Function fieldList($table)->$result : Object
 						End for each 
 						
 						//……………………………………………………………………………………………………………
-					: (PROJECT.isRelationToMany($tableModel[$key]))
+					: ($field.kind="relatedEntities")
+						
+						$field.name:=$key
+						$field.path:=$key
+						$field.fieldType:=8859
+						$field.$label:=$key
+						$field.$level:=0
 						
 						If (Form:C1466.$dialog[Current form name:C1298].template.detailform)
-							
-							$field:=OB Copy:C1225($tableModel[$key])
-							
-							$field.name:=$key
-							$field.fieldType:=8859
 							
 							// #TEMPO [
 							$field.id:=0
 							$field.fieldNumber:=0
 							//]
 							
-							$field.path:=$key
-							$field.$label:=$field.path
-							
-							$result.fields.push($field)
-							
 						Else 
 							
-							$field:=New object:C1471(\
-								"name"; $key; \
-								"path"; $key; \
-								"fieldType"; 8859; \
-								"relatedDataClass"; $tableModel[$key].relatedDataclass; \
-								"relatedTableNumber"; $tableModel[$key].relatedTableNumber; \
-								"inverseName"; $tableModel[$key].inverseName; \
-								"label"; PROJECT.label($tableModel[$key].label); \
-								"shortLabel"; PROJECT.label($tableModel[$key].shortLabel); \
-								"isToMany"; True:C214)
-							
-							// #TEMPO [
-							$field.id:=0
-							//]
-							
-							$field.$label:=$field.path
-							
-							$result.fields.push($field)
 							
 						End if 
 						
-						$field.$level:=0
+						$result.fields.push($field)
+						
 						
 						//……………………………………………………………………………………………………………
 				End case 

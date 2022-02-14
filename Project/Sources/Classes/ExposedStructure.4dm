@@ -805,8 +805,8 @@ Function _fieldModel($field : cs:C1710.field; $relatedCatalog : Object)->$fieldM
 		: ($field.kind="storage")  // Attribute
 			
 			$fieldModel:=New object:C1471(\
-				"kind"; $field.kind; \
 				"name"; $field.name; \
+				"kind"; $field.kind; \
 				"fieldType"; $field.fieldType; \
 				"label"; PROJECT.label($field.name); \
 				"shortLabel"; PROJECT.label($field.name); \
@@ -1014,6 +1014,11 @@ Don't keep:
 			: ($field.kind="alias")
 				
 				Case of 
+						
+						//______________________________________
+					: ($field.fieldType=Is undefined:K8:13)
+						
+						// INVALID ALIAS
 						
 						//______________________________________
 					: (This:C1470.allowedTypes.indexOf($field.type)>=0)  // Scalar Attribute

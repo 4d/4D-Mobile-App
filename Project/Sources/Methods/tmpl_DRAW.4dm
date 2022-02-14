@@ -18,10 +18,11 @@ var $background; $binding; $formName; $formType; $key; $label; $name; $node; $pa
 var $style; $t; $tableID; $tips : Text
 var $found; $isToMany; $isToOne; $stop : Boolean
 var $avalaibleWidth; $count; $height; $indx : Integer
-var $context; $field; $manifest; $o; $relation; $target : Object
+var $context; $manifest; $o; $relation; $target : Object
 var $nodes : Collection
 var $svg : cs:C1710.svg
 var $tmpl : cs:C1710.tmpl
+var $field : cs:C1710.field
 
 // ----------------------------------------------------
 // Initialisations
@@ -218,11 +219,20 @@ If (Num:C11($tableID)>0)
 								CLEAR VARIABLE:C89($isToOne)
 								CLEAR VARIABLE:C89($isToMany)
 								
-								If ($field.fieldType#Null:C1517)
+								If ($field.kind#Null:C1517)
 									
-									$isToOne:=($field.fieldType=8858)
-									$isToMany:=($field.fieldType=8859)
+									$isToOne:=($field.kind="relatedEntity")
+									$isToMany:=($field.kind="relatedEntities")
 									
+								Else 
+									
+									// FIXME:#TEMPO
+									If ($field.fieldType#Null:C1517)
+										
+										$isToOne:=($field.fieldType=8858)
+										$isToMany:=($field.fieldType=8859)
+										
+									End if 
 								End if 
 								
 								If ($indx>$count)
@@ -294,9 +304,17 @@ If (Num:C11($tableID)>0)
 															$label:=EDITOR.str.setText(EDITOR.toMany).concat($field.name)
 															
 															//______________________________________________________
+														: ($field.kind="alias")
+															
+															$tips:=$field.path
+															$label:=$field.name
+															
+															// TODO:Test if the target is available
+															
+															//______________________________________________________
 														Else 
 															
-															$label:=Choose:C955($field.path#Null:C1517; $field.path; $field.name)
+															$label:=($field.path#Null:C1517) ? $field.path : $field.name
 															
 															If (Not:C34(PROJECT.fieldAvailable($tableID; $field)))
 																
@@ -383,7 +401,12 @@ If (Num:C11($tableID)>0)
 														Else 
 															
 															var $c : Collection
-															$c:=Split string:C1554($field.path; ".")
+															
+															If ($field.path=Null:C1517)
+																$c:=New collection:C1472()
+															Else 
+																$c:=Split string:C1554($field.path; ".")
+															End if 
 															
 															If ($c.length=1)
 																
