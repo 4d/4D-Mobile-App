@@ -52,7 +52,7 @@ End if
 // ----------------------------------------------------
 Case of 
 		
-		//______________________________________________________
+		// MARK:- datastore
 	: ($Txt_action="datastore")
 		
 		$Obj_datastore:=_4D_Build Exposed Datastore:C1598
@@ -69,7 +69,7 @@ Case of
 			
 		End if 
 		
-		//______________________________________________________
+		// MARK:- table
 	: ($Txt_action="table")
 		
 		ASSERT:C1129($Obj_in.tableName#Null:C1517)
@@ -142,7 +142,7 @@ Case of
 			End if 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- fields
 	: ($Txt_action="fields")
 		
 		ASSERT:C1129($Obj_in.tableName#Null:C1517)

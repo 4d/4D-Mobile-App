@@ -56,7 +56,7 @@ End if
 // ----------------------------------------------------
 Case of 
 		
-		//______________________________________________________
+		// MARK:- capabilities
 	: ($Txt_action="capabilities")
 		
 		$Obj_out.capabilities:=New object:C1471(\
@@ -125,7 +125,7 @@ Case of
 		
 		$Obj_out.success:=True:C214
 		
-		//______________________________________________________
+		// MARK:- form
 	: ($Txt_action="form")
 		
 		$Obj_out.success:=True:C214
@@ -166,7 +166,7 @@ Case of
 			
 		End for each 
 		
-		//______________________________________________________
+		// MARK:- filter
 	: ($Txt_action="filter")
 		
 		If ($Obj_in.project#Null:C1517)  // Could be not(null) for test
@@ -200,7 +200,7 @@ Case of
 			End if 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- assets
 	: ($Txt_action="assets")
 		
 		Case of 
@@ -267,7 +267,7 @@ Case of
 				//……………………………………………………………………………………………………………
 		End case 
 		
-		//______________________________________________________
+		// MARK:- iconPath
 	: ($Txt_action="iconPath")  // RECURSIVE CALL
 		
 		Case of 
@@ -295,7 +295,7 @@ Case of
 				//……………………………………………………………………………………………………………
 		End case 
 		
-		//______________________________________________________
+		// MARK:- addChoiceList
 	: ($Txt_action="addChoiceList")  // RECURSIVE CALL
 		
 		// Add choice lists if any to action parameters
@@ -448,7 +448,7 @@ Case of
 			End for each 
 		End if 
 		
-		//______________________________________________________
+		// MARK:- hasAction
 	: ($Txt_action="hasAction")
 		
 		If ($Obj_in.project.actions#Null:C1517)
@@ -463,7 +463,7 @@ Case of
 		
 		$Obj_out.success:=True:C214
 		
-		//______________________________________________________
+		// MARK:- getByName
 	: ($Txt_action="getByName")
 		
 		$Obj_out.inputControls:=New object:C1471
@@ -484,7 +484,7 @@ Case of
 		
 		$Obj_out.success:=True:C214
 		
-		//______________________________________________________
+		// MARK:- hostFormatList
 	: ($Txt_action="hostFormatList")
 		// list all custom format from project
 		
@@ -532,7 +532,7 @@ Case of
 		
 		$Obj_out.success:=True:C214
 		
-		//______________________________________________________
+		// MARK:- injectHost
 	: ($Txt_action="injectHost")  // for custom Action Formatters
 		
 		$formats:=$Obj_in.formats  // to implement a cache passed by caller
@@ -580,6 +580,29 @@ $Col_catalog:=doc_catalog(This.template.source; This.getCatalogExcludePattern())
 				
 			End if 
 		End for each 
+		
+		// MARK:- putTableNames
+	: ($Txt_action="putTableNames")
+		ASSERT:C1129(FEATURE.with("actionsInTabBar"); "For this feature")
+		
+		// Add table names instead of number
+		If ($Obj_in.project.actions#Null:C1517)
+			
+			$dataModel:=$Obj_in.project.dataModel
+			
+			For each ($action; $Obj_in.project.actions)
+				If ($action.tableNumber#Null:C1517)
+					If ($dataModel[String:C10($action.tableNumber)]#Null:C1517)
+						$action.tableName:=formatString("table-name"; $dataModel[String:C10($action.tableNumber)][""].name)
+					Else 
+						ob_warning_add($Obj_out; "missing table in datamodel with number "+String:C10($action.tableNumber)+" found in action")
+					End if 
+				End if 
+			End for each 
+			
+		End if 
+		
+		$Obj_out.success:=True:C214
 		
 		//______________________________________________________
 	Else 
