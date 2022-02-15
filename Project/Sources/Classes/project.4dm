@@ -705,24 +705,23 @@ Function isRelationToMany($attribute : Variant)->$is : Boolean
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function isAvailable($dataClass : 4D:C1709.DataClass; $path : Variant)->$success : Boolean
+Function isAvailable($dataClass : 4D:C1709.DataClass; $path)->$success : Boolean
 	
-	var $t : Text
+	var $key : Text
 	var $o : Object
 	var $c : Collection
 	
 	$o:=$dataClass
-	$c:=Split string:C1554($path; ".")
 	
-	For each ($t; $c)
+	For each ($key; Split string:C1554($path; "."))
 		
-		If ($o[$t].relatedDataClass#Null:C1517)
+		If ($o[$key].relatedDataClass#Null:C1517)
 			
-			$o:=ds:C1482[$o[$t].relatedDataClass]
+			$o:=ds:C1482[$o[$key].relatedDataClass]
 			
 		Else 
 			
-			$o:=$o[$t]
+			$o:=$o[$key]
 			
 		End if 
 	End for each 

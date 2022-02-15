@@ -8,7 +8,7 @@
 //
 // ----------------------------------------------------
 // Declarations
-var $bind; $buffer; $cible; $currentForm; $preview; $t; $tableNumber : Text
+var $bind; $buffer; $cible; $currentForm; $preview; $binding; $tableNumber : Text
 var $isToMany; $isToOne : Boolean
 var $fixed; $indx : Integer
 var $x : Blob
@@ -44,12 +44,12 @@ If (Length:C16($cible)>0)
 		If ($tmpl.isTypeAccepted($bind; $dropped.fieldType))
 			
 			$target:=Form:C1466[This:C1470.$.typeForm()][$tableNumber]
-			$dropped.name:=$dropped.path
+			//$dropped.name:=$dropped.path
 			
-			SVG GET ATTRIBUTE:C1056(*; $preview; $cible; "ios:bind"; $t)
+			SVG GET ATTRIBUTE:C1056(*; $preview; $cible; "ios:bind"; $binding)
 			
 			ARRAY TEXT:C222($tMatches; 0x0000)
-			Rgx_MatchText("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"; $t; ->$tMatches)
+			Rgx_MatchText("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"; $binding; ->$tMatches)
 			
 			If (Size of array:C274($tMatches)=2)  // List of fields
 				
@@ -173,26 +173,18 @@ If (Length:C16($cible)>0)
 				
 				If (JSON Parse:C1218($buffer; Is boolean:K8:9))  // Search on several fields - append to the field list if any
 					
-					If (Value type:C1509($target[$t])#Is collection:K8:32)
+					If (Value type:C1509($target[$binding])#Is collection:K8:32)
 						
-						If ($target[$t]#Null:C1517)
-							
-							// Convert
-							$target[$t]:=New collection:C1472($target[$t])
-							
-						Else 
-							
-							$target[$t]:=$dropped
-							
-						End if 
+						$target[$binding]:=($target[$binding]=Null:C1517) ? $dropped : New collection:C1472($target[$binding])
+						
 					End if 
 					
-					If (Value type:C1509($target[$t])=Is collection:K8:32)
+					If (Value type:C1509($target[$binding])=Is collection:K8:32)
 						
-						If ($target[$t].extract("name").indexOf($dropped.path)=-1)
+						If ($target[$binding].query("name = :1"; $dropped.path).pop()=Null:C1517)
 							
 							// Append field
-							$target[$t].push($dropped)
+							$target[$binding].push($dropped)
 							
 						End if 
 					End if 
@@ -261,7 +253,7 @@ If (Length:C16($cible)>0)
 							//______________________________________________________
 						Else 
 							
-							$target[$t]:=$dropped
+							$target[$binding]:=$dropped
 							
 							//______________________________________________________
 					End case 

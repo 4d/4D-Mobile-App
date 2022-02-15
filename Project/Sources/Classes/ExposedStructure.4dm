@@ -15,6 +15,8 @@ Class constructor($sorted : Boolean)
 	
 	This:C1470.allowedTypes:=New collection:C1472("string"; "bool"; "date"; "number"; "image")
 	
+	ASSERT:C1129(FEATURE#Null:C1517)
+	
 	If (FEATURE.with("objectFieldManagement"))
 		
 		This:C1470.allowedTypes.push("object")

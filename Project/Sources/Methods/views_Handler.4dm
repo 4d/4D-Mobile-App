@@ -362,13 +362,13 @@ Case of
 						: ($o.fieldType=8858)\
 							 | ($o.fieldType=8859)  // Relation
 							
-							If (Bool:C1537($o.$added))  // Relation name
+							If (Bool:C1537($o.$added))  // relatedEntity name
 								
 								LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.selectedColor; lk font color:K53:24)
 								
 							Else 
 								
-								If ($datamodel[String:C10($o.relatedTableNumber)]=Null:C1517)  //related table is not published
+								If ($datamodel[String:C10($o.relatedTableNumber)]=Null:C1517)
 									
 									LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color:K53:24)
 									
@@ -376,12 +376,22 @@ Case of
 							End if 
 							
 							//______________________________________________________
-						: ($o.kind="alias") && ($dataClass[$o.name]#Null:C1517)
+						: ($o.kind="alias")
 							
-							
+							If ($datamodel[$context.tableNumber][$o.name]=Null:C1517)
+								
+								LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color:K53:24)
+								
+							End if 
 							
 							//______________________________________________________
-						: ($o.kind="calculated") && ($dataClass[$o.name]#Null:C1517)
+						: ($o.kind="calculated")
+							
+							If ($datamodel[$context.tableNumber][$o.name]=Null:C1517)
+								
+								LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color:K53:24)
+								
+							End if 
 							
 							//______________________________________________________
 						: (PROJECT.isAvailable($dataClass; $o.path))

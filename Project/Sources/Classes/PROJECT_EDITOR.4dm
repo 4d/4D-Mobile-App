@@ -351,7 +351,7 @@ Function updateColorScheme()
 		This:C1470.highlightColorNoFocus:=Background color:K23:2
 		
 		This:C1470.selectedColor:=0x0003A9F4
-		This:C1470.alternateSelectedColor:="cadetblue"
+		This:C1470.alternateSelectedColor:="cornflowerblue"  //"cadetblue"
 		This:C1470.backgroundSelectedColor:=Highlight text background color:K23:5
 		This:C1470.backgroundUnselectedColor:=Highlight text background color:K23:5
 		

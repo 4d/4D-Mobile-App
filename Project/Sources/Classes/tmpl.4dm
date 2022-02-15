@@ -672,7 +672,7 @@ Function truncateLabelIfTooBig($o : Object)
 	
 	//============================================================================
 	/// Add a "one field" widget to the template
-Function appendOneField($index : Integer; $field : Object; $context : Object; $background : Text; $offset : Integer)->$height : Integer
+Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Object; $background : Text; $offset : Integer)->$height : Integer
 	
 	var $class; $label; $name; $node; $style; $t; $tips : Text
 	var $found; $isToMany; $isToOne : Boolean
@@ -692,24 +692,61 @@ Function appendOneField($index : Integer; $field : Object; $context : Object; $b
 	Case of 
 			
 			//______________________________________________________
-		: ($isToOne)
+		: ($field.kind=Null:C1517)
 			
-			$tips:=Form:C1466.dataModel[$context.tableNum()][$field.name].label
+			oops
 			
-			$relation:=Form:C1466.dataModel[$context.tableNumber]
+			//______________________________________________________
+		: ($field.kind="storage")
 			
-			If (Match regex:C1019("(?m-si)^%.*%$"; String:C10($relation[$field.name].label); 1))
+			$label:=$field.path
+			$tips:=$field.label
+			
+			$found:=(PROJECT.dataModel[$context.tableNumber][String:C10($field.fieldNumber)]#Null:C1517)
+			
+			//______________________________________________________
+		: ($field.kind="alias")
+			
+			$label:=$field.name
+			$tips:=$field.label
+			
+			$found:=(PROJECT.dataModel[$context.tableNumber][$field.name]#Null:C1517)
+			
+			//______________________________________________________
+		: ($field.kind="calculated")
+			
+			$label:=$field.name
+			$tips:=$field.label
+			
+			$found:=(PROJECT.dataModel[$context.tableNumber][$field.name]#Null:C1517)
+			
+			//______________________________________________________
+		: ($field.kind="relatedEntity")
+			
+			$relation:=PROJECT.dataModel[$context.tableNumber][$field.name]
+			
+			$tips:=String:C10($relation.label)
+			
+			If (Match regex:C1019("(?m-si)^%.*%$"; $tips; 1))
 				
-				$name:=Substring:C12($relation[$field.name].label; 2; Length:C16($relation[$field.name].label)-2)
+				$name:=Substring:C12($tips; 2; Length:C16($tips)-2)
 				$label:=$field.name+" ("+$name+")"
 				$tips:=$field.name+"."+$name
 				
 				// Check that the discriminant field is published
-				For each ($o; OB Entries:C1720($relation[$field.name]).query("value.fieldType != null")) Until ($found)
+				For each ($t; $relation) Until ($found)
 					
-					$found:=String:C10($o.value.name)=$name
+					If (Value type:C1509($relation[$t])#Is object:K8:27)
+						
+						continue
+						
+					End if 
+					
+					$found:=String:C10($relation[$t].name)=$name
 					
 				End for each 
+				
+				
 				
 				If (Not:C34($found))
 					
@@ -727,10 +764,12 @@ Function appendOneField($index : Integer; $field : Object; $context : Object; $b
 			$label:=EDITOR.str.setText(EDITOR.toOne).concat($label)
 			
 			//______________________________________________________
-		: ($isToMany)
+		: ($field.kind="relatedEntities")
 			
 			$tips:=$field.label
 			$label:=EDITOR.str.setText(EDITOR.toMany).concat($field.name)
+			
+			$found:=(PROJECT.dataModel[$context.tableNumber][$field.name]#Null:C1517)
 			
 			//______________________________________________________
 		Else 

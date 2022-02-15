@@ -58,7 +58,9 @@ Else   // <== WIDGETS METHOD
 					
 					// Update UI
 					$ƒ.refresh()
-					
+					//_____________________________________
+				: ($e.code=On Mouse Move:K2:35)
+					SET CURSOR:C469()
 					//_____________________________________
 				: (PROJECT.isLocked())\
 					 | (Num:C11($e.row)=0)

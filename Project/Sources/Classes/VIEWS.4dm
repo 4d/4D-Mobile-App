@@ -168,10 +168,9 @@ Function addField($field : Object; $fields : Collection)
 	// Construct the table's field list
 Function fieldList($table)->$result : Object
 	
-	var $attribute; $key; $linkPrefix; $tableID : Text
+	var $attribute; $key; $linkPrefix; $sub; $tableID : Text
 	var $subLevel : Integer
-	var $o; $tableModel : Object
-	var $c : Collection
+	var $tableModel : Object
 	var $field; $subfield : cs:C1710.field
 	
 	$linkPrefix:=Choose:C955(Is macOS:C1572; "└ "; "└ ")  //"├ " //" ┊"
@@ -185,6 +184,7 @@ Function fieldList($table)->$result : Object
 	
 	If ($result.success)
 		
+		// ⚠️ Make a copy so as not to modify the original
 		$tableModel:=OB Copy:C1225(Form:C1466.dataModel[$tableID])
 		
 		$result.success:=($tableModel#Null:C1517)
@@ -203,68 +203,66 @@ Function fieldList($table)->$result : Object
 				End if 
 				
 				$field:=$tableModel[$key]
-				ASSERT:C1129($key#"employee_return")
 				
 				Case of 
 						
 						//……………………………………………………………………………………………………………
 					: ($field.kind="storage")
 						
-						
-						// #TEMPO [
-						$field.fieldNumber:=Num:C11($key)
-						//]
-						
-						$field.path:=$field.name
 						$field.$label:=$field.name
 						$field.$level:=0
+						$field.fieldNumber:=Num:C11($key)
+						$field.path:=$field.name
+						
 						$result.fields.push($field)
 						
 						//……………………………………………………………………………………………………………
 					: ($field.kind="alias")
 						
-						$field.name:=$key
 						$field.$label:=$key
 						$field.$level:=0
+						$field.name:=$key
+						
 						$result.fields.push($field)
 						
 						//……………………………………………………………………………………………………………
 					: ($field.kind="calculated")
 						
-						$field.name:=$key
-						$field.path:=$key
 						$field.$label:=$key
 						$field.$level:=0
+						$field.name:=$key
+						$field.path:=$key
+						
 						$result.fields.push($field)
 						
 						//……………………………………………………………………………………………………………
 					: ($field.kind="relatedEntity")
 						
-						$field:=New object:C1471(\
-							"kind"; "relatedEntity"; \
-							"name"; $key; \
-							"path"; $key; \
-							"fieldType"; 8858; \
-							"relatedDataClass"; $tableModel[$key].relatedDataclass; \
-							"inverseName"; $tableModel[$key].inverseName; \
-							"label"; PROJECT.label($key); \
-							"shortLabel"; PROJECT.shortLabel($key); \
-							"relatedTableNumber"; $tableModel[$key].relatedTableNumber; \
-							"$added"; True:C214)
-						
-						// #TEMPO [
-						$field.id:=0
-						//]
-						
 						//******* Il faut vérifier que la relation existe toujours *******
 						
 						$subLevel:=$subLevel+10
 						
-						$field.$label:=$key
-						$field.$level:=$subLevel
+						$field:=New object:C1471(\
+							"kind"; "relatedEntity"; \
+							"name"; $key; \
+							"path"; $key; \
+							"relatedDataClass"; $tableModel[$key].relatedDataclass; \
+							"relatedTableNumber"; $tableModel[$key].relatedTableNumber; \
+							"inverseName"; $tableModel[$key].inverseName; \
+							"label"; PROJECT.label($key); \
+							"shortLabel"; PROJECT.shortLabel($key); \
+							"$added"; True:C214; \
+							"$label"; $key; \
+							"$level"; $subLevel)
+						
+						// #TEMPO [
+						//$field.id:=0
+						$field.fieldType:=8858
+						//]
 						
 						$result.fields.push($field)
 						
+						// Add the entity's fields
 						For each ($attribute; $tableModel[$key])
 							
 							If (Value type:C1509($tableModel[$key][$attribute])#Is object:K8:27)
@@ -273,19 +271,14 @@ Function fieldList($table)->$result : Object
 								
 							End if 
 							
-							ASSERT:C1129($attribute#"employee_return")
-							
-							$field:=$tableModel[$key][$attribute]
+							$field:=OB Copy:C1225($tableModel[$key][$attribute])
 							
 							Case of 
 									
 									//……………………………………………………………………………………………………………
 								: ($field.kind="storage")
 									
-									// #TEMPO [
 									$field.fieldNumber:=Num:C11($attribute)
-									//]
-									
 									$field.$label:=$linkPrefix+$field.name
 									$field.path:=$key+"."+$field.name
 									$field.$level:=$subLevel+1
@@ -315,72 +308,71 @@ Function fieldList($table)->$result : Object
 									//______________________________________________________
 								: ($field.kind="relatedEntities")
 									
+									$field.name:=$attribute
+									$field.$label:=$linkPrefix+$attribute
+									$field.$level:=$subLevel+2
+									
+									// #TEMPO [
+									$field.fieldType:=8859
+									//]
+									
+									$result.fields.push($field)
+									
+									//______________________________________________________
+								: ($field.kind="relatedEntity")
+									
+									For each ($sub; $field)
+										
+										If (Value type:C1509($field[$sub])#Is object:K8:27)
+											
+											continue
+											
+										End if 
+										
+										$subfield:=$field[$sub]
+										
+										If ($subfield.kind="alias")
+											
+											$subfield.name:=$sub
+											$subfield.$label:=$linkPrefix+$sub
+											$subfield.path:=$key+"."+$sub
+											
+										Else 
+											
+											$subfield.$label:=$linkPrefix+$subfield.path
+											//$subfield.path:=$key+"."+$subfield.path
+											
+										End if 
+										
+										
+										$subfield.$level:=$subLevel+2
+										
+										$result.fields.push($subfield)
+										
+									End for each 
 									
 									//______________________________________________________
 								Else 
 									
-									$field:=OB Copy:C1225($tableModel[$key][$attribute])
+									oops
 									
-									$c:=New collection:C1472
-									
-									If ($field.relatedTableNumber#Null:C1517)
-										
-										For each ($subfield; OB Entries:C1720($field).filter("col_formula"; Formula:C1597($1.result:=Match regex:C1019("^\\d+$"; $1.value.key; 1))))
-											
-											$o:=OB Copy:C1225($subfield.value)
-											$o.$label:=$linkPrefix+$o.path
-											$o.path:=$key+"."+$o.path
-											$o.id:=Num:C11($subfield.key)
-											$o.$level:=$subLevel+2
-											
-											$c.push($o)
-											
-										End for each 
-									End if 
-									
-									If ($c.length>0)
-										
-										$result.fields.combine($c)
-										
-									Else 
-										
-										$field.id:=0
-										$field.name:=$attribute
-										$field.$label:=$linkPrefix+$attribute
-										$field.path:=$key+"."+$attribute
-										$field.fieldType:=Choose:C955(Bool:C1537($field.isToMany); 8859; 8858)
-										$result.fields.push($field)
-										$field.$level:=$subLevel+2
-										
-									End if 
 									//______________________________________________________
 							End case 
-							
 						End for each 
 						
 						//……………………………………………………………………………………………………………
 					: ($field.kind="relatedEntities")
 						
 						$field.name:=$key
-						$field.path:=$key
-						$field.fieldType:=8859
 						$field.$label:=$key
+						$field.path:=$key
 						$field.$level:=0
 						
-						If (Form:C1466.$dialog[Current form name:C1298].template.detailform)
-							
-							// #TEMPO [
-							$field.id:=0
-							$field.fieldNumber:=0
-							//]
-							
-						Else 
-							
-							
-						End if 
+						// #TEMPO [
+						$field.fieldType:=8859
+						//]
 						
 						$result.fields.push($field)
-						
 						
 						//……………………………………………………………………………………………………………
 				End case 

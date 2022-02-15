@@ -82,7 +82,6 @@
 					"width": 449,
 					"height": 551,
 					"hideSystemHighlight": true,
-					"rowHeight": "32px",
 					"selectionMode": "single",
 					"method": "STRUCTURE_OBJECTS_HANDLER",
 					"events": [
@@ -94,6 +93,7 @@
 						"onMouseLeave",
 						"onMouseMove"
 					],
+					"rowHeight": "30px",
 					"columns": [
 						{
 							"name": "tables",
@@ -167,7 +167,6 @@
 					"width": 448,
 					"height": 551,
 					"hideSystemHighlight": true,
-					"rowHeight": "32px",
 					"method": "STRUCTURE_OBJECTS_HANDLER",
 					"events": [
 						"onClick",
@@ -179,8 +178,11 @@
 						"onMouseMove"
 					],
 					"fill": "automatic",
+					"selectionMode": "multiple",
+					"focusable": true,
 					"rowHeightAutoMin": "1em",
 					"rowHeightAutoMax": "1600em",
+					"rowHeight": "20px",
 					"columns": [
 						{
 							"name": "published",
@@ -213,7 +215,7 @@
 							"resizable": false,
 							"enterable": false,
 							"pictureFormat": "truncatedCenter",
-							"rowHeightAuto": true,
+							"rowHeightAuto": false,
 							"textAlign": "center",
 							"verticalAlign": "middle",
 							"header": {
@@ -241,7 +243,8 @@
 							"footer": {
 								"name": "Footer6",
 								"timeFormat": "hh_mm_ss"
-							}
+							},
+							"rowHeightAuto": false
 						}
 					]
 				},

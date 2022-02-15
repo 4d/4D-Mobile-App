@@ -177,6 +177,7 @@
 						"onDragOver",
 						"onSelectionChange",
 						"onMouseLeave",
+						"onMouseMove",
 						"onBeginDragOver"
 					],
 					"focusable": true,

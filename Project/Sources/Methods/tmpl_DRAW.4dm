@@ -306,7 +306,7 @@ If (Num:C11($tableID)>0)
 															//______________________________________________________
 														: ($field.kind="alias")
 															
-															$tips:=$field.path
+															$tips:=$field.label
 															$label:=$field.name
 															
 															// TODO:Test if the target is available

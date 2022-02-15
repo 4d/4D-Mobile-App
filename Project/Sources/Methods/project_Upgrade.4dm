@@ -10,12 +10,20 @@
 // Declarations
 #DECLARE($project : Object; $folder : 4D:C1709.Folder)->$isUpgraded : Boolean
 
-var $fieldID; $relatedID; $t; $tableID : Text
+If (False:C215)
+	C_OBJECT:C1216(project_Upgrade; $1)
+	C_OBJECT:C1216(project_Upgrade; $2)
+	C_BOOLEAN:C305(project_Upgrade; $0)
+End if 
+
+var $fieldID; $relatedID; $t; $tableID; $tt : Text
+var $picture : Picture
 var $type : Integer
-var $exposedDatastore; $field; $info; $o; $table; $template : Object
+var $exposedDatastore; $info; $o; $table; $template : Object
 var $c; $catalog; $fieldTypes; $types : Collection
 var $file : 4D:C1709.File
 var $internalFolder; $userFolder : 4D:C1709.Folder
+var $field : cs:C1710.field
 var $path : cs:C1710.path
 var $plist : cs:C1710.plist
 
@@ -546,6 +554,113 @@ If (Num:C11($project.info.version)<6)
 	
 End if 
 
+If (Num:C11($project.info.version)<7)
+	
+	// Mark: #132487 - Update old iOS project with Title and long/short label for N>1 relation
+	
+	If ($project.dataModel#Null:C1517)
+		
+		For each ($tableID; $project.dataModel)
+			
+			For each ($t; $project.dataModel[$tableID])
+				
+				If (Length:C16($t)=0)
+					
+					continue
+					
+				End if 
+				
+				$field:=$project.dataModel[$tableID][$t]
+				
+				Case of 
+						//______________________________________________________
+					: (Match regex:C1019("^\\d+$"; $t; 1))
+						
+						$field.kind:="storage"
+						
+						//______________________________________________________
+					: (Bool:C1537($field.computed))
+						
+						$field.kind:="calculated"
+						
+						//______________________________________________________
+					: (Bool:C1537($field.isToMany))
+						
+						$field.kind:="relatedEntities"
+						
+						//______________________________________________________
+					: ($field.relatedDataClass#Null:C1517)
+						
+						$field.kind:="relatedEntity"
+						
+						For each ($tt; $field)
+							
+							If (Value type:C1509($field[$tt])#Is object:K8:27)
+								
+								continue
+								
+							End if 
+							
+							$o:=$project.dataModel[$tableID][$t][$tt]
+							
+							Case of 
+									//______________________________________________________
+								: (Match regex:C1019("^\\d+$"; $tt; 1))
+									
+									$o.kind:="storage"
+									
+									//______________________________________________________
+								: (Bool:C1537($o.computed))
+									
+									$o.kind:="calculated"
+									
+									//______________________________________________________
+								: (Bool:C1537($o.isToMany))
+									
+									$o.kind:="relatedEntities"
+									
+									//______________________________________________________
+								: ($o.relatedDataClass#Null:C1517)
+									
+									$o.kind:="relatedEntity"
+									
+									//______________________________________________________
+								: ($o.relatedTableNumber#Null:C1517)
+									
+									$o.kind:="relatedEntities"
+									
+									//______________________________________________________
+								Else 
+									
+									oops
+									
+									//______________________________________________________
+							End case 
+						End for each 
+						
+						//______________________________________________________
+					: ($field.relatedTableNumber#Null:C1517)
+						
+						$field.kind:="relatedEntities"
+						
+						//______________________________________________________
+					Else 
+						
+						oops
+						
+						//______________________________________________________
+				End case 
+			End for each 
+		End for each 
+		
+	End if 
+	
+	$isUpgraded:=True:C214
+	$project.info.version:=7
+	RECORD.warning("Upadted to version: "+String:C10($project.info.version))
+	
+End if 
+
 //=====================================================================
 //                         MISCELLANEOUS
 //=====================================================================
@@ -702,7 +817,6 @@ If ($project.ui.dominantColor=Null:C1517)
 	//
 	If (Count parameters:C259>=2)
 		
-		var $picture : Picture
 		$folder:=$folder.folder("Assets.xcassets/AppIcon.appiconset")
 		
 		If ($folder.exists)
@@ -762,7 +876,6 @@ If ($project.actions#Null:C1517)
 		
 	End for each 
 End if 
-
 
 OB REMOVE:C1226($project; "regexParameters")
 
