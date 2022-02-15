@@ -71,9 +71,14 @@ Function createIconAssets
 	
 	If ($Boo_withIcons)
 		
-		C_OBJECT:C1216($file; $Path_root; $Path_hostRoot)
-		$Path_root:=_o_COMPONENT_Pathname("fieldIcons")
-		$Path_hostRoot:=_o_COMPONENT_Pathname("host_fieldIcons")
+		var $file; $Path_root; $Path_hostRoot : Object
+		If (FEATURE.with("actionsInTabBar"))
+			$Path_root:=This:C1470.path.fieldIcons()
+			$Path_hostRoot:=This:C1470.path.hostIcons()
+		Else 
+			$Path_root:=_o_COMPONENT_Pathname("fieldIcons")
+			$Path_hostRoot:=_o_COMPONENT_Pathname("host_fieldIcons")
+		End if 
 		
 		// If need asset, create it
 		$Obj_out.assets:=New collection:C1472  // result of asset operations

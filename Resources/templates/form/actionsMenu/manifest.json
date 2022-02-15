@@ -3,6 +3,6 @@
   "name": "actionsmenuform",
   "sources": "Sources/Forms/ActionsMenu/",
   "storyboard": "Sources/Forms/ActionsMenu/___TABLE___/ActionsMenu___TABLE___.storyboard",
-  "tagtypes": ["___TABLE___", "navigation","storyboardID"],
+  "tagtypes": ["___TABLE___", "storyboardID"],
   "inject": true
 }

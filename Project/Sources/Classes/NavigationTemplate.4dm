@@ -66,11 +66,17 @@ Function _actionsInTabBarProcess()
 		
 	Else 
 		
-		// all table in model
+		// all tables in model (BACKUP_STRAT)
 		OB GET PROPERTY NAMES:C1232($dataModel; $tTxt_tables)
 		$Col_tables:=New collection:C1472()
 		ARRAY TO COLLECTION:C1563($Col_tables; $tTxt_tables)
 		
+	End if 
+	
+	// TODO: remove test code
+	If (True:C214)
+		$Col_tables.push(New object:C1471("name"; "itName"; "label"; "itLabel"; "shortLabel"; "itShort"; "actions"; New collection:C1472(New object:C1471("name"; "acName"; "label"; "acLabel"; "shortLabel"; "acShort"))))
+		$Col_tables.push(New object:C1471("name"; "itName2"; "label"; "itLabel2"; "shortLabel"; "itShort2"; "actions"; New collection:C1472(New object:C1471("name"; "acNamessz"; "label"; "acLqdabel"; "shortLabel"; "acShorqsdt"); New object:C1471("name"; "acName2z"; "label"; "acLabel"; "shortLabel"; "acShort"))))
 	End if 
 	
 	This:C1470.input.tags.navigationTables:=New collection:C1472
@@ -100,7 +106,7 @@ Function _actionsInTabBarProcess()
 			: (Value type:C1509($navigationItem)=Is object:K8:27)
 				
 				$table:=OB Copy:C1225($navigationItem)  // to not alter caller
-				$table[""]:=$table  // to simulate meta data behaviour or table (but must be clean)
+				$table[""]:=OB Copy:C1225($table)  // to simulate meta data behaviour or table (but must be clean)
 				
 				// TODO:actionsInTabBar: create items for actions, maybe format according
 				This:C1470.input.tags.navigationTables.push($table)
@@ -114,9 +120,18 @@ Function _actionsInTabBarProcess()
 	For each ($table; This:C1470.input.tags.navigationTables)
 		If ($table.actions#Null:C1517)  //TODO:test:actionsInTabBar:  or any criteria to see if action instead of table
 			
-			$o:=New object:C1471()
+			var $templateFolder : 4D:C1709.Folder
+			$templateFolder:=This:C1470.path.forms().folder("actionsMenu")
+			
+			$o:=OB Copy:C1225(This:C1470.input)
+			$o.template:=ob_parseFile($templateFolder.file("manifest.json")).value
+			$o.template.source:=$templateFolder.platformPath
+			$o.template.parent:=This:C1470.input.template.parent  // for xproj uuid
+			//$o.projfile:=This.input.projfile 
+			//$o.path:=This.input.path
 			$o.tags:=New object:C1471("table"; $table)
 			$table.tableActions:=$table.actions  // tag ___TABLE_ACTIONS___ (or do a new tag system with only ACTIONS)
+			$table.fields:=New collection:C1472  // no fields // used by swift (CLEAN: in process tag allow to not have fields)
 			$o:=TemplateInstanceFactory($o).run()  // <================================== RECURSIVE
 			// XXX errors?
 			
@@ -191,8 +206,8 @@ Function _createIconAssets()->$Obj_out : Object
 		
 		var $Path_root; $Path_hostRoot : Object
 		If (FEATURE.with("actionsInTabBar"))
-			$Path_root:=This:C1470.path.new().fieldIcons()
-			$Path_hostRoot:=This:C1470.path.new().hostIcons()
+			$Path_root:=This:C1470.path.fieldIcons()
+			$Path_hostRoot:=This:C1470.path.hostIcons()
 		Else 
 			$Path_root:=_o_COMPONENT_Pathname("fieldIcons")
 			$Path_hostRoot:=_o_COMPONENT_Pathname("host_fieldIcons")
