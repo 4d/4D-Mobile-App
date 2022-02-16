@@ -16,13 +16,14 @@ If (False:C215)
 End if 
 
 var $storeCache; $isTableUnsynchronized; $isUnsynchronized : Boolean
-var $cache; $current; $field; $item; $linkedField; $linkedItem : Object
+var $cache; $current; $item; $linkedField; $linkedItem : Object
 var $relatedField; $relatedItem; $structure; $tableCatalog : Object
 var $cachedCatalog; $currentCatalog; $linkedCatalog; $relatedCatalog; $unsynchronizedFields; $unsynchronizedTables : Collection
 var $cacheFile : 4D:C1709.File
 var $o : cs:C1710.ob
 var $str : cs:C1710.str
 var $table : cs:C1710.table
+var $field : cs:C1710.field
 
 $currentCatalog:=$in.catalog
 
@@ -84,32 +85,23 @@ If ($cacheFile.exists)
 								Case of 
 										
 										//______________________________________________________
-									: (PROJECT.isField($item.key))
+									: ($item.value.kind="storage")
 										
 										$field:=$table.value[$item.key]
 										$field.current:=$tableCatalog.field.query("fieldNumber = :1 & kind = storage"; Num:C11($item.key)).pop()
 										$field.fieldNumber:=Num:C11($item.key)
 										$field.missing:=$field.current=Null:C1517
-										$field.nameMismatch:=Not:C34($str.setText($field.name).equal($field.current.name))
 										
 										If (Not:C34($field.missing))
 											
-											If (Value type:C1509($field.type)=Is text:K8:3)
-												
-												// Compare to value Type
-												$field.typeMismatch:=$field.type#$field.current.valueType
-												
-											Else 
-												
-												$field.typeMismatch:=$field.fieldType#$field.current.fieldType
-												
-											End if 
+											$field.nameMismatch:=Not:C34($str.setText($field.name).equal($field.current.name))
+											$field.typeMismatch:=$field.fieldType#$field.current.fieldType
+											
 										End if 
 										
-										If ($field.missing | $field.nameMismatch | Bool:C1537($field.typeMismatch))
-											
-											// THE FIELD IS NO LONGER AVAILABLE
-											// OR THE NAME/TYPE HAS BEEN CHANGED
+										If ($field.missing\
+											 || Bool:C1537($field.nameMismatch)\
+											 || Bool:C1537($field.typeMismatch))
 											
 											$isTableUnsynchronized:=True:C214
 											
@@ -142,7 +134,113 @@ If ($cacheFile.exists)
 										End if 
 										
 										//______________________________________________________
-									: (PROJECT.isRelationToOne($item.value))
+									: ($item.value.kind="calculated")\
+										 | ($item.value.kind="alias")
+										
+										$field:=$table.value[$item.key]
+										$field.current:=$tableCatalog.field.query("name = :1 & kind = :2"; $item.key; $item.value.kind).pop()
+										$field.missing:=$field.current=Null:C1517
+										
+										If (Not:C34($field.missing))
+											
+											$field.nameMismatch:=Not:C34($str.setText($item.key).equal($field.current.name))
+											$field.typeMismatch:=$field.fieldType#$field.current.fieldType
+											
+										End if 
+										
+										If ($field.missing\
+											 || Bool:C1537($field.nameMismatch)\
+											 || Bool:C1537($field.typeMismatch))
+											
+											$isTableUnsynchronized:=True:C214
+											
+											Case of 
+													
+													//______________________________________________________
+												: ($field.missing)
+													
+													$field.tableTips:=$str.localize("theFieldNameIsMissing"; $item.key)
+													$field.fieldTips:=$str.localize("theFieldIsMissing")
+													
+													//______________________________________________________
+												: ($field.nameMismatch)
+													
+													$field.tableTips:=$str.localize("theFieldNameWasRenamed"; New collection:C1472($item.key; $field.current.name))
+													$field.fieldTips:=$str.localize("theFieldWasRenamed"; $field.current.name)
+													
+													//______________________________________________________
+												: (Bool:C1537($field.typeMismatch))
+													
+													$field.tableTips:=$str.localize("theFieldNameTypeWasModified"; $item.key)
+													$field.fieldTips:=$str.localize("theFieldTypeWasModified")
+													
+													//______________________________________________________
+											End case 
+											
+											// Append faulty field
+											$unsynchronizedFields.push($field)
+											
+										End if 
+										
+										//______________________________________________________
+									: ($item.value.kind="relatedEntities")
+										
+										$field:=$table.value[$item.key]
+										$field.current:=$tableCatalog.field.query("name === :1"; $item.key).pop()
+										$field.missing:=$field.current=Null:C1517
+										
+										If ($field.missing)
+											
+											// Check the related dataclass availability
+											$field.missingRelatedDataclass:=$currentCatalog.query("tableNumber = :1"; Num:C11($field.relatedTableNumber)).pop()=Null:C1517
+											
+										Else 
+											
+											// Diacritical equality of the name
+											$field.nameMismatch:=Not:C34($str.setText($item.key).equal($field.current.name))
+											
+										End if 
+										
+										If ($field.missing\
+											 || Bool:C1537($field.nameMismatch)\
+											 || Bool:C1537($field.missingRelatedDataclass))
+											
+											Case of 
+													
+													//______________________________________________________
+												: (Bool:C1537($field.missingRelatedDataclass))
+													
+													$field.tableTips:=$str.localize("theRelatedTableIsNoLongerAvailable"; $field.relatedEntities)
+													$field.fieldTips:=$field.tableTips
+													
+													//______________________________________________________
+												: ($field.missing)
+													
+													$field.tableTips:=$str.localize("theRelatedFieldIsMissingOrHasBeenModified"; $item.key)
+													$field.fieldTips:=$field.tableTips
+													
+													//______________________________________________________
+												: ($field.nameMismatch)
+													
+													$field.tableTips:=$str.localize("theFieldNameWasRenamed"; New collection:C1472($item.key; $field.current.name))
+													$field.fieldTips:=$field.tableTips
+													
+													//______________________________________________________
+											End case 
+											
+											$isTableUnsynchronized:=True:C214
+											
+											// Append faulty relation
+											If ($unsynchronizedFields.query("name= :1"; $item.key).length=0)
+												
+												$field.name:=$item.key
+												$unsynchronizedFields.push($field)
+												
+											End if 
+										End if 
+										
+										//______________________________________________________
+									: ($item.value.kind="relatedEntity")
 										
 										$field:=$table.value[$item.key]
 										$current:=$tableCatalog.field.query("name === :1"; $item.key).pop()
@@ -204,7 +302,7 @@ If ($cacheFile.exists)
 												Case of 
 														
 														//______________________________________________________
-													: (PROJECT.isField($relatedItem.key))
+													: ($relatedField.kind="storage")
 														
 														$relatedField.parent:=$item.key
 														$relatedField.current:=$relatedCatalog.query("fieldNumber = :1"; Num:C11($relatedItem.key)).pop()
@@ -292,7 +390,7 @@ If ($cacheFile.exists)
 														End if 
 														
 														//______________________________________________________
-													: (PROJECT.isRelationToOne($relatedField))
+													: ($relatedField.kind="relatedEntity")
 														
 														$linkedCatalog:=$currentCatalog.query("tableNumber = :1"; $relatedField.relatedTableNumber).pop().field
 														
@@ -426,134 +524,9 @@ If ($cacheFile.exists)
 										$field.current:=$current
 										
 										//______________________________________________________
-									: (PROJECT.isRelationToMany($item.value))
-										
-										$field:=$table.value[$item.key]
-										$field.current:=$tableCatalog.field.query("name === :1"; $item.key).pop()
-										$field.missing:=$field.current=Null:C1517
-										
-										If ($field.missing)
-											
-											// Check the related dataclass availability
-											$field.missingRelatedDataclass:=$currentCatalog.query("tableNumber = :1"; Num:C11($field.relatedTableNumber)).pop()=Null:C1517
-											
-										Else 
-											
-											// Diacritical equality of the name
-											$field.nameMismatch:=Not:C34($str.setText($item.key).equal($field.current.name))
-											
-										End if 
-										
-										If ($field.missing | Bool:C1537($field.nameMismatch) | Bool:C1537($field.missingRelatedDataclass))
-											
-											// THE RELATION IS NO LONGER AVAILABLE
-											// OR IF THE NAME HAS BEEN CHANGED
-											
-											Case of 
-													
-													//______________________________________________________
-												: (Bool:C1537($field.missingRelatedDataclass))
-													
-													$field.tableTips:=$str.localize("theRelatedTableIsNoLongerAvailable"; $field.relatedEntities)
-													$field.fieldTips:=$field.tableTips
-													
-													//______________________________________________________
-												: ($field.missing)
-													
-													$field.tableTips:=$str.localize("theRelatedFieldIsMissingOrHasBeenModified"; $item.key)
-													$field.fieldTips:=$field.tableTips
-													
-													//______________________________________________________
-												: ($field.nameMismatch)
-													
-													$field.tableTips:=$str.localize("theFieldNameWasRenamed"; New collection:C1472($field.name; $field.current.name))
-													$field.fieldTips:=$field.tableTips
-													
-													//______________________________________________________
-											End case 
-											
-											$isTableUnsynchronized:=True:C214
-											
-											// Append faulty relation
-											If ($unsynchronizedFields.query("name= :1"; $item.key).length=0)
-												
-												$field.name:=$item.key
-												$unsynchronizedFields.push($field)
-												
-											End if 
-										End if 
-										
-										//______________________________________________________
-									: (PROJECT.isComputedAttribute($item.value))
-										
-										$field:=$table.value[$item.key]
-										$field.current:=$tableCatalog.field.query("name = :1"; $item.key).pop()
-										$field.missing:=$field.current=Null:C1517
-										$field.nameMismatch:=Not:C34($str.setText($field.name).equal($field.current.name))
-										
-										If (Not:C34($field.missing))
-											
-											If (Value type:C1509($field.type)=Is text:K8:3)
-												
-												// Compare to value Type
-												$field.typeMismatch:=$field.type#$field.current.valueType
-												
-											Else 
-												
-												$field.typeMismatch:=$field.fieldType#$field.current.fieldType
-												
-											End if 
-										End if 
-										
-										If ($field.missing | $field.nameMismatch | Bool:C1537($field.typeMismatch))
-											
-											// THE FIELD IS NO LONGER AVAILABLE
-											// OR THE TYPE HAS BEEN CHANGED
-											
-											$isTableUnsynchronized:=True:C214
-											
-											Case of 
-													
-													//______________________________________________________
-												: ($field.missing)
-													
-													$field.tableTips:=$str.localize("theFieldNameIsMissing"; $field.name)
-													$field.fieldTips:=$str.localize("theFieldIsMissing")
-													
-													//______________________________________________________
-												: ($field.nameMismatch)
-													
-													$field.tableTips:=$str.localize("theFieldNameWasRenamed"; New collection:C1472($field.name; $field.current.name))
-													$field.fieldTips:=$str.localize("theFieldWasRenamed"; $field.current.name)
-													
-													//______________________________________________________
-												: (Bool:C1537($field.typeMismatch))
-													
-													$field.tableTips:=$str.localize("theFieldNameTypeWasModified"; $field.name)
-													$field.fieldTips:=$str.localize("theFieldTypeWasModified")
-													
-													//______________________________________________________
-											End case 
-											
-											// Append faulty field
-											$unsynchronizedFields.push($field)
-											
-										End if 
-										
-										//______________________________________________________
-									: (PROJECT.isAlias($item.value))
-										
-										// Todo: MANAGE ALIAS
-										
-										//$field:=$table.value[$item.key]
-										//$field.current:=$tableCatalog.field.query("name = :1"; $item.key).pop()
-										//$field_2:=Formula from string("ds:C1482[\""+$table.value[""].name+"\"]."+$item.value.path).call()
-										//$field.missing:=$field.current=Null
-										
-										//______________________________________________________
 									Else 
 										
-										//oups
+										oops
 										
 										//______________________________________________________
 								End case 

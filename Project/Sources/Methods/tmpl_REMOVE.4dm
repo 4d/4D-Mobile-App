@@ -11,34 +11,40 @@
 // #98105 - Multi-criteria Search
 // ----------------------------------------------------
 // Declarations
-var $Txt_bind; $Txt_field; $Txt_isOfClass : Text
-var $Lon_indx : Integer
-var $menu; $o; $Obj_target : Object
+var $binding; $targetField; $testClass : Text
+var $indx : Integer
+var $target : Object
+var $c : Collection
+var $field : cs:C1710.field
+var $menu : cs:C1710.menu
 
 ARRAY TEXT:C222($tTxt_results; 0)
 
 // ----------------------------------------------------
 // Initialisations
-$Txt_field:=Replace string:C233(This:C1470.$.current; ".cancel"; "")
-SVG GET ATTRIBUTE:C1056(*; This:C1470.preview.name; $Txt_field; "ios:bind"; $Txt_bind)
+$targetField:=Replace string:C233(This:C1470.$.current; ".cancel"; "")
+SVG GET ATTRIBUTE:C1056(*; This:C1470.preview.name; $targetField; "ios:bind"; $binding)
 
-$Obj_target:=Form:C1466[Choose:C955(Num:C11(This:C1470.$.selector)=2; "detail"; "list")][This:C1470.$.tableNumber]
+$target:=Form:C1466[This:C1470.$.typeForm()][This:C1470.$.tableNumber]
 
 // ----------------------------------------------------
-SVG GET ATTRIBUTE:C1056(*; This:C1470.preview.name; $Txt_field; "4D-isOfClass-multi-criteria"; $Txt_isOfClass)
+SVG GET ATTRIBUTE:C1056(*; This:C1470.preview.name; $targetField; "4D-isOfClass-multi-criteria"; $testClass)
 
-If ($Txt_isOfClass="true")\
- & (Value type:C1509($Obj_target[$Txt_bind])=Is collection:K8:32)
+If ($testClass="true")\
+ & (Value type:C1509($target[$binding])=Is collection:K8:32)
 	
 	$menu:=cs:C1710.menu.new()
 	
-	For each ($o; $Obj_target[$Txt_bind])
+	For each ($field; $target[$binding])
 		
-		If ($o#Null:C1517)
+		If ($field=Null:C1517)
 			
-			$menu.append(Replace string:C233(Get localized string:C991("removeField"); "{field}"; $o.name); String:C10($o.id))
+			continue
 			
 		End if 
+		
+		$menu.append(EDITOR.str.localize("removeField"; $field.name); $field.name)
+		
 	End for each 
 	
 	$menu.line()
@@ -50,51 +56,56 @@ If ($Txt_isOfClass="true")\
 		
 		If ($menu.choice="all")
 			
-			$Obj_target[$Txt_bind]:=Null:C1517
+			$target[$binding]:=Null:C1517
 			
 		Else 
 			
 			// Delete one
-			$Lon_indx:=$Obj_target[$Txt_bind].extract("id").indexOf(Num:C11($menu.choice))
+			$c:=$target[$binding].indices("name = :1"; $menu.choice)
 			
-			If ($Lon_indx#-1)
+			If ($c.length>0)
 				
-				$Obj_target[$Txt_bind].remove($Lon_indx)
+				$target[$binding].remove($c[0])
 				
-				If ($Obj_target[$Txt_bind].length=1)
+				If ($target[$binding].length=1)
 					
 					// Convert to object
-					$Obj_target[$Txt_bind]:=$Obj_target[$Txt_bind][0]
+					$target[$binding]:=$target[$binding][0]
 					
 				End if 
+				
+			Else 
+				
+				oops
+				
 			End if 
 		End if 
 	End if 
 	
 Else 
 	
-	If (Asserted:C1132(Length:C16($Txt_bind)>0))
+	If (Asserted:C1132(Length:C16($binding)>0))
 		
-		Rgx_MatchText("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"; $Txt_bind; ->$tTxt_results)
+		Rgx_MatchText("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"; $binding; ->$tTxt_results)
 		
 		If (Size of array:C274($tTxt_results)=2)
 			
-			If ($Obj_target[$tTxt_results{1}]#Null:C1517)
+			If ($target[$tTxt_results{1}]#Null:C1517)
 				
-				$Lon_indx:=Num:C11($tTxt_results{2})
+				$indx:=Num:C11($tTxt_results{2})
 				
-				If ($Obj_target[$tTxt_results{1}].length>$Lon_indx)
+				If ($target[$tTxt_results{1}].length>$indx)
 					
-					SVG GET ATTRIBUTE:C1056(*; This:C1470.preview.name; $Txt_field; "4D-isOfClass-multivalued"; $Txt_isOfClass)
+					SVG GET ATTRIBUTE:C1056(*; This:C1470.preview.name; $targetField; "4D-isOfClass-multivalued"; $testClass)
 					
-					If ($Txt_isOfClass="true")
+					If ($testClass="true")
 						
-						$Obj_target[$tTxt_results{1}].remove($Lon_indx)
+						$target[$tTxt_results{1}].remove($indx)
 						
 					Else 
 						
 						// Empty
-						$Obj_target[$tTxt_results{1}][$Lon_indx]:=Null:C1517
+						$target[$tTxt_results{1}][$indx]:=Null:C1517
 						
 					End if 
 				End if 
@@ -102,7 +113,7 @@ Else
 			
 		Else 
 			
-			$Obj_target[$Txt_bind]:=Null:C1517
+			$target[$binding]:=Null:C1517
 			
 		End if 
 	End if 
@@ -112,6 +123,3 @@ PROJECT.save()
 
 // Update preview
 tmpl_DRAW(This:C1470)
-
-// ----------------------------------------------------
-// End

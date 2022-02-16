@@ -58,7 +58,6 @@ $form:=New object:C1471(\
 "selectors"; _o_UI.static("tab.@"); \
 "drag"; Formula:C1597(tmpl_On_drag_over); \
 "drop"; Formula:C1597(tmpl_ON_DROP); \
-"cancel"; Formula:C1597(tmpl_REMOVE); \
 "tips"; Formula:C1597(tmpl_TIPS); \
 "scrollBar"; _o_UI.thermometer("preview.scrollBar"))
 

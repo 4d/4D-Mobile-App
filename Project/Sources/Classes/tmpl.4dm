@@ -746,8 +746,6 @@ Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Ob
 					
 				End for each 
 				
-				
-				
 				If (Not:C34($found))
 					
 					$class:="error"

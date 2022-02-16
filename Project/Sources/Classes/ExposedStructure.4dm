@@ -463,6 +463,11 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 			Case of 
 					
 					//______________________________________________________
+				: (Not:C34(Bool:C1537($relatedAttribute.exposed)))
+					
+					continue
+					
+					//______________________________________________________
 				: ($relatedAttribute.kind="storage")
 					
 					If ($relatedAttribute.name#"__GlobalStamp")\
@@ -622,8 +627,6 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 					//______________________________________________________
 			End case 
 		End for each 
-		
-		//$result.fields:=$result.fields.orderBy("order asc")
 		
 	Else 
 		

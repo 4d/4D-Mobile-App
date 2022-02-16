@@ -25,7 +25,7 @@ Function init($project : Object)
 	End for each 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function load($project)->$this : cs:C1710.project
+Function load($project) : cs:C1710.project
 	
 	var $o : Object
 	
@@ -102,7 +102,7 @@ Function load($project)->$this : cs:C1710.project
 		
 	End if 
 	
-	$this:=This:C1470
+	return (This:C1470)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Prepare the project folder according to the target systems
@@ -487,23 +487,23 @@ Function cleanup($dirtyObject : Object)->$cleanObject : Object
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Tests if the project is locked
-Function isLocked()->$isLocked : Boolean
+Function isLocked() : Boolean
 	
 	If (This:C1470.structure#Null:C1517)
 		
-		$isLocked:=Bool:C1537(This:C1470.structure.unsynchronized)
+		return (Bool:C1537(This:C1470.structure.unsynchronized))
 		
 	Else 
 		
-		$isLocked:=Bool:C1537(This:C1470.$project.structure.unsynchronized)
+		return (Bool:C1537(This:C1470.$project.structure.unsynchronized))
 		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Tests if the project is not locked and
-Function isNotLocked()->$isNotLocked : Boolean
+Function isNotLocked() : Boolean
 	
-	$isNotLocked:=Not:C34(This:C1470.isLocked())
+	return (Not:C34(This:C1470.isLocked()))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function updateActions
@@ -646,26 +646,26 @@ Function storageFields($table : Variant)->$fields : Collection
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function isField($attribute : Variant)->$is : Boolean
+Function isField($attribute : Variant) : Boolean
 	
 	Case of 
 			
 			//______________________________________________________
 		: (Value type:C1509($attribute)=Is text:K8:3)
 			
-			$is:=Match regex:C1019("(?m-si)^\\d+$"; $attribute; 1; *)
+			return (Match regex:C1019("(?m-si)^\\d+$"; $attribute; 1; *))
 			
 			//______________________________________________________
 		: (Value type:C1509($attribute)=Is object:K8:27)
 			
-			$is:=($attribute.fieldType#Null:C1517)
+			return ($attribute.fieldType#Null:C1517)
 			
 			//______________________________________________________
 	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if it is a storage or calculated attribute
-Function isFieldAttribute($fieldName : Text; $tableName : Text)->$is : Boolean
+Function isFieldAttribute($fieldName : Text; $tableName : Text) : Boolean
 	
 	var $field; $table : Object
 	
@@ -677,30 +677,31 @@ Function isFieldAttribute($fieldName : Text; $tableName : Text)->$is : Boolean
 		
 	End if 
 	
-	$is:=$field#Null:C1517
+	return ($field#Null:C1517)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function isRelation($attribute : Variant)->$is : Boolean
+Function isRelation($attribute : Variant) : Boolean
 	
-	$is:=($attribute.relatedTableNumber#Null:C1517) || ((This:C1470.isRelationToOne($attribute)) || (This:C1470.isRelationToMany($attribute)))
+	return (($attribute.relatedTableNumber#Null:C1517)\
+		 || ((This:C1470.isRelationToOne($attribute))\
+		 || (This:C1470.isRelationToMany($attribute))))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function isRelationToOne($attribute : Variant)->$is : Boolean
+Function isRelationToOne($attribute : Variant) : Boolean
 	
 	If (Value type:C1509($attribute)=Is object:K8:27)
 		
-		//$is:=($attribute.relatedDataClass#Null) & (Not(Bool($attribute.isToMany)))
-		$is:=String:C10($attribute.kind)="relatedEntity"
+		return (String:C10($attribute.kind)="relatedEntity")
 		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function isRelationToMany($attribute : Variant)->$is : Boolean
+Function isRelationToMany($attribute : Variant) : Boolean
 	
 	If (Value type:C1509($attribute)=Is object:K8:27)
 		
 		//$is:=(($attribute.relatedEntities#Null) | (String($attribute.kind)="relatedEntities")) | (Bool($attribute.isToMany))
-		$is:=String:C10($attribute.kind)="relatedEntities"
+		return (String:C10($attribute.kind)="relatedEntities")
 		
 	End if 
 	
@@ -763,11 +764,11 @@ Function isComputedAttribute($field : Object; $tableName : Text)->$is : Boolean
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if field is an alias
-Function isAlias($attribute : Variant)->$is : Boolean
+Function isAlias($attribute : Variant) : Boolean
 	
 	If (Value type:C1509($attribute)=Is object:K8:27)
 		
-		$is:=(String:C10($attribute.kind)="alias")
+		return (String:C10($attribute.kind)="alias")
 		
 	End if 
 	
@@ -993,7 +994,6 @@ Function checkLocalQueryFilter($table : Object)
 		End if 
 	End if 
 	
-	
 	// Returns alias destination if alias 
 	// CLEAN: maybe move to structure?
 Function getAliasDestination($dataClass : Variant; $attribute : Variant; $recursive : Boolean)->$result : Object
@@ -1049,40 +1049,44 @@ Function getAliasDestination($dataClass : Variant; $attribute : Variant; $recurs
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if the 4D Type is a Numeric type
-Function isNumeric($type : Integer)->$is : Boolean
+Function isNumeric($type : Integer) : Boolean
 	
-	$is:=(New collection:C1472(Is integer:K8:5; Is longint:K8:6; Is integer 64 bits:K8:25; Is real:K8:4; _o_Is float:K8:26).indexOf($type)#-1)
+	return (New collection:C1472(Is integer:K8:5; Is longint:K8:6; Is integer 64 bits:K8:25; Is real:K8:4; _o_Is float:K8:26).indexOf($type)#-1)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if the 4D Type is a String type
-Function isString($type : Integer)->$is : Boolean
+Function isString($type : Integer) : Boolean
 	
-	$is:=(New collection:C1472(Is alpha field:K8:1; Is text:K8:3).indexOf($type)#-1)
+	return (New collection:C1472(Is alpha field:K8:1; Is text:K8:3).indexOf($type)#-1)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if the field is sortable
-Function isSortable($field : Object)->$sortable : Boolean
+Function isSortable($field : Object) : Boolean
 	
 	If ($field.fieldType#Null:C1517)
 		
-		$sortable:=($field.fieldType#Is object:K8:27)\
+		return (($field.fieldType#Is object:K8:27)\
 			 && ($field.fieldType#Is BLOB:K8:12)\
 			 && ($field.fieldType#Is picture:K8:10)\
 			 && ($field.fieldType#38)\
-			 && ($field.fieldType#42)
+			 && ($field.fieldType#42))
 		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if the resource comes from the host's database.
-Function isCustomResource($resource : Text)->$custom : Boolean
+Function isCustomResource($resource : Text) : Boolean
 	
 	If (Length:C16($resource)>0)
+		
 		//%W-533.1
-		$custom:=($resource[[1]]="/")
+		return ($resource[[1]]="/")
 		//%W+533.1
+		
 	Else 
-		$custom:=False:C215
+		
+		return (False:C215)
+		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -1159,33 +1163,7 @@ Function addTable($table)->$tableModel : Object
 	var $tableID : Text
 	var $o : cs:C1710.table
 	
-	Case of 
-			
-			//______________________________________________________
-		: (Value type:C1509($table)=Is object:K8:27)
-			
-			ASSERT:C1129($table.tableNumber#Null:C1517)
-			$tableID:=String:C10($table.tableNumber)
-			
-			//______________________________________________________
-		: (Value type:C1509($table)=Is text:K8:3)
-			
-			$tableID:=$table
-			
-			//______________________________________________________
-		: (Value type:C1509($table)=Is longint:K8:6)\
-			 | (Value type:C1509($table)=Is real:K8:4)
-			
-			$tableID:=String:C10($table)
-			
-			//______________________________________________________
-		Else 
-			
-			ASSERT:C1129(False:C215)
-			return 
-			
-			//______________________________________________________
-	End case 
+	$tableID:=This:C1470._tableID($table)
 	
 	$o:=This:C1470.getCatalog().query("tableNumber = :1"; Num:C11($tableID)).pop()
 	ASSERT:C1129($o#Null:C1517)
@@ -1209,8 +1187,9 @@ Function addTable($table)->$tableModel : Object
 	
 	This:C1470.dataModel[String:C10($tableID)]:=$tableModel
 	
-	// Update main
+	// Update dependencies
 	This:C1470.addToMain($table)
+	This:C1470.createFormEntries($table)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Delete the table from the data model
@@ -1220,40 +1199,15 @@ Function removeTable($table)
 	
 	If (This:C1470.dataModel#Null:C1517)
 		
-		Case of 
-				
-				//______________________________________________________
-			: (Value type:C1509($table)=Is object:K8:27)
-				
-				ASSERT:C1129($table.tableNumber#Null:C1517)
-				$tableID:=String:C10($table.tableNumber)
-				
-				//______________________________________________________
-			: (Value type:C1509($table)=Is text:K8:3)
-				
-				$tableID:=$table
-				
-				//______________________________________________________
-			: (Value type:C1509($table)=Is longint:K8:6)\
-				 | (Value type:C1509($table)=Is real:K8:4)
-				
-				$tableID:=String:C10($table)
-				
-				//______________________________________________________
-			Else 
-				
-				ASSERT:C1129(False:C215)
-				return 
-				
-				//______________________________________________________
-		End case 
+		$tableID:=This:C1470._tableID($table)
 		
 		OB REMOVE:C1226(This:C1470.dataModel; $tableID)
 		
+		// Update dependencies
+		This:C1470.removeFromMain($table)
+		This:C1470.deleteFormEntries($table)
+		
 	End if 
-	
-	// Update main
-	This:C1470.removeFromMain($table)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Add table to the Main Menu
@@ -1262,33 +1216,7 @@ Function addToMain($table)
 	var $tableID : Text
 	var $main : Object
 	
-	Case of 
-			
-			//______________________________________________________
-		: (Value type:C1509($table)=Is object:K8:27)
-			
-			ASSERT:C1129($table.tableNumber#Null:C1517)
-			$tableID:=String:C10($table.tableNumber)
-			
-			//______________________________________________________
-		: (Value type:C1509($table)=Is text:K8:3)
-			
-			$tableID:=$table
-			
-			//______________________________________________________
-		: (Value type:C1509($table)=Is longint:K8:6)\
-			 | (Value type:C1509($table)=Is real:K8:4)
-			
-			$tableID:=String:C10($table)
-			
-			//______________________________________________________
-		Else 
-			
-			ASSERT:C1129(False:C215)
-			return 
-			
-			//______________________________________________________
-	End case 
+	$tableID:=This:C1470._tableID($table)
 	
 	$main:=This:C1470.main
 	
@@ -1313,33 +1241,7 @@ Function removeFromMain($table)
 	var $index : Integer
 	var $main : Object
 	
-	Case of 
-			
-			//______________________________________________________
-		: (Value type:C1509($table)=Is object:K8:27)
-			
-			ASSERT:C1129($table.tableNumber#Null:C1517)
-			$tableID:=String:C10($table.tableNumber)
-			
-			//______________________________________________________
-		: (Value type:C1509($table)=Is text:K8:3)
-			
-			$tableID:=$table
-			
-			//______________________________________________________
-		: (Value type:C1509($table)=Is longint:K8:6)\
-			 | (Value type:C1509($table)=Is real:K8:4)
-			
-			$tableID:=String:C10($table)
-			
-			//______________________________________________________
-		Else 
-			
-			ASSERT:C1129(False:C215)
-			return 
-			
-			//______________________________________________________
-	End case 
+	$tableID:=This:C1470._tableID($table)
 	
 	$main:=This:C1470.main
 	
@@ -1359,19 +1261,47 @@ Function removeFromMain($table)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function getCatalog()->$catalog : Collection
+	/// Create list and detail form entries
+Function createFormEntries($table)
+	
+	var $tableID : Text
+	
+	This:C1470.list:=This:C1470.list=Null:C1517 ? New object:C1471 : This:C1470.list
+	This:C1470.detail:=This:C1470.detail=Null:C1517 ? New object:C1471 : This:C1470.detail
+	
+	$tableID:=This:C1470._tableID($table)
+	
+	This:C1470.list[$tableID]:=This:C1470.list[$tableID]=Null:C1517 ? New object:C1471 : This:C1470.list[$tableID]
+	This:C1470.detail[$tableID]:=This:C1470.detail[$tableID]=Null:C1517 ? New object:C1471 : This:C1470.detail[$tableID]
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	/// Delete entries for the list and detail forms
+Function deleteFormEntries($table)
+	
+	var $tableID : Text
+	
+	This:C1470.list:=This:C1470.list=Null:C1517 ? New object:C1471 : This:C1470.list
+	This:C1470.detail:=This:C1470.detail=Null:C1517 ? New object:C1471 : This:C1470.detail
+	
+	$tableID:=This:C1470._tableID($table)
+	
+	OB REMOVE:C1226(This:C1470.list; $tableID)
+	OB REMOVE:C1226(This:C1470.detail; $tableID)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function getCatalog() : Collection
 	
 	Case of 
 			
 			//____________________________________
 		: (This:C1470.$project#Null:C1517)
 			
-			$catalog:=This:C1470.$project.ExposedStructure.catalog
+			return (This:C1470.$project.ExposedStructure.catalog)
 			
 			//____________________________________
 		: (This:C1470.ExposedStructure#Null:C1517)
 			
-			$catalog:=This:C1470.ExposedStructure.catalog
+			return (This:C1470.ExposedStructure.catalog)
 			
 			//____________________________________
 		Else 
@@ -1673,7 +1603,7 @@ Function updateFormDefinitions()
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// TODO:Move to EDITOR class
 	/// Performs the project audit
-Function audit($audits : Object)->$audit : Object
+Function audit($audits : Object)
 	
 	If (Count parameters:C259>=1)
 		
@@ -1966,63 +1896,6 @@ Function repairStructure($audit : Collection)
 		
 	End if 
 	
-	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
-	//
-Function _checkFieldForRepair($current : Object; $fromAudit : Object)->$succes : Boolean
-	
-	Case of 
-			
-			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-		: ($fromAudit=Null:C1517)
-			
-			$succes:=True:C214  // 😇 We can go dancing
-			
-			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-		: ($fromAudit.missing)
-			
-			// ❌ THE FIELD DOESN'T EXIST ANYMORE
-			
-			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-		: (Bool:C1537($fromAudit.typeMismatch))
-			
-			Case of 
-					
-					//======================================
-				: (This:C1470.isString($fromAudit.fieldType))\
-					 & (This:C1470.isString($fromAudit.current.fieldType))
-					
-					$succes:=True:C214  // 🆗
-					$current.fieldType:=$fromAudit.current.fieldType  // Update
-					
-					//======================================
-				: (This:C1470.isNumeric($fromAudit.fieldType))\
-					 & (This:C1470.isNumeric($fromAudit.current.fieldType))
-					
-					$succes:=True:C214  // 🆗
-					$current.fieldType:=$fromAudit.current.fieldType  // Update
-					
-					//======================================
-				Else 
-					
-					// ❌ INCOMPATIBLE TYPE
-					
-					//======================================
-			End case 
-			
-			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-		: (Bool:C1537($fromAudit.nameMismatch))
-			
-			$succes:=True:C214  // 🆗
-			$current.name:=$fromAudit.current.name  // Update
-			
-			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-		Else 
-			
-			oops
-			
-			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-	End case 
-	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Repairing the project
 Function fix($data : Object)->$result : Object
@@ -2157,3 +2030,90 @@ Function repairProject()
 	OB REMOVE:C1226(Form:C1466; "audit")
 	Form:C1466.status.project:=True:C214
 	
+	//MARK:-[PRIVATE]
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _tableID($table) : Text
+	
+	Case of 
+			
+			//______________________________________________________
+		: (Value type:C1509($table)=Is object:K8:27)
+			
+			ASSERT:C1129($table.tableNumber#Null:C1517)
+			
+			return (String:C10($table.tableNumber))
+			
+			//______________________________________________________
+		: (Value type:C1509($table)=Is text:K8:3)
+			
+			return ($table)
+			
+			//______________________________________________________
+		: (Value type:C1509($table)=Is longint:K8:6)\
+			 | (Value type:C1509($table)=Is real:K8:4)
+			
+			return (String:C10($table))
+			
+			//______________________________________________________
+		Else 
+			
+			ASSERT:C1129(False:C215)
+			
+			//______________________________________________________
+	End case 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _checkFieldForRepair($current : Object; $fromAudit : Object)->$succes : Boolean
+	
+	Case of 
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+		: ($fromAudit=Null:C1517)
+			
+			$succes:=True:C214  // 😇 We can go dancing
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+		: ($fromAudit.missing)
+			
+			// ❌ THE FIELD DOESN'T EXIST ANYMORE
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+		: (Bool:C1537($fromAudit.typeMismatch))
+			
+			Case of 
+					
+					//======================================
+				: (This:C1470.isString($fromAudit.fieldType))\
+					 & (This:C1470.isString($fromAudit.current.fieldType))
+					
+					$succes:=True:C214  // 🆗
+					$current.fieldType:=$fromAudit.current.fieldType  // Update
+					
+					//======================================
+				: (This:C1470.isNumeric($fromAudit.fieldType))\
+					 & (This:C1470.isNumeric($fromAudit.current.fieldType))
+					
+					$succes:=True:C214  // 🆗
+					$current.fieldType:=$fromAudit.current.fieldType  // Update
+					
+					//======================================
+				Else 
+					
+					// ❌ INCOMPATIBLE TYPE
+					
+					//======================================
+			End case 
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+		: (Bool:C1537($fromAudit.nameMismatch))
+			
+			$succes:=True:C214  // 🆗
+			$current.name:=$fromAudit.current.name  // Update
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+		Else 
+			
+			oops
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+	End case 

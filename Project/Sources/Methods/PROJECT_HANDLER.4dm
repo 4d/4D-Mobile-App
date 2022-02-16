@@ -52,7 +52,9 @@ End if
 Case of 
 		
 		//=========================================================
-	: ($IN=Null:C1517)  // Form method
+	: ($IN=Null:C1517)
+		
+		// MARK:-Form method
 		
 		$e:=FORM Event:C1606
 		
@@ -81,7 +83,7 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Activate:K2:9)
 				
-				//BEEP
+				// BEEP
 				//ARRAY TEXT($order; 0x0000)
 				//FORM GET ENTRY ORDER($order; 1)
 				//GOTO OBJECT($order{1})
@@ -124,9 +126,10 @@ Case of
 		ASSERT:C1129(False:C215; "Missing parameter \"action\"")
 		
 		//=========================================================
-	: ($IN.action="projectAudit")  // Audit the project
+	: ($IN.action="projectAudit")
 		
-		// ----------------------------------------------------
+		// MARK:-Audit the project
+		
 		If (Num:C11(EDITOR.window)#0)
 			
 			// Send result
@@ -139,11 +142,10 @@ Case of
 			
 		End if 
 		
-		// ----------------------------------------------------
-		// End
-		
 		//=========================================================
-	: ($IN.action="projectAuditResult")  // Result of the project audit
+	: ($IN.action="projectAuditResult")
+		
+		// MARK:-Result of the project audit
 		
 		// ================================== //
 		// Execution space is the form EDITOR //
@@ -204,7 +206,6 @@ Case of
 								"action"; "page_views"; \
 								"tab"; EDITOR.projectAudit.errors[0].tab; \
 								"table"; EDITOR.projectAudit.errors[0].table)
-							
 							
 							//________________________________________
 						: (EDITOR.projectAudit.errors[0].type="icon")
@@ -379,7 +380,7 @@ Case of
 					End if 
 				End if 
 				
-				// user dialog
+				// User dialog
 				POST_MESSAGE(New object:C1471("target"; $form.window; \
 					"action"; "show"; \
 					"type"; "confirm"; \
@@ -396,9 +397,11 @@ Case of
 		//=========================================================
 	: ($IN.action="projectFixErrors")
 		
+		// MARK:-projectFixErrors
+		
 		If (Form:C1466.$dialog.projectInvalid#Null:C1517)
 			
-			// reset project invalid after user make it decision, do not wait a potiential audit #100588
+			// Reset project invalid after user make it decision, do not wait a potiential audit #100588
 			// XXX if could be done only one time in code, when dialog dismissing it will better (a dismissAction or completeAction)
 			OB REMOVE:C1226(Form:C1466.$dialog; "projectInvalid")
 			

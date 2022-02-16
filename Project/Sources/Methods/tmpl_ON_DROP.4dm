@@ -257,10 +257,19 @@ If (Length:C16($cible)>0)
 							
 							//______________________________________________________
 					End case 
-					
-					OB REMOVE:C1226($dropped; "fromIndex")
-					
 				End if 
+				
+				//MARK:Cleanup
+				OB REMOVE:C1226($dropped; "fromIndex")
+				OB REMOVE:C1226($dropped; "id")
+				OB REMOVE:C1226($dropped; "path")
+				OB REMOVE:C1226($dropped; "label")
+				OB REMOVE:C1226($dropped; "shortLabel")
+				OB REMOVE:C1226($dropped; "type")
+				OB REMOVE:C1226($dropped; "computed")
+				OB REMOVE:C1226($dropped; "fieldType")
+				OB REMOVE:C1226($dropped; "fieldNumber")
+				
 			End if 
 			
 			OB REMOVE:C1226(Form:C1466.$dialog[$currentForm]; "scroll")

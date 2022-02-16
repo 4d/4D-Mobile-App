@@ -5,6 +5,7 @@ Class constructor
 	
 	Super:C1705("editor_CALLBACK")
 	
+	//MARK:TEMPO 🚧
 	If (Count parameters:C259>=1)
 		
 		var $1 : Object
@@ -46,13 +47,14 @@ Class constructor
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function init()
 	
+	var $group : cs:C1710.group
+	
 	This:C1470.toBeInitialized:=False:C215
 	
 	This:C1470.button("noPublishedTable")
 	
 	This:C1470.picture("tableWidget")
 	
-	var $group : cs:C1710.group
 	$group:=This:C1470.group("tableNext")
 	This:C1470.button("next").addToGroup($group)
 	This:C1470.formObject("next.limit").addToGroup($group)
@@ -71,10 +73,11 @@ Function init()
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function onLoad()
 	
+	var $offset : Integer
+	
 	// This trick remove the horizontal gap
 	This:C1470.fieldList.setScrollbar(0; 2)
 	
-	var $offset : Integer
 	$offset:=This:C1470.tablist.bestSize(Align left:K42:2).coordinates.right+10
 	This:C1470.tabdetail.bestSize(Align left:K42:2).setCoordinates($offset)
 	
@@ -105,14 +108,6 @@ Function setTab()
 	$ref:=This:C1470["tab"+This:C1470.typeForm()].setFontStyle(Bold:K14:2).coordinates
 	$tgt:=This:C1470.tabSelector.coordinates
 	This:C1470.tabSelector.setCoordinates($ref.left; $tgt.top; $ref.right; $tgt.bottom)
-	
-	//OBJECT SET FONT STYLE(*; $form.selectors.name; Plain)
-	//$t:="tab."+This.typeForm()
-	//OBJECT SET FONT STYLE(*; $t; Bold)
-	//$t:=Replace string($t; "."; "")
-	//$o:=$form[$t].getCoordinates().coordinates
-	//$o1:=$form.tabSelector.getCoordinates()
-	//$o1.setCoordinates($o.left; $o1.coordinates.top; $o.right; $o1.coordinates.bottom)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Redraw the preview
@@ -163,6 +158,123 @@ Function addField($field : Object; $fields : Collection)
 			
 		End if 
 	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+	// Delete a field from the form
+Function removeField()
+	
+	var $binding; $targetField; $testClass : Text
+	var $indx : Integer
+	var $target : Object
+	var $c : Collection
+	var $field : cs:C1710.field
+	var $menu : cs:C1710.menu
+	
+	ARRAY TEXT:C222($tTxt_results; 0)
+	
+	//FIXME:Tempo
+	var $form : Object
+	$form:=This:C1470.form
+	
+	$targetField:=Replace string:C233(This:C1470.context.current; ".cancel"; "")
+	SVG GET ATTRIBUTE:C1056(*; $form.preview.name; $targetField; "ios:bind"; $binding)
+	
+	$target:=Form:C1466[This:C1470.typeForm()][This:C1470.context.tableNumber]
+	SVG GET ATTRIBUTE:C1056(*; $form.preview.name; $targetField; "4D-isOfClass-multi-criteria"; $testClass)
+	
+	If ($testClass="true")\
+		 & (Value type:C1509($target[$binding])=Is collection:K8:32)
+		
+		$menu:=cs:C1710.menu.new()
+		
+		For each ($field; $target[$binding])
+			
+			If ($field=Null:C1517)
+				
+				continue
+				
+			End if 
+			
+			$menu.append(EDITOR.str.localize("removeField"; $field.name); $field.name)
+			
+		End for each 
+		
+		$menu.line()
+		$menu.append("removeAllFields"; "all")
+		
+		$menu.popup()
+		
+		If ($menu.selected)
+			
+			If ($menu.choice="all")
+				
+				$target[$binding]:=Null:C1517
+				
+			Else 
+				
+				// Delete one
+				$c:=$target[$binding].indices("name = :1"; $menu.choice)
+				
+				If ($c.length>0)
+					
+					$target[$binding].remove($c[0])
+					
+					If ($target[$binding].length=1)
+						
+						// Convert to object
+						$target[$binding]:=$target[$binding][0]
+						
+					End if 
+					
+				Else 
+					
+					oops
+					
+				End if 
+			End if 
+		End if 
+		
+	Else 
+		
+		If (Asserted:C1132(Length:C16($binding)>0))
+			
+			Rgx_MatchText("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"; $binding; ->$tTxt_results)
+			
+			If (Size of array:C274($tTxt_results)=2)
+				
+				If ($target[$tTxt_results{1}]#Null:C1517)
+					
+					$indx:=Num:C11($tTxt_results{2})
+					
+					If ($target[$tTxt_results{1}].length>$indx)
+						
+						SVG GET ATTRIBUTE:C1056(*; $form.preview.name; $targetField; "4D-isOfClass-multivalued"; $testClass)
+						
+						If ($testClass="true")
+							
+							$target[$tTxt_results{1}].remove($indx)
+							
+						Else 
+							
+							// Empty
+							$target[$tTxt_results{1}][$indx]:=Null:C1517
+							
+						End if 
+					End if 
+				End if 
+				
+			Else 
+				
+				$target[$binding]:=Null:C1517
+				
+			End if 
+		End if 
+	End if 
+	
+	PROJECT.save()
+	
+	// Update preview
+	This:C1470.draw()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Construct the table's field list
@@ -803,32 +915,36 @@ Function typeForm()->$formType : Text
 	// Ensure that there is an entry in "list" and "detail" for each table in the data model
 Function createFormObjects($datamodel : Object)
 	
+	var $tableID : Text
+	
 	If ($datamodel#Null:C1517)
 		
-		If (PROJECT.list=Null:C1517)
-			
-			PROJECT.list:=New object:C1471
-			
-		End if 
+		PROJECT.list:=PROJECT.list=Null:C1517 ? New object:C1471 : PROJECT.list
+		PROJECT.detail:=PROJECT.detail=Null:C1517 ? New object:C1471 : PROJECT.detail
 		
-		If (PROJECT.detail=Null:C1517)
-			
-			PROJECT.detail:=New object:C1471
-			
-		End if 
-		
-		var $tableID : Text
+		// Add mising table if any
 		For each ($tableID; $datamodel)
 			
-			If (PROJECT.list[$tableID]=Null:C1517)
+			PROJECT.list[$tableID]:=PROJECT.list[$tableID]=Null:C1517 ? New object:C1471 : PROJECT.list[$tableID]
+			PROJECT.detail[$tableID]:=PROJECT.detail[$tableID]=Null:C1517 ? New object:C1471 : PROJECT.detail[$tableID]
+			
+		End for each 
+		
+		// Delete unpublished table entries
+		For each ($tableID; PROJECT.list)
+			
+			If ($datamodel[$tableID]=Null:C1517)
 				
-				PROJECT.list[$tableID]:=New object:C1471
+				OB REMOVE:C1226(PROJECT.list; $tableID)
 				
 			End if 
+		End for each 
+		
+		For each ($tableID; PROJECT.detail)
 			
-			If (PROJECT.detail[$tableID]=Null:C1517)
+			If ($datamodel[$tableID]=Null:C1517)
 				
-				PROJECT.detail[$tableID]:=New object:C1471
+				OB REMOVE:C1226(PROJECT.detail; $tableID)
 				
 			End if 
 		End for each 

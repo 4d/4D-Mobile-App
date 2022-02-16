@@ -31,11 +31,11 @@ $e:=FORM Event:C1606
 $form:=VIEWS_Handler(New object:C1471("action"; "init"))
 $context:=$form.$
 
+//MARK:TEMPO 🚧
 var $view : cs:C1710.VIEWS
-$view:=cs:C1710.VIEWS.new($form)  //#TEMPO
+$view:=cs:C1710.VIEWS.new($form)
 
 $0:=-1  // Reject drop
-
 
 // ----------------------------------------------------
 Case of 
@@ -92,8 +92,7 @@ Case of
 							// Display the template picker
 							$form.fieldGroup.hide()
 							$form.previewGroup.hide()
-							
-							cs:C1710.VIEWS.new().templatePicker($formType)
+							$view.templatePicker($formType)
 							
 							CLEAR VARIABLE:C89($tableID)  // To avoid redrawing the preview
 							
@@ -123,7 +122,7 @@ Case of
 						
 						// Select the item
 						//SVG SET ATTRIBUTE(*; $e.objectName; $tableID; \
-																												"fill"; Choose(EDITOR.isDark; "slategray"; EDITOR.selectedFillColor))
+																																			"fill"; Choose(EDITOR.isDark; "slategray"; EDITOR.selectedFillColor))
 						
 						$context.draw:=True:C214
 						$context.update:=True:C214
@@ -152,8 +151,6 @@ Case of
 				
 				// Update UI
 				If (Length:C16($tableID)#0)
-					
-					//OB REMOVE($context; "manifest")
 					
 					// Redraw
 					$form.form.refresh()
@@ -484,12 +481,12 @@ End case
 						$context.tabIndex:=Replace string:C233($context.current; "tab_"; "")
 						
 						// Update preview
-						tmpl_DRAW($form)
+						$view.draw()
 						
 						//………………………………………………………………………………………………………………
 					: ($context.current="@.cancel")
 						
-						$form.cancel()
+						$view.removeField()
 						
 						//………………………………………………………………………………………………………………
 					: ($context.current="magnifyingGlass")
