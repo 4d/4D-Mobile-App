@@ -1150,17 +1150,9 @@ Function doFormatMenu()
 	
 	If (PROJECT.isFieldAttribute($current.name; Table name:C256(This:C1470.action.tableNumber)))
 		
-		$type:=Choose:C955($current.type="text"; "string"; $current.type)
+		$menu.append(":xliff:byDefault"; "null"; $current.format=Null:C1517).line()
 		
-		If ($type="image")
-			
-			$menu.append(Get localized string:C991("byDefault")+Get localized string:C991("iosOnly"); "null"; $current.format=Null:C1517).line()
-			
-		Else 
-			
-			$menu.append(":xliff:byDefault"; "null"; $current.format=Null:C1517).line()
-			
-		End if 
+		$type:=Choose:C955($current.type="text"; "string"; $current.type)
 		
 		For each ($format; $formats[$type])
 			
@@ -1455,8 +1447,8 @@ Function doDataSourceMenu()
 Function editList()
 	
 	//$form:=New object(\
-												"static"; $static; \
-												"host"; This.path.hostInputControls(True))
+														"static"; $static; \
+														"host"; This.path.hostInputControls(True))
 	
 	//$form.folder:=This.path.hostInputControls()
 	//$manifest:=$form.folder.file("manifest.json")
@@ -2011,7 +2003,7 @@ Function formatToolTip($format : Text)->$tip : Text
 		//SHARED.resources.formattersByName:=New object
 		//var $bind
 		//For each ($bind; SHARED.resources.fieldBindingTypes\
-												.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
+															.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
 		//SHARED.resources.formattersByName[$bind.name]:=$bind
 		//End for each
 		//End if
@@ -2219,33 +2211,7 @@ Function _appendFormat($data : Object)->$custom : Boolean
 		
 	Else 
 		
-		//fixme:🚧 #132599: Add tag iOS only for unsupported type 
-		//$data.menu.append(":xliff:f_"+$format; $format; $data.currentFormat=$format)
-		var $label : Text
-		
-		Case of 
-				
-				//______________________________________________________
-			: ($data.type="string")\
-				 & ($data.format="barcode")
-				
-				$label:=Get localized string:C991("f_"+$format)+Get localized string:C991("iosOnly")
-				
-				//______________________________________________________
-			: ($data.type="image")\
-				 & ($data.format="signature")
-				
-				$label:=Get localized string:C991("f_"+$format)+Get localized string:C991("iosOnly")
-				
-				//______________________________________________________
-			Else 
-				
-				$label:=":xliff:f_"+$format
-				
-				//______________________________________________________
-		End case 
-		
-		$data.menu.append($label; $format; $data.currentFormat=$format)
+		$data.menu.append(":xliff:f_"+$format; $format; $data.currentFormat=$format)
 		
 	End if 
 	
