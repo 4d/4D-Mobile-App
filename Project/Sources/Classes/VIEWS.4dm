@@ -775,7 +775,7 @@ Function tableWidget($dataModel : Object; $options : Object)->$widget : Picture
 			
 			If (EDITOR.isDark)
 				
-				$svg.layer($table).fill(Choose:C955($isSelected; "slategray"; "none"))
+				$svg.layer($table).fill(Choose:C955($isSelected; "#0E2732"; "#76D5FE"))
 				
 			Else 
 				
