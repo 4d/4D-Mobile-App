@@ -122,7 +122,7 @@ Case of
 						
 						// Select the item
 						//SVG SET ATTRIBUTE(*; $e.objectName; $tableID; \
-																																			"fill"; Choose(EDITOR.isDark; "slategray"; EDITOR.selectedFillColor))
+																																										"fill"; Choose(EDITOR.isDark; "slategray"; EDITOR.selectedFillColor))
 						
 						$context.draw:=True:C214
 						$context.update:=True:C214
@@ -210,8 +210,9 @@ Case of
 						// Get the current field
 						//%W-533.3
 						$o:=($form.fields.pointer())->{$form.fieldList.row}
-						$o.name:=$o.path
 						//%W+533.3
+						
+						$o.name:=$o.name=Null:C1517 ? $o.path : $o.name
 						
 						$view.addField($o; Form:C1466[$formType][$context.tableNumber].fields)
 						

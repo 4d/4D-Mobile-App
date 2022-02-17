@@ -349,25 +349,26 @@ Case of
 				var $dataClass : 4D:C1709.DataClass
 				$dataClass:=ds:C1482[Table name:C256(Num:C11($context.tableNumber))]
 				
+				var $field : cs:C1710.field
 				For ($i; 1; Size of array:C274(($form.fields.pointer())->); 1)
 					
 					LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; lk inherited:K53:26; lk font color:K53:24)
 					
-					$o:=($form.fields.pointer())->{$i}
+					$field:=($form.fields.pointer())->{$i}
 					
 					Case of 
 							
 							//______________________________________________________
-						: ($o.fieldType=8858)\
-							 | ($o.fieldType=8859)  // Relation
+						: ($field.kind="relatedEntity")\
+							 | ($field.kind="relatedEntities")  // Relation
 							
-							If (Bool:C1537($o.$added))  // relatedEntity name
+							If (Bool:C1537($field.$added))  // relatedEntity name
 								
 								LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.selectedColor; lk font color:K53:24)
 								
 							Else 
 								
-								If ($datamodel[String:C10($o.relatedTableNumber)]=Null:C1517)
+								If ($datamodel[String:C10($field.relatedTableNumber)]=Null:C1517)
 									
 									LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color:K53:24)
 									
@@ -375,25 +376,64 @@ Case of
 							End if 
 							
 							//______________________________________________________
-						: ($o.kind="alias")
+						: ($field.kind="alias")
 							
-							If ($datamodel[$context.tableNumber][$o.name]=Null:C1517)
+							$c:=Split string:C1554($field.path; ".")
+							
+							If ($c.length>2)
 								
-								LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color:K53:24)
+								If ($datamodel[$context.tableNumber][$c[1]]=Null:C1517)
+									
+									LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color:K53:24)
+									
+								End if 
 								
+							Else 
+								
+								If ($c.length=1)
+									
+									If ($datamodel[$context.tableNumber][$field.name]=Null:C1517)
+										
+										LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color:K53:24)
+										
+									End if 
+									
+								Else 
+									
+									// A "If" statement should never omit "Else" 
+									If ($datamodel[$context.tableNumber][$c[0]]=Null:C1517)
+										
+										LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color:K53:24)
+										
+									End if 
+									
+								End if 
 							End if 
 							
 							//______________________________________________________
-						: ($o.kind="calculated")
+						: ($field.kind="calculated")
 							
-							If ($datamodel[$context.tableNumber][$o.name]=Null:C1517)
+							$c:=Split string:C1554($field.path; ".")
+							
+							If ($c.length>1)
 								
-								LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color:K53:24)
+								If ($datamodel[$context.tableNumber][$c[1]]=Null:C1517)
+									
+									LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color:K53:24)
+									
+								End if 
 								
+							Else 
+								
+								If ($datamodel[$context.tableNumber][$c[0]]=Null:C1517)
+									
+									LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color:K53:24)
+									
+								End if 
 							End if 
 							
 							//______________________________________________________
-						: (PROJECT.isAvailable($dataClass; $o.path))
+						: (PROJECT.isAvailable($dataClass; $field.path))
 							
 							// <NOTHING MORE TO DO>
 							

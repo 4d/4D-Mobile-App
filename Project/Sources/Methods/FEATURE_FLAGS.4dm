@@ -143,6 +143,8 @@ FEATURE.isUnstable("iosBuildWithClass")  // Use cs.MobileProjectIOS class
 
 //mark:-🚧 WIP
 FEATURE.isWIP(131225)  // [MOBILE] Use aliases
+FEATURE.isWIP("modernStructure")
+
 FEATURE.isWIP(127558)  // [ANDROID] Data set
 FEATURE.isWIP(131983)  // [MOBILE] Launch an action from the Tab bar
 
@@ -153,8 +155,6 @@ FEATURE.isWIP("newFormatterChoiceList")  // Menu to create formatter choice list
 FEATURE.isWIP("taskIndicator")  // UI for background tasks executing
 
 FEATURE.isWIP("sourceClass")  // Work with Source class to test the data source
-
-FEATURE.vdl("modernStructure")
 
 //mark:-⛔ PENDING
 FEATURE.isPending(129953)  // [MOBILE] Handle Many-one-Many relations

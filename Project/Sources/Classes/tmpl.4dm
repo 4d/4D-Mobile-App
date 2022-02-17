@@ -674,16 +674,15 @@ Function truncateLabelIfTooBig($o : Object)
 	/// Add a "one field" widget to the template
 Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Object; $background : Text; $offset : Integer)->$height : Integer
 	
-	var $class; $label; $name; $node; $style; $t; $tips : Text
-	var $found; $isToMany; $isToOne : Boolean
+	var $class; $label; $name; $node; $style; $t : Text
+	var $tips : Text
+	var $found : Boolean
 	var $o; $relation : Object
 	var $c : Collection
 	var $xml : cs:C1710.xml
 	
-	$isToOne:=($field.fieldType=8858)
-	$isToMany:=($field.fieldType=8859)
-	
-	If ($isToOne | $isToMany)  // Relation
+	If ($field.kind="relatedEntity")\
+		 || ($field.kind="relatedEntities")
 		
 		$style:="italic"
 		
@@ -692,14 +691,9 @@ Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Ob
 	Case of 
 			
 			//______________________________________________________
-		: ($field.kind=Null:C1517)
-			
-			oops
-			
-			//______________________________________________________
 		: ($field.kind="storage")
 			
-			$label:=$field.path
+			$label:=$field.path#Null:C1517 ? $field.path : $field.name
 			$tips:=$field.label
 			
 			$found:=(PROJECT.dataModel[$context.tableNumber][String:C10($field.fieldNumber)]#Null:C1517)
@@ -707,15 +701,22 @@ Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Ob
 			//______________________________________________________
 		: ($field.kind="alias")
 			
+			If ($field.$path#Null:C1517)
+				
+				TRACE:C157
+				
+			End if 
+			
+			//$label:=$field.path#Null ? $field.path : $field.name
 			$label:=$field.name
 			$tips:=$field.label
-			
-			$found:=(PROJECT.dataModel[$context.tableNumber][$field.name]#Null:C1517)
 			
 			//______________________________________________________
 		: ($field.kind="calculated")
 			
-			$label:=$field.name
+			//$label:=$field.path#Null ? $field.path : $field.name
+			
+			$label:=$field.path#Null:C1517 ? $field.path : $field.name
 			$tips:=$field.label
 			
 			$found:=(PROJECT.dataModel[$context.tableNumber][$field.name]#Null:C1517)
@@ -772,37 +773,7 @@ Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Ob
 			//______________________________________________________
 		Else 
 			
-			$label:=$field.path
-			
-			$c:=Split string:C1554($label; ".")
-			
-			$found:=(PROJECT.dataModel[$context.tableNumber][$c[0]]#Null:C1517)
-			
-			If (Not:C34($found))
-				
-				$found:=cs:C1710.ob.new(PROJECT.dataModel[$context.tableNumber]).toCollection().query("name = :1"; $c[0]).pop()#Null:C1517
-				
-			End if 
-			
-			If ($found & ($c.length>1))
-				
-				If (Bool:C1537($field.computed))
-					
-					$found:=(PROJECT.dataModel[$context.tableNumber][$c[0]][$c[1]]#Null:C1517)
-					
-				Else 
-					
-					$found:=(PROJECT.dataModel[$context.tableNumber][$c[0]][String:C10($field.fieldNumber)]#Null:C1517)
-					
-				End if 
-			End if 
-			
-			If (Not:C34($found))
-				
-				$class:="error"
-				$tips:=EDITOR.str.setText(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($label))
-				
-			End if 
+			oops
 			
 			//______________________________________________________
 	End case 

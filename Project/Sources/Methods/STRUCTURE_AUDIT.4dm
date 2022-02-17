@@ -484,7 +484,7 @@ If ($cacheFile.exists)
 																	//______________________________________________________
 																: ($relatedField.nameMismatch)
 																	
-																	$relatedField.tableTips:=$str.localize("theFieldNameWasRenamed"; New collection:C1472($relatedField.name; $relatedField.current.name))
+																	$relatedField.tableTips:=$str.localize("theFieldNameWasRenamed"; New collection:C1472($relatedItem.key; $relatedField.current.name))
 																	$relatedField.fieldTips:=$relatedField.tableTips
 																	
 																	//______________________________________________________

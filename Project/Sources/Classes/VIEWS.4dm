@@ -117,39 +117,54 @@ Function draw()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Define a field in the form
-Function addField($field : Object; $fields : Collection)
+Function addField($field : cs:C1710.field; $fields : Collection)
 	
-	var $ok : Boolean
 	var $index : Integer
 	
 	$field:=PROJECT.cleanup($field)
 	
-	$ok:=True:C214
+	OB REMOVE:C1226($field; "type")
+	OB REMOVE:C1226($field; "valueType")
+	OB REMOVE:C1226($field; "computed")
 	
-	If ($field.fieldType=8859)
+	If ($field.kind="alias")
 		
-		// 1-N relation with published related data class
-		$ok:=(Form:C1466.dataModel[String:C10($field.relatedTableNumber)]#Null:C1517)
+		//
 		
+	Else 
+		
+		If ($field.path=$field.name)
+			
+			OB REMOVE:C1226($field; "path")
+			
+		End if 
+		
+		If ($field.fieldType=8858)\
+			 | ($field.fieldType=8859)\
+			 | ($field.fieldType<0)
+			
+			OB REMOVE:C1226($field; "fieldType")
+			
+		End if 
 	End if 
 	
-	If ($ok)
+	If ($field.kind="relatedEntities")  // 1-N relation with published related data class
 		
-		If ($field.fieldType#8859)  // Not 1-N relation
+		If (Form:C1466.dataModel[String:C10($field.relatedTableNumber)]#Null:C1517)
 			
-			$index:=$fields.indexOf(Null:C1517)
+			// Append
+			$fields.push($field)
 			
-			If (($index#-1))
-				
-				// Set
-				$fields[$index]:=$field
-				
-			Else 
-				
-				// Append
-				$fields.push($field)
-				
-			End if 
+		End if 
+		
+	Else 
+		
+		$index:=$fields.indexOf(Null:C1517)
+		
+		If (($index#-1))
+			
+			// Set
+			$fields[$index]:=$field
 			
 		Else 
 			
@@ -358,7 +373,7 @@ Function fieldList($table)->$result : Object
 							"kind"; "relatedEntity"; \
 							"name"; $key; \
 							"path"; $key; \
-							"relatedDataClass"; $tableModel[$key].relatedDataclass; \
+							"relatedDataClass"; $tableModel[$key].relatedDataClass; \
 							"relatedTableNumber"; $tableModel[$key].relatedTableNumber; \
 							"inverseName"; $tableModel[$key].inverseName; \
 							"label"; PROJECT.label($key); \
@@ -367,10 +382,8 @@ Function fieldList($table)->$result : Object
 							"$label"; $key; \
 							"$level"; $subLevel)
 						
-						// #TEMPO [
-						//$field.id:=0
+						//FIXME:Tempo
 						$field.fieldType:=8858
-						//]
 						
 						$result.fields.push($field)
 						
@@ -384,6 +397,7 @@ Function fieldList($table)->$result : Object
 							End if 
 							
 							$field:=OB Copy:C1225($tableModel[$key][$attribute])
+							$field.$path:=$field.path
 							
 							Case of 
 									
@@ -391,8 +405,8 @@ Function fieldList($table)->$result : Object
 								: ($field.kind="storage")
 									
 									$field.fieldNumber:=Num:C11($attribute)
-									$field.$label:=$linkPrefix+$field.name
 									$field.path:=$key+"."+$field.name
+									$field.$label:=$linkPrefix+$field.name
 									$field.$level:=$subLevel+1
 									
 									$result.fields.push($field)
@@ -401,8 +415,8 @@ Function fieldList($table)->$result : Object
 								: ($field.kind="alias")
 									
 									$field.name:=$attribute
-									$field.$label:=$linkPrefix+$attribute
 									$field.path:=$key+"."+$field.path
+									$field.$label:=$linkPrefix+$attribute
 									$field.$level:=$subLevel+1
 									
 									$result.fields.push($field)
@@ -424,9 +438,8 @@ Function fieldList($table)->$result : Object
 									$field.$label:=$linkPrefix+$attribute
 									$field.$level:=$subLevel+2
 									
-									// #TEMPO [
+									//FIXME:Tempo
 									$field.fieldType:=8859
-									//]
 									
 									$result.fields.push($field)
 									
@@ -443,20 +456,21 @@ Function fieldList($table)->$result : Object
 										
 										$subfield:=$field[$sub]
 										
+										$subfield.$path:=$subfield.path
+										
 										If ($subfield.kind="alias")
 											
-											$subfield.name:=$sub
-											$subfield.$label:=$linkPrefix+$sub
-											$subfield.path:=$key+"."+$sub
+											$subfield.name:=$key+"."+$sub
+											$subfield.path:=$key+"."+$subfield.path
 											
 										Else 
 											
-											$subfield.$label:=$linkPrefix+$subfield.path
-											//$subfield.path:=$key+"."+$subfield.path
+											$subfield.name:=$key+"."+($subfield.kind="storage" ? $subfield.name : $sub)
+											$subfield.path:=$key+"."+$subfield.name
 											
 										End if 
 										
-										
+										$subfield.$label:=$linkPrefix+$subfield.name
 										$subfield.$level:=$subLevel+2
 										
 										$result.fields.push($subfield)
@@ -480,9 +494,8 @@ Function fieldList($table)->$result : Object
 						$field.path:=$key
 						$field.$level:=0
 						
-						// #TEMPO [
+						//FIXME:Tempo
 						$field.fieldType:=8859
-						//]
 						
 						$result.fields.push($field)
 						
