@@ -19,7 +19,7 @@ Class constructor($name : Text; $datasource)
 	
 	If (This:C1470.assignable)
 		
-		This:C1470._pointer:=$p
+		This:C1470.pointer:=$p
 		This:C1470.value:=$p->
 		
 	Else 
@@ -34,23 +34,22 @@ Class constructor($name : Text; $datasource)
 	This:C1470.action:=OBJECT Get action:C1457(*; This:C1470.name)
 	
 	//=== === === === === === === === === === === === === === === === === === ===
-Function updatePointer() : Pointer
+Function updatePointer()->$p : Pointer
 	
 	var $p : Pointer
 	$p:=OBJECT Get pointer:C1124(Object named:K67:5; This:C1470.name)
 	
 	If (Not:C34(Is nil pointer:C315($p)))
 		
-		This:C1470._pointer:=$p
+		This:C1470.pointer:=$p
 		
 	End if 
 	
-	return (This:C1470._pointer)
 	
 	//=== === === === === === === === === === === === === === === === === === ===
-Function pointer() : Pointer
+Function pointer()->$p : Pointer
 	
-	return (OBJECT Get pointer:C1124(Object named:K67:5; This:C1470.name))
+	$p:=OBJECT Get pointer:C1124(Object named:K67:5; This:C1470.name)
 	
 	//=== === === === === === === === === === === === === === === === === === ===
 Function setDatasource($datasource)
