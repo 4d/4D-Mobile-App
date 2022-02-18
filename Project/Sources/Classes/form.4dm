@@ -25,9 +25,9 @@ Class constructor($method : Text)
 	End if 
 	
 	//MARK:-[COMPUTED ATTRIBUTES]
-Function get focused()->$widget  /// The name of the object that has the focus in the form
+Function get focused() : Text  /// The name of the object that has the focus in the form
 	
-	$widget:=OBJECT Get name:C1087(Object with focus:K67:3)
+	return (OBJECT Get name:C1087(Object with focus:K67:3))
 	
 	
 	//MARK:-[FUNCTIONS]
@@ -54,7 +54,7 @@ Function restoreContext()
 	//MARK:-[FORM OBJECTS CREATION]
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Create a static object instance
-Function formObject($name : Text; $widgetName : Text)->$widget : cs:C1710.formObject
+Function formObject($name : Text; $widgetName : Text) : cs:C1710.formObject
 	
 	If (Count parameters:C259>=2)
 		
@@ -66,11 +66,11 @@ Function formObject($name : Text; $widgetName : Text)->$widget : cs:C1710.formOb
 		
 	End if 
 	
-	$widget:=This:C1470[$name]
+	return (This:C1470[$name])
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Create a button object instance
-Function button($name : Text; $widgetName : Text)->$widget : cs:C1710.button
+Function button($name : Text; $widgetName : Text) : cs:C1710.button
 	
 	If (Count parameters:C259>=2)
 		
@@ -82,11 +82,11 @@ Function button($name : Text; $widgetName : Text)->$widget : cs:C1710.button
 		
 	End if 
 	
-	$widget:=This:C1470[$name]
+	return (This:C1470[$name])
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Create a widget object instance
-Function widget($name : Text; $widgetName : Text)->$widget : cs:C1710.widget
+Function widget($name : Text; $widgetName : Text) : cs:C1710.widget
 	
 	If (Count parameters:C259>=2)
 		
@@ -98,11 +98,11 @@ Function widget($name : Text; $widgetName : Text)->$widget : cs:C1710.widget
 		
 	End if 
 	
-	$widget:=This:C1470[$name]
+	return (This:C1470[$name])
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Create a input object instance
-Function input($name : Text; $widgetName : Text)->$widget : cs:C1710.input
+Function input($name : Text; $widgetName : Text) : cs:C1710.input
 	
 	If (Count parameters:C259>=2)
 		
@@ -114,11 +114,11 @@ Function input($name : Text; $widgetName : Text)->$widget : cs:C1710.input
 		
 	End if 
 	
-	$widget:=This:C1470[$name]
+	return (This:C1470[$name])
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Create a stepper object instance
-Function stepper($name : Text; $widgetName : Text)->$widget : cs:C1710.stepper
+Function stepper($name : Text; $widgetName : Text) : cs:C1710.stepper
 	
 	If (Count parameters:C259>=2)
 		
@@ -130,11 +130,11 @@ Function stepper($name : Text; $widgetName : Text)->$widget : cs:C1710.stepper
 		
 	End if 
 	
-	$widget:=This:C1470[$name]
+	return (This:C1470[$name])
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Create a thermometer object instance
-Function thermometer($name : Text; $widgetName : Text)->$widget : cs:C1710.thermometer
+Function thermometer($name : Text; $widgetName : Text) : cs:C1710.thermometer
 	
 	If (Count parameters:C259>=2)
 		
@@ -146,11 +146,11 @@ Function thermometer($name : Text; $widgetName : Text)->$widget : cs:C1710.therm
 		
 	End if 
 	
-	$widget:=This:C1470[$name]
+	return (This:C1470[$name])
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Create a listbox object instance
-Function listbox($name : Text; $widgetName : Text)->$widget : cs:C1710.listbox
+Function listbox($name : Text; $widgetName : Text) : cs:C1710.listbox
 	
 	If (Count parameters:C259>=2)
 		
@@ -162,11 +162,11 @@ Function listbox($name : Text; $widgetName : Text)->$widget : cs:C1710.listbox
 		
 	End if 
 	
-	$widget:=This:C1470[$name]
+	return (This:C1470[$name])
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Create a picture object instance
-Function picture($name : Text; $widgetName : Text)->$widget : cs:C1710.picture
+Function picture($name : Text; $widgetName : Text) : cs:C1710.picture
 	
 	If (Count parameters:C259>=2)
 		
@@ -178,11 +178,11 @@ Function picture($name : Text; $widgetName : Text)->$widget : cs:C1710.picture
 		
 	End if 
 	
-	$widget:=This:C1470[$name]
+	return (This:C1470[$name])
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Create a subform object instance
-Function subform($name : Text; $widgetName : Text)->$widget : cs:C1710.subform
+Function subform($name : Text; $widgetName : Text) : cs:C1710.subform
 	
 	If (Count parameters:C259>=2)
 		
@@ -194,11 +194,11 @@ Function subform($name : Text; $widgetName : Text)->$widget : cs:C1710.subform
 		
 	End if 
 	
-	$widget:=This:C1470[$name]
+	return (This:C1470[$name])
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Create a selector object instance
-Function selector($name : Text; $widgetName : Text)->$widget : cs:C1710.selector
+Function selector($name : Text; $widgetName : Text) : cs:C1710.selector
 	
 	If (Count parameters:C259>=2)
 		
@@ -210,11 +210,11 @@ Function selector($name : Text; $widgetName : Text)->$widget : cs:C1710.selector
 		
 	End if 
 	
-	$widget:=This:C1470[$name]
+	return (This:C1470[$name])
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Create a group instance
-Function group($name : Text; $member; $member2; $memberN)->$widget : cs:C1710.group
+Function group($name : Text; $member; $member2; $memberN) : cs:C1710.group
 	
 	var ${2}
 	var $i : Integer
@@ -227,7 +227,7 @@ Function group($name : Text; $member; $member2; $memberN)->$widget : cs:C1710.gr
 		
 	End for 
 	
-	$widget:=This:C1470[$name]
+	return (This:C1470[$name])
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// 🛠 IN WORKS
@@ -601,25 +601,25 @@ Function callParent($event : Integer)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-Function dimensions()->$dimensions : Object
+Function dimensions() : Object
 	
 	var $height; $width : Integer
 	
 	OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $height)
 	
-	$dimensions:=New object:C1471(\
+	return (New object:C1471(\
 		"width"; $width; \
-		"height"; $height)
+		"height"; $height))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-Function height()->$height : Integer
+Function height() : Integer
 	
-	$height:=This:C1470.dimensions().height
+	return (This:C1470.dimensions().height)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-Function width()->$width : Integer
+Function width() : Integer
 	
-	$width:=This:C1470.dimensions().width
+	return (This:C1470.dimensions().width)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 Function goToPage($page : Integer; $subform : Boolean)
@@ -649,7 +649,7 @@ Function goToPage($page : Integer; $subform : Boolean)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-Function page($subform : Boolean)->$page : Integer
+Function page($subform : Boolean) : Integer
 	
 	var $_subform : Boolean
 	
@@ -667,11 +667,11 @@ Function page($subform : Boolean)->$page : Integer
 	If ($_subform)
 		
 		// Current subform page
-		$page:=FORM Get current page:C276(*)
+		return (FORM Get current page:C276(*))
 		
 	Else 
 		
-		$page:=FORM Get current page:C276
+		return (FORM Get current page:C276)
 		
 	End if 
 	

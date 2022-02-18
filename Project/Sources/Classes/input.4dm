@@ -13,7 +13,7 @@ Class constructor($name : Text; $datasource)
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
-Function highlight($startSel : Integer; $endSel : Integer)->$this : cs:C1710.input
+Function highlight($startSel : Integer; $endSel : Integer) : cs:C1710.input
 	
 	Case of 
 			
@@ -43,15 +43,15 @@ Function highlight($startSel : Integer; $endSel : Integer)->$this : cs:C1710.inp
 			//______________________________________________________
 	End case 
 	
-	$this:=This:C1470
+	return (This:C1470)
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	// From the last character entered to the end
-Function highlightLastToEnd()->$this : cs:C1710.input
+Function highlightLastToEnd() : cs:C1710.input
 	
 	HIGHLIGHT TEXT:C210(*; This:C1470.name; This:C1470.highlightingStart()+1; MAXLONG:K35:2)
 	
-	$this:=This:C1470
+	return (This:C1470)
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function highlighted()->$highlight : Object
@@ -78,23 +78,25 @@ Function highlighted()->$highlight : Object
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
-Function highlightingStart()->$pos : Integer
+Function highlightingStart() : Integer
 	
-	var $end : Integer
-	GET HIGHLIGHT:C209(*; This:C1470.name; $pos; $end)
+	var $end; $start : Integer
+	GET HIGHLIGHT:C209(*; This:C1470.name; $start; $end)
+	return ($start)
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
-Function highlightingEnd()->$pos : Integer
+Function highlightingEnd() : Integer
 	
-	var $start : Integer
-	GET HIGHLIGHT:C209(*; This:C1470.name; $start; $pos)
+	var $end; $start : Integer
+	GET HIGHLIGHT:C209(*; This:C1470.name; $start; $end)
+	return ($end)
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 /*
 .setFilter(int) -> This
 .setFilter(text) -> This
 */
-Function setFilter($filter; $separator : Text)->$this : cs:C1710.input
+Function setFilter($filter; $separator : Text) : cs:C1710.input
 	
 	var $t : Text
 	
@@ -171,22 +173,22 @@ Function setFilter($filter; $separator : Text)->$this : cs:C1710.input
 		
 	End if 
 	
-	$this:=This:C1470
+	return (This:C1470)
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
-Function getFilter()->$filter : Text
+Function getFilter() : Text
 	
-	$filter:=OBJECT Get filter:C1073(*; This:C1470.name)
+	return (OBJECT Get filter:C1073(*; This:C1470.name))
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
-Function get password()->$isPassword : Boolean
+Function get password() : Boolean
 	
-	$isPassword:=(OBJECT Get font:C1069(*; This:C1470.name)="%password")
+	return (OBJECT Get font:C1069(*; This:C1470.name)="%password")
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function set password($isPassword : Boolean)
 	
-	$isPassword:=Choose:C955($isPassword=Null:C1517; True:C214; $isPassword)
+	$isPassword:=$isPassword=Null:C1517 ? True:C214 : $isPassword
 	
 	If ($isPassword)
 		
