@@ -72,9 +72,10 @@
 					"width": 36,
 					"height": 29,
 					"visibility": "hidden",
-					"fill": "#E7F8FF",
-					"stroke": "#6495ed",
-					"borderRadius": 10
+					"borderRadius": 10,
+					"class": "rect",
+					"fill": "automatic",
+					"stroke": "automatic"
 				},
 				"prompt": {
 					"type": "text",
@@ -142,7 +143,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 5,
+	"geometryStamp": 11,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

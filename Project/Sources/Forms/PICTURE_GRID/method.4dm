@@ -46,7 +46,7 @@ Case of
 		
 		If (EDITOR.isDark)
 			
-			OBJECT SET RGB COLORS:C628(*; "selection"; "white"; "steelblue")
+			OBJECT SET RGB COLORS:C628(*; "selection"; "#76D5FE"; "#0E2732")
 			
 		Else 
 			

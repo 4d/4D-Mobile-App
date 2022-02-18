@@ -424,8 +424,8 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 					
 					$svg.rect($data.cell.width-6; $data.cell.height-3)\
 						.position(5; 2)\
-						.stroke(EDITOR.colors.strokeColor.hex)\
-						.fill(EDITOR.colors.backgroundSelectedColor.hex)\
+						.stroke(Choose:C955(EDITOR.isDark; "#76D5FE"; EDITOR.colors.strokeColor.hex))\
+						.fill(Choose:C955(EDITOR.isDark; "#0E2732"; EDITOR.colors.backgroundSelectedColor.hex))\
 						.radius(10)
 					
 				End if 
@@ -546,20 +546,33 @@ $error.show()  // <- STOP HIDING ERRORS
 $svg:=cs:C1710.svg.new().size($data.cell.width; $data.cell.height)
 
 // Media
-READ PICTURE FILE:C678(File:C1566("/RESOURCES/templates/more-white@2x.png").platformPath; $p)
+If (EDITOR.isDark)
+	
+	READ PICTURE FILE:C678(File:C1566("/RESOURCES/templates/more-white@2x_dark.png").platformPath; $p)
+	
+Else 
+	
+	READ PICTURE FILE:C678(File:C1566("/RESOURCES/templates/more-white@2x.png").platformPath; $p)
+	
+End if 
+
 $svg.image($p).position(20; 30).size(96)
 
 // Put text
-//$svg.textArea(Get localized string("explore"); "root").position(0; $ƒ.cell.height-20)\
+/*
+$svg.textArea(Get localized string("explore"); "root").position(0; $ƒ.cell.height-20)\
 .dimensions($data.cell.width)\
 .fill("dimgray")\
 .textAlignment(Align center)
+*/
 
 // Put in second position
-//$oPicker.pictures.insert(1;$svg.picture())
-//$oPicker.pathnames.insert(1;Null)
-//$oPicker.helpTips.insert(1;$str.setText("downloadMoreResources").localized($ƒ.type))
-//$oPicker.infos.push(Null)
+/*
+$oPicker.pictures.insert(1;$svg.picture())
+$oPicker.pathnames.insert(1;Null)
+$oPicker.helpTips.insert(1;$str.setText("downloadMoreResources").localized($ƒ.type))
+$oPicker.infos.push(Null)
+*/
 
 // Put at the end
 $picker.pictures.push($svg.picture())
