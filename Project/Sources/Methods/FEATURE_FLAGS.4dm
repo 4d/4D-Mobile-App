@@ -140,11 +140,10 @@ FEATURE.isUnstable("useTextRestResponse")  // [MOBILE] Data generation : for opt
 FEATURE.isUnstable("listEditor")  // [MOBILE] Create and edit an input control from the project editor
 FEATURE.isUnstable("xcDataModelClass")  // Use class to create core data model ie. xcDataModel (useful to refactor for alias)
 FEATURE.isUnstable("iosBuildWithClass")  // Use cs.MobileProjectIOS class
+FEATURE.isUnstable(131225)  // [MOBILE] Use aliases
+FEATURE.isUnstable("modernStructure")
 
 //mark:-🚧 WIP
-FEATURE.isWIP(131225)  // [MOBILE] Use aliases
-FEATURE.isWIP("modernStructure")
-
 FEATURE.isWIP(127558)  // [ANDROID] Data set
 FEATURE.isWIP(131983)  // [MOBILE] Launch an action from the Tab bar
 

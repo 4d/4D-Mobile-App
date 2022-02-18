@@ -126,16 +126,16 @@ Function display()
 				//……………………………………………………………………………………………………………………
 			: ($o.key="title")
 				
-				$widget:=This:C1470.title
+				$widget:=This:C1470[$o.key]
 				
-				If (Value type:C1509(Form:C1466.title)=Is collection:K8:32)
+				If (Value type:C1509(Form:C1466[$o.key])=Is collection:K8:32)
 					
 					$c:=$o.value.copy()
 					$widget.setValue(This:C1470.str.localize($c.shift(); $c))
 					
 				Else 
 					
-					$widget.setValue(This:C1470.str.localize($o.value))
+					$widget.setValue($o.value)
 					
 				End if 
 				
@@ -175,16 +175,16 @@ Function display()
 				//……………………………………………………………………………………………………………………
 			: ($o.key="additional")
 				
-				$widget:=This:C1470.additional
+				$widget:=This:C1470[$o.key]
 				
-				If (Value type:C1509(Form:C1466.additional)=Is collection:K8:32)
+				If (Value type:C1509(Form:C1466[$o.key])=Is collection:K8:32)
 					
 					$c:=$o.value.copy()
 					$widget.setValue(This:C1470.str.localize($c.shift(); $c))
 					
 				Else 
 					
-					$widget.setValue(This:C1470.str.localize($o.value))
+					$widget.setValue($o.value)
 					
 				End if 
 				
@@ -217,12 +217,12 @@ Function display()
 				//……………………………………………………………………………………………………………………
 			: ($o.key="ok")
 				
-				This:C1470.ok.setTitle(This:C1470.str.localize($o.value)).show()
+				This:C1470.ok.setTitle($o.value).show()
 				
 				//……………………………………………………………………………………………………………………
 			: ($o.key="cancel")
 				
-				This:C1470.cancel.setTitle(This:C1470.str.localize($o.value)).show()
+				This:C1470.cancel.setTitle($o.value).show()
 				
 				//……………………………………………………………………………………………………………………
 			: ($o.key="type")
@@ -259,7 +259,7 @@ Function display()
 				//……………………………………………………………………………………………………………………
 			: ($o.key="option")
 				
-				This:C1470.optional.setTitle(This:C1470.str.localize(String:C10($o.value.label))).show()
+				This:C1470.optional.setTitle($o.value.title).show()
 				
 				//……………………………………………………………………………………………………………………
 			: ($o.key="help")
@@ -268,7 +268,6 @@ Function display()
 				
 				//……………………………………………………………………………………………………………………
 		End case 
-		
 	End for each 
 	
 	SET TIMER:C645(-1)  // To update form geometry
