@@ -59,6 +59,9 @@ If (Asserted:C1132($structure.success; "cs.ExposedStructure.new() failed"))
 	// Check if a relation 1 -> N is not referenced if the related dataclass isn't exposed
 	ASSERT:C1129($fields.query("name = ToNotExposedTable").pop()=Null:C1517)
 	
+	// Check if a non exposed alias is not referenced
+	ASSERT:C1129($structure.catalog.query("name=Employes").pop().fields.query("name = :1"; "alias_NON_EXPOSED").pop()=Null:C1517)
+	
 End if 
 
 // Get a sorted catalog

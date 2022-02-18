@@ -338,6 +338,7 @@ Function fieldList($table)->$result : Object
 						
 						$field.$label:=$field.name
 						$field.$level:=0
+						
 						$field.fieldNumber:=Num:C11($key)
 						$field.path:=$field.name
 						
@@ -348,6 +349,7 @@ Function fieldList($table)->$result : Object
 						
 						$field.$label:=$key
 						$field.$level:=0
+						
 						$field.name:=$key
 						
 						$result.fields.push($field)
@@ -357,17 +359,16 @@ Function fieldList($table)->$result : Object
 						
 						$field.$label:=$key
 						$field.$level:=0
+						
 						$field.name:=$key
-						$field.path:=$key
+						$field.path:=$field.name
 						
 						$result.fields.push($field)
 						
 						//……………………………………………………………………………………………………………
 					: ($field.kind="relatedEntity")
 						
-						//******* Il faut vérifier que la relation existe toujours *******
-						
-						$subLevel:=$subLevel+10
+						$subLevel+=10
 						
 						$field:=New object:C1471(\
 							"kind"; "relatedEntity"; \
@@ -396,47 +397,50 @@ Function fieldList($table)->$result : Object
 								
 							End if 
 							
-							$field:=OB Copy:C1225($tableModel[$key][$attribute])
-							$field.$path:=$field.path
+							$field:=$tableModel[$key][$attribute]
 							
 							Case of 
 									
 									//……………………………………………………………………………………………………………
 								: ($field.kind="storage")
 									
-									$field.fieldNumber:=Num:C11($attribute)
-									$field.path:=$key+"."+$field.name
 									$field.$label:=$linkPrefix+$field.name
 									$field.$level:=$subLevel+1
+									
+									$field.fieldNumber:=Num:C11($attribute)
+									$field.path:=$key+"."+$field.name
 									
 									$result.fields.push($field)
 									
 									//……………………………………………………………………………………………………………
 								: ($field.kind="alias")
 									
-									$field.name:=$attribute
-									$field.path:=$key+"."+$field.path
 									$field.$label:=$linkPrefix+$attribute
 									$field.$level:=$subLevel+1
+									
+									$field.name:=$attribute
+									$field.path:=$key+"."+$field.path
 									
 									$result.fields.push($field)
 									
 									//……………………………………………………………………………………………………………
 								: ($field.kind="calculated")
 									
-									$field.name:=$attribute
 									$field.$label:=$linkPrefix+$attribute
-									$field.path:=$key+"."+$attribute
 									$field.$level:=$subLevel+1
+									
+									$field.name:=$attribute
+									$field.path:=$key+"."+$attribute
 									
 									$result.fields.push($field)
 									
 									//______________________________________________________
 								: ($field.kind="relatedEntities")
 									
-									$field.name:=$attribute
 									$field.$label:=$linkPrefix+$attribute
 									$field.$level:=$subLevel+2
+									
+									$field.name:=$attribute
 									
 									//FIXME:Tempo
 									$field.fieldType:=8859
@@ -455,8 +459,6 @@ Function fieldList($table)->$result : Object
 										End if 
 										
 										$subfield:=$field[$sub]
-										
-										$subfield.$path:=$subfield.path
 										
 										If ($subfield.kind="alias")
 											
@@ -489,10 +491,12 @@ Function fieldList($table)->$result : Object
 						//……………………………………………………………………………………………………………
 					: ($field.kind="relatedEntities")
 						
-						$field.name:=$key
+						$field.$name:=$key
 						$field.$label:=$key
-						$field.path:=$key
 						$field.$level:=0
+						
+						$field.name:=$key
+						$field.path:=$key
 						
 						//FIXME:Tempo
 						$field.fieldType:=8859
@@ -754,8 +758,17 @@ Function tableWidget($dataModel : Object; $options : Object)->$widget : Picture
 	$params.hOffset:=5
 	$params.maxChar:=Choose:C955(Get database localization:C1009="ja"; 7; 15)
 	
-	$params.selectedFill:=EDITOR.colors.backgroundSelectedColor.hex
-	$params.selectedStroke:=EDITOR.colors.strokeColor.hex
+	If (EDITOR.isDark)
+		
+		$params.selectedFill:="#76D5FE"
+		$params.selectedStroke:="#0E2732"
+		
+	Else 
+		
+		$params.selectedFill:=EDITOR.colors.backgroundSelectedColor.hex
+		$params.selectedStroke:=EDITOR.colors.strokeColor.hex
+		
+	End if 
 	
 	$str:=cs:C1710.str.new()
 	$error:=cs:C1710.error.new()
@@ -775,7 +788,7 @@ Function tableWidget($dataModel : Object; $options : Object)->$widget : Picture
 			
 			If (EDITOR.isDark)
 				
-				$svg.layer($table).fill(Choose:C955($isSelected; "#0E2732"; "#76D5FE"))
+				$svg.layer($table).fill(Choose:C955($isSelected; $params.selectedFill; $params.selectedStroke))
 				
 			Else 
 				

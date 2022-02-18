@@ -701,20 +701,12 @@ Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Ob
 			//______________________________________________________
 		: ($field.kind="alias")
 			
-			If ($field.$path#Null:C1517)
-				
-				TRACE:C157
-				
-			End if 
-			
-			//$label:=$field.path#Null ? $field.path : $field.name
+			$label:=$field.path#Null:C1517 ? $field.path : $field.name
 			$label:=$field.name
 			$tips:=$field.label
 			
 			//______________________________________________________
 		: ($field.kind="calculated")
-			
-			//$label:=$field.path#Null ? $field.path : $field.name
 			
 			$label:=$field.path#Null:C1517 ? $field.path : $field.name
 			$tips:=$field.label

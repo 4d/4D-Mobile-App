@@ -1,3 +1,15 @@
 path {
 	fill: white !important;
 }
+
+polygon {
+	stroke: white !important
+}
+
+circle {
+		fill: white !important;
+}
+
+rect {
+		fill: white !important;
+}

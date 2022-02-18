@@ -16,7 +16,7 @@ Function get format()->$value : Text
 	
 	If (This:C1470.formatDropdown#Null:C1517)
 		
-		$value:=This:C1470.formatDropdown.data.binding[This:C1470.formatDropdown.data.index]
+		$value:=This:C1470.formatDropdown.binding[This:C1470.formatDropdown.index]
 		
 	End if 
 	
@@ -444,7 +444,7 @@ Function doStaticDragAndDrop()->$allowed : Integer
 	//End if 
 	//Else 
 	//If ($o.src#$e.row)\
-														 & ($e.row#($o.src+1))  // Not the same or the next one
+																 & ($e.row#($o.src+1))  // Not the same or the next one
 	//$allowed:=0
 	//$o:=$list.getRowCoordinates($e.row)
 	//$o.bottom:=$o.top
