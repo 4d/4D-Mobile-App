@@ -24,6 +24,7 @@ FEATURE:=New object:C1471(\
 "isWIP"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Structure file:C489=Structure file:C489(*))); \
 "isPending"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=False:C215); \
 "vdl"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Current system user:C484="vdelachaux") | (Current system user:C484="Vincent de LACHAUX")); \
+"erm"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Current system user:C484="emarchand") | (Current system user:C484="phimage")); \
 "makeAlias"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=Bool:C1537(This:C1470[Choose:C955(Value type:C1509($2)=Is text:K8:3; $2; "_"+String:C10($2))])); \
 "main"; Formula:C1597(This:C1470[Choose:C955(Value type:C1509($1)=Is text:K8:3; $1; "_"+String:C10($1))]:=(Application version:C493(*)="A@"))\
 )
@@ -31,18 +32,9 @@ FEATURE:=New object:C1471(\
 /* _____________
 TOOLS
 _____________*/
-//featuresFlags._97117:=True    // Deactivate image dump (test purpose)
-//featuresFlags._917:=True // commit to git generated project
-//featuresFlags._405:=True // add framework sources to workspace
-//featuresFlags._406:=True // do not add compiled frameworks to workspace
-//featuresFlags._475:=True // deactivate code signing on framework
-//featuresFlags._234:=True // Add in coreData model Record abstract entity
+
 FEATURE.isDebug(8858)  // Activates a debug mode for UI
 FEATURE.makeAlias("debug"; 8858)
-//FEATURE.wip("devGallery")  // Allow to dev with local http gallery
-
-// Use old behaviour
-//featuresFlags._677:=True // Format fields when dumping data from rest (userless if iOS app could translate)
 
 If (True:C214)  // DELIVERED
 	
@@ -155,6 +147,14 @@ FEATURE.isWIP("taskIndicator")  // UI for background tasks executing
 
 FEATURE.isWIP("sourceClass")  // Work with Source class to test the data source
 
+FEATURE.isWIP("buildWithCmd")  // allow to build using cmd only
+
+//mark:- DEV
+
+FEATURE.erm("gitCommit")  // commit to git generated project
+FEATURE.erm("generateForDev")  // add framework sources and do not add compiled frameworks to workspace, deactivate code signing on framework
+//FEATURE.isWip("devGallery")  // Allow to dev with local http gallery
+
 //mark:-⛔ PENDING
 FEATURE.isPending(129953)  // [MOBILE] Handle Many-one-Many relations
 FEATURE.isPending("compressionOfTemplates")  // Use the archive "/RESOURCES/template.zip" instead of "templates" folder in builded component
@@ -165,6 +165,8 @@ FEATURE.isPending("withWidgetActions")  // Enable widget actions
 FEATURE.isPending(114338)  // Support Collection of field injected into detail template https://project.4d.com/issues/114338
 FEATURE.isPending("droppingNext"; 114338)  // Allow to drop a multivalued field next to another existing dropped multivalued fields
 FEATURE.isPending("iosSDKfromAWS")  // Download iOS SDK from AWS
+
+FEATURE.isPending("coreDataAbstractEntity")  // Add in coreData model Record abstract entity
 
 /* -------------------------------------
 OVERRIDE WITH LOCAL PREFERENCES

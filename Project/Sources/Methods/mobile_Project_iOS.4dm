@@ -654,7 +654,7 @@ If ($in.create)
 		// ----------------------------------------------------
 		
 		// Add sources if any to workspace {
-		If (Bool:C1537(FEATURE._405))  // In feature until fix project launch with xcode
+		If (Bool:C1537(FEATURE.with("generateForDev")))  // In feature until fix project launch with xcode
 			
 			Xcode(New object:C1471(\
 				"action"; "workspace-addsources"; \
@@ -664,7 +664,7 @@ If ($in.create)
 		//}
 		
 		// Backup into git {
-		If (Bool:C1537(FEATURE._917))
+		If (Bool:C1537(FEATURE.with("gitCommit")))
 			
 			git(New object:C1471(\
 				"action"; "config core.autocrlf"; \

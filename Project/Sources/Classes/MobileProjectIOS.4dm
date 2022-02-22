@@ -576,6 +576,8 @@ Function _generateTemplates($out : Object; $tags : Object)
 	//doc_UNLOCK_DIRECTORY(New object("path"; $in.path)) // ASK: move elsewhere
 	
 	//  MARK: STRUCTURE & DATA
+	
+	// Create catalog and data files {
 Function _manageDataSet($out : Object)
 	var $in; $project; $tags; $template : Object
 	$in:=This:C1470.input
@@ -583,7 +585,6 @@ Function _manageDataSet($out : Object)
 	$tags:=$out.tags
 	$template:=$out.rootTemplate
 	
-	// Create catalog and data files {
 	If ($in.structureAdjustments=Null:C1517)
 		
 		$in.structureAdjustments:=Bool:C1537($in.test)  // default value for test
@@ -599,6 +600,32 @@ Function _manageDataSet($out : Object)
 			"dataModel"; $project.dataModel; \
 			"relation"; True:C214)).values))
 		
+	End if 
+	
+	If (FEATURE.with("buildWithCmd"))
+		
+		If (FEATURE.with("xcDataModelClass"))
+			$out.coreData:=cs:C1710.xcDataModel.new($project).run(\
+				/*path*/$in.path+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"; \
+				/*options*/New object:C1471("flat"; False:C215; "relationship"; True:C214))
+		Else 
+			$out.coreData:=xcDataModel(New object:C1471(\
+				"action"; "xcdatamodel"; \
+				"dataModel"; $project.dataModel; \
+				"actions"; $project.actions; \
+				"flat"; False:C215; \
+				"relationship"; True:C214; \
+				"path"; $in.path+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"))
+		End if 
+		
+		ob_error_combine($out; $out.coreData)
+		
+	End if 
+	
+	If (FEATURE.with("buildWithCmd"))
+		If (Bool:C1537($in.noData))  // for the moment deactivate data dump,
+			return   // maybe the key must be passed to dump from a remote server source later
+		End if 
 	End if 
 	
 	$out.dump:=dataSet(New object:C1471(\
@@ -674,21 +701,25 @@ Function _manageDataSet($out : Object)
 	ob_error_combine($out; $out.dumpCopy)
 	//}
 	
-	If (FEATURE.with("xcDataModelClass"))
-		$out.coreData:=cs:C1710.xcDataModel.new($project).run(\
-			/*path*/$in.path+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"; \
-			/*options*/New object:C1471("flat"; False:C215; "relationship"; True:C214))
-	Else 
-		$out.coreData:=xcDataModel(New object:C1471(\
-			"action"; "xcdatamodel"; \
-			"dataModel"; $project.dataModel; \
-			"actions"; $project.actions; \
-			"flat"; False:C215; \
-			"relationship"; True:C214; \
-			"path"; $in.path+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"))
+	If (Not:C34(FEATURE.with("buildWithCmd")))
+		
+		If (FEATURE.with("xcDataModelClass"))
+			$out.coreData:=cs:C1710.xcDataModel.new($project).run(\
+				/*path*/$in.path+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"; \
+				/*options*/New object:C1471("flat"; False:C215; "relationship"; True:C214))
+		Else 
+			$out.coreData:=xcDataModel(New object:C1471(\
+				"action"; "xcdatamodel"; \
+				"dataModel"; $project.dataModel; \
+				"actions"; $project.actions; \
+				"flat"; False:C215; \
+				"relationship"; True:C214; \
+				"path"; $in.path+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"))
+		End if 
+		
+		ob_error_combine($out; $out.coreData)
+		
 	End if 
-	
-	ob_error_combine($out; $out.coreData)
 	
 	If (Not:C34(Bool:C1537($project.dataSource.doNotGenerateDataAtEachBuild)))
 		
@@ -830,7 +861,7 @@ Function _generateCapabilities($out : Object; $appFolder : 4D:C1709.Folder)
 	// Internal feature to help to dev iOS project
 Function _devFeatures($out : Object)
 	
-	If (Bool:C1537(FEATURE._405))  // In feature until fix project launch with xcode
+	If (Bool:C1537(FEATURE.with("generateForDev")))  // In feature until fix project launch with xcode
 		
 		Xcode(New object:C1471(\
 			"action"; "workspace-addsources"; \
@@ -839,7 +870,7 @@ Function _devFeatures($out : Object)
 	//}
 	
 	// Backup into git {
-	If (Bool:C1537(FEATURE._917))
+	If (Bool:C1537(FEATURE.with("gitCommit")))
 		
 		git(New object:C1471(\
 			"action"; "config core.autocrlf"; \

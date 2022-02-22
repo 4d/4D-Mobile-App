@@ -47,7 +47,7 @@ Function run($path : Text; $options : Object)->$out : Object
 			$index:=$index+1
 		End for each 
 		
-		If (Bool:C1537(FEATURE._234))
+		If (Bool:C1537(FEATURE.with("coreDataAbstractEntity")))
 			
 			// Parent abtract Record entity in model, with common private fields
 			var $Txt_tableName : Text
@@ -180,7 +180,7 @@ Function createEntity($options : Object; $Dom_model : Text; $Lon_tableID : Integ
 	var $Dom_userInfo; $Dom_entity; $Dom_userInfo; $Dom_node; $Dom_attribute; $Dom_userInfo : Text
 	$Dom_entity:=DOM Create XML element arrays:C1097($Dom_model; "entity"; $tTxt_entityAttributes; $tTxt_entityValues)
 	
-	If (Bool:C1537(FEATURE._234))
+	If (Bool:C1537(FEATURE.with("coreDataAbstractEntity")))
 		
 		DOM SET XML ATTRIBUTE:C866($Dom_entity; \
 			"parentEntity"; "Record")
