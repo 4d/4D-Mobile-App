@@ -114,7 +114,7 @@ Case of
 				var $manifest : Object
 				$manifest:=$o.file("manifest.json")
 				
-				If (False:C215)  // FEATURE.wip("formatMarketPlace")  // Support zip when listing
+				If (False:C215)  // FEATURE.with("formatMarketPlace")  // Support zip when listing
 					
 					If ($o.extension=SHARED.archiveExtension)
 						
