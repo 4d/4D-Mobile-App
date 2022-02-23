@@ -5,16 +5,23 @@ Class constructor($project : Object)
 	Super:C1705($project)
 	
 	// Copy project (to not modify original project data)
-	
 	If (Count parameters:C259>=1)
 		This:C1470.project:=This:C1470._cleanCopyProject($project)
-		This:C1470.productName:=This:C1470.project._folder.name
 	Else 
 		If (This:C1470.debug)  // use last build to test and test again
 			This:C1470.project:=ob_parseFile(This:C1470.logFolder.file("lastBuild.ios.4dmobile")).value
-			This:C1470.productName:="debug"
 		End if 
 	End if 
+	
+	// Compute product name (used for files and scheme/target)
+	Case of 
+		: (Value type:C1509(This:C1470.project.name)=Is text:K8:3)
+			This:C1470.productName:=This:C1470.project.name
+		: (This:C1470.project._folder#Null:C1517)
+			This:C1470.productName:=This:C1470.project._folder.name
+		Else 
+			This:C1470.productName:="debug"
+	End case 
 	
 	// Keep the last used project
 	This:C1470.logFolder.file("lastBuild.ios.4dmobile").setText(JSON Stringify:C1217(This:C1470.project; *))
@@ -113,7 +120,7 @@ Function build()->$result : Object
 	If ($Obj_result_build.app=Null:C1517)
 		
 		var $pathname : Text
-		$pathname:=$in.path+Convert path POSIX to system:C1107("build/Build/Products/Debug-iphonesimulator/")+This:C1470.productName+".app"
+		$pathname:=$in.path+Convert path POSIX to system:C1107("build/Build/Products/Debug-iphonesimulator/")+This:C1470.schemeName+".app"
 		
 		If (Test path name:C476($pathname)=Is a folder:K24:2)
 			
@@ -239,6 +246,11 @@ Function _runSimulator($out : Object)
 		
 	End if 
 	
+Function get _schemeName()->$scheme : Text
+	$scheme:=This:C1470.productName  // see usage as tag ___PRODUCT___ in template
+	
+Function get _archiveName()->$archive : Text
+	$archive:=This:C1470.productName
 	
 Function _archive($out : Object)->$Obj_result_build : Object
 	This:C1470.postStep("projectArchive")
@@ -247,9 +259,12 @@ Function _archive($out : Object)->$Obj_result_build : Object
 	var $in : Object
 	$in:=This:C1470.input
 	
+	var $archivePath : 4D:C1709.Folder
+	$archivePath:=Folder:C1567($in.path; fk platform path:K87:2).folder("archive").folder(This:C1470._archiveName+".xcarchive")
+	
 	$Obj_result_build:=Xcode(New object:C1471(\
 		"action"; "build"; \
-		"scheme"; This:C1470.productName; \
+		"scheme"; This:C1470._schemeName; \
 		"destination"; $in.path; \
 		"sdk"; "iphoneos"; \
 		"verbose"; This:C1470.debug; \
@@ -257,7 +272,7 @@ Function _archive($out : Object)->$Obj_result_build : Object
 		"archive"; True:C214; \
 		"allowProvisioningUpdates"; True:C214; \
 		"allowProvisioningDeviceRegistration"; True:C214; \
-		"archivePath"; Convert path system to POSIX:C1106($in.path+"archive"+Folder separator:K24:12+This:C1470.productName+".xcarchive")))
+		"archivePath"; $archivePath.path))
 	
 	This:C1470.logFolder.file("lastArchive.xlog").setText(String:C10($Obj_result_build.out))
 	
@@ -276,8 +291,8 @@ Function _archive($out : Object)->$Obj_result_build : Object
 			"teamID"; String:C10($in.project.organization.teamId); \
 			"stripSwiftSymbols"; Bool:C1537(SHARED.swift.Export.stripSwiftSymbols); \
 			"exportMethod"; String:C10(SHARED.swift.Export.method); \
-			"exportPath"; Convert path system to POSIX:C1106($in.path+"archive"+Folder separator:K24:12); \
-			"archivePath"; Convert path system to POSIX:C1106($in.path+"archive"+Folder separator:K24:12+This:C1470.productName+".xcarchive")))
+			"exportPath"; Folder:C1567($in.path; fk platform path:K87:2).folder("archive").path; \
+			"archivePath"; $archivePath.path))
 		
 		This:C1470.logFolder.file("lastExportArchive.xlog").setText(String:C10($Obj_result_build.out))
 		
@@ -290,7 +305,6 @@ Function _archive($out : Object)->$Obj_result_build : Object
 		
 	End if 
 	
-	
 Function _build($out : Object)->$Obj_result_build : Object
 	var $in : Object
 	$in:=This:C1470.input
@@ -301,7 +315,7 @@ Function _build($out : Object)->$Obj_result_build : Object
 	
 	$Obj_result_build:=Xcode(New object:C1471(\
 		"action"; "build"; \
-		"scheme"; This:C1470.productName; \
+		"scheme"; This:C1470._schemeName; \
 		"destination"; $in.path; \
 		"sdk"; $in.sdk; \
 		"verbose"; This:C1470.debug; \
@@ -425,7 +439,7 @@ Function _createTags()->$tags : Object
 	
 	$tags:=OB Copy:C1225(SHARED.tags)  // Common project tags
 	
-	$tags.product:=This:C1470.productName
+	$tags.product:=This:C1470.productName  //tag ___PRODUCT___
 	$tags.packageName:=$tags.product
 	
 	// Project file tags
@@ -533,13 +547,12 @@ Function _generateTemplates($out : Object; $tags : Object)
 		$template.source:=$Dir_template.platformPath
 	End if 
 	$template.assets.target:=$in.path+Convert path POSIX to system:C1107($template.assets.path)+Folder separator:K24:12+$template.assets.name+Folder separator:K24:12
-	If ($project._folder=Null:C1517)
-		$template.assets.source:=This:C1470.paths.projects().platformPath+This:C1470.productName+Folder separator:K24:12+$template.assets.name+Folder separator:K24:12
-	Else 
-		$template.assets.source:=This:C1470.project._folder.platformPath+Folder separator:K24:12+$template.assets.name+Folder separator:K24:12
-		If (Not:C34(Test path name:C476($template.assets.source)=Is a folder:K24:2))
-			$template.assets.source:=This:C1470.paths.projects().platformPath+This:C1470.productName+Folder separator:K24:12+$template.assets.name+Folder separator:K24:12
-		End if 
+	If ($project._folder#Null:C1517)
+		$template.assets.source:=This:C1470.project._folder.folder($template.assets.name).platformPath
+	End if 
+	If ($template.assets.source=Null:C1517 || Not:C34(Folder:C1567($template.assets.source).exists))
+		// expected path for mobile project file
+		$template.assets.source:=This:C1470.paths.projects().folder(This:C1470.productName).folder($template.assets.name).platformPath
 	End if 
 	
 	$out.rootTemplate:=$template
