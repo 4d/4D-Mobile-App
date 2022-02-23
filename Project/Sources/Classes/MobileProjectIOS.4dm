@@ -38,7 +38,7 @@ Function create()->$result : Object
 	
 	$result:=New object:C1471(\
 		"path"; This:C1470.input.path; \
-		"success"; False:C215; \
+		"success"; True:C214; \
 		"errors"; New collection:C1472)
 	
 	//===============================================================
@@ -81,15 +81,17 @@ Function create()->$result : Object
 		This:C1470.success:=False:C215
 		$result.success:=False:C215
 		// Failed to unzip sdk
-		//$ui.alert("failedDecompressTheSdk")
-		//$log.error("Failed to unzip sdk")
-		
+		This:C1470.postError("failedDecompressTheSdk")
+		This:C1470.logError("Failed to unzip sdk")
 		return   // guard stop
 	End if 
 	
 	//===============================================================
 	This:C1470.postStep("workspaceCreation")
 	This:C1470._generateTemplates($result; $result.tags)
+	If (Not:C34($result.success))
+		return   // guard stop: no need to do dump if failed to create the app
+	End if 
 	This:C1470._manageDataSet($result)
 	This:C1470._generateCapabilities($result)
 	This:C1470._devFeatures($result)
@@ -550,7 +552,7 @@ Function _generateTemplates($out : Object; $tags : Object)
 	If ($project._folder#Null:C1517)
 		$template.assets.source:=This:C1470.project._folder.folder($template.assets.name).platformPath
 	End if 
-	If ($template.assets.source=Null:C1517 || Not:C34(Folder:C1567($template.assets.source).exists))
+	If ($template.assets.source=Null:C1517 || Not:C34(Folder:C1567($template.assets.source; fk platform path:K87:2).exists))
 		// expected path for mobile project file
 		$template.assets.source:=This:C1470.paths.projects().folder(This:C1470.productName).folder($template.assets.name).platformPath
 	End if 
