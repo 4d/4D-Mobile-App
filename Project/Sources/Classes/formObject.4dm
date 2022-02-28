@@ -24,19 +24,34 @@ Class constructor($name : Text)
 		
 	End if 
 	
-	//MARK:-
+	//MARK:-[COMPUTED ATTRIBUTES]
 	//=== === === === === === === === === === === === === === === === === === ===
-Function get colors()->$color : Object
+Function get colors() : Object
 	
 	var $altBackground; $background; $foreground : Text
 	
 	OBJECT GET RGB COLORS:C1074(*; This:C1470.name; $foreground; $background; $altBackground)
-	$color:=New object:C1471("foreground"; $foreground; "background"; $background; "altBackground"; $altBackground)
+	return (New object:C1471(\
+		"foreground"; $foreground; \
+		"background"; $background; \
+		"altBackground"; $altBackground))
 	
+	//=== === === === === === === === === === === === === === === === === === ===
+Function get foregroundColor() : Variant
+	
+	var $color : Variant
+	
+	OBJECT GET RGB COLORS:C1074(*; This:C1470.name; $color)
+	return ($color)
+	
+	//=== === === === === === === === === === === === === === === === === === ===
+Function set foregroundColor($color : Variant)
+	
+	OBJECT SET RGB COLORS:C628(*; This:C1470.name; $color)
 	
 	//MARK:-
 	//=== === === === === === === === === === === === === === === === === === ===
-	// Adds this widget to a group
+	/// Adds this widget to a group
 Function addToGroup($group : cs:C1710.group) : cs:C1710.formObject
 	
 	If (Asserted:C1132(OB Instance of:C1731($group; cs:C1710.group); "The parameter isn't a group"))

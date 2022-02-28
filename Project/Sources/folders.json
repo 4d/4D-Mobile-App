@@ -1,14 +1,4 @@
 {
-	"__": {
-		"methods": [
-			"_and",
-			"_bool",
-			"_choose",
-			"_or",
-			"COMPILER__",
-			"test_"
-		]
-	},
 	"____FOR_TESTS": {
 		"classes": [
 			"ALL_TYPESEntity",
@@ -121,6 +111,16 @@
 			"COMPILER_UNUSED",
 			"net",
 			"tester_net"
+		]
+	},
+	"(__)": {
+		"methods": [
+			"(_and)",
+			"(_bool)",
+			"(_choose)",
+			"(_or)",
+			"(COMPILER__)",
+			"(test_)"
 		]
 	},
 	"(HDI_COLOR)": {},
@@ -738,7 +738,6 @@
 	},
 	"lib": {
 		"groups": [
-			"__",
 			"col",
 			"dev",
 			"doc",
@@ -1067,6 +1066,7 @@
 	},
 	"trash": {
 		"groups": [
+			"(__)",
 			"(HDI_COLOR)"
 		]
 	}

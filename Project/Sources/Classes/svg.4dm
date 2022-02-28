@@ -1608,6 +1608,7 @@ Function cy($cy : Real; $applyTo) : cs:C1710.svg
 	//———————————————————————————————————————————————————————————
 Function width($width : Real; $applyTo) : cs:C1710.svg
 	
+	//FIXME:Target specific treatment
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
 		
 		If (Count parameters:C259>=2)
@@ -2878,30 +2879,54 @@ Function size($width : Real; $height : Real; $unit : Text) : cs:C1710.svg
 				: (Count parameters:C259>=3)
 					
 					Super:C1706.setAttributes($node; New object:C1471(\
-						"width"; Choose:C955($width=0; "auto"; String:C10($width; "&xml")+String:C10($unit)); \
-						"height"; Choose:C955($height=0; "auto"; String:C10($height; "&xml")+String:C10($unit))))
+						"width"; $width=0 ? "auto" : String:C10($width; "&xml")+String:C10($unit); \
+						"height"; $height=0 ? "auto" : String:C10($height; "&xml")+String:C10($unit)))
 					
 					//……………………………………………………………………………………………………
 				: (Count parameters:C259>=2)
 					
 					Super:C1706.setAttributes($node; New object:C1471(\
-						"width"; Choose:C955($width=0; "auto"; String:C10($width; "&xml")); \
-						"height"; Choose:C955($height=0; "auto"; String:C10($height; "&xml"))))
+						"width"; $width=0 ? "auto" : String:C10($width; "&xml"); \
+						"height"; $height=0 ? "auto" : String:C10($height; "&xml")))
 					
 					//……………………………………………………………………………………………………
 				: (Count parameters:C259>=1)
 					
-					Super:C1706.setAttribute($node; "width"; Choose:C955($width=0; "auto"; String:C10($width; "&xml")))
+					Super:C1706.setAttribute($node; "width"; $width=0 ? "auto" : String:C10($width; "&xml"))
 					
 					//……………………………………………………………………………………………………
 			End case 
 			
 			//______________________________________________________
-		: ($element="line")\
-			 | ($element="circle")\
+		: ($element="line")
+			
+			Case of 
+					
+					//……………………………………………………………………………………………………
+				: (Count parameters:C259>=3)
+					
+					Super:C1706.setAttribute($node; "y2"; String:C10(Num:C11(Super:C1706.getAttribute($node; "y1"))+$width; "&xml")+String:C10($unit))
+					Super:C1706.setAttribute($node; "x2"; String:C10(Num:C11(Super:C1706.getAttribute($node; "x1"))+$height; "&xml")+String:C10($unit))
+					
+					//……………………………………………………………………………………………………
+				: (Count parameters:C259>=2)  // Length & offset
+					
+					Super:C1706.setAttribute($node; "y2"; String:C10(Num:C11(Super:C1706.getAttribute($node; "y1"))+$width; "&xml"))
+					Super:C1706.setAttribute($node; "x2"; String:C10(Num:C11(Super:C1706.getAttribute($node; "x1"))+$height; "&xml"))
+					
+					//……………………………………………………………………………………………………
+				: (Count parameters:C259>=1)  // Length
+					
+					Super:C1706.setAttribute($node; "y2"; String:C10(Num:C11(Super:C1706.getAttribute($node; "y1"))+$width; "&xml"))
+					
+					//……………………………………………………………………………………………………
+			End case 
+			
+			//______________________________________________________
+		: ($element="circle")\
 			 | ($element="ellipse")
 			
-			//FIXME:TO_DO
+			//FIXME:TO_DO?
 			
 			//______________________________________________________
 		Else 
