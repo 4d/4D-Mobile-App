@@ -32,11 +32,7 @@ Function create($do : Boolean)
 		
 	End if 
 	
-/*========================================================
-	
-                    USER
-	
-========================================================*/
+	//MARK:-USER
 Function userCache()->$folder : 4D:C1709.Folder
 	
 	If (Is macOS:C1572)
@@ -81,11 +77,7 @@ Function preferences($fileName : Text)->$target : Object
 	
 	$target:=This:C1470.target
 	
-/*========================================================
-	
-                    INTERNAL
-	
-========================================================*/
+	//MARK:-INTERNAL
 Function cacheSdkApple()->$zip : 4D:C1709.ZipFile
 	
 	$zip:=This:C1470.cacheSDK().folder(Application version:C493+"/iOS/").file("sdk.zip")
@@ -177,13 +169,6 @@ Function scripts()->$folder : 4D:C1709.Folder  // scripts folder
 	
 	// Unsandboxed for use with LEP
 	$folder:=Folder:C1567(Folder:C1567("/RESOURCES/scripts").platformPath; fk platform path:K87:2)
-	This:C1470.target:=$folder
-	This:C1470.exists:=$folder.exists
-	
-/*========================================================*/
-Function _icons()->$folder : 4D:C1709.Folder  // icons folder
-	
-	$folder:=Folder:C1567("/RESOURCES/images/tableIcons")
 	This:C1470.target:=$folder
 	This:C1470.exists:=$folder.exists
 	
@@ -287,11 +272,7 @@ Function androidProjectTemplateFiles()->$folder : 4D:C1709.Folder  // android pr
 	This:C1470.target:=$folder
 	This:C1470.exists:=$folder.exists
 	
-/*========================================================
-	
-                  USER DATABASE
-	
-========================================================*/
+	//MARK:-USER DATABASE
 Function databasePreferences($fileName : Text)->$target : Object  //  Writable user database preferences folder
 	
 	If (Count parameters:C259>=1)
@@ -559,10 +540,10 @@ Function navigation($relativePath : Text)->$file : 4D:C1709.Folder
 	
 	$file:=This:C1470._getResource($relativePath; "navigation")
 	
+	//MARK:-[PRIVATE]
 /*========================================================*/
 Function _getResource($relativePath : Text; $type : Text)->$target : Object
 	
-	var $error : Object
 	var $folder : 4D:C1709.Folder
 	var $archive : 4D:C1709.ZipArchive
 	var $error : cs:C1710.error
@@ -651,3 +632,9 @@ Function _getResource($relativePath : Text; $type : Text)->$target : Object
 		End case 
 	End if 
 	
+/*========================================================*/
+Function _icons()->$folder : 4D:C1709.Folder  // icons folder
+	
+	$folder:=Folder:C1567("/RESOURCES/images/tableIcons")
+	This:C1470.target:=$folder
+	This:C1470.exists:=$folder.exists

@@ -33,13 +33,13 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		var $o : cs:C1710.dateTime
-		$o:=cs:C1710.dateTime.new()
+		var $dateTime : cs:C1710.dateTime
+		$dateTime:=cs:C1710.dateTime.new()
 		
 		//%W-550.2
-		$t:=$o.stamp()
-		$t:=$o.stamp(!1958-08-08!)
-		$t:=$o.stamp(!1958-08-08!; ?12:10:30?)
+		$t:=$dateTime.stamp()
+		$t:=$dateTime.stamp(!1958-08-08!)
+		$t:=$dateTime.stamp(!1958-08-08!; ?12:10:30?)
 		
 		//%W+550.2
 		
@@ -262,27 +262,27 @@ Case of
 		//________________________________________
 	: (False:C215)
 		
-		var $o : cs:C1710.lep
-		$o:=cs:C1710.lep.new()
+		var $lep : cs:C1710.lep
+		$lep:=cs:C1710.lep.new()
 		
-		$o.asynchronous().launch("open"; "/Applications/Pages.app")
+		$lep.asynchronous().launch("open"; "/Applications/Pages.app")
 		
 		If (False:C215)
 			
-			$o.launch("kill"; String:C10($o.pid))
+			$lep.launch("kill"; String:C10($lep.pid))
 			
 		Else 
 			
-			$o.launch("osascript -e"; "'quit app \"Calculator.app\"'")
+			$lep.launch("osascript -e"; "'quit app \"Calculator.app\"'")
 			
 		End if 
 		
-		$o.launch("/bin/ls -l"; "/Users")
-		$c:=Split string:C1554(String:C10($o.outputStream); "\n")
+		$lep.launch("/bin/ls -l"; "/Users")
+		$c:=Split string:C1554(String:C10($lep.outputStream); "\n")
 		
-		$o.reset()
-		$o.launch("ioreg -n IODisplayWrangler |grep -i IOPowerManagement")
-		$t:=$o.outputStream
+		$lep.reset()
+		$lep.launch("ioreg -n IODisplayWrangler |grep -i IOPowerManagement")
+		$t:=$lep.outputStream
 		
 		//________________________________________
 	: (True:C214)

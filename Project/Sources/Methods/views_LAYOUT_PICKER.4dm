@@ -108,29 +108,29 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 					
 					For each ($fileName; $manifest.mandatory) While ($success)
 						
-						$success:=$userTemplates.folder($folder.name).file($fileName).exists | \
-							$userTemplates.folder($folder.name).folder("ios").file($fileName).exists
+						$success:=$userTemplates.folder($folder.name).file($fileName).exists\
+							 || $userTemplates.folder($folder.name).folder("ios").file($fileName).exists
 						
 					End for each 
 					
 					//______________________________________________________
 				: ($forAndroidOnly & $tmpl.android)
 					
-					$success:=$userTemplates.folder($folder.name).file("app/src/main/res/layout/layout.xml").exists | \
-						$userTemplates.folder($folder.name).folder("android").file("app/src/main/res/layout/layout.xml").exists
+					$success:=$userTemplates.folder($folder.name).file("app/src/main/res/layout/layout.xml").exists\
+						 || $userTemplates.folder($folder.name).folder("android").file("app/src/main/res/layout/layout.xml").exists
 					
 					//______________________________________________________
 				: ($tmpl.ios & $tmpl.android)
 					
 					For each ($fileName; $manifest.mandatory) While ($success)
 						
-						$success:=$userTemplates.folder($folder.name).file($fileName).exists | \
-							$userTemplates.folder($folder.name).folder("ios").file($fileName).exists
+						$success:=$userTemplates.folder($folder.name).file($fileName).exists\
+							 || $userTemplates.folder($folder.name).folder("ios").file($fileName).exists
 						
 					End for each 
 					
-					$success:=$success & $userTemplates.folder($folder.name).file("app/src/main/res/layout/layout.xml").exists | \
-						$userTemplates.folder($folder.name).folder("android").file("app/src/main/res/layout/layout.xml").exists
+					$success:=$success & $userTemplates.folder($folder.name).file("app/src/main/res/layout/layout.xml").exists\
+						 || $userTemplates.folder($folder.name).folder("android").file("app/src/main/res/layout/layout.xml").exists
 					
 					//______________________________________________________
 				Else 
