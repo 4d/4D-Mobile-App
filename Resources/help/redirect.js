@@ -8,20 +8,12 @@ if (navigator.browserLanguage)
 else
 	var language = navigator.language;
 		
-if (language.indexOf('fr') > -1) document.location.href = 'https://developer.4d.com/4d-for-ios/fr/';
-		
-else if (language.indexOf('en') > -1) document.location.href = 'https://developer.4d.com/4d-for-ios/en/';
-		
-else if (language.indexOf('ja') > -1) document.location.href = 'https://developer.4d.com/4d-for-ios/ja/';
-		
-else if (language.indexOf('es') > -1) document.location.href = 'https://developer.4d.com/4d-for-ios/es/';
-		
-//	else if (language.indexOf('de') > -1) document.location.href = 'https://developer.4d.com/4d-for-ios/de/';
-		
-//	else if (language.indexOf('it') > -1) document.location.href = 'Resources/it.lproj/Help/Help.html';
-		
-// else
-		
-	document.location.href = 'https://developer.4d.com/4d-for-ios/en/';
-
+if (language.indexOf('fr') > -1) document.location.href = 'https://developer.4d.com/go-mobile/fr/';	
+else if (language.indexOf('es') > -1) document.location.href = 'https://developer.4d.com/go-mobile/es/';
+else if (language.indexOf('ja') > -1) document.location.href = 'https://developer.4d.com/go-mobile/ja/';
+else if (language.indexOf('pt') > -1) document.location.href = 'https://developer.4d.com/go-mobile/pt/';
+//	else if (language.indexOf('de') > -1) document.location.href = 'https://developer.4d.com/go-mobile/de/';
+//	else if (language.indexOf('cs') > -1) document.location.href = 'https://developer.4d.com/go-mobile/cs/';
+	document.location.href = 'https://developer.4d.com/go-mobile/';
+	
 // -->		
