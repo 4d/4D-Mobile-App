@@ -285,12 +285,12 @@ Case of
 				//……………………………………………………………………………………………………………
 			: (String:C10($Obj_in.action.icon)[[1]]="/")  // host icons
 				
-				$Obj_out:=_o_COMPONENT_Pathname("host_actionIcons").file(Delete string:C232($Obj_in.action.icon; 1; 1))
+				$Obj_out:=cs:C1710.path.new().hostIcons().file(Delete string:C232($Obj_in.action.icon; 1; 1))
 				
 				//……………………………………………………………………………………………………………
 			Else 
 				
-				$Obj_out:=_o_COMPONENT_Pathname("actionIcons").file($Obj_in.action.icon)
+				$Obj_out:=cs:C1710.path.new().actionIcons().file($Obj_in.action.icon)
 				
 				//……………………………………………………………………………………………………………
 		End case 

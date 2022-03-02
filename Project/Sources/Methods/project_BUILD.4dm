@@ -265,7 +265,7 @@ If (Asserted:C1132($project#Null:C1517))
 					"url"; String:C10($project.server.urls.production); \
 					"headers"; New object:C1471(\
 					"X-MobileApp"; "1"; \
-					"Authorization"; "Bearer "+_o_COMPONENT_Pathname("key").getText())))
+					"Authorization"; "Bearer "+cs:C1710.path.new().key().getText())))
 				
 				$success:=$o.success
 				

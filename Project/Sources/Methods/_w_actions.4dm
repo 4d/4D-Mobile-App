@@ -116,7 +116,7 @@ Case of
 		//     User actions    //
 		//=======================
 		
-		$folder:=_o_COMPONENT_Pathname("host_actions")
+		$folder:=cs:C1710.path.new().hostInputControls()
 		
 		If ($folder.exists)
 			

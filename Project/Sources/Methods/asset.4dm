@@ -138,7 +138,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 							//........................................
 						Else 
 							
-							$Dir_source:=_o_COMPONENT_Pathname("formatterImages").platformPath
+							$Dir_source:=cs:C1710.path.new().actionIcons().platformPath  // never called?
 							
 							//........................................
 					End case 

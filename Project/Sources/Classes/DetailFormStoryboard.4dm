@@ -9,7 +9,7 @@ Class constructor
 	End if 
 	This:C1470.type:="detailform"
 	
-	This:C1470.relationFolder:=_o_COMPONENT_Pathname("templates").folder("relation")
+	This:C1470.relationFolder:=cs:C1710.path.new().templates().folder("relation")
 	
 Function run
 	C_OBJECT:C1216($0; $Obj_out)

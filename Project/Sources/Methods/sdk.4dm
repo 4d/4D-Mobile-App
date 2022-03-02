@@ -123,8 +123,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 			
 			If (Test path name:C476(String:C10($Obj_param.file))#Is a document:K24:1)
 				
-				//$Obj_param.file:=_o_Pathname ("sdk")+String($Obj_param.template.sdk.name)+".zip"
-				$Obj_param.file:=_o_COMPONENT_Pathname("sdk").file(String:C10($Obj_param.template.sdk.name)+".zip").platformPath
+				$Obj_param.file:=cs:C1710.path.new().sdk().file(String:C10($Obj_param.template.sdk.name)+".zip").platformPath
 				
 			End if 
 			
