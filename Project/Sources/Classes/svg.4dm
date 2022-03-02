@@ -19,7 +19,17 @@ Class constructor($content)
 	This:C1470.graphic:=Null:C1517
 	This:C1470.store:=New collection:C1472
 	
+	// Elements that can have graphic elements and other container elements as child elements.
+	This:C1470._container:=New collection:C1472("a"; "defs"; "g"; "marker"; "mask"; "pattern"; "svg"; "switch"; "symbol")
+	
+	//  Graphics element that is defined by some combination of straight lines and curves
+	This:C1470._shapes:=New collection:C1472("path"; "rect"; "circle"; "ellipse"; "line"; "polyline"; "polygon")
+	
+	// Elements that provide additional descriptive information about their parent.
+	This:C1470._descriptive:=New collection:C1472("desc"; "metadata"; "title")
+	
 	This:C1470._notContainer:=New collection:C1472("rect"; "line"; "image"; "circle"; "ellipse"; "path"; "polygon"; "polyline"; "use"; "textArea")
+	
 	This:C1470._aspectRatioValues:=New collection:C1472("none"; "xMinYMin"; "xMidYMin"; "xMaxYMin"; "xMinYMid"; "xMidYMid"; "xMaxYMid"; "xMinYMax"; "xMidYMax"; "xMaxYMax")
 	This:C1470._textRenderingValue:=New collection:C1472("auto"; "optimizeSpeed"; "optimizeLegibility"; "geometricPrecision"; "inherit")
 	

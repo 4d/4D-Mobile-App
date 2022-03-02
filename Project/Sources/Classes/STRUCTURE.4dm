@@ -366,7 +366,9 @@ Function fieldList()
 				
 				$row:=$row+1
 				
-				$withError:=($unsynchronized#Null:C1517)
+				//$withError:=($unsynchronized#Null)
+				
+				$withError:=($unsynchronized#Null:C1517) && ($unsynchronized.length>0)
 				
 				If ($withError)
 					

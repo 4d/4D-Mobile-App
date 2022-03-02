@@ -22,16 +22,6 @@ Class constructor($id : Text; $options : Variant)
 	// ⚠️ In some cases (Surface), the Home folder is not the parent of the desktop folder.
 	This:C1470.home:=Folder:C1567(Split string:C1554(Folder:C1567(fk desktop folder:K87:19).path; "/").resize(3).join("/"))
 	
-/*========================================================*/
-Function create($do : Boolean)
-	
-	If ($do)
-		
-		This:C1470.target.create()
-		This:C1470.exists:=This:C1470.target.exists
-		
-	End if 
-	
 	//MARK:-USER
 Function userCache()->$folder : 4D:C1709.Folder
 	
@@ -296,7 +286,7 @@ Function projects($create : Boolean)->$folder : 4D:C1709.Folder  // Projects fol
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.create($create)
+		This:C1470._create($create)
 		
 	Else 
 		
@@ -316,7 +306,7 @@ Function products($create : Boolean)->$folder : 4D:C1709.Folder  // Products fol
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.create($create)
+		This:C1470._create($create)
 		
 	Else 
 		
@@ -352,7 +342,7 @@ Function host($create : Boolean)->$folder : 4D:C1709.Folder  // Mobile folder
 		
 		If (Count parameters:C259>=1)
 			
-			This:C1470.create($create)
+			This:C1470._create($create)
 			
 		Else 
 			
@@ -370,7 +360,7 @@ Function hostForms($create : Boolean)->$folder : 4D:C1709.Folder  // Form folder
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.create($create)
+		This:C1470._create($create)
 		
 	Else 
 		
@@ -387,7 +377,7 @@ Function hostFormatters($create : Boolean)->$folder : 4D:C1709.Folder  // Format
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.create($create)
+		This:C1470._create($create)
 		
 	Else 
 		
@@ -404,7 +394,7 @@ Function hostInputControls($create : Boolean)->$folder : 4D:C1709.Folder  // Act
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.create($create)
+		This:C1470._create($create)
 		
 	Else 
 		
@@ -421,7 +411,7 @@ Function hostIcons($create : Boolean)->$folder : 4D:C1709.Folder  // Icons folde
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.create($create)
+		This:C1470._create($create)
 		
 	Else 
 		
@@ -438,7 +428,7 @@ Function hostlistForms($create : Boolean)->$folder : 4D:C1709.Folder  // form/li
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.create($create)
+		This:C1470._create($create)
 		
 	Else 
 		
@@ -455,7 +445,7 @@ Function hostloginForms($create : Boolean)->$folder : 4D:C1709.Folder  // login 
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.create($create)
+		This:C1470._create($create)
 		
 	Else 
 		
@@ -472,7 +462,7 @@ Function hostdetailForms($create : Boolean)->$folder : 4D:C1709.Folder  // form/
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.create($create)
+		This:C1470._create($create)
 		
 	Else 
 		
@@ -489,7 +479,7 @@ Function hostNavigationForms($create : Boolean)->$folder : 4D:C1709.Folder  // f
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.create($create)
+		This:C1470._create($create)
 		
 	Else 
 		
@@ -541,6 +531,16 @@ Function navigation($relativePath : Text)->$file : 4D:C1709.Folder
 	$file:=This:C1470._getResource($relativePath; "navigation")
 	
 	//MARK:-[PRIVATE]
+/*========================================================*/
+Function _create($do : Boolean)
+	
+	If ($do)
+		
+		This:C1470.target.create()
+		This:C1470.exists:=This:C1470.target.exists
+		
+	End if 
+	
 /*========================================================*/
 Function _getResource($relativePath : Text; $type : Text)->$target : Object
 	

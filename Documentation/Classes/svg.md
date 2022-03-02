@@ -32,15 +32,17 @@ This class will be augmented according to my needs but you are strongly encourag
 
 |Function|Action|
 |--------|------|   
-|.**rect** ( height : `Real` {; width : `Real` } {; attachTo} ) → `cs.svg` | To draw a rectangle
-|.**circle** ( radius : `Real` {; cx : `Real` {; cy : `Real`}} {; attachTo } ) → `cs.svg` | To draw a circle
-|.**ellipse** ( radiusX : `Real`; radiusY : `Real`; cx : `Real`; cy : `Real` {; attachTo } ) → `cs.svg` | To draw a circle  
-|.**line** ( x1 : `Real`; y1 : `Real`; x2 : `Real`; y2 : `Real` {; attachTo } ) → `cs.svg` | To draw a line  
-|.**polyline** ( points : `Text` \| `Collection` {; attachTo } ) → `cs.svg` | To draw a polyline
-|.**polygon** ( points : `Text` \| `Collection` {; attachTo } ) → `cs.svg` | To draw a polygon
-|.**text** ( text : `Text` {; attachTo } ) → `cs.svg` | To create a text
-|.**textArea** ( text : `Text` {; attachTo } ) → `cs.svg` | To create a text area
-|.**image** ( picture : `Picture` \| `4D.File` {; attachTo } ) → `cs.svg` | To put an image
+|.**rect** ( height : `Real` {; width : `Real` } {; attachTo} ) → `cs.svg` | Creates a rectangle<br>Rounded rectangles can be obtained using `.rx()` & `.ry()`
+|.**circle** ( radius : `Real` {; cx : `Real` {; cy : `Real`}} {; attachTo } ) → `cs.svg` | Creates a circle based on a center point and a radius.
+|.**ellipse** ( radiusX : `Real`; radiusY : `Real`; cx : `Real`; cy : `Real` {; attachTo } ) → `cs.svg` | Creates an ellipse based on a center point and two radii  
+|.**line** ( x1 : `Real`; y1 : `Real`; x2 : `Real`; y2 : `Real` {; attachTo } ) → `cs.svg` | Creates a line segment that starts at one point (`x1`,`y1`) and ends at another (`x2`,`y2`) 
+|.**polyline** ( points : `Text` \| `Collection` {; attachTo } ) → `cs.svg` | Creates a set of connected straight line segments. Typically, `polyline` elements define open shapes.
+|.**polygon** ( points : `Text` \| `Collection` {; attachTo } ) → `cs.svg` | Creates a closed shape consisting of a set of connected straight line segments.
+|.**text** ( text : `Text` {; attachTo } ) → `cs.svg` | Creates a graphics element consisting of text.
+|.**textArea** ( text : `Text` {; attachTo } ) → `cs.svg` | Creates a `textArea` element that allows simplistic wrapping of a text content within a given region.\*
+|.**image** ( picture : `Picture` \| `4D.File` {; attachTo } ) → `cs.svg` | Creates an image element.<br>Can refer to an image file or a picture type variable (embedded picture)
+
+\* The `textArea` elements are well rendered by 4D widgets but may not be supported by some browsers.
 
 ### Setting functions
 
@@ -52,7 +54,7 @@ This class will be augmented according to my needs but you are strongly encourag
 
 |Function|Action|
 |--------|------|
-|.**id** ( id : `Text` {; applyTo } ) → `cs.svg` | Sets the id of the element
+|.**id** ( id : `Text` {; applyTo } ) → `cs.svg` | Assigns a unique name to an element (standard XML attribute)
 |.**x** ( x : `Real` {; applyTo } ) → `cs.svg` | Sets the x
 |.**y** ( y : `Real` {; applyTo } ) → `cs.svg` | Sets the y
 |.**width** ( width : `Real` {; applyTo } ) → `cs.svg` | Sets the width
@@ -98,22 +100,22 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**newCanvas** ( { attributes : `Object` } ) → `cs.svg` | Close the current tree if any & create a new svg default structure.
 |.**close** () → `cs.svg` | Frees the memory taken up by the SVG tree \*
 |.**save** ( { keepStructure : `Boolean` } ) → `cs.svg` | Saves the content of the SVG tree into the initially loaded file or the last created file by calling `exportText()`
-|.**group** ( { id : `Text` {; attachTo }} ) → `cs.svg` | To define a group
+|.**group** ( { id : `Text` {; attachTo }} ) → `cs.svg` | Defines a `g` element who is a container element for grouping together related graphics elements.
 |.**symbol** ( name : `Text` {; applyTo } ) → `cs.svg` | To define a symbol
 |.**use** ( symbol : `Text` {; attachTo } ) → `cs.svg` | To place an occurence of a symbol
 |.**styleSheet** ( file : `4D.File` ) → `cs.svg` | Attach a style sheet
 
 \* After the execution,`.root`is null but `.graphic` & `.xml` are always available
 
-### Shortcuts &utilities functions
+### Shortcuts & utilities functions
  
 |Function|Action|
 |--------|------| 
 |.**square** ( side : `Real` {; attachTo } ) → `cs.svg` | To draw a square
-|.**color** ( color : `Text` {; applyTo } ) → `cs.svg` | Sets stroke and fill color
+|.**color** ( color : `Text` {; applyTo } ) → `cs.svg` | Defines the color of both the line and the fill (`stroke` & `fill` attributes)
 |.**opacity** ( opacity : `Real` {; applyTo } ) → `cs.svg` | Sets stroke and fill opacity
-|.**fill** ( value `Text` \| `Boolean` \| `Object` {; applyTo } ) → `cs.svg` | Sets the fill attributes
-|.**stroke** ( value `Text` \| `Boolean` \| `Real` \| `Object` {; applyTo } ) → `cs.svg` | Sets the stroke attributes
+|.**fill** ( value `Text` \| `Boolean` \| `Object` {; applyTo } ) → `cs.svg` |  To define the painting of the inside of a shape (`fill` attributes)
+|.**stroke** ( value `Text` \| `Boolean` \| `Real` \| `Object` {; applyTo } ) → `cs.svg` | To define the painting of the outline of a shape (`stroke` attribute)
 |.**font** ( attributes : `Object` {; applyTo } ) → `cs.svg` | Sets the font attributes
 |.**size** ( { width : `Real`; height : `Real` {; unit : `Text` }} ) → `cs.svg` | Sets the dimensions
 |.**position** ( x : `Real` {; y : `Real` }{; unit : `Text` } ) → `cs.svg` | Sets the position

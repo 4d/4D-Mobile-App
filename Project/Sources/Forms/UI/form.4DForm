@@ -1,4 +1,4 @@
-﻿{
+{
 	"destination": "detailScreen",
 	"rightMargin": 20,
 	"bottomMargin": 20,
@@ -66,5 +66,5 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 1
+	"geometryStamp": 2
 }
