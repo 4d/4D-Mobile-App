@@ -69,20 +69,12 @@
 			"_o_color",
 			"_o_currentForm",
 			"_o_device",
-			"_o_doc_getFromPath",
-			"_o_doc_LoadJsonFile",
 			"_o_editor_Locked",
-			"_o_env_System_path",
 			"_o_err",
-			"_o_http",
 			"_o_panel_Form_common",
-			"_o_panel_SET_CONSTRAINTS",
 			"_o_plist",
-			"_o_project_CLASSES",
-			"_o_project_REPAIR",
 			"_o_rest_isValidField",
 			"_o_SERVER_Handler",
-			"_o_SERVER_OBJECTS_HANDLER",
 			"_o_simulator",
 			"_o_storyboard",
 			"_o_storyboard_fix_id",
@@ -535,6 +527,7 @@
 			"Tests"
 		],
 		"methods": [
+			"COMPILER__",
 			"HTTP ERROR HANDLER"
 		],
 		"classes": [

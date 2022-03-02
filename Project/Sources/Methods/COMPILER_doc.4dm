@@ -2,12 +2,6 @@
 If (False:C215)
 	
 	//______________________________________________________
-	C_TEXT:C284(_o_doc_getFromPath; $0)
-	C_TEXT:C284(_o_doc_getFromPath; $1)
-	C_TEXT:C284(_o_doc_getFromPath; $2)
-	C_TEXT:C284(_o_doc_getFromPath; $3)
-	
-	//______________________________________________________
 	C_TEXT:C284(doc_Absolute_path; $0)
 	C_TEXT:C284(doc_Absolute_path; $1)
 	C_TEXT:C284(doc_Absolute_path; $2)
@@ -54,14 +48,6 @@ If (False:C215)
 	//______________________________________________________
 	C_OBJECT:C1216(doc_Folder_writable; $0)
 	C_TEXT:C284(doc_Folder_writable; $1)
-	
-	//______________________________________________________
-	//C_TEXT(doc_folderDigest; $0)
-	//C_TEXT(doc_folderDigest; $1)
-	
-	//______________________________________________________
-	C_OBJECT:C1216(_o_doc_LoadJsonFile; $0)
-	C_TEXT:C284(_o_doc_LoadJsonFile; $1)
 	
 	//______________________________________________________
 	C_TEXT:C284(doc_Relative_path; $0)

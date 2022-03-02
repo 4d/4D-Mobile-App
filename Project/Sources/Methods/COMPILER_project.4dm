@@ -33,9 +33,6 @@ If (False:C215)
 	C_OBJECT:C1216(project_PROCESS_MESSAGES; $3)
 	
 	// ----------------------------------------------------
-	C_OBJECT:C1216(_o_project_REPAIR; $1)
-	
-	// ----------------------------------------------------
 	C_BOOLEAN:C305(project_Upgrade; $0)
 	C_OBJECT:C1216(project_Upgrade; $1)
 	C_OBJECT:C1216(project_Upgrade; $2)

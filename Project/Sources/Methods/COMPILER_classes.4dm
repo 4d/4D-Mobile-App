@@ -54,7 +54,7 @@ If (False:C215)  // Widgets
 	//______________________________________________________
 End if 
 
-If (False:C215)  // ob
+If (False:C215)  // Ob
 	
 	//______________________________________________________
 	C_OBJECT:C1216(ob; $0)
@@ -102,40 +102,14 @@ If (False:C215)  // Tools
 	C_OBJECT:C1216(environment; $2)
 	
 	//______________________________________________________
-	C_LONGINT:C283(httpError)
-	C_OBJECT:C1216(_o_http; $0)
-	C_TEXT:C284(_o_http; $1)
-	C_OBJECT:C1216(_o_http; $2)
-	
-	//______________________________________________________
-	//C_OBJECT(_o_lep; $0)
-	//C_TEXT(_o_lep; $1)
-	//C_OBJECT(_o_lep; $2)
-	
-	//______________________________________________________
 	C_OBJECT:C1216(logger; $0)
 	C_VARIANT:C1683(logger; $1)
 	C_OBJECT:C1216(logger; $2)
 	
 	//______________________________________________________
-	//C_OBJECT(menu;$0)
-	//C_TEXT(menu;$1)
-	//C_OBJECT(menu;$2)
-	
-	//______________________________________________________
 	C_OBJECT:C1216(_o_process; $0)
 	C_TEXT:C284(_o_process; $1)
 	C_OBJECT:C1216(_o_process; $2)
-	
-	//______________________________________________________
-	//C_OBJECT(_o_str; $0)
-	//C_TEXT(_o_str; $1)
-	//C_OBJECT(_o_str; $2)
-	
-	//______________________________________________________
-	//C_OBJECT(_o_tips; $0)
-	//C_TEXT(_o_tips; $1)
-	//C_OBJECT(_o_tips; $2)
 	
 	//______________________________________________________
 	C_OBJECT:C1216(window; $0)
@@ -148,7 +122,6 @@ End if
 If (False:C215)  // Demos
 	
 	//______________________________________________________
-	
 	C_TEXT:C284(htuProgressDoSomething; $0)
 	C_VARIANT:C1683(htuProgressDoSomething; $1)
 	C_VARIANT:C1683(htuProgressDoSomething; $2)

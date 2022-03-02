@@ -78,11 +78,6 @@ C_OBJECT:C1216(unitTestSuites; $1)
 C_BOOLEAN:C305(_o_rest_isValidField; $0)
 C_OBJECT:C1216(_o_rest_isValidField; $1)
 
-//______________________________________________________
-C_TEXT:C284(_o_env_System_path; $0)
-C_TEXT:C284(_o_env_System_path; $1)
-C_BOOLEAN:C305(_o_env_System_path; $2)
-
 //__________________________________________________
 C_LONGINT:C283(00_TESTS; $1)
 C_LONGINT:C283(00_TESTS; $2)
