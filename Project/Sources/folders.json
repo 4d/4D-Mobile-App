@@ -1,8 +1,7 @@
 {
 	"____FOR_TESTS": {
 		"classes": [
-			"ALL_TYPESEntity",
-			"EmployesEntity"
+			"ALL_TYPESEntity"
 		]
 	},
 	"__IN WORKS": {
@@ -113,16 +112,7 @@
 			"tester_net"
 		]
 	},
-	"(__)": {
-		"methods": [
-			"(_and)",
-			"(_bool)",
-			"(_choose)",
-			"(_or)",
-			"(COMPILER__)",
-			"(test_)"
-		]
-	},
+	"(__)": {},
 	"(HDI_COLOR)": {},
 	"[ android ]": {
 		"methods": [
@@ -144,33 +134,22 @@
 		]
 	},
 	"[ macOS ]": {
-		"groups": [
-			"storyboardClass"
-		],
 		"methods": [
-			"asset",
 			"capabilities",
 			"certificate",
 			"colors",
 			"COMPILER_macOS",
-			"git",
 			"mobile_Project_iOS",
 			"provisioningProfiles",
 			"swiftPM",
 			"teamId",
-			"test_capabilities",
-			"test_swiftPM",
-			"xcDataModel",
 			"Xcode",
 			"Xcode_CheckInstall",
-			"XcodeProj",
-			"XcodeProjInject"
+			"XcodeProj"
 		],
 		"classes": [
 			"cfgutil",
-			"MobileProjectIOS",
 			"simctl",
-			"xcDataModel",
 			"Xcode"
 		]
 	},
@@ -211,6 +190,24 @@
 		"classes": [
 			"ExposedStructure",
 			"path"
+		]
+	},
+	"[ios]": {
+		"groups": [
+			"storyboardClass",
+			"templateClass"
+		],
+		"methods": [
+			"asset",
+			"COMPILER_ios",
+			"dataModel",
+			"xcDataModel",
+			"XcodeProjInject",
+			"xloc"
+		],
+		"classes": [
+			"MobileProjectIOS",
+			"xcDataModel"
 		]
 	},
 	"[PANELS]": {
@@ -490,27 +487,25 @@
 		],
 		"methods": [
 			"_test_alias",
+			"_test_structureClass",
 			"mobileUnit4D",
 			"test__catalog",
+			"test_capabilities",
 			"test_catalog",
 			"test_ob_class",
 			"test_reconcile",
 			"test_sqliteSizes",
-			"test_storyboard",
 			"test_structure",
 			"test_structureCatalog",
+			"test_swiftPM",
 			"test_xmlClass",
 			"unitTestSuites"
 		]
 	},
 	"backend": {
-		"groups": [
-			"templateClass"
-		],
 		"methods": [
 			"catalog",
 			"COMPILER_backend",
-			"dataModel",
 			"dataSet",
 			"downloadSDK",
 			"dump",
@@ -519,14 +514,14 @@
 			"formatString",
 			"formatters",
 			"getSQLite",
+			"git",
 			"plist_toObject",
 			"Process_tags",
 			"Process_tags_on_file",
 			"Rest",
 			"sdk",
 			"template",
-			"unzip",
-			"xloc"
+			"unzip"
 		],
 		"classes": [
 			"formatter",

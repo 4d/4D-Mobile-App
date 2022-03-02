@@ -12,14 +12,6 @@ If (False:C215)
 	C_OBJECT:C1216(_o_checkQueryFilter; $0)
 	C_OBJECT:C1216(_o_checkQueryFilter; $1)
 	
-	//__________________________________________________
-	C_OBJECT:C1216(dataModel; $0)
-	C_OBJECT:C1216(dataModel; $1)
-	
-	//__________________________________________________________
-	C_OBJECT:C1216(xcDataModel; $0)
-	C_OBJECT:C1216(xcDataModel; $1)
-	
 	//______________________________________________________
 	C_OBJECT:C1216(dataSet; $0)
 	C_OBJECT:C1216(dataSet; $1)
@@ -69,10 +61,6 @@ If (False:C215)
 	C_OBJECT:C1216(template; $0)
 	C_OBJECT:C1216(template; $1)
 	
-	//______________________________________________________
-	C_OBJECT:C1216(TemplateInstanceFactory; $0)
-	C_OBJECT:C1216(TemplateInstanceFactory; $1)
-	
 	//__________________________________________________
 	C_OBJECT:C1216(plist_toObject; $0)
 	C_TEXT:C284(plist_toObject; $1)
@@ -83,6 +71,10 @@ If (False:C215)
 	//__________________________________________________
 	C_OBJECT:C1216(folder_copyMerge; $1)
 	C_OBJECT:C1216(folder_copyMerge; $2)
+	
+	//__________________________________________________
+	C_OBJECT:C1216(git; $0)
+	C_OBJECT:C1216(git; $1)
 	
 	//______________________________________________________
 End if 

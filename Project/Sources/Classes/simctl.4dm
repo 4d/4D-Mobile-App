@@ -866,3 +866,109 @@ Function _kill($simulator : Text; $wait : Boolean)
 Function _cleanupOldDevices()
 	
 	This:C1470.launch("xcrun simctl delete unavailable")
+	
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Get app of device
+Function deviceApp($Obj_in : Object)->$Obj_out : Object
+	var $childrenFolder; $subFolder : 4D:C1709.Folder
+	var $File_ : 4D:C1709.File
+	var $o : Object
+	var $Lon_x : Integer
+	
+	$Obj_out:=New object:C1471
+	If ($Obj_in.device#Null:C1517)
+		
+		$Obj_out.apps:=New collection:C1472
+		
+		If (Bool:C1537($Obj_in.data))
+			
+			$Obj_out.path:=This:C1470.home.folder("Library/Developer/CoreSimulator/Devices/")\
+				.folder($Obj_in.device)\
+				.folder("Containers/Data/Application")
+			
+			$Obj_out.metaData:=New collection:C1472
+			
+			If ($Obj_out.path.exists)
+				
+				For each ($childrenFolder; $Obj_out.path.folders())
+					
+					$File_:=$childrenFolder.folder("Library/Preferences")
+					
+					If ($childrenFolder.folder("Library/Preferences").exists)
+						
+						If ($childrenFolder.folder("Library/Preferences").files().length>0)  // Check that app have user default (as any 4d for ios app, this speed up  menu loading ))
+							
+							$File_:=$childrenFolder.folder("Library/Preferences").file(".com.apple.mobile_container_manager.metadata.plist")
+							
+							If ($File_.exists)
+								
+								$o:=_o_plist(New object:C1471(\
+									"action"; "object"; \
+									"path"; $File_.platformPath))
+								
+								If ($o.success)
+									
+									$o.value.path:=$childrenFolder.platformPath
+									
+									$Obj_out.metaData.push($o.value)
+									
+								End if 
+							End if 
+						End if 
+					End if 
+				End for each 
+			End if 
+		End if 
+		
+		$Obj_out.path:=This:C1470.home.folder("Library/Developer/CoreSimulator/Devices/")\
+			.folder($Obj_in.device)\
+			.folder("Containers/Bundle/Application")
+		
+		If ($Obj_out.path.exists)
+			
+			For each ($childrenFolder; $Obj_out.path.folders())
+				
+				
+				If ($childrenFolder.folders().length>0)
+					$subFolder:=$childrenFolder.folders()[0]
+					$File_:=$subFolder.file("Info.plist")
+					
+					If ($File_.exists)
+						
+						$o:=_o_plist(New object:C1471(\
+							"action"; "object"; \
+							"path"; $File_))
+						
+						If ($o.success)
+							
+							$o.value.path:=$childrenFolder.platformPath
+							$o.value.appPath:=$subFolder.platformPath
+							$o.value.iconPath:=$subFolder.file(String:C10($o.value.CFBundleIcons.CFBundlePrimaryIcon.CFBundleIconFiles[0])+"@2x.png").platformPath
+							
+							$Obj_out.apps.push($o.value)
+							
+							If (Bool:C1537($Obj_in.data))
+								
+								// Search associated metadata
+								$Lon_x:=$Obj_out.metaData.extract("MCMMetadataIdentifier").indexOf($o.value["CFBundleIdentifier"])
+								
+								If ($Lon_x#-1)
+									
+									$o.value.metaData:=$Obj_out.metaData[$Lon_x]
+									
+								End if 
+							End if 
+						End if 
+					End if 
+				End if 
+			End for each 
+		End if 
+		
+		$Obj_out.success:=True:C214
+		
+	Else 
+		
+		$Obj_out.errors:=New collection:C1472("device must be in parameters")
+		
+	End if 

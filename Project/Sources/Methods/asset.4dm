@@ -1,4 +1,5 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
+#DECLARE($Obj_in : Object)->$Obj_out : Object
 // ----------------------------------------------------
 // Project method : asset
 // Created 2017 by Eric Marchand
@@ -6,9 +7,6 @@
 // Description: Create, Edit Xcode asset
 // ----------------------------------------------------
 // Declarations
-C_OBJECT:C1216($0)
-C_OBJECT:C1216($1)
-
 C_BOOLEAN:C305($Boo_)
 C_LONGINT:C283($Lon_height; $Lon_i; $Lon_parameters; $Lon_scale; $Lon_width)
 C_PICTURE:C286($Pic_buffer; $Pic_icon)
@@ -27,9 +25,6 @@ End if
 $Lon_parameters:=Count parameters:C259
 
 If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
-	
-	// Required parameters
-	$Obj_in:=$1
 	
 	// Optional parameters
 	If ($Lon_parameters>=2)
@@ -59,7 +54,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 	
 	Case of 
 			
-		// MARK:- path
+			// MARK:- path
 		: ($Obj_in.action="path")
 			
 			$Txt_buffer:="Resources"+Folder separator:K24:12+"Assets.xcassets"+Folder separator:K24:12
@@ -86,7 +81,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 			
 			$Obj_out.success:=True:C214
 			
-		// MARK:- formatter
+			// MARK:- formatter
 		: ($Obj_in.action="formatter") | ($Obj_in.action="input")
 			
 			Case of 
@@ -226,7 +221,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 					//----------------------------------------
 			End case 
 			
-		// MARK:- create
+			// MARK:- create
 		: ($Obj_in.action="create")
 			
 			If (($Obj_in.tags=Null:C1517)\
@@ -269,7 +264,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 								
 							End if 
 							
-							$Folder_buffer:=_o_COMPONENT_Pathname("templates").folder("asset").folder($Obj_in.type).folder($Obj_in.format)
+							$Folder_buffer:=cs:C1710.path.new().templates().folder("asset").folder($Obj_in.type).folder($Obj_in.format)
 							$Txt_buffer:=$Folder_buffer.platformPath
 							$Obj_out.success:=$Folder_buffer.exists
 							
@@ -278,7 +273,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 							
 							If ($Obj_in.space#Null:C1517)
 								
-								$Folder_buffer:=_o_COMPONENT_Pathname("templates").folder("asset").folder($Obj_in.type).folder($Obj_in.space)
+								$Folder_buffer:=cs:C1710.path.new().templates().folder("asset").folder($Obj_in.type).folder($Obj_in.space)
 								$Txt_buffer:=$Folder_buffer.platformPath
 								
 								If ($Obj_in.tags.alpha=Null:C1517)
@@ -299,7 +294,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 							//........................................
 						: ($Obj_in.type="dataset")
 							
-							$Folder_buffer:=_o_COMPONENT_Pathname("templates").folder("asset").folder($Obj_in.type)
+							$Folder_buffer:=cs:C1710.path.new().templates().folder("asset").folder($Obj_in.type)
 							$Txt_buffer:=$Folder_buffer.platformPath
 							$Obj_out.success:=$Folder_buffer.exists
 							
@@ -312,7 +307,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 							//........................................
 						: ($Obj_in.type="folder")
 							
-							$Folder_buffer:=_o_COMPONENT_Pathname("templates").folder("asset").folder($Obj_in.type)
+							$Folder_buffer:=cs:C1710.path.new().templates().folder("asset").folder($Obj_in.type)
 							$Txt_buffer:=$Folder_buffer.platformPath
 							$Obj_out.success:=$Folder_buffer.exists
 							
@@ -638,7 +633,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 					//…………………………………………………………………………………………………………………
 			End case 
 			
-		// MARK:- read
+			// MARK:- read
 		: ($Obj_in.action="read")
 			
 			If ($Obj_in.path#Null:C1517)
@@ -668,7 +663,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 				
 			End if 
 			
-		// MARK:- list
+			// MARK:- list
 		: ($Obj_in.action="list")
 			
 			If ($Obj_in.path#Null:C1517)
@@ -793,10 +788,3 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 			//________________________________________
 	End case 
 End if 
-
-// ----------------------------------------------------
-// Return
-$0:=$Obj_out
-
-// ----------------------------------------------------
-// End
