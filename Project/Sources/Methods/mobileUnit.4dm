@@ -214,9 +214,13 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			
 			If (Asserted:C1132($parameters.target#Null:C1517; "Expected 'target' key into object parameter"))
 				
+				//$response:=New object(\
+					"success"; True; \
+					"value"; _o_COMPONENT_Pathname($parameters.target).platformPath)
+				
 				$response:=New object:C1471(\
 					"success"; True:C214; \
-					"value"; _o_COMPONENT_Pathname($parameters.target).platformPath)
+					"value"; cs:C1710.path.new($parameters.target).platformPath)
 				
 			End if 
 			

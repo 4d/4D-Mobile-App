@@ -113,8 +113,12 @@ Function pathname
 	var $0 : Object
 	var $1 : Object
 	
+	//$0:=New object(\
+		"success"; True; \
+		"value"; _o_COMPONENT_Pathname($1.target).platformPath)
+	
 	$0:=New object:C1471(\
 		"success"; True:C214; \
-		"value"; _o_COMPONENT_Pathname($1.target).platformPath)
+		"value"; cs:C1710.path.new($1.target).platformPath)
 	
 	//______________________________________________________
