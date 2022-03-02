@@ -153,20 +153,19 @@ Function checkInsert
 	End if 
 	
 	// Reformat storyboard document to follow xcode rules (line ending, attributes order, add missing resources)
-Function format  // MAC ONLY
-	var $0 : Object
-	var $1 : Object  // file to format (if null use This.path)
-	
+Function format($Obj_in : Object)->$Obj_out : Object  // MAC ONLY
 	var $Txt_cmd; $Txt_error; $Txt_in; $Txt_out : Text
-	var $Obj_in; $Obj_out : Object
+	var $File_ : 4D:C1709.File
 	
 	$Obj_out:=New object:C1471()
-	
-	If (Count parameters:C259>0)
-		$Obj_in:=New object:C1471("path"; $1)
-	Else 
+	If (Count parameters:C259=0)
 		$Obj_in:=New object:C1471("path"; This:C1470.path)
 	End if 
+	
+	If (Not:C34(Is macOS:C1572))
+		return   // just not format file on other OS > result, opening with Xcode project will make a lot of change in storyboard file (in vcs)
+	End if 
+	
 	If (Value type:C1509($Obj_in.path)=Is text:K8:3)
 		
 		If (Test path name:C476(String:C10($Obj_in.path))=Is a document:K24:1)
@@ -180,7 +179,6 @@ Function format  // MAC ONLY
 	If ($Obj_in.path.exists)
 		
 		// Use temp file because inplace command do not reformat
-		C_OBJECT:C1216($File_)
 		$File_:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+".storyboard")
 		$Obj_in.path.copyTo($File_.parent; $File_.name+$File_.extension)
 		
@@ -248,10 +246,7 @@ Function format  // MAC ONLY
 		// ----------------------------------------
 	End if 
 	
-	$0:=$Obj_out
-	
-Function ibtoolVersion
-	var $0; $Obj_out : Object
+Function _ibtoolVersion()->$Obj_out : Object
 	
 	// Get storyboard tool version (could be used to replace in storyboard header)
 	var $Txt_cmd; $Txt_error; $Txt_in; $Txt_out : Text
@@ -278,20 +273,14 @@ Function ibtoolVersion
 			End if 
 		End if 
 	End if 
-	$0:=$Obj_out
 	
 /* fix color asset according to theme. issues on simu*/
-Function colorAssetFix
-	var $0 : Object
-	var $1 : Object
-	
+Function colorAssetFix($theme : Object)->$Obj_out : Object
 	var $t : Text
 	var $asModification : Boolean
-	var $node; $Dom_child; $root; $File_; $Obj_color; $Obj_out; $theme : Object
+	var $node; $Dom_child; $root; $File_; $Obj_color : Object
 	
 	$Obj_out:=New object:C1471()
-	$theme:=$1
-	
 	$File_:=This:C1470.path
 	
 	// read file
@@ -383,18 +372,14 @@ Function colorAssetFix
 	
 	$Obj_out.success:=True:C214
 	
-	$0:=$Obj_out
-	
 /* remove all empty image asset, and double*/
-Function imageAssetFix
-	var $0 : Object
-	
+Function imageAssetFix()->$out : Object
 	var $t : Text
 	var $asModification : Boolean
 	var $node; $attributes; $root : Object
 	var $c : Collection
 	
-	$0:=New object:C1471(\
+	$out:=New object:C1471(\
 		"success"; False:C215)
 	
 	// Read file
@@ -452,7 +437,7 @@ Function imageAssetFix
 			$root.save(This:C1470.path)
 			This:C1470.format()
 			
-			$0.success:=True:C214
+			$out.success:=True:C214
 			
 		End if 
 		
