@@ -1289,6 +1289,7 @@ Function deleteFormEntries($table)
 	OB REMOVE:C1226(This:C1470.detail; $tableID)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Get the current catalog
 Function getCatalog() : Collection
 	
 	Case of 
@@ -1296,7 +1297,7 @@ Function getCatalog() : Collection
 			//____________________________________
 		: (This:C1470.$project#Null:C1517)
 			
-			return (This:C1470.$project.ExposedStructure.catalog)
+			return ((This:C1470.$project.$catalog#Null:C1517) ? This:C1470.$project.$catalog : This:C1470.$project.ExposedStructure.catalog)
 			
 			//____________________________________
 		: (This:C1470.ExposedStructure#Null:C1517)
@@ -1727,13 +1728,13 @@ Function repairStructure($audit : Collection)
 					Case of 
 							
 							//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-						: (This:C1470.isField($item.key))
+						: ($item.value.kind="storage")
 							
 							$field:=$table.query("fieldNumber = :1"; Num:C11($item.key)).pop()
 							
 							If (This:C1470._checkFieldForRepair($current; $field))
 								
-								$tablePublishedFieldNumber:=$tablePublishedFieldNumber+1
+								$tablePublishedFieldNumber+=1
 								
 							Else 
 								
@@ -1742,7 +1743,37 @@ Function repairStructure($audit : Collection)
 							End if 
 							
 							//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-						: (This:C1470.isRelationToOne($item.value))
+						: ($item.value.kind="calculated")\
+							 | ($item.value.kind="alias")
+							
+							$field:=$table.query("name = :1"; $item.key).pop()
+							
+							If (This:C1470._checkFieldForRepair($current; $field))
+								
+								$tablePublishedFieldNumber+=1
+								
+							Else 
+								
+								OB REMOVE:C1226($tableModel; $item.key)
+								
+							End if 
+							
+							//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+						: ($item.value.kind="relatedEntities")
+							
+							If ($datastore[$tableModel[$item.key].relatedEntities]=Null:C1517)
+								
+								// ❌ THE RELATED TABLE DOESN'T EXIST ANYMORE
+								OB REMOVE:C1226($tableModel; String:C10($item.key))
+								
+							Else 
+								
+								$tablePublishedFieldNumber+=1
+								
+							End if 
+							
+							//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+						: ($item.value.kind="relatedEntity")
 							
 							$field:=$table.query("name = :1"; $item.key).pop()
 							
@@ -1761,7 +1792,7 @@ Function repairStructure($audit : Collection)
 									Case of 
 											
 											//======================================
-										: (This:C1470.isField($relatedItem.key))
+										: ($relatedField.kind="storage")
 											
 											$field:=$table.query("fieldNumber = :1"; Num:C11($relatedItem.key)).pop()
 											
@@ -1776,7 +1807,23 @@ Function repairStructure($audit : Collection)
 											End if 
 											
 											//======================================
-										: (This:C1470.isRelationToMany($relatedField))
+										: ($relatedField.kind="calculated")\
+											 | ($relatedField.kind="alias")
+											
+											$field:=$table.query("name = :1"; $relatedField.name).pop()
+											
+											If (This:C1470._checkFieldForRepair($current; $field))
+												
+												$relatedCount:=$relatedCount+1
+												
+											Else 
+												
+												OB REMOVE:C1226($item.value; $relatedItem.key)
+												
+											End if 
+											
+											//======================================
+										: ($relatedField.kind="relatedEntities")
 											
 											$field:=$table.query("name = :1"; $relatedField.name).pop()
 											
@@ -1791,7 +1838,7 @@ Function repairStructure($audit : Collection)
 											End if 
 											
 											//======================================
-										: (This:C1470.isRelationToOne($relatedField))
+										: ($relatedField.kind="relatedEntity")
 											
 											var $linkedItem : Object
 											For each ($linkedItem; This:C1470.storageFields($relatedField))
@@ -1810,21 +1857,6 @@ Function repairStructure($audit : Collection)
 											End for each 
 											
 											//======================================
-										: (This:C1470.isComputedAttribute($relatedField))
-											
-											$field:=$table.query("name = :1"; $relatedField.name).pop()
-											
-											If (This:C1470._checkFieldForRepair($current; $field))
-												
-												$relatedCount:=$relatedCount+1
-												
-											Else 
-												
-												OB REMOVE:C1226($item.value; $relatedItem.key)
-												
-											End if 
-											
-											//======================================
 									End case 
 								End for each 
 								
@@ -1834,38 +1866,9 @@ Function repairStructure($audit : Collection)
 									
 								Else 
 									
-									$tablePublishedFieldNumber:=$tablePublishedFieldNumber+1
+									$tablePublishedFieldNumber+=1
 									
 								End if 
-							End if 
-							
-							//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-						: (This:C1470.isRelationToMany($item.value))
-							
-							If ($datastore[$tableModel[$item.key].relatedEntities]=Null:C1517)
-								
-								// ❌ THE RELATED TABLE DOESN'T EXIST ANYMORE
-								OB REMOVE:C1226($tableModel; String:C10($item.key))
-								
-							Else 
-								
-								$tablePublishedFieldNumber:=$tablePublishedFieldNumber+1
-								
-							End if 
-							
-							//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-						: (This:C1470.isComputedAttribute($item.value))
-							
-							$field:=$table.query("name = :1"; $item.key).pop()
-							
-							If (This:C1470._checkFieldForRepair($current; $field))
-								
-								$tablePublishedFieldNumber:=$tablePublishedFieldNumber+1
-								
-							Else 
-								
-								OB REMOVE:C1226($tableModel; $item.key)
-								
 							End if 
 							
 							//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
@@ -2063,38 +2066,38 @@ Function _tableID($table) : Text
 	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function _checkFieldForRepair($current : Object; $fromAudit : Object)->$succes : Boolean
+Function _checkFieldForRepair($current : Object; $audit : Object) : Boolean
 	
 	Case of 
 			
 			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-		: ($fromAudit=Null:C1517)
+		: ($audit=Null:C1517)
 			
-			$succes:=True:C214  // 😇 We can go dancing
+			return (True:C214)  // 😇 We can go dancing
 			
 			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-		: ($fromAudit.missing)
+		: ($audit.missing)
 			
 			// ❌ THE FIELD DOESN'T EXIST ANYMORE
 			
 			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-		: (Bool:C1537($fromAudit.typeMismatch))
+		: (Bool:C1537($audit.typeMismatch))
 			
 			Case of 
 					
 					//======================================
-				: (This:C1470.isString($fromAudit.fieldType))\
-					 & (This:C1470.isString($fromAudit.current.fieldType))
+				: (This:C1470.isString($audit.fieldType))\
+					 & (This:C1470.isString($audit.current.fieldType))
 					
-					$succes:=True:C214  // 🆗
-					$current.fieldType:=$fromAudit.current.fieldType  // Update
+					$current.fieldType:=$audit.current.fieldType  // Update
+					return (True:C214)  // 🆗
 					
 					//======================================
-				: (This:C1470.isNumeric($fromAudit.fieldType))\
-					 & (This:C1470.isNumeric($fromAudit.current.fieldType))
+				: (This:C1470.isNumeric($audit.fieldType))\
+					 & (This:C1470.isNumeric($audit.current.fieldType))
 					
-					$succes:=True:C214  // 🆗
-					$current.fieldType:=$fromAudit.current.fieldType  // Update
+					$current.fieldType:=$audit.current.fieldType  // Update
+					return (True:C214)  // 🆗
 					
 					//======================================
 				Else 
@@ -2105,10 +2108,10 @@ Function _checkFieldForRepair($current : Object; $fromAudit : Object)->$succes :
 			End case 
 			
 			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-		: (Bool:C1537($fromAudit.nameMismatch))
+		: (Bool:C1537($audit.nameMismatch))
 			
-			$succes:=True:C214  // 🆗
-			$current.name:=$fromAudit.current.name  // Update
+			$current.name:=$audit.current.name  // Update
+			return (True:C214)  // 🆗
 			
 			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		Else 

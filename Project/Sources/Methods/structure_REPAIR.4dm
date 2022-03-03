@@ -22,7 +22,7 @@ Else
 	
 End if 
 
-$catalog:=Form:C1466.$project.ExposedStructure.catalog
+$catalog:=PROJECT.$project.ExposedStructure.catalog
 
 $cache.structure.definition:=$catalog
 $cache.structure.digest:=Generate digest:C1147(JSON Stringify:C1217($catalog); SHA1 digest:K66:2)

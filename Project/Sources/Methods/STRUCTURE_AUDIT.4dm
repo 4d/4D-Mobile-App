@@ -15,7 +15,7 @@ If (False:C215)
 	C_OBJECT:C1216(STRUCTURE_AUDIT; $1)
 End if 
 
-var $storeCache; $isTableUnsynchronized; $isUnsynchronized : Boolean
+var $storeCache; $isTableUnsynchronized; $isUnsynchronized; $updateCurrentCatalog : Boolean
 var $cache; $current; $item; $linkedField; $linkedItem : Object
 var $relatedField; $relatedItem; $structure; $tableCatalog : Object
 var $cachedCatalog; $currentCatalog; $linkedCatalog; $relatedCatalog; $unsynchronizedFields; $unsynchronizedTables : Collection
@@ -138,6 +138,7 @@ If ($cacheFile.exists)
 										 | ($item.value.kind="alias")
 										
 										$field:=$table.value[$item.key]
+										$field.name:=$item.key
 										$field.current:=$tableCatalog.field.query("name = :1 & kind = :2"; $item.key; $item.value.kind).pop()
 										$field.missing:=$field.current=Null:C1517
 										
@@ -585,6 +586,7 @@ If ($cacheFile.exists)
 		
 		// Update the cache
 		$storeCache:=True:C214
+		$updateCurrentCatalog:=True:C214
 		
 	End if 
 	
@@ -592,6 +594,7 @@ Else
 	
 	// Create the cache
 	$storeCache:=True:C214
+	$updateCurrentCatalog:=True:C214
 	
 End if 
 
@@ -607,8 +610,7 @@ If ($storeCache\
 	
 End if 
 
-If (Not:C34($isUnsynchronized))\
- | (Form:C1466.$catalog=Null:C1517)
+If ($updateCurrentCatalog) && ((Not:C34($isUnsynchronized)) | (Form:C1466.$catalog=Null:C1517))
 	
 	// Keep the current catalog
 	Form:C1466.$catalog:=$currentCatalog

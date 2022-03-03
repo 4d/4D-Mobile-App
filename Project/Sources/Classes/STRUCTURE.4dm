@@ -364,9 +364,7 @@ Function fieldList()
 			
 			If (Find in array:C230($fieldsPtr->; $field.name)>0)  // In list
 				
-				$row:=$row+1
-				
-				//$withError:=($unsynchronized#Null)
+				$row+=1
 				
 				$withError:=($unsynchronized#Null:C1517) && ($unsynchronized.length>0)
 				
@@ -377,14 +375,15 @@ Function fieldList()
 					
 				End if 
 				
-				$style:=Plain:K14:1
-				$color:=lk inherited:K53:26
-				
 				If ($withError)
 					
 					$color:=EDITOR.errorColor
+					$style:=($field.kind="alias") ? Italic:K14:3 : ($field.kind="relatedEntity") ? Underline:K14:4 : Plain:K14:1
 					
 				Else 
+					
+					$style:=Plain:K14:1
+					$color:=lk inherited:K53:26
 					
 					If (($field.kind="alias")\
 						 & ($field.relatedDataClass#Null:C1517))
