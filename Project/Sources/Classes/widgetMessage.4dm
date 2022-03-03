@@ -135,7 +135,7 @@ Function display()
 					
 				Else 
 					
-					$widget.setValue($o.value)
+					$widget.setValue(This:C1470.str.localize($o.value))
 					
 				End if 
 				
@@ -184,7 +184,7 @@ Function display()
 					
 				Else 
 					
-					$widget.setValue($o.value)
+					$widget.setValue(This:C1470.str.localize($o.value))
 					
 				End if 
 				
