@@ -43,7 +43,7 @@ Function setPicture($picture : Picture)
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function getMediumColor()->$color : Integer
+Function getMediumColor() : Integer
 	
 	var $i; $pixels : Integer
 	var $hsl; $map; $rgb : Object
@@ -119,7 +119,7 @@ Function getMediumColor()->$color : Integer
 			
 		End if 
 		
-		$color:=$ƒ.hslToColor($hsl)
+		return ($ƒ.hslToColor($hsl))
 		
 	End if 
 	
@@ -458,7 +458,7 @@ Function getHeader()->$header : Object
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function _isOK()->$ok : Boolean
+Function _isOK() : Boolean
 	
 	Case of 
 			//______________________________________________________
@@ -474,7 +474,7 @@ Function _isOK()->$ok : Boolean
 			//______________________________________________________
 		Else 
 			
-			$ok:=True:C214
+			return (True:C214)
 			
 			//______________________________________________________
 	End case 
