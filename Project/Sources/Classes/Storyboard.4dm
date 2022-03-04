@@ -788,4 +788,4 @@ Function exportDom
 	$File_:=$target.file(Process_tags(String:C10($Obj_template.storyboard); $Obj_tags; New collection:C1472("filename")))
 	$File_.setText($Txt_buffer; "UTF-8"; Document with CRLF:K24:20)
 	
-	This:C1470.format($target)
+	This:C1470.format($File_)

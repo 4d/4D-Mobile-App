@@ -156,7 +156,7 @@ Function run
 		$File_:=$target.file(String:C10($Obj_template.storyboard))
 		$File_.setText($Txt_buffer; "UTF-8"; Document with CRLF:K24:20)
 		
-		$Obj_out.format:=This:C1470.format($target)
+		$Obj_out.format:=This:C1470.format($File_)
 		
 		$Obj_out.success:=True:C214  // XXX maybe better error managing, take into account all "doms"
 		
