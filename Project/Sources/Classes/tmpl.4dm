@@ -449,11 +449,14 @@ Function getBinding($node : Text)->$binding : Text
 	// Return the embedded cancel button used into the templates
 Function cancel() : Text
 	
-	If (EDITOR.darkScheme) & False:C215
+	If (EDITOR.darkScheme)
 		
-		
-		
-		
+		return ("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAelJREFUeJzsmD9OwzAUxjMwghADLOxwAFjyB6l"+\
+			"CHKCcghvkCJyAvSfokLQFoQi6cASW7NggiipEBzaKP9euQiAkjZImlt5PsmIl7718jp/9klgWQRAEQRBEO/BGkwMnYL4dsEgcYyfgs0VjsTrnw6Zpnb/whvzICdmdEDkv0mALn6"+\
+			"Z1W53xfMMN2JUd8i8lbCpazx7wLp50Z/y6iYa+N+DnuAYbORDhA1/EaES8N3zfEelxr4R/CtGXZ9F0O88PNrCVPvAVMRBrHZqX4Klp8XbIntwRP141Bnzgqwex1pmQaaPEnw7e9"+\
+			"svGga8eBGJWqTETLD7kL1KgzJNPgxgynUTMtSzs5W4j8riqmIild6eqYv6JezM51LtNkQVbFMTSu1OtdUIVKQygl2XjhvxCpEP/5Pp5V59DH+dwLTM2t"+\
+			"l+5oJlfte4lqKYqfbqZNkLoYpD8EcLR0Fd7fz/LD3VCFbqoHvWWnIE4b5qTgnFM9pOzkgYx1QzE9ai3MAA+w01QXf+z+/HUC4gHiKlqwqxa1QnqHID7MNlSA/ioVnUC4"+\
+			"1OozCJ2bl/22rSIzd5GjS9kwOhXCWD8y5y8qcmv08D4Dxpg9CelZpWPepxr1Ud9EmN/q6RBncj7sQWbpnUSBEEQBEEovgEAAP//AwDX7M3qHyPFyQAAAABJRU5E"+"rkJggg==")
 		
 	Else 
 		
