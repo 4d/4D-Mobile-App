@@ -11,7 +11,7 @@ _o_UI.form:=Formula:C1597(_o_currentForm($1))
 // ============================= WIDGETS =============================
 _o_UI.static:=Formula:C1597(static($1))
 
-_o_UI.group:=Formula:C1597(group($1))
+//_o_UI.group:=Formula(group($1))
 
 _o_UI.button:=Formula:C1597(button($1))
 

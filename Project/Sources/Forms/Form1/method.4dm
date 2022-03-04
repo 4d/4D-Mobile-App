@@ -31,7 +31,7 @@ COPY ARRAY:C226($tTxt_check; (OBJECT Get pointer:C1124(Object named:K67:5; "Colu
 //%W+518.1
 
 
-Form:C1466.window:=window.getCoordinates()
+//Form.window:=window.getCoordinates()
 
 Form:C1466.tablist:=widget("tab.list")
 Form:C1466.tabdetail:=widget("tab.detail")

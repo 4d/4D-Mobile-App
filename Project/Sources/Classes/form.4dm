@@ -6,6 +6,8 @@ Class constructor($method : Text)
 	This:C1470.name:=Current form name:C1298
 	This:C1470.window:=Current form window:C827
 	
+	This:C1470.visible:=True:C214
+	
 	This:C1470.toBeInitialized:=True:C214
 	
 	This:C1470.callback:=Null:C1517
@@ -25,12 +27,39 @@ Class constructor($method : Text)
 	End if 
 	
 	//MARK:-[COMPUTED ATTRIBUTES]
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function get focused() : Text  /// The name of the object that has the focus in the form
 	
 	return (OBJECT Get name:C1087(Object with focus:K67:3))
 	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function get darkScheme() : Boolean
 	
-	//MARK:-[FUNCTIONS]
+	return ((FORM Get color scheme:C1761="dark"))
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function get lightScheme() : Boolean
+	
+	return ((FORM Get color scheme:C1761="light"))
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function get windowTitle() : Text
+	
+	return (Get window title:C450(This:C1470.window))
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function set windowTitle($title : Text)
+	
+	var $t : Text
+	$t:=Get localized string:C991($title)
+	SET WINDOW TITLE:C213(Length:C16($t)>0 ? $t : $title; This:C1470.window)
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function get frontmost() : Boolean
+	
+	return (Frontmost window:C447=This:C1470.window)
+	
+	//MARK:-TO BE OVERWRITTEN IN THE SUBCLASS
 	//=== === === === === === === === === === === === === === === === === === === === === 
 Function init()
 	
@@ -51,183 +80,64 @@ Function restoreContext()
 	
 	ASSERT:C1129(False:C215; "👀 restore() must be overriden by the subclass!")
 	
-	//MARK:-[FORM OBJECTS CREATION]
+	
+	//MARK:-[FUNCTIONS] 
 	//=== === === === === === === === === === === === === === === === === === === === === 
-	// Create a static object instance
-Function formObject($name : Text; $widgetName : Text) : cs:C1710.formObject
+Function close()
 	
-	If (Count parameters:C259>=2)
-		
-		This:C1470._instantiate("formObject"; $name; $widgetName)
-		
-	Else 
-		
-		This:C1470._instantiate("formObject"; $name)
-		
-	End if 
-	
-	return (This:C1470[$name])
+	CLOSE WINDOW:C154(This:C1470.window)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-	// Create a button object instance
-Function button($name : Text; $widgetName : Text) : cs:C1710.button
+Function hide()
 	
-	If (Count parameters:C259>=2)
-		
-		This:C1470._instantiate("button"; $name; $widgetName)
-		
-	Else 
-		
-		This:C1470._instantiate("button"; $name)
-		
-	End if 
-	
-	return (This:C1470[$name])
+	HIDE WINDOW:C436(This:C1470.window)
+	This:C1470.visible:=False:C215
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-	// Create a widget object instance
-Function widget($name : Text; $widgetName : Text) : cs:C1710.widget
+Function show()
 	
-	If (Count parameters:C259>=2)
-		
-		This:C1470._instantiate("widget"; $name; $widgetName)
-		
-	Else 
-		
-		This:C1470._instantiate("widget"; $name)
-		
-	End if 
-	
-	return (This:C1470[$name])
+	SHOW WINDOW:C435(This:C1470.window)
+	This:C1470.visible:=True:C214
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-	// Create a input object instance
-Function input($name : Text; $widgetName : Text) : cs:C1710.input
+Function bringToFront()
 	
-	If (Count parameters:C259>=2)
-		
-		This:C1470._instantiate("input"; $name; $widgetName)
-		
-	Else 
-		
-		This:C1470._instantiate("input"; $name)
-		
-	End if 
+	var $bottom; $left; $right; $top : Integer
 	
-	return (This:C1470[$name])
+	GET WINDOW RECT:C443($left; $top; $right; $bottom; This:C1470.window)
+	SET WINDOW RECT:C444($left; $top; $right; $bottom; This:C1470.window)
+	This:C1470.show()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-	// Create a stepper object instance
-Function stepper($name : Text; $widgetName : Text) : cs:C1710.stepper
+Function minimize()
 	
-	If (Count parameters:C259>=2)
-		
-		This:C1470._instantiate("stepper"; $name; $widgetName)
-		
-	Else 
-		
-		This:C1470._instantiate("stepper"; $name)
-		
-	End if 
-	
-	return (This:C1470[$name])
+	MINIMIZE WINDOW:C454(This:C1470.window)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-	// Create a thermometer object instance
-Function thermometer($name : Text; $widgetName : Text) : cs:C1710.thermometer
+Function maximize()
 	
-	If (Count parameters:C259>=2)
-		
-		This:C1470._instantiate("thermometer"; $name; $widgetName)
-		
-	Else 
-		
-		This:C1470._instantiate("thermometer"; $name)
-		
-	End if 
-	
-	return (This:C1470[$name])
+	MAXIMIZE WINDOW:C453(This:C1470.window)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-	// Create a listbox object instance
-Function listbox($name : Text; $widgetName : Text) : cs:C1710.listbox
+Function dimensions() : Object
 	
-	If (Count parameters:C259>=2)
-		
-		This:C1470._instantiate("listbox"; $name; $widgetName)
-		
-	Else 
-		
-		This:C1470._instantiate("listbox"; $name)
-		
-	End if 
+	var $height; $width : Integer
 	
-	return (This:C1470[$name])
+	OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $height)
+	
+	return (New object:C1471(\
+		"width"; $width; \
+		"height"; $height))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-	// Create a picture object instance
-Function picture($name : Text; $widgetName : Text) : cs:C1710.picture
+Function height() : Integer
 	
-	If (Count parameters:C259>=2)
-		
-		This:C1470._instantiate("picture"; $name; $widgetName)
-		
-	Else 
-		
-		This:C1470._instantiate("picture"; $name)
-		
-	End if 
-	
-	return (This:C1470[$name])
+	return (This:C1470.dimensions().height)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-	// Create a subform object instance
-Function subform($name : Text; $widgetName : Text) : cs:C1710.subform
+Function width() : Integer
 	
-	If (Count parameters:C259>=2)
-		
-		This:C1470._instantiate("subform"; $name; $widgetName)
-		
-	Else 
-		
-		This:C1470._instantiate("subform"; $name)
-		
-	End if 
-	
-	return (This:C1470[$name])
-	
-	//=== === === === === === === === === === === === === === === === === === === === === 
-	// Create a selector object instance
-Function selector($name : Text; $widgetName : Text) : cs:C1710.selector
-	
-	If (Count parameters:C259>=2)
-		
-		This:C1470._instantiate("selector"; $name; $widgetName)
-		
-	Else 
-		
-		This:C1470._instantiate("selector"; $name)
-		
-	End if 
-	
-	return (This:C1470[$name])
-	
-	//=== === === === === === === === === === === === === === === === === === === === === 
-	// Create a group instance
-Function group($name : Text; $member; $member2; $memberN) : cs:C1710.group
-	
-	var ${2}
-	var $i : Integer
-	
-	This:C1470[$name]:=cs:C1710.group.new()
-	
-	For ($i; 2; Count parameters:C259; 1)
-		
-		This:C1470[$name].addMember(${$i})
-		
-	End for 
-	
-	return (This:C1470[$name])
+	return (This:C1470.dimensions().width)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// 🛠 IN WORKS
@@ -279,7 +189,6 @@ Function getWidgets()
 		
 	End for 
 	
-	//MARK:-[WIDGETS]
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Add form event(s) for the current form
 Function appendEvents($events)
@@ -601,27 +510,6 @@ Function callParent($event : Integer)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-Function dimensions() : Object
-	
-	var $height; $width : Integer
-	
-	OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $height)
-	
-	return (New object:C1471(\
-		"width"; $width; \
-		"height"; $height))
-	
-	//=== === === === === === === === === === === === === === === === === === === === === 
-Function height() : Integer
-	
-	return (This:C1470.dimensions().height)
-	
-	//=== === === === === === === === === === === === === === === === === === === === === 
-Function width() : Integer
-	
-	return (This:C1470.dimensions().width)
-	
-	//=== === === === === === === === === === === === === === === === === === === === === 
 Function goToPage($page : Integer; $subform : Boolean)
 	
 	var $_subform : Boolean
@@ -724,6 +612,184 @@ Function postKeyDown($keyCode : Integer; $modifier : Integer)
 		POST EVENT:C467(Key down event:K17:4; $keyCode; Tickcount:C458; 0; 0; 0; Current process:C322)
 		
 	End if 
+	
+	//MARK:-[WIDGETS CREATION]
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	// Create a static object instance
+Function formObject($name : Text; $widgetName : Text) : cs:C1710.formObject
+	
+	If (Count parameters:C259>=2)
+		
+		This:C1470._instantiate("formObject"; $name; $widgetName)
+		
+	Else 
+		
+		This:C1470._instantiate("formObject"; $name)
+		
+	End if 
+	
+	return (This:C1470[$name])
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	// Create a button object instance
+Function button($name : Text; $widgetName : Text) : cs:C1710.button
+	
+	If (Count parameters:C259>=2)
+		
+		This:C1470._instantiate("button"; $name; $widgetName)
+		
+	Else 
+		
+		This:C1470._instantiate("button"; $name)
+		
+	End if 
+	
+	return (This:C1470[$name])
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	// Create a widget object instance
+Function widget($name : Text; $widgetName : Text) : cs:C1710.widget
+	
+	If (Count parameters:C259>=2)
+		
+		This:C1470._instantiate("widget"; $name; $widgetName)
+		
+	Else 
+		
+		This:C1470._instantiate("widget"; $name)
+		
+	End if 
+	
+	return (This:C1470[$name])
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	// Create a input object instance
+Function input($name : Text; $widgetName : Text) : cs:C1710.input
+	
+	If (Count parameters:C259>=2)
+		
+		This:C1470._instantiate("input"; $name; $widgetName)
+		
+	Else 
+		
+		This:C1470._instantiate("input"; $name)
+		
+	End if 
+	
+	return (This:C1470[$name])
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	// Create a stepper object instance
+Function stepper($name : Text; $widgetName : Text) : cs:C1710.stepper
+	
+	If (Count parameters:C259>=2)
+		
+		This:C1470._instantiate("stepper"; $name; $widgetName)
+		
+	Else 
+		
+		This:C1470._instantiate("stepper"; $name)
+		
+	End if 
+	
+	return (This:C1470[$name])
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	// Create a thermometer object instance
+Function thermometer($name : Text; $widgetName : Text) : cs:C1710.thermometer
+	
+	If (Count parameters:C259>=2)
+		
+		This:C1470._instantiate("thermometer"; $name; $widgetName)
+		
+	Else 
+		
+		This:C1470._instantiate("thermometer"; $name)
+		
+	End if 
+	
+	return (This:C1470[$name])
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	// Create a listbox object instance
+Function listbox($name : Text; $widgetName : Text) : cs:C1710.listbox
+	
+	If (Count parameters:C259>=2)
+		
+		This:C1470._instantiate("listbox"; $name; $widgetName)
+		
+	Else 
+		
+		This:C1470._instantiate("listbox"; $name)
+		
+	End if 
+	
+	return (This:C1470[$name])
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	// Create a picture object instance
+Function picture($name : Text; $widgetName : Text) : cs:C1710.picture
+	
+	If (Count parameters:C259>=2)
+		
+		This:C1470._instantiate("picture"; $name; $widgetName)
+		
+	Else 
+		
+		This:C1470._instantiate("picture"; $name)
+		
+	End if 
+	
+	return (This:C1470[$name])
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	// Create a subform object instance
+Function subform($name : Text; $widgetName : Text) : cs:C1710.subform
+	
+	If (Count parameters:C259>=2)
+		
+		This:C1470._instantiate("subform"; $name; $widgetName)
+		
+	Else 
+		
+		This:C1470._instantiate("subform"; $name)
+		
+	End if 
+	
+	return (This:C1470[$name])
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	// Create a selector object instance
+Function selector($name : Text; $widgetName : Text) : cs:C1710.selector
+	
+	If (Count parameters:C259>=2)
+		
+		This:C1470._instantiate("selector"; $name; $widgetName)
+		
+	Else 
+		
+		This:C1470._instantiate("selector"; $name)
+		
+	End if 
+	
+	return (This:C1470[$name])
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	// Create a group instance
+Function group($name : Text; $member; $member2; $memberN) : cs:C1710.group
+	
+	var ${2}
+	var $i : Integer
+	
+	This:C1470[$name]:=cs:C1710.group.new()
+	
+	For ($i; 2; Count parameters:C259; 1)
+		
+		This:C1470[$name].addMember(${$i})
+		
+	End for 
+	
+	return (This:C1470[$name])
 	
 	//MARK:-[CURSOR]
 	//=== === === === === === === === === === === === === === === === === === === === === 
@@ -843,7 +909,6 @@ Function _instantiate($class : Text; $key : Text; $name : Text)
 				//______________________________________________________
 		End case 
 	End if 
-	
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// [PRIVATE] set form events

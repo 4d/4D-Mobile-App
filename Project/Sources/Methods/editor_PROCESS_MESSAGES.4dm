@@ -120,7 +120,7 @@ Case of
 		EDITOR.removeTask($message)
 		
 		// Keep the result
-		Form:C1466.ExposedStructure:=$data  // cs.ExposedStructure
+		Form:C1466.ExposedStructure:=$data
 		
 		If ($data.success)
 			

@@ -163,18 +163,6 @@
 					"stroke": "#1E90FF",
 					"text": "Window:"
 				},
-				"Button": {
-					"type": "button",
-					"text": "Button",
-					"top": 618,
-					"left": 31,
-					"width": 172,
-					"height": 35,
-					"events": [
-						"onClick"
-					],
-					"method": "ObjectMethods/Button.4dm"
-				},
 				"Button1": {
 					"type": "button",
 					"text": "Button Button Button Button",
@@ -284,32 +272,6 @@
 					"fontSize": 13,
 					"textDecoration": "none"
 				},
-				"Button2": {
-					"type": "button",
-					"text": "Flat",
-					"top": 45,
-					"left": 714,
-					"width": 72,
-					"height": 22,
-					"events": [
-						"onClick"
-					],
-					"method": "ObjectMethods/Button2.4dm",
-					"style": "flat",
-					"stroke": "#808080"
-				},
-				"Button4": {
-					"type": "button",
-					"text": "fonts",
-					"top": 414,
-					"left": 16,
-					"width": 105,
-					"height": 25,
-					"events": [
-						"onClick"
-					],
-					"method": "ObjectMethods/Button4.4dm"
-				},
 				"Button5": {
 					"type": "button",
 					"text": "view",
@@ -328,15 +290,12 @@
 				"Variable2",
 				"Variable1",
 				"Variable",
-				"Button",
 				"Button1",
 				"tab.list",
 				"tab.detail",
 				"Radio Button",
 				"Radio Button1",
 				"Input",
-				"Button2",
-				"Button4",
 				"Button5"
 			]
 		}
@@ -345,7 +304,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 30,
+	"geometryStamp": 33,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

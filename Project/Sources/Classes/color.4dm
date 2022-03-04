@@ -28,7 +28,7 @@ Class constructor($color)
 					This:C1470.setHSL($color)
 					
 					//______________________________________________________
-				: ($color.color#Null:C1517)  // 4D Color 
+				: ($color.color#Null:C1517)  // 4D Color
 					
 					This:C1470.setColor(Num:C11($color.color))
 					
@@ -46,61 +46,68 @@ Class constructor($color)
 			This:C1470.setCSS($color)
 			
 			//______________________________________________________
+		: (Value type:C1509($color)=Is real:K8:4)\
+			 | (Value type:C1509($color)=Is longint:K8:6)  // 4D Color
+			
+			This:C1470.setColor(Num:C11($color))
+			
+			//______________________________________________________
 		Else 
 			
-			This:C1470.setColor(Num:C11($color))  // 4D Color 
+			ASSERT:C1129(False:C215; "Invalid type for the color parameter!")
 			
 			//______________________________________________________
 	End case 
 	
+	//MARK:-[SETTERS]
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// 4D color expression
-Function setColor($color : Integer)->$this : cs:C1710.color
+Function setColor($color : Integer) : cs:C1710.color
 	
 	This:C1470.main:=$color
 	This:C1470.rgb:=This:C1470.colorToRGB($color)
 	This:C1470.hsl:=This:C1470.colorToHSL($color)
 	This:C1470.css:=This:C1470.colorToCSS($color)
 	
-	$this:=This:C1470
+	return (This:C1470)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// 4RGB color from 4DPalette index (1-256)
-Function setColorIndexed($color : Integer)->$this : cs:C1710.color
+Function setColorIndexed($color : Integer) : cs:C1710.color
 	
-	If ($color>=1) & ($color<=256)
+	If (Asserted:C1132(($color>=1) & ($color<=256); "The index value must be between 1 & 256 !"))
 		
 		This:C1470.setCSS(JSON Parse:C1218(File:C1566("/RESOURCES/colors.json").getText()).indexed[$color-1])
 		
 	End if 
 	
-	$this:=This:C1470
+	return (This:C1470)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// RGB Color
-Function setRGB($rgb : Object)->$this : cs:C1710.color
+Function setRGB($rgb : Object) : cs:C1710.color
 	
 	This:C1470.rgb:=$rgb
 	This:C1470.main:=(This:C1470.rgb.red << 16)+(This:C1470.rgb.green << 8)+This:C1470.rgb.blue
 	This:C1470.hsl:=This:C1470.colorToHSL(This:C1470.main)
 	This:C1470.css:=This:C1470.colorToCSS(This:C1470.main)
 	
-	$this:=This:C1470
+	return (This:C1470)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// HSL Color
-Function setHSL($hsl : Object)->$this : cs:C1710.color
+Function setHSL($hsl : Object) : cs:C1710.color
 	
 	This:C1470.hsl:=$hsl
 	This:C1470.rgb:=This:C1470.hslToRGB($hsl)
 	This:C1470.main:=(This:C1470.rgb.red << 16)+(This:C1470.rgb.green << 8)+This:C1470.rgb.blue
 	This:C1470.css:=This:C1470.colorToCSS(This:C1470.main)
 	
-	$this:=This:C1470
+	return (This:C1470)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// HTML Color
-Function setCSS($css : Text)->$this : cs:C1710.color
+Function setCSS($css : Text) : cs:C1710.color
 	
 	var $lightness; $r1; $r2; $saturation : Real
 	var $t : Text
@@ -177,12 +184,13 @@ Function setCSS($css : Text)->$this : cs:C1710.color
 			//______________________________________________________
 	End case 
 	
-	$this:=This:C1470
+	return (This:C1470)
 	
+	//MARK:-[CONVERTERS]
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function colorToRGB($color)->$rgb : Object
+Function colorToRGB($color) : Object
 	
-	$rgb:=This:C1470._convertColor($color)
+	return (This:C1470._convertColor($color))
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function colorToCSS($color : Integer; $type : Text)->$css
@@ -256,35 +264,36 @@ Function colorToCSS($color : Integer; $type : Text)->$css
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function colorToHSL($color : Integer)->$hsl : Object
+Function colorToHSL($color : Integer) : Object
 	
-	$hsl:=This:C1470._convertColor($color; "hsl")
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function hslToRGB($hsl : Object)->$rgb : Object
-	
-	$rgb:=This:C1470._convertHSL($hsl; "rgb")
+	return (This:C1470._convertColor($color; "hsl"))
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function hslToColor($hsl : Object)->$color : Integer
+Function hslToRGB($hsl : Object) : Object
 	
-	$color:=This:C1470._convertHSL($hsl)
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function hslToCss($hsl : Object)->$css : Text
-	
-	$css:=This:C1470._convertHSL($hsl; "css")
+	return (This:C1470._convertHSL($hsl; "rgb"))
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function rgbToColor($rgb : Object)->$color : Integer
+Function hslToColor($hsl : Object) : Integer
 	
-	$color:=This:C1470._convertRgb($rgb; "color")
+	return (This:C1470._convertHSL($hsl))
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function rgbToHSL($rgb : Object)->$hsl : Object
+Function hslToCss($hsl : Object) : Text
 	
-	$hsl:=This:C1470._convertRgb($rgb; "hsl")
+	return (This:C1470._convertHSL($hsl; "css"))
 	
+	// === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function rgbToColor($rgb : Object) : Integer
+	
+	return (This:C1470._convertRgb($rgb; "color"))
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function rgbToHSL($rgb : Object) : Object
+	
+	return (This:C1470._convertRgb($rgb; "hsl"))
+	
+	//MARK:-[UTILITIES]
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function getMatchingColors($kind : Integer)->$palette : Collection
 	
@@ -680,7 +689,7 @@ Function getMatchingColors($kind : Integer)->$palette : Collection
 	End case 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function fontColor($backgroundColor; $green : Integer; $blue : Integer)->$value : Text
+Function fontColor($backgroundColor; $green : Integer; $blue : Integer) : Text
 	
 	var $lightness : Real
 	var $rgb : Object
@@ -724,24 +733,22 @@ Function fontColor($backgroundColor; $green : Integer; $blue : Integer)->$value 
 	If ($rgb#Null:C1517)
 		
 		$lightness:=1-(((0.299*$rgb.red)+(0.587*$rgb.green)+(0.114*$rgb.blue))/255)
-		$value:=Choose:C955($lightness<0.5; "black"; "white")
+		return ($lightness<0.5 ? "black" : "white")
 		
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function _convertColor($color : Integer; $format : Text)->$value
+Function isValid() : Boolean
 	
-	var $alpha; $red; $green; $blue : Integer
-	var $to : Text
-	var $rgb : Object
+	return ((This:C1470.rgb#Null:C1517) & (This:C1470.hsl#Null:C1517) & (This:C1470.css#Null:C1517))
 	
-	$to:="rgb"  // Default is RGB
+	//MARK:-[PRIVATES]
+	// === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _convertColor($color : Integer; $format : Text) : Variant
 	
-	If (Count parameters:C259>=2)
-		
-		$to:=$format
-		
-	End if 
+	var $alpha; $blue; $green; $red : Integer
+	
+	$format:=Length:C16($format)=0 ? "rgb" : $format  // Default is RGB
 	
 	$alpha:=255  // No alpha with 4D color
 	$red:=($color & 0x00FF0000) >> 16
@@ -751,70 +758,54 @@ Function _convertColor($color : Integer; $format : Text)->$value
 	Case of 
 			
 			//………………………………………………………………………………………………………
-		: ($to="rgb")
+		: ($format="rgb")
 			
-			$value:=New object:C1471(\
+			return (New object:C1471(\
 				"alpha"; $alpha; \
 				"red"; $red; \
 				"green"; $green; \
 				"blue"; $blue\
-				)
+				))
 			
 			//………………………………………………………………………………………………………
-		: ($to="hsl")
+		: ($format="hsl")
 			
-			$value:=This:C1470._rgb2Hsl($red; $green; $blue)
+			return (This:C1470._rgb2Hsl($red; $green; $blue))
 			
 			//………………………………………………………………………………………………………
-		: ($to="css")
+		: ($format="css")
 			
-			$value:="rgb("+String:C10($red)+","\
+			return ("rgb("+String:C10($red)+","\
 				+String:C10($green)+","\
-				+String:C10($blue)+")"
+				+String:C10($blue)+")")
 			
 			//………………………………………………………………………………………………………
 	End case 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function _convertRgb($color : Object; $format : Text)->$value
+Function _convertRgb($color : Object; $format : Text) : Variant
 	
 	var $rgb : Object
-	var $to : Text
 	
-	$to:="color"  // Default is 4D color
-	
-	If (Count parameters:C259>=1)
-		
-		$rgb:=$color
-		
-		If (Count parameters:C259>=2)
-			
-			$to:=$format
-			
-		End if 
-		
-	Else 
-		
-		$rgb:=This:C1470.rgb
-		
-	End if 
+	$rgb:=Count parameters:C259>=1 ? $color : This:C1470.rgb
+	$format:=Length:C16($format)=0 ? "color" : $format  // Default is 4D color
 	
 	Case of 
 			
 			//………………………………………………………………………………………………………
-		: ($to="color")
+		: ($format="color")
 			
-			$value:=(Num:C11($rgb.alpha) << 24)+(Num:C11($rgb.red) << 16)+(Num:C11($rgb.green) << 8)+Num:C11($rgb.blue)
-			
-			//………………………………………………………………………………………………………
-		: ($to="hsl")
-			
-			$value:=This:C1470._rgb2Hsl(Num:C11($rgb.red); Num:C11($rgb.green); Num:C11($rgb.blue))
+			return ((Num:C11($rgb.alpha) << 24)+(Num:C11($rgb.red) << 16)+(Num:C11($rgb.green) << 8)+Num:C11($rgb.blue))
 			
 			//………………………………………………………………………………………………………
-		: ($to="css")
+		: ($format="hsl")
 			
-			$value:="rgb("+String:C10(Num:C11($rgb.red))+","+String:C10(Num:C11($rgb.green))+","+String:C10(Num:C11($rgb.blue))+")"
+			return (This:C1470._rgb2Hsl(Num:C11($rgb.red); Num:C11($rgb.green); Num:C11($rgb.blue)))
+			
+			//………………………………………………………………………………………………………
+		: ($format="css")
+			
+			return ("rgb("+String:C10(Num:C11($rgb.red))+","+String:C10(Num:C11($rgb.green))+","+String:C10(Num:C11($rgb.blue))+")")
 			
 			//………………………………………………………………………………………………………
 	End case 
@@ -957,31 +948,15 @@ Function _rgb2Hsl($r : Integer; $g : Integer; $b : Integer)->$value : Object
 	$value.hue:=Round:C94($value.hue; 0)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function _convertHSL($color : Object; $format : Text)->$value
+Function _convertHSL($color : Object; $format : Text) : Variant
 	
-	var $to : Text
 	var $blue; $green; $hue; $lightness; $max; $min; $offset; $red; $saturation : Integer
 	var $hsl : Object
 	
-	$to:="color"  // Default is 4D color
+	$hsl:=Count parameters:C259>=1 ? $color : This:C1470.hsl
+	$format:=Length:C16($format)=0 ? "color" : $format  // Default is 4D color
 	
-	If (Count parameters:C259>=1)
-		
-		$hsl:=$color
-		
-		If (Count parameters:C259>=2)
-			
-			$to:=$format
-			
-		End if 
-		
-	Else 
-		
-		$hsl:=This:C1470.hsl
-		
-	End if 
-	
-	If ($to#"css")
+	If ($format#"css")
 		
 		$hue:=Num:C11($hsl.hue)%360  //0 to 360°
 		$saturation:=Num:C11($hsl.saturation)  //0 to 100%
@@ -1055,30 +1030,30 @@ Function _convertHSL($color : Object; $format : Text)->$value
 	Case of 
 			
 			//………………………………………………………………………………………………………
-		: ($to="color")
+		: ($format="color")
 			
-			$value:=0+($red << 16)+($green << 8)+$blue
+			return (0+($red << 16)+($green << 8)+$blue)
 			
 			//………………………………………………………………………………………………………
-		: ($to="rgb")
+		: ($format="rgb")
 			
-			$value:=New object:C1471(\
+			return (New object:C1471(\
 				"red"; $red; \
 				"green"; $green; \
-				"blue"; $blue)
+				"blue"; $blue))
 			
 			//………………………………………………………………………………………………………
-		: ($to="css")
+		: ($format="css")
 			
-			$value:="hsl("+String:C10($hsl.hue)+","\
+			return ("hsl("+String:C10($hsl.hue)+","\
 				+String:C10($hsl.saturation)+"%,"\
-				+String:C10($hsl.lightness)+"%)"
+				+String:C10($hsl.lightness)+"%)")
 			
 			//………………………………………………………………………………………………………
 	End case 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function _hueToRGB($v1 : Real; $v2 : Real; $vH : Real)->$value : Integer
+Function _hueToRGB($v1 : Real; $v2 : Real; $vH : Real) : Integer
 	
 	Case of 
 			
@@ -1100,27 +1075,23 @@ Function _hueToRGB($v1 : Real; $v2 : Real; $vH : Real)->$value : Integer
 			//…………………………………………………………………………………………………
 		: ((6*$vH)<1)
 			
-			$value:=$v1+(($v2-$v1)*6*$vH)
+			return ($v1+(($v2-$v1)*6*$vH))
 			
 			//…………………………………………………………………………………………………
 		: ((2*$vH)<1)
 			
-			$value:=$v2
+			return ($v2)
 			
 			//…………………………………………………………………………………………………
 		: ((3*$vH)<2)
 			
-			$value:=$v1+(($v2-$v1)*((2/3)-$vH)*6)
+			return ($v1+(($v2-$v1)*((2/3)-$vH)*6))
 			
 			//…………………………………………………………………………………………………
 		Else 
 			
-			$value:=$v1
+			return ($v1)
 			
 			//…………………………………………………………………………………………………
 	End case 
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function isValid()->$valid : Boolean
-	$valid:=(This:C1470.rgb#Null:C1517) & (This:C1470.hsl#Null:C1517) & (This:C1470.css#Null:C1517)
 	

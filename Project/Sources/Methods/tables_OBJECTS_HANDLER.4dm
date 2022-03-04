@@ -111,7 +111,7 @@ Case of
 							
 							$Obj_picker.action:="tableIcons"
 							
-							If (EDITOR.isDark)
+							If (EDITOR.darkScheme)
 								
 								$Obj_picker.background:="black"
 								$Obj_picker.backgroundStroke:="white"

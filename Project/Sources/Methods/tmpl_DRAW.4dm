@@ -543,7 +543,7 @@ If (Num:C11($tableID)>0)
 					.textArea(EDITOR.str.localize("theTemplateIsMissingOrInvalid"; Replace string:C233($formName; "/"; ""))).size($form.preview.coordinates.width-50)\
 					.position(20; 180).font(New object:C1471(\
 					"size"; 14; \
-					"color"; EDITOR.colors.errorColor.hex; \
+					"color"; EDITOR.colors.errorColor.css.hexLong; \
 					"alignment"; Align center:K42:3)).picture())
 				
 				OBJECT SET TITLE:C194(*; "preview.label"; "")

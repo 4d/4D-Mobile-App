@@ -7,7 +7,6 @@
 	},
 	"__IN WORKS": {
 		"methods": [
-			"_o_process",
 			"_w_actions",
 			"00_NEW",
 			"00_OPEN",
@@ -43,6 +42,8 @@
 		],
 		"methods": [
 			"_catalog",
+			"_NEW_MOBILE_PROJECT",
+			"_OPEN_MOBILE_PROJECT",
 			"01_LASTBUILD",
 			"dev_test_android",
 			"dev_tests_iOS",
@@ -65,13 +66,12 @@
 	},
 	"_o_OBSOLETES": {
 		"methods": [
-			"_NEW_MOBILE_PROJECT",
 			"_o_checkQueryFilter",
-			"_o_color",
 			"_o_currentForm",
 			"_o_device",
 			"_o_editor_Locked",
 			"_o_err",
+			"_o_mobile_Project_iOS",
 			"_o_panel_Form_common",
 			"_o_plist",
 			"_o_rest_isValidField",
@@ -88,7 +88,6 @@
 			"_o_xml_elementToObject",
 			"_o_xml_fileToObject",
 			"_o_xml_refToObject",
-			"_OPEN_MOBILE_PROJECT",
 			"OBSOLETE",
 			"TEMPO_1",
 			"TURN_AROUND_Field_name"
@@ -128,7 +127,6 @@
 			"certificate",
 			"colors",
 			"COMPILER_macOS",
-			"mobile_Project_iOS",
 			"provisioningProfiles",
 			"swiftPM",
 			"teamId",
@@ -900,10 +898,8 @@
 			"ob MERGE",
 			"picture",
 			"static",
-			"subform",
 			"thermometer",
-			"widget",
-			"window"
+			"widget"
 		]
 	},
 	"rgx (thread-safe)": {

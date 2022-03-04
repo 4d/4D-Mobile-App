@@ -515,15 +515,15 @@ Function getContent($keepStructure : Boolean)->$content : Blob
 	
 	//———————————————————————————————————————————————————————————/
 	// 
-Function toObject($withAdresses : Boolean)->$object : Object
+Function toObject($withAdresses : Boolean) : Object
 	
 	If (Count parameters:C259>=1)
 		
-		$object:=This:C1470._elementToObject(This:C1470.root; $withAdresses)
+		return (This:C1470._elementToObject(This:C1470.root; $withAdresses))
 		
 	Else 
 		
-		$object:=This:C1470._elementToObject(This:C1470.root)
+		return (This:C1470._elementToObject(This:C1470.root))
 		
 	End if 
 	

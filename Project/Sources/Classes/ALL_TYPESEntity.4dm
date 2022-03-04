@@ -14,6 +14,8 @@ exposed Function get computedString()->$result : Text
 	// +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++
 exposed Function get computedBoolean()->$result : Boolean
 	
+exposed Function set computedBoolean($value : Boolean)
+	
 	// +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++
 exposed Function get computedDate()->$result : Date
 	

@@ -120,10 +120,6 @@ Case of
 							
 						End if 
 						
-						// Select the item
-						//SVG SET ATTRIBUTE(*; $e.objectName; $tableID; \
-																																										"fill"; Choose(EDITOR.isDark; "slategray"; EDITOR.selectedFillColor))
-						
 						$context.draw:=True:C214
 						$context.update:=True:C214
 						$context.picker:=Not:C34($exists)
@@ -347,7 +343,7 @@ Case of
 					SET BLOB SIZE:C606($x; 0)
 					
 					// Set the drag icon
-					If (EDITOR.isDark)
+					If (EDITOR.darkScheme)
 						
 						$p:=cs:C1710.svg.new().fillColor("slategray").fillOpacity(1).height(23)\
 							.image(EDITOR.fieldIcons[$o.fieldType]).position(2; 2)\
@@ -570,7 +566,7 @@ End case
 						SET BLOB SIZE:C606($x; 0)
 						
 						// Create the drag icon
-						If (EDITOR.isDark)
+						If (EDITOR.darkScheme)
 							
 							$p:=cs:C1710.svg.new().fillColor("slategray").fillOpacity(1).height(23)\
 								.image(EDITOR.fieldIcons[$o.fieldType]).position(2; 2)\

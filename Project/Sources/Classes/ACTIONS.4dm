@@ -815,7 +815,7 @@ Function doShowIconPicker()
 		
 		$o.action:="actionIcons"
 		
-		If (EDITOR.isDark)
+		If (EDITOR.darkScheme)
 			
 			$o.background:="black"
 			$o.backgroundStroke:="white"
@@ -972,7 +972,7 @@ Function metaInfo($current : Object)->$result
 	
 	// Default values
 	$result:=New object:C1471(\
-		"stroke"; Choose:C955(EDITOR.isDark; "white"; "black"); \
+		"stroke"; Choose:C955(EDITOR.darkScheme; "white"; "black"); \
 		"fontWeight"; "normal"; \
 		"cell"; New object:C1471(\
 		"tables"; New object:C1471; \
@@ -995,7 +995,7 @@ Function metaInfo($current : Object)->$result
 			
 		Else 
 			
-			$result.cell.names.stroke:=Choose:C955(EDITOR.isDark; "white"; "black")
+			$result.cell.names.stroke:=Choose:C955(EDITOR.darkScheme; "white"; "black")
 			
 		End if 
 	End if 
@@ -1008,11 +1008,11 @@ Function metaInfo($current : Object)->$result
 		
 	Else 
 		
-		$result.cell.names.stroke:=Choose:C955(EDITOR.isDark; "white"; "black")
+		$result.cell.names.stroke:=Choose:C955(EDITOR.darkScheme; "white"; "black")
 		
 	End if 
 	
 	// Redmine:#129995 : The short label value of a sort action shall be greyed and not
 	// editable from the action section of the project editor
-	$result.cell.shorts.stroke:=Choose:C955(String:C10($current.preset)="sort"; "silver"; Choose:C955(EDITOR.isDark; "white"; "black"))
+	$result.cell.shorts.stroke:=Choose:C955(String:C10($current.preset)="sort"; "silver"; Choose:C955(EDITOR.darkScheme; "white"; "black"))
 	

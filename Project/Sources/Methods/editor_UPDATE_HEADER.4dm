@@ -8,50 +8,43 @@
 // Manage UI of the subform TITLE into the container "description"
 // ----------------------------------------------------
 // Declarations
-C_OBJECT:C1216($1)
-
-C_OBJECT:C1216($o)
+#DECLARE($data : Object)
 
 If (False:C215)
 	C_OBJECT:C1216(editor_UPDATE_HEADER; $1)
 End if 
 
+var $button : cs:C1710.button
+
 // ----------------------------------------------------
 // Initialisations
-If (Asserted:C1132(Count parameters:C259>=0; "Missing parameter"))
+
+// <NO PARAMETERS REQUIRED>
+
+// Optional parameters
+If (Count parameters:C259>=1)
 	
-	// <NO PARAMETERS REQUIRED>
-	
-	// Optional parameters
-	If (Count parameters:C259>=1)
+	If ($data.action#Null:C1517)
 		
-		If ($1.action#Null:C1517)
+		Form:C1466.action:=$data.action
+		
+	Else 
+		
+		If (Form:C1466.action#Null:C1517)
 			
-			Form:C1466.action:=$1.action
+			Form:C1466.action.show:=Bool:C1537($data.show)
 			
-		Else 
-			
-			If (Form:C1466.action#Null:C1517)
-				
-				Form:C1466.action.show:=Bool:C1537($1.show)
-				
-			End if 
 		End if 
 	End if 
-	
-Else 
-	
-	ABORT:C156
-	
 End if 
 
 // ----------------------------------------------------
-$o:=_o_UI.button("action")
+$button:=cs:C1710.button.new("action")
 
 If (Form:C1466.action#Null:C1517)
 	
-	$o.setTitle(String:C10(Form:C1466.action.title)).bestSize(Align right:K42:4)
+	$button.setTitle(String:C10(Form:C1466.action.title)).bestSize(Align right:K42:4)
 	
 End if 
 
-$o.setVisible(Bool:C1537(Form:C1466.action.show))
+$button.show(Bool:C1537(Form:C1466.action.show))

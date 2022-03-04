@@ -729,11 +729,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 						
 						// 2- scene
 						//$Obj_element:=New object(\
-																																																																																																									"insertInto";$Dom_root.findByXPath("document/scenes");\
-																																																																																																									"dom";xml("load";$Folder_relation.file("storyboardScene.xml"));\
-																																																																																																									"idCount";3;\
-																																																																																																									"tagInterfix";"SN";\
-																																																																																																									"insertMode";"append")
+																																																																																																																"insertInto";$Dom_root.findByXPath("document/scenes");\
+																																																																																																																"dom";xml("load";$Folder_relation.file("storyboardScene.xml"));\
+																																																																																																																"idCount";3;\
+																																																																																																																"tagInterfix";"SN";\
+																																																																																																																"insertMode";"append")
 						$Obj_element:=New object:C1471(\
 							"insertInto"; $Dom_root.findByXPath("/document/scenes"); \
 							"dom"; _o_xml("load"; $Folder_relation.file("storyboardScene.xml")); \

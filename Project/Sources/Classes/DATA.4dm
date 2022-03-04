@@ -92,7 +92,7 @@ Function onLoad()
 	
 	// Init the query widget
 	var $t : Text
-	If (EDITOR.isDark)
+	If (EDITOR.darkScheme)
 		
 		$t:=File:C1566("/RESOURCES/queryWidget_dark.svg").getText()
 		
@@ -694,7 +694,7 @@ Function doQueryWidget()
 							
 						End if 
 						
-						If (EDITOR.isDark)
+						If (EDITOR.darkScheme)
 							
 							$menu.icon("Images/dark/fieldsIcons/field_"+String:C10($field.typeLegacy; "00")+".png")
 							
@@ -828,7 +828,7 @@ Function metaInfo($current : Object)->$meta
 	
 	// Default values
 	$meta:=New object:C1471(\
-		"stroke"; Choose:C955(EDITOR.isDark; "white"; "black"); \
+		"stroke"; Choose:C955(EDITOR.darkScheme; "white"; "black"); \
 		"fontWeight"; "normal"; \
 		"cell"; New object:C1471(\
 		"table_names"; New object:C1471))

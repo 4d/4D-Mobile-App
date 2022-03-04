@@ -14,8 +14,8 @@
 #DECLARE($in : Object)->$out : Object
 
 If (False:C215)
-	C_OBJECT:C1216(mobile_Project_iOS; $0)
-	C_OBJECT:C1216(mobile_Project_iOS; $1)
+	C_OBJECT:C1216(_o_mobile_Project_iOS; $0)
+	C_OBJECT:C1216(_o_mobile_Project_iOS; $1)
 End if 
 
 var $associatedDomain; $pathname; $productName; $t; $tt; $urlScheme : Text

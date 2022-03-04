@@ -37,11 +37,6 @@ If (False:C215)  // Widgets
 	C_OBJECT:C1216(static; $2)
 	
 	//______________________________________________________
-	C_OBJECT:C1216(subform; $0)
-	C_TEXT:C284(subform; $1)
-	C_OBJECT:C1216(subform; $2)
-	
-	//______________________________________________________
 	C_OBJECT:C1216(thermometer; $0)
 	C_TEXT:C284(thermometer; $1)
 	C_OBJECT:C1216(thermometer; $2)
@@ -82,11 +77,6 @@ End if
 If (False:C215)  // Tools
 	
 	//______________________________________________________
-	C_OBJECT:C1216(_o_color; $0)
-	C_TEXT:C284(_o_color; $1)
-	C_OBJECT:C1216(_o_color; $2)
-	
-	//______________________________________________________
 	C_OBJECT:C1216(_o_currentForm; $0)
 	C_TEXT:C284(_o_currentForm; $1)
 	C_OBJECT:C1216(_o_currentForm; $2)
@@ -105,16 +95,6 @@ If (False:C215)  // Tools
 	C_OBJECT:C1216(logger; $0)
 	C_VARIANT:C1683(logger; $1)
 	C_OBJECT:C1216(logger; $2)
-	
-	//______________________________________________________
-	C_OBJECT:C1216(_o_process; $0)
-	C_TEXT:C284(_o_process; $1)
-	C_OBJECT:C1216(_o_process; $2)
-	
-	//______________________________________________________
-	C_OBJECT:C1216(window; $0)
-	C_TEXT:C284(window; $1)
-	C_OBJECT:C1216(window; $2)
 	
 	//______________________________________________________
 End if 

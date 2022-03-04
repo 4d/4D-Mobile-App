@@ -54,7 +54,7 @@ Case of
 		
 		$medias:=Folder:C1567("/RESOURCES/images/welcome/")
 		
-		If (EDITOR.isDark)
+		If (EDITOR.darkScheme)
 			
 			$c:=New collection:C1472("structure-dark.png"; "design-dark.png"; "generateAndTest-dark.png"; "deploy-dark.png")
 			

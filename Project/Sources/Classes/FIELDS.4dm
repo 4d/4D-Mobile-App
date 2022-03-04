@@ -746,7 +746,7 @@ Function doShowIconPicker($e : Object)
 		
 		$o.action:="fieldIcons"
 		
-		If (EDITOR.isDark)
+		If (EDITOR.darkScheme)
 			
 			$o.background:="black"
 			$o.backgroundStroke:="white"

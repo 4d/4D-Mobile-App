@@ -71,7 +71,7 @@ $icons:=New collection:C1472.resize($pathnames.length)
 
 For each ($path; $pathnames)
 	
-	If (EDITOR.isDark) && ($path="@.svg")
+	If (EDITOR.darkScheme) && ($path="@.svg")
 		
 		var $svg : cs:C1710.svg
 		$svg:=cs:C1710.svg.new(File:C1566($path; fk platform path:K87:2))
@@ -118,7 +118,7 @@ If ($folder.exists)
 	
 	For each ($path; $host)
 		
-		If (EDITOR.isDark) && ($path="@.svg")
+		If (EDITOR.darkScheme) && ($path="@.svg")
 			
 			var $svg : cs:C1710.svg
 			$svg:=cs:C1710.svg.new(File:C1566($path; fk platform path:K87:2))
@@ -150,7 +150,7 @@ End if
 // ----------------------------------------------------
 //                 Insert blank icon
 // ----------------------------------------------------
-If (EDITOR.isDark) && (EDITOR.noIcon="@.svg")
+If (EDITOR.darkScheme) && (EDITOR.noIcon="@.svg")
 	
 	var $svg : cs:C1710.svg
 	$svg:=cs:C1710.svg.new(File:C1566(EDITOR.noIcon; fk platform path:K87:2))

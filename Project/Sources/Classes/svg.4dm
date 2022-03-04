@@ -20,7 +20,7 @@ Class constructor($content)
 	This:C1470.store:=New collection:C1472
 	
 	// Elements that can have graphic elements and other container elements as child elements.
-	This:C1470._container:=New collection:C1472("a"; "defs"; "g"; "marker"; "mask"; "pattern"; "svg"; "switch"; "symbol")
+	This:C1470._containers:=New collection:C1472("a"; "defs"; "g"; "marker"; "mask"; "pattern"; "svg"; "switch"; "symbol")
 	
 	//  Graphics element that is defined by some combination of straight lines and curves
 	This:C1470._shapes:=New collection:C1472("path"; "rect"; "circle"; "ellipse"; "line"; "polyline"; "polygon")
@@ -1618,7 +1618,7 @@ Function cy($cy : Real; $applyTo) : cs:C1710.svg
 	//———————————————————————————————————————————————————————————
 Function width($width : Real; $applyTo) : cs:C1710.svg
 	
-	//FIXME:Target specific treatment
+	//FIXME:Target specific treatment (line,…)
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
 		
 		If (Count parameters:C259>=2)

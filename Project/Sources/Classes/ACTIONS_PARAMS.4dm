@@ -1447,8 +1447,8 @@ Function doDataSourceMenu()
 Function editList()
 	
 	//$form:=New object(\
-														"static"; $static; \
-														"host"; This.path.hostInputControls(True))
+																"static"; $static; \
+																"host"; This.path.hostInputControls(True))
 	
 	//$form.folder:=This.path.hostInputControls()
 	//$manifest:=$form.folder.file("manifest.json")
@@ -2003,7 +2003,7 @@ Function formatToolTip($format : Text)->$tip : Text
 		//SHARED.resources.formattersByName:=New object
 		//var $bind
 		//For each ($bind; SHARED.resources.fieldBindingTypes\
-															.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
+																		.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
 		//SHARED.resources.formattersByName[$bind.name]:=$bind
 		//End for each
 		//End if
@@ -2041,7 +2041,7 @@ Function backgroundColor($current : Object)->$color
 Function metaInfo($current : Object)->$result
 	
 	$result:=New object:C1471(\
-		"stroke"; Choose:C955(EDITOR.isDark; "white"; "black"); \
+		"stroke"; Choose:C955(EDITOR.darkScheme; "white"; "black"); \
 		"fontWeight"; "normal"; \
 		"cell"; New object:C1471(\
 		"names"; New object:C1471))
@@ -2053,7 +2053,7 @@ Function metaInfo($current : Object)->$result
 		
 	Else 
 		
-		$result.cell.names.stroke:=Choose:C955(EDITOR.isDark; "white"; "black")
+		$result.cell.names.stroke:=Choose:C955(EDITOR.darkScheme; "white"; "black")
 		
 	End if 
 	

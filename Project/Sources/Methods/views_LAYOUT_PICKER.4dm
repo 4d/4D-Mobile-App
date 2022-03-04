@@ -241,7 +241,7 @@ $picker:=New object:C1471(\
 "thumbnailWidth"; $data.icon.width; \
 "noPicture"; Get localized string:C991("noMedia"); \
 "tips"; True:C214; \
-"background"; Choose:C955(EDITOR.isDark; 0x0000; 0x00FFFFFF); \
+"background"; Choose:C955(EDITOR.darkScheme; 0x0000; 0x00FFFFFF); \
 "backgroundStroke"; EDITOR.strokeColor; \
 "promptColor"; 0x00FFFFFF; \
 "promptBackColor"; EDITOR.strokeColor; \
@@ -323,8 +323,8 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 				
 				$svg.rect($data.cell.width-6; $data.cell.height-3)\
 					.position(5; 2)\
-					.stroke(EDITOR.colors.strokeColor.hex)\
-					.fill(EDITOR.colors.backgroundSelectedColor.hex)\
+					.stroke(EDITOR.colors.strokeColor.css.hexLong)\
+					.fill(EDITOR.colors.backgroundSelectedColor.css.hexLong)\
 					.radius(10)
 				
 			End if 
@@ -359,7 +359,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 			$svg.textArea($o.name; "root")\
 				.position(0; $data.cell.height-20)\
 				.width($data.cell.width)\
-				.fill(Choose:C955(EDITOR.isDark; Choose:C955($isSelected; "dimgray"; "white"); "dimgray"))\
+				.fill(Choose:C955(EDITOR.darkScheme; Choose:C955($isSelected; "dimgray"; "white"); "dimgray"))\
 				.alignment(Align center:K42:3)\
 				.fontStyle(Choose:C955($isSelected; Bold:K14:2; Normal:K14:15))
 			
@@ -422,10 +422,16 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 				
 				If ($isSelected)  //selected
 					
+					//$svg.rect($data.cell.width-6; $data.cell.height-3)\
+						.position(5; 2)\
+						.stroke(Choose(EDITOR.darkScheme; "#76D5FE"; EDITOR.colors.strokeColor.css.hexLong))\
+						.fill(Choose(EDITOR.darkScheme; "#0E2732"; EDITOR.colors.backgroundSelectedColor.css.hexLong))\
+						.radius(10)
+					
 					$svg.rect($data.cell.width-6; $data.cell.height-3)\
 						.position(5; 2)\
-						.stroke(Choose:C955(EDITOR.isDark; "#76D5FE"; EDITOR.colors.strokeColor.hex))\
-						.fill(Choose:C955(EDITOR.isDark; "#0E2732"; EDITOR.colors.backgroundSelectedColor.hex))\
+						.stroke(EDITOR.colors.strokeColor.css.hexLong)\
+						.fill(EDITOR.colors.backgroundSelectedColor.css.hexLong)\
 						.radius(10)
 					
 				End if 
@@ -461,7 +467,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 				$svg.textArea($template.parent.name; "root")\
 					.position(0; $data.cell.height-20)\
 					.size($data.cell.width)\
-					.fill(Choose:C955(EDITOR.isDark; Choose:C955($isSelected; "dimgray"; "white"); "dimgray"))\
+					.fill(Choose:C955(EDITOR.darkScheme; Choose:C955($isSelected; "dimgray"; "white"); "dimgray"))\
 					.alignment(Align center:K42:3)\
 					.fontStyle(Choose:C955($isSelected; Bold:K14:2; Normal:K14:15))
 				
@@ -483,7 +489,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 				If ($svg.success)
 					
 					// Add the css reference
-					$svg.styleSheet(Choose:C955(EDITOR.isDark; File:C1566("/RESOURCES/css/template_dark.css"); File:C1566("/RESOURCES/css/template.css")))
+					$svg.styleSheet(Choose:C955(EDITOR.darkScheme; File:C1566("/RESOURCES/css/template_dark.css"); File:C1566("/RESOURCES/css/template.css")))
 					
 					$p:=$svg.picture()
 					CREATE THUMBNAIL:C679($p; $p; $data.cell.width; $data.cell.height-40)
@@ -494,8 +500,8 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 						
 						$svg.rect($data.cell.width-6; $data.cell.height-3)\
 							.position(5; 2)\
-							.stroke(EDITOR.colors.strokeColor.hex)\
-							.fill(EDITOR.colors.backgroundSelectedColor.hex)\
+							.stroke(EDITOR.colors.strokeColor.css.hexLong)\
+							.fill(EDITOR.colors.backgroundSelectedColor.css.hexLong)\
 							.radius(10)
 						
 					End if 
@@ -506,7 +512,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 					$svg.textArea($template.name; "root")\
 						.position(0; $data.cell.height-20)\
 						.size($data.cell.width)\
-						.fill(Choose:C955(EDITOR.isDark; Choose:C955($isSelected; "dimgray"; "white"); "dimgray"))\
+						.fill(Choose:C955(EDITOR.darkScheme; Choose:C955($isSelected; "dimgray"; "white"); "dimgray"))\
 						.alignment(Align center:K42:3)\
 						.fontStyle(Choose:C955($isSelected; Bold:K14:2; Normal:K14:15))
 					
@@ -546,7 +552,7 @@ $error.show()  // <- STOP HIDING ERRORS
 $svg:=cs:C1710.svg.new().size($data.cell.width; $data.cell.height)
 
 // Media
-If (EDITOR.isDark)
+If (EDITOR.darkScheme)
 	
 	READ PICTURE FILE:C678(File:C1566("/RESOURCES/templates/more-white@2x_dark.png").platformPath; $p)
 	

@@ -10,6 +10,17 @@ Class constructor()
 	
 	This:C1470.design()
 	
+	// Mark:Embedded classes
+	For each ($t; New collection:C1472(\
+		"str"; \
+		"path"; \
+		"tips"; \
+		"svg"))
+		
+		This:C1470._instantiate($t)
+		
+	End for each 
+	
 	// Load preferences
 	This:C1470.preferences:=cs:C1710.preferences.new().user("4D Mobile App.preferences")
 	
@@ -18,14 +29,8 @@ Class constructor()
 	
 	This:C1470.pendingTasks:=New collection:C1472
 	
-	// Mark:Embedded classes
-	For each ($t; New collection:C1472("str"; "path"; "tips"))
-		
-		This:C1470._instantiate($t)
-		
-	End for each 
-	
 	//MARK:-[COMPUTED]
+	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function get unsynchronizedTables()->$sesult : Collection
 	
@@ -329,7 +334,7 @@ Function updateColorScheme()
 	
 	This:C1470.fieldIcons:=New collection:C1472
 	
-	If (This:C1470.isDark)
+	If (This:C1470.darkScheme)
 		
 		// * PRE-LOADING ICONS FOR FIELD TYPES
 		For each ($file; Folder:C1567("/RESOURCES/images/dark/fieldsIcons").files(Ignore invisible:K24:16))
@@ -404,27 +409,23 @@ Function updateColorScheme()
 	// COLORS
 	This:C1470.colors:=New object:C1471
 	
-	This:C1470.colors.strokeColor:=_o_color("4dColor"; New object:C1471("value"; This:C1470.strokeColor))
-	This:C1470.colors.highlightColor:=_o_color("4dColor"; New object:C1471("value"; This:C1470.highlightColor))
-	This:C1470.colors.highlightColorNoFocus:=_o_color("4dColor"; New object:C1471("value"; This:C1470.highlightColorNoFocus))
-	This:C1470.colors.selectedColor:=_o_color("4dColor"; New object:C1471("value"; This:C1470.selectedColor))
-	This:C1470.colors.alternateSelectedColor:=_o_color("4dColor"; New object:C1471("value"; This:C1470.alternateSelectedColor))
-	This:C1470.colors.backgroundSelectedColor:=_o_color("4dColor"; New object:C1471("value"; This:C1470.backgroundSelectedColor))
-	This:C1470.colors.backgroundUnselectedColor:=_o_color("4dColor"; New object:C1471("value"; This:C1470.backgroundUnselectedColor))
-	This:C1470.colors.errorColor:=_o_color("4dColor"; New object:C1471("value"; This:C1470.errorColor))
-	This:C1470.colors.warningColor:=_o_color("4dColor"; New object:C1471("value"; This:C1470.warningColor))
+	var $color : cs:C1710.color
+	var $key : Text
 	
-	//var $color : cs.color
-	//$color:=cs.color.new()
-	//This.colors.strokeColor:=$color.setColor(This.strokeColor)
-	//This.colors.highlightColor:=$color.setColor(This.highlightColor)
-	//This.colors.highlightColorNoFocus:=$color.setColor(This.highlightColorNoFocus)
-	//This.colors.selectedColor:=$color.setColor(This.selectedColor)
-	//This.colors.alternateSelectedColor:=$color.setColor(This.alternateSelectedColor)
-	//This.colors.backgroundSelectedColor:=$color.setColor(This.backgroundSelectedColor)
-	//This.colors.backgroundUnselectedColor:=$color.setColor(This.backgroundUnselectedColor)
-	//This.colors.errorColor:=$color.setColor(This.errorColor)
-	//This.colors.warningColor:=$color.setColor(This.warningColor)
+	For each ($key; New collection:C1472(\
+		"strokeColor"; \
+		"highlightColor"; \
+		"highlightColorNoFocus"; \
+		"selectedColor"; \
+		"alternateSelectedColor"; \
+		"backgroundSelectedColor"; \
+		"backgroundUnselectedColor"; \
+		"errorColor"; \
+		"warningColor"))
+		
+		This:C1470.colors[$key]:=cs:C1710.color.new(This:C1470[$key])
+		
+	End for each 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function goToPage($page : Text)
@@ -517,43 +518,38 @@ Function removeTask($task : Text)
 	// Display the task indicator, if applicable
 Function showTask()
 	
-	var $t; $task : Text
-	
 	If (FEATURE.with("taskIndicator"))  // 🚧
 		
 		If (This:C1470.countTasks()>0)
 			
-			$task:=This:C1470.pendingTasks[0].name
-			$t:=Get localized string:C991($task)
-			This:C1470.currentTask:=Choose:C955(Length:C16($t)>0; $t; $task)
-			
+			This:C1470.currentTask:=This:C1470.str.localize(This:C1470.pendingTasks[0].name)
 			This:C1470.taskUI.show(This:C1470.message.isHidden())
 			
 		Else 
 			
-			This:C1470.taskIndicator.hide()
 			This:C1470.currentTask:=""
+			This:C1470.taskIndicator.hide()
 			
 		End if 
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Returns the number of tasks in the stack (include current running task)
-Function countTasks()->$number : Integer
+Function countTasks() : Integer
 	
-	$number:=This:C1470.pendingTasks.length
+	return (This:C1470.pendingTasks.length)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if a task is running or into the stack
-Function taskInProgress($taskID : Text)->$response : Boolean
+Function taskInProgress($taskID : Text) : Boolean
 	
-	$response:=(This:C1470.pendingTasks.extract("name").indexOf($taskID)#-1)
+	return (This:C1470.pendingTasks.query("name = :1"; $taskID).length>0)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if a task isn't running or into the stack
-Function taskNotInProgress($taskID : Text)->$response : Boolean
+Function taskNotInProgress($taskID) : Boolean
 	
-	$response:=(This:C1470.pendingTasks.extract("name").indexOf($taskID)=-1)
+	return (This:C1470.pendingTasks.query("name = :1"; $taskID).length=0)
 	
 	//MARK:-UI
 	//=== === === === === === === === === === === === === === === === === === === === ===
@@ -709,7 +705,7 @@ Function ribbonContainer($e : Object)
 			//…………………………………………………………………………………………………
 		: ($e.code=153)  // Install
 			
-			If (Not:C34(Bool:C1537(EDITOR.build)))
+			If (Not:C34(Bool:C1537(This:C1470.build)))
 				
 				PROJECT.save()
 				
@@ -726,9 +722,9 @@ Function ribbonContainer($e : Object)
 			//…………………………………………………………………………………………………
 		: ($e.code>100)  // Section menu
 			
-			$button:=EDITOR.context.ribbon.pages.query("button = :1"; String:C10($e.code)).pop()
+			$button:=This:C1470.context.ribbon.pages.query("button = :1"; String:C10($e.code)).pop()
 			
-			EDITOR.goToPage($button.name)
+			This:C1470.goToPage($button.name)
 			
 			$me.page:=$button.name
 			This:C1470.ribbon.setValue($me)
@@ -743,13 +739,15 @@ Function ribbonContainer($e : Object)
 	
 	//MARK:-TOOLS
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function getIcon($relativePath : Text)->$icon : Picture
+Function getIcon($relativePath : Text) : Picture
 	
+	var $icon : Picture
 	var $file : 4D:C1709.File
+	var $svg : cs:C1710.svg
 	
 	If (Length:C16($relativePath)=0)
 		
-		$file:=File:C1566(EDITOR.noIcon; fk platform path:K87:2)
+		$file:=File:C1566(This:C1470.noIcon; fk platform path:K87:2)
 		
 	Else 
 		
@@ -757,17 +755,16 @@ Function getIcon($relativePath : Text)->$icon : Picture
 		
 		If (Not:C34($file.exists))
 			
-			$file:=File:C1566(EDITOR.errorIcon; fk platform path:K87:2)
+			$file:=File:C1566(This:C1470.errorIcon; fk platform path:K87:2)
 			
 		End if 
 	End if 
 	
 	If ($file.exists)
 		
-		If (EDITOR.isDark) && ($file.extension=".svg")
+		If (This:C1470.darkScheme) && ($file.extension=".svg")
 			
-			var $svg : cs:C1710.svg
-			$svg:=cs:C1710.svg.new($file)
+			$svg:=This:C1470.svg.load($file)
 			
 			If ($svg.success)
 				
@@ -786,8 +783,8 @@ Function getIcon($relativePath : Text)->$icon : Picture
 			
 		End if 
 		
-		
 		CREATE THUMBNAIL:C679($icon; $icon; 24; 24; Scaled to fit:K6:2)
+		return ($icon)
 		
 	End if 
 	

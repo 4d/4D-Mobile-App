@@ -758,17 +758,8 @@ Function tableWidget($dataModel : Object; $options : Object)->$widget : Picture
 	$params.hOffset:=5
 	$params.maxChar:=Choose:C955(Get database localization:C1009="ja"; 7; 15)
 	
-	If (EDITOR.isDark)
-		
-		$params.selectedFill:="#76D5FE"
-		$params.selectedStroke:="#0E2732"
-		
-	Else 
-		
-		$params.selectedFill:=EDITOR.colors.backgroundSelectedColor.hex
-		$params.selectedStroke:=EDITOR.colors.strokeColor.hex
-		
-	End if 
+	$params.selectedFill:=EDITOR.colors.backgroundSelectedColor.css.hexLong
+	$params.selectedStroke:=EDITOR.colors.strokeColor.css.hexLong
 	
 	$str:=cs:C1710.str.new()
 	$error:=cs:C1710.error.new()
@@ -786,7 +777,7 @@ Function tableWidget($dataModel : Object; $options : Object)->$widget : Picture
 			
 			// Create a table group filled according to selected status
 			
-			If (EDITOR.isDark)
+			If (EDITOR.darkScheme)
 				
 				$svg.layer($table).fill(Choose:C955($isSelected; $params.selectedFill; $params.selectedStroke))
 				
@@ -808,7 +799,7 @@ Function tableWidget($dataModel : Object; $options : Object)->$widget : Picture
 					
 					// No form selected
 					$icon:=File:C1566("/RESOURCES/templates/form/"+$typeForm+"/defaultLayoutIcon.png")
-					$color:=Choose:C955($isSelected; $params.selectedStroke; Choose:C955(EDITOR.isDark; "white"; "dimgray"))
+					$color:=Choose:C955($isSelected; $params.selectedStroke; Choose:C955(EDITOR.darkScheme; "white"; "dimgray"))
 					
 				Else 
 					
@@ -825,19 +816,19 @@ Function tableWidget($dataModel : Object; $options : Object)->$widget : Picture
 									//______________________________________________________
 								: (Form:C1466.$android & Not:C34($tmpl.android))
 									
-									$color:=EDITOR.colors.warningColor.hex
+									$color:=EDITOR.colors.warningColor.css.hexLong
 									$svg.setAttribute("tips"; Replace string:C233(Get localized string:C991("thisModelIsNotApplicableForthisPlatform"); "{platform}"; "Android"); $svg.fetch($table))
 									
 									//______________________________________________________
 								: (Form:C1466.$ios & Not:C34($tmpl.ios))
 									
-									$color:=EDITOR.colors.warningColor.hex
+									$color:=EDITOR.colors.warningColor.css.hexLong
 									$svg.setAttribute("tips"; Replace string:C233(Get localized string:C991("thisModelIsNotApplicableForthisPlatform"); "{platform}"; "iOS"); $svg.fetch($table))
 									
 									//________________________________________
 								Else 
 									
-									$color:=Choose:C955($isSelected; $params.selectedStroke; Choose:C955(EDITOR.isDark; "white"; "dimgray"))
+									$color:=Choose:C955($isSelected; $params.selectedStroke; Choose:C955(EDITOR.darkScheme; "white"; "dimgray"))
 									
 									//______________________________________________________
 							End case 
@@ -845,7 +836,7 @@ Function tableWidget($dataModel : Object; $options : Object)->$widget : Picture
 						Else 
 							
 							$icon:=File:C1566("/RESOURCES/images/noIcon.svg")
-							$color:=Choose:C955($isSelected; $params.selectedStroke; Choose:C955(EDITOR.isDark; "white"; "dimgray"))
+							$color:=Choose:C955($isSelected; $params.selectedStroke; Choose:C955(EDITOR.darkScheme; "white"; "dimgray"))
 							$svg.setAttribute("tips"; Replace string:C233($tmpl.name; "/"; ""); $svg.fetch($table))
 							
 						End if 
@@ -890,7 +881,7 @@ Function tableWidget($dataModel : Object; $options : Object)->$widget : Picture
 					.fontStyle(Choose:C955($isSelected; Bold:K14:2; Normal:K14:15))
 				
 				// Border & reactive 'button'
-				If (EDITOR.isDark)
+				If (EDITOR.darkScheme)
 					
 					$svg.rect(Num:C11($params.cell.width); Num:C11($params.cell.height))\
 						.position(Num:C11($params.x)+1; Num:C11($params.y)+1)\

@@ -44,7 +44,7 @@ Case of
 		
 		$bDisplay:=True:C214
 		
-		If (EDITOR.isDark)
+		If (EDITOR.darkScheme)
 			
 			OBJECT SET RGB COLORS:C628(*; "selection"; "#76D5FE"; "#0E2732")
 			
