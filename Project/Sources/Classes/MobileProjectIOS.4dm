@@ -122,7 +122,7 @@ Function build()->$result : Object
 	If ($Obj_result_build.app=Null:C1517)
 		
 		var $pathname : Text
-		$pathname:=$in.path+Convert path POSIX to system:C1107("build/Build/Products/Debug-iphonesimulator/")+This:C1470.schemeName+".app"
+		$pathname:=$in.path+Convert path POSIX to system:C1107("build/Build/Products/Debug-iphonesimulator/")+This:C1470._schemeName+".app"
 		
 		If (Test path name:C476($pathname)=Is a folder:K24:2)
 			

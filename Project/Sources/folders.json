@@ -945,6 +945,7 @@
 	},
 	"storyboardClass": {
 		"classes": [
+			"ActionsMenuStoryboard",
 			"DetailFormStoryboard",
 			"ListFormStoryboard",
 			"NavigationStoryboard",

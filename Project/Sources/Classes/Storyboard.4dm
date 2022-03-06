@@ -158,23 +158,27 @@ Function format($Obj_in : Object)->$Obj_out : Object  // MAC ONLY
 	var $File_ : 4D:C1709.File
 	
 	$Obj_out:=New object:C1471()
-	If (Count parameters:C259=0)
-		$Obj_in:=New object:C1471("path"; This:C1470.path)
-	End if 
+	
 	
 	If (Not:C34(Is macOS:C1572))
 		return   // just not format file on other OS > result, opening with Xcode project will make a lot of change in storyboard file (in vcs)
 	End if 
 	
-	If (Value type:C1509($Obj_in.path)=Is text:K8:3)
-		
-		If (Test path name:C476(String:C10($Obj_in.path))=Is a document:K24:1)
+	Case of 
+		: (Count parameters:C259=0)
+			$Obj_in:=New object:C1471("path"; This:C1470.path)
 			
+		: (OB Instance of:C1731($Obj_in; 4D:C1709.File))
+			
+			$Obj_in:=New object:C1471("path"; $Obj_in)  // CLEAN: remove all this compatibility code, only file must be passed
+			
+		: (Test path name:C476(String:C10($Obj_in.path))=Is a document:K24:1)
 			ASSERT:C1129(dev_Matrix; "Must not be string, now File")  // Deprecated, maybe be test ...
 			$Obj_in.path:=File:C1566($Obj_in.path; fk platform path:K87:2)
 			
-		End if 
-	End if 
+			// Else maybe not exists
+			
+	End case 
 	
 	If ($Obj_in.path.exists)
 		

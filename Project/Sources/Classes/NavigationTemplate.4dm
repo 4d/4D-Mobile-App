@@ -75,7 +75,7 @@ Function _actionsInTabBarProcess()
 	
 	// TODO: remove test code
 	If (True:C214)
-		$Col_tables.push(New object:C1471("name"; "itName"; "label"; "itLabel"; "shortLabel"; "itShort"; "actions"; New collection:C1472(New object:C1471("name"; "acName"; "label"; "acLabel"; "shortLabel"; "acShort"))))
+		$Col_tables.push(New object:C1471("name"; "itName"; "label"; "itLabel"; "shortLabel"; "itShort"; "icon"; "actions/Adjust.svg"; "actions"; New collection:C1472(New object:C1471("name"; "acName"; "label"; "acLabel"; "shortLabel"; "acShort"))))
 		$Col_tables.push(New object:C1471("name"; "itName2"; "label"; "itLabel2"; "shortLabel"; "itShort2"; "actions"; New collection:C1472(New object:C1471("name"; "acNamessz"; "label"; "acLqdabel"; "shortLabel"; "acShorqsdt"); New object:C1471("name"; "acName2z"; "label"; "acLabel"; "shortLabel"; "acShort"))))
 	End if 
 	
@@ -127,13 +127,15 @@ Function _actionsInTabBarProcess()
 			$o.template:=ob_parseFile($templateFolder.file("manifest.json")).value
 			$o.template.source:=$templateFolder.platformPath
 			$o.template.parent:=This:C1470.input.template.parent  // for xproj uuid
+			$o.projfile:=This:C1470.input.projfile  // do not want a copy
 			//$o.projfile:=This.input.projfile 
 			//$o.path:=This.input.path
-			$o.tags:=New object:C1471("table"; $table)
+			$o.tags:=OB Copy:C1225(This:C1470.input.tags)
+			$o.tags.table:=$table
 			$table.tableActions:=$table.actions  // tag ___TABLE_ACTIONS___ (or do a new tag system with only ACTIONS)
 			$table.fields:=New collection:C1472  // no fields // used by swift (CLEAN: in process tag allow to not have fields)
 			$o:=TemplateInstanceFactory($o).run()  // <================================== RECURSIVE
-			// XXX errors?
+			// TODO:XXX errors?
 			
 		End if 
 	End for each 
