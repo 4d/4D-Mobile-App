@@ -409,7 +409,7 @@ Function update()
 									This:C1470.revealDatasource.hide()
 									This:C1470.placeholderGroup.show(This:C1470.typesWithoutPlaceholder.indexOf($current.type)=-1)
 									
-									If ($current.type#"image")
+									If ((String:C10($current.type)#"image"))
 										
 										$withDefault:=Choose:C955(String:C10($action.preset)#"edit"; True:C214; Not:C34($isLinked))
 										
@@ -737,7 +737,7 @@ Function doNewParameter()
 	// Add a field linked parameter
 Function doAddParameterMenu($target : Object; $update : Boolean)
 	
-	var $t; $type : Text
+	var $t : Text
 	var $isSortAction : Boolean
 	var $parameter; $table : Object
 	var $fields : Collection
@@ -887,16 +887,15 @@ Function doAddParameterMenu($target : Object; $update : Boolean)
 					"fieldNumber"; $field.fieldNumber; \
 					"name"; $field.name; \
 					"label"; $field.label; \
-					"shortLabel"; $field.shortLabel)
+					"shortLabel"; $field.shortLabel; \
+					"type"; PROJECT.fieldType2type($field.fieldType); \
+					"defaultField"; formatString("field-name"; $field.name))
 				
 				If (Bool:C1537($field.mandatory))
 					
 					$parameter.rules:=New collection:C1472("mandatory")
 					
 				End if 
-				
-				$type:=PROJECT.fieldType2type($field.fieldType)
-				
 			End if 
 			
 			Case of 
@@ -907,12 +906,12 @@ Function doAddParameterMenu($target : Object; $update : Boolean)
 					$parameter.format:="ascending"
 					
 					//……………………………………………………………………
-				: ($type="date")
+				: ($parameter.type="date")
 					
 					$parameter.format:="mediumDate"
 					
 					//……………………………………………………………………
-				: ($type="time")
+				: ($parameter.type="time")
 					
 					$parameter.format:="hour"
 					
@@ -1447,8 +1446,8 @@ Function doDataSourceMenu()
 Function editList()
 	
 	//$form:=New object(\
-																"static"; $static; \
-																"host"; This.path.hostInputControls(True))
+																		"static"; $static; \
+																		"host"; This.path.hostInputControls(True))
 	
 	//$form.folder:=This.path.hostInputControls()
 	//$manifest:=$form.folder.file("manifest.json")
@@ -2003,7 +2002,7 @@ Function formatToolTip($format : Text)->$tip : Text
 		//SHARED.resources.formattersByName:=New object
 		//var $bind
 		//For each ($bind; SHARED.resources.fieldBindingTypes\
-																		.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
+																					.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
 		//SHARED.resources.formattersByName[$bind.name]:=$bind
 		//End for each
 		//End if
