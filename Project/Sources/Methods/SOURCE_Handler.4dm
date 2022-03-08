@@ -223,8 +223,8 @@ Case of
 			
 			If (Not:C34(Bool:C1537($result.success)))
 				
-				If (String:C10($result.errors[0])="The request is unauthorized")\
-					 | (String:C10($result.errors[0])="This request is forbidden")
+				If (String:C10($result.errors[0].message)="The request is unauthorized")\
+					 || (String:C10($result.errors[0].message)="This request is forbidden")
 					
 					$result.title:=Get localized string:C991("locateTheKey")
 					$result.type:=9
