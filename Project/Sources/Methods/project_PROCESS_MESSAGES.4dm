@@ -312,7 +312,6 @@ Case of
 		Else 
 			
 			$panel:=panel_Load
-			
 			$panel.sqlite:=$data.database
 			$panel.updateTableListWithDataSizes()
 			

@@ -3,7 +3,7 @@ Class extends form
 // === === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor($form : Object)
 	
-	Super:C1705("editor_CALLBACK")
+	Super:C1705(Formula:C1597(editor_CALLBACK).source)
 	
 	// This.context:=editor_Panel_init(This.name)
 	

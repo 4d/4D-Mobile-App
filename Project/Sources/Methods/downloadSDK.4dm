@@ -397,7 +397,7 @@ If ($run)
 					
 					If (Count parameters:C259>=4)
 						
-						CALL FORM:C1391($caller; "editor_CALLBACK"; "updateRibbon")
+						CALL FORM:C1391($caller; Formula:C1597(editor_CALLBACK).source; "updateRibbon")
 						
 					End if 
 					

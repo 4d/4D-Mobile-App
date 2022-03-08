@@ -50,13 +50,13 @@ If (PROJECT.$android)
 	
 	If ($withRelation)
 		
-		CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "footer"; New object:C1471(\
+		CALL FORM:C1391(Current form window:C827; Formula:C1597(editor_CALLBACK).source; "footer"; New object:C1471(\
 			"message"; "One to Many relations are coming soon for Android"; \
 			"type"; "android"))
 		
 	Else 
 		
-		CALL FORM:C1391(Current form window:C827; "editor_CALLBACK"; "footer"; New object:C1471(\
+		CALL FORM:C1391(Current form window:C827; Formula:C1597(editor_CALLBACK).source; "footer"; New object:C1471(\
 			"message"; ""))
 		
 	End if 

@@ -35,7 +35,7 @@ End if
 
 $form:=New object:C1471(\
 "$"; editor_Panel_init; \
-"form"; _o_UI.form("editor_CALLBACK").get(); \
+"form"; _o_UI.form(Formula:C1597(editor_CALLBACK).source).get(); \
 "tableWidget"; _o_UI.picture("tableWidget"); \
 "tableNext"; _o_UI.static("next@"); \
 "tablePrevious"; _o_UI.static("previous@"); \

@@ -2,25 +2,42 @@ Class extends MobileProject
 
 //=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor($project : Object)
+	
 	Super:C1705($project)
 	
 	// Copy project (to not modify original project data)
 	If (Count parameters:C259>=1)
+		
 		This:C1470.project:=This:C1470._cleanCopyProject($project)
+		
 	Else 
-		If (This:C1470.debug)  // use last build to test and test again
+		
+		If (This:C1470.debug)  // Use last build to test and test again
+			
 			This:C1470.project:=ob_parseFile(This:C1470.logFolder.file("lastBuild.ios.4dmobile")).value
+			
 		End if 
 	End if 
 	
 	// Compute product name (used for files and scheme/target)
 	Case of 
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		: (Value type:C1509(This:C1470.project.name)=Is text:K8:3)
+			
 			This:C1470.productName:=This:C1470.project.name
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		: (This:C1470.project._folder#Null:C1517)
+			
 			This:C1470.productName:=This:C1470.project._folder.name
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		Else 
+			
 			This:C1470.productName:="debug"
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	End case 
 	
 	// Keep the last used project
@@ -30,8 +47,7 @@ Class constructor($project : Object)
 	This:C1470.simctl:=cs:C1710.simctl.new()  // ASK: SHARED.iosDeploymentTarget ?
 	This:C1470.cfgutil:=cs:C1710.cfgutil.new()
 	
-	// MARK:- steps
-	
+	// MARK:-[STEPS]
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Creating the project
 Function create()->$result : Object
@@ -66,7 +82,7 @@ Function create()->$result : Object
 	$destinationFolder.create()
 	
 	// Cache the last build in generated project
-	This:C1470.input.appFolder:=Null:C1517  // cyclic
+	This:C1470.input.appFolder:=Null:C1517  // Cyclic
 	ob_writeToFile(This:C1470._cleanCopyProject(This:C1470.input); $destinationFolder.file("project.4dmobile"); True:C214)
 	
 	//===============================================================
@@ -78,24 +94,30 @@ Function create()->$result : Object
 		"target"; This:C1470.input.path))
 	
 	If (Not:C34($result.sdk.success))
+		
 		This:C1470.success:=False:C215
 		$result.success:=False:C215
+		
 		// Failed to unzip sdk
 		This:C1470.postError("failedDecompressTheSdk")
 		This:C1470.logError("Failed to unzip sdk")
-		return   // guard stop
+		return   // Guard stop
+		
 	End if 
 	
 	//===============================================================
 	This:C1470.postStep("workspaceCreation")
 	This:C1470._generateTemplates($result; $result.tags)
+	
 	If (Not:C34($result.success))
-		return   // guard stop: no need to do dump if failed to create the app
+		
+		return   // Guard stop: no need to do dump if failed to create the app
+		
 	End if 
+	
 	This:C1470._manageDataSet($result)
 	This:C1470._generateCapabilities($result)
 	This:C1470._devFeatures($result)
-	
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Building the App
@@ -108,16 +130,16 @@ Function build()->$result : Object
 	$in:=This:C1470.input
 	
 	var $Obj_result_build : Object
+	
 	If ($in.realDevice)
 		
-		$Obj_result_build:=This:C1470._archive($result)  // real device need ipa
+		$Obj_result_build:=This:C1470._archive($result)  // Real device need ipa
 		
 	Else 
 		
 		$Obj_result_build:=This:C1470._build($result)
 		
 	End if 
-	
 	
 	If ($Obj_result_build.app=Null:C1517)
 		
@@ -332,8 +354,7 @@ Function _build($out : Object)->$Obj_result_build : Object
 	// Installing the IPA on a connected device
 Function install()
 	
-	// MARK:- private
-	
+	// MARK:-[PRIVATE]
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// [PRIVATE] - Check if we have to reload data
 Function _checkToReloadData()
@@ -590,7 +611,7 @@ Function _generateTemplates($out : Object; $tags : Object)
 	// Set writable target directory with all its subfolders and files
 	//doc_UNLOCK_DIRECTORY(New object("path"; $in.path)) // ASK: move elsewhere
 	
-	//  MARK: STRUCTURE & DATA
+	//  MARK: Structure & Data
 	
 	// Create catalog and data files {
 Function _manageDataSet($out : Object)

@@ -3,7 +3,7 @@ Class extends form
 // === === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	
-	Super:C1705("editor_CALLBACK")
+	Super:C1705(Formula:C1597(editor_CALLBACK).source)
 	
 	This:C1470.context:=editor_Panel_init(This:C1470.name)
 	
@@ -201,7 +201,7 @@ Function tableList()
 Function getSQLite()
 	
 	This:C1470.sqlite:=Null:C1517
-	This:C1470.callWorker("getSQLite"; New object:C1471("caller"; This:C1470.window; "project"; PROJECT))
+	This:C1470.callWorker(Formula:C1597(getSQLite).source; New object:C1471("caller"; This:C1470.window; "project"; PROJECT))
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function updateTableListWithDataSizes()

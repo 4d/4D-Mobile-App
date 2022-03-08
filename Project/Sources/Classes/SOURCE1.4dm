@@ -3,7 +3,7 @@ Class extends form
 // === === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	
-	Super:C1705("editor_CALLBACK")
+	Super:C1705(Formula:C1597(editor_CALLBACK).source)
 	
 	This:C1470.context:=editor_Panel_init(This:C1470.name)
 	

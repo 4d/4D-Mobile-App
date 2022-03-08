@@ -33,7 +33,7 @@ If ($e.objectName=Null:C1517)  // <== FORM METHOD
 			EDITOR.android:=PROJECT.$android
 			EDITOR.ios:=PROJECT.$ios
 			
-			EDITOR.title:=EDITOR.str.localize("editorWindowTitle"; PROJECT._name)
+			EDITOR.windowTitle:=EDITOR.str.localize("editorWindowTitle"; PROJECT._name)
 			EDITOR.context.ribbon:=New object:C1471(\
 				"state"; "open"; \
 				"tab"; "section"; \

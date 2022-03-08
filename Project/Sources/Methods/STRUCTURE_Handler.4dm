@@ -34,7 +34,7 @@ End if
 
 $form:=New object:C1471(\
 "window"; Current form window:C827; \
-"callback"; "editor_CALLBACK"; \
+"callback"; Formula:C1597(editor_CALLBACK).source; \
 "form"; editor_Panel_init; \
 "tableList"; "01_tables"; \
 "tables"; "tables"; \

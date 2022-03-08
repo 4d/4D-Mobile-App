@@ -795,7 +795,7 @@ End case
 // Return
 If (Bool:C1537($Obj_in.caller))
 	
-	CALL FORM:C1391($Obj_in.caller; "editor_CALLBACK"; "getDevices"; $Obj_out)
+	CALL FORM:C1391($Obj_in.caller; Formula:C1597(editor_CALLBACK).source; "getDevices"; $Obj_out)
 	
 Else 
 	

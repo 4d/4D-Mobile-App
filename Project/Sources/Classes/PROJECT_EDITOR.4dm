@@ -30,7 +30,6 @@ Class constructor()
 	This:C1470.pendingTasks:=New collection:C1472
 	
 	//MARK:-[COMPUTED]
-	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function get unsynchronizedTables()->$sesult : Collection
 	
@@ -480,7 +479,6 @@ Function goToPage($page : Text)
 		This:C1470.project.focus()
 		
 	End if 
-	
 	
 	//MARK:-TASKS
 	//=== === === === === === === === === === === === === === === === === === === === ===
