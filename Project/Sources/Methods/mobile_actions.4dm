@@ -1,4 +1,5 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
+#DECLARE($Txt_action : Text; $Obj_in : Object)->$Obj_out : Object
 // ----------------------------------------------------
 // Project method : actions
 // ID[66E9AA75F234494E96C5C0514F05D6C4]
@@ -8,13 +9,9 @@
 //
 // ----------------------------------------------------
 // Declarations
-C_OBJECT:C1216($0)
-C_TEXT:C284($1)
-C_OBJECT:C1216($2)
 
-var $Lon_parameters : Integer
-var $t; $Txt_action : Text
-var $o; $oResult; $Obj_in; $Obj_out : Object
+var $t : Text
+var $o; $oResult : Object
 var $action; $parameter; $manifest; $dataModel : Object
 var $hasImage; $isObject : Boolean
 var $format : Variant/*Text or Object*/
@@ -30,19 +27,7 @@ End if
 
 // ----------------------------------------------------
 // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
-	
-	// Required parameters
-	$Txt_action:=$1
-	
-	// Optional parameters
-	If ($Lon_parameters>=2)
-		
-		$Obj_in:=$2
-		
-	End if 
+If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
 	$Obj_out:=New object:C1471(\
 		"success"; False:C215)
@@ -55,6 +40,27 @@ End if
 
 // ----------------------------------------------------
 Case of 
+		
+		// MARK:- getFilteredActions
+	: ($Txt_action="getFilteredActions")
+		
+		$Obj_out.actions:=New collection:C1472
+		
+		If (Value type:C1509($Obj_in.project.actions)=Is collection:K8:32)
+			
+			For each ($t; $Obj_in.names)
+				For each ($action; $Obj_in.project.actions)
+					If ($t=$action.name)
+						$Obj_out.actions.push($action)
+						break
+					End if 
+				End for each 
+			End for each 
+			
+			$Obj_out.success:=$Obj_out.actions.length=$Obj_in.names.length
+			
+		End if 
+		
 		
 		// MARK:- capabilities
 	: ($Txt_action="capabilities")

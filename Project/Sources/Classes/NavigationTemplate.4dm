@@ -73,10 +73,10 @@ Function _actionsInTabBarProcess()
 		
 	End if 
 	
-	// TODO: remove test code
-	If (True:C214)
-		$Col_tables.push(New object:C1471("name"; "itName"; "label"; "itLabel"; "shortLabel"; "itShort"; "icon"; "actions/Adjust.svg"; "actions"; New collection:C1472(New object:C1471("name"; "acName"; "label"; "acLabel"; "shortLabel"; "acShort"))))
-		$Col_tables.push(New object:C1471("name"; "itName2"; "label"; "itLabel2"; "shortLabel"; "itShort2"; "actions"; New collection:C1472(New object:C1471("name"; "acNamessz"; "label"; "acLqdabel"; "shortLabel"; "acShorqsdt"); New object:C1471("name"; "acName2z"; "label"; "acLabel"; "shortLabel"; "acShort"))))
+	// TODO: remove test code about actionsInTabBar
+	If (False:C215)
+		$Col_tables.push(New object:C1471("name"; "itName"; "label"; "itLabel"; "shortLabel"; "itShort"; "icon"; "actions/Adjust.svg"; "actions"; New collection:C1472("acName")))
+		$Col_tables.push(New object:C1471("name"; "itName2"; "label"; "itLabel2"; "shortLabel"; "itShort2"; "actions"; New collection:C1472("acName2z")))
 	End if 
 	
 	This:C1470.input.tags.navigationTables:=New collection:C1472
@@ -107,6 +107,8 @@ Function _actionsInTabBarProcess()
 				
 				$table:=OB Copy:C1225($navigationItem)  // to not alter caller
 				$table[""]:=OB Copy:C1225($table)  // to simulate meta data behaviour or table (but must be clean)
+				
+				$table.actions:=mobile_actions("getFilteredActions"; New object:C1471("project"; This:C1470.input.project; "names"; $table.actions)).actions  // replace by action data
 				
 				// TODO:actionsInTabBar: create items for actions, maybe format according
 				This:C1470.input.tags.navigationTables.push($table)
