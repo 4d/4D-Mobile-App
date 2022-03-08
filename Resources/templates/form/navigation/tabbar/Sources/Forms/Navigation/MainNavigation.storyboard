@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="XUq-5b-LM2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="XUq-5b-LM2">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -31,11 +32,11 @@
         <scene sceneID="5tF-Lk-Zp4">
             <objects>
                 <tabBarController modalPresentationStyle="fullScreen" id="XUq-5b-LM2" customClass="MainNavigation" customModule="___PRODUCT___" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBar key="tabBar" contentMode="scaleToFill" id="34m-v6-Nve">
+                    <tabBar key="tabBar" contentMode="scaleToFill" id="34m-v6-Nve" customClass="MainTabBar" customModule="QMobileUI">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" name="BackgroundColor"/>
-                        <color key="selectedImageTintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <color key="selectedImageTintColor" systemColor="labelColor"/>
                     </tabBar>
                     <connections>
                         <segue destination="TAG-ID-SEG" kind="relationship" relationship="viewControllers" id="TAG-SG-001"/>
@@ -49,9 +50,12 @@
     </scenes>
     <resources>
         <image name="___TABLE_ICON___" width="25" height="25"/>
-        <image name="settings" width="25" height="25"/>
+        <image name="settings" width="21" height="21"/>
         <namedColor name="BackgroundColor">
             <color red="0.32929306030273436" green="0.32396804094314574" blue="0.47762881517410277" alpha="0.33000000000000002" colorSpace="deviceRGB"/>
         </namedColor>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>
