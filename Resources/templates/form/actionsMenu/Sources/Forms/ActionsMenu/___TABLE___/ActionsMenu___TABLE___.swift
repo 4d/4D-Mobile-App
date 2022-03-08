@@ -8,7 +8,7 @@
 import UIKit
 import QMobileUI
 
-class ActionsMenu___TABLE___: UIViewController {
+class ActionsMenu___TABLE___: ActionsViewController {
 
     override open func viewDidLoad() {
         super.viewDidLoad()
