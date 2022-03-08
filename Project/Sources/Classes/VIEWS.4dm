@@ -3,7 +3,7 @@ Class extends form
 //=== === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	
-	Super:C1705("editor_CALLBACK")
+	Super:C1705(Formula:C1597(editor_CALLBACK).source)
 	
 	//MARK:TEMPO 🚧
 	If (Count parameters:C259>=1)
@@ -758,8 +758,18 @@ Function tableWidget($dataModel : Object; $options : Object)->$widget : Picture
 	$params.hOffset:=5
 	$params.maxChar:=Choose:C955(Get database localization:C1009="ja"; 7; 15)
 	
-	$params.selectedFill:=EDITOR.colors.backgroundSelectedColor.css.hexLong
-	$params.selectedStroke:=EDITOR.colors.strokeColor.css.hexLong
+	If (EDITOR.darkScheme)
+		
+		$params.selectedFill:="#0E2732"
+		$params.selectedStroke:="#48a7ee"
+		
+	Else 
+		
+		$params.selectedFill:=EDITOR.colors.backgroundSelectedColor.css.hexLong
+		$params.selectedStroke:=EDITOR.colors.strokeColor.css.hexLong
+		
+	End if 
+	
 	
 	$str:=cs:C1710.str.new()
 	$error:=cs:C1710.error.new()
@@ -779,7 +789,7 @@ Function tableWidget($dataModel : Object; $options : Object)->$widget : Picture
 			
 			If (EDITOR.darkScheme)
 				
-				$svg.layer($table).fill(Choose:C955($isSelected; $params.selectedFill; $params.selectedStroke))
+				$svg.layer($table).fill(Choose:C955($isSelected; $params.selectedFill; "none"))
 				
 			Else 
 				

@@ -61,7 +61,7 @@ rectangle {
 
 			@media (prefers-color-scheme: dark) {
 				.toolbarButtons {
-					stroke: #808080;
+					stroke: white;
 				}
 			}
 
