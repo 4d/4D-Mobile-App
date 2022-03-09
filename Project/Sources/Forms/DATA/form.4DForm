@@ -22,29 +22,22 @@
 		"paperHeight": "842pt"
 	},
 	"pages": [
-		null,
 		{
 			"objects": {
-				"noPublishedTable": {
-					"type": "button",
-					"top": 35,
+				"noDataModel": {
+					"type": "subform",
 					"left": 30,
+					"top": 35,
 					"width": 412,
 					"height": 19,
-					"visibility": "hidden",
-					"text": ":xliff:noPublishedTable",
-					"textPlacement": "center",
-					"style": "custom",
-					"method": "ObjectMethods/noPublishedTable.4dm",
-					"events": [
-						"onLoad",
-						"onClick",
-						"onMouseEnter",
-						"onMouseLeave",
-						"onMouseMove"
-					],
-					"class": "link"
-				},
+					"detailForm": "NO_DATAMODEL",
+					"focusable": false,
+					"visibility": "visible"
+				}
+			}
+		},
+		{
+			"objects": {
 				"method": {
 					"type": "button",
 					"top": 193,
@@ -298,7 +291,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 102,
+	"geometryStamp": 142,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

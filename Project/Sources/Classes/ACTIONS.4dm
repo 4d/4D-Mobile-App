@@ -24,7 +24,7 @@ Function init()
 	
 	This:C1470.toBeInitialized:=False:C215
 	
-	This:C1470.button("noPublishedTable")
+	This:C1470.subform("noDataModel")
 	
 	This:C1470.listbox("actions")
 	This:C1470.formObject("actionsBorder"; "actions.border")
@@ -52,7 +52,7 @@ Function onLoad()
 	If ((Form:C1466.dataModel#Null:C1517) && Not:C34(OB Is empty:C1297(Form:C1466.dataModel)))
 		
 		This:C1470.actions.show().updateDefinition()
-		This:C1470.noPublishedTable.hide()
+		This:C1470.noDataModel.hide()
 		
 		This:C1470.add.enable()
 		This:C1470.databaseMethod.enable()
@@ -83,7 +83,7 @@ Function onLoad()
 	Else 
 		
 		This:C1470.actions.hide()
-		This:C1470.noPublishedTable.show()
+		This:C1470.noDataModel.show()
 		
 		This:C1470.add.disable()
 		This:C1470.databaseMethod.disable()

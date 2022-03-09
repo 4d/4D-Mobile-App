@@ -44,7 +44,7 @@ $form:=New object:C1471(\
 "tablist"; _o_UI.button("tab.list"); \
 "tabdetail"; _o_UI.button("tab.detail"); \
 "tabSelector"; _o_UI.widget("tab.selector"); \
-"noPublishedTable"; _o_UI.widget("noPublishedTable"); \
+"noDataModel"; _o_UI.widget("noDataModel"); \
 "fieldList"; _o_UI.listbox("01_fields"); \
 "fieldGroup"; _o_UI.static("01_fields@"); \
 "preview"; _o_UI.picture("preview"); \
@@ -140,7 +140,7 @@ Case of
 				If (($datamodel=Null:C1517) | OB Is empty:C1297($datamodel))
 					
 					// No published table
-					$form.noPublishedTable.show()
+					$form.noDataModel.show()
 					
 					$form.fieldGroup.hide()
 					$form.previewGroup.hide()
@@ -149,7 +149,7 @@ Case of
 					
 				Else 
 					
-					$form.noPublishedTable.hide()
+					$form.noDataModel.hide()
 					
 					// Select the first table if any
 					ARRAY TEXT:C222($_tables; 0x0000)
@@ -208,14 +208,14 @@ Case of
 					RECORD.warning("DATA MODEL IS EMPTY")
 					
 					// No published table
-					$form.noPublishedTable.show()
+					$form.noDataModel.show()
 					
 					$form.fieldGroup.hide()
 					$form.previewGroup.hide()
 					
 				Else 
 					
-					$form.noPublishedTable.hide()
+					$form.noDataModel.hide()
 					
 				End if 
 				

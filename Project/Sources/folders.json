@@ -22,7 +22,6 @@
 			"tempoSVGLineHeight"
 		],
 		"forms": [
-			"_w_VIEWS",
 			"UI"
 		],
 		"classes": [
@@ -60,8 +59,7 @@
 			"APP_STORE",
 			"Form1",
 			"ITUNE",
-			"LAUNCHSCREEN",
-			"NO_PUBLISHED_TABLES"
+			"LAUNCHSCREEN"
 		]
 	},
 	"_o_OBSOLETES": {
@@ -1021,6 +1019,9 @@
 			"Predicting",
 			"Proposals",
 			"Search"
+		],
+		"forms": [
+			"NO_DATAMODEL"
 		]
 	},
 	"xml (thread-safe)": {

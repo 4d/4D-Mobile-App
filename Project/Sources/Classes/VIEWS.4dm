@@ -51,7 +51,7 @@ Function init()
 	
 	This:C1470.toBeInitialized:=False:C215
 	
-	This:C1470.button("noPublishedTable")
+	This:C1470.button("noDataModel")
 	
 	This:C1470.picture("tableWidget")
 	

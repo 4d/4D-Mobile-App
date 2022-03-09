@@ -346,25 +346,15 @@
 						"onClick"
 					]
 				},
-				"noPublishedTable": {
-					"type": "button",
-					"top": 35,
+				"noDataModel": {
+					"type": "subform",
 					"left": 30,
+					"top": 35,
 					"width": 412,
 					"height": 19,
-					"visibility": "hidden",
-					"stroke": "#1AA1E5",
-					"text": ":xliff:noPublishedTable",
-					"textPlacement": "center",
-					"style": "custom",
-					"method": "ObjectMethods/noPublishedTable.4dm",
-					"events": [
-						"onLoad",
-						"onClick",
-						"onMouseEnter",
-						"onMouseLeave",
-						"onMouseMove"
-					]
+					"detailForm": "NO_DATAMODEL",
+					"focusable": false,
+					"visibility": "visible"
 				}
 			}
 		}
@@ -374,7 +364,7 @@
 		"kind": "form"
 	},
 	"method": "main_Handler",
-	"geometryStamp": 12,
+	"geometryStamp": 18,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

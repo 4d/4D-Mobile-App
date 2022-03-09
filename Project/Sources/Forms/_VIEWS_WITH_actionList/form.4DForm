@@ -93,26 +93,6 @@
 					"width": 0,
 					"startPoint": "topLeft"
 				},
-				"noPublishedTable": {
-					"type": "button",
-					"top": 69,
-					"left": 25,
-					"width": 384,
-					"height": 19,
-					"visibility": "hidden",
-					"stroke": "#1AA1E5",
-					"text": ":xliff:noPublishedTable",
-					"textPlacement": "center",
-					"style": "custom",
-					"method": "ObjectMethods/noPublishedTable.4dm",
-					"events": [
-						"onLoad",
-						"onClick",
-						"onMouseEnter",
-						"onMouseLeave",
-						"onMouseMove"
-					]
-				},
 				"tab.list": {
 					"type": "radio",
 					"top": 9,
@@ -166,6 +146,16 @@
 					"height": 5,
 					"fill": "#1AA1E5",
 					"stroke": "transparent"
+				},
+				"noDataModel": {
+					"type": "subform",
+					"left": 25,
+					"top": 69,
+					"width": 412,
+					"height": 19,
+					"detailForm": "NO_DATAMODEL",
+					"focusable": false,
+					"visibility": "visible"
 				}
 			}
 		},
@@ -529,5 +519,5 @@
 		"kind": "form"
 	},
 	"method": "VIEWS_Handler",
-	"geometryStamp": 1
+	"geometryStamp": 5
 }

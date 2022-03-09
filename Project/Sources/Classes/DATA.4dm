@@ -54,7 +54,7 @@ Function init()
 	This:C1470.button("enter").addToGroup($group)
 	This:C1470.input("result").addToGroup($group)
 	
-	This:C1470.widget("noPublishedTable")
+	This:C1470.subform("noDataModel")
 	
 	// ??
 	This:C1470.formObject("dataSize")
@@ -77,14 +77,14 @@ Function onLoad()
 	If (This:C1470.tables.length>0)
 		
 		This:C1470.tableGroup.show()
-		This:C1470.noPublishedTable.hide()
+		This:C1470.noDataModel.hide()
 		
 	Else 
 		
 		This:C1470.lastIndex:=0
 		
 		This:C1470.tableGroup.hide()
-		This:C1470.noPublishedTable.show()
+		This:C1470.noDataModel.show()
 		
 		This:C1470.dataSize.hide()
 		

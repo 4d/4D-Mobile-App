@@ -22,7 +22,7 @@ Function init()
 	
 	This:C1470.toBeInitialized:=False:C215
 	
-	This:C1470.formObject("noPublishedTable")
+	This:C1470.formObject("noDataModel")
 	
 	var $group : cs:C1710.group
 	$group:=This:C1470.group("withDataModel")
@@ -78,7 +78,7 @@ Function update()
 		End for each 
 	End if 
 	
-	This:C1470.noPublishedTable.show(This:C1470.available.length=0)
+	This:C1470.noDataModel.show(This:C1470.available.length=0)
 	
 	// Selected tables
 	This:C1470.main:=New collection:C1472
@@ -102,12 +102,12 @@ Function update()
 	
 	If (This:C1470.available.length=0)
 		
-		This:C1470.noPublishedTable.show()
+		This:C1470.noDataModel.show()
 		This:C1470.withDataModel.hide()
 		
 	Else 
 		
-		This:C1470.noPublishedTable.hide()
+		This:C1470.noDataModel.hide()
 		This:C1470.withDataModel.show()
 		
 	End if 

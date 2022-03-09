@@ -99,9 +99,7 @@ Case of
 				//______________________________________________________
 			: ($Lon_event=On Timer:K2:25)
 				
-				//OB GET PROPERTY NAMES($Obj_dataModel;$tTxt_keys)
-				//$Lon_count:=Size of array($tTxt_keys)
-				//OBJECT SET VISIBLE(*;"noPublishedTable";$Lon_count=0)
+				//
 				
 				//______________________________________________________
 		End case 
@@ -144,7 +142,7 @@ Case of
 			End for each 
 		End if 
 		
-		OBJECT SET VISIBLE:C603(*; "noPublishedTable"; Size of array:C274($Ptr_names->)=0)
+		OBJECT SET VISIBLE:C603(*; "noDataModel"; Size of array:C274($Ptr_names->)=0)
 		
 		// Selected tables
 		For each ($Txt_tableNumber; Form:C1466.main.order)

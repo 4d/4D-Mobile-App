@@ -123,7 +123,7 @@ Case of
 			If ($o.ids.length>0)
 				
 				OBJECT SET VISIBLE:C603(*; $Obj_form.tableList; True:C214)
-				OBJECT SET VISIBLE:C603(*; "noPublishedTable"; False:C215)
+				OBJECT SET VISIBLE:C603(*; "noDataModel"; False:C215)
 				GOTO OBJECT:C206(*; $Obj_form.tableList)
 				
 				// Select the first table if any
@@ -151,7 +151,7 @@ Case of
 				OB REMOVE:C1226($Obj_context; "currentTable")
 				
 				OBJECT SET VISIBLE:C603(*; $Obj_form.tableList; False:C215)
-				OBJECT SET VISIBLE:C603(*; "noPublishedTable"; True:C214)
+				OBJECT SET VISIBLE:C603(*; "noDataModel"; True:C214)
 				
 			End if 
 			
@@ -161,7 +161,7 @@ Case of
 			OB REMOVE:C1226($Obj_context; "currentTable")
 			
 			OBJECT SET VISIBLE:C603(*; $Obj_form.tableList; False:C215)
-			OBJECT SET VISIBLE:C603(*; "noPublishedTable"; True:C214)
+			OBJECT SET VISIBLE:C603(*; "noDataModel"; True:C214)
 			
 		End if 
 		
