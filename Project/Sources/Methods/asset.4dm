@@ -360,7 +360,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 							"source"; $Txt_buffer; \
 							"target"; $Obj_in.target; \
 							"tags"; $Obj_in.tags; \
-							"catalog"; doc_catalog($Txt_buffer)))
+							"catalog"; _o_doc_catalog($Txt_buffer)))
 						
 						$Obj_template:=ob_parseDocument($Txt_buffer+"manifest.json").value
 						

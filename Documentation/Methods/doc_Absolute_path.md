@@ -1,1 +1,0 @@
-﻿<!----------------------------------------------------absolutePath := doc_Absolute_path ( pathname ; directory ) -> pathname (Text) -  Path to be treated -> directory (Text) -  Reference directory (database folder if omitted) <- absolutePath (Text)-->absolutePath := doc_Absolute_path ( pathname ; directory )

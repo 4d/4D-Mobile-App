@@ -70,7 +70,8 @@ Case of
 		//=======================
 		// Integarated actions //
 		//=======================
-		$o:=doc_Folder(Get 4D folder:C485(Current resources folder:K5:16)+"actions"+Folder separator:K24:12)
+		//FIXME: use Folder/File if used
+		//$o:=doc_Folder(Get 4D folder(Current resources folder)+"actions"+Folder separator)
 		
 		For each ($o; $o.folders)
 			

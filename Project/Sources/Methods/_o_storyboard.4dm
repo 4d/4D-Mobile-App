@@ -729,11 +729,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 						
 						// 2- scene
 						//$Obj_element:=New object(\
-																																																																																																																"insertInto";$Dom_root.findByXPath("document/scenes");\
-																																																																																																																"dom";xml("load";$Folder_relation.file("storyboardScene.xml"));\
-																																																																																																																"idCount";3;\
-																																																																																																																"tagInterfix";"SN";\
-																																																																																																																"insertMode";"append")
+																																																																																																																							"insertInto";$Dom_root.findByXPath("document/scenes");\
+																																																																																																																							"dom";xml("load";$Folder_relation.file("storyboardScene.xml"));\
+																																																																																																																							"idCount";3;\
+																																																																																																																							"tagInterfix";"SN";\
+																																																																																																																							"insertMode";"append")
 						$Obj_element:=New object:C1471(\
 							"insertInto"; $Dom_root.findByXPath("/document/scenes"); \
 							"dom"; _o_xml("load"; $Folder_relation.file("storyboardScene.xml")); \
@@ -1207,7 +1207,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 						If ($Boo_buffer)
 							
 							// write if there is one named colors (could also do it only if one attribute change)
-							doc_UNLOCK_DIRECTORY(New object:C1471(\
+							_o_doc_UNLOCK_DIRECTORY(New object:C1471(\
 								"path"; $File_.parent.platformPath))
 							$Dom_root.save($File_)
 							$Dom_root.close()

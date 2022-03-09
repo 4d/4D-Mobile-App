@@ -821,7 +821,7 @@ Case of
 				
 			End if 
 			
-			doc_UNLOCK_DIRECTORY(New object:C1471(\
+			_o_doc_UNLOCK_DIRECTORY(New object:C1471(\
 				"path"; $Obj_param.path))
 			
 			DELETE FOLDER:C693($Obj_param.path; Delete with contents:K24:24)

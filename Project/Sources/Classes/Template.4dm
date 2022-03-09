@@ -108,7 +108,7 @@ Function copyFiles
 	
 	// get files to copy
 	C_COLLECTION:C1488($Col_catalog)
-	$Col_catalog:=doc_catalog(This:C1470.template.source; This:C1470.getCatalogExcludePattern())
+	$Col_catalog:=_o_doc_catalog(This:C1470.template.source; This:C1470.getCatalogExcludePattern())
 	
 	// and finally copy with tag processing
 	This:C1470.copyFilesResult:=template(New object:C1471(\

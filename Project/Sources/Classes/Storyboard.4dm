@@ -362,7 +362,7 @@ Function colorAssetFix($theme : Object)->$Obj_out : Object
 		If ($asModification)
 			
 			// write if there is one named colors (could also do it only if one attribute change)
-			doc_UNLOCK_DIRECTORY(New object:C1471(\
+			_o_doc_UNLOCK_DIRECTORY(New object:C1471(\
 				"path"; $File_.parent.platformPath))
 			$root.save($File_)
 			

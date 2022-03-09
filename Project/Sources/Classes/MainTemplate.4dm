@@ -20,7 +20,7 @@ Function updateAssets
 		$Obj_out.assets:=template(New object:C1471(\
 			"source"; $Obj_template.assets.source; \
 			"target"; $Obj_template.assets.target; \
-			"catalog"; doc_catalog($Obj_template.assets.source)\
+			"catalog"; _o_doc_catalog($Obj_template.assets.source)\
 			))
 		
 		ob_error_combine($Obj_out; $Obj_out.assets)

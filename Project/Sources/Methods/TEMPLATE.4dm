@@ -71,7 +71,7 @@ If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
 			//________________________________________
 		: (Test path name:C476($Obj_input.source)=Is a folder:K24:2)  // Get catalog from source
 			
-			$Col_catalog:=doc_catalog($Obj_input.source)
+			$Col_catalog:=_o_doc_catalog($Obj_input.source)
 			
 			//________________________________________
 		Else 
@@ -254,7 +254,7 @@ If ($Col_catalog#Null:C1517)
 					// Ignore
 					
 					//______________________________________________________
-				: (doc_document(New object:C1471(\
+				: (_o_doc_document(New object:C1471(\
 					"action"; "isAlias"; \
 					"path"; $File_src)).isAlias)
 					

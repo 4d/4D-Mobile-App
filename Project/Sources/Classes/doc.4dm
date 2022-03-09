@@ -1,7 +1,5 @@
 
-Class constructor
-	var $1 : Variant
-	var $2 : Variant
+Class constructor($target; $reference)
 	
 	var $t : Text
 	
@@ -19,7 +17,7 @@ Class constructor
 		
 		If (Count parameters:C259>=2)
 			
-			This:C1470.setReference($2)
+			This:C1470.setReference($reference)
 			
 		Else 
 			
@@ -35,28 +33,35 @@ Class constructor
 				// ERROR
 				
 				//______________________________________________________
-			: (Value type:C1509($1)=Is object:K8:27)
+			: (Value type:C1509($target)=Is object:K8:27)
 				
-				This:C1470.setTarget($1)
+				This:C1470.setTarget($target)
 				
 				//______________________________________________________
-			: (Value type:C1509($1)=Is text:K8:3)
+			: (Value type:C1509($target)=Is text:K8:3)
 				
-				If ((Position:C15(":"; $1)>0))  // Platform path
+				If ((Position:C15(":"; $target)>0))  // Platform path
 					
 					//%W-533.1
-					If ($1[[1]]=Folder separator:K24:12)
+					If ($target[[1]]=Folder separator:K24:12)
 						
 						// relative
-						This:C1470.relativePath:=Replace string:C233($1; Folder separator:K24:12; "/")
-						This:C1470.platformPath:=This:C1470.reference.platformPath+Substring:C12($1; 2)
+						This:C1470.relativePath:=Replace string:C233($target; Folder separator:K24:12; "/")
+						This:C1470.platformPath:=This:C1470.reference.platformPath+Substring:C12($target; 2)
 						
 					Else 
 						
 						// Absolute
-						This:C1470.platformPath:=$1
-						This:C1470.relativePath:=Convert path system to POSIX:C1106(Replace string:C233($1; This:C1470.reference.platformPath; ""))
+						This:C1470.platformPath:=$target
 						
+						$t:=Convert path system to POSIX:C1106(Replace string:C233($target; This:C1470.reference.platformPath; ""))
+						
+						If (Position:C15("/Volumes/"; $t; *)=0)\
+							 && (Position:C15("/Users/"; $t; *)=0)
+							
+							This:C1470.relativePath:=$t
+							
+						End if 
 					End if 
 					//%W+533.3
 					
@@ -64,27 +69,27 @@ Class constructor
 					
 				Else   // POSIX
 					
-					$t:=Replace string:C233($1; This:C1470.reference.path; ""; 1)
+					$t:=Replace string:C233($target; This:C1470.reference.path; ""; 1)
 					
-					If (Length:C16($t)#Length:C16($1))
+					If (Length:C16($t)#Length:C16($target))
 						
 						// Absolute
-						This:C1470.path:=$1
+						This:C1470.path:=$target
 						This:C1470.relativePath:="/"+$t
 						
 					Else 
 						
 						// Relative
-						This:C1470.relativePath:=$1
+						This:C1470.relativePath:=$target
 						
-						If (Position:C15("/Volumes/"; $1; *)=0)\
-							 & (Position:C15("/Users/"; $1; *)=0)
+						If (Position:C15("/Volumes/"; $target; *)=0)\
+							 && (Position:C15("/Users/"; $target; *)=0)
 							
 							This:C1470.path:=This:C1470.reference.path+Substring:C12(This:C1470.relativePath; 2)
 							
 						Else 
 							
-							This:C1470.path:=$1
+							This:C1470.path:=$target
 							
 						End if 
 					End if 
@@ -118,15 +123,16 @@ Class constructor
 	//Function digest()->$digest : Text
 	
 /*======================================================================*/
-Function get sandBoxed()->$path : Text
+Function unSandBoxed()->$path : Text
+	
+	var $t : Text
+	var $filesystem : Object
 	
 	$path:=This:C1470.path
 	
-	var $filesystem : Object
 	For each ($filesystem; This:C1470._filesystemPathnames)
 		
 		// Unsandboxed
-		var $t : Text
 		$t:=Folder:C1567(Folder:C1567($filesystem.constant; *).platformPath; fk platform path:K87:2).path
 		
 		If (Position:C15($t; $path; 1; *)=1)
@@ -149,19 +155,17 @@ Function __defaultReference
 	End if 
 	
 /*======================================================================*/
-Function setReference
-	
-	var $1
+Function setReference($reference)
 	
 	Case of 
 			
 			//______________________________________________________
-		: (Value type:C1509($1)=Is object:K8:27)
+		: (Value type:C1509($reference)=Is object:K8:27)
 			
-			If (OB Instance of:C1731($1; 4D:C1709.Folder))\
-				 | (OB Instance of:C1731($1; 4D:C1709.File))
+			If (OB Instance of:C1731($reference; 4D:C1709.Folder))\
+				 | (OB Instance of:C1731($reference; 4D:C1709.File))
 				
-				This:C1470.reference:=$1
+				This:C1470.reference:=$reference
 				
 			Else 
 				
@@ -171,9 +175,9 @@ Function setReference
 			End if 
 			
 			//______________________________________________________
-		: (Value type:C1509($1)=Is text:K8:3)
+		: (Value type:C1509($reference)=Is text:K8:3)
 			
-			This:C1470.reference:=Folder:C1567($1; Choose:C955(Position:C15(":"; $1)>0; fk platform path:K87:2; fk posix path:K87:1))
+			This:C1470.reference:=Folder:C1567($reference; Choose:C955(Position:C15(":"; $reference)>0; fk platform path:K87:2; fk posix path:K87:1))
 			
 			//______________________________________________________
 		Else 
@@ -185,13 +189,11 @@ Function setReference
 	End case 
 	
 /*======================================================================*/
-Function setTarget
-	var $1 : Variant
-	var $2 : Variant
+Function setTarget($target; $reference)
 	
 	If (Count parameters:C259>=2)
 		
-		This:C1470.setReference($2)
+		This:C1470.setReference($reference)
 		
 	Else 
 		
@@ -201,13 +203,13 @@ Function setTarget
 	
 	If (Count parameters:C259>=1)
 		
-		If (OB Instance of:C1731($1; 4D:C1709.Folder))\
-			 | (OB Instance of:C1731($1; 4D:C1709.File))
+		If (OB Instance of:C1731($target; 4D:C1709.Folder))\
+			 | (OB Instance of:C1731($target; 4D:C1709.File))
 			
-			This:C1470.target:=$1
+			This:C1470.target:=$target
 			This:C1470.platformPath:=This:C1470.target.platformPath
 			
-			If (OB Instance of:C1731($1; 4D:C1709.File))
+			If (OB Instance of:C1731($target; 4D:C1709.File))
 				
 				// Unsandboxed file
 				This:C1470.path:=File:C1566(This:C1470.platformPath; fk platform path:K87:2).path
@@ -248,4 +250,3 @@ Function setTarget
 		ASSERT:C1129(False:C215; Current method name:C684+"setTarget(): Missing File/folder parameter")
 		
 	End if 
-	

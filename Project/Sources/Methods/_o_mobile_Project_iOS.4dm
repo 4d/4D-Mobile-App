@@ -392,7 +392,7 @@ If ($in.create)
 		ob_error_combine($out; $out.imageAssetFix)
 		
 		// Set writable target directory with all its subfolders and files
-		doc_UNLOCK_DIRECTORY(New object:C1471("path"; $in.path))
+		_o_doc_UNLOCK_DIRECTORY(New object:C1471("path"; $in.path))
 		
 		// ----------------------------------------------------
 		//  MARK: STRUCTURE & DATA
