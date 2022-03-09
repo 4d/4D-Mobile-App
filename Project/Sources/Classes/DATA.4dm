@@ -35,6 +35,8 @@ Function init()
 	$group:=This:C1470.group("tableGroup")
 	This:C1470.listbox("list"; "01_tables").addToGroup($group)
 	This:C1470.formObject("listBorder").addToGroup($group)
+	This:C1470.formObject("dataSizeLabel").addToGroup($group)
+	This:C1470.formObject("tableLabel").addToGroup($group)
 	
 	// Properties
 	$group:=This:C1470.group("properties")
@@ -55,9 +57,6 @@ Function init()
 	This:C1470.input("result").addToGroup($group)
 	
 	This:C1470.subform("noDataModel")
-	
-	// ??
-	This:C1470.formObject("dataSize")
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Initializations at loading
@@ -86,8 +85,6 @@ Function onLoad()
 		This:C1470.tableGroup.hide()
 		This:C1470.noDataModel.show()
 		
-		This:C1470.dataSize.hide()
-		
 	End if 
 	
 	// Init the query widget
@@ -111,6 +108,12 @@ Function onLoad()
 	
 	This:C1470.queryWidget.setValue(cs:C1710.svg.new($t).picture())
 	
+	If (PROJECT.iOS() & PROJECT.android())
+		
+		This:C1470.dataSizeLabel.setTitle(This:C1470.dataSizeLabel.title()+" (iOS / Android)")
+		
+	End if 
+	
 	This:C1470.update()
 	
 	This:C1470.list.focus()
@@ -125,8 +128,6 @@ Function update()
 	
 	// Select the last used table or the first one if none
 	This:C1470.list.doSafeSelect(Choose:C955(Num:C11(This:C1470.lastIndex)=0; 1; Num:C11(This:C1470.lastIndex)))
-	
-	//This.dataSize.show(This.tables.query("embedded=:1"; True).length>0)
 	
 	This:C1470.getSQLite()
 	

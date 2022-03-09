@@ -326,6 +326,30 @@ Function save()
 	$file.setText(JSON Stringify:C1217(This:C1470.cleaned(); *))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	/// Returns target(s) as collection
+Function targets() : Collection
+	
+	If (Value type:C1509(This:C1470.info.target)=Is text:K8:3)
+		
+		return (New collection:C1472(This:C1470.info.target))
+		
+	Else 
+		
+		return (This:C1470.info.target)
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function iOS() : Boolean
+	
+	return (This:C1470.targets().indexOf("iOS")#-1)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function android() : Boolean
+	
+	return (This:C1470.targets().indexOf("android")#-1)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// TODO:Move to EDITOR class
 	// Populate the target value into the project
 Function setTarget($checkDevTools : Boolean; $target : Text)
@@ -421,6 +445,11 @@ Function cleaned()->$project : Object
 				
 				//______________________________________________________
 			: ($t[[1]]="$")
+				
+				OB REMOVE:C1226($project; $t)
+				
+				//______________________________________________________
+			: (OB Instance of:C1731($project["get "+$t]; 4D:C1709.Function))
 				
 				OB REMOVE:C1226($project; $t)
 				

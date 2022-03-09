@@ -34,11 +34,11 @@ Case of
 			
 			If (Form:C1466.dataSource.source="server")
 				
-				//ACI0100868
+				// ACI0100868
 				//$File_key:=doc_Absolute_path (Form.dataSource.keyPath;Get 4D folder(MobileApps folder;*))
 				
 				//===============================================================
-				//#RUSTINE: ne devrait plus être nécessaire
+				// #RUSTINE: ne devrait plus être nécessaire
 				If (Test path name:C476($keyPathname)#Is a document:K24:1)
 					
 					LOG_EVENT(New object:C1471(\
@@ -78,7 +78,6 @@ Case of
 				SET TIMER:C645(-1)
 				
 			End if 
-			
 			
 		Else   // A generation is already in works
 			

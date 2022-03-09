@@ -175,7 +175,7 @@
 					],
 					"dataSourceTypeHint": "boolean"
 				},
-				"01_tables.label": {
+				"tableLabel": {
 					"type": "text",
 					"top": 5,
 					"left": 17,
@@ -265,7 +265,7 @@
 					],
 					"display": false
 				},
-				"dataSize": {
+				"dataSizeLabel": {
 					"type": "text",
 					"top": 5,
 					"left": 268,
@@ -291,7 +291,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 142,
+	"geometryStamp": 144,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
