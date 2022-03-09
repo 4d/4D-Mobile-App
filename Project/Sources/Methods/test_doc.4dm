@@ -55,15 +55,6 @@ If (True:C214)
 	$o:=cs:C1710.doc.new($oFile)
 	ASSERT:C1129($o.path=$o.relativePath)
 	
-	If (False:C215)  // doc_document
-		
-		$File_:=Temporary folder:C486+"alias"
-		CREATE ALIAS:C694(Structure file:C489; $File_)
-		ASSERT:C1129(_o_doc_document(New object:C1471(\
-			"action"; "isAlias"; \
-			"path"; $File_)).isAlias=True:C214)
-		
-	End if 
 End if 
 
 err_FINALLY

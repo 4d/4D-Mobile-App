@@ -551,7 +551,7 @@ Case of
 		//$File_:=$t+"Carthage:Checkouts:TRMosaicLayout:_Pods.xcodeproj"  // A broken symbolic link
 		//$Boo_reset:=_o_doc_isAlias ($File_)
 		
-		$Boo_reset:=Folder:C1567(fk resources folder:K87:11).folder("sdk").folder("Versions").folder("Carthage").folder("Checkouts").folder("TRMosaicLayout").file("_Pods.xcodeproj").isAlias
+		$Boo_reset:=Folder:C1567(fk resources folder:K87:11).file("sdk/Versions/Carthage/Checkouts/TRMosaicLayout/_Pods.xcodeproj").isAlias
 		
 		//________________________________________
 	: (True:C214)

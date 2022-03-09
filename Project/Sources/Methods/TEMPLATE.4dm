@@ -246,43 +246,20 @@ If ($Col_catalog#Null:C1517)
 			
 			$Boo_copy:=True:C214
 			
-			Case of 
-					
-					//______________________________________________________
-				: (Not:C34($Boo_processTags))
-					
-					// Ignore
-					
-					//______________________________________________________
-				: (_o_doc_document(New object:C1471(\
-					"action"; "isAlias"; \
-					"path"; $File_src)).isAlias)
-					
-					// Ignore
-					
-					//______________________________________________________
-				: (Is picture file:C1113($File_src))
-					
-					// Ignore
-					
-					//______________________________________________________
-				: (Position:C15(".git"+Folder separator:K24:12; $File_src)>0)
-					
-					// ignore XXX maybe filter before all content of git folders before calling
-					
-					//______________________________________________________
-				: ($Txt_fileName="manifest.json")
-					
-					// Ignore
-					
-					//______________________________________________________
-				Else 
-					
-					Process_tags_on_file($File_src; $File_tgt; $Obj_input.tags; $Col_types)
-					$Boo_copy:=False:C215
-					
-					//______________________________________________________
-			End case 
+			If (Not:C34($Boo_processTags))\
+				 || ($Txt_fileName="manifest.json")\
+				 || (Is picture file:C1113($File_src))\
+				 || (Position:C15(".git"+Folder separator:K24:12; $File_src)>0)\
+				 || (File:C1566($File_src; fk platform path:K87:2).isAlias)
+				
+				// Ignore
+				
+			Else 
+				
+				Process_tags_on_file($File_src; $File_tgt; $Obj_input.tags; $Col_types)
+				$Boo_copy:=False:C215
+				
+			End if 
 			
 			If ($Boo_copy)
 				
