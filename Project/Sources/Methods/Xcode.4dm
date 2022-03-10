@@ -573,11 +573,7 @@ Case of
 				
 				If ($Obj_result.success)
 					
-					$Txt_buffer:=Replace string:C233($Obj_result.posix; $Obj_param.folder.folder($File_subpath).path; "")
-					
-					$Txt_buffer:="group:"+$File_subpath+$Txt_buffer
-					
-					$Col_paths.push($Txt_buffer)
+					$Col_paths.push("group:"+Replace string:C233($Obj_result.folder.path; $Obj_param.folder.path; ""))
 					
 				End if 
 			End for each 
