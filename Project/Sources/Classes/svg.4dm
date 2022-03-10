@@ -697,7 +697,7 @@ Function image($picture : Variant; $attachTo) : cs:C1710.svg
 						End if 
 						
 						This:C1470.latest:=Super:C1706.create($node; "image"; New object:C1471(\
-							"xlink:href"; "data:;base64,"+$t; \
+							"xlink:href"; "data:image/png;base64,"+$t; \
 							"x"; 0; \
 							"y"; 0; \
 							"width"; $width; \

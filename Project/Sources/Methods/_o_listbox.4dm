@@ -19,9 +19,9 @@ C_TEXT:C284($t)
 C_OBJECT:C1216($o; $oo)
 
 If (False:C215)
-	C_OBJECT:C1216(listbox; $0)
-	C_TEXT:C284(listbox; $1)
-	C_OBJECT:C1216(listbox; $2)
+	C_OBJECT:C1216(_o_listbox; $0)
+	C_TEXT:C284(_o_listbox; $1)
+	C_OBJECT:C1216(_o_listbox; $2)
 End if 
 
 // ----------------------------------------------------
@@ -49,35 +49,35 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 		"focused"; Formula:C1597(This:C1470.name=OBJECT Get name:C1087(Object with focus:K67:3)); \
 		"focus"; Formula:C1597(GOTO OBJECT:C206(*; This:C1470.name)); \
 		"pointer"; Formula:C1597(OBJECT Get pointer:C1124(Object named:K67:5; This:C1470.name)); \
-		"update"; Formula:C1597(widget("update")); \
+		"update"; Formula:C1597(_o_widget("update")); \
 		"coordinates"; Null:C1517; \
 		"windowCoordinates"; Null:C1517; \
-		"getCoordinates"; Formula:C1597(widget("getCoordinates")); \
-		"setCoordinates"; Formula:C1597(widget("setCoordinates"; New object:C1471("left"; $1; "top"; $2; "right"; $3; "bottom"; $4))); \
-		"moveHorizontally"; Formula:C1597(widget("setCoordinates"; New object:C1471("left"; $1))); \
-		"resizeHorizontally"; Formula:C1597(widget("setCoordinates"; New object:C1471("right"; $1))); \
-		"moveVertically"; Formula:C1597(widget("setCoordinates"; New object:C1471("top"; $1))); \
-		"resizeVertically"; Formula:C1597(widget("setCoordinates"; New object:C1471("bottom"; $1))); \
-		"setColors"; Formula:C1597(widget("setColors"; New object:C1471("foreground"; $1; "background"; $2; "altBackgrnd"; $3))); \
-		"getDefinition"; Formula:C1597(listbox("getDefinition")); \
-		"getCell"; Formula:C1597(listbox("getCell")); \
-		"cellPosition"; Formula:C1597(listbox("cellPosition")); \
-		"cellCoordinates"; Formula:C1597(listbox("cellCoordinates"; New object:C1471("column"; $1; "row"; $2))); \
-		"getScrollbar"; Formula:C1597(listbox("getScrollbar")); \
+		"getCoordinates"; Formula:C1597(_o_widget("getCoordinates")); \
+		"setCoordinates"; Formula:C1597(_o_widget("setCoordinates"; New object:C1471("left"; $1; "top"; $2; "right"; $3; "bottom"; $4))); \
+		"moveHorizontally"; Formula:C1597(_o_widget("setCoordinates"; New object:C1471("left"; $1))); \
+		"resizeHorizontally"; Formula:C1597(_o_widget("setCoordinates"; New object:C1471("right"; $1))); \
+		"moveVertically"; Formula:C1597(_o_widget("setCoordinates"; New object:C1471("top"; $1))); \
+		"resizeVertically"; Formula:C1597(_o_widget("setCoordinates"; New object:C1471("bottom"; $1))); \
+		"setColors"; Formula:C1597(_o_widget("setColors"; New object:C1471("foreground"; $1; "background"; $2; "altBackgrnd"; $3))); \
+		"getDefinition"; Formula:C1597(_o_listbox("getDefinition")); \
+		"getCell"; Formula:C1597(_o_listbox("getCell")); \
+		"cellPosition"; Formula:C1597(_o_listbox("cellPosition")); \
+		"cellCoordinates"; Formula:C1597(_o_listbox("cellCoordinates"; New object:C1471("column"; $1; "row"; $2))); \
+		"getScrollbar"; Formula:C1597(_o_listbox("getScrollbar")); \
 		"setScrollbar"; Formula:C1597(OBJECT SET SCROLLBAR:C843(*; This:C1470.name; Num:C11($1); Num:C11($2))); \
-		"getProperty"; Formula:C1597(listbox("getProperty"; New object:C1471("property"; $1))); \
+		"getProperty"; Formula:C1597(_o_listbox("getProperty"; New object:C1471("property"; $1))); \
 		"setProperty"; Formula:C1597(LISTBOX SET PROPERTY:C1440(*; This:C1470.name; $1; $2)); \
 		"rowsNumber"; Formula:C1597(LISTBOX Get number of rows:C915(*; This:C1470.name)); \
 		"deleteRow"; Formula:C1597(LISTBOX DELETE ROWS:C914(*; This:C1470.name; $1; 1)); \
 		"deleteRows"; Formula:C1597(LISTBOX DELETE ROWS:C914(*; This:C1470.name; $1; $2)); \
 		"deleteAllRows"; Formula:C1597(LISTBOX DELETE ROWS:C914(*; This:C1470.name; 1; This:C1470.rowsNumber())); \
-		"selected"; Formula:C1597(listbox("selected").count); \
+		"selected"; Formula:C1597(_o_listbox("selected").count); \
 		"select"; Formula:C1597(LISTBOX SELECT ROW:C912(*; This:C1470.name; Num:C11($1); lk replace selection:K53:1)); \
 		"selectAll"; Formula:C1597(LISTBOX SELECT ROW:C912(*; This:C1470.name; 0; lk replace selection:K53:1)); \
 		"deselect"; Formula:C1597(LISTBOX SELECT ROW:C912(*; This:C1470.name; 0; lk remove from selection:K53:3)); \
-		"reveal"; Formula:C1597(listbox("reveal"; New object:C1471("row"; Num:C11($1)))); \
-		"popup"; Formula:C1597(listbox("popup"; $1)); \
-		"clear"; Formula:C1597(listbox("clear"))\
+		"reveal"; Formula:C1597(_o_listbox("reveal"; New object:C1471("row"; Num:C11($1)))); \
+		"popup"; Formula:C1597(_o_listbox("popup"; $1)); \
+		"clear"; Formula:C1597(_o_listbox("clear"))\
 		)
 	
 	$o.getCoordinates()

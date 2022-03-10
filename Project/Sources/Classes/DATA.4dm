@@ -110,7 +110,7 @@ Function onLoad()
 	
 	If (PROJECT.iOS() & PROJECT.android())
 		
-		This:C1470.dataSizeLabel.setTitle(This:C1470.dataSizeLabel.title()+" (iOS / Android)")
+		This:C1470.dataSizeLabel.title:=This:C1470.dataSizeLabel.title+" (iOS / Android)"
 		
 	End if 
 	

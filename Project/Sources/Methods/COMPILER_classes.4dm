@@ -1,69 +1,41 @@
 //%attributes = {"invisible":true}
-If (False:C215)  // Constructor
-	
-	//______________________________________________________
-	C_OBJECT:C1216(new; $0)
-	C_TEXT:C284(new; $1)
-	C_TEXT:C284(new; $2)
-	
-	//______________________________________________________
-End if 
 
 If (False:C215)  // Widgets
 	
 	//______________________________________________________
-	C_OBJECT:C1216(button; $0)
-	C_TEXT:C284(button; $1)
-	C_OBJECT:C1216(button; $2)
+	C_OBJECT:C1216(_o_button; $0)
+	C_TEXT:C284(_o_button; $1)
+	C_OBJECT:C1216(_o_button; $2)
 	
 	//______________________________________________________
-	C_OBJECT:C1216(group; $0)
-	C_TEXT:C284(group; $1)
-	C_OBJECT:C1216(group; $2)
+	C_OBJECT:C1216(_o_listbox; $0)
+	C_TEXT:C284(_o_listbox; $1)
+	C_OBJECT:C1216(_o_listbox; $2)
 	
 	//______________________________________________________
-	C_OBJECT:C1216(listbox; $0)
-	C_TEXT:C284(listbox; $1)
-	C_OBJECT:C1216(listbox; $2)
+	C_OBJECT:C1216(_o_picture; $0)
+	C_TEXT:C284(_o_picture; $1)
+	C_OBJECT:C1216(_o_picture; $2)
 	
 	//______________________________________________________
-	C_OBJECT:C1216(picture; $0)
-	C_TEXT:C284(picture; $1)
-	C_OBJECT:C1216(picture; $2)
+	C_OBJECT:C1216(_o_static; $0)
+	C_TEXT:C284(_o_static; $1)
+	C_OBJECT:C1216(_o_static; $2)
 	
 	//______________________________________________________
-	C_OBJECT:C1216(static; $0)
-	C_TEXT:C284(static; $1)
-	C_OBJECT:C1216(static; $2)
+	C_OBJECT:C1216(_o_thermometer; $0)
+	C_TEXT:C284(_o_thermometer; $1)
+	C_OBJECT:C1216(_o_thermometer; $2)
 	
 	//______________________________________________________
-	C_OBJECT:C1216(thermometer; $0)
-	C_TEXT:C284(thermometer; $1)
-	C_OBJECT:C1216(thermometer; $2)
-	
-	//______________________________________________________
-	C_OBJECT:C1216(widget; $0)
-	C_TEXT:C284(widget; $1)
-	C_OBJECT:C1216(widget; $2)
+	C_OBJECT:C1216(_o_widget; $0)
+	C_TEXT:C284(_o_widget; $1)
+	C_OBJECT:C1216(_o_widget; $2)
 	
 	//______________________________________________________
 End if 
 
 If (False:C215)  // Ob
-	
-	//______________________________________________________
-	C_OBJECT:C1216(ob; $0)
-	C_TEXT:C284(ob; $1)
-	C_OBJECT:C1216(ob; ${2})
-	
-	//______________________________________________________
-	C_OBJECT:C1216(ob deepMerge; $0)
-	C_OBJECT:C1216(ob deepMerge; $1)
-	C_OBJECT:C1216(ob deepMerge; $2)
-	
-	//______________________________________________________
-	C_OBJECT:C1216(ob MERGE; $1)
-	C_OBJECT:C1216(ob MERGE; $2)
 	
 	//______________________________________________________
 	C_OBJECT:C1216(ob findPropertyValues; $0)
@@ -85,11 +57,6 @@ If (False:C215)  // Tools
 	C_OBJECT:C1216(dat; $0)
 	C_TEXT:C284(dat; $1)
 	C_OBJECT:C1216(dat; $2)
-	
-	//______________________________________________________
-	C_OBJECT:C1216(environment; $0)
-	C_TEXT:C284(environment; $1)
-	C_OBJECT:C1216(environment; $2)
 	
 	//______________________________________________________
 	C_OBJECT:C1216(logger; $0)

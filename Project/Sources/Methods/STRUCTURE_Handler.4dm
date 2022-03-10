@@ -105,15 +105,15 @@ Case of
 				End if 
 				
 				// Initialize the search widget
-				widget("search").setValue(New object:C1471(\
+				_o_widget("search").setValue(New object:C1471(\
 					"placeholder"; Get localized string:C991("search")))
 				
 				// Position search filters based on the language of the label
-				widget($form.tableFilter).moveHorizontally(widget($form.tableList+".label").bestSize().coordinates.right+10)
-				widget($form.fieldFilter).moveHorizontally(widget($form.fieldList+".label").bestSize().coordinates.right+10)
+				_o_widget($form.tableFilter).moveHorizontally(_o_widget($form.tableList+".label").bestSize().coordinates.right+10)
+				_o_widget($form.fieldFilter).moveHorizontally(_o_widget($form.fieldList+".label").bestSize().coordinates.right+10)
 				
 				// Align checkbox & help according to the translation
-				widget($form.allowHelp).moveHorizontally(widget($form.allow).bestSize().coordinates.right+5)
+				_o_widget($form.allowHelp).moveHorizontally(_o_widget($form.allow).bestSize().coordinates.right+5)
 				
 				EDITOR.updateHeader(New object:C1471(\
 					"show"; Not:C34(Bool:C1537(Form:C1466.$project.structure.dataModel))))

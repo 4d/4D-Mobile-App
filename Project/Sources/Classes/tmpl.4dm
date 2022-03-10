@@ -472,6 +472,40 @@ Function cancel() : Text
 		
 	End if 
 	
+	
+	//============================================================================
+/* Utility function to get the data:image/png;base64
+	
+Use it to populate the .cancel() values
+	
+cs.tmpl.new()._getPictureAsData()
+	
+will put the data into the pasteboard
+	
+*/
+Function _getPictureAsData()
+	
+	var $picture : Picture
+	var $c : Collection
+	var $svg : cs:C1710.svg
+	
+	READ PICTURE FILE:C678(""; $picture)
+	
+	If (Bool:C1537(OK))
+		
+		$svg:=cs:C1710.svg.new().image($picture)
+		$c:=$svg.findByName($svg.root; "image")
+		
+		If ($svg.success)
+			
+			SET TEXT TO PASTEBOARD:C523($svg.getAttribute($c[0]; "xlink:href"))
+			
+		End if 
+		
+		$svg.close()
+		
+	End if 
+	
 	//============================================================================
 	// Return the source folder of the template (could be a zip)
 Function getSources($name : Text; $type : Text)->$template : 4D:C1709.Folder

@@ -28,7 +28,6 @@
 			"catalog",
 			"DataStore",
 			"dateTime",
-			"ob",
 			"unit4D",
 			"with"
 		]
@@ -64,6 +63,7 @@
 	},
 	"_o_OBSOLETES": {
 		"methods": [
+			"_o_button",
 			"_o_checkQueryFilter",
 			"_o_currentForm",
 			"_o_device",
@@ -71,19 +71,24 @@
 			"_o_doc_UNLOCK_DIRECTORY",
 			"_o_editor_Locked",
 			"_o_err",
+			"_o_listbox",
 			"_o_mobile_Project_iOS",
 			"_o_panel_Form_common",
+			"_o_picture",
 			"_o_plist",
 			"_o_rest_isValidField",
 			"_o_SERVER_Handler",
 			"_o_simulator",
+			"_o_static",
 			"_o_storyboard",
 			"_o_storyboard_fix_id",
 			"_o_structure",
 			"_o_tempoFieldType",
+			"_o_thermometer",
 			"_o_tmpl_form",
 			"_o_ui_BEST_SIZE",
 			"_o_unzip",
+			"_o_widget",
 			"_o_xml",
 			"_o_xml_elementToObject",
 			"_o_xml_fileToObject",
@@ -540,6 +545,7 @@
 			"http",
 			"lep",
 			"menu",
+			"ob",
 			"plist",
 			"preferences",
 			"process",
@@ -870,23 +876,10 @@
 	},
 	"Pseudo-Class": {
 		"methods": [
-			"button",
-			"CALL_MAIN_PROCESS",
 			"COMPILER_classes",
 			"dat",
-			"environment",
-			"group",
-			"listbox",
 			"logger",
-			"new",
-			"ob",
-			"ob deepMerge",
-			"ob findPropertyValues",
-			"ob MERGE",
-			"picture",
-			"static",
-			"thermometer",
-			"widget"
+			"ob findPropertyValues"
 		]
 	},
 	"rgx (thread-safe)": {
@@ -997,7 +990,6 @@
 		"methods": [
 			"test_dat",
 			"test_lep",
-			"test_ob",
 			"test_regex",
 			"test_str"
 		]

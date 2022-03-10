@@ -32,11 +32,6 @@ C_OBJECT:C1216(_catalog; $0)
 C_TEXT:C284(_catalog; $1)
 C_OBJECT:C1216(_catalog; $2)
 
-//C_OBJECT(Init; $1)
-
-C_OBJECT:C1216(CALL_MAIN_PROCESS; $1)
-C_TEXT:C284(CALL_MAIN_PROCESS; $2)
-
 //__________________________________________________
 C_OBJECT:C1216(publishedTableList; $0)
 C_OBJECT:C1216(publishedTableList; $1)

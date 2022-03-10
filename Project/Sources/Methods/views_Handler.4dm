@@ -68,25 +68,23 @@ If (OB Is empty:C1297($context))  // First load
 	RECORD.info("VIEWS init")
 	
 	// § DEFINE UI CONSTRAINTS §
-	$c:=New collection:C1472
+	cs:C1710.ob.new($context).createPath("constraints.rules"; Is collection:K8:32)
 	
-	$c.push(New object:C1471(\
+	$context.constraints.rules.push(New object:C1471(\
 		"formula"; Formula:C1597(VIEWS_Handler(New object:C1471(\
 		"action"; "geometry")))))
 	
-	$c.push(New object:C1471(\
+	$context.constraints.rules.push(New object:C1471(\
 		"object"; New collection:C1472("preview"; "preview.label"; "preview.back"; "Preview.border"); \
 		"reference"; "viewport.preview"; \
 		"type"; "horizontal alignment"; \
 		"value"; "center"))
 	
-	$c.push(New object:C1471(\
+	$context.constraints.rules.push(New object:C1471(\
 		"object"; "preview.scrollBar"; \
 		"reference"; "preview"; \
 		"type"; "margin-left"; \
 		"value"; 20))
-	
-	$context:=ob.set($context).createPath("constraints.rules"; Is collection:K8:32; $c).contents
 	
 	// § DEFINE FORM MEMBER METHODS §
 	

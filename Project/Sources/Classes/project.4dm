@@ -685,8 +685,9 @@ Function isField($field) : Boolean
 			return (Match regex:C1019("(?m-si)^\\d+$"; $field; 1; *))
 			
 			//______________________________________________________
-		: (Value type:C1509($field)=Is object:K8:27)
+		: (Value type:C1509($field)=Is object:K8:27)  // The field itself
 			
+			// Eventually, just the kind will be needed
 			return (($field.kind="storage") || ($field.fieldType#Null:C1517))
 			
 			//______________________________________________________
@@ -1699,9 +1700,146 @@ Function publishedTables()->$tables : Collection
 	End if 
 	
 	//================================================================================
-Function fieldDefinition
+	/// Gets a dataclass definition 
+Function table($table) : 4D:C1709.DataClass
 	
-	//MARK: TODO
+	return (ds:C1482[This:C1470.tableName($table)])
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	/// Gets table name
+Function tableName($table) : Text
+	
+	Case of 
+			
+			//______________________________________________________
+		: (Value type:C1509($table)=Is object:K8:27)
+			
+			If (OB Instance of:C1731($table; 4D:C1709.DataClass))
+				
+				return ($table.getInfo().name)
+				
+			Else 
+				
+				return (String:C10($table.name))
+				
+			End if 
+			
+			//______________________________________________________
+		: (Value type:C1509($table)=Is longint:K8:6)\
+			 | (Value type:C1509($table)=Is real:K8:4)
+			
+			return (Table name:C256($table))
+			
+			//______________________________________________________
+		: (Value type:C1509($table)=Is text:K8:3)
+			
+			If (Match regex:C1019("(?m-si)^\\d+$"; $table; 1; *))
+				
+				return (Table name:C256(Num:C11($table)))
+				
+			Else 
+				
+				return ($table)
+				
+			End if 
+			
+			//______________________________________________________
+		Else 
+			
+			ASSERT:C1129(False:C215)
+			
+			//______________________________________________________
+	End case 
+	
+	//================================================================================
+	/// Gets a datastore field definition 
+Function field($table; $field) : Object
+	
+	$table:=This:C1470.table($table)  //[This.tableName($table)]
+	
+	If ($table#Null:C1517)
+		
+		return ($table[This:C1470.fieldName($table; $field)])
+		
+	Else 
+		
+		ASSERT:C1129(False:C215)
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	/// Gets a field name
+Function fieldName($table : 4D:C1709.DataClass; $field) : Text
+	
+	var $key : Text
+	
+	Case of 
+			
+			//______________________________________________________
+		: (Value type:C1509($field)=Is text:K8:3)
+			
+			If (Match regex:C1019("(?m-si)^\\d+$"; $field; 1; *))
+				
+				For each ($key; $table)
+					
+					If ($table[$key].fieldNumber=Num:C11($field))
+						
+						return ($table[$key].name)
+						
+					End if 
+				End for each 
+				
+			Else 
+				
+				return ($table[$field].name)
+				
+			End if 
+			
+			//______________________________________________________
+		: (Value type:C1509($field)=Is object:K8:27)
+			
+			Case of 
+					
+					//______________________________________________________
+				: ($field.name#Null:C1517)
+					
+					return ($field.name)
+					
+					//______________________________________________________
+				: ($field.fieldNumber#Null:C1517)
+					
+					For each ($key; $table)
+						
+						If ($table[$key].fieldNumber=$field.fieldNumber)
+							
+							return ($table[$key].name)
+							
+						End if 
+					End for each 
+					
+					//______________________________________________________
+			End case 
+			
+			//______________________________________________________
+		: (Value type:C1509($field)=Is longint:K8:6)\
+			 | (Value type:C1509($field)=Is real:K8:4)
+			
+			For each ($key; $table)
+				
+				If ($table[$key].fieldNumber=$field)
+					
+					return ($table[$key].name)
+					
+				End if 
+			End for each 
+			
+			//______________________________________________________
+		Else 
+			
+			ASSERT:C1129(False:C215)
+			
+			//______________________________________________________
+	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Makes a Backup of the project & catalog

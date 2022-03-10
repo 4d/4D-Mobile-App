@@ -30,7 +30,6 @@ Function highlightShortcut() : cs:C1710.button
 	var $key; $t : Text
 	var $index; $lModifier : Integer
 	
-	//$t:=This.title()
 	$t:=This:C1470.title
 	
 	OBJECT GET SHORTCUT:C1186(*; This:C1470.name; $key; $lModifier)
@@ -47,15 +46,14 @@ Function highlightShortcut() : cs:C1710.button
 		
 		If ($index>0)
 			
-			This:C1470.setTitle(Substring:C12($t; 1; $index)+Char:C90(0x0332)+Substring:C12($t; $index+1))
+			This:C1470.title:=Substring:C12($t; 1; $index)+Char:C90(0x0332)+Substring:C12($t; $index+1)
 			
 		End if 
 		
 	Else 
 		
 		// Remove if any
-		$t:=Replace string:C233($t; Char:C90(0x0332); "")
-		This:C1470.setTitle($t)
+		This:C1470.title:=Replace string:C233($t; Char:C90(0x0332); "")
 		
 	End if 
 	

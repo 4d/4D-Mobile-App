@@ -33,10 +33,10 @@ COPY ARRAY:C226($tTxt_check; (OBJECT Get pointer:C1124(Object named:K67:5; "Colu
 
 //Form.window:=window.getCoordinates()
 
-Form:C1466.tablist:=widget("tab.list")
-Form:C1466.tabdetail:=widget("tab.detail")
+Form:C1466.tablist:=_o_widget("tab.list")
+Form:C1466.tabdetail:=_o_widget("tab.detail")
 
-group("Button;Button1").distributeHorizontally(New object:C1471("start"; 20; "gap"; 10))
+//group("Button;Button1").distributeHorizontally(New object("start"; 20; "gap"; 10))
 
 Form:C1466.input:=cs:C1710.input.new("Input")
 Form:C1466.input.password:=True:C214

@@ -284,7 +284,8 @@ If (Num:C11($tableID)>0)
 																	// Check that the discriminant field is published
 																	For each ($o; OB Entries:C1720($relation[$field.name]).query("value.fieldType != null")) Until ($found)
 																		
-																		$found:=String:C10($o.value.name)=$name
+																		$found:=(String:C10($o.value.name)=$name)\
+																			/* computed or alias */ || ($o.key=$name)
 																		
 																	End for each 
 																	

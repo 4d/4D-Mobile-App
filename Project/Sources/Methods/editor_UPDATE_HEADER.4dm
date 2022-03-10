@@ -43,7 +43,8 @@ $button:=cs:C1710.button.new("action")
 
 If (Form:C1466.action#Null:C1517)
 	
-	$button.setTitle(String:C10(Form:C1466.action.title)).bestSize(Align right:K42:4)
+	$button.setTitle(String:C10(Form:C1466.action.title))\
+		.bestSize(Align right:K42:4)
 	
 End if 
 

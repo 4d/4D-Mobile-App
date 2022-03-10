@@ -16,58 +16,32 @@ the button must be defined with this properties:
 
 Class extends widget
 
-Class constructor
-	var $1 : Text
+Class constructor($name : Text)
 	
-	Super:C1705($1)
-	
-	//=============================================================
-Function alert  // This.alert("message")
-	var $1 : Text
-	
-	This:C1470.setTitle("🚫")
-	
-	If (Count parameters:C259>=1)
-		
-		This:C1470.setHelpTip($1)
-		
-	End if 
+	Super:C1705($name)
 	
 	//=============================================================
-Function warning  // This.warning("message")
-	var $1 : Text
+Function alert($message : Text)
 	
-	var $e : Object
-	
-	This:C1470.setTitle("❗")
-	
-	If (Count parameters:C259>=1)
-		
-		This:C1470.setHelpTip($1)
-		
-	End if 
+	This:C1470.title:="🚫"
+	This:C1470.setHelpTip($message)
 	
 	//=============================================================
-Function reset  // This.reset()
+Function warning($message : Text)
 	
-	This:C1470.setTitle()
+	This:C1470.title:="❗"
+	This:C1470.setHelpTip($message)
+	
+	//=============================================================
+Function reset
+	
+	This:C1470.title:=""
 	This:C1470.setHelpTip()
 	
 	//=============================================================
-Function method  // This.method({event})
-	var $1 : Object
+Function method($e : Object)
 	
-	var $e : Object
-	
-	If (Count parameters:C259>=1)
-		
-		$e:=$1
-		
-	Else 
-		
-		$e:=FORM Event:C1606
-		
-	End if 
+	$e:=$e=Null:C1517 ? FORM Event:C1606 : $e
 	
 	Case of 
 			

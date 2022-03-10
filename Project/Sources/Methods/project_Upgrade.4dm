@@ -572,7 +572,14 @@ If (Num:C11($project.info.version)<7)
 				
 				$field:=$project.dataModel[$tableID][$t]
 				
+				If ($field.kind#Null:C1517)
+					
+					continue
+					
+				End if 
+				
 				Case of 
+						
 						//______________________________________________________
 					: (Match regex:C1019("^\\d+$"; $t; 1))
 						
