@@ -49,6 +49,48 @@ Function set foregroundColor($color : Variant)
 	
 	OBJECT SET RGB COLORS:C628(*; This:C1470.name; $color)
 	
+	//=== === === === === === === === === === === === === === === === === === ===
+Function get title() : Text
+	
+	//If (This.type=Object type push button)\
+		 || (This.type=Object type 3D button)\
+		 || (This.type=Object type checkbox)\
+		 || (This.type=Object type radio button)\
+		 || (This.type=Object type static text)\
+		 || (This.type=Object type groupbox)\
+		 || (This.type=Object type listbox header)\
+		 || (This.type=Object type 3D checkbox)\
+		 || (This.type=Object type 3D radio button)
+	
+	var $t : Text
+	$t:=OBJECT Get title:C1068(*; This:C1470.name)
+	return ($t)
+	
+	//return (String(OBJECT Get title(*; This.name)))
+	
+	//End if 
+	
+	//=== === === === === === === === === === === === === === === === === === ===
+Function set title($title : Text)
+	
+	//If (This.type=Object type push button)\
+		 || (This.type=Object type 3D button)\
+		 || (This.type=Object type checkbox)\
+		 || (This.type=Object type radio button)\
+		 || (This.type=Object type static text)\
+		 || (This.type=Object type groupbox)\
+		 || (This.type=Object type listbox header)\
+		 || (This.type=Object type 3D checkbox)\
+		 || (This.type=Object type 3D radio button)
+	
+	This:C1470.setTitle($title)
+	
+	//Else 
+	
+	//ASSERT(False; "Defining the title is not possible for this type of object")
+	
+	//End if 
+	
 	//MARK:-
 	//=== === === === === === === === === === === === === === === === === === ===
 	/// Adds this widget to a group
@@ -150,9 +192,9 @@ Function setTitle($title : Text) : cs:C1710.formObject
 	return (This:C1470)
 	
 	//=== === === === === === === === === === === === === === === === === === ===
-Function title() : Text
+	//Function title() : Text
 	
-	return (OBJECT Get title:C1068(*; This:C1470.name))
+	//return (OBJECT Get title(*; This.name))
 	
 	//=== === === === === === === === === === === === === === === === === === ===
 Function setFont($font : Text) : cs:C1710.formObject

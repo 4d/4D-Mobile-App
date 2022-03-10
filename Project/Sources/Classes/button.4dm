@@ -30,7 +30,8 @@ Function highlightShortcut() : cs:C1710.button
 	var $key; $t : Text
 	var $index; $lModifier : Integer
 	
-	$t:=This:C1470.title()
+	//$t:=This.title()
+	$t:=This:C1470.title
 	
 	OBJECT GET SHORTCUT:C1186(*; This:C1470.name; $key; $lModifier)
 	
