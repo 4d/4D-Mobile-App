@@ -675,19 +675,19 @@ Function storageFields($table : Variant)->$fields : Collection
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function isField($attribute : Variant) : Boolean
+Function isField($field) : Boolean
 	
 	Case of 
 			
 			//______________________________________________________
-		: (Value type:C1509($attribute)=Is text:K8:3)
+		: (Value type:C1509($field)=Is text:K8:3)  // Key property
 			
-			return (Match regex:C1019("(?m-si)^\\d+$"; $attribute; 1; *))
+			return (Match regex:C1019("(?m-si)^\\d+$"; $field; 1; *))
 			
 			//______________________________________________________
-		: (Value type:C1509($attribute)=Is object:K8:27)
+		: (Value type:C1509($field)=Is object:K8:27)
 			
-			return ($attribute.fieldType#Null:C1517)
+			return (($field.kind="storage") || ($field.fieldType#Null:C1517))
 			
 			//______________________________________________________
 	End case 
