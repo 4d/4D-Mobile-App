@@ -187,32 +187,33 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 				"embed"; $Obj_objects["48FDD0DF1E94FA1000EEDE31"]; \
 				"copy"; $Obj_objects["D9BA4A381EC4A6D9001A997B"])
 			
-			$Txt_buffer:=$Obj_param.target+Convert path POSIX to system:C1107($Obj_param.folder)
-			If (Test path name:C476($Txt_buffer)=Is a folder:K24:2)
+			var $folder; $child : 4D:C1709.Folder
+			var $children : Collection
+			$folder:=Folder:C1567($Obj_param.target; fk platform path:K87:2).folder($Obj_param.folder)
+			If ($folder.exists)
 				
-				FOLDER LIST:C473($Txt_buffer; $tTxt_folders)
-				
-				If (Size of array:C274($tTxt_folders)>0)
+				$children:=$folder.folders()
+				If ($children.length>0)
 					$Obj_param.projfile.mustSave:=True:C214
 				End if 
 				
-				For ($Lon_i; 1; Size of array:C274($tTxt_folders); 1)
+				For each ($child; $children)
 					
-					If (Path to object:C1547($tTxt_folders{$Lon_i}).extension=".framework")
+					If ($child.extension=".framework")
 						
 						// in source tree group
 						$Txt_buffer:=XcodeProj(New object:C1471("action"; "randomObjectId"; "proj"; $Obj_param.projfile.value)).value
 						
 						If (Not:C34(Bool:C1537(FEATURE.with("generateForDev"))))  // # feature to not add framework
-							$Obj_:=New object:C1471("name"; $tTxt_folders{$Lon_i}; "isa"; "PBXFileReference"; "lastKnownFileType"; "wrapper.framework"; "path"; $Obj_param.folder+$tTxt_folders{$Lon_i}; "sourceTree"; "<group>")
+							$Obj_:=New object:C1471("name"; $child.fullName; "isa"; "PBXFileReference"; "lastKnownFileType"; "wrapper.framework"; "path"; $Obj_param.folder+$child.fullName; "sourceTree"; "<group>")
 						Else 
 							// XXX for source not in compiled, maybe do thi code elsewhere, or change $Obj_param.folder in caller function
-							$Obj_:=New object:C1471("name"; $tTxt_folders{$Lon_i}; "isa"; "PBXFileReference"; "lastKnownFileType"; "wrapper.framework"; "path"; $tTxt_folders{$Lon_i}; "sourceTree"; "BUILT_PRODUCTS_DIR")
+							$Obj_:=New object:C1471("name"; $child.fullName; "isa"; "PBXFileReference"; "lastKnownFileType"; "wrapper.framework"; "path"; $child.fullName; "sourceTree"; "BUILT_PRODUCTS_DIR")
 							
 						End if 
 						
 						$Obj_objects[$Txt_buffer]:=$Obj_
-						If (Position:C15("QMobile"; $tTxt_folders{$Lon_i})=1)
+						If (Position:C15("QMobile"; $child.name)=1)
 							$Col_:=$Obj_result.group["qmobile"]
 						Else 
 							$Col_:=$Obj_result.group["thirdparty"]
@@ -245,12 +246,12 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 						// in Copy Frameworks // PBXShellScriptBuildPhase
 						If (Value type:C1509($Obj_result.phase.copy)=Is object:K8:27)
 							
-							$Obj_result.phase.copy.inputPaths.push("$(SRCROOT)/"+$Obj_param.folder+$tTxt_folders{$Lon_i})
-							$Obj_result.phase.copy.outputPaths.push("$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/"+$tTxt_folders{$Lon_i})
+							$Obj_result.phase.copy.inputPaths.push("$(SRCROOT)/"+$Obj_param.folder+$child.fullName)
+							$Obj_result.phase.copy.outputPaths.push("$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/"+$child.fullName)
 							
 						End if 
 					End if 
-				End for 
+				End for each 
 				
 				$Obj_result.success:=True:C214
 				

@@ -116,33 +116,31 @@ Function run($path : Text; $options : Object)->$out : Object
 		End for each 
 		
 		// Then write XML result to file
-		var $File_ : Text
-		$File_:=$path
+		var $File_ : Object  // file or folder
 		
-		var $Obj_path : Object
-		$Obj_path:=Path to object:C1547($File_)
+		$File_:=Folder:C1567($path; fk platform path:K87:2)
 		
 		Case of 
 				
 				//………………………………………………………………………………………………
-			: ($Obj_path.extension=".xcdatamodeld")
+			: ($File_.extension=".xcdatamodeld")
 				
-				$File_:=$File_+Folder separator:K24:12+$Obj_path.name+".xcdatamodel"+Folder separator:K24:12+"contents"
+				$File_:=$File_.folder($File_.name+".xcdatamodel").file("contents")
 				
 				//………………………………………………………………………………………………
-			: ($Obj_path.extension=".xcdatamodel")
+			: ($File_.extension=".xcdatamodel")
 				
-				$File_:=$File_+Folder separator:K24:12+"contents"
+				$File_:=$File_.file("contents")
 				
 				//………………………………………………………………………………………………
 		End case 
 		
-		CREATE FOLDER:C475($File_; *)
+		$File_.create()
 		
-		DOM EXPORT TO FILE:C862($Dom_model; $File_)
+		DOM EXPORT TO FILE:C862($Dom_model; $File_.platformPath)
 		
 		$out.success:=Bool:C1537(OK)
-		$out.path:=$File_
+		$out.path:=$File_.platformPath
 		
 		DOM CLOSE XML:C722($Dom_model)  // Modify the system variable OK!
 		

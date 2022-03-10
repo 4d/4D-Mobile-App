@@ -148,22 +148,20 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 						
 						If (Value type:C1509($Obj_formatter.choicePattern)=Is text:K8:3)
 							
-							ARRAY TEXT:C222($tTxt_documents; 0x0000)
-							DOCUMENT LIST:C474($Dir_source; $tTxt_documents)
-							
 							$Obj_formatter.choiceList:=New object:C1471(\
 								)
 							
-							For ($Lon_i; 1; Size of array:C274($tTxt_documents); 1)
+							var $file : 4D:C1709.File
+							For each ($file; Folder:C1567($Dir_source; fk platform path:K87:2).files())
 								
 								ARRAY TEXT:C222($tTxt_result; 0x0000)
 								
-								If (Rgx_ExtractText($Obj_formatter.choicePattern; $tTxt_documents{$Lon_i}; "1"; ->$tTxt_result)=0)
+								If (Rgx_ExtractText($Obj_formatter.choicePattern; $file.fullName; "1"; ->$tTxt_result)=0)
 									
-									$Obj_formatter.choiceList[$tTxt_result{1}]:=$tTxt_documents{$Lon_i}
+									$Obj_formatter.choiceList[$tTxt_result{1}]:=$file.fullName
 									
 								End if 
-							End for 
+							End for each 
 						End if 
 					End if 
 					
@@ -669,50 +667,45 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 			If ($Obj_in.path#Null:C1517)
 				
 				// Remove final folder separator
-				$Obj_file:=Path to object:C1547($Obj_in.path)
-				$Obj_file.isFolder:=False:C215
-				$Obj_in.path:=Object to path:C1548($Obj_file)
+				var $path : 4D:C1709.Folder
+				$path:=Folder:C1567($Obj_in.path; fk platform path:K87:2)
 				
-				If (Test path name:C476($Obj_in.path)=Is a folder:K24:2)
-					
-					ARRAY TEXT:C222($tTxt_folder; 0x0000)
-					FOLDER LIST:C473($Obj_in.path; $tTxt_folder)
+				If ($path.exists)
 					
 					$Obj_out.children:=New collection:C1472
 					
 					If (Bool:C1537($Obj_in.contents))
 						
-						If (Test path name:C476($Obj_in.path+Folder separator:K24:12+"Contents.json")=Is a document:K24:1)
+						If ($path.file("Contents.json").exists)
 							
-							$Obj_out.contents:=JSON Parse:C1218(Document to text:C1236($Obj_in.path+Folder separator:K24:12+"Contents.json"))
+							$Obj_out.contents:=ob_parseFile($path.file("Contents.json")).value
 							
 							// Else error
 							
 						End if 
 					End if 
 					
-					For ($Lon_i; 1; Size of array:C274($tTxt_folder); 1)
+					var $folder : 4D:C1709.Folder
+					For each ($folder; $path.folders())
 						
-						$Obj_path:=Path to object:C1547($tTxt_folder{$Lon_i})
-						
-						If (Length:C16($Obj_path.extension)=0)
+						If (Length:C16($folder.extension)=0)
 							
 							// No extension
-							$Txt_name:=$tTxt_folder{$Lon_i}
+							$Txt_name:=$folder.name
 							$Txt_buffer:=""
 							
 						Else 
 							
 							// Get short name if extension
-							$Txt_name:=$Obj_path.name
-							$Txt_buffer:=Substring:C12($Obj_path.extension; 2)
+							$Txt_name:=$folder.name
+							$Txt_buffer:=Substring:C12($folder.extension; 2)
 							
 						End if 
 						
 						$Obj_:=New object:C1471(\
 							"name"; $Txt_name; \
 							"type"; $Txt_buffer; \
-							"path"; $Obj_in.path+Folder separator:K24:12+$tTxt_folder{$Lon_i})
+							"path"; $folder.platformPath)
 						
 						$Boo_:=True:C214
 						
@@ -727,9 +720,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 							
 							If (Bool:C1537($Obj_in.contents))
 								
-								If (Test path name:C476($Obj_.path+Folder separator:K24:12+"Contents.json")=Is a document:K24:1)
+								If ($folder.file("Contents.json").exists)
 									
-									$Obj_.contents:=JSON Parse:C1218(Document to text:C1236($Obj_.path+Folder separator:K24:12+"Contents.json"))
+									$Obj_.contents:=ob_parseFile($folder.file("Contents.json")).value
 									
 									// Else errors?
 									
@@ -764,7 +757,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 							$Obj_out.children.push($Obj_)
 							
 						End if 
-					End for 
+					End for each 
 					
 					$Obj_out.success:=True:C214
 					

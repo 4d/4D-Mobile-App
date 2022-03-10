@@ -588,16 +588,6 @@ Case of
 		//________________________________________
 	: (False:C215)
 		
-		$o:=Path to object:C1547(Get 4D folder:C485(Database folder:K5:14; *))
-		
-		$Dir_root:=Object to path:C1548(New object:C1471(\
-			"name"; $o.name+" Project"; \
-			"isFolder"; True:C214; \
-			"parentFolder"; $o.parentFolder))
-		
-		//________________________________________
-	: (False:C215)
-		
 		APPEND TO ARRAY:C911($tTxt_; "method1")
 		APPEND TO ARRAY:C911($tTxt_; "Unit_test")
 		

@@ -380,6 +380,8 @@ Case of
 				
 				$Txt_buffer:=$Obj_param.path
 				
+				// TODO: allow Folder object
+				
 				//……………………………………………………………………………………
 			Else 
 				
@@ -526,36 +528,22 @@ Case of
 		
 		If ($Obj_result.success)
 			
-			$File_path:=$Obj_result.folder
-			
 			$Col_paths:=New collection:C1472
 			
 			// From carthage checkouts
-			$Txt_newPath:=$Obj_param.path+Convert path POSIX to system:C1107($File_subpath)
-			FOLDER LIST:C473($Txt_newPath; $tTxt_frameworks)
 			
-			For ($Lon_i; 1; Size of array:C274($tTxt_frameworks); 1)
-				
-				If ($Lon_i<=Size of array:C274($tTxt_frameworks))  // size is only evaluted once at the beginning of the loop
-					
-					If (Position:C15(".xcarchive"; $tTxt_frameworks{$Lon_i})>0)
-						
-						DELETE FROM ARRAY:C228($tTxt_frameworks; $Lon_i)
-						$Lon_i:=$Lon_i-1
-						
-					End if 
+			var $child : 4D:C1709.Folder
+			For each ($child; Folder:C1567($Obj_param.path; fk platform path:K87:2).folder($Obj_result.folder).folders())  // TODO check if $File_subpath instead
+				If ($child.extension=".xcarchive")
+					continue
 				End if 
-			End for 
-			
-			For ($Lon_i; 1; Size of array:C274($tTxt_frameworks); 1)
 				
-				$Txt_buffer:=$Txt_newPath+Folder separator:K24:12+$tTxt_frameworks{$Lon_i}
 				$Obj_result:=Xcode(New object:C1471(\
 					"action"; "find"; \
 					"type"; "xcodeproj"; \
-					"path"; $Txt_buffer))
+					"path"; $child.platformPath))
 				
-				$Col_folder:=New collection:C1472($tTxt_frameworks{$Lon_i}; $tTxt_frameworks{$Lon_i}+"Example"; "Example")
+				$Col_folder:=New collection:C1472($child.fullName; $child.fullName+"Example"; "Example")
 				
 				// Some times projects are under subfolder
 				$Lon_x:=0
@@ -563,14 +551,12 @@ Case of
 				While (Not:C34($Obj_result.success)\
 					 & ($Lon_x<$Col_folder.length))
 					
-					$Txt_buffer:=$Txt_newPath+Folder separator:K24:12+$tTxt_frameworks{$Lon_i}+Folder separator:K24:12+$Col_folder[$Lon_x]
-					
-					If (Test path name:C476($Txt_buffer)=Is a folder:K24:2)
+					If ($child.folder($Col_folder[$Lon_x]).exists)
 						
 						$Obj_result:=Xcode(New object:C1471(\
 							"action"; "find"; \
 							"type"; "xcodeproj"; \
-							"path"; $Txt_buffer))
+							"path"; $child.folder($Col_folder[$Lon_x]).platformPath))
 						
 					End if 
 					
@@ -587,7 +573,7 @@ Case of
 					$Col_paths.push($Txt_buffer)
 					
 				End if 
-			End for 
+			End for each 
 			
 			// From config files
 			If (Value type:C1509(SHARED.xcworkspace.projects)=Is collection:K8:32)
@@ -888,17 +874,14 @@ Case of
 		
 		If ($Obj_param.posix#Null:C1517)
 			
-			$Txt_newPath:=$Obj_param.posix
+			var $xcodePath : Object
+			$xcodePath:=Folder:C1567($Obj_param.posix; fk posix path:K87:1)
 			
 			$Lon_x:=Position:C15("Contents/Developer"; $Obj_param.posix)
 			
 			If ($Lon_x=0)
 				
-				$Obj_buffer:=Path to object:C1547(Convert path POSIX to system:C1107($Txt_newPath))
-				$Obj_buffer.isFolder:=True:C214
-				$Txt_newPath:=Convert path system to POSIX:C1106(Object to path:C1548($Obj_buffer))
-				
-				$Txt_newPath:=$Txt_newPath+"Contents/Developer"
+				$xcodePath:=$xcodePath.folder("Contents/Developer")
 				
 			End if 
 			
@@ -906,7 +889,7 @@ Case of
 			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_MESSAGE"; Get localized string:C991("enterYourPasswordToAllowThis"))
 			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS"; cs:C1710.path.new().scripts().file("sudo-askpass").path)
 			
-			LAUNCH EXTERNAL PROCESS:C811("sudo -A /usr/bin/xcode-select -s "+cs:C1710.str.new($Txt_newPath).singleQuoted(); $Txt_in; $Txt_out; $Txt_error)
+			LAUNCH EXTERNAL PROCESS:C811("sudo -A /usr/bin/xcode-select -s "+cs:C1710.str.new($xcodePath.path).singleQuoted(); $Txt_in; $Txt_out; $Txt_error)
 			
 			If (Asserted:C1132(OK=1; "set-tool-path"))
 				

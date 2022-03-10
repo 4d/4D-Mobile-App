@@ -125,7 +125,7 @@ Case of
 						$menu.append("❌ Close simulators"; "_killSimulators")\
 							.append("🗑 Erase Current Simulator"; "_eraseCurrentSimulator")
 						
-						$device:=_o_simulator(\
+						$device:=cs:C1710.simctl.new().deviceApp(\
 							New object:C1471("action"; "deviceApp"; \
 							"device"; EDITOR.currentDevice; \
 							"data"; True:C214))

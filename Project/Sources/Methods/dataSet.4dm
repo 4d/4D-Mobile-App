@@ -750,18 +750,16 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 				
 				$pathname:=asset(New object:C1471("action"; "path"; "path"; $in.path)).path+"Catalog"
 				
-				If (Test path name:C476($pathname)=Is a folder:K24:2)
+				If (Folder:C1567($pathname; fk platform path:K87:2).exists)
 					
-					DOCUMENT LIST:C474($pathname; $tTxt_documents; Recursive parsing:K24:13+Absolute path:K24:14)
-					
-					For ($i; 1; Size of array:C274($tTxt_documents); 1)
+					For each ($file; Folder:C1567($pathname; fk platform path:K87:2).files())
 						
-						If (Position:C15(".catalog.json"; $tTxt_documents{$i})>0)
+						If (Position:C15(".catalog.json"; $file.fullName)>0)
 							
-							$out.catalog[Path to object:C1547(Path to object:C1547($tTxt_documents{$i}).name).name]:=ob_parseDocument($tTxt_documents{$i}).value
+							$out.catalog[Path to object:C1547(Path to object:C1547($tTxt_documents{$i}).name).name]:=ob_parseFile($file).value
 							
 						End if 
-					End for 
+					End for each 
 					
 					$out.success:=True:C214
 					
