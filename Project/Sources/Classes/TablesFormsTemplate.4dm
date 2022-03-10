@@ -165,7 +165,7 @@ Function doRun
 					Case of 
 							
 							//……………………………………………………………………………………………………………
-						: ((Num:C11($Obj_field.id)#0) | (PROJECT.isComputedAttribute($Obj_field)))
+						: ((PROJECT.isField($Obj_field)) || (PROJECT.isComputedAttribute($Obj_field)))
 							
 							$Obj_field:=OB Copy:C1225($Obj_field)
 							$Obj_field.originalName:=$Obj_field.name
@@ -375,9 +375,9 @@ Function doRun
 							// and if no search field find the first one sortable in diplayed field
 							For each ($Obj_field; $Obj_table.fields) Until ($Obj_table.sortField#Null:C1517)
 								
-								If (($Obj_field.fieldType#Is picture:K8:10)\
-									 & ($Obj_field.fieldType#-1)\
-									 & (Num:C11($Obj_field.id)#0))  // not image or not defined or not relation
+								If (PROJECT.isField($Obj_field)\
+									 && ($Obj_field.fieldType#Is picture:K8:10)\
+									 && ($Obj_field.fieldType#-1))  // not image or not defined or not relation
 									
 									$Obj_table.sortField:=$Obj_field.name  // formatString ("field-name";String($Obj_field.originalName))
 									
