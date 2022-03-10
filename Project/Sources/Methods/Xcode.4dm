@@ -515,6 +515,10 @@ Case of
 		$Obj_param.type:="xcworkspace"
 		$Obj_result:=Xcode($Obj_param)
 		
+		If ($Obj_param.folder=Null:C1517)
+			$Obj_param.folder:=Folder:C1567($Obj_param.path; fk platform path:K87:2)
+		End if 
+		
 		// path of the sources?
 		Case of 
 			: (Length:C16(String:C10($Obj_param.from))>0)
@@ -528,12 +532,15 @@ Case of
 		
 		If ($Obj_result.success)
 			
+			var $workSpaceFolder : 4D:C1709.Folder
+			$workSpaceFolder:=$Obj_result.folder
+			
 			$Col_paths:=New collection:C1472
 			
 			// From carthage checkouts
 			
 			var $child : 4D:C1709.Folder
-			For each ($child; Folder:C1567($Obj_param.path; fk platform path:K87:2).folder($Obj_result.folder).folders())  // TODO check if $File_subpath instead
+			For each ($child; $Obj_param.folder.folder($File_subpath).folders())  // TODO check if $File_subpath instead
 				If ($child.extension=".xcarchive")
 					continue
 				End if 
@@ -566,7 +573,7 @@ Case of
 				
 				If ($Obj_result.success)
 					
-					$Txt_buffer:=Replace string:C233($Obj_result.posix; Convert path system to POSIX:C1106($Txt_newPath); "")
+					$Txt_buffer:=Replace string:C233($Obj_result.posix; $Obj_param.folder.folder($File_subpath).path; "")
 					
 					$Txt_buffer:="group:"+$File_subpath+$Txt_buffer
 					
@@ -607,8 +614,7 @@ Case of
 				End for each 
 			End if 
 			
-			$File_path:=$File_path.file("contents.xcworkspacedata")
-			$Dom_root:=_o_xml("load"; $File_path)
+			$Dom_root:=_o_xml("load"; $workSpaceFolder.file("contents.xcworkspacedata"))
 			
 			If ($Dom_root.success)
 				
@@ -634,7 +640,7 @@ Case of
 				End for each 
 				
 				$Dom_root.setOption(XML indentation:K45:34; XML with indentation:K45:35)
-				$Dom_root.save($File_path)
+				$Dom_root.save($workSpaceFolder.file("contents.xcworkspacedata"))
 				$Dom_root.close()
 				
 			End if 
