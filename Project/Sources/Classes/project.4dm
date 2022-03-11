@@ -736,6 +736,7 @@ Function isRelationToMany($attribute : Variant) : Boolean
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	/// Given a dataclass & a path, returns true if the path is valid (in ds)
 Function isAvailable($dataClass : 4D:C1709.DataClass; $path)->$success : Boolean
 	
 	var $key : Text
@@ -1700,146 +1701,33 @@ Function publishedTables()->$tables : Collection
 	End if 
 	
 	//================================================================================
-	/// Gets a dataclass definition 
-Function table($table) : 4D:C1709.DataClass
+	/// Gets a datamodel table definition from ID, table number, name or object
+Function table($table) : cs:C1710.table
 	
-	return (ds:C1482[This:C1470.tableName($table)])
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	/// Gets table name
-Function tableName($table) : Text
-	
-	Case of 
-			
-			//______________________________________________________
-		: (Value type:C1509($table)=Is object:K8:27)
-			
-			If (OB Instance of:C1731($table; 4D:C1709.DataClass))
-				
-				return ($table.getInfo().name)
-				
-			Else 
-				
-				return (String:C10($table.name))
-				
-			End if 
-			
-			//______________________________________________________
-		: (Value type:C1509($table)=Is longint:K8:6)\
-			 | (Value type:C1509($table)=Is real:K8:4)
-			
-			return (Table name:C256($table))
-			
-			//______________________________________________________
-		: (Value type:C1509($table)=Is text:K8:3)
-			
-			If (Match regex:C1019("(?m-si)^\\d+$"; $table; 1; *))
-				
-				return (Table name:C256(Num:C11($table)))
-				
-			Else 
-				
-				return ($table)
-				
-			End if 
-			
-			//______________________________________________________
-		Else 
-			
-			ASSERT:C1129(False:C215)
-			
-			//______________________________________________________
-	End case 
+	return (This:C1470.dataModel[This:C1470._tableID($table)])
 	
 	//================================================================================
-	/// Gets a datastore field definition 
+	/// Gets a datamodel field definition from ID, field number, name or object 
 Function field($table; $field) : Object
 	
-	$table:=This:C1470.table($table)  //[This.tableName($table)]
+	$table:=This:C1470.table($table)
 	
 	If ($table#Null:C1517)
 		
-		return ($table[This:C1470.fieldName($table; $field)])
+		var $t : Text
+		$t:=This:C1470._fieldID($field; $table)
+		
+		If (Length:C16($t)>0)
+			
+			return ($table[$t])
+			
+		End if 
 		
 	Else 
 		
 		ASSERT:C1129(False:C215)
 		
 	End if 
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	/// Gets a field name
-Function fieldName($table : 4D:C1709.DataClass; $field) : Text
-	
-	var $key : Text
-	
-	Case of 
-			
-			//______________________________________________________
-		: (Value type:C1509($field)=Is text:K8:3)
-			
-			If (Match regex:C1019("(?m-si)^\\d+$"; $field; 1; *))
-				
-				For each ($key; $table)
-					
-					If ($table[$key].fieldNumber=Num:C11($field))
-						
-						return ($table[$key].name)
-						
-					End if 
-				End for each 
-				
-			Else 
-				
-				return ($table[$field].name)
-				
-			End if 
-			
-			//______________________________________________________
-		: (Value type:C1509($field)=Is object:K8:27)
-			
-			Case of 
-					
-					//______________________________________________________
-				: ($field.name#Null:C1517)
-					
-					return ($field.name)
-					
-					//______________________________________________________
-				: ($field.fieldNumber#Null:C1517)
-					
-					For each ($key; $table)
-						
-						If ($table[$key].fieldNumber=$field.fieldNumber)
-							
-							return ($table[$key].name)
-							
-						End if 
-					End for each 
-					
-					//______________________________________________________
-			End case 
-			
-			//______________________________________________________
-		: (Value type:C1509($field)=Is longint:K8:6)\
-			 | (Value type:C1509($field)=Is real:K8:4)
-			
-			For each ($key; $table)
-				
-				If ($table[$key].fieldNumber=$field)
-					
-					return ($table[$key].name)
-					
-				End if 
-			End for each 
-			
-			//______________________________________________________
-		Else 
-			
-			ASSERT:C1129(False:C215)
-			
-			//______________________________________________________
-	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Makes a Backup of the project & catalog
@@ -2202,27 +2090,73 @@ Function repairProject()
 	
 	//MARK:-[PRIVATE]
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function _tableID($table) : Text
+Function _fieldID($field; $table) : Text
+	
+	var $key : Text
 	
 	Case of 
 			
 			//______________________________________________________
-		: (Value type:C1509($table)=Is object:K8:27)
+		: (Value type:C1509($field)=Is object:K8:27)
 			
-			ASSERT:C1129($table.tableNumber#Null:C1517)
-			
-			return (String:C10($table.tableNumber))
+			Case of 
+					
+					//======================================
+				: ($field.fieldNumber#Null:C1517)
+					
+					return (String:C10($field.fieldNumber))
+					
+					//======================================
+				: ($field.id#Null:C1517)
+					
+					return (String:C10($field.id))
+					
+					//======================================
+				Else 
+					
+					ASSERT:C1129(False:C215)
+					
+					//======================================
+			End case 
 			
 			//______________________________________________________
-		: (Value type:C1509($table)=Is text:K8:3)
+		: (Value type:C1509($field)=Is text:K8:3)
 			
-			return ($table)
+			If (Match regex:C1019("(?m-si)^\\d+$"; $field; 1; *))  // ID
+				
+				return ($field)
+				
+			Else 
+				
+				If ($table[$field]#Null:C1517)  // Name refrenced
+					
+					return ($field)
+					
+				Else 
+					
+					For each ($key; $table)
+						
+						If (Length:C16($key)=0)
+							
+							continue
+							
+						End if 
+						
+						If (Match regex:C1019("(?m-si)^\\d+$"; $key; 1; *))\
+							 && ($table[$key].name=$field)
+							
+							return ($key)
+							
+						End if 
+					End for each 
+				End if 
+			End if 
 			
 			//______________________________________________________
-		: (Value type:C1509($table)=Is longint:K8:6)\
-			 | (Value type:C1509($table)=Is real:K8:4)
+		: (Value type:C1509($field)=Is longint:K8:6)\
+			 | (Value type:C1509($field)=Is real:K8:4)
 			
-			return (String:C10($table))
+			return (String:C10($field))
 			
 			//______________________________________________________
 		Else 
@@ -2230,6 +2164,75 @@ Function _tableID($table) : Text
 			ASSERT:C1129(False:C215)
 			
 			//______________________________________________________
+	End case 
+	
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _tableID($table) : Text
+	
+	var $key : Text
+	
+	Case of 
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+		: (Value type:C1509($table)=Is object:K8:27)
+			
+			Case of 
+					
+					//======================================
+				: ($table[""].name#Null:C1517)
+					
+					return (String:C10(ds:C1482[$table[""].name].getInfo().tableNumber))
+					
+					//======================================
+				: ($table.tableNumber#Null:C1517)
+					
+					return (String:C10($table.tableNumber))
+					
+					//======================================
+				: ($table[""].tableNumber#Null:C1517)
+					
+					return (String:C10($table[""].tableNumber))
+					
+					//======================================
+				Else 
+					
+					ASSERT:C1129(False:C215)
+					
+					//======================================
+			End case 
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+		: (Value type:C1509($table)=Is text:K8:3)
+			
+			If (Match regex:C1019("(?m-si)^\\d+$"; $table; 1; *))
+				
+				return ($table)
+				
+			Else 
+				
+				For each ($key; This:C1470.dataModel)
+					
+					If (This:C1470.dataModel[$key][""].name=$table)
+						
+						return ($key)
+						
+					End if 
+				End for each 
+			End if 
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+		: (Value type:C1509($table)=Is longint:K8:6)\
+			 | (Value type:C1509($table)=Is real:K8:4)
+			
+			return (String:C10($table))
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+		Else 
+			
+			ASSERT:C1129(False:C215)
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===

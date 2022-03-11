@@ -106,6 +106,7 @@
 		]
 	},
 	"(__)": {},
+	"([UI])": {},
 	"(HDI_COLOR)": {},
 	"[ android ]": {
 		"methods": [
@@ -228,7 +229,6 @@
 		"groups": [
 			"[BROWSER]",
 			"[PANELS]",
-			"[PROJECT]",
 			"FOOTER",
 			"LISTE_EDITOR",
 			"RIBON"
@@ -1031,6 +1031,7 @@
 	"trash": {
 		"groups": [
 			"(__)",
+			"([UI])",
 			"(HDI_COLOR)"
 		]
 	}
