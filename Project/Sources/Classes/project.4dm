@@ -678,6 +678,10 @@ Function storageFields($table : Variant)->$fields : Collection
 Function isField($field) : Boolean
 	
 	Case of 
+			//______________________________________________________
+		: ($field=Null:C1517)  // Value type($field)=Is object seems to be true if an object null is passed 
+			
+			return False:C215
 			
 			//______________________________________________________
 		: (Value type:C1509($field)=Is text:K8:3)  // Key property

@@ -171,7 +171,7 @@ Function doRun
 							$Obj_field.originalName:=$Obj_field.name
 							
 							var $keyPath : Text
-							var $tmp : Object
+							var $tmp; $fullField : Object
 							var $keyPaths : Collection
 							
 							$keyPaths:=Split string:C1554($Obj_field.name; ".")
@@ -185,12 +185,16 @@ Function doRun
 							End if 
 							
 							// Add info from dataModel
-							If ($tmp[String:C10($Obj_field.id)]#Null:C1517)
-								
-								$Obj_field:=ob_deepMerge($Obj_field; $tmp[String:C10($Obj_field.id)]; False:C215)
-								
-								
-							End if 
+							Case of 
+								: (($Obj_field.id#Null:C1517) && ($tmp[String:C10($Obj_field.id)]#Null:C1517))  // OLD CODE
+									
+									$Obj_field:=ob_deepMerge($Obj_field; $tmp[String:C10($Obj_field.id)]; False:C215)
+									
+								: (let(->$fullField; Formula:C1597($Obj_in.project.field($tmp; $Obj_field)); Formula:C1597($fullField#Null:C1517)))  // computed or NEW CODE
+									
+									$Obj_field:=ob_deepMerge($Obj_field; $fullField; False:C215)
+									
+							End case 
 							
 							// Format name for the tag
 							$Obj_field.name:=formatString("field-name"; $Obj_field.originalName)
@@ -209,6 +213,8 @@ Function doRun
 							
 							// Set binding type according to field information
 							$Obj_field.bindingType:=This:C1470.fieldBinding($Obj_field; $Obj_in.formatters).bindingType
+							
+							ASSERT:C1129(dev_Matrix && (Length:C16(String:C10($Obj_field.bindingType))>0); "Not able to compute binding type for field: "-JSON Stringify:C1217($Obj_field))
 							
 							//……………………………………………………………………………………………………………
 						: ($Obj_field.name#Null:C1517)  // ie. relation
