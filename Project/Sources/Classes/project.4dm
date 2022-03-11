@@ -2112,6 +2112,32 @@ Function _fieldID($field; $table) : Text
 					return (String:C10($field.id))
 					
 					//======================================
+				: (Length:C16(String:C10($field.name))>0)
+					
+					If ($table[String:C10($field.name)]#Null:C1517)  // Name refrenced
+						
+						return (String:C10($field.name))
+						
+					Else 
+						
+						For each ($key; $table)
+							
+							If (Length:C16($key)=0)
+								
+								continue
+								
+							End if 
+							
+							If (Match regex:C1019("(?m-si)^\\d+$"; $key; 1; *))\
+								 && ($table[$key].name=String:C10($field.name))
+								
+								return ($key)
+								
+							End if 
+						End for each 
+					End if 
+					
+					//======================================
 				Else 
 					
 					ASSERT:C1129(False:C215)
@@ -2166,11 +2192,8 @@ Function _fieldID($field; $table) : Text
 			//______________________________________________________
 	End case 
 	
-	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _tableID($table) : Text
-	
-	var $key : Text
 	
 	Case of 
 			
@@ -2211,6 +2234,7 @@ Function _tableID($table) : Text
 				
 			Else 
 				
+				var $key : Text
 				For each ($key; This:C1470.dataModel)
 					
 					If (This:C1470.dataModel[$key][""].name=$table)

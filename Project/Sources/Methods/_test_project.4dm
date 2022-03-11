@@ -21,7 +21,7 @@ If ($project.dataModel#Null:C1517)
 	$o:=cs:C1710.ob.new($table)
 	ASSERT:C1129($o.isEqual($project.table("5")))  // From key
 	ASSERT:C1129($o.isEqual($project.table($table[""].name)))  // From name
-	//ASSERT($o.isEqual($project.table($table)))  // From object
+	ASSERT:C1129($o.isEqual($project.table($table)))  // From object
 	
 	$table:=$project.table("ALL_TYPES")
 	
@@ -40,7 +40,7 @@ If ($project.dataModel#Null:C1517)
 		$o:=cs:C1710.ob.new($field)
 		ASSERT:C1129($o.isEqual($project.field($table; "4")))  // From key
 		ASSERT:C1129($o.isEqual($project.field($table; $field.name)))  // From name
-		//ASSERT($o.isEqual($project.field($table; $field)))  // From object
+		ASSERT:C1129($o.isEqual($project.field($table; $field)))  // From object
 		
 	End if 
 	
