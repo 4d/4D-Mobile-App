@@ -423,10 +423,10 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 				If ($isSelected)  //selected
 					
 					//$svg.rect($data.cell.width-6; $data.cell.height-3)\
-						.position(5; 2)\
-						.stroke(Choose(EDITOR.darkScheme; "#76D5FE"; EDITOR.colors.strokeColor.css.hexLong))\
-						.fill(Choose(EDITOR.darkScheme; "#0E2732"; EDITOR.colors.backgroundSelectedColor.css.hexLong))\
-						.radius(10)
+												.position(5; 2)\
+												.stroke(Choose(EDITOR.darkScheme; "#76D5FE"; EDITOR.colors.strokeColor.css.hexLong))\
+												.fill(Choose(EDITOR.darkScheme; "#0E2732"; EDITOR.colors.backgroundSelectedColor.css.hexLong))\
+												.radius(10)
 					
 					$svg.rect($data.cell.width-6; $data.cell.height-3)\
 						.position(5; 2)\
@@ -554,11 +554,11 @@ $svg:=cs:C1710.svg.new().size($data.cell.width; $data.cell.height)
 // Media
 If (EDITOR.darkScheme)
 	
-	READ PICTURE FILE:C678(File:C1566("/RESOURCES/templates/more-white@2x_dark.png").platformPath; $p)
+	READ PICTURE FILE:C678(File:C1566("/RESOURCES/templates/more_dark@2x.png").platformPath; $p)
 	
 Else 
 	
-	READ PICTURE FILE:C678(File:C1566("/RESOURCES/templates/more-white@2x.png").platformPath; $p)
+	READ PICTURE FILE:C678(File:C1566("/RESOURCES/templates/more@2x.png").platformPath; $p)
 	
 End if 
 
