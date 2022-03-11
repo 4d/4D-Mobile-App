@@ -374,41 +374,6 @@ Case of
 							End if 
 							
 							//______________________________________________________
-						: ($field.kind="alias")
-							
-							$c:=Split string:C1554($field.path; ".")
-							
-							If ($c.length>2)
-								
-								If ($datamodel[$context.tableNumber][$c[1]]=Null:C1517)
-									
-									LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color:K53:24)
-									
-								End if 
-								
-							Else 
-								
-								If ($c.length=1)
-									
-									If ($datamodel[$context.tableNumber][$field.name]=Null:C1517)
-										
-										LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color:K53:24)
-										
-									End if 
-									
-								Else 
-									
-									// A "If" statement should never omit "Else" 
-									If ($datamodel[$context.tableNumber][$c[0]]=Null:C1517)
-										
-										LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color:K53:24)
-										
-									End if 
-									
-								End if 
-							End if 
-							
-							//______________________________________________________
 						: ($field.kind="calculated")
 							
 							$c:=Split string:C1554($field.path; ".")
@@ -431,7 +396,29 @@ Case of
 							End if 
 							
 							//______________________________________________________
+							//: ($field.kind="alias") & False
+							//$c:=Split string($field.path; ".")
+							//If ($c.length>2)
+							//If ($datamodel[$context.tableNumber][$c[1]]=Null)
+							//LISTBOX SET ROW COLOR(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color)
+							//End if 
+							//Else 
+							//If ($c.length=1)
+							//If ($datamodel[$context.tableNumber][$field.name]=Null)
+							//LISTBOX SET ROW COLOR(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color)
+							//End if 
+							//Else 
+							//// A "If" statement should never omit "Else" 
+							//If ($datamodel[$context.tableNumber][$c[0]]=Null)
+							//LISTBOX SET ROW COLOR(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color)
+							//End if 
+							//End if 
+							//End if 
+							
+							//______________________________________________________
 						: (PROJECT.isAvailable($dataClass; $field.path))
+							
+							// TODO: Test for computed attribute
 							
 							// <NOTHING MORE TO DO>
 							
@@ -460,7 +447,7 @@ Case of
 			End if 
 		End if 
 		
-		$form.scrollBar.setVisible(($view.typeForm()="detail") & ($form.preview.visible()) & (Num:C11($context.previewHeight)>460))
+		$form.scrollBar.setVisible(($view.typeForm()="detail") && ($form.preview.visible()) && (Num:C11($context.previewHeight)>460))
 		
 		If (Bool:C1537($context.picker))
 			
