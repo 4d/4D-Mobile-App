@@ -685,7 +685,7 @@
 			<table_ref uuid="F199D0D03F864B939EF3CD9CF9BC0F24" name="Employes"/>
 		</field_ref>
 	</index>
-	<index kind="regular" name="__GlobalStamp_all_types" uuid="196974D8550F4FCE87CC1030F8DD7392" type="7">
+	<index kind="regular" name="__GlobalStamp_aLLTYPES" uuid="196974D8550F4FCE87CC1030F8DD7392" type="7">
 		<field_ref uuid="0D8C34FB22A64D3B88CB6E7B3BE4D73C" name="__GlobalStamp">
 			<table_ref uuid="677711DF5FAF4C00A69092ED84B50A2D" name="ALL_TYPES"/>
 		</field_ref>

@@ -256,6 +256,12 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			
 			EXECUTE METHOD:C1007($entryPoint; $response; $parameters)
 			
+			
+			//________________________________________
+		: ($entryPoint="simulator")
+			
+			ASSERT:C1129(False:C215; "Deprecated endpoint")
+			
 			//________________________________________
 		: ($entryPoint="xcode")\
 			 | ($entryPoint="xcodeProj")\
@@ -263,7 +269,6 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			 | ($entryPoint="asset")\
 			 | ($entryPoint="colors")\
 			 | ($entryPoint="provisioningProfiles")\
-			 | ($entryPoint="simulator")\
 			 | ($entryPoint="dataSet")\
 			 | ($entryPoint="dataModel")\
 			 | ($entryPoint="xcDataModel")\
@@ -282,11 +287,6 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			 | ($entryPoint="swiftPM")\
 			 | ($entryPoint="certificate")
 			
-			If ($entryPoint="simulator")
-				
-				$entryPoint:="_o_simulator"
-				
-			End if 
 			
 			If ($entryPoint="plist")
 				

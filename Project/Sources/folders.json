@@ -1,8 +1,7 @@
 {
 	"____FOR_TESTS": {
 		"classes": [
-			"ALL_TYPESEntity",
-			"EmployesEntity"
+			"ALL_TYPESEntity"
 		]
 	},
 	"__IN WORKS": {
@@ -78,7 +77,6 @@
 			"_o_plist",
 			"_o_rest_isValidField",
 			"_o_SERVER_Handler",
-			"_o_simulator",
 			"_o_static",
 			"_o_storyboard",
 			"_o_storyboard_fix_id",

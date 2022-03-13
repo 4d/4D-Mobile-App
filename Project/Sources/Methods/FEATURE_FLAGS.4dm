@@ -99,7 +99,7 @@ If (True:C214)  // DELIVERED
 	FEATURE.isDelivered("searchWithBarCode"; 1860)
 	
 	// Mark:-1️⃣9️⃣
-	FEATURE.isDelivered("withSimulatorClass"; 1900)  // Use simctl class intead of _o_simulator
+	// FEATURE.isDelivered("withSimulatorClass"; 1900)  // Use simctl class intead of _o_simulator
 	
 	FEATURE.isDelivered("wizards"; 1900)  // Use a wizard instead of standard dialogs to create or open a project
 	

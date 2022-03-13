@@ -573,9 +573,12 @@ Case of
 					
 					$t:=$t+".data.json"
 					
-					If (Test path name:C476($t)=Is a document:K24:1)
+					var $fileT : 4D:C1709.File
+					$fileT:=File:C1566($t; fk platform path:K87:2)
+					
+					If ($fileT.exists)
 						
-						$rest:=ob_parseDocument($t)
+						$rest:=ob_parseFile($fileT)
 						$rest.response:=$rest.value
 						
 					Else 
