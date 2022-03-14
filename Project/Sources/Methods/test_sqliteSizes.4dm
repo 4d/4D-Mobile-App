@@ -24,18 +24,7 @@ End if
 
 If ($file.exists)
 	
-	var $sqlite3 : 4D:C1709.File
-	$sqlite3:=cs:C1710.androidProcess.new().androidSDKFolder().folder("platform-tools").file(Is Windows:C1573 ? "sqlite3.exe" : "sqlite3")
-	
-	If ($sqlite3.exists & $testAndroid)
-		
-		$stats:=cs:C1710.sqliteSizes.new($sqlite3)
-		
-	Else 
-		
-		$stats:=cs:C1710.sqliteSizes.new()
-		
-	End if 
+	$stats:=cs:C1710.sqliteSizes.new()
 	
 	$object:=$stats.stats($file)
 	

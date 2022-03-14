@@ -5,7 +5,7 @@ Class constructor($exe : 4D:C1709.File)
 		This:C1470.cmd:=$exe.path
 	Else 
 		If (Is Windows:C1573)
-			This:C1470.cmd:="sqlite3.exe"
+			This:C1470.cmd:=Folder:C1567(fk resources folder:K87:11).folder("scripts").folder("win").file("sqlite3.exe").platformPath
 		Else 
 			This:C1470.cmd:="sqlite3"
 		End if 
@@ -25,7 +25,7 @@ Function execute($sql : Text)->$out : Text
 	
 	var $in; $err; $cmd : Text
 	If (Is Windows:C1573)
-		$cmd:=str_singleQuoted(This:C1470.cmd)+" "+str_singleQuoted(This:C1470.database.platformPath)+" \""+$sql+"\""  // TODO: to test
+		$cmd:=str_singleQuoted(This:C1470.cmd)+" \""+This:C1470.database.platformPath+"\" \""+$sql+"\""  // TODO: to test
 	Else 
 		$cmd:=str_singleQuoted(This:C1470.cmd)+" "+str_singleQuoted(This:C1470.database.path)+" \""+$sql+"\""
 	End if 

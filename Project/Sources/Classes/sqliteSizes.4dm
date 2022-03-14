@@ -10,6 +10,8 @@ Class constructor($sqlite3 : 4D:C1709.File)
 		
 	End if 
 	
+	This:C1470.schemaTableName:="sqlite_schema"
+	
 	/// Main public method to return stats on db file
 Function stats($dbFile : 4D:C1709.File)->$stats : Object
 	
@@ -64,7 +66,7 @@ Function _tableMaps()->$map : Object
 	var $line; $result : Text
 	var $values : Collection
 	
-	$result:=This:C1470.sqlite3.execute("SELECT name, tbl_name FROM sqlite_schema WHERE rootpage>0;")
+	$result:=This:C1470.sqlite3.execute("SELECT name, tbl_name FROM "+This:C1470.schemaTableName+" WHERE rootpage>0;")
 	
 	If (Length:C16($result)=0)
 		
