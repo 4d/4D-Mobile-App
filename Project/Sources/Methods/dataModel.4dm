@@ -116,12 +116,13 @@ Case of
 				Case of 
 						
 						//………………………………………………………………………………………………………………………
-					: (Match regex:C1019("(?m-si)^\\d+$"; $Txt_field; 1; *))
+					: (Match regex:C1019("(?m-si)^\\d+$"; $Txt_field; 1; *))  // XXX or isField and isComputeAttribute if we want it as default list
 						
 						// TODO: Change field.id to field.fieldNumber
-						$Obj_out.fields.push(New object:C1471(\
-							"name"; $Obj_in.table[$Txt_field].name; \
-							"id"; $Txt_field))
+						var $field : Object
+						$field:=OB Copy:C1225($Obj_in.table[$Txt_field])
+						$field.id:=$Txt_field
+						$Obj_out.fields.push($field)
 						
 						//………………………………………………………………………………………………………………………
 					: ((Value type:C1509($Obj_in.table[$Txt_field])=Is object:K8:27))
