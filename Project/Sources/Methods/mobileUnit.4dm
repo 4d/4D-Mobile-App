@@ -282,7 +282,6 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			 | ($entryPoint="PROJECT_HANDLER")\
 			 | ($entryPoint="project_Audit")\
 			 | ($entryPoint="device")\
-			 | ($entryPoint="checkQueryFilter")\
 			 | ($entryPoint="teamId")\
 			 | ($entryPoint="swiftPM")\
 			 | ($entryPoint="certificate")
@@ -291,12 +290,6 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			If ($entryPoint="plist")
 				
 				$entryPoint:="_o_plist"
-				
-			End if 
-			
-			If ($entryPoint="checkQueryFilter")
-				
-				$entryPoint:="_o_checkQueryFilter"
 				
 			End if 
 			

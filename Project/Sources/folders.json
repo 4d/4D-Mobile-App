@@ -44,7 +44,8 @@
 			"01_LASTBUILD",
 			"dev_test_android",
 			"dev_tests_iOS",
-			"oops"
+			"oops",
+			"showTestOnDisk"
 		],
 		"forms": [
 			"_VIEWS_WITH_actionList",
@@ -63,7 +64,6 @@
 	"_o_OBSOLETES": {
 		"methods": [
 			"_o_button",
-			"_o_checkQueryFilter",
 			"_o_currentForm",
 			"_o_device",
 			"_o_doc_catalog",

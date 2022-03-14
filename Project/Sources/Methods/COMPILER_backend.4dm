@@ -8,9 +8,6 @@ If (False:C215)
 	C_TEXT:C284(catalog; $1)
 	C_OBJECT:C1216(catalog; $2)
 	
-	//__________________________________________________
-	C_OBJECT:C1216(_o_checkQueryFilter; $0)
-	C_OBJECT:C1216(_o_checkQueryFilter; $1)
 	
 	//______________________________________________________
 	C_OBJECT:C1216(dataSet; $0)
