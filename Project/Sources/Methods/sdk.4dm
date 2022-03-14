@@ -323,7 +323,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 			var $sdkVersionFile : Object
 			$sdkVersionFile:=New object:C1471("exists"; False:C215)
 			
-			var $isFolder : 4D:C1709.File
+			var $isFolder : Boolean
 			$isFolder:=Path to object:C1547($Obj_param.file).isFolder
 			
 			Case of 
