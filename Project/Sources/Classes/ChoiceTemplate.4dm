@@ -75,7 +75,7 @@ Function makeTheChoice
 	$o:=OB Copy:C1225($Obj_in)
 	
 	$Obj_out:=New object:C1471("success"; True:C214)
-	$Obj_out.template:=ob_parseDocument($t+"manifest.json")
+	$Obj_out.template:=ob_parseFile(File:C1566($t+"manifest.json"; fk platform path:K87:2))
 	
 	If ($Obj_out.template.success)
 		

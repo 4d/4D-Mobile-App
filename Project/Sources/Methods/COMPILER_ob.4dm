@@ -46,9 +46,6 @@ If (False:C215)
 	C_TEXT:C284(ob_testPath; $2)
 	C_TEXT:C284(ob_testPath; ${3})
 	
-	//__________________________________________________
-	C_OBJECT:C1216(ob_parseDocument; $0)
-	C_TEXT:C284(ob_parseDocument; $1)
 	
 	//__________________________________________________
 	C_COLLECTION:C1488(sharedCollection; $1)

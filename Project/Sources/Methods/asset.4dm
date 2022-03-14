@@ -358,7 +358,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 							"tags"; $Obj_in.tags; \
 							"catalog"; _o_doc_catalog($Txt_buffer)))
 						
-						$Obj_template:=ob_parseDocument($Txt_buffer+"manifest.json").value
+						$Obj_template:=ob_parseFile(File:C1566($Txt_buffer+"manifest.json"; fk platform path:K87:2)).value
 						
 						If (String:C10($Obj_template.contents)#"")
 							

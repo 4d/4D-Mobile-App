@@ -779,7 +779,6 @@
 			"ob_inHierarchy",
 			"ob_MERGE",
 			"ob_noError",
-			"ob_parseDocument",
 			"ob_parseFile",
 			"ob_removeFormula",
 			"ob_removeProperty",
