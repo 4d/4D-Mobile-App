@@ -262,7 +262,6 @@ If (Length:C16($cible)>0)
 				//MARK:Cleanup
 				OB REMOVE:C1226($dropped; "fromIndex")
 				OB REMOVE:C1226($dropped; "id")
-				OB REMOVE:C1226($dropped; "path")
 				OB REMOVE:C1226($dropped; "label")
 				OB REMOVE:C1226($dropped; "shortLabel")
 				OB REMOVE:C1226($dropped; "type")
