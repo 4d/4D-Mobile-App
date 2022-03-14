@@ -467,7 +467,7 @@ Function fieldList($table)->$result : Object
 											
 										Else 
 											
-											$subfield.name:=$key+"."+($subfield.kind="storage" ? $subfield.name : $sub)
+											$subfield.name:=($subfield.kind="storage") ? $subfield.path : $key+"."+$sub
 											$subfield.path:=$key+"."+$subfield.name
 											
 										End if 

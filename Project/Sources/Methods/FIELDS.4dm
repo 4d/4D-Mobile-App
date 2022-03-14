@@ -7,7 +7,7 @@
 // FIELDS pannel management
 // ----------------------------------------------------
 // Declarations
-var $e; $field; $ƒ : Object
+var $e; $ƒ : Object
 
 // ----------------------------------------------------
 // Initialisations
@@ -142,6 +142,7 @@ Else   // <== WIDGETS METHOD
 						: ($e.columnName=$ƒ.titles.name)
 							
 							If (Is editing text:C1744)
+								
 								If (Contextual click:C713)  // Propose the tags to be inserted
 									
 									If ($ƒ.popup=Null:C1517)  // Stop re-antrance
@@ -164,7 +165,8 @@ Else   // <== WIDGETS METHOD
 				: ($e.code=On Data Change:K2:15)
 					
 					// Get the edited field definition
-					$field:=$ƒ.field($e.row)
+					var $field : cs:C1710.field
+					$field:=$ƒ.context.cache[$e.row-1]
 					
 					// Update data model
 					//%W-533.3

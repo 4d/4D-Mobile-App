@@ -48,7 +48,7 @@ Case of
 			 & ($params.item<=$params.pathnames.length)
 			
 			// Update data model
-			$ƒ.field($params.row).icon:=$params.pathnames[$params.item-1]
+			$ƒ.context.cache[$params.row-1].icon:=$params.pathnames[$params.item-1]
 			
 			// Update UI
 			If ($params.pictures[$params.item-1]#Null:C1517)
@@ -68,7 +68,7 @@ Case of
 				
 			End if 
 			
-			$ƒ.updateForms($ƒ.field($params.row); $params.row)
+			$ƒ.updateForms($ƒ.context.cache[$params.row-1]; $params.row)
 			
 			PROJECT.save()
 			

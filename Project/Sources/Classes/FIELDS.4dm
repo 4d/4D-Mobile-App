@@ -24,7 +24,6 @@ Function init()
 	This:C1470.toBeInitialized:=False:C215
 	
 	This:C1470.listbox("fieldList"; "01_fields")
-	This:C1470.widget("ids")
 	This:C1470.widget("names")
 	This:C1470.widget("icons")
 	This:C1470.widget("labels"; "label")
@@ -62,14 +61,13 @@ Function onLoad()
 	This:C1470.selectors.distributeLeftToRight()
 	
 	// Place the download button
-	This:C1470.resources.setTitle(EDITOR.str.localize("downloadMoreResources"; Lowercase:C14(Get localized string:C991("formatters"))))
+	This:C1470.resources.title:=EDITOR.str.localize("downloadMoreResources"; Lowercase:C14(Get localized string:C991("formatters")))
 	This:C1470.resources.bestSize(Align right:K42:4)
 	
 	// Initialize the Fields/Relations tab
 	This:C1470.setTab()
 	
 	// Update widget pointers after a reload
-	This:C1470.ids.updatePointer()
 	This:C1470.names.updatePointer()
 	This:C1470.icons.updatePointer()
 	This:C1470.labels.updatePointer()
@@ -97,13 +95,15 @@ Function updateFieldList
 	var $enterable : Boolean
 	var $o : Object
 	
+	// FIXME: use collections
 	$o:=This:C1470.getFieldList()
 	
 	If ($o.success)
 		
-		This:C1470.empty.setTitle(Choose:C955(Num:C11(This:C1470.tabSelector.data); "noFieldPublishedForThisTable"; "noPublishedRelationForThisTable"))
+		This:C1470.context.cache:=$o.targets
 		
-		COLLECTION TO ARRAY:C1562($o.ids; This:C1470.ids.pointer->)
+		This:C1470.empty.title:=Choose:C955(Num:C11(This:C1470.tabSelector.data); "noFieldPublishedForThisTable"; "noPublishedRelationForThisTable")
+		
 		COLLECTION TO ARRAY:C1562($o.paths; This:C1470.names.pointer->)
 		COLLECTION TO ARRAY:C1562($o.labels; This:C1470.labels.pointer->)
 		COLLECTION TO ARRAY:C1562($o.shortLabels; This:C1470.shortLabels.pointer->)
@@ -119,13 +119,15 @@ Function updateFieldList
 		End for 
 		
 		// Sort by names
-		LISTBOX SORT COLUMNS:C916(*; This:C1470.fieldList.name; 2; >)
+		LISTBOX SORT COLUMNS:C916(*; This:C1470.fieldList.name; 1; >)
 		
 		This:C1470.fieldList.show(Num:C11($o.count)>0)
 		
 	Else 
 		
-		This:C1470.empty.setTitle("selectATableToDisplayItsFields")
+		This:C1470.context.cache:=Null:C1517
+		
+		This:C1470.empty.title:="selectATableToDisplayItsFields"
 		
 		This:C1470.fieldList.clear()
 		This:C1470.fieldList.hide()
@@ -157,32 +159,29 @@ Function updateFieldList
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-	// Updates the list of fields/reports according to the selected table
+	// Gets the list of fields/reports according to the selected table as collections
 Function getFieldList()->$result : Object
 	
 	var $key; $subKey; $tableID : Text
-	var $field; $table : Object
 	var $target : Collection
+	var $field; $subfield : cs:C1710.field
+	var $table : cs:C1710.table
 	var $formatters : 4D:C1709.Folder
 	
-	$result:=New object:C1471(\
-		"success"; Form:C1466.dataModel#Null:C1517)
-	
-	$tableID:=String:C10(This:C1470.tableNumber)
-	
-	If ($result.success)
+	If (PROJECT.dataModel#Null:C1517)
 		
-		$result.success:=(Form:C1466.dataModel[$tableID]#Null:C1517)
+		$tableID:=String:C10(This:C1470.tableNumber)
+		
+		$result:=New object:C1471(\
+			"success"; (PROJECT.dataModel[$tableID]#Null:C1517))
 		
 		If ($result.success)
 			
-			$result.ids:=New collection:C1472
 			$result.names:=New collection:C1472
 			$result.labels:=New collection:C1472
 			$result.shortLabels:=New collection:C1472
 			$result.iconPaths:=New collection:C1472
 			$result.icons:=New collection:C1472
-			$result.types:=New collection:C1472
 			$result.formats:=New collection:C1472
 			$result.formatColors:=New collection:C1472
 			$result.nameColors:=New collection:C1472
@@ -190,135 +189,240 @@ Function getFieldList()->$result : Object
 			
 /* TEMPO */$result.tableNumbers:=New collection:C1472
 			
+			$result.targets:=New collection:C1472()
+			
 			$table:=Form:C1466.dataModel[$tableID]
 			
 			$target:=Value type:C1509(PROJECT.info.target)=Is collection:K8:32 ? PROJECT.info.target : New collection:C1472(PROJECT.info.target)
 			
 			For each ($key; $table)
 				
-				Case of 
-						
-						//……………………………………………………………………………………………………………
-					: (Length:C16($key)=0)
-						
-						// <META-DATA>
-						
-						//……………………………………………………………………………………………………………
-					: (PROJECT.isField($key))\
-						 & (Num:C11(This:C1470.tabSelector.data)=0)
-						
-						
-						$field:=$table[$key]
-						$field.id:=Num:C11($key)
-						
-						$field.label:=($field.label#Null:C1517) ? $field.label : PROJECT.label($field.name)
-						$field.shortLabel:=($field.shortLabel#Null:C1517) ? $field.shortLabel : $field.label
-						
-/* TEMPO */$result.tableNumbers.push(Num:C11($tableID))
-						$result.ids.push($field.id)
-						$result.names.push($field.name)
-						$result.paths.push($field.name)
-						$result.types.push($field.type)
-						$result.labels.push($field.label)
-						$result.shortLabels.push($field.shortLabel)
-						$result.iconPaths.push(String:C10($field.icon))
-						$result.formatColors.push(Foreground color:K23:1)
-						$result.nameColors.push(Foreground color:K23:1)
-						$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
-						$result.formats.push(This:C1470._computeFormat($field; $result; $target))
-						
-						//……………………………………………………………………………………………………………
-					: (Value type:C1509($table[$key])#Is object:K8:27)
-						
-						// <NOTHING MORE TO DO>
-						
-						//……………………………………………………………………………………………………………
-					: (PROJECT.isComputedAttribute($table[$key]))\
-						 & (Num:C11(This:C1470.tabSelector.data)=0)
-						
-						$field:=$table[$key]
-						
-						$field.label:=($field.label#Null:C1517) ? $field.label : PROJECT.label($key)
-						$field.shortLabel:=($field.shortLabel#Null:C1517) ? $field.shortLabel : $field.label
-						
-/* TEMPO */$result.tableNumbers.push(Num:C11($tableID))
-						$result.ids.push(0)
-						$result.names.push($key)
-						$result.paths.push($key)
-						$result.types.push($field.fieldType)
-						$result.labels.push($field.label)
-						$result.shortLabels.push($field.shortLabel)
-						$result.iconPaths.push(String:C10($field.icon))
-						$result.formatColors.push(Foreground color:K23:1)
-						$result.nameColors.push(Foreground color:K23:1)
-						$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
-						$result.formats.push(This:C1470._computeFormat($field; $result; $target))
-						
-						//……………………………………………………………………………………………………………
-					: (PROJECT.isRelationToOne($table[$key]))
-						
-						If (Num:C11(This:C1470.tabSelector.data)=0)
+				If (Length:C16($key)=0)
+					
+					continue
+					
+				End if 
+				
+				$field:=$table[$key]
+				
+				If (Num:C11(This:C1470.tabSelector.data)=0)  // [FIELDS]
+					
+					Case of 
 							
-							For each ($subKey; $table[$key])
+							//……………………………………………………………………………………………………………
+						: ($field.kind="storage")
+							
+							This:C1470._labels($field)
+							
+							$field.fieldNumber:=Num:C11($key)
+							
+							$result.names.push($field.name)
+							$result.paths.push($field.name)
+							$result.labels.push($field.label)
+							$result.shortLabels.push($field.shortLabel)
+							$result.iconPaths.push(String:C10($field.icon))
+							$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
+							$result.formats.push(This:C1470._computeFormat($field; $result; $target))
+							$result.formatColors.push(Foreground color:K23:1)
+							$result.nameColors.push(Foreground color:K23:1)
+							
+/* TEMPO */$result.tableNumbers.push(Num:C11($tableID))
+							
+							$result.targets.push($field)
+							
+							//……………………………………………………………………………………………………………
+						: ($field.kind="calculated")
+							
+							This:C1470._labels($field; $key)
+							
+							$result.names.push($key)
+							$result.paths.push($key)
+							$result.labels.push($field.label)
+							$result.shortLabels.push($field.shortLabel)
+							$result.iconPaths.push(String:C10($field.icon))
+							$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
+							$result.formats.push(This:C1470._computeFormat($field; $result; $target))
+							$result.formatColors.push(Foreground color:K23:1)
+							$result.nameColors.push(Foreground color:K23:1)
+							
+/* TEMPO */$result.tableNumbers.push(Num:C11($tableID))
+							
+							$result.targets.push($field)
+							
+							//……………………………………………………………………………………………………………
+						: ($field.kind="alias")\
+							 && ($field.fieldType#38)\
+							 && ($field.fieldType#42)
+							
+							This:C1470._labels($field; $key)
+							
+							$result.names.push($key)
+							$result.paths.push($key)
+							$result.labels.push($field.label)
+							$result.shortLabels.push($field.shortLabel)
+							$result.iconPaths.push(String:C10($field.icon))
+							$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
+							$result.formats.push(This:C1470._computeFormat($field; $result; $target))
+							$result.formatColors.push(Foreground color:K23:1)
+							$result.nameColors.push(Foreground color:K23:1)
+							
+/* TEMPO */$result.tableNumbers.push(Num:C11($tableID))
+							
+							$result.targets.push($field)
+							
+							//……………………………………………………………………………………………………………
+						: ($field.kind="relatedEntity")
+							
+							For each ($subKey; $field)
+								
+								If (Value type:C1509($field[$subKey])#Is object:K8:27)
+									
+									continue
+									
+								End if 
+								
+								$subfield:=$field[$subKey]
 								
 								Case of 
 										
 										//______________________________________________________
-									: (Value type:C1509($table[$key][$subKey])#Is object:K8:27)
+									: ($subfield.kind="storage")
 										
-										// <NOTHING MORE TO DO>
+										This:C1470._labels($subfield)
 										
-										//______________________________________________________
-									: (PROJECT.isField($subKey))
+										$subfield.fieldNumber:=Num:C11($subKey)
 										
-										$field:=$table[$key][$subKey]
-										$field.id:=Num:C11($subKey)
-										
-										$result.tableNumbers.push(ds:C1482[$table[$key].relatedDataClass].getInfo().tableNumber)
-										$result.ids.push($field.id)
-										$result.names.push($field.name)
-										$result.paths.push($key+"."+$field.name)
-										$result.types.push($field.fieldType)
-										$result.labels.push($field.label)
-										$result.shortLabels.push($field.shortLabel)
-										$result.iconPaths.push(String:C10($field.icon))
+										$result.names.push($subfield.name)
+										$result.paths.push($key+"."+$subfield.name)
+										$result.labels.push($subfield.label)
+										$result.shortLabels.push($subfield.shortLabel)
+										$result.iconPaths.push(String:C10($subfield.icon))
+										$result.icons.push(EDITOR.getIcon(String:C10($subfield.icon)))
+										$result.formats.push(This:C1470._computeFormat($subfield; $result; $target))
 										$result.formatColors.push(Foreground color:K23:1)
 										$result.nameColors.push(Foreground color:K23:1)
-										$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
-										$result.formats.push(This:C1470._computeFormat($field; $result; $target))
+										
+										$result.tableNumbers.push(ds:C1482[$field.relatedDataClass].getInfo().tableNumber)
+										
+										$result.targets.push($subfield)
 										
 										//______________________________________________________
-									: (PROJECT.isComputedAttribute($table[$key][$subKey]))
+									: ($subfield.kind="calculated")
 										
-										$field:=$table[$key][$subKey]
+										This:C1470._labels($subfield; $subKey)
 										
-										$result.tableNumbers.push(ds:C1482[$table[$key].relatedDataClass].getInfo().tableNumber)
-										$result.ids.push(-3)
-										$result.names.push($field.name)
-										$result.paths.push($key+"."+$subKey)
-										$result.types.push($field.fieldType)
-										$result.labels.push($field.label)
-										$result.shortLabels.push($field.shortLabel)
-										$result.iconPaths.push(String:C10($field.icon))
+										$result.names.push($subfield.name)
+										$result.paths.push($key+"."+$subfield.path)
+										$result.labels.push($subfield.label)
+										$result.shortLabels.push($subfield.shortLabel)
+										$result.iconPaths.push(String:C10($subfield.icon))
+										$result.icons.push(EDITOR.getIcon(String:C10($subfield.icon)))
+										$result.formats.push(This:C1470._computeFormat($subfield; $result; $target))
 										$result.formatColors.push(Foreground color:K23:1)
 										$result.nameColors.push(Foreground color:K23:1)
-										$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
-										$result.formats.push(This:C1470._computeFormat($field; $result; $target))
+										
+										$result.tableNumbers.push(ds:C1482[$field.relatedDataClass].getInfo().tableNumber)
+										
+										$result.targets.push($subfield)
 										
 										//______________________________________________________
-									Else 
+									: ($subfield.kind="alias")
 										
-										$field:=$table[$key][$subKey]
+										This:C1470._labels($subfield; $subKey)
 										
-										If (Bool:C1537($field.isToMany))
+										$result.names.push($subfield.name)
+										$result.paths.push($key+"."+$subfield.path)
+										$result.labels.push($subfield.label)
+										$result.shortLabels.push($subfield.shortLabel)
+										$result.iconPaths.push(String:C10($subfield.icon))
+										$result.icons.push(EDITOR.getIcon(String:C10($subfield.icon)))
+										$result.formats.push(This:C1470._computeFormat($subfield; $result; $target))
+										$result.formatColors.push(Foreground color:K23:1)
+										$result.nameColors.push(Foreground color:K23:1)
+										
+										$result.tableNumbers.push(ds:C1482[$field.relatedDataClass].getInfo().tableNumber)
+										
+										$result.targets.push($subfield)
+										
+										//______________________________________________________
+									: ($subfield.kind="relatedEntity")
+										
+										var $subKey2 : Text
+										For each ($subKey2; $field)
 											
-											//todo: many to may
+											If (Value type:C1509($subfield[$subKey2])#Is object:K8:27)
+												
+												continue
+												
+											End if 
 											
-										Else 
+											var $subfield2 : cs:C1710.field
+											$subfield2:=$subfield[$subKey2]
 											
-											// A "If" statement should never omit "Else"
-											
-										End if 
+											Case of 
+													
+													//______________________________________________________
+												: ($subfield2.kind="storage")
+													
+													This:C1470._labels($subfield2)
+													
+													$subfield2.fieldNumber:=Num:C11($subKey2)
+													
+													$result.names.push($subfield2.name)
+													$result.paths.push($key+"."+$subfield2.path)
+													$result.labels.push($subfield2.label)
+													$result.shortLabels.push($subfield2.shortLabel)
+													$result.iconPaths.push(String:C10($subfield2.icon))
+													$result.icons.push(EDITOR.getIcon(String:C10($subfield2.icon)))
+													$result.formats.push(This:C1470._computeFormat($subfield2; $result; $target))
+													$result.formatColors.push(Foreground color:K23:1)
+													$result.nameColors.push(Foreground color:K23:1)
+													
+													$result.tableNumbers.push(ds:C1482[$field.relatedDataClass].getInfo().tableNumber)
+													
+													$result.targets.push($subfield2)
+													
+													//______________________________________________________
+												: ($subfield.kind="calculated")
+													
+													This:C1470._labels($subfield2; $subKey2)
+													
+													$result.names.push($subfield2.name)
+													$result.paths.push($key+"."+$subfield2.path)
+													$result.labels.push($subfield2.label)
+													$result.shortLabels.push($subfield2.shortLabel)
+													$result.iconPaths.push(String:C10($subfield2.icon))
+													$result.icons.push(EDITOR.getIcon(String:C10($subfield2.icon)))
+													$result.formats.push(This:C1470._computeFormat($subfield2; $result; $target))
+													$result.formatColors.push(Foreground color:K23:1)
+													$result.nameColors.push(Foreground color:K23:1)
+													
+													$result.tableNumbers.push(ds:C1482[$field.relatedDataClass].getInfo().tableNumber)
+													
+													$result.targets.push($subfield2)
+													
+													//______________________________________________________
+												: ($subfield.kind="alias")
+													
+													This:C1470._labels($subfield2; $subKey2)
+													
+													$result.names.push($subfield2.name)
+													$result.paths.push($key+"."+$subfield2.path)
+													$result.labels.push($subfield2.label)
+													$result.shortLabels.push($subfield2.shortLabel)
+													$result.iconPaths.push(String:C10($subfield2.icon))
+													$result.icons.push(EDITOR.getIcon(String:C10($subfield2.icon)))
+													$result.formats.push(This:C1470._computeFormat($subfield2; $result; $target))
+													$result.formatColors.push(Foreground color:K23:1)
+													$result.nameColors.push(Foreground color:K23:1)
+													
+													$result.tableNumbers.push(ds:C1482[$field.relatedDataClass].getInfo().tableNumber)
+													
+													$result.targets.push($subfield2)
+													
+													//______________________________________________________
+											End case 
+										End for each 
 										
 										//______________________________________________________
 								End case 
@@ -326,67 +430,82 @@ Function getFieldList()->$result : Object
 							
 						Else 
 							
-							$field:=$table[$key]
 							
-							$result.formatColors.push(Foreground color:K23:1)
-							$result.nameColors.push(Foreground color:K23:1)
+					End case 
+					
+				Else   // RELATIONS
+					
+					Case of 
 							
-							$result.ids.push(Null:C1517)
+							//……………………………………………………………………………………………………………
+						: ($field.kind="alias")\
+							 && (($field.fieldType=38) | ($field.fieldType=42))
+							
+							This:C1470._labels($field; $key)
+							
 							$result.names.push($key)
 							$result.paths.push($key)
-							$result.types.push(-1)
-							
-/* TEMPO */$result.tableNumbers.push(Num:C11($tableID))
-							
-							If (String:C10($field.label)="")
-								
-								$field.label:=PROJECT.label($key)
-								
-							End if 
-							
 							$result.labels.push($field.label)
-							
-							If (String:C10($field.shortLabel)="")
-								
-								$field.shortLabel:=$field.label
-								
-							End if 
-							
 							$result.shortLabels.push($field.shortLabel)
 							$result.iconPaths.push(String:C10($field.icon))
 							$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
+							$result.formatColors.push(Foreground color:K23:1)
+							$result.nameColors.push(Foreground color:K23:1)
+							$result.formats.push(This:C1470._computeFormat($field; $result; $target))
+							
+/* TEMPO */$result.tableNumbers.push(Num:C11($tableID))
+							
+							$result.targets.push($field)
+							
+							//……………………………………………………………………………………………………………
+						: ($field.kind="relatedEntity")
+							
+							This:C1470._labels($field; $key)
+							
+							$result.names.push($key)
+							$result.paths.push($key)
+							$result.labels.push($field.label)
+							$result.shortLabels.push($field.shortLabel)
+							$result.iconPaths.push(String:C10($field.icon))
+							$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
+							$result.formatColors.push(Foreground color:K23:1)
+							$result.nameColors.push(Foreground color:K23:1)
 							$result.formats.push($field.format)
 							
-							If (PROJECT.isLink($table[$key]))
+/* TEMPO */$result.tableNumbers.push(Num:C11($tableID))
+							
+							$result.targets.push($field)
+							
+							If (PROJECT.isLink($field))  // N -> 1 -> N relation
 								
-								// N -> 1 -> N relation
-								
-								For each ($subKey; $table[$key])
+								For each ($subKey; $field)
 									
-									If (Value type:C1509($table[$key][$subKey])=Is object:K8:27)
+									If (Value type:C1509($field[$subKey])#Is object:K8:27)
 										
-										If (Bool:C1537($table[$key][$subKey].isToMany))
-											
-											$field:=$table[$key][$subKey]
-											
-											$result.formatColors.push(Foreground color:K23:1)
-											$result.nameColors.push(Foreground color:K23:1)
-											
-											$result.tableNumbers.push(Num:C11($tableID))
-											
-											$result.ids.push(Null:C1517)
-											$result.names.push($field.path)
-											$result.paths.push($field.path)
-											$result.types.push(-1)
-											
-											$result.labels.push($field.label)
-											$result.shortLabels.push($field.shortLabel)
-											$result.iconPaths.push(String:C10($field.icon))
-											$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
-											
-											$result.formats.push($field.format)
-											
-										End if 
+										continue
+										
+									End if 
+									
+									$subfield:=$field[$subKey]
+									
+									If (Bool:C1537($subfield.isToMany))
+										
+										This:C1470._labels($subfield; $subKey)
+										
+										$result.names.push($subfield.path)
+										$result.paths.push($subfield.path)
+										$result.labels.push($subfield.label)
+										$result.shortLabels.push($subfield.shortLabel)
+										$result.iconPaths.push(String:C10($subfield.icon))
+										$result.formatColors.push(Foreground color:K23:1)
+										$result.nameColors.push(Foreground color:K23:1)
+										$result.icons.push(EDITOR.getIcon(String:C10($subfield.icon)))
+										$result.formats.push($subfield.format)
+										
+/* TEMPO */$result.tableNumbers.push(Num:C11($tableID))
+										
+										$result.targets.push($subfield)
+										
 									End if 
 								End for each 
 								
@@ -399,102 +518,29 @@ Function getFieldList()->$result : Object
 								End if 
 							End if 
 							
-						End if 
-						
-						//……………………………………………………………………………………………………………
-					: (FEATURE.with("alias"))\
-						 && (PROJECT.isAlias($table[$key]))
-						
-						$field:=$table[$key]
-						
-						var $show : Boolean
-						If (Num:C11(This:C1470.tabSelector.data)=0)
+							//……………………………………………………………………………………………………………
+						: ($field.kind="relatedEntities")
 							
-							$show:=($field.fieldType#38) & ($field.fieldType#42)
+							This:C1470._labels($field; $key)
 							
-						Else 
-							
-							$show:=($field.fieldType=38) | ($field.fieldType=42)
-							
-						End if 
-						
-						If ($show)
-							
-							$field.label:=($field.label#Null:C1517) ? $field.label : PROJECT.label($key)
-							$field.shortLabel:=($field.shortLabel#Null:C1517) ? $field.shortLabel : $field.label
-							
-/* TEMPO */$result.tableNumbers.push(Num:C11($tableID))
-							$result.ids.push(0)
 							$result.names.push($key)
 							$result.paths.push($key)
 							$result.labels.push($field.label)
 							$result.shortLabels.push($field.shortLabel)
 							$result.iconPaths.push(String:C10($field.icon))
+							$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
 							$result.formatColors.push(Foreground color:K23:1)
 							$result.nameColors.push(Foreground color:K23:1)
-							$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
+							$result.formats.push($field.format)
 							
-							If (Num:C11(This:C1470.tabSelector.data)=0)
-								
-								$result.types.push($field.fieldType)
-								$result.formats.push(This:C1470._computeFormat($field; $result; $target))
-								
-							Else 
-								
-								$result.types.push(($field.fieldType=42) ? -2 : -1)
-								
-							End if 
-						End if 
-						
-						//……………………………………………………………………………………………………………
-					: (Num:C11(This:C1470.tabSelector.data)=0)
-						
-						//……………………………………………………………………………………………………………
-					: (PROJECT.isRelationToMany($table[$key]))
-						
-						$result.formatColors.push(Foreground color:K23:1)
-						$result.nameColors.push(Foreground color:K23:1)
-						
-						$result.ids.push(Null:C1517)
-						$result.names.push($key)
-						$result.paths.push($key)
-						$result.types.push(-2)
-						
-/* TEMPO */$result.tableNumbers.push(Num:C11($tableID))
-						
-						$field:=$table[$key]
-						
-						If (String:C10($field.label)="")
+							$result.targets.push($field)
 							
-							$field.label:=PROJECT.label($key)
-							
-						End if 
-						
-						$result.labels.push($field.label)
-						
-						If (String:C10($field.shortLabel)="")
-							
-							$field.shortLabel:=$field.label
-							
-						End if 
-						
-						$result.shortLabels.push($field.shortLabel)
-						$result.iconPaths.push(String:C10($field.icon))
-						$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
-						
-						If (Form:C1466.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)
-							
-							$result.nameColors[$result.names.length-1]:=EDITOR.errorColor  // Missing or invalid
-							
-						End if 
-						
-						$result.formats.push($field.format)
-						
-						//……………………………………………………………………………………………………………
-				End case 
+					End case 
+				End if 
+				
 			End for each 
 			
-			$result.count:=$result.ids.length
+			$result.count:=$result.targets.length
 			
 		Else 
 			
@@ -548,60 +594,6 @@ Function setTab()
 	This:C1470.updateFieldList()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-	// Returns the field associated with the line
-Function field($row : Integer)->$field : Object
-	
-	var $t : Text
-	var $c : Collection
-	
-	If (Num:C11(This:C1470.tabSelector.data)=1)
-		
-		$t:=(This:C1470.fieldList.columns["names"].pointer)->{$row}
-		$c:=Split string:C1554($t; ".")
-		
-		If ($c.length>1)
-			
-			// 1 -> 1 -> N
-			$field:=Form:C1466.dataModel[String:C10(This:C1470.tableNumber)][String:C10($c[0])][String:C10($c[1])]
-			
-		End if 
-	End if 
-	
-	If ($field=Null:C1517)
-		
-		$t:=(This:C1470.names.pointer)->{$row}
-		$c:=Split string:C1554($t; ".")
-		
-		If ($c.length>1)  // RelatedDataclass
-			
-			If (Num:C11((This:C1470.ids.pointer)->{$row})=-3)  // Computed attribute
-				
-				$field:=Form:C1466.dataModel[String:C10(This:C1470.tableNumber)][$c[0]][$c[1]]
-				
-			Else 
-				
-				$field:=Form:C1466.dataModel[String:C10(This:C1470.tableNumber)][$c[0]][String:C10((This:C1470.ids.pointer)->{$row})]
-				
-			End if 
-			
-		Else 
-			
-			$t:=(This:C1470.ids.pointer)->{$row}  // Field number
-			
-			If (Num:C11($t)#0)
-				
-				$field:=Form:C1466.dataModel[String:C10(This:C1470.tableNumber)][$t]
-				
-			Else 
-				
-				// Take the name
-				$field:=Form:C1466.dataModel[String:C10(This:C1470.tableNumber)][String:C10($c[0])]
-				
-			End if 
-		End if 
-	End if 
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Display tips on the field list
 Function setHelpTip($e : Object)
 	
@@ -638,7 +630,7 @@ Function setHelpTip($e : Object)
 				//………………………………………………………………………………
 			: ($e.columnName=This:C1470.formats.name)
 				
-				$field:=This:C1470.field($e.row)
+				$field:=This:C1470.context.cache[$e.row-1]
 				
 				If (($field#Null:C1517) && (Length:C16(String:C10($field.format))#0))
 					
@@ -705,7 +697,8 @@ Function updateForms($field : Object; $row : Integer)
 Function doShowIconPicker($e : Object)
 	
 	var $c : Collection
-	var $field; $o : Object
+	var $o : Object
+	var $field : cs:C1710.field
 	
 	$o:=This:C1470.picker.getValue()
 	
@@ -723,7 +716,7 @@ Function doShowIconPicker($e : Object)
 		$o.inited:=True:C214  // Stop the re-entry
 		
 		// Get the current field
-		$field:=This:C1470.field($e.row)
+		$field:=This:C1470.context.cache[$e.row-1]
 		
 		// #MARK_TODO WIDGET WORK WITH ARRAY
 		If ($field.icon#Null:C1517)
@@ -795,11 +788,13 @@ Function doGetResources()
 Function showFormatOnDisk($e : Object)
 	
 	var $format : Text
-	var $field; $o : Object
+	var $o : Object
+	var $field : cs:C1710.field
 	
 	$e:=$e=Null:C1517 ? FORM Event:C1606 : $e
 	
-	$field:=This:C1470.field($e.row)  // Get the field definition
+	// Get the field definition
+	$field:=This:C1470.context.cache[$e.row-1]
 	
 	// Get current format
 	If ($field.format#Null:C1517)
@@ -830,15 +825,16 @@ Function showFormatOnDisk($e : Object)
 Function doFormatMenu($e : Object)
 	
 	var $format; $t : Text
-	var $field; $o : Object
+	var $o : Object
 	var $formatters : Collection
 	var $menu : cs:C1710.menu
 	var $formatter : cs:C1710.formatter
+	var $field : cs:C1710.field
 	
 	$e:=$e=Null:C1517 ? FORM Event:C1606 : $e
 	
 	// Get the field definition
-	$field:=This:C1470.field($e.row)
+	$field:=This:C1470.context.cache[$e.row-1]
 	
 	$menu:=cs:C1710.menu.new()
 	$formatter:=cs:C1710.formatter.new()
@@ -1033,13 +1029,16 @@ Function doTagMenu($e : Object; $values : Collection)
 		$ptr->{$ptr->}:=$t
 		//%W+533.3
 		
+		var $field : cs:C1710.field
+		$field:=This:C1470.context.cache[$e.row-1]
+		
 		If ($e.columnName="titles")
 			
-			This:C1470.field($e.row)["format"]:=$t
+			$field["format"]:=$t
 			
 		Else 
 			
-			This:C1470.field($e.row)[$e.columnName]:=$t
+			$field[$e.columnName]:=$t
 			
 		End if 
 		
@@ -1049,7 +1048,13 @@ Function doTagMenu($e : Object; $values : Collection)
 	
 	// MARK:-[PRIVATE]
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function _computeFormat($field : Object; $result : Object)->$label : Text
+Function _labels($target : cs:C1710.field; $name : Text)
+	
+	$target.label:=(Length:C16(String:C10($target.label))>0) ? $target.label : PROJECT.label(Length:C16($name)>0 ? $name : String:C10($target.name))
+	$target.shortLabel:=(Length:C16(String:C10($target.shortLabel))>0) ? $target.shortLabel : $target.label
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function _computeFormat($field : cs:C1710.field; $result : Object)->$label : Text
 	
 	var $manifest : Object
 	var $target : Collection

@@ -1032,8 +1032,11 @@ Function checkLocalQueryFilter($table : Object)
 	// Returns alias destination if alias 
 	// CLEAN: maybe move to structure?
 Function getAliasDestination($dataClass : Variant; $attribute : Variant; $recursive : Boolean)->$result : Object
+	
 	If (Value type:C1509($attribute)=Is object:K8:27)
+		
 		If (String:C10($attribute.kind)="alias")
+			
 			If (Length:C16(String:C10($attribute.path))>0)
 				
 				var $ds : Object
@@ -1047,37 +1050,49 @@ Function getAliasDestination($dataClass : Variant; $attribute : Variant; $recurs
 				$result.paths:=New collection:C1472
 				
 				var $sourceDataClass; $destination; $previousDataClass : Object
+				
 				If (Value type:C1509($dataClass)=Is text:K8:3)
+					
 					$sourceDataClass:=$ds[$dataClass]
+					
 				Else 
+					
 					$sourceDataClass:=$dataClass
+					
 				End if 
 				
 				Repeat 
+					
 					$path:=$paths.shift()
 					$destination:=$sourceDataClass[$path]
 					
-					$result.paths.push(New object:C1471("path"; $path; "dataClass"; $sourceDataClass.getInfo().name))
+					$result.paths.push(New object:C1471(\
+						"path"; $path; \
+						"dataClass"; $sourceDataClass.getInfo().name))
 					
 					$previousDataClass:=$sourceDataClass
-					If ($destination.relatedDataClass#Null:C1517)  // is relatedDataClass filled for alias? like destination field
-						$sourceDataClass:=$ds[$destination.relatedDataClass]
-					End if 
 					
+					If ($destination.relatedDataClass#Null:C1517)  // Is relatedDataClass filled for alias? like destination field
+						
+						$sourceDataClass:=$ds[$destination.relatedDataClass]
+						
+					End if 
 				Until ($paths.length=0)
 				
 				$result.field:=$destination
 				
 				If (Bool:C1537($recursive))
-					If (String:C10($result.field.kind)="alias")  // maybe an alias too
+					
+					If (String:C10($result.field.kind)="alias")  // Maybe an alias too
+						
 						var $rs : Object
 						$rs:=This:C1470.getAliasDestination($previousDataClass; $result.field; True:C214)
 						
 						$result.paths.combine($rs.paths)
 						$result.field:=$rs
+						
 					End if 
 				End if 
-				
 			End if 
 		End if 
 	End if 
@@ -1549,6 +1564,7 @@ Function fieldAvailable($tableID; $field : Object)->$available : Boolean
 	// Update all form definition according to the datamodel
 	// Ie. remove from forms, the fields that are no more published
 Function updateFormDefinitions()
+	
 	var $formType; $tableID : Text
 	var $field; $target : Object
 	
