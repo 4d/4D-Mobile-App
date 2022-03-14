@@ -445,9 +445,18 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 	$ds:=ds:C1482
 	$field:=$ds[$tableName][$relationName]
 	
-	If ($field.kind="relatedEntity")
+	If ($field.kind="relatedEntity")\
+		 || (($field.kind="alias") && ($field.fieldType=Is object:K8:27))
 		
 		$result.success:=True:C214
+		
+		If ($field.kind="alias")
+			
+			$result.alias:=This:C1470.aliasTarget($tableName; $field)
+			$field:=$result.alias.target
+			
+		End if 
+		
 		$result.relatedEntity:=$field.name
 		$result.relatedTableNumber:=$ds[$field.relatedDataClass].getInfo().tableNumber
 		$result.relatedDataClass:=$field.relatedDataClass
@@ -636,6 +645,65 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 	Else 
 		
 		This:C1470.errors.push("The attribute \""+$relationName+"\" of dataclass \""+$tableName+"\" does not refer to an entity")
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns the target and levels of an alias {"target": {},"levels":[]}
+Function aliasTarget($table; $field; $recursive : Boolean)->$result : Object
+	
+	var $member : Text
+	var $resolve; $target : Object
+	var $levels : Collection
+	var $ds : 4D:C1709.DataStoreImplementation
+	var $previousDataClass; $sourceDataClass : 4D:C1709.DataClass
+	
+	If (Value type:C1509($field)=Is object:K8:27)\
+		 && (String:C10($field.kind)="alias")\
+		 && (Length:C16(String:C10($field.path))>0)
+		
+		$result:=New object:C1471
+		$result.levels:=New collection:C1472
+		
+		$ds:=ds:C1482
+		$levels:=Split string:C1554($field.path; ".")
+		$sourceDataClass:=(Value type:C1509($table)=Is text:K8:3) ? $ds[$table] : $table
+		
+		Repeat 
+			
+			$member:=$levels.shift()
+			$target:=$sourceDataClass[$member]
+			
+			$result.levels.push(New object:C1471(\
+				"path"; $member; \
+				"dataClass"; $sourceDataClass.getInfo().name))
+			
+			$previousDataClass:=$sourceDataClass
+			
+			If ($target.relatedDataClass#Null:C1517)  // Is relatedDataClass filled for alias? like destination field
+				
+				$sourceDataClass:=$ds[$target.relatedDataClass]
+				
+			End if 
+		Until ($levels.length=0)
+		
+		$result.target:=$target
+		
+		If ($recursive)
+			
+			If (String:C10($result.target.kind)="alias")  // Maybe an alias too
+				
+				$resolve:=This:C1470.aliasTarget($previousDataClass; $result.target; True:C214)
+				
+				$result.levels.combine($resolve.levels)
+				$result.target:=$resolve.target
+				
+			End if 
+		End if 
+		
+	Else 
+		
+		This:C1470.errors.push("The attribute does not refer to an alias")
 		
 	End if 
 	

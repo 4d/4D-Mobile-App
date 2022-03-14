@@ -578,11 +578,22 @@ Function doFieldPicker()->$count : Integer
 						
 						If ($target=Null:C1517)
 							
-							$target:=New object:C1471(\
-								"kind"; "relatedEntity"; \
-								"relatedDataClass"; $relatedCatalog.relatedDataClass; \
-								"relatedTableNumber"; $relatedCatalog.relatedTableNumber; \
-								"inverseName"; $relatedCatalog.inverseName)
+							If ($relatedCatalog.alias=Null:C1517)
+								
+								$target:=New object:C1471(\
+									"kind"; "relatedEntity"; \
+									"relatedDataClass"; $relatedCatalog.relatedDataClass; \
+									"relatedTableNumber"; $relatedCatalog.relatedTableNumber; \
+									"inverseName"; $relatedCatalog.inverseName)
+								
+							Else 
+								
+								$target:=New object:C1471(\
+									"kind"; "alias"; \
+									"fieldType"; Is object:K8:27; \
+									"path"; $relatedCatalog.alias.levels.extract("path").join("."))
+								
+							End if 
 							
 							$tableDataModel[$context.fieldName]:=$target
 							

@@ -17,7 +17,7 @@ C_TEXT:C284($File_subpath; $Txt_buffer)
 C_TEXT:C284($Txt_cmd; $Txt_error; $Txt_in; $Txt_name; $Txt_newPath; $Txt_out)
 C_OBJECT:C1216($Obj_buffer; $Obj_param; $Obj_path; $Obj_result; $Obj_version; $File_path)
 C_OBJECT:C1216($Dom_fileRef; $Dom_root; $Dom_group; $Dom_child)
-C_OBJECT:C1216($folder; $subfolder)
+C_OBJECT:C1216($subfolder)
 C_COLLECTION:C1488($Col_folder; $Col_paths)
 
 ARRAY TEXT:C222($tTxt_folders; 0)

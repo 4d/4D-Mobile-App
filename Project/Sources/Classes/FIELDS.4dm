@@ -251,8 +251,8 @@ Function getFieldList()->$result : Object
 							
 							//……………………………………………………………………………………………………………
 						: ($field.kind="alias")\
-							 && ($field.fieldType#38)\
-							 && ($field.fieldType#42)
+							 && ($field.fieldType#Is object:K8:27)\
+							 && ($field.fieldType#Is collection:K8:32)
 							
 							This:C1470._labels($field; $key)
 							

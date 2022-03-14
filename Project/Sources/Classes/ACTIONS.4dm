@@ -567,8 +567,8 @@ Function doAddMenu()
 									
 									$field:=$fields.query("name = :1"; $t).pop()
 									
-									If ($field.fieldType#38)\
-										 && ($field.fieldType#42)\
+									If ($field.fieldType#Is object:K8:27)\
+										 && ($field.fieldType#Is collection:K8:32)\
 										 && (Not:C34(Bool:C1537($field.readOnly)))
 										
 										$action.parameters.push(This:C1470._addParameter($field; $tableModel[$t]; $menu.edit))

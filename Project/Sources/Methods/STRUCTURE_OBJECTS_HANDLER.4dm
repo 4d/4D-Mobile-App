@@ -335,7 +335,7 @@ Case of
 								$field:=PROJECT.getCatalog().query("name = :1"; $context.currentTable.name).pop().fields.query("name = :1"; $context.fieldName).pop()
 								
 								If ($field.kind="relatedEntity")\
-									 || (($field.kind="alias") & ($field.fieldType=Is object:K8:27))
+									 || (($field.kind="alias") & (($field.fieldType=Is object:K8:27) | ($field.type=-1)))
 									
 									//TODO: Manage alias to entity
 									

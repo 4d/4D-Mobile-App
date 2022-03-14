@@ -1118,8 +1118,8 @@ Function isSortable($field : Object) : Boolean
 		return (($field.fieldType#Is object:K8:27)\
 			 && ($field.fieldType#Is BLOB:K8:12)\
 			 && ($field.fieldType#Is picture:K8:10)\
-			 && ($field.fieldType#38)\
-			 && ($field.fieldType#42))
+			 && ($field.fieldType#Is object:K8:27)\
+			 && ($field.fieldType#Is collection:K8:32))
 		
 	End if 
 	
