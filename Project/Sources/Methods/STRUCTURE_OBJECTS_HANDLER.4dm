@@ -335,7 +335,7 @@ Case of
 								$field:=PROJECT.getCatalog().query("name = :1"; $context.currentTable.name).pop().fields.query("name = :1"; $context.fieldName).pop()
 								
 								If ($field.kind="relatedEntity")\
-									 || (($field.kind="alias") & ($field.fieldType=38))
+									 || (($field.kind="alias") & ($field.fieldType=Is object:K8:27))
 									
 									//TODO: Manage alias to entity
 									
@@ -673,8 +673,8 @@ Case of
 		//// Hide the bottom line
 		//OBJECT SET VISIBLE(*; "bottom.line"; False)
 		//CALL FORM(Current form window; "editor_CALLBACK"; "resizePanel"; New object(\
-																																																												"panel"; Current form name; \
-																																																												"offset"; $Lon_vOffset))
+																																																															"panel"; Current form name; \
+																																																															"offset"; $Lon_vOffset))
 		//End if 
 		////______________________________________________________
 		//: ($e.code=On Mouse Leave)

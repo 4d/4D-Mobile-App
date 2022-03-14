@@ -636,7 +636,7 @@ Function doFieldPicker()->$count : Integer
 									Case of 
 											
 											//______________________________________________________
-										: ($field.fieldType=42)  // Selection
+										: ($field.fieldType=Is collection:K8:32)  // Selection
 											
 											$o.label:=PROJECT.label(EDITOR.str.localize("listOf"; $field.name))
 											$o.shortLabel:=PROJECT.label($field.name)
@@ -1317,7 +1317,7 @@ Function _appendField($table : cs:C1710.table; $field : cs:C1710.field)
 		: ($field.kind="alias") && ($type<=EDITOR.fieldIcons.length)
 			
 			$published:=Num:C11($dataModel[String:C10($table.tableNumber)][$field.name]#Null:C1517)
-			$type:=($type=42) ? 8859 : ($type=38) ? 8858 : $type
+			$type:=($type=Is collection:K8:32) ? 8859 : ($type=Is object:K8:27) ? 8858 : $type
 			
 			//…………………………………………………………………………………………………
 		: ($field.kind="relatedEntity")  // N -> 1 relation

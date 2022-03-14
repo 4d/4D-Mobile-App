@@ -439,7 +439,7 @@ Function getFieldList()->$result : Object
 							
 							//……………………………………………………………………………………………………………
 						: ($field.kind="alias")\
-							 && (($field.fieldType=38) | ($field.fieldType=42))
+							 && (($field.fieldType=Is object:K8:27) | ($field.fieldType=Is collection:K8:32))
 							
 							This:C1470._labels($field; $key)
 							
@@ -451,7 +451,17 @@ Function getFieldList()->$result : Object
 							$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
 							$result.formatColors.push(Foreground color:K23:1)
 							$result.nameColors.push(Foreground color:K23:1)
-							$result.formats.push(This:C1470._computeFormat($field; $result; $target))
+							
+							If ($field.fieldType=Is collection:K8:32)
+								
+								// Entity Selection
+								$result.formats.push("")
+								
+							Else 
+								
+								$result.formats.push(This:C1470._computeFormat($field; $result; $target))
+								
+							End if 
 							
 /* TEMPO */$result.tableNumbers.push(Num:C11($tableID))
 							

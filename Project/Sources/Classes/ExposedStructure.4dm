@@ -549,7 +549,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 									$related:=OB Copy:C1225($relatedField)
 									$related.label:=New collection:C1472($relatedAttribute.name; $related.name).join(".")
 									$related.tableNumber:=This:C1470.tableNumber($field.relatedDataClass)
-									$related.fieldType:=($related.fieldType=38) ? 8858 : $related.fieldType
+									$related.fieldType:=($related.fieldType=Is object:K8:27) ? 8858 : $related.fieldType
 									$related._order:=$related.label
 									$result.fields.push($related)
 									
@@ -836,7 +836,7 @@ Function _fieldModel($field : cs:C1710.field; $relatedCatalog : Object)->$fieldM
 			Case of 
 					
 					//______________________________________________________
-				: ($field.fieldType=42)  // Selection
+				: ($field.fieldType=Is collection:K8:32)  // Selection
 					
 					$fieldModel.label:=PROJECT.label(EDITOR.str.localize("listOf"; $field.name))
 					$fieldModel.shortLabel:=PROJECT.label($field.name)
