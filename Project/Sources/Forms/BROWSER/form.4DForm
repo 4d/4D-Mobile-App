@@ -1,4 +1,4 @@
-﻿{
+{
 	"$4d": {
 		"version": "1",
 		"kind": "form"
@@ -23,9 +23,8 @@
 					"width": 938,
 					"height": 669,
 					"sizingY": "grow",
-					"stroke": "#1BA1E5",
-					"fill": "#1BA1E5",
-					"sizingX": "grow"
+					"sizingX": "grow",
+					"class": "coloredBanner"
 				},
 				"Rectangle": {
 					"type": "rectangle",
@@ -101,5 +100,6 @@
 		"views": {
 			"View 1": {}
 		}
-	}
+	},
+	"geometryStamp": 2
 }

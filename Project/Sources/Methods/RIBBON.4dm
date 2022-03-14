@@ -162,7 +162,7 @@ Case of
 			
 		Else 
 			
-			OBJECT SET RGB COLORS:C628(*; $e.objectName; 0x00696969)
+			OBJECT SET RGB COLORS:C628(*; $e.objectName; Foreground color:K23:1)
 			
 		End if 
 		

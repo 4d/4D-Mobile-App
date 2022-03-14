@@ -45,10 +45,8 @@
 					"left": 0,
 					"width": 948,
 					"height": 40,
-					"fill": "#1BA1E5",
-					"class": "",
-					"sizingX": "grow",
-					"stroke": "transparent"
+					"class": "coloredBanner",
+					"sizingX": "grow"
 				},
 				"tab": {
 					"type": "rectangle",
@@ -401,6 +399,6 @@
 			"View 1": {}
 		}
 	},
-	"geometryStamp": 158,
+	"geometryStamp": 160,
 	"method": "RIBBON_HANDLER"
 }

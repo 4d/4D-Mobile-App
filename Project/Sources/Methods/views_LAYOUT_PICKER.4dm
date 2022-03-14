@@ -243,11 +243,11 @@ $picker:=New object:C1471(\
 "tips"; True:C214; \
 "background"; Choose:C955(EDITOR.darkScheme; 0x0000; 0x00FFFFFF); \
 "backgroundStroke"; EDITOR.strokeColor; \
+"prompt"; $str.setText("selectAFormTemplateToUseAs").localized($data.type); \
 "promptColor"; 0x00FFFFFF; \
 "promptBackColor"; EDITOR.strokeColor; \
 "hidePromptSeparator"; True:C214; \
 "forceRedraw"; True:C214; \
-"prompt"; $str.setText("selectAFormTemplateToUseAs").localized($data.type); \
 "selector"; $data.type)
 
 /* Hot zones definition */
@@ -321,12 +321,23 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 			
 			If ($isSelected)  //selected
 				
-				$svg.rect($data.cell.width-6; $data.cell.height-3)\
-					.position(5; 2)\
-					.stroke(EDITOR.colors.strokeColor.css.hexLong)\
-					.fill(EDITOR.colors.backgroundSelectedColor.css.hexLong)\
-					.radius(10)
-				
+				If (EDITOR.darkScheme)
+					
+					$svg.rect($data.cell.width-6; $data.cell.height-3)\
+						.position(5; 2)\
+						.stroke(EDITOR.colors.strokeColor.css.hexLong)\
+						.fill("#0D3648")\
+						.radius(10)
+					
+				Else 
+					
+					$svg.rect($data.cell.width-6; $data.cell.height-3)\
+						.position(5; 2)\
+						.stroke(EDITOR.colors.strokeColor.css.hexLong)\
+						.fill(EDITOR.colors.backgroundSelectedColor.css.hexLong)\
+						.radius(10)
+					
+				End if 
 			End if 
 			
 			// Put icon
@@ -422,18 +433,23 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 				
 				If ($isSelected)  //selected
 					
-					//$svg.rect($data.cell.width-6; $data.cell.height-3)\
-												.position(5; 2)\
-												.stroke(Choose(EDITOR.darkScheme; "#76D5FE"; EDITOR.colors.strokeColor.css.hexLong))\
-												.fill(Choose(EDITOR.darkScheme; "#0E2732"; EDITOR.colors.backgroundSelectedColor.css.hexLong))\
-												.radius(10)
-					
-					$svg.rect($data.cell.width-6; $data.cell.height-3)\
-						.position(5; 2)\
-						.stroke(EDITOR.colors.strokeColor.css.hexLong)\
-						.fill(EDITOR.colors.backgroundSelectedColor.css.hexLong)\
-						.radius(10)
-					
+					If (EDITOR.darkScheme)
+						
+						$svg.rect($data.cell.width-6; $data.cell.height-3)\
+							.position(5; 2)\
+							.stroke(EDITOR.colors.strokeColor.css.hexLong)\
+							.fill("#0D3648")\
+							.radius(10)
+						
+					Else 
+						
+						$svg.rect($data.cell.width-6; $data.cell.height-3)\
+							.position(5; 2)\
+							.stroke(EDITOR.colors.strokeColor.css.hexLong)\
+							.fill(EDITOR.colors.backgroundSelectedColor.css.hexLong)\
+							.radius(10)
+						
+					End if 
 				End if 
 				
 				// Media
@@ -467,7 +483,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 				$svg.textArea($template.parent.name; "root")\
 					.position(0; $data.cell.height-20)\
 					.size($data.cell.width)\
-					.fill(Choose:C955(EDITOR.darkScheme; Choose:C955($isSelected; "dimgray"; "white"); "dimgray"))\
+					.fill(Choose:C955(EDITOR.darkScheme; Choose:C955($isSelected; "white"; "white"); "dimgray"))\
 					.alignment(Align center:K42:3)\
 					.fontStyle(Choose:C955($isSelected; Bold:K14:2; Normal:K14:15))
 				
@@ -498,12 +514,23 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 					
 					If ($isSelected)  //selected
 						
-						$svg.rect($data.cell.width-6; $data.cell.height-3)\
-							.position(5; 2)\
-							.stroke(EDITOR.colors.strokeColor.css.hexLong)\
-							.fill(EDITOR.colors.backgroundSelectedColor.css.hexLong)\
-							.radius(10)
-						
+						If (EDITOR.darkScheme)
+							
+							$svg.rect($data.cell.width-6; $data.cell.height-3)\
+								.position(5; 2)\
+								.stroke(EDITOR.colors.strokeColor.css.hexLong)\
+								.fill("#0D3648")\
+								.radius(10)
+							
+						Else 
+							
+							$svg.rect($data.cell.width-6; $data.cell.height-3)\
+								.position(5; 2)\
+								.stroke(EDITOR.colors.strokeColor.css.hexLong)\
+								.fill(EDITOR.colors.backgroundSelectedColor.css.hexLong)\
+								.radius(10)
+							
+						End if 
 					End if 
 					
 					$svg.image($p).y(10)  //.moveH(-5)

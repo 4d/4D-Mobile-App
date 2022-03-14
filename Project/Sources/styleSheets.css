@@ -55,6 +55,18 @@ rectangle {
 				}
 			}
 
+.coloredBanner {
+	fill: #1BA1E5;
+	stroke: #1BA1E5;
+}
+
+			@media (prefers-color-scheme: dark) {
+				.coloredBanner {
+					fill: #0D3648;
+					stroke: #0D3648;
+				}
+			}
+
 .toolbarButtons {
 	stroke: #808080;
 }
