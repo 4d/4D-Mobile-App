@@ -740,13 +740,13 @@ Function unlockDirectory($cible : 4D:C1709.Folder)->$this : cs:C1710.lep
 			
 			This:C1470.setEnvironnementVariable("directory"; $cible.platformPath)
 			
-			If (Is macOS:C1572)
+			If (Is Windows:C1573)
 				
-				This:C1470.launch("chmod -R u+rwX "+This:C1470.singleQuoted($cible.path))
+				This:C1470.launch("attrib.exe -R /D /S")
 				
 			Else 
 				
-				This:C1470.launch("attrib.exe -R /D /S")
+				This:C1470.launch("chmod -R u+rwX "+This:C1470.singleQuoted($cible.path))
 				
 			End if 
 			

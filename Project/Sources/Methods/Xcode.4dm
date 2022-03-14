@@ -785,19 +785,24 @@ Case of
 		// MARK:- safeDelete
 	: ($Obj_param.action="safeDelete")
 		
-		If (Folder:C1567($Obj_param.path; fk platform path:K87:2).exists)
+		var $folder : 4D:C1709.Folder
+		$folder:=Folder:C1567($Obj_param.path; fk platform path:K87:2)
+		
+		If ($folder.exists)
 			
 			// Workonly if project or workspace if selected
 			
 			// Close project
 			Xcode(New object:C1471(\
 				"action"; "close"; \
+				"folder"; $folder; \
 				"path"; $Obj_param.path; \
 				"type"; "xcodeproj"))
 			
 			// or workspace
 			Xcode(New object:C1471(\
 				"action"; "close"; \
+				"folder"; $folder; \
 				"path"; $Obj_param.path; \
 				"type"; "xcworkspace"))
 			
@@ -805,14 +810,13 @@ Case of
 				
 				sdk(New object:C1471(\
 					"action"; "cache"; \
+					"folder"; $folder; \
 					"path"; $Obj_param.path))
 				
 			End if 
 			
-			_o_doc_UNLOCK_DIRECTORY(New object:C1471(\
-				"path"; $Obj_param.path))
-			
-			Folder:C1567($Obj_param.path; fk platform path:K87:2).delete(Delete with contents:K24:24)
+			cs:C1710.lep.new().unlockDirectory($folder)
+			$folder.delete(Delete with contents:K24:24)
 			
 		End if 
 		

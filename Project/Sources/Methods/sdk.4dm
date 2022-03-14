@@ -323,15 +323,18 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 			var $sdkVersionFile : Object
 			$sdkVersionFile:=New object:C1471("exists"; False:C215)
 			
+			var $isFolder : 4D:C1709.File
+			$isFolder:=Path to object:C1547($Obj_param.file).isFolder
+			
 			Case of 
 					
 					// ----------------------------------------
-				: (File:C1566($Obj_param.file; fk platform path:K87:2).exists)
+				: (Not:C34($isFolder) && (File:C1566($Obj_param.file; fk platform path:K87:2).exists))  // /!!\ error if trying to pass folder path to File
 					
 					$sdkVersionFile:=ZIP Read archive:C1637(File:C1566($Obj_param.file; fk platform path:K87:2)).root.file("sdkVersion")  // suppose zip
 					
 					// ----------------------------------------
-				: (Folder:C1567($Obj_param.file; fk platform path:K87:2).exists)
+				: ($isFolder && (Folder:C1567($Obj_param.file; fk platform path:K87:2).exists))
 					
 					$sdkVersionFile:=Folder:C1567($Obj_param.file; fk platform path:K87:2).file("sdkVersion")
 					
