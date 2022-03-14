@@ -10,7 +10,7 @@
 C_BOOLEAN:C305($Boo_)
 C_LONGINT:C283($Lon_height; $Lon_i; $Lon_parameters; $Lon_scale; $Lon_width)
 C_PICTURE:C286($Pic_buffer; $Pic_icon)
-C_TEXT:C284($Dir_buffer; $Dir_source; $File_source; $Txt_buffer; $Txt_name; $Txt_value)
+C_TEXT:C284($Dir_source; $File_source; $Txt_buffer; $Txt_name; $Txt_value)
 C_OBJECT:C1216($Obj_; $Obj_buffer; $Obj_file; $Obj_formatter; $Obj_image; $Obj_in)
 C_OBJECT:C1216($Obj_out; $Obj_path; $Obj_template)
 C_OBJECT:C1216($Folder_buffer)
@@ -327,31 +327,29 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 						If (Not:C34(Folder:C1567($Obj_in.target; fk platform path:K87:2).exists))
 							
 							// Create intermediate asset folder if necessary
+							var $directories : Collection
+							$directories:=New collection:C1472
 							
-							ARRAY TEXT:C222($tDirs_buffer; 0x0000)
-							$Dir_buffer:=$Obj_in.target
+							var $directory : 4D:C1709.Folder
+							$directory:=Folder:C1567($Obj_in.target; fk platform path:K87:2)
 							
-							While (Test path name:C476($Dir_buffer)#Is a folder:K24:2)
+							While (Not:C34($directory.exists))
 								
-								APPEND TO ARRAY:C911($tDirs_buffer; $Dir_buffer)
-								$Dir_buffer:=Path to object:C1547($Dir_buffer).parentFolder
+								$directories.push($directory)
+								$directory:=$directory.parent
 								
 							End while 
 							
-							For ($Lon_i; Size of array:C274($tDirs_buffer); 1; -1)
-								
-								$Dir_buffer:=$tDirs_buffer{$Lon_i}
-								
-								$Obj_path:=Path to object:C1547($Dir_buffer)
+							For each ($directory; $directories.reverse())
 								
 								asset(New object:C1471(\
 									"action"; "create"; \
 									"type"; "folder"; \
-									"target"; $Obj_path.parentFolder; \
+									"target"; $directory.parent.platformPath; \
 									"tags"; New object:C1471(\
-									"name"; $Obj_path.name+$Obj_path.extension)))
+									"name"; $directory.name+$directory.extension)))
 								
-							End for 
+							End for each 
 						End if 
 						
 						$Obj_out.template:=template(New object:C1471(\
