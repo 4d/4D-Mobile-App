@@ -84,8 +84,8 @@ If (Length:C16($cible)>0)
 					// Get current table
 					$table:=Form:C1466.dataModel[$tableNumber]
 					
-					$isToOne:=($dropped.fieldType=8858)
-					$isToMany:=($dropped.fieldType=8859)
+					$isToOne:=($dropped.kind="relatedEntity") || ($dropped.fieldType=8858)
+					$isToMany:=($dropped.kind="relatedEntities") || ($dropped.fieldType=8859)
 					
 					Case of 
 							
@@ -139,18 +139,19 @@ If (Length:C16($cible)>0)
 									
 									$relation:=$table[$current.name]
 									
-									If ($current.fieldType=8858)  // 1 -> N relation
+									If ($current.kind="relatedEntity") || ($current.fieldType=8858)  // 1 -> N relation
 										
 										If ($cCurrent[0]=$cDroped[0])  // Same related table
 											
 											// Switch to relation & update the long label
 											$dropped:=New object:C1471(\
 												"name"; $cDroped[0]; \
-												"fieldType"; 8858; \
+												"kind"; "relatedEntity"; \
 												"relatedTableNumber"; $relation.relatedTableNumber; \
-												"label"; $current.label; \
-												"shortLabel"; $current.shortLabel; \
 												"path"; $cDroped[0])
+											
+											// FIXME:remove fieldType
+											$dropped.fieldType:=8858
 											
 											$relation.label:="%"+$cDroped[1]+"%"
 											
@@ -162,6 +163,8 @@ If (Length:C16($cible)>0)
 							
 							//______________________________________________________
 					End case 
+					
+					PROJECT.minimumField($dropped)
 					
 					$target[$tMatches{1}][Num:C11($tMatches{2})]:=$dropped
 					
@@ -260,14 +263,7 @@ If (Length:C16($cible)>0)
 				End if 
 				
 				//MARK:Cleanup
-				OB REMOVE:C1226($dropped; "fromIndex")
-				OB REMOVE:C1226($dropped; "id")
-				OB REMOVE:C1226($dropped; "label")
-				OB REMOVE:C1226($dropped; "shortLabel")
-				OB REMOVE:C1226($dropped; "type")
-				OB REMOVE:C1226($dropped; "computed")
-				OB REMOVE:C1226($dropped; "fieldType")
-				OB REMOVE:C1226($dropped; "fieldNumber")
+				PROJECT.minimumField($dropped)
 				
 			End if 
 			

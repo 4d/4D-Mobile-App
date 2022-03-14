@@ -519,6 +519,10 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 										$related.path:=New collection:C1472($relatedAttribute.name; $related.name).join(".")
 										$related.tableNumber:=$result.relatedTableNumber
 										
+										// MARK: TEMPO
+										$related.valueType:=$relatedAttribute.type
+										$related.type:=This:C1470.__fielddType($relatedAttribute.fieldType)
+										
 										$related._order:=$related.path
 										$result.fields.push($related)
 										
@@ -590,7 +594,8 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 						
 						// MARK: #TEMPO
 						$related.valueType:=$relatedAttribute.type
-						$related.type:=-3
+						//$related.type:=-3
+						$related.type:=This:C1470.__fielddType($relatedAttribute.fieldType)
 						
 						$related.path:=$related.name
 						$related.relatedTableNumber:=$result.relatedTableNumber

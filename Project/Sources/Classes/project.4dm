@@ -1561,6 +1561,41 @@ Function fieldAvailable($tableID; $field : Object)->$available : Boolean
 	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//returns minimium field definition
+Function minimumField($field : cs:C1710.field)
+	
+	$field:=This:C1470.cleanup($field)
+	
+	//FIXME:#TEMPO
+	OB REMOVE:C1226($field; "id")
+	
+	OB REMOVE:C1226($field; "fromIndex")  // Internal D&D
+	
+	OB REMOVE:C1226($field; "type")
+	OB REMOVE:C1226($field; "valueType")
+	OB REMOVE:C1226($field; "computed")
+	
+	OB REMOVE:C1226($field; "label")
+	OB REMOVE:C1226($field; "shortLabel")
+	
+	If ($field.kind#"alias")
+		
+		If ($field.path=$field.name)
+			
+			//OB REMOVE($field; "path")
+			
+		End if 
+		
+		If ($field.fieldType=8858)\
+			 | ($field.fieldType=8859)\
+			 | ($field.fieldType<0)
+			
+			OB REMOVE:C1226($field; "fieldType")
+			
+		End if 
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Update all form definition according to the datamodel
 	// Ie. remove from forms, the fields that are no more published
 Function updateFormDefinitions()

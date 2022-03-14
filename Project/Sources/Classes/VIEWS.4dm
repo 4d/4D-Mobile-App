@@ -121,32 +121,8 @@ Function addField($field : cs:C1710.field; $fields : Collection)
 	
 	var $index : Integer
 	
-	$field:=PROJECT.cleanup($field)
-	
-	OB REMOVE:C1226($field; "type")
-	OB REMOVE:C1226($field; "valueType")
-	OB REMOVE:C1226($field; "computed")
-	
-	If ($field.kind="alias")
-		
-		//
-		
-	Else 
-		
-		If ($field.path=$field.name)
-			
-			OB REMOVE:C1226($field; "path")
-			
-		End if 
-		
-		If ($field.fieldType=8858)\
-			 | ($field.fieldType=8859)\
-			 | ($field.fieldType<0)
-			
-			OB REMOVE:C1226($field; "fieldType")
-			
-		End if 
-	End if 
+	//MARK:Cleanup
+	PROJECT.minimumField($field)
 	
 	If ($field.kind="relatedEntities")  // 1-N relation with published related data class
 		
@@ -409,6 +385,7 @@ Function fieldList($table)->$result : Object
 									
 									$field.fieldNumber:=Num:C11($attribute)
 									$field.path:=$key+"."+$field.name
+									$field.name:=$field.path
 									
 									$result.fields.push($field)
 									
@@ -418,8 +395,8 @@ Function fieldList($table)->$result : Object
 									$field.$label:=$linkPrefix+$attribute
 									$field.$level:=$subLevel+1
 									
-									$field.name:=$attribute
 									$field.path:=$key+"."+$field.path
+									$field.name:=$field.path
 									
 									$result.fields.push($field)
 									
@@ -429,8 +406,8 @@ Function fieldList($table)->$result : Object
 									$field.$label:=$linkPrefix+$attribute
 									$field.$level:=$subLevel+1
 									
-									$field.name:=$attribute
 									$field.path:=$key+"."+$attribute
+									$field.name:=$field.path
 									
 									$result.fields.push($field)
 									

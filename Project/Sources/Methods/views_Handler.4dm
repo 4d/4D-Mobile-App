@@ -380,7 +380,7 @@ Case of
 							
 							If ($c.length>1)
 								
-								If ($datamodel[$context.tableNumber][$c[1]]=Null:C1517)
+								If ($datamodel[$context.tableNumber][$c[0]][$c[1]]=Null:C1517)
 									
 									LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color:K53:24)
 									
