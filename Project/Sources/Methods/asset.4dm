@@ -104,7 +104,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 					//----------------------------------------
 				Else 
 					
-					If (Test path name:C476($Obj_in.target+$Obj_in.formatter.name)#Is a folder:K24:2)
+					If (Not:C34(Folder:C1567($Obj_in.target+$Obj_in.formatter.name; fk platform path:K87:2).exists))
 						
 						asset(New object:C1471(\
 							"action"; "create"; \
@@ -324,7 +324,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 					
 					If ($Obj_out.success)
 						
-						If (Test path name:C476($Obj_in.target)#Is a folder:K24:2)
+						If (Not:C34(Folder:C1567($Obj_in.target; fk platform path:K87:2).exists))
 							
 							// Create intermediate asset folder if necessary
 							
@@ -636,22 +636,14 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 			
 			If ($Obj_in.path#Null:C1517)
 				
-				If (Test path name:C476($Obj_in.path)=Is a folder:K24:2)
+				If (Folder:C1567($Obj_in.path; fk platform path:K87:2).file("Contents.json").exists)
 					
-					If (Test path name:C476($Obj_in.path+Folder separator:K24:12+"Contents.json")=Is a document:K24:1)
-						
-						$Obj_out.value:=JSON Parse:C1218(Document to text:C1236($Obj_in.path+Folder separator:K24:12+"Contents.json"))
-						$Obj_out.success:=True:C214
-						
-					Else 
-						
-						$Obj_out.errors:=New collection:C1472("missing asset file Contents.json under path "+$Obj_in.path)
-						
-					End if 
+					$Obj_out.value:=ob_parseFile(Folder:C1567($Obj_in.path; fk platform path:K87:2).file("Contents.json")).value
+					$Obj_out.success:=True:C214
 					
 				Else 
 					
-					$Obj_out.errors:=New collection:C1472("path must be a folder")
+					$Obj_out.errors:=New collection:C1472("missing asset file Contents.json under path "+$Obj_in.path)
 					
 				End if 
 				

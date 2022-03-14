@@ -89,7 +89,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 				
 				$Txt_buffer:=$Obj_in.path
 				
-				If (Test path name:C476($Obj_in.path)=Is a folder:K24:2)
+				If (Folder:C1567($Obj_in.path; fk platform path:K87:2).exists)
 					
 					$Obj_out:=Xcode(\
 						New object:C1471("action"; "find"; \

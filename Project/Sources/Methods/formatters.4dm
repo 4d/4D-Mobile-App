@@ -255,8 +255,7 @@ Case of
 			
 		Else 
 			
-			If (Test path name:C476($oIN.path)#Is a folder:K24:2)\
-				 | (Test path name:C476($oIN.path+"manifest.json")#Is a document:K24:1)
+			If (Not:C34(File:C1566($oIN.path+"manifest.json"; fk platform path:K87:2).exists))
 				
 				ob_error_add($oOUT; "Formatter missing or invalid")  // Missing or invalid
 				

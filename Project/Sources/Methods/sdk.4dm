@@ -63,12 +63,12 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 				
 				// Check if there is a source version SDK, if yes use it instead
 				$Txt_buffer:=Replace string:C233($Obj_param.file; "zip"; "src.zip")
-				If (Test path name:C476($Txt_buffer)=Is a document:K24:1)
+				If (File:C1566($Txt_buffer; fk platform path:K87:2).exists)
 					$Obj_param.file:=$Txt_buffer
 				End if 
 				
 				// Finally unzip if SDK exist
-				If (Test path name:C476($Obj_param.file)=Is a document:K24:1)
+				If (File:C1566($Obj_param.file; fk platform path:K87:2).exists)
 					
 					$Obj_result.success:=False:C215
 					
@@ -116,18 +116,18 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 		: ($Obj_param.action="installAdditionnalSDK")
 			
 			// Check
-			$Obj_param.file:=String:C10($Obj_param.template.source)+"sdk"+Folder separator:K24:12+String:C10($Obj_param.template.sdk.name)+".zip"
-			If (Test path name:C476(String:C10($Obj_param.file))#Is a document:K24:1)
-				$Obj_param.file:=String:C10($Obj_param.template.source)+".."+Folder separator:K24:12+"sdk"+Folder separator:K24:12+String:C10($Obj_param.template.sdk.name)+".zip"
+			$Obj_param.file:=Folder:C1567(String:C10($Obj_param.template.source)).folder("sdk").file(String:C10($Obj_param.template.sdk.name)+".zip")
+			If (Not:C34($Obj_param.file.exists))
+				$Obj_param.file:=Folder:C1567(String:C10($Obj_param.template.source)).folder("../sdk").file(String:C10($Obj_param.template.sdk.name)+".zip")
 			End if 
 			
-			If (Test path name:C476(String:C10($Obj_param.file))#Is a document:K24:1)
+			If (Not:C34($Obj_param.file.exists))
 				
-				$Obj_param.file:=cs:C1710.path.new().sdk().file(String:C10($Obj_param.template.sdk.name)+".zip").platformPath
+				$Obj_param.file:=cs:C1710.path.new().sdk().file(String:C10($Obj_param.template.sdk.name)+".zip")
 				
 			End if 
 			
-			If (Test path name:C476(String:C10($Obj_param.file))=Is a document:K24:1)
+			If ($Obj_param.file.exists)
 				
 				// Get the root template to keep SDK information in it
 				$Obj_:=$Obj_param.template
@@ -146,11 +146,11 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 					
 				Else 
 					
-					$Boo_install:=$Obj_.sdk.installed[$Obj_param.file]=Null:C1517
+					$Boo_install:=$Obj_.sdk.installed[$Obj_param.file.platformPath]=Null:C1517
 					
 					If (Not:C34($Boo_install))
 						
-						$Obj_result:=$Obj_.sdk.installed[$Obj_param.file]
+						$Obj_result:=$Obj_.sdk.installed[$Obj_param.file.platformPath]
 						
 					End if 
 				End if 
@@ -159,10 +159,11 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 					
 					// TODO maybe do some additional stuff like merging Cartfile.resolved instead of replace it
 					
+					$Obj_param.file:=$Obj_param.file.platformPath  // to keep compatibility
 					$Obj_result:=_o_unzip($Obj_param)
 					
 					// Add to installed framework
-					$Obj_.sdk.installed[$Obj_param.file]:=$Obj_result
+					$Obj_.sdk.installed[$Obj_param.file.platformPath]:=$Obj_result
 					
 				End if 
 				
@@ -270,26 +271,27 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 				$Obj_.isFolder:=True:C214  // Ensure ensure end separator
 				$Obj_param.path:=Object to path:C1548($Obj_)
 				
-				If (Test path name:C476($Obj_param.path+SHARED.thirdParty)=Is a folder:K24:2)  // well known sdk path
+				If (Folder:C1567($Obj_param.path+SHARED.thirdParty; fk platform path:K87:2).exists)  // well known sdk path
 					
-					$Txt_buffer:=cs:C1710.path.new().home.folder("Library/Caches").platformPath
+					var $cacheFolder : 4D:C1709.Folder
+					$cacheFolder:=cs:C1710.path.new().home.folder("Library/Caches")
 					
-					If (Test path name:C476($Txt_buffer)#Is a folder:K24:2)
+					If (Not:C34($cacheFolder.exists))
 						
-						CREATE FOLDER:C475($Txt_buffer)
+						$cacheFolder.create()
 						
 					End if 
 					
-					$Txt_buffer:=$Txt_buffer+".sdk"
+					$cacheFolder:=$cacheFolder.folder(".sdk")
 					
-					If (Test path name:C476($Txt_buffer)#Is a folder:K24:2)
+					If (Not:C34($cacheFolder.exists))
 						
-						CREATE FOLDER:C475($Txt_buffer)
+						$cacheFolder.create()
 						
 					End if 
 					
 					$Txt_cmd:="mv -f "+str_singleQuoted(Convert path system to POSIX:C1106($Obj_param.path+SHARED.thirdParty))\
-						+" "+str_singleQuoted(Convert path system to POSIX:C1106($Txt_buffer))
+						+" "+str_singleQuoted($cacheFolder.path)
 					
 					LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
 					
@@ -324,12 +326,12 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 			Case of 
 					
 					// ----------------------------------------
-				: (Test path name:C476($Obj_param.file)=Is a document:K24:1)
+				: (File:C1566($Obj_param.file; fk platform path:K87:2).exists)
 					
 					$sdkVersionFile:=ZIP Read archive:C1637(File:C1566($Obj_param.file; fk platform path:K87:2)).root.file("sdkVersion")  // suppose zip
 					
 					// ----------------------------------------
-				: (Test path name:C476($Obj_param.file)=Is a folder:K24:2)
+				: (Folder:C1567($Obj_param.file; fk platform path:K87:2).exists)
 					
 					$sdkVersionFile:=Folder:C1567($Obj_param.file; fk platform path:K87:2).file("sdkVersion")
 					

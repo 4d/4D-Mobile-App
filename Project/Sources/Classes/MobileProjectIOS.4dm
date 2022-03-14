@@ -143,12 +143,12 @@ Function build()->$result : Object
 	
 	If ($Obj_result_build.app=Null:C1517)
 		
-		var $pathname : Text
-		$pathname:=$in.path+Convert path POSIX to system:C1107("build/Build/Products/Debug-iphonesimulator/")+This:C1470._schemeName+".app"
+		var $pathname : 4D:C1709.Folder
+		$pathname:=Folder:C1567($in.path; fk platform path:K87:2).folder("build/Build/Products/Debug-iphonesimulator/"+This:C1470._schemeName+".app")
 		
-		If (Test path name:C476($pathname)=Is a folder:K24:2)
+		If ($pathname.exists)
 			
-			$Obj_result_build.app:=Convert path system to POSIX:C1106($pathname)
+			$Obj_result_build.app:=$pathname.path
 			
 		End if 
 	End if 
@@ -694,18 +694,21 @@ Function _manageDataSet($out : Object)
 			// <NOTHING MORE TO DO>
 			
 		Else 
-			
+			var $keyPath : 4D:C1709.File
 			var $pathname : Text
-			$pathname:=This:C1470.paths.key().platformPath
 			
-			If (Test path name:C476($pathname)#Is a document:K24:1)
+			$keyPath:=This:C1470.paths.key()
+			
+			$pathname:=$keyPath.platformPath
+			
+			If (Not:C34($keyPath.exists))
 				
 				$out.keyPing:=Rest(New object:C1471(\
 					"action"; "status"; \
 					"handler"; "mobileapp"))
 				$out.keyPing.file:=New object:C1471(\
 					"path"; $pathname; \
-					"exists"; (Test path name:C476($pathname)=Is a document:K24:1))
+					"exists"; $keyPath.exists)
 				
 				If (Not:C34($out.keyPing.file.exists))
 					

@@ -69,7 +69,7 @@ If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
 			$Col_catalog:=$Obj_input.catalog
 			
 			//________________________________________
-		: (Test path name:C476($Obj_input.source)=Is a folder:K24:2)  // Get catalog from source
+		: (Folder:C1567($Obj_input.source; fk platform path:K87:2).exists)  // Get catalog from source
 			
 			$Col_catalog:=_o_doc_catalog($Obj_input.source)
 			
@@ -160,7 +160,7 @@ If ($Col_catalog#Null:C1517)
 			$File_tgt:=$Obj_input.target+$Txt_fileName
 			$File_src:=$Obj_input.source+$t
 			
-			If (Test path name:C476($File_tgt)=Is a document:K24:1)
+			If (File:C1566($File_tgt; fk platform path:K87:2).exists)
 				
 				If ($Txt_fileName="manifest.json")
 					

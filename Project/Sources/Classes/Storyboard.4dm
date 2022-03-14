@@ -172,7 +172,7 @@ Function format($Obj_in : Object)->$Obj_out : Object  // MAC ONLY
 			
 			$Obj_in:=New object:C1471("path"; $Obj_in)  // CLEAN: remove all this compatibility code, only file must be passed
 			
-		: (Test path name:C476(String:C10($Obj_in.path))=Is a document:K24:1)
+		: (File:C1566(String:C10($Obj_in.path); fk platform path:K87:2).exists)
 			ASSERT:C1129(dev_Matrix; "Must not be string, now File")  // Deprecated, maybe be test ...
 			$Obj_in.path:=File:C1566($Obj_in.path; fk platform path:K87:2)
 			

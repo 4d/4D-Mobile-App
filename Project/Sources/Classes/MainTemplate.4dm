@@ -134,44 +134,43 @@ Function getXcodeProj
 	$0:=This:C1470.input.projfile
 	
 	// Manage the project file for main template
-Function afterChildren
-	C_OBJECT:C1216($0; $Obj_out)
+Function afterChildren()->$Obj_out : Object
+	var $Obj_in; $o : Object
+	
 	$Obj_out:=New object:C1471()
 	
-	C_OBJECT:C1216($Obj_in; $Obj_template)
 	$Obj_in:=This:C1470.input
-	$Obj_template:=This:C1470.template
 	
 	// Possible files near the projet file
 	If (Value type:C1509($Obj_in.project.$project)=Is object:K8:27)
 		
-		C_TEXT:C284($t)
-		$t:="main"  // XXX maybe later a list
+		var $name : Text
+		$name:="main"  // XXX maybe later a list
 		
-		If (Test path name:C476(String:C10($Obj_in.project.$project.root)+$t)=Is a folder:K24:2)
-			C_OBJECT:C1216($o)
+		If (Folder:C1567(String:C10(This:C1470.input.project.$project.root)+$name; fk platform path:K87:2).exists)
+			
 			$o:=New object:C1471(\
 				"template"; New object:C1471(\
-				"name"; "project"+$t; \
+				"name"; "project"+$name; \
 				"inject"; True:C214; \
-				"source"; This:C1470.input.project.$project.root+$t+Folder separator:K24:12; \
-				"parent"; $Obj_template); \
+				"source"; This:C1470.input.project.$project.root+$name+Folder separator:K24:12; \
+				"parent"; This:C1470.template); \
 				"project"; This:C1470.input.project; \
 				"path"; This:C1470.input.path; \
 				"projfile"; This:C1470.input.projfile)
 			
-			$Obj_out["project"+$t]:=TemplateInstanceFactory($o).run()  // <================================== RECURSIVE
+			$Obj_out["project"+$name]:=TemplateInstanceFactory($o).run()  // <================================== RECURSIVE
 			
 		End if 
 	End if 
 	
 	// Inject all SDK
-	If (String:C10($Obj_template.sdk.frameworks)#"")
+	If (String:C10(This:C1470.template.sdk.frameworks)#"")
 		
 		$Obj_out.sdk:=sdk(New object:C1471(\
 			"action"; "inject"; \
 			"projfile"; $Obj_in.projfile; \
-			"folder"; $Obj_template.sdk.frameworks; \
+			"folder"; This:C1470.template.sdk.frameworks; \
 			"target"; $Obj_in.path))
 		
 		ob_error_combine($Obj_out; $Obj_out.sdk)
@@ -223,7 +222,7 @@ Function afterChildren
 			"name"; "pushNotification"; \
 			"inject"; True:C214; \
 			"source"; cs:C1710.path.new().templates().folder("pushNotification").platformPath; \
-			"parent"; $Obj_template); \
+			"parent"; This:C1470.template); \
 			"project"; This:C1470.input.project; \
 			"path"; This:C1470.input.path; \
 			"projfile"; This:C1470.input.projfile)
@@ -270,7 +269,6 @@ Function afterChildren
 	End if 
 	
 	$Obj_out.success:=Not:C34(ob_error_has($Obj_out))
-	$0:=$Obj_out
 	
 	
 Function getCatalogExcludePattern()->$pattern : Text

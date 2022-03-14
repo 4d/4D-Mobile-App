@@ -67,10 +67,10 @@ Case of
 	: ($Obj_in.action="appPath")
 		
 		// Default path, to speed up
-		If ((Test path name:C476(Convert path POSIX to system:C1107("/Applications/"+$kTxt_bundleName))=Is a folder:K24:2))
+		If (Folder:C1567("/Applications/"+$kTxt_bundleName; fk posix path:K87:1).exists)
 			
 			$Obj_out.path:="/Applications/"+$kTxt_bundleName+"/Contents/MacOS/cfgutil"
-			$Obj_out.success:=(Test path name:C476(Convert path POSIX to system:C1107($Obj_out.path))=Is a document:K24:1)
+			$Obj_out.success:=File:C1566($Obj_out.path; fk posix path:K87:1).exists
 			
 		Else 
 			
@@ -79,7 +79,7 @@ Case of
 			If ($Obj_out.success)
 				
 				$Obj_out.path:=$Obj_out.paths[0]+"/Contents/MacOS/cfgutil"
-				$Obj_out.success:=(Test path name:C476(Convert path POSIX to system:C1107($Obj_out.path))=Is a document:K24:1)
+				$Obj_out.success:=File:C1566($Obj_out.path; fk posix path:K87:1).exists
 				
 			Else 
 				

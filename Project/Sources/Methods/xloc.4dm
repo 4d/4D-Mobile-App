@@ -11,8 +11,8 @@ C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
 C_LONGINT:C283($Lon_parameters)
-C_TEXT:C284($Txt_buffer; $File_target; $Txt_ouput; $Txt_value)
-C_OBJECT:C1216($Obj_; $Obj_comment; $Obj_in; $Obj_out)
+C_TEXT:C284($Txt_buffer; $Txt_ouput; $Txt_value)
+C_OBJECT:C1216($Obj_; $Obj_comment; $Obj_in; $Obj_out; $File_target)
 
 If (False:C215)
 	C_OBJECT:C1216(xloc; $0)
@@ -140,7 +140,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 					$Obj_out.errors:=New collection:C1472("No formatter defined to create an xcode files")
 					
 					//----------------------------------------
-				: (Test path name:C476(String:C10($Obj_in.target))#Is a folder:K24:2)
+				: (Not:C34(Folder:C1567($Obj_in.target; fk platform path:K87:2).exists))
 					
 					$Obj_out.errors:=New collection:C1472("Target is not a folder: "+String:C10($Obj_in.target))
 					
@@ -210,7 +210,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 					
 					//If (Position(".lproj";$Obj_in.target;Length($Obj_in.target)-6)>0)
 					
-					$File_target:=$Obj_in.target+$Obj_in.file+".strings"  // already a lang folder
+					$File_target:=File:C1566($Obj_in.target+$Obj_in.file+".strings"; fk platform path:K87:2)  // already a lang folder
 					
 					//Else 
 					
@@ -221,15 +221,15 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 					
 					/// append mode
 					If (Bool:C1537($Obj_in.append)\
-						 & (Test path name:C476($File_target)=Is a document:K24:1))
+						 & ($File_target.exists))
 						
-						$Txt_ouput:=Document to text:C1236($File_target)+$Obj_in.ld+$Txt_ouput
+						$Txt_ouput:=$File_target.getText()+$Obj_in.ld+$Txt_ouput
 						
 					End if 
 					
-					TEXT TO DOCUMENT:C1237($File_target; $Txt_ouput)
+					$File_target.setText($Txt_ouput)
 					
-					$Obj_out.target:=$File_target
+					$Obj_out.target:=$File_target.platformPath
 					$Obj_out.ouput:=$Txt_ouput
 					$Obj_out.success:=True:C214
 					

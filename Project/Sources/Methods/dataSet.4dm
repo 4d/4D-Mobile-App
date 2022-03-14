@@ -118,13 +118,13 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 					Case of 
 							
 							//........................................
-						: (Test path name:C476($in.project)=Is a document:K24:1)
+						: (File:C1566($in.project; fk platform path:K87:2).exists)
 							
 							$out.path:=Path to object:C1547($in.project).parentFolder+"project.dataSet"+Folder separator:K24:12
 							$out.success:=True:C214
 							
 							//........................................
-						: (Test path name:C476($in.project)=Is a folder:K24:2)
+						: (Folder:C1567($in.project; fk platform path:K87:2).exists)
 							
 							$out.path:=$in.project+"project.dataSet"+Folder separator:K24:12
 							$out.success:=True:C214
@@ -174,18 +174,18 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 			
 			If ($out.success)
 				
-				$out.exists:=Test path name:C476($out.path)=Is a folder:K24:2
+				$out.exists:=Folder:C1567($out.path; fk platform path:K87:2).exists
 				
 				If (Bool:C1537($in.digest))
 					
-					If (Test path name:C476($out.path+"dataSetDigest")=Is a document:K24:1)
+					If (File:C1566($out.path+"dataSetDigest"; fk platform path:K87:2).exists)
 						
 						$out.digest:=New object:C1471(\
 							"old"; dataSet(New object:C1471(\
 							"action"; "digest"; \
 							"dataModel"; $dataModel; \
 							"url"; $in.url)).digest; \
-							"new"; Document to text:C1236($out.path+"dataSetDigest"))
+							"new"; File:C1566($out.path+"dataSetDigest"; fk platform path:K87:2).getText())
 						
 						$out.valid:=$out.digest.old=$out.digest.new
 						
@@ -317,7 +317,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 			
 			If ($out.success)
 				
-				If (Test path name:C476($out.path)=Is a folder:K24:2)
+				If (Folder:C1567($out.path; fk platform path:K87:2).exists)
 					
 					Folder:C1567($out.path; fk platform path:K87:2).delete(Delete with contents:K24:24)
 					
@@ -351,7 +351,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 					
 				Else 
 					
-					If (Test path name:C476($in.target)=Is a document:K24:1)
+					If (File:C1566($in.target; fk platform path:K87:2).exists)
 						
 						$out.errors:=New collection:C1472("Destination "+$in.target+" is a document")
 						
@@ -500,8 +500,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 							
 							// Ignore
 							
-							//----------------------------------------
-						: (Test path name:C476($in.key)=Is a document:K24:1)
+						: (File:C1566($in.key; fk platform path:K87:2).exists)
 							
 							$headers.Authorization:="Bearer "+Document to text:C1236($in.key)
 							

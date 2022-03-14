@@ -785,7 +785,7 @@ Case of
 		// MARK:- safeDelete
 	: ($Obj_param.action="safeDelete")
 		
-		If (Test path name:C476($Obj_param.path)=Is a folder:K24:2)
+		If (Folder:C1567($Obj_param.path; fk platform path:K87:2).exists)
 			
 			// Workonly if project or workspace if selected
 			
@@ -812,7 +812,7 @@ Case of
 			_o_doc_UNLOCK_DIRECTORY(New object:C1471(\
 				"path"; $Obj_param.path))
 			
-			DELETE FOLDER:C693($Obj_param.path; Delete with contents:K24:24)
+			Folder:C1567($Obj_param.path; fk platform path:K87:2).delete(Delete with contents:K24:24)
 			
 		End if 
 		
