@@ -86,7 +86,9 @@ Function run
 				$Lon_j:=1
 				For each ($Obj_field; $Col_fields)
 					If (This:C1470.isRelationField($Obj_field))  // relation to N field
-						
+						If ($Obj_field.isToMany=Null:C1517)
+							$Obj_field.isToMany:=(Num:C11($Obj_field.fieldType)=8859)
+						End if 
 						If (This:C1470.xmlAppendRelationAttributeForField($Lon_j; $Dom_root; Bool:C1537($Obj_field.isToMany)).success)
 							$Boo_buffer:=True:C214  // we make modification
 						End if 

@@ -427,6 +427,10 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 						$t+"_IS_TO_MANY_RELATION___"\
 						))
 					
+					If ($Obj_field.isToMany=Null:C1517)
+						$Obj_field.isToMany:=(Num:C11($Obj_field.fieldType)=8859)
+					End if 
+					
 					$Col_newStrings.combine(New collection:C1472(\
 						$Obj_field.name; \
 						$str.setText($Obj_field.originalName).xmlEncode(); \
@@ -459,6 +463,10 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 					$t+"_LABEL_ALIGNMENT___"; \
 					$t+"_IS_TO_MANY_RELATION___"\
 					))
+				
+				If ($Obj_tags.field.isToMany=Null:C1517)
+					$Obj_tags.field.isToMany:=(Num:C11($Obj_tags.field.fieldType)=8859)
+				End if 
 				
 				$Col_newStrings.combine(New collection:C1472(\
 					$Obj_tags.field.name; \
