@@ -17,7 +17,7 @@ $xml.close()
 // Create from file
 C_OBJECT:C1216($folder)
 $folder:=Folder:C1567(fk resources folder:K87:11).folder("templates").folder("form").folder("list")
-$xml:=_o_xml("load"; $folder.file("Simple Table/Sources/Forms/Tables/___TABLE___/___TABLE___ListForm.storyboard"))
+$xml:=_o_xml("load"; $folder.file("Simple Table/ios/Sources/Forms/Tables/___TABLE___/___TABLE___ListForm.storyboard"))
 ASSERT:C1129($xml.success)
 
 // export to an internal variable

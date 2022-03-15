@@ -18,7 +18,7 @@ ASSERT:C1129($xml.success; ".new()")
 // Export to an internal variable
 $t:=$xml.getText()  // Must autoclose
 ASSERT:C1129($xml.success; ".getText()")
-ASSERT:C1129($t="<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\r<root/>\r")
+ASSERT:C1129($t="<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n<root/>\n")
 
 // Must failed
 $xml.close()
