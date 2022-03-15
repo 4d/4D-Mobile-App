@@ -181,7 +181,7 @@ Case of
 				
 				// Move the tab background
 				OBJECT GET COORDINATES:C663(*; $e.objectName; $left; $top; $right; $bottom)
-				OBJECT SET COORDINATES:C1248(*; "tab"; $left; $top; $right; $bottom)
+				OBJECT SET COORDINATES:C1248(*; "tab"; $left; $top; $right; $bottom+1)
 				
 				// Deselects the previous tab
 				OBJECT SET RGB COLORS:C628(*; Form:C1466.tab; 0x00FFFFFF)

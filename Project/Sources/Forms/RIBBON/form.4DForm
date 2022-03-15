@@ -30,15 +30,6 @@
 					"class": "background",
 					"sizingX": "grow"
 				},
-				"top": {
-					"type": "line",
-					"top": 39,
-					"left": 0,
-					"width": 970,
-					"sizingX": "grow",
-					"height": 0,
-					"startPoint": "topLeft"
-				},
 				"toolbar.background": {
 					"type": "rectangle",
 					"top": 0,
@@ -399,6 +390,6 @@
 			"View 1": {}
 		}
 	},
-	"geometryStamp": 160,
+	"geometryStamp": 169,
 	"method": "RIBBON_HANDLER"
 }

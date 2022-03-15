@@ -1568,7 +1568,7 @@ Function minimumField($field : cs:C1710.field)
 	
 	//FIXME:#TEMPO
 	OB REMOVE:C1226($field; "id")
-	OB REMOVE:C1226($field; "isToMany")
+	//OB REMOVE($field; "isToMany")
 	OB REMOVE:C1226($field; "relatedEntities")
 	
 	OB REMOVE:C1226($field; "fromIndex")  // Internal D&D
