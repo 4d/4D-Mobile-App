@@ -194,6 +194,17 @@ Case of
 		$form.build.enable($isDevToolAvailable & $isProjectOK & $isDeviceSelected & $isSdkAvailable)
 		$form.install.enable($isDevToolAvailable & $isProjectOK & $withTeamID & $isDeviceSelected)
 		
+		// * UPDATE background toolbar color
+		If (EDITOR.darkScheme)
+			
+			OBJECT SET RGB COLORS:C628(*; "toolbar.background"; "#0D3648"; "#0D3648")
+			
+		Else 
+			
+			OBJECT SET RGB COLORS:C628(*; "toolbar.background"; "#1BA1E5"; "#1BA1E5")
+			
+		End if 
+		
 		//______________________________________________________
 	: ($e.code=On Page Change:K2:54)
 		
