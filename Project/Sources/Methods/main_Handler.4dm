@@ -99,7 +99,8 @@ Case of
 				//______________________________________________________
 			: ($Lon_event=On Timer:K2:25)
 				
-				//
+				editor_ui_LISTBOX($Obj_form.tables.name)
+				editor_ui_LISTBOX($Obj_form.mains.name)
 				
 				//______________________________________________________
 		End case 
