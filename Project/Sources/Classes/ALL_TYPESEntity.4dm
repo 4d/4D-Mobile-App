@@ -1,37 +1,39 @@
-//[ALL_TYPES] Entitty Class
+// [ALL_TYPES] Entitty Class
 Class extends Entity
 
-//MARK:-[ALIAS]
-exposed Alias identifier ID
+// MARK:-[ALIAS]
+exposed Alias aka_identifiant ID
 
-//MARK:-[COMPUTED]
+// MARK:-[COMPUTED]
 // +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++
-exposed Function get computedInteger()->$result : Integer
+exposed Function get calc_alpha() : Text
 	
 	// +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++
-exposed Function get computedString()->$result : Text
+exposed Function get calc_text() : Text
 	
 	// +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++
-exposed Function get computedBoolean()->$result : Boolean
-	
-exposed Function set computedBoolean($value : Boolean)
+exposed Function get calc_date() : Date
 	
 	// +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++
-exposed Function get computedDate()->$result : Date
+	// FIXME: ⚠️ Time is displayed as Longint #ACI0102776
+exposed Function get calc_heure() : Time
 	
 	// +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++
-exposed Function get computedPicture()->$result : Picture
+exposed Function get calc_booléen() : Boolean
+	
+exposed Function set calc_booléen($value : Boolean)
 	
 	// +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++
-exposed Function get computedObject()->$result : Object
+exposed Function get calc_entier() : Integer
 	
 	// +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++
-exposed Function get computedReal()->$result : Real
+exposed Function get calc_réel() : Real
 	
 	// +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++
-exposed Function get computedBlob()->$result : Blob
+exposed Function get calc_blob() : Blob
 	
 	// +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++
-	//FIXME:Time is displayed as Longint
-exposed Function get computedTime()->$result : Time
+exposed Function get calc_image() : Picture
 	
+	// +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++ +++
+exposed Function get calc_objet() : Object
