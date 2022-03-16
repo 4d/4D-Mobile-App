@@ -725,7 +725,7 @@ Function handleFieldIcon
 	End if 
 	
 	// Computed fields has no id
-	If (Bool:C1537($field.computed))
+	If ($field.kind="calculated") || (Bool:C1537($field.computed))
 		
 		$field.id:=$field.name
 		

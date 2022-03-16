@@ -43,7 +43,7 @@
 		<table_extra input_form="Form1" output_form="Form2">
 			<editor_table_info displayable_fields_count="12">
 				<color red="237" green="211" blue="181" alpha="255"/>
-				<coordinates left="517.12878417969" top="843.25018310547" width="153" height="293.33203125"/>
+				<coordinates left="643.15515136719" top="859.48480224609" width="153" height="293.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -271,7 +271,7 @@
 		<table_extra input_form="Form2" output_form="Form1">
 			<editor_table_info displayable_fields_count="4">
 				<color red="237" green="211" blue="181" alpha="255"/>
-				<coordinates left="735.48291015625" top="860.95672607422" width="140" height="125.33203125"/>
+				<coordinates left="861.50927734375" top="877.19134521484" width="140" height="125.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>

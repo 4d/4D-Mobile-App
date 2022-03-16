@@ -182,7 +182,7 @@ If (Asserted:C1132($svg.success; "Missing cookery element"))
 						
 						Case of 
 								//______________________________________________________
-							: (Num:C11($o.fieldType)=8859)  // 1-N relation
+							: ($o.kind="relatedEntities") || (Num:C11($o.fieldType)=8859)  // 1-N relation
 								
 								$node:=$svg.findById($t+".label")
 								$svg.setAttribute("font-style"; "italic"; $node)
@@ -194,7 +194,7 @@ If (Asserted:C1132($svg.success; "Missing cookery element"))
 								End if 
 								
 								//______________________________________________________
-							: (Bool:C1537($o.computed))
+							: ($o.kind="calculated") || (Bool:C1537($o.computed))
 								
 								If (PROJECT.dataModel[$context.tableNumber][$o.name]=Null:C1517)
 									

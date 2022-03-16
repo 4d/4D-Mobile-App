@@ -52,7 +52,7 @@ If ($project.targetBackup#Null:C1517)
 End if 
 
 // ----------------------------------------------------
-// *RENAME cache.json -> catalog.json
+// RENAME cache.json -> catalog.json
 If (Form:C1466#Null:C1517)
 	
 	$file:=Form:C1466.folder.file("cache.json")
@@ -77,7 +77,7 @@ $info.ideBuildVersion:=String:C10(SHARED.ide.build)
 
 If ($project.info.ideVersion=Null:C1517)  // "1720"
 	
-	// *REMOVE FIRST "/" ON ICON PATH #100580
+	// * REMOVE FIRST "/" ON ICON PATH #100580
 	If ($project.dataModel#Null:C1517)
 		
 		For each ($tableID; $project.dataModel)
@@ -108,7 +108,7 @@ If ($project.info.ideVersion=Null:C1517)  // "1720"
 		End for each 
 	End if 
 	
-	// *RENAME INTERNAL DETAIL TEMPLATES
+	// * RENAME INTERNAL DETAIL TEMPLATES
 	If ($project.detail#Null:C1517)
 		
 		For each ($tableID; $project.detail)
@@ -148,7 +148,7 @@ If ($project.info.ideVersion=Null:C1517)  // "1720"
 		End for each 
 	End if 
 	
-	// *RENAME INTERNAL LIST TEMPLATES
+	// * RENAME INTERNAL LIST TEMPLATES
 	If ($project.list#Null:C1517)
 		
 		For each ($tableID; $project.list)
@@ -184,9 +184,10 @@ End if
 
 RECORD.info("Project version: "+String:C10($project.info.version))
 
+// MARK:v2
 If (Num:C11($project.info.version)<2)
 	
-	// *ADD DATASOURCE PROPERTY, IF ANY
+	// * ADD DATASOURCE PROPERTY
 	If ($project.dataSource=Null:C1517)
 		
 		$project.dataSource:=New object:C1471(\
@@ -197,7 +198,7 @@ If (Num:C11($project.info.version)<2)
 		
 	End if 
 	
-	// *SET DEFAULT EMBEDDED PROPERTY, IF ANY
+	// * SET DEFAULT EMBEDDED PROPERTY, IF ANY
 	If ($project.dataModel#Null:C1517)
 		
 		For each ($tableID; $project.dataModel)
@@ -218,9 +219,7 @@ If (Num:C11($project.info.version)<2)
 	
 End if 
 
-//=====================================================================
-//                 REORGANIZATION FIX AND RENAMING
-//=====================================================================
+// MARK:v3 -REORGANIZATION FIX AND RENAMING
 If (Num:C11($project.info.version)<3)
 	
 	// *CHANGE PRIMARY KEY PROPERTY
@@ -256,9 +255,7 @@ If (Num:C11($project.info.version)<3)
 	End if 
 End if 
 
-//=====================================================================
-//                    NEW FIELD DESCRIPTION
-//=====================================================================
+// MARK:v4 - NEW FIELD DESCRIPTION
 If (Num:C11($project.info.version)<=4)
 	
 	// *REMAP FIELD TYPE TO BE COMPLIANT WITH DS
@@ -462,9 +459,7 @@ If (Num:C11($project.info.version)<=4)
 	
 End if 
 
-//=====================================================================
-//                    NEW DATA MODEL
-//=====================================================================
+// MARK:v5 - NEW DATA MODEL
 If (Num:C11($project.info.version)<5)
 	
 	If ($project.dataModel#Null:C1517)
@@ -522,9 +517,9 @@ If (Num:C11($project.info.version)<5)
 	
 End if 
 
+// MARK:v6 - #132487
+// Update old iOS project with Title and long/short label for N>1 relation
 If (Num:C11($project.info.version)<6)
-	
-	// Mark: #132487 - Update old iOS project with Title and long/short label for N>1 relation
 	
 	If ($project.dataModel#Null:C1517)
 		
@@ -554,9 +549,8 @@ If (Num:C11($project.info.version)<6)
 	
 End if 
 
+// MARK:v6 - POPULATE field.kind
 If (Num:C11($project.info.version)<7)
-	
-	// Mark: #132487 - Update old iOS project with Title and long/short label for N>1 relation
 	
 	If ($project.dataModel#Null:C1517)
 		
@@ -668,223 +662,218 @@ If (Num:C11($project.info.version)<7)
 	
 End if 
 
-//=====================================================================
-//                         MISCELLANEOUS
-//=====================================================================
-If ($project.dataModel#Null:C1517)
+// MARK:MISCELLANEOUS
+If (True:C214)
 	
-	// *REMOVE EMPTY ICONS
-	For each ($tableID; $project.dataModel)
+	If ($project.dataModel#Null:C1517)
 		
-		For each ($fieldID; $project.dataModel[$tableID])
+		// * REMOVE EMPTY ICONS
+		For each ($tableID; $project.dataModel)
 			
-			If (Match regex:C1019("(?m-si)^\\d+$"; $fieldID; 1; *))
+			For each ($fieldID; $project.dataModel[$tableID])
 				
-				If (String:C10($project.dataModel[$tableID][$fieldID].icon)="")
+				If (Match regex:C1019("(?m-si)^\\d+$"; $fieldID; 1; *))
 					
-					OB REMOVE:C1226($project.dataModel[$tableID][$fieldID]; "icon")
+					If (String:C10($project.dataModel[$tableID][$fieldID].icon)="")
+						
+						OB REMOVE:C1226($project.dataModel[$tableID][$fieldID]; "icon")
+						
+					End if 
+				End if 
+			End for each 
+		End for each 
+	End if 
+	
+	// * REPLACE THE OLD INTERNAL FORMS WITH A USER ARCHIVE AS IF HE HAD DOWNLOADED IT
+	If ($project.list#Null:C1517)
+		
+		RECORD.info("Check list forms")
+		
+		$internalFolder:=$path.listForms()
+		$userFolder:=$path.hostlistForms()
+		$userFolder.create()
+		
+		$c:=JSON Parse:C1218(File:C1566("/RESOURCES/Compatibility/manifest.json").getText()).list
+		
+		For each ($tableID; $project.list)
+			
+			$t:=String:C10($project.list[$tableID].form)
+			
+			If (Length:C16($t)>0)
+				
+				If ($t[[1]]#"/")  // Internal template
 					
+					If (Not:C34($internalFolder.folder($t).exists))
+						
+						RECORD.warning("Missing internal form: "+$t)
+						
+						$template:=$c.query("old=:1"; $t).pop()
+						
+						If ($template#Null:C1517)
+							
+							// Copy from tempo folder to database
+							$file:=File:C1566("/RESOURCES/Compatibility/"+$template.new)
+							
+							If ($file.exists)
+								
+								$file:=$file.copyTo($userFolder; fk overwrite:K87:5)
+								
+								If ($file#Null:C1517)
+									
+									$project.list[$tableID].form:="/"+$template.new
+									RECORD.info("Replaced by: "+$project.list[$tableID].form)
+									
+								Else 
+									
+									RECORD.error("Error during copy: "+$file.path)
+									
+								End if 
+								
+							Else 
+								
+								RECORD.error("Missing archive: "+$file.path)
+								
+							End if 
+							
+						Else 
+							
+							RECORD.error("Unknown template: "+$t)
+							
+						End if 
+					End if 
 				End if 
 			End if 
 		End for each 
-	End for each 
-End if 
-
-//=====================================================================
-//        REPLACE THE OLD INTERNAL FORMS WITH A USER ARCHIVE
-//                 AS IF HE HAD DOWNLOADED IT
-//=====================================================================
-If ($project.list#Null:C1517)
+	End if 
 	
-	RECORD.info("Check list forms")
-	
-	$internalFolder:=$path.listForms()
-	$userFolder:=$path.hostlistForms()
-	$userFolder.create()
-	
-	$c:=JSON Parse:C1218(File:C1566("/RESOURCES/Compatibility/manifest.json").getText()).list
-	
-	For each ($tableID; $project.list)
+	If ($project.detail#Null:C1517)
 		
-		$t:=String:C10($project.list[$tableID].form)
+		RECORD.info("Check detail forms")
 		
-		If (Length:C16($t)>0)
+		$internalFolder:=$path.detailForms()
+		$userFolder:=$path.hostdetailForms()
+		$userFolder.create()
+		
+		$c:=JSON Parse:C1218(File:C1566("/RESOURCES/Compatibility/manifest.json").getText()).detail
+		
+		For each ($tableID; $project.detail)
 			
-			If ($t[[1]]#"/")  // Internal template
+			$t:=String:C10($project.detail[$tableID].form)
+			
+			If (Length:C16($t)>0)
 				
-				If (Not:C34($internalFolder.folder($t).exists))
+				If ($t[[1]]#"/")  // Internal template
 					
-					RECORD.warning("Missing internal form: "+$t)
-					
-					$template:=$c.query("old=:1"; $t).pop()
-					
-					If ($template#Null:C1517)
+					If (Not:C34($internalFolder.folder($t).exists))
 						
-						// Copy from tempo folder to database
-						$file:=File:C1566("/RESOURCES/Compatibility/"+$template.new)
+						RECORD.warning("Missing internal form: "+$t)
 						
-						If ($file.exists)
+						$template:=$c.query("old=:1"; $t).pop()
+						
+						If ($template#Null:C1517)
 							
-							$file:=$file.copyTo($userFolder; fk overwrite:K87:5)
+							// Copy from tempo folder to database
+							$file:=File:C1566("/RESOURCES/Compatibility/"+$template.new)
 							
-							If ($file#Null:C1517)
+							If ($file.exists)
 								
-								$project.list[$tableID].form:="/"+$template.new
-								RECORD.info("Replaced by: "+$project.list[$tableID].form)
+								$file:=$file.copyTo($userFolder; fk overwrite:K87:5)
+								
+								If ($file#Null:C1517)
+									
+									$project.detail[$tableID].form:="/"+$template.new
+									RECORD.info("Replaced by: "+$project.detail[$tableID].form)
+									
+								Else 
+									
+									RECORD.error("Error during copy: "+$file.path)
+									
+								End if 
 								
 							Else 
 								
-								RECORD.error("Error during copy: "+$file.path)
+								RECORD.error("Missing archive: "+$file.path)
 								
 							End if 
 							
 						Else 
 							
-							RECORD.error("Missing archive: "+$file.path)
+							RECORD.error("Unknown template: "+$t)
 							
 						End if 
-						
-					Else 
-						
-						RECORD.error("Unknown template: "+$t)
-						
 					End if 
 				End if 
 			End if 
-		End if 
-	End for each 
-End if 
-
-If ($project.detail#Null:C1517)
+		End for each 
+	End if 
 	
-	RECORD.info("Check detail forms")
-	
-	$internalFolder:=$path.detailForms()
-	$userFolder:=$path.hostdetailForms()
-	$userFolder.create()
-	
-	$c:=JSON Parse:C1218(File:C1566("/RESOURCES/Compatibility/manifest.json").getText()).detail
-	
-	For each ($tableID; $project.detail)
+	// * ADD DOMINANT COLOR, IF ANY
+	If ($project.ui.dominantColor=Null:C1517)
 		
-		$t:=String:C10($project.detail[$tableID].form)
-		
-		If (Length:C16($t)>0)
+		//
+		If (Count parameters:C259>=2)
 			
-			If ($t[[1]]#"/")  // Internal template
-				
-				If (Not:C34($internalFolder.folder($t).exists))
-					
-					RECORD.warning("Missing internal form: "+$t)
-					
-					$template:=$c.query("old=:1"; $t).pop()
-					
-					If ($template#Null:C1517)
-						
-						// Copy from tempo folder to database
-						$file:=File:C1566("/RESOURCES/Compatibility/"+$template.new)
-						
-						If ($file.exists)
-							
-							$file:=$file.copyTo($userFolder; fk overwrite:K87:5)
-							
-							If ($file#Null:C1517)
-								
-								$project.detail[$tableID].form:="/"+$template.new
-								RECORD.info("Replaced by: "+$project.detail[$tableID].form)
-								
-							Else 
-								
-								RECORD.error("Error during copy: "+$file.path)
-								
-							End if 
-							
-						Else 
-							
-							RECORD.error("Missing archive: "+$file.path)
-							
-						End if 
-						
-					Else 
-						
-						RECORD.error("Unknown template: "+$t)
-						
-					End if 
-				End if 
-			End if 
-		End if 
-	End for each 
-End if 
-
-//=====================================================================
-//                        ADD DOMINANT COLOR
-//=====================================================================
-If ($project.ui.dominantColor=Null:C1517)
-	
-	//
-	If (Count parameters:C259>=2)
-		
-		$folder:=$folder.folder("Assets.xcassets/AppIcon.appiconset")
-		
-		If ($folder.exists)
-			
-			READ PICTURE FILE:C678($folder.file("ios-marketing1024.png").platformPath; $picture)
-			
-		Else 
-			
-			$folder:=$folder.folder("Android")
+			$folder:=$folder.folder("Assets.xcassets/AppIcon.appiconset")
 			
 			If ($folder.exists)
 				
-				READ PICTURE FILE:C678($folder.file("main/ic_launcher-playstore.png").platformPath; $picture)
+				READ PICTURE FILE:C678($folder.file("ios-marketing1024.png").platformPath; $picture)
+				
+			Else 
+				
+				$folder:=$folder.folder("Android")
+				
+				If ($folder.exists)
+					
+					READ PICTURE FILE:C678($folder.file("main/ic_launcher-playstore.png").platformPath; $picture)
+					
+				End if 
+			End if 
+			
+			If (Picture size:C356($picture)>0)
+				
+				$project.ui.dominantColor:=cs:C1710.color.new(cs:C1710.bmp.new($picture).getDominantColor()).css.components
+				$isUpgraded:=True:C214
 				
 			End if 
 		End if 
+	End if 
+	
+	// * CHANGE ACTION PRESET
+	If ($project.actions#Null:C1517)
 		
-		If (Picture size:C356($picture)>0)
+		For each ($o; $project.actions.query("preset = adding"))
 			
-			$project.ui.dominantColor:=cs:C1710.color.new(cs:C1710.bmp.new($picture).getDominantColor()).css.components
+			$o.preset:="add"
 			$isUpgraded:=True:C214
 			
-		End if 
+		End for each 
+		
+		For each ($o; $project.actions.query("preset = suppression"))
+			
+			$o.preset:="delete"
+			$isUpgraded:=True:C214
+			
+		End for each 
+		
+		For each ($o; $project.actions.query("preset = sharing"))
+			
+			$o.preset:="share"
+			$isUpgraded:=True:C214
+			
+		End for each 
+		
+		For each ($o; $project.actions.query("preset = edition"))
+			
+			$o.preset:="edit"
+			$isUpgraded:=True:C214
+			
+		End for each 
 	End if 
+	
+	OB REMOVE:C1226($project; "regexParameters")
+	
 End if 
-
-//=====================================================================
-//                       CHANGE ACTION PRESET
-//=====================================================================
-If ($project.actions#Null:C1517)
-	
-	For each ($o; $project.actions.query("preset = adding"))
-		
-		$o.preset:="add"
-		$isUpgraded:=True:C214
-		
-	End for each 
-	
-	For each ($o; $project.actions.query("preset = suppression"))
-		
-		$o.preset:="delete"
-		$isUpgraded:=True:C214
-		
-	End for each 
-	
-	For each ($o; $project.actions.query("preset = sharing"))
-		
-		$o.preset:="share"
-		$isUpgraded:=True:C214
-		
-	End for each 
-	
-	For each ($o; $project.actions.query("preset = edition"))
-		
-		$o.preset:="edit"
-		$isUpgraded:=True:C214
-		
-	End for each 
-End if 
-
-OB REMOVE:C1226($project; "regexParameters")
 
 // Set the current version
 $project.info.componentBuild:=$info.componentBuild
