@@ -138,6 +138,7 @@ If (Num:C11($e.row)>0)
 					
 					//%W+533.3
 					
+					
 					If ($field#Null:C1517)
 						
 						Case of 
@@ -162,16 +163,28 @@ If (Num:C11($e.row)>0)
 								//%W+533.3
 								
 								//…………………………………………………………………………………………………
-							: ($field.kind="relatedEntities")  // 1 -> N relation
+							: ($field.kind="relatedEntities")\
+								 | (($field.kind="alias") && (Bool:C1537($field.isToMany)))  // 1 -> N relation
 								
 								If (Form:C1466.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)
 									
 									//%W-533.3
 									If (Bool:C1537((OBJECT Get pointer:C1124(Object named:K67:5; $1.form.published))->{$e.row}))
 										//%W+533.3
-										
 										// Error
-										$tips:=EDITOR.alert+" "+$str.setText("theLinkedTableIsNotPublished").localized($field.relatedDataClass)
+										
+										If ($field.kind="alias")
+											
+											
+											//ASSERT(Not(Shift down))
+											
+											$tips:=EDITOR.alert+" "+$str.setText("theTargetTableIsNotPublished").localized()
+											
+										Else 
+											
+											$tips:=EDITOR.alert+" "+$str.setText("theLinkedTableIsNotPublished").localized($field.relatedDataClass)
+											
+										End if 
 										
 									Else 
 										

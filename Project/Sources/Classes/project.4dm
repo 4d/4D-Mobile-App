@@ -1517,6 +1517,7 @@ Function fieldAvailable($tableID; $field : Object)->$available : Boolean
 			
 			// Check the data class
 			If ($field.relatedTableNumber#Null:C1517)\
+				 | ($field.kind="calculated")\
 				 | (Bool:C1537($field.computed))
 				
 				// Relation or computed attribute --> use name

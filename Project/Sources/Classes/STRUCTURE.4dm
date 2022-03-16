@@ -385,11 +385,6 @@ Function fieldList()
 					$style:=Plain:K14:1
 					$color:=lk inherited:K53:26
 					
-					If (($field.kind="alias")\
-						 & ($field.relatedDataClass#Null:C1517))
-						
-					End if 
-					
 					Case of 
 							
 							//______________________________________________________
@@ -397,12 +392,23 @@ Function fieldList()
 							
 							$style:=Italic:K14:3
 							
-							If (($field.relatedDataClass#Null:C1517)\
-								 & ($field.valueType#"@Selection"))
+							If ($field.relatedDataClass#Null:C1517)
 								
-								$style:=$style+Underline:K14:4
-								$color:=EDITOR.selectedColor
-								
+								If ($field.fieldType=Is object:K8:27)  // -> relatedEntity
+									
+									$style:=$style+Underline:K14:4
+									$color:=EDITOR.selectedColor
+									
+								Else   // -> relatedEntities
+									
+									If ($field.relatedTableNumber#$table.tableNumber)\
+										 && ($dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)\
+										 && ($dataModel[$tableID][$field.name]#Null:C1517)
+										
+										$color:=EDITOR.errorColor
+										
+									End if 
+								End if 
 							End if 
 							
 							//______________________________________________________
@@ -414,14 +420,12 @@ Function fieldList()
 							//______________________________________________________
 						: ($field.kind="relatedEntities")
 							
-							If ($field.relatedTableNumber#$table.tableNumber)  // Not for a recursive relation
+							If ($field.relatedTableNumber#$table.tableNumber)\
+								 && ($dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)\
+								 && ($dataModel[$tableID][$field.name]#Null:C1517)
 								
-								If ($dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)\
-									 & ($dataModel[$tableID][$field.name]#Null:C1517)
-									
-									$color:=EDITOR.errorColor
-									
-								End if 
+								$color:=EDITOR.errorColor
+								
 							End if 
 							
 							//______________________________________________________

@@ -1099,7 +1099,7 @@ Don't keep:
 						// INVALID ALIAS
 						
 						//______________________________________
-					: ($field.relatedDataClass#Null:C1517)  // Non scalar
+					: ($field.relatedDataClass#Null:C1517)  // Non scalar Attribute
 						
 						$field.isToMany:=($field.fieldType=Is collection:K8:32)  // -> relatedEntities
 						$field.isToOne:=($field.fieldType=Is object:K8:27)  // -> relatedEntity
@@ -1112,10 +1112,10 @@ Don't keep:
 						
 						$fields.push($field)
 						
-						//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-					Else 
+						//______________________________________
+					Else   // Scalar Attribute
 						
-						If (This:C1470.allowedTypes.indexOf($field.type)>=0)  // Scalar Attribute
+						If (This:C1470.allowedTypes.indexOf($field.type)>=0)
 							
 							// Mark: #TEMPO
 							$field.valueType:=$field.type
