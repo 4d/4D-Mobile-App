@@ -22,22 +22,18 @@ Class constructor($project : Object)
 	// Compute product name (used for files and scheme/target)
 	Case of 
 			
-			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		: (Value type:C1509(This:C1470.project.name)=Is text:K8:3)
-			
 			This:C1470.productName:=This:C1470.project.name
-			
-			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		: (This:C1470.project._folder#Null:C1517)
-			
 			This:C1470.productName:=This:C1470.project._folder.name
-			
-			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+		: ((Value type:C1509($project.$project.project)=Is text:K8:3) && (Folder:C1567($project.$project.project; fk platform path:K87:2).exists))
+			This:C1470.productName:=Folder:C1567($project.$project.project; fk platform path:K87:2).name
+		: (Value type:C1509($project.$project.product)=Is text:K8:3)
+			This:C1470.productName:=$project.$project.product
+		: (Value type:C1509(This:C1470.product.name)=Is text:K8:3)
+			This:C1470.productName:=This:C1470.product.name
 		Else 
-			
 			This:C1470.productName:="debug"
-			
-			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	End case 
 	
 	// Keep the last used project
