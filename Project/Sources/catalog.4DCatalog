@@ -43,7 +43,7 @@
 		<table_extra input_form="Form1" output_form="Form2">
 			<editor_table_info displayable_fields_count="12">
 				<color red="237" green="211" blue="181" alpha="255"/>
-				<coordinates left="1.6695556640625" top="384.0869140625" width="153" height="293.33203125"/>
+				<coordinates left="517.12878417969" top="843.25018310547" width="153" height="293.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -117,6 +117,8 @@
 		<field name="Blob field" uuid="73DB7BD6328440F899B42B0C7FDA0FF7" type="18" never_null="true" id="12"/>
 		<field name="Picture field" uuid="D358D9F154764FDAA6C77DFB43529EDE" type="12" never_null="true" id="13"/>
 		<field name="Object field" uuid="1C87BCCFACC942D6852F5DA0CA82A883" type="21" never_null="true" id="14"/>
+		<field name="objectField" uuid="9F8CE478CA7C45C0827E95B6ECC30928" type="21" blob_switch_size="2147483647" never_null="true" id="15"/>
+		<field name="blobField" uuid="4C4E45A776EA48278FEE9F52BA4D850E" type="18" never_null="true" id="16"/>
 		<field name="__GlobalStamp" uuid="0D8C34FB22A64D3B88CB6E7B3BE4D73C" type="5" id="24">
 			<field_extra>
 				<editor_field_info>
@@ -126,9 +128,9 @@
 		</field>
 		<primary_key field_name="ID" field_uuid="2E229433BE754803B3BC16E18675FE09"/>
 		<table_extra input_form="Input" output_form="Form1">
-			<editor_table_info displayable_fields_count="15">
+			<editor_table_info displayable_fields_count="26">
 				<color red="175" green="188" blue="191" alpha="255"/>
-				<coordinates left="0" top="0" width="153" height="356.33203125"/>
+				<coordinates left="0" top="0" width="165.44616699219" height="605.87432861328"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -269,7 +271,7 @@
 		<table_extra input_form="Form2" output_form="Form1">
 			<editor_table_info displayable_fields_count="4">
 				<color red="237" green="211" blue="181" alpha="255"/>
-				<coordinates left="218.35412597656" top="442" width="140" height="125.33203125"/>
+				<coordinates left="735.48291015625" top="860.95672607422" width="140" height="125.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>

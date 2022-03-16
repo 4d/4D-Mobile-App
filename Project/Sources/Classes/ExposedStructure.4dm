@@ -1099,24 +1099,10 @@ Don't keep:
 						// INVALID ALIAS
 						
 						//______________________________________
-					: ($field.fieldType=Is collection:K8:32)  // -> relatedEntities
+					: ($field.relatedDataClass#Null:C1517)  // Non scalar
 						
-						$field.isToMany:=True:C214
-						$field.isToOne:=False:C215
-						
-						$field.relatedTableNumber:=$ds[$field.relatedDataClass].getInfo().tableNumber
-						
-						// Mark: #TEMPO
-						$field.valueType:=$field.type
-						$field.type:=$field.isToMany ? -2 : -1
-						
-						$fields.push($field)
-						
-						//______________________________________
-					: ($field.fieldType=Is object:K8:27)  // -> relatedEntity
-						
-						$field.isToMany:=False:C215
-						$field.isToOne:=True:C214
+						$field.isToMany:=($field.fieldType=Is collection:K8:32)  // -> relatedEntities
+						$field.isToOne:=($field.fieldType=Is object:K8:27)  // -> relatedEntity
 						
 						$field.relatedTableNumber:=$ds[$field.relatedDataClass].getInfo().tableNumber
 						
@@ -1126,20 +1112,19 @@ Don't keep:
 						
 						$fields.push($field)
 						
-						//______________________________________
-					: (This:C1470.allowedTypes.indexOf($field.type)>=0)  // Scalar Attribute
-						
-						// Mark: #TEMPO
-						$field.valueType:=$field.type
-						$field.id:=$field.fieldNumber
-						$field.type:=This:C1470.__fielddType($field.fieldType)
-						
-						$fields.push($field)
-						
-						//______________________________________
+						//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 					Else 
 						
-						oops
+						If (This:C1470.allowedTypes.indexOf($field.type)>=0)  // Scalar Attribute
+							
+							// Mark: #TEMPO
+							$field.valueType:=$field.type
+							$field.id:=$field.fieldNumber
+							$field.type:=This:C1470.__fielddType($field.fieldType)
+							
+							$fields.push($field)
+							
+						End if 
 						
 						//______________________________________
 				End case 
