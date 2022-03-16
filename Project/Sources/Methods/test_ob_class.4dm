@@ -132,7 +132,7 @@ $ob.remove("two")
 ASSERT:C1129($ob.toCollection().length=5)
 ASSERT:C1129($ob.toCollection($ob.get().deep).length=2)
 ASSERT:C1129($ob.inHierarchy("two")=Null:C1517)
-ASSERT:C1129(JSON Parse:C1218("[11,13,1,3,11,13,11,13,11,13]").equal($ob.findPropertyValues("uuid")))
+ASSERT:C1129(JSON Parse:C1218("[1,3,11,13,11,13,11,13,11,13]").equal($ob.findPropertyValues("uuid")))
 
 $ob.remove("uuid")
 ASSERT:C1129($ob.inHierarchy("uuid")=Null:C1517)
