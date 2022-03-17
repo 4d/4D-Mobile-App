@@ -446,7 +446,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 	$field:=$ds[$tableName][$relationName]
 	
 	If ($field.kind="relatedEntity")\
-		 || (($field.kind="alias") && ($field.fieldType=Is object:K8:27))
+		 || (($field.kind="alias") && ($field.fieldType=Is object:K8:27) && ($field.relatedDataClass#Null:C1517))
 		
 		$result.success:=True:C214
 		

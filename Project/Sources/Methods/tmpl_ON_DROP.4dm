@@ -108,6 +108,8 @@ If (Length:C16($cible)>0)
 										$relation:=$table[$cDroped[0]]
 										$relation.label:="%"+$cCurrent[1]+"%"
 										
+										$dropped.relatedTableNumber:=$relation.relatedTableNumber
+										
 									End if 
 								End if 
 							End if 
@@ -145,13 +147,12 @@ If (Length:C16($cible)>0)
 											
 											// Switch to relation & update the long label
 											$dropped:=New object:C1471(\
-												"name"; $cDroped[0]; \
 												"kind"; "relatedEntity"; \
+												"name"; $cDroped[0]; \
+												"path"; $cDroped[0]; \
+												"relatedDataClass"; $relation.relatedDataClass; \
 												"relatedTableNumber"; $relation.relatedTableNumber; \
-												"path"; $cDroped[0])
-											
-											// FIXME:remove fieldType
-											$dropped.fieldType:=8858
+												"inverseName"; $relation.inverseName)
 											
 											$relation.label:="%"+$cDroped[1]+"%"
 											

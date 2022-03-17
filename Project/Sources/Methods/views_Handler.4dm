@@ -351,6 +351,7 @@ Case of
 				For ($i; 1; Size of array:C274(($form.fields.pointer())->); 1)
 					
 					LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; lk inherited:K53:26; lk font color:K53:24)
+					LISTBOX SET ROW FONT STYLE:C1268(*; $form.fieldList.name; $i; Plain:K14:1)
 					
 					$field:=($form.fields.pointer())->{$i}
 					
@@ -396,7 +397,10 @@ Case of
 							End if 
 							
 							//______________________________________________________
-							//: ($field.kind="alias") & False
+						: ($field.kind="alias")
+							
+							LISTBOX SET ROW FONT STYLE:C1268(*; $form.fieldList.name; $i; Italic:K14:3)
+							
 							//$c:=Split string($field.path; ".")
 							//If ($c.length>2)
 							//If ($datamodel[$context.tableNumber][$c[1]]=Null)

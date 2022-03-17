@@ -321,7 +321,7 @@ Function fieldList($table)->$result : Object
 						$result.fields.push($field)
 						
 						//……………………………………………………………………………………………………………
-					: ($field.kind="alias")
+					: ($field.kind="alias") & ($field.relatedDataClass=Null:C1517)
 						
 						$field.$label:=$key
 						$field.$level:=0
@@ -342,7 +342,8 @@ Function fieldList($table)->$result : Object
 						$result.fields.push($field)
 						
 						//……………………………………………………………………………………………………………
-					: ($field.kind="relatedEntity")
+					: ($field.kind="relatedEntity")\
+						 || (($field.kind="alias") && (Bool:C1537($field.isToOne)))
 						
 						$subLevel+=10
 						

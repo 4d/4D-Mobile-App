@@ -531,7 +531,6 @@ Function doFieldPicker()->$publishedNumber : Integer
 		
 		$tableDataModel:=$currentDataModel[String:C10($currentTable.tableNumber)]
 		
-		
 		If ($relatedCatalog.alias=Null:C1517)
 			
 			$relatedDataModel:=$tableDataModel[$relatedCatalog.relatedEntity]
@@ -611,8 +610,12 @@ Function doFieldPicker()->$publishedNumber : Integer
 								
 								$target:=New object:C1471(\
 									"kind"; "alias"; \
+									"path"; $relatedCatalog.alias.levels.extract("path").join("."); \
 									"fieldType"; Is object:K8:27; \
-									"path"; $relatedCatalog.alias.levels.extract("path").join("."))
+									"relatedDataClass"; $relatedCatalog.relatedDataClass; \
+									"relatedTableNumber"; $relatedCatalog.relatedTableNumber; \
+									"inverseName"; $relatedCatalog.inverseName; \
+									"isToOne"; True:C214)
 								
 							End if 
 							
@@ -1346,18 +1349,8 @@ Function _appendField($table : cs:C1710.table; $field : cs:C1710.field)
 			$published:=Num:C11($dataModel[String:C10($table.tableNumber)][$field.name]#Null:C1517)
 			
 			//…………………………………………………………………………………………………
-		: ($field.kind="alias") && ($type<=EDITOR.fieldIcons.length)
-			
-			$published:=Num:C11($dataModel[String:C10($table.tableNumber)][$field.name]#Null:C1517)
-			
-			If ($field.relatedDataClass#Null:C1517)
-				
-				$type:=($type=Is collection:K8:32) ? 8859 : ($type=Is object:K8:27) ? 8858 : $type
-				
-			End if 
-			
-			//…………………………………………………………………………………………………
-		: ($field.kind="relatedEntity")  // N -> 1 relation
+		: ($field.kind="relatedEntity")\
+			 || (($field.kind="alias") && Bool:C1537($field.isToOne))
 			
 			$fieldModel:=$dataModel[String:C10($table.tableNumber)][$field.name]
 			
@@ -1436,7 +1429,8 @@ Function _appendField($table : cs:C1710.table; $field : cs:C1710.field)
 			$type:=8858
 			
 			//…………………………………………………………………………………………………
-		: ($field.kind="relatedEntities")  // 1 -> N relation //($field.type=-2)
+		: ($field.kind="relatedEntities")\
+			 || (($field.kind="alias") && Bool:C1537($field.isToMany))
 			
 			//*******************************************************************************************
 			$published:=Num:C11($dataModel[String:C10($table.tableNumber)][String:C10($field.name)]#Null:C1517)
@@ -1447,6 +1441,11 @@ Function _appendField($table : cs:C1710.table; $field : cs:C1710.field)
 			//
 			//*******************************************************************************************
 			$type:=8859
+			
+			//…………………………………………………………………………………………………
+		: ($field.kind="alias") && ($type<=EDITOR.fieldIcons.length)
+			
+			$published:=Num:C11($dataModel[String:C10($table.tableNumber)][$field.name]#Null:C1517)
 			
 			//…………………………………………………………………………………………………
 		: (Bool:C1537($field.oneToOne))  // 1 -> N -> 1

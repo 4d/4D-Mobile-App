@@ -351,7 +351,7 @@ If ($cacheFile.exists)
 														End if 
 														
 														//______________________________________________________
-													: (PROJECT.isRelationToMany($relatedField))
+													: ($relatedField.kind="relatedEntities")
 														
 														$relatedField.parent:=$item.key
 														$relatedField.current:=$relatedCatalog.query("name === :1"; $relatedItem.key).pop()
@@ -374,7 +374,7 @@ If ($cacheFile.exists)
 																	//______________________________________________________
 																: ($relatedField.nameMismatch)
 																	
-																	$relatedField.tableTips:=$str.localize("theFieldNameWasRenamed"; New collection:C1472($relatedItem.key; $relatedField.name))
+																	$relatedField.tableTips:=$str.localize("theFieldNameWasRenamed"; New collection:C1472($relatedItem.key; String:C10($relatedField.name)))
 																	$relatedField.fieldTips:=$relatedField.tableTips
 																	
 																	//______________________________________________________

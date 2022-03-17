@@ -114,6 +114,17 @@ Function updateFieldList
 		For ($i; 0; $o.count-1; 1)
 			
 			LISTBOX SET ROW COLOR:C1270(*; This:C1470.names.name; $i+1; $o.nameColors[$i]; lk font color:K53:24)
+			
+			If ($o.targets[$i].kind="alias")
+				
+				LISTBOX SET ROW FONT STYLE:C1268(*; This:C1470.names.name; $i+1; Italic:K14:3)
+				
+			Else 
+				
+				LISTBOX SET ROW FONT STYLE:C1268(*; This:C1470.names.name; $i+1; Plain:K14:1)
+				
+			End if 
+			
 			LISTBOX SET ROW COLOR:C1270(*; This:C1470.formats.name; $i+1; $o.formatColors[$i]; lk font color:K53:24)
 			
 		End for 
@@ -250,24 +261,27 @@ Function getFieldList()->$result : Object
 							$result.targets.push($field)
 							
 							//……………………………………………………………………………………………………………
-						: ($field.kind="alias")\
-							 && ($field.relatedDataClass=Null:C1517)
+						: ($field.kind="alias")
 							
-							This:C1470._labels($field; $key)
-							
-							$result.names.push($key)
-							$result.paths.push($key)
-							$result.labels.push($field.label)
-							$result.shortLabels.push($field.shortLabel)
-							$result.iconPaths.push(String:C10($field.icon))
-							$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
-							$result.formats.push(This:C1470._computeFormat($field; $result; $target))
-							$result.formatColors.push(Foreground color:K23:1)
-							$result.nameColors.push(Foreground color:K23:1)
-							
+							If (PROJECT.$project.ExposedStructure.aliasTarget(ds:C1482[$table[""].name]; $field).target.relatedDataClass=Null:C1517)
+								
+								This:C1470._labels($field; $key)
+								
+								$result.names.push($key)
+								$result.paths.push($key)
+								$result.labels.push($field.label)
+								$result.shortLabels.push($field.shortLabel)
+								$result.iconPaths.push(String:C10($field.icon))
+								$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
+								$result.formats.push(This:C1470._computeFormat($field; $result; $target))
+								$result.formatColors.push(Foreground color:K23:1)
+								$result.nameColors.push(Foreground color:K23:1)
+								
 /* TEMPO */$result.tableNumbers.push(Num:C11($tableID))
-							
-							$result.targets.push($field)
+								
+								$result.targets.push($field)
+								
+							End if 
 							
 							//……………………………………………………………………………………………………………
 						: ($field.kind="relatedEntity")
@@ -437,34 +451,27 @@ Function getFieldList()->$result : Object
 					Case of 
 							
 							//……………………………………………………………………………………………………………
-						: ($field.kind="alias")\
-							 && ($field.relatedDataClass#Null:C1517)
+						: ($field.kind="alias")
 							
-							This:C1470._labels($field; $key)
-							
-							$result.names.push($key)
-							$result.paths.push($key)
-							$result.labels.push($field.label)
-							$result.shortLabels.push($field.shortLabel)
-							$result.iconPaths.push(String:C10($field.icon))
-							$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
-							$result.formatColors.push(Foreground color:K23:1)
-							$result.nameColors.push(Foreground color:K23:1)
-							
-							If ($field.fieldType=Is collection:K8:32)
+							If (PROJECT.$project.ExposedStructure.aliasTarget(ds:C1482[$table[""].name]; $field).target.relatedDataClass#Null:C1517)
 								
-								// Entity Selection
+								This:C1470._labels($field; $key)
+								
+								$result.names.push($key)
+								$result.paths.push($key)
+								$result.labels.push($field.label)
+								$result.shortLabels.push($field.shortLabel)
+								$result.iconPaths.push(String:C10($field.icon))
+								$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
+								$result.formatColors.push(Foreground color:K23:1)
+								$result.nameColors.push(Foreground color:K23:1)
 								$result.formats.push("")
 								
-							Else 
+/* TEMPO */$result.tableNumbers.push(Num:C11($tableID))
 								
-								$result.formats.push(This:C1470._computeFormat($field; $result; $target))
+								$result.targets.push($field)
 								
 							End if 
-							
-/* TEMPO */$result.tableNumbers.push(Num:C11($tableID))
-							
-							$result.targets.push($field)
 							
 							//……………………………………………………………………………………………………………
 						: ($field.kind="relatedEntity")
