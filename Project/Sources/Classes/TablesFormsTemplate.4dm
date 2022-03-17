@@ -5,18 +5,17 @@ Class constructor
 	Super:C1705($1)
 	ASSERT:C1129(This:C1470.template.type="tablesForms")
 	
-Function doRun
-	C_OBJECT:C1216($0; $Obj_out)
+Function doRun()->$Obj_out : Object
 	
+	var $Obj_dataModel; $Obj_field; $Obj_tableModel; $Obj_table; $Obj_userChoice; $Obj_tableList : Object
+	var $Obj_in; $Obj_template : Object
 	$Obj_out:=New object:C1471()
 	
-	C_OBJECT:C1216($Obj_in; $Obj_template)
 	$Obj_in:=This:C1470.input
 	$Obj_template:=This:C1470.template
 	
 	// Manage root templates for all tables forms according to user choice
 	// Get the user choice information
-	C_OBJECT:C1216($Obj_userChoice)
 	$Obj_userChoice:=$Obj_in.project[String:C10($Obj_template.userChoiceTag)]  // list or detail from project
 	
 	// For each on tags here, maybe on data view instead?
@@ -24,18 +23,16 @@ Function doRun
 	
 	$Obj_out.success:=True:C214
 	
-	C_OBJECT:C1216($Obj_dataModel)
 	$Obj_dataModel:=$Obj_in.project.dataModel
 	
 	// Create table form for each table in data model
-	C_TEXT:C284($Txt_tableNumber)
+	var $Txt_tableNumber : Text
 	For each ($Txt_tableNumber; $Obj_dataModel)
 		
 		// Get dataModel information
 		$Obj_tableModel:=$Obj_dataModel[$Txt_tableNumber]
 		
 		// Get userChoice for one table
-		C_OBJECT:C1216($Obj_tableList)
 		$Obj_tableList:=$Obj_userChoice[$Txt_tableNumber]
 		
 		If ($Obj_tableList=Null:C1517)  // No user choice, create it
@@ -56,10 +53,10 @@ Function doRun
 		End if 
 		
 		// Get template path
-		C_TEXT:C284($t)
+		var $t : Text
 		$t:=Choose:C955(Length:C16(String:C10($Obj_tableList.form))>0; String:C10($Obj_tableList.form); $Obj_template.default)  // Use default if not defined
 		
-		C_OBJECT:C1216($pathForm; $folder; $file)
+		var $pathForm; $folder; $file : Object
 		If ($t[[1]]="/")  // custom form
 			
 			//$pathForm:=_o_tmpl_form($t; String($Obj_template.userChoiceTag))
@@ -81,14 +78,7 @@ Function doRun
 			Else 
 				
 				RECORD.error("Invalid path: \""+$pathForm.path+"\"")
-				
-				If ($Obj_out.errors=Null:C1517)
-					
-					$Obj_out.errors:=New collection:C1472
-					
-				End if 
-				
-				$Obj_out.errors.push("Invalid path: "+$pathForm.path)
+				ob_error_add($Obj_out; "Invalid path: "+$pathForm.path)
 				
 			End if 
 			
@@ -101,9 +91,9 @@ Function doRun
 		If ($folder.exists)
 			
 			// Load the manifest file
+			var $o : Object
 			$o:=OB Copy:C1225($Obj_in)
 			$file:=$folder.file("manifest.json")
-			C_OBJECT:C1216($o)
 			$o.template:=ob_parseFile($file)
 			
 			If ($o.template.success)  // The template existe or not
@@ -114,7 +104,6 @@ Function doRun
 				// ==============================================================
 				//                          TABLE INFOS
 				// ==============================================================
-				C_OBJECT:C1216($Obj_table)
 				$Obj_table:=OB Copy:C1225($Obj_tableModel)
 				
 				$Obj_table.tableNumber:=$Txt_tableNumber
@@ -129,7 +118,6 @@ Function doRun
 					
 				Else 
 					
-					// User label
 					$Obj_table.label:=$Obj_table[""].label
 					
 				End if 
@@ -140,7 +128,6 @@ Function doRun
 					
 				Else 
 					
-					// User label
 					$Obj_table.shortLabel:=$Obj_table[""].shortLabel
 					
 				End if 
@@ -152,14 +139,14 @@ Function doRun
 				$Obj_table.fields:=New collection:C1472
 				
 				// Get expected field count
-				C_LONGINT:C283($Lon_count)
+				var $Lon_count; $i : Integer
 				$Lon_count:=Num:C11($o.template.fields.count)
-				
-				C_LONGINT:C283($i)
 				$i:=0
-				C_OBJECT:C1216($Obj_tableModel)
 				
-				C_OBJECT:C1216($Obj_field)
+				var $keyPath : Text
+				var $tmp; $fullField : Object
+				var $keyPaths : Collection
+				
 				For each ($Obj_field; $Obj_tableList.fields)
 					
 					Case of 
@@ -168,13 +155,13 @@ Function doRun
 						: ((PROJECT.isField($Obj_field)) || (PROJECT.isComputedAttribute($Obj_field)))
 							
 							$Obj_field:=OB Copy:C1225($Obj_field)
-							$Obj_field.originalName:=$Obj_field.name
 							
-							var $keyPath : Text
-							var $tmp; $fullField : Object
-							var $keyPaths : Collection
+							$Obj_field.nameOrPath:=$Obj_field.name
+							If (FEATURE.with("alias") && $Obj_field.path#Null:C1517)
+								$Obj_field.nameOrPath:=$Obj_field.path
+							End if 
 							
-							$keyPaths:=Split string:C1554($Obj_field.name; ".")
+							$keyPaths:=Split string:C1554($Obj_field.nameOrPath; ".")
 							$keyPaths.pop()  // we remove field leaf name, because we get info from id, not path
 							
 							$tmp:=$Obj_tableModel
@@ -197,19 +184,7 @@ Function doRun
 							End case 
 							
 							// Format name for the tag
-							$Obj_field.name:=formatString("field-name"; $Obj_field.originalName)
-							
-							If ($Obj_field.label=Null:C1517)
-								
-								$Obj_field.label:=formatString("label"; $Obj_field.originalName)
-								
-							End if 
-							
-							If ($Obj_field.shortLabel=Null:C1517)
-								
-								$Obj_field.shortLabel:=formatString("label"; $Obj_field.originalName)
-								
-							End if 
+							This:C1470._fieldTagify($Obj_field)
 							
 							// Set binding type according to field information
 							$Obj_field.bindingType:=This:C1470.fieldBinding($Obj_field; $Obj_in.formatters).bindingType
@@ -221,14 +196,14 @@ Function doRun
 							
 							$Obj_field:=OB Copy:C1225($Obj_field)
 							
-							$Obj_field.originalName:=$Obj_field.name
+							$Obj_field.nameOrPath:=$Obj_field.name
+							If (FEATURE.with("alias") && $Obj_field.path#Null:C1517)
+								$Obj_field.nameOrPath:=$Obj_field.path
+							End if 
 							
-							var $tmp : Object
-							var $keyPaths : Collection
-							var $keyPath : Text
-							$tmp:=$Obj_tableModel[$Obj_field.name]
+							$tmp:=$Obj_tableModel[$Obj_field.nameOrPath]
 							If ($tmp=Null:C1517)
-								$keyPaths:=Split string:C1554($Obj_field.name; ".")
+								$keyPaths:=Split string:C1554($Obj_field.nameOrPath; ".")
 								If ($keyPaths.length>1)
 									$tmp:=$Obj_tableModel
 									For each ($keyPath; $keyPaths) Until ($tmp=Null:C1517)
@@ -242,19 +217,7 @@ Function doRun
 							End if 
 							
 							// Format name for the tag
-							$Obj_field.name:=formatString("field-name"; $Obj_field.originalName)
-							
-							If ($Obj_field.label=Null:C1517)
-								
-								$Obj_field.label:=formatString("label"; $Obj_field.originalName)
-								
-							End if 
-							
-							If ($Obj_field.shortLabel=Null:C1517)
-								
-								$Obj_field.shortLabel:=formatString("label"; $Obj_field.originalName)
-								
-							End if 
+							This:C1470._fieldTagify($Obj_field)
 							
 							// Set binding type according to field information
 							//$Obj_field.bindingType:=This.fieldBinding($Obj_field; $Obj_in.formatters).bindingType
@@ -263,16 +226,7 @@ Function doRun
 						: ($i<$Lon_count)
 							
 							// Create a dummy fields to replace in template
-							$Obj_field:=New object:C1471(\
-								"name"; ""; \
-								"originalName"; ""; \
-								"label"; ""; \
-								"shortLabel"; ""; \
-								"bindingType"; "unknown"; \
-								"type"; -1; \
-								"fieldType"; -1; \
-								"id"; -1; \
-								"icon"; "")
+							$Obj_field:=This:C1470._createDummyField()
 							
 							//……………………………………………………………………………………………………………
 						Else 
@@ -282,7 +236,7 @@ Function doRun
 							//……………………………………………………………………………………………………………
 					End case 
 					
-					If ($Obj_field#Null:C1517)
+					If ($Obj_field#Null:C1517)  // if valid
 						
 						$Obj_table.fields.push($Obj_field)
 						
@@ -299,16 +253,7 @@ Function doRun
 					
 					While ($Obj_table.fields.length<$Lon_count)
 						
-						$Obj_table.fields.push(New object:C1471(\
-							"name"; ""; \
-							"originalName"; ""; \
-							"label"; ""; \
-							"shortLabel"; ""; \
-							"bindingType"; "unknown"; \
-							"type"; -1; \
-							"fieldType"; -1; \
-							"id"; -1; \
-							"icon"; ""))
+						$Obj_table.fields.push(This:C1470._createDummyField())
 						
 					End while 
 				End if 
@@ -536,18 +481,42 @@ Function doRun
 		Else 
 			
 			RECORD.error("Invalid path: \""+$folder.path+"\"")
-			
-			If ($Obj_out.errors=Null:C1517)
-				
-				$Obj_out.errors:=New collection:C1472
-				
-			End if 
-			
-			$Obj_out.errors.push("Invalid path: "+$folder.path)
+			ob_error_add($Obj_out; "Invalid path: "+$folder.path)
 			
 		End if 
 	End for each 
-	$0:=$Obj_out
+	
+	
+Function _createDummyField()->$dummy : Object
+	$dummy:=New object:C1471(\
+		"name"; ""; \
+		"originalName"; ""; \
+		"label"; ""; \
+		"shortLabel"; ""; \
+		"valueType"; ""; \
+		"kind"; ""; \
+		"bindingType"; "unknown"; \
+		"type"; -1; \
+		"fieldType"; -1; \
+		"id"; -1; \
+		"icon"; "")
+	
+	// change name attribute and add missing value
+Function _fieldTagify($Obj_field : Object)
+	$Obj_field.originalName:=$Obj_field.name
+	$Obj_field.name:=formatString("field-name"; $Obj_field.originalName)
+	
+	If ($Obj_field.label=Null:C1517)
+		
+		$Obj_field.label:=formatString("label"; $Obj_field.originalName)
+		
+	End if 
+	
+	If ($Obj_field.shortLabel=Null:C1517)
+		
+		$Obj_field.shortLabel:=formatString("label"; $Obj_field.originalName)
+		
+	End if 
 	
 	// create a comma separated sort field from first action
 Function sortFieldFromAction($table : Object)->$sortFields : Text
@@ -588,6 +557,7 @@ Function fieldBinding($field : Object; $formatter : Object)->$binding : Object
 		: ($field.fieldType=Null:C1517)
 			
 			$binding.errors:=New collection:C1472("field must be have a type to fill binding type")
+			ASSERT:C1129(dev_Matrix; "field must be have a type to fill binding type")
 			
 			// ----------------------------------------
 		Else 

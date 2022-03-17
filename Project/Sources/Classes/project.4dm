@@ -2276,6 +2276,11 @@ Function _tableID($table) : Text
 					return (String:C10($table[""].tableNumber))
 					
 					//======================================
+				: ($table.relatedTableNumber#Null:C1517)
+					
+					return (String:C10($table.relatedTableNumber))
+					
+					//======================================
 				Else 
 					
 					ASSERT:C1129(False:C215)
