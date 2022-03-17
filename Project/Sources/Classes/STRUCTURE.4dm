@@ -506,7 +506,7 @@ Function fieldList()
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Displays related field picker
-Function doFieldPicker()->$count : Integer
+Function doFieldPicker()->$publishedNumber : Integer
 	
 	var $context; $currentDataModel; $o; $relatedCatalog; $relatedDataModel; $tableDataModel : Object
 	var $target : Object
@@ -530,7 +530,17 @@ Function doFieldPicker()->$count : Integer
 		End if 
 		
 		$tableDataModel:=$currentDataModel[String:C10($currentTable.tableNumber)]
-		$relatedDataModel:=$tableDataModel[$relatedCatalog.relatedEntity]
+		
+		
+		If ($relatedCatalog.alias=Null:C1517)
+			
+			$relatedDataModel:=$tableDataModel[$relatedCatalog.relatedEntity]
+			
+		Else 
+			
+			$relatedDataModel:=$currentDataModel[String:C10($currentTable.tableNumber)]
+			
+		End if 
 		
 		For each ($field; $relatedCatalog.fields)
 			
@@ -546,8 +556,15 @@ Function doFieldPicker()->$count : Integer
 				
 			Else 
 				
-				$field.published:=($relatedDataModel[$t]#Null:C1517)
-				
+				If ($currentTable.fields.query("name = :1"; $context.fieldName).pop().kind="alias")
+					
+					$field.published:=($relatedDataModel[$context.fieldName][$t]#Null:C1517)
+					
+				Else 
+					
+					$field.published:=($relatedDataModel[$t]#Null:C1517)
+					
+				End if 
 			End if 
 			
 			// Set icon
@@ -561,9 +578,9 @@ Function doFieldPicker()->$count : Integer
 		If ($relatedCatalog.success)  // Dialog was validated
 			
 			// The number of published
-			$count:=$relatedCatalog.fields.query("published=true").length
+			$publishedNumber:=$relatedCatalog.fields.query("published=true").length
 			
-			If ($count>0)  // At least one related field is published
+			If ($publishedNumber>0)  // At least one related field is published
 				
 				If ($tableDataModel=Null:C1517)\
 					 | OB Is empty:C1297($tableDataModel)
@@ -777,9 +794,9 @@ Function doFieldPicker()->$count : Integer
 								//______________________________________________________
 							: ($field.kind="relatedEntities")
 								
-								If ($relatedDataModel#Null:C1517)
+								If ($target#Null:C1517)
 									
-									OB REMOVE:C1226($relatedDataModel; $field.name)
+									OB REMOVE:C1226($target; $field.name)
 									
 								End if 
 								
@@ -788,9 +805,9 @@ Function doFieldPicker()->$count : Integer
 								
 								If ($path.length>1)
 									
-									If ($target[$path[0]][($field.kind="storage") ? String:C10($field.fieldNumber) : $field.name]#Null:C1517)
+									If (($target[$path[0]][($field.kind="storage") ? String:C10($field.fieldNumber) : $field.name])#Null:C1517)
 										
-										OB REMOVE:C1226($target[$path[0]]; Choose:C955($field.kind="storage"; String:C10($field.fieldNumber); $field.name))
+										OB REMOVE:C1226($target[$path[0]]; $field.kind="storage" ? String:C10($field.fieldNumber) : $field.name)
 										
 										If (OB Keys:C1719($target[$path[0]]).length=3)  //description keys ("kind", "inverseName", "relatedTableNumber")
 											
@@ -802,9 +819,9 @@ Function doFieldPicker()->$count : Integer
 									
 								Else 
 									
-									If ($target[($field.kind="storage") ? String:C10($field.fieldNumber) : $field.name]#Null:C1517)
+									If (($target[($field.kind="storage") ? String:C10($field.fieldNumber) : $field.name])#Null:C1517)
 										
-										OB REMOVE:C1226($target; Choose:C955($field.kind="storage"; String:C10($field.fieldNumber); $field.name))
+										OB REMOVE:C1226($target; $field.kind="storage" ? String:C10($field.fieldNumber) : $field.name)
 										
 									End if 
 								End if 
@@ -815,9 +832,9 @@ Function doFieldPicker()->$count : Integer
 				End for each 
 				
 				// Checkbox value according to the count
-				If ($count>0)
+				If ($publishedNumber>0)
 					
-					$count:=1+Num:C11($count#$relatedCatalog.fields.length)
+					$publishedNumber:=1+Num:C11($publishedNumber#$relatedCatalog.fields.length)
 					
 				End if 
 				
@@ -1332,7 +1349,12 @@ Function _appendField($table : cs:C1710.table; $field : cs:C1710.field)
 		: ($field.kind="alias") && ($type<=EDITOR.fieldIcons.length)
 			
 			$published:=Num:C11($dataModel[String:C10($table.tableNumber)][$field.name]#Null:C1517)
-			$type:=($type=Is collection:K8:32) ? 8859 : ($type=Is object:K8:27) ? 8858 : $type
+			
+			If ($field.relatedDataClass#Null:C1517)
+				
+				$type:=($type=Is collection:K8:32) ? 8859 : ($type=Is object:K8:27) ? 8858 : $type
+				
+			End if 
 			
 			//…………………………………………………………………………………………………
 		: ($field.kind="relatedEntity")  // N -> 1 relation
