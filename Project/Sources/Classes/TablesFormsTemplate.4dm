@@ -491,6 +491,7 @@ Function _createDummyField()->$dummy : Object
 	$dummy:=New object:C1471(\
 		"name"; ""; \
 		"originalName"; ""; \
+		"originalPath"; ""; \
 		"label"; ""; \
 		"shortLabel"; ""; \
 		"valueType"; ""; \
@@ -504,7 +505,12 @@ Function _createDummyField()->$dummy : Object
 	// change name attribute and add missing value
 Function _fieldTagify($Obj_field : Object)
 	$Obj_field.originalName:=$Obj_field.name
-	$Obj_field.name:=formatString("field-name"; $Obj_field.originalName)
+	If (FEATURE.with("alias"))
+		$Obj_field.originalPath:=$Obj_field.path
+		$Obj_field.name:=formatString("field-name"; $Obj_field.nameOrPath)  // NAME is used in tag for binding, but we need path now because name seems to be shortened sometimes...
+	Else 
+		$Obj_field.name:=formatString("field-name"; $Obj_field.originalName)
+	End if 
 	
 	If ($Obj_field.label=Null:C1517)
 		
