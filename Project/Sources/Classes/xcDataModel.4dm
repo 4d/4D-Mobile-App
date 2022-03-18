@@ -15,6 +15,12 @@ Function run($path : Text; $options : Object)->$out : Object
 	
 	If (This:C1470.dataModel#Null:C1517)
 		
+		If (Bool:C1537(FEATURE.with("alias")) & False:C215)
+			
+			This:C1470._alias()
+			
+		End if 
+		
 		$Dom_model:=DOM Create XML Ref:C861("model")
 		
 		// Create XML document
@@ -209,10 +215,7 @@ Function createEntity($options : Object; $Dom_model : Text; $Lon_tableID : Integ
 	// Has or not the global stamp fields
 	$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
 		"key"; "globalStamp"; \
-		"value"; Choose:C955(Bool:C1537(_o_structure(New object:C1471(\
-		"action"; "hasField"; \
-		"table"; $tableInfo.name; \
-		"field"; SHARED.stampField.name)).value); "YES"; "NO"))
+		"value"; Choose:C955(This:C1470._hasGlobalStamp($tableInfo.name); "YES"; "NO"))
 	
 	// Add primary key info and add fetch index
 	If ($tableInfo.primaryKey#Null:C1517)
@@ -628,6 +631,90 @@ Function _relations($options : Object)->$out : Object
 		
 	End for each 
 	
+	// MARK: - alias
+	
+Function _manageAlias($alias : Object; $table : Object)->$out : Object
+	$out:=New object:C1471()
+	If (Length:C16(String:C10($alias.path))=0)
+		ASSERT:C1129(False:C215; "No path on alias. Issue in data model")
+		return 
+	End if 
+	
+	var $paths : Collection
+	var $destination; $tableInfo; $sourceDataClass; $result : Object
+	var $path : Text
+	
+	$tableInfo:=$table[""]
+	
+	$paths:=Split string:C1554(String:C10($alias.path); ".")
+	$sourceDataClass:=$table
+	Repeat 
+		$path:=$paths.shift()
+		$destination:=This:C1470._fieldForKey($table; $path)
+		
+		If ($destination=Null:C1517)
+			
+			$result:=This:C1470._createField($tableInfo.name; $path)
+			
+			If ($result.success)
+				Case of 
+					: ($result.value.id#Null:C1517)  // final field
+						$table[String:C10($result.value.id)]:=$result.value
+						$out.hasBeenEdited:=True:C214
+					: ($result.value.name#Null:C1517)  // final field
+						$table[String:C10($result.value.name)]:=$result.value
+						$out.hasBeenEdited:=True:C214
+						
+						// TODO: if alias in alias, recursive work
+						If (String:C10($result.value.kind)="alias")  // isAlias ?
+							// TODO: table or dst table?
+							This:C1470._manageAlias($result.value; $table)
+						End if 
+					Else 
+						ASSERT:C1129(False:C215; "Field destination of alias "+$path+" in "+$tableInfo.name+" is not publishable: "+JSON Stringify:C1217($result))
+				End case 
+			Else 
+				ASSERT:C1129(False:C215; "Field destination of alias "+$path+" in "+$tableInfo.name+" is not published")
+			End if 
+		End if 
+		
+		If ($destination.relatedDataClass#Null:C1517)
+			
+			$sourceDataClass:=This:C1470.dataModel[$destination.relatedDataClass]
+			If ($sourceDataClass=Null:C1517)
+				ASSERT:C1129(False:C215; "Not implemented yet. publish one field of table "+$destination.relatedDataClass+" please")
+			End if 
+			
+		Else 
+			
+			// normal field or alias
+			
+		End if 
+	Until ($paths.length=0)
+	
+Function _aliasInTable($table : Object)->$out : Object
+	var $result : Object
+	$out:=New object:C1471()
+	
+	var $fieldKey : Text
+	For each ($fieldKey; $table)
+		If (String:C10($table[$fieldKey].kind)="alias")  // isAlias ?
+			$result:=This:C1470._manageAlias($table[$fieldKey]; $table)
+			ob_error_combine($out; $result)
+			$out.hasBeenEdited:=Bool:C1537($out.hasBeenEdited) | Bool:C1537($result.hasBeenEdited)
+		End if 
+	End for each 
+	
+Function _alias()->$out : Object
+	$out:=New object:C1471()
+	var $result : Object
+	var $tableID : Text
+	For each ($tableID; This:C1470.dataModel)
+		$result:=This:C1470._aliasInTable(This:C1470.dataModel[$tableID])
+		ob_error_combine($out; $result)
+		$out.hasBeenEdited:=Bool:C1537($out.hasBeenEdited) | Bool:C1537($result.hasBeenEdited)
+	End for each 
+	
 	
 	// MARK: - utility
 Function getDataClass($dataClassName : Text)->$dataClass : Object
@@ -654,6 +741,37 @@ Function hasField($table : Object; $name : Text)->$has : Boolean
 		End if 
 	End for each 
 	
+Function _fieldForKey($table : Object; $key : Text)->$dst : Object
+	$dst:=$table[$key]
+	If ($dst=Null:C1517)
+		var $fieldKey : Text
+		For each ($fieldKey; $table)
+			//If (Match regex("(?m-si)^\\d+$"; $fieldKey; 1; *))
+			If (String:C10($table[$fieldKey].name)=$key)
+				$dst:=$table[$fieldKey]
+				return 
+			End if 
+			//End if 
+		End for each 
+	End if 
+	ASSERT:C1129(dev_Matrix; "Not found field "+$key+" in "+$table[""].name+". maybe not published ")  //TMP
+	
+Function _createField($tableName : Text; $field : Text)->$result : Object
+	// TODO: ALIAS use catalog.json
+	$result:=_o_structure(New object:C1471(\
+		"action"; "createField"; \
+		"table"; $tableName; \
+		"field"; $field))
+	
+	// if ds : but not wanted
+	// cs.ExposedStructure.new().fieldDefinition($tableInfo.name; $Txt_fieldName) ???
+	
+Function _hasGlobalStamp($tableName : Text)->$has : Boolean
+	// TODO: look at catalog.json, not ds
+	$has:=Bool:C1537(_o_structure(New object:C1471(\
+		"action"; "hasField"; \
+		"table"; $tableName; \
+		"field"; SHARED.stampField.name)).value)
 	
 	// MARK: - primary key
 	
@@ -696,12 +814,7 @@ Function _primaryKey($table : Object)->$out : Object
 		
 		If (Not:C34(This:C1470.hasField($table; $Txt_fieldName)))  // if not add missing primary key field
 			
-			// cs.ExposedStructure.new().fieldDefinition($tableInfo.name; $Txt_fieldName) ???
-			
-			$result:=_o_structure(New object:C1471(\
-				"action"; "createField"; \
-				"table"; $tableInfo.name; \
-				"field"; $Txt_fieldName))
+			$result:=This:C1470._createField($tableInfo.name; $Txt_fieldName)
 			
 			If ($result.success)
 				

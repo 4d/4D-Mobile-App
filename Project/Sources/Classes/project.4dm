@@ -1030,8 +1030,8 @@ Function checkLocalQueryFilter($table : Object)
 	End if 
 	
 	// Returns alias destination if alias 
-	// CLEAN: maybe move to structure?
-Function getAliasDestination($dataClass : Variant; $attribute : Variant; $recursive : Boolean)->$result : Object
+	// CLEAN: maybe move to structure? or somewhere where ds is authorized
+Function __getAliasDestination($dataClass : Variant; $attribute : Variant; $recursive : Boolean)->$result : Object
 	
 	If (Value type:C1509($attribute)=Is object:K8:27)
 		
@@ -1040,7 +1040,7 @@ Function getAliasDestination($dataClass : Variant; $attribute : Variant; $recurs
 			If (Length:C16(String:C10($attribute.path))>0)
 				
 				var $ds : Object
-				$ds:=ds:C1482
+				$ds:=ds:C1482  // DS not allowed?
 				
 				var $paths : Collection
 				var $path : Text
@@ -1086,7 +1086,7 @@ Function getAliasDestination($dataClass : Variant; $attribute : Variant; $recurs
 					If (String:C10($result.field.kind)="alias")  // Maybe an alias too
 						
 						var $rs : Object
-						$rs:=This:C1470.getAliasDestination($previousDataClass; $result.field; True:C214)
+						$rs:=This:C1470.__getAliasDestination($previousDataClass; $result.field; True:C214)
 						
 						$result.paths.combine($rs.paths)
 						$result.field:=$rs
