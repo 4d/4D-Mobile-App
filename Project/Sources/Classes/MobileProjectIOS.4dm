@@ -6,35 +6,34 @@ Class constructor($project : Object)
 	Super:C1705($project)
 	
 	// Copy project (to not modify original project data)
-	If (Count parameters:C259>=1)
-		
-		This:C1470.project:=This:C1470._cleanCopyProject($project)
-		
-	Else 
-		
-		If (This:C1470.debug)  // Use last build to test and test again
-			
+	Case of 
+		: (Count parameters:C259>=1)
+			This:C1470.project:=This:C1470._cleanCopyProject(This:C1470.project)
+		: (Bool:C1537(This:C1470.debug))  // If dev use last build to test and test again
 			This:C1470.project:=ob_parseFile(This:C1470.logFolder.file("lastBuild.ios.4dmobile")).value
-			
-		End if 
-	End if 
+		Else 
+			ASSERT:C1129(False:C215; "Missing project parameters when building iOS app")
+	End case 
 	
 	// Compute product name (used for files and scheme/target)
 	Case of 
-			
 		: (Value type:C1509(This:C1470.project.name)=Is text:K8:3)
 			This:C1470.productName:=This:C1470.project.name
 		: (This:C1470.project._folder#Null:C1517)
 			This:C1470.productName:=This:C1470.project._folder.name
-		: ((Value type:C1509($project.$project.project)=Is text:K8:3) && (Folder:C1567($project.$project.project; fk platform path:K87:2).exists))
-			This:C1470.productName:=Folder:C1567($project.$project.project; fk platform path:K87:2).name
 		: (Value type:C1509($project.$project.product)=Is text:K8:3)
 			This:C1470.productName:=$project.$project.product
+		: ((Value type:C1509($project.$project.project)=Is text:K8:3) && (Folder:C1567($project.$project.project; fk platform path:K87:2).exists))
+			This:C1470.productName:=Folder:C1567($project.$project.project; fk platform path:K87:2).name
 		: (Value type:C1509(This:C1470.product.name)=Is text:K8:3)
 			This:C1470.productName:=This:C1470.product.name
 		Else 
 			This:C1470.productName:="debug"
 	End case 
+	
+	If ((This:C1470.project._folder=Null:C1517) && (Folder:C1567($project.$project.project; fk platform path:K87:2).exists))
+		This:C1470.project._folder:=Folder:C1567($project.$project.project; fk platform path:K87:2)
+	End if 
 	
 	// Keep the last used project
 	This:C1470.logFolder.file("lastBuild.ios.4dmobile").setText(JSON Stringify:C1217(This:C1470.project; *))
