@@ -281,6 +281,162 @@ Function getFieldList()->$result : Object
 								
 								$result.targets.push($field)
 								
+							Else 
+								
+								For each ($subKey; $field)
+									
+									If (Value type:C1509($field[$subKey])#Is object:K8:27)
+										
+										continue
+										
+									End if 
+									
+									$subfield:=$field[$subKey]
+									
+									Case of 
+											
+											//______________________________________________________
+										: ($subfield.kind="storage")
+											
+											This:C1470._labels($subfield)
+											
+											$subfield.fieldNumber:=Num:C11($subKey)
+											
+											$result.names.push($subfield.name)
+											$result.paths.push($key+"."+$subfield.name)
+											$result.labels.push($subfield.label)
+											$result.shortLabels.push($subfield.shortLabel)
+											$result.iconPaths.push(String:C10($subfield.icon))
+											$result.icons.push(EDITOR.getIcon(String:C10($subfield.icon)))
+											$result.formats.push(This:C1470._computeFormat($subfield; $result; $target))
+											$result.formatColors.push(Foreground color:K23:1)
+											$result.nameColors.push(Foreground color:K23:1)
+											
+											$result.tableNumbers.push(ds:C1482[$field.relatedDataClass].getInfo().tableNumber)
+											
+											$result.targets.push($subfield)
+											
+											//______________________________________________________
+										: ($subfield.kind="calculated")
+											
+											This:C1470._labels($subfield; $subKey)
+											
+											$result.names.push($subfield.name)
+											$result.paths.push($key+"."+$subfield.path)
+											$result.labels.push($subfield.label)
+											$result.shortLabels.push($subfield.shortLabel)
+											$result.iconPaths.push(String:C10($subfield.icon))
+											$result.icons.push(EDITOR.getIcon(String:C10($subfield.icon)))
+											$result.formats.push(This:C1470._computeFormat($subfield; $result; $target))
+											$result.formatColors.push(Foreground color:K23:1)
+											$result.nameColors.push(Foreground color:K23:1)
+											
+											$result.tableNumbers.push(ds:C1482[$field.relatedDataClass].getInfo().tableNumber)
+											
+											$result.targets.push($subfield)
+											
+											//______________________________________________________
+										: ($subfield.kind="alias")
+											
+											This:C1470._labels($subfield; $subKey)
+											
+											$result.names.push($subfield.name)
+											$result.paths.push($key+"."+$subfield.path)
+											$result.labels.push($subfield.label)
+											$result.shortLabels.push($subfield.shortLabel)
+											$result.iconPaths.push(String:C10($subfield.icon))
+											$result.icons.push(EDITOR.getIcon(String:C10($subfield.icon)))
+											$result.formats.push(This:C1470._computeFormat($subfield; $result; $target))
+											$result.formatColors.push(Foreground color:K23:1)
+											$result.nameColors.push(Foreground color:K23:1)
+											
+											$result.tableNumbers.push(ds:C1482[$field.relatedDataClass].getInfo().tableNumber)
+											
+											$result.targets.push($subfield)
+											
+											//______________________________________________________
+										: ($subfield.kind="relatedEntity")
+											
+											var $subKey2 : Text
+											For each ($subKey2; $field)
+												
+												If (Value type:C1509($subfield[$subKey2])#Is object:K8:27)
+													
+													continue
+													
+												End if 
+												
+												var $subfield2 : cs:C1710.field
+												$subfield2:=$subfield[$subKey2]
+												
+												Case of 
+														
+														//______________________________________________________
+													: ($subfield2.kind="storage")
+														
+														This:C1470._labels($subfield2)
+														
+														$subfield2.fieldNumber:=Num:C11($subKey2)
+														
+														$result.names.push($subfield2.name)
+														$result.paths.push($key+"."+$subfield2.path)
+														$result.labels.push($subfield2.label)
+														$result.shortLabels.push($subfield2.shortLabel)
+														$result.iconPaths.push(String:C10($subfield2.icon))
+														$result.icons.push(EDITOR.getIcon(String:C10($subfield2.icon)))
+														$result.formats.push(This:C1470._computeFormat($subfield2; $result; $target))
+														$result.formatColors.push(Foreground color:K23:1)
+														$result.nameColors.push(Foreground color:K23:1)
+														
+														$result.tableNumbers.push(ds:C1482[$field.relatedDataClass].getInfo().tableNumber)
+														
+														$result.targets.push($subfield2)
+														
+														//______________________________________________________
+													: ($subfield.kind="calculated")
+														
+														This:C1470._labels($subfield2; $subKey2)
+														
+														$result.names.push($subfield2.name)
+														$result.paths.push($key+"."+$subfield2.path)
+														$result.labels.push($subfield2.label)
+														$result.shortLabels.push($subfield2.shortLabel)
+														$result.iconPaths.push(String:C10($subfield2.icon))
+														$result.icons.push(EDITOR.getIcon(String:C10($subfield2.icon)))
+														$result.formats.push(This:C1470._computeFormat($subfield2; $result; $target))
+														$result.formatColors.push(Foreground color:K23:1)
+														$result.nameColors.push(Foreground color:K23:1)
+														
+														$result.tableNumbers.push(ds:C1482[$field.relatedDataClass].getInfo().tableNumber)
+														
+														$result.targets.push($subfield2)
+														
+														//______________________________________________________
+													: ($subfield.kind="alias")
+														
+														This:C1470._labels($subfield2; $subKey2)
+														
+														$result.names.push($subfield2.name)
+														$result.paths.push($key+"."+$subfield2.path)
+														$result.labels.push($subfield2.label)
+														$result.shortLabels.push($subfield2.shortLabel)
+														$result.iconPaths.push(String:C10($subfield2.icon))
+														$result.icons.push(EDITOR.getIcon(String:C10($subfield2.icon)))
+														$result.formats.push(This:C1470._computeFormat($subfield2; $result; $target))
+														$result.formatColors.push(Foreground color:K23:1)
+														$result.nameColors.push(Foreground color:K23:1)
+														
+														$result.tableNumbers.push(ds:C1482[$field.relatedDataClass].getInfo().tableNumber)
+														
+														$result.targets.push($subfield2)
+														
+														//______________________________________________________
+												End case 
+											End for each 
+											
+											//______________________________________________________
+									End case 
+								End for each 
 							End if 
 							
 							//……………………………………………………………………………………………………………
@@ -470,6 +626,10 @@ Function getFieldList()->$result : Object
 /* TEMPO */$result.tableNumbers.push(Num:C11($tableID))
 								
 								$result.targets.push($field)
+								
+							Else 
+								
+								//
 								
 							End if 
 							

@@ -40,7 +40,9 @@ If (Bool:C1537(OK))
 		End for each 
 		
 		// Open the project editor
-		If (DATABASE.isMatrix)
+		If (DATABASE.isMatrix | Not:C34(Is compiled mode:C492))
+			
+			SET ASSERT ENABLED:C1131(True:C214; *)
 			
 			DIALOG:C40("PROJECT_EDITOR"; $data)
 			CLOSE WINDOW:C154(EDITOR.window)
