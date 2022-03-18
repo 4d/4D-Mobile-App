@@ -353,7 +353,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 					
 					ASSERT:C1129(Value type:C1509($in.target)=Is text:K8:3; "target attribute must be a Text value (platform path)")
 					
-					If (Value type:C1509($in.target)=Is text:K8:3) && (File:C1566($in.target; fk platform path:K87:2).exists)
+					If (Value type:C1509($in.target)=Is text:K8:3) && (Test path name:C476($in.target)=Is a document:K24:1)
 						
 						$out.errors:=New collection:C1472("Destination "+$in.target+" is a document")
 						
