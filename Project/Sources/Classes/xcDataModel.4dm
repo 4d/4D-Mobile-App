@@ -1,166 +1,199 @@
 Class constructor($project : Object)
 	This:C1470.dataModel:=OB Copy:C1225($project.dataModel)
-	This:C1470.actions:=$project.actions
+	This:C1470.actions:=$project.actions  // to create fetch index using sort actions
 	
 Function run($path : Text; $options : Object)->$out : Object
 	$out:=New object:C1471()
+	
 	If ($options.definition=Null:C1517)
 		$options.definition:=New object:C1471  // cache
 	End if 
 	
-	var $result; $table; $tableInfo : Object
-	var $Txt_table : Text
-	var $index : Integer
-	var $Dom_model; $Dom_node; $Dom_elements : Text
-	
-	If (This:C1470.dataModel#Null:C1517)
-		
-		If (Bool:C1537(FEATURE.with("alias")) & False:C215)
-			
-			This:C1470._alias()
-			
-		End if 
-		
-		$Dom_model:=DOM Create XML Ref:C861("model")
-		
-		// Create XML document
-		XML SET OPTIONS:C1090($Dom_model; XML indentation:K45:34; XML with indentation:K45:35)
-		
-		DOM SET XML ATTRIBUTE:C866($Dom_model; \
-			"type"; "com.apple.IDECoreDataModeler.DataModel"; \
-			"documentVersion"; "1.0"; \
-			"lastSavedToolsVersion"; "14903"; \
-			"systemVersion"; "18G87"; \
-			"minimumToolsVersion"; "Automatic"; \
-			"sourceLanguage"; "Swift"; \
-			"userDefinedModelVersionIdentifier"; "")
-		
-		// Create elements nodes
-		$Dom_elements:=DOM Create XML element:C865($Dom_model; "elements")
-		
-		$index:=0
-		For each ($Txt_table; This:C1470.dataModel)
-			$table:=This:C1470.dataModel[$Txt_table]
-			$tableInfo:=$table[""]
-			
-			$Dom_node:=DOM Create XML element:C865($Dom_elements; "element"; \
-				"name"; $Txt_tableName; \
-				"positionX"; 200*$index; \
-				"positionY"; 100; \
-				"width"; 150; \
-				"height"; 45+(15*OB Keys:C1719($table).length))
-			
-			$index:=$index+1
-		End for each 
-		
-		If (Bool:C1537(FEATURE.with("coreDataAbstractEntity")))
-			
-			// Parent abtract Record entity in model, with common private fields
-			var $Txt_tableName : Text
-			$Txt_tableName:="Record"
-			
-			ARRAY TEXT:C222($tTxt_entityAttributes; 4)
-			$tTxt_entityAttributes{1}:="name"
-			$tTxt_entityAttributes{2}:="representedClassName"
-			$tTxt_entityAttributes{3}:="syncable"
-			$tTxt_entityAttributes{4}:="codeGenerationType"
-			
-			ARRAY TEXT:C222($tTxt_entityValues; 4)
-			$tTxt_entityValues{1}:=$Txt_tableName
-			$tTxt_entityValues{2}:=$Txt_tableName
-			$tTxt_entityValues{3}:="YES"
-			$tTxt_entityValues{4}:="class"
-			
-			var $Dom_entity : Text
-			$Dom_entity:=DOM Create XML element arrays:C1097($Dom_model; "entity"; $tTxt_entityAttributes; $tTxt_entityValues)
-			DOM SET XML ATTRIBUTE:C866($Dom_entity; \
-				"isAbstract"; "YES")
-			
-			var $Dom_attribute : Text
-			$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")
-			DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
-				"name"; "qmobile__STAMP"; \
-				"attributeType"; "Integer 64")
-			
-			$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")
-			DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
-				"name"; "qmobile__TIMESTAMP"; \
-				"attributeType"; "Date")
-			
-			$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")
-			DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
-				"name"; "qmobile__KEY"; \
-				"attributeType"; "String")
-			
-			var $Dom_node : Text
-			$Dom_node:=DOM Create XML element:C865($Dom_elements; "element"; \
-				"name"; $Txt_tableName; \
-				"positionX"; 200; \
-				"positionY"; 0; \
-				"width"; 150; \
-				"height"; 45+(15*3))
-			
-		End if 
-		
-		// Add missing relations
-		If (Bool:C1537($options.relationship))
-			
-			$result:=This:C1470._relations($options)
-			ob_error_combine($out; $result)
-			
-		End if 
-		
-		// Add missing primary keys
-		$result:=This:C1470._primaryKeys()
-		ob_error_combine($out; $result)
-		
-		// Create entities nodes
-		For each ($Txt_table; This:C1470.dataModel)
-			$table:=This:C1470.dataModel[$Txt_table]
-			$result:=This:C1470.createEntity($options; $Dom_model; Num:C11($Txt_table); $table)
-			ob_error_combine($out; $result)
-		End for each 
-		
-		// Then write XML result to file
-		var $File_ : Object  // file or folder
-		
-		$File_:=Folder:C1567($path; fk platform path:K87:2)
-		
-		Case of 
-				
-				//………………………………………………………………………………………………
-			: ($File_.extension=".xcdatamodeld")
-				
-				$File_:=$File_.folder($File_.name+".xcdatamodel").file("contents")
-				
-				//………………………………………………………………………………………………
-			: ($File_.extension=".xcdatamodel")
-				
-				$File_:=$File_.file("contents")
-				
-				//………………………………………………………………………………………………
-		End case 
-		
-		$File_.create()
-		
-		DOM EXPORT TO FILE:C862($Dom_model; $File_.platformPath)
-		
-		$out.success:=Bool:C1537(OK)
-		$out.path:=$File_.platformPath
-		
-		DOM CLOSE XML:C722($Dom_model)  // Modify the system variable OK!
-		
-	Else 
+	If (This:C1470.dataModel=Null:C1517)
 		
 		ASSERT:C1129(dev_Matrix; "No data model passed to xcDataModel")
 		RECORD.warning("dataModel is null to generate xcDataModel (core data ios)")
+		return 
+	End if 
+	
+	var $result : Object
+	
+	// MARK: Manage alias
+	If (Bool:C1537(FEATURE.with("alias")) && Bool:C1537(FEATURE.with("iOSAlias")))
+		
+		$result:=This:C1470._alias()
+		ob_error_combine($out; $result)
 		
 	End if 
+	
+	// MARK: Add missing relations
+	If (Bool:C1537($options.relationship))  // TODO if not defined True?
+		
+		$result:=This:C1470._relations($options)
+		ob_error_combine($out; $result)
+		
+	End if 
+	
+	// MARK: Add missing primary keys
+	$result:=This:C1470._primaryKeys()
+	ob_error_combine($out; $result)
+	
+	// MARK: Create header
+	var $Dom_model : Text
+	$Dom_model:=This:C1470._createHeader()
+	
+	// MARK: Create elements nodes
+	var $Dom_elements : Text
+	$Dom_elements:=This:C1470._createElements($Dom_model)
+	
+	// MARK: (NO) add abstract entity
+	If (Bool:C1537(FEATURE.with("coreDataAbstractEntity")))
+		
+		// Parent abtract Record entity in model, with common private fields
+		var $Txt_tableName : Text
+		$Txt_tableName:="Record"
+		
+		ARRAY TEXT:C222($tTxt_entityAttributes; 4)
+		$tTxt_entityAttributes{1}:="name"
+		$tTxt_entityAttributes{2}:="representedClassName"
+		$tTxt_entityAttributes{3}:="syncable"
+		$tTxt_entityAttributes{4}:="codeGenerationType"
+		
+		ARRAY TEXT:C222($tTxt_entityValues; 4)
+		$tTxt_entityValues{1}:=$Txt_tableName
+		$tTxt_entityValues{2}:=$Txt_tableName
+		$tTxt_entityValues{3}:="YES"
+		$tTxt_entityValues{4}:="class"
+		
+		var $Dom_entity : Text
+		$Dom_entity:=DOM Create XML element arrays:C1097($Dom_model; "entity"; $tTxt_entityAttributes; $tTxt_entityValues)
+		DOM SET XML ATTRIBUTE:C866($Dom_entity; \
+			"isAbstract"; "YES")
+		
+		var $Dom_attribute : Text
+		$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")
+		DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+			"name"; "qmobile__STAMP"; \
+			"attributeType"; "Integer 64")
+		
+		$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")
+		DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+			"name"; "qmobile__TIMESTAMP"; \
+			"attributeType"; "Date")
+		
+		$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")
+		DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+			"name"; "qmobile__KEY"; \
+			"attributeType"; "String")
+		
+		var $Dom_node : Text
+		$Dom_node:=DOM Create XML element:C865($Dom_elements; "element"; \
+			"name"; $Txt_tableName; \
+			"positionX"; 200; \
+			"positionY"; 0; \
+			"width"; 150; \
+			"height"; 45+(15*3))
+		
+	End if 
+	
+	// MARK: Create entities nodes
+	$result:=This:C1470._createEntities($options; $Dom_model)
+	ob_error_combine($out; $result)
+	
+	// MARK: Then write XML result to file
+	$result:=This:C1470._writeToFile($path; $Dom_model)
+	$out.success:=$result.success
+	$out.path:=$result.path
+	
+	// MARK: close dom
+	DOM CLOSE XML:C722($Dom_model)
+	
+	// Write xml model to file
+Function _writeToFile($destination : Variant; $Dom_model : Text)->$out : Object
+	// manage parameters
+	var $file : Object  // file or folder
+	Case of 
+		: (Value type:C1509($destination)=Is text:K8:3)
+			$file:=Folder:C1567($destination; fk platform path:K87:2)
+		: ((Value type:C1509($destination)=Is object:K8:27) && (OB Instance of:C1731($destination; 4D:C1709.File) || OB Instance of:C1731($destination; 4D:C1709.Folder)))
+			$file:=$destination
+		Else 
+			ASSERT:C1129(False:C215; "Wrong destination file type for xml")
+			$out:=New object:C1471("success"; False:C215; "errors"; New collection:C1472("Wrong destination file type for xml"))
+			return 
+	End case 
+	
+	// get "contents" file at wanted path if a folder has been provided 
+	Case of 
+		: ($file.extension=".xcdatamodeld")
+			$file:=$file.folder($file.name+".xcdatamodel").file("contents")
+		: ($file.extension=".xcdatamodel")
+			$file:=$file.file("contents")
+	End case 
+	
+	// export
+	$file.create()  // will create intermediate folders
+	
+	DOM EXPORT TO FILE:C862($Dom_model; $file.platformPath)
+	
+	$out:=New object:C1471("success"; OK; "path"; $file.platformPath)
+	
+	// MARK: - creations
+	
+Function _createHeader()->$Dom_model : Text
+	$Dom_model:=DOM Create XML Ref:C861("model")
+	
+	// Create XML document
+	XML SET OPTIONS:C1090($Dom_model; XML indentation:K45:34; XML with indentation:K45:35)
+	
+	DOM SET XML ATTRIBUTE:C866($Dom_model; \
+		"type"; "com.apple.IDECoreDataModeler.DataModel"; \
+		"documentVersion"; "1.0"; \
+		"lastSavedToolsVersion"; "14903"; \
+		"systemVersion"; "18G87"; \
+		"minimumToolsVersion"; "Automatic"; \
+		"sourceLanguage"; "Swift"; \
+		"userDefinedModelVersionIdentifier"; "")
+	
+	// create Element nodes
+Function _createElements($Dom_model : Text)
+	var $Dom_elements; $Dom_node : Text
+	$Dom_elements:=DOM Create XML element:C865($Dom_model; "elements")
+	
+	var $index : Integer
+	$index:=0
+	var $table; $tableInfo : Object
+	var $tableId : Text
+	For each ($tableId; This:C1470.dataModel)
+		$table:=This:C1470.dataModel[$tableId]
+		$tableInfo:=$table[""]
+		
+		$Dom_node:=DOM Create XML element:C865($Dom_elements; "element"; \
+			"name"; formatString("table-name"; $tableInfo.name); \
+			"positionX"; 200*$index; \
+			"positionY"; 100; \
+			"width"; 150; \
+			"height"; 45+(15*OB Keys:C1719($table).length))
+		
+		$index:=$index+1
+	End for each 
+	
+	// create Entities node
+Function _createEntities($options : Object; $Dom_model : Text)->$out : Object
+	$out:=New object:C1471()
+	var $table; $result : Object
+	var $tableId : Text
+	For each ($tableId; This:C1470.dataModel)
+		$table:=This:C1470.dataModel[$tableId]
+		$result:=This:C1470._createEntity($options; $Dom_model; Num:C11($tableId); $table)
+		ob_error_combine($out; $result)
+	End for each 
+	$out.success:=ob_error_has($out)
 	
 	// create Entity node
 	// $Dom_model: parent node
 	// $table table data
-Function createEntity($options : Object; $Dom_model : Text; $Lon_tableID : Integer; $table : Object)->$out : Object
+Function _createEntity($options : Object; $Dom_model : Text; $tableID : Integer; $table : Object)->$out : Object
 	var $result : Object  // result of external function call
 	
 	var $tableInfo : Object
@@ -181,7 +214,7 @@ Function createEntity($options : Object; $Dom_model : Text; $Lon_tableID : Integ
 	$tTxt_entityValues{3}:="YES"
 	$tTxt_entityValues{4}:="class"
 	
-	var $Dom_userInfo; $Dom_entity; $Dom_userInfo; $Dom_node; $Dom_attribute; $Dom_userInfo : Text
+	var $Dom_userInfo; $Dom_entity; $Dom_node; $Dom_attribute : Text
 	$Dom_entity:=DOM Create XML element arrays:C1097($Dom_model; "entity"; $tTxt_entityAttributes; $tTxt_entityValues)
 	
 	If (Bool:C1537(FEATURE.with("coreDataAbstractEntity")))
@@ -248,7 +281,7 @@ Function createEntity($options : Object; $Dom_model : Text; $Lon_tableID : Integ
 			If (String:C10($action.preset)="sort")
 				If ($action.parameters#Null:C1517)
 					If ($action.parameters.length>0)
-						If (Num:C11($action.tableNumber)=$Lon_tableID)
+						If (Num:C11($action.tableNumber)=$tableID)
 							$Dom_fetchIndex:=DOM Create XML element:C865($Dom_entity; "fetchIndex"; "name"; formatString("field-name"; String:C10($action.name)))
 							For each ($parameter; $action.parameters)
 								
@@ -305,10 +338,10 @@ Function createEntity($options : Object; $Dom_model : Text; $Lon_tableID : Integ
 				Else 
 					
 					var $Lon_fieldID : Integer
-					ASSERT:C1129(dev_Matrix; "Please avoid to have missing info in dataModel and rely and Field, fiel name method")
+					ASSERT:C1129(dev_Matrix; "Please avoid to have missing info in dataModel and rely and Field, field name method")
 					$Lon_fieldID:=Num:C11($Txt_field)
 					var $Ptr_field : Pointer
-					$Ptr_field:=Field:C253($Lon_tableID; $Lon_fieldID)
+					$Ptr_field:=Field:C253($tableID; $Lon_fieldID)
 					$Txt_originalFieldName:=Field name:C257($Ptr_field)
 					$Lon_type:=Type:C295($Ptr_field->)
 					$Boo_4dType:=True:C214

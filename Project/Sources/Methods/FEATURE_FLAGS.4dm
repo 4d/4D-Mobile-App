@@ -153,6 +153,7 @@ FEATURE.isWIP("buildWithCmd")  // allow to build using cmd only
 FEATURE.erm("gitCommit")  // commit to git generated project
 FEATURE.erm("generateForDev")  // add framework sources and do not add compiled frameworks to workspace, deactivate code signing on framework
 //FEATURE.isWip("devGallery")  // Allow to dev with local http gallery
+FEATURE.erm("iOSAlias")
 
 //mark:-⛔ PENDING
 FEATURE.isPending(129953)  // [MOBILE] Handle Many-one-Many relations
