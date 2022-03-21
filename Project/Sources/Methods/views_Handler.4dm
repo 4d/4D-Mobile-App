@@ -50,7 +50,6 @@ $form:=New object:C1471(\
 "preview"; _o_UI.picture("preview"); \
 "previewGroup"; _o_UI.static("preview@"); \
 "fields"; _o_UI.widget("fields"); \
-"ids"; _o_UI.widget("field_ids"); \
 "icons"; _o_UI.widget("icons"); \
 "names"; _o_UI.widget("names"); \
 "selectorList"; _o_UI.button("tab.list"); \
@@ -327,11 +326,7 @@ Case of
 			If ($o.success)
 				
 				COLLECTION TO ARRAY:C1562($o.fields; ($form.fields.pointer())->)
-				COLLECTION TO ARRAY:C1562($o.fields; ($form.ids.pointer())->; "id")
 				COLLECTION TO ARRAY:C1562($o.fields; ($form.names.pointer())->; "$label")
-				
-				ASSERT:C1129($o.fields.length=Size of array:C274(($form.ids.pointer())->))
-				ASSERT:C1129($o.fields.length=Size of array:C274(($form.names.pointer())->))
 				
 				$c:=New collection:C1472
 				
@@ -444,7 +439,6 @@ Case of
 			Else 
 				
 				$form.fields.clear()
-				$form.ids.clear()
 				$form.names.clear()
 				$form.icons.clear()
 				

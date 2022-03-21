@@ -272,37 +272,6 @@
 							"fontTheme": "normal"
 						},
 						{
-							"name": "field_ids",
-							"dataSourceTypeHint": "number",
-							"width": 20,
-							"minWidth": 20,
-							"maxWidth": 20,
-							"resizable": false,
-							"enterable": false,
-							"visibility": "hidden",
-							"stroke": "#FF9300",
-							"textAlign": "left",
-							"verticalAlign": "middle",
-							"fontSize": 10,
-							"events": [
-								"onDataChange"
-							],
-							"header": {
-								"name": "Header6",
-								"text": "Header4",
-								"textAlign": "left",
-								"verticalAlign": "middle",
-								"fontWeight": "bold"
-							},
-							"footer": {
-								"name": "Footer6",
-								"timeFormat": "hh_mm_ss",
-								"textAlign": "left",
-								"verticalAlign": "middle"
-							},
-							"fontTheme": "normal"
-						},
-						{
 							"name": "icons",
 							"dataSourceTypeHint": "picture",
 							"width": 25,

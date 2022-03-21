@@ -145,39 +145,6 @@
 			"Xcode"
 		]
 	},
-	"[ UI ]": {
-		"groups": [
-			"[BROWSER]",
-			"[PANELS]",
-			"[PROJECT]",
-			"FOOTER",
-			"LISTE_EDITOR",
-			"RIBON"
-		],
-		"methods": [
-			"COMPILER_editor",
-			"editor_CALLBACK",
-			"editor_CHECK_INSTALLATION",
-			"editor_CREATE_PROJECT",
-			"editor_GET_DEVICES",
-			"editor_LoadIcons",
-			"editor_MESSAGE_CALLBACK",
-			"editor_Panel_init",
-			"editor_PROCESS_MESSAGES",
-			"editor_RESUME",
-			"editor_ui_LISTBOX",
-			"editor_UPDATE_EXPOSED_CATALOG",
-			"editor_UPDATE_HEADER",
-			"PROJECT_EDITOR"
-		],
-		"forms": [
-			"PROJECT_EDITOR",
-			"TITLE"
-		],
-		"classes": [
-			"PROJECT_EDITOR"
-		]
-	},
 	"[API]": {
 		"methods": [
 			"C_NEW_MOBILE_PROJECT",
@@ -279,6 +246,39 @@
 		],
 		"classes": [
 			"PROJECT_FORM"
+		]
+	},
+	"[UI]": {
+		"groups": [
+			"[BROWSER]",
+			"[PANELS]",
+			"[PROJECT]",
+			"FOOTER",
+			"LISTE_EDITOR",
+			"RIBON"
+		],
+		"methods": [
+			"COMPILER_editor",
+			"editor_CALLBACK",
+			"editor_CHECK_INSTALLATION",
+			"editor_CREATE_PROJECT",
+			"editor_GET_DEVICES",
+			"editor_LoadIcons",
+			"editor_MESSAGE_CALLBACK",
+			"editor_Panel_init",
+			"editor_PROCESS_MESSAGES",
+			"editor_RESUME",
+			"editor_ui_LISTBOX",
+			"editor_UPDATE_EXPOSED_CATALOG",
+			"editor_UPDATE_HEADER",
+			"PROJECT_EDITOR"
+		],
+		"forms": [
+			"PROJECT_EDITOR",
+			"TITLE"
+		],
+		"classes": [
+			"PROJECT_EDITOR"
 		]
 	},
 	"00] TARGET": {
