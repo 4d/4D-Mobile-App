@@ -9,7 +9,7 @@ PROJECT.repairStructure(PROJECT.$dialog.unsynchronizedTables)
 OB REMOVE:C1226(PROJECT.$dialog; "unsynchronizedTableFields")
 OB REMOVE:C1226(PROJECT.$project.structure; "unsynchronized")
 
-$file:=PROJECT._folder.file("catalog.json")
+$file:=PROJECT.getCatalogFile()
 
 If ($file.exists)
 	

@@ -39,7 +39,7 @@ $str:=cs:C1710.str.new()
 
 // ----------------------------------------------------
 // Compare to cached catalog (the last valid)
-$cacheFile:=PROJECT._folder.file("catalog.json")
+$cacheFile:=PROJECT.getCatalogFile()
 
 If ($cacheFile.exists)
 	

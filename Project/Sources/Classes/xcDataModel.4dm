@@ -1,6 +1,11 @@
 Class constructor($project : Object)
 	This:C1470.dataModel:=OB Copy:C1225($project.dataModel)
 	This:C1470.actions:=$project.actions  // to create fetch index using sort actions
+	This:C1470.project:=$project
+	
+	If (Bool:C1537(FEATURE.with("alias")) && Bool:C1537(FEATURE.with("iOSAlias")))
+		This:C1470.catalog:=This:C1470.project.getCatalog()
+	End if 
 	
 Function run($path : Text; $options : Object)->$out : Object
 	$out:=New object:C1471()
@@ -392,14 +397,14 @@ Function _createEntity($options : Object; $Dom_model : Text; $tableID : Integer;
 					$Txt_formattedRelationName:=formatString("field-name"; $Txt_relationName)
 					
 					$Txt_inverseName:=String:C10($table[$Txt_relationName].inverseName)
+					If ((Length:C16($Txt_inverseName)=0) && PROJECT.isAlias($table[$Txt_field]))
+						
+						$Txt_inverseName:=String:C10($table[$table[$Txt_field].path].inverseName)
+					End if 
 					
 					If (Length:C16($Txt_inverseName)=0)
 						
-						If (dev_Matrix)
-							
-							ASSERT:C1129(False:C215; "Missing inverseName")
-							
-						End if 
+						ASSERT:C1129(dev_Matrix; "Missing inverseName")
 						
 						$result:=_o_structure(New object:C1471(\
 							"action"; "inverseRelationName"; \
@@ -572,26 +577,13 @@ Function _relation($table : Object; $options : Object)->$out : Object
 					$Obj_relationTable:=This:C1470.getDataClass($Obj_field.relatedDataClass)
 					If ($Obj_relationTable=Null:C1517)  // not found we must add a new table in model
 						
-						$Obj_relationTable:=New object:C1471(\
-							""; New object:C1471(\
-							"name"; $Obj_field.relatedDataClass))
-						
+						$Obj_relationTable:=This:C1470._createTable($Obj_field.relatedDataClass)
 						$Obj_relationTableInfo:=$Obj_relationTable[""]
 						
-						var $Obj_buffer : Object
-						$Obj_buffer:=_o_structure(New object:C1471(\
-							"action"; "tableInfo"; \
-							"name"; $Obj_field.relatedDataClass))
-						
-						If ($Obj_buffer.success)
-							
-							$Obj_relationTableInfo.primaryKey:=$Obj_buffer.tableInfo.primaryKey
+						If ($Obj_relationTableInfo.primaryKey#Null:C1517)  // one criteria to know if ok
 							$Obj_relationTableInfo.slave:=$table[""].name
 							
-							var $Lon_relatedTableID : Integer
-							$Lon_relatedTableID:=$Obj_buffer.tableInfo.tableNumber
-							
-							This:C1470.dataModel[String:C10($Lon_relatedTableID)]:=$Obj_relationTable
+							This:C1470.dataModel[String:C10($Obj_relationTableInfo.tableNumber)]:=$Obj_relationTable
 							$out.hasBeenEdited:=True:C214
 							
 						Else 
@@ -616,6 +608,7 @@ Function _relation($table : Object; $options : Object)->$out : Object
 					End for each 
 					
 					// Get inverse field
+					var $Obj_buffer : Object
 					$Obj_buffer:=_o_structure(New object:C1471(\
 						"action"; "inverseRelatedFields"; \
 						"table"; $tableInfo.name; \
@@ -674,48 +667,59 @@ Function _manageAlias($alias : Object; $table : Object)->$out : Object
 	End if 
 	
 	var $paths : Collection
-	var $destination; $tableInfo; $sourceDataClass; $result : Object
+	var $destination; $sourceDataClass; $result : Object
 	var $path : Text
 	
-	$tableInfo:=$table[""]
 	
 	$paths:=Split string:C1554(String:C10($alias.path); ".")
 	$sourceDataClass:=$table
 	Repeat 
 		$path:=$paths.shift()
-		$destination:=This:C1470._fieldForKey($table; $path)
+		$destination:=This:C1470._fieldForKey($sourceDataClass; $path)
 		
 		If ($destination=Null:C1517)
 			
-			$result:=This:C1470._createField($tableInfo.name; $path)
+			$result:=This:C1470._createField($sourceDataClass[""].name; $path)
 			
 			If ($result.success)
+				$destination:=$result.value
 				Case of 
 					: ($result.value.id#Null:C1517)  // final field
-						$table[String:C10($result.value.id)]:=$result.value
+						$sourceDataClass[String:C10($result.value.id)]:=$result.value
 						$out.hasBeenEdited:=True:C214
 					: ($result.value.name#Null:C1517)  // final field
-						$table[String:C10($result.value.name)]:=$result.value
+						$sourceDataClass[String:C10($result.value.name)]:=$result.value
 						$out.hasBeenEdited:=True:C214
 						
 						// TODO: if alias in alias, recursive work
 						If (String:C10($result.value.kind)="alias")  // isAlias ?
 							// TODO: table or dst table?
-							This:C1470._manageAlias($result.value; $table)
+							This:C1470._manageAlias($result.value; $sourceDataClass)
 						End if 
 					Else 
-						ASSERT:C1129(False:C215; "Field destination of alias "+$path+" in "+$tableInfo.name+" is not publishable: "+JSON Stringify:C1217($result))
+						ASSERT:C1129(False:C215; "Field destination of alias "+$path+" in "+$sourceDataClass[""].name+" is not publishable: "+JSON Stringify:C1217($result))
 				End case 
 			Else 
-				ASSERT:C1129(False:C215; "Field destination of alias "+$path+" in "+$tableInfo.name+" is not published")
+				ASSERT:C1129(False:C215; "Field destination of alias "+$path+" in "+$sourceDataClass[""].name+" is not published")
 			End if 
 		End if 
 		
 		If ($destination.relatedDataClass#Null:C1517)
+			var $sourceDataClassName : Text
+			$sourceDataClassName:=$sourceDataClass[""].name  // old one
 			
-			$sourceDataClass:=This:C1470.dataModel[$destination.relatedDataClass]
+			$sourceDataClass:=This:C1470.getDataClass($destination.relatedDataClass)
 			If ($sourceDataClass=Null:C1517)
-				ASSERT:C1129(False:C215; "Not implemented yet. publish one field of table "+$destination.relatedDataClass+" please")
+				$sourceDataClass:=This:C1470._createTable($destination.relatedDataClass)
+				If ($sourceDataClass[""].primaryKey)  // one criteria to known if ok
+					$sourceDataClass[""].slave:=$sourceDataClassName
+					
+					This:C1470.dataModel[String:C10($sourceDataClass[""].tableNumber)]:=$sourceDataClass
+					$out.hasBeenEdited:=True:C214
+				Else 
+					ob_error_add($out; "Missing table "+String:C10($destination.relatedDataClas)+" in catalog")
+					ASSERT:C1129(dev_Matrix; "Missing table "+String:C10($destination.relatedDataClas)+" in catalog")
+				End if 
 			End if 
 			
 		Else 
@@ -749,7 +753,8 @@ Function _alias()->$out : Object
 	End for each 
 	
 	
-	// MARK: - utility
+	// MARK: - utility from data model
+	
 Function getDataClass($dataClassName : Text)->$dataClass : Object
 	var $Txt_table : Text
 	var $table : Object
@@ -774,37 +779,74 @@ Function hasField($table : Object; $name : Text)->$has : Boolean
 		End if 
 	End for each 
 	
+	// (used only in alias now)s
 Function _fieldForKey($table : Object; $key : Text)->$dst : Object
 	$dst:=$table[$key]
 	If ($dst=Null:C1517)
 		var $fieldKey : Text
-		For each ($fieldKey; $table)
+		For each ($fieldKey; $table) Until ($dst#Null:C1517)
 			//If (Match regex("(?m-si)^\\d+$"; $fieldKey; 1; *))
 			If (String:C10($table[$fieldKey].name)=$key)
 				$dst:=$table[$fieldKey]
-				return 
 			End if 
 			//End if 
 		End for each 
 	End if 
-	ASSERT:C1129(dev_Matrix; "Not found field "+$key+" in "+$table[""].name+". maybe not published ")  //TMP
 	
-Function _createField($tableName : Text; $field : Text)->$result : Object
+	// MARK: - utility from full catalog
+	
+Function _tableFromCatalog($tableName : Text)->$table : Object
+	$table:=This:C1470.catalog.query("name = :1"; $tableName).pop()
+	
+Function _createTable($tableName : Text)->$table : Object
+	$table:=New object:C1471(\
+		""; New object:C1471(\
+		"name"; $tableName))
+	
+	var $tableInfo : Object
+	If (Bool:C1537(FEATURE.with("iOSAlias")))
+		$tableInfo:=This:C1470._tableFromCatalog($tableName)
+	Else 
+		$tableInfo:=_o_structure(New object:C1471(\
+			"action"; "tableInfo"; \
+			"name"; $tableName)).tableInfo
+	End if 
+	
+	If ($tableInfo#Null:C1517)
+		$table[""]:=$tableInfo
+	End if 
+	
+Function _createField($tableName : Text; $fieldName : Text)->$result : Object
 	// TODO: ALIAS use catalog.json
-	$result:=_o_structure(New object:C1471(\
-		"action"; "createField"; \
-		"table"; $tableName; \
-		"field"; $field))
-	
-	// if ds : but not wanted
-	// cs.ExposedStructure.new().fieldDefinition($tableInfo.name; $Txt_fieldName) ???
+	If (Bool:C1537(FEATURE.with("iOSAlias")))
+		$result:=New object:C1471("success"; False:C215)
+		var $table : Object
+		$table:=This:C1470._tableFromCatalog($tableName)
+		If ($table#Null:C1517)
+			$result.value:=$table.fields.query("name = :1"; $fieldName).pop()
+			$result.success:=$result.value#Null:C1517
+		End if 
+	Else 
+		$result:=_o_structure(New object:C1471("action"; "createField"; "table"; $tableName; "field"; $fieldName))
+		// cs.ExposedStructure.new().fieldDefinition($tableInfo.name; $Txt_fieldName) ???
+	End if 
 	
 Function _hasGlobalStamp($tableName : Text)->$has : Boolean
-	// TODO: look at catalog.json, not ds
-	$has:=Bool:C1537(_o_structure(New object:C1471(\
-		"action"; "hasField"; \
-		"table"; $tableName; \
-		"field"; SHARED.stampField.name)).value)
+	If (Bool:C1537(FEATURE.with("iOSAlias")))
+		$has:=False:C215
+		var $table : Object
+		$table:=This:C1470._tableFromCatalog($tableName)
+		If ($table#Null:C1517)
+			$has:=$table.fields.query("name :1"; SHARED.stampField.name).length>0
+		End if 
+	Else 
+		// XXX this look at ds, we do not want, must be removed if catalog is ok
+		$has:=Bool:C1537(_o_structure(New object:C1471(\
+			"action"; "hasField"; \
+			"table"; $tableName; \
+			"field"; SHARED.stampField.name)).value)
+	End if 
+	
 	
 	// MARK: - primary key
 	

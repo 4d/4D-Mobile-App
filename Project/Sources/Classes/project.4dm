@@ -322,7 +322,7 @@ Function save()
 	
 	var $file : 4D:C1709.File
 	
-	$file:=This:C1470._folder.file("project.4dmobileapp")
+	$file:=This:C1470.getProjectFile()
 	$file.setText(JSON Stringify:C1217(This:C1470.cleaned(); *))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -1357,7 +1357,7 @@ Function getCatalog() : Collection
 			//____________________________________
 		Else 
 			
-			ASSERT:C1129(False:C215)
+			return This:C1470.getCatalogObject().structure.definition
 			
 			//____________________________________
 	End case 
@@ -1787,6 +1787,21 @@ Function field($table; $field) : Object
 		
 	End if 
 	
+	
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Get the project file
+Function getProjectFile()->$file : 4D:C1709.File
+	This:C1470._folder.file("project.4dmobileapp")
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Get the associated catalog file
+Function getCatalogFile()->$file : 4D:C1709.File
+	$file:=This:C1470._folder.file("catalog.json")
+	
+Function getCatalogObject()->$object : Object
+	$object:=JSON Parse:C1218(This:C1470.getCatalogFile().getText())
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Makes a Backup of the project & catalog
 Function backup()
@@ -1798,11 +1813,11 @@ Function backup()
 	$backup.create()
 	
 	// Copy the project
-	$file:=This:C1470._folder.file("project.4dmobileapp")
+	$file:=This:C1470.getProjectFile()
 	$file.copyTo($backup)
 	
 	// Copy the catalog
-	$file:=$file.parent.file("catalog.json")
+	$file:=This:C1470.getCatalogFile()
 	$file.copyTo($backup)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
