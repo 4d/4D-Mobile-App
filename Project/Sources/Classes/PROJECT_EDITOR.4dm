@@ -333,6 +333,9 @@ Function updateColorScheme()
 	
 	This:C1470.fieldIcons:=New collection:C1472
 	
+	This:C1470.selectedColor:=Highlight menu background color:K23:7
+	This:C1470.alternateSelectedColor:=Disable highlight item color:K23:9
+	
 	If (This:C1470.darkScheme)
 		
 		// * PRE-LOADING ICONS FOR FIELD TYPES
@@ -354,8 +357,9 @@ Function updateColorScheme()
 		This:C1470.highlightColor:=Background color:K23:2
 		This:C1470.highlightColorNoFocus:=Background color:K23:2
 		
-		This:C1470.selectedColor:=0x0003A9F4
-		This:C1470.alternateSelectedColor:="cornflowerblue"  //"cadetblue"
+		//This.selectedColor:=0x0003A9F4
+		//This.alternateSelectedColor:="cornflowerblue"  //"cadetblue"
+		
 		This:C1470.backgroundSelectedColor:=Highlight text background color:K23:5
 		This:C1470.backgroundUnselectedColor:=Highlight text background color:K23:5
 		
@@ -389,8 +393,9 @@ Function updateColorScheme()
 		This:C1470.highlightColor:=0x00FFFFFF
 		This:C1470.highlightColorNoFocus:=0x00FFFFFF
 		
-		This:C1470.selectedColor:=0x0003A9F4
-		This:C1470.alternateSelectedColor:=0x00F4F4F6
+		//This.selectedColor:=0x0003A9F4
+		//This.alternateSelectedColor:=0x00F4F4F6
+		
 		This:C1470.backgroundSelectedColor:=0x00E7F8FF
 		This:C1470.backgroundUnselectedColor:=0x00C9C9C9
 		
