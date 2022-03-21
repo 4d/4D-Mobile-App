@@ -2,13 +2,12 @@ Class extends MobileProject
 
 //=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor($project : Object)
-	
 	Super:C1705($project)
 	
 	// Copy project (to not modify original project data)
 	Case of 
 		: (Count parameters:C259>=1)
-			This:C1470.project:=This:C1470._cleanCopyProject(This:C1470.project)
+			This:C1470.project:=This:C1470._cleanCopyProject($project)
 		: (Bool:C1537(This:C1470.debug))  // If dev use last build to test and test again
 			This:C1470.project:=ob_parseFile(This:C1470.logFolder.file("lastBuild.ios.4dmobile")).value
 		Else 
