@@ -117,39 +117,33 @@ Function create()->$result : Object
 	// Building the App
 Function build()->$result : Object
 	
-	$result:=New object:C1471
-	$result.success:=False:C215
-	
-	var $in : Object
-	$in:=This:C1470.input
-	
-	var $Obj_result_build : Object
-	
-	If ($in.realDevice)
+	If (This:C1470.input.realDevice)
 		
-		$Obj_result_build:=This:C1470._archive($result)  // Real device need ipa
+		$result:=This:C1470._archive($result)  // Real device need ipa
 		
 	Else 
 		
-		$Obj_result_build:=This:C1470._build($result)
+		$result:=This:C1470._build($result)
 		
 	End if 
 	
-	If ($Obj_result_build.app=Null:C1517)
+	If ($result.success)
 		
-		var $pathname : 4D:C1709.Folder
-		$pathname:=Folder:C1567($in.path; fk platform path:K87:2).folder("build/Build/Products/Debug-iphonesimulator/"+This:C1470._schemeName+".app")
-		
-		If ($pathname.exists)
+		If ($result.app=Null:C1517)
 			
-			$Obj_result_build.app:=$pathname.path
+			var $app : 4D:C1709.Folder
+			$app:=Folder:C1567(This:C1470.input.path; fk platform path:K87:2).folder("build/Build/Products/Debug-iphonesimulator/"+This:C1470._schemeName+".app")
 			
+			If ($app.exists)
+				
+				$result.app:=$app.path
+				
+			End if 
 		End if 
-	End if 
-	
-	If (Not:C34($Obj_result_build.success))
 		
-		This:C1470.postError(String:C10($Obj_result_build.error))
+	Else 
+		
+		This:C1470.postError(String:C10($result.error))
 		This:C1470.logError("Build Failed")
 		
 	End if 
