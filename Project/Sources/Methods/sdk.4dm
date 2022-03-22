@@ -163,7 +163,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 					$Obj_result:=_o_unzip($Obj_param)
 					
 					// Add to installed framework
-					$Obj_.sdk.installed[$Obj_param.file.platformPath]:=$Obj_result
+					$Obj_.sdk.installed[$Obj_param.file]:=$Obj_result
 					
 				End if 
 				
