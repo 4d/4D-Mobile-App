@@ -323,20 +323,22 @@ Function preload()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// [Warning] Executed every time the editor is activated to adapt UI to the color scheme
+	// TODO: Detect if the color scheme has been changed and apply only in this case.
 Function updateColorScheme()
 	
 	var $icon : Picture
 	var $file : 4D:C1709.File
 	
-	This:C1470.colorScheme:=FORM Get color scheme:C1761
-	This:C1470.isDark:=(FORM Get color scheme:C1761="dark")
-	
-	This:C1470.fieldIcons:=New collection:C1472
-	
 	This:C1470.selectedColor:=Highlight menu background color:K23:7
 	This:C1470.alternateSelectedColor:=Disable highlight item color:K23:9
 	
+	This:C1470.fieldIcons:=New collection:C1472
+	
+	//read pictures only i scheme change
+	
 	If (This:C1470.darkScheme)
+		
+		This:C1470.colorScheme:="dark"
 		
 		// * PRE-LOADING ICONS FOR FIELD TYPES
 		For each ($file; Folder:C1567("/RESOURCES/images/dark/fieldsIcons").files(Ignore invisible:K24:16))
@@ -373,6 +375,8 @@ Function updateColorScheme()
 		This:C1470.warningRGB:="orangered"
 		
 	Else 
+		
+		This:C1470.colorScheme:="light"
 		
 		// * PRE-LOADING ICONS FOR FIELD TYPES
 		For each ($file; Folder:C1567("/RESOURCES/images/light/fieldsIcons").files(Ignore invisible:K24:16))
@@ -430,6 +434,7 @@ Function updateColorScheme()
 		This:C1470.colors[$key]:=cs:C1710.color.new(This:C1470[$key])
 		
 	End for each 
+	
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function goToPage($page : Text)
