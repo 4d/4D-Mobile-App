@@ -1787,23 +1787,26 @@ Function field($table; $field) : Object
 		
 	End if 
 	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	/// Get the project file
+Function getProjectFile() : 4D:C1709.File
 	
+	return (This:C1470._folder.file("project.4dmobileapp"))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Get the project file
-Function getProjectFile()->$file : 4D:C1709.File
-	This:C1470._folder.file("project.4dmobileapp")
+	/// Get the associated catalog file
+Function getCatalogFile() : 4D:C1709.File
+	
+	return (This:C1470._folder.file("catalog.json"))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Get the associated catalog file
-Function getCatalogFile()->$file : 4D:C1709.File
-	$file:=This:C1470._folder.file("catalog.json")
+	/// Returns the catalog as object
+Function getCatalogObject() : Object
 	
-Function getCatalogObject()->$object : Object
-	$object:=JSON Parse:C1218(This:C1470.getCatalogFile().getText())
+	return (JSON Parse:C1218(This:C1470.getCatalogFile().getText()))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Makes a Backup of the project & catalog
+	/// Makes a Backup of the project & catalog
 Function backup()
 	
 	var $file : 4D:C1709.File
