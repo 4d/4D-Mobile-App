@@ -434,7 +434,7 @@ Function fieldList($table)->$result : Object
 												
 											End if 
 											
-											$subfield2:=$field[$sub]
+											$subfield2:=$subfield[$sub]
 											
 											If ($subfield2.kind="alias")
 												
