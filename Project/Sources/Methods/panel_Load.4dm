@@ -1,24 +1,18 @@
 //%attributes = {"invisible":true}
-#DECLARE($name : Text)->$definition : Object
+#DECLARE($form : Text)->$definition : Object
 
-var $form : Text
-
-// The name of the managed form
-If (Count parameters:C259>=1)
-	
-	$form:=$name
-	
-Else 
-	
-	// Default
-	$form:=Current form name:C1298
-	
+If (False:C215)
+	C_TEXT:C284(panel_Load; $1)
+	C_OBJECT:C1216(panel_Load; $0)
 End if 
+
+// The name of the managed form, the current form if omitted.
+$form:=Length:C16($form)>0 ? $form : Current form name:C1298
 
 // Create the object if any
 If (Form:C1466.$dialog=Null:C1517)
 	
-	RECORD.info("🛑 CREATE $dialog (panel_Definition)")
+	RECORD.info("🛑 CREATE $dialog (panel_Definition: "+$form+")")
 	
 	Form:C1466.$dialog:=New object:C1471(\
 		$form; New object:C1471)
@@ -48,6 +42,3 @@ $definition:=Form:C1466.$dialog[$form]
 
 // Always return the current event
 $definition.event:=FORM Event:C1606
-
-// And the focused widget
-//$definition.focused:=OBJECT Get name(Object with focus)
