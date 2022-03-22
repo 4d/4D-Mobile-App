@@ -406,6 +406,48 @@ Function _cleanCopyProject($projectInput : Object)->$project : Object
 		
 	End for each 
 	
+	If (Not:C34(FEATURE.with("iOSAlias")))
+		
+		This:C1470._tmpRemoveAlias($project)
+		
+	End if 
+	
+Function _tmpRemoveAlias($project : Object/*in place*/)->$removedEntries : Collection
+	
+	$removedEntries:=New collection:C1472
+	
+	// remove from data model
+	var $tableNumber; $fieldKey : Text
+	var $field : Variant
+	For each ($tableNumber; $project.dataModel || New object:C1471)
+		For each ($fieldKey; $project.dataModel[$tableNumber])
+			$field:=$project.dataModel[$tableNumber][$fieldKey]
+			If ((Value type:C1509($field)=Is object:K8:27) && (String:C10($field.kind)="alias"))
+				OB REMOVE:C1226($project.dataModel[$tableNumber]; $fieldKey)
+				$removedEntries.push(New object:C1471("tableNumber"; $tableNumber; "fieldName"; $fieldKey))  // fieldName because alias
+			End if 
+		End for each 
+	End for each 
+	
+	// remove now from form
+	var $removedEntry : Object
+	var $formType : Text
+	var $index : Integer
+	For each ($removedEntry; $removedEntries)
+		For each ($formType; New collection:C1472("detail"; "list"))
+			If ($project[$formType][$removedEntry.tableNumber]#Null:C1517)
+				If (Value type:C1509($project[$formType][$removedEntry.tableNumber].fields)=Is collection:K8:32)
+					For ($index; 0; $project[$formType][$removedEntry.tableNumber].fields.length-1; 1)
+						If (($project[$formType][$removedEntry.tableNumber].fields[$index]#Null:C1517)\
+							 && (String:C10($project[$formType][$removedEntry.tableNumber].fields[$index].name)=$removedEntry.fieldName))
+							$project[$formType][$removedEntry.tableNumber].fields[$index]:=Null:C1517
+						End if 
+					End for 
+				End if 
+			End if 
+		End for each 
+	End for each 
+	
 	
 Function _getAppId()->$appId : Text
 	$appId:=This:C1470.project.organization.teamId+"."+This:C1470.project.product.bundleIdentifier
