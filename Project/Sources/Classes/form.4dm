@@ -80,7 +80,6 @@ Function restoreContext()
 	
 	ASSERT:C1129(False:C215; "👀 restore() must be overriden by the subclass!")
 	
-	
 	//MARK:-[FUNCTIONS] 
 	//=== === === === === === === === === === === === === === === === === === === === === 
 Function close()
@@ -360,7 +359,7 @@ Function setWorker($worker)
 	// .callWorker ( method : Text ; param : Collection )
 	// .callWorker ( method : Text ; param1, param2, …, paramN )
 	// ---------------------------------------------------------------------------------
-	//#TO_DO : Accept an integer as first parameter to allow calling a specific worker.
+	//TODO: Accept an integer as first parameter to allow calling a specific worker.
 	// .callWorker ( process : Integer ; method : Text )
 	// .callWorker ( process : Integer ; method : Text ; param : Collection )
 	// .callWorker ( process : Integer ; method : Text ; param1, param2, …, paramN )

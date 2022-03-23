@@ -162,7 +162,6 @@
 	},
 	"[COMPONENT]": {
 		"groups": [
-			"[API]",
 			"backend",
 			"UI",
 			"WIZARD"
@@ -1003,6 +1002,7 @@
 	},
 	"UI": {
 		"groups": [
+			"[API]",
 			"[BROWSER]",
 			"[EDITOR]",
 			"[PANELS]",
