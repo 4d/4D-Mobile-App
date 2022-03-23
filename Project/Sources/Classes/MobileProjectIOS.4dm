@@ -145,6 +145,7 @@ Function build()->$result : Object
 	End if 
 	
 	$result.success:=$Obj_result_build.success
+	This:C1470.build:=$Obj_result_build
 	
 	If (Not:C34($result.success))
 		This:C1470.postError(ob_error_string($result))
@@ -174,7 +175,13 @@ Function _runSimulator($out : Object)
 	$simctl:=This:C1470.simctl  // CLEAN: Maybe init only here
 	$project:=This:C1470.project
 	
-	$in.product:=$out.build.app
+	$in.product:=This:C1470.build.app
+	
+	If ($in.product=Null:C1517)
+		ASSERT:C1129(dev_Matrix; "product to install not found")
+		This:C1470.logError("product to install not found")
+		return 
+	End if 
 	
 	This:C1470.postStep("launchingTheSimulator")
 	This:C1470.logInfo("Launching the Simulator")
