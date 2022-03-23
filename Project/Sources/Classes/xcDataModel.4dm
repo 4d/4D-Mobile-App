@@ -711,14 +711,14 @@ Function _manageAlias($alias : Object; $table : Object)->$out : Object
 			$sourceDataClass:=This:C1470.getDataClass($destination.relatedDataClass)
 			If ($sourceDataClass=Null:C1517)
 				$sourceDataClass:=This:C1470._createTable($destination.relatedDataClass)
-				If ($sourceDataClass[""].primaryKey)  // one criteria to known if ok
+				If ($sourceDataClass[""].primaryKey#Null:C1517)  // one criteria to known if ok
 					$sourceDataClass[""].slave:=$sourceDataClassName
 					
 					This:C1470.dataModel[String:C10($sourceDataClass[""].tableNumber)]:=$sourceDataClass
 					$out.hasBeenEdited:=True:C214
 				Else 
-					ob_error_add($out; "Missing table "+String:C10($destination.relatedDataClas)+" in catalog")
-					ASSERT:C1129(dev_Matrix; "Missing table "+String:C10($destination.relatedDataClas)+" in catalog")
+					ob_error_add($out; "Missing table "+String:C10($destination.relatedDataClass)+" in catalog")
+					ASSERT:C1129(dev_Matrix; "Missing table "+String:C10($destination.relatedDataClass)+" in catalog")
 				End if 
 			End if 
 			

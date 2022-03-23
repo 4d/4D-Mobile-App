@@ -1,6 +1,6 @@
 //%attributes = {"invisible":true}
 var $choice; $pathname : Text
-var $o : Object
+var $o; $folder : Object
 var $product : 4D:C1709.Folder
 
 $choice:=Get selected menu item parameter:C1005
@@ -78,15 +78,15 @@ Case of
 		//______________________________________________________
 	: ($choice="xcdatamodel")
 		
-		$pathname:=Temporary folder:C486+Folder separator:K24:12+Generate UUID:C1066+Folder separator:K24:12
+		$folder:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).folder(Generate UUID:C1066).folder("Structures.xcdatamodeld")
 		
 		cs:C1710.xcDataModel.new(PROJECT).run(\
-			/*path*/$pathname+"Structures.xcdatamodeld"; \
+			/*path*/$folder.platformPath; \
 			/*options*/New object:C1471(\
 			"flat"; False:C215; \
 			"relationship"; True:C214))
 		
-		SHOW ON DISK:C922($pathname)
+		SHOW ON DISK:C922($folder.folder("Structures.xcdatamodel").platformPath)
 		
 		//______________________________________________________
 	: ($choice="dataSet")
