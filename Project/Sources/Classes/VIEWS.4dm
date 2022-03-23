@@ -298,6 +298,7 @@ Function fieldList($table)->$result : Object
 			
 			For each ($key; $tableModel)
 				
+				
 				If (Length:C16($key)=0)\
 					 || (Value type:C1509($tableModel[$key])#Is object:K8:27)
 					
@@ -342,8 +343,12 @@ Function fieldList($table)->$result : Object
 						$result.fields.push($field)
 						
 						//……………………………………………………………………………………………………………
+						//FIXME: BUG EN COMPILÉ
+						//: ($field.kind="relatedEntity")\
+							 || (($field.kind="alias") && (Bool($field.isToOne)))
+						
 					: ($field.kind="relatedEntity")\
-						 || (($field.kind="alias") && (Bool:C1537($field.isToOne)))
+						 || (($field.kind="alias") & (Bool:C1537($field.isToOne)))
 						
 						$subLevel+=10
 						
@@ -369,100 +374,106 @@ Function fieldList($table)->$result : Object
 						// Add the entity's fields
 						For each ($attribute; $field)
 							
-							If (Value type:C1509($field[$attribute])=Is object:K8:27)
+							
+							If (Length:C16($attribute)=0)\
+								 || (Value type:C1509($field[$attribute])#Is object:K8:27)
 								
-								$subfield:=$field[$attribute]
+								continue
 								
-								Case of 
-										
-										//……………………………………………………………………………………………………………
-									: ($subfield.kind="storage")
-										
-										$subfield.$label:=$linkPrefix+$subfield.name
-										$subfield.$level:=$subLevel+1
-										
-										$subfield.path:=$key+"."+$subfield.name
-										$subfield.name:=$subfield.path
-										
-										$subfield.fieldNumber:=Num:C11($attribute)
-										
-										$result.fields.push($subfield)
-										
-										//……………………………………………………………………………………………………………
-									: ($subfield.kind="alias")
-										
-										$subfield.$label:=$linkPrefix+$attribute
-										$subfield.$level:=$subLevel+1
-										
-										$subfield.path:=$key+"."+$subfield.path
-										$subfield.name:=$subfield.path
-										
-										$result.fields.push($subfield)
-										
-										//……………………………………………………………………………………………………………
-									: ($subfield.kind="calculated")
-										
-										$subfield.$label:=$linkPrefix+$attribute
-										$subfield.$level:=$subLevel+1
-										
-										$subfield.path:=$key+"."+$attribute
-										$subfield.name:=$subfield.path
-										
-										$result.fields.push($subfield)
-										
-										//______________________________________________________
-									: ($subfield.kind="relatedEntities")
-										
-										$subfield.$label:=$linkPrefix+$attribute
-										$subfield.$level:=$subLevel+2
-										
-										$subfield.name:=$attribute
-										
-										//FIXME:Tempo
-										$subfield.fieldType:=8859
-										
-										$result.fields.push($subfield)
-										
-										//______________________________________________________
-									: ($subfield.kind="relatedEntity")
-										
-										For each ($sub; $subfield)
-											
-											If (Value type:C1509($subfield[$sub])#Is object:K8:27)
-												
-												continue
-												
-											End if 
-											
-											$subfield2:=$subfield[$sub]
-											
-											If ($subfield2.kind="alias")
-												
-												$subfield2.name:=$key+"."+$sub
-												$subfield2.path:=$key+"."+$subfield2.path
-												
-											Else 
-												
-												$subfield2.name:=($subfield2.kind="storage") ? $subfield2.path : $key+"."+$sub
-												$subfield2.path:=$key+"."+$subfield2.name
-												
-											End if 
-											
-											$subfield2.$label:=$linkPrefix+$subfield2.name
-											$subfield2.$level:=$subLevel+2
-											
-											$result.fields.push($subfield2)
-											
-										End for each 
-										
-										//______________________________________________________
-									Else 
-										
-										oops
-										
-										//______________________________________________________
-								End case 
 							End if 
+							
+							$subfield:=$field[$attribute]
+							
+							Case of 
+									
+									//……………………………………………………………………………………………………………
+								: ($subfield.kind="storage")
+									
+									$subfield.$label:=$linkPrefix+$subfield.name
+									$subfield.$level:=$subLevel+1
+									
+									$subfield.path:=$key+"."+$subfield.name
+									$subfield.name:=$subfield.path
+									
+									$subfield.fieldNumber:=Num:C11($attribute)
+									
+									$result.fields.push($subfield)
+									
+									//……………………………………………………………………………………………………………
+								: ($subfield.kind="alias")
+									
+									$subfield.$label:=$linkPrefix+$attribute
+									$subfield.$level:=$subLevel+1
+									
+									$subfield.path:=$key+"."+$subfield.path
+									$subfield.name:=$subfield.path
+									
+									$result.fields.push($subfield)
+									
+									//……………………………………………………………………………………………………………
+								: ($subfield.kind="calculated")
+									
+									$subfield.$label:=$linkPrefix+$attribute
+									$subfield.$level:=$subLevel+1
+									
+									$subfield.path:=$key+"."+$attribute
+									$subfield.name:=$subfield.path
+									
+									$result.fields.push($subfield)
+									
+									//______________________________________________________
+								: ($subfield.kind="relatedEntities")
+									
+									$subfield.$label:=$linkPrefix+$attribute
+									$subfield.$level:=$subLevel+2
+									
+									$subfield.name:=$attribute
+									
+									//FIXME:Tempo
+									$subfield.fieldType:=8859
+									
+									$result.fields.push($subfield)
+									
+									//______________________________________________________
+								: ($subfield.kind="relatedEntity")
+									
+									For each ($sub; $subfield)
+										
+										
+										If (Value type:C1509($subfield[$sub])#Is object:K8:27)
+											
+											continue
+											
+										End if 
+										
+										$subfield2:=$subfield[$sub]
+										
+										If ($subfield2.kind="alias")
+											
+											$subfield2.name:=$key+"."+$sub
+											$subfield2.path:=$key+"."+$subfield2.path
+											
+										Else 
+											
+											$subfield2.name:=($subfield2.kind="storage") ? $subfield2.path : $key+"."+$sub
+											$subfield2.path:=$key+"."+$subfield2.name
+											
+										End if 
+										
+										$subfield2.$label:=$linkPrefix+$subfield2.name
+										$subfield2.$level:=$subLevel+2
+										
+										$result.fields.push($subfield2)
+										
+									End for each 
+									
+									//______________________________________________________
+								Else 
+									
+									oops
+									
+									//______________________________________________________
+							End case 
 						End for each 
 						
 						//……………………………………………………………………………………………………………
