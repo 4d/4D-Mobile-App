@@ -1179,8 +1179,7 @@ Function getSortableFields($table; $ordered : Boolean)->$fields : Collection
 				
 				If ($member.value.kind="storage")
 					
-					// FIXME:remove ID
-					$field.fieldNumber:=($field.fieldNumber#Null:C1517) ? $field.fieldNumber : $field.id
+					$field.fieldNumber:=($field.fieldNumber#Null:C1517) ? $field.fieldNumber : Num:C11($member.key)
 					
 				Else 
 					

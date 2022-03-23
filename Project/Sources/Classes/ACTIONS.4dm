@@ -323,8 +323,7 @@ Function doAddMenu()
 			
 			If ($field.kind="storage")
 				
-				// FIXME:remove ID
-				$fieldsMenu.append($field.name; "sort_"+$o.tableID+","+String:C10(($field.fieldNumber#Null:C1517) ? $field.fieldNumber : $field.id))
+				$fieldsMenu.append($field.name; "sort_"+$o.tableID+","+String:C10($field.fieldNumber))
 				
 			Else 
 				
