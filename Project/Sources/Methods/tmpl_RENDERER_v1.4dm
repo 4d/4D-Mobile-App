@@ -26,7 +26,7 @@ $t:=$svg.findById("cookery")
 
 If (Asserted:C1132($svg.success; "Missing cookery element"))
 	
-	$o:=xml_attributes($t)
+	$o:=_o_xml_attributes($t)
 	
 	// Get the bindind definition
 	If (Asserted:C1132($o["ios:values"]#Null:C1517))
@@ -45,7 +45,7 @@ If (Asserted:C1132($svg.success; "Missing cookery element"))
 		$container:=$svg.findById("multivalued")
 		
 		// Get the vertical offset
-		$o:=xml_attributes($domTemplate)
+		$o:=_o_xml_attributes($domTemplate)
 		
 		If ($o["ios:dy"]#Null:C1517)
 			
@@ -136,7 +136,7 @@ If (Asserted:C1132($svg.success; "Missing cookery element"))
 		$domField:=$svg.findById($t)
 		
 		// Get the field bind
-		$o:=xml_attributes($domField)
+		$o:=_o_xml_attributes($domField)
 		
 		If (Asserted:C1132($o["ios:bind"]#Null:C1517))
 			
@@ -189,7 +189,7 @@ If (Asserted:C1132($svg.success; "Missing cookery element"))
 								
 								If (PROJECT.dataModel[String:C10($o.relatedTableNumber)]=Null:C1517)  // Error
 									
-									$svg.setAttribute("class"; String:C10(xml_attributes($node).class)+" error"; $node)
+									$svg.setAttribute("class"; String:C10(_o_xml_attributes($node).class)+" error"; $node)
 									
 								End if 
 								
@@ -199,7 +199,7 @@ If (Asserted:C1132($svg.success; "Missing cookery element"))
 								If (PROJECT.dataModel[$context.tableNumber][$o.name]=Null:C1517)
 									
 									$node:=$svg.findById($t+".label")
-									$svg.setAttribute("class"; String:C10(xml_attributes($node).class)+" error"; $node)
+									$svg.setAttribute("class"; String:C10(_o_xml_attributes($node).class)+" error"; $node)
 									
 								End if 
 								
@@ -238,7 +238,7 @@ If (Asserted:C1132($svg.success; "Missing cookery element"))
 				If (Asserted:C1132($svg.success))
 					
 					// Truncate & set tips if necessary
-					$width:=Num:C11(xml_attributes($node).width)
+					$width:=Num:C11(_o_xml_attributes($node).width)
 					
 					If ($width>0)
 						
@@ -278,7 +278,7 @@ If (Asserted:C1132($svg.success; "Missing cookery element"))
 		
 		For ($i; 1; Size of array:C274($tDom_); 1)
 			
-			If (String:C10(xml_attributes($tDom_{$i}).class)="")  // Not affected
+			If (String:C10(_o_xml_attributes($tDom_{$i}).class)="")  // Not affected
 				
 				If (Not:C34($first))
 					

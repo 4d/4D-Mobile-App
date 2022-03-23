@@ -116,7 +116,7 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 				C_TEXT:C284($Txt_methodOnError)
 				$Txt_methodOnError:=Method called on error:C704
 				xml_ERROR:=0
-				ON ERR CALL:C155("xml_NO_ERROR")
+				ON ERR CALL:C155("_o_xml_NO_ERROR")
 				
 				If (Value type:C1509($2.variable)=Is BLOB:K8:12)
 					
@@ -281,7 +281,7 @@ Else
 					C_TEXT:C284($Txt_methodOnError)
 					$Txt_methodOnError:=Method called on error:C704
 					xml_ERROR:=0
-					ON ERR CALL:C155("xml_NO_ERROR")
+					ON ERR CALL:C155("_o_xml_NO_ERROR")
 					//) {
 					
 					DOM GET XML ATTRIBUTE BY NAME:C728($o.elementRef; $2.name; $tt)
@@ -302,7 +302,7 @@ Else
 				: ($1="attributes")
 					
 					$o:=New object:C1471(\
-						"attributes"; xml_attributes($o.elementRef); \
+						"attributes"; _o_xml_attributes($o.elementRef); \
 						"success"; True:C214)
 					
 					// use a level because could have an attribute named success...
@@ -353,7 +353,7 @@ Else
 					//=================================================================
 				: ($1="findByXPath")
 					
-					$t:=xml_findElement($o.elementRef; $2.xpath).reference
+					$t:=_o_xml_findElement($o.elementRef; $2.xpath).reference
 					
 					//=================================================================
 				: ($1="findOrCreate")
@@ -361,7 +361,7 @@ Else
 					$t:=$o.elementRef
 					DOM GET XML ELEMENT NAME:C730($t; $tt)
 					
-					$o:=xml_findElement($t; $2.element)  // a new $o will be created after, $t filled
+					$o:=_o_xml_findElement($t; $2.element)  // a new $o will be created after, $t filled
 					If ($o.success)
 						
 						$t:=$o.reference
@@ -403,7 +403,7 @@ Else
 					
 					This:C1470[""]:=Null:C1517
 					
-					For each ($tt; xml_findByName($o.parent.elementRef; $2.name))
+					For each ($tt; _o_xml_findByName($o.parent.elementRef; $2.name))
 						
 						$o.elements.push(_o_xml($tt))
 						
@@ -421,7 +421,7 @@ Else
 					
 					This:C1470[""]:=Null:C1517
 					
-					For each ($tt; xml_findByAttribute($o.parent.elementRef; $2))
+					For each ($tt; _o_xml_findByAttribute($o.parent.elementRef; $2))
 						
 						$o.elements.push(_o_xml($tt))
 						
@@ -515,7 +515,7 @@ Else
 					C_TEXT:C284($Txt_methodOnError)
 					$Txt_methodOnError:=Method called on error:C704
 					xml_ERROR:=0
-					ON ERR CALL:C155("xml_NO_ERROR")
+					ON ERR CALL:C155("_o_xml_NO_ERROR")
 					
 					Case of 
 							
@@ -577,7 +577,7 @@ Else
 					C_TEXT:C284($Txt_methodOnError)
 					$Txt_methodOnError:=Method called on error:C704
 					xml_ERROR:=0
-					ON ERR CALL:C155("xml_NO_ERROR")
+					ON ERR CALL:C155("_o_xml_NO_ERROR")
 					
 					Case of 
 							

@@ -3,7 +3,9 @@
 		"classes": [
 			"ALL_TYPESEntity",
 			"EmployesEntity",
-			"ServiceEntity"
+			"ServiceEntity",
+			"UNIT_0Entity",
+			"UNIT_1Entity"
 		]
 	},
 	"__IN WORKS": {
@@ -86,7 +88,9 @@
 			"_o_tempoFieldType",
 			"_o_thermometer",
 			"_o_tmpl_form",
+			"_o_ui_ALIGN_ON_BEST_SIZE",
 			"_o_ui_BEST_SIZE",
+			"_o_ui_MOVE",
 			"_o_unzip",
 			"_o_widget",
 			"_o_xml",
@@ -97,7 +101,16 @@
 			"TURN_AROUND_Field_name"
 		]
 	},
+	"_ui": {
+		"methods": [
+			"COMPILER_ui",
+			"ui_SET_GEOMETRY"
+		]
+	},
 	"_UNUSED": {
+		"groups": [
+			"deliver"
+		],
 		"methods": [
 			"COMPILER_UNUSED",
 			"net",
@@ -105,9 +118,10 @@
 		]
 	},
 	"(__)": {},
+	"([ macOS ])": {},
 	"([UI])": {},
 	"(HDI_COLOR)": {},
-	"[ android ]": {
+	"[android]": {
 		"methods": [
 			"COMPILER_android",
 			"studioCheckInstall"
@@ -124,25 +138,6 @@
 			"sdkmanager",
 			"studio",
 			"vdtool"
-		]
-	},
-	"[ macOS ]": {
-		"methods": [
-			"capabilities",
-			"certificate",
-			"colors",
-			"COMPILER_macOS",
-			"provisioningProfiles",
-			"swiftPM",
-			"teamId",
-			"Xcode",
-			"Xcode_CheckInstall",
-			"XcodeProj"
-		],
-		"classes": [
-			"cfgutil",
-			"simctl",
-			"Xcode"
 		]
 	},
 	"[API]": {
@@ -166,6 +161,12 @@
 		]
 	},
 	"[COMPONENT]": {
+		"groups": [
+			"[API]",
+			"backend",
+			"UI",
+			"WIZARD"
+		],
 		"methods": [
 			"BUILD",
 			"COMPILER_COMPONENT",
@@ -174,14 +175,36 @@
 			"FEATURE_FLAGS",
 			"killWorker"
 		],
-		"forms": [
-			"NEW_PROJECT",
-			"WIZARD_NEW_PROJECT",
-			"WIZARD_OPEN_PROJECT"
-		],
 		"classes": [
 			"ExposedStructure",
-			"path"
+			"field",
+			"path",
+			"table"
+		]
+	},
+	"[EDITOR]": {
+		"methods": [
+			"COMPILER_editor",
+			"editor_CALLBACK",
+			"editor_CHECK_INSTALLATION",
+			"editor_CREATE_PROJECT",
+			"editor_GET_DEVICES",
+			"editor_LoadIcons",
+			"editor_MESSAGE_CALLBACK",
+			"editor_Panel_init",
+			"editor_PROCESS_MESSAGES",
+			"editor_RESUME",
+			"editor_ui_LISTBOX",
+			"editor_UPDATE_EXPOSED_CATALOG",
+			"editor_UPDATE_HEADER",
+			"PROJECT_EDITOR"
+		],
+		"forms": [
+			"PROJECT_EDITOR",
+			"TITLE"
+		],
+		"classes": [
+			"PROJECT_EDITOR"
 		]
 	},
 	"[ios]": {
@@ -191,15 +214,28 @@
 		],
 		"methods": [
 			"asset",
+			"capabilities",
+			"certificate",
+			"colors",
 			"COMPILER_ios",
+			"COMPILER_macOS",
 			"dataModel",
+			"provisioningProfiles",
+			"swiftPM",
+			"teamId",
 			"xcDataModel",
+			"Xcode",
+			"Xcode_CheckInstall",
+			"XcodeProj",
 			"XcodeProjInject",
 			"xloc"
 		],
 		"classes": [
+			"cfgutil",
 			"MobileProjectIOS",
-			"xcDataModel"
+			"simctl",
+			"xcDataModel",
+			"Xcode"
 		]
 	},
 	"[PANELS]": {
@@ -246,39 +282,6 @@
 		],
 		"classes": [
 			"PROJECT_FORM"
-		]
-	},
-	"[UI]": {
-		"groups": [
-			"[BROWSER]",
-			"[PANELS]",
-			"[PROJECT]",
-			"FOOTER",
-			"LISTE_EDITOR",
-			"RIBON"
-		],
-		"methods": [
-			"COMPILER_editor",
-			"editor_CALLBACK",
-			"editor_CHECK_INSTALLATION",
-			"editor_CREATE_PROJECT",
-			"editor_GET_DEVICES",
-			"editor_LoadIcons",
-			"editor_MESSAGE_CALLBACK",
-			"editor_Panel_init",
-			"editor_PROCESS_MESSAGES",
-			"editor_RESUME",
-			"editor_ui_LISTBOX",
-			"editor_UPDATE_EXPOSED_CATALOG",
-			"editor_UPDATE_HEADER",
-			"PROJECT_EDITOR"
-		],
-		"forms": [
-			"PROJECT_EDITOR",
-			"TITLE"
-		],
-		"classes": [
-			"PROJECT_EDITOR"
 		]
 	},
 	"00] TARGET": {
@@ -495,6 +498,11 @@
 		]
 	},
 	"backend": {
+		"groups": [
+			"[android]",
+			"[ios]",
+			"mobile"
+		],
 		"methods": [
 			"catalog",
 			"COMPILER_backend",
@@ -714,6 +722,7 @@
 	},
 	"lib": {
 		"groups": [
+			"_ui",
 			"col",
 			"dev",
 			"doc",
@@ -726,7 +735,6 @@
 			"rgx (thread-safe)",
 			"semver",
 			"str",
-			"ui",
 			"xml (thread-safe)"
 		],
 		"methods": [
@@ -993,12 +1001,17 @@
 			"test_str"
 		]
 	},
-	"ui": {
-		"methods": [
-			"COMPILER_ui",
-			"ui_ALIGN_ON_BEST_SIZE",
-			"ui_MOVE",
-			"ui_SET_GEOMETRY"
+	"UI": {
+		"groups": [
+			"[BROWSER]",
+			"[EDITOR]",
+			"[PANELS]",
+			"[PROJECT]",
+			"FOOTER",
+			"LISTE_EDITOR",
+			"panel",
+			"RIBON",
+			"widgets"
 		]
 	},
 	"widgets": {
@@ -1015,21 +1028,28 @@
 			"NO_DATAMODEL"
 		]
 	},
+	"WIZARD": {
+		"forms": [
+			"NEW_PROJECT",
+			"WIZARD_NEW_PROJECT",
+			"WIZARD_OPEN_PROJECT"
+		]
+	},
 	"xml (thread-safe)": {
 		"methods": [
+			"_o_xml_attributes",
+			"_o_xml_findByAttribute",
+			"_o_xml_findByName",
+			"_o_xml_findElement",
+			"_o_xml_NO_ERROR",
 			"COMPILER_xml",
-			"test_xml",
-			"xml_attributes",
-			"xml_encode",
-			"xml_findByAttribute",
-			"xml_findByName",
-			"xml_findElement",
-			"xml_NO_ERROR"
+			"test_xml"
 		]
 	},
 	"trash": {
 		"groups": [
 			"(__)",
+			"([ macOS ])",
 			"([UI])",
 			"(HDI_COLOR)"
 		]

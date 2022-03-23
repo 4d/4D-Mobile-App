@@ -8,20 +8,20 @@ err_TRY
 $o:=_o_err("NO_ERROR")
 ASSERT:C1129(Method called on error:C704="NO_ERROR")
 
-$o.install("xml_NO_ERROR")
-ASSERT:C1129(Method called on error:C704="xml_NO_ERROR")
+$o.install("_o_xml_NO_ERROR")
+ASSERT:C1129(Method called on error:C704="_o_xml_NO_ERROR")
 
 $o.install("err_CATCH")
 ASSERT:C1129(Method called on error:C704="err_CATCH")
 
 $o.deinstall()
-ASSERT:C1129(Method called on error:C704="xml_NO_ERROR")
+ASSERT:C1129(Method called on error:C704="_o_xml_NO_ERROR")
 
 $o.install("NO_ERROR")
 ASSERT:C1129(Method called on error:C704="NO_ERROR")
 
-$o.install("xml_NO_ERROR")
-ASSERT:C1129(Method called on error:C704="xml_NO_ERROR")
+$o.install("_o_xml_NO_ERROR")
+ASSERT:C1129(Method called on error:C704="_o_xml_NO_ERROR")
 
 $o.install("err_CATCH")
 ASSERT:C1129(Method called on error:C704="err_CATCH")
@@ -35,14 +35,14 @@ ASSERT:C1129(Method called on error:C704="NO_ERROR")
 $o.install("NO_ERROR")
 ASSERT:C1129(Method called on error:C704="NO_ERROR")
 
-$o.install("xml_NO_ERROR")
-ASSERT:C1129(Method called on error:C704="xml_NO_ERROR")
+$o.install("_o_xml_NO_ERROR")
+ASSERT:C1129(Method called on error:C704="_o_xml_NO_ERROR")
 
 $o.install("err_CATCH")
 ASSERT:C1129(Method called on error:C704="err_CATCH")
 
 $o.deinstall()
-ASSERT:C1129(Method called on error:C704="xml_NO_ERROR")
+ASSERT:C1129(Method called on error:C704="_o_xml_NO_ERROR")
 
 $o.deinstall()
 ASSERT:C1129(Method called on error:C704="NO_ERROR")
@@ -73,8 +73,8 @@ ASSERT:C1129(Method called on error:C704="err_HIDE")
 $o.show()
 ASSERT:C1129(Length:C16(Method called on error:C704)=0)
 
-$o.install("xml_NO_ERROR")
-ASSERT:C1129(Method called on error:C704="xml_NO_ERROR")
+$o.install("_o_xml_NO_ERROR")
+ASSERT:C1129(Method called on error:C704="_o_xml_NO_ERROR")
 
 $o.hide()
 ASSERT:C1129(Method called on error:C704="err_HIDE")
@@ -85,7 +85,7 @@ C_TEXT:C284($t)
 $t:=$o.$
 
 $o.show()
-ASSERT:C1129(Method called on error:C704="xml_NO_ERROR")
+ASSERT:C1129(Method called on error:C704="_o_xml_NO_ERROR")
 
 $o.deinstall()
 ASSERT:C1129(Length:C16(Method called on error:C704)=0)

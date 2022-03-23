@@ -5,7 +5,7 @@
 // Created 26-4-2018 by Vincent de Lachaux
 // ----------------------------------------------------
 // Description:
-// 
+//
 // ----------------------------------------------------
 // Declarations
 #DECLARE($oIN : Object)
@@ -45,7 +45,7 @@ Else
 				If (Bool:C1537(OK))
 					
 					// Get the bindind definition
-					$oAttributes:=xml_attributes($dom)
+					$oAttributes:=_o_xml_attributes($dom)
 					OK:=Num:C11($oAttributes["ios:values"]#Null:C1517)
 					ASSERT:C1129(OK=1; "Missing 'ios:values' attribute in the template")
 					
@@ -80,7 +80,7 @@ Else
 							
 							If (Bool:C1537(OK))
 								
-								$oAttributes:=xml_attributes($Dom_field)
+								$oAttributes:=_o_xml_attributes($Dom_field)
 								ASSERT:C1129($oAttributes["ios:bind"]#Null:C1517)
 								
 							Else 

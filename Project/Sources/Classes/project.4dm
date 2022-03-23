@@ -707,7 +707,7 @@ Function isFieldAttribute($fieldName : Text; $tableName : Text) : Boolean
 	
 	If ($table#Null:C1517)
 		
-		$field:=$table.field.query("name = :1"; $fieldName).pop()
+		$field:=$table.fields.query("name = :1"; $fieldName).pop()
 		
 	End if 
 	

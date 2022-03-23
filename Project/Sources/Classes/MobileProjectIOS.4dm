@@ -154,7 +154,7 @@ Function build()->$result : Object
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Runing the App on a simulator
+	// Running the application on a simulator or a connected device
 Function run()->$result : Object
 	
 	$result:=New object:C1471
@@ -169,6 +169,8 @@ Function run()->$result : Object
 		
 	End if 
 	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Running the application on a simulator
 Function _runSimulator($out : Object)
 	var $in; $simctl; $project : Object
 	$in:=This:C1470.input

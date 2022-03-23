@@ -132,7 +132,7 @@ For each ($o; $definition.panels)
 		OBJECT SET VISIBLE:C603(*; $title; True:C214)
 		OBJECT SET VISIBLE:C603(*; $help; Bool:C1537($o.help))
 		
-		ui_ALIGN_ON_BEST_SIZE(Align left:K42:2; $title; $help)
+		_o_ui_ALIGN_ON_BEST_SIZE(Align left:K42:2; $title; $help)
 		
 		$top:=$vOffset+40
 		

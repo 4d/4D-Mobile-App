@@ -180,8 +180,8 @@ Case of
 				
 				$class.fieldList()
 				
-				ui_MOVE($form.search; $e.objectName; Align right:K42:4; 30)
-				ui_MOVE($form.action; $e.objectName; Align right:K42:4; 0)
+				_o_ui_MOVE($form.search; $e.objectName; Align right:K42:4; 30)
+				_o_ui_MOVE($form.action; $e.objectName; Align right:K42:4; 0)
 				
 				OBJECT SET VISIBLE:C603(*; $form.tables+".filter"; False:C215)
 				OBJECT SET VISIBLE:C603(*; $form.search; True:C214)
@@ -432,8 +432,8 @@ Case of
 				OBJECT SET RGB COLORS:C628(*; $e.objectName; Foreground color:K23:1; EDITOR.highlightColor; EDITOR.highlightColor)
 				
 				// Move search & action [
-				ui_MOVE($form.search; $e.objectName; Align right:K42:4; 30)
-				ui_MOVE($form.action; $e.objectName; Align right:K42:4; 0)
+				_o_ui_MOVE($form.search; $e.objectName; Align right:K42:4; 30)
+				_o_ui_MOVE($form.action; $e.objectName; Align right:K42:4; 0)
 				
 				OBJECT SET VISIBLE:C603(*; $form.fields+".filter"; False:C215)
 				OBJECT SET VISIBLE:C603(*; $form.search; True:C214)
@@ -656,7 +656,7 @@ Case of
 		
 		//==================================================
 		//: ($e.objectName="splitter")  // **********************************************
-		//Case of 
+		//Case of
 		////______________________________________________________
 		//: ($e.code=On Clicked)
 		//// Determine the offset
@@ -669,13 +669,13 @@ Case of
 		//OBJECT GET SUBFORM CONTAINER SIZE($width; $height)
 		//$bottom:=$height-10
 		//OBJECT SET COORDINATES(*; "splitter"; 0; $bottom; $width; $bottom+1)
-		//Else 
+		//Else
 		//// Hide the bottom line
 		//OBJECT SET VISIBLE(*; "bottom.line"; False)
 		//CALL FORM(Current form window; "editor_CALLBACK"; "resizePanel"; New object(\
-																																																															"panel"; Current form name; \
-																																																															"offset"; $Lon_vOffset))
-		//End if 
+																																																																		"panel"; Current form name; \
+																																																																		"offset"; $Lon_vOffset))
+		//End if
 		////______________________________________________________
 		//: ($e.code=On Mouse Leave)
 		//GET MOUSE($l; $l; $Lon_button)
@@ -683,7 +683,7 @@ Case of
 		//OBJECT GET SUBFORM CONTAINER SIZE($width; $height)
 		//$bottom:=$height-10
 		//OBJECT SET COORDINATES(*; "splitter"; 0; $bottom; $width; $bottom+1)
-		//End if 
+		//End if
 		//If ($Lon_button=0)
 		////  // Place and show the bottom line
 		////OBJECT GET COORDINATES(*;"bottom.line";$Lon_left;$Lon_top;$Lon_right;$Lon_bottom)
@@ -696,12 +696,12 @@ Case of
 		////GET WINDOW RECT($Lon_left;$Lon_top;$Lon_right;$Lon_bottom;$Lon_windowRef)
 		////SET WINDOW RECT($Lon_left;$Lon_top;$Lon_right+1;$Lon_bottom;$Lon_windowRef)
 		////SET WINDOW RECT($Lon_left;$Lon_top;$Lon_right;$Lon_bottom;$Lon_windowRef)
-		//End if 
+		//End if
 		////______________________________________________________
-		//Else 
+		//Else
 		//ASSERT(False; "Form event activated unnecessarily ("+$e.description+")")
 		////______________________________________________________
-		//End case 
+		//End case
 		
 		//==================================================
 	Else 
