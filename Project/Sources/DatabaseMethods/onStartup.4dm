@@ -15,7 +15,6 @@ If (Not:C34(Is compiled mode:C492))
 		
 		// Add custom actions
 		READ PICTURE FILE:C678(File:C1566("/RESOURCES/Images/phone-blue.png").platformPath; $icon)
-		
 		$o:=New object:C1471(\
 			"name"; "Open Mobile Project"; \
 			"formula"; Formula:C1597(_OPEN_MOBILE_PROJECT); \

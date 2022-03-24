@@ -2,11 +2,10 @@
 var $content; $o; $result : Object
 
 COMPILER_COMPONENT
+
 $o:=cs:C1710.path.new().userCache().parent.file("lastBuild.ios.4dmobile")
 
 If ($o.exists)
-	
-	COMPILER_COMPONENT
 	
 	//$content:=JSON Parse(Document to text($o.platformPath))
 	$content:=JSON Parse:C1218(File:C1566($o.platformPath; fk platform path:K87:2).getText())

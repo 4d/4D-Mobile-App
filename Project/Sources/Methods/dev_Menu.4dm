@@ -1,14 +1,12 @@
 //%attributes = {"invisible":true}
-C_OBJECT:C1216($1)
-
-C_OBJECT:C1216($menu; $o)
-C_COLLECTION:C1488($c)
+#DECLARE($menu : cs:C1710.menu)
 
 If (False:C215)
 	C_OBJECT:C1216(dev_Menu; $1)
 End if 
 
-$menu:=$1
+var $c : Collection
+var $o : cs:C1710.menu
 
 $c:=New collection:C1472
 
@@ -45,19 +43,19 @@ $c.push(New object:C1471(\
 $menu.append("Navigate"; cs:C1710.menu.new().append($c))
 
 $o:=cs:C1710.menu.new()
-$o.append("Create project without building"; "create").method("menu_product")
-$o.append("Build and run"; "build").method("menu_product").disable()
-$o.append("Create, build and run"; "buildAndRun").method("menu_product")
-$o.append("Run only (must have been builded)"; "run").method("menu_product")
+$o.append("Create project without building"; "create").method(Formula:C1597(menu_product).source)
+$o.append("Build and run"; "build").method(Formula:C1597(menu_product).source).disable()
+$o.append("Create, build and run"; "buildAndRun").method(Formula:C1597(menu_product).source)
+$o.append("Run only (must have been builded)"; "run").method(Formula:C1597(menu_product).source)
 $o.line()
-$o.append("Launch Last Build").method("01_LASTBUILD")
+$o.append("Launch Last Build").method(Formula:C1597(01_LASTBUILD).source)
 $o.line()
-$o.append("Reveal in Finder"; "reveal").method("menu_product")
-$o.append("Replace SDK"; "replaceSDK").method("menu_product")
+$o.append("Reveal in Finder"; "reveal").method(Formula:C1597(menu_product).source)
+$o.append("Replace SDK"; "replaceSDK").method(Formula:C1597(menu_product).source)
 $o.line()
-$o.append("Generate core data model"; "xcdatamodel").method("menu_product").shortcut(New object:C1471("key"; "E"; "modifier"; Command key mask:K16:1))
-$o.append("Generate data set"; "dataSet").method("menu_product")
-$o.append("Generate core data set"; "coreDataSet").method("menu_product")
+$o.append("Generate core data model"; "xcdatamodel").method(Formula:C1597(menu_product).source).shortcut(New object:C1471("key"; "E"; "modifier"; Command key mask:K16:1))
+$o.append("Generate data set"; "dataSet").method(Formula:C1597(menu_product).source)
+$o.append("Generate core data set"; "coreDataSet").method(Formula:C1597(menu_product).source)
 $menu.append("Product"; $o)
 
 $o:=cs:C1710.menu.new()
@@ -65,11 +63,11 @@ cs:C1710.menu_component_class.new().fillMenu($o)
 $menu.append("Component"; $o)
 
 $o:=cs:C1710.menu.new()
-$o.append("Close"; "close").method("menu_window")
-$o.append("Minimize"; "minimize").method("menu_window")
-$o.append("Maximize"; "maximize").method("menu_window")
-$o.append("Centered"; "centered").method("menu_window")
+$o.append("Close"; "close").method(Formula:C1597(menu_window).source)
+$o.append("Minimize"; "minimize").method(Formula:C1597(menu_window).source)
+$o.append("Maximize"; "maximize").method(Formula:C1597(menu_window).source)
+$o.append("Centered"; "centered").method(Formula:C1597(menu_window).source)
 $menu.append("Window"; $o)
 
 $menu.append("DEV"; cs:C1710.menu.new()\
-.append("00_TESTS"; "00_TESTS"))
+.append("00_TESTS"; Formula:C1597(00_TESTS).source))

@@ -48,8 +48,7 @@
 			"01_LASTBUILD",
 			"dev_test_android",
 			"dev_tests_iOS",
-			"oops",
-			"showTestOnDisk"
+			"oops"
 		],
 		"forms": [
 			"_VIEWS_WITH_actionList",
@@ -114,6 +113,7 @@
 		"methods": [
 			"COMPILER_UNUSED",
 			"net",
+			"showTestOnDisk",
 			"tester_net"
 		]
 	},

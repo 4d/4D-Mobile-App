@@ -1,10 +1,10 @@
 //%attributes = {"invisible":true}
 // ----------------------------------------------------
-// Project method : PRODUCT
+// Project method : TARGET
 // Created 16-9-2020 by Vincent de Lachaux
 // ----------------------------------------------------
 // Description:
-// PRODUCT pannel management
+// TARGET pannel management
 // ----------------------------------------------------
 // Declarations
 var $e; $ƒ : Object
@@ -32,8 +32,6 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 			
 			// Update UI
 			$ƒ.displayTarget()
-			
-			//SET TIMER(-1)
 			
 			//______________________________________________________
 	End case 
@@ -80,14 +78,12 @@ Else   // <== WIDGETS METHOD
 				: ($e.code=On Mouse Enter:K2:33)
 					
 					// Highlights
-					//OBJECT SET RGB COLORS(*; $e.objectName; EDITOR.selectedColor)
 					$ƒ[$e.objectName].setColors(EDITOR.selectedColor)
 					
 					//______________________________________________________
 				: ($e.code=On Mouse Leave:K2:34)
 					
 					// Restore
-					//OBJECT SET RGB COLORS(*; $e.objectName; Foreground color)
 					$ƒ[$e.objectName].setColors(Foreground color:K23:1)
 					
 					//______________________________________________________
