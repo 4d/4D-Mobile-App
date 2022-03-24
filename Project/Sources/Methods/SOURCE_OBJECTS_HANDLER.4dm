@@ -134,15 +134,7 @@ Case of
 					
 					If (Bool:C1537(OK))
 						
-						If (FEATURE.with("sourceClass"))
-							
-							Form:C1466.dataSource.keyPath:=cs:C1710.doc.new(DOCUMENT).relativePath
-							
-						Else 
-							
-							// 18R2-
-							
-						End if 
+						Form:C1466.dataSource.keyPath:=cs:C1710.doc.new(DOCUMENT).relativePath
 						
 						PROJECT.save()
 						$Obj_context.testServer()
