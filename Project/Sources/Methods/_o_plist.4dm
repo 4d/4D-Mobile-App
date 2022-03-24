@@ -435,7 +435,8 @@ Case of
 		
 		If (($Obj_in.domain#Null:C1517) & ($Obj_in.object#Null:C1517))
 			
-			TEXT TO DOCUMENT:C1237(Convert path POSIX to system:C1107($Obj_in.domain); JSON Stringify:C1217($Obj_in.object; *))
+			//TEXT TO DOCUMENT(Convert path POSIX to system($Obj_in.domain); JSON Stringify($Obj_in.object; *))
+			File:C1566(Convert path POSIX to system:C1107($Obj_in.domain); fk platform path:K87:2).setText(JSON Stringify:C1217($Obj_in.object; *))
 			
 			If ($Obj_in.format#Null:C1517)
 				

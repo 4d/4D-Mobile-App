@@ -502,7 +502,8 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 							
 						: (File:C1566($in.key; fk platform path:K87:2).exists)
 							
-							$headers.Authorization:="Bearer "+Document to text:C1236($in.key)
+							//$headers.Authorization:="Bearer "+Document to text($in.key)
+							$headers.Authorization:="Bearer "+File:C1566($in.key; fk platform path:K87:2).getText()
 							
 							//----------------------------------------
 						: (Length:C16(Path to object:C1547(String:C10($in.key)).parentFolder)=0)  // normal string
@@ -686,7 +687,8 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 								"dataModel"; $dataModel; \
 								"url"; $in.url)).digest
 							
-							TEXT TO DOCUMENT:C1237($out.path+"dataSetDigest"; $out.digest)
+							//TEXT TO DOCUMENT($out.path+"dataSetDigest"; $out.digest)
+							File:C1566($out.path+"dataSetDigest"; fk platform path:K87:2).setText($out.digest)
 							
 						End if 
 					End if 

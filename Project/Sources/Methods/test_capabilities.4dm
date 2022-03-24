@@ -25,13 +25,16 @@ $Folder_target:=$Folder_target.folder("list")
 // For test purpose, must have a real between <real></real> tags, etc.
 C_TEXT:C284($settingsContent; $settingsFilePath)
 $settingsFilePath:=$Folder_target.platformPath+Convert path POSIX to system:C1107("Settings/Settings.plist")
-$settingsContent:=Document to text:C1236($settingsFilePath)
+//$settingsContent:=Document to text($settingsFilePath)
+$settingsContent:=File:C1566($settingsFilePath; fk platform path:K87:2).getText()
+
 $settingsContent:=Replace string:C233($settingsContent; "___SERVER_PORT___"; "80")
 $settingsContent:=Replace string:C233($settingsContent; "___SERVER_HTTPS_PORT___"; "443")
 $settingsContent:=Replace string:C233($settingsContent; "___SERVER_AUTHENTIFICATION_EMAIL___"; "false")
 $settingsContent:=Replace string:C233($settingsContent; "___SERVER_AUTHENTIFICATION_RELOAD_DATA___"; "false")
 $settingsContent:=Replace string:C233($settingsContent; "___HAS_ACTION___"; "false")
-TEXT TO DOCUMENT:C1237($settingsFilePath; $settingsContent)
+//TEXT TO DOCUMENT($settingsFilePath; $settingsContent)
+File:C1566($settingsFilePath; fk platform path:K87:2).setText($settingsContent)
 
 //_____________________________________________________________
 // Test
@@ -206,3 +209,4 @@ End if
 If (Not:C34($Bool_shiftDown))
 	err_FINALLY
 End if 
+

@@ -75,7 +75,8 @@ Case of
 		
 		For each ($o; $o.folders)
 			
-			$oo:=JSON Parse:C1218(Document to text:C1236($o.parentFolder+$o.name+Folder separator:K24:12+"manifest.json"))
+			//$oo:=JSON Parse(Document to text($o.parentFolder+$o.name+Folder separator+"manifest.json"))
+			$oo:=JSON Parse:C1218(Folder:C1567($o.parentFolder; fk platform path:K87:2).file($o.name+"/manifest.json"))
 			
 			If (Length:C16(String:C10($oo.target))=0)\
 				 | (Position:C15(String:C10($oo.target); $Txt_type)>0)
@@ -84,9 +85,12 @@ Case of
 				
 				If ($oo.icon#Null:C1517)
 					
-					$t:=Get 4D folder:C485(Current resources folder:K5:16)+"images"+Folder separator:K24:12+"actions"+Folder separator:K24:12+$oo.icon
+					//$t:=Get 4D folder(Current resources folder)+"images"+Folder separator+"actions"+Folder separator+$oo.icon
+					//If (Test path name($t)#Is a document)
+					var $file : 4D:C1709.File
+					$file:=Folder:C1567(fk resources folder:K87:11; *).file("images/actions/"+$oo.icon)
 					
-					If (Test path name:C476($t)#Is a document:K24:1)
+					If (Not:C34($file.exists))
 						
 						$t:=$File_noIcon
 						

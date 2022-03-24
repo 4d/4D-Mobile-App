@@ -8,7 +8,8 @@ If ($o.exists)
 	
 	COMPILER_COMPONENT
 	
-	$content:=JSON Parse:C1218(Document to text:C1236($o.platformPath))
+	//$content:=JSON Parse(Document to text($o.platformPath))
+	$content:=JSON Parse:C1218(File:C1566($o.platformPath; fk platform path:K87:2).getText())
 	$content.verbose:=True:C214  // force verbose
 	$content.caller:=Null:C1517  // no caller windows, want to have result here
 	
