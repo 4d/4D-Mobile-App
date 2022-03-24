@@ -223,8 +223,11 @@ Case of
 			
 			If (Not:C34(Bool:C1537($result.success)))
 				
-				If (String:C10($result.errors[0].message)="The request is unauthorized")\
-					 || (String:C10($result.errors[0].message)="This request is forbidden")
+				var $t : Text
+				$t:=Value type:C1509($result.errors[0])=Is object:K8:27 ? String:C10($result.errors[0].message) : String:C10($result.errors[0])
+				
+				If ($t="The request is unauthorized")\
+					 || ($t="This request is forbidden")
 					
 					$result.title:=Get localized string:C991("locateTheKey")
 					$result.type:=9
@@ -240,7 +243,7 @@ Case of
 				If ($result.errors#Null:C1517)
 					
 					// Oops - Keep the first error message for the tips
-					$result.message:=_o_SERVER_Handler(New object:C1471("action"; "localization"; "message"; String:C10($result.errors[0].message))).message
+					$result.message:=_o_SERVER_Handler(New object:C1471("action"; "localization"; "message"; $t)).message
 					
 				Else 
 					
@@ -358,7 +361,7 @@ $regex.match[1].data:="127.0.0.1"
 									
 									$form.ui.doTestServer:=True:C214
 									
-									CALL WORKER:C1389(EDITOR.worker; "Rest"; New object:C1471(\
+									CALL WORKER:C1389(EDITOR.worker; Formula:C1597(Rest).source; New object:C1471(\
 										"caller"; EDITOR.window; \
 										"action"; "status"; \
 										"handler"; "mobileapp"; \
@@ -382,7 +385,7 @@ $regex.match[1].data:="127.0.0.1"
 							
 						Else 
 							
-							CALL WORKER:C1389(EDITOR.worker; "Rest"; New object:C1471(\
+							CALL WORKER:C1389(EDITOR.worker; Formula:C1597(Rest).source; New object:C1471(\
 								"caller"; EDITOR.window; \
 								"action"; "status"; \
 								"handler"; "mobileapp"; \
@@ -525,7 +528,7 @@ $regex.match[1].data:="127.0.0.1"
 									
 									$form.ui.doTestServer:=True:C214
 									
-									CALL WORKER:C1389(EDITOR.worker; "Rest"; New object:C1471(\
+									CALL WORKER:C1389(EDITOR.worker; Formula:C1597(Rest).source; New object:C1471(\
 										"caller"; EDITOR.window; \
 										"action"; "status"; \
 										"handler"; "mobileapp"; \
@@ -555,7 +558,7 @@ $regex.match[1].data:="127.0.0.1"
 							
 						Else 
 							
-							CALL WORKER:C1389(EDITOR.worker; "Rest"; New object:C1471(\
+							CALL WORKER:C1389(EDITOR.worker; Formula:C1597(Rest).source; New object:C1471(\
 								"caller"; EDITOR.window; \
 								"action"; "status"; \
 								"handler"; "mobileapp"; \

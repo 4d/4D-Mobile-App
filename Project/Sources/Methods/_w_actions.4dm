@@ -70,9 +70,6 @@ Case of
 		//=======================
 		// Integarated actions //
 		//=======================
-		//FIXME: use Folder/File if used
-		//$o:=doc_Folder(Get 4D folder(Current resources folder)+"actions"+Folder separator)
-		
 		For each ($o; $o.folders)
 			
 			//$oo:=JSON Parse(Document to text($o.parentFolder+$o.name+Folder separator+"manifest.json"))
@@ -85,8 +82,6 @@ Case of
 				
 				If ($oo.icon#Null:C1517)
 					
-					//$t:=Get 4D folder(Current resources folder)+"images"+Folder separator+"actions"+Folder separator+$oo.icon
-					//If (Test path name($t)#Is a document)
 					var $file : 4D:C1709.File
 					$file:=Folder:C1567(fk resources folder:K87:11; *).file("images/actions/"+$oo.icon)
 					
