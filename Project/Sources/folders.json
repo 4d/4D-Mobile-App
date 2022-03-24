@@ -163,16 +163,13 @@
 	"[COMPONENT]": {
 		"groups": [
 			"backend",
-			"UI",
-			"WIZARD"
+			"UI"
 		],
 		"methods": [
-			"BUILD",
 			"COMPILER_COMPONENT",
 			"COMPONENT_Infos",
 			"COMPONENT_INIT",
-			"FEATURE_FLAGS",
-			"killWorker"
+			"FEATURE_FLAGS"
 		],
 		"classes": [
 			"ExposedStructure",
@@ -737,6 +734,7 @@
 			"xml (thread-safe)"
 		],
 		"methods": [
+			"killWorker",
 			"LOG_EVENT",
 			"noError"
 		]
@@ -1011,7 +1009,11 @@
 			"LISTE_EDITOR",
 			"panel",
 			"RIBON",
-			"widgets"
+			"widgets",
+			"WIZARD"
+		],
+		"methods": [
+			"BUILD"
 		]
 	},
 	"widgets": {

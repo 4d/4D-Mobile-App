@@ -391,8 +391,7 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="syncDataModel")
 				
-				POST_MESSAGE(New object:C1471(\
-					"target"; Current form window:C827; \
+				EDITOR.postMessage(New object:C1471(\
 					"action"; "show"; \
 					"type"; "confirm"; \
 					"title"; "updateTheProject"; \

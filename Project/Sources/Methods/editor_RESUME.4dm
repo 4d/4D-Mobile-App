@@ -98,7 +98,7 @@ Case of
 					"action"; "safeDelete"; \
 					"path"; $in.build.path))
 				
-				BUILD($in.build)  // Relaunch the build process
+				EDITOR.runBuild($in.build)  // Relaunch the build process
 				
 			End if 
 		End if 
@@ -108,7 +108,7 @@ Case of
 		
 		$in.build.ignoreServer:=True:C214
 		
-		BUILD($in.build)  // Relaunch the build process
+		EDITOR.runBuild($in.build)  // Relaunch the build process
 		
 		//______________________________________________________
 	: ($selector="build_startWebServer")\
@@ -137,7 +137,7 @@ Case of
 			
 			If ($selector="build_startWebServer")
 				
-				BUILD($in.build)  // Relaunch the build process
+				EDITOR.runBuild($in.build)  // Relaunch the build process
 				
 			End if 
 			
@@ -177,8 +177,7 @@ Case of
 					//______________________________________________________
 			End case 
 			
-			POST_MESSAGE(New object:C1471(\
-				"target"; $target; \
+			EDITOR.postMessage(New object:C1471(\
 				"action"; "show"; \
 				"type"; "alert"; \
 				"title"; Get localized string:C991("failedToStartTheWebServer"); \
@@ -201,8 +200,7 @@ Case of
 			"action"; "build_manualInstallation"; \
 			"build"; $in.build)
 		
-		POST_MESSAGE(New object:C1471(\
-			"target"; $target; \
+		EDITOR.postMessage(New object:C1471(\
 			"action"; "show"; \
 			"type"; "confirm"; \
 			"title"; Get localized string:C991("appleConfigurator2Installation"); \
@@ -217,12 +215,13 @@ Case of
 		
 		$in.build.manualInstallation:=($selector="build_manualInstallation")
 		
-		CALL FORM:C1391($target; Formula:C1597(BUILD).source; $in.build)  // Relaunch the build process
+		EDITOR.runBuild($in.build)  // Relaunch the build process
 		
 		//______________________________________________________
 	: ($selector="projectFixErrors")
 		
-		CALL FORM:C1391($target; Formula:C1597(editor_CALLBACK).source; $selector; $in)
+		//CALL FORM($target; Formula(editor_CALLBACK).source; $selector; $in)
+		EDITOR.callMeBack($selector; $in)
 		
 		//______________________________________________________
 	: ($selector="stopWebServer")
@@ -238,7 +237,8 @@ Case of
 			
 		End if 
 		
-		CALL FORM:C1391($target; Formula:C1597(editor_CALLBACK).source; "testServer"; $in)
+		//CALL FORM($target; Formula(editor_CALLBACK).source; "testServer"; $in)
+		EDITOR.callMeBack("testServer"; $in)
 		
 		//______________________________________________________
 	Else 

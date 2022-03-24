@@ -154,8 +154,7 @@ Case of
 										// ERROR
 										EDITOR.hideBrowser()
 										
-										POST_MESSAGE(New object:C1471(\
-											"target"; Current form window:C827; \
+										EDITOR.postMessage(New object:C1471(\
 											"action"; "show"; \
 											"type"; "alert"; \
 											"title"; "ERROR"; \

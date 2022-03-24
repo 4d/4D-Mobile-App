@@ -355,8 +355,7 @@ Case of
 						 & Not:C34(Bool:C1537($data.param.build))\
 						 & Not:C34(Bool:C1537($data.param.run)))
 						
-						POST_MESSAGE(New object:C1471(\
-							"target"; EDITOR.window; \
+						EDITOR.postMessage(New object:C1471(\
 							"action"; "show"; \
 							"type"; "confirm"; \
 							"title"; "projectCreationSuccessful"; \
@@ -375,8 +374,7 @@ Case of
 		PROJECT.$_ignoreServerStructureAdjustement:=True:C214
 		
 		// Relaunch the build process
-		BUILD(New object:C1471(\
-			"caller"; EDITOR.window; \
+		EDITOR.runBuild(New object:C1471(\
 			"project"; PROJECT; \
 			"create"; True:C214; \
 			"build"; True:C214; \
@@ -397,14 +395,12 @@ Case of
 		End if 
 		
 		// Relaunch the build process
-		BUILD(New object:C1471(\
-			"caller"; Current form window:C827; \
+		EDITOR.runBuild(New object:C1471(\
 			"project"; PROJECT; \
 			"create"; True:C214; \
 			"build"; True:C214; \
 			"run"; True:C214; \
 			"verbose"; Bool:C1537(Form:C1466.verbose)))
-		
 		//______________________________________________________
 	Else 
 		

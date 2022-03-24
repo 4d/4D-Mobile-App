@@ -15,8 +15,7 @@ Case of
 		//______________________________________________________
 	: ($choice="buildAndRun")
 		
-		project_BUILD(New object:C1471(\
-			"caller"; Current form window:C827; \
+		EDITOR.runBuild(New object:C1471(\
 			"project"; PROJECT; \
 			"create"; True:C214; \
 			"build"; True:C214; \
@@ -26,8 +25,7 @@ Case of
 		//______________________________________________________
 	: ($choice="create")
 		
-		project_BUILD(New object:C1471(\
-			"caller"; Current form window:C827; \
+		EDITOR.runBuild(New object:C1471(\
 			"project"; PROJECT; \
 			"create"; True:C214; \
 			"build"; False:C215; \
@@ -37,8 +35,7 @@ Case of
 		//______________________________________________________
 	: ($choice="build")
 		
-		project_BUILD(New object:C1471(\
-			"caller"; Current form window:C827; \
+		EDITOR.runBuild(New object:C1471(\
 			"project"; PROJECT; \
 			"create"; False:C215; \
 			"build"; True:C214; \
@@ -48,8 +45,7 @@ Case of
 		//______________________________________________________
 	: ($choice="run")
 		
-		project_BUILD(New object:C1471(\
-			"caller"; Current form window:C827; \
+		EDITOR.runBuild(New object:C1471(\
 			"project"; PROJECT; \
 			"create"; False:C215; \
 			"build"; False:C215; \

@@ -104,7 +104,7 @@ If ($e.objectName=Null:C1517)  // <== FORM METHOD
 		: ($e.code=On Unload:K2:2)
 			
 			EDITOR.tips.restore()
-			EDITOR.callWorker("killWorker")
+			EDITOR.callWorker(Formula:C1597(killWorker).source)
 			
 			//______________________________________________________
 		: ($e.code=On Resize:K2:27)

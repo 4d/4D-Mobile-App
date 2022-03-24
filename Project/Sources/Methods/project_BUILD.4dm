@@ -312,16 +312,16 @@ If (Asserted:C1132($project#Null:C1517))
 						
 						If (Not:C34($success))
 							
-							POST_MESSAGE(New object:C1471(\
-								"target"; EDITOR.window; \
+							EDITOR.postMessage(New object:C1471(\
 								"action"; "show"; \
 								"type"; "confirm"; \
 								"title"; "theStructureOfTheProductionServerIsNotOptimizedForThisProject"; \
 								"additional"; "youMustUpdateTheStructureOfTheProductionServer"; \
 								"help"; Formula:C1597(OPEN URL:C673(Get localized string:C991("doc_structureAdjustment"); *)); \
 								"cancelFormula"; Formula:C1597(CALL FORM:C1391(EDITOR.window; Formula:C1597(editor_CALLBACK).source; "build_stop")); \
-								"ok"; Get localized string:C991("continue"); \
-								"okFormula"; Formula:C1597(CALL FORM:C1391(EDITOR.window; Formula:C1597(editor_CALLBACK).source; "ignoreServerStructureAdjustement"))))
+								"ok"; "continue"; \
+								"okFormula"; Formula:C1597(CALL FORM:C1391(EDITOR.window; Formula:C1597(editor_CALLBACK).source; "ignoreServerStructureAdjustement"))\
+								))
 							
 						End if 
 					End if 
@@ -340,14 +340,14 @@ If (Asserted:C1132($project#Null:C1517))
 					
 					If (Not:C34($success))
 						
-						POST_MESSAGE(New object:C1471(\
-							"target"; EDITOR.window; \
+						EDITOR.postMessage(New object:C1471(\
 							"action"; "show"; \
 							"type"; "alert"; \
 							"title"; "theProductionServerIsNotAvailable"; \
 							"additional"; _o_SERVER_Handler(New object:C1471(\
 							"action"; "localization"; \
-							"code"; $o.httpError)).message))
+							"code"; $o.httpError)).message\
+							))
 						
 					End if 
 				End if 
@@ -393,16 +393,15 @@ If (Asserted:C1132($project#Null:C1517))
 								$manual:=OB Copy:C1225($data)
 								$manual.manualInstallation:=True:C214
 								
-								POST_MESSAGE(New object:C1471(\
-									"target"; EDITOR.window; \
+								EDITOR.postMessage(New object:C1471(\
 									"action"; "show"; \
 									"type"; "confirm"; \
-									"title"; Get localized string:C991("noDeviceFound"); \
-									"additional"; Get localized string:C991("makeSureThatADeviceIsConnected"); \
-									"ok"; Get localized string:C991("continue"); \
-									"okFormula"; Formula:C1597(EDITOR.callMe("BUILD"; $data)); \
-									"cancel"; Get localized string:C991("manualInstallation"); \
-									"cancelFormula"; Formula:C1597(EDITOR.callMe("BUILD"; $manual))\
+									"title"; "noDeviceFound"; \
+									"additional"; "makeSureThatADeviceIsConnected"; \
+									"ok"; "continue"; \
+									"okFormula"; Formula:C1597(EDITOR.callMe(Formula:C1597(BUILD).source; $data)); \
+									"cancel"; "manualInstallation"; \
+									"cancelFormula"; Formula:C1597(EDITOR.callMe(Formula:C1597(BUILD).source; $manual))\
 									))
 								
 							End if 
@@ -420,15 +419,15 @@ If (Asserted:C1132($project#Null:C1517))
 								"action"; "build_manualInstallation"; \
 								"build"; $data)
 							
-							POST_MESSAGE(New object:C1471(\
-								"target"; EDITOR.window; \
+							EDITOR.postMessage(New object:C1471(\
 								"action"; "show"; \
 								"type"; "confirm"; \
 								"title"; New collection:C1472("appIsNotInstalled"; $cfgutil.appName); \
 								"additional"; New collection:C1472("wouldYouLikeToInstallNow"; $cfgutil.appName); \
 								"okAction"; JSON Stringify:C1217($Obj_ok); \
-								"cancel"; Get localized string:C991("manualInstallation"); \
-								"cancelAction"; JSON Stringify:C1217($Obj_cancel)))
+								"cancel"; "manualInstallation"; \
+								"cancelAction"; JSON Stringify:C1217($Obj_cancel)\
+								))
 							
 						End if 
 						
@@ -448,16 +447,15 @@ If (Asserted:C1132($project#Null:C1517))
 							$manual:=OB Copy:C1225($data)
 							$manual.manualInstallation:=True:C214
 							
-							POST_MESSAGE(New object:C1471(\
-								"target"; EDITOR.window; \
+							EDITOR.postMessage(New object:C1471(\
 								"action"; "show"; \
 								"type"; "confirm"; \
-								"title"; Get localized string:C991("noDeviceFound"); \
-								"additional"; Get localized string:C991("makeSureThatADeviceIsConnected"); \
-								"ok"; Get localized string:C991("continue"); \
-								"okFormula"; Formula:C1597(EDITOR.callMe("BUILD"; $data)); \
-								"cancel"; Get localized string:C991("manualInstallation"); \
-								"cancelFormula"; Formula:C1597(EDITOR.callMe("BUILD"; $manual))\
+								"title"; "noDeviceFound"; \
+								"additional"; "makeSureThatADeviceIsConnected"; \
+								"ok"; "continue"; \
+								"okFormula"; Formula:C1597(EDITOR.callMe(Formula:C1597(BUILD).source; $data)); \
+								"cancel"; "manualInstallation"; \
+								"cancelFormula"; Formula:C1597(EDITOR.callMe(Formula:C1597(BUILD).source; $manual))\
 								))
 							
 						End if 

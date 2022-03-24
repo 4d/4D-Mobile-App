@@ -53,14 +53,13 @@ Case of
 			
 			If ($status.success)
 				
-				BUILD($1.build)  // Relaunch the build process
+				EDITOR.runBuild($1.build)  // Relaunch the build process
 				
 			Else 
 				
 				$t:=$status.errors[0].message
 				
-				POST_MESSAGE(New object:C1471(\
-					"target"; Current form window:C827; \
+				EDITOR.postMessage(New object:C1471(\
 					"action"; "show"; \
 					"type"; "alert"; \
 					"title"; Get localized string:C991("failedToStartTheWebServer"); \
@@ -103,7 +102,7 @@ Case of
 						"action"; "safeDelete"; \
 						"path"; $1.build.path))
 					
-					BUILD($1.build)  // Relaunch the build process
+					EDITOR.runBuild($1.build)  // Relaunch the build process
 					
 				End if 
 			End if 

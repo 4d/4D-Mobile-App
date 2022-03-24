@@ -15,8 +15,7 @@
 // * STOP REENTRANCE
 EDITOR.build:=True:C214
 
-POST_MESSAGE(New object:C1471(\
-"target"; EDITOR.window; \
+EDITOR.postMessage(New object:C1471(\
 "action"; "show"; \
 "type"; "progress"; \
 "title"; Get localized string:C991("product")+" - "+PROJECT.product.name+" ["+Choose:C955(PROJECT._buildTarget="android"; "Android"; "iOS")+"]"; \

@@ -381,7 +381,7 @@ Case of
 				End if 
 				
 				// User dialog
-				POST_MESSAGE(New object:C1471("target"; $form.window; \
+				EDITOR.postMessage(New object:C1471(\
 					"action"; "show"; \
 					"type"; "confirm"; \
 					"title"; $title; \

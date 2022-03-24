@@ -125,7 +125,6 @@ Function append($item; $param; $mark : Boolean) : cs:C1710.menu
 			//______________________________________________________
 		: (Value type:C1509($item)=Is text:K8:3)
 			
-			
 			Case of 
 					//______________________________________________________
 				: (Length:C16($item)=0)

@@ -95,11 +95,11 @@ End if
 			
 		Else 
 			
-			POST_MESSAGE(New object:C1471(\
-				"target"; EDITOR.window; \
+			EDITOR.postMessage(New object:C1471(\
 				"action"; "show"; \
 				"type"; "alert"; \
-				"title"; "youMustFirstSelectASimulator"))
+				"title"; "youMustFirstSelectASimulator"\
+				))
 			
 		End if 
 		

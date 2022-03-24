@@ -258,8 +258,7 @@ Case of
 					
 					If ($target=Null:C1517)
 						
-						POST_MESSAGE(New object:C1471(\
-							"target"; EDITOR.window; \
+						EDITOR.postMessage(New object:C1471(\
 							"action"; "show"; \
 							"type"; "alert"; \
 							"title"; ".You must first select a connected device"))

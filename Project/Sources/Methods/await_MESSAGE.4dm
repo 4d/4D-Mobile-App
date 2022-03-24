@@ -58,7 +58,7 @@ End use
 // Add the signal object
 $message.signal:=$response
 
-POST_MESSAGE($message)
+EDITOR.postMessage($message)
 
 If ($message.target#$winRef)
 	

@@ -191,11 +191,10 @@ Case of
 					
 					If (String:C10($Obj_server.message)#"")
 						
-						POST_MESSAGE(New object:C1471(\
-							"target"; $Obj_form.window; \
+						EDITOR.postMessage(New object:C1471(\
 							"action"; "show"; \
 							"type"; "alert"; \
-							"title"; Get localized string:C991("theServerIsNotReady"); \
+							"title"; "theServerIsNotReady"; \
 							"additional"; $Obj_server.message))
 						
 					End if 

@@ -408,14 +408,14 @@ $regex.match[1].data:="127.0.0.1"
 							"action"; "goToProductionURL"; \
 							"type"; 9)
 						
-						POST_MESSAGE(New object:C1471(\
-							"target"; Current form window:C827; \
+						EDITOR.postMessage(New object:C1471(\
 							"action"; "show"; \
 							"type"; "confirm"; \
 							"title"; EDITOR.alert+" "+Get localized string:C991("theLocalWebServerIsStarted"); \
 							"additional"; "youNeedToShutDownTheLocalWebServer"; \
 							"okAction"; "stopWebServer"; \
-							"ok"; "stopTheLocalServer"))
+							"ok"; "stopTheLocalServer"\
+							))
 						
 					End if 
 					
@@ -581,8 +581,7 @@ $regex.match[1].data:="127.0.0.1"
 							"action"; "goToProductionURL"; \
 							"type"; 9)
 						
-						POST_MESSAGE(New object:C1471(\
-							"target"; Current form window:C827; \
+						EDITOR.postMessage(New object:C1471(\
 							"action"; "show"; \
 							"type"; "confirm"; \
 							"title"; EDITOR.alert+" "+Get localized string:C991("theLocalWebServerIsStarted"); \
@@ -687,10 +686,9 @@ $regex.match[1].data:="127.0.0.1"
 				
 				If ($in.data.errors#Null:C1517)
 					
-					POST_MESSAGE(New object:C1471(\
+					EDITOR.postMessage(New object:C1471(\
 						"action"; "show"; \
 						"type"; "alert"; \
-						"target"; $in.data.caller; \
 						"additional"; $in.data.errors.join("\n")))
 					
 				End if 

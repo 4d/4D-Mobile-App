@@ -88,14 +88,13 @@ Function design()
 		$o.action:=New object:C1471(\
 			"title"; "syncDataModel"; \
 			"show"; False:C215; \
-			"formula"; Formula:C1597(POST_MESSAGE(New object:C1471(\
-			"target"; $window; \
+			"formula"; Formula:C1597(EDITOR.postMessage(New object:C1471(\
 			"action"; "show"; \
 			"type"; "confirm"; \
 			"title"; "updateTheProject"; \
 			"additional"; "aBackupWillBeCreatedIntoTheProjectFolder"; \
 			"ok"; "update"; \
-			"okFormula"; Formula:C1597(CALL FORM:C1391($window; Formula:C1597(editor_CALLBACK).source; "syncDataModel")))))\
+			"okFormula"; Formula:C1597(EDITOR.callMeBack("syncDataModel")))))\
 			)
 		
 	End if 
@@ -147,14 +146,13 @@ Function design()
 		$o.action:=New object:C1471(\
 			"title"; ".Repair the project"; \
 			"show"; False:C215; \
-			"formula"; Formula:C1597(POST_MESSAGE(New object:C1471(\
-			"target"; $window; \
+			"formula"; Formula:C1597(EDITOR.postMessage(New object:C1471(\
 			"action"; "show"; \
 			"type"; "confirm"; \
 			"title"; "updateTheProject"; \
 			"additional"; "aBackupWillBeCreatedIntoTheProjectFolder"; \
 			"ok"; "update"; \
-			"okFormula"; Formula:C1597(CALL FORM:C1391($window; Formula:C1597(editor_CALLBACK).source; "syncDataModel")))))\
+			"okFormula"; Formula:C1597(EDITOR.callMeBack("syncDataModel")))))\
 			)
 		
 	End if 
@@ -702,7 +700,7 @@ Function ribbonContainer($e : Object)
 			This:C1470.hideBrowser()
 			This:C1470.hidePicker()
 			
-			BUILD(New object:C1471(\
+			This:C1470.runBuild(New object:C1471(\
 				"caller"; This:C1470.window; \
 				"project"; PROJECT; \
 				"create"; True:C214; \
@@ -717,7 +715,10 @@ Function ribbonContainer($e : Object)
 				
 				PROJECT.save()
 				
-				BUILD(New object:C1471(\
+				This:C1470.hideBrowser()
+				This:C1470.hidePicker()
+				
+				This:C1470.runBuild(New object:C1471(\
 					"caller"; This:C1470.window; \
 					"project"; PROJECT; \
 					"create"; Not:C34(Shift down:C543); \
@@ -797,6 +798,28 @@ Function getIcon($relativePath : Text) : Picture
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
+/**
+Display the message immediately to be more responsive
+The real build process (project_BUILD) will autostart at the message is posted
+*/
+Function runBuild($data : Object)
+	
+	This:C1470.build:=True:C214
+	
+	This:C1470.postMessage(New object:C1471(\
+		"action"; "show"; \
+		"type"; "progress"; \
+		"title"; Get localized string:C991("product")+" - "+PROJECT.product.name+" ["+Choose:C955(PROJECT._buildTarget="android"; "Android"; "iOS")+"]"; \
+		"additional"; Get localized string:C991("preparations"); \
+		"autostart"; Formula:C1597(CALL FORM:C1391(Current form window:C827; Formula:C1597(project_BUILD).source; $data))))
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+	/// Displays the message dialog box
+Function postMessage($message : Object)
+	
+	This:C1470.callMe(Formula:C1597(DO_MESSAGE).source; $message)
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function checkDevTools()
 	
 	This:C1470.addTask("checkDevTools")
@@ -854,15 +877,13 @@ Function getDevice($udid : Text)->$device : Object
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function doGenerate($keyPathname : Text)
 	
+	var $worker : Text
 	var $ƒ : 4D:C1709.Function
 	
-	var $worker : Text
-	var $window : Integer
 	$worker:=This:C1470.worker
-	$window:=This:C1470.window
 	
 	$ƒ:=Formula:C1597(CALL WORKER:C1389($worker; Formula:C1597(dataSet).source; New object:C1471(\
-		"caller"; $window; \
+		"caller"; Current form window:C827; \
 		"action"; "create"; \
 		"eraseIfExists"; True:C214; \
 		"project"; PROJECT; \
@@ -872,8 +893,7 @@ Function doGenerate($keyPathname : Text)
 		"key"; $keyPathname; \
 		"dataSet"; True:C214)))
 	
-	POST_MESSAGE(New object:C1471(\
-		"target"; $window; \
+	This:C1470.postMessage(New object:C1471(\
 		"action"; "show"; \
 		"type"; "cancelableProgress"; \
 		"title"; "dataGeneration"; \
@@ -906,8 +926,7 @@ Function doCancelableProgress($content; $additional : Text)
 	
 	If (Count parameters:C259>=2)
 		
-		POST_MESSAGE(New object:C1471(\
-			"target"; This:C1470.window; \
+		This:C1470.postMessage(New object:C1471(\
 			"action"; "show"; \
 			"type"; "cancelableProgress"; \
 			"title"; String:C10($content); \
@@ -923,16 +942,16 @@ Function doCancelableProgress($content; $additional : Text)
 			$content.action:="show"
 			$content.type:="cancelableProgress"
 			
-			POST_MESSAGE($content)
+			This:C1470.postMessage($content)
 			
 		Else 
 			
-			POST_MESSAGE(New object:C1471(\
-				"target"; This:C1470.window; \
+			This:C1470.postMessage(New object:C1471(\
 				"action"; "show"; \
 				"type"; "cancelableProgress"; \
 				"title"; String:C10($content)\
 				))
+			
 			
 		End if 
 	End if 
@@ -942,8 +961,7 @@ Function doAlert($content; $additional : Text)
 	
 	If (Count parameters:C259>=2)
 		
-		POST_MESSAGE(New object:C1471(\
-			"target"; This:C1470.window; \
+		This:C1470.postMessage(New object:C1471(\
 			"action"; "show"; \
 			"type"; "alert"; \
 			"title"; String:C10($content); \
@@ -958,16 +976,16 @@ Function doAlert($content; $additional : Text)
 			$content.action:="show"
 			$content.type:="alert"
 			
-			POST_MESSAGE($content)
+			This:C1470.postMessage($content)
 			
 		Else 
 			
-			POST_MESSAGE(New object:C1471(\
-				"target"; This:C1470.window; \
+			This:C1470.postMessage(New object:C1471(\
 				"action"; "show"; \
 				"type"; "alert"; \
 				"title"; String:C10($content)\
 				))
+			
 			
 		End if 
 	End if 
