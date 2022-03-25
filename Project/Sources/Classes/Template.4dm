@@ -1,14 +1,22 @@
 Class constructor($input : Object)
 	This:C1470.input:=$input
-	This:C1470.template:=$input.template
 	
 	// XXX make clean with errors?
-	ASSERT:C1129(Value type:C1509(This:C1470.input.project)=Is object:K8:27)
-	ASSERT:C1129(Value type:C1509(This:C1470.input.path)=Is text:K8:3)
+	ASSERT:C1129(Value type:C1509(This:C1470.input.path)=Is text:K8:3; "No path specified for target template")
 	
-	ASSERT:C1129(Value type:C1509(This:C1470.input.template)=Is object:K8:27)
-	ASSERT:C1129(Value type:C1509(This:C1470.input.template.source)=Is text:K8:3)
+	ASSERT:C1129(Value type:C1509(This:C1470.input.project)=Is object:K8:27; "No project passed to template")
+	This:C1470.project:=$input.project
+	If (OB Instance of:C1731(This:C1470.project.getCatalog; 4D:C1709.Function))  // only if project is a project class
+		This:C1470.catalog:=This:C1470.project.getCatalog()
+	Else 
+		ASSERT:C1129(dev_Matrix && Not:C34(OB Instance of:C1731(This:C1470.project; cs:C1710.project)); "project is cs.project but you remove getCatalog???")
+	End if 
 	
+	ASSERT:C1129(Value type:C1509(This:C1470.input.template)=Is object:K8:27; "No template defined")
+	ASSERT:C1129(Value type:C1509(This:C1470.input.template.source)=Is text:K8:3; "Template has not source path")
+	This:C1470.template:=$input.template
+	
+	// singleton helper
 	This:C1470.path:=cs:C1710.path.new()
 	
 Function run()->$Obj_out : Object

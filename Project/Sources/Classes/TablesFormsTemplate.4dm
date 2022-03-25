@@ -1,8 +1,7 @@
 Class extends Template
 
-Class constructor
-	C_OBJECT:C1216($1)
-	Super:C1705($1)
+Class constructor($input : Object)
+	Super:C1705($input)
 	ASSERT:C1129(This:C1470.template.type="tablesForms")
 	
 Function doRun()->$Obj_out : Object
@@ -31,6 +30,7 @@ Function doRun()->$Obj_out : Object
 		
 		// Get dataModel information
 		$Obj_tableModel:=$Obj_dataModel[$Txt_tableNumber]
+		$Obj_tableModel[""].tableNumber:=$Txt_tableNumber
 		
 		// Get userChoice for one table
 		$Obj_tableList:=$Obj_userChoice[$Txt_tableNumber]
@@ -144,7 +144,7 @@ Function doRun()->$Obj_out : Object
 				$i:=0
 				
 				var $keyPath : Text
-				var $tmp; $fullField : Object
+				var $tmpTableModel; $fieldModel : Object
 				var $keyPaths : Collection
 				
 				For each ($Obj_field; $Obj_tableList.fields)
@@ -164,24 +164,26 @@ Function doRun()->$Obj_out : Object
 							$keyPaths:=Split string:C1554($Obj_field.nameOrPath; ".")
 							$keyPaths.pop()  // we remove field leaf name, because we get info from id, not path
 							
-							$tmp:=$Obj_tableModel
+							$tmpTableModel:=$Obj_tableModel
 							If ($keyPaths.length>0)  // is it a link?
 								For each ($keyPath; $keyPaths)
-									$tmp:=$tmp[$keyPath]  // get sub model if related field
+									$tmpTableModel:=$tmpTableModel[$keyPath]  // get sub model if related field
 								End for each 
 							End if 
 							
-							// Add info from dataModel
-							Case of 
-								: (($Obj_field.id#Null:C1517) && ($tmp[String:C10($Obj_field.id)]#Null:C1517))  // OLD CODE
-									
-									$Obj_field:=ob_deepMerge($Obj_field; $tmp[String:C10($Obj_field.id)]; False:C215)
-									
-								: (let(->$fullField; Formula:C1597($Obj_in.project.field($tmp; $Obj_field)); Formula:C1597($fullField#Null:C1517)))  // computed or NEW CODE
-									
-									$Obj_field:=ob_deepMerge($Obj_field; $fullField; False:C215)
-									
-							End case 
+							// Add info from dataModel or cache if missing
+							$fieldModel:=Null:C1517
+							If ($Obj_field.id#Null:C1517)
+								$fieldModel:=$tmpTableModel[String:C10($Obj_field.id)]  // OLD CODE
+							End if 
+							If ($fieldModel=Null:C1517)  // computed or NEW CODE
+								$fieldModel:=This:C1470._field($tmpTableModel; $Obj_field)
+							End if 
+							If ($fieldModel#Null:C1517)
+								$Obj_field:=ob_deepMerge($Obj_field; $fieldModel; False:C215)
+							Else 
+								ASSERT:C1129(dev_Matrix; "Unable to get info of field "+JSON Stringify:C1217($Obj_field))
+							End if 
 							
 							// Format name for the tag
 							This:C1470._fieldTagify($Obj_field)
@@ -201,19 +203,19 @@ Function doRun()->$Obj_out : Object
 								$Obj_field.nameOrPath:=$Obj_field.path
 							End if 
 							
-							$tmp:=$Obj_tableModel[$Obj_field.nameOrPath]
-							If ($tmp=Null:C1517)
+							$tmpTableModel:=$Obj_tableModel[$Obj_field.nameOrPath]
+							If ($tmpTableModel=Null:C1517)
 								$keyPaths:=Split string:C1554($Obj_field.nameOrPath; ".")
 								If ($keyPaths.length>1)
-									$tmp:=$Obj_tableModel
-									For each ($keyPath; $keyPaths) Until ($tmp=Null:C1517)
-										$tmp:=$tmp[$keyPath]
+									$tmpTableModel:=$Obj_tableModel
+									For each ($keyPath; $keyPaths) Until ($tmpTableModel=Null:C1517)
+										$tmpTableModel:=$tmpTableModel[$keyPath]
 									End for each 
 								End if 
 							End if 
 							
-							If ($tmp#Null:C1517)
-								$Obj_field:=ob_deepMerge($Obj_field; $tmp; False:C215)
+							If ($tmpTableModel#Null:C1517)
+								$Obj_field:=ob_deepMerge($Obj_field; $tmpTableModel; False:C215)
 							End if 
 							
 							// Format name for the tag
@@ -486,7 +488,6 @@ Function doRun()->$Obj_out : Object
 		End if 
 	End for each 
 	
-	
 Function _createDummyField()->$dummy : Object
 	$dummy:=New object:C1471(\
 		"name"; ""; \
@@ -548,6 +549,94 @@ Function sortFieldFromAction($table : Object)->$sortFields : Text
 		End for each 
 	End if 
 	
+	// Return complete info about field
+Function _field($table; $field)->$fieldResult : Object
+	var $tableResult : Object
+	$fieldResult:=Null:C1517
+	If (Asserted:C1132(OB Instance of:C1731(This:C1470.project; cs:C1710.project); "project is no more a class, and no method exist to get field from it. use data model?"))
+		If (This:C1470.project.table($table)#Null:C1517)
+			$fieldResult:=This:C1470.project.field($table; $field)
+		End if 
+	Else 
+		// tmp code in cas of...
+		$tableResult:=This:C1470.project.dataModel[This:C1470._tableNumber($table)]
+		var $t : Text
+		$t:=This:C1470._fieldKey($field)
+		If (Length:C16($t)>0)
+			$fieldResult:=$tableResult[$t]
+		End if 
+	End if 
+	
+	If ($fieldResult=Null:C1517 & This:C1470.catalog#Null:C1517)
+		// maybe table not published, so get from cache catalog
+		$tableResult:=This:C1470.catalog.query("name = :1"; This:C1470._tableName($table)).pop()
+		If ($tableResult=Null:C1517)
+			$tableResult:=This:C1470.catalog.query("tableNumber = :1"; This:C1470._tableNumber($table)).pop()
+		End if 
+		If ($tableResult#Null:C1517)
+			$fieldResult:=$tableResult.fields.query("name = :1"; This:C1470._fieldName($field)).pop()
+			// will not work if name contain full path? (but what we want!!!)
+			If ($fieldResult=Null:C1517)  // so try with last path
+				var $components : Collection
+				$components:=Split string:C1554(This:C1470._fieldName($field); ".")
+				If ($components.length>1)
+					$fieldResult:=$tableResult.fields.query("name = :1"; $components[$components.length-1]).pop()
+				End if 
+			End if 
+		End if 
+	End if 
+	
+Function _tableNumber($table : Variant)->$number : Integer
+	Case of 
+		: (Value type:C1509($table)=Is text:K8:3)
+			$number:=Num:C11($table)
+		: (Value type:C1509($table)#Is object:K8:27)
+			ASSERT:C1129(False:C215; "Wrong type for table data "+String:C10(Value type:C1509($table)))
+		: ((Value type:C1509($table[""])=Is object:K8:27) && ($table[""].tableNumber#Null:C1517))
+			$number:=Num:C11($table[""].tableNumber)
+		: ((Value type:C1509($table[""])=Is object:K8:27) && ($table[""].relatedTableNumber#Null:C1517))
+			$number:=Num:C11($table[""].relatedTableNumber)
+		: ($table.tableNumber#Null:C1517)
+			$number:=Num:C11($table.tableNumber)
+		Else 
+			$number:=Num:C11($table.relatedTableNumber)
+	End case 
+	
+Function _fieldKey($field : Variant)->$key : Text
+	Case of 
+		: (Value type:C1509($field)=Is text:K8:3)
+			$key:=$field
+		: ((Value type:C1509($field)=Is object:K8:27) && ($field.fieldNumber#Null:C1517))
+			$key:=String:C10($field.fieldNumber)
+		: ((Value type:C1509($field)=Is object:K8:27) && ($field.id#Null:C1517))
+			$key:=String:C10($field.id)
+		Else 
+			$key:=This:C1470._fieldName($field)
+	End case 
+	
+Function _fieldName($field : Variant)->$name : Text
+	Case of 
+		: (Value type:C1509($field)=Is text:K8:3)
+			$name:=$field
+		: (Value type:C1509($field)=Is object:K8:27)
+			$name:=String:C10($field.name)
+		Else 
+			ASSERT:C1129(False:C215; "Wrong type for table data "+String:C10(Value type:C1509($field)))
+	End case 
+	
+Function _tableName($table : Variant)->$name : Text
+	Case of 
+		: (Value type:C1509($table)=Is text:K8:3)
+			$name:=$table
+		: (Value type:C1509($table)#Is object:K8:27)
+			ASSERT:C1129(False:C215; "Wrong type for table data "+String:C10(Value type:C1509($table)))
+		: (Value type:C1509($table[""])=Is object:K8:27)
+			$name:=String:C10($table[""].name)
+		Else 
+			$name:=String:C10($table.name)
+	End case 
+	
+	// return binding information for a field
 Function fieldBinding($field : Object; $formatter : Object)->$binding : Object
 	
 	$binding:=New object:C1471("success"; False:C215)
