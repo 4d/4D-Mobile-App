@@ -609,11 +609,7 @@ Function _relation($table : Object; $options : Object)->$out : Object
 					
 					// Get inverse field
 					var $Obj_buffer : Object
-					$Obj_buffer:=_o_structure(New object:C1471(\
-						"action"; "inverseRelatedFields"; \
-						"table"; $tableInfo.name; \
-						"relation"; $Txt_field; \
-						"definition"; $options.definition))
+					$Obj_buffer:=This:C1470._inverseRelatedFields($tableInfo.name; $Txt_field; $options.definition)
 					
 					If ($Obj_buffer.success)
 						
@@ -817,7 +813,6 @@ Function _createTable($tableName : Text)->$table : Object
 	End if 
 	
 Function _createField($tableName : Text; $fieldName : Text)->$result : Object
-	// TODO: ALIAS use catalog.json
 	If (Bool:C1537(FEATURE.with("iOSAlias")))
 		$result:=New object:C1471("success"; False:C215)
 		var $table : Object
@@ -837,7 +832,7 @@ Function _hasGlobalStamp($tableName : Text)->$has : Boolean
 		var $table : Object
 		$table:=This:C1470._tableFromCatalog($tableName)
 		If ($table#Null:C1517)
-			$has:=$table.fields.query("name :1"; SHARED.stampField.name).length>0
+			$has:=$table.fields.query("name = :1"; SHARED.stampField.name).length>0
 		End if 
 	Else 
 		// XXX this look at ds, we do not want, must be removed if catalog is ok
@@ -847,6 +842,22 @@ Function _hasGlobalStamp($tableName : Text)->$has : Boolean
 			"field"; SHARED.stampField.name)).value)
 	End if 
 	
+Function _inverseRelatedFields($tableName : Text; $relationKey : Text; $cache : Object)->$result : Object
+	If (Bool:C1537(FEATURE.with("iOSAlias")))
+		
+		$result:=_o_structure(New object:C1471(\
+			"action"; "inverseRelatedFields"; \
+			"table"; $tableName; \
+			"relation"; $relationKey; \
+			"definition"; $cache))
+		// TODO: remove  _o_structure  inverseRelatedFields
+	Else 
+		$result:=_o_structure(New object:C1471(\
+			"action"; "inverseRelatedFields"; \
+			"table"; $tableName; \
+			"relation"; $relationKey; \
+			"definition"; $cache))
+	End if 
 	
 	// MARK: - primary key
 	
