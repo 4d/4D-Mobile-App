@@ -567,7 +567,7 @@ Function _field($table; $field)->$fieldResult : Object
 		End if 
 	End if 
 	
-	If ($fieldResult=Null:C1517 & This:C1470.catalog#Null:C1517)
+	If (($fieldResult=Null:C1517) && (This:C1470.catalog#Null:C1517))
 		// maybe table not published, so get from cache catalog
 		$tableResult:=This:C1470.catalog.query("name = :1"; This:C1470._tableName($table)).pop()
 		If ($tableResult=Null:C1517)

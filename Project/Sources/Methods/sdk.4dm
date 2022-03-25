@@ -116,9 +116,9 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 		: ($Obj_param.action="installAdditionnalSDK")
 			
 			// Check
-			$Obj_param.file:=Folder:C1567(String:C10($Obj_param.template.source)).folder("sdk").file(String:C10($Obj_param.template.sdk.name)+".zip")
+			$Obj_param.file:=Folder:C1567(String:C10($Obj_param.template.source); fk platform path:K87:2).folder("sdk").file(String:C10($Obj_param.template.sdk.name)+".zip")
 			If (Not:C34($Obj_param.file.exists))
-				$Obj_param.file:=Folder:C1567(String:C10($Obj_param.template.source)).folder("../sdk").file(String:C10($Obj_param.template.sdk.name)+".zip")
+				$Obj_param.file:=Folder:C1567(String:C10($Obj_param.template.source); fk platform path:K87:2).folder("../sdk").file(String:C10($Obj_param.template.sdk.name)+".zip")
 			End if 
 			
 			If (Not:C34($Obj_param.file.exists))
