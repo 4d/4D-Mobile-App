@@ -394,7 +394,7 @@ Case of
 							//______________________________________________________
 						: ($field.kind="alias")
 							
-							LISTBOX SET ROW FONT STYLE:C1268(*; $form.fieldList.name; $i; Italic:K14:3)
+							//LISTBOX SET ROW FONT STYLE(*; $form.fieldList.name; $i; Italic)
 							
 							//$c:=Split string($field.path; ".")
 							//If ($c.length>2)

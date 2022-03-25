@@ -131,12 +131,13 @@ FEATURE.isUnstable("useTextRestResponse")  // [MOBILE] Data generation : for opt
 FEATURE.isUnstable("listEditor")  // [MOBILE] Create and edit an input control from the project editor
 FEATURE.isUnstable("xcDataModelClass")  // Use class to create core data model ie. xcDataModel (useful to refactor for alias)
 FEATURE.isUnstable("iosBuildWithClass")  // Use cs.MobileProjectIOS class
-FEATURE.isUnstable(131225)  // [MOBILE] Use aliases
 FEATURE.isUnstable("modernStructure")
 
 //mark:-🚧 WIP
 FEATURE.isWIP(127558)  // [ANDROID] Data set
 FEATURE.isWIP(131983)  // [MOBILE] Launch an action from the Tab bar
+
+//FEATURE.isWIP(131225)  // [MOBILE] Use aliases
 
 // FEATURE.isWIP("simuARMOnAppleProcessor") // Mac M1 build for simu using arm64
 FEATURE.isWIP("duplicateTemplate")  // Allow to duplicate template in host database and show on disk https:// Project.4d.com/issues/98054
@@ -147,6 +148,7 @@ FEATURE.isWIP("taskIndicator")  // UI for background tasks executing
 FEATURE.isWIP("sourceClass")  // Work with Source class to test the data source
 
 FEATURE.isWIP("buildWithCmd")  // allow to build using cmd only
+
 
 //mark:- DEV
 
@@ -266,6 +268,7 @@ If ($preferences.features#Null:C1517)
 		End if 
 	End for each 
 End if 
+
 
 //mark:-→ ALIAS
 FEATURE.makeAlias("actionsInTabBar"; 131983)

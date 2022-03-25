@@ -76,7 +76,7 @@ If ($cacheFile.exists)
 						
 						// Check TABLE NAME & PRIMARY KEY
 						$isTableUnsynchronized:=($tableCatalog.name#$table.value[""].name)\
-							 | (String:C10($tableCatalog.primaryKey)#$table.value[""].primaryKey)
+							 || (String:C10($tableCatalog.primaryKey)#String:C10($table.value[""].primaryKey))
 						
 						If (Not:C34($isTableUnsynchronized))
 							

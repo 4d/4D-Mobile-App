@@ -454,7 +454,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 	$field:=$ds[$tableName][$relationName]
 	
 	If ($field.kind="relatedEntity")\
-		 || (($field.kind="alias") && ($field.fieldType=Is object:K8:27) && ($field.relatedDataClass#Null:C1517))
+		 || (FEATURE.with("alias") && ($field.kind="alias") && ($field.fieldType=Is object:K8:27) && ($field.relatedDataClass#Null:C1517))
 		
 		$result.success:=True:C214
 		
@@ -622,6 +622,11 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 						
 					End if 
 					
+					//…………………………………………………………………………………………………
+				: (Not:C34(FEATURE.with("alias")))
+					
+					// <NOT YET AVAILABLE>
+					
 					//______________________________________________________
 				: ($relatedAttribute.kind="alias")
 					
@@ -732,9 +737,9 @@ Function addField($table : Object; $field : cs:C1710.field)
 			$table[String:C10($field.id)]:=This:C1470._fieldModel($field)
 			
 			//………………………………………………………………………………………………………
-		: ($field.kind="alias")\
-			 | ($field.kind="calculated")\
-			 | ($field.kind="relatedEntities")
+		: ($field.kind="calculated")\
+			 || ($field.kind="relatedEntities")\
+			 || (FEATURE.with("alias") && ($field.kind="alias"))
 			
 			$table[$field.name]:=This:C1470._fieldModel($field)
 			
@@ -781,7 +786,7 @@ Function addField($table : Object; $field : cs:C1710.field)
 							$o[$path[0]][$relatedField.name].path:=$relatedField.path
 							
 							//______________________________________________________
-						: ($relatedField.kind="alias") && ($o[$path[0]][$relatedField.name]=Null:C1517)
+						: (FEATURE.with("alias") && $relatedField.kind="alias") && ($o[$path[0]][$relatedField.name]=Null:C1517)
 							
 							$o[$path[0]][$relatedField.name]:=This:C1470._fieldModel($relatedField)
 							$o[$path[0]][$relatedField.name].path:=$relatedField.path
@@ -817,7 +822,7 @@ Function addField($table : Object; $field : cs:C1710.field)
 							$o[$relatedField.name].path:=$relatedField.path
 							
 							//______________________________________________________
-						: ($relatedField.kind="alias") && ($o[$relatedField.name]=Null:C1517)
+						: (FEATURE.with("alias") && $relatedField.kind="alias") && ($o[$relatedField.name]=Null:C1517)
 							
 							$o[$relatedField.name]:=This:C1470._fieldModel($relatedField)
 							$o[$relatedField.name].path:=$relatedField.path
@@ -902,7 +907,7 @@ Function _fieldModel($field : cs:C1710.field; $relatedCatalog : Object)->$fieldM
 			$fieldModel.type:=$field.type
 			
 			//………………………………………………………………………………………………………
-		: ($field.kind="alias")  // Alias
+		: (FEATURE.with("alias") && ($field.kind="alias"))  // Alias
 			
 			$fieldModel:=New object:C1471(\
 				"kind"; $field.kind; \
@@ -969,6 +974,11 @@ Function _fieldModel($field : cs:C1710.field; $relatedCatalog : Object)->$fieldM
 			
 			// mark:#TEMPO
 			$fieldModel.relatedTableNumber:=$relatedCatalog.relatedTableNumber
+			
+			//…………………………………………………………………………………………………
+		: (Not:C34(FEATURE.with("alias")))
+			
+			// <NOT YET AVAILABLE>
 			
 			//………………………………………………………………………………………………………
 		Else 

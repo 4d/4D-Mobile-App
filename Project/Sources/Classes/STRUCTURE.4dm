@@ -549,6 +549,11 @@ Function doFieldPicker()->$publishedNumber : Integer
 			var $t : Text
 			$t:=Choose:C955($field.kind="storage"; String:C10($field.fieldNumber); $field.name)
 			
+			//If ($field.kind="alias")
+			//$x:=PROJECT._pathTarget($currentTable.name; $field; True)
+			//$y:=cs.ExposedStructure.new().aliasTarget($currentTable.name; $field; True)
+			//End if 
+			
 			If ($field.kind#"alias") && ($path.length>1)
 				
 				$field.published:=($relatedDataModel[$path[0]][$t]#Null:C1517)

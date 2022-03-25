@@ -492,14 +492,13 @@ Function doAddMenu()
 						
 						If ($field.kind="storage")
 							
-							// FIXME:remove ID
 							$parameter:=New object:C1471(\
-								"fieldNumber"; ($field.fieldNumber#Null:C1517) ? $field.fieldNumber : $field.id; \
+								"fieldNumber"; ($field.fieldNumber#Null:C1517) ? $field.fieldNumber : Num:C11($menu.fieldIdentifier); \
 								"name"; $field.name; \
 								"type"; PROJECT.fieldType2type($field.fieldType); \
 								"format"; "ascending")
 							
-						Else   // Computed attribute
+						Else   // Alias or Computed attribute
 							
 							$parameter:=New object:C1471(\
 								"name"; $menu.fieldIdentifier; \

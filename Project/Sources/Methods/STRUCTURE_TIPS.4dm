@@ -156,7 +156,7 @@ If (Num:C11($e.row)>0)
 								
 								//…………………………………………………………………………………………………
 							: ($field.kind="relatedEntity")\
-								 | (($field.kind="alias") && (Bool:C1537($field.isToOne)))
+								 || (($field.kind="alias") && (Bool:C1537($field.isToOne)))
 								
 								// Related dataclass name
 								$tips:=EDITOR.str.localize("nTo1Relation"; $field.relatedDataClass)
@@ -177,7 +177,7 @@ If (Num:C11($e.row)>0)
 								
 								//…………………………………………………………………………………………………
 							: ($field.kind="relatedEntities")\
-								 | (($field.kind="alias") && (Bool:C1537($field.isToMany)))
+								 || (($field.kind="alias") && (Bool:C1537($field.isToMany)))
 								
 								If (Form:C1466.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)
 									

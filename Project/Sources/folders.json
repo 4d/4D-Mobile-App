@@ -148,18 +148,6 @@
 			"mobileUnit"
 		]
 	},
-	"[BROWSER]": {
-		"methods": [
-			"BROWSER_CONTAINER",
-			"browser_DOWNLOAD",
-			"BROWSER_Handler",
-			"BROWSER_OBJECTS_HANDLER",
-			"COMPILER_BROWSER"
-		],
-		"forms": [
-			"BROWSER"
-		]
-	},
 	"[COMPONENT]": {
 		"groups": [
 			"backend",
@@ -170,12 +158,6 @@
 			"COMPONENT_Infos",
 			"COMPONENT_INIT",
 			"FEATURE_FLAGS"
-		],
-		"classes": [
-			"ExposedStructure",
-			"field",
-			"path",
-			"table"
 		]
 	},
 	"[EDITOR]": {
@@ -520,11 +502,27 @@
 			"unzip"
 		],
 		"classes": [
+			"ExposedStructure",
+			"field",
 			"formatter",
 			"MobileProject",
+			"path",
 			"project",
 			"sqlite3",
-			"sqliteSizes"
+			"sqliteSizes",
+			"table"
+		]
+	},
+	"BROWSER": {
+		"methods": [
+			"BROWSER_CONTAINER",
+			"browser_DOWNLOAD",
+			"BROWSER_Handler",
+			"BROWSER_OBJECTS_HANDLER",
+			"COMPILER_BROWSER"
+		],
+		"forms": [
+			"BROWSER"
 		]
 	},
 	"classes": {
@@ -1001,10 +999,10 @@
 	"UI": {
 		"groups": [
 			"[API]",
-			"[BROWSER]",
 			"[EDITOR]",
 			"[PANELS]",
 			"[PROJECT]",
+			"BROWSER",
 			"FOOTER",
 			"LISTE_EDITOR",
 			"panel",
