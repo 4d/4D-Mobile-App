@@ -527,6 +527,112 @@ Function toObject($withAdresses : Boolean) : Object
 		
 	End if 
 	
+	//———————————————————————————————————————————————————————————/
+	// 
+Function toList($refPtr : Pointer; $xpath : Text; $root : Text) : Integer
+	
+	var $name; $node; $value; $current : Text
+	var $count; $i; $ref; $list; $sublist : Integer
+	
+	Case of 
+			//______________________________________________________
+		: (Count parameters:C259<2)
+			
+			This:C1470._pushError("Missing parameter")
+			return 
+			
+			//______________________________________________________
+		: (Length:C16($xpath)=0)
+			
+			This:C1470._pushError("xpath parameter couldn't be an empty string")
+			return 
+			
+			//______________________________________________________
+		: ($xpath="/")
+			
+			This:C1470._pushError("You must provide the root name of the XML tree in the xpath parameter")
+			return 
+			
+			//______________________________________________________
+		Else 
+			
+			If (Count parameters:C259<3)
+				
+				If (This:C1470.isReference($xpath))
+					
+					$root:=$xpath
+					$xpath:=""
+					
+				Else 
+					
+					$root:=This:C1470.root
+					
+				End if 
+			End if 
+			
+			// Ensure to work with an absolute path
+			$xpath:=$xpath[[1]]="/" ? $xpath : "/"+$xpath
+			
+			DOM GET XML ELEMENT NAME:C730($root; $name)
+			DOM GET XML ELEMENT VALUE:C731($root; $value)
+			
+			$list:=New list:C375
+			
+			Repeat 
+				
+				$current:=$xpath+"/"+$name
+				$refPtr->+=1
+				$ref:=$refPtr->
+				
+				$count:=DOM Count XML attributes:C727($root)
+				ARRAY TEXT:C222($names; $count)
+				ARRAY TEXT:C222($values; $count)
+				
+				If ($count>0)
+					
+					For ($i; 1; $count; 1)
+						
+						DOM GET XML ATTRIBUTE BY INDEX:C729($root; $i; $names{$i}; $values{$i})
+						
+					End for 
+				End if 
+				
+				$node:=DOM Get first child XML element:C723($root)
+				
+				If (Bool:C1537(OK))
+					
+					$sublist:=This:C1470.toList($refPtr; $current; $node)  // <==== RECURSIVE
+					
+					APPEND TO LIST:C376($list; $name; $ref; $sublist; True:C214)
+					SET LIST ITEM PROPERTIES:C386($list; 0; False:C215; Bold:K14:2; 0)
+					
+				Else 
+					
+					If ($name#"")
+						
+						APPEND TO LIST:C376($list; $name; $ref)
+						SET LIST ITEM PARAMETER:C986($list; 0; "Value"; $value)
+						SET LIST ITEM PARAMETER:C986($list; 0; "dom"; $root)
+						
+						For ($i; 1; $count; 1)
+							
+							SET LIST ITEM PARAMETER:C986($list; 0; $names{$i}; $values{$i})
+							
+						End for 
+					End if 
+				End if 
+				
+				SET LIST ITEM PARAMETER:C986($list; 0; "xpath"; $current)
+				
+				$root:=DOM Get next sibling XML element:C724($root; $name; $value)
+				
+			Until (OK=0)
+			
+			//______________________________________________________
+	End case 
+	
+	return ($list)
+	
 	// —————————————————————————————————————————————————————————————————————————————————
 	// Search for an element by its id
 Function findById($id : Text)->$reference : Text

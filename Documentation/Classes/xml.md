@@ -30,12 +30,12 @@ This class is intended to work with the [enhanced XPath support](https://blog.4d
 |.**setOptions** ( selector : `Integer` ; value : `integer` … {selectorN : `Integer` ; valueN : `integer`}) → `cs.xml` | Modify the value of one or more XML options for the structure
 |.**parse** ( value : `Text` {; validate : `Boolean` {; schema : `Text`}} ) → `cs.xml` <br/> .**parse** ( value : `Blob` {; validate : `Boolean` {; schema : `Text`}} ) → `cs.xml` | Parses a BLOB or Text type variable containing an XML structure 
 |.**open** ( file : `4D.File` {; validate : `Boolean` {; schema : `Text`}} ) → `cs.xml` | Parses a document containing an XML structure
-|.**save** () → `cs.xml` <br/> .**save** ( {file : `4D.File`} {; keepStructure : `Boolean`) → `cs.xml` | Saves the XML structure to a document
+|.**save** () → `cs.xml` <br/> .**save** ( {file : `4D.File`} {; keepStructure : `Boolean`}) → `cs.xml` | Saves the XML structure to a document
 |.**close** ( ) → `cs.xml` | Close the XML tree (Release the memory)
-|.**getText()** ({keepStructure : `Boolean`}) → `Text` |  Returns the XML tree as text
-|.**getContent()** ({keepStructure : `Boolean`}) → `Blob` |  Returns the XML tree as BLOB
-|.**toObject()** ({withAdresses : `Boolean`}) → `Blob` |  Returns the XML structure as Object.<br/> If withAdresses is True, an attribute `@` is populated for each element with it's XML reference.
-
+|.**getText** ({keepStructure : `Boolean`}) → `Text` |  Returns the XML tree as text
+|.**getContent** ({keepStructure : `Boolean`}) → `Blob` |  Returns the XML tree as BLOB
+|.**toObject** ({withAdresses : `Boolean`}) → `Blob` |  Returns the XML structure as Object.<br/> If withAdresses is True, an attribute `@` is populated for each element with it's XML reference.
+|.**toList** (counter : `Pointer` ; xpath : `Text`) → `Integer`<br>.**toList** (counter : `Pointer` ; nodeRef : `Text`) → `Integer`<br>.**toList** (counter : `Pointer` ; xpath : `Text` ; nodeRef : `Text`) → `Integer` |  Returns a hierarchical list from the XML tree.<br/>Each item of the list includes as item parameters: its `value`, its `xpath` & its `dom` reference.<br/>• To ensure the uniqueness of the references of the list elements, you must initialize a counter and pass a pointer as the 1st parameter of the function.<br/>• The `xpath` parameter can be the root name of the XML tree or an absolute path. 
 
 ### Elements functions
 
