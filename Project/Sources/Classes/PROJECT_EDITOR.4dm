@@ -256,14 +256,14 @@ Function init()
 	// Create the context, id any
 	If (Form:C1466.$dialog=Null:C1517)
 		
-		RECORD.info("📍 CREATE $dialog (PROJECT_EDITOR)")
+		RECORD.info("📍 Create $dialog (PROJECT_EDITOR)")
 		Form:C1466.$dialog:=New object:C1471
 		
 	End if 
 	
 	If (Form:C1466.$dialog[This:C1470.name]=Null:C1517)
 		
-		RECORD.info("Create context for: "+This:C1470.name)
+		RECORD.info("🚧 Create "+This:C1470.name+"'s context (class "+Current method name:C684+")")
 		Form:C1466.$dialog[This:C1470.name]:=New object:C1471
 		
 	End if 

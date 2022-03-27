@@ -131,7 +131,9 @@ Case of
 					$outputPathname:=$outputPathname+".catalog.json"
 					
 					// Make sure the folder exist
-					CREATE FOLDER:C475($outputPathname; *)
+					var $target : 4D:C1709.File
+					$target:=File:C1566($outputPathname; fk platform path:K87:2)
+					$target.create()
 					
 					If (Bool:C1537($in.dataSet))
 						
@@ -148,8 +150,7 @@ Case of
 /* START HIDING ERRORS */
 					$error:=cs:C1710.error.new("capture")
 					
-					//TEXT TO DOCUMENT($outputPathname; JSON Stringify($rest.response; *))
-					File:C1566($outputPathname; fk platform path:K87:2).setText(JSON Stringify:C1217($rest.response; *))
+					$target.setText(JSON Stringify:C1217($rest.response; *))
 					
 /* STOP HIDING ERRORS */
 					$error.show()
@@ -859,14 +860,14 @@ Case of
 														If (Bool:C1537($in.dataSet))
 															
 															//TEXT TO DOCUMENT($outputPathname+"Contents.json"; \
-																JSON Stringify(New object(\
-																"info"; New object(\
-																"version"; 1; \
-																"author"; "xcode"\
-																); \
-																"images"; New collection(New object(\
-																"idiom"; "universal"; \
-																"filename"; $File_name)))))
+																																JSON Stringify(New object(\
+																																"info"; New object(\
+																																"version"; 1; \
+																																"author"; "xcode"\
+																																); \
+																																"images"; New collection(New object(\
+																																"idiom"; "universal"; \
+																																"filename"; $File_name)))))
 															
 															File:C1566($outputPathname+"Contents.json"; fk platform path:K87:2).setText(JSON Stringify:C1217(New object:C1471(\
 																"info"; New object:C1471(\
@@ -918,9 +919,9 @@ Case of
 							$outputPathname:=$in.output+Folder separator:K24:12+$meta.name+Folder separator:K24:12
 							$outputPathname:=$outputPathname+"manifest.json"
 							//TEXT TO DOCUMENT($outputPathname; \
-								JSON Stringify(New object(\
-								"contentSize"; Num($result.contentSize); \
-								"count"; Num($result.count))))
+																JSON Stringify(New object(\
+																"contentSize"; Num($result.contentSize); \
+																"count"; Num($result.count))))
 							File:C1566($outputPathname; fk platform path:K87:2).setText(JSON Stringify:C1217(New object:C1471(\
 								"contentSize"; Num:C11($result.contentSize); \
 								"count"; Num:C11($result.count))))
