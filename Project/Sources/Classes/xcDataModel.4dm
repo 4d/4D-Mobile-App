@@ -3,7 +3,7 @@ Class constructor($project : Object)
 	This:C1470.actions:=$project.actions  // to create fetch index using sort actions
 	This:C1470.project:=$project
 	
-	If (Bool:C1537(FEATURE.with("alias")) && Bool:C1537(FEATURE.with("iOSAlias")))
+	If (FEATURE.with("alias") && FEATURE.with("iOSAlias"))
 		This:C1470.catalog:=This:C1470.project.getCatalog()
 	End if 
 	
@@ -24,7 +24,7 @@ Function run($path : Text; $options : Object)->$out : Object
 	var $result : Object
 	
 	// MARK: Manage alias
-	If (Bool:C1537(FEATURE.with("alias")) && Bool:C1537(FEATURE.with("iOSAlias")))
+	If (FEATURE.with("alias") && FEATURE.with("iOSAlias"))
 		
 		$result:=This:C1470._alias()
 		ob_error_combine($out; $result)

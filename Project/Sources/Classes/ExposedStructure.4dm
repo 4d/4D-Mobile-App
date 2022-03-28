@@ -786,7 +786,7 @@ Function addField($table : Object; $field : cs:C1710.field)
 							$o[$path[0]][$relatedField.name].path:=$relatedField.path
 							
 							//______________________________________________________
-						: (FEATURE.with("alias") && $relatedField.kind="alias") && ($o[$path[0]][$relatedField.name]=Null:C1517)
+						: (FEATURE.with("alias")) && (($relatedField.kind="alias") && ($o[$path[0]][$relatedField.name]=Null:C1517))
 							
 							$o[$path[0]][$relatedField.name]:=This:C1470._fieldModel($relatedField)
 							$o[$path[0]][$relatedField.name].path:=$relatedField.path
@@ -822,7 +822,7 @@ Function addField($table : Object; $field : cs:C1710.field)
 							$o[$relatedField.name].path:=$relatedField.path
 							
 							//______________________________________________________
-						: (FEATURE.with("alias") && $relatedField.kind="alias") && ($o[$relatedField.name]=Null:C1517)
+						: (FEATURE.with("alias")) && (($relatedField.kind="alias") && ($o[$relatedField.name]=Null:C1517))
 							
 							$o[$relatedField.name]:=This:C1470._fieldModel($relatedField)
 							$o[$relatedField.name].path:=$relatedField.path

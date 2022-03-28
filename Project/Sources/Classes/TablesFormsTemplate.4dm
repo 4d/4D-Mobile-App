@@ -157,7 +157,7 @@ Function doRun()->$Obj_out : Object
 							$Obj_field:=OB Copy:C1225($Obj_field)
 							
 							$Obj_field.nameOrPath:=$Obj_field.name
-							If (FEATURE.with("alias") && $Obj_field.path#Null:C1517)
+							If (FEATURE.with("alias") && ($Obj_field.path#Null:C1517))
 								$Obj_field.nameOrPath:=$Obj_field.path
 							End if 
 							
@@ -199,7 +199,7 @@ Function doRun()->$Obj_out : Object
 							$Obj_field:=OB Copy:C1225($Obj_field)
 							
 							$Obj_field.nameOrPath:=$Obj_field.name
-							If (FEATURE.with("alias") && $Obj_field.path#Null:C1517)
+							If (FEATURE.with("alias") && ($Obj_field.path#Null:C1517))
 								$Obj_field.nameOrPath:=$Obj_field.path
 							End if 
 							
