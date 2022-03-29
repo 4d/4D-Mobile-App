@@ -1,8 +1,8 @@
-//%attributes = {"invisible":true}
+//%attributes = {}
 #DECLARE($in : Object)
 
 If (False:C215)
-	C_OBJECT:C1216(getSQLite; $1)
+	C_OBJECT:C1216(getAndroidDataset; $1)
 End if 
 
 var $osVersion : Text
@@ -17,7 +17,7 @@ $reponse:=New object:C1471("database"; Null:C1517)
 If (Is macOS:C1572)
 	
 	$project:=$in.project
-	$database:=$project._folder.file("project.dataSet/Resources/Structures.sqlite")
+	$database:=$project._folder.file("project.dataSet/android/static.db")
 	
 	If ($database.exists)
 		
@@ -60,6 +60,12 @@ If (Is macOS:C1572)
 			
 		End if 
 	End if 
+	
+Else 
+	
+	//TODO:
+	
+	
 End if 
 
-CALL FORM:C1391($in.caller; Formula:C1597(editor_CALLBACK).source; "datasetIOS"; $reponse)
+CALL FORM:C1391($in.caller; Formula:C1597(editor_CALLBACK).source; "datasetAndroid"; $reponse)

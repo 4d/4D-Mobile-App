@@ -292,12 +292,12 @@ Case of
 			
 		Else 
 			
-			panel_Load.update()
+			panel.update()
 			
 		End if 
 		
 		//______________________________________________________
-	: ($selector="datasetInformations")  // Callback from getSQLite method to update the data panel
+	: ($selector="datasetAndroid")  // Callback from getAndroidDB method to update the data panel
 		
 		If ($isProjectForm)  // Pass to target panel
 			
@@ -311,9 +311,34 @@ Case of
 			
 		Else 
 			
-			$panel:=panel_Load
+			$panel:=panel
+			$panel.datasetAndroid:=$data.database
+			$panel.updateTableListWithDataSizes()
+			
+			panel("SOURCE").updateDataSet()
+			
+		End if 
+		
+		//______________________________________________________
+	: ($selector="datasetIOS")  // Callback from getSQLite method to update the data panel
+		
+		If ($isProjectForm)  // Pass to target panel
+			
+			$container:=panel_Find($ƒ.data)
+			
+			If (Length:C16($container)>0)
+				
+				EDITOR.callChild($container; Current method name:C684; $selector; $data)
+				
+			End if 
+			
+		Else 
+			
+			$panel:=panel
 			$panel.sqlite:=$data.database
 			$panel.updateTableListWithDataSizes()
+			
+			panel("SOURCE").updateDataSet()
 			
 		End if 
 		

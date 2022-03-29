@@ -1,3 +1,9 @@
+/* #DEPENDENCIES [
+   {"file":"/RESOURCES/scripts/sudo-askpass"},
+   {"xliff":"lep.xlf"}
+]
+*/
+
 //=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	
@@ -543,6 +549,60 @@ Function getEnvironnementVariable($name : Text; $nonDiacritic : Boolean)->$value
 	End if 
 	
 	//MARK:- 🛠 Tools
+	//====================================================================
+	// Runs a sudo command line and displays a password prompt if necessary
+	// Needs file "/RESOURCES/scripts/sudo-askpass"
+Function sudo($cmd : Text; $title : Text; $message : Text) : Boolean
+	
+	var $script : 4D:C1709.File
+	
+/*
+	
+Normally, if sudo requires a password, it will read it from the current terminal.
+	
+If the -A (askpass) option is specified, a (possibly graphical) helper program
+is executed to read the user's password and output the password to the standard output.
+	
+If the SUDO_ASKPASS environment variable is set, it specifies the path to the helper program.
+	
+https://apple.stackexchange.com/questions/23494/what-option-should-i-give-the-sudo-command-to-have-the-password-asked-through-a
+	
+*/
+	
+	$script:=Folder:C1567(Folder:C1567("/RESOURCES/scripts").platformPath; fk platform path:K87:2).file("sudo-askpass")
+	
+	If ($script.exists)
+		
+		If (Count parameters:C259>=2)
+			
+			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_TITLE"; $title)
+			
+		End if 
+		
+		$message:=$message ? $message : Get localized string:C991("enterYourPasswordToAllowThis")
+		$message:=$message ? $message : "Enter your password to allow this."
+		
+		SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_MESSAGE"; $message)
+		SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS"; $script.path)
+		
+		This:C1470.lastError:=""
+		
+		If ($cmd#"sudo -A @")
+			
+			$cmd:="sudo -A "+$cmd
+			
+		End if 
+		
+		This:C1470.launch($cmd)
+		
+	Else 
+		
+		This:C1470._pushError("File not found: \""+$script.path+"\"")
+		
+	End if 
+	
+	return (This:C1470.success)
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//escape special caracters for lep commands
 Function escape($text : Text)->$escaped : Text

@@ -31,6 +31,7 @@ The `lep` class is designed to manage external process tasks performed with the 
 |.**getEnvironnementVariables** ()  → variables : `Object` | Returns an object containing all the environment variables | 
 |.**getEnvironnementVariable** ( name : `Text` {; nonDiacritic : `Boolean`} )  → value : Text | Returns the value of an environment variable | 
 |.**launch** ( script : `4D.File` \| command : `Text` {; arguments : `Text`} )  → `cs.lep` | launches an external process |
+|.**sudo** (cmd : `Text` {; title : `Text`{; message : `Text`}})  → `Boolean`| Runs a sudo command line and displays a password prompt if necessary|
 |.**reset** ()  → `cs.lep` | To restore the properties of the class to their default values |
 |.**setCharSet** ( {charset : `Text`} )  → `cs.lep` | Sets the charset used to convert the outputStream | "utf-8" |
 |.**setDirectory** ( folder : `4D.Folder` )  → `cs.lep` | Sets the current directory of the next external process to be launched | (none)

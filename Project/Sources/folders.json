@@ -325,18 +325,18 @@
 		]
 	},
 	"05] SOURCE": {
+		"groups": [
+			"wip"
+		],
 		"methods": [
 			"COMPILER_SOURCE",
-			"SOURCE",
 			"SOURCE_Handler",
 			"SOURCE_OBJECTS_HANDLER"
 		],
 		"forms": [
-			"SOURCE",
-			"SOURCE1"
+			"SOURCE"
 		],
 		"classes": [
-			"SOURCE1",
 			"sources"
 		]
 	},
@@ -1026,6 +1026,17 @@
 		],
 		"forms": [
 			"NO_DATAMODEL"
+		]
+	},
+	"wip": {
+		"methods": [
+			"SOURCE"
+		],
+		"forms": [
+			"SOURCE1"
+		],
+		"classes": [
+			"SOURCE1"
 		]
 	},
 	"WIZARD": {

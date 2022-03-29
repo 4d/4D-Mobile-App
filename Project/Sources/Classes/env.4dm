@@ -3,7 +3,6 @@ Class constructor
 	This:C1470.isMacOs:=Is macOS:C1572
 	This:C1470.isWindows:=Is Windows:C1573
 	This:C1470.isLinux:=Not:C34(This:C1470.isMacOs) & Not:C34(This:C1470.isWindows)
-	This:C1470.systemInfos:=Get system info:C1571
 	
 	This:C1470.home:=Folder:C1567(Split string:C1554(Folder:C1567(fk desktop folder:K87:19).path; "/").resize(3).join("/"))
 	
@@ -12,6 +11,10 @@ Class constructor
 	//===================================================================================
 Function update  // Updating values that can be modified after opening the database
 	var $value : Text
+	
+	// To update the  volumes
+	// TODO: Could be an option of the constructor
+	This:C1470.systemInfos:=Get system info:C1571
 	
 	GET SYSTEM FORMAT:C994(Currency symbol:K60:3; $value)
 	This:C1470.currencySymbol:=$value
@@ -154,13 +157,13 @@ Function logs($path : Text; $create : Boolean)->$document : 4D:C1709.File
 	//===================================================================================
 	//Function derivedData($path : Text; $create : Boolean)->$document : 4D.File
 	//$document:=This.home.folder("Library/Developer/Xcode/DerivedData/")
-	//If (Count parameters>=2)
+	// If (Count parameters>=2)
 	//$document:=This._postProcessing($document; $path; $create)
-	//Else 
-	//If (Count parameters>=1)
+	// Else
+	// If (Count parameters>=1)
 	//$document:=This._postProcessing($document; $path)
-	//End if 
-	//End if 
+	// End if
+	// End if
 	
 	//===================================================================================
 Function simulators($path : Text; $create : Boolean)->$document : 4D:C1709.File
@@ -235,6 +238,7 @@ Function _postProcessing($document : Object; $pathOrCreate : Variant; $create : 
 			
 			//%W-533.1
 			If ($pathOrCreate[[Length:C16($pathOrCreate)]]="/")
+				
 				//%W+533.1
 				
 				// Append folder

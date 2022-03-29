@@ -43,6 +43,9 @@ If (OB Is empty:C1297($form.ui))
 	$form.ui.testServer:=Formula:C1597(SOURCE_Handler(New object:C1471(\
 		"action"; "checkingServerConfiguration")))
 	
+	$form.ui.updateDataSet:=Formula:C1597(SOURCE_Handler(New object:C1471(\
+		"action"; "updateDataSet")))
+	
 	$form.ui.remote:=Formula:C1597(String:C10(Form:C1466.dataSource.source)="server")
 	
 End if 
@@ -181,9 +184,17 @@ Case of
 				
 				If (FEATURE.with("cancelableDatasetGeneration"))
 					
-					$file:=PROJECT._folder.file("project.dataSet/Resources/Structures.sqlite")
-					OBJECT SET TITLE:C194(*; "lastGeneration"; EDITOR.str.localize("lastGeneration"; New collection:C1472(String:C10($file.modificationDate); Time string:C180($file.modificationTime))))
-					OBJECT SET VISIBLE:C603(*; "lastGeneration@"; $file.exists)
+					If (FEATURE.with("androidDataSet"))
+						
+						$form.ui.updateDataSet()
+						
+					Else 
+						
+						$file:=PROJECT._folder.file("project.dataSet/Resources/Structures.sqlite")
+						OBJECT SET TITLE:C194(*; "lastGeneration"; EDITOR.str.localize("lastGeneration"; New collection:C1472(String:C10($file.modificationDate); Time string:C180($file.modificationTime))))
+						OBJECT SET VISIBLE:C603(*; "lastGeneration@"; $file.exists)
+						
+					End if 
 					
 					If (Bool:C1537(Form:C1466.$project.dataSetGeneration))
 						
@@ -327,7 +338,6 @@ $regex.match[1].data:="127.0.0.1"
 							If ($ok)
 								
 								$oSystem:=Get system info:C1571
-								
 								$o:=$oSystem.networkInterfaces.query("ipAddresses[].ip=:1"; $regex.matches[1].data).pop()
 								
 								If ($o#Null:C1517)
@@ -697,6 +707,74 @@ $regex.match[1].data:="127.0.0.1"
 				End if 
 			End if 
 		End if 
+		
+		//=========================================================
+	: ($in.action="updateDataSet")  // update the last generation comment
+		
+		var $data : Object
+		$data:=panel("DATA")
+		
+		If (Bool:C1537(Form:C1466.dataSource.doNotGenerateDataAtEachBuild))
+			
+			Case of 
+					
+					//______________________________________________________
+				: (PROJECT.allTargets()) && ($data.datasetAndroid#Null:C1517) && ($data.sqlite#Null:C1517)  //& False
+					
+					Case of 
+							
+							//______________________________________________________
+						: ($data.datasetAndroid=Null:C1517) & ($data.sqlite=Null:C1517)
+							
+							OBJECT SET TITLE:C194(*; "lastGeneration"; ".Need to regenerate the data.")
+							
+							//______________________________________________________
+						: ($data.datasetAndroid=Null:C1517)
+							
+							OBJECT SET TITLE:C194(*; "lastGeneration"; ".Need to regenerate the data, embedded data for Android is missing.")
+							
+							//______________________________________________________
+						: ($data.sqlite=Null:C1517)
+							
+							OBJECT SET TITLE:C194(*; "lastGeneration"; ".Need to regenerate the data, embedded data for iOS is missing.")
+							
+							//______________________________________________________
+						Else 
+							
+							$file:=PROJECT._folder.file("project.dataSet/Resources/Structures.sqlite")
+							OBJECT SET TITLE:C194(*; "lastGeneration"; EDITOR.str.localize("lastGeneration"; New collection:C1472(String:C10($file.modificationDate); Time string:C180($file.modificationTime))))
+							
+							//______________________________________________________
+					End case 
+					
+					//______________________________________________________
+				: (PROJECT.android()) && ($data.datasetAndroid#Null:C1517) & False:C215
+					
+					$file:=PROJECT._folder.file("project.dataSet/android/static.db")
+					OBJECT SET TITLE:C194(*; "lastGeneration"; EDITOR.str.localize("lastGeneration"; New collection:C1472(String:C10($file.modificationDate); Time string:C180($file.modificationTime))))
+					
+					//______________________________________________________
+				: (PROJECT.iOS()) && ($data.sqlite#Null:C1517) & False:C215
+					
+					$file:=PROJECT._folder.file("project.dataSet/Resources/Structures.sqlite")
+					OBJECT SET TITLE:C194(*; "lastGeneration"; EDITOR.str.localize("lastGeneration"; New collection:C1472(String:C10($file.modificationDate); Time string:C180($file.modificationTime))))
+					
+					//______________________________________________________
+				Else 
+					
+					OBJECT SET TITLE:C194(*; "lastGeneration"; ".Need to regenerate the data, the structure has changed.")
+					
+					//______________________________________________________
+			End case 
+			
+			OBJECT SET VISIBLE:C603(*; "lastGeneration@"; True:C214)
+			
+		Else 
+			
+			OBJECT SET VISIBLE:C603(*; "lastGeneration@"; False:C215)
+			
+		End if 
+		
 		
 		//=========================================================
 	Else 

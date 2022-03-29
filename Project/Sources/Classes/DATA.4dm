@@ -129,7 +129,23 @@ Function update()
 	// Select the last used table or the first one if none
 	This:C1470.list.doSafeSelect(Choose:C955(Num:C11(This:C1470.lastIndex)=0; 1; Num:C11(This:C1470.lastIndex)))
 	
-	This:C1470.getSQLite()
+	If (PROJECT.iOS())
+		
+		This:C1470.sqlite:=Null:C1517
+		This:C1470.callWorker(Formula:C1597(getSQLite).source; New object:C1471(\
+			"caller"; This:C1470.window; \
+			"project"; PROJECT))
+		
+	End if 
+	
+	If (PROJECT.android())
+		
+		This:C1470.datasetAndroid:=Null:C1517
+		This:C1470.callWorker(Formula:C1597(getAndroidDataset).source; New object:C1471(\
+			"caller"; This:C1470.window; \
+			"project"; PROJECT))
+		
+	End if 
 	
 	If (This:C1470.current=Null:C1517)
 		
@@ -198,16 +214,9 @@ Function tableList()
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
-	/// Get the dump sizes if available
-Function getSQLite()
-	
-	This:C1470.sqlite:=Null:C1517
-	This:C1470.callWorker(Formula:C1597(getSQLite).source; New object:C1471("caller"; This:C1470.window; "project"; PROJECT))
-	
-	// === === === === === === === === === === === === === === === === === === === === ===
 Function updateTableListWithDataSizes()
 	
-	var $sqlID; $name : Text
+	var $sqlID; $tableName : Text
 	var $size : Integer
 	var $table : Object
 	var $file : 4D:C1709.File
@@ -223,60 +232,61 @@ Function updateTableListWithDataSizes()
 		If (Bool:C1537($table.embedded))\
 			 & (Not:C34(Bool:C1537($table.filter.parameters)))
 			
-			If (This:C1470.sqlite#Null:C1517)
+			If (FEATURE.with("androidDataSet"))
 				
-				$name:=formatString("table-name"; $table.name)
+				$tableName:=formatString("table-name"; $table.name)
 				
-				$sqlID:="Z"+Uppercase:C13($name)
-				
-				If (This:C1470.sqlite.tables[$sqlID]#Null:C1517)
-					
-					$size:=Num:C11(This:C1470.sqlite.tables[$sqlID])  // Size of the data dump
-					
-					If ($size>4096)
+				Case of 
 						
-						// Add pictures size if any
-						$file:=PROJECT._folder.file("project.dataSet/Resources/Assets.xcassets/Pictures/"+$name+"/manifest.json")
+						//______________________________________________________
+					: (PROJECT.allTargets())
 						
-						If ($file.exists)
-							
-							$size:=$size+Num:C11(JSON Parse:C1218($file.getText()).contentSize)
-							
-						End if 
-					End if 
-					
-					$table.dumpSize:=doc_bytesToString($size)
-					
-				Else 
-					
-					$table.dumpSize:=Get localized string:C991("notAvailable")
-					
-				End if 
+						$table.dumpSize:=This:C1470.iosDumpTableSize($tableName)+" / "+This:C1470.androidDumpTableSize($tableName)
+						
+						//______________________________________________________
+					: (PROJECT.iOS())
+						
+						$table.dumpSize:=This:C1470.iosDumpTableSize($tableName)
+						
+						//______________________________________________________
+					: (PROJECT.android())
+						
+						$table.dumpSize:=This:C1470.androidDumpTableSize($tableName)
+						
+						//______________________________________________________
+				End case 
 				
 			Else 
 				
-				$file:=PROJECT._folder.file("project.dataSet/Resources/Assets.xcassets/Data/"+$table.name+".dataset/"+$table.name+".data.json")
-				
-				If ($file.exists)
+				If (This:C1470.sqlite#Null:C1517)
 					
-					// Get document size
-					$size:=$file.size
-					
-					// Add pictures size if any
-					$file:=PROJECT._folder.file("Resources/Assets.xcassets/Pictures/"+$table.name+"/manifest.json")
-					
-					If ($file.exists)
-						
-						$size:=$size+JSON Parse:C1218($file.getText()).contentSize
-						
-					End if 
-					
-					$table.dumpSize:=doc_bytesToString($size)
+					$table.dumpSize:=This:C1470.iosDumpTableSize($tableName)
 					
 				Else 
 					
-					$table.dumpSize:=Get localized string:C991("notAvailable")
+					$file:=PROJECT._folder.file("project.dataSet/Resources/Assets.xcassets/Data/"+$table.name+".dataset/"+$table.name+".data.json")
 					
+					If ($file.exists)
+						
+						// Get document size
+						$size:=$file.size
+						
+						// Add pictures size if any
+						$file:=PROJECT._folder.file("Resources/Assets.xcassets/Pictures/"+$table.name+"/manifest.json")
+						
+						If ($file.exists)
+							
+							$size:=$size+JSON Parse:C1218($file.getText()).contentSize
+							
+						End if 
+						
+						$table.dumpSize:=doc_bytesToString($size)
+						
+					Else 
+						
+						$table.dumpSize:=Get localized string:C991("notAvailable")
+						
+					End if 
 				End if 
 			End if 
 		End if 
@@ -284,6 +294,68 @@ Function updateTableListWithDataSizes()
 	
 	// Redraw
 	This:C1470.list.touch()
+	
+	//panel("SOURCE").updateDataSet()
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function androidDumpTableSize($tableName) : Text
+	
+	var $size : Integer
+	var $file : 4D:C1709.File
+	
+	If (This:C1470.datasetAndroid=Null:C1517)\
+		 || (This:C1470.datasetAndroid.tables=Null:C1517)\
+		 || (This:C1470.datasetAndroid.tables[$tableName]=Null:C1517)
+		
+		return ("#NA")
+		
+	End if 
+	
+	$size:=Num:C11(This:C1470.datasetAndroid.tables[$tableName])  // Size of the data dump
+	
+	If ($size>4096)
+		
+		// Add pictures size if any
+		$file:=PROJECT._folder.file("project.dataSet/Resources/Assets.xcassets/Pictures/"+$tableName+"/manifest.json")
+		
+		If ($file.exists)
+			
+			$size:=$size+Num:C11(JSON Parse:C1218($file.getText()).contentSize)
+			
+		End if 
+	End if 
+	
+	return (doc_bytesToString($size))
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function iosDumpTableSize($tableName) : Text
+	
+	var $size : Integer
+	var $file : 4D:C1709.File
+	
+	If (This:C1470.sqlite=Null:C1517)\
+		 || (This:C1470.sqlite.tables=Null:C1517)\
+		 || (This:C1470.sqlite.tables["Z"+Uppercase:C13($tableName)]=Null:C1517)
+		
+		return ("#NA")
+		
+	End if 
+	
+	$size:=Num:C11(This:C1470.sqlite.tables["Z"+Uppercase:C13($tableName)])  // Size of the data dump
+	
+	If ($size>4096)
+		
+		// Add pictures size if any
+		$file:=PROJECT._folder.file("project.dataSet/Resources/Assets.xcassets/Pictures/"+$tableName+"/manifest.json")
+		
+		If ($file.exists)
+			
+			$size:=$size+Num:C11(JSON Parse:C1218($file.getText()).contentSize)
+			
+		End if 
+	End if 
+	
+	return (doc_bytesToString($size))
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Display filter status

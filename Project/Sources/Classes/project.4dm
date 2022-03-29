@@ -10,6 +10,11 @@ Class constructor($project : Object)
 	
 	This:C1470.$regexParameters:="(?mi-s)(=|==|===|IS|!=|#|!==|IS NOT|>|<|>=|<=|%)\\s*:[^\\s]*"
 	
+	// MARK: [COMPUTED]
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// FIXME: DO NOT CREATE CALCULATED ATTRIBUTES, THEY WILL BE SAVED IN THE PROJECT FILE.
+	
+	// MARK:-
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function init($project : Object)
 	
@@ -340,19 +345,28 @@ Function targets() : Collection
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	/// Returns True if the project is intended to be run on iOS
 Function iOS() : Boolean
 	
 	return (This:C1470.targets().indexOf("iOS")#-1)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	/// Returns True if the project is intended to be run on Android
 Function android() : Boolean
 	
 	return (This:C1470.targets().indexOf("android")#-1)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// TODO:Move to EDITOR class
+	/// Returns True if the project is intended to run on both iOS and Android
+Function allTargets() : Boolean
+	
+	return (This:C1470.targets().length=2)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Populate the target value into the project
 Function setTarget($checkDevTools : Boolean; $target : Text)
+	
+	// TODO:Move to EDITOR class
 	
 	If (This:C1470.$ios & This:C1470.$android)
 		
@@ -518,6 +532,8 @@ Function cleanup($dirtyObject : Object)->$cleanObject : Object
 	// Tests if the project is locked
 Function isLocked() : Boolean
 	
+	// TODO:Move to EDITOR class
+	
 	If (This:C1470.structure#Null:C1517)
 		
 		return (Bool:C1537(This:C1470.structure.unsynchronized))
@@ -531,6 +547,8 @@ Function isLocked() : Boolean
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Tests if the project is not locked and
 Function isNotLocked() : Boolean
+	
+	// TODO:Move to EDITOR class
 	
 	return (Not:C34(This:C1470.isLocked()))
 	
