@@ -607,7 +607,7 @@ Don't keep:
 							//For each ($Txt_field;$Obj_relatedDataClass)
 							
 							//If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-								
+																
 							//If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
 							//$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])
@@ -1164,11 +1164,11 @@ Don't keep:
 				
 				DOCUMENT:=DOCUMENT+");"
 				
-				Begin SQL:C948
+				Begin SQL
 					
 					EXECUTE IMMEDIATE :DOCUMENT
 					
-				End SQL:C949
+				End SQL
 				
 				For each ($o; SHARED.deletedRecordsTable.fields)
 					
@@ -1176,12 +1176,11 @@ Don't keep:
 						
 						DOCUMENT:="ALTER TABLE "+String:C10(SHARED.deletedRecordsTable.name)+" MODIFY "+String:C10($o.name)+" ENABLE AUTO_INCREMENT;"
 						
-						Begin SQL:C948
+						Begin SQL
 							
 							EXECUTE IMMEDIATE :DOCUMENT
 							
-						End SQL:C949
-						
+						End SQL
 					End if 
 				End for each 
 				
@@ -1196,11 +1195,11 @@ Don't keep:
 					
 					$errors.reset()
 					
-					Begin SQL:C948
+					Begin SQL
 						
 						EXECUTE IMMEDIATE :DOCUMENT
 						
-					End SQL:C949
+					End SQL
 					
 					If ($errors.lastError.stack#Null:C1517)
 						
@@ -1276,11 +1275,11 @@ Don't keep:
 			
 			$errors.reset()
 			
-			Begin SQL:C948
+			Begin SQL
 				
-				EXECUTE IMMEDIATE :DOCUMENT
+				EXECUTE IMMEDIATE : DOCUMENT;
 				
-			End SQL:C949
+			End SQL
 			
 			If ($errors.lastError.stack#Null:C1517)
 				
@@ -1303,11 +1302,11 @@ Don't keep:
 			
 			$errors.reset()
 			
-			Begin SQL:C948
+			Begin SQL
 				
-				EXECUTE IMMEDIATE :DOCUMENT
+				EXECUTE IMMEDIATE : DOCUMENT;
 				
-			End SQL:C949
+			End SQL
 			
 			If ($errors.lastError.stack#Null:C1517)
 				
