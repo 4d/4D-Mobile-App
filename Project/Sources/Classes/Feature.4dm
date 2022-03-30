@@ -1,4 +1,4 @@
-Class constructor($version : Integer)
+Class constructor($version : Integer; $file : 4D:C1709.File)
 	
 	var $build : Integer
 	var $file : 4D:C1709.File
@@ -13,8 +13,7 @@ Class constructor($version : Integer)
 	This:C1470._features:=New object:C1471
 	
 	// Get the config file, if any
-	$file:=Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile")
-	This:C1470.local:=$file.exists ? JSON Parse:C1218($file.getText()).features : Null:C1517
+	This:C1470.local:=($file && $file.exists) ? JSON Parse:C1218($file.getText()).features : Null:C1517
 	
 	//====================================================================
 	/// Returns True if the feature is activated

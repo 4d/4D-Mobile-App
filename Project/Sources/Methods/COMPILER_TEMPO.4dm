@@ -4,7 +4,7 @@ C_OBJECT:C1216(<>testData)
 
 
 
-C_VARIANT:C1683(tempoDatamodelWith1toNRelation; $1)
+C_OBJECT:C1216(tempoDatamodelWith1toNRelation; $1)
 
 C_BOOLEAN:C305(androidLimitations; $1)
 C_TEXT:C284(androidLimitations; $2)

@@ -130,7 +130,7 @@ Function updateFieldList
 		End for 
 		
 		// Sort by names
-		LISTBOX SORT COLUMNS:C916(*; This:C1470.fieldList.name; 1; >)
+		//LISTBOX SORT COLUMNS(*; This.fieldList.name; 1; >)
 		
 		This:C1470.fieldList.show(Num:C11($o.count)>0)
 		

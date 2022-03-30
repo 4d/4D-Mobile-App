@@ -158,6 +158,9 @@
 			"COMPONENT_Infos",
 			"COMPONENT_INIT",
 			"FEATURE_FLAGS"
+		],
+		"classes": [
+			"Feature"
 		]
 	},
 	"[EDITOR]": {
