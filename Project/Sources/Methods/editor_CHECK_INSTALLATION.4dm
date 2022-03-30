@@ -79,7 +79,7 @@ Case of
 			
 			If ($ios)
 				
-				If (FEATURE.with("iosSDKfromAWS"))
+				If (Feature.with("iosSDKfromAWS"))
 					
 					$fileManifest:=cs:C1710.path.new().cacheSdkApple().parent.file("manifest.json")
 					

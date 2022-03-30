@@ -57,7 +57,7 @@ Case of
 				
 			End if 
 			
-			If (FEATURE.with("cancelableDatasetGeneration"))
+			If (Feature.with("cancelableDatasetGeneration"))
 				
 				EDITOR.doGenerate($keyPathname)
 				SET TIMER:C645(-1)
@@ -70,8 +70,8 @@ Case of
 					"eraseIfExists"; True:C214; \
 					"project"; PROJECT; \
 					"digest"; True:C214; \
-					"accordingToTarget"; FEATURE.with("androidDataSet"); \
-					"coreDataSet"; Not:C34(FEATURE.with("androidDataSet")); \
+					"accordingToTarget"; Feature.with("androidDataSet"); \
+					"coreDataSet"; Not:C34(Feature.with("androidDataSet")); \
 					"key"; $keyPathname; \
 					"dataSet"; True:C214))
 				

@@ -115,7 +115,7 @@ Function updateFieldList
 			
 			LISTBOX SET ROW COLOR:C1270(*; This:C1470.names.name; $i+1; $o.nameColors[$i]; lk font color:K53:24)
 			
-			If (FEATURE.with("alias") && ($o.targets[$i].kind="alias"))
+			If (Feature.with("alias") && ($o.targets[$i].kind="alias"))
 				
 				LISTBOX SET ROW FONT STYLE:C1268(*; This:C1470.names.name; $i+1; Italic:K14:3)
 				
@@ -157,7 +157,7 @@ Function updateFieldList
 	
 	If (Num:C11(This:C1470.tabSelector.data)=1)  // Relations
 		
-		If (Not:C34(FEATURE.with("android1ToNRelations")))
+		If (Not:C34(Feature.with("android1ToNRelations")))
 			
 			tempoDatamodelWith1toNRelation(This:C1470.tableNumber)
 			
@@ -261,7 +261,7 @@ Function getFieldList()->$result : Object
 							$result.targets.push($field)
 							
 							//……………………………………………………………………………………………………………
-						: (FEATURE.with("alias") && ($field.kind="alias"))
+						: (Feature.with("alias") && ($field.kind="alias"))
 							
 							If (PROJECT.$project.ExposedStructure.aliasTarget(ds:C1482[$table[""].name]; $field).target.relatedDataClass=Null:C1517)
 								
@@ -336,7 +336,7 @@ Function getFieldList()->$result : Object
 											$result.targets.push($subfield)
 											
 											//______________________________________________________
-										: (FEATURE.with("alias") && ($subfield.kind="alias"))
+										: (Feature.with("alias") && ($subfield.kind="alias"))
 											
 											This:C1470._labels($subfield; $subKey)
 											
@@ -412,7 +412,7 @@ Function getFieldList()->$result : Object
 														$result.targets.push($subfield2)
 														
 														//______________________________________________________
-													: (FEATURE.with("alias") && ($subfield.kind="alias"))
+													: (Feature.with("alias") && ($subfield.kind="alias"))
 														
 														This:C1470._labels($subfield2; $subKey2)
 														
@@ -495,7 +495,7 @@ Function getFieldList()->$result : Object
 										$result.targets.push($subfield)
 										
 										//______________________________________________________
-									: (FEATURE.with("alias") && ($subfield.kind="alias"))
+									: (Feature.with("alias") && ($subfield.kind="alias"))
 										
 										This:C1470._labels($subfield; $subKey)
 										
@@ -571,7 +571,7 @@ Function getFieldList()->$result : Object
 													$result.targets.push($subfield2)
 													
 													//______________________________________________________
-												: (FEATURE.with("alias") && ($subfield.kind="alias"))
+												: (Feature.with("alias") && ($subfield.kind="alias"))
 													
 													This:C1470._labels($subfield2; $subKey2)
 													
@@ -599,7 +599,7 @@ Function getFieldList()->$result : Object
 							
 							
 							//……………………………………………………………………………………………………………
-						: (Not:C34(FEATURE.with("alias")))
+						: (Not:C34(Feature.with("alias")))
 							
 							// <NOT YET AVAILABLE>
 							
@@ -616,7 +616,7 @@ Function getFieldList()->$result : Object
 					Case of 
 							
 							//……………………………………………………………………………………………………………
-						: (FEATURE.with("alias") && ($field.kind="alias"))
+						: (Feature.with("alias") && ($field.kind="alias"))
 							
 							If (PROJECT.$project.ExposedStructure.aliasTarget(ds:C1482[$table[""].name]; $field).target.relatedDataClass#Null:C1517)
 								
@@ -956,7 +956,7 @@ Function doShowIconPicker($e : Object)
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function doGetResources()
 	
-	If (FEATURE.with("formatMarketPlace"))
+	If (Feature.with("formatMarketPlace"))
 		
 		// Show browser
 		This:C1470.callMeBack("initBrowser"; New object:C1471(\
@@ -1073,7 +1073,7 @@ Function doFormatMenu($e : Object)
 		End for each 
 	End if 
 	
-	If (FEATURE.with("newFormatterChoiceList"))
+	If (Feature.with("newFormatterChoiceList"))
 		
 		If (($field.fieldType=Is alpha field:K8:1)\
 			 | ($field.fieldType=Is boolean:K8:9)\

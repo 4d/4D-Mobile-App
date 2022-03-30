@@ -345,7 +345,7 @@ Function fieldList($table)->$result : Object
 						//……………………………………………………………………………………………………………
 						//FIXME: BUG EN COMPILÉ
 						//: ($field.kind="relatedEntity")\
-							 || (($field.kind="alias") && (Bool($field.isToOne)))
+														 || (($field.kind="alias") && (Bool($field.isToOne)))
 						
 					: ($field.kind="relatedEntity")\
 						 || (($field.kind="alias") & (Bool:C1537($field.isToOne)))
@@ -537,7 +537,7 @@ Function setTemplate($browser : Object)
 				// * SHOW BROWSER
 				$url:="https://4d-go-mobile.github.io/gallery/"
 				
-				If (FEATURE.with("devGallery"))
+				If (Feature.with("devGallery"))
 					
 					$url:="http://localhost:8080/"
 					
@@ -912,7 +912,7 @@ Function tableWidget($dataModel : Object; $options : Object)->$widget : Picture
 		
 	End if 
 	
-	If (FEATURE.with("debug"))
+	If (Feature.with("debug"))
 		
 		Folder:C1567(fk desktop folder:K87:19).file("DEV/table.svg").setText($svg.getText(True:C214))
 		

@@ -86,7 +86,7 @@ Case of
 				$table:=$dataModel[$tableID]
 				$meta:=$table[""]
 				
-				If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
+				If ($withUI & Feature.with("cancelableDatasetGeneration"))
 					
 					// Notify user
 					CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
@@ -189,7 +189,7 @@ Case of
 		
 		$out.results:=New object:C1471
 		
-		If (FEATURE.with("useTextRestResponse"))
+		If (Feature.with("useTextRestResponse"))
 			
 			var $rgx : cs:C1710.regex
 			$rgx:=cs:C1710.regex.new()
@@ -200,7 +200,7 @@ Case of
 		var $count; $page; $pages : Integer
 		
 		var $useTextRestResponse : Boolean
-		$useTextRestResponse:=FEATURE.with("useTextRestResponse")
+		$useTextRestResponse:=Feature.with("useTextRestResponse")
 		
 		var $notify : 4D:C1709.Function
 		$notify:=Formula:C1597(CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; $1))
@@ -264,7 +264,7 @@ Case of
 			
 			If ($query#Null:C1517) & (Not:C34($cancelled))  // If query defined, we must dump the table
 				
-				If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
+				If ($withUI & Feature.with("cancelableDatasetGeneration"))
 					
 					// Display the table being processed
 					$notify.call(Null:C1517; New object:C1471(\
@@ -296,7 +296,7 @@ Case of
 						
 						If ($page>1)
 							
-							If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
+							If ($withUI & Feature.with("cancelableDatasetGeneration"))
 								
 								If ($pages=0)
 									
@@ -404,7 +404,7 @@ Case of
 							
 							$outputPathname:=$outputPathname+".dataset"+Folder separator:K24:12+$meta.name
 							
-							If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
+							If ($withUI & Feature.with("cancelableDatasetGeneration"))
 								
 								If ($page>=2)
 									
@@ -548,7 +548,7 @@ Case of
 			
 			If ($fields.length>0)
 				
-				If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
+				If ($withUI & Feature.with("cancelableDatasetGeneration"))
 					
 					// Notify user
 					CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
@@ -664,7 +664,7 @@ Case of
 											
 											If ($o#Null:C1517)
 												
-												If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
+												If ($withUI & Feature.with("cancelableDatasetGeneration"))
 													
 													// Notify user
 													CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
@@ -708,7 +708,7 @@ Case of
 													$targetFolder:=Folder:C1567($in.output; fk platform path:K87:2)
 													$targetFolder.create()
 													
-													//TODO: Work with the File and Folder instead of the path to avoid the headache of folder separators. 
+													//TODO: Work with the File and Folder instead of the path to avoid the headache of folder separators.
 													$outputPathname:=$targetFolder.platformPath
 													
 													Case of 
@@ -860,14 +860,14 @@ Case of
 														If (Bool:C1537($in.dataSet))
 															
 															//TEXT TO DOCUMENT($outputPathname+"Contents.json"; \
-																																JSON Stringify(New object(\
-																																"info"; New object(\
-																																"version"; 1; \
-																																"author"; "xcode"\
-																																); \
-																																"images"; New collection(New object(\
-																																"idiom"; "universal"; \
-																																"filename"; $File_name)))))
+																																																JSON Stringify(New object(\
+																																																"info"; New object(\
+																																																"version"; 1; \
+																																																"author"; "xcode"\
+																																																); \
+																																																"images"; New collection(New object(\
+																																																"idiom"; "universal"; \
+																																																"filename"; $File_name)))))
 															
 															File:C1566($outputPathname+"Contents.json"; fk platform path:K87:2).setText(JSON Stringify:C1217(New object:C1471(\
 																"info"; New object:C1471(\
@@ -919,9 +919,9 @@ Case of
 							$outputPathname:=$in.output+Folder separator:K24:12+$meta.name+Folder separator:K24:12
 							$outputPathname:=$outputPathname+"manifest.json"
 							//TEXT TO DOCUMENT($outputPathname; \
-																JSON Stringify(New object(\
-																"contentSize"; Num($result.contentSize); \
-																"count"; Num($result.count))))
+																								JSON Stringify(New object(\
+																								"contentSize"; Num($result.contentSize); \
+																								"count"; Num($result.count))))
 							File:C1566($outputPathname; fk platform path:K87:2).setText(JSON Stringify:C1217(New object:C1471(\
 								"contentSize"; Num:C11($result.contentSize); \
 								"count"; Num:C11($result.count))))

@@ -436,7 +436,7 @@ If ($in.create)
 		$out.dump:=dataSet(New object:C1471(\
 			"action"; "check"; \
 			"digest"; False:C215; \
-			"coreDataSet"; FEATURE.with("androidDataSet"); \
+			"coreDataSet"; Feature.with("androidDataSet"); \
 			"project"; $project))
 		
 		If (Not:C34(Bool:C1537($out.dump.exists)))
@@ -488,7 +488,7 @@ If ($in.create)
 		ob_error_combine($out; $out.dumpCopy)
 		//}
 		
-		If (FEATURE.with("xcDataModelClass"))
+		If (Feature.with("xcDataModelClass"))
 			$out.coreData:=cs:C1710.xcDataModel.new($project).run(\
 				/*path*/$in.path+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"; \
 				/*options*/New object:C1471("flat"; False:C215; "relationship"; True:C214))
@@ -654,7 +654,7 @@ If ($in.create)
 		// ----------------------------------------------------
 		
 		// Add sources if any to workspace {
-		If (Bool:C1537(FEATURE.with("generateForDev")))  // In feature until fix project launch with xcode
+		If (Bool:C1537(Feature.with("generateForDev")))  // In feature until fix project launch with xcode
 			
 			Xcode(New object:C1471(\
 				"action"; "workspace-addsources"; \
@@ -664,7 +664,7 @@ If ($in.create)
 		//}
 		
 		// Backup into git {
-		If (Bool:C1537(FEATURE.with("gitCommit")))
+		If (Bool:C1537(Feature.with("gitCommit")))
 			
 			git(New object:C1471(\
 				"action"; "config core.autocrlf"; \

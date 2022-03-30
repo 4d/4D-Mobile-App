@@ -138,7 +138,7 @@ Function isLocal()->$local : Boolean
 	$local:=(String:C10(Form:C1466.dataSource.source)="local")
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
-	/// 
+	///
 Function doGenerate()
 	
 	var $keyPathname : Text
@@ -169,7 +169,7 @@ Function doGenerate()
 			
 		End if 
 		
-		If (FEATURE.with("cancelableDatasetGeneration"))
+		If (Feature.with("cancelableDatasetGeneration"))
 			
 			EDITOR.doGenerate($keyPathname)
 			This:C1470.refresh()
@@ -182,8 +182,8 @@ Function doGenerate()
 				"eraseIfExists"; True:C214; \
 				"project"; PROJECT; \
 				"digest"; True:C214; \
-				"accordingToTarget"; FEATURE.with("androidDataSet"); \
-				"coreDataSet"; Not:C34(FEATURE.with("androidDataSet")); \
+				"accordingToTarget"; Feature.with("androidDataSet"); \
+				"coreDataSet"; Not:C34(Feature.with("androidDataSet")); \
 				"key"; $keyPathname; \
 				"dataSet"; True:C214))
 			

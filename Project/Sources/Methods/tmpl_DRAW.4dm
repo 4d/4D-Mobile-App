@@ -523,7 +523,7 @@ If (Num:C11($tableID)>0)
 				
 				$svg.size($form.preview.coordinates.width; $context.previewHeight)
 				
-				If (FEATURE.with("_8858"))
+				If (Feature.with("_8858"))
 					
 					$svg.exportText(Folder:C1567(fk desktop folder:K87:19).file("DEV/preview.svg"); True:C214)
 					$svg.exportPicture(Folder:C1567(fk desktop folder:K87:19).file("DEV/preview.png"); True:C214)

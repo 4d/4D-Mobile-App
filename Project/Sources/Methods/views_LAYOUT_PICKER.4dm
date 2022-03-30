@@ -349,7 +349,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 			// Get the manifest
 			$o:=JSON Parse:C1218($zip.root.file("manifest.json").getText())
 			
-			If (FEATURE.with("duplicateTemplate"))
+			If (Feature.with("duplicateTemplate"))
 				
 				$o.file:=$template  // Will activate menu to show on disk or duplicate
 				
@@ -402,7 +402,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 		
 		$o:=Null:C1517  // Import to reset to not pass to next template
 		
-		If (FEATURE.with("duplicateTemplate"))
+		If (Feature.with("duplicateTemplate"))
 			
 			If ($template.file("manifest.json").exists)
 				
@@ -465,7 +465,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 					
 				End if 
 				
-				If (FEATURE.with("duplicateTemplate"))
+				If (Feature.with("duplicateTemplate"))
 					
 					$o.used:=($picker.marked.indexOf($formsArray{$i})#-1)
 					If ($o.used)

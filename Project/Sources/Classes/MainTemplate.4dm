@@ -289,7 +289,7 @@ Function doRun()->$result : Object
 	$result.choiceList:=mobile_actions("addChoiceList"; This:C1470.input)
 	ob_error_combine($result; $result.choiceList)
 	
-	If (FEATURE.with("actionsInTabBar"))
+	If (Feature.with("actionsInTabBar"))
 		// Instead of table number, put directly name, iOS do not use table number
 		$result.putTableNames:=mobile_actions("putTableNames"; This:C1470.input)
 		ob_error_combine($result; $result.putTableNames)

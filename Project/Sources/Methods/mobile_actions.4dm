@@ -589,7 +589,7 @@ $Col_catalog:=doc_catalog(This.template.source; This.getCatalogExcludePattern())
 		
 		// MARK:- putTableNames
 	: ($Txt_action="putTableNames")
-		ASSERT:C1129(FEATURE.with("actionsInTabBar"); "For this feature")
+		ASSERT:C1129(Feature.with("actionsInTabBar"); "For this feature")
 		
 		// Add table names instead of number
 		If ($Obj_in.project.actions#Null:C1517)

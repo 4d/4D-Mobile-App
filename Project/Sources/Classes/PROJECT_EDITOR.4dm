@@ -188,7 +188,7 @@ Function design()
 		
 		$o:=This:C1470.pages.data
 		
-		If (FEATURE.with(8858)) & False:C215
+		If (Feature.with(8858)) & False:C215
 			
 			$o.panels.push(New object:C1471(\
 				"title"; Get localized string:C991("source"); \
@@ -524,7 +524,7 @@ Function removeTask($task : Text)
 	// Display the task indicator, if applicable
 Function showTask()
 	
-	If (FEATURE.with("taskIndicator"))  // 🚧
+	If (Feature.with("taskIndicator"))  // 🚧
 		
 		If (This:C1470.countTasks()>0)
 			
@@ -888,8 +888,8 @@ Function doGenerate($keyPathname : Text)
 		"eraseIfExists"; True:C214; \
 		"project"; PROJECT; \
 		"digest"; True:C214; \
-		"accordingToTarget"; FEATURE.with("androidDataSet"); \
-		"coreDataSet"; Not:C34(FEATURE.with("androidDataSet")); \
+		"accordingToTarget"; Feature.with("androidDataSet"); \
+		"coreDataSet"; Not:C34(Feature.with("androidDataSet")); \
 		"key"; $keyPathname; \
 		"dataSet"; True:C214)))
 	

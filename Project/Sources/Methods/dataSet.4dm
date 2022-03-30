@@ -336,7 +336,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 			
 			If ($out.success)
 				
-				If (FEATURE.with("androidDataSet"))
+				If (Feature.with("androidDataSet"))
 					
 					var $source; $target : 4D:C1709.Folder
 					
@@ -386,7 +386,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 			// MARK:- create
 		: ($in.action="create")  // later allow to do it with remove
 			
-			If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
+			If ($withUI & Feature.with("cancelableDatasetGeneration"))
 				
 				$delay:=New object:C1471(\
 					"minimumDisplayTime"; 3*60; \
@@ -453,7 +453,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 						
 					End if 
 					
-					If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
+					If ($withUI & Feature.with("cancelableDatasetGeneration"))
 						
 						$delay.start:=Tickcount:C458
 						
@@ -577,7 +577,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 								
 							End if 
 							
-							If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
+							If ($withUI & Feature.with("cancelableDatasetGeneration"))
 								
 								CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
 									"step"; "pictures"))
@@ -601,7 +601,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 							
 						End if 
 						
-						If (FEATURE.with("androidDataSet"))
+						If (Feature.with("androidDataSet"))
 							
 							If (Bool:C1537($in.accordingToTarget))
 								
@@ -621,7 +621,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 						
 						If (Bool:C1537($in.coreDataSet) & $out.success)
 							
-							If (FEATURE.with("xcDataModelClass"))
+							If (Feature.with("xcDataModelClass"))
 								
 								$out.coreData:=cs:C1710.xcDataModel.new(New object:C1471(\
 									"dataModel"; $dataModel; \
@@ -645,15 +645,15 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 							
 							$out.coreDataSet:=dataSet(New object:C1471(\
 								"action"; "coreData"; \
-								"removeAsset"; Not:C34(FEATURE.with("androidDataSet"))/*False*/; \
-								"path"; $out.path; \
-								"caller"; $in.caller))
+								"removeAsset"; Not:C34(Feature.with("androidDataSet"))))  ////False//; "path"; $out.path; "caller"; $in.caller))								\
+								
+							
 							
 							ob_error_combine($out; $out.coreDataSet)
 							
 						End if 
 						
-						If (FEATURE.with("androidDataSet"))
+						If (Feature.with("androidDataSet"))
 							
 							If (Bool:C1537($in.androidDataSet) & $out.success)
 								
@@ -708,7 +708,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 				End if 
 			End if 
 			
-			If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
+			If ($withUI & Feature.with("cancelableDatasetGeneration"))
 				
 				If (Bool:C1537(Storage:C1525.flags.stopGeneration))
 					
@@ -775,7 +775,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 			
 			If (Not:C34(Bool:C1537(Storage:C1525.flags.stopGeneration)))
 				
-				If ($withUI & FEATURE.with("cancelableDatasetGeneration"))
+				If ($withUI & Feature.with("cancelableDatasetGeneration"))
 					
 					CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
 						"step"; "coreDataInjection"))

@@ -15,16 +15,16 @@ Class constructor($sorted : Boolean)
 	
 	This:C1470.allowedTypes:=New collection:C1472("string"; "bool"; "date"; "number"; "image")
 	
-	If ((FEATURE=Null:C1517) && dev_Matrix)
+	If ((Feature=Null:C1517) && dev_Matrix)
 		
 		ASSERT:C1129(False:C215; "Process VAR like FEATURE are null, maybe you abort the process?")
 		COMPONENT_INIT  // Will reinit it, but be carreful it could change behaviour, because some data could have been lost
 		
 	End if 
 	
-	ASSERT:C1129(FEATURE#Null:C1517)
+	ASSERT:C1129(Feature#Null:C1517)
 	
-	If (FEATURE.with("objectFieldManagement"))
+	If (Feature.with("objectFieldManagement"))
 		
 		This:C1470.allowedTypes.push("object")
 		
@@ -50,11 +50,11 @@ Function update()
 - A relation 1 -> N is not referenced if the related dataclass isn't exposed !
 	
 Note: The datastore property is filled in during the construction phase of the class.
-      Thus, this function must only be called to obtain an updated datastore.
+Thus, this function must only be called to obtain an updated datastore.
 */
 Function getDatastore()->$datastore : Object
 	
-	If (FEATURE.with("modernStructure"))
+	If (Feature.with("modernStructure"))
 		
 		var $key : Text
 		var $o : Object
@@ -110,7 +110,7 @@ Function getDatastore()->$datastore : Object
 - If $query is a dataclasses name or number, the catalog is that dataclasses's if found.
 	
 Note: The catalog property is filled in during the construction phase of the class.
-      Thus, this function must only be called to obtain an updated catalog.
+Thus, this function must only be called to obtain an updated catalog.
 */
 Function getCatalog($query; $sorted : Boolean)->$catalog : Collection
 	
@@ -454,7 +454,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 	$field:=$ds[$tableName][$relationName]
 	
 	If ($field.kind="relatedEntity")\
-		 || (FEATURE.with("alias") && ($field.kind="alias") && ($field.fieldType=Is object:K8:27) && ($field.relatedDataClass#Null:C1517))
+		 || (Feature.with("alias") && ($field.kind="alias") && ($field.fieldType=Is object:K8:27) && ($field.relatedDataClass#Null:C1517))
 		
 		$result.success:=True:C214
 		
@@ -556,7 +556,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 									// NOT MANAGED
 									
 									//…………………………………………………………………………………………………
-								: (Not:C34(FEATURE.with("alias")))
+								: (Not:C34(Feature.with("alias")))
 									
 									// <NOT YET AVAILABLE>
 									
@@ -623,7 +623,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 					End if 
 					
 					//…………………………………………………………………………………………………
-				: (Not:C34(FEATURE.with("alias")))
+				: (Not:C34(Feature.with("alias")))
 					
 					// <NOT YET AVAILABLE>
 					
@@ -739,7 +739,7 @@ Function addField($table : Object; $field : cs:C1710.field)
 			//………………………………………………………………………………………………………
 		: ($field.kind="calculated")\
 			 || ($field.kind="relatedEntities")\
-			 || (FEATURE.with("alias") && ($field.kind="alias"))
+			 || (Feature.with("alias") && ($field.kind="alias"))
 			
 			$table[$field.name]:=This:C1470._fieldModel($field)
 			
@@ -786,7 +786,7 @@ Function addField($table : Object; $field : cs:C1710.field)
 							$o[$path[0]][$relatedField.name].path:=$relatedField.path
 							
 							//______________________________________________________
-						: (FEATURE.with("alias")) && (($relatedField.kind="alias") && ($o[$path[0]][$relatedField.name]=Null:C1517))
+						: (Feature.with("alias")) && (($relatedField.kind="alias") && ($o[$path[0]][$relatedField.name]=Null:C1517))
 							
 							$o[$path[0]][$relatedField.name]:=This:C1470._fieldModel($relatedField)
 							$o[$path[0]][$relatedField.name].path:=$relatedField.path
@@ -822,7 +822,7 @@ Function addField($table : Object; $field : cs:C1710.field)
 							$o[$relatedField.name].path:=$relatedField.path
 							
 							//______________________________________________________
-						: (FEATURE.with("alias")) && (($relatedField.kind="alias") && ($o[$relatedField.name]=Null:C1517))
+						: (Feature.with("alias")) && (($relatedField.kind="alias") && ($o[$relatedField.name]=Null:C1517))
 							
 							$o[$relatedField.name]:=This:C1470._fieldModel($relatedField)
 							$o[$relatedField.name].path:=$relatedField.path
@@ -907,7 +907,7 @@ Function _fieldModel($field : cs:C1710.field; $relatedCatalog : Object)->$fieldM
 			$fieldModel.type:=$field.type
 			
 			//………………………………………………………………………………………………………
-		: (FEATURE.with("alias") && ($field.kind="alias"))  // Alias
+		: (Feature.with("alias") && ($field.kind="alias"))  // Alias
 			
 			$fieldModel:=New object:C1471(\
 				"kind"; $field.kind; \
@@ -976,7 +976,7 @@ Function _fieldModel($field : cs:C1710.field; $relatedCatalog : Object)->$fieldM
 			$fieldModel.relatedTableNumber:=$relatedCatalog.relatedTableNumber
 			
 			//…………………………………………………………………………………………………
-		: (Not:C34(FEATURE.with("alias")))
+		: (Not:C34(Feature.with("alias")))
 			
 			// <NOT YET AVAILABLE>
 			
@@ -1102,7 +1102,7 @@ Don't keep:
 				$fields.push($field)
 				
 				//…………………………………………………………………………………………………
-			: (Not:C34(FEATURE.with("alias")))
+			: (Not:C34(Feature.with("alias")))
 				
 				// <NOT YET AVAILABLE>
 				
@@ -1200,7 +1200,7 @@ Function _relatedFields($field : cs:C1710.field; $relationName : Text; $recursiv
 			End if 
 			
 			//…………………………………………………………………………………………………
-		: ($field.kind="alias")  // 
+		: ($field.kind="alias")  //
 			
 			// TODO: manage alias
 			
@@ -1250,7 +1250,7 @@ Function _relatedFields($field : cs:C1710.field; $relationName : Text; $recursiv
 							// NOT MANAGED
 							
 							//…………………………………………………………………………………………………
-						: (Not:C34(FEATURE.with("alias")))
+						: (Not:C34(Feature.with("alias")))
 							
 							// <NOT YET AVAILABLE>
 							
@@ -1287,7 +1287,7 @@ Function _relatedFields($field : cs:C1710.field; $relationName : Text; $recursiv
 			End if 
 			
 			//…………………………………………………………………………………………………
-		: (Not:C34(FEATURE.with("alias")))
+		: (Not:C34(Feature.with("alias")))
 			
 			// <NOT YET AVAILABLE>
 			

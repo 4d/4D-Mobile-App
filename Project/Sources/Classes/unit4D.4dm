@@ -51,14 +51,14 @@ Function _parameters
 Function featuresFlags
 	var $0 : Object
 	
-	$0:=FEATURE
+	$0:=Feature
 	
 	//______________________________________________________
 Function featuresFlag
 	var $0 : Boolean
 	var $1 : Variant
 	
-	$0:=FEATURE.with($1)
+	$0:=Feature.with($1)
 	
 	//______________________________________________________
 Function loadProject
@@ -114,8 +114,8 @@ Function pathname
 	var $1 : Object
 	
 	//$0:=New object(\
-		"success"; True; \
-		"value"; _o_COMPONENT_Pathname($1.target).platformPath)
+				"success"; True; \
+				"value"; _o_COMPONENT_Pathname($1.target).platformPath)
 	
 	$0:=New object:C1471(\
 		"success"; True:C214; \

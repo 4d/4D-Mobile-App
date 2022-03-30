@@ -413,7 +413,7 @@ Function _cleanCopyProject($projectInput : Object)->$project : Object
 		
 	End for each 
 	
-	If (Not:C34(FEATURE.with("iOSAlias")))
+	If (Not:C34(Feature.with("iOSAlias")))
 		
 		This:C1470._tmpRemoveAlias($project)
 		
@@ -681,9 +681,9 @@ Function _manageDataSet($out : Object)
 		
 	End if 
 	
-	If (FEATURE.with("buildWithCmd"))
+	If (Feature.with("buildWithCmd"))
 		
-		If (FEATURE.with("xcDataModelClass"))
+		If (Feature.with("xcDataModelClass"))
 			$out.coreData:=cs:C1710.xcDataModel.new($project).run(\
 				/*path*/$in.path+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"; \
 				/*options*/New object:C1471("flat"; False:C215; "relationship"; True:C214))
@@ -701,7 +701,7 @@ Function _manageDataSet($out : Object)
 		
 	End if 
 	
-	If (FEATURE.with("buildWithCmd"))
+	If (Feature.with("buildWithCmd"))
 		If (Bool:C1537($in.noData))  // for the moment deactivate data dump,
 			return   // maybe the key must be passed to dump from a remote server source later
 		End if 
@@ -710,7 +710,7 @@ Function _manageDataSet($out : Object)
 	$out.dump:=dataSet(New object:C1471(\
 		"action"; "check"; \
 		"digest"; True:C214; \
-		"coreDataSet"; FEATURE.with("androidDataSet"); \
+		"coreDataSet"; Feature.with("androidDataSet"); \
 		"project"; $project))
 	ob_error_combine($out; $out.dump)
 	
@@ -783,9 +783,9 @@ Function _manageDataSet($out : Object)
 	ob_error_combine($out; $out.dumpCopy)
 	//}
 	
-	If (Not:C34(FEATURE.with("buildWithCmd")))
+	If (Not:C34(Feature.with("buildWithCmd")))
 		
-		If (FEATURE.with("xcDataModelClass"))
+		If (Feature.with("xcDataModelClass"))
 			$out.coreData:=cs:C1710.xcDataModel.new($project).run(\
 				/*path*/$in.path+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"; \
 				/*options*/New object:C1471("flat"; False:C215; "relationship"; True:C214))
@@ -943,7 +943,7 @@ Function _generateCapabilities($out : Object; $appFolder : 4D:C1709.Folder)
 	// Internal feature to help to dev iOS project
 Function _devFeatures($out : Object)
 	
-	If (Bool:C1537(FEATURE.with("generateForDev")))  // In feature until fix project launch with xcode
+	If (Bool:C1537(Feature.with("generateForDev")))  // In feature until fix project launch with xcode
 		
 		Xcode(New object:C1471(\
 			"action"; "workspace-addsources"; \
@@ -952,7 +952,7 @@ Function _devFeatures($out : Object)
 	//}
 	
 	// Backup into git {
-	If (Bool:C1537(FEATURE.with("gitCommit")))
+	If (Bool:C1537(Feature.with("gitCommit")))
 		
 		git(New object:C1471(\
 			"action"; "config core.autocrlf"; \

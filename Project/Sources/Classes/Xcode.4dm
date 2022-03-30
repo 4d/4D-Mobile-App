@@ -48,6 +48,7 @@ Function getRequirements()
 		
 	Else 
 		
+		// Use the embedded file
 		File:C1566("/RESOURCES/requirements.json").copyTo(cs:C1710.path.new().preferences())
 		$run:=True:C214
 		
@@ -86,6 +87,12 @@ Function getRequirements()
 			$content.Etag:=String:C10($http.headers.query("name = ETag").pop().value)
 			$requirement.setText(JSON Stringify:C1217($content; *))
 			
+			If (Structure file:C489=Structure file:C489(*))
+				
+				// Update the embedded file
+				$requirement.copyTo(Folder:C1567(fk resources folder:K87:11); fk overwrite:K87:5)
+				
+			End if 
 		End if 
 	End if 
 	

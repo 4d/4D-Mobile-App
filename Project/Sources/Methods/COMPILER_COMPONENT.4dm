@@ -4,7 +4,7 @@
 var SHARED : Object  // Common values
 var _o_UI : Object  // UI constants
 
-var FEATURE : Object  // Feature flags
+var Feature : Object  // Feature flags
 
 var RECORD : Object  // General journal
 
@@ -69,7 +69,6 @@ If (False:C215)
 	
 	// ----------------------------------------------------
 	C_LONGINT:C283(FEATURE_FLAGS; $1)
-	C_OBJECT:C1216(FEATURE_FLAGS; $2)
 	
 	// ----------------------------------------------------
 End if 

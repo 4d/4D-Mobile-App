@@ -477,7 +477,7 @@ Function doAddMenu()
 						//-------------------------------------------
 					: ($menu.share)
 						
-						If (FEATURE.with("sharedActionWithDescription"))
+						If (Feature.with("sharedActionWithDescription"))
 							
 							$action.description:=$menu.description
 							

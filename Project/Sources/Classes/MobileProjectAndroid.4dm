@@ -41,12 +41,12 @@ Class constructor($project : Object)
 		
 	End if 
 	
-	This:C1470.project.hasActions:=FEATURE.with("androidActions")
-	This:C1470.project.hasDataSet:=FEATURE.with("androidDataSet")
+	This:C1470.project.hasActions:=Feature.with("androidActions")
+	This:C1470.project.hasDataSet:=Feature.with("androidDataSet")
 	
 	This:C1470.checkPackage()
 	
-	If (Not:C34(FEATURE.with("androidDataSet")))
+	If (Not:C34(Feature.with("androidDataSet")))
 		
 		This:C1470.file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"projecteditor.json")
 		This:C1470.file.setText(JSON Stringify:C1217(This:C1470.project))
@@ -118,7 +118,7 @@ Function create()->$result : Object
 	
 	$o:=New object:C1471("success"; True:C214)
 	
-	If (FEATURE.with("androidDataSet"))
+	If (Feature.with("androidDataSet"))
 		
 		// * CREATE DATASET
 		
@@ -190,7 +190,7 @@ Function create()->$result : Object
 	End if 
 	
 	
-	If (Not:C34(FEATURE.with("androidDataSet")))
+	If (Not:C34(Feature.with("androidDataSet")))
 		
 		If ($o.success)
 			
@@ -238,7 +238,7 @@ Function create()->$result : Object
 	End if 
 	
 	
-	If (FEATURE.with("androidDataSet"))
+	If (Feature.with("androidDataSet"))
 		
 		If ($o.success)
 			
@@ -326,7 +326,7 @@ Function build()->$result : Object
 	This:C1470.logFolder.file("lastBuild.android.out.log").setText(String:C10($o.outputStream))
 	This:C1470.logFolder.file("lastBuild.android.err.log").setText(String:C10($o.errorStream))
 	
-	If (Not:C34(FEATURE.with("androidDataSet")))
+	If (Not:C34(Feature.with("androidDataSet")))
 		
 		If ($o.success)
 			
@@ -504,10 +504,10 @@ Function checkPackage()
 @ https://developer.android.com/studio/build/application-id
 	
 Every Android app has a unique application ID that looks like
-a Java package name, such as com.example.myapp. 
+a Java package name, such as com.example.myapp.
 	
 - All characters must be alphanumeric or an underscore [a-zA-Z0-9_]
-  (preferably in lowercase for use with adb commands)
+(preferably in lowercase for use with adb commands)
 	
 - It must have at least two segments (one or more dots)
 	

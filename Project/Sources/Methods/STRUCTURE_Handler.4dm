@@ -124,7 +124,7 @@ Case of
 				editor_ui_LISTBOX($form.tableList)
 				editor_ui_LISTBOX($form.fieldList)
 				
-				If (Not:C34(FEATURE.with("android1ToNRelations")))
+				If (Not:C34(Feature.with("android1ToNRelations")))
 					
 					tempoDatamodelWith1toNRelation($context.currentTable)
 					

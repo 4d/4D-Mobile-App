@@ -157,7 +157,7 @@ Function doRun()->$Obj_out : Object
 							$Obj_field:=OB Copy:C1225($Obj_field)
 							
 							$Obj_field.nameOrPath:=$Obj_field.name
-							If (FEATURE.with("alias") && ($Obj_field.path#Null:C1517))
+							If (Feature.with("alias") && ($Obj_field.path#Null:C1517))
 								$Obj_field.nameOrPath:=$Obj_field.path
 							End if 
 							
@@ -199,7 +199,7 @@ Function doRun()->$Obj_out : Object
 							$Obj_field:=OB Copy:C1225($Obj_field)
 							
 							$Obj_field.nameOrPath:=$Obj_field.name
-							If (FEATURE.with("alias") && ($Obj_field.path#Null:C1517))
+							If (Feature.with("alias") && ($Obj_field.path#Null:C1517))
 								$Obj_field.nameOrPath:=$Obj_field.path
 							End if 
 							
@@ -506,7 +506,7 @@ Function _createDummyField()->$dummy : Object
 	// change name attribute and add missing value
 Function _fieldTagify($Obj_field : Object)
 	$Obj_field.originalName:=$Obj_field.name
-	If (FEATURE.with("alias"))
+	If (Feature.with("alias"))
 		$Obj_field.originalPath:=$Obj_field.path
 		$Obj_field.name:=formatString("field-name"; $Obj_field.nameOrPath)  // NAME is used in tag for binding, but we need path now because name seems to be shortened sometimes...
 	Else 

@@ -298,7 +298,7 @@ Function update()
 					//______________________________________________________
 				: (String:C10($action.preset)="share")
 					
-					If (FEATURE.with("sharedActionWithDescription"))  //🚧
+					If (Feature.with("sharedActionWithDescription"))  //🚧
 						
 						This:C1470.goToPage(2)
 						This:C1470.title.setTitle("description").show()
@@ -1371,7 +1371,7 @@ Function doDataSourceMenu()
 				
 			End for each 
 			
-			If (FEATURE.with("listEditor"))  //🚧
+			If (Feature.with("listEditor"))  //🚧
 				
 				// Allow to create a custom input control
 				$menu.append("newChoiceList"; "newChoiceList")
@@ -1398,7 +1398,7 @@ Function doDataSourceMenu()
 				
 			End for each 
 			
-			If (FEATURE.with("listEditor"))  //🚧
+			If (Feature.with("listEditor"))  //🚧
 				
 				// Allow to create a custom input control
 				$menu.append("newDatasource"; "newDataSource")
@@ -1425,7 +1425,7 @@ Function doDataSourceMenu()
 				
 				This:C1470._newUserControl(False:C215)
 				
-			: (FEATURE.with("listEditor")) & Macintosh option down:C545
+			: (Feature.with("listEditor")) & Macintosh option down:C545
 				
 				This:C1470.editList()
 				
@@ -1446,8 +1446,8 @@ Function doDataSourceMenu()
 Function editList()
 	
 	//$form:=New object(\
-																						"static"; $static; \
-																						"host"; This.path.hostInputControls(True))
+																								"static"; $static; \
+																								"host"; This.path.hostInputControls(True))
 	
 	//$form.folder:=This.path.hostInputControls()
 	//$manifest:=$form.folder.file("manifest.json")
@@ -2002,7 +2002,7 @@ Function formatToolTip($format : Text)->$tip : Text
 		//SHARED.resources.formattersByName:=New object
 		//var $bind
 		//For each ($bind; SHARED.resources.fieldBindingTypes\
-																											.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
+																														.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
 		//SHARED.resources.formattersByName[$bind.name]:=$bind
 		//End for each
 		//End if
@@ -2056,7 +2056,7 @@ Function metaInfo($current : Object)->$result
 		
 	End if 
 	
-	//MARK:-[PRIVATE] 
+	//MARK:-[PRIVATE]
 Function _newUserControl($static : Boolean)
 	
 	var $current; $data; $form; $o : Object

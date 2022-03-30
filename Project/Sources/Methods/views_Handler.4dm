@@ -185,7 +185,7 @@ Case of
 				// Update geometry
 				$context.setGeometry()
 				
-				If (FEATURE.with("withWidgetActions"))
+				If (Feature.with("withWidgetActions"))
 					
 					//$context.actions:=_w_actions ("getList";$context).actions
 					
@@ -235,7 +235,7 @@ Case of
 						// Uppdate preview
 						tmpl_DRAW($form)
 						
-						If (FEATURE.with("withWidgetActions"))
+						If (Feature.with("withWidgetActions"))
 							
 							//(ui.pointer($form.actionDrop))->:=_w_actions ("preview";$context).pict
 							
@@ -400,19 +400,19 @@ Case of
 							//If ($c.length>2)
 							//If ($datamodel[$context.tableNumber][$c[1]]=Null)
 							//LISTBOX SET ROW COLOR(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color)
-							//End if 
-							//Else 
+							//End if
+							//Else
 							//If ($c.length=1)
 							//If ($datamodel[$context.tableNumber][$field.name]=Null)
 							//LISTBOX SET ROW COLOR(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color)
-							//End if 
-							//Else 
-							//// A "If" statement should never omit "Else" 
+							//End if
+							//Else
+							//// A "If" statement should never omit "Else"
 							//If ($datamodel[$context.tableNumber][$c[0]]=Null)
 							//LISTBOX SET ROW COLOR(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color)
-							//End if 
-							//End if 
-							//End if 
+							//End if
+							//End if
+							//End if
 							
 							//______________________________________________________
 						: (PROJECT.isAvailable($dataClass; $field.path))

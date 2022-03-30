@@ -73,7 +73,7 @@ Case of
 		var $allowedTypes : Collection
 		$allowedTypes:=New collection:C1472("string"; "bool"; "date"; "number"; "image")
 		
-		If (FEATURE.with("objectFieldManagement"))
+		If (Feature.with("objectFieldManagement"))
 			
 			$allowedTypes.push("object")
 			
@@ -222,7 +222,7 @@ Don't keep:
 									$table.field.push($field)
 									
 									//…………………………………………………………………………………………………
-								: (Not:C34(FEATURE.with("alias")))
+								: (Not:C34(Feature.with("alias")))
 									
 									// <NOT YET AVAILABLE>
 									
@@ -247,7 +247,7 @@ Don't keep:
 										
 									End if 
 									
-									//Case of 
+									//Case of
 									////______________________________________
 									//: ($allowedTypes.indexOf($field.type)>=0)  // Scalar Attribute
 									//// Mark: #TEMPO
@@ -265,10 +265,10 @@ Don't keep:
 									//$field.type:=$field.isToMany ? -2 : -1
 									//$table.field.push($field)
 									////______________________________________
-									//Else 
+									//Else
 									//oups
 									////______________________________________
-									//End case 
+									//End case
 									
 									//…………………………………………………………………………………………………
 								Else 
@@ -607,7 +607,7 @@ Don't keep:
 							//For each ($Txt_field;$Obj_relatedDataClass)
 							
 							//If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																																																																																																																																																								
+								
 							//If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
 							//$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])
@@ -844,7 +844,7 @@ Don't keep:
 		// MARK:- tables
 	: ($IN.action="tables")  //  [OBSOLETE]
 		
-		If (Bool:C1537(FEATURE._98145))  //#MARK_TODO - CHANGE "tables" entrypoint to "catalog"
+		If (Bool:C1537(Feature._98145))  //#MARK_TODO - CHANGE "tables" entrypoint to "catalog"
 			
 			// CHECK ALL CALLERS AND UNIT TEST
 			
@@ -1164,11 +1164,11 @@ Don't keep:
 				
 				DOCUMENT:=DOCUMENT+");"
 				
-				Begin SQL
+				Begin SQL:C948
 					
 					EXECUTE IMMEDIATE :DOCUMENT
 					
-				End SQL
+				End SQL:C949
 				
 				For each ($o; SHARED.deletedRecordsTable.fields)
 					
@@ -1176,11 +1176,11 @@ Don't keep:
 						
 						DOCUMENT:="ALTER TABLE "+String:C10(SHARED.deletedRecordsTable.name)+" MODIFY "+String:C10($o.name)+" ENABLE AUTO_INCREMENT;"
 						
-						Begin SQL
+						Begin SQL:C948
 							
 							EXECUTE IMMEDIATE :DOCUMENT
 							
-						End SQL
+						End SQL:C949
 						
 					End if 
 				End for each 
@@ -1196,11 +1196,11 @@ Don't keep:
 					
 					$errors.reset()
 					
-					Begin SQL
+					Begin SQL:C948
 						
 						EXECUTE IMMEDIATE :DOCUMENT
 						
-					End SQL
+					End SQL:C949
 					
 					If ($errors.lastError.stack#Null:C1517)
 						
@@ -1276,11 +1276,11 @@ Don't keep:
 			
 			$errors.reset()
 			
-			Begin SQL
+			Begin SQL:C948
 				
 				EXECUTE IMMEDIATE :DOCUMENT
 				
-			End SQL
+			End SQL:C949
 			
 			If ($errors.lastError.stack#Null:C1517)
 				
@@ -1303,11 +1303,11 @@ Don't keep:
 			
 			$errors.reset()
 			
-			Begin SQL
+			Begin SQL:C948
 				
 				EXECUTE IMMEDIATE :DOCUMENT
 				
-			End SQL
+			End SQL:C949
 			
 			If ($errors.lastError.stack#Null:C1517)
 				

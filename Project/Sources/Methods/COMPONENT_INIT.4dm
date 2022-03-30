@@ -23,7 +23,7 @@ var $process : cs:C1710.process
 var SHARED : Object  // Common values
 var _o_UI : Object  // UI constants
 
-var FEATURE : Object  // Feature flags
+var Feature : cs:C1710.Feature  // Feature flags
 
 var RECORD : Object  // General journal
 
@@ -330,7 +330,7 @@ End if
 /*================================================================================================================================
 FEATURES FLAGS
 ================================================================================================================================*/
-If (OB Is empty:C1297(FEATURE)) | $reset
+If (OB Is empty:C1297(Feature)) | $reset
 	
 	var $version : Integer
 	
@@ -349,7 +349,7 @@ If (OB Is empty:C1297(FEATURE)) | $reset
 		
 	End if 
 	
-	FEATURE_FLAGS($version; $pref)
+	FEATURE_FLAGS($version)
 	
 End if 
 
@@ -362,14 +362,16 @@ If ($process.cooperative)\
 	RECORD.log("Component "+SHARED.component.version)
 	RECORD.line()
 	
-	For each ($t; FEATURE)
-		
-		If (Value type:C1509(FEATURE[$t])=Is boolean:K8:9)
-			
-			RECORD.log("feature "+Replace string:C233($t; "_"; "")+": "+Choose:C955(FEATURE[$t]; "Enabled"; "Disabled"))
-			
-		End if 
-	End for each 
+	//For each ($t; FEATURE)
+	
+	//If (Value type(FEATURE[$t])=Is boolean)
+	
+	//RECORD.log("feature "+Replace string($t; "_"; "")+": "+Choose(FEATURE[$t]; "Enabled"; "Disabled"))
+	
+	//End if 
+	//End for each 
+	
+	Feature.log(Formula:C1597(RECORD.log($1)))
 	
 	RECORD.line()
 	
@@ -379,7 +381,7 @@ End if
 AFTER FLAGS
 ================================================================================================================================*/
 
-SET ASSERT ENABLED:C1131(FEATURE.with("debug"); *)
+SET ASSERT ENABLED:C1131(Feature.with("debug"); *)
 
 RECORD.info("Assert "+Choose:C955(Get assert enabled:C1130; "Enabled"; "Disabled"))
 

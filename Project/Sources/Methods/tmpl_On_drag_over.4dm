@@ -59,7 +59,7 @@ If (Length:C16($cible)>0)
 				// Accept insertion
 				$isInsertion:=($cible="@.vInsert")
 				
-				If (FEATURE.with("droppingNext"))
+				If (Feature.with("droppingNext"))
 					
 					$isInsertion:=$isInsertion | ($cible="@.hInsertBefore") | ($cible="@.hInsertAfter")
 					
@@ -93,7 +93,7 @@ If (Length:C16($cible)>0)
 				SVG GET ATTRIBUTE:C1056(*; $preview; $cible; "4D-isOfClass-droppable"; $t)
 				$isDroppable:=JSON Parse:C1218($t; Is boolean:K8:9)
 				
-				// Reject object fields for search and sections 
+				// Reject object fields for search and sections
 				If ($isDroppable)
 					
 					SVG GET ATTRIBUTE:C1056(*; $preview; $cible; "ios:bind"; $t)
@@ -167,7 +167,7 @@ If (Length:C16($cible)>0)
 					End if 
 					
 					//————————————————————————————————————
-				: (FEATURE.with("withWidgetActions"))  // Action area (WIP)
+				: (Feature.with("withWidgetActions"))  // Action area (WIP)
 					
 					// Accept drag if a widget action is drag over
 					GET PASTEBOARD DATA:C401("com.4d.private.4dmobile.action"; $x)

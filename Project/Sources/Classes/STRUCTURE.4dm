@@ -320,7 +320,7 @@ Function fieldList()
 					
 				End for each 
 				
-				If (FEATURE.with("many-one-many"))
+				If (Feature.with("many-one-many"))
 					
 					For each ($field; $table.fields.query("kind = relatedEntities & relatedDataClass != :1"; $table.name))
 						
@@ -450,7 +450,7 @@ Function fieldList()
 		
 	End if 
 	
-	If (Not:C34(FEATURE.with("android1ToNRelations")))
+	If (Not:C34(Feature.with("android1ToNRelations")))
 		
 		tempoDatamodelWith1toNRelation($ƒ.currentTable)
 		
@@ -552,7 +552,7 @@ Function doFieldPicker()->$publishedNumber : Integer
 			//If ($field.kind="alias")
 			//$x:=PROJECT._pathTarget($currentTable.name; $field; True)
 			//$y:=cs.ExposedStructure.new().aliasTarget($currentTable.name; $field; True)
-			//End if 
+			//End if
 			
 			If ($field.kind#"alias") && ($path.length>1)
 				
@@ -954,7 +954,7 @@ Function updateProject()
 							//………………………………………………………………………………………………………
 						: ($fieldModel.kind="relatedEntities")
 							
-							If (FEATURE.with("many-one-many"))
+							If (Feature.with("many-one-many"))
 								
 								
 								

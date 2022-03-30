@@ -14,7 +14,7 @@ Function doRun()->$Obj_out : Object
 	$Obj_template:=This:C1470.template
 	
 	// Get navigation tables or other items as tag
-	If (FEATURE.with("actionsInTabBar"))
+	If (Feature.with("actionsInTabBar"))
 		This:C1470._actionsInTabBarProcess()
 	Else 
 		This:C1470.input.tags.navigationTables:=dataModel(New object:C1471(\
@@ -130,7 +130,7 @@ Function _actionsInTabBarProcess()
 			$o.template.source:=$templateFolder.platformPath
 			$o.template.parent:=This:C1470.input.template.parent  // for xproj uuid
 			$o.projfile:=This:C1470.input.projfile  // do not want a copy
-			//$o.projfile:=This.input.projfile 
+			//$o.projfile:=This.input.projfile
 			//$o.path:=This.input.path
 			$o.tags:=OB Copy:C1225(This:C1470.input.tags)
 			$o.tags.table:=$table

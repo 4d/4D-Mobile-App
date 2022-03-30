@@ -253,7 +253,7 @@ Case of
 		//==================================================
 End case 
 
-If (Bool:C1537(FEATURE._8858))
+If (Bool:C1537(Feature._8858))
 	
 	PROJECT.save()
 	
