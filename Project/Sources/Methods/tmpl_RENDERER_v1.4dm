@@ -194,6 +194,7 @@ If (Asserted:C1132($svg.success; "Missing cookery element"))
 								End if 
 								
 								//______________________________________________________
+								//TODO:Remove computed
 							: ($o.kind="calculated") || (Bool:C1537($o.computed))
 								
 								If (PROJECT.dataModel[$context.tableNumber][$o.name]=Null:C1517)

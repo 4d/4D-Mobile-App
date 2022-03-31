@@ -788,7 +788,6 @@ Function isComputedAttribute($field : Object; $tableName : Text)->$is : Boolean
 	var $o : Object
 	var $catalog : Collection
 	
-	//$is:=(String($field.kind)="calculated") | (Bool($field.computed)) | (Num($field.type)=-3)
 	$is:=($field.kind#Null:C1517) && ($field.kind="calculated")
 	
 	If ($is & (Count parameters:C259>=2))
@@ -1533,6 +1532,7 @@ Function fieldAvailable($tableID; $field : Object)->$available : Boolean
 		: ($c.length=1)
 			
 			// Check the data class
+			//TODO:Remove computed
 			If ($field.relatedTableNumber#Null:C1517)\
 				 | ($field.kind="calculated")\
 				 | (Bool:C1537($field.computed))

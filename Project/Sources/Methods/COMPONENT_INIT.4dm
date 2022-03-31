@@ -349,7 +349,7 @@ If (OB Is empty:C1297(Feature)) | $reset
 		
 	End if 
 	
-	FEATURE_FLAGS($version)
+	FEATURE_FLAGS($version; Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile"))
 	
 End if 
 
@@ -358,22 +358,9 @@ If ($process.cooperative)\
  & ($initLog)
 	
 	$t:=SHARED.ide.version
-	RECORD.log("4D "+$t[[1]]+$t[[2]]+Choose:C955($t[[3]]="0"; "."+$t[[4]]; "R"+$t[[3]])+" ("+String:C10(SHARED.ide.build)+")")
-	RECORD.log("Component "+SHARED.component.version)
-	RECORD.line()
-	
-	//For each ($t; FEATURE)
-	
-	//If (Value type(FEATURE[$t])=Is boolean)
-	
-	//RECORD.log("feature "+Replace string($t; "_"; "")+": "+Choose(FEATURE[$t]; "Enabled"; "Disabled"))
-	
-	//End if 
-	//End for each 
-	
-	Feature.log(Formula:C1597(RECORD.log($1)))
-	
-	RECORD.line()
+	RECORD.log("4D "+$t[[1]]+$t[[2]]+($t[[3]]="0" ? "."+$t[[4]] : "R"+$t[[3]])+" ("+String:C10(SHARED.ide.build)+")")
+	RECORD.log("Component "+SHARED.component.version).line()
+	Feature.log(Formula:C1597(RECORD.log($1))).line()
 	
 End if 
 

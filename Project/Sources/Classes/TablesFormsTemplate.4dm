@@ -559,7 +559,7 @@ Function _field($table; $field)->$fieldResult : Object
 		End if 
 	Else 
 		// tmp code in cas of...
-		$tableResult:=This:C1470.project.dataModel[This:C1470._tableNumber($table)]
+		$tableResult:=This:C1470.project.dataModel[This:C1470._tableID($table)]
 		var $t : Text
 		$t:=This:C1470._fieldKey($field)
 		If (Length:C16($t)>0)
@@ -601,6 +601,10 @@ Function _tableNumber($table : Variant)->$number : Integer
 		Else 
 			$number:=Num:C11($table.relatedTableNumber)
 	End case 
+	
+Function _tableID($table) : Text
+	
+	return (String:C10(This:C1470._tableNumber($table)))
 	
 Function _fieldKey($field : Variant)->$key : Text
 	Case of 

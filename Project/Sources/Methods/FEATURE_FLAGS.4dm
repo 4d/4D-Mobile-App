@@ -1,7 +1,7 @@
 //%attributes = {"invisible":true}
-#DECLARE($version : Integer)
+#DECLARE($version : Integer; $file : 4D:C1709.File)
 
-Feature:=cs:C1710.Feature.new($version)
+Feature:=cs:C1710.Feature.new($version; $file)
 
 If (True:C214)  // DELIVERED
 	
@@ -145,6 +145,7 @@ Feature.pending("coreDataAbstractEntity")  // Add in coreData model Record abstr
 Feature.loadLocal()
 
 // Mark:-→ ALIAS
+Feature.alias("debug"; 8858)
 Feature.alias("actionsInTabBar"; 131983)
 Feature.alias("androidDataSet"; 127558)
 Feature.alias("many-one-many"; 129953)

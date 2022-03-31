@@ -25,51 +25,31 @@ Function with($feature) : Boolean
 	/// Storing a feature as unstable
 Function unstable($feature)
 	
-	If (This:C1470.internalVersion>=This:C1470.ideVersion)
-		
-		This:C1470._features[This:C1470._feature($feature)]:=True:C214
-		
-	End if 
+	This:C1470._features[This:C1470._feature($feature)]:=(This:C1470.internalVersion>=This:C1470.ideVersion)
 	
 	//====================================================================
 	/// Storing a feature as delivered
 Function delivered($feature; $version : Integer)
 	
-	If (This:C1470.internalVersion>=$version)
-		
-		This:C1470._features[This:C1470._feature($feature)]:=True:C214
-		
-	End if 
+	This:C1470._features[This:C1470._feature($feature)]:=(This:C1470.internalVersion>=$version)
 	
 	//====================================================================
 	/// Storing a feature as debug (only available in dev mode)
 Function debug($feature; $version : Integer)
 	
-	If (Structure file:C489=Structure file:C489(*))
-		
-		This:C1470._features[This:C1470._feature($feature)]:=True:C214
-		
-	End if 
+	This:C1470._features[This:C1470._feature($feature)]:=(Structure file:C489=Structure file:C489(*))
 	
 	//====================================================================
 	/// Storing a feature as only available in main branch
 Function main($feature; $version : Integer)
 	
-	If (Application version:C493(*)[[1]]="A")
-		
-		This:C1470._features[This:C1470._feature($feature)]:=True:C214
-		
-	End if 
+	This:C1470._features[This:C1470._feature($feature)]:=(Application version:C493(*)[[1]]="A")
 	
 	//====================================================================
 	/// Storing a feature as work in progress (only available in dev mode)
 Function wip($feature; $version : Integer)
 	
-	If (Structure file:C489=Structure file:C489(*))
-		
-		This:C1470._features[This:C1470._feature($feature)]:=True:C214
-		
-	End if 
+	This:C1470._features[This:C1470._feature($feature)]:=(Structure file:C489=Structure file:C489(*))
 	
 	//====================================================================
 	/// Storing an alias name for a feature
@@ -194,11 +174,13 @@ Function log($logger : 4D:C1709.Function)
 	
 	var $key; $t : Text
 	
+	$logger.call(Null:C1517; "Features:\n")
+	
 	For each ($key; This:C1470._features)
 		
 		If (Value type:C1509(This:C1470._features[$key])=Is boolean:K8:9)
 			
-			$t:="feature "+Replace string:C233($key; "_"; "")+": "+(This:C1470._features[$key] ? "Enabled" : "Disabled")
+			$t:=(This:C1470._features[$key] ? " ✅ " : " ❌ ")+Replace string:C233($key; "_"; "")
 			$logger.call(Null:C1517; $t)
 			
 		End if 

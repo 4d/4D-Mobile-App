@@ -938,14 +938,16 @@ Function _fieldModel($field : cs:C1710.field; $relatedCatalog : Object)->$fieldM
 			
 			$fieldModel:=New object:C1471(\
 				"kind"; $field.kind; \
-				"fieldType"; $field.fieldType; \
+				"name"; $field.name; \
 				"label"; PROJECT.label($field.name); \
 				"shortLabel"; PROJECT.label($field.name); \
+				"fieldType"; $field.fieldType; \
 				"valueType"; $field.valueType)
 			
 			// mark:#TEMPO
-			$fieldModel.type:=$field.type
+			// TODO:Remove computed
 			$fieldModel.computed:=True:C214
+			$fieldModel.type:=$field.type  //(-3)
 			
 			//………………………………………………………………………………………………………
 		: ($field.kind="relatedEntities")  // 1 -> N relation

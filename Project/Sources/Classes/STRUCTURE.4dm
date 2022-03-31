@@ -705,6 +705,7 @@ Function doFieldPicker()->$publishedNumber : Integer
 										"shortLabel"; PROJECT.shortLabel($field.name))
 									
 									// MARK:#TEMPO
+									//TODO:Remove computed
 									$o.computed:=True:C214
 									
 									$target[$path[0]][$field.name]:=$o
@@ -768,6 +769,7 @@ Function doFieldPicker()->$publishedNumber : Integer
 										"shortLabel"; PROJECT.shortLabel($field.name))
 									
 									// MARK:#TEMPO
+									//TODO:Remove computed
 									$o.computed:=True:C214
 									
 									$target[$field.name]:=$o
