@@ -68,7 +68,7 @@ Case of
 		
 		If (($Obj_param.path=Null:C1517) & ($Obj_param.posix=Null:C1517))
 			
-			$Obj_result.errors:=New collection:C1472("path or posix must be specified")
+			$Obj_result.errors:=New collection:C1472("path or posix must be specified for git repository path")
 			
 		Else 
 			

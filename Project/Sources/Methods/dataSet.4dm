@@ -849,7 +849,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 					
 				Else 
 					
-					$out.errors:=New collection:C1472("path or posix must be defined")
+					$out.errors:=New collection:C1472("path or posix must be defined to produce dataset")
 					
 				End if 
 			End if 

@@ -116,7 +116,7 @@ Case of
 			
 		Else 
 			
-			$Obj_out.errors:=New collection:C1472("path or posix must be defined")
+			$Obj_out.errors:=New collection:C1472("path or posix must be defined to get colors of image")
 			
 		End if 
 		

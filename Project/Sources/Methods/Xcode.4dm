@@ -429,7 +429,7 @@ Case of
 			
 		Else 
 			
-			$Obj_result.error:="path or posix must be defined"
+			$Obj_result.error:="path or posix must be defined to look for Xcode "+String:C10($Obj_param.type)
 			
 		End if 
 		
@@ -468,7 +468,7 @@ Case of
 			
 		Else 
 			
-			$Obj_result.error:="path or posix must be defined"
+			$Obj_result.error:="path or posix must be defined when getting xcode project information"
 			
 		End if 
 		
