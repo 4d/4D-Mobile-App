@@ -645,9 +645,9 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 							
 							$out.coreDataSet:=dataSet(New object:C1471(\
 								"action"; "coreData"; \
-								"removeAsset"; Not:C34(Feature.with("androidDataSet"))))  ////False//; "path"; $out.path; "caller"; $in.caller))								\
-								
-							
+								"removeAsset"; Not:C34(Feature.with("androidDataSet"))/*False*/; \
+								"path"; $out.path; \
+								"caller"; $in.caller))
 							
 							ob_error_combine($out; $out.coreDataSet)
 							
