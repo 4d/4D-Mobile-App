@@ -338,6 +338,9 @@ Function _createEntity($options : Object; $Dom_model : Text; $tableID : Integer;
 				If (Value type:C1509($table[$Txt_field])=Is object:K8:27)
 					
 					$Txt_originalFieldName:=String:C10($table[$Txt_field].name)
+					If ((Length:C16($Txt_originalFieldName)=0) && PROJECT.isComputedAttribute($table[$Txt_field]))
+						$Txt_originalFieldName:=$Txt_field
+					End if 
 					$Lon_type:=$table[$Txt_field].fieldType
 					
 				Else 
@@ -792,7 +795,9 @@ Function _fieldForKey($table : Object; $key : Text)->$dst : Object
 	// MARK: - utility from full catalog
 	
 Function _tableFromCatalog($tableName : Text)->$table : Object
-	$table:=This:C1470.catalog.query("name = :1"; $tableName).pop()
+	If (This:C1470.catalog#Null:C1517)
+		$table:=This:C1470.catalog.query("name = :1"; $tableName).pop()
+	End if 
 	
 Function _createTable($tableName : Text)->$table : Object
 	$table:=New object:C1471(\
