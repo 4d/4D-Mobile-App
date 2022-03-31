@@ -66,7 +66,7 @@ Case of
 				// Constraints definition
 				$form.ui.constraints:=New object:C1471
 				
-				If (FEATURE.with("cancelableDatasetGeneration"))
+				If (Feature.with("cancelableDatasetGeneration"))
 					
 					_o_ui_BEST_SIZE(New object:C1471(\
 						"widgets"; New collection:C1472($form.generate)))
@@ -182,9 +182,9 @@ Case of
 					
 				End if 
 				
-				If (FEATURE.with("cancelableDatasetGeneration"))
+				If (Feature.with("cancelableDatasetGeneration"))
 					
-					If (FEATURE.with("androidDataSet"))
+					If (Feature.with("androidDataSet"))
 						
 						$form.ui.updateDataSet()
 						
@@ -285,7 +285,7 @@ Case of
 		//=========================================================
 	: ($in.action="checkingServerConfiguration")
 		
-		If (FEATURE.with("sourceClass")) & False:C215
+		If (Feature.with("sourceClass")) & False:C215
 			
 			BEEP:C151
 			

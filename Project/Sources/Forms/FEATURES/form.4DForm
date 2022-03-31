@@ -99,7 +99,7 @@
 					"width": 369,
 					"height": 22,
 					"detailForm": "PATH PICKER",
-					"dataSource": "Form:C1466.$dialog.FEATURES.certificate.picker",
+					"dataSource": "panel.certificate.picker",
 					"events": [
 						"onDataChange"
 					],

@@ -62,7 +62,7 @@ Function init()
 	/// Initializations at loading
 Function onLoad()
 	
-	If (Not:C34(FEATURE.with("cancelableDatasetGeneration")))
+	If (Feature.disabled("cancelableDatasetGeneration"))
 		
 		This:C1470.method.setCoordinates(486; 104; 486+330; 104+22)
 		
@@ -160,7 +160,7 @@ Function update()
 		
 		OB REMOVE:C1226(This:C1470.current; "user")
 		
-		This:C1470.result.setValue("").setColors(EDITOR.selectedFillColor).show(FEATURE.with("cancelableDatasetGeneration"))
+		This:C1470.result.setValue("").setColors(EDITOR.selectedFillColor).show(Feature.with("cancelableDatasetGeneration"))
 		
 		This:C1470.displayFilter(This:C1470.current)
 		
@@ -232,7 +232,7 @@ Function updateTableListWithDataSizes()
 		If (Bool:C1537($table.embedded))\
 			 & (Not:C34(Bool:C1537($table.filter.parameters)))
 			
-			If (FEATURE.with("androidDataSet"))
+			If (Feature.with("androidDataSet"))
 				
 				$tableName:=formatString("table-name"; $table.name)
 				

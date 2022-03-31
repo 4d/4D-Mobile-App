@@ -52,7 +52,7 @@ Function run($path : Text; $options : Object)->$out : Object
 	$Dom_elements:=This:C1470._createElements($Dom_model)
 	
 	// MARK: (NO) add abstract entity
-	If (Bool:C1537(Feature.with("coreDataAbstractEntity")))
+	If (Feature.with("coreDataAbstractEntity"))
 		
 		// Parent abtract Record entity in model, with common private fields
 		var $Txt_tableName : Text
@@ -222,7 +222,7 @@ Function _createEntity($options : Object; $Dom_model : Text; $tableID : Integer;
 	var $Dom_userInfo; $Dom_entity; $Dom_node; $Dom_attribute : Text
 	$Dom_entity:=DOM Create XML element arrays:C1097($Dom_model; "entity"; $tTxt_entityAttributes; $tTxt_entityValues)
 	
-	If (Bool:C1537(Feature.with("coreDataAbstractEntity")))
+	If (Feature.with("coreDataAbstractEntity"))
 		
 		DOM SET XML ATTRIBUTE:C866($Dom_entity; \
 			"parentEntity"; "Record")
@@ -805,7 +805,7 @@ Function _createTable($tableName : Text)->$table : Object
 		"name"; $tableName))
 	
 	var $tableInfo : Object
-	If (Bool:C1537(Feature.with("iOSAlias")))
+	If (Feature.with("iOSAlias"))
 		$tableInfo:=This:C1470._tableFromCatalog($tableName)
 	Else 
 		$tableInfo:=_o_structure(New object:C1471(\
@@ -818,7 +818,7 @@ Function _createTable($tableName : Text)->$table : Object
 	End if 
 	
 Function _createField($tableName : Text; $fieldName : Text)->$result : Object
-	If (Bool:C1537(Feature.with("iOSAlias")))
+	If (Feature.with("iOSAlias"))
 		$result:=New object:C1471("success"; False:C215)
 		var $table : Object
 		$table:=This:C1470._tableFromCatalog($tableName)
@@ -832,7 +832,7 @@ Function _createField($tableName : Text; $fieldName : Text)->$result : Object
 	End if 
 	
 Function _hasGlobalStamp($tableName : Text)->$has : Boolean
-	If (Bool:C1537(Feature.with("iOSAlias")))
+	If (Feature.with("iOSAlias"))
 		$has:=False:C215
 		var $table : Object
 		$table:=This:C1470._tableFromCatalog($tableName)
@@ -848,7 +848,7 @@ Function _hasGlobalStamp($tableName : Text)->$has : Boolean
 	End if 
 	
 Function _inverseRelatedFields($tableName : Text; $relationKey : Text; $cache : Object)->$result : Object
-	If (Bool:C1537(Feature.with("iOSAlias")))
+	If (Feature.with("iOSAlias"))
 		
 		$result:=_o_structure(New object:C1471(\
 			"action"; "inverseRelatedFields"; \

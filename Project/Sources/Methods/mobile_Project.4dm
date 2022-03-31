@@ -8,7 +8,7 @@ If ((String:C10($data.project._buildTarget)="android")\
 	
 Else 
 	
-	If (Bool:C1537(Feature.with("iosBuildWithClass")))
+	If (Feature.with("iosBuildWithClass"))
 		
 		return (cs:C1710.MobileProjectIOS.new($data).main())
 		

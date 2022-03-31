@@ -46,7 +46,7 @@ Class constructor($project : Object)
 	
 	This:C1470.checkPackage()
 	
-	If (Not:C34(Feature.with("androidDataSet")))
+	If (Feature.disabled("androidDataSet"))
 		
 		This:C1470.file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"projecteditor.json")
 		This:C1470.file.setText(JSON Stringify:C1217(This:C1470.project))
@@ -190,7 +190,7 @@ Function create()->$result : Object
 	End if 
 	
 	
-	If (Not:C34(Feature.with("androidDataSet")))
+	If (Feature.disabled("androidDataSet"))
 		
 		If ($o.success)
 			
@@ -326,7 +326,7 @@ Function build()->$result : Object
 	This:C1470.logFolder.file("lastBuild.android.out.log").setText(String:C10($o.outputStream))
 	This:C1470.logFolder.file("lastBuild.android.err.log").setText(String:C10($o.errorStream))
 	
-	If (Not:C34(Feature.with("androidDataSet")))
+	If (Feature.disabled("androidDataSet"))
 		
 		If ($o.success)
 			

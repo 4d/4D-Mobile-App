@@ -219,8 +219,8 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 				
 				If (Asserted:C1132($path[$parameters.target]#Null:C1517; "No function for path "+String:C10($parameters.target)))
 					//$response:=New object(\
-																	"success"; True; \
-																	"value"; _o_COMPONENT_Pathname($parameters.target).platformPath)
+																							"success"; True; \
+																							"value"; _o_COMPONENT_Pathname($parameters.target).platformPath)
 					
 					$response:=New object:C1471(\
 						"success"; True:C214; \
@@ -247,7 +247,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 				"error"; "Command unavailable for this Windows platform")
 			
 			//________________________________________
-		: (Bool:C1537(Feature.with("xcDataModelClass")) & \
+		: (Feature.with("xcDataModelClass") & \
 			(($entryPoint="dataModel")\
 			 | ($entryPoint="xcDataModel")))
 			

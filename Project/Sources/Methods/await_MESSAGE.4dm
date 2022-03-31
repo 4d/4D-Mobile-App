@@ -33,7 +33,7 @@ If (Not:C34(($mode ?? 1)))  // Cooperative
 End if 
 
 // Default target is the current windows
-$message.target:=$message.target ? $message.target : $winRef
+$message.target:=$message.target || $winRef
 
 If (Count parameters:C259>=2)
 	

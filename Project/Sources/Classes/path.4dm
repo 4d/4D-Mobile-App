@@ -134,7 +134,7 @@ Function templates()->$folder : 4D:C1709.Folder  // templates folder
 	
 	If (Feature.with("compressionOfTemplates"))
 		
-		If (DATABASE.isMatrix) & Not:C34(Feature.with("testCompression"))
+		If (DATABASE.isMatrix) & Feature.disabled("testCompression")
 			
 			// Use uncompressed resources
 			$folder:=Folder:C1567("/RESOURCES/templates")

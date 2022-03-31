@@ -222,7 +222,7 @@ Don't keep:
 									$table.field.push($field)
 									
 									//…………………………………………………………………………………………………
-								: (Not:C34(Feature.with("alias")))
+								: (Feature.disabled("alias"))
 									
 									// <NOT YET AVAILABLE>
 									
@@ -607,7 +607,7 @@ Don't keep:
 							//For each ($Txt_field;$Obj_relatedDataClass)
 							
 							//If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																
+																																
 							//If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
 							//$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])
@@ -844,7 +844,7 @@ Don't keep:
 		// MARK:- tables
 	: ($IN.action="tables")  //  [OBSOLETE]
 		
-		If (Bool:C1537(Feature._98145))  //#MARK_TODO - CHANGE "tables" entrypoint to "catalog"
+		If (Feature.with(98145))  //#MARK_TODO - CHANGE "tables" entrypoint to "catalog"
 			
 			// CHECK ALL CALLERS AND UNIT TEST
 			
@@ -1034,11 +1034,6 @@ Don't keep:
 		End if 
 		
 /* STOP HIDING ERRORS */$errors.show()
-		
-		//______________________________________________________
-		//: (Not(Bool(featuresFlags._103411)))
-		
-		//ASSERT(False;"Not implemented: \""+$Obj_in.action+"\"")
 		
 		// MARK:- verify@
 	: ($IN.action="verify@")

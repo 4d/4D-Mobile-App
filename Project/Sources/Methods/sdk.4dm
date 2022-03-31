@@ -205,7 +205,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 						// in source tree group
 						$Txt_buffer:=XcodeProj(New object:C1471("action"; "randomObjectId"; "proj"; $Obj_param.projfile.value)).value
 						
-						If (Not:C34(Bool:C1537(Feature.with("generateForDev"))))  // # feature to not add framework
+						If (Feature.disabled("generateForDev"))  // # feature to not add framework
 							$Obj_:=New object:C1471("name"; $child.fullName; "isa"; "PBXFileReference"; "lastKnownFileType"; "wrapper.framework"; "path"; $Obj_param.folder+$child.fullName; "sourceTree"; "<group>")
 						Else 
 							// XXX for source not in compiled, maybe do thi code elsewhere, or change $Obj_param.folder in caller function
@@ -234,7 +234,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 							$Txt_buffer:=XcodeProj(New object:C1471("action"; "randomObjectId"; "proj"; $Obj_param.projfile.value)).value
 							
 							$Obj_:=New object:C1471("isa"; "PBXBuildFile"; "fileRef"; $Txt_fileRef)
-							If (Not:C34(Bool:C1537(Feature.with("generateForDev"))))
+							If (Feature.disabled("generateForDev"))
 								$Obj_.settings:=New object:C1471("ATTRIBUTES"; New collection:C1472("CodeSignOnCopy"))  // ;"RemoveHeadersOnCopy"
 							End if 
 							$Obj_objects[$Txt_buffer]:=$Obj_

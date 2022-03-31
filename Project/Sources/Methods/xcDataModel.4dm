@@ -105,7 +105,7 @@ Case of
 						$tTxt_entityValues{3}:="YES"
 						$tTxt_entityValues{4}:="class"
 						
-						If (Bool:C1537(Feature.with("coreDataAbstractEntity")))
+						If (Feature.with("coreDataAbstractEntity"))
 							
 							// Parent abtract Record entity in model, with common private fields
 							$Txt_tableName:="Record"
@@ -182,7 +182,7 @@ Case of
 							
 							$Dom_entity:=DOM Create XML element arrays:C1097($Dom_model; "entity"; $tTxt_entityAttributes; $tTxt_entityValues)
 							
-							If (Bool:C1537(Feature.with("coreDataAbstractEntity")))
+							If (Feature.with("coreDataAbstractEntity"))
 								
 								DOM SET XML ATTRIBUTE:C866($Dom_entity; \
 									"parentEntity"; "Record")

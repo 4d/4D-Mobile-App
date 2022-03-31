@@ -413,7 +413,7 @@ Function _cleanCopyProject($projectInput : Object)->$project : Object
 		
 	End for each 
 	
-	If (Not:C34(Feature.with("iOSAlias")))
+	If (Feature.disabled("iOSAlias"))
 		
 		This:C1470._tmpRemoveAlias($project)
 		
@@ -783,7 +783,7 @@ Function _manageDataSet($out : Object)
 	ob_error_combine($out; $out.dumpCopy)
 	//}
 	
-	If (Not:C34(Feature.with("buildWithCmd")))
+	If (Feature.disabled("buildWithCmd"))
 		
 		If (Feature.with("xcDataModelClass"))
 			$out.coreData:=cs:C1710.xcDataModel.new($project).run(\
@@ -943,7 +943,7 @@ Function _generateCapabilities($out : Object; $appFolder : 4D:C1709.Folder)
 	// Internal feature to help to dev iOS project
 Function _devFeatures($out : Object)
 	
-	If (Bool:C1537(Feature.with("generateForDev")))  // In feature until fix project launch with xcode
+	If (Feature.with("generateForDev"))  // In feature until fix project launch with xcode
 		
 		Xcode(New object:C1471(\
 			"action"; "workspace-addsources"; \
@@ -952,7 +952,7 @@ Function _devFeatures($out : Object)
 	//}
 	
 	// Backup into git {
-	If (Bool:C1537(Feature.with("gitCommit")))
+	If (Feature.with("gitCommit"))
 		
 		git(New object:C1471(\
 			"action"; "config core.autocrlf"; \

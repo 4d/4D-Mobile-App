@@ -71,7 +71,7 @@ Case of
 					"project"; PROJECT; \
 					"digest"; True:C214; \
 					"accordingToTarget"; Feature.with("androidDataSet"); \
-					"coreDataSet"; Not:C34(Feature.with("androidDataSet")); \
+					"coreDataSet"; Feature.disabled("androidDataSet"); \
 					"key"; $keyPathname; \
 					"dataSet"; True:C214))
 				

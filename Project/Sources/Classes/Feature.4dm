@@ -22,6 +22,18 @@ Function with($feature) : Boolean
 	return (Bool:C1537(This:C1470._features[This:C1470._feature($feature)]))
 	
 	//====================================================================
+	/// Returns True if the feature is activated
+Function enabled($feature) : Boolean
+	
+	return (Bool:C1537(This:C1470._features[This:C1470._feature($feature)]))
+	
+	//====================================================================
+	/// Returns True if the feature is NOT activated
+Function disabled($feature) : Boolean
+	
+	return (Not:C34(Bool:C1537(This:C1470._features[This:C1470._feature($feature)])))
+	
+	//====================================================================
 	/// Storing a feature as unstable
 Function unstable($feature)
 	

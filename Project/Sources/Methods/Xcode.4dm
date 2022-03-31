@@ -806,7 +806,7 @@ Case of
 				"path"; $Obj_param.path; \
 				"type"; "xcworkspace"))
 			
-			If (Bool:C1537(FEATURE._568))  // FAST SDK MOVE
+			If (Feature.with(568))  // FAST SDK MOVE
 				
 				sdk(New object:C1471(\
 					"action"; "cache"; \
@@ -974,7 +974,7 @@ Case of
 WARNING:
 Get system info should not be called frequently (consumer) as the processor will not change during the execution of the code
 */
-				If (FEATURE.with("simuARMOnAppleProcessor") && (Get system info:C1571().processor="@Apple@"))
+				If (Feature.with("simuARMOnAppleProcessor") && (Get system info:C1571().processor="@Apple@"))
 					$Txt_cmd:=$Txt_cmd+" -arch arm64"  // TODO APPLE SILICON: according to if silicon or not set good arch for simu
 				Else 
 					$Txt_cmd:=$Txt_cmd+" -arch x86_64"  // TODO APPLE SILICON: according to if silicon or not set good arch for simu

@@ -996,7 +996,7 @@ Function checkLocalQueryFilter($table : Object)
 				//mark: - START TRAPPING ERRORS
 				$error:=cs:C1710.error.new("capture")
 				
-				If (FEATURE.with("cancelableDatasetGeneration"))
+				If (Feature.with("cancelableDatasetGeneration"))
 					
 					//$table.count:=ds[$table.name].count($filter.string)
 					var $es : 4D:C1709.EntitySelection

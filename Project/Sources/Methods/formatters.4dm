@@ -365,7 +365,6 @@ Case of
 				
 				If (Length:C16(String:C10($oFormatter.name))#0)
 					
-					// If (Bool(featuresFlags._100990))
 					If ($oOUT.sources.indexOf($oFormatter.name)<0)
 						
 						$oOUT.sources.push($oFormatter.name)
@@ -399,8 +398,6 @@ Case of
 						End if 
 					End if 
 					
-					// End if
-					
 					Case of 
 							
 						: (Length:C16(String:C10($oFormatter.binding))=0)  // Case of simple format, which defined only binding type
@@ -425,14 +422,9 @@ Case of
 								
 								$oOUT.localized.push($oFormatter.name)
 								
-								// If (Bool(featuresFlags._100990))
 								$oOUT.children.push(New object:C1471(\
 									"target"; $oResult.target; \
 									"types"; New collection:C1472("strings")))
-								
-								// Else
-								//$Obj_out.target:=$Obj_result.target  // XXX if multiple files replace by a collection
-								// End if
 								
 							Else 
 								

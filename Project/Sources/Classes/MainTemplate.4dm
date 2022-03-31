@@ -194,7 +194,6 @@ Function afterChildren()->$Obj_out : Object
 		
 		If ($Obj_out.formatters.success)
 			
-			// If (Bool(featuresFlags._100990))
 			// Add all files provided
 			$o:=XcodeProjInject(New object:C1471(\
 				"node"; $Obj_out.formatters; \
@@ -202,13 +201,6 @@ Function afterChildren()->$Obj_out : Object
 				"proj"; This:C1470.input.projfile.value; \
 				"target"; This:C1470.input.path; \
 				"uuid"; This:C1470.input.template.uuid))
-			
-			// Else
-			//  // * Formatters.strings file has been generated, add it
-			//If (Length(String($Obj_out.formatters.target))>0)
-			//$Obj_out.formatters:=XcodeProjInject (New object("path";$Obj_out.formatters.target;"mapping";$Obj_out.projfile.mapping;"proj";$Obj_out.projfile.value;"target";$Obj_in.path;"types";New collection();"uuid";$Obj_in.template.uuid))
-			// End if
-			// End if
 			
 		End if 
 	End if 

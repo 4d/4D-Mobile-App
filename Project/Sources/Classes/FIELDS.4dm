@@ -157,7 +157,7 @@ Function updateFieldList
 	
 	If (Num:C11(This:C1470.tabSelector.data)=1)  // Relations
 		
-		If (Not:C34(Feature.with("android1ToNRelations")))
+		If (Feature.disabled("android1ToNRelations"))
 			
 			tempoDatamodelWith1toNRelation(This:C1470.tableNumber)
 			
@@ -599,7 +599,7 @@ Function getFieldList()->$result : Object
 							
 							
 							//……………………………………………………………………………………………………………
-						: (Not:C34(Feature.with("alias")))
+						: (Feature.disabled("alias"))
 							
 							// <NOT YET AVAILABLE>
 							

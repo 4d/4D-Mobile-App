@@ -556,7 +556,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 									// NOT MANAGED
 									
 									//…………………………………………………………………………………………………
-								: (Not:C34(Feature.with("alias")))
+								: (Feature.disabled("alias"))
 									
 									// <NOT YET AVAILABLE>
 									
@@ -623,7 +623,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 					End if 
 					
 					//…………………………………………………………………………………………………
-				: (Not:C34(Feature.with("alias")))
+				: (Feature.disabled("alias"))
 					
 					// <NOT YET AVAILABLE>
 					
@@ -978,7 +978,7 @@ Function _fieldModel($field : cs:C1710.field; $relatedCatalog : Object)->$fieldM
 			$fieldModel.relatedTableNumber:=$relatedCatalog.relatedTableNumber
 			
 			//…………………………………………………………………………………………………
-		: (Not:C34(Feature.with("alias")))
+		: (Feature.disabled("alias"))
 			
 			// <NOT YET AVAILABLE>
 			
@@ -1104,7 +1104,7 @@ Don't keep:
 				$fields.push($field)
 				
 				//…………………………………………………………………………………………………
-			: (Not:C34(Feature.with("alias")))
+			: (Feature.disabled("alias"))
 				
 				// <NOT YET AVAILABLE>
 				
@@ -1252,7 +1252,7 @@ Function _relatedFields($field : cs:C1710.field; $relationName : Text; $recursiv
 							// NOT MANAGED
 							
 							//…………………………………………………………………………………………………
-						: (Not:C34(Feature.with("alias")))
+						: (Feature.disabled("alias"))
 							
 							// <NOT YET AVAILABLE>
 							
@@ -1289,7 +1289,7 @@ Function _relatedFields($field : cs:C1710.field; $relationName : Text; $recursiv
 			End if 
 			
 			//…………………………………………………………………………………………………
-		: (Not:C34(Feature.with("alias")))
+		: (Feature.disabled("alias"))
 			
 			// <NOT YET AVAILABLE>
 			
