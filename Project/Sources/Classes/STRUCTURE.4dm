@@ -397,7 +397,8 @@ Function fieldList()
 								If ($field.fieldType=Is object:K8:27)  // -> relatedEntity
 									
 									$style:=$style+Underline:K14:4
-									$color:=EDITOR.selectedColor
+									$color:=EDITOR.darkScheme ? Highlight menu text color:K23:8 : EDITOR.selectedColor
+									
 									
 								Else   // -> relatedEntities
 									
@@ -415,7 +416,7 @@ Function fieldList()
 						: ($field.kind="relatedEntity")
 							
 							$style:=Underline:K14:4
-							$color:=EDITOR.selectedColor
+							$color:=EDITOR.darkScheme ? Highlight menu text color:K23:8 : EDITOR.selectedColor
 							
 							//______________________________________________________
 						: ($field.kind="relatedEntities")
