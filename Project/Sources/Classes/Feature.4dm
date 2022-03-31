@@ -77,13 +77,27 @@ Function pending($feature; $version : Integer)
 	
 	//====================================================================
 	/// Storing a feature as only availbale for a particular user
-Function dev($feature; $user : Collection)
+Function dev($feature; $user)
 	
-	If ($user.indexOf(This:C1470.currentUser)#-1)
-		
-		This:C1470._features[This:C1470._feature($feature)]:=True:C214
-		
-	End if 
+	Case of 
+			//______________________________________________________
+		: (Value type:C1509($user)=Is collection:K8:32)
+			
+			This:C1470._features[This:C1470._feature($feature)]:=($user.indexOf(This:C1470.currentUser)#-1)
+			
+			//______________________________________________________
+		: (Value type:C1509($user)=Is text:K8:3)
+			
+			This:C1470._features[This:C1470._feature($feature)]:=($user=This:C1470.currentUser)
+			
+			//______________________________________________________
+		Else 
+			
+			BEEP:C151
+			This:C1470._features[This:C1470._feature($feature)]:=False:C215
+			
+			//______________________________________________________
+	End case 
 	
 	//====================================================================
 	/// Override features activation with local preferences, if any
