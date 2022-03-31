@@ -28,7 +28,6 @@ If (Not:C34(($mode ?? 1)))  // Cooperative
 	
 	//%T-
 	$winRef:=Current form window:C827
-	
 	//%T+
 	
 End if 

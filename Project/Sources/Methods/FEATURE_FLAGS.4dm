@@ -111,10 +111,10 @@ Feature.unstable("modernStructure")
 
 // Mark:-R6
 Feature.main(127558)  // [ANDROID] Data set
+Feature.main(131225)  // [MOBILE] Use aliases
 
 // Mark:-🚧 WIP
 Feature.wip(131983)  // [MOBILE] Launch an action from the Tab bar
-// FEATURE.wip(131225)  // [MOBILE] Use aliases
 // FEATURE.wip("simuARMOnAppleProcessor") // Mac M1 build for simu using arm64
 Feature.wip("duplicateTemplate")  // Allow to duplicate template in host database and show on disk https:// Project.4d.com/issues/98054
 Feature.wip("newFormatterChoiceList")  // Menu to create formatter choice list directly , from data

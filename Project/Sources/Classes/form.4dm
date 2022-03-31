@@ -35,12 +35,12 @@ Function get focused() : Text  /// The name of the object that has the focus in 
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function get darkScheme() : Boolean
 	
-	return ((FORM Get color scheme:C1761="dark"))
+	return (Get Application color scheme:C1763="dark")
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function get lightScheme() : Boolean
 	
-	return ((FORM Get color scheme:C1761="light"))
+	return (Get Application color scheme:C1763="light")
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function get windowTitle() : Text

@@ -319,12 +319,6 @@ If (OB Is empty:C1297(SHARED)) | $reset
 		RECORD.error("Missing file "+$file.path)
 		
 	End if 
-	
-	If (DATABASE.isMatrix)
-		
-		Folder:C1567(fk desktop folder:K87:19).folder("DEV").create()
-		
-	End if 
 End if 
 
 /*================================================================================================================================
@@ -351,6 +345,11 @@ If (OB Is empty:C1297(Feature)) | $reset
 	
 	FEATURE_FLAGS($version; Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile"))
 	
+	If (Feature.with("vdl"))
+		
+		Folder:C1567(fk desktop folder:K87:19).folder("DEV").create()
+		
+	End if 
 End if 
 
 If ($process.cooperative)\

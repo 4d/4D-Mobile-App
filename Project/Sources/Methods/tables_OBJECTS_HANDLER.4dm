@@ -253,7 +253,7 @@ Case of
 		//==================================================
 End case 
 
-If (Bool:C1537(Feature._8858))
+If (Feature.with("vdl"))
 	
 	PROJECT.save()
 	
