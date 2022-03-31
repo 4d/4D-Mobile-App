@@ -28,16 +28,13 @@ If (Not:C34(($mode ?? 1)))  // Cooperative
 	
 	//%T-
 	$winRef:=Current form window:C827
+	
 	//%T+
 	
 End if 
 
 // Default target is the current windows
-If ($message.target=Null:C1517)
-	
-	$message.target:=$winRef
-	
-End if 
+$message.target:=$message.target ? $message.target : $winRef
 
 If (Count parameters:C259>=2)
 	
@@ -58,14 +55,13 @@ End use
 // Add the signal object
 $message.signal:=$response
 
-EDITOR.postMessage($message)
-
 If ($message.target#$winRef)
 	
+	CALL FORM:C1391($message.target; "DO_MESSAGE"; $message)
 	$response.wait()
 	
 Else 
 	
-	// The result must be processed by the callback method, if applicable.
+	CALL FORM:C1391($message.target; "DO_MESSAGE"; $message)
 	
 End if 
