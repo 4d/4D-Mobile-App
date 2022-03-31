@@ -108,7 +108,9 @@ Feature.unstable("listEditor")  // [MOBILE] Create and edit an input control fro
 Feature.unstable("xcDataModelClass")  // Use class to create core data model ie. xcDataModel (useful to refactor for alias)
 Feature.unstable("iosBuildWithClass")  // Use cs.MobileProjectIOS class
 Feature.unstable("modernStructure")
-Feature.unstable(127558)  // [ANDROID] Data set
+
+// Mark:-R6
+Feature.main(127558)  // [ANDROID] Data set
 
 // Mark:-🚧 WIP
 Feature.wip(131983)  // [MOBILE] Launch an action from the Tab bar
@@ -125,6 +127,8 @@ Feature.dev("gitCommit"; New collection:C1472("emarchand"; "phimage"))  // Commi
 Feature.dev("generateForDev"; New collection:C1472("emarchand"; "phimage"))  // Add framework sources and do not add compiled frameworks to workspace, deactivate code signing on framework
 //FEATURE.dev("devGallery"; New collection("emarchand"; "phimage"))  // Allow to dev with local http gallery
 Feature.dev("iOSAlias"; New collection:C1472("emarchand"; "phimage"))
+
+Feature.dev("vdl"; New collection:C1472("vdelachaux"; "Vincent de LACHAUX"))
 
 // Mark:-⛔ PENDING
 Feature.pending(129953)  // [MOBILE] Handle Many-one-Many relations
