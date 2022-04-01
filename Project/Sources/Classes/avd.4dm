@@ -1,12 +1,12 @@
 Class extends androidProcess
 
 /*
-   lep ━ androidProcess ━┳━ adb  
-                         ┣━ androidEmulator 
-                         ┣━ androidProjectGenerator 
-                         ┣━ avd 
-                         ┣━ gradlew  
-                         ┗━ sdkmanager                                
+lep ━ androidProcess ━┳━ adb 
+┣━ androidEmulator 
+┣━ androidProjectGenerator
+┣━ avd
+┣━ gradlew
+┗━ sdkmanager
 */
 
 //=== === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -292,8 +292,8 @@ Function availableDevices()->$devices : Collection
 		
 	Else 
 		
-		RECORD.error("availableDevices() failed")
-		RECORD.log(This:C1470.errors.join("\r"))
+		Logger.error("availableDevices() failed")
+		Logger.log(This:C1470.errors)
 		
 	End if 
 	

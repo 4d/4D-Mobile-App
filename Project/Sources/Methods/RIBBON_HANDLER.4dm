@@ -183,7 +183,7 @@ Case of
 		
 		If (Not:C34($isDevToolAvailable & $isProjectOK & $isDeviceSelected & $withTeamID & $isSdkAvailable))  //#DEBUG LOG
 			
-			RECORD.warning("project: "+Choose:C955($isProjectOK; "ok"; "NOT READY")\
+			Logger.warning("project: "+Choose:C955($isProjectOK; "ok"; "NOT READY")\
 				+" - devTools: "+Choose:C955($isDevToolAvailable; "ready"; "NOT READY")\
 				+" - device: "+Choose:C955($isDeviceSelected; "ok"; "NO DEVICE SELECTED")\
 				+" - teamID: "+Choose:C955($withTeamID; "ok"; "NO TEAM SELECTED")\
@@ -259,14 +259,14 @@ Case of
 					
 					If (EDITOR.devices.android.length=0)
 						
-						RECORD.warning("NO ANDROID SIMULATOR AVAILABLE")
+						Logger.warning("NO ANDROID SIMULATOR AVAILABLE")
 						
 					End if 
 					
 					//______________________________________________________
 				: (EDITOR.ios) & Not:C34(EDITOR.android) & (EDITOR.devices.apple.length=0)
 					
-					RECORD.warning("NO IOS SIMULATOR AVAILABLE")
+					Logger.warning("NO IOS SIMULATOR AVAILABLE")
 					
 					//______________________________________________________
 				: (EDITOR.ios) & (EDITOR.android)
@@ -274,19 +274,19 @@ Case of
 					If (EDITOR.devices.apple.length=0)\
 						 & (EDITOR.devices.android.length=0)
 						
-						RECORD.warning("NO SIMULATOR AVAILABLE")
+						Logger.warning("NO SIMULATOR AVAILABLE")
 						
 					Else 
 						
 						If (EDITOR.devices.apple.length=0)
 							
-							RECORD.warning("NO IOS SIMULATOR AVAILABLE")
+							Logger.warning("NO IOS SIMULATOR AVAILABLE")
 							
 						Else 
 							
 							If (EDITOR.devices.android.length=0)
 								
-								RECORD.warning("NO ANDROID SIMULATOR AVAILABLE")
+								Logger.warning("NO ANDROID SIMULATOR AVAILABLE")
 								
 							End if 
 						End if 
@@ -295,7 +295,7 @@ Case of
 					//______________________________________________________
 				: (EDITOR.android) & (EDITOR.devices.android.length=0)
 					
-					RECORD.warning("NO ANDROID SIMULATOR AVAILABLE")
+					Logger.warning("NO ANDROID SIMULATOR AVAILABLE")
 					
 					//______________________________________________________
 			End case 
@@ -417,7 +417,7 @@ Case of
 		Else 
 			
 			$form.simulator.disable()
-			RECORD.warning("Simulators button is disabled because EDITOR.devices is not yet available")
+			Logger.warning("Simulators button is disabled because EDITOR.devices is not yet available")
 			
 		End if 
 		

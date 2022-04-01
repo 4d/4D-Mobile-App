@@ -107,7 +107,7 @@ If (Num:C11($tableID)>0)
 				
 			Else 
 				
-				RECORD.error("Failed to parse template \""+$tmpl.name+"\"")
+				Logger.error("Failed to parse template \""+$tmpl.name+"\"")
 				
 			End if 
 			

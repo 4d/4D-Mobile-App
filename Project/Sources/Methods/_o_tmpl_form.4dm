@@ -97,19 +97,19 @@ If ($t_formName[[1]]="/")  // Host database resources
 					
 				Else 
 					
-					RECORD.warning("No mandatory for: "+$fileManifest.path)
+					Logger.warning("No mandatory for: "+$fileManifest.path)
 					
 				End if 
 				
 			Else 
 				
-				RECORD.warning("Missing manifest: "+$fileManifest.path)
+				Logger.warning("Missing manifest: "+$fileManifest.path)
 				
 			End if 
 			
 		Else 
 			
-			RECORD.warning("Unmanaged form type: "+$t_typeForm)
+			Logger.warning("Unmanaged form type: "+$t_typeForm)
 			
 		End if 
 	End if 

@@ -100,7 +100,7 @@ Case of
 				
 				If (Num:C11(PROJECT.getCatalog().length)>=500)
 					
-					RECORD.warning("Table number: "+String:C10(PROJECT.getCatalog().length))
+					Logger.warning("Table number: "+String:C10(PROJECT.getCatalog().length))
 					
 				End if 
 				

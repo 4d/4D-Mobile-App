@@ -7,6 +7,7 @@ Class constructor()
 	Super:C1705(Formula:C1597(editor_CALLBACK).source)
 	
 	This:C1470.setWorker("4D Mobile ("+String:C10(This:C1470.window)+")")
+	This:C1470.callWorker(Formula:C1597(COMPONENT_INIT).source)
 	
 	This:C1470.design()
 	
@@ -256,14 +257,14 @@ Function init()
 	// Create the context, id any
 	If (Form:C1466.$dialog=Null:C1517)
 		
-		RECORD.info("📍 Create $dialog (PROJECT_EDITOR)")
+		Logger.info("📍 Create $dialog (PROJECT_EDITOR)")
 		Form:C1466.$dialog:=New object:C1471
 		
 	End if 
 	
 	If (Form:C1466.$dialog[This:C1470.name]=Null:C1517)
 		
-		RECORD.info("🚧 Create "+This:C1470.name+"'s context (class "+Current method name:C684+")")
+		Logger.info("🚧 Create "+This:C1470.name+"'s context (class "+Current method name:C684+")")
 		Form:C1466.$dialog[This:C1470.name]:=New object:C1471
 		
 	End if 
@@ -488,7 +489,7 @@ Function addTask($task : Text)
 	
 	If (This:C1470.pendingTasks.query("name = :1"; $task).pop()=Null:C1517)
 		
-		RECORD.info("START: "+$task)
+		Logger.info("START: "+$task)
 		
 		This:C1470.pendingTasks.push(New object:C1471(\
 			"name"; $task))
@@ -506,7 +507,7 @@ Function removeTask($task : Text)
 	
 	If ($indx#-1)
 		
-		RECORD.info("END: "+$task)
+		Logger.info("END: "+$task)
 		
 		This:C1470.pendingTasks.remove($indx)
 		
@@ -563,28 +564,28 @@ Function hidePicker()
 	
 	This:C1470.callMeBack("pickerHide")
 	
-	RECORD.info("hidePicker()")
+	Logger.info("hidePicker()")
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function hideBrowser()
 	
 	This:C1470.callMeBack("hideBrowser")
 	
-	RECORD.info("hideBrowser()")
+	Logger.info("hideBrowser()")
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function updateRibbon()
 	
 	This:C1470.callMeBack("updateRibbon")
 	
-	RECORD.info("updateRibbon()")
+	Logger.info("updateRibbon()")
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function refreshViews()
 	
 	This:C1470.callMeBack("refreshViews")
 	
-	RECORD.info("refreshViews()")
+	Logger.info("refreshViews()")
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function setHeader()

@@ -345,7 +345,7 @@ Function fieldList($table)->$result : Object
 						//……………………………………………………………………………………………………………
 						//FIXME: BUG EN COMPILÉ
 						//: ($field.kind="relatedEntity")\
-														 || (($field.kind="alias") && (Bool($field.isToOne)))
+																					 || (($field.kind="alias") && (Bool($field.isToOne)))
 						
 					: ($field.kind="relatedEntity")\
 						 || (($field.kind="alias") & (Bool:C1537($field.isToOne)))
@@ -584,7 +584,7 @@ Function setTemplate($browser : Object)
 		
 		If ($newTemplate#$currentTemplate)
 			
-			RECORD.info("Selected template: "+$newTemplate)
+			Logger.info("Selected template: "+$newTemplate)
 			
 			$template:=cs:C1710.tmpl.new($newTemplate; $selector).update()
 			

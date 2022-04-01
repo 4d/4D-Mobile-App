@@ -12,7 +12,7 @@ $form:=Length:C16($form)>0 ? $form : Current form name:C1298
 // Create the object if any
 If (Form:C1466.$dialog=Null:C1517)
 	
-	RECORD.info("📍 Create $dialog (panel_Definition: "+$form+")")
+	Logger.info("📍 Create $dialog (panel_Definition: "+$form+")")
 	
 	Form:C1466.$dialog:=New object:C1471(\
 		$form; New object:C1471)
@@ -21,7 +21,7 @@ Else
 	
 	If (Form:C1466.$dialog[$form]=Null:C1517)
 		
-		RECORD.info("👀 Create "+$form+"'s object (panel_Definition)")
+		Logger.info("👀 Create "+$form+"'s object (panel_Definition)")
 		Form:C1466.$dialog[$form]:=New object:C1471
 		
 	End if 
@@ -30,7 +30,7 @@ End if
 If (OB Is empty:C1297(Form:C1466.$dialog[$form]))
 	
 	// Instantiate the corresponding dialog class
-	RECORD.info("🚧 Create "+$form+"'s class (panel_Definition)")
+	Logger.info("🚧 Create "+$form+"'s class (panel_Definition)")
 	Form:C1466.$dialog[$form]:=cs:C1710[$form].new()
 	
 	// Define local functions ***** SHOULD BE NO MORE NECESSARY WHEN CLASSES WILL BE USED ANYWHERE ****

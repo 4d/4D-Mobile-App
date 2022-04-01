@@ -6,7 +6,7 @@ var _o_UI : Object  // UI constants
 
 var Feature : Object  // Feature flags
 
-var RECORD : Object  // General journal
+var Logger : Object  // General journal
 
 var PROJECT : cs:C1710.project
 var DATABASE : cs:C1710.database

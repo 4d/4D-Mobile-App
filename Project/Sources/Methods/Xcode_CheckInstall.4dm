@@ -29,7 +29,12 @@ var $Xcode : cs:C1710.Xcode
 
 // NO PARAMETERS REQUIRED
 
-If (Value type:C1509(SHARED)=Is undefined:K8:13)  // For testing purposes
+If (SHARED=Null:C1517)  // FIXME #105596
+	
+	var Logger : cs:C1710.logger
+	Logger:=Logger || cs:C1710.logger.new()
+	Logger.warning("SHARED=Null")
+	Logger.trace()
 	
 	COMPONENT_INIT
 	

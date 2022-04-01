@@ -16,41 +16,14 @@ var $progress : cs:C1710.progress
 
 ASSERT:C1129(Count parameters:C259>=2)
 
-var DATABASE; RECORD : Object
+var DATABASE : cs:C1710.database
+DATABASE:=DATABASE || cs:C1710.database.new()
 
-Case of 
-		
-	: (RECORD#Null:C1517)
-		
-		//already initialized
-		
-		//______________________________________________________
-	: (Is macOS:C1572)
-		
-		RECORD:=logger("~/Library/Logs/"+Folder:C1567(fk database folder:K87:14).name+".log")
-		
-		//______________________________________________________
-	: (Is Windows:C1573)
-		
-		RECORD:=logger(Folder:C1567(fk user preferences folder:K87:10).folder(Folder:C1567(fk database folder:K87:14; *).name).file(Folder:C1567(fk database folder:K87:14).name+".log"))
-		
-		//______________________________________________________
-	Else 
-		
-		TRACE:C157
-		
-		//______________________________________________________
-End case 
+var Logger : cs:C1710.logger
+Logger:=Logger || cs:C1710.logger.new()
+Logger.verbose:=DATABASE.isMatrix
 
-If (DATABASE=Null:C1517)
-	
-	DATABASE:=cs:C1710.database.new()
-	
-End if 
-
-RECORD.verbose:=DATABASE.isMatrix
-
-RECORD.info("Verify "+$target+" SDK, Server: "+$server)
+Logger.info("Verify "+$target+" SDK, Server: "+$server)
 
 $withUI:=True:C214
 
@@ -79,7 +52,7 @@ Case of
 	Else 
 		
 		$run:=False:C215
-		RECORD.error("Uknown SDK target: "+$target)
+		Logger.error("Uknown SDK target: "+$target)
 		
 		//______________________________________________________
 End case 
@@ -189,7 +162,7 @@ Case of
 					Else 
 						
 						$run:=False:C215
-						RECORD.error("Uknown SDK target: "+$target)
+						Logger.error("Uknown SDK target: "+$target)
 						
 						//______________________________________________________
 				End case 
@@ -214,7 +187,7 @@ Case of
 	Else 
 		
 		$run:=False:C215
-		RECORD.error("Unknown server: "+$server)
+		Logger.error("Unknown server: "+$server)
 		
 		//______________________________________________________
 End case 
@@ -295,7 +268,7 @@ If ($run)
 			//______________________________________________________
 		: ($run)
 			
-			RECORD.info("Downloading: "+$url)
+			Logger.info("Downloading: "+$url)
 			
 			If ($withUI)
 				
@@ -346,7 +319,7 @@ If ($run)
 					
 				End if 
 				
-				RECORD.info("Unzipping: "+$sdk.path)
+				Logger.info("Unzipping: "+$sdk.path)
 				
 /* START HIDING ERRORS */
 				$error:=cs:C1710.error.new("hide")
@@ -391,7 +364,7 @@ If ($run)
 					
 					$fileManifest.setText(JSON Stringify:C1217($manifest; *))
 					
-					RECORD.info("The 4D Mobile "+$target+" SDK was updated to version "+$manifest.version)
+					Logger.info("The 4D Mobile "+$target+" SDK was updated to version "+$manifest.version)
 					
 					//$sdk.delete()
 					
@@ -403,13 +376,13 @@ If ($run)
 					
 				Else 
 					
-					RECORD.warning("Failed to unarchive "+$sdk.path)
+					Logger.warning("Failed to unarchive "+$sdk.path)
 					
 				End if 
 				
 			Else 
 				
-				RECORD.warning($http.url+": "+$http.lastError)
+				Logger.warning($http.url+": "+$http.lastError)
 				
 			End if 
 			
@@ -422,7 +395,7 @@ If ($run)
 			//______________________________________________________
 		: ($http.status=8858)
 			
-			RECORD.warning("The update of 4D Mobile "+$target+" SDK is locked")
+			Logger.warning("The update of 4D Mobile "+$target+" SDK is locked")
 			
 			//______________________________________________________
 		: ($http.status=200)
@@ -430,12 +403,12 @@ If ($run)
 			// Force manifest modification date to avoid a new execution today
 			$fileManifest.setText($fileManifest.getText())
 			
-			RECORD.info("The 4D Mobile "+$target+" SDK is up to date")
+			Logger.info("The 4D Mobile "+$target+" SDK is up to date")
 			
 			//______________________________________________________
 		Else 
 			
-			RECORD.error($http.url+": "+$http.lastError)
+			Logger.error($http.url+": "+$http.lastError)
 			
 			//______________________________________________________
 	End case 

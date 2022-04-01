@@ -402,7 +402,7 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="openThe4dMobileAppLog")
 				
-				RECORD.open()
+				Logger.open()
 				
 				//______________________________________________________
 			: ($menu.choice="clearXcodeBuild")

@@ -86,7 +86,7 @@ If ($oOUT.success)
 		
 	Else   // Old mechanism
 		
-		RECORD.info("#Old mechanism for publishedTableList").trace()
+		Logger.info("#Old mechanism for publishedTableList").trace()
 		
 		$oOUT.ids:=New collection:C1472
 		$oOUT.names:=New collection:C1472

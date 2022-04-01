@@ -64,7 +64,7 @@ $context:=$form.$
 
 If (OB Is empty:C1297($context))  // First load
 	
-	RECORD.info("VIEWS init")
+	Logger.info("VIEWS init")
 	
 	// § DEFINE UI CONSTRAINTS §
 	cs:C1710.ob.new($context).createPath("constraints.rules"; Is collection:K8:32)
@@ -202,7 +202,7 @@ Case of
 				
 				If ($datamodel=Null:C1517) | OB Is empty:C1297($datamodel)
 					
-					RECORD.warning("DATA MODEL IS EMPTY")
+					Logger.warning("DATA MODEL IS EMPTY")
 					
 					// No published table
 					$form.noDataModel.show()
@@ -227,7 +227,7 @@ Case of
 						//………………………………………………………………………………………………………………………………………
 					: (Bool:C1537($context.draw))
 						
-						RECORD.info("Draw template")
+						Logger.info("Draw template")
 						
 						$form.fieldGroup.setVisible(Length:C16($context.tableNum())>0)
 						$form.previewGroup.setVisible(Length:C16($context.tableNum())>0)
@@ -251,7 +251,7 @@ Case of
 							
 							$formName:=String:C10(PROJECT[$typeForm][$context.tableNum()].form)
 							
-							RECORD.info("Current template : "+$formName)
+							Logger.info("Current template : "+$formName)
 							
 							If (String:C10($context.template.name)#$formName)
 								

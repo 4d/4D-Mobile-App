@@ -549,6 +549,7 @@
 			"error",
 			"http",
 			"lep",
+			"logger",
 			"menu",
 			"ob",
 			"plist",
@@ -705,7 +706,6 @@
 	},
 	"HTUs": {
 		"methods": [
-			"HTU_logs",
 			"HTU_progress",
 			"htuProgressDoSomething"
 		]
@@ -883,7 +883,6 @@
 		"methods": [
 			"COMPILER_classes",
 			"dat",
-			"logger",
 			"ob findPropertyValues"
 		]
 	},

@@ -25,18 +25,15 @@ var _o_UI : Object  // UI constants
 
 var Feature : cs:C1710.Feature  // Feature flags
 
-var RECORD : Object  // General journal
-
-var PROJECT : cs:C1710.project
-var DATABASE : cs:C1710.database
-var ENV : cs:C1710.env
-
-// ----------------------------------------------------
-// Initialisations
 $reset:=Macintosh option down:C545
 
+var ENV : cs:C1710.env
 ENV:=cs:C1710.env.new()
+
+var PROJECT : cs:C1710.project
 PROJECT:=cs:C1710.project.new()
+
+var DATABASE : cs:C1710.database
 DATABASE:=cs:C1710.database.new()
 DATABASE.projects:=DATABASE.root.folder("Mobile Projects")
 DATABASE.projects.create()  // Make sure the directory exists
@@ -44,65 +41,32 @@ DATABASE.products:=DATABASE.root.parent.folder(DATABASE.structure.name+" - Mobil
 
 $process:=cs:C1710.process.new()
 
-
-// ----------------------------------------------------
 // Disable asserts in release mode
 SET ASSERT ENABLED:C1131(DATABASE.isInterpreted; *)
 
 // Get the config file
 $file:=Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile")
+$pref:=$file.exists ? JSON Parse:C1218($file.getText()) : New object:C1471
 
-If ($file.exists)
+//MARK:-LOGGER
+var Logger : cs:C1710.logger  // General journal
+Logger:=$reset ? Null:C1517 : Logger
+Logger:=Logger || cs:C1710.logger.new()
+
+If (Not:C34($process.worker))
 	
-	$pref:=JSON Parse:C1218($file.getText())
-	
-Else 
-	
-	// Create the preferences
-	$pref:=New object:C1471
+	Logger.clear()
 	
 End if 
 
-// ================================================================================================================================
-//                                                               LOGGER
-// ================================================================================================================================
+Logger.verbose:=(DATABASE.isMatrix)
+$initLog:=True:C214
 
-If (OB Is empty:C1297(RECORD)) | $reset
-	
-	Case of 
-			//______________________________________________________
-		: (Is macOS:C1572)
-			
-			RECORD:=logger("~/Library/Logs/"+Folder:C1567(fk database folder:K87:14).name+".log")
-			
-			//______________________________________________________
-		: (Is Windows:C1573)
-			
-			RECORD:=logger(Folder:C1567(fk user preferences folder:K87:10).folder(Folder:C1567(fk database folder:K87:14; *).name).file(Folder:C1567(fk database folder:K87:14).name+".log"))
-			
-			//______________________________________________________
-		Else 
-			
-			TRACE:C157
-			
-			//______________________________________________________
-	End case 
-	
-	If (Not:C34($process.worker))
-		
-		RECORD.reset()
-		
-	End if 
-	
-	RECORD.verbose:=(DATABASE.isMatrix)
-	$initLog:=True:C214
-	
-End if 
 
-// ================================================================================================================================
-//                                                            COMMON VALUES
-// ================================================================================================================================
+//MARK:-COMMON VALUES
 If (OB Is empty:C1297(SHARED)) | $reset
+	
+	//Formula($process.worker ? BEEP : IDLE).call()
 	
 	SHARED:=New object:C1471
 	
@@ -310,20 +274,18 @@ If (OB Is empty:C1297(SHARED)) | $reset
 			
 		Else 
 			
-			RECORD.error("Failed to parse "+File:C1566("/RESOURCES/Resources.json").path)
+			Logger.error("Failed to parse "+File:C1566("/RESOURCES/Resources.json").path)
 			
 		End if 
 		
 	Else 
 		
-		RECORD.error("Missing file "+$file.path)
+		Logger.error("Missing file "+$file.path)
 		
 	End if 
 End if 
 
-/*================================================================================================================================
-FEATURES FLAGS
-================================================================================================================================*/
+//MARK:-FEATURES FLAGS
 If (OB Is empty:C1297(Feature)) | $reset
 	
 	var $version : Integer
@@ -357,19 +319,44 @@ If ($process.cooperative)\
  & ($initLog)
 	
 	$t:=SHARED.ide.version
+	RECORD.log("4D "+$t[[1]]+$t[[2]]+Choose:C955($t[[3]]="0"; "."+$t[[4]]; "R"+$t[[3]])+" ("+String:C10(SHARED.ide.build)+")")
+	RECORD.log("Component "+SHARED.component.version)
+	RECORD.line()
+	
+	For each ($t; FEATURE)
+		
+		If (Value type:C1509(FEATURE[$t])=Is boolean:K8:9)
+			
+			RECORD.log("feature "+Replace string:C233($t; "_"; "")+": "+Choose:C955(FEATURE[$t]; "Enabled"; "Disabled"))
+			
+		End if 
+	End for each 
 	RECORD.log("4D "+$t[[1]]+$t[[2]]+($t[[3]]="0" ? "."+$t[[4]] : "R"+$t[[3]])+" ("+String:C10(SHARED.ide.build)+")")
 	RECORD.log("Component "+SHARED.component.version).line()
 	Feature.log(Formula:C1597(RECORD.log($1))).line()
+	Logger.log("4D "+$t[[1]]+$t[[2]]+($t[[3]]="0" ? "."+$t[[4]] : "R"+$t[[3]])+" ("+String:C10(SHARED.ide.build)+")")
+	Logger.log("Component "+SHARED.component.version).line()
+	
+	Feature.log(Formula:C1597(Logger.log($1)))
+	
+	RECORD.line()
+	
+	Logger.line()
 	
 End if 
 
-/*================================================================================================================================
-AFTER FLAGS
-================================================================================================================================*/
+//MARK:-AFTER FLAGS
 
 SET ASSERT ENABLED:C1131(Feature.with("debug"); *)
+
+SET ASSERT ENABLED:C1131(FEATURE.with("debug"); *)
 
 RECORD.info("Assert "+Choose:C955(Get assert enabled:C1130; "Enabled"; "Disabled"))
 
 // ----------------------------------------------------
 // End
+RECORD.info("Assert "+Choose:C955(Get assert enabled:C1130; "Enabled"; "Disabled"))
+
+// ----------------------------------------------------
+// End
+Logger.info("Assert "+Choose:C955(Get assert enabled:C1130; "Enabled"; "Disabled"))

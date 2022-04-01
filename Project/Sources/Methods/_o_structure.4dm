@@ -31,10 +31,10 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
 	If (SHARED=Null:C1517)  // FIXME #105596
 		
-		If (RECORD#Null:C1517)
-			RECORD.warning("SHARED=Null")
-			RECORD.trace()
-		End if 
+		var Logger : cs:C1710.logger
+		Logger:=Logger || cs:C1710.logger.new()
+		Logger.warning("SHARED=Null")
+		Logger.trace()
 		
 		COMPONENT_INIT
 		
@@ -607,7 +607,7 @@ Don't keep:
 							//For each ($Txt_field;$Obj_relatedDataClass)
 							
 							//If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																																
+																
 							//If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
 							//$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])

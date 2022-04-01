@@ -697,7 +697,7 @@ Function isField($field) : Boolean
 	
 	Case of 
 			//______________________________________________________
-		: ($field=Null:C1517)  // Value type($field)=Is object seems to be true if an object null is passed 
+		: ($field=Null:C1517)  // Value type($field)=Is object seems to be true if an object null is passed
 			
 			return False:C215
 			
@@ -825,7 +825,7 @@ Function isAlias($attribute : Variant) : Boolean
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// ?? 
+	// ??
 Function isLink
 	var $0 : Boolean
 	var $1 : Object
@@ -1046,7 +1046,7 @@ Function checkLocalQueryFilter($table : Object)
 		End if 
 	End if 
 	
-	// Returns alias destination if alias 
+	// Returns alias destination if alias
 	// CLEAN: maybe move to structure? or somewhere where ds is authorized
 Function __getAliasDestination($dataClass : Variant; $attribute : Variant; $recursive : Boolean)->$result : Object
 	
@@ -1623,7 +1623,7 @@ Function updateFormDefinitions()
 	var $formType; $tableID : Text
 	var $field; $target : Object
 	
-	RECORD.info("updateFormDefinitions()")
+	Logger.info("updateFormDefinitions()")
 	
 	For each ($formType; New collection:C1472("list"; "detail"))
 		
@@ -1782,7 +1782,7 @@ Function table($table) : cs:C1710.table
 	return (This:C1470.dataModel[This:C1470._tableID($table)])
 	
 	//================================================================================
-	/// Gets a datamodel field definition from ID, field number, name or object 
+	/// Gets a datamodel field definition from ID, field number, name or object
 Function field($table; $field) : Object
 	
 	$table:=This:C1470.table($table)

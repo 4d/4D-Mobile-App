@@ -77,7 +77,7 @@ Function doRun()->$Obj_out : Object
 				
 			Else 
 				
-				RECORD.error("Invalid path: \""+$pathForm.path+"\"")
+				Logger.error("Invalid path: \""+$pathForm.path+"\"")
 				ob_error_add($Obj_out; "Invalid path: "+$pathForm.path)
 				
 			End if 
@@ -482,7 +482,7 @@ Function doRun()->$Obj_out : Object
 			
 		Else 
 			
-			RECORD.error("Invalid path: \""+$folder.path+"\"")
+			Logger.error("Invalid path: \""+$folder.path+"\"")
 			ob_error_add($Obj_out; "Invalid path: "+$folder.path)
 			
 		End if 

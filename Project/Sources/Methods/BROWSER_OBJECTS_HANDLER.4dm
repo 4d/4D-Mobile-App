@@ -192,7 +192,7 @@ Case of
 										//______________________________________________________
 									Else 
 										
-										RECORD.warning("Unknown resource: "+$formName)
+										Logger.warning("Unknown resource: "+$formName)
 										
 										//______________________________________________________
 								End case 

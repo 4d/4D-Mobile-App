@@ -17,7 +17,7 @@ Function run($path : Text; $options : Object)->$out : Object
 	If (This:C1470.dataModel=Null:C1517)
 		
 		ASSERT:C1129(dev_Matrix; "No data model passed to xcDataModel")
-		RECORD.warning("dataModel is null to generate xcDataModel (core data ios)")
+		Logger.warning("dataModel is null to generate xcDataModel (core data ios)")
 		return 
 	End if 
 	
@@ -313,7 +313,7 @@ Function _createEntity($options : Object; $Dom_model : Text; $tableID : Integer;
 		Else 
 			
 			ob_warning_add($out; "Filter '"+String:C10($tableInfo.filter.string)+"' of table '"+$Txt_tableName+"' not validated")
-			RECORD.warning("Filter '"+String:C10($tableInfo.filter.string)+"' of table '"+$Txt_tableName+"' not validated")
+			Logger.warning("Filter '"+String:C10($tableInfo.filter.string)+"' of table '"+$Txt_tableName+"' not validated")
 			
 		End if 
 	End if 

@@ -63,8 +63,11 @@ Else
 		// IF no parameters, load from previous launched file
 		If (SHARED=Null:C1517)
 			
-			RECORD.warning("SHARED=Null")
-			RECORD.trace()
+			var Logger : cs:C1710.logger
+			Logger:=Logger || cs:C1710.logger.new()
+			Logger.warning("SHARED=Null")
+			Logger.trace()
+			
 			COMPONENT_INIT
 			
 		End if 

@@ -182,7 +182,7 @@ If ($project.info.ideVersion=Null:C1517)  // "1720"
 	End if 
 End if 
 
-RECORD.info("Project version: "+String:C10($project.info.version))
+Logger.info("Project version: "+String:C10($project.info.version))
 
 // MARK:v2
 If (Num:C11($project.info.version)<2)
@@ -215,7 +215,7 @@ If (Num:C11($project.info.version)<2)
 	End if 
 	
 	$project.info.version:=2
-	RECORD.warning("Upadted to version: "+String:C10($project.info.version))
+	Logger.warning("Upadted to version: "+String:C10($project.info.version))
 	
 End if 
 
@@ -250,7 +250,7 @@ If (Num:C11($project.info.version)<3)
 		End for each 
 		
 		$project.info.version:=3
-		RECORD.warning("Upadted to version: "+String:C10($project.info.version))
+		Logger.warning("Upadted to version: "+String:C10($project.info.version))
 		
 	End if 
 End if 
@@ -455,7 +455,7 @@ If (Num:C11($project.info.version)<=4)
 	End if 
 	
 	$project.info.version:=4
-	RECORD.warning("Upadted to version: "+String:C10($project.info.version))
+	Logger.warning("Upadted to version: "+String:C10($project.info.version))
 	
 End if 
 
@@ -513,7 +513,7 @@ If (Num:C11($project.info.version)<5)
 	End if 
 	
 	$project.info.version:=5
-	RECORD.warning("Upadted to version: "+String:C10($project.info.version))
+	Logger.warning("Upadted to version: "+String:C10($project.info.version))
 	
 End if 
 
@@ -545,7 +545,7 @@ If (Num:C11($project.info.version)<6)
 	End if 
 	
 	$project.info.version:=6
-	RECORD.warning("Upadted to version: "+String:C10($project.info.version))
+	Logger.warning("Upadted to version: "+String:C10($project.info.version))
 	
 End if 
 
@@ -658,7 +658,7 @@ If (Num:C11($project.info.version)<7)
 	
 	$isUpgraded:=True:C214
 	$project.info.version:=7
-	RECORD.warning("Upadted to version: "+String:C10($project.info.version))
+	Logger.warning("Upadted to version: "+String:C10($project.info.version))
 	
 End if 
 
@@ -687,7 +687,7 @@ If (True:C214)
 	// * REPLACE THE OLD INTERNAL FORMS WITH A USER ARCHIVE AS IF HE HAD DOWNLOADED IT
 	If ($project.list#Null:C1517)
 		
-		RECORD.info("Check list forms")
+		Logger.info("Check list forms")
 		
 		$internalFolder:=$path.listForms()
 		$userFolder:=$path.hostlistForms()
@@ -705,7 +705,7 @@ If (True:C214)
 					
 					If (Not:C34($internalFolder.folder($t).exists))
 						
-						RECORD.warning("Missing internal form: "+$t)
+						Logger.warning("Missing internal form: "+$t)
 						
 						$template:=$c.query("old=:1"; $t).pop()
 						
@@ -721,23 +721,23 @@ If (True:C214)
 								If ($file#Null:C1517)
 									
 									$project.list[$tableID].form:="/"+$template.new
-									RECORD.info("Replaced by: "+$project.list[$tableID].form)
+									Logger.info("Replaced by: "+$project.list[$tableID].form)
 									
 								Else 
 									
-									RECORD.error("Error during copy: "+$file.path)
+									Logger.error("Error during copy: "+$file.path)
 									
 								End if 
 								
 							Else 
 								
-								RECORD.error("Missing archive: "+$file.path)
+								Logger.error("Missing archive: "+$file.path)
 								
 							End if 
 							
 						Else 
 							
-							RECORD.error("Unknown template: "+$t)
+							Logger.error("Unknown template: "+$t)
 							
 						End if 
 					End if 
@@ -748,7 +748,7 @@ If (True:C214)
 	
 	If ($project.detail#Null:C1517)
 		
-		RECORD.info("Check detail forms")
+		Logger.info("Check detail forms")
 		
 		$internalFolder:=$path.detailForms()
 		$userFolder:=$path.hostdetailForms()
@@ -766,7 +766,7 @@ If (True:C214)
 					
 					If (Not:C34($internalFolder.folder($t).exists))
 						
-						RECORD.warning("Missing internal form: "+$t)
+						Logger.warning("Missing internal form: "+$t)
 						
 						$template:=$c.query("old=:1"; $t).pop()
 						
@@ -782,23 +782,23 @@ If (True:C214)
 								If ($file#Null:C1517)
 									
 									$project.detail[$tableID].form:="/"+$template.new
-									RECORD.info("Replaced by: "+$project.detail[$tableID].form)
+									Logger.info("Replaced by: "+$project.detail[$tableID].form)
 									
 								Else 
 									
-									RECORD.error("Error during copy: "+$file.path)
+									Logger.error("Error during copy: "+$file.path)
 									
 								End if 
 								
 							Else 
 								
-								RECORD.error("Missing archive: "+$file.path)
+								Logger.error("Missing archive: "+$file.path)
 								
 							End if 
 							
 						Else 
 							
-							RECORD.error("Unknown template: "+$t)
+							Logger.error("Unknown template: "+$t)
 							
 						End if 
 					End if 

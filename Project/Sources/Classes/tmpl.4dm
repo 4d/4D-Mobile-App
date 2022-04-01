@@ -68,7 +68,7 @@ Class constructor($name : Text; $type : Text)
 					
 				Else 
 					
-					RECORD.warning("Missing manifest for the template "+This:C1470.title)
+					Logger.warning("Missing manifest for the template "+This:C1470.title)
 					
 				End if 
 				
@@ -82,7 +82,7 @@ Class constructor($name : Text; $type : Text)
 					
 				Else 
 					
-					RECORD.warning("Missing svg for the template "+This:C1470.title)
+					Logger.warning("Missing svg for the template "+This:C1470.title)
 					
 				End if 
 			End if 
@@ -582,19 +582,19 @@ Function getSources($name : Text; $type : Text)->$template : 4D:C1709.Folder
 							
 						Else 
 							
-							RECORD.warning("No mandatory for: "+$manifest.path)
+							Logger.warning("No mandatory for: "+$manifest.path)
 							
 						End if 
 						
 					Else 
 						
-						RECORD.error("Missing manifest: "+$manifest.path)
+						Logger.error("Missing manifest: "+$manifest.path)
 						
 					End if 
 					
 				Else 
 					
-					RECORD.error("Unmanaged form type: "+$formType)
+					Logger.error("Unmanaged form type: "+$formType)
 					
 				End if 
 			End if 

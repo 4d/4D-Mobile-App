@@ -15,10 +15,14 @@ Class constructor($sorted : Boolean)
 	
 	This:C1470.allowedTypes:=New collection:C1472("string"; "bool"; "date"; "number"; "image")
 	
-	If ((Feature=Null:C1517) && dev_Matrix)
+	If (SHARED=Null:C1517)  // FIXME #105596
 		
-		ASSERT:C1129(False:C215; "Process VAR like FEATURE are null, maybe you abort the process?")
-		COMPONENT_INIT  // Will reinit it, but be carreful it could change behaviour, because some data could have been lost
+		var Logger : cs:C1710.logger
+		Logger:=Logger || cs:C1710.logger.new()
+		Logger.warning("SHARED=Null")
+		Logger.trace()
+		
+		COMPONENT_INIT
 		
 	End if 
 	

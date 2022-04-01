@@ -59,11 +59,6 @@ If (False:C215)  // Tools
 	C_OBJECT:C1216(dat; $2)
 	
 	//______________________________________________________
-	C_OBJECT:C1216(logger; $0)
-	C_VARIANT:C1683(logger; $1)
-	C_OBJECT:C1216(logger; $2)
-	
-	//______________________________________________________
 End if 
 
 If (False:C215)  // Demos

@@ -639,7 +639,7 @@ Case of
 				
 			Else 
 				
-				RECORD.warning("$Obj_in.project.dataModel is null")
+				Logger.warning("$Obj_in.project.dataModel is null")
 				
 			End if 
 		End if 

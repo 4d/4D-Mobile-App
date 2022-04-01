@@ -253,7 +253,7 @@ Case of
 					
 				Else 
 					
-					RECORD.error("missing default avd definition")
+					Logger.error("missing default avd definition")
 					
 				End if 
 				
