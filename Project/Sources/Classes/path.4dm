@@ -493,7 +493,7 @@ Function hostNavigationForms($create : Boolean)->$folder : 4D:C1709.Folder  // f
 Function androidDb($relativePath : Text)->$file : 4D:C1709.File
 	
 	var $currentFolder : 4D:C1709.Folder
-	$currentFolder:=Folder:C1567($relativePath; fk platform path:K87:2)
+	$currentFolder:=Folder:C1567($relativePath)
 	
 	If ($currentFolder.fullName="project.dataSet")
 		
