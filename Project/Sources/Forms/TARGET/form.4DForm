@@ -88,6 +88,6 @@
 			"View 1": {}
 		}
 	},
-	"method": "TARGET",
+	"method": "panel_HANDLE_EVENT",
 	"geometryStamp": 571
 }

@@ -7,7 +7,7 @@ Class constructor($target)
 	
 	This:C1470.target:=Null:C1517
 	
-	This:C1470.verbose:=False:C215
+	This:C1470._verbose:=False:C215
 	This:C1470.success:=True:C214
 	
 	This:C1470.component:=Folder:C1567(fk database folder:K87:14).name
@@ -19,6 +19,14 @@ Class constructor($target)
 	This:C1470.errors:=New collection:C1472()
 	
 	This:C1470.setTarget($target)
+	
+Function get verbose() : Boolean
+	
+	return (This:C1470._verbose)
+	
+Function set verbose($verbose : Boolean) : Boolean
+	
+	This:C1470._verbose:=$verbose
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function get lastError() : Text
@@ -183,6 +191,12 @@ Function start()
 		//%T-
 		Case of 
 				
+				//……………………………………………………………………………………………………
+			: (This:C1470.isWorker)
+				
+				// Worker can't call SET DATABASE PARAMETER
+				This:C1470._pushError(".start() cannot be used for a worker!")
+				
 				//______________________________________________________
 			: (This:C1470.target=Into 4D commands log:K38:7)
 				
@@ -204,7 +218,6 @@ Function start()
 				
 				//______________________________________________________
 		End case 
-		
 		//%T+
 		
 	End if 
@@ -216,6 +229,12 @@ Function stop()
 		
 		//%T-
 		Case of 
+				
+				//……………………………………………………………………………………………………
+			: (This:C1470.isWorker)
+				
+				// Worker can't call SET DATABASE PARAMETER
+				This:C1470._pushError(".stop() cannot be used for a worker!")
 				
 				//______________________________________________________
 			: (This:C1470.target=Into 4D commands log:K38:7)
@@ -236,7 +255,6 @@ Function stop()
 				
 				//______________________________________________________
 		End case 
-		
 		//%T+
 		
 	End if 
@@ -246,7 +264,14 @@ Function reset()
 	
 	If (This:C1470._destination="4D")
 		
+		//%T-
 		Case of 
+				
+				//……………………………………………………………………………………………………
+			: (This:C1470.isWorker)
+				
+				// Worker can't call SET DATABASE PARAMETER
+				This:C1470._pushError(".reset() cannot be used for a worker!")
 				
 				//______________________________________________________
 			: (This:C1470.target=Into 4D commands log:K38:7)
@@ -269,6 +294,7 @@ Function reset()
 				
 				//______________________________________________________
 		End case 
+		//%T+
 		
 	Else 
 		
@@ -408,7 +434,6 @@ Function _restore()
 				
 				//……………………………………………………………………………………………………
 		End case 
-		
 		//%T+
 		
 	End if 

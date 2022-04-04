@@ -1,4 +1,4 @@
-//%attributes = {"invisible":true}
+//%attributes = {"invisible":true,"preemptive":"capable"}
 // ----------------------------------------------------
 // Project method : editor_GET_DEVICES
 // ID[738D4FF89D414DF286DAB9CACD196B02]
@@ -136,6 +136,6 @@ End case
 // Return
 If (Bool:C1537($in.caller))
 	
-	CALL FORM:C1391($in.caller; Formula:C1597(editor_CALLBACK).source; "getDevices"; $out)
+	CALL FORM:C1391($in.caller; "editor_CALLBACK"; "getDevices"; $out)
 	
 End if 

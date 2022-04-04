@@ -15,11 +15,12 @@
 		"onLosingFocus",
 		"onGettingFocus",
 		"onDrop",
+		"onDragOver",
 		"onTimer",
 		"onSelectionChange",
 		"onBeginDragOver"
 	],
-	"method": "ACTIONS",
+	"method": "panel_HANDLE_EVENT",
 	"pageFormat": {
 		"paperName": "A4",
 		"paperWidth": "595pt",

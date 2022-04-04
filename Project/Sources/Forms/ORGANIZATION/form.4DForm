@@ -8,6 +8,9 @@
 	"markerFooter": 240,
 	"events": [
 		"onLoad",
+		"onClick",
+		"onLosingFocus",
+		"onGettingFocus",
 		"onDataChange",
 		"onUnload",
 		"onTimer"
@@ -93,7 +96,6 @@
 					"events": [
 						"onClick"
 					],
-					"method": "ORGANIZATION",
 					"focusable": false
 				},
 				"identifierHelp": {
@@ -107,7 +109,6 @@
 					"events": [
 						"onClick"
 					],
-					"method": "ORGANIZATION",
 					"focusable": false
 				}
 			},
@@ -117,7 +118,7 @@
 			]
 		}
 	],
-	"method": "ORGANIZATION",
+	"method": "panel_HANDLE_EVENT",
 	"$4d": {
 		"version": "1",
 		"kind": "form"
@@ -129,5 +130,5 @@
 			"View 1": {}
 		}
 	},
-	"geometryStamp": 21
+	"geometryStamp": 25
 }

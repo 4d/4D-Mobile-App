@@ -9,6 +9,9 @@
 	"markerFooter": 240,
 	"events": [
 		"onLoad",
+		"onClick",
+		"onLosingFocus",
+		"onGettingFocus",
 		"onDataChange"
 	],
 	"pageFormat": {
@@ -59,7 +62,6 @@
 					"events": [
 						"onClick"
 					],
-					"method": "DEVELOPER",
 					"focusable": false
 				},
 				"02_team": {
@@ -74,7 +76,6 @@
 						"onGettingFocus",
 						"onDataChange"
 					],
-					"method": "DEVELOPER",
 					"class": "input",
 					"fill": "transparent"
 				},
@@ -99,7 +100,6 @@
 					"events": [
 						"onClick"
 					],
-					"method": "DEVELOPER",
 					"focusable": false
 				},
 				"01_name.label": {
@@ -127,12 +127,12 @@
 			]
 		}
 	],
-	"method": "DEVELOPER",
+	"method": "panel_HANDLE_EVENT",
 	"$4d": {
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 18,
+	"geometryStamp": 23,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

@@ -266,9 +266,6 @@
 		]
 	},
 	"00] TARGET": {
-		"methods": [
-			"TARGET"
-		],
 		"forms": [
 			"TARGET"
 		],
@@ -277,9 +274,6 @@
 		]
 	},
 	"01] ORGANIZATION": {
-		"methods": [
-			"ORGANIZATION"
-		],
 		"forms": [
 			"ORGANIZATION"
 		],
@@ -288,10 +282,6 @@
 		]
 	},
 	"02] PRODUCT": {
-		"methods": [
-			"COMPILER_PRODUCT",
-			"PRODUCT"
-		],
 		"forms": [
 			"PRODUCT"
 		],
@@ -300,9 +290,6 @@
 		]
 	},
 	"03] DEVELOPER": {
-		"methods": [
-			"DEVELOPER"
-		],
 		"forms": [
 			"DEVELOPER"
 		],
@@ -356,7 +343,6 @@
 	},
 	"07] ACTIONS": {
 		"methods": [
-			"ACTIONS",
 			"ACTIONS_CALLBACK",
 			"COMPILER_ACTIONS"
 		],
@@ -821,6 +807,7 @@
 			"panel_Find",
 			"panel_FindByIndex",
 			"panel_GOTO",
+			"panel_HANDLE_EVENT",
 			"panel_INIT",
 			"panel_LAST",
 			"panel_Load",

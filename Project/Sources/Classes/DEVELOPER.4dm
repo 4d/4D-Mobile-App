@@ -60,6 +60,89 @@ Function onLoad()
 	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
+Function handleEvents()
+	
+	var $e; $o : Object
+	var $menu : cs:C1710.menu
+	
+	$e:=FORM Event:C1606
+	
+	If ($e.objectName=Null:C1517)  // <== FORM METHOD
+		
+		$e:=panel_Common(On Load:K2:1)
+		
+		Case of 
+				
+				//______________________________________________________
+			: ($e.code=On Load:K2:1)
+				
+				This:C1470.onLoad()
+				
+				//______________________________________________________
+		End case 
+		
+	Else   // <== WIDGETS METHOD
+		
+		Case of 
+				
+				//==============================================
+			: (This:C1470.team.catch())
+				
+				Case of 
+						
+						//______________________________________
+					: ($e.code=On Getting Focus:K2:7)
+						
+						This:C1470.teamHelp.show()
+						
+						//______________________________________
+					: ($e.code=On Losing Focus:K2:8)
+						
+						This:C1470.teamHelp.hide()
+						
+						//______________________________________
+					: ($e.code=On Data Change:K2:15)
+						
+						This:C1470.setTeamID(This:C1470.team.getValue())
+						
+						//______________________________________
+				End case 
+				
+				//==============================================
+			: (This:C1470.teamMenu.catch())
+				
+				$menu:=cs:C1710.menu.new()\
+					.append("none"; "none").mark(Length:C16(String:C10(PROJECT.organization.teamId))=0)
+				
+				If (EDITOR.teams.length>0)
+					
+					$menu.line()
+					
+					For each ($o; EDITOR.teams)
+						
+						$menu.append($o.menu; $o.id).mark(PROJECT.organization.teamId=$o.id)
+						
+					End for each 
+				End if 
+				
+				$menu.popup(This:C1470.teamBorder)
+				
+				If ($menu.selected)
+					
+					This:C1470.setTeamID($menu.choice)
+					
+				End if 
+				
+				//==============================================
+			: (This:C1470.teamHelp.catch())
+				
+				OPEN URL:C673(Get localized string:C991("doc_team"); *)
+				
+				//________________________________________
+		End case 
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function setTeamID($id : Text; $item : Text)
 	var $label; $teamId : Text
 	var $team : Object

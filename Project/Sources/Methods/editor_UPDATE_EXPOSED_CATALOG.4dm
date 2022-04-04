@@ -1,4 +1,4 @@
-//%attributes = {"invisible":true}
+//%attributes = {"invisible":true,"preemptive":"capable"}
 #DECLARE($caller : Integer; $callback : Text)
 
 If (False:C215)

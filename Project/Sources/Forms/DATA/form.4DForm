@@ -299,5 +299,5 @@
 			"View 1": {}
 		}
 	},
-	"method": "DATA"
+	"method": "panel_HANDLE_EVENT"
 }

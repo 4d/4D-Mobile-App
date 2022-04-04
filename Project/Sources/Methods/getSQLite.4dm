@@ -1,4 +1,4 @@
-//%attributes = {"invisible":true}
+//%attributes = {"invisible":true,"preemptive":"capable"}
 #DECLARE($in : Object)
 
 If (False:C215)
@@ -62,4 +62,4 @@ If (Is macOS:C1572)
 	End if 
 End if 
 
-CALL FORM:C1391($in.caller; Formula:C1597(editor_CALLBACK).source; "datasetIOS"; $reponse)
+CALL FORM:C1391($in.caller; "editor_CALLBACK"; "datasetIOS"; $reponse)

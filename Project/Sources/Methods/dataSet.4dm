@@ -1,4 +1,4 @@
-//%attributes = {"invisible":true}
+//%attributes = {"invisible":true,"preemptive":"capable"}
 // ----------------------------------------------------
 // Project method : dataSet
 // ID[BC6566132D8B51458EE1B40856D08E06]

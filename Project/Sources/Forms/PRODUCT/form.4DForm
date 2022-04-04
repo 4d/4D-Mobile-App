@@ -54,8 +54,7 @@
 					"events": [
 						"onDataChange",
 						"onAfterEdit"
-					],
-					"method": "PRODUCT"
+					]
 				},
 				"10_name.label": {
 					"type": "text",
@@ -304,7 +303,7 @@
 			"View 1": {}
 		}
 	},
-	"method": "PRODUCT",
-	"geometryStamp": 580,
+	"method": "panel_HANDLE_EVENT",
+	"geometryStamp": 583,
 	"destination": "detailScreen"
 }

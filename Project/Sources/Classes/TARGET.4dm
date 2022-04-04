@@ -53,6 +53,91 @@ Function onLoad()
 		
 	End if 
 	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function handleEvents()
+	
+	var $e : Object
+	$e:=FORM Event:C1606
+	
+	If ($e.objectName=Null:C1517)  // <== FORM METHOD
+		
+		$e:=panel_Common(On Load:K2:1; On Bound Variable Change:K2:52)
+		
+		Case of 
+				
+				//______________________________________________________
+			: ($e.code=On Load:K2:1)
+				
+				This:C1470.onLoad()
+				
+				//______________________________________________________
+			: ($e.code=On Bound Variable Change:K2:52)
+				
+				PROJECT.setTarget()
+				
+				// Update UI
+				This:C1470.displayTarget()
+				
+				//______________________________________________________
+		End case 
+		
+	Else   // <== WIDGETS METHOD
+		
+		$e:=This:C1470.event
+		
+		Case of 
+				
+				//==============================================
+			: (This:C1470.ios.catch())\
+				 | (This:C1470.android.catch())
+				
+				Case of 
+						
+						//______________________________________________________
+					: (Is Windows:C1573)
+						
+						// <NOTHING MORE TO DO>
+						
+						//______________________________________________________
+					: ($e.code=On Clicked:K2:4)
+						
+						If (Is macOS:C1572)\
+							 & ($e.objectName=This:C1470.android.name)\
+							 & Not:C34(Form:C1466.$ios)\
+							 & Not:C34(Form:C1466.$android)
+							
+							// Force iOS
+							PROJECT.setTarget(True:C214; "ios")
+							
+						Else 
+							
+							PROJECT.setTarget(OBJECT Get value:C1743($e.objectName); $e.objectName)
+							
+						End if 
+						
+						// Update UI
+						This:C1470.displayTarget()
+						EDITOR.updateRibbon()
+						
+						//______________________________________________________
+					: ($e.code=On Mouse Enter:K2:33)
+						
+						// Highlights
+						This:C1470[$e.objectName].setColors(EDITOR.selectedColor)
+						
+						//______________________________________________________
+					: ($e.code=On Mouse Leave:K2:34)
+						
+						// Restore
+						This:C1470[$e.objectName].setColors(Foreground color:K23:1)
+						
+						//______________________________________________________
+				End case 
+				
+				//________________________________________
+		End case 
+	End if 
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Manage UI for the target
 Function displayTarget()

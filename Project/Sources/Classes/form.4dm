@@ -80,6 +80,11 @@ Function restoreContext()
 	
 	ASSERT:C1129(False:C215; "👀 restore() must be overriden by the subclass!")
 	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function handleEvents()
+	
+	ASSERT:C1129(False:C215; "👀 handleEvents() must be overriden by the subclass!")
+	
 	//MARK:-[FUNCTIONS] 
 	//=== === === === === === === === === === === === === === === === === === === === === 
 Function close()
@@ -599,6 +604,7 @@ Function goTo($widget : Text)
 Function removeFocus()
 	
 	GOTO OBJECT:C206(*; "")
+	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 Function postKeyDown($keyCode : Integer; $modifier : Integer)
 	

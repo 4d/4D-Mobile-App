@@ -1,57 +1,29 @@
 //%attributes = {"invisible":true}
-  // ----------------------------------------------------
-  // Project method : panel_TOUCH
-  // ID[F7BCCE684B5F4360906F800B8FF8E6A9]
-  // Created 11-5-2017 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
+// ----------------------------------------------------
+// Project method : panel_TOUCH
+// ID[F7BCCE684B5F4360906F800B8FF8E6A9]
+// Created 11-5-2017 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+// Force a O bound variable change event
+// ----------------------------------------------------
+// Declarations
+var $indx : Integer
+var $container : Object
 
-  // ----------------------------------------------------
-  // Declarations
-C_LONGINT:C283($Lon_parameters;$Lon_x)
-C_OBJECT:C1216($Obj_project)
+ARRAY TEXT:C222($widgets; 0)
 
-ARRAY TEXT:C222($tTxt_objects;0)
+$container:=(OBJECT Get pointer:C1124(Object subform container:K67:4))->
 
-  // ----------------------------------------------------
-  // Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=0;"Missing parameter"))
-	
-	  //NO PARAMETERS REQUIRED
-	
-	  //Optional parameters
-	If ($Lon_parameters>=1)
-		
-		  // <NONE>
-		
-	End if 
-	
-Else 
-	
-	ABORT:C156
-	
-End if 
-
-  // ----------------------------------------------------
-$Obj_project:=(OBJECT Get pointer:C1124(Object subform container:K67:4))->
-
-FORM GET OBJECTS:C898($tTxt_objects)
+FORM GET OBJECTS:C898($widgets)
 
 Repeat 
 	
-	$Lon_x:=Find in array:C230($tTxt_objects;"panel.@";$Lon_x+1)
+	$indx:=Find in array:C230($widgets; "panel.@"; $indx+1)
 	
-	If ($Lon_x>0)
+	If ($indx>0)
 		
-		(OBJECT Get pointer:C1124(Object named:K67:5;$tTxt_objects{$Lon_x}))->:=$Obj_project
+		(OBJECT Get pointer:C1124(Object named:K67:5; $widgets{$indx}))->:=$container
 		
 	End if 
-Until ($Lon_x=-1)
-
-  // ----------------------------------------------------
-  // Return
-  // <NONE>
-  // ----------------------------------------------------
-  // End
+Until ($indx=-1)

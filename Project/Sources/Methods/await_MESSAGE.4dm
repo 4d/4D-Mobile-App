@@ -1,4 +1,4 @@
-//%attributes = {"invisible":true}
+//%attributes = {"invisible":true,"preemptive":"capable"}
 // ----------------------------------------------------
 // Project method : await_MESSAGE
 // ID[9B5983900B4F4E13A2A5AD80D245E814]

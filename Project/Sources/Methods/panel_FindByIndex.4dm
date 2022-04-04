@@ -1,4 +1,4 @@
-//%attributes = {}
+//%attributes = {"invisible":true}
 #DECLARE($index : Integer)->$name : Text
 
 If (False:C215)

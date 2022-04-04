@@ -428,7 +428,6 @@ Function updateColorScheme()
 		
 	End for each 
 	
-	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function goToPage($page : Text)
 	

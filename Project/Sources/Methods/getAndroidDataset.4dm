@@ -1,4 +1,4 @@
-//%attributes = {}
+//%attributes = {"preemptive":"capable"}
 #DECLARE($in : Object)
 
 If (False:C215)
@@ -68,4 +68,4 @@ Else
 	
 End if 
 
-CALL FORM:C1391($in.caller; Formula:C1597(editor_CALLBACK).source; "datasetAndroid"; $reponse)
+CALL FORM:C1391($in.caller; "editor_CALLBACK"; "datasetAndroid"; $reponse)

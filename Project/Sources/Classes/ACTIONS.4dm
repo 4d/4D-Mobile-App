@@ -100,6 +100,334 @@ Function onLoad()
 	This:C1470.appendEvents(New collection:C1472(On Alternative Click:K2:36; On Before Data Entry:K2:39; On Data Change:K2:15))
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
+Function handleEvents()
+	
+	var $e : Object
+	
+	$e:=FORM Event:C1606
+	
+	If ($e.objectName=Null:C1517)  // <== FORM METHOD
+		
+		$e:=panel_Common(On Load:K2:1; On Timer:K2:25; On Resize:K2:27)
+		
+		Case of 
+				
+				//______________________________________________________
+			: ($e.code=On Load:K2:1)
+				
+				If (Feature.disabled("androidActions"))
+					
+					androidLimitations(True:C214; "Actions are coming soon for Android")
+					
+				End if 
+				
+				This:C1470.loadActions()
+				This:C1470.onLoad()
+				
+				//______________________________________________________
+			: ($e.code=On Timer:K2:25)
+				
+				If (Feature.disabled("androidActions"))
+					
+					androidLimitations(True:C214)
+					
+				End if 
+				
+				This:C1470.update()
+				
+				//______________________________________________________
+			: ($e.code=On Resize:K2:27)
+				
+				ui_SET_GEOMETRY(This:C1470.context.constraints.rules)
+				
+				//______________________________________________________
+		End case 
+		
+	Else   // <== WIDGETS METHOD
+		
+		Case of 
+				
+				//==============================================
+			: (This:C1470.actions.catch())
+				
+				Case of 
+						
+						//_____________________________________
+					: ($e.code=On Selection Change:K2:29)
+						
+						This:C1470.$current:=This:C1470.current
+						
+						// Update parameters panel
+						This:C1470.updateParameters()
+						
+						// Update UI
+						This:C1470.refresh()
+						
+						//_____________________________________
+					: ($e.code=On Getting Focus:K2:7)
+						
+						This:C1470.actions.setColors(Foreground color:K23:1)
+						This:C1470.actionsBorder.setColors(EDITOR.selectedColor)
+						
+						If (Bool:C1537(This:C1470.actions.inEdition))
+							
+							This:C1470.updateParameters()
+							
+						End if 
+						
+						//_____________________________________
+					: ($e.code=On Losing Focus:K2:8)
+						
+						If (Bool:C1537(This:C1470.actions.inEdition))  // Focus is lost after editing a cell
+							
+							OB REMOVE:C1226(This:C1470.actions; "inEdition")
+							
+							If (String:C10($e.columnName)="shorts")
+								
+								// Update parameters panel
+								This:C1470.updateParameters()
+								
+							End if 
+							
+						Else 
+							
+							This:C1470.actions.setColors(Foreground color:K23:1)
+							This:C1470.actionsBorder.setColors(EDITOR.backgroundUnselectedColor)
+							
+						End if 
+						
+						//_____________________________________
+					: (PROJECT.isLocked()) | (Num:C11($e.row)=0)
+						
+						// <NOTHING MORE TO DO>
+						
+						//_____________________________________
+					: ($e.code=On Clicked:K2:4)
+						
+						Case of 
+								
+								//………………………………………………………………
+							: ($e.columnName="icons")
+								
+								This:C1470.doShowIconPicker()
+								
+								//………………………………………………………………
+						End case 
+						
+						//_____________________________________
+					: ($e.code=On Before Data Entry:K2:39)
+						
+						Case of 
+								
+								//………………………………………………………………
+							: (New collection:C1472("names"; "shorts"; "labels").indexOf($e.columnName)#-1)
+								
+								// Set a flag to manage On Losing Focus
+								This:C1470.actions.inEdition:=True:C214
+								
+								//………………………………………………………………
+							: ($e.columnName="tables")
+								
+								This:C1470.doTableMenu()
+								
+								//………………………………………………………………
+							: ($e.columnName="scopes")
+								
+								This:C1470.doScopeMenu()
+								
+								//………………………………………………………………
+						End case 
+						
+						//_____________________________________
+					: ($e.code=On Double Clicked:K2:5)
+						
+						If (New collection:C1472("names"; "shorts"; "labels").indexOf($e.columnName)#-1)
+							
+							EDIT ITEM:C870(*; $e.columnName; Num:C11(This:C1470.index))
+							
+						End if 
+						
+						//_____________________________________
+					: ($e.code=On Mouse Leave:K2:34)
+						
+						This:C1470.dropCursor.hide()
+						
+						//_____________________________________
+					: ($e.code=On Data Change:K2:15)
+						
+						If (String:C10(This:C1470.current.preset)="sort")
+							
+							// Redmine:#129995 : The value of the short label that is displayed shall be equal
+							// To the value that is available for the long label
+							This:C1470.current.shortLabel:=This:C1470.current.label
+							
+						End if 
+						
+						//_____________________________________
+				End case 
+				
+				//==============================================
+			: (This:C1470.add.catch())
+				
+				Case of 
+						
+						//_____________________________
+					: ($e.code=On Alternative Click:K2:36)
+						
+						This:C1470.doAddMenu()
+						
+						//_____________________________
+					: ($e.code=On Clicked:K2:4)
+						
+						This:C1470.doNewAction()
+						
+						//_____________________________
+				End case 
+				
+				//==============================================
+			: (This:C1470.remove.catch())
+				
+				This:C1470.doRemoveAction()
+				
+				//==============================================
+			: (This:C1470.databaseMethod.catch())
+				
+				This:C1470.doOpenDatabaseMethod()
+				
+				//==============================================
+		End case 
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+	/// Internal drop for actions
+Function doActions()->$allow : Integer
+	
+	var $uri : Text
+	var $x : Blob
+	var $e; $me; $o : Object
+	
+	$uri:="com.4d.private.4dmobile.action"
+	
+	$e:=FORM Event:C1606
+	$e.row:=Drop position:C608
+	
+	ASSERT:C1129(Not:C34(Shift down:C543))
+	
+	Case of 
+			
+			//______________________________________________________
+		: (PROJECT.isLocked())
+			
+			// <NOTHING MORE TO DO>
+			
+			//______________________________________________________
+		: ($e.code=On Begin Drag Over:K2:44)
+			
+			$o:=New object:C1471(\
+				"src"; This:C1470.index)
+			
+			VARIABLE TO BLOB:C532($o; $x)
+			APPEND DATA TO PASTEBOARD:C403($uri; $x)
+			SET BLOB SIZE:C606($x; 0)
+			
+			//______________________________________________________
+		: ($e.code=On Drag Over:K2:13)
+			
+			$allow:=-1  // Reject drop
+			
+			GET PASTEBOARD DATA:C401($uri; $x)
+			
+			If (Bool:C1537(OK))
+				
+				BLOB TO VARIABLE:C533($x; $o)
+				SET BLOB SIZE:C606($x; 0)
+				
+				$me:=This:C1470.actions
+				
+				If ($e.row=-1)  // After the last line
+					
+					If ($o.src#$me.rowsNumber())  // Not if the source was the last line
+						
+						$o:=$me.getRowCoordinates($me.rowsNumber())
+						$o.top:=$o.bottom
+						$o.right:=$me.coordinates.right
+						$allow:=0  // Allow drop
+						
+					End if 
+					
+				Else 
+					
+					If ($o.src#$e.row)\
+						 & ($e.row#($o.src+1))  // Not the same or the next one
+						
+						$o:=$me.getRowCoordinates($e.row)
+						$o.bottom:=$o.top
+						$o.right:=$me.coordinates.right
+						$allow:=0  // Allow drop
+						
+					End if 
+				End if 
+			End if 
+			
+			If ($allow=-1)
+				
+				SET CURSOR:C469(9019)
+				This:C1470.dropCursor.hide()
+				
+			Else 
+				
+				This:C1470.dropCursor.setCoordinates($o.left; $o.top; $o.right; $o.bottom)
+				This:C1470.dropCursor.show()
+				
+			End if 
+			
+			//______________________________________________________
+		: ($e.code=On Drop:K2:12)
+			
+			GET PASTEBOARD DATA:C401($uri; $x)
+			
+			If (Bool:C1537(OK))
+				
+				BLOB TO VARIABLE:C533($x; $o)
+				SET BLOB SIZE:C606($x; 0)
+				
+				$o.tgt:=Drop position:C608
+				
+				If ($o.src#$o.tgt)
+					
+					If ($o.tgt=-1)  // After the last line
+						
+						Form:C1466.actions.push(This:C1470.current)
+						Form:C1466.actions.remove($o.src-1)
+						
+					Else 
+						
+						Form:C1466.actions.insert($o.tgt-1; This:C1470.current)
+						
+						If ($o.tgt<$o.src)
+							
+							Form:C1466.actions.remove($o.src)
+							
+						Else 
+							
+							Form:C1466.actions.remove($o.src-1)
+							
+						End if 
+					End if 
+					
+					PROJECT.save()
+					
+				End if 
+				
+				This:C1470.dropCursor.hide()
+				This:C1470.actions.touch()
+				
+			End if 
+			
+			//______________________________________________________
+	End case 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Load project actions
 Function loadActions()
 	
@@ -724,69 +1052,6 @@ Function doScopeMenu()
 		This:C1470.refresh()
 		
 	End if 
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-	// Initialization of the internal D&D for actions
-Function doBeginDrag()
-	
-	var $x : Blob
-	var $o : Object
-	
-	$o:=New object:C1471(\
-		"src"; This:C1470.index)
-	
-	// Put into the container
-	VARIABLE TO BLOB:C532($o; $x)
-	APPEND DATA TO PASTEBOARD:C403("com.4d.private.4dmobile.action"; $x)
-	SET BLOB SIZE:C606($x; 0)
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-	// Internal drop for actions
-Function doOnDrop()
-	
-	var $x : Blob
-	var $o : Object
-	
-	// Get the pastboard
-	GET PASTEBOARD DATA:C401("com.4d.private.4dmobile.action"; $x)
-	
-	If (Bool:C1537(OK))
-		
-		BLOB TO VARIABLE:C533($x; $o)
-		SET BLOB SIZE:C606($x; 0)
-		
-		$o.tgt:=Drop position:C608
-		
-	End if 
-	
-	If ($o.src#$o.tgt)
-		
-		If ($o.tgt=-1)  // After the last line
-			
-			Form:C1466.actions.push(This:C1470.current)
-			Form:C1466.actions.remove($o.src-1)
-			
-		Else 
-			
-			Form:C1466.actions.insert($o.tgt-1; This:C1470.current)
-			
-			If ($o.tgt<$o.src)
-				
-				Form:C1466.actions.remove($o.src)
-				
-			Else 
-				
-				Form:C1466.actions.remove($o.src-1)
-				
-			End if 
-		End if 
-		
-		PROJECT.save()
-		
-	End if 
-	
-	This:C1470.dropCursor.hide()
-	This:C1470.actions.touch()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Open the icons picker

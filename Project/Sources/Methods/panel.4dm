@@ -1,16 +1,9 @@
 //%attributes = {"invisible":true}
-#DECLARE($name : Text)->$definition : Object
+#DECLARE($form : Text)->$definition : Object
 
-If (Count parameters:C259>=1)
-	
-	$definition:=Form:C1466.$dialog[$name]
-	
-Else 
-	
-	// Default
-	$definition:=Form:C1466.$dialog[Current form name:C1298]
-	
-End if 
+$form:=$form || Current form name:C1298
+
+$definition:=Form:C1466.$dialog[$form]
 
 If ($definition#Null:C1517)
 	

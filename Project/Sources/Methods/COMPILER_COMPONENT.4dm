@@ -1,4 +1,4 @@
-//%attributes = {"invisible":true}
+//%attributes = {"invisible":true,"preemptive":"capable"}
 
 // SYSTEM VARIABLES
 var SHARED : Object  // Common values
@@ -18,58 +18,31 @@ var EDITOR : cs:C1710.PROJECT_EDITOR
 COMPONENT_INIT
 
 // Editor
-COMPILER_editor
-COMPILER_project
+//COMPILER_editor
+//COMPILER_project
 
 // Panels
-COMPILER_PRODUCT
+//COMPILER_STRUCTURES
 
-COMPILER_STRUCTURES
+//COMPILER_tables
+//COMPILER_fields
 
-COMPILER_tables
-COMPILER_fields
-
-COMPILER_views
+//COMPILER_views
 
 // Language
-COMPILER_ob
-COMPILER_col
-COMPILER_let
+//COMPILER_ob
+//COMPILER_col
+//COMPILER_let
 
 // Widgets
-COMPILER_message
-COMPILER_search
+//COMPILER_message
+//COMPILER_search
 
 // Tools
-COMPILER_backend
-COMPILER_ob_error
-COMPILER_macOS
-COMPILER_mobile
+//COMPILER_backend
+//COMPILER_ob_error
+//COMPILER_macOS
+//COMPILER_mobile
 
-COMPILER_err
+//COMPILER_err
 
-If (False:C215)
-	
-	// ----------------------------------------------------
-	C_OBJECT:C1216(BUILD; $1)
-	
-	// ----------------------------------------------------
-End if 
-
-If (False:C215)
-	
-	// ----------------------------------------------------
-	C_TEXT:C284(COMPONENT_Infos; $0)
-	C_TEXT:C284(COMPONENT_Infos; $1)
-	
-	// ----------------------------------------------------
-End if 
-
-If (False:C215)
-	
-	// ----------------------------------------------------
-	C_LONGINT:C283(FEATURE_FLAGS; $1)
-	C_OBJECT:C1216(FEATURE_FLAGS; $2)
-	
-	// ----------------------------------------------------
-End if 

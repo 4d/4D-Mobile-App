@@ -1,4 +1,4 @@
-//%attributes = {"invisible":true}
+//%attributes = {"invisible":true,"preemptive":"capable"}
 // -> silent  =   No interface for progression
 // -> force   =   Force the download even if the file is up to date (see verification code)
 #DECLARE($server : Text; $target : Text; $silent : Boolean; $caller : Integer; $force : Boolean)
@@ -370,7 +370,7 @@ If ($run)
 					
 					If (Count parameters:C259>=4)
 						
-						CALL FORM:C1391($caller; Formula:C1597(editor_CALLBACK).source; "updateRibbon")
+						CALL FORM:C1391($caller; "editor_CALLBACK"; "updateRibbon")
 						
 					End if 
 					

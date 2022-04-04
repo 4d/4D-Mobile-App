@@ -7,24 +7,21 @@ If (False:C215)
 End if 
 
 // The name of the managed form, the current form if omitted.
-$form:=Length:C16($form)>0 ? $form : Current form name:C1298
+$form:=$form || Current form name:C1298
 
 // Create the object if any
 If (Form:C1466.$dialog=Null:C1517)
 	
 	Logger.info("📍 Create $dialog (panel_Definition: "+$form+")")
+	Form:C1466.$dialog:=New object:C1471
 	
-	Form:C1466.$dialog:=New object:C1471(\
-		$form; New object:C1471)
+End if 
+
+If (Form:C1466.$dialog[$form]=Null:C1517)
 	
-Else 
+	Logger.info("👀 Create "+$form+"'s object (panel_Definition)")
+	Form:C1466.$dialog[$form]:=New object:C1471
 	
-	If (Form:C1466.$dialog[$form]=Null:C1517)
-		
-		Logger.info("👀 Create "+$form+"'s object (panel_Definition)")
-		Form:C1466.$dialog[$form]:=New object:C1471
-		
-	End if 
 End if 
 
 If (OB Is empty:C1297(Form:C1466.$dialog[$form]))

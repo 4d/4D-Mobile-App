@@ -1,4 +1,4 @@
-//%attributes = {"invisible":true}
+//%attributes = {"invisible":true,"preemptive":"capable"}
 // ----------------------------------------------------
 // Project method : COMPONENT_Infos
 // ID[75F81CD689A34E77A474AA215699B738]

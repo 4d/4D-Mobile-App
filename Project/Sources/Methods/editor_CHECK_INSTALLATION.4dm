@@ -1,4 +1,4 @@
-//%attributes = {"invisible":true}
+//%attributes = {"invisible":true,"preemptive":"capable"}
 // ----------------------------------------------------
 // Project method : editor_CHECK_INSTALLATION
 // ID[684C0081C1734937A99F71EC2516C9F8]
@@ -155,6 +155,6 @@ End case
 
 If (Bool:C1537($in.caller))
 	
-	CALL FORM:C1391($in.caller; Formula:C1597(editor_CALLBACK).source; "checkDevTools"; $out)
+	CALL FORM:C1391($in.caller; "editor_CALLBACK"; "checkDevTools"; $out)
 	
 End if 

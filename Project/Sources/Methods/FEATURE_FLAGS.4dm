@@ -1,4 +1,4 @@
-//%attributes = {"invisible":true}
+//%attributes = {"invisible":true,"preemptive":"capable"}
 #DECLARE($version : Integer; $file : 4D:C1709.File)
 
 Feature:=cs:C1710.Feature.new($version; $file)

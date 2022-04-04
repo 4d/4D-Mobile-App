@@ -1,16 +1,12 @@
 //%attributes = {"invisible":true}
 #DECLARE($action : Text; $data : Object)
 
-var $ƒ : Object
-
-$ƒ:=panel
-
 Case of 
 		
 		//=========================================================
 	: ($action="loadActionIcons")  // Preload the icons
 		
-		$ƒ.loadIcons()
+		panel.loadIcons()
 		
 		//=========================================================
 	Else 

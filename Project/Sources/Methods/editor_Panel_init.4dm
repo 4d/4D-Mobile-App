@@ -6,33 +6,11 @@
 // ----------------------------------------------------
 // Defines, if necessary, the context of the panel and returns it
 // ----------------------------------------------------
-#DECLARE($name : Text)->$context : Object
+#DECLARE($form : Text) : Object
 
-var $form : Text
-var $context : Object
+$form:=$form || Current form name:C1298
 
-If (Count parameters:C259>=1)
-	
-	$form:=$name
-	
-Else 
-	
-	// Get the current form
-	$form:=Current form name:C1298
-	
-End if 
+Form:C1466.$dialog:=Form:C1466.$dialog || New object:C1471
+Form:C1466.$dialog[$form]:=Form:C1466.$dialog[$form] || New object:C1471
 
-// ----------------------------------------------------
-If (Form:C1466.$dialog=Null:C1517)
-	
-	Form:C1466.$dialog:=New object:C1471
-	
-End if 
-
-If (Form:C1466.$dialog[$form]=Null:C1517)
-	
-	Form:C1466.$dialog[$form]:=New object:C1471
-	
-End if 
-
-$context:=Form:C1466.$dialog[$form]
+return (Form:C1466.$dialog[$form])

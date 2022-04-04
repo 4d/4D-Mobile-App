@@ -26,6 +26,7 @@ var _o_UI : Object  // UI constants
 var Feature : cs:C1710.Feature  // Feature flags
 
 $reset:=Macintosh option down:C545
+$process:=cs:C1710.process.new()
 
 var ENV : cs:C1710.env
 ENV:=cs:C1710.env.new()
@@ -39,7 +40,6 @@ DATABASE.projects:=DATABASE.root.folder("Mobile Projects")
 DATABASE.projects.create()  // Make sure the directory exists
 DATABASE.products:=DATABASE.root.parent.folder(DATABASE.structure.name+" - Mobile")
 
-$process:=cs:C1710.process.new()
 
 // Disable asserts in release mode
 SET ASSERT ENABLED:C1131(DATABASE.isInterpreted; *)
@@ -297,7 +297,6 @@ If (OB Is empty:C1297(Feature)) | $reset
 		
 		//%T-
 		METHOD OPEN PATH:C1213(Current method name:C684; 271)
-		
 		//%T+
 		
 		ABORT:C156
@@ -319,7 +318,9 @@ If ($process.cooperative)\
 	$t:=SHARED.ide.version
 	
 	Logger.log("4D "+$t[[1]]+$t[[2]]+($t[[3]]="0" ? "."+$t[[4]] : "R"+$t[[3]])+" ("+String:C10(SHARED.ide.build)+")")
-	Logger.log("Component "+SHARED.component.version).line()
+	Logger.log("Component "+String:C10(SHARED.component.version))
+	
+	Logger.line()
 	
 	Feature.log(Formula:C1597(Logger.log($1)))
 	

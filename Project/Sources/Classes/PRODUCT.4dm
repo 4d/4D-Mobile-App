@@ -56,6 +56,84 @@ Function onLoad()
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
+Function handleEvents()
+	
+	var $e : Object
+	$e:=FORM Event:C1606
+	
+	If ($e.objectName=Null:C1517)  // <== FORM METHOD
+		
+		$e:=panel_Common(On Load:K2:1; On Timer:K2:25; On Bound Variable Change:K2:52)
+		
+		Case of 
+				
+				//______________________________________________________
+			: ($e.code=On Load:K2:1)
+				
+				This:C1470.onLoad()
+				
+				//______________________________________________________
+			: ($e.code=On Timer:K2:25)
+				
+				This:C1470.update()
+				
+				//______________________________________________________
+			: ($e.code=On Bound Variable Change:K2:52)
+				
+				// Update UI
+				This:C1470.refresh()
+				
+				//______________________________________________________
+		End case 
+		
+	Else   // <== WIDGETS METHOD
+		
+		$e:=This:C1470.event
+		
+		Case of 
+				
+				//==============================================
+			: (This:C1470.colorButton.catch($e; On Clicked:K2:4))
+				
+				This:C1470.doColorMenu()
+				
+				//==============================================
+			: (This:C1470.productName.catch())
+				
+				Case of 
+						
+						//______________________________________________________
+					: ($e.code=On After Edit:K2:43)
+						
+						This:C1470.checkName(Get edited text:C655)
+						
+						//______________________________________________________
+					: ($e.code=On Data Change:K2:15)
+						
+						This:C1470.checkName(Form:C1466.product.name)
+						
+						// Update bundleIdentifier & navigationTitle
+						Form:C1466.product.bundleIdentifier:=Form:C1466.organization.id+"."+formatString("bundleApp"; Form:C1466.product.name)
+						Form:C1466.main.navigationTitle:=Form:C1466.product.name
+						
+						//______________________________________________________
+				End case 
+				
+				//==============================================
+			: (This:C1470.icon.catch())
+				
+				// ❗️MANAGED INTO OBJECT METHOD BECAUSE OF THE DRAG AND DROP
+				
+				//==============================================
+			: (This:C1470.iconAction.catch($e; On Clicked:K2:4))
+				
+				This:C1470.doIconMenu()
+				
+				//________________________________________
+		End case 
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function update()
 	
 	This:C1470.checkName(Form:C1466.product.name)
@@ -128,6 +206,84 @@ End if
 			End if 
 		End if 
 	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function doIcon()->$allow : Integer
+	
+	var $p : Picture
+	var $e : Object
+	
+	$allow:=-1
+	$e:=This:C1470.event
+	
+	Case of 
+			
+			//______________________________________________________
+		: ($e.code=On Getting Focus:K2:7)
+			
+			This:C1470.iconAction.show()
+			
+			//______________________________________________________
+		: ($e.code=On Losing Focus:K2:8)
+			
+			This:C1470.iconAction.hide()
+			
+			//______________________________________________________
+		: ($e.code=On Double Clicked:K2:5)
+			
+			This:C1470.browseIcon()
+			
+			//______________________________________________________
+		: ($e.code=On Drag Over:K2:13)
+			
+			GET PICTURE FROM PASTEBOARD:C522($p)
+			
+			If (Not:C34(Bool:C1537(OK)))
+				
+				// Alllow pictures
+				DOCUMENT:=Get file from pasteboard:C976(1)
+				
+				If (Length:C16(DOCUMENT)>0)
+					
+					OK:=Num:C11(Is picture file:C1113(DOCUMENT))
+					
+					If ((OK=0) && Is macOS:C1572)
+						
+						// Accept applications
+						OK:=Num:C11(Path to object:C1547(DOCUMENT).extension=".app")
+						
+					End if 
+				End if 
+			End if 
+			
+			If (Bool:C1537(OK))
+				
+				$allow:=0
+				
+			End if 
+			
+			//______________________________________________________
+		: ($e.code=On Drop:K2:12)
+			
+			GET PICTURE FROM PASTEBOARD:C522($p)
+			
+			If (Bool:C1537(OK))
+				
+				This:C1470.setIcon($p)
+				
+			Else 
+				
+				DOCUMENT:=Get file from pasteboard:C976(1)
+				
+				If (Length:C16(DOCUMENT)>0)
+					
+					This:C1470.getIcon(DOCUMENT)
+					
+				End if 
+			End if 
+			
+			//______________________________________________________
+	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Manage the icon's action button

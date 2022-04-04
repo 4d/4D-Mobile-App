@@ -1,4 +1,4 @@
-//%attributes = {"invisible":true}
+//%attributes = {"invisible":true,"preemptive":"capable"}
 // ----------------------------------------------------
 // Project method : studioCheckInstall
 // ID[2A1B62E6BC6F46899AFA3FFA6F418242]

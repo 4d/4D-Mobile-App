@@ -118,6 +118,89 @@ Function onLoad()
 	
 	This:C1470.list.focus()
 	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function handleEvents()
+	
+	var $e; $o : Object
+	
+	$e:=FORM Event:C1606
+	
+	If ($e.objectName=Null:C1517)  // <== FORM METHOD
+		
+		$e:=panel_Common(On Load:K2:1; On Timer:K2:25)
+		
+		Case of 
+				
+				//______________________________________________________
+			: ($e.code=On Load:K2:1)
+				
+				This:C1470.onLoad()
+				
+				//______________________________________________________
+			: ($e.code=On Timer:K2:25)
+				
+				This:C1470.update()
+				
+				//______________________________________________________
+		End case 
+		
+	Else   // <== WIDGETS METHOD
+		
+		$e:=This:C1470.event
+		
+		Case of 
+				
+				//==============================================
+			: (This:C1470.filter.catch())
+				
+				This:C1470.doFilter($e)
+				
+				//==============================================
+			: (This:C1470.list.catch())
+				
+				This:C1470.doList($e)
+				
+				//==============================================
+			: (This:C1470.method.catch($e; On Clicked:K2:4))
+				
+				EDITOR.editAuthenticationMethod()
+				
+				//==============================================
+			: (This:C1470.validate.catch($e; On Clicked:K2:4))\
+				 | (This:C1470.enter.catch($e; On Clicked:K2:4))
+				
+				This:C1470.list.focus()
+				
+				This:C1470.doValidateFilter()
+				
+				//==============================================
+			: (This:C1470.embedded.catch($e; On Clicked:K2:4))
+				
+				var $table : cs:C1710.table
+				$table:=This:C1470.current
+				
+				If (Bool:C1537($table.embedded))
+					
+					Form:C1466.dataModel[String:C10($table.tableNumber)][""].embedded:=True:C214
+					
+				Else 
+					
+					OB REMOVE:C1226(Form:C1466.dataModel[String:C10($table.tableNumber)][""]; "embedded")
+					
+				End if 
+				
+				PROJECT.save()
+				This:C1470.update()
+				
+				//==============================================
+			: (This:C1470.queryWidget.catch($e; On Clicked:K2:4))
+				
+				This:C1470.doQueryWidget()
+				
+				//________________________________________
+		End case 
+	End if 
+	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Update of the user interface
 Function update()
