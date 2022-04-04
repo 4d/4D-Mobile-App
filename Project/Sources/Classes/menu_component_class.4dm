@@ -4,7 +4,10 @@ Function fillMenu($menu : Object)
 	$menu.append("Inject component in 4D app"; "injectComponentToCurrentApp").method("menu_component")
 	$menu.append("Get iOS SDK from 4D app"; "getAppiOSSDK").method("menu_component")
 	$menu.append("Get iOS SDK from TC"; "getTCiOSSDK").method("menu_component")
-	$menu.append("Show configuartion file"; "openConf").method("menu_component")
+	$menu.line()
+	$menu.append("Show configuration file"; "openConf").method("menu_component")
+	$menu.append("Show current features"; "showFeatures").method("menu_component")
+	$menu.append("Re-load features file"; "reloadFeatureFile").method("menu_component")
 	
 Function injectComponentToCurrentApp
 	// sometime you want to debug other 4d database mobile app
@@ -47,7 +50,6 @@ Function getAppiOSSDK
 	
 	SHOW ON DISK:C922($result.platformPath)
 	
-	
 Function getTCiOSSDK
 	// if there is new 4D app because of build failure, allow to get last one from build chain
 	var $credential : 4D:C1709.File
@@ -76,7 +78,11 @@ Function getTCiOSSDK
 		SHOW ON DISK:C922(Folder:C1567(fk user preferences folder:K87:10).platformPath)
 	End if 
 	
-	
 Function openConf
 	SHOW ON DISK:C922(Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile").platformPath)
 	
+Function showFeatures
+	ALERT:C41(JSON Stringify:C1217(Feature; *))
+	
+Function reloadFeatureFile
+	Feature.loadLocal()

@@ -4,7 +4,7 @@
 var SHARED : Object  // Common values
 var _o_UI : Object  // UI constants
 
-var Feature : Object  // Feature flags
+var Feature : cs:C1710.Feature  // Feature flags
 
 var Logger : Object  // General journal
 

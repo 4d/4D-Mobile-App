@@ -1,7 +1,6 @@
 Class constructor($version : Integer; $file : 4D:C1709.File)
 	
 	var $build : Integer
-	var $file : 4D:C1709.File
 	
 	Super:C1705()
 	
@@ -13,7 +12,7 @@ Class constructor($version : Integer; $file : 4D:C1709.File)
 	This:C1470._features:=New object:C1471
 	
 	// Get the config file, if any
-	This:C1470.local:=($file && $file.exists) ? JSON Parse:C1218($file.getText()).features : Null:C1517
+	This:C1470.localFile:=$file
 	
 	//====================================================================
 	/// Returns True if the feature is activated
@@ -107,7 +106,8 @@ Function loadLocal()
 	var $enabled : Boolean
 	var $o : Object
 	
-	If (This:C1470.local#Null:C1517)
+	If ((This:C1470.localFile#Null:C1517) && This:C1470.localFile.exists)
+		This:C1470.local:=JSON Parse:C1218(This:C1470.localFile.getText()).features
 		
 		For each ($o; This:C1470.local)
 			
