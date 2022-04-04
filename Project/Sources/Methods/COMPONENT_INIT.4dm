@@ -12,7 +12,7 @@
 // Declarations
 var $t : Text
 var $icon : Picture
-var $initLog; $reset : Boolean
+var $reset : Boolean
 var $l : Integer
 var $o; $pref : Object
 
@@ -48,7 +48,7 @@ SET ASSERT ENABLED:C1131(DATABASE.isInterpreted; *)
 $file:=Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile")
 $pref:=$file.exists ? JSON Parse:C1218($file.getText()) : New object:C1471
 
-//MARK:-LOGGER
+// MARK:-LOGGER
 var Logger : cs:C1710.logger  // General journal
 Logger:=$reset ? Null:C1517 : Logger
 Logger:=Logger || cs:C1710.logger.new()
@@ -60,10 +60,8 @@ If (Not:C34($process.worker))
 End if 
 
 Logger.verbose:=(DATABASE.isMatrix)
-$initLog:=True:C214
 
-
-//MARK:-COMMON VALUES
+// MARK:-COMMON VALUES
 If (OB Is empty:C1297(SHARED)) | $reset
 	
 	//Formula($process.worker ? BEEP : IDLE).call()
@@ -116,13 +114,13 @@ If (OB Is empty:C1297(SHARED)) | $reset
 	// 1:iphone / 2:ipad / 1,2:universal
 	SHARED.targetedDeviceFamily:="1,2"
 	
-	// https://developer.apple.com/library/content/documentation/FileManagement/Conceptual/On_Demand_Resources_Guide/index.html#//apple_ref/doc/uid/TP40015083
+	// https://developer.apple.com/library/content/documentation/FileManagement/Conceptual/On_Demand_Resources_Guide/index.html#//Apple_ref/doc/uid/TP40015083
 	SHARED.onDemandResources:=True:C214
 	
 	// https://developer.apple.com/library/content/documentation/IDEs/Conceptual/AppDistributionGuide/AppThinning/AppThinning.html
 	SHARED.bitcode:=True:C214
 	
-	// iOS simulator time out
+	// IOS simulator time out
 	SHARED.simulatorTimeout:=10000
 	
 	// Info.plist
@@ -203,7 +201,7 @@ If (OB Is empty:C1297(SHARED)) | $reset
 	SHARED.defaultFieldBindingTypes[8858]:="relation"
 	SHARED.defaultFieldBindingTypes[8859]:="relation"
 	
-	// XXX check table & filed names in https://project.4d.com/issues/90770
+	// XXX check table & filed names in https:// Project.4d.com/issues/90770
 	SHARED.deletedRecordsTable:=New object:C1471(\
 		"name"; "__DeletedRecords"; \
 		"fields"; New collection:C1472)
@@ -285,12 +283,12 @@ If (OB Is empty:C1297(SHARED)) | $reset
 	End if 
 End if 
 
-//MARK:-FEATURES FLAGS
+// MARK:-FEATURES FLAGS
 If (OB Is empty:C1297(Feature)) | $reset
 	
 	var $version : Integer
 	
-	$version:=1950  // Current branch version number
+	$version:=1960  // Current branch version number
 	
 	If (Structure file:C489=Structure file:C489(*))\
 		 & (Num:C11(SHARED.ide.version)#$version)
@@ -299,6 +297,7 @@ If (OB Is empty:C1297(Feature)) | $reset
 		
 		//%T-
 		METHOD OPEN PATH:C1213(Current method name:C684; 271)
+		
 		//%T+
 		
 		ABORT:C156
@@ -315,43 +314,19 @@ If (OB Is empty:C1297(Feature)) | $reset
 End if 
 
 If ($process.cooperative)\
- & (Not:C34($process.worker))\
- & ($initLog)
+ && (Not:C34($process.worker))
 	
 	$t:=SHARED.ide.version
-	//RECORD.log("4D "+$t[[1]]+$t[[2]]+Choose($t[[3]]="0"; "."+$t[[4]]; "R"+$t[[3]])+" ("+String(SHARED.ide.build)+")")
-	//RECORD.log("Component "+SHARED.component.version)
-	//RECORD.line()
-	//For each ($t; FEATURE)
-	//If (Value type(FEATURE[$t])=Is boolean)
-	//RECORD.log("feature "+Replace string($t; "_"; "")+": "+Choose(FEATURE[$t]; "Enabled"; "Disabled"))
-	//End if 
-	//End for each 
-	//RECORD.log("4D "+$t[[1]]+$t[[2]]+($t[[3]]="0" ? "."+$t[[4]] : "R"+$t[[3]])+" ("+String(SHARED.ide.build)+")")
-	//RECORD.log("Component "+SHARED.component.version).line()
-	//Feature.log(Formula(RECORD.log($1))).line()
 	
 	Logger.log("4D "+$t[[1]]+$t[[2]]+($t[[3]]="0" ? "."+$t[[4]] : "R"+$t[[3]])+" ("+String:C10(SHARED.ide.build)+")")
 	Logger.log("Component "+SHARED.component.version).line()
 	
 	Feature.log(Formula:C1597(Logger.log($1)))
 	
-	//RECORD.line()
-	
 	Logger.line()
 	
 End if 
 
-//MARK:-AFTER FLAGS
-
+// MARK:-AFTER FLAGS
 SET ASSERT ENABLED:C1131(Feature.with("debug"); *)
-
-//SET ASSERT ENABLED(FEATURE.with("debug"); *)
-//RECORD.info("Assert "+Choose(Get assert enabled; "Enabled"; "Disabled"))
-//// ----------------------------------------------------
-//// End
-//RECORD.info("Assert "+Choose(Get assert enabled; "Enabled"; "Disabled"))
-
-// ----------------------------------------------------
-// End
 Logger.info("Assert "+Choose:C955(Get assert enabled:C1130; "Enabled"; "Disabled"))
