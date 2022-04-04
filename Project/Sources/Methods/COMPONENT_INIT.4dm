@@ -319,27 +319,24 @@ If ($process.cooperative)\
  & ($initLog)
 	
 	$t:=SHARED.ide.version
-	RECORD.log("4D "+$t[[1]]+$t[[2]]+Choose:C955($t[[3]]="0"; "."+$t[[4]]; "R"+$t[[3]])+" ("+String:C10(SHARED.ide.build)+")")
-	RECORD.log("Component "+SHARED.component.version)
-	RECORD.line()
+	//RECORD.log("4D "+$t[[1]]+$t[[2]]+Choose($t[[3]]="0"; "."+$t[[4]]; "R"+$t[[3]])+" ("+String(SHARED.ide.build)+")")
+	//RECORD.log("Component "+SHARED.component.version)
+	//RECORD.line()
+	//For each ($t; FEATURE)
+	//If (Value type(FEATURE[$t])=Is boolean)
+	//RECORD.log("feature "+Replace string($t; "_"; "")+": "+Choose(FEATURE[$t]; "Enabled"; "Disabled"))
+	//End if 
+	//End for each 
+	//RECORD.log("4D "+$t[[1]]+$t[[2]]+($t[[3]]="0" ? "."+$t[[4]] : "R"+$t[[3]])+" ("+String(SHARED.ide.build)+")")
+	//RECORD.log("Component "+SHARED.component.version).line()
+	//Feature.log(Formula(RECORD.log($1))).line()
 	
-	For each ($t; FEATURE)
-		
-		If (Value type:C1509(FEATURE[$t])=Is boolean:K8:9)
-			
-			RECORD.log("feature "+Replace string:C233($t; "_"; "")+": "+Choose:C955(FEATURE[$t]; "Enabled"; "Disabled"))
-			
-		End if 
-	End for each 
-	RECORD.log("4D "+$t[[1]]+$t[[2]]+($t[[3]]="0" ? "."+$t[[4]] : "R"+$t[[3]])+" ("+String:C10(SHARED.ide.build)+")")
-	RECORD.log("Component "+SHARED.component.version).line()
-	Feature.log(Formula:C1597(RECORD.log($1))).line()
 	Logger.log("4D "+$t[[1]]+$t[[2]]+($t[[3]]="0" ? "."+$t[[4]] : "R"+$t[[3]])+" ("+String:C10(SHARED.ide.build)+")")
 	Logger.log("Component "+SHARED.component.version).line()
 	
 	Feature.log(Formula:C1597(Logger.log($1)))
 	
-	RECORD.line()
+	//RECORD.line()
 	
 	Logger.line()
 	
@@ -349,13 +346,11 @@ End if
 
 SET ASSERT ENABLED:C1131(Feature.with("debug"); *)
 
-SET ASSERT ENABLED:C1131(FEATURE.with("debug"); *)
-
-RECORD.info("Assert "+Choose:C955(Get assert enabled:C1130; "Enabled"; "Disabled"))
-
-// ----------------------------------------------------
-// End
-RECORD.info("Assert "+Choose:C955(Get assert enabled:C1130; "Enabled"; "Disabled"))
+//SET ASSERT ENABLED(FEATURE.with("debug"); *)
+//RECORD.info("Assert "+Choose(Get assert enabled; "Enabled"; "Disabled"))
+//// ----------------------------------------------------
+//// End
+//RECORD.info("Assert "+Choose(Get assert enabled; "Enabled"; "Disabled"))
 
 // ----------------------------------------------------
 // End
