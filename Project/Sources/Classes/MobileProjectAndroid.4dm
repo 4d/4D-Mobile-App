@@ -32,15 +32,8 @@ Class constructor($project : Object)
 	
 	This:C1470.project.remote_url:=This:C1470.remoteUrl()
 	This:C1470.project.package:=This:C1470.project.project.product.bundleIdentifier
-	This:C1470.hasRelations:=True:C214
 	
-	// FIXME: Vu la ligne du dessus, n'ai jamais vérifié
-	If (This:C1470.hasRelations=False:C215)
-		
-		This:C1470.project.hasRelations:=False:C215
-		
-	End if 
-	
+	This:C1470.project.hasRelations:=True:C214
 	This:C1470.project.hasActions:=True:C214
 	This:C1470.project.hasDataSet:=Feature.with("androidDataSet")
 	
