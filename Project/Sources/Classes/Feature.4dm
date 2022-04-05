@@ -107,92 +107,96 @@ Function loadLocal()
 	var $o : Object
 	
 	If ((This:C1470.localFile#Null:C1517) && This:C1470.localFile.exists)
+		
 		This:C1470.local:=JSON Parse:C1218(This:C1470.localFile.getText()).features
 		
-		For each ($o; This:C1470.local)
+		If (This:C1470.local#Null:C1517)
 			
-			If (Value type:C1509($o.enabled)=Is boolean:K8:9)
+			For each ($o; This:C1470.local)
 				
-				This:C1470._features[This:C1470._feature($o.id)]:=Bool:C1537($o.enabled)
-				
-			Else 
-				
-				For each ($key; $o.enabled) Until (Not:C34($enabled))
+				If (Value type:C1509($o.enabled)=Is boolean:K8:9)
 					
-					Case of 
-							
-							//______________________________________________________
-						: ($key="os")
-							
-							$enabled:=((Num:C11(Is macOS:C1572)+1)=Num:C11($o.enabled[$key]))
-							
-							//______________________________________________________
-						: ($key="matrix")
-							
-							$enabled:=(Structure file:C489=Structure file:C489(*))
-							
-							//______________________________________________________
-						: ($key="debug")
-							
-							If ($o.enabled[$key])
+					This:C1470._features[This:C1470._feature($o.id)]:=Bool:C1537($o.enabled)
+					
+				Else 
+					
+					For each ($key; $o.enabled) Until (Not:C34($enabled))
+						
+						Case of 
 								
-								// Only into a debug version
-								$enabled:=Not:C34(Is compiled mode:C492)
+								//______________________________________________________
+							: ($key="os")
 								
-							Else 
+								$enabled:=((Num:C11(Is macOS:C1572)+1)=Num:C11($o.enabled[$key]))
 								
-								// Not into a debug version
-								$enabled:=Is compiled mode:C492
+								//______________________________________________________
+							: ($key="matrix")
 								
-							End if 
-							
-							//______________________________________________________
-						: ($key="bitness")
-							
-							Case of 
+								$enabled:=(Structure file:C489=Structure file:C489(*))
+								
+								//______________________________________________________
+							: ($key="debug")
+								
+								If ($o.enabled[$key])
 									
-									//……………………………………………………………………………………………………
-								: (Num:C11($o.enabled[$key])=64)
+									// Only into a debug version
+									$enabled:=Not:C34(Is compiled mode:C492)
 									
-									$enabled:=(Version type:C495 ?? 64 bit version:K5:25)
-									
-									//……………………………………………………………………………………………………
-								: (Num:C11($o.enabled[$key])=32)
-									
-									$enabled:=Not:C34(Version type:C495 ?? 64 bit version:K5:25)
-									
-									//……………………………………………………………………………………………………
 								Else 
 									
-									ASSERT:C1129(False:C215; "Unknown value ("+$o.enabled[$key]+") for the key : \""+$key+"\"")
-									$enabled:=False:C215
+									// Not into a debug version
+									$enabled:=Is compiled mode:C492
 									
-									//……………………………………………………………………………………………………
-							End case 
-							
-							//______________________________________________________
-						: ($key="version")
-							
-							$enabled:=(This:C1470.ideVersion>=Num:C11($o.enabled[$key]))
-							
-							//______________________________________________________
-						: ($key="type")
-							
-							$enabled:=(Application type:C494=Num:C11($o.enabled[$key]))
-							
-							//______________________________________________________
-						Else 
-							
-							ASSERT:C1129(False:C215; "Unknown key: \""+$key+"\"")
-							
-							//______________________________________________________
-					End case 
-				End for each 
-				
-				This:C1470._features[This:C1470._feature($o.id)]:=$enabled
-				
-			End if 
-		End for each 
+								End if 
+								
+								//______________________________________________________
+							: ($key="bitness")
+								
+								Case of 
+										
+										//……………………………………………………………………………………………………
+									: (Num:C11($o.enabled[$key])=64)
+										
+										$enabled:=(Version type:C495 ?? 64 bit version:K5:25)
+										
+										//……………………………………………………………………………………………………
+									: (Num:C11($o.enabled[$key])=32)
+										
+										$enabled:=Not:C34(Version type:C495 ?? 64 bit version:K5:25)
+										
+										//……………………………………………………………………………………………………
+									Else 
+										
+										ASSERT:C1129(False:C215; "Unknown value ("+$o.enabled[$key]+") for the key : \""+$key+"\"")
+										$enabled:=False:C215
+										
+										//……………………………………………………………………………………………………
+								End case 
+								
+								//______________________________________________________
+							: ($key="version")
+								
+								$enabled:=(This:C1470.ideVersion>=Num:C11($o.enabled[$key]))
+								
+								//______________________________________________________
+							: ($key="type")
+								
+								$enabled:=(Application type:C494=Num:C11($o.enabled[$key]))
+								
+								//______________________________________________________
+							Else 
+								
+								ASSERT:C1129(False:C215; "Unknown key: \""+$key+"\"")
+								
+								//______________________________________________________
+						End case 
+					End for each 
+					
+					This:C1470._features[This:C1470._feature($o.id)]:=$enabled
+					
+				End if 
+			End for each 
+		End if 
 	End if 
 	
 	//====================================================================
