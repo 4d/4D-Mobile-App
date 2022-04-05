@@ -2,10 +2,6 @@
 C_LONGINT:C283(vThermo)
 C_OBJECT:C1216(<>testData)
 
-
-
-C_OBJECT:C1216(tempoDatamodelWith1toNRelation; $1)
-
 C_BOOLEAN:C305(androidLimitations; $1)
 C_TEXT:C284(androidLimitations; $2)
 

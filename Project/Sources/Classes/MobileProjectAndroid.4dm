@@ -41,7 +41,7 @@ Class constructor($project : Object)
 		
 	End if 
 	
-	This:C1470.project.hasActions:=Feature.with("androidActions")
+	This:C1470.project.hasActions:=True:C214
 	This:C1470.project.hasDataSet:=Feature.with("androidDataSet")
 	
 	This:C1470.checkPackage()

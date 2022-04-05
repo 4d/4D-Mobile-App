@@ -13,7 +13,7 @@ Class constructor($sorted : Boolean)
 	
 	This:C1470.success:=True:C214
 	
-	This:C1470.allowedTypes:=New collection:C1472("string"; "bool"; "date"; "number"; "image")
+	This:C1470.allowedTypes:=New collection:C1472("string"; "bool"; "date"; "number"; "image"; "object")
 	
 	If (SHARED=Null:C1517)  // FIXME #105596
 		
@@ -23,14 +23,6 @@ Class constructor($sorted : Boolean)
 		Logger.trace()
 		
 		COMPONENT_INIT
-		
-	End if 
-	
-	ASSERT:C1129(Feature#Null:C1517)
-	
-	If (Feature.with("objectFieldManagement"))
-		
-		This:C1470.allowedTypes.push("object")
 		
 	End if 
 	

@@ -155,19 +155,7 @@ Function updateFieldList
 	
 	editor_ui_LISTBOX(This:C1470.fieldList.name)
 	
-	If (Num:C11(This:C1470.tabSelector.data)=1)  // Relations
-		
-		If (Feature.disabled("android1ToNRelations"))
-			
-			tempoDatamodelWith1toNRelation(This:C1470.tableNumber)
-			
-		End if 
-		
-	Else 
-		
-		androidLimitations(False:C215; "")
-		
-	End if 
+	androidLimitations(False:C215; "")
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Gets the list of fields/reports according to the selected table as collections

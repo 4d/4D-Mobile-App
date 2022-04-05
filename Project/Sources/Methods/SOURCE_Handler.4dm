@@ -66,23 +66,10 @@ Case of
 				// Constraints definition
 				$form.ui.constraints:=New object:C1471
 				
-				If (Feature.with("cancelableDatasetGeneration"))
-					
-					_o_ui_BEST_SIZE(New object:C1471(\
-						"widgets"; New collection:C1472($form.generate)))
-					
-					//TODO: align lastGeneration
-					
-				Else 
-					
-					_o_ui_BEST_SIZE(New object:C1471(\
-						"widgets"; New collection:C1472($form.generate; "dataGeneration"; "dataGenerationLabel"); \
-						"alignment"; Align left:K42:2; \
-						"factor"; 1.15))
-					
-					OBJECT SET TITLE:C194(*; "dataGenerationLabel"; Replace string:C233(Get localized string:C991("dataSetGeneration"); "\n\n"; "\r"))
-					
-				End if 
+				_o_ui_BEST_SIZE(New object:C1471(\
+					"widgets"; New collection:C1472($form.generate)))
+				
+				//TODO: align lastGeneration
 				
 				_o_ui_BEST_SIZE(New object:C1471(\
 					"widgets"; New collection:C1472($form.local)))
@@ -182,31 +169,22 @@ Case of
 					
 				End if 
 				
-				If (Feature.with("cancelableDatasetGeneration"))
+				If (Feature.with("androidDataSet"))
 					
-					If (Feature.with("androidDataSet"))
-						
-						$form.ui.updateDataSet()
-						
-					Else 
-						
-						$file:=PROJECT._folder.file("project.dataSet/Resources/Structures.sqlite")
-						OBJECT SET TITLE:C194(*; "lastGeneration"; EDITOR.str.localize("lastGeneration"; New collection:C1472(String:C10($file.modificationDate); Time string:C180($file.modificationTime))))
-						OBJECT SET VISIBLE:C603(*; "lastGeneration@"; $file.exists)
-						
-					End if 
-					
-					If (Bool:C1537(Form:C1466.$project.dataSetGeneration))
-						
-						// Disable the generate button during generation
-						OBJECT SET ENABLED:C1123(*; $form.generate; False:C215)
-						
-					End if 
+					$form.ui.updateDataSet()
 					
 				Else 
 					
-					(OBJECT Get pointer:C1124(Object named:K67:5; "dataGeneration"))->:=Num:C11(Bool:C1537(Form:C1466.$project.dataSetGeneration))
-					OBJECT SET VISIBLE:C603(*; "dataGeneration@"; Bool:C1537(Form:C1466.$project.dataSetGeneration))
+					$file:=PROJECT._folder.file("project.dataSet/Resources/Structures.sqlite")
+					OBJECT SET TITLE:C194(*; "lastGeneration"; EDITOR.str.localize("lastGeneration"; New collection:C1472(String:C10($file.modificationDate); Time string:C180($file.modificationTime))))
+					OBJECT SET VISIBLE:C603(*; "lastGeneration@"; $file.exists)
+					
+				End if 
+				
+				If (Bool:C1537(Form:C1466.$project.dataSetGeneration))
+					
+					// Disable the generate button during generation
+					OBJECT SET ENABLED:C1123(*; $form.generate; False:C215)
 					
 				End if 
 				

@@ -115,23 +115,11 @@ Function handleEvents()
 				//______________________________________________________
 			: ($e.code=On Load:K2:1)
 				
-				If (Feature.disabled("androidActions"))
-					
-					androidLimitations(True:C214; "Actions are coming soon for Android")
-					
-				End if 
-				
 				This:C1470.loadActions()
 				This:C1470.onLoad()
 				
 				//______________________________________________________
 			: ($e.code=On Timer:K2:25)
-				
-				If (Feature.disabled("androidActions"))
-					
-					androidLimitations(True:C214)
-					
-				End if 
 				
 				This:C1470.update()
 				

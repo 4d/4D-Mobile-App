@@ -124,12 +124,6 @@ Case of
 				editor_ui_LISTBOX($form.tableList)
 				editor_ui_LISTBOX($form.fieldList)
 				
-				If (Feature.disabled("android1ToNRelations"))
-					
-					tempoDatamodelWith1toNRelation($context.currentTable)
-					
-				End if 
-				
 				//______________________________________________________
 		End case 
 		

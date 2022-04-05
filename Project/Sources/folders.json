@@ -21,7 +21,6 @@
 			"nvl",
 			"object",
 			"publishedTableList",
-			"tempoDatamodelWith1toNRelation",
 			"tempoSVGLineHeight"
 		],
 		"forms": [
@@ -807,7 +806,6 @@
 			"panel_Find",
 			"panel_FindByIndex",
 			"panel_GOTO",
-			"panel_HANDLE_EVENT",
 			"panel_INIT",
 			"panel_LAST",
 			"panel_Load",

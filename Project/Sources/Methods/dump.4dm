@@ -86,7 +86,7 @@ Case of
 				$table:=$dataModel[$tableID]
 				$meta:=$table[""]
 				
-				If ($withUI & Feature.with("cancelableDatasetGeneration"))
+				If ($withUI)
 					
 					// Notify user
 					CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
@@ -189,18 +189,14 @@ Case of
 		
 		$out.results:=New object:C1471
 		
-		If (Feature.with("useTextRestResponse"))
-			
-			var $rgx : cs:C1710.regex
-			$rgx:=cs:C1710.regex.new()
-			$rgx.setPattern("(?mi-s),\"__GlobalStamp\":(\\d+),\"__COUNT\":(\\d+),\"__FIRST\":(\\d+).*,\"__SENT\":(\\d+).{1,10}$")
-			
-		End if 
+		var $rgx : cs:C1710.regex
+		$rgx:=cs:C1710.regex.new()
+		$rgx.setPattern("(?mi-s),\"__GlobalStamp\":(\\d+),\"__COUNT\":(\\d+),\"__FIRST\":(\\d+).*,\"__SENT\":(\\d+).{1,10}$")
 		
 		var $count; $page; $pages : Integer
 		
-		var $useTextRestResponse : Boolean
-		$useTextRestResponse:=Feature.with("useTextRestResponse")
+		//var $useTextRestResponse : Boolean
+		//$useTextRestResponse:=Feature.with("useTextRestResponse")
 		
 		var $notify : 4D:C1709.Function
 		$notify:=Formula:C1597(CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; $1))
@@ -264,7 +260,7 @@ Case of
 			
 			If ($query#Null:C1517) & (Not:C34($cancelled))  // If query defined, we must dump the table
 				
-				If ($withUI & Feature.with("cancelableDatasetGeneration"))
+				If ($withUI)
 					
 					// Display the table being processed
 					$notify.call(Null:C1517; New object:C1471(\
@@ -296,20 +292,11 @@ Case of
 						
 						If ($page>1)
 							
-							If ($withUI & Feature.with("cancelableDatasetGeneration"))
+							If ($withUI)
 								
 								If ($pages=0)
 									
-									If ($useTextRestResponse)
-										
-										$count:=Num:C11($rgx.matches[2].data)
-										
-									Else 
-										
-										$count:=Num:C11($rest.response.__COUNT)
-										
-									End if 
-									
+									$count:=Num:C11($rgx.matches[2].data)
 									$pages:=($count\SHARED.data.dump.limit)+Num:C11(($count%SHARED.data.dump.limit)>0)
 									
 								End if 
@@ -330,7 +317,7 @@ Case of
 						// Do the rest request
 						$rest:=Rest(New object:C1471(\
 							"action"; "records"; \
-							"reponseType"; Choose:C955($useTextRestResponse; Is text:K8:3; Is object:K8:27); \
+							"reponseType"; Is text:K8:3; \
 							"url"; $in.url; \
 							"headers"; $in.headers; \
 							"table"; $meta.name; \
@@ -347,7 +334,7 @@ Case of
 									
 									$rest:=Rest(New object:C1471(\
 										"action"; "records"; \
-										"reponseType"; Choose:C955($useTextRestResponse; Is text:K8:3; Is object:K8:27); \
+										"reponseType"; Is text:K8:3; \
 										"url"; $in.url; \
 										"headers"; $in.headers; \
 										"table"; $meta.name; \
@@ -366,21 +353,14 @@ Case of
 						If ($out.success)
 							
 							// Analyse response
-							If ($useTextRestResponse)
+							$rgx.setTarget($rest.response).match()
+							
+							If ($rgx.success)
 								
-								$rgx.setTarget($rest.response).match()
-								
-								If ($rgx.success)
-									
-									$rest.globalStamp:=Num:C11($rgx.matches[1].data)
-									
-								End if 
-								
-							Else 
-								
-								$rest.globalStamp:=$rest.response.__GlobalStamp
+								$rest.globalStamp:=Num:C11($rgx.matches[1].data)
 								
 							End if 
+							
 							
 							If ($out.results[$meta.name]=Null:C1517)
 								
@@ -404,7 +384,7 @@ Case of
 							
 							$outputPathname:=$outputPathname+".dataset"+Folder separator:K24:12+$meta.name
 							
-							If ($withUI & Feature.with("cancelableDatasetGeneration"))
+							If ($withUI)
 								
 								If ($page>=2)
 									
@@ -491,21 +471,10 @@ Case of
 						
 					Else 
 						
-						If ($useTextRestResponse)
+						If ((Num:C11($rgx.matches[3].data)+Num:C11($rgx.matches[4].data))>=Num:C11($rgx.matches[2].data))
 							
-							If ((Num:C11($rgx.matches[3].data)+Num:C11($rgx.matches[4].data))>=Num:C11($rgx.matches[2].data))
-								
-								$page:=MAXLONG:K35:2-1  // BREAK
-								
-							End if 
+							$page:=MAXLONG:K35:2-1  // BREAK
 							
-						Else 
-							
-							If ((Num:C11($rest.response.__FIRST)+Num:C11($rest.response.__SENT))>=Num:C11($rest.response.__COUNT))
-								
-								$page:=MAXLONG:K35:2-1  // BREAK
-								
-							End if 
 						End if 
 					End if 
 				End for 
@@ -548,7 +517,7 @@ Case of
 			
 			If ($fields.length>0)
 				
-				If ($withUI & Feature.with("cancelableDatasetGeneration"))
+				If ($withUI)
 					
 					// Notify user
 					CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
@@ -664,7 +633,7 @@ Case of
 											
 											If ($o#Null:C1517)
 												
-												If ($withUI & Feature.with("cancelableDatasetGeneration"))
+												If ($withUI)
 													
 													// Notify user
 													CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
@@ -860,14 +829,14 @@ Case of
 														If (Bool:C1537($in.dataSet))
 															
 															//TEXT TO DOCUMENT($outputPathname+"Contents.json"; \
-																																																JSON Stringify(New object(\
-																																																"info"; New object(\
-																																																"version"; 1; \
-																																																"author"; "xcode"\
-																																																); \
-																																																"images"; New collection(New object(\
-																																																"idiom"; "universal"; \
-																																																"filename"; $File_name)))))
+																																																																																JSON Stringify(New object(\
+																																																																																"info"; New object(\
+																																																																																"version"; 1; \
+																																																																																"author"; "xcode"\
+																																																																																); \
+																																																																																"images"; New collection(New object(\
+																																																																																"idiom"; "universal"; \
+																																																																																"filename"; $File_name)))))
 															
 															File:C1566($outputPathname+"Contents.json"; fk platform path:K87:2).setText(JSON Stringify:C1217(New object:C1471(\
 																"info"; New object:C1471(\
@@ -919,9 +888,9 @@ Case of
 							$outputPathname:=$in.output+Folder separator:K24:12+$meta.name+Folder separator:K24:12
 							$outputPathname:=$outputPathname+"manifest.json"
 							//TEXT TO DOCUMENT($outputPathname; \
-																								JSON Stringify(New object(\
-																								"contentSize"; Num($result.contentSize); \
-																								"count"; Num($result.count))))
+																																								JSON Stringify(New object(\
+																																								"contentSize"; Num($result.contentSize); \
+																																								"count"; Num($result.count))))
 							File:C1566($outputPathname; fk platform path:K87:2).setText(JSON Stringify:C1217(New object:C1471(\
 								"contentSize"; Num:C11($result.contentSize); \
 								"count"; Num:C11($result.count))))

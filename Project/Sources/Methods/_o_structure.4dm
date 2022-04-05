@@ -71,13 +71,7 @@ Case of
 		// -------------------------------------------------------------------------------------------
 		
 		var $allowedTypes : Collection
-		$allowedTypes:=New collection:C1472("string"; "bool"; "date"; "number"; "image")
-		
-		If (Feature.with("objectFieldManagement"))
-			
-			$allowedTypes.push("object")
-			
-		End if 
+		$allowedTypes:=New collection:C1472("string"; "bool"; "date"; "number"; "image"; "object")
 		
 		$datastore:=_4D_Build Exposed Datastore:C1598
 		
@@ -607,7 +601,7 @@ Don't keep:
 							//For each ($Txt_field;$Obj_relatedDataClass)
 							
 							//If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																
+																								
 							//If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
 							//$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])

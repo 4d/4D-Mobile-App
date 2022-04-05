@@ -386,7 +386,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 			// MARK:- create
 		: ($in.action="create")  // later allow to do it with remove
 			
-			If ($withUI & Feature.with("cancelableDatasetGeneration"))
+			If ($withUI)
 				
 				$delay:=New object:C1471(\
 					"minimumDisplayTime"; 3*60; \
@@ -453,7 +453,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 						
 					End if 
 					
-					If ($withUI & Feature.with("cancelableDatasetGeneration"))
+					If ($withUI)
 						
 						$delay.start:=Tickcount:C458
 						
@@ -577,7 +577,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 								
 							End if 
 							
-							If ($withUI & Feature.with("cancelableDatasetGeneration"))
+							If ($withUI)
 								
 								CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
 									"step"; "pictures"))
@@ -706,7 +706,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 				End if 
 			End if 
 			
-			If ($withUI & Feature.with("cancelableDatasetGeneration"))
+			If ($withUI)
 				
 				If (Bool:C1537(Storage:C1525.flags.stopGeneration))
 					
@@ -773,7 +773,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 			
 			If (Not:C34(Bool:C1537(Storage:C1525.flags.stopGeneration)))
 				
-				If ($withUI & Feature.with("cancelableDatasetGeneration"))
+				If ($withUI)
 					
 					CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
 						"step"; "coreDataInjection"))

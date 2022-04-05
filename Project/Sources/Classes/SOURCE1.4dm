@@ -169,27 +169,8 @@ Function doGenerate()
 			
 		End if 
 		
-		If (Feature.with("cancelableDatasetGeneration"))
-			
-			EDITOR.doGenerate($keyPathname)
-			This:C1470.refresh()
-			
-		Else 
-			
-			CALL WORKER:C1389(EDITOR.worker; "dataSet"; New object:C1471(\
-				"caller"; EDITOR.window; \
-				"action"; "create"; \
-				"eraseIfExists"; True:C214; \
-				"project"; PROJECT; \
-				"digest"; True:C214; \
-				"accordingToTarget"; Feature.with("androidDataSet"); \
-				"coreDataSet"; Feature.disabled("androidDataSet"); \
-				"key"; $keyPathname; \
-				"dataSet"; True:C214))
-			
-			SET TIMER:C645(-1)
-			
-		End if 
+		EDITOR.doGenerate($keyPathname)
+		This:C1470.refresh()
 		
 		
 	Else   // A generation is already in works

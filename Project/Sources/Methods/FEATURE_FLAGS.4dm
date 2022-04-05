@@ -1,6 +1,8 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
 #DECLARE($version : Integer; $file : 4D:C1709.File)
 
+var $c : Collection
+
 Feature:=cs:C1710.Feature.new($version; $file)
 
 If (True:C214)  // DELIVERED
@@ -94,24 +96,28 @@ If (True:C214)  // DELIVERED
 	
 	Feature.delivered("computedProperties"; 1930)  // #130206 [MOBILE] Use computed attributes
 	
+	// Mark:-R4
+	Feature.delivered("androidActions"; 1940)  // [Mobile] Feature flag pour activer les actions dans le projet mobile
+	Feature.delivered("objectFieldManagement"; 1940)  // [MOBILE] Object fields Management
+	Feature.delivered("android1ToNRelations"; 1940)  // [ANDROID] 1 to N relations
+	Feature.delivered("cancelableDatasetGeneration"; 1940)  // [MOBILE] Data generation
+	Feature.delivered("useTextRestResponse"; 1940)  // [MOBILE] Data generation : for optis
+	
 End if 
 
-// Mark:-R4
-Feature.unstable("androidActions")  // [Mobile] Feature flag pour activer les actions dans le projet mobile
-Feature.unstable("objectFieldManagement")  // [MOBILE] Object fields Management
-Feature.unstable("android1ToNRelations")  // [ANDROID] 1 to N relations
-Feature.unstable("cancelableDatasetGeneration")  // [MOBILE] Data generation
-Feature.unstable("useTextRestResponse")  // [MOBILE] Data generation : for optis
-
 // Mark:-R5
-Feature.unstable("listEditor")  // [MOBILE] Create and edit an input control from the project editor
 Feature.unstable("xcDataModelClass")  // Use class to create core data model ie. xcDataModel (useful to refactor for alias)
 Feature.unstable("iosBuildWithClass")  // Use cs.MobileProjectIOS class
 Feature.unstable("modernStructure")
 
 // Mark:-R6
+
+
+
+// Mark:-🚧 MAIN
 Feature.main(127558)  // [ANDROID] Data set
 Feature.main(131225)  // [MOBILE] Use aliases
+Feature.main("listEditor")  // #130828 [MOBILE] Create and edit an input control from the project editor
 
 // Mark:-🚧 WIP
 Feature.wip(131983)  // [MOBILE] Launch an action from the Tab bar
@@ -122,19 +128,20 @@ Feature.wip("taskIndicator")  // UI for background tasks executing
 Feature.wip("sourceClass")  // Work with Source class to test the data source
 Feature.wip("buildWithCmd")  // Allow to build using cmd only
 
-// Mark:- DEV
-Feature.dev("gitCommit"; New collection:C1472("emarchand"; "phimage"))  // Commit to git generated project
-Feature.dev("generateForDev"; New collection:C1472("emarchand"; "phimage"))  // Add framework sources and do not add compiled frameworks to workspace, deactivate code signing on framework
-//FEATURE.dev("devGallery"; New collection("emarchand"; "phimage"))  // Allow to dev with local http gallery
-Feature.dev("iOSAlias"; New collection:C1472("emarchand"; "phimage"))
+// Mark:- 👨‍💻 DEV Eric
+$c:=New collection:C1472("emarchand"; "phimage")
+Feature.dev("gitCommit"; $c)  // Commit to git generated project
+Feature.dev("generateForDev"; $c)  // Add framework sources and do not add compiled frameworks to workspace, deactivate code signing on framework
+//FEATURE.dev("devGallery"; $c)  // Allow to dev with local http gallery
+Feature.dev("iOSAlias"; $c)
 
-Feature.dev("vdl"; New collection:C1472("vdelachaux"; "Vincent de LACHAUX"))
+// Mark:- 👴🏻 DEV Vincent
+$c:=New collection:C1472("vdelachaux"; "Vincent de LACHAUX")
+Feature.dev("vdl"; $c)
 
 // Mark:-⛔ PENDING
 Feature.pending(129953)  // [MOBILE] Handle Many-one-Many relations
-
 Feature.pending("compressionOfTemplates")  // Use the archive "/RESOURCES/template.zip" instead of "templates" folder in builded component
-
 //FEATURE.dev("testCompression";New collection("vdelachaux"; "Vincent de LACHAUX"))
 Feature.pending("formatMarketPlace")  // Manage format as archive
 Feature.pending("sharedActionWithDescription")  // [MOBILE] Add a description parameter to predefined share action

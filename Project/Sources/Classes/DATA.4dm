@@ -62,12 +62,6 @@ Function init()
 	/// Initializations at loading
 Function onLoad()
 	
-	If (Feature.disabled("cancelableDatasetGeneration"))
-		
-		This:C1470.method.setCoordinates(486; 104; 486+330; 104+22)
-		
-	End if 
-	
 	This:C1470.list.setScrollbars(False:C215; 2)
 	
 	// Get/update the table list
@@ -243,7 +237,7 @@ Function update()
 		
 		OB REMOVE:C1226(This:C1470.current; "user")
 		
-		This:C1470.result.setValue("").setColors(EDITOR.selectedFillColor).show(Feature.with("cancelableDatasetGeneration"))
+		This:C1470.result.setValue("").setColors(EDITOR.selectedFillColor).show()
 		
 		This:C1470.displayFilter(This:C1470.current)
 		

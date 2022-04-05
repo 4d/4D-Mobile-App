@@ -451,12 +451,6 @@ Function fieldList()
 		
 	End if 
 	
-	If (Feature.disabled("android1ToNRelations"))
-		
-		tempoDatamodelWith1toNRelation($ƒ.currentTable)
-		
-	End if 
-	
 	// Disable field publication if the table is missing
 	OBJECT SET ENTERABLE:C238($publishedPtr->; PROJECT.isNotLocked())
 	
