@@ -49,7 +49,251 @@ Function init()
 	// Link to the TABLES panel
 	This:C1470.tableLink:=Formula:C1597(panel("TABLES").currentTableNumber)
 	
-	//This.form:=Form.$dialog[This.name]  // ????????????????????????????
+	//=== === === === === === === === === === === === === === === === === === === === ==
+Function handleEvents($e : Object)
+	
+	If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
+		
+		$e:=panel_Common(On Load:K2:1; On Timer:K2:25)
+		
+		Case of 
+				
+				//______________________________________________________
+			: ($e.code=On Load:K2:1)
+				
+				This:C1470.onLoad()
+				
+				//______________________________________________________
+			: ($e.code=On Timer:K2:25)
+				
+				This:C1470.update()
+				
+				This:C1470.tableNumber:=This:C1470.tableLink.call()
+				This:C1470.updateFieldList()
+				
+				//______________________________________________________
+		End case 
+		
+	Else   // <== WIDGETS METHOD
+		
+		Case of 
+				
+				//==============================================
+			: (This:C1470.fieldList.catch())
+				
+				This:C1470.tableNumber:=This:C1470.tableLink.call()
+				This:C1470.fieldList.updateDefinition()
+				
+				Case of 
+						
+						//_______________________________
+					: ($e.code=On Selection Change:K2:29)
+						
+						editor_ui_LISTBOX($e.objectName)
+						
+						//_______________________________
+					: ($e.code=On Mouse Enter:K2:33)
+						
+						EDITOR.tips.instantly()
+						
+						//_______________________________
+					: ($e.code=On Mouse Move:K2:35)
+						
+						This:C1470.setHelpTip($e)
+						
+						//_______________________________
+					: ($e.code=On Mouse Leave:K2:34)
+						
+						EDITOR.tips.restore()
+						
+						//_______________________________
+					: ($e.code=On Getting Focus:K2:7)
+						
+						editor_ui_LISTBOX($e.name; True:C214)
+						
+						This:C1470.setHelpTip($e)
+						
+						//_______________________________
+					: ($e.code=On Losing Focus:K2:8)
+						
+						editor_ui_LISTBOX($e.name; False:C215)
+						
+						//_______________________________
+					: (PROJECT.isLocked())
+						
+						// <NOTHING MORE TO DO>
+						
+						//_______________________________
+					: ($e.code=On Double Clicked:K2:5)
+						
+						editor_ui_LISTBOX($e.objectName)
+						
+						If ($e.columnName=This:C1470.labels.name)\
+							 | ($e.columnName=This:C1470.shortLabels.name)\
+							 | ($e.columnName=This:C1470.titles.name)
+							
+							var $ptr : Pointer
+							$ptr:=OBJECT Get pointer:C1124(Object named:K67:5; $e.columnName)
+							EDIT ITEM:C870($ptr->; $ptr->)
+							
+						End if 
+						
+						//_______________________________
+					: ($e.code=On Clicked:K2:4)
+						
+						Case of 
+								
+								//........................................
+							: ($e.row=Null:C1517)
+								
+								// NO SELECTION
+								
+								//........................................
+							: ($e.columnName=This:C1470.icons.name)
+								
+								This:C1470.doShowIconPicker($e)
+								
+								//........................................
+							: ($e.columnName=This:C1470.shortLabels.name)\
+								 | ($e.columnName=This:C1470.labels.name)
+								
+								If (Is editing text:C1744)
+									
+									If (Contextual click:C713)  // Propose the tags to be inserted
+										
+										If (This:C1470.popup=Null:C1517)  // Stop re-antrance
+											
+											This:C1470.popup:=True:C214
+											This:C1470.doTagMenu($e; New collection:C1472("length"))
+											
+										Else 
+											
+											OB REMOVE:C1226(This:C1470; "popup")
+											
+										End if 
+									End if 
+								End if 
+								
+								//........................................
+							: ($e.columnName=This:C1470.titles.name)
+								
+								If (Is editing text:C1744)
+									
+									If (Contextual click:C713)  // Propose the tags to be inserted
+										
+										If (This:C1470.popup=Null:C1517)  // Stop re-antrance
+											
+											This:C1470.popup:=True:C214
+											This:C1470.doTagMenu($e; New collection:C1472("name"))
+											
+										Else 
+											
+											OB REMOVE:C1226(This:C1470; "popup")
+											
+										End if 
+									End if 
+								End if 
+								
+								//........................................
+						End case 
+						
+						//_______________________________
+					: ($e.code=On Data Change:K2:15)
+						
+						// Get the edited field definition
+						var $field : cs:C1710.field
+						$field:=This:C1470.context.cache[$e.row-1]
+						
+						// Update data model
+						//%W-533.3
+						If ($e.columnName="titles")
+							
+							$field["format"]:=(This:C1470.fieldList.columns[$e.columnName].pointer)->{$e.row}
+							
+						Else 
+							
+							$field[$e.columnName]:=(This:C1470.fieldList.columns[$e.columnName].pointer)->{$e.row}
+							
+						End if 
+						//%W+533.3
+						
+						This:C1470.updateForms($field; $e.row)
+						
+						PROJECT.save()
+						
+						//_______________________________
+					: ($e.code=On Before Data Entry:K2:39)
+						
+						// Done in the object's method
+						
+						//_______________________________
+					: ($e.code=On Before Keystroke:K2:6)
+						
+						Case of 
+								
+								//……………………………………………………………………
+							: ($e.row=Null:C1517)\
+								 | (Keystroke:C390#"%")
+								
+								// <NOTHING MORE TO DO>
+								//……………………………………………………………………
+							: ($e.columnName=This:C1470.shortLabels.name)\
+								 | ($e.columnName=This:C1470.labels.name)
+								
+								This:C1470.doTagMenu($e; New collection:C1472("name"))
+								
+								//……………………………………………………………………
+							: ($e.columnName=This:C1470.titles.name)
+								
+								This:C1470.doTagMenu($e; New collection:C1472("length"))
+								
+								//……………………………………………………………………
+						End case 
+						
+						//_______________________________
+				End case 
+				
+				//==============================================
+			: (This:C1470.selectorFields.catch())\
+				 | (This:C1470.selectorRelations.catch())
+				
+				Case of 
+						
+						//_______________________________
+					: ($e.code=On Clicked:K2:4)
+						
+						// Update
+						This:C1470.tabSelector.data:=Num:C11($e.objectName=This:C1470.selectorRelations.name)
+						This:C1470.setTab()
+						
+						//_______________________________
+					: ($e.code=On Mouse Enter:K2:33)
+						
+						If (This:C1470.current#$e.objectName)
+							
+							// Highlights
+							Choose:C955($e.objectName=This:C1470.selectorFields.name; This:C1470.selectorFields; This:C1470.selectorRelations)\
+								.setColors(EDITOR.selectedColor; Background color none:K23:10)
+							
+						End if 
+						
+						//_______________________________
+					: ($e.code=On Mouse Leave:K2:34)
+						
+						Choose:C955($e.objectName=This:C1470.selectorFields.name; This:C1470.selectorFields; This:C1470.selectorRelations)\
+							.setColors(Foreground color:K23:1; Background color none:K23:10)
+						
+						//_______________________________
+				End case 
+				
+				//==============================================
+			: (This:C1470.resources.catch($e; On Clicked:K2:4))
+				
+				This:C1470.doGetResources()
+				
+				//________________________________________
+		End case 
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function onLoad()
@@ -955,6 +1199,24 @@ Function doGetResources()
 		OPEN URL:C673(Get localized string:C991("res_formatters"); *)
 		
 	End if 
+	
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function doFormat() : Integer
+	
+	If (Shift down:C543)
+		
+		This:C1470.showFormatOnDisk()
+		
+	Else 
+		
+		This:C1470.doFormatMenu()
+		
+	End if 
+	
+	This:C1470.inEdition:=This:C1470.fieldList
+	
+	return (-1)  // 💪 We manage data entry
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Show format on disk

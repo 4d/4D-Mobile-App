@@ -29,35 +29,7 @@ Function init()
 	This:C1470.button("android").addToGroup($group)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function onLoad()
-	
-	If (Is Windows:C1573)
-		
-		This:C1470.android.setPicture("#images/os/Android-32.png")\
-			.setBackgroundPicture()\
-			.setNumStates(1)
-		
-		If (Form:C1466.$ios)
-			
-			This:C1470.ios.setPicture("#images/os/iOS-32.png")
-			
-		Else 
-			
-			This:C1470.ios.setPicture("#images/os/iOS-24.png")
-			
-		End if 
-		
-		This:C1470.ios.disable()\
-			.setBackgroundPicture()\
-			.setNumStates(1)
-		
-	End if 
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-Function handleEvents()
-	
-	var $e : Object
-	$e:=FORM Event:C1606
+Function handleEvents($e : Object)
 	
 	If ($e.objectName=Null:C1517)  // <== FORM METHOD
 		
@@ -82,8 +54,6 @@ Function handleEvents()
 		End case 
 		
 	Else   // <== WIDGETS METHOD
-		
-		$e:=This:C1470.event
 		
 		Case of 
 				
@@ -136,6 +106,31 @@ Function handleEvents()
 				
 				//________________________________________
 		End case 
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function onLoad()
+	
+	If (Is Windows:C1573)
+		
+		This:C1470.android.setPicture("#images/os/Android-32.png")\
+			.setBackgroundPicture()\
+			.setNumStates(1)
+		
+		If (Form:C1466.$ios)
+			
+			This:C1470.ios.setPicture("#images/os/iOS-32.png")
+			
+		Else 
+			
+			This:C1470.ios.setPicture("#images/os/iOS-24.png")
+			
+		End if 
+		
+		This:C1470.ios.disable()\
+			.setBackgroundPicture()\
+			.setNumStates(1)
+		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===

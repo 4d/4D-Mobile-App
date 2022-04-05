@@ -41,6 +41,54 @@ Function getCoordinates()->$coordinates : Object
 	This:C1470.updateCell()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Giving a column, a header or a footer name, returns the corresponding column pointer
+Function get columnPtr($name : Text) : Pointer
+	
+	var $indx : Integer
+	
+	ARRAY BOOLEAN:C223($isVisible; 0x0000)
+	ARRAY POINTER:C280($columnsPtr; 0x0000)
+	ARRAY POINTER:C280($footersPtr; 0x0000)
+	ARRAY POINTER:C280($headersPtr; 0x0000)
+	ARRAY POINTER:C280($stylesPtr; 0x0000)
+	ARRAY TEXT:C222($columns; 0x0000)
+	ARRAY TEXT:C222($footers; 0x0000)
+	ARRAY TEXT:C222($headers; 0x0000)
+	
+	LISTBOX GET ARRAYS:C832(*; This:C1470.name; \
+		$columns; $headers; \
+		$columnsPtr; $headersPtr; \
+		$isVisible; \
+		$stylesPtr; \
+		$footers; $footersPtr)
+	
+	$indx:=Find in array:C230($columns; $name)
+	
+	If ($indx>0)
+		
+		return ($columnsPtr{$indx})
+		
+	Else 
+		
+		$indx:=Find in array:C230($headers; $name)
+		
+		If ($indx>0)
+			
+			return ($columnsPtr{$indx})
+			
+		Else 
+			
+			$indx:=Find in array:C230($footers; $name)
+			
+			If ($indx>0)
+				
+				return ($columnsPtr{$indx})
+				
+			End if 
+		End if 
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Select row(s)
 Function select($row : Integer) : cs:C1710.listbox
 	

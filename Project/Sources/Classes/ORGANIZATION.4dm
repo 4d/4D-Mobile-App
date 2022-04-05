@@ -30,18 +30,13 @@ Function init()
 	This:C1470.button("identifierHelp")
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function handleEvents()
-	
-	var $e : Object
-	$e:=FORM Event:C1606
+Function handleEvents($e : Object)
 	
 	If ($e.objectName=Null:C1517)  // <== FORM METHOD
 		
 		$e:=panel_Common()
 		
 	Else   // <== WIDGETS METHOD
-		
-		$e:=This:C1470.event
 		
 		Case of 
 				

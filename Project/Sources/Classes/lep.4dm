@@ -9,6 +9,7 @@ Class constructor
 	
 	Super:C1705()
 	
+	// ⚠️ In some cases (Surface), the Home folder is not the parent of the desktop folder.
 	This:C1470.home:=Folder:C1567(Split string:C1554(Folder:C1567(fk desktop folder:K87:19).path; "/").resize(3).join("/"))
 	
 	This:C1470.reset()

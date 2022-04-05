@@ -143,6 +143,198 @@ Function init()
 	This:C1470.button("namePopup").addToGroup($group)
 	This:C1470.formObject("namePopupBorder").addToGroup($group)
 	
+	//=== === === === === === === === === === === === === === === === === === === === ==
+Function handleEvents($e : Object)
+	
+	If ($e.objectName=Null:C1517)  // <== FORM METHOD
+		
+		$e:=panel_Common(On Load:K2:1; On Timer:K2:25)
+		
+		Case of 
+				
+				//______________________________________________________
+			: ($e.code=On Load:K2:1)
+				
+				This:C1470.onLoad()
+				
+				//______________________________________________________
+			: ($e.code=On Timer:K2:25)
+				
+				This:C1470.update()
+				
+				//______________________________________________________
+		End case 
+		
+	Else   // <== WIDGETS METHOD
+		
+		Case of 
+				
+				//==============================================
+			: (This:C1470.parameters.catch())
+				
+				Case of 
+						
+						//_____________________________________
+					: ($e.code=On Getting Focus:K2:7)
+						
+						This:C1470.parameters.setColors(Foreground color:K23:1)
+						This:C1470.parametersBorder.setColors(EDITOR.selectedColor)
+						
+						//_____________________________________
+					: ($e.code=On Losing Focus:K2:8)
+						
+						This:C1470.parameters.setColors(Foreground color:K23:1)
+						This:C1470.parametersBorder.setColors(EDITOR.backgroundUnselectedColor)
+						
+						//_____________________________________
+					: ($e.code=On Selection Change:K2:29)
+						
+						This:C1470.$current:=This:C1470.current
+						
+						// Update UI
+						This:C1470.refresh()
+						//_____________________________________
+					: ($e.code=On Mouse Move:K2:35)
+						
+						SET CURSOR:C469
+						
+						//_____________________________________
+					: (PROJECT.isLocked())\
+						 | (Num:C11($e.row)=0)
+						
+						// <NOTHING MORE TO DO>
+						
+						//_____________________________________
+					: ($e.code=On Mouse Leave:K2:34)
+						
+						This:C1470.dropCursor.hide()
+						
+						//_____________________________________
+				End case 
+				
+				//==============================================
+			: (This:C1470.add.catch($e; New collection:C1472(On Clicked:K2:4; On Alternative Click:K2:36)))
+				
+				If ($e.code=On Clicked:K2:4)
+					
+					This:C1470.doAddParameter(This:C1470.add)
+					
+				Else 
+					
+					This:C1470.doAddParameterMenu(This:C1470.add)
+					
+				End if 
+				
+				//==============================================
+			: (This:C1470.remove.catch($e; On Clicked:K2:4))
+				
+				This:C1470.doRemoveParameter()
+				
+				//==============================================
+			: (This:C1470.mandatory.catch($e; On Clicked:K2:4))
+				
+				This:C1470.doMandatory()
+				
+				//==============================================
+			: (This:C1470.formatPopup.catch($e; On Clicked:K2:4))
+				
+				If (Shift down:C543)
+					
+					This:C1470.showFormatOnDisk()
+					
+				Else 
+					
+					This:C1470.doFormatMenu()
+					
+				End if 
+				
+				//==============================================
+			: (This:C1470.dataSourcePopup.catch($e; On Clicked:K2:4))
+				
+				This:C1470.doDataSourceMenu()
+				
+				//==============================================
+			: (This:C1470.sortOrderPopup.catch($e; On Clicked:K2:4))
+				
+				This:C1470.doSortOrderMenu()
+				
+				//==============================================
+			: (This:C1470.min.catch($e; On Data Change:K2:15))
+				
+				This:C1470.doRule("min")
+				
+				//==============================================
+			: (This:C1470.max.catch($e; On Data Change:K2:15))
+				
+				This:C1470.doRule("max")
+				
+				//==============================================
+			: (This:C1470.defaultValue.catch($e; On After Edit:K2:43))
+				
+				If (Length:C16(Get edited text:C655)=0)
+					
+					OB REMOVE:C1226(This:C1470.current; "default")
+					
+				End if 
+				
+				//==============================================
+			: (This:C1470.defaultValue.catch($e; On Data Change:K2:15))
+				
+				This:C1470.doDefaultValue()
+				
+				//==================================================
+			: (This:C1470.format.catch())
+				
+				Case of 
+						
+						//_______________________________
+					: ($e.code=On Mouse Enter:K2:33)
+						
+						EDITOR.tips.instantly()
+						
+						//_______________________________
+					: ($e.code=On Mouse Move:K2:35)
+						
+						This:C1470.setHelpTip()
+						
+						//_______________________________
+					: ($e.code=On Mouse Leave:K2:34)
+						
+						EDITOR.tips.restore()
+						
+						//________________________________________
+				End case 
+				
+				//==================================================
+			: (This:C1470.paramName.catch())
+				
+				This:C1470.doName($e)
+				
+				//==================================================
+			: (This:C1470.namePopup.catch($e; On Clicked:K2:4))
+				
+				This:C1470.doAddParameterMenu(This:C1470.namePopup; True:C214)
+				
+				//==================================================
+			: (This:C1470.revealFormat.catch($e; On Clicked:K2:4))
+				
+				SHOW ON DISK:C922(This:C1470.sourceFolder(Delete string:C232(This:C1470.current.format; 1; 1)).platformPath)
+				
+				//==================================================
+			: (This:C1470.revealDatasource.catch($e; On Clicked:K2:4))
+				
+				SHOW ON DISK:C922(This:C1470.sourceFolder(Delete string:C232(This:C1470.current.source; 1; 1); True:C214).platformPath)
+				
+				//==================================================
+			: ($e.code=On Data Change:K2:15)\
+				 & (This:C1470.linked.belongsTo($e.objectName))  // Linked widgets
+				
+				PROJECT.save()
+				
+				//==============================================
+		End case 
+	End if 
+	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function onLoad()
 	
@@ -177,7 +369,180 @@ Function onLoad()
 	This:C1470.formatLabel.setTitle("inputControl")
 	
 	// Add the events that we cannot select in the form properties 😇
-	This:C1470.appendEvents(New collection:C1472(On Alternative Click:K2:36; On Before Keystroke:K2:6; On After Keystroke:K2:26))
+	This:C1470.appendEvents(New collection:C1472(On Alternative Click:K2:36; On Before Keystroke:K2:6; On After Keystroke:K2:26; -1; -2; -3))
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+	/// Internal drop for params
+Function doParameters()->$allow : Integer
+	
+	var $uri : Text
+	var $x : Blob
+	var $e; $me; $o : Object
+	
+	$uri:="com.4d.private.4dmobile.parameter"
+	
+	$e:=FORM Event:C1606
+	$e.row:=Drop position:C608
+	
+	Case of 
+			
+			//______________________________________________________
+		: (PROJECT.isLocked())
+			
+			$allow:=-1  // Reject drop
+			
+			//______________________________________________________
+		: ($e.code=On Begin Drag Over:K2:44)
+			
+			$o:=New object:C1471(\
+				"src"; This:C1470.index)
+			
+			VARIABLE TO BLOB:C532($o; $x)
+			APPEND DATA TO PASTEBOARD:C403($uri; $x)
+			SET BLOB SIZE:C606($x; 0)
+			
+			//______________________________________________________
+		: ($e.code=On Drag Over:K2:13)
+			
+			$allow:=-1  // Reject drop
+			
+			GET PASTEBOARD DATA:C401($uri; $x)
+			
+			If (Bool:C1537(OK))
+				
+				BLOB TO VARIABLE:C533($x; $o)
+				SET BLOB SIZE:C606($x; 0)
+				
+				$me:=This:C1470.parameters
+				
+				If ($e.row=-1)  // After the last line
+					
+					If ($o.src#$me.rowsNumber())  // Not if the source was the last line
+						
+						$o:=$me.getRowCoordinates($me.rowsNumber())
+						$o.top:=$o.bottom
+						$o.right:=$me.coordinates.right
+						$allow:=0  // Allow drop
+						
+					End if 
+					
+				Else 
+					
+					If ($o.src#$e.row)\
+						 & ($e.row#($o.src+1))  // Not the same or the next one
+						
+						$o:=$me.getRowCoordinates($e.row)
+						$o.bottom:=$o.top
+						$o.right:=$me.coordinates.right
+						$allow:=0  // Allow drop
+						
+					End if 
+				End if 
+			End if 
+			
+			If ($allow=-1)
+				
+				SET CURSOR:C469(9019)
+				This:C1470.dropCursor.hide()
+				
+			Else 
+				
+				This:C1470.dropCursor.setCoordinates($o.left; $o.top; $o.right; $o.bottom)
+				This:C1470.dropCursor.show()
+				
+			End if 
+			
+			//______________________________________________________
+		: ($e.code=On Drop:K2:12)
+			
+			GET PASTEBOARD DATA:C401($uri; $x)
+			
+			If (Bool:C1537(OK))
+				
+				BLOB TO VARIABLE:C533($x; $o)
+				SET BLOB SIZE:C606($x; 0)
+				
+				$o.tgt:=Drop position:C608
+				
+				If ($o.src#$o.tgt)
+					
+					If ($o.tgt=-1)  // After the last line
+						
+						This:C1470.action.parameters.push(This:C1470.current)
+						This:C1470.action.parameters.remove($o.src-1)
+						
+					Else 
+						
+						This:C1470.action.parameters.insert($o.tgt-1; This:C1470.current)
+						
+						If ($o.tgt<$o.src)
+							
+							This:C1470.action.parameters.remove($o.src)
+							
+						Else 
+							
+							This:C1470.action.parameters.remove($o.src-1)
+							
+						End if 
+					End if 
+					
+					PROJECT.save()
+					
+				End if 
+				
+				This:C1470.dropCursor.hide()
+				This:C1470.parameters.touch()
+				
+			End if 
+			
+			//______________________________________________________
+	End case 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+	/// predicting container method
+Function doPredicting()
+	
+	var $e : Object
+	$e:=FORM Event:C1606
+	
+	If ($e.code<0)
+		
+		var $o : Object
+		$o:=This:C1470.predicting.getValue()
+		
+		Case of 
+				
+				//_________________________
+			: ($e.code=-1)  // Validate
+				
+				This:C1470.updateParamater($o.choice.value)
+				This:C1470.postKeyDown(Tab:K15:37)
+				This:C1470.refresh()
+				
+				//_________________________
+			: ($e.code=-2)  // Show
+				
+				This:C1470.predicting.show()
+				
+				var $height : Integer
+				$height:=$o.ƒ.bestSize()
+				
+				If ((This:C1470.predicting.coordinates.top+$height)>This:C1470.dimensions().height)
+					
+					$height:=This:C1470.dimensions().height-This:C1470.predicting.coordinates.top
+					
+				End if 
+				
+				This:C1470.predicting.setHeight($height)
+				
+				//_________________________
+			: ($e.code=-3)  // Hide
+				
+				This:C1470.predicting.hide()
+				
+				//_________________________
+		End case 
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function saveContext($current : Object)
@@ -1446,16 +1811,13 @@ Function doDataSourceMenu()
 Function editList()
 	
 	//$form:=New object(\
-																								"static"; $static; \
-																								"host"; This.path.hostInputControls(True))
+								"static"; $static; \
+								"host"; This.path.hostInputControls(True))
 	
 	//$form.folder:=This.path.hostInputControls()
 	//$manifest:=$form.folder.file("manifest.json")
 	
-	
-	
-	
-	// === === === === === === === === === === === === === === === === === === === === ===
+	//===============================================================
 Function doRule($name : Text)
 	
 	var $value : Variant
@@ -1635,69 +1997,6 @@ Function doDefaultValue()
 	
 	//This.refresh()
 	PROJECT.save()
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-	// Initialization of the internal D&D for actions
-Function doBeginDrag()
-	
-	var $x : Blob
-	var $o : Object
-	
-	$o:=New object:C1471(\
-		"src"; This:C1470.index)
-	
-	// Put into the container
-	VARIABLE TO BLOB:C532($o; $x)
-	APPEND DATA TO PASTEBOARD:C403("com.4d.private.4dmobile.parameter"; $x)
-	SET BLOB SIZE:C606($x; 0)
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-	// Internal drop for actions
-Function doOnDrop()
-	
-	var $x : Blob
-	var $o : Object
-	
-	// Get the pastboard
-	GET PASTEBOARD DATA:C401("com.4d.private.4dmobile.parameter"; $x)
-	
-	If (Bool:C1537(OK))
-		
-		BLOB TO VARIABLE:C533($x; $o)
-		SET BLOB SIZE:C606($x; 0)
-		
-		$o.tgt:=Drop position:C608
-		
-	End if 
-	
-	If ($o.src#$o.tgt)
-		
-		If ($o.tgt=-1)  // After the last line
-			
-			This:C1470.action.parameters.push(This:C1470.current)
-			This:C1470.action.parameters.remove($o.src-1)
-			
-		Else 
-			
-			This:C1470.action.parameters.insert($o.tgt-1; This:C1470.current)
-			
-			If ($o.tgt<$o.src)
-				
-				This:C1470.action.parameters.remove($o.src)
-				
-			Else 
-				
-				This:C1470.action.parameters.remove($o.src-1)
-				
-			End if 
-		End if 
-		
-		PROJECT.save()
-		
-	End if 
-	
-	This:C1470.dropCursor.hide()
-	This:C1470.parameters.touch()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function doName($e : Object)
@@ -2002,7 +2301,7 @@ Function formatToolTip($format : Text)->$tip : Text
 		//SHARED.resources.formattersByName:=New object
 		//var $bind
 		//For each ($bind; SHARED.resources.fieldBindingTypes\
-																														.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
+																																										.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
 		//SHARED.resources.formattersByName[$bind.name]:=$bind
 		//End for each
 		//End if

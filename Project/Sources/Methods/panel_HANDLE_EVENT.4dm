@@ -1,2 +1,2 @@
 //%attributes = {"invisible":true}
-panel_Load.handleEvents()
+panel_Load.handleEvents(FORM Event:C1606)

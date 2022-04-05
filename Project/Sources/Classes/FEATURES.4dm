@@ -64,6 +64,129 @@ Function init()
 	This:C1470.formObject("deepLinkBorder"; "associatedDomain.border").addToGroup($group)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
+Function handleEvents($e : Object)
+	
+	If ($e.objectName=Null:C1517)  // <== FORM METHOD
+		
+		$e:=panel_Common(On Load:K2:1; On Timer:K2:25)
+		
+		Case of 
+				
+				//______________________________________________
+			: ($e.code=On Load:K2:1)
+				
+				This:C1470.onLoad()
+				
+				//______________________________________________
+			: ($e.code=On Timer:K2:25)
+				
+				This:C1470.update()
+				
+				//______________________________________________
+		End case 
+		
+	Else   // <== WIDGETS METHOD
+		
+		Case of 
+				
+				//==============================================
+			: (This:C1470.loginRequired.catch($e; On Clicked:K2:4))
+				
+				Form:C1466.server.authentication.email:=Bool:C1537(Form:C1466.server.authentication.email)
+				PROJECT.save()
+				
+				This:C1470.authenticationGroup.show(Form:C1466.server.authentication.email)
+				
+				//==============================================
+			: (This:C1470.authenticationButton.catch($e; On Clicked:K2:4))
+				
+				EDITOR.editAuthenticationMethod()
+				This:C1470.checkAuthenticationMethod()
+				
+				//==============================================
+			: (This:C1470.pushNotification.catch($e; On Clicked:K2:4))
+				
+				Form:C1466.server.pushNotification:=Bool:C1537(Form:C1466.server.pushNotification)
+				PROJECT.save()
+				
+				This:C1470.certificateGroup.show(Form:C1466.server.pushNotification)
+				This:C1470.refresh()
+				
+				//==============================================
+			: (This:C1470.certificate.catch($e; On Data Change:K2:15))
+				
+				If (This:C1470.certificate.picker.target#Null:C1517)
+					
+					If (Bool:C1537(This:C1470.certificate.picker.target.exists))
+						
+						If (This:C1470.certificate.picker.path#String:C10(Form:C1466.server.pushCertificate))
+							
+							Form:C1466.server.pushCertificate:=cs:C1710.doc.new(This:C1470.certificate.picker.target).relativePath
+							PROJECT.save()
+							
+						End if 
+					End if 
+				End if 
+				
+				//==============================================
+			: (This:C1470.deepLinking.catch($e; On Clicked:K2:4))
+				
+				Form:C1466.deepLinking.enabled:=Bool:C1537(Form:C1466.deepLinking.enabled)
+				
+				If (Form:C1466.deepLinking.enabled)
+					
+					This:C1470.deepLinkingGroup.show()
+					
+					// Create scheme from application name if not defined
+					This:C1470.initScheme()
+					
+					If (Form:C1466.deepLinking.associatedDomain=Null:C1517)
+						
+						Form:C1466.deepLinking.associatedDomain:=""
+						This:C1470.deepLink.setHelpTip()
+						
+					Else 
+						
+						This:C1470.deepLink.setHelpTip("universalLinksTips")
+						
+					End if 
+					
+				Else 
+					
+					This:C1470.deepLinkingGroup.hide()
+					
+				End if 
+				
+				PROJECT.save()
+				
+				This:C1470.refresh()
+				
+				//==============================================
+			: (This:C1470.deepScheme.catch($e; On Data Change:K2:15))
+				
+				If (This:C1470.validateScheme())
+					
+					PROJECT.save()
+					
+				End if 
+				
+				//==============================================
+			: (This:C1470.deepSchemeAlert.catch())
+				
+				This:C1470.deepSchemeAlert.method($e)
+				
+				//==============================================
+			: (This:C1470.deepLink.catch($e; On Data Change:K2:15))
+				
+				PROJECT.save()
+				
+				This:C1470.deepLink.setHelpTip(Choose:C955(Length:C16(Form:C1466.deepLinking.associatedDomain)>0; "universalLinksTips"; ""))
+				
+				//==============================================
+		End case 
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function onLoad()
 	
 	This:C1470.loginRequired.bestSize()

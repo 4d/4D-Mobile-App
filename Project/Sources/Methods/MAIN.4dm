@@ -3,7 +3,9 @@ var $e; $ƒ : Object
 
 $ƒ:=panel_Load
 
-If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
+$e:=FORM Event:C1606
+
+If ($e.objectName=Null:C1517)  // <== FORM METHOD
 	
 	$e:=panel_Common(On Load:K2:1; On Timer:K2:25)
 	
@@ -23,8 +25,6 @@ If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 	End case 
 	
 Else   // <== WIDGETS METHOD
-	
-	$e:=$ƒ.event
 	
 	Case of 
 			

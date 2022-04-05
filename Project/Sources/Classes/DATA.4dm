@@ -58,66 +58,8 @@ Function init()
 	
 	This:C1470.subform("noDataModel")
 	
-	// === === === === === === === === === === === === === === === === === === === === ===
-	/// Initializations at loading
-Function onLoad()
-	
-	This:C1470.list.setScrollbars(False:C215; 2)
-	
-	// Get/update the table list
-	This:C1470.tableList()
-	
-	If (This:C1470.tables.length>0)
-		
-		This:C1470.tableGroup.show()
-		This:C1470.noDataModel.hide()
-		
-	Else 
-		
-		This:C1470.lastIndex:=0
-		
-		This:C1470.tableGroup.hide()
-		This:C1470.noDataModel.show()
-		
-	End if 
-	
-	// Init the query widget
-	var $t : Text
-	If (EDITOR.darkScheme)
-		
-		$t:=File:C1566("/RESOURCES/queryWidget_dark.svg").getText()
-		
-	Else 
-		
-		$t:=File:C1566("/RESOURCES/queryWidget.svg").getText()
-		
-	End if 
-	
-	PROCESS 4D TAGS:C816($t; $t; \
-		EDITOR.selectedFillColor; \
-		Get localized string:C991("fields"); \
-		Get localized string:C991("comparators"); \
-		Get localized string:C991("operators"); \
-		"🢓")
-	
-	This:C1470.queryWidget.setValue(cs:C1710.svg.new($t).picture())
-	
-	If (PROJECT.iOS() & PROJECT.android())
-		
-		This:C1470.dataSizeLabel.title:=This:C1470.dataSizeLabel.title+" (iOS / Android)"
-		
-	End if 
-	
-	This:C1470.update()
-	
-	This:C1470.list.focus()
-	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function handleEvents()
-	
-	var $e; $o : Object
-	
-	$e:=FORM Event:C1606
+Function handleEvents($e : Object)
 	
 	If ($e.objectName=Null:C1517)  // <== FORM METHOD
 		
@@ -139,8 +81,6 @@ Function handleEvents()
 		End case 
 		
 	Else   // <== WIDGETS METHOD
-		
-		$e:=This:C1470.event
 		
 		Case of 
 				
@@ -194,6 +134,60 @@ Function handleEvents()
 				//________________________________________
 		End case 
 	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+	/// Initializations at loading
+Function onLoad()
+	
+	This:C1470.list.setScrollbars(False:C215; 2)
+	
+	// Get/update the table list
+	This:C1470.tableList()
+	
+	If (This:C1470.tables.length>0)
+		
+		This:C1470.tableGroup.show()
+		This:C1470.noDataModel.hide()
+		
+	Else 
+		
+		This:C1470.lastIndex:=0
+		
+		This:C1470.tableGroup.hide()
+		This:C1470.noDataModel.show()
+		
+	End if 
+	
+	// Init the query widget
+	var $t : Text
+	If (EDITOR.darkScheme)
+		
+		$t:=File:C1566("/RESOURCES/queryWidget_dark.svg").getText()
+		
+	Else 
+		
+		$t:=File:C1566("/RESOURCES/queryWidget.svg").getText()
+		
+	End if 
+	
+	PROCESS 4D TAGS:C816($t; $t; \
+		EDITOR.selectedFillColor; \
+		Get localized string:C991("fields"); \
+		Get localized string:C991("comparators"); \
+		Get localized string:C991("operators"); \
+		"🢓")
+	
+	This:C1470.queryWidget.setValue(cs:C1710.svg.new($t).picture())
+	
+	If (PROJECT.iOS() & PROJECT.android())
+		
+		This:C1470.dataSizeLabel.title:=This:C1470.dataSizeLabel.title+" (iOS / Android)"
+		
+	End if 
+	
+	This:C1470.update()
+	
+	This:C1470.list.focus()
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Update of the user interface

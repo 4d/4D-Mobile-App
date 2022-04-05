@@ -31,6 +31,42 @@ Function init()
 	This:C1470.button("webSettings").addToGroup($group)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
+Function handleEvents($e : Object)
+	
+	If ($e.objectName=Null:C1517)  // <== Form method
+		
+		$e:=panel_Common(On Load:K2:1)
+		
+		Case of 
+				
+				//______________________________________________________
+			: ($e.code=On Load:K2:1)
+				
+				This:C1470.onLoad()
+				
+				//______________________________________________________
+		End case 
+		
+	Else   // <== Widgets method
+		
+		Case of 
+				
+				//==================================================
+			: (This:C1470.productionURL.catch($e; On Data Change:K2:15))
+				
+				// Verify the web server configuration
+				EDITOR.callMeBack("checkingServerConfiguration")
+				
+				//==================================================
+			: (This:C1470.webSettings.catch($e; On Clicked:K2:4))
+				
+				OPEN SETTINGS WINDOW:C903("/Database/Web/Config")
+				
+				//==================================================
+		End case 
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function onLoad()
 	
 	This:C1470.webSettings.bestSize()
@@ -45,9 +81,3 @@ Function onLoad()
 		"urls"; New object:C1471)))
 	
 	ob_MERGE(Form:C1466; $o.buffer)
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-Function doSettings()
-	
-	OPEN SETTINGS WINDOW:C903("/Database/Web/Config")
-	

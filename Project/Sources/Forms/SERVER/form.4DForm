@@ -9,10 +9,14 @@
 	"markerFooter": 240,
 	"events": [
 		"onLoad",
+		"onClick",
+		"onDataChange",
 		"onUnload",
-		"onTimer"
+		"onTimer",
+		"onMouseEnter",
+		"onMouseLeave"
 	],
-	"method": "SERVER",
+	"method": "panel_HANDLE_EVENT",
 	"pageFormat": {
 		"paperName": "A4",
 		"paperWidth": "595pt",
@@ -51,8 +55,7 @@
 					"dragging": "none",
 					"events": [
 						"onDataChange"
-					],
-					"method": "SERVER"
+					]
 				},
 				"webSettings": {
 					"type": "button",
@@ -64,7 +67,6 @@
 					"events": [
 						"onClick"
 					],
-					"method": "SERVER",
 					"focusable": false
 				},
 				"webSettings.label": {
@@ -83,7 +85,6 @@
 					"width": 20,
 					"height": 20,
 					"style": "custom",
-					"method": "ObjectMethods/prodURL.alert.4dm",
 					"events": [
 						"onMouseEnter",
 						"onMouseLeave"
@@ -103,5 +104,5 @@
 			"View 1": {}
 		}
 	},
-	"geometryStamp": 7
+	"geometryStamp": 13
 }

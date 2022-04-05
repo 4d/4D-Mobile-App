@@ -330,9 +330,6 @@
 		]
 	},
 	"06] DATA": {
-		"methods": [
-			"DATA"
-		],
 		"forms": [
 			"DATA"
 		],
@@ -353,9 +350,6 @@
 		]
 	},
 	"08] ACTIONS_PARAMS": {
-		"methods": [
-			"ACTIONS_PARAMS"
-		],
 		"forms": [
 			"ACTIONS_PARAMS"
 		],
@@ -376,7 +370,6 @@
 	"10] FIELDS": {
 		"methods": [
 			"COMPILER_fields",
-			"FIELDS",
 			"FIELDS_CALLBACK"
 		],
 		"forms": [
@@ -418,9 +411,6 @@
 		]
 	},
 	"13] SERVER": {
-		"methods": [
-			"SERVER"
-		],
 		"forms": [
 			"SERVER"
 		],
@@ -429,9 +419,6 @@
 		]
 	},
 	"14] FEATURES": {
-		"methods": [
-			"FEATURES"
-		],
 		"forms": [
 			"FEATURES"
 		],

@@ -5,10 +5,10 @@
 // Created 10-8-2017 by Vincent de Lachaux
 // ----------------------------------------------------
 // Description:
-// Returns a collection of the panels of the current form
+// Returns a collection of the panel manes of the current form
 // ----------------------------------------------------
 // Declarations
-var $0 : Collection
+#DECLARE() : Collection
 
 If (False:C215)
 	C_COLLECTION:C1488(panels; $0)
@@ -16,8 +16,6 @@ End if
 
 var $index : Integer
 var $panels : Collection
-
-// NO PARAMETERS REQUIRED
 
 // ----------------------------------------------------
 ARRAY TEXT:C222($widgets; 0x0000)
@@ -36,9 +34,4 @@ Repeat
 	End if 
 Until ($index=-1)
 
-// ----------------------------------------------------
-// Return
-$0:=$panels
-
-// ----------------------------------------------------
-// End
+return ($panels)

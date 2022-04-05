@@ -43,68 +43,7 @@ Function init()
 	This:C1470.parametersLink:=Formula:C1597(panel("ACTIONS_PARAMS"))
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function onLoad()
-	
-	// This trick remove the horizontal gap
-	This:C1470.actions.setScrollbars(0; 2)
-	
-	// Set the initial display
-	If ((Form:C1466.dataModel#Null:C1517) && Not:C34(OB Is empty:C1297(Form:C1466.dataModel)))
-		
-		This:C1470.actions.show().updateDefinition()
-		This:C1470.noDataModel.hide()
-		
-		This:C1470.add.enable()
-		This:C1470.databaseMethod.enable()
-		
-		This:C1470.dropCursor.setColors(Highlight menu background color:K23:7)
-		
-		If ((Form:C1466.actions#Null:C1517) && (Form:C1466.actions.length>0))
-			
-			// Select last used action (or the first one)
-			If (This:C1470.$current#Null:C1517)
-				
-				var $indx : Integer
-				$indx:=Form:C1466.actions.indexOf(This:C1470.$current)
-				This:C1470.actions.select($indx+1)
-				
-			Else 
-				
-				This:C1470.actions.select(1)
-				
-			End if 
-			
-			This:C1470.updateParameters()
-			
-		End if 
-		
-		This:C1470.actions.focus()
-		
-	Else 
-		
-		This:C1470.actions.hide()
-		This:C1470.noDataModel.show()
-		
-		This:C1470.add.disable()
-		This:C1470.databaseMethod.disable()
-		
-	End if 
-	
-	// Preload the icons
-	This:C1470.callMeBack("loadActionIcons")
-	
-	// Give the focus to the actions listbox
-	This:C1470.actions.focus()
-	
-	// Add the events that we cannot select in the form properties 😇
-	This:C1470.appendEvents(New collection:C1472(On Alternative Click:K2:36; On Before Data Entry:K2:39; On Data Change:K2:15))
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-Function handleEvents()
-	
-	var $e : Object
-	
-	$e:=FORM Event:C1606
+Function handleEvents($e : Object)
 	
 	If ($e.objectName=Null:C1517)  // <== FORM METHOD
 		
@@ -287,6 +226,106 @@ Function handleEvents()
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
+Function onLoad()
+	
+	// This trick remove the horizontal gap
+	This:C1470.actions.setScrollbars(0; 2)
+	
+	// Set the initial display
+	If ((Form:C1466.dataModel#Null:C1517) && Not:C34(OB Is empty:C1297(Form:C1466.dataModel)))
+		
+		This:C1470.actions.show().updateDefinition()
+		This:C1470.noDataModel.hide()
+		
+		This:C1470.add.enable()
+		This:C1470.databaseMethod.enable()
+		
+		This:C1470.dropCursor.setColors(Highlight menu background color:K23:7)
+		
+		If ((Form:C1466.actions#Null:C1517) && (Form:C1466.actions.length>0))
+			
+			// Select last used action (or the first one)
+			If (This:C1470.$current#Null:C1517)
+				
+				var $indx : Integer
+				$indx:=Form:C1466.actions.indexOf(This:C1470.$current)
+				This:C1470.actions.select($indx+1)
+				
+			Else 
+				
+				This:C1470.actions.select(1)
+				
+			End if 
+			
+			This:C1470.updateParameters()
+			
+		End if 
+		
+		This:C1470.actions.focus()
+		
+	Else 
+		
+		This:C1470.actions.hide()
+		This:C1470.noDataModel.show()
+		
+		This:C1470.add.disable()
+		This:C1470.databaseMethod.disable()
+		
+	End if 
+	
+	// Preload the icons
+	This:C1470.callMeBack("loadActionIcons")
+	
+	// Give the focus to the actions listbox
+	This:C1470.actions.focus()
+	
+	// Add the events that we cannot select in the form properties 😇
+	This:C1470.appendEvents(New collection:C1472(On Alternative Click:K2:36; On Before Data Entry:K2:39; On Data Change:K2:15))
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+	// Update UI
+Function update()
+	
+	var $success : Boolean
+	ARRAY TEXT:C222($methods; 0)
+	
+	This:C1470.updateParameters()
+	
+	This:C1470.remove.enable(Num:C11(This:C1470.index)#0)
+	
+	METHOD GET PATHS:C1163(Path database method:K72:2; $methods; *)
+	$success:=(Find in array:C230($methods; METHOD Get path:C1164(Path database method:K72:2; "onMobileAppAction"))>0)
+	This:C1470.databaseMethod.setTitle(Choose:C955($success; "edit..."; "create..."))
+	This:C1470.databaseMethod.enable($success | ((Form:C1466.actions#Null:C1517) && (Form:C1466.actions.length>0)))
+	
+	This:C1470.databaseMethodGroup.distributeRigthToLeft(New object:C1471("spacing"; 20))
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+	// Update parameters panel, if present
+Function updateParameters($action : Object)
+	
+	var $o : Object
+	
+	$o:=This:C1470.parametersLink.call()
+	
+	If ($o#Null:C1517)
+		
+		If (Count parameters:C259=0)
+			
+			// Use current
+			$o.action:=This:C1470.current
+			
+		Else 
+			
+			$o.action:=$action
+			
+		End if 
+		
+		This:C1470.callMeBack("refreshParameters")
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	/// Internal drop for actions
 Function doActions()->$allow : Integer
 	
@@ -299,14 +338,12 @@ Function doActions()->$allow : Integer
 	$e:=FORM Event:C1606
 	$e.row:=Drop position:C608
 	
-	ASSERT:C1129(Not:C34(Shift down:C543))
-	
 	Case of 
 			
 			//______________________________________________________
 		: (PROJECT.isLocked())
 			
-			// <NOTHING MORE TO DO>
+			$allow:=-1  // Reject drop
 			
 			//______________________________________________________
 		: ($e.code=On Begin Drag Over:K2:44)
@@ -453,49 +490,6 @@ Function setIcon($data : Object)
 	This:C1470.actions.touch()
 	
 	This:C1470.refresh()
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-	// Update UI
-Function update()
-	
-	var $success : Boolean
-	ARRAY TEXT:C222($methods; 0)
-	
-	This:C1470.updateParameters()
-	
-	This:C1470.remove.enable(Num:C11(This:C1470.index)#0)
-	
-	METHOD GET PATHS:C1163(Path database method:K72:2; $methods; *)
-	$success:=(Find in array:C230($methods; METHOD Get path:C1164(Path database method:K72:2; "onMobileAppAction"))>0)
-	This:C1470.databaseMethod.setTitle(Choose:C955($success; "edit..."; "create..."))
-	This:C1470.databaseMethod.enable($success | ((Form:C1466.actions#Null:C1517) && (Form:C1466.actions.length>0)))
-	
-	This:C1470.databaseMethodGroup.distributeRigthToLeft(New object:C1471("spacing"; 20))
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-	// Update parameters panel, if present
-Function updateParameters($action : Object)
-	
-	var $o : Object
-	
-	$o:=This:C1470.parametersLink.call()
-	
-	If ($o#Null:C1517)
-		
-		If (Count parameters:C259=0)
-			
-			// Use current
-			$o.action:=This:C1470.current
-			
-		Else 
-			
-			$o.action:=$action
-			
-		End if 
-		
-		This:C1470.callMeBack("refreshParameters")
-		
-	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function doNewAction($tableNumber : Integer)

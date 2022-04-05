@@ -30,42 +30,10 @@ Function init()
 	This:C1470.button("teamHelp")
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function onLoad()
+Function handleEvents($e : Object)
 	
-	This:C1470.team.setValue(String:C10(PROJECT.organization.teamId))
-	
-	Case of 
-			
-			//…………………………………………………………………………………………
-		: (Is macOS:C1572)
-			
-			This:C1470.teamMenu.disable()
-			
-			// *LAUNCH GETTING TEAM IDS
-			This:C1470.callWorker("teamId"; New object:C1471(\
-				"action"; "list"; \
-				"provisioningProfiles"; True:C214; \
-				"certificate"; True:C214; \
-				"caller"; This:C1470.window; \
-				"callerMethod"; This:C1470.callback; \
-				"callerReturn"; "teamId"))
-			
-			//…………………………………………………………………………………………
-		: (Is Windows:C1573)
-			
-			This:C1470.team.disable()
-			This:C1470.teamMenu.disable()
-			
-			//…………………………………………………………………………………………
-	End case 
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-Function handleEvents()
-	
-	var $e; $o : Object
+	var $o : Object
 	var $menu : cs:C1710.menu
-	
-	$e:=FORM Event:C1606
 	
 	If ($e.objectName=Null:C1517)  // <== FORM METHOD
 		
@@ -141,6 +109,36 @@ Function handleEvents()
 				//________________________________________
 		End case 
 	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function onLoad()
+	
+	This:C1470.team.setValue(String:C10(PROJECT.organization.teamId))
+	
+	Case of 
+			
+			//…………………………………………………………………………………………
+		: (Is macOS:C1572)
+			
+			This:C1470.teamMenu.disable()
+			
+			// *LAUNCH GETTING TEAM IDS
+			This:C1470.callWorker("teamId"; New object:C1471(\
+				"action"; "list"; \
+				"provisioningProfiles"; True:C214; \
+				"certificate"; True:C214; \
+				"caller"; This:C1470.window; \
+				"callerMethod"; This:C1470.callback; \
+				"callerReturn"; "teamId"))
+			
+			//…………………………………………………………………………………………
+		: (Is Windows:C1573)
+			
+			This:C1470.team.disable()
+			This:C1470.teamMenu.disable()
+			
+			//…………………………………………………………………………………………
+	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function setTeamID($id : Text; $item : Text)

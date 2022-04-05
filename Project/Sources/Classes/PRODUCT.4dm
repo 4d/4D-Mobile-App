@@ -47,19 +47,7 @@ Function init()
 	This:C1470.iconColor:=Null:C1517
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function onLoad()
-	
-	If (PROJECT.ui.dominantColor#Null:C1517)
-		
-		This:C1470.mainColor:=cs:C1710.color.new(PROJECT.ui.dominantColor).main
-		
-	End if 
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-Function handleEvents()
-	
-	var $e : Object
-	$e:=FORM Event:C1606
+Function handleEvents($e : Object)
 	
 	If ($e.objectName=Null:C1517)  // <== FORM METHOD
 		
@@ -87,8 +75,6 @@ Function handleEvents()
 		End case 
 		
 	Else   // <== WIDGETS METHOD
-		
-		$e:=This:C1470.event
 		
 		Case of 
 				
@@ -131,6 +117,15 @@ Function handleEvents()
 				
 				//________________________________________
 		End case 
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function onLoad()
+	
+	If (PROJECT.ui.dominantColor#Null:C1517)
+		
+		This:C1470.mainColor:=cs:C1710.color.new(PROJECT.ui.dominantColor).main
+		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===

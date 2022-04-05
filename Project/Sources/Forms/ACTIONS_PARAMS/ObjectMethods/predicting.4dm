@@ -1,1 +1,1 @@
-ACTIONS_PARAMS
+panel.doPredicting()

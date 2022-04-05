@@ -5,7 +5,7 @@
 // Created 11-5-2017 by Vincent de Lachaux
 // ----------------------------------------------------
 // Description:
-// Force a O bound variable change event
+// Force a On bound variable change event
 // ----------------------------------------------------
 // Declarations
 var $indx : Integer

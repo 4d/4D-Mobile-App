@@ -23,7 +23,7 @@
 		"onAfterEdit",
 		"onBeginDragOver"
 	],
-	"method": "ACTIONS_PARAMS",
+	"method": "panel_HANDLE_EVENT",
 	"pageFormat": {
 		"paperName": "A4",
 		"paperWidth": "595pt",
@@ -609,9 +609,7 @@
 					"detailForm": "PREDICTIVE_ENTRY",
 					"focusable": false,
 					"visibility": "hidden",
-					"events": [
-						"onLoad"
-					],
+					"events": [],
 					"method": "ObjectMethods/predicting.4dm"
 				},
 				"namePopupBorder": {

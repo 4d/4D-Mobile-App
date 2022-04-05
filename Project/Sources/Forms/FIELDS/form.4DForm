@@ -370,7 +370,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"method": "FIELDS",
+	"method": "panel_HANDLE_EVENT",
 	"geometryStamp": 39,
 	"editor": {
 		"activeView": "View 1",
