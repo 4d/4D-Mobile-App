@@ -483,15 +483,9 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_generateDataModel")
 				
-				$project:=New object:C1471
-				$project.product:=PROJECT.product
-				$project.dataModel:=PROJECT.dataModel
-				
 				$pathName:=Temporary folder:C486+Folder separator:K24:12+"Structures.xcdatamodeld"
 				
-				cs:C1710.xcDataModel.new(New object:C1471(\
-					"dataModel"; PROJECT.dataModel; \
-					"actions"; PROJECT.actions)).run($pathName; New object:C1471(\
+				cs:C1710.xcDataModel.new(PROJECT).run($pathName; New object:C1471(\
 					"flat"; False:C215; \
 					"relationship"; True:C214))
 				

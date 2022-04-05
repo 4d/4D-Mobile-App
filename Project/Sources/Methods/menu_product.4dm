@@ -119,9 +119,7 @@ Case of
 		
 		$pathname:=Temporary folder:C486+Folder separator:K24:12+Generate UUID:C1066+Folder separator:K24:12
 		
-		$o:=cs:C1710.xcDataModel.new(New object:C1471(\
-			"dataModel"; PROJECT.dataModel; \
-			"actions"; PROJECT.actions)).run(\
+		$o:=cs:C1710.xcDataModel.new(PROJECT).run(\
 			/*path*/$pathname+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"; \
 			/*options*/New object:C1471(\
 			"flat"; False:C215; \

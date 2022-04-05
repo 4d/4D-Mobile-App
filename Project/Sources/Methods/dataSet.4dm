@@ -623,9 +623,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 							
 							If (Feature.with("xcDataModelClass"))
 								
-								$out.coreData:=cs:C1710.xcDataModel.new(New object:C1471(\
-									"dataModel"; $dataModel; \
-									"actions"; $actions)).run(\
+								$out.coreData:=cs:C1710.xcDataModel.new($in.project).run(\
 									/*path*/Folder:C1567($out.path; fk platform path:K87:2).file("Sources/Structures.xcdatamodeld").platformPath; \
 									/*options*/New object:C1471("flat"; False:C215; "relationship"; True:C214))
 								
