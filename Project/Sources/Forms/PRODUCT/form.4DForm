@@ -299,6 +299,6 @@
 		}
 	},
 	"method": "panel_HANDLE_EVENT",
-	"geometryStamp": 583,
+	"geometryStamp": 584,
 	"destination": "detailScreen"
 }

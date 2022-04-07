@@ -209,7 +209,7 @@ Function doIcon()->$allow : Integer
 	var $e : Object
 	
 	$allow:=-1
-	$e:=This:C1470.event
+	$e:=FORM Event:C1606
 	
 	Case of 
 			
