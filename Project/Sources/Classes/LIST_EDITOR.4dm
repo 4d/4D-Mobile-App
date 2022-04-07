@@ -445,7 +445,7 @@ Function doStaticDragAndDrop()->$allowed : Integer
 	//End if 
 	//Else 
 	//If ($o.src#$e.row)\
-																				 & ($e.row#($o.src+1))  // Not the same or the next one
+																						 & ($e.row#($o.src+1))  // Not the same or the next one
 	//$allowed:=0
 	//$o:=$list.rowCoordinates($e.row)
 	//$o.bottom:=$o.top
@@ -479,16 +479,8 @@ Function doStaticDragAndDrop()->$allowed : Integer
 	// Initialization of the internal D&D for actions
 Function doBeginDrag()
 	
-	var $x : Blob
-	var $o : Object
-	
-	$o:=New object:C1471(\
-		"src"; This:C1470.list.itemPosition)
-	
-	// Put into the container
-	VARIABLE TO BLOB:C532($o; $x)
-	APPEND DATA TO PASTEBOARD:C403("com.4d.private.4dmobile.choicelist"; $x)
-	SET BLOB SIZE:C606($x; 0)
+	This:C1470.beginDrag(New object:C1471(\
+		"src"; This:C1470.list.itemPosition))
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	// Choice list Meta info expression

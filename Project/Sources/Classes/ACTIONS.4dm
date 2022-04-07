@@ -330,7 +330,6 @@ Function updateParameters($action : Object)
 Function doActions()->$allow : Integer
 	
 	var $uri : Text
-	var $x : Blob
 	var $e; $me; $o : Object
 	
 	$uri:="com.4d.private.4dmobile.action"
@@ -348,24 +347,17 @@ Function doActions()->$allow : Integer
 			//______________________________________________________
 		: ($e.code=On Begin Drag Over:K2:44)
 			
-			$o:=New object:C1471(\
-				"src"; This:C1470.index)
-			
-			VARIABLE TO BLOB:C532($o; $x)
-			APPEND DATA TO PASTEBOARD:C403($uri; $x)
-			SET BLOB SIZE:C606($x; 0)
+			This:C1470.beginDrag(New object:C1471(\
+				"src"; This:C1470.index))
 			
 			//______________________________________________________
 		: ($e.code=On Drag Over:K2:13)
 			
 			$allow:=-1  // Reject drop
 			
-			GET PASTEBOARD DATA:C401($uri; $x)
+			$o:=This:C1470.getPasteboard($uri)
 			
-			If (Bool:C1537(OK))
-				
-				BLOB TO VARIABLE:C533($x; $o)
-				SET BLOB SIZE:C606($x; 0)
+			If ($o#Null:C1517)
 				
 				$me:=This:C1470.actions
 				
@@ -409,12 +401,9 @@ Function doActions()->$allow : Integer
 			//______________________________________________________
 		: ($e.code=On Drop:K2:12)
 			
-			GET PASTEBOARD DATA:C401($uri; $x)
+			$o:=This:C1470.getPasteboard($uri)
 			
-			If (Bool:C1537(OK))
-				
-				BLOB TO VARIABLE:C533($x; $o)
-				SET BLOB SIZE:C606($x; 0)
+			If ($o#Null:C1517)
 				
 				$o.tgt:=Drop position:C608
 				

@@ -376,7 +376,6 @@ Function onLoad()
 Function doParameters()->$allow : Integer
 	
 	var $uri : Text
-	var $x : Blob
 	var $e; $me; $o : Object
 	
 	$uri:="com.4d.private.4dmobile.parameter"
@@ -394,24 +393,17 @@ Function doParameters()->$allow : Integer
 			//______________________________________________________
 		: ($e.code=On Begin Drag Over:K2:44)
 			
-			$o:=New object:C1471(\
-				"src"; This:C1470.index)
-			
-			VARIABLE TO BLOB:C532($o; $x)
-			APPEND DATA TO PASTEBOARD:C403($uri; $x)
-			SET BLOB SIZE:C606($x; 0)
+			This:C1470.beginDrag(New object:C1471(\
+				"src"; This:C1470.index))
 			
 			//______________________________________________________
 		: ($e.code=On Drag Over:K2:13)
 			
 			$allow:=-1  // Reject drop
 			
-			GET PASTEBOARD DATA:C401($uri; $x)
+			$o:=This:C1470.getPasteboard($uri)
 			
-			If (Bool:C1537(OK))
-				
-				BLOB TO VARIABLE:C533($x; $o)
-				SET BLOB SIZE:C606($x; 0)
+			If ($o#Null:C1517)
 				
 				$me:=This:C1470.parameters
 				
@@ -455,12 +447,9 @@ Function doParameters()->$allow : Integer
 			//______________________________________________________
 		: ($e.code=On Drop:K2:12)
 			
-			GET PASTEBOARD DATA:C401($uri; $x)
+			$o:=This:C1470.getPasteboard($uri)
 			
-			If (Bool:C1537(OK))
-				
-				BLOB TO VARIABLE:C533($x; $o)
-				SET BLOB SIZE:C606($x; 0)
+			If ($o#Null:C1517)
 				
 				$o.tgt:=Drop position:C608
 				
@@ -1811,8 +1800,8 @@ Function doDataSourceMenu()
 Function editList()
 	
 	//$form:=New object(\
-												"static"; $static; \
-												"host"; This.path.hostInputControls(True))
+														"static"; $static; \
+														"host"; This.path.hostInputControls(True))
 	
 	//$form.folder:=This.path.hostInputControls()
 	//$manifest:=$form.folder.file("manifest.json")
@@ -2301,7 +2290,7 @@ Function formatToolTip($format : Text)->$tip : Text
 		//SHARED.resources.formattersByName:=New object
 		//var $bind
 		//For each ($bind; SHARED.resources.fieldBindingTypes\
-																																																.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
+																																																			.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
 		//SHARED.resources.formattersByName[$bind.name]:=$bind
 		//End for each
 		//End if

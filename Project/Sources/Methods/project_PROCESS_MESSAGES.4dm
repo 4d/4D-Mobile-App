@@ -356,6 +356,8 @@ Case of
 		//______________________________________________________
 	: ($selector="mainMenu")  // Update Main menu panel
 		
+		ASSERT:C1129(DATABASE.isMatrix)
+		
 		If ($isProjectForm)  // Pass to target panel
 			
 			$container:=panel_Find($ƒ.mainMenu)
