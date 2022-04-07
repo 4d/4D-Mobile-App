@@ -1,4 +1,4 @@
-﻿{
+{
 	"destination": "detailScreen",
 	"inheritedForm": "panel_template",
 	"width": 600,
@@ -13,11 +13,6 @@
 		"onTimer"
 	],
 	"method": "method.4dm",
-	"pageFormat": {
-		"paperName": "A4",
-		"paperWidth": "595pt",
-		"paperHeight": "842pt"
-	},
 	"pages": [
 		null,
 		{
@@ -89,7 +84,7 @@
 					"scrollbarVertical": "automatic",
 					"horizontalLineStroke": "transparent",
 					"verticalLineStroke": "transparent",
-					"rowStrokeSource": "Choose:C955(This:C1470.filename#Null:C1517;-1;-11)",
+					"rowStrokeSource": "Choose:C955(This:C1470.filename#Null:C1517; -1; -11)",
 					"borderStyle": "none",
 					"method": "ObjectMethods/40_icons.4dm",
 					"events": [

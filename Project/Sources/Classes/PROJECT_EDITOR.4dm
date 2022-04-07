@@ -6,7 +6,8 @@ Class constructor()
 	
 	Super:C1705(Formula:C1597(editor_CALLBACK).source)
 	
-	This:C1470.setWorker("4D Mobile ("+String:C10(This:C1470.window)+")")
+	// Mark: Associated worker
+	This:C1470.worker:="4D Mobile ("+String:C10(This:C1470.window)+")"
 	This:C1470.callWorker(Formula:C1597(COMPONENT_INIT).source)
 	
 	This:C1470.design()
@@ -262,14 +263,14 @@ Function init()
 		
 	End if 
 	
-	If (Form:C1466.$dialog[This:C1470.name]=Null:C1517)
+	If (Form:C1466.$dialog[This:C1470.currentForm]=Null:C1517)
 		
-		Logger.info("🚧 Create "+This:C1470.name+"'s context (class "+Current method name:C684+")")
-		Form:C1466.$dialog[This:C1470.name]:=New object:C1471
+		Logger.info("🚧 Create "+This:C1470.currentForm+"'s context (class "+Current method name:C684+")")
+		Form:C1466.$dialog[This:C1470.currentForm]:=New object:C1471
 		
 	End if 
 	
-	This:C1470.context:=Form:C1466.$dialog[This:C1470.name]
+	This:C1470.context:=Form:C1466.$dialog[This:C1470.currentForm]
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function onLoad()

@@ -38,7 +38,7 @@ If (Asserted:C1132($Lon_parameters>=0; "Missing parameter"))
 	
 	$Obj_form:=New object:C1471(\
 		"window"; Current form window:C827; \
-		"form"; editor_Panel_init; \
+		"form"; _o_editor_Panel_init; \
 		"tableList"; "01_tables"; \
 		"ids"; "IDs"; \
 		"idColumn"; 1; \
@@ -167,7 +167,7 @@ Case of
 		
 		_o_editor_Locked($Obj_form.labels; $Obj_form.shortLabels)
 		
-		editor_ui_LISTBOX($Obj_form.tableList)
+		_editor_ui_LISTBOX($Obj_form.tableList)
 		
 		//=========================================================
 	: ($Obj_in.action="tableIcons")  // Call back from widget

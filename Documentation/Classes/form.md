@@ -4,17 +4,21 @@ The `form` class is intended to handle a form.
 
 ## Properties
 
-|Properties|Description|Type|default|
-|----------|-----------|:-----------:|:-----------:|
-|**.name** | Current form name |`Text`|
-|**.window** | Current form window |`Integer`|
-|**.toBeInitialized** | Has the form been initialized |`Boolean`|**True**
-|**.callback** | Name of a call-back method |`Text`|**Null**
-|**.worker** | Name  or ID of the associated worker  |`Text`\|`Integer`|**Null**
-|**.isSubform** | Is the form used as a subform  |`Boolean`|**False**
+|Properties|Description|Type|default|Writable|
+|----------|-----------|:-----------:|:-----------:|:-----------:|
+|**.currentForm** | Current form name |`Text`|||
+|**.window** | Current form window |`Integer`|||
+|**.toBeInitialized** | Has the form been initialized |`Boolean`|**True**|✅|
+|**.callback** | Name of a call-back method |`Text`|**Null**|✅|
+|**.worker** | Name  or ID of the worker associated associated to the form |`Text`\|`Integer`|**Null**|✅|
+|**.isSubform** | Is the form used as a subform  |`Boolean`|**False**|✅|
+|**.focused** | The name of the object that has the focus in the form  |`Text`|**""**||
+|**.darkScheme** | **True** if the actual color scheme is "dark" |`Boolean`|||
+|**.lightScheme** | **True** if the actual color scheme is "light" |`Boolean`|||
+|**.windowTitle** | The title of the window |`Text`||✅|
+|**.frontmost** | True if the current window is the frontmost window |`Boolean`|||
 
 ## 🔸 cs.form.new()
-
 The class constructor `cs.form.new({callbackMethodName})` creates a new class instance and init the `.callback` property if any.
 
 ## Summary
@@ -34,6 +38,7 @@ The class constructor `cs.form.new({callbackMethodName})` creates a new class in
 |.**appendEvents** (events`:Integer`\|`Collection`) | Adds form event(s) for the current form|
 |.**removeEvents** (events`:Integer`\|`Collection`) | Removes form event(s) for the current form|
 |.**setEvents** (events`:Integer`\|`Collection`) | Define the event(s) for the current form|
+|.**setEntryOrder** (widgetNames`:Collection`\) | Set the entry order of the current form|
 |.**page** () →`:Integer` | Returns the number of the currently displayed form page|
 |.**goToPage** (page`:Integer`) | Changes the currently displayed form page|
 |.**refresh** ({delay`:Integer`}) | Start a timer to update the user interface. Default delay is ASAP|

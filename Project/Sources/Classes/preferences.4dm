@@ -2,49 +2,50 @@
 // === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor()
 	
-	This:C1470._user:=Folder:C1567(fk user preferences folder:K87:10).folder(Folder:C1567(Database folder:K5:14; *).name)
-	This:C1470._database:=Folder:C1567(fk database folder:K87:14).folder("Preferences")
-	This:C1470.sessionRoot:=Folder:C1567(fk desktop folder:K87:19).parent.folder("Library/Preferences/")
 	This:C1470.target:=Null:C1517
 	This:C1470.content:=Null:C1517
 	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function user($path)->$this : cs:C1710.preferences
+	This:C1470._user:=Folder:C1567(fk user preferences folder:K87:10).folder(Folder:C1567(Database folder:K5:14; *).name)
+	This:C1470._database:=Folder:C1567(fk database folder:K87:14; *).folder("Preferences")
+	This:C1470._session:=Folder:C1567(fk desktop folder:K87:19).parent.folder("Library/Preferences/")
 	
-	This:C1470.target:=This:C1470._user.file($path)
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function user($fileName) : cs:C1710.preferences
+	
+	$fileName:=$fileName || "preference.pref"
+	
+	This:C1470.target:=This:C1470._user.file($fileName)
 	This:C1470.load()
 	
-	$this:=This:C1470
+	return (This:C1470)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function database($path)->$this : cs:C1710.preferences
+Function database($fileName) : cs:C1710.preferences
 	
-	This:C1470.target:=This:C1470._database.file($path)
+	$fileName:=$fileName || "preference.pref"
+	
+	This:C1470.target:=This:C1470._database.file($fileName)
 	This:C1470.load()
 	
-	$this:=This:C1470
+	return (This:C1470)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function session($path)->$this : cs:C1710.preferences
+Function session($fileName) : cs:C1710.preferences
 	
-	This:C1470.target:=This:C1470._session.file($path)
+	$fileName:=$fileName || "preference.pref"
+	
+	This:C1470.target:=This:C1470._session.file($fileName)
 	This:C1470.load()
 	
-	$this:=This:C1470
+	return (This:C1470)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function get($key : Text; $target : Text)->$value : Variant
+Function get($key : Text) : Variant
 	
-	var $o : Object
-	var $file : 4D:C1709.File
-	
-	$value:=This:C1470.content[$key]
+	return (This:C1470.content[$key])
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function set($key : Text; $value : Variant; $target : Text)
-	
-	var $o : Object
-	var $file : 4D:C1709.File
+Function set($key : Text; $value)
 	
 	If (Count parameters:C259>=2)
 		

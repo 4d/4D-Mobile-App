@@ -1,14 +1,12 @@
-Class extends form
+Class extends panel
 
 Class constructor
 	
 	Super:C1705(Formula:C1597(editor_CALLBACK).source)
 	
-	This:C1470.context:=editor_Panel_init(This:C1470.name)
+	This:C1470.context:=Super:C1706.init()
 	
 	If (OB Is empty:C1297(This:C1470.context))
-		
-		This:C1470.isSubform:=True:C214
 		
 		This:C1470.init()
 		
@@ -25,6 +23,7 @@ Class constructor
 	This:C1470.customInputControlsWithoutPlaceholder:=New collection:C1472("/segmented"; "/picker")
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
+	/// Design definition
 Function init()
 	
 	var $group : cs:C1710.group
@@ -144,11 +143,12 @@ Function init()
 	This:C1470.formObject("namePopupBorder").addToGroup($group)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ==
+	/// Events handler
 Function handleEvents($e : Object)
 	
 	If ($e.objectName=Null:C1517)  // <== FORM METHOD
 		
-		$e:=panel_Common(On Load:K2:1; On Timer:K2:25)
+		$e:=Super:C1706.handleEvents(On Load:K2:1; On Timer:K2:25)
 		
 		Case of 
 				
@@ -419,7 +419,7 @@ Function doParameters()->$allow : Integer
 					
 					If ($o.src#$me.rowsNumber())  // Not if the source was the last line
 						
-						$o:=$me.getRowCoordinates($me.rowsNumber())
+						$o:=$me.rowCoordinates($me.rowsNumber())
 						$o.top:=$o.bottom
 						$o.right:=$me.coordinates.right
 						$allow:=0  // Allow drop
@@ -431,7 +431,7 @@ Function doParameters()->$allow : Integer
 					If ($o.src#$e.row)\
 						 & ($e.row#($o.src+1))  // Not the same or the next one
 						
-						$o:=$me.getRowCoordinates($e.row)
+						$o:=$me.rowCoordinates($e.row)
 						$o.bottom:=$o.top
 						$o.right:=$me.coordinates.right
 						$allow:=0  // Allow drop
@@ -1811,8 +1811,8 @@ Function doDataSourceMenu()
 Function editList()
 	
 	//$form:=New object(\
-								"static"; $static; \
-								"host"; This.path.hostInputControls(True))
+												"static"; $static; \
+												"host"; This.path.hostInputControls(True))
 	
 	//$form.folder:=This.path.hostInputControls()
 	//$manifest:=$form.folder.file("manifest.json")
@@ -2301,7 +2301,7 @@ Function formatToolTip($format : Text)->$tip : Text
 		//SHARED.resources.formattersByName:=New object
 		//var $bind
 		//For each ($bind; SHARED.resources.fieldBindingTypes\
-																																										.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
+																																																.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
 		//SHARED.resources.formattersByName[$bind.name]:=$bind
 		//End for each
 		//End if

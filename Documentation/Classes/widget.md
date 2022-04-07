@@ -16,8 +16,8 @@ It's a transition class between the **`formObject`** class and more specific cla
 |**.windowCoordinates** | [*inherited*](formObject.md) |
 |**.action** | The name & , if any, parameter of the standard action associated with the object | `Text` | cf. [Standard actions](https://doc.4d.com/4Dv18R6/4D/18-R6/Standard-actions.300-5217689.en.html)|
 |**.assignable** | Is the object accessible by a pointer | `Boolean` | **True** or **False** it depends |
-|**.pointer** | The pointer, if any, to the widget | `Pointer` | **Nil** if not assignable |
 |**.value** | The value of the datasource, if any | `Variant` |  |
+|**.pointer** | A pointer, if any, to the widget | `Pointer` |⚠️ **Nil** if not assignable
 
 ## 🔸 cs.widget.new()
 
@@ -33,8 +33,6 @@ If the `formObjectName` parameter is ommited, the constructor use the result of 
 
 | Function | Action |
 | -------- | ------ |  
-|.**updatePointer** () →`Pointer` | Update of the widget pointer. Useful when reloading the form |
-|.**pointer** () →`Pointer` | Returns the pointer to the widget |
 |.**setFormat** (format`:Text`) →`cs.widget` | Sets the format for the widget |
 |.**setPicture** (proxy`:Text`) →`cs.widget` | Attaches an image to the widget - *cf*. *infra* |
 |.**getEnterable** () →`Boolean` | Returns **True** if the widget is enterable |
@@ -59,6 +57,7 @@ If the `formObjectName` parameter is ommited, the constructor use the result of 
 |.**focus** () →`cs.widget` | Gives focus to the widget |
 |.**addEvent** ( event`:Integer`) →`cs.widget`<br/>.**addEvent** ( events`:Collection`) →`cs.widget` | Adds one or more  form events to the widget |
 |.**removeEvent** ( event`:Integer`) →`cs.widget`<br/>.**removeEvent** ( events`:Collection`) →`cs.widget` | Removes one or more  form events to the widget |
+|\< obsolete > .**updatePointer** () →`Pointer` | Update of the widget pointer.|
 
 
 

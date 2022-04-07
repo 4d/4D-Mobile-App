@@ -1,15 +1,13 @@
-Class extends form
+Class extends panel
 
 //=== === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	
 	Super:C1705(Formula:C1597(editor_CALLBACK).source)
 	
-	This:C1470.context:=editor_Panel_init(This:C1470.name)
+	This:C1470.context:=Super:C1706.init()
 	
 	If (OB Is empty:C1297(This:C1470.context))
-		
-		This:C1470.isSubform:=True:C214
 		
 		This:C1470.init()
 		
@@ -19,6 +17,7 @@ Class constructor
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
+	/// Design definition
 Function init()
 	
 	This:C1470.toBeInitialized:=False:C215
@@ -50,11 +49,12 @@ Function init()
 	This:C1470.tableLink:=Formula:C1597(panel("TABLES").currentTableNumber)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ==
+	/// Events handler
 Function handleEvents($e : Object)
 	
 	If (FORM Event:C1606.objectName=Null:C1517)  // <== FORM METHOD
 		
-		$e:=panel_Common(On Load:K2:1; On Timer:K2:25)
+		$e:=Super:C1706.handleEvents(On Load:K2:1; On Timer:K2:25)
 		
 		Case of 
 				
@@ -89,7 +89,7 @@ Function handleEvents($e : Object)
 						//_______________________________
 					: ($e.code=On Selection Change:K2:29)
 						
-						editor_ui_LISTBOX($e.objectName)
+						_editor_ui_LISTBOX($e.objectName)
 						
 						//_______________________________
 					: ($e.code=On Mouse Enter:K2:33)
@@ -109,14 +109,14 @@ Function handleEvents($e : Object)
 						//_______________________________
 					: ($e.code=On Getting Focus:K2:7)
 						
-						editor_ui_LISTBOX($e.name; True:C214)
+						_editor_ui_LISTBOX($e.name; True:C214)
 						
 						This:C1470.setHelpTip($e)
 						
 						//_______________________________
 					: ($e.code=On Losing Focus:K2:8)
 						
-						editor_ui_LISTBOX($e.name; False:C215)
+						_editor_ui_LISTBOX($e.name; False:C215)
 						
 						//_______________________________
 					: (PROJECT.isLocked())
@@ -126,7 +126,7 @@ Function handleEvents($e : Object)
 						//_______________________________
 					: ($e.code=On Double Clicked:K2:5)
 						
-						editor_ui_LISTBOX($e.objectName)
+						_editor_ui_LISTBOX($e.objectName)
 						
 						If ($e.columnName=This:C1470.labels.name)\
 							 | ($e.columnName=This:C1470.shortLabels.name)\
@@ -311,14 +311,6 @@ Function onLoad()
 	// Initialize the Fields/Relations tab
 	This:C1470.setTab()
 	
-	// Update widget pointers after a reload
-	This:C1470.names.updatePointer()
-	This:C1470.icons.updatePointer()
-	This:C1470.labels.updatePointer()
-	This:C1470.shortLabels.updatePointer()
-	This:C1470.formats.updatePointer()
-	This:C1470.titles.updatePointer()
-	
 	// Add the events that we cannot select in the form properties 😇
 	This:C1470.appendEvents(New collection:C1472(\
 		On Data Change:K2:15; \
@@ -397,7 +389,7 @@ Function updateFieldList
 	
 	This:C1470.fieldList.unselect()
 	
-	editor_ui_LISTBOX(This:C1470.fieldList.name)
+	_editor_ui_LISTBOX(This:C1470.fieldList.name)
 	
 	androidLimitations(False:C215; "")
 	
@@ -1405,7 +1397,7 @@ Function doFormatMenu($e : Object)
 	This:C1470.fieldList.focus()
 	This:C1470.fieldList.select($e.row)
 	
-	editor_ui_LISTBOX(This:C1470.fieldList.name)
+	_editor_ui_LISTBOX(This:C1470.fieldList.name)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Manage the tags menu for label & shortlabel

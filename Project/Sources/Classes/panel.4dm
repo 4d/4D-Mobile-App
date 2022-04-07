@@ -1,136 +1,75 @@
-Class constructor
+Class extends form
+
+//=== === === === === === === === === === === === === === === === === === === === ===
+Class constructor($method : Text)
 	
-	This:C1470.formName:=Current form name:C1298
+	Super:C1705($method)
 	
-	If (Form:C1466.$panels=Null:C1517)
-		
-		Form:C1466.$panels:=New object:C1471(\
-			This:C1470.formName; New object:C1471)
-		
-	Else 
-		
-		If (Form:C1466.$panels[This:C1470.formName]=Null:C1517)
-			
-			Form:C1466.$panels[This:C1470.formName]:=New object:C1471
-			
-		End if 
-	End if 
+	This:C1470.isSubform:=True:C214
 	
-	This:C1470.def:=Form:C1466.$panels[This:C1470.formName]
+	// === === === === === === === === === === === === === === === === === === === === ===
+	// Creates if necessary the object Form.$dialog [Current form] and returns it
+Function init() : Object
 	
-	If (OB Is empty:C1297(This:C1470.def))\
-		 | (Shift down:C543 & Not:C34(Is compiled mode:C492))
-		
-		This:C1470.def:=cs:C1710[This:C1470.formName].new()
-		
-	End if 
+	Form:C1466.$dialog:=Form:C1466.$dialog || New object:C1471
+	Form:C1466.$dialog[This:C1470.currentForm]:=Form:C1466.$dialog[This:C1470.currentForm] || New object:C1471
 	
-	This:C1470.event:=FORM Event:C1606
+	return (Form:C1466.$dialog[This:C1470.currentForm])
 	
-	//============================================================================
-Function refresh
+	//=== === === === === === === === === === === === === === === === === === === === ===
+	/// Events handler
+Function handleEvents($eventCode; $eventCode2 : Integer; $eventCodeN : Integer)->$e : Object
 	
-	SET TIMER:C645(-1)
+	var ${2} : Integer
+	var $forward : Boolean
+	var $height; $i; $width : Integer
+	var $c : Collection
 	
-	//============================================================================
-Function common
-	var $0 : Object
-	var ${1} : Integer
-	
-	var $focused : Text
-	var $height; $i; $type; $width : Integer
-	var $e : Object
-	var $retainedEvents : Collection
-	
-	$e:=This:C1470.event
+	$e:=FORM Event:C1606
 	
 	Case of 
 			
 			//______________________________________________________
 		: ($e.code=On Load:K2:1)
 			
-			// Place the background & the bottom line {
-			FORM GET PROPERTIES:C674(String:C10(This:C1470.formName); $width; $height)
-			
+			// * PLACE THE BACKGROUND & THE BOTTOM LINE
+			FORM GET PROPERTIES:C674(String:C10(This:C1470.currentForm); $width; $height)
 			OBJECT SET COORDINATES:C1248(*; "bottom.line"; 16; $height-1; $width-16; $height-1)
 			
-			// ENTRY ORDER IS BASED UPON THE OBJECT NAMES
+			// * ENTRY ORDER IS BASED UPON THE OBJECT NAMES
 			ARRAY TEXT:C222($widgets; 0x0000)
 			FORM GET OBJECTS:C898($widgets)
 			SORT ARRAY:C229($widgets)
 			
-			This:C1470.entyOrder:=New collection:C1472
-			
 			For ($i; 1; Size of array:C274($widgets); 1)
 				
-				$type:=OBJECT Get type:C1300(*; $widgets{$i})
-				
 				If (OBJECT Get enterable:C1067(*; $widgets{$i}))\
-					 | ($type=Object type listbox:K79:8)
+					 || (OBJECT Get type:C1300(*; $widgets{$i})=Object type listbox:K79:8)
 					
-					This:C1470.entyOrder.push($widgets{$i})
+					This:C1470.entryOrder.push($widgets{$i})
 					
 				End if 
 			End for 
 			
-			ARRAY TEXT:C222($entryOrder; 0x0000)
-			COLLECTION TO ARRAY:C1562(This:C1470.entyOrder; $entryOrder)
-			FORM SET ENTRY ORDER:C1468($entryOrder)
+			This:C1470.setEntryOrder(This:C1470.entryOrder)
 			
-			// ACTIVATE ESSENTIAL EVENTS TO THE FORM
-			ARRAY LONGINT:C221($tLon_events; 0x0000)
-			APPEND TO ARRAY:C911($tLon_events; On Load:K2:1)
-			APPEND TO ARRAY:C911($tLon_events; On Unload:K2:2)
-			APPEND TO ARRAY:C911($tLon_events; On Timer:K2:25)
-			APPEND TO ARRAY:C911($tLon_events; On Activate:K2:9)
-			APPEND TO ARRAY:C911($tLon_events; On Getting Focus:K2:7)
-			APPEND TO ARRAY:C911($tLon_events; On Losing Focus:K2:8)
+			// * ACTIVATE ESSENTIAL EVENTS TO THE FORM
+			This:C1470.appendEvents(New collection:C1472(On Load:K2:1; On Unload:K2:2; On Timer:K2:25; On Activate:K2:9; On Getting Focus:K2:7; On Losing Focus:K2:8))
 			
-			OBJECT SET EVENTS:C1239(*; ""; $tLon_events; Enable events others unchanged:K42:38)
+			// * POST-LOADING PROCESSING
+			This:C1470.callParent(-On Load:K2:1)
 			
-			// POST-LOADING PROCESSING
-			CALL SUBFORM CONTAINER:C1086(-On Load:K2:1)
-			
-			SET TIMER:C645(-1)
+			// * START TIMER
+			This:C1470.refresh()
 			
 			//______________________________________________________
 		: ($e.code=On Activate:K2:9)
 			
-			If (OBJECT Get name:C1087(Object with focus:K67:3)="")
+			If (This:C1470.focused="")\
+				 && (This:C1470.entryOrder.length>0)
 				
 				// Focus the first
-				If (This:C1470.entyOrder.length>0)
-					
-					GOTO OBJECT:C206(*; This:C1470.entyOrder[0])
-					
-				Else 
-					
-					GOTO OBJECT:C206(*; "")
-					
-				End if 
-			End if 
-			
-			//______________________________________________________
-		: ($e.code=On Getting Focus:K2:7)
-			
-			// Show help button if any
-			$focused:=OBJECT Get name:C1087(Object with focus:K67:3)
-			
-			If (OBJECT Get type:C1300(*; $focused+".help")#Object type unknown:K79:1)
-				
-				OBJECT SET VISIBLE:C603(*; $focused+".help"; True:C214)
-				
-			End if 
-			
-			//______________________________________________________
-		: ($e.code=On Losing Focus:K2:8)
-			
-			// Hide help button if any
-			$focused:=OBJECT Get name:C1087(Object with focus:K67:3)
-			
-			If (OBJECT Get type:C1300(*; $focused+".help")#Object type unknown:K79:1)
-				
-				OBJECT SET VISIBLE:C603(*; $focused+".help"; False:C215)
+				GOTO OBJECT:C206(*; This:C1470.entryOrder[0])
 				
 			End if 
 			
@@ -147,21 +86,43 @@ Function common
 			//______________________________________________________
 	End case 
 	
-	$0:=OB Copy:C1225($e)
-	
 	If (Count parameters:C259>=1)
 		
-		$retainedEvents:=New collection:C1472
-		
-		For ($i; 1; Count parameters:C259; 1)
+		// FIXME:Remove for 19R6+
+		If (Num:C11(Application version:C493)>=1960)
 			
-			$retainedEvents.push(${$i})
+			If (Value type:C1509($eventCode)#Is collection:K8:32)
+				
+				$eventCode:=Copy parameters:C1790
+				
+			End if 
 			
-		End for 
-		
-		If ($retainedEvents.indexOf($e.code)=-1)
+			$forward:=($eventCode.indexOf($e.code)#-1)
 			
-			$0.code:=0
+		Else 
 			
+			If (Value type:C1509($eventCode)=Is collection:K8:32)
+				
+				$forward:=($eventCode.indexOf($e.code)#-1)
+				
+			Else 
+				
+				For ($i; 1; Count parameters:C259; 1)
+					
+					If (Num:C11(${$i})=$e.code)
+						
+						$forward:=True:C214
+						break
+						
+					End if 
+				End for 
+			End if 
 		End if 
+	End if 
+	
+	If (Not:C34($forward))
+		
+		$e.code:=0
+		$e.description:="Treated in panel.handleEvents()"
+		
 	End if 

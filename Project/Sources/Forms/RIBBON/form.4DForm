@@ -13,11 +13,6 @@
 		"onBoundVariableChange",
 		"onPageChange"
 	],
-	"pageFormat": {
-		"paperName": "A4",
-		"paperWidth": "842pt",
-		"paperHeight": "595pt"
-	},
 	"pages": [
 		{
 			"objects": {

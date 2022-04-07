@@ -14,7 +14,7 @@ $e:=FORM Event:C1606
 // ----------------------------------------------------
 If ($e.objectName=Null:C1517)  // <== FORM METHOD
 	
-	$e:=panel_Common(On Load:K2:1; On Timer:K2:25)
+	$e:=_o_panel_Common(On Load:K2:1; On Timer:K2:25)
 	
 	Case of 
 			

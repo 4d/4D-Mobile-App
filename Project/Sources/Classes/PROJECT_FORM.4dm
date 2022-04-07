@@ -4,7 +4,7 @@ Class constructor
 	
 	Super:C1705(Formula:C1597(editor_CALLBACK).source)
 	
-	This:C1470.context:=editor_Panel_init(This:C1470.name)
+	This:C1470.context:=_o_editor_Panel_init(This:C1470.currentForm)
 	
 	If (OB Is empty:C1297(This:C1470.context))
 		
@@ -18,6 +18,7 @@ Class constructor
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
+	/// Design definition
 Function init()
 	
 	This:C1470.formObject("background")

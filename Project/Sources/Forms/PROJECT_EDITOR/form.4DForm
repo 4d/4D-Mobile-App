@@ -15,11 +15,6 @@
 		"onTimer",
 		"onResize"
 	],
-	"pageFormat": {
-		"paperName": "A4",
-		"paperWidth": "595pt",
-		"paperHeight": "842pt"
-	},
 	"$4d": {
 		"version": "1",
 		"kind": "form"

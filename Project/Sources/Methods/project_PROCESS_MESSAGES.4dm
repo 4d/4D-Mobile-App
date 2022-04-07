@@ -368,8 +368,9 @@ Case of
 			
 		Else 
 			
-			main_Handler(New object:C1471("action"; "update"))
-			main_Handler(New object:C1471("action"; "order"))
+			//main_Handler(New object("action"; "update"))
+			//main_Handler(New object("action"; "order"))
+			panel($ƒ.mainMenu)._updateOrder()
 			
 		End if 
 		

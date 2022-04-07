@@ -1,4 +1,4 @@
-Class extends form
+Class extends panel
 
 //=== === === === === === === === === === === === === === === === === === === === ===
 Class constructor
@@ -13,11 +13,9 @@ Class constructor
 		
 	End if 
 	
-	This:C1470.context:=editor_Panel_init(This:C1470.name)
+	This:C1470.context:=Super:C1706.init()
 	
 	If (OB Is empty:C1297(This:C1470.context))
-		
-		This:C1470.isSubform:=True:C214
 		
 		This:C1470.init()
 		
@@ -45,6 +43,7 @@ Class constructor
 	This:C1470.scroll:=450
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
+	/// Design definition
 Function init()
 	
 	var $group : cs:C1710.group
@@ -345,7 +344,7 @@ Function fieldList($table)->$result : Object
 						//……………………………………………………………………………………………………………
 						//FIXME: BUG EN COMPILÉ
 						//: ($field.kind="relatedEntity")\
-																					 || (($field.kind="alias") && (Bool($field.isToOne)))
+																																			 || (($field.kind="alias") && (Bool($field.isToOne)))
 						
 					: ($field.kind="relatedEntity")\
 						 || (($field.kind="alias") & (Bool:C1537($field.isToOne)))

@@ -3,28 +3,23 @@ Class constructor($method : Text)
 	
 	Super:C1705()
 	
-	This:C1470.name:=Current form name:C1298
+	This:C1470.currentForm:=Current form name:C1298
 	This:C1470.window:=Current form window:C827
 	
 	This:C1470.visible:=True:C214
 	
 	This:C1470.toBeInitialized:=True:C214
 	
-	This:C1470.callback:=Null:C1517
-	This:C1470.worker:=Null:C1517
+	This:C1470._callback:=$method
+	This:C1470._worker:=Null:C1517
 	
 	This:C1470.isSubform:=False:C215
 	
-	//This.focused:=Null
 	This:C1470.current:=Null:C1517
 	
 	This:C1470.widgets:=New object:C1471
 	
-	If (Count parameters:C259>=1)
-		
-		This:C1470.setCallBack($method)
-		
-	End if 
+	This:C1470.entryOrder:=New collection:C1472
 	
 	//MARK:-[COMPUTED ATTRIBUTES]
 	//=== === === === === === === === === === === === === === === === === === === === ===
@@ -52,12 +47,46 @@ Function set windowTitle($title : Text)
 	
 	var $t : Text
 	$t:=Get localized string:C991($title)
-	SET WINDOW TITLE:C213(Length:C16($t)>0 ? $t : $title; This:C1470.window)
+	SET WINDOW TITLE:C213($t ? $t : $title; This:C1470.window)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function get frontmost() : Boolean
 	
 	return (Frontmost window:C447=This:C1470.window)
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function get worker() : Variant
+	
+	return (This:C1470._worker)
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function set worker($worker)
+	
+	var $type : Integer
+	
+	$type:=Value type:C1509($worker)
+	
+	If (Asserted:C1132(($type=Is text:K8:3)\
+		 | ($type=Is real:K8:4)\
+		 | ($type=Is longint:K8:6); "The parameter must be a text or a number"))
+		
+		This:C1470._worker:=$worker
+		
+	Else 
+		
+		BEEP:C151
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function get callback() : Text
+	
+	return (This:C1470._callback)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function set callback($method : Text)
+	
+	This:C1470._callback:=$method
 	
 	//MARK:-TO BE OVERWRITTEN IN THE SUBCLASS
 	//=== === === === === === === === === === === === === === === === === === === === === 
@@ -212,16 +241,12 @@ Function setEvents($events)
 	This:C1470._setEvents($events; Enable events disable others:K42:37)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-	// Set window title
-Function setTitle($title : Text)
+	// Set the entry order of the current form for the current process
+Function setEntryOrder($widgetNames : Collection)
 	
-	SET WINDOW TITLE:C213($title; This:C1470.window)
-	
-	//=== === === === === === === === === === === === === === === === === === === === === 
-	// Defines the name of the callback method
-Function setCallBack($method : Text)
-	
-	This:C1470.callback:=$method
+	ARRAY TEXT:C222($entryOrder; 0x0000)
+	COLLECTION TO ARRAY:C1562($widgetNames; $entryOrder)
+	FORM SET ENTRY ORDER:C1468($entryOrder)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Start a timer to update the user interface
@@ -251,15 +276,15 @@ Function callMeBack($param; $param1; $paramN)
 	var $i : Integer
 	var $parameters : Collection
 	
-	If (Length:C16(String:C10(This:C1470.callback))#0)
+	If (Length:C16(String:C10(This:C1470._callback))#0)
 		
 		If (Count parameters:C259=0)
 			
-			CALL FORM:C1391(This:C1470.window; This:C1470.callback)
+			CALL FORM:C1391(This:C1470.window; This:C1470._callback)
 			
 		Else 
 			
-			$code:="CALL FORM:C1391("+String:C10(This:C1470.window)+"; \""+This:C1470.callback+"\""
+			$code:="CALL FORM:C1391("+String:C10(This:C1470.window)+"; \""+This:C1470._callback+"\""
 			
 			If (Value type:C1509($1)=Is collection:K8:32)
 				
@@ -346,19 +371,6 @@ Function callMe($method : Text; $param1; $paramN)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-	// Associate a worker to the current form
-Function setWorker($worker)
-	
-	var $type : Integer
-	$type:=Value type:C1509($worker)
-	
-	If (Asserted:C1132(($type=Is text:K8:3) | ($type=Is real:K8:4) | ($type=Is longint:K8:6); "Wrong parameter type"))
-		
-		This:C1470.worker:=$worker
-		
-	End if 
-	
-	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Assigns a task to the associated worker
 	// .callWorker ( method : Text )
 	// .callWorker ( method : Text ; param : Collection )
@@ -377,19 +389,15 @@ Function callWorker($method; $param; $param1; $paramN)
 	var $i : Integer
 	var $parameters : Collection
 	
-	If (This:C1470.worker#Null:C1517)
+	If (This:C1470._worker#Null:C1517)
 		
 		If (Count parameters:C259=1)
 			
-			If (Asserted:C1132(This:C1470.worker#Null:C1517; "No associated worker"))
-				
-				CALL WORKER:C1389(This:C1470.worker; $method)
-				
-			End if 
+			CALL WORKER:C1389(This:C1470._worker; $method)
 			
 		Else 
 			
-			$code:="CALL WORKER:C1389(\""+This:C1470.worker+"\"; \""+$method+"\""
+			$code:="CALL WORKER:C1389(\""+This:C1470._worker+"\"; \""+$method+"\""
 			
 			If (Value type:C1509($2)=Is collection:K8:32)
 				
@@ -421,7 +429,7 @@ Function callWorker($method; $param; $param1; $paramN)
 		
 	Else 
 		
-		ASSERT:C1129(False:C215; "Worker is not is not defined.")
+		ASSERT:C1129(False:C215; "No associated worker")
 		
 	End if 
 	
@@ -514,51 +522,12 @@ Function callParent($event : Integer)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-Function goToPage($page : Integer; $subform : Boolean)
-	
-	var $_subform : Boolean
-	
-	If (Count parameters:C259>=2)
-		
-		// User's request
-		$_subform:=$subform
-		
-	Else 
-		
-		$_subform:=This:C1470.isSubform
-		
-	End if 
-	
-	If ($_subform)
-		
-		// Change page of current subform
-		FORM GOTO PAGE:C247($page; *)
-		
-	Else 
-		
-		FORM GOTO PAGE:C247($page)
-		
-	End if 
-	
-	//=== === === === === === === === === === === === === === === === === === === === === 
 Function page($subform : Boolean) : Integer
 	
-	var $_subform : Boolean
+	$subform:=Count parameters:C259>=1 ? $subform : This:C1470.isSubform
 	
-	If (Count parameters:C259>=1)
+	If ($subform)
 		
-		// User's request
-		$_subform:=$subform
-		
-	Else 
-		
-		$_subform:=This:C1470.isSubform
-		
-	End if 
-	
-	If ($_subform)
-		
-		// Current subform page
 		return (FORM Get current page:C276(*))
 		
 	Else 
@@ -568,28 +537,81 @@ Function page($subform : Boolean) : Integer
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-	// ⚠️ No optional parameter to allow the distinction between form and subform
-Function firstPage()
+Function goToPage($page : Integer; $subform : Boolean)
 	
-	FORM FIRST PAGE:C250
+	$subform:=Count parameters:C259>=2 ? $subform : This:C1470.isSubform
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
-	// ⚠️ No optional parameter to allow the distinction between form and subform
-Function lastPage()
-	
-	FORM LAST PAGE:C251
-	
-	//=== === === === === === === === === === === === === === === === === === === === === 
-	// ⚠️ No optional parameter to allow the distinction between form and subform
-Function nextPage()
-	
-	FORM NEXT PAGE:C248
+	If ($subform)
+		
+		FORM GOTO PAGE:C247($page; *)
+		
+	Else 
+		
+		FORM GOTO PAGE:C247($page)
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-	// ⚠️ No optional parameter to allow the distinction between form and subform
-Function previousPage()
+Function firstPage($subform : Boolean)
 	
-	FORM PREVIOUS PAGE:C249
+	$subform:=Count parameters:C259>=1 ? $subform : This:C1470.isSubform
+	
+	If ($subform)
+		
+		FORM GOTO PAGE:C247(1; *)
+		
+	Else 
+		
+		FORM FIRST PAGE:C250
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function lastPage($subform : Boolean)
+	
+	$subform:=Count parameters:C259>=1 ? $subform : This:C1470.isSubform
+	
+	If ($subform)
+		
+		var $height; $numPages; $width : Integer
+		FORM GET PROPERTIES:C674(String:C10(This:C1470.currentForm); $width; $height; $numPages)
+		FORM GOTO PAGE:C247($numPages; *)
+		
+	Else 
+		
+		FORM LAST PAGE:C251
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function nextPage($subform : Boolean)
+	
+	$subform:=Count parameters:C259>=1 ? $subform : This:C1470.isSubform
+	
+	If ($subform)
+		
+		FORM GOTO PAGE:C247(FORM Get current page:C276(*)+1; *)
+		
+	Else 
+		
+		FORM NEXT PAGE:C248
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function previousPage($subform : Boolean)
+	
+	$subform:=Count parameters:C259>=1 ? $subform : This:C1470.isSubform
+	
+	If ($subform)
+		
+		FORM GOTO PAGE:C247(FORM Get current page:C276(*)-1; *)
+		
+	Else 
+		
+		FORM PREVIOUS PAGE:C249
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Gives the focus to a widget in the current form
@@ -878,6 +900,42 @@ Function setCursorPointingHand($display : Boolean)
 		
 	End if 
 	
+	//MARK:-[DRAGG & DROP]
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function beginDrag($uri : Text; $data; $dragIcon : Picture)
+	
+	var $x : Blob
+	
+	If (Value type:C1509($data)=Is BLOB:K8:12)
+		
+		APPEND DATA TO PASTEBOARD:C403($uri; $data)
+		
+	Else 
+		
+		VARIABLE TO BLOB:C532($data; $x)
+		APPEND DATA TO PASTEBOARD:C403($uri; $x)
+		
+	End if 
+	
+	If (Count parameters:C259>=3)
+		
+		SET DRAG ICON:C1272($dragIcon)
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function getPasteboard($uri : Text)->$value
+	
+	var $data : Blob
+	
+	GET PASTEBOARD DATA:C401($uri; $data)
+	
+	If (Bool:C1537(OK))
+		
+		BLOB TO VARIABLE:C533($data; $value)
+		SET BLOB SIZE:C606($data; 0)
+		
+	End if 
 	
 	//MARK:-[PRIVATE]
 	//=== === === === === === === === === === === === === === === === === === === === === 

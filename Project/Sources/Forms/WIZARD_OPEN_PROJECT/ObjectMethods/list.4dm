@@ -9,7 +9,7 @@ Case of
 		
 		If (Form:C1466._index#0)
 			
-			Form:C1466._selection.setCoordinates(Form:C1466._list.getRowCoordinates(Form:C1466._index)).show()
+			Form:C1466._selection.setCoordinates(Form:C1466._list.rowCoordinates(Form:C1466._index)).show()
 			
 		End if 
 		

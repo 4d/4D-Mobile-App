@@ -1,4 +1,4 @@
-﻿{
+{
 	"destination": "detailScreen",
 	"inheritedForm": "panel_template",
 	"width": 450,
@@ -14,11 +14,6 @@
 		"onResize"
 	],
 	"method": "method.4dm",
-	"pageFormat": {
-		"paperName": "A4",
-		"paperWidth": "595pt",
-		"paperHeight": "842pt"
-	},
 	"pages": [
 		null,
 		{
@@ -234,7 +229,7 @@
 					"left": 117,
 					"width": 26,
 					"height": 26,
-					"fontFamily": ".SF NS Text",
+					"fontFamily": "System Font Regular",
 					"fontSize": 18,
 					"text": "+",
 					"style": "bevel",
@@ -248,7 +243,7 @@
 					"left": 149,
 					"width": 26,
 					"height": 26,
-					"fontFamily": ".SF NS Text",
+					"fontFamily": "System Font Regular",
 					"fontSize": 18,
 					"text": "-",
 					"style": "bevel",
@@ -294,5 +289,9 @@
 				}
 			}
 		}
-	]
+	],
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	}
 }

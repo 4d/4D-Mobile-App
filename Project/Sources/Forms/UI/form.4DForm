@@ -9,11 +9,6 @@
 	"events": [
 		"onActivate"
 	],
-	"pageFormat": {
-		"paperName": "A4",
-		"paperWidth": "595pt",
-		"paperHeight": "842pt"
-	},
 	"pages": [
 		null,
 		{

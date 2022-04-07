@@ -19,7 +19,7 @@ Class constructor($name : Text; $datasource)
 	
 	If (This:C1470.assignable)
 		
-		This:C1470.pointer:=$p
+		This:C1470._pointer:=$p
 		This:C1470.value:=$p->
 		
 	Else 
@@ -34,22 +34,22 @@ Class constructor($name : Text; $datasource)
 	This:C1470.action:=OBJECT Get action:C1457(*; This:C1470.name)
 	
 	//=== === === === === === === === === === === === === === === === === === ===
-Function updatePointer()->$p : Pointer
+	// Returns a pointer to the widget
+	// ⚠️ Could return a nil pointer if data source is an expression
+Function get pointer() : Pointer
 	
-	var $p : Pointer
-	$p:=OBJECT Get pointer:C1124(Object named:K67:5; This:C1470.name)
-	
-	If (Not:C34(Is nil pointer:C315($p)))
+	If (Asserted:C1132(This:C1470.assignable; "No pointer if the data source is an expression"))
 		
-		This:C1470.pointer:=$p
+		return (OBJECT Get pointer:C1124(Object named:K67:5; This:C1470.name))
+		
+		//return (OBJECT Get data source(This.name; *))
 		
 	End if 
 	
-	
 	//=== === === === === === === === === === === === === === === === === === ===
-Function pointer()->$p : Pointer
+Function updatePointer()
 	
-	$p:=OBJECT Get pointer:C1124(Object named:K67:5; This:C1470.name)
+	This:C1470._pointer:=OBJECT Get pointer:C1124(Object named:K67:5; This:C1470.name)
 	
 	//=== === === === === === === === === === === === === === === === === === ===
 Function setDatasource($datasource)

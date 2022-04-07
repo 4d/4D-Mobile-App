@@ -12,8 +12,8 @@ var $1 : Text
 var $2 : Boolean
 
 If (False:C215)
-	C_TEXT:C284(editor_ui_LISTBOX; $1)
-	C_BOOLEAN:C305(editor_ui_LISTBOX; $2)
+	C_TEXT:C284(_editor_ui_LISTBOX; $1)
+	C_BOOLEAN:C305(_editor_ui_LISTBOX; $2)
 End if 
 
 var $listbox : Text

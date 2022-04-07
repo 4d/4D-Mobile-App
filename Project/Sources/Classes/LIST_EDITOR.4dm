@@ -22,6 +22,7 @@ Function get format()->$value : Text
 	
 	//MARK:-FUNCTIONS
 	// === === === === === === === === === === === === === === === === === === === === ===
+	/// Design definition
 Function init()
 	
 	var $t : Text
@@ -438,15 +439,15 @@ Function doStaticDragAndDrop()->$allowed : Integer
 	//$rows:=$list.rowsNumber()
 	//If ($o.src#$rows)  // Not if the source was the last line
 	//$allowed:=0
-	//$o:=$list.getRowCoordinates($rows)
+	//$o:=$list.rowCoordinates($rows)
 	//$o.top:=$o.bottom
 	//$o.right:=$list.coordinates.right
 	//End if 
 	//Else 
 	//If ($o.src#$e.row)\
-																 & ($e.row#($o.src+1))  // Not the same or the next one
+																				 & ($e.row#($o.src+1))  // Not the same or the next one
 	//$allowed:=0
-	//$o:=$list.getRowCoordinates($e.row)
+	//$o:=$list.rowCoordinates($e.row)
 	//$o.bottom:=$o.top
 	//$o.right:=$list.coordinates.right
 	//End if 

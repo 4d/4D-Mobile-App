@@ -57,7 +57,7 @@ Case of
 				CREATE THUMBNAIL:C679($p; $p; 24; 24; Scaled to fit:K6:2)
 				
 				//%W-533.3
-				$ƒ.icons.pointer->{$params.row}:=$p
+				($ƒ.icons.pointer)->{$params.row}:=$p
 				//%W+533.3
 				
 			Else 

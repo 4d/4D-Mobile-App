@@ -1,14 +1,12 @@
-Class extends form
+Class extends panel
 
 Class constructor
 	
 	Super:C1705(Formula:C1597(editor_CALLBACK).source)
 	
-	This:C1470.context:=editor_Panel_init(This:C1470.name)
+	This:C1470.context:=Super:C1706.init()
 	
 	If (OB Is empty:C1297(This:C1470.context))
-		
-		This:C1470.isSubform:=True:C214
 		
 		This:C1470.init()
 		
@@ -18,6 +16,7 @@ Class constructor
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
+	/// Design definition
 Function init()
 	
 	var $group : cs:C1710.group
@@ -43,11 +42,12 @@ Function init()
 	This:C1470.parametersLink:=Formula:C1597(panel("ACTIONS_PARAMS"))
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
+	/// Events handler
 Function handleEvents($e : Object)
 	
 	If ($e.objectName=Null:C1517)  // <== FORM METHOD
 		
-		$e:=panel_Common(On Load:K2:1; On Timer:K2:25; On Resize:K2:27)
+		$e:=Super:C1706.handleEvents(On Load:K2:1; On Timer:K2:25; On Resize:K2:27)
 		
 		Case of 
 				
@@ -373,7 +373,7 @@ Function doActions()->$allow : Integer
 					
 					If ($o.src#$me.rowsNumber())  // Not if the source was the last line
 						
-						$o:=$me.getRowCoordinates($me.rowsNumber())
+						$o:=$me.rowCoordinates($me.rowsNumber())
 						$o.top:=$o.bottom
 						$o.right:=$me.coordinates.right
 						$allow:=0  // Allow drop
@@ -385,7 +385,7 @@ Function doActions()->$allow : Integer
 					If ($o.src#$e.row)\
 						 & ($e.row#($o.src+1))  // Not the same or the next one
 						
-						$o:=$me.getRowCoordinates($e.row)
+						$o:=$me.rowCoordinates($e.row)
 						$o.bottom:=$o.top
 						$o.right:=$me.coordinates.right
 						$allow:=0  // Allow drop

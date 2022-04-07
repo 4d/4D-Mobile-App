@@ -34,7 +34,7 @@ If (Count parameters:C259>=1)
 End if 
 
 $form:=New object:C1471(\
-"$"; editor_Panel_init; \
+"$"; _o_editor_Panel_init; \
 "form"; _o_UI.form(Formula:C1597(editor_CALLBACK).source).get(); \
 "tableWidget"; _o_UI.picture("tableWidget"); \
 "tableNext"; _o_UI.static("next@"); \

@@ -1,15 +1,13 @@
-Class extends form
+Class extends panel
 
 //=== === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	
 	Super:C1705(Formula:C1597(editor_CALLBACK).source)
 	
-	This:C1470.context:=editor_Panel_init(This:C1470.name)
+	This:C1470.context:=Super:C1706.init()
 	
 	If (OB Is empty:C1297(This:C1470.context))
-		
-		This:C1470.isSubform:=True:C214
 		
 		This:C1470.init()
 		
@@ -19,6 +17,7 @@ Class constructor
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
+	/// Design definition
 Function init()
 	
 	This:C1470.toBeInitialized:=False:C215
@@ -31,11 +30,12 @@ Function init()
 	This:C1470.button("webSettings").addToGroup($group)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
+	/// Events handler
 Function handleEvents($e : Object)
 	
 	If ($e.objectName=Null:C1517)  // <== Form method
 		
-		$e:=panel_Common(On Load:K2:1)
+		$e:=Super:C1706.handleEvents(On Load:K2:1)
 		
 		Case of 
 				

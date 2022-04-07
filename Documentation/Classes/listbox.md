@@ -36,30 +36,31 @@ If the `formObjectName` parameter is ommited, the constructor use the result of 
 
 > 📌 All functions that return `cs.listbox` may include one call after another. 
 
+### Definition
+| Function | Action |
+| -------- | ------ | 
+|.**columnNumber** ()  →`:Integer` | Gives the number of columns |
+|.**columnPtr** ()  →`:Pointer` | Giving a column, a header or a footer name, returns the corresponding column pointer |
+|.**rowNumber** ()  →`:Integer` | Gives the number of lines |
+|.**rowCoordinates** (row`:Integer`) →`:Object` | Returns a row <a href="#Coordinates">coordinates object</a> |
+|.**cellPosition** ({event`:Object`})  →`:Object` | Returns, as object `{column,row}`, the cell position of the given event (works also on Mouse Enter/Move/Leave!). Uses the  row & column of the current form event if no parameter.|
+|.**cellCoordinates** ({column`:Integer`;row`:Integer`}) →`:Object` | Returns, as a <a href="#Coordinates">coordinates object</a>, the designated cell coordinate & update the cellBox property. Uses the  row & column of the current form event if no parameter|
+
+### Selection
 | Function | Action |
 | -------- | ------ |  
-|.**select** ({row `:Integer`}) →`:cs.listbox` | Selects a row or all lines if no parameter is passed.|
-|.**unselect** ({row `:Integer`}) →`:cs.listbox` | Unselects a row or all lines if no parameter is passed.|
+|.**selected** ()  →`:Integer` | Gives the number of selected lines |
+|.**select** ({row `:Integer`}) →`:cs.listbox` | Selects a line or all lines if no parameter is passed.|
+|.**selectAll** ( ) →`:cs.listbox` | Selects all lines |
+|.**unselect** ({row `:Integer`}) →`:cs.listbox` | Unselects a line or all lines if no parameter is passed.|
 |.**selectFirstRow** () →`:cs.listbox` | Selects the first line of the list.|
 |.**selectLastRow** () →`:cs.listbox` | Selects the last line of the list.|
-|.**autoSelect** () →`:cs.listbox` | Selects the last touched row (last mouse click, last selection made via the keyboard or last drop).|
-|.**doSafeSelect** (row `:Integer`) →`:cs.listbox` | Selects the given row if possible, else the most appropiate one. <br/>Useful to maintain a selection after a deletion|
-|.**selectAll** ( ) →`:cs.listbox` | Selects all rows |
-|.**edit** ()<br/>.**edit** (event `:Object` {; item `:Integer`})<br/>.**edit** (target `:Text` {; item `:Integer`}) | To edit a listbox item |
-|.**reveal** (row `:Integer`)  → `:cs.listbox` | Selects ans reveal the passed row number |
-|.**selectedNumber** ()  →`:Integer` | Gives the number of selected rows |
-|.**columnNumber** ()  →`:Integer` | Gives the number of columns |
-|.**rowNumber** ()  →`:Integer` | Gives the number of lines |
-|.**getRowCoordinates** (row`:Integer`) →`:Object` | Returns a row coordinates as coordinate's object |
-|.**cellPosition** ({event`:Object`})  →`:Object` | Returns, as object `{column,row}`, the cell position of the given event (works also on Mouse Enter/Move/Leave!). Uses the  row & column of the current form event if no parameter.|
-|.**cellCoordinates** ({column`:Integer`;row`:Integer`}) →`:Object` | Returns, as a coordinate's object, the designated cell coordinate & update the cellBox property. Uses the  row & column of the current form event if no parameter|
-|.**popup** (menu`:cs.menu` {;default`:Text`})  →`:cs.menu` | Displays a [`cs.menu`](menu.md) at the bottom left of the current cell
-|.**showColumn** (column`:Integer` {; visible`:Boolean`})| |
-|.**hideColumn** (column`:Integer`)| |
-|.**clear** ()  →`:cs.listbox`| |
-|.**deleteRow** (row`:Integer`)  →`:cs.listbox`| |
-|.**getColumnProperties** (column`:Integer`)  →`:Object`| |
-|.**getProperty** (property`:Integer` {; column`:Integer`}) →`:Variant`| Returns a column or listbox (if column is ommited) property value|
+|.**autoSelect** () →`:cs.listbox` | Selects the last touched line (last mouse click, last selection made via the keyboard or last drop).|
+|.**doSafeSelect** (row `:Integer`) →`:cs.listbox` | Selects the given line if possible, else the most appropiate one. <br/>*Useful to maintain a selection after a deletion, for example*|
+
+### Properties
+| Function | Action |
+| -------- | ------ | 
 |.**highlight** ({enable`:Boolean`})  →`:cs.listbox`| |
 |.**noHighlight** ()  →`:cs.listbox`| |
 |.**movableLines** ({enable `:Boolean`})  →`:cs.listbox`| |
@@ -70,8 +71,21 @@ If the `formObjectName` parameter is ommited, the constructor use the result of 
 |.**multipleSelectable** ()  →`:cs.listbox`| |
 |.**sortable** ({enable `:Boolean`})  →`:cs.listbox`| |
 |.**notSortable** ()  →`:cs.listbox`| |
+|.**getColumnProperties** (column`:Integer`)  →`:Object`| |
+|.**getProperty** (property`:Integer` {; column`:Integer`}) →`:Variant`| Returns a column or listbox (if column is ommited) property value|
 
-### Coordinates object
+### Miscellaneous
+| Function | Action |
+| -------- | ------ | 
+|.**edit** ()<br/>.**edit** (event `:Object` {; item `:Integer`})<br/>.**edit** (target `:Text` {; item `:Integer`}) | To edit a listbox item |
+|.**reveal** (row `:Integer`)  → `:cs.listbox` | Selects ans reveal the passed row number |
+|.**popup** (menu`:cs.menu` {;default`:Text`})  →`:cs.menu` | Displays a [`cs.menu`](menu.md) at the bottom left of the current cell
+|.**showColumn** (column`:Integer` {; visible`:Boolean`})| |
+|.**hideColumn** (column`:Integer`)| |
+|.**clear** ()  →`:cs.listbox`| |
+|.**deleteRows** (row`:Integer`)  →`:cs.listbox`| |
+
+######Coordinates object
 	
 ```json
 {
@@ -83,7 +97,7 @@ If the `formObjectName` parameter is ommited, the constructor use the result of 
 ```
 
 
-### Columns description object
+###### Columns description object
 	
 ```json
 {
@@ -103,7 +117,7 @@ If the `formObjectName` parameter is ommited, the constructor use the result of 
 ```
 
 
-### Column desc object
+###### Column desc object
 	
 ```json
 {
@@ -125,7 +139,7 @@ If the `formObjectName` parameter is ommited, the constructor use the result of 
 }
 ```
 
-### Columns definition object
+###### Columns definition object
 
 ```json
 { 
@@ -135,7 +149,7 @@ If the `formObjectName` parameter is ommited, the constructor use the result of 
 }
 ```
 
-### Properties object
+###### Properties object
 
 ```json
 {

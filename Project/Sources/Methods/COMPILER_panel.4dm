@@ -13,8 +13,8 @@ If (False:C215)
 	C_TEXT:C284(panel_Load; $1)
 	
 	//______________________________________________________
-	C_OBJECT:C1216(panel_Common; $0)
-	C_LONGINT:C283(panel_Common; ${1})
+	C_OBJECT:C1216(_o_panel_Common; $0)
+	C_LONGINT:C283(_o_panel_Common; ${1})
 	
 	//______________________________________________________
 	C_OBJECT:C1216(panel_INIT; $1)

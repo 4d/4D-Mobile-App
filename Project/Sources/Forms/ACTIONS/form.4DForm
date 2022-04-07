@@ -21,11 +21,6 @@
 		"onBeginDragOver"
 	],
 	"method": "panel_HANDLE_EVENT",
-	"pageFormat": {
-		"paperName": "A4",
-		"paperWidth": "595pt",
-		"paperHeight": "842pt"
-	},
 	"pages": [
 		{
 			"objects": {

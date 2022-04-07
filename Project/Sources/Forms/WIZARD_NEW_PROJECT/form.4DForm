@@ -10,11 +10,6 @@
 		"onResize"
 	],
 	"method": "method.4dm",
-	"pageFormat": {
-		"paperName": "A4",
-		"paperWidth": "842pt",
-		"paperHeight": "595pt"
-	},
 	"css": [
 		{
 			"path": "/RESOURCES/css/wizard.css",

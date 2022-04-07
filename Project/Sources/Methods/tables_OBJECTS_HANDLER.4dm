@@ -141,7 +141,7 @@ Case of
 					
 				End if 
 				
-				editor_ui_LISTBOX($Txt_me)
+				_editor_ui_LISTBOX($Txt_me)
 				
 				//______________________________________________________
 			: ($Lon_formEvent=On Mouse Enter:K2:33)
@@ -192,12 +192,12 @@ Case of
 				//______________________________________________________
 			: ($Lon_formEvent=On Getting Focus:K2:7)
 				
-				editor_ui_LISTBOX($Txt_me; True:C214)
+				_editor_ui_LISTBOX($Txt_me; True:C214)
 				
 				//______________________________________________________
 			: ($Lon_formEvent=On Losing Focus:K2:8)
 				
-				editor_ui_LISTBOX($Txt_me; False:C215)
+				_editor_ui_LISTBOX($Txt_me; False:C215)
 				
 				//______________________________________________________
 			: (PROJECT.isLocked())

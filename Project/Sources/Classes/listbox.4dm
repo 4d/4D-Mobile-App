@@ -42,18 +42,19 @@ Function getCoordinates()->$coordinates : Object
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Giving a column, a header or a footer name, returns the corresponding column pointer
-Function get columnPtr($name : Text) : Pointer
+	// ⚠️ Could return a nil pointer if the colunmn isn't found or if column data source is an expression
+Function columnPtr($name : Text) : Pointer
 	
 	var $indx : Integer
 	
-	ARRAY BOOLEAN:C223($isVisible; 0x0000)
-	ARRAY POINTER:C280($columnsPtr; 0x0000)
-	ARRAY POINTER:C280($footersPtr; 0x0000)
-	ARRAY POINTER:C280($headersPtr; 0x0000)
-	ARRAY POINTER:C280($stylesPtr; 0x0000)
-	ARRAY TEXT:C222($columns; 0x0000)
-	ARRAY TEXT:C222($footers; 0x0000)
-	ARRAY TEXT:C222($headers; 0x0000)
+	ARRAY BOOLEAN:C223($isVisible; 0)
+	ARRAY POINTER:C280($columnsPtr; 0)
+	ARRAY POINTER:C280($footersPtr; 0)
+	ARRAY POINTER:C280($headersPtr; 0)
+	ARRAY POINTER:C280($stylesPtr; 0)
+	ARRAY TEXT:C222($columns; 0)
+	ARRAY TEXT:C222($footers; 0)
+	ARRAY TEXT:C222($headers; 0)
 	
 	LISTBOX GET ARRAYS:C832(*; This:C1470.name; \
 		$columns; $headers; \
@@ -87,6 +88,43 @@ Function get columnPtr($name : Text) : Pointer
 			End if 
 		End if 
 	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Giving a column, a header or a footer name, returns the corresponding column number
+Function columnNumber($name : Text) : Integer
+	
+	var $indx : Integer
+	
+	ARRAY BOOLEAN:C223($isVisible; 0)
+	ARRAY POINTER:C280($columnsPtr; 0)
+	ARRAY POINTER:C280($footersPtr; 0)
+	ARRAY POINTER:C280($headersPtr; 0)
+	ARRAY POINTER:C280($stylesPtr; 0)
+	ARRAY TEXT:C222($columns; 0)
+	ARRAY TEXT:C222($footers; 0)
+	ARRAY TEXT:C222($headers; 0)
+	
+	LISTBOX GET ARRAYS:C832(*; This:C1470.name; \
+		$columns; $headers; \
+		$columnsPtr; $headersPtr; \
+		$isVisible; \
+		$stylesPtr; \
+		$footers; $footersPtr)
+	
+	$indx:=Find in array:C230($columns; $name)
+	
+	If ($indx=-1)
+		
+		$indx:=Find in array:C230($headers; $name)
+		
+		If ($indx=-1)
+			
+			$indx:=Find in array:C230($footers; $name)
+			
+		End if 
+	End if 
+	
+	return ($indx)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Select row(s)
@@ -228,12 +266,12 @@ Function edit($target; $item : Integer)
 				//______________________________________________________
 			: (Count parameters:C259=0)  // First editable column of the current row
 				
-				ARRAY BOOLEAN:C223($isVisible; 0x0000)
-				ARRAY POINTER:C280($columnsPtr; 0x0000)
-				ARRAY POINTER:C280($headersPtr; 0x0000)
-				ARRAY POINTER:C280($stylesPtr; 0x0000)
-				ARRAY TEXT:C222($columns; 0x0000)
-				ARRAY TEXT:C222($headers; 0x0000)
+				ARRAY BOOLEAN:C223($isVisible; 0)
+				ARRAY POINTER:C280($columnsPtr; 0)
+				ARRAY POINTER:C280($footersPtr; 0)
+				ARRAY POINTER:C280($headersPtr; 0)
+				ARRAY POINTER:C280($stylesPtr; 0)
+				ARRAY TEXT:C222($columns; 0)
 				
 				LISTBOX GET ARRAYS:C832(*; This:C1470.name; \
 					$columns; $headers; \
@@ -268,7 +306,7 @@ Function edit($target; $item : Integer)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns a row coordinates
-Function getRowCoordinates($row : Integer)->$coordinates : Object
+Function rowCoordinates($row : Integer) : Object
 	
 	var $l; $bottom; $left; $right; $top; $width : Integer
 	var $horizontal; $vertical : Boolean
@@ -279,35 +317,27 @@ Function getRowCoordinates($row : Integer)->$coordinates : Object
 	LISTBOX GET CELL COORDINATES:C1330(*; This:C1470.name; This:C1470.columnsNumber(); $row; $l; $l; $right; $bottom)
 	
 	// Adjust according to the visible part
-	$left:=Choose:C955($left<This:C1470.coordinates.left; This:C1470.coordinates.left; $left)
-	$top:=Choose:C955($top<This:C1470.coordinates.top; This:C1470.coordinates.top; $top)
+	$left:=($left<This:C1470.coordinates.left) ? This:C1470.coordinates.left : $left
+	$top:=($top<This:C1470.coordinates.top) ? This:C1470.coordinates.top : $top
 	
 	OBJECT GET SCROLLBAR:C1076(*; This:C1470.name; $horizontal; $vertical)
+	$width:=$vertical ? LISTBOX Get property:C917(*; This:C1470.name; lk ver scrollbar width:K53:9) : 0
 	
-	If ($vertical)
-		
-		$width:=LISTBOX Get property:C917(*; This:C1470.name; lk ver scrollbar width:K53:9)
-		$right:=Choose:C955($right>(This:C1470.coordinates.right-$width); This:C1470.coordinates.right-$width; $right)
-		
-	Else 
-		
-		$right:=Choose:C955($right>This:C1470.coordinates.right; This:C1470.coordinates.right; $right)
-		
-	End if 
+	$right:=($right>(This:C1470.coordinates.right-$width)) ? This:C1470.coordinates.right-$width : $right
 	
-	$bottom:=Choose:C955($bottom>This:C1470.coordinates.bottom; This:C1470.coordinates.bottom; $bottom)
+	$bottom:=($bottom>This:C1470.coordinates.bottom) ? This:C1470.coordinates.bottom : $bottom
 	
-	$coordinates:=New object:C1471(\
+	return (New object:C1471(\
 		"left"; $left; \
 		"top"; $top; \
 		"right"; $right; \
-		"bottom"; $bottom)
+		"bottom"; $bottom))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Gives the number of selected rows
-Function selectedNumber() : Integer
+Function selected() : Integer
 	
-	return (Count in array:C907((This:C1470.pointer())->; True:C214))
+	return (Count in array:C907((This:C1470.pointer)->; True:C214))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Gives the number of columns
@@ -336,14 +366,14 @@ Function updateDefinition() : cs:C1710.listbox
 	
 	var $i : Integer
 	
-	ARRAY BOOLEAN:C223($isVisible; 0x0000)
-	ARRAY POINTER:C280($columnsPtr; 0x0000)
-	ARRAY POINTER:C280($footersPtr; 0x0000)
-	ARRAY POINTER:C280($headersPtr; 0x0000)
-	ARRAY POINTER:C280($stylesPtr; 0x0000)
-	ARRAY TEXT:C222($columns; 0x0000)
-	ARRAY TEXT:C222($footers; 0x0000)
-	ARRAY TEXT:C222($headers; 0x0000)
+	ARRAY BOOLEAN:C223($isVisible; 0)
+	ARRAY POINTER:C280($columnsPtr; 0)
+	ARRAY POINTER:C280($footersPtr; 0)
+	ARRAY POINTER:C280($headersPtr; 0)
+	ARRAY POINTER:C280($stylesPtr; 0)
+	ARRAY TEXT:C222($columns; 0)
+	ARRAY TEXT:C222($footers; 0)
+	ARRAY TEXT:C222($headers; 0)
 	
 	LISTBOX GET ARRAYS:C832(*; This:C1470.name; \
 		$columns; $headers; \
@@ -397,21 +427,11 @@ Function updateCell() : cs:C1710.listbox
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Current cell indexes {column,row}
-Function cellPosition($event : Object)->$position : Object
+Function cellPosition($e : Object) : Object
 	
-	var $_; $column; $row; $x; $y : Integer
-	var $e; $event : Object
+	var $button; $column; $row; $x; $y : Integer
 	
-	If (Count parameters:C259>=1)
-		
-		// Event is provided
-		$e:=$event
-		
-	Else 
-		
-		$e:=FORM Event:C1606
-		
-	End if 
+	$e:=$e || FORM Event:C1606
 	
 	If ($e.code=On Clicked:K2:4)\
 		 | ($e.code=On Double Clicked:K2:5)
@@ -420,14 +440,14 @@ Function cellPosition($event : Object)->$position : Object
 		
 	Else 
 		
-		GET MOUSE:C468($x; $y; $_)
+		GET MOUSE:C468($x; $y; $button)
 		LISTBOX GET CELL POSITION:C971(*; This:C1470.name; $x; $y; $column; $row)
 		
 	End if 
 	
-	$position:=New object:C1471(\
+	return (New object:C1471(\
 		"column"; $column; \
-		"row"; $row)
+		"row"; $row))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function cellCoordinates($column : Integer; $row : Integer)->$coordinates : Object
@@ -567,17 +587,16 @@ Function clear() : cs:C1710.listbox
 	return (This:C1470)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function deleteRow($row : Integer) : cs:C1710.listbox
-	
+Function deleteRows($row : Integer) : cs:C1710.listbox
 	
 	If (Count parameters:C259=0)
 		
-		// Delete all rowsLISTBOX DELETE ROWS(*; This.name; 1; This.rowsNumber())
-		LISTBOX SELECT ROW:C912(*; This:C1470.name; 0; lk remove from selection:K53:3)
+		// Delete all rows
+		LISTBOX DELETE ROWS:C914(*; This:C1470.name; 1; This:C1470.rowsNumber())
 		
 	Else 
 		
-		// #TO_DO: use a collection for multiple delrtion
+		// #TO_DO: use a collection for multiple deletion
 		LISTBOX DELETE ROWS:C914(*; This:C1470.name; $row; 1)
 		
 	End if 
@@ -645,15 +664,7 @@ Function getProperty($property : Integer; $column : Text) : Variant
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function highlight($enabled : Boolean) : cs:C1710.listbox
 	
-	var $highlight : Boolean
-	
-	If (Count parameters:C259>=1)
-		
-		$highlight:=$enabled
-		
-	End if 
-	
-	This:C1470.setProperty(lk hide selection highlight:K53:41; Choose:C955($highlight; lk yes:K53:69; lk no:K53:68))
+	This:C1470.setProperty(lk hide selection highlight:K53:41; $enabled ? lk yes:K53:69 : lk no:K53:68)
 	
 	return (This:C1470)
 	
@@ -686,16 +697,9 @@ Function nonMovableLines() : cs:C1710.listbox
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function selectable($enabled : Boolean) : cs:C1710.listbox
 	
-	var $selectable : Boolean
-	$selectable:=True:C214
+	$enabled:=$enabled || True:C214
 	
-	If (Count parameters:C259>=1)
-		
-		$selectable:=$enabled
-		
-	End if 
-	
-	If ($selectable)
+	If ($enabled)
 		
 		// Restore design mode definition
 		This:C1470.setProperty(lk selection mode:K53:35; This:C1470.properties.selectionMode)

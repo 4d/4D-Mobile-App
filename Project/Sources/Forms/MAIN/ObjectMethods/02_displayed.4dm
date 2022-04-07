@@ -1,1 +1,3 @@
-main_OBJECTS_HANDLER 
+#DECLARE() : Integer
+
+return (panel.doMainDrop())

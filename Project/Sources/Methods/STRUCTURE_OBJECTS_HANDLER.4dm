@@ -54,7 +54,7 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Selection Change:K2:29)
 				
-				editor_ui_LISTBOX($e.objectName)
+				_editor_ui_LISTBOX($e.objectName)
 				
 				If ($row=0)
 					
@@ -309,7 +309,7 @@ Case of
 			: ($e.code=On Selection Change:K2:29)\
 				 | ($e.code=On Clicked:K2:4)
 				
-				editor_ui_LISTBOX($e.objectName)
+				_editor_ui_LISTBOX($e.objectName)
 				
 				If ($row=0)
 					
@@ -671,8 +671,8 @@ Case of
 		//// Hide the bottom line
 		//OBJECT SET VISIBLE(*; "bottom.line"; False)
 		//CALL FORM(Current form window; "editor_CALLBACK"; "resizePanel"; New object(\
-																																																																					"panel"; Current form name; \
-																																																																					"offset"; $Lon_vOffset))
+																																																																								"panel"; Current form name; \
+																																																																								"offset"; $Lon_vOffset))
 		//End if
 		////______________________________________________________
 		//: ($e.code=On Mouse Leave)

@@ -9,6 +9,7 @@ Class constructor
 	This:C1470.init()
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
+	/// Design definition
 Function init()
 	
 	This:C1470.toBeInitialized:=False:C215

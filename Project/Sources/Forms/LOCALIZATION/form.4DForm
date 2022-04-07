@@ -1,4 +1,4 @@
-﻿{
+{
 	"destination": "detailScreen",
 	"rightMargin": 0,
 	"bottomMargin": 0,
@@ -10,11 +10,6 @@
 		"onLoad",
 		"onUnload"
 	],
-	"pageFormat": {
-		"paperName": "A4",
-		"paperWidth": "842pt",
-		"paperHeight": "595pt"
-	},
 	"pages": [
 		null,
 		{

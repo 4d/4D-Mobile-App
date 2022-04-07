@@ -35,7 +35,7 @@ End if
 $form:=New object:C1471(\
 "window"; Current form window:C827; \
 "callback"; Formula:C1597(editor_CALLBACK).source; \
-"form"; editor_Panel_init; \
+"form"; _o_editor_Panel_init; \
 "tableList"; "01_tables"; \
 "tables"; "tables"; \
 "tableFilter"; "tables.filter"; \
@@ -121,8 +121,8 @@ Case of
 				//______________________________________________________
 			: ($Lon_formEvent=On Timer:K2:25)
 				
-				editor_ui_LISTBOX($form.tableList)
-				editor_ui_LISTBOX($form.fieldList)
+				_editor_ui_LISTBOX($form.tableList)
+				_editor_ui_LISTBOX($form.fieldList)
 				
 				//______________________________________________________
 		End case 
@@ -212,7 +212,7 @@ Case of
 		EDITOR.callMeBack("tableList")
 		EDITOR.callMeBack("fieldList")
 		EDITOR.callMeBack("tableProperties")
-		EDITOR.callMeBack("mainMenu")
+		//EDITOR.callMeBack("mainMenu")
 		
 		//=========================================================
 	Else 

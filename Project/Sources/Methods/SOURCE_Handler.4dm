@@ -27,7 +27,7 @@ var $oSource : cs:C1710.sources
 // Initialisations
 $form:=New object:C1471(\
 "window"; Current form window:C827; \
-"ui"; editor_Panel_init; \
+"ui"; _o_editor_Panel_init; \
 "local"; "local"; \
 "server"; "server"; \
 "doNotGenerate"; "doNotGenerate"; \

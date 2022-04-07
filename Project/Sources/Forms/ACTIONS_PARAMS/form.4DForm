@@ -1,6 +1,5 @@
 {
 	"destination": "detailScreen",
-	"memorizeGeometry": true,
 	"inheritedForm": "panel_template",
 	"width": 960,
 	"height": 335,
@@ -24,11 +23,6 @@
 		"onBeginDragOver"
 	],
 	"method": "panel_HANDLE_EVENT",
-	"pageFormat": {
-		"paperName": "A4",
-		"paperWidth": "595pt",
-		"paperHeight": "842pt"
-	},
 	"pages": [
 		{
 			"objects": {
@@ -791,7 +785,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 578,
+	"geometryStamp": 579,
 	"editor": {
 		"groups": {
 			"Group": [

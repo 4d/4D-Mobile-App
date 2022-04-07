@@ -9,14 +9,18 @@
 	"markerFooter": 240,
 	"events": [
 		"onLoad",
+		"onClick",
+		"onDoubleClick",
+		"onLosingFocus",
+		"onGettingFocus",
+		"onDrop",
+		"onDragOver",
 		"onUnload",
-		"onTimer"
+		"onTimer",
+		"onSelectionChange",
+		"onBeginDragOver",
+		"onBoundVariableChange"
 	],
-	"pageFormat": {
-		"paperName": "A4",
-		"paperWidth": "595pt",
-		"paperHeight": "842pt"
-	},
 	"pages": [
 		null,
 		{
@@ -66,7 +70,7 @@
 					"fill": "transparent",
 					"stroke": "#AAAAAA"
 				},
-				"01_available.border": {
+				"_dataModel.border": {
 					"type": "rectangle",
 					"top": 26,
 					"left": 16,
@@ -75,7 +79,7 @@
 					"fill": "transparent",
 					"stroke": "#AAAAAA"
 				},
-				"01_available": {
+				"_dataModel": {
 					"type": "listbox",
 					"top": 28,
 					"left": 17,
@@ -85,7 +89,6 @@
 					"dragging": "custom",
 					"hideSystemHighlight": true,
 					"rowHeight": "32px",
-					"method": "ObjectMethods/01_available.4dm",
 					"events": [
 						"onClick",
 						"onDoubleClick",
@@ -160,7 +163,6 @@
 					"dropping": "custom",
 					"hideSystemHighlight": true,
 					"rowHeight": "32px",
-					"method": "ObjectMethods/02_displayed.4dm",
 					"events": [
 						"onClick",
 						"onLosingFocus",
@@ -171,6 +173,7 @@
 						"onRowMove"
 					],
 					"movableRows": true,
+					"method": "ObjectMethods/02_displayed.4dm",
 					"columns": [
 						{
 							"name": "main_ids",
@@ -238,7 +241,7 @@
 					"text": ":xliff:availableTables",
 					"class": "label"
 				},
-				"b.add.one": {
+				"addOne": {
 					"type": "button",
 					"top": 59,
 					"left": 465,
@@ -248,12 +251,12 @@
 					"icon": "/RESOURCES/images/common/next.png",
 					"iconFrames": 4,
 					"style": "custom",
-					"method": "ObjectMethods/b.add.one.4dm",
 					"events": [
 						"onClick"
-					]
+					],
+					"focusable": false
 				},
-				"b.remove.all": {
+				"removeAll": {
 					"type": "button",
 					"top": 148,
 					"left": 465,
@@ -265,12 +268,11 @@
 					"icon": "/RESOURCES/Images/common/previousAll.png",
 					"iconFrames": 4,
 					"style": "custom",
-					"method": "ObjectMethods/b.remove.all.4dm",
 					"events": [
 						"onClick"
 					]
 				},
-				"b.remove.one": {
+				"removeOne": {
 					"type": "button",
 					"top": 118,
 					"left": 465,
@@ -281,12 +283,11 @@
 					"icon": "/RESOURCES/images/common/previous.png",
 					"iconFrames": 4,
 					"style": "custom",
-					"method": "ObjectMethods/b.remove.one.4dm",
 					"events": [
 						"onClick"
 					]
 				},
-				"b.add.all": {
+				"addAll": {
 					"type": "button",
 					"top": 88,
 					"left": 465,
@@ -298,7 +299,6 @@
 					"icon": "/RESOURCES/Images/common/nextAll.png",
 					"iconFrames": 4,
 					"style": "custom",
-					"method": "ObjectMethods/b.add.all.4dm",
 					"events": [
 						"onClick"
 					]
@@ -312,39 +312,45 @@
 					"text": ":xliff:selectedTables",
 					"class": "label"
 				},
-				"b.up": {
+				"up": {
 					"type": "button",
 					"top": 6,
 					"left": 904,
 					"width": 16,
 					"height": 16,
 					"visibility": "hidden",
-					"shortcutKey": "[right arrow]",
+					"shortcutKey": "[up arrow]",
 					"icon": "/RESOURCES/images/common/up.png",
 					"iconFrames": 4,
 					"style": "custom",
-					"method": "ObjectMethods/b.up.4dm",
 					"events": [
 						"onClick"
-					]
+					],
+					"focusable": false,
+					"shortcutAccel": false,
+					"shortcutControl": false,
+					"shortcutShift": true,
+					"shortcutAlt": false
 				},
-				"b.down": {
+				"down": {
 					"type": "button",
 					"top": 6,
 					"left": 921,
 					"width": 16,
 					"height": 16,
 					"visibility": "hidden",
-					"shortcutKey": "[right arrow]",
+					"shortcutKey": "[down arrow]",
 					"shortcutShift": true,
 					"focusable": false,
 					"icon": "/RESOURCES/images/common/down.png",
 					"iconFrames": 4,
 					"style": "custom",
-					"method": "ObjectMethods/b.down.4dm",
 					"events": [
 						"onClick"
-					]
+					],
+					"shortcutAccel": false,
+					"shortcutControl": false,
+					"shortcutAlt": false
 				},
 				"noDataModel": {
 					"type": "subform",
@@ -354,7 +360,7 @@
 					"height": 19,
 					"detailForm": "NO_DATAMODEL",
 					"focusable": false,
-					"visibility": "visible"
+					"visibility": "hidden"
 				}
 			}
 		}
@@ -363,8 +369,8 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"method": "main_Handler",
-	"geometryStamp": 18,
+	"method": "panel_HANDLE_EVENT",
+	"geometryStamp": 37,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

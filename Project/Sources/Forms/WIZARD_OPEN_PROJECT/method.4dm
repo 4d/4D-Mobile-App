@@ -54,7 +54,7 @@ Case of
 		
 		If (Form:C1466._index#0)
 			
-			$o:=Form:C1466._list.getRowCoordinates(Form:C1466._index)
+			$o:=Form:C1466._list.rowCoordinates(Form:C1466._index)
 			Form:C1466._selection.setCoordinates($o).show()
 			
 		End if 
@@ -85,7 +85,7 @@ Case of
 		
 		If (Form:C1466._index#0)
 			
-			$o:=Form:C1466._list.getRowCoordinates(Form:C1466._index)
+			$o:=Form:C1466._list.rowCoordinates(Form:C1466._index)
 			Form:C1466._selection.setCoordinates($o).show()
 			Form:C1466._open.enable()
 			

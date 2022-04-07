@@ -1,22 +1,20 @@
-Class extends form
+Class extends panel
 
 // === === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor($form : Object)
 	
 	Super:C1705(Formula:C1597(editor_CALLBACK).source)
 	
-	// This.context:=editor_Panel_init(This.name)
+	//This.context:=Super.init()
 	
-	// If (OB Is empty(This.context))
-	
-	This:C1470.isSubform:=True:C214
+	//If (OB Is empty(This.context))
 	
 	This:C1470.init()
 	
-	// Constraints definition
+	//// Constraints definition
 	//cs.ob.new(This.context).createPath("constraints.rules"; Is collection)
 	
-	// End if
+	//End if 
 	
 	// FIXME:TEMPO
 	This:C1470.form:=$form
@@ -56,6 +54,7 @@ Function get ExposedStructure()->$structure : Object
 	// MARK:-[FUNCTIONS]
 	// MARK:-
 	// === === === === === === === === === === === === === === === === === === === === ===
+	/// Design definition
 Function init()
 	
 	This:C1470.toBeInitialized:=False:C215

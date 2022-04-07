@@ -1286,6 +1286,7 @@ Function addToMain($table)
 		If ($main.order.indexOf($tableID)=-1)
 			
 			$main.order.push($tableID)
+			This:C1470.save()
 			
 		End if 
 	End if 
@@ -1316,6 +1317,8 @@ Function removeFromMain($table)
 			
 		End if 
 	End if 
+	
+	This:C1470.save()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Create list and detail form entries
