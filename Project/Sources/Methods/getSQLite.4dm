@@ -62,4 +62,8 @@ If (Is macOS:C1572)
 	End if 
 End if 
 
-CALL FORM:C1391($in.caller; "editor_CALLBACK"; "datasetIOS"; $reponse)
+If ($in.caller#Null:C1517)
+	
+	CALL FORM:C1391($in.caller; $in.method; $in.message; $reponse)
+	
+End if 

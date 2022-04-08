@@ -391,8 +391,6 @@ Function updateFieldList
 	
 	_editor_ui_LISTBOX(This:C1470.fieldList.name)
 	
-	androidLimitations(False:C215; "")
-	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Gets the list of fields/reports according to the selected table as collections
 Function getFieldList()->$result : Object

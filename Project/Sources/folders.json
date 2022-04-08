@@ -167,6 +167,7 @@
 			"folder_copyMerge",
 			"formatString",
 			"formatters",
+			"getAndroidDataset",
 			"getSQLite",
 			"git",
 			"plist_toObject",

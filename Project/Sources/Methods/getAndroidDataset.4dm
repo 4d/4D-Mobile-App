@@ -12,7 +12,8 @@ var $database : 4D:C1709.File
 var $scripts : 4D:C1709.Folder
 var $lep : cs:C1710.lep
 
-$reponse:=New object:C1471("database"; Null:C1517)
+$reponse:=New object:C1471(\
+"database"; Null:C1517)
 
 If (Is macOS:C1572)
 	
@@ -23,12 +24,12 @@ If (Is macOS:C1572)
 		
 		$scripts:=cs:C1710.path.new().scripts()
 		
-		//warning: Get system info should not be called frequently (consumer) as the system will not change during the execution of the code
+		// Warning: Get system info should not be called frequently (consumer) as the system will not change during the execution of the code
 		$osVersion:=Get system info:C1571.osVersion
 		
 		If (Is macOS:C1572)
 			
-			//fixme: macOS <12
+			// Fixme: macOS <12
 			If (Match regex:C1019("(?m-si)macOS\\s(\\d+)"; $osVersion; 1; $pos; $len))
 				
 				If (Num:C11(Substring:C12($osVersion; $pos; $len))<12)
@@ -63,9 +64,12 @@ If (Is macOS:C1572)
 	
 Else 
 	
-	//TODO:
-	
+	// TODO:
 	
 End if 
 
-CALL FORM:C1391($in.caller; "editor_CALLBACK"; "datasetAndroid"; $reponse)
+If ($in.caller#Null:C1517)
+	
+	CALL FORM:C1391($in.caller; $in.method; $in.message; $reponse)
+	
+End if 

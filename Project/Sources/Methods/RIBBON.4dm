@@ -220,8 +220,6 @@ Case of
 				
 				If ($button=153)  // Install
 					
-					androidLimitations(False:C215; "")
-					
 					var $device : Object
 					var $target
 					

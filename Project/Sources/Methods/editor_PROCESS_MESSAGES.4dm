@@ -7,7 +7,6 @@
 // Description:
 // Management of messages addressed to the main form
 // ----------------------------------------------------
-// Declarations
 #DECLARE($message : Text; $data : Object)
 
 var $t; $title : Text

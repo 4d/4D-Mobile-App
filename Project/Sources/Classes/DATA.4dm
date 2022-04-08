@@ -192,8 +192,6 @@ Function onLoad()
 	/// Update of the user interface
 Function update()
 	
-	androidLimitations(False:C215; "")
-	
 	This:C1470.properties.enable(Not:C34(PROJECT.isLocked()))
 	
 	// Select the last used table or the first one if none
@@ -204,6 +202,8 @@ Function update()
 		This:C1470.sqlite:=Null:C1517
 		This:C1470.callWorker(Formula:C1597(getSQLite).source; New object:C1471(\
 			"caller"; This:C1470.window; \
+			"method"; Formula:C1597(editor_CALLBACK).source; \
+			"message"; "datasetIOS"; \
 			"project"; PROJECT))
 		
 	End if 
@@ -213,6 +213,8 @@ Function update()
 		This:C1470.datasetAndroid:=Null:C1517
 		This:C1470.callWorker(Formula:C1597(getAndroidDataset).source; New object:C1471(\
 			"caller"; This:C1470.window; \
+			"method"; Formula:C1597(editor_CALLBACK).source; \
+			"message"; "datasetAndroid"; \
 			"project"; PROJECT))
 		
 	End if 

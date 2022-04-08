@@ -1020,3 +1020,18 @@ Function editAuthenticationMethod()
 	
 	// Open method
 	METHOD OPEN PATH:C1213($ar{0}; *)
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function doProjectMessage($panel : Text; $selector : Text; $data : Object)
+	
+	var $subform : Text
+	
+	$subform:=panel_Find($panel)
+	
+	If (Length:C16($subform)>0)
+		
+		This:C1470.callChild($subform; Formula:C1597(project_PROCESS_MESSAGES).source; $selector; $data)
+		
+	End if 
+	
+	

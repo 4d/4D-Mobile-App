@@ -139,7 +139,7 @@ Case of
 			
 		End if 
 		
-		If (Current form name:C1298=$ƒ.project)  // Pass to target panel
+		If ($isProjectForm)
 			
 			Case of 
 					
@@ -151,7 +151,7 @@ Case of
 					//……………………………………………………………………………………………
 				: (String:C10($data.action)="forms")
 					
-					$container:=panel_Find($ƒ.views)
+					EDITOR.doProjectMessage($ƒ.views; $selector; $data)
 					
 					//……………………………………………………………………………………………
 				Else 
@@ -160,12 +160,6 @@ Case of
 					
 					//……………………………………………………………………………………………
 			End case 
-			
-			If (Length:C16($container)>0)
-				
-				EDITOR.callChild($container; Current method name:C684; $selector; $data)
-				
-			End if 
 			
 		Else 
 			
@@ -190,7 +184,6 @@ Case of
 			OBJECT SET VISIBLE:C603(*; "picker@"; False:C215)
 			OB REMOVE:C1226(Form:C1466.$dialog; "picker")
 			
-			// Pass to target panel
 			$selector:=String:C10($data.action)
 			
 			Case of 
@@ -198,22 +191,22 @@ Case of
 					//……………………………………………………………………………………………
 				: ($selector="tableIcons")
 					
-					$container:=panel_Find($ƒ.tableProperties)
+					EDITOR.doProjectMessage($ƒ.tableProperties; "pickerResume"; $data)
 					
 					//……………………………………………………………………………………………
 				: ($selector="fieldIcons")
 					
-					$container:=panel_Find($ƒ.fieldProperties)
+					EDITOR.doProjectMessage($ƒ.fieldProperties; "pickerResume"; $data)
 					
 					//……………………………………………………………………………………………
 				: ($selector="forms")
 					
-					$container:=panel_Find($ƒ.views)
+					EDITOR.doProjectMessage($ƒ.views; "pickerResume"; $data)
 					
 					//……………………………………………………………………………………………
 				: ($selector="actionIcons")
 					
-					$container:=panel_Find($ƒ.actions)
+					EDITOR.doProjectMessage($ƒ.actions; "pickerResume"; $data)
 					
 					//……………………………………………………………………………………………
 				Else 
@@ -222,12 +215,6 @@ Case of
 					
 					//……………………………………………………………………………………………
 			End case 
-			
-			If (Length:C16($container)>0)
-				
-				EDITOR.callChild($container; Current method name:C684; "pickerResume"; $data)
-				
-			End if 
 			
 		Else 
 			
@@ -261,15 +248,9 @@ Case of
 		//______________________________________________________
 	: ($selector="dataSet")  // Dataset generation result
 		
-		If ($isProjectForm)  // Pass to target panel
+		If ($isProjectForm)
 			
-			$container:=panel_Find($ƒ.dataSource)
-			
-			If (Length:C16($container)>0)
-				
-				EDITOR.callChild($container; Current method name:C684; $selector; $data)
-				
-			End if 
+			EDITOR.doProjectMessage($ƒ.dataSource; $selector; $data)
 			
 		Else 
 			
@@ -278,17 +259,11 @@ Case of
 		End if 
 		
 		//______________________________________________________
-	: ($selector="update_data")  // Update data panel
+	: ($selector="update_data")
 		
-		If ($isProjectForm)  // Pass to target panel
+		If ($isProjectForm)
 			
-			$container:=panel_Find($ƒ.data)
-			
-			If (Length:C16($container)>0)
-				
-				EDITOR.callChild($container; Current method name:C684; $selector)
-				
-			End if 
+			EDITOR.doProjectMessage($ƒ.data; $selector)
 			
 		Else 
 			
@@ -299,15 +274,9 @@ Case of
 		//______________________________________________________
 	: ($selector="datasetAndroid")  // Callback from getAndroidDB method to update the data panel
 		
-		If ($isProjectForm)  // Pass to target panel
+		If ($isProjectForm)
 			
-			$container:=panel_Find($ƒ.data)
-			
-			If (Length:C16($container)>0)
-				
-				EDITOR.callChild($container; Current method name:C684; $selector; $data)
-				
-			End if 
+			EDITOR.doProjectMessage($ƒ.data; $selector; $data)
 			
 		Else 
 			
@@ -322,15 +291,9 @@ Case of
 		//______________________________________________________
 	: ($selector="datasetIOS")  // Callback from getSQLite method to update the data panel
 		
-		If ($isProjectForm)  // Pass to target panel
+		If ($isProjectForm)
 			
-			$container:=panel_Find($ƒ.data)
-			
-			If (Length:C16($container)>0)
-				
-				EDITOR.callChild($container; Current method name:C684; $selector; $data)
-				
-			End if 
+			EDITOR.doProjectMessage($ƒ.data; $selector; $data)
 			
 		Else 
 			
@@ -358,15 +321,9 @@ Case of
 		
 		ASSERT:C1129(DATABASE.isMatrix)
 		
-		If ($isProjectForm)  // Pass to target panel
+		If ($isProjectForm)
 			
-			$container:=panel_Find($ƒ.mainMenu)
-			
-			If (Length:C16($container)>0)
-				
-				EDITOR.callChild($container; Current method name:C684; $selector)
-				
-			End if 
+			EDITOR.doProjectMessage($ƒ.mainMenu; $selector)
 			
 		Else 
 			
@@ -379,15 +336,9 @@ Case of
 		//______________________________________________________
 	: ($selector="tableProperties")  // Update table properties panel
 		
-		If ($isProjectForm)  // Pass to target panel
+		If ($isProjectForm)
 			
-			$container:=panel_Find($ƒ.tableProperties)
-			
-			If (Length:C16($container)>0)
-				
-				EDITOR.callChild($container; Current method name:C684; $selector)
-				
-			End if 
+			EDITOR.doProjectMessage($ƒ.tableProperties; $selector)
 			
 		Else 
 			
@@ -398,15 +349,9 @@ Case of
 		//______________________________________________________
 	: ($selector="tableIcons")  // Preload the table icons
 		
-		If ($isProjectForm)  // Pass to target panel
+		If ($isProjectForm)
 			
-			$container:=panel_Find($ƒ.tableProperties)
-			
-			If (Length:C16($container)>0)
-				
-				EDITOR.callChild($container; Current method name:C684; $selector)
-				
-			End if 
+			EDITOR.doProjectMessage($ƒ.tableProperties; $selector)
 			
 		Else 
 			
@@ -417,15 +362,9 @@ Case of
 		//______________________________________________________
 	: ($selector="fieldProperties")  // Update field properties panel
 		
-		If ($isProjectForm)  // Pass to target panel
+		If ($isProjectForm)
 			
-			$container:=panel_Find($ƒ.fieldProperties)
-			
-			If (Length:C16($container)>0)
-				
-				EDITOR.callChild($container; Current method name:C684; $selector)
-				
-			End if 
+			EDITOR.doProjectMessage($ƒ.fieldProperties; $selector)
 			
 		Else 
 			
@@ -436,7 +375,7 @@ Case of
 		//______________________________________________________
 	: ($selector="loadActionIcons")  // Preload the actions icons
 		
-		If ($isProjectForm)  // Pass to target panel
+		If ($isProjectForm)
 			
 			$container:=panel_Find($ƒ.actions)
 			
@@ -450,15 +389,9 @@ Case of
 		//______________________________________________________
 	: ($selector="checkingServerConfiguration")  // Verify the web server configuration
 		
-		If ($isProjectForm)  // Pass to target panel
+		If ($isProjectForm)
 			
-			$container:=panel_Find($ƒ.dataSource)
-			
-			If (Length:C16($container)>0)
-				
-				EDITOR.callChild($container; Current method name:C684; $selector)
-				
-			End if 
+			EDITOR.doProjectMessage($ƒ.dataSource; $selector)
 			
 		Else 
 			
@@ -469,15 +402,9 @@ Case of
 		//______________________________________________________
 	: ($selector="teamId")
 		
-		If ($isProjectForm)  // Pass to target panel
+		If ($isProjectForm)
 			
-			$container:=panel_Find($ƒ.developer)
-			
-			If (Length:C16($container)>0)
-				
-				EDITOR.callChild($container; Current method name:C684; $selector; $data)
-				
-			End if 
+			EDITOR.doProjectMessage($ƒ.developer; $selector; $data)
 			
 		Else 
 			
@@ -492,15 +419,9 @@ Case of
 	: ($selector="tableList")\
 		 | ($selector="fieldList")
 		
-		If ($isProjectForm)  // Pass to target panel
+		If ($isProjectForm)
 			
-			$container:=panel_Find($ƒ.structure)
-			
-			If (Length:C16($container)>0)
-				
-				EDITOR.callChild($container; EDITOR.callback; $selector)
-				
-			End if 
+			EDITOR.doProjectMessage($ƒ.structure; $selector)
 			
 		Else 
 			
@@ -549,7 +470,7 @@ Case of
 		
 		If ($isProjectForm)
 			
-			If (Asserted:C1132($data.panel#Null:C1517))  // Pass to target panel
+			If (Asserted:C1132($data.panel#Null:C1517))
 				
 				$container:=panel_Find($data.panel; ->$indx)
 				
@@ -620,7 +541,8 @@ Case of
 		//______________________________________________________
 	: ($selector="selectTab")
 		
-		If ($isProjectForm)  // Pass to target panel
+		If ($isProjectForm)
+			
 			$container:=panel_Find($ƒ.views; ->$indx)
 			
 			If (Length:C16($container)>0)
@@ -642,15 +564,9 @@ Case of
 		//______________________________________________________
 	: ($selector="setForm")  // Set form from browser
 		
-		If ($isProjectForm)  // Pass to target panel
+		If ($isProjectForm)
 			
-			$container:=panel_Find($ƒ.views)
-			
-			If (Length:C16($container)>0)
-				
-				EDITOR.callChild($container; Current method name:C684; $selector; $data)
-				
-			End if 
+			EDITOR.doProjectMessage($ƒ.views; $selector; $data)
 			
 		Else 
 			
@@ -670,15 +586,9 @@ Case of
 		//______________________________________________________
 	: ($selector="refreshViews")  // Update VIEWS panel
 		
-		If ($isProjectForm)  // Pass to target panel
+		If ($isProjectForm)
 			
-			$container:=panel_Find($ƒ.views)
-			
-			If (Length:C16($container)>0)
-				
-				EDITOR.callChild($container; Current method name:C684; $selector; $data)
-				
-			End if 
+			EDITOR.doProjectMessage($ƒ.views; $selector; $data)
 			
 		Else 
 			
@@ -699,7 +609,7 @@ Case of
 		//______________________________________________________
 	: ($selector="refreshParameters")  // Update ACTIONS PARAMETERS panel
 		
-		If ($isProjectForm)  // Pass to target panel
+		If ($isProjectForm)
 			
 			$container:=panel_Find($ƒ.actionParameters)
 			
@@ -713,15 +623,9 @@ Case of
 		//______________________________________________________
 	: ($selector="refreshServer")  // Update SERVER panel
 		
-		If ($isProjectForm)  // Pass to target panel
+		If ($isProjectForm)
 			
-			$container:=panel_Find($ƒ.server)
-			
-			If (Length:C16($container)>0)
-				
-				EDITOR.callChild($container; Current method name:C684; $selector)
-				
-			End if 
+			EDITOR.doProjectMessage($ƒ.server; $selector)
 			
 		Else 
 			
@@ -732,15 +636,9 @@ Case of
 		//______________________________________________________
 	: ($selector="testServer")  // Server checking response
 		
-		If ($isProjectForm)  // Pass to target panel
+		If ($isProjectForm)
 			
-			$container:=panel_Find($ƒ.dataSource)
-			
-			If (Length:C16($container)>0)
-				
-				EDITOR.callChild($container; Current method name:C684; $selector; $data)
-				
-			End if 
+			EDITOR.doProjectMessage($ƒ.dataSource; $selector; $data)
 			
 		Else 
 			

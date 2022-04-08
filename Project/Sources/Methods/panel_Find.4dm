@@ -8,74 +8,46 @@
 //
 // ----------------------------------------------------
 // Declarations
-C_TEXT:C284($0)
-C_TEXT:C284($1)
-C_POINTER:C301($2)
-
-C_LONGINT:C283($Lon_index; $Lon_parameters; $Lon_x)
-C_POINTER:C301($Ptr_; $Ptr_index)
-C_TEXT:C284($Txt_form; $Txt_panel; $Txt_subform)
+#DECLARE($panel : Text; $ptr : Pointer) : Text
 
 If (False:C215)
-	C_TEXT:C284(panel_Find; $0)
 	C_TEXT:C284(panel_Find; $1)
 	C_POINTER:C301(panel_Find; $2)
+	C_TEXT:C284(panel_Find; $0)
 End if 
 
-// ----------------------------------------------------
-// Initialisations
-$Lon_parameters:=Count parameters:C259
+var $form; $subform : Text
+var $count; $indx : Integer
+var $nil : Pointer
 
-If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
-	
-	// Required parameters
-	$Txt_panel:=$1
-	
-	// Optional parameters
-	If ($Lon_parameters>=2)
-		
-		$Ptr_index:=$2
-		
-	End if 
-	
-Else 
-	
-	ABORT:C156
-	
-End if 
+ARRAY TEXT:C222($widgets; 0)
 
 // ----------------------------------------------------
-ARRAY TEXT:C222($tTxt_objects; 0x0000)
-FORM GET OBJECTS:C898($tTxt_objects)
+FORM GET OBJECTS:C898($widgets)
 
 Repeat 
 	
-	$Lon_x:=Find in array:C230($tTxt_objects; "panel.@"; $Lon_x+1)
+	$indx:=Find in array:C230($widgets; "panel.@"; $indx+1)
 	
-	If ($Lon_x>0)
+	If ($indx>0)
 		
-		$Lon_index:=$Lon_index+1
+		$count+=1
 		
-		OBJECT GET SUBFORM:C1139(*; $tTxt_objects{$Lon_x}; $Ptr_; $Txt_form)
+		OBJECT GET SUBFORM:C1139(*; $widgets{$indx}; $nil; $form)
 		
-		If ($Txt_form=$Txt_panel)
+		If ($form=$panel)
 			
-			$Txt_subform:=$tTxt_objects{$Lon_x}
-			$Lon_x:=-1  // Break
+			$subform:=$widgets{$indx}
+			break
 			
 		End if 
 	End if 
-Until ($Lon_x=-1)
+Until ($indx=-1)
 
-// ----------------------------------------------------
-// Return
-$0:=$Txt_subform
-
-If ($Lon_parameters>=2)
+If (Not:C34(Is nil pointer:C315($ptr)))
 	
-	$Ptr_index->:=$Lon_index
+	$ptr->:=$count
 	
 End if 
 
-// ----------------------------------------------------
-// End
+return ($subform)
