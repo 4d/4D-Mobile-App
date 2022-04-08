@@ -21,8 +21,8 @@ The `listbox` class is intended to handle listbox widget.
 |**.itemPosition** | Ready to be used as a current item position of the data source.
 |**.items** | Ready to be used as selected items of the data source.
 |**.cellBox** | Last updated cell coordinates as coordinate's object.
-|**.definition** | Object containing the listbox columns description. [*cf. infra*](#listboxDefinition)
-|**.properties** | Object containing all available properties of the listbox. [*cf. infra*](#property)
+|**.definition** | `object` containing the [listbox definition](#listboxDefinition)
+|**.properties** | `object` containing the [listbox properties](#property)
 
 ## 🔸 cs.listbox.new()
 
