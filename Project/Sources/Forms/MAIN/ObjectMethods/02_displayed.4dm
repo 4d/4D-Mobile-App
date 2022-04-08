@@ -1,3 +1,3 @@
 #DECLARE() : Integer
 
-return (panel.doMainDrop())
+return (panel.mainHandleEvents())

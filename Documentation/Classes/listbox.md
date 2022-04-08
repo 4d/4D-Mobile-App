@@ -21,8 +21,8 @@ The `listbox` class is intended to handle listbox widget.
 |**.itemPosition** | Ready to be used as a current item position of the data source.
 |**.items** | Ready to be used as selected items of the data source.
 |**.cellBox** | Last updated cell coordinates as coordinate's object.
-|**.definition** | Object containing the listbox columns description. *cf. infra*
-|**.properties** | Object containing all available properties. *cf. infra*
+|**.definition** | Object containing the listbox columns description. [*cf. infra*](#listboxDefinition)
+|**.properties** | Object containing all available properties of the listbox. [*cf. infra*](#property)
 
 ## 🔸 cs.listbox.new()
 
@@ -39,12 +39,12 @@ If the `formObjectName` parameter is ommited, the constructor use the result of 
 ### Definition
 | Function | Action |
 | -------- | ------ | 
-|.**columnNumber** ()  →`:Integer` | Gives the number of columns |
-|.**columnPtr** ()  →`:Pointer` | Giving a column, a header or a footer name, returns the corresponding column pointer |
-|.**rowNumber** ()  →`:Integer` | Gives the number of lines |
-|.**rowCoordinates** (row`:Integer`) →`:Object` | Returns a row <a href="#Coordinates">coordinates object</a> |
-|.**cellPosition** ({event`:Object`})  →`:Object` | Returns, as object `{column,row}`, the cell position of the given event (works also on Mouse Enter/Move/Leave!). Uses the  row & column of the current form event if no parameter.|
-|.**cellCoordinates** ({column`:Integer`;row`:Integer`}) →`:Object` | Returns, as a <a href="#Coordinates">coordinates object</a>, the designated cell coordinate & update the cellBox property. Uses the  row & column of the current form event if no parameter|
+|.**columnNumber** ()  →`:Integer` | Returns the number of columns |
+|.**columnPtr** ()  →`:Pointer` | Giving a `column`, a `header` or a `footer` name, returns the corresponding column pointer |
+|.**rowNumber** ()  →`:Integer` | Returns the number of lines |
+|.**rowCoordinates** (row`:Integer`) →`:Object` | Returns a row [coordinates object](#coordinates) |
+|.**cellPosition** ({event`:Object`})  →`:Object` | Returns, as [cell object](#cell) of the given event (works also on Mouse Enter/Move/Leave!).<br/>*Uses the  row & column of the current form event if no parameter.*|
+|.**cellCoordinates** ({column`:Integer`;row`:Integer`}) →`:Object` | Returns, as a [coordinates object](#coordinates), the designated cell coordinate & update the cellBox property.<br/>*Uses the  row & column of the current form event if no parameter.*|
 
 ### Selection
 | Function | Action |
@@ -85,8 +85,14 @@ If the `formObjectName` parameter is ommited, the constructor use the result of 
 |.**clear** ()  →`:cs.listbox`| |
 |.**deleteRows** (row`:Integer`)  →`:cs.listbox`| |
 
-######Coordinates object
-	
+#### <a name="cell">Cell object</a>
+```json
+{
+	"column": Integer,
+	"row": Integer
+}
+```
+#### <a name="coordinates">Coordinates object</a>
 ```json
 {
 	"left": Integer,
@@ -95,30 +101,24 @@ If the `formObjectName` parameter is ommited, the constructor use the result of 
 	"bottom": Integer
 }
 ```
-
-
-###### Columns description object
-	
+#### <a name="listboxDefinition">Listbox definition object</a>
 ```json
 {
 	"definition": [
-		column 1 definition object,
-		column 2 definition object,
+		column 1 : Column definition object,
+		column 2 : Column definition object,
 		…
 		column N definition object
 	],
 	"columns": {
-		"column1Name" : column desc object,
-		"column2Name" : column desc object,
+		"column1Name" : Column decription object,
+		"column2Name" : Column decription object,
 		—
-		"columnNName" : column desc object
+		"columnNName" : Column decription object
 	}
 }
 ```
-
-
-###### Column desc object
-	
+#### <a name="columnDef">Column definition object</a>
 ```json
 {
 	"number": Integer,
@@ -138,9 +138,7 @@ If the `formObjectName` parameter is ommited, the constructor use the result of 
 	"pointer": pointer
 }
 ```
-
-###### Columns definition object
-
+#### <a name="columnDesc">Column decription object</a>
 ```json
 { 
 	"name" : column name, 
@@ -148,9 +146,7 @@ If the `formObjectName` parameter is ommited, the constructor use the result of 
 	"footer" : footer name
 }
 ```
-
-###### Properties object
-
+#### <a name="property">Property object</a>
 ```json
 {
 	"enterable": Boolean,

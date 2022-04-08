@@ -119,8 +119,11 @@
 	},
 	"(__)": {},
 	"([ macOS ])": {},
+	"([API])": {},
 	"([UI])": {},
+	"(backend)": {},
 	"(HDI_COLOR)": {},
+	"(UI)": {},
 	"[android]": {
 		"methods": [
 			"COMPILER_android",
@@ -140,7 +143,7 @@
 			"vdtool"
 		]
 	},
-	"[API]": {
+	"[COMPONENT API]": {
 		"methods": [
 			"C_NEW_MOBILE_PROJECT",
 			"C_OPEN_MOBILE_PROJECT",
@@ -148,19 +151,67 @@
 			"mobileUnit"
 		]
 	},
-	"[COMPONENT]": {
+	"[COMPONENT BACKEND]": {
 		"groups": [
-			"backend",
-			"UI"
+			"[android]",
+			"[ios]",
+			"mobile"
 		],
+		"methods": [
+			"catalog",
+			"COMPILER_backend",
+			"dataSet",
+			"downloadSDK",
+			"dump",
+			"findFirstPathComponentInCatalog",
+			"folder_copyMerge",
+			"formatString",
+			"formatters",
+			"getSQLite",
+			"git",
+			"plist_toObject",
+			"Process_tags",
+			"Process_tags_on_file",
+			"Rest",
+			"sdk",
+			"template",
+			"unzip"
+		],
+		"classes": [
+			"ExposedStructure",
+			"field",
+			"formatter",
+			"MobileProject",
+			"path",
+			"project",
+			"sqlite3",
+			"sqliteSizes",
+			"table"
+		]
+	},
+	"[COMPONENT UI]": {
+		"groups": [
+			"[EDITOR]",
+			"[PANELS]",
+			"[PROJECT]",
+			"BROWSER",
+			"FOOTER",
+			"LISTE_EDITOR",
+			"panel",
+			"RIBON",
+			"widgets",
+			"WIZARD"
+		],
+		"methods": [
+			"BUILD"
+		]
+	},
+	"[COMPONENT]": {
 		"methods": [
 			"COMPILER_COMPONENT",
 			"COMPONENT_Infos",
 			"COMPONENT_INIT",
 			"FEATURE_FLAGS"
-		],
-		"classes": [
-			"Feature"
 		]
 	},
 	"[EDITOR]": {
@@ -443,44 +494,6 @@
 			"unitTestSuites"
 		]
 	},
-	"backend": {
-		"groups": [
-			"[android]",
-			"[ios]",
-			"mobile"
-		],
-		"methods": [
-			"catalog",
-			"COMPILER_backend",
-			"dataSet",
-			"downloadSDK",
-			"dump",
-			"findFirstPathComponentInCatalog",
-			"folder_copyMerge",
-			"formatString",
-			"formatters",
-			"getSQLite",
-			"git",
-			"plist_toObject",
-			"Process_tags",
-			"Process_tags_on_file",
-			"Rest",
-			"sdk",
-			"template",
-			"unzip"
-		],
-		"classes": [
-			"ExposedStructure",
-			"field",
-			"formatter",
-			"MobileProject",
-			"path",
-			"project",
-			"sqlite3",
-			"sqliteSizes",
-			"table"
-		]
-	},
 	"BROWSER": {
 		"methods": [
 			"BROWSER_CONTAINER",
@@ -512,6 +525,7 @@
 			"doc",
 			"env",
 			"error",
+			"feature",
 			"http",
 			"lep",
 			"logger",
@@ -787,6 +801,7 @@
 			"panel_Find",
 			"panel_FindByIndex",
 			"panel_GOTO",
+			"panel_HANDLE_EVENT",
 			"panel_INIT",
 			"panel_LAST",
 			"panel_Load",
@@ -964,24 +979,6 @@
 			"test_str"
 		]
 	},
-	"UI": {
-		"groups": [
-			"[API]",
-			"[EDITOR]",
-			"[PANELS]",
-			"[PROJECT]",
-			"BROWSER",
-			"FOOTER",
-			"LISTE_EDITOR",
-			"panel",
-			"RIBON",
-			"widgets",
-			"WIZARD"
-		],
-		"methods": [
-			"BUILD"
-		]
-	},
 	"widgets": {
 		"groups": [
 			"Localization",
@@ -1008,10 +1005,16 @@
 		]
 	},
 	"WIZARD": {
+		"methods": [
+			"WIZARD_HANDLE_EVENTS"
+		],
 		"forms": [
 			"NEW_PROJECT",
 			"WIZARD_NEW_PROJECT",
 			"WIZARD_OPEN_PROJECT"
+		],
+		"classes": [
+			"WIZARD"
 		]
 	},
 	"xml (thread-safe)": {
@@ -1029,8 +1032,11 @@
 		"groups": [
 			"(__)",
 			"([ macOS ])",
+			"([API])",
 			"([UI])",
-			"(HDI_COLOR)"
+			"(backend)",
+			"(HDI_COLOR)",
+			"(UI)"
 		]
 	}
 }

@@ -6,10 +6,10 @@
 	"markerFooter": 240,
 	"events": [
 		"onLoad",
+		"onClick",
 		"onTimer",
 		"onResize"
 	],
-	"method": "method.4dm",
 	"css": [
 		{
 			"path": "/RESOURCES/css/wizard.css",
@@ -107,7 +107,6 @@
 					"height": 22,
 					"text": ":xliff:continue",
 					"defaultButton": true,
-					"method": "ObjectMethods/continue.4dm",
 					"events": [
 						"onClick"
 					]
@@ -234,5 +233,6 @@
 	"windowMinWidth": 970,
 	"windowMinHeight": 860,
 	"width": 970,
-	"height": 875
+	"height": 875,
+	"method": "WIZARD_HANDLE_EVENTS"
 }

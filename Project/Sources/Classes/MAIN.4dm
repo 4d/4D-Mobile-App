@@ -117,48 +117,6 @@ Function handleEvents($e : Object) : Integer
 				End case 
 				
 				//==============================================
-			: (This:C1470.displayed.catch())
-				
-				Case of 
-						
-						//______________________________________________________
-					: ($e.code=On Clicked:K2:4)\
-						 | ($e.code=On Selection Change:K2:29)
-						
-						This:C1470._updateButtons()
-						
-						_editor_ui_LISTBOX(This:C1470.displayed.name)
-						
-						//______________________________________________________
-					: ($e.code=On Row Moved:K2:32)
-						
-						If (PROJECT.isLocked())
-							
-							// Unable to set "movable rows" to false, so redraw
-							This:C1470.update()
-							
-							BEEP:C151
-							
-						Else 
-							
-							This:C1470._updateOrder()
-							
-						End if 
-						
-						//______________________________________________________
-					: ($e.code=On Getting Focus:K2:7)
-						
-						_editor_ui_LISTBOX(This:C1470.displayed.name; True:C214)
-						
-						//______________________________________________________
-					: ($e.code=On Losing Focus:K2:8)
-						
-						_editor_ui_LISTBOX(This:C1470.displayed.name; False:C215)
-						
-						//______________________________________________________
-				End case 
-				
-				//==============================================
 			: (This:C1470.addOne.catch($e; On Clicked:K2:4))
 				
 				This:C1470._add()
@@ -299,22 +257,60 @@ Function update()
 	This:C1470._updateButtons()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function doMainDrop()->$allow : Integer
+Function mainHandleEvents($e : Object)->$allow : Integer
 	
 	var $uri : Text
-	var $e; $o : Object
+	var $o : Object
 	
 	$uri:="com.4d.private.4dmobile.table"
 	
-	$e:=FORM Event:C1606
-	$e.row:=Drop position:C608
+	$e:=$e || FORM Event:C1606
 	
 	Case of 
 			
 			//______________________________________________________
+		: ($e.code=On Clicked:K2:4)\
+			 | ($e.code=On Selection Change:K2:29)
+			
+			This:C1470._updateButtons()
+			
+			_editor_ui_LISTBOX(This:C1470.displayed.name)
+			
+			//______________________________________________________
+		: ($e.code=On Row Moved:K2:32)
+			
+			If (PROJECT.isLocked())
+				
+				// Unable to set "movable rows" to false, so redraw
+				This:C1470.update()
+				
+				BEEP:C151
+				
+			Else 
+				
+				This:C1470._updateOrder()
+				
+			End if 
+			
+			//______________________________________________________
+		: ($e.code=On Getting Focus:K2:7)
+			
+			_editor_ui_LISTBOX(This:C1470.displayed.name; True:C214)
+			
+			//______________________________________________________
+		: ($e.code=On Losing Focus:K2:8)
+			
+			_editor_ui_LISTBOX(This:C1470.displayed.name; False:C215)
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		: (PROJECT.isLocked())
 			
 			$allow:=-1  // Reject drop
+			
+			//______________________________________________________
+		: ($e.code=On Begin Drag Over:K2:44)
+			
+			//BEEP
 			
 			//______________________________________________________
 		: ($e.code=On Drag Over:K2:13)
@@ -331,7 +327,8 @@ Function doMainDrop()->$allow : Integer
 			If ($allow=-1)
 				
 				SET CURSOR:C469(9019)
-				//This.dropCursor.hide()
+				
+				// This.dropCursor.hide()
 				
 			Else 
 				
@@ -342,18 +339,18 @@ Function doMainDrop()->$allow : Integer
 				//$o.top:=$o.bottom
 				//$o.right:=$me.coordinates.right
 				//$allow:=0  // Allow drop
-				//End if
-				//Else
+				// End if
+				// Else
 				//If ($o.src#$e.row)\
-																									& ($e.row#($o.src+1))  // Not the same or the next one
+					& ($e.row#($o.src+1))  // Not the same or the next one
 				//$o:=$me.rowCoordinates($e.row)
 				//$o.bottom:=$o.top
 				//$o.right:=$me.coordinates.right
 				//$allow:=0  // Allow drop
-				//End if
-				//End if
+				// End if
+				// End if
 				//This.dropCursor.setCoordinates($o.left; $o.top; $o.right; $o.bottom)
-				//This.dropCursor.show()
+				// This.dropCursor.show()
 				
 			End if 
 			
@@ -368,7 +365,7 @@ Function doMainDrop()->$allow : Integer
 				
 				If ($o.tgt=-1)  // After the last line
 					
-					//This.action.parameters.push(This.current)
+					// This.action.parameters.push(This.current)
 					//This.action.parameters.remove($o.src-1)
 					
 					This:C1470.__add($o.tableNumber; $o.name)
@@ -378,9 +375,9 @@ Function doMainDrop()->$allow : Integer
 					//This.action.parameters.insert($o.tgt-1; This.current)
 					//If ($o.tgt<$o.src)
 					//This.action.parameters.remove($o.src)
-					//Else
+					// Else
 					//This.action.parameters.remove($o.src-1)
-					//End if
+					// End if
 					
 					This:C1470.__add($o.tableNumber; $o.name; $o.tgt)
 					
@@ -388,8 +385,8 @@ Function doMainDrop()->$allow : Integer
 				
 				This:C1470._updateOrder()
 				
-				//This.dropCursor.hide()
-				//This.displayed.touch()
+				// This.dropCursor.hide()
+				// This.displayed.touch()
 				
 			End if 
 			
@@ -475,20 +472,12 @@ Function __add($id : Text; $name : Text; $row : Integer)
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function _updateOrder()
 	
-	var $count; $i : Integer
 	var $order : Collection
 	
-	$order:=Form:C1466.main.order.copy()  // Current value
+	$order:=Form:C1466.main.order.copy()  // Current order
 	
 	// FIXME: Use a listbox collection
-	$count:=Size of array:C274(This:C1470.dstIdPtr->)
-	Form:C1466.main.order:=New collection:C1472.resize($count)
-	
-	For ($i; 1; $count; 1)
-		
-		Form:C1466.main.order[$i-1]:=(This:C1470.dstIdPtr)->{$i}
-		
-	End for 
+	ARRAY TO COLLECTION:C1563(Form:C1466.main.order; This:C1470.dstIdPtr->)
 	
 	If (Not:C34(Form:C1466.main.order.equal($order)))
 		

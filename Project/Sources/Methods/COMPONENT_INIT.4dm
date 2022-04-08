@@ -20,33 +20,20 @@ var $folder : 4D:C1709.Folder
 var $file : 4D:C1709.File
 var $process : cs:C1710.process
 
-var SHARED : Object  // Common values
 var _o_UI : Object  // UI constants
-
-var Feature : cs:C1710.Feature  // Feature flags
 
 $reset:=Macintosh option down:C545
 $process:=cs:C1710.process.new()
 
-var ENV : cs:C1710.env
-ENV:=cs:C1710.env.new()
-
-var PROJECT : cs:C1710.project
-PROJECT:=cs:C1710.project.new()
-
+// MARK:-DATABASE
 var DATABASE : cs:C1710.database
-DATABASE:=cs:C1710.database.new()
+DATABASE:=DATABASE || cs:C1710.database.new()
 DATABASE.projects:=DATABASE.root.folder("Mobile Projects")
 DATABASE.projects.create()  // Make sure the directory exists
 DATABASE.products:=DATABASE.root.parent.folder(DATABASE.structure.name+" - Mobile")
 
-
 // Disable asserts in release mode
 SET ASSERT ENABLED:C1131(DATABASE.isInterpreted; *)
-
-// Get the config file
-$file:=Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile")
-$pref:=$file.exists ? JSON Parse:C1218($file.getText()) : New object:C1471
 
 // MARK:-LOGGER
 var Logger : cs:C1710.logger  // General journal
@@ -61,7 +48,14 @@ End if
 
 Logger.verbose:=(DATABASE.isMatrix)
 
+var ENV : cs:C1710.env
+ENV:=ENV || cs:C1710.env.new()
+
+var PROJECT : cs:C1710.project
+PROJECT:=PROJECT || cs:C1710.project.new()
+
 // MARK:-COMMON VALUES
+var SHARED : Object  // Common values
 If (OB Is empty:C1297(SHARED)) | $reset
 	
 	//Formula($process.worker ? BEEP : IDLE).call()
@@ -155,6 +149,10 @@ If (OB Is empty:C1297(SHARED)) | $reset
 		
 	End if 
 	
+	// Get the config file
+	$file:=Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile")
+	$pref:=$file.exists ? JSON Parse:C1218($file.getText()) : New object:C1471
+	
 	If (SHARED.component.build#Num:C11($pref.lastBuild)) | $reset
 		
 		If (Is macOS:C1572)
@@ -171,7 +169,7 @@ If (OB Is empty:C1297(SHARED)) | $reset
 		
 		// Save the preferences
 		$pref.lastBuild:=SHARED.component.build
-		Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile").setText(JSON Stringify:C1217($pref; *))
+		$file.setText(JSON Stringify:C1217($pref; *))
 		
 	End if 
 	
@@ -201,7 +199,7 @@ If (OB Is empty:C1297(SHARED)) | $reset
 	SHARED.defaultFieldBindingTypes[8858]:="relation"
 	SHARED.defaultFieldBindingTypes[8859]:="relation"
 	
-	// XXX check table & filed names in https:// Project.4d.com/issues/90770
+	// XXX check table & field names in https:// Project.4d.com/issues/90770
 	SHARED.deletedRecordsTable:=New object:C1471(\
 		"name"; "__DeletedRecords"; \
 		"fields"; New collection:C1472)
@@ -284,6 +282,7 @@ If (OB Is empty:C1297(SHARED)) | $reset
 End if 
 
 // MARK:-FEATURES FLAGS
+var Feature : cs:C1710.feature
 If (OB Is empty:C1297(Feature)) | $reset
 	
 	var $version : Integer
@@ -329,5 +328,5 @@ If ($process.cooperative)\
 End if 
 
 // MARK:-AFTER FLAGS
-SET ASSERT ENABLED:C1131(Feature.with("debug"); *)
+SET ASSERT ENABLED:C1131(DATABASE.isInterpreted | Feature.with("debug"); *)
 Logger.info("Assert "+Choose:C955(Get assert enabled:C1130; "Enabled"; "Disabled"))

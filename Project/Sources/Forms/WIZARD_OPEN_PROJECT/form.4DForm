@@ -13,7 +13,6 @@
 		"onTimer",
 		"onResize"
 	],
-	"method": "method.4dm",
 	"css": [
 		{
 			"path": "/RESOURCES/css/wizard.css",
@@ -84,7 +83,6 @@
 					"currentItemPositionSource": "Form:C1466._index",
 					"scrollbarVertical": "visible",
 					"sizingY": "grow",
-					"method": "ObjectMethods/list.4dm",
 					"class": "",
 					"columns": [
 						{
@@ -141,7 +139,6 @@
 					],
 					"sizingY": "move",
 					"focusable": false,
-					"method": "ObjectMethods/browse.4dm",
 					"shortcutAccel": true,
 					"shortcutControl": false,
 					"shortcutShift": false,
@@ -168,7 +165,6 @@
 						"onClick"
 					],
 					"stroke": "automatic",
-					"method": "ObjectMethods/up.4dm",
 					"sizingY": "move",
 					"shortcutAccel": false,
 					"shortcutControl": false,
@@ -185,7 +181,6 @@
 					"events": [
 						"onClick"
 					],
-					"method": "ObjectMethods/down.4dm",
 					"sizingY": "move",
 					"shortcutAccel": false,
 					"shortcutControl": false,
@@ -218,51 +213,11 @@
 					"width": 387,
 					"height": 1,
 					"sizingY": "move"
-				},
-				"message.back": {
-					"type": "picture",
-					"top": 0,
-					"left": 0,
-					"width": 970,
-					"height": 875,
-					"visibility": "hidden",
-					"sizingX": "grow",
-					"sizingY": "grow",
-					"pictureFormat": "tiled",
-					"picture": "/RESOURCES/images/common/background.png"
-				},
-				"message.button": {
-					"type": "button",
-					"top": 0,
-					"left": 0,
-					"width": 970,
-					"height": 875,
-					"visibility": "hidden",
-					"sizingX": "grow",
-					"sizingY": "grow",
-					"display": false
-				},
-				"message": {
-					"type": "subform",
-					"top": 205,
-					"left": 280,
-					"width": 410,
-					"height": 180,
-					"visibility": "hidden",
-					"detailForm": "MESSAGE",
-					"focusable": false,
-					"deletableInList": false,
-					"doubleClickInRowAction": "editSubrecord",
-					"selectionMode": "multiple",
-					"printFrame": "variable",
-					"method": "ObjectMethods/message.4dm"
 				}
 			},
 			"entryOrder": [
 				"open",
 				"list",
-				"message.button",
-				"message",
 				"browse",
 				"up",
 				"down",
@@ -274,23 +229,16 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 475,
+	"geometryStamp": 481,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
 		"views": {
-			"View 1": {},
-			"message": {
-				"visible": false,
-				"objects": [
-					"message.back",
-					"message.button",
-					"message"
-				]
-			}
+			"View 1": {}
 		}
 	},
 	"windowMinWidth": 970,
 	"windowMinHeight": 860,
-	"windowTitle": ":xliff:4dProductName"
+	"windowTitle": ":xliff:4dProductName",
+	"method": "WIZARD_HANDLE_EVENTS"
 }

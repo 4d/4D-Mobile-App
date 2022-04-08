@@ -8,46 +8,18 @@
 // Management of the message widget in the context of the current window
 // ----------------------------------------------------
 // Declarations
-#DECLARE($message : Object)
+#DECLARE($message : Object; $widget : cs:C1710.subform)
 
 var $action; $key : Text
 var $data; $ƒ : Object
-var $widget : cs:C1710.subform
 
-//mark: #TODDO - Allow a text parameter for one action only
+//TODO: Allow a text parameter for one action only
 
-// ----------------------------------------------------
-// Initialisations
-If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
-	
-	Case of 
-			//______________________________________________________
-		: (Current form name:C1298="PROJECT_EDITOR")
-			
-			$widget:=EDITOR.message
-			
-			//______________________________________________________
-		: (Current form name:C1298="WIZARD_NEW_PROJECT")\
-			 | (Current form name:C1298="WIZARD_OPEN_PROJECT")
-			
-			$widget:=Form:C1466._message
-			
-			//______________________________________________________
-		Else 
-			
-			ASSERT:C1129(False:C215; "Unmanaged parent form")
-			
-			//______________________________________________________
-	End case 
-	
-	$data:=$widget.getValue()
-	$ƒ:=$data.ƒ
-	
-Else 
-	
-	ABORT:C156
-	
-End if 
+$widget:=$widget || EDITOR.message
+
+$data:=$widget.getValue()
+$ƒ:=$data.ƒ
+
 
 // ----------------------------------------------------
 If $widget.isVisible()\

@@ -29,16 +29,18 @@ Class constructor($name : Text; $datasource)
 	// Backup design properties
 	This:C1470.saveProperties()
 	
+	// MARK: - Informations
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// ⚠️ 
-Function getCoordinates()->$coordinates : Object
+	// Gives the number of columns
+Function columnsNumber() : Integer
 	
-	$coordinates:=Super:C1706.getCoordinates()
+	return (LISTBOX Get number of columns:C831(*; This:C1470.name))
 	
-	This:C1470.getScrollPosition()
-	This:C1470.getScrollbars()
-	This:C1470.updateDefinition()
-	This:C1470.updateCell()
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Gives the number of rows
+Function rowsNumber() : Integer
+	
+	return (LISTBOX Get number of rows:C915(*; This:C1470.name))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Giving a column, a header or a footer name, returns the corresponding column pointer
@@ -127,6 +129,123 @@ Function columnNumber($name : Text) : Integer
 	return ($indx)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Current cell indexes {column,row}
+Function cellPosition($e : Object) : Object
+	
+	var $button; $column; $row; $x; $y : Integer
+	
+	$e:=$e || FORM Event:C1606
+	
+	If ($e.code=On Clicked:K2:4)\
+		 | ($e.code=On Double Clicked:K2:5)
+		
+		LISTBOX GET CELL POSITION:C971(*; This:C1470.name; $column; $row)
+		
+	Else 
+		
+		GET MOUSE:C468($x; $y; $button)
+		LISTBOX GET CELL POSITION:C971(*; This:C1470.name; $x; $y; $column; $row)
+		
+	End if 
+	
+	return (New object:C1471(\
+		"column"; $column; \
+		"row"; $row))
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// ⚠️ 
+Function getCoordinates() : Object
+	
+	return (Super:C1706.getCoordinates())
+	
+	This:C1470.getScrollPosition()
+	This:C1470.getScrollbars()
+	This:C1470.updateDefinition()
+	This:C1470.updateCell()
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns a row coordinates
+Function rowCoordinates($row : Integer) : Object
+	
+	var $l; $bottom; $left; $right; $top; $width : Integer
+	var $horizontal; $vertical : Boolean
+	
+	This:C1470.getCoordinates()
+	
+	LISTBOX GET CELL COORDINATES:C1330(*; This:C1470.name; 1; $row; $left; $top; $l; $l)
+	LISTBOX GET CELL COORDINATES:C1330(*; This:C1470.name; This:C1470.columnsNumber(); $row; $l; $l; $right; $bottom)
+	
+	// Adjust according to the visible part
+	$left:=($left<This:C1470.coordinates.left) ? This:C1470.coordinates.left : $left
+	$top:=($top<This:C1470.coordinates.top) ? This:C1470.coordinates.top : $top
+	
+	OBJECT GET SCROLLBAR:C1076(*; This:C1470.name; $horizontal; $vertical)
+	$width:=$vertical ? LISTBOX Get property:C917(*; This:C1470.name; lk ver scrollbar width:K53:9) : 0
+	
+	$right:=($right>(This:C1470.coordinates.right-$width)) ? This:C1470.coordinates.right-$width : $right
+	
+	$bottom:=($bottom>This:C1470.coordinates.bottom) ? This:C1470.coordinates.bottom : $bottom
+	
+	return (New object:C1471(\
+		"left"; $left; \
+		"top"; $top; \
+		"right"; $right; \
+		"bottom"; $bottom))
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function cellCoordinates($column : Integer; $row : Integer) : Object
+	
+	var $bottom; $left; $right; $top : Integer
+	var $e : Object
+	
+	If (Count parameters:C259=0)
+		
+		$e:=FORM Event:C1606
+		
+		If ($e.column#Null:C1517)
+			
+			$column:=$e.column
+			$row:=$e.row
+			
+		End if 
+	End if 
+	
+	// Mark: TURNAROUND
+	If ($row<=0)
+		
+		LISTBOX GET CELL POSITION:C971(*; This:C1470.name; $column; $row)
+		
+	End if 
+	
+	LISTBOX GET CELL COORDINATES:C1330(*; This:C1470.name; $column; $row; $left; $top; $right; $bottom)
+	
+	If (This:C1470.cellBox=Null:C1517)
+		
+		This:C1470.cellBox:=New object:C1471(\
+			"left"; $left; \
+			"top"; $top; \
+			"right"; $right; \
+			"bottom"; $bottom)
+		
+	Else 
+		
+		This:C1470.cellBox.left:=$left
+		This:C1470.cellBox.top:=$top
+		This:C1470.cellBox.right:=$right
+		This:C1470.cellBox.bottom:=$bottom
+		
+	End if 
+	
+	return (This:C1470.cellBox)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Gives the number of selected rows
+Function selected() : Integer
+	
+	return (Count in array:C907((This:C1470.pointer)->; True:C214))
+	
+	// MARK: - Selection
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Select row(s)
 Function select($row : Integer) : cs:C1710.listbox
 	
@@ -205,8 +324,8 @@ Function doSafeSelect($row : Integer) : cs:C1710.listbox
 	
 	var $rowNumber : Integer
 	
-	$rowNumber:=This:C1470.rowsNumber()
 	LISTBOX SELECT ROW:C912(*; This:C1470.name; 0; lk remove from selection:K53:3)
+	$rowNumber:=This:C1470.rowsNumber()
 	
 	Case of 
 			
@@ -221,7 +340,6 @@ Function doSafeSelect($row : Integer) : cs:C1710.listbox
 			return (This:C1470.select($rowNumber))
 			
 			//______________________________
-			
 		Else 
 			
 			return (This:C1470.unselect())
@@ -234,6 +352,7 @@ Function selectAll() : cs:C1710.listbox
 	
 	return (This:C1470.select())
 	
+	// MARK: - 
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function edit($target; $item : Integer)
 	
@@ -303,53 +422,6 @@ Function edit($target; $item : Integer)
 				//______________________________________________________
 		End case 
 	End if 
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns a row coordinates
-Function rowCoordinates($row : Integer) : Object
-	
-	var $l; $bottom; $left; $right; $top; $width : Integer
-	var $horizontal; $vertical : Boolean
-	
-	This:C1470.getCoordinates()
-	
-	LISTBOX GET CELL COORDINATES:C1330(*; This:C1470.name; 1; $row; $left; $top; $l; $l)
-	LISTBOX GET CELL COORDINATES:C1330(*; This:C1470.name; This:C1470.columnsNumber(); $row; $l; $l; $right; $bottom)
-	
-	// Adjust according to the visible part
-	$left:=($left<This:C1470.coordinates.left) ? This:C1470.coordinates.left : $left
-	$top:=($top<This:C1470.coordinates.top) ? This:C1470.coordinates.top : $top
-	
-	OBJECT GET SCROLLBAR:C1076(*; This:C1470.name; $horizontal; $vertical)
-	$width:=$vertical ? LISTBOX Get property:C917(*; This:C1470.name; lk ver scrollbar width:K53:9) : 0
-	
-	$right:=($right>(This:C1470.coordinates.right-$width)) ? This:C1470.coordinates.right-$width : $right
-	
-	$bottom:=($bottom>This:C1470.coordinates.bottom) ? This:C1470.coordinates.bottom : $bottom
-	
-	return (New object:C1471(\
-		"left"; $left; \
-		"top"; $top; \
-		"right"; $right; \
-		"bottom"; $bottom))
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Gives the number of selected rows
-Function selected() : Integer
-	
-	return (Count in array:C907((This:C1470.pointer)->; True:C214))
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Gives the number of columns
-Function columnsNumber() : Integer
-	
-	return (LISTBOX Get number of columns:C831(*; This:C1470.name))
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Gives the number of rows
-Function rowsNumber() : Integer
-	
-	return (LISTBOX Get number of rows:C915(*; This:C1470.name))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Reveal the row
@@ -424,83 +496,6 @@ Function updateCell() : cs:C1710.listbox
 	This:C1470.cellCoordinates()
 	
 	return (This:C1470)
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Current cell indexes {column,row}
-Function cellPosition($e : Object) : Object
-	
-	var $button; $column; $row; $x; $y : Integer
-	
-	$e:=$e || FORM Event:C1606
-	
-	If ($e.code=On Clicked:K2:4)\
-		 | ($e.code=On Double Clicked:K2:5)
-		
-		LISTBOX GET CELL POSITION:C971(*; This:C1470.name; $column; $row)
-		
-	Else 
-		
-		GET MOUSE:C468($x; $y; $button)
-		LISTBOX GET CELL POSITION:C971(*; This:C1470.name; $x; $y; $column; $row)
-		
-	End if 
-	
-	return (New object:C1471(\
-		"column"; $column; \
-		"row"; $row))
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function cellCoordinates($column : Integer; $row : Integer)->$coordinates : Object
-	
-	var $bottom; $left; $right; $top : Integer
-	var $columnƒ; $rowƒ : Integer
-	var $e : Object
-	
-	If (Count parameters:C259=0)
-		
-		$e:=FORM Event:C1606
-		
-		If ($e.column#Null:C1517)
-			
-			$columnƒ:=$e.column
-			$rowƒ:=$e.row
-			
-		End if 
-		
-	Else 
-		
-		$columnƒ:=$column
-		$rowƒ:=$row
-		
-	End if 
-	
-	// Mark: TURNAROUND
-	If ($rowƒ<=0)
-		
-		LISTBOX GET CELL POSITION:C971(*; This:C1470.name; $columnƒ; $rowƒ)
-		
-	End if 
-	
-	LISTBOX GET CELL COORDINATES:C1330(*; This:C1470.name; $columnƒ; $rowƒ; $left; $top; $right; $bottom)
-	
-	If (This:C1470.cellBox=Null:C1517)
-		
-		This:C1470.cellBox:=New object:C1471(\
-			"left"; $left; \
-			"top"; $top; \
-			"right"; $right; \
-			"bottom"; $bottom)
-		
-	Else 
-		
-		This:C1470.cellBox.left:=$left
-		This:C1470.cellBox.top:=$top
-		This:C1470.cellBox.right:=$right
-		This:C1470.cellBox.bottom:=$bottom
-		
-	End if 
-	
-	$coordinates:=This:C1470.cellBox
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Displays a cs.menu at the bottom left of the current cell
@@ -664,28 +659,19 @@ Function getProperty($property : Integer; $column : Text) : Variant
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function highlight($enabled : Boolean) : cs:C1710.listbox
 	
-	This:C1470.setProperty(lk hide selection highlight:K53:41; $enabled ? lk yes:K53:69 : lk no:K53:68)
-	
-	return (This:C1470)
+	return (This:C1470.setProperty(lk hide selection highlight:K53:41; $enabled ? lk yes:K53:69 : lk no:K53:68))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function noHighlight() : cs:C1710.listbox
 	
-	return (This:C1470.highlight(False:C215))
+	return (This:C1470.setProperty(lk hide selection highlight:K53:41; lk no:K53:68))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function movableLines($enabled : Boolean) : cs:C1710.listbox
 	
-	var $movable : Boolean
-	$movable:=True:C214
+	$enabled:=(Count parameters:C259>=1) ? $enabled : True:C214
 	
-	If (Count parameters:C259>=1)
-		
-		$movable:=$enabled
-		
-	End if 
-	
-	This:C1470.setProperty(lk movable rows:K53:76; Choose:C955($movable; lk yes:K53:69; lk no:K53:68))
+	This:C1470.setProperty(lk movable rows:K53:76; Choose:C955($enabled; lk yes:K53:69; lk no:K53:68))
 	
 	return (This:C1470)
 	
@@ -695,18 +681,27 @@ Function nonMovableLines() : cs:C1710.listbox
 	return (This:C1470.movableLines(False:C215))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function selectable($enabled : Boolean) : cs:C1710.listbox
+Function selectable($enabled : Boolean; $mode : Integer) : cs:C1710.listbox
 	
-	$enabled:=$enabled || True:C214
-	
-	If ($enabled)
+	If (Count parameters:C259=0)
 		
 		// Restore design mode definition
 		This:C1470.setProperty(lk selection mode:K53:35; This:C1470.properties.selectionMode)
 		
 	Else 
 		
-		This:C1470.setProperty(lk selection mode:K53:35; lk none:K53:57)
+		$enabled:=Count parameters:C259>=1 ? $enabled : True:C214
+		
+		If ($enabled)
+			
+			// Restore design mode definition
+			This:C1470.setProperty(lk selection mode:K53:35; $mode)
+			
+		Else 
+			
+			This:C1470.setProperty(lk selection mode:K53:35; lk none:K53:57)
+			
+		End if 
 		
 	End if 
 	

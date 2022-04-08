@@ -170,7 +170,8 @@
 						"onDrop",
 						"onDragOver",
 						"onSelectionChange",
-						"onRowMove"
+						"onRowMove",
+						"onBeginDragOver"
 					],
 					"movableRows": true,
 					"method": "ObjectMethods/02_displayed.4dm",

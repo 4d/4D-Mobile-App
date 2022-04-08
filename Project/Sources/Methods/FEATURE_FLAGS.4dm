@@ -3,7 +3,7 @@
 
 var $c : Collection
 
-Feature:=cs:C1710.Feature.new($version; $file)
+Feature:=cs:C1710.feature.new($version; $file)
 
 If (True:C214)  // DELIVERED
 	
@@ -128,14 +128,14 @@ Feature.wip("taskIndicator")  // UI for background tasks executing
 Feature.wip("sourceClass")  // Work with Source class to test the data source
 Feature.wip("buildWithCmd")  // Allow to build using cmd only
 
-// Mark:- 👨‍💻 DEV Eric
+// Mark:-👨‍💻 Eric
 $c:=New collection:C1472("emarchand"; "phimage")
 Feature.dev("gitCommit"; $c)  // Commit to git generated project
 Feature.dev("generateForDev"; $c)  // Add framework sources and do not add compiled frameworks to workspace, deactivate code signing on framework
 //FEATURE.dev("devGallery"; $c)  // Allow to dev with local http gallery
 Feature.dev("iOSAlias"; $c)
 
-// Mark:- 👴🏻 DEV Vincent
+// Mark:-👴🏻 Vincent
 $c:=New collection:C1472("vdelachaux"; "Vincent de LACHAUX")
 Feature.dev("vdl"; $c)
 
@@ -152,10 +152,10 @@ Feature.pending("iosSDKfromAWS")  // Download iOS SDK from AWS
 
 Feature.pending("coreDataAbstractEntity")  // Add in coreData model Record abstract entity
 
-// Mark:-→ LOCAL PREFERENCES
+// Mark:-→ Local preferences
 Feature.loadLocal()
 
-// Mark:-→ ALIAS
+// Mark:-→ Alias
 Feature.alias("debug"; 8858)
 Feature.alias("actionsInTabBar"; 131983)
 Feature.alias("androidDataSet"; 127558)
