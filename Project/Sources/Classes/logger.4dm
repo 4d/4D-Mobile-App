@@ -41,7 +41,7 @@ Function get lastError() : Text
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
-Function setTarget($target; $level : Integer) : cs:C1710.logger
+Function setTarget($target) : cs:C1710.logger
 	
 	var $file : 4D:C1709.File
 	
@@ -106,7 +106,7 @@ Function setTarget($target; $level : Integer) : cs:C1710.logger
 				
 				If (OB Instance of:C1731($target; 4D:C1709.File))
 					
-					This:C1470._setTarget($file)
+					This:C1470._setTarget($target)
 					
 				Else 
 					
