@@ -301,7 +301,6 @@ Case of
 			$panel.sqlite:=$data.database
 			$panel.updateTableListWithDataSizes()
 			
-			
 			If (Feature.with("sourceClassPanel"))
 				
 				panel("SOURCE").updateDataSet()

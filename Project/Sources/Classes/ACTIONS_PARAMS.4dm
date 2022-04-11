@@ -217,23 +217,23 @@ Function handleEvents($e : Object)
 				
 				If ($e.code=On Clicked:K2:4)
 					
-					This:C1470.doAddParameter(This:C1470.add)
+					This:C1470.addParameter(This:C1470.add)
 					
 				Else 
 					
-					This:C1470.doAddParameterMenu(This:C1470.add)
+					This:C1470.addParameterMenuManager(This:C1470.add)
 					
 				End if 
 				
 				//==============================================
 			: (This:C1470.remove.catch($e; On Clicked:K2:4))
 				
-				This:C1470.doRemoveParameter()
+				This:C1470.removeParameter()
 				
 				//==============================================
 			: (This:C1470.mandatory.catch($e; On Clicked:K2:4))
 				
-				This:C1470.doMandatory()
+				This:C1470.mandatoryManager()
 				
 				//==============================================
 			: (This:C1470.formatPopup.catch($e; On Clicked:K2:4))
@@ -244,29 +244,29 @@ Function handleEvents($e : Object)
 					
 				Else 
 					
-					This:C1470.doFormatMenu()
+					This:C1470.formatMenuManager()
 					
 				End if 
 				
 				//==============================================
 			: (This:C1470.dataSourcePopup.catch($e; On Clicked:K2:4))
 				
-				This:C1470.doDataSourceMenu()
+				This:C1470.dataSourceMenuManager()
 				
 				//==============================================
 			: (This:C1470.sortOrderPopup.catch($e; On Clicked:K2:4))
 				
-				This:C1470.doSortOrderMenu()
+				This:C1470.sortOrderMenuManager()
 				
 				//==============================================
 			: (This:C1470.min.catch($e; On Data Change:K2:15))
 				
-				This:C1470.doRule("min")
+				This:C1470.ruleManager("min")
 				
 				//==============================================
 			: (This:C1470.max.catch($e; On Data Change:K2:15))
 				
-				This:C1470.doRule("max")
+				This:C1470.ruleManager("max")
 				
 				//==============================================
 			: (This:C1470.defaultValue.catch($e; On After Edit:K2:43))
@@ -280,7 +280,7 @@ Function handleEvents($e : Object)
 				//==============================================
 			: (This:C1470.defaultValue.catch($e; On Data Change:K2:15))
 				
-				This:C1470.doDefaultValue()
+				This:C1470.defaultValueManager()
 				
 				//==================================================
 			: (This:C1470.format.catch())
@@ -308,12 +308,12 @@ Function handleEvents($e : Object)
 				//==================================================
 			: (This:C1470.paramName.catch())
 				
-				This:C1470.doName($e)
+				This:C1470.nameManager($e)
 				
 				//==================================================
 			: (This:C1470.namePopup.catch($e; On Clicked:K2:4))
 				
-				This:C1470.doAddParameterMenu(This:C1470.namePopup; True:C214)
+				This:C1470.addParameterMenuManager(This:C1470.namePopup; True:C214)
 				
 				//==================================================
 			: (This:C1470.revealFormat.catch($e; On Clicked:K2:4))
@@ -373,7 +373,7 @@ Function onLoad()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	/// Internal drop for params
-Function doParameters()->$allow : Integer
+Function parameterListManager()->$allow : Integer
 	
 	var $uri : Text
 	var $e; $me; $o : Object
@@ -393,7 +393,7 @@ Function doParameters()->$allow : Integer
 			//______________________________________________________
 		: ($e.code=On Begin Drag Over:K2:44)
 			
-			This:C1470.beginDrag(New object:C1471(\
+			This:C1470.beginDrag($uri; New object:C1471(\
 				"src"; This:C1470.index))
 			
 			//______________________________________________________
@@ -489,7 +489,7 @@ Function doParameters()->$allow : Integer
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	/// predicting container method
-Function doPredicting()
+Function predictingManager()
 	
 	var $e : Object
 	$e:=FORM Event:C1606
@@ -901,7 +901,7 @@ Function sortOrderValue()->$value : Text
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Format choice
-Function doSortOrderMenu()
+Function sortOrderMenuManager()
 	
 	var $menu : cs:C1710.menu
 	
@@ -1059,21 +1059,21 @@ Function sourceFolder($name : Text; $control : Boolean)->$source : 4D:C1709.Fold
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Add a user parameter except for sort when adding is not possible
-Function doAddParameter($target : Object)
+Function addParameter($target : Object)
 	
 	If (String:C10(This:C1470.action.preset)="sort")
 		
-		This:C1470.doAddParameterMenu($target)
+		This:C1470.addParameterMenuManager($target)
 		
 	Else 
 		
-		This:C1470.doNewParameter()
+		This:C1470.newParameter()
 		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Add a user parameter
-Function doNewParameter()
+Function newParameter()
 	
 	var $parameter : Object
 	
@@ -1089,7 +1089,7 @@ Function doNewParameter()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Add a field linked parameter
-Function doAddParameterMenu($target : Object; $update : Boolean)
+Function addParameterMenuManager($target : Object; $update : Boolean)
 	
 	var $t : Text
 	var $isSortAction : Boolean
@@ -1215,7 +1215,7 @@ Function doAddParameterMenu($target : Object; $update : Boolean)
 			//______________________________________________________
 		: ($menu.choice="new")  // Add a user parameter
 			
-			This:C1470.doNewParameter()
+			This:C1470.newParameter()
 			
 			//______________________________________________________
 		: ($update)  // Change linked field
@@ -1324,7 +1324,7 @@ Function _addParameter($parameter : Object)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Remove action button
-Function doRemoveParameter()
+Function removeParameter()
 	
 	var $index : Integer
 	
@@ -1340,7 +1340,7 @@ Function doRemoveParameter()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Mandatory checkbox
-Function doMandatory()
+Function mandatoryManager()
 	
 	var $index : Integer
 	var $current : Object
@@ -1486,7 +1486,7 @@ Function showFormatOnDisk
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Format choice
-Function doFormatMenu()
+Function formatMenuManager()
 	
 	var $currentFormat; $label; $newType; $type : Text
 	var $hasCustom : Boolean
@@ -1664,7 +1664,7 @@ Function _withDataSource($format : Text)->$with : Boolean
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Data source choice
-Function doDataSourceMenu()
+Function dataSourceMenuManager()
 	
 	var $current; $manifest; $o : Object
 	var $parameter; $tab : Text
@@ -1800,14 +1800,14 @@ Function doDataSourceMenu()
 Function editList()
 	
 	//$form:=New object(\
-														"static"; $static; \
-														"host"; This.path.hostInputControls(True))
+																"static"; $static; \
+																"host"; This.path.hostInputControls(True))
 	
 	//$form.folder:=This.path.hostInputControls()
 	//$manifest:=$form.folder.file("manifest.json")
 	
 	//===============================================================
-Function doRule($name : Text)
+Function ruleManager($name : Text)
 	
 	var $value : Variant
 	var $rule : Object
@@ -1867,7 +1867,7 @@ Function doRule($name : Text)
 	PROJECT.save()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function doDefaultValue()
+Function defaultValueManager()
 	
 	var $value : Text
 	var $date : Date
@@ -1988,7 +1988,7 @@ Function doDefaultValue()
 	PROJECT.save()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function doName($e : Object)
+Function nameManager($e : Object)
 	
 	Case of 
 			
@@ -2290,7 +2290,7 @@ Function formatToolTip($format : Text)->$tip : Text
 		//SHARED.resources.formattersByName:=New object
 		//var $bind
 		//For each ($bind; SHARED.resources.fieldBindingTypes\
-																																																			.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
+																																																						.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
 		//SHARED.resources.formattersByName[$bind.name]:=$bind
 		//End for each
 		//End if

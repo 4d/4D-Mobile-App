@@ -347,7 +347,7 @@ Function actionListManager()->$allow : Integer
 			//______________________________________________________
 		: ($e.code=On Begin Drag Over:K2:44)
 			
-			This:C1470.beginDrag(New object:C1471(\
+			This:C1470.beginDrag($uri; New object:C1471(\
 				"src"; This:C1470.index))
 			
 			//______________________________________________________

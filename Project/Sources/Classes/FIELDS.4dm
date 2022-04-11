@@ -1200,7 +1200,7 @@ Function doFormat() : Integer
 		
 	Else 
 		
-		This:C1470.doFormatMenu()
+		This:C1470.formatMenuManager()
 		
 	End if 
 	
@@ -1247,7 +1247,7 @@ Function showFormatOnDisk($e : Object)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Manage the format menu according to the field type
-Function doFormatMenu($e : Object)
+Function formatMenuManager($e : Object)
 	
 	var $format; $t : Text
 	var $o : Object

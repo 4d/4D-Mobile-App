@@ -1,1 +1,1 @@
-panel.doPredicting()
+panel.predictingManager()
