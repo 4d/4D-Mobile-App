@@ -5,17 +5,6 @@
 		<sql>
 			<publication port_number="19812"/>
 		</sql>
-		<web>
-			<standalone_server>
-				<configuration port_number="80"/>
-				<options>
-					<cache/>
-				</options>
-				<webservices>
-					<server name="A_WebService"/>
-				</webservices>
-			</standalone_server>
-		</web>
 		<server>
 			<network>
 				<options publication_name="4D Mobile App" publish_at_startup="false" use_legacy_network_layer="false"/>
