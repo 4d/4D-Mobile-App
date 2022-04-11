@@ -122,6 +122,20 @@ Function handleEvents($e : Object)
 					
 				End if 
 				
+				If (Feature.with("androidDataSet"))
+					
+					If (Feature.with("sourceClassPanel"))
+						
+						panel("SOURCE").updateDataSet()
+						
+						
+					Else 
+						
+						panel("_o_SOURCE").updateDataSet()
+						
+					End if 
+				End if 
+				
 				PROJECT.save()
 				This:C1470.update()
 				
@@ -999,3 +1013,10 @@ Function metaInfo($current : Object)->$meta
 			End if 
 		End if 
 	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+	// Returns the number of tables with embedded data
+Function embeddedDataCount() : Integer
+	
+	return (This:C1470.tables.query("embedded = true").length)
+	

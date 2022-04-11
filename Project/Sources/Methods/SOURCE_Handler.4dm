@@ -171,7 +171,8 @@ Case of
 				
 				If (Feature.with("androidDataSet"))
 					
-					$form.ui.updateDataSet()
+					SOURCE_Handler(New object:C1471(\
+						"action"; "updateDataSet"))
 					
 				Else 
 					
@@ -263,7 +264,7 @@ Case of
 		//=========================================================
 	: ($in.action="checkingServerConfiguration")
 		
-		If (Feature.with("sourceClass")) & False:C215
+		If (Feature.with("DataSourceClass")) & False:C215
 			
 			BEEP:C151
 			
@@ -689,70 +690,89 @@ $regex.match[1].data:="127.0.0.1"
 		//=========================================================
 	: ($in.action="updateDataSet")  // update the last generation comment
 		
-		var $data : Object
-		$data:=panel("DATA")
+		var $dataLink : Object
+		$dataLink:=panel("DATA")
 		
-		If (Bool:C1537(Form:C1466.dataSource.doNotGenerateDataAtEachBuild))
+		If (Bool:C1537(PROJECT.dataSource.doNotGenerateDataAtEachBuild))
 			
-			Case of 
-					
-					//______________________________________________________
-				: (PROJECT.allTargets()) && ($data.datasetAndroid#Null:C1517) && ($data.sqlite#Null:C1517)  //& False
-					
-					Case of 
+			ASSERT:C1129(Not:C34(Shift down:C543))
+			IDLE:C311
+			
+			If ($dataLink.embeddedDataCount()=0)
+				
+				OBJECT SET ENABLED:C1123(*; "doNotGenerate"; False:C215)
+				OBJECT SET ENABLED:C1123(*; "generate"; False:C215)
+				
+				OBJECT SET VISIBLE:C603(*; "lastGeneration@"; False:C215)
+				
+			Else 
+				
+				OBJECT SET ENABLED:C1123(*; "doNotGenerate"; True:C214)
+				OBJECT SET ENABLED:C1123(*; "generate"; True:C214)
+				
+				OBJECT SET VISIBLE:C603(*; "lastGeneration@"; True:C214)
+				
+				Case of 
+						
+						//______________________________________________________
+					: (PROJECT.allTargets())  //&& (($panelData.datasetAndroid#Null) | ($panelData.sqlite#Null))
+						
+						Case of 
+								
+								//______________________________________________________
+							: ($dataLink.datasetAndroid=Null:C1517) & ($dataLink.sqlite=Null:C1517)
+								
+								OBJECT SET TITLE:C194(*; "lastGeneration"; ".Need to generate data")  //Besoin de générer les données
+								
+								//______________________________________________________
+							: ($dataLink.datasetAndroid=Null:C1517)
+								
+								OBJECT SET TITLE:C194(*; "lastGeneration"; ".Need to generate data, built-in data for Android is missing")  //Nécessité de générer les données, les données intégrées pour Android sont manquantes
+								
+								//______________________________________________________
+							: ($dataLink.sqlite=Null:C1517)
+								
+								OBJECT SET TITLE:C194(*; "lastGeneration"; ".The data must be regenerated, the integrated data for iOS is missing")  //Les données doivent être régénérées, les données intégrées pour iOS sont manquantes.
+								
+								//______________________________________________________
+							Else 
+								
+								$file:=PROJECT._folder.file("project.dataSet/Resources/Structures.sqlite")
+								OBJECT SET TITLE:C194(*; "lastGeneration"; EDITOR.str.localize("lastGeneration"; New collection:C1472(String:C10($file.modificationDate); Time string:C180($file.modificationTime))))
+								
+								//______________________________________________________
+						End case 
+						
+						//______________________________________________________
+					: (PROJECT.android()) && ($dataLink.datasetAndroid#Null:C1517)
+						
+						$file:=PROJECT._folder.file("project.dataSet/android/static.db")
+						OBJECT SET TITLE:C194(*; "lastGeneration"; EDITOR.str.localize("lastGeneration"; New collection:C1472(String:C10($file.modificationDate); Time string:C180($file.modificationTime))))
+						
+						//______________________________________________________
+					: (PROJECT.iOS())
+						
+						If ($dataLink.sqlite=Null:C1517)
 							
-							//______________________________________________________
-						: ($data.datasetAndroid=Null:C1517) & ($data.sqlite=Null:C1517)
-							
-							OBJECT SET TITLE:C194(*; "lastGeneration"; ".Need to regenerate the data.")
-							
-							//______________________________________________________
-						: ($data.datasetAndroid=Null:C1517)
-							
-							OBJECT SET TITLE:C194(*; "lastGeneration"; ".Need to regenerate the data, embedded data for Android is missing.")
-							
-							//______________________________________________________
-						: ($data.sqlite=Null:C1517)
-							
-							OBJECT SET TITLE:C194(*; "lastGeneration"; ".Need to regenerate the data, embedded data for iOS is missing.")
-							
-							//______________________________________________________
 						Else 
 							
 							$file:=PROJECT._folder.file("project.dataSet/Resources/Structures.sqlite")
 							OBJECT SET TITLE:C194(*; "lastGeneration"; EDITOR.str.localize("lastGeneration"; New collection:C1472(String:C10($file.modificationDate); Time string:C180($file.modificationTime))))
-							
-							//______________________________________________________
-					End case 
-					
-					//______________________________________________________
-				: (PROJECT.android()) && ($data.datasetAndroid#Null:C1517) & False:C215
-					
-					$file:=PROJECT._folder.file("project.dataSet/android/static.db")
-					OBJECT SET TITLE:C194(*; "lastGeneration"; EDITOR.str.localize("lastGeneration"; New collection:C1472(String:C10($file.modificationDate); Time string:C180($file.modificationTime))))
-					
-					//______________________________________________________
-				: (PROJECT.iOS()) && ($data.sqlite#Null:C1517) & False:C215
-					
-					$file:=PROJECT._folder.file("project.dataSet/Resources/Structures.sqlite")
-					OBJECT SET TITLE:C194(*; "lastGeneration"; EDITOR.str.localize("lastGeneration"; New collection:C1472(String:C10($file.modificationDate); Time string:C180($file.modificationTime))))
-					
-					//______________________________________________________
-				Else 
-					
-					OBJECT SET TITLE:C194(*; "lastGeneration"; ".Need to regenerate the data, the structure has changed.")
-					
-					//______________________________________________________
-			End case 
-			
-			OBJECT SET VISIBLE:C603(*; "lastGeneration@"; True:C214)
+						End if 
+						//______________________________________________________
+					Else 
+						
+						OBJECT SET TITLE:C194(*; "lastGeneration"; ".Need to regenerate the data, the structure has changed.")
+						
+						//______________________________________________________
+				End case 
+			End if 
 			
 		Else 
 			
 			OBJECT SET VISIBLE:C603(*; "lastGeneration@"; False:C215)
 			
 		End if 
-		
 		
 		//=========================================================
 	Else 

@@ -71,6 +71,17 @@ Function handleEvents($e : Object)
 						//______________________________________________________
 					: ($e.code=On Clicked:K2:4)
 						
+						If (Feature.with("androidDataSet"))
+							
+							// Keep current status
+							var $o : Object
+							$o:=New object:C1471(\
+								"before"; New object:C1471(\
+								"ios"; PROJECT.iOS(); \
+								"android"; PROJECT.android()))
+							
+						End if 
+						
 						If (Is macOS:C1572)\
 							 & ($e.objectName=This:C1470.android.name)\
 							 & Not:C34(Form:C1466.$ios)\
@@ -83,6 +94,32 @@ Function handleEvents($e : Object)
 							
 							PROJECT.setTarget(OBJECT Get value:C1743($e.objectName); $e.objectName)
 							
+						End if 
+						
+						If (Feature.with("androidDataSet"))
+							
+							// Invalidate dataset if target was modified
+							$o.after:=New object:C1471(\
+								"ios"; PROJECT.iOS(); \
+								"android"; PROJECT.android())
+							
+							If (Not:C34(New collection:C1472($o.before).equal(New collection:C1472($o.after))))
+								
+								var $panelData : Object
+								$panelData:=panel("DATA")
+								
+								If ($o.before.ios#$o.after.ios)
+									
+									OB REMOVE:C1226($panelData; "sqlite")
+									
+								End if 
+								
+								If ($o.before.android#$o.after.android)
+									
+									OB REMOVE:C1226($panelData; "datasetAndroid")
+									
+								End if 
+							End if 
 						End if 
 						
 						// Update UI

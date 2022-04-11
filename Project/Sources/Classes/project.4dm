@@ -377,7 +377,7 @@ Function setTarget($checkDevTools : Boolean; $target : Text)
 		If (Not:C34(This:C1470.$android))
 			
 			// According to platform
-			This:C1470.info.target:=Choose:C955(Is macOS:C1572; "iOS"; "android")
+			This:C1470.info.target:=Is macOS:C1572 ? "iOS" : "android"
 			
 			var $t : Text
 			$t:=This:C1470.info.target
@@ -385,7 +385,7 @@ Function setTarget($checkDevTools : Boolean; $target : Text)
 			
 		Else 
 			
-			This:C1470.info.target:=Choose:C955(This:C1470.$android; "android"; "iOS")
+			This:C1470.info.target:=This:C1470.$android ? "android" : "iOS"
 			
 		End if 
 	End if 

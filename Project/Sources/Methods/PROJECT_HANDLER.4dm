@@ -95,7 +95,7 @@ Case of
 				
 				For each ($panel; panels)
 					
-					EXECUTE METHOD IN SUBFORM:C1085($panel; "panel_UI"; *; (OBJECT Get pointer:C1124(Object named:K67:5; "UI"))->)
+					EXECUTE METHOD IN SUBFORM:C1085($panel; Formula:C1597(panel_UI).source; *; (OBJECT Get pointer:C1124(Object named:K67:5; "UI"))->)
 					
 				End for each 
 				

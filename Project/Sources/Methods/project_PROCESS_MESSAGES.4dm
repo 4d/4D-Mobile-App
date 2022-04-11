@@ -284,8 +284,15 @@ Case of
 			$panel.datasetAndroid:=$data.database
 			$panel.updateTableListWithDataSizes()
 			
-			panel("SOURCE").updateDataSet()
-			
+			If (Feature.with("sourceClassPanel"))
+				
+				panel("SOURCE").refresh()
+				
+			Else 
+				
+				panel("_o_SOURCE").refresh()
+				
+			End if 
 		End if 
 		
 		//______________________________________________________
@@ -483,9 +490,6 @@ Case of
 				
 				If (Length:C16($container)>0)
 					
-					// Open the panel, if any
-					panel_OPEN($indx)
-					
 					EDITOR.callChild($container; Current method name:C684; $selector; $data)
 					
 				End if 
@@ -553,9 +557,6 @@ Case of
 			$container:=panel_Find($ƒ.views; ->$indx)
 			
 			If (Length:C16($container)>0)
-				
-				// Open the panel, if any
-				panel_OPEN($indx)
 				
 				EDITOR.callChild($container; Current method name:C684; $selector; $data)
 				

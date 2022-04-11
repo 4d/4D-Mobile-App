@@ -30,7 +30,7 @@ Case of
 		
 		If (Length:C16($t)>0)
 			
-			$o:=panel_Load($t)
+			$o:=panel($t)
 			
 			If ($o.help#Null:C1517)
 				

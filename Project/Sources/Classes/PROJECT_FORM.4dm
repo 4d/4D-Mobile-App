@@ -17,18 +17,18 @@ Class constructor
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === ===
+	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Design definition
 Function init()
 	
 	This:C1470.formObject("background")
 	
-	//=== === === === === === === === === === === === === === === === === === === === ===
+	// === === === === === === === === === === === === === === === === === === === === ===
 Function onLoad()
 	
 	This:C1470.background.hide()
 	
-	//=== === === === === === === === === === === === === === === === === === === === ===
+	// === === === === === === === === === === === === === === === === === === === === ===
 	// Update UI
 Function update()
 	
@@ -36,16 +36,16 @@ Function update()
 	$data:=OBJECT Get value:C1743("UI")
 	
 	var $panel : Text
+	
 	For each ($panel; panels)
 		
-		This:C1470.callChild("panel_UI"; $data)
-		//EXECUTE METHOD IN SUBFORM($panel; "panel_UI"; *; (OBJECT Get pointer(Object named; "UI"))->)
+		This:C1470.callChild(Formula:C1597(panel_UI).source; $data)
 		
 	End for each 
 	
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	//Performs the project audit                                                                                          #MARK_TODO : remove $project.status.project
+	// === === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//Performs the project audit                                                                                         
+	//TODO: remove $project.status.project
 Function audit($whatToCheck : Object)->$audit : Object
 	
 	If (Count parameters:C259>=1)
@@ -58,4 +58,4 @@ Function audit($whatToCheck : Object)->$audit : Object
 		
 	End if 
 	
-	cs:C1710.ob.new(This:C1470).set("$project.status.project"; EDITOR.projectAudit.success)  //#TO_REMOVE
+	cs:C1710.ob.new(This:C1470).set("$project.status.project"; EDITOR.projectAudit.success)  // #TO_REMOVE
