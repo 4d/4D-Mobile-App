@@ -86,12 +86,12 @@ Function handleEvents($e : Object)
 				//==============================================
 			: (This:C1470.filter.catch())
 				
-				This:C1470.doFilter($e)
+				This:C1470.filterManager($e)
 				
 				//==============================================
 			: (This:C1470.list.catch())
 				
-				This:C1470.doList($e)
+				This:C1470.tableListManager($e)
 				
 				//==============================================
 			: (This:C1470.method.catch($e; On Clicked:K2:4))
@@ -104,7 +104,7 @@ Function handleEvents($e : Object)
 				
 				This:C1470.list.focus()
 				
-				This:C1470.doValidateFilter()
+				This:C1470.validateFilterManager()
 				
 				//==============================================
 			: (This:C1470.embedded.catch($e; On Clicked:K2:4))
@@ -128,7 +128,7 @@ Function handleEvents($e : Object)
 				//==============================================
 			: (This:C1470.queryWidget.catch($e; On Clicked:K2:4))
 				
-				This:C1470.doQueryWidget()
+				This:C1470.queryWidgetManager()
 				
 				//________________________________________
 		End case 
@@ -625,7 +625,9 @@ Function displayFilter($table : Object)
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Table list script
-Function doList($e : Object)
+Function tableListManager($e : Object)
+	
+	$e:=$e || FORM Event:C1606
 	
 	Case of 
 			
@@ -676,11 +678,12 @@ Function doList($e : Object)
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Filter input script
-Function doFilter($e : Object)
+Function filterManager($e : Object)
 	
 	var $t : Text
 	var $meta; $table : Object
 	
+	$e:=$e || FORM Event:C1606
 	$table:=This:C1470.current
 	
 	Case of 
@@ -779,7 +782,7 @@ Function doFilter($e : Object)
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Validate button script
-Function doValidateFilter()
+Function validateFilterManager()
 	
 	If (PROJECT.dataSource.source="server")
 		
@@ -802,7 +805,7 @@ Function doValidateFilter()
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Filter input assistance widget script
-Function doQueryWidget()
+Function queryWidgetManager()
 	
 	var $ID : Text
 	var $withInsertion : Boolean

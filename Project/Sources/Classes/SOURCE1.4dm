@@ -14,7 +14,7 @@ Class constructor
 		// Constraints definition
 		cs:C1710.ob.new(This:C1470.context).createPath("constraints.rules"; Is collection:K8:32)
 		
-		This:C1470.source:=cs:C1710.sources.new()
+		This:C1470.source:=cs:C1710.DataSource.new()
 		
 		This:C1470.serverTesting:=False:C215
 		This:C1470.dataGenerating:=False:C215

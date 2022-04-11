@@ -151,7 +151,7 @@ Function handleEvents($e : Object)
 								//........................................
 							: ($e.columnName=This:C1470.icons.name)
 								
-								This:C1470.doShowIconPicker($e)
+								This:C1470.showIconPicker($e)
 								
 								//........................................
 							: ($e.columnName=This:C1470.shortLabels.name)\
@@ -1101,7 +1101,7 @@ Function updateForms($field : Object; $row : Integer)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Show the icon picker
-Function doShowIconPicker($e : Object)
+Function showIconPicker($e : Object)
 	
 	var $c : Collection
 	var $o : Object

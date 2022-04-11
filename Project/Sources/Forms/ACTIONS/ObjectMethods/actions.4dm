@@ -1,3 +1,3 @@
 #DECLARE() : Integer
 
-return (panel.doActions())
+return (panel.actionListManager())

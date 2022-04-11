@@ -136,7 +136,7 @@ Function handleEvents($e : Object)
 								//………………………………………………………………
 							: ($e.columnName="icons")
 								
-								This:C1470.doShowIconPicker()
+								This:C1470.showIconPicker()
 								
 								//………………………………………………………………
 						End case 
@@ -155,12 +155,12 @@ Function handleEvents($e : Object)
 								//………………………………………………………………
 							: ($e.columnName="tables")
 								
-								This:C1470.doTableMenu()
+								This:C1470.tableMenuManager()
 								
 								//………………………………………………………………
 							: ($e.columnName="scopes")
 								
-								This:C1470.doScopeMenu()
+								This:C1470.scopeMenuManager()
 								
 								//………………………………………………………………
 						End case 
@@ -201,12 +201,12 @@ Function handleEvents($e : Object)
 						//_____________________________
 					: ($e.code=On Alternative Click:K2:36)
 						
-						This:C1470.doAddMenu()
+						This:C1470.addMenuManager()
 						
 						//_____________________________
 					: ($e.code=On Clicked:K2:4)
 						
-						This:C1470.doNewAction()
+						This:C1470.newAction()
 						
 						//_____________________________
 				End case 
@@ -214,12 +214,12 @@ Function handleEvents($e : Object)
 				//==============================================
 			: (This:C1470.remove.catch())
 				
-				This:C1470.doRemoveAction()
+				This:C1470.removeAction()
 				
 				//==============================================
 			: (This:C1470.databaseMethod.catch())
 				
-				This:C1470.doOpenDatabaseMethod()
+				This:C1470.openOnMobileAppActionDatabaseMethod()
 				
 				//==============================================
 		End case 
@@ -327,7 +327,7 @@ Function updateParameters($action : Object)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	/// Internal drop for actions
-Function doActions()->$allow : Integer
+Function actionListManager()->$allow : Integer
 	
 	var $uri : Text
 	var $e; $me; $o : Object
@@ -481,7 +481,7 @@ Function setIcon($data : Object)
 	This:C1470.refresh()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function doNewAction($tableNumber : Integer)
+Function newAction($tableNumber : Integer)
 	
 	var $t : Text
 	var $i; $index : Integer
@@ -546,7 +546,7 @@ Function doNewAction($tableNumber : Integer)
 	This:C1470._addAction($action)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function doAddMenu()
+Function addMenuManager()
 	
 	var $t : Text
 	var $icon : Picture
@@ -644,13 +644,13 @@ Function doAddMenu()
 				//______________________________________________________
 			: ($menu.choice="new")
 				
-				This:C1470.doNewAction()
+				This:C1470.newAction()
 				
 				//______________________________________________________
 			: ($menu.choice="new_@")
 				
 				$t:=Replace string:C233($menu.choice; "new_"; "")
-				This:C1470.doNewAction(Num:C11($t))
+				This:C1470.newAction(Num:C11($t))
 				
 				//______________________________________________________
 			Else 
@@ -937,7 +937,7 @@ Function _addParameter($fieldModel : Object; $field : Object; $edit : Boolean)->
 	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function doRemoveAction()
+Function removeAction()
 	
 	var $index : Integer
 	
@@ -951,7 +951,7 @@ Function doRemoveAction()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Display published table menu
-Function doTableMenu()
+Function tableMenuManager()
 	
 	var $t : Text
 	var $menu : cs:C1710.menu
@@ -976,7 +976,7 @@ Function doTableMenu()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Display scope menu
-Function doScopeMenu()
+Function scopeMenuManager()
 	
 	var $preset; $t : Text
 	var $i : Integer
@@ -1026,7 +1026,7 @@ Function doScopeMenu()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Open the icons picker
-Function doShowIconPicker()
+Function showIconPicker()
 	
 	var $coordinates; $o : Object
 	
@@ -1101,7 +1101,7 @@ Function _addAction($action : Object)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Create, if any, & Open the "On Mobile Action" Database method
-Function doOpenDatabaseMethod()
+Function openOnMobileAppActionDatabaseMethod()
 	
 	var $code : Text
 	var $file : 4D:C1709.File

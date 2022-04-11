@@ -179,6 +179,7 @@
 			"unzip"
 		],
 		"classes": [
+			"DataSource",
 			"ExposedStructure",
 			"field",
 			"formatter",
@@ -375,9 +376,6 @@
 		],
 		"forms": [
 			"SOURCE"
-		],
-		"classes": [
-			"sources"
 		]
 	},
 	"06] DATA": {

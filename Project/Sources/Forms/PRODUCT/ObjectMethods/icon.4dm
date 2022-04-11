@@ -1,3 +1,3 @@
 #DECLARE() : Integer
 
-return (panel.doIcon())
+return (panel.iconManager())

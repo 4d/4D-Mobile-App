@@ -267,7 +267,7 @@ Case of
 			
 			BEEP:C151
 			
-			$oSource:=cs:C1710.sources.new()
+			$oSource:=cs:C1710.DataSource.new()
 			
 			If ($form.ui.remote())
 				

@@ -56,7 +56,7 @@ Function read($file : 4D:C1709.File)->$plist : cs:C1710.plist
 	
 	This:C1470.success:=Bool:C1537(This:C1470.file.exists)
 	
-	If (Asserted:C1132(This:C1470.success; "File not found: "+String:C10(This:C1470.file.path)))
+	If (This:C1470.success)
 		
 		If (Is macOS:C1572)
 			

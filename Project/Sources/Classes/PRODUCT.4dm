@@ -81,7 +81,7 @@ Function handleEvents($e : Object)
 				//==============================================
 			: (This:C1470.colorButton.catch($e; On Clicked:K2:4))
 				
-				This:C1470.doColorMenu()
+				This:C1470.colorMenuManager()
 				
 				//==============================================
 			: (This:C1470.productName.catch())
@@ -113,7 +113,7 @@ Function handleEvents($e : Object)
 				//==============================================
 			: (This:C1470.iconAction.catch($e; On Clicked:K2:4))
 				
-				This:C1470.doIconMenu()
+				This:C1470.iconMenuManager()
 				
 				//________________________________________
 		End case 
@@ -143,7 +143,7 @@ Function update()
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function doColorMenu()
+Function colorMenuManager()
 	
 	var $color : cs:C1710.color
 	var $menu : cs:C1710.menu
@@ -203,7 +203,7 @@ End if
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function doIcon()->$allow : Integer
+Function iconManager()->$allow : Integer
 	
 	var $p : Picture
 	var $e : Object
@@ -282,7 +282,7 @@ Function doIcon()->$allow : Integer
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Manage the icon's action button
-Function doIconMenu()
+Function iconMenuManager()
 	
 	var $p : Picture
 	var $menu : Object

@@ -168,7 +168,6 @@ Function setTeamID($id : Text; $item : Text)
 	
 	This:C1470.team.setValue($label)
 	PROJECT.organization.teamId:=$teamId
-	
 	PROJECT.save()
 	
 	// *UPDATE RIBBON'S BUTTONS
