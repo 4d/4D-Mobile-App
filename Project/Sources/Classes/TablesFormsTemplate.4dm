@@ -191,7 +191,7 @@ Function doRun()->$Obj_out : Object
 							// Set binding type according to field information
 							$Obj_field.bindingType:=This:C1470.fieldBinding($Obj_field; $Obj_in.formatters).bindingType
 							
-							ASSERT:C1129(dev_Matrix && (Length:C16(String:C10($Obj_field.bindingType))>0); "Not able to compute binding type for field: "+JSON Stringify:C1217($Obj_field))
+							ASSERT:C1129((Length:C16(String:C10($Obj_field.bindingType))>0); "Not able to compute binding type for field: "+JSON Stringify:C1217($Obj_field)+". Please provide screenshot to support")
 							
 							//……………………………………………………………………………………………………………
 						: ($Obj_field.name#Null:C1517)  // ie. relation
