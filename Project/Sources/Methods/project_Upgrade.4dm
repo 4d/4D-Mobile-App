@@ -66,11 +66,7 @@ If (Form:C1466#Null:C1517)
 End if 
 
 // Create current information to compare
-If ($plist.success)
-	
-	$info.componentBuild:=$plist.get("CFBundleVersion")
-	
-End if 
+$info.componentBuild:=$plist.success ? $plist.get("CFBundleVersion") : SHARED.componentBuild
 
 $info.ideVersion:=SHARED.ide.version
 $info.ideBuildVersion:=String:C10(SHARED.ide.build)
