@@ -375,7 +375,7 @@
 			"SOURCE_OBJECTS_HANDLER"
 		],
 		"forms": [
-			"SOURCE"
+			"_o_SOURCE"
 		]
 	},
 	"06] DATA": {
@@ -997,10 +997,10 @@
 			"SOURCE"
 		],
 		"forms": [
-			"SOURCE1"
+			"SOURCE"
 		],
 		"classes": [
-			"SOURCE1"
+			"SOURCE"
 		]
 	},
 	"WIZARD": {

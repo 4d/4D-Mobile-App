@@ -9,7 +9,7 @@
 	"markerFooter": 240,
 	"events": [
 		"onLoad",
-		"onUnload",
+		"onClick",
 		"onTimer"
 	],
 	"pages": [
@@ -28,7 +28,6 @@
 					"events": [
 						"onClick"
 					],
-					"method": "SOURCE_OBJECTS_HANDLER",
 					"dataSourceTypeHint": "boolean"
 				},
 				"server": {
@@ -43,7 +42,6 @@
 					"events": [
 						"onClick"
 					],
-					"method": "SOURCE_OBJECTS_HANDLER",
 					"dataSourceTypeHint": "boolean"
 				},
 				"doNotGenerate": {
@@ -58,7 +56,6 @@
 					"events": [
 						"onClick"
 					],
-					"method": "SOURCE_OBJECTS_HANDLER",
 					"dataSourceTypeHint": "boolean"
 				},
 				"generate": {
@@ -73,10 +70,9 @@
 					"events": [
 						"onClick"
 					],
-					"focusable": false,
-					"method": "SOURCE_OBJECTS_HANDLER"
+					"focusable": false
 				},
-				"serverStatus": {
+				"server1": {
 					"type": "button",
 					"top": 62,
 					"left": 77,
@@ -90,7 +86,6 @@
 					"events": [
 						"onClick"
 					],
-					"method": "SOURCE_OBJECTS_HANDLER",
 					"focusable": false
 				},
 				"serverInTest": {
@@ -141,8 +136,16 @@
 					"events": [
 						"onClick"
 					],
-					"dataSourceTypeHint": "boolean",
-					"method": "SOURCE_OBJECTS_HANDLER"
+					"dataSourceTypeHint": "boolean"
+				},
+				"Rectangle": {
+					"type": "rectangle",
+					"top": 5,
+					"left": 916,
+					"width": 22,
+					"height": 21,
+					"fill": "#ff0000",
+					"stroke": "#ff0000"
 				},
 				"lastGeneration": {
 					"type": "text",
@@ -159,7 +162,7 @@
 			"entryOrder": [
 				"local",
 				"server",
-				"serverStatus",
+				"server1",
 				"doNotExportImages",
 				"doNotGenerate",
 				"generate"
@@ -170,8 +173,8 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"method": "SOURCE_Handler",
-	"geometryStamp": 41,
+	"method": "panel_HANDLE_EVENT",
+	"geometryStamp": 32,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

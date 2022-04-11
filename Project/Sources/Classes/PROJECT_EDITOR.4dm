@@ -190,18 +190,18 @@ Function design()
 		
 		$o:=This:C1470.pages.data
 		
-		If (Feature.with(8858)) & False:C215
+		If (Feature.with("sourceClassPanel"))
 			
 			$o.panels.push(New object:C1471(\
 				"title"; Get localized string:C991("source"); \
-				"form"; "SOURCE1"; \
+				"form"; "SOURCE"; \
 				"help"; True:C214))
 			
 		Else 
 			
 			$o.panels.push(New object:C1471(\
 				"title"; Get localized string:C991("source"); \
-				"form"; "SOURCE"; \
+				"form"; "_o_SOURCE"; \
 				"help"; True:C214))
 			
 		End if 

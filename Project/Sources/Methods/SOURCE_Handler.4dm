@@ -21,7 +21,7 @@ var $eventCode : Integer
 var $o; $oServer; $oSystem; $result : Object
 var $file : 4D:C1709.File
 var $regex : cs:C1710.regex
-var $oSource : cs:C1710.sources
+var $oSource : cs:C1710.DataSource
 
 // ----------------------------------------------------
 // Initialisations

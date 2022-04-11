@@ -128,6 +128,9 @@ Feature.wip("taskIndicator")  // UI for background tasks executing
 Feature.wip("sourceClass")  // Work with Source class to test the data source
 Feature.wip("buildWithCmd")  // Allow to build using cmd only
 
+//Feature.wip("sourceClassPanel")
+
+
 // Mark:-👨‍💻 Eric
 $c:=New collection:C1472("emarchand"; "phimage")
 Feature.dev("gitCommit"; $c)  // Commit to git generated project
