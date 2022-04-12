@@ -378,6 +378,16 @@ Function _createEntity($options : Object; $Dom_model : Text; $tableID : Integer;
 						
 					End if 
 					
+					If ($table[$Txt_field].aliasOf#Null:C1517)
+						
+						$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+							"key"; "aliasOf"; \
+							"value"; $table[$Txt_field].aliasOf.extract("name").join(","))
+						
+					End if 
+					
+					
+					
 					// add xml attribut for type
 					This:C1470._field($Dom_attribute; $Dom_userInfo; $Lon_type)
 					
@@ -682,18 +692,25 @@ Function _manageAlias($alias : Object; $table : Object)->$out : Object
 			
 			If ($result.success)
 				$destination:=$result.value
+				
+				// save origin field
+				If ($destination.aliasOf=Null:C1517)
+					$destination.aliasOf:=New collection:C1472
+				End if 
+				$destination.aliasOf.push($alias)
+				
 				Case of 
-					: ($result.value.id#Null:C1517)  // final field
-						$sourceDataClass[String:C10($result.value.id)]:=$result.value
+					: ($destination.id#Null:C1517)  // final field
+						$sourceDataClass[String:C10($destination.id)]:=$destination
 						$out.hasBeenEdited:=True:C214
-					: ($result.value.name#Null:C1517)  // final field
-						$sourceDataClass[String:C10($result.value.name)]:=$result.value
+					: ($destination.name#Null:C1517)  // final field
+						$sourceDataClass[String:C10($destination.name)]:=$destination
 						$out.hasBeenEdited:=True:C214
 						
 						// TODO: if alias in alias, recursive work
-						If (String:C10($result.value.kind)="alias")  // isAlias ?
+						If (String:C10($destination.kind)="alias")  // isAlias ?
 							// TODO: table or dst table?
-							This:C1470._manageAlias($result.value; $sourceDataClass)
+							This:C1470._manageAlias($destination; $sourceDataClass)
 						End if 
 					Else 
 						ASSERT:C1129(False:C215; "Field destination of alias "+$path+" in "+$sourceDataClass[""].name+" is not publishable: "+JSON Stringify:C1217($result))
@@ -735,6 +752,9 @@ Function _aliasInTable($table : Object)->$out : Object
 	var $fieldKey : Text
 	For each ($fieldKey; $table)
 		If (String:C10($table[$fieldKey].kind)="alias")  // isAlias ?
+			If ($table[$fieldKey].name=Null:C1517)
+				$table[$fieldKey].name:=$fieldKey
+			End if 
 			$result:=This:C1470._manageAlias($table[$fieldKey]; $table)
 			ob_error_combine($out; $result)
 			$out.hasBeenEdited:=Bool:C1537($out.hasBeenEdited) | Bool:C1537($result.hasBeenEdited)

@@ -2,7 +2,6 @@
 	"____FOR_TESTS": {
 		"classes": [
 			"ALL_TYPESEntity",
-			"EmployesEntity",
 			"ServiceEntity",
 			"UNIT_0Entity",
 			"UNIT_1Entity"
@@ -209,6 +208,10 @@
 		]
 	},
 	"[COMPONENT]": {
+		"groups": [
+			"backend",
+			"UI"
+		],
 		"methods": [
 			"COMPILER_COMPONENT",
 			"COMPONENT_Infos",
