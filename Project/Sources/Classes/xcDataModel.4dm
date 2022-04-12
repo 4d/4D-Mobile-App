@@ -693,11 +693,7 @@ Function _manageAlias($alias : Object; $table : Object)->$out : Object
 			If ($result.success)
 				$destination:=$result.value
 				
-				// save origin field
-				If ($destination.aliasOf=Null:C1517)
-					$destination.aliasOf:=New collection:C1472
-				End if 
-				$destination.aliasOf.push($alias)
+				This:C1470._copyAliasFieldToDst($alias; $destination)
 				
 				Case of 
 					: ($destination.id#Null:C1517)  // final field
@@ -719,6 +715,11 @@ Function _manageAlias($alias : Object; $table : Object)->$out : Object
 				ASSERT:C1129(False:C215; "Field destination of alias "+$path+" in "+$sourceDataClass[""].name+" is not published")
 			End if 
 		End if 
+		
+		If ($destination.aliasOf=Null:C1517)
+			$destination.aliasOf:=New collection:C1472
+		End if 
+		$destination.aliasOf.push($alias)
 		
 		If ($destination.relatedDataClass#Null:C1517)
 			var $sourceDataClassName : Text
@@ -745,20 +746,44 @@ Function _manageAlias($alias : Object; $table : Object)->$out : Object
 		End if 
 	Until ($paths.length=0)
 	
+Function _copyAliasFieldToDst($alias : Object; $dst : Object)
+	var $key : Text
+	For each ($key; $alias)
+		If ((Value type:C1509($alias[$key])=Is object:K8:27) && ($alias[$key].kind#Null:C1517)/* is it a subfield */)
+			$dst[$key]:=$alias[$key]
+		End if 
+	End for each 
+	
 Function _aliasInTable($table : Object)->$out : Object
 	var $result : Object
 	$out:=New object:C1471()
 	
 	var $fieldKey : Text
 	For each ($fieldKey; $table)
-		If (String:C10($table[$fieldKey].kind)="alias")  // isAlias ?
-			If ($table[$fieldKey].name=Null:C1517)
-				$table[$fieldKey].name:=$fieldKey
-			End if 
-			$result:=This:C1470._manageAlias($table[$fieldKey]; $table)
-			ob_error_combine($out; $result)
-			$out.hasBeenEdited:=Bool:C1537($out.hasBeenEdited) | Bool:C1537($result.hasBeenEdited)
-		End if 
+		Case of 
+			: (Value type:C1509($table[$fieldKey])#Is object:K8:27)
+				// ignore 
+			: (String:C10($table[$fieldKey].kind)="alias")  // isAlias ?
+				If ($table[$fieldKey].name=Null:C1517)
+					$table[$fieldKey].name:=$fieldKey
+				End if 
+				$result:=This:C1470._manageAlias($table[$fieldKey]; $table)
+				ob_error_combine($out; $result)
+				$out.hasBeenEdited:=Bool:C1537($out.hasBeenEdited) | Bool:C1537($result.hasBeenEdited)
+				
+				
+/*If (Num($table[$fieldKey].fieldType)=38)  // alias on relation
+This._aliasInTable($table[$fieldKey])
+End if */
+				
+			: (String:C10($table[$fieldKey].kind)="relatedEntity")
+				
+				This:C1470._aliasInTable($table[$fieldKey])
+				
+		End case 
+		
+		
+		
 	End for each 
 	
 Function _alias()->$out : Object

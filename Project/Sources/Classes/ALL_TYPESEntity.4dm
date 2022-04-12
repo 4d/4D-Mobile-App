@@ -4,6 +4,7 @@ Class extends Entity
 // MARK:-[ALIAS]
 exposed Alias aka_identifiant ID
 exposed Alias aka_objet objectField
+exposed Alias aka_objet2 aka_objet
 exposed Alias aka_blob blobField
 
 // MARK:-[COMPUTED]
