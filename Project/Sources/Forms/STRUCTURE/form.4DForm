@@ -23,7 +23,6 @@
 					"left": 12,
 					"width": 76,
 					"height": 17,
-					"sizingY": "move",
 					"shortcutKey": "f",
 					"shortcutAccel": true,
 					"text": "⌘ f",
@@ -41,7 +40,6 @@
 					"left": 12,
 					"width": 76,
 					"height": 17,
-					"sizingY": "move",
 					"shortcutKey": " ",
 					"text": "space",
 					"focusable": false,
@@ -341,7 +339,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 5,
+	"geometryStamp": 21,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

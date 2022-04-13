@@ -251,14 +251,14 @@
 					"type": "button",
 					"top": 369,
 					"left": 17,
-					"width": 103,
+					"width": 66,
 					"height": 20,
 					"shortcutKey": "[Enter]",
 					"focusable": false,
 					"events": [
 						"onClick"
 					],
-					"display": false
+					"text": "[enter]"
 				},
 				"dataSizeLabel": {
 					"type": "text",
@@ -286,7 +286,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 144,
+	"geometryStamp": 148,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

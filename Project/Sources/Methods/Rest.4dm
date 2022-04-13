@@ -340,7 +340,7 @@ WARNING: "localhost" may not find the server if the computer is connected to a n
 		
 		If ($caller#0)
 			
-			CALL FORM:C1391($caller; "editor_CALLBACK"; "testServer"; $out)
+			CALL FORM:C1391($caller; "editor_CALLBACK"; "checkingServerResponse"; $out)
 			
 		End if 
 		

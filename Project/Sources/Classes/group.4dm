@@ -57,6 +57,24 @@ Class constructor($members : Variant)
 			//___________________________
 	End case 
 	
+/*
+The user data can be anything you want to attach to the group.
+The .data property is used to get or set this data.
+*/
+	This:C1470._data:=Null:C1517
+	
+	//=== === === === === === === === === === === === === === === === === === ===
+	/// Returns the user data attached to the group
+Function get data() : Variant
+	
+	return (This:C1470._data)
+	
+	//=== === === === === === === === === === === === === === === === === === ===
+	/// Defines the user data attached to the group
+Function set data($data)
+	
+	This:C1470._data:=$data
+	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function addMember($member)->$this : cs:C1710.group
 	
@@ -341,15 +359,14 @@ Function distributeRigthToLeft($params : Object) : cs:C1710.group
 	
 	return (This:C1470)
 	
-	//════════════════════════════════════════════
-/*
+/*════════════════════════════════════════════
 Performs a centered alignment of the elements according to their best size
 	
 .centerVertically({obj})
 	
 The optional widget name parameter allow to specify the reference
 If ommited, the distribution is relative to the form
-*/
+══════════════════════════*/
 Function centerVertically($reference : Text) : cs:C1710.group
 	
 	var $bottom; $height; $left; $middle; $right; $top; $width : Integer

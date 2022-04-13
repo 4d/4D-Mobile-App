@@ -20,10 +20,6 @@ C_OBJECT:C1216(removeAllEntities; $1)
 //_______________________________________
 C_OBJECT:C1216(internalTests; $0)
 
-// ----------------------------------------------------
-C_OBJECT:C1216(_o_SERVER_Handler; $0)
-C_OBJECT:C1216(_o_SERVER_Handler; $1)
-
 C_OBJECT:C1216(_catalog; $0)
 C_TEXT:C284(_catalog; $1)
 C_OBJECT:C1216(_catalog; $2)
@@ -51,9 +47,6 @@ C_OBJECT:C1216(dev_Menu; $1)
 
 //__________________________________________________
 C_OBJECT:C1216(form_spreadToSubforms; $1)
-
-//__________________________________________________
-C_OBJECT:C1216(project_SKIN; $1)
 
 //__________________________________________________
 C_TEXT:C284(TURN_AROUND_Field_name; $0)

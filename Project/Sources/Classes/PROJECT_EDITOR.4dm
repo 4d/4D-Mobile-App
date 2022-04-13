@@ -190,21 +190,10 @@ Function design()
 		
 		$o:=This:C1470.pages.data
 		
-		If (Feature.with("sourceClassPanel"))
-			
-			$o.panels.push(New object:C1471(\
-				"title"; Get localized string:C991("source"); \
-				"form"; "SOURCE"; \
-				"help"; True:C214))
-			
-		Else 
-			
-			$o.panels.push(New object:C1471(\
-				"title"; Get localized string:C991("source"); \
-				"form"; "_o_SOURCE"; \
-				"help"; True:C214))
-			
-		End if 
+		$o.panels.push(New object:C1471(\
+			"title"; Get localized string:C991("source"); \
+			"form"; "SOURCE"; \
+			"help"; True:C214))
 		
 		$o.panels.push(New object:C1471(\
 			"title"; Get localized string:C991("properties"); \
@@ -1022,16 +1011,30 @@ Function editAuthenticationMethod()
 	METHOD OPEN PATH:C1213($ar{0}; *)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function doProjectMessage($panel : Text; $selector : Text; $data : Object)
+Function sendMessageToPanel($panel : Text; $selector : Text; $data : Object)
 	
 	var $subform : Text
+	var $value
 	
 	$subform:=panel_Find($panel)
 	
 	If (Length:C16($subform)>0)
 		
-		This:C1470.callChild($subform; Formula:C1597(project_PROCESS_MESSAGES).source; $selector; $data)
+		$value:=OBJECT Get value:C1743($subform).$dialog[$panel]
+		
+		If (Value type:C1509($value)=Is object:K8:27) && ($value.isSubform#Null:C1517)
+			
+			This:C1470.callChild($subform; Formula:C1597(project_PROCESS_MESSAGES).source; $selector; $data)
+			
+		Else 
+			
+			Logger.error("panel "+$panel+" receive a bad message ("+$selector+")")
+			
+		End if 
+		
+	Else 
+		
+		Logger.info("panel "+$panel+" not displayed, message \""+$selector+"\" is ignored")
 		
 	End if 
-	
 	

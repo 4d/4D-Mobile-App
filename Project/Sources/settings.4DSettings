@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><preferences stamp="7">
+<?xml version="1.0" encoding="UTF-8"?><preferences stamp="8">
 	<com.4d>
 		<general execute_host_database_event="true"/>
 		<php ip_address="127.0.0.1"/>
@@ -25,5 +25,10 @@
 		<database>
 			<misc mac_use_lf="true" no_bom="true" standard_xpath="true"/>
 		</database>
+		<web>
+			<standalone_server>
+				<rest launch_at_startup="true"/>
+			</standalone_server>
+		</web>
 	</com.4d>
 </preferences>

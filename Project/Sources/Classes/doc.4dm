@@ -53,6 +53,7 @@ Class constructor($target; $reference)
 						
 						// Absolute
 						This:C1470.platformPath:=$target
+						This:C1470.path:=Convert path system to POSIX:C1106(This:C1470.platformPath)
 						
 						$t:=Convert path system to POSIX:C1106(Replace string:C233($target; This:C1470.reference.platformPath; ""))
 						
@@ -61,11 +62,13 @@ Class constructor($target; $reference)
 							
 							This:C1470.relativePath:=$t
 							
+						Else 
+							
+							This:C1470.relativePath:=This:C1470.path
+							
 						End if 
 					End if 
 					//%W+533.3
-					
-					This:C1470.path:=Convert path system to POSIX:C1106(This:C1470.platformPath)
 					
 				Else   // POSIX
 					

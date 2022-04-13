@@ -50,7 +50,7 @@ Case of
 		var $error : cs:C1710.error
 		var $web : 4D:C1709.WebServer
 		
-		$web:=WEB Server:C1674
+		$web:=WEB Server:C1674(Web server host database:K73:31)
 		
 		If (Not:C34($web.isRunning))
 			

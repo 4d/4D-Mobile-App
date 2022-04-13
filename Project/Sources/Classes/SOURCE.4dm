@@ -16,15 +16,14 @@ Class constructor
 		
 		This:C1470.source:=cs:C1710.DataSource.new()
 		
-		This:C1470.serverTesting:=False:C215
-		This:C1470.dataGenerating:=False:C215
+		This:C1470._dataSource:=PROJECT.dataSource
 		
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function get remote() : Boolean
 	
-	return (PROJECT.dataSource.source="server")
+	return (This:C1470._dataSource.source="server")
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Design definition
@@ -35,20 +34,23 @@ Function init()
 	// Help URL
 	This:C1470.help:=Get localized string:C991("help_source")
 	
+	// Data source buttons
 	This:C1470.button("local")
 	This:C1470.button("server")
 	
-	This:C1470.button("server")
-	This:C1470.server.data:=New object:C1471("success"; False:C215)
+	This:C1470.button("dataSourceStatus")
+	
+	This:C1470.dataSourceStatus.data:=New object:C1471(\
+		"success"; False:C215)
 	
 	var $group : cs:C1710.group
 	$group:=This:C1470.group("testServer")
 	This:C1470.stepper("serverInTest").addToGroup($group)
 	This:C1470.formObject("serverInTestLabel").addToGroup($group)
 	
-	This:C1470.button("generate")
 	This:C1470.button("doNotExportImages")
 	This:C1470.button("doNotGenerate")
+	This:C1470.button("generate")
 	
 	$group:=This:C1470.group("dataInGeneration")
 	This:C1470.stepper("dataGeneration").addToGroup($group)
@@ -56,10 +58,10 @@ Function init()
 	
 	This:C1470.formObject("lastGeneration")
 	
+	This:C1470.testServer.isRunning:=False:C215  // A flag to know if the test server is running
+	This:C1470.generate.isRunning:=False:C215  // A flag to indicate if a data generation is in progress and prevent re-entry
 	
-	
-	
-	//=== === === === === === === === === === === === === === === === === === === === ==
+	// === === === === === === === === === === === === === === === === === === === === ==
 	/// Events handler
 Function handleEvents($e : Object)
 	
@@ -84,145 +86,453 @@ Function handleEvents($e : Object)
 		
 	Else   // <== WIDGETS METHOD
 		
-		//Case of 
-		
-		////==============================================
-		//: (this.ios.catch())\
-			 | (this.android.catch())
-		
-		//Case of 
-		
-		////______________________________________________________
-		//: (Is Windows)
-		
-		//// <NOTHING MORE TO DO>
-		
-		////______________________________________________________
-		//: ($e.code=On Clicked)
-		
-		//If (Is macOS)\
-			 & ($e.objectName=this.android.name)\
-			 & Not(Form.$ios)\
-			 & Not(Form.$android)
-		
-		//// Force iOS
-		//PROJECT.setTarget(True; "ios")
-		
-		//Else 
-		
-		//PROJECT.setTarget(OBJECT Get value($e.objectName); $e.objectName)
-		
-		//End if 
-		
-		//// Update UI
-		//this.displayTarget()
-		//EDITOR.updateRibbon()
-		
-		////______________________________________________________
-		//: ($e.code=On Mouse Enter)
-		
-		//// Highlights
-		//this[$e.objectName].setColors(EDITOR.selectedColor)
-		
-		////______________________________________________________
-		//: ($e.code=On Mouse Leave)
-		
-		//// Restore
-		//this[$e.objectName].setColors(Foreground color)
-		
-		////______________________________________________________
-		//End case 
-		
-		////________________________________________
-		//End case 
+		Case of 
+				
+				//==============================================
+			: (This:C1470.local.catch($e; On Clicked:K2:4))
+				
+				This:C1470._dataSource.source:="local"
+				PROJECT.save()
+				
+				This:C1470.checkingDatasourceConfiguration()
+				
+				//==============================================
+			: (This:C1470.server.catch($e; On Clicked:K2:4))
+				
+				This:C1470._dataSource.source:="server"
+				PROJECT.save()
+				
+				This:C1470.checkingDatasourceConfiguration()
+				
+				//==============================================
+			: (This:C1470.dataSourceStatus.catch($e; On Clicked:K2:4))
+				
+				var $data : Object
+				
+				$data:=This:C1470.dataSourceStatus.data
+				
+				If ($data.action#Null:C1517)
+					
+					This:C1470[$data.action]()
+					
+				End if 
+				
+				//==============================================
+			: (This:C1470.doNotExportImages.catch($e; On Clicked:K2:4))
+				
+				This:C1470._dataSource.doNotExportImages:=This:C1470.doNotExportImages.getValue()
+				PROJECT.save()
+				
+				This:C1470.update()
+				
+				//==============================================
+			: (This:C1470.doNotGenerate.catch($e; On Clicked:K2:4))
+				
+				This:C1470._dataSource.doNotGenerateDataAtEachBuild:=This:C1470.doNotGenerate.getValue()
+				PROJECT.save()
+				
+				This:C1470.update()
+				
+				//==============================================
+			: (This:C1470.generate.catch($e; On Clicked:K2:4))
+				
+				This:C1470.doGenerate()
+				
+				//==============================================
+		End case 
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Initializations at loading
 Function onLoad()
 	
-	This:C1470.local.bestSize()
-	This:C1470.server.bestSize()
+	This:C1470.local.bestSize().setValue(Not:C34(This:C1470.remote))
+	This:C1470.server.bestSize().setValue(This:C1470.remote)
 	This:C1470.testServer.distributeLeftToRight()
 	
-	This:C1470.doNotExportImages.bestSize()
-	This:C1470.doNotGenerate.bestSize()
-	This:C1470.dataInGeneration.distributeLeftToRight()
-	
+	This:C1470.doNotExportImages.bestSize().setValue(This:C1470._dataSource.doNotExportImages)
+	This:C1470.doNotGenerate.bestSize().setValue(This:C1470._dataSource.doNotGenerateDataAtEachBuild)
 	This:C1470.generate.bestSize().disable()
 	
 	This:C1470.dataGenerationLabel.setTitle(Replace string:C233(Get localized string:C991("dataSetGeneration"); "\n\n"; "\r"))
+	This:C1470.dataInGeneration.distributeLeftToRight()
 	
-	This:C1470.local.setValue(Not:C34(This:C1470.remote))
-	This:C1470.server.setValue(This:C1470.remote)
+	This:C1470.checkingDatasourceConfiguration()
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Update of the user interface
 Function update()
 	
-	If (This:C1470.serverTesting)
+	If (This:C1470.testServer.isRunning)
+		
+		This:C1470.dataSourceStatus.hide()
 		
 		This:C1470.serverInTest.start()
 		This:C1470.testServer.show()
-		This:C1470.server.hide()
+		
 		This:C1470.generate.disable()
 		
 	Else 
 		
+		If (Bool:C1537(This:C1470._dataSource.doNotGenerateDataAtEachBuild))
+			
+			This:C1470.generate.setHelpTip("clickToGenerateADataset")
+			
+		Else 
+			
+			This:C1470.generate.removeHelpTip()
+			
+		End if 
+		
+		This:C1470.dataSourceStatus.show()
+		
 		This:C1470.serverInTest.stop()
 		This:C1470.testServer.hide()
 		
-		If (This:C1470.server.data.success)  // Data are online
+		var $data : Object
+		$data:=This:C1470.dataSourceStatus.data
+		
+		If ($data.success)  // Data are online
 			
-			This:C1470.server.horizontalMargin:=0
-			This:C1470.server.setPicture("#images/light_on.png")\
-				.setTitle(This:C1470.remote ? "serverIsOnline" : "theWebServerIsRunning")\
-				.removeHelpTip()
+			This:C1470.dataSourceStatus.horizontalMargin:=0
+			This:C1470.dataSourceStatus.title:=This:C1470.remote ? "serverIsOnline" : "theWebServerIsRunning"
+			This:C1470.dataSourceStatus.setPicture("#images/light_on.png")
+			
+			This:C1470.doNotGenerate.enable()
+			This:C1470.generate.enable(This:C1470._dataSource.doNotGenerateDataAtEachBuild)
 			
 		Else 
 			
-			This:C1470.server.horizontalMargin:=50
-			This:C1470.server.setPicture("#images/light_off.png")\
-				.setHelpTip(String:C10(This:C1470.server.message))
+			This:C1470.dataSourceStatus.horizontalMargin:=50
+			This:C1470.dataSourceStatus.title:=$data.title ? $data.title : "theServerIsNotReady"
+			This:C1470.dataSourceStatus.setPicture(Num:C11($data.type)=0 ? "#images/light_off.png" : "0")
 			
-			If (Length:C16(This:C1470.server.title)>0)
-				
-				This:C1470.server.title:="theServerIsNotReady"
-				
-			End if 
+			This:C1470.generate.disable()
+			
 		End if 
 		
-		If (Bool:C1537(Form:C1466.dataSource.doNotGenerateDataAtEachBuild))
+		This:C1470.dataSourceStatus.setStyle(Num:C11($data.type))
+		This:C1470.dataSourceStatus.setHelpTip(String:C10($data.message))
+		This:C1470.dataSourceStatus.bestSize(New object:C1471("maxWidth"; 390))
+		
+		This:C1470.updateDatasetComment()
+		
+	End if 
+	
+	// MARK:-
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function checkingDatasourceConfiguration()
+	
+	var $success : Boolean
+	var $pos; $len; $port : Integer
+	var $keypath; $url : Text
+	var $c : Collection
+	var $webServer : 4D:C1709.WebServer
+	var $file : 4D:C1709.File
+	
+	$webServer:=WEB Server:C1674(Web server host database:K73:31)
+	
+	If (This:C1470.remote)
+		
+		// Check the address of the production server
+		$url:=String:C10(PROJECT.server.urls.production)
+		
+		If (Length:C16($url)>0)
 			
-			This:C1470.generate.setHelpTip("clickToGenerateADataset")\
-				.enable()
+			// Check if there is a port conflict with the database web server,
+			// in case the server is on the same machine
+			$success:=Not:C34($webServer.isRunning)
+			
+			If (Not:C34($success))
+				
+				$success:=(Position:C15("127.0.0.1"; $url)=0)\
+					 & (Position:C15("localhost"; $url)=0)
+				
+				If (Not:C34($success))
+					
+					$c:=Split string:C1554($url; ":")
+					$port:=$c.length=2 ? Num:C11($c[1]) : 80  // 80 is the default port
+					$success:=($port#$webServer.HTTPPort) & ($port#$webServer.HTTPSPort)
+					
+				End if 
+			End if 
+			
+			If ($success)
+				
+				$keypath:=String:C10(This:C1470._dataSource.keyPath)
+				
+				If (Length:C16($keypath)>0)
+					
+					//%W-533.1
+					If ($keypath[[1]]="/")\
+						 && (Position:C15("/Volumes/"; $keypath; *)=0)\
+						 && (Position:C15("/Users/"; $keypath; *)=0)
+						
+						// Relative path
+						$file:=Folder:C1567(Folder:C1567(fk database folder:K87:14; *).platformPath; fk platform path:K87:2)\
+							.file(Substring:C12($keypath; 2))
+						
+					Else 
+						
+						$file:=File:C1566($keypath)
+						
+					End if 
+					//%W+533.1
+					
+					If ($file.exists)
+						
+						If (Not:C34(This:C1470.testServer.isRunning))  // Test server
+							
+							This:C1470.testServer.isRunning:=True:C214
+							
+							This:C1470.callWorker(Formula:C1597(Rest).source; New object:C1471(\
+								"caller"; EDITOR.window; \
+								"action"; "status"; \
+								"handler"; "mobileapp"; \
+								"timeout"; 60; \
+								"url"; $url; \
+								"headers"; New object:C1471("X-MobileApp"; "1"; \
+								"Authorization"; "Bearer "+$file.getText())))
+							
+						End if 
+						
+					Else 
+						
+						// Generate the key
+						var $o : Object
+						$o:=Rest(New object:C1471(\
+							"action"; "request"; \
+							"handler"; "mobileapp"; \
+							"url"; $url))
+						
+						This:C1470.dataSourceStatus.data:=New object:C1471(\
+							"success"; False:C215; \
+							"title"; "locateTheKey"; \
+							"message"; Get localized string:C991("theKeyFileIsNotAvailable")+"\r"+Get localized string:C991("clickHereToFindTheKeyFile"); \
+							"action"; "localizeKeyFile"; \
+							"type"; 9)
+						
+					End if 
+					
+				Else 
+					
+					This:C1470.callWorker(Formula:C1597(Rest).source; New object:C1471(\
+						"caller"; EDITOR.window; \
+						"action"; "status"; \
+						"handler"; "mobileapp"; \
+						"timeout"; 60; \
+						"url"; $url; \
+						"headers"; New object:C1471("X-MobileApp"; "1")))
+					
+					This:C1470.dataSourceStatus.data:=New object:C1471(\
+						"success"; False:C215; \
+						"title"; "theServerIsNotReady"; \
+						"message"; "checkThatThe4dServerIsStartedAndThatTheWebServerIsRunning"; \
+						"type"; 0)
+					
+				End if 
+				
+			Else 
+				
+				This:C1470.dataSourceStatus.data:=New object:C1471(\
+					"success"; False:C215; \
+					"title"; "theServerIsNotReady"; \
+					"message"; "theLocalWebServerIsStarted"; \
+					"type"; 0)
+				
+				EDITOR.postMessage(New object:C1471(\
+					"action"; "show"; \
+					"type"; "confirm"; \
+					"title"; EDITOR.alert+" "+Get localized string:C991("theLocalWebServerIsStarted"); \
+					"additional"; "youNeedToShutDownTheLocalWebServer"; \
+					"okAction"; "stopWebServer"; \
+					"ok"; "stopTheLocalServer"))
+				
+			End if 
 			
 		Else 
 			
-			This:C1470.generate.removeHelpTip()\
-				.disable()
+			This:C1470.dataSourceStatus.data:=New object:C1471(\
+				"success"; False:C215; \
+				"title"; "setTheServerUrl"; \
+				"message"; Get localized string:C991("theProductionUrlIsNotPopulated")+"\r"+Get localized string:C991("clickToFillItIn"); \
+				"action"; "goToProductionURL"; \
+				"type"; 9)
+			
+		End if 
+		
+	Else 
+		
+		If ($webServer.isRunning)
+			
+			This:C1470.dataSourceStatus.data:=New object:C1471(\
+				"success"; True:C214)
+			
+		Else 
+			
+			This:C1470.dataSourceStatus.data:=New object:C1471(\
+				"success"; False:C215; \
+				"title"; "startWebServer"; \
+				"message"; Get localized string:C991("theWebServerIsNotStarted")+"\r"+Get localized string:C991("clickToStartIt"); \
+				"action"; "startWebServer"; \
+				"type"; 9)
 			
 		End if 
 	End if 
 	
-	This:C1470.updateDatasetComment()
-	
-	//MARK:-TOOLS
+	This:C1470.update()
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
-	///
+Function checkingServerResponse($data : Object)
+	
+	var $t : Text
+	var $result : Object
+	
+	This:C1470.testServer.isRunning:=False:C215
+	
+	If (This:C1470.remote)
+		
+		$result:=$data.response ? $data.response : $data
+		
+		If ($data.success)\
+			 && (Bool:C1537($data.response.ok))
+			
+			$result.type:=0
+			$result.success:=True:C214
+			
+		Else 
+			
+			If ($result.errors#Null:C1517)
+				
+				$t:=Value type:C1509($result.errors[0])=Is object:K8:27 ? String:C10($result.errors[0].message) : String:C10($result.errors[0])
+				
+			Else 
+				
+				$t:=Value type:C1509($result.__ERRORS[0])=Is object:K8:27 ? String:C10($result.__ERRORS[0].message) : String:C10($result.__ERRORS[0])
+				
+			End if 
+			
+			If ($t="The request is unauthorized")\
+				 || ($t="This request is forbidden")
+				
+				$result.title:=Get localized string:C991("locateTheKey")
+				$result.type:=9
+				$result.action:="localizeKeyFile"
+				
+			Else 
+				
+				$result.title:=Get localized string:C991("theServerIsNotReady")
+				$result.type:=0
+				
+			End if 
+			
+			If ($result.__ERRORS#Null:C1517)
+				
+				// Oops - Keep the first error message for the tips
+				$result.title:=Localize_server_response($t)
+				
+			Else 
+				
+				If ($result.response=Null:C1517)\
+					 & (Num:C11($result.code)=0)
+					
+					$result.code:=30  // Default is not reachable
+					
+				End if 
+				
+				// Use error code
+				$result.title:=Localize_server_response(Num:C11($result.code))
+				
+			End if 
+		End if 
+		
+		This:C1470.dataSourceStatus.data:=$result
+		
+		This:C1470.update()
+		
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function goToProductionURL()
+	
+	This:C1470.callMeBack("goToPage"; New object:C1471(\
+		"page"; "deployment"; \
+		"panel"; "SERVER"; \
+		"object"; "02_prodURL"))
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function startWebServer()
+	
+	var $status : Object
+	var $webServer : 4D:C1709.WebServer
+	var $error : cs:C1710.error
+	
+	$webServer:=WEB Server:C1674(Web server host database:K73:31)
+	
+	If ($webServer.isRunning)
+		
+		// Already started
+		$status:=New object:C1471(\
+			"success"; True:C214)
+		
+	Else 
+		
+		$error:=cs:C1710.error.new("capture")
+		$status:=$webServer.start()
+		$error.release()
+		
+	End if 
+	
+	If ($status.success)
+		
+		This:C1470.checkingDatasourceConfiguration()
+		
+	Else 
+		
+		EDITOR.postMessage(New object:C1471(\
+			"action"; "show"; \
+			"type"; "alert"; \
+			"title"; "theServerIsNotReady"; \
+			"additional"; $status.errors[0].message))
+		
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function stoptWebServer()
+	
+	WEB Server:C1674(Web server host database:K73:31).stop()
+	
+	This:C1470.checkingDatasourceConfiguration()
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function localizeKeyFile()
+	
+	var $t : Text
+	
+	$t:=Select document:C905(Get 4D folder:C485(MobileApps folder:K5:47; *); SHARED.keyExtension; Get localized string:C991("selectTheKeyFile"); Use sheet window:K24:11+Package open:K24:8)
+	
+	If (Bool:C1537(OK))
+		
+		This:C1470._dataSource.keyPath:=cs:C1710.doc.new(DOCUMENT).relativePath
+		PROJECT.save()
+		
+		This:C1470.checkingDatasourceConfiguration()
+		
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
 Function doGenerate()
 	
 	var $keyPathname : Text
 	
-	If (Not:C34(This:C1470.dataGenerating))  // No reentry
+	If (Not:C34(This:C1470.generate.isRunning))
 		
-		This:C1470.dataGenerating:=True:C214
+		This:C1470.generate.isRunning:=True:C214
 		
 		If (This:C1470.remote)
 			
-			//===============================================================
-			//#RUSTINE: ne devrait plus être nécessaire
+			// ***************************************************************
+			// #RUSTINE: ne devrait plus être nécessaire
 			If (Test path name:C476($keyPathname)#Is a document:K24:1)
 				
 				LOG_EVENT(New object:C1471(\
@@ -231,8 +541,7 @@ Function doGenerate()
 				$keyPathname:=Convert path POSIX to system:C1107(Form:C1466.dataSource.keyPath)
 				
 			End if 
-			
-			//===============================================================
+			// ***************************************************************
 			
 		Else 
 			
@@ -244,89 +553,135 @@ Function doGenerate()
 		EDITOR.doGenerate($keyPathname)
 		This:C1470.refresh()
 		
+	Else 
 		
-	Else   // A generation is already in works
-		
-		This:C1470.refresh()
+		// Data generation is already underway
 		
 	End if 
 	
-	
 	// === === === === === === === === === === === === === === === === === === === === ===
-Function testServer()
+Function endOfDatasetGeneration($data : Object)
 	
+	This:C1470.generate.isRunning:=False:C215
+	
+	If ($data.data#Null:C1517)
+		
+		If ($data.data.success)
+			
+			This:C1470.update()
+			panel("DATA").update()
+			
+		Else 
+			
+			If ($data.data.errors#Null:C1517)
+				
+				EDITOR.postMessage(New object:C1471(\
+					"action"; "show"; \
+					"type"; "alert"; \
+					"additional"; $data.data.errors.join("\n")))
+				
+			End if 
+		End if 
+	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function updateDatasetComment()
 	
-	var $data : Object
-	$data:=panel("DATA")
-	
-	If (Bool:C1537(Form:C1466.dataSource.doNotGenerateDataAtEachBuild))
-		
-		Case of 
-				
-				//______________________________________________________
-			: (PROJECT.allTargets()) && ($data.datasetAndroid#Null:C1517) && ($data.sqlite#Null:C1517)
-				
-				Case of 
-						
-						//______________________________________________________
-					: ($data.datasetAndroid=Null:C1517) & ($data.sqlite=Null:C1517)
-						
-						This:C1470.lastGeneration.setTitle(".Need to regenerate the data.")
-						
-						//______________________________________________________
-					: ($data.datasetAndroid=Null:C1517)
-						
-						This:C1470.lastGeneration.setTitle(".Need to regenerate the data, embedded data for Android is missing.")
-						
-						//______________________________________________________
-					: ($data.sqlite=Null:C1517)
-						
-						This:C1470.lastGeneration.setTitle(".Need to regenerate the data, embedded data for iOS is missing.")
-						
-						//______________________________________________________
-					Else 
-						
-						var $file : 4D:C1709.File
-						$file:=PROJECT._folder.file("project.dataSet/Resources/Structures.sqlite")
-						This:C1470.lastGeneration.setTitle(EDITOR.str.localize("lastGeneration"; New collection:C1472(String:C10($file.modificationDate); Time string:C180($file.modificationTime))))
-						
-						//______________________________________________________
-				End case 
-				
-				//______________________________________________________
-			: (PROJECT.android()) && ($data.datasetAndroid#Null:C1517) & False:C215
-				
-				$file:=PROJECT._folder.file("project.dataSet/android/static.db")
-				This:C1470.lastGeneration.setTitle(EDITOR.str.localize("lastGeneration"; New collection:C1472(String:C10($file.modificationDate); Time string:C180($file.modificationTime))))
-				
-				//______________________________________________________
-			: (PROJECT.iOS()) && ($data.sqlite#Null:C1517) & False:C215
-				
-				$file:=PROJECT._folder.file("project.dataSet/Resources/Structures.sqlite")
-				This:C1470.lastGeneration.setTitle(EDITOR.str.localize("lastGeneration"; New collection:C1472(String:C10($file.modificationDate); Time string:C180($file.modificationTime))))
-				
-				//______________________________________________________
-			Else 
-				
-				This:C1470.lastGeneration.setTitle(".Need to regenerate the data, the structure has changed.")
-				
-				//______________________________________________________
-		End case 
-		
-		This:C1470.lastGeneration.show()
-		
-	Else 
+	If (This:C1470.testServer.isRunning)
 		
 		This:C1470.lastGeneration.hide()
 		
+	Else 
+		
+		var $data : cs:C1710.DATA
+		$data:=panel("DATA")
+		
+		If ($data=Null:C1517)
+			BEEP:C151
+			This:C1470.callMeBack("updateSourcePanel")
+			
+		Else 
+			
+			If (Bool:C1537(Form:C1466.dataSource.doNotGenerateDataAtEachBuild))
+				
+				If ($data.embeddedDataCount()=0)
+					
+					This:C1470.doNotGenerate.disable()
+					This:C1470.generate.disable()
+					This:C1470.lastGeneration.hide()
+					
+				Else 
+					
+					Case of 
+							
+							//______________________________________________________
+						: (PROJECT.allTargets())
+							
+							Case of 
+									
+									//=======================================
+								: ($data.datasetAndroid=Null:C1517)\
+									 & ($data.sqlite=Null:C1517)
+									
+									This:C1470.lastGeneration.setTitle("dataMustBeGenerated")
+									
+									//=======================================
+								: ($data.datasetAndroid=Null:C1517)
+									
+									This:C1470.lastGeneration.setTitle(EDITOR.str.localize("dataMustBeRegeneratedBuiltInDataForTargetIsMissing"; "Android"))
+									
+									//=======================================
+								: ($data.sqlite=Null:C1517)
+									
+									This:C1470.lastGeneration.setTitle(EDITOR.str.localize("dataMustBeRegeneratedBuiltInDataForTargetIsMissing"; "iOS"))
+									
+									//=======================================
+								Else 
+									
+									var $file : 4D:C1709.File
+									$file:=PROJECT._folder.file("project.dataSet/Resources/Structures.sqlite")
+									This:C1470.lastGeneration.setTitle(EDITOR.str.localize("lastGeneration"; New collection:C1472(String:C10($file.modificationDate); Time string:C180($file.modificationTime))))
+									
+									//=======================================
+							End case 
+							
+							//______________________________________________________
+						: (PROJECT.android()) && ($data.datasetAndroid#Null:C1517)
+							
+							$file:=PROJECT._folder.file("project.dataSet/android/static.db")
+							This:C1470.lastGeneration.setTitle(EDITOR.str.localize("lastGeneration"; New collection:C1472(String:C10($file.modificationDate); Time string:C180($file.modificationTime))))
+							
+							//______________________________________________________
+						: (PROJECT.iOS())
+							
+							If ($data.sqlite=Null:C1517)
+								
+								This:C1470.lastGeneration.setTitle("dataMustBeGenerated")
+								
+							Else 
+								
+								$file:=PROJECT._folder.file("project.dataSet/Resources/Structures.sqlite")
+								This:C1470.lastGeneration.setTitle(EDITOR.str.localize("lastGeneration"; New collection:C1472(String:C10($file.modificationDate); Time string:C180($file.modificationTime))))
+								
+							End if 
+							
+							//______________________________________________________
+						Else 
+							
+							This:C1470.lastGeneration.setTitle("dataMustBeRegeneratedTheStructureHasBeenModified")
+							
+							//______________________________________________________
+					End case 
+					
+					This:C1470.lastGeneration.show()
+					
+				End if 
+				
+			Else 
+				
+				This:C1470.lastGeneration.hide()
+				
+			End if 
+		End if 
 	End if 
-	
-	
-	
-	
-	
-	
 	

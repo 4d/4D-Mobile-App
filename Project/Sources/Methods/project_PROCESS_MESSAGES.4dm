@@ -151,7 +151,7 @@ Case of
 					//……………………………………………………………………………………………
 				: (String:C10($data.action)="forms")
 					
-					EDITOR.doProjectMessage($ƒ.views; $selector; $data)
+					EDITOR.sendMessageToPanel($ƒ.views; $selector; $data)
 					
 					//……………………………………………………………………………………………
 				Else 
@@ -191,22 +191,22 @@ Case of
 					//……………………………………………………………………………………………
 				: ($selector="tableIcons")
 					
-					EDITOR.doProjectMessage($ƒ.tableProperties; "pickerResume"; $data)
+					EDITOR.sendMessageToPanel($ƒ.tableProperties; "pickerResume"; $data)
 					
 					//……………………………………………………………………………………………
 				: ($selector="fieldIcons")
 					
-					EDITOR.doProjectMessage($ƒ.fieldProperties; "pickerResume"; $data)
+					EDITOR.sendMessageToPanel($ƒ.fieldProperties; "pickerResume"; $data)
 					
 					//……………………………………………………………………………………………
 				: ($selector="forms")
 					
-					EDITOR.doProjectMessage($ƒ.views; "pickerResume"; $data)
+					EDITOR.sendMessageToPanel($ƒ.views; "pickerResume"; $data)
 					
 					//……………………………………………………………………………………………
 				: ($selector="actionIcons")
 					
-					EDITOR.doProjectMessage($ƒ.actions; "pickerResume"; $data)
+					EDITOR.sendMessageToPanel($ƒ.actions; "pickerResume"; $data)
 					
 					//……………………………………………………………………………………………
 				Else 
@@ -244,26 +244,26 @@ Case of
 			End case 
 		End if 
 		
-		//MARK:-DATASET
+		//MARK:-SOURCE
 		//______________________________________________________
 	: ($selector="dataSet")  // Dataset generation result
 		
 		If ($isProjectForm)
 			
-			EDITOR.doProjectMessage($ƒ.dataSource; $selector; $data)
+			EDITOR.sendMessageToPanel($ƒ.dataSource; $selector; $data)
 			
 		Else 
 			
-			SOURCE_Handler(New object:C1471("action"; "dataset"; "data"; $data))
+			panel.endOfDatasetGeneration($data)
 			
 		End if 
 		
 		//______________________________________________________
-	: ($selector="update_data")
+	: ($selector="updateSourcePanel")
 		
 		If ($isProjectForm)
 			
-			EDITOR.doProjectMessage($ƒ.data; $selector)
+			EDITOR.sendMessageToPanel($ƒ.dataSource; $selector)
 			
 		Else 
 			
@@ -272,11 +272,51 @@ Case of
 		End if 
 		
 		//______________________________________________________
-	: ($selector="datasetAndroid")  // Callback from getAndroidDB method to update the data panel
+	: ($selector="checkingServerConfiguration")
 		
 		If ($isProjectForm)
 			
-			EDITOR.doProjectMessage($ƒ.data; $selector; $data)
+			EDITOR.sendMessageToPanel($ƒ.dataSource; $selector)
+			
+		Else 
+			
+			panel.checkingDatasourceConfiguration()
+			
+		End if 
+		
+		//______________________________________________________
+	: ($selector="checkingServerResponse")
+		
+		If ($isProjectForm)
+			
+			EDITOR.sendMessageToPanel($ƒ.dataSource; $selector; $data)
+			
+		Else 
+			
+			panel.checkingServerResponse($data)
+			
+		End if 
+		
+		//MARK:-DATA
+		//______________________________________________________
+	: ($selector="update_data")
+		
+		If ($isProjectForm)
+			
+			EDITOR.sendMessageToPanel($ƒ.data; $selector)
+			
+		Else 
+			
+			panel.update()
+			
+		End if 
+		
+		//______________________________________________________
+	: ($selector="getAndroidDBResponse")  // Callback from getAndroidDB method to update the data panel
+		
+		If ($isProjectForm)
+			
+			EDITOR.sendMessageToPanel($ƒ.data; $selector; $data)
 			
 		Else 
 			
@@ -284,23 +324,16 @@ Case of
 			$panel.datasetAndroid:=$data.database
 			$panel.updateTableListWithDataSizes()
 			
-			If (Feature.with("sourceClassPanel"))
-				
-				panel("SOURCE").refresh()
-				
-			Else 
-				
-				panel("_o_SOURCE").refresh()
-				
-			End if 
+			panel("SOURCE").updateDatasetComment()
+			
 		End if 
 		
 		//______________________________________________________
-	: ($selector="datasetIOS")  // Callback from getSQLite method to update the data panel
+	: ($selector="getSQLiteResponse")  // Callback from getSQLite method to update the data panel
 		
 		If ($isProjectForm)
 			
-			EDITOR.doProjectMessage($ƒ.data; $selector; $data)
+			EDITOR.sendMessageToPanel($ƒ.data; $selector; $data)
 			
 		Else 
 			
@@ -308,15 +341,11 @@ Case of
 			$panel.sqlite:=$data.database
 			$panel.updateTableListWithDataSizes()
 			
-			If (Feature.with("sourceClassPanel"))
-				
-				panel("SOURCE").updateDataSet()
-				
-			Else 
-				
-				panel("_o_SOURCE").updateDataSet()
-				
-			End if 
+			// Update the source panel
+			//CALL FORM($ƒ.window; Current method name; "updateSourcePanel")
+			
+			panel("SOURCE").updateDatasetComment()
+			
 		End if 
 		
 		//______________________________________________________
@@ -330,6 +359,7 @@ Case of
 		$data.action:=$selector
 		PROJECT_Handler($data)
 		
+		//MARK:-MAIN
 		//______________________________________________________
 	: ($selector="mainMenu")  // Update Main menu panel
 		
@@ -337,22 +367,23 @@ Case of
 		
 		If ($isProjectForm)
 			
-			EDITOR.doProjectMessage($ƒ.mainMenu; $selector)
+			EDITOR.sendMessageToPanel($ƒ.mainMenu; $selector)
 			
 		Else 
 			
 			//main_Handler(New object("action"; "update"))
 			//main_Handler(New object("action"; "order"))
-			panel($ƒ.mainMenu)._updateOrder()
+			panel._updateOrder()
 			
 		End if 
 		
+		//MARK:-TABLE
 		//______________________________________________________
 	: ($selector="tableProperties")  // Update table properties panel
 		
 		If ($isProjectForm)
 			
-			EDITOR.doProjectMessage($ƒ.tableProperties; $selector)
+			EDITOR.sendMessageToPanel($ƒ.tableProperties; $selector)
 			
 		Else 
 			
@@ -365,7 +396,7 @@ Case of
 		
 		If ($isProjectForm)
 			
-			EDITOR.doProjectMessage($ƒ.tableProperties; $selector)
+			EDITOR.sendMessageToPanel($ƒ.tableProperties; $selector)
 			
 		Else 
 			
@@ -373,12 +404,13 @@ Case of
 			
 		End if 
 		
+		//MARK:-FIELD
 		//______________________________________________________
 	: ($selector="fieldProperties")  // Update field properties panel
 		
 		If ($isProjectForm)
 			
-			EDITOR.doProjectMessage($ƒ.fieldProperties; $selector)
+			EDITOR.sendMessageToPanel($ƒ.fieldProperties; $selector)
 			
 		Else 
 			
@@ -386,6 +418,8 @@ Case of
 				"action"; "update"))
 			
 		End if 
+		
+		//MARK:-ACTIONS
 		//______________________________________________________
 	: ($selector="loadActionIcons")  // Preload the actions icons
 		
@@ -400,42 +434,31 @@ Case of
 			End if 
 		End if 
 		
-		//______________________________________________________
-	: ($selector="checkingServerConfiguration")  // Verify the web server configuration
-		
-		If ($isProjectForm)
-			
-			EDITOR.doProjectMessage($ƒ.dataSource; $selector)
-			
-		Else 
-			
-			SOURCE_Handler(New object:C1471("action"; $selector))
-			
-		End if 
-		
+		//MARK:-DEVELOPER
 		//______________________________________________________
 	: ($selector="teamId")
 		
 		If ($isProjectForm)
 			
-			EDITOR.doProjectMessage($ƒ.developer; $selector; $data)
+			EDITOR.sendMessageToPanel($ƒ.developer; $selector; $data)
 			
 		Else 
 			
 			If ($data.success)
 				
-				panel($ƒ.developer).updateTeamID(New object:C1471("action"; $selector; "value"; $data.value))
+				panel.updateTeamID(New object:C1471("action"; $selector; "value"; $data.value))
 				
 			End if 
 		End if 
 		
+		//MARK:-STRUCTURE
 		//______________________________________________________
 	: ($selector="tableList")\
 		 | ($selector="fieldList")
 		
 		If ($isProjectForm)
 			
-			EDITOR.doProjectMessage($ƒ.structure; $selector)
+			EDITOR.sendMessageToPanel($ƒ.structure; $selector)
 			
 		Else 
 			
@@ -549,6 +572,7 @@ Case of
 			End case 
 		End if 
 		
+		//MARK:-VIEWS
 		//______________________________________________________
 	: ($selector="selectTab")
 		
@@ -574,7 +598,7 @@ Case of
 		
 		If ($isProjectForm)
 			
-			EDITOR.doProjectMessage($ƒ.views; $selector; $data)
+			EDITOR.sendMessageToPanel($ƒ.views; $selector; $data)
 			
 		Else 
 			
@@ -583,20 +607,11 @@ Case of
 		End if 
 		
 		//______________________________________________________
-	: ($selector="refresh")  // Refresh displayed panels
-		
-		For each ($t; panels)
-			
-			EDITOR.callChild($t; "panel_REFRESH")
-			
-		End for each 
-		
-		//______________________________________________________
 	: ($selector="refreshViews")  // Update VIEWS panel
 		
 		If ($isProjectForm)
 			
-			EDITOR.doProjectMessage($ƒ.views; $selector; $data)
+			EDITOR.sendMessageToPanel($ƒ.views; $selector; $data)
 			
 		Else 
 			
@@ -615,6 +630,15 @@ Case of
 		End if 
 		
 		//______________________________________________________
+	: ($selector="refresh")  // Refresh displayed panels
+		
+		For each ($t; panels)
+			
+			EDITOR.callChild($t; "panel_REFRESH")
+			
+		End for each 
+		
+		//______________________________________________________
 	: ($selector="refreshParameters")  // Update ACTIONS PARAMETERS panel
 		
 		If ($isProjectForm)
@@ -626,32 +650,6 @@ Case of
 				EDITOR.callChild($container; "panel_REFRESH")
 				
 			End if 
-		End if 
-		
-		//______________________________________________________
-	: ($selector="refreshServer")  // Update SERVER panel
-		
-		If ($isProjectForm)
-			
-			EDITOR.doProjectMessage($ƒ.server; $selector)
-			
-		Else 
-			
-			_o_SERVER_Handler(New object:C1471("action"; "authenticationMethod"))
-			
-		End if 
-		
-		//______________________________________________________
-	: ($selector="testServer")  // Server checking response
-		
-		If ($isProjectForm)
-			
-			EDITOR.doProjectMessage($ƒ.dataSource; $selector; $data)
-			
-		Else 
-			
-			SOURCE_Handler(New object:C1471("action"; $selector; "response"; $data))
-			
 		End if 
 		
 		//______________________________________________________

@@ -923,7 +923,7 @@ End if
 
 // ----------------------------------------------------
 // Return
-If (Bool:C1537($in.caller))
+If (Bool:C1537($in.caller)) && ($in.action="create")
 	
 	$out.caller:=$in.caller
 	CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dataSet"; $out)

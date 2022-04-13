@@ -22,6 +22,6 @@ FORM GET OBJECTS:C898($widgets)
 Repeat 
 	
 	$indx:=Find in array:C230($widgets; "panel.@"; $indx+1)
-	$number:=$number+Num:C11($indx>0)
+	$number+=Num:C11($indx>0)
 	
 Until ($indx=-1)

@@ -192,6 +192,31 @@ Function setNumStates($states : Integer) : cs:C1710.button
 	return (This:C1470)
 	
 	//═════════════════════════════════════════════════
+	// Button style
+Function setStyle($style : Integer) : cs:C1710.button
+	
+/*
+style = 0: None (default)
+style = 1: Background offset
+style = 2: Push button
+style = 3: Toolbar button
+style = 4: Custom
+style = 5: Circle
+style = 6: Small system square
+style = 7: Office XP
+style = 8: Bevel
+style = 9: Rounded bevel
+style = 10: Collapse/Expand
+style = 11: Help
+style = 12: OS X Textured
+style = 13: OS X Gradient
+*/
+	
+	This:C1470.setFormat(";;;;;;"+String:C10($style))
+	
+	return (This:C1470)
+	
+	//═════════════════════════════════════════════════
 	/// Returns True if the current button is a 3D button
 Function is3DButton($message : Text) : Boolean
 	

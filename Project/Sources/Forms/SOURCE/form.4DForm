@@ -50,7 +50,7 @@
 					"left": 486,
 					"width": 391,
 					"height": 21,
-					"dataSource": "Form:C1466.dataSource.doNotGenerateDataAtEachBuild",
+					"dataSource": "",
 					"text": ":xliff:doNotGenerateDataAtEachBuild",
 					"focusable": false,
 					"events": [
@@ -72,7 +72,7 @@
 					],
 					"focusable": false
 				},
-				"server1": {
+				"dataSourceStatus": {
 					"type": "button",
 					"top": 62,
 					"left": 77,
@@ -90,16 +90,16 @@
 				},
 				"serverInTest": {
 					"type": "spinner",
-					"top": 84,
-					"left": 72,
+					"top": 65,
+					"left": 70,
 					"width": 25,
 					"height": 19,
 					"visibility": "hidden"
 				},
 				"serverInTestLabel": {
 					"type": "text",
-					"top": 85,
-					"left": 96,
+					"top": 66,
+					"left": 94,
 					"width": 332,
 					"height": 16,
 					"visibility": "hidden",
@@ -130,7 +130,7 @@
 					"left": 486,
 					"width": 391,
 					"height": 21,
-					"dataSource": "Form:C1466.dataSource.doNotExportImages",
+					"dataSource": "",
 					"text": ":xliff:doNotExportImages",
 					"focusable": false,
 					"events": [
@@ -138,31 +138,22 @@
 					],
 					"dataSourceTypeHint": "boolean"
 				},
-				"Rectangle": {
-					"type": "rectangle",
-					"top": 5,
-					"left": 916,
-					"width": 22,
-					"height": 21,
-					"fill": "#ff0000",
-					"stroke": "#ff0000"
-				},
 				"lastGeneration": {
 					"type": "text",
-					"top": 65,
+					"top": 62,
 					"left": 659,
 					"width": 279,
 					"height": 56,
 					"fontStyle": "italic",
 					"class": "comment",
-					"text": "/*____________________________________________*/",
+					"text": "========== HELLO WORLD ==========",
 					"visibility": "hidden"
 				}
 			},
 			"entryOrder": [
 				"local",
 				"server",
-				"server1",
+				"dataSourceStatus",
 				"doNotExportImages",
 				"doNotGenerate",
 				"generate"
@@ -174,7 +165,7 @@
 		"kind": "form"
 	},
 	"method": "panel_HANDLE_EVENT",
-	"geometryStamp": 32,
+	"geometryStamp": 58,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

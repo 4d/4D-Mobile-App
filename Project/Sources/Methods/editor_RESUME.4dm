@@ -117,7 +117,7 @@ Case of
 		var $status : Object
 		var $web : 4D:C1709.WebServer
 		
-		$web:=WEB Server:C1674
+		$web:=WEB Server:C1674(Web server host database:K73:31)
 		
 		If (Not:C34($web.isRunning))
 			
@@ -220,7 +220,6 @@ Case of
 		//______________________________________________________
 	: ($selector="projectFixErrors")
 		
-		//CALL FORM($target; Formula(editor_CALLBACK).source; $selector; $in)
 		EDITOR.callMeBack($selector; $in)
 		
 		//______________________________________________________
@@ -229,7 +228,7 @@ Case of
 		var $status : Object
 		var $web : 4D:C1709.WebServer
 		
-		$web:=WEB Server:C1674
+		$web:=WEB Server:C1674(Web server host database:K73:31)
 		
 		If ($web.isRunning)
 			
@@ -237,8 +236,7 @@ Case of
 			
 		End if 
 		
-		//CALL FORM($target; Formula(editor_CALLBACK).source; "testServer"; $in)
-		EDITOR.callMeBack("testServer"; $in)
+		EDITOR.callMeBack("checkingServerResponse"; $in)
 		
 		//______________________________________________________
 	Else 

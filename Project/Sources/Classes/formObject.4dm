@@ -253,17 +253,12 @@ Function bestSize($alignment; $minWidth : Integer; $maxWidth : Integer) : cs:C17
 		If (Value type:C1509($alignment)=Is object:K8:27)
 			
 			$o:=$alignment
-			
-			If ($o.alignment=Null:C1517)
-				
-				$o.alignment:=Align left:K42:2
-				
-			End if 
+			$o.alignment:=$o.alignment ? $o.alignment : Align left:K42:2
 			
 		Else 
 			
 			$o:=New object:C1471(\
-				"alignment"; $alignment)
+				"alignment"; String:C10($alignment))
 			
 			If (Count parameters:C259>=2)
 				
@@ -280,7 +275,7 @@ Function bestSize($alignment; $minWidth : Integer; $maxWidth : Integer) : cs:C17
 	Else 
 		
 		$o:=New object:C1471(\
-			"alignment"; Align left:K42:2)
+			"alignment"; Align left:K42:2)  // Default is Align left
 		
 	End if 
 	
@@ -356,7 +351,7 @@ Function bestSize($alignment; $minWidth : Integer; $maxWidth : Integer) : cs:C17
 		
 		If ($o.minWidth#Null:C1517)
 			
-			$width:=Choose:C955($width<$o.minWidth; $o.minWidth; $width)
+			$width:=$width<$o.minWidth ? $o.minWidth : $width
 			
 		End if 
 		
@@ -366,7 +361,6 @@ Function bestSize($alignment; $minWidth : Integer; $maxWidth : Integer) : cs:C17
 			
 		Else 
 			
-			// Default is Align left
 			$right:=$left+$width
 			
 		End if 

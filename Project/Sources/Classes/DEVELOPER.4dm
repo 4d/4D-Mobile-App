@@ -125,7 +125,7 @@ Function onLoad()
 			This:C1470.teamMenu.disable()
 			
 			// *LAUNCH GETTING TEAM IDS
-			This:C1470.callWorker("teamId"; New object:C1471(\
+			This:C1470.callWorker(Formula:C1597(teamId).source; New object:C1471(\
 				"action"; "list"; \
 				"provisioningProfiles"; True:C214; \
 				"certificate"; True:C214; \

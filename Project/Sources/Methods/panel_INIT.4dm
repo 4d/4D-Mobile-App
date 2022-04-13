@@ -8,64 +8,28 @@
 //
 // ----------------------------------------------------
 // Declarations
-var $1 : Object
-var $2 : Object
+#DECLARE($definition : Object; $value : Object)
 
 If (False:C215)
 	C_OBJECT:C1216(panel_INIT; $1)
 	C_OBJECT:C1216(panel_INIT; $2)
 End if 
 
-var $help; $key; $panel; $t; $title : Text
-var $bottom; $height; $index; $l; $left; $right; $top; $vOffset; $width : Integer
+var $help; $name; $title : Text
+var $bottom; $height; $i; $index; $l; $left : Integer
+var $right; $top; $vOffset; $width : Integer
 var $nil : Pointer
-var $definition; $o : Object
+var $panel : Object
 
-// ----------------------------------------------------
-// Initialisations
-If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
+// Delete the content of all panels to avoid re-entries
+For ($i; 1; panel_Count; 1)
 	
-	// Required parameters
-	$definition:=$1  // Definition of the panels
+	$name:="panel."+String:C10($i)
+	OBJECT SET SUBFORM:C1138(*; $name; "EMPTY")
+	OBJECT SET VALUE:C1742($name; New object:C1471(\
+		))
 	
-Else 
-	
-	ABORT:C156
-	
-End if 
-
-// ----------------------------------------------------
-// UI
-If ($definition.ui#Null:C1517)
-	
-	For each ($key; $definition.ui)
-		
-		Case of 
-				
-				//______________________________________________________
-			: ($key="background")  // Background color
-				
-				OBJECT SET RGB COLORS:C628(*; "_background"; Background color none:K23:10; $definition.ui.background)
-				
-				//______________________________________________________
-			: ($key="line")  // Lines color
-				
-				OBJECT SET RGB COLORS:C628(*; "title.line.1"; $definition.ui.line; Background color:K23:2)
-				
-				//______________________________________________________
-			: ($key="labels")  // Labels color
-				
-				OBJECT SET RGB COLORS:C628(*; "title.label.1"; $definition.ui.labels; Background color:K23:2)
-				
-				//________________________________________
-			Else 
-				
-				ASSERT:C1129(False:C215; "Unknown key: \""+$key+"\"")
-				
-				//______________________________________________________
-		End case 
-	End for each 
-End if 
+End for 
 
 // Hide all dynamique objects
 OBJECT SET VISIBLE:C603(*; "title.@"; False:C215)
@@ -74,105 +38,96 @@ OBJECT SET VISIBLE:C603(*; "help.@"; False:C215)
 
 ARRAY TEXT:C222($objectNames; 0x0000)
 
-For each ($o; $definition.panels)
+For each ($panel; $definition.panels)
 	
-	$index:=$index+1
-	$panel:="panel."+String:C10($index)
+	$index+=1
+	$name:="panel."+String:C10($index)
 	$title:="title.label."+String:C10($index)
 	$help:="help."+String:C10($index)
 	
-	If (Is nil pointer:C315(OBJECT Get pointer:C1124(Object named:K67:5; $panel)))  // DUPLICATE
+	If (Is nil pointer:C315(OBJECT Get pointer:C1124(Object named:K67:5; $name)))  // DUPLICATE
 		
-		// Title
 		OBJECT DUPLICATE:C1111(*; "title.label.1"; $title; $nil; ""; 0; $vOffset; 0; 0)
-		
-		// Help
 		OBJECT DUPLICATE:C1111(*; "help.1"; $help; $nil; ""; 0; $vOffset; 0; 0)
-		
-		// Panel (bound to the previous panel)
-		OBJECT DUPLICATE:C1111(*; "panel.1"; $panel; $nil; "panel."+String:C10($index-1); 0; $vOffset; 0; 0)
+		OBJECT DUPLICATE:C1111(*; "panel.1"; $name; $nil; "panel."+String:C10($index-1); 0; $vOffset; 0; 0)  // Bound to the previous panel
 		
 	Else   // REUSE
 		
 		OBJECT GET COORDINATES:C663(*; $title; $left; $top; $right; $bottom)
 		$height:=$bottom-$top
-		
 		$top:=$vOffset+10
-		
 		$bottom:=$top+$height
 		OBJECT SET COORDINATES:C1248(*; $title; $left; $top; $right; $bottom)
 		
 		OBJECT GET COORDINATES:C663(*; $help; $left; $top; $right; $bottom)
 		$height:=$bottom-$top
 		$top:=$vOffset+10
-		$top:=$vOffset+10
 		$bottom:=$top+$height
 		OBJECT SET COORDINATES:C1248(*; $help; $left; $top; $right; $bottom)
 		
 	End if 
 	
-	// Set the panel form…
-	$t:=$o.form
-	FORM GET PROPERTIES:C674($t; $width; $height)
+	// Set the panel form
+	OBJECT SET SUBFORM:C1138(*; $name; String:C10($panel.form))
 	
-	OBJECT SET SUBFORM:C1138(*; $panel; $t)
+	OBJECT GET COORDINATES:C663(*; $name; $left; $l; $right; $l)
 	
-	OBJECT GET COORDINATES:C663(*; $panel; $left; $l; $right; $l)
-	
-	If (Bool:C1537($o.noTitle))
+	If (Bool:C1537($panel.noTitle))
 		
 		OBJECT SET VISIBLE:C603(*; $title; False:C215)
-		
 		$top:=$vOffset
 		
 	Else 
 		
-		OBJECT SET TITLE:C194(*; $title; $o.title)
-		
+		OBJECT SET TITLE:C194(*; $title; $panel.title)
 		OBJECT SET VISIBLE:C603(*; $title; True:C214)
-		OBJECT SET VISIBLE:C603(*; $help; Bool:C1537($o.help))
-		
-		_o_ui_ALIGN_ON_BEST_SIZE(Align left:K42:2; $title; $help)
-		
 		$top:=$vOffset+40
 		
+		If (Bool:C1537($panel.help))
+			
+			OBJECT SET VISIBLE:C603(*; $help; True:C214)
+			cs:C1710.group.new(New collection:C1472($title; $help).join(",")).distributeLeftToRight(New object:C1471("spacing"; 8))
+			
+		End if 
 	End if 
 	
 	// Set coordinates
+	FORM GET PROPERTIES:C674(String:C10($panel.form); $width; $height)
 	$bottom:=$top+$height
-	OBJECT SET COORDINATES:C1248(*; $panel; $left; $top; $right; $bottom)
+	OBJECT SET COORDINATES:C1248(*; $name; $left; $top; $right; $bottom)
 	
 	// Make visible
-	OBJECT SET VISIBLE:C603(*; $panel; True:C214)
+	OBJECT SET VISIBLE:C603(*; $name; True:C214)
 	
 	If ($index<$definition.panels.length)
 		
-		//OBJECT SET RESIZING OPTIONS(*;$Txt_panel;Resize horizontal none;Resize vertical none)
+		//OBJECT SET RESIZING OPTIONS(*; $name; Resize horizontal none; Resize vertical none)
 		$vOffset:=$bottom
 		
 	Else 
 		
 		// Last panel
-		//OBJECT SET RESIZING OPTIONS(*;$Txt_panel;Resize horizontal none;Resize vertical grow)
+		//OBJECT SET RESIZING OPTIONS(*; $name; Resize horizontal none; Resize vertical grow)
 		
 	End if 
 	
+	// Set panel container value
 	If (Count parameters:C259>=2)
 		
-		OBJECT SET VALUE:C1742($panel; $2)
+		OBJECT SET VALUE:C1742($name; $value)
 		
 	End if 
 	
-	APPEND TO ARRAY:C911($objectNames; $panel)
+	APPEND TO ARRAY:C911($objectNames; $name)
 	
 End for each 
 
+// Define the order of entry of the panels
 FORM SET ENTRY ORDER:C1468($objectNames)
 
 // Finally place the background
 OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $height)
 OBJECT SET COORDINATES:C1248(*; "_background"; 0; 0; $width; $bottom)
 
-CALL FORM:C1391(Current form window:C827; Formula:C1597(project_SKIN).source; $definition)
-
+// Give focus to the first panel
 GOTO OBJECT:C206(*; $objectNames{1})

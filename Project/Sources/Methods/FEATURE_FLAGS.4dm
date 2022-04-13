@@ -128,7 +128,6 @@ Feature.wip("taskIndicator")  // UI for background tasks executing
 Feature.wip("DataSourceClass")  // Work with DataSource class class to test the data source
 Feature.wip("buildWithCmd")  // Allow to build using cmd only
 
-//Feature.wip("sourceClassPanel")
 
 
 // Mark:-👨‍💻 Eric

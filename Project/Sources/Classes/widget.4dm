@@ -33,6 +33,12 @@ Class constructor($name : Text; $datasource)
 	
 	This:C1470.action:=OBJECT Get action:C1457(*; This:C1470.name)
 	
+/*
+The user data can be anything you want to attach to the widget.
+The .data property is used to get or set this data.
+*/
+	This:C1470._data:=Null:C1517
+	
 	//=== === === === === === === === === === === === === === === === === === ===
 	// Returns a pointer to the widget
 	// ⚠️ Could return a nil pointer if data source is an expression
@@ -45,6 +51,18 @@ Function get pointer() : Pointer
 		//return (OBJECT Get data source(This.name; *))
 		
 	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === ===
+	/// Returns the user data attached to the widget
+Function get data() : Variant
+	
+	return (This:C1470._data)
+	
+	//=== === === === === === === === === === === === === === === === === === ===
+	/// Defines the user data attached to the widget
+Function set data($data)
+	
+	This:C1470._data:=$data
 	
 	//=== === === === === === === === === === === === === === === === === === ===
 Function updatePointer()
@@ -500,11 +518,10 @@ Function getHelpTip
 .setHelpTip(text| resname) -> This
 ══════════════════════════*/
 Function setHelpTip($helpTip : Text) : cs:C1710.widget
+	
 	var $t : Text
 	
 	If (Count parameters:C259>=1)
-		
-		$t:=$helpTip
 		
 		If (Length:C16($helpTip)>0)\
 			 & (Length:C16($helpTip)<=255)
@@ -513,15 +530,16 @@ Function setHelpTip($helpTip : Text) : cs:C1710.widget
 			If ($helpTip[[1]]#Char:C90(1))
 				
 				$t:=Get localized string:C991($helpTip)
-				$t:=Choose:C955(Length:C16($t)>0; $t; $helpTip)  // Revert if no localization
+				$helpTip:=Length:C16($t)>0 ? $t : $helpTip  // Revert if no localization
 				
 			End if 
+			
 			//%W+533.1
 			
 		End if 
 	End if 
 	
-	OBJECT SET HELP TIP:C1181(*; This:C1470.name; $t)
+	OBJECT SET HELP TIP:C1181(*; This:C1470.name; $helpTip)
 	
 	return (This:C1470)
 	

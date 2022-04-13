@@ -344,9 +344,7 @@ If (Asserted:C1132($project#Null:C1517))
 							"action"; "show"; \
 							"type"; "alert"; \
 							"title"; "theProductionServerIsNotAvailable"; \
-							"additional"; _o_SERVER_Handler(New object:C1471(\
-							"action"; "localization"; \
-							"code"; $o.httpError)).message\
+							"additional"; Localize_server_response($o.httpError)\
 							))
 						
 					End if 

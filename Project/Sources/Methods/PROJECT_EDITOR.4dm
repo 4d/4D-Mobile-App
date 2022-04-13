@@ -92,7 +92,6 @@ If ($e.objectName=Null:C1517)  // <== FORM METHOD
 			
 			// Verify the web server configuration
 			EDITOR.callMeBack("checkingServerConfiguration")
-			EDITOR.callMeBack("refreshServer")
 			
 			// Launch project verifications
 			EDITOR.checkProject()

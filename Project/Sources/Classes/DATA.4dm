@@ -124,16 +124,8 @@ Function handleEvents($e : Object)
 				
 				If (Feature.with("androidDataSet"))
 					
-					If (Feature.with("sourceClassPanel"))
-						
-						panel("SOURCE").updateDataSet()
-						
-						
-					Else 
-						
-						panel("_o_SOURCE").updateDataSet()
-						
-					End if 
+					This:C1470.callMeBack("updateSourcePanel")
+					
 				End if 
 				
 				PROJECT.save()
@@ -209,7 +201,7 @@ Function update()
 	This:C1470.properties.enable(Not:C34(PROJECT.isLocked()))
 	
 	// Select the last used table or the first one if none
-	This:C1470.list.doSafeSelect(Choose:C955(Num:C11(This:C1470.lastIndex)=0; 1; Num:C11(This:C1470.lastIndex)))
+	This:C1470.list.doSafeSelect(Num:C11(This:C1470.lastIndex)=0 ? 1 : Num:C11(This:C1470.lastIndex))
 	
 	If (PROJECT.iOS())
 		
@@ -217,7 +209,7 @@ Function update()
 		This:C1470.callWorker(Formula:C1597(getSQLite).source; New object:C1471(\
 			"caller"; This:C1470.window; \
 			"method"; Formula:C1597(editor_CALLBACK).source; \
-			"message"; "datasetIOS"; \
+			"message"; "getSQLiteResponse"; \
 			"project"; PROJECT))
 		
 	End if 
@@ -228,7 +220,7 @@ Function update()
 		This:C1470.callWorker(Formula:C1597(getAndroidDataset).source; New object:C1471(\
 			"caller"; This:C1470.window; \
 			"method"; Formula:C1597(editor_CALLBACK).source; \
-			"message"; "datasetAndroid"; \
+			"message"; "getAndroidDBResponse"; \
 			"project"; PROJECT))
 		
 	End if 

@@ -78,7 +78,6 @@
 			"_o_picture",
 			"_o_plist",
 			"_o_rest_isValidField",
-			"_o_SERVER_Handler",
 			"_o_static",
 			"_o_storyboard",
 			"_o_storyboard_fix_id",
@@ -86,8 +85,6 @@
 			"_o_tempoFieldType",
 			"_o_thermometer",
 			"_o_tmpl_form",
-			"_o_ui_ALIGN_ON_BEST_SIZE",
-			"_o_ui_BEST_SIZE",
 			"_o_ui_MOVE",
 			"_o_unzip",
 			"_o_widget",
@@ -117,12 +114,15 @@
 		]
 	},
 	"(__)": {},
+	"(_SOURCES_OLD)": {},
 	"([ macOS ])": {},
 	"([API])": {},
+	"([PANELS])": {},
 	"([UI])": {},
 	"(backend)": {},
 	"(HDI_COLOR)": {},
 	"(UI)": {},
+	"(wip)": {},
 	"[android]": {
 		"methods": [
 			"COMPILER_android",
@@ -140,6 +140,14 @@
 			"sdkmanager",
 			"studio",
 			"vdtool"
+		]
+	},
+	"[COMPONENT ]": {
+		"methods": [
+			"COMPILER_COMPONENT",
+			"COMPONENT_Infos",
+			"COMPONENT_INIT",
+			"FEATURE_FLAGS"
 		]
 	},
 	"[COMPONENT API]": {
@@ -169,6 +177,7 @@
 			"getAndroidDataset",
 			"getSQLite",
 			"git",
+			"Localize_server_response",
 			"plist_toObject",
 			"Process_tags",
 			"Process_tags_on_file",
@@ -193,8 +202,22 @@
 	"[COMPONENT UI]": {
 		"groups": [
 			"[EDITOR]",
-			"[PANELS]",
 			"[PROJECT]",
+			"00] TARGET",
+			"01] ORGANIZATION",
+			"02] PRODUCT",
+			"03] DEVELOPER",
+			"04] STRUCTURE",
+			"05] SOURCE",
+			"06] DATA",
+			"07] ACTIONS",
+			"08] ACTIONS_PARAMS",
+			"09] TABLES",
+			"10] FIELDS",
+			"11] MAIN",
+			"12] VIEWS",
+			"13] SERVER",
+			"14] FEATURES",
 			"BROWSER",
 			"FOOTER",
 			"LISTE_EDITOR",
@@ -205,18 +228,9 @@
 		],
 		"methods": [
 			"BUILD"
-		]
-	},
-	"[COMPONENT]": {
-		"groups": [
-			"backend",
-			"UI"
 		],
-		"methods": [
-			"COMPILER_COMPONENT",
-			"COMPONENT_Infos",
-			"COMPONENT_INIT",
-			"FEATURE_FLAGS"
+		"forms": [
+			"EMPTY"
 		]
 	},
 	"[EDITOR]": {
@@ -273,28 +287,6 @@
 			"Xcode"
 		]
 	},
-	"[PANELS]": {
-		"groups": [
-			"00] TARGET",
-			"01] ORGANIZATION",
-			"02] PRODUCT",
-			"03] DEVELOPER",
-			"04] STRUCTURE",
-			"05] SOURCE",
-			"06] DATA",
-			"07] ACTIONS",
-			"08] ACTIONS_PARAMS",
-			"09] TABLES",
-			"10] FIELDS",
-			"11] MAIN",
-			"12] VIEWS",
-			"13] SERVER",
-			"14] FEATURES"
-		],
-		"forms": [
-			"EMPTY"
-		]
-	},
 	"[PROJECT]": {
 		"methods": [
 			"COMPILER_project",
@@ -308,7 +300,6 @@
 			"PROJECT_OBJECT_HANDLER",
 			"PROJECT_ON_ACTIVATE",
 			"project_PROCESS_MESSAGES",
-			"project_SKIN",
 			"project_UI_ALERT",
 			"project_Upgrade"
 		],
@@ -369,16 +360,11 @@
 		]
 	},
 	"05] SOURCE": {
-		"groups": [
-			"wip"
-		],
-		"methods": [
-			"COMPILER_SOURCE",
-			"SOURCE_Handler",
-			"SOURCE_OBJECTS_HANDLER"
-		],
 		"forms": [
-			"_o_SOURCE"
+			"SOURCE"
+		],
+		"classes": [
+			"SOURCE"
 		]
 	},
 	"06] DATA": {
@@ -995,14 +981,6 @@
 			"NO_DATAMODEL"
 		]
 	},
-	"wip": {
-		"forms": [
-			"SOURCE"
-		],
-		"classes": [
-			"SOURCE"
-		]
-	},
 	"WIZARD": {
 		"methods": [
 			"WIZARD_HANDLE_EVENTS"
@@ -1030,12 +1008,15 @@
 	"trash": {
 		"groups": [
 			"(__)",
+			"(_SOURCES_OLD)",
 			"([ macOS ])",
 			"([API])",
+			"([PANELS])",
 			"([UI])",
 			"(backend)",
 			"(HDI_COLOR)",
-			"(UI)"
+			"(UI)",
+			"(wip)"
 		]
 	}
 }

@@ -35,7 +35,7 @@ Case of
 			var $status : Object
 			var $web : 4D:C1709.WebServer
 			
-			$web:=WEB Server:C1674
+			$web:=WEB Server:C1674(Web server host database:K73:31)
 			
 			If (Not:C34($web.isRunning))
 				
