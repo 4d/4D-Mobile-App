@@ -184,7 +184,7 @@ Function onLoad()
 	
 	This:C1470.queryWidget.setValue(cs:C1710.svg.new($t).picture())
 	
-	If (PROJECT.iOS() & PROJECT.android())
+	If (Feature.with("androidDataSet")) && (PROJECT.iOS() && PROJECT.android())
 		
 		This:C1470.dataSizeLabel.title:=This:C1470.dataSizeLabel.title+" (iOS / Android)"
 		

@@ -258,7 +258,7 @@ Function bestSize($alignment; $minWidth : Integer; $maxWidth : Integer) : cs:C17
 		Else 
 			
 			$o:=New object:C1471(\
-				"alignment"; String:C10($alignment))
+				"alignment"; Num:C11($alignment))
 			
 			If (Count parameters:C259>=2)
 				
