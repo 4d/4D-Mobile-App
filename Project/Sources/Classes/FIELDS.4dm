@@ -819,17 +819,6 @@ Function getFieldList()->$result : Object
 								End case 
 							End for each 
 							
-							
-							//……………………………………………………………………………………………………………
-						: (Feature.disabled("alias"))
-							
-							// <NOT YET AVAILABLE>
-							
-							//……………………………………………………………………………………………………………
-						Else 
-							
-							oops
-							
 							//……………………………………………………………………………………………………………
 					End case 
 					

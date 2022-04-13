@@ -144,6 +144,7 @@ Case of
 				// Select current table
 				$Lon_x:=Find in array:C230((OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.ids))->; String:C10($Obj_context.currentTableNumber))
 				LISTBOX SELECT ROW:C912(*; $Obj_form.tableList; Choose:C955($Lon_x<0; 1; $Lon_x); lk replace selection:K53:1)
+				OBJECT SET SCROLL POSITION:C906(*; $Obj_form.tableList; Choose:C955($Lon_x<0; 1; $Lon_x))
 				
 			Else 
 				
