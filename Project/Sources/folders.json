@@ -46,7 +46,6 @@
 			"devTable"
 		],
 		"methods": [
-			"_catalog",
 			"_NEW_MOBILE_PROJECT",
 			"_OPEN_MOBILE_PROJECT",
 			"01_LASTBUILD",
@@ -472,7 +471,6 @@
 		],
 		"methods": [
 			"mobileUnit4D",
-			"test__catalog",
 			"test_capabilities",
 			"test_catalog",
 			"test_ob_class",

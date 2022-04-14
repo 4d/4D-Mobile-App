@@ -20,10 +20,6 @@ C_OBJECT:C1216(removeAllEntities; $1)
 //_______________________________________
 C_OBJECT:C1216(internalTests; $0)
 
-C_OBJECT:C1216(_catalog; $0)
-C_TEXT:C284(_catalog; $1)
-C_OBJECT:C1216(_catalog; $2)
-
 //__________________________________________________
 C_OBJECT:C1216(publishedTableList; $0)
 C_OBJECT:C1216(publishedTableList; $1)
