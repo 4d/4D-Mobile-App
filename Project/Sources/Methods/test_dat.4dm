@@ -190,9 +190,3 @@ $o:=dat("christmas")
 $o:=dat("newYear")
 
 err_FINALLY
-
-If (Structure file:C489=Structure file:C489(*))
-	
-	ALERT:C41("Done")
-	
-End if 

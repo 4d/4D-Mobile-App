@@ -335,17 +335,17 @@
 			</editor_table_info>
 		</table_extra>
 	</table>
-	<table name="__DeletedRecords" uuid="1990EE8CAE3D42D681EB8FF96B57A682" id="18" leave_tag_on_delete="true" prevent_journaling="true">
-		<field name="ID" uuid="02F6BC569ACD40C49F507B226C7EF53F" type="5" unique="true" autosequence="true" id="1"/>
-		<field name="__Stamp" uuid="9C8660E9BF7D4D26A5164B2AA25A2B3F" type="5" id="2"/>
-		<field name="__TableNumber" uuid="B36C8D5272A641B384B34660D1C36F8B" type="4" id="3"/>
-		<field name="__TableName" uuid="87E790EB43E44CEFA2A41054696149FF" type="10" limiting_length="255" id="4"/>
-		<field name="__PrimaryKey" uuid="C087A5F4AA344B98ADF3C93561C94F45" type="10" limiting_length="255" id="5"/>
-		<primary_key field_name="ID" field_uuid="02F6BC569ACD40C49F507B226C7EF53F"/>
+	<table name="__DeletedRecords" uuid="C65C6D8A7C934582BEA52B36C902A774" id="18" leave_tag_on_delete="true" prevent_journaling="true">
+		<field name="ID" uuid="D688336067D944FD88A402902CD9ECFB" type="5" unique="true" autosequence="true" id="1"/>
+		<field name="__Stamp" uuid="824AFD8FF1624C2A9EB6BE781CD98496" type="5" id="2"/>
+		<field name="__TableNumber" uuid="92F26EC7D93949D6981D4DF8B3BF4E9C" type="4" id="3"/>
+		<field name="__TableName" uuid="6544E90DF3CD4622947A42F38DBD11E9" type="10" limiting_length="255" id="4"/>
+		<field name="__PrimaryKey" uuid="B952CDB443F64F4895F583344BF58323" type="10" limiting_length="255" id="5"/>
+		<primary_key field_name="ID" field_uuid="D688336067D944FD88A402902CD9ECFB"/>
 		<table_extra>
-			<editor_table_info fields_ordering="1" displayable_fields_count="5">
-				<color red="255" green="38" blue="0" alpha="255"/>
-				<coordinates left="904.4840698242" top="0" width="138" height="146.33203125"/>
+			<editor_table_info fields_ordering="1" displayable_fields_count="6">
+				<color red="255" green="255" blue="255" alpha="0"/>
+				<coordinates left="1040" top="40" width="120" height="167.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -727,14 +727,14 @@
 			<table_ref uuid="A7F05DD39BF141959331A84CAECF5267" name="Service"/>
 		</field_ref>
 	</index>
-	<index kind="regular" name="__DeletedRecords__Stamp" uuid="588807B4C575438FB2BB058BF0C289BC" type="7">
-		<field_ref uuid="9C8660E9BF7D4D26A5164B2AA25A2B3F" name="__Stamp">
-			<table_ref uuid="1990EE8CAE3D42D681EB8FF96B57A682" name="__DeletedRecords"/>
-		</field_ref>
-	</index>
 	<index kind="regular" name="__GlobalStamp_table_3" uuid="61BCED41D26142D9B8397C6C6C8DF7D0" type="7">
 		<field_ref uuid="324DBC62775F4C60BFC38F8072DEF10C" name="__GlobalStamp">
 			<table_ref uuid="30E13DEEB95C4BABA4D0449FDF2C55DC" name="Table_3"/>
+		</field_ref>
+	</index>
+	<index kind="regular" unique_keys="true" name="__DeletedRecordsID" uuid="6398D8737C7C4027994210E69EA45A27" type="7">
+		<field_ref uuid="D688336067D944FD88A402902CD9ECFB" name="ID">
+			<table_ref uuid="C65C6D8A7C934582BEA52B36C902A774" name="__DeletedRecords"/>
 		</field_ref>
 	</index>
 	<index kind="regular" unique_keys="true" uuid="64420E34B6FB4603BF04E1AFB863E701" type="7">
@@ -825,6 +825,11 @@
 			<table_ref uuid="4AED578B39014B59AB3054B0278F6453" name="Commands"/>
 		</field_ref>
 	</index>
+	<index kind="regular" name="__DeletedRecords__Stamp" uuid="BCEEF98F381C4349A5518B396E0F8923" type="7">
+		<field_ref uuid="824AFD8FF1624C2A9EB6BE781CD98496" name="__Stamp">
+			<table_ref uuid="C65C6D8A7C934582BEA52B36C902A774" name="__DeletedRecords"/>
+		</field_ref>
+	</index>
 	<index kind="regular" unique_keys="true" uuid="C08143B882E24FE39237043EFB82B0A2" type="7">
 		<field_ref uuid="C8BFA0F3AF484D53BE28A57224357568" name="ID">
 			<table_ref uuid="49B3FBDD5F7247559052EF4FA3386A5D" name="とてもとても長いフィールド"/>
@@ -863,11 +868,6 @@
 	<index kind="regular" name="__GlobalStamp_table_2" uuid="D5945CA68B54408993BD1F2DA3594712" type="7">
 		<field_ref uuid="63497E7F161442009B8F5F9417626F6A" name="__GlobalStamp">
 			<table_ref uuid="E0EF4D9E925848A8893B9926694CF58E" name="Table_2"/>
-		</field_ref>
-	</index>
-	<index kind="regular" unique_keys="true" name="__DeletedRecordsID" uuid="D6F5230EF552403D89927D1A723A93DC" type="7">
-		<field_ref uuid="02F6BC569ACD40C49F507B226C7EF53F" name="ID">
-			<table_ref uuid="1990EE8CAE3D42D681EB8FF96B57A682" name="__DeletedRecords"/>
 		</field_ref>
 	</index>
 	<index kind="regular" name="__GlobalStamp_service" uuid="E1981ABC2795450BBD685503C84E1D15" type="7">

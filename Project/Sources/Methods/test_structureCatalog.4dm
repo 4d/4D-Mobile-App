@@ -104,7 +104,7 @@ If (Asserted:C1132($o.success))
 						End if 
 					End for 
 					
-					ASSERT:C1129($o.value[0].field.length=10)
+					ASSERT:C1129($o.value[0].field.length=12)
 					
 					$c:=$o.value[0].field.extract("name")
 					
@@ -211,8 +211,8 @@ End if
 
 err_FINALLY
 
-If (Structure file:C489=Structure file:C489(*))
-	
-	ALERT:C41(String:C10(Milliseconds:C459-$start))
-	
-End if 
+//If (Structure file=Structure file(*))
+
+//ALERT(String(Milliseconds-$start))
+
+//End if 

@@ -23,6 +23,8 @@ Function init()
 	This:C1470.toBeInitialized:=False:C215
 	
 	This:C1470.listbox("fieldList"; "01_fields")
+	This:C1470.formObject("fieldListBorder"; "01_fields.border")
+	
 	This:C1470.widget("names")
 	This:C1470.widget("icons")
 	This:C1470.widget("labels"; "label")
@@ -89,7 +91,7 @@ Function handleEvents($e : Object)
 						//_______________________________
 					: ($e.code=On Selection Change:K2:29)
 						
-						_editor_ui_LISTBOX($e.objectName)
+						This:C1470._fieldListUI(True:C214)
 						
 						//_______________________________
 					: ($e.code=On Mouse Enter:K2:33)
@@ -109,14 +111,15 @@ Function handleEvents($e : Object)
 						//_______________________________
 					: ($e.code=On Getting Focus:K2:7)
 						
-						_editor_ui_LISTBOX($e.name; True:C214)
+						This:C1470._fieldListUI(True:C214)
 						
 						This:C1470.setHelpTip($e)
 						
 						//_______________________________
 					: ($e.code=On Losing Focus:K2:8)
 						
-						_editor_ui_LISTBOX($e.name; False:C215)
+						This:C1470.fieldList.setColors(Foreground color:K23:1)
+						This:C1470.fieldListBorder.setColors(EDITOR.backgroundUnselectedColor)
 						
 						//_______________________________
 					: (PROJECT.isLocked())
@@ -126,7 +129,7 @@ Function handleEvents($e : Object)
 						//_______________________________
 					: ($e.code=On Double Clicked:K2:5)
 						
-						_editor_ui_LISTBOX($e.objectName)
+						This:C1470._fieldListUI(True:C214)
 						
 						If ($e.columnName=This:C1470.labels.name)\
 							 | ($e.columnName=This:C1470.shortLabels.name)\
@@ -140,6 +143,8 @@ Function handleEvents($e : Object)
 						
 						//_______________________________
 					: ($e.code=On Clicked:K2:4)
+						
+						This:C1470._fieldListUI(True:C214)
 						
 						Case of 
 								
@@ -389,7 +394,7 @@ Function updateFieldList
 	
 	This:C1470.fieldList.unselect()
 	
-	_editor_ui_LISTBOX(This:C1470.fieldList.name)
+	This:C1470._fieldListUI(This:C1470.focused=This:C1470.fieldList.name)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Gets the list of fields/reports according to the selected table as collections
@@ -1179,7 +1184,6 @@ Function doGetResources()
 		
 	End if 
 	
-	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function doFormat() : Integer
 	
@@ -1461,6 +1465,21 @@ Function doTagMenu($e : Object; $values : Collection)
 	End if 
 	
 	// MARK:-[PRIVATE]
+	//=== === === === === === === === === === === === === === === === === === === === ==
+Function _fieldListUI($selected : Boolean)
+	
+	If ($selected)
+		
+		This:C1470.fieldList.setColors(Foreground color:K23:1)
+		This:C1470.fieldListBorder.setColors(EDITOR.selectedColor)
+		
+	Else 
+		
+		This:C1470.fieldList.setColors(Foreground color:K23:1)
+		This:C1470.fieldListBorder.setColors(EDITOR.backgroundUnselectedColor)
+		
+	End if 
+	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function _labels($target : cs:C1710.field; $name : Text)
 	

@@ -44,9 +44,3 @@ ASSERT:C1129($folder.platformPath=$lep.getEnvironnementVariable("directory"))
 ASSERT:C1129($lep.success)
 
 err_FINALLY
-
-If (Structure file:C489=Structure file:C489(*))
-	
-	ALERT:C41("Done")
-	
-End if 

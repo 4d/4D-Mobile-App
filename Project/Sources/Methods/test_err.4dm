@@ -91,9 +91,3 @@ $o.deinstall()
 ASSERT:C1129(Length:C16(Method called on error:C704)=0)
 
 err_FINALLY
-
-If (Structure file:C489=Structure file:C489(*))
-	
-	ALERT:C41("Done")
-	
-End if 

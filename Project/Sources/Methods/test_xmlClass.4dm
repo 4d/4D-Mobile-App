@@ -273,8 +273,8 @@ ASSERT:C1129($t="him"; ".getAttribute()")
 
 err_FINALLY
 
-If (Structure file:C489=Structure file:C489(*))
-	
-	ALERT:C41(String:C10(Milliseconds:C459-$start))
-	
-End if 
+//If (Structure file=Structure file(*))
+
+//ALERT(String(Milliseconds-$start))
+
+//End if 

@@ -1,7 +1,13 @@
 {
 	"____FOR_TESTS": {
+		"methods": [
+			"_test_alias",
+			"_test_project",
+			"_test_structureClass"
+		],
 		"classes": [
 			"ALL_TYPESEntity",
+			"EmployesEntity",
 			"ServiceEntity",
 			"UNIT_0Entity",
 			"UNIT_1Entity"
@@ -466,8 +472,6 @@
 			"UNIT_3"
 		],
 		"methods": [
-			"_test_alias",
-			"_test_structureClass",
 			"mobileUnit4D",
 			"test__catalog",
 			"test_capabilities",
@@ -588,7 +592,6 @@
 	},
 	"devTable": {
 		"tables": [
-			"__DeletedRecords",
 			"ALL_TYPES",
 			"Commands",
 			"COMPOSITE PRIMARY KEY",

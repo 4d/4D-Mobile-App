@@ -38,7 +38,7 @@ If (True:C214)
 		"platformPath"; $o.platformPath; \
 		"relativePath"; $o.relativePath))
 	
-	ASSERT:C1129($c.query("path = :1"; $oFile.path).length=4)
+	ASSERT:C1129($c.query("path = :1"; $oFile.path).length=3)
 	ASSERT:C1129($c.query("platformPath = :1"; $oFile.platformPath).length=4)
 	ASSERT:C1129($c.query("relativePath = :1"; "/folder1/folder2/file.txt").length=4)
 	

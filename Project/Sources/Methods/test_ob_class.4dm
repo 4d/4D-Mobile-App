@@ -274,10 +274,3 @@ $o:=New object:C1471(\
 $ob.deepMerge($o)
 
 err_FINALLY
-
-If (Structure file:C489=Structure file:C489(*))
-	
-	ALERT:C41("Done")
-	
-End if 
-

@@ -21,13 +21,11 @@ var $right; $top; $vOffset; $width : Integer
 var $nil : Pointer
 var $panel : Object
 
-// Delete the content of all panels to avoid re-entries
+// Unload the form from all panels to avoid re-entries
 For ($i; 1; panel_Count; 1)
 	
 	$name:="panel."+String:C10($i)
 	OBJECT SET SUBFORM:C1138(*; $name; "EMPTY")
-	OBJECT SET VALUE:C1742($name; New object:C1471(\
-		))
 	
 End for 
 

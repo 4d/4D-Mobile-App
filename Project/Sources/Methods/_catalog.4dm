@@ -145,9 +145,14 @@ Else
 								$c.push($oo[$t])
 								
 								//………………………………………………………………………………………………
+							: ($oo[$t].kind="alias")
+								
+								$c.push($oo[$t])
+								
+								//………………………………………………………………………………………………
 							Else 
 								
-								$o.warnings.push("Unmanaged kind \""+$oo[$t].kind+"\" for field \""+$oo[$t]+"\"")
+								$o.warnings.push("Unmanaged kind \""+$oo[$t].kind+"\" for field \""+$t+"\"")
 								
 								//………………………………………………………………………………………………
 						End case 

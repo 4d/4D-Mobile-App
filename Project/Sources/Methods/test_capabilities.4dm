@@ -1,4 +1,4 @@
-//%attributes = {"invisible":true,"preemptive":"capable"}
+//%attributes = {"preemptive":"capable"}
 
 C_OBJECT:C1216($Obj_result; $Obj_projfile)
 C_OBJECT:C1216($Folder_target; $Folder_source)

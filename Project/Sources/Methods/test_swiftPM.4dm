@@ -1,4 +1,4 @@
-//%attributes = {"invisible":true,"preemptive":"capable"}
+//%attributes = {"preemptive":"capable"}
 var $Obj_in; $Obj_out; $Obj_target; $Obj_targetPath : Object
 var $Obj_framework : 4D:C1709.Folder
 

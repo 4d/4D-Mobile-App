@@ -14,7 +14,7 @@ ASSERT:C1129($o.result.infos.name="UNIT_1")
 ASSERT:C1129($o.result.infos.primaryKey="ID")
 ASSERT:C1129($o.result.infos.tableNumber=11)
 ASSERT:C1129($o.result.fields#Null:C1517)
-ASSERT:C1129($o.result.fields.length=6)
+ASSERT:C1129($o.result.fields.length=7)
 
 //_____________________________________________________________
 $o:=_catalog("HELLO WORLD")
@@ -43,7 +43,7 @@ ASSERT:C1129($o.result.infos.name="UNIT_1")
 ASSERT:C1129($o.result.infos.primaryKey="ID")
 ASSERT:C1129($o.result.infos.tableNumber=11)
 ASSERT:C1129($o.result.fields#Null:C1517)
-ASSERT:C1129($o.result.fields.length=6)
+ASSERT:C1129($o.result.fields.length=7)
 
 $o:=_catalog("UNIT_1"; $datastore).table("UNIT_1"; "storage")
 ASSERT:C1129($o.success)

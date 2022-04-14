@@ -1,4 +1,4 @@
-//%attributes = {"invisible":true,"preemptive":"capable"}
+//%attributes = {"preemptive":"capable"}
 
 var $project : Object
 $project:=cs:C1710.project.new()

@@ -1,4 +1,4 @@
-//%attributes = {"invisible":true,"shared":true,"preemptive":"capable"}
+//%attributes = {"invisible":true,"shared":true,"preemptive":"incapable"}
 // ----------------------------------------------------
 // Project method : mobileUnit
 // ID[397F98984CE44B3CB94A856B86C833B1]
@@ -20,6 +20,7 @@ var $t : Text
 var $b; $run : Boolean
 var $o : Object
 var $file : 4D:C1709.File
+var $path : cs:C1710.path
 
 // ----------------------------------------------------
 // Initialisations
@@ -50,7 +51,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			
 			$o:=New signal:C1641
 			
-			CALL WORKER:C1389(1; "unitTestSuites"; $o)
+			CALL WORKER:C1389(1; Formula:C1597(unitTestSuites).source; $o)
 			
 			If ($o.wait(10))
 				
@@ -62,9 +63,19 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 				
 				$response.success:=($response.tests.length>0)
 				
+				If ($response.success)
+					
+					For each ($o; $response.tests)
+						
+						$o.call()
+						
+					End for each 
+				End if 
+				
 			Else 
 				
-				ASSERT:C1129(False:C215; "Failed to load internal test methods")
+				$response.success:=False:C215
+				$response.errors:="Failed to load internal test methods"
 				
 			End if 
 			
@@ -79,7 +90,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			
 			If (Asserted:C1132($parameters.project#Null:C1517; "Expected 'project' key into object parameter"))
 				
-				EXECUTE METHOD:C1007("project_Upgrade"; $b; $parameters.project)
+				EXECUTE METHOD:C1007(Formula:C1597(project_Upgrade).source; $b; $parameters.project)
 				
 				$response:=New object:C1471(\
 					"upgraded"; $b)
@@ -89,13 +100,13 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			//______________________________________________________
 		: ($entryPoint="checkRest")
 			
-			EXECUTE METHOD:C1007("env_Database_setting"; $response; "rest")
+			EXECUTE METHOD:C1007(Formula:C1597(env_Database_setting).source; $response; "rest")
 			
 			//______________________________________________________
 		: ($entryPoint="checkInstall")
 			
 			// Check without message
-			EXECUTE METHOD:C1007("Xcode_CheckInstall"; $response; New object:C1471("silent"; True:C214))
+			EXECUTE METHOD:C1007(Formula:C1597(Xcode_CheckInstall).source; $response; New object:C1471("silent"; True:C214))
 			
 			//________________________________________
 		: (Not:C34(Count parameters:C259=2))
@@ -156,7 +167,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 					
 					$o.parent.delete(Delete with contents:K24:24)
 					
-					EXECUTE METHOD:C1007($entryPoint; *; "aws"; $t; True:C214)
+					EXECUTE METHOD:C1007(Formula:C1597(downloadSDK).source; *; "aws"; $t; True:C214)
 					
 					If ($o.exists)
 						
@@ -185,7 +196,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			//______________________________________________________
 		: ($entryPoint="structure")
 			
-			EXECUTE METHOD:C1007("_o_structure"; $response; $parameters)
+			EXECUTE METHOD:C1007(Formula:C1597(_o_structure).source; $response; $parameters)
 			
 			//________________________________________
 		: ($entryPoint="templates")
@@ -196,31 +207,31 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 		: ($entryPoint="storyboard")
 			
 			// if feature.with("templateClass") must not be tested anymore
-			EXECUTE METHOD:C1007("_o_storyboard"; $response; $parameters)
+			EXECUTE METHOD:C1007(Formula:C1597(_o_storyboard).source; $response; $parameters)
 			
 			//______________________________________________________
 		: ($entryPoint="device")
 			
-			EXECUTE METHOD:C1007("_o_device"; $response; $parameters)
+			EXECUTE METHOD:C1007(Formula:C1597(_o_device).source; $response; $parameters)
 			
 			//______________________________________________________
-		: ($entryPoint="rest")\
-			 | ($entryPoint="dump")
+		: ($entryPoint="rest")
 			
-			EXECUTE METHOD:C1007($entryPoint; $response; $parameters)
+			EXECUTE METHOD:C1007(Formula:C1597(Rest).source; $response; $parameters)
+			
+			//______________________________________________________
+		: ($entryPoint="rest")
+			
+			EXECUTE METHOD:C1007(Formula:C1597(dump).source; $response; $parameters)
 			
 			//______________________________________________________
 		: ($entryPoint="pathname")
 			
 			If (Asserted:C1132($parameters.target#Null:C1517; "Expected 'target' key into object parameter"))
 				
-				var $path : cs:C1710.path
 				$path:=cs:C1710.path.new()
 				
 				If (Asserted:C1132($path[$parameters.target]#Null:C1517; "No function for path "+String:C10($parameters.target)))
-					//$response:=New object(\
-																							"success"; True; \
-																							"value"; _o_COMPONENT_Pathname($parameters.target).platformPath)
 					
 					$response:=New object:C1471(\
 						"success"; True:C214; \
@@ -252,15 +263,18 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			 | ($entryPoint="xcDataModel")))
 			
 			$response:=cs:C1710.xcDataModel.new($parameters).run(\
-				/*path*/$parameters.path; \
-				/*options*/$parameters)
+				$parameters.path; \
+				$parameters)
 			
 			//________________________________________
-		: (($entryPoint="dataModel")\
-			 | ($entryPoint="xcDataModel"))
+		: ($entryPoint="dataModel")
 			
-			EXECUTE METHOD:C1007($entryPoint; $response; $parameters)
+			EXECUTE METHOD:C1007(Formula:C1597(dataModel).source; $response; $parameters)
 			
+			//________________________________________
+		: ($entryPoint="xcDataModel")
+			
+			EXECUTE METHOD:C1007(Formula:C1597(xcDataModel).source; $response; $parameters)
 			
 			//________________________________________
 		: ($entryPoint="simulator")
@@ -268,42 +282,119 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			ASSERT:C1129(False:C215; "Deprecated endpoint")
 			
 			//________________________________________
-		: ($entryPoint="xcode")\
-			 | ($entryPoint="xcodeProj")\
-			 | ($entryPoint="plist")\
-			 | ($entryPoint="asset")\
-			 | ($entryPoint="colors")\
-			 | ($entryPoint="provisioningProfiles")\
-			 | ($entryPoint="dataSet")\
-			 | ($entryPoint="dataModel")\
-			 | ($entryPoint="xcDataModel")\
-			 | ($entryPoint="storyboard")\
-			 | ($entryPoint="TEMPLATE")\
-			 | ($entryPoint="sdk")\
-			 | ($entryPoint="git")\
-			 | ($entryPoint="itunes_lookup")\
-			 | ($entryPoint="xloc")\
-			 | ($entryPoint="formatters")\
-			 | ($entryPoint="PROJECT_HANDLER")\
-			 | ($entryPoint="project_Audit")\
-			 | ($entryPoint="device")\
-			 | ($entryPoint="teamId")\
-			 | ($entryPoint="swiftPM")\
-			 | ($entryPoint="certificate")
+		: ($entryPoint="xcode")
 			
+			EXECUTE METHOD:C1007(Formula:C1597(Xcode).source; $response; $parameters)
 			
-			If ($entryPoint="plist")
-				
-				$entryPoint:="_o_plist"
-				
-			End if 
+			//________________________________________
+		: ($entryPoint="xcodeProj")
 			
-			EXECUTE METHOD:C1007($entryPoint; $response; $parameters)
+			EXECUTE METHOD:C1007(Formula:C1597(XcodeProj).source; $response; $parameters)
+			
+			//________________________________________
+		: ($entryPoint="plist")
+			
+			EXECUTE METHOD:C1007(Formula:C1597(_o_plist).source; $response; $parameters)
+			
+			//________________________________________
+		: ($entryPoint="asset")
+			
+			EXECUTE METHOD:C1007(Formula:C1597(asset).source; $response; $parameters)
+			
+			//________________________________________
+		: ($entryPoint="colors")
+			
+			EXECUTE METHOD:C1007(Formula:C1597(colors).source; $response; $parameters)
+			
+			//________________________________________
+		: ($entryPoint="provisioningProfiles")
+			
+			EXECUTE METHOD:C1007(Formula:C1597(provisioningProfiles).source; $response; $parameters)
+			
+			//________________________________________
+		: ($entryPoint="dataSet")
+			
+			EXECUTE METHOD:C1007(Formula:C1597(dataSet).source; $response; $parameters)
+			
+			//________________________________________
+		: ($entryPoint="dataModel")
+			
+			EXECUTE METHOD:C1007(Formula:C1597(dataModel).source; $response; $parameters)
+			
+			//________________________________________
+		: ($entryPoint="xcDataModel")
+			
+			EXECUTE METHOD:C1007(Formula:C1597(xcDataModel).source; $response; $parameters)
+			
+			//________________________________________
+		: ($entryPoint="storyboard")
+			
+			EXECUTE METHOD:C1007(Formula:C1597(_o_storyboard).source; $response; $parameters)
+			
+			//________________________________________
+		: ($entryPoint="TEMPLATE")
+			
+			EXECUTE METHOD:C1007(Formula:C1597(template).source; $response; $parameters)
+			
+			//________________________________________
+		: ($entryPoint="sdk")
+			
+			EXECUTE METHOD:C1007(Formula:C1597(sdk).source; $response; $parameters)
+			
+			//________________________________________
+		: ($entryPoint="git")
+			
+			EXECUTE METHOD:C1007(Formula:C1597(git).source; $response; $parameters)
+			
+			//________________________________________
+		: ($entryPoint="itunes_lookup")
+			
+			EXECUTE METHOD:C1007(Formula:C1597(itunes_lookup).source; $response; $parameters)
+			
+			//________________________________________
+		: ($entryPoint="xloc")
+			
+			EXECUTE METHOD:C1007(Formula:C1597(xloc).source; $response; $parameters)
+			
+			//________________________________________
+		: ($entryPoint="formatters")
+			
+			EXECUTE METHOD:C1007(Formula:C1597(formatters).source; $response; $parameters)
+			
+			//________________________________________
+		: ($entryPoint="PROJECT_HANDLER")
+			
+			EXECUTE METHOD:C1007(Formula:C1597(PROJECT_Handler).source; $response; $parameters)
+			
+			//________________________________________
+		: ($entryPoint="project_Audit")
+			
+			EXECUTE METHOD:C1007(Formula:C1597(project_Audit).source; $response; $parameters)
+			
+			//________________________________________
+		: ($entryPoint="device")
+			
+			EXECUTE METHOD:C1007(Formula:C1597(_o_device).source; $response; $parameters)
+			
+			//________________________________________
+		: ($entryPoint="teamId")
+			
+			EXECUTE METHOD:C1007(Formula:C1597(teamId).source; $response; $parameters)
+			
+			//________________________________________
+		: ($entryPoint="swiftPM")
+			
+			EXECUTE METHOD:C1007(Formula:C1597(swiftPM).source; $response; $parameters)
+			
+			//________________________________________
+		: ($entryPoint="certificate")
+			
+			EXECUTE METHOD:C1007(Formula:C1597(certificate).source; $response; $parameters)
 			
 			//______________________________________________________
 		: ($entryPoint="project")
 			
-			EXECUTE METHOD:C1007("mobile_Project"; $response; $parameters)
+			EXECUTE METHOD:C1007(Formula:C1597(mobile_Project).source; $response; $parameters)
 			
 			//______________________________________________________
 		: ($entryPoint="_internalWebser")
@@ -321,17 +412,17 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 					: ($parameters.tags#Null:C1517)\
 						 & ($parameters.types#Null:C1517)
 						
-						EXECUTE METHOD:C1007("Process_tags"; $t; $parameters.text; $parameters.tags; $parameters.types)
+						EXECUTE METHOD:C1007(Formula:C1597(Process_tags).source; $t; $parameters.text; $parameters.tags; $parameters.types)
 						
 						//……………………………………………………………………………………………………………………………
 					: ($parameters.tags#Null:C1517)
 						
-						EXECUTE METHOD:C1007("Process_tags"; $t; $parameters.text; $parameters.tags)
+						EXECUTE METHOD:C1007(Formula:C1597(Process_tags).source; $t; $parameters.text; $parameters.tags)
 						
 						//……………………………………………………………………………………………………………………………
 					Else 
 						
-						EXECUTE METHOD:C1007("Process_tags"; $t; $parameters.text)
+						EXECUTE METHOD:C1007(Formula:C1597(Process_tags).source; $t; $parameters.text)
 						
 						//……………………………………………………………………………………………………………………………
 				End case 
@@ -361,7 +452,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 						//……………………………………………………………………………………………………………………………
 					Else 
 						
-						EXECUTE METHOD:C1007("Process_tags_on_file"; *; $parameters.file; $parameters.tags; $parameters.types)
+						EXECUTE METHOD:C1007(Formula:C1597(Process_tags_on_file).source; *; $parameters.file; $parameters.tags; $parameters.types)
 						
 						//…………………………………………………………………………………………………………………………
 				End case 
