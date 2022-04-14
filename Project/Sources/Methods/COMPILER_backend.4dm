@@ -70,9 +70,6 @@ If (False:C215)
 	C_OBJECT:C1216(getSQLite; $1)
 	
 	// ----------------------------------------------------
-	C_OBJECT:C1216(getAndroidDataset; $1)
-	
-	// ----------------------------------------------------
 	C_OBJECT:C1216(folder_copyMerge; $1)
 	C_OBJECT:C1216(folder_copyMerge; $2)
 	

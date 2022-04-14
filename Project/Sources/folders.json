@@ -180,7 +180,6 @@
 			"folder_copyMerge",
 			"formatString",
 			"formatters",
-			"getAndroidDataset",
 			"getSQLite",
 			"git",
 			"Localize_server_response",

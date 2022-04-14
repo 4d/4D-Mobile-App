@@ -208,6 +208,7 @@ Function update()
 		This:C1470.sqlite:=Null:C1517
 		This:C1470.callWorker(Formula:C1597(getSQLite).source; New object:C1471(\
 			"caller"; This:C1470.window; \
+			"target"; "ios"; \
 			"method"; Formula:C1597(editor_CALLBACK).source; \
 			"message"; "getSQLiteResponse"; \
 			"project"; PROJECT))
@@ -217,10 +218,11 @@ Function update()
 	If (PROJECT.android())
 		
 		This:C1470.datasetAndroid:=Null:C1517
-		This:C1470.callWorker(Formula:C1597(getAndroidDataset).source; New object:C1471(\
+		This:C1470.callWorker(Formula:C1597(getSQLite).source; New object:C1471(\
 			"caller"; This:C1470.window; \
+			"target"; "android"; \
 			"method"; Formula:C1597(editor_CALLBACK).source; \
-			"message"; "getAndroidDBResponse"; \
+			"message"; "getSQLiteResponse"; \
 			"project"; PROJECT))
 		
 	End if 

@@ -312,23 +312,6 @@ Case of
 		End if 
 		
 		//______________________________________________________
-	: ($selector="getAndroidDBResponse")  // Callback from getAndroidDB method to update the data panel
-		
-		If ($isProjectForm)
-			
-			EDITOR.sendMessageToPanel($ƒ.data; $selector; $data)
-			
-		Else 
-			
-			$panel:=panel
-			$panel.datasetAndroid:=$data.database
-			$panel.updateTableListWithDataSizes()
-			
-			panel("SOURCE").updateDatasetComment()
-			
-		End if 
-		
-		//______________________________________________________
 	: ($selector="getSQLiteResponse")  // Callback from getSQLite method to update the data panel
 		
 		If ($isProjectForm)
@@ -338,7 +321,15 @@ Case of
 		Else 
 			
 			$panel:=panel
-			$panel.sqlite:=$data.database
+			Case of 
+				: (String:C10($data.target)="ios")
+					$panel.sqlite:=$data.database
+				: (String:C10($data.target)="android")
+					$panel.datasetAndroid:=$data.database
+				Else 
+					ASSERT:C1129(dev_Matrix; "Missing target")
+			End case 
+			
 			$panel.updateTableListWithDataSizes()
 			
 			// Update the source panel
