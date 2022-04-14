@@ -8,7 +8,7 @@ Class constructor
 	This:C1470.path:=cs:C1710.path.new()
 	This:C1470.logFolder:=This:C1470.path.userCache()
 	
-	If (This:C1470.studio.java#Null:C1517 && This:C1470.studio.javaHome#Null:C1517)
+	If ((This:C1470.studio.java#Null:C1517) && (This:C1470.studio.javaHome#Null:C1517))
 		
 		This:C1470.isOnError:=False:C215
 		
