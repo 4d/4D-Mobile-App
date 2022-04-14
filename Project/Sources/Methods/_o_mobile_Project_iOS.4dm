@@ -477,7 +477,9 @@ If ($in.create)
 				"key"; $pathname; \
 				"caller"; $in.caller; \
 				"verbose"; $verbose; \
-				"keepUI"; True:C214))
+				"keepUI"; True:C214; \
+				"method"; "editor_CALLBACK"; \
+				"message"; "endOfDatasetGeneration"))
 			
 			ob_error_combine($out; $out.dump)
 			

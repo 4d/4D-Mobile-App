@@ -211,6 +211,13 @@ Function handleEvents($e : Object)
 					End if 
 				End if 
 				
+				//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+			: ($e.code=On Close Box:K2:21)
+				
+				EDITOR.callWorker(Formula:C1597(killWorker).source)
+				
+				CANCEL:C270
+				
 				//______________________________________________________
 		End case 
 		

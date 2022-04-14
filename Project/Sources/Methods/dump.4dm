@@ -89,7 +89,7 @@ Case of
 				If ($withUI)
 					
 					// Notify user
-					CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
+					CALL FORM:C1391($in.caller; $in.method; "dump"; New object:C1471(\
 						"step"; "catalog"; \
 						"table"; $meta))
 					
@@ -199,7 +199,7 @@ Case of
 		//$useTextRestResponse:=Feature.with("useTextRestResponse")
 		
 		var $notify : 4D:C1709.Function
-		$notify:=Formula:C1597(CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; $1))
+		$notify:=Formula:C1597(CALL FORM:C1391($in.caller; $in.method; "dump"; $1))
 		
 		var $targetFolder : 4D:C1709.Folder
 		$targetFolder:=Folder:C1567($in.output; fk platform path:K87:2)
@@ -520,7 +520,7 @@ Case of
 				If ($withUI)
 					
 					// Notify user
-					CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
+					CALL FORM:C1391($in.caller; $in.method; "dump"; New object:C1471(\
 						"step"; "pictures"; \
 						"table"; $meta))
 					
@@ -636,7 +636,7 @@ Case of
 												If ($withUI)
 													
 													// Notify user
-													CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
+													CALL FORM:C1391($in.caller; $in.method; "dump"; New object:C1471(\
 														"step"; "pictures"; \
 														"table"; $meta; \
 														"id"; $ID))
@@ -829,14 +829,14 @@ Case of
 														If (Bool:C1537($in.dataSet))
 															
 															//TEXT TO DOCUMENT($outputPathname+"Contents.json"; \
-																																																																																JSON Stringify(New object(\
-																																																																																"info"; New object(\
-																																																																																"version"; 1; \
-																																																																																"author"; "xcode"\
-																																																																																); \
-																																																																																"images"; New collection(New object(\
-																																																																																"idiom"; "universal"; \
-																																																																																"filename"; $File_name)))))
+																																																																																																JSON Stringify(New object(\
+																																																																																																"info"; New object(\
+																																																																																																"version"; 1; \
+																																																																																																"author"; "xcode"\
+																																																																																																); \
+																																																																																																"images"; New collection(New object(\
+																																																																																																"idiom"; "universal"; \
+																																																																																																"filename"; $File_name)))))
 															
 															File:C1566($outputPathname+"Contents.json"; fk platform path:K87:2).setText(JSON Stringify:C1217(New object:C1471(\
 																"info"; New object:C1471(\
@@ -888,9 +888,9 @@ Case of
 							$outputPathname:=$in.output+Folder separator:K24:12+$meta.name+Folder separator:K24:12
 							$outputPathname:=$outputPathname+"manifest.json"
 							//TEXT TO DOCUMENT($outputPathname; \
-																																								JSON Stringify(New object(\
-																																								"contentSize"; Num($result.contentSize); \
-																																								"count"; Num($result.count))))
+																																																JSON Stringify(New object(\
+																																																"contentSize"; Num($result.contentSize); \
+																																																"count"; Num($result.count))))
 							File:C1566($outputPathname; fk platform path:K87:2).setText(JSON Stringify:C1217(New object:C1471(\
 								"contentSize"; Num:C11($result.contentSize); \
 								"count"; Num:C11($result.count))))

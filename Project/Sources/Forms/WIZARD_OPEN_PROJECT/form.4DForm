@@ -10,6 +10,7 @@
 		"onLoad",
 		"onClick",
 		"onDoubleClick",
+		"onCloseBox",
 		"onTimer",
 		"onResize"
 	],

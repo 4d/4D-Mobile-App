@@ -354,7 +354,10 @@ Function dataSetLegacy()->$dump : Object  // TODO: to remove with Not(FEATURE.wi
 			"key"; $pathname; \
 			"androidDataSet"; Feature.with("androidDataSet"); \
 			"caller"; This:C1470.input.caller; \
-			"verbose"; This:C1470.input.verbose))
+			"verbose"; This:C1470.input.verbose; \
+			"keepUI"; True:C214; \
+			"method"; Formula:C1597(editor_CALLBACK).source; \
+			"message"; "endOfDatasetGeneration"))
 		
 	End if 
 	
@@ -404,7 +407,9 @@ Function dataSet()->$dump : Object
 		"androidDataSet"; Feature.with("androidDataSet"); \
 		"caller"; This:C1470.input.caller; \
 		"verbose"; This:C1470.input.verbose; \
-		"keepUI"; True:C214))
+		"keepUI"; True:C214; \
+		"method"; Formula:C1597(editor_CALLBACK).source; \
+		"message"; "endOfDatasetGeneration"))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Return true if must be generated each time or data set not valid (according to project checksum)

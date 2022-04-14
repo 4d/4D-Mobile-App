@@ -100,11 +100,13 @@ Case of
 		$o:=dataSet(New object:C1471(\
 			"action"; "create"; \
 			"project"; PROJECT; \
+			"verbose"; True:C214; \
 			"digest"; True:C214; \
 			"dataSet"; True:C214; \
 			"key"; cs:C1710.path.new().key().platformPath; \
 			"caller"; Current form window:C827; \
-			"verbose"; True:C214))
+			"method"; Formula:C1597(editor_CALLBACK).source; \
+			"message"; "endOfDatasetGeneration"))
 		
 		SHOW ON DISK:C922($o.path)
 		
@@ -134,18 +136,22 @@ Case of
 		$o:=dataSet(New object:C1471(\
 			"action"; "create"; \
 			"project"; PROJECT; \
+			"verbose"; True:C214; \
 			"digest"; True:C214; \
 			"dataSet"; True:C214; \
 			"path"; $pathname; \
 			"key"; cs:C1710.path.new().key().platformPath; \
 			"caller"; Current form window:C827; \
-			"verbose"; True:C214))
+			"method"; Formula:C1597(editor_CALLBACK).source; \
+			"message"; "endOfDatasetGeneration"))
 		
 		$o:=dataSet(New object:C1471(\
 			"action"; "coreData"; \
+			"verbose"; True:C214; \
 			"removeAsset"; True:C214; \
 			"caller"; Current form window:C827; \
-			"verbose"; True:C214; \
+			"method"; Formula:C1597(editor_CALLBACK).source; \
+			"message"; "endOfDatasetGeneration"; \
 			"path"; $pathname))
 		
 		SHOW ON DISK:C922($pathname)

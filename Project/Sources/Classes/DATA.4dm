@@ -18,6 +18,11 @@ Class constructor
 	
 	This:C1470.numbereFormat:="### ### ### ### ###"
 	
+	This:C1470.datasetAndroid:=Null:C1517
+	This:C1470.sqlite:=Null:C1517
+	
+	This:C1470.sourceLink:=Formula:C1597(panel("SOURCE"))
+	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Design definition
 Function init()
@@ -196,34 +201,32 @@ Function onLoad()
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Update of the user interface
-Function update()
+Function update($updateList : Boolean)
 	
 	This:C1470.properties.enable(Not:C34(PROJECT.isLocked()))
 	
 	// Select the last used table or the first one if none
 	This:C1470.list.doSafeSelect(Num:C11(This:C1470.lastIndex)=0 ? 1 : Num:C11(This:C1470.lastIndex))
 	
+	var $o : Object
+	
+	$o:=New object:C1471(\
+		"project"; PROJECT; \
+		"caller"; This:C1470.window; \
+		"method"; Formula:C1597(editor_CALLBACK).source; \
+		"message"; "getSQLiteResponse")
+	
 	If (PROJECT.iOS())
 		
-		This:C1470.sqlite:=Null:C1517
-		This:C1470.callWorker(Formula:C1597(getSQLite).source; New object:C1471(\
-			"caller"; This:C1470.window; \
-			"target"; "ios"; \
-			"method"; Formula:C1597(editor_CALLBACK).source; \
-			"message"; "getSQLiteResponse"; \
-			"project"; PROJECT))
+		$o.target:="ios"
+		This:C1470.callWorker(Formula:C1597(getSQLite).source; $o)
 		
 	End if 
 	
 	If (PROJECT.android())
 		
-		This:C1470.datasetAndroid:=Null:C1517
-		This:C1470.callWorker(Formula:C1597(getSQLite).source; New object:C1471(\
-			"caller"; This:C1470.window; \
-			"target"; "android"; \
-			"method"; Formula:C1597(editor_CALLBACK).source; \
-			"message"; "getSQLiteResponse"; \
-			"project"; PROJECT))
+		$o.target:="android"
+		This:C1470.callWorker(Formula:C1597(getSQLite).source; $o)
 		
 	End if 
 	
@@ -243,6 +246,12 @@ Function update()
 		This:C1470.result.setValue("").setColors(EDITOR.selectedFillColor).show()
 		
 		This:C1470.displayFilter(This:C1470.current)
+		
+	End if 
+	
+	If ($updateList)
+		
+		//This.updateTableListWithDataSizes()
 		
 	End if 
 	
@@ -321,17 +330,17 @@ Function updateTableListWithDataSizes()
 						//______________________________________________________
 					: (PROJECT.allTargets())
 						
-						$table.dumpSize:=This:C1470.iosDumpTableSize($tableName)+" / "+This:C1470.androidDumpTableSize($tableName)
+						$table.dumpSize:=This:C1470.dumpTableSize($tableName; "ios")+" / "+This:C1470.dumpTableSize($tableName; "android")
 						
 						//______________________________________________________
 					: (PROJECT.iOS())
 						
-						$table.dumpSize:=This:C1470.iosDumpTableSize($tableName)
+						$table.dumpSize:=This:C1470.dumpTableSize($tableName; "ios")
 						
 						//______________________________________________________
 					: (PROJECT.android())
 						
-						$table.dumpSize:=This:C1470.androidDumpTableSize($tableName)
+						$table.dumpSize:=This:C1470.dumpTableSize($tableName; "android")
 						
 						//______________________________________________________
 				End case 
@@ -340,7 +349,7 @@ Function updateTableListWithDataSizes()
 				
 				If (This:C1470.sqlite#Null:C1517)
 					
-					$table.dumpSize:=This:C1470.iosDumpTableSize($tableName)
+					$table.dumpSize:=This:C1470.dumpTableSize($tableName; "ios")
 					
 				Else 
 					
@@ -369,59 +378,53 @@ Function updateTableListWithDataSizes()
 					End if 
 				End if 
 			End if 
+			
+		Else 
+			
+			OB REMOVE:C1226($table; "dumpSize")
+			
 		End if 
 	End for each 
 	
 	// Redraw
-	This:C1470.list.touch()
+	//This.list.touch()
 	
-	//panel("SOURCE").updateDataSet()
+	// Update source panel comments
+	//This.callMeBack("updateSourcePanel")
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
-Function androidDumpTableSize($tableName) : Text
+Function dumpTableSize($tableName : Text; $target : Text) : Text
 	
 	var $size : Integer
 	var $file : 4D:C1709.File
 	
-	If (This:C1470.datasetAndroid=Null:C1517)\
-		 || (This:C1470.datasetAndroid.tables=Null:C1517)\
-		 || (This:C1470.datasetAndroid.tables[$tableName]=Null:C1517)
-		
-		return ("#NA")
-		
-	End if 
+	$target:=$target || "ios"
 	
-	$size:=Num:C11(This:C1470.datasetAndroid.tables[$tableName])  // Size of the data dump
-	
-	If ($size>4096)
+	If ($target="ios")
 		
-		// Add pictures size if any
-		$file:=PROJECT._folder.file("project.dataSet/Resources/Assets.xcassets/Pictures/"+$tableName+"/manifest.json")
-		
-		If ($file.exists)
+		If (This:C1470.sqlite=Null:C1517)\
+			 || (This:C1470.sqlite.tables=Null:C1517)\
+			 || (This:C1470.sqlite.tables["Z"+Uppercase:C13($tableName)]=Null:C1517)
 			
-			$size:=$size+Num:C11(JSON Parse:C1218($file.getText()).contentSize)
+			return ("#NA")
 			
 		End if 
-	End if 
-	
-	return (doc_bytesToString($size))
-	
-	// === === === === === === === === === === === === === === === === === === === === ===
-Function iosDumpTableSize($tableName) : Text
-	
-	var $size : Integer
-	var $file : 4D:C1709.File
-	
-	If (This:C1470.sqlite=Null:C1517)\
-		 || (This:C1470.sqlite.tables=Null:C1517)\
-		 || (This:C1470.sqlite.tables["Z"+Uppercase:C13($tableName)]=Null:C1517)
 		
-		return ("#NA")
+		$size:=Num:C11(This:C1470.sqlite.tables["Z"+Uppercase:C13($tableName)])
+		
+	Else 
+		
+		If (This:C1470.datasetAndroid=Null:C1517)\
+			 || (This:C1470.datasetAndroid.tables=Null:C1517)\
+			 || (This:C1470.datasetAndroid.tables[$tableName]=Null:C1517)
+			
+			return ("#NA")
+			
+		End if 
+		
+		$size:=Num:C11(This:C1470.datasetAndroid.tables[$tableName])
 		
 	End if 
-	
-	$size:=Num:C11(This:C1470.sqlite.tables["Z"+Uppercase:C13($tableName)])  // Size of the data dump
 	
 	If ($size>4096)
 		

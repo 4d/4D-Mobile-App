@@ -22,7 +22,6 @@
 			"androidLimitations",
 			"COMPILER_TEMPO",
 			"instantiate",
-			"internalTests",
 			"nvl",
 			"object",
 			"publishedTableList",
@@ -35,7 +34,6 @@
 			"catalog",
 			"DataStore",
 			"dateTime",
-			"unit4D",
 			"with"
 		]
 	},
@@ -470,7 +468,6 @@
 			"UNIT_3"
 		],
 		"methods": [
-			"mobileUnit4D",
 			"test_capabilities",
 			"test_catalog",
 			"test_ob_class",

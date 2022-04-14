@@ -790,12 +790,15 @@ Function runBuild($data : Object)
 	
 	This:C1470.build:=True:C214
 	
+	var $caller : Integer
+	$caller:=This:C1470.window
+	
 	This:C1470.postMessage(New object:C1471(\
 		"action"; "show"; \
 		"type"; "progress"; \
-		"title"; Get localized string:C991("product")+" - "+PROJECT.product.name+" ["+Choose:C955(PROJECT._buildTarget="android"; "Android"; "iOS")+"]"; \
-		"additional"; Get localized string:C991("preparations"); \
-		"autostart"; Formula:C1597(CALL FORM:C1391(Current form window:C827; Formula:C1597(project_BUILD).source; $data))))
+		"title"; Get localized string:C991("product")+" - "+PROJECT.product.name+" ["+PROJECT._buildTarget="android" ? "Android" : "iOS"+"]"; \
+		"additional"; "preparations"; \
+		"autostart"; Formula:C1597(CALL FORM:C1391($caller; Formula:C1597(project_BUILD).source; $data))))
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	/// Displays the message dialog box
@@ -862,12 +865,13 @@ Function getDevice($udid : Text)->$device : Object
 Function doGenerate($keyPathname : Text)
 	
 	var $worker : Text
-	var $ƒ : 4D:C1709.Function
-	
 	$worker:=This:C1470.worker
 	
+	var $caller : Integer
+	$caller:=This:C1470.window
+	
+	var $ƒ : 4D:C1709.Function
 	$ƒ:=Formula:C1597(CALL WORKER:C1389($worker; Formula:C1597(dataSet).source; New object:C1471(\
-		"caller"; Current form window:C827; \
 		"action"; "create"; \
 		"eraseIfExists"; True:C214; \
 		"project"; PROJECT; \
@@ -875,7 +879,10 @@ Function doGenerate($keyPathname : Text)
 		"accordingToTarget"; Feature.with("androidDataSet"); \
 		"coreDataSet"; Feature.disabled("androidDataSet"); \
 		"key"; $keyPathname; \
-		"dataSet"; True:C214)))
+		"dataSet"; True:C214; \
+		"caller"; $caller; \
+		"method"; Formula:C1597(editor_CALLBACK).source; \
+		"message"; "endOfDatasetGeneration")))
 	
 	This:C1470.postMessage(New object:C1471(\
 		"action"; "show"; \

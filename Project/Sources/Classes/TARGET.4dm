@@ -108,16 +108,19 @@ Function handleEvents($e : Object)
 								var $panelData : Object
 								$panelData:=panel("DATA")
 								
-								If ($o.before.ios#$o.after.ios)
+								If ($panelData#Null:C1517)
 									
-									OB REMOVE:C1226($panelData; "sqlite")
+									If ($o.before.ios#$o.after.ios)
+										
+										OB REMOVE:C1226($panelData; "sqlite")
+										
+									End if 
 									
-								End if 
-								
-								If ($o.before.android#$o.after.android)
-									
-									OB REMOVE:C1226($panelData; "datasetAndroid")
-									
+									If ($o.before.android#$o.after.android)
+										
+										OB REMOVE:C1226($panelData; "datasetAndroid")
+										
+									End if 
 								End if 
 							End if 
 						End if 

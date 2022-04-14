@@ -18,6 +18,8 @@ Class constructor
 		
 		This:C1470._dataSource:=PROJECT.dataSource
 		
+		This:C1470.dataLink:=Formula:C1597(panel("DATA"))
+		
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
@@ -174,7 +176,7 @@ Function update()
 		
 	Else 
 		
-		If (Bool:C1537(This:C1470._dataSource.doNotGenerateDataAtEachBuild))
+		If (This:C1470._dataSource.doNotGenerateDataAtEachBuild)
 			
 			This:C1470.generate.setHelpTip("clickToGenerateADataset")
 			
@@ -569,7 +571,6 @@ Function endOfDatasetGeneration($data : Object)
 		If ($data.data.success)
 			
 			This:C1470.update()
-			panel("DATA").update()
 			
 		Else 
 			
@@ -584,6 +585,8 @@ Function endOfDatasetGeneration($data : Object)
 		End if 
 	End if 
 	
+	//This.dataLink.call().updateTableListWithDataSizes()
+	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function updateDatasetComment()
 	
@@ -594,15 +597,15 @@ Function updateDatasetComment()
 	Else 
 		
 		var $data : cs:C1710.DATA
-		$data:=panel("DATA")
+		$data:=This:C1470.dataLink.call()
 		
 		If ($data=Null:C1517)
-			BEEP:C151
-			This:C1470.callMeBack("updateSourcePanel")
+			
+			//this.callMeBack()
 			
 		Else 
 			
-			If (Bool:C1537(Form:C1466.dataSource.doNotGenerateDataAtEachBuild))
+			If (This:C1470._dataSource.doNotGenerateDataAtEachBuild)
 				
 				If ($data.embeddedDataCount()=0)
 					
@@ -613,6 +616,11 @@ Function updateDatasetComment()
 				Else 
 					
 					Case of 
+							
+							//______________________________________________________
+						: ($data.tables.query("dumpSize = :1"; "@#NA@").length>0)
+							
+							This:C1470.lastGeneration.setTitle("dataMustBeRegeneratedTheStructureHasBeenModified")
 							
 							//______________________________________________________
 						: (PROJECT.allTargets())
@@ -682,6 +690,8 @@ Function updateDatasetComment()
 				This:C1470.lastGeneration.hide()
 				
 			End if 
+			
 		End if 
+		
 	End if 
 	

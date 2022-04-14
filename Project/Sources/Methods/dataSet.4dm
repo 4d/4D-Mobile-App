@@ -526,7 +526,8 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 						"dataSet"; $in.dataSet; \
 						"debug"; Bool:C1537($in.debug); \
 						"dataModel"; $dataModel; \
-						"caller"; $in.caller))
+						"caller"; $in.caller; \
+						"method"; $in.method))
 					
 					ob_error_combine($out; $out.catalog)
 					
@@ -546,10 +547,10 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 							"headers"; $headers; \
 							"output"; $out.path+Choose:C955(Bool:C1537($in.dataSet); $Txt_assets+"Data"; "JSON"); \
 							"dataSet"; $in.dataSet; \
-							"caller"; $in.caller; \
 							"debug"; Bool:C1537($in.debug); \
 							"dataModel"; $dataModel; \
-							"caller"; $in.caller))
+							"caller"; $in.caller; \
+							"method"; $in.method))
 						
 						ob_error_combine($out; $out.data)
 						
@@ -579,8 +580,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 							
 							If ($withUI)
 								
-								CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
-									"step"; "pictures"))
+								CALL FORM:C1391($in.caller; $in.method; "dump"; New object:C1471("step"; "pictures"))
 								
 							End if 
 							
@@ -593,7 +593,8 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 								"debug"; Bool:C1537($in.debug); \
 								"output"; $out.path+Choose:C955(Bool:C1537($in.dataSet); $Txt_assets+"Pictures"; "Resources"+Folder separator:K24:12+"Pictures"); \
 								"dataModel"; $dataModel; \
-								"caller"; $in.caller))
+								"caller"; $in.caller; \
+								"method"; $in.method))
 							
 							ob_error_combine($out; $out.picture)
 							
@@ -645,7 +646,8 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 								"action"; "coreData"; \
 								"removeAsset"; Feature.disabled("androidDataSet")/*False*/; \
 								"path"; $out.path; \
-								"caller"; $in.caller))
+								"caller"; $in.caller; \
+								"method"; $in.method))
 							
 							ob_error_combine($out; $out.coreDataSet)
 							
@@ -674,7 +676,6 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 									"path"; $out.path))
 								
 							End if 
-							
 						End if 
 						
 						// Generate a digest according to structure
@@ -711,8 +712,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 				If (Bool:C1537(Storage:C1525.flags.stopGeneration))
 					
 					// Display cancelled message
-					CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
-						"step"; "cancelledOperation"))
+					CALL FORM:C1391($in.caller; $in.method; "dump"; New object:C1471("step"; "cancelledOperation"))
 					
 					// Reset to allow user read the message
 					$delay.start:=Tickcount:C458
@@ -730,8 +730,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 				If (Not:C34(Bool:C1537($in.keepUI)))
 					
 					// Notify the end of the process
-					CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
-						"step"; "end"))
+					CALL FORM:C1391($in.caller; $in.method; "dump"; New object:C1471("step"; "end"))
 					
 				End if 
 			End if 
@@ -775,8 +774,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 				
 				If ($withUI)
 					
-					CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dump"; New object:C1471(\
-						"step"; "coreDataInjection"))
+					CALL FORM:C1391($in.caller; $in.method; "dump"; New object:C1471("step"; "coreDataInjection"))
 					
 				End if 
 				
@@ -923,9 +921,9 @@ End if
 
 // ----------------------------------------------------
 // Return
-If (Bool:C1537($in.caller)) && ($in.action="create")
+If ($in.action="create") & ($withUI)
 	
 	$out.caller:=$in.caller
-	CALL FORM:C1391($in.caller; "editor_CALLBACK"; "dataSet"; $out)
+	CALL FORM:C1391($in.caller; $in.method; $in.message; $out)
 	
 End if 

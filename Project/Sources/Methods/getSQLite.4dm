@@ -12,17 +12,33 @@ var $database : 4D:C1709.File
 var $scripts : 4D:C1709.Folder
 var $lep : cs:C1710.lep
 
-$reponse:=New object:C1471("database"; Null:C1517; "target"; String:C10($in.target))
+$reponse:=New object:C1471(\
+"database"; Null:C1517; \
+"target"; String:C10($in.target))
 
 $project:=$in.project
+
 Case of 
+		
+		//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	: ((String:C10($in.target)="ios") && (Is macOS:C1572))
+		
 		$database:=$project._folder.file("project.dataSet/Resources/Structures.sqlite")
+		
+		//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	: (String:C10($in.target)="android")
+		
 		$database:=$project._folder.file("project.dataSet/android/static.db")
+		
+		//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	Else 
-		$database:=New object:C1471("exists"; False:C215)
+		
+		$database:=New object:C1471(\
+			"exists"; False:C215)
+		
 		ASSERT:C1129(dev_Matrix; "Unknown target for data dump")
+		
+		//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 End case 
 
 If ($database.exists)
@@ -67,6 +83,7 @@ If ($database.exists)
 			$reponse.database:=$lep.outputStream
 			
 		End if 
+		
 	Else 
 		
 		$reponse.database:=cs:C1710.sqliteSizes.new().stats($database)

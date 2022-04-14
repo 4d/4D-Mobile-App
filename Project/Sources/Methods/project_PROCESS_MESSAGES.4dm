@@ -246,7 +246,7 @@ Case of
 		
 		//MARK:-SOURCE
 		//______________________________________________________
-	: ($selector="dataSet")  // Dataset generation result
+	: ($selector="endOfDatasetGeneration")
 		
 		If ($isProjectForm)
 			
@@ -312,7 +312,7 @@ Case of
 		End if 
 		
 		//______________________________________________________
-	: ($selector="getSQLiteResponse")  // Callback from getSQLite method to update the data panel
+	: ($selector="getSQLiteResponse")
 		
 		If ($isProjectForm)
 			
@@ -321,21 +321,67 @@ Case of
 		Else 
 			
 			$panel:=panel
+			
 			Case of 
+					
+					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 				: (String:C10($data.target)="ios")
+					
 					$panel.sqlite:=$data.database
+					
+					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 				: (String:C10($data.target)="android")
+					
 					$panel.datasetAndroid:=$data.database
+					
+					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 				Else 
+					
 					ASSERT:C1129(dev_Matrix; "Missing target")
+					
+					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 			End case 
 			
+			$panel.update()
+			//$panel.updateTableListWithDataSizes()
+			
+		End if 
+		
+		//______________________________________________________
+	: ($selector="endOfDatasetGeneration")
+		
+		If ($isProjectForm)
+			
+			EDITOR.sendMessageToPanel($ƒ.data; $selector; $data)
+			
+		Else 
+			
+			$panel:=panel
+			
+			Case of 
+					
+					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+				: (String:C10($data.target)="ios")
+					
+					$panel.sqlite:=$data.database
+					
+					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+				: (String:C10($data.target)="android")
+					
+					$panel.datasetAndroid:=$data.database
+					
+					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+				Else 
+					
+					ASSERT:C1129(dev_Matrix; "Missing target")
+					
+					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+			End case 
+			
+			//$panel.update()
 			$panel.updateTableListWithDataSizes()
 			
-			// Update the source panel
-			//CALL FORM($ƒ.window; Current method name; "updateSourcePanel")
-			
-			panel("SOURCE").updateDatasetComment()
+			EDITOR.sendMessageToPanel($ƒ.dataSource; "updateSourcePanel")
 			
 		End if 
 		
