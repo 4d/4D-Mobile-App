@@ -63,15 +63,6 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 				
 				$response.success:=($response.tests.length>0)
 				
-				If ($response.success)
-					
-					For each ($o; $response.tests)
-						
-						$o.call()
-						
-					End for each 
-				End if 
-				
 			Else 
 				
 				$response.success:=False:C215
