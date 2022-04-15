@@ -871,7 +871,7 @@ Function updateProject()
 	var $indx : Integer
 	var $o : Object
 	var $published : Collection
-	var $tableModel; $currentTable : cs:C1710.table
+	var $tableModel; $currentTable; $tableBackup : cs:C1710.table
 	var $field; $fieldModel : cs:C1710.field
 	var $structure : cs:C1710.ExposedStructure
 	var $form : Object
@@ -906,6 +906,7 @@ Function updateProject()
 	Else 
 		
 		$tableModel:=Form:C1466.dataModel[String:C10($currentTable.tableNumber)]
+		$tableBackup:=OB Copy:C1225($tableModel)
 		
 		If ($tableModel=Null:C1517)
 			
@@ -1024,6 +1025,15 @@ Function updateProject()
 			// UI - De-emphasize the table name
 			$indx:=Find in array:C230((OBJECT Get pointer:C1124(Object named:K67:5; $form.tableList))->; True:C214)
 			LISTBOX SET ROW FONT STYLE:C1268(*; $form.tableList; $indx; Plain:K14:1)
+			
+		End if 
+	End if 
+	
+	If (Feature.with("androidDataSet"))
+		
+		If (Not:C34(New collection:C1472($tableModel).equal(New collection:C1472($tableBackup))))
+			
+			EDITOR.deleteDBFiles()
 			
 		End if 
 	End if 

@@ -21,12 +21,12 @@ Class constructor
 	/// Design definition
 Function init()
 	
-	This:C1470.formObject("background")
+	//This.formObject("background")
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function onLoad()
 	
-	This:C1470.background.hide()
+	//This.background.hide()
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	// Update UI

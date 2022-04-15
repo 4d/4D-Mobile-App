@@ -165,7 +165,7 @@
 		"kind": "form"
 	},
 	"method": "panel_HANDLE_EVENT",
-	"geometryStamp": 58,
+	"geometryStamp": 67,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

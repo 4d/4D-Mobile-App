@@ -36,7 +36,7 @@ Function init()
 	// Help URL
 	This:C1470.help:=Get localized string:C991("help_source")
 	
-	// Data source buttons
+	// Data source radio buttons
 	This:C1470.button("local")
 	This:C1470.button("server")
 	
@@ -50,15 +50,28 @@ Function init()
 	This:C1470.stepper("serverInTest").addToGroup($group)
 	This:C1470.formObject("serverInTestLabel").addToGroup($group)
 	
+	// Option checkboxes
 	This:C1470.button("doNotExportImages")
 	This:C1470.button("doNotGenerate")
-	This:C1470.button("generate")
 	
-	$group:=This:C1470.group("dataInGeneration")
-	This:C1470.stepper("dataGeneration").addToGroup($group)
-	This:C1470.formObject("dataGenerationLabel").addToGroup($group)
-	
-	This:C1470.formObject("lastGeneration")
+	If (Feature.with("androidDataSet"))
+		
+		$group:=This:C1470.group("_generation")
+		This:C1470.button("generate").addToGroup($group)
+		This:C1470.formObject("lastGeneration").addToGroup($group)
+		
+	Else 
+		
+		This:C1470.button("generate")
+		
+		$group:=This:C1470.group("dataInGeneration")
+		This:C1470.stepper("dataGeneration").addToGroup($group)
+		This:C1470.formObject("dataGenerationLabel").addToGroup($group)
+		
+		This:C1470.group("_generation").addMember(This:C1470.generate)
+		This:C1470._generation.addMember($group)
+		
+	End if 
 	
 	This:C1470.testServer.isRunning:=False:C215  // A flag to know if the test server is running
 	This:C1470.generate.isRunning:=False:C215  // A flag to indicate if a data generation is in progress and prevent re-entry
@@ -154,10 +167,21 @@ Function onLoad()
 	
 	This:C1470.doNotExportImages.bestSize().setValue(This:C1470._dataSource.doNotExportImages)
 	This:C1470.doNotGenerate.bestSize().setValue(This:C1470._dataSource.doNotGenerateDataAtEachBuild)
-	This:C1470.generate.bestSize().disable()
 	
-	This:C1470.dataGenerationLabel.setTitle(Replace string:C233(Get localized string:C991("dataSetGeneration"); "\n\n"; "\r"))
-	This:C1470.dataInGeneration.distributeLeftToRight()
+	This:C1470._generation.distributeLeftToRight()
+	
+	If (Feature.with("androidDataSet"))
+		
+		This:C1470.lastGeneration.hide()
+		This:C1470.generate.disable()
+		
+	Else 
+		
+		This:C1470.generate.bestSize().disable()
+		This:C1470.dataGenerationLabel.setTitle(Replace string:C233(Get localized string:C991("dataSetGeneration"); "\n\n"; "\r"))
+		This:C1470.dataInGeneration.distributeLeftToRight()
+		
+	End if 
 	
 	This:C1470.checkingDatasourceConfiguration()
 	
@@ -531,6 +555,8 @@ Function doGenerate()
 		
 		This:C1470.generate.isRunning:=True:C214
 		
+		Logger.info("🏁  START DATA GENERATION")
+		
 		If (This:C1470.remote)
 			
 			// ***************************************************************
@@ -553,7 +579,6 @@ Function doGenerate()
 		End if 
 		
 		EDITOR.doGenerate($keyPathname)
-		This:C1470.refresh()
 		
 	Else 
 		
@@ -564,13 +589,16 @@ Function doGenerate()
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function endOfDatasetGeneration($data : Object)
 	
+	Logger.info("SOURCE endOfDatasetGeneration()")
+	
 	This:C1470.generate.isRunning:=False:C215
 	
 	If ($data.data#Null:C1517)
 		
 		If ($data.data.success)
 			
-			This:C1470.update()
+			// Update the data panel
+			This:C1470.dataLink.call().update()
 			
 		Else 
 			
@@ -583,27 +611,32 @@ Function endOfDatasetGeneration($data : Object)
 				
 			End if 
 		End if 
+		
+	Else 
+		
+		Logger.error("SOURCE endOfDatasetGeneration: Null data received")
+		
 	End if 
-	
-	//This.dataLink.call().updateTableListWithDataSizes()
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function updateDatasetComment()
 	
-	If (This:C1470.testServer.isRunning)
+	var $file : 4D:C1709.File
+	var $data : cs:C1710.DATA
+	
+	This:C1470.lastGeneration.hide()
+	
+	If (Not:C34(This:C1470.testServer.isRunning))
 		
-		This:C1470.lastGeneration.hide()
-		
-	Else 
-		
-		var $data : cs:C1710.DATA
 		$data:=This:C1470.dataLink.call()
 		
 		If ($data=Null:C1517)
 			
-			//this.callMeBack()
+			Logger.warning("SOURCE updateDatasetComment() delayed")
 			
 		Else 
+			
+			Logger.info("SOURCE updateDatasetComment()")
 			
 			If (This:C1470._dataSource.doNotGenerateDataAtEachBuild)
 				
@@ -618,80 +651,54 @@ Function updateDatasetComment()
 					Case of 
 							
 							//______________________________________________________
-						: ($data.tables.query("dumpSize = :1"; "@#NA@").length>0)
+						: ($data.tables.query("dumpSize = :1"; "#NA").length=$data.tables.length)\
+							 | ($data.tables.query("dumpSize = :1"; "#NA / #NA").length=$data.tables.length)
 							
-							This:C1470.lastGeneration.setTitle("dataMustBeRegeneratedTheStructureHasBeenModified")
-							
-							//______________________________________________________
-						: (PROJECT.allTargets())
-							
-							Case of 
-									
-									//=======================================
-								: ($data.datasetAndroid=Null:C1517)\
-									 & ($data.sqlite=Null:C1517)
-									
-									This:C1470.lastGeneration.setTitle("dataMustBeGenerated")
-									
-									//=======================================
-								: ($data.datasetAndroid=Null:C1517)
-									
-									This:C1470.lastGeneration.setTitle(EDITOR.str.localize("dataMustBeRegeneratedBuiltInDataForTargetIsMissing"; "Android"))
-									
-									//=======================================
-								: ($data.sqlite=Null:C1517)
-									
-									This:C1470.lastGeneration.setTitle(EDITOR.str.localize("dataMustBeRegeneratedBuiltInDataForTargetIsMissing"; "iOS"))
-									
-									//=======================================
-								Else 
-									
-									var $file : 4D:C1709.File
-									$file:=PROJECT._folder.file("project.dataSet/Resources/Structures.sqlite")
-									This:C1470.lastGeneration.setTitle(EDITOR.str.localize("lastGeneration"; New collection:C1472(String:C10($file.modificationDate); Time string:C180($file.modificationTime))))
-									
-									//=======================================
-							End case 
+							This:C1470.lastGeneration.setTitle("dataMustBeGenerated").setColors(EDITOR.errorColor)
 							
 							//______________________________________________________
-						: (PROJECT.android()) && ($data.datasetAndroid#Null:C1517)
+						: ($data.tables.query("dumpSize = :1"; "#NA").length>0)
 							
-							$file:=PROJECT._folder.file("project.dataSet/android/static.db")
-							This:C1470.lastGeneration.setTitle(EDITOR.str.localize("lastGeneration"; New collection:C1472(String:C10($file.modificationDate); Time string:C180($file.modificationTime))))
+							This:C1470.lastGeneration.setTitle("dataMustBeRegeneratedTheStructureHasBeenModified").setColors(EDITOR.warningColor)
 							
 							//______________________________________________________
-						: (PROJECT.iOS())
+						: ($data.tables.query("dumpSize = :1"; "#NA / #NA").length>0)
 							
-							If ($data.sqlite=Null:C1517)
+							This:C1470.lastGeneration.setTitle("dataMustBeRegeneratedTheStructureHasBeenModified").setColors(EDITOR.warningColor)
+							
+							//______________________________________________________
+						: ($data.tables.query("dumpSize = :1"; "@/ #NA").length>0)
+							
+							This:C1470.lastGeneration.setTitle(EDITOR.str.localize("dataMustBeRegeneratedBuiltInDataForTargetIsMissing"; "Android")).setColors(EDITOR.warningColor)
+							
+							//______________________________________________________
+						: ($data.tables.query("dumpSize = :1"; "#NA /@").length>0)
+							
+							This:C1470.lastGeneration.setTitle(EDITOR.str.localize("dataMustBeRegeneratedBuiltInDataForTargetIsMissing"; "iOS")).setColors(EDITOR.warningColor)
+							
+							//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+						Else 
+							
+							$file:=EDITOR.getDBFile()
+							
+							If ($file.exists)
 								
-								This:C1470.lastGeneration.setTitle("dataMustBeGenerated")
+								This:C1470.lastGeneration.setTitle(EDITOR.str.localize("lastGeneration"; New collection:C1472($file.modificationDate; Time string:C180($file.modificationTime))))
+								This:C1470.lastGeneration.setColors(EDITOR.comment)
 								
 							Else 
 								
-								$file:=PROJECT._folder.file("project.dataSet/Resources/Structures.sqlite")
-								This:C1470.lastGeneration.setTitle(EDITOR.str.localize("lastGeneration"; New collection:C1472(String:C10($file.modificationDate); Time string:C180($file.modificationTime))))
+								This:C1470.lastGeneration.setTitle("dataMustBeGenerated").setColors(EDITOR.errorColor)
 								
 							End if 
 							
 							//______________________________________________________
-						Else 
-							
-							This:C1470.lastGeneration.setTitle("dataMustBeRegeneratedTheStructureHasBeenModified")
-							
-							//______________________________________________________
 					End case 
 					
-					This:C1470.lastGeneration.show()
+					This:C1470.lastGeneration.show()  // .bestSize()
 					
 				End if 
-				
-			Else 
-				
-				This:C1470.lastGeneration.hide()
-				
 			End if 
-			
 		End if 
-		
 	End if 
 	

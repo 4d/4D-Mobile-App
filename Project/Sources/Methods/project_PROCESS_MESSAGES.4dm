@@ -58,7 +58,7 @@ End if
 // ----------------------------------------------------
 Case of 
 		
-		//MARK:-PICKER
+		//mark:-pickerShow
 		//______________________________________________________
 	: ($selector="pickerShow")  // Display the picture grid widget
 		
@@ -128,6 +128,7 @@ Case of
 		OBJECT SET VALUE:C1742("picker"; $data)
 		Form:C1466.$dialog.picker:=True:C214  // Picker opened
 		
+		//mark:pickerHide
 		//______________________________________________________
 	: ($selector="pickerHide")  // Hide the picture grid widget
 		
@@ -175,6 +176,7 @@ Case of
 			End case 
 		End if 
 		
+		//mark:pickerResume
 		//______________________________________________________
 	: ($selector="pickerResume")  // Return the picture grid widget result to the caller
 		
@@ -244,60 +246,7 @@ Case of
 			End case 
 		End if 
 		
-		//MARK:-SOURCE
-		//______________________________________________________
-	: ($selector="endOfDatasetGeneration")
-		
-		If ($isProjectForm)
-			
-			EDITOR.sendMessageToPanel($ƒ.dataSource; $selector; $data)
-			
-		Else 
-			
-			panel.endOfDatasetGeneration($data)
-			
-		End if 
-		
-		//______________________________________________________
-	: ($selector="updateSourcePanel")
-		
-		If ($isProjectForm)
-			
-			EDITOR.sendMessageToPanel($ƒ.dataSource; $selector)
-			
-		Else 
-			
-			panel.update()
-			
-		End if 
-		
-		//______________________________________________________
-	: ($selector="checkingServerConfiguration")
-		
-		If ($isProjectForm)
-			
-			EDITOR.sendMessageToPanel($ƒ.dataSource; $selector)
-			
-		Else 
-			
-			panel.checkingDatasourceConfiguration()
-			
-		End if 
-		
-		//______________________________________________________
-	: ($selector="checkingServerResponse")
-		
-		If ($isProjectForm)
-			
-			EDITOR.sendMessageToPanel($ƒ.dataSource; $selector; $data)
-			
-		Else 
-			
-			panel.checkingServerResponse($data)
-			
-		End if 
-		
-		//MARK:-DATA
+		//mark:-update_data
 		//______________________________________________________
 	: ($selector="update_data")
 		
@@ -307,10 +256,12 @@ Case of
 			
 		Else 
 			
+			Logger.info("Message update_data -> DATA")
 			panel.update()
 			
 		End if 
 		
+		//mark:getSQLiteResponse
 		//______________________________________________________
 	: ($selector="getSQLiteResponse")
 		
@@ -327,76 +278,102 @@ Case of
 					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 				: (String:C10($data.target)="ios")
 					
+					Logger.info("Message getSQLiteResponse(iOS) -> DATA")
 					$panel.sqlite:=$data.database
 					
 					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 				: (String:C10($data.target)="android")
 					
+					Logger.info("Message getSQLiteResponse(Android) -> DATA")
 					$panel.datasetAndroid:=$data.database
 					
 					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 				Else 
 					
+					Logger.error("Message -> DATA getSQLiteResponse = Missing target")
 					ASSERT:C1129(dev_Matrix; "Missing target")
 					
 					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 			End case 
 			
-			$panel.update()
-			//$panel.updateTableListWithDataSizes()
+			$panel.updateTableListWithDataSizes()
 			
 		End if 
 		
+		//mark:endOfDatasetGeneration
 		//______________________________________________________
 	: ($selector="endOfDatasetGeneration")
 		
 		If ($isProjectForm)
 			
-			EDITOR.sendMessageToPanel($ƒ.data; $selector; $data)
+			EDITOR.sendMessageToPanel($ƒ.dataSource; $selector; $data)
 			
 		Else 
 			
-			$panel:=panel
-			
-			Case of 
-					
-					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-				: (String:C10($data.target)="ios")
-					
-					$panel.sqlite:=$data.database
-					
-					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-				: (String:C10($data.target)="android")
-					
-					$panel.datasetAndroid:=$data.database
-					
-					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-				Else 
-					
-					ASSERT:C1129(dev_Matrix; "Missing target")
-					
-					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-			End case 
-			
-			//$panel.update()
-			$panel.updateTableListWithDataSizes()
-			
-			EDITOR.sendMessageToPanel($ƒ.dataSource; "updateSourcePanel")
+			Logger.info("🏁 END DATA GENERATION")
+			panel.endOfDatasetGeneration($data)
 			
 		End if 
 		
+		//mark:updateSourcePanel
+		//______________________________________________________
+	: ($selector="updateSourcePanel")
+		
+		If ($isProjectForm)
+			
+			EDITOR.sendMessageToPanel($ƒ.dataSource; $selector)
+			
+		Else 
+			
+			Logger.info("Message updateSourcePanel -> SOURCE")
+			panel.update()
+			
+		End if 
+		
+		//mark:checkingServerConfiguration
+		//______________________________________________________
+	: ($selector="checkingServerConfiguration")
+		
+		If ($isProjectForm)
+			
+			EDITOR.sendMessageToPanel($ƒ.dataSource; $selector)
+			
+		Else 
+			
+			Logger.info("Message checkingServerConfiguration -> SOURCE")
+			panel.checkingDatasourceConfiguration()
+			
+		End if 
+		
+		//mark:checkingServerResponse
+		//______________________________________________________
+	: ($selector="checkingServerResponse")
+		
+		If ($isProjectForm)
+			
+			EDITOR.sendMessageToPanel($ƒ.dataSource; $selector; $data)
+			
+		Else 
+			
+			Logger.info("Message checkingServerResponse -> SOURCE")
+			panel.checkingServerResponse($data)
+			
+		End if 
+		
+		//mark:-projectAudit
 		//______________________________________________________
 	: ($selector="projectAudit")  // Verify the project integrity
 		
 		PROJECT_Handler(New object:C1471("action"; $selector))
 		
+		//mark:projectFixErrors
 		//______________________________________________________
 	: ($selector="projectFixErrors")  // Fix the project errors
 		
 		$data.action:=$selector
 		PROJECT_Handler($data)
 		
-		//MARK:-MAIN
+		//mark:-mainMenu
 		//______________________________________________________
 	: ($selector="mainMenu")  // Update Main menu panel
 		
@@ -414,7 +391,7 @@ Case of
 			
 		End if 
 		
-		//MARK:-TABLE
+		//mark:-Update table properties panel
 		//______________________________________________________
 	: ($selector="tableProperties")  // Update table properties panel
 		
@@ -428,8 +405,9 @@ Case of
 			
 		End if 
 		
+		//mark:Preload the table icons
 		//______________________________________________________
-	: ($selector="tableIcons")  // Preload the table icons
+	: ($selector="tableIcons")
 		
 		If ($isProjectForm)
 			
@@ -441,9 +419,9 @@ Case of
 			
 		End if 
 		
-		//MARK:-FIELD
+		//mark:-Update field properties panel
 		//______________________________________________________
-	: ($selector="fieldProperties")  // Update field properties panel
+	: ($selector="fieldProperties")
 		
 		If ($isProjectForm)
 			
@@ -456,7 +434,7 @@ Case of
 			
 		End if 
 		
-		//MARK:-ACTIONS
+		//mark:-loadActionIcons
 		//______________________________________________________
 	: ($selector="loadActionIcons")  // Preload the actions icons
 		
@@ -471,7 +449,7 @@ Case of
 			End if 
 		End if 
 		
-		//MARK:-DEVELOPER
+		//mark:-teamId
 		//______________________________________________________
 	: ($selector="teamId")
 		

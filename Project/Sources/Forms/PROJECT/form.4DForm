@@ -46,16 +46,6 @@
 					],
 					"display": false
 				},
-				"background": {
-					"type": "rectangle",
-					"top": 0,
-					"left": 0,
-					"width": 970,
-					"height": 150,
-					"class": "background",
-					"sizingY": "fixed",
-					"visibility": "hidden"
-				},
 				"panel.1": {
 					"type": "subform",
 					"top": 29,
@@ -171,5 +161,5 @@
 		}
 	},
 	"method": "PROJECT_Handler",
-	"geometryStamp": 140
+	"geometryStamp": 141
 }

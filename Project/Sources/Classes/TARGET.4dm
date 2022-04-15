@@ -99,26 +99,27 @@ Function handleEvents($e : Object)
 						If (Feature.with("androidDataSet"))
 							
 							// Invalidate dataset if target was modified
+							// But don't delete the db files
 							$o.after:=New object:C1471(\
 								"ios"; PROJECT.iOS(); \
 								"android"; PROJECT.android())
 							
 							If (Not:C34(New collection:C1472($o.before).equal(New collection:C1472($o.after))))
 								
-								var $panelData : Object
-								$panelData:=panel("DATA")
+								var $data : cs:C1710.DATA
+								$data:=panel("DATA")
 								
-								If ($panelData#Null:C1517)
+								If ($data#Null:C1517)
 									
 									If ($o.before.ios#$o.after.ios)
 										
-										OB REMOVE:C1226($panelData; "sqlite")
+										OB REMOVE:C1226($data; "sqlite")
 										
 									End if 
 									
 									If ($o.before.android#$o.after.android)
 										
-										OB REMOVE:C1226($panelData; "datasetAndroid")
+										OB REMOVE:C1226($data; "datasetAndroid")
 										
 									End if 
 								End if 

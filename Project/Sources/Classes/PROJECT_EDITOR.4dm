@@ -354,6 +354,8 @@ Function updateColorScheme()
 		This:C1470.selectedFillColor:="darkgray"
 		This:C1470.unselectedFillColor:="black"
 		
+		This:C1470.comment:="white"
+		
 		This:C1470.errorColor:=0x00E61C70
 		This:C1470.errorRGB:="rgb(230,28,112)"
 		
@@ -388,6 +390,8 @@ Function updateColorScheme()
 		
 		This:C1470.selectedFillColor:="gray"
 		This:C1470.unselectedFillColor:="white"
+		
+		This:C1470.comment:="rgb(128,128,128)"
 		
 		This:C1470.errorColor:=0x00FF0000
 		This:C1470.errorRGB:="red"
@@ -1041,7 +1045,62 @@ Function sendMessageToPanel($panel : Text; $selector : Text; $data : Object)
 		
 	Else 
 		
-		Logger.info("panel "+$panel+" not displayed, message \""+$selector+"\" is ignored")
+		//Logger.info("panel "+$panel+" not displayed, message \""+$selector+"\" is ignored")
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function getDBFile($target : Text) : 4D:C1709.File
+	
+	Case of 
+			
+			//______________________________________________________
+		: ($target="android")
+			
+			return (PROJECT._folder.file("project.dataSet/android/static.db"))
+			
+			//______________________________________________________
+		: ($target="ios")
+			
+			return (PROJECT._folder.file("project.dataSet/Resources/Structures.sqlite"))
+			
+			//______________________________________________________
+		: (PROJECT.allTargets())
+			
+			// Use android because still relevant on Windows
+			return (PROJECT._folder.file("project.dataSet/android/static.db"))
+			
+			//______________________________________________________
+		: (PROJECT.iOS())
+			
+			return (PROJECT._folder.file("project.dataSet/Resources/Structures.sqlite"))
+			
+			//______________________________________________________
+		: (PROJECT.android())
+			
+			return (PROJECT._folder.file("project.dataSet/android/static.db"))
+			
+			//______________________________________________________
+	End case 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function deleteDBFiles()
+	
+	var $file : 4D:C1709.File
+	
+	$file:=This:C1470.getDBFile("ios")
+	
+	If ($file.exists)
+		
+		$file.delete()
+		
+	End if 
+	
+	$file:=This:C1470.getDBFile("android")
+	
+	If ($file.exists)
+		
+		$file.delete()
 		
 	End if 
 	

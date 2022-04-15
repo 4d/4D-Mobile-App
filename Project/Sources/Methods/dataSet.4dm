@@ -919,9 +919,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 	End case 
 End if 
 
-// ----------------------------------------------------
-// Return
-If ($in.action="create") & ($withUI)
+If ($withUI && ($in.action="create"))
 	
 	$out.caller:=$in.caller
 	CALL FORM:C1391($in.caller; $in.method; $in.message; $out)

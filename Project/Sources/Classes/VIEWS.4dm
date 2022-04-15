@@ -86,17 +86,7 @@ Function onLoad()
 Function _update()
 	
 	This:C1470.template:=Form:C1466.$dialog[Current form name:C1298].template
-	
-	If (This:C1470.template=Null:C1517)
-		
-		//This.manifest:=This.choose(This.template=Null; Formula(Null); Formula(This.template.manifest))
-		This:C1470.manifest:=Null:C1517
-		
-	Else 
-		
-		This:C1470.manifest:=This:C1470.template.manifest
-		
-	End if 
+	This:C1470.manifest:=This:C1470.manifest#Null:C1517 ? This:C1470.template.manifest : Null:C1517
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function setTab()
@@ -344,7 +334,7 @@ Function fieldList($table)->$result : Object
 						//……………………………………………………………………………………………………………
 						//FIXME: BUG EN COMPILÉ
 						//: ($field.kind="relatedEntity")\
-																																			 || (($field.kind="alias") && (Bool($field.isToOne)))
+																																										 || (($field.kind="alias") && (Bool($field.isToOne)))
 						
 					: ($field.kind="relatedEntity")\
 						 || (($field.kind="alias") & (Bool:C1537($field.isToOne)))

@@ -133,9 +133,6 @@ Function isOriginal() : Boolean
 	return (Not:C34(This:C1470.isAlias()))
 	
 /*======================================================================*/
-	//Function digest()->$digest : Text
-	
-/*======================================================================*/
 Function unSandBoxed()->$path : Text
 	
 	var $t : Text
@@ -183,20 +180,20 @@ Function setReference($reference)
 			Else 
 				
 				This:C1470.reference:=Null:C1517
-				ASSERT:C1129(False:C215; Current method name:C684+"__defaultReference(): The passed object must be a File/Folder object")
+				ASSERT:C1129(False:C215; Current method name:C684+".setReference(): The passed object must be a File/Folder object")
 				
 			End if 
 			
 			//______________________________________________________
 		: (Value type:C1509($reference)=Is text:K8:3)
 			
-			This:C1470.reference:=Folder:C1567($reference; Choose:C955(Position:C15(":"; $reference)>0; fk platform path:K87:2; fk posix path:K87:1))
+			This:C1470.reference:=Folder:C1567($reference; Position:C15(":"; $reference)>0 ? fk platform path:K87:2 : fk posix path:K87:1)
 			
 			//______________________________________________________
 		Else 
 			
 			This:C1470.reference:=Null:C1517
-			ASSERT:C1129(False:C215; Current method name:C684+"__defaultReference(): The reference must be a path or a File/Folder")
+			ASSERT:C1129(False:C215; Current method name:C684+".setReference(): The reference must be a pathname or a File/Folder")
 			
 			//______________________________________________________
 	End case 
@@ -221,18 +218,7 @@ Function setTarget($target; $reference)
 			
 			This:C1470.target:=$target
 			This:C1470.platformPath:=This:C1470.target.platformPath
-			
-			If (OB Instance of:C1731($target; 4D:C1709.File))
-				
-				// Unsandboxed file
-				This:C1470.path:=File:C1566(This:C1470.platformPath; fk platform path:K87:2).path
-				
-			Else 
-				
-				// Unsandboxed older
-				This:C1470.path:=Folder:C1567(This:C1470.platformPath; fk platform path:K87:2).path
-				
-			End if 
+			This:C1470.path:=(OB Instance of:C1731($target; 4D:C1709.File)) ? File:C1566(This:C1470.platformPath; fk platform path:K87:2).path : Folder:C1567(This:C1470.platformPath; fk platform path:K87:2).path
 			
 			If (Position:C15(This:C1470.reference.path; This:C1470.path)=1)
 				
@@ -260,6 +246,6 @@ Function setTarget($target; $reference)
 		
 	Else 
 		
-		ASSERT:C1129(False:C215; Current method name:C684+"setTarget(): Missing File/folder parameter")
+		ASSERT:C1129(False:C215; Current method name:C684+"setTarget(): Missing File/Folder parameter")
 		
 	End if 

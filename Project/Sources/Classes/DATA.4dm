@@ -203,6 +203,8 @@ Function onLoad()
 	/// Update of the user interface
 Function update($updateList : Boolean)
 	
+	Logger.info("DATA update")
+	
 	This:C1470.properties.enable(Not:C34(PROJECT.isLocked()))
 	
 	// Select the last used table or the first one if none
@@ -310,6 +312,8 @@ Function updateTableListWithDataSizes()
 	var $table : Object
 	var $file : 4D:C1709.File
 	
+	Logger.info("DATA updateTableListWithDataSizes()")
+	
 	For each ($table; This:C1470.tables)
 		
 		If (Length:C16(String:C10($table.filter.string))>0)
@@ -387,10 +391,10 @@ Function updateTableListWithDataSizes()
 	End for each 
 	
 	// Redraw
-	//This.list.touch()
+	This:C1470.list.touch()
 	
 	// Update source panel comments
-	//This.callMeBack("updateSourcePanel")
+	This:C1470.callMeBack("updateSourcePanel")
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function dumpTableSize($tableName : Text; $target : Text) : Text
