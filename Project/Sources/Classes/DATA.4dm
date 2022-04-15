@@ -241,11 +241,12 @@ Function update($updateList : Boolean)
 		This:C1470.properties.show()
 		This:C1470.method.hide()
 		This:C1470.queryWidget.show(This:C1470.filter.isFocused())
-		This:C1470.filter.setColors(Foreground color:K23:1)
+		This:C1470.filter.foregroundColor:=Foreground color:K23:1
 		
 		OB REMOVE:C1226(This:C1470.current; "user")
 		
-		This:C1470.result.setValue("").setColors(EDITOR.selectedFillColor).show()
+		This:C1470.result.setValue("").show()
+		This:C1470.result.foregroundColor:=EDITOR.selectedFillColor
 		
 		This:C1470.displayFilter(This:C1470.current)
 		
@@ -516,7 +517,7 @@ Function displayFilter($table : Object)
 					
 					If ($table.total>100000)
 						
-						This:C1470.result.setColors(EDITOR.warningColor)
+						This:C1470.result.foregroundColor:=EDITOR.warningColor
 						
 						If (Bool:C1537($table.embedded))
 							
@@ -546,16 +547,16 @@ Function displayFilter($table : Object)
 			//______________________________________________________
 		: (Length:C16(String:C10($filter.error))>0)  // With errors
 			
-			This:C1470.filter.setColors(EDITOR.errorColor)
-			This:C1470.result.setColors(EDITOR.errorColor)
+			This:C1470.filter.foregroundColor:=EDITOR.errorColor
+			This:C1470.result.foregroundColor:=EDITOR.errorColor
 			
 			$Comment:=EDITOR.str.localize("error:")+$filter.error
 			
 			//______________________________________________________
 		: (Not:C34(Bool:C1537($filter.validated)))  // Not validated
 			
-			This:C1470.filter.setColors(EDITOR.errorColor)
-			This:C1470.result.setColors(EDITOR.errorColor)
+			This:C1470.filter.foregroundColor:=EDITOR.errorColor
+			This:C1470.result.foregroundColor:=EDITOR.errorColor
 			
 			$Comment:=EDITOR.str.localize("notValidatedFilter")
 			
@@ -607,7 +608,7 @@ Function displayFilter($table : Object)
 							
 							If ($table.count>100000)
 								
-								This:C1470.result.setColors(EDITOR.warningColor)
+								This:C1470.result.foregroundColor:=EDITOR.warningColor
 								$Comment:=EDITOR.str.localize("largeNumberOfEntitiesToEmbed")
 								
 							Else 
@@ -620,7 +621,7 @@ Function displayFilter($table : Object)
 							
 							If ($table.count>100000)
 								
-								This:C1470.result.setColors(EDITOR.warningColor)
+								This:C1470.result.foregroundColor:=EDITOR.warningColor
 								$Comment:=EDITOR.str.localize("largeNumberOfEntitiesToLoad")
 								
 							Else 
@@ -649,14 +650,14 @@ Function tableListManager($e : Object)
 			//______________________________________________________
 		: ($e.code=On Getting Focus:K2:7)
 			
-			This:C1470.list.setColors(Foreground color:K23:1)
-			This:C1470.listBorder.setColors(EDITOR.selectedColor)
+			This:C1470.list.foregroundColor:=Foreground color:K23:1
+			This:C1470.listBorder.foregroundColor:=EDITOR.selectedColor
 			
 			//______________________________________________________
 		: ($e.code=On Losing Focus:K2:8)
 			
-			This:C1470.list.setColors(Foreground color:K23:1)
-			This:C1470.listBorder.setColors(EDITOR.backgroundUnselectedColor)
+			This:C1470.list.foregroundColor:=Foreground color:K23:1
+			This:C1470.listBorder.foregroundColor:=EDITOR.backgroundUnselectedColor
 			This:C1470.tables:=This:C1470.tables
 			
 			//______________________________________________________
@@ -706,7 +707,7 @@ Function filterManager($e : Object)
 			//______________________________________________________
 		: ($e.code=On Getting Focus:K2:7)
 			
-			This:C1470.filterBorder.setColors(EDITOR.selectedColor)
+			This:C1470.filterBorder.foregroundColor:=EDITOR.selectedColor
 			
 			If ($table.filter=Null:C1517)
 				
@@ -725,7 +726,7 @@ Function filterManager($e : Object)
 			//______________________________________________________
 		: ($e.code=On Losing Focus:K2:8)
 			
-			This:C1470.filterBorder.setColors(EDITOR.backgroundUnselectedColor)
+			This:C1470.filterBorder.foregroundColor:=EDITOR.backgroundUnselectedColor
 			
 			This:C1470.refresh()
 			

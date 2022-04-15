@@ -117,7 +117,7 @@ If ($e.objectName=Null:C1517)  // <== FORM METHOD
 			
 			// Footer
 			$o:=EDITOR.footer.updateCoordinates().coordinates
-			EDITOR.footer.setCoordinates($o.left; $o.top; $o.left+EDITOR.width(); $o.bottom)
+			EDITOR.footer.setCoordinates($o.left; $o.top; $o.left+EDITOR.width; $o.bottom)
 			
 			// Center message
 			EDITOR.message.alignHorizontally(Align center:K42:3)
@@ -131,7 +131,7 @@ If ($e.objectName=Null:C1517)  // <== FORM METHOD
 			
 			// Footer
 			$o:=EDITOR.footer.updateCoordinates().coordinates
-			EDITOR.footer.setCoordinates($o.left; $o.top; $o.left+EDITOR.width(); $o.bottom)
+			EDITOR.footer.setCoordinates($o.left; $o.top; $o.left+EDITOR.width; $o.bottom)
 			
 			//______________________________________________________
 		Else 

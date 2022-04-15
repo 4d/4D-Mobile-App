@@ -29,17 +29,77 @@ Function get colors() : Object
 		"altBackground"; $altBackground))
 	
 	// === === === === === === === === === === === === === === === === === === ===
+Function set colors($colors : Object)
+	
+	var $altBackground; $background; $foreground
+	
+	$foreground:=Value type:C1509($colors.foreground)=Is text:K8:3 ? $colors.foreground : Num:C11($colors.foreground)
+	
+	If ($colors.background#Null:C1517)
+		
+		$background:=Value type:C1509($colors.background)=Is text:K8:3 ? $colors.background : Num:C11($colors.background)
+		
+		If ($colors.altBackground#Null:C1517)
+			
+			$altBackground:=Value type:C1509($colors.altBackground)=Is text:K8:3 ? $colors.altBackground : Num:C11($colors.altBackground)
+			OBJECT SET RGB COLORS:C628(*; This:C1470.name; $foreground; $background; $altBackground)
+			
+		Else 
+			
+			OBJECT SET RGB COLORS:C628(*; This:C1470.name; $foreground; $background)
+			
+		End if 
+		
+	Else 
+		
+		OBJECT SET RGB COLORS:C628(*; This:C1470.name; $foreground)
+		
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === ===
 Function get foregroundColor() : Variant
 	
-	var $color
+	var $foreground
 	
-	OBJECT GET RGB COLORS:C1074(*; This:C1470.name; $color)
-	return ($color)
+	OBJECT GET RGB COLORS:C1074(*; This:C1470.name; $foreground)
+	return ($foreground)
 	
 	// === === === === === === === === === === === === === === === === === === ===
 Function set foregroundColor($color)
 	
 	OBJECT SET RGB COLORS:C628(*; This:C1470.name; $color)
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function get bacgroundColor() : Variant
+	
+	var $foreground; $background
+	
+	OBJECT GET RGB COLORS:C1074(*; This:C1470.name; $foreground; $background)
+	return ($background)
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function set bacgroundColor($color)
+	
+	var $foreground; $background; $altBackground
+	
+	OBJECT GET RGB COLORS:C1074(*; This:C1470.name; $foreground; $background)
+	OBJECT SET RGB COLORS:C628(*; This:C1470.name; $foreground; $color)
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function get altBackgroundColor() : Variant
+	
+	var $foreground; $background; $altBackground
+	
+	OBJECT GET RGB COLORS:C1074(*; This:C1470.name; $foreground; $background; $altBackground)
+	return ($altBackground)
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function set altBackgroundColor($color)
+	
+	var $foreground; $background; $altBackground
+	
+	OBJECT GET RGB COLORS:C1074(*; This:C1470.name; $foreground; $background; $altBackground)
+	OBJECT SET RGB COLORS:C628(*; This:C1470.name; $foreground; $background; $color)
 	
 	// === === === === === === === === === === === === === === === === === === ===
 Function get title() : Text
@@ -50,6 +110,105 @@ Function get title() : Text
 Function set title($title : Text)
 	
 	This:C1470.setTitle($title)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function get width() : Integer
+	
+	var $bottom; $left; $right; $top : Integer
+	OBJECT GET COORDINATES:C663(*; This:C1470.name; $left; $top; $right; $bottom)
+	return ($right-$left)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function set width($width : Integer)
+	
+	var $o : Object
+	$o:=This:C1470.getCoordinates()
+	$o.right:=$o.left+$width
+	
+	OBJECT SET COORDINATES:C1248(*; This:C1470.name; $o.left; $o.top; $o.right; $o.bottom)
+	This:C1470.updateCoordinates($o.left; $o.top; $o.right; $o.bottom)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function get height() : Integer
+	
+	var $bottom; $left; $right; $top : Integer
+	OBJECT GET COORDINATES:C663(*; This:C1470.name; $left; $top; $right; $bottom)
+	return ($bottom-$top)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function set height($height : Integer)
+	
+	var $o : Object
+	$o:=This:C1470.getCoordinates()
+	$o.bottom:=$o.top+$height
+	
+	OBJECT SET COORDINATES:C1248(*; This:C1470.name; $o.left; $o.top; $o.right; $o.bottom)
+	This:C1470.updateCoordinates($o.left; $o.top; $o.right; $o.bottom)
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function get dimensions() : Object
+	
+	var $o : Object
+	$o:=This:C1470.getCoordinates()
+	
+	return (New object:C1471(\
+		"width"; $o.right-$o.left; \
+		"height"; $o.bottom-$o.top))
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function set dimensions($dimensions : Object)
+	
+	var $o : Object
+	$o:=This:C1470.getCoordinates()
+	
+	If ($dimensions.width#Null:C1517)
+		
+		$o.right:=$o.left+Num:C11($dimensions.width)
+		
+	End if 
+	
+	If ($dimensions.height#Null:C1517)
+		
+		$o.bottom:=$o.top+Num:C11($dimensions.height)
+		
+	End if 
+	
+	OBJECT SET COORDINATES:C1248(*; This:C1470.name; $o.left; $o.top; $o.right; $o.bottom)
+	This:C1470.updateCoordinates($o.left; $o.top; $o.right; $o.bottom)
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function get windowCoordinates() : Object
+	
+	var $bottom; $left; $right; $top : Integer
+	
+	$left:=This:C1470.coordinates.left
+	$top:=This:C1470.coordinates.top
+	$right:=This:C1470.coordinates.right
+	$bottom:=This:C1470.coordinates.bottom
+	
+	CONVERT COORDINATES:C1365($left; $top; XY Current form:K27:5; XY Current window:K27:6)
+	CONVERT COORDINATES:C1365($right; $bottom; XY Current form:K27:5; XY Current window:K27:6)
+	
+	return (New object:C1471(\
+		"left"; $left; \
+		"top"; $top; \
+		"right"; $right; \
+		"bottom"; $bottom))
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function get visible() : Boolean
+	
+	return (OBJECT Get visible:C1075(*; This:C1470.name))
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function get hidden() : Boolean
+	
+	return (Not:C34(OBJECT Get visible:C1075(*; This:C1470.name)))
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function get enabled() : Boolean
+	
+	return (OBJECT Get enabled:C1079(*; This:C1470.name))
 	
 	// MARK:-
 	// === === === === === === === === === === === === === === === === === === ===
@@ -92,11 +251,6 @@ Function show($state : Boolean) : cs:C1710.formObject
 	return (This:C1470)
 	
 	// === === === === === === === === === === === === === === === === === === ===
-Function isVisible() : Boolean
-	
-	return (OBJECT Get visible:C1075(*; This:C1470.name))
-	
-	// === === === === === === === === === === === === === === === === === === ===
 Function enable($state : Boolean) : cs:C1710.formObject
 	
 	If (Count parameters:C259>=1)
@@ -117,11 +271,6 @@ Function disable() : cs:C1710.formObject
 	OBJECT SET ENABLED:C1123(*; This:C1470.name; False:C215)
 	
 	return (This:C1470)
-	
-	// === === === === === === === === === === === === === === === === === === ===
-Function isEnabled() : Boolean
-	
-	return (OBJECT Get enabled:C1079(*; This:C1470.name))
 	
 	// === === === === === === === === === === === === === === === === === === ===
 Function setTitle($title : Text) : cs:C1710.formObject
@@ -526,6 +675,7 @@ Function setWidth($width : Integer) : cs:C1710.formObject
 	
 	return (This:C1470)
 	
+	// === === === === === === === === === === === === === === === === === === ===
 Function setColors($foreground : Variant; $background : Variant; $altBackground : Variant) : cs:C1710.formObject
 	
 	Case of 
@@ -579,19 +729,6 @@ Function updateCoordinates($left : Integer; $top : Integer; $right : Integer; $b
 	End if 
 	
 	This:C1470.coordinates:=New object:C1471(\
-		"left"; $left; \
-		"top"; $top; \
-		"right"; $right; \
-		"bottom"; $bottom)
-	
-	This:C1470.dimensions:=New object:C1471(\
-		"width"; $right-$left; \
-		"height"; $bottom-$top)
-	
-	CONVERT COORDINATES:C1365($left; $top; XY Current form:K27:5; XY Current window:K27:6)
-	CONVERT COORDINATES:C1365($right; $bottom; XY Current form:K27:5; XY Current window:K27:6)
-	
-	This:C1470.windowCoordinates:=New object:C1471(\
 		"left"; $left; \
 		"top"; $top; \
 		"right"; $right; \

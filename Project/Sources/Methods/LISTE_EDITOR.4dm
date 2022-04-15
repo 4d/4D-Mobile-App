@@ -48,12 +48,12 @@ Else   // <== WIDGETS METHOD
 					//___________________________________________
 				: ($e.code=On Getting Focus:K2:7)
 					
-					$ƒ.choiceListBorder.setColors(EDITOR.selectedColor)
+					$ƒ.choiceListBorder.colors:=EDITOR.selectedColor
 					
 					//___________________________________________
 				: ($e.code=On Losing Focus:K2:8)
 					
-					$ƒ.choiceListBorder.setColors(EDITOR.backgroundUnselectedColor)
+					$ƒ.choiceListBorder.colors:=EDITOR.backgroundUnselectedColor
 					
 					//___________________________________________
 				: ($e.code=On Double Clicked:K2:5)
@@ -153,12 +153,12 @@ Else   // <== WIDGETS METHOD
 					//___________________________________________
 				: ($e.code=On Getting Focus:K2:7)
 					
-					$ƒ.datasourceBorder.setColors(EDITOR.selectedColor)
+					$ƒ.datasourceBorder.foregroundColor:=EDITOR.selectedColor
 					
 					//___________________________________________
 				: ($e.code=On Losing Focus:K2:8)
 					
-					$ƒ.datasourceBorder.setColors(EDITOR.backgroundUnselectedColor)
+					$ƒ.datasourceBorder.foregroundColor:=EDITOR.backgroundUnselectedColor
 					
 					//___________________________________________
 			End case 

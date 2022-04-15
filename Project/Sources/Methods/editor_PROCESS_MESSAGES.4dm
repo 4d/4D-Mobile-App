@@ -31,7 +31,7 @@ Case of
 				//======================================
 			: ($data.step="table")
 				
-				If (EDITOR.message.isVisible())
+				If (EDITOR.message.visible)
 					
 					If ($data.page=Null:C1517)
 						
@@ -67,7 +67,7 @@ Case of
 				//======================================
 			: ($data.step="asset")
 				
-				If (EDITOR.message.isVisible())
+				If (EDITOR.message.visible)
 					
 					If ($data.page=Null:C1517)
 						
@@ -102,7 +102,7 @@ Case of
 				//======================================
 			Else 
 				
-				If (EDITOR.message.isVisible())
+				If (EDITOR.message.visible)
 					
 					$o.additional:=EDITOR.str.localize($data.step)
 					EDITOR.message.setValue($o)
@@ -174,7 +174,7 @@ Case of
 		
 		If ($offset<0)  // Show
 			
-			If (EDITOR.footer.isHidden())
+			If (EDITOR.footer.hidden)
 				
 				EDITOR.project.resizeVertically($offset)
 				EDITOR.footer.show()
@@ -183,7 +183,7 @@ Case of
 			
 		Else   // Hide
 			
-			If (EDITOR.footer.isVisible())
+			If (EDITOR.footer.visible)
 				
 				EDITOR.project.resizeVertically($offset)
 				EDITOR.footer.hide()

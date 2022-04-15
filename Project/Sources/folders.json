@@ -82,8 +82,6 @@
 			"_o_plist",
 			"_o_rest_isValidField",
 			"_o_static",
-			"_o_storyboard",
-			"_o_storyboard_fix_id",
 			"_o_structure",
 			"_o_tempoFieldType",
 			"_o_thermometer",
@@ -93,7 +91,6 @@
 			"_o_widget",
 			"_o_xml",
 			"_o_xml_elementToObject",
-			"_o_xml_fileToObject",
 			"_o_xml_refToObject",
 			"OBSOLETE",
 			"TURN_AROUND_Field_name"

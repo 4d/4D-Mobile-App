@@ -23,7 +23,9 @@ If ($e.objectName=Null:C1517)  // <== FORM METHOD
 			
 			If (Form:C1466.bakgroundColor#Null:C1517)
 				
-				$ƒ.background.setColors($ƒ.background.getForegroundColor(); Form:C1466.bakgroundColor)
+				$ƒ.background.colors:=New object:C1471(\
+					"foreground"; $ƒ.bacgroundColor; \
+					"background"; Form:C1466.bakgroundColor)
 				
 			End if 
 			

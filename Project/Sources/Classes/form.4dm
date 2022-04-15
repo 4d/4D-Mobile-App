@@ -88,6 +88,34 @@ Function set callback($method : Text)
 	
 	This:C1470._callback:=$method
 	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function get width() : Integer
+	
+	var $height; $width : Integer
+	
+	OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $height)
+	return ($width)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function get height() : Integer
+	
+	var $height; $width : Integer
+	
+	OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $height)
+	return ($height)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function get dimensions() : Object
+	
+	var $height; $width : Integer
+	
+	OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $height)
+	
+	return (New object:C1471(\
+		"width"; $width; \
+		"height"; $height))
+	
+	
 	//MARK:-TO BE OVERWRITTEN IN THE SUBCLASS
 	//=== === === === === === === === === === === === === === === === === === === === === 
 Function init()
@@ -150,27 +178,6 @@ Function minimize()
 Function maximize()
 	
 	MAXIMIZE WINDOW:C453(This:C1470.window)
-	
-	//=== === === === === === === === === === === === === === === === === === === === === 
-Function dimensions() : Object
-	
-	var $height; $width : Integer
-	
-	OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $height)
-	
-	return (New object:C1471(\
-		"width"; $width; \
-		"height"; $height))
-	
-	//=== === === === === === === === === === === === === === === === === === === === === 
-Function height() : Integer
-	
-	return (This:C1470.dimensions().height)
-	
-	//=== === === === === === === === === === === === === === === === === === === === === 
-Function width() : Integer
-	
-	return (This:C1470.dimensions().width)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 	// 🛠 IN WORKS

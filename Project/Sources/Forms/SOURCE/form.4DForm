@@ -147,7 +147,8 @@
 					"fontStyle": "italic",
 					"class": "comment",
 					"text": "========== HELLO WORLD ==========",
-					"visibility": "hidden"
+					"visibility": "hidden",
+					"borderStyle": "none"
 				}
 			},
 			"entryOrder": [

@@ -354,7 +354,7 @@ Function updateColorScheme()
 		This:C1470.selectedFillColor:="darkgray"
 		This:C1470.unselectedFillColor:="black"
 		
-		This:C1470.comment:="white"
+		This:C1470.commentColor:="white"
 		
 		This:C1470.errorColor:=0x00E61C70
 		This:C1470.errorRGB:="rgb(230,28,112)"
@@ -391,7 +391,7 @@ Function updateColorScheme()
 		This:C1470.selectedFillColor:="gray"
 		This:C1470.unselectedFillColor:="white"
 		
-		This:C1470.comment:="rgb(128,128,128)"
+		This:C1470.commentColor:="rgb(128,128,128)"
 		
 		This:C1470.errorColor:=0x00FF0000
 		This:C1470.errorRGB:="red"
@@ -517,7 +517,7 @@ Function showTask()
 		If (This:C1470.countTasks()>0)
 			
 			This:C1470.currentTask:=This:C1470.str.localize(This:C1470.pendingTasks[0].name)
-			This:C1470.taskUI.show(This:C1470.message.isHidden())
+			This:C1470.taskUI.show(This:C1470.message.hidden)
 			
 		Else 
 			

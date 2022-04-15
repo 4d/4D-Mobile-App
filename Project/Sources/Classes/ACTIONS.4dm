@@ -93,8 +93,8 @@ Function handleEvents($e : Object)
 						//_____________________________________
 					: ($e.code=On Getting Focus:K2:7)
 						
-						This:C1470.actions.setColors(Foreground color:K23:1)
-						This:C1470.actionsBorder.setColors(EDITOR.selectedColor)
+						This:C1470.actions.foregroundColor:=Foreground color:K23:1
+						This:C1470.actionsBorder.foregroundColor:=EDITOR.selectedColor
 						
 						If (Bool:C1537(This:C1470.actions.inEdition))
 							
@@ -118,8 +118,8 @@ Function handleEvents($e : Object)
 							
 						Else 
 							
-							This:C1470.actions.setColors(Foreground color:K23:1)
-							This:C1470.actionsBorder.setColors(EDITOR.backgroundUnselectedColor)
+							This:C1470.actions.foregroundColor:=Foreground color:K23:1
+							This:C1470.actionsBorder.foregroundColor:=EDITOR.backgroundUnselectedColor
 							
 						End if 
 						
@@ -240,7 +240,7 @@ Function onLoad()
 		This:C1470.add.enable()
 		This:C1470.databaseMethod.enable()
 		
-		This:C1470.dropCursor.setColors(Highlight menu background color:K23:7)
+		This:C1470.dropCursor.foregroundColor:=Highlight menu background color:K23:7
 		
 		If ((Form:C1466.actions#Null:C1517) && (Form:C1466.actions.length>0))
 			

@@ -195,12 +195,6 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			$response:=TemplateInstanceFactory($parameters).run()
 			
 			//______________________________________________________
-		: ($entryPoint="storyboard")
-			
-			// if feature.with("templateClass") must not be tested anymore
-			EXECUTE METHOD:C1007(Formula:C1597(_o_storyboard).source; $response; $parameters)
-			
-			//______________________________________________________
 		: ($entryPoint="device")
 			
 			EXECUTE METHOD:C1007(Formula:C1597(_o_device).source; $response; $parameters)
@@ -320,7 +314,10 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			//________________________________________
 		: ($entryPoint="storyboard")
 			
-			EXECUTE METHOD:C1007(Formula:C1597(_o_storyboard).source; $response; $parameters)
+			//EXECUTE METHOD(Formula(_o_storyboard).source; $response; $parameters)
+			$response:=New object:C1471(\
+				"success"; False:C215; \
+				"error"; "OBSOLETE CALL SINCE 18R6")
 			
 			//________________________________________
 		: ($entryPoint="TEMPLATE")

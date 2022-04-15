@@ -177,14 +177,14 @@ Function handleEvents($e : Object)
 						//_____________________________________
 					: ($e.code=On Getting Focus:K2:7)
 						
-						This:C1470.parameters.setColors(Foreground color:K23:1)
-						This:C1470.parametersBorder.setColors(EDITOR.selectedColor)
+						This:C1470.parameters.foregroundColor:=Foreground color:K23:1
+						This:C1470.parametersBorder.foregroundColor:=EDITOR.selectedColor
 						
 						//_____________________________________
 					: ($e.code=On Losing Focus:K2:8)
 						
-						This:C1470.parameters.setColors(Foreground color:K23:1)
-						This:C1470.parametersBorder.setColors(EDITOR.backgroundUnselectedColor)
+						This:C1470.parameters.foregroundColor:=Foreground color:K23:1
+						This:C1470.parametersBorder.foregroundColor:=EDITOR.backgroundUnselectedColor
 						
 						//_____________________________________
 					: ($e.code=On Selection Change:K2:29)
@@ -341,7 +341,7 @@ Function onLoad()
 	// This trick remove the horizontal gap
 	This:C1470.parameters.setScrollbars(0; 2).updateDefinition()
 	
-	This:C1470.dropCursor.setColors(Highlight menu background color:K23:7)
+	This:C1470.dropCursor.foregroundColor:=Highlight menu background color:K23:7
 	
 	// Set the initial display
 	If (This:C1470.action#Null:C1517)
@@ -357,7 +357,7 @@ Function onLoad()
 		
 	End if 
 	
-	This:C1470.dropCursor.setColors(Highlight menu background color:K23:7)
+	This:C1470.dropCursor.foregroundColor:=Highlight menu background color:K23:7
 	
 	This:C1470.predicting.setWidth(This:C1470.paramNameBorder.dimensions.width)\
 		.setCoordinates(This:C1470.paramNameBorder.coordinates.left; This:C1470.paramNameBorder.coordinates.bottom-1)
@@ -516,13 +516,13 @@ Function predictingManager()
 				var $height : Integer
 				$height:=$o.ƒ.bestSize()
 				
-				If ((This:C1470.predicting.coordinates.top+$height)>This:C1470.dimensions().height)
+				If ((This:C1470.predicting.coordinates.top+$height)>This:C1470.height)
 					
-					$height:=This:C1470.dimensions().height-This:C1470.predicting.coordinates.top
+					$height:=This:C1470.height-This:C1470.predicting.coordinates.top
 					
 				End if 
 				
-				This:C1470.predicting.setHeight($height)
+				This:C1470.predicting.height:=$height
 				
 				//_________________________
 			: ($e.code=-3)  // Hide
@@ -612,7 +612,7 @@ Function update()
 	This:C1470.field.hide()
 	This:C1470.predicting.hide()
 	
-	If (This:C1470.namePopup.isVisible())
+	If (This:C1470.namePopup.visible)
 		
 		This:C1470.sortMenu.hide()
 		
@@ -1003,11 +1003,11 @@ Function dataSourceValue()->$value : Text
 	
 	If (This:C1470.sourceFolder($value; True:C214).exists)
 		
-		This:C1470.dataSource.setColors(Foreground color:K23:1)
+		This:C1470.dataSource.foregroundColor:=Foreground color:K23:1
 		
 	Else 
 		
-		This:C1470.dataSource.setColors(EDITOR.errorRGB)
+		This:C1470.dataSource.foregroundColor:=EDITOR.errorRGB
 		
 	End if 
 	
@@ -1800,8 +1800,8 @@ Function dataSourceMenuManager()
 Function editList()
 	
 	//$form:=New object(\
-																"static"; $static; \
-																"host"; This.path.hostInputControls(True))
+																						"static"; $static; \
+																						"host"; This.path.hostInputControls(True))
 	
 	//$form.folder:=This.path.hostInputControls()
 	//$manifest:=$form.folder.file("manifest.json")
@@ -2015,7 +2015,7 @@ Function nameManager($e : Object)
 				Case of 
 						
 						//_________________________
-					: (This:C1470.predicting.isHidden())
+					: (This:C1470.predicting.hidden)
 						
 						FILTER KEYSTROKE:C389("")
 						This:C1470.current.name:=$editedText
@@ -2290,7 +2290,7 @@ Function formatToolTip($format : Text)->$tip : Text
 		//SHARED.resources.formattersByName:=New object
 		//var $bind
 		//For each ($bind; SHARED.resources.fieldBindingTypes\
-																																																						.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
+																																																															.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
 		//SHARED.resources.formattersByName[$bind.name]:=$bind
 		//End for each
 		//End if

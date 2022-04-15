@@ -83,16 +83,16 @@ Function handleEvents($e : Object) : Integer
 						
 						This:C1470._updateButtons()
 						
-						This:C1470._dataModel.setColors(Foreground color:K23:1)
-						This:C1470["_dataModel.border"].setColors(EDITOR.selectedColor)
+						This:C1470._dataModel.foregroundColor:=Foreground color:K23:1
+						This:C1470["_dataModel.border"].foregroundColor:=EDITOR.selectedColor
 						
 						//______________________________________________________
 					: ($e.code=On Double Clicked:K2:5)
 						
 						This:C1470._add("one"; $e.row)
 						
-						This:C1470._dataModel.setColors(Foreground color:K23:1)
-						This:C1470["_dataModel.border"].setColors(EDITOR.selectedColor)
+						This:C1470._dataModel.foregroundColor:=Foreground color:K23:1
+						This:C1470["_dataModel.border"].foregroundColor:=EDITOR.selectedColor
 						
 						//______________________________________________________
 					: ($e.code=On Begin Drag Over:K2:44)
@@ -108,14 +108,14 @@ Function handleEvents($e : Object) : Integer
 						//______________________________________________________
 					: ($e.code=On Getting Focus:K2:7)
 						
-						This:C1470._dataModel.setColors(Foreground color:K23:1)
-						This:C1470["_dataModel.border"].setColors(EDITOR.selectedColor)
+						This:C1470._dataModel.foregroundColor:=Foreground color:K23:1
+						This:C1470["_dataModel.border"].foregroundColor:=EDITOR.selectedColor
 						
 						//______________________________________________________
 					: ($e.code=On Losing Focus:K2:8)
 						
-						This:C1470._dataModel.setColors(Foreground color:K23:1)
-						This:C1470["_dataModel.border"].setColors(EDITOR.backgroundUnselectedColor)
+						This:C1470._dataModel.foregroundColor:=Foreground color:K23:1
+						This:C1470["_dataModel.border"].foregroundColor:=EDITOR.backgroundUnselectedColor
 						
 						//______________________________________________________
 				End case 
@@ -279,8 +279,8 @@ Function mainHandleEvents($e : Object)->$allow : Integer
 			
 			This:C1470._updateButtons()
 			
-			This:C1470.displayed.setColors(Foreground color:K23:1)
-			This:C1470.displayedBorder.setColors(EDITOR.selectedColor)
+			This:C1470.displayed.foregroundColor:=Foreground color:K23:1
+			This:C1470.displayedBorder.foregroundColor:=EDITOR.selectedColor
 			
 			//______________________________________________________
 		: ($e.code=On Row Moved:K2:32)
@@ -301,14 +301,14 @@ Function mainHandleEvents($e : Object)->$allow : Integer
 			//______________________________________________________
 		: ($e.code=On Getting Focus:K2:7)
 			
-			This:C1470.displayed.setColors(Foreground color:K23:1)
-			This:C1470.displayedBorder.setColors(EDITOR.selectedColor)
+			This:C1470.displayed.foregroundColor:=Foreground color:K23:1
+			This:C1470.displayedBorder.foregroundColor:=EDITOR.selectedColor
 			
 			//______________________________________________________
 		: ($e.code=On Losing Focus:K2:8)
 			
-			This:C1470.displayed.setColors(Foreground color:K23:1)
-			This:C1470.displayedBorder.setColors(EDITOR.backgroundUnselectedColor)
+			This:C1470.displayed.foregroundColor:=Foreground color:K23:1
+			This:C1470.displayedBorder.foregroundColor:=EDITOR.backgroundUnselectedColor
 			
 			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		: (PROJECT.isLocked())
@@ -350,7 +350,7 @@ Function mainHandleEvents($e : Object)->$allow : Integer
 				// End if
 				// Else
 				//If ($o.src#$e.row)\
-															& ($e.row#($o.src+1))  // Not the same or the next one
+																				& ($e.row#($o.src+1))  // Not the same or the next one
 				//$o:=$me.rowCoordinates($e.row)
 				//$o.bottom:=$o.top
 				//$o.right:=$me.coordinates.right

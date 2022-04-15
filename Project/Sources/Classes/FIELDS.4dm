@@ -118,8 +118,8 @@ Function handleEvents($e : Object)
 						//_______________________________
 					: ($e.code=On Losing Focus:K2:8)
 						
-						This:C1470.fieldList.setColors(Foreground color:K23:1)
-						This:C1470.fieldListBorder.setColors(EDITOR.backgroundUnselectedColor)
+						This:C1470.fieldList.foregroundColor:=Foreground color:K23:1
+						This:C1470.fieldListBorder.foregroundColor:=EDITOR.backgroundUnselectedColor
 						
 						//_______________________________
 					: (PROJECT.isLocked())
@@ -1470,13 +1470,13 @@ Function _fieldListUI($selected : Boolean)
 	
 	If ($selected)
 		
-		This:C1470.fieldList.setColors(Foreground color:K23:1)
-		This:C1470.fieldListBorder.setColors(EDITOR.selectedColor)
+		This:C1470.fieldList.foregroundColor:=Foreground color:K23:1
+		This:C1470.fieldListBorder.foregroundColor:=EDITOR.selectedColor
 		
 	Else 
 		
-		This:C1470.fieldList.setColors(Foreground color:K23:1)
-		This:C1470.fieldListBorder.setColors(EDITOR.backgroundUnselectedColor)
+		This:C1470.fieldList.foregroundColor:=Foreground color:K23:1
+		This:C1470.fieldListBorder.foregroundColor:=EDITOR.backgroundUnselectedColor
 		
 	End if 
 	

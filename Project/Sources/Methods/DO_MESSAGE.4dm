@@ -22,7 +22,7 @@ $ƒ:=$data.ƒ
 
 
 // ----------------------------------------------------
-If $widget.isVisible()\
+If ($widget.visible)\
  & (New collection:C1472("alert"; "confirm").indexOf(String:C10($data.type))#-1)
 	
 	// A message is already displayed: wait

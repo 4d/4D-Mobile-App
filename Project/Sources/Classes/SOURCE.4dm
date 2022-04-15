@@ -654,27 +654,32 @@ Function updateDatasetComment()
 						: ($data.tables.query("dumpSize = :1"; "#NA").length=$data.tables.length)\
 							 | ($data.tables.query("dumpSize = :1"; "#NA / #NA").length=$data.tables.length)
 							
-							This:C1470.lastGeneration.setTitle("dataMustBeGenerated").setColors(EDITOR.errorColor)
+							This:C1470.lastGeneration.title:="dataMustBeGenerated"
+							This:C1470.lastGeneration.foregroundColor:=EDITOR.errorColor
 							
 							//______________________________________________________
 						: ($data.tables.query("dumpSize = :1"; "#NA").length>0)
 							
-							This:C1470.lastGeneration.setTitle("dataMustBeRegeneratedTheStructureHasBeenModified").setColors(EDITOR.warningColor)
+							This:C1470.lastGeneration.title:="dataMustBeRegeneratedTheStructureHasBeenModified"
+							This:C1470.lastGeneration.foregroundColor:=EDITOR.warningColor
 							
 							//______________________________________________________
 						: ($data.tables.query("dumpSize = :1"; "#NA / #NA").length>0)
 							
-							This:C1470.lastGeneration.setTitle("dataMustBeRegeneratedTheStructureHasBeenModified").setColors(EDITOR.warningColor)
+							This:C1470.lastGeneration.title:="dataMustBeRegeneratedTheStructureHasBeenModified"
+							This:C1470.lastGeneration.foregroundColor:=EDITOR.warningColor
 							
 							//______________________________________________________
 						: ($data.tables.query("dumpSize = :1"; "@/ #NA").length>0)
 							
-							This:C1470.lastGeneration.setTitle(EDITOR.str.localize("dataMustBeRegeneratedBuiltInDataForTargetIsMissing"; "Android")).setColors(EDITOR.warningColor)
+							This:C1470.lastGeneration.title:=EDITOR.str.localize("dataMustBeRegeneratedBuiltInDataForTargetIsMissing"; "Android")
+							This:C1470.lastGeneration.foregroundColor:=EDITOR.warningColor
 							
 							//______________________________________________________
 						: ($data.tables.query("dumpSize = :1"; "#NA /@").length>0)
 							
-							This:C1470.lastGeneration.setTitle(EDITOR.str.localize("dataMustBeRegeneratedBuiltInDataForTargetIsMissing"; "iOS")).setColors(EDITOR.warningColor)
+							This:C1470.lastGeneration.title:=EDITOR.str.localize("dataMustBeRegeneratedBuiltInDataForTargetIsMissing"; "iOS")
+							This:C1470.lastGeneration.foregroundColor:=EDITOR.warningColor
 							
 							//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 						Else 
@@ -683,19 +688,20 @@ Function updateDatasetComment()
 							
 							If ($file.exists)
 								
-								This:C1470.lastGeneration.setTitle(EDITOR.str.localize("lastGeneration"; New collection:C1472($file.modificationDate; Time string:C180($file.modificationTime))))
-								This:C1470.lastGeneration.setColors(EDITOR.comment)
+								This:C1470.lastGeneration.title:=EDITOR.str.localize("lastGeneration"; New collection:C1472($file.modificationDate; Time string:C180($file.modificationTime)))
+								This:C1470.lastGeneration.foregroundColor:=EDITOR.commentColor
 								
 							Else 
 								
-								This:C1470.lastGeneration.setTitle("dataMustBeGenerated").setColors(EDITOR.errorColor)
+								This:C1470.lastGeneration.title:="dataMustBeGenerated"
+								This:C1470.lastGeneration.foregroundColor:=EDITOR.errorColor
 								
 							End if 
 							
 							//______________________________________________________
 					End case 
 					
-					This:C1470.lastGeneration.show()  // .bestSize()
+					This:C1470.lastGeneration.show().bestSize(New object:C1471("maxWidth"; (This:C1470.width-35)-This:C1470.lastGeneration.coordinates.left))
 					
 				End if 
 			End if 

@@ -245,7 +245,7 @@ Case of
 			
 		End for each 
 		
-		$form.simulator.setColors("dimgray")
+		$form.simulator.foregroundColor:="dimgray"
 		
 		If (EDITOR.devices#Null:C1517) & (EDITOR.ios#Null:C1517) & (EDITOR.android#Null:C1517)
 			
@@ -355,14 +355,15 @@ Case of
 					
 					If (EDITOR.ios)
 						
-						$form.simulator.setTitle(PROJECT._device.name)
+						$form.simulator.title:=PROJECT._device.name
 						EDITOR.currentDevice:=$lastDevice
 						PROJECT._buildTarget:="ios"
 						PROJECT._simulator:=PROJECT._device.udid
 						
 					Else 
 						
-						$form.simulator.setTitle("select").setColors(EDITOR.errorRGB)
+						$form.simulator.title:="select"
+						$form.simulator.foregroundColor:=EDITOR.errorRGB
 						OB REMOVE:C1226(PROJECT; "_buildTarget")
 						OB REMOVE:C1226(PROJECT; "_simulator")
 						
@@ -381,14 +382,15 @@ Case of
 						
 						If (EDITOR.android)
 							
-							$form.simulator.setTitle(PROJECT._device.name)
+							$form.simulator.title:=PROJECT._device.name
 							EDITOR.currentDevice:=$lastDevice
 							PROJECT._buildTarget:="android"
 							PROJECT._simulator:=PROJECT._device.udid
 							
 						Else 
 							
-							$form.simulator.setTitle("select").setColors(EDITOR.errorRGB)
+							$form.simulator.title:="select"
+							$form.simulator.foregroundColor:=EDITOR.errorRGB
 							OB REMOVE:C1226(PROJECT; "_buildTarget")
 							OB REMOVE:C1226(PROJECT; "_simulator")
 							
@@ -396,7 +398,7 @@ Case of
 						
 					Else 
 						
-						$form.simulator.setTitle("unknown")
+						$form.simulator.title:="unknown"
 						OB REMOVE:C1226(PROJECT; "_buildTarget")
 						OB REMOVE:C1226(PROJECT; "_simulator")
 						

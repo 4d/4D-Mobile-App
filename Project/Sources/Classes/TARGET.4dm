@@ -134,13 +134,13 @@ Function handleEvents($e : Object)
 					: ($e.code=On Mouse Enter:K2:33)
 						
 						// Highlights
-						This:C1470[$e.objectName].setColors(EDITOR.selectedColor)
+						This:C1470[$e.objectName].foregroundColor:=EDITOR.selectedColor
 						
 						//______________________________________________________
 					: ($e.code=On Mouse Leave:K2:34)
 						
 						// Restore
-						This:C1470[$e.objectName].setColors(Foreground color:K23:1)
+						This:C1470[$e.objectName].foregroundColor:=Foreground color:K23:1
 						
 						//______________________________________________________
 				End case 

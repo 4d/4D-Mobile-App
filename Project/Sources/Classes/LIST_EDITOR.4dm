@@ -90,9 +90,9 @@ Function onLoad()
 	
 	This:C1470.appendEvents(On Double Clicked:K2:5; On Selection Change:K2:29)  // Allow double click to edit list items
 	
-	This:C1470.dropCursor.setColors(Highlight menu background color:K23:7)
+	This:C1470.dropCursor.foregroundColor:=Highlight menu background color:K23:7
 	
-	This:C1470.controlAlreadyExists.setColors(EDITOR.errorRGB)
+	This:C1470.controlAlreadyExists.foregroundColor:=EDITOR.errorRGB
 	
 	// Select the format (push if not defined)
 	Form:C1466.format:=Form:C1466.format#Null:C1517 ? Form:C1466.format : "push"
@@ -137,7 +137,7 @@ Function update()
 	ASSERT:C1129(Not:C34(Shift down:C543))
 	
 	// Name is mandatory
-	This:C1470.nameEdge.setColors((This:C1470.name.getValue()="") ? EDITOR.errorRGB : EDITOR.backgroundUnselectedColor)
+	This:C1470.nameEdge.foregroundColor:=(This:C1470.name.getValue()="") ? EDITOR.errorRGB : EDITOR.backgroundUnselectedColor
 	This:C1470.revealFolder.show((Form:C1466.dial.folder#Null:C1517) && (Form:C1466.dial.folder.exists))
 	
 	Form:C1466.binding:=This:C1470.image.getValue()
@@ -445,7 +445,7 @@ Function doStaticDragAndDrop()->$allowed : Integer
 	//End if 
 	//Else 
 	//If ($o.src#$e.row)\
-																								 & ($e.row#($o.src+1))  // Not the same or the next one
+																										 & ($e.row#($o.src+1))  // Not the same or the next one
 	//$allowed:=0
 	//$o:=$list.rowCoordinates($e.row)
 	//$o.bottom:=$o.top
