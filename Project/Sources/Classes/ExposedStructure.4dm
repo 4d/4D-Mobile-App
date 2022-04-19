@@ -633,7 +633,6 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 						// MARK: TEMPO
 						$related.valueType:=$related.type
 						
-						$related.path:=$related.name
 						$related.type:=This:C1470.__fielddType($related.fieldType)
 						$related.relatedTableNumber:=$result.relatedTableNumber
 						
