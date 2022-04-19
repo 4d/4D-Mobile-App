@@ -945,16 +945,6 @@ Function getPasteboard($uri : Text)->$value
 	End if 
 	
 	//MARK:-[PRIVATE]
-	//=== === === === === === === === === === === === === === === === === === === === === 
-	//Function _cursor($id : Integer; $diplay : Boolean)
-	//If (Count parameters=0)
-	//SET CURSOR
-	//Else 
-	//If (Count parameters<2 ? True : $display)
-	//SET CURSOR($id)
-	//End if 
-	//End if
-	
 Function _instantiate($class : Text; $key : Text; $name : Text)
 	
 	If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
@@ -1011,4 +1001,13 @@ Function _setEvents($events; $mode : Integer)
 	
 	OBJECT SET EVENTS:C1239(*; ""; $codes; $mode)
 	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+	//Function _cursor($id : Integer; $diplay : Boolean)
+	//If (Count parameters=0)
+	//SET CURSOR
+	//Else 
+	//If (Count parameters<2 ? True : $display)
+	//SET CURSOR($id)
+	//End if 
+	//End if
 	

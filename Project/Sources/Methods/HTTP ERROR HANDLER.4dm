@@ -1,2 +1,2 @@
-//%attributes = {"invisible":true}
+//%attributes = {"invisible":true,"preemptive":"capable"}
 httpError:=ERROR

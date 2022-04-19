@@ -142,6 +142,18 @@
 			"vdtool"
 		]
 	},
+	"[BROWSER]": {
+		"methods": [
+			"BROWSER_CONTAINER",
+			"browser_DOWNLOAD",
+			"BROWSER_Handler",
+			"BROWSER_OBJECTS_HANDLER",
+			"COMPILER_BROWSER"
+		],
+		"forms": [
+			"BROWSER"
+		]
+	},
 	"[COMPONENT ]": {
 		"methods": [
 			"COMPILER_COMPONENT",
@@ -200,8 +212,13 @@
 	},
 	"[COMPONENT UI]": {
 		"groups": [
+			"[BROWSER]",
 			"[EDITOR]",
+			"[FOOTER]",
+			"[LISTE_EDITOR]",
 			"[PROJECT]",
+			"[RIBON]",
+			"[WIZARD]",
 			"00] TARGET",
 			"01] ORGANIZATION",
 			"02] PRODUCT",
@@ -217,13 +234,8 @@
 			"12] VIEWS",
 			"13] SERVER",
 			"14] FEATURES",
-			"BROWSER",
-			"FOOTER",
-			"LISTE_EDITOR",
 			"panel",
-			"RIBON",
-			"widgets",
-			"WIZARD"
+			"widgets"
 		],
 		"methods": [
 			"BUILD"
@@ -253,6 +265,11 @@
 		],
 		"classes": [
 			"PROJECT_EDITOR"
+		]
+	},
+	"[FOOTER]": {
+		"forms": [
+			"FOOTER"
 		]
 	},
 	"[ios]": {
@@ -286,6 +303,17 @@
 			"Xcode"
 		]
 	},
+	"[LISTE_EDITOR]": {
+		"methods": [
+			"LISTE_EDITOR"
+		],
+		"forms": [
+			"LISTE_EDITOR"
+		],
+		"classes": [
+			"LIST_EDITOR"
+		]
+	},
 	"[PROJECT]": {
 		"methods": [
 			"COMPILER_project",
@@ -307,6 +335,84 @@
 		],
 		"classes": [
 			"PROJECT_FORM"
+		]
+	},
+	"[RIBON]": {
+		"methods": [
+			"RIBBON",
+			"RIBBON_BUILD",
+			"RIBBON_HANDLER",
+			"RIBBON_PROJECT",
+			"RIBBON_SIMULATOR"
+		],
+		"forms": [
+			"RIBBON"
+		]
+	},
+	"[TOOLS]": {
+		"methods": [
+			"COMPILER_http",
+			"HTTP ERROR HANDLER"
+		],
+		"classes": [
+			"bmp",
+			"color",
+			"database",
+			"debugLog",
+			"doc",
+			"env",
+			"error",
+			"feature",
+			"http",
+			"lep",
+			"logger",
+			"menu",
+			"ob",
+			"plist",
+			"preferences",
+			"process",
+			"progress",
+			"regex",
+			"str",
+			"svg",
+			"tips",
+			"tools",
+			"xml"
+		]
+	},
+	"[UI]": {
+		"methods": [
+			"form_spreadToSubforms"
+		],
+		"classes": [
+			"attention",
+			"button",
+			"form",
+			"formObject",
+			"group",
+			"input",
+			"listbox",
+			"picture",
+			"scrollable",
+			"selector",
+			"stepper",
+			"subform",
+			"thermometer",
+			"webArea",
+			"widget"
+		]
+	},
+	"[WIZARD]": {
+		"methods": [
+			"WIZARD_HANDLE_EVENTS"
+		],
+		"forms": [
+			"NEW_PROJECT",
+			"WIZARD_NEW_PROJECT",
+			"WIZARD_OPEN_PROJECT"
+		],
+		"classes": [
+			"WIZARD"
 		]
 	},
 	"00] TARGET": {
@@ -477,53 +583,13 @@
 			"unitTestSuites"
 		]
 	},
-	"BROWSER": {
-		"methods": [
-			"BROWSER_CONTAINER",
-			"browser_DOWNLOAD",
-			"BROWSER_Handler",
-			"BROWSER_OBJECTS_HANDLER",
-			"COMPILER_BROWSER"
-		],
-		"forms": [
-			"BROWSER"
-		]
-	},
 	"classes": {
 		"groups": [
-			"form",
+			"[TOOLS]",
+			"[UI]",
 			"HTUs",
 			"Pseudo-Class",
 			"Tests"
-		],
-		"methods": [
-			"COMPILER__",
-			"HTTP ERROR HANDLER"
-		],
-		"classes": [
-			"bmp",
-			"color",
-			"database",
-			"debugLog",
-			"doc",
-			"env",
-			"error",
-			"feature",
-			"http",
-			"lep",
-			"logger",
-			"menu",
-			"ob",
-			"plist",
-			"preferences",
-			"process",
-			"progress",
-			"regex",
-			"str",
-			"svg",
-			"tips",
-			"tools",
-			"xml"
 		]
 	},
 	"col": {
@@ -638,33 +704,6 @@
 			"test_err"
 		]
 	},
-	"FOOTER": {
-		"forms": [
-			"FOOTER"
-		]
-	},
-	"form": {
-		"methods": [
-			"form_spreadToSubforms"
-		],
-		"classes": [
-			"attention",
-			"button",
-			"form",
-			"formObject",
-			"group",
-			"input",
-			"listbox",
-			"picture",
-			"scrollable",
-			"selector",
-			"stepper",
-			"subform",
-			"thermometer",
-			"webArea",
-			"widget"
-		]
-	},
 	"HTUs": {
 		"methods": [
 			"HTU_progress",
@@ -699,17 +738,6 @@
 			"killWorker",
 			"LOG_EVENT",
 			"noError"
-		]
-	},
-	"LISTE_EDITOR": {
-		"methods": [
-			"LISTE_EDITOR"
-		],
-		"forms": [
-			"LISTE_EDITOR"
-		],
-		"classes": [
-			"LIST_EDITOR"
 		]
 	},
 	"Localization": {
@@ -861,18 +889,6 @@
 			"Rgx_SubstituteText"
 		]
 	},
-	"RIBON": {
-		"methods": [
-			"RIBBON",
-			"RIBBON_BUILD",
-			"RIBBON_HANDLER",
-			"RIBBON_PROJECT",
-			"RIBBON_SIMULATOR"
-		],
-		"forms": [
-			"RIBBON"
-		]
-	},
 	"Search": {
 		"methods": [
 			"COMPILER_search",
@@ -973,19 +989,6 @@
 		],
 		"forms": [
 			"NO_DATAMODEL"
-		]
-	},
-	"WIZARD": {
-		"methods": [
-			"WIZARD_HANDLE_EVENTS"
-		],
-		"forms": [
-			"NEW_PROJECT",
-			"WIZARD_NEW_PROJECT",
-			"WIZARD_OPEN_PROJECT"
-		],
-		"classes": [
-			"WIZARD"
 		]
 	},
 	"xml (thread-safe)": {

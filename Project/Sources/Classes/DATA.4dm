@@ -354,7 +354,7 @@ Function updateTableListWithDataSizes()
 				
 				If (This:C1470.sqlite#Null:C1517)
 					
-					$table.dumpSize:=This:C1470.dumpTableSize($tableName; "ios")
+					$table.dumpSize:=This:C1470.dumpTableSize($table.name)
 					
 				Else 
 					

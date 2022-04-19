@@ -726,7 +726,7 @@ Function getFieldList()->$result : Object
 										
 										This:C1470._labels($subfield; $subKey)
 										
-										$result.names.push($subfield.name)
+										$result.names.push($subKey)
 										$result.paths.push($key+"."+$subfield.path)
 										$result.labels.push($subfield.label)
 										$result.shortLabels.push($subfield.shortLabel)

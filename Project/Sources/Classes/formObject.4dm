@@ -231,11 +231,6 @@ Function hide() : cs:C1710.formObject
 	return (This:C1470)
 	
 	// === === === === === === === === === === === === === === === === === === ===
-Function isHidden() : Boolean
-	
-	return (Not:C34(OBJECT Get visible:C1075(*; This:C1470.name)))
-	
-	// === === === === === === === === === === === === === === === === === === ===
 Function show($state : Boolean) : cs:C1710.formObject
 	
 	If (Count parameters:C259>=1)

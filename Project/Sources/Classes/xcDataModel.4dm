@@ -141,7 +141,7 @@ Function _writeToFile($destination : Variant; $Dom_model : Text)->$out : Object
 	
 	DOM EXPORT TO FILE:C862($Dom_model; $file.platformPath)
 	
-	$out:=New object:C1471("success"; OK; "path"; $file.platformPath)
+	$out:=New object:C1471("success"; Bool:C1537(OK); "path"; $file.platformPath)
 	
 	// MARK: - creations
 	

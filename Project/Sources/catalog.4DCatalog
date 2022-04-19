@@ -342,6 +342,12 @@
 		<field name="__TableName" uuid="6CD75A00BCAA4E91BA70C4E619781205" type="10" limiting_length="255" id="4"/>
 		<field name="__PrimaryKey" uuid="B3461033F9194A89B68AD2F899503BBE" type="10" limiting_length="255" id="5"/>
 		<primary_key field_name="ID" field_uuid="11AD9E75F4C24FD5873E8D9F23ADAFCE"/>
+		<table_extra>
+			<editor_table_info fields_ordering="1" displayable_fields_count="6">
+				<color red="255" green="255" blue="255" alpha="0"/>
+				<coordinates left="1040" top="40" width="120" height="167.33203125"/>
+			</editor_table_info>
+		</table_extra>
 	</table>
 	<table name="Offices" uuid="9530473090624E829F824BFFA4F81FC0" id="19">
 		<field name="ID" uuid="87AFAE6B7DD645E283CC7951EF00451E" type="4" unique="true" autosequence="true" not_null="true" id="1"/>

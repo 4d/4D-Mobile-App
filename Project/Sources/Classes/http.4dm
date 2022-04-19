@@ -1,7 +1,7 @@
 //=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor($url)
 	
-	This:C1470.onErrorCallMethod:="HTTP ERROR HANDLER"
+	This:C1470.onErrorCallMethod:=Formula:C1597(HTTP ERROR HANDLER).source
 	This:C1470._trials:=0
 	
 	If (Count parameters:C259>=1)
@@ -444,8 +444,8 @@ Function get()->$this : cs:C1710.http
 		//If (This.success)
 		
 		//ARRAY TO COLLECTION(This.headers; \
-												$headerNames; "name"; \
-												$headerValues; "value")
+															$headerNames; "name"; \
+															$headerValues; "value")
 		
 		//This._response($t; $x)
 		
