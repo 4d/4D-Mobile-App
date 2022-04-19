@@ -502,6 +502,7 @@ Function fieldList()
 	/// Displays related field picker
 Function doFieldPicker()->$publishedNumber : Integer
 	
+	var $t : Text
 	var $context; $currentDataModel; $o; $relatedCatalog; $relatedDataModel; $tableDataModel : Object
 	var $target : Object
 	var $path : Collection
@@ -540,17 +541,19 @@ Function doFieldPicker()->$publishedNumber : Integer
 			// Recover the publication status
 			$path:=Split string:C1554(($field.label=Null:C1517) ? $field.path : $field.label; ".")
 			
-			var $t : Text
-			$t:=Choose:C955($field.kind="storage"; String:C10($field.fieldNumber); $field.name)
+			$t:=$field.kind="storage" ? String:C10($field.fieldNumber) : $field.name
 			
-			//If ($field.kind="alias")
-			//$x:=PROJECT._pathTarget($currentTable.name; $field; True)
-			//$y:=cs.ExposedStructure.new().aliasTarget($currentTable.name; $field; True)
-			//End if
-			
-			If ($field.kind#"alias") && ($path.length>1)
+			If ($path.length>1)
 				
-				$field.published:=($relatedDataModel[$path[0]][$t]#Null:C1517)
+				If ($field.kind="alias")
+					
+					$field.published:=($relatedDataModel[$path[0]][$path[1]]#Null:C1517)
+					
+				Else 
+					
+					$field.published:=($relatedDataModel[$path[0]][$t]#Null:C1517)
+					
+				End if 
 				
 			Else 
 				
@@ -573,10 +576,10 @@ Function doFieldPicker()->$publishedNumber : Integer
 		$relatedCatalog.window:=Open form window:C675("RELATED"; Sheet form window:K39:12; *)
 		DIALOG:C40("RELATED"; $relatedCatalog)
 		
-		If ($relatedCatalog.success)  // Dialog was validated
-			
-			// The number of published
-			$publishedNumber:=$relatedCatalog.fields.query("published=true").length
+		// The number of published
+		$publishedNumber:=$relatedCatalog.fields.query("published=true").length
+		
+		If ($relatedCatalog.success)
 			
 			If ($publishedNumber>0)  // At least one related field is published
 				
@@ -699,7 +702,7 @@ Function doFieldPicker()->$publishedNumber : Integer
 										"shortLabel"; PROJECT.shortLabel($field.name))
 									
 									// MARK:#TEMPO
-									//TODO:Remove computed
+									// TODO:Remove computed
 									$o.computed:=True:C214
 									
 									$target[$path[0]][$field.name]:=$o
@@ -835,13 +838,6 @@ Function doFieldPicker()->$publishedNumber : Integer
 					End if 
 				End for each 
 				
-				// Checkbox value according to the count
-				If ($publishedNumber>0)
-					
-					$publishedNumber:=1+Num:C11($publishedNumber#$relatedCatalog.fields.length)
-					
-				End if 
-				
 			Else 
 				
 				OB REMOVE:C1226($tableDataModel; $context.fieldName)
@@ -854,6 +850,18 @@ Function doFieldPicker()->$publishedNumber : Integer
 				PROJECT.removeTable($currentTable)
 				
 			End if 
+			
+		Else 
+			
+			// User has cancelled
+			
+		End if 
+		
+		// Checkbox value according to the count
+		If ($publishedNumber>0)
+			
+			$publishedNumber:=1+Num:C11($publishedNumber#$relatedCatalog.fields.length)
+			
 		End if 
 		
 	Else 
