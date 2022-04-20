@@ -235,20 +235,23 @@ Function restoreContext()
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function update()
 	
-	var $tableID : Text
+	var $item : Variant  // table id or other items
 	
 	Form:C1466.main.order:=Form:C1466.main.order || New collection:C1472
 	
 	// Selected tables
 	This:C1470.main:=New collection:C1472
 	
-	For each ($tableID; Form:C1466.main.order)
-		
-		If (Form:C1466.dataModel[$tableID]#Null:C1517)
+	For each ($item; Form:C1466.main.order)
+		If (Value type:C1509($item)=Is text:K8:3)
 			
-			This:C1470.main.push(New object:C1471(\
-				"name"; Form:C1466.dataModel[$tableID][""].label; \
-				"id"; $tableID))
+			If (Form:C1466.dataModel[$item]#Null:C1517)
+				
+				This:C1470.main.push(New object:C1471(\
+					"name"; Form:C1466.dataModel[$item][""].label; \
+					"id"; $item))
+				
+			End if 
 			
 		End if 
 	End for each 
@@ -486,6 +489,22 @@ Function _updateOrder()
 	
 	// FIXME: Use a listbox collection
 	ARRAY TO COLLECTION:C1563(Form:C1466.main.order; This:C1470.dstIdPtr->)
+	
+	If (Feature.with("actionsInTabBar"))
+		var $index : Integer
+		var $item : Variant
+		$index:=0
+		For each ($item; $order)
+			If (Form:C1466.main.order.indexOf($item)<0)
+				// maybe removed or unknow item type
+				If (Value type:C1509($item)=Is object:K8:27)  // currently object are ignored
+					Form:C1466.main.order.insert($index; $item)  // try to put at same pos, not really smart like a Diffable algo
+				End if 
+			End if 
+			$index+=1
+		End for each 
+		
+	End if 
 	
 	If (Not:C34(Form:C1466.main.order.equal($order)))
 		
