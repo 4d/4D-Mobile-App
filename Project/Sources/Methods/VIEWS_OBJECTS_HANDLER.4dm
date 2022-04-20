@@ -63,7 +63,7 @@ Case of
 						
 						If (Form:C1466[$formType][$context.tableNum()].form#Null:C1517)
 							
-							EDITOR.hidePicker()
+							UI.hidePicker()
 							
 							If (Bool:C1537(Form:C1466.$dialog.picker))
 								
@@ -83,7 +83,7 @@ Case of
 							
 							If ($exists)
 								
-								EDITOR.hidePicker()
+								UI.hidePicker()
 								
 							End if 
 							
@@ -104,7 +104,7 @@ Case of
 						
 						If ($tableID#$context.tableNum()) & $exists
 							
-							EDITOR.hidePicker()
+							UI.hidePicker()
 							
 						Else 
 							
@@ -116,7 +116,7 @@ Case of
 							
 							// Restore current selected background
 							SVG SET ATTRIBUTE:C1055(*; $e.objectName; $context.tableNumber; \
-								"fill"; EDITOR.unselectedFillColor)
+								"fill"; UI.unselectedFillColor)
 							
 						End if 
 						
@@ -129,14 +129,14 @@ Case of
 						//______________________________________________________
 					Else 
 						
-						EDITOR.hidePicker()
+						UI.hidePicker()
 						
 						// Outside click
 						If (Length:C16($context.tableNum())>0)
 							
 							// Unselect
 							SVG SET ATTRIBUTE:C1055(*; $e.objectName; $context.tableNumber; \
-								"fill"; EDITOR.unselectedFillColor)
+								"fill"; UI.unselectedFillColor)
 							
 						End if 
 						
@@ -162,12 +162,12 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Mouse Enter:K2:33)
 				
-				EDITOR.tips.instantly(100)
+				UI.tips.instantly(100)
 				
 				//______________________________________________________
 			: ($e.code=On Mouse Leave:K2:34)
 				
-				EDITOR.tips.restore()
+				UI.tips.restore()
 				
 				//______________________________________________________
 			: ($e.code=On Mouse Move:K2:35)
@@ -343,17 +343,17 @@ Case of
 					SET BLOB SIZE:C606($x; 0)
 					
 					// Set the drag icon
-					If (EDITOR.darkScheme)
+					If (UI.darkScheme)
 						
 						$p:=cs:C1710.svg.new().fillColor("slategray").fillOpacity(1).height(23)\
-							.image(EDITOR.fieldIcons[$o.fieldType]).position(2; 2)\
+							.image(UI.fieldIcons[$o.fieldType]).position(2; 2)\
 							.textArea($o.path+" "; "append").fontSize(13).position(20; 2).color("white")\
 							.picture()
 						
 					Else 
 						
 						$p:=cs:C1710.svg.new()\
-							.image(EDITOR.fieldIcons[$o.fieldType]).position(2; 2)\
+							.image(UI.fieldIcons[$o.fieldType]).position(2; 2)\
 							.textArea($o.path+" "; "append").fontSize(13).position(20; 2)\
 							.picture()
 						
@@ -566,17 +566,17 @@ End case
 						SET BLOB SIZE:C606($x; 0)
 						
 						// Create the drag icon
-						If (EDITOR.darkScheme)
+						If (UI.darkScheme)
 							
 							$p:=cs:C1710.svg.new().fillColor("slategray").fillOpacity(1).height(23)\
-								.image(EDITOR.fieldIcons[$o.fieldType]).position(2; 2)\
+								.image(UI.fieldIcons[$o.fieldType]).position(2; 2)\
 								.textArea($o.path+" "; "append").fontSize(13).position(20; 2).color("white")\
 								.picture()
 							
 						Else 
 							
 							$p:=cs:C1710.svg.new()\
-								.image(EDITOR.fieldIcons[$o.fieldType]).position(2; 2)\
+								.image(UI.fieldIcons[$o.fieldType]).position(2; 2)\
 								.textArea($o.path+" "; "append").fontSize(13).position(20; 2)\
 								.picture()
 							
@@ -607,7 +607,7 @@ End case
 				//______________________________________________________
 			: ($e.code=On Mouse Enter:K2:33)
 				
-				EDITOR.tips.instantly(100)
+				UI.tips.instantly(100)
 				
 				//______________________________________________________
 			: ($e.code=On Mouse Leave:K2:34)
@@ -623,7 +623,7 @@ End case
 					
 				End if 
 				
-				EDITOR.tips.restore()
+				UI.tips.restore()
 				
 				//______________________________________________________
 			: ($e.code=On Mouse Move:K2:35)
@@ -671,7 +671,7 @@ End case
 			: ($e.code=On Clicked:K2:4)
 				
 				// Hide picker if any
-				EDITOR.hidePicker()
+				UI.hidePicker()
 				
 				// Update tab detail/list
 				$context.selector:=1+Num:C11($e.objectName=$form.selectorDetail.name)
@@ -698,7 +698,7 @@ End case
 					
 					// Highlights
 					$o:=Choose:C955($e.objectName=$form.selectorList.name; $form.selectorList; $form.selectorDetail)
-					$o.setColors(EDITOR.selectedColor; Background color none:K23:10)
+					$o.setColors(UI.selectedColor; Background color none:K23:10)
 					
 				End if 
 				

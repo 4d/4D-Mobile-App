@@ -15,7 +15,7 @@ Case of
 		//______________________________________________________
 	: ($choice="buildAndRun")
 		
-		EDITOR.runBuild(New object:C1471(\
+		UI.runBuild(New object:C1471(\
 			"project"; PROJECT; \
 			"create"; True:C214; \
 			"build"; True:C214; \
@@ -25,7 +25,7 @@ Case of
 		//______________________________________________________
 	: ($choice="create")
 		
-		EDITOR.runBuild(New object:C1471(\
+		UI.runBuild(New object:C1471(\
 			"project"; PROJECT; \
 			"create"; True:C214; \
 			"build"; False:C215; \
@@ -35,7 +35,7 @@ Case of
 		//______________________________________________________
 	: ($choice="build")
 		
-		EDITOR.runBuild(New object:C1471(\
+		UI.runBuild(New object:C1471(\
 			"project"; PROJECT; \
 			"create"; False:C215; \
 			"build"; True:C214; \
@@ -45,7 +45,7 @@ Case of
 		//______________________________________________________
 	: ($choice="run")
 		
-		EDITOR.runBuild(New object:C1471(\
+		UI.runBuild(New object:C1471(\
 			"project"; PROJECT; \
 			"create"; False:C215; \
 			"build"; False:C215; \

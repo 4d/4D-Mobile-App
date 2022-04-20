@@ -622,7 +622,7 @@ $o:=cs:C1710.ob.new(Form:C1466)
 $o.createPath("structure").structure.unsynchronized:=$isUnsynchronized
 $o.createPath("status").structure.dataModel:=Not:C34($isUnsynchronized)
 
-EDITOR.updateHeader(New object:C1471(\
+UI.updateHeader(New object:C1471(\
 "show"; $isUnsynchronized))
 
 // Refresh UI

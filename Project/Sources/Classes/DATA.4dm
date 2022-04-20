@@ -101,7 +101,7 @@ Function handleEvents($e : Object)
 				//==============================================
 			: (This:C1470.method.catch($e; On Clicked:K2:4))
 				
-				EDITOR.editAuthenticationMethod()
+				UI.editAuthenticationMethod()
 				
 				//==============================================
 			: (This:C1470.validate.catch($e; On Clicked:K2:4))\
@@ -170,7 +170,7 @@ Function onLoad()
 	
 	// Init the query widget
 	var $t : Text
-	If (EDITOR.darkScheme)
+	If (UI.darkScheme)
 		
 		$t:=File:C1566("/RESOURCES/queryWidget_dark.svg").getText()
 		
@@ -181,7 +181,7 @@ Function onLoad()
 	End if 
 	
 	PROCESS 4D TAGS:C816($t; $t; \
-		EDITOR.selectedFillColor; \
+		UI.selectedFillColor; \
 		Get localized string:C991("fields"); \
 		Get localized string:C991("comparators"); \
 		Get localized string:C991("operators"); \
@@ -203,7 +203,7 @@ Function onLoad()
 	/// Update of the user interface
 Function update($updateList : Boolean)
 	
-	Logger.info("DATA update")
+	Logger.info("DATA update()")
 	
 	This:C1470.properties.enable(Not:C34(PROJECT.isLocked()))
 	
@@ -246,7 +246,7 @@ Function update($updateList : Boolean)
 		OB REMOVE:C1226(This:C1470.current; "user")
 		
 		This:C1470.result.setValue("").show()
-		This:C1470.result.foregroundColor:=EDITOR.selectedFillColor
+		This:C1470.result.foregroundColor:=UI.selectedFillColor
 		
 		This:C1470.displayFilter(This:C1470.current)
 		
@@ -319,7 +319,7 @@ Function updateTableListWithDataSizes()
 		
 		If (Length:C16(String:C10($table.filter.string))>0)
 			
-			$table.filterIcon:=Choose:C955(Bool:C1537($table.filter.parameters); EDITOR.userIcon; EDITOR.filterIcon)
+			$table.filterIcon:=Choose:C955(Bool:C1537($table.filter.parameters); UI.userIcon; UI.filterIcon)
 			
 		End if 
 		
@@ -491,11 +491,11 @@ Function displayFilter($table : Object)
 				
 				If (Bool:C1537($table.embedded))
 					
-					$Comment:=EDITOR.str.localize("allDataEmbedded")
+					$Comment:=UI.str.localize("allDataEmbedded")
 					
 				Else 
 					
-					$Comment:=EDITOR.str.localize("allDataLoaded")
+					$Comment:=UI.str.localize("allDataLoaded")
 					
 				End if 
 				
@@ -505,11 +505,11 @@ Function displayFilter($table : Object)
 					
 					If (Bool:C1537($table.embedded))
 						
-						$Comment:=EDITOR.str.localize("noEntityToEmbed")
+						$Comment:=UI.str.localize("noEntityToEmbed")
 						
 					Else 
 						
-						$Comment:=EDITOR.str.localize("noEntityToLoad")
+						$Comment:=UI.str.localize("noEntityToLoad")
 						
 					End if 
 					
@@ -517,15 +517,15 @@ Function displayFilter($table : Object)
 					
 					If ($table.total>100000)
 						
-						This:C1470.result.foregroundColor:=EDITOR.warningColor
+						This:C1470.result.foregroundColor:=UI.warningColor
 						
 						If (Bool:C1537($table.embedded))
 							
-							$Comment:=EDITOR.str.localize("largeNumberOfEntitiesToEmbed")
+							$Comment:=UI.str.localize("largeNumberOfEntitiesToEmbed")
 							
 						Else 
 							
-							$Comment:=EDITOR.str.localize("largeNumberOfEntitiesToLoad")
+							$Comment:=UI.str.localize("largeNumberOfEntitiesToLoad")
 							
 						End if 
 						
@@ -533,11 +533,11 @@ Function displayFilter($table : Object)
 						
 						If (Bool:C1537($table.embedded))
 							
-							$Comment:=EDITOR.str.localize("entitiesToEmbed"; String:C10($table.total; This:C1470.numbereFormat))
+							$Comment:=UI.str.localize("entitiesToEmbed"; String:C10($table.total; This:C1470.numbereFormat))
 							
 						Else 
 							
-							$Comment:=EDITOR.str.localize("entitiesToLoad"; String:C10($table.total; This:C1470.numbereFormat))
+							$Comment:=UI.str.localize("entitiesToLoad"; String:C10($table.total; This:C1470.numbereFormat))
 							
 						End if 
 					End if 
@@ -547,18 +547,18 @@ Function displayFilter($table : Object)
 			//______________________________________________________
 		: (Length:C16(String:C10($filter.error))>0)  // With errors
 			
-			This:C1470.filter.foregroundColor:=EDITOR.errorColor
-			This:C1470.result.foregroundColor:=EDITOR.errorColor
+			This:C1470.filter.foregroundColor:=UI.errorColor
+			This:C1470.result.foregroundColor:=UI.errorColor
 			
-			$Comment:=EDITOR.str.localize("error:")+$filter.error
+			$Comment:=UI.str.localize("error:")+$filter.error
 			
 			//______________________________________________________
 		: (Not:C34(Bool:C1537($filter.validated)))  // Not validated
 			
-			This:C1470.filter.foregroundColor:=EDITOR.errorColor
-			This:C1470.result.foregroundColor:=EDITOR.errorColor
+			This:C1470.filter.foregroundColor:=UI.errorColor
+			This:C1470.result.foregroundColor:=UI.errorColor
 			
-			$Comment:=EDITOR.str.localize("notValidatedFilter")
+			$Comment:=UI.str.localize("notValidatedFilter")
 			
 			//______________________________________________________
 		Else 
@@ -567,12 +567,12 @@ Function displayFilter($table : Object)
 			
 			If (Bool:C1537($filter.parameters))
 				
-				$table.filterIcon:=EDITOR.userIcon
+				$table.filterIcon:=UI.userIcon
 				
 				This:C1470.embedded.hide()
 				This:C1470.method.show()
 				
-				$Comment:=EDITOR.str.localize("dataFilteringByUser")
+				$Comment:=UI.str.localize("dataFilteringByUser")
 				
 			Else 
 				
@@ -580,11 +580,11 @@ Function displayFilter($table : Object)
 					
 					If (Bool:C1537($table.embedded))
 						
-						$Comment:=EDITOR.str.localize("dataEmbedded")
+						$Comment:=UI.str.localize("dataEmbedded")
 						
 					Else 
 						
-						$Comment:=EDITOR.str.localize("dataLoaded")
+						$Comment:=UI.str.localize("dataLoaded")
 						
 					End if 
 					
@@ -594,11 +594,11 @@ Function displayFilter($table : Object)
 						
 						If (Bool:C1537($table.embedded))
 							
-							$Comment:=EDITOR.str.localize("noEntityToEmbed")
+							$Comment:=UI.str.localize("noEntityToEmbed")
 							
 						Else 
 							
-							$Comment:=EDITOR.str.localize("noEntityToLoad")
+							$Comment:=UI.str.localize("noEntityToLoad")
 							
 						End if 
 						
@@ -608,12 +608,12 @@ Function displayFilter($table : Object)
 							
 							If ($table.count>100000)
 								
-								This:C1470.result.foregroundColor:=EDITOR.warningColor
-								$Comment:=EDITOR.str.localize("largeNumberOfEntitiesToEmbed")
+								This:C1470.result.foregroundColor:=UI.warningColor
+								$Comment:=UI.str.localize("largeNumberOfEntitiesToEmbed")
 								
 							Else 
 								
-								$Comment:=EDITOR.str.localize("entitiesEmbeddedUponConnection"; New collection:C1472(String:C10($table.count; This:C1470.numbereFormat); String:C10($table.total; This:C1470.numbereFormat)))
+								$Comment:=UI.str.localize("entitiesEmbeddedUponConnection"; New collection:C1472(String:C10($table.count; This:C1470.numbereFormat); String:C10($table.total; This:C1470.numbereFormat)))
 								
 							End if 
 							
@@ -621,12 +621,12 @@ Function displayFilter($table : Object)
 							
 							If ($table.count>100000)
 								
-								This:C1470.result.foregroundColor:=EDITOR.warningColor
-								$Comment:=EDITOR.str.localize("largeNumberOfEntitiesToLoad")
+								This:C1470.result.foregroundColor:=UI.warningColor
+								$Comment:=UI.str.localize("largeNumberOfEntitiesToLoad")
 								
 							Else 
 								
-								$Comment:=EDITOR.str.localize("entitiesLoadedUponConnection"; New collection:C1472(String:C10($table.count; This:C1470.numbereFormat); String:C10($table.total; This:C1470.numbereFormat)))
+								$Comment:=UI.str.localize("entitiesLoadedUponConnection"; New collection:C1472(String:C10($table.count; This:C1470.numbereFormat); String:C10($table.total; This:C1470.numbereFormat)))
 								
 							End if 
 						End if 
@@ -651,13 +651,13 @@ Function tableListManager($e : Object)
 		: ($e.code=On Getting Focus:K2:7)
 			
 			This:C1470.list.foregroundColor:=Foreground color:K23:1
-			This:C1470.listBorder.foregroundColor:=EDITOR.selectedColor
+			This:C1470.listBorder.foregroundColor:=UI.selectedColor
 			
 			//______________________________________________________
 		: ($e.code=On Losing Focus:K2:8)
 			
 			This:C1470.list.foregroundColor:=Foreground color:K23:1
-			This:C1470.listBorder.foregroundColor:=EDITOR.backgroundUnselectedColor
+			This:C1470.listBorder.foregroundColor:=UI.backgroundUnselectedColor
 			This:C1470.tables:=This:C1470.tables
 			
 			//______________________________________________________
@@ -707,7 +707,7 @@ Function filterManager($e : Object)
 			//______________________________________________________
 		: ($e.code=On Getting Focus:K2:7)
 			
-			This:C1470.filterBorder.foregroundColor:=EDITOR.selectedColor
+			This:C1470.filterBorder.foregroundColor:=UI.selectedColor
 			
 			If ($table.filter=Null:C1517)
 				
@@ -726,7 +726,7 @@ Function filterManager($e : Object)
 			//______________________________________________________
 		: ($e.code=On Losing Focus:K2:8)
 			
-			This:C1470.filterBorder.foregroundColor:=EDITOR.backgroundUnselectedColor
+			This:C1470.filterBorder.foregroundColor:=UI.backgroundUnselectedColor
 			
 			This:C1470.refresh()
 			
@@ -817,7 +817,7 @@ Function validateFilterManager()
 	PROJECT.audit(New object:C1471(\
 		"target"; New collection:C1472("filters")))
 	
-	EDITOR.updateRibbon()
+	UI.updateRibbon()
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Filter input assistance widget script
@@ -858,7 +858,7 @@ Function queryWidgetManager()
 							
 						End if 
 						
-						If (EDITOR.darkScheme)
+						If (UI.darkScheme)
 							
 							$menu.icon("Images/dark/fieldsIcons/field_"+String:C10($field.typeLegacy; "00")+".png")
 							
@@ -936,7 +936,7 @@ Function queryWidgetManager()
 			
 			$table.filter.validated:=False:C215
 			
-			$str:=EDITOR.str.setText(String:C10($table.filter.string)).insert($menu.choice; $highligh.start; $highligh.end)
+			$str:=UI.str.setText(String:C10($table.filter.string)).insert($menu.choice; $highligh.start; $highligh.end)
 			$table.filter.string:=$str.value
 			
 			Form:C1466.dataModel[String:C10($table.tableNumber)][""].filter:=$table.filter
@@ -975,12 +975,12 @@ Function backgoundColor($current : Object)->$color
 		
 		If (This:C1470.current.name=$current.name)
 			
-			$color:=Choose:C955($selected; EDITOR.backgroundSelectedColor; EDITOR.alternateSelectedColor)
+			$color:=Choose:C955($selected; UI.backgroundSelectedColor; UI.alternateSelectedColor)
 			
 		Else 
 			
 			var $backgroundColor
-			$backgroundColor:=Choose:C955($selected; EDITOR.highlightColor; EDITOR.highlightColorNoFocus)
+			$backgroundColor:=Choose:C955($selected; UI.highlightColor; UI.highlightColorNoFocus)
 			$color:=Choose:C955($selected; $backgroundColor; "transparent")
 			
 		End if 
@@ -992,7 +992,7 @@ Function metaInfo($current : Object)->$meta
 	
 	// Default values
 	$meta:=New object:C1471(\
-		"stroke"; Choose:C955(EDITOR.darkScheme; "white"; "black"); \
+		"stroke"; Choose:C955(UI.darkScheme; "white"; "black"); \
 		"fontWeight"; "normal"; \
 		"cell"; New object:C1471(\
 		"table_names"; New object:C1471))
@@ -1010,7 +1010,7 @@ Function metaInfo($current : Object)->$meta
 			
 			If (Not:C34(Bool:C1537($current.filter.validated)))
 				
-				$meta.cell.table_names.stroke:=EDITOR.errorRGB
+				$meta.cell.table_names.stroke:=UI.errorRGB
 				
 			End if 
 		End if 

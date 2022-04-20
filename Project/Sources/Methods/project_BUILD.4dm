@@ -43,7 +43,7 @@ If (Asserted:C1132($project#Null:C1517))
 		
 		$project.organization.identifier:=$project.organization.id+"."+cs:C1710.str.new($project.product.name).uperCamelCase()
 		$project.product.bundleIdentifier:=formatString("bundleApp"; $project.organization.id+"."+$project.product.name)
-		$data.appFolder:=EDITOR.path.products().folder($project.product.name)
+		$data.appFolder:=UI.path.products().folder($project.product.name)
 		
 		$data.realDevice:=($project._device.type="device")
 		
@@ -98,7 +98,7 @@ If (Asserted:C1132($project#Null:C1517))
 					
 					// Check if the project was modified by another application
 					// Compare to the signature of the sources folder
-					$file:=EDITOR.path.userCache().file($project._name)
+					$file:=UI.path.userCache().file($project._name)
 					
 					If ($file.exists)
 						
@@ -107,7 +107,7 @@ If (Asserted:C1132($project#Null:C1517))
 						
 					Else 
 						
-						$file:=EDITOR.path.userCache().file($project._name+".ios.fingerprint")
+						$file:=UI.path.userCache().file($project._name+".ios.fingerprint")
 						
 					End if 
 					
@@ -127,7 +127,7 @@ If (Asserted:C1132($project#Null:C1517))
 				
 			Else 
 				
-				$file:=EDITOR.path.userCache().file($project._name+".android.fingerprint")
+				$file:=UI.path.userCache().file($project._name+".android.fingerprint")
 				
 				//#MARK_TODO
 				$success:=True:C214
@@ -312,15 +312,15 @@ If (Asserted:C1132($project#Null:C1517))
 						
 						If (Not:C34($success))
 							
-							EDITOR.postMessage(New object:C1471(\
+							UI.postMessage(New object:C1471(\
 								"action"; "show"; \
 								"type"; "confirm"; \
 								"title"; "theStructureOfTheProductionServerIsNotOptimizedForThisProject"; \
 								"additional"; "youMustUpdateTheStructureOfTheProductionServer"; \
 								"help"; Formula:C1597(OPEN URL:C673(Get localized string:C991("doc_structureAdjustment"); *)); \
-								"cancelFormula"; Formula:C1597(CALL FORM:C1391(EDITOR.window; Formula:C1597(editor_CALLBACK).source; "build_stop")); \
+								"cancelFormula"; Formula:C1597(CALL FORM:C1391(UI.window; Formula:C1597(editor_CALLBACK).source; "build_stop")); \
 								"ok"; "continue"; \
-								"okFormula"; Formula:C1597(CALL FORM:C1391(EDITOR.window; Formula:C1597(editor_CALLBACK).source; "ignoreServerStructureAdjustement"))\
+								"okFormula"; Formula:C1597(CALL FORM:C1391(UI.window; Formula:C1597(editor_CALLBACK).source; "ignoreServerStructureAdjustement"))\
 								))
 							
 						End if 
@@ -340,7 +340,7 @@ If (Asserted:C1132($project#Null:C1517))
 					
 					If (Not:C34($success))
 						
-						EDITOR.postMessage(New object:C1471(\
+						UI.postMessage(New object:C1471(\
 							"action"; "show"; \
 							"type"; "alert"; \
 							"title"; "theProductionServerIsNotAvailable"; \
@@ -391,15 +391,15 @@ If (Asserted:C1132($project#Null:C1517))
 								$manual:=OB Copy:C1225($data)
 								$manual.manualInstallation:=True:C214
 								
-								EDITOR.postMessage(New object:C1471(\
+								UI.postMessage(New object:C1471(\
 									"action"; "show"; \
 									"type"; "confirm"; \
 									"title"; "noDeviceFound"; \
 									"additional"; "makeSureThatADeviceIsConnected"; \
 									"ok"; "continue"; \
-									"okFormula"; Formula:C1597(EDITOR.callMe(Formula:C1597(BUILD).source; $data)); \
+									"okFormula"; Formula:C1597(UI.callMe(Formula:C1597(BUILD).source; $data)); \
 									"cancel"; "manualInstallation"; \
-									"cancelFormula"; Formula:C1597(EDITOR.callMe(Formula:C1597(BUILD).source; $manual))\
+									"cancelFormula"; Formula:C1597(UI.callMe(Formula:C1597(BUILD).source; $manual))\
 									))
 								
 							End if 
@@ -417,7 +417,7 @@ If (Asserted:C1132($project#Null:C1517))
 								"action"; "build_manualInstallation"; \
 								"build"; $data)
 							
-							EDITOR.postMessage(New object:C1471(\
+							UI.postMessage(New object:C1471(\
 								"action"; "show"; \
 								"type"; "confirm"; \
 								"title"; New collection:C1472("appIsNotInstalled"; $cfgutil.appName); \
@@ -445,15 +445,15 @@ If (Asserted:C1132($project#Null:C1517))
 							$manual:=OB Copy:C1225($data)
 							$manual.manualInstallation:=True:C214
 							
-							EDITOR.postMessage(New object:C1471(\
+							UI.postMessage(New object:C1471(\
 								"action"; "show"; \
 								"type"; "confirm"; \
 								"title"; "noDeviceFound"; \
 								"additional"; "makeSureThatADeviceIsConnected"; \
 								"ok"; "continue"; \
-								"okFormula"; Formula:C1597(EDITOR.callMe(Formula:C1597(BUILD).source; $data)); \
+								"okFormula"; Formula:C1597(UI.callMe(Formula:C1597(BUILD).source; $data)); \
 								"cancel"; "manualInstallation"; \
-								"cancelFormula"; Formula:C1597(EDITOR.callMe(Formula:C1597(BUILD).source; $manual))\
+								"cancelFormula"; Formula:C1597(UI.callMe(Formula:C1597(BUILD).source; $manual))\
 								))
 							
 						End if 
@@ -465,11 +465,11 @@ If (Asserted:C1132($project#Null:C1517))
 		
 		If ($success)
 			
-			CALL WORKER:C1389(EDITOR.worker; "mobile_Project"; $data)
+			CALL WORKER:C1389(UI.worker; "mobile_Project"; $data)
 			
 		End if 
 	End if 
 	
-	OB REMOVE:C1226(EDITOR; "build")
+	OB REMOVE:C1226(UI; "build")
 	
 End if 

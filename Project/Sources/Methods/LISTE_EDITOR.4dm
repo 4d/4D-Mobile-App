@@ -48,12 +48,12 @@ Else   // <== WIDGETS METHOD
 					//___________________________________________
 				: ($e.code=On Getting Focus:K2:7)
 					
-					$ƒ.choiceListBorder.colors:=EDITOR.selectedColor
+					$ƒ.choiceListBorder.colors:=UI.selectedColor
 					
 					//___________________________________________
 				: ($e.code=On Losing Focus:K2:8)
 					
-					$ƒ.choiceListBorder.colors:=EDITOR.backgroundUnselectedColor
+					$ƒ.choiceListBorder.colors:=UI.backgroundUnselectedColor
 					
 					//___________________________________________
 				: ($e.code=On Double Clicked:K2:5)
@@ -92,7 +92,7 @@ Else   // <== WIDGETS METHOD
 			
 			If (Length:C16(Form:C1466.name)>0)
 				
-				Form:C1466.dial.folder:=Form:C1466.dial.host.folder(EDITOR.str.setText(Form:C1466.name).suitableWithFileName())
+				Form:C1466.dial.folder:=Form:C1466.dial.host.folder(UI.str.setText(Form:C1466.name).suitableWithFileName())
 				$ƒ.controlAlreadyExists.show(Form:C1466.dial.folder.exists)
 				
 			Else 
@@ -153,12 +153,12 @@ Else   // <== WIDGETS METHOD
 					//___________________________________________
 				: ($e.code=On Getting Focus:K2:7)
 					
-					$ƒ.datasourceBorder.foregroundColor:=EDITOR.selectedColor
+					$ƒ.datasourceBorder.foregroundColor:=UI.selectedColor
 					
 					//___________________________________________
 				: ($e.code=On Losing Focus:K2:8)
 					
-					$ƒ.datasourceBorder.foregroundColor:=EDITOR.backgroundUnselectedColor
+					$ƒ.datasourceBorder.foregroundColor:=UI.backgroundUnselectedColor
 					
 					//___________________________________________
 			End case 

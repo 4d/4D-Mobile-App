@@ -39,11 +39,11 @@ PROJECT.repairProject()
 PROJECT.save()
 
 // Launch project verifications
-EDITOR.callMeBack("projectAudit")
+UI.callMeBack("projectAudit")
 
 // Update UI
-EDITOR.updateRibbon()
-EDITOR.refreshViews()
-EDITOR.hidePicker()
-EDITOR.updateHeader(New object:C1471("show"; False:C215))
-EDITOR.callChild("project"; Formula:C1597(PROJECT_ON_ACTIVATE).source)
+UI.updateRibbon()
+UI.refreshViews()
+UI.hidePicker()
+UI.updateHeader(New object:C1471("show"; False:C215))
+UI.callChild("project"; Formula:C1597(PROJECT_ON_ACTIVATE).source)

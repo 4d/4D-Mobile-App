@@ -89,7 +89,7 @@ Function handleEvents($e : Object)
 				//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 			: ($e.code=On Load:K2:1)
 				
-				EDITOR:=cs:C1710.PROJECT_EDITOR.new()
+				UI:=cs:C1710.EDITOR.new()
 				
 				Case of 
 						
@@ -128,7 +128,7 @@ Function handleEvents($e : Object)
 						
 						$medias:=Folder:C1567("/RESOURCES/images/welcome/")
 						
-						If (EDITOR.darkScheme)
+						If (UI.darkScheme)
 							
 							$c:=New collection:C1472("structure-dark.png"; "design-dark.png"; "generateAndTest-dark.png"; "deploy-dark.png")
 							
@@ -214,7 +214,7 @@ Function handleEvents($e : Object)
 				//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 			: ($e.code=On Close Box:K2:21)
 				
-				EDITOR.callWorker(Formula:C1597(killWorker).source)
+				UI.callWorker(Formula:C1597(killWorker).source)
 				
 				CANCEL:C270
 				
@@ -304,7 +304,7 @@ Function openObjectHandleEvents($e : Object)
 			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		: (This:C1470.browse.catch())
 			
-			$e.document:=Select document:C905(EDITOR.path.projects().platformPath; SHARED.extension; Get localized string:C991("selectTheProjectToOpen"); Package open:K24:8+Use sheet window:K24:11)
+			$e.document:=Select document:C905(UI.path.projects().platformPath; SHARED.extension; Get localized string:C991("selectTheProjectToOpen"); Package open:K24:8+Use sheet window:K24:11)
 			
 			If (Bool:C1537(OK))
 				

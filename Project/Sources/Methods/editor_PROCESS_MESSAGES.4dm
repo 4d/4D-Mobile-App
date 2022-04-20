@@ -18,33 +18,33 @@ Case of
 		// MARK:-Steps of data generation
 	: ($message="dump")  // Cancellable data generation
 		
-		$o:=EDITOR.message.getValue()
+		$o:=UI.message.getValue()
 		
 		Case of 
 				
 				//======================================
 			: ($data.step="catalog")
 				
-				$o.additional:=EDITOR.str.localize("dataCatalog"; $data.table.name)
-				EDITOR.message.setValue($o)
+				$o.additional:=UI.str.localize("dataCatalog"; $data.table.name)
+				UI.message.setValue($o)
 				
 				//======================================
 			: ($data.step="table")
 				
-				If (EDITOR.message.visible)
+				If (UI.message.visible)
 					
 					If ($data.page=Null:C1517)
 						
-						$o.additional:=EDITOR.str.localize("dataRequest"; $data.table.name)
+						$o.additional:=UI.str.localize("dataRequest"; $data.table.name)
 						
 					Else 
 						
-						$o.additional:=EDITOR.str.localize("dataRequest"; $data.table.name)+" ("+String:C10($data.page)+"/"+String:C10($data.pages)+")"
-						$o.additional:=$o.additional+"\r\r"+EDITOR.str.localize("dataConsiderToSetAFilter")
+						$o.additional:=UI.str.localize("dataRequest"; $data.table.name)+" ("+String:C10($data.page)+"/"+String:C10($data.pages)+")"
+						$o.additional:=$o.additional+"\r\r"+UI.str.localize("dataConsiderToSetAFilter")
 						
 					End if 
 					
-					EDITOR.message.setValue($o)
+					UI.message.setValue($o)
 					
 				End if 
 				
@@ -54,33 +54,33 @@ Case of
 				// TODO: Change field.id to field.fieldNumber ?
 				If ($data.id=Null:C1517)
 					
-					$o.additional:=EDITOR.str.localize("imageGeneration"; $data.table.name)
+					$o.additional:=UI.str.localize("imageGeneration"; $data.table.name)
 					
 				Else 
 					
-					$o.additional:=EDITOR.str.localize("imageGeneration"; $data.table.name)+" ("+$data.id+")"
+					$o.additional:=UI.str.localize("imageGeneration"; $data.table.name)+" ("+$data.id+")"
 					
 				End if 
 				
-				EDITOR.message.setValue($o)
+				UI.message.setValue($o)
 				
 				//======================================
 			: ($data.step="asset")
 				
-				If (EDITOR.message.visible)
+				If (UI.message.visible)
 					
 					If ($data.page=Null:C1517)
 						
-						$o.additional:=EDITOR.str.localize("dataCoreDataInjection"; $data.table.name)
+						$o.additional:=UI.str.localize("dataCoreDataInjection"; $data.table.name)
 						
 					Else 
 						
-						$o.additional:=EDITOR.str.localize("dataCoreDataInjection"; $data.table.name)+" ("+String:C10($data.page)+"/"+String:C10($data.pages)+")"
-						$o.additional:=$o.additional+"\r\r"+EDITOR.str.localize("dataConsiderToSetAFilter"; String:C10(SHARED.data.dump.limit))
+						$o.additional:=UI.str.localize("dataCoreDataInjection"; $data.table.name)+" ("+String:C10($data.page)+"/"+String:C10($data.pages)+")"
+						$o.additional:=$o.additional+"\r\r"+UI.str.localize("dataConsiderToSetAFilter"; String:C10(SHARED.data.dump.limit))
 						
 					End if 
 					
-					EDITOR.message.setValue($o)
+					UI.message.setValue($o)
 					
 				End if 
 				
@@ -102,10 +102,10 @@ Case of
 				//======================================
 			Else 
 				
-				If (EDITOR.message.visible)
+				If (UI.message.visible)
 					
-					$o.additional:=EDITOR.str.localize($data.step)
-					EDITOR.message.setValue($o)
+					$o.additional:=UI.str.localize($data.step)
+					UI.message.setValue($o)
 					
 				End if 
 				
@@ -116,7 +116,7 @@ Case of
 	: ($message="checkProject")
 		
 		// Update task list
-		EDITOR.removeTask($message)
+		UI.removeTask($message)
 		
 		// Keep the result
 		Form:C1466.ExposedStructure:=$data
@@ -138,16 +138,16 @@ Case of
 	: ($message="checkDevTools")
 		
 		// Update task list
-		EDITOR.removeTask($message)
+		UI.removeTask($message)
 		
 		If ($data#Null:C1517)  // Store the result
 			
-			EDITOR.studio:=$data.studio
-			EDITOR.xCode:=$data.xCode
+			UI.studio:=$data.studio
+			UI.xCode:=$data.xCode
 			
-			If (EDITOR.devices=Null:C1517)  // First time -> Update the device list
+			If (UI.devices=Null:C1517)  // First time -> Update the device list
 				
-				EDITOR.getDevices()
+				UI.getDevices()
 				
 			End if 
 		End if 
@@ -156,13 +156,13 @@ Case of
 	: ($message="getDevices")
 		
 		// Update task list
-		EDITOR.removeTask($message)
+		UI.removeTask($message)
 		
 		// Keep the result
-		EDITOR.devices:=$data
+		UI.devices:=$data
 		
 		// Update UI
-		EDITOR.ribbon.touch()
+		UI.ribbon.touch()
 		
 		// MARK:-[UI]
 		
@@ -174,55 +174,55 @@ Case of
 		
 		If ($offset<0)  // Show
 			
-			If (EDITOR.footer.hidden)
+			If (UI.footer.hidden)
 				
-				EDITOR.project.resizeVertically($offset)
-				EDITOR.footer.show()
+				UI.project.resizeVertically($offset)
+				UI.footer.show()
 				
 			End if 
 			
 		Else   // Hide
 			
-			If (EDITOR.footer.visible)
+			If (UI.footer.visible)
 				
-				EDITOR.project.resizeVertically($offset)
-				EDITOR.footer.hide()
+				UI.project.resizeVertically($offset)
+				UI.footer.hide()
 				
 			End if 
 		End if 
 		
-		EDITOR.footer.setValue($data)
+		UI.footer.setValue($data)
 		
 		// MARK:Update TITLE subform
 	: ($message="description")
 		
-		EDITOR.updateHeader($data)
+		UI.updateHeader($data)
 		
 		// MARK:Update RIBBON subform
 	: ($message="updateRibbon")
 		
-		EDITOR.teamId:=(Length:C16(String:C10(PROJECT.organization.teamId))>0)
-		EDITOR.ribbon.touch()
+		UI.teamId:=(Length:C16(String:C10(PROJECT.organization.teamId))>0)
+		UI.ribbon.touch()
 		
 		// MARK:-BROWSER
 	: ($message="hideBrowser")
 		
-		EDITOR.browser.setSubform("EMPTY")
-		EDITOR.browser.hide()
+		UI.browser.setSubform("EMPTY")
+		UI.browser.hide()
 		
 		//______________________________________________________
 	: ($message="showBrowser")
 		
-		EDITOR.browser.show()
+		UI.browser.show()
 		
 		//______________________________________________________
 	: ($message="initBrowser")
 		
-		EDITOR.browser.show()
-		EDITOR.browser.setSubform("BROWSER")
-		EDITOR.browser.setValue($data)
+		UI.browser.show()
+		UI.browser.setSubform("BROWSER")
+		UI.browser.setValue($data)
 		
-		// MARK:- 
+		// MARK:-
 		
 		//______________________________________________________
 	: ($message="projectAuditResult")
@@ -239,21 +239,21 @@ Case of
 		//______________________________________________________
 	: ($message="goToPage")
 		
-		EDITOR.goToPage($data.page)
-		EDITOR.context.ribbon.page:=EDITOR.currentPage
-		EDITOR.ribbon.touch()
+		UI.goToPage($data.page)
+		UI.context.ribbon.page:=UI.currentPage
+		UI.ribbon.touch()
 		
 		Case of 
 				
 				//………………………………………………………………………………
 			: ($data.panel#Null:C1517)
 				
-				EDITOR.callMeBack("goTo"; $data)
+				UI.callMeBack("goTo"; $data)
 				
 				//………………………………………………………………………………
 			: ($data.tab#Null:C1517)
 				
-				EDITOR.callMeBack("selectTab"; $data)
+				UI.callMeBack("selectTab"; $data)
 				
 				//………………………………………………………………………………
 		End case 
@@ -263,7 +263,7 @@ Case of
 		
 		// Build = Result of the build/archive action
 		// Build_stop =  Cancel build process
-		OB REMOVE:C1226(EDITOR; "build")
+		OB REMOVE:C1226(UI; "build")
 		
 		// Remove the temporary authorizations, if any
 		For each ($t; PROJECT)
@@ -300,13 +300,13 @@ Case of
 					If (Bool:C1537($data.param.manualInstallation))
 						
 						DISPLAY NOTIFICATION:C910($title; \
-							EDITOR.str.setText("theApplicationHasBeenSuccessfullyGenerated")\
+							UI.str.setText("theApplicationHasBeenSuccessfullyGenerated")\
 							.localized($project.product.name))
 						
 					Else 
 						
 						DISPLAY NOTIFICATION:C910($title; \
-							EDITOR.str.setText("theApplicationHasBeenSuccessfullyInstalled")\
+							UI.str.setText("theApplicationHasBeenSuccessfullyInstalled")\
 							.localized(New collection:C1472($project.product.name; $project._device.name)))
 						
 					End if 
@@ -317,13 +317,13 @@ Case of
 					If ($project._device.type="device")
 						
 						DISPLAY NOTIFICATION:C910($title; \
-							EDITOR.str.setText("theApplicationHasBeenSuccessfullyInstalled")\
+							UI.str.setText("theApplicationHasBeenSuccessfullyInstalled")\
 							.localized(New collection:C1472($project.product.name; $project._device.name)))
 						
 					Else 
 						
 						DISPLAY NOTIFICATION:C910($title; \
-							EDITOR.str.setText("theApplicationHasBeenSuccessfullyGenerated")\
+							UI.str.setText("theApplicationHasBeenSuccessfullyGenerated")\
 							.localized($project.product.name))
 						
 					End if 
@@ -333,7 +333,7 @@ Case of
 					
 					If ($project._buildTarget="iOS")
 						
-						$file:=EDITOR.path.userCache().file($project._name+".ios.fingerprint")
+						$file:=UI.path.userCache().file($project._name+".ios.fingerprint")
 						
 						If ($data.param.appFolder.folder("iOS/Sources").exists)
 							
@@ -343,7 +343,7 @@ Case of
 						
 					Else 
 						
-						$file:=EDITOR.path.userCache().file($project._name+".android.fingerprint")
+						$file:=UI.path.userCache().file($project._name+".android.fingerprint")
 						
 						// TODO: Android fingerprint
 						
@@ -354,7 +354,7 @@ Case of
 						 & Not:C34(Bool:C1537($data.param.build))\
 						 & Not:C34(Bool:C1537($data.param.run)))
 						
-						EDITOR.postMessage(New object:C1471(\
+						UI.postMessage(New object:C1471(\
 							"action"; "show"; \
 							"type"; "confirm"; \
 							"title"; "projectCreationSuccessful"; \
@@ -373,7 +373,7 @@ Case of
 		PROJECT.$_ignoreServerStructureAdjustement:=True:C214
 		
 		// Relaunch the build process
-		EDITOR.runBuild(New object:C1471(\
+		UI.runBuild(New object:C1471(\
 			"project"; PROJECT; \
 			"create"; True:C214; \
 			"build"; True:C214; \
@@ -394,7 +394,7 @@ Case of
 		End if 
 		
 		// Relaunch the build process
-		EDITOR.runBuild(New object:C1471(\
+		UI.runBuild(New object:C1471(\
 			"project"; PROJECT; \
 			"create"; True:C214; \
 			"build"; True:C214; \
@@ -406,11 +406,11 @@ Case of
 		// Pass to PROJECT subform
 		If (Count parameters:C259>=2)
 			
-			EDITOR.callChild(EDITOR.project; EDITOR.callback; $message; $data)
+			UI.callChild(UI.project; UI.callback; $message; $data)
 			
 		Else 
 			
-			EDITOR.callChild(EDITOR.project; EDITOR.callback; $message)
+			UI.callChild(UI.project; UI.callback; $message)
 			
 		End if 
 		

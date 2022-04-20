@@ -94,7 +94,7 @@ Function handleEvents($e : Object)
 					: ($e.code=On Getting Focus:K2:7)
 						
 						This:C1470.actions.foregroundColor:=Foreground color:K23:1
-						This:C1470.actionsBorder.foregroundColor:=EDITOR.selectedColor
+						This:C1470.actionsBorder.foregroundColor:=UI.selectedColor
 						
 						If (Bool:C1537(This:C1470.actions.inEdition))
 							
@@ -119,7 +119,7 @@ Function handleEvents($e : Object)
 						Else 
 							
 							This:C1470.actions.foregroundColor:=Foreground color:K23:1
-							This:C1470.actionsBorder.foregroundColor:=EDITOR.backgroundUnselectedColor
+							This:C1470.actionsBorder.foregroundColor:=UI.backgroundUnselectedColor
 							
 						End if 
 						
@@ -454,7 +454,7 @@ Function loadActions()
 		// Compute icons
 		For each ($action; Form:C1466.actions)
 			
-			$action.$icon:=EDITOR.getIcon($action.icon)
+			$action.$icon:=UI.getIcon($action.icon)
 			
 		End for each 
 	End if 
@@ -513,7 +513,7 @@ Function newAction($tableNumber : Integer)
 		"scope"; "table"; \
 		"shortLabel"; $t; \
 		"label"; $t; \
-		"$icon"; EDITOR.getIcon(""))
+		"$icon"; UI.getIcon(""))
 	
 	$action.parameters:=New collection:C1472
 	$action.parameters.push(New object:C1471(\
@@ -692,7 +692,7 @@ Function addMenuManager()
 						$menu.icon:="actions/Edit.svg"
 						$menu.scope:="currentRecord"
 						$menu.label:=Get localized string:C991("edit...")
-						$icon:=EDITOR.getIcon($menu.icon)
+						$icon:=UI.getIcon($menu.icon)
 						
 						//……………………………………………………………………
 					: ($menu.add)
@@ -701,7 +701,7 @@ Function addMenuManager()
 						$menu.icon:="actions 2/Add.svg"
 						$menu.scope:="table"
 						$menu.label:=Get localized string:C991("add...")
-						$icon:=EDITOR.getIcon($menu.icon)
+						$icon:=UI.getIcon($menu.icon)
 						
 						//……………………………………………………………………
 					: ($menu.delete)
@@ -710,7 +710,7 @@ Function addMenuManager()
 						$menu.icon:="actions/Delete.svg"
 						$menu.scope:="currentRecord"
 						$menu.label:=Get localized string:C991("remove")
-						$icon:=EDITOR.getIcon($menu.icon)
+						$icon:=UI.getIcon($menu.icon)
 						
 						//……………………………………………………………………
 					: ($menu.share)
@@ -719,7 +719,7 @@ Function addMenuManager()
 						$menu.icon:="actions/Send-basic.svg"
 						$menu.scope:="currentRecord"
 						$menu.label:=Get localized string:C991("share...")
-						$icon:=EDITOR.getIcon($menu.icon)
+						$icon:=UI.getIcon($menu.icon)
 						$menu.description:=""
 						
 						//……………………………………………………………………
@@ -729,7 +729,7 @@ Function addMenuManager()
 						$menu.icon:="actions/Sort.svg"
 						$menu.scope:="table"
 						$menu.label:=Get localized string:C991("sort...")
-						$icon:=EDITOR.getIcon($menu.icon)
+						$icon:=UI.getIcon($menu.icon)
 						
 						//……………………………………………………………………
 				End case 
@@ -737,7 +737,7 @@ Function addMenuManager()
 				$tableModel:=OB Copy:C1225(Form:C1466.dataModel[$menu.tableID])
 				
 				// Generate a unique name
-				$t:=EDITOR.str.setText(formatString("label"; $tableModel[""].name)).uperCamelCase()
+				$t:=UI.str.setText(formatString("label"; $tableModel[""].name)).uperCamelCase()
 				
 				$menu.name:=$menu.preset+$t
 				
@@ -1047,7 +1047,7 @@ Function showIconPicker()
 		
 		$o.action:="actionIcons"
 		
-		If (EDITOR.darkScheme)
+		If (UI.darkScheme)
 			
 			$o.background:="black"
 			$o.backgroundStroke:="white"
@@ -1055,17 +1055,17 @@ Function showIconPicker()
 		Else 
 			
 			$o.background:="white"
-			$o.backgroundStroke:=EDITOR.strokeColor
+			$o.backgroundStroke:=UI.strokeColor
 			
 		End if 
 		
 		$o.promptColor:=0x00FFFFFF
-		$o.promptBackColor:=EDITOR.strokeColor
+		$o.promptBackColor:=UI.strokeColor
 		
 		$o.hidePromptSeparator:=True:C214
 		$o.forceRedraw:=True:C214
 		
-		$o.prompt:=EDITOR.str.setText("chooseAnIconForTheAction").localized(String:C10(This:C1470.current.name))
+		$o.prompt:=UI.str.setText("chooseAnIconForTheAction").localized(String:C10(This:C1470.current.name))
 		
 		This:C1470.callMeBack("pickerShow"; $o)
 		
@@ -1188,11 +1188,11 @@ Function backgroundColor($current : Object)->$color
 		
 		If (ob_equal(This:C1470.current; $current))  // Selected row
 			
-			$color:=Choose:C955($isFocused; EDITOR.backgroundSelectedColor; EDITOR.alternateSelectedColor)
+			$color:=Choose:C955($isFocused; UI.backgroundSelectedColor; UI.alternateSelectedColor)
 			
 		Else 
 			
-			$v:=Choose:C955($isFocused; EDITOR.highlightColor; EDITOR.highlightColorNoFocus)
+			$v:=Choose:C955($isFocused; UI.highlightColor; UI.highlightColorNoFocus)
 			$color:=Choose:C955($isFocused; $v; "transparent")
 			
 		End if 
@@ -1204,7 +1204,7 @@ Function metaInfo($current : Object)->$result
 	
 	// Default values
 	$result:=New object:C1471(\
-		"stroke"; Choose:C955(EDITOR.darkScheme; "white"; "black"); \
+		"stroke"; Choose:C955(UI.darkScheme; "white"; "black"); \
 		"fontWeight"; "normal"; \
 		"cell"; New object:C1471(\
 		"tables"; New object:C1471; \
@@ -1215,7 +1215,7 @@ Function metaInfo($current : Object)->$result
 	If (Form:C1466.dataModel[String:C10($current.tableNumber)]=Null:C1517)
 		
 		// Not published table
-		$result.cell.tables.stroke:=EDITOR.errorRGB
+		$result.cell.tables.stroke:=UI.errorRGB
 		
 	Else 
 		
@@ -1223,11 +1223,11 @@ Function metaInfo($current : Object)->$result
 		If (Num:C11($current.tableNumber)=0)
 			
 			// Missing table
-			$result.cell.names.stroke:=EDITOR.errorRGB
+			$result.cell.names.stroke:=UI.errorRGB
 			
 		Else 
 			
-			$result.cell.names.stroke:=Choose:C955(EDITOR.darkScheme; "white"; "black")
+			$result.cell.names.stroke:=Choose:C955(UI.darkScheme; "white"; "black")
 			
 		End if 
 	End if 
@@ -1236,15 +1236,15 @@ Function metaInfo($current : Object)->$result
 	If (Form:C1466.actions.indices("name = :1"; $current.name).length>1)
 		
 		// Duplicate
-		$result.cell.names.stroke:=EDITOR.errorRGB
+		$result.cell.names.stroke:=UI.errorRGB
 		
 	Else 
 		
-		$result.cell.names.stroke:=Choose:C955(EDITOR.darkScheme; "white"; "black")
+		$result.cell.names.stroke:=Choose:C955(UI.darkScheme; "white"; "black")
 		
 	End if 
 	
 	// Redmine:#129995 : The short label value of a sort action shall be greyed and not
 	// editable from the action section of the project editor
-	$result.cell.shorts.stroke:=Choose:C955(String:C10($current.preset)="sort"; "silver"; Choose:C955(EDITOR.darkScheme; "white"; "black"))
+	$result.cell.shorts.stroke:=Choose:C955(String:C10($current.preset)="sort"; "silver"; Choose:C955(UI.darkScheme; "white"; "black"))
 	

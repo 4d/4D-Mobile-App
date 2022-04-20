@@ -128,13 +128,13 @@ Function handleEvents($e : Object)
 						
 						// Update UI
 						This:C1470.displayTarget()
-						EDITOR.updateRibbon()
+						UI.updateRibbon()
 						
 						//______________________________________________________
 					: ($e.code=On Mouse Enter:K2:33)
 						
 						// Highlights
-						This:C1470[$e.objectName].foregroundColor:=EDITOR.selectedColor
+						This:C1470[$e.objectName].foregroundColor:=UI.selectedColor
 						
 						//______________________________________________________
 					: ($e.code=On Mouse Leave:K2:34)
@@ -178,5 +178,5 @@ Function onLoad()
 	// Manage UI for the target
 Function displayTarget()
 	
-	This:C1470.ios.setValue(EDITOR.ios)
-	This:C1470.android.setValue(EDITOR.android)
+	This:C1470.ios.setValue(UI.ios)
+	This:C1470.android.setValue(UI.android)

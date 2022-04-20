@@ -14,7 +14,7 @@ Class constructor($form : Object)
 	//// Constraints definition
 	//cs.ob.new(This.context).createPath("constraints.rules"; Is collection)
 	
-	//End if 
+	//End if
 	
 	// FIXME:TEMPO
 	This:C1470.form:=$form
@@ -141,15 +141,15 @@ Function tableList()
 			
 			$row:=$row+1
 			
-			If (EDITOR.unsynchronizedTables=Null:C1517)\
-				 || (EDITOR.unsynchronizedTables.length<=$table.tableNumber)\
-				 || (EDITOR.unsynchronizedTables[$table.tableNumber]=Null:C1517)
+			If (UI.unsynchronizedTables=Null:C1517)\
+				 || (UI.unsynchronizedTables.length<=$table.tableNumber)\
+				 || (UI.unsynchronizedTables[$table.tableNumber]=Null:C1517)
 				
 				LISTBOX SET ROW COLOR:C1270(*; $form.tableList; $row; lk inherited:K53:26; lk font color:K53:24)
 				
 			Else 
 				
-				LISTBOX SET ROW COLOR:C1270(*; $form.tableList; $row; EDITOR.errorColor; lk font color:K53:24)
+				LISTBOX SET ROW COLOR:C1270(*; $form.tableList; $row; UI.errorColor; lk font color:K53:24)
 				
 			End if 
 			
@@ -376,7 +376,7 @@ Function fieldList()
 				
 				If ($withError)
 					
-					$color:=EDITOR.errorColor
+					$color:=UI.errorColor
 					$style:=($field.kind="alias") ? Italic:K14:3 : ($field.kind="relatedEntity") ? Underline:K14:4 : Plain:K14:1
 					
 				Else 
@@ -396,7 +396,7 @@ Function fieldList()
 								If ($field.fieldType=Is object:K8:27)  // -> relatedEntity
 									
 									$style:=$style+Underline:K14:4
-									$color:=EDITOR.darkScheme ? Highlight menu text color:K23:8 : EDITOR.selectedColor
+									$color:=UI.darkScheme ? Highlight menu text color:K23:8 : UI.selectedColor
 									
 									
 								Else   // -> relatedEntities
@@ -405,7 +405,7 @@ Function fieldList()
 										 && ($dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)\
 										 && ($dataModel[$tableID][$field.name]#Null:C1517)
 										
-										$color:=EDITOR.errorColor
+										$color:=UI.errorColor
 										
 									End if 
 								End if 
@@ -415,7 +415,7 @@ Function fieldList()
 						: ($field.kind="relatedEntity")
 							
 							$style:=Underline:K14:4
-							$color:=EDITOR.darkScheme ? Highlight menu text color:K23:8 : EDITOR.selectedColor
+							$color:=UI.darkScheme ? Highlight menu text color:K23:8 : UI.selectedColor
 							
 							//______________________________________________________
 						: ($field.kind="relatedEntities")
@@ -424,7 +424,7 @@ Function fieldList()
 								 && ($dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)\
 								 && ($dataModel[$tableID][$field.name]#Null:C1517)
 								
-								$color:=EDITOR.errorColor
+								$color:=UI.errorColor
 								
 							End if 
 							
@@ -569,7 +569,7 @@ Function doFieldPicker()->$publishedNumber : Integer
 			End if 
 			
 			// Set icon
-			$field.icon:=EDITOR.fieldIcons[$field.fieldType]
+			$field.icon:=UI.fieldIcons[$field.fieldType]
 			
 		End for each 
 		
@@ -675,7 +675,7 @@ Function doFieldPicker()->$publishedNumber : Integer
 											//______________________________________________________
 										: ($field.fieldType=Is collection:K8:32)  // Selection
 											
-											$o.label:=PROJECT.label(EDITOR.str.localize("listOf"; $field.name))
+											$o.label:=PROJECT.label(UI.str.localize("listOf"; $field.name))
 											$o.shortLabel:=PROJECT.label($field.name)
 											
 											//______________________________________________________
@@ -1041,7 +1041,7 @@ Function updateProject()
 		
 		If (Not:C34(New collection:C1472($tableModel).equal(New collection:C1472($tableBackup))))
 			
-			EDITOR.deleteDBFiles()
+			UI.deleteDBFiles()
 			
 		End if 
 	End if 
@@ -1358,12 +1358,12 @@ Function _appendField($table : cs:C1710.table; $field : cs:C1710.field)
 	Case of 
 			
 			//…………………………………………………………………………………………………
-		: ($field.kind="storage") && ($type<=EDITOR.fieldIcons.length)
+		: ($field.kind="storage") && ($type<=UI.fieldIcons.length)
 			
 			$published:=Num:C11($dataModel[String:C10($table.tableNumber)][String:C10($field.id)]#Null:C1517)
 			
 			//…………………………………………………………………………………………………
-		: ($field.kind="calculated") && ($type<=EDITOR.fieldIcons.length)
+		: ($field.kind="calculated") && ($type<=UI.fieldIcons.length)
 			
 			$published:=Num:C11($dataModel[String:C10($table.tableNumber)][$field.name]#Null:C1517)
 			
@@ -1462,7 +1462,7 @@ Function _appendField($table : cs:C1710.table; $field : cs:C1710.field)
 			$type:=8859
 			
 			//…………………………………………………………………………………………………
-		: ($field.kind="alias") && ($type<=EDITOR.fieldIcons.length)
+		: ($field.kind="alias") && ($type<=UI.fieldIcons.length)
 			
 			$published:=Num:C11($dataModel[String:C10($table.tableNumber)][$field.name]#Null:C1517)
 			
@@ -1476,7 +1476,7 @@ Function _appendField($table : cs:C1710.table; $field : cs:C1710.field)
 			//…………………………………………………………………………………………………
 		Else 
 			
-			If ($type<=EDITOR.fieldIcons.length)
+			If ($type<=UI.fieldIcons.length)
 				
 				$published:=Num:C11($dataModel[String:C10($table.tableNumber)][String:C10($field.id)]#Null:C1517)
 				
@@ -1486,7 +1486,7 @@ Function _appendField($table : cs:C1710.table; $field : cs:C1710.field)
 	End case 
 	
 	APPEND TO ARRAY:C911((This:C1470.publishedPtr)->; $published)
-	APPEND TO ARRAY:C911((This:C1470.iconsPtr)->; EDITOR.fieldIcons[$type])
+	APPEND TO ARRAY:C911((This:C1470.iconsPtr)->; UI.fieldIcons[$type])
 	APPEND TO ARRAY:C911((This:C1470.fieldsPtr)->; $field.name)
 	
 	LISTBOX SET ROW FONT STYLE:C1268(*; This:C1470.form.fieldList; Size of array:C274((This:C1470.fieldsPtr)->); Plain:K14:1)

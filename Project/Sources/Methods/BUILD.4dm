@@ -13,11 +13,11 @@
 
 // ----------------------------------------------------
 // * STOP REENTRANCE
-EDITOR.build:=True:C214
+UI.build:=True:C214
 
-EDITOR.postMessage(New object:C1471(\
+UI.postMessage(New object:C1471(\
 "action"; "show"; \
 "type"; "progress"; \
 "title"; Get localized string:C991("product")+" - "+PROJECT.product.name+" ["+Choose:C955(PROJECT._buildTarget="android"; "Android"; "iOS")+"]"; \
 "additional"; Get localized string:C991("preparations"); \
-"autostart"; Formula:C1597(CALL FORM:C1391(EDITOR.window; Formula:C1597(project_BUILD).source; $data))))
+"autostart"; Formula:C1597(CALL FORM:C1391(UI.window; Formula:C1597(project_BUILD).source; $data))))

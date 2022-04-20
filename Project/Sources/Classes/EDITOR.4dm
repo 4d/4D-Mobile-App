@@ -31,194 +31,167 @@ Class constructor()
 	
 	This:C1470.pendingTasks:=New collection:C1472
 	
-	//MARK:-[COMPUTED]
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function get unsynchronizedTables()->$sesult : Collection
 	
 	$sesult:=Form:C1466.$dialog.unsynchronizedTables
 	
+	//MARK:-
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Definition of the editor pages and panels used
 Function design()
 	
 	var $o : Object
 	
-	
-	var $window : Integer
-	$window:=This:C1470.window
-	
 	This:C1470.pages:=New object:C1471
 	This:C1470.currentPage:=""
 	
-	If (True:C214)  // GENERAL
-		
-		This:C1470.pages.general:=New object:C1471(\
-			"panels"; New collection:C1472)
-		
-		$o:=This:C1470.pages.general
+	// MARK:GENERAL
+	This:C1470.pages.general:=New object:C1471(\
+		"panels"; New collection:C1472)
+	
+	$o:=This:C1470.pages.general
+	
+	$o.panels.push(New object:C1471(\
+		"title"; Get localized string:C991("targetOs"); \
+		"form"; "TARGET"))
+	
+	$o.panels.push(New object:C1471(\
+		"title"; Get localized string:C991("organization"); \
+		"form"; "ORGANIZATION"))
+	
+	$o.panels.push(New object:C1471(\
+		"title"; Get localized string:C991("product"); \
+		"form"; "PRODUCT"))
+	
+	$o.panels.push(New object:C1471(\
+		"title"; Get localized string:C991("developer"); \
+		"form"; "DEVELOPER"))
+	
+	// MARK:STRUCTURE
+	This:C1470.pages.structure:=New object:C1471(\
+		"panels"; New collection:C1472)
+	
+	$o:=This:C1470.pages.structure
+	
+	$o.panels.push(New object:C1471(\
+		"title"; Get localized string:C991("publishedStructure"); \
+		"form"; "STRUCTURE"; \
+		"noTitle"; True:C214))
+	
+	$o.action:=New object:C1471(\
+		"title"; "syncDataModel"; \
+		"show"; False:C215; \
+		"formula"; Formula:C1597(UI.postMessage(New object:C1471(\
+		"action"; "show"; \
+		"type"; "confirm"; \
+		"title"; "updateTheProject"; \
+		"additional"; "aBackupWillBeCreatedIntoTheProjectFolder"; \
+		"ok"; "update"; \
+		"okFormula"; Formula:C1597(UI.callMeBack("syncDataModel")))))\
+		)
+	
+	// MARK:PROPERTIES
+	This:C1470.pages.properties:=New object:C1471(\
+		"panels"; New collection:C1472)
+	
+	$o:=This:C1470.pages.properties
+	
+	$o.panels.push(New object:C1471(\
+		"title"; Get localized string:C991("tablesProperties"); \
+		"form"; "TABLES"))
+	
+	$o.panels.push(New object:C1471(\
+		"title"; Get localized string:C991("fieldsProperties"); \
+		"form"; "FIELDS"; \
+		"noTitle"; True:C214))
+	
+	// MARK:MAIN
+	This:C1470.pages.main:=New object:C1471(\
+		"panels"; New collection:C1472)
+	
+	$o:=This:C1470.pages.main
+	
+	$o.panels.push(New object:C1471(\
+		"title"; Get localized string:C991("mainMenu"); \
+		"form"; "MAIN"; \
+		"noTitle"; True:C214))
+	
+	// MARK:VIEWS
+	This:C1470.pages.views:=New object:C1471(\
+		"panels"; New collection:C1472)
+	
+	$o:=This:C1470.pages.views
+	
+	$o.panels.push(New object:C1471(\
+		"title"; Get localized string:C991("forms"); \
+		"form"; "VIEWS"; \
+		"noTitle"; True:C214))
+	
+	$o.action:=New object:C1471(\
+		"title"; ".Repair the project"; \
+		"show"; False:C215; \
+		"formula"; Formula:C1597(UI.postMessage(New object:C1471(\
+		"action"; "show"; \
+		"type"; "confirm"; \
+		"title"; "updateTheProject"; \
+		"additional"; "aBackupWillBeCreatedIntoTheProjectFolder"; \
+		"ok"; "update"; \
+		"okFormula"; Formula:C1597(UI.callMeBack("syncDataModel")))))\
+		)
+	
+	// MARK:DEPLOYMENT
+	This:C1470.pages.deployment:=New object:C1471(\
+		"panels"; New collection:C1472)
+	
+	$o:=This:C1470.pages.deployment
+	
+	$o.panels.push(New object:C1471(\
+		"title"; Get localized string:C991("server"); \
+		"form"; "SERVER"))
+	
+	$o.panels.push(New object:C1471(\
+		"title"; Get localized string:C991("features"); \
+		"form"; "FEATURES"))
+	
+	If (False:C215)
 		
 		$o.panels.push(New object:C1471(\
-			"title"; Get localized string:C991("targetOs"); \
-			"form"; "TARGET"))
-		
-		$o.panels.push(New object:C1471(\
-			"title"; Get localized string:C991("organization"); \
-			"form"; "ORGANIZATION"))
-		
-		$o.panels.push(New object:C1471(\
-			"title"; Get localized string:C991("product"); \
-			"form"; "PRODUCT"))
-		
-		$o.panels.push(New object:C1471(\
-			"title"; Get localized string:C991("developer"); \
-			"form"; "DEVELOPER"))
+			"title"; "UI FOR DEMO PURPOSE"; \
+			"form"; "UI"))
 		
 	End if 
 	
-	If (True:C214)  // STRUCTURE
-		
-		This:C1470.pages.structure:=New object:C1471(\
-			"panels"; New collection:C1472)
-		
-		$o:=This:C1470.pages.structure
-		
-		$o.panels.push(New object:C1471(\
-			"title"; Get localized string:C991("publishedStructure"); \
-			"form"; "STRUCTURE"; \
-			"noTitle"; True:C214))
-		
-		$o.action:=New object:C1471(\
-			"title"; "syncDataModel"; \
-			"show"; False:C215; \
-			"formula"; Formula:C1597(EDITOR.postMessage(New object:C1471(\
-			"action"; "show"; \
-			"type"; "confirm"; \
-			"title"; "updateTheProject"; \
-			"additional"; "aBackupWillBeCreatedIntoTheProjectFolder"; \
-			"ok"; "update"; \
-			"okFormula"; Formula:C1597(EDITOR.callMeBack("syncDataModel")))))\
-			)
-		
-	End if 
+	// MARK:DATA
+	This:C1470.pages.data:=New object:C1471(\
+		"panels"; New collection:C1472)
 	
-	If (True:C214)  // PROPERTIES
-		
-		This:C1470.pages.properties:=New object:C1471(\
-			"panels"; New collection:C1472)
-		
-		$o:=This:C1470.pages.properties
-		
-		$o.panels.push(New object:C1471(\
-			"title"; Get localized string:C991("tablesProperties"); \
-			"form"; "TABLES"))
-		
-		$o.panels.push(New object:C1471(\
-			"title"; Get localized string:C991("fieldsProperties"); \
-			"form"; "FIELDS"; \
-			"noTitle"; True:C214))
-		
-	End if 
+	$o:=This:C1470.pages.data
 	
-	If (True:C214)  // MAIN
-		
-		This:C1470.pages.main:=New object:C1471(\
-			"panels"; New collection:C1472)
-		
-		$o:=This:C1470.pages.main
-		
-		$o.panels.push(New object:C1471(\
-			"title"; Get localized string:C991("mainMenu"); \
-			"form"; "MAIN"; \
-			"noTitle"; True:C214))
-		
-	End if 
+	$o.panels.push(New object:C1471(\
+		"title"; Get localized string:C991("source"); \
+		"form"; "SOURCE"; \
+		"help"; True:C214))
 	
-	If (True:C214)  // VIEWS
-		
-		This:C1470.pages.views:=New object:C1471(\
-			"panels"; New collection:C1472)
-		
-		$o:=This:C1470.pages.views
-		
-		$o.panels.push(New object:C1471(\
-			"title"; Get localized string:C991("forms"); \
-			"form"; "VIEWS"; \
-			"noTitle"; True:C214))
-		
-		$o.action:=New object:C1471(\
-			"title"; ".Repair the project"; \
-			"show"; False:C215; \
-			"formula"; Formula:C1597(EDITOR.postMessage(New object:C1471(\
-			"action"; "show"; \
-			"type"; "confirm"; \
-			"title"; "updateTheProject"; \
-			"additional"; "aBackupWillBeCreatedIntoTheProjectFolder"; \
-			"ok"; "update"; \
-			"okFormula"; Formula:C1597(EDITOR.callMeBack("syncDataModel")))))\
-			)
-		
-	End if 
+	$o.panels.push(New object:C1471(\
+		"title"; Get localized string:C991("properties"); \
+		"form"; "DATA"; \
+		"help"; True:C214))
 	
-	If (True:C214)  // DEPLOYMENT
-		
-		This:C1470.pages.deployment:=New object:C1471(\
-			"panels"; New collection:C1472)
-		
-		$o:=This:C1470.pages.deployment
-		
-		$o.panels.push(New object:C1471(\
-			"title"; Get localized string:C991("server"); \
-			"form"; "SERVER"))
-		
-		$o.panels.push(New object:C1471(\
-			"title"; Get localized string:C991("features"); \
-			"form"; "FEATURES"))
-		
-		If (False:C215)
-			
-			$o.panels.push(New object:C1471(\
-				"title"; "UI FOR DEMO PURPOSE"; \
-				"form"; "UI"))
-			
-		End if 
-	End if 
+	// MARK:ACTIONS
+	This:C1470.pages.actions:=New object:C1471(\
+		"panels"; New collection:C1472)
 	
-	If (True:C214)  // DATA
-		
-		This:C1470.pages.data:=New object:C1471(\
-			"panels"; New collection:C1472)
-		
-		$o:=This:C1470.pages.data
-		
-		$o.panels.push(New object:C1471(\
-			"title"; Get localized string:C991("source"); \
-			"form"; "SOURCE"; \
-			"help"; True:C214))
-		
-		$o.panels.push(New object:C1471(\
-			"title"; Get localized string:C991("properties"); \
-			"form"; "DATA"; \
-			"help"; True:C214))
-		
-	End if 
+	$o:=This:C1470.pages.actions
 	
-	If (True:C214)  // ACTIONS
-		
-		This:C1470.pages.actions:=New object:C1471(\
-			"panels"; New collection:C1472)
-		
-		$o:=This:C1470.pages.actions
-		
-		$o.panels.push(New object:C1471(\
-			"form"; "ACTIONS"; \
-			"noTitle"; True:C214))  //;"noSeparator"; True))
-		
-		$o.panels.push(New object:C1471(\
-			"title"; Get localized string:C991("page_action_params"); \
-			"form"; "ACTIONS_PARAMS"; \
-			"noTitle"; True:C214))
-		
-	End if 
+	$o.panels.push(New object:C1471(\
+		"form"; "ACTIONS"; \
+		"noTitle"; True:C214))
+	
+	$o.panels.push(New object:C1471(\
+		"title"; Get localized string:C991("page_action_params"); \
+		"form"; "ACTIONS_PARAMS"; \
+		"noTitle"; True:C214))
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	/// Design definition
@@ -247,7 +220,7 @@ Function init()
 	// Create the context, id any
 	If (Form:C1466.$dialog=Null:C1517)
 		
-		Logger.info("📍 Create $dialog (PROJECT_EDITOR)")
+		Logger.info("📍 Create $dialog (EDITOR)")
 		Form:C1466.$dialog:=New object:C1471
 		
 	End if 
@@ -894,7 +867,7 @@ Function doGenerate($keyPathname : Text)
 		"title"; "dataGeneration"; \
 		"additional"; "datagenerationPreparations"; \
 		"autostart"; $ƒ; \
-		"stopFormula"; Formula:C1597(EDITOR.doStopDataGeneration()); \
+		"stopFormula"; Formula:C1597(UI.doStopDataGeneration()); \
 		"cancelMessage"; "doYouWantToCancelTheDataGenerationProcess"\
 		))
 	

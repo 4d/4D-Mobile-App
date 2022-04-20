@@ -367,7 +367,6 @@ Function allTargets() : Boolean
 Function setTarget($checkDevTools : Boolean; $target : Text)
 	
 	// TODO:Move to EDITOR class
-	
 	If (This:C1470.$ios & This:C1470.$android)
 		
 		This:C1470.info.target:=New collection:C1472("iOS"; "android")
@@ -394,8 +393,8 @@ Function setTarget($checkDevTools : Boolean; $target : Text)
 	This:C1470.save()
 	This:C1470.prepare()
 	
-	EDITOR.ios:=This:C1470.$ios
-	EDITOR.android:=This:C1470.$android
+	UI.ios:=This:C1470.$ios
+	UI.android:=This:C1470.$android
 	
 	If (Count parameters:C259>=1)
 		
@@ -410,10 +409,10 @@ Function setTarget($checkDevTools : Boolean; $target : Text)
 						
 						This:C1470._buildTarget:=$target
 						
-						If (EDITOR.xCode#Null:C1517)
+						If (UI.xCode#Null:C1517)
 							
-							EDITOR.xCode.canceled:=False:C215
-							EDITOR.xCode.alreadyNotified:=False:C215
+							UI.xCode.canceled:=False:C215
+							UI.xCode.alreadyNotified:=False:C215
 							
 						End if 
 						
@@ -422,10 +421,10 @@ Function setTarget($checkDevTools : Boolean; $target : Text)
 						
 						This:C1470._buildTarget:=$target
 						
-						If (EDITOR.studio#Null:C1517)
+						If (UI.studio#Null:C1517)
 							
-							EDITOR.studio.canceled:=False:C215
-							EDITOR.studio.alreadyNotified:=False:C215
+							UI.studio.canceled:=False:C215
+							UI.studio.alreadyNotified:=False:C215
 							
 						End if 
 						
@@ -433,7 +432,7 @@ Function setTarget($checkDevTools : Boolean; $target : Text)
 				End case 
 			End if 
 			
-			EDITOR.checkDevTools()
+			UI.checkDevTools()
 			
 		End if 
 	End if 
@@ -1708,15 +1707,16 @@ Function audit($audits : Object)
 	
 	If (Count parameters:C259>=1)
 		
-		EDITOR.projectAudit:=project_Audit($audits)
+		UI.projectAudit:=project_Audit($audits)
 		
 	Else 
 		
-		EDITOR.projectAudit:=project_Audit
+		UI.projectAudit:=project_Audit
 		
 	End if 
 	
-	cs:C1710.ob.new(This:C1470).set("$project.status.project"; EDITOR.projectAudit.success)  //#TO_REMOVE
+	// FIXME:TO REMOVE
+	cs:C1710.ob.new(This:C1470).set("$project.status.project"; UI.projectAudit.success)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Returns the published tables as a collection

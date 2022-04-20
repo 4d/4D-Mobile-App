@@ -96,7 +96,7 @@ Function handleEvents($e : Object)
 						//_______________________________
 					: ($e.code=On Mouse Enter:K2:33)
 						
-						EDITOR.tips.instantly()
+						UI.tips.instantly()
 						
 						//_______________________________
 					: ($e.code=On Mouse Move:K2:35)
@@ -106,7 +106,7 @@ Function handleEvents($e : Object)
 						//_______________________________
 					: ($e.code=On Mouse Leave:K2:34)
 						
-						EDITOR.tips.restore()
+						UI.tips.restore()
 						
 						//_______________________________
 					: ($e.code=On Getting Focus:K2:7)
@@ -119,7 +119,7 @@ Function handleEvents($e : Object)
 					: ($e.code=On Losing Focus:K2:8)
 						
 						This:C1470.fieldList.foregroundColor:=Foreground color:K23:1
-						This:C1470.fieldListBorder.foregroundColor:=EDITOR.backgroundUnselectedColor
+						This:C1470.fieldListBorder.foregroundColor:=UI.backgroundUnselectedColor
 						
 						//_______________________________
 					: (PROJECT.isLocked())
@@ -278,7 +278,7 @@ Function handleEvents($e : Object)
 							
 							// Highlights
 							Choose:C955($e.objectName=This:C1470.selectorFields.name; This:C1470.selectorFields; This:C1470.selectorRelations)\
-								.setColors(EDITOR.selectedColor; Background color none:K23:10)
+								.setColors(UI.selectedColor; Background color none:K23:10)
 							
 						End if 
 						
@@ -310,7 +310,7 @@ Function onLoad()
 	This:C1470.selectors.distributeLeftToRight()
 	
 	// Place the download button
-	This:C1470.resources.title:=EDITOR.str.localize("downloadMoreResources"; Lowercase:C14(Get localized string:C991("formatters")))
+	This:C1470.resources.title:=UI.str.localize("downloadMoreResources"; Lowercase:C14(Get localized string:C991("formatters")))
 	This:C1470.resources.bestSize(Align right:K42:4)
 	
 	// Initialize the Fields/Relations tab
@@ -459,7 +459,7 @@ Function getFieldList()->$result : Object
 							$result.labels.push($field.label)
 							$result.shortLabels.push($field.shortLabel)
 							$result.iconPaths.push(String:C10($field.icon))
-							$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
+							$result.icons.push(UI.getIcon(String:C10($field.icon)))
 							$result.formats.push(This:C1470._computeFormat($field; $result; $target))
 							$result.formatColors.push(Foreground color:K23:1)
 							$result.nameColors.push(Foreground color:K23:1)
@@ -478,7 +478,7 @@ Function getFieldList()->$result : Object
 							$result.labels.push($field.label)
 							$result.shortLabels.push($field.shortLabel)
 							$result.iconPaths.push(String:C10($field.icon))
-							$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
+							$result.icons.push(UI.getIcon(String:C10($field.icon)))
 							$result.formats.push(This:C1470._computeFormat($field; $result; $target))
 							$result.formatColors.push(Foreground color:K23:1)
 							$result.nameColors.push(Foreground color:K23:1)
@@ -499,7 +499,7 @@ Function getFieldList()->$result : Object
 								$result.labels.push($field.label)
 								$result.shortLabels.push($field.shortLabel)
 								$result.iconPaths.push(String:C10($field.icon))
-								$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
+								$result.icons.push(UI.getIcon(String:C10($field.icon)))
 								$result.formats.push(This:C1470._computeFormat($field; $result; $target))
 								$result.formatColors.push(Foreground color:K23:1)
 								$result.nameColors.push(Foreground color:K23:1)
@@ -534,7 +534,7 @@ Function getFieldList()->$result : Object
 											$result.labels.push($subfield.label)
 											$result.shortLabels.push($subfield.shortLabel)
 											$result.iconPaths.push(String:C10($subfield.icon))
-											$result.icons.push(EDITOR.getIcon(String:C10($subfield.icon)))
+											$result.icons.push(UI.getIcon(String:C10($subfield.icon)))
 											$result.formats.push(This:C1470._computeFormat($subfield; $result; $target))
 											$result.formatColors.push(Foreground color:K23:1)
 											$result.nameColors.push(Foreground color:K23:1)
@@ -553,7 +553,7 @@ Function getFieldList()->$result : Object
 											$result.labels.push($subfield.label)
 											$result.shortLabels.push($subfield.shortLabel)
 											$result.iconPaths.push(String:C10($subfield.icon))
-											$result.icons.push(EDITOR.getIcon(String:C10($subfield.icon)))
+											$result.icons.push(UI.getIcon(String:C10($subfield.icon)))
 											$result.formats.push(This:C1470._computeFormat($subfield; $result; $target))
 											$result.formatColors.push(Foreground color:K23:1)
 											$result.nameColors.push(Foreground color:K23:1)
@@ -572,7 +572,7 @@ Function getFieldList()->$result : Object
 											$result.labels.push($subfield.label)
 											$result.shortLabels.push($subfield.shortLabel)
 											$result.iconPaths.push(String:C10($subfield.icon))
-											$result.icons.push(EDITOR.getIcon(String:C10($subfield.icon)))
+											$result.icons.push(UI.getIcon(String:C10($subfield.icon)))
 											$result.formats.push(This:C1470._computeFormat($subfield; $result; $target))
 											$result.formatColors.push(Foreground color:K23:1)
 											$result.nameColors.push(Foreground color:K23:1)
@@ -610,7 +610,7 @@ Function getFieldList()->$result : Object
 														$result.labels.push($subfield2.label)
 														$result.shortLabels.push($subfield2.shortLabel)
 														$result.iconPaths.push(String:C10($subfield2.icon))
-														$result.icons.push(EDITOR.getIcon(String:C10($subfield2.icon)))
+														$result.icons.push(UI.getIcon(String:C10($subfield2.icon)))
 														$result.formats.push(This:C1470._computeFormat($subfield2; $result; $target))
 														$result.formatColors.push(Foreground color:K23:1)
 														$result.nameColors.push(Foreground color:K23:1)
@@ -629,7 +629,7 @@ Function getFieldList()->$result : Object
 														$result.labels.push($subfield2.label)
 														$result.shortLabels.push($subfield2.shortLabel)
 														$result.iconPaths.push(String:C10($subfield2.icon))
-														$result.icons.push(EDITOR.getIcon(String:C10($subfield2.icon)))
+														$result.icons.push(UI.getIcon(String:C10($subfield2.icon)))
 														$result.formats.push(This:C1470._computeFormat($subfield2; $result; $target))
 														$result.formatColors.push(Foreground color:K23:1)
 														$result.nameColors.push(Foreground color:K23:1)
@@ -648,7 +648,7 @@ Function getFieldList()->$result : Object
 														$result.labels.push($subfield2.label)
 														$result.shortLabels.push($subfield2.shortLabel)
 														$result.iconPaths.push(String:C10($subfield2.icon))
-														$result.icons.push(EDITOR.getIcon(String:C10($subfield2.icon)))
+														$result.icons.push(UI.getIcon(String:C10($subfield2.icon)))
 														$result.formats.push(This:C1470._computeFormat($subfield2; $result; $target))
 														$result.formatColors.push(Foreground color:K23:1)
 														$result.nameColors.push(Foreground color:K23:1)
@@ -693,7 +693,7 @@ Function getFieldList()->$result : Object
 										$result.labels.push($subfield.label)
 										$result.shortLabels.push($subfield.shortLabel)
 										$result.iconPaths.push(String:C10($subfield.icon))
-										$result.icons.push(EDITOR.getIcon(String:C10($subfield.icon)))
+										$result.icons.push(UI.getIcon(String:C10($subfield.icon)))
 										$result.formats.push(This:C1470._computeFormat($subfield; $result; $target))
 										$result.formatColors.push(Foreground color:K23:1)
 										$result.nameColors.push(Foreground color:K23:1)
@@ -712,7 +712,7 @@ Function getFieldList()->$result : Object
 										$result.labels.push($subfield.label)
 										$result.shortLabels.push($subfield.shortLabel)
 										$result.iconPaths.push(String:C10($subfield.icon))
-										$result.icons.push(EDITOR.getIcon(String:C10($subfield.icon)))
+										$result.icons.push(UI.getIcon(String:C10($subfield.icon)))
 										$result.formats.push(This:C1470._computeFormat($subfield; $result; $target))
 										$result.formatColors.push(Foreground color:K23:1)
 										$result.nameColors.push(Foreground color:K23:1)
@@ -731,7 +731,7 @@ Function getFieldList()->$result : Object
 										$result.labels.push($subfield.label)
 										$result.shortLabels.push($subfield.shortLabel)
 										$result.iconPaths.push(String:C10($subfield.icon))
-										$result.icons.push(EDITOR.getIcon(String:C10($subfield.icon)))
+										$result.icons.push(UI.getIcon(String:C10($subfield.icon)))
 										$result.formats.push(This:C1470._computeFormat($subfield; $result; $target))
 										$result.formatColors.push(Foreground color:K23:1)
 										$result.nameColors.push(Foreground color:K23:1)
@@ -769,7 +769,7 @@ Function getFieldList()->$result : Object
 													$result.labels.push($subfield2.label)
 													$result.shortLabels.push($subfield2.shortLabel)
 													$result.iconPaths.push(String:C10($subfield2.icon))
-													$result.icons.push(EDITOR.getIcon(String:C10($subfield2.icon)))
+													$result.icons.push(UI.getIcon(String:C10($subfield2.icon)))
 													$result.formats.push(This:C1470._computeFormat($subfield2; $result; $target))
 													$result.formatColors.push(Foreground color:K23:1)
 													$result.nameColors.push(Foreground color:K23:1)
@@ -788,7 +788,7 @@ Function getFieldList()->$result : Object
 													$result.labels.push($subfield2.label)
 													$result.shortLabels.push($subfield2.shortLabel)
 													$result.iconPaths.push(String:C10($subfield2.icon))
-													$result.icons.push(EDITOR.getIcon(String:C10($subfield2.icon)))
+													$result.icons.push(UI.getIcon(String:C10($subfield2.icon)))
 													$result.formats.push(This:C1470._computeFormat($subfield2; $result; $target))
 													$result.formatColors.push(Foreground color:K23:1)
 													$result.nameColors.push(Foreground color:K23:1)
@@ -807,7 +807,7 @@ Function getFieldList()->$result : Object
 													$result.labels.push($subfield2.label)
 													$result.shortLabels.push($subfield2.shortLabel)
 													$result.iconPaths.push(String:C10($subfield2.icon))
-													$result.icons.push(EDITOR.getIcon(String:C10($subfield2.icon)))
+													$result.icons.push(UI.getIcon(String:C10($subfield2.icon)))
 													$result.formats.push(This:C1470._computeFormat($subfield2; $result; $target))
 													$result.formatColors.push(Foreground color:K23:1)
 													$result.nameColors.push(Foreground color:K23:1)
@@ -843,7 +843,7 @@ Function getFieldList()->$result : Object
 								$result.labels.push($field.label)
 								$result.shortLabels.push($field.shortLabel)
 								$result.iconPaths.push(String:C10($field.icon))
-								$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
+								$result.icons.push(UI.getIcon(String:C10($field.icon)))
 								$result.formatColors.push(Foreground color:K23:1)
 								$result.nameColors.push(Foreground color:K23:1)
 								$result.formats.push("")
@@ -868,7 +868,7 @@ Function getFieldList()->$result : Object
 							$result.labels.push($field.label)
 							$result.shortLabels.push($field.shortLabel)
 							$result.iconPaths.push(String:C10($field.icon))
-							$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
+							$result.icons.push(UI.getIcon(String:C10($field.icon)))
 							$result.formatColors.push(Foreground color:K23:1)
 							$result.nameColors.push(Foreground color:K23:1)
 							$result.formats.push($field.format)
@@ -900,7 +900,7 @@ Function getFieldList()->$result : Object
 										$result.iconPaths.push(String:C10($subfield.icon))
 										$result.formatColors.push(Foreground color:K23:1)
 										$result.nameColors.push(Foreground color:K23:1)
-										$result.icons.push(EDITOR.getIcon(String:C10($subfield.icon)))
+										$result.icons.push(UI.getIcon(String:C10($subfield.icon)))
 										$result.formats.push($subfield.format)
 										
 /* TEMPO */$result.tableNumbers.push(Num:C11($tableID))
@@ -914,7 +914,7 @@ Function getFieldList()->$result : Object
 								
 								If (Form:C1466.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)
 									
-									$result.nameColors[$result.names.length-1]:=EDITOR.errorColor  // Missing or invalid
+									$result.nameColors[$result.names.length-1]:=UI.errorColor  // Missing or invalid
 									
 								End if 
 							End if 
@@ -929,7 +929,7 @@ Function getFieldList()->$result : Object
 							$result.labels.push($field.label)
 							$result.shortLabels.push($field.shortLabel)
 							$result.iconPaths.push(String:C10($field.icon))
-							$result.icons.push(EDITOR.getIcon(String:C10($field.icon)))
+							$result.icons.push(UI.getIcon(String:C10($field.icon)))
 							$result.formatColors.push(Foreground color:K23:1)
 							$result.nameColors.push(Foreground color:K23:1)
 							$result.formats.push($field.format)
@@ -1011,22 +1011,22 @@ Function setHelpTip($e : Object)
 				//………………………………………………………………………………
 			: ($e.columnName=This:C1470.icons.name)
 				
-				$tips:=EDITOR.str.localize("clickToSet")
+				$tips:=UI.str.localize("clickToSet")
 				
 				//………………………………………………………………………………
 			: ($e.columnName=This:C1470.shortLabels.name)
 				
-				$tips:=EDITOR.str.localize("doubleClickToEdit")+"\r - "+EDITOR.str.localize("shouldBe10CharOrLess")
+				$tips:=UI.str.localize("doubleClickToEdit")+"\r - "+UI.str.localize("shouldBe10CharOrLess")
 				
 				//………………………………………………………………………………
 			: ($e.columnName=This:C1470.labels.name)
 				
-				$tips:=EDITOR.str.localize("doubleClickToEdit")+"\r - "+EDITOR.str.localize("shouldBe25CharOrLess")
+				$tips:=UI.str.localize("doubleClickToEdit")+"\r - "+UI.str.localize("shouldBe25CharOrLess")
 				
 				//………………………………………………………………………………
 			: ($e.columnName=This:C1470.titles.name)
 				
-				$tips:=EDITOR.str.localize("doubleClickToEdit")
+				$tips:=UI.str.localize("doubleClickToEdit")
 				
 				//………………………………………………………………………………
 			: ($e.columnName=This:C1470.formats.name)
@@ -1140,7 +1140,7 @@ Function showIconPicker($e : Object)
 		
 		$o.action:="fieldIcons"
 		
-		If (EDITOR.darkScheme)
+		If (UI.darkScheme)
 			
 			$o.background:="black"
 			$o.backgroundStroke:="white"
@@ -1148,17 +1148,17 @@ Function showIconPicker($e : Object)
 		Else 
 			
 			$o.background:="white"
-			$o.backgroundStroke:=EDITOR.strokeColor
+			$o.backgroundStroke:=UI.strokeColor
 			
 		End if 
 		
 		$o.promptColor:=0x00FFFFFF
-		$o.promptBackColor:=EDITOR.strokeColor
+		$o.promptBackColor:=UI.strokeColor
 		$o.hidePromptSeparator:=True:C214
 		$o.forceRedraw:=True:C214
 		
 		//%W-533.3
-		$o.prompt:=EDITOR.str.localize("chooseAnIconForTheField"; (This:C1470.fieldList.columns["names"].pointer)->{$e.row})
+		$o.prompt:=UI.str.localize("chooseAnIconForTheField"; (This:C1470.fieldList.columns["names"].pointer)->{$e.row})
 		//%W+533.3
 		
 		This:C1470.callMeBack("pickerShow"; $o)
@@ -1287,7 +1287,7 @@ Function formatMenuManager($e : Object)
 			
 		Else 
 			
-			$menu.append(EDITOR.str.localize("_"+$t); $t; $format=$t)
+			$menu.append(UI.str.localize("_"+$t); $t; $format=$t)
 			
 		End if 
 	End for each 
@@ -1371,7 +1371,7 @@ Function formatMenuManager($e : Object)
 				
 			Else 
 				
-				$ptr->{$e.row}:=EDITOR.str.localize("_"+$menu.choice)
+				$ptr->{$e.row}:=UI.str.localize("_"+$menu.choice)
 				
 			End if 
 			//%W+533.3
@@ -1471,12 +1471,12 @@ Function _fieldListUI($selected : Boolean)
 	If ($selected)
 		
 		This:C1470.fieldList.foregroundColor:=Foreground color:K23:1
-		This:C1470.fieldListBorder.foregroundColor:=EDITOR.selectedColor
+		This:C1470.fieldListBorder.foregroundColor:=UI.selectedColor
 		
 	Else 
 		
 		This:C1470.fieldList.foregroundColor:=Foreground color:K23:1
-		This:C1470.fieldListBorder.foregroundColor:=EDITOR.backgroundUnselectedColor
+		This:C1470.fieldListBorder.foregroundColor:=UI.backgroundUnselectedColor
 		
 	End if 
 	
@@ -1521,26 +1521,26 @@ Function _computeFormat($field : cs:C1710.field; $result : Object)->$label : Tex
 				If (Not:C34((($manifest.target.length=2) & ($target.length=2))\
 					 || (($target.length=1) & ($manifest.target.indexOf($target[0])#-1))))
 					
-					$result.formatColors[$result.formats.length]:=EDITOR.errorColor  // Not compatible with the target
+					$result.formatColors[$result.formats.length]:=UI.errorColor  // Not compatible with the target
 					
 				End if 
 				
 			Else 
 				
 				$label:=$formatter.label
-				$result.formatColors[$result.formats.length]:=EDITOR.errorColor  // Missing or invalid
+				$result.formatColors[$result.formats.length]:=UI.errorColor  // Missing or invalid
 				
 			End if 
 			
 		Else 
 			
-			$label:=EDITOR.str.localize("_"+$field.format)
+			$label:=UI.str.localize("_"+$field.format)
 			
 		End if 
 		
 	Else 
 		
-		$label:=EDITOR.str.localize("_"+String:C10(SHARED.defaultFieldBindingTypes[$field.fieldType]))
+		$label:=UI.str.localize("_"+String:C10(SHARED.defaultFieldBindingTypes[$field.fieldType]))
 		
 	End if 
 	

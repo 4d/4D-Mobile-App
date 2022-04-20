@@ -355,7 +355,7 @@ Function displayIcon
 			
 		Else 
 			
-			READ PICTURE FILE:C678(EDITOR.errorIcon; $picture)
+			READ PICTURE FILE:C678(UI.errorIcon; $picture)
 			
 		End if 
 	End if 

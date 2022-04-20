@@ -81,7 +81,7 @@ If (Num:C11($e.row)>0)
 				
 				If ($unsynchronized.length=0)  // Not found into the current catalog
 					
-					$tips:=EDITOR.alert+" "+EDITOR.str.localize("theTableIsNoLongerAvailable"; $table.name)
+					$tips:=UI.alert+" "+UI.str.localize("theTableIsNoLongerAvailable"; $table.name)
 					
 				Else 
 					
@@ -93,11 +93,11 @@ If (Num:C11($e.row)>0)
 							
 							If ($unsynchronized.length=1)
 								
-								$tips:=EDITOR.alert+" "+$unsynchronized.extract("tableTips").distinct().join("\r       - ")
+								$tips:=UI.alert+" "+$unsynchronized.extract("tableTips").distinct().join("\r       - ")
 								
 							Else 
 								
-								$tips:=EDITOR.alert+" "+EDITOR.str.localize("someFieldsOrRelationsAreNoLongerAvailableOrWasModified"; $unsynchronized.extract("name").distinct().join("\", \""))
+								$tips:=UI.alert+" "+UI.str.localize("someFieldsOrRelationsAreNoLongerAvailableOrWasModified"; $unsynchronized.extract("name").distinct().join("\", \""))
 								$tips+="\r       - "+$unsynchronized.extract("tableTips").distinct().join("\r       - ")
 								
 							End if 
@@ -114,7 +114,7 @@ If (Num:C11($e.row)>0)
 							
 							If (Length:C16(String:C10($o.fieldTips))#0)
 								
-								$tips:=EDITOR.alert+" "+$o.fieldTips
+								$tips:=UI.alert+" "+$o.fieldTips
 								
 							End if 
 							
@@ -159,7 +159,7 @@ If (Num:C11($e.row)>0)
 								 || (($field.kind="alias") && (Bool:C1537($field.isToOne)))
 								
 								// Related dataclass name
-								$tips:=EDITOR.str.localize("nTo1Relation"; $field.relatedDataClass)
+								$tips:=UI.str.localize("nTo1Relation"; $field.relatedDataClass)
 								
 								If ($field.relatedDataClass=$table.name)  // Recursive link
 									
@@ -170,7 +170,7 @@ If (Num:C11($e.row)>0)
 								
 								//%W-533.3
 								$tips+="\r- "+($e.column=1 ? \
-									EDITOR.str.localize("youCanEnableDisableThePublishOfAllRelatedFieldsByClickingHere"; $ƒ.publishedPtr->{$e.row}#0 ? "disable" : "enable")\
+									UI.str.localize("youCanEnableDisableThePublishOfAllRelatedFieldsByClickingHere"; $ƒ.publishedPtr->{$e.row}#0 ? "disable" : "enable")\
 									 : Get localized string:C991("clickHereToSelectThePublishedFields"))
 								
 								//%W+533.3
@@ -186,11 +186,11 @@ If (Num:C11($e.row)>0)
 										//%W+533.3
 										
 										// Error
-										$tips:=EDITOR.alert+" "+EDITOR.str.localize("theLinkedTableIsNotPublished"; $field.relatedDataClass)
+										$tips:=UI.alert+" "+UI.str.localize("theLinkedTableIsNotPublished"; $field.relatedDataClass)
 										
 									Else 
 										
-										$tips:=EDITOR.str.localize("1toNRelation"; $field.relatedDataClass)
+										$tips:=UI.str.localize("1toNRelation"; $field.relatedDataClass)
 										
 										If ($field.relatedDataClass=$table.name)
 											
@@ -208,7 +208,7 @@ If (Num:C11($e.row)>0)
 								Else 
 									
 									// Related dataclass name
-									$tips:=EDITOR.str.localize("1toNRelation"; $field.relatedDataClass)
+									$tips:=UI.str.localize("1toNRelation"; $field.relatedDataClass)
 									
 									If ($field.relatedDataClass=$table.name)  // Recursive link
 										
@@ -246,7 +246,7 @@ If (Num:C11($e.row)>0)
 		If ($e.row<=Size of array:C274($ptr->))
 			
 			//%W-533.3
-			$tips:=EDITOR.alert+" "+EDITOR.str.localize("theTableIsNoLongerAvailable"; (OBJECT Get pointer:C1124(Object named:K67:5; $ƒ.tableList))->{$e.row})
+			$tips:=UI.alert+" "+UI.str.localize("theTableIsNoLongerAvailable"; (OBJECT Get pointer:C1124(Object named:K67:5; $ƒ.tableList))->{$e.row})
 			
 			//%W+533.3
 			
@@ -255,7 +255,7 @@ If (Num:C11($e.row)>0)
 	
 	If (Position:C15("\r"; $tips)=0)
 		
-		$tips:=EDITOR.str.setText($tips).wordWrap(60)
+		$tips:=UI.str.setText($tips).wordWrap(60)
 		
 	End if 
 	

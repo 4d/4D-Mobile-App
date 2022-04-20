@@ -312,7 +312,7 @@ Function checkingDatasourceConfiguration()
 							This:C1470.testServer.isRunning:=True:C214
 							
 							This:C1470.callWorker(Formula:C1597(Rest).source; New object:C1471(\
-								"caller"; EDITOR.window; \
+								"caller"; UI.window; \
 								"action"; "status"; \
 								"handler"; "mobileapp"; \
 								"timeout"; 60; \
@@ -343,7 +343,7 @@ Function checkingDatasourceConfiguration()
 				Else 
 					
 					This:C1470.callWorker(Formula:C1597(Rest).source; New object:C1471(\
-						"caller"; EDITOR.window; \
+						"caller"; UI.window; \
 						"action"; "status"; \
 						"handler"; "mobileapp"; \
 						"timeout"; 60; \
@@ -366,10 +366,10 @@ Function checkingDatasourceConfiguration()
 					"message"; "theLocalWebServerIsStarted"; \
 					"type"; 0)
 				
-				EDITOR.postMessage(New object:C1471(\
+				UI.postMessage(New object:C1471(\
 					"action"; "show"; \
 					"type"; "confirm"; \
-					"title"; EDITOR.alert+" "+Get localized string:C991("theLocalWebServerIsStarted"); \
+					"title"; UI.alert+" "+Get localized string:C991("theLocalWebServerIsStarted"); \
 					"additional"; "youNeedToShutDownTheLocalWebServer"; \
 					"okAction"; "stopWebServer"; \
 					"ok"; "stopTheLocalServer"))
@@ -515,7 +515,7 @@ Function startWebServer()
 		
 	Else 
 		
-		EDITOR.postMessage(New object:C1471(\
+		UI.postMessage(New object:C1471(\
 			"action"; "show"; \
 			"type"; "alert"; \
 			"title"; "theServerIsNotReady"; \
@@ -574,11 +574,11 @@ Function doGenerate()
 		Else 
 			
 			// Default location
-			$keyPathname:=EDITOR.path.key().platformPath
+			$keyPathname:=UI.path.key().platformPath
 			
 		End if 
 		
-		EDITOR.doGenerate($keyPathname)
+		UI.doGenerate($keyPathname)
 		
 	Else 
 		
@@ -604,7 +604,7 @@ Function endOfDatasetGeneration($data : Object)
 			
 			If ($data.data.errors#Null:C1517)
 				
-				EDITOR.postMessage(New object:C1471(\
+				UI.postMessage(New object:C1471(\
 					"action"; "show"; \
 					"type"; "alert"; \
 					"additional"; $data.data.errors.join("\n")))
@@ -655,46 +655,46 @@ Function updateDatasetComment()
 							 | ($data.tables.query("dumpSize = :1"; "#NA / #NA").length=$data.tables.length)
 							
 							This:C1470.lastGeneration.title:="dataMustBeGenerated"
-							This:C1470.lastGeneration.foregroundColor:=EDITOR.errorColor
+							This:C1470.lastGeneration.foregroundColor:=UI.errorColor
 							
 							//______________________________________________________
 						: ($data.tables.query("dumpSize = :1"; "#NA").length>0)
 							
 							This:C1470.lastGeneration.title:="dataMustBeRegeneratedTheStructureHasBeenModified"
-							This:C1470.lastGeneration.foregroundColor:=EDITOR.warningColor
+							This:C1470.lastGeneration.foregroundColor:=UI.warningColor
 							
 							//______________________________________________________
 						: ($data.tables.query("dumpSize = :1"; "#NA / #NA").length>0)
 							
 							This:C1470.lastGeneration.title:="dataMustBeRegeneratedTheStructureHasBeenModified"
-							This:C1470.lastGeneration.foregroundColor:=EDITOR.warningColor
+							This:C1470.lastGeneration.foregroundColor:=UI.warningColor
 							
 							//______________________________________________________
 						: ($data.tables.query("dumpSize = :1"; "@/ #NA").length>0)
 							
-							This:C1470.lastGeneration.title:=EDITOR.str.localize("dataMustBeRegeneratedBuiltInDataForTargetIsMissing"; "Android")
-							This:C1470.lastGeneration.foregroundColor:=EDITOR.warningColor
+							This:C1470.lastGeneration.title:=UI.str.localize("dataMustBeRegeneratedBuiltInDataForTargetIsMissing"; "Android")
+							This:C1470.lastGeneration.foregroundColor:=UI.warningColor
 							
 							//______________________________________________________
 						: ($data.tables.query("dumpSize = :1"; "#NA /@").length>0)
 							
-							This:C1470.lastGeneration.title:=EDITOR.str.localize("dataMustBeRegeneratedBuiltInDataForTargetIsMissing"; "iOS")
-							This:C1470.lastGeneration.foregroundColor:=EDITOR.warningColor
+							This:C1470.lastGeneration.title:=UI.str.localize("dataMustBeRegeneratedBuiltInDataForTargetIsMissing"; "iOS")
+							This:C1470.lastGeneration.foregroundColor:=UI.warningColor
 							
 							//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 						Else 
 							
-							$file:=EDITOR.getDBFile()
+							$file:=UI.getDBFile()
 							
 							If ($file.exists)
 								
-								This:C1470.lastGeneration.title:=EDITOR.str.localize("lastGeneration"; New collection:C1472($file.modificationDate; Time string:C180($file.modificationTime)))
-								This:C1470.lastGeneration.foregroundColor:=EDITOR.commentColor
+								This:C1470.lastGeneration.title:=UI.str.localize("lastGeneration"; New collection:C1472($file.modificationDate; Time string:C180($file.modificationTime)))
+								This:C1470.lastGeneration.foregroundColor:=UI.commentColor
 								
 							Else 
 								
 								This:C1470.lastGeneration.title:="dataMustBeGenerated"
-								This:C1470.lastGeneration.foregroundColor:=EDITOR.errorColor
+								This:C1470.lastGeneration.foregroundColor:=UI.errorColor
 								
 							End if 
 							

@@ -84,11 +84,11 @@ Function handleEvents($e : Object)
 				$menu:=cs:C1710.menu.new()\
 					.append("none"; "none").mark(Length:C16(String:C10(PROJECT.organization.teamId))=0)
 				
-				If (EDITOR.teams.length>0)
+				If (UI.teams.length>0)
 					
 					$menu.line()
 					
-					For each ($o; EDITOR.teams)
+					For each ($o; UI.teams)
 						
 						$menu.append($o.menu; $o.id).mark(PROJECT.organization.teamId=$o.id)
 						
@@ -147,7 +147,7 @@ Function setTeamID($id : Text; $item : Text)
 	var $label; $teamId : Text
 	var $team : Object
 	
-	$team:=EDITOR.teams.query("id = :1"; $id).pop()
+	$team:=UI.teams.query("id = :1"; $id).pop()
 	
 	If ($team#Null:C1517)
 		
@@ -171,20 +171,20 @@ Function setTeamID($id : Text; $item : Text)
 	PROJECT.save()
 	
 	// *UPDATE RIBBON'S BUTTONS
-	EDITOR.updateRibbon()
+	UI.updateRibbon()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Call back from provisioningProfiles
 Function updateTeamID($response : Object)
 	var $o; $team : Object
 	
-	EDITOR.teams:=New collection:C1472
+	UI.teams:=New collection:C1472
 	
 	If ($response.value#Null:C1517)
 		
 		For each ($o; $response.value.query("id != null"))
 			
-			If (EDITOR.teams.query("id = :1"; String:C10($o.id)).pop()=Null:C1517)
+			If (UI.teams.query("id = :1"; String:C10($o.id)).pop()=Null:C1517)
 				
 				$team:=New object:C1471(\
 					"id"; $o.id; \
@@ -198,7 +198,7 @@ Function updateTeamID($response : Object)
 					
 				End if 
 				
-				EDITOR.teams.push($team)
+				UI.teams.push($team)
 				
 			End if 
 		End for each 
@@ -207,9 +207,9 @@ Function updateTeamID($response : Object)
 			
 			// No team: Assign the first one if there is one.
 			
-			If (EDITOR.teams.length>0)
+			If (UI.teams.length>0)
 				
-				This:C1470.setTeamID(EDITOR.teams[0].id)
+				This:C1470.setTeamID(UI.teams[0].id)
 				
 			End if 
 			
@@ -219,7 +219,7 @@ Function updateTeamID($response : Object)
 			
 		End if 
 		
-		This:C1470.teamMenu.enable(EDITOR.teams.length>0)
+		This:C1470.teamMenu.enable(UI.teams.length>0)
 		
 	Else 
 		

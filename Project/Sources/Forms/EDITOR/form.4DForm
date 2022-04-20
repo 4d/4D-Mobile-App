@@ -81,7 +81,7 @@
 					"width": 131,
 					"height": 12,
 					"sizingX": "move",
-					"dataSource": "EDITOR.currentTask",
+					"dataSource": "UI.currentTask",
 					"focusable": false,
 					"enterable": false,
 					"hideFocusRing": true,

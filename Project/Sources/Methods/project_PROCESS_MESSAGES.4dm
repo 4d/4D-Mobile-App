@@ -30,7 +30,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 		"window"; Current form window:C827; \
 		"callback"; Current method name:C684; \
 		"currentForm"; Current form name:C1298; \
-		"editor"; "PROJECT_EDITOR"; \
+		"editor"; "EDITOR"; \
 		"project"; "PROJECT"; \
 		"developer"; "DEVELOPER"; \
 		"structure"; "STRUCTURE"; \
@@ -152,7 +152,7 @@ Case of
 					//……………………………………………………………………………………………
 				: (String:C10($data.action)="forms")
 					
-					EDITOR.sendMessageToPanel($ƒ.views; $selector; $data)
+					UI.sendMessageToPanel($ƒ.views; $selector; $data)
 					
 					//……………………………………………………………………………………………
 				Else 
@@ -193,22 +193,22 @@ Case of
 					//……………………………………………………………………………………………
 				: ($selector="tableIcons")
 					
-					EDITOR.sendMessageToPanel($ƒ.tableProperties; "pickerResume"; $data)
+					UI.sendMessageToPanel($ƒ.tableProperties; "pickerResume"; $data)
 					
 					//……………………………………………………………………………………………
 				: ($selector="fieldIcons")
 					
-					EDITOR.sendMessageToPanel($ƒ.fieldProperties; "pickerResume"; $data)
+					UI.sendMessageToPanel($ƒ.fieldProperties; "pickerResume"; $data)
 					
 					//……………………………………………………………………………………………
 				: ($selector="forms")
 					
-					EDITOR.sendMessageToPanel($ƒ.views; "pickerResume"; $data)
+					UI.sendMessageToPanel($ƒ.views; "pickerResume"; $data)
 					
 					//……………………………………………………………………………………………
 				: ($selector="actionIcons")
 					
-					EDITOR.sendMessageToPanel($ƒ.actions; "pickerResume"; $data)
+					UI.sendMessageToPanel($ƒ.actions; "pickerResume"; $data)
 					
 					//……………………………………………………………………………………………
 				Else 
@@ -252,7 +252,7 @@ Case of
 		
 		If ($isProjectForm)
 			
-			EDITOR.sendMessageToPanel($ƒ.data; $selector)
+			UI.sendMessageToPanel($ƒ.data; $selector)
 			
 		Else 
 			
@@ -267,7 +267,7 @@ Case of
 		
 		If ($isProjectForm)
 			
-			EDITOR.sendMessageToPanel($ƒ.data; $selector; $data)
+			UI.sendMessageToPanel($ƒ.data; $selector; $data)
 			
 		Else 
 			
@@ -306,7 +306,7 @@ Case of
 		
 		If ($isProjectForm)
 			
-			EDITOR.sendMessageToPanel($ƒ.dataSource; $selector; $data)
+			UI.sendMessageToPanel($ƒ.dataSource; $selector; $data)
 			
 		Else 
 			
@@ -321,7 +321,7 @@ Case of
 		
 		If ($isProjectForm)
 			
-			EDITOR.sendMessageToPanel($ƒ.dataSource; $selector)
+			UI.sendMessageToPanel($ƒ.dataSource; $selector)
 			
 		Else 
 			
@@ -336,7 +336,7 @@ Case of
 		
 		If ($isProjectForm)
 			
-			EDITOR.sendMessageToPanel($ƒ.dataSource; $selector)
+			UI.sendMessageToPanel($ƒ.dataSource; $selector)
 			
 		Else 
 			
@@ -351,7 +351,7 @@ Case of
 		
 		If ($isProjectForm)
 			
-			EDITOR.sendMessageToPanel($ƒ.dataSource; $selector; $data)
+			UI.sendMessageToPanel($ƒ.dataSource; $selector; $data)
 			
 		Else 
 			
@@ -381,7 +381,7 @@ Case of
 		
 		If ($isProjectForm)
 			
-			EDITOR.sendMessageToPanel($ƒ.mainMenu; $selector)
+			UI.sendMessageToPanel($ƒ.mainMenu; $selector)
 			
 		Else 
 			
@@ -397,7 +397,7 @@ Case of
 		
 		If ($isProjectForm)
 			
-			EDITOR.sendMessageToPanel($ƒ.tableProperties; $selector)
+			UI.sendMessageToPanel($ƒ.tableProperties; $selector)
 			
 		Else 
 			
@@ -411,7 +411,7 @@ Case of
 		
 		If ($isProjectForm)
 			
-			EDITOR.sendMessageToPanel($ƒ.tableProperties; $selector)
+			UI.sendMessageToPanel($ƒ.tableProperties; $selector)
 			
 		Else 
 			
@@ -425,7 +425,7 @@ Case of
 		
 		If ($isProjectForm)
 			
-			EDITOR.sendMessageToPanel($ƒ.fieldProperties; $selector)
+			UI.sendMessageToPanel($ƒ.fieldProperties; $selector)
 			
 		Else 
 			
@@ -444,7 +444,7 @@ Case of
 			
 			If (Length:C16($container)>0)
 				
-				EDITOR.callChild($container; Formula:C1597(ACTIONS_CALLBACK).source; $selector)
+				UI.callChild($container; Formula:C1597(ACTIONS_CALLBACK).source; $selector)
 				
 			End if 
 		End if 
@@ -455,7 +455,7 @@ Case of
 		
 		If ($isProjectForm)
 			
-			EDITOR.sendMessageToPanel($ƒ.developer; $selector; $data)
+			UI.sendMessageToPanel($ƒ.developer; $selector; $data)
 			
 		Else 
 			
@@ -473,7 +473,7 @@ Case of
 		
 		If ($isProjectForm)
 			
-			EDITOR.sendMessageToPanel($ƒ.structure; $selector)
+			UI.sendMessageToPanel($ƒ.structure; $selector)
 			
 		Else 
 			
@@ -492,7 +492,7 @@ Case of
 				//…………………………………………………………………………………………………………
 			: ($container=$ƒ.structure)
 				
-				EDITOR.callChild($container; "structure_Handler"; New object:C1471("action"; $selector))
+				UI.callChild($container; "structure_Handler"; New object:C1471("action"; $selector))
 				
 				//…………………………………………………………………………………………………………
 		End case 
@@ -506,7 +506,7 @@ Case of
 			
 			// Resize the current panel
 			OBJECT MOVE:C664(*; $container; 0; 0; 0; $data.offset)
-			EDITOR.callChild($container; "structure_Handler"; New object:C1471("action"; "geometry"; "target"; $data.panel))
+			UI.callChild($container; "structure_Handler"; New object:C1471("action"; "geometry"; "target"; $data.panel))
 			
 			// Move all the following panels
 			For ($i; $indx+1; panel_Count; 1)
@@ -528,7 +528,7 @@ Case of
 				
 				If (Length:C16($container)>0)
 					
-					EDITOR.callChild($container; Current method name:C684; $selector; $data)
+					UI.callChild($container; Current method name:C684; $selector; $data)
 					
 				End if 
 			End if 
@@ -597,7 +597,7 @@ Case of
 			
 			If (Length:C16($container)>0)
 				
-				EDITOR.callChild($container; Current method name:C684; $selector; $data)
+				UI.callChild($container; Current method name:C684; $selector; $data)
 				
 			End if 
 			
@@ -613,7 +613,7 @@ Case of
 		
 		If ($isProjectForm)
 			
-			EDITOR.sendMessageToPanel($ƒ.views; $selector; $data)
+			UI.sendMessageToPanel($ƒ.views; $selector; $data)
 			
 		Else 
 			
@@ -626,7 +626,7 @@ Case of
 		
 		If ($isProjectForm)
 			
-			EDITOR.sendMessageToPanel($ƒ.views; $selector; $data)
+			UI.sendMessageToPanel($ƒ.views; $selector; $data)
 			
 		Else 
 			
@@ -649,7 +649,7 @@ Case of
 		
 		For each ($t; panels)
 			
-			EDITOR.callChild($t; "panel_REFRESH")
+			UI.callChild($t; "panel_REFRESH")
 			
 		End for each 
 		
@@ -662,7 +662,7 @@ Case of
 			
 			If (Length:C16($container)>0)
 				
-				EDITOR.callChild($container; "panel_REFRESH")
+				UI.callChild($container; "panel_REFRESH")
 				
 			End if 
 		End if 

@@ -53,13 +53,13 @@ Case of
 			
 			If ($status.success)
 				
-				EDITOR.runBuild($1.build)  // Relaunch the build process
+				UI.runBuild($1.build)  // Relaunch the build process
 				
 			Else 
 				
 				$t:=$status.errors[0].message
 				
-				EDITOR.postMessage(New object:C1471(\
+				UI.postMessage(New object:C1471(\
 					"action"; "show"; \
 					"type"; "alert"; \
 					"title"; Get localized string:C991("failedToStartTheWebServer"); \
@@ -70,7 +70,7 @@ Case of
 		Else 
 			
 			// Cancel build process
-			EDITOR.callMeBack("build_stop")
+			UI.callMeBack("build_stop")
 			
 		End if 
 		
@@ -80,12 +80,12 @@ Case of
 		If ($validated)
 			
 			// Set and continue
-			EDITOR.callMeBack("allowStructureModification"; Form:C1466.option)
+			UI.callMeBack("allowStructureModification"; Form:C1466.option)
 			
 		Else 
 			
 			// Cancel build process
-			EDITOR.callMeBack("build_stop")
+			UI.callMeBack("build_stop")
 			
 		End if 
 		
@@ -102,7 +102,7 @@ Case of
 						"action"; "safeDelete"; \
 						"path"; $1.build.path))
 					
-					EDITOR.runBuild($1.build)  // Relaunch the build process
+					UI.runBuild($1.build)  // Relaunch the build process
 					
 				End if 
 			End if 
@@ -110,7 +110,7 @@ Case of
 		Else 
 			
 			// Cancel build process
-			EDITOR.callMeBack("build_stop")
+			UI.callMeBack("build_stop")
 			
 		End if 
 		

@@ -55,7 +55,7 @@ Function handleEvents($e : Object)
 			: (This:C1470.productionURL.catch($e; On Data Change:K2:15))
 				
 				// Verify the web server configuration
-				EDITOR.callMeBack("checkingServerConfiguration")
+				UI.callMeBack("checkingServerConfiguration")
 				
 				//==================================================
 			: (This:C1470.webSettings.catch($e; On Clicked:K2:4))

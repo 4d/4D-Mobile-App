@@ -43,7 +43,7 @@ If ($testClass="true")\
 			
 		End if 
 		
-		$menu.append(EDITOR.str.localize("removeField"; $field.name); $field.name)
+		$menu.append(UI.str.localize("removeField"; $field.name); $field.name)
 		
 	End for each 
 	

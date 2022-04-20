@@ -71,7 +71,7 @@ $icons:=New collection:C1472.resize($pathnames.length)
 
 For each ($path; $pathnames)
 	
-	If (EDITOR.darkScheme) && ($path="@.svg")
+	If (UI.darkScheme) && ($path="@.svg")
 		
 		var $svg : cs:C1710.svg
 		$svg:=cs:C1710.svg.new(File:C1566($path; fk platform path:K87:2))
@@ -118,7 +118,7 @@ If ($folder.exists)
 	
 	For each ($path; $host)
 		
-		If (EDITOR.darkScheme) && ($path="@.svg")
+		If (UI.darkScheme) && ($path="@.svg")
 			
 			var $svg : cs:C1710.svg
 			$svg:=cs:C1710.svg.new(File:C1566($path; fk platform path:K87:2))
@@ -150,10 +150,10 @@ End if
 // ----------------------------------------------------
 //                 Insert blank icon
 // ----------------------------------------------------
-If (EDITOR.darkScheme) && (EDITOR.noIcon="@.svg")
+If (UI.darkScheme) && (UI.noIcon="@.svg")
 	
 	var $svg : cs:C1710.svg
-	$svg:=cs:C1710.svg.new(File:C1566(EDITOR.noIcon; fk platform path:K87:2))
+	$svg:=cs:C1710.svg.new(File:C1566(UI.noIcon; fk platform path:K87:2))
 	
 	If ($svg.success)
 		
@@ -162,13 +162,13 @@ If (EDITOR.darkScheme) && (EDITOR.noIcon="@.svg")
 		
 	Else 
 		
-		READ PICTURE FILE:C678(EDITOR.noIcon; $p)
+		READ PICTURE FILE:C678(UI.noIcon; $p)
 		
 	End if 
 	
 Else 
 	
-	READ PICTURE FILE:C678(EDITOR.noIcon; $p)
+	READ PICTURE FILE:C678(UI.noIcon; $p)
 	
 End if 
 

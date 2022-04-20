@@ -44,18 +44,18 @@ Function update()
 	End for each 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	//Performs the project audit                                                                                         
+	//Performs the project audit
 	//TODO: remove $project.status.project
 Function audit($whatToCheck : Object)->$audit : Object
 	
 	If (Count parameters:C259>=1)
 		
-		EDITOR.projectAudit:=project_Audit($whatToCheck)
+		UI.projectAudit:=project_Audit($whatToCheck)
 		
 	Else 
 		
-		EDITOR.projectAudit:=project_Audit
+		UI.projectAudit:=project_Audit
 		
 	End if 
 	
-	cs:C1710.ob.new(This:C1470).set("$project.status.project"; EDITOR.projectAudit.success)  // #TO_REMOVE
+	cs:C1710.ob.new(This:C1470).set("$project.status.project"; UI.projectAudit.success)  // #TO_REMOVE

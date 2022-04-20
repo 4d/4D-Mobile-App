@@ -111,7 +111,7 @@ Case of
 							
 							$Obj_picker.action:="tableIcons"
 							
-							If (EDITOR.darkScheme)
+							If (UI.darkScheme)
 								
 								$Obj_picker.background:="black"
 								$Obj_picker.backgroundStroke:="white"
@@ -119,12 +119,12 @@ Case of
 							Else 
 								
 								$Obj_picker.background:="white"
-								$Obj_picker.backgroundStroke:=EDITOR.strokeColor
+								$Obj_picker.backgroundStroke:=UI.strokeColor
 								
 							End if 
 							
 							$Obj_picker.promptColor:=0x00FFFFFF
-							$Obj_picker.promptBackColor:=EDITOR.strokeColor
+							$Obj_picker.promptBackColor:=UI.strokeColor
 							$Obj_picker.hidePromptSeparator:=True:C214
 							$Obj_picker.forceRedraw:=True:C214
 							$Obj_picker.prompt:=cs:C1710.str.new("chooseAnIconForTheTable").localized((OBJECT Get pointer:C1124(Object named:K67:5; $Obj_form.tables))->{$Lon_row})
@@ -146,7 +146,7 @@ Case of
 				//______________________________________________________
 			: ($Lon_formEvent=On Mouse Enter:K2:33)
 				
-				EDITOR.tips.instantly()
+				UI.tips.instantly()
 				
 				//______________________________________________________
 			: ($Lon_formEvent=On Mouse Move:K2:35)
@@ -187,7 +187,7 @@ Case of
 				//______________________________________________________
 			: ($Lon_formEvent=On Mouse Leave:K2:34)
 				
-				EDITOR.tips.restore()
+				UI.tips.restore()
 				
 				//______________________________________________________
 			: ($Lon_formEvent=On Getting Focus:K2:7)

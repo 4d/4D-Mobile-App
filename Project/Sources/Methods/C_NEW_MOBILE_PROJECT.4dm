@@ -22,7 +22,7 @@ $data:=New object:C1471(\
 "$name"; Get localized string:C991("newProject"); \
 "$ios"; Is macOS:C1572; \
 "$android"; Is Windows:C1573; \
-"_window"; Open form window:C675("PROJECT_EDITOR"; Plain form window:K39:10; Horizontally centered:K39:1; At the top:K39:5; *))
+"_window"; Open form window:C675("EDITOR"; Plain form window:K39:10; Horizontally centered:K39:1; At the top:K39:5; *))
 
 DIALOG:C40("WIZARD_NEW_PROJECT"; $data)
 
@@ -44,23 +44,23 @@ If (Bool:C1537(OK))
 			
 			SET ASSERT ENABLED:C1131(True:C214; *)
 			
-			DIALOG:C40("PROJECT_EDITOR"; $data)
-			CLOSE WINDOW:C154(EDITOR.window)
+			DIALOG:C40("EDITOR"; $data)
+			CLOSE WINDOW:C154(UI.window)
 			
 		Else 
 			
-			DIALOG:C40("PROJECT_EDITOR"; $data; *)
+			DIALOG:C40("EDITOR"; $data; *)
 			
 		End if 
 		
 	Else 
 		
-		CLOSE WINDOW:C154(EDITOR.window)
+		CLOSE WINDOW:C154(UI.window)
 		
 	End if 
 	
 Else 
 	
-	CLOSE WINDOW:C154(EDITOR.window)
+	CLOSE WINDOW:C154(UI.window)
 	
 End if 

@@ -115,7 +115,7 @@ Case of
 				// Align checkbox & help according to the translation
 				_o_widget($form.allowHelp).moveHorizontally(_o_widget($form.allow).bestSize().coordinates.right+5)
 				
-				EDITOR.updateHeader(New object:C1471(\
+				UI.updateHeader(New object:C1471(\
 					"show"; Not:C34(Bool:C1537(Form:C1466.$project.structure.dataModel))))
 				
 				//______________________________________________________
@@ -206,12 +206,12 @@ Case of
 	: ($IN.action="update")
 		
 		// Update ribbon
-		EDITOR.updateRibbon()
+		UI.updateRibbon()
 		
 		// Update structure dependencies, if any
-		EDITOR.callMeBack("tableList")
-		EDITOR.callMeBack("fieldList")
-		EDITOR.callMeBack("tableProperties")
+		UI.callMeBack("tableList")
+		UI.callMeBack("fieldList")
+		UI.callMeBack("tableProperties")
 		//EDITOR.callMeBack("mainMenu")
 		
 		//=========================================================

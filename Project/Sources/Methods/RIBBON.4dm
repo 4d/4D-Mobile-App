@@ -39,7 +39,7 @@ Case of
 			If (Form:C1466.tab=$e.objectName)
 				
 				// Highlights
-				OBJECT SET RGB COLORS:C628(*; $e.objectName; EDITOR.selectedColor)
+				OBJECT SET RGB COLORS:C628(*; $e.objectName; UI.selectedColor)
 				
 			Else 
 				
@@ -52,7 +52,7 @@ Case of
 			If (OBJECT Get enabled:C1079(*; $e.objectName))
 				
 				// Highlights
-				OBJECT SET RGB COLORS:C628(*; $e.objectName; EDITOR.selectedColor)
+				OBJECT SET RGB COLORS:C628(*; $e.objectName; UI.selectedColor)
 				
 				Case of 
 						
@@ -187,7 +187,7 @@ Case of
 				OBJECT SET RGB COLORS:C628(*; Form:C1466.tab; 0x00FFFFFF)
 				
 				// Selects the current tab
-				OBJECT SET RGB COLORS:C628(*; $e.objectName; EDITOR.selectedColor)
+				OBJECT SET RGB COLORS:C628(*; $e.objectName; UI.selectedColor)
 				
 				If (Form:C1466.tab=$e.objectName)
 					
@@ -228,25 +228,25 @@ Case of
 					Case of 
 							
 							//______________________________________________________
-						: (EDITOR.currentDevice=Null:C1517)
+						: (UI.currentDevice=Null:C1517)
 							
 							// <NOTHING MORE TO DO>
 							
 							//______________________________________________________
 						: (Is Windows:C1573)
 							
-							$device:=EDITOR.devices.plugged.android.query("udid = :1"; EDITOR.currentDevice).pop()
+							$device:=UI.devices.plugged.android.query("udid = :1"; UI.currentDevice).pop()
 							$target:=Choose:C955($device#Null:C1517; "android"; Null:C1517)
 							
 							//______________________________________________________
 						: (Is macOS:C1572)
 							
-							$device:=EDITOR.devices.plugged.apple.query("udid = :1"; EDITOR.currentDevice).pop()
+							$device:=UI.devices.plugged.apple.query("udid = :1"; UI.currentDevice).pop()
 							$target:=Choose:C955($device#Null:C1517; "ios"; Null:C1517)
 							
 							If ($target=Null:C1517)
 								
-								$device:=EDITOR.devices.plugged.android.query("udid = :1"; EDITOR.currentDevice).pop()
+								$device:=UI.devices.plugged.android.query("udid = :1"; UI.currentDevice).pop()
 								$target:=Choose:C955($device#Null:C1517; "android"; Null:C1517)
 								
 							End if 
@@ -256,7 +256,7 @@ Case of
 					
 					If ($target=Null:C1517)
 						
-						EDITOR.postMessage(New object:C1471(\
+						UI.postMessage(New object:C1471(\
 							"action"; "show"; \
 							"type"; "alert"; \
 							"title"; ".You must first select a connected device"))

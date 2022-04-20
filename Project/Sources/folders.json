@@ -260,11 +260,11 @@
 			"PROJECT_EDITOR"
 		],
 		"forms": [
-			"PROJECT_EDITOR",
+			"EDITOR",
 			"TITLE"
 		],
 		"classes": [
-			"PROJECT_EDITOR"
+			"EDITOR"
 		]
 	},
 	"[FOOTER]": {

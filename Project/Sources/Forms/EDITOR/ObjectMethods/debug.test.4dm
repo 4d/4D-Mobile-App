@@ -14,12 +14,12 @@ Case of
 			"option"; New object:C1471("title"; "rememberMyChoice"; "value"; False:C215); \
 			"target"; Current form window:C827)
 		
-		EDITOR.postMessage($o)
+		UI.postMessage($o)
 		
 		//______________________________________________________
 	: (True:C214)
 		
-		EDITOR.doCancelableProgress(New object:C1471(\
+		UI.doCancelableProgress(New object:C1471(\
 			"title"; "dataSetGeneration"; \
 			"cancelMessage"; "Z'ETES CERTAINS?"))
 		

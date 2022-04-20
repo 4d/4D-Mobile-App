@@ -148,7 +148,7 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Mouse Enter:K2:33)
 				
-				EDITOR.tips.instantly(100)
+				UI.tips.instantly(100)
 				
 				//______________________________________________________
 			: ($e.code=On Mouse Move:K2:35)
@@ -158,7 +158,7 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Mouse Leave:K2:34)
 				
-				EDITOR.tips.restore()
+				UI.tips.restore()
 				
 				//______________________________________________________
 			: ($e.code=On Getting Focus:K2:7)
@@ -176,7 +176,7 @@ Case of
 					End if 
 				End if 
 				
-				OBJECT SET RGB COLORS:C628(*; $e.objectName; Foreground color:K23:1; EDITOR.highlightColor; EDITOR.highlightColor)
+				OBJECT SET RGB COLORS:C628(*; $e.objectName; Foreground color:K23:1; UI.highlightColor; UI.highlightColor)
 				
 				$class.fieldList()
 				
@@ -397,7 +397,7 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Mouse Enter:K2:33)
 				
-				EDITOR.tips.instantly(100)
+				UI.tips.instantly(100)
 				
 				//______________________________________________________
 			: ($e.code=On Mouse Move:K2:35)
@@ -409,7 +409,7 @@ Case of
 				
 				OBJECT SET HELP TIP:C1181(*; $e.objectName; "")
 				
-				EDITOR.tips.restore()
+				UI.tips.restore()
 				
 				//______________________________________________________
 			: ($e.code=On Getting Focus:K2:7)
@@ -427,7 +427,7 @@ Case of
 					End if 
 				End if 
 				
-				OBJECT SET RGB COLORS:C628(*; $e.objectName; Foreground color:K23:1; EDITOR.highlightColor; EDITOR.highlightColor)
+				OBJECT SET RGB COLORS:C628(*; $e.objectName; Foreground color:K23:1; UI.highlightColor; UI.highlightColor)
 				
 				// Move search & action [
 				_o_ui_MOVE($form.search; $e.objectName; Align right:K42:4; 30)
@@ -671,8 +671,8 @@ Case of
 		//// Hide the bottom line
 		//OBJECT SET VISIBLE(*; "bottom.line"; False)
 		//CALL FORM(Current form window; "editor_CALLBACK"; "resizePanel"; New object(\
-									"panel"; Current form name; \
-									"offset"; $Lon_vOffset))
+												"panel"; Current form name; \
+												"offset"; $Lon_vOffset))
 		//End if
 		////______________________________________________________
 		//: ($e.code=On Mouse Leave)

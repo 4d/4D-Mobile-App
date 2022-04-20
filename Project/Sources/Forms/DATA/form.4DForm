@@ -109,7 +109,6 @@
 							"minWidth": 10,
 							"maxWidth": 32000,
 							"enterable": false,
-							"textAlign": "left",
 							"events": [
 								"onClick",
 								"onDataChange"
@@ -125,7 +124,8 @@
 								"timeFormat": "hh_mm_ss",
 								"textAlign": "left",
 								"verticalAlign": "middle"
-							}
+							},
+							"textAlign": "center"
 						},
 						{
 							"name": "Column1",

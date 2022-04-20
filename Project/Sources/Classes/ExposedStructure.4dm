@@ -28,6 +28,8 @@ Class constructor($sorted : Boolean)
 	
 	This:C1470.sorted:=(Count parameters:C259>=1) ? $sorted : False:C215
 	
+	This:C1470.str:=cs:C1710.str.new()
+	
 	This:C1470.update()
 	
 	//==================================================================
@@ -914,7 +916,7 @@ Function _fieldModel($field : cs:C1710.field; $relatedCatalog : Object)->$fieldM
 					//______________________________________________________
 				: ($field.fieldType=Is collection:K8:32)  // Selection
 					
-					$fieldModel.label:=PROJECT.label(EDITOR.str.localize("listOf"; $field.name))
+					$fieldModel.label:=PROJECT.label(This:C1470.str.localize("listOf"; $field.name))
 					$fieldModel.shortLabel:=PROJECT.label($field.name)
 					
 					//______________________________________________________
@@ -949,7 +951,7 @@ Function _fieldModel($field : cs:C1710.field; $relatedCatalog : Object)->$fieldM
 			
 			$fieldModel:=New object:C1471(\
 				"kind"; $field.kind; \
-				"label"; PROJECT.label(EDITOR.str.localize("listOf"; $field.name)); \
+				"label"; PROJECT.label(This:C1470.str.localize("listOf"; $field.name)); \
 				"shortLabel"; PROJECT.label($field.name); \
 				"relatedEntities"; $field.relatedDataClass; \
 				"inverseName"; $field.inverseName; \

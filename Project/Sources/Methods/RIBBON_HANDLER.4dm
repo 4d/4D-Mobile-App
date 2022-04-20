@@ -106,55 +106,55 @@ Case of
 		Case of 
 				
 				//______________________________________________________
-			: (Bool:C1537(EDITOR.android)) & (Bool:C1537(EDITOR.ios))
+			: (Bool:C1537(UI.android)) & (Bool:C1537(UI.ios))
 				
-				If (EDITOR.xCode#Null:C1517)
+				If (UI.xCode#Null:C1517)
 					
-					$isDevToolAvailable:=Bool:C1537(EDITOR.xCode.ready)
+					$isDevToolAvailable:=Bool:C1537(UI.xCode.ready)
 					
 				End if 
 				
 				If (Not:C34($isDevToolAvailable))
 					
-					If (EDITOR.studio#Null:C1517)
+					If (UI.studio#Null:C1517)
 						
-						$isDevToolAvailable:=Bool:C1537(EDITOR.studio.ready)
+						$isDevToolAvailable:=Bool:C1537(UI.studio.ready)
 						
 					End if 
 				End if 
 				
-				$isDeviceSelected:=(EDITOR.currentDevice#Null:C1517)
+				$isDeviceSelected:=(UI.currentDevice#Null:C1517)
 				$isSdkAvailable:=cs:C1710.path.new().cacheSdkAndroidUnzipped().exists
 				
 				//______________________________________________________
-			: (Bool:C1537(EDITOR.ios))
+			: (Bool:C1537(UI.ios))
 				
-				If (EDITOR.xCode#Null:C1517)
+				If (UI.xCode#Null:C1517)
 					
-					$isDevToolAvailable:=Bool:C1537(EDITOR.xCode.ready)
+					$isDevToolAvailable:=Bool:C1537(UI.xCode.ready)
 					
 				End if 
 				
-				If (EDITOR.currentDevice#Null:C1517)
+				If (UI.currentDevice#Null:C1517)
 					
-					$isDeviceSelected:=EDITOR.devices.apple.copy().combine(EDITOR.devices.plugged.apple).query("udid = :1"; EDITOR.currentDevice).pop()#Null:C1517
+					$isDeviceSelected:=UI.devices.apple.copy().combine(UI.devices.plugged.apple).query("udid = :1"; UI.currentDevice).pop()#Null:C1517
 					
 				End if 
 				
 				$isSdkAvailable:=True:C214
 				
 				//______________________________________________________
-			: (Bool:C1537(EDITOR.android))
+			: (Bool:C1537(UI.android))
 				
-				If (EDITOR.studio#Null:C1517)
+				If (UI.studio#Null:C1517)
 					
-					$isDevToolAvailable:=Bool:C1537(EDITOR.studio.ready)
+					$isDevToolAvailable:=Bool:C1537(UI.studio.ready)
 					
 				End if 
 				
-				If (EDITOR.currentDevice#Null:C1517)
+				If (UI.currentDevice#Null:C1517)
 					
-					$isDeviceSelected:=EDITOR.devices.android.copy().combine(EDITOR.devices.plugged.android).query("udid = :1"; EDITOR.currentDevice).pop()#Null:C1517
+					$isDeviceSelected:=UI.devices.android.copy().combine(UI.devices.plugged.android).query("udid = :1"; UI.currentDevice).pop()#Null:C1517
 					
 				End if 
 				
@@ -166,7 +166,7 @@ Case of
 		If (Is macOS:C1572)
 			
 			// True if only android | teamID OK
-			$withTeamID:=Choose:C955(Bool:C1537(EDITOR.ios); Bool:C1537(EDITOR.teamId); True:C214)
+			$withTeamID:=Choose:C955(Bool:C1537(UI.ios); Bool:C1537(UI.teamId); True:C214)
 			
 		Else 
 			
@@ -175,9 +175,9 @@ Case of
 			
 		End if 
 		
-		If (EDITOR.projectAudit#Null:C1517)
+		If (UI.projectAudit#Null:C1517)
 			
-			$isProjectOK:=Bool:C1537(EDITOR.projectAudit.success)
+			$isProjectOK:=Bool:C1537(UI.projectAudit.success)
 			
 		End if 
 		
@@ -195,7 +195,7 @@ Case of
 		$form.install.enable($isDevToolAvailable & $isProjectOK & $withTeamID & $isDeviceSelected)
 		
 		// * UPDATE background toolbar color
-		If (EDITOR.darkScheme)
+		If (UI.darkScheme)
 			
 			OBJECT SET RGB COLORS:C628(*; "toolbar.background"; "#0D3648"; "#0D3648")
 			
@@ -241,50 +241,50 @@ Case of
 		// * UPDATE THE SECTION BUTTONS
 		For each ($page; $form.pages)
 			
-			OBJECT SET VALUE:C1742($page.button; Num:C11($page.name=EDITOR.currentPage))
+			OBJECT SET VALUE:C1742($page.button; Num:C11($page.name=UI.currentPage))
 			
 		End for each 
 		
 		$form.simulator.foregroundColor:="dimgray"
 		
-		If (EDITOR.devices#Null:C1517) & (EDITOR.ios#Null:C1517) & (EDITOR.android#Null:C1517)
+		If (UI.devices#Null:C1517) & (UI.ios#Null:C1517) & (UI.android#Null:C1517)
 			
 			// * UPDATE DEVICE BUTTON
-			$form.simulator.enable(EDITOR.taskNotInProgress("getDevices"))
+			$form.simulator.enable(UI.taskNotInProgress("getDevices"))
 			
 			Case of   //#DEBUG LOG
 					
 					//______________________________________________________
 				: (Is Windows:C1573)
 					
-					If (EDITOR.devices.android.length=0)
+					If (UI.devices.android.length=0)
 						
 						Logger.warning("NO ANDROID SIMULATOR AVAILABLE")
 						
 					End if 
 					
 					//______________________________________________________
-				: (EDITOR.ios) & Not:C34(EDITOR.android) & (EDITOR.devices.apple.length=0)
+				: (UI.ios) & Not:C34(UI.android) & (UI.devices.apple.length=0)
 					
 					Logger.warning("NO IOS SIMULATOR AVAILABLE")
 					
 					//______________________________________________________
-				: (EDITOR.ios) & (EDITOR.android)
+				: (UI.ios) & (UI.android)
 					
-					If (EDITOR.devices.apple.length=0)\
-						 & (EDITOR.devices.android.length=0)
+					If (UI.devices.apple.length=0)\
+						 & (UI.devices.android.length=0)
 						
 						Logger.warning("NO SIMULATOR AVAILABLE")
 						
 					Else 
 						
-						If (EDITOR.devices.apple.length=0)
+						If (UI.devices.apple.length=0)
 							
 							Logger.warning("NO IOS SIMULATOR AVAILABLE")
 							
 						Else 
 							
-							If (EDITOR.devices.android.length=0)
+							If (UI.devices.android.length=0)
 								
 								Logger.warning("NO ANDROID SIMULATOR AVAILABLE")
 								
@@ -293,7 +293,7 @@ Case of
 					End if 
 					
 					//______________________________________________________
-				: (EDITOR.android) & (EDITOR.devices.android.length=0)
+				: (UI.android) & (UI.devices.android.length=0)
 					
 					Logger.warning("NO ANDROID SIMULATOR AVAILABLE")
 					
@@ -303,19 +303,19 @@ Case of
 			Case of   // * GET THE LAST SIMULATOR USED, IF KNOWN
 					
 					//______________________________________________________
-				: (EDITOR.ios & EDITOR.android)
+				: (UI.ios & UI.android)
 					
-					$lastDevice:=String:C10(EDITOR.preferences.get("lastDevice"))
-					
-					//______________________________________________________
-				: (EDITOR.ios)
-					
-					$lastDevice:=String:C10(EDITOR.preferences.get("lastIosDevice"))
+					$lastDevice:=String:C10(UI.preferences.get("lastDevice"))
 					
 					//______________________________________________________
-				: (EDITOR.android)
+				: (UI.ios)
 					
-					$lastDevice:=String:C10(EDITOR.preferences.get("lastAndroidDevice"))
+					$lastDevice:=String:C10(UI.preferences.get("lastIosDevice"))
+					
+					//______________________________________________________
+				: (UI.android)
+					
+					$lastDevice:=String:C10(UI.preferences.get("lastAndroidDevice"))
 					
 					//______________________________________________________
 			End case 
@@ -324,8 +324,8 @@ Case of
 				
 				
 				If (Is macOS:C1572)\
-					 & (EDITOR.ios)\
-					 & (EDITOR.devices.apple.length>0)
+					 & (UI.ios)\
+					 & (UI.devices.apple.length>0)
 					
 					$lastDevice:=String:C10(cs:C1710.simctl.new(SHARED.iosDeploymentTarget).defaultDevice().udid)
 					
@@ -334,36 +334,36 @@ Case of
 			
 			If (Length:C16($lastDevice)=0)  // * GET A DEFAULT ANDROID DEVICE
 				
-				If (EDITOR.devices.android.length>0)
+				If (UI.devices.android.length>0)
 					
 					// Select the first one
-					$lastDevice:=EDITOR.devices.android[0].udid
+					$lastDevice:=UI.devices.android[0].udid
 					
 				End if 
 			End if 
 			
 			If (Length:C16($lastDevice)>0)
 				
-				If (EDITOR.devices.apple#Null:C1517)\
-					 & (EDITOR.devices.plugged.apple#Null:C1517)
+				If (UI.devices.apple#Null:C1517)\
+					 & (UI.devices.plugged.apple#Null:C1517)
 					
-					PROJECT._device:=EDITOR.devices.apple.copy().combine(EDITOR.devices.plugged.apple).query("udid = :1"; $lastDevice).pop()
+					PROJECT._device:=UI.devices.apple.copy().combine(UI.devices.plugged.apple).query("udid = :1"; $lastDevice).pop()
 					
 				End if 
 				
 				If (PROJECT._device#Null:C1517)
 					
-					If (EDITOR.ios)
+					If (UI.ios)
 						
 						$form.simulator.title:=PROJECT._device.name
-						EDITOR.currentDevice:=$lastDevice
+						UI.currentDevice:=$lastDevice
 						PROJECT._buildTarget:="ios"
 						PROJECT._simulator:=PROJECT._device.udid
 						
 					Else 
 						
 						$form.simulator.title:="select"
-						$form.simulator.foregroundColor:=EDITOR.errorRGB
+						$form.simulator.foregroundColor:=UI.errorRGB
 						OB REMOVE:C1226(PROJECT; "_buildTarget")
 						OB REMOVE:C1226(PROJECT; "_simulator")
 						
@@ -371,26 +371,26 @@ Case of
 					
 				Else 
 					
-					If (EDITOR.devices.android#Null:C1517)\
-						 & (EDITOR.devices.plugged.android#Null:C1517)
+					If (UI.devices.android#Null:C1517)\
+						 & (UI.devices.plugged.android#Null:C1517)
 						
-						PROJECT._device:=EDITOR.devices.android.copy().combine(EDITOR.devices.plugged.android).query("udid = :1"; $lastDevice).pop()
+						PROJECT._device:=UI.devices.android.copy().combine(UI.devices.plugged.android).query("udid = :1"; $lastDevice).pop()
 						
 					End if 
 					
 					If (PROJECT._device#Null:C1517)
 						
-						If (EDITOR.android)
+						If (UI.android)
 							
 							$form.simulator.title:=PROJECT._device.name
-							EDITOR.currentDevice:=$lastDevice
+							UI.currentDevice:=$lastDevice
 							PROJECT._buildTarget:="android"
 							PROJECT._simulator:=PROJECT._device.udid
 							
 						Else 
 							
 							$form.simulator.title:="select"
-							$form.simulator.foregroundColor:=EDITOR.errorRGB
+							$form.simulator.foregroundColor:=UI.errorRGB
 							OB REMOVE:C1226(PROJECT; "_buildTarget")
 							OB REMOVE:C1226(PROJECT; "_simulator")
 							

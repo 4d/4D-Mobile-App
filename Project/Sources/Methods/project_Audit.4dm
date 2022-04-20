@@ -309,7 +309,7 @@ End if
 
 If (Form:C1466#Null:C1517)
 	
-	EDITOR.updateHeader(New object:C1471(\
+	UI.updateHeader(New object:C1471(\
 		"show"; Not:C34($result.success)))
 	
 End if 

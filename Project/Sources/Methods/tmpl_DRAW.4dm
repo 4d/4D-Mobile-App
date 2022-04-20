@@ -113,7 +113,7 @@ If (Num:C11($tableID)>0)
 			
 			cs:C1710.formObject.new("preview.label")\
 				.setTitle(String:C10($tmpl.title))\
-				.setColors(Choose:C955((Form:C1466.$android & Not:C34($tmpl.android)) | (Form:C1466.$ios & Not:C34($tmpl.ios)); EDITOR.errorRGB; EDITOR.selectedColor))
+				.setColors(Choose:C955((Form:C1466.$android & Not:C34($tmpl.android)) | (Form:C1466.$ios & Not:C34($tmpl.ios)); UI.errorRGB; UI.selectedColor))
 			
 			If (Asserted:C1132($svg.success; "Failed to parse template \""+$t+"\""))
 				
@@ -146,7 +146,7 @@ If (Num:C11($tableID)>0)
 										If ($stop)
 											
 											$svg.addClass("error"; $node)\
-												.setAttribute("tips"; cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("oneOrMoreFieldsAreNoLongerPublished").localized()); $node)
+												.setAttribute("tips"; cs:C1710.str.new(UI.alert).concat(cs:C1710.str.new("oneOrMoreFieldsAreNoLongerPublished").localized()); $node)
 											
 										End if 
 									End for each 
@@ -170,7 +170,7 @@ If (Num:C11($tableID)>0)
 								If (Not:C34(PROJECT.fieldAvailable($tableID; $field)))
 									
 									$svg.addClass("error"; $node)\
-										.setAttribute("tips"; cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($field.name)); $node)
+										.setAttribute("tips"; cs:C1710.str.new(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($field.name)); $node)
 									
 								End if 
 							End if 
@@ -193,7 +193,7 @@ If (Num:C11($tableID)>0)
 							If (Not:C34(PROJECT.fieldAvailable($tableID; $target.sectionField)))
 								
 								$svg.addClass("error"; $node)\
-									.setAttribute("tips"; cs:C1710.str.new(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($target.sectionField.name)); $node)
+									.setAttribute("tips"; cs:C1710.str.new(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($target.sectionField.name)); $node)
 								
 							End if 
 						End if 
@@ -268,7 +268,7 @@ If (Num:C11($tableID)>0)
 														: ($isToOne)
 															
 															$tips:=$tableModel[$field.name].label
-															$label:=EDITOR.str.setText(EDITOR.toOne).concat($field.name)
+															$label:=UI.str.setText(UI.toOne).concat($field.name)
 															
 															$relation:=$tableModel
 															
@@ -292,7 +292,7 @@ If (Num:C11($tableID)>0)
 																	If (Not:C34($found))
 																		
 																		$svg.addClass("error"; $node)
-																		$tips:=EDITOR.str.setText(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
+																		$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
 																		
 																	End if 
 																End if 
@@ -302,7 +302,7 @@ If (Num:C11($tableID)>0)
 														: ($isToMany)  // Only available on list form
 															
 															$tips:=$field.label
-															$label:=EDITOR.str.setText(EDITOR.toMany).concat($field.name)
+															$label:=UI.str.setText(UI.toMany).concat($field.name)
 															
 															//______________________________________________________
 														: ($field.kind="alias")
@@ -320,7 +320,7 @@ If (Num:C11($tableID)>0)
 															If (Not:C34(PROJECT.fieldAvailable($tableID; $field)))
 																
 																$svg.addClass("error"; $node)
-																$tips:=EDITOR.str.setText(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($label))
+																$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($label))
 																
 															End if 
 															
@@ -388,7 +388,7 @@ If (Num:C11($tableID)>0)
 																
 																If (PROJECT.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)  // Error
 																	
-																	$tips:=EDITOR.str.setText(EDITOR.alert).concat(cs:C1710.str.new("theLinkedTableIsNotPublished").localized($relation[$field.name].relatedEntities))
+																	$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theLinkedTableIsNotPublished").localized($relation[$field.name].relatedEntities))
 																	
 																End if 
 																
@@ -414,7 +414,7 @@ If (Num:C11($tableID)>0)
 																If ($dataClass[$field.name]=Null:C1517)\
 																	 | (($tableModel[$field.name]=Null:C1517) & ($tableModel[String:C10($field.id)]=Null:C1517))
 																	
-																	$tips:=EDITOR.str.setText(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($field.name))
+																	$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($field.name))
 																	
 																End if 
 																
@@ -422,13 +422,13 @@ If (Num:C11($tableID)>0)
 																
 																If ($dataClass[$c[0]]=Null:C1517)
 																	
-																	$tips:=EDITOR.str.setText(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($c[1]))
+																	$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($c[1]))
 																	
 																Else 
 																	
 																	If (ds:C1482[$dataClass[$c[0]].relatedDataClass][$c[1]]=Null:C1517)
 																		
-																		$tips:=EDITOR.str.setText(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($c[1]))
+																		$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($c[1]))
 																		
 																	End if 
 																End if 
@@ -534,17 +534,17 @@ If (Num:C11($tableID)>0)
 				
 			Else 
 				
-				EDITOR.hidePicker()
+				UI.hidePicker()
 				
 				// Put an error message
 				$form.preview.getCoordinates()
 				
 				OBJECT SET VALUE:C1742("preview"; cs:C1710.svg.new()\
 					.size($form.preview.coordinates.width-20; $form.preview.coordinates.height)\
-					.textArea(EDITOR.str.localize("theTemplateIsMissingOrInvalid"; Replace string:C233($formName; "/"; ""))).size($form.preview.coordinates.width-50)\
+					.textArea(UI.str.localize("theTemplateIsMissingOrInvalid"; Replace string:C233($formName; "/"; ""))).size($form.preview.coordinates.width-50)\
 					.position(20; 180).font(New object:C1471(\
 					"size"; 14; \
-					"color"; EDITOR.colors.errorColor.css.hexLong; \
+					"color"; UI.colors.errorColor.css.hexLong; \
 					"alignment"; Align center:K42:3)).picture())
 				
 				OBJECT SET TITLE:C194(*; "preview.label"; "")

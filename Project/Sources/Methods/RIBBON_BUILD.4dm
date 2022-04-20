@@ -95,7 +95,7 @@ End if
 			
 		Else 
 			
-			EDITOR.postMessage(New object:C1471(\
+			UI.postMessage(New object:C1471(\
 				"action"; "show"; \
 				"type"; "alert"; \
 				"title"; "youMustFirstSelectASimulator"\

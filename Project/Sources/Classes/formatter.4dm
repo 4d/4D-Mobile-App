@@ -45,6 +45,8 @@ Class constructor($format : Text)
 	This:C1470.typeBinding[Is picture:K8:10]:="picture"
 	This:C1470.typeBinding[Is object:K8:27]:="object"
 	
+	This:C1470.path:=cs:C1710.path.new()
+	
 	//============================================================================
 	/// Returns the embedded or host formatters available for a given field type.
 Function getByType($type : Integer; $host : Boolean)->$formatters : Collection
@@ -233,7 +235,7 @@ Function create($type : Variant; $data : Collection)->$file : 4D:C1709.File
 	If (Length:C16($name)>0)
 		
 		var $formatFolder : 4D:C1709.Folder
-		$formatFolder:=EDITOR.path.hostFormatters(True:C214).folder($name)
+		$formatFolder:=This:C1470.path.hostFormatters(True:C214).folder($name)
 		
 		$file:=$formatFolder.file("manifest.json")
 		

@@ -92,7 +92,7 @@ Function onLoad()
 	
 	This:C1470.dropCursor.foregroundColor:=Highlight menu background color:K23:7
 	
-	This:C1470.controlAlreadyExists.foregroundColor:=EDITOR.errorRGB
+	This:C1470.controlAlreadyExists.foregroundColor:=UI.errorRGB
 	
 	// Select the format (push if not defined)
 	Form:C1466.format:=Form:C1466.format#Null:C1517 ? Form:C1466.format : "push"
@@ -137,7 +137,7 @@ Function update()
 	ASSERT:C1129(Not:C34(Shift down:C543))
 	
 	// Name is mandatory
-	This:C1470.nameEdge.foregroundColor:=(This:C1470.name.getValue()="") ? EDITOR.errorRGB : EDITOR.backgroundUnselectedColor
+	This:C1470.nameEdge.foregroundColor:=(This:C1470.name.getValue()="") ? UI.errorRGB : UI.backgroundUnselectedColor
 	This:C1470.revealFolder.show((Form:C1466.dial.folder#Null:C1517) && (Form:C1466.dial.folder.exists))
 	
 	Form:C1466.binding:=This:C1470.image.getValue()
@@ -419,22 +419,22 @@ Function doStaticDragAndDrop()->$allowed : Integer
 	//BLOB TO VARIABLE($x; $o)
 	//SET BLOB SIZE($x; 0)
 	//$o.tgt:=Drop position
-	//End if 
+	//End if
 	//If ($o.src#$o.tgt)
 	//If ($o.tgt=-1)  // After the last line
 	//Form._choiceList.push($list.item)
 	//Form._choiceList.remove($o.src-1)
-	//Else 
+	//Else
 	//Form._choiceList.insert($o.tgt-1; $list.item)
 	//If ($o.tgt<$o.src)
 	//Form._choiceList.remove($o.src)
-	//Else 
+	//Else
 	//Form._choiceList.remove($o.src-1)
-	//End if 
-	//End if 
-	//End if 
+	//End if
+	//End if
+	//End if
 	//This.dropCursor.hide()
-	//Else 
+	//Else
 	//If ($e.row=-1)  // After the last line
 	//$rows:=$list.rowsNumber()
 	//If ($o.src#$rows)  // Not if the source was the last line
@@ -442,32 +442,32 @@ Function doStaticDragAndDrop()->$allowed : Integer
 	//$o:=$list.rowCoordinates($rows)
 	//$o.top:=$o.bottom
 	//$o.right:=$list.coordinates.right
-	//End if 
-	//Else 
+	//End if
+	//Else
 	//If ($o.src#$e.row)\
-																										 & ($e.row#($o.src+1))  // Not the same or the next one
+																												 & ($e.row#($o.src+1))  // Not the same or the next one
 	//$allowed:=0
 	//$o:=$list.rowCoordinates($e.row)
 	//$o.bottom:=$o.top
 	//$o.right:=$list.coordinates.right
-	//End if 
-	//End if 
+	//End if
+	//End if
 	//If ($allowed=-1)
 	//This.dropCursor.hide()
-	//Else 
+	//Else
 	//This.dropCursor.setCoordinates($o.left; $o.top; $o.right; $o.bottom)
 	//This.dropCursor.show()
-	//End if 
-	//End if 
-	//End if 
-	//End if 
+	//End if
+	//End if
+	//End if
+	//End if
 	//If ($e.code=On Drag Over)
 	//If ($allowed)
 	//This.setCursor(9016)
-	//Else 
+	//Else
 	//This.setCursor(9019)
-	//End if 
-	//Else 
+	//End if
+	//Else
 	//This.setCursor()
 	////$list.touch()
 	//End if
@@ -498,7 +498,7 @@ Function listMeta($this : Object)->$style
 	
 	If (This:C1470.choiceList.query("key = :1"; $this.key).length>1)
 		
-		$style.cell.keys.stroke:=EDITOR.errorRGB
+		$style.cell.keys.stroke:=UI.errorRGB
 		
 	End if 
 	
@@ -506,7 +506,7 @@ Function listMeta($this : Object)->$style
 		
 		If (Not:C34(Form:C1466.dial.folder.file("images/"+$this.value).exists))
 			
-			$style.cell.values.stroke:=EDITOR.errorRGB
+			$style.cell.values.stroke:=UI.errorRGB
 			
 		End if 
 	End if 
@@ -526,11 +526,11 @@ Function listBackgroundColor($this : Object)->$color
 		
 		If (ob_equal(This:C1470.list.item; $this))  // Selected row
 			
-			$color:=Choose:C955($isFocused; EDITOR.backgroundSelectedColor; EDITOR.alternateSelectedColor)
+			$color:=Choose:C955($isFocused; UI.backgroundSelectedColor; UI.alternateSelectedColor)
 			
 		Else 
 			
-			$color:=$isFocused ? EDITOR.highlightColor : EDITOR.highlightColorNoFocus
+			$color:=$isFocused ? UI.highlightColor : UI.highlightColorNoFocus
 			
 		End if 
 	End if 

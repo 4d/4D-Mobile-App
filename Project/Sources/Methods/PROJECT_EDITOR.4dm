@@ -10,54 +10,54 @@ If ($e.objectName=Null:C1517)  // <== FORM METHOD
 			//______________________________________________________
 		: ($e.code=On Load:K2:1)
 			
-			var EDITOR : cs:C1710.PROJECT_EDITOR
+			var UI : cs:C1710.EDITOR
 			
-			If (EDITOR#Null:C1517)
+			If (UI#Null:C1517)
 				
 				// We come from a wizard,
 				// so we need to update the form name
-				EDITOR.name:=Current form name:C1298
+				UI.name:=Current form name:C1298
 				
 			Else 
 				
 				// Direct launch (dev mode)
-				EDITOR:=cs:C1710.PROJECT_EDITOR.new()
+				UI:=cs:C1710.EDITOR.new()
 				
 			End if 
 			
-			EDITOR.onLoad()
+			UI.onLoad()
 			
 			// Load the project
 			PROJECT:=cs:C1710.project.new().load(Form:C1466.file)
 			
-			EDITOR.android:=PROJECT.$android
-			EDITOR.ios:=PROJECT.$ios
+			UI.android:=PROJECT.$android
+			UI.ios:=PROJECT.$ios
 			
-			EDITOR.windowTitle:=EDITOR.str.localize("editorWindowTitle"; PROJECT._name)
-			EDITOR.context.ribbon:=New object:C1471(\
+			UI.windowTitle:=UI.str.localize("editorWindowTitle"; PROJECT._name)
+			UI.context.ribbon:=New object:C1471(\
 				"state"; "open"; \
 				"tab"; "section"; \
-				"page"; EDITOR.currentPage; \
+				"page"; UI.currentPage; \
 				"editor"; Form:C1466)
 			
-			EDITOR.ribbon.setValue(EDITOR.context.ribbon)
+			UI.ribbon.setValue(UI.context.ribbon)
 			
 			// Update the description
-			EDITOR.setHeader()
+			UI.setHeader()
 			
 			// Initialize the project subform
-			EDITOR.project.setValue(PROJECT)
+			UI.project.setValue(PROJECT)
 			
-			EDITOR.ribbon.show()
-			EDITOR.description.show()
+			UI.ribbon.show()
+			UI.description.show()
 			
 			// Launch project verifications
-			EDITOR.checkProject()
+			UI.checkProject()
 			
 			// Audit of development tools
-			EDITOR.checkDevTools()
+			UI.checkDevTools()
 			
-			EDITOR.refresh()
+			UI.refresh()
 			
 			//______________________________________________________
 		: ($e.code=On Close Box:K2:21)
@@ -76,7 +76,7 @@ If ($e.objectName=Null:C1517)  // <== FORM METHOD
 			//______________________________________________________
 		: ($e.code=On Deactivate:K2:10)
 			
-			EDITOR.tips.restore()
+			UI.tips.restore()
 			
 			//______________________________________________________
 		: ($e.code=On Activate:K2:9)
@@ -85,25 +85,25 @@ If ($e.objectName=Null:C1517)  // <== FORM METHOD
 			ENV.update()
 			
 			// Update color scheme if any
-			EDITOR.updateColorScheme()
+			UI.updateColorScheme()
 			
 			// Restore local tips properties
-			EDITOR.tips.set()
+			UI.tips.set()
 			
 			// Verify the web server configuration
-			EDITOR.callMeBack("checkingServerConfiguration")
+			UI.callMeBack("checkingServerConfiguration")
 			
 			// Launch project verifications
-			EDITOR.checkProject()
+			UI.checkProject()
 			
 			// Update the displayed panels
-			EDITOR.refreshPanels()
+			UI.refreshPanels()
 			
 			//______________________________________________________
 		: ($e.code=On Unload:K2:2)
 			
-			EDITOR.tips.restore()
-			EDITOR.callWorker(Formula:C1597(killWorker).source)
+			UI.tips.restore()
+			UI.callWorker(Formula:C1597(killWorker).source)
 			
 			//______________________________________________________
 		: ($e.code=On Resize:K2:27)
@@ -113,25 +113,25 @@ If ($e.objectName=Null:C1517)  // <== FORM METHOD
 				"action"; "forms"; \
 				"onResize"; True:C214)
 			
-			EDITOR.callChild(EDITOR.project; EDITOR.callback; "pickerHide"; $o)
+			UI.callChild(UI.project; UI.callback; "pickerHide"; $o)
 			
 			// Footer
-			$o:=EDITOR.footer.updateCoordinates().coordinates
-			EDITOR.footer.setCoordinates($o.left; $o.top; $o.left+EDITOR.width; $o.bottom)
+			$o:=UI.footer.updateCoordinates().coordinates
+			UI.footer.setCoordinates($o.left; $o.top; $o.left+UI.width; $o.bottom)
 			
 			// Center message
-			EDITOR.message.alignHorizontally(Align center:K42:3)
+			UI.message.alignHorizontally(Align center:K42:3)
 			
 			//______________________________________________________
 		: ($e.code=On Timer:K2:25)
 			
 			SET TIMER:C645(0)
 			
-			EDITOR.project.show()
+			UI.project.show()
 			
 			// Footer
-			$o:=EDITOR.footer.updateCoordinates().coordinates
-			EDITOR.footer.setCoordinates($o.left; $o.top; $o.left+EDITOR.width; $o.bottom)
+			$o:=UI.footer.updateCoordinates().coordinates
+			UI.footer.setCoordinates($o.left; $o.top; $o.left+UI.width; $o.bottom)
 			
 			//______________________________________________________
 		Else 
@@ -146,16 +146,16 @@ Else   // <== WIDGETS METHOD
 	Case of 
 			
 			//==============================================
-		: (EDITOR.message.catch())\
+		: (UI.message.catch())\
 			 & ($e.code<0)
 			
-			EDITOR.messageContainer($e)
+			UI.messageContainer($e)
 			
 			//==============================================
-		: (EDITOR.ribbon.catch())\
+		: (UI.ribbon.catch())\
 			 & ($e.code<0)
 			
-			EDITOR.ribbonContainer($e)
+			UI.ribbonContainer($e)
 			
 			//==============================================
 	End case 

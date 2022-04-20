@@ -74,7 +74,7 @@ Else
 			"$name"; Get localized string:C991("newProject"); \
 			"$ios"; Is macOS:C1572; \
 			"$android"; Is Windows:C1573; \
-			"_window"; Open form window:C675("PROJECT_EDITOR"; Plain form window:K39:10; Horizontally centered:K39:1; At the top:K39:5; *))
+			"_window"; Open form window:C675("EDITOR"; Plain form window:K39:10; Horizontally centered:K39:1; At the top:K39:5; *))
 		
 		editor_CREATE_PROJECT($data)
 		
@@ -83,18 +83,18 @@ Else
 			// Open the project editor
 			If (DATABASE.isMatrix)
 				
-				DIALOG:C40("PROJECT_EDITOR"; $data)
-				CLOSE WINDOW:C154(EDITOR.window)
+				DIALOG:C40("EDITOR"; $data)
+				CLOSE WINDOW:C154(UI.window)
 				
 			Else 
 				
-				DIALOG:C40("PROJECT_EDITOR"; $data; *)
+				DIALOG:C40("EDITOR"; $data; *)
 				
 			End if 
 			
 		Else 
 			
-			CLOSE WINDOW:C154(EDITOR.window)
+			CLOSE WINDOW:C154(UI.window)
 			
 		End if 
 	End if 

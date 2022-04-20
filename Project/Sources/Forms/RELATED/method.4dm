@@ -18,7 +18,7 @@ Case of
 	: ($e.code=On Load:K2:1)
 		
 		cs:C1710.group.new("ok,cancel").distributeRigthToLeft()
-		cs:C1710.formObject.new("title").setTitle(EDITOR.str.localize("relatedTable"; String:C10(Form:C1466.relatedDataClass)))
+		cs:C1710.formObject.new("title").setTitle(UI.str.localize("relatedTable"; String:C10(Form:C1466.relatedDataClass)))
 		
 		SET TIMER:C645(-1)
 		

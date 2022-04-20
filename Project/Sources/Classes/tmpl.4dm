@@ -449,7 +449,7 @@ Function getBinding($node : Text)->$binding : Text
 	// Return the embedded cancel button used into the templates
 Function cancel() : Text
 	
-	If (EDITOR.darkScheme)
+	If (UI.darkScheme)
 		
 		return ("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAelJREFUeJzsmD9OwzAUxjMwghADLOxwAFjyB6l"+\
 			"CHKCcghvkCJyAvSfokLQFoQi6cASW7NggiipEBzaKP9euQiAkjZImlt5PsmIl7718jp/9klgWQRAEQRBEO/BGkwMnYL4dsEgcYyfgs0VjsTrnw6Zpnb/whvzICdmdEDkv0mALn6"+\
@@ -611,7 +611,7 @@ Function getSources($name : Text; $type : Text)->$template : 4D:C1709.Folder
 	// Gives the path to the css file
 Function css()->$file : 4D:C1709.File
 	
-	If (EDITOR.darkScheme)
+	If (UI.darkScheme)
 		
 		$file:=File:C1566("/RESOURCES/css/template_dark.css")
 		
@@ -789,7 +789,7 @@ Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Ob
 				If (Not:C34($found))
 					
 					$class:="error"
-					$tips:=EDITOR.str.setText(EDITOR.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
+					$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
 					
 				End if 
 				
@@ -799,13 +799,13 @@ Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Ob
 				
 			End if 
 			
-			$label:=EDITOR.str.setText(EDITOR.toOne).concat($label)
+			$label:=UI.str.setText(UI.toOne).concat($label)
 			
 			//______________________________________________________
 		: ($field.kind="relatedEntities")
 			
 			$tips:=$field.label
-			$label:=EDITOR.str.setText(EDITOR.toMany).concat($field.name)
+			$label:=UI.str.setText(UI.toMany).concat($field.name)
 			
 			$found:=(PROJECT.dataModel[$context.tableNumber][$field.name]#Null:C1517)
 			
@@ -827,7 +827,7 @@ Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Ob
 	// Set ids, label & position
 	PROCESS 4D TAGS:C816(This:C1470.oneField.definition; $t; New object:C1471(\
 		"index"; $index; \
-		"name"; EDITOR.str.setText($o.label).xmlSafe(); \
+		"name"; UI.str.setText($o.label).xmlSafe(); \
 		"offset"; 5+$offset; \
 		"style"; $style; \
 		"class"; $class; \

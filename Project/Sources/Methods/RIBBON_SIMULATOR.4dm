@@ -32,18 +32,18 @@ Case of
 		
 		$menu:=cs:C1710.menu.new()
 		
-		$lastDevice:=EDITOR.preferences.get("lastDevice")
+		$lastDevice:=UI.preferences.get("lastDevice")
 		$tab:="       "
 		
 		If (Is macOS:C1572)
 			
 			$menu.append("iOS").icon("images/os/iOS-24.png").disable()
 			
-			If (EDITOR.xCode.ready)
+			If (UI.xCode.ready)
 				
-				If (EDITOR.devices.plugged.apple.length>0)
+				If (UI.devices.plugged.apple.length>0)
 					
-					For each ($device; EDITOR.devices.plugged.apple)
+					For each ($device; UI.devices.plugged.apple)
 						
 						$menu.append($tab+$device.name; $device.udid)\
 							.mark($device.udid=$lastDevice)
@@ -54,9 +54,9 @@ Case of
 					
 				End if 
 				
-				If (EDITOR.devices.apple.length>0)
+				If (UI.devices.apple.length>0)
 					
-					For each ($device; EDITOR.devices.apple)
+					For each ($device; UI.devices.apple)
 						
 						$menu.append($tab+$device.name; $device.udid)\
 							.mark(($device.udid=$lastDevice) & PROJECT.$ios)
@@ -78,11 +78,11 @@ Case of
 			
 			$menu.append("Android").icon("images/os/android-24.png").disable()
 			
-			If (EDITOR.studio.ready)
+			If (UI.studio.ready)
 				
-				If (EDITOR.devices.plugged.android.length>0)
+				If (UI.devices.plugged.android.length>0)
 					
-					For each ($device; EDITOR.devices.plugged.android)
+					For each ($device; UI.devices.plugged.android)
 						
 						$menu.append($tab+$device.name; $device.udid)\
 							.mark($device.udid=$lastDevice)
@@ -93,9 +93,9 @@ Case of
 					
 				End if 
 				
-				If (EDITOR.devices.android.length>0)
+				If (UI.devices.android.length>0)
 					
-					For each ($device; EDITOR.devices.android.orderBy("name"))
+					For each ($device; UI.devices.android.orderBy("name"))
 						
 						$menu.append($tab+$device.name; $device.udid)\
 							.mark(($device.udid=$lastDevice) & PROJECT.$android).enable(Not:C34($device.missingSystemImage))
@@ -120,11 +120,11 @@ Case of
 			
 		Else 
 			
-			If (EDITOR.studio.ready)
+			If (UI.studio.ready)
 				
-				If (EDITOR.devices.plugged.android.length>0)
+				If (UI.devices.plugged.android.length>0)
 					
-					For each ($device; EDITOR.devices.plugged.android)
+					For each ($device; UI.devices.plugged.android)
 						
 						$menu.append($device.name; $device.udid)\
 							.mark($device.udid=$lastDevice).enable(Not:C34(Bool:C1537($device.unauthorized)))
@@ -135,12 +135,12 @@ Case of
 					
 				End if 
 				
-				If (EDITOR.devices.android.length>0)
+				If (UI.devices.android.length>0)
 					
-					For each ($device; EDITOR.devices.android)
+					For each ($device; UI.devices.android)
 						
 						$menu.append($device.name; $device.udid)\
-							.mark($device.udid=String:C10(EDITOR.currentDevice))
+							.mark($device.udid=String:C10(UI.currentDevice))
 						
 					End for each 
 					
@@ -161,7 +161,7 @@ Case of
 			End if 
 		End if 
 		
-		If (EDITOR.xCode.ready) | (EDITOR.studio.ready)
+		If (UI.xCode.ready) | (UI.studio.ready)
 			
 			$menu.line().append("updatingTheListOfDevices"; "updateTheDeviceList")
 			
@@ -181,8 +181,8 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="updateTheDeviceList")
 				
-				EDITOR.getDevices()
-				EDITOR.updateRibbon()
+				UI.getDevices()
+				UI.updateRibbon()
 				
 				//______________________________________________________
 			: ($menu.choice="checkAndroidInstallation")\
@@ -190,17 +190,17 @@ Case of
 				
 				If ($menu.choice="checkAndroidInstallation")
 					
-					EDITOR.studio.canceled:=False:C215
+					UI.studio.canceled:=False:C215
 					
 				Else 
 					
-					EDITOR.xCode.canceled:=False:C215
-					EDITOR.xCode.alreadyNotified:=False:C215
+					UI.xCode.canceled:=False:C215
+					UI.xCode.alreadyNotified:=False:C215
 					
 				End if 
 				
 				// Launch checking the development environment
-				EDITOR.checkDevTools()
+				UI.checkDevTools()
 				
 				//______________________________________________________
 			: ($menu.choice="XcodeDeviceManager")
@@ -241,7 +241,7 @@ Case of
 						cs:C1710.avd.new().createAvd($defaultAvd)
 						
 						// * UPDATE DEVICE LIST
-						EDITOR.getDevices()
+						UI.getDevices()
 						
 					End if 
 					
@@ -269,10 +269,10 @@ Case of
 				//______________________________________________________
 			: (Match regex:C1019("(?m-si)[[:xdigit:]]{8}-(?:[[:xdigit:]]{4}-){3}[[:xdigit:]]{12}"; $menu.choice; 1))  // iOS Simulator
 				
-				$device:=EDITOR.devices.apple.query("udid = :1"; $menu.choice).pop()
+				$device:=UI.devices.apple.query("udid = :1"; $menu.choice).pop()
 				
 				$selectedDevice:=$menu.choice
-				EDITOR.preferences.set("lastIosDevice"; $selectedDevice)  // Last iOS device
+				UI.preferences.set("lastIosDevice"; $selectedDevice)  // Last iOS device
 				
 				// #TO_OPTMIZE : deport to worker
 				
@@ -284,7 +284,7 @@ Case of
 				
 				PROJECT.$ios:=True:C214  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++
 				
-				EDITOR.ios:=True:C214
+				UI.ios:=True:C214
 				PROJECT._device:=$device
 				PROJECT._simulator:=$device.udid
 				PROJECT.setTarget(True:C214; "ios")
@@ -292,14 +292,14 @@ Case of
 				//______________________________________________________
 			: (Match regex:C1019("(?m-si)[[:xdigit:]]{8}-[[:xdigit:]]{16}"; $menu.choice; 1))  // iOS plugged Device
 				
-				$device:=EDITOR.devices.plugged.apple.query("udid = :1"; $menu.choice).pop()
+				$device:=UI.devices.plugged.apple.query("udid = :1"; $menu.choice).pop()
 				
 				$selectedDevice:=$menu.choice
-				EDITOR.preferences.set("lastIosConnected"; $selectedDevice)  // Last iOS plugged device
+				UI.preferences.set("lastIosConnected"; $selectedDevice)  // Last iOS plugged device
 				
 				PROJECT.$ios:=True:C214  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++
 				
-				EDITOR.ios:=True:C214
+				UI.ios:=True:C214
 				PROJECT._device:=$device
 				PROJECT._simulator:=$device.udid
 				PROJECT.setTarget(True:C214; "ios")
@@ -307,20 +307,20 @@ Case of
 				//______________________________________________________
 			Else 
 				
-				$device:=EDITOR.devices.android.query("udid = :1"; $menu.choice).pop()
+				$device:=UI.devices.android.query("udid = :1"; $menu.choice).pop()
 				
 				If ($device=Null:C1517)
 					
-					$device:=EDITOR.devices.plugged.android.query("udid = :1"; $menu.choice).pop()
+					$device:=UI.devices.plugged.android.query("udid = :1"; $menu.choice).pop()
 					
 				End if 
 				
 				$selectedDevice:=$menu.choice
-				EDITOR.preferences.set("lastAndroidDevice"; $selectedDevice)  // Last Android device
+				UI.preferences.set("lastAndroidDevice"; $selectedDevice)  // Last Android device
 				
 				PROJECT.$android:=True:C214  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++
 				
-				EDITOR.android:=True:C214
+				UI.android:=True:C214
 				PROJECT._device:=$device
 				PROJECT._simulator:=$device.udid
 				PROJECT.setTarget(True:C214; "android")
@@ -328,16 +328,16 @@ Case of
 				//______________________________________________________
 		End case 
 		
-		If (Length:C16($selectedDevice)>0) & ($selectedDevice#String:C10(EDITOR.currentDevice))
+		If (Length:C16($selectedDevice)>0) & ($selectedDevice#String:C10(UI.currentDevice))
 			
 			// Set
-			EDITOR.currentDevice:=$selectedDevice
+			UI.currentDevice:=$selectedDevice
 			
 			// Update UI
 			OBJECT SET TITLE:C194(*; "201"; $device.name)
 			SET TIMER:C645(-1)  // Adapt button width
 			
-			EDITOR.preferences.set("lastDevice"; EDITOR.currentDevice)  // Last used device
+			UI.preferences.set("lastDevice"; UI.currentDevice)  // Last used device
 			
 		End if 
 		

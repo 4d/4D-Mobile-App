@@ -15,7 +15,7 @@ var $data; $ƒ : Object
 
 //TODO: Allow a text parameter for one action only
 
-$widget:=$widget || EDITOR.message
+$widget:=$widget || UI.message
 
 $data:=$widget.getValue()
 $ƒ:=$data.ƒ
@@ -26,7 +26,7 @@ If ($widget.visible)\
  & (New collection:C1472("alert"; "confirm").indexOf(String:C10($data.type))#-1)
 	
 	// A message is already displayed: wait
-	EDITOR.callMe("DO_MESSAGE"; $message)
+	UI.callMe("DO_MESSAGE"; $message)
 	
 Else 
 	
@@ -60,9 +60,9 @@ Else
 				
 				Case of 
 						//______________________________________________________
-					: (Current form name:C1298="PROJECT_EDITOR")
+					: (Current form name:C1298="EDITOR")
 						
-						EDITOR.messageGroup.hide()
+						UI.messageGroup.hide()
 						
 						//______________________________________________________
 					: (Current form name:C1298="WIZARD_NEW_PROJECT")

@@ -245,7 +245,7 @@ If ($Xcode.success)
 					"type"; "alert"; \
 					"title"; New collection:C1472("versionNotSupported"; "Xcode"); \
 					"additional"; New collection:C1472("tooRecentVersion"; "4dForIos"; "Xcode"; $requestedVersion); \
-					"okFormula"; Formula:C1597(EDITOR.xCode.alreadyNotified:=True:C214)\
+					"okFormula"; Formula:C1597(UI.xCode.alreadyNotified:=True:C214)\
 					))
 				
 			End if   //$xcode.versionCompare($version; $xcode.version)=1

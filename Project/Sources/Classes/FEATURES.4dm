@@ -1,6 +1,6 @@
 Class extends panel
 
-//=== === === === === === === === === === === === === === === === === === === === === 
+//=== === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	
 	Super:C1705(Formula:C1597(editor_CALLBACK).source)
@@ -16,7 +16,7 @@ Class constructor
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	/// Design definition
 Function init()
 	
@@ -100,7 +100,7 @@ Function handleEvents($e : Object)
 				//==============================================
 			: (This:C1470.authenticationButton.catch($e; On Clicked:K2:4))
 				
-				EDITOR.editAuthenticationMethod()
+				UI.editAuthenticationMethod()
 				This:C1470.checkAuthenticationMethod()
 				
 				//==============================================
@@ -249,7 +249,7 @@ Function update()
 	This:C1470.deepLinking.enable(Is macOS:C1572 & PROJECT.$ios)
 	This:C1470.deepLinkingGroup.enable(Is macOS:C1572 & PROJECT.$ios)
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function checkAuthenticationMethod
 	
 	ARRAY TEXT:C222($methods; 0x0000)
@@ -261,7 +261,7 @@ Function checkAuthenticationMethod
 		.bestSize()\
 		.show(Form:C1466.server.authentication.email)
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function initScheme
 	
 	If (Length:C16(String:C10(Form:C1466.deepLinking.urlScheme))=0)
@@ -270,7 +270,7 @@ Function initScheme
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === 
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function validateScheme
 	var $0 : Boolean
 	

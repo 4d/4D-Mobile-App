@@ -98,7 +98,7 @@ Case of
 		//______________________________________________________
 	: ($event.code=On Mouse Enter:K2:33)
 		
-		EDITOR.tips.setDuration(45*5)
+		UI.tips.setDuration(45*5)
 		
 		//______________________________________________________
 	: ($event.code=On Mouse Move:K2:35)
@@ -193,7 +193,7 @@ Case of
 		//______________________________________________________
 	: ($event.code=On Mouse Leave:K2:34)
 		
-		EDITOR.tips.restore()
+		UI.tips.restore()
 		
 		//______________________________________________________
 	Else 

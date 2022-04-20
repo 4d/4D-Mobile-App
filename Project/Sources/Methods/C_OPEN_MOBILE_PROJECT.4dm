@@ -30,7 +30,7 @@ COMPILER_COMPONENT
 
 // ----------------------------------------------------
 $data:=New object:C1471(\
-"_window"; Open form window:C675("PROJECT_EDITOR"; Plain form window:K39:10; Horizontally centered:K39:1; At the top:K39:5; *))
+"_window"; Open form window:C675("EDITOR"; Plain form window:K39:10; Horizontally centered:K39:1; At the top:K39:5; *))
 
 If (Count parameters:C259>=1)
 	
@@ -131,17 +131,17 @@ If (Bool:C1537(OK))
 		
 		SET ASSERT ENABLED:C1131(True:C214; *)
 		
-		DIALOG:C40("PROJECT_EDITOR"; $data)
-		CLOSE WINDOW:C154(EDITOR.window)
+		DIALOG:C40("EDITOR"; $data)
+		CLOSE WINDOW:C154(UI.window)
 		
 	Else 
 		
-		DIALOG:C40("PROJECT_EDITOR"; $data; *)
+		DIALOG:C40("EDITOR"; $data; *)
 		
 	End if 
 	
 Else 
 	
-	CLOSE WINDOW:C154(EDITOR.window)
+	CLOSE WINDOW:C154(UI.window)
 	
 End if 

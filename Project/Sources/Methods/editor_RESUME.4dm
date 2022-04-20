@@ -72,11 +72,11 @@ Case of
 			$in.action:="goToPage"
 			$in.page:=Delete string:C232($selector; 1; 5)
 			
-			EDITOR.callMeBack("goToPage"; $in)
+			UI.callMeBack("goToPage"; $in)
 			
 		Else 
 			
-			EDITOR.callMeBack("goToPage"; New object:C1471(\
+			UI.callMeBack("goToPage"; New object:C1471(\
 				"page"; Delete string:C232($selector; 1; 5)\
 				))
 			
@@ -85,7 +85,7 @@ Case of
 		//______________________________________________________
 	: ($selector="build_stop")  // #MARK_TO_REMOVE
 		
-		EDITOR.callMeBack($selector)
+		UI.callMeBack($selector)
 		
 		//______________________________________________________
 	: ($selector="build_deleteProductFolder")  // #MARK_TO_REMOVE
@@ -98,7 +98,7 @@ Case of
 					"action"; "safeDelete"; \
 					"path"; $in.build.path))
 				
-				EDITOR.runBuild($in.build)  // Relaunch the build process
+				UI.runBuild($in.build)  // Relaunch the build process
 				
 			End if 
 		End if 
@@ -108,7 +108,7 @@ Case of
 		
 		$in.build.ignoreServer:=True:C214
 		
-		EDITOR.runBuild($in.build)  // Relaunch the build process
+		UI.runBuild($in.build)  // Relaunch the build process
 		
 		//______________________________________________________
 	: ($selector="build_startWebServer")\
@@ -137,7 +137,7 @@ Case of
 			
 			If ($selector="build_startWebServer")
 				
-				EDITOR.runBuild($in.build)  // Relaunch the build process
+				UI.runBuild($in.build)  // Relaunch the build process
 				
 			End if 
 			
@@ -177,7 +177,7 @@ Case of
 					//______________________________________________________
 			End case 
 			
-			EDITOR.postMessage(New object:C1471(\
+			UI.postMessage(New object:C1471(\
 				"action"; "show"; \
 				"type"; "alert"; \
 				"title"; Get localized string:C991("failedToStartTheWebServer"); \
@@ -200,7 +200,7 @@ Case of
 			"action"; "build_manualInstallation"; \
 			"build"; $in.build)
 		
-		EDITOR.postMessage(New object:C1471(\
+		UI.postMessage(New object:C1471(\
 			"action"; "show"; \
 			"type"; "confirm"; \
 			"title"; Get localized string:C991("appleConfigurator2Installation"); \
@@ -215,12 +215,12 @@ Case of
 		
 		$in.build.manualInstallation:=($selector="build_manualInstallation")
 		
-		EDITOR.runBuild($in.build)  // Relaunch the build process
+		UI.runBuild($in.build)  // Relaunch the build process
 		
 		//______________________________________________________
 	: ($selector="projectFixErrors")
 		
-		EDITOR.callMeBack($selector; $in)
+		UI.callMeBack($selector; $in)
 		
 		//______________________________________________________
 	: ($selector="stopWebServer")
@@ -236,7 +236,7 @@ Case of
 			
 		End if 
 		
-		EDITOR.callMeBack("checkingServerResponse"; $in)
+		UI.callMeBack("checkingServerResponse"; $in)
 		
 		//______________________________________________________
 	Else 

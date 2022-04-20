@@ -15,7 +15,7 @@
 
 If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	
-	If (Current form name:C1298="PROJECT_EDITOR")
+	If (Current form name:C1298="EDITOR")
 		
 		If (Count parameters:C259>=2)
 			

@@ -152,9 +152,9 @@ Case of
 									Else 
 										
 										// ERROR
-										EDITOR.hideBrowser()
+										UI.hideBrowser()
 										
-										EDITOR.postMessage(New object:C1471(\
+										UI.postMessage(New object:C1471(\
 											"action"; "show"; \
 											"type"; "alert"; \
 											"title"; "ERROR"; \
@@ -206,15 +206,15 @@ Case of
 						Else 
 							
 							// ERROR
-							EDITOR.hideBrowser()
+							UI.hideBrowser()
 							
 							If ($destination=Null:C1517)
 								
-								EDITOR.doAlert("fileNotFound"; "theAliasMobileOriginalCan'tBeFound")
+								UI.doAlert("fileNotFound"; "theAliasMobileOriginalCan'tBeFound")
 								
 							Else 
 								
-								EDITOR.doAlert("fileNotFound"; $destination.path)
+								UI.doAlert("fileNotFound"; $destination.path)
 								
 							End if 
 						End if 

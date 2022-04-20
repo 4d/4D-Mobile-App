@@ -12,7 +12,7 @@ var PROJECT : cs:C1710.project
 var DATABASE : cs:C1710.database
 var ENV : cs:C1710.env
 
-var EDITOR : cs:C1710.PROJECT_EDITOR
+var UI : cs:C1710.EDITOR
 
 // INITIALIZATION
 COMPONENT_INIT

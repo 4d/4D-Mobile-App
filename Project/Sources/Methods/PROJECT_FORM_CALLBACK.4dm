@@ -16,10 +16,10 @@ Case of
 		//=========================================================
 	: ($action="projectAudit")  // Audit the project
 		
-		If (Num:C11(EDITOR.window)#0)
+		If (Num:C11(UI.window)#0)
 			
 			// Send result
-			EDITOR.callMeBack("projectAuditResult"; PROJECT.audit())
+			UI.callMeBack("projectAuditResult"; PROJECT.audit())
 			
 		Else 
 			

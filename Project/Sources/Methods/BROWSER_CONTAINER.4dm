@@ -5,9 +5,9 @@ $e:=FORM Event:C1606
 
 If ($e.code=-1)  // Close
 	
-	EDITOR.hideBrowser()
+	UI.hideBrowser()
 	
-	$widget:=EDITOR.browser
+	$widget:=UI.browser
 	$data:=$widget.getValue()
 	
 	If ($data.form#Null:C1517)
@@ -21,7 +21,7 @@ If ($e.code=-1)  // Close
 				$data.action:="forms"
 				$data.selector:=Replace string:C233($data.selector; "form-"; "")
 				
-				EDITOR.callMeBack("setForm"; $data)
+				UI.callMeBack("setForm"; $data)
 				
 				//______________________________________________________
 			: ($data.selector="form-formatter")

@@ -36,15 +36,15 @@ Case of
 		// Autosave
 		PROJECT.save()
 		
-		$folder:=EDITOR.path.products().folder(PROJECT.product.name)
+		$folder:=UI.path.products().folder(PROJECT.product.name)
 		
 		$could:=New object:C1471(\
 			"isDebug"; DATABASE.isMatrix; \
 			"isMain"; (Application version:C493(*)="A@"); \
 			"withMoreItems"; Macintosh option down:C545 | Windows Alt down:C563; \
 			"productFolder"; $folder; \
-			"xCodeAvailable"; Bool:C1537(EDITOR.xCode.applicationAvailable); \
-			"studioAvailable"; Bool:C1537(EDITOR.studio.applicationAvailable); \
+			"xCodeAvailable"; Bool:C1537(UI.xCode.applicationAvailable); \
+			"studioAvailable"; Bool:C1537(UI.studio.applicationAvailable); \
 			"iosFolder"; $folder.folder("iOS"); \
 			"androidFolder"; $folder.folder("android").folder(PROJECT.product.name); \
 			"isLocked"; PROJECT.isLocked(); \
@@ -114,20 +114,20 @@ Case of
 					End if 
 					
 					$menu.append("showCurrentSimulatorFolder"; "_openSimuPath")\
-						.append("showTheCurrentSimulatorLogsFolder"; "_openLogs").enable($simctl.deviceLog(EDITOR.currentDevice).exists)\
+						.append("showTheCurrentSimulatorLogsFolder"; "_openLogs").enable($simctl.deviceLog(UI.currentDevice).exists)\
 						.line()\
 						.append("showDiagnosticReportsFolder"; "_openDiagnosticReports")
 					
 					If ($could.isDebug)
 						
-						$device:=$simctl.device(EDITOR.currentDevice)
+						$device:=$simctl.device(UI.currentDevice)
 						
 						$menu.append("❌ Close simulators"; "_killSimulators")\
 							.append("🗑 Erase Current Simulator"; "_eraseCurrentSimulator")
 						
 						$device:=cs:C1710.simctl.new().deviceApp(\
 							New object:C1471("action"; "deviceApp"; \
-							"device"; EDITOR.currentDevice; \
+							"device"; UI.currentDevice; \
 							"data"; True:C214))
 						
 						If ($device.success)
@@ -173,7 +173,7 @@ Case of
 			
 			$menu.append(Replace string:C233(Get localized string:C991("downloadTheSDK"); "{os}"; "Android"); "downloadAndroidSdk")
 			
-			$o:=EDITOR.path.cacheSdkAndroid().parent.file("manifest.json")
+			$o:=UI.path.cacheSdkAndroid().parent.file("manifest.json")
 			
 			If ($o.exists)
 				
@@ -188,7 +188,7 @@ Case of
 				
 				$menu.append(Replace string:C233(Get localized string:C991("downloadTheSDK"); "{os}"; "iOS"); "downloadIosSdk")
 				
-				$o:=EDITOR.path.cacheSdkApple().parent.file("manifest.json")
+				$o:=UI.path.cacheSdkApple().parent.file("manifest.json")
 				
 				If ($o.exists)
 					
@@ -204,7 +204,7 @@ Case of
 		// =================== DEVELOPMENT ITEMS ===================== [
 		If ($could.withMoreItems)
 			
-			$sdkCacheFolder:=EDITOR.path.cacheSDK().folder(Application version:C493)
+			$sdkCacheFolder:=UI.path.cacheSDK().folder(Application version:C493)
 			
 			If ($could.isDebug)
 				
@@ -213,7 +213,7 @@ Case of
 			End if 
 			
 			$menu.line()
-			$menu.append("showTheCacheFolder"; "showTheCacheFolder").enable(EDITOR.path.userCache().exists)
+			$menu.append("showTheCacheFolder"; "showTheCacheFolder").enable(UI.path.userCache().exists)
 			$menu.append("showTheSdkCacheFolder"; "showTheSdkCacheFolder").enable($sdkCacheFolder.exists)
 			
 			If (Is macOS:C1572)
@@ -347,7 +347,7 @@ Case of
 					End if 
 				End if 
 				
-				CALL WORKER:C1389(1; "downloadSDK"; Choose:C955($fromTeamCity; "TeamCity"; "aws"); $t; False:C215; EDITOR.window)
+				CALL WORKER:C1389(1; "downloadSDK"; Choose:C955($fromTeamCity; "TeamCity"; "aws"); $t; False:C215; UI.window)
 				
 				//______________________________________________________
 			: ($menu.choice="openWithXcode")  // Open a file of project in xcode
@@ -381,23 +381,23 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="showTheCacheFolder")
 				
-				SHOW ON DISK:C922(EDITOR.path.userCache().platformPath)
+				SHOW ON DISK:C922(UI.path.userCache().platformPath)
 				
 				//______________________________________________________
 			: ($menu.choice="showTheSdkCacheFolder")
 				
-				SHOW ON DISK:C922(EDITOR.path.cacheSDK().folder(Application version:C493).platformPath)
+				SHOW ON DISK:C922(UI.path.cacheSDK().folder(Application version:C493).platformPath)
 				
 				//______________________________________________________
 			: ($menu.choice="syncDataModel")
 				
-				EDITOR.postMessage(New object:C1471(\
+				UI.postMessage(New object:C1471(\
 					"action"; "show"; \
 					"type"; "confirm"; \
 					"title"; "updateTheProject"; \
 					"additional"; "aBackupWillBeCreatedIntoTheProjectFolder"; \
 					"ok"; "update"; \
-					"okFormula"; Formula:C1597(EDITOR.callMeBack("syncDataModel"))))
+					"okFormula"; Formula:C1597(UI.callMeBack("syncDataModel"))))
 				
 				//______________________________________________________
 			: ($menu.choice="openThe4dMobileAppLog")
@@ -419,22 +419,22 @@ Case of
 				Folder:C1567(Get 4D folder:C485(-1); fk platform path:K87:2).file("key.pem").copyTo($folder; fk overwrite:K87:5)
 				
 				// Verify the web server configuration
-				EDITOR.callMeBack("checkingServerConfiguration")
+				UI.callMeBack("checkingServerConfiguration")
 				
 				//______________________________________________________
 			: ($menu.choice="_openDiagnosticReports")
 				
-				SHOW ON DISK:C922(EDITOR.path.userlibrary().folder("Logs").platformPath)
+				SHOW ON DISK:C922(UI.path.userlibrary().folder("Logs").platformPath)
 				
 				//______________________________________________________
 			: ($menu.choice="_openLogs")
 				
-				$simctl.showDeviceLog(EDITOR.currentDevice)
+				$simctl.showDeviceLog(UI.currentDevice)
 				
 				//______________________________________________________
 			: ($menu.choice="_openSimuPath")
 				
-				$o:=$simctl.deviceFolder(EDITOR.currentDevice)
+				$o:=$simctl.deviceFolder(UI.currentDevice)
 				
 				If ($o.exists)
 					
@@ -450,13 +450,13 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_eraseCurrentSimulator")
 				
-				$simctl.eraseDevice(EDITOR.currentDevice)
+				$simctl.eraseDevice(UI.currentDevice)
 				
 				//______________________________________________________
 			: ($menu.choice="_clearCache")
 				
-				EDITOR.path.cacheSdkAppleUnzipped().delete(fk recursive:K87:7)
-				EDITOR.path.cacheSdkAndroidUnzipped().delete(fk recursive:K87:7)
+				UI.path.cacheSdkAppleUnzipped().delete(fk recursive:K87:7)
+				UI.path.cacheSdkAndroidUnzipped().delete(fk recursive:K87:7)
 				
 				//______________________________________________________
 			: ($menu.choice="_removeSDK")
@@ -466,13 +466,13 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_removeMobilesProjects")
 				
-				EDITOR.path.projects().delete(fk recursive:K87:7)
-				EDITOR.path.products().delete(fk recursive:K87:7)
+				UI.path.projects().delete(fk recursive:K87:7)
+				UI.path.products().delete(fk recursive:K87:7)
 				
 				//______________________________________________________
 			: ($menu.choice="_removeDerivedData")
 				
-				EDITOR.path.userlibrary().folder("Developer/Xcode/DerivedData").delete(fk recursive:K87:7)
+				UI.path.userlibrary().folder("Developer/Xcode/DerivedData").delete(fk recursive:K87:7)
 				$could.iosFolder.folder("build").delete(fk recursive:K87:7)
 				
 				//______________________________________________________
@@ -501,12 +501,12 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_openTemplateFolder")
 				
-				SHOW ON DISK:C922(EDITOR.path.templates().platformPath)
+				SHOW ON DISK:C922(UI.path.templates().platformPath)
 				
 				//______________________________________________________
 			: ($menu.choice="_openHostFormFolder")
 				
-				SHOW ON DISK:C922(EDITOR.path.hostForms().platformPath)
+				SHOW ON DISK:C922(UI.path.hostForms().platformPath)
 				
 				//______________________________________________________
 			: ($menu.choice="_verbose")

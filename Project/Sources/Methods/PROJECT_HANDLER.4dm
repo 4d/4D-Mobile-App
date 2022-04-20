@@ -130,10 +130,10 @@ Case of
 		
 		// MARK:-Audit the project
 		
-		If (Num:C11(EDITOR.window)#0)
+		If (Num:C11(UI.window)#0)
 			
 			// Send result
-			EDITOR.callMeBack("projectAuditResult"; PROJECT.audit())
+			UI.callMeBack("projectAuditResult"; PROJECT.audit())
 			
 		Else 
 			
@@ -158,98 +158,98 @@ Case of
 			
 		End if 
 		
-		Form:C1466.status.project:=Bool:C1537(EDITOR.projectAudit.success)
-		Form:C1466.audit:=EDITOR.projectAudit
+		Form:C1466.status.project:=Bool:C1537(UI.projectAudit.success)
+		Form:C1466.audit:=UI.projectAudit
 		
 		// Update UI
-		EDITOR.callMeBack("tableProperties")
-		EDITOR.callMeBack("fieldProperties")
-		EDITOR.callMeBack("refreshViews")
-		EDITOR.callMeBack("update_data")
+		UI.callMeBack("tableProperties")
+		UI.callMeBack("fieldProperties")
+		UI.callMeBack("refreshViews")
+		UI.callMeBack("update_data")
 		
-		If (Bool:C1537(EDITOR.projectAudit.success))  // Update status
+		If (Bool:C1537(UI.projectAudit.success))  // Update status
 			
-			OB REMOVE:C1226(EDITOR; "projectInvalid")
+			OB REMOVE:C1226(UI; "projectInvalid")
 			
 		Else   // Display alert only one time
 			
-			If (Not:C34(Bool:C1537(EDITOR.projectInvalid)))
+			If (Not:C34(Bool:C1537(UI.projectInvalid)))
 				
-				EDITOR.projectInvalid:=True:C214
+				UI.projectInvalid:=True:C214
 				
 				$ok:=New object:C1471(\
 					"action"; "projectFixErrors"; \
-					"audit"; EDITOR.projectAudit)
+					"audit"; UI.projectAudit)
 				
-				If (EDITOR.projectAudit.errors.length=1)
+				If (UI.projectAudit.errors.length=1)
 					
-					$title:=EDITOR.projectAudit.errors[0].message
+					$title:=UI.projectAudit.errors[0].message
 					
 					Case of 
 							
 							//________________________________________
-						: (EDITOR.projectAudit.errors[0].type="template")
+						: (UI.projectAudit.errors[0].type="template")
 							
 							$additional:="doYouWantToFixYourProjectByUsingTheDefaultTemplates"
 							
 							$cancel:=New object:C1471(\
 								"action"; "page_views"; \
-								"tab"; EDITOR.projectAudit.errors[0].tab; \
-								"table"; EDITOR.projectAudit.errors[0].table)
+								"tab"; UI.projectAudit.errors[0].tab; \
+								"table"; UI.projectAudit.errors[0].table)
 							
 							//________________________________________
-						: (EDITOR.projectAudit.errors[0].type="field")
+						: (UI.projectAudit.errors[0].type="field")
 							
 							$additional:="doYouWantToFixYourProjectByDeletingThisField"
 							
 							$cancel:=New object:C1471(\
 								"action"; "page_views"; \
-								"tab"; EDITOR.projectAudit.errors[0].tab; \
-								"table"; EDITOR.projectAudit.errors[0].table)
+								"tab"; UI.projectAudit.errors[0].tab; \
+								"table"; UI.projectAudit.errors[0].table)
 							
 							//________________________________________
-						: (EDITOR.projectAudit.errors[0].type="icon")
+						: (UI.projectAudit.errors[0].type="icon")
 							
 							$additional:="doYouWantToFixYourProjectByUsingTheDefaultIcons"
 							
 							$cancel:=New object:C1471(\
 								"action"; "page_properties"; \
-								"panel"; EDITOR.projectAudit.errors[0].panel; \
-								"table"; EDITOR.projectAudit.errors[0].table; \
-								"field"; Num:C11(EDITOR.projectAudit.errors[0].field))
+								"panel"; UI.projectAudit.errors[0].panel; \
+								"table"; UI.projectAudit.errors[0].table; \
+								"field"; Num:C11(UI.projectAudit.errors[0].field))
 							
 							//________________________________________
-						: (EDITOR.projectAudit.errors[0].type="formatter")
+						: (UI.projectAudit.errors[0].type="formatter")
 							
 							$additional:="doYouWantToFixYourProjectByUsingTheDefaultFormatter"
 							
 							$cancel:=New object:C1471(\
 								"action"; "page_properties"; \
-								"panel"; EDITOR.projectAudit.errors[0].panel; \
-								"table"; EDITOR.projectAudit.errors[0].table; \
-								"field"; Num:C11(EDITOR.projectAudit.errors[0].field))
+								"panel"; UI.projectAudit.errors[0].panel; \
+								"table"; UI.projectAudit.errors[0].table; \
+								"field"; Num:C11(UI.projectAudit.errors[0].field))
 							
 							//________________________________________
-						: (EDITOR.projectAudit.errors[0].type="filter")
+						: (UI.projectAudit.errors[0].type="filter")
 							
 							$additional:="wouldYouLikeToRemoveTheFilterToFixYourProject"
 							
 							$cancel:=New object:C1471(\
 								"action"; "page_data"; \
-								"panel"; EDITOR.projectAudit.errors[0].panel; \
-								"table"; EDITOR.projectAudit.errors[0].table)
+								"panel"; UI.projectAudit.errors[0].panel; \
+								"table"; UI.projectAudit.errors[0].table)
 							
 							//________________________________________
 						Else 
 							
-							ASSERT:C1129(dev_Matrix; "Unknown project audit error type "+EDITOR.projectAudit.errors[0].type)
+							ASSERT:C1129(dev_Matrix; "Unknown project audit error type "+UI.projectAudit.errors[0].type)
 							
 							//________________________________________
 					End case 
 					
 				Else 
 					
-					$c:=EDITOR.projectAudit.errors.extract("type").distinct()
+					$c:=UI.projectAudit.errors.extract("type").distinct()
 					
 					If ($c.length=1)
 						
@@ -263,8 +263,8 @@ Case of
 								
 								$cancel:=New object:C1471(\
 									"action"; "page_views"; \
-									"tab"; EDITOR.projectAudit.errors[0].tab; \
-									"table"; EDITOR.projectAudit.errors[0].table)
+									"tab"; UI.projectAudit.errors[0].tab; \
+									"table"; UI.projectAudit.errors[0].table)
 								
 								//________________________________________
 							: ($c[0]="field")
@@ -274,8 +274,8 @@ Case of
 								
 								$cancel:=New object:C1471(\
 									"action"; "page_views"; \
-									"panel"; EDITOR.projectAudit.errors[0].panel; \
-									"table"; EDITOR.projectAudit.errors[0].table)
+									"panel"; UI.projectAudit.errors[0].panel; \
+									"table"; UI.projectAudit.errors[0].table)
 								
 								//________________________________________
 							: ($c[0]="icon")
@@ -285,9 +285,9 @@ Case of
 								
 								$cancel:=New object:C1471(\
 									"action"; "page_properties"; \
-									"panel"; EDITOR.projectAudit.errors[0].panel; \
-									"table"; EDITOR.projectAudit.errors[0].table; \
-									"field"; Num:C11(EDITOR.projectAudit.errors[0].field))
+									"panel"; UI.projectAudit.errors[0].panel; \
+									"table"; UI.projectAudit.errors[0].table; \
+									"field"; Num:C11(UI.projectAudit.errors[0].field))
 								
 								//________________________________________
 							: ($c[0]="formatter")
@@ -297,20 +297,20 @@ Case of
 								
 								$cancel:=New object:C1471(\
 									"action"; "page_properties"; \
-									"panel"; EDITOR.projectAudit.errors[0].panel; \
-									"table"; EDITOR.projectAudit.errors[0].table; \
-									"field"; Num:C11(EDITOR.projectAudit.errors[0].field))
+									"panel"; UI.projectAudit.errors[0].panel; \
+									"table"; UI.projectAudit.errors[0].table; \
+									"field"; Num:C11(UI.projectAudit.errors[0].field))
 								
 								//________________________________________
-							: (EDITOR.projectAudit.errors[0].type="filter")
+							: (UI.projectAudit.errors[0].type="filter")
 								
 								$title:="someFiltersAreNotValidatedOrInvalid"
 								$additional:="wouldYouLikeToRemoveTheInvalidOrNotValidatedFilters"
 								
 								$cancel:=New object:C1471(\
 									"action"; "page_data"; \
-									"panel"; EDITOR.projectAudit.errors[0].panel; \
-									"table"; EDITOR.projectAudit.errors[0].table)
+									"panel"; UI.projectAudit.errors[0].panel; \
+									"table"; UI.projectAudit.errors[0].table)
 								
 								//________________________________________
 							Else 
@@ -329,51 +329,51 @@ Case of
 						Case of 
 								
 								//________________________________________
-							: (EDITOR.projectAudit.errors[0].type="template")
+							: (UI.projectAudit.errors[0].type="template")
 								
 								$cancel:=New object:C1471(\
 									"action"; "page_views"; \
-									"tab"; EDITOR.projectAudit.errors[0].tab; \
-									"table"; EDITOR.projectAudit.errors[0].table)
+									"tab"; UI.projectAudit.errors[0].tab; \
+									"table"; UI.projectAudit.errors[0].table)
 								
 								//________________________________________
-							: (EDITOR.projectAudit.errors[0].type="field")
+							: (UI.projectAudit.errors[0].type="field")
 								
 								$cancel:=New object:C1471(\
 									"action"; "page_views"; \
-									"panel"; EDITOR.projectAudit.errors[0].panel; \
-									"table"; EDITOR.projectAudit.errors[0].table)
+									"panel"; UI.projectAudit.errors[0].panel; \
+									"table"; UI.projectAudit.errors[0].table)
 								
 								//________________________________________
-							: (EDITOR.projectAudit.errors[0].type="icon")
+							: (UI.projectAudit.errors[0].type="icon")
 								
 								$cancel:=New object:C1471(\
 									"action"; "page_properties"; \
-									"panel"; EDITOR.projectAudit.errors[0].panel; \
-									"table"; EDITOR.projectAudit.errors[0].table; \
-									"field"; Num:C11(EDITOR.projectAudit.errors[0].field))
+									"panel"; UI.projectAudit.errors[0].panel; \
+									"table"; UI.projectAudit.errors[0].table; \
+									"field"; Num:C11(UI.projectAudit.errors[0].field))
 								
 								//________________________________________
 							: ($c[0]="formatter")
 								
 								$cancel:=New object:C1471(\
 									"action"; "page_properties"; \
-									"panel"; EDITOR.projectAudit.errors[0].panel; \
-									"table"; EDITOR.projectAudit.errors[0].table; \
-									"field"; Num:C11(EDITOR.projectAudit.errors[0].field))
+									"panel"; UI.projectAudit.errors[0].panel; \
+									"table"; UI.projectAudit.errors[0].table; \
+									"field"; Num:C11(UI.projectAudit.errors[0].field))
 								
 								//________________________________________
 							: ($c[0]="filter")
 								
 								$cancel:=New object:C1471(\
 									"action"; "page_data"; \
-									"panel"; EDITOR.projectAudit.errors[0].panel; \
-									"table"; EDITOR.projectAudit.errors[0].table)
+									"panel"; UI.projectAudit.errors[0].panel; \
+									"table"; UI.projectAudit.errors[0].table)
 								
 								//________________________________________
 							Else 
 								
-								ASSERT:C1129(dev_Matrix; "Unknown project audit error type "+EDITOR.projectAudit.errors[0].type)
+								ASSERT:C1129(dev_Matrix; "Unknown project audit error type "+UI.projectAudit.errors[0].type)
 								
 								//________________________________________
 						End case 
@@ -381,7 +381,7 @@ Case of
 				End if 
 				
 				// User dialog
-				EDITOR.postMessage(New object:C1471(\
+				UI.postMessage(New object:C1471(\
 					"action"; "show"; \
 					"type"; "confirm"; \
 					"title"; $title; \
@@ -425,13 +425,13 @@ Case of
 			End if 
 			
 			// Update UI
-			EDITOR.callMeBack("tableProperties")
-			EDITOR.callMeBack("fieldProperties")
-			EDITOR.callMeBack("refreshViews")
-			EDITOR.callMeBack("update_data")
+			UI.callMeBack("tableProperties")
+			UI.callMeBack("fieldProperties")
+			UI.callMeBack("refreshViews")
+			UI.callMeBack("update_data")
 			
 			// Relaunch audit
-			EDITOR.callMeBack("projectAudit")
+			UI.callMeBack("projectAudit")
 			
 			// Save project
 			PROJECT.save()

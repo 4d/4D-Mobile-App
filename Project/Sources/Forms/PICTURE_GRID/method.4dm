@@ -44,13 +44,13 @@ Case of
 		
 		$bDisplay:=True:C214
 		
-		If (EDITOR.darkScheme)
+		If (UI.darkScheme)
 			
 			OBJECT SET RGB COLORS:C628(*; "selection"; "#76D5FE"; "#0E2732")
 			
 		Else 
 			
-			OBJECT SET RGB COLORS:C628(*; "selection"; EDITOR.selectedColor; "aliceblue")
+			OBJECT SET RGB COLORS:C628(*; "selection"; UI.selectedColor; "aliceblue")
 			
 		End if 
 		

@@ -178,13 +178,13 @@ Function handleEvents($e : Object)
 					: ($e.code=On Getting Focus:K2:7)
 						
 						This:C1470.parameters.foregroundColor:=Foreground color:K23:1
-						This:C1470.parametersBorder.foregroundColor:=EDITOR.selectedColor
+						This:C1470.parametersBorder.foregroundColor:=UI.selectedColor
 						
 						//_____________________________________
 					: ($e.code=On Losing Focus:K2:8)
 						
 						This:C1470.parameters.foregroundColor:=Foreground color:K23:1
-						This:C1470.parametersBorder.foregroundColor:=EDITOR.backgroundUnselectedColor
+						This:C1470.parametersBorder.foregroundColor:=UI.backgroundUnselectedColor
 						
 						//_____________________________________
 					: ($e.code=On Selection Change:K2:29)
@@ -290,7 +290,7 @@ Function handleEvents($e : Object)
 						//_______________________________
 					: ($e.code=On Mouse Enter:K2:33)
 						
-						EDITOR.tips.instantly()
+						UI.tips.instantly()
 						
 						//_______________________________
 					: ($e.code=On Mouse Move:K2:35)
@@ -300,7 +300,7 @@ Function handleEvents($e : Object)
 						//_______________________________
 					: ($e.code=On Mouse Leave:K2:34)
 						
-						EDITOR.tips.restore()
+						UI.tips.restore()
 						
 						//________________________________________
 				End case 
@@ -669,7 +669,7 @@ Function update()
 					
 					This:C1470.goToPage(1)
 					This:C1470.title.setTitle(\
-						EDITOR.str.localize("sortCriteria"; New collection:C1472($action.shortLabel; Table name:C256($action.tableNumber)))).show()
+						UI.str.localize("sortCriteria"; New collection:C1472($action.shortLabel; Table name:C256($action.tableNumber)))).show()
 					This:C1470.withSelection.show()
 					
 					This:C1470.add.enable()
@@ -710,7 +710,7 @@ Function update()
 					Else 
 						
 						This:C1470.title.setTitle(\
-							EDITOR.str.localize("actionParameters"; New collection:C1472($action.shortLabel; Table name:C256($action.tableNumber)))).show()
+							UI.str.localize("actionParameters"; New collection:C1472($action.shortLabel; Table name:C256($action.tableNumber)))).show()
 						This:C1470.withSelection.show()
 						This:C1470.add.enable()
 						This:C1470.remove.enable($current#Null:C1517)
@@ -732,7 +732,7 @@ Function update()
 								If ($isLinked)
 									
 									This:C1470.field.show()
-									This:C1470.field.setValue(EDITOR.str.localize("thisParameterIsLinkedToTheField"; $current.name))
+									This:C1470.field.setValue(UI.str.localize("thisParameterIsLinkedToTheField"; $current.name))
 									
 								Else 
 									
@@ -804,7 +804,7 @@ Function update()
 												
 												// Should accept "today", "yesterday", "tomorrow"
 												GET SYSTEM FORMAT:C994(Date separator:K60:10; $t)
-												This:C1470.defaultValue.setFilter("&\"0-9;"+$t+";-;/;"+EDITOR.str.setText("todayyesterdaytomorrow").distinctLetters(";")+"\"")
+												This:C1470.defaultValue.setFilter("&\"0-9;"+$t+";-;/;"+UI.str.setText("todayyesterdaytomorrow").distinctLetters(";")+"\"")
 												
 												var $t
 												$t:=String:C10(This:C1470.defaultValue.getValue())
@@ -1007,7 +1007,7 @@ Function dataSourceValue()->$value : Text
 		
 	Else 
 		
-		This:C1470.dataSource.foregroundColor:=EDITOR.errorRGB
+		This:C1470.dataSource.foregroundColor:=UI.errorRGB
 		
 	End if 
 	
@@ -1800,8 +1800,8 @@ Function dataSourceMenuManager()
 Function editList()
 	
 	//$form:=New object(\
-																										"static"; $static; \
-																										"host"; This.path.hostInputControls(True))
+																												"static"; $static; \
+																												"host"; This.path.hostInputControls(True))
 	
 	//$form.folder:=This.path.hostInputControls()
 	//$manifest:=$form.folder.file("manifest.json")
@@ -2226,7 +2226,7 @@ Function updateParamater($name : Text)
 	End if 
 	
 	This:C1470.paramName.setValue(This:C1470.current.name)
-	This:C1470.field.setValue(EDITOR.str.localize("thisParameterIsLinkedToTheField"; $name))
+	This:C1470.field.setValue(UI.str.localize("thisParameterIsLinkedToTheField"; $name))
 	
 	PROJECT.save()
 	
@@ -2269,7 +2269,7 @@ Function formatToolTip($format : Text)->$tip : Text
 	
 	If ($formatter.host)
 		
-		$file:=EDITOR.path.hostInputControls().folder(Delete string:C232($format; 1; 1)).file("manifest.json")
+		$file:=UI.path.hostInputControls().folder(Delete string:C232($format; 1; 1)).file("manifest.json")
 		
 		If ($file.exists)
 			
@@ -2277,7 +2277,7 @@ Function formatToolTip($format : Text)->$tip : Text
 			
 			If ($o.choiceList#Null:C1517)
 				
-				$tip:=EDITOR.str.setText(JSON Stringify:C1217($o.choiceList; *)).jsonSimplify()
+				$tip:=UI.str.setText(JSON Stringify:C1217($o.choiceList; *)).jsonSimplify()
 				
 			End if 
 		End if 
@@ -2290,7 +2290,7 @@ Function formatToolTip($format : Text)->$tip : Text
 		//SHARED.resources.formattersByName:=New object
 		//var $bind
 		//For each ($bind; SHARED.resources.fieldBindingTypes\
-																																																																					.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
+																																																																								.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
 		//SHARED.resources.formattersByName[$bind.name]:=$bind
 		//End for each
 		//End if
@@ -2313,11 +2313,11 @@ Function backgroundColor($current : Object)->$color
 		
 		If (ob_equal(This:C1470.current; $current))  // Selected row
 			
-			$color:=Choose:C955($isFocused; EDITOR.backgroundSelectedColor; EDITOR.alternateSelectedColor)
+			$color:=Choose:C955($isFocused; UI.backgroundSelectedColor; UI.alternateSelectedColor)
 			
 		Else 
 			
-			$v:=Choose:C955($isFocused; EDITOR.highlightColor; EDITOR.highlightColorNoFocus)
+			$v:=Choose:C955($isFocused; UI.highlightColor; UI.highlightColorNoFocus)
 			$color:=Choose:C955($isFocused; $v; "transparent")
 			
 		End if 
@@ -2328,7 +2328,7 @@ Function backgroundColor($current : Object)->$color
 Function metaInfo($current : Object)->$result
 	
 	$result:=New object:C1471(\
-		"stroke"; Choose:C955(EDITOR.darkScheme; "white"; "black"); \
+		"stroke"; Choose:C955(UI.darkScheme; "white"; "black"); \
 		"fontWeight"; "normal"; \
 		"cell"; New object:C1471(\
 		"names"; New object:C1471))
@@ -2336,11 +2336,11 @@ Function metaInfo($current : Object)->$result
 	If (This:C1470.action.parameters.query("name = :1"; $current.name).length>1)
 		
 		// Selected item
-		$result.cell.names.stroke:=EDITOR.errorRGB
+		$result.cell.names.stroke:=UI.errorRGB
 		
 	Else 
 		
-		$result.cell.names.stroke:=Choose:C955(EDITOR.darkScheme; "white"; "black")
+		$result.cell.names.stroke:=Choose:C955(UI.darkScheme; "white"; "black")
 		
 	End if 
 	

@@ -275,7 +275,7 @@ Case of
 									If (Length:C16(String:C10($context.template.name))>0)
 										
 										// Hide the template picker
-										EDITOR.hidePicker()
+										UI.hidePicker()
 										
 										// Redraw
 										$context.draw:=True:C214
@@ -332,7 +332,7 @@ Case of
 				
 				For each ($i; $o.fields.extract("fieldType"))
 					
-					$c.push(EDITOR.fieldIcons[$i])
+					$c.push(UI.fieldIcons[$i])
 					
 				End for each 
 				
@@ -358,13 +358,13 @@ Case of
 							
 							If (Bool:C1537($field.$added))  // relatedEntity name
 								
-								LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.selectedColor; lk font color:K53:24)
+								LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; UI.selectedColor; lk font color:K53:24)
 								
 							Else 
 								
 								If ($datamodel[String:C10($field.relatedTableNumber)]=Null:C1517)
 									
-									LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color:K53:24)
+									LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; UI.errorColor; lk font color:K53:24)
 									
 								End if 
 							End if 
@@ -378,7 +378,7 @@ Case of
 								
 								If ($datamodel[$context.tableNumber][$c[0]][$c[1]]=Null:C1517)
 									
-									LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color:K53:24)
+									LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; UI.errorColor; lk font color:K53:24)
 									
 								End if 
 								
@@ -386,7 +386,7 @@ Case of
 								
 								If ($datamodel[$context.tableNumber][$c[0]]=Null:C1517)
 									
-									LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color:K53:24)
+									LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; UI.errorColor; lk font color:K53:24)
 									
 								End if 
 							End if 
@@ -424,7 +424,7 @@ Case of
 							//______________________________________________________
 						Else 
 							
-							LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; EDITOR.errorColor; lk font color:K53:24)
+							LISTBOX SET ROW COLOR:C1270(*; $form.fieldList.name; $i; UI.errorColor; lk font color:K53:24)
 							
 							//______________________________________________________
 					End case 
@@ -567,7 +567,7 @@ Case of
 				
 				// Restore current selected background
 				SVG SET ATTRIBUTE:C1055(*; $form.tableWidget.name; $context.tableNumber; \
-					"fill"; EDITOR.unselectedFillColor)
+					"fill"; UI.unselectedFillColor)
 				
 			End if 
 			
@@ -575,7 +575,7 @@ Case of
 			
 			// Select the item
 			SVG SET ATTRIBUTE:C1055(*; $form.tableWidget.name; $context.tableNumber; \
-				"fill"; EDITOR.selectedFillColor)
+				"fill"; UI.selectedFillColor)
 			
 			$context.update:=True:C214
 			$context.picker:=(String:C10(Form:C1466[$view.typeForm()][$context.tableNumber].form)="")
