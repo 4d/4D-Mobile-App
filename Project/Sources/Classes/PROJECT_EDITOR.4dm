@@ -1033,7 +1033,8 @@ Function sendMessageToPanel($panel : Text; $selector : Text; $data : Object)
 		
 		$value:=OBJECT Get value:C1743($subform).$dialog[$panel]
 		
-		If (Value type:C1509($value)=Is object:K8:27) && ($value.constraints#Null:C1517)
+		// FIXME: remove constraints test after all panels use a form class 
+		If (Value type:C1509($value)=Is object:K8:27) & (($value.isSubform#Null:C1517) || ($value.constraints#Null:C1517))
 			
 			This:C1470.callChild($subform; Formula:C1597(project_PROCESS_MESSAGES).source; $selector; $data)
 			
