@@ -38,7 +38,7 @@ Function execute($sql : Text)->$out : Text
 	
 	If (Is Windows:C1573)
 		
-		$cmd:=str_singleQuoted(This:C1470.cmd)+" \""+This:C1470.database.platformPath+"\" \""+$sql+"\""  // TODO: to test
+		$cmd:="\""+This:C1470.cmd+"\" \""+This:C1470.database.platformPath+"\" \""+$sql+"\""
 		
 	Else 
 		
