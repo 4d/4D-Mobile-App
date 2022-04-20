@@ -113,16 +113,6 @@
 			"tester_net"
 		]
 	},
-	"(__)": {},
-	"(_SOURCES_OLD)": {},
-	"([ macOS ])": {},
-	"([API])": {},
-	"([PANELS])": {},
-	"([UI])": {},
-	"(backend)": {},
-	"(HDI_COLOR)": {},
-	"(UI)": {},
-	"(wip)": {},
 	"[android]": {
 		"methods": [
 			"COMPILER_android",
@@ -1003,18 +993,5 @@
 			"test_xml"
 		]
 	},
-	"trash": {
-		"groups": [
-			"(__)",
-			"(_SOURCES_OLD)",
-			"([ macOS ])",
-			"([API])",
-			"([PANELS])",
-			"([UI])",
-			"(backend)",
-			"(HDI_COLOR)",
-			"(UI)",
-			"(wip)"
-		]
-	}
+	"trash": {}
 }

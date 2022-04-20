@@ -715,6 +715,27 @@ Function getForegroundColor()->$color
 	OBJECT GET RGB COLORS:C1074(*; This:C1470.name; $color)
 	
 	// === === === === === === === === === === === === === === === === === === ===
+Function align($alignment : Integer)
+	
+	$alignment:=$alignment=0 ? Align default:K42:1 : $alignment
+	OBJECT SET HORIZONTAL ALIGNMENT:C706(*; This:C1470.name; $alignment)
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function alignLeft()
+	
+	This:C1470.align(Align left:K42:2)
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function alignRight()
+	
+	This:C1470.align(Align right:K42:4)
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function alignCenter()
+	
+	This:C1470.align(Align center:K42:3)
+	
+	// === === === === === === === === === === === === === === === === === === ===
 Function updateCoordinates($left : Integer; $top : Integer; $right : Integer; $bottom : Integer) : Object
 	
 	If (Count parameters:C259<4)

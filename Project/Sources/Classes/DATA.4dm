@@ -41,6 +41,8 @@ Function init()
 	This:C1470.formObject("dataSizeLabel").addToGroup($group)
 	This:C1470.formObject("tableLabel").addToGroup($group)
 	
+	This:C1470.formObject("dumpSize")
+	
 	// Properties
 	$group:=This:C1470.group("properties")
 	
@@ -189,9 +191,10 @@ Function onLoad()
 	
 	This:C1470.queryWidget.setValue(cs:C1710.svg.new($t).picture())
 	
-	If (Feature.with("androidDataSet")) && (PROJECT.iOS() && PROJECT.android())
+	If (Feature.with("androidDataSet")) && (PROJECT.allTargets())
 		
 		This:C1470.dataSizeLabel.title:=This:C1470.dataSizeLabel.title+" (iOS / Android)"
+		This:C1470.dumpSize.alignCenter()
 		
 	End if 
 	
@@ -201,7 +204,7 @@ Function onLoad()
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Update of the user interface
-Function update($updateList : Boolean)
+Function update()
 	
 	Logger.info("DATA update()")
 	
@@ -249,12 +252,6 @@ Function update($updateList : Boolean)
 		This:C1470.result.foregroundColor:=UI.selectedFillColor
 		
 		This:C1470.displayFilter(This:C1470.current)
-		
-	End if 
-	
-	If ($updateList)
-		
-		//This.updateTableListWithDataSizes()
 		
 	End if 
 	

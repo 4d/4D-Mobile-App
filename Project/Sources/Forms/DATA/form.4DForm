@@ -103,7 +103,7 @@
 							}
 						},
 						{
-							"name": "Column2",
+							"name": "dumpSize",
 							"dataSource": "This:C1470.dumpSize",
 							"width": 145,
 							"minWidth": 10,
@@ -124,8 +124,7 @@
 								"timeFormat": "hh_mm_ss",
 								"textAlign": "left",
 								"verticalAlign": "middle"
-							},
-							"textAlign": "center"
+							}
 						},
 						{
 							"name": "Column1",
@@ -286,7 +285,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 148,
+	"geometryStamp": 153,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
