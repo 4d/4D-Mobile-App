@@ -773,7 +773,7 @@ Function runBuild($data : Object)
 	This:C1470.postMessage(New object:C1471(\
 		"action"; "show"; \
 		"type"; "progress"; \
-		"title"; Get localized string:C991("product")+" - "+PROJECT.product.name+" ["+PROJECT._buildTarget="android" ? "Android" : "iOS"+"]"; \
+		"title"; Get localized string:C991("product")+" - "+PROJECT.product.name+" ["+(PROJECT._buildTarget="android" ? "Android" : "iOS")+"]"; \
 		"additional"; "preparations"; \
 		"autostart"; Formula:C1597(CALL FORM:C1391($caller; Formula:C1597(project_BUILD).source; $data))))
 	
