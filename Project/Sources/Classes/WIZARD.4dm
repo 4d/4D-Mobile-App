@@ -59,7 +59,7 @@ Function init()
 			If (Is Windows:C1573)
 				
 				This:C1470.newProject.moveAndResizeVertically(50; -90)
-				This:C1470.listbox.new("list")
+				This:C1470.listbox("list")
 				This:C1470.list.resizeVertically(50).setRowsHeight(5; lk lines:K53:23)
 				
 			End if 
