@@ -513,7 +513,7 @@ Function androidDb($relativePath : Text) : 4D:C1709.File
 	
 	var $currentFolder : 4D:C1709.Folder
 	
-	$currentFolder:=Is Windows:C1573 ? Folder:C1567($relativePath) : Folder:C1567($relativePath; fk platform path:K87:2)
+	$currentFolder:=Is Windows:C1573 ? Folder:C1567($relativePath) : ($relativePath[[1]]="/" ? Folder:C1567($relativePath) : Folder:C1567($relativePath; fk platform path:K87:2))
 	
 	If ($currentFolder.fullName="project.dataSet")
 		
