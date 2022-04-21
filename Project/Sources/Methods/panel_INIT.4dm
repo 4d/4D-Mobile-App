@@ -86,6 +86,10 @@ For each ($panel; $definition.panels)
 			OBJECT SET VISIBLE:C603(*; $help; True:C214)
 			cs:C1710.group.new(New collection:C1472($title; $help).join(",")).distributeLeftToRight(New object:C1471("spacing"; 8))
 			
+		Else 
+			
+			cs:C1710.formObject.new($title).bestSize(Align left:K42:2)
+			
 		End if 
 	End if 
 	
