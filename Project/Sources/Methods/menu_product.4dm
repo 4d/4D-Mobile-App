@@ -5,7 +5,7 @@ var $product : 4D:C1709.Folder
 
 $choice:=Get selected menu item parameter:C1005
 
-PROJECT._buildTarget="ios"
+PROJECT._buildTarget:="ios"
 
 Case of 
 		
