@@ -76,6 +76,9 @@ Function _tableMaps()->$map : Object
 	
 	$map:=New object:C1471
 	
+	// Under Windows, the line separator is "\r\n" instead of "\n" under macOS.
+	$result:=Is Windows:C1573 ? Replace string:C233($result; "\r\n"; "\n") : $result
+	
 	For each ($line; Split string:C1554($result; "\n"))
 		
 		$values:=Split string:C1554($line; "|")
@@ -95,6 +98,9 @@ Function _dbstat()->$results : Collection
 	$results:=New collection:C1472
 	$text:=This:C1470.sqlite3.execute("SELECT * FROM dbstat;")
 	
+	// Under Windows, the line separator is "\r\n" instead of "\n" under macOS.
+	$text:=Is Windows:C1573 ? Replace string:C233($text; "\r\n"; "\n") : $text
+	
 	For each ($line; Split string:C1554($text; "\n"))
 		
 		$values:=Split string:C1554($line; "|")
@@ -105,14 +111,5 @@ Function _dbstat()->$results : Collection
 				"name"/*TEXT,--Name of table or index*/; $values[0]; \
 				"pgsize"/*INTEGER,--Size of the page, in bytes*/; Num:C11($values[9])))
 			
-			//"path"/*TEXT,--Path to page from root*/; $values[1]; \
-				//"pageno"/*INTEGER,--Page number, or page count*/; Num($values[2]); \
-				//"pagetype"/*TEXT,--'internal', 'leaf', 'overflow', or NULL*/; $values[3]; \
-				//"ncell"/*INTEGER,--Cells on page(0 for overflow pages)*/; Num($values[4]); \
-				//"payload"/*INTEGER,--Bytes of payload on this page or btree*/; Num($values[5]); \
-				//"unused"/*INTEGER,--Bytes of unused space on this page or btree*/; Num($values[6]); \
-				//"mx_payload"/*INTEGER,--Largest payload size of all cells on this row*/; Num($values[7]); \
-				//"pgoffset"/*INTEGER,--Byte offset of the page in the database file*/; Num($values[8]); \
-				
 		End if 
 	End for each 
