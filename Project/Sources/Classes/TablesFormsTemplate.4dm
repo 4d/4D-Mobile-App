@@ -508,8 +508,10 @@ Function _fieldTagify($Obj_field : Object)
 	$Obj_field.originalName:=$Obj_field.name
 	If (Feature.with("alias"))
 		$Obj_field.originalPath:=$Obj_field.path
+		$Obj_field.nameIcon:=$Obj_field.name
 		$Obj_field.name:=formatString("field-name"; $Obj_field.nameOrPath)  // NAME is used in tag for binding, but we need path now because name seems to be shortened sometimes...
 	Else 
+		$Obj_field.nameIcon:=$Obj_field.name
 		$Obj_field.name:=formatString("field-name"; $Obj_field.originalName)
 	End if 
 	

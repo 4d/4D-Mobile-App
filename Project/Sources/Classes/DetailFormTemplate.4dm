@@ -44,22 +44,22 @@ Function doRun
 Function storyboard()->$result : Object
 	$result:=cs:C1710.DetailFormStoryboard.new()
 	
-Function createIconAssets
-	C_OBJECT:C1216($Obj_out; $0)
+Function createIconAssets()->$Obj_out : Object
 	$Obj_out:=New object:C1471()
 	
 	C_BOOLEAN:C305($Boo_withIcons)
 	$Boo_withIcons:=Bool:C1537(This:C1470.template.assets.mandatory)\
 		 | (This:C1470.input.tags.table.fields.query("icon != ''").length>0)
 	
+	
 	// Create by field icon alignment or icon name
-	C_OBJECT:C1216($Obj_field)
+	var $Obj_field : Object
 	For each ($Obj_field; This:C1470.input.tags.table.fields)
 		
 		If ($Boo_withIcons)
 			
 			$Obj_field.labelAlignment:="left"
-			$Obj_field.detailIcon:=This:C1470.input.tags.table.name+"Detail"+$Obj_field.name
+			$Obj_field.detailIcon:=This:C1470.input.tags.table.name+"Detail"+$Obj_field.nameIcon
 			
 		Else 
 			
@@ -116,10 +116,10 @@ Function createIconAssets
 								$t:=Uppercase:C13($t[[1]])
 								
 								//……………………………………………………………………………………………………………
-							: (Length:C16($Obj_metaData.name)>0)
+							: (Length:C16($Obj_metaData.nameIcon)>0)
 								
 								//%W-533.1
-								$t:=Uppercase:C13($Obj_metaData.name[[1]])
+								$t:=Uppercase:C13($Obj_metaData.nameIcon[[1]])
 								//%W+533.1
 								
 								//……………………………………………………………………………………………………………
@@ -137,7 +137,7 @@ Function createIconAssets
 							$Obj_out.assets.push(asset(New object:C1471(\
 								"action"; "create"; \
 								"type"; "imageset"; \
-								"tags"; New object:C1471("name"; This:C1470.input.tags.table.name+"Detail"+$Obj_metaData.name); \
+								"tags"; New object:C1471("name"; This:C1470.input.tags.table.name+"Detail"+$Obj_metaData.nameIcon); \
 								"source"; $file.platformPath; \
 								"target"; This:C1470.template.parent.parent.assets.target+Replace string:C233(Process_tags(This:C1470.template.assets.target; This:C1470.input.tags; New collection:C1472("filename")); "/"; Folder separator:K24:12)+Folder separator:K24:12; \
 								"format"; This:C1470.template.assets.format; \
@@ -149,7 +149,7 @@ Function createIconAssets
 				
 			Else   // There is an icon defined
 				
-				C_OBJECT:C1216($Path_icon)
+				var $Path_icon : 4D:C1709.File
 				If (Position:C15("/"; $Obj_metaData.icon)=1)
 					
 					// Custom icon
@@ -162,22 +162,20 @@ Function createIconAssets
 					
 				End if 
 				
-				C_OBJECT:C1216($o)
-				$o:=asset(New object:C1471(\
+				var $assetResult : Object
+				$assetResult:=asset(New object:C1471(\
 					"action"; "create"; \
 					"type"; "imageset"; \
-					"tags"; New object:C1471("name"; This:C1470.input.tags.table.name+"Detail"+$Obj_metaData.name); \
+					"tags"; New object:C1471("name"; This:C1470.input.tags.table.name+"Detail"+$Obj_metaData.nameIcon); \
 					"source"; $Path_icon.platformPath; \
 					"target"; This:C1470.template.parent.parent.assets.target+Replace string:C233(Process_tags(This:C1470.template.assets.target; This:C1470.input.tags; New collection:C1472("filename")); "/"; Folder separator:K24:12)+Folder separator:K24:12; \
 					"format"; This:C1470.template.assets.format; \
 					"size"; This:C1470.template.assets.size))
 				
-				$Obj_out.assets.push($o)
-				ob_error_combine($Obj_out; $o)
+				$Obj_out.assets.push($assetResult)
+				ob_error_combine($Obj_out; $assetResult)
 				
 			End if 
 		End for each 
 		
 	End if 
-	
-	$0:=$Obj_out
