@@ -576,10 +576,10 @@ Function _relation($table : Object; $options : Object)->$out : Object
 				var $Txt_relationName : Text
 				$Txt_relationName:=$Txt_field  // CLEAN maybe remove var
 				
-				If ($Obj_field.relatedEntities#Null:C1517)  // To remove if relatedEntities deleted and relatedDataClass already filled #109019
+				If (($Obj_field.relatedEntities#Null:C1517) && ($Obj_field.relatedDataClass=Null:C1517))  // To remove if relatedEntities deleted and relatedDataClass already filled #109019
 					
-					$Obj_field.relatedDataClass:=$table[$Txt_relationName].relatedEntities
-					ASSERT:C1129(dev_Matrix; "Code must have relatedEntities or relatedDataclass????")
+					$Obj_field.relatedDataClass:=$Obj_field.relatedEntities
+					ASSERT:C1129(Not:C34(dev_Matrix); "Code must have relatedEntities or relatedDataclass????")
 					
 				End if 
 				
