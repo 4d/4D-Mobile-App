@@ -360,6 +360,8 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 					Else 
 						
 						$cmd:="cp -R "+str_singleQuoted(Convert path system to POSIX:C1106($out.path))+" "+str_singleQuoted(Convert path system to POSIX:C1106($in.target))
+						
+						SET ENVIRONMENT VARIABLE:C812("_4D_OPTION_HIDE_CONSOLE"; "true")
 						LAUNCH EXTERNAL PROCESS:C811($cmd; $inputStream; $outputStream; $Txt_error)
 						
 						If (Asserted:C1132(OK=1; "copy failed: "+$cmd))
@@ -794,6 +796,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 						+" --structure "+str_singleQuoted($in.posix+"Sources/Structures.xcdatamodeld")\
 						+" --output "+str_singleQuoted($in.posix+"Resources")
 					
+					SET ENVIRONMENT VARIABLE:C812("_4D_OPTION_HIDE_CONSOLE"; "true")
 					LAUNCH EXTERNAL PROCESS:C811($cmd; $inputStream; $outputStream; $Txt_error)
 					
 					If (Asserted:C1132(OK=1; "LEP failed: "+$cmd))

@@ -290,6 +290,7 @@ Function _callback
 	
 	This:C1470.waiting:=True:C214
 	$udid:="booted"  // simu id
+	SET ENVIRONMENT VARIABLE:C812("_4D_OPTION_HIDE_CONSOLE"; "true")
 	LAUNCH EXTERNAL PROCESS:C811("xcrun simctl openurl "+$udid+" "+$url)
 	
 	// wait sync end
@@ -304,6 +305,7 @@ Function _callback
 	
 	This:C1470.waiting:=True:C214
 	$url:=$scheme+"://x-callback-url/dump?x-success="+$callback+"?success=1&x-error="+$callback+"?success=0"
+	SET ENVIRONMENT VARIABLE:C812("_4D_OPTION_HIDE_CONSOLE"; "true")
 	LAUNCH EXTERNAL PROCESS:C811("xcrun simctl openurl "+$udid+" "+$url)
 	This:C1470.wait()
 	

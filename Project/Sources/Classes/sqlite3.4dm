@@ -46,4 +46,5 @@ Function execute($sql : Text)->$out : Text
 		
 	End if 
 	
+	SET ENVIRONMENT VARIABLE:C812("_4D_OPTION_HIDE_CONSOLE"; "true")
 	LAUNCH EXTERNAL PROCESS:C811($cmd; $in; $out; $err)
