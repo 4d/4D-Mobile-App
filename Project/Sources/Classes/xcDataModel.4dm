@@ -3,7 +3,7 @@ Class constructor($project : Object)
 	This:C1470.actions:=$project.actions  // to create fetch index using sort actions
 	This:C1470.project:=$project
 	
-	If (Feature.with("alias") && Feature.with("iOSAlias"))
+	If (Feature.with("alias"))
 		This:C1470.catalog:=This:C1470.project.getCatalog()
 	End if 
 	
@@ -24,7 +24,7 @@ Function run($path : Text; $options : Object)->$out : Object
 	var $result : Object
 	
 	// MARK: Manage alias
-	If (Feature.with("alias") && Feature.with("iOSAlias"))
+	If (Feature.with("alias"))
 		
 		$result:=This:C1470._alias()
 		ob_error_combine($out; $result)
@@ -850,7 +850,7 @@ Function _createTable($tableName : Text)->$table : Object
 		"name"; $tableName))
 	
 	var $tableInfo : Object
-	If (Feature.with("iOSAlias"))
+	If (Feature.with("alias"))
 		$tableInfo:=This:C1470._tableFromCatalog($tableName)
 	Else 
 		$tableInfo:=_o_structure(New object:C1471(\
@@ -863,7 +863,7 @@ Function _createTable($tableName : Text)->$table : Object
 	End if 
 	
 Function _createField($tableName : Text; $fieldName : Text)->$result : Object
-	If (Feature.with("iOSAlias"))
+	If (Feature.with("alias"))
 		$result:=New object:C1471("success"; False:C215)
 		var $table : Object
 		$table:=This:C1470._tableFromCatalog($tableName)
@@ -877,7 +877,7 @@ Function _createField($tableName : Text; $fieldName : Text)->$result : Object
 	End if 
 	
 Function _hasGlobalStamp($tableName : Text)->$has : Boolean
-	If (Feature.with("iOSAlias"))
+	If (Feature.with("alias"))
 		$has:=False:C215
 		var $table : Object
 		$table:=This:C1470._tableFromCatalog($tableName)
@@ -893,7 +893,7 @@ Function _hasGlobalStamp($tableName : Text)->$has : Boolean
 	End if 
 	
 Function _inverseRelatedFields($tableName : Text; $relationKey : Text; $cache : Object)->$result : Object
-	If (Feature.with("iOSAlias"))
+	If (Feature.with("alias"))
 		
 		$result:=_o_structure(New object:C1471(\
 			"action"; "inverseRelatedFields"; \

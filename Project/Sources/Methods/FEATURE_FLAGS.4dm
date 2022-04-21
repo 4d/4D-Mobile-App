@@ -135,7 +135,6 @@ $c:=New collection:C1472("emarchand"; "phimage")
 Feature.dev("gitCommit"; $c)  // Commit to git generated project
 Feature.dev("generateForDev"; $c)  // Add framework sources and do not add compiled frameworks to workspace, deactivate code signing on framework
 //FEATURE.dev("devGallery"; $c)  // Allow to dev with local http gallery
-Feature.dev("iOSAlias"; $c)
 
 // Mark:-👴🏻 Vincent
 $c:=New collection:C1472("vdelachaux"; "Vincent de LACHAUX")

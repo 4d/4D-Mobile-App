@@ -6,7 +6,7 @@ Class constructor($input : Object)
 	
 Function doRun()->$Obj_out : Object
 	
-	var $Obj_dataModel; $Obj_field; $Obj_tableModel; $Obj_table; $Obj_userChoice; $Obj_tableList : Object
+	var $Obj_dataModel; $Obj_field; $Obj_tableModel; $Obj_table; $Obj_userChoice; $Obj_tableList; $item : Object
 	var $Obj_in; $Obj_template : Object
 	$Obj_out:=New object:C1471()
 	
@@ -274,17 +274,33 @@ Function doRun()->$Obj_out : Object
 							//……………………………………………………………………………………………………………
 						: (Value type:C1509($Obj_tableList.searchableField)=Is object:K8:27)
 							
-							$Obj_table.searchableField:=formatString("field-name"; String:C10($Obj_tableList.searchableField.name))
+							If (Feature.with("alias"))
+								$Obj_table.searchableField:=formatString("field-name"; String:C10($Obj_tableList.searchableField.path || $Obj_tableList.searchableField.name))
+							Else 
+								$Obj_table.searchableField:=formatString("field-name"; String:C10($Obj_tableList.searchableField.name))
+							End if 
 							
 							//……………………………………………………………………………………………………………
 						: (Value type:C1509($Obj_tableList.searchableField)=Is collection:K8:32)
 							
-							$Obj_table.searchableField:=$Obj_tableList.searchableField.extract("name").map("col_formula"; Formula:C1597($1.result:=formatString("field-name"; String:C10($1.value)))).join(",")
+							If (Feature.with("alias"))
+								
+								$Obj_table.searchableField:=New collection:C1472
+								For each ($item; $Obj_tableList.searchableField)
+									$Obj_table.searchableField.push(formatString("field-name"; String:C10($item.path || $item.name)))
+								End for each 
+								$Obj_table.searchableField:=$Obj_table.searchableField.join(",")
+								
+							Else 
+								$Obj_table.searchableField:=$Obj_tableList.searchableField.extract("name").map("col_formula"; Formula:C1597($1.result:=formatString("field-name"; String:C10($1.value)))).join(",")
+							End if 
 							
 							//……………………………………………………………………………………………………………
 						: (Value type:C1509($Obj_tableList.searchableField)=Is text:K8:3)
 							
-							$Obj_table.searchableField:=formatString("field-name"; String:C10($Obj_tableList.searchableField))
+							If (Asserted:C1132(Not:C34(Feature.with("alias")); "Old way to defined searchable field"))
+								$Obj_table.searchableField:=formatString("field-name"; String:C10($Obj_tableList.searchableField))
+							End if 
 							
 							//……………………………………………………………………………………………………………
 					End case 
@@ -304,17 +320,33 @@ Function doRun()->$Obj_out : Object
 							//……………………………………………………………………………………………………………
 						: (Value type:C1509($Obj_tableList.sortField)=Is object:K8:27)
 							
-							$Obj_table.sortField:=formatString("field-name"; String:C10($Obj_tableList.sortField.name))
+							If (Feature.with("alias"))
+								$Obj_table.sortField:=formatString("field-name"; String:C10($Obj_tableList.sortField.path || $Obj_tableList.sortField.name))
+							Else 
+								$Obj_table.sortField:=formatString("field-name"; String:C10($Obj_tableList.sortField.name))
+							End if 
 							
 							//……………………………………………………………………………………………………………
 						: (Value type:C1509($Obj_tableList.sortField)=Is collection:K8:32)
 							
-							$Obj_table.sortField:=$Obj_tableList.sortField.extract("name").map("col_formula"; Formula:C1597($1.result:=formatString("field-name"; String:C10($1.value)))).join(",")
+							If (Feature.with("alias"))
+								
+								$Obj_table.sortField:=New collection:C1472
+								For each ($item; $Obj_tableList.sortField)
+									$Obj_table.sortField.push(formatString("field-name"; String:C10($item.path || $item.name)))
+								End for each 
+								$Obj_table.sortField:=$Obj_table.sortField.join(",")
+								
+							Else 
+								$Obj_table.sortField:=$Obj_tableList.sortField.extract("name").map("col_formula"; Formula:C1597($1.result:=formatString("field-name"; String:C10($1.value)))).join(",")
+							End if 
 							
 							//……………………………………………………………………………………………………………
 						: (Value type:C1509($Obj_tableList.sortField)=Is text:K8:3)
 							
-							$Obj_table.sortField:=formatString("field-name"; String:C10($Obj_tableList.sortField))
+							If (Asserted:C1132(Not:C34(Feature.with("alias")); "Old way to defined sort field"))
+								$Obj_table.sortField:=formatString("field-name"; String:C10($Obj_tableList.sortField))
+							End if 
 							
 							//……………………………………………………………………………………………………………
 					End case 
@@ -335,7 +367,11 @@ Function doRun()->$Obj_out : Object
 									 && ($Obj_field.fieldType#Is picture:K8:10)\
 									 && ($Obj_field.fieldType#-1))  // not image or not defined or not relation
 									
-									$Obj_table.sortField:=$Obj_field.name  // formatString ("field-name";String($Obj_field.originalName))
+									If (Feature.with("alias"))
+										$Obj_table.sortField:=$Obj_field.path || $Obj_field.name  // formatString ("field-name";String($Obj_field.originalName))
+									Else 
+										$Obj_table.sortField:=$Obj_field.name  // formatString ("field-name";String($Obj_field.originalName))
+									End if 
 									
 								End if 
 							End for each 
@@ -356,14 +392,18 @@ Function doRun()->$Obj_out : Object
 				
 				If ($Obj_tableList.sectionField#Null:C1517)
 					
-					$Obj_table.sectionField:=formatString("field-name"; String:C10($Obj_tableList.sectionField.name))
+					If (Feature.with("alias"))
+						$Obj_table.sectionField:=formatString("field-name"; String:C10($Obj_tableList.sectionField.path || $Obj_tableList.sectionField.name))
+					Else 
+						$Obj_table.sectionField:=formatString("field-name"; String:C10($Obj_tableList.sectionField.name))
+					End if 
 					$Obj_table.sectionFieldBindingType:=""
 					
 					// Get format of section field$Obj_tableList
-					If ($Obj_tableModel[String:C10($Obj_tableList.sectionField.id)]#Null:C1517)
+					If ($Obj_tableModel[String:C10($Obj_tableList.sectionField.id || $Obj_tableList.sectionField.name)]#Null:C1517)
 						
 						$Obj_field:=New object:C1471  // maybe get other info from  $Obj_tableList.fields
-						$Obj_field:=ob_deepMerge($Obj_field; $Obj_tableModel[String:C10($Obj_tableList.sectionField.id)])
+						$Obj_field:=ob_deepMerge($Obj_field; $Obj_tableModel[String:C10($Obj_tableList.sectionField.id || $Obj_tableList.sectionField.name)])
 						
 						$Obj_table.sectionFieldBindingType:=This:C1470.fieldBinding($Obj_field; $Obj_in.formatters).bindingType
 						

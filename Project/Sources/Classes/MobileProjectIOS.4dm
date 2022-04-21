@@ -413,7 +413,7 @@ Function _cleanCopyProject($projectInput : Object)->$project : Object
 		
 	End for each 
 	
-	If (Feature.disabled("iOSAlias"))
+	If (False:C215)
 		
 		This:C1470._tmpRemoveAlias($project)
 		
