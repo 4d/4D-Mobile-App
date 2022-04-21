@@ -50,12 +50,12 @@ Function update()
 Note: The datastore property is filled in during the construction phase of the class.
 Thus, this function must only be called to obtain an updated datastore.
 */
-Function getDatastore()->$datastore : Object
+Function getDatastore() : Object
 	
 	If (Feature.with("modernStructure"))
 		
 		var $key : Text
-		var $o : Object
+		var $datastore; $o : Object
 		var $table : cs:C1710.table
 		var $ds : cs:C1710.DataStore
 		
@@ -96,9 +96,11 @@ Function getDatastore()->$datastore : Object
 			End if 
 		End for each 
 		
+		return ($datastore)
+		
 	Else 
 		
-		$datastore:=_4D_Build Exposed Datastore:C1598
+		return (_4D_Build Exposed Datastore:C1598)
 		
 	End if 
 	
@@ -262,7 +264,7 @@ Function table($query)->$table : cs:C1710.table
 	
 	//==================================================================
 	/// Returns Info of the table from its name or number.
-Function tableInfos($query)->$infos : Object
+Function tableInfos($query) : Object
 	
 	var $table : Object
 	
@@ -270,13 +272,13 @@ Function tableInfos($query)->$infos : Object
 	
 	If (This:C1470.success)
 		
-		$infos:=ds:C1482[$table.name].getInfo()
+		return (ds:C1482[$table.name].getInfo())
 		
 	End if 
 	
 	//==================================================================
 	/// Returns the table number from its name or number
-Function tableNumber($query)->$number : Integer
+Function tableNumber($query) : Integer
 	
 	var $table : Object
 	
@@ -284,13 +286,13 @@ Function tableNumber($query)->$number : Integer
 	
 	If (This:C1470.success)
 		
-		$number:=$table.tableNumber
+		return ($table.tableNumber)
 		
 	End if 
 	
 	//==================================================================
 	/// Returns the table name from its name or number
-Function tableName($query)->$name : Text
+Function tableName($query) : Text
 	
 	var $table : Object
 	
@@ -298,7 +300,7 @@ Function tableName($query)->$name : Text
 	
 	If (This:C1470.success)
 		
-		$name:=$table.name
+		return ($table.name)
 		
 	End if 
 	
@@ -404,37 +406,35 @@ Function fieldDefinition($table; $fieldPath : Text)->$field : Object
 	End if 
 	
 	//==================================================================
-Function isStorage($field : Object)->$is : Boolean
+Function isStorage($field : Object) : Boolean
 	
-	If (($field#Null:C1517) && (String:C10($field.kind)="storage"))
+	If (($field#Null:C1517)\
+		 && (String:C10($field.kind)="storage")\
+		 && ($field.name#This:C1470.stampFieldName))  // Don't allow stamp field
 		
-		// Don't allow stamp field
-		If ($field.name#This:C1470.stampFieldName)
-			
-			$is:=This:C1470._allowPublication($field)
-			
-		End if 
+		return (This:C1470._allowPublication($field))
+		
 	End if 
 	
 	//==================================================================
-Function isRelatedEntity($field : Object)->$is : Boolean
+Function isRelatedEntity($field : Object) : Boolean
 	
-	$is:=($field#Null:C1517) && ($field.kind="relatedEntity")
-	
-	//==================================================================
-Function isRelatedEntities($field : Object)->$is : Boolean
-	
-	$is:=($field#Null:C1517) && ($field.kind="relatedEntities")
+	return ($field#Null:C1517) && ($field.kind="relatedEntity")
 	
 	//==================================================================
-Function isComputedAttribute($field : Object)->$is : Boolean
+Function isRelatedEntities($field : Object) : Boolean
 	
-	$is:=(($field#Null:C1517) && (String:C10($field.kind)="calculated"))
+	return ($field#Null:C1517) && ($field.kind="relatedEntities")
 	
 	//==================================================================
-Function isAlias($field : Object)->$is : Boolean
+Function isComputedAttribute($field : Object) : Boolean
 	
-	$is:=(($field#Null:C1517) && (String:C10($field.kind)="alias"))
+	return (($field#Null:C1517) && (String:C10($field.kind)="calculated"))
+	
+	//==================================================================
+Function isAlias($field : Object) : Boolean
+	
+	return (($field#Null:C1517) && (String:C10($field.kind)="alias"))
 	
 	//==================================================================
 	// Return related entity catalog
@@ -454,7 +454,13 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 	If ($field.kind="relatedEntity")\
 		 || (Feature.with("alias") && ($field.kind="alias") && ($field.fieldType=Is object:K8:27) && ($field.relatedDataClass#Null:C1517))
 		
-		$result.success:=True:C214
+		$result:=New object:C1471(\
+			"success"; True:C214; \
+			"relatedEntity"; $field.name; \
+			"relatedTableNumber"; $ds[$field.relatedDataClass].getInfo().tableNumber; \
+			"relatedDataClass"; $field.relatedDataClass; \
+			"inverseName"; $field.inverseName; \
+			"fields"; New collection:C1472)
 		
 		If ($field.kind="alias")
 			
@@ -462,12 +468,6 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 			$field:=$result.alias.target
 			
 		End if 
-		
-		$result.relatedEntity:=$field.name
-		$result.relatedTableNumber:=$ds[$field.relatedDataClass].getInfo().tableNumber
-		$result.relatedDataClass:=$field.relatedDataClass
-		$result.inverseName:=$field.inverseName
-		$result.fields:=New collection:C1472
 		
 		$relatedDataClass:=$ds[$field.relatedDataClass]
 		
@@ -653,6 +653,9 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 		End for each 
 		
 	Else 
+		
+		$result:=New object:C1471(\
+			"success"; False:C215)
 		
 		This:C1470.errors.push("The attribute \""+$relationName+"\" of dataclass \""+$tableName+"\" does not refer to an entity")
 		
@@ -882,8 +885,6 @@ Function check
 	//#WIP
 	
 	// MARK:-[PRIVATE]
-	
-	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function _fieldModel($field : cs:C1710.field; $relatedCatalog : Object)->$fieldModel : Object
 	

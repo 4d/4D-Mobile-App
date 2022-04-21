@@ -210,6 +210,26 @@ Function get enabled() : Boolean
 	
 	return (OBJECT Get enabled:C1079(*; This:C1470.name))
 	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function get horizontalAlignment() : Integer
+	
+	return (OBJECT Get horizontal alignment:C707(*; This:C1470.name))
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function set horizontalAlignment($alignment : Integer)
+	
+	OBJECT SET HORIZONTAL ALIGNMENT:C706(*; This:C1470.name; $alignment+Num:C11($alignment=0))
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function get verticalAlignment() : Integer
+	
+	return (OBJECT Get vertical alignment:C1188(*; This:C1470.name))
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
+Function set verticalAlignment($alignment : Integer)
+	
+	OBJECT SET VERTICAL ALIGNMENT:C1187(*; This:C1470.name; $alignment+Num:C11($alignment=0))
+	
 	// MARK:-
 	// === === === === === === === === === === === === === === === === === === ===
 	/// Adds this widget to a group
@@ -715,25 +735,43 @@ Function getForegroundColor()->$color
 	OBJECT GET RGB COLORS:C1074(*; This:C1470.name; $color)
 	
 	// === === === === === === === === === === === === === === === === === === ===
-Function align($alignment : Integer)
+Function alignLeft() : cs:C1710.formObject
 	
-	$alignment:=$alignment=0 ? Align default:K42:1 : $alignment
-	OBJECT SET HORIZONTAL ALIGNMENT:C706(*; This:C1470.name; $alignment)
-	
-	// === === === === === === === === === === === === === === === === === === ===
-Function alignLeft()
-	
-	This:C1470.align(Align left:K42:2)
+	OBJECT SET HORIZONTAL ALIGNMENT:C706(*; This:C1470.name; Align left:K42:2)
+	return (This:C1470)
 	
 	// === === === === === === === === === === === === === === === === === === ===
-Function alignRight()
+Function alignRight() : cs:C1710.formObject
 	
-	This:C1470.align(Align right:K42:4)
+	OBJECT SET HORIZONTAL ALIGNMENT:C706(*; This:C1470.name; Align right:K42:4)
+	return (This:C1470)
 	
 	// === === === === === === === === === === === === === === === === === === ===
-Function alignCenter()
+Function alignTop() : cs:C1710.formObject
 	
-	This:C1470.align(Align center:K42:3)
+	OBJECT SET VERTICAL ALIGNMENT:C1187(*; This:C1470.name; Align top:K42:5)
+	return (This:C1470)
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function alignBottom() : cs:C1710.formObject
+	
+	OBJECT SET VERTICAL ALIGNMENT:C1187(*; This:C1470.name; Align bottom:K42:6)
+	return (This:C1470)
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function alignCenter($vertical : Boolean) : cs:C1710.formObject
+	
+	If ($vertical)
+		
+		OBJECT SET VERTICAL ALIGNMENT:C1187(*; This:C1470.name; Align center:K42:3)
+		
+	Else 
+		
+		OBJECT SET HORIZONTAL ALIGNMENT:C706(*; This:C1470.name; Align center:K42:3)
+		
+	End if 
+	
+	return (This:C1470)
 	
 	// === === === === === === === === === === === === === === === === === === ===
 Function updateCoordinates($left : Integer; $top : Integer; $right : Integer; $bottom : Integer) : Object

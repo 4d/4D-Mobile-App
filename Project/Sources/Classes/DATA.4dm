@@ -194,7 +194,7 @@ Function onLoad()
 	If (Feature.with("androidDataSet")) && (PROJECT.allTargets())
 		
 		This:C1470.dataSizeLabel.title:=This:C1470.dataSizeLabel.title+" (iOS / Android)"
-		This:C1470.dumpSize.alignCenter()
+		This:C1470.dumpSize.horizontalAlignment:=Align center:K42:3
 		
 	End if 
 	
