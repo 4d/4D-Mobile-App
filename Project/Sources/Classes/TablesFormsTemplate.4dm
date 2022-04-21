@@ -587,7 +587,15 @@ Function sortFieldFromAction($table : Object)->$sortFields : Text
 						If (String:C10($parameter.format)="descending")
 							$sortFields:=$sortFields+"!"  // because on iOS sortAscending = true by default so we reverse here
 						End if 
-						$sortFields:=$sortFields+formatString("field-name"; String:C10($table[String:C10($parameter.fieldNumber)].name))
+						If ($parameter.fieldNumber#Null:C1517)
+							$sortFields:=$sortFields+formatString("field-name"; String:C10($table[String:C10($parameter.fieldNumber)].name))
+						Else 
+							If (Feature.with("alias"))
+								$sortFields:=$sortFields+formatString("field-name"; $parameter.path || $parameter.name)
+							Else 
+								ASSERT:C1129(Not:C34(dev_Matrix); "Missing fieldNumber in sort action: "+JSON Stringify:C1217($action))
+							End if 
+						End if 
 					End for each 
 				End if 
 			End if 
