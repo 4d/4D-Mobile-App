@@ -5,6 +5,8 @@ var $product : 4D:C1709.Folder
 
 $choice:=Get selected menu item parameter:C1005
 
+PROJECT._buildTarget="ios"
+
 Case of 
 		
 		//______________________________________________________
@@ -20,16 +22,19 @@ Case of
 			"create"; True:C214; \
 			"build"; True:C214; \
 			"run"; True:C214; \
+			"target"; PROJECT._buildTarget; \
 			"verbose"; True:C214))
 		
 		//______________________________________________________
-	: ($choice="create")
+	: (Position:C15("create"; $choice)=1)
 		
+		PROJECT._buildTarget:=Substring:C12($choice; Length:C16("create")+1)
 		UI.runBuild(New object:C1471(\
 			"project"; PROJECT; \
 			"create"; True:C214; \
 			"build"; False:C215; \
 			"run"; False:C215; \
+			"target"; PROJECT._buildTarget; \
 			"verbose"; True:C214))
 		
 		//______________________________________________________
@@ -40,6 +45,7 @@ Case of
 			"create"; False:C215; \
 			"build"; True:C214; \
 			"run"; True:C214; \
+			"target"; PROJECT._buildTarget; \
 			"verbose"; True:C214))
 		
 		//______________________________________________________
@@ -50,6 +56,7 @@ Case of
 			"create"; False:C215; \
 			"build"; False:C215; \
 			"run"; True:C214; \
+			"target"; PROJECT._buildTarget; \
 			"verbose"; True:C214))
 		
 		//______________________________________________________

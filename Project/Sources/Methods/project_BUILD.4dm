@@ -45,7 +45,10 @@ If (Asserted:C1132($project#Null:C1517))
 		$project.product.bundleIdentifier:=formatString("bundleApp"; $project.organization.id+"."+$project.product.name)
 		$data.appFolder:=UI.path.products().folder($project.product.name)
 		
-		$data.realDevice:=($project._device.type="device")
+		$data.realDevice:=(String:C10($project._device.type)="device")
+		
+		var $target : Text
+		$target:=$project._buildTarget || $data.target/*_buildTarget is constantly resty because in project... better to have it from caller*/
 		
 		If ($data.path=Null:C1517)
 			
@@ -79,7 +82,7 @@ If (Asserted:C1132($project#Null:C1517))
 			End if 
 			
 			// According to the target
-			$data.appFolder:=$data.appFolder.folder(Choose:C955($project._buildTarget="iOS"; "iOS"; "Android"))
+			$data.appFolder:=$data.appFolder.folder(Choose:C955($target="iOS"; "iOS"; "Android"))
 			$data.path:=$data.appFolder.platformPath
 			
 		Else 
@@ -92,7 +95,7 @@ If (Asserted:C1132($project#Null:C1517))
 		
 		If (Not:C34($success))
 			
-			If ($project._buildTarget="iOS")
+			If ($target="iOS")
 				
 				If ($data.appFolder.folder("Sources").exists)
 					
@@ -365,7 +368,7 @@ If (Asserted:C1132($project#Null:C1517))
 						$success:=True:C214
 						
 						//______________________________________________________
-					: ($project._buildTarget="iOS")
+					: ($target="iOS")
 						
 						var $cfgutil : cs:C1710.cfgutil
 						$cfgutil:=cs:C1710.cfgutil.new()
@@ -430,7 +433,7 @@ If (Asserted:C1132($project#Null:C1517))
 						End if 
 						
 						//______________________________________________________
-					: ($project._buildTarget="android")
+					: ($target="android")
 						
 						var $adb : cs:C1710.adb
 						$adb:=cs:C1710.adb.new()
