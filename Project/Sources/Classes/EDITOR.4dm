@@ -769,11 +769,12 @@ Function runBuild($data : Object)
 	Logger.info("LAUNCH BUILD - runBuild()")
 	
 	If ($data.project._buildTarget=Null:C1517)
+		
 		$data.project._buildTarget:=$data.target || PROJECT._buildTarget  // temporary fix
+		
 	End if 
-	If ($data.caller=Null:C1517)
-		$data.caller:=$caller
-	End if 
+	
+	$data.caller:=$data.caller || Current form window:C827
 	
 	This:C1470.postMessage(New object:C1471(\
 		"action"; "show"; \
