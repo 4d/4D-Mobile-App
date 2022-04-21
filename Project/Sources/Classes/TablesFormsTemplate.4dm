@@ -166,23 +166,26 @@ Function doRun()->$Obj_out : Object
 							
 							$tmpTableModel:=$Obj_tableModel
 							If ($keyPaths.length>0)  // is it a link?
-								For each ($keyPath; $keyPaths)
+								For each ($keyPath; $keyPaths) Until ($tmpTableModel=Null:C1517)
 									$tmpTableModel:=$tmpTableModel[$keyPath]  // get sub model if related field
 								End for each 
 							End if 
 							
 							// Add info from dataModel or cache if missing
 							$fieldModel:=Null:C1517
-							If ($Obj_field.id#Null:C1517)
-								$fieldModel:=$tmpTableModel[String:C10($Obj_field.id)]  // OLD CODE
-							End if 
-							If ($fieldModel=Null:C1517)  // computed or NEW CODE
-								$fieldModel:=This:C1470._field($tmpTableModel; $Obj_field)
-							End if 
-							If ($fieldModel#Null:C1517)
-								$Obj_field:=ob_deepMerge($Obj_field; $fieldModel; False:C215)
-							Else 
-								ASSERT:C1129(dev_Matrix; "Unable to get info of field "+JSON Stringify:C1217($Obj_field))
+							If ($tmpTableModel#Null:C1517)
+								If ($Obj_field.id#Null:C1517)
+									$fieldModel:=$tmpTableModel[String:C10($Obj_field.id)]  // OLD CODE
+								End if 
+								If ($fieldModel=Null:C1517)  // computed or NEW CODE
+									$fieldModel:=This:C1470._field($tmpTableModel; $Obj_field)
+								End if 
+								If ($fieldModel#Null:C1517)
+									$Obj_field:=ob_deepMerge($Obj_field; $fieldModel; False:C215)
+								Else 
+									ASSERT:C1129(dev_Matrix; "Unable to get info of field "+JSON Stringify:C1217($Obj_field))
+								End if 
+								// Else , nothing in data model, nothing to get
 							End if 
 							
 							// Format name for the tag
