@@ -596,7 +596,7 @@ Function addMenuManager()
 			
 			For each ($field; PROJECT.getSortableFields(Form:C1466.dataModel[$o.tableID]; True:C214))
 				
-				$fieldsMenu.append($field.name; "sort_"+$o.tableID+","+String:C10($field.fieldNumber))
+				$fieldsMenu.append($field.name; "sort_"+$o.tableID+","+($field.fieldNumber#Null:C1517 ? String:C10($field.fieldNumber) : $field.name))
 				
 			End for each 
 			
@@ -622,7 +622,7 @@ Function addMenuManager()
 			
 			If ($field.kind="storage")
 				
-				$fieldsMenu.append($field.name; "sort_"+$o.tableID+","+String:C10($field.fieldNumber))
+				$fieldsMenu.append($field.name; "sort_"+$o.tableID+","+($field.fieldNumber#Null:C1517 ? String:C10($field.fieldNumber) : $field.name))
 				
 			Else 
 				
