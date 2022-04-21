@@ -103,7 +103,7 @@ Function _actionsInTabBarProcess()
 					
 				End if 
 				
-			: (Value type:C1509($navigationItem)=Is object:K8:27)
+			: ((Value type:C1509($navigationItem)=Is object:K8:27) && ($table.actions#Null:C1517))
 				
 				$table:=OB Copy:C1225($navigationItem)  // to not alter caller
 				$table[""]:=OB Copy:C1225($table)  // to simulate meta data behaviour or table (but must be clean)
@@ -112,6 +112,9 @@ Function _actionsInTabBarProcess()
 				
 				// TODO:actionsInTabBar: create items for actions, maybe format according
 				This:C1470.input.tags.navigationTables.push($table)
+				
+			Else 
+				// Unknown menu item type
 				
 		End case 
 		
