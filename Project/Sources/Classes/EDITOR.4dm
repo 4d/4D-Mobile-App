@@ -770,6 +770,13 @@ Function runBuild($data : Object)
 	var $caller : Integer
 	$caller:=This:C1470.window
 	
+	If ($data.project._buildTarget=Null:C1517)
+		$data.project._buildTarget:=$data.target || PROJECT._buildTarget  // temporary fix
+	End if 
+	If ($data.caller=Null:C1517)
+		$data.caller:=$caller
+	End if 
+	
 	This:C1470.postMessage(New object:C1471(\
 		"action"; "show"; \
 		"type"; "progress"; \
