@@ -631,12 +631,12 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 					If (This:C1470.allowedTypes.indexOf($relatedAttribute.type)>=0)
 						
 						$related:=OB Copy:C1225($relatedAttribute)
+						$related.label:=New collection:C1472($field.name; $related.name).join(".")
+						$related.type:=This:C1470.__fielddType($related.fieldType)
+						$related.relatedTableNumber:=$result.relatedTableNumber
 						
 						// MARK: TEMPO
 						$related.valueType:=$related.type
-						
-						$related.type:=This:C1470.__fielddType($related.fieldType)
-						$related.relatedTableNumber:=$result.relatedTableNumber
 						
 						$related._order:=""
 						$result.fields.push($related)
