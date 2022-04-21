@@ -131,6 +131,8 @@ Function handleEvents($e : Object)
 				
 				If (Feature.with("androidDataSet"))
 					
+					This:C1470.datasetAndroid:=Null:C1517
+					This:C1470.sqlite:=Null:C1517
 					This:C1470.callMeBack("updateSourcePanel")
 					
 				End if 

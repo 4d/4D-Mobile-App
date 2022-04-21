@@ -290,12 +290,12 @@ If (OB Is empty:C1297(Feature)) | $reset
 	$version:=1960  // Current branch version number
 	
 	If (Structure file:C489=Structure file:C489(*))\
-		 & (Num:C11(SHARED.ide.version)#$version)
+		 && (Num:C11(SHARED.ide.version)#$version)
 		
 		ALERT:C41("You need to update the last delivered version number in COMPONENT_INIT")
 		
 		//%T-
-		METHOD OPEN PATH:C1213(Current method name:C684; 271)
+		METHOD OPEN PATH:C1213(Current method name:C684; 222)
 		//%T+
 		
 		ABORT:C156
@@ -326,6 +326,8 @@ If ($process.cooperative)\
 	Logger.line()
 	
 End if 
+
+Logger.info(Is compiled mode:C492 ? "COMPILED MODE" : "INTERPRETED MODE")
 
 // MARK:-AFTER FLAGS
 SET ASSERT ENABLED:C1131(DATABASE.isInterpreted | Feature.with("debug"); *)

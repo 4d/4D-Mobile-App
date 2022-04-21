@@ -8,7 +8,6 @@ Class constructor()
 	
 	// Mark: Associated worker
 	This:C1470.worker:="4D Mobile ("+String:C10(This:C1470.window)+")"
-	This:C1470.callWorker(Formula:C1597(COMPONENT_INIT).source)
 	
 	This:C1470.design()
 	
@@ -767,8 +766,7 @@ Function runBuild($data : Object)
 	
 	This:C1470.build:=True:C214
 	
-	var $caller : Integer
-	$caller:=This:C1470.window
+	Logger.info("LAUNCH BUILD - runBuild()")
 	
 	If ($data.project._buildTarget=Null:C1517)
 		$data.project._buildTarget:=$data.target || PROJECT._buildTarget  // temporary fix
@@ -782,7 +780,7 @@ Function runBuild($data : Object)
 		"type"; "progress"; \
 		"title"; Get localized string:C991("product")+" - "+$data.project.product.name+" ["+($data.project._buildTarget="android" ? "Android" : "iOS")+"]"; \
 		"additional"; "preparations"; \
-		"autostart"; Formula:C1597(CALL FORM:C1391($caller; Formula:C1597(project_BUILD).source; $data))))
+		"autostart"; Formula:C1597(CALL FORM:C1391(Current form window:C827; Formula:C1597(project_BUILD).source; $data))))
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	/// Displays the message dialog box

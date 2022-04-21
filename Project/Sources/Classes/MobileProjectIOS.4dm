@@ -46,6 +46,8 @@ Class constructor($project : Object)
 	// Creating the project
 Function create()->$result : Object
 	
+	Logger.info(Current method name:C684)
+	
 	$result:=New object:C1471(\
 		"path"; This:C1470.input.path; \
 		"success"; True:C214; \
@@ -117,6 +119,8 @@ Function create()->$result : Object
 	// Building the App
 Function build()->$result : Object
 	
+	Logger.info(Current method name:C684)
+	
 	$result:=New object:C1471
 	$result.success:=False:C215
 	
@@ -156,6 +160,8 @@ Function build()->$result : Object
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Running the application on a simulator or a connected device
 Function run()->$result : Object
+	
+	Logger.info(Current method name:C684)
 	
 	$result:=New object:C1471
 	

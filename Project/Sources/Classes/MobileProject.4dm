@@ -35,7 +35,6 @@ Function main()->$result : Object
 			
 			If ($o.success)
 				
-				
 				Case of 
 						//______________________________________________________
 					: (Bool:C1537(This:C1470.input.run))
@@ -80,7 +79,7 @@ Function main()->$result : Object
 				
 			Else 
 				
-				// ❌ ERROR OCCURRED WHILE BUILDING PROJECT
+				Logger.error("❌ ERROR OCCURRED WHILE BUILDING PROJECT")
 				
 			End if 
 			
@@ -93,7 +92,7 @@ Function main()->$result : Object
 		
 	Else 
 		
-		// ❌ ERROR OCCURRED WHILE CREATING PROJECT
+		Logger.error("❌ ERROR OCCURRED WHILE CREATING PROJECT")
 		
 	End if 
 	

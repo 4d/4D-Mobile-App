@@ -22,19 +22,11 @@ var $c : Collection
 
 var $file : 4D:C1709.File
 
-// ----------------------------------------------------
-// Initialisations
-If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
-	
-	ob_MERGE($data; project_Defaults)
-	
-	$project:=$data.project
-	
-Else 
-	
-	ABORT:C156
-	
-End if 
+ASSERT:C1129($data#Null:C1517; "Missing paramater")
+
+ob_MERGE($data; project_Defaults)
+
+$project:=$data.project
 
 // ----------------------------------------------------
 If (Asserted:C1132($project#Null:C1517))
@@ -145,13 +137,15 @@ If (Asserted:C1132($project#Null:C1517))
 			
 		Else 
 			
+			Logger.info("⚠️"+Current method name:C684+" productFolderAlreadyExist")
+			
 			// Product folder already exist. user MUST CONFIRM
 			$o:=New object:C1471(\
 				"action"; "show"; \
 				"type"; "confirm"; \
 				"title"; "theProductFolderAlreadyExist"; \
 				"additional"; "allContentWillBeReplaced"; \
-				"CALLBACK"; "editor_MESSAGE_CALLBACK"; \
+				"CALLBACK"; Formula:C1597(editor_MESSAGE_CALLBACK).source; \
 				"build"; $data)
 			
 			$o:=await_MESSAGE($o; "productFolderAlreadyExist")
@@ -204,6 +198,8 @@ If (Asserted:C1132($project#Null:C1517))
 						
 					Else 
 						
+						Logger.info("⚠️"+Current method name:C684+" someStructuralAdjustmentsAreNeeded")
+						
 						$o:=New object:C1471(\
 							"action"; "show"; \
 							"type"; "confirm"; \
@@ -211,7 +207,7 @@ If (Asserted:C1132($project#Null:C1517))
 							"additional"; cs:C1710.tools.new().localized("doYouAllow4dToModifyStructure"); \
 							"ok"; "allow"; \
 							"option"; New object:C1471("title"; "rememberMyChoice"; "value"; False:C215); \
-							"CALLBACK"; "editor_MESSAGE_CALLBACK")
+							"CALLBACK"; Formula:C1597(editor_MESSAGE_CALLBACK).source)
 						
 						$o:=await_MESSAGE($o; "someStructuralAdjustmentsAreNeeded")
 						
@@ -235,6 +231,8 @@ If (Asserted:C1132($project#Null:C1517))
 						
 						If (Not:C34($success))
 							
+							Logger.info("⚠️"+Current method name:C684+" theWebServerIsNotStarted")
+							
 							$Obj_ok:=New object:C1471(\
 								"action"; "build_startWebServer"; \
 								"build"; $data)
@@ -250,7 +248,7 @@ If (Asserted:C1132($project#Null:C1517))
 								"title"; "theWebServerIsNotStarted"; \
 								"additional"; "DoYouWantToStartTheWebServer"; \
 								"cancel"; "notNow"; \
-								"CALLBACK"; "editor_MESSAGE_CALLBACK"; \
+								"CALLBACK"; Formula:C1597(editor_MESSAGE_CALLBACK).source; \
 								"build"; $data)
 							
 							$o:=await_MESSAGE($o; "theWebServerIsNotStarted")
@@ -468,11 +466,22 @@ If (Asserted:C1132($project#Null:C1517))
 		
 		If ($success)
 			
-			CALL WORKER:C1389(UI.worker; "mobile_Project"; $data)
+			Logger.info(Current method name:C684+": CALL WORKER(mobile_Project)")
+			
+			CALL WORKER:C1389(UI.worker; Formula:C1597(mobile_Project).source; $data)
 			
 		End if 
+		
+	Else 
+		
+		Logger.error("❌"+Current method name:C684+" project_Check_param failed")
+		
 	End if 
 	
 	OB REMOVE:C1226(UI; "build")
+	
+Else 
+	
+	Logger.error("❌"+Current method name:C684+" Project is empty")
 	
 End if 

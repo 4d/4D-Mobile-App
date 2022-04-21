@@ -45,7 +45,7 @@
 					"scrollbarVertical": "automatic",
 					"events": [],
 					"focusable": false,
-					"rowStyleSource": "Choose:C955(Position:C15(\".\"; This:C1470.path)>0; Italic:K14:3; Plain:K14:1)",
+					"rowStyleSource": "Choose:C955(Bool:C1537(This:C1470.kind=\"alias\"); Italic:K14:3; Plain:K14:1)",
 					"columns": [
 						{
 							"name": "_airbag",

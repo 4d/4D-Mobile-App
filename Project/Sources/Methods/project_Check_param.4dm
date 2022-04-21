@@ -41,6 +41,8 @@ End if
 // ----------------------------------------------------
 $project:=$in.project
 
+Logger.info("-> "+Current method name:C684)
+
 Case of 
 		
 		//______________________________________________________
@@ -186,5 +188,4 @@ If ($result.success & Bool:C1537($in.run))
 	
 End if 
 
-// ----------------------------------------------------
-// End
+Logger.info("<- "+Current method name:C684)

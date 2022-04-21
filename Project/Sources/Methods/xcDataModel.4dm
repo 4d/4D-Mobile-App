@@ -1,4 +1,4 @@
-//%attributes = {}
+//%attributes = {"preemptive":"capable"}
 // Manager model with some possible "action"
 // - xcdatamodel:  Dump the data mode as iOS xcdatamodel
 #DECLARE($Obj_in : Object)->$Obj_out : Object

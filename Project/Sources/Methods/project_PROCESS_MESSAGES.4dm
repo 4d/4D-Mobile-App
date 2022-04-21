@@ -281,11 +281,20 @@ Case of
 					Logger.info("Message getSQLiteResponse(iOS) -> DATA")
 					$panel.sqlite:=$data.database
 					
+					// iOS is treated first. Don't refresh before the Android response
+					If (Not:C34(PROJECT.allTargets()))
+						
+						$panel.updateTableListWithDataSizes()
+						
+					End if 
+					
 					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 				: (String:C10($data.target)="android")
 					
 					Logger.info("Message getSQLiteResponse(Android) -> DATA")
 					$panel.datasetAndroid:=$data.database
+					
+					$panel.updateTableListWithDataSizes()
 					
 					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 				Else 
@@ -295,9 +304,6 @@ Case of
 					
 					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 			End case 
-			
-			$panel.updateTableListWithDataSizes()
-			
 		End if 
 		
 		//mark:endOfDatasetGeneration
