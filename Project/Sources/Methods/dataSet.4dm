@@ -41,7 +41,7 @@ Else
 	
 End if 
 
-$verbose:=Bool:C1537($in.verbose)
+$verbose:=Bool:C1537($in.verbose) | (Feature.with("vdl"))
 
 If ($in.url=Null:C1517)
 	
@@ -449,8 +449,8 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 					
 					If ($verbose)
 						
-						CALL FORM:C1391($in.caller; "LOG_EVENT"; New object:C1471(\
-							"message"; "Dump Catalog"; \
+						LOG_EVENT(New object:C1471(\
+							"message"; "Dump catalog"; \
 							"importance"; Information message:K38:1))
 						
 					End if 
@@ -458,7 +458,6 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 					If ($withUI)
 						
 						$delay.start:=Tickcount:C458
-						
 						DELAY PROCESS:C323(Current process:C322; ($delay.minimumDisplayTime/2))
 						
 					End if 
@@ -537,7 +536,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 						
 						If ($verbose)
 							
-							CALL FORM:C1391($in.caller; "LOG_EVENT"; New object:C1471(\
+							LOG_EVENT(New object:C1471(\
 								"message"; "Dump Data"; \
 								"importance"; Information message:K38:1))
 							
@@ -574,7 +573,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 							
 							If ($verbose)
 								
-								CALL FORM:C1391($in.caller; "LOG_EVENT"; New object:C1471(\
+								LOG_EVENT(New object:C1471(\
 									"message"; "Dump Pictures"; \
 									"importance"; Information message:K38:1))
 								
@@ -688,7 +687,6 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 								"dataModel"; $dataModel; \
 								"url"; $in.url)).digest
 							
-							//TEXT TO DOCUMENT($out.path+"dataSetDigest"; $out.digest)
 							File:C1566($out.path+"dataSetDigest"; fk platform path:K87:2).setText($out.digest)
 							
 						End if 
@@ -701,7 +699,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 					
 					If ($verbose)
 						
-						CALL FORM:C1391($in.caller; "LOG_EVENT"; New object:C1471(\
+						LOG_EVENT(New object:C1471(\
 							"message"; "Web server not running"; \
 							"importance"; Error message:K38:3))
 						

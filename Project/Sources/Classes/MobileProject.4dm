@@ -48,7 +48,7 @@ Function main()->$result : Object
 							
 						Else 
 							
-							// ❌ ERROR OCCURRED WHILE RUNNING PROJECT
+							Logger.error("❌ ERROR OCCURRED WHILE RUNNING PROJECT")
 							
 						End if 
 						
@@ -64,7 +64,7 @@ Function main()->$result : Object
 							
 						Else 
 							
-							// ❌ ERROR OCCURRED WHILE INSTALLING APP
+							Logger.error("❌ ERROR OCCURRED WHILE INSTALLING APP")
 							
 						End if 
 						
@@ -135,6 +135,8 @@ Function install()
 	// Display a system notification
 Function notification()
 	
+	Logger.info("🏁  End build")
+	
 	If (This:C1470.withUI)
 		
 		// Send result
@@ -146,7 +148,7 @@ Function notification()
 			"archive"; This:C1470.input.archive; \
 			"project"; This:C1470.input.project)
 		
-		CALL FORM:C1391(This:C1470.input.caller; Formula:C1597(editor_CALLBACK).source; "build"; New object:C1471(\
+		CALL FORM:C1391(This:C1470.input.caller; "editor_CALLBACK"; "build"; New object:C1471(\
 			"success"; True:C214; \
 			"param"; $param))
 		
@@ -158,7 +160,7 @@ Function logInfo($message : Text)
 	
 	If (This:C1470.verbose)
 		
-		CALL FORM:C1391(This:C1470.caller; "LOG_EVENT"; New object:C1471(\
+		LOG_EVENT(New object:C1471(\
 			"message"; $message; \
 			"importance"; Information message:K38:1))
 		
@@ -174,7 +176,7 @@ Function logError($message : Text)
 	
 	If (This:C1470.verbose)
 		
-		CALL FORM:C1391(This:C1470.caller; "LOG_EVENT"; New object:C1471(\
+		LOG_EVENT(New object:C1471(\
 			"message"; $message; \
 			"importance"; Error message:K38:3))
 		
@@ -355,7 +357,7 @@ Function dataSetLegacy()->$dump : Object  // TODO: to remove with Not(FEATURE.wi
 			"caller"; This:C1470.input.caller; \
 			"verbose"; This:C1470.input.verbose; \
 			"keepUI"; True:C214; \
-			"method"; Formula:C1597(editor_CALLBACK).source; \
+			"method"; "editor_CALLBACK"; \
 			"message"; "endOfDatasetGeneration"))
 		
 	End if 
@@ -407,7 +409,7 @@ Function dataSet()->$dump : Object
 		"caller"; This:C1470.input.caller; \
 		"verbose"; This:C1470.input.verbose; \
 		"keepUI"; True:C214; \
-		"method"; Formula:C1597(editor_CALLBACK).source; \
+		"method"; "editor_CALLBACK"; \
 		"message"; "endOfDatasetGeneration"))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===

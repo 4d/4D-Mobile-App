@@ -419,7 +419,7 @@ Case of
 		Else 
 			
 			$form.simulator.disable()
-			Logger.warning("Simulators button is disabled because EDITOR.devices is not yet available")
+			Logger.warning("Simulators button is disabled because UI.devices is not yet available")
 			
 		End if 
 		

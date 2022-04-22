@@ -17,9 +17,6 @@ C_LONGINT:C283(nvl; $2)
 
 C_OBJECT:C1216(removeAllEntities; $1)
 
-//_______________________________________
-C_OBJECT:C1216(internalTests; $0)
-
 //__________________________________________________
 C_OBJECT:C1216(publishedTableList; $0)
 C_OBJECT:C1216(publishedTableList; $1)

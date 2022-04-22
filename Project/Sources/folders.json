@@ -147,6 +147,7 @@
 	"[COMPONENT ]": {
 		"methods": [
 			"COMPILER_COMPONENT",
+			"COMPILER_NON_THREAD_SAFE",
 			"COMPONENT_Infos",
 			"COMPONENT_INIT",
 			"FEATURE_FLAGS"
@@ -340,10 +341,6 @@
 		]
 	},
 	"[TOOLS]": {
-		"methods": [
-			"COMPILER_http",
-			"HTTP ERROR HANDLER"
-		],
 		"classes": [
 			"bmp",
 			"color",

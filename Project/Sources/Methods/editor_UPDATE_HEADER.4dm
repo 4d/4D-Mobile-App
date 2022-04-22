@@ -16,11 +16,6 @@ End if
 
 var $button : cs:C1710.button
 
-// ----------------------------------------------------
-// Initialisations
-
-// <NO PARAMETERS REQUIRED>
-
 // Optional parameters
 If (Count parameters:C259>=1)
 	

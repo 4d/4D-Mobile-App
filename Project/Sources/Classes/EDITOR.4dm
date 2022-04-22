@@ -397,11 +397,13 @@ Function updateColorScheme()
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function goToPage($page : Text)
 	
-	var $o : Object
+	var $description : Object
+	
+	logger.info(Current method name:C684+" ("+$page+")")
 	
 	If (Count parameters:C259>=1)
 		
-		$o:=This:C1470.pages[$page]
+		$description:=This:C1470.pages[$page]
 		
 	End if 
 	
@@ -413,37 +415,35 @@ Function goToPage($page : Text)
 	// Hide footer
 	androidLimitations(False:C215; "")
 	
-	Case of 
-			
-			//_______________________________________________
-		: (Form:C1466.status.dataModel=Null:C1517)
-			
-			//_______________________________________________
-		: ($page="structure")
-			
-			$o.action.show:=Not:C34(Bool:C1537(Form:C1466.status.dataModel))
-			
-			//_______________________________________________
-		: ($page="views")
-			
-			$o.action.show:=Not:C34(Bool:C1537(Form:C1466.status.project))
-			
-			//_______________________________________________
-	End case 
-	
-	If ($o#Null:C1517)
+	If ($description#Null:C1517)
+		
+		Case of 
+				
+				//_______________________________________________
+			: (Form:C1466.status.dataModel=Null:C1517)
+				
+				//_______________________________________________
+			: ($page="structure")
+				
+				$description.action.show:=Not:C34(Bool:C1537(Form:C1466.status.dataModel))
+				
+				//_______________________________________________
+			: ($page="views")
+				
+				$description.action.show:=Not:C34(Bool:C1537(Form:C1466.status.project))
+				
+				//_______________________________________________
+		End case 
 		
 		This:C1470.currentPage:=$page
 		This:C1470.setHeader()
 		
-		Form:C1466.$page:=$o
+		Form:C1466.$page:=$description
 		
-		This:C1470.callChild(This:C1470.project; Formula:C1597(panel_INIT).source; $o; PROJECT)
+		This:C1470.callChild(This:C1470.project; Formula:C1597(panel_INIT).source; $description; PROJECT)
 		
-		This:C1470.updateHeader($o)
-		
+		This:C1470.updateHeader($description)
 		This:C1470.refresh()  // Update geometry
-		
 		This:C1470.project.focus()
 		
 	End if 
@@ -560,7 +560,15 @@ Function setHeader()
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function updateHeader($data : Object)
 	
-	This:C1470.callChild(This:C1470.description; Formula:C1597(editor_UPDATE_HEADER).source; $data)
+	If (This:C1470.currentForm=UI.currentForm)
+		
+		This:C1470.callChild(This:C1470.description; Formula:C1597(editor_UPDATE_HEADER).source; $data)
+		
+	Else 
+		
+		This:C1470.callMeBack("description"; $data)
+		
+	End if 
 	
 	//MARK:-Widget methods
 	//=== === === === === === === === === === === === === === === === === === === === ===
@@ -758,15 +766,15 @@ Function getIcon($relativePath : Text) : Picture
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-/**
+Function runBuild($data : Object)
+/*
 Display the message immediately to be more responsive
 The real build process (project_BUILD) will autostart at the message is posted
 */
-Function runBuild($data : Object)
 	
 	This:C1470.build:=True:C214
 	
-	Logger.info("LAUNCH BUILD - runBuild()")
+	Logger.info("🏁  Start build")
 	
 	If ($data.project._buildTarget=Null:C1517)
 		
@@ -779,7 +787,7 @@ Function runBuild($data : Object)
 	This:C1470.postMessage(New object:C1471(\
 		"action"; "show"; \
 		"type"; "progress"; \
-		"title"; Get localized string:C991("product")+" - "+$data.project.product.name+" ["+($data.project._buildTarget="android" ? "Android" : "iOS")+"]"; \
+		"title"; Get localized string:C991("product")+" - "+PROJECT.product.name+" ["+(PROJECT._buildTarget="android" ? "Android" : "iOS")+"]"; \
 		"additional"; "preparations"; \
 		"autostart"; Formula:C1597(CALL FORM:C1391(Current form window:C827; Formula:C1597(project_BUILD).source; $data))))
 	
@@ -795,6 +803,8 @@ Function checkDevTools()
 	This:C1470.addTask("checkDevTools")
 	This:C1470.callWorker(Formula:C1597(editor_CHECK_INSTALLATION).source; New object:C1471(\
 		"caller"; This:C1470.window; \
+		"method"; Formula:C1597(editor_CALLBACK).source; \
+		"message"; "checkDevTools"; \
 		"xCode"; This:C1470.xCode; \
 		"studio"; This:C1470.studio; \
 		"android"; PROJECT.$android; \
@@ -848,13 +858,14 @@ Function getDevice($udid : Text)->$device : Object
 Function doGenerate($keyPathname : Text)
 	
 	var $worker : Text
+	var $ƒ : Object
+	var $window : Integer
+	
+	// Make a copy for the Formula
+	$window:=Current form window:C827
 	$worker:=This:C1470.worker
 	
-	var $caller : Integer
-	$caller:=This:C1470.window
-	
-	var $ƒ : 4D:C1709.Function
-	$ƒ:=Formula:C1597(CALL WORKER:C1389($worker; Formula:C1597(dataSet).source; New object:C1471(\
+	$ƒ:=Formula:C1597(CALL WORKER:C1389($worker; "dataSet"; New object:C1471(\
 		"action"; "create"; \
 		"eraseIfExists"; True:C214; \
 		"project"; PROJECT; \
@@ -863,7 +874,7 @@ Function doGenerate($keyPathname : Text)
 		"coreDataSet"; Feature.disabled("androidDataSet"); \
 		"key"; $keyPathname; \
 		"dataSet"; True:C214; \
-		"caller"; $caller; \
+		"caller"; $window; \
 		"method"; Formula:C1597(editor_CALLBACK).source; \
 		"message"; "endOfDatasetGeneration")))
 	
@@ -879,6 +890,8 @@ Function doGenerate($keyPathname : Text)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function doStopDataGeneration()
+	
+	Logger.warning("Data generation cancelled")
 	
 	Use (Storage:C1525)
 		
@@ -925,7 +938,6 @@ Function doCancelableProgress($content; $additional : Text)
 				"type"; "cancelableProgress"; \
 				"title"; String:C10($content)\
 				))
-			
 			
 		End if 
 	End if 
@@ -1013,7 +1025,7 @@ Function sendMessageToPanel($panel : Text; $selector : Text; $data : Object)
 		$value:=OBJECT Get value:C1743($subform).$dialog[$panel]
 		
 		// FIXME: remove constraints test after all panels use a form class 
-		If (Value type:C1509($value)=Is object:K8:27) & (($value.isSubform#Null:C1517) || ($value.constraints#Null:C1517))
+		If (Value type:C1509($value)=Is object:K8:27) && (($value.isPannel#Null:C1517) || ($value.constraints#Null:C1517))
 			
 			This:C1470.callChild($subform; Formula:C1597(project_PROCESS_MESSAGES).source; $selector; $data)
 			

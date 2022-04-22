@@ -828,16 +828,6 @@ Case of
 														
 														If (Bool:C1537($in.dataSet))
 															
-															//TEXT TO DOCUMENT($outputPathname+"Contents.json"; \
-																																																																																																JSON Stringify(New object(\
-																																																																																																"info"; New object(\
-																																																																																																"version"; 1; \
-																																																																																																"author"; "xcode"\
-																																																																																																); \
-																																																																																																"images"; New collection(New object(\
-																																																																																																"idiom"; "universal"; \
-																																																																																																"filename"; $File_name)))))
-															
 															File:C1566($outputPathname+"Contents.json"; fk platform path:K87:2).setText(JSON Stringify:C1217(New object:C1471(\
 																"info"; New object:C1471(\
 																"version"; 1; \
@@ -887,10 +877,7 @@ Case of
 							
 							$outputPathname:=$in.output+Folder separator:K24:12+$meta.name+Folder separator:K24:12
 							$outputPathname:=$outputPathname+"manifest.json"
-							//TEXT TO DOCUMENT($outputPathname; \
-																																																JSON Stringify(New object(\
-																																																"contentSize"; Num($result.contentSize); \
-																																																"count"; Num($result.count))))
+							
 							File:C1566($outputPathname; fk platform path:K87:2).setText(JSON Stringify:C1217(New object:C1471(\
 								"contentSize"; Num:C11($result.contentSize); \
 								"count"; Num:C11($result.count))))

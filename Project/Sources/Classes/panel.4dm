@@ -5,6 +5,7 @@ Class constructor($method : Text)
 	
 	Super:C1705($method)
 	
+	This:C1470.isPannel:=True:C214
 	This:C1470.isSubform:=True:C214
 	
 	// === === === === === === === === === === === === === === === === === === === === ===

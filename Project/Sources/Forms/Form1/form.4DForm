@@ -262,7 +262,7 @@
 					"dataSourceTypeHint": "boolean",
 					"radioGroup": "radio"
 				},
-				"Input": {
+				"password": {
 					"type": "input",
 					"left": 515,
 					"top": 537,
@@ -270,19 +270,23 @@
 					"height": 17,
 					"fontFamily": "Apple Chancery",
 					"fontSize": 13,
-					"textDecoration": "none"
+					"textDecoration": "none",
+					"dataSource": "",
+					"events": []
 				},
 				"Button5": {
 					"type": "button",
-					"text": "view",
-					"top": 539,
+					"text": "👀",
+					"top": 541,
 					"left": 682,
-					"width": 78,
-					"height": 19,
+					"width": 25,
+					"height": 14,
 					"events": [
-						"onClick"
+						"onMouseEnter",
+						"onMouseLeave"
 					],
-					"method": "ObjectMethods/Button5.4dm"
+					"method": "ObjectMethods/Button5.4dm",
+					"style": "custom"
 				}
 			},
 			"entryOrder": [
@@ -295,7 +299,7 @@
 				"tab.detail",
 				"Radio Button",
 				"Radio Button1",
-				"Input",
+				"password",
 				"Button5"
 			]
 		}
@@ -304,7 +308,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 33,
+	"geometryStamp": 50,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

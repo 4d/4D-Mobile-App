@@ -1,7 +1,7 @@
 //=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor($url)
 	
-	This:C1470.onErrorCallMethod:=Formula:C1597(HTTP ERROR HANDLER).source
+	This:C1470.onErrorCallMethod:=Formula:C1597(noError).source
 	This:C1470._trials:=0
 	
 	If (Count parameters:C259>=1)
@@ -13,8 +13,6 @@ Class constructor($url)
 		This:C1470.reset()
 		
 	End if 
-	
-	var httpError : Integer
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function reset($url)
@@ -43,6 +41,42 @@ Function reset($url)
 	This:C1470.lastError:=""
 	This:C1470.maxRedirect:=2  // Default value
 	This:C1470.success:=True:C214  //This.isInternetAvailable()
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function get timeout() : Integer
+	
+	var $value : Integer
+	
+	HTTP GET OPTION:C1159(HTTP timeout:K71:10; $value)
+	return ($value)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function set timeout($value)
+	
+	// Keep the current value
+	This:C1470._timeout:=This:C1470._timeout || This:C1470.timeout
+	
+	Case of 
+			
+			//______________________________________________________
+		: (String:C10($value)="default")
+			
+			$value:=120
+			
+			//______________________________________________________
+		: (String:C10($value)="reset")
+			
+			$value:=This:C1470._timeout
+			
+			//______________________________________________________
+		Else 
+			
+			$value:=Num:C11($value)
+			
+			//______________________________________________________
+	End case 
+	
+	HTTP SET OPTION:C1160(HTTP timeout:K71:10; $value)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// To set the display of the authentication dialog box
@@ -140,7 +174,7 @@ Function ping($url : Text)->$reachable : Boolean
 	ARRAY TEXT:C222($headerValues; 0x0000)
 	
 	$onErrCallMethod:=Method called on error:C704
-	httpError:=0
+	CLEAR VARIABLE:C89(ERROR)
 	ON ERR CALL:C155(This:C1470.onErrorCallMethod)
 	
 	If (Count parameters:C259>=1)
@@ -158,7 +192,7 @@ Function ping($url : Text)->$reachable : Boolean
 	
 	ON ERR CALL:C155($onErrCallMethod)
 	
-	This:C1470.success:=(This:C1470.status=200) & (httpError=0)
+	This:C1470.success:=(This:C1470.status=200) & (ERROR=0)
 	
 	If (This:C1470.success)
 		
@@ -183,7 +217,7 @@ Function allow($url : Text)->$allowed : Collection
 	ARRAY TEXT:C222($headerValues; 0x0000)
 	
 	$onErrCallMethod:=Method called on error:C704
-	httpError:=0
+	CLEAR VARIABLE:C89(ERROR)
 	ON ERR CALL:C155(This:C1470.onErrorCallMethod)
 	
 	If (Count parameters:C259>=1)
@@ -201,7 +235,7 @@ Function allow($url : Text)->$allowed : Collection
 	
 	ON ERR CALL:C155($onErrCallMethod)
 	
-	This:C1470.success:=(This:C1470.status=200) & (httpError=0)
+	This:C1470.success:=(This:C1470.status=200) & (ERROR=0)
 	
 	If (This:C1470.success)
 		
@@ -389,7 +423,7 @@ Function get()->$this : cs:C1710.http
 		This:C1470._setOptions()
 		
 		$onErrCallMethod:=Method called on error:C704
-		httpError:=0
+		CLEAR VARIABLE:C89(ERROR)
 		ON ERR CALL:C155(This:C1470.onErrorCallMethod)
 		
 		If (This:C1470.keepAlive)
@@ -405,7 +439,7 @@ Function get()->$this : cs:C1710.http
 		
 		ON ERR CALL:C155($onErrCallMethod)
 		
-		This:C1470.success:=(This:C1470.status=200) & (httpError=0)
+		This:C1470.success:=(This:C1470.status=200) & (ERROR=0)
 		
 		Case of 
 				
@@ -440,20 +474,6 @@ Function get()->$this : cs:C1710.http
 				
 				//______________________________________________________
 		End case 
-		
-		//If (This.success)
-		
-		//ARRAY TO COLLECTION(This.headers; \
-															$headerNames; "name"; \
-															$headerValues; "value")
-		
-		//This._response($t; $x)
-		
-		//Else 
-		
-		//This._decodeError()
-		
-		//End if 
 		
 	Else 
 		
@@ -525,7 +545,7 @@ Function request($method : Text; $body)->$this : cs:C1710.http
 		This:C1470._setOptions()
 		
 		$onErrCallMethod:=Method called on error:C704
-		httpError:=0
+		CLEAR VARIABLE:C89(ERROR)
 		ON ERR CALL:C155(This:C1470.onErrorCallMethod)
 		
 		If (This:C1470.keepAlive)
@@ -541,7 +561,7 @@ Function request($method : Text; $body)->$this : cs:C1710.http
 		
 		ON ERR CALL:C155($onErrCallMethod)
 		
-		This:C1470.success:=(This:C1470.status=200) & (httpError=0)
+		This:C1470.success:=(This:C1470.status=200) & (ERROR=0)
 		
 		If (This:C1470.success)
 			
@@ -577,7 +597,9 @@ Function newerRelease($ETag : Text; $lastModified : Text)->$newer : Boolean
 	var $headers : Collection
 	$headers:=This:C1470.headers.copy()
 	
+	This:C1470.timeout:=30
 	This:C1470.request(HTTP HEAD method:K71:3)
+	This:C1470.timeout:="reset"
 	
 	If (This:C1470.success)
 		
@@ -656,12 +678,12 @@ Function myIP()->$IP : Text
 	var $code : Integer
 	
 	$onErrCallMethod:=Method called on error:C704
-	httpError:=0
+	CLEAR VARIABLE:C89(ERROR)
 	ON ERR CALL:C155(This:C1470.onErrorCallMethod)
 	This:C1470.status:=HTTP Get:C1157("http://api.ipify.org"; $t)
 	ON ERR CALL:C155($onErrCallMethod)
 	
-	This:C1470.success:=(This:C1470.status=200) & (httpError=0)
+	This:C1470.success:=(This:C1470.status=200) & (ERROR=0)
 	
 	If (This:C1470.success)
 		
@@ -986,9 +1008,9 @@ Function _statusCodeMessage($statusCode : Integer)->$message : Text
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _decodeError()
 	
-	If (httpError#0)
+	If (ERROR#0)
 		
-		This:C1470._pushError(This:C1470._errorCodeMessage(httpError))
+		This:C1470._pushError(This:C1470._errorCodeMessage(ERROR))
 		
 	Else 
 		

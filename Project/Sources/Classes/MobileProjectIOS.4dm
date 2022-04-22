@@ -776,7 +776,7 @@ Function _manageDataSet($out : Object)
 			"caller"; $in.caller; \
 			"verbose"; This:C1470.verbose; \
 			"keepUI"; True:C214; \
-			"method"; Formula:C1597(editor_CALLBACK).source; \
+			"method"; "editor_CALLBACK"; \
 			"message"; "endOfDatasetGeneration"))
 		
 		ob_error_combine($out; $out.dump)

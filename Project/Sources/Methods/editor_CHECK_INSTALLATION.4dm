@@ -45,15 +45,8 @@ Case of
 					 | ($fileManifest.modificationDate#Current date:C33)
 					
 					// Get the last 4D Mobile Android SDK from AWS server if any
-					If (DATABASE.isMatrix)
-						
-						//CALL WORKER("downloadSDK"; "downloadSDK"; "aws"; "android"; False; $in.caller)
-						
-					Else 
-						
-						CALL WORKER:C1389(1; "downloadSDK"; "aws"; "android"; False:C215; $in.caller)
-						
-					End if 
+					CALL WORKER:C1389(1; Formula:C1597(downloadSDK).source; "aws"; "android"; False:C215; $in.caller)
+					
 				End if 
 			End if 
 			
@@ -87,15 +80,8 @@ Case of
 						 | ($fileManifest.modificationDate#Current date:C33)
 						
 						// Get the last 4D Mobile Android SDK from AWS server if any
-						If (DATABASE.isMatrix)
-							
-							//CALL WORKER("downloadSDK"; "downloadSDK"; "aws"; "ios"; False; $in.caller)
-							
-						Else 
-							
-							CALL WORKER:C1389(1; "downloadSDK"; "aws"; "ios"; False:C215; $in.caller)
-							
-						End if 
+						CALL WORKER:C1389(1; Formula:C1597(downloadSDK).source; "aws"; "ios"; False:C215; $in.caller)
+						
 					End if 
 				End if 
 			End if 
@@ -132,15 +118,8 @@ Case of
 					 | ($fileManifest.modificationDate#Current date:C33)
 					
 					// Get the last 4D Mobile Android SDK from AWS server if any
-					If (DATABASE.isMatrix)
-						
-						//CALL WORKER("downloadSDK"; "downloadSDK"; "aws"; "android"; False; $in.caller)
-						
-					Else 
-						
-						CALL WORKER:C1389(1; "downloadSDK"; "aws"; "android"; False:C215; $in.caller)
-						
-					End if 
+					CALL WORKER:C1389(1; Formula:C1597(downloadSDK).source; "aws"; "android"; False:C215; $in.caller)
+					
 				End if 
 			End if 
 		End if 
@@ -155,6 +134,6 @@ End case
 
 If (Bool:C1537($in.caller))
 	
-	CALL FORM:C1391($in.caller; "editor_CALLBACK"; "checkDevTools"; $out)
+	CALL FORM:C1391($in.caller; $in.method; $in.message; $out)
 	
 End if 

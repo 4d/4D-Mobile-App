@@ -178,9 +178,7 @@ Case of
 		//______________________________________________________
 	: (True:C214)
 		
-		//downloadSDK("aws"; "android")
-		CALL WORKER:C1389(1; "downloadSDK"; "aws"; "android")
-		
+		CALL WORKER:C1389(1; Formula:C1597(downloadSDK).source; "aws"; "android")
 		
 		//______________________________________________________
 	: (True:C214)

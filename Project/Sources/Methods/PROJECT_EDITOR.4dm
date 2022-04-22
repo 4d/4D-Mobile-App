@@ -16,7 +16,7 @@ If ($e.objectName=Null:C1517)  // <== FORM METHOD
 				
 				// We come from a wizard,
 				// so we need to update the form name
-				UI.name:=Current form name:C1298
+				UI.currentForm:=Current form name:C1298
 				
 			Else 
 				
@@ -82,7 +82,7 @@ If ($e.objectName=Null:C1517)  // <== FORM METHOD
 		: ($e.code=On Activate:K2:9)
 			
 			// Update of values that may have changed
-			ENV.update()
+			Env.update()
 			
 			// Update color scheme if any
 			UI.updateColorScheme()

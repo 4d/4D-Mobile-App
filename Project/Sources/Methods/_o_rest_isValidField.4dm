@@ -1,4 +1,4 @@
-//%attributes = {"invisible":true}
+//%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : rest_isValidField
   // ID[0F0D6B3602C94E3BA39832C6C701DEA9]

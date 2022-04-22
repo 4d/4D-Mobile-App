@@ -196,6 +196,7 @@ Case of
 		// MARK:Update TITLE subform
 	: ($message="description")
 		
+		logger.info("Update description ("+Current method name:C684+")")
 		UI.updateHeader($data)
 		
 		// MARK:Update RIBBON subform

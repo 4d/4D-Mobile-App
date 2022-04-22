@@ -1,4 +1,4 @@
-//%attributes = {"invisible":true}
+//%attributes = {"invisible":true,"preemptive":"capable"}
   // ----------------------------------------------------
   // Project method : err_PUSH
   // ID[2BF58939C6654B88BCD34A20C97DDB76]

@@ -38,5 +38,6 @@ Form:C1466.tabdetail:=_o_widget("tab.detail")
 
 //group("Button;Button1").distributeHorizontally(New object("start"; 20; "gap"; 10))
 
-Form:C1466.input:=cs:C1710.input.new("Input")
-Form:C1466.input.password:=True:C214
+// A password input
+Form:C1466.password:=cs:C1710.input.new("password")
+Form:C1466.password.asPassword:=True:C214

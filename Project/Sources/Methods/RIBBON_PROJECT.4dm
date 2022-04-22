@@ -334,8 +334,6 @@ Case of
 			: ($menu.choice="downloadAndroidSdk")\
 				 | ($menu.choice="downloadIosSdk")
 				
-				$t:=Choose:C955($menu.choice="downloadAndroidSdk"; "android"; "ios")
-				
 				var $fromTeamCity : Boolean
 				
 				If (Shift down:C543)
@@ -347,7 +345,11 @@ Case of
 					End if 
 				End if 
 				
-				CALL WORKER:C1389(1; "downloadSDK"; Choose:C955($fromTeamCity; "TeamCity"; "aws"); $t; False:C215; UI.window)
+				CALL WORKER:C1389(1; Formula:C1597(downloadSDK).source; \
+					$fromTeamCity ? "TeamCity" : "aws"; \
+					$menu.choice="downloadAndroidSdk" ? "android" : "ios"; \
+					False:C215; \
+					UI.window)
 				
 				//______________________________________________________
 			: ($menu.choice="openWithXcode")  // Open a file of project in xcode

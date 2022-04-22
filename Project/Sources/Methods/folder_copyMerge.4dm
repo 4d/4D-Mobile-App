@@ -1,4 +1,4 @@
-//%attributes = {}
+//%attributes = {"preemptive":"capable"}
 #DECLARE($folder : 4D:C1709.Folder; $destination : 4D:C1709.Folder)
 
 var $children : Object/* File & Folder*/

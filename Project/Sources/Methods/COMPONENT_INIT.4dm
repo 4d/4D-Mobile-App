@@ -48,8 +48,8 @@ End if
 
 Logger.verbose:=(DATABASE.isMatrix)
 
-var ENV : cs:C1710.env
-ENV:=ENV || cs:C1710.env.new()
+var Env : cs:C1710.env
+Env:=Env || cs:C1710.env.new()
 
 var PROJECT : cs:C1710.project
 PROJECT:=PROJECT || cs:C1710.project.new()

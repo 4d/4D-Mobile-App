@@ -13,13 +13,12 @@
 var $action; $key : Text
 var $data; $ƒ : Object
 
-//TODO: Allow a text parameter for one action only
+// TODO: Allow a text parameter for one action only
 
 $widget:=$widget || UI.message
 
 $data:=$widget.getValue()
 $ƒ:=$data.ƒ
-
 
 // ----------------------------------------------------
 If ($widget.visible)\
@@ -46,7 +45,6 @@ Else
 			End for each 
 			
 			$data.ƒ:=$ƒ
-			
 			$widget.setValue($data)
 			
 			OBJECT SET VISIBLE:C603(*; "message@"; Not:C34(OB Is empty:C1297($data)))
@@ -59,8 +57,9 @@ Else
 			If (New collection:C1472("alert"; "confirm").indexOf(String:C10($data.type))=-1)
 				
 				Case of 
+						
 						//______________________________________________________
-					: (Current form name:C1298="EDITOR")
+					: (Current form name:C1298=UI.currentForm)
 						
 						UI.messageGroup.hide()
 						
@@ -77,7 +76,6 @@ Else
 			
 			// Restore original size
 			$widget.setDimensions($ƒ.width; $ƒ.height)
-			
 			
 			//______________________________________________________
 		: ($action="reset")

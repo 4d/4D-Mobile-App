@@ -316,7 +316,6 @@ Case of
 			
 		Else 
 			
-			Logger.info("🏁 END DATA GENERATION")
 			panel.endOfDatasetGeneration($data)
 			
 		End if 
@@ -391,8 +390,6 @@ Case of
 			
 		Else 
 			
-			//main_Handler(New object("action"; "update"))
-			//main_Handler(New object("action"; "order"))
 			panel._updateOrder()
 			
 		End if 
@@ -498,7 +495,15 @@ Case of
 				//…………………………………………………………………………………………………………
 			: ($container=$ƒ.structure)
 				
-				UI.callChild($container; "structure_Handler"; New object:C1471("action"; $selector))
+				If (Current form name:C1298=UI.currentForm)
+					
+					UI.callChild($container; Formula:C1597(STRUCTURE_Handler).source; New object:C1471("action"; $selector))
+					
+				Else 
+					
+					logger.info("On losingFocus message for "+$container+" ignored")
+					
+				End if 
 				
 				//…………………………………………………………………………………………………………
 		End case 

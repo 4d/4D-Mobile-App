@@ -3,11 +3,19 @@
 // -> force   =   Force the download even if the file is up to date (see verification code)
 #DECLARE($server : Text; $target : Text; $silent : Boolean; $caller : Integer; $force : Boolean)
 
+If (False:C215)
+	C_TEXT:C284(downloadSDK; $1)
+	C_TEXT:C284(downloadSDK; $2)
+	C_BOOLEAN:C305(downloadSDK; $3)
+	C_LONGINT:C283(downloadSDK; $4)
+	C_BOOLEAN:C305(downloadSDK; $5)
+End if 
+
 var $applicationVersion; $url : Text
 var $run; $withUI : Boolean
 var $buildNumber : Integer
-var $o; $manifest : Object
-var $file; $fileManifest : 4D:C1709.File
+var $manifest; $o : Object
+var $fileManifest; $preferences : 4D:C1709.File
 var $folder : 4D:C1709.Folder
 var $sdk : 4D:C1709.ZipFile
 var $error : cs:C1710.error
@@ -16,10 +24,8 @@ var $progress : cs:C1710.progress
 
 ASSERT:C1129(Count parameters:C259>=2)
 
-var DATABASE : cs:C1710.database
 DATABASE:=DATABASE || cs:C1710.database.new()
 
-var Logger : cs:C1710.logger
 Logger:=Logger || cs:C1710.logger.new()
 Logger.verbose:=DATABASE.isMatrix
 
@@ -94,7 +100,6 @@ Case of
 		//______________________________________________________
 	: ($server="TeamCity")
 		
-		var $preferences : 4D:C1709.File
 		$preferences:=Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile")
 		
 		If ($preferences.exists)
@@ -131,7 +136,6 @@ Case of
 								
 							End if 
 						End if 
-						
 						
 						//______________________________________________________
 					: ($target="ios")
@@ -239,6 +243,7 @@ If ($run)
 				End if 
 			End if 
 			// ============================== //
+			
 			
 			If ($run)
 				

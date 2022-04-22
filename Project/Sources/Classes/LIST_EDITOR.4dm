@@ -148,7 +148,7 @@ Function update()
 		This:C1470.remove.enable($isValid & (This:C1470.list.itemPosition>0))
 		
 		// Limit to 2 lines for booleans
-		This:C1470.add.enable(Form:C1466.type#"bool" || (This:C1470.choiceList=Null:C1517 ? True:C214 : This:C1470.choiceList.length<2))
+		This:C1470.add.enable((Form:C1466.type#"bool") || (This:C1470.choiceList=Null:C1517 ? True:C214 : This:C1470.choiceList.length<2))
 		
 	Else 
 		
@@ -419,22 +419,22 @@ Function doStaticDragAndDrop()->$allowed : Integer
 	//BLOB TO VARIABLE($x; $o)
 	//SET BLOB SIZE($x; 0)
 	//$o.tgt:=Drop position
-	//End if
+	//End if 
 	//If ($o.src#$o.tgt)
 	//If ($o.tgt=-1)  // After the last line
 	//Form._choiceList.push($list.item)
 	//Form._choiceList.remove($o.src-1)
-	//Else
+	//Else 
 	//Form._choiceList.insert($o.tgt-1; $list.item)
 	//If ($o.tgt<$o.src)
 	//Form._choiceList.remove($o.src)
-	//Else
+	//Else 
 	//Form._choiceList.remove($o.src-1)
-	//End if
-	//End if
-	//End if
+	//End if 
+	//End if 
+	//End if 
 	//This.dropCursor.hide()
-	//Else
+	//Else 
 	//If ($e.row=-1)  // After the last line
 	//$rows:=$list.rowsNumber()
 	//If ($o.src#$rows)  // Not if the source was the last line
@@ -442,35 +442,35 @@ Function doStaticDragAndDrop()->$allowed : Integer
 	//$o:=$list.rowCoordinates($rows)
 	//$o.top:=$o.bottom
 	//$o.right:=$list.coordinates.right
-	//End if
-	//Else
+	//End if 
+	//Else 
 	//If ($o.src#$e.row)\
-																												 & ($e.row#($o.src+1))  // Not the same or the next one
+		 & ($e.row#($o.src+1))  // Not the same or the next one
 	//$allowed:=0
 	//$o:=$list.rowCoordinates($e.row)
 	//$o.bottom:=$o.top
 	//$o.right:=$list.coordinates.right
-	//End if
-	//End if
+	//End if 
+	//End if 
 	//If ($allowed=-1)
 	//This.dropCursor.hide()
-	//Else
+	//Else 
 	//This.dropCursor.setCoordinates($o.left; $o.top; $o.right; $o.bottom)
 	//This.dropCursor.show()
-	//End if
-	//End if
-	//End if
-	//End if
+	//End if 
+	//End if 
+	//End if 
+	//End if 
 	//If ($e.code=On Drag Over)
 	//If ($allowed)
 	//This.setCursor(9016)
-	//Else
+	//Else 
 	//This.setCursor(9019)
-	//End if
-	//Else
+	//End if 
+	//Else 
 	//This.setCursor()
 	////$list.touch()
-	//End if
+	//End if 
 	
 	This:C1470.setCursorNotAllowed($allowed=-1)
 	

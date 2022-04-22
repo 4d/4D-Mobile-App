@@ -555,7 +555,7 @@ Function doGenerate()
 		
 		This:C1470.generate.isRunning:=True:C214
 		
-		Logger.info("🏁  START DATA GENERATION")
+		Logger.info("🏁  Start Data Generation")
 		
 		If (This:C1470.remote)
 			
@@ -563,9 +563,7 @@ Function doGenerate()
 			// #RUSTINE: ne devrait plus être nécessaire
 			If (Test path name:C476($keyPathname)#Is a document:K24:1)
 				
-				LOG_EVENT(New object:C1471(\
-					"message"; String:C10(Form:C1466.dataSource.keyPath)+" ->"+$keyPathname))
-				
+				Logger.warning(String:C10(Form:C1466.dataSource.keyPath)+" -> "+$keyPathname)
 				$keyPathname:=Convert path POSIX to system:C1107(Form:C1466.dataSource.keyPath)
 				
 			End if 
@@ -589,7 +587,7 @@ Function doGenerate()
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function endOfDatasetGeneration($data : Object)
 	
-	Logger.info("SOURCE endOfDatasetGeneration()")
+	Logger.info("🏁  End Data Generation")
 	
 	This:C1470.generate.isRunning:=False:C215
 	

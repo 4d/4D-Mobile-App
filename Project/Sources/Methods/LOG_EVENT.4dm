@@ -1,47 +1,48 @@
-//%attributes = {"invisible":true}
-  // ----------------------------------------------------
-  // Project method : LOG_EVENT
-  // ID[96B758353E7C46B2AC1896B15D9C0058]
-  // Created 14-9-2017 by Vincent de Lachaux
-  // ----------------------------------------------------
-  // Description:
-  //
-  // ----------------------------------------------------
-  // Declarations
-C_OBJECT:C1216($1)
-
-C_LONGINT:C283($Lon_importance)
-C_TEXT:C284($Txt_header)
-C_OBJECT:C1216($Obj_in)
+//%attributes = {"invisible":true,"preemptive":"capable"}
+// ----------------------------------------------------
+// Project method : LOG_EVENT
+// ID[96B758353E7C46B2AC1896B15D9C0058]
+// Created 14-9-2017 by Vincent de Lachaux
+// ----------------------------------------------------
+// Description:
+//
+// ----------------------------------------------------
+// Declarations
+#DECLARE($in : Object)
 
 If (False:C215)
-	C_OBJECT:C1216(LOG_EVENT ;$1)
+	C_OBJECT:C1216(LOG_EVENT; $1)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
-If (Asserted:C1132(Count parameters:C259>=1;"Missing parameter"))
+var $header : Text
+var $importance : Integer
+
+ASSERT:C1129(Count parameters:C259>=1; "Missing parameter")
+
+$header:=$in.header || "["+Folder:C1567(fk database folder:K87:14).name+"] "
+$importance:=$in.importance || Warning message:K38:2
+
+LOG EVENT:C667(Into 4D debug message:K38:5; $header+$in.message; $importance)
+
+If (Feature.with("vdl"))
 	
-	  // Required parameters
-	$Obj_in:=$1
-	
-	  // Optional parameters
-	  // <NONE>
-	
-	$Txt_header:=Choose:C955(Bool:C1537($Obj_in.header);$Obj_in.header;"["+Folder:C1567(fk database folder:K87:14).name+"] ")
-	$Lon_importance:=Choose:C955(Bool:C1537($Obj_in.importance);$Obj_in.importance;Warning message:K38:2)
-	
-Else 
-	
-	ABORT:C156
-	
+	Case of 
+			
+			//______________________________________________________
+		: ($importance=Information message:K38:1)
+			
+			Logger.info($in.message)
+			
+			//______________________________________________________
+		: ($importance=Warning message:K38:2)
+			
+			Logger.warning($in.message)
+			
+			//______________________________________________________
+		: ($importance=Error message:K38:3)
+			
+			Logger.error($in.message)
+			
+			//______________________________________________________
+	End case 
 End if 
-
-  // ----------------------------------------------------
-LOG EVENT:C667(Into 4D debug message:K38:5;$Txt_header+$Obj_in.message;$Lon_importance)
-
-  // ----------------------------------------------------
-  // Return
-  // <NONE>
-  // ----------------------------------------------------
-  // End

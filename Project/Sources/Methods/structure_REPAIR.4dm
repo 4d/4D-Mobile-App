@@ -47,3 +47,4 @@ UI.refreshViews()
 UI.hidePicker()
 UI.updateHeader(New object:C1471("show"; False:C215))
 UI.callChild("project"; Formula:C1597(PROJECT_ON_ACTIVATE).source)
+

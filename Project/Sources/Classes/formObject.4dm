@@ -230,6 +230,16 @@ Function set verticalAlignment($alignment : Integer)
 	
 	OBJECT SET VERTICAL ALIGNMENT:C1187(*; This:C1470.name; $alignment+Num:C11($alignment=0))
 	
+	// === === === === === === === === === === === === === === === === === === ===
+Function get font() : Text
+	
+	return (OBJECT Get font:C1069(*; This:C1470.name))
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function set font($font : Text)
+	
+	OBJECT SET FONT:C164(*; This:C1470.name; $font)
+	
 	// MARK:-
 	// === === === === === === === === === === === === === === === === === === ===
 	/// Adds this widget to a group
