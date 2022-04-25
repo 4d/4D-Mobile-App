@@ -1233,6 +1233,7 @@ Function addParameterMenuManager($target : Object; $update : Boolean)
 				$parameter:=New object:C1471(\
 					"fieldNumber"; $field.fieldNumber; \
 					"name"; $field.name; \
+					"type"; PROJECT.fieldType2type($field.fieldType); \
 					"path"; $field.path)
 				
 			Else 
@@ -1800,8 +1801,8 @@ Function dataSourceMenuManager()
 Function editList()
 	
 	//$form:=New object(\
-																												"static"; $static; \
-																												"host"; This.path.hostInputControls(True))
+																														"static"; $static; \
+																														"host"; This.path.hostInputControls(True))
 	
 	//$form.folder:=This.path.hostInputControls()
 	//$manifest:=$form.folder.file("manifest.json")
@@ -2290,7 +2291,7 @@ Function formatToolTip($format : Text)->$tip : Text
 		//SHARED.resources.formattersByName:=New object
 		//var $bind
 		//For each ($bind; SHARED.resources.fieldBindingTypes\
-																																																																								.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
+																																																																											.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
 		//SHARED.resources.formattersByName[$bind.name]:=$bind
 		//End for each
 		//End if

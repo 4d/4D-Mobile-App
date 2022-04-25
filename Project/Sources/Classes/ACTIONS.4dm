@@ -789,27 +789,41 @@ Function addMenuManager()
 						
 						$field:=$tableModel[$menu.fieldIdentifier]
 						
-						If ($field.kind="storage")
-							
-							$parameter:=New object:C1471(\
-								"fieldNumber"; ($field.fieldNumber#Null:C1517) ? $field.fieldNumber : Num:C11($menu.fieldIdentifier); \
-								"name"; $field.name; \
-								"type"; PROJECT.fieldType2type($field.fieldType); \
-								"format"; "ascending")
-							
-						Else   // Alias or Computed attribute
-							
-							$parameter:=New object:C1471(\
-								"name"; $menu.fieldIdentifier; \
-								"format"; "ascending")
-							
-						End if 
-						
-						If ($field.kind="alias")
-							
-							$parameter.path:=$field.path
-							
-						End if 
+						Case of 
+								
+								//______________________________________________________
+							: ($field.kind="storage")
+								
+								$parameter:=New object:C1471(\
+									"fieldNumber"; ($field.fieldNumber#Null:C1517) ? $field.fieldNumber : Num:C11($menu.fieldIdentifier); \
+									"name"; $field.name; \
+									"type"; PROJECT.fieldType2type($field.fieldType); \
+									"format"; "ascending")
+								
+								//______________________________________________________
+							: ($field.kind="calculated")
+								
+								$parameter:=New object:C1471(\
+									"name"; $menu.fieldIdentifier; \
+									"type"; PROJECT.fieldType2type($field.fieldType); \
+									"format"; "ascending")
+								
+								//______________________________________________________
+							: ($field.kind="alias")
+								
+								$parameter:=New object:C1471(\
+									"name"; $menu.fieldIdentifier; \
+									"path"; $field.path; \
+									"type"; PROJECT.fieldType2type($field.fieldType); \
+									"format"; "ascending")
+								
+								//______________________________________________________
+							Else 
+								
+								oops
+								
+								//______________________________________________________
+						End case 
 						
 						$action.parameters.push($parameter)
 						
