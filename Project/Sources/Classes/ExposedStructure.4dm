@@ -516,7 +516,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 									
 									If (This:C1470.allowedTypes.indexOf($relatedField.valueType)>=0)
 										
-										$related:=This:C1470.fieldDefinition(This:C1470.tableNumber($relatedAttribute.relatedDataClass); $relatedField.name)
+										$related:=This:C1470.fieldDefinition($relatedAttribute.relatedTableNumber; $relatedField.name)
 										$related.path:=New collection:C1472($relatedAttribute.name; $related.name).join(".")
 										$related.tableNumber:=This:C1470.tableNumber($field.relatedDataClass)
 										
@@ -609,7 +609,6 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 						
 						// MARK: #TEMPO
 						$related.valueType:=$relatedAttribute.type
-						//$related.type:=-3
 						$related.type:=This:C1470.__fielddType($relatedAttribute.fieldType)
 						
 						$related.path:=$related.name
@@ -1211,6 +1210,18 @@ Function _relatedFields($field : cs:C1710.field; $relationName : Text; $recursiv
 				
 				For each ($relatedField; This:C1470.catalog.query("name = :1"; $field.relatedDataClass).pop().field)
 					
+					If (Not:C34(Bool:C1537($relatedField.exposed)))\
+						 || ($relatedField.kind="relatedEntity")\
+						 || ($relatedField.kind="relatedEntities")\
+						 || (($relatedField.kind="alias") & Feature.disabled("alias"))
+						
+						continue
+						
+					End if 
+					
+					$related:=OB Copy:C1225($relatedField)
+					$related.tableNumber:=This:C1470.tableNumber($related.relatedDataClass)
+					
 					Case of 
 							
 							//______________________________________________________
@@ -1218,9 +1229,7 @@ Function _relatedFields($field : cs:C1710.field; $relationName : Text; $recursiv
 							
 							If (This:C1470.allowedTypes.indexOf($relatedField.valueType)>=0)
 								
-								$related:=OB Copy:C1225($relatedField)
 								$related.path:=New collection:C1472($field.name; $related.name).join(".")
-								$related.tableNumber:=This:C1470.tableNumber($field.relatedDataClass)
 								
 								$fields.push($related)
 								
@@ -1231,35 +1240,16 @@ Function _relatedFields($field : cs:C1710.field; $relationName : Text; $recursiv
 							
 							If (This:C1470.allowedTypes.indexOf($relatedField.valueType)>=0)
 								
-								$related:=OB Copy:C1225($relatedField)
 								$related.path:=New collection:C1472($field.name; $related.name).join(".")
-								$related.tableNumber:=This:C1470.tableNumber($field.relatedDataClass)
 								
 								$fields.push($related)
 								
 							End if 
 							
-							//______________________________________________________
-						: ($relatedField.kind="relatedEntity")
-							
-							// NOT MANAGED
-							
-							//______________________________________________________
-						: ($relatedField.kind="relatedEntities")
-							
-							// NOT MANAGED
-							
-							//…………………………………………………………………………………………………
-						: (Feature.disabled("alias"))
-							
-							// <NOT YET AVAILABLE>
-							
 							//…………………………………………………………………………………………………
 						: ($relatedField.kind="alias")  // Alias
 							
-							$related:=OB Copy:C1225($relatedField)
-							$related.path:=New collection:C1472($field.name; $related.name).join(".")
-							$related.tableNumber:=This:C1470.tableNumber($field.relatedDataClass)
+							//$related.path:=New collection($field.name; $related.name).join(".")
 							
 							$fields.push($related)
 							

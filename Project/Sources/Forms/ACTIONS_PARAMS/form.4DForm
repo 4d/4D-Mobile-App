@@ -785,7 +785,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 579,
+	"geometryStamp": 582,
 	"editor": {
 		"groups": {
 			"Group": [
@@ -816,7 +816,6 @@
 				]
 			},
 			"sort": {
-				"visible": false,
 				"objects": [
 					"Group",
 					"namePopupBorder",

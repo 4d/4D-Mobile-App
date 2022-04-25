@@ -21,19 +21,18 @@
 			"objects": {
 				"Rectangle": {
 					"type": "rectangle",
-					"top": 533,
-					"left": 184,
+					"top": 600,
+					"left": 19,
 					"width": 263,
 					"height": 25,
-					"right": 447
+					"right": 282
 				},
 				"List Box": {
 					"type": "listbox",
-					"top": 14,
+					"top": 38,
 					"left": 19,
-					"width": 398,
-					"height": 380,
-					"resizingMode": "legacy",
+					"width": 322,
+					"height": 245,
 					"rowHeight": "2em",
 					"events": [
 						"onClick",
@@ -42,10 +41,11 @@
 						"onHeaderClick"
 					],
 					"movableRows": false,
-					"method": "ObjectMethods/List Box.4dm",
 					"hideSystemHighlight": true,
 					"headerHeight": "17px",
 					"fill": "transparent",
+					"borderStyle": "system",
+					"scrollbarVertical": "hidden",
 					"columns": [
 						{
 							"name": "Column1",
@@ -88,27 +88,14 @@
 								"timeFormat": "hh_mm_ss"
 							},
 							"enterable": false,
-							"method": "ObjectMethods/Column2.4dm",
 							"truncateMode": "none",
 							"verticalAlign": "middle"
 						}
 					]
 				},
-				"Button3": {
-					"type": "button",
-					"top": 499,
-					"left": 28,
-					"width": 136,
-					"height": 42,
-					"text": "Open Popover",
-					"method": "ObjectMethods/Button3.4dm",
-					"events": [
-						"onClick"
-					]
-				},
 				"Variable2": {
 					"type": "input",
-					"top": 462,
+					"top": 313,
 					"left": 19,
 					"width": 102,
 					"height": 17,
@@ -117,19 +104,21 @@
 					"dropping": "custom",
 					"events": [
 						"onDataChange"
-					]
+					],
+					"borderStyle": "system"
 				},
 				"Variable1": {
 					"type": "input",
-					"top": 410,
-					"left": 184,
+					"top": 341,
+					"left": 19,
 					"width": 233,
 					"height": 97,
 					"hideFocusRing": true,
 					"styledText": true,
 					"events": [
 						"onDataChange"
-					]
+					],
+					"borderStyle": "system"
 				},
 				"Variable": {
 					"type": "input",
@@ -165,11 +154,11 @@
 				},
 				"Button1": {
 					"type": "button",
-					"text": "Button Button Button Button",
-					"top": 608,
-					"left": 223,
-					"width": 125,
-					"height": 55,
+					"text": "Best Size",
+					"top": 604,
+					"left": 291,
+					"width": 81,
+					"height": 20,
 					"events": [
 						"onClick"
 					],
@@ -177,8 +166,8 @@
 				},
 				"tab.list": {
 					"type": "radio",
-					"top": 537,
-					"left": 189,
+					"top": 604,
+					"left": 24,
 					"width": 107,
 					"height": 16,
 					"fontWeight": "bold",
@@ -194,8 +183,8 @@
 				},
 				"tab.detail": {
 					"type": "radio",
-					"top": 537,
-					"left": 295,
+					"top": 604,
+					"left": 130,
 					"width": 147,
 					"height": 16,
 					"fontWeight": "bold",
@@ -210,11 +199,11 @@
 				},
 				"Rectangle1": {
 					"type": "rectangle",
-					"top": 537,
-					"left": 189,
+					"top": 604,
+					"left": 24,
 					"width": 107,
 					"height": 16,
-					"right": 296,
+					"right": 131,
 					"strokeDashArray": [
 						1,
 						3
@@ -223,11 +212,11 @@
 				},
 				"Rectangle2": {
 					"type": "rectangle",
-					"top": 537,
-					"left": 295,
+					"top": 604,
+					"left": 130,
 					"width": 147,
 					"height": 16,
-					"right": 442,
+					"right": 277,
 					"strokeDashArray": [
 						1,
 						3
@@ -264,33 +253,47 @@
 				},
 				"password": {
 					"type": "input",
-					"left": 515,
-					"top": 537,
+					"left": 428,
+					"top": 604,
 					"width": 157,
 					"height": 17,
 					"fontFamily": "Apple Chancery",
 					"fontSize": 13,
 					"textDecoration": "none",
-					"dataSource": "",
-					"events": []
+					"borderStyle": "system"
 				},
-				"Button5": {
+				"👀": {
 					"type": "button",
 					"text": "👀",
-					"top": 541,
-					"left": 682,
+					"top": 604,
+					"left": 590,
 					"width": 25,
-					"height": 14,
+					"height": 19,
 					"events": [
 						"onMouseEnter",
 						"onMouseLeave"
 					],
-					"method": "ObjectMethods/Button5.4dm",
+					"method": "ObjectMethods/👀.4dm",
 					"style": "custom"
+				},
+				"Text1": {
+					"type": "text",
+					"text": "Password:",
+					"top": 583,
+					"left": 428,
+					"width": 75,
+					"height": 16
+				},
+				"Text2": {
+					"type": "text",
+					"text": "Checkboxes in listboxes",
+					"top": 16,
+					"left": 19,
+					"width": 186,
+					"height": 16
 				}
 			},
 			"entryOrder": [
-				"Button3",
 				"Variable2",
 				"Variable1",
 				"Variable",
@@ -300,7 +303,7 @@
 				"Radio Button",
 				"Radio Button1",
 				"password",
-				"Button5"
+				"👀"
 			]
 		}
 	],
@@ -308,7 +311,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 50,
+	"geometryStamp": 78,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

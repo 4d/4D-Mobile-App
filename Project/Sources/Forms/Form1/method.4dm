@@ -1,4 +1,3 @@
-//ARRAY LONGINT(vsel;0)
 
 ARRAY LONGINT:C221($tLon_check; 7)
 ARRAY TEXT:C222($tTxt_check; 7)
@@ -30,13 +29,8 @@ COPY ARRAY:C226($tLon_check; (OBJECT Get pointer:C1124(Object named:K67:5; "Colu
 COPY ARRAY:C226($tTxt_check; (OBJECT Get pointer:C1124(Object named:K67:5; "Column2"))->)
 //%W+518.1
 
-
-//Form.window:=window.getCoordinates()
-
-Form:C1466.tablist:=_o_widget("tab.list")
-Form:C1466.tabdetail:=_o_widget("tab.detail")
-
-//group("Button;Button1").distributeHorizontally(New object("start"; 20; "gap"; 10))
+Form:C1466.tablist:=cs:C1710.widget.new("tab.list")
+Form:C1466.tabdetail:=cs:C1710.widget.new("tab.detail")
 
 // A password input
 Form:C1466.password:=cs:C1710.input.new("password")

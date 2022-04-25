@@ -1279,51 +1279,6 @@ Function addParameterMenuManager($target : Object; $update : Boolean)
 	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-	// [PRIVATE]
-Function _addParameter($parameter : Object)
-	
-	var $label : Text
-	var $index : Integer
-	var $o : Object
-	
-	If (This:C1470.action.parameters=Null:C1517)
-		
-		This:C1470.action.parameters:=New collection:C1472
-		
-	Else 
-		
-		$label:=$parameter.name
-		
-		If (This:C1470.action.parameters.query("name=:1"; $label).length=0)
-			
-			// <NOTHING MORE TO DO>
-			
-		Else 
-			
-			Repeat 
-				
-				$index:=$index+1
-				
-				$o:=This:C1470.action.parameters.query("name=:1"; $label+String:C10($index)).pop()
-				
-				If ($o=Null:C1517)
-					
-					$parameter.name:=$label+String:C10($index)
-					
-				End if 
-			Until ($o=Null:C1517)
-		End if 
-	End if 
-	
-	This:C1470.action.parameters.push($parameter)
-	PROJECT.save()
-	
-	This:C1470.parameters.focus()
-	This:C1470.saveContext($parameter)
-	This:C1470.parameters.reveal(This:C1470.parameters.rowsNumber()+Num:C11(This:C1470.parameters.rowsNumber()=0))
-	This:C1470.refresh()
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Remove action button
 Function removeParameter()
 	
@@ -1644,26 +1599,6 @@ Function formatMenuManager()
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function _withDataSource($format : Text)->$with : Boolean
-	
-	var $manifest : Object
-	var $file : 4D:C1709.File
-	
-	$with:=This:C1470.customInputControls.indexOf($format)>=0
-	
-	If (Not:C34($with))
-		
-		$file:=This:C1470.path.hostInputControls().file($format+"/manifest.json")
-		
-		If ($file.exists)
-			
-			$manifest:=JSON Parse:C1218($file.getText())
-			$with:=$manifest.choiceList#Null:C1517
-			
-		End if 
-	End if 
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Data source choice
 Function dataSourceMenuManager()
 	
@@ -1800,12 +1735,14 @@ Function dataSourceMenuManager()
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function editList()
 	
-	//$form:=New object(\
-																														"static"; $static; \
-																														"host"; This.path.hostInputControls(True))
+/*
+	$form:=New object(\
+		"static"; $static; \
+		"host"; This.path.hostInputControls(True))
 	
-	//$form.folder:=This.path.hostInputControls()
-	//$manifest:=$form.folder.file("manifest.json")
+$form.folder:=This.path.hostInputControls()
+$manifest:=$form.folder.file("manifest.json")
+*/
 	
 	//===============================================================
 Function ruleManager($name : Text)
@@ -2350,6 +2287,70 @@ Function metaInfo($current : Object)->$result
 	End if 
 	
 	//MARK:-[PRIVATE]
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function _withDataSource($format : Text)->$with : Boolean
+	
+	var $manifest : Object
+	var $file : 4D:C1709.File
+	
+	$with:=This:C1470.customInputControls.indexOf($format)>=0
+	
+	If (Not:C34($with))
+		
+		$file:=This:C1470.path.hostInputControls().file($format+"/manifest.json")
+		
+		If ($file.exists)
+			
+			$manifest:=JSON Parse:C1218($file.getText())
+			$with:=$manifest.choiceList#Null:C1517
+			
+		End if 
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function _addParameter($parameter : Object)
+	
+	var $label : Text
+	var $index : Integer
+	var $o : Object
+	
+	If (This:C1470.action.parameters=Null:C1517)
+		
+		This:C1470.action.parameters:=New collection:C1472
+		
+	Else 
+		
+		$label:=$parameter.name
+		
+		If (This:C1470.action.parameters.query("name=:1"; $label).length=0)
+			
+			// <NOTHING MORE TO DO>
+			
+		Else 
+			
+			Repeat 
+				
+				$index:=$index+1
+				
+				$o:=This:C1470.action.parameters.query("name=:1"; $label+String:C10($index)).pop()
+				
+				If ($o=Null:C1517)
+					
+					$parameter.name:=$label+String:C10($index)
+					
+				End if 
+			Until ($o=Null:C1517)
+		End if 
+	End if 
+	
+	This:C1470.action.parameters.push($parameter)
+	PROJECT.save()
+	
+	This:C1470.parameters.focus()
+	This:C1470.saveContext($parameter)
+	This:C1470.parameters.reveal(This:C1470.parameters.rowsNumber()+Num:C11(This:C1470.parameters.rowsNumber()=0))
+	This:C1470.refresh()
+	
 Function _newUserControl($static : Boolean)
 	
 	var $current; $data; $form; $o : Object

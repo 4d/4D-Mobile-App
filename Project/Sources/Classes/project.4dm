@@ -366,7 +366,6 @@ Function allTargets() : Boolean
 	// Populate the target value into the project
 Function setTarget($checkDevTools : Boolean; $target : Text)
 	
-	// TODO:Move to EDITOR class
 	If (This:C1470.$ios & This:C1470.$android)
 		
 		This:C1470.info.target:=New collection:C1472("iOS"; "android")
@@ -393,6 +392,7 @@ Function setTarget($checkDevTools : Boolean; $target : Text)
 	This:C1470.save()
 	This:C1470.prepare()
 	
+	// TODO:Move to EDITOR class
 	UI.ios:=This:C1470.$ios
 	UI.android:=This:C1470.$android
 	
@@ -1579,7 +1579,6 @@ Function minimumField($field : cs:C1710.field)
 	
 	//FIXME:#TEMPO
 	OB REMOVE:C1226($field; "id")
-	//OB REMOVE($field; "isToMany")
 	OB REMOVE:C1226($field; "relatedEntities")
 	
 	OB REMOVE:C1226($field; "fromIndex")  // Internal D&D
