@@ -192,6 +192,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 					Else 
 						
 						$out.valid:=False:C215  // no digest file
+						ob_warning_add($out; "No digest file. Maybe failed to generated correctly data dump")
 						
 					End if 
 					
