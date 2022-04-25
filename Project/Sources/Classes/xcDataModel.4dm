@@ -777,7 +777,7 @@ This._aliasInTable($table[$fieldKey])
 End if */
 				
 			: (String:C10($table[$fieldKey].kind)="relatedEntity")
-				
+				$table[$fieldKey][""]:=New object:C1471("name"; $table[$fieldKey].relatedDataClass)  // simulate table data with it's data
 				This:C1470._aliasInTable($table[$fieldKey])
 				
 		End case 
@@ -830,8 +830,10 @@ Function _fieldForKey($table : Object; $key : Text)->$dst : Object
 		var $fieldKey : Text
 		For each ($fieldKey; $table) Until ($dst#Null:C1517)
 			//If (Match regex("(?m-si)^\\d+$"; $fieldKey; 1; *))
-			If (String:C10($table[$fieldKey].name)=$key)
-				$dst:=$table[$fieldKey]
+			If (Value type:C1509($table[$fieldKey])=Is object:K8:27)
+				If (String:C10($table[$fieldKey].name)=$key)
+					$dst:=$table[$fieldKey]
+				End if 
 			End if 
 			//End if
 		End for each 
