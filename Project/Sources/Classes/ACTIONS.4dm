@@ -805,6 +805,12 @@ Function addMenuManager()
 							
 						End if 
 						
+						If ($field.kind="alias")
+							
+							$parameter.path:=$field.path
+							
+						End if 
+						
 						$action.parameters.push($parameter)
 						
 						//-------------------------------------------
