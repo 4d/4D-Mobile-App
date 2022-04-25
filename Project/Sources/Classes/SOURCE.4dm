@@ -591,21 +591,21 @@ Function endOfDatasetGeneration($data : Object)
 	
 	This:C1470.generate.isRunning:=False:C215
 	
-	If ($data.data#Null:C1517)
+	If ($data#Null:C1517)
 		
-		If ($data.data.success)
+		If ($data.success)
 			
 			// Update the data panel
 			This:C1470.dataLink.call().update()
 			
 		Else 
 			
-			If ($data.data.errors#Null:C1517)
+			If ($data.errors#Null:C1517)
 				
 				UI.postMessage(New object:C1471(\
 					"action"; "show"; \
 					"type"; "alert"; \
-					"additional"; $data.data.errors.join("\n")))
+					"additional"; $data.errors.join("\n")))
 				
 			End if 
 		End if 
