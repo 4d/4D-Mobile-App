@@ -591,6 +591,14 @@ Function sortFieldFromAction($table : Object)->$sortFields : Text
 							$sortFields:=$sortFields+formatString("field-name"; String:C10($table[String:C10($parameter.fieldNumber)].name))
 						Else 
 							If (Feature.with("alias"))
+								If ($parameter.path=Null:C1517)  // WORKAROUND if missing path (could be removed)
+									var $field : Object
+									$field:=This:C1470.input.project.dataModel[String:C10($action.tableNumber)][$parameter.name]
+									If (This:C1470.input.project.isAlias($field))
+										$parameter.path:=$field.path
+									End if 
+								End if 
+								
 								$sortFields:=$sortFields+formatString("field-name"; $parameter.path || $parameter.name)
 							Else 
 								ASSERT:C1129(Not:C34(dev_Matrix); "Missing fieldNumber in sort action: "+JSON Stringify:C1217($action))
