@@ -2165,9 +2165,10 @@ Function updateParamater($name : Text)
 	
 	var $identifier; $key : Text
 	var $success : Boolean
-	var $tableModel : Object
+	var $parameter; $tableModel : Object
 	var $field : cs:C1710.field
 	
+	$parameter:=This:C1470.current
 	$tableModel:=Form:C1466.dataModel[String:C10(This:C1470.action.tableNumber)]
 	
 	For each ($key; $tableModel) Until ($success)
@@ -2184,50 +2185,53 @@ Function updateParamater($name : Text)
 			
 			$identifier:=($field.name#Null:C1517 ? $field.name : $key)
 			
-			If ($field.kind="storage")\
-				 | ($field.kind="calculated")
+			$success:=($identifier=$name)
+			
+			If ($success)
 				
-				$success:=($identifier=$name)
+				$parameter.name:=$identifier
+				$parameter.label:=$field.label
+				$parameter.shortLabel:=$field.shortLabel
+				$parameter.type:=PROJECT.fieldType2type($field.fieldType)
 				
-				If ($success)
+				If ($field.path#Null:C1517)
 					
-					This:C1470.current.fieldNumber:=Num:C11($key)
-					This:C1470.current.name:=$identifier
-					This:C1470.current.label:=$field.label
-					This:C1470.current.shortLabel:=$field.shortLabel
-					This:C1470.current.type:=PROJECT.fieldType2type($field.fieldType)
+					$parameter.path:=$field.path
+					
+				Else 
+					
+					OB REMOVE:C1226($parameter; "path")
+					
+				End if 
+				
+				If (Num:C11($key)#0)
+					
+					$parameter.fieldNumber:=Num:C11($key)
+					
+				Else 
+					
+					OB REMOVE:C1226($parameter; "fieldNumber")
 					
 				End if 
 				
-			Else 
-				
-				$success:=($identifier=$name)
-				
-				If ($success)
-					
-					OB REMOVE:C1226(This:C1470.current; "fieldNumber")
-					This:C1470.current.name:=$identifier
-					This:C1470.current.label:=$field.label
-					This:C1470.current.shortLabel:=$field.shortLabel
-					This:C1470.current.type:=PROJECT.fieldType2type($field.fieldType)
-					
-				End if 
+				This:C1470.field.setValue(UI.str.localize("thisParameterIsLinkedToTheField"; $name))
 				
 			End if 
 		End if 
 	End for each 
 	
-	If (Not:C34($success))
+	If (Not:C34($success))  // Not linked to a field
 		
-		// Keep the user entry
-		// & remove field link
-		This:C1470.current.name:=$name
-		OB REMOVE:C1226(This:C1470.current; "fieldNumber")
+		// Keep the user's entry & Delete the properties related to the field
+		$parameter.name:=$name
+		OB REMOVE:C1226($parameter; "fieldNumber")
+		OB REMOVE:C1226($parameter; "path")
+		
+		This:C1470.field.setValue("")
 		
 	End if 
 	
-	This:C1470.paramName.setValue(This:C1470.current.name)
-	This:C1470.field.setValue(UI.str.localize("thisParameterIsLinkedToTheField"; $name))
+	This:C1470.paramName.setValue($parameter.name)
 	
 	PROJECT.save()
 	
