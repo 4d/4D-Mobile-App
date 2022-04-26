@@ -509,11 +509,27 @@ Function hostNavigationForms($create : Boolean) : 4D:C1709.Folder  // form/navig
 	return (This:C1470.target)
 	
 /*========================================================*/
-Function androidDb($relativePath : Text) : 4D:C1709.File
+Function androidDb($relativePath : Variant) : 4D:C1709.File
 	
 	var $currentFolder : 4D:C1709.Folder
 	
-	$currentFolder:=Is Windows:C1573 ? Folder:C1567($relativePath) : ($relativePath[[1]]="/" ? Folder:C1567($relativePath) : Folder:C1567($relativePath; fk platform path:K87:2))
+	Case of 
+		: (Value type:C1509($relativePath)=Is text:K8:3)
+			
+			// General build process provide now platform path,
+			// but some android class do not take into account path and use This.project._folder.path
+			// until all code has been changed to pass 4d folder, we make a code that support any type of path
+			If (Is Windows:C1573)
+				$currentFolder:=(Position:C15("\\"; $relativePath)=0) ? Folder:C1567($relativePath) : Folder:C1567($relativePath; fk platform path:K87:2)
+			Else 
+				$currentFolder:=($relativePath[[1]]="/" ? Folder:C1567($relativePath) : Folder:C1567($relativePath; fk platform path:K87:2))
+			End if 
+			
+		: ((Value type:C1509($relativePath)=Is object:K8:27) && OB Instance of:C1731($relativePath; 4D:C1709.Folder))
+			
+			$currentFolder:=$relativePath
+			
+	End case 
 	
 	If ($currentFolder.fullName="project.dataSet")
 		
