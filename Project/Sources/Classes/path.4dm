@@ -508,6 +508,34 @@ Function hostNavigationForms($create : Boolean) : 4D:C1709.Folder  // form/navig
 	
 	return (This:C1470.target)
 	
+	
+	
+/*========================================================*/
+Function iOSDb($relativePath : Variant) : 4D:C1709.File
+	
+	var $currentFolder : 4D:C1709.Folder
+	
+	Case of 
+		: (Value type:C1509($relativePath)=Is text:K8:3)
+			
+			$currentFolder:=Folder:C1567($relativePath; fk platform path:K87:2)
+			
+		: ((Value type:C1509($relativePath)=Is object:K8:27) && OB Instance of:C1731($relativePath; 4D:C1709.Folder))
+			
+			$currentFolder:=$relativePath
+			
+	End case 
+	
+	If ($currentFolder.fullName="project.dataSet")
+		
+		return ($currentFolder.file("Resources/Structures.sqlite"))
+		
+	Else 
+		
+		return ($currentFolder.file("project.dataSet/Resources/Structures.sqlite"))
+		
+	End if 
+	
 /*========================================================*/
 Function androidDb($relativePath : Variant) : 4D:C1709.File
 	
@@ -522,7 +550,9 @@ Function androidDb($relativePath : Variant) : 4D:C1709.File
 			If (Is Windows:C1573)
 				$currentFolder:=(Position:C15("\\"; $relativePath)=0) ? Folder:C1567($relativePath) : Folder:C1567($relativePath; fk platform path:K87:2)
 			Else 
+				//%W-533.1
 				$currentFolder:=($relativePath[[1]]="/" ? Folder:C1567($relativePath) : Folder:C1567($relativePath; fk platform path:K87:2))
+				//%W+533.1
 			End if 
 			
 		: ((Value type:C1509($relativePath)=Is object:K8:27) && OB Instance of:C1731($relativePath; 4D:C1709.Folder))

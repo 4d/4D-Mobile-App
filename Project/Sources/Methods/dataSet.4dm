@@ -203,7 +203,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 				End if 
 				
 				If ($out.valid && Bool:C1537($in.coreDataSet))
-					$out.valid:=Folder:C1567($out.path; fk platform path:K87:2).folder("Resources/Structures.sqlite").exists
+					$out.valid:=cs:C1710.path.new().iOSDb($out.path).exists
 				End if 
 				
 				If ($out.valid && Bool:C1537($in.androidDataSet))
