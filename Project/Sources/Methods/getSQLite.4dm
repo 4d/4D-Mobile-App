@@ -21,7 +21,7 @@ $project:=$in.project
 Case of 
 		
 		//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-	: ((String:C10($in.target)="ios") && (Is macOS:C1572))
+	: (String:C10($in.target)="ios")
 		
 		$database:=$project._folder.file("project.dataSet/Resources/Structures.sqlite")
 		
@@ -36,7 +36,7 @@ Case of
 		$database:=New object:C1471(\
 			"exists"; False:C215)
 		
-		ASSERT:C1129(dev_Matrix; "Unknown target for data dump")
+		ASSERT:C1129(dev_Matrix; "Unknown target '"+String:C10($in.target)+"' for data dump")
 		
 		//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 End case 
