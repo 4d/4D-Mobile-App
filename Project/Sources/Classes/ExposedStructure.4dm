@@ -559,7 +559,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 								: ($relatedField.kind="alias")
 									
 									$related:=OB Copy:C1225($relatedField)
-									$related.label:=$related.name
+									$related.label:=New collection:C1472($relatedAttribute.name; $related.name).join(".")
 									$related.tableNumber:=This:C1470.tableNumber($field.relatedDataClass)
 									$related.fieldType:=($related.fieldType=Is object:K8:27) ? 8858 : $related.fieldType
 									$related._order:=$related.label
@@ -627,7 +627,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 					If (This:C1470.allowedTypes.indexOf($relatedAttribute.type)>=0)
 						
 						$related:=OB Copy:C1225($relatedAttribute)
-						$related.label:=New collection:C1472($field.name; $related.name).join(".")
+						$related.label:=$related.name
 						$related.type:=This:C1470.__fielddType($related.fieldType)
 						$related.relatedTableNumber:=$result.relatedTableNumber
 						
@@ -635,6 +635,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 						$related.valueType:=$related.type
 						
 						$related._order:=""
+						
 						$result.fields.push($related)
 						
 					End if 
