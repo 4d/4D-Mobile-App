@@ -506,6 +506,14 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 						
 						For each ($relatedField; This:C1470.catalog.query("name = :1"; $relatedAttribute.relatedDataClass).pop().fields)
 							
+							If ($relatedField.kind="relatedEntity")\
+								 || ($relatedField.kind="relatedEntities")
+								
+								// NOT MANAGED
+								continue
+								
+							End if 
+							
 							Case of 
 									
 									//…………………………………………………………………………………………………
@@ -541,29 +549,26 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 									End if 
 									
 									//…………………………………………………………………………………………………
-								: ($relatedField.kind="relatedEntity")
-									
-									// NOT MANAGED
-									
-									//…………………………………………………………………………………………………
-								: ($relatedField.kind="relatedEntities")
-									
-									// NOT MANAGED
-									
-									//…………………………………………………………………………………………………
-								: (Feature.disabled("alias"))
-									
-									// <NOT YET AVAILABLE>
-									
-									//…………………………………………………………………………………………………
 								: ($relatedField.kind="alias")
 									
-									$related:=OB Copy:C1225($relatedField)
-									$related.label:=New collection:C1472($relatedAttribute.name; $related.name).join(".")
-									$related.tableNumber:=This:C1470.tableNumber($field.relatedDataClass)
-									$related.fieldType:=($related.fieldType=Is object:K8:27) ? 8858 : $related.fieldType
-									$related._order:=$related.label
-									$result.fields.push($related)
+									If (Feature.disabled("alias"))
+										
+										continue
+										
+									End if 
+									
+									// Ignore N -> 1 relations
+									If ($relatedField.relatedDataClass=Null:C1517)\
+										 || (Not:C34(Bool:C1537($relatedField.isToOne)))
+										
+										$related:=OB Copy:C1225($relatedField)
+										$related.label:=New collection:C1472($relatedAttribute.name; $related.name).join(".")
+										$related.tableNumber:=This:C1470.tableNumber($field.relatedDataClass)
+										$related.fieldType:=($related.fieldType=Is object:K8:27) ? 8858 : $related.fieldType
+										$related._order:=$related.label
+										$result.fields.push($related)
+										
+									End if 
 									
 									//…………………………………………………………………………………………………
 								Else 
@@ -616,13 +621,14 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 						
 					End if 
 					
-					//…………………………………………………………………………………………………
-				: (Feature.disabled("alias"))
-					
-					// <NOT YET AVAILABLE>
-					
 					//______________________________________________________
 				: ($relatedAttribute.kind="alias")
+					
+					If (Feature.disabled("alias"))
+						
+						continue
+						
+					End if 
 					
 					If (This:C1470.allowedTypes.indexOf($relatedAttribute.type)>=0)
 						
@@ -635,7 +641,6 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 						$related.valueType:=$related.type
 						
 						$related._order:=""
-						
 						$result.fields.push($related)
 						
 					End if 
