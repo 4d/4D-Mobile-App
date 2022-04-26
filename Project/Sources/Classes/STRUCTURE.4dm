@@ -603,10 +603,7 @@ Function doFieldPicker()->$publishedNumber : Integer
 							If ($relatedCatalog.alias=Null:C1517)
 								
 								$target:=New object:C1471(\
-									"kind"; "relatedEntity"; \
-									"relatedDataClass"; $relatedCatalog.relatedDataClass; \
-									"relatedTableNumber"; $relatedCatalog.relatedTableNumber; \
-									"inverseName"; $relatedCatalog.inverseName)
+									"kind"; "relatedEntity")
 								
 							Else 
 								
@@ -614,12 +611,15 @@ Function doFieldPicker()->$publishedNumber : Integer
 									"kind"; "alias"; \
 									"path"; $relatedCatalog.alias.levels.extract("path").join("."); \
 									"fieldType"; Is object:K8:27; \
-									"relatedDataClass"; $relatedCatalog.relatedDataClass; \
-									"relatedTableNumber"; $relatedCatalog.relatedTableNumber; \
-									"inverseName"; $relatedCatalog.inverseName; \
 									"isToOne"; True:C214)
 								
 							End if 
+							
+							$target.relatedDataClass:=$relatedCatalog.relatedDataClass
+							$target.relatedTableNumber:=$relatedCatalog.relatedTableNumber
+							$target.inverseName:=$relatedCatalog.inverseName
+							$target.label:=PROJECT.label($field.name)
+							$target.shortLabel:=PROJECT.shortLabel($field.name)
 							
 							$tableDataModel[$context.fieldName]:=$target
 							
