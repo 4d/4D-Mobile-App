@@ -28,15 +28,13 @@ Class constructor($sorted : Boolean)
 	
 	This:C1470.sorted:=(Count parameters:C259>=1) ? $sorted : False:C215
 	
-	This:C1470.str:=cs:C1710.str.new()
-	
 	This:C1470.update()
 	
 	//==================================================================
 	/// Update the datastore & the catalog
 Function update()
 	
-	This:C1470.datastore:=This:C1470.getDatastore()
+	This:C1470.datastore:=This:C1470.exposedDatastore()
 	This:C1470.catalog:=This:C1470.getCatalog()
 	
 	//==================================================================
@@ -50,7 +48,7 @@ Function update()
 Note: The datastore property is filled in during the construction phase of the class.
 Thus, this function must only be called to obtain an updated datastore.
 */
-Function getDatastore() : Object
+Function exposedDatastore() : Object
 	
 	If (Feature.with("modernStructure"))
 		
@@ -66,34 +64,32 @@ Function getDatastore() : Object
 			
 			$o:=$ds[$key].getInfo()
 			
-			If ($key=This:C1470.deletedRecordsTableName)\
-				 || Not:C34($o.exposed)
+			If (Not:C34($o.exposed))\
+				 || ($key=This:C1470.deletedRecordsTableName)
 				
 				continue
 				
-			Else 
-				
-				$table:=New object:C1471
-				$table[""]:=$o
-				
-				For each ($o; OB Entries:C1720($ds[$key]))
-					
-					If ($o.key=This:C1470.stampFieldName)\
-						 || (Not:C34(Bool:C1537($o.value.exposed)))\
-						 || (This:C1470.allowedTypes.indexOf($o.value.type)=-1)
-						
-						continue
-						
-					Else 
-						
-						$table[$o.key]:=$o.value
-						
-					End if 
-				End for each 
-				
-				$datastore[$key]:=$table
-				
 			End if 
+			
+			$table:=New object:C1471
+			$table[""]:=$o
+			
+			For each ($o; OB Entries:C1720($ds[$key]))
+				
+				If (Not:C34(Bool:C1537($o.value.exposed)))\
+					 || ($o.key=This:C1470.stampFieldName)\
+					 || ((This:C1470.allowedTypes.indexOf($o.value.type)=-1) & ($o.value.relatedDataClass=Null:C1517))
+					
+					continue
+					
+				End if 
+				
+				$table[$o.key]:=$o.value
+				
+			End for each 
+			
+			$datastore[$key]:=$table
+			
 		End for each 
 		
 		return ($datastore)
@@ -475,18 +471,19 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 			
 			$relatedAttribute:=$relatedDataClass[$fieldName]
 			
+			If (Not:C34(Bool:C1537($relatedAttribute.exposed)))\
+				 || ($relatedAttribute.name=This:C1470.stampFieldName)
+				
+				continue
+				
+			End if 
+			
 			Case of 
-					
-					//______________________________________________________
-				: (Not:C34(Bool:C1537($relatedAttribute.exposed)))
-					
-					continue
 					
 					//______________________________________________________
 				: ($relatedAttribute.kind="storage")
 					
-					If ($relatedAttribute.name#"__GlobalStamp")\
-						 && (This:C1470.allowedTypes.indexOf($relatedAttribute.type)>=0)
+					If (This:C1470.allowedTypes.indexOf($relatedAttribute.type)>=0)
 						
 						// MARK: TEMPO
 						$relatedAttribute.valueType:=$relatedAttribute.type
@@ -562,7 +559,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 								: ($relatedField.kind="alias")
 									
 									$related:=OB Copy:C1225($relatedField)
-									$related.label:=New collection:C1472($relatedAttribute.name; $related.name).join(".")
+									$related.label:=$related.name
 									$related.tableNumber:=This:C1470.tableNumber($field.relatedDataClass)
 									$related.fieldType:=($related.fieldType=Is object:K8:27) ? 8858 : $related.fieldType
 									$related._order:=$related.label
@@ -887,6 +884,9 @@ Function check
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function _fieldModel($field : cs:C1710.field; $relatedCatalog : Object)->$fieldModel : Object
 	
+	var $str : cs:C1710.str
+	$str:=cs:C1710.str.new()
+	
 	Case of 
 			
 			//………………………………………………………………………………………………………
@@ -916,7 +916,7 @@ Function _fieldModel($field : cs:C1710.field; $relatedCatalog : Object)->$fieldM
 					//______________________________________________________
 				: ($field.fieldType=Is collection:K8:32)  // Selection
 					
-					$fieldModel.label:=PROJECT.label(This:C1470.str.localize("listOf"; $field.name))
+					$fieldModel.label:=PROJECT.label($str.localize("listOf"; $field.name))
 					$fieldModel.shortLabel:=PROJECT.label($field.name)
 					
 					//______________________________________________________
@@ -951,7 +951,7 @@ Function _fieldModel($field : cs:C1710.field; $relatedCatalog : Object)->$fieldM
 			
 			$fieldModel:=New object:C1471(\
 				"kind"; $field.kind; \
-				"label"; PROJECT.label(This:C1470.str.localize("listOf"; $field.name)); \
+				"label"; PROJECT.label($str.localize("listOf"; $field.name)); \
 				"shortLabel"; PROJECT.label($field.name); \
 				"relatedEntities"; $field.relatedDataClass; \
 				"inverseName"; $field.inverseName; \
@@ -992,14 +992,11 @@ Function _fieldModel($field : cs:C1710.field; $relatedCatalog : Object)->$fieldM
 Function _fields($tableName : Text)->$fields : Collection
 	
 	var $fieldName : Text
-	var $equal : Boolean
 	var $inquiry : Object
 	var $ds : cs:C1710.DataStore
 	var $field : cs:C1710.field
-	var $str : cs:C1710.str
 	
 	$ds:=ds:C1482
-	$str:=cs:C1710.str.new()
 	
 	$fields:=New collection:C1472
 	
@@ -1007,16 +1004,15 @@ Function _fields($tableName : Text)->$fields : Collection
 		
 		$field:=$ds[$tableName][$fieldName]
 		
-		If ($fieldName=This:C1470.stampFieldName)\
-			 || (Position:C15("."; $fieldName)>0)\
-			 || Not:C34(Bool:C1537($field.exposed))
+		If (Not:C34(Bool:C1537($field.exposed))\
+			 || ($fieldName=This:C1470.stampFieldName))\
+			 || (Position:C15("."; $fieldName)>0)
 			
 /*
 Don't keep:
 - not exposed field
 - stamp field
 - attribute name with dot
-			
 */
 			
 			continue
@@ -1026,24 +1022,21 @@ Don't keep:
 		// Get a field with the same name already exists
 		$inquiry:=$fields.query("name = :1"; $fieldName).pop()
 		
-		//FIXME: TURNAROUND
-		If ($inquiry#Null:C1517)
+		If ($inquiry#Null:C1517)\
+			 && (Length:C16($inquiry.name)=Length:C16($fieldName))\
+			 && ((Length:C16($inquiry.name)=0) | (Position:C15($inquiry.name; $fieldName; 1; *)=1))
 			
-			$equal:=$str.setText($inquiry.name).equal($fieldName)
+/*
+Do not allow duplicate attribute names.
+*/
 			
-		Else 
+			This:C1470.warnings.push("Name conflict for the attribute \""+$fieldName+"\" of the dataclass \""+$tableName+"\"")
 			
-			$equal:=False:C215
+			continue
 			
 		End if 
 		
 		Case of 
-				
-				//…………………………………………………………………………………………………
-			: ($equal)  //(($inquiry#Null) && $str.setText($inquiry.name).equal($fieldName))
-				
-				// NOT ALLOW DUPLICATE NAMES !
-				This:C1470.warnings.push("Name conflict for the attribute \""+$fieldName+"\" of the dataclass \""+$tableName+"\"")
 				
 				//…………………………………………………………………………………………………
 			: ($field.kind="storage")  // Storage attribute
@@ -1083,7 +1076,6 @@ Don't keep:
 					// Mark: #TEMPO
 					$field.valueType:=$field.type
 					$field.type:=-1
-					
 					$fields.push($field)
 					
 				End if 
@@ -1118,10 +1110,10 @@ Don't keep:
 						//______________________________________
 					: ($field.relatedDataClass#Null:C1517)  // Non scalar Attribute
 						
+						$field.relatedTableNumber:=$ds[$field.relatedDataClass].getInfo().tableNumber
+						
 						$field.isToMany:=($field.fieldType=Is collection:K8:32)  // -> relatedEntities
 						$field.isToOne:=($field.fieldType=Is object:K8:27)  // -> relatedEntity
-						
-						$field.relatedTableNumber:=$ds[$field.relatedDataClass].getInfo().tableNumber
 						
 						// Mark: #TEMPO
 						$field.valueType:=$field.type
