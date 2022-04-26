@@ -619,6 +619,11 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 									$in.androidDataSet:=(String:C10($in.project.info.target)="android")
 									
 								End if 
+								
+								If (Not:C34(Is macOS:C1572))
+									$in.coreDataSet:=False:C215
+								End if 
+								
 							End if 
 						End if 
 						
