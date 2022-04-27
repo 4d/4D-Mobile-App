@@ -634,9 +634,9 @@ Function doFieldPicker()->$publishedNumber : Integer
 								
 								$target[$path[0]]:=New object:C1471(\
 									"kind"; "relatedEntity"; \
-									"relatedDataClass"; $field.tableName; \
-									"inverseName"; $currentTable.field.query("name=:1"; $context.fieldName).pop().inverseName; \
-									"relatedTableNumber"; $field.tableNumber)
+									"relatedDataClass"; This:C1470.ExposedStructure.tableName($path[0]); \
+									"relatedTableNumber"; This:C1470.ExposedStructure.tableNumber($path[0]); \
+									"inverseName"; $currentTable.field.query("inverseName=:1"; $path[0]).pop().name)
 								
 							End if 
 							
