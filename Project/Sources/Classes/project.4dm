@@ -1547,7 +1547,7 @@ Function fieldAvailable($tableID; $field : Object)->$available : Boolean
 			End if 
 			
 			//______________________________________________________
-		: ($c.length=2)
+		: ($c.length>=2)
 			
 			// Check the related data class
 			$tableCatalog:=ds:C1482[Table name:C256(Num:C11($tableID))]

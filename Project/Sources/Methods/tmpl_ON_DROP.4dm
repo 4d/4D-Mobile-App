@@ -35,6 +35,8 @@ If (Length:C16($cible)>0)
 		
 		PROJECT.cleanup($dropped)
 		
+		$dropped.name:=$dropped.path
+		
 		// Check the match of the type with the source
 		SVG GET ATTRIBUTE:C1056(*; $preview; $cible; "ios:type"; $bind)
 		

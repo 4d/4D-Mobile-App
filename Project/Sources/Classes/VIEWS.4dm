@@ -112,6 +112,7 @@ Function addField($field : cs:C1710.field; $fields : Collection)
 	
 	//MARK:Cleanup
 	PROJECT.minimumField($field)
+	$field.name:=$field.path
 	
 	If ($field.kind="relatedEntities")  // 1-N relation with published related data class
 		
@@ -334,7 +335,7 @@ Function fieldList($table)->$result : Object
 						//……………………………………………………………………………………………………………
 						//FIXME: BUG EN COMPILÉ
 						//: ($field.kind="relatedEntity")\
-																																																																																				 || (($field.kind="alias") && (Bool($field.isToOne)))
+																																																																																											 || (($field.kind="alias") && (Bool($field.isToOne)))
 						
 					: ($field.kind="relatedEntity")\
 						 || (($field.kind="alias") & (Bool:C1537($field.isToOne)))
@@ -439,8 +440,8 @@ Function fieldList($table)->$result : Object
 										
 										If ($subfield2.kind="alias")
 											
-											$subfield2.name:=$attribute+"."+$sub
 											$subfield2.path:=$key+"."+$attribute+"."+$sub
+											$subfield2.name:=$subfield2.path
 											
 										Else 
 											
