@@ -31,6 +31,7 @@ $currentCatalog:=$in.catalog
 // Initialisations
 If (PROJECT.$dialog=Null:C1517)
 	
+	Logger.warning("📍 Create $dialog (STRUCTURE_AUDIT)")
 	PROJECT.$dialog:=New object:C1471
 	
 End if 
@@ -590,6 +591,9 @@ If ($cacheFile.exists)
 		
 	End if 
 	
+	return 
+	
+	
 Else 
 	
 	// Create the cache
@@ -617,6 +621,9 @@ If ($updateCurrentCatalog) && ((Not:C34($isUnsynchronized)) | (Form:C1466.$catal
 	
 End if 
 
+// Save project
+PROJECT.save()
+
 // Store the status
 $o:=cs:C1710.ob.new(Form:C1466)
 $o.createPath("structure").structure.unsynchronized:=$isUnsynchronized
@@ -629,6 +636,3 @@ UI.callMeBack("description"; New object:C1471(\
 STRUCTURE_Handler(New object:C1471(\
 "action"; "update"; \
 "project"; PROJECT))
-
-// Save project
-PROJECT.save()

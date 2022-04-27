@@ -141,10 +141,14 @@ Case of
 		//=========================================================
 	: ($IN.action="tableList")
 		
+		Logger.info("Update table list")
+		
 		$class.tableList()
 		
 		//=========================================================
 	: ($IN.action="fieldList")
+		
+		Logger.info("Update field list")
 		
 		$o:=PROJECT.getCatalog().query("name = :1"; String:C10($context.currentTable.name)).pop()
 		

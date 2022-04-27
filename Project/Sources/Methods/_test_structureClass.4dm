@@ -397,3 +397,5 @@ If (Asserted:C1132($structure.success))
 End if 
 
 err_FINALLY
+
+BEEP:C151

@@ -32,8 +32,7 @@ If (False:C215)
 	C_OBJECT:C1216(editor_RESUME; $2)
 	
 	// ----------------------------------------------------
-	C_LONGINT:C283(editor_UPDATE_EXPOSED_CATALOG; $1)
-	C_TEXT:C284(editor_UPDATE_EXPOSED_CATALOG; $2)
+	C_OBJECT:C1216(editor_UPDATE_EXPOSED_CATALOG; $1)
 	
 	// ----------------------------------------------------
 	C_OBJECT:C1216(_o_editor_Panel_init; $0)

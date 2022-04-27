@@ -4,6 +4,6 @@ var $panel : Text
 
 For each ($panel; panels)
 	
-	UI.callChild($panel; "panel_REFRESH")
+	UI.callChild($panel; Formula:C1597(panel_REFRESH).source)
 	
 End for each 

@@ -90,11 +90,11 @@ If ($e.objectName=Null:C1517)  // <== FORM METHOD
 			// Restore local tips properties
 			UI.tips.set()
 			
-			// Verify the web server configuration
-			UI.callMeBack("checkingServerConfiguration")
-			
 			// Launch project verifications
 			UI.checkProject()
+			
+			// Verify the web server configuration
+			UI.callMeBack("checkingServerConfiguration")
 			
 			// Update the displayed panels
 			UI.refreshPanels()

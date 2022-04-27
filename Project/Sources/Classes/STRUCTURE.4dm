@@ -502,378 +502,376 @@ Function fieldList()
 	/// Displays related field picker
 Function doFieldPicker()->$publishedNumber : Integer
 	
-	var $t : Text
+	var $identifier : Text
 	var $context; $currentDataModel; $o; $relatedCatalog; $relatedDataModel; $tableDataModel : Object
 	var $target : Object
 	var $path : Collection
 	var $field : cs:C1710.field
-	var $currentTable : cs:C1710.table
+	var $table : cs:C1710.table
 	
 	$context:=This:C1470.context
-	$currentTable:=$context.currentTable
+	$table:=$context.currentTable
 	
-	$relatedCatalog:=This:C1470.ExposedStructure.relatedCatalog($currentTable.name; $context.fieldName; True:C214)
+	$relatedCatalog:=This:C1470.ExposedStructure.relatedCatalog($table.name; $context.fieldName; True:C214)
 	
-	If ($relatedCatalog.success)  // Open field picker
+	If (Not:C34($relatedCatalog.success))  // It shouldn't be, but...
 		
-		$currentDataModel:=Form:C1466.dataModel
+		oops
 		
-		If (Bool:C1537($context.fieldSortByName))
-			
-			$relatedCatalog.fields:=$relatedCatalog.fields.orderBy("path asc")
-			
-		End if 
+		return 
 		
-		$tableDataModel:=$currentDataModel[String:C10($currentTable.tableNumber)]
+	End if 
+	
+	// Open field picker
+	$currentDataModel:=Form:C1466.dataModel
+	
+	$tableDataModel:=$currentDataModel[String:C10($table.tableNumber)]
+	
+	If ($relatedCatalog.alias=Null:C1517)
 		
-		If ($relatedCatalog.alias=Null:C1517)
-			
-			$relatedDataModel:=$tableDataModel[$relatedCatalog.relatedEntity]
-			
-		Else 
-			
-			$relatedDataModel:=$currentDataModel[String:C10($currentTable.tableNumber)]
-			
-		End if 
+		$relatedDataModel:=$tableDataModel[$relatedCatalog.relatedEntity]
 		
-		For each ($field; $relatedCatalog.fields)
+	Else 
+		
+		$relatedDataModel:=$currentDataModel[String:C10($table.tableNumber)]
+		
+	End if 
+	
+	For each ($field; $relatedCatalog.fields)
+		
+		// Recover the publication status
+		$path:=Split string:C1554(($field.label=Null:C1517) ? $field.path : $field.label; ".")
+		$identifier:=$field.kind="storage" ? String:C10($field.fieldNumber) : $field.name
+		
+		If ($path.length>1)
 			
-			// Recover the publication status
-			$path:=Split string:C1554(($field.label=Null:C1517) ? $field.path : $field.label; ".")
-			
-			$t:=$field.kind="storage" ? String:C10($field.fieldNumber) : $field.name
-			
-			If ($path.length>1)
+			If ($field.kind="alias")
 				
-				If ($field.kind="alias")
-					
-					$field.published:=($relatedDataModel[$path[0]][$path[1]]#Null:C1517)
-					
-				Else 
-					
-					$field.published:=($relatedDataModel[$path[0]][$t]#Null:C1517)
-					
-				End if 
+				$field.published:=($relatedDataModel[$path[0]][$path[1]]#Null:C1517)
 				
 			Else 
 				
-				If ($currentTable.fields.query("name = :1"; $context.fieldName).pop().kind="alias")
-					
-					$field.published:=($relatedDataModel[$context.fieldName][$t]#Null:C1517)
-					
-				Else 
-					
-					$field.published:=($relatedDataModel[$t]#Null:C1517)
-					
-				End if 
+				$field.published:=($relatedDataModel[$path[0]][$identifier]#Null:C1517)
+				
 			End if 
 			
-			// Set icon
-			$field.icon:=UI.fieldIcons[$field.fieldType]
+		Else 
 			
-		End for each 
+			If ($table.fields.query("name = :1"; $context.fieldName).pop().kind="alias")
+				
+				$field.published:=($relatedDataModel[$context.fieldName][$identifier]#Null:C1517)
+				
+			Else 
+				
+				$field.published:=($relatedDataModel[$identifier]#Null:C1517)
+				
+			End if 
+		End if 
+		
+		// Set icon
+		$field.icon:=UI.fieldIcons[$field.fieldType]
+		
+	End for each 
+	
+	If (Bool:C1537($context.fieldSortByName))
 		
 		$relatedCatalog.fields:=$relatedCatalog.fields.orderBy("_order asc, name asc")
 		
-		$relatedCatalog.window:=Open form window:C675("RELATED"; Sheet form window:K39:12; *)
-		DIALOG:C40("RELATED"; $relatedCatalog)
+	Else 
 		
-		// The number of published
-		$publishedNumber:=$relatedCatalog.fields.query("published=true").length
+		$relatedCatalog.fields:=$relatedCatalog.fields.orderBy("_order asc")
 		
-		If ($relatedCatalog.success)
+	End if 
+	
+	$relatedCatalog.window:=Open form window:C675("RELATED"; Sheet form window:K39:12; *)
+	DIALOG:C40("RELATED"; $relatedCatalog)
+	
+	If (Not:C34($relatedCatalog.success))
+		
+		return   // User has cancelled
+		
+	End if 
+	
+	// Get the number of published fields
+	$publishedNumber:=$relatedCatalog.fields.query("published=true").length
+	
+	If ($publishedNumber=0)
+		
+		// No fields published
+		OB REMOVE:C1226($tableDataModel; $context.fieldName)
+		return (0)
+		
+	End if 
+	
+	If ($tableDataModel=Null:C1517)\
+		 | OB Is empty:C1297($tableDataModel)
+		
+		// Create the table instance
+		$tableDataModel:=PROJECT.addTable($table)
+		
+	End if 
+	
+	For each ($field; $relatedCatalog.fields)
+		
+		$target:=$tableDataModel[$context.fieldName]
+		$path:=Split string:C1554(($field.label=Null:C1517) ? $field.path : $field.label; ".")
+		$identifier:=$field.kind="storage" ? String:C10($field.fieldNumber) : $field.name
+		
+		If ($field.published)
 			
-			If ($publishedNumber>0)  // At least one related field is published
+			If ($target=Null:C1517)
 				
-				If ($tableDataModel=Null:C1517)\
-					 | OB Is empty:C1297($tableDataModel)
+				If ($relatedCatalog.alias=Null:C1517)
 					
-					$tableDataModel:=PROJECT.addTable($currentTable)
+					$target:=New object:C1471(\
+						"kind"; "relatedEntity")
+					
+				Else 
+					
+					$target:=New object:C1471(\
+						"kind"; "alias"; \
+						"path"; $relatedCatalog.alias.levels.extract("path").join("."); \
+						"fieldType"; Is object:K8:27; \
+						"isToOne"; True:C214)
 					
 				End if 
 				
-				For each ($field; $relatedCatalog.fields)
+				$target.label:=PROJECT.label($context.fieldName)
+				$target.shortLabel:=PROJECT.shortLabel($context.fieldName)
+				$target.relatedDataClass:=$relatedCatalog.relatedDataClass
+				$target.relatedTableNumber:=$relatedCatalog.relatedTableNumber
+				$target.inverseName:=$relatedCatalog.inverseName
+				
+				$tableDataModel[$context.fieldName]:=$target
+				
+			End if 
+			
+			// Create the field, if any
+			If ($path.length>1)
+				
+				If ($target[$path[0]]=Null:C1517)
 					
-					$target:=$tableDataModel[$context.fieldName]
+					$target[$path[0]]:=New object:C1471(\
+						"kind"; "relatedEntity"; \
+						"relatedDataClass"; This:C1470.ExposedStructure.tableName($path[0]); \
+						"relatedTableNumber"; This:C1470.ExposedStructure.tableNumber($path[0]); \
+						"inverseName"; $table.fields.query("inverseName=:1"; $path[0]).pop().name)
 					
-					$path:=Split string:C1554(($field.label=Null:C1517) ? $field.path : $field.label; ".")
+				End if 
+				
+				If ($target[$path[0]][$identifier]#Null:C1517)
 					
-					If ($field.published)
+					// The field is already in the data model
+					continue
+					
+				End if 
+				
+				Case of 
 						
-						If ($target=Null:C1517)
-							
-							If ($relatedCatalog.alias=Null:C1517)
+						//______________________________________________________
+					: ($field.kind="storage")  // Attribute
+						
+						$o:=New object:C1471(\
+							"name"; $field.name; \
+							"kind"; $field.kind; \
+							"fieldType"; $field.fieldType; \
+							"path"; $field.path; \
+							"label"; PROJECT.label($field.name); \
+							"shortLabel"; PROJECT.shortLabel($field.name); \
+							"valueType"; $field.valueType)
+						
+						// TODO:#TEMPO
+						$o.type:=$field.type
+						
+						$target[$path[0]][String:C10($field.fieldNumber)]:=$o
+						
+						//______________________________________________________
+					: ($field.kind="alias")  // Alias
+						
+						$o:=New object:C1471(\
+							"kind"; $field.kind; \
+							"fieldType"; $field.fieldType; \
+							"path"; $field.path)
+						
+						Case of 
 								
-								$target:=New object:C1471(\
-									"kind"; "relatedEntity")
+								//______________________________________________________
+							: ($field.fieldType=Is collection:K8:32)  // Selection
 								
+								$o.label:=PROJECT.label(UI.str.localize("listOf"; $field.name))
+								$o.shortLabel:=PROJECT.label($field.name)
+								
+								//______________________________________________________
 							Else 
 								
-								$target:=New object:C1471(\
-									"kind"; "alias"; \
-									"path"; $relatedCatalog.alias.levels.extract("path").join("."); \
-									"fieldType"; Is object:K8:27; \
-									"isToOne"; True:C214)
+								$o.label:=PROJECT.label($field.name)
+								$o.shortLabel:=PROJECT.label($field.name)
 								
-							End if 
-							
-							$target.label:=PROJECT.label($context.fieldName)
-							$target.shortLabel:=PROJECT.shortLabel($context.fieldName)
-							$target.relatedDataClass:=$relatedCatalog.relatedDataClass
-							$target.relatedTableNumber:=$relatedCatalog.relatedTableNumber
-							$target.inverseName:=$relatedCatalog.inverseName
-							
-							$tableDataModel[$context.fieldName]:=$target
-							
-						End if 
+								//______________________________________________________
+						End case 
 						
-						// Create the field, if any
-						If ($path.length>1)
+						$o.fieldType:=$field.fieldType
+						
+						$target[$path[0]][$field.name]:=$o
+						
+						//______________________________________________________
+					: ($field.kind="calculated")  // Computed attribute
+						
+						$o:=New object:C1471(\
+							"kind"; $field.kind; \
+							"fieldType"; $field.fieldType; \
+							"path"; $field.path; \
+							"label"; PROJECT.label($field.name); \
+							"shortLabel"; PROJECT.shortLabel($field.name))
+						
+						// TODO:Remove computed
+						$o.computed:=True:C214
+						
+						$target[$path[0]][$field.name]:=$o
+						
+						//______________________________________________________
+					Else 
+						
+						oops
+						
+						//______________________________________________________
+				End case 
+				
+			Else 
+				
+				If ($target[$identifier]#Null:C1517)
+					
+					// The field is already in the data model
+					continue
+					
+				End if 
+				
+				Case of 
+						
+						//______________________________________________________
+					: ($field.kind="storage")
+						
+						$o:=New object:C1471(\
+							"name"; $field.name; \
+							"kind"; $field.kind; \
+							"fieldType"; $field.fieldType; \
+							"valueType"; $field.valueType; \
+							"label"; PROJECT.label($field.name); \
+							"shortLabel"; PROJECT.shortLabel($field.name); \
+							"type"; $field.type)
+						
+						$target[String:C10($field.fieldNumber)]:=$o
+						
+						//______________________________________________________
+					: ($field.kind="relatedEntities")
+						
+						$o:=New object:C1471(\
+							"kind"; $field.kind; \
+							"relatedDataClass"; $field.relatedDataClass; \
+							"relatedTableNumber"; $field.relatedTableNumber; \
+							"inverseName"; $field.inverseName; \
+							"path"; New collection:C1472($context.fieldName; $field.path).join("."); \
+							"label"; PROJECT.labelList($field.name); \
+							"shortLabel"; PROJECT.label($field.name))
+						
+						// TODO:Remove isToMany
+						$o.isToMany:=True:C214
+						
+						$target[$field.name]:=$o
+						
+						//______________________________________________________
+					: ($field.kind="calculated")
+						
+						$o:=New object:C1471(\
+							"kind"; $field.kind; \
+							"fieldType"; $field.fieldType; \
+							"valueType"; $field.valueType; \
+							"label"; PROJECT.label($field.name); \
+							"shortLabel"; PROJECT.shortLabel($field.name))
+						
+						// TODO:Remove computed
+						$o.computed:=True:C214
+						
+						$target[$field.name]:=$o
+						
+						//______________________________________________________
+					: ($field.kind="alias")
+						
+						$o:=New object:C1471(\
+							"kind"; $field.kind; \
+							"fieldType"; $field.fieldType; \
+							"valueType"; $field.valueType; \
+							"path"; $field.path; \
+							"label"; PROJECT.label($field.name); \
+							"shortLabel"; PROJECT.shortLabel($field.name))
+						
+						$target[$field.name]:=$o
+						
+						//______________________________________________________
+					Else 
+						
+						oops
+						
+						//______________________________________________________
+				End case 
+			End if 
+			
+		Else 
+			
+			// Remove the field, if any
+			Case of 
+					
+					//______________________________________________________
+				: ($field.kind="relatedEntities")
+					
+					If ($target#Null:C1517)
+						
+						OB REMOVE:C1226($target; $field.name)
+						
+					End if 
+					
+					//______________________________________________________
+				Else 
+					
+					If ($path.length>1)
+						
+						If (($target[$path[0]][$identifier])#Null:C1517)
 							
-							If ($target[$path[0]]=Null:C1517)
+							OB REMOVE:C1226($target[$path[0]]; $identifier)
+							
+							If (OB Keys:C1719($target[$path[0]]).length=3)  //description keys ("kind", "inverseName", "relatedTableNumber")
 								
-								$target[$path[0]]:=New object:C1471(\
-									"kind"; "relatedEntity"; \
-									"relatedDataClass"; This:C1470.ExposedStructure.tableName($path[0]); \
-									"relatedTableNumber"; This:C1470.ExposedStructure.tableNumber($path[0]); \
-									"inverseName"; $currentTable.fields.query("inverseName=:1"; $path[0]).pop().name)
+								// Empty -> remove
+								OB REMOVE:C1226($target; $path[0])
 								
 							End if 
-							
-							Case of 
-									
-									//______________________________________________________
-								: ($target[$path[0]][Choose:C955($field.kind="storage"; String:C10($field.fieldNumber); $field.name)]#Null:C1517)
-									
-									// THE FIELD IS ALREADY IN THE DATA MODEL
-									
-									//______________________________________________________
-								: ($field.kind="storage")  // Attribute
-									
-									$o:=New object:C1471(\
-										"name"; $field.name; \
-										"kind"; $field.kind; \
-										"fieldType"; $field.fieldType; \
-										"path"; $field.path; \
-										"label"; PROJECT.label($field.name); \
-										"shortLabel"; PROJECT.shortLabel($field.name); \
-										"valueType"; $field.valueType)
-									
-									// mark:#TEMPO
-									$o.type:=$field.type
-									
-									$target[$path[0]][String:C10($field.fieldNumber)]:=$o
-									
-									//______________________________________________________
-								: ($field.kind="alias")  // Alias
-									
-									$o:=New object:C1471(\
-										"kind"; $field.kind; \
-										"fieldType"; $field.fieldType; \
-										"path"; $field.path)
-									
-									Case of 
-											
-											//______________________________________________________
-										: ($field.fieldType=Is collection:K8:32)  // Selection
-											
-											$o.label:=PROJECT.label(UI.str.localize("listOf"; $field.name))
-											$o.shortLabel:=PROJECT.label($field.name)
-											
-											//______________________________________________________
-										Else 
-											
-											$o.label:=PROJECT.label($field.name)
-											$o.shortLabel:=PROJECT.label($field.name)
-											
-											//______________________________________________________
-									End case 
-									
-									$o.fieldType:=$field.fieldType
-									
-									$target[$path[0]][$field.name]:=$o
-									
-									//______________________________________________________
-								: ($field.kind="calculated")  // Computed attribute
-									
-									$o:=New object:C1471(\
-										"kind"; $field.kind; \
-										"fieldType"; $field.fieldType; \
-										"path"; $field.path; \
-										"label"; PROJECT.label($field.name); \
-										"shortLabel"; PROJECT.shortLabel($field.name))
-									
-									// MARK:#TEMPO
-									// TODO:Remove computed
-									$o.computed:=True:C214
-									
-									$target[$path[0]][$field.name]:=$o
-									
-									//______________________________________________________
-								Else 
-									
-									oops
-									
-									//______________________________________________________
-							End case 
-							
-						Else 
-							
-							Case of 
-									
-									//______________________________________________________
-								: ($target[Choose:C955($field.kind="storage"; String:C10($field.fieldNumber); $field.name)]#Null:C1517)
-									
-									// THE FIELD IS ALREADY IN THE DATA MODEL
-									
-									//______________________________________________________
-								: ($field.kind="storage")
-									
-									$o:=New object:C1471(\
-										"name"; $field.name; \
-										"kind"; $field.kind; \
-										"fieldType"; $field.fieldType; \
-										"valueType"; $field.valueType; \
-										"label"; PROJECT.label($field.name); \
-										"shortLabel"; PROJECT.shortLabel($field.name); \
-										"type"; $field.type)
-									
-									$target[String:C10($field.fieldNumber)]:=$o
-									
-									//______________________________________________________
-								: ($field.kind="relatedEntities")
-									
-									$o:=New object:C1471(\
-										"kind"; $field.kind; \
-										"relatedDataClass"; $field.relatedDataClass; \
-										"relatedTableNumber"; $field.relatedTableNumber; \
-										"inverseName"; $field.inverseName; \
-										"path"; New collection:C1472($context.fieldName; $field.path).join("."); \
-										"label"; PROJECT.labelList($field.name); \
-										"shortLabel"; PROJECT.label($field.name))
-									
-									// MARK:#TEMPO
-									$o.isToMany:=True:C214
-									
-									$target[$field.name]:=$o
-									
-									//______________________________________________________
-								: ($field.kind="calculated")
-									
-									$o:=New object:C1471(\
-										"kind"; $field.kind; \
-										"fieldType"; $field.fieldType; \
-										"valueType"; $field.valueType; \
-										"label"; PROJECT.label($field.name); \
-										"shortLabel"; PROJECT.shortLabel($field.name))
-									
-									// MARK:#TEMPO
-									//TODO:Remove computed
-									$o.computed:=True:C214
-									
-									$target[$field.name]:=$o
-									
-									//______________________________________________________
-								: ($field.kind="alias")
-									
-									$o:=New object:C1471(\
-										"kind"; $field.kind; \
-										"fieldType"; $field.fieldType; \
-										"valueType"; $field.valueType; \
-										"path"; $field.path; \
-										"label"; PROJECT.label($field.name); \
-										"shortLabel"; PROJECT.shortLabel($field.name))
-									
-									$target[$field.name]:=$o
-									
-									//______________________________________________________
-								Else 
-									
-									oops
-									
-									//______________________________________________________
-							End case 
 						End if 
 						
 					Else 
 						
-						// Remove the field, if any
-						Case of 
-								
-								//______________________________________________________
-							: ($field.kind="relatedEntities")
-								
-								If ($target#Null:C1517)
-									
-									OB REMOVE:C1226($target; $field.name)
-									
-								End if 
-								
-								//______________________________________________________
-							Else 
-								
-								If ($path.length>1)
-									
-									If (($target[$path[0]][($field.kind="storage") ? String:C10($field.fieldNumber) : $field.name])#Null:C1517)
-										
-										OB REMOVE:C1226($target[$path[0]]; $field.kind="storage" ? String:C10($field.fieldNumber) : $field.name)
-										
-										If (OB Keys:C1719($target[$path[0]]).length=3)  //description keys ("kind", "inverseName", "relatedTableNumber")
-											
-											// Empty -> remove
-											OB REMOVE:C1226($target; $path[0])
-											
-										End if 
-									End if 
-									
-								Else 
-									
-									If (($target[($field.kind="storage") ? String:C10($field.fieldNumber) : $field.name])#Null:C1517)
-										
-										OB REMOVE:C1226($target; $field.kind="storage" ? String:C10($field.fieldNumber) : $field.name)
-										
-									End if 
-								End if 
-								
-								//______________________________________________________
-						End case 
+						If (($target[$identifier])#Null:C1517)
+							
+							OB REMOVE:C1226($target; $identifier)
+							
+						End if 
 					End if 
-				End for each 
-				
-			Else 
-				
-				OB REMOVE:C1226($tableDataModel; $context.fieldName)
-				
-			End if 
-			
-			If (OB Entries:C1720($tableDataModel).query("key != ''").length=0)
-				
-				// Empty -> remove
-				PROJECT.removeTable($currentTable)
-				
-			End if 
-			
-			
-			PROJECT.save()
-			
-		Else 
-			
-			// User has cancelled
-			
+					
+					//______________________________________________________
+			End case 
 		End if 
+	End for each 
+	
+	// Checkbox value mixed (> 1) if all fields are not published
+	$publishedNumber:=1+Num:C11($publishedNumber#$relatedCatalog.fields.length)
+	
+	If (OB Entries:C1720($tableDataModel).query("key != ''").length=0)
 		
-		// Checkbox value according to the count
-		If ($publishedNumber>0)
-			
-			$publishedNumber:=1+Num:C11($publishedNumber#$relatedCatalog.fields.length)
-			
-		End if 
-		
-	Else 
-		
-		oops
+		// Empty table
+		PROJECT.removeTable($table)
 		
 	End if 
+	
+	PROJECT.save()
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Update the project according to the published fields

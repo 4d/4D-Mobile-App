@@ -6,6 +6,8 @@ Class constructor()
 	
 	Super:C1705(Formula:C1597(editor_CALLBACK).source)
 	
+	This:C1470.colorScheme:=""
+	
 	// Mark: Associated worker
 	This:C1470.worker:="4D Mobile ("+String:C10(This:C1470.window)+")"
 	
@@ -287,112 +289,129 @@ Function preload()
 	// TODO: Detect if the color scheme has been changed and apply only in this case.
 Function updateColorScheme()
 	
+	var $key : Text
 	var $icon : Picture
+	var $update : Boolean
 	var $file : 4D:C1709.File
 	
 	This:C1470.selectedColor:=Highlight menu background color:K23:7
 	This:C1470.alternateSelectedColor:=Disable highlight item color:K23:9
 	
-	This:C1470.fieldIcons:=New collection:C1472
-	
-	//read pictures only i scheme change
-	
 	If (This:C1470.darkScheme)
 		
-		This:C1470.colorScheme:="dark"
+		$update:=This:C1470.colorScheme#"dark"
 		
-		// * PRE-LOADING ICONS FOR FIELD TYPES
-		For each ($file; Folder:C1567("/RESOURCES/images/dark/fieldsIcons").files(Ignore invisible:K24:16))
+		If ($update)
 			
-			READ PICTURE FILE:C678($file.platformPath; $icon)
-			This:C1470.fieldIcons[Num:C11(Replace string:C233($file.name; "field_"; ""))]:=$icon
+			Logger.info("Update colorScheme to dark")
 			
-		End for each 
-		
-		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/dark/user.png").platformPath; $icon)
-		This:C1470.userIcon:=$icon
-		
-		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/dark/filter.png").platformPath; $icon)
-		This:C1470.filterIcon:=$icon
-		
-		// * DEFINE COLORS
-		This:C1470.strokeColor:=0x00083C56
-		This:C1470.highlightColor:=Background color:K23:2
-		This:C1470.highlightColorNoFocus:=Background color:K23:2
-		
-		This:C1470.backgroundSelectedColor:=Highlight text background color:K23:5
-		This:C1470.backgroundUnselectedColor:=Highlight text background color:K23:5
-		
-		This:C1470.selectedFillColor:="darkgray"
-		This:C1470.unselectedFillColor:="black"
-		
-		This:C1470.commentColor:="white"
-		
-		This:C1470.errorColor:=0x00E61C70
-		This:C1470.errorRGB:="rgb(230,28,112)"
-		
-		This:C1470.warningColor:=0x00FF4500
-		This:C1470.warningRGB:="orangered"
+			This:C1470.colorScheme:="dark"
+			
+			// * PRE-LOADING ICONS FOR FIELD TYPES
+			This:C1470.fieldIcons:=New collection:C1472
+			
+			For each ($file; Folder:C1567("/RESOURCES/images/dark/fieldsIcons").files(Ignore invisible:K24:16))
+				
+				READ PICTURE FILE:C678($file.platformPath; $icon)
+				This:C1470.fieldIcons[Num:C11(Replace string:C233($file.name; "field_"; ""))]:=$icon
+				
+			End for each 
+			
+			READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/dark/user.png").platformPath; $icon)
+			This:C1470.userIcon:=$icon
+			
+			READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/dark/filter.png").platformPath; $icon)
+			This:C1470.filterIcon:=$icon
+			
+			// * DEFINE COLORS
+			This:C1470.strokeColor:=0x00083C56
+			This:C1470.highlightColor:=Background color:K23:2
+			This:C1470.highlightColorNoFocus:=Background color:K23:2
+			
+			This:C1470.backgroundSelectedColor:=Highlight text background color:K23:5
+			This:C1470.backgroundUnselectedColor:=Highlight text background color:K23:5
+			
+			This:C1470.selectedFillColor:="darkgray"
+			This:C1470.unselectedFillColor:="black"
+			
+			This:C1470.commentColor:="white"
+			
+			This:C1470.errorColor:=0x00E61C70
+			This:C1470.errorRGB:="rgb(230,28,112)"
+			
+			This:C1470.warningColor:=0x00FF4500
+			This:C1470.warningRGB:="orangered"
+			
+		End if 
 		
 	Else 
 		
-		This:C1470.colorScheme:="light"
+		$update:=This:C1470.colorScheme#"light"
 		
-		// * PRE-LOADING ICONS FOR FIELD TYPES
-		For each ($file; Folder:C1567("/RESOURCES/images/light/fieldsIcons").files(Ignore invisible:K24:16))
+		If ($update)
 			
-			READ PICTURE FILE:C678($file.platformPath; $icon)
-			This:C1470.fieldIcons[Num:C11(Replace string:C233($file.name; "field_"; ""))]:=$icon
+			Logger.info("Update colorScheme to light")
 			
-		End for each 
-		
-		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/light/user.png").platformPath; $icon)
-		This:C1470.userIcon:=$icon
-		
-		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/light/filter.png").platformPath; $icon)
-		This:C1470.filterIcon:=$icon
-		
-		// * DEFINE COLORS
-		This:C1470.strokeColor:=0x001AA1E5
-		This:C1470.highlightColor:=0x00FFFFFF
-		This:C1470.highlightColorNoFocus:=0x00FFFFFF
-		
-		This:C1470.backgroundSelectedColor:=0x00E7F8FF
-		This:C1470.backgroundUnselectedColor:=0x00C9C9C9
-		
-		This:C1470.selectedFillColor:="gray"
-		This:C1470.unselectedFillColor:="white"
-		
-		This:C1470.commentColor:="rgb(128,128,128)"
-		
-		This:C1470.errorColor:=0x00FF0000
-		This:C1470.errorRGB:="red"
-		
-		This:C1470.warningColor:=0x00F19135
-		This:C1470.warningRGB:="darkorange"
-		
+			This:C1470.colorScheme:="light"
+			
+			// * PRE-LOADING ICONS FOR FIELD TYPES
+			This:C1470.fieldIcons:=New collection:C1472
+			
+			For each ($file; Folder:C1567("/RESOURCES/images/light/fieldsIcons").files(Ignore invisible:K24:16))
+				
+				READ PICTURE FILE:C678($file.platformPath; $icon)
+				This:C1470.fieldIcons[Num:C11(Replace string:C233($file.name; "field_"; ""))]:=$icon
+				
+			End for each 
+			
+			READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/light/user.png").platformPath; $icon)
+			This:C1470.userIcon:=$icon
+			
+			READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/light/filter.png").platformPath; $icon)
+			This:C1470.filterIcon:=$icon
+			
+			// * DEFINE COLORS
+			This:C1470.strokeColor:=0x001AA1E5
+			This:C1470.highlightColor:=0x00FFFFFF
+			This:C1470.highlightColorNoFocus:=0x00FFFFFF
+			
+			This:C1470.backgroundSelectedColor:=0x00E7F8FF
+			This:C1470.backgroundUnselectedColor:=0x00C9C9C9
+			
+			This:C1470.selectedFillColor:="gray"
+			This:C1470.unselectedFillColor:="white"
+			
+			This:C1470.commentColor:="rgb(128,128,128)"
+			
+			This:C1470.errorColor:=0x00FF0000
+			This:C1470.errorRGB:="red"
+			
+			This:C1470.warningColor:=0x00F19135
+			This:C1470.warningRGB:="darkorange"
+			
+		End if 
 	End if 
 	
-	// COLORS
-	This:C1470.colors:=New object:C1471
-	
-	var $color : cs:C1710.color
-	var $key : Text
-	
-	For each ($key; New collection:C1472(\
-		"strokeColor"; \
-		"highlightColor"; \
-		"highlightColorNoFocus"; \
-		"selectedColor"; \
-		"alternateSelectedColor"; \
-		"backgroundSelectedColor"; \
-		"backgroundUnselectedColor"; \
-		"errorColor"; \
-		"warningColor"))
+	If ($update)
 		
-		This:C1470.colors[$key]:=cs:C1710.color.new(This:C1470[$key])
+		// * COLORS
+		This:C1470.colors:=New object:C1471
 		
-	End for each 
+		For each ($key; New collection:C1472(\
+			"strokeColor"; \
+			"highlightColor"; \
+			"highlightColorNoFocus"; \
+			"selectedColor"; \
+			"alternateSelectedColor"; \
+			"backgroundSelectedColor"; \
+			"backgroundUnselectedColor"; \
+			"errorColor"; \
+			"warningColor"))
+			
+			This:C1470.colors[$key]:=cs:C1710.color.new(This:C1470[$key])
+			
+		End for each 
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function goToPage($page : Text)
@@ -816,7 +835,10 @@ Function checkProject()
 	
 	// Launch of the update of the exposed catalog
 	This:C1470.addTask("checkProject")
-	This:C1470.callWorker(Formula:C1597(editor_UPDATE_EXPOSED_CATALOG).source; This:C1470.window; This:C1470.callback)
+	This:C1470.callWorker(Formula:C1597(editor_UPDATE_EXPOSED_CATALOG).source; New object:C1471(\
+		"caller"; This:C1470.window; \
+		"method"; This:C1470.callback; \
+		"message"; "checkProject"))
 	
 	// Launch of the project audit
 	This:C1470.callMeBack("projectAudit")

@@ -133,7 +133,6 @@ Case of
 			
 		End if 
 		
-		
 		// MARK:-CHECK_INSTALLATION callback
 	: ($message="checkDevTools")
 		

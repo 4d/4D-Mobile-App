@@ -42,4 +42,3 @@ Function set computedWithSetterNonExposed($entry : Text)
 	
 	// Calculated non-scalars
 exposed Function get computedNonScalar()->$selection : cs:C1710.EmployesSelection
-	
