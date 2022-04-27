@@ -265,11 +265,11 @@ Function fieldList($table)->$result : Object
 	var $tableModel : Object
 	var $field; $subfield; $subfield2 : cs:C1710.field
 	
-	$linkPrefix:=Choose:C955(Is macOS:C1572; "└ "; "└ ")  //"├ " //" ┊"
+	$linkPrefix:=Is macOS:C1572 ? "└ " : "└ "  //"├ " //" ┊"
 	
 	ASSERT:C1129(Count parameters:C259>=1; "Missing parameter")
 	
-	$tableID:=Choose:C955(Value type:C1509($table)=Is text:K8:3; $table; String:C10($table))
+	$tableID:=Value type:C1509($table)=Is text:K8:3 ? $table : String:C10($table)
 	
 	$result:=New object:C1471(\
 		"success"; Form:C1466.dataModel#Null:C1517)
@@ -334,7 +334,7 @@ Function fieldList($table)->$result : Object
 						//……………………………………………………………………………………………………………
 						//FIXME: BUG EN COMPILÉ
 						//: ($field.kind="relatedEntity")\
-																																																															 || (($field.kind="alias") && (Bool($field.isToOne)))
+																																																																																				 || (($field.kind="alias") && (Bool($field.isToOne)))
 						
 					: ($field.kind="relatedEntity")\
 						 || (($field.kind="alias") & (Bool:C1537($field.isToOne)))
@@ -394,7 +394,7 @@ Function fieldList($table)->$result : Object
 									$subfield.$label:=$linkPrefix+$attribute
 									$subfield.$level:=$subLevel+1
 									
-									$subfield.path:=$key+"."+$subfield.path
+									$subfield.path:=$key+"."+$attribute
 									$subfield.name:=$subfield.path
 									
 									$result.fields.push($subfield)
@@ -439,8 +439,8 @@ Function fieldList($table)->$result : Object
 										
 										If ($subfield2.kind="alias")
 											
-											$subfield2.name:=$key+"."+$sub
-											$subfield2.path:=$key+"."+$subfield2.path
+											$subfield2.name:=$attribute+"."+$sub
+											$subfield2.path:=$key+"."+$attribute+"."+$sub
 											
 										Else 
 											

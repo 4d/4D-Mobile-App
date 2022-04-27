@@ -573,6 +573,8 @@ Function doFieldPicker()->$publishedNumber : Integer
 			
 		End for each 
 		
+		$relatedCatalog.fields:=$relatedCatalog.fields.orderBy("_order asc, name asc")
+		
 		$relatedCatalog.window:=Open form window:C675("RELATED"; Sheet form window:K39:12; *)
 		DIALOG:C40("RELATED"; $relatedCatalog)
 		
@@ -1422,7 +1424,8 @@ Function _appendField($table : cs:C1710.table; $field : cs:C1710.field)
 								//______________________________________________________
 							: ($o.kind="alias")
 								
-								$published+=Num:C11($fieldModel[$o.name]=Null:C1517)
+								$c:=Split string:C1554($o.label; "."; sk ignore empty strings:K86:1)
+								$published+=($c.length=1) ? Num:C11($fieldModel[$o.name]=Null:C1517) : Num:C11($fieldModel[$c[0]][$o.name]=Null:C1517)
 								
 								//______________________________________________________
 							: ($o.fieldType=8859)

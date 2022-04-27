@@ -78,7 +78,7 @@ Function exposedDatastore() : Object
 				
 				If (Not:C34(Bool:C1537($o.value.exposed)))\
 					 || ($o.key=This:C1470.stampFieldName)\
-					 || ((This:C1470.allowedTypes.indexOf($o.value.type)=-1) & ($o.value.relatedDataClass=Null:C1517))
+					 || (Not:C34(This:C1470._managedType($o.value.type)) & ($o.value.relatedDataClass=Null:C1517))
 					
 					continue
 					
@@ -483,7 +483,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 					//______________________________________________________
 				: ($relatedAttribute.kind="storage")
 					
-					If (This:C1470.allowedTypes.indexOf($relatedAttribute.type)>=0)
+					If (This:C1470._managedType($relatedAttribute.type))
 						
 						// MARK: TEMPO
 						$relatedAttribute.valueType:=$relatedAttribute.type
@@ -509,8 +509,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 							If ($relatedField.kind="relatedEntity")\
 								 || ($relatedField.kind="relatedEntities")
 								
-								// NOT MANAGED
-								continue
+								continue  //Unmanaged at the 2nd level
 								
 							End if 
 							
@@ -519,7 +518,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 									//…………………………………………………………………………………………………
 								: ($relatedField.kind="storage")
 									
-									If (This:C1470.allowedTypes.indexOf($relatedField.valueType)>=0)
+									If (This:C1470._managedType($relatedField.valueType))
 										
 										$related:=This:C1470.fieldDefinition($relatedAttribute.relatedTableNumber; $relatedField.name)
 										$related.path:=New collection:C1472($relatedAttribute.name; $related.name).join(".")
@@ -533,7 +532,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 									//…………………………………………………………………………………………………
 								: ($relatedField.kind="calculated")
 									
-									If (This:C1470.allowedTypes.indexOf($relatedField.valueType)>=0)
+									If (This:C1470._managedType($relatedField.valueType))
 										
 										$related:=OB Copy:C1225($relatedField)
 										$related.path:=New collection:C1472($relatedAttribute.name; $related.name).join(".")
@@ -597,7 +596,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 						$related.fieldType:=8859
 						$related.isToMany:=True:C214
 						
-						$related._order:=$relatedAttribute.relatedDataClass
+						$related._order:=""
 						$result.fields.push($related)
 						
 					End if 
@@ -605,7 +604,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 					//______________________________________________________
 				: ($relatedAttribute.kind="calculated")
 					
-					If (This:C1470.allowedTypes.indexOf($relatedAttribute.type)>=0)
+					If (This:C1470._managedType($relatedAttribute.type))
 						
 						$related:=OB Copy:C1225($relatedAttribute)
 						
@@ -630,7 +629,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 						
 					End if 
 					
-					If (This:C1470.allowedTypes.indexOf($relatedAttribute.type)>=0)
+					If (This:C1470._managedType($relatedAttribute.type))
 						
 						$related:=OB Copy:C1225($relatedAttribute)
 						$related.label:=$related.name
@@ -731,6 +730,12 @@ Function addField($table : Object; $field : cs:C1710.field)
 	var $o; $relatedCatalog; $relatedField : Object
 	var $path : Collection
 	
+	If (Structure file:C489=Structure file:C489(*))
+		
+		ON ERR CALL:C155("")
+		
+	End if 
+	
 	Case of 
 			
 			//………………………………………………………………………………………………………
@@ -759,7 +764,7 @@ Function addField($table : Object; $field : cs:C1710.field)
 				
 				$fieldID:=String:C10($relatedField.fieldNumber)
 				
-				$path:=Split string:C1554($relatedField.path; ".")
+				$path:=Split string:C1554(($relatedField.label#Null:C1517 ? $relatedField.label : $relatedField.path); ".")
 				
 				// Create the field, if any
 				If ($path.length>1) & ($relatedField.kind#"alias")
@@ -788,12 +793,6 @@ Function addField($table : Object; $field : cs:C1710.field)
 							$o[$path[0]][$relatedField.name].path:=$relatedField.path
 							
 							//______________________________________________________
-						: (Feature.with("alias")) && (($relatedField.kind="alias") && ($o[$path[0]][$relatedField.name]=Null:C1517))
-							
-							$o[$path[0]][$relatedField.name]:=This:C1470._fieldModel($relatedField)
-							$o[$path[0]][$relatedField.name].path:=$relatedField.path
-							
-							//______________________________________________________
 						: ($relatedField.kind="relatedEntities") && ($o[$path[0]][$relatedField.name]=Null:C1517)
 							
 							$o[$path[0]][$relatedField.name]:=This:C1470._fieldModel($relatedField)
@@ -802,7 +801,7 @@ Function addField($table : Object; $field : cs:C1710.field)
 							//______________________________________________________
 						Else 
 							
-							//oups
+							//oops
 							
 							//______________________________________________________
 					End case 
@@ -824,10 +823,29 @@ Function addField($table : Object; $field : cs:C1710.field)
 							$o[$relatedField.name].path:=$relatedField.path
 							
 							//______________________________________________________
-						: (Feature.with("alias")) && (($relatedField.kind="alias") && ($o[$relatedField.name]=Null:C1517))
+						: (Feature.with("alias")) && (($relatedField.kind="alias"))
 							
-							$o[$relatedField.name]:=This:C1470._fieldModel($relatedField)
-							$o[$relatedField.name].path:=$relatedField.path
+							If ($path.length>1)
+								
+								If ($o[$path[0]]=Null:C1517)
+									
+									$o[$path[0]]:=New object:C1471
+									$o[$path[0]].kind:=$field.kind
+									$o[$path[0]].relatedDataClass:=$field.relatedDataClass
+									$o[$path[0]].inverseName:=$field.inverseName
+									$o[$path[0]].relatedTableNumber:=$field.relatedTableNumber
+									
+								End if 
+								
+								$o[$path[0]][$relatedField.name]:=This:C1470._fieldModel($relatedField)
+								$o[$path[0]][$relatedField.name].path:=$relatedField.path
+								
+							Else 
+								
+								$o[$relatedField.name]:=This:C1470._fieldModel($relatedField)
+								$o[$relatedField.name].path:=$relatedField.path
+								
+							End if 
 							
 							//______________________________________________________
 						: ($relatedField.kind="relatedEntities") && ($o[$relatedField.name]=Null:C1517)
@@ -838,7 +856,7 @@ Function addField($table : Object; $field : cs:C1710.field)
 							//______________________________________________________
 						Else 
 							
-							//oups
+							//oops
 							
 							//______________________________________________________
 					End case 
@@ -887,6 +905,12 @@ Function check
 	//#WIP
 	
 	// MARK:-[PRIVATE]
+	// === === === === === === === === === === === === === === === === === === === === ===
+	// Returns True if a field's type is allowed
+Function _managedType($type : Text) : Boolean
+	
+	return (This:C1470.allowedTypes.indexOf($type)>=0)
+	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function _fieldModel($field : cs:C1710.field; $relatedCatalog : Object)->$fieldModel : Object
 	
@@ -950,7 +974,7 @@ Function _fieldModel($field : cs:C1710.field; $relatedCatalog : Object)->$fieldM
 			// mark:#TEMPO
 			// TODO:Remove computed
 			$fieldModel.computed:=True:C214
-			$fieldModel.type:=$field.type  //(-3)
+			$fieldModel.type:=$field.type
 			
 			//………………………………………………………………………………………………………
 		: ($field.kind="relatedEntities")  // 1 -> N relation
@@ -1047,7 +1071,7 @@ Do not allow duplicate attribute names.
 				//…………………………………………………………………………………………………
 			: ($field.kind="storage")  // Storage attribute
 				
-				If (This:C1470.allowedTypes.indexOf($field.type)>=0)
+				If (This:C1470._managedType($field.type))
 					
 					// Mark: #TEMPO
 					$field.valueType:=$field.type
@@ -1061,7 +1085,7 @@ Do not allow duplicate attribute names.
 				//…………………………………………………………………………………………………
 			: ($field.kind="calculated")  // Calculated scalar attribute
 				
-				If (This:C1470.allowedTypes.indexOf($field.type)>=0)
+				If (This:C1470._managedType($field.type))
 					
 					// Mark: #TEMPO
 					$field.valueType:=$field.type
@@ -1130,7 +1154,7 @@ Do not allow duplicate attribute names.
 						//______________________________________
 					Else   // Scalar Attribute
 						
-						If (This:C1470.allowedTypes.indexOf($field.type)>=0)
+						If (This:C1470._managedType($field.type))
 							
 							// Mark: #TEMPO
 							$field.valueType:=$field.type
@@ -1166,7 +1190,7 @@ Function _relatedFields($field : cs:C1710.field; $relationName : Text; $recursiv
 			//___________________________________________
 		: ($field.kind="storage")  // Storage attribute
 			
-			If (This:C1470.allowedTypes.indexOf($field.type)>=0)
+			If (This:C1470._managedType($field.type))
 				
 				// MARK: #TEMPO
 				$field.valueType:=$field.type
@@ -1183,7 +1207,7 @@ Function _relatedFields($field : cs:C1710.field; $relationName : Text; $recursiv
 			//…………………………………………………………………………………………………
 		: ($field.kind="calculated")  // Calculated scalar attribute
 			
-			If (This:C1470.allowedTypes.indexOf($field.type)>=0)
+			If (This:C1470._managedType($field.type))
 				
 				// MARK: #TEMPO
 				$field.valueType:=$field.type
@@ -1225,7 +1249,7 @@ Function _relatedFields($field : cs:C1710.field; $relationName : Text; $recursiv
 							//______________________________________________________
 						: ($relatedField.kind="storage")  // Storage attribute
 							
-							If (This:C1470.allowedTypes.indexOf($relatedField.valueType)>=0)
+							If (This:C1470._managedType($relatedField.valueType))
 								
 								$related.path:=New collection:C1472($field.name; $related.name).join(".")
 								
@@ -1236,7 +1260,7 @@ Function _relatedFields($field : cs:C1710.field; $relationName : Text; $recursiv
 							//______________________________________________________
 						: ($relatedField.kind="calculated")  // Calculated scalar attribute
 							
-							If (This:C1470.allowedTypes.indexOf($relatedField.valueType)>=0)
+							If (This:C1470._managedType($relatedField.valueType))
 								
 								$related.path:=New collection:C1472($field.name; $related.name).join(".")
 								
@@ -1298,11 +1322,11 @@ Function _relatedFields($field : cs:C1710.field; $relationName : Text; $recursiv
 	
 	//==================================================================
 	// Returns True if a field could be published
-Function _allowPublication($field : cs:C1710.field)->$allow : Boolean
+Function _allowPublication($field : cs:C1710.field) : Boolean
 	
 	If ($field.name#This:C1470.stampFieldName)
 		
-		$allow:=(This:C1470.allowedTypes.indexOf($field.valueType)>=0) || (This:C1470.allowedTypes.indexOf($field.type)>=0)
+		return ((This:C1470._managedType($field.valueType)) || (This:C1470._managedType($field.type)))
 		
 	End if 
 	

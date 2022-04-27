@@ -384,7 +384,6 @@ Case of
 						End for 
 					End if 
 					
-					//#MARK_TODO - use CALL FORM to avoid three-state display
 					$class.updateProject()
 					
 					If ($Ptr_me->{$row}=0)
@@ -671,8 +670,8 @@ Case of
 		//// Hide the bottom line
 		//OBJECT SET VISIBLE(*; "bottom.line"; False)
 		//CALL FORM(Current form window; "editor_CALLBACK"; "resizePanel"; New object(\
-												"panel"; Current form name; \
-												"offset"; $Lon_vOffset))
+															"panel"; Current form name; \
+															"offset"; $Lon_vOffset))
 		//End if
 		////______________________________________________________
 		//: ($e.code=On Mouse Leave)

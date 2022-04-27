@@ -1,7 +1,9 @@
 Class extends Entity
 
+// Alias scalaires
 exposed Alias aka_Nom Name
 
+// Calculated Scalars
 exposed Function get computedName()->$name : Text
 	
 	$name:=Uppercase:C13(This:C1470.Name)
@@ -38,5 +40,6 @@ Function set computedWithSetterNonExposed($entry : Text)
 	
 	$bool:=$entry#Null:C1517
 	
+	// Calculated non-scalars
 exposed Function get computedNonScalar()->$selection : cs:C1710.EmployesSelection
 	

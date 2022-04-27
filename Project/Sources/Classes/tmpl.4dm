@@ -749,7 +749,6 @@ Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Ob
 		: ($field.kind="alias")
 			
 			$label:=$field.path#Null:C1517 ? $field.path : $field.name
-			$label:=$field.name
 			$tips:=$field.label
 			
 			//______________________________________________________
