@@ -67,7 +67,6 @@ If (Num:C11($tableID)>0)
 			$manifest:=$tmpl.manifest
 			
 			// Load the template
-			
 			$t:=$tmpl.update().svg
 			
 			//fixme: Put something before :C
@@ -128,7 +127,7 @@ If (Num:C11($tableID)>0)
 				
 				If (Num:C11($manifest.renderer)>=2)
 					
-					// 🔎 UPDATE THE SEARCH WIDGET
+					// Mark:🔎 UPDATE THE SEARCH WIDGET
 					If ($target.searchableField#Null:C1517)
 						
 						If (let(->$node; Formula:C1597($svg.findById("search.label")); Formula:C1597($svg.success)))
@@ -181,7 +180,7 @@ If (Num:C11($tableID)>0)
 						End if 
 					End if 
 					
-					// 🗂 UPDATE THE SECTION WIDGET
+					// Mark:🗂 UPDATE THE SECTION WIDGET
 					If ($target.sectionField#Null:C1517)
 						
 						If (let(->$node; Formula:C1597($svg.findById("section.label")); Formula:C1597($svg.success)))
@@ -201,7 +200,7 @@ If (Num:C11($tableID)>0)
 					
 					$height:=Num:C11($manifest.hOffset)
 					
-					// 🗄 UPDATE FIELDS
+					// Mark:🗄 UPDATE FIELDS
 					If ($target.fields#Null:C1517)
 						
 						$count:=Num:C11($manifest.fields.count)
@@ -209,260 +208,264 @@ If (Num:C11($tableID)>0)
 						
 						For each ($field; $target.fields)
 							
-							$indx:=$indx+1
+							$indx+=1
 							
-							If ($field#Null:C1517)
+							If ($field=Null:C1517)
 								
-								CLEAR VARIABLE:C89($style)
-								CLEAR VARIABLE:C89($found)
-								CLEAR VARIABLE:C89($tips)
-								CLEAR VARIABLE:C89($isToOne)
-								CLEAR VARIABLE:C89($isToMany)
+								continue  // Unaffected
 								
-								If ($field.kind#Null:C1517)
+							End if 
+							
+							CLEAR VARIABLE:C89($style)
+							CLEAR VARIABLE:C89($found)
+							CLEAR VARIABLE:C89($tips)
+							CLEAR VARIABLE:C89($isToOne)
+							CLEAR VARIABLE:C89($isToMany)
+							
+							If ($field.kind#Null:C1517)
+								
+								$isToOne:=($field.kind="relatedEntity")
+								$isToMany:=($field.kind="relatedEntities")
+								
+							Else 
+								
+								// FIXME:#TEMPO
+								If ($field.fieldType#Null:C1517)
 									
-									$isToOne:=($field.kind="relatedEntity")
-									$isToMany:=($field.kind="relatedEntities")
+									$isToOne:=($field.fieldType=8858)
+									$isToMany:=($field.fieldType=8859)
 									
-								Else 
+								End if 
+							End if 
+							
+							If ($indx>$count)
+								
+								// Dynamic
+								$height+=$tmpl.appendOneField($indx; $field; $context; $background; $height)
+								
+							Else 
+								
+								// Static
+								$t:=String:C10($indx)
+								
+								// Get the bindind definition
+								If (let(->$node; Formula:C1597($svg.findById("f"+$t)); Formula:C1597($svg.success)))
 									
-									// FIXME:#TEMPO
-									If ($field.fieldType#Null:C1517)
+									$binding:=$tmpl.getBinding($node)
+									
+									If (Length:C16($binding)=0)
 										
-										$isToOne:=($field.fieldType=8858)
-										$isToMany:=($field.fieldType=8859)
+										continue  // No binding
 										
 									End if 
-								End if 
-								
-								If ($indx>$count)
 									
-									// Dynamic
-									$height:=$height+$tmpl.appendOneField($indx; $field; $context; $background; $height)
-									
-								Else 
-									
-									// Static
-									$t:=String:C10($indx)
-									
-									// Get the bindind definition
-									If (let(->$node; Formula:C1597($svg.findById("f"+$t)); Formula:C1597($svg.success)))
+									If ($tmpl.isTypeAccepted($binding; $field.fieldType))
 										
-										$binding:=$tmpl.getBinding($node)
-										
-										If (Length:C16($binding)>0)
+										If (let(->$node; Formula:C1597($svg.findById("f"+$t+".label")); Formula:C1597($svg.success)))
 											
-											If ($tmpl.isTypeAccepted($binding; $field.fieldType))
+											If ($isToOne | $isToMany)  // Relation
 												
-												If (let(->$node; Formula:C1597($svg.findById("f"+$t+".label")); Formula:C1597($svg.success)))
+												$svg.fontStyle(Italic:K14:3; $node)
+												
+											End if 
+											
+											Case of 
 													
-													If ($isToOne | $isToMany)  // Relation
-														
-														$svg.fontStyle(Italic:K14:3; $node)
-														
-													End if 
+													//______________________________________________________
+												: ($isToOne)
 													
-													Case of 
+													$tips:=$tableModel[$field.name].label
+													$label:=UI.str.setText(UI.toOne).concat($field.name)
+													
+													$relation:=$tableModel
+													
+													If (Match regex:C1019("(?m-si)^%[^%]*%$"; String:C10($relation[$field.name].label); 1))
+														
+														$name:=Substring:C12($relation[$field.name].label; 2; Length:C16($relation[$field.name].label)-2)
+														
+														If (Length:C16($name)>0)
 															
-															//______________________________________________________
-														: ($isToOne)
+															$label:=$label+" ("+$name+")"
+															$tips:=$field.name+"."+$name
 															
-															$tips:=$tableModel[$field.name].label
-															$label:=UI.str.setText(UI.toOne).concat($field.name)
-															
-															$relation:=$tableModel
-															
-															If (Match regex:C1019("(?m-si)^%[^%]*%$"; String:C10($relation[$field.name].label); 1))
+															// Check that the discriminant field is published
+															For each ($o; OB Entries:C1720($relation[$field.name]).query("value.fieldType != null")) Until ($found)
 																
-																$name:=Substring:C12($relation[$field.name].label; 2; Length:C16($relation[$field.name].label)-2)
+																$found:=(String:C10($o.value.name)=$name)\
+																	/* computed or alias */ || ($o.key=$name)
 																
-																If (Length:C16($name)>0)
-																	
-																	$label:=$label+" ("+$name+")"
-																	$tips:=$field.name+"."+$name
-																	
-																	// Check that the discriminant field is published
-																	For each ($o; OB Entries:C1720($relation[$field.name]).query("value.fieldType != null")) Until ($found)
-																		
-																		$found:=(String:C10($o.value.name)=$name)\
-																			/* computed or alias */ || ($o.key=$name)
-																		
-																	End for each 
-																	
-																	If (Not:C34($found))
-																		
-																		$svg.addClass("error"; $node)
-																		$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
-																		
-																	End if 
-																End if 
-															End if 
+															End for each 
 															
-															//______________________________________________________
-														: ($isToMany)  // Only available on list form
-															
-															$tips:=$field.label
-															$label:=UI.str.setText(UI.toMany).concat($field.name)
-															
-															//______________________________________________________
-														: ($field.kind="alias")
-															
-															$tips:=$field.label
-															$label:=$field.name
-															
-															// TODO:Test if the target is available
-															
-															//______________________________________________________
-														Else 
-															
-															$label:=($field.path#Null:C1517) ? $field.path : $field.name
-															
-															If (Not:C34(PROJECT.fieldAvailable($tableID; $field)))
+															If (Not:C34($found))
 																
 																$svg.addClass("error"; $node)
-																$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($label))
+																$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
 																
 															End if 
-															
-															//______________________________________________________
-													End case 
+														End if 
+													End if 
 													
-													// Try to get the width of the container (#121515)
-													$avalaibleWidth:=200
+													//______________________________________________________
+												: ($isToMany)  // Only available on list form
 													
-													$parent:=$svg.parent($node)
+													$tips:=$field.label
+													$label:=UI.str.setText(UI.toMany).concat($field.name)
 													
-													If ($svg.getName($parent)="g")
+													//______________________________________________________
+												: ($field.kind="alias")
+													
+													$tips:=$field.label
+													$label:=$field.path
+													
+													// TODO:Test if the target is available
+													
+													//______________________________________________________
+												Else 
+													
+													$label:=($field.path#Null:C1517) ? $field.path : $field.name
+													
+													If (Not:C34(PROJECT.fieldAvailable($tableID; $field)))
 														
-														$nodes:=$svg.find($parent; "*[contains(@class,'bg field')]")
-														
-														Case of 
-																
-																//______________________________________________________
-															: (Not:C34(Bool:C1537(OK)))\
-																 | ($nodes.length=0)
-																
-																// Fails
-																
-																//______________________________________________________
-															: ($svg.getName($nodes[0])="rect")
-																
-																$avalaibleWidth:=Num:C11($svg.getAttribute($nodes[0]; "width"))-38  // 38 for grip of the cancel button
-																
-																//______________________________________________________
-															: ($svg.getName($nodes[0])="circle")
-																
-																$avalaibleWidth:=(Num:C11($svg.getAttribute($nodes[0]; "r"))*2)-10  // 10 for margins
-																
-																//______________________________________________________
-															Else 
-																
-																// Not yet managed
-																
-																//______________________________________________________
-														End case 
-														
-													Else 
-														
-														// Unknown structure
+														$svg.addClass("error"; $node)
+														$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($label))
 														
 													End if 
 													
-													$o:=New object:C1471(\
-														"label"; $label; \
-														"tips"; $tips; \
-														"avalaibleWidth"; $avalaibleWidth)
-													
-													$tmpl.truncateLabelIfTooBig($o)
-													$label:=$o.label
-													$tips:=$o.tips
-													
-													$svg.setValue($label; $node)
-													
-													Case of 
-															
-															//______________________________________________________
-														: ($isToOne | $isToMany)  // Relation
-															
-															If (Split string:C1554($field.path; ".").length=1)
-																
-																If (PROJECT.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)  // Error
-																	
-																	$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theLinkedTableIsNotPublished").localized($relation[$field.name].relatedEntities))
-																	
-																End if 
-																
-															Else 
-																
-																// MARK:TODO
-																
-															End if 
-															
-															//______________________________________________________
-														Else 
-															
-															var $c : Collection
-															
-															If ($field.path=Null:C1517)
-																$c:=New collection:C1472()
-															Else 
-																$c:=Split string:C1554($field.path; ".")
-															End if 
-															
-															If ($c.length=1)
-																
-																If ($dataClass[$field.name]=Null:C1517)\
-																	 | (($tableModel[$field.name]=Null:C1517) & ($tableModel[String:C10($field.id)]=Null:C1517))
-																	
-																	$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($field.name))
-																	
-																End if 
-																
-															Else 
-																
-																If ($dataClass[$c[0]]=Null:C1517)
-																	
-																	$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($c[1]))
-																	
-																Else 
-																	
-																	If (ds:C1482[$dataClass[$c[0]].relatedDataClass][$c[1]]=Null:C1517)
-																		
-																		$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($c[1]))
-																		
-																	End if 
-																End if 
-															End if 
-															
-															//______________________________________________________
-													End case 
-													
-													// Set tips
-													$svg.setAttribute("tips"; $tips; $node)
-													
-													// Remove dotted lines
-													$svg.setAttribute("stroke-dasharray"; "none"; $svg.nextSibling($node))
-													
-													// Display delete button
-													$svg.visible(True:C214; $svg.findById("f"+$t+".cancel"))
-													
-												End if 
+													//______________________________________________________
+											End case 
+											
+											// Try to get the width of the container (#121515)
+											$avalaibleWidth:=200
+											
+											$parent:=$svg.parent($node)
+											
+											If ($svg.getName($parent)="g")
+												
+												$nodes:=$svg.find($parent; "*[contains(@class,'bg field')]")
+												
+												Case of 
+														
+														//______________________________________________________
+													: (Not:C34(Bool:C1537(OK)))\
+														 | ($nodes.length=0)
+														
+														// Fails
+														
+														//______________________________________________________
+													: ($svg.getName($nodes[0])="rect")
+														
+														$avalaibleWidth:=Num:C11($svg.getAttribute($nodes[0]; "width"))-38  // 38 for grip of the cancel button
+														
+														//______________________________________________________
+													: ($svg.getName($nodes[0])="circle")
+														
+														$avalaibleWidth:=(Num:C11($svg.getAttribute($nodes[0]; "r"))*2)-10  // 10 for margins
+														
+														//______________________________________________________
+													Else 
+														
+														// Not yet managed
+														
+														//______________________________________________________
+												End case 
 												
 											Else 
 												
-												// For a detail form, treat as as a dynamic field ?
-												$height:=$height+$tmpl.appendOneField($indx; $field; $context; $background; $height)
+												// Unknown structure
 												
 											End if 
-										Else   // No binding
+											
+											$o:=New object:C1471(\
+												"label"; $label; \
+												"tips"; $tips; \
+												"avalaibleWidth"; $avalaibleWidth)
+											
+											$tmpl.truncateLabelIfTooBig($o)
+											$label:=$o.label
+											$tips:=$o.tips
+											
+											$svg.setValue($label; $node)
+											
+											Case of 
+													
+													//______________________________________________________
+												: ($isToOne | $isToMany)  // Relation
+													
+													If (Split string:C1554($field.path; ".").length=1)
+														
+														If (PROJECT.dataModel[String:C10($field.relatedTableNumber)]=Null:C1517)  // Error
+															
+															$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theLinkedTableIsNotPublished").localized($relation[$field.name].relatedEntities))
+															
+														End if 
+														
+													Else 
+														
+														// MARK:TODO
+														
+													End if 
+													
+													//______________________________________________________
+												Else 
+													
+													var $c : Collection
+													
+													If ($field.path=Null:C1517)
+														$c:=New collection:C1472()
+													Else 
+														$c:=Split string:C1554($field.path; ".")
+													End if 
+													
+													If ($c.length=1)
+														
+														If ($dataClass[$field.name]=Null:C1517)\
+															 | (($tableModel[$field.name]=Null:C1517) & ($tableModel[String:C10($field.id)]=Null:C1517))
+															
+															$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($field.name))
+															
+														End if 
+														
+													Else 
+														
+														If ($dataClass[$c[0]]=Null:C1517)
+															
+															$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($c[1]))
+															
+														Else 
+															
+															If (ds:C1482[$dataClass[$c[0]].relatedDataClass][$c[1]]=Null:C1517)
+																
+																$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($c[1]))
+																
+															End if 
+														End if 
+													End if 
+													
+													//______________________________________________________
+											End case 
+											
+											// Set tips
+											$svg.setAttribute("tips"; $tips; $node)
+											
+											// Remove dotted lines
+											$svg.setAttribute("stroke-dasharray"; "none"; $svg.nextSibling($node))
+											
+											// Display delete button
+											$svg.visible(True:C214; $svg.findById("f"+$t+".cancel"))
+											
 										End if 
+										
+									Else 
+										
+										// For a detail form, treat as as a dynamic field ?
+										$height+=$tmpl.appendOneField($indx; $field; $context; $background; $height)
+										
 									End if 
 								End if 
-							Else   // <NOTHING MORE TO DO>
 							End if 
 						End for each 
 						
-						$height:=$height+40
+						$height+=40
 						
 					End if 
 					
@@ -515,7 +518,8 @@ If (Num:C11($tableID)>0)
 					
 				Else 
 					
-					tmpl_RENDERER_v1($svg; $context; $target)  // #OLD RENDERER
+					//MARK:OLD RENDERER
+					tmpl_RENDERER_v1($svg; $context; $target)
 					
 					$context.previewHeight:=440
 					

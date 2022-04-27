@@ -636,7 +636,6 @@
 	},
 	"devTable": {
 		"tables": [
-			"__DeletedRecords",
 			"ALL_TYPES",
 			"Commands",
 			"COMPOSITE PRIMARY KEY",

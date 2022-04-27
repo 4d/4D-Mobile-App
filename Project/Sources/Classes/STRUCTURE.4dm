@@ -617,11 +617,11 @@ Function doFieldPicker()->$publishedNumber : Integer
 								
 							End if 
 							
+							$target.label:=PROJECT.label($context.fieldName)
+							$target.shortLabel:=PROJECT.shortLabel($context.fieldName)
 							$target.relatedDataClass:=$relatedCatalog.relatedDataClass
 							$target.relatedTableNumber:=$relatedCatalog.relatedTableNumber
 							$target.inverseName:=$relatedCatalog.inverseName
-							$target.label:=PROJECT.label($field.name)
-							$target.shortLabel:=PROJECT.shortLabel($field.name)
 							
 							$tableDataModel[$context.fieldName]:=$target
 							
@@ -636,7 +636,7 @@ Function doFieldPicker()->$publishedNumber : Integer
 									"kind"; "relatedEntity"; \
 									"relatedDataClass"; This:C1470.ExposedStructure.tableName($path[0]); \
 									"relatedTableNumber"; This:C1470.ExposedStructure.tableNumber($path[0]); \
-									"inverseName"; $currentTable.field.query("inverseName=:1"; $path[0]).pop().name)
+									"inverseName"; $currentTable.fields.query("inverseName=:1"; $path[0]).pop().name)
 								
 							End if 
 							
@@ -852,6 +852,9 @@ Function doFieldPicker()->$publishedNumber : Integer
 				PROJECT.removeTable($currentTable)
 				
 			End if 
+			
+			
+			PROJECT.save()
 			
 		Else 
 			

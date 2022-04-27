@@ -322,7 +322,7 @@ Case of
 				
 				// Get the dragged field
 				//%W-533.3
-				$o:=($form.fields.pointer())->{$form.fieldList.row}
+				$o:=($form.fields.pointer())->{$e.row}
 				//%W+533.3
 				
 				$ok:=($o.fieldType#8858) & ($o.fieldType#8859)  // Not a relation

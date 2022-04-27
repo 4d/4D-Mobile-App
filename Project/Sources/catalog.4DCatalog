@@ -185,7 +185,7 @@
 		<table_extra input_form="Input" output_form="Output">
 			<editor_table_info fields_ordering="1" displayable_fields_count="4">
 				<color red="150" green="216" blue="175" alpha="255"/>
-				<coordinates left="427.60717773438" top="904.71258544922" width="140" height="125.33203125"/>
+				<coordinates left="440.74957275391" top="904.60479736328" width="140" height="125.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -335,13 +335,19 @@
 			</editor_table_info>
 		</table_extra>
 	</table>
-	<table name="__DeletedRecords" uuid="5EB7733F66604DF1A166008C55E5A526" id="18" leave_tag_on_delete="true" prevent_journaling="true">
-		<field name="ID" uuid="085D37990B31437AAB68F9115E6E3DF0" type="5" unique="true" autosequence="true" id="1"/>
-		<field name="__Stamp" uuid="39A84F7103E946E594F46534BF086BBC" type="5" id="2"/>
-		<field name="__TableNumber" uuid="0A26ED6E49F3433699DD350B12214439" type="4" id="3"/>
-		<field name="__TableName" uuid="3E13FC5AE4CF430FA0E16476D10D9F86" type="10" limiting_length="255" id="4"/>
-		<field name="__PrimaryKey" uuid="DDE510BA135048B2A72A4D286EE51845" type="10" limiting_length="255" id="5"/>
-		<primary_key field_name="ID" field_uuid="085D37990B31437AAB68F9115E6E3DF0"/>
+	<table name="__DeletedRecords" uuid="FF149A0036954E679C0AC43E8871AF8F" id="18" leave_tag_on_delete="true" prevent_journaling="true">
+		<field name="ID" uuid="165C1F04A5B44D8CAC3E0B6301C3E561" type="5" unique="true" autosequence="true" id="1"/>
+		<field name="__Stamp" uuid="D62E221EB4544C23A07E72D49DA67EA8" type="5" id="2"/>
+		<field name="__TableNumber" uuid="2674B57EC7AF4E80A92B82DD8F877C8C" type="4" id="3"/>
+		<field name="__TableName" uuid="D5DF1AD171F443B59BDB42CC94D3F148" type="10" limiting_length="255" id="4"/>
+		<field name="__PrimaryKey" uuid="77648FF63E0F4A7991012FA2651FC752" type="10" limiting_length="255" id="5"/>
+		<primary_key field_name="ID" field_uuid="165C1F04A5B44D8CAC3E0B6301C3E561"/>
+		<table_extra>
+			<editor_table_info fields_ordering="1" displayable_fields_count="6">
+				<color red="255" green="255" blue="255" alpha="0"/>
+				<coordinates left="240" top="534" width="120" height="167.33203125"/>
+			</editor_table_info>
+		</table_extra>
 	</table>
 	<table name="Offices" uuid="9530473090624E829F824BFFA4F81FC0" id="19">
 		<field name="ID" uuid="87AFAE6B7DD645E283CC7951EF00451E" type="4" unique="true" autosequence="true" not_null="true" id="1"/>
@@ -666,14 +672,14 @@
 			</editor_relation_info>
 		</relation_extra>
 	</relation>
-	<index kind="regular" name="__DeletedRecords__Stamp" uuid="018583377D114B808F0940049C257DE9" type="7">
-		<field_ref uuid="39A84F7103E946E594F46534BF086BBC" name="__Stamp">
-			<table_ref uuid="5EB7733F66604DF1A166008C55E5A526" name="__DeletedRecords"/>
-		</field_ref>
-	</index>
 	<index kind="regular" unique_keys="true" uuid="0A0A860C829344C99CEB1F9F664A4E58" type="7">
 		<field_ref uuid="13CEC179D1F346F09BBA5F20ECC3D388" name="ID">
 			<table_ref uuid="E0EF4D9E925848A8893B9926694CF58E" name="Table_2"/>
+		</field_ref>
+	</index>
+	<index kind="regular" name="__DeletedRecords__Stamp" uuid="0A1A366834BC458C92A4DA2CB377C5E8" type="7">
+		<field_ref uuid="D62E221EB4544C23A07E72D49DA67EA8" name="__Stamp">
+			<table_ref uuid="FF149A0036954E679C0AC43E8871AF8F" name="__DeletedRecords"/>
 		</field_ref>
 	</index>
 	<index kind="regular" uuid="0B25D088684D4C2EBF1D9754AEEA4826" type="7">
@@ -741,11 +747,6 @@
 			<table_ref uuid="2FF8473F88C9455CB55C1D7BE0B097BD" name="Only primary key"/>
 		</field_ref>
 	</index>
-	<index kind="regular" unique_keys="true" name="__DeletedRecordsID" uuid="6DA2705E12FD453AB81E7B8B9BCEAEB4" type="7">
-		<field_ref uuid="085D37990B31437AAB68F9115E6E3DF0" name="ID">
-			<table_ref uuid="5EB7733F66604DF1A166008C55E5A526" name="__DeletedRecords"/>
-		</field_ref>
-	</index>
 	<index kind="regular" unique_keys="true" uuid="77026820FBE94EE5A9C89AF02A6D200B" type="7">
 		<field_ref uuid="2E229433BE754803B3BC16E18675FE09" name="ID">
 			<table_ref uuid="677711DF5FAF4C00A69092ED84B50A2D" name="ALL_TYPES"/>
@@ -772,6 +773,11 @@
 	<index kind="regular" uuid="8190770A42FC4F4695B579645E8E9748" type="7">
 		<field_ref uuid="19840AA68D2B477CB74348C07EF93FCA" name="__GlobalStamp">
 			<table_ref uuid="DE40BD82B9154CEB8926B7B9CC6B43D5" name="EmployesOffices"/>
+		</field_ref>
+	</index>
+	<index kind="regular" unique_keys="true" name="__DeletedRecordsID" uuid="832E444BAF14490B92C2B6C7982EFB50" type="7">
+		<field_ref uuid="165C1F04A5B44D8CAC3E0B6301C3E561" name="ID">
+			<table_ref uuid="FF149A0036954E679C0AC43E8871AF8F" name="__DeletedRecords"/>
 		</field_ref>
 	</index>
 	<index kind="regular" uuid="846B2AC9634646BD8026EE56940334E5" type="7">
