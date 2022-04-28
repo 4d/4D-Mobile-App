@@ -36,6 +36,8 @@ If (PROJECT.$dialog=Null:C1517)
 	
 End if 
 
+logger.info("STRUCTURE_AUDIT")
+
 $str:=cs:C1710.str.new()
 
 // ----------------------------------------------------
@@ -551,7 +553,7 @@ If ($cacheFile.exists)
 		If ($isUnsynchronized)
 			
 			// Display alert only one time
-			If (PROJECT.isNotLocked())
+			If (UI.isNotLocked())
 				
 				POST_MESSAGE(New object:C1471(\
 					"target"; Current form window:C827; \
@@ -586,6 +588,7 @@ If ($cacheFile.exists)
 		PROJECT.$dialog.unsynchronizedTables:=New collection:C1472
 		
 		// Update the cache
+		logger.info("STRUCTURE_AUDIT: Update the cache")
 		$storeCache:=True:C214
 		$updateCurrentCatalog:=True:C214
 		
@@ -593,10 +596,10 @@ If ($cacheFile.exists)
 	
 	return 
 	
-	
 Else 
 	
 	// Create the cache
+	logger.info("STRUCTURE_AUDIT: Create the cache")
 	$storeCache:=True:C214
 	$updateCurrentCatalog:=True:C214
 	
@@ -614,7 +617,8 @@ If ($storeCache\
 	
 End if 
 
-If ($updateCurrentCatalog) && ((Not:C34($isUnsynchronized)) | (Form:C1466.$catalog=Null:C1517))
+If ($updateCurrentCatalog)\
+ && ((Not:C34($isUnsynchronized)) | (Form:C1466.$catalog=Null:C1517))
 	
 	// Keep the current catalog
 	Form:C1466.$catalog:=$currentCatalog

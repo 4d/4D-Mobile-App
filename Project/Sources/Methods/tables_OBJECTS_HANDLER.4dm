@@ -91,7 +91,7 @@ Case of
 					Else 
 						
 						If ($Lon_column=$Obj_form.iconColumn)\
-							 & (PROJECT.isNotLocked())
+							 & (UI.isNotLocked())
 							
 							LISTBOX GET CELL COORDINATES:C1330(*; $Obj_form.tableList; $Lon_column; $Lon_row; $Lon_left; $Lon_top; $Lon_right; $Lon_bottom)
 							
@@ -141,7 +141,7 @@ Case of
 					
 				End if 
 				
-				_editor_ui_LISTBOX($Txt_me)
+				_o_editor_ui_LISTBOX($Txt_me)
 				
 				//______________________________________________________
 			: ($Lon_formEvent=On Mouse Enter:K2:33)
@@ -192,15 +192,15 @@ Case of
 				//______________________________________________________
 			: ($Lon_formEvent=On Getting Focus:K2:7)
 				
-				_editor_ui_LISTBOX($Txt_me; True:C214)
+				_o_editor_ui_LISTBOX($Txt_me; True:C214)
 				
 				//______________________________________________________
 			: ($Lon_formEvent=On Losing Focus:K2:8)
 				
-				_editor_ui_LISTBOX($Txt_me; False:C215)
+				_o_editor_ui_LISTBOX($Txt_me; False:C215)
 				
 				//______________________________________________________
-			: (PROJECT.isLocked())
+			: (UI.isLocked())
 				
 				// NOTHING MORE TO DO
 				

@@ -43,12 +43,8 @@ If (False:C215)
 	C_OBJECT:C1216(editor_LoadIcons; $1)
 	
 	// ----------------------------------------------------
-	C_TEXT:C284(_editor_ui_LISTBOX; $1)
-	C_BOOLEAN:C305(_editor_ui_LISTBOX; $2)
-	
-	// ----------------------------------------------------
-	C_BOOLEAN:C305(_o_editor_Locked; $0)
-	C_TEXT:C284(_o_editor_Locked; ${1})
+	C_TEXT:C284(_o_editor_ui_LISTBOX; $1)
+	C_BOOLEAN:C305(_o_editor_ui_LISTBOX; $2)
 	
 	// ----------------------------------------------------
 	C_LONGINT:C283(RIBBON; $1)

@@ -286,7 +286,6 @@ Function preload()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// [Warning] Executed every time the editor is activated to adapt UI to the color scheme
-	// TODO: Detect if the color scheme has been changed and apply only in this case.
 Function updateColorScheme()
 	
 	var $key : Text
@@ -734,6 +733,26 @@ Function ribbonContainer($e : Object)
 	End case 
 	
 	//MARK:-TOOLS
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Tests if the project is locked
+Function isLocked() : Boolean
+	
+	If (This:C1470.structure#Null:C1517)
+		
+		return Bool:C1537(This:C1470.structure.unsynchronized)
+		
+	Else 
+		
+		return Bool:C1537(This:C1470.$project.structure.unsynchronized)
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Tests if the project is not locked and
+Function isNotLocked() : Boolean
+	
+	return Not:C34(This:C1470.isLocked())
+	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function getIcon($relativePath : Text) : Picture
 	
@@ -780,7 +799,7 @@ Function getIcon($relativePath : Text) : Picture
 		End if 
 		
 		CREATE THUMBNAIL:C679($icon; $icon; 24; 24; Scaled to fit:K6:2)
-		return ($icon)
+		return $icon
 		
 	End if 
 	

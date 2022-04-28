@@ -185,7 +185,7 @@ Case of
 				//______________________________________________________
 		End case 
 		
-		_editor_ui_LISTBOX($form.fieldList.name)
+		_o_editor_ui_LISTBOX($form.fieldList.name)
 		
 		//==================================================
 	: ($e.objectName=$form.fieldList.name)
@@ -225,13 +225,13 @@ Case of
 					End if 
 				End if 
 				
-				_editor_ui_LISTBOX($e.objectName)
+				_o_editor_ui_LISTBOX($e.objectName)
 				
 				//______________________________________________________
 			: ($e.code=On Clicked:K2:4)\
 				 | ($e.code=On Selection Change:K2:29)
 				
-				_editor_ui_LISTBOX($e.objectName)
+				_o_editor_ui_LISTBOX($e.objectName)
 				
 				If (Num:C11($context.template.manifest.renderer)>=2)
 					
@@ -365,17 +365,17 @@ Case of
 					
 				End if 
 				
-				_editor_ui_LISTBOX($e.objectName)
+				_o_editor_ui_LISTBOX($e.objectName)
 				
 				//______________________________________________________
 			: ($e.code=On Getting Focus:K2:7)
 				
-				_editor_ui_LISTBOX($e.objectName; True:C214)
+				_o_editor_ui_LISTBOX($e.objectName; True:C214)
 				
 				//______________________________________________________
 			: ($e.code=On Losing Focus:K2:8)
 				
-				_editor_ui_LISTBOX($e.objectName; False:C215)
+				_o_editor_ui_LISTBOX($e.objectName; False:C215)
 				
 				//______________________________________________________
 			Else 

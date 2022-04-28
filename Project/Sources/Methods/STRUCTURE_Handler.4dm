@@ -121,8 +121,8 @@ Case of
 				//______________________________________________________
 			: ($Lon_formEvent=On Timer:K2:25)
 				
-				_editor_ui_LISTBOX($form.tableList)
-				_editor_ui_LISTBOX($form.fieldList)
+				_o_editor_ui_LISTBOX($form.tableList)
+				_o_editor_ui_LISTBOX($form.fieldList)
 				
 				//______________________________________________________
 		End case 
@@ -141,14 +141,14 @@ Case of
 		//=========================================================
 	: ($IN.action="tableList")
 		
-		Logger.info("Update table list")
+		Logger.info("STRUCTURE.tableList")
 		
 		$class.tableList()
 		
 		//=========================================================
 	: ($IN.action="fieldList")
 		
-		Logger.info("Update field list")
+		Logger.info("STRUCTURE.fieldList")
 		
 		$o:=PROJECT.getCatalog().query("name = :1"; String:C10($context.currentTable.name)).pop()
 		
@@ -208,6 +208,8 @@ Case of
 		
 		//=========================================================
 	: ($IN.action="update")
+		
+		logger.info("STRUCTURE.update")
 		
 		// Update ribbon
 		UI.updateRibbon()

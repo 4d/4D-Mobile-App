@@ -123,6 +123,8 @@ Case of
 		
 		If ($data.success)
 			
+			logger.info("UPDATE_EXPOSED_CATALOG callback")
+			
 			// Perform the structure audit
 			STRUCTURE_AUDIT($data)
 			

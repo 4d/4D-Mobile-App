@@ -528,30 +528,6 @@ Function cleanup($dirtyObject : Object)->$cleanObject : Object
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Tests if the project is locked
-Function isLocked() : Boolean
-	
-	// TODO:Move to EDITOR class
-	
-	If (This:C1470.structure#Null:C1517)
-		
-		return (Bool:C1537(This:C1470.structure.unsynchronized))
-		
-	Else 
-		
-		return (Bool:C1537(This:C1470.$project.structure.unsynchronized))
-		
-	End if 
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Tests if the project is not locked and
-Function isNotLocked() : Boolean
-	
-	// TODO:Move to EDITOR class
-	
-	return (Not:C34(This:C1470.isLocked()))
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function updateActions
 	var $indx : Integer
 	var $dataModel; $parameter; $table : Object
@@ -782,36 +758,36 @@ Function isAvailable($dataClass : 4D:C1709.DataClass; $path)->$success : Boolean
 	$success:=($o#Null:C1517)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function isComputedAttribute($field : Object; $tableName : Text)->$is : Boolean
+Function isComputedAttribute($field : cs:C1710.field; $tableName : Text) : Boolean
 	
-	var $o : Object
+	var $success : Boolean
+	var $table : Object
 	var $catalog : Collection
+	var $target : cs:C1710.field
 	
-	$is:=($field.kind#Null:C1517) && ($field.kind="calculated")
+	$success:=($field.kind#Null:C1517) && ($field.kind="calculated")
 	
-	If ($is & (Count parameters:C259>=2))
+	If ($success & (Count parameters:C259>=2))
 		
-		$is:=False:C215
+		$success:=False:C215
 		
 		// Filter writable (not readOnly) computed attrbutes
 		$catalog:=This:C1470.getCatalog()
 		
 		If ($catalog#Null:C1517)
 			
-			$o:=$catalog.query("name = :1"; $tableName).pop()
+			$table:=$catalog.query("name = :1"; $tableName).pop()
 			
-			If ($o#Null:C1517)
+			If ($table#Null:C1517)
 				
-				$o:=$o.fields.query("name = :1"; $field.name).pop()
+				$target:=$table.fields.query("name = :1"; $field.name).pop()
+				$success:=($target#Null:C1517) && Not:C34(Bool:C1537($target.readOnly))
 				
-				If ($o#Null:C1517)
-					
-					$is:=Not:C34(Bool:C1537($o.readOnly))
-					
-				End if 
 			End if 
 		End if 
 	End if 
+	
+	return $success
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if field is an alias
@@ -1371,7 +1347,65 @@ Function getCatalog() : Collection
 			//____________________________________
 	End case 
 	
-	//====================================
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function formatTableName($name : Text) : Text
+	
+	var $error : Integer
+	var $str : cs:C1710.str
+	
+	// Start with alpha
+	// Could start with capital letter (no need to lowercase)
+	// No space
+	
+	If (Length:C16($name)>0)
+		
+		// Remove the forbidden at beginning characters
+		$error:=Rgx_SubstituteText("(?mi-s)^[^[:alpha:]]*([^$]*)$"; "\\1"; ->$name; 0)
+		
+		$str:=cs:C1710.str.new(Replace string:C233($name; "."; " "))
+		
+		// Replace accented characters with non accented one.
+		$name:=$str.unaccented()
+		
+		$name:=$str.uperCamelCase()
+		
+	End if 
+	
+	// Modify the reserved names
+	$name:=$name+("_"*Num:C11(SHARED.resources.coreDataForbiddenNames.indexOf($name)#-1))
+	
+	return $name
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function formatFieldName($name : Text) : Text
+	
+	var $error : Integer
+	var $str : cs:C1710.str
+	
+	// Start with alpha
+	// Could start with capital letter (no need to lowercase)
+	// No space
+	
+	If (Length:C16($name)>0)
+		
+		// Remove the forbidden at beginning characters
+		$error:=Rgx_SubstituteText("(?mi-s)^[^[:alpha:]]*([^$]*)$"; "\\1"; ->$name; 0)
+		
+		$str:=cs:C1710.str.new(Replace string:C233($name; "."; " "))
+		
+		// Replace accented characters with non accented one.
+		$name:=$str.unaccented()
+		
+		$name:=$str.uperCamelCase()
+		
+	End if 
+	
+	// Modify the reserved names
+	$name:=$name+("_"*Num:C11(SHARED.resources.coreDataForbiddenNames.indexOf($name)#-1))
+	
+	return $name
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function label  // Format labels
 	var $0 : Text
 	var $1 : Text
@@ -2175,6 +2209,28 @@ Function repairProject()
 	Form:C1466.status.project:=True:C214
 	
 	//MARK:-[PRIVATE]
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function _capitalizeFirtsLetter($string : Text; $separator : Text) : Text
+	
+	var $t : Text
+	var $i : Integer
+	var $c : Collection
+	
+	// Remove spaces
+	$c:=Split string:C1554($string; " "; sk ignore empty strings:K86:1)
+	
+	// Capitalize first letter of words
+	For ($i; 0; $c.length-1; 1)
+		
+		$t:=$c[$i]
+		$t[[1]]:=Uppercase:C13($t[[1]])
+		$c[$i]:=$t
+		
+	End for 
+	
+	return $c.join($separator)
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _fieldID($field; $table) : Text
 	

@@ -196,7 +196,7 @@ Function onLoad()
 	This:C1470._dataModel.setScrollbars(0; 2).unselect()  //.noHighlight()
 	This:C1470.displayed.setScrollbars(0; 2).unselect()  //.noHighlight()
 	
-	If (PROJECT.isLocked())
+	If (UI.isLocked())
 		
 		This:C1470._dataModel.notDraggable()\
 			.notSelectable()
@@ -288,7 +288,7 @@ Function mainHandleEvents($e : Object)->$allow : Integer
 			//______________________________________________________
 		: ($e.code=On Row Moved:K2:32)
 			
-			If (PROJECT.isLocked())
+			If (UI.isLocked())
 				
 				// Unable to set "movable rows" to false, so redraw
 				This:C1470.update()
@@ -314,7 +314,7 @@ Function mainHandleEvents($e : Object)->$allow : Integer
 			This:C1470.displayedBorder.foregroundColor:=UI.backgroundUnselectedColor
 			
 			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-		: (PROJECT.isLocked())
+		: (UI.isLocked())
 			
 			$allow:=-1  // Reject drop
 			
@@ -353,7 +353,7 @@ Function mainHandleEvents($e : Object)->$allow : Integer
 				// End if
 				// Else
 				//If ($o.src#$e.row)\
-																									& ($e.row#($o.src+1))  // Not the same or the next one
+																																			& ($e.row#($o.src+1))  // Not the same or the next one
 				//$o:=$me.rowCoordinates($e.row)
 				//$o.bottom:=$o.top
 				//$o.right:=$me.coordinates.right
@@ -407,7 +407,7 @@ Function mainHandleEvents($e : Object)->$allow : Integer
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function _updateButtons()
 	
-	If (PROJECT.isLocked())
+	If (UI.isLocked())
 		
 		This:C1470.addOne.disable()
 		This:C1470.addAll.disable()

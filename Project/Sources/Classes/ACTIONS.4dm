@@ -124,7 +124,7 @@ Function handleEvents($e : Object)
 						End if 
 						
 						//_____________________________________
-					: (PROJECT.isLocked()) | (Num:C11($e.row)=0)
+					: (UI.isLocked()) | (Num:C11($e.row)=0)
 						
 						// <NOTHING MORE TO DO>
 						
@@ -340,7 +340,7 @@ Function actionListManager()->$allow : Integer
 	Case of 
 			
 			//______________________________________________________
-		: (PROJECT.isLocked())
+		: (UI.isLocked())
 			
 			$allow:=-1  // Reject drop
 			
@@ -928,7 +928,7 @@ Function _addParameter($fieldModel : Object; $field : Object; $edit : Boolean)->
 	
 	If ($edit)
 		
-		$parameter.defaultField:=formatString("field-name"; $field.name)
+		$parameter.defaultField:=PROJECT.formatFieldName($field.name)
 		
 	End if 
 	

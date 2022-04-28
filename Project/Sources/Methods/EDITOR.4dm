@@ -82,7 +82,7 @@ If ($e.objectName=Null:C1517)  // <== FORM METHOD
 		: ($e.code=On Activate:K2:9)
 			
 			// Update of values that may have changed
-			Env.update()
+			Env.updateEnvironmentValues()
 			
 			// Update color scheme if any
 			UI.updateColorScheme()

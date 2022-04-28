@@ -19,7 +19,6 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"method": "PROJECT_EDITOR",
 	"pages": [
 		{
 			"objects": {
@@ -45,7 +44,7 @@
 					"doubleClickInRowAction": "editSubrecord",
 					"selectionMode": "multiple",
 					"printFrame": "variable",
-					"method": "PROJECT_EDITOR"
+					"method": "EDITOR"
 				},
 				"description": {
 					"type": "subform",
@@ -207,7 +206,7 @@
 					"selectionMode": "multiple",
 					"printFrame": "variable",
 					"events": [],
-					"method": "PROJECT_EDITOR"
+					"method": "EDITOR"
 				},
 				"footer": {
 					"type": "subform",
@@ -270,5 +269,6 @@
 	},
 	"geometryStamp": 217,
 	"width": 970,
-	"height": 870
+	"height": 870,
+	"method": "EDITOR"
 }

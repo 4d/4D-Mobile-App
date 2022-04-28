@@ -479,69 +479,81 @@ Function fixedLength
 	
 	//=======================================================================================================
 	// Returns value as upper camelcase
-Function uperCamelCase
-	var $0 : Text
+Function uperCamelCase() : Text
 	
 	var $t : Text
 	var $i : Integer
 	var $c : Collection
-	ARRAY TEXT:C222($keywords; 0)
 	
 	If (Length:C16(This:C1470.value)>0)
 		
 		If (Length:C16(This:C1470.value)>2)
 			
 			$t:=This:C1470.spaceSeparated()
-			GET TEXT KEYWORDS:C1141($t; $keywords)
-			$c:=New collection:C1472
 			
-			For ($i; 1; Size of array:C274($keywords); 1)
+			// Remove spaces
+			$c:=Split string:C1554(This:C1470.value; " "; sk ignore empty strings:K86:1)
+			
+			// Capitalize first letter of words
+			For ($i; 0; $c.length-1; 1)
 				
-				$keywords{$i}:=Lowercase:C14($keywords{$i})
-				$keywords{$i}[[1]]:=Uppercase:C13($keywords{$i}[[1]])
-				$c.push($keywords{$i})
+				$t:=$c[$i]
+				$t[[1]]:=Uppercase:C13($t[[1]])
+				$c[$i]:=$t
 				
 			End for 
 			
-			$0:=$c.join()
+			return $c.join()
 			
 		Else 
 			
-			$0:=Lowercase:C14(This:C1470.value)
+			return Lowercase:C14(This:C1470.value)
 			
 		End if 
 	End if 
 	
 	//=======================================================================================================
 	// Returns value as lower camelcase
-Function lowerCamelCase
-	var $0 : Text
+Function lowerCamelCase() : Text
 	
 	var $t : Text
 	var $i : Integer
 	var $c : Collection
 	
-	ARRAY TEXT:C222($keywords; 0)
-	
-	$t:=This:C1470.spaceSeparated()
-	GET TEXT KEYWORDS:C1141($t; $keywords)
-	$c:=New collection:C1472
-	
-	For ($i; 1; Size of array:C274($keywords); 1)
+	If (Length:C16(This:C1470.value)>0)
 		
-		$keywords{$i}:=Lowercase:C14($keywords{$i})
-		
-		If ($i>1)
+		If (Length:C16(This:C1470.value)>=2)
 			
-			$keywords{$i}[[1]]:=Uppercase:C13($keywords{$i}[[1]])
+			$t:=This:C1470.spaceSeparated()
+			
+			// Remove spaces
+			$c:=Split string:C1554(This:C1470.value; " "; sk ignore empty strings:K86:1)
+			
+			// Capitalization of the first letter of words from the 2nd
+			If ($c.length>1)
+				
+				For ($i; 1; $c.length-1; 1)
+					
+					$t:=$c[$i]
+					$t[[1]]:=Uppercase:C13($t[[1]])
+					$c[$i]:=$t
+					
+				End for 
+				
+				return $c.join()
+				
+			Else 
+				
+				return Lowercase:C14($t)
+				
+			End if 
+			
+		Else 
+			
+			return Lowercase:C14(This:C1470.value)
 			
 		End if 
-		
-		$c.push($keywords{$i})
-		
-	End for 
-	
-	$0:=$c.join()
+	End if 
 	
 	//=======================================================================================================
 	// Returns underscored value & camelcase (lower or upper) value as space separated
@@ -556,7 +568,7 @@ Function spaceSeparated
 	
 	$t:=Replace string:C233(This:C1470.value; "_"; " ")
 	$c:=New collection:C1472
-	COLLECTION TO ARRAY:C1562(Split string:C1554($t; ""); $keywords)
+	COLLECTION TO ARRAY:C1562(Split string:C1554($t; " "; sk ignore empty strings:K86:1); $keywords)
 	$t:=Lowercase:C14($t)
 	$l:=1
 	

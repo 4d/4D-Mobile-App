@@ -451,7 +451,7 @@ Function fieldList()
 	End if 
 	
 	// Disable field publication if the table is missing
-	OBJECT SET ENTERABLE:C238($publishedPtr->; PROJECT.isNotLocked())
+	OBJECT SET ENTERABLE:C238($publishedPtr->; UI.isNotLocked())
 	
 	// Sort if any
 	If ($ƒ.fieldSortByName)
@@ -500,7 +500,7 @@ Function fieldList()
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Displays related field picker
-Function doFieldPicker()->$publishedNumber : Integer
+Function displayFieldPicker()->$publishedNumber : Integer
 	
 	var $identifier : Text
 	var $context; $currentDataModel; $o; $relatedCatalog; $relatedDataModel; $tableDataModel : Object
@@ -1058,7 +1058,7 @@ Function updateProject()
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Manage teh action button
-Function doActionMenu()
+Function actionMenuManager()
 	
 	var $Boo_value : Boolean
 	var $i; $number; $row; $indx : Integer
@@ -1113,7 +1113,7 @@ Function doActionMenu()
 				
 				//$Obj_popup.shortcut(Char(Space);Command key mask)
 				
-				If (PROJECT.isLocked())
+				If (UI.isLocked())
 					
 					$menu.disable()
 					
@@ -1142,7 +1142,7 @@ Function doActionMenu()
 			
 			// #93984
 			If ($number=0)\
-				 | (PROJECT.isLocked())
+				 | (UI.isLocked())
 				
 				$menu.disable()
 				

@@ -54,7 +54,7 @@ Case of
 				//______________________________________________________
 			: ($e.code=On Selection Change:K2:29)
 				
-				_editor_ui_LISTBOX($e.objectName)
+				_o_editor_ui_LISTBOX($e.objectName)
 				
 				If ($row=0)
 					
@@ -309,7 +309,7 @@ Case of
 			: ($e.code=On Selection Change:K2:29)\
 				 | ($e.code=On Clicked:K2:4)
 				
-				_editor_ui_LISTBOX($e.objectName)
+				_o_editor_ui_LISTBOX($e.objectName)
 				
 				If ($row=0)
 					
@@ -321,7 +321,7 @@ Case of
 					$context.fieldName:=(OBJECT Get pointer:C1124(Object named:K67:5; $form.fields))->{$row}
 					
 					If ($e.code=On Clicked:K2:4)\
-						 && (PROJECT.isNotLocked())
+						 && (UI.isNotLocked())
 						
 						If (Right click:C712)
 							
@@ -337,7 +337,7 @@ Case of
 								If ($field.kind="relatedEntity")\
 									 || (($field.kind="alias") && ($field.fieldType=Is object:K8:27) && ($field.relatedDataClass#Null:C1517))
 									
-									OBJECT Get pointer:C1124(Object named:K67:5; $form.published)->{$row}:=$class.doFieldPicker()
+									OBJECT Get pointer:C1124(Object named:K67:5; $form.published)->{$row}:=$class.displayFieldPicker()
 									
 								Else 
 									
@@ -606,12 +606,12 @@ Case of
 		//==================================================
 	: ($e.objectName=$form.action)
 		
-		$class.doActionMenu()
+		$class.actionMenuManager()
 		
 		//==================================================
 	: ($e.objectName="space.shortcut")
 		
-		If (PROJECT.isNotLocked())
+		If (UI.isNotLocked())
 			
 			// Check/uncheck the selection
 			If (OBJECT Get name:C1087(Object with focus:K67:3)=$form.fieldList)
@@ -670,8 +670,8 @@ Case of
 		//// Hide the bottom line
 		//OBJECT SET VISIBLE(*; "bottom.line"; False)
 		//CALL FORM(Current form window; "editor_CALLBACK"; "resizePanel"; New object(\
-															"panel"; Current form name; \
-															"offset"; $Lon_vOffset))
+																								"panel"; Current form name; \
+																								"offset"; $Lon_vOffset))
 		//End if
 		////______________________________________________________
 		//: ($e.code=On Mouse Leave)

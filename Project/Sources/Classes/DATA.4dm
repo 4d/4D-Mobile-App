@@ -210,7 +210,7 @@ Function update()
 	
 	Logger.info("DATA update()")
 	
-	This:C1470.properties.enable(Not:C34(PROJECT.isLocked()))
+	This:C1470.properties.enable(UI.isNotLocked())
 	
 	// Select the last used table or the first one if none
 	This:C1470.list.doSafeSelect(Num:C11(This:C1470.lastIndex)=0 ? 1 : Num:C11(This:C1470.lastIndex))
@@ -327,7 +327,7 @@ Function updateTableListWithDataSizes()
 			
 			If (Feature.with("androidDataSet"))
 				
-				$tableName:=formatString("table-name"; $table.name)
+				$tableName:=PROJECT.formatTableName($table.name)
 				
 				Case of 
 						
@@ -684,7 +684,7 @@ Function tableListManager($e : Object)
 			// _o_UI.tips.defaultDelay()
 			
 			//______________________________________________________
-		: (PROJECT.isLocked())
+		: (UI.isLocked())
 			
 			// <NOTHING MORE TO DO>
 			
@@ -730,7 +730,7 @@ Function filterManager($e : Object)
 			This:C1470.refresh()
 			
 			//______________________________________________________
-		: (PROJECT.isLocked())
+		: (UI.isLocked())
 			
 			// <NOTHING MORE TO DO>
 			

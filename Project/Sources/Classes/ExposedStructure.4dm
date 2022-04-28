@@ -92,11 +92,11 @@ Function exposedDatastore() : Object
 			
 		End for each 
 		
-		return ($datastore)
+		return $datastore
 		
 	Else 
 		
-		return (_4D_Build Exposed Datastore:C1598)
+		return _4D_Build Exposed Datastore:C1598
 		
 	End if 
 	
@@ -268,7 +268,7 @@ Function tableInfos($query) : Object
 	
 	If (This:C1470.success)
 		
-		return (ds:C1482[$table.name].getInfo())
+		return ds:C1482[$table.name].getInfo()
 		
 	End if 
 	
@@ -282,7 +282,7 @@ Function tableNumber($query) : Integer
 	
 	If (This:C1470.success)
 		
-		return ($table.tableNumber)
+		return $table.tableNumber
 		
 	End if 
 	
@@ -296,7 +296,7 @@ Function tableName($query) : Text
 	
 	If (This:C1470.success)
 		
-		return ($table.name)
+		return $table.name
 		
 	End if 
 	
@@ -408,7 +408,7 @@ Function isStorage($field : Object) : Boolean
 		 && (String:C10($field.kind)="storage")\
 		 && ($field.name#This:C1470.stampFieldName))  // Don't allow stamp field
 		
-		return (This:C1470._allowPublication($field))
+		return This:C1470._allowPublication($field)
 		
 	End if 
 	
@@ -425,12 +425,12 @@ Function isRelatedEntities($field : Object) : Boolean
 	//==================================================================
 Function isComputedAttribute($field : Object) : Boolean
 	
-	return (($field#Null:C1517) && (String:C10($field.kind)="calculated"))
+	return ($field#Null:C1517) && (String:C10($field.kind)="calculated")
 	
 	//==================================================================
 Function isAlias($field : Object) : Boolean
 	
-	return (($field#Null:C1517) && (String:C10($field.kind)="alias"))
+	return ($field#Null:C1517) && (String:C10($field.kind)="alias")
 	
 	//==================================================================
 	// Return related entity catalog
@@ -1178,6 +1178,7 @@ Do not allow duplicate attribute names.
 	End for each 
 	
 	//==================================================================
+	//MARK:Seems unused
 Function _relatedFields($field : cs:C1710.field; $relationName : Text; $recursive : Boolean)->$fields : Collection
 	
 	var $result : Object
@@ -1271,8 +1272,6 @@ Function _relatedFields($field : cs:C1710.field; $relationName : Text; $recursiv
 							//…………………………………………………………………………………………………
 						: ($relatedField.kind="alias")  // Alias
 							
-							//$related.path:=New collection($field.name; $related.name).join(".")
-							
 							$fields.push($related)
 							
 							//______________________________________________________
@@ -1331,7 +1330,7 @@ Function _allowPublication($field : cs:C1710.field) : Boolean
 	End if 
 	
 	//==================================================================
-Function __fielddType($old : Integer)->$type : Integer  // #TEMPORARY REMAPPING FOR THE FIELD TYPE
+Function __fielddType($old : Integer) : Integer  // #TEMPORARY REMAPPING FOR THE FIELD TYPE
 	
 	var $c : Collection
 	
@@ -1352,5 +1351,5 @@ Function __fielddType($old : Integer)->$type : Integer  // #TEMPORARY REMAPPING 
 	
 	$c[5]:=10  // ACI0100285
 	
-	$type:=$c[$old]
+	return $c[$old]
 	

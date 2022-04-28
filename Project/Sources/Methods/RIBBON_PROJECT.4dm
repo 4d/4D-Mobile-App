@@ -47,7 +47,7 @@ Case of
 			"studioAvailable"; Bool:C1537(UI.studio.applicationAvailable); \
 			"iosFolder"; $folder.folder("iOS"); \
 			"androidFolder"; $folder.folder("android").folder(PROJECT.product.name); \
-			"isLocked"; PROJECT.isLocked(); \
+			"isLocked"; UI.isLocked(); \
 			"openWithXcode"; False:C215; \
 			"openWithStudio"; False:C215)
 		

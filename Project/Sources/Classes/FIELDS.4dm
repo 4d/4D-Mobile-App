@@ -122,7 +122,7 @@ Function handleEvents($e : Object)
 						This:C1470.fieldListBorder.foregroundColor:=UI.backgroundUnselectedColor
 						
 						//_______________________________
-					: (PROJECT.isLocked())
+					: (UI.isLocked())
 						
 						// <NOTHING MORE TO DO>
 						
@@ -386,7 +386,7 @@ Function updateFieldList
 		
 	End if 
 	
-	$enterable:=PROJECT.isNotLocked()
+	$enterable:=UI.isNotLocked()
 	This:C1470.labels.enterable($enterable)
 	This:C1470.shortLabels.enterable($enterable)
 	This:C1470.formats.enterable($enterable)
@@ -1388,7 +1388,7 @@ Function formatMenuManager($e : Object)
 	This:C1470.fieldList.focus()
 	This:C1470.fieldList.select($e.row)
 	
-	_editor_ui_LISTBOX(This:C1470.fieldList.name)
+	_o_editor_ui_LISTBOX(This:C1470.fieldList.name)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Manage the tags menu for label & shortlabel

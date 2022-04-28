@@ -166,9 +166,19 @@ Case of
 			
 		End if 
 		
-		_o_editor_Locked($Obj_form.labels; $Obj_form.shortLabels)
+		If (UI.isLocked())
+			
+			OBJECT SET ENTERABLE:C238(*; $Obj_form.labels; False:C215)
+			OBJECT SET ENTERABLE:C238(*; $Obj_form.shortLabels; False:C215)
+			
+		Else 
+			
+			OBJECT SET ENTERABLE:C238(*; $Obj_form.labels; True:C214)
+			OBJECT SET ENTERABLE:C238(*; $Obj_form.shortLabels; True:C214)
+			
+		End if 
 		
-		_editor_ui_LISTBOX($Obj_form.tableList)
+		_o_editor_ui_LISTBOX($Obj_form.tableList)
 		
 		//=========================================================
 	: ($Obj_in.action="tableIcons")  // Call back from widget
