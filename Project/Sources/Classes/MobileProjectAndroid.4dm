@@ -259,6 +259,43 @@ Function create()->$result : Object
 	
 	If ($o.success)
 		
+		// MARK:ACI0102883 : reformat coreDataForbiddenNames
+		var $reservedName; $t : Text
+		var $i : Integer
+		var $action; $parameter : Object
+		
+		If (This:C1470.project.project.actions#Null:C1517) && (This:C1470.project.project.actions.length>0)
+			
+			//%W-533.1
+			For each ($action; This:C1470.project.project.actions)
+				
+				For each ($parameter; This:C1470.project.project.actions[$i].parameters)
+					
+					If ($parameter.defaultField[[Length:C16($parameter.defaultField)]]="_")
+						
+						$t:=Delete string:C232($parameter.defaultField; Length:C16($parameter.defaultField); 1)
+						
+						For each ($reservedName; SHARED.resources.coreDataForbiddenNames)
+							
+							If (SHARED.resources.coreDataForbiddenNames.indexOf($t)#-1)
+								
+								$parameter.defaultField:=$t
+								
+							End if 
+						End for each 
+					End if 
+				End for each 
+				
+				$i+=1
+				
+			End for each 
+			//%W+533.1
+			
+		End if 
+	End if 
+	
+	If ($o.success)
+		
 		// * COPY ICONS
 		$o:=This:C1470.androidprojectgenerator.copyIcons(This:C1470.project.project.dataModel; This:C1470.project.project.actions)
 		
