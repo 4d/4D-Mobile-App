@@ -371,7 +371,7 @@ Function updateFieldList
 		End for 
 		
 		// Sort by names
-		//LISTBOX SORT COLUMNS(*; This.fieldList.name; 1; >)
+		LISTBOX SORT COLUMNS:C916(*; This:C1470.fieldList.name; 1; >)
 		
 		This:C1470.fieldList.show(Num:C11($o.count)>0)
 		
@@ -727,7 +727,7 @@ Function getFieldList()->$result : Object
 										This:C1470._labels($subfield; $subKey)
 										
 										$result.names.push($subKey)
-										$result.paths.push($key+"."+$subfield.path)
+										$result.paths.push($key+"."+$subKey)
 										$result.labels.push($subfield.label)
 										$result.shortLabels.push($subfield.shortLabel)
 										$result.iconPaths.push(String:C10($subfield.icon))
@@ -744,7 +744,7 @@ Function getFieldList()->$result : Object
 									: ($subfield.kind="relatedEntity")
 										
 										var $subKey2 : Text
-										For each ($subKey2; $field)
+										For each ($subKey2; $subfield)
 											
 											If (Value type:C1509($subfield[$subKey2])#Is object:K8:27)
 												
@@ -798,12 +798,12 @@ Function getFieldList()->$result : Object
 													$result.targets.push($subfield2)
 													
 													//______________________________________________________
-												: (Feature.with("alias") && ($subfield.kind="alias"))
+												: (Feature.with("alias") && ($subfield2.kind="alias"))
 													
 													This:C1470._labels($subfield2; $subKey2)
 													
-													$result.names.push($subfield2.name)
-													$result.paths.push($key+"."+$subfield2.path)
+													$result.names.push($subKey+"."+$subKey2)
+													$result.paths.push($key+"."+$subKey+"."+$subKey2)
 													$result.labels.push($subfield2.label)
 													$result.shortLabels.push($subfield2.shortLabel)
 													$result.iconPaths.push(String:C10($subfield2.icon))
@@ -826,6 +826,9 @@ Function getFieldList()->$result : Object
 							
 							//……………………………………………………………………………………………………………
 					End case 
+					
+					//TODO: Sort by _order
+					//$result.targets:=$result.targets.orderBy("_order asc")
 					
 				Else   // RELATIONS
 					

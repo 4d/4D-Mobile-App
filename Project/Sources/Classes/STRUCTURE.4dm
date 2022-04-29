@@ -499,9 +499,10 @@ Function fieldList()
 	This:C1470.refresh()
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
-	/// Displays related field picker
-Function displayFieldPicker()->$publishedNumber : Integer
+	/// Displays related field picker & retutn the checkbox value
+Function displayFieldPicker() : Integer
 	
+	var $publishedNumber : Integer
 	var $identifier : Text
 	var $context; $currentDataModel; $o; $relatedCatalog; $relatedDataClass; $relatedDataModel : Object
 	var $tableDataModel; $target : Object
@@ -586,14 +587,15 @@ Function displayFieldPicker()->$publishedNumber : Integer
 	$relatedCatalog.window:=Open form window:C675("RELATED"; Sheet form window:K39:12; *)
 	DIALOG:C40("RELATED"; $relatedCatalog)
 	
-	If (Not:C34($relatedCatalog.success))  // User has cancelled
-		
-		return 
-		
-	End if 
-	
 	// Get the number of published fields
 	$publishedNumber:=$relatedCatalog.fields.query("published=true").length
+	
+	If (Not:C34($relatedCatalog.success))  // User has cancelled
+		
+		// Checkbox value mixed (> 1) if all fields are not published
+		return (1+Num:C11($publishedNumber#$relatedCatalog.fields.length))
+		
+	End if 
 	
 	If ($publishedNumber=0)  // No fields published
 		
@@ -617,8 +619,10 @@ Function displayFieldPicker()->$publishedNumber : Integer
 		
 		$identifier:=$field.kind="storage" ? String:C10($field.fieldNumber) : $field.name
 		
-		$relatedDataClass:=ds:C1482[$context.currentTable.name][$context.fieldName]
 		$path:=Split string:C1554($field.label ? $field.label : $field.path; ".")
+		
+		$relatedDataClass:=ds:C1482[$context.currentTable.name][$path[0]]
+		$relatedDataClass:=$relatedDataClass || ds:C1482[$context.currentTable.name][$context.fieldName]
 		
 		If ($field.published)
 			
@@ -864,9 +868,6 @@ Function displayFieldPicker()->$publishedNumber : Integer
 		End if 
 	End for each 
 	
-	// Checkbox value mixed (> 1) if all fields are not published
-	$publishedNumber:=1+Num:C11($publishedNumber#$relatedCatalog.fields.length)
-	
 	If (OB Entries:C1720($tableDataModel).query("key != ''").length=0)  // Empty table
 		
 		PROJECT.removeTable($table)
@@ -874,6 +875,9 @@ Function displayFieldPicker()->$publishedNumber : Integer
 	End if 
 	
 	PROJECT.save()
+	
+	// Checkbox value mixed (> 1) if all fields are not published
+	return (1+Num:C11($publishedNumber#$relatedCatalog.fields.length))
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Update the project according to the published fields
