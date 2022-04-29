@@ -503,8 +503,8 @@ Function fieldList()
 Function displayFieldPicker()->$publishedNumber : Integer
 	
 	var $identifier : Text
-	var $context; $currentDataModel; $o; $relatedCatalog; $relatedDataModel; $tableDataModel : Object
-	var $target : Object
+	var $context; $currentDataModel; $o; $relatedCatalog; $relatedDataClass; $relatedDataModel : Object
+	var $tableDataModel; $target : Object
 	var $path : Collection
 	var $field : cs:C1710.field
 	var $table : cs:C1710.table
@@ -586,40 +586,43 @@ Function displayFieldPicker()->$publishedNumber : Integer
 	$relatedCatalog.window:=Open form window:C675("RELATED"; Sheet form window:K39:12; *)
 	DIALOG:C40("RELATED"; $relatedCatalog)
 	
-	If (Not:C34($relatedCatalog.success))
+	If (Not:C34($relatedCatalog.success))  // User has cancelled
 		
-		return   // User has cancelled
+		return 
 		
 	End if 
 	
 	// Get the number of published fields
 	$publishedNumber:=$relatedCatalog.fields.query("published=true").length
 	
-	If ($publishedNumber=0)
+	If ($publishedNumber=0)  // No fields published
 		
-		// No fields published
 		OB REMOVE:C1226($tableDataModel; $context.fieldName)
-		return (0)
+		PROJECT.save()
+		
+		return 
 		
 	End if 
 	
 	If ($tableDataModel=Null:C1517)\
-		 | OB Is empty:C1297($tableDataModel)
+		 | OB Is empty:C1297($tableDataModel)  // Create the table instance
 		
-		// Create the table instance
 		$tableDataModel:=PROJECT.addTable($table)
 		
 	End if 
 	
+	$target:=$tableDataModel[$context.fieldName]
+	
 	For each ($field; $relatedCatalog.fields)
 		
-		$target:=$tableDataModel[$context.fieldName]
-		$path:=Split string:C1554(($field.label=Null:C1517) ? $field.path : $field.label; ".")
 		$identifier:=$field.kind="storage" ? String:C10($field.fieldNumber) : $field.name
+		
+		$relatedDataClass:=ds:C1482[$context.currentTable.name][$context.fieldName]
+		$path:=Split string:C1554($field.label ? $field.label : $field.path; ".")
 		
 		If ($field.published)
 			
-			If ($target=Null:C1517)
+			If ($target=Null:C1517)  // Create the relation instance
 				
 				If ($relatedCatalog.alias=Null:C1517)
 					
@@ -651,18 +654,29 @@ Function displayFieldPicker()->$publishedNumber : Integer
 				
 				If ($target[$path[0]]=Null:C1517)
 					
-					$target[$path[0]]:=New object:C1471(\
-						"kind"; "relatedEntity"; \
-						"relatedDataClass"; This:C1470.ExposedStructure.tableName($path[0]); \
-						"relatedTableNumber"; This:C1470.ExposedStructure.tableNumber($path[0]); \
-						"inverseName"; $table.fields.query("inverseName=:1"; $path[0]).pop().name)
+					If (ds:C1482[$path[0]]=Null:C1517)
+						
+						$target[$path[0]]:=New object:C1471(\
+							"kind"; "relatedEntity"; \
+							"relatedDataClass"; This:C1470.ExposedStructure.tableName($relatedDataClass.relatedDataClass); \
+							"relatedTableNumber"; This:C1470.ExposedStructure.tableNumber($relatedDataClass.relatedDataClass); \
+							"inverseName"; $table.fields.query("inverseName=:1"; $relatedDataClass.name).pop().name)
+						
+					Else 
+						
+						$target[$path[0]]:=New object:C1471(\
+							"kind"; "relatedEntity"; \
+							"relatedDataClass"; This:C1470.ExposedStructure.tableName($path[0]); \
+							"relatedTableNumber"; This:C1470.ExposedStructure.tableNumber($path[0]); \
+							"inverseName"; $table.fields.query("inverseName=:1"; $path[0]).pop().name)
+						
+					End if 
 					
 				End if 
 				
 				If ($target[$path[0]][$identifier]#Null:C1517)
 					
-					// The field is already in the data model
-					continue
+					continue  // The field is already in the data model
 					
 				End if 
 				
@@ -690,8 +704,8 @@ Function displayFieldPicker()->$publishedNumber : Integer
 						
 						$o:=New object:C1471(\
 							"kind"; $field.kind; \
-							"fieldType"; $field.fieldType; \
-							"path"; $field.path)
+							"path"; $field.path; \
+							"fieldType"; $field.fieldType)
 						
 						Case of 
 								
@@ -741,8 +755,7 @@ Function displayFieldPicker()->$publishedNumber : Integer
 				
 				If ($target[$identifier]#Null:C1517)
 					
-					// The field is already in the data model
-					continue
+					continue  // The field is already in the data model
 					
 				End if 
 				
@@ -760,8 +773,6 @@ Function displayFieldPicker()->$publishedNumber : Integer
 							"shortLabel"; PROJECT.shortLabel($field.name); \
 							"type"; $field.type)
 						
-						$target[String:C10($field.fieldNumber)]:=$o
-						
 						//______________________________________________________
 					: ($field.kind="relatedEntities")
 						
@@ -777,8 +788,6 @@ Function displayFieldPicker()->$publishedNumber : Integer
 						// TODO:Remove isToMany
 						$o.isToMany:=True:C214
 						
-						$target[$field.name]:=$o
-						
 						//______________________________________________________
 					: ($field.kind="calculated")
 						
@@ -792,28 +801,28 @@ Function displayFieldPicker()->$publishedNumber : Integer
 						// TODO:Remove computed
 						$o.computed:=True:C214
 						
-						$target[$field.name]:=$o
-						
 						//______________________________________________________
 					: ($field.kind="alias")
 						
 						$o:=New object:C1471(\
 							"kind"; $field.kind; \
+							"path"; $field.path; \
 							"fieldType"; $field.fieldType; \
 							"valueType"; $field.valueType; \
-							"path"; $field.path; \
 							"label"; PROJECT.label($field.name); \
 							"shortLabel"; PROJECT.shortLabel($field.name))
-						
-						$target[$field.name]:=$o
 						
 						//______________________________________________________
 					Else 
 						
+						$o:=New object:C1471
 						oops
 						
 						//______________________________________________________
 				End case 
+				
+				$target[$identifier]:=$o
+				
 			End if 
 			
 		Else 
@@ -831,30 +840,24 @@ Function displayFieldPicker()->$publishedNumber : Integer
 					End if 
 					
 					//______________________________________________________
-				Else 
+				: ($path.length>1)
 					
-					If ($path.length>1)
+					If (($target[$path[0]][$identifier])#Null:C1517)
 						
-						If (($target[$path[0]][$identifier])#Null:C1517)
-							
-							OB REMOVE:C1226($target[$path[0]]; $identifier)
-							
-							If (OB Keys:C1719($target[$path[0]]).length=3)  //description keys ("kind", "inverseName", "relatedTableNumber")
-								
-								// Empty -> remove
-								OB REMOVE:C1226($target; $path[0])
-								
-							End if 
-						End if 
+						OB REMOVE:C1226($target[$path[0]]; $identifier)
 						
-					Else 
-						
-						If (($target[$identifier])#Null:C1517)
+						If (OB Keys:C1719($target[$path[0]]).length=4)  //description keys ("kind", "inverseName", "relatedTableNumber", "relatedDataClass")
 							
-							OB REMOVE:C1226($target; $identifier)
+							// Empty -> remove
+							OB REMOVE:C1226($target; $path[0])
 							
 						End if 
 					End if 
+					
+					//______________________________________________________
+				Else 
+					
+					OB REMOVE:C1226($target; $identifier)
 					
 					//______________________________________________________
 			End case 
@@ -864,9 +867,8 @@ Function displayFieldPicker()->$publishedNumber : Integer
 	// Checkbox value mixed (> 1) if all fields are not published
 	$publishedNumber:=1+Num:C11($publishedNumber#$relatedCatalog.fields.length)
 	
-	If (OB Entries:C1720($tableDataModel).query("key != ''").length=0)
+	If (OB Entries:C1720($tableDataModel).query("key != ''").length=0)  // Empty table
 		
-		// Empty table
 		PROJECT.removeTable($table)
 		
 	End if 

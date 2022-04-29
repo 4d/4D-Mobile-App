@@ -3,6 +3,8 @@ Class extends Entity
 // Alias scalaires
 exposed Alias aka_Nom Name
 
+exposed Alias aka_ServiceName service.Name
+
 // Calculated Scalars
 exposed Function get computedName()->$name : Text
 	

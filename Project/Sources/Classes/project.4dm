@@ -1347,10 +1347,9 @@ Function getCatalog() : Collection
 			//____________________________________
 	End case 
 	
-	//=== === === === === === === === === === === === === === === === === === === === ===
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function formatTableName($name : Text) : Text
 	
-	var $error : Integer
 	var $str : cs:C1710.str
 	
 	// Start with alpha
@@ -1360,14 +1359,12 @@ Function formatTableName($name : Text) : Text
 	If (Length:C16($name)>0)
 		
 		// Remove the forbidden at beginning characters
-		$error:=Rgx_SubstituteText("(?mi-s)^[^[:alpha:]]*([^$]*)$"; "\\1"; ->$name; 0)
+		Rgx_SubstituteText("(?mi-s)^[^[:alpha:]]*([^$]*)$"; "\\1"; ->$name; 0)
 		
 		$str:=cs:C1710.str.new(Replace string:C233($name; "."; " "))
 		
-		// Replace accented characters with non accented one.
-		$name:=$str.unaccented()
-		
-		$name:=$str.uperCamelCase()
+		//$name:=$str.unaccented()
+		$name:=$str.uperCamelCase($str.unaccented())
 		
 	End if 
 	
@@ -1376,36 +1373,30 @@ Function formatTableName($name : Text) : Text
 	
 	return $name
 	
-	//=== === === === === === === === === === === === === === === === === === === === ===
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function formatFieldName($name : Text) : Text
 	
-	var $error : Integer
+	// For the moment, the rules are the same as for the tables
+	return This:C1470.formatTableName($name)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function formatBundleAppName($name : Text) : Text
+	
 	var $str : cs:C1710.str
 	
-	// Start with alpha
-	// Could start with capital letter (no need to lowercase)
-	// No space
+	$str:=cs:C1710.str.new($name)
 	
-	If (Length:C16($name)>0)
-		
-		// Remove the forbidden at beginning characters
-		$error:=Rgx_SubstituteText("(?mi-s)^[^[:alpha:]]*([^$]*)$"; "\\1"; ->$name; 0)
-		
-		$str:=cs:C1710.str.new(Replace string:C233($name; "."; " "))
-		
-		// Replace accented characters with non accented one.
-		$name:=$str.unaccented()
-		
-		$name:=$str.uperCamelCase()
-		
-	End if 
+	$name:=$str.trim()
 	
-	// Modify the reserved names
-	$name:=$name+("_"*Num:C11(SHARED.resources.coreDataForbiddenNames.indexOf($name)#-1))
+	// Replace accented characters with non accented one.
+	$name:=$str.unaccented()
+	
+	// Remove space, other accent, special characters
+	Rgx_SubstituteText("[^a-zA-Z0-9\\.]"; "-"; ->$name; 0)
 	
 	return $name
 	
-	//=== === === === === === === === === === === === === === === === === === === === ===
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function label  // Format labels
 	var $0 : Text
 	var $1 : Text
