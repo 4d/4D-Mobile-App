@@ -23,7 +23,7 @@ $xml:=cs:C1710.xml.new()
 // Retrieve the list of command names
 Repeat 
 	
-	$number:=$number+1
+	$number+=1
 	
 	$command:=New object:C1471(\
 		"ID"; $number; \
@@ -137,6 +137,7 @@ If (Asserted:C1132(Test path name:C476($pathnameSyntaxINTL)=Is a document:K24:1;
 		$index:=$resnames.indexOf("cmd"+String:C10($command["Command Number"]))
 		
 		If ($index#-1)
+			
 			$command.syntax:=$str.setText($syntax[$index].target.$).xmlSafe()
 			
 			$index:=$resnames.indexOf("desc"+String:C10($command["Command Number"]))

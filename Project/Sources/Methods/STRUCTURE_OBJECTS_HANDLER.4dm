@@ -337,7 +337,14 @@ Case of
 								If ($field.kind="relatedEntity")\
 									 || (($field.kind="alias") && ($field.fieldType=Is object:K8:27) && ($field.relatedDataClass#Null:C1517))
 									
-									OBJECT Get pointer:C1124(Object named:K67:5; $form.published)->{$row}:=$class.displayFieldPicker()
+									var $selected : Integer
+									$selected:=$class.displayFieldPicker()
+									
+									OBJECT Get pointer:C1124(Object named:K67:5; $form.published)->{$row}:=$selected
+									
+									// UI - update table name style
+									$indx:=Find in array:C230((OBJECT Get pointer:C1124(Object named:K67:5; $form.tableList))->; True:C214)
+									LISTBOX SET ROW FONT STYLE:C1268(*; $form.tableList; $indx; $selected>0 ? Bold:K14:2 : Plain:K14:1)
 									
 								Else 
 									
@@ -670,8 +677,8 @@ Case of
 		//// Hide the bottom line
 		//OBJECT SET VISIBLE(*; "bottom.line"; False)
 		//CALL FORM(Current form window; "editor_CALLBACK"; "resizePanel"; New object(\
-																								"panel"; Current form name; \
-																								"offset"; $Lon_vOffset))
+																											"panel"; Current form name; \
+																											"offset"; $Lon_vOffset))
 		//End if
 		////______________________________________________________
 		//: ($e.code=On Mouse Leave)

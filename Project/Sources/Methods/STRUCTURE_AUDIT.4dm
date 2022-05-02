@@ -29,6 +29,9 @@ $currentCatalog:=$in.catalog
 
 // ----------------------------------------------------
 // Initialisations
+
+//FIXME: Must return a result and beeing independant of the UI
+
 If (PROJECT.$dialog=Null:C1517)
 	
 	Logger.warning("📍 Create $dialog (STRUCTURE_AUDIT)")
@@ -580,12 +583,14 @@ If ($cacheFile.exists)
 		End if 
 		
 		// Keep state
-		PROJECT.$dialog.unsynchronizedTables:=$unsynchronizedTables
+		//PROJECT.$dialog.unsynchronizedTables:=$unsynchronizedTables
+		Form:C1466.$dialog.unsynchronizedTables:=$unsynchronizedTables
 		
 	Else 
 		
 		// Reset
-		PROJECT.$dialog.unsynchronizedTables:=New collection:C1472
+		//PROJECT.$dialog.unsynchronizedTables:=New collection
+		Form:C1466.$dialog.unsynchronizedTables:=New collection:C1472
 		
 		// Update the cache
 		logger.info("STRUCTURE_AUDIT: Update the cache")

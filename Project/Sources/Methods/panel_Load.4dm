@@ -12,7 +12,7 @@ $form:=$form || Current form name:C1298
 // Create the object if any
 If (Form:C1466.$dialog=Null:C1517)
 	
-	Logger.info("📍 Creation of $dialog (panel_Load: "+$form+")")
+	Logger.info("📍 Creation of Form.$project.$dialog (panel_Load: "+$form+")")
 	Form:C1466.$dialog:=New object:C1471
 	
 End if 

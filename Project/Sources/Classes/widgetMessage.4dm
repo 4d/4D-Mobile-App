@@ -342,18 +342,13 @@ Function update($data : Object)
 	// Auto-launch
 	If (Form:C1466.autostart#Null:C1517)
 		
-		Logger.info(Current method name:C684+" : autostart")
-		
 		If (OB Instance of:C1731(Form:C1466.autostart; 4D:C1709.Function))
-			
-			Logger.info(Current method name:C684+" : Form.autostart.call("+Form:C1466.autostart.source+")")
 			
 			Form:C1466.autostart.call()
 			
 		Else 
 			
 			Logger.warning(Current method name:C684+" : autostart #OLD_MECHANISM")
-			
 			CALL FORM:C1391(Current form window:C827; Form:C1466.autostart.method; Form:C1466.autostart.action; Form:C1466.autostart.project)
 			
 		End if 

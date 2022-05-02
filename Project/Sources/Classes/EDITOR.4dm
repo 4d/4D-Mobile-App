@@ -221,7 +221,7 @@ Function init()
 	// Create the context, id any
 	If (Form:C1466.$dialog=Null:C1517)
 		
-		Logger.info("📍 Create $dialog (EDITOR)")
+		Logger.info("📍 Create Form.$dialog (EDITOR)")
 		Form:C1466.$dialog:=New object:C1471
 		
 	End if 
@@ -545,16 +545,14 @@ Function refreshPanels()
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function hidePicker()
 	
+	//Logger.info("hidePicker()")
 	This:C1470.callMeBack("pickerHide")
-	
-	Logger.info("hidePicker()")
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function hideBrowser()
 	
+	//Logger.info("hideBrowser()")
 	This:C1470.callMeBack("hideBrowser")
-	
-	Logger.info("hideBrowser()")
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function updateRibbon()
