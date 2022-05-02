@@ -329,25 +329,33 @@ Function updateTableListWithDataSizes()
 				
 				$tableName:=PROJECT.formatTableName($table.name)
 				
-				Case of 
-						
-						//______________________________________________________
-					: (PROJECT.allTargets())
-						
-						$table.dumpSize:=This:C1470.dumpTableSize($tableName; "ios")+" / "+This:C1470.dumpTableSize($tableName; "android")
-						
-						//______________________________________________________
-					: (PROJECT.iOS())
-						
-						$table.dumpSize:=This:C1470.dumpTableSize($tableName; "ios")
-						
-						//______________________________________________________
-					: (PROJECT.android())
-						
-						$table.dumpSize:=This:C1470.dumpTableSize($tableName; "android")
-						
-						//______________________________________________________
-				End case 
+				If (Is macOS:C1572)
+					
+					Case of 
+							
+							//______________________________________________________
+						: (PROJECT.allTargets())
+							
+							$table.dumpSize:=This:C1470.dumpTableSize($tableName; "ios")+" / "+This:C1470.dumpTableSize($tableName; "android")
+							
+							//______________________________________________________
+						: (PROJECT.iOS())
+							
+							$table.dumpSize:=This:C1470.dumpTableSize($tableName; "ios")
+							
+							//______________________________________________________
+						: (PROJECT.android())
+							
+							$table.dumpSize:=This:C1470.dumpTableSize($tableName; "android")
+							
+							//______________________________________________________
+					End case 
+					
+				Else 
+					
+					$table.dumpSize:=This:C1470.dumpTableSize($tableName; "android")
+					
+				End if 
 				
 			Else 
 				
