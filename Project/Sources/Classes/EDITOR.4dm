@@ -466,6 +466,13 @@ Function goToPage($page : Text)
 		
 	End if 
 	
+	If (Is Windows:C1573)
+		
+		//FIXME:Force redrawing of the window
+		This:C1470.redraw()
+		
+	End if 
+	
 	//MARK:-TASKS
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function addTask($task : Text)

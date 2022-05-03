@@ -53,7 +53,7 @@
 			"objects": {
 				"progress": {
 					"type": "spinner",
-					"top": 133,
+					"top": 124,
 					"left": 105,
 					"width": 194,
 					"height": 40,
@@ -149,7 +149,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 325,
+	"geometryStamp": 380,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

@@ -116,18 +116,10 @@ Function insert($text : Text; $begin : Integer; $end : Integer)->$this : cs:C171
 	// Also update the inserted text position into the original string (str.begin & str.end)
 Function append($text : Text; $separator : Text)->$this : cs:C1710.str
 	
-	var $ƒseparator : Text
-	
 	If (Length:C16($text)>0)
 		
-		If (Count parameters:C259>=2)
-			
-			$ƒseparator:=$separator
-			
-		End if 
-		
 		This:C1470.begin:=Length:C16(This:C1470.value)
-		This:C1470.value:=This:C1470.value+$ƒseparator+$text
+		This:C1470.value+=$separator+$text
 		This:C1470.end:=Length:C16(This:C1470.value)
 		
 		This:C1470.length:=Length:C16(This:C1470.value)
@@ -143,40 +135,46 @@ Function append($text : Text; $separator : Text)->$this : cs:C1710.str
 	
 	//=======================================================================================================
 	// Returns True if the $toFind text is present in the string (diacritical if $2 is True)
-Function containsString($toFind : Text; $diacritical : Boolean)->$contains : Boolean
+Function containsString($target : Text; $toFind; $diacritical : Boolean)->$contains : Boolean
 	
-	If (Count parameters:C259>=2)
-		
-		If ($diacritical)
+	Case of 
+			//______________________________________________________
+		: (Count parameters:C259=3)
 			
-			// Evaluation based on character codes
-			$contains:=(Position:C15($toFind; This:C1470.value; *)#0)
+			return $diacritical ? (Position:C15(String:C10($toFind); $target; *)#0) : (Position:C15(String:C10($toFind); $target)#0)
 			
+			//______________________________________________________
+		: (Count parameters:C259=2)
+			
+			If (Value type:C1509($toFind)=Is boolean:K8:9)
+				
+				return $toFind ? (Position:C15($target; This:C1470.value; *)#0) : (Position:C15($target; This:C1470.value)#0)
+				
+			Else 
+				
+				return (Position:C15($target; This:C1470.value)#0)
+				
+			End if 
+			
+			//______________________________________________________
 		Else 
 			
-			$contains:=(Position:C15($toFind; This:C1470.value)#0)
+			return (Position:C15($target; This:C1470.value)#0)
 			
-		End if 
-		
-	Else 
-		
-		$contains:=(Position:C15($toFind; This:C1470.value)#0)
-		
-	End if 
+			//______________________________________________________
+	End case 
 	
 	//=======================================================================================================
 	// Returns True if the string contains one or more words passed by a collection or parameters.
-Function contains($words; $word : Text; $word_2 : Text; $word_N : Text)->$contains : Boolean
+Function contains($words; $word; $word_2 : Text; $word_N : Text) : Boolean
 	
-	C_TEXT:C284(${2})
-	
-	var $v : Variant
 	var $t : Text
+	var $contains : Boolean
 	var $i : Integer
+	var $v
 	var $formula : Object
 	
-	$t:=This:C1470.value
-	$formula:=Formula:C1597($t%$1)
+	C_TEXT:C284(${3})
 	
 	$contains:=True:C214
 	
@@ -185,6 +183,9 @@ Function contains($words; $word : Text; $word_2 : Text; $word_N : Text)->$contai
 			//______________________________________________________
 		: (Value type:C1509($words)=Is collection:K8:32)
 			
+			$t:=This:C1470.value
+			$formula:=Formula:C1597($t%$1)
+			
 			For each ($v; $words) While ($contains)
 				
 				$contains:=$contains & $formula.call(Null:C1517; String:C10($v))
@@ -192,43 +193,76 @@ Function contains($words; $word : Text; $word_2 : Text; $word_N : Text)->$contai
 			End for each 
 			
 			//______________________________________________________
-		: (Value type:C1509($words)=Is text:K8:3)
+		: (Value type:C1509($words)=Is text:K8:3) & (Value type:C1509($word)=Is collection:K8:32)
 			
-			For ($i; 1; Count parameters:C259; 1)
+			$formula:=Formula:C1597($words%$1)
+			
+			For each ($v; $word) While ($contains)
 				
-				$contains:=$contains & $formula.call(Null:C1517; ${$i})
-				$i:=Choose:C955($contains; $i; MAXLONG:K35:2-1)  // Break if false
+				$contains:=$contains & $formula.call(Null:C1517; String:C10($v))
 				
-			End for 
+			End for each 
 			
 			//______________________________________________________
 		Else 
 			
-			ASSERT:C1129(False:C215; "Expected  type:  collection or text")
-			$contains:=False:C215
+			$t:=This:C1470.value
+			$formula:=Formula:C1597($t%$1)
+			
+			For ($i; 1; Count parameters:C259; 1)
+				
+				$contains:=$contains & $formula.call(Null:C1517; ${$i})
+				
+				If (Not:C34($contains))
+					
+					break
+					
+				End if 
+			End for 
 			
 			//______________________________________________________
 	End case 
 	
+	return $contains
+	
 	//=======================================================================================================
 	// Returns the position of the last occurence of a string
-Function lastOccurrenceOf($toFind : Text; $diacritic : Boolean)->$position : Integer
+Function lastOccurrenceOf($target : Text; $toFind; $diacritic : Boolean) : Integer
 	
-	var $toFind : Text
-	var $pos; $start : Integer
-	var $isDiacritic : Boolean
+	var $pos; $position; $start : Integer
+	
+	Case of 
+			
+			//______________________________________________________
+		: (Count parameters:C259=1)
+			
+			$toFind:=$target
+			$target:=This:C1470.value
+			
+			//______________________________________________________
+		: (Count parameters:C259=2)
+			
+			If (Value type:C1509($toFind)=Is boolean:K8:9)
+				
+				$diacritic:=$toFind
+				$toFind:=$target
+				$target:=This:C1470.value
+				
+			End if 
+			
+			//______________________________________________________
+		: (Count parameters:C259=3)
+			
+			$toFind:=String:C10($toFind)
+			
+			//______________________________________________________
+	End case 
 	
 	If (Length:C16($toFind)>0)
 		
 		$start:=1
 		
-		If (Count parameters:C259>=2)
-			
-			$isDiacritic:=$diacritic
-			
-		End if 
-		
-		If ($isDiacritic)
+		If ($diacritic)
 			
 			Repeat 
 				
@@ -258,15 +292,39 @@ Function lastOccurrenceOf($toFind : Text; $diacritic : Boolean)->$position : Int
 		End if 
 	End if 
 	
-	//=======================================================================================================
-Function shuffle($length : Integer)->$shuffle : Text
+	return $position
 	
-	var $pattern; $t; $text : Text
-	var $charNumber; $count; $i; $length; $size : Integer
+	//=======================================================================================================
+Function shuffle($string; $length : Integer) : Text
+	
+	var $pattern; $shuffle; $t; $text : Text
+	var $charNumber; $count; $i : Integer
 	
 	$pattern:="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,?;.:/=+@#&([{§!)]}-_$€*`£"
 	
-	If (Length:C16(This:C1470.value)=0)
+	Case of 
+			
+			//______________________________________________________
+		: (Count parameters:C259=0)
+			
+			$string:=This:C1470.value
+			
+			//______________________________________________________
+		: (Value type:C1509($string)=Is integer:K8:5)\
+			 | (Value type:C1509($string)=Is real:K8:4)
+			
+			$length:=$string
+			$string:=This:C1470.value
+			
+			//______________________________________________________
+		Else 
+			
+			$string:=String:C10($string)
+			
+			//______________________________________________________
+	End case 
+	
+	If (Length:C16($string)=0)
 		
 		$text:=$pattern
 		
@@ -276,7 +334,7 @@ Function shuffle($length : Integer)->$shuffle : Text
 			
 			If (Position:C15($t; $pattern)>0)
 				
-				$text:=$text+$t
+				$text+=$t
 				
 			End if 
 		End for each 
@@ -284,59 +342,60 @@ Function shuffle($length : Integer)->$shuffle : Text
 	
 	$text:=$text*2
 	
-	If (Count parameters:C259>=1)
-		
-		$size:=$length
-		
-	End if 
-	
 	$charNumber:=Length:C16($text)
-	$count:=Choose:C955($size=0; Choose:C955(10>$charNumber; $charNumber; 10); Choose:C955($size>$charNumber; $charNumber; $size))
-	$size:=$charNumber
+	$count:=$length=0 ? (10>$charNumber ? $charNumber : 10) : ($length>$charNumber ? $charNumber : $length)
+	$length:=$charNumber
 	
 	For ($i; 1; $count; 1)
 		
-		$shuffle:=$shuffle+$text[[(Random:C100%($size-1+1))+1]]
+		$shuffle+=$text[[(Random:C100%($length-1+1))+1]]
 		
 	End for 
 	
+	return $shuffle
+	
 	//=======================================================================================================
 	// Returns a base64 encoded UTF-8 string
-Function base64($html : Boolean)->$base64 : Text
+Function base64($toEncode; $html : Boolean) : Text
 	
-	var $x : Blob
-	
-	CONVERT FROM TEXT:C1011(This:C1470.value; "UTF-8"; $x)
-	
-	If (Count parameters:C259>=1)
-		
-		If ($html)
+	Case of 
+			//______________________________________________________
+		: (Count parameters:C259=0)
 			
-			// Encode in Base64URL format
-			BASE64 ENCODE:C895($x; $base64; *)
+			$toEncode:=This:C1470.value
 			
+			//______________________________________________________
+		: (Value type:C1509($toEncode)=Is boolean:K8:9)
+			
+			$html:=$toEncode
+			$toEncode:=This:C1470.value
+			
+			//______________________________________________________
 		Else 
 			
-			BASE64 ENCODE:C895($x; $base64)
+			$toEncode:=String:C10($toEncode)
 			
-		End if 
+			//______________________________________________________
+	End case 
+	
+	If ($html)
+		
+		// Encode in Base64URL format
+		BASE64 ENCODE:C895($toEncode; *)
 		
 	Else 
 		
-		BASE64 ENCODE:C895($x; $base64)
+		BASE64 ENCODE:C895($toEncode)
 		
 	End if 
 	
+	return $toEncode
+	
 	//=======================================================================================================
 	// Returns an URL-safe base64url encoded UTF-8 string
-Function urlBase64Encode()->$base64url : Text
+Function urlBase64Encode() : Text
 	
-	//$0:=This.base64()
-	//$0:=Replace string($0; "+"; "-"; *)
-	//$0:=Replace string($0; "/"; "_"; *)
-	//$0:=Replace string($0; "="; ""; *)
-	
-	$base64url:=This:C1470.base64(True:C214)
+	return This:C1470.base64(True:C214)
 	
 	//=======================================================================================================
 	// Returns an URL encoded string
@@ -374,48 +433,65 @@ Function urlEncode
 	
 	//=======================================================================================================
 	// Returns an URL decoded string
-Function urlDecode
-	var $0 : Text
+Function urlDecode($target : Text) : Text
 	
-	var $t : Text
-	var $i; $length : Integer
+	var $i; $length; $size : Integer
 	var $x : Blob
 	
-	SET BLOB SIZE:C606($x; This:C1470.length+1; 0)
-	$t:=This:C1470.value
+	If (Count parameters:C259=0)
+		
+		$target:=This:C1470.value
+		$size:=This:C1470.length
+		
+	Else 
+		
+		$size:=Length:C16($target)
+		
+	End if 
 	
-	For ($i; 1; This:C1470.length; 1)
+	SET BLOB SIZE:C606($x; $size+1; 0)
+	
+	For ($i; 1; $size; 1)
 		
 		Case of 
 				
 				//________________________________________
-			: ($t[[$i]]="%")
+			: ($target[[$i]]="%")
 				
-				$x{$length}:=Position:C15(Substring:C12($t; $i+1; 1); "123456789ABCDEF")*16\
-					+Position:C15(Substring:C12($t; $i+2; 1); "123456789ABCDEF")
-				$i:=$i+2
+				$x{$length}:=Position:C15(Substring:C12($target; $i+1; 1); "123456789ABCDEF")*16\
+					+Position:C15(Substring:C12($target; $i+2; 1); "123456789ABCDEF")
+				$i+=2
 				
 				//________________________________________
 			Else 
 				
-				$x{$length}:=Character code:C91($t[[$i]])
+				$x{$length}:=Character code:C91($target[[$i]])
 				
 				//________________________________________
 		End case 
 		
-		$length:=$length+1
+		$length+=1
 		
 	End for 
 	
 	// Convert from UTF-8
 	SET BLOB SIZE:C606($x; $length)
-	$0:=Convert to text:C1012($x; "UTF-8")
+	
+	return Convert to text:C1012($x; "UTF-8")
 	
 	//=======================================================================================================
 	// Returns True if the string passed is exactly the same as the value.
-Function equal($to : Text)->$equal : Boolean
+Function equal($target : Text; $string : Text) : Boolean
 	
-	$equal:=(Length:C16(This:C1470.value)=Length:C16($to)) && ((Length:C16(This:C1470.value)=0) | (Position:C15(This:C1470.value; $to; 1; *)=1))
+	If (Count parameters:C259>=2)
+		
+		return (Length:C16($target)=Length:C16($string)) && ((Length:C16($target)=0) | (Position:C15($target; $string; 1; *)=1))
+		
+	Else 
+		
+		return (Length:C16(This:C1470.value)=Length:C16($target)) && ((Length:C16(This:C1470.value)=0) | (Position:C15(This:C1470.value; $target; 1; *)=1))
+		
+	End if 
 	
 	//=======================================================================================================
 	// Returns the list of distinct letters of the string.
@@ -477,22 +553,24 @@ Function fixedLength
 		
 	End if 
 	
-	//=======================================================================================================
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns value as upper camelcase
-Function uperCamelCase() : Text
+Function uperCamelCase($string : Text) : Text
 	
 	var $t : Text
 	var $i : Integer
 	var $c : Collection
 	
-	If (Length:C16(This:C1470.value)>0)
+	$string:=Count parameters:C259=0 ? This:C1470.value : $string
+	
+	If (Length:C16($string)>0)
 		
-		If (Length:C16(This:C1470.value)>2)
+		If (Length:C16($string)>2)
 			
 			$t:=This:C1470.spaceSeparated()
 			
 			// Remove spaces
-			$c:=Split string:C1554(This:C1470.value; " "; sk ignore empty strings:K86:1)
+			$c:=Split string:C1554($t; " "; sk ignore empty strings:K86:1+sk trim spaces:K86:2)
 			
 			// Capitalize first letter of words
 			For ($i; 0; $c.length-1; 1)
@@ -507,27 +585,29 @@ Function uperCamelCase() : Text
 			
 		Else 
 			
-			return Lowercase:C14(This:C1470.value)
+			return Lowercase:C14($string)
 			
 		End if 
 	End if 
 	
 	//=======================================================================================================
 	// Returns value as lower camelcase
-Function lowerCamelCase() : Text
+Function lowerCamelCase($string : Text) : Text
 	
 	var $t : Text
 	var $i : Integer
 	var $c : Collection
 	
-	If (Length:C16(This:C1470.value)>0)
+	$string:=Count parameters:C259=0 ? This:C1470.value : $string
+	
+	If (Length:C16($string)>0)
 		
-		If (Length:C16(This:C1470.value)>=2)
+		If (Length:C16($string)>=2)
 			
 			$t:=This:C1470.spaceSeparated()
 			
 			// Remove spaces
-			$c:=Split string:C1554(This:C1470.value; " "; sk ignore empty strings:K86:1)
+			$c:=Split string:C1554(This:C1470.value; " "; sk ignore empty strings:K86:1+sk trim spaces:K86:2)
 			
 			// Capitalization of the first letter of words from the 2nd
 			If ($c.length>1)
@@ -550,45 +630,47 @@ Function lowerCamelCase() : Text
 			
 		Else 
 			
-			return Lowercase:C14(This:C1470.value)
+			return Lowercase:C14($string)
 			
 		End if 
 	End if 
 	
 	//=======================================================================================================
 	// Returns underscored value & camelcase (lower or upper) value as space separated
-Function spaceSeparated
-	var $0 : Text
+Function spaceSeparated($string : Text) : Text
 	
-	var $t : Text
+	var $char : Text
 	var $i; $l : Integer
 	var $c : Collection
 	
-	ARRAY TEXT:C222($keywords; 0)
-	
-	$t:=Replace string:C233(This:C1470.value; "_"; " ")
+	$string:=Count parameters:C259=0 ? This:C1470.value : $string
 	$c:=New collection:C1472
-	COLLECTION TO ARRAY:C1562(Split string:C1554($t; " "; sk ignore empty strings:K86:1); $keywords)
-	$t:=Lowercase:C14($t)
-	$l:=1
 	
-	For ($i; 2; Size of array:C274($keywords); 1)
+	$string:=Replace string:C233($string; "_"; " ")
+	
+	If (Position:C15(" "; $string)>0)
 		
-		If (Character code:C91($keywords{$i})#Character code:C91($t[[$i]]))  // Cesure
+		$c:=Split string:C1554($string; " "; sk ignore empty strings:K86:1+sk trim spaces:K86:2)
+		
+	Else 
+		
+		For each ($char; Split string:C1554($string; ""))
 			
-			$c.push(Substring:C12($t; $l; $i-$l))
-			$l:=$i
+			$i+=1
 			
-		End if 
-	End for 
-	
-	$c.push(Substring:C12($t; $l))
-	
-	For each ($t; $c)
+			If (Character code:C91($char)#Character code:C91($string[[$i]]))  // Cesure
+				
+				$c.push(Substring:C12($string; $l; $i-$l))
+				$l:=$i
+				
+			End if 
+		End for each 
 		
-		$0:=$0+Uppercase:C13($t[[1]])+Lowercase:C14(Substring:C12($t; 2))+" "
+		$c.push(Substring:C12($string; $l))
 		
-	End for each 
+	End if 
+	
+	return $c.join(" ")
 	
 	//=======================================================================================================
 	// Trims leading spaces or passed
@@ -664,6 +746,7 @@ Function trimTrailing
 	//=======================================================================================================
 	// Trims leading & trailing spaces or passed
 Function trim
+	
 	var $0 : Text
 	var $1 : Text
 	
@@ -764,44 +847,43 @@ Function occurrencesOf($toFind : Text)->$occurences : Integer
 	
 	$occurences:=Split string:C1554(This:C1470.value; $toFind; sk trim spaces:K86:2).length-1
 	
-	//=======================================================================================================
-	// Replace accented characters with non accented one
-Function unaccented
-	var $0 : Text
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Replace accented and special characters with non-accented or equivalent characters.
+Function unaccented($string : Text) : Text
 	
 	var $t : Text
 	var $i; $index : Integer
 	
-	$0:=This:C1470.value
+	$string:=Count parameters:C259=0 ? This:C1470.value : $string
 	
-	If (Length:C16($0)>0)
+	If (Length:C16($string)>0)
 		
 		// Specific cases
-		$0:=Replace string:C233($0; "ȼ"; "c"; *)
-		$0:=Replace string:C233($0; "Ȼ"; "C"; *)
-		$0:=Replace string:C233($0; "Ð"; "D"; *)
-		$0:=Replace string:C233($0; "Đ"; "D"; *)
-		$0:=Replace string:C233($0; "đ"; "d"; *)
-		$0:=Replace string:C233($0; "Ħ"; "H"; *)
-		$0:=Replace string:C233($0; "ħ"; "h"; *)
-		$0:=Replace string:C233($0; "ı"; "i"; *)
-		$0:=Replace string:C233($0; "Ŀ"; "L"; *)
-		$0:=Replace string:C233($0; "Ŀ"; "L"; *)
-		$0:=Replace string:C233($0; "ŀ"; "l"; *)
-		$0:=Replace string:C233($0; "Ł"; "L"; *)
-		$0:=Replace string:C233($0; "ł"; "l"; *)
-		$0:=Replace string:C233($0; "Ŋ"; "N"; *)
-		$0:=Replace string:C233($0; "ŋ"; "n"; *)
-		$0:=Replace string:C233($0; "ŉ"; "n"; *)
-		$0:=Replace string:C233($0; "n̈"; "n"; *)
-		$0:=Replace string:C233($0; "N̈"; "N"; *)
-		$0:=Replace string:C233($0; "Ø"; "O"; *)
-		$0:=Replace string:C233($0; "ð"; "o"; *)
-		$0:=Replace string:C233($0; "ø"; "o"; *)
-		$0:=Replace string:C233($0; "Þ"; "P"; *)
-		$0:=Replace string:C233($0; "þ"; "p"; *)
-		$0:=Replace string:C233($0; "Ŧ"; "T"; *)
-		$0:=Replace string:C233($0; "ŧ"; "t"; *)
+		$string:=Replace string:C233($string; "ȼ"; "c"; *)
+		$string:=Replace string:C233($string; "Ȼ"; "C"; *)
+		$string:=Replace string:C233($string; "Ð"; "D"; *)
+		$string:=Replace string:C233($string; "Đ"; "D"; *)
+		$string:=Replace string:C233($string; "đ"; "d"; *)
+		$string:=Replace string:C233($string; "Ħ"; "H"; *)
+		$string:=Replace string:C233($string; "ħ"; "h"; *)
+		$string:=Replace string:C233($string; "ı"; "i"; *)
+		$string:=Replace string:C233($string; "Ŀ"; "L"; *)
+		$string:=Replace string:C233($string; "Ŀ"; "L"; *)
+		$string:=Replace string:C233($string; "ŀ"; "l"; *)
+		$string:=Replace string:C233($string; "Ł"; "L"; *)
+		$string:=Replace string:C233($string; "ł"; "l"; *)
+		$string:=Replace string:C233($string; "Ŋ"; "N"; *)
+		$string:=Replace string:C233($string; "ŋ"; "n"; *)
+		$string:=Replace string:C233($string; "ŉ"; "n"; *)
+		$string:=Replace string:C233($string; "n̈"; "n"; *)
+		$string:=Replace string:C233($string; "N̈"; "N"; *)
+		$string:=Replace string:C233($string; "Ø"; "O"; *)
+		$string:=Replace string:C233($string; "ð"; "o"; *)
+		$string:=Replace string:C233($string; "ø"; "o"; *)
+		$string:=Replace string:C233($string; "Þ"; "P"; *)
+		$string:=Replace string:C233($string; "þ"; "p"; *)
+		$string:=Replace string:C233($string; "Ŧ"; "T"; *)
+		$string:=Replace string:C233($string; "ŧ"; "t"; *)
 		
 		$t:="abcdefghijklmnopqrstuvwxyz"
 		
@@ -811,19 +893,19 @@ Function unaccented
 			
 			Repeat 
 				
-				$index:=Position:C15($t[[$i]]; $0; $index+1)
+				$index:=Position:C15($t[[$i]]; $string; $index+1)
 				
 				If ($index>0)
 					
-					If (Position:C15($0[[$index]]; Uppercase:C13($0[[$index]]; *); *)>0)
+					If (Position:C15($string[[$index]]; Uppercase:C13($string[[$index]]; *); *)>0)
 						
 						// UPPERCASE
-						$0[[$index]]:=Uppercase:C13($0[[$index]])
+						$string[[$index]]:=Uppercase:C13($string[[$index]])
 						
 					Else 
 						
 						// lowercase
-						$0[[$index]]:=Lowercase:C14($0[[$index]])
+						$string[[$index]]:=Lowercase:C14($string[[$index]])
 						
 					End if 
 				End if 
@@ -831,19 +913,21 @@ Function unaccented
 		End for 
 		
 		// Miscellaneous
-		$0:=Replace string:C233($0; "ß"; "ss"; *)
-		$0:=Replace string:C233($0; "Æ"; "AE"; *)
-		$0:=Replace string:C233($0; "æ"; "ae"; *)
-		$0:=Replace string:C233($0; "œ"; "oe"; *)
-		$0:=Replace string:C233($0; "Œ"; "OE"; *)
-		$0:=Replace string:C233($0; "∂"; "d"; *)
-		$0:=Replace string:C233($0; "∆"; "D"; *)
-		$0:=Replace string:C233($0; "ƒ"; "f"; *)
-		$0:=Replace string:C233($0; "µ"; "u"; *)
-		$0:=Replace string:C233($0; "π"; "p"; *)
-		$0:=Replace string:C233($0; "∏"; "P"; *)
+		$string:=Replace string:C233($string; "ß"; "ss"; *)
+		$string:=Replace string:C233($string; "Æ"; "AE"; *)
+		$string:=Replace string:C233($string; "æ"; "ae"; *)
+		$string:=Replace string:C233($string; "œ"; "oe"; *)
+		$string:=Replace string:C233($string; "Œ"; "OE"; *)
+		$string:=Replace string:C233($string; "∂"; "d"; *)
+		$string:=Replace string:C233($string; "∆"; "D"; *)
+		$string:=Replace string:C233($string; "ƒ"; "f"; *)
+		$string:=Replace string:C233($string; "µ"; "u"; *)
+		$string:=Replace string:C233($string; "π"; "p"; *)
+		$string:=Replace string:C233($string; "∏"; "P"; *)
 		
 	End if 
+	
+	return $string
 	
 	//=======================================================================================================
 	// Returns True if the text contains only ASCII characters

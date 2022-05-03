@@ -170,6 +170,18 @@ Function bringToFront()
 	This:C1470.show()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
+Function redraw()
+	
+/*
+In some cases, on Windows platform, some regions are not invalidated after 
+resizing or moving subforms. This trick allows you to force the window 
+to be redrawn without any effect apparent for the user.
+*/
+	
+	RESIZE FORM WINDOW:C890(1; 0)
+	RESIZE FORM WINDOW:C890(-1; 0)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
 Function minimize()
 	
 	MINIMIZE WINDOW:C454(This:C1470.window)

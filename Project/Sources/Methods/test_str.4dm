@@ -308,6 +308,9 @@ ASSERT:C1129(Not:C34($o.setText("HELLO WORLD").equal("Hello world")))
 ASSERT:C1129(Not:C34($o.setText("Hello world").equal("Hello world!")))
 ASSERT:C1129($o.setText("").equal(""))
 
+ASSERT:C1129($o.equal("Hello world"; "Hello world"))
+ASSERT:C1129(Not:C34($o.equal("Hello world"; "HELLO WORLD")))
+
 // ============================================
 // urlEncode()
 ASSERT:C1129($o.setText("'Command Name' != '_@'").urlEncode()="%27Command%20Name%27%20%21%3D%20%27_@%27")
@@ -327,11 +330,19 @@ ASSERT:C1129(Not:C34($o.containsString("toto")))
 ASSERT:C1129($o.containsString("Hello"; True:C214))
 ASSERT:C1129(Not:C34($o.containsString("WORLD"; True:C214)))
 
+ASSERT:C1129($o.containsString("Hello World"; "Hello"))
+ASSERT:C1129($o.containsString("Hello World"; "WORLD"))
+ASSERT:C1129($o.containsString("Hello World"; "Hello"; True:C214))
+ASSERT:C1129(Not:C34($o.containsString("Hello World"; "WORLD"; True:C214)))
+
 // ============================================
 // contains()
 ASSERT:C1129($o.contains("Hello"; "world"))
 ASSERT:C1129(Not:C34($o.contains("Hello"; "vincent")))
 ASSERT:C1129(Not:C34($o.contains("Hello"; "world"; "vincent")))
+
+ASSERT:C1129($o.contains("Hello world"; New collection:C1472("Hello"; "world")))
+ASSERT:C1129(Not:C34($o.contains("Hello world"; New collection:C1472("Hello"; "vincent"))))
 
 ASSERT:C1129($o.contains(New collection:C1472("Hello"; "world")))
 ASSERT:C1129(Not:C34($o.contains(New collection:C1472("Hello"; "vincent"))))
@@ -504,5 +515,9 @@ ASSERT:C1129($o.setText("mon<fichier").suitableWithFileName()="monFichier")
 ASSERT:C1129($o.setText("mon>fichier").suitableWithFileName()="monFichier")
 ASSERT:C1129($o.setText("mon|fichier").suitableWithFileName()="monFichier")
 ASSERT:C1129($o.setText("..m/o\\n:F*i?c\"h<i>e|r  ").suitableWithFileName()="monFichier")
+
+
+$o.setText("https://doc.4d.com/4Dv19/4D/19.1/BASE64-ENCODE.301-5653982.en.html")
+ASSERT:C1129($o.base64()="aHR0cHM6Ly9kb2MuNGQuY29tLzREdjE5LzRELzE5LjEvQkFTRTY0LUVOQ09ERS4zMDEtNTY1Mzk4Mi5lbi5odG1s")
 
 err_FINALLY
