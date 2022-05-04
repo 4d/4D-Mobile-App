@@ -929,15 +929,15 @@ Certifique-se de que o dispositivo está conectado ao computador com um cabo USB
       <group resname="tasks">
         <trans-unit id="KFFcrqFjFKTy9jWBVmEh4w" resname="getDevices">
           <source>Available devices</source>
-          <target/>
+          <target>Dispositivos disponíveis</target>
         </trans-unit>
         <trans-unit id="cOn/py2JN/Rdwqqz3IBdDw" resname="checkDevTools">
           <source>Checking dev environment</source>
-          <target/>
+          <target>Verificando o ambiente de desenvolvimento</target>
         </trans-unit>
         <trans-unit id="pF0XDVVhBND7cRyYvkr42g" resname="checkProject">
           <source>Audit of the project</source>
-          <target/>
+          <target>Verificação do projeto</target>
         </trans-unit>
       </group>
       <group resname="_tempo">
