@@ -428,7 +428,7 @@ O instalador precisará da sua senha.</target>
         </trans-unit>
         <trans-unit id="MDtmzadlZicdL2ZiSF5k3A" resname="thePackageNameMustNotEndWithADot">
           <source>The package name must not end with a dot ({packageName})</source>
-          <target>The package name must not end with a dot ({packageName})</target>
+          <target>O nome do pacote não deve terminar com um ponto ({packageName})</target>
         </trans-unit>
         <trans-unit id="cRehBhjHNQ23ZXzrVix6tA" resname="aPackageNameSegmentMustStartWithALetter">
           <source>A package name segment must start with a letter ({packageName})</source>
