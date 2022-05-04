@@ -13,33 +13,52 @@ Class constructor
 	This:C1470.systemFolder:=Folder:C1567(This:C1470.isWindows ? System folder:C487(System Win:K41:13) : System folder:C487(System:K41:1); fk platform path:K87:2)
 	This:C1470.applicationsFolder:=Folder:C1567(System folder:C487(Applications or program files:K41:17); fk platform path:K87:2)
 	
-	This:C1470.screens:=New collection:C1472().resize(Count screens:C437; New object:C1471("coordinates"; New object:C1471; "workArea"; New object:C1471))
-	
-	var $bottom; $i; $left; $right; $top : Integer
+	//FIXME: Execute in cooperative process
+	var $t : Text
+	var $bottom; $i; $l; $left; $right; $top : Integer
 	var $creen : Object
 	
-	For each ($creen; This:C1470.screens)
-		
-		$i+=1
-		
-		SCREEN COORDINATES:C438($left; $top; $right; $bottom; $i; Screen size:K27:9)
-		$creen.coordinates.left:=$left
-		$creen.coordinates.top:=$top
-		$creen.coordinates.right:=$right
-		$creen.coordinates.bottom:=$bottom
-		
-		SCREEN COORDINATES:C438($left; $top; $right; $bottom; $i; Screen work area:K27:10)
-		$creen.workArea.left:=$left
-		$creen.workArea.top:=$top
-		$creen.workArea.right:=$right
-		$creen.workArea.bottom:=$bottom
-		
-	End for each 
+	PROCESS PROPERTIES:C336(Current process:C322; $t; $l; $l; $l)
 	
-	This:C1470.mainScreenID:=Menu bar screen:C441  //On Windows, Menu bar screen always returns 1
-	This:C1470.mainScreen:=This:C1470.screens[This:C1470.mainScreenID-1]
-	
-	This:C1470.menuBarHeight:=Menu bar height:C440
+	If ($l ?? 1)  // Preemptive execution
+		
+		This:C1470.screens:=New collection:C1472()
+		This:C1470.mainScreenID:=0
+		This:C1470.mainScreen:=0
+		This:C1470.menuBarHeight:=0
+		
+	Else 
+		
+		//%T-
+		This:C1470.screens:=New collection:C1472().resize(Count screens:C437; New object:C1471(\
+			"coordinates"; New object:C1471; \
+			"workArea"; New object:C1471))
+		
+		For each ($creen; This:C1470.screens)
+			
+			$i+=1
+			
+			SCREEN COORDINATES:C438($left; $top; $right; $bottom; $i; Screen size:K27:9)
+			$creen.coordinates.left:=$left
+			$creen.coordinates.top:=$top
+			$creen.coordinates.right:=$right
+			$creen.coordinates.bottom:=$bottom
+			
+			SCREEN COORDINATES:C438($left; $top; $right; $bottom; $i; Screen work area:K27:10)
+			$creen.workArea.left:=$left
+			$creen.workArea.top:=$top
+			$creen.workArea.right:=$right
+			$creen.workArea.bottom:=$bottom
+			
+		End for each 
+		
+		This:C1470.mainScreenID:=Menu bar screen:C441  // On Windows, Menu bar screen always returns 1
+		This:C1470.mainScreen:=This:C1470.screens[This:C1470.mainScreenID-1]
+		
+		This:C1470.menuBarHeight:=Menu bar height:C440
+		//%T+
+		
+	End if 
 	
 	This:C1470.updateEnvironmentValues(True:C214)
 	
