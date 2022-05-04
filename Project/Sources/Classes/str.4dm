@@ -844,7 +844,7 @@ Function wordWrap($target; $columns : Integer) : Text
 	// Return extract numeric
 Function toNum($target : Text) : Real
 	
-	$target:=Count parameters:C259>=1; ; $target : This:C1470.value
+	$target:=Count parameters:C259>=1 ? $target : This:C1470.value
 	
 	return This:C1470.filter("numeric")
 	
@@ -1319,7 +1319,7 @@ Function filter($target : Text; $type : Text) : Variant
 	If (Count parameters:C259=1)
 		
 		$target:=This:C1470.value
-		$type=$target
+		$type:=$target
 		
 	End if 
 	
