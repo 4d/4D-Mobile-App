@@ -82,7 +82,7 @@ Function handleEvents($e : Object)
 					: ($e.code=On Data Change:K2:15)
 						
 						// Update bundleIdentifier
-						Form:C1466.product.bundleIdentifier:=Form:C1466.organization.id+"."+formatString("bundleApp"; Form:C1466.product.name)
+						Form:C1466.product.bundleIdentifier:=Form:C1466.organization.id+"."+PROJECT.formatBundleAppName(Form:C1466.product.name)
 						
 						//______________________________________________________
 				End case 

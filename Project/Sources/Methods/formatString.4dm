@@ -60,7 +60,8 @@ Case of
 	: ($t_format="bundleApp")
 		
 		// Replace accented characters with non accented one.
-		$t_formated:=cs:C1710.str.new($t_string).unaccented()
+		$t_formated:=cs:C1710.str.new($t_string).trim()
+		$t_formated:=cs:C1710.str.new($t_formated).unaccented()
 		
 		// Remove space, other accent, special characters
 		$lError:=Rgx_SubstituteText("[^a-zA-Z0-9\\.]"; "-"; ->$t_formated; 0)
@@ -236,6 +237,7 @@ Case of
 		
 		C_LONGINT:C283($l)
 		C_TEXT:C284($t; $tt)
+		
 		// Space and some charaters are replaced by _
 		// Some accuented charactere are replaced by one without accent but with _
 		// japanese, other ss all are not replaced...

@@ -1382,14 +1382,21 @@ Function formatFieldName($name : Text) : Text
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function formatBundleAppName($name : Text) : Text
 	
+	var $i : Integer
 	var $str : cs:C1710.str
 	
-	$str:=cs:C1710.str.new($name)
-	$name:=$str.trimLeading()
-	$name:=$str.unaccented($name)
+	$str:=cs:C1710.str.new()
+	$name:=$str.trim($str.unaccented($name))
 	
 	// Remove space, other accent, special characters
-	Rgx_SubstituteText("[^a-zA-Z0-9\\.]"; "-"; ->$name; 0)
+	For ($i; 1; Length:C16($name); 1)
+		
+		If (Position:C15($name[[$i]]; "abcdefghijklmnopqrstuvwxyz0123456789.")=0)
+			
+			$name[[$i]]:="-"
+			
+		End if 
+	End for 
 	
 	return $name
 	

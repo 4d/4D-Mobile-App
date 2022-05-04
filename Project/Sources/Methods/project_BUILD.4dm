@@ -34,7 +34,7 @@ If (Asserted:C1132($project#Null:C1517))
 	If (project_Check_param($data).success)
 		
 		$project.organization.identifier:=$project.organization.id+"."+cs:C1710.str.new($project.product.name).uperCamelCase()
-		$project.product.bundleIdentifier:=formatString("bundleApp"; $project.organization.id+"."+$project.product.name)
+		$project.product.bundleIdentifier:=PROJECT.formatBundleAppName($project.organization.id+"."+$project.product.name)
 		$data.appFolder:=UI.path.products().folder($project.product.name)
 		
 		$data.realDevice:=(String:C10($project._device.type)="device")

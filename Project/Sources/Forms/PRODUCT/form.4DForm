@@ -107,7 +107,7 @@
 					"left": 23,
 					"width": 437,
 					"height": 17,
-					"dataSource": "formatString(\"bundleApp\"; Form:C1466.organization.id+\".\"+Form:C1466.product.name)",
+					"dataSource": "PROJECT.formatBundleAppName(Form:C1466.organization.id+\".\"+Form:C1466.product.name)",
 					"tooltip": ":xliff:appBundleIDTip",
 					"dragging": "none",
 					"dropping": "custom",

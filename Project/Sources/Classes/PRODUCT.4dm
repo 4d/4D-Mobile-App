@@ -99,7 +99,7 @@ Function handleEvents($e : Object)
 						This:C1470.checkName(Form:C1466.product.name)
 						
 						// Update bundleIdentifier & navigationTitle
-						Form:C1466.product.bundleIdentifier:=Form:C1466.organization.id+"."+formatString("bundleApp"; Form:C1466.product.name)
+						Form:C1466.product.bundleIdentifier:=Form:C1466.organization.id+"."+PROJECT.formatBundleAppName(Form:C1466.product.name)
 						Form:C1466.main.navigationTitle:=Form:C1466.product.name
 						
 						//______________________________________________________

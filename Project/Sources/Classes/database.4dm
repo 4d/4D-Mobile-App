@@ -1,7 +1,9 @@
 Class extends env
 
-Class constructor
+Class constructor()
+	
 	var $t; $userParam : Text
+	var $l : Integer
 	var $o : Object
 	
 	Super:C1705()
@@ -13,7 +15,6 @@ Class constructor
 	
 	This:C1470.databaseFolder:=Folder:C1567(Folder:C1567(fk database folder:K87:14; *).platformPath; fk platform path:K87:2)
 	This:C1470.preferencesFolder:=Folder:C1567(fk user preferences folder:K87:10).folder(This:C1470.name)
-	
 	
 	This:C1470.isCompiled:=Is compiled mode:C492(*)
 	This:C1470.isInterpreted:=Not:C34(This:C1470.isCompiled)
@@ -33,8 +34,6 @@ Class constructor
 	This:C1470.preferences:=This:C1470.preferencesFolder
 	//******************************************
 	
-	var $t : Text
-	var $l : Integer
 	PROCESS PROPERTIES:C336(Current process:C322; $t; $l; $l; $l)
 	
 	This:C1470.runInPreemptive:=$l ?? 1

@@ -1,6 +1,6 @@
 Class extends tools
 
-Class constructor($content : Variant)
+Class constructor($content)
 	
 	Super:C1705()
 	
@@ -19,7 +19,7 @@ Class constructor($content : Variant)
 	
 	//=======================================================================================================
 	// Defines the contents of the string & returns the updated object string
-Function setText($content : Variant)->$this : cs:C1710.str
+Function setText($content) : cs:C1710.str
 	
 	Case of 
 			
@@ -50,7 +50,7 @@ Function setText($content : Variant)->$this : cs:C1710.str
 	This:C1470.length:=Length:C16(This:C1470.value)
 	This:C1470.styled:=This:C1470.isStyled()
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	//=======================================================================================================
 	// Insertion of the given text into the current string according to the optianal parameters begin & end
@@ -135,7 +135,7 @@ Function append($text : Text; $separator : Text)->$this : cs:C1710.str
 	
 	//=======================================================================================================
 	// Returns True if the $toFind text is present in the string (diacritical if $2 is True)
-Function containsString($target : Text; $toFind; $diacritical : Boolean)->$contains : Boolean
+Function containsString($target : Text; $toFind; $diacritical : Boolean) : Boolean
 	
 	Case of 
 			//______________________________________________________
@@ -152,7 +152,7 @@ Function containsString($target : Text; $toFind; $diacritical : Boolean)->$conta
 				
 			Else 
 				
-				return (Position:C15($target; This:C1470.value)#0)
+				return (Position:C15($toFind; $target)#0)
 				
 			End if 
 			
@@ -229,7 +229,7 @@ Function contains($words; $word; $word_2 : Text; $word_N : Text) : Boolean
 	// Returns the position of the last occurence of a string
 Function lastOccurrenceOf($target : Text; $toFind; $diacritic : Boolean) : Integer
 	
-	var $pos; $position; $start : Integer
+	var $index; $position; $start : Integer
 	
 	Case of 
 			
@@ -266,36 +266,36 @@ Function lastOccurrenceOf($target : Text; $toFind; $diacritic : Boolean) : Integ
 			
 			Repeat 
 				
-				$pos:=Position:C15($toFind; This:C1470.value; $start; *)
+				$index:=Position:C15($toFind; This:C1470.value; $start; *)
 				
-				If ($pos>0)
+				If ($index>0)
 					
-					$position:=$pos
-					$start:=$pos+Length:C16($toFind)
+					$position:=$index
+					$start:=$position+Length:C16($toFind)
 					
 				End if 
-			Until ($pos=0)
+			Until ($index=0)
 			
 		Else 
 			
 			Repeat 
 				
-				$pos:=Position:C15($toFind; This:C1470.value; $start)
+				$index:=Position:C15($toFind; This:C1470.value; $start)
 				
-				If ($pos>0)
+				If ($index>0)
 					
-					$position:=$pos
-					$start:=$pos+Length:C16($toFind)
+					$position:=$index
+					$start:=$position+Length:C16($toFind)
 					
 				End if 
-			Until ($pos=0)
+			Until ($index=0)
 		End if 
 	End if 
 	
 	return $position
 	
 	//=======================================================================================================
-Function shuffle($string; $length : Integer) : Text
+Function shuffle($target; $length : Integer) : Text
 	
 	var $pattern; $shuffle; $t; $text : Text
 	var $charNumber; $count; $i : Integer
@@ -307,24 +307,24 @@ Function shuffle($string; $length : Integer) : Text
 			//______________________________________________________
 		: (Count parameters:C259=0)
 			
-			$string:=This:C1470.value
+			$target:=This:C1470.value
 			
 			//______________________________________________________
-		: (Value type:C1509($string)=Is integer:K8:5)\
-			 | (Value type:C1509($string)=Is real:K8:4)
+		: (Value type:C1509($target)=Is integer:K8:5)\
+			 | (Value type:C1509($target)=Is real:K8:4)
 			
-			$length:=$string
-			$string:=This:C1470.value
+			$length:=$target
+			$target:=This:C1470.value
 			
 			//______________________________________________________
 		Else 
 			
-			$string:=String:C10($string)
+			$target:=String:C10($target)
 			
 			//______________________________________________________
 	End case 
 	
-	If (Length:C16($string)=0)
+	If (Length:C16($target)=0)
 		
 		$text:=$pattern
 		
@@ -356,24 +356,24 @@ Function shuffle($string; $length : Integer) : Text
 	
 	//=======================================================================================================
 	// Returns a base64 encoded UTF-8 string
-Function base64($toEncode; $html : Boolean) : Text
+Function base64($target; $html : Boolean) : Text
 	
 	Case of 
 			//______________________________________________________
 		: (Count parameters:C259=0)
 			
-			$toEncode:=This:C1470.value
+			$target:=This:C1470.value
 			
 			//______________________________________________________
-		: (Value type:C1509($toEncode)=Is boolean:K8:9)
+		: (Value type:C1509($target)=Is boolean:K8:9)
 			
-			$html:=$toEncode
-			$toEncode:=This:C1470.value
+			$html:=$target
+			$target:=This:C1470.value
 			
 			//______________________________________________________
 		Else 
 			
-			$toEncode:=String:C10($toEncode)
+			$target:=String:C10($target)
 			
 			//______________________________________________________
 	End case 
@@ -381,38 +381,39 @@ Function base64($toEncode; $html : Boolean) : Text
 	If ($html)
 		
 		// Encode in Base64URL format
-		BASE64 ENCODE:C895($toEncode; *)
+		BASE64 ENCODE:C895($target; *)
 		
 	Else 
 		
-		BASE64 ENCODE:C895($toEncode)
+		BASE64 ENCODE:C895($target)
 		
 	End if 
 	
-	return $toEncode
+	return $target
 	
 	//=======================================================================================================
 	// Returns an URL-safe base64url encoded UTF-8 string
-Function urlBase64Encode() : Text
+Function urlBase64Encode($target : Text) : Text
 	
-	return This:C1470.base64(True:C214)
+	return (Count parameters:C259=0 ? This:C1470.base64(True:C214) : This:C1470.base64($target; True:C214))
 	
 	//=======================================================================================================
 	// Returns an URL encoded string
-Function urlEncode
-	var $0 : Text
+Function urlEncode($target : Text) : Text
 	
-	var $pattern : Text
+	var $encoded; $pattern : Text
 	var $i : Integer
 	var $x : Blob
+	
+	$target:=Count parameters:C259=0 ? This:C1470.value : $target
 	
 	// List of safe characters
 	$pattern:="1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz:/.?_-$(){}~&@"
 	
-	If (This:C1470.length>0)
+	If (Length:C16($target)>0)
 		
 		// Use the UTF-8 character set for encoding
-		CONVERT FROM TEXT:C1011(This:C1470.value; "UTF-8"; $x)
+		CONVERT FROM TEXT:C1011($target; "UTF-8"; $x)
 		
 		// Convert the characters
 		For ($i; 0; BLOB size:C605($x)-1; 1)
@@ -420,16 +421,18 @@ Function urlEncode
 			If (Position:C15(Char:C90($x{$i}); $pattern; *)>0)
 				
 				// It's a safe character, append unaltered
-				$0:=$0+Char:C90($x{$i})
+				$encoded+=Char:C90($x{$i})
 				
 			Else 
 				
 				// It's an unsafe character, append as a hex string
-				$0:=$0+"%"+Substring:C12(String:C10($x{$i}; "&x"); 5)
+				$encoded+="%"+Substring:C12(String:C10($x{$i}; "&x"); 5)
 				
 			End if 
 		End for 
 	End if 
+	
+	return $encoded
 	
 	//=======================================================================================================
 	// Returns an URL decoded string
@@ -438,16 +441,8 @@ Function urlDecode($target : Text) : Text
 	var $i; $length; $size : Integer
 	var $x : Blob
 	
-	If (Count parameters:C259=0)
-		
-		$target:=This:C1470.value
-		$size:=This:C1470.length
-		
-	Else 
-		
-		$size:=Length:C16($target)
-		
-	End if 
+	$target:=Count parameters:C259=0 ? This:C1470.value : $target
+	$size:=Length:C16($target)
 	
 	SET BLOB SIZE:C606($x; $size+1; 0)
 	
@@ -483,35 +478,25 @@ Function urlDecode($target : Text) : Text
 	// Returns True if the string passed is exactly the same as the value.
 Function equal($target : Text; $string : Text) : Boolean
 	
-	If (Count parameters:C259>=2)
+	If (Count parameters:C259=1)
 		
-		return (Length:C16($target)=Length:C16($string)) && ((Length:C16($target)=0) | (Position:C15($target; $string; 1; *)=1))
-		
-	Else 
-		
-		return (Length:C16(This:C1470.value)=Length:C16($target)) && ((Length:C16(This:C1470.value)=0) | (Position:C15(This:C1470.value; $target; 1; *)=1))
+		$string:=$target
+		$target:=This:C1470.value
 		
 	End if 
 	
+	return (Length:C16($target)=Length:C16($string)) && ((Length:C16($target)=0) | (Position:C15($target; $string; 1; *)=1))
+	
 	//=======================================================================================================
 	// Returns the list of distinct letters of the string.
-Function distinctLetters
-	var $0 : Variant  // Collection or string if delimiter is passed
-	var $1 : Text  // {delimiter}
+Function distinctLetters($delimitor : Text) : Variant
 	
 	var $c : Collection
 	
 	$c:=Split string:C1554(This:C1470.value; "").distinct().sort()
 	
-	If (Count parameters:C259>=1)  // …as string if delimiter is passed
-		
-		$0:=$c.join($1)
-		
-	Else   // …as collection
-		
-		$0:=$c
-		
-	End if 
+	// As string if delimiter is passed else as collection
+	return (Count parameters:C259>=1 ? $c.join($delimitor) : $c)
 	
 	//=======================================================================================================
 	// Returns value as fixed length string
@@ -555,17 +540,17 @@ Function fixedLength
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns value as upper camelcase
-Function uperCamelCase($string : Text) : Text
+Function uperCamelCase($target : Text) : Text
 	
 	var $t : Text
 	var $i : Integer
 	var $c : Collection
 	
-	$string:=Count parameters:C259=0 ? This:C1470.value : $string
+	$target:=Count parameters:C259=0 ? This:C1470.value : $target
 	
-	If (Length:C16($string)>0)
+	If (Length:C16($target)>0)
 		
-		If (Length:C16($string)>2)
+		If (Length:C16($target)>2)
 			
 			$t:=This:C1470.spaceSeparated()
 			
@@ -585,24 +570,24 @@ Function uperCamelCase($string : Text) : Text
 			
 		Else 
 			
-			return Lowercase:C14($string)
+			return Lowercase:C14($target)
 			
 		End if 
 	End if 
 	
 	//=======================================================================================================
 	// Returns value as lower camelcase
-Function lowerCamelCase($string : Text) : Text
+Function lowerCamelCase($target : Text) : Text
 	
 	var $t : Text
 	var $i : Integer
 	var $c : Collection
 	
-	$string:=Count parameters:C259=0 ? This:C1470.value : $string
+	$target:=Count parameters:C259=0 ? This:C1470.value : $target
 	
-	If (Length:C16($string)>0)
+	If (Length:C16($target)>0)
 		
-		If (Length:C16($string)>=2)
+		If (Length:C16($target)>=2)
 			
 			$t:=This:C1470.spaceSeparated()
 			
@@ -630,260 +615,289 @@ Function lowerCamelCase($string : Text) : Text
 			
 		Else 
 			
-			return Lowercase:C14($string)
+			return Lowercase:C14($target)
 			
 		End if 
 	End if 
 	
 	//=======================================================================================================
 	// Returns underscored value & camelcase (lower or upper) value as space separated
-Function spaceSeparated($string : Text) : Text
+Function spaceSeparated($target : Text) : Text
 	
 	var $char : Text
 	var $i; $l : Integer
 	var $c : Collection
 	
-	$string:=Count parameters:C259=0 ? This:C1470.value : $string
+	$target:=Count parameters:C259=0 ? This:C1470.value : $target
 	$c:=New collection:C1472
 	
-	$string:=Replace string:C233($string; "_"; " ")
+	$target:=Replace string:C233($target; "_"; " ")
 	
-	If (Position:C15(" "; $string)>0)
+	If (Position:C15(" "; $target)>0)
 		
-		$c:=Split string:C1554($string; " "; sk ignore empty strings:K86:1+sk trim spaces:K86:2)
+		$c:=Split string:C1554($target; " "; sk ignore empty strings:K86:1+sk trim spaces:K86:2)
 		
 	Else 
 		
-		For each ($char; Split string:C1554($string; ""))
+		For each ($char; Split string:C1554($target; ""))
 			
 			$i+=1
 			
-			If (Character code:C91($char)#Character code:C91($string[[$i]]))  // Cesure
+			If (Character code:C91($char)#Character code:C91($target[[$i]]))  // Cesure
 				
-				$c.push(Substring:C12($string; $l; $i-$l))
+				$c.push(Substring:C12($target; $l; $i-$l))
 				$l:=$i
 				
 			End if 
 		End for each 
 		
-		$c.push(Substring:C12($string; $l))
+		$c.push(Substring:C12($target; $l))
 		
 	End if 
 	
 	return $c.join(" ")
 	
 	//=======================================================================================================
-	// Trims leading spaces or passed
-Function trimLeading
-	var $0 : Text
-	var $1 : Text
+	// Trims Trailing spaces or passed
+Function trimTrailing($target : Text; $trim : Text) : Text
 	
 	var $pattern; $t : Text
 	var $length; $position : Integer
 	
-	If (Count parameters:C259>=1)
-		
-		$pattern:="(?m-si)^(TRIM*)"
-		If ($1=".")
-			
-			$1:="\\."
-			
-		End if 
-		$pattern:=Replace string:C233($pattern; "TRIM"; $1; *)
-		
-	Else 
-		
-		$pattern:="(?m-si)^(\\s*)"
-		
-	End if 
+	$pattern:="(?m-si)^(\\s*)"  // Default is space
 	
-	$t:=Split string:C1554(This:C1470.value; "").reverse().join("")
+	Case of 
+			
+			//______________________________________________________
+		: (Count parameters:C259=0)
+			
+			$target:=This:C1470.value
+			
+			//______________________________________________________
+		: (Count parameters:C259=1)
+			
+			If (Length:C16($target)=1)
+				
+				$trim:=Position:C15($target; ".$^{[(|)*+?\\^")>0 ? "\\"+$target : $target
+				$target:=This:C1470.value
+				$pattern:="(?m-si)^("+$trim+"*)"
+				
+			End if 
+			
+			//______________________________________________________
+		: (Count parameters:C259=2)
+			
+			$trim:=Position:C15($trim; ".$^{[(|)*+?\\^")>0 ? "\\"+$trim : $trim
+			$pattern:=Length:C16($trim)>0 ? "(?m-si)^("+$trim+"*)" : $pattern
+			
+			//______________________________________________________
+	End case 
 	
-	$0:=This:C1470.value
+	$t:=Split string:C1554($target; "").reverse().join("")
 	
 	If (Match regex:C1019($pattern; $t; 1; $position; $length; *))
 		
-		$0:=Split string:C1554(Delete string:C232($t; $position; $length); "").reverse().join("")
+		return Split string:C1554(Delete string:C232($t; $position; $length); "").reverse().join("")
+		
+	Else 
+		
+		return $target
 		
 	End if 
 	
 	//=======================================================================================================
-	// Trims Trailing spaces or passed
-Function trimTrailing
-	var $0 : Text
-	var $1 : Text
+	// Trims leading spaces or passed
+Function trimLeading($target : Text; $trim : Text) : Text
 	
-	var $pattern; $t : Text
+	var $pattern : Text
 	var $length; $position : Integer
 	
-	If (Count parameters:C259>=1)
-		
-		$pattern:="(?m-si)^(TRIM*)"
-		If ($1=".")
+	$pattern:="(?m-si)^(\\s*)"  // Default is space
+	
+	Case of 
 			
-			$1:="\\."
+			//______________________________________________________
+		: (Count parameters:C259=0)
 			
-		End if 
+			$target:=This:C1470.value
+			
+			//______________________________________________________
+		: (Count parameters:C259=1)
+			
+			If (Length:C16($target)=1)
+				
+				$trim:=Position:C15($target; ".$^{[(|)*+?\\^")>0 ? "\\"+$target : $target
+				$target:=This:C1470.value
+				$pattern:="(?m-si)^("+$trim+"*)"
+				
+			End if 
+			
+			//______________________________________________________
+		: (Count parameters:C259=2)
+			
+			$trim:=Position:C15($trim; ".$^{[(|)*+?\\^")>0 ? "\\"+$trim : $trim
+			$pattern:=Length:C16($trim)>0 ? "(?m-si)^("+$trim+"*)" : $pattern
+			
+			//______________________________________________________
+	End case 
+	
+	If (Match regex:C1019($pattern; $target; 1; $position; $length; *))
 		
-		$pattern:=Replace string:C233($pattern; "TRIM"; $1; *)
+		return Delete string:C232($target; $position; $length)
 		
 	Else 
 		
-		$pattern:="(?m-si)^(\\s*)"
-		
-	End if 
-	
-	$t:=This:C1470.value
-	
-	$0:=This:C1470.value
-	
-	If (Match regex:C1019($pattern; $t; 1; $position; $length; *))
-		
-		$0:=Delete string:C232(This:C1470.value; $position; $length)
+		return $target
 		
 	End if 
 	
 	//=======================================================================================================
 	// Trims leading & trailing spaces or passed
-Function trim
+Function trim($target : Text; $trim : Text) : Text
 	
-	var $0 : Text
-	var $1 : Text
-	
-	var $pattern; $t : Text
-	var $length; $position : Integer
-	
-	If (Count parameters:C259>=1)
-		
-		$pattern:="(?m-si)^(TRIM*)"
-		If ($1=".")
+	Case of 
 			
-			$1:="\\."
+			//______________________________________________________
+		: (Count parameters:C259=0)
 			
-		End if 
-		$pattern:=Replace string:C233($pattern; "TRIM"; $1; *)
-		
-	Else 
-		
-		$pattern:="(?m-si)^(\\s*)"
-		
-	End if 
+			$target:=This:C1470.value
+			
+			//______________________________________________________
+		: (Count parameters:C259=1)
+			
+			If (Length:C16($target)=1)
+				
+				$trim:=Position:C15($target; ".$^{[(|)*+?\\^")>0 ? "\\"+$target : $target
+				$target:=This:C1470.value
+				
+			End if 
+			
+			//______________________________________________________
+		: (Count parameters:C259=2)
+			
+			$trim:=Position:C15($trim; ".$^{[(|)*+?\\^")>0 ? "\\"+$trim : $trim
+			
+			//______________________________________________________
+	End case 
 	
-	$0:=This:C1470.value
-	
-	// trimLeading
-	$t:=Split string:C1554($0; "").reverse().join("")
-	
-	If (Match regex:C1019($pattern; $t; 1; $position; $length; *))
-		
-		$0:=Split string:C1554(Delete string:C232($t; $position; $length); "").reverse().join("")
-		
-	End if 
-	
-	// trimTrailing
-	$t:=$0
-	
-	If (Match regex:C1019($pattern; $t; 1; $position; $length; *))
-		
-		$0:=Delete string:C232($t; $position; $length)
-		
-	End if 
+	return This:C1470.trimTrailing(This:C1470.trimLeading($target; $trim); $trim)
 	
 	//=======================================================================================================
 	// Returns a word wrapped text based on the line length given (default is 80 characters)
-Function wordWrap($lineLength : Integer)->$wrapped : Text
+Function wordWrap($target; $columns : Integer) : Text
 	
 	var $pattern; $t : Text
 	var $match : Boolean
-	var $columns; $length; $position : Integer
+	var $colums; $length; $position : Integer
 	var $c : Collection
 	
-	If (Count parameters:C259>=1)
-		
-		$columns:=$1
-		
-	Else 
-		
-		$columns:=79
-		
-	End if 
-	
-	$t:=This:C1470.value
-	$wrapped:=$t
+	Case of 
+			
+			//______________________________
+		: (Count parameters:C259=0)
+			
+			$target:=This:C1470.value
+			$columns:=79
+			
+			//______________________________
+		: (Value type:C1509($target)=Is text:K8:3)
+			
+			$columns:=79
+			
+			//______________________________
+	End case 
 	
 	$pattern:="^(.{1,"+String:C10($columns)+"}|\\S{"+String:C10($columns+1)+",})(?:\\s[^\\S\\r\\n]*|\\Z)"
+	
 	$c:=New collection:C1472
 	
 	Repeat 
 		
-		$match:=Match regex:C1019($pattern; $t; 1; $position; $length; *)
+		$match:=Match regex:C1019($pattern; $target; 1; $position; $length; *)
 		
 		If ($match)
 			
-			$c.push(Substring:C12($t; 1; $length))
-			$t:=Delete string:C232($t; 1; $length)
+			$c.push(Substring:C12($target; 1; $length))
+			$target:=Delete string:C232($target; 1; $length)
 			
 		Else 
 			
-			If (Length:C16($t)>0)
+			If (Length:C16($target)>0)
 				
-				$c.push($t)
+				$c.push($target)
 				
 			End if 
 		End if 
 	Until (Not:C34($match))
 	
-	$wrapped:=$c.join(Choose:C955(Is macOS:C1572; "\r"; "\n"))
+	If ($c.length>0)
+		
+		return $c.join(Choose:C955(Is macOS:C1572; "\r"; "\n"))
+		
+	Else 
+		
+		return $target
+		
+	End if 
 	
 	//=======================================================================================================
 	// Return extract numeric
-Function toNum()->$num : Real
+Function toNum($target : Text) : Real
 	
-	$num:=This:C1470.filter("numeric")
+	$target:=Count parameters:C259>=1; ; $target : This:C1470.value
+	
+	return This:C1470.filter("numeric")
 	
 	//=======================================================================================================
 	// Returns the number of occurennces of $1 into the string
-Function occurrencesOf($toFind : Text)->$occurences : Integer
+Function occurrencesOf($target : Text; $toFind : Text) : Integer
 	
-	$occurences:=Split string:C1554(This:C1470.value; $toFind; sk trim spaces:K86:2).length-1
+	If (Count parameters:C259<2)
+		
+		$toFind:=$target
+		$target:=This:C1470.value
+		
+	End if 
+	
+	return Split string:C1554($target; $toFind; sk trim spaces:K86:2).length-1
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Replace accented and special characters with non-accented or equivalent characters.
-Function unaccented($string : Text) : Text
+Function unaccented($target : Text) : Text
 	
 	var $t : Text
 	var $i; $index : Integer
 	
-	$string:=Count parameters:C259=0 ? This:C1470.value : $string
+	$target:=Count parameters:C259=0 ? This:C1470.value : $target
 	
-	If (Length:C16($string)>0)
+	If (Length:C16($target)>0)
 		
 		// Specific cases
-		$string:=Replace string:C233($string; "ȼ"; "c"; *)
-		$string:=Replace string:C233($string; "Ȼ"; "C"; *)
-		$string:=Replace string:C233($string; "Ð"; "D"; *)
-		$string:=Replace string:C233($string; "Đ"; "D"; *)
-		$string:=Replace string:C233($string; "đ"; "d"; *)
-		$string:=Replace string:C233($string; "Ħ"; "H"; *)
-		$string:=Replace string:C233($string; "ħ"; "h"; *)
-		$string:=Replace string:C233($string; "ı"; "i"; *)
-		$string:=Replace string:C233($string; "Ŀ"; "L"; *)
-		$string:=Replace string:C233($string; "Ŀ"; "L"; *)
-		$string:=Replace string:C233($string; "ŀ"; "l"; *)
-		$string:=Replace string:C233($string; "Ł"; "L"; *)
-		$string:=Replace string:C233($string; "ł"; "l"; *)
-		$string:=Replace string:C233($string; "Ŋ"; "N"; *)
-		$string:=Replace string:C233($string; "ŋ"; "n"; *)
-		$string:=Replace string:C233($string; "ŉ"; "n"; *)
-		$string:=Replace string:C233($string; "n̈"; "n"; *)
-		$string:=Replace string:C233($string; "N̈"; "N"; *)
-		$string:=Replace string:C233($string; "Ø"; "O"; *)
-		$string:=Replace string:C233($string; "ð"; "o"; *)
-		$string:=Replace string:C233($string; "ø"; "o"; *)
-		$string:=Replace string:C233($string; "Þ"; "P"; *)
-		$string:=Replace string:C233($string; "þ"; "p"; *)
-		$string:=Replace string:C233($string; "Ŧ"; "T"; *)
-		$string:=Replace string:C233($string; "ŧ"; "t"; *)
+		$target:=Replace string:C233($target; "ȼ"; "c"; *)
+		$target:=Replace string:C233($target; "Ȼ"; "C"; *)
+		$target:=Replace string:C233($target; "Ð"; "D"; *)
+		$target:=Replace string:C233($target; "Đ"; "D"; *)
+		$target:=Replace string:C233($target; "đ"; "d"; *)
+		$target:=Replace string:C233($target; "Ħ"; "H"; *)
+		$target:=Replace string:C233($target; "ħ"; "h"; *)
+		$target:=Replace string:C233($target; "ı"; "i"; *)
+		$target:=Replace string:C233($target; "Ŀ"; "L"; *)
+		$target:=Replace string:C233($target; "Ŀ"; "L"; *)
+		$target:=Replace string:C233($target; "ŀ"; "l"; *)
+		$target:=Replace string:C233($target; "Ł"; "L"; *)
+		$target:=Replace string:C233($target; "ł"; "l"; *)
+		$target:=Replace string:C233($target; "Ŋ"; "N"; *)
+		$target:=Replace string:C233($target; "ŋ"; "n"; *)
+		$target:=Replace string:C233($target; "ŉ"; "n"; *)
+		$target:=Replace string:C233($target; "n̈"; "n"; *)
+		$target:=Replace string:C233($target; "N̈"; "N"; *)
+		$target:=Replace string:C233($target; "Ø"; "O"; *)
+		$target:=Replace string:C233($target; "ð"; "o"; *)
+		$target:=Replace string:C233($target; "ø"; "o"; *)
+		$target:=Replace string:C233($target; "Þ"; "P"; *)
+		$target:=Replace string:C233($target; "þ"; "p"; *)
+		$target:=Replace string:C233($target; "Ŧ"; "T"; *)
+		$target:=Replace string:C233($target; "ŧ"; "t"; *)
 		
 		$t:="abcdefghijklmnopqrstuvwxyz"
 		
@@ -893,19 +907,19 @@ Function unaccented($string : Text) : Text
 			
 			Repeat 
 				
-				$index:=Position:C15($t[[$i]]; $string; $index+1)
+				$index:=Position:C15($t[[$i]]; $target; $index+1)
 				
 				If ($index>0)
 					
-					If (Position:C15($string[[$index]]; Uppercase:C13($string[[$index]]; *); *)>0)
+					If (Position:C15($target[[$index]]; Uppercase:C13($target[[$index]]; *); *)>0)
 						
 						// UPPERCASE
-						$string[[$index]]:=Uppercase:C13($string[[$index]])
+						$target[[$index]]:=Uppercase:C13($target[[$index]])
 						
 					Else 
 						
 						// lowercase
-						$string[[$index]]:=Lowercase:C14($string[[$index]])
+						$target[[$index]]:=Lowercase:C14($target[[$index]])
 						
 					End if 
 				End if 
@@ -913,21 +927,21 @@ Function unaccented($string : Text) : Text
 		End for 
 		
 		// Miscellaneous
-		$string:=Replace string:C233($string; "ß"; "ss"; *)
-		$string:=Replace string:C233($string; "Æ"; "AE"; *)
-		$string:=Replace string:C233($string; "æ"; "ae"; *)
-		$string:=Replace string:C233($string; "œ"; "oe"; *)
-		$string:=Replace string:C233($string; "Œ"; "OE"; *)
-		$string:=Replace string:C233($string; "∂"; "d"; *)
-		$string:=Replace string:C233($string; "∆"; "D"; *)
-		$string:=Replace string:C233($string; "ƒ"; "f"; *)
-		$string:=Replace string:C233($string; "µ"; "u"; *)
-		$string:=Replace string:C233($string; "π"; "p"; *)
-		$string:=Replace string:C233($string; "∏"; "P"; *)
+		$target:=Replace string:C233($target; "ß"; "ss"; *)
+		$target:=Replace string:C233($target; "Æ"; "AE"; *)
+		$target:=Replace string:C233($target; "æ"; "ae"; *)
+		$target:=Replace string:C233($target; "œ"; "oe"; *)
+		$target:=Replace string:C233($target; "Œ"; "OE"; *)
+		$target:=Replace string:C233($target; "∂"; "d"; *)
+		$target:=Replace string:C233($target; "∆"; "D"; *)
+		$target:=Replace string:C233($target; "ƒ"; "f"; *)
+		$target:=Replace string:C233($target; "µ"; "u"; *)
+		$target:=Replace string:C233($target; "π"; "p"; *)
+		$target:=Replace string:C233($target; "∏"; "P"; *)
 		
 	End if 
 	
-	return $string
+	return $target
 	
 	//=======================================================================================================
 	// Returns True if the text contains only ASCII characters
@@ -1012,31 +1026,31 @@ Function match
 	
 	//=======================================================================================================
 	//  ⚠️ Returns the localized string & made replacement if any 
-Function localized($replacements)->$localizedString : Text
+Function localized($replacements) : Text
 	
 	If (Count parameters:C259>=1)
 		
-		$localizedString:=Super:C1706.localized(This:C1470.value; $replacements)
+		return Super:C1706.localized(This:C1470.value; $replacements)
 		
 	Else 
 		
-		$localizedString:=Super:C1706.localized(This:C1470.value)
+		return Super:C1706.localized(This:C1470.value)
 		
 	End if 
 	
 	//=======================================================================================================
 	//  ⚠️ Returns the available localized string for the given "resname" and makes replacements, if any. 
-Function localize($resname : Text; $replacements)->$localizedString : Text
+Function localize($resname : Text; $replacements) : Text
 	
 	This:C1470.setText($resname)
 	
 	If (Count parameters:C259>=2)
 		
-		$localizedString:=Super:C1706.localized(This:C1470.value; $replacements)
+		return Super:C1706.localized(This:C1470.value; $replacements)
 		
 	Else 
 		
-		$localizedString:=Super:C1706.localized(This:C1470.value)
+		return Super:C1706.localized(This:C1470.value)
 		
 	End if 
 	
@@ -1296,20 +1310,26 @@ Function truncate($maxChar : Integer; $position : Integer)->$truncated : Text
 	
 	//=======================================================================================================
 	// 
-Function filter
+Function filter($target : Text; $type : Text) : Variant
 	var $0 : Variant
-	var $1 : Text
 	
 	var $value; $pattern; $t; $text : Text
 	var $length; $position : Integer
 	
+	If (Count parameters:C259=1)
+		
+		$target:=This:C1470.value
+		$type=$target
+		
+	End if 
+	
 	Case of 
 			
 			//…………………………………………………………………………………
-		: ($1="numeric")  // Return extract numeric
+		: ($type="numeric")  // Return extract numeric
 			
 			$pattern:="(?m-si)^\\D*([+-]?\\d+\\{thousand}?\\d*\\{decimal}?\\d?)\\s?\\D*$"
-			$value:=This:C1470.value
+			$value:=$target
 			GET SYSTEM FORMAT:C994(Decimal separator:K60:1; $t)
 			$pattern:=Replace string:C233($pattern; "{decimal}"; $t)
 			
@@ -1336,7 +1356,7 @@ Function filter
 				End if 
 			End if 
 			
-			$0:=Num:C11($text)
+			return Num:C11($text)
 			
 			//…………………………………………………………………………………
 	End case 
@@ -1399,13 +1419,13 @@ All non-permitted characters are removed. Example: way*fast becomes wayfast:
   . (period) or space at the begin or end of the file or folder name
 */
 	
-	var $pos; $len : Integer
+	var $position; $length : Integer
 	
 	$suitable:=This:C1470.value
 	
-	While (Match regex:C1019("(?mi-s)((?:^[\\.\\s]+)|(?:[\\.\\s]+$)|(?:[:\\\\*?\"<>|/]+))+"; $suitable; 1; $pos; $len))
+	While (Match regex:C1019("(?mi-s)((?:^[\\.\\s]+)|(?:[\\.\\s]+$)|(?:[:\\\\*?\"<>|/]+))+"; $suitable; 1; $position; $length))
 		
-		$suitable:=Delete string:C232($suitable; $pos; $len)
+		$suitable:=Delete string:C232($suitable; $position; $length)
 		
 	End while 
 	
