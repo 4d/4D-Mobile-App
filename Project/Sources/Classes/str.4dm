@@ -661,47 +661,20 @@ Function spaceSeparated($target : Text) : Text
 	// Trims Trailing spaces or passed
 Function trimTrailing($target : Text; $trim : Text) : Text
 	
-	var $pattern; $t : Text
 	var $length; $position : Integer
+	var $o : Object
 	
-	$pattern:="(?m-si)^(\\s*)"  // Default is space
+	$o:=This:C1470._trimInit(Copy parameters:C1790())
 	
-	Case of 
-			
-			//______________________________________________________
-		: (Count parameters:C259=0)
-			
-			$target:=This:C1470.value
-			
-			//______________________________________________________
-		: (Count parameters:C259=1)
-			
-			If (Length:C16($target)=1)
-				
-				$trim:=Position:C15($target; ".$^{[(|)*+?\\^")>0 ? "\\"+$target : $target
-				$target:=This:C1470.value
-				$pattern:="(?m-si)^("+$trim+"*)"
-				
-			End if 
-			
-			//______________________________________________________
-		: (Count parameters:C259=2)
-			
-			$trim:=Position:C15($trim; ".$^{[(|)*+?\\^")>0 ? "\\"+$trim : $trim
-			$pattern:=Length:C16($trim)>0 ? "(?m-si)^("+$trim+"*)" : $pattern
-			
-			//______________________________________________________
-	End case 
+	$target:=Split string:C1554($o.target; "").reverse().join("")
 	
-	$t:=Split string:C1554($target; "").reverse().join("")
-	
-	If (Match regex:C1019($pattern; $t; 1; $position; $length; *))
+	If (Match regex:C1019($o.pattern; $target; 1; $position; $length; *))
 		
-		return Split string:C1554(Delete string:C232($t; $position; $length); "").reverse().join("")
+		return Split string:C1554(Delete string:C232($target; $position; $length); "").reverse().join("")
 		
 	Else 
 		
-		return $target
+		return $o.target
 		
 	End if 
 	
@@ -709,45 +682,18 @@ Function trimTrailing($target : Text; $trim : Text) : Text
 	// Trims leading spaces or passed
 Function trimLeading($target : Text; $trim : Text) : Text
 	
-	var $pattern : Text
 	var $length; $position : Integer
+	var $o : Object
 	
-	$pattern:="(?m-si)^(\\s*)"  // Default is space
+	$o:=This:C1470._trimInit(Copy parameters:C1790())
 	
-	Case of 
-			
-			//______________________________________________________
-		: (Count parameters:C259=0)
-			
-			$target:=This:C1470.value
-			
-			//______________________________________________________
-		: (Count parameters:C259=1)
-			
-			If (Length:C16($target)=1)
-				
-				$trim:=Position:C15($target; ".$^{[(|)*+?\\^")>0 ? "\\"+$target : $target
-				$target:=This:C1470.value
-				$pattern:="(?m-si)^("+$trim+"*)"
-				
-			End if 
-			
-			//______________________________________________________
-		: (Count parameters:C259=2)
-			
-			$trim:=Position:C15($trim; ".$^{[(|)*+?\\^")>0 ? "\\"+$trim : $trim
-			$pattern:=Length:C16($trim)>0 ? "(?m-si)^("+$trim+"*)" : $pattern
-			
-			//______________________________________________________
-	End case 
-	
-	If (Match regex:C1019($pattern; $target; 1; $position; $length; *))
+	If (Match regex:C1019($o.pattern; $o.target; 1; $position; $length; *))
 		
-		return Delete string:C232($target; $position; $length)
+		return Delete string:C232($o.target; $position; $length)
 		
 	Else 
 		
-		return $target
+		return $o.target
 		
 	End if 
 	
@@ -846,7 +792,7 @@ Function toNum($target : Text) : Real
 	
 	$target:=Count parameters:C259>=1 ? $target : This:C1470.value
 	
-	return This:C1470.filter("numeric")
+	return This:C1470.filter($target; "numeric")
 	
 	//=======================================================================================================
 	// Returns the number of occurennces of $1 into the string
@@ -945,84 +891,85 @@ Function unaccented($target : Text) : Text
 	
 	//=======================================================================================================
 	// Returns True if the text contains only ASCII characters
-Function isAscii
-	var $0 : Boolean
+Function isAscii($target : Text) : Boolean
 	
-	$0:=Match regex:C1019("(?mi-s)^[[:ascii:]]*$"; This:C1470.value; 1)
+	$target:=Count parameters:C259=0 ? This:C1470.value : $target
+	return Match regex:C1019("(?mi-s)^[[:ascii:]]*$"; $target; 1)
 	
 	//=======================================================================================================
 	// Returns True if text is "T/true" or "F/false"
-Function isBoolean
-	var $0 : Boolean
+Function isBoolean($target : Text) : Boolean
 	
-	$0:=Match regex:C1019("(?m-is)^(?:[tT]rue|[fF]alse)$"; This:C1470.value; 1)
+	$target:=Count parameters:C259=0 ? This:C1470.value : $target
+	return Match regex:C1019("(?m-is)^(?:[tT]rue|[fF]alse)$"; $target; 1)
 	
 	//=======================================================================================================
 	// Returns True if the text is a date string (DOES NOT CHECK IF THE DATE IS VALID)
-Function isDate
-	var $0 : Boolean
+Function isDate($target : Text) : Boolean
 	
-	$0:=Match regex:C1019("(?m-si)^\\d+/\\d+/\\d+$"; This:C1470.value; 1)
+	$target:=Count parameters:C259=0 ? This:C1470.value : $target
+	return Match regex:C1019("(?m-si)^\\d+/\\d+/\\d+$"; $target; 1)
 	
 	//=======================================================================================================
 	// Returns True if text is a numeric
-Function isNum
-	var $0 : Boolean
+Function isNum($target : Text) : Boolean
 	
 	var $t : Text
 	
+	$target:=Count parameters:C259=0 ? This:C1470.value : $target
 	GET SYSTEM FORMAT:C994(Decimal separator:K60:1; $t)
-	$0:=Match regex:C1019("(?m-si)^(?:\\+|-)?\\d+(?:\\.|"+$t+"\\d+)?$"; This:C1470.value; 1)
+	return Match regex:C1019("(?m-si)^(?:\\+|-)?\\d+(?:\\.|"+$t+"\\d+)?$"; $target; 1)
 	
 	//=======================================================================================================
 	//  Returns True if text is a time string (DOES NOT CHECK IF THE TIME IS VALID)
-Function isTime
-	var $0 : Boolean
+Function isTime($target : Text) : Boolean
 	
 	var $t : Text
 	
+	$target:=Count parameters:C259=0 ? This:C1470.value : $target
 	GET SYSTEM FORMAT:C994(Time separator:K60:11; $t)
-	$0:=Match regex:C1019("(?m-si)^\\d+"+$t+"\\d+(?:"+$t+"\\d+)?$"; This:C1470.value; 1)
+	return Match regex:C1019("(?m-si)^\\d+"+$t+"\\d+(?:"+$t+"\\d+)?$"; $target; 1)
 	
 	//=======================================================================================================
 	// Returns True if the text conforms to the URL grammar. (DOES NOT CHECK IF THE URL IS VALID)
-Function isUrl
-	var $0 : Boolean
+Function isUrl($target : Text) : Boolean
 	
-	$0:=Match regex:C1019("(?m-si)^(?:(?:https?):// )?(?:localhost|127.0.0.1|(?:\\S+(?::\\S*)?@)?(?:(?!10(?:\\.\\d{1,3}){3})(?!127(?:\\.\\d{1,3}){3}"+\
+	$target:=Count parameters:C259=0 ? This:C1470.value : $target
+	return Match regex:C1019("(?m-si)^(?:(?:https?):// )?(?:localhost|127.0.0.1|(?:\\S+(?::\\S*)?@)?(?:(?!10(?:\\.\\d{1,3}){3})(?!127(?:\\.\\d{1,3}){3}"+\
 		")(?!169\\.254(?:\\.\\d{1,3}){2})(?!192\\.168(?:\\.\\d{1,3}){2})(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})(?:[1-9"+\
 		"]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|"+\
 		"(?:(?:[a-z\\x{00a1}-\\x{ffff}0-9]+-?)*[a-z\\x{00a1}-\\x{ffff}0-9]+)(?:\\.(?:[a-z\\x{00a1}-\\x{ffff}0-9]+-?)*[a-z\\x{00a1"+\
-		"}-\\x{ffff}0-9]+)*(?:\\.(?:[a-z\\x{00a1}-\\x{ffff}]{2,}))))(?::\\d{2,5})?(?:/[^\\s]*)?$"; This:C1470.value; 1)
+		"}-\\x{ffff}0-9]+)*(?:\\.(?:[a-z\\x{00a1}-\\x{ffff}]{2,}))))(?::\\d{2,5})?(?:/[^\\s]*)?$"; $target; 1)
 	
 	//=======================================================================================================
 	// Returns True if the text is a json string
-Function isJson
-	var $0 : Boolean
+Function isJson($target : Text) : Boolean
 	
-	$0:=Match regex:C1019("(?msi)^(?:\\{.*\\})|(?:\\[.*\\])$"; This:C1470.value; 1)
+	$target:=Count parameters:C259=0 ? This:C1470.value : $target
+	return Match regex:C1019("(?msi)^(?:\\{.*\\})|(?:\\[.*\\])$"; $target; 1)
 	
 	//=======================================================================================================
 	// Returns True if the text is a json array string
-Function isJsonArray
-	var $0 : Boolean
+Function isJsonArray($target : Text) : Boolean
 	
-	$0:=Match regex:C1019("(?msi)^\\[.*\\]$"; This:C1470.value; 1)
+	$target:=Count parameters:C259=0 ? This:C1470.value : $target
+	return Match regex:C1019("(?msi)^\\[.*\\]$"; $target; 1)
 	
 	//=======================================================================================================
 	// Returns True if the text is a json object string
-Function isJsonObject
-	var $0 : Boolean
+Function isJsonObject($target : Text) : Boolean
 	
-	$0:=Match regex:C1019("(?msi)^\\{.*\\}$"; This:C1470.value; 1)
+	$target:=Count parameters:C259=0 ? This:C1470.value : $target
+	return Match regex:C1019("(?msi)^\\{.*\\}$"; $target; 1)
 	
 	//=======================================================================================================
 	//  ⚠️ Returns True if text match given pattern
-Function match
-	var $0 : Boolean
-	var $1 : Text
+Function match($target : Text; $pattern) : Boolean
 	
-	$0:=Super:C1706.match($1; This:C1470.value)
+	$pattern:=Count parameters:C259=1 ? $target : $pattern
+	$target:=Count parameters:C259=1 ? This:C1470.value : $target
+	
+	return Super:C1706.match($pattern; $target)
 	
 	//=======================================================================================================
 	//  ⚠️ Returns the localized string & made replacement if any 
@@ -1463,4 +1410,46 @@ con, nul, prn
 		$suitable:="_"+$suitable
 		
 	End if 
+	
+	//MARK:-PRIVATE
+	//=======================================================================================================
+Function _trimInit($parameters : Collection) : Object
+	
+	var $pattern; $target; $trim : Text
+	
+	$pattern:="(?m-si)^(\\s*)"  // Default is space
+	
+	Case of 
+			
+			//______________________________________________________
+		: ($parameters.length=0)
+			
+			$target:=This:C1470.value
+			
+			//______________________________________________________
+		: ($parameters.length=1)
+			
+			If (Length:C16($parameters[0])=1)
+				
+				$trim:=Position:C15($parameters[0]; ".$^{[(|)*+?\\^")>0 ? "\\"+$parameters[0] : $parameters[0]
+				$target:=This:C1470.value
+				$pattern:="(?m-si)^("+$trim+"*)"
+				
+			Else 
+				
+				$target:=$parameters[0]
+				
+			End if 
+			
+			//______________________________________________________
+		: ($parameters.length=2)
+			
+			$target:=$parameters[0]
+			$trim:=Position:C15($parameters[1]; ".$^{[(|)*+?\\^")>0 ? "\\"+$parameters[1] : $parameters[1]
+			$pattern:=Length:C16($trim)>0 ? "(?m-si)^("+$trim+"*)" : $pattern
+			
+			//______________________________________________________
+	End case 
+	
+	return New object:C1471("target"; $target; "pattern"; $pattern)
 	

@@ -1,5 +1,5 @@
 //%attributes = {}
-var $t; $tt; $Txt_in; $Txt_out : Text
+var $t; $tt; $in; $out : Text
 var $i : Integer
 var $str : cs:C1710.str
 
@@ -18,9 +18,7 @@ GET SYSTEM FORMAT:C994(Decimal separator:K60:1; $t)
 ASSERT:C1129($str.value=Replace string:C233("3.14159265359"; "."; $t))
 ASSERT:C1129($str.length=(12+Length:C16($t)))
 
-// ============================================
-// trim()
-
+// mark:-trim()
 ASSERT:C1129($str.setText("Hello World").trimTrailing()="Hello World")
 ASSERT:C1129($str.setText("Hello World").trimTrailing("_")="Hello World")
 ASSERT:C1129($str.setText("Hello World       ").trimTrailing()="Hello World")
@@ -52,95 +50,102 @@ ASSERT:C1129($str.trimLeading("       Hello World")="Hello World")
 ASSERT:C1129($str.trimLeading("_____Hello World"; "_")="Hello World")
 ASSERT:C1129($str.trimLeading("$Hello World"; "$")="Hello World")
 
-// ============================================
-// wordWrap()
-$Txt_in:="The principle of the XLIFF norm drives to determine a language source in which "\
+// mark:-wordWrap()
+$in:="The principle of the XLIFF norm drives to determine a language source in which "\
 +"are written all the strings. This language will be the reference language (the "\
 +"one from which will be done all the translations). The second language is the "\
 +"language said target Who will be used for the dialogs, warnings, prints… This is "\
 +"the language of the user."
 
-$Txt_out:="The principle of the XLIFF norm drives to determine a language source in which "\
+$out:="The principle of the XLIFF norm drives to determine a language source in which "\
 +"\rare written all the strings. This language will be the reference language (the "\
 +"\rone from which will be done all the translations). The second language is the "\
 +"\rlanguage said target Who will be used for the dialogs, warnings, prints… This "\
 +"\ris the language of the user."
 
-ASSERT:C1129($str.setText($Txt_in).wordWrap()=$Txt_out)
+ASSERT:C1129($str.setText($in).wordWrap()=$out)
 
 $str.setText("")
-ASSERT:C1129($str.wordWrap($Txt_in)=$Txt_out)
+ASSERT:C1129($str.wordWrap($in)=$out)
 
-// ============================================
-// uperCamelCase()
+// mark:-uperCamelCase()
 ASSERT:C1129($str.setText("").uperCamelCase()="")
 
 $str.setText("Category ID Element")
 
-$Txt_in:="CategoryIDElement"
-$Txt_out:=$str.uperCamelCase()
+$in:="CategoryIDElement"
+$out:=$str.uperCamelCase()
 
-For ($i; 1; Length:C16($Txt_in); 1)
+For ($i; 1; Length:C16($in); 1)
 	
-	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91($Txt_in[[$i]]); "uperCamelCase('CategoryIDElement')")
-	
-End for 
-
-$Txt_out:=$str.uperCamelCase()
-
-For ($i; 1; Length:C16($Txt_in); 1)
-	
-	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91($Txt_in[[$i]]); "uperCamelCase('Category ID Element')")
+	ASSERT:C1129(Character code:C91($out[[$i]])=Character code:C91($in[[$i]]); "uperCamelCase('CategoryIDElement')")
 	
 End for 
 
-$Txt_out:=$str.setText("Category_ID_element").uperCamelCase()
+$out:=$str.uperCamelCase()
 
-For ($i; 1; Length:C16($Txt_in); 1)
+For ($i; 1; Length:C16($in); 1)
 	
-	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91($Txt_in[[$i]]); "uperCamelCase('CategoryIDElement')")
-	
-End for 
-
-$Txt_in:="Category"
-$Txt_out:=$str.setText("category").uperCamelCase()
-
-For ($i; 1; Length:C16($Txt_in); 1)
-	
-	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91($Txt_in[[$i]]); "uperCamelCase('Category')")
+	ASSERT:C1129(Character code:C91($out[[$i]])=Character code:C91($in[[$i]]); "uperCamelCase('Category ID Element')")
 	
 End for 
 
-// ============================================
-// length
+$out:=$str.setText("Category_ID_element").uperCamelCase()
+
+For ($i; 1; Length:C16($in); 1)
+	
+	ASSERT:C1129(Character code:C91($out[[$i]])=Character code:C91($in[[$i]]); "uperCamelCase('CategoryIDElement')")
+	
+End for 
+
+$in:="Category"
+$out:=$str.setText("category").uperCamelCase()
+
+For ($i; 1; Length:C16($in); 1)
+	
+	ASSERT:C1129(Character code:C91($out[[$i]])=Character code:C91($in[[$i]]); "uperCamelCase('Category')")
+	
+End for 
+
+// mark:-length
 ASSERT:C1129($str.setText("").length=0)
 ASSERT:C1129($str.setText("Hello world").length=Length:C16("Hello world"))
 
-// ============================================
-// isStyled()
+/// mark-:isStyled()
 ASSERT:C1129(Not:C34($str.setText("Hello world").isStyled()))
 ASSERT:C1129(Not:C34($str.setText("xxx\r\nyyy").isStyled()))
 ASSERT:C1129($str.setText("<SPAN STYLE=\"font-family: DESDEMONA\">Hello world</SPAN>").isStyled())
 ASSERT:C1129($str.setText("<span style=\"text-align:left;font-family:'Segoe UI';font-size:9pt;color:#009900\">This is the word <span style=\"color:#D81E05\">red</span></span>").isStyled())
 
-// ============================================
-// isBoolean()
+// mark:-isBoolean()
 ASSERT:C1129($str.setText("true").isBoolean())
 ASSERT:C1129($str.setText("True").isBoolean())
 ASSERT:C1129($str.setText("false").isBoolean())
 ASSERT:C1129($str.setText("False").isBoolean())
 ASSERT:C1129(Not:C34($str.setText("hello").isBoolean()))
 
-// ============================================
-// isDate()
+$str.setText("")
+ASSERT:C1129($str.isBoolean("true"))
+ASSERT:C1129($str.isBoolean("True"))
+ASSERT:C1129($str.isBoolean("false"))
+ASSERT:C1129($str.isBoolean("False"))
+ASSERT:C1129(Not:C34($str.isBoolean("hello")))
+
+// mark:-isDate()
 ASSERT:C1129($str.setText("1/1/01").isDate())
 ASSERT:C1129($str.setText("01/12/2015").isDate())
 ASSERT:C1129($str.setText(String:C10(Current date:C33)).isDate())
 ASSERT:C1129(Not:C34($str.setText("1/1").isDate()))
 ASSERT:C1129(Not:C34($str.setText("hello").isDate()))
 
-// ============================================
-// isNum()
+$str.setText("")
+ASSERT:C1129($str.isDate("1/1/01"))
+ASSERT:C1129($str.isDate("01/12/2015"))
+ASSERT:C1129($str.isDate(String:C10(Current date:C33)))
+ASSERT:C1129(Not:C34($str.isDate("1/1")))
+ASSERT:C1129(Not:C34($str.isDate("hello")))
+
+// mark:-isNum()
 GET SYSTEM FORMAT:C994(Decimal separator:K60:1; $t)
 ASSERT:C1129($str.setText("100").isNum())
 ASSERT:C1129($str.setText("+1").isNum())
@@ -150,8 +155,16 @@ ASSERT:C1129($str.setText(String:C10(Pi:K30:1)).isNum())
 ASSERT:C1129(Not:C34($str.setText("1/1").isNum()))
 ASSERT:C1129(Not:C34($str.setText("hello").isNum()))
 
-// ============================================
-// isTime()
+$str.setText("")
+ASSERT:C1129($str.isNum("100"))
+ASSERT:C1129($str.isNum("+1"))
+ASSERT:C1129($str.isNum("-10"))
+ASSERT:C1129($str.isNum("12"+$t+"5"))
+ASSERT:C1129($str.isNum(String:C10(Pi:K30:1)))
+ASSERT:C1129(Not:C34($str.isNum("1/1")))
+ASSERT:C1129(Not:C34($str.isNum("hello")))
+
+// mark:-isTime()
 GET SYSTEM FORMAT:C994(Time separator:K60:11; $t)
 ASSERT:C1129($str.setText("12"+$t+"50").isTime())
 ASSERT:C1129($str.setText("0"+$t+"0"+$t+"30").isTime())
@@ -161,15 +174,28 @@ ASSERT:C1129(Not:C34($str.setText(String:C10(Pi:K30:1)).isTime()))
 ASSERT:C1129(Not:C34($str.setText("1/1").isTime()))
 ASSERT:C1129(Not:C34($str.setText("hello").isTime()))
 
-// ============================================
-// match()
+$str.setText("")
+ASSERT:C1129($str.isTime("12"+$t+"50"))
+ASSERT:C1129($str.isTime("0"+$t+"0"+$t+"30"))
+ASSERT:C1129($str.isTime(String:C10(Current time:C178)))
+ASSERT:C1129(Not:C34($str.isTime("-10")))
+ASSERT:C1129(Not:C34($str.isTime(String:C10(Pi:K30:1))))
+ASSERT:C1129(Not:C34($str.isTime("1/1")))
+ASSERT:C1129(Not:C34($str.isTime("hello")))
+
+// mark:-match()
 ASSERT:C1129($str.setText("today").match("(?m-si)^(?:today|tomorrow|yesterday)$"))
 ASSERT:C1129($str.setText("tomorrow").match("(?m-si)^(?:today|tomorrow|yesterday)$"))
 ASSERT:C1129($str.setText("Hello world").match("h|Hello"))
 ASSERT:C1129(Not:C34($str.setText("Hello world").match("(?m-si)^(?:today|tomorrow|yesterday)$")))
 
-// ============================================
-// fixedLength()
+$str.setText("")
+ASSERT:C1129($str.match("today"; "(?m-si)^(?:today|tomorrow|yesterday)$"))
+ASSERT:C1129($str.match("tomorrow"; "(?m-si)^(?:today|tomorrow|yesterday)$"))
+ASSERT:C1129($str.match("Hello world"; "h|Hello"))
+ASSERT:C1129(Not:C34($str.match("Hello world"; "(?m-si)^(?:today|tomorrow|yesterday)$")))
+
+// mark:-fixedLength()
 ASSERT:C1129($str.setText("").fixedLength(5; "0")="00000")
 ASSERT:C1129($str.setText("").fixedLength(5)="*****")
 ASSERT:C1129($str.setText("75").fixedLength(5; "0")="75000")
@@ -179,113 +205,112 @@ ASSERT:C1129($str.setText("75").fixedLength(5; "_"; Align right:K42:4)="___75")
 ASSERT:C1129($str.setText("75").fixedLength(10; Null:C1517; Align right:K42:4)="********75")
 ASSERT:C1129($str.setText("75,1").fixedLength(5; "0")="75,10")
 
-// ============================================
-// unaccented()
+// mark:-unaccented()
 $t:="àáâãäå"
 $tt:="ÀÁÂÃÄÅ"
-$Txt_in:=$t+$tt
-$Txt_out:=$str.setText($Txt_in).unaccented()
-ASSERT:C1129(Length:C16($Txt_in)=Length:C16($Txt_out))
+$in:=$t+$tt
+$out:=$str.setText($in).unaccented()
+ASSERT:C1129(Length:C16($in)=Length:C16($out))
 
 For ($i; 1; Length:C16($t); 1)
 	
-	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("a"); "unaccented()")
+	ASSERT:C1129(Character code:C91($out[[$i]])=Character code:C91("a"); "unaccented()")
 	
 End for 
 
-For ($i; Length:C16($t)+1; Length:C16($Txt_out); 1)
+For ($i; Length:C16($t)+1; Length:C16($out); 1)
 	
-	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("A"); "unaccented()")
+	ASSERT:C1129(Character code:C91($out[[$i]])=Character code:C91("A"); "unaccented()")
 	
 End for 
 
 $t:="èéêë"
 $tt:="ÈÉÊË"
-$Txt_in:=$t+$tt
-$Txt_out:=$str.setText($Txt_in).unaccented()
-ASSERT:C1129(Length:C16($Txt_in)=Length:C16($Txt_out))
+$in:=$t+$tt
+$out:=$str.setText($in).unaccented()
+ASSERT:C1129(Length:C16($in)=Length:C16($out))
 
 For ($i; 1; Length:C16($t); 1)
 	
-	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("e"); "unaccented()")
+	ASSERT:C1129(Character code:C91($out[[$i]])=Character code:C91("e"); "unaccented()")
 	
 End for 
 
-For ($i; Length:C16($t)+1; Length:C16($Txt_out); 1)
+For ($i; Length:C16($t)+1; Length:C16($out); 1)
 	
-	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("E"); "unaccented()")
+	ASSERT:C1129(Character code:C91($out[[$i]])=Character code:C91("E"); "unaccented()")
 	
 End for 
 
 $t:=""
 $tt:="ÌÍÎÏ"
-$Txt_in:=$t+$tt
-$Txt_out:=$str.setText($Txt_in).unaccented()
-ASSERT:C1129(Length:C16($Txt_in)=Length:C16($Txt_out))
+$in:=$t+$tt
+$out:=$str.setText($in).unaccented()
+ASSERT:C1129(Length:C16($in)=Length:C16($out))
 
 For ($i; 1; Length:C16($t); 1)
 	
-	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("i"); "unaccented()")
+	ASSERT:C1129(Character code:C91($out[[$i]])=Character code:C91("i"); "unaccented()")
 	
 End for 
 
-For ($i; Length:C16($t)+1; Length:C16($Txt_out); 1)
+For ($i; Length:C16($t)+1; Length:C16($out); 1)
 	
-	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("I"); "unaccented()")
+	ASSERT:C1129(Character code:C91($out[[$i]])=Character code:C91("I"); "unaccented()")
 	
 End for 
 
 $t:="ðòóôõö"
 $tt:="ÒÓÔÕÖ"
-$Txt_in:=$t+$tt
-$Txt_out:=$str.setText($Txt_in).unaccented()
-ASSERT:C1129(Length:C16($Txt_in)=Length:C16($Txt_out))
+$in:=$t+$tt
+$out:=$str.setText($in).unaccented()
+ASSERT:C1129(Length:C16($in)=Length:C16($out))
 
 For ($i; 1; Length:C16($t); 1)
 	
-	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("o"); "unaccented()")
+	ASSERT:C1129(Character code:C91($out[[$i]])=Character code:C91("o"); "unaccented()")
 	
 End for 
 
-For ($i; Length:C16($t)+1; Length:C16($Txt_out); 1)
+For ($i; Length:C16($t)+1; Length:C16($out); 1)
 	
-	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("O"); "unaccented()")
+	ASSERT:C1129(Character code:C91($out[[$i]])=Character code:C91("O"); "unaccented()")
 	
 End for 
 
 $t:="ùúûü"
 $tt:="ÙÚÛÜ"
-$Txt_in:=$t+$tt
-$Txt_out:=$str.setText($Txt_in).unaccented()
-ASSERT:C1129(Length:C16($Txt_in)=Length:C16($Txt_out))
+$in:=$t+$tt
+$out:=$str.setText($in).unaccented()
+ASSERT:C1129(Length:C16($in)=Length:C16($out))
 
 For ($i; 1; Length:C16($t); 1)
 	
-	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("u"); "unaccented()")
+	ASSERT:C1129(Character code:C91($out[[$i]])=Character code:C91("u"); "unaccented()")
 	
 End for 
 
-For ($i; Length:C16($t)+1; Length:C16($Txt_out); 1)
+For ($i; Length:C16($t)+1; Length:C16($out); 1)
 	
-	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("U"); "unaccented()")
+	ASSERT:C1129(Character code:C91($out[[$i]])=Character code:C91("U"); "unaccented()")
 	
 End for 
 
 $t:="ćĉčċçḉȼ"
 $tt:="ĆĈČĊÇḈȻ"
-$Txt_in:=$t+$tt
-$Txt_out:=$str.setText($Txt_in).unaccented()
-ASSERT:C1129(Length:C16($Txt_in)=Length:C16($Txt_out))
+$in:=$t+$tt
+$out:=$str.setText($in).unaccented()
+ASSERT:C1129(Length:C16($in)=Length:C16($out))
 
 For ($i; 1; Length:C16($t); 1)
 	
-	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("c"); "unaccented()")
+	ASSERT:C1129(Character code:C91($out[[$i]])=Character code:C91("c"); "unaccented()")
 	
 End for 
 
-For ($i; Length:C16($t)+1; Length:C16($Txt_out); 1)
+For ($i; Length:C16($t)+1; Length:C16($out); 1)
 	
-	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("C"); "unaccented()")
+	ASSERT:C1129(Character code:C91($out[[$i]])=Character code:C91("C"); "unaccented()")
 	
 End for 
 
@@ -293,28 +318,27 @@ End for
 // LENGTH IS ONE MORE FOR THESE 2 CHAR
 $t:="ņńǹňñṅṇṋṉn̈"
 $tt:="ŃǸŇÑṄŅṆṊṈN̈"
-$Txt_in:=$t+$tt
-$Txt_out:=$str.setText($Txt_in).unaccented()
+$in:=$t+$tt
+$out:=$str.setText($in).unaccented()
 
 //ASSERT(Length($Txt_in)=Length($Txt_out))
-ASSERT:C1129(Length:C16($Txt_in)-2=Length:C16($Txt_out))
+ASSERT:C1129(Length:C16($in)-2=Length:C16($out))
 
 //For ($i;1;Length($t);1)
 For ($i; 1; Length:C16($t)-1; 1)
 	
-	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("n"); "unaccented()")
+	ASSERT:C1129(Character code:C91($out[[$i]])=Character code:C91("n"); "unaccented()")
 	
 End for 
 
 //For ($i;Length($t)+1;Length($Txt_out);1)
-For ($i; Length:C16($t); Length:C16($Txt_out); 1)
+For ($i; Length:C16($t); Length:C16($out); 1)
 	
-	ASSERT:C1129(Character code:C91($Txt_out[[$i]])=Character code:C91("N"); "unaccented()")
+	ASSERT:C1129(Character code:C91($out[[$i]])=Character code:C91("N"); "unaccented()")
 	
 End for 
 
-// ============================================
-// distinctLetters()
+// mark:-distinctLetters()
 $str:=$str.setText("unchecked")
 ASSERT:C1129(New collection:C1472("c"; "d"; "e"; "h"; "k"; "n"; "u").equal($str.distinctLetters()))
 ASSERT:C1129($str.distinctLetters(";")="c;d;e;h;k;n;u")
@@ -323,8 +347,7 @@ $str:=$str.setText("")
 ASSERT:C1129($str.distinctLetters().length=0)
 ASSERT:C1129($str.distinctLetters(";")="")
 
-// ============================================
-// equal()
+// mark:-equal()
 ASSERT:C1129($str.setText("Hello world").equal("Hello world"))
 ASSERT:C1129(Not:C34($str.setText("Hello world").equal("HELLO WORLD")))
 ASSERT:C1129(Not:C34($str.setText("HELLO WORLD").equal("Hello world")))
@@ -335,22 +358,19 @@ $str.setText("")
 ASSERT:C1129($str.equal("Hello world"; "Hello world"))
 ASSERT:C1129(Not:C34($str.equal("Hello world"; "HELLO WORLD")))
 
-// ============================================
-// urlEncode()
+// mark:-urlEncode()
 ASSERT:C1129($str.setText("'Command Name' != '_@'").urlEncode()="%27Command%20Name%27%20%21%3D%20%27_@%27")
 
 $str.setText("")
 ASSERT:C1129($str.urlEncode("'Command Name' != '_@'")="%27Command%20Name%27%20%21%3D%20%27_@%27")
 
-// ============================================
-// urlDecode()
+// mark:-urlDecode()
 ASSERT:C1129($str.setText("%27Command%20Name%27%20%21%3D%20%27_@%27").urlDecode()="'Command Name' != '_@'")
 
 $str.setText("")
 ASSERT:C1129($str.urlDecode("%27Command%20Name%27%20%21%3D%20%27_@%27")="'Command Name' != '_@'")
 
-// ============================================
-// containsString()
+// mark:-containsString()
 $str:=$str.setText("Hello World")
 ASSERT:C1129($str.containsString("Hello"))
 ASSERT:C1129($str.containsString("WORLD"))
@@ -364,8 +384,7 @@ ASSERT:C1129($str.containsString("Hello World"; "WORLD"))
 ASSERT:C1129($str.containsString("Hello World"; "Hello"; True:C214))
 ASSERT:C1129(Not:C34($str.containsString("Hello World"; "WORLD"; True:C214)))
 
-// ============================================
-// contains()
+// mark:-contains()
 $str:=$str.setText("Hello World")
 ASSERT:C1129($str.contains("Hello"; "world"))
 ASSERT:C1129(Not:C34($str.contains("Hello"; "vincent")))
@@ -383,8 +402,7 @@ $str.setText("")
 ASSERT:C1129($str.contains("Hello world"; New collection:C1472("Hello"; "world")))
 ASSERT:C1129(Not:C34($str.contains("Hello world"; New collection:C1472("Hello"; "vincent"))))
 
-// ============================================
-// toNum()
+// mark:-toNum()
 ASSERT:C1129($str.setText("12.5").toNum()=12.5)
 ASSERT:C1129($str.setText("12,5").toNum()=12.5)
 ASSERT:C1129($str.setText("12 500").toNum()=12500)
@@ -393,15 +411,13 @@ ASSERT:C1129($str.setText("+0003,14").toNum()=3.14)
 ASSERT:C1129($str.setText("-3.14000").toNum()=-3.14)
 ASSERT:C1129($str.setText("hello world").toNum()=0)
 
-// ============================================
-// concat()
+// mark:-concat()
 ASSERT:C1129($str.setText("Hello").concat("world")="Hello world")
 ASSERT:C1129($str.setText("Hello").concat("world"; "_")="Hello_world")
 ASSERT:C1129($str.setText("Hello").concat(New collection:C1472("AAA"; "NNN"; "ZZZ"))="Hello AAA NNN ZZZ")
 ASSERT:C1129($str.setText("Hello").concat(New collection:C1472("AAA"; "NNN"; "ZZZ"); ", ")="Hello, AAA, NNN, ZZZ")
 
-// ============================================
-// occurrencesOf()
+// mark:-occurrencesOf()
 $t:="The Split string command returns a collection of strings, created by splitting stringToSplit into substrings at the boundaries specified by the separator parameter."
 ASSERT:C1129($str.setText($t).occurrencesOf("string")=4)
 ASSERT:C1129($str.setText($t).occurrencesOf("s")=14)
@@ -416,8 +432,7 @@ ASSERT:C1129($str.occurrencesOf($t; " ")=22)
 ASSERT:C1129($str.occurrencesOf($t; "hello")=0)
 ASSERT:C1129($str.occurrencesOf($t; "\r")=0)
 
-// ============================================
-// insert()
+// mark:-insert()
 $str.setText("hello world")
 
 $str.insert(" great"; 6)
@@ -432,8 +447,7 @@ ASSERT:C1129($str.length=13)
 ASSERT:C1129($str.begin=7)
 ASSERT:C1129($str.end=13)
 
-// ============================================
-// append()
+// mark:-append()
 $str.append("in Paris"; " ")
 ASSERT:C1129($str.value="hello Vincent in Paris")
 ASSERT:C1129($str.length=22)
@@ -447,8 +461,7 @@ ASSERT:C1129($str.length=11)
 ASSERT:C1129($str.begin=6)
 ASSERT:C1129($str.end=11)
 
-// ============================================
-// replace()
+// mark:-replace()
 $t:="If you pass the optional * parameter, you indicate that the object parameter is "\
 +"an object name (string). If you do not pass this parameter, you indicate that "\
 +"the object parameter is a variable. In this case, you pass a variable reference "\
@@ -465,15 +478,13 @@ ASSERT:C1129(cs:C1710.str.new($tt).equal("Ab©AAbb©©"))
 ASSERT:C1129($str.setText("Hello World").replace("World"; "Vincent")="Hello Vincent")
 ASSERT:C1129($str.setText("Hello World").replace(" World"; Null:C1517)="Hello")
 
-// ============================================
-// xmlEncode()
+// mark:-xmlEncode()
 ASSERT:C1129($str.setText("&").xmlEncode()="&amp;")
 ASSERT:C1129($str.setText("<").xmlEncode()="&lt;")
 ASSERT:C1129($str.setText(">").xmlEncode()=">")
 ASSERT:C1129($str.setText("<hello world>").xmlEncode()="&lt;hello world>")
 
-// ============================================
-// isJson(), isJsonArray(), isJsonObject()
+// mark:-isJson(), isJsonArray(), isJsonObject()
 ASSERT:C1129($str.setText("{\"test\":1,\"test\":1}").isJson())
 ASSERT:C1129($str.setText("[1,2,{\"test\":1}]").isJson())
 ASSERT:C1129(Not:C34($str.setText("hello {world}").isJson()))
@@ -488,8 +499,7 @@ ASSERT:C1129($str.setText("[1,2,{\"test\":1}]").isJsonArray())
 ASSERT:C1129(Not:C34($str.setText("[hello] {world}").isJsonArray()))
 ASSERT:C1129(Not:C34($str.setText("{\"test\":1,\"test\":1}").isJsonArray()))
 
-// ============================================
-// versionCompare()
+// mark:-versionCompare()
 ASSERT:C1129($str.setText("9.0").versionCompare("9.1.2")=-1)
 ASSERT:C1129($str.setText("9.1.2").versionCompare("9.0")=1)
 ASSERT:C1129($str.setText("9.1.2").versionCompare("9.1.2")=0)
@@ -505,8 +515,7 @@ ASSERT:C1129($str.setText("9 0").versionCompare("9 1 2"; " ")=-1)
 ASSERT:C1129($str.setText("9 1 2").versionCompare("9 0"; " ")=1)
 ASSERT:C1129($str.setText("9/1/2").versionCompare("9/0"; "/")=1)
 
-// ============================================
-// truncate()
+// mark:-truncate()
 ASSERT:C1129($str.setText("hello").truncate(1)="h…")
 ASSERT:C1129($str.setText("hello").truncate(2)="he…")
 ASSERT:C1129($str.setText("hello").truncate(3)="hel…")
@@ -515,8 +524,7 @@ ASSERT:C1129($str.setText("hello").truncate(5)="hello")
 ASSERT:C1129($str.setText("hello").truncate(10)="hello")
 ASSERT:C1129($str.setText("hello world").truncate(12)="hello world")
 
-// ============================================
-// lastOccurrenceOf()
+// mark:-lastOccurrenceOf()
 $t:="hello world hello world hello world"
 $str.setText($t)
 ASSERT:C1129($str.lastOccurrenceOf("hello")=25)
