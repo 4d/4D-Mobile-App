@@ -65,7 +65,9 @@ Function get count()->$att : Integer
 	//MARK:- 📌 FUNCTIONS
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Set the root content
-Function setContent($content)->$object : Object
+Function setContent($content) : Object
+	
+	var $key : Text
 	
 	This:C1470.success:=True:C214
 	
@@ -103,12 +105,18 @@ Function setContent($content)->$object : Object
 		
 	Else 
 		
-		// Create an empty object
-		This:C1470.content:=New object:C1471
+		// Create if any
+		This:C1470.content:=This:C1470.content || New object:C1471
 		
+		//
+		For each ($key; This:C1470.content)
+			
+			OB REMOVE:C1226(This:C1470.content; $key)
+			
+		End for each 
 	End if 
 	
-	$object:=This:C1470.content
+	return This:C1470.content
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Load from a json file

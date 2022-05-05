@@ -55,47 +55,35 @@ Function setText($content) : cs:C1710.str
 	//=======================================================================================================
 	// Insertion of the given text into the current string according to the optianal parameters begin & end
 	// Also update the inserted text position into the original string (str.begin & str.end)
-Function insert($text : Text; $begin : Integer; $end : Integer)->$this : cs:C1710.str
+Function insert($text : Text; $begin : Integer; $end : Integer) : cs:C1710.str
 	
-	var $length; $start; $stop : Integer
+	var $length : Integer
 	
 	If (Length:C16($text)>0)
 		
-		If (Count parameters:C259>=2)
-			
-			$start:=$begin
-			
-			If (Count parameters:C259>=3)
-				
-				$stop:=$end
-				
-			End if 
-		End if 
+		This:C1470.begin:=$begin
 		
-		This:C1470.begin:=$start
-		
-		If ($stop>$start)
+		If ($end>$begin)
 			
 			// Replace the selection with the string to insert
-			This:C1470.value:=Substring:C12(This:C1470.value; 1; $start-1)+$text+Substring:C12(This:C1470.value; $stop)
-			
-			This:C1470.end:=$start+Length:C16($text)-1
+			This:C1470.value:=Substring:C12(This:C1470.value; 1; $begin-1)+$text+Substring:C12(This:C1470.value; $end)
+			This:C1470.end:=$begin+Length:C16($text)-1
 			
 		Else 
 			
 			// Insert the chain at the insertion point
 			$length:=Length:C16(This:C1470.value)  // Keep the current length
-			This:C1470.value:=Insert string:C231(This:C1470.value; $text; $start)
+			This:C1470.value:=Insert string:C231(This:C1470.value; $text; $begin)
 			
-			If ($start=$length)
+			If ($begin=$length)
 				
 				// We were at the end of the text and we stay
-				This:C1470.end:=Length:C16(This:C1470.value)  //+1
+				This:C1470.end:=Length:C16(This:C1470.value)
 				
 			Else 
 				
 				// The insertion point is translated from the length of the inserted string
-				This:C1470.end:=$start+Length:C16($text)
+				This:C1470.end:=$begin+Length:C16($text)
 				
 			End if 
 		End if 
@@ -109,12 +97,12 @@ Function insert($text : Text; $begin : Integer; $end : Integer)->$this : cs:C171
 		
 	End if 
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	//=======================================================================================================
 	// Append the given text to the current string according eventualy use the optional separator text
 	// Also update the inserted text position into the original string (str.begin & str.end)
-Function append($text : Text; $separator : Text)->$this : cs:C1710.str
+Function append($text : Text; $separator : Text) : cs:C1710.str
 	
 	If (Length:C16($text)>0)
 		
@@ -131,10 +119,10 @@ Function append($text : Text; $separator : Text)->$this : cs:C1710.str
 		
 	End if 
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	//=======================================================================================================
-	// Returns True if the $toFind text is present in the string (diacritical if $2 is True)
+	// Returns True if the $toFind text is present in the string (diacritical if any)
 Function containsString($target : Text; $toFind; $diacritical : Boolean) : Boolean
 	
 	Case of 
@@ -737,18 +725,20 @@ Function wordWrap($target; $columns : Integer) : Text
 	var $colums; $length; $position : Integer
 	var $c : Collection
 	
+	$columns:=79  //default is 80 colums (-1 for "…")
+	
 	Case of 
 			
 			//______________________________
 		: (Count parameters:C259=0)
 			
 			$target:=This:C1470.value
-			$columns:=79
 			
 			//______________________________
-		: (Value type:C1509($target)=Is text:K8:3)
+		: (Value type:C1509($target)=Is integer:K8:5) | (Value type:C1509($target)=Is real:K8:4)
 			
-			$columns:=79
+			$columns:=$target
+			$target:=This:C1470.value
 			
 			//______________________________
 	End case 
@@ -792,7 +782,7 @@ Function toNum($target : Text) : Real
 	
 	$target:=Count parameters:C259>=1 ? $target : This:C1470.value
 	
-	return This:C1470.filter($target; "numeric")
+	return This:C1470.extract($target; "numeric")
 	
 	//=======================================================================================================
 	// Returns the number of occurennces of $1 into the string
@@ -1257,10 +1247,9 @@ Function truncate($maxChar : Integer; $position : Integer)->$truncated : Text
 	
 	//=======================================================================================================
 	// 
-Function filter($target : Text; $type : Text) : Variant
-	var $0 : Variant
+Function extract($target : Text; $type : Text) : Variant
 	
-	var $value; $pattern; $t; $text : Text
+	var $pattern; $t : Text
 	var $length; $position : Integer
 	
 	If (Count parameters:C259=1)
@@ -1272,38 +1261,38 @@ Function filter($target : Text; $type : Text) : Variant
 	
 	Case of 
 			
-			//…………………………………………………………………………………
-		: ($type="numeric")  // Return extract numeric
+			// Mark:Numeric
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+		: ($type="numeric")  // Return extracted numeric
 			
 			$pattern:="(?m-si)^\\D*([+-]?\\d+\\{thousand}?\\d*\\{decimal}?\\d?)\\s?\\D*$"
-			$value:=$target
+			
 			GET SYSTEM FORMAT:C994(Decimal separator:K60:1; $t)
 			$pattern:=Replace string:C233($pattern; "{decimal}"; $t)
 			
 			If ($t#".")
 				
-				$value:=Replace string:C233($value; "."; $t)
+				$target:=Replace string:C233($target; "."; $t)
 				
 			End if 
 			
 			GET SYSTEM FORMAT:C994(Thousand separator:K60:2; $t)
 			$pattern:=Replace string:C233($pattern; "{thousand}"; $t)
 			
-			If (Match regex:C1019($pattern; $value; 1; $position; $length; *))
+			If (Match regex:C1019($pattern; $target; 1; $position; $length; *))
 				
-				$text:=$text+Substring:C12($value; 1; $length)
-				$value:=Delete string:C232($value; 1; $length)
+				return Num:C11(Substring:C12($target; 1; $length))
 				
 			Else 
 				
-				If (Length:C16($value)>0)
-					
-					$text:=$text+$value
-					
-				End if 
+				return Num:C11($target)
+				
 			End if 
 			
-			return Num:C11($text)
+			//…………………………………………………………………………………
+		Else 
+			
+			// Mark:TO DO (date, time, …)
 			
 			//…………………………………………………………………………………
 	End case 
@@ -1313,71 +1302,76 @@ Function filter($target : Text; $type : Text) : Variant
 	// -  0 if the version and the reference are equal
 	// -  1 if the version is higher than the reference
 	// - -1 if the version is lower than the reference
-Function versionCompare($with : Text; $separator : Text)->$result : Integer
+Function versionCompare($with : Text; $separator : Text) : Integer
 	
 	If (Count parameters:C259>=2)
 		
-		$result:=Super:C1706.versionCompare(This:C1470.value; $with; $separator)
+		return Super:C1706.versionCompare(This:C1470.value; $with; $separator)
 		
 	Else 
 		
-		$result:=Super:C1706.versionCompare(This:C1470.value; $with)
+		return Super:C1706.versionCompare(This:C1470.value; $with)
 		
 	End if 
 	
 	//=======================================================================================================
 	// Return a user friendly string from json prettified string
-Function jsonSimplify()->$formatted : Text
-	$formatted:=Replace string:C233(This:C1470.value; "\t"; "")
-	$formatted:=Replace string:C233($formatted; "{\n"; "")
-	$formatted:=Replace string:C233($formatted; "\n}"; "")
-	$formatted:=Replace string:C233($formatted; ",\n"; "\n")
-	$formatted:=Replace string:C233($formatted; "[\n"; "")
-	$formatted:=Replace string:C233($formatted; "\n]"; "")
+Function jsonSimplify($target : Text) : Text
+	
+	$target:=Count parameters:C259>=1 ? $target : This:C1470.value
+	
+	$target:=Replace string:C233($target; "\t"; "")
+	$target:=Replace string:C233($target; "{\n"; "")
+	$target:=Replace string:C233($target; "\n}"; "")
+	$target:=Replace string:C233($target; ",\n"; "\n")
+	$target:=Replace string:C233($target; "[\n"; "")
+	$target:=Replace string:C233($target; "\n]"; "")
+	
+	return $target
 	
 	//=======================================================================================================
 	// Enforcing Standard Password Compliance
-Function passwordCompliance($length : Integer)->$compliant : Boolean
+Function passwordCompliance($length : Integer) : Boolean
 	
 	If (Count parameters:C259>=1)
 		
 		// At least $length characters with at least one number, one lower case, one upper case and one special character
-		$compliant:=Match regex:C1019("(?m-si)^(?=.{"+String:C10($length)+",})(?=.*[[:digit:]])(?=.*[[:lower:]])(?=.*[[:upper:]])(?=.*[[:punct:]]).*$"; This:C1470.value; 1)
+		return Match regex:C1019("(?m-si)^(?=.{"+String:C10($length)+",})(?=.*[[:digit:]])(?=.*[[:lower:]])(?=.*[[:upper:]])(?=.*[[:punct:]]).*$"; This:C1470.value; 1)
 		
 	Else 
 		
 		// At least 8 characters with at least one number, one lower case, one upper case and one special character
-		$compliant:=Match regex:C1019("(?m-si)^(?=.{8,})(?=.*[[:digit:]])(?=.*[[:lower:]])(?=.*[[:upper:]])(?=.*[[:punct:]]).*$"; This:C1470.value; 1)
+		return Match regex:C1019("(?m-si)^(?=.{8,})(?=.*[[:digit:]])(?=.*[[:lower:]])(?=.*[[:upper:]])(?=.*[[:punct:]]).*$"; This:C1470.value; 1)
 		
 	End if 
 	
 	//=======================================================================================================
-Function suitableWithFileName()->$suitable : Text
+Function suitableWithFileName($target : Text) : Text
+	
+	var $length; $position : Integer
 	
 /*
 All non-permitted characters are removed. Example: way*fast becomes wayfast:
-  < (less than) 
-  > (greater than) 
-  : (colon) 
-  " (right quotation mark) 
-  | (vertical bar or pipe) 
-  ? (question mark) 
-  * (asterisk) 
-  . (period) or space at the begin or end of the file or folder name
+< (less than)
+> (greater than)
+: (colon)
+" (right quotation mark)
+| (vertical bar or pipe)
+? (question mark)
+* (asterisk)
+. (period) or space at the begin or end of the file or folder name
 */
 	
-	var $position; $length : Integer
+	$target:=Count parameters:C259>=1 ? $target : This:C1470.value
 	
-	$suitable:=This:C1470.value
-	
-	While (Match regex:C1019("(?mi-s)((?:^[\\.\\s]+)|(?:[\\.\\s]+$)|(?:[:\\\\*?\"<>|/]+))+"; $suitable; 1; $position; $length))
+	While (Match regex:C1019("(?mi-s)((?:^[\\.\\s]+)|(?:[\\.\\s]+$)|(?:[:\\\\*?\"<>|/]+))+"; $target; 1; $position; $length))
 		
-		$suitable:=Delete string:C232($suitable; $position; $length)
+		$target:=Delete string:C232($target; $position; $length)
 		
 	End while 
 	
 /*
-Windows reserved names 
+Windows reserved names
 com1, com2, com3, com4, com5, com6, com7, com8, com9
 lpt1, lpt2, lpt3, lpt4, lpt5, lpt6, lpt7, lpt8, lpt9
 con, nul, prn
@@ -1405,11 +1399,13 @@ con, nul, prn
 		"con"; \
 		"nul"; \
 		"prn")\
-		.indexOf($suitable)>-1)
+		.indexOf($target)>-1)
 		
-		$suitable:="_"+$suitable
+		$target:="_"+$target
 		
 	End if 
+	
+	return $target
 	
 	//MARK:-PRIVATE
 	//=======================================================================================================

@@ -154,9 +154,7 @@ Function create()->$result : Object
 			This:C1470.file.copyTo(This:C1470.logFolder; "lastBuild.android.4dmobile"; fk overwrite:K87:5)
 			
 		End if 
-		
 	End if 
-	
 	
 	If ($o.success)
 		
@@ -181,7 +179,6 @@ Function create()->$result : Object
 		End if 
 		
 	End if 
-	
 	
 	If (Feature.disabled("androidDataSet"))
 		
@@ -246,7 +243,6 @@ Function create()->$result : Object
 		End if 
 		
 	End if 
-	
 	
 	If ($o.success)
 		

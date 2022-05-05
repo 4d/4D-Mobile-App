@@ -298,6 +298,12 @@ Function fieldList($table)->$result : Object
 				
 				$field:=$tableModel[$key]
 				
+				If ($field.kind="alias")
+					
+					$field.$target:=PROJECT.$project.ExposedStructure.aliasTarget($tableModel[""].name; $field).target
+					
+				End if 
+				
 				Case of 
 						
 						//……………………………………………………………………………………………………………
@@ -335,7 +341,7 @@ Function fieldList($table)->$result : Object
 						//……………………………………………………………………………………………………………
 						//FIXME: BUG EN COMPILÉ
 						//: ($field.kind="relatedEntity")\
-																																																																																											 || (($field.kind="alias") && (Bool($field.isToOne)))
+																																																																																																		 || (($field.kind="alias") && (Bool($field.isToOne)))
 						
 					: ($field.kind="relatedEntity")\
 						 || (($field.kind="alias") & (Bool:C1537($field.isToOne)))

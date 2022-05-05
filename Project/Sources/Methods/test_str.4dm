@@ -461,6 +461,13 @@ ASSERT:C1129($str.length=11)
 ASSERT:C1129($str.begin=6)
 ASSERT:C1129($str.end=11)
 
+// mark:-extract()
+ASSERT:C1129($str.extract(String:C10(Pi:K30:1); "numeric")=Pi:K30:1)
+ASSERT:C1129($str.extract("hello world"; "numeric")=0)
+ASSERT:C1129($str.extract("12 worlds"; "numeric")=12)
+ASSERT:C1129($str.extract("3,14"; "numeric")=3.14)
+ASSERT:C1129($str.extract("3.14"; "numeric")=3.14)
+
 // mark:-replace()
 $t:="If you pass the optional * parameter, you indicate that the object parameter is "\
 +"an object name (string). If you do not pass this parameter, you indicate that "\

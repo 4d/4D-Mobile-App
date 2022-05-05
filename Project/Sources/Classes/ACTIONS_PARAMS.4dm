@@ -1736,9 +1736,9 @@ Function dataSourceMenuManager()
 Function editList()
 	
 /*
-			$form:=New object(\
-						"static"; $static; \
-						"host"; This.path.hostInputControls(True))
+				$form:=New object(\
+								"static"; $static; \
+								"host"; This.path.hostInputControls(True))
 	
 $form.folder:=This.path.hostInputControls()
 $manifest:=$form.folder.file("manifest.json")
@@ -2217,11 +2217,19 @@ Function formatToolTip($format : Text)->$tip : Text
 			
 			$o:=JSON Parse:C1218($file.getText())
 			
-			If ($o.choiceList#Null:C1517)
-				
-				$tip:=UI.str.setText(JSON Stringify:C1217($o.choiceList; *)).jsonSimplify()
-				
-			End if 
+			Case of 
+					//______________________________________________________
+				: ($o.choiceList#Null:C1517)
+					
+					$tip:=UI.str.jsonSimplify(JSON Stringify:C1217($o.choiceList; *))
+					
+					//______________________________________________________
+				: ($o.homepage#Null:C1517)
+					
+					$tip:=String:C10($o.homepage)
+					
+					//______________________________________________________
+			End case 
 		End if 
 		
 	Else 
@@ -2232,7 +2240,7 @@ Function formatToolTip($format : Text)->$tip : Text
 		//SHARED.resources.formattersByName:=New object
 		//var $bind
 		//For each ($bind; SHARED.resources.fieldBindingTypes\
-																																																																																	.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
+																																																																																				.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
 		//SHARED.resources.formattersByName[$bind.name]:=$bind
 		//End for each
 		//End if

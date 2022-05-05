@@ -1003,7 +1003,7 @@ Function setHelpTip($e : Object)
 	
 	var $field : Object
 	var $file : 4D:C1709.File
-	var $name; $tips : Text
+	var $name; $tip : Text
 	var $o : Object
 	
 	// ----------------------------------------------------
@@ -1014,22 +1014,22 @@ Function setHelpTip($e : Object)
 				//………………………………………………………………………………
 			: ($e.columnName=This:C1470.icons.name)
 				
-				$tips:=UI.str.localize("clickToSet")
+				$tip:=UI.str.localize("clickToSet")
 				
 				//………………………………………………………………………………
 			: ($e.columnName=This:C1470.shortLabels.name)
 				
-				$tips:=UI.str.localize("doubleClickToEdit")+"\r - "+UI.str.localize("shouldBe10CharOrLess")
+				$tip:=UI.str.localize("doubleClickToEdit")+"\r - "+UI.str.localize("shouldBe10CharOrLess")
 				
 				//………………………………………………………………………………
 			: ($e.columnName=This:C1470.labels.name)
 				
-				$tips:=UI.str.localize("doubleClickToEdit")+"\r - "+UI.str.localize("shouldBe25CharOrLess")
+				$tip:=UI.str.localize("doubleClickToEdit")+"\r - "+UI.str.localize("shouldBe25CharOrLess")
 				
 				//………………………………………………………………………………
 			: ($e.columnName=This:C1470.titles.name)
 				
-				$tips:=UI.str.localize("doubleClickToEdit")
+				$tip:=UI.str.localize("doubleClickToEdit")
 				
 				//………………………………………………………………………………
 			: ($e.columnName=This:C1470.formats.name)
@@ -1048,12 +1048,20 @@ Function setHelpTip($e : Object)
 						If ($file.exists)
 							
 							$o:=JSON Parse:C1218($file.getText())
-							
-							If ($o.choiceList#Null:C1517)
-								
-								$tips:=cs:C1710.str.new(JSON Stringify:C1217($o.choiceList; *)).jsonSimplify()
-								
-							End if 
+							ASSERT:C1129(Not:C34(Shift down:C543))
+							Case of 
+									//______________________________________________________
+								: ($o.choiceList#Null:C1517)
+									
+									$tip:=UI.str.jsonSimplify(JSON Stringify:C1217($o.choiceList; *))
+									
+									//______________________________________________________
+								: ($o.homepage#Null:C1517)
+									
+									$tip:=String:C10($o.homepage)
+									
+									//______________________________________________________
+							End case 
 						End if 
 						
 					Else 
@@ -1073,7 +1081,7 @@ Function setHelpTip($e : Object)
 							End for each 
 						End if 
 						
-						$tips:=String:C10(SHARED.resources.formattersByName[This:C1470.name].tips)
+						$tip:=String:C10(SHARED.resources.formattersByName[This:C1470.name].tips)
 						
 					End if 
 				End if 
@@ -1087,7 +1095,7 @@ Function setHelpTip($e : Object)
 		
 	End if 
 	
-	This:C1470.fieldList.setHelpTip($tips)
+	This:C1470.fieldList.setHelpTip($tip)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Update forms if any

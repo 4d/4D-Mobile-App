@@ -1085,7 +1085,7 @@ Function showIconPicker()
 		$o.hidePromptSeparator:=True:C214
 		$o.forceRedraw:=True:C214
 		
-		$o.prompt:=UI.str.setText("chooseAnIconForTheAction").localized(String:C10(This:C1470.current.name))
+		$o.prompt:=UI.str.localize("chooseAnIconForTheAction"; String:C10(This:C1470.current.name))
 		
 		This:C1470.callMeBack("pickerShow"; $o)
 		

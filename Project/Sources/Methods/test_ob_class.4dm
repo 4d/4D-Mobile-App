@@ -56,16 +56,6 @@ ASSERT:C1129($ob.count=5)
 ASSERT:C1129($ob.entries().length=5)
 ASSERT:C1129($ob.isEqual($o))
 
-$ob.clear()
-
-$ob:=cs:C1710.ob.new($o)
-ASSERT:C1129(Not:C34($ob.isEmpty))
-ASSERT:C1129($ob.isObject)
-ASSERT:C1129(Not:C34($ob.isCollection))
-ASSERT:C1129($ob.count=5)
-ASSERT:C1129($ob.entries().length=5)
-ASSERT:C1129($ob.isEqual($o))
-
 //MARK: - inHierarchy()
 ASSERT:C1129($ob.isEqual($ob.inHierarchy("one")))
 ASSERT:C1129($ob.inHierarchy("uuid")#Null:C1517)
@@ -247,7 +237,6 @@ ASSERT:C1129($o.f#Null:C1517)
 ASSERT:C1129($o.h#Null:C1517)
 ASSERT:C1129($o.j#Null:C1517)
 
-
 //MARK: - deepMerge()
 $o:=New object:C1471(\
 "a"; New object:C1471("b"; 1); \
@@ -273,4 +262,17 @@ $o:=New object:C1471(\
 "test"; New collection:C1472("c"; Pi:K30:1))
 $ob.deepMerge($o)
 
+
+//MARK: - clear()
+$ob.clear()
+
+ASSERT:C1129($ob.isEmpty)
+ASSERT:C1129($ob.isObject)
+ASSERT:C1129(Not:C34($ob.isCollection))
+ASSERT:C1129($ob.count=0)
+ASSERT:C1129($ob.entries().length=0)
+ASSERT:C1129($ob.isEqual(New object:C1471()))
+
 err_FINALLY
+
+BEEP:C151
