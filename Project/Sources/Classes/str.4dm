@@ -720,9 +720,9 @@ Function trim($target : Text; $trim : Text) : Text
 	// Returns a word wrapped text based on the line length given (default is 80 characters)
 Function wordWrap($target; $columns : Integer) : Text
 	
-	var $pattern; $t : Text
+	var $pattern : Text
 	var $match : Boolean
-	var $colums; $length; $position : Integer
+	var $length; $position : Integer
 	var $c : Collection
 	
 	$columns:=79  //default is 80 colums (-1 for "…")
@@ -743,37 +743,40 @@ Function wordWrap($target; $columns : Integer) : Text
 			//______________________________
 	End case 
 	
-	$pattern:="^(.{1,"+String:C10($columns)+"}|\\S{"+String:C10($columns+1)+",})(?:\\s[^\\S\\r\\n]*|\\Z)"
-	
-	$c:=New collection:C1472
-	
-	Repeat 
+	If (Length:C16($target)>0)
 		
-		$match:=Match regex:C1019($pattern; $target; 1; $position; $length; *)
+		$pattern:="^(.{1,"+String:C10($columns)+"}|\\S{"+String:C10($columns+1)+",})(?:\\s[^\\S\\r\\n]*|\\Z)"
 		
-		If ($match)
+		$c:=New collection:C1472
+		
+		Repeat 
 			
-			$c.push(Substring:C12($target; 1; $length))
-			$target:=Delete string:C232($target; 1; $length)
+			$match:=Match regex:C1019($pattern; $target; 1; $position; $length; *)
+			
+			If ($match)
+				
+				$c.push(Substring:C12($target; 1; $length))
+				$target:=Delete string:C232($target; 1; $length)
+				
+			Else 
+				
+				If (Length:C16($target)>0)
+					
+					$c.push($target)
+					
+				End if 
+			End if 
+		Until (Not:C34($match))
+		
+		If ($c.length>0)
+			
+			return $c.join(Is macOS:C1572 ? "\r" : "\n")
 			
 		Else 
 			
-			If (Length:C16($target)>0)
-				
-				$c.push($target)
-				
-			End if 
+			return $target
+			
 		End if 
-	Until (Not:C34($match))
-	
-	If ($c.length>0)
-		
-		return $c.join(Choose:C955(Is macOS:C1572; "\r"; "\n"))
-		
-	Else 
-		
-		return $target
-		
 	End if 
 	
 	//=======================================================================================================

@@ -253,9 +253,9 @@ If (Num:C11($e.row)>0)
 		End if 
 	End if 
 	
-	If (Position:C15("\r"; $tips)=0)
+	If (Length:C16($tips)>0) && (Position:C15("\r"; $tips)=0)
 		
-		$tips:=UI.str.setText($tips).wordWrap(60)
+		$tips:=UI.str.wordWrap($tips; 60)
 		
 	End if 
 	
