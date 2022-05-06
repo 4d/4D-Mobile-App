@@ -4,32 +4,53 @@ Class constructor($url)
 	This:C1470.onErrorCallMethod:=Formula:C1597(noError).source
 	This:C1470._trials:=0
 	
-	If (Count parameters:C259>=1)
-		
-		This:C1470.reset($url)
-		
-	Else 
-		
-		This:C1470.reset()
-		
-	End if 
+	This:C1470.reset($url)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function get timeout() : Integer
+	
+	var $timeout : Integer
+	
+	HTTP GET OPTION:C1159(HTTP timeout:K71:10; $timeout)
+	return ($timeout)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function set timeout($timeout)
+	
+	// Keep the current value
+	This:C1470._timeout:=This:C1470._timeout || This:C1470.timeout
+	
+	Case of 
+			
+			//______________________________________________________
+		: (String:C10($timeout)="default")
+			
+			$timeout:=120
+			
+			//______________________________________________________
+		: (String:C10($timeout)="reset")
+			
+			$timeout:=This:C1470._timeout
+			
+			//______________________________________________________
+		Else 
+			
+			$timeout:=Num:C11($timeout)
+			
+			//______________________________________________________
+	End case 
+	
+	HTTP SET OPTION:C1160(HTTP timeout:K71:10; $timeout)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function reset($url)
 	
-	If (Count parameters:C259>=1)
-		
-		This:C1470.setURL($url)
-		
-	Else 
-		
-		This:C1470.url:=""
-		
-	End if 
+	This:C1470.setURL($url)
 	
 	This:C1470.status:=0
 	This:C1470.keepAlive:=False:C215
 	This:C1470.timeout:=120  // Default value = 120 secondes
+	This:C1470._timeout:=Null:C1517
 	This:C1470.followRedirect:=True:C214
 	This:C1470.AllowCompression:=True:C214
 	This:C1470.AllowDisplayAuthDial:=False:C215
@@ -41,42 +62,6 @@ Function reset($url)
 	This:C1470.lastError:=""
 	This:C1470.maxRedirect:=2  // Default value
 	This:C1470.success:=True:C214  //This.isInternetAvailable()
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function get timeout() : Integer
-	
-	var $value : Integer
-	
-	HTTP GET OPTION:C1159(HTTP timeout:K71:10; $value)
-	return ($value)
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function set timeout($value)
-	
-	// Keep the current value
-	This:C1470._timeout:=This:C1470._timeout || This:C1470.timeout
-	
-	Case of 
-			
-			//______________________________________________________
-		: (String:C10($value)="default")
-			
-			$value:=120
-			
-			//______________________________________________________
-		: (String:C10($value)="reset")
-			
-			$value:=This:C1470._timeout
-			
-			//______________________________________________________
-		Else 
-			
-			$value:=Num:C11($value)
-			
-			//______________________________________________________
-	End case 
-	
-	HTTP SET OPTION:C1160(HTTP timeout:K71:10; $value)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// To set the display of the authentication dialog box
@@ -105,25 +90,16 @@ Function setMaxRedirect($allow : Integer)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// To set the URL
-Function setURL($url)->$this : cs:C1710.http
+Function setURL($url) : cs:C1710.http
 	
-	If (Count parameters:C259>=1)
-		
-		This:C1470.url:=$url
-		
-	Else 
-		
-		This:C1470.url:=""
-		
-	End if 
-	
+	This:C1470.url:=$url
 	This:C1470._trials:=0
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// To set the response type
-Function setResponseType($type : Integer; $file : 4D:C1709.File)->$this : cs:C1710.http
+Function setResponseType($type : Integer; $file : 4D:C1709.File) : cs:C1710.http
 	
 	This:C1470.responseType:=$type
 	
@@ -131,23 +107,16 @@ Function setResponseType($type : Integer; $file : 4D:C1709.File)->$this : cs:C17
 		
 		If (Count parameters:C259>=2)
 			
-			If (OB Instance of:C1731($file; 4D:C1709.File))
-				
-				This:C1470.targetFile:=$file
-				
-			Else 
-				
-				This:C1470._pushError("The target file must be a 4D File")
-				
-			End if 
+			This:C1470.targetFile:=$file
+			
 		End if 
 	End if 
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// To set the headers of the requête. must be a collection of name/value pairs
-Function setHeaders($headers : Collection)->$this : cs:C1710.http
+Function setHeaders($headers : Collection) : cs:C1710.http
 	
 	This:C1470.success:=False:C215
 	
@@ -161,11 +130,11 @@ Function setHeaders($headers : Collection)->$this : cs:C1710.http
 		End if 
 	End if 
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Test if the server is reachable
-Function ping($url : Text)->$reachable : Boolean
+Function ping($url : Text) : Boolean
 	
 	var $onErrCallMethod; $body; $response : Text
 	var $code; $len; $pos : Integer
@@ -196,7 +165,7 @@ Function ping($url : Text)->$reachable : Boolean
 	
 	If (This:C1470.success)
 		
-		$reachable:=True:C214
+		return True:C214
 		
 	Else 
 		
@@ -206,7 +175,7 @@ Function ping($url : Text)->$reachable : Boolean
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the methods allowed on the server
-Function allow($url : Text)->$allowed : Collection
+Function allow($url : Text) : Collection
 	
 	var $onErrCallMethod; $body; $response : Text
 	var $code; $len; $pos : Integer
@@ -248,7 +217,7 @@ Function allow($url : Text)->$allowed : Collection
 		
 		If ($o#Null:C1517)
 			
-			$allowed:=Split string:C1554($o.value; ",")
+			return Split string:C1554($o.value; ",")
 			
 		End if 
 		
@@ -260,7 +229,7 @@ Function allow($url : Text)->$allowed : Collection
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// DELETE method
-Function delete($body)->$this : cs:C1710.http
+Function delete($body) : cs:C1710.http
 	
 	If (Count parameters:C259>=1)
 		
@@ -272,11 +241,11 @@ Function delete($body)->$this : cs:C1710.http
 		
 	End if 
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// HEAD method
-Function head($body)->$this : cs:C1710.http
+Function head($body) : cs:C1710.http
 	
 	If (Count parameters:C259>=1)
 		
@@ -288,11 +257,11 @@ Function head($body)->$this : cs:C1710.http
 		
 	End if 
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// OPTIONS method
-Function options($body)->$this : cs:C1710.http
+Function options($body) : cs:C1710.http
 	
 	If (Count parameters:C259>=1)
 		
@@ -304,11 +273,11 @@ Function options($body)->$this : cs:C1710.http
 		
 	End if 
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// POST method
-Function post($body)->$this : cs:C1710.http
+Function post($body) : cs:C1710.http
 	
 	If (Count parameters:C259>=1)
 		
@@ -320,11 +289,11 @@ Function post($body)->$this : cs:C1710.http
 		
 	End if 
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// PUT method
-Function put($body)->$this : cs:C1710.http
+Function put($body) : cs:C1710.http
 	
 	If (Count parameters:C259>=1)
 		
@@ -336,11 +305,11 @@ Function put($body)->$this : cs:C1710.http
 		
 	End if 
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// TRACE method
-Function trace($body)->$this : cs:C1710.http
+Function trace($body) : cs:C1710.http
 	
 	If (Count parameters:C259>=1)
 		
@@ -352,11 +321,11 @@ Function trace($body)->$this : cs:C1710.http
 		
 	End if 
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// GET method
-Function get()->$this : cs:C1710.http
+Function get() : cs:C1710.http
 	
 	C_VARIANT:C1683(${1})
 	
@@ -481,10 +450,10 @@ Function get()->$this : cs:C1710.http
 		
 	End if 
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function request($method : Text; $body)->$this : cs:C1710.http
+Function request($method : Text; $body) : cs:C1710.http
 	
 	var $onErrCallMethod; $t : Text
 	var $indx : Integer
@@ -587,14 +556,17 @@ Function request($method : Text; $body)->$this : cs:C1710.http
 		
 	End if 
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Test if a newer version of a resource is available
-Function newerRelease($ETag : Text; $lastModified : Text)->$newer : Boolean
+Function newerRelease($ETag : Text; $lastModified : Text) : Boolean
+	
+	var $newer : Boolean
+	var $local; $o; $server : Object
+	var $headers : Collection
 	
 	// Keep current headers
-	var $headers : Collection
 	$headers:=This:C1470.headers.copy()
 	
 	This:C1470.timeout:=30
@@ -607,7 +579,6 @@ Function newerRelease($ETag : Text; $lastModified : Text)->$newer : Boolean
 		// Resource. It lets caches be more efficient and save bandwidth, as a web server
 		// Does not need to resend a full response if the content has not changed.
 		
-		var $o : Object
 		$o:=This:C1470.headers.query("name = 'ETag'").pop()
 		
 		If ($o#Null:C1517)
@@ -628,7 +599,6 @@ Function newerRelease($ETag : Text; $lastModified : Text)->$newer : Boolean
 			
 			If ($o#Null:C1517)
 				
-				var $server; $local : Object
 				$server:=This:C1470.decodeDateTime(String:C10($o.value))
 				$local:=This:C1470.decodeDateTime($lastModified)
 				
@@ -642,52 +612,61 @@ Function newerRelease($ETag : Text; $lastModified : Text)->$newer : Boolean
 	This:C1470.responseHeaders:=This:C1470.headers.copy()
 	This:C1470.headers:=$headers
 	
+	return $newer
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Convert a date-time string (<day-name>, <day> <month> <year> <hour>:<minute>:<second> GMT) as object
-Function decodeDateTime($dateTimeString : Text)->$dateTime : Object
+Function decodeDateTime($dateTimeString : Text) : Object
+	
+	var $o : Object
 	
 	ARRAY LONGINT:C221($pos; 0x0000)
 	ARRAY LONGINT:C221($len; 0x0000)
 	
-	$dateTime:=New object:C1471(\
+	$o:=New object:C1471(\
 		"date"; !00-00-00!; \
 		"time"; ?00:00:00?)
 	
 	If (Match regex:C1019("(?m-si)(\\d{2})\\s([^\\s]*)\\s(\\d{4})\\s(\\d{2}(?::\\d{2}){2})"; $dateTimeString; 1; $pos; $len))
 		
-		$dateTime.date:=Add to date:C393(!00-00-00!; \
+		$o.date:=Add to date:C393(!00-00-00!; \
 			Num:C11(Substring:C12($dateTimeString; $pos{3}; $len{3})); \
 			New collection:C1472(""; "jan"; "feb"; "mar"; "apr"; "may"; "jun"; "jul"; "aug"; "sep"; "oct"; "nov"; "dec").indexOf(Substring:C12($dateTimeString; $pos{2}; $len{2})); \
 			Num:C11(Substring:C12($dateTimeString; $pos{1}; $len{1})))
 		
-		$dateTime.time:=Time:C179(Substring:C12($dateTimeString; $pos{4}; $len{4}))
+		$o.time:=Time:C179(Substring:C12($dateTimeString; $pos{4}; $len{4}))
 		
 	End if 
 	
+	return $o
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if internet access is available
-Function isInternetAvailable()->$available : Boolean
+Function isInternetAvailable() : Boolean
 	
-	$available:=(Length:C16(This:C1470.myIP())>0)
+	return (Length:C16(This:C1470.publicIP)>0)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns public IP
-Function myIP()->$IP : Text
+	// Returns public IP v4 address string
+Function publicIP() : Text
 	
-	var $onErrCallMethod; $t : Text
-	var $code : Integer
+	var $ip; $onErrCallMethod : Text
+	
+	This:C1470.timeout:=30
 	
 	$onErrCallMethod:=Method called on error:C704
 	CLEAR VARIABLE:C89(ERROR)
 	ON ERR CALL:C155(This:C1470.onErrorCallMethod)
-	This:C1470.status:=HTTP Get:C1157("http://api.ipify.org"; $t)
+	This:C1470.status:=HTTP Get:C1157("http://api.ipify.org"; $ip)
 	ON ERR CALL:C155($onErrCallMethod)
+	
+	This:C1470.timeout:="reset"
 	
 	This:C1470.success:=(This:C1470.status=200) & (ERROR=0)
 	
 	If (This:C1470.success)
 		
-		$IP:=$t
+		return $ip
 		
 	Else 
 		
@@ -696,18 +675,40 @@ Function myIP()->$IP : Text
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Return the local IP v4 adress string
+Function localIP($ssl : Boolean) : Text
+	
+	var $ip : Text
+	var $defaultPort; $port : Integer
+	var $webServer : 4D:C1709.WebServer
+	
+	$webServer:=WEB Server:C1674
+	
+	$ip:=$webServer.IPAddressToListen="0.0.0.0" ? "127.0.0.1" : $webServer.IPAddressToListen
+	$port:=$ssl ? $webServer.HTTPSPort : $webServer.HTTPPort
+	
+	If ($port#($ssl ? 443 : 80))
+		
+		$ip+=":"+String:C10($port)
+		
+	End if 
+	
+	return $ip
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Converts a string IP address into its integer equivalent
-Function ipToInteger($IP : Text)->$result : Integer
+Function ipToInteger($IP : Text) : Integer
 	
 	var $t : Text
-	
-	$result:=0
+	var $result : Integer
 	
 	For each ($t; Split string:C1554($IP; "."))
 		
 		$result:=$result << 8+Num:C11($t)
 		
 	End for each 
+	
+	return $result
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _setOptions()
@@ -864,15 +865,16 @@ Function _computeParameters($params)
 	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function _errorCodeMessage($errorCode : Integer)->$message : Text
+Function _errorCodeMessage($errorCode : Integer) : Text
 	
+	var $message : Text
 	var $errorMessages : Collection
+	
 	$errorMessages:=New collection:C1472
 	
 	$errorMessages[2]:="HTTP server not reachable"
 	$errorMessages[17]:="HTTP server not reachable (timeout?)"
 	$errorMessages[30]:="HTTP server not reachable"
-	
 	
 	If (Count parameters:C259>=1)
 		
@@ -900,10 +902,14 @@ Function _errorCodeMessage($errorCode : Integer)->$message : Text
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function _statusCodeMessage($statusCode : Integer)->$message : Text
+	return $message
 	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _statusCodeMessage($statusCode : Integer) : Text
+	
+	var $message : Text
 	var $statusMessages : Collection
+	
 	$statusMessages:=New collection:C1472
 	
 	// 1xx Informational response
@@ -1004,6 +1010,8 @@ Function _statusCodeMessage($statusCode : Integer)->$message : Text
 		$message:="Unknow status code"
 		
 	End if 
+	
+	return $message
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _decodeError()

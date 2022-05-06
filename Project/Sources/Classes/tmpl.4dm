@@ -846,22 +846,27 @@ Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Ob
 			//______________________________________________________
 		: ($field.kind="storage")
 			
-			$label:=$field.path#Null:C1517 ? $field.path : $field.name
-			$tips:=$field.label
+			$label:=$field.name
 			
 			$found:=(PROJECT.dataModel[$context.tableNumber][String:C10($field.fieldNumber)]#Null:C1517)
 			
 			//______________________________________________________
 		: ($field.kind="alias")
 			
-			$label:=$field.path#Null:C1517 ? $field.path : $field.name
-			$tips:=$field.label
+			$label:=$field.name
+			$tips:=$field.path
+			
+			If (Not:C34(PROJECT.fieldAvailable($context.tableNumber; $field)))
+				
+				$class:="error"
+				$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($label))
+				
+			End if 
 			
 			//______________________________________________________
 		: ($field.kind="calculated")
 			
-			$label:=$field.path#Null:C1517 ? $field.path : $field.name
-			$tips:=$field.label
+			$label:=$field.name
 			
 			$found:=(PROJECT.dataModel[$context.tableNumber][$field.name]#Null:C1517)
 			

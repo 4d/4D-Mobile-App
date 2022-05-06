@@ -1536,10 +1536,11 @@ Function getIcon($relativePath : Text)->$icon : Picture
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Check if a field is still available in the table catalog
-Function fieldAvailable($tableID; $field : Object)->$available : Boolean
+Function fieldAvailable($tableID; $field : Object) : Boolean
 	
-	var $fieldID : Text
-	var $relatedCatalog; $tableCatalog : Object
+	var $fieldID; $t : Text
+	var $available : Boolean
+	var $o; $relatedCatalog; $tableCatalog : Object
 	var $c : Collection
 	
 	// Accept num or string
@@ -1553,14 +1554,36 @@ Function fieldAvailable($tableID; $field : Object)->$available : Boolean
 			//______________________________________________________
 		: ($c.length=1)
 			
+			// TODO:Remove computed
 			// Check the data class
-			//TODO:Remove computed
 			If ($field.relatedTableNumber#Null:C1517)\
 				 | ($field.kind="calculated")\
 				 | (Bool:C1537($field.computed))
 				
-				// Relation or computed attribute --> use name
-				$available:=(This:C1470.dataModel[$tableID][$field.name]#Null:C1517)
+				If ($field.path#Null:C1517) && Not:C34(Bool:C1537($field.computed))
+					
+					$c:=Split string:C1554($field.path; ".")
+					
+					$o:=This:C1470.dataModel[$tableID]
+					
+					For each ($t; $c)
+						
+						$o:=$o[$t]
+						$available:=$o#Null:C1517
+						
+						If (Not:C34($available))
+							
+							break
+							
+						End if 
+					End for each 
+					
+				Else 
+					
+					// Relation or computed attribute --> use name
+					$available:=(This:C1470.dataModel[$tableID][$field.name]#Null:C1517)
+					
+				End if 
 				
 			Else 
 				
@@ -1599,6 +1622,8 @@ Function fieldAvailable($tableID; $field : Object)->$available : Boolean
 			
 			//______________________________________________________
 	End case 
+	
+	return $available
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//returns minimium field definition
