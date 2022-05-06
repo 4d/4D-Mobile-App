@@ -473,9 +473,8 @@ Function cancel() : Text
 	End if 
 	
 	
-Function fieldDescription($dropped : Object; $current : Object) : Object
+Function fieldDescription($dropped : Object; $current : Object; $tableID : Text) : Object
 	
-	var $tableNumber : Integer
 	var $relation; $table : Object
 	var $cCurrent; $cDropped : Collection
 	
@@ -490,7 +489,7 @@ Function fieldDescription($dropped : Object; $current : Object) : Object
 	$cDropped:=Split string:C1554($dropped.path; ".")
 	
 	// Get current table
-	$table:=Form:C1466.dataModel[$tableNumber]
+	$table:=Form:C1466.dataModel[$tableID]
 	
 	Case of 
 			

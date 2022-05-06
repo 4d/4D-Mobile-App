@@ -75,7 +75,7 @@ If (Length:C16($cible)>0)
 					
 				Else 
 					
-					$dropped:=$tmpl.fieldDescription($dropped; $target[$tMatches{1}][Num:C11($tMatches{2})])
+					$dropped:=$tmpl.fieldDescription($dropped; $target[$tMatches{1}][Num:C11($tMatches{2})]; $context.tableNumber)
 					
 				End if 
 				
