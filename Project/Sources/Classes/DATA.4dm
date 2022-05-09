@@ -853,7 +853,7 @@ Function queryWidgetManager()
 				
 				If ($catalog.success)
 					
-					For each ($field; $catalog.fields)
+					For each ($field; $catalog.fields.orderBy("path"))
 						
 						If (Position:C15(" "; $field.path)>0)
 							

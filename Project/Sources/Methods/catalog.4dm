@@ -197,7 +197,7 @@ Case of
 							// DON'T DISPLAY STAMP FIELD
 							
 							//______________________________________________________
-						: ($table[$fieldName].kind="storage")  // Field
+						: ($table[$fieldName].kind="storage")
 							
 							$o:=OB Copy:C1225($table[$fieldName])
 							$o.path:=$o.name
@@ -211,7 +211,7 @@ Case of
 							$Obj_out.fields.push($o)
 							
 							//______________________________________________________
-						: ($table[$fieldName].kind="relatedEntity")  // N -> 1 relation
+						: ($table[$fieldName].kind="relatedEntity")
 							
 							If (Num:C11($Obj_in.level)=0)
 								
@@ -261,12 +261,12 @@ Case of
 							End if 
 							
 							//______________________________________________________
-						: ($table[$fieldName].kind="relatedEntities")  // 1 -> N relation
+						: ($table[$fieldName].kind="relatedEntities")
 							
 							// <NOT YET  MANAGED>
 							
 							//______________________________________________________
-						: ($table[$fieldName].kind="calculated")  // Computed properties
+						: ($table[$fieldName].kind="calculated")
 							
 							$o:=OB Copy:C1225($table[$fieldName])
 							$o.path:=$o.name
@@ -279,6 +279,24 @@ Case of
 							//]
 							
 							$Obj_out.fields.push($o)
+							
+							//______________________________________________________
+						: ($table[$fieldName].kind="alias")
+							
+							If ($table[$fieldName].relatedDataClass=Null:C1517)
+								
+								$o:=OB Copy:C1225($table[$fieldName])
+								$o.path:=$o.name
+								
+								// #TEMPO [
+								$o.valueType:=$o.type
+								$o.type:=_o_tempoFieldType($o.fieldType)
+								$o.typeLegacy:=$o.fieldType
+								//]
+								
+								$Obj_out.fields.push($o)
+								
+							End if 
 							
 							//______________________________________________________
 					End case 
