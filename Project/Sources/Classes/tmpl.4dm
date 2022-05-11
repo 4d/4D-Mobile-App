@@ -473,10 +473,10 @@ Function cancel() : Text
 	End if 
 	
 	
-Function fieldDescription($dropped : Object; $current : Object; $tableID : Text) : Object
+Function fieldDescription($field : Object; $target : Object; $tableID : Text) : cs:C1710.field
 	
 	var $relation; $table : Object
-	var $cCurrent; $cDropped : Collection
+	var $current; $dropped : Collection
 	
 	//$dropped.name:=$dropped.path
 	
@@ -485,8 +485,8 @@ Function fieldDescription($dropped : Object; $current : Object; $tableID : Text)
 	//End if
 	
 	// Splits path for later
-	$cCurrent:=Split string:C1554(String:C10($current.path); ".")
-	$cDropped:=Split string:C1554($dropped.path; ".")
+	$current:=Split string:C1554(String:C10($target.path); ".")
+	$dropped:=Split string:C1554($field.path; ".")
 	
 	// Get current table
 	$table:=Form:C1466.dataModel[$tableID]
@@ -494,44 +494,44 @@ Function fieldDescription($dropped : Object; $current : Object; $tableID : Text)
 	Case of 
 			
 			//______________________________________________________
-		: ($dropped.kind="alias")
+		: ($field.kind="alias")
 			
-			$dropped:=New object:C1471(\
+			$field:=New object:C1471(\
 				"kind"; "alias"; \
-				"name"; $dropped.name; \
-				"path"; $dropped.path)
+				"name"; $field.name; \
+				"path"; $field.path)
 			
 			//______________________________________________________
-		: ($dropped.kind="relatedEntity")  // N -> 1 relation
+		: ($field.kind="relatedEntity")  // N -> 1 relation
 			
-			If (Bool:C1537($current.kind="relatedEntities"))
+			If (Bool:C1537($target.kind="relatedEntities"))
 				
 				// Replace
-				OB REMOVE:C1226($dropped; "path")
+				OB REMOVE:C1226($field; "path")
 				
 			Else 
 				
-				If ($cCurrent.length=2)\
-					 & ($cDropped.length=1)  // Drop a relation on a field
+				If ($current.length=2)\
+					 & ($dropped.length=1)  // Drop a relation on a field
 					
-					If ($cCurrent[0]=$cDropped[0])  // Same related table
+					If ($current[0]=$dropped[0])  // Same related table
 						
 						// Keep the droped relation & update the long label
-						$relation:=$table[$cDropped[0]]
-						$relation.label:="%"+$cCurrent[1]+"%"
+						$relation:=$table[$dropped[0]]
+						$relation.label:="%"+$current[1]+"%"
 						
 					End if 
 				End if 
 			End if 
 			
 			//______________________________________________________
-		: ($dropped.kind="relatedEntities")  // 1 -> N relation
+		: ($field.kind="relatedEntities")  // 1 -> N relation
 			
 			//TODO: Remove isToMany
 			//OB REMOVE($dropped; "isToMany")
 			
 			//______________________________________________________
-		: ($current=Null:C1517)  // Add
+		: ($target=Null:C1517)  // Add
 			
 			// <NOTHING MORE TO DO>
 			
@@ -542,30 +542,30 @@ Function fieldDescription($dropped : Object; $current : Object; $tableID : Text)
 			Case of 
 					
 					//……………………………………………………………………………………………………
-				: ($cCurrent.length=$cDropped.length)
+				: ($current.length=$dropped.length)
 					
 					// Replace
 					
 					//……………………………………………………………………………………………………
-				: ($cCurrent.length=1)\
-					 & ($cDropped.length=2)  // Drop a field on a relation
+				: ($current.length=1)\
+					 & ($dropped.length=2)  // A field droped on a relation
 					
-					$relation:=$table[$current.name]
-					
-					If ($current.kind="relatedEntity") || ($current.fieldType=8858)  // 1 -> N relation
+					If ($target.kind="relatedEntity") || ($target.fieldType=8858)  // 1 -> N relation
 						
-						If ($cCurrent[0]=$cDropped[0])  // Same related table
+						If ($current[0]=$dropped[0])  // Same related table
+							
+							$relation:=$table[$target.name]
 							
 							// Switch to relation & update the long label
-							$dropped:=New object:C1471(\
+							$field:=New object:C1471(\
 								"kind"; "relatedEntity"; \
-								"name"; $cDropped[0]; \
-								"path"; $cDropped[0]; \
+								"name"; $dropped[0]; \
+								"path"; $dropped[0]; \
 								"relatedDataClass"; $relation.relatedDataClass; \
 								"relatedTableNumber"; $relation.relatedTableNumber; \
 								"inverseName"; $relation.inverseName)
 							
-							$relation.label:="%"+$cDropped[1]+"%"
+							$relation.label:="%"+$dropped[1]+"%"
 							
 						End if 
 					End if 
@@ -576,7 +576,7 @@ Function fieldDescription($dropped : Object; $current : Object; $tableID : Text)
 			//______________________________________________________
 	End case 
 	
-	return $dropped
+	return $field
 	
 	//============================================================================
 /* Utility function to get the data:image/png;base64
