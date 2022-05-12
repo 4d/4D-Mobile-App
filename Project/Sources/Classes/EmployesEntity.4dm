@@ -1,9 +1,14 @@
 Class extends Entity
 
 // Alias scalaires
+exposed Alias aka_ID ID
 exposed Alias aka_Nom Name
 
 exposed Alias aka_ServiceName service.Name
+
+exposed Alias aka_relatedEntity service
+
+exposed Alias relatedEntities serviceManaged
 
 // Calculated Scalars
 exposed Function get computedName()->$name : Text

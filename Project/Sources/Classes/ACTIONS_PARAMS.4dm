@@ -1093,10 +1093,11 @@ Function addParameterMenuManager($target : Object; $update : Boolean)
 	
 	var $t : Text
 	var $isSortAction : Boolean
-	var $parameter; $table : Object
-	var $fields : Collection
-	var $menu : cs:C1710.menu
+	var $i : Integer
+	var $parameter : Object
+	var $c; $fields : Collection
 	var $field : cs:C1710.field
+	var $menu : cs:C1710.menu
 	
 	$isSortAction:=String:C10(This:C1470.action.preset)="sort"
 	$menu:=cs:C1710.menu.new()
@@ -1107,100 +1108,51 @@ Function addParameterMenuManager($target : Object; $update : Boolean)
 		
 	End if 
 	
-	If (This:C1470.action.tableNumber#Null:C1517)
+	If (This:C1470.action.tableNumber=Null:C1517)
 		
-		$table:=Form:C1466.dataModel[String:C10(This:C1470.action.tableNumber)]
+		return   // No table affected to action
 		
-		$fields:=New collection:C1472
+	End if 
+	
+	$fields:=This:C1470._getParameterFields(Form:C1466.dataModel[String:C10(This:C1470.action.tableNumber)]; $isSortAction)
+	
+	If (This:C1470.action.parameters#Null:C1517)
 		
-		If (This:C1470.action.parameters=Null:C1517)
+		// Remove the fields already present
+		$c:=New collection:C1472
+		
+		For each ($field; $fields)
 			
-			For each ($t; $table)
+			If (This:C1470.action.parameters.query("name = :1"; $field.name).pop()#Null:C1517)
 				
-				If (Length:C16($t)=0)
-					
-					continue
-					
-				End if 
+				$c.push($i)
 				
-				$field:=OB Copy:C1225($table[$t])
-				
-				If ($field.kind="storage")\
-					 || ($field.kind="calculated")\
-					 || (($field.kind="alias") && ($field.fieldType#Is object:K8:27) && ($field.fieldType#Is collection:K8:32))
-					
-					If (Not:C34($isSortAction) | PROJECT.isSortable($field))
-						
-						If ($field.kind="storage")
-							
-							$field.fieldNumber:=Num:C11($t)
-							
-						Else 
-							
-							$field.name:=$t
-							
-						End if 
-						
-						$fields.push($field)
-						
-					End if 
-				End if 
-			End for each 
+			End if 
 			
-		Else 
+			$i+=1
 			
-			For each ($t; $table)
-				
-				If (Length:C16($t)=0)
-					
-					continue
-					
-				End if 
-				
-				$field:=OB Copy:C1225($table[$t])
-				
-				If ($field.kind="storage")\
-					 || ($field.kind="calculated")\
-					 || (($field.kind="alias") && ($field.fieldType#Is object:K8:27) && ($field.fieldType#Is collection:K8:32))
-					
-					If (Not:C34($isSortAction) | PROJECT.isSortable($field))
-						
-						If (This:C1470.action.parameters.query("name = :1"; $field.name#Null:C1517 ? $field.name : $t).pop()=Null:C1517)
-							
-							If ($field.kind="storage")
-								
-								$field.fieldNumber:=Num:C11($t)
-								
-							Else 
-								
-								$field.name:=$t
-								
-							End if 
-							
-							$fields.push($field)
-							
-						End if 
-					End if 
-				End if 
-			End for each 
-		End if 
+		End for each 
 		
-		If ($fields.length>0)
+		For each ($i; $c.reverse())
 			
-			$menu.line()
+			$fields.remove($i)
 			
-			For each ($field; $fields)
-				
-				$t:=$field.name#Null:C1517 ? $field.name : $t
-				$menu.append($t; $t)
-				
-			End for each 
-		End if 
+		End for each 
 		
-	Else 
+	End if 
+	
+	If ($fields.length>0)
 		
-		// No table affected to action
+		$fields:=$fields.orderBy("name")
 		
+		$menu.line()
+		
+		For each ($field; $fields)
+			
+			$t:=$field.name#Null:C1517 ? $field.name : $t
+			$menu.append($t; $t)
+			
+		End for each 
 	End if 
 	
 	$menu.popup($target)
@@ -1736,9 +1688,9 @@ Function dataSourceMenuManager()
 Function editList()
 	
 /*
-				$form:=New object(\
-								"static"; $static; \
-								"host"; This.path.hostInputControls(True))
+					$form:=New object(\
+										"static"; $static; \
+										"host"; This.path.hostInputControls(True))
 	
 $form.folder:=This.path.hostInputControls()
 $manifest:=$form.folder.file("manifest.json")
@@ -2240,7 +2192,7 @@ Function formatToolTip($format : Text)->$tip : Text
 		//SHARED.resources.formattersByName:=New object
 		//var $bind
 		//For each ($bind; SHARED.resources.fieldBindingTypes\
-																																																																																				.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
+																																																																																							.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
 		//SHARED.resources.formattersByName[$bind.name]:=$bind
 		//End for each
 		//End if
@@ -2295,6 +2247,82 @@ Function metaInfo($current : Object)->$result
 	End if 
 	
 	//MARK:-[PRIVATE]
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function _getParameterFields($table : cs:C1710.table; $isSortAction : Boolean) : Collection
+	
+	var $t : Text
+	var $fields : Collection
+	var $field : cs:C1710.field
+	
+	$fields:=New collection:C1472
+	
+	For each ($t; $table)
+		
+		If (Length:C16($t)=0)
+			
+			continue
+			
+		End if 
+		
+		$field:=OB Copy:C1225($table[$t])
+		
+		If ($field.kind="storage")\
+			 || ($field.kind="calculated")\
+			 || ($field.kind="alias")
+			
+			If ($field.kind="storage")
+				
+				$field.fieldNumber:=Num:C11($t)
+				
+			Else 
+				
+				$field.name:=$field.name=Null:C1517 ? $t : $field.name
+				
+			End if 
+			
+			If (Not:C34($isSortAction) || PROJECT.isSortable($field))
+				
+				If (This:C1470._isActionCompatibleField($field; $table[""].name))
+					
+					$fields.push($field)
+					
+				End if 
+			End if 
+		End if 
+	End for each 
+	
+	return $fields
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function _isActionCompatibleField($field : cs:C1710.field; $table) : Boolean
+	
+	var $target : Object
+	
+	Case of 
+			
+			//______________________________________________________
+		: ($field.kind="storage")\
+			 | ($field.kind="calculated")
+			
+			return $field.fieldType#Is object:K8:27
+			
+			//______________________________________________________
+		: ($field.kind="alias")
+			
+			If ($field.fieldType=Is collection:K8:32)
+				
+				return   // NOT SELECTION
+				
+			End if 
+			
+			// Get the targeted field
+			$target:=PROJECT.getAliasTarget($table; $field)
+			
+			return ($target.fieldType#Null:C1517) && ($target.fieldType#Is object:K8:27)
+			
+			//______________________________________________________
+	End case 
+	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function _withDataSource($format : Text)->$with : Boolean
 	

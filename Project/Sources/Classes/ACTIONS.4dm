@@ -852,12 +852,12 @@ Function addMenuManager()
 											//======================================
 										: ($tableModel[$t].name=$catalog.primaryKey)
 											
-											// DO NOT ADD A PRIMARY KEY
+											continue  // DO NOT ADD A PRIMARY KEY
 											
 											//======================================
 										: ($tableModel[$t].fieldType=Is object:K8:27)
 											
-											// DO NOT ADD OBJECT FIELD
+											continue  // DO NOT ADD OBJECT FIELD
 											
 											//======================================
 										Else 
@@ -884,7 +884,17 @@ Function addMenuManager()
 									
 									$field:=$fields.query("name = :1"; $t).pop()
 									
-									If ($field.fieldType#Is collection:K8:32)  //not a selection
+									If ($field.fieldType=Is collection:K8:32)
+										
+										continue  // NOT SELECTION
+										
+									End if 
+									
+									// Get the targeted field
+									var $target : cs:C1710.field
+									$target:=PROJECT.getAliasTarget($tableModel[""].name; $field)
+									
+									If ($target.fieldType#Null:C1517) && ($target.fieldType#Is object:K8:27)
 										
 										$action.parameters.push(This:C1470._addParameter($field; $tableModel[$t]; $menu.edit))
 										

@@ -734,11 +734,10 @@ Function isRelationToMany($attribute : Variant) : Boolean
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Given a dataclass & a path, returns true if the path is valid (in ds)
-Function isAvailable($dataClass : 4D:C1709.DataClass; $path)->$success : Boolean
+Function isAvailable($dataClass : 4D:C1709.DataClass; $path) : Boolean
 	
 	var $key : Text
 	var $o : Object
-	var $c : Collection
 	
 	$o:=$dataClass
 	
@@ -755,7 +754,7 @@ Function isAvailable($dataClass : 4D:C1709.DataClass; $path)->$success : Boolean
 		End if 
 	End for each 
 	
-	$success:=($o#Null:C1517)
+	return ($o#Null:C1517)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function isComputedAttribute($field : cs:C1710.field; $tableName : Text) : Boolean
@@ -798,6 +797,30 @@ Function isAlias($attribute : Variant) : Boolean
 		return (String:C10($attribute.kind)="alias")
 		
 	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function getAliasTarget($table; $field : cs:C1710.field) : cs:C1710.field
+	
+	var $member : Text
+	var $sourceDataClass; $target : Object
+	var $levels : Collection
+	
+	$levels:=Split string:C1554($field.path; ".")
+	$sourceDataClass:=(Value type:C1509($table)=Is text:K8:3) ? ds:C1482[$table] : $table
+	
+	Repeat 
+		
+		$member:=$levels.shift()
+		$target:=$sourceDataClass[$member]
+		
+		If ($target.relatedDataClass#Null:C1517)
+			
+			$sourceDataClass:=ds:C1482[$target.relatedDataClass]
+			
+		End if 
+	Until ($levels.length=0)
+	
+	return $target
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// ??
@@ -1101,7 +1124,6 @@ Function isSortable($field : Object) : Boolean
 		return (($field.fieldType#Is object:K8:27)\
 			 && ($field.fieldType#Is BLOB:K8:12)\
 			 && ($field.fieldType#Is picture:K8:10)\
-			 && ($field.fieldType#Is object:K8:27)\
 			 && ($field.fieldType#Is collection:K8:32))
 		
 	End if 
