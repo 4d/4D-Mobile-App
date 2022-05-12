@@ -681,6 +681,10 @@ Certifique-se de que o dispositivo está conectado ao computador com um cabo USB
           <source>True;False</source>
           <target>Verdadeiro; Falso</target>
         </trans-unit>
+        <trans-unit id="4xH2u8rJxf1Fh3dd3Pn/6A" resname="today">
+          <source>Today</source>
+          <target>Hoje</target>
+        </trans-unit>
       </group>
       <group resname="default values">
         <trans-unit id="uvcuS+6kvyLtejaBCimjbw" resname="newApplication">

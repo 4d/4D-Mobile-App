@@ -324,8 +324,8 @@ Por exemplo, o nome da organização é usado na fonte e no cabeçalho.</target>
           <target>Configurações do servidor Web</target>
         </trans-unit>
         <trans-unit id="lE7lMIWfPMEckVR4jRHf7A" resname="theProductionUrlIsNotPopulated">
-          <source>The production URL is not populated.</source>
-          <target>A URL de produção não é preenchida.</target>
+          <source>The production URL is not specified.</source>
+          <target>A URL de produção não está especificada.</target>
         </trans-unit>
         <trans-unit id="pOh+jYQja0KBHCFhN2+3Ng" resname="clickToFillItIn">
           <source>Click here to populate it.</source>
@@ -1212,8 +1212,8 @@ Crie e implante facilmente aplicativos móveis nativos personalizados.</target>
           <target>Não regenerar dados em cada compilação</target>
         </trans-unit>
         <trans-unit id="5wOA0G+FjpL0tUbV2WaWsQ" resname="generate">
-          <source>Regenerate now</source>
-          <target>Regenerar agora</target>
+          <source>Generate…</source>
+          <target>Gerar...</target>
         </trans-unit>
         <trans-unit id="qxePQ2An7tAuLPa3IR7nFQ" resname="source">
           <source>Data source</source>
@@ -1358,6 +1358,22 @@ Isso pode levar alguns minutos...</target>
         <trans-unit id="7JZRcB+wyv4xjn3zXFzi3A" resname="lastGeneration">
           <source>Last generation on {date} at {time}</source>
           <target>Última geração em {date} em {time}</target>
+        </trans-unit>
+        <trans-unit id="rzY10kgopsFYir+n3SONKQ" resname="dataMustBeGenerated">
+          <source>Data must be generated</source>
+          <target>Dados devem ser gerados</target>
+        </trans-unit>
+        <trans-unit id="OUJcki1Z0GZnLiepuHDmKQ" resname="dataMustBeRegeneratedBuiltInDataForTargetIsMissing">
+          <source>Data must be regenerated, built-in data for {targetOS} is missing</source>
+          <target>Os dados precisam ser regenerados, faltam dados incorporados para {targetOS}</target>
+        </trans-unit>
+        <trans-unit id="AJBA3A9yuJPS1SiHDtvaVg" resname="dataMustBeRegeneratedTheStructureHasBeenModified">
+          <source>Data must be regenerated, the structure has been modified</source>
+          <target>Os dados devem ser regenerados, a estrutura foi modificada</target>
+        </trans-unit>
+        <trans-unit id="skT6xEWRU9UMFXNh5AgL5g" resname="checkThatThe4dServerIsStartedAndThatTheWebServerIsRunning">
+          <source>Check that the 4D server is started and that the web server is running</source>
+          <target>Verifique se o servidor 4D foi iniciado e o servidor web foi iniciado</target>
         </trans-unit>
       </group>
       <group resname="Actions">
