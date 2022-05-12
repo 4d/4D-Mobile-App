@@ -205,7 +205,6 @@ Function create()->$result : Object
 		If ($o.success)
 			
 			// * CREATE DATASET
-			
 			If (Not:C34(Bool:C1537(This:C1470.project.project.dataSource.doNotGenerateDataAtEachBuild)))
 				
 				$o:=This:C1470.dataSetLegacy()
@@ -226,7 +225,6 @@ Function create()->$result : Object
 		End if 
 		
 	End if 
-	
 	
 	If (Feature.with("androidDataSet"))
 		
@@ -267,7 +265,7 @@ Function create()->$result : Object
 				
 				For each ($parameter; This:C1470.project.project.actions[$i].parameters)
 					
-					If ($parameter.defaultField[[Length:C16($parameter.defaultField)]]="_")
+					If (Length:C16($parameter.defaultField)>0) && ($parameter.defaultField[[Length:C16($parameter.defaultField)]]="_")
 						
 						$t:=Delete string:C232($parameter.defaultField; Length:C16($parameter.defaultField); 1)
 						
