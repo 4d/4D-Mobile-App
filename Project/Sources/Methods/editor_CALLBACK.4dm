@@ -8,7 +8,7 @@
 // Manage all callbacks to the editor window.
 // Some messages can be addressed to a specific panel. In this case & if the panel is
 // displayed on the current screen, the message is sent to it
-// otherwise nothing more is do.
+// otherwise nothing more is done.
 // ----------------------------------------------------
 // Declarations
 #DECLARE($selector : Text; $data : Object)

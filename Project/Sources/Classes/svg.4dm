@@ -40,31 +40,24 @@ Class constructor($content)
 	//MARK:-DOCUMENTS & STRUCTURE
 	//———————————————————————————————————————————————————————————
 	// Close the current tree if any & create a new svg default structure.
-	// ⚠️ Overrides the method of the inherited class
 Function newCanvas($attributes : Object) : cs:C1710.svg
 	
-	var $root; $t : Text
+	var $t : Text
 	
 	This:C1470._reset()
 	
-	$root:=DOM Create XML Ref:C861("svg"; "http://www.w3.org/2000/svg")
-	This:C1470.success:=Bool:C1537(OK)
+	Super:C1706.newRef("svg"; "http://www.w3.org/2000/svg")
 	
 	If (This:C1470.success)
 		
-		This:C1470.root:=$root
-		
-		DOM SET XML ATTRIBUTE:C866($root; "xmlns:xlink"; "http://www.w3.org/1999/xlink")
-		
-		DOM SET XML DECLARATION:C859($root; "UTF-8"; True:C214)
-		XML SET OPTIONS:C1090($root; XML indentation:K45:34; Choose:C955(Is compiled mode:C492; XML no indentation:K45:36; XML with indentation:K45:35))
-		
-		This:C1470.success:=Bool:C1537(OK)
+		Super:C1706.setDeclaration("UTF-8"; True:C214)
+		Super:C1706.setOption(XML indentation:K45:34; Is compiled mode:C492 ? XML no indentation:K45:36 : XML with indentation:K45:35)
+		Super:C1706.setAttribute(This:C1470.root; "xmlns:xlink"; "http://www.w3.org/1999/xlink")
 		
 		If (This:C1470.success)
 			
 			// Default values
-			DOM SET XML ATTRIBUTE:C866(This:C1470.root; \
+			Super:C1706.setAttributes(This:C1470.root; New object:C1471(\
 				"viewport-fill"; "none"; \
 				"fill"; "none"; \
 				"stroke"; "black"; \
@@ -72,47 +65,32 @@ Function newCanvas($attributes : Object) : cs:C1710.svg
 				"font-size"; 12; \
 				"text-rendering"; "geometricPrecision"; \
 				"shape-rendering"; "crispEdges"; \
-				"preserveAspectRatio"; "none")
+				"preserveAspectRatio"; "none"))
+			
+			This:C1470.success:=Bool:C1537(OK)
 			
 		End if 
 	End if 
 	
-	If (Bool:C1537(OK) & (This:C1470.root#Null:C1517))
+	If (This:C1470.success && ($attributes#Null:C1517))
 		
-		If (Count parameters:C259>=1)
+		For each ($t; $attributes)
 			
-			If ($attributes#Null:C1517)
-				
-				For each ($t; $attributes)
+			Case of 
 					
-					Case of 
-							
-							//_______________________
-						: ($t="keepReference")
-							
-							This:C1470.autoClose:=Bool:C1537($attributes[$t])
-							
-							//_______________________
-						Else 
-							
-							DOM SET XML ATTRIBUTE:C866(This:C1470.root; \
-								$t; $attributes[$t])
-							
-							//______________________
-					End case 
-				End for each 
-				
-			Else 
-				
-				// <NOTHING MORE TO DO>
-				
-			End if 
-			
-		Else 
-			
-			// <NOTHING MORE TO DO>
-			
-		End if 
+					//_______________________
+				: ($t="keepReference")
+					
+					This:C1470.autoClose:=Bool:C1537($attributes[$t])
+					
+					//_______________________
+				Else 
+					
+					Super:C1706.setAttribute(This:C1470.root; $t; $attributes[$t])
+					
+					//______________________
+			End case 
+		End for each 
 		
 	Else 
 		
@@ -185,7 +163,7 @@ Function picture($exportType; $keepStructure : Boolean) : Picture
 		
 		This:C1470.graphic:=$picture
 		
-		return ($picture)
+		return $picture
 		
 	Else 
 		
@@ -642,19 +620,25 @@ Function image($picture; $attachTo) : cs:C1710.svg
 		Case of 
 				
 				//______________________________________________________
-			: (Value type:C1509($picture)=Is picture:K8:10)  // Embedded
+			: (Value type:C1509($picture)=Is picture:K8:10)  // Embed the image
 				
-				If (Picture size:C356($picture)>0)
+				This:C1470.success:=Picture size:C356($picture)>0
+				
+				If (This:C1470.success)
 					
 					// Determines the codec to use (default: .png)
 					ARRAY TEXT:C222($codecs; 0x0000)
 					GET PICTURE FORMATS:C1406($picture; $codecs)
-					$codecs{0}:=Size of array:C274($codecs)>0 ? $codecs{1} : ".png"
 					
-					// Put the encoded image
-					PICTURE PROPERTIES:C457($picture; $width; $height)
+					// Priority order: svg > png > jpg > fisrt | default = png
+					$codecs{0}:=\
+						Find in array:C230($codecs; ".svg")>0 ? ".svg" : \
+						Find in array:C230($codecs; ".png")>0 ? ".png" : \
+						Find in array:C230($codecs; ".jpg")>0 ? ".jpg" : \
+						Size of array:C274($codecs)>0 ? $codecs{1} : \
+						".png"
 					
-					// Encode in base64
+					// Encode the image
 					PICTURE TO BLOB:C692($picture; $x; $codecs{0})
 					CLEAR VARIABLE:C89($picture)
 					This:C1470.success:=Bool:C1537(OK)
@@ -664,6 +648,7 @@ Function image($picture; $attachTo) : cs:C1710.svg
 						BASE64 ENCODE:C895($x; $t)
 						CLEAR VARIABLE:C89($x)
 						
+						PICTURE PROPERTIES:C457($picture; $width; $height)
 						$codecs{0}:=$codecs{0}=".svg" ? "svg+xml" : Replace string:C233($codecs{0}; "."; "")
 						
 						This:C1470.latest:=Super:C1706.create($node; "image"; New object:C1471(\
@@ -682,53 +667,49 @@ Function image($picture; $attachTo) : cs:C1710.svg
 				End if 
 				
 				//______________________________________________________
-			: (Value type:C1509($picture)=Is object:K8:27)  // Url
+			: (Value type:C1509($picture)=Is object:K8:27)\
+				 && (OB Instance of:C1731($picture; 4D:C1709.File))  // Create a link to a file
 				
-				If (OB Instance of:C1731($picture; 4D:C1709.File))
+				This:C1470.success:=$picture.exists
+				
+				If (This:C1470.success)
 					
-					If ($picture.exists)
+					// Unsandboxed, if any
+					$picture:=File:C1566(File:C1566($picture.path).platformPath; fk platform path:K87:2)
+					
+					READ PICTURE FILE:C678($picture.platformPath; $p)
+					
+					This:C1470.success:=Bool:C1537(OK)
+					
+					If (This:C1470.success)
 						
-						// Unsandboxed, if any
-						$picture:=File:C1566(File:C1566($picture.path).platformPath; fk platform path:K87:2)
+						PICTURE PROPERTIES:C457($p; $width; $height)
+						CLEAR VARIABLE:C89($p)
 						
-						READ PICTURE FILE:C678($picture.platformPath; $p)
+						This:C1470.latest:=Super:C1706.create($node; "image"; New object:C1471(\
+							"xlink:href"; (Is Windows:C1573 ? "file:///" : "file://")+Replace string:C233($picture.path; " "; "%20"); \
+							"x"; 0; \
+							"y"; 0; \
+							"width"; $width; \
+							"height"; $height))
 						
-						If (Bool:C1537(OK))
+						If (Not:C34(This:C1470.success))
 							
-							PICTURE PROPERTIES:C457($p; $width; $height)
-							CLEAR VARIABLE:C89($p)
-							
-							This:C1470.latest:=Super:C1706.create($node; "image"; New object:C1471(\
-								"xlink:href"; (Is Windows:C1573 ? "file:///" : "file://")+Replace string:C233($picture.path; " "; "%20"); \
-								"x"; 0; \
-								"y"; 0; \
-								"width"; $width; \
-								"height"; $height))
-							
-							If (Not:C34(This:C1470.success))
-								
-								This:C1470._pushError("Failed to create image \""+String:C10($picture.path)+"\"")
-								
-							End if 
-							
-						Else 
-							
-							This:C1470._pushError("Failed to read image \""+String:C10($picture.path)+"\"")
+							This:C1470._pushError("Failed to create image \""+$picture.path+"\"")
 							
 						End if 
 						
 					Else 
 						
-						This:C1470._pushError("File not found \""+String:C10($picture.path)+"\"")
+						This:C1470._pushError("Failed to read image \""+$picture.path+"\"")
 						
 					End if 
 					
 				Else 
 					
-					This:C1470._pushError("Picture must be a picture file.")
+					This:C1470._pushError("File not found \""+$picture.path+"\"")
 					
 				End if 
-				
 				//______________________________________________________
 			Else 
 				
@@ -3459,6 +3440,7 @@ Function _defs()->$reference
 		
 	Else 
 		
+		// Create & put in first position
 		$root:=DOM Create XML Ref:C861("root")
 		This:C1470.success:=Bool:C1537(OK)
 		

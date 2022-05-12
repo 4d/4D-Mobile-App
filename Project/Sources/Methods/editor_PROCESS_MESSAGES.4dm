@@ -15,8 +15,8 @@ var $o : Object
 // ----------------------------------------------------
 Case of 
 		
-		// MARK:-Steps of data generation
-	: ($message="dump")  // Cancellable data generation
+		// MARK:-Cancellable data generation
+	: ($message="dump")
 		
 		$o:=UI.message.getValue()
 		

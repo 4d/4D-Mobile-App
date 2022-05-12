@@ -528,15 +528,9 @@ Function displayFieldPicker() : Integer
 	
 	$tableDataModel:=$currentDataModel[String:C10($table.tableNumber)]
 	
-	If ($relatedCatalog.alias=Null:C1517)
-		
-		$relatedDataModel:=$tableDataModel[$relatedCatalog.relatedEntity]
-		
-	Else 
-		
-		$relatedDataModel:=$currentDataModel[String:C10($table.tableNumber)]
-		
-	End if 
+	$relatedDataModel:=$relatedCatalog.alias=Null:C1517\
+		 ? $tableDataModel[$relatedCatalog.relatedEntity]\
+		 : $tableDataModel
 	
 	For each ($field; $relatedCatalog.fields)
 		
@@ -660,26 +654,14 @@ Function displayFieldPicker() : Integer
 					
 					If (ds:C1482[$path[0]]=Null:C1517)
 						
-						If ($field.kind="alias")
-							
-							var $t : Text
-							$t:=ds:C1482[$relateddataclass.relatedDataClass][$path[0]].relatedDataClass
-							
-							$target[$path[0]]:=New object:C1471(\
-								"kind"; "relatedEntity"; \
-								"relatedDataClass"; $t; \
-								"relatedTableNumber"; This:C1470.ExposedStructure.tableNumber($t); \
-								"inverseName"; $table.fields.query("inverseName=:1"; $t).pop().name)
-							
-						Else 
-							
-							$target[$path[0]]:=New object:C1471(\
-								"kind"; "relatedEntity"; \
-								"relatedDataClass"; This:C1470.ExposedStructure.tableName($relatedDataClass.relatedDataClass); \
-								"relatedTableNumber"; This:C1470.ExposedStructure.tableNumber($relatedDataClass.relatedDataClass); \
-								"inverseName"; $table.fields.query("inverseName=:1"; $relatedDataClass.name).pop().name)
-							
-						End if 
+						var $t : Text
+						$t:=ds:C1482[$relateddataclass.relatedDataClass][$path[0]].relatedDataClass
+						
+						$target[$path[0]]:=New object:C1471(\
+							"kind"; "relatedEntity"; \
+							"relatedDataClass"; $t; \
+							"relatedTableNumber"; This:C1470.ExposedStructure.tableNumber($t); \
+							"inverseName"; $table.fields.query("inverseName=:1"; $t).pop().name)
 						
 					Else 
 						
@@ -690,7 +672,6 @@ Function displayFieldPicker() : Integer
 							"inverseName"; $table.fields.query("inverseName=:1"; $path[0]).pop().name)
 						
 					End if 
-					
 				End if 
 				
 				If ($target[$path[0]][$identifier]#Null:C1517)
