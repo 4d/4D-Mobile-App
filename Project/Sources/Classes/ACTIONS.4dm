@@ -928,7 +928,7 @@ Function _addParameter($fieldModel : Object; $field : Object; $edit : Boolean)->
 	
 	If ($edit)
 		
-		$parameter.defaultField:=PROJECT.formatFieldName($field.name)
+		$parameter.defaultField:=PROJECT.formatFieldName($fieldModel.name)
 		
 	End if 
 	
