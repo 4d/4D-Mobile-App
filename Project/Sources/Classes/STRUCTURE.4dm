@@ -499,10 +499,10 @@ Function fieldList()
 	This:C1470.refresh()
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
-	/// Displays related field picker & retutn the checkbox value
+	/// Displays related field picker & return the checkbox value
 Function displayFieldPicker() : Integer
 	
-	var $publishedNumber : Integer
+	var $initialPublishedCount; $publishedCount : Integer
 	var $identifier : Text
 	var $context; $currentDataModel; $o; $relatedCatalog; $relatedDataClass; $relatedDataModel : Object
 	var $tableDataModel; $target : Object
@@ -568,6 +568,8 @@ Function displayFieldPicker() : Integer
 		
 	End for each 
 	
+	$initialPublishedCount:=$relatedCatalog.fields.query("published=true").length
+	
 	If (Bool:C1537($context.fieldSortByName))
 		
 		$relatedCatalog.fields:=$relatedCatalog.fields.orderBy("_order asc, name asc")
@@ -578,20 +580,23 @@ Function displayFieldPicker() : Integer
 		
 	End if 
 	
+	$relatedCatalog.cancelled:=False:C215
 	$relatedCatalog.window:=Open form window:C675("RELATED"; Sheet form window:K39:12; *)
 	DIALOG:C40("RELATED"; $relatedCatalog)
 	
 	// Get the number of published fields
-	$publishedNumber:=$relatedCatalog.fields.query("published=true").length
+	$publishedCount:=$relatedCatalog.fields.query("published=true").length
 	
-	If (Not:C34($relatedCatalog.success))  // User has cancelled
+	If ($relatedCatalog.cancelled)
 		
-		// Checkbox value mixed (> 1) if all fields are not published
-		return (1+Num:C11($publishedNumber#$relatedCatalog.fields.length))
+		// 0 if no field published
+		// 1 if all field published
+		// 2 if all fields are not published
+		return $initialPublishedCount>0 ? (1+Num:C11($initialPublishedCount#$relatedCatalog.fields.length)) : 0
 		
 	End if 
 	
-	If ($publishedNumber=0)  // No fields published
+	If ($publishedCount=0)  // No fields published
 		
 		OB REMOVE:C1226($tableDataModel; $context.fieldName)
 		PROJECT.save()
@@ -872,8 +877,10 @@ Function displayFieldPicker() : Integer
 	
 	PROJECT.save()
 	
-	// Checkbox value mixed (> 1) if all fields are not published
-	return (1+Num:C11($publishedNumber#$relatedCatalog.fields.length))
+	// 0 if no field published
+	// 1 if all field published
+	// 2 if all fields are not published
+	return $publishedCount>0 ? (1+Num:C11($publishedCount#$relatedCatalog.fields.length)) : 0
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Update the project according to the published fields

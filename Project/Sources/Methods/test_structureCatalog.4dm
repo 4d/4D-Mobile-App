@@ -210,9 +210,3 @@ If (Asserted:C1132($o.success))
 End if 
 
 err_FINALLY
-
-//If (Structure file=Structure file(*))
-
-//ALERT(String(Milliseconds-$start))
-
-//End if 

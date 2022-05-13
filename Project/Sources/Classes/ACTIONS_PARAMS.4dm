@@ -1114,7 +1114,7 @@ Function addParameterMenuManager($target : Object; $update : Boolean)
 		
 	End if 
 	
-	$fields:=This:C1470._getParameterFields(Form:C1466.dataModel[String:C10(This:C1470.action.tableNumber)]; $isSortAction)
+	$fields:=This:C1470._getParameterFields(Form:C1466.dataModel[String:C10(This:C1470.action.tableNumber)]; String:C10(This:C1470.action.preset))
 	
 	If (This:C1470.action.parameters#Null:C1517)
 		
@@ -1688,9 +1688,9 @@ Function dataSourceMenuManager()
 Function editList()
 	
 /*
-					$form:=New object(\
-										"static"; $static; \
-										"host"; This.path.hostInputControls(True))
+						$form:=New object(\
+												"static"; $static; \
+												"host"; This.path.hostInputControls(True))
 	
 $form.folder:=This.path.hostInputControls()
 $manifest:=$form.folder.file("manifest.json")
@@ -2192,7 +2192,7 @@ Function formatToolTip($format : Text)->$tip : Text
 		//SHARED.resources.formattersByName:=New object
 		//var $bind
 		//For each ($bind; SHARED.resources.fieldBindingTypes\
-																																																																																							.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
+																																																																																										.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
 		//SHARED.resources.formattersByName[$bind.name]:=$bind
 		//End for each
 		//End if
@@ -2248,7 +2248,7 @@ Function metaInfo($current : Object)->$result
 	
 	//MARK:-[PRIVATE]
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function _getParameterFields($table : cs:C1710.table; $isSortAction : Boolean) : Collection
+Function _getParameterFields($table : cs:C1710.table; $preset : Text) : Collection
 	
 	var $t : Text
 	var $fields : Collection
@@ -2266,21 +2266,27 @@ Function _getParameterFields($table : cs:C1710.table; $isSortAction : Boolean) :
 		
 		$field:=OB Copy:C1225($table[$t])
 		
+		If ($field.kind="storage")
+			
+			$field.fieldNumber:=Num:C11($t)
+			
+		Else 
+			
+			$field.name:=$field.name=Null:C1517 ? $t : $field.name
+			
+		End if 
+		
+/* Allow
+ • Storage field
+ • Read-only computed field, only for a sort action.
+ • Scalar aliases (not pointing to an object field)
+*/
+		
 		If ($field.kind="storage")\
-			 || ($field.kind="calculated")\
+			 || (($field.kind="calculated") & (($preset="sort") || (Not:C34(Bool:C1537(ds:C1482[$table[""].name][$field.name].readOnly)))))\
 			 || ($field.kind="alias")
 			
-			If ($field.kind="storage")
-				
-				$field.fieldNumber:=Num:C11($t)
-				
-			Else 
-				
-				$field.name:=$field.name=Null:C1517 ? $t : $field.name
-				
-			End if 
-			
-			If (Not:C34($isSortAction) || PROJECT.isSortable($field))
+			If (($preset#"sort") || PROJECT.isSortable($field))
 				
 				If (This:C1470._isActionCompatibleField($field; $table[""].name))
 					
@@ -2318,6 +2324,7 @@ Function _isActionCompatibleField($field : cs:C1710.field; $table) : Boolean
 			// Get the targeted field
 			$target:=PROJECT.getAliasTarget($table; $field)
 			
+			// Scalar alias not corresponding to an object field
 			return ($target.fieldType#Null:C1517) && ($target.fieldType#Is object:K8:27)
 			
 			//______________________________________________________
