@@ -451,6 +451,55 @@ Function mustDoDataSet()->$doIt : Boolean
 	
 	// MARK:-[PRIVATES]
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _createManifest($project : Object) : Object
+	
+	var $manifest : Object
+	
+	$manifest:=New object:C1471(\
+		"application"; New object:C1471(\
+		"id"; $project.product.bundleIdentifier; \
+		"name"; $project.product.name); \
+		"team"; New object:C1471("id"; $project.organization.teamId); \
+		"info"; $project.info)
+	
+	// • Deep linking
+	If (Bool:C1537($project.deepLinking.enabled))
+		
+		If (Length:C16(String:C10($project.deepLinking.urlScheme))>0)
+			
+			$manifest.urlScheme:=String:C10($project.deepLinking.urlScheme)
+			$manifest.urlScheme:=Replace string:C233($manifest.urlScheme; "://"; "")
+			
+		End if 
+		
+		If (Length:C16(String:C10($project.deepLinking.associatedDomain))>0)
+			
+			$manifest.associatedDomain:=String:C10($project.deepLinking.associatedDomain)
+			
+		End if 
+	End if 
+	
+	// Write to app data (to use with 4D Mobile App Server)
+	This:C1470._getAppDataFolder($project).file("manifest.json").setText(JSON Stringify:C1217($manifest; *))
+	
+	return $manifest
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _getAppDataFolder($project : Object) : 4D:C1709.Folder
+	
+	var $folder : 4D:C1709.Folder
+	
+	$folder:=Folder:C1567(fk mobileApps folder:K87:18; *).folder(This:C1470._getAppId($project))
+	$folder.create()
+	
+	return $folder
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _getAppId($project : Object) : Text
+	
+	return String:C10($project.product.bundleIdentifier)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _o_themeImageFile()->$theme : 4D:C1709.File
 	
 	ASSERT:C1129(False:C215; "👀 Must be overriden")

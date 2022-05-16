@@ -70,7 +70,7 @@ Function create()->$result : Object
 	$result.tags:=This:C1470._createTags()
 	
 	// Create the app manifest
-	$result.manifest:=This:C1470._createManifest()
+	$result.manifest:=This:C1470._createManifest(This:C1470.project)
 	
 	// Target folder
 	var $destinationFolder : 4D:C1709.Folder
@@ -461,52 +461,9 @@ Function _tmpRemoveAlias($project : Object/*in place*/)->$removedEntries : Colle
 		End for each 
 	End for each 
 	
-	
-Function _getAppId()->$appId : Text
-	$appId:=This:C1470.project.organization.teamId+"."+This:C1470.project.product.bundleIdentifier
-	
-Function _getAppDataFolder()->$appFolder : 4D:C1709.Folder
-	$appFolder:=Folder:C1567(fk mobileApps folder:K87:18; *).folder(This:C1470._getAppId())
-	If (Not:C34($appFolder.exists))
-		$appFolder.create()
-	End if 
-	
+	// MARK:-[PRIVATES]
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// [PRIVATE] - Create the app manifest
-Function _createManifest()->$manifest : Object
-	
-	$manifest:=New object:C1471(\
-		"application"; New object:C1471(\
-		"id"; This:C1470.project.product.bundleIdentifier; \
-		"name"; This:C1470.project.product.name); \
-		"team"; New object:C1471(\
-		"id"; This:C1470.project.organization.teamId); \
-		"info"; This:C1470.project.info)
-	
-	$manifest.id:=String:C10($manifest.team.id)+"."+$manifest.application.id
-	
-	// • Deep linking
-	If (Bool:C1537(This:C1470.project.deepLinking.enabled))
-		
-		If (Length:C16(String:C10(This:C1470.project.deepLinking.urlScheme))>0)
-			
-			$manifest.urlScheme:=String:C10(This:C1470.project.deepLinking.urlScheme)
-			$manifest.urlScheme:=Replace string:C233($manifest.urlScheme; "://"; "")
-			
-		End if 
-		
-		If (Length:C16(String:C10(This:C1470.project.deepLinking.associatedDomain))>0)
-			
-			$manifest.associatedDomain:=String:C10(This:C1470.project.deepLinking.associatedDomain)
-			
-		End if 
-	End if 
-	
-	// Write to app data (to use with 4D Mobile App Server)
-	This:C1470._getAppDataFolder().file("manifest.json").setText(JSON Stringify:C1217($manifest; *))
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// [PRIVATE] - Create tags object for template
+	// Create tags object for template
 Function _createTags()->$tags : Object
 	
 	$tags:=OB Copy:C1225(SHARED.tags)  // Common project tags

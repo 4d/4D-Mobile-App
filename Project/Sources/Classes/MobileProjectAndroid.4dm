@@ -169,6 +169,9 @@ Function create()->$result : Object
 		
 		If ($o.success)
 			
+			// Create the app manifest
+			$o.manifest:=This:C1470._createManifest(This:C1470.project.project)
+			
 			// * GRADLEW ACCESS RIGHTS
 			If (Is macOS:C1572)  // No need to change permissions on Windows
 				
