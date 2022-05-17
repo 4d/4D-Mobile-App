@@ -40,7 +40,7 @@ class App : BaseApp() {
 
         // Init SharedPreferences, persisting data
         sharedPreferencesHolder = SharedPreferencesHolder.getInstance(this).apply {
-            init(BuildConfig.APPLICATION_ID, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
+            init()
         }
 
         // Init runtime data holder
