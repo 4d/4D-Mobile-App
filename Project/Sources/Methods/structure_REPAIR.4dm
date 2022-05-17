@@ -2,12 +2,13 @@
 var $cache; $file : Object
 var $catalog : Collection
 
+
 //MARK: Audit result should be in EDITOR not into PROJECT.$dialog
-PROJECT.repairStructure(PROJECT.$dialog.unsynchronizedTables)
+PROJECT.repairStructure(UI.unsynchronizedTables)
 
 // Update status & cache
-OB REMOVE:C1226(PROJECT.$dialog; "unsynchronizedTableFields")
-OB REMOVE:C1226(PROJECT.$project.structure; "unsynchronized")
+OB REMOVE:C1226(Form:C1466.$dialog; "unsynchronizedTableFields")
+//OB REMOVE(PROJECT.$project.structure; "unsynchronized")
 
 $file:=PROJECT.getCatalogFile()
 

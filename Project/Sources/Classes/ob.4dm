@@ -413,7 +413,7 @@ Function toCollection($target : Object)->$c : Collection
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Create a path in the object if it not exist
-Function createPath($path; $type : Integer)->$object : Object
+Function createPath($path; $type : Integer) : Object
 	
 	var $valueType : Integer
 	
@@ -437,7 +437,7 @@ Function createPath($path; $type : Integer)->$object : Object
 		
 	End if 
 	
-	$object:=This:C1470.content
+	return This:C1470.content
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Sorts the properties of the object in alphabetical order (like in the debugger)

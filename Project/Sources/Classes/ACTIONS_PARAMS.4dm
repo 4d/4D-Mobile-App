@@ -2283,8 +2283,8 @@ Function _getParameterFields($table : cs:C1710.table; $preset : Text) : Collecti
 */
 		
 		If ($field.kind="storage")\
-			 || (($field.kind="calculated") & (($preset="sort") || (Not:C34(Bool:C1537(ds:C1482[$table[""].name][$field.name].readOnly)))))\
-			 || ($field.kind="alias")
+			 || ($field.kind="alias")\
+			 || (($field.kind="calculated") & (($preset="sort") || (Not:C34(Bool:C1537(ds:C1482[$table[""].name][$field.name].readOnly)))))
 			
 			If (($preset#"sort") || PROJECT.isSortable($field))
 				

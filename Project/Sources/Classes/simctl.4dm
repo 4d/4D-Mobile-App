@@ -259,6 +259,15 @@ Function availableDevices($iosDeploymentTarget : Text)->$Devices : Collection
 		
 		$str:=cs:C1710.str.new()
 		
+		// With Xcode 13.4, the json can be polluted by a header:
+		//Install Started
+		//1%.........20.........40.........60.........80.........Install Succeeded
+		If (Match regex:C1019("(?msi)(\\{.*\\})$"; This:C1470.outputStream; 1; $pos; $len)) && ($pos{1}#1)
+			
+			This:C1470.outputStream:=Delete string:C232(This:C1470.outputStream; 1; $pos{1})
+			
+		End if 
+		
 		$availables:=JSON Parse:C1218(This:C1470.outputStream).devices
 		
 		For each ($key; $availables) While ($Devices.length=0)
