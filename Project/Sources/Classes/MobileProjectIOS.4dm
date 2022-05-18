@@ -484,7 +484,7 @@ Function _createTags()->$tags : Object
 	// • Info plist
 	$tags.displayName:=This:C1470.project.product.name
 	$tags.version:=This:C1470.project.product.version
-	$tags.build:=This:C1470.fullVersion(This:C1470.tags.version)
+	$tags.build:=This:C1470.fullVersion($tags.version)
 	
 	$tags.prodUrl:=This:C1470.project.server.urls.production
 	
