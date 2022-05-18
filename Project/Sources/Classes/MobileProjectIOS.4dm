@@ -70,7 +70,7 @@ Function create()->$result : Object
 	$result.tags:=This:C1470._createTags()
 	
 	// Create the app manifest
-	$result.manifest:=This:C1470._createManifest(This:C1470.project)
+	//$result.manifest:=This._createManifest(This.project)
 	
 	// Target folder
 	var $destinationFolder : 4D:C1709.Folder
