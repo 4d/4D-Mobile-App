@@ -903,7 +903,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 			// MARK:- androidDataSet
 		: ($in.action="androidDataSet")
 			
-			$out.androidPrepackaged:=cs:C1710.AndroidPrepackaged.new().generate($in.project)
+			$out.androidPrepackaged:=cs:C1710.AndroidPrepackaged.new().generate($in.project; $in.project._folder)
 			ob_error_combine($out; $out.androidPrepackaged)
 			
 			$out.success:=$out.androidPrepackaged.success

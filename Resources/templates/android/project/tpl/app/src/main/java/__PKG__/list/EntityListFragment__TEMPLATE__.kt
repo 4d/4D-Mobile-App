@@ -7,12 +7,13 @@
 package {{package}}.list
 
 import android.os.Bundle
+import android.view.View
 import androidx.databinding.ViewDataBinding
 import com.qmobile.qmobiledatasync.utils.CustomEntityListFragment
 
 class EntityListFragment{{tableName}}(private val binding: ViewDataBinding) : CustomEntityListFragment {
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Nothing to do
     }
 }

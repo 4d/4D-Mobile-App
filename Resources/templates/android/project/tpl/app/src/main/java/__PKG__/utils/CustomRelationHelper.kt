@@ -6,15 +6,13 @@
 
 package {{package}}.utils
 
-import android.app.Application
-import androidx.lifecycle.LiveData
 import com.qmobile.qmobileapi.model.entity.EntityModel
-import com.qmobile.qmobiledatastore.data.RoomRelation
-import com.qmobile.qmobiledatasync.relation.RelationHelper
-import com.qmobile.qmobiledatasync.relation.RelationTypeEnum
+import com.qmobile.qmobiledatastore.data.RoomEntity
+import com.qmobile.qmobiledatasync.relation.Relation
 import com.qmobile.qmobiledatasync.utils.GenericRelationHelper
 {{#tableNames}}
 import {{package}}.data.model.entity.{{name}}
+import {{package}}.data.model.entity.{{name}}RoomEntity
 {{/tableNames}}
 
 /**
@@ -23,151 +21,48 @@ import {{package}}.data.model.entity.{{name}}
 class CustomRelationHelper : GenericRelationHelper {
 
     /**
-     * Retrieves the table name of a related field
+     * Returns the list of relations
      */
-    override fun getRelatedTableName(sourceTableName: String, relationName: String): String =
-        when {
-            {{#relations_many_to_one}}
-            sourceTableName == "{{relation_source}}" && relationName == "{{relation_name}}" -> "{{relation_target}}"
-            {{/relations_many_to_one}}
-            {{#relations_one_to_many}}
-            {{#isSubRelation}}
-            sourceTableName == "{{relation_source}}" && relationName == "{{originalSubRelationName}}" -> "{{relation_target}}"
-            {{/isSubRelation}}
-            {{^isSubRelation}}
-            sourceTableName == "{{relation_source}}" && relationName == "{{relation_name}}" -> "{{relation_target}}"
-            {{/isSubRelation}}
-            {{/relations_one_to_many}}
-            else -> throw IllegalArgumentException(
-                "Missing related tableName for sourceTableName: $sourceTableName, " +
-                    "relationName: $relationName"
-            )
-        }
-
+    override fun getRelations(): List<Relation> = listOf(
+        {{#relations}}
+        Relation("{{relation_source}}", "{{relation_target}}", "{{relation_name}}", "{{inverse_name}}", {{relationType}}, "{{path}}"){{^-last}}, {{/-last}}
+        {{/relations}}
+    )
 
     /**
-     * Retrieves the inverse relation name
+     * Get relation Id for a given entity
      */
-    override fun getInverseRelationName(sourceTableName: String, relationName: String): String =
-        when {
-            {{#relations_many_to_one}}
-            sourceTableName == "{{relation_source}}" && relationName == "{{relation_name}}" -> "{{inverse_name}}"
-            {{/relations_many_to_one}}
-            {{#relations_one_to_many}}
-            {{#isSubRelation}}
-            sourceTableName == "{{relation_source}}" && relationName == "{{originalSubRelationName}}" -> "{{inverse_name}}"
-            {{/isSubRelation}}
-            {{^isSubRelation}}
-            sourceTableName == "{{relation_source}}" && relationName == "{{relation_name}}" -> "{{inverse_name}}"
-            {{/isSubRelation}}
-            {{/relations_one_to_many}}
-            else -> throw IllegalArgumentException(
-                "Missing inverse relation name for sourceTableName: $sourceTableName, " +
-                    "relationName: $relationName"
-            )
-        }
+    override fun getRelationId(tableName: String, relationName: String, entity: EntityModel): String? = when {
+        {{#relations_id}}
+        tableName == "{{relation_source}}" && relationName == "{{relation_name}}" -> (entity as? {{relation_source}})?.__{{relation_name}}Key
+        {{/relations_id}}
+        else -> null
+    }
 
     /**
-     * Provides the relation map extracted from an entity
+     * Checks equality in 2 RoomEntities relations
      */
-    override fun getManyToOneRelationsInfo(
-        tableName: String,
-        entity: EntityModel
-    ): Map<String, LiveData<RoomRelation>> {
-        {{#has_any_many_to_one_relation}}
-        val map = mutableMapOf<String, LiveData<RoomRelation>>()
+    override fun relationsEquals(oldItem: RoomEntity, newItem: RoomEntity): Boolean {   
         {{#relations_many_to_one}}
-        // Many to One relations
-        if (tableName == "{{relation_source}}") {
-            (entity as? {{relation_source}})?.__{{relation_name}}Key?.let { relationId ->
-                map["{{relation_name}}"] = RelationHelper.addRelation(
-                    relationName = "{{relation_name}}", 
-                    relationId = relationId, 
-                    sourceTableName = tableName, 
-                    relationType = RelationTypeEnum.MANY_TO_ONE
-                )
-            }
+        {{#isAlias}}
+        if (oldItem is {{relation_source}}RoomEntity && oldItem.{{relation_name}}?.{{pathToOneWithoutFirst}}?.__STAMP != (newItem as {{relation_source}}RoomEntity?)?.{{relation_name}}?.{{pathToOneWithoutFirst}}?.__STAMP) {
+        {{/isAlias}}
+        {{^isAlias}}
+        if (oldItem is {{relation_source}}RoomEntity && oldItem.{{relation_name}}?.__STAMP != (newItem as {{relation_source}}RoomEntity?)?.{{relation_name}}?.__STAMP) {
+        {{/isAlias}}
+            return false
         }
         {{/relations_many_to_one}}
-        return map
-        {{/has_any_many_to_one_relation}}
-        {{^has_any_many_to_one_relation}}
-        return mutableMapOf()
-        {{/has_any_many_to_one_relation}}
-    }
-
-    override fun getOneToManyRelationsInfo(
-        tableName: String,
-        entity: EntityModel
-    ): Map<String, LiveData<RoomRelation>> {
-        {{#has_any_one_to_many_relation}}
-        val map = mutableMapOf<String, LiveData<RoomRelation>>()
-        // One to Many relations
         {{#relations_one_to_many}}
-        {{#isSubRelation}}
-        if (tableName == "{{relation_target}}") {
-            (entity as? {{relation_target}})?.__{{inverse_name}}Key?.let { relationId ->
-                map["{{originalSubRelationName}}"] = RelationHelper.addRelation(
-                    relationName = "{{originalSubRelationName}}",
-                    relationId = relationId,
-                    sourceTableName = "{{relation_source}}", 
-                    inverseName = "{{inverse_name}}",
-                    relationType = RelationTypeEnum.ONE_TO_MANY
-                )
-            }
+        {{#isAlias}}
+        if (oldItem is {{relation_source}}RoomEntity && oldItem.{{relation_name}}?.{{pathToManyWithoutFirst}}?.size != (newItem as {{relation_source}}RoomEntity?)?.{{relation_name}}?.{{pathToManyWithoutFirst}}?.size) {
+        {{/isAlias}}
+        {{^isAlias}}
+        if (oldItem is {{relation_source}}RoomEntity && oldItem.{{relation_name}}?.size != (newItem as {{relation_source}}RoomEntity?)?.{{relation_name}}?.size) {
+        {{/isAlias}}
+            return false
         }
-        {{/isSubRelation}}
-        {{^isSubRelation}}
-        if (tableName == "{{relation_source}}") {
-            (entity as? {{relation_source}})?.let {
-                map["{{relation_name}}"] = RelationHelper.addRelation(
-                    relationName = "{{relation_name}}", 
-                    relationId = entity.__KEY, 
-                    sourceTableName = tableName, 
-                    inverseName = "{{inverse_name}}",
-                    relationType = RelationTypeEnum.ONE_TO_MANY
-                )
-            }
-        }
-        {{/isSubRelation}}
         {{/relations_one_to_many}}
-        return map
-        {{/has_any_one_to_many_relation}}
-        {{^has_any_one_to_many_relation}}
-        return mutableMapOf()
-        {{/has_any_one_to_many_relation}}
-    }
-
-    /**
-     * Returns list of table properties as a String, separated by commas, without EntityModel
-     * inherited properties
-     */
-    override fun getPropertyListFromTable(tableName: String, application: Application): String {
-        return when (tableName) {
-            {{#tableNames}}
-            "{{name}}" -> RelationHelper.getPropertyListString<{{name}}>(tableName, application)
-            {{/tableNames}}
-            else -> throw IllegalArgumentException("Missing property list for table: $tableName")
-        }
-    }
-
-    /**
-     * Provides the list of One to Many relations for given tableName
-     */
-    override fun getOneToManyRelationNames(tableName: String): List<String> = when (tableName) {
-        {{#tableNames}}
-        "{{name}}" -> listOf({{{concat_relations_one_to_many}}})
-        {{/tableNames}}
-        else -> throw IllegalArgumentException("Missing one to many relation names for table: $tableName")
-    }
-
-    /**
-     * Provides the list of Many to One relations for given tableName
-     */
-    override fun getManyToOneRelationNames(tableName: String): List<String> = when (tableName) {
-        {{#tableNames}}
-        "{{name}}" -> listOf({{{concat_relations_many_to_one}}})
-        {{/tableNames}}
-        else -> throw IllegalArgumentException("Missing many to one relation names for table: $tableName")
+        return true
     }
 }

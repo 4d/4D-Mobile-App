@@ -36,7 +36,7 @@ Function setJavaHome
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
 	
-Function generate($project : Object)->$result : Object
+Function generate($project : Object; $mobileProj : 4D:C1709.Folder)->$result : Object
 	
 	$result:=New object:C1471(\
 		"success"; True:C214; \
@@ -48,12 +48,11 @@ Function generate($project : Object)->$result : Object
 		// An error occurred during class init (This.studio.java or This.studio.javaHome was null)
 		$result.success:=False:C215
 		$result.errors:=New collection:C1472("Cannot generated Android database because java is missing")
-		
 		return 
 		
 	End if 
 	
-	var $projFile; $dbFile : 4D:C1709.File
+	var $projFile; $dbFile; $catalogfile : 4D:C1709.File
 	var $assetsDir : 4D:C1709.Folder
 	
 	This:C1470.project:=OB Copy:C1225($project)
@@ -71,56 +70,64 @@ Function generate($project : Object)->$result : Object
 	
 	$assetsDir:=This:C1470.project._folder.folder("project.dataSet/Resources/Assets.xcassets")
 	$dbFile:=This:C1470.path.androidDb(This:C1470.project._folder.path)
+	$catalogfile:=$mobileProj.file("catalog.json")
 	
-	If (This:C1470.path.scripts().exists)
+	If (Not:C34(This:C1470.path.scripts().exists))
 		
-		This:C1470.setDirectory(This:C1470.path.scripts())
+		$result.errors:=New collection:C1472("Missing scripts directory")
+		return 
 		
-		This:C1470.launch(This:C1470.androidprepackageCmd\
-			+" createDatabase"\
-			+" --project-editor \""+$projFile.path\
-			+"\" --assets \""+$assetsDir.path\
-			+"\" --db-file \""+$dbFile.path\
-			+"\"")
+	End if 
+	
+	If (Not:C34($catalogFile.exists))
 		
-		var $exceptionPos; $errorPos : Integer
+		$result.errors:=New collection:C1472("Missing catalog.json file")
+		return 
 		
-		$exceptionPos:=Position:C15("Exception"; String:C10(This:C1470.errorStream))
-		$errorPos:=Position:C15("Error"; String:C10(This:C1470.errorStream))
+	End if 
+	
+	This:C1470.setDirectory(This:C1470.path.scripts())
+	
+	This:C1470.launch(This:C1470.androidprepackageCmd\
+		+" createDatabase"\
+		+" --project-editor \""+$projFile.path\
+		+"\" --assets \""+$assetsDir.path\
+		+"\" --db-file \""+$dbFile.path\
+		+"\" --catalog \""+$catalogfile.path\
+		+"\"")
+	
+	var $exceptionPos; $errorPos : Integer
+	
+	$exceptionPos:=Position:C15("Exception"; String:C10(This:C1470.errorStream))
+	$errorPos:=Position:C15("Error"; String:C10(This:C1470.errorStream))
+	
+	If ($exceptionPos>0)
+		// Removes illegal capsule access warnings
+		This:C1470.errorStream:=Substring:C12(This:C1470.errorStream; $exceptionPos)
+	End if 
+	
+	$result.success:=Not:C34(($exceptionPos>0) | ($errorPos>0))
+	$result.outputStream:=This:C1470.outputStream
+	$result.errorStream:=This:C1470.errorStream
+	
+	// Log outputs
+	This:C1470.logFolder.file("lastPrepackage.android.out.log").setText(String:C10(This:C1470.outputStream))
+	This:C1470.logFolder.file("lastPrepackage.android.err.log").setText(String:C10(This:C1470.errorStream))
+	
+	If (Not:C34($result.success))
 		
-		If ($exceptionPos>0)
-			// Removes illegal capsule access warnings
-			This:C1470.errorStream:=Substring:C12(This:C1470.errorStream; $exceptionPos)
-		End if 
-		
-		$0.success:=Not:C34(($exceptionPos>0) | ($errorPos>0))
-		$0.outputStream:=This:C1470.outputStream
-		$0.errorStream:=This:C1470.errorStream
-		
-		// Log outputs
-		This:C1470.logFolder.file("lastPrepackage.android.out.log").setText(String:C10(This:C1470.outputStream))
-		This:C1470.logFolder.file("lastPrepackage.android.err.log").setText(String:C10(This:C1470.errorStream))
-		
-		If (Not:C34($result.success))
-			
-			$result.errors:=New collection:C1472
-			$result.errors.push("Failed to generate files")
-			$result.errors.push(This:C1470.errorStream)
-			
-		Else 
-			
-			If (Not:C34($dbFile.exists))
-				
-				$result.errors:=New collection:C1472("Failed to generate prepackaged database "+$dbFile.path)
-				
-				// Else : all ok 
-			End if 
-		End if 
+		$result.errors:=New collection:C1472
+		$result.errors.push("Failed to generate files")
+		$result.errors.push(This:C1470.errorStream)
 		
 	Else 
 		
-		$result.errors:=New collection:C1472("Missing scripts directory")
-		
+		If (Not:C34($dbFile.exists))
+			
+			$result.errors:=New collection:C1472("Failed to generate prepackaged database "+$dbFile.path)
+			
+			// Else : all ok 
+		End if 
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===

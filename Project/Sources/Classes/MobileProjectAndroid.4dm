@@ -37,6 +37,12 @@ Class constructor($project : Object)
 	This:C1470.project.hasActions:=True:C214
 	This:C1470.project.hasDataSet:=Feature.with("androidDataSet")
 	
+	If ((Shift down:C543) && (Bool:C1537(dev_Matrix)=True:C214))
+		This:C1470.project.debugMode:=True:C214
+	Else 
+		This:C1470.project.debugMode:=False:C215
+	End if 
+	
 	This:C1470.checkPackage()
 	
 	If (Feature.disabled("androidDataSet"))
@@ -161,7 +167,7 @@ Function create()->$result : Object
 		// * GENERATE PROJECT FILES
 		This:C1470.postStep("workspaceCreation")
 		
-		$o:=This:C1470.androidprojectgenerator.generate(This:C1470.file)
+		$o:=This:C1470.androidprojectgenerator.generate(This:C1470.file; This:C1470.project.project._folder)
 		
 		// Log outputs
 		This:C1470.logFolder.file("lastCreate.android.out.log").setText(String:C10($o.outputStream))

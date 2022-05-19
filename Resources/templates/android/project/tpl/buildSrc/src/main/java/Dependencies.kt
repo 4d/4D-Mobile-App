@@ -29,7 +29,7 @@ object Versions {
     const val json = "20210307"
     const val junit = "4.13.2"
     const val kotlin = "1.5.31"
-    const val kotlin_coroutines = "1.5.2"
+    const val kotlin_coroutines = "1.6.0"
     const val leakcanary = "2.0"
     const val lifecycle = "2.4.0"
     const val mockito = "4.1.0"
@@ -110,6 +110,7 @@ object Libs {
     const val androidx_room_compiler = "androidx.room:room-compiler:${Versions.room_compiler}"
     const val sqlite = "androidx.sqlite:sqlite-ktx:${Versions.sqlite}"
     const val sqlite_jdbc = "org.xerial:sqlite-jdbc:${Versions.sqlite_jdbc}"
+    const val room_paging = "androidx.room:room-paging:${Versions.room}"
 
     // Glide
     const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"

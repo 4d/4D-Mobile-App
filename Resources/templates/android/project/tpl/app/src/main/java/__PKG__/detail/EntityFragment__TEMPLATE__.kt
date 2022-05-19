@@ -7,6 +7,7 @@
 package {{package}}.detail
 
 import android.os.Bundle
+import android.view.View
 import com.qmobile.qmobileui.detail.EntityDetailFragment
 import {{package}}.databinding.FragmentDetail{{tableName_nameCamelCase}}Binding
 
@@ -14,7 +15,7 @@ class EntityFragment{{tableName}} : EntityDetailFragment() {
 
     private val dataBinding get() = super.binding as FragmentDetail{{tableName_nameCamelCase}}Binding
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
     }
 }

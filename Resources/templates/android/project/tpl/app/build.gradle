@@ -9,15 +9,28 @@ apply from: "$rootDir/buildscripts/detekt.gradle"
 {{^hasDataSet}}
 apply from: "$rootDir/buildscripts/prepopulation.gradle"
 {{/hasDataSet}}
+{{#debug_mode}}
+apply from: "$rootDir/buildscripts/jacoco.gradle"
+apply from: "$rootDir/buildscripts/maven-check.gradle"
+apply from: "$rootDir/buildscripts/git-hash.gradle"
+{{/debug_mode}}
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // QMobile libraries
+    {{#debug_mode}}
+    implementation project(':qmobileapi')
+    implementation project(':qmobiledatastore')
+    implementation project(':qmobiledatasync')
+    implementation project(':qmobileui')
+    {{/debug_mode}}
+    {{^debug_mode}}
     implementation(QMobileAPI) { changing = true }
     implementation(QMobileDataStore) { changing = true }
     implementation(QMobileDataSync) { changing = true }
     implementation(QMobileUI) { changing = true }
+    {{/debug_mode}}
 
     // Common
     implementation Libs.androidx_constraintlayout
@@ -31,6 +44,7 @@ dependencies {
     implementation Libs.androidx_room
     implementation Libs.androidx_room_runtime
     kapt Libs.androidx_room_compiler
+    implementation Libs.room_paging
 
     // Paging
     implementation Libs.androidx_paging3

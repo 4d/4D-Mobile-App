@@ -7,32 +7,18 @@
 package {{package}}.utils
 
 import androidx.databinding.ViewDataBinding
-import com.qmobile.qmobileapi.model.entity.EntityModel
 import com.qmobile.qmobiledatasync.utils.CustomEntityListFragment
 import com.qmobile.qmobiledatasync.utils.GenericTableFragmentHelper
-import com.qmobile.qmobiledatasync.viewmodel.EntityViewModel
-{{#has_relation}}
-import com.qmobile.qmobileui.BR
-{{/has_relation}}
 import com.qmobile.qmobileui.detail.EntityDetailFragment
 {{#has_custom_formatter_images}}
 import {{package}}.R
 {{/has_custom_formatter_images}}
-{{#tableNames_navigation}}
-import {{package}}.databinding.FragmentDetail{{nameCamelCase}}Binding
-{{/tableNames_navigation}}
-{{#tableNames_navigation}}
-import {{package}}.databinding.RecyclerviewItem{{nameCamelCase}}Binding
-{{/tableNames_navigation}}
 {{#tableNames_navigation}}
 import {{package}}.detail.EntityFragment{{name}}
 {{/tableNames_navigation}}
 {{#tableNames_navigation}}
 import {{package}}.list.EntityListFragment{{name}}
 {{/tableNames_navigation}}
-{{#tableNames}}
-import {{package}}.viewmodel.entity.EntityViewModel{{name}}
-{{/tableNames}}
 
 /**
  * Provides different elements depending of the generated type
@@ -52,21 +38,6 @@ class CustomTableFragmentHelper :
         }
 
     /**
-     * Sets the appropriate EntityViewModel
-     */
-    override fun setEntityViewModel(
-        viewDataBinding: ViewDataBinding,
-        entityViewModel: EntityViewModel<EntityModel>
-    ) {
-        when (viewDataBinding) {
-            {{#tableNames_navigation}}
-            is FragmentDetail{{nameCamelCase}}Binding -> viewDataBinding.viewModel = entityViewModel as EntityViewModel{{name}}
-            {{/tableNames_navigation}}
-            else -> throw IllegalArgumentException("Missing viewDataBinding: $viewDataBinding")
-        }
-    }
-
-    /**
      * Provides the list form type
      */
     override fun layoutType(tableName: String): String = when (tableName) {
@@ -84,45 +55,6 @@ class CustomTableFragmentHelper :
         "{{name}}" -> {{isSwipeAllowed}}
         {{/tableNames_layout}}
         else -> false
-    }
-
-    /**
-     * Sets relations to the appropriate list form
-     */
-    override fun setRelationBinding(
-        viewDataBinding: ViewDataBinding,
-        relationName: String,
-        relatedEntity: Any
-    ) {
-        {{#tableNames_layout_relations}}
-        {{#isSubRelation}}
-        if (viewDataBinding is RecyclerviewItem{{relation_target_camelCase}}Binding) {
-            if (relationName == "{{originalSubRelationName}}") {
-        {{/isSubRelation}}
-        {{^isSubRelation}}
-        if (viewDataBinding is RecyclerviewItem{{relation_source_camelCase}}Binding) {
-            if (relationName == "{{relation_name}}") {
-        {{/isSubRelation}}
-                viewDataBinding.setVariable(BR.{{relation_name}}, relatedEntity)
-            }
-        }
-        {{/tableNames_layout_relations}}
-    }
-
-    /**
-     * Reset relations as PagedListAdapter generates issue with relations
-     */
-    override fun unsetRelationBinding(viewDataBinding: ViewDataBinding) {
-        {{#tableNames_layout_relations}}
-        {{#isSubRelation}}
-        if (viewDataBinding is RecyclerviewItem{{relation_target_camelCase}}Binding) {
-        {{/isSubRelation}}
-        {{^isSubRelation}}
-        if (viewDataBinding is RecyclerviewItem{{relation_source_camelCase}}Binding) {
-        {{/isSubRelation}}
-            viewDataBinding.setVariable(BR.{{relation_name}}, null)
-        }
-        {{/tableNames_layout_relations}}
     }
 
      /**

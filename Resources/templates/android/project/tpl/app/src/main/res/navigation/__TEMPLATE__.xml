@@ -93,7 +93,7 @@
             app:argType="string" />
 
         <argument
-            android:name="query"
+            android:name="searchQueryPattern"
             app:argType="string" />
 
         <argument
@@ -101,11 +101,15 @@
             app:argType="string" />
 
         <argument
-            android:name="currentItemId"
+            android:name="parentItemId"
+            app:argType="string" />
+
+      <argument
+            android:name="parentTableName"
             app:argType="string" />
 
         <argument
-            android:name="inverseName"
+            android:name="path"
             app:argType="string" />
 
     </fragment>
@@ -153,13 +157,17 @@
             app:argType="string" />
 
         <argument
-            android:name="currentItemId"
+            android:name="parentItemId"
             app:argType="string" />
 
         <argument
-            android:name="inverseName"
+            android:name="parentTableName"
             app:argType="string" />
 
+        <argument
+            android:name="path"
+            app:argType="string" />
+            
         <argument
             android:name="navbarTitle"
             app:argType="string" />
@@ -216,7 +224,7 @@
 
         <action
             android:id="@+id/action_parameters_to_scanner"
-            app:destination="@id/barCodeScannerFragment"
+            app:destination="@id/barCodeFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -227,16 +235,16 @@
             app:argType="string" />
 
         <argument
-            android:name="inverseName"
+            android:name="itemId"
             app:argType="string" />
 
         <argument
-            android:name="currentItemId"
+            android:name="relationName"
             app:argType="string" />
 
         <argument
-            android:name="fromRelation"
-            app:argType="boolean" />
+            android:name="parentItemId"
+            app:argType="string" />
 
         <argument
             android:name="navbarTitle"
@@ -244,10 +252,10 @@
 
     </fragment>
 
-    <fragment
-        android:id="@+id/barCodeScannerFragment"
-        android:name="com.qmobile.qmobileui.action.BarCodeScannerFragment">
-
+     <fragment
+        android:id="@+id/barCodeFragment"
+        android:name="com.qmobile.qmobileui.action.barcode.BarcodeScannerFragment">
+     
         <argument
             android:name="position"
             app:argType="integer" />

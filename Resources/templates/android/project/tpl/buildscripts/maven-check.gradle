@@ -1,0 +1,92 @@
+def urlExists(String repositoryUrl) {
+
+  try {
+    def connection = (HttpURLConnection) new URL(repositoryUrl).openConnection()
+
+    connection.setRequestProperty("Authorization", "Basic " + getBase64EncodedCredentials())
+    connection.setConnectTimeout(10000)
+    connection.setReadTimeout(10000)
+    connection.setRequestMethod("HEAD")
+
+    def responseCode = connection.getResponseCode()
+
+    if (responseCode == 401) {
+      throw new RuntimeException("Unauthorized MavenUser user. Please provide valid username and password.")
+    }
+
+    return (200 == responseCode)
+
+  } catch (IOException ignored) {
+    println(ignored)
+    return false
+  }
+}
+
+static def getBase64EncodedCredentials() {
+  def s = "${System.getenv('ARTIFACTORY_USERNAME')}" + ":" + "${System.getenv('ARTIFACTORY_PASSWORD')}"
+  return s.bytes.encodeBase64().toString()
+}
+
+static def currentGitBranch() {
+  def branch = ""
+  branch = System.getenv('CI_COMMIT_REF_NAME')
+  if (branch == null) {
+    def proc = "git rev-parse --abbrev-ref HEAD".execute()
+    proc.in.eachLine { line -> branch = line }
+    proc.err.eachLine { line -> println line }
+    proc.waitFor()
+  }
+  if (branch == null) {
+    branch = "master"
+  }
+  branch.replace("/", "_")
+}
+
+// Checks if there is an artifact for this repo, with the current branch name
+static def getUrl(String repoName) {
+
+  def repo = repoName.toLowerCase()
+  def ARTIFACT_VERSION = ""
+  switch (repo) {
+    case "qmobileapi":
+      ARTIFACT_VERSION = Versions.qmobileapi
+      break
+    case "qmobiledatastore":
+      ARTIFACT_VERSION = Versions.qmobiledatastore
+      break
+    case "qmobiledatasync":
+      ARTIFACT_VERSION = Versions.qmobiledatasync
+      break
+    case "qmobileui":
+      ARTIFACT_VERSION = Versions.qmobileui
+      break
+    default:
+      break
+  }
+
+  def machineIP = System.getenv('ARTIFACTORY_MACHINE_IP')
+  def contextUrl = "http://${machineIP}:8081/artifactory"
+  def repoKey = "libs-release-local"
+  def ARTIFACT_GROUP = "com.qmobile.${repo}"
+  def ARTIFACT_ID = "${repo}"
+  def pomFileName = "${ARTIFACT_ID}-${ARTIFACT_VERSION}-${currentGitBranch()}.pom"
+  return "${contextUrl}/${repoKey}/${ARTIFACT_GROUP.replace(".", "/")}/${ARTIFACT_ID}/${ARTIFACT_VERSION}-${currentGitBranch()}/${pomFileName}"
+}
+
+def branch(String repoName) {
+  if (urlExists(getUrl(repoName)))
+    return currentGitBranch()
+  else
+    return "master"
+}
+
+// Export methods by turning them into closures
+ext {
+  urlExists = this.&urlExists
+  currentGitBranch = this.&currentGitBranch
+
+  QMobileAPI =  QMobileLibs.qmobileapi + '-' + branch("qmobileapi")
+  QMobileDataStore =  QMobileLibs.qmobiledatastore + '-' + branch("qmobiledatastore")
+  QMobileDataSync =  QMobileLibs.qmobiledatasync + '-' + branch("qmobiledatasync")
+  QMobileUI =  QMobileLibs.qmobileui + '-' + branch("qmobileui")
+}

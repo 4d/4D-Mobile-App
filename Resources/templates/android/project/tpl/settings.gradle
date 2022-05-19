@@ -1,2 +1,12 @@
 include ':app'
 rootProject.name = "{{app_name_with_caps}}"
+{{#debug_mode}}
+include ':qmobileapi'
+project(':qmobileapi').projectDir = new File(settingsDir, '../QMobileAPI/qmobileapi')
+include ':qmobiledatastore'
+project(':qmobiledatastore').projectDir = new File(settingsDir, "../QMobileDataStore/qmobiledatastore")
+include ':qmobiledatasync'
+project(':qmobiledatasync').projectDir = new File(settingsDir, '../QMobileDataSync/qmobiledatasync')
+include ':qmobileui'
+project(':qmobileui').projectDir = new File(settingsDir, '../QMobileUI/qmobileui')
+{{/debug_mode}}

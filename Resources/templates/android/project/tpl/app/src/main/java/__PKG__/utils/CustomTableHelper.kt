@@ -6,21 +6,18 @@
 
 package {{package}}.utils
 
+import android.app.Application
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.qmobile.qmobileapi.model.entity.EntityModel
 import com.qmobile.qmobileapi.network.ApiService
 import com.qmobile.qmobiledatasync.app.BaseApp
+import com.qmobile.qmobiledatasync.relation.RelationHelper
 import com.qmobile.qmobiledatasync.utils.GenericTableHelper
+import com.qmobile.qmobiledatasync.utils.ReflectionUtils
 import com.qmobile.qmobiledatasync.viewmodel.EntityListViewModel
 import com.qmobile.qmobiledatasync.viewmodel.EntityViewModel
 {{#tableNames}}
 import {{package}}.data.model.entity.{{name}}
-{{/tableNames}}
-{{#tableNames_with_many_to_one_relations}}
-import {{package}}.data.model.entity.{{name}}ManyToOneRelationMask
-{{/tableNames_with_many_to_one_relations}}
-{{#tableNames}}
-import {{package}}.viewmodel.entity.EntityViewModel{{name}}
 {{/tableNames}}
 {{#tableNames}}
 import {{package}}.viewmodel.entityList.EntityListViewModel{{name}}
@@ -60,17 +57,10 @@ class CustomTableHelper : GenericTableHelper {
         var entity: EntityModel? = null
         {{#relations_many_to_one}}
         if (tableName == "{{relation_source}}") {
-            if (entity == null) {
+            if (entity == null)
                 entity = BaseApp.mapper.readValue<{{relation_source}}>(jsonString)
-            }
-            if (fetchedFromRelation) {
-                val entityManyToOneRelationMask =
-                    BaseApp.mapper.readValue<{{relation_source}}ManyToOneRelationMask>(jsonString)
-                (entity as {{relation_source}}?)?.__{{relation_name}}Key = entityManyToOneRelationMask.{{relation_name}}?.__deferred?.__KEY
-            } else {
-                (entity as {{relation_source}}?)?.__{{relation_name}}Key = entity.{{relation_name}}?.__KEY
-            }
-            entity.{{relation_name}} = null
+            (entity as {{relation_source}}?)?.__{{relation_name}}Key =
+                RelationHelper.getRelationId(jsonString, "{{relation_name}}", fetchedFromRelation)
         }
         {{/relations_many_to_one}}
         {{#tableNames_without_many_to_one_relation}}
@@ -107,7 +97,7 @@ class CustomTableHelper : GenericTableHelper {
     ): EntityViewModel<*> =
         when (tableName) {
             {{#tableNames}}
-            "{{name}}" -> EntityViewModel{{name}}(tableName, id, apiService)
+            "{{name}}" -> EntityViewModel<{{name}}>(tableName, id, apiService)
             {{/tableNames}}
             else -> throw IllegalArgumentException("Missing entityViewModel for table: $tableName")
         }
@@ -122,18 +112,6 @@ class CustomTableHelper : GenericTableHelper {
             "{{name}}" -> EntityListViewModel{{name}}::class.java as Class<EntityListViewModel<EntityModel>>
             {{/tableNames}}
             else -> throw IllegalArgumentException("Missing entityListViewModel class for table: $tableName")
-        }
-
-    /**
-     * Provides the appropriate EntityViewModel KClass
-     */
-    @Suppress("UNCHECKED_CAST")
-    override fun entityViewModelClassFromTable(tableName: String): Class<EntityViewModel<EntityModel>> =
-        when (tableName) {
-            {{#tableNames}}
-            "{{name}}" -> EntityViewModel{{name}}::class.java as Class<EntityViewModel<EntityModel>>
-            {{/tableNames}}
-            else -> throw IllegalArgumentException("Missing entityViewModel class table: $tableName")
         }
 
     /**
@@ -155,5 +133,18 @@ class CustomTableHelper : GenericTableHelper {
             else -> throw IllegalArgumentException("Missing reflected properties for table: $tableName")
         }
         return Pair(properties, constructorParameters)
+    }
+
+    /**
+     * Returns list of table properties as a String, separated by commas, without EntityModel
+     * inherited properties
+     */
+    override fun getPropertyListFromTable(tableName: String, application: Application): String {
+        return when (tableName) {
+            {{#tableNames}}
+            "{{name}}" -> ReflectionUtils.getPropertyListString<{{name}}>(tableName, application)
+            {{/tableNames}}
+            else -> throw IllegalArgumentException("Missing property list for table: $tableName")
+        }
     }
 }

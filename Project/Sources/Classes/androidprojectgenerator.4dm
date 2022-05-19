@@ -16,66 +16,73 @@ Class constructor($java : 4D:C1709.File; $kotlinc : 4D:C1709.File; $projectPath 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function generate
-	var $0 : Object
-	var $1 : 4D:C1709.File  // project editor json
+Function generate($project : Object; $mobileProj : 4D:C1709.Folder)->$result : Object
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; True:C214; \
 		"outputStream"; ""; \
 		"errorStream"; ""; \
 		"errors"; New collection:C1472)
 	
+	var $catalogfile : 4D:C1709.File
 	
-	If ((This:C1470.path.androidProjectFilesToCopy().exists)\
-		 & (This:C1470.path.androidProjectTemplateFiles().exists)\
-		 & (This:C1470.path.androidForms().exists))
+	$catalogfile:=$mobileProj.file("catalog.json")
+	
+	If (Not:C34(This:C1470.path.androidProjectFilesToCopy().exists)\
+		 | Not:C34(This:C1470.path.androidProjectTemplateFiles().exists)\
+		 | Not:C34(This:C1470.path.androidForms().exists))
 		
-		If (This:C1470.path.scripts().exists)
-			
-			This:C1470.setDirectory(This:C1470.path.scripts())
-			
-			This:C1470.launch(This:C1470.androidprojectgeneratorCmd\
-				+" generate"\
-				+" --project-editor \""+$1.path\
-				+"\" --files-to-copy \""+This:C1470.path.androidProjectFilesToCopy().path\
-				+"\" --template-files \""+This:C1470.path.androidProjectTemplateFiles().path\
-				+"\" --template-forms \""+This:C1470.path.androidForms().path\
-				+"\" --host-db \""+This:C1470.path.host().path\
-				+"\"")
-			
-			var $exceptionPos; $errorPos : Integer
-			
-			$exceptionPos:=Position:C15("Exception"; String:C10(This:C1470.errorStream))
-			$errorPos:=Position:C15("Error"; String:C10(This:C1470.errorStream))
-			
-			If ($exceptionPos>0)
-				// Removes illegal capsule access warnings
-				This:C1470.errorStream:=Substring:C12(This:C1470.errorStream; $exceptionPos)
-			End if 
-			
-			$0.success:=Not:C34(($exceptionPos>0) | ($errorPos>0))
-			$0.outputStream:=This:C1470.outputStream
-			$0.errorStream:=This:C1470.errorStream
-			
-			If (Not:C34($0.success))
-				
-				$0.errors.push("Failed to generate files")
-				$0.errors.push(This:C1470.errorStream)
-				
-				// Else : all ok
-			End if 
-			
-		Else 
-			
-			$0.errors.push("Missing scripts directory")
-			
-		End if 
+		$result.errors.push("Missing directories for project templating")
+		return 
 		
-	Else 
+	End if 
+	
+	If (Not:C34(This:C1470.path.scripts().exists))
 		
-		$0.errors.push("Missing directories for project templating")
+		$result.errors.push("Missing scripts directory")
+		return 
 		
+	End if 
+	
+	If (Not:C34($catalogFile.exists))
+		
+		$result.errors.push("Missing catalog.json file")
+		return 
+		
+	End if 
+	
+	This:C1470.setDirectory(This:C1470.path.scripts())
+	
+	This:C1470.launch(This:C1470.androidprojectgeneratorCmd\
+		+" generate"\
+		+" --project-editor \""+$project.path\
+		+"\" --files-to-copy \""+This:C1470.path.androidProjectFilesToCopy().path\
+		+"\" --template-files \""+This:C1470.path.androidProjectTemplateFiles().path\
+		+"\" --template-forms \""+This:C1470.path.androidForms().path\
+		+"\" --host-db \""+This:C1470.path.host().path\
+		+"\" --catalog \""+$catalogFile.path\
+		+"\"")
+	
+	var $exceptionPos; $errorPos : Integer
+	
+	$exceptionPos:=Position:C15("Exception"; String:C10(This:C1470.errorStream))
+	$errorPos:=Position:C15("Error"; String:C10(This:C1470.errorStream))
+	
+	If ($exceptionPos>0)
+		// Removes illegal capsule access warnings
+		This:C1470.errorStream:=Substring:C12(This:C1470.errorStream; $exceptionPos)
+	End if 
+	
+	$result.success:=Not:C34(($exceptionPos>0) | ($errorPos>0))
+	$result.outputStream:=This:C1470.outputStream
+	$result.errorStream:=This:C1470.errorStream
+	
+	If (Not:C34($result.success))
+		
+		$result.errors.push("Failed to generate files")
+		$result.errors.push(This:C1470.errorStream)
+		
+		// Else : all ok
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -334,7 +341,7 @@ Function copyIcons
 		
 		$0.success:=True:C214
 		
-		var $dataModel; $field : Object
+		var $dataModel; $field; $subField : Object
 		
 		For each ($dataModel; OB Entries:C1720($1))
 			
@@ -350,7 +357,6 @@ Function copyIcons
 				
 				// Else : all ok
 			End if 
-			
 			
 			var $shouldCreateMissingIcon : Boolean
 			
@@ -372,7 +378,6 @@ Function copyIcons
 						
 						// Else : all ok
 					End if 
-					
 					
 					// Check for field icon
 					var $Obj_handleField : Object
@@ -457,13 +462,14 @@ Function copyIcons
 		$0.errors.push("Missing icons folder : "+$tableIcons.path)
 	End if 
 	
-	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
 Function willRequireFieldIcons
 	var $0 : Boolean
 	var $1 : Object  // dataModel key value object
+	
 	var $field : Object
+	var $handleWillRequireFieldIcons : Boolean
 	
 	$0:=False:C215
 	
@@ -471,50 +477,55 @@ Function willRequireFieldIcons
 		
 		If ($field.key#"")
 			
-			If ($field.value.icon#Null:C1517)
+			$handleWillRequireFieldIcons:=This:C1470.handleWillRequireFieldIcons($field)
+			
+			If ($handleWillRequireFieldIcons=True:C214)
+				$0:=True:C214
+			End if 
+			
+			// Else: table metadata
+		End if 
+		
+	End for each 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function handleWillRequireFieldIcons
+	var $0 : Boolean
+	var $1 : Object  // field object
+	var $field : Object
+	
+	$0:=False:C215
+	$field:=$1
+	
+	If (Value type:C1509($field.value)=Is object:K8:27)
+		
+		If ($field.value.icon#Null:C1517)
+			
+			If (Value type:C1509($field.value.icon)=Is text:K8:3)
 				
-				If (Value type:C1509($field.value.icon)=Is text:K8:3)
+				If ($field.value.icon#"")
 					
-					If ($field.value.icon#"")
-						
-						$0:=True:C214
-						
-					End if 
+					$0:=True:C214
 					
 				End if 
 				
 			End if 
 			
-			// check in related fields
-			If ($field.value.relatedDataClass#Null:C1517)
-				
-				var $relatedField : Object
-				
-				For each ($relatedField; OB Entries:C1720($field.value))  // For each field in related table
-					
-					If (Value type:C1509($relatedField.value)=Is object:K8:27)
-						
-						If ($relatedField.value.icon#Null:C1517)
-							
-							If (Value type:C1509($relatedField.value.icon)=Is text:K8:3)
-								
-								If ($relatedField.value.icon#"")
-									
-									$0:=True:C214
-									
-								End if 
-								
-							End if 
-							
-						End if 
-						
-					End if 
-					
-				End for each 
-				
-			End if 
+		End if 
+		
+	End if 
+	
+	// checking subFields
+	var $subField : Object
+	var $handleWillRequireFieldIcons : Boolean
+	
+	For each ($subField; OB Entries:C1720($field.value))  // For each subField in field
+		
+		If (Value type:C1509($subField.value)=Is object:K8:27)
 			
-			// Else: table metadata
+			$0:=This:C1470.handleWillRequireFieldIcons($subField)
+			
 		End if 
 		
 	End for each 
@@ -640,7 +651,7 @@ Function handleField
 		"success"; True:C214; \
 		"errors"; New collection:C1472)
 	
-	$Obj_handleFieldIcon:=This:C1470.handleFieldIcon($1; $2; $3; -1)
+	$Obj_handleFieldIcon:=This:C1470.handleFieldIcon($1; $2; $3; -1; ""; "")
 	
 	If (Not:C34($Obj_handleFieldIcon.success))
 		
@@ -650,34 +661,96 @@ Function handleField
 		// Else : all ok
 	End if 
 	
-	$isRelation:=($2.value.relatedDataClass#Null:C1517)
 	
-	If ($isRelation)  // related field
+	If (Value type:C1509($2.value)=Is object:K8:27)
 		
-		var $relatedField : Object
+		$isRelation:=($2.value.relatedDataClass#Null:C1517)
 		
-		For each ($relatedField; OB Entries:C1720($2.value))  // For each field in related table
+		If ($isRelation)  // related field
 			
-			If (Value type:C1509($relatedField.value)=Is object:K8:27)
+			var $relatedField : Object
+			
+			For each ($relatedField; OB Entries:C1720($2.value))  // For each field in related table
 				
-				If ($relatedField.value.name#Null:C1517)  // can be a sub field or a sub 1->N relation (ignore sub N->1 relation)
+				If (Value type:C1509($relatedField.value)=Is object:K8:27)
 					
-					$Obj_handleFieldIcon:=This:C1470.handleFieldIcon($1; $relatedField.value; $3; $2.value.relatedTableNumber)
+					Case of 
+						: ($relatedField.value.name#Null:C1517)  // can be a sub field or a sub 1->N relation (ignore sub N->1 relation)
+							
+							$Obj_handleFieldIcon:=This:C1470.handleFieldIcon($1; $relatedField.value; $3; $2.value.relatedTableNumber; $2.value.id; "")
+							
+							If (Not:C34($Obj_handleFieldIcon.success))
+								
+								$0.success:=False:C215
+								$0.errors.combine($Obj_handleFieldIcon.errors)
+								
+								// Else : all ok
+							End if 
+							
+						: ($relatedField.value.kind="alias")
+							
+							// Add alias name key in object
+							$relatedField.value.aliasName:=$relatedField.key
+							
+							$Obj_handleFieldIcon:=This:C1470.handleFieldIcon($1; $relatedField.value; $3; $2.value.relatedTableNumber; $2.value.id; "")
+							
+							If (Not:C34($Obj_handleFieldIcon.success))
+								
+								$0.success:=False:C215
+								$0.errors.combine($Obj_handleFieldIcon.errors)
+								
+								// Else : all ok
+							End if 
+							
+					End case 
 					
-					If (Not:C34($Obj_handleFieldIcon.success))
+					// Checking subFields
+					var $subField : Object
+					
+					For each ($subField; OB Entries:C1720($relatedField.value))  // For each subField in relatedFields
 						
-						$0.success:=False:C215
-						$0.errors.combine($Obj_handleFieldIcon.errors)
+						If (Value type:C1509($subField.value)=Is object:K8:27)
+							
+							Case of 
+								: ($subField.value.name#Null:C1517)  // can be a sub field or a sub 1->N relation (ignore sub N->1 relation)
+									
+									$Obj_handleFieldIcon:=This:C1470.handleFieldIcon($1; $subField.value; $3; $2.value.relatedTableNumber; $2.value.id; $relatedField.key)
+									
+									If (Not:C34($Obj_handleFieldIcon.success))
+										
+										$0.success:=False:C215
+										$0.errors.combine($Obj_handleFieldIcon.errors)
+										
+										// Else : all ok
+									End if 
+									
+								: ($subField.value.kind="alias")
+									
+									// Add alias name key in object
+									$subField.value.aliasName:=$subField.key
+									
+									$Obj_handleFieldIcon:=This:C1470.handleFieldIcon($1; $subField.value; $3; $2.value.relatedTableNumber; $2.value.id; $relatedField.key)
+									
+									If (Not:C34($Obj_handleFieldIcon.success))
+										
+										$0.success:=False:C215
+										$0.errors.combine($Obj_handleFieldIcon.errors)
+										
+										// Else : all ok
+									End if 
+									
+							End case 
+							
+						End if 
 						
-						// Else : all ok
-					End if 
+					End for each 
 					
 					// Else : not a sub field (can be inverseName, relatedTableNumber, relatedDataClass, etc)
 				End if 
 				
-			End if 
+			End for each 
 			
-		End for each 
+		End if 
 		
 	End if 
 	
@@ -690,6 +763,8 @@ Function handleFieldIcon
 	var $2 : Object  // field key value object
 	var $3 : Boolean  // if should create icon if missing
 	var $4 : Integer  // relatedTableNumber if is related field
+	var $5 : Text  // parent name if is related field
+	var $6 : Text  // grand parent name if is sub related field
 	var $currentFile : 4D:C1709.File
 	var $shouldCreateMissingIcon : Boolean
 	var $field : Object
@@ -715,7 +790,6 @@ Function handleFieldIcon
 		
 		$field:=$2
 		
-		// For 1-N relation, set name as id
 		If ($field.id=Null:C1517)
 			
 			$field.id:=$2.name
@@ -785,7 +859,25 @@ Function handleFieldIcon
 		
 		If ($4>0)  // related field
 			
-			$newName:=Replace string:C233($newName; "qmobile_android_missing_icon"; "related_field_icon_"+$1+"_"+String:C10($4)+"_"+String:C10($field.id))
+			var $fieldName : Text
+			If ($field.name#Null:C1517)
+				If ($6="")
+					$fieldName:=String:C10($5)+"_"+String:C10($field.name)
+				Else 
+					$fieldName:=String:C10($5)+"_"+String:C10($6)+"_"+String:C10($field.name)
+				End if 
+			Else 
+				If ($6="")
+					$fieldName:=String:C10($5)+"_"+String:C10($2.aliasName)
+				Else 
+					$fieldName:=String:C10($5)+"_"+String:C10($6)+"_"+String:C10($2.aliasName)
+				End if 
+			End if 
+			
+			$fieldName:=Lowercase:C14($fieldName)
+			Rgx_SubstituteText("[^a-z0-9]"; "_"; ->$fieldName; 0)
+			
+			$newName:=Replace string:C233($newName; "qmobile_android_missing_icon"; "related_field_icon_"+$1+"_"+String:C10($4)+"_"+$fieldName)
 			
 		Else   // direct field
 			
@@ -925,103 +1017,131 @@ Function copyFormatterImage
 		"success"; True:C214; \
 		"errors"; New collection:C1472)
 	
-	// Check for formatter image to copy
-	If ($1.value.format#Null:C1517)
+	
+	If (Value type:C1509($1.value)=Is object:K8:27)
 		
-		var $format; $formatName : Text
-		var $copyDest : 4D:C1709.File
-		var $copyFormatterImagesToApp : Object
-		
-		If (Value type:C1509($1.value.format)=Is text:K8:3)
+		// Check for formatter image to copy
+		If ($1.value.format#Null:C1517)
 			
-			$format:=$1.value.format
+			var $format; $formatName : Text
+			var $copyDest : 4D:C1709.File
+			var $copyFormatterImagesToApp : Object
 			
-			If ($format#"")
+			If (Value type:C1509($1.value.format)=Is text:K8:3)
 				
-				If (Substring:C12($format; 1; 1)="/")
+				$format:=$1.value.format
+				
+				If ($format#"")
 					
-					var $formattersFolder; $customFormatterFolder; $imagesFolderInFormatter : 4D:C1709.Folder
-					
-					$formattersFolder:=This:C1470.path.hostFormatters()
-					
-					If ($formattersFolder.exists)
+					If (Substring:C12($format; 1; 1)="/")
 						
-						$formatName:=Substring:C12($format; 2)
+						var $formattersFolder; $customFormatterFolder; $imagesFolderInFormatter : 4D:C1709.Folder
 						
-						$customFormatterFolder:=$formattersFolder.folder($formatName)
+						$formattersFolder:=This:C1470.path.hostFormatters()
 						
-						If ($customFormatterFolder.exists)
+						If ($formattersFolder.exists)
 							
-							$copyFormatterImagesToApp:=This:C1470.copyFormatterImagesToApp($customFormatterFolder; $formatName)
+							$formatName:=Substring:C12($format; 2)
 							
-							If (Not:C34($copyFormatterImagesToApp.success))
-								
-								$0.success:=False:C215
-								$0.errors.combine($copyFormatterImagesToApp.errors)
-								
-								// Else : all ok
-							End if 
+							$customFormatterFolder:=$formattersFolder.folder($formatName)
 							
-						Else 
-							
-							// Check for ZIP
-							var $customFormatterZipFile : 4D:C1709.File
-							
-							$customFormatterZipFile:=$formattersFolder.file($formatName)
-							
-							If ($customFormatterZipFile.exists)
+							If ($customFormatterFolder.exists)
 								
-								var $archive : 4D:C1709.ZipArchive
+								$copyFormatterImagesToApp:=This:C1470.copyFormatterImagesToApp($customFormatterFolder; $formatName)
 								
-								$archive:=ZIP Read archive:C1637($customFormatterZipFile)
-								
-								var $unzipDest : 4D:C1709.Folder
-								
-								$unzipDest:=$archive.root.copyTo($customFormatterZipFile.parent; "android_temporary_"+$customFormatterZipFile.name; fk overwrite:K87:5)
-								
-								If ($unzipDest.exists)
+								If (Not:C34($copyFormatterImagesToApp.success))
 									
-									$copyFormatterImagesToApp:=This:C1470.copyFormatterImagesToApp($unzipDest; $formatName)
+									$0.success:=False:C215
+									$0.errors.combine($copyFormatterImagesToApp.errors)
 									
-									If (Not:C34($copyFormatterImagesToApp.success))
+									// Else : all ok
+								End if 
+								
+							Else 
+								
+								// Check for ZIP
+								var $customFormatterZipFile : 4D:C1709.File
+								
+								$customFormatterZipFile:=$formattersFolder.file($formatName)
+								
+								If ($customFormatterZipFile.exists)
+									
+									var $archive : 4D:C1709.ZipArchive
+									
+									$archive:=ZIP Read archive:C1637($customFormatterZipFile)
+									
+									var $unzipDest : 4D:C1709.Folder
+									
+									$unzipDest:=$archive.root.copyTo($customFormatterZipFile.parent; "android_temporary_"+$customFormatterZipFile.name; fk overwrite:K87:5)
+									
+									If ($unzipDest.exists)
 										
+										$copyFormatterImagesToApp:=This:C1470.copyFormatterImagesToApp($unzipDest; $formatName)
+										
+										If (Not:C34($copyFormatterImagesToApp.success))
+											
+											$0.success:=False:C215
+											$0.errors.combine($copyFormatterImagesToApp.errors)
+											
+											// Else : all ok
+										End if 
+										
+										$unzipDest.delete(Delete with contents:K24:24)
+										
+									Else 
+										// error
 										$0.success:=False:C215
-										$0.errors.combine($copyFormatterImagesToApp.errors)
+										$0.errors.push("Could not unzip to destination: "+$unzipDest.path)
 										
-										// Else : all ok
 									End if 
-									
-									$unzipDest.delete(Delete with contents:K24:24)
 									
 								Else 
 									// error
 									$0.success:=False:C215
-									$0.errors.push("Could not unzip to destination: "+$unzipDest.path)
-									
+									$0.errors.push("Custom formatter \""+$format+"\" couldn't be found at path: "+$customFormatterFolder.path)
 								End if 
 								
-							Else 
-								// error
-								$0.success:=False:C215
-								$0.errors.push("Custom formatter \""+$format+"\" couldn't be found at path: "+$customFormatterFolder.path)
 							End if 
 							
+							// Else : no formatters folder
 						End if 
 						
-						// Else : no formatters folder
+						// Else : no custom formatter
 					End if 
 					
-					// Else : no custom formatter
+					// Else : format empty
 				End if 
 				
-				// Else : format empty
+				// Else : field.format is not Text
 			End if 
 			
-			// Else : field.format is not Text
+			// Else : no formatter
 		End if 
 		
-		// Else : no formatter
+		// Checking for subFields
+		
+		var $subField; $copyFormatterImage : Object
+		
+		For each ($subField; OB Entries:C1720($1.value))  // For each subField in field
+			
+			If (Value type:C1509($subField)=Is object:K8:27)
+				
+				$copyFormatterImage:=This:C1470.copyFormatterImage($subField)
+				
+				If (Not:C34($copyFormatterImage.success))
+					
+					$0.success:=False:C215
+					$0.errors.combine($copyFormatterImage.errors)
+					
+					// Else : all ok
+				End if 
+				
+			End if 
+			
+		End for each 
+		
 	End if 
+	
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
@@ -1078,11 +1198,7 @@ Function copyKotlinCustomFormatterFiles
 	var $1 : Object  // Datamodel object
 	var $2 : Text  // Package name
 	
-	var $packageName; $packageNamePath; $format; $formatName; $fileContent : Text
-	$packageName:=$2
-	var $dataModel; $field; $copyFormatterFilesToApp : Object
-	var $bindingAdapterFile; $copyDest : 4D:C1709.File
-	var $bindingFolder; $formattersFolder; $customFormatterFolder; $formattersFolderInFormatter : 4D:C1709.Folder
+	var $dataModel; $field; $subField; $handleKotlinCustomFormatterFile : Object
 	
 	$0:=New object:C1471(\
 		"success"; True:C214; \
@@ -1094,27 +1210,95 @@ Function copyKotlinCustomFormatterFiles
 			
 			If ($field.key#"")
 				
-				If ($field.value.format#Null:C1517)
+				$handleKotlinCustomFormatterFile:=This:C1470.handleKotlinCustomFormatterFiles($field; $2)
+				
+				If (Not:C34($handleKotlinCustomFormatterFile.success))
 					
-					If (Value type:C1509($field.value.format)=Is text:K8:3)
+					$0.success:=False:C215
+					$0.errors.combine($handleKotlinCustomFormatterFile.errors)
+					
+					// Else : all ok
+				End if 
+				
+				// Else : table metadata
+			End if 
+			
+		End for each 
+		
+	End for each 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function handleKotlinCustomFormatterFiles
+	var $0 : Object
+	var $1 : Object  // field object
+	var $2 : Text  // Package name
+	
+	var $packageName; $packageNamePath; $format; $formatName; $fileContent : Text
+	$packageName:=$2
+	var $field; $subField; $copyFormatterFilesToApp; $handleKotlinCustomFormatterFile : Object
+	var $bindingAdapterFile; $copyDest : 4D:C1709.File
+	var $bindingFolder; $formattersFolder; $customFormatterFolder; $formattersFolderInFormatter : 4D:C1709.Folder
+	
+	$0:=New object:C1471(\
+		"success"; True:C214; \
+		"errors"; New collection:C1472)
+	
+	$field:=$1
+	
+	If (Value type:C1509($field.value)=Is object:K8:27)
+		
+		If ($field.value.format#Null:C1517)
+			
+			If (Value type:C1509($field.value.format)=Is text:K8:3)
+				
+				$format:=$field.value.format
+				
+				If ($format#"")
+					
+					If (Substring:C12($format; 1; 1)="/")
 						
-						$format:=$field.value.format
+						$formattersFolder:=This:C1470.path.hostFormatters()
 						
-						If ($format#"")
+						If ($formattersFolder.exists)
 							
-							If (Substring:C12($format; 1; 1)="/")
+							$formatName:=Substring:C12($format; 2)
+							
+							$customFormatterFolder:=$formattersFolder.folder($formatName)
+							
+							If ($customFormatterFolder.exists)
 								
-								$formattersFolder:=This:C1470.path.hostFormatters()
+								$copyFormatterFilesToApp:=This:C1470.copyFormatterFilesToApp($customFormatterFolder; $packageName)
 								
-								If ($formattersFolder.exists)
+								If (Not:C34($copyFormatterFilesToApp.success))
 									
-									$formatName:=Substring:C12($format; 2)
+									$0.success:=False:C215
+									$0.errors.combine($copyFormatterFilesToApp.errors)
 									
-									$customFormatterFolder:=$formattersFolder.folder($formatName)
+									// Else : all ok
+								End if 
+								
+							Else 
+								
+								// check for ZIP
+								
+								var $customFormatterZipFile : 4D:C1709.File
+								
+								$customFormatterZipFile:=$formattersFolder.file($formatName)
+								
+								If ($customFormatterZipFile.exists)
 									
-									If ($customFormatterFolder.exists)
+									var $archive : 4D:C1709.ZipArchive
+									
+									$archive:=ZIP Read archive:C1637($customFormatterZipFile)
+									
+									var $unzipDest : 4D:C1709.Folder
+									
+									$unzipDest:=$archive.root.copyTo($customFormatterZipFile.parent; "android_temporary_"+$customFormatterZipFile.name; fk overwrite:K87:5)
+									
+									If ($unzipDest.exists)
 										
-										$copyFormatterFilesToApp:=This:C1470.copyFormatterFilesToApp($customFormatterFolder; $packageName)
+										$copyFormatterFilesToApp:=This:C1470.copyFormatterFilesToApp($unzipDest; $packageName)
 										
 										If (Not:C34($copyFormatterFilesToApp.success))
 											
@@ -1124,75 +1308,62 @@ Function copyKotlinCustomFormatterFiles
 											// Else : all ok
 										End if 
 										
+										$unzipDest.delete(Delete with contents:K24:24)
+										
 									Else 
-										
-										// check for ZIP
-										
-										var $customFormatterZipFile : 4D:C1709.File
-										
-										$customFormatterZipFile:=$formattersFolder.file($formatName)
-										
-										If ($customFormatterZipFile.exists)
-											
-											var $archive : 4D:C1709.ZipArchive
-											
-											$archive:=ZIP Read archive:C1637($customFormatterZipFile)
-											
-											var $unzipDest : 4D:C1709.Folder
-											
-											$unzipDest:=$archive.root.copyTo($customFormatterZipFile.parent; "android_temporary_"+$customFormatterZipFile.name; fk overwrite:K87:5)
-											
-											If ($unzipDest.exists)
-												
-												$copyFormatterFilesToApp:=This:C1470.copyFormatterFilesToApp($unzipDest; $packageName)
-												
-												If (Not:C34($copyFormatterFilesToApp.success))
-													
-													$0.success:=False:C215
-													$0.errors.combine($copyFormatterFilesToApp.errors)
-													
-													// Else : all ok
-												End if 
-												
-												$unzipDest.delete(Delete with contents:K24:24)
-												
-											Else 
-												// error
-												$0.success:=False:C215
-												$0.errors.push("Could not unzip to destination: "+$unzipDest.path)
-												
-											End if 
-											
-										Else 
-											// error
-											$0.success:=False:C215
-											$0.errors.push("Custom formatter \""+$format+"\" couldn't be found at path: "+$customFormatterFolder.path)
-										End if 
-										
+										// error
+										$0.success:=False:C215
+										$0.errors.push("Could not unzip to destination: "+$unzipDest.path)
 										
 									End if 
 									
-									// Else : no formatters folder
+								Else 
+									// error
+									$0.success:=False:C215
+									$0.errors.push("Custom formatter \""+$format+"\" couldn't be found at path: "+$customFormatterFolder.path)
 								End if 
 								
-								// Else : no custom formatter
+								
 							End if 
 							
-							// Else : format empty
+							// Else : no formatters folder
 						End if 
 						
-						// Else : field.format is not Text
+						// Else : no custom formatter
 					End if 
 					
-					// Else : no formatter
+					// Else : format empty
 				End if 
 				
-				// Else : table metadata
+				// Else : field.format is not Text
+			End if 
+			
+			// Else : no formatter
+		End if 
+		
+		// Checking for subFields
+		
+		var $subField; $handleKotlinCustomFormatterFile : Object
+		
+		For each ($subField; OB Entries:C1720($field.value))  // For each subField in field
+			
+			If (Value type:C1509($subField)=Is object:K8:27)
+				
+				$handleKotlinCustomFormatterFile:=This:C1470.handleKotlinCustomFormatterFiles($subField; $2)
+				
+				If (Not:C34($handleKotlinCustomFormatterFile.success))
+					
+					$0.success:=False:C215
+					$0.errors.combine($handleKotlinCustomFormatterFile.errors)
+					
+					// Else : all ok
+				End if 
+				
 			End if 
 			
 		End for each 
 		
-	End for each 
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
@@ -1333,6 +1504,7 @@ Function createIconAssets
 		var $t : Text
 		
 		Case of 
+				
 			: ($1.shortLabel#"")
 				
 				$t:=$1.shortLabel
