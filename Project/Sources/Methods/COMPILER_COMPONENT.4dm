@@ -14,6 +14,8 @@ var DATABASE : cs:C1710.database
 
 var UI : cs:C1710.EDITOR
 
+var motor : cs:C1710.motor
+
 If (False:C215)
 	
 	// ----------------------------------------------------
