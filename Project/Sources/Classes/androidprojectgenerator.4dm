@@ -468,7 +468,7 @@ Function willRequireFieldIcons
 	var $0 : Boolean
 	var $1 : Object  // dataModel key value object
 	
-	var $field : Object
+	var $field; $subField : Object
 	var $handleWillRequireFieldIcons : Boolean
 	
 	$0:=False:C215
@@ -477,59 +477,52 @@ Function willRequireFieldIcons
 		
 		If ($field.key#"")
 			
-			$handleWillRequireFieldIcons:=This:C1470.handleWillRequireFieldIcons($field)
-			
-			If ($handleWillRequireFieldIcons=True:C214)
-				$0:=True:C214
+			If (Value type:C1509($field.value)=Is object:K8:27)
+				
+				If ($field.value.icon#Null:C1517)
+					
+					If (Value type:C1509($field.value.icon)=Is text:K8:3)
+						
+						If ($field.value.icon#"")
+							
+							$0:=True:C214
+							return 
+							
+						End if 
+						
+					End if 
+					
+				End if 
+				
+				For each ($subField; OB Entries:C1720($field.value))  // For each subField in field
+					
+					If (Value type:C1509($subField.value)=Is object:K8:27)
+						
+						If ($subField.value.icon#Null:C1517)
+							
+							If (Value type:C1509($subField.value.icon)=Is text:K8:3)
+								
+								If ($subField.value.icon#"")
+									
+									$0:=True:C214
+									return 
+									
+								End if 
+								
+							End if 
+							
+						End if 
+						
+					End if 
+					
+				End for each 
+				
 			End if 
 			
 			// Else: table metadata
 		End if 
 		
 	End for each 
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	//
-Function handleWillRequireFieldIcons
-	var $0 : Boolean
-	var $1 : Object  // field object
-	var $field : Object
-	
-	$0:=False:C215
-	$field:=$1
-	
-	If (Value type:C1509($field.value)=Is object:K8:27)
-		
-		If ($field.value.icon#Null:C1517)
-			
-			If (Value type:C1509($field.value.icon)=Is text:K8:3)
-				
-				If ($field.value.icon#"")
-					
-					$0:=True:C214
-					
-				End if 
-				
-			End if 
-			
-		End if 
-		
-	End if 
-	
-	// checking subFields
-	var $subField : Object
-	var $handleWillRequireFieldIcons : Boolean
-	
-	For each ($subField; OB Entries:C1720($field.value))  // For each subField in field
-		
-		If (Value type:C1509($subField.value)=Is object:K8:27)
-			
-			$0:=This:C1470.handleWillRequireFieldIcons($subField)
-			
-		End if 
-		
-	End for each 
-	
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
@@ -557,7 +550,6 @@ Function willRequireActionIcons
 		End if 
 		
 	End for each 
-	
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
