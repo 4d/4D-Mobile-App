@@ -497,7 +497,7 @@ Function _getAppDataFolder($project : Object) : 4D:C1709.Folder
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _getAppId($project : Object) : Text
 	
-	return String:C10($project.product.bundleIdentifier)
+	return String:C10($project.organization.teamId)+"."+String:C10($project.product.bundleIdentifier)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _o_themeImageFile()->$theme : 4D:C1709.File
