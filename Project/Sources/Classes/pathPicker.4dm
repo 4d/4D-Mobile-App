@@ -1,7 +1,6 @@
-Class constructor
+Class constructor($target; $options : Object)
 	
-	var $1
-	var $2 : Object
+	var $t : Text
 	
 	This:C1470.type:=Is a document:K24:1
 	
@@ -25,31 +24,29 @@ Class constructor
 		
 		If (Count parameters:C259>=2)
 			
-			var $t : Text
-			
-			For each ($t; $2)
+			For each ($t; $options)
 				
-				This:C1470[$t]:=$2[$t]
+				This:C1470[$t]:=$options[$t]
 				
 			End for each 
 		End if 
 		
-		If (Value type:C1509($1)=Is object:K8:27)
+		If (Value type:C1509($target)=Is object:K8:27)
 			
 			// File or Folder
-			This:C1470.setTarget($1)
+			This:C1470.setTarget($target)
 			
 		Else 
 			
-			If ((Position:C15(":"; String:C10($1))>0))
+			If ((Position:C15(":"; String:C10($target))>0))
 				
 				// Platform path
-				This:C1470.setPlatformPath(String:C10($1))
+				This:C1470.setPlatformPath(String:C10($target))
 				
 			Else 
 				
 				// POSIX
-				This:C1470.setPath(String:C10($1))
+				This:C1470.setPath(String:C10($target))
 				
 			End if 
 		End if 
@@ -58,14 +55,12 @@ Class constructor
 	This:C1470.__geometry()
 	This:C1470.__updateLabel()
 	
-	//===================================================
-Function setType
-	
-	var $1 : Integer
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function setType($type : Integer)
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.type:=$1
+		This:C1470.type:=$type
 		
 	Else 
 		
@@ -73,14 +68,12 @@ Function setType
 		
 	End if 
 	
-	//===================================================
-Function setMessage
-	
-	var $1 : Text
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function setMessage($message : Text)
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.message:=$1
+		This:C1470.message:=$message
 		
 	Else 
 		
@@ -88,14 +81,12 @@ Function setMessage
 		
 	End if 
 	
-	//===================================================
-Function setPlaceholder
-	
-	var $1 : Text
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function setPlaceholder($placeholder : Text)
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.placeHolder:=$1
+		This:C1470.placeHolder:=$placeholder
 		OBJECT SET PLACEHOLDER:C1295(*; "text"; This:C1470.placeHolder)
 		
 	Else 
@@ -104,21 +95,19 @@ Function setPlaceholder
 		
 	End if 
 	
-	//===================================================
-Function setTarget
-	
-	var $1 : Object
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function setTarget($target)
 	
 	If (Count parameters:C259>=1)
 		
-		If ($1#Null:C1517)
+		If ($target#Null:C1517)
 			
-			If (OB Instance of:C1731($1; 4D:C1709.Folder))\
-				 | (OB Instance of:C1731($1; 4D:C1709.File))
+			If (OB Instance of:C1731($target; 4D:C1709.Folder))\
+				 | (OB Instance of:C1731($target; 4D:C1709.File))
 				
-				This:C1470.target:=$1
-				This:C1470.path:=$1.path
-				This:C1470.platformPath:=$1.platformPath
+				This:C1470.target:=$target
+				This:C1470.path:=$target.path
+				This:C1470.platformPath:=$target.platformPath
 				
 				This:C1470.__updateLabel()
 				
@@ -144,18 +133,16 @@ Function setTarget
 		
 	End if 
 	
-	//===================================================
-Function setPlatformPath
-	
-	var $1 : Text
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function setPlatformPath($pathname : Text)
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.platformPath:=$1
+		This:C1470.platformPath:=$pathname
 		
-		If (Length:C16($1)>0)
+		If (Length:C16($pathname)>0)
 			
-			This:C1470.path:=Convert path system to POSIX:C1106($1)
+			This:C1470.path:=Convert path system to POSIX:C1106($pathname)
 			
 			If (Path to object:C1547(This:C1470.platformPath).isFolder)
 				
@@ -184,18 +171,16 @@ Function setPlatformPath
 		
 	End if 
 	
-	//===================================================
-Function setPath
-	
-	var $1 : Text
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function setPath($path : Text)
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.path:=$1
+		This:C1470.path:=$path
 		
-		If (Length:C16($1)>0)
+		If (Length:C16($path)>0)
 			
-			This:C1470.platformPath:=Convert path POSIX to system:C1107($1)
+			This:C1470.platformPath:=Convert path POSIX to system:C1107($path)
 			
 			If (Path to object:C1547(This:C1470.platformPath).isFolder)
 				
@@ -224,10 +209,10 @@ Function setPath
 		
 	End if 
 	
-	//===================================================
-Function __select
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function __select()
 	
-	var $t
+	var $t : Text
 	
 	Case of 
 			
@@ -270,12 +255,12 @@ Function __select
 		
 	End if 
 	
-	//===================================================
-Function __displayMenu
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function __displayMenu()
+	
 	var $menu; $sep; $t : Text
 	var $bottom; $left; $right; $top : Integer
 	var $c : Collection
-	
 	
 	// In remote mode, the path can be in the server system format
 	
@@ -286,7 +271,7 @@ Function __displayMenu
 			 & (Is macOS:C1572)\
 			 & (Position:C15("\\"; This:C1470.platformPath)>0)
 			
-			// macOS client with server on Windows
+			// MacOS client with server on Windows
 			$sep:="\\"
 			
 			//……………………………………………………………………………………………
@@ -347,6 +332,7 @@ Function __displayMenu
 				
 				SET MENU ITEM ICON:C984($menu; -1; "path:/RESOURCES/pathPicker/file.png")
 				
+				//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 			Else 
 				
 				SET MENU ITEM STYLE:C425($menu; -1; Italic:K14:3)
@@ -414,14 +400,12 @@ Function __displayMenu
 		End case 
 	End if 
 	
-	//===================================================
-Function __onDrag
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function __onDrag() : Integer
 	
-	var $0 : Integer
+	return (-1+Num:C11(Test path name:C476(Get file from pasteboard:C976(1))=Num:C11(This:C1470.type)))
 	
-	$0:=-1+Num:C11(Test path name:C476(Get file from pasteboard:C976(1))=Num:C11(This:C1470.type))
-	
-	//===================================================
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function __onDrop
 	
 	DOCUMENT:=Get file from pasteboard:C976(1)
@@ -436,11 +420,10 @@ Function __onDrop
 		End if 
 	End if 
 	
-	//===================================================
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function __updateLabel
 	
 	If (Length:C16(This:C1470.platformPath)>0)
-		
 		
 		// In remote mode, the path can be in the server system format
 		Case of 
@@ -450,7 +433,7 @@ Function __updateLabel
 				 & (Is macOS:C1572)\
 				 & (Position:C15("\\"; This:C1470.platformPath)>0)
 				
-				// macOS client with server on Windows
+				// MacOS client with server on Windows
 				This:C1470.separator:="\\"
 				
 				//……………………………………………………………………………………………
@@ -486,7 +469,7 @@ Function __updateLabel
 		
 	End if 
 	
-	//===================================================
+	//=== === === === === === === === === === === === === === === === === === === === ===
 Function __resume
 	
 	If (Form:C1466.callback#Null:C1517)
@@ -499,9 +482,11 @@ Function __resume
 		
 	End if 
 	
-	//===================================================
-Function __geometry
-	var $bottom; $l; $left; $formWidth; $offset; $right; $top; $containerWidth : Integer
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function __geometry()
+	
+	var $bottom; $containerWidth; $formWidth; $l; $left; $offset : Integer
+	var $right; $top : Integer
 	
 	OBJECT GET SUBFORM CONTAINER SIZE:C1148($containerWidth; $l)
 	FORM GET PROPERTIES:C674(Current form name:C1298; $formWidth; $l)
@@ -520,8 +505,9 @@ Function __geometry
 	
 	This:C1470.__ui()
 	
-	//===================================================
-Function __ui
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function __ui()
+	
 	var $bottom; $l; $left; $right; $top : Integer
 	
 	If (This:C1470.browse)
@@ -573,4 +559,3 @@ Function __ui
 		End if 
 	End if 
 	
-	//===================================================
