@@ -640,7 +640,6 @@ Function image($picture; $attachTo) : cs:C1710.svg
 					
 					// Encode the image
 					PICTURE TO BLOB:C692($picture; $x; $codecs{0})
-					CLEAR VARIABLE:C89($picture)
 					This:C1470.success:=Bool:C1537(OK)
 					
 					If (This:C1470.success)
@@ -659,6 +658,8 @@ Function image($picture; $attachTo) : cs:C1710.svg
 							"height"; $height))
 						
 					End if 
+					
+					CLEAR VARIABLE:C89($picture)
 					
 				Else 
 					

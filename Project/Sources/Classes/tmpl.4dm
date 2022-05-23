@@ -891,7 +891,7 @@ Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Ob
 						
 					End if 
 					
-					$found:=String:C10($relation[$t].name)=$name
+					$found:=(String:C10($relation[$t].name)=$name) || (($relation[$t]#Null:C1517) & ($t=$name))
 					
 				End for each 
 				

@@ -309,40 +309,36 @@ Function fieldList($table)->$result : Object
 						//……………………………………………………………………………………………………………
 					: ($field.kind="storage")
 						
+						$field.path:=$field.name
+						$field.fieldNumber:=Num:C11($key)
+						
 						$field.$label:=$field.name
 						$field.$level:=0
-						
-						$field.fieldNumber:=Num:C11($key)
-						$field.path:=$field.name
 						
 						$result.fields.push($field)
 						
 						//……………………………………………………………………………………………………………
 					: ($field.kind="alias") & ($field.relatedDataClass=Null:C1517)
 						
+						$field.name:=$key
+						
 						$field.$label:=$key
 						$field.$level:=0
-						
-						$field.name:=$key
 						
 						$result.fields.push($field)
 						
 						//……………………………………………………………………………………………………………
 					: ($field.kind="calculated")
 						
-						$field.$label:=$key
-						$field.$level:=0
-						
 						$field.name:=$key
 						$field.path:=$field.name
+						
+						$field.$label:=$key
+						$field.$level:=0
 						
 						$result.fields.push($field)
 						
 						//……………………………………………………………………………………………………………
-						//FIXME: BUG EN COMPILÉ
-						//: ($field.kind="relatedEntity")\
-																																																																																																		 || (($field.kind="alias") && (Bool($field.isToOne)))
-						
 					: ($field.kind="relatedEntity")\
 						 || (($field.kind="alias") & (Bool:C1537($field.isToOne)))
 						
@@ -385,11 +381,11 @@ Function fieldList($table)->$result : Object
 									//……………………………………………………………………………………………………………
 								: ($subfield.kind="storage")
 									
+									$subfield.name:=$key+"."+$subfield.name
+									$subfield.path:=$subfield.name
+									
 									$subfield.$label:=$linkPrefix+$subfield.name
 									$subfield.$level:=$subLevel+1
-									
-									$subfield.path:=$key+"."+$subfield.name
-									$subfield.name:=$subfield.path
 									
 									$subfield.fieldNumber:=Num:C11($attribute)
 									
@@ -398,32 +394,32 @@ Function fieldList($table)->$result : Object
 									//……………………………………………………………………………………………………………
 								: ($subfield.kind="alias")
 									
+									$subfield.name:=$key+"."+$attribute
+									$subfield.path:=$subfield.name
+									
 									$subfield.$label:=$linkPrefix+$attribute
 									$subfield.$level:=$subLevel+1
-									
-									$subfield.path:=$key+"."+$attribute
-									$subfield.name:=$subfield.path
 									
 									$result.fields.push($subfield)
 									
 									//……………………………………………………………………………………………………………
 								: ($subfield.kind="calculated")
 									
+									$subfield.name:=$key+"."+$attribute
+									$subfield.path:=$subfield.name
+									
 									$subfield.$label:=$linkPrefix+$attribute
 									$subfield.$level:=$subLevel+1
-									
-									$subfield.path:=$key+"."+$attribute
-									$subfield.name:=$subfield.path
 									
 									$result.fields.push($subfield)
 									
 									//______________________________________________________
 								: ($subfield.kind="relatedEntities")
 									
+									$subfield.name:=$attribute
+									
 									$subfield.$label:=$linkPrefix+$attribute
 									$subfield.$level:=$subLevel+2
-									
-									$subfield.name:=$attribute
 									
 									//FIXME:Tempo
 									$subfield.fieldType:=8859
@@ -446,8 +442,8 @@ Function fieldList($table)->$result : Object
 										
 										If ($subfield2.kind="alias")
 											
+											$subfield2.name:=$attribute+"."+$sub
 											$subfield2.path:=$key+"."+$attribute+"."+$sub
-											$subfield2.name:=$subfield2.path
 											
 										Else 
 											
@@ -475,12 +471,12 @@ Function fieldList($table)->$result : Object
 						//……………………………………………………………………………………………………………
 					: ($field.kind="relatedEntities")
 						
+						$field.name:=$key
+						$field.path:=$key
+						
 						$field.$name:=$key
 						$field.$label:=$key
 						$field.$level:=0
-						
-						$field.name:=$key
-						$field.path:=$key
 						
 						//FIXME:Tempo
 						$field.fieldType:=8859

@@ -45,7 +45,8 @@ If (Length:C16($cible)>0)
 		If ($tmpl.isTypeAccepted($bind; $dropped.fieldType))
 			
 			$target:=Form:C1466[This:C1470.$.typeForm()][$tableNumber]
-			//$dropped.name:=$dropped.path
+			
+			$dropped.name:=$dropped.path
 			
 			SVG GET ATTRIBUTE:C1056(*; $preview; $cible; "ios:bind"; $binding)
 			
