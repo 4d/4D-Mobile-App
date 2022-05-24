@@ -39,7 +39,7 @@ Case of
 		$folder:=UI.path.products().folder(PROJECT.product.name)
 		
 		$could:=New object:C1471(\
-			"isDebug"; DATABASE.isMatrix; \
+			"isDebug"; Component.isMatrix; \
 			"isMain"; (Application version:C493(*)="A@"); \
 			"withMoreItems"; Macintosh option down:C545 | Windows Alt down:C563; \
 			"productFolder"; $folder; \

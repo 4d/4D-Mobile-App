@@ -127,7 +127,7 @@ If (Bool:C1537(OK))
 	End for each 
 	
 	// Open the project editor
-	If (DATABASE.isMatrix | Not:C34(Is compiled mode:C492))
+	If (Component.isMatrix | Component.isInterpreted)
 		
 		SET ASSERT ENABLED:C1131(True:C214; *)
 		

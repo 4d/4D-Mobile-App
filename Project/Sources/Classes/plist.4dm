@@ -8,10 +8,9 @@ Documentation:
    - https://medium.com/@karaiskc/understanding-apples-binary-property-list-format-281e6da00dbd
 */
 
-//#MARK_TODO : manage openstep
-
-//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class extends ob
+
+//todo: manage openstep
 
 //=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor($file : 4D:C1709.File)
@@ -43,7 +42,7 @@ Class constructor($file : 4D:C1709.File)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function read($file : 4D:C1709.File)->$plist : cs:C1710.plist
+Function read($file : 4D:C1709.File) : cs:C1710.plist
 	
 	var $inputStream; $outputStream; $errorStream : Text
 	var $x : Blob
@@ -134,42 +133,47 @@ Function read($file : 4D:C1709.File)->$plist : cs:C1710.plist
 		
 	End if 
 	
-	$plist:=This:C1470
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Saves the current changes not saved into the plist file
-Function save()
+Function save($save : Boolean)
 	
 	var $inputStream; $outputStream; $errorStream : Text
 	
-	If (This:C1470.isConverted)
+	$save:=Count parameters:C259=0 ? True:C214 : $save
+	
+	If ($save)
 		
-		If (This:C1470.isBinary)
+		If (This:C1470.isConverted)
 			
-			This:C1470.buffer.setAppInfo(This:C1470.content)
-			
-			SET ENVIRONMENT VARIABLE:C812("_4D_OPTION_HIDE_CONSOLE"; "true")
-			LAUNCH EXTERNAL PROCESS:C811("plutil -convert binary1 \""+This:C1470.buffer.path+"\" -o \""+This:C1470.file.path+"\""; $inputStream; $outputStream; $errorStream)
-			This:C1470.success:=Bool:C1537(OK) & (Position:C15("Property List error:"; $errorStream)=0)
-			
-			If (Not:C34(This:C1470.success))
+			If (This:C1470.isBinary)
 				
-				// *ERROR
-				This:C1470._pushError("Conversion to binary failure: "+This:C1470.file.path)
+				This:C1470.buffer.setAppInfo(This:C1470.content)
 				
+				SET ENVIRONMENT VARIABLE:C812("_4D_OPTION_HIDE_CONSOLE"; "true")
+				LAUNCH EXTERNAL PROCESS:C811("plutil -convert binary1 \""+This:C1470.buffer.path+"\" -o \""+This:C1470.file.path+"\""; $inputStream; $outputStream; $errorStream)
+				This:C1470.success:=Bool:C1537(OK) & (Position:C15("Property List error:"; $errorStream)=0)
+				
+				If (Not:C34(This:C1470.success))
+					
+					// *ERROR
+					This:C1470._pushError("Conversion to binary failure: "+This:C1470.file.path)
+					
+				End if 
 			End if 
-		End if 
-		
-	Else 
-		
-		If (This:C1470.isJson)
-			
-			This:C1470.file.setText(JSON Stringify:C1217(This:C1470.content; *))
 			
 		Else 
 			
-			This:C1470.file.setAppInfo(This:C1470.content)
-			
+			If (This:C1470.isJson)
+				
+				This:C1470.file.setText(JSON Stringify:C1217(This:C1470.content; *))
+				
+			Else 
+				
+				This:C1470.file.setAppInfo(This:C1470.content)
+				
+			End if 
 		End if 
 	End if 
 	
@@ -184,15 +188,7 @@ Function revert()
 Function clear($save : Boolean)
 	
 	Super:C1706.clear()
-	
-	If (Count parameters:C259>=1)
-		
-		If ($save)
-			
-			This:C1470.save()
-			
-		End if 
-	End if 
+	This:C1470.save($save)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// *[ALIAS] of .save()
@@ -203,9 +199,9 @@ Function write()
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the value of stored at $path entry.
 	// If we don’t specify $path, it returns the entire content
-Function get($path : Text)->$value : Variant
+Function get($path : Text) : Variant
 	
-	var $member; $v : Variant
+	var $member; $v
 	var $c : Collection
 	
 	If (Count parameters:C259>=1)
@@ -215,7 +211,7 @@ Function get($path : Text)->$value : Variant
 		If ($c.length=1)
 			
 			This:C1470.success:=(This:C1470.content[$path]#Null:C1517)
-			$value:=This:C1470.content[$path]  // Null if not exists
+			return This:C1470.content[$path]  // Null if not exists
 			
 		Else 
 			
@@ -235,20 +231,20 @@ Function get($path : Text)->$value : Variant
 			
 			If (This:C1470.success)
 				
-				$value:=$v
+				return $v
 				
 			End if 
 		End if 
 		
 	Else 
 		
-		$value:=This:C1470.content
+		return This:C1470.content
 		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Defines the $path entry value and returns the plist content object
-Function set($path; $value; $save : Boolean)->$o : Object
+Function set($path; $value; $save : Boolean) : Object
 	
 	If (Asserted:C1132(Count parameters:C259>=1; "Missing parameters"))
 		
@@ -262,21 +258,15 @@ Function set($path; $value; $save : Boolean)->$o : Object
 			
 		End if 
 		
-		If (Count parameters:C259>=3)
-			
-			If ($save)
-				
-				This:C1470.save()
-				
-			End if 
-		End if 
+		This:C1470.save($save)
+		
 	End if 
 	
-	$o:=This:C1470.content
+	return This:C1470.content
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Deletes the $path entry
-Function delete($path : Text; $save : Boolean)->$plist : cs:C1710.plist
+Function delete($path : Text; $save : Boolean) : cs:C1710.plist
 	
 	var $c : Collection
 	
@@ -291,34 +281,20 @@ Function delete($path : Text; $save : Boolean)->$plist : cs:C1710.plist
 		
 	Else 
 		
+		//todo: manage path
 		ASSERT:C1129(False:C215; "TODO")
 		
 	End if 
 	
-	If (Count parameters:C259=2)
-		
-		If ($save)
-			
-			This:C1470.save()
-			
-		End if 
-	End if 
+	This:C1470.save($save)
 	
-	$plist:=This:C1470
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// *[ALIAS] of .delete()
-Function remove($path : Text; $save : Boolean)->$plist : cs:C1710.plist
+Function remove($path : Text; $save : Boolean) : cs:C1710.plist
 	
 	ASSERT:C1129(Count parameters:C259>=1; "Missing parameters")
 	
-	If (Count parameters:C259=1)
-		
-		$plist:=This:C1470.delete($path)
-		
-	Else 
-		
-		$plist:=This:C1470.delete($path; $save)
-		
-	End if 
+	return This:C1470.delete($path; $save)
 	

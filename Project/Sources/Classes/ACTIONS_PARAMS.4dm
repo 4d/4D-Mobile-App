@@ -1688,9 +1688,9 @@ Function dataSourceMenuManager()
 Function editList()
 	
 /*
-						$form:=New object(\
-												"static"; $static; \
-												"host"; This.path.hostInputControls(True))
+		$form:=New object(\
+																"static"; $static; \
+																"host"; This.path.hostInputControls(True))
 	
 $form.folder:=This.path.hostInputControls()
 $manifest:=$form.folder.file("manifest.json")
@@ -2192,7 +2192,7 @@ Function formatToolTip($format : Text)->$tip : Text
 		//SHARED.resources.formattersByName:=New object
 		//var $bind
 		//For each ($bind; SHARED.resources.fieldBindingTypes\
-																																																																																										.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
+																																																																																																.reduce("col_formula"; New collection(); Formula($1.accumulator.combine(Choose($1.value=Null; New collection(); $1.value)))))
 		//SHARED.resources.formattersByName[$bind.name]:=$bind
 		//End for each
 		//End if
@@ -2277,9 +2277,9 @@ Function _getParameterFields($table : cs:C1710.table; $preset : Text) : Collecti
 		End if 
 		
 /* Allow
- • Storage field
- • Read-only computed field, only for a sort action.
- • Scalar aliases (not pointing to an object field)
+• Storage field
+• Read-only computed field, only for a sort action.
+• Scalar aliases (not pointing to an object field)
 */
 		
 		If ($field.kind="storage")\
@@ -2438,7 +2438,7 @@ Function _newUserControl($static : Boolean)
 		"host"; This:C1470.path.hostInputControls(True:C214))
 	
 	// Fixme:🚧 for the development stage
-	If (database.isMatrix)
+	If (Component.isMatrix)
 		
 		$form.window:=Open form window:C675("LISTE_EDITOR"; Plain form window:K39:10; Horizontally centered:K39:1; Vertically centered:K39:4)
 		
@@ -2507,7 +2507,7 @@ Function _newUserControl($static : Boolean)
 	Else 
 		
 		// Fixme:🚧 for the development stage
-		If (DATABASE.isComponent)  // Test purpose
+		If (Database.isComponent)  // Test purpose
 			
 			$form.folder.delete(Delete with contents:K24:24)
 			

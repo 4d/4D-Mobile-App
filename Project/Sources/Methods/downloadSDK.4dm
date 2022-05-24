@@ -24,10 +24,10 @@ var $progress : cs:C1710.progress
 
 ASSERT:C1129(Count parameters:C259>=2)
 
-DATABASE:=DATABASE || cs:C1710.database.new()
+Component:=Component || cs:C1710.component.new()
 
 Logger:=Logger || cs:C1710.logger.new()
-Logger.verbose:=DATABASE.isMatrix
+Logger.verbose:=Component.isMatrix
 
 Logger.info("Verify "+$target+" SDK, Server: "+$server)
 

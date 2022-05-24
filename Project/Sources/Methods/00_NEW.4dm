@@ -54,7 +54,7 @@ Else
 	
 	$menu:=cs:C1710.menu.new().defaultMinimalMenuBar()
 	
-	If (DATABASE.isMatrix)
+	If (Component.isMatrix)
 		
 		file_Menu($menu.submenus[0])
 		dev_Menu($menu)
@@ -81,7 +81,7 @@ Else
 		If (Bool:C1537($data.file.exists))
 			
 			// Open the project editor
-			If (DATABASE.isMatrix)
+			If (Component.isMatrix)
 				
 				DIALOG:C40("EDITOR"; $data)
 				CLOSE WINDOW:C154(UI.window)

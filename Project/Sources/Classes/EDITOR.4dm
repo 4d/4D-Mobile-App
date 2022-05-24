@@ -245,7 +245,7 @@ Function onLoad()
 	This:C1470.message.setValue(New object:C1471)
 	
 	// DEV items
-	OBJECT SET VISIBLE:C603(*; "debug.@"; Bool:C1537(DATABASE.isMatrix))
+	OBJECT SET VISIBLE:C603(*; "debug.@"; Bool:C1537(Component.isMatrix))
 	
 	// Launch the worker
 	This:C1470.callWorker(Formula:C1597(COMPILER_COMPONENT).source)

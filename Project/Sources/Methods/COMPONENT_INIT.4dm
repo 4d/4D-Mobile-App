@@ -25,15 +25,19 @@ var _o_UI : Object  // UI constants
 $reset:=Macintosh option down:C545
 $process:=cs:C1710.process.new()
 
-// MARK:-DATABASE
-var DATABASE : cs:C1710.database
-DATABASE:=DATABASE || cs:C1710.database.new()
-DATABASE.projects:=DATABASE.root.folder("Mobile Projects")
-DATABASE.projects.create()  // Make sure the directory exists
-DATABASE.products:=DATABASE.root.parent.folder(DATABASE.structure.name+" - Mobile")
+// MARK:-COMPONENT
+var Component : cs:C1710.component
+Component:=Component || cs:C1710.component.new()
 
 // Disable asserts in release mode
-SET ASSERT ENABLED:C1131(DATABASE.isInterpreted; *)
+SET ASSERT ENABLED:C1131(Component.isInterpreted; *)
+
+// MARK:-DATABASE
+var Database : cs:C1710.database
+Database:=Database || cs:C1710.database.new()
+Database.projects:=Database.databaseFolder.folder("Mobile Projects")
+Database.projects.create()  // Make sure the directory exists
+Database.products:=Database.databaseFolder.parent.folder(Database.structureFile.name+" - Mobile")
 
 // MARK:-LOGGER
 var Logger : cs:C1710.logger  // General journal
@@ -46,13 +50,10 @@ If (Not:C34($process.worker))
 	
 End if 
 
-Logger.verbose:=(DATABASE.isMatrix)
+Logger.verbose:=(Component.isMatrix)
 
-var Env : cs:C1710.env
-Env:=Env || cs:C1710.env.new()
-
-var motor : cs:C1710.motor
-motor:=motor || cs:C1710.motor.new()
+var Motor : cs:C1710.motor
+Motor:=Motor || cs:C1710.motor.new()
 
 var PROJECT : cs:C1710.project
 PROJECT:=PROJECT || cs:C1710.project.new()
@@ -66,12 +67,12 @@ If (OB Is empty:C1297(SHARED)) | $reset
 	SHARED:=New object:C1471
 	
 	SHARED.ide:=New object:C1471(\
-		"version"; COMPONENT_Infos("ideVersion"); \
-		"build"; Num:C11(COMPONENT_Infos("ideBuildVersion")))
+		"version"; motor._version; \
+		"build"; motor.buildNumber)
 	
 	SHARED.component:=New object:C1471(\
-		"version"; COMPONENT_Infos("componentVersion"); \
-		"build"; Num:C11(COMPONENT_Infos("componentBuild")))
+		"version"; Component.version; \
+		"build"; Component.buildNumber)
 	
 	SHARED.componentBuild:=SHARED.component.build
 	
@@ -333,5 +334,5 @@ End if
 Logger.info(Is compiled mode:C492 ? "COMPILED MODE" : "INTERPRETED MODE")
 
 // MARK:-AFTER FLAGS
-SET ASSERT ENABLED:C1131(DATABASE.isInterpreted | Feature.with("debug"); *)
+SET ASSERT ENABLED:C1131(Component.isInterpreted | Feature.with("debug"); *)
 Logger.info("Assert "+Choose:C955(Get assert enabled:C1130; "Enabled"; "Disabled"))

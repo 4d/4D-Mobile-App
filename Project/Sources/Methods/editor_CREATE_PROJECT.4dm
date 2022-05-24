@@ -1,24 +1,24 @@
 //%attributes = {"invisible":true}
 #DECLARE($data : Object)
 
-var $json; $name; $t : Text
+If (False:C215)
+	C_OBJECT:C1216(editor_CREATE_PROJECT; $1)
+End if 
+
+var $json; $name; $newName : Text
 var $index : Integer
-var $data; $project : Object
+var $project : Object
 var $file : 4D:C1709.File
 var $folder; $mobileProjects : 4D:C1709.Folder
 
-If (DATABASE.isWritable())
+If (Database.isWritable())
 	
-	If ($data.$name="test")
-		
 /*
 Xcode automatically creates a "Test" target for each iOS project.
 So we have to rename the project to avoid any conflict.
 */
-		
-		$data.$name:=$data.$name+" App"
-		
-	End if 
+	
+	$data.$name:=$data.$name="test" ? $data.$name+" App" : $data.$name
 	
 	// Get the folder "Mobile Projects" and make sure it exists
 	$mobileProjects:=cs:C1710.path.new().projects(True:C214)
@@ -33,28 +33,30 @@ So we have to rename the project to avoid any conflict.
 		
 		$json:=$file.getText()
 		
-		PROCESS 4D TAGS:C816($json; $json)
+		PROCESS 4D TAGS:C816($json; $json; New object:C1471(\
+			"ideVersion"; Motor._version; \
+			"ideBuildVersion"; String:C10(Motor.buildNumber); \
+			"componentBuild"; String:C10(Component.buildNumber); \
+			"organizationName"; Get localized string:C991("companyName"); \
+			"organization"; UI.str.setText(Get localized string:C991("companyName")).lowerCamelCase(); \
+			"productName"; Get localized string:C991("newApplication"); \
+			"year"; String:C10(Year of:C25(Current date:C33)); \
+			"reserved"; Get localized string:C991("allRightsReserved"); \
+			"bundle"; formatString("bundleApp"; Get localized string:C991("newApplication")); \
+			"developerName"; Current system user:C484))
 		
 		$data.folder:=$folder
 		$data.file:=$file
 		
 		$data.project:=$file.platformPath
 		
-		// Ensure that the name of the application is unique
 		$project:=JSON Parse:C1218($json)
 		
 		If (Is macOS:C1572)
 			
-			If (Bool:C1537($data.$ios) & Bool:C1537($data.$android))
-				
-				$project.info.target:=New collection:C1472("iOS"; "android")
-				
-			Else 
-				
-				// Default is iOS
-				$project.info.target:=Choose:C955(Bool:C1537($data.$android); "android"; "iOS")
-				
-			End if 
+			$project.info.target:=(Bool:C1537($data.$ios) & Bool:C1537($data.$android))\
+				 ? New collection:C1472("iOS"; "android")\
+				 : Bool:C1537($data.$android) ? "android" : "iOS"  // Default is iOS
 			
 		Else 
 			
@@ -62,34 +64,31 @@ So we have to rename the project to avoid any conflict.
 			
 		End if 
 		
+		// Ensure that the name of the application is unique
 		If ($project.product.name#Null:C1517)
 			
 			$name:=$project.product.name
-			$t:=$project.product.name
+			$newName:=$name
 			
 			// Get the folder "4D Mobile App - Mobile" and make sure it exists
 			$folder:=cs:C1710.path.new().products(True:C214)
 			
-			While ($folder.folder($t).exists)
+			While ($folder.folder($newName).exists)
 				
 				$index:=$index+1
-				$t:=$name+String:C10($index; " #####0")
+				$newName:=$name+String:C10($index; " #####0")
 				
 			End while 
 			
-			If ($t#$name)
-				
-				$project.product.name:=$t
-				
-			End if 
+			$project.product.name:=$newName#$name ? $newName : $name
+			
 		End if 
 		
-		$json:=JSON Stringify:C1217($project; *)
-		$file.setText($json)
+		$file.setText(JSON Stringify:C1217($project; *))
 		
 	Else 
 		
-		ASSERT:C1129(DATABASE.isComponent; "The default project content is not the expected one")
+		ASSERT:C1129(Database.isComponent; "The default project content is not the expected one")
 		
 	End if 
 	

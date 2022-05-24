@@ -112,6 +112,11 @@
 			"tester_net"
 		]
 	},
+	"(env (not thread-safe))": {
+		"methods": [
+			"(env_Component_availabe)"
+		]
+	},
 	"[android]": {
 		"methods": [
 			"COMPILER_android",
@@ -147,7 +152,6 @@
 		"methods": [
 			"COMPILER_COMPONENT",
 			"COMPILER_NON_THREAD_SAFE",
-			"COMPONENT_Infos",
 			"COMPONENT_INIT",
 			"FEATURE_FLAGS"
 		]
@@ -179,7 +183,6 @@
 			"getSQLite",
 			"git",
 			"Localize_server_response",
-			"plist_toObject",
 			"Process_tags",
 			"Process_tags_on_file",
 			"Rest",
@@ -340,9 +343,15 @@
 		]
 	},
 	"[TOOLS]": {
+		"methods": [
+			"COMPILER_env",
+			"envDatabase",
+			"envScreens"
+		],
 		"classes": [
 			"bmp",
 			"color",
+			"component",
 			"database",
 			"debugLog",
 			"doc",
@@ -353,6 +362,7 @@
 			"lep",
 			"logger",
 			"menu",
+			"motor",
 			"ob",
 			"plist",
 			"preferences",
@@ -660,20 +670,7 @@
 			"test_doc"
 		]
 	},
-	"env (not thread-safe)": {
-		"methods": [
-			"env_Component_availabe"
-		]
-	},
-	"env (thread-safe)": {
-		"groups": [
-			"env (not thread-safe)"
-		],
-		"methods": [
-			"COMPILER_env",
-			"env_Database_setting"
-		]
-	},
+	"env (thread-safe)": {},
 	"err": {
 		"methods": [
 			"COMPILER_err",
@@ -988,5 +985,9 @@
 			"test_xml"
 		]
 	},
-	"trash": {}
+	"trash": {
+		"groups": [
+			"(env (not thread-safe))"
+		]
+	}
 }

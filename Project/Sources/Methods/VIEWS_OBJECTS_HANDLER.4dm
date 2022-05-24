@@ -509,7 +509,7 @@ End case
 								//______________________________________________________
 							Else 
 								
-								ASSERT:C1129(DATABASE.isComponent)
+								ASSERT:C1129(Database.isComponent)
 								
 								//______________________________________________________
 						End case 

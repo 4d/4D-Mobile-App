@@ -1,6 +1,6 @@
 //%attributes = {"invisible":true}
 // ----------------------------------------------------
-// Project method : env_Database_setting
+// Project method : databaseSettings
 // ID[33966321E2DE470E8A359A94EB152664]
 // Created 23-8-2017 by Vincent de Lachaux
 // ----------------------------------------------------
@@ -11,8 +11,8 @@
 #DECLARE($selector : Text)->$response : Object
 
 If (False:C215)
-	C_TEXT:C284(env_Database_setting; $1)
-	C_OBJECT:C1216(env_Database_setting; $0)
+	C_TEXT:C284(databaseSettings; $1)
+	C_OBJECT:C1216(databaseSettings; $0)
 End if 
 
 var $value : Boolean

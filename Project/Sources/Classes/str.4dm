@@ -534,13 +534,13 @@ Function uperCamelCase($target : Text) : Text
 	var $i : Integer
 	var $c : Collection
 	
-	$target:=Count parameters:C259=0 ? This:C1470.value : $target
+	$target:=Lowercase:C14(Count parameters:C259=0 ? This:C1470.value : $target)
 	
 	If (Length:C16($target)>0)
 		
 		If (Length:C16($target)>2)
 			
-			$t:=This:C1470.spaceSeparated()
+			$t:=This:C1470.spaceSeparated($target)
 			
 			// Remove spaces
 			$c:=Split string:C1554($t; " "; sk ignore empty strings:K86:1+sk trim spaces:K86:2)
@@ -549,7 +549,17 @@ Function uperCamelCase($target : Text) : Text
 			For ($i; 0; $c.length-1; 1)
 				
 				$t:=$c[$i]
-				$t[[1]]:=Uppercase:C13($t[[1]])
+				
+				If (Length:C16($t)>2)
+					
+					$t[[1]]:=Uppercase:C13($t[[1]])
+					
+				Else 
+					
+					$t:=Uppercase:C13($t)
+					
+				End if 
+				
 				$c[$i]:=$t
 				
 			End for 
@@ -558,7 +568,7 @@ Function uperCamelCase($target : Text) : Text
 			
 		Else 
 			
-			return Lowercase:C14($target)
+			return $target
 			
 		End if 
 	End if 
@@ -571,16 +581,16 @@ Function lowerCamelCase($target : Text) : Text
 	var $i : Integer
 	var $c : Collection
 	
-	$target:=Count parameters:C259=0 ? This:C1470.value : $target
+	$target:=Lowercase:C14(Count parameters:C259=0 ? This:C1470.value : $target)
 	
 	If (Length:C16($target)>0)
 		
 		If (Length:C16($target)>=2)
 			
-			$t:=This:C1470.spaceSeparated()
+			$t:=This:C1470.spaceSeparated($target)
 			
 			// Remove spaces
-			$c:=Split string:C1554(This:C1470.value; " "; sk ignore empty strings:K86:1+sk trim spaces:K86:2)
+			$c:=Split string:C1554($target; " "; sk ignore empty strings:K86:1+sk trim spaces:K86:2)
 			
 			// Capitalization of the first letter of words from the 2nd
 			If ($c.length>1)
@@ -597,13 +607,13 @@ Function lowerCamelCase($target : Text) : Text
 				
 			Else 
 				
-				return Lowercase:C14($t)
+				return $t
 				
 			End if 
 			
 		Else 
 			
-			return Lowercase:C14($target)
+			return $target
 			
 		End if 
 	End if 

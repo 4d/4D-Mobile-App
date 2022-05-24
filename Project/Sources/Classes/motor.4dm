@@ -113,35 +113,7 @@ Function get newConnectionsAllowed() : Boolean
 	
 	return This:C1470.infos.newConnectionsAllowed
 	
-	// === === === === === === === === === === === === === === === === === === === === === === === ===
-Function restart($delay : Integer; $message : Text)
-	
-	//%T-
-	If (Count parameters:C259>=1)
-		
-		If (Count parameters:C259>=2)
-			
-			RESTART 4D:C1292($delay; $message)
-			
-		Else 
-			
-			RESTART 4D:C1292($delay)
-			
-		End if 
-		
-	Else 
-		
-		RESTART 4D:C1292
-		
-	End if 
-	//%T+
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === ===
-Function quit($delay : Integer)
-	
-	//%T-
-	QUIT 4D:C291($delay)
-	//%T+
+	//MARK:-THREAD SAFE
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === ===
 Function acceptNewConnections
@@ -162,29 +134,6 @@ Function rejectNewConnections
 		This:C1470.infos.newConnectionsAllowed:=False:C215
 		
 	End if 
-	
-	// === === === === === === === === === === === === === === === === === === === === === === === ===
-Function setUpdateFolder($folder; $silent : Boolean)
-	
-	//%T-
-	If (Value type:C1509($folder)=Is object:K8:27)
-		
-		If (OB Instance of:C1731($folder; 4D:C1709.Folder))
-			
-			SET UPDATE FOLDER:C1291(String:C10($folder.platformPath); $silent)
-			
-		Else 
-			
-			// ERROR
-			
-		End if 
-		
-	Else 
-		
-		SET UPDATE FOLDER:C1291(String:C10($folder); $silent)
-		
-	End if 
-	//%T+
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === ===
 Function getInfos($type : Text) : Text
@@ -358,3 +307,58 @@ minor or release without space for web compatibility
 			
 			//______________________________________________________
 	End case 
+	
+	//MARK:-NOT THREAD SAFE
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === ===
+Function restart($delay : Integer; $message : Text)
+	
+	//%T-
+	If (Count parameters:C259>=1)
+		
+		If (Count parameters:C259>=2)
+			
+			RESTART 4D:C1292($delay; $message)
+			
+		Else 
+			
+			RESTART 4D:C1292($delay)
+			
+		End if 
+		
+	Else 
+		
+		RESTART 4D:C1292
+		
+	End if 
+	//%T+
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === ===
+Function quit($delay : Integer)
+	
+	//%T-
+	QUIT 4D:C291($delay)
+	//%T+
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === ===
+Function setUpdateFolder($folder; $silent : Boolean)
+	
+	//%T-
+	If (Value type:C1509($folder)=Is object:K8:27)
+		
+		If (OB Instance of:C1731($folder; 4D:C1709.Folder))
+			
+			SET UPDATE FOLDER:C1291(String:C10($folder.platformPath); $silent)
+			
+		Else 
+			
+			// ERROR
+			
+		End if 
+		
+	Else 
+		
+		SET UPDATE FOLDER:C1291(String:C10($folder); $silent)
+		
+	End if 
+	//%T+

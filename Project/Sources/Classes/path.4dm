@@ -137,7 +137,7 @@ Function templates() : 4D:C1709.Folder  // templates folder
 	
 	If (Feature.with("compressionOfTemplates"))
 		
-		If (DATABASE.isMatrix) & Feature.disabled("testCompression")
+		If (Component.isMatrix) & Feature.disabled("testCompression")
 			
 			// Use uncompressed resources
 			This:C1470.target:=Folder:C1567("/RESOURCES/templates")

@@ -91,7 +91,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			//______________________________________________________
 		: ($entryPoint="checkRest")
 			
-			EXECUTE METHOD:C1007(Formula:C1597(env_Database_setting).source; $response; "rest")
+			EXECUTE METHOD:C1007(Formula:C1597(databaseSettings).source; $response; "rest")
 			
 			//______________________________________________________
 		: ($entryPoint="checkInstall")

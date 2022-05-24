@@ -382,7 +382,7 @@ Case of
 		//______________________________________________________
 	: ($selector="mainMenu")  // Update Main menu panel
 		
-		ASSERT:C1129(DATABASE.isMatrix)
+		ASSERT:C1129(Component.isMatrix)
 		
 		If ($isProjectForm)
 			

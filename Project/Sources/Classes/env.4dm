@@ -1,9 +1,5 @@
 Class constructor
 	
-	This:C1470.isMacOs:=Is macOS:C1572
-	This:C1470.isWindows:=Is Windows:C1573
-	This:C1470.isLinux:=Not:C34(This:C1470.isMacOs) & Not:C34(This:C1470.isWindows)
-	
 	This:C1470.machineName:=Current machine:C483
 	This:C1470.userName:=Current system user:C484
 	
@@ -13,58 +9,54 @@ Class constructor
 	This:C1470.systemFolder:=Folder:C1567(This:C1470.isWindows ? System folder:C487(System Win:K41:13) : System folder:C487(System:K41:1); fk platform path:K87:2)
 	This:C1470.applicationsFolder:=Folder:C1567(System folder:C487(Applications or program files:K41:17); fk platform path:K87:2)
 	
-	//FIXME: Execute in cooperative process
-	var $t : Text
-	var $bottom; $i; $l; $left; $right; $top : Integer
-	var $creen : Object
-	
-	PROCESS PROPERTIES:C336(Current process:C322; $t; $l; $l; $l)
-	
-	If ($l ?? 1)  // Preemptive execution
+	If (Is macOS:C1572 || Is Windows:C1573)
+		
+		// Non-thread-safe screen commands are delegated to the application process
+		var $signal : 4D:C1709.Signal
+		$signal:=New signal:C1641("env")
+		
+		CALL WORKER:C1389(1; "envScreens"; $signal)
+		$signal.wait()
+		
+		This:C1470.screens:=$signal.screens.copy()
+		This:C1470.mainScreenID:=$signal.mainScreenID
+		This:C1470.mainScreen:=This:C1470.screens[This:C1470.mainScreenID-1]
+		This:C1470.menuBarHeight:=$signal.menuBarHeight
+		This:C1470.toolBarHeight:=$signal.toolBarHeight
+		
+	Else 
 		
 		This:C1470.screens:=New collection:C1472()
 		This:C1470.mainScreenID:=0
 		This:C1470.mainScreen:=0
 		This:C1470.menuBarHeight:=0
-		
-	Else 
-		
-		//%T-
-		This:C1470.screens:=New collection:C1472().resize(Count screens:C437; New object:C1471(\
-			"coordinates"; New object:C1471; \
-			"workArea"; New object:C1471))
-		
-		For each ($creen; This:C1470.screens)
-			
-			$i+=1
-			
-			SCREEN COORDINATES:C438($left; $top; $right; $bottom; $i; Screen size:K27:9)
-			$creen.coordinates.left:=$left
-			$creen.coordinates.top:=$top
-			$creen.coordinates.right:=$right
-			$creen.coordinates.bottom:=$bottom
-			
-			SCREEN COORDINATES:C438($left; $top; $right; $bottom; $i; Screen work area:K27:10)
-			$creen.workArea.left:=$left
-			$creen.workArea.top:=$top
-			$creen.workArea.right:=$right
-			$creen.workArea.bottom:=$bottom
-			
-		End for each 
-		
-		This:C1470.mainScreenID:=Menu bar screen:C441  // On Windows, Menu bar screen always returns 1
-		This:C1470.mainScreen:=This:C1470.screens[This:C1470.mainScreenID-1]
-		
-		This:C1470.menuBarHeight:=Menu bar height:C440
-		//%T+
+		This:C1470.toolBarHeight:=0
 		
 	End if 
 	
 	This:C1470.updateEnvironmentValues(True:C214)
 	
-	//===================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === ===
+Function get macos() : Boolean
+	
+	return Is macOS:C1572
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === ===
+Function get windows() : Boolean
+	
+	return Is Windows:C1573
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === ===
+Function get linux() : Boolean
+	
+	return Not:C34(Is Windows:C1573) & Not:C34(Is macOS:C1572)
+	
+	//MARK:-
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Update user & system values that may have been modified
 Function updateEnvironmentValues($system : Boolean)
+	
 	var $value : Text
 	
 	If ($system)  // To update the  volumes
@@ -122,143 +114,58 @@ Function updateEnvironmentValues($system : Boolean)
 	GET SYSTEM FORMAT:C994(System time short pattern:K60:4; $value)
 	This:C1470.timeShortPattern:=$value
 	
-	//===================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === ===
 Function startupDisk($path : Text; $create : Boolean) : Object
 	
-	var $o : Object
+	var $folder : 4D:C1709.Folder
+	$folder:=Folder:C1567("/")
 	
-	$o:=Folder:C1567("/")
+	return Count parameters:C259>=1 ? This:C1470._postProcessing($folder; $path; $create) : $folder
 	
-	If (Count parameters:C259>=2)
-		
-		$o:=This:C1470._postProcessing($o; $path; $create)
-		
-	Else 
-		
-		If (Count parameters:C259>=1)
-			
-			$o:=This:C1470._postProcessing($o; $path)
-			
-		End if 
-	End if 
+	// === === === === === === === === === === === === === === === === === === === === === === === ===
+Function library($path : Text; $create : Boolean) : Object
 	
-	return $o
+	var $folder : 4D:C1709.Folder
+	$folder:=This:C1470.home.folder("Library/")
 	
-	//===================================================================================
-Function userLibrary($path : Text; $create : Boolean) : Object
+	return Count parameters:C259>=1 ? This:C1470._postProcessing($folder; $path; $create) : $folder
 	
-	var $o : Object
-	
-	$o:=This:C1470.home.folder("Library/")
-	
-	If (Count parameters:C259>=2)
-		
-		$o:=This:C1470._postProcessing($o; $path; $create)
-		
-	Else 
-		
-		If (Count parameters:C259>=1)
-			
-			$o:=This:C1470._postProcessing($o; $path)
-			
-		End if 
-	End if 
-	
-	return $o
-	
-	//===================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === ===
 Function preferences($path : Text; $create : Boolean) : Object
 	
-	var $o : Object
+	var $folder : 4D:C1709.Folder
+	$folder:=This:C1470.home.folder("Library/Preferences/")
 	
-	$o:=This:C1470.home.folder("Library/Preferences/")
+	return Count parameters:C259>=1 ? This:C1470._postProcessing($folder; $path; $create) : $folder
 	
-	If (Count parameters:C259>=2)
-		
-		$o:=This:C1470._postProcessing($o; $path; $create)
-		
-	Else 
-		
-		If (Count parameters:C259>=1)
-			
-			$o:=This:C1470._postProcessing($o; $path)
-			
-		End if 
-	End if 
+	// === === === === === === === === === === === === === === === === === === === === === === === ===
+Function caches($path; $create : Boolean) : Object
 	
-	return $o
+	var $folder : 4D:C1709.Folder
+	$folder:=This:C1470.home.folder("Library/Caches/")
 	
-	//===================================================================================
-Function userCaches($path; $create : Boolean) : Object
+	return Count parameters:C259>=1 ? This:C1470._postProcessing($folder; $path; $create) : $folder
 	
-	var $o : Object
-	
-	$o:=This:C1470.home.folder("Library/Caches/")
-	
-	If (Count parameters:C259>=2)
-		
-		$o:=This:C1470._postProcessing($o; $path; $create)
-		
-	Else 
-		
-		If (Count parameters:C259>=1)
-			
-			$o:=This:C1470._postProcessing($o; $path)
-			
-		End if 
-	End if 
-	
-	return $o
-	
-	//===================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === ===
 Function logs($path : Text; $create : Boolean) : Object
 	
-	var $o : Object
+	var $folder : 4D:C1709.Folder
+	$folder:=This:C1470.home.folder("Library/Logs/")
 	
-	$o:=This:C1470.home.folder("Library/Logs/")
+	return Count parameters:C259>=1 ? This:C1470._postProcessing($folder; $path; $create) : $folder
 	
-	If (Count parameters:C259>=2)
-		
-		$o:=This:C1470._postProcessing($o; $path; $create)
-		
-	Else 
-		
-		If (Count parameters:C259>=1)
-			
-			$o:=This:C1470._postProcessing($o; $path)
-			
-		End if 
-	End if 
-	
-	return $o
-	
-	//===================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === ===
 Function applicationSupport($path : Text; $create : Boolean) : Object
 	
-	var $o : Object
+	var $folder : 4D:C1709.Folder
+	$folder:=This:C1470.home.folder("Library/Application Support/")
 	
-	$o:=This:C1470.home.folder("Library/Application Support/")
+	return Count parameters:C259>=1 ? This:C1470._postProcessing($folder; $path; $create) : $folder
 	
-	If (Count parameters:C259>=2)
-		
-		$o:=This:C1470._postProcessing($o; $path; $create)
-		
-	Else 
-		
-		If (Count parameters:C259>=1)
-			
-			$o:=This:C1470._postProcessing($o; $path)
-			
-		End if 
-	End if 
+	//MARK:-
 	
-	return $o
-	
-	//mark:-
-	//===================================================================================
-Function _postProcessing($document : Object; $pathOrCreate : Variant; $create : Boolean)->$return : Object
-	
-	$return:=$document
+	// === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _postProcessing($target : Object; $pathOrCreate; $create : Boolean) : Object
 	
 	If (Count parameters:C259>=2)
 		
@@ -266,34 +173,22 @@ Function _postProcessing($document : Object; $pathOrCreate : Variant; $create : 
 			
 			If ($pathOrCreate)
 				
-				$document.create()
+				$target.create()
 				
 			End if 
 			
 		Else 
 			
-			//%W-533.1
-			If ($pathOrCreate[[Length:C16($pathOrCreate)]]="/")
-				
-				//%W+533.1
-				
-				// Append folder
-				$return:=$document.folder($pathOrCreate)
-				
-			Else 
-				
-				// Append file
-				$return:=$document.file($pathOrCreate)
-				
-			End if 
+			$target:=($pathOrCreate="@/") ? $target.folder($pathOrCreate) : $target.file($pathOrCreate)
+			
 		End if 
 		
-		If (Count parameters:C259>=3)
+		If ($create)
 			
-			If ($create)
-				
-				$document.create()
-				
-			End if 
+			$target.create()
+			
 		End if 
+		
 	End if 
+	
+	return $target

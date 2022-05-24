@@ -31,7 +31,7 @@ var $simctl : cs:C1710.simctl
 
 // NO PARAMETERS REQUIRED
 // MARK:-init
-$isDebug:=DATABASE.isInterpreted
+$isDebug:=Component.isInterpreted
 $cacheFolder:=cs:C1710.path.new().userCache()
 
 $out:=New object:C1471(\

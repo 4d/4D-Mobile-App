@@ -5,7 +5,7 @@
 // Created 11-5-2017 by Vincent de Lachaux
 // ----------------------------------------------------
 // Description
-// 
+//
 // ----------------------------------------------------
 // Declarations
 var $1 : Text
@@ -57,7 +57,7 @@ Else
 	
 	$menu:=cs:C1710.menu.new().defaultMinimalMenuBar()
 	
-	If (DATABASE.isMatrix)
+	If (Component.isMatrix)
 		
 		file_Menu($menu.submenus[0])
 		dev_Menu($menu)
