@@ -381,11 +381,11 @@ Function fieldList($table)->$result : Object
 									//……………………………………………………………………………………………………………
 								: ($subfield.kind="storage")
 									
+									$subfield.$level:=$subLevel+1
+									$subfield.$label:=$linkPrefix+$subfield.name
+									
 									$subfield.name:=$key+"."+$subfield.name
 									$subfield.path:=$subfield.name
-									
-									$subfield.$label:=$linkPrefix+$subfield.name
-									$subfield.$level:=$subLevel+1
 									
 									$subfield.fieldNumber:=Num:C11($attribute)
 									
@@ -394,32 +394,32 @@ Function fieldList($table)->$result : Object
 									//……………………………………………………………………………………………………………
 								: ($subfield.kind="alias")
 									
+									$subfield.$level:=$subLevel+1
+									$subfield.$label:=$linkPrefix+$attribute
+									
 									$subfield.name:=$key+"."+$attribute
 									$subfield.path:=$subfield.name
-									
-									$subfield.$label:=$linkPrefix+$attribute
-									$subfield.$level:=$subLevel+1
 									
 									$result.fields.push($subfield)
 									
 									//……………………………………………………………………………………………………………
 								: ($subfield.kind="calculated")
 									
+									$subfield.$level:=$subLevel+1
+									$subfield.$label:=$linkPrefix+$attribute
+									
 									$subfield.name:=$key+"."+$attribute
 									$subfield.path:=$subfield.name
-									
-									$subfield.$label:=$linkPrefix+$attribute
-									$subfield.$level:=$subLevel+1
 									
 									$result.fields.push($subfield)
 									
 									//______________________________________________________
 								: ($subfield.kind="relatedEntities")
 									
-									$subfield.name:=$attribute
-									
-									$subfield.$label:=$linkPrefix+$attribute
 									$subfield.$level:=$subLevel+2
+									$subfield.$label:=$linkPrefix+$attribute
+									
+									$subfield.name:=$attribute
 									
 									//FIXME:Tempo
 									$subfield.fieldType:=8859
