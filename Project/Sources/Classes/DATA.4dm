@@ -103,7 +103,7 @@ Function handleEvents($e : Object)
 				//==============================================
 			: (This:C1470.method.catch($e; On Clicked:K2:4))
 				
-				UI.editAuthenticationMethod()
+				UI.editDatabaseMethod("onMobileAppAuthentication")
 				
 				//==============================================
 			: (This:C1470.validate.catch($e; On Clicked:K2:4))\

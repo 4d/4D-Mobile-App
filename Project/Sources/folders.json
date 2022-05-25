@@ -112,11 +112,8 @@
 			"tester_net"
 		]
 	},
-	"(env (not thread-safe))": {
-		"methods": [
-			"(env_Component_availabe)"
-		]
-	},
+	"(env (not thread-safe))": {},
+	"(env (thread-safe))": {},
 	"[android]": {
 		"methods": [
 			"COMPILER_android",
@@ -670,7 +667,6 @@
 			"test_doc"
 		]
 	},
-	"env (thread-safe)": {},
 	"err": {
 		"methods": [
 			"COMPILER_err",
@@ -706,7 +702,6 @@
 			"col",
 			"dev",
 			"doc",
-			"env (thread-safe)",
 			"err",
 			"let",
 			"ob",
@@ -718,6 +713,7 @@
 			"xml (thread-safe)"
 		],
 		"methods": [
+			"databaseSettings",
 			"killWorker",
 			"LOG_EVENT",
 			"noError"
@@ -987,7 +983,8 @@
 	},
 	"trash": {
 		"groups": [
-			"(env (not thread-safe))"
+			"(env (not thread-safe))",
+			"(env (thread-safe))"
 		]
 	}
 }

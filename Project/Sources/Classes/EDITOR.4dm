@@ -1023,40 +1023,44 @@ Function doAlert($content; $additional : Text)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function editAuthenticationMethod()
+	// Open a database method to edit (create it if not exist)
+Function editDatabaseMethod($path : Text)
 	
-	var $t : Text
-	var $o : 4D:C1709.File
+	var $code : Text
+	var $file : 4D:C1709.File
 	
-	ARRAY TEXT:C222($ar; 0x0000)
+	ARRAY TEXT:C222($paths; 0x0000)
+	METHOD GET PATHS:C1163(Path database method:K72:2; $paths; *)
+	$paths{0}:=METHOD Get path:C1164(Path database method:K72:2; $path)
 	
-	METHOD GET PATHS:C1163(Path database method:K72:2; $ar; *)
-	$ar{0}:=METHOD Get path:C1164(Path database method:K72:2; "onMobileAppAuthentication")
+	If (Find in array:C230($paths; $paths{0})>0)\
+		 && (Macintosh option down:C545)\
+		 && (Structure file:C489=Structure file:C489(*))
+		
+		// Delete to recreate.
+		// WARNING: Generates an error if the method is open
+		File:C1566("/PACKAGE/Project/Sources/DatabaseMethods/"+$path+".4dm").delete()
+		DELETE FROM ARRAY:C228($paths; Find in array:C230($paths; $paths{0}))
+		
+	End if 
 	
 	// Create method if not exist
-	If (Find in array:C230($ar; $ar{0})=-1)
+	If (Find in array:C230($paths; $paths{0})=-1)
 		
-		If (Command name:C538(1)="Somme")
-			
-			// FR language
-			$o:=File:C1566("/RESOURCES/fr.lproj/onMobileAppAuthentication.4dm")
-			
-		Else 
-			
-			$o:=File:C1566(Get localized document path:C1105("onMobileAppAuthentication.4dm"); fk platform path:K87:2)
-			
-		End if 
+		$file:=Command name:C538(1)="Somme"\
+			/*FR */ ? File:C1566("/RESOURCES/fr.lproj/"+$path+".4dm")\
+			/*INTL*/: File:C1566("/RESOURCES/"+$path+".4dm")
 		
-		If ($o.exists)
+		If ($file.exists)
 			
-			$t:=$o.getText()
-			METHOD SET CODE:C1194($ar{0}; $t; *)
+			$code:=$file.getText()
+			METHOD SET CODE:C1194($paths{0}; $code; *)
 			
 		End if 
 	End if 
 	
 	// Open method
-	METHOD OPEN PATH:C1213($ar{0}; *)
+	METHOD OPEN PATH:C1213($paths{0}; *)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function sendMessageToPanel($panel : Text; $selector : Text; $data : Object)
