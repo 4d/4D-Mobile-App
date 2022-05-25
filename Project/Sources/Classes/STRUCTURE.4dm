@@ -281,7 +281,7 @@ Function fieldList()
 					
 					If (Position:C15($ƒ.fieldFilter; $field.name)>0)
 						
-						This:C1470._getField($dataModel[$tableID]; $field)
+						This:C1470._getField($dataModel[$tableID]; $field; $table)
 						
 					End if 
 				End for each 
@@ -305,7 +305,7 @@ Function fieldList()
 				
 				For each ($field; $table.fields)
 					
-					This:C1470._getField($dataModel[$tableID]; $field)
+					This:C1470._getField($dataModel[$tableID]; $field; $table)
 					
 				End for each 
 				
@@ -1029,7 +1029,7 @@ Function updateProject()
 						
 					Else 
 						
-						$structure.removeField($tableModel; Choose:C955(Num:C11($field.type)<0; $o.name; $field.id))
+						$structure.removeField($tableModel; Choose:C955(Num:C11($field.type)<0; $o.name; $field.fieldNumber))
 						
 					End if 
 					
@@ -1372,7 +1372,7 @@ Function _appendField($table : cs:C1710.table; $field : cs:C1710.field)
 			//…………………………………………………………………………………………………
 		: ($field.kind="storage") && ($type<=UI.fieldIcons.length)
 			
-			$published:=Num:C11($dataModel[String:C10($table.tableNumber)][String:C10($field.id)]#Null:C1517)
+			$published:=Num:C11($dataModel[String:C10($table.tableNumber)][String:C10($field.fieldNumber)]#Null:C1517)
 			
 			//…………………………………………………………………………………………………
 		: ($field.kind="calculated") && ($type<=UI.fieldIcons.length)
@@ -1491,7 +1491,7 @@ Function _appendField($table : cs:C1710.table; $field : cs:C1710.field)
 			
 			If ($type<=UI.fieldIcons.length)
 				
-				$published:=Num:C11($dataModel[String:C10($table.tableNumber)][String:C10($field.id)]#Null:C1517)
+				$published:=Num:C11($dataModel[String:C10($table.tableNumber)][String:C10($field.fieldNumber)]#Null:C1517)
 				
 			End if 
 			
@@ -1505,27 +1505,27 @@ Function _appendField($table : cs:C1710.table; $field : cs:C1710.field)
 	LISTBOX SET ROW FONT STYLE:C1268(*; This:C1470.form.fieldList; Size of array:C274((This:C1470.fieldsPtr)->); Plain:K14:1)
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
-Function _getField($table : cs:C1710.table; $field : cs:C1710.field)
+Function _getField($dataModel : cs:C1710.table; $field : cs:C1710.field; $table : cs:C1710.table)
 	
 	Case of 
 			
 			//======================================
 		: ($field.kind="storage")
 			
-			If ($table[String:C10($field.fieldNumber)]#Null:C1517)
+			If ($dataModel[String:C10($field.fieldNumber)]#Null:C1517)
 				
 				This:C1470._appendField($table; $field)
 				
 			End if 
 			
 			//======================================
-		: ($field.kind="relatedEntity")  // N -> 1 relation
+		: ($field.kind="relatedEntity")
 			
 			var $o : cs:C1710.field
 			
-			For each ($o; This:C1470.ExposedStructure.getCatalog($table.name))
+			For each ($o; This:C1470.ExposedStructure.getCatalog($dataModel.name))
 				
-				If ($table[$field.name][String:C10($o.id)]#Null:C1517)
+				If ($dataModel[$field.name][String:C10($o.id)]#Null:C1517)
 					
 					This:C1470._appendField($table; $field)
 					
@@ -1537,7 +1537,7 @@ Function _getField($table : cs:C1710.table; $field : cs:C1710.field)
 			//======================================
 		Else 
 			
-			If ($table[String:C10($field.name)]#Null:C1517)
+			If ($dataModel[String:C10($field.name)]#Null:C1517)
 				
 				This:C1470._appendField($table; $field)
 				
