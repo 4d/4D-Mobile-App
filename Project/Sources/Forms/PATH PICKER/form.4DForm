@@ -42,13 +42,13 @@
 				},
 				"text": {
 					"type": "input",
-					"top": 2,
+					"top": 3,
 					"left": 18,
 					"width": 302,
 					"height": 18,
 					"hideFocusRing": true,
 					"sizingX": "grow",
-					"dataSource": "Form:C1466.label",
+					"dataSource": "Form:C1466[\"\"].label",
 					"events": [],
 					"class": "label",
 					"focusable": false,
@@ -118,7 +118,7 @@
 		"kind": "form"
 	},
 	"method": "PATH_PICKER",
-	"geometryStamp": 412,
+	"geometryStamp": 425,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

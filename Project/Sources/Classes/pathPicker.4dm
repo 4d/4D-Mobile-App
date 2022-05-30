@@ -2,23 +2,19 @@ Class constructor($target; $options : Object)
 	
 	var $t : Text
 	
-	This:C1470.type:=Is a document:K24:1
-	
-	This:C1470.options:=Package selection:K24:9+Use sheet window:K24:11
-	
-	This:C1470.browse:=True:C214
-	This:C1470.showOnDisk:=True:C214
-	This:C1470.copyPath:=True:C214
-	This:C1470.openItem:=True:C214
-	This:C1470.directory:=""
-	This:C1470.fileTypes:=""
-	
-	This:C1470.target:=Null:C1517
-	This:C1470.platformPath:=""
-	This:C1470.path:=""
-	This:C1470.label:=""
-	This:C1470.message:=""
-	This:C1470.placeHolder:=""
+	This:C1470[""]:=New object:C1471
+	This:C1470[""].target:=Null:C1517
+	This:C1470[""].type:=Is a document:K24:1
+	This:C1470[""].options:=Package selection:K24:9+Use sheet window:K24:11
+	This:C1470[""].message:=""
+	This:C1470[""].placeHolder:=""
+	This:C1470[""].browse:=True:C214
+	This:C1470[""].showOnDisk:=True:C214
+	This:C1470[""].copyPath:=True:C214
+	This:C1470[""].openItem:=True:C214
+	This:C1470[""].directory:=""
+	This:C1470[""].fileTypes:=""
+	This:C1470[""].label:=""
 	
 	If (Count parameters:C259>=1)
 		
@@ -34,19 +30,19 @@ Class constructor($target; $options : Object)
 		If (Value type:C1509($target)=Is object:K8:27)
 			
 			// File or Folder
-			This:C1470.setTarget($target)
+			This:C1470.target:=$target
 			
 		Else 
 			
 			If ((Position:C15(":"; String:C10($target))>0))
 				
 				// Platform path
-				This:C1470.setPlatformPath(String:C10($target))
+				This:C1470._setPlatformPath(String:C10($target))
 				
 			Else 
 				
 				// POSIX
-				This:C1470.setPath(String:C10($target))
+				This:C1470._setPath(String:C10($target))
 				
 			End if 
 		End if 
@@ -55,111 +51,197 @@ Class constructor($target; $options : Object)
 	This:C1470.__geometry()
 	This:C1470.__updateLabel()
 	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-Function setType($type : Integer)
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function get target() : Object
 	
-	If (Count parameters:C259>=1)
+	return This:C1470[""].target
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function set target($target)
+	
+	If ($target#Null:C1517)\
+		 && (OB Instance of:C1731($target; 4D:C1709.Folder) | OB Instance of:C1731($target; 4D:C1709.File))
 		
-		This:C1470.type:=$type
+		This:C1470[""].target:=$target
 		
 	Else 
 		
-		ASSERT:C1129(False:C215; Current method name:C684+".setType(): Missing the type (integer) parameter")
+		This:C1470[""].target:=Null:C1517
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-Function setMessage($message : Text)
+	This:C1470.__updateLabel()
 	
-	If (Count parameters:C259>=1)
-		
-		This:C1470.message:=$message
-		
-	Else 
-		
-		ASSERT:C1129(False:C215; Current method name:C684+".setMessage(): Missing the message (text) parameter")
-		
-	End if 
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function get placeHolder() : Text
 	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-Function setPlaceholder($placeholder : Text)
+	return This:C1470[""].placeHolder
 	
-	If (Count parameters:C259>=1)
-		
-		This:C1470.placeHolder:=$placeholder
-		OBJECT SET PLACEHOLDER:C1295(*; "text"; This:C1470.placeHolder)
-		
-	Else 
-		
-		ASSERT:C1129(False:C215; Current method name:C684+".setPlaceholder(): Missing the placeHolder (text) parameter")
-		
-	End if 
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function set placeHolder($placeholder : Text)
 	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-Function setTarget($target)
+	var $t : Text
 	
-	If (Count parameters:C259>=1)
-		
-		If ($target#Null:C1517)
+	$t:=Get localized string:C991($placeholder)
+	$t:=Length:C16($t)>0 ? $t : $placeholder  // Revert if no localization
+	This:C1470[""].placeHolder:=$t
+	OBJECT SET PLACEHOLDER:C1295(*; "text"; $t+"…")
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function get type() : Integer
+	
+	return This:C1470[""].type
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function set type($type : Integer)
+	
+	This:C1470[""].type:=$type>1 ? Is a document:K24:1 : $type
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function get options() : Integer
+	
+	return This:C1470[""].options
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function set options($options : Integer)
+	
+	This:C1470[""].options:=$options
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function get message() : Text
+	
+	return This:C1470[""].message
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function set message($message : Text)
+	
+	var $t : Text
+	
+	$t:=Get localized string:C991($message)
+	$t:=Length:C16($t)>0 ? $t : $message  // Revert if no localization
+	This:C1470[""].message:=$t
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function get browse() : Boolean
+	
+	return This:C1470[""].browse
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function set browse($enabled : Boolean)
+	
+	This:C1470[""].browse:=$enabled
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function get showOnDisk() : Boolean
+	
+	return This:C1470[""].showOnDisk
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function set showOnDisk($enabled : Boolean)
+	
+	This:C1470[""].showOnDisk:=$enabled
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function get copyPath() : Boolean
+	
+	return This:C1470[""].copyPath
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function set copyPath($enabled : Boolean)
+	
+	This:C1470[""].copyPath:=$enabled
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function get openItem() : Boolean
+	
+	return This:C1470[""].openItem
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function set openItem($enabled : Boolean)
+	
+	This:C1470[""].openItem:=$enabled
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function get directory() : Variant
+	
+	return This:C1470[""].directory
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function set directory($directory)
+	
+	This:C1470[""].directory:=$directory
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function get fileTypes() : Collection
+	
+	return This:C1470[""].fileTypes
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function set fileTypes($types)
+	
+	Case of 
 			
-			If (OB Instance of:C1731($target; 4D:C1709.Folder))\
-				 | (OB Instance of:C1731($target; 4D:C1709.File))
-				
-				This:C1470.target:=$target
-				This:C1470.path:=$target.path
-				This:C1470.platformPath:=$target.platformPath
-				
-				This:C1470.__updateLabel()
-				
-			Else 
-				
-				ASSERT:C1129(False:C215; Current method name:C684+".setTarget(): The passed object must be a File or a Folder")
-				
-			End if 
+			//______________________________________________________
+		: (Value type:C1509($types)=Is text:K8:3)
 			
+			This:C1470[""].fileTypes:=Split string:C1554($types; ";")
+			
+			//______________________________________________________
+		: (Value type:C1509($types)=Is collection:K8:32)
+			
+			This:C1470[""].fileTypes:=$types
+			
+			//______________________________________________________
 		Else 
 			
-			This:C1470.target:=Null:C1517
-			This:C1470.path:=""
-			This:C1470.platformPath:=""
+			// #ERROR
 			
-			This:C1470.__updateLabel()
-			
-		End if 
-		
-	Else 
-		
-		ASSERT:C1129(False:C215; Current method name:C684+".setTarget(): Missing the target (File or Folder object) parameter")
-		
-	End if 
+			//______________________________________________________
+	End case 
 	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-Function setPlatformPath($pathname : Text)
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function get platformPath() : Text
+	
+	return This:C1470[""].target#Null:C1517 ? This:C1470[""].target.platformPath : ""
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function set platformPath($pathname : Text)
+	
+	This:C1470._setPlatformPath($pathname)
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function get path() : Text
+	
+	return This:C1470[""].target.path
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function set path($path : Text)
+	
+	This:C1470._setPath($path)
+	
+	// Mark:-
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function _setPlatformPath($pathname : Text)
 	
 	If (Count parameters:C259>=1)
-		
-		This:C1470.platformPath:=$pathname
 		
 		If (Length:C16($pathname)>0)
 			
-			This:C1470.path:=Convert path system to POSIX:C1106($pathname)
-			
-			If (Path to object:C1547(This:C1470.platformPath).isFolder)
+			If (Path to object:C1547($pathname).isFolder)
 				
 				// Folder
-				This:C1470.target:=Folder:C1567(This:C1470.platformPath; fk platform path:K87:2)
+				This:C1470[""].target:=Folder:C1567($pathname; fk platform path:K87:2)
 				
 			Else 
 				
 				// File
-				This:C1470.target:=File:C1566(This:C1470.platformPath; fk platform path:K87:2)
+				This:C1470[""].target:=File:C1566($pathname; fk platform path:K87:2)
 				
 			End if 
 			
 		Else 
 			
-			This:C1470.platformPath:=""
-			This:C1470.target:=Null:C1517
+			This:C1470[""].target:=Null:C1517
 			
 		End if 
 		
@@ -167,81 +249,72 @@ Function setPlatformPath($pathname : Text)
 		
 	Else 
 		
-		ASSERT:C1129(False:C215; Current method name:C684+".setTarget(): Missing the PlatformPath (text) parameter")
+		ASSERT:C1129(False:C215; Current method name:C684+"._setPlatformPath(): Missing the PlatformPath (text) parameter")
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-Function setPath($path : Text)
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function _setPath($path : Text)
 	
-	If (Count parameters:C259>=1)
+	If (Length:C16($path)>0)
 		
-		This:C1470.path:=$path
+		$path:=Convert path POSIX to system:C1107($path)
 		
-		If (Length:C16($path)>0)
+		If (Path to object:C1547($path).isFolder)
 			
-			This:C1470.platformPath:=Convert path POSIX to system:C1107($path)
-			
-			If (Path to object:C1547(This:C1470.platformPath).isFolder)
-				
-				// Folder
-				This:C1470.target:=Folder:C1567(This:C1470.platformPath; fk platform path:K87:2)
-				
-			Else 
-				
-				// File
-				This:C1470.target:=File:C1566(This:C1470.platformPath; fk platform path:K87:2)
-				
-			End if 
+			// Folder
+			This:C1470[""].target:=Folder:C1567($path; fk platform path:K87:2)
 			
 		Else 
 			
-			This:C1470.platformPath:=""
-			This:C1470.target:=Null:C1517
+			// File
+			This:C1470[""].target:=File:C1566($path; fk platform path:K87:2)
 			
 		End if 
 		
-		This:C1470.__updateLabel()
-		
 	Else 
 		
-		ASSERT:C1129(False:C215; Current method name:C684+".setTarget(): Missing the Path (text) parameter")
+		This:C1470[""].target:=Null:C1517
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === ===
+	This:C1470.__updateLabel()
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
 Function __select()
 	
 	var $t : Text
 	
+	$t:=This:C1470[""].fileTypes.join(";")
+	
 	Case of 
 			
 			//………………………………………………………………
-		: (This:C1470.type=Is a document:K24:1)\
-			 | (Is macOS:C1572 & (Position:C15(".app"; String:C10(This:C1470.fileTypes))>0))
+		: (This:C1470[""].type=Is a document:K24:1)\
+			 | (Is macOS:C1572 & (Position:C15(".app"; $t)>0))
 			
-			If (Value type:C1509(This:C1470.directory)=Is text:K8:3)
+			If (Value type:C1509(This:C1470[""].directory)=Is text:K8:3)
 				
-				$t:=Select document:C905(This:C1470.directory; This:C1470.fileTypes; This:C1470.message; This:C1470.options)
+				$t:=Select document:C905(This:C1470[""].directory; $t; This:C1470[""].message; This:C1470[""].options)
 				
 			Else 
 				
 				// Use a memorized access path
-				$t:=Select document:C905(Num:C11(This:C1470.directory); This:C1470.fileTypes; This:C1470.message; This:C1470.options)
+				$t:=Select document:C905(Num:C11(This:C1470[""].directory); $t; This:C1470[""].message; This:C1470[""].options)
 				
 			End if 
 			
 			//………………………………………………………………
-		: (This:C1470.type=Is a folder:K24:2)
+		: (This:C1470[""].type=Is a folder:K24:2)
 			
-			If (Value type:C1509(This:C1470.directory)=Is text:K8:3)
+			If (Value type:C1509(This:C1470[""].directory)=Is text:K8:3)
 				
-				DOCUMENT:=Select folder:C670(This:C1470.message; This:C1470.directory; This:C1470.options)
+				DOCUMENT:=Select folder:C670(This:C1470[""].message; This:C1470[""].directory; This:C1470[""].options)
 				
 			Else 
 				
 				// Use a memorized access path
-				DOCUMENT:=Select folder:C670(This:C1470.message; Num:C11(This:C1470.directory); This:C1470.options)
+				DOCUMENT:=Select folder:C670(This:C1470[""].message; Num:C11(This:C1470[""].directory); This:C1470[""].options)
 				
 			End if 
 			
@@ -250,15 +323,15 @@ Function __select()
 	
 	If (Bool:C1537(OK))
 		
-		This:C1470.setPlatformPath(DOCUMENT)
+		This:C1470._setPlatformPath(DOCUMENT)
 		This:C1470.__resume()
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === ===
+	// === === === === === === === === === === === === === === === === === === === === ===
 Function __displayMenu()
 	
-	var $menu; $sep; $t : Text
+	var $menu; $folderSeparator; $t : Text
 	var $bottom; $left; $right; $top : Integer
 	var $c : Collection
 	
@@ -272,7 +345,7 @@ Function __displayMenu()
 			 & (Position:C15("\\"; This:C1470.platformPath)>0)
 			
 			// MacOS client with server on Windows
-			$sep:="\\"
+			$folderSeparator:="\\"
 			
 			//……………………………………………………………………………………………
 		: (Application type:C494=4D Remote mode:K5:5)\
@@ -280,20 +353,20 @@ Function __displayMenu()
 			 & (Position:C15(":"; Replace string:C233(This:C1470.platformPath; ":"; ""; 1))>0)
 			
 			// Windows client with server on macOS
-			$sep:=":"
+			$folderSeparator:=":"
 			
 			//……………………………………………………………………………………………
 		Else 
 			
-			$sep:=Folder separator:K24:12
+			$folderSeparator:=Folder separator:K24:12
 			
 			//……………………………………………………………………………………………
 	End case 
 	
-	ARRAY TEXT:C222($aVol; 0x0000)
-	VOLUME LIST:C471($aVol)
+	ARRAY TEXT:C222($volumes; 0x0000)
+	VOLUME LIST:C471($volumes)
 	
-	$c:=Split string:C1554(This:C1470.platformPath; $sep)
+	$c:=Split string:C1554(This:C1470.platformPath; $folderSeparator)
 	
 	$menu:=Create menu:C408
 	
@@ -318,7 +391,7 @@ Function __displayMenu()
 		Case of 
 				
 				//……………………………………………………………………………………………
-			: (Find in array:C230($aVol; $t)>0)
+			: (Find in array:C230($volumes; $t)>0)
 				
 				SET MENU ITEM ICON:C984($menu; -1; "path:/RESOURCES/pathPicker/drive.png")
 				
@@ -347,21 +420,21 @@ Function __displayMenu()
 	
 	If (Count menu items:C405($menu)>0)
 		
-		If (Bool:C1537(This:C1470.showOnDisk))\
-			 | (Bool:C1537(This:C1470.copyPath))
+		If (Bool:C1537(This:C1470[""].showOnDisk))\
+			 | (Bool:C1537(This:C1470[""].copyPath))
 			
 			APPEND MENU ITEM:C411($menu; "-")
 			
 		End if 
 		
-		If (Bool:C1537(This:C1470.showOnDisk))
+		If (Bool:C1537(This:C1470[""].showOnDisk))
 			
 			APPEND MENU ITEM:C411($menu; Get localized string:C991("ShowOnDisk"))
 			SET MENU ITEM PARAMETER:C1004($menu; -1; "show")
 			
 		End if 
 		
-		If (Bool:C1537(This:C1470.copyPath))
+		If (Bool:C1537(This:C1470[""].copyPath))
 			
 			APPEND MENU ITEM:C411($menu; Get localized string:C991("CopyPath"))
 			SET MENU ITEM PARAMETER:C1004($menu; -1; "copy")
@@ -390,7 +463,7 @@ Function __displayMenu()
 				SHOW ON DISK:C922(DOCUMENT)
 				
 				//……………………………………………………………………………………………
-			: (Not:C34(Bool:C1537(This:C1470.openItem)))
+			: (Not:C34(Bool:C1537(This:C1470[""].openItem)))
 				
 				// NOTHING MORE TO DO
 				
@@ -403,28 +476,32 @@ Function __displayMenu()
 		End case 
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === ===
+	// === === === === === === === === === === === === === === === === === === === === ===
 Function __onDrag() : Integer
 	
-	return (-1+Num:C11(Test path name:C476(Get file from pasteboard:C976(1))=Num:C11(This:C1470.type)))
+	return (-1+Num:C11(Test path name:C476(Get file from pasteboard:C976(1))=Num:C11(This:C1470[""].type)))
 	
-	//=== === === === === === === === === === === === === === === === === === === === ===
+	// === === === === === === === === === === === === === === === === === === === === ===
 Function __onDrop
 	
 	DOCUMENT:=Get file from pasteboard:C976(1)
 	
-	If (Test path name:C476(DOCUMENT)=Num:C11(This:C1470.type))
+	If (Test path name:C476(DOCUMENT)=Num:C11(This:C1470[""].type))
 		
-		If (Position:C15(Path to object:C1547(DOCUMENT).extension; This:C1470.fileTypes)>0)
+		If (Position:C15(Path to object:C1547(DOCUMENT).extension; This:C1470[""].fileTypes.join(";"))>0)
 			
-			This:C1470.setPlatformPath(DOCUMENT)
+			This:C1470._setPlatformPath(DOCUMENT)
 			This:C1470.__resume()
 			
 		End if 
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-Function __updateLabel
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function __updateLabel()
+	
+	var $folderSeparator : Text
+	var $bottom; $height; $left; $right; $top; $width : Integer
+	var $c : Collection
 	
 	If (Length:C16(This:C1470.platformPath)>0)
 		
@@ -437,7 +514,7 @@ Function __updateLabel
 				 & (Position:C15("\\"; This:C1470.platformPath)>0)
 				
 				// MacOS client with server on Windows
-				This:C1470.separator:="\\"
+				$folderSeparator:="\\"
 				
 				//……………………………………………………………………………………………
 			: (Application type:C494=4D Remote mode:K5:5)\
@@ -445,47 +522,61 @@ Function __updateLabel
 				 & (Position:C15(":"; Replace string:C233(This:C1470.platformPath; ":"; ""; 1))>0)
 				
 				// Windows client with server on macOS
-				This:C1470.separator:=":"
+				$folderSeparator:=":"
 				
 				//……………………………………………………………………………………………
 			Else 
 				
-				This:C1470.separator:=Folder separator:K24:12
+				$folderSeparator:=Folder separator:K24:12
 				
 				//……………………………………………………………………………………………
 		End case 
 		
-		var $c : Collection
-		$c:=Split string:C1554(This:C1470.platformPath; This:C1470.separator; sk ignore empty strings:K86:1)
+		$c:=Split string:C1554(This:C1470.platformPath; $folderSeparator; sk ignore empty strings:K86:1)
 		
-		This:C1470.label:=Choose:C955($c[$c.length-1]#$c[0]; \
+		This:C1470[""].label:=Choose:C955($c[$c.length-1]#$c[0]; \
 			Replace string:C233(Replace string:C233(Get localized string:C991("FileInVolume"); "{file}"; $c[$c.length-1]); "{volume}"; $c[0]); \
 			"\""+$c[$c.length-1]+"\"")
 		
 		OBJECT SET VISIBLE:C603(*; "menu@"; True:C214)
-		OBJECT SET RGB COLORS:C628(*; "text"; Choose:C955(Bool:C1537(This:C1470.target.exists); Foreground color:K23:1; "red"))
+		OBJECT SET RGB COLORS:C628(*; "text"; Choose:C955(Bool:C1537(This:C1470[""].target.exists); Foreground color:K23:1; "red"))
 		
 	Else 
 		
-		This:C1470.label:=""
+		This:C1470[""].label:=""
 		OBJECT SET VISIBLE:C603(*; "menu@"; False:C215)
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === ===
+	OBJECT GET COORDINATES:C663(*; "menu.expand"; $left; $top; $right; $bottom)
+	OBJECT GET BEST SIZE:C717(*; "text"; $width; $height)
+	
+	If ($width>($right-$left))
+		
+		OBJECT SET HELP TIP:C1181(*; "menu.expand"; This:C1470[""].label)
+		
+	Else 
+		
+		OBJECT SET HELP TIP:C1181(*; "menu.expand"; "")
+		
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
 Function __resume
 	
-	If (Form:C1466.callback#Null:C1517)
+	If (This:C1470.callback#Null:C1517)
 		
-		Form:C1466.callback.call(Form:C1466.target)
+		This:C1470.callback.call()
 		
 	Else 
 		
 		CALL SUBFORM CONTAINER:C1086(On Data Change:K2:15)
 		
+		OBJECT SET SUBFORM CONTAINER VALUE:C1784(OBJECT Get subform container value:C1785)
+		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === ===
+	// === === === === === === === === === === === === === === === === === === === === ===
 Function __geometry()
 	
 	var $bottom; $containerWidth; $formWidth; $l; $left; $offset : Integer
@@ -508,12 +599,12 @@ Function __geometry()
 	
 	This:C1470.__ui()
 	
-	//=== === === === === === === === === === === === === === === === === === === === ===
+	// === === === === === === === === === === === === === === === === === === === === ===
 Function __ui()
 	
 	var $bottom; $l; $left; $right; $top : Integer
 	
-	If (This:C1470.browse)
+	If (This:C1470[""].browse)
 		
 		If (Not:C34(OBJECT Get visible:C1075(*; "browse")))
 			
@@ -546,12 +637,12 @@ Function __ui()
 		End if 
 	End if 
 	
-	OBJECT SET VISIBLE:C603(*; "menu@"; Length:C16(This:C1470.label)>0)
-	OBJECT SET PLACEHOLDER:C1295(*; "text"; This:C1470.placeHolder)
+	OBJECT SET VISIBLE:C603(*; "menu@"; Length:C16(This:C1470[""].label)>0)
+	OBJECT SET PLACEHOLDER:C1295(*; "text"; This:C1470[""].placeHolder+"…")
 	
-	If (This:C1470.target#Null:C1517)
+	If (This:C1470[""].target#Null:C1517)
 		
-		If (Bool:C1537(This:C1470.target.exists))
+		If (Bool:C1537(This:C1470[""].target.exists))
 			
 			OBJECT SET RGB COLORS:C628(*; "text"; Foreground color:K23:1)
 			
@@ -561,4 +652,3 @@ Function __ui()
 			
 		End if 
 	End if 
-	

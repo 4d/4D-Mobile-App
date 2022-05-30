@@ -39,13 +39,16 @@ Function init()
 	This:C1470.widget("certificate"; "certificatePicker").addToGroup($group)
 	
 	This:C1470.certificate.picker:=cs:C1710.pathPicker.new(String:C10(Form:C1466.server.pushCertificate); New object:C1471(\
-		"options"; Package open:K24:8+Use sheet window:K24:11; \
 		"fileTypes"; ".p8"; \
 		"directory"; 8858; \
 		"copyPath"; False:C215; \
 		"openItem"; False:C215; \
-		"message"; Get localized string:C991("selectACertificate"); \
-		"placeHolder"; Get localized string:C991("selectACertificate")+"…"))
+		"message"; "selectACertificate"; \
+		"placeHolder"; "selectACertificate"))
+	
+	var $o : Object
+	$o:=OB Copy:C1225(This:C1470)
+	This:C1470.certificate.picker.callback:=Formula:C1597($o.doCertificate())
 	
 	// * DEEP LINKING
 	This:C1470.button("deepLinking"; "03_deepLinking")
@@ -61,6 +64,25 @@ Function init()
 	This:C1470.input("deepLink"; "04_associatedDomain.input").addToGroup($group)
 	This:C1470.formObject("deepLinkLabel"; "associatedDomain.label").addToGroup($group)
 	This:C1470.formObject("deepLinkBorder"; "associatedDomain.border").addToGroup($group)
+	
+	
+Function doCertificate()
+	
+	var $o : cs:C1710.pathPicker
+	$o:=This:C1470.certificate.picker
+	
+	If ($o.target#Null:C1517)
+		
+		If (Bool:C1537($o.target.exists))
+			
+			If ($o.path#String:C10(PROJECT.server.pushCertificate))
+				
+				PROJECT.server.pushCertificate:=cs:C1710.doc.new($o.target).relativePath
+				PROJECT.save()
+				
+			End if 
+		End if 
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	/// Events handler
@@ -113,7 +135,7 @@ Function handleEvents($e : Object)
 				This:C1470.refresh()
 				
 				//==============================================
-			: (This:C1470.certificate.catch($e; On Data Change:K2:15))
+			: (This:C1470.certificate.catch())
 				
 				If (This:C1470.certificate.picker.target#Null:C1517)
 					

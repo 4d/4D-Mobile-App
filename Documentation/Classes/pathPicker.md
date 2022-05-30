@@ -31,7 +31,7 @@ The complete pathPicker form, code and ressources are:
 |**.copyPath** | Add a "Copy the path" item into the widget menu | `Boolean` | **True**
 |**.directory** | Allow to display in the finder any menu item of the widget | `Boolean` | **True**
 |**.openItem** | The directory access path to display by default or a number to memorize the access path\* | `Text` <br> `Integer` | ""
-|**.fileTypes** | List of types of documents to filter, or "\*" to not filter documents\* | `Text` | ""
+|**.fileTypes** | List of types of documents to filter, or "\*" to not filter documents\* | `Collection` | ""
 |**.message** | Title of the selection dialog box\* | `Text` | ""
 |**.placeHolder** | Placeholder text associated with the widget | `Text` | ""
 \* as described for the command **[Select document](https://doc.4d.com/4Dv19/4D/19.1/Select-document.301-5654273.en.html)**
