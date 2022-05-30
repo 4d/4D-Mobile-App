@@ -107,20 +107,23 @@ End if
 
 // Mark:-R5
 Feature.unstable("xcDataModelClass")  // Use class to create core data model ie. xcDataModel (useful to refactor for alias)
+
 Feature.unstable("iosBuildWithClass")  // Use cs.MobileProjectIOS class
+
 Feature.unstable("modernStructure")
 
 // Mark:-R6
 
-
-
 // Mark:-🚧 MAIN
 Feature.main(127558)  // [ANDROID] Data set
+
 Feature.main(131225)  // [MOBILE] Use aliases
+
 Feature.main("listEditor")  // #130828 [MOBILE] Create and edit an input control from the project editor
 
 // Mark:-🚧 WIP
 Feature.wip(131983)  // [MOBILE] Launch an action from the Tab bar
+
 // FEATURE.wip("simuARMOnAppleProcessor") // Mac M1 build for simu using arm64
 Feature.wip("duplicateTemplate")  // Allow to duplicate template in host database and show on disk https:// Project.4d.com/issues/98054
 Feature.wip("newFormatterChoiceList")  // Menu to create formatter choice list directly , from data
@@ -128,12 +131,11 @@ Feature.wip("taskIndicator")  // UI for background tasks executing
 Feature.wip("DataSourceClass")  // Work with DataSource class class to test the data source
 Feature.wip("buildWithCmd")  // Allow to build using cmd only
 
-
-
 // Mark:-👨‍💻 Eric
 $c:=New collection:C1472("emarchand"; "phimage")
 Feature.dev("gitCommit"; $c)  // Commit to git generated project
 Feature.dev("generateForDev"; $c)  // Add framework sources and do not add compiled frameworks to workspace, deactivate code signing on framework
+
 //FEATURE.dev("devGallery"; $c)  // Allow to dev with local http gallery
 
 // Mark:-👴🏻 Vincent
@@ -142,7 +144,9 @@ Feature.dev("vdl"; $c)
 
 // Mark:-⛔ PENDING
 Feature.pending(129953)  // [MOBILE] Handle Many-one-Many relations
+
 Feature.pending("compressionOfTemplates")  // Use the archive "/RESOURCES/template.zip" instead of "templates" folder in builded component
+
 //FEATURE.dev("testCompression";New collection("vdelachaux"; "Vincent de LACHAUX"))
 Feature.pending("formatMarketPlace")  // Manage format as archive
 Feature.pending("sharedActionWithDescription")  // [MOBILE] Add a description parameter to predefined share action
@@ -152,6 +156,8 @@ Feature.pending("droppingNext"; 114338)  // Allow to drop a multivalued field ne
 Feature.pending("iosSDKfromAWS")  // Download iOS SDK from AWS
 
 Feature.pending("coreDataAbstractEntity")  // Add in coreData model Record abstract entity
+
+Feature.pending("nonScalarAlias")  // Manage non scalar alias
 
 // Mark:-→ Local preferences
 Feature.loadLocal()

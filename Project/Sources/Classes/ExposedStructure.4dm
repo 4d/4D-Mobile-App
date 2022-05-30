@@ -1140,16 +1140,20 @@ Do not allow duplicate attribute names.
 						//______________________________________
 					: ($field.relatedDataClass#Null:C1517)  // Non scalar Attribute
 						
-						$field.relatedTableNumber:=$ds[$field.relatedDataClass].getInfo().tableNumber
-						
-						$field.isToMany:=($field.fieldType=Is collection:K8:32)  // -> relatedEntities
-						$field.isToOne:=($field.fieldType=Is object:K8:27)  // -> relatedEntity
-						
-						// Mark: #TEMPO
-						$field.valueType:=$field.type
-						$field.type:=$field.isToMany ? -2 : -1
-						
-						$fields.push($field)
+						If (Feature.with("nonScalarAlias"))
+							
+							$field.relatedTableNumber:=$ds[$field.relatedDataClass].getInfo().tableNumber
+							
+							$field.isToMany:=($field.fieldType=Is collection:K8:32)  // -> relatedEntities
+							$field.isToOne:=($field.fieldType=Is object:K8:27)  // -> relatedEntity
+							
+							// Mark: #TEMPO
+							$field.valueType:=$field.type
+							$field.type:=$field.isToMany ? -2 : -1
+							
+							$fields.push($field)
+							
+						End if 
 						
 						//______________________________________
 					Else   // Scalar Attribute
