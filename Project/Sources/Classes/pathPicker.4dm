@@ -340,6 +340,9 @@ Function __displayMenu()
 				
 				//……………………………………………………………………………………………
 		End case 
+		
+		SET MENU ITEM PARAMETER:C1004($menu; -1; DOCUMENT)
+		
 	End for each 
 	
 	If (Count menu items:C405($menu)>0)
