@@ -6,10 +6,11 @@ The pathPicker widget is attented to display and select a file or folder path
 The complete pathPicker form, code and ressources are:
 
 * A form nammed `PATH PICKER`
-* A class `pathPicker`
 * A method `PATH_PICKER` (form method)
+* A class `pathPicker`
+* This documentation file `Documentation/Classes/pathPicker.md`
 * A `Resources/pathPicker` folder for the medias
-* A XLIFF file `pathPicker.xlf` for the 7 managed languages:
+* A `pathPicker.xlf` file for each of the 7 managed languages:
 
 	* `cs.lproj`
 	* `de.lproj`
