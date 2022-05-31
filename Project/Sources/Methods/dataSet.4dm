@@ -551,6 +551,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 							"dataSet"; $in.dataSet; \
 							"debug"; Bool:C1537($in.debug); \
 							"dataModel"; $dataModel; \
+							"catalog"; (Feature.with("alias") ? $in.project.getCatalog() : Null:C1517); \
 							"caller"; $in.caller; \
 							"method"; $in.method))
 						

@@ -272,6 +272,7 @@ Case of
 				// Get field list name
 				$o:=dataModel(New object:C1471(\
 					"action"; "fieldNames"; \
+					"catalog"; $in.catalog; \
 					"table"; $table))
 				
 				If (Bool:C1537($in.expand))  // If we want to use old way to do it, not optimized $expand

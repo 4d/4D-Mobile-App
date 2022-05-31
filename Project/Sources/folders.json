@@ -564,14 +564,18 @@
 			"UNIT_3"
 		],
 		"methods": [
+			"_createPrjForTesting",
+			"Compiler_4dUnit",
 			"test_capabilities",
 			"test_catalog",
+			"test_dataSet",
 			"test_ob_class",
 			"test_reconcile",
 			"test_sqliteSizes",
 			"test_structure",
 			"test_structureCatalog",
 			"test_swiftPM",
+			"test_xcdataModel",
 			"test_xmlClass",
 			"unitTestSuites"
 		]

@@ -106,96 +106,111 @@ Case of
 	: ($Obj_in.action="fieldCollection")  // get field name and if, format in list and detail userChoice - CALLERS : templates
 		
 		$Obj_out.success:=($Obj_in.table#Null:C1517)
+		If (Not:C34($Obj_out.success))
+			$Obj_out.errors:=New collection:C1472("Missing table property")
+			return 
+		End if 
 		
-		If ($Obj_out.success)
+		$Obj_out.fields:=New collection:C1472()
+		
+		For each ($Txt_field; $Obj_in.table)
 			
-			$Obj_out.fields:=New collection:C1472()
-			
-			For each ($Txt_field; $Obj_in.table)
-				
-				Case of 
+			Case of 
+					
+					//………………………………………………………………………………………………………………………
+				: (Match regex:C1019("(?m-si)^\\d+$"; $Txt_field; 1; *))  // XXX or isField and isComputeAttribute if we want it as default list
+					
+					// TODO: Change field.id to field.fieldNumber
+					var $field : Object
+					$field:=OB Copy:C1225($Obj_in.table[$Txt_field])
+					$field.id:=$Txt_field
+					$Obj_out.fields.push($field)
+					
+					//………………………………………………………………………………………………………………………
+				: ((Value type:C1509($Obj_in.table[$Txt_field])=Is object:K8:27))
+					
+					If (Bool:C1537($Obj_in.relation))
 						
-						//………………………………………………………………………………………………………………………
-					: (Match regex:C1019("(?m-si)^\\d+$"; $Txt_field; 1; *))  // XXX or isField and isComputeAttribute if we want it as default list
-						
-						// TODO: Change field.id to field.fieldNumber
-						var $field : Object
-						$field:=OB Copy:C1225($Obj_in.table[$Txt_field])
-						$field.id:=$Txt_field
-						$Obj_out.fields.push($field)
-						
-						//………………………………………………………………………………………………………………………
-					: ((Value type:C1509($Obj_in.table[$Txt_field])=Is object:K8:27))
-						
-						If (Bool:C1537($Obj_in.relation))
+						If ($Obj_in.table[$Txt_field].relatedEntities#Null:C1517)  // To change if relatedEntities deleted and relatedDataClass already filled #109019
 							
-							If ($Obj_in.table[$Txt_field].relatedEntities#Null:C1517)  // To change if relatedEntities deleted and relatedDataClass already filled #109019
+							// redmine #110927 : want to add relation 1-N if no field specified at all by user
+							// Here we detect 1-N Relation, there is no "kind" or "type" to see it at this level...
+							
+							If ($Obj_in.dataModel[String:C10($Obj_in.table[$Txt_field].relatedTableNumber)]#Null:C1517)  // only if destination table published
 								
-								// redmine #110927 : want to add relation 1-N if no field specified at all by user
-								// Here we detect 1-N Relation, there is no "kind" or "type" to see it at this level...
+								$Obj_out.fields.push(New object:C1471(\
+									"name"; $Txt_field; \
+									"relatedDataClass"; $Obj_in.table[$Txt_field].relatedEntities; \
+									"relatedTableNumber"; $Obj_in.table[$Txt_field].relatedTableNumber; \
+									"fieldType"; 8859; \
+									"id"; 0))  // TODO field.id change to fieldNumber
 								
-								If ($Obj_in.dataModel[String:C10($Obj_in.table[$Txt_field].relatedTableNumber)]#Null:C1517)  // only if destination table published
-									
-									$Obj_out.fields.push(New object:C1471(\
-										"name"; $Txt_field; \
-										"relatedDataClass"; $Obj_in.table[$Txt_field].relatedEntities; \
-										"relatedTableNumber"; $Obj_in.table[$Txt_field].relatedTableNumber; \
-										"fieldType"; 8859; \
-										"id"; 0))  // TODO field.id change to fieldNumber
-									
-								End if 
 							End if 
 						End if 
-						
-						//………………………………………………………………………………………………………………………
-					Else 
-						
-						// Ignore
-						
-						//………………………………………………………………………………………………………………………
-				End case 
-			End for each 
-			
-		Else 
-			
-			$Obj_out.errors:=New collection:C1472("Missing table property")
-			
-		End if 
+					End if 
+					
+					//………………………………………………………………………………………………………………………
+				Else 
+					
+					// Ignore
+					
+					//………………………………………………………………………………………………………………………
+			End case 
+		End for each 
+		
 		
 		// MARK:- fieldNames
 	: ($Obj_in.action="fieldNames")  // Get field names for dump with table (model format) - CALLERS : dump
 		
 		$Obj_out.success:=($Obj_in.table#Null:C1517)
+		If (Not:C34($Obj_out.success))
+			$Obj_out.errors:=New collection:C1472("Missing table property")
+			return 
+		End if 
 		
-		If ($Obj_out.success)
+		$Obj_out.fields:=New collection:C1472()
+		$Obj_out.expand:=New collection:C1472()
+		
+		For each ($Txt_field; $Obj_in.table)
 			
-			$Obj_out.fields:=New collection:C1472()
-			$Obj_out.expand:=New collection:C1472()
-			
-			For each ($Txt_field; $Obj_in.table)
-				
-				Case of 
-						
-						//………………………………………………………………………………………………………………………
-					: (Length:C16($Txt_field)=0)
-						
-						// <NOTHING MORE TO DO>
-						
-						//………………………………………………………………………………………………………………………
-					: (Match regex:C1019("(?m-si)^\\d+$"; $Txt_field; 1; *))
-						
-						$Obj_out.fields.push($Obj_in.table[$Txt_field].name)
-						
-						//………………………………………………………………………………………………………………………
-					: ((Value type:C1509($Obj_in.table[$Txt_field])=Is object:K8:27))
-						
-						$Obj_buffer:=$Obj_in.table[$Txt_field]
-						
-						If (PROJECT.isComputedAttribute($Obj_buffer))
+			Case of 
+					
+					//………………………………………………………………………………………………………………………
+				: (Length:C16($Txt_field)=0)
+					
+					// <NOTHING MORE TO DO>
+					
+					//………………………………………………………………………………………………………………………
+				: (Match regex:C1019("(?m-si)^\\d+$"; $Txt_field; 1; *))  // CLEAN: use PROJECT.isField (ie. scalaire only)
+					
+					$Obj_out.fields.push($Obj_in.table[$Txt_field].name)
+					
+					//………………………………………………………………………………………………………………………
+				: ((Value type:C1509($Obj_in.table[$Txt_field])=Is object:K8:27))
+					
+					$Obj_buffer:=$Obj_in.table[$Txt_field]
+					
+					Case of 
+						: (Feature.with("alias") && PROJECT.isAlias($Obj_buffer))
+							
+							$Obj_out.fields.push($Obj_buffer.path)
+							
+							// TODO: Fix get last point instead
+							
+							If (Position:C15("."; $Obj_buffer.path)>0)
+								$Txt_field:=Substring:C12($Obj_buffer.path; 1; Position:C15("."; $Obj_buffer.path)-1)
+								If ($Obj_out.expand.indexOf($Txt_field)<0)
+									$Obj_out.expand.push($Txt_field)
+								End if 
+							End if 
+							
+							
+						: (PROJECT.isComputedAttribute($Obj_buffer))
 							
 							$Obj_out.fields.push($Txt_field)
 							
 						Else 
+							// CLEAN: use PROJECT.isRelati...
 							If ($Obj_buffer.relatedEntities#Null:C1517)  // To remove if relatedEntities deleted and relatedDataClass already filled #109019
 								
 								$Obj_buffer.relatedDataClass:=$Obj_buffer.relatedEntities
@@ -219,11 +234,18 @@ Case of
 											
 										: (Value type:C1509($Obj_buffer[$Txt_fieldNumber])=Is object:K8:27)
 											
-											If (PROJECT.isComputedAttribute($Obj_buffer[$Txt_fieldNumber]))
-												
-												$Obj_out.fields.push($Txt_field+"."+$Obj_buffer[$Txt_fieldNumber].name)
-												
-											End if 
+											Case of 
+												: (Feature.with("alias") && PROJECT.isAlias($Obj_buffer[$Txt_fieldNumber]))
+													
+													$Obj_out.fields.push($Txt_field+"."+$Obj_buffer[$Txt_fieldNumber].path)
+													
+													// TODO: alias, maybe some other intermediated expand values
+													
+												: (PROJECT.isComputedAttribute($Obj_buffer[$Txt_fieldNumber]))
+													
+													$Obj_out.fields.push($Txt_field+"."+$Obj_buffer[$Txt_fieldNumber].name)
+													
+											End case 
 											
 										Else 
 											
@@ -235,54 +257,67 @@ Case of
 								// Else  Ignore
 								
 							End if 
-						End if 
-						
-						//………………………………………………………………………………………………………………………
-					Else 
-						
-						// Ignore
-						
-						//………………………………………………………………………………………………………………………
-				End case 
-			End for each 
+					End case 
+					
+					//………………………………………………………………………………………………………………………
+				Else 
+					
+					// Ignore
+					
+					//………………………………………………………………………………………………………………………
+			End case 
+		End for each 
+		
+		// Add primary key if needed for expanded data
+		For each ($Txt_field; $Obj_out.expand)
 			
-			// Add primary key if needed for expanded data
-			For each ($Txt_field; $Obj_out.expand)
+			If (Feature.with("alias"))
 				
+				ASSERT:C1129($Obj_in.catalog#Null:C1517; "Need catalog definition to dump data")
+				
+				$Obj_table:=$Obj_in.catalog.query("name = :1"; $Obj_in.table[""].name).pop()
+				
+				// TODO: if contain "." split and get first, and loop
+				$Obj_field:=$Obj_table.fields.query("name = :1"; $Txt_field).pop()
+				
+				$Obj_buffer:=New object:C1471
+				$Obj_buffer.tableInfo:=$Obj_in.catalog.query("name = :1"; String:C10($Obj_field.relatedDataClass)).pop()
+				$Obj_buffer.success:=$Obj_buffer.tableInfo#Null:C1517
+				
+			Else 
 				$Obj_buffer:=_o_structure(New object:C1471(\
 					"action"; "tableInfo"; \
 					"name"; String:C10($Obj_in.table[$Txt_field].relatedDataClass)))
-				
-				If ($Obj_buffer.success)
-					
-					$Txt_buffer:=$Txt_field+"."+$Obj_buffer.tableInfo.primaryKey
-					
-					If ($Obj_out.fields.indexOf($Txt_buffer)<0)
-						
-						$Obj_out.fields.push($Txt_buffer)
-						
-					End if 
-					
-				Else 
-					
-					ob_warning_add($Obj_out; "Cannot get information for related table "+String:C10($Obj_in.table[$Txt_field].relatedDataClass)+"(related by "+$Txt_field+" in "+$Obj_in.table+")")
-					
-				End if 
-			End for each 
-			
-			$o:=$Obj_in.table[""]
-			
-			// Append the primaryKey if any
-			If ((Length:C16(String:C10($o.primaryKey))>0) & \
-				($Obj_out.fields.indexOf(String:C10($o.primaryKey))<0))
-				
-				$Obj_out.fields.push($o.primaryKey)
-				
 			End if 
 			
-		Else 
+			If ($Obj_buffer.success)
+				
+				$Txt_buffer:=$Txt_field+"."+$Obj_buffer.tableInfo.primaryKey
+				
+				If ($Obj_out.fields.indexOf($Txt_buffer)<0)
+					
+					$Obj_out.fields.push($Txt_buffer)
+					
+				End if 
+				
+			Else 
+				
+				If (Feature.with("alias"))
+					ob_warning_add($Obj_out; "Cannot get information for related table , related by link "+$Txt_field+" in "+$Obj_in.table+")")
+				Else 
+					ob_warning_add($Obj_out; "Cannot get information for related table "+String:C10($Obj_in.table[$Txt_field].relatedDataClass)+"(related by "+$Txt_field+" in "+$Obj_in.table+")")
+				End if 
+				
+			End if 
+		End for each 
+		
+		$o:=$Obj_in.table[""]
+		
+		// Append the primaryKey if any
+		If ((Length:C16(String:C10($o.primaryKey))>0) & \
+			($Obj_out.fields.indexOf(String:C10($o.primaryKey))<0))
 			
-			$Obj_out.errors:=New collection:C1472("Missing table property")
+			$Obj_out.fields.push($o.primaryKey)
 			
 		End if 
 		
