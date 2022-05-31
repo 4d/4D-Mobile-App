@@ -6,7 +6,7 @@ The pathPicker widget is attented to display and select a file or folder path
 The complete pathPicker form, code and ressources are:
 
 * A form nammed `PATH PICKER`
-* A method `PATH_PICKER` (form method)
+* A method `PATH PICKER`
 * A class `pathPicker`
 * This documentation file `Documentation/Classes/pathPicker.md`
 * A `Resources/pathPicker` folder for the medias
@@ -40,14 +40,14 @@ myPicker:=cs.pathPicker.new(""; New object(\	"fileTypes"; ".jpg"; \	"directory
 > If `options` parameter is omitted the default options will be used
 
 ## .type
-.type : `Integer` - default _`Is a document`_
+**.type** : `Integer` - default _`Is a document`_
 
 The `.type` property is the type of the target which can be a folder or a file. 
 
 The accepted values are the 4D constants _`Is a document`_ or _`Is a folder`_. 
 
 ## .target
-.type : `4D.File` | `4D.Folder`| `Text` - default `Null`
+**.target** : `4D.File` | `4D.Folder`| `Text` - default **`Null`**
 
 The `.target` property is the targeted File or folder. If the target property is assigned as text, it can be a platform path name or a POSIX path.
 
@@ -94,7 +94,7 @@ var $folder:4D.Folder
 $folder := myPicker.target
 ```
 ## .fileTypes
-.fileTypes : `Text` | `Collection` - default **`"*"`**
+**.fileTypes** : `Text` | `Collection` - default **`"*"`**
 
 The `.fileTypes ` property defines the type(s) of file(s) that can be selected in the open file dialog, as described for the command **[Select document](https://doc.4d.com/4Dv19/4D/19.1/Select-document.301-5654273.en.html)**, if the target is a file. 
 
@@ -114,7 +114,7 @@ When read back the `.fileTypes ` property, the result could be **`"*"`** or a co
 >This property is ignored if the target is a folder.
 
 ## .directory
-.directory : `Text` | `Integer` - default is empty
+**.directory** : `Text` | `Integer` - default is empty
 
 The `.directory` property is the directory access path to display by default or a number to memorize the access path as described for the command **[Select document](https://doc.4d.com/4Dv19/4D/19.1/Select-document.301-5654273.en.html)**.
 
@@ -126,42 +126,42 @@ myPicker.directory := Folder(fk documents folder).platformPath
 ```
 
 ## .options
-.options : `Integer` - default _`Package selection`_ + _`Use sheet window`_
+**.options** : `Integer` - default _`Package selection`_ + _`Use sheet window`_
 
 The `.options` property allows you to specify advanced functions that are allowed in the open file dialog box as described for the command **[Select document](https://doc.4d.com/4Dv19/4D/19.1/Select-document.301-5654273.en.html)**. 
 
 ## .message
-.message : `Text` - default ""
+**.message** : `Text` - default is empty
 
 The `.message` property allows to set the title of the selection dialog box as described for the command **[Select document](https://doc.4d.com/4Dv19/4D/19.1/Select-document.301-5654273.en.html)**. 
 
 ## .browse
-.browse : `Boolean` - default `True`
+**.browse** : `Boolean` - default **`True`**
 
 If the `.browse` property is `True`, a "Browse…" button is dsplayed. 
 
 ## .copyPath
-.copyPath : `Boolean` - default `True`
+**.copyPath** : `Boolean` - default **`True`**
 
 If the `.copyPath` property is `True`, a "Copy path" item is appended to the widget menu. 
 
 ## .showOnDisk
-.showOnDisk : `Boolean` - default `True`
+**.showOnDisk** : `Boolean` - default **`True`**
 
 If the `.showOnDisk` property is `True`, a "Show on disk…" item is appended to the widget menu. 
 
 ## .openItem
-.openItem : `Boolean` - default `True`
+**.openItem** : `Boolean` - default **`True`**
 
 If the `.openItem` property is `True`, selecting any item in the widget menu triggers a display of the selected item on disk. 
 
 ## .placeHolder
-.placeHolder : `Text` - default ""
+**.placeHolder** : `Text` - default is empty
 
 The `.placeHolder` property defines the text displayed if the target is not defined. 
 
 ## .callback
-.callback : `4D.Fonction` - default `Null`
+**.callback** : `4D.Fonction` - default **`Null`**
 
 The `.callback` property allow to defines a formula to be called when the target is modified. 
 
@@ -170,7 +170,7 @@ The formula will receive as parameter the targetted `4D.File` or `4D.Folder`
 ```4d
 myPicker.callback := Formula(myCallback($1))
 ```
-***myCallback*** method :
+With ***myCallback*** method :
 
 ```4d
 #DECLARE ($target : Object)

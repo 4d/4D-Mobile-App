@@ -101,7 +101,7 @@ Function set placeHolder($placeholder : Text)
 	$t:=Get localized string:C991($placeholder)
 	$t:=Length:C16($t)>0 ? $t : $placeholder  // Revert if no localization
 	This:C1470[""].placeHolder:=$t
-	OBJECT SET PLACEHOLDER:C1295(*; "text"; $t+"…")
+	OBJECT SET PLACEHOLDER:C1295(*; "label"; $t+"…")
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function get type() : Integer
@@ -594,7 +594,7 @@ Function __updateLabel()
 			"\""+$c[$c.length-1]+"\"")
 		
 		OBJECT SET VISIBLE:C603(*; "menu@"; True:C214)
-		OBJECT SET RGB COLORS:C628(*; "text"; Choose:C955(Bool:C1537(This:C1470[""].target.exists); Foreground color:K23:1; "red"))
+		OBJECT SET RGB COLORS:C628(*; "label"; Choose:C955(Bool:C1537(This:C1470[""].target.exists); Foreground color:K23:1; "red"))
 		
 	Else 
 		
@@ -602,6 +602,8 @@ Function __updateLabel()
 		OBJECT SET VISIBLE:C603(*; "menu@"; False:C215)
 		
 	End if 
+	
+	This:C1470.__ui()
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function __resume()
@@ -635,8 +637,9 @@ Function __geometry()
 	OBJECT SET COORDINATES:C1248(*; "browse"; $left+$offset; $top; $right+$offset; $bottom)
 	
 	$right:=$left+$offset-5
-	OBJECT GET COORDINATES:C663(*; "text"; $left; $top; $l; $bottom)
-	OBJECT SET COORDINATES:C1248(*; "text"; $left; $top; $right; $bottom)
+	OBJECT GET COORDINATES:C663(*; "label"; $left; $top; $l; $bottom)
+	OBJECT SET COORDINATES:C1248(*; "label"; $left; $top; $right; $bottom)
+	OBJECT SET COORDINATES:C1248(*; "placeholder"; $left; $top; $right; $bottom)
 	OBJECT GET COORDINATES:C663(*; "menu.expand"; $left; $top; $l; $bottom)
 	OBJECT SET COORDINATES:C1248(*; "menu.expand"; $left; $top; $right; $bottom)
 	OBJECT GET COORDINATES:C663(*; "border"; $left; $top; $l; $bottom)
@@ -651,8 +654,6 @@ Function __ui()
 	var $bottom; $height; $l; $left; $right; $top : Integer
 	var $width : Integer
 	
-	OBJECT SET HELP TIP:C1181(*; "text"; "")
-	
 	If (This:C1470[""].browse)
 		
 		If (Not:C34(OBJECT Get visible:C1075(*; "browse")))
@@ -661,8 +662,8 @@ Function __ui()
 			OBJECT GET COORDINATES:C663(*; "browse"; $left; $top; $right; $bottom)
 			
 			$right:=$left-5
-			OBJECT GET COORDINATES:C663(*; "text"; $left; $top; $l; $bottom)
-			OBJECT SET COORDINATES:C1248(*; "text"; $left; $top; $right; $bottom)
+			OBJECT GET COORDINATES:C663(*; "label"; $left; $top; $l; $bottom)
+			OBJECT SET COORDINATES:C1248(*; "label"; $left; $top; $right; $bottom)
 			OBJECT GET COORDINATES:C663(*; "menu.expand"; $left; $top; $l; $bottom)
 			OBJECT SET COORDINATES:C1248(*; "menu.expand"; $left; $top; $right; $bottom)
 			OBJECT GET COORDINATES:C663(*; "border"; $left; $top; $l; $bottom)
@@ -676,8 +677,8 @@ Function __ui()
 			
 			OBJECT SET VISIBLE:C603(*; "browse"; False:C215)
 			OBJECT GET COORDINATES:C663(*; "browse"; $left; $top; $right; $bottom)
-			OBJECT GET COORDINATES:C663(*; "text"; $left; $top; $l; $bottom)
-			OBJECT SET COORDINATES:C1248(*; "text"; $left; $top; $right; $bottom)
+			OBJECT GET COORDINATES:C663(*; "label"; $left; $top; $l; $bottom)
+			OBJECT SET COORDINATES:C1248(*; "label"; $left; $top; $right; $bottom)
 			OBJECT GET COORDINATES:C663(*; "menu.expand"; $left; $top; $l; $bottom)
 			OBJECT SET COORDINATES:C1248(*; "menu.expand"; $left; $top; $right; $bottom)
 			OBJECT GET COORDINATES:C663(*; "border"; $left; $top; $l; $bottom)
@@ -687,41 +688,27 @@ Function __ui()
 	End if 
 	
 	OBJECT SET VISIBLE:C603(*; "menu@"; Length:C16(This:C1470[""].label)>0)
-	OBJECT SET PLACEHOLDER:C1295(*; "text"; This:C1470[""].placeHolder+"…")
+	OBJECT SET PLACEHOLDER:C1295(*; "label"; This:C1470[""].placeHolder+"…")
 	
 	If (This:C1470[""].target#Null:C1517)
 		
-		If (Bool:C1537(This:C1470[""].target.exists))
-			
-			OBJECT SET RGB COLORS:C628(*; "text"; Foreground color:K23:1)
-			
-		Else 
-			
-			OBJECT SET RGB COLORS:C628(*; "text"; "red")
-			
-		End if 
+		// Display in red if the target does not exist
+		OBJECT SET RGB COLORS:C628(*; "label"; Bool:C1537(This:C1470[""].target.exists) ? Foreground color:K23:1 : "red")
 		
-		OBJECT SET VALUE:C1742("text"; This:C1470[""].label)
-		
-		OBJECT GET COORDINATES:C663(*; "text"; $left; $top; $right; $bottom)
-		OBJECT GET BEST SIZE:C717(*; "text"; $width; $height)
+		// Manage the length of the label according to the space available
+		OBJECT GET COORDINATES:C663(*; "label"; $left; $top; $right; $bottom)
+		OBJECT GET BEST SIZE:C717(*; "label"; $width; $height)
 		
 		If ($width>($right-$left))
 			
-			OBJECT SET HELP TIP:C1181(*; "text"; String:C10(This:C1470[""].label))
-			
-			$t:=This:C1470[""].label
-			
 			While (($width>($right-$left)))
 				
-				$t:=Delete string:C232($t; Length:C16($t); 1)
-				OBJECT SET VALUE:C1742("text"; $t)
-				OBJECT GET BEST SIZE:C717(*; "text"; $width; $height)
+				This:C1470[""].label:=Delete string:C232(This:C1470[""].label; Length:C16(This:C1470[""].label); 1)
+				OBJECT GET BEST SIZE:C717(*; "label"; $width; $height)
 				
 			End while 
 			
-			$t:=Delete string:C232($t; Length:C16($t)-2; 2)+"…"
-			OBJECT SET VALUE:C1742("text"; $t)
+			This:C1470[""].label:=Delete string:C232(This:C1470[""].label; Length:C16(This:C1470[""].label)-1; 2)+"…"
 			
 		End if 
 	End if 

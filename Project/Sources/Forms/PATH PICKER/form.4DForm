@@ -30,7 +30,7 @@
 						"onClick"
 					]
 				},
-				"text": {
+				"label": {
 					"type": "input",
 					"top": 3,
 					"left": 18,
@@ -114,7 +114,7 @@
 			"entryOrder": [
 				"_airbag",
 				"menu.icon",
-				"text",
+				"label",
 				"menu.expand",
 				"browse"
 			]
@@ -125,7 +125,7 @@
 		"kind": "form"
 	},
 	"method": "PATH PICKER",
-	"geometryStamp": 485,
+	"geometryStamp": 505,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
