@@ -38,17 +38,16 @@ Function init()
 	This:C1470.formObject("certificateLabel").addToGroup($group)
 	This:C1470.widget("certificate"; "certificatePicker").addToGroup($group)
 	
+	var $o : cs:C1710.FEATURES
+	$o:=OB Copy:C1225(This:C1470)
 	This:C1470.certificate.picker:=cs:C1710.pathPicker.new(String:C10(Form:C1466.server.pushCertificate); New object:C1471(\
 		"fileTypes"; ".p8"; \
 		"directory"; 8858; \
 		"copyPath"; False:C215; \
-		"openItem"; False:C215; \
+		"openItem"; True:C214; \
 		"message"; "selectACertificate"; \
-		"placeHolder"; "selectACertificate"))
-	
-	var $o : Object
-	$o:=OB Copy:C1225(This:C1470)
-	This:C1470.certificate.picker.callback:=Formula:C1597($o.doCertificate())
+		"placeHolder"; "selectACertificate"; \
+		"callback"; Formula:C1597($o.certificateCallback($1))))
 	
 	// * DEEP LINKING
 	This:C1470.button("deepLinking"; "03_deepLinking")
@@ -64,25 +63,6 @@ Function init()
 	This:C1470.input("deepLink"; "04_associatedDomain.input").addToGroup($group)
 	This:C1470.formObject("deepLinkLabel"; "associatedDomain.label").addToGroup($group)
 	This:C1470.formObject("deepLinkBorder"; "associatedDomain.border").addToGroup($group)
-	
-	
-Function doCertificate()
-	
-	var $o : cs:C1710.pathPicker
-	$o:=This:C1470.certificate.picker
-	
-	If ($o.target#Null:C1517)
-		
-		If (Bool:C1537($o.target.exists))
-			
-			If ($o.path#String:C10(PROJECT.server.pushCertificate))
-				
-				PROJECT.server.pushCertificate:=cs:C1710.doc.new($o.target).relativePath
-				PROJECT.save()
-				
-			End if 
-		End if 
-	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	/// Events handler
@@ -133,22 +113,6 @@ Function handleEvents($e : Object)
 				
 				This:C1470.certificateGroup.show(Form:C1466.server.pushNotification)
 				This:C1470.refresh()
-				
-				//==============================================
-			: (This:C1470.certificate.catch())
-				
-				If (This:C1470.certificate.picker.target#Null:C1517)
-					
-					If (Bool:C1537(This:C1470.certificate.picker.target.exists))
-						
-						If (This:C1470.certificate.picker.path#String:C10(Form:C1466.server.pushCertificate))
-							
-							Form:C1466.server.pushCertificate:=cs:C1710.doc.new(This:C1470.certificate.picker.target).relativePath
-							PROJECT.save()
-							
-						End if 
-					End if 
-				End if 
 				
 				//==============================================
 			: (This:C1470.deepLinking.catch($e; On Clicked:K2:4))
@@ -309,5 +273,18 @@ Function validateScheme
 		
 		This:C1470.deepSchemeAlert.alert("schemeFormat")
 		This:C1470.deepScheme.focus()
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+	// Callback from pathPicker widget
+Function certificateCallback($file : 4D:C1709.File)
+	
+	If ($file#Null:C1517)\
+		 && ($file.exists)\
+		 && ($file.path#String:C10(PROJECT.server.pushCertificate))
+		
+		PROJECT.server.pushCertificate:=cs:C1710.doc.new($file).relativePath
+		PROJECT.save()
 		
 	End if 

@@ -93,7 +93,7 @@
 					"left": 566,
 					"top": 34,
 					"width": 369,
-					"height": 22,
+					"height": 23,
 					"detailForm": "PATH PICKER",
 					"dataSource": "panel.certificate.picker",
 					"events": [
@@ -204,7 +204,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 380,
+	"geometryStamp": 385,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

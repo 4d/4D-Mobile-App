@@ -1,3 +1,17 @@
+/* USE
+"/Forms/PATH PICKER"
+"/Methods/PATH PICKER.4dm"
+"/Documentation/Classes/pathPicker.md"
+"/Resources/pathPicker"
+"/Resources/cs.lproj/pathPicker.xlf"
+"/Resources/de.lproj/pathPicker.xlf"
+"/Resources/en.lproj/pathPicker.xlf"
+"/Resources/es.lproj/pathPicker.xlf"
+"/Resources/fr.lproj/pathPicker.xlf"
+"/Resources/ja.lproj/pathPicker.xlf"
+"/Resources/pt.lproj/pathPicker.xlf"
+*/
+
 Class constructor($target; $options : Object)
 	
 	var $t : Text
@@ -13,19 +27,12 @@ Class constructor($target; $options : Object)
 	This:C1470[""].copyPath:=True:C214
 	This:C1470[""].openItem:=True:C214
 	This:C1470[""].directory:=""
-	This:C1470[""].fileTypes:=""
+	This:C1470[""].fileTypes:="*"
 	This:C1470[""].label:=""
+	This:C1470[""].callback:=Null:C1517
 	
-	If (Count parameters:C259>=1)
-		
-		If (Count parameters:C259>=2)
-			
-			For each ($t; $options)
-				
-				This:C1470[$t]:=$options[$t]
-				
-			End for each 
-		End if 
+	
+	If ($target#Null:C1517)
 		
 		If (Value type:C1509($target)=Is object:K8:27)
 			
@@ -46,6 +53,15 @@ Class constructor($target; $options : Object)
 				
 			End if 
 		End if 
+	End if 
+	
+	If ($options#Null:C1517)
+		
+		For each ($t; $options)
+			
+			This:C1470[$t]:=$options[$t]
+			
+		End for each 
 	End if 
 	
 	This:C1470.__geometry()
@@ -172,7 +188,7 @@ Function set directory($directory)
 	This:C1470[""].directory:=$directory
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
-Function get fileTypes() : Collection
+Function get fileTypes() : Variant
 	
 	return This:C1470[""].fileTypes
 	
@@ -184,7 +200,15 @@ Function set fileTypes($types)
 			//______________________________________________________
 		: (Value type:C1509($types)=Is text:K8:3)
 			
-			This:C1470[""].fileTypes:=Split string:C1554($types; ";")
+			If ($types="") || ($types="*")
+				
+				This:C1470[""].fileTypes:="*"
+				
+			Else 
+				
+				This:C1470[""].fileTypes:=Split string:C1554($types; ";")
+				
+			End if 
 			
 			//______________________________________________________
 		: (Value type:C1509($types)=Is collection:K8:32)
@@ -194,7 +218,7 @@ Function set fileTypes($types)
 			//______________________________________________________
 		Else 
 			
-			// #ERROR
+			This:C1470[""].fileTypes:="*"
 			
 			//______________________________________________________
 	End case 
@@ -218,6 +242,16 @@ Function get path() : Text
 Function set path($path : Text)
 	
 	This:C1470._setPath($path)
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function get callback() : 4D:C1709.Function
+	
+	return This:C1470[""].callback
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function set callback($callback : 4D:C1709.Function)
+	
+	This:C1470[""].callback:=$callback
 	
 	// Mark:-
 	// === === === === === === === === === === === === === === === === === === === === ===
@@ -283,24 +317,32 @@ Function _setPath($path : Text)
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function __select()
 	
-	var $t : Text
+	var $fileTypes; $name : Text
 	
-	$t:=This:C1470[""].fileTypes.join(";")
+	If (Value type:C1509(This:C1470[""].fileTypes)=Is collection:K8:32)
+		
+		$fileTypes:=This:C1470[""].fileTypes.length>0 ? This:C1470[""].fileTypes.join(";") : "*"
+		
+	Else 
+		
+		$fileTypes:=This:C1470[""].fileTypes
+		
+	End if 
 	
 	Case of 
 			
 			//………………………………………………………………
 		: (This:C1470[""].type=Is a document:K24:1)\
-			 | (Is macOS:C1572 & (Position:C15(".app"; $t)>0))
+			 | (Is macOS:C1572 & (Position:C15(".app"; $fileTypes)>0))
 			
 			If (Value type:C1509(This:C1470[""].directory)=Is text:K8:3)
 				
-				$t:=Select document:C905(This:C1470[""].directory; $t; This:C1470[""].message; This:C1470[""].options)
+				$name:=Select document:C905(This:C1470[""].directory; $fileTypes; This:C1470[""].message; This:C1470[""].options)
 				
 			Else 
 				
 				// Use a memorized access path
-				$t:=Select document:C905(Num:C11(This:C1470[""].directory); $t; This:C1470[""].message; This:C1470[""].options)
+				$name:=Select document:C905(Num:C11(This:C1470[""].directory); $fileTypes; This:C1470[""].message; This:C1470[""].options)
 				
 			End if 
 			
@@ -335,8 +377,9 @@ Function __displayMenu()
 	var $bottom; $left; $right; $top : Integer
 	var $c : Collection
 	
-	// In remote mode, the path can be in the server system format
+	ARRAY TEXT:C222($volumes; 0)
 	
+	// In remote mode, the path can be in the server system format
 	Case of 
 			
 			//……………………………………………………………………………………………
@@ -363,7 +406,6 @@ Function __displayMenu()
 			//……………………………………………………………………………………………
 	End case 
 	
-	ARRAY TEXT:C222($volumes; 0x0000)
 	VOLUME LIST:C471($volumes)
 	
 	$c:=Split string:C1554(This:C1470.platformPath; $folderSeparator)
@@ -376,16 +418,16 @@ Function __displayMenu()
 		
 		If (Is Windows:C1573)
 			
-			APPEND MENU ITEM:C411($menu; $t)
+			APPEND MENU ITEM:C411($menu; Char:C90(1)+$t)
 			
 		Else 
 			
-			INSERT MENU ITEM:C412($menu; 0; $t)
+			INSERT MENU ITEM:C412($menu; 0; Char:C90(1)+$t)
 			
 		End if 
 		
 		// Keep the item path
-		DOCUMENT:=DOCUMENT+(Folder separator:K24:12*Num:C11(Length:C16(DOCUMENT)>0))+$t
+		DOCUMENT+=(Folder separator:K24:12*Num:C11(Length:C16(DOCUMENT)>0))+$t
 		
 		// Case of
 		Case of 
@@ -479,16 +521,29 @@ Function __displayMenu()
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function __onDrag() : Integer
 	
-	return (-1+Num:C11(Test path name:C476(Get file from pasteboard:C976(1))=Num:C11(This:C1470[""].type)))
+	return (-1+Num:C11(Test path name:C476(Get file from pasteboard:C976(1))=This:C1470[""].type))
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
-Function __onDrop
+Function __onDrop()
+	
+	var $accept : Boolean
 	
 	DOCUMENT:=Get file from pasteboard:C976(1)
 	
-	If (Test path name:C476(DOCUMENT)=Num:C11(This:C1470[""].type))
+	If (Test path name:C476(DOCUMENT)=This:C1470[""].type)
 		
-		If (Position:C15(Path to object:C1547(DOCUMENT).extension; This:C1470[""].fileTypes.join(";"))>0)
+		If (Value type:C1509(This:C1470[""].fileTypes)=Is text:K8:3)
+			
+			$accept:=This:C1470[""].fileTypes="*"
+			
+		Else 
+			
+			$accept:=(This:C1470[""].fileTypes.length=0)\
+				 || (Position:C15(Path to object:C1547(DOCUMENT).extension; This:C1470[""].fileTypes.join(";"))>0)
+			
+		End if 
+		
+		If ($accept)
 			
 			This:C1470._setPlatformPath(DOCUMENT)
 			This:C1470.__resume()
@@ -548,45 +603,35 @@ Function __updateLabel()
 		
 	End if 
 	
-	OBJECT GET COORDINATES:C663(*; "menu.expand"; $left; $top; $right; $bottom)
-	OBJECT GET BEST SIZE:C717(*; "text"; $width; $height)
-	
-	If ($width>($right-$left))
-		
-		OBJECT SET HELP TIP:C1181(*; "menu.expand"; This:C1470[""].label)
-		
-	Else 
-		
-		OBJECT SET HELP TIP:C1181(*; "menu.expand"; "")
-		
-	End if 
-	
 	// === === === === === === === === === === === === === === === === === === === === ===
-Function __resume
+Function __resume()
 	
-	If (This:C1470.callback#Null:C1517)
+	This:C1470.__ui()
+	
+	If (This:C1470[""].callback#Null:C1517)
 		
-		This:C1470.callback.call()
+		// The callback formula receives the target as a parameter.
+		This:C1470[""].callback.call(Null:C1517; This:C1470[""].target)
 		
 	Else 
 		
+		// Notify the container
 		CALL SUBFORM CONTAINER:C1086(On Data Change:K2:15)
-		
-		OBJECT SET SUBFORM CONTAINER VALUE:C1784(OBJECT Get subform container value:C1785)
 		
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function __geometry()
 	
-	var $bottom; $containerWidth; $formWidth; $l; $left; $offset : Integer
+	var $bottom; $availableWidth; $formWidth; $l; $left; $offset : Integer
 	var $right; $top : Integer
 	
-	OBJECT GET SUBFORM CONTAINER SIZE:C1148($containerWidth; $l)
+	OBJECT GET SUBFORM CONTAINER SIZE:C1148($availableWidth; $l)
 	FORM GET PROPERTIES:C674(Current form name:C1298; $formWidth; $l)
 	
-	$offset:=$containerWidth-$formWidth-8
 	OBJECT GET COORDINATES:C663(*; "browse"; $left; $top; $right; $bottom)
+	
+	$offset:=$availableWidth-$formWidth-8
 	OBJECT SET COORDINATES:C1248(*; "browse"; $left+$offset; $top; $right+$offset; $bottom)
 	
 	$right:=$left+$offset-5
@@ -602,7 +647,11 @@ Function __geometry()
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function __ui()
 	
-	var $bottom; $l; $left; $right; $top : Integer
+	var $t : Text
+	var $bottom; $height; $l; $left; $right; $top : Integer
+	var $width : Integer
+	
+	OBJECT SET HELP TIP:C1181(*; "text"; "")
 	
 	If (This:C1470[""].browse)
 		
@@ -649,6 +698,30 @@ Function __ui()
 		Else 
 			
 			OBJECT SET RGB COLORS:C628(*; "text"; "red")
+			
+		End if 
+		
+		OBJECT SET VALUE:C1742("text"; This:C1470[""].label)
+		
+		OBJECT GET COORDINATES:C663(*; "text"; $left; $top; $right; $bottom)
+		OBJECT GET BEST SIZE:C717(*; "text"; $width; $height)
+		
+		If ($width>($right-$left))
+			
+			OBJECT SET HELP TIP:C1181(*; "text"; String:C10(This:C1470[""].label))
+			
+			$t:=This:C1470[""].label
+			
+			While (($width>($right-$left)))
+				
+				$t:=Delete string:C232($t; Length:C16($t); 1)
+				OBJECT SET VALUE:C1742("text"; $t)
+				OBJECT GET BEST SIZE:C717(*; "text"; $width; $height)
+				
+			End while 
+			
+			$t:=Delete string:C232($t; Length:C16($t)-2; 2)+"…"
+			OBJECT SET VALUE:C1742("text"; $t)
 			
 		End if 
 	End if 

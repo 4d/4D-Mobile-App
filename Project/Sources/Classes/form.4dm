@@ -1000,7 +1000,7 @@ Function _setEvents($events; $mode : Integer)
 			 | (Value type:C1509($events)=Is longint:K8:6)\
 			 | (Value type:C1509($events)=Is real:K8:4)
 			
-			ARRAY LONGINT:C221($codes; 1)
+			//ARRAY LONGINT($codes; 1)
 			APPEND TO ARRAY:C911($codes; $events)
 			
 			//______________________________________________________

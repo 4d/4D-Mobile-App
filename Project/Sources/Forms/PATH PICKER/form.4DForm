@@ -30,21 +30,11 @@
 						"onClick"
 					]
 				},
-				"border": {
-					"type": "rectangle",
-					"top": 1,
-					"left": 1,
-					"width": 323,
-					"height": 20,
-					"sizingX": "grow",
-					"class": "border",
-					"stroke": "transparent"
-				},
 				"text": {
 					"type": "input",
 					"top": 3,
 					"left": 18,
-					"width": 302,
+					"width": 304,
 					"height": 18,
 					"hideFocusRing": true,
 					"sizingX": "grow",
@@ -71,7 +61,7 @@
 					],
 					"focusable": false,
 					"bottom": 22,
-					"method": "PATH_PICKER"
+					"method": "PATH PICKER"
 				},
 				"menu.icon": {
 					"type": "button",
@@ -88,13 +78,13 @@
 						"onClick"
 					],
 					"focusable": false,
-					"method": "PATH_PICKER"
+					"method": "PATH PICKER"
 				},
 				"menu.expand": {
 					"type": "button",
 					"top": 1,
 					"left": 18,
-					"width": 304,
+					"width": 306,
 					"height": 20,
 					"visibility": "hidden",
 					"events": [
@@ -105,20 +95,37 @@
 					"focusable": false,
 					"display": false,
 					"sizingX": "grow",
-					"right": 322,
+					"right": 324,
 					"bottom": 21,
 					"dropping": "custom",
-					"method": "PATH_PICKER"
+					"method": "PATH PICKER"
+				},
+				"border": {
+					"type": "rectangle",
+					"top": 1,
+					"left": 1,
+					"width": 323,
+					"height": 21,
+					"sizingX": "grow",
+					"class": "border",
+					"fill": "transparent"
 				}
-			}
+			},
+			"entryOrder": [
+				"_airbag",
+				"menu.icon",
+				"text",
+				"menu.expand",
+				"browse"
+			]
 		}
 	],
 	"$4d": {
 		"version": "1",
 		"kind": "form"
 	},
-	"method": "PATH_PICKER",
-	"geometryStamp": 425,
+	"method": "PATH PICKER",
+	"geometryStamp": 485,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
