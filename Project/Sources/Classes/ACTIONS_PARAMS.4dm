@@ -2109,7 +2109,11 @@ Function updateParamater($name : Text)
 		End if 
 	End for each 
 	
-	If (Not:C34($success))  // Not linked to a field
+	If ($success)  // Linked to a field
+		
+		$parameter.defaultField:=PROJECT.formatFieldName($parameter.name)
+		
+	Else 
 		
 		// Keep the user's entry & Delete the properties related to the field
 		$parameter.name:=$name
