@@ -666,35 +666,22 @@ Function handleField
 				
 				If (Value type:C1509($relatedField.value)=Is object:K8:27)
 					
-					Case of 
-						: ($relatedField.value.name#Null:C1517)  // can be a sub field or a sub 1->N relation (ignore sub N->1 relation)
-							
-							$Obj_handleFieldIcon:=This:C1470.handleFieldIcon($1; $relatedField.value; $3; $2.value.relatedTableNumber; $2.value.id; "")
-							
-							If (Not:C34($Obj_handleFieldIcon.success))
-								
-								$0.success:=False:C215
-								$0.errors.combine($Obj_handleFieldIcon.errors)
-								
-								// Else : all ok
-							End if 
-							
-						: ($relatedField.value.kind="alias")
-							
-							// Add alias name key in object
-							$relatedField.value.aliasName:=$relatedField.key
-							
-							$Obj_handleFieldIcon:=This:C1470.handleFieldIcon($1; $relatedField.value; $3; $2.value.relatedTableNumber; $2.value.id; "")
-							
-							If (Not:C34($Obj_handleFieldIcon.success))
-								
-								$0.success:=False:C215
-								$0.errors.combine($Obj_handleFieldIcon.errors)
-								
-								// Else : all ok
-							End if 
-							
-					End case 
+					If ($relatedField.value.kind="alias")
+						
+						// Add alias name key in object
+						$relatedField.value.aliasName:=$relatedField.key
+						
+					End if 
+					
+					$Obj_handleFieldIcon:=This:C1470.handleFieldIcon($1; $relatedField.value; $3; $2.value.relatedTableNumber; $2.value.id; "")
+					
+					If (Not:C34($Obj_handleFieldIcon.success))
+						
+						$0.success:=False:C215
+						$0.errors.combine($Obj_handleFieldIcon.errors)
+						
+						// Else : all ok
+					End if 
 					
 					// Checking subFields
 					var $subField : Object
@@ -703,35 +690,22 @@ Function handleField
 						
 						If (Value type:C1509($subField.value)=Is object:K8:27)
 							
-							Case of 
-								: ($subField.value.name#Null:C1517)  // can be a sub field or a sub 1->N relation (ignore sub N->1 relation)
-									
-									$Obj_handleFieldIcon:=This:C1470.handleFieldIcon($1; $subField.value; $3; $2.value.relatedTableNumber; $2.value.id; $relatedField.key)
-									
-									If (Not:C34($Obj_handleFieldIcon.success))
-										
-										$0.success:=False:C215
-										$0.errors.combine($Obj_handleFieldIcon.errors)
-										
-										// Else : all ok
-									End if 
-									
-								: ($subField.value.kind="alias")
-									
-									// Add alias name key in object
-									$subField.value.aliasName:=$subField.key
-									
-									$Obj_handleFieldIcon:=This:C1470.handleFieldIcon($1; $subField.value; $3; $2.value.relatedTableNumber; $2.value.id; $relatedField.key)
-									
-									If (Not:C34($Obj_handleFieldIcon.success))
-										
-										$0.success:=False:C215
-										$0.errors.combine($Obj_handleFieldIcon.errors)
-										
-										// Else : all ok
-									End if 
-									
-							End case 
+							If ($subField.value.kind="alias")
+								
+								// Add alias name key in object
+								$subField.value.aliasName:=$subField.key
+								
+							End if 
+							
+							$Obj_handleFieldIcon:=This:C1470.handleFieldIcon($1; $subField.value; $3; $2.value.relatedTableNumber; $2.value.id; $relatedField.key)
+							
+							If (Not:C34($Obj_handleFieldIcon.success))
+								
+								$0.success:=False:C215
+								$0.errors.combine($Obj_handleFieldIcon.errors)
+								
+								// Else : all ok
+							End if 
 							
 						End if 
 						
