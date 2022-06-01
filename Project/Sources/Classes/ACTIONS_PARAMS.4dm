@@ -1888,11 +1888,7 @@ Function nameManager($e : Object)
 			var $charCode; $indx : Integer
 			
 			// Store the current value
-			If (This:C1470.paramName.oldValue=Null:C1517)
-				
-				This:C1470.paramName.oldValue:=This:C1470.paramName.getValue()
-				
-			End if 
+			This:C1470.paramName.oldValue:=This:C1470.paramName.oldValue ? This:C1470.paramName.oldValue : This:C1470.paramName.getValue()
 			
 			$charCode:=Character code:C91(Keystroke:C390)
 			$editedText:=Replace string:C233(Get edited text:C655; Char:C90(At sign:K15:46); "")
@@ -1948,7 +1944,7 @@ Function nameManager($e : Object)
 					Else   // Arrow keys
 						
 						This:C1470.current.name:=$editedText
-						This:C1470.callChild(This:C1470.predicting; "PREDICTING_FILTER"; $charCode)
+						This:C1470.callChild(This:C1470.predicting; Formula:C1597(PREDICTING_FILTER).source; $charCode)
 						This:C1470.paramName.highlightLastToEnd()
 						
 						//_________________________

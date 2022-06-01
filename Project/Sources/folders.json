@@ -114,6 +114,12 @@
 	},
 	"(env (not thread-safe))": {},
 	"(env (thread-safe))": {},
+	"(HTUs)": {
+		"methods": [
+			"(HTU_progress)",
+			"(htuProgressDoSomething)"
+		]
+	},
 	"[android]": {
 		"methods": [
 			"COMPILER_android",
@@ -584,7 +590,6 @@
 		"groups": [
 			"[TOOLS]",
 			"[UI]",
-			"HTUs",
 			"Pseudo-Class",
 			"Tests"
 		]
@@ -685,12 +690,6 @@
 			"err_TRY",
 			"NO_ERROR",
 			"test_err"
-		]
-	},
-	"HTUs": {
-		"methods": [
-			"HTU_progress",
-			"htuProgressDoSomething"
 		]
 	},
 	"let": {
@@ -988,7 +987,8 @@
 	"trash": {
 		"groups": [
 			"(env (not thread-safe))",
-			"(env (thread-safe))"
+			"(env (thread-safe))",
+			"(HTUs)"
 		]
 	}
 }
