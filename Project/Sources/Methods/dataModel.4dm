@@ -1,6 +1,5 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
 // Manager model with some possible "action"
-// - tableCollection &amp; fieldCollection: to transform object models to collection
 // - tableNames &amp; fieldNames: get only names
 // - pictureFields: fieldNames but for only picture?
 // - fields: flatten fields on key path
@@ -42,122 +41,6 @@ Case of
 	: ($Obj_in.action=Null:C1517)  // Missing parameter
 		
 		ASSERT:C1129(False:C215; "Missing parameter \"action\"")
-		
-		// MARK:- tableCollection
-	: ($Obj_in.action="tableCollection")  // Get table as collection - CALLERS : templates
-		
-		Case of 
-				
-				//………………………………………………………………………………………………………………………
-			: ($Obj_in.dataModel=Null:C1517)
-				
-				$Obj_out.errors:=New collection:C1472("Missing `dataModel` property")
-				
-				//………………………………………………………………………………………………………………………
-			Else 
-				
-				$Obj_dataModel:=$Obj_in.dataModel
-				
-				If (Value type:C1509($Obj_in.tables)=Is collection:K8:32)
-					
-					$Col_tables:=$Obj_in.tables
-					
-				Else 
-					
-					// all table in model
-					OB GET PROPERTY NAMES:C1232($Obj_dataModel; $tTxt_tables)
-					$Col_tables:=New collection:C1472()
-					ARRAY TO COLLECTION:C1563($Col_tables; $tTxt_tables)
-					
-				End if 
-				
-				$Obj_out.tables:=New collection:C1472
-				
-				For each ($Txt_tableNumber; $Col_tables)
-					
-					If ($Obj_dataModel[$Txt_tableNumber]#Null:C1517)
-						
-						$Obj_table:=OB Copy:C1225($Obj_dataModel[$Txt_tableNumber])
-						
-						$Obj_table.tableNumber:=Num:C11($Txt_tableNumber)
-						
-						If (Bool:C1537($Obj_in.tag))  // for tag format name
-							
-							$Obj_table.originalName:=$Obj_table[""].name
-							$Obj_table.name:=formatString("table-name"; $Obj_table[""].name)
-							
-						End if 
-						
-						$Obj_out.tables.push($Obj_table)
-						
-					Else 
-						
-						// ASSERT(dev_Matrix )
-						
-					End if 
-				End for each 
-				
-				$Obj_out.success:=True:C214
-				
-				//………………………………………………………………………………………………………………………
-		End case 
-		
-		// MARK:- fieldCollection
-	: ($Obj_in.action="fieldCollection")  // get field name and if, format in list and detail userChoice - CALLERS : templates
-		
-		$Obj_out.success:=($Obj_in.table#Null:C1517)
-		If (Not:C34($Obj_out.success))
-			$Obj_out.errors:=New collection:C1472("Missing table property")
-			return 
-		End if 
-		
-		$Obj_out.fields:=New collection:C1472()
-		
-		For each ($Txt_field; $Obj_in.table)
-			
-			Case of 
-					
-					//………………………………………………………………………………………………………………………
-				: (Match regex:C1019("(?m-si)^\\d+$"; $Txt_field; 1; *))  // XXX or isField and isComputeAttribute if we want it as default list
-					
-					// TODO: Change field.id to field.fieldNumber
-					var $field : Object
-					$field:=OB Copy:C1225($Obj_in.table[$Txt_field])
-					$field.id:=$Txt_field
-					$Obj_out.fields.push($field)
-					
-					//………………………………………………………………………………………………………………………
-				: ((Value type:C1509($Obj_in.table[$Txt_field])=Is object:K8:27))
-					
-					If (Bool:C1537($Obj_in.relation))
-						
-						If ($Obj_in.table[$Txt_field].relatedEntities#Null:C1517)  // To change if relatedEntities deleted and relatedDataClass already filled #109019
-							
-							// redmine #110927 : want to add relation 1-N if no field specified at all by user
-							// Here we detect 1-N Relation, there is no "kind" or "type" to see it at this level...
-							
-							If ($Obj_in.dataModel[String:C10($Obj_in.table[$Txt_field].relatedTableNumber)]#Null:C1517)  // only if destination table published
-								
-								$Obj_out.fields.push(New object:C1471(\
-									"name"; $Txt_field; \
-									"relatedDataClass"; $Obj_in.table[$Txt_field].relatedEntities; \
-									"relatedTableNumber"; $Obj_in.table[$Txt_field].relatedTableNumber; \
-									"fieldType"; 8859; \
-									"id"; 0))  // TODO field.id change to fieldNumber
-								
-							End if 
-						End if 
-					End if 
-					
-					//………………………………………………………………………………………………………………………
-				Else 
-					
-					// Ignore
-					
-					//………………………………………………………………………………………………………………………
-			End case 
-		End for each 
-		
 		
 		// MARK:- fieldNames
 	: ($Obj_in.action="fieldNames")  // Get field names for dump with table (model format) - CALLERS : dump

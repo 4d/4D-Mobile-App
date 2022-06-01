@@ -44,11 +44,7 @@ Function doRun()->$Obj_out : Object
 		// No fields defined by user in form, take all
 		If ($Obj_tableList.fields=Null:C1517)
 			
-			$Obj_tableList.fields:=dataModel(New object:C1471(\
-				"action"; "fieldCollection"; \
-				"dataModel"; $Obj_dataModel; \
-				"relation"; ($Obj_template.userChoiceTag="detail"); \
-				"table"; $Obj_tableModel)).fields
+			$Obj_tableList.fields:=This:C1470._fieldCollection($Obj_dataModel; $Obj_template.userChoiceTag="detail"; $Obj_tableModel)
 			
 		End if 
 		
@@ -794,3 +790,58 @@ Function fieldBinding($field : Object; $formatter : Object)->$binding : Object
 			End if 
 	End case 
 	
+	
+	// Used to provide a default list of field for forms
+Function _fieldCollection($Obj_dataModel : Object; $addRelation : Boolean; $table : Object)->$fields : Collection
+	$fields:=New collection:C1472()
+	
+	If ($table=Null:C1517)
+		// error: Missing table property
+		return 
+	End if 
+	
+	var $Txt_field : Text
+	For each ($Txt_field; $table)
+		
+		Case of 
+				
+				//………………………………………………………………………………………………………………………
+			: (Match regex:C1019("(?m-si)^\\d+$"; $Txt_field; 1; *))  // XXX or isField and isComputeAttribute if we want it as default list
+				
+				// TODO: Change field.id to field.fieldNumber
+				var $field : Object
+				$field:=OB Copy:C1225($table[$Txt_field])
+				$field.id:=$Txt_field
+				$fields.push($field)
+				
+				//………………………………………………………………………………………………………………………
+			: ((Value type:C1509($table[$Txt_field])=Is object:K8:27))
+				
+				If ($addRelation)
+					
+					If ($table[$Txt_field].relatedEntities#Null:C1517)  // To change if relatedEntities deleted and relatedDataClass already filled #109019
+						
+						// redmine #110927 : want to add relation 1-N if no field specified at all by user
+						// Here we detect 1-N Relation, there is no "kind" or "type" to see it at this level...
+						
+						If ($Obj_dataModel[String:C10($table[$Txt_field].relatedTableNumber)]#Null:C1517)  // only if destination table published
+							
+							$fields.push(New object:C1471(\
+								"name"; $Txt_field; \
+								"relatedDataClass"; $table[$Txt_field].relatedEntities; \
+								"relatedTableNumber"; $table[$Txt_field].relatedTableNumber; \
+								"fieldType"; 8859; \
+								"id"; 0))  // TODO field.id change to fieldNumber
+							
+						End if 
+					End if 
+				End if 
+				
+				//………………………………………………………………………………………………………………………
+			Else 
+				
+				// Ignore
+				
+				//………………………………………………………………………………………………………………………
+		End case 
+	End for each 

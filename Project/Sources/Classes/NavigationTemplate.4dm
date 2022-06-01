@@ -17,11 +17,7 @@ Function doRun()->$Obj_out : Object
 	If (Feature.with("actionsInTabBar"))
 		This:C1470._actionsInTabBarProcess()
 	Else 
-		This:C1470.input.tags.navigationTables:=dataModel(New object:C1471(\
-			"action"; "tableCollection"; \
-			"dataModel"; This:C1470.input.project.dataModel; \
-			"tag"; True:C214; \
-			"tables"; This:C1470.input.project.main.order)).tables
+		This:C1470.input.tags.navigationTables:=This:C1470._tableCollection()
 	End if 
 	
 	This:C1470._computeNavigationRowHeight()
@@ -45,7 +41,6 @@ Function doRun()->$Obj_out : Object
 	End if 
 	
 	$0:=$Obj_out
-	
 	
 	// MARK: - items
 Function _actionsInTabBarProcess()
@@ -306,3 +301,52 @@ Function _createIconAssets()->$Obj_out : Object
 		
 	End if 
 	
+Function _tableCollection()->$tables : Collection
+	
+	$tables:=New collection:C1472
+	
+	var $dataModel : Object
+	$dataModel:=This:C1470.input.project.dataModel
+	
+	
+	var $Col_tables : Collection
+	$Col_tables:=New collection:C1472()
+	Case of 
+		: (Value type:C1509(This:C1470.input.project.main.order)=Is collection:K8:32)
+			
+			$Col_tables:=This:C1470.input.project.main.order
+			
+		: (This:C1470.input.project.dataModel#Null:C1517)
+			
+			// all table in model
+			OB GET PROPERTY NAMES:C1232($dataModel; $tTxt_tables)
+			ARRAY TO COLLECTION:C1563($Col_tables; $tTxt_tables)
+		Else 
+			
+			// TODO log errors
+			return 
+	End case 
+	
+	var $Txt_tableNumber : Text
+	var $Obj_table : Object
+	For each ($Txt_tableNumber; $Col_tables)
+		
+		If ($dataModel[$Txt_tableNumber]#Null:C1517)
+			
+			$Obj_table:=OB Copy:C1225($dataModel[$Txt_tableNumber])
+			
+			$Obj_table.tableNumber:=Num:C11($Txt_tableNumber)
+			
+			// for tag format name
+			
+			$Obj_table.originalName:=$Obj_table[""].name
+			$Obj_table.name:=formatString("table-name"; $Obj_table[""].name)
+			
+			$tables.push($Obj_table)
+			
+		Else 
+			
+			// ASSERT(dev_Matrix )
+			
+		End if 
+	End for each 
