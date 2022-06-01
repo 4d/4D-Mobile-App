@@ -363,8 +363,7 @@ Function onLoad()
 		.setCoordinates(This:C1470.paramNameBorder.coordinates.left; This:C1470.paramNameBorder.coordinates.bottom-1)
 	
 	This:C1470.predicting.setValue(New object:C1471(\
-		"withValue"; True:C214; \
-		"bakgroundColor"; 0x00E9F7FE))
+		"withValue"; True:C214))
 	
 	This:C1470.formatLabel.setTitle("inputControl")
 	
