@@ -1398,8 +1398,7 @@ Function formatTableName($name : Text) : Text
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function formatFieldName($name : Text) : Text
 	
-	// For the moment, the rules are the same as for the tables
-	return This:C1470.formatTableName($name)
+	return $name+("_"*Num:C11(SHARED.resources.coreDataForbiddenNames.indexOf($name)#-1))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function formatBundleAppName($name : Text) : Text
