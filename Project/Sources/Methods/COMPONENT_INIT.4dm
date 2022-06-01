@@ -88,8 +88,8 @@ If (OB Is empty:C1297(SHARED)) | $reset
 	//***********************
 	
 	// 1] iOS
-	SHARED.xCodeMinVersion:="13.3"
-	SHARED.iosDeploymentTarget:="15.4"
+	SHARED.xCodeMinVersion:="13.4"
+	SHARED.iosDeploymentTarget:="15.5"
 	SHARED.useXcodeDefaultPath:=True:C214
 	
 	// 1] Android
