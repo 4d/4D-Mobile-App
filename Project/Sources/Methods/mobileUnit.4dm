@@ -254,7 +254,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			//________________________________________
 		: ($entryPoint="dataModel")
 			
-			EXECUTE METHOD:C1007(Formula:C1597(dataModel).source; $response; $parameters)
+			EXECUTE METHOD:C1007(Formula:C1597(_o_dataModel).source; $response; $parameters)
 			
 			//________________________________________
 		: ($entryPoint="xcDataModel")
@@ -304,7 +304,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			//________________________________________
 		: ($entryPoint="dataModel")
 			
-			EXECUTE METHOD:C1007(Formula:C1597(dataModel).source; $response; $parameters)
+			EXECUTE METHOD:C1007(Formula:C1597(_o_dataModel).source; $response; $parameters)
 			
 			//________________________________________
 		: ($entryPoint="xcDataModel")

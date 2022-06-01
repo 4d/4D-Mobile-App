@@ -69,6 +69,7 @@
 		"methods": [
 			"_o_button",
 			"_o_currentForm",
+			"_o_dataModel",
 			"_o_device",
 			"_o_doc_catalog",
 			"_o_doc_UNLOCK_DIRECTORY",
@@ -110,14 +111,6 @@
 			"net",
 			"showTestOnDisk",
 			"tester_net"
-		]
-	},
-	"(env (not thread-safe))": {},
-	"(env (thread-safe))": {},
-	"(HTUs)": {
-		"methods": [
-			"(HTU_progress)",
-			"(htuProgressDoSomething)"
 		]
 	},
 	"[android]": {
@@ -280,7 +273,6 @@
 			"colors",
 			"COMPILER_ios",
 			"COMPILER_macOS",
-			"dataModel",
 			"provisioningProfiles",
 			"swiftPM",
 			"teamId",
@@ -984,11 +976,5 @@
 			"test_xml"
 		]
 	},
-	"trash": {
-		"groups": [
-			"(env (not thread-safe))",
-			"(env (thread-safe))",
-			"(HTUs)"
-		]
-	}
+	"trash": {}
 }

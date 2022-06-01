@@ -412,7 +412,7 @@ If ($in.create)
 			
 			$out.structureAdjustments:=_o_structure(New object:C1471(\
 				"action"; "create"; \
-				"tables"; dataModel(New object:C1471(\
+				"tables"; _o_dataModel(New object:C1471(\
 				"action"; "tableNames"; \
 				"dataModel"; $project.dataModel; \
 				"relation"; True:C214)).values))

@@ -67,7 +67,7 @@ Case of
 		$out.errors:=New collection:C1472("Missing tag \"action\"")
 		
 		//______________________________________________________
-	: ($in.dataModel=Null:C1517)
+	: (($in.dataModel=Null:C1517) && (Position:C15("_"; $in.action)#1)/*private methods*/)
 		
 		$out.errors:=New collection:C1472("`dataModel` must be specified when dumping")
 		
@@ -270,8 +270,8 @@ Case of
 				End if 
 				
 				// Get field list name
-				$o:=dataModel(New object:C1471(\
-					"action"; "fieldNames"; \
+				$o:=dump(New object:C1471(\
+					"action"; "_fieldNames"; \
 					"catalog"; $in.catalog; \
 					"table"; $table))
 				
@@ -482,6 +482,173 @@ Case of
 			End if 
 		End for each 
 		
+		// MARK: _fieldNames
+	: ($in.action="_fieldNames")  // Get field names for dump with table (model format) - CALLERS : dump
+		
+		$out.success:=($in.table#Null:C1517)
+		If (Not:C34($out.success))
+			$out.errors:=New collection:C1472("Missing table property")
+			return 
+		End if 
+		
+		$out.fields:=New collection:C1472()
+		$out.expand:=New collection:C1472()
+		
+		var $Txt_field : Text
+		For each ($Txt_field; $in.table)
+			
+			Case of 
+					
+					//………………………………………………………………………………………………………………………
+				: (Length:C16($Txt_field)=0)
+					
+					// <NOTHING MORE TO DO>
+					
+					//………………………………………………………………………………………………………………………
+				: (Match regex:C1019("(?m-si)^\\d+$"; $Txt_field; 1; *))  // CLEAN: use PROJECT.isField (ie. scalaire only)
+					
+					$out.fields.push($in.table[$Txt_field].name)
+					
+					//………………………………………………………………………………………………………………………
+				: ((Value type:C1509($in.table[$Txt_field])=Is object:K8:27))
+					
+					$Obj_buffer:=$in.table[$Txt_field]
+					
+					Case of 
+						: (Feature.with("alias") && PROJECT.isAlias($Obj_buffer))
+							
+							$out.fields.push($Obj_buffer.path)
+							
+							// TODO: Fix get last point instead
+							
+							If (Position:C15("."; $Obj_buffer.path)>0)
+								$Txt_field:=Substring:C12($Obj_buffer.path; 1; Position:C15("."; $Obj_buffer.path)-1)
+								If ($out.expand.indexOf($Txt_field)<0)
+									$out.expand.push($Txt_field)
+								End if 
+							End if 
+							
+							
+						: (PROJECT.isComputedAttribute($Obj_buffer))
+							
+							$out.fields.push($Txt_field)
+							
+						Else 
+							// CLEAN: use PROJECT.isRelati...
+							If ($Obj_buffer.relatedEntities#Null:C1517)  // To remove if relatedEntities deleted and relatedDataClass already filled #109019
+								
+								$Obj_buffer.relatedDataClass:=$Obj_buffer.relatedEntities
+								
+							End if 
+							
+							If ($Obj_buffer.relatedDataClass#Null:C1517)  // Is is a link?
+								
+								If ($out.expand.indexOf($Txt_field)<0)
+									
+									$out.expand.push($Txt_field)
+									
+								End if 
+								
+								var $Txt_fieldNumber : Text
+								For each ($Txt_fieldNumber; $Obj_buffer)
+									
+									Case of 
+										: (Match regex:C1019("(?m-si)^\\d+$"; $Txt_fieldNumber; 1; *))  // fieldNumber
+											
+											$out.fields.push($Txt_field+"."+$Obj_buffer[$Txt_fieldNumber].name)
+											
+										: (Value type:C1509($Obj_buffer[$Txt_fieldNumber])=Is object:K8:27)
+											
+											Case of 
+												: (Feature.with("alias") && PROJECT.isAlias($Obj_buffer[$Txt_fieldNumber]))
+													
+													$out.fields.push($Txt_field+"."+$Obj_buffer[$Txt_fieldNumber].path)
+													
+													// TODO: alias, maybe some other intermediated expand values
+													
+												: (PROJECT.isComputedAttribute($Obj_buffer[$Txt_fieldNumber]))
+													
+													$out.fields.push($Txt_field+"."+$Obj_buffer[$Txt_fieldNumber].name)
+													
+											End case 
+											
+										Else 
+											
+											// Ignore (primary key, etc...)
+											
+									End case 
+								End for each 
+								
+								// Else  Ignore
+								
+							End if 
+					End case 
+					
+					//………………………………………………………………………………………………………………………
+				Else 
+					
+					// Ignore
+					
+					//………………………………………………………………………………………………………………………
+			End case 
+		End for each 
+		
+		var $Obj_buffer; $Obj_table : Object
+		var $Txt_buffer : Text
+		
+		// Add primary key if needed for expanded data
+		For each ($Txt_field; $out.expand)
+			
+			If (Feature.with("alias"))
+				
+				ASSERT:C1129($in.catalog#Null:C1517; "Need catalog definition to dump data")
+				
+				$Obj_table:=$in.catalog.query("name = :1"; $in.table[""].name).pop()
+				
+				// TODO: if contain "." split and get first, and loop
+				$field:=$Obj_table.fields.query("name = :1"; $Txt_field).pop()
+				
+				$Obj_buffer:=New object:C1471
+				$Obj_buffer.tableInfo:=$in.catalog.query("name = :1"; String:C10($field.relatedDataClass)).pop()
+				$Obj_buffer.success:=$Obj_buffer.tableInfo#Null:C1517
+				
+			Else 
+				$Obj_buffer:=_o_structure(New object:C1471(\
+					"action"; "tableInfo"; \
+					"name"; String:C10($in.table[$Txt_field].relatedDataClass)))
+			End if 
+			
+			If ($Obj_buffer.success)
+				
+				$Txt_buffer:=$Txt_field+"."+$Obj_buffer.tableInfo.primaryKey
+				
+				If ($out.fields.indexOf($Txt_buffer)<0)
+					
+					$out.fields.push($Txt_buffer)
+					
+				End if 
+				
+			Else 
+				
+				If (Feature.with("alias"))
+					ob_warning_add($out; "Cannot get information for related table , related by link "+$Txt_field+" in "+$in.table+")")
+				Else 
+					ob_warning_add($out; "Cannot get information for related table "+String:C10($in.table[$Txt_field].relatedDataClass)+"(related by "+$Txt_field+" in "+$in.table+")")
+				End if 
+				
+			End if 
+		End for each 
+		
+		$o:=$in.table[""]
+		
+		// Append the primaryKey if any
+		If ((Length:C16(String:C10($o.primaryKey))>0) & \
+			($out.fields.indexOf(String:C10($o.primaryKey))<0))
+			
+			$out.fields.push($o.primaryKey)
+			
+		End if 
+		
 		// MARK:- pictures
 	: ($in.action="pictures")
 		
@@ -503,8 +670,8 @@ Case of
 			
 			$table:=$dataModel[$tableID]
 			$meta:=$table[""]
-			$o:=dataModel(New object:C1471(\
-				"action"; "pictureFields"; \
+			$o:=dump(New object:C1471(\
+				"action"; "_pictureFields"; \
 				"table"; $table))
 			
 			// Check if there is image (XXX use some extract/filter function)
@@ -897,7 +1064,60 @@ Case of
 			End if 
 		End for each 
 		
-		//________________________________________
+		// MARK: _pictureFields
+	: ($in.action="_pictureFields")  // get field names for dump with table (model format) - CALLERS : dump
+		
+		$out.fields:=New collection:C1472()
+		
+		If ($out.success)
+			$out.errors:=New collection:C1472("Missing table property")
+			return 
+		End if 
+		
+		$out.success:=True:C214
+		
+		var $Txt_field : Text
+		For each ($Txt_field; $in.table)
+			Case of 
+					//………………………………………………………………………………………………………………………
+				: (Match regex:C1019("(?m-si)^\\d+$"; $Txt_field; 1; *))
+					
+					If ($in.table[$Txt_field].fieldType=Is picture:K8:10)
+						
+						$out.fields.push($in.table[$Txt_field])
+						
+					End if 
+					
+					//………………………………………………………………………………………………………………………
+				: (Value type:C1509($in.table[$Txt_field])#Is object:K8:27)
+					
+					//………………………………………………………………………………………………………………………
+				: ($in.table[$Txt_field].relatedDataClass#Null:C1517)  // Is is a link?
+					
+					For each ($Txt_fieldNumber; $in.table[$Txt_field])
+						
+						If (Match regex:C1019("(?m-si)^\\d+$"; $Txt_fieldNumber; 1; *))  // fieldNumber
+							
+							If ($in.table[$Txt_field][$Txt_fieldNumber].fieldType=Is picture:K8:10)  // if image
+								
+								$field:=OB Copy:C1225($in.table[$Txt_field][$Txt_fieldNumber])
+								$field.relatedDataClass:=$in.table[$Txt_field].relatedDataClass  // copy it only if wanted to index picture on this table
+								$field.relatedField:=$Txt_field
+								$out.fields.push($field)
+								
+							End if 
+							
+						Else 
+							
+							// Ignore (primary key, etc...)
+							
+						End if 
+					End for each 
+					
+					//………………………………………………………………………………………………………………………
+			End case 
+		End for each 
+		
 	Else 
 		
 		ASSERT:C1129(False:C215; "Unknown entry point: \""+$in.action+"\"")
