@@ -60,7 +60,7 @@ class CustomTableHelper : GenericTableHelper {
             if (entity == null)
                 entity = BaseApp.mapper.readValue<{{relation_source}}>(jsonString)
             (entity as {{relation_source}}?)?.__{{relation_name}}Key =
-                RelationHelper.getRelationId(jsonString, "{{relation_name}}", fetchedFromRelation)
+                RelationHelper.getRelationId(jsonString, "{{relation_name_original}}", fetchedFromRelation)
         }
         {{/relations_many_to_one}}
         {{#tableNames_without_many_to_one_relation}}
