@@ -185,7 +185,16 @@ Function get directory() : Variant
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function set directory($directory)
 	
-	This:C1470[""].directory:=$directory
+	If (Value type:C1509($directory)=Is object:K8:27)\
+		 && OB Instance of:C1731($directory; 4D:C1709.Folder)
+		
+		This:C1470[""].directory:=$directory.platformPath
+		
+	Else 
+		
+		This:C1470[""].directory:=$directory
+		
+	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function get fileTypes() : Variant

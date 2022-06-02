@@ -56,9 +56,9 @@ Function getRequirements()
 	
 	$content:=JSON Parse:C1218($requirement.getText())
 	
-	$http:=cs:C1710.http.new("https://4d-go-mobile.github.io/sdk/xcode.json").setResponseType(Is a document:K24:1; $requirement)
-	
 	If ($run)
+		
+		$http:=cs:C1710.http.new("https://4d-go-mobile.github.io/sdk/xcode.json").setResponseType(Is a document:K24:1; $requirement)
 		
 		$content:=JSON Parse:C1218($requirement.getText())
 		$ETag:=String:C10($content.Etag)

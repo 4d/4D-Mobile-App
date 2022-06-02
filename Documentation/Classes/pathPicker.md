@@ -114,15 +114,22 @@ When read back the `.fileTypes ` property, the result could be **`"*"`** or a co
 >This property is ignored if the target is a folder.
 
 ## .directory
-**.directory** : `Text` | `Integer` - default is empty
+**.directory** : `Text` | `Integer` | `4D.Folder` - default is empty
 
 The `.directory` property is the directory access path to display by default or a number to memorize the access path as described for the command **[Select document](https://doc.4d.com/4Dv19/4D/19.1/Select-document.301-5654273.en.html)**.
 
+> To set a default access path:
+
 ```4d
-myPicker.directory := 8858
+myPicker.directory := Folder(fk documents folder)
 ```
 ```4d
-myPicker.directory := Folder(fk documents folder).platformPath
+myPicker.directory := "Macintosh HD:Users:vdl:Documents:"
+```
+> To refer to a memorized access path:
+
+```4d
+myPicker.directory := 8858
 ```
 
 ## .options

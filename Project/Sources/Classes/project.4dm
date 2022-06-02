@@ -1374,52 +1374,46 @@ Function formatTableName($name : Text) : Text
 	
 	var $str : cs:C1710.str
 	
-	// Start with alpha
-	// Could start with capital letter (no need to lowercase)
-	// No space
+/*
+Start with alpha
+No space, No accent
+Uper camel case
+*/
 	
 	If (Length:C16($name)>0)
 		
-		// Remove the forbidden at beginning characters
-		Rgx_SubstituteText("(?mi-s)^[^[:alpha:]]*([^$]*)$"; "\\1"; ->$name; 0)
-		
-		$str:=cs:C1710.str.new(Replace string:C233($name; "."; " "))
-		
-		//$name:=$str.unaccented()
+		$str:=This:C1470._formatName($name)
 		$name:=$str.uperCamelCase($str.unaccented())
+		return This:C1470._obfuscateReservedNames($name)
+		
+	Else 
+		
+		
 		
 	End if 
-	
-	// Modify the reserved names
-	$name:=$name+("_"*Num:C11(SHARED.resources.coreDataForbiddenNames.indexOf($name)#-1))
-	
-	return $name
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function formatFieldName($name : Text) : Text
 	
 	var $str : cs:C1710.str
 	
-	// Start with alpha
-	// Must start with a lowercase letter
-	// No space, No accents
+/*
+Start with alpha
+No space, No accent
+Lower camel case
+*/
 	
 	If (Length:C16($name)>0)
 		
-		// Remove the forbidden at beginning characters
-		Rgx_SubstituteText("(?mi-s)^[^[:alpha:]]*([^$]*)$"; "\\1"; ->$name; 0)
-		
-		$str:=cs:C1710.str.new(Replace string:C233($name; "."; " "))
-		
-		//$name:=$str.unaccented()
+		$str:=This:C1470._formatName($name)
 		$name:=$str.lowerCamelCase($str.unaccented())
+		return This:C1470._obfuscateReservedNames($name)
+		
+	Else 
+		
+		
 		
 	End if 
-	
-	// Modify the reserved names
-	$name:=$name+("_"*Num:C11(SHARED.resources.coreDataForbiddenNames.indexOf($name)#-1))
-	
-	return $name
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function formatBundleAppName($name : Text) : Text
@@ -2271,6 +2265,23 @@ Function repairProject()
 	Form:C1466.status.project:=True:C214
 	
 	//MARK:-[PRIVATE]
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _obfuscateReservedNames($name : Text) : Text
+	
+	return $name+("_"*Num:C11(SHARED.resources.coreDataForbiddenNames.indexOf($name)#-1))
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _formatName($name : Text) : cs:C1710.str
+	
+	var $str : cs:C1710.str
+	
+	// Remove the forbidden at beginning characters
+	Rgx_SubstituteText("(?mi-s)^[^[:alpha:]]*([^$]*)$"; "\\1"; ->$name; 0)
+	
+	// Remove dots and underscores
+	$str:=cs:C1710.str.new(Replace string:C233(Replace string:C233($name; "_"; " "); "."; " "))
+	return $str
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function _capitalizeFirtsLetter($string : Text; $separator : Text) : Text
