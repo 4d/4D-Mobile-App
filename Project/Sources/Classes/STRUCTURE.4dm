@@ -699,7 +699,7 @@ Function displayFieldPicker() : Integer
 							"shortLabel"; PROJECT.shortLabel($field.name); \
 							"valueType"; $field.valueType)
 						
-						// TODO:#TEMPO
+						// TODO:#Tempo
 						$o.type:=$field.type
 						
 						$target[$path[0]][String:C10($field.fieldNumber)]:=$o
@@ -718,13 +718,13 @@ Function displayFieldPicker() : Integer
 							: ($field.fieldType=Is collection:K8:32)  // Selection
 								
 								$o.label:=PROJECT.label(UI.str.localize("listOf"; $field.name))
-								$o.shortLabel:=PROJECT.label($field.name)
+								$o.shortLabel:=PROJECT.shortLabel($field.name)
 								
 								//______________________________________________________
 							Else 
 								
 								$o.label:=PROJECT.label($field.name)
-								$o.shortLabel:=PROJECT.label($field.name)
+								$o.shortLabel:=PROJECT.shortLabel($field.name)
 								
 								//______________________________________________________
 						End case 
@@ -737,14 +737,17 @@ Function displayFieldPicker() : Integer
 					: ($field.kind="calculated")  // Computed attribute
 						
 						$o:=New object:C1471(\
-							"kind"; $field.kind; \
-							"fieldType"; $field.fieldType; \
 							"path"; $field.path; \
+							"kind"; $field.kind; \
+							"name"; $field.name; \
 							"label"; PROJECT.label($field.name); \
-							"shortLabel"; PROJECT.shortLabel($field.name))
+							"shortLabel"; PROJECT.shortLabel($field.name); \
+							"fieldType"; $field.fieldType; \
+							"valueType"; PROJECT.fieldType2type($field.fieldType))
 						
-						// TODO:Remove computed
+						// TODO:#Tempo
 						$o.computed:=True:C214
+						$o.type:=-3
 						
 						$target[$path[0]][$field.name]:=$o
 						
@@ -790,7 +793,7 @@ Function displayFieldPicker() : Integer
 							"label"; PROJECT.labelList($field.name); \
 							"shortLabel"; PROJECT.label($field.name))
 						
-						// TODO:Remove isToMany
+						// TODO:#Tempo
 						$o.isToMany:=True:C214
 						
 						//______________________________________________________
@@ -798,13 +801,15 @@ Function displayFieldPicker() : Integer
 						
 						$o:=New object:C1471(\
 							"kind"; $field.kind; \
-							"fieldType"; $field.fieldType; \
-							"valueType"; $field.valueType; \
+							"name"; $field.name; \
 							"label"; PROJECT.label($field.name); \
-							"shortLabel"; PROJECT.shortLabel($field.name))
+							"shortLabel"; PROJECT.shortLabel($field.name); \
+							"fieldType"; $field.fieldType; \
+							"valueType"; $field.valueType)
 						
-						// TODO:Remove computed
+						// TODO:#Tempo
 						$o.computed:=True:C214
+						$o.type:=-3
 						
 						//______________________________________________________
 					: ($field.kind="alias")
