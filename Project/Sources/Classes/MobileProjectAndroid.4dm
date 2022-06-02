@@ -272,22 +272,26 @@ Function create()->$result : Object
 			//%W-533.1
 			For each ($action; This:C1470.project.project.actions)
 				
-				For each ($parameter; This:C1470.project.project.actions[$i].parameters)
+				If (This:C1470.project.project.actions[$i].parameters#Null:C1517)
 					
-					If (Length:C16($parameter.defaultField)>0) && ($parameter.defaultField[[Length:C16($parameter.defaultField)]]="_")
+					For each ($parameter; This:C1470.project.project.actions[$i].parameters)
 						
-						$t:=Delete string:C232($parameter.defaultField; Length:C16($parameter.defaultField); 1)
-						
-						For each ($reservedName; SHARED.resources.coreDataForbiddenNames)
+						If (Length:C16($parameter.defaultField)>0) && ($parameter.defaultField[[Length:C16($parameter.defaultField)]]="_")
 							
-							If (SHARED.resources.coreDataForbiddenNames.indexOf($t)#-1)
+							$t:=Delete string:C232($parameter.defaultField; Length:C16($parameter.defaultField); 1)
+							
+							For each ($reservedName; SHARED.resources.coreDataForbiddenNames)
 								
-								$parameter.defaultField:=$t
-								
-							End if 
-						End for each 
-					End if 
-				End for each 
+								If (SHARED.resources.coreDataForbiddenNames.indexOf($t)#-1)
+									
+									$parameter.defaultField:=$t
+									
+								End if 
+							End for each 
+						End if 
+					End for each 
+					
+				End if 
 				
 				$i+=1
 				
