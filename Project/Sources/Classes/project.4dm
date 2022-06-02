@@ -1398,7 +1398,28 @@ Function formatTableName($name : Text) : Text
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function formatFieldName($name : Text) : Text
 	
-	return $name+("_"*Num:C11(SHARED.resources.coreDataForbiddenNames.indexOf($name)#-1))
+	var $str : cs:C1710.str
+	
+	// Start with alpha
+	// Must start with a lowercase letter
+	// No space, No accents
+	
+	If (Length:C16($name)>0)
+		
+		// Remove the forbidden at beginning characters
+		Rgx_SubstituteText("(?mi-s)^[^[:alpha:]]*([^$]*)$"; "\\1"; ->$name; 0)
+		
+		$str:=cs:C1710.str.new(Replace string:C233($name; "."; " "))
+		
+		//$name:=$str.unaccented()
+		$name:=$str.lowerCamelCase($str.unaccented())
+		
+	End if 
+	
+	// Modify the reserved names
+	$name:=$name+("_"*Num:C11(SHARED.resources.coreDataForbiddenNames.indexOf($name)#-1))
+	
+	return $name
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function formatBundleAppName($name : Text) : Text
