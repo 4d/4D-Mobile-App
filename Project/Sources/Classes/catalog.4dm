@@ -10,7 +10,7 @@ Class constructor
 	
 	This:C1470.success:=True:C214
 	
-	//==================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function buildExposedCatalog() : Collection
 	
 	var $key : Text
@@ -62,7 +62,7 @@ Function buildExposedCatalog() : Collection
 	
 	return $catalog
 	
-	//==================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function buildExposedDatastore($localID : Text) : Object
 	
 	var $tableName : Text
@@ -125,8 +125,7 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 	
 	return $datastore
 	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-/*
+/* === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Returns True if everything is OK.
 Returns False and no error if we can solve the problem.
 Returns False and an error list if we can't solve the problem.
@@ -165,17 +164,7 @@ Function verifyStructureAdjustments($publishedTableNames : Collection) : Boolean
 				//______________________________________________________
 			: (String:C10($o.primaryKey)#$pk.name)
 				
-				This:C1470.errors.push("The primary key of the table \""+SHARED.deletedRecordsTable.name+"\" must be named \""+$pk.name+"\"")
-				
-				//______________________________________________________
-			: (Not:C34(Bool:C1537($dataclass.ID.autoFilled)))
-				
-				This:C1470.errors.push("The primary key of the table \""+SHARED.deletedRecordsTable.name+"\" must be auto-incremented")
-				
-				//______________________________________________________
-			: (Not:C34(Bool:C1537($pk.indexed)))
-				
-				This:C1470.errors.push("The primary key of the table \""+SHARED.deletedRecordsTable.name+"\" must be indexed")
+				This:C1470.errors.push("The primary key of the dataclass \""+SHARED.deletedRecordsTable.name+"\" must be named \""+$pk.name+"\"")
 				
 				//______________________________________________________
 		End case 
@@ -197,12 +186,12 @@ Function verifyStructureAdjustments($publishedTableNames : Collection) : Boolean
 					//______________________________________________________
 				: (Not:C34(Bool:C1537($field.exposed)))
 					
-					This:C1470.errors.push("The field \""+$o.name+"\" of the table \""+SHARED.deletedRecordsTable.name+"\" must be exposed")
+					This:C1470.errors.push("The attribute \""+$o.name+"\" of the dataclass \""+SHARED.deletedRecordsTable.name+"\" must be exposed")
 					
 					//______________________________________________________
 				: ($field.type#$o._type)
 					
-					This:C1470.errors.push("The field \""+$o.name+"\" of the table \""+SHARED.deletedRecordsTable.name+"\" isn't of a correct format")
+					This:C1470.errors.push("The type of the attribute \""+$o.name+"\" of the dataclass \""+SHARED.deletedRecordsTable.name+"\" is not the expected one")
 					
 					//______________________________________________________
 			End case 
@@ -232,8 +221,7 @@ Function verifyStructureAdjustments($publishedTableNames : Collection) : Boolean
 	
 	return True:C214
 	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-/*
+/* === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Returns True if everything is OK.
 Returns False and an error list if we can't solve the problem.
 */
@@ -315,7 +303,7 @@ Function doStructureAdjustments($publishedTableNames : Collection) : Boolean
 					
 					If ($error.lastError().stack[0].code=1155)
 						
-						// Index already exists
+						This:C1470.warnings.push("Index already exists for the attribute \""+$o.name+"\" of the table \""+SHARED.deletedRecordsTable.name+"\"")
 						$error.ignoreLastError()
 						
 					Else 
@@ -352,7 +340,7 @@ Function doStructureAdjustments($publishedTableNames : Collection) : Boolean
 					
 					If ($error.lastError().stack[0].code=1053)
 						
-						// Field name already exists
+						This:C1470.warnings.push("Attribute \""+SHARED.stampField.name+"\" already exists for the dataclass \""+$t+"\"")
 						$error.ignoreLastError()
 						
 					End if 
@@ -375,6 +363,7 @@ Function doStructureAdjustments($publishedTableNames : Collection) : Boolean
 							If ($error.lastError().stack[0].code=1155)
 								
 								// Index already exists
+								This:C1470.warnings.push("Index of the attribute \""+SHARED.stampField.name+"\\ of the dataclass \""+$t+"\" already exists")
 								$error.ignoreLastError()
 								
 							Else 
