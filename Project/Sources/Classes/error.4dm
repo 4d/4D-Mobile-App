@@ -77,6 +77,11 @@ Function hide()->$this : cs:C1710.error
 	$this:=This:C1470
 	
 	//===================================================================================
+Function ignoreLastError()
+	
+	lastError:=Null:C1517
+	
+	//===================================================================================
 	/// Returns true if no errors were encountered during a capture phase
 Function noError()->$noError : Boolean
 	

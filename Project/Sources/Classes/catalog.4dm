@@ -11,10 +11,62 @@ Class constructor
 	This:C1470.success:=True:C214
 	
 	//==================================================================
-Function buildExposedDatastore($localID : Text)->$datastore : Object
+Function buildExposedCatalog() : Collection
+	
+	var $key : Text
+	var $attribute; $entry; $field; $meta; $table : Object
+	var $catalog : Collection
+	
+	$catalog:=New collection:C1472
+	
+	For each ($entry; OB Entries:C1720(ds:C1482))
+		
+		$meta:=ds:C1482[$entry.key].getInfo()
+		
+		If (Not:C34($meta.exposed))
+			
+			continue
+			
+		End if 
+		
+		$table:=New object:C1471(\
+			"name"; $entry.key; \
+			"fields"; New collection:C1472; \
+			"infos"; $meta)
+		
+		For each ($attribute; OB Entries:C1720($entry))
+			
+			If (Value type:C1509($attribute.value)=Is object:K8:27)
+				
+				For each ($key; $attribute.value)
+					
+					$field:=$attribute.value[$key]
+					
+					If ($field.exposed=Null:C1517)\
+						 || ($field.type="blob")
+						
+						continue
+						
+					End if 
+					
+					$table.fields.push($field)
+					
+				End for each 
+				
+			End if 
+		End for each 
+		
+		$catalog.push($table)
+		
+	End for each 
+	
+	return $catalog
+	
+	//==================================================================
+Function buildExposedDatastore($localID : Text) : Object
 	
 	var $tableName : Text
-	var $meta; $o; $table : Object
+	var $datastore; $meta; $o; $table : Object
 	var $ds : cs:C1710.DataStore
 	
 	$datastore:=New object:C1471
@@ -28,117 +80,316 @@ Function buildExposedDatastore($localID : Text)->$datastore : Object
 			// DON'T DISPLAY DELETED RECORDS TABLE
 			continue
 			
-		Else 
+		End if 
+		
+		$meta:=$ds[$tableName].getInfo()
+		
+		If (Not:C34($meta.exposed))
 			
-			$meta:=$ds[$tableName].getInfo()
+			continue
 			
-			Case of 
-					
-					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-				: (Not:C34($meta.exposed))
-					
-					// Table is not exposed
-					
-					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-				Else 
-					
-					$table:=New object:C1471
-					$table[""]:=$meta
-					
-					For each ($o; OB Entries:C1720($ds[$tableName]))
-						
-						If ($o.key=This:C1470.stampFieldName)\
-							 || (Position:C15("."; $o.key)>0)
-							
+		End if 
+		
+		$table:=New object:C1471
+		$table[""]:=$meta
+		
+		For each ($o; OB Entries:C1720($ds[$tableName]))
+			
 /*
 DON'T DISPLAY STAMP FIELD
 DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 */
-							
-							continue
-							
-						End if 
-						
-						If (Bool:C1537($o.value.exposed))
-							
-							If (This:C1470.allowedTypes.indexOf($o.value.type)>=0)
-								
-								$table[$o.key]:=$o.value
-								
-							End if 
-						End if 
-					End for each 
-					
-					$datastore[$tableName]:=$table
-					
-					//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-			End case 
-		End if 
+			
+			If ($o.key=This:C1470.stampFieldName)\
+				 || (Position:C15("."; $o.key)>0)\
+				 || (Not:C34(Bool:C1537($o.value.exposed)))\
+				 || (This:C1470.allowedTypes.indexOf($o.value.type)=-1)
+				
+				continue
+				
+			End if 
+			
+			$table[$o.key]:=$o.value
+			
+		End for each 
 		
+		ARRAY TEXT:C222($properties; 0x0000)
+		OB GET PROPERTY NAMES:C1232($table; $properties)
+		
+		If (Size of array:C274($properties)>0)
+			
+			$datastore[$tableName]:=$table
+			
+		End if 
 	End for each 
 	
-	//==================================================================
-Function buildExposedCatalog()->$catalog : Collection
+	return $datastore
 	
-	var $key : Text
-	var $attribute; $entry; $field; $o; $table : Object
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+/*
+Returns True if everything is OK.
+Returns False and no error if we can solve the problem.
+Returns False and an error list if we can't solve the problem.
+*/
+Function verifyStructureAdjustments($publishedTableNames : Collection) : Boolean
 	
-	$catalog:=New collection:C1472
+	var $t : Text
+	var $field; $o; $pk : Object
+	var $dataclass : 4D:C1709.DataClass
 	
-	For each ($entry; OB Entries:C1720(ds:C1482))
+	// Mark:Verify __DeletedRecords dataclasses
+	$dataclass:=ds:C1482[SHARED.deletedRecordsTable.name]
+	
+	If ($dataclass=Null:C1517)
 		
-		$o:=ds:C1482[$entry.key].getInfo()
+		return 
+		
+	End if 
+	
+	$o:=$dataclass.getInfo()
+	
+	$pk:=$dataclass[SHARED.deletedRecordsTable.fields.query("primaryKey = true").pop().name]
+	
+	If (Not:C34(Bool:C1537($o.exposed)))\
+		 || (String:C10($o.primaryKey)#$pk.name)\
+		 || (Not:C34(Bool:C1537($pk.autoFilled)))\
+		 || (Not:C34(Bool:C1537($pk.indexed)))
 		
 		Case of 
 				
-				//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-			: (Not:C34($o.exposed))
+				//______________________________________________________
+			: (Not:C34(Bool:C1537($o.exposed)))
 				
-				// Dataclass is not exposed
+				This:C1470.errors.push("The table \""+SHARED.deletedRecordsTable.name+"\" is not exposed")
 				
-				//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-			Else 
+				//______________________________________________________
+			: (String:C10($o.primaryKey)#$pk.name)
 				
-				$table:=New object:C1471(\
-					"name"; $entry.key; \
-					"fields"; New collection:C1472; \
-					"infos"; $o)
+				This:C1470.errors.push("The primary key of the table \""+SHARED.deletedRecordsTable.name+"\" must be named \""+$pk.name+"\"")
 				
-				For each ($attribute; OB Entries:C1720($entry))
-					
-					If (Value type:C1509($attribute.value)=Is object:K8:27)
-						
-						For each ($key; $attribute.value)
-							
-							$field:=$attribute.value[$key]
-							
-							Case of 
-									
-									//======================================
-								: ($field.exposed=Null:C1517)
-									
-									// Attribute is not exposed
-									
-									//======================================
-								: ($field.type="blob")
-									
-									// BLOB type attributes are not managed in the datastore
-									
-									//======================================
-								Else 
-									
-									$table.fields.push($field)
-									
-									//======================================
-							End case 
-						End for each 
-						
-					End if 
-				End for each 
+				//______________________________________________________
+			: (Not:C34(Bool:C1537($dataclass.ID.autoFilled)))
 				
-				//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+				This:C1470.errors.push("The primary key of the table \""+SHARED.deletedRecordsTable.name+"\" must be auto-incremented")
+				
+				//______________________________________________________
+			: (Not:C34(Bool:C1537($pk.indexed)))
+				
+				This:C1470.errors.push("The primary key of the table \""+SHARED.deletedRecordsTable.name+"\" must be indexed")
+				
+				//______________________________________________________
 		End case 
 		
-		$catalog.push($table)
+		return 
 		
+	End if 
+	
+	For each ($o; SHARED.deletedRecordsTable.fields)
+		
+		$field:=$dataclass[$o.name]
+		
+		If ($field=Null:C1517)\
+			 || (Not:C34(Bool:C1537($field.exposed)))\
+			 || ($field.type#$o._type)
+			
+			Case of 
+					
+					//______________________________________________________
+				: (Not:C34(Bool:C1537($field.exposed)))
+					
+					This:C1470.errors.push("The field \""+$o.name+"\" of the table \""+SHARED.deletedRecordsTable.name+"\" must be exposed")
+					
+					//______________________________________________________
+				: ($field.type#$o._type)
+					
+					This:C1470.errors.push("The field \""+$o.name+"\" of the table \""+SHARED.deletedRecordsTable.name+"\" isn't of a correct format")
+					
+					//______________________________________________________
+			End case 
+			
+			return 
+			
+		End if 
 	End for each 
+	
+	// Mark:Verify __GlobalStamp for published dataclasses
+	If ($publishedTableNames#Null:C1517)\
+		 && ($publishedTableNames.length>0)
+		
+		For each ($t; $publishedTableNames)
+			
+			$dataclass:=ds:C1482[$t]
+			
+			If ($dataclass=Null:C1517)\
+				 || ($dataclass[SHARED.stampField.name]=Null:C1517)\
+				 || ($dataclass[SHARED.stampField.name].type#SHARED.stampField._type)
+				
+				return 
+				
+			End if 
+		End for each 
+	End if 
+	
+	return True:C214
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+/*
+Returns True if everything is OK.
+Returns False and an error list if we can't solve the problem.
+*/
+Function doStructureAdjustments($publishedTableNames : Collection) : Boolean
+	
+	var $t : Text
+	var $o : Object
+	var $error : cs:C1710.error
+	
+	$error:=cs:C1710.error.new()
+	$error.capture()
+	
+	// MARK:Create __DeletedRecords dataclasses
+	DOCUMENT:="CREATE TABLE IF NOT EXISTS "+String:C10(SHARED.deletedRecordsTable.name)+" ("
+	
+	For each ($o; SHARED.deletedRecordsTable.fields)
+		
+		DOCUMENT:=DOCUMENT+" "+String:C10($o.name)+" "+String:C10($o.type)+","
+		
+		If (Bool:C1537($o.primaryKey))
+			
+			DOCUMENT:=DOCUMENT+" PRIMARY KEY ("+String:C10($o.name)+"),"
+			
+		End if 
+	End for each 
+	
+	// Delete the last ","
+	DOCUMENT:=Delete string:C232(DOCUMENT; Length:C16(DOCUMENT); 1)
+	
+	DOCUMENT:=DOCUMENT+");"
+	
+	Begin SQL
+		
+		EXECUTE IMMEDIATE : DOCUMENT
+		
+	End SQL
+	
+	If ($error.noError())
+		
+		For each ($o; SHARED.deletedRecordsTable.fields)
+			
+			If (Bool:C1537($o.autoincrement))
+				
+				DOCUMENT:="ALTER TABLE "+String:C10(SHARED.deletedRecordsTable.name)+" MODIFY "+String:C10($o.name)+" ENABLE AUTO_INCREMENT;"
+				
+				Begin SQL
+					
+					EXECUTE IMMEDIATE : DOCUMENT
+					
+				End SQL
+				
+			End if 
+			
+			If ($error.withError())
+				
+				This:C1470.errors.push(JSON Stringify:C1217($error.errors())+" ("+DOCUMENT+")")
+				return 
+				
+			End if 
+		End for each 
+	End if 
+	
+	// Create the indexes if any
+	If ($error.noError())
+		
+		For each ($o; SHARED.deletedRecordsTable.fields)
+			
+			If (Bool:C1537($o.indexed))
+				
+				DOCUMENT:="CREATE INDEX "+String:C10(SHARED.deletedRecordsTable.name)+String:C10($o.name)+" ON "+String:C10(SHARED.deletedRecordsTable.name)+" ("+String:C10($o.name)+");"
+				
+				Begin SQL
+					
+					EXECUTE IMMEDIATE : DOCUMENT
+					
+				End SQL
+				
+				If ($error.withError())
+					
+					If ($error.lastError().stack[0].code=1155)
+						
+						// Index already exists
+						$error.ignoreLastError()
+						
+					Else 
+						
+						This:C1470.errors.push(JSON Stringify:C1217($error.errors())+" ("+DOCUMENT+")")
+						return 
+						
+					End if 
+				End if 
+			End if 
+		End for each 
+	End if 
+	
+	If ($error.noError())
+		
+		// Mark:Create __GlobalStamp for published dataclasses
+		If ($publishedTableNames#Null:C1517)\
+			 && ($publishedTableNames.length>0)
+			
+			var $str : cs:C1710.str
+			$str:=cs:C1710.str.new()
+			
+			For each ($t; $publishedTableNames)
+				
+				DOCUMENT:="ALTER TABLE ["+$t+"] ADD TRAILING "+String:C10(SHARED.stampField.name)+" "+String:C10(SHARED.stampField.type)+";"
+				
+				Begin SQL
+					
+					EXECUTE IMMEDIATE : DOCUMENT
+					
+				End SQL
+				
+				If ($error.withError())
+					
+					If ($error.lastError().stack[0].code=1053)
+						
+						// Field name already exists
+						$error.ignoreLastError()
+						
+					End if 
+				End if 
+				
+				If ($error.noError())
+					
+					If (Bool:C1537(SHARED.stampField.indexed))
+						
+						DOCUMENT:="CREATE INDEX "+String:C10(SHARED.stampField.name)+"_"+$str.lowerCamelCase($t)+" ON ["+$t+"] ("+String:C10(SHARED.stampField.name)+");"
+						
+						Begin SQL
+							
+							EXECUTE IMMEDIATE : DOCUMENT
+							
+						End SQL
+						
+						If ($error.withError())
+							
+							If ($error.lastError().stack[0].code=1155)
+								
+								// Index already exists
+								$error.ignoreLastError()
+								
+							Else 
+								
+								This:C1470.errors.push(JSON Stringify:C1217($error.errors())+" ("+DOCUMENT+")")
+								return 
+								
+							End if 
+						End if 
+					End if 
+				End if 
+			End for each 
+		End if 
+	End if 
+	
+	$error.release()
+	
+	return True:C214

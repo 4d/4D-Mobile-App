@@ -213,29 +213,35 @@ If (OB Is empty:C1297(SHARED)) | $reset
 		"type"; "INT64"; \
 		"indexed"; True:C214; \
 		"primaryKey"; True:C214; \
-		"autoincrement"; True:C214))
+		"autoincrement"; True:C214; \
+		"_type"; "number"))
 	
 	SHARED.deletedRecordsTable.fields.push(New object:C1471(\
 		"name"; "__Stamp"; \
 		"type"; "INT64"; \
-		"indexed"; True:C214))
+		"indexed"; True:C214; \
+		"_type"; "number"))
 	
 	SHARED.deletedRecordsTable.fields.push(New object:C1471(\
 		"name"; "__TableNumber"; \
-		"type"; "INT32"))
+		"type"; "INT32"; \
+		"_type"; "number"))
 	
 	SHARED.deletedRecordsTable.fields.push(New object:C1471(\
 		"name"; "__TableName"; \
-		"type"; "VARCHAR(255)"))
+		"type"; "VARCHAR(255)"; \
+		"_type"; "string"))
 	
 	SHARED.deletedRecordsTable.fields.push(New object:C1471(\
 		"name"; "__PrimaryKey"; \
-		"type"; "VARCHAR(255)"))
+		"type"; "VARCHAR(255)"; \
+		"_type"; "string"))
 	
 	SHARED.stampField:=New object:C1471(\
 		"name"; "__GlobalStamp"; \
 		"type"; "INT64"; \
-		"indexed"; True:C214)
+		"indexed"; True:C214; \
+		"_type"; "number")
 	
 	// Common project tags
 	SHARED.tags:=New object:C1471(\

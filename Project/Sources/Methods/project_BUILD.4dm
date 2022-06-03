@@ -14,13 +14,15 @@ If (False:C215)
 	C_OBJECT:C1216(project_BUILD; $1)
 End if 
 
-var $t; $tt : Text
+var $t; $target; $tt : Text
 var $b; $success : Boolean
 var $l : Integer
-var $o; $Obj_cancel; $Obj_ok; $project : Object
-var $c : Collection
-
+var $manual; $o; $Obj_cancel; $Obj_ok; $project : Object
+var $c; $publishedTableNames : Collection
 var $file : 4D:C1709.File
+var $adb : cs:C1710.adb
+var $catalog : cs:C1710.catalog
+var $cfgutil : cs:C1710.cfgutil
 
 ASSERT:C1129($data#Null:C1517; "Missing paramater")
 
@@ -39,7 +41,6 @@ If (Asserted:C1132($project#Null:C1517))
 		
 		$data.realDevice:=(String:C10($project._device.type)="device")
 		
-		var $target : Text
 		$target:=$project._buildTarget || $data.target/*_buildTarget is constantly resty because in project... better to have it from caller*/
 		
 		If ($data.path=Null:C1517)
@@ -139,7 +140,7 @@ If (Asserted:C1132($project#Null:C1517))
 			
 			Logger.info("⚠️"+Current method name:C684+" productFolderAlreadyExist")
 			
-			// Product folder already exist. user MUST CONFIRM
+			// mark: Product folder already exist. user MUST CONFIRM
 			$o:=New object:C1471(\
 				"action"; "show"; \
 				"type"; "confirm"; \
@@ -154,12 +155,12 @@ If (Asserted:C1132($project#Null:C1517))
 		
 		If ($success)
 			
-			// * VERIFY THE STRUCTURE
-			$c:=New collection:C1472
+			// MARK:-VERIFY THE STRUCTURE
+			$publishedTableNames:=New collection:C1472
 			
 			For each ($t; $project.dataModel)
 				
-				$c.push($project.dataModel[$t][""].name)
+				$publishedTableNames.push($project.dataModel[$t][""].name)
 				
 				For each ($tt; $project.dataModel[$t])
 					
@@ -167,7 +168,7 @@ If (Asserted:C1132($project#Null:C1517))
 						
 						If ($project.dataModel[$t][$tt].relatedDataClass#Null:C1517)
 							
-							$c.push($project.dataModel[$t][$tt].relatedDataClass)
+							$publishedTableNames.push($project.dataModel[$t][$tt].relatedDataClass)
 							
 						End if 
 					End if 
@@ -176,23 +177,22 @@ If (Asserted:C1132($project#Null:C1517))
 			
 			If ($project.dataSource.source="local")
 				
-				// Check host-database structure
-				If (Not:C34(_o_structure(New object:C1471(\
-					"action"; "verify"; \
-					"tables"; $c)).success))
+				$catalog:=cs:C1710.catalog.new()
+				
+				$success:=$catalog.verifyStructureAdjustments($publishedTableNames)
+				
+				If (Not:C34($success))
 					
 					$success:=(Bool:C1537($project.allowStructureAdjustments))\
 						 | (Bool:C1537($project.$_allowStructureAdjustments))
 					
 					If ($success)
 						
-						$success:=_o_structure(New object:C1471(\
-							"action"; "create"; \
-							"tables"; $c)).success
+						$success:=$catalog.doStructureAdjustments($publishedTableNames)
 						
 						If (Not:C34($success))
 							
-							//#MARK_TODO - DISPLAY ERROR
+							//TODO:DISPLAY ERROR
 							
 						End if 
 						
@@ -368,7 +368,6 @@ If (Asserted:C1132($project#Null:C1517))
 						//______________________________________________________
 					: ($target="iOS")
 						
-						var $cfgutil : cs:C1710.cfgutil
 						$cfgutil:=cs:C1710.cfgutil.new()
 						
 						If (Not:C34(Bool:C1537($data.configurator)))
@@ -387,7 +386,6 @@ If (Asserted:C1132($project#Null:C1517))
 							
 							If (Not:C34($success))
 								
-								var $manual : Object
 								$data:=cs:C1710.project.new($data).cleaned()
 								$manual:=OB Copy:C1225($data)
 								$manual.manualInstallation:=True:C214
@@ -433,7 +431,6 @@ If (Asserted:C1132($project#Null:C1517))
 						//______________________________________________________
 					: ($target="android")
 						
-						var $adb : cs:C1710.adb
 						$adb:=cs:C1710.adb.new()
 						
 						// Verify that the device is plugged
@@ -441,7 +438,6 @@ If (Asserted:C1132($project#Null:C1517))
 						
 						If (Not:C34($success))
 							
-							var $manual : Object
 							$data:=cs:C1710.project.new($data).cleaned()
 							$manual:=OB Copy:C1225($data)
 							$manual.manualInstallation:=True:C214

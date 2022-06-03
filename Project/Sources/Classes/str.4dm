@@ -590,7 +590,7 @@ Function lowerCamelCase($target : Text) : Text
 			$t:=This:C1470.spaceSeparated($target)
 			
 			// Remove spaces
-			$c:=Split string:C1554($target; " "; sk ignore empty strings:K86:1+sk trim spaces:K86:2)
+			$c:=Split string:C1554($t; " "; sk ignore empty strings:K86:1+sk trim spaces:K86:2)
 			
 			// Capitalization of the first letter of words from the 2nd
 			If ($c.length>1)

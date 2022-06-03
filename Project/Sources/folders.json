@@ -31,7 +31,6 @@
 			"UI"
 		],
 		"classes": [
-			"catalog",
 			"DataStore",
 			"dateTime",
 			"with"
@@ -187,6 +186,7 @@
 			"unzip"
 		],
 		"classes": [
+			"catalog",
 			"DataSource",
 			"ExposedStructure",
 			"field",
