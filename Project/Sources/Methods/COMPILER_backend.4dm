@@ -17,6 +17,10 @@ If (False:C215)
 	C_OBJECT:C1216(dump; $1)
 	
 	// ----------------------------------------------------
+	C_OBJECT:C1216(dumpFieldNames; $0)
+	C_OBJECT:C1216(dumpFieldNames; $1)
+	
+	// ----------------------------------------------------
 	C_COLLECTION:C1488(findFirstPathComponentInCatalog; $0)
 	C_COLLECTION:C1488(findFirstPathComponentInCatalog; $1)
 	

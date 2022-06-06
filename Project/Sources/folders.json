@@ -171,6 +171,7 @@
 			"dataSet",
 			"downloadSDK",
 			"dump",
+			"dumpFieldNames",
 			"findFirstPathComponentInCatalog",
 			"folder_copyMerge",
 			"formatString",
