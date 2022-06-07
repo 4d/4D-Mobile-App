@@ -646,9 +646,10 @@ Function spaceSeparated($target : Text) : Text
 			
 			$i+=1
 			
-			If (Character code:C91($char)#Character code:C91($target[[$i]]))  // Cesure
+			If (Character code:C91(Lowercase:C14($char))#Character code:C91($target[[$i]]))\
+				 && ($i>1)  // Cesure
 				
-				$c.push(Substring:C12($target; $l; $i-$l))
+				$c.push(Substring:C12($target; $l; $i-$l-1))
 				$l:=$i
 				
 			End if 

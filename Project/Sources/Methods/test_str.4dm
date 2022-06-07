@@ -107,6 +107,16 @@ For ($i; 1; Length:C16($in); 1)
 	
 End for 
 
+// mark:-spaceSeparated()
+ASSERT:C1129($str.setText($str.spaceSeparated("Last Name")).equal("Last Name"))
+ASSERT:C1129($str.setText($str.spaceSeparated("Last_Name")).equal("Last Name"))
+ASSERT:C1129($str.setText($str.spaceSeparated("LastName")).equal("Last Name"))
+
+// mark:-lowerCamelCase()
+ASSERT:C1129($str.setText($str.lowerCamelCase("First Name")).equal("firstName"))
+ASSERT:C1129($str.setText($str.lowerCamelCase("firstName")).equal("firstName"))
+ASSERT:C1129($str.setText($str.lowerCamelCase("FirstName")).equal("firstName"))
+
 // mark:-length
 ASSERT:C1129($str.setText("").length=0)
 ASSERT:C1129($str.setText("Hello world").length=Length:C16("Hello world"))
