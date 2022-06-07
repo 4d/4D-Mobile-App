@@ -9,17 +9,16 @@
 // ----------------------------------------------------
 // Declarations
 var $bind; $binding; $buffer; $cible; $currentForm; $preview : Text
-var $tableNumber : Text
 var $fixed; $indx : Integer
 var $x : Blob
-var $context; $dropped; $target : Object
+var $context; $target : Object
+var $field : cs:C1710.field
 var $tmpl : cs:C1710.tmpl
 
 // ----------------------------------------------------
 // Initialisations
 $context:=panel
 $cible:=$context.current
-$tableNumber:=$context.tableNumber
 
 $preview:=This:C1470.preview.name
 
@@ -31,10 +30,10 @@ If (Length:C16($cible)>0)
 	
 	If (Bool:C1537(OK))
 		
-		BLOB TO VARIABLE:C533($x; $dropped)
+		BLOB TO VARIABLE:C533($x; $field)
 		SET BLOB SIZE:C606($x; 0)
 		
-		PROJECT.cleanup($dropped)
+		PROJECT.cleanup($field)
 		
 		// Check the match of the type with the source
 		SVG GET ATTRIBUTE:C1056(*; $preview; $cible; "ios:type"; $bind)
@@ -42,13 +41,17 @@ If (Length:C16($cible)>0)
 		$currentForm:=Current form name:C1298
 		$tmpl:=$context.template
 		
-		If ($tmpl.isTypeAccepted($bind; $dropped.fieldType))
+		If ($tmpl.isTypeAccepted($bind; $field.fieldType))
 			
-			$target:=Form:C1466[This:C1470.$.typeForm()][$tableNumber]
+			$target:=Form:C1466[This:C1470.$.typeForm()][$context.tableNumber]
 			
-			If ($dropped.kind#"alias")
+			If ($field.kind="alias")
 				
-				$dropped.name:=$dropped.path
+				//resolve the alias ?
+				
+			Else 
+				
+				$field.name:=$field.path
 				
 			End if 
 			
@@ -66,27 +69,27 @@ If (Length:C16($cible)>0)
 					
 				End if 
 				
-				If ($dropped.fromIndex#Null:C1517)  // Internal D&D
+				If ($field.fromIndex#Null:C1517)  // Internal D&D
 					
-					If ($dropped.fromIndex#(Num:C11(Replace string:C233($cible; "e"; ""))-1))
+					If ($field.fromIndex#(Num:C11(Replace string:C233($cible; "e"; ""))-1))
 						
 						$indx:=Num:C11(Replace string:C233($cible; "e"; ""))
-						$target.fields.remove($dropped.fromIndex)
-						$indx:=$indx-1-Num:C11($dropped.fromIndex<$indx)
-						OB REMOVE:C1226($dropped; "fromIndex")
-						$target.fields.insert($indx; $dropped)
+						$target.fields.remove($field.fromIndex)
+						$indx:=$indx-1-Num:C11($field.fromIndex<$indx)
+						OB REMOVE:C1226($field; "fromIndex")
+						$target.fields.insert($indx; $field)
 						
 					End if 
 					
 				Else 
 					
-					$dropped:=$tmpl.fieldDescription($dropped; $target[$tMatches{1}][Num:C11($tMatches{2})]; $context.tableNumber)
+					$field:=$tmpl.fieldDescription($field; $target[$tMatches{1}][Num:C11($tMatches{2})]; $context.tableNumber)
 					
 				End if 
 				
-				PROJECT.minimumField($dropped)
+				PROJECT.minimumField($field)
 				
-				$target[$tMatches{1}][Num:C11($tMatches{2})]:=$dropped
+				$target[$tMatches{1}][Num:C11($tMatches{2})]:=$field
 				
 			Else   // Single value field (Not aaaaa[000]) ie 'searchableField' or 'sectionField'
 				
@@ -96,16 +99,16 @@ If (Length:C16($cible)>0)
 					
 					If (Value type:C1509($target[$binding])#Is collection:K8:32)
 						
-						$target[$binding]:=($target[$binding]=Null:C1517) ? $dropped : New collection:C1472($target[$binding])
+						$target[$binding]:=($target[$binding]=Null:C1517) ? $field : New collection:C1472($target[$binding])
 						
 					End if 
 					
 					If (Value type:C1509($target[$binding])=Is collection:K8:32)
 						
-						If ($target[$binding].query("name = :1"; $dropped.path).pop()=Null:C1517)
+						If ($target[$binding].query("name = :1"; $field.path).pop()=Null:C1517)
 							
 							// Append field
-							$target[$binding].push($dropped)
+							$target[$binding].push($field)
 							
 						End if 
 					End if 
@@ -117,9 +120,9 @@ If (Length:C16($cible)>0)
 							//______________________________________________________
 						: ($cible="background")
 							
-							If ($dropped.fromIndex#Null:C1517)
+							If ($field.fromIndex#Null:C1517)
 								
-								$target.fields.remove($dropped.fromIndex)
+								$target.fields.remove($field.fromIndex)
 								
 							End if 
 							
@@ -133,23 +136,23 @@ If (Length:C16($cible)>0)
 									
 									If ($target.fields.length<$fixed)
 										
-										$target.fields[$fixed]:=$dropped
+										$target.fields[$fixed]:=$field
 										
 									Else 
 										
-										$target.fields.push($dropped)
+										$target.fields.push($field)
 										
 									End if 
 									
 								Else 
 									
-									$target.fields[$indx]:=$dropped
+									$target.fields[$indx]:=$field
 									
 								End if 
 								
 							Else 
 								
-								$target.fields.push($dropped)
+								$target.fields.push($field)
 								
 							End if 
 							
@@ -158,10 +161,10 @@ If (Length:C16($cible)>0)
 							
 							$indx:=Num:C11(Replace string:C233($cible; "e"; ""))
 							
-							If ($dropped.fromIndex#Null:C1517)
+							If ($field.fromIndex#Null:C1517)
 								
-								$target.fields.remove($dropped.fromIndex)
-								$indx:=$indx-1-Num:C11($dropped.fromIndex<$indx)
+								$target.fields.remove($field.fromIndex)
+								$indx:=$indx-1-Num:C11($field.fromIndex<$indx)
 								
 							Else 
 								
@@ -169,19 +172,19 @@ If (Length:C16($cible)>0)
 								
 							End if 
 							
-							$target.fields.insert($indx; $dropped)
+							$target.fields.insert($indx; $field)
 							
 							//______________________________________________________
 						Else 
 							
-							$target[$binding]:=$dropped
+							$target[$binding]:=$field
 							
 							//______________________________________________________
 					End case 
 				End if 
 				
 				//MARK:Cleanup
-				PROJECT.minimumField($dropped)
+				PROJECT.minimumField($field)
 				
 			End if 
 			

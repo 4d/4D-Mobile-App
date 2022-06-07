@@ -164,13 +164,16 @@ If (Asserted:C1132($project#Null:C1517))
 				
 				For each ($tt; $project.dataModel[$t])
 					
-					If (Length:C16($tt)>0)
+					If (Length:C16($tt)=0)
 						
-						If ($project.dataModel[$t][$tt].relatedDataClass#Null:C1517)
-							
-							$publishedTableNames.push($project.dataModel[$t][$tt].relatedDataClass)
-							
-						End if 
+						continue
+						
+					End if 
+					
+					If ($project.dataModel[$t][$tt].relatedDataClass#Null:C1517)
+						
+						$publishedTableNames.push($project.dataModel[$t][$tt].relatedDataClass)
+						
 					End if 
 				End for each 
 			End for each 
