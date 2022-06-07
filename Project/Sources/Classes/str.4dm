@@ -581,7 +581,7 @@ Function lowerCamelCase($target : Text) : Text
 	var $i : Integer
 	var $c : Collection
 	
-	$target:=Lowercase:C14(Count parameters:C259=0 ? This:C1470.value : $target)
+	$target:=Count parameters:C259=0 ? This:C1470.value : $target
 	
 	If (Length:C16($target)>0)
 		
@@ -589,11 +589,16 @@ Function lowerCamelCase($target : Text) : Text
 			
 			$t:=This:C1470.spaceSeparated($target)
 			
+			// Delete, if necessary, the first capital letter
+			$t[[1]]:=Lowercase:C14($t[[1]])
+			
 			// Remove spaces
 			$c:=Split string:C1554($t; " "; sk ignore empty strings:K86:1+sk trim spaces:K86:2)
 			
 			// Capitalization of the first letter of words from the 2nd
 			If ($c.length>1)
+				
+				$c[0]:=Lowercase:C14($c[0])
 				
 				For ($i; 1; $c.length-1; 1)
 					
@@ -1365,14 +1370,14 @@ Function suitableWithFileName($target : Text) : Text
 	
 /*
 All non-permitted characters are removed. Example: way*fast becomes wayfast:
-< (less than)
-> (greater than)
+<(less than)
+>(greater than)
 : (colon)
-" (right quotation mark)
-| (vertical bar or pipe)
+" (right quotation mark)"
+ | (vertical bar or pipe)
 ? (question mark)
-* (asterisk)
-. (period) or space at the begin or end of the file or folder name
+*(asterisk)
+.(Period)or space at the begin or end of the file or folder name
 */
 	
 	$target:=Count parameters:C259>=1 ? $target : This:C1470.value
