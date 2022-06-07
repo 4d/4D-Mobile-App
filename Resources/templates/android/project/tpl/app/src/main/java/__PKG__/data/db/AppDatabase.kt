@@ -9,10 +9,12 @@ package {{package}}.data.db
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.qmobile.qmobiledatastore.dao.ActionTask
 import com.qmobile.qmobiledatastore.dao.BaseDao
 import com.qmobile.qmobiledatastore.data.RoomData
 import com.qmobile.qmobiledatastore.data.RoomEntity
 import com.qmobile.qmobiledatastore.db.DaoProvider
+import com.qmobile.qmobileui.action.utils.ActionInfoConverter
 import {{package}}.data.converter.Converters
 {{#tableNames}}
 import {{package}}.data.dao.entity.{{name}}Dao
@@ -22,11 +24,11 @@ import {{package}}.data.model.entity.{{name}}
 {{/tableNames}}
 
 @Database(
-    entities = [{{entity_classes}}],
+    entities = [{{entity_classes}}, ActionTask::class],
     version = 1,
     exportSchema = true
 )
-@TypeConverters(Converters::class)
+@TypeConverters(Converters::class, ActionInfoConverter::class)
 abstract class AppDatabase :
     RoomDatabase(),
     DaoProvider {

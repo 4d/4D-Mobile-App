@@ -9,6 +9,99 @@
         android:id="@+id/settingsFragment"
         android:name="com.qmobile.qmobileui.settings.SettingsFragment"
         android:label="Settings"
-        tools:layout="@xml/preferences" />
+        tools:layout="@xml/preferences">
+
+        <action
+            android:id="@+id/to_action_form"
+            app:destination="@id/actionParametersFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/to_pending_tasks"
+            app:destination="@id/tasksFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/tasksFragment"
+        android:name="com.qmobile.qmobileui.action.pendingtasks.TasksFragment">
+
+        <action
+            android:id="@+id/to_action_form"
+            app:destination="@id/actionParametersFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <argument
+            android:name="tableName"
+            app:argType="string" />
+
+        <argument
+            android:name="currentItemId"
+            app:argType="string" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/actionParametersFragment"
+        android:name="com.qmobile.qmobileui.action.actionparameters.ActionParametersFragment"
+        android:label="{navbarTitle}">
+
+        <action
+            android:id="@+id/action_parameters_to_scanner"
+            app:destination="@id/barCodeFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <argument
+            android:name="tableName"
+            app:argType="string" />
+
+        <argument
+            android:name="itemId"
+            app:argType="string" />
+
+        <argument
+            android:name="relationName"
+            app:argType="string" />
+
+        <argument
+            android:name="parentItemId"
+            app:argType="string" />
+
+        <argument
+            android:name="taskId"
+            app:argType="string" />
+
+        <argument
+            android:name="actionId"
+            app:argType="string" />
+
+        <argument
+            android:name="navbarTitle"
+            app:argType="string" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/barCodeFragment"
+        android:name="com.qmobile.qmobileui.action.barcode.BarcodeScannerFragment">
+
+        <argument
+            android:name="position"
+            app:argType="integer" />
+
+    </fragment>
 
 </navigation>

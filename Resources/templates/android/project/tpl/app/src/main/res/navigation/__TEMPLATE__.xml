@@ -41,8 +41,16 @@
             app:popExitAnim="@anim/slide_out_right" />
 
         <action
-            android:id="@+id/action_list_to_action_form"
+            android:id="@+id/to_action_form"
             app:destination="@id/actionParametersFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/to_pending_tasks"
+            app:destination="@id/tasksFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -77,8 +85,16 @@
             app:popExitAnim="@anim/slide_out_right" />
 
         <action
-            android:id="@+id/action_list_to_action_form"
+            android:id="@+id/to_action_form"
             app:destination="@id/actionParametersFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/to_pending_tasks"
+            app:destination="@id/tasksFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -145,8 +161,16 @@
             app:popExitAnim="@anim/slide_out_right" />
 
         <action
-            android:id="@+id/action_list_to_action_form"
+            android:id="@+id/to_action_form"
             app:destination="@id/actionParametersFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+                    
+        <action
+            android:id="@+id/to_pending_tasks"
+            app:destination="@id/tasksFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -196,8 +220,16 @@
             app:popExitAnim="@anim/slide_out_right" />
 
         <action
-            android:id="@+id/action_list_to_action_form"
+            android:id="@+id/to_action_form"
             app:destination="@id/actionParametersFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        
+        <action
+            android:id="@+id/to_pending_tasks"
+            app:destination="@id/tasksFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -219,7 +251,7 @@
 
     <fragment
         android:id="@+id/actionParametersFragment"
-        android:name="com.qmobile.qmobileui.action.ActionParametersFragment"
+        android:name="com.qmobile.qmobileui.action.actionparameters.ActionParametersFragment"
         android:label="{navbarTitle}">
 
         <action
@@ -245,6 +277,14 @@
         <argument
             android:name="parentItemId"
             app:argType="string" />
+                 
+        <argument
+            android:name="taskId"
+            app:argType="string" />
+
+        <argument
+            android:name="actionId"
+            app:argType="string" />
 
         <argument
             android:name="navbarTitle"
@@ -259,6 +299,28 @@
         <argument
             android:name="position"
             app:argType="integer" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/tasksFragment"
+        android:name="com.qmobile.qmobileui.action.pendingtasks.TasksFragment">
+
+        <action
+            android:id="@+id/to_action_form"
+            app:destination="@id/actionParametersFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <argument
+            android:name="tableName"
+            app:argType="string" />
+
+        <argument
+            android:name="currentItemId"
+            app:argType="string" />
 
     </fragment>
 

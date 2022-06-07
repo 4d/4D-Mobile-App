@@ -43,8 +43,4 @@ abstract class {{tableName}}Dao :
     @Transaction
     @RawQuery(observedEntities = [{{tableName}}::class])
     abstract override fun getAllPagingData(sqLiteQuery: SupportSQLiteQuery): PagingSource<Int, {{tableName}}RoomEntity>
-
-    @Transaction
-    @RawQuery(observedEntities = [{{tableName}}::class])
-    abstract override fun getAll(sqLiteQuery: SupportSQLiteQuery): LiveData<List<{{tableName}}RoomEntity>>
 }

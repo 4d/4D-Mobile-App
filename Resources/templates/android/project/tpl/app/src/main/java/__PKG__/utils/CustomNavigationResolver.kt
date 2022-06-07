@@ -7,13 +7,17 @@
 package {{package}}.utils
 
 import androidx.databinding.ViewDataBinding
+import androidx.fragment.app.FragmentActivity
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.qmobile.qmobileapi.model.entity.EntityModel
 import com.qmobile.qmobiledatastore.data.RoomEntity
 import com.qmobile.qmobiledatasync.utils.GenericNavigationResolver
-import com.qmobile.qmobileui.action.ActionParametersFragmentDirections
+import com.qmobile.qmobileui.R
+import com.qmobile.qmobileui.action.actionparameters.ActionParametersFragmentDirections
 import com.qmobile.qmobileui.detail.viewpager.EntityViewPagerFragmentDirections
 import com.qmobile.qmobileui.list.EntityListFragmentDirections
+import com.qmobile.qmobileui.settings.SettingsFragmentDirections
 import com.qmobile.qmobileui.ui.disableLink
 import com.qmobile.qmobileui.ui.enableLink
 import com.qmobile.qmobileui.ui.setOnSingleClickListener
@@ -40,26 +44,23 @@ class CustomNavigationResolver : GenericNavigationResolver {
         viewDataBinding: ViewDataBinding,
         key: String,
         query: String,
+        sourceTable: String,
         destinationTable: String,
         parentItemId: String,
         parentTableName: String,
         path: String
     ) {
-        val action = when (viewDataBinding) {
-            {{#tableNames_navigation}}
-            is RecyclerviewItem{{nameCamelCase}}Binding -> EntityListFragmentDirections.actionListToViewpager(
+        viewDataBinding.root.findNavController().navigate(
+            EntityListFragmentDirections.actionListToViewpager(
                 key,
-                "{{name}}",
+                sourceTable,
                 query,
                 destinationTable,
                 parentItemId,
                 parentTableName,
-                path               
+                path
             )
-            {{/tableNames_navigation}}
-            else -> null
-        }
-        action?.let { viewDataBinding.root.findNavController().navigate(action) }
+        )
     }
 
     /**
@@ -197,14 +198,18 @@ class CustomNavigationResolver : GenericNavigationResolver {
         itemId: String,
         relationName: String,
         parentItemId: String,
+        pendingTaskId: String,
+        actionId: String,
         navbarTitle: String
     ) {
         viewDataBinding.root.findNavController().navigate(
-            EntityListFragmentDirections.actionListToActionForm(
+            SettingsFragmentDirections.toActionForm(
                 tableName = tableName,
                 itemId = itemId,
                 relationName = relationName,
                 parentItemId = parentItemId,
+                taskId = pendingTaskId,
+                actionId = actionId,
                 navbarTitle = navbarTitle
             )
         )
@@ -215,7 +220,16 @@ class CustomNavigationResolver : GenericNavigationResolver {
      */
     override fun navigateToActionScanner(viewDataBinding: ViewDataBinding, position: Int) {
         viewDataBinding.root.findNavController().navigate(
-            ActionParametersFragmentDirections.actionParametersToScanner(position)
+            ActionParametersFragmentDirections.actionParametersToScanner(position = position)
+        )
+    }
+
+    /**
+     * Navigates to TasksFragment
+     */
+    override fun navigateToPendingTasks(fragmentActivity: FragmentActivity, tableName: String, currentItemId: String) {
+        Navigation.findNavController(fragmentActivity, R.id.nav_host_container).navigate(
+            SettingsFragmentDirections.toPendingTasks(tableName = tableName, currentItemId = currentItemId)
         )
     }
 }
