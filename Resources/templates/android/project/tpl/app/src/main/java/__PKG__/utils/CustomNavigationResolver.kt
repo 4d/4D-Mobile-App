@@ -199,7 +199,7 @@ class CustomNavigationResolver : GenericNavigationResolver {
         relationName: String,
         parentItemId: String,
         pendingTaskId: String,
-        actionId: String,
+        actionUUID: String,
         navbarTitle: String
     ) {
         viewDataBinding.root.findNavController().navigate(
@@ -209,7 +209,7 @@ class CustomNavigationResolver : GenericNavigationResolver {
                 relationName = relationName,
                 parentItemId = parentItemId,
                 taskId = pendingTaskId,
-                actionId = actionId,
+                actionUUID = actionUUID,
                 navbarTitle = navbarTitle
             )
         )
