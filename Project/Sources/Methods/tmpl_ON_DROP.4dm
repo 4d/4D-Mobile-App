@@ -46,7 +46,11 @@ If (Length:C16($cible)>0)
 			
 			$target:=Form:C1466[This:C1470.$.typeForm()][$tableNumber]
 			
-			$dropped.name:=$dropped.path
+			If ($dropped.kind#"alias")
+				
+				$dropped.name:=$dropped.path
+				
+			End if 
 			
 			SVG GET ATTRIBUTE:C1056(*; $preview; $cible; "ios:bind"; $binding)
 			
