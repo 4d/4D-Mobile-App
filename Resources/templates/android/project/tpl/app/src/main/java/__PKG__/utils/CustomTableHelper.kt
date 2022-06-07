@@ -61,15 +61,20 @@ class CustomTableHelper : GenericTableHelper {
                 entity = BaseApp.mapper.readValue<{{relation_source}}>(jsonString)
             (entity as {{relation_source}}?)?.__{{relation_name}}Key =
                 RelationHelper.getRelationId(jsonString, "{{relation_name_original}}", fetchedFromRelation)
+            (entity as {{relation_source}}?)?.{{relation_name}} = null
         }
         {{/relations_many_to_one}}
         {{#tableNames_without_many_to_one_relation}}
         if (tableName == "{{name}}") {
-            if (entity == null) {
+            if (entity == null)
                 entity = BaseApp.mapper.readValue<{{name}}>(jsonString)
-            }
         }
         {{/tableNames_without_many_to_one_relation}}
+        // Empty relations
+        {{#relations_one_to_many}}
+        if (tableName == "{{relation_source}}")
+            (entity as {{relation_source}}?)?.{{relation_name}} = null
+        {{/relations_one_to_many}}
         return entity
     }
 
