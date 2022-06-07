@@ -17,7 +17,7 @@ import com.qmobile.qmobiledatastore.db.DaoProvider
 import com.qmobile.qmobileui.action.utils.ActionInfoConverter
 import {{package}}.data.converter.Converters
 {{#tableNames}}
-import {{package}}.data.dao.entity.{{name}}Dao
+import {{package}}.data.dao.{{name}}Dao
 {{/tableNames}}
 {{#tableNames}}
 import {{package}}.data.model.entity.{{name}}

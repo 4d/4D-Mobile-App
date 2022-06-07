@@ -4,7 +4,7 @@
  * Copyright (c) {{date_year}} {{author}}. All rights reserved.
  */
 
-package {{package}}.data.dao.entity
+package {{package}}.data.dao
 
 import androidx.lifecycle.LiveData
 import androidx.paging.DataSource

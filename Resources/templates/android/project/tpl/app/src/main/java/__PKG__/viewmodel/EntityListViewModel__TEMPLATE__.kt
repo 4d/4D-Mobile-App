@@ -4,7 +4,7 @@
  * Copyright (c) {{date_year}} {{author}}. All rights reserved.
  */
 
-package {{package}}.viewmodel.entityList
+package {{package}}.viewmodel
 
 import com.qmobile.qmobileapi.network.ApiService
 import com.qmobile.qmobiledatasync.viewmodel.EntityListViewModel

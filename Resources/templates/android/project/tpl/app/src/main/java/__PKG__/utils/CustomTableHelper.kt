@@ -20,7 +20,7 @@ import com.qmobile.qmobiledatasync.viewmodel.EntityViewModel
 import {{package}}.data.model.entity.{{name}}
 {{/tableNames}}
 {{#tableNames}}
-import {{package}}.viewmodel.entityList.EntityListViewModel{{name}}
+import {{package}}.viewmodel.EntityListViewModel{{name}}
 {{/tableNames}}
 import kotlin.reflect.KParameter
 import kotlin.reflect.KProperty1
