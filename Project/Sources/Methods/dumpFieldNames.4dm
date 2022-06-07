@@ -20,6 +20,7 @@ End if
 
 PROJECT:=cs:C1710.project.new()
 
+var $recu; $recuOut : Object
 var $fieldKey : Text  // field id or name
 For each ($fieldKey; $in.table)
 	Case of 
@@ -55,7 +56,7 @@ For each ($fieldKey; $in.table)
 				
 			End if 
 			
-			// add primary key if missing
+			// add primary key if missing (destination table must be published, id allow to match link [OPTI: inverse relation n-1 could be sufficient])
 			var $relatedDataClass : Object
 			$relatedDataClass:=$in.catalog.getTable(String:C10($in.table[$fieldKey].relatedDataClass))
 			If (Asserted:C1132($relatedDataClass#Null:C1517; "Unknown data class '"+String:C10($in.table[$fieldKey].relatedDataClass)+"' pointed by link "+$fieldKey))
@@ -73,7 +74,6 @@ For each ($fieldKey; $in.table)
 				
 			End if 
 			
-			var $recu; $recuOut : Object
 			$recu:=New object:C1471()
 			$recu.table:=OB Copy:C1225($in.table[$fieldKey])
 			$recu.table[""]:=$in.catalog.getTableInfo(String:C10($in.table[$fieldKey].relatedDataClass))
@@ -93,17 +93,10 @@ For each ($fieldKey; $in.table)
 			
 			$recuOut:=$in.catalog.aliasPath($in.table[""].name; $in.table[$fieldKey])
 			
+			$out.fields.push($recuOut.path)
 			
-			$out.fields.push($in.table[$fieldKey].path)  // TODO: unalias
-			
-			// TODO: Fix get last point instead
-/*
-If (Position("."; $in.table[$fieldKey].path)>0)
-$Txt_field:=Substring($in.table[$fieldKey].path; 1; Position("."; $in.table[$fieldKey].path)-1)
-If ($out.expand.indexOf($fieldKey)<0)
-$out.expand.push($fieldKey)
-End if 
-End if */
+			// ASKME: do we really need all recursive fields data here, just maybe by doing a first pass to get them,
+			// we could just keep id, and data must be retrieved by their own table request.
 			
 	End case 
 	

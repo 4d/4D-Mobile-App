@@ -270,13 +270,19 @@ Case of
 				End if 
 				
 				// Get field list name
-				$o:=dump(New object:C1471(\
-					"action"; "_fieldNames"; \
-					"catalog"; $in.catalog; \
-					"table"; $table))
+				If (False:C215)
+					$o:=dump(New object:C1471(\
+						"action"; "_fieldNames"; \
+						"catalog"; $in.catalog; \
+						"table"; $table))
+				Else 
+					$o:=dumpFieldNames(New object:C1471(\
+						"catalog"; $in.catalog; \
+						"table"; $table))
+				End if 
 				
 				If (Bool:C1537($in.expand))  // If we want to use old way to do it, not optimized $expand
-					
+					ASSERT:C1129(Not:C34(dev_Matrix); "Expand code must not be used, remove?")  // check if not used
 					If ($o.expand.length>0)
 						
 						$query["$expand"]:=$o.expand.join(",")

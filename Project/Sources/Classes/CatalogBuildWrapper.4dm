@@ -32,24 +32,30 @@ Function aliasPath($tableName : Text; $alias : Object; $recursive : Boolean)->$r
 	$result:=New object:C1471
 	$result.paths:=New collection:C1472
 	
-	var $sourceDataClass; $destination; $previousDataClass : Object
+	var $sourceDataClass; $destination; $previousDataClass; $pathElement : Object
 	$sourceDataClass:=This:C1470.getTable($tableName)
 	
 	Repeat 
 		$path:=$paths.shift()
-		$destination:=$sourceDataClass[$path]
+		$destination:=$sourceDataClass.fields.query("name = :1"; $path).pop()
 		
-		$result.paths.push(New object:C1471(\
-			"path"; $path; \
-			"dataClass"; $sourceDataClass[""].name))
 		
 		$previousDataClass:=$sourceDataClass
+		
+		$pathElement:=New object:C1471(\
+			"path"; $path; \
+			"from"; $sourceDataClass.name)
+		$result.paths.push($pathElement)
 		
 		If ($destination.relatedDataClass#Null:C1517)  // Is relatedDataClass filled for alias? like destination field
 			
 			$sourceDataClass:=This:C1470.getTable($destination.relatedDataClass)
 			
+			$pathElement.to:=$sourceDataClass.name
+			
 		End if 
+		
+		
 	Until ($paths.length=0)
 	
 	If (Bool:C1537($recursive))
@@ -65,4 +71,6 @@ Function aliasPath($tableName : Text; $alias : Object; $recursive : Boolean)->$r
 		End if 
 	End if 
 	
+	$result.path:=$result.paths.extract("path").join(".")
+	$result.dataClasses:=$result.paths.extract("from").distinct()
 	
