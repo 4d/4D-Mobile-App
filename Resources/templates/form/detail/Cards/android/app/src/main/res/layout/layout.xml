@@ -71,15 +71,10 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!--
-            THE FOLLOWING PART WILL BE DUPLICATED CARD VIEWS FOR EVERY FIELD
-            YOU DROP AT THE BOTTOM OF THE TEMPLATE
-            -->
-
-            <!--FOR_EACH_FIELD-->
             <!-- EVERYTHING BELOW WILL BE DUPLICATED FOR EACH FIELD YOU DROP AT THE BOTTOM OF THE
                  TEMPLATE IN THE PROJECT EDITOR -->
 
+            <!--FOR_EACH_FIELD-->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -192,7 +187,6 @@
             </androidx.cardview.widget.CardView>
 
             <!--END_FOR_EACH_FIELD-->
-
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
