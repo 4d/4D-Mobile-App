@@ -43,17 +43,9 @@ If (Length:C16($cible)>0)
 		
 		If ($tmpl.isTypeAccepted($bind; $field.fieldType))
 			
-			$target:=Form:C1466[This:C1470.$.typeForm()][$context.tableNumber]
+			$field.name:=$field.kind="alias" ? $field.name : $field.path
 			
-			If ($field.kind="alias")
-				
-				//resolve the alias ?
-				
-			Else 
-				
-				$field.name:=$field.path
-				
-			End if 
+			$target:=Form:C1466[This:C1470.$.typeForm()][$context.tableNumber]
 			
 			SVG GET ATTRIBUTE:C1056(*; $preview; $cible; "ios:bind"; $binding)
 			

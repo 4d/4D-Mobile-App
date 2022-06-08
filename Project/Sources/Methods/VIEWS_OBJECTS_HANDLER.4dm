@@ -269,8 +269,6 @@ Case of
 										For ($i; 1; $count; 1)
 											
 											$o:=($form.fields.pointer())->{$i}
-											$o.name:=$o.path
-											
 											$view.addField($o; $fieldList)
 											
 										End for 
@@ -287,8 +285,6 @@ Case of
 												If (Num:C11($o.fieldNumber)=0)\
 													 | ($fieldList.query("fieldNumber = :1"; Num:C11($o.fieldNumber)).pop()=Null:C1517)
 													
-													// Add the field
-													$o.name:=$o.path
 													$view.addField($o; $fieldList)
 													
 												End if 

@@ -110,9 +110,10 @@ Function addField($field : cs:C1710.field; $fields : Collection)
 	
 	var $index : Integer
 	
+	$field.name:=$field.kind="alias" ? $field.name : $field.path
+	
 	//MARK:Cleanup
 	PROJECT.minimumField($field)
-	$field.name:=$field.path
 	
 	If ($field.kind="relatedEntities")  // 1-N relation with published related data class
 		
