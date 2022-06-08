@@ -565,12 +565,15 @@
 		"methods": [
 			"_createPrjForTesting",
 			"Compiler_4dUnit",
+			"Method436",
 			"test_capabilities",
 			"test_catalog",
 			"test_dataSet",
-			"test_ob_class",
+			"test_obClass",
+			"test_projectClass",
 			"test_reconcile",
 			"test_sqliteSizes",
+			"test_strClass",
 			"test_structure",
 			"test_structureCatalog",
 			"test_swiftPM",
@@ -948,8 +951,7 @@
 		"methods": [
 			"test_dat",
 			"test_lep",
-			"test_regex",
-			"test_str"
+			"test_regex"
 		]
 	},
 	"widgets": {

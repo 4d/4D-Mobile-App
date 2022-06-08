@@ -589,9 +589,6 @@ Function lowerCamelCase($target : Text) : Text
 			
 			$t:=This:C1470.spaceSeparated($target)
 			
-			// Delete, if necessary, the first capital letter
-			$t[[1]]:=Lowercase:C14($t[[1]])
-			
 			// Remove spaces
 			$c:=Split string:C1554($t; " "; sk ignore empty strings:K86:1+sk trim spaces:K86:2)
 			
@@ -602,7 +599,7 @@ Function lowerCamelCase($target : Text) : Text
 				
 				For ($i; 1; $c.length-1; 1)
 					
-					$t:=$c[$i]
+					$t:=Lowercase:C14($c[$i])
 					$t[[1]]:=Uppercase:C13($t[[1]])
 					$c[$i]:=$t
 					
@@ -612,7 +609,7 @@ Function lowerCamelCase($target : Text) : Text
 				
 			Else 
 				
-				return $t
+				return Lowercase:C14($t)
 				
 			End if 
 			
@@ -628,13 +625,14 @@ Function lowerCamelCase($target : Text) : Text
 Function spaceSeparated($target : Text) : Text
 	
 	var $char : Text
+	var $uppercase : Boolean
 	var $i; $l : Integer
 	var $c : Collection
 	
 	$target:=Count parameters:C259=0 ? This:C1470.value : $target
-	$c:=New collection:C1472
-	
 	$target:=Replace string:C233($target; "_"; " ")
+	
+	$c:=New collection:C1472
 	
 	If (Position:C15(" "; $target)>0)
 		
@@ -646,12 +644,23 @@ Function spaceSeparated($target : Text) : Text
 			
 			$i+=1
 			
-			If (Character code:C91(Lowercase:C14($char))#Character code:C91($target[[$i]]))\
-				 && ($i>1)  // Cesure
+			If ($i=1)
 				
-				$c.push(Substring:C12($target; $l; $i-$l-1))
-				$l:=$i
+				$uppercase:=Character code:C91(Uppercase:C13($char))=Character code:C91($target[[$i]])
 				
+			Else 
+				
+				If (Character code:C91(Lowercase:C14($char))#Character code:C91($target[[$i]])) & Not:C34($uppercase)  // Cesure
+					
+					$c.push(Substring:C12($target; $l; $i-$l-1))
+					$l:=$i
+					$uppercase:=False:C215
+					
+				Else 
+					
+					$uppercase:=Character code:C91(Uppercase:C13($char))=Character code:C91($target[[$i]])
+					
+				End if 
 			End if 
 		End for each 
 		

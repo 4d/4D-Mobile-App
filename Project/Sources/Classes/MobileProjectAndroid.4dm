@@ -2,16 +2,14 @@ Class extends MobileProject
 
 //=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor($project : Object)
+	
 	Super:C1705($project)
 	
 	This:C1470.isOnError:=False:C215
 	
-	This:C1470.androidProcess:=cs:C1710.androidProcess.new()
-	This:C1470.studio:=cs:C1710.studio.new()
-	
 	This:C1470.project:=OB Copy:C1225(This:C1470.input)
 	
-	// * CLEANING INNER $OBJECTS
+	// MARK:CLEANING INNER $OBJECTS
 	var $o : Object
 	For each ($o; OB Entries:C1720(This:C1470.project.project).query("key=:1"; "$@"))
 		
@@ -19,11 +17,14 @@ Class constructor($project : Object)
 		
 	End for each 
 	
+	This:C1470.androidProcess:=cs:C1710.androidProcess.new()
+	This:C1470.studio:=cs:C1710.studio.new()
+	
 	This:C1470.project.sdk:=This:C1470.androidProcess.androidSDKFolder().path
 	This:C1470.project.cache_4d_sdk:=This:C1470.paths.cacheSdkAndroidUnzipped().path
 	This:C1470.project.path:=Convert path system to POSIX:C1106(This:C1470.project.path)
 	
-	// * GET THE PROJECT FOLDER
+	// MARK:GET THE PROJECT FOLDER
 	var $folder : 4D:C1709.Folder
 	$folder:=Folder:C1567(This:C1470.project.path)
 	$folder:=$folder.folder($folder.parent.name)
@@ -37,11 +38,7 @@ Class constructor($project : Object)
 	This:C1470.project.hasActions:=True:C214
 	This:C1470.project.hasDataSet:=Feature.with("androidDataSet")
 	
-	If ((Shift down:C543) && (Bool:C1537(dev_Matrix)=True:C214))
-		This:C1470.project.debugMode:=True:C214
-	Else 
-		This:C1470.project.debugMode:=False:C215
-	End if 
+	This:C1470.project.debugMode:=((Shift down:C543) && (Bool:C1537(dev_Matrix)=True:C214)) ? True:C214 : False:C215
 	
 	This:C1470.checkPackage()
 	
@@ -58,16 +55,15 @@ Class constructor($project : Object)
 	This:C1470.activity:="com.qmobile.qmobileui.activity.loginactivity.LoginActivity"
 	
 	This:C1470.avdName:=$project.project._simulator
-	//This.device:=$project.project._device
 	This:C1470.serial:=""
 	
-	// Class for create()
+	// MARK:Class for create()
 	This:C1470.androidprojectgenerator:=cs:C1710.androidprojectgenerator.new(This:C1470.studio.java; This:C1470.studio.kotlinc; This:C1470.project.path)
 	
-	// Class for build()
+	// MARK:Class for build()
 	This:C1470.gradlew:=cs:C1710.gradlew.new(This:C1470.project.path)
 	
-	// Classes for run()
+	// MARK:Classes for run()
 	This:C1470.emulator:=cs:C1710.androidEmulator.new()
 	This:C1470.adb:=cs:C1710.adb.new()
 	
@@ -76,6 +72,7 @@ Class constructor($project : Object)
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
 Function init
+	
 	This:C1470.setJavaHome()
 	This:C1470.setAndroidHome()
 	
@@ -119,8 +116,7 @@ Function create()->$result : Object
 	
 	If (Feature.with("androidDataSet"))
 		
-		// * CREATE DATASET
-		
+		// MARK:CREATE DATASET
 		If (This:C1470.mustDoDataSet())
 			
 			This:C1470.postStep("dataSetGeneration")
@@ -133,8 +129,6 @@ Function create()->$result : Object
 				$o.errors.push("Failed to dump data")
 				
 			End if 
-			
-			// Else: asked to not generate data at each build
 		End if 
 		
 		If ($o.success)
@@ -164,7 +158,7 @@ Function create()->$result : Object
 	
 	If ($o.success)
 		
-		// * GENERATE PROJECT FILES
+		// MARK:GENERATE PROJECT FILES
 		This:C1470.postStep("workspaceCreation")
 		
 		$o:=This:C1470.androidprojectgenerator.generate(This:C1470.file; This:C1470.project.project._folder)
@@ -178,7 +172,7 @@ Function create()->$result : Object
 			// Create the app manifest
 			$o.manifest:=This:C1470._createManifest(This:C1470.project.project)
 			
-			// * GRADLEW ACCESS RIGHTS
+			// MARK:GRADLEW ACCESS RIGHTS
 			If (Is macOS:C1572)  // No need to change permissions on Windows
 				
 				$o:=This:C1470.androidprojectgenerator.chmod()
@@ -217,22 +211,23 @@ Function create()->$result : Object
 			If (Not:C34(Bool:C1537(This:C1470.project.project.dataSource.doNotGenerateDataAtEachBuild)))
 				
 				$o:=This:C1470.dataSetLegacy()
+				
 				If (Not:C34($o.success))
+					
 					If ($o.errors=Null:C1517)
+						
 						$o.errors.push("Failed to dump data")
+						
 					End if 
 				End if 
 				
 				If ($o.success)
 					
 					$o:=This:C1470.androidprojectgenerator.copyDataSet(This:C1470.project.project._folder)
+					
 				End if 
-				
-				// Else: asked to not generate data at each build
 			End if 
-			
 		End if 
-		
 	End if 
 	
 	If (Feature.with("androidDataSet"))
@@ -253,28 +248,32 @@ Function create()->$result : Object
 	
 	If ($o.success)
 		
-		// * COPY RESOURCES
+		// MARK:COPY RESOURCES
 		This:C1470.postStep("copyingResources")
 		
 		$o:=This:C1470.androidprojectgenerator.copyResources(This:C1470.project.project._folder)
 		
 	End if 
 	
+	// MARK:ACTIONS
+	var $actions : Collection
+	$actions:=This:C1470.project.project.actions
+	
 	If ($o.success)
 		
-		// MARK:ACI0102883 : reformat coreDataForbiddenNames
+		// FIXME:ACI0102883 : reformat coreDataForbiddenNames
 		var $reservedName; $t : Text
 		var $i : Integer
 		var $action; $parameter : Object
 		
-		If (This:C1470.project.project.actions#Null:C1517) && (This:C1470.project.project.actions.length>0)
+		If ($actions#Null:C1517) && ($actions.length>0)
 			
 			//%W-533.1
-			For each ($action; This:C1470.project.project.actions)
+			For each ($action; $actions)
 				
-				If (This:C1470.project.project.actions[$i].parameters#Null:C1517)
+				If ($actions[$i].parameters#Null:C1517)
 					
-					For each ($parameter; This:C1470.project.project.actions[$i].parameters)
+					For each ($parameter; $actions[$i].parameters)
 						
 						If (Length:C16($parameter.defaultField)>0) && ($parameter.defaultField[[Length:C16($parameter.defaultField)]]="_")
 							
@@ -303,14 +302,14 @@ Function create()->$result : Object
 	
 	If ($o.success)
 		
-		// * COPY ICONS
-		$o:=This:C1470.androidprojectgenerator.copyIcons(This:C1470.project.project.dataModel; This:C1470.project.project.actions)
+		// MARK:COPY ICONS
+		$o:=This:C1470.androidprojectgenerator.copyIcons(This:C1470.project.project.dataModel; $actions)
 		
 	End if 
 	
 	If ($o.success)
 		
-		// * COPY KOTLIN CUSTOM FORMATTER FILES
+		// MARK:COPY KOTLIN CUSTOM FORMATTER FILES
 		$o:=This:C1470.androidprojectgenerator.copyKotlinCustomFormatterFiles(This:C1470.project.project.dataModel; This:C1470.project.package)
 		
 	End if 

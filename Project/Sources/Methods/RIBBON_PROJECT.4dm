@@ -345,7 +345,7 @@ Case of
 					End if 
 				End if 
 				
-				CALL WORKER:C1389(1; Formula:C1597(downloadSDK).source; \
+				CALL WORKER:C1389(Is compiled mode:C492 ? 1 : "$worker"; Formula:C1597(downloadSDK).source; \
 					$fromTeamCity ? "TeamCity" : "aws"; \
 					$menu.choice="downloadAndroidSdk" ? "android" : "ios"; \
 					False:C215; \

@@ -55,11 +55,7 @@ If (Length:C16($cible)>0)
 			If (Size of array:C274($tMatches)=2)  // List of fields
 				
 				// Belt and braces
-				If ($target[$tMatches{1}]=Null:C1517)
-					
-					$target[$tMatches{1}]:=New collection:C1472
-					
-				End if 
+				$target[$tMatches{1}]:=$target[$tMatches{1}]=Null:C1517 ? New collection:C1472 : $target[$tMatches{1}]
 				
 				If ($field.fromIndex#Null:C1517)  // Internal D&D
 					

@@ -42,10 +42,10 @@ Function update()
 - Only references tables with a single primary key (tables without a primary key or with composite primary keys are not referenced).
 - Only references tables & fields exposed as REST resource.
 - BLOB type attributes are not managed in the datastore.
-- A relation N -> 1 is not referenced if the field isn't exposed !
-- A relation 1 -> N is not referenced if the related dataclass isn't exposed !
+- A relation N->1 is not referenced if the field isn't exposed !
+- A relation 1->Nisnotreferencedifthe related dataclass isn't exposed !
 	
-Note: The datastore property is filled in during the construction phase of the class.
+Note : The datastore property is filled in during the construction phase of the class.
 Thus, this function must only be called to obtain an updated datastore.
 */
 Function exposedDatastore() : Object
@@ -103,9 +103,9 @@ Function exposedDatastore() : Object
 	//==================================================================
 /** Returns a collection of all project's dataclasses and their attributes
 	
-- If $query is a dataclasses name or number, the catalog is that dataclasses's if found.
+-If $query is a dataclasses name or number, the catalog is that dataclasses's if found.
 	
-Note: The catalog property is filled in during the construction phase of the class.
+Note : The catalog property is filled in during the construction phase of the class.
 Thus, this function must only be called to obtain an updated catalog.
 */
 Function getCatalog($query; $sorted : Boolean)->$catalog : Collection
@@ -1040,9 +1040,9 @@ Function _fields($tableName : Text)->$fields : Collection
 			
 /*
 Don't keep:
-- not exposed field
-- stamp field
-- attribute name with dot
+-not exposed field
+-stamp field
+-attribute name with dot
 */
 			
 			continue
@@ -1152,6 +1152,10 @@ Do not allow duplicate attribute names.
 							$field.type:=$field.isToMany ? -2 : -1
 							
 							$fields.push($field)
+							
+						Else 
+							
+							
 							
 						End if 
 						

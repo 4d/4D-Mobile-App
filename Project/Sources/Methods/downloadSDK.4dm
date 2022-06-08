@@ -117,7 +117,7 @@ Case of
 						
 						If ($applicationVersion[[1]]="A")
 							
-							//http://srv-build:8111/repository/download/id4dmobile_QMobile_Main_Android_Sdk_Build//855236:id/android.zip
+							//http://srv-build:8111/repository/download/id4dmobile_QMobile_Main_Android_Sdk_Build/.lastSuccessful/android.zip
 							$url:=$url+"id4dmobile_QMobile_Main_Android_Sdk_Build/.lastSuccessful/android.zip"
 							
 						Else 
@@ -126,12 +126,12 @@ Case of
 							
 							If ($applicationVersion[[7]]="0")
 								
-								//http://srv-build:8111/repository/download/id4dmobile_QMobile_19x_Android_Sdk_Build/853617:id/android.zip
+								//http://srv-build:8111/repository/download/id4dmobile_QMobile_19x_Android_Sdk_Build/.lastSuccessful/android.zip
 								$url:=$url+"x_Android_Sdk_Build/.lastSuccessful/android.zip"
 								
 							Else 
 								
-								//http://srv-build:8111/repository/download/id4dmobile_QMobile_18r6_IOS_Sdk_Build/838082:id/android.zip
+								//http://srv-build:8111/repository/download/id4dmobile_QMobile_18r6_IOS_Sdk_Build/.lastSuccessful/android.zip
 								$url:=$url+"r"+$applicationVersion[[7]]+"_IOS_Sdk_Build/.lastSuccessful/android.zip"
 								
 							End if 
@@ -142,7 +142,7 @@ Case of
 						
 						If ($applicationVersion[[1]]="A")
 							
-							//http://srv-build:8111/repository/download/id4dmobile_4dIOSSdk_Build/855236:id/ios.zip
+							//http://srv-build:8111/repository/download/id4dmobile_4dIOSSdk_Build/.lastSuccessful/ios.zip
 							$url:=$url+"id4dmobile_4dIOSSdk_Build/.lastSuccessful/ios.zip"
 							
 						Else 
@@ -151,12 +151,12 @@ Case of
 							
 							If ($applicationVersion[[7]]="0")
 								
-								//http://srv-build:8111/repository/download/id4dmobile_QMobile_19x_IOS_Sdk_Build/837030:id/ios.zip
+								//http://srv-build:8111/repository/download/id4dmobile_QMobile_19x_IOS_Sdk_Build/.lastSuccessful/ios.zip
 								$url:=$url+"x_IOS_Sdk_Build/.lastSuccessful/ios.zip"
 								
 							Else 
 								
-								//http://srv-build:8111/repository/download/id4dmobile_QMobile_18r6_IOS_Sdk_Build/838082:id/1.0.zip
+								//http://srv-build:8111/repository/download/id4dmobile_QMobile_18r6_IOS_Sdk_Build/.lastSuccessful/ios.zip
 								$url:=$url+"r"+$applicationVersion[[7]]+"x_IOS_Sdk_Build/.lastSuccessful/ios.zip"
 								
 							End if 

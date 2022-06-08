@@ -109,6 +109,12 @@ DON'T ALLOW FIELD OR RELATION NAME WITH DOT !
 				
 			End if 
 			
+			If ($o.value.kind="alias")
+				
+				
+				
+			End if 
+			
 			$table[$o.key]:=$o.value
 			
 		End for each 

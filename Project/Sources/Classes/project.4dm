@@ -1386,10 +1386,6 @@ Uper camel case
 		$name:=$str.uperCamelCase($str.unaccented())
 		return This:C1470._obfuscateReservedNames($name)
 		
-	Else 
-		
-		
-		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -1408,10 +1404,6 @@ Lower camel case
 		$str:=This:C1470._formatName($name)
 		$name:=$str.lowerCamelCase($str.unaccented())
 		return This:C1470._obfuscateReservedNames($name)
-		
-	Else 
-		
-		
 		
 	End if 
 	
@@ -2280,8 +2272,7 @@ Function _formatName($name : Text) : cs:C1710.str
 	Rgx_SubstituteText("(?mi-s)^[^[:alpha:]]*([^$]*)$"; "\\1"; ->$name; 0)
 	
 	// Remove dots and underscores
-	$str:=cs:C1710.str.new(Replace string:C233(Replace string:C233($name; "_"; " "); "."; " "))
-	return $str
+	return cs:C1710.str.new(Replace string:C233(Replace string:C233($name; "_"; " "); "."; " "))
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function _capitalizeFirtsLetter($string : Text; $separator : Text) : Text
