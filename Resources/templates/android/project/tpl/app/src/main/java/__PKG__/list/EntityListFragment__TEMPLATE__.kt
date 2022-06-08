@@ -16,4 +16,8 @@ class EntityListFragment{{tableName}}(private val binding: ViewDataBinding) : Cu
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Nothing to do
     }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        onViewCreated(binding.root, savedInstanceState)
+    }
 }
