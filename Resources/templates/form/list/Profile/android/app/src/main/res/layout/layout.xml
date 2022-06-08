@@ -36,7 +36,7 @@
 
         <TextView
             android:id="@+id/___SPECIFIC_ID_2___"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
@@ -47,14 +47,13 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="?colorPrimary"
             app:layout_constraintBottom_toTopOf="@+id/___SPECIFIC_ID_3___"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/___SPECIFIC_ID_1___"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="My field 2" />
 
         <TextView
             android:id="@+id/___SPECIFIC_ID_3___"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
@@ -64,7 +63,6 @@
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
             android:textColor="?colorOnSurface"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/___SPECIFIC_ID_1___"
             app:layout_constraintTop_toBottomOf="@+id/___SPECIFIC_ID_2___"
             tools:text="My field 3" />
