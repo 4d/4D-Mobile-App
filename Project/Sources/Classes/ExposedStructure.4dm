@@ -563,7 +563,6 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 										$related:=OB Copy:C1225($relatedField)
 										$related.label:=New collection:C1472($relatedAttribute.name; $related.name).join(".")
 										$related.tableNumber:=This:C1470.tableNumber($field.relatedDataClass)
-										$related.fieldType:=($related.fieldType=Is object:K8:27) ? 8858 : $related.fieldType
 										$related._order:=$related.label
 										$result.fields.push($related)
 										
