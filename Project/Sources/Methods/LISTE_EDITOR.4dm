@@ -143,6 +143,7 @@ Else   // <== WIDGETS METHOD
 					
 					If ($e.objectName=$ƒ.dataclasses.name)
 						
+						//TODO:Chnage field to fields ?
 						Form:C1466.dial.attributes:=Form:C1466.dial.dataclasses[$ƒ.dataclasses.itemPosition-1].field
 						$ƒ.attributes.unselect()
 						

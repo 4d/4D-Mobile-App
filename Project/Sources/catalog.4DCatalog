@@ -150,11 +150,12 @@
 			</field_extra>
 		</field>
 		<field name="Gender" uuid="8D4495BAE2A0462D981A8AB8B2742F44" type="10" limiting_length="255" never_null="true" id="7"/>
+		<field name="data" uuid="23D3822998C34E7EA26D2648D07CB18F" type="21" blob_switch_size="2147483647" never_null="true" id="8"/>
 		<primary_key field_name="ID" field_uuid="0A26D100922E475A92C49657B6C02271"/>
 		<table_extra input_form="Input" output_form="Output">
-			<editor_table_info displayable_fields_count="7">
+			<editor_table_info displayable_fields_count="13">
 				<color red="150" green="216" blue="175" alpha="255"/>
-				<coordinates left="221.29174804688" top="862.47894287109" width="140" height="188.33203125"/>
+				<coordinates left="221.29174804688" top="862.47894287109" width="147.86834716797" height="320.84118652344"/>
 			</editor_table_info>
 		</table_extra>
 	</table>

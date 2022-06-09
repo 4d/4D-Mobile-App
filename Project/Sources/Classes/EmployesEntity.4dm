@@ -3,6 +3,7 @@ Class extends Entity
 // Alias scalaires
 exposed Alias aka_ID ID
 exposed Alias aka_Nom Name
+exposed Alias aka_data data
 
 exposed Alias aka_ServiceName service.Name
 

@@ -330,9 +330,9 @@ Case of
 				
 				$c:=New collection:C1472
 				
-				For each ($i; $o.fields.extract("fieldType"))
+				For each ($field; $o.fields)
 					
-					$c.push(UI.fieldIcons[$i])
+					$c.push(UI.fieldIcons[$field.fieldType])
 					
 				End for each 
 				

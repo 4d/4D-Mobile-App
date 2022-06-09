@@ -310,16 +310,8 @@ Function updateParameters($action : Object)
 	
 	If ($o#Null:C1517)
 		
-		If (Count parameters:C259=0)
-			
-			// Use current
-			$o.action:=This:C1470.current
-			
-		Else 
-			
-			$o.action:=$action
-			
-		End if 
+		// Use current item if not passed
+		$o.action:=$action || This:C1470.current
 		
 		This:C1470.callMeBack("refreshParameters")
 		

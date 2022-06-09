@@ -350,7 +350,7 @@ Function updateFieldList
 		
 		This:C1470.context.cache:=$o.targets
 		
-		This:C1470.empty.title:=Choose:C955(Num:C11(This:C1470.tabSelector.data); "noFieldPublishedForThisTable"; "noPublishedRelationForThisTable")
+		This:C1470.empty.title:=Num:C11(This:C1470.tabSelector.data)=0 ? "noFieldPublishedForThisTable" : "noPublishedRelationForThisTable"
 		
 		COLLECTION TO ARRAY:C1562($o.paths; This:C1470.names.pointer->)
 		COLLECTION TO ARRAY:C1562($o.labels; This:C1470.labels.pointer->)
