@@ -83,6 +83,9 @@ Function handleEvents($e : Object)
 				//==============================================
 			: (This:C1470.fieldList.catch())
 				
+				var $focused : Boolean
+				$focused:=True:C214
+				
 				This:C1470.tableNumber:=This:C1470.tableLink.call()
 				This:C1470.fieldList.updateDefinition()
 				
@@ -120,6 +123,8 @@ Function handleEvents($e : Object)
 						
 						This:C1470.fieldList.foregroundColor:=Foreground color:K23:1
 						This:C1470.fieldListBorder.foregroundColor:=UI.backgroundUnselectedColor
+						
+						$focused:=False:C215
 						
 						//_______________________________
 					: (UI.isLocked())
@@ -258,6 +263,8 @@ Function handleEvents($e : Object)
 						//_______________________________
 				End case 
 				
+				_o_editor_ui_LISTBOX(This:C1470.fieldList.name; $focused)
+				
 				//==============================================
 			: (This:C1470.selectorFields.catch())\
 				 | (This:C1470.selectorRelations.catch())
@@ -371,7 +378,8 @@ Function updateFieldList
 		End for 
 		
 		// Sort by names
-		LISTBOX SORT COLUMNS:C916(*; This:C1470.fieldList.name; 1; >)
+		// FIXME:#136117 Sorting creates a desynchronization of the cache
+		// LISTBOX SORT COLUMNS(*; This.fieldList.name; 1; >)
 		
 		This:C1470.fieldList.show(Num:C11($o.count)>0)
 		
