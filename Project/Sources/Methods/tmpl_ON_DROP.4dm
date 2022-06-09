@@ -33,6 +33,16 @@ If (Length:C16($cible)>0)
 		BLOB TO VARIABLE:C533($x; $field)
 		SET BLOB SIZE:C606($x; 0)
 		
+		If ($field.kind="alias")
+			
+			$field.name:=$field.$level>0 ? $field.path : $field.name
+			
+		Else 
+			
+			$field.name:=$field.path
+			
+		End if 
+		
 		PROJECT.cleanup($field)
 		
 		// Check the match of the type with the source
@@ -43,7 +53,7 @@ If (Length:C16($cible)>0)
 		
 		If ($tmpl.isTypeAccepted($bind; $field.fieldType))
 			
-			$field.name:=$field.kind="alias" ? $field.name : $field.path
+			
 			
 			$target:=Form:C1466[This:C1470.$.typeForm()][$context.tableNumber]
 			

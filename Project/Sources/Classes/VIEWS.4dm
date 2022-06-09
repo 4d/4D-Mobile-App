@@ -110,7 +110,15 @@ Function addField($field : cs:C1710.field; $fields : Collection)
 	
 	var $index : Integer
 	
-	$field.name:=$field.kind="alias" ? $field.name : $field.path
+	If ($field.kind="alias")
+		
+		$field.name:=$field.$level>0 ? $field.path : $field.name
+		
+	Else 
+		
+		$field.name:=$field.path
+		
+	End if 
 	
 	//MARK:Cleanup
 	PROJECT.minimumField($field)
