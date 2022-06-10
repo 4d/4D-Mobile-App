@@ -53,8 +53,6 @@ If (Length:C16($cible)>0)
 		
 		If ($tmpl.isTypeAccepted($bind; $field.fieldType))
 			
-			
-			
 			$target:=Form:C1466[This:C1470.$.typeForm()][$context.tableNumber]
 			
 			SVG GET ATTRIBUTE:C1056(*; $preview; $cible; "ios:bind"; $binding)

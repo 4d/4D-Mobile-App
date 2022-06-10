@@ -478,12 +478,6 @@ Function fieldDescription($field : Object; $target : Object; $tableID : Text) : 
 	var $relation; $table : Object
 	var $current; $dropped : Collection
 	
-	//$dropped.name:=$dropped.path
-	
-	//If ($dropped.name=$dropped.path)
-	//OB REMOVE($dropped; "path")
-	//End if
-	
 	// Splits path for later
 	$current:=Split string:C1554(String:C10($target.path); ".")
 	$dropped:=Split string:C1554($field.path; ".")
@@ -498,8 +492,9 @@ Function fieldDescription($field : Object; $target : Object; $tableID : Text) : 
 			
 			$field:=New object:C1471(\
 				"kind"; "alias"; \
-				"name"; $field.name; \
-				"path"; $field.path)
+				"fieldType"; $field.fieldType; \
+				"path"; $field.path; \
+				"name"; $field.name)
 			
 			//______________________________________________________
 		: ($field.kind="relatedEntity")  // N -> 1 relation
