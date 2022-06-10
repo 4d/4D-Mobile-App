@@ -86,6 +86,8 @@ Function handleEvents($e : Object) : Integer
 						This:C1470._dataModel.foregroundColor:=Foreground color:K23:1
 						This:C1470["_dataModel.border"].foregroundColor:=UI.selectedColor
 						
+						_o_editor_ui_LISTBOX(This:C1470._dataModel.name; True:C214)
+						
 						//______________________________________________________
 					: ($e.code=On Double Clicked:K2:5)
 						
@@ -93,6 +95,8 @@ Function handleEvents($e : Object) : Integer
 						
 						This:C1470._dataModel.foregroundColor:=Foreground color:K23:1
 						This:C1470["_dataModel.border"].foregroundColor:=UI.selectedColor
+						
+						_o_editor_ui_LISTBOX(This:C1470._dataModel.name; True:C214)
 						
 						//______________________________________________________
 					: ($e.code=On Begin Drag Over:K2:44)
@@ -117,13 +121,66 @@ Function handleEvents($e : Object) : Integer
 						This:C1470._dataModel.foregroundColor:=Foreground color:K23:1
 						This:C1470["_dataModel.border"].foregroundColor:=UI.backgroundUnselectedColor
 						
+						_o_editor_ui_LISTBOX(This:C1470._dataModel.name; False:C215)
+						
+						//______________________________________________________
+				End case 
+				
+				//==============================================
+			: (This:C1470.displayed.catch())
+				
+				var $x : Blob
+				var $o : Object
+				
+				$o:=This:C1470.displayed.cellPosition($e)
+				
+				Case of 
+						
+						//______________________________________________________
+					: ($e.code=On Clicked:K2:4)\
+						 | ($e.code=On Selection Change:K2:29)
+						
+						This:C1470._updateButtons()
+						
+						This:C1470.displayed.foregroundColor:=Foreground color:K23:1
+						This:C1470.displayedBorder.foregroundColor:=UI.selectedColor
+						
+						_o_editor_ui_LISTBOX(This:C1470.displayed.name; True:C214)
+						
+						//______________________________________________________
+					: ($e.code=On Begin Drag Over:K2:44)
+						
+						//%W-533.3
+						$o:=New object:C1471(\
+							"name"; (This:C1470.srcNamePtr)->{$e.row}; \
+							"tableNumber"; (This:C1470.srcIdPtr)->{$e.row})
+						//%W+533.3
+						
+						This:C1470.beginDrag("com.4d.private.4dmobile.table"; $o)
+						
+						//______________________________________________________
+					: ($e.code=On Getting Focus:K2:7)
+						
+						This:C1470.displayed.foregroundColor:=Foreground color:K23:1
+						This:C1470.displayedBorder.foregroundColor:=UI.selectedColor
+						
+						//______________________________________________________
+					: ($e.code=On Losing Focus:K2:8)
+						
+						This:C1470.displayed.foregroundColor:=Foreground color:K23:1
+						This:C1470.displayedBorder.foregroundColor:=UI.backgroundUnselectedColor
+						
+						_o_editor_ui_LISTBOX(This:C1470.displayed.name; False:C215)
+						
 						//______________________________________________________
 				End case 
 				
 				//==============================================
 			: (This:C1470.addOne.catch($e; On Clicked:K2:4))
 				
-				This:C1470._add()
+				$o:=This:C1470._dataModel.cellPosition($e)
+				
+				This:C1470._add("one"; $o.row)
 				
 				//==============================================
 			: (This:C1470.addAll.catch($e; On Clicked:K2:4))
@@ -243,6 +300,7 @@ Function update()
 	This:C1470.main:=New collection:C1472
 	
 	For each ($item; Form:C1466.main.order)
+		
 		If (Value type:C1509($item)=Is text:K8:3)
 			
 			If (Form:C1466.dataModel[$item]#Null:C1517)
@@ -252,7 +310,6 @@ Function update()
 					"id"; $item))
 				
 			End if 
-			
 		End if 
 	End for each 
 	
@@ -353,7 +410,7 @@ Function mainHandleEvents($e : Object)->$allow : Integer
 				// End if
 				// Else
 				//If ($o.src#$e.row)\
-																																			& ($e.row#($o.src+1))  // Not the same or the next one
+																																								& ($e.row#($o.src+1))  // Not the same or the next one
 				//$o:=$me.rowCoordinates($e.row)
 				//$o.bottom:=$o.top
 				//$o.right:=$me.coordinates.right

@@ -97,6 +97,7 @@
 						"onSelectionChange",
 						"onBeginDragOver"
 					],
+					"selectionMode": "single",
 					"columns": [
 						{
 							"name": "table_ids",

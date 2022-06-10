@@ -688,11 +688,6 @@
 			<table_ref uuid="48238E0BC07B412AA3CEDE737B1E2762" name="__DeletedRecords"/>
 		</field_ref>
 	</index>
-	<index kind="regular" uuid="1AB9703657AC44CEA2377A26C10C63F7" type="7">
-		<field_ref uuid="4B754EB7AC2E4DC5A7DB7F3A1C5EE73E" name="Alpha Field">
-			<table_ref uuid="677711DF5FAF4C00A69092ED84B50A2D" name="ALL_TYPES"/>
-		</field_ref>
-	</index>
 	<index kind="regular" uuid="28BBE591ECA14531B7C388772D2BEEA9" type="7">
 		<field_ref uuid="61141087F41B4016B4ED6AD8797357B3" name="Field_2">
 			<table_ref uuid="E0EF4D9E925848A8893B9926694CF58E" name="Table_2"/>

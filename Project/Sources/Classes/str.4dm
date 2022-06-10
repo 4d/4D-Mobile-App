@@ -1,5 +1,6 @@
 Class extends tools
 
+// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor($content)
 	
 	Super:C1705()
@@ -17,7 +18,7 @@ Class constructor($content)
 		
 	End if 
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Defines the contents of the string & returns the updated object string
 Function setText($content) : cs:C1710.str
 	
@@ -52,7 +53,7 @@ Function setText($content) : cs:C1710.str
 	
 	return This:C1470
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Insertion of the given text into the current string according to the optianal parameters begin & end
 	// Also update the inserted text position into the original string (str.begin & str.end)
 Function insert($text : Text; $begin : Integer; $end : Integer) : cs:C1710.str
@@ -99,7 +100,7 @@ Function insert($text : Text; $begin : Integer; $end : Integer) : cs:C1710.str
 	
 	return This:C1470
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === ===
 	// Append the given text to the current string according eventualy use the optional separator text
 	// Also update the inserted text position into the original string (str.begin & str.end)
 Function append($text : Text; $separator : Text) : cs:C1710.str
@@ -121,7 +122,7 @@ Function append($text : Text; $separator : Text) : cs:C1710.str
 	
 	return This:C1470
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if the $toFind text is present in the string (diacritical if any)
 Function containsString($target : Text; $toFind; $diacritical : Boolean) : Boolean
 	
@@ -152,7 +153,7 @@ Function containsString($target : Text; $toFind; $diacritical : Boolean) : Boole
 			//______________________________________________________
 	End case 
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if the string contains one or more words passed by a collection or parameters.
 Function contains($words; $word; $word_2 : Text; $word_N : Text) : Boolean
 	
@@ -213,7 +214,7 @@ Function contains($words; $word; $word_2 : Text; $word_N : Text) : Boolean
 	
 	return $contains
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the position of the last occurence of a string
 Function lastOccurrenceOf($target : Text; $toFind; $diacritic : Boolean) : Integer
 	
@@ -282,7 +283,7 @@ Function lastOccurrenceOf($target : Text; $toFind; $diacritic : Boolean) : Integ
 	
 	return $position
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function shuffle($target; $length : Integer) : Text
 	
 	var $pattern; $shuffle; $t; $text : Text
@@ -342,7 +343,7 @@ Function shuffle($target; $length : Integer) : Text
 	
 	return $shuffle
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns a base64 encoded UTF-8 string
 Function base64($target; $html : Boolean) : Text
 	
@@ -379,13 +380,13 @@ Function base64($target; $html : Boolean) : Text
 	
 	return $target
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns an URL-safe base64url encoded UTF-8 string
 Function urlBase64Encode($target : Text) : Text
 	
 	return (Count parameters:C259=0 ? This:C1470.base64(True:C214) : This:C1470.base64($target; True:C214))
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns an URL encoded string
 Function urlEncode($target : Text) : Text
 	
@@ -422,7 +423,7 @@ Function urlEncode($target : Text) : Text
 	
 	return $encoded
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns an URL decoded string
 Function urlDecode($target : Text) : Text
 	
@@ -462,7 +463,7 @@ Function urlDecode($target : Text) : Text
 	
 	return Convert to text:C1012($x; "UTF-8")
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if the string passed is exactly the same as the value.
 Function equal($target : Text; $string : Text) : Boolean
 	
@@ -475,9 +476,11 @@ Function equal($target : Text; $string : Text) : Boolean
 	
 	return (Length:C16($target)=Length:C16($string)) && ((Length:C16($target)=0) | (Position:C15($target; $string; 1; *)=1))
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the list of distinct letters of the string.
 Function distinctLetters($delimitor : Text) : Variant
+	
+	//TODO: Accept target
 	
 	var $c : Collection
 	
@@ -486,47 +489,26 @@ Function distinctLetters($delimitor : Text) : Variant
 	// As string if delimiter is passed else as collection
 	return (Count parameters:C259>=1 ? $c.join($delimitor) : $c)
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns value as fixed length string
-Function fixedLength
-	var $0 : Text
-	var $1 : Integer  // Length
-	var $2 : Variant  // {Filler}
-	var $3 : Integer  // {Alignment}
+Function fixedLength($length : Integer; $filler; $alignment : Integer) : Text
 	
-	var $filler : Text
-	var $alignment : Integer
+	//TODO: Accept target
 	
-	$filler:="*"  // Default is star
-	
-	If (Count parameters:C259>=2)
-		
-		If ($2#Null:C1517)
-			
-			$filler:=String:C10($2)
-			
-		End if 
-		
-		
-		If (Count parameters:C259>=3)
-			
-			$alignment:=$3
-			
-		End if 
-	End if 
+	$filler:=(Count parameters:C259>=2) && ($filler#Null:C1517) ? String:C10($filler) : "*"  // Default is star
 	
 	If ($alignment=Align right:K42:4)
 		
-		$0:=Substring:C12(($filler*($1-This:C1470.length))+This:C1470.value; 1; $1)
+		return Substring:C12(($filler*($length-This:C1470.length))+This:C1470.value; 1; $length)
 		
 	Else 
 		
 		// Default is left
-		$0:=Substring:C12(This:C1470.value+($filler*$1); 1; $1)
+		return Substring:C12(This:C1470.value+($filler*$length); 1; $length)
 		
 	End if 
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns value as upper camelcase
 Function uperCamelCase($target : Text) : Text
 	
@@ -573,7 +555,7 @@ Function uperCamelCase($target : Text) : Text
 		End if 
 	End if 
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns value as lower camelcase
 Function lowerCamelCase($target : Text) : Text
 	
@@ -620,7 +602,7 @@ Function lowerCamelCase($target : Text) : Text
 		End if 
 	End if 
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns underscored value & camelcase (lower or upper) value as space separated
 Function spaceSeparated($target : Text) : Text
 	
@@ -670,7 +652,7 @@ Function spaceSeparated($target : Text) : Text
 	
 	return $c.join(" ")
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Trims Trailing spaces or passed
 Function trimTrailing($target : Text; $trim : Text) : Text
 	
@@ -691,7 +673,7 @@ Function trimTrailing($target : Text; $trim : Text) : Text
 		
 	End if 
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Trims leading spaces or passed
 Function trimLeading($target : Text; $trim : Text) : Text
 	
@@ -710,7 +692,7 @@ Function trimLeading($target : Text; $trim : Text) : Text
 		
 	End if 
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Trims leading & trailing spaces or passed
 Function trim($target : Text; $trim : Text) : Text
 	
@@ -741,7 +723,7 @@ Function trim($target : Text; $trim : Text) : Text
 	
 	return This:C1470.trimTrailing(This:C1470.trimLeading($target; $trim); $trim)
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns a word wrapped text based on the line length given (default is 80 characters)
 Function wordWrap($target; $columns : Integer) : Text
 	
@@ -804,7 +786,7 @@ Function wordWrap($target; $columns : Integer) : Text
 		End if 
 	End if 
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Return extract numeric
 Function toNum($target : Text) : Real
 	
@@ -812,7 +794,7 @@ Function toNum($target : Text) : Real
 	
 	return This:C1470.extract($target; "numeric")
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the number of occurennces of $1 into the string
 Function occurrencesOf($target : Text; $toFind : Text) : Integer
 	
@@ -825,7 +807,7 @@ Function occurrencesOf($target : Text; $toFind : Text) : Integer
 	
 	return Split string:C1554($target; $toFind; sk trim spaces:K86:2).length-1
 	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Replace accented and special characters with non-accented or equivalent characters.
 Function unaccented($target : Text) : Text
 	
@@ -907,28 +889,28 @@ Function unaccented($target : Text) : Text
 	
 	return $target
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if the text contains only ASCII characters
 Function isAscii($target : Text) : Boolean
 	
 	$target:=Count parameters:C259=0 ? This:C1470.value : $target
 	return Match regex:C1019("(?mi-s)^[[:ascii:]]*$"; $target; 1)
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if text is "T/true" or "F/false"
 Function isBoolean($target : Text) : Boolean
 	
 	$target:=Count parameters:C259=0 ? This:C1470.value : $target
 	return Match regex:C1019("(?m-is)^(?:[tT]rue|[fF]alse)$"; $target; 1)
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if the text is a date string (DOES NOT CHECK IF THE DATE IS VALID)
 Function isDate($target : Text) : Boolean
 	
 	$target:=Count parameters:C259=0 ? This:C1470.value : $target
 	return Match regex:C1019("(?m-si)^\\d+/\\d+/\\d+$"; $target; 1)
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if text is a numeric
 Function isNum($target : Text) : Boolean
 	
@@ -938,7 +920,7 @@ Function isNum($target : Text) : Boolean
 	GET SYSTEM FORMAT:C994(Decimal separator:K60:1; $t)
 	return Match regex:C1019("(?m-si)^(?:\\+|-)?\\d+(?:\\.|"+$t+"\\d+)?$"; $target; 1)
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//  Returns True if text is a time string (DOES NOT CHECK IF THE TIME IS VALID)
 Function isTime($target : Text) : Boolean
 	
@@ -948,7 +930,7 @@ Function isTime($target : Text) : Boolean
 	GET SYSTEM FORMAT:C994(Time separator:K60:11; $t)
 	return Match regex:C1019("(?m-si)^\\d+"+$t+"\\d+(?:"+$t+"\\d+)?$"; $target; 1)
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if the text conforms to the URL grammar. (DOES NOT CHECK IF THE URL IS VALID)
 Function isUrl($target : Text) : Boolean
 	
@@ -959,28 +941,28 @@ Function isUrl($target : Text) : Boolean
 		"(?:(?:[a-z\\x{00a1}-\\x{ffff}0-9]+-?)*[a-z\\x{00a1}-\\x{ffff}0-9]+)(?:\\.(?:[a-z\\x{00a1}-\\x{ffff}0-9]+-?)*[a-z\\x{00a1"+\
 		"}-\\x{ffff}0-9]+)*(?:\\.(?:[a-z\\x{00a1}-\\x{ffff}]{2,}))))(?::\\d{2,5})?(?:/[^\\s]*)?$"; $target; 1)
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if the text is a json string
 Function isJson($target : Text) : Boolean
 	
 	$target:=Count parameters:C259=0 ? This:C1470.value : $target
 	return Match regex:C1019("(?msi)^(?:\\{.*\\})|(?:\\[.*\\])$"; $target; 1)
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if the text is a json array string
 Function isJsonArray($target : Text) : Boolean
 	
 	$target:=Count parameters:C259=0 ? This:C1470.value : $target
 	return Match regex:C1019("(?msi)^\\[.*\\]$"; $target; 1)
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if the text is a json object string
 Function isJsonObject($target : Text) : Boolean
 	
 	$target:=Count parameters:C259=0 ? This:C1470.value : $target
 	return Match regex:C1019("(?msi)^\\{.*\\}$"; $target; 1)
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//  ⚠️ Returns True if text match given pattern
 Function match($target : Text; $pattern) : Boolean
 	
@@ -989,7 +971,7 @@ Function match($target : Text; $pattern) : Boolean
 	
 	return Super:C1706.match($pattern; $target)
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//  ⚠️ Returns the localized string & made replacement if any 
 Function localized($replacements) : Text
 	
@@ -1003,7 +985,7 @@ Function localized($replacements) : Text
 		
 	End if 
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//  ⚠️ Returns the available localized string for the given "resname" and makes replacements, if any. 
 Function localize($resname : Text; $replacements) : Text
 	
@@ -1019,7 +1001,7 @@ Function localize($resname : Text; $replacements) : Text
 		
 	End if 
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Concatenates the values ​​given to the original string
 Function concat
 	var $0 : Text
@@ -1086,7 +1068,7 @@ Function concat
 		
 	End if 
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the string after replacements
 Function replace
 	var $0 : Text
@@ -1125,7 +1107,7 @@ Function replace
 		
 	End if 
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns a HTML encoded string
 Function htmlEncode()->$html : Text
 	var $code; $i : Integer
@@ -1161,7 +1143,7 @@ Function htmlEncode()->$html : Text
 		
 	End for 
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns a XML encoded string
 Function xmlEncode()->$xml : Text
 	var $root; $t : Text
@@ -1191,7 +1173,7 @@ Function xmlEncode()->$xml : Text
 		
 	End if 
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Replacing characters that could be wrongfully interpreted as markup
 Function xmlSafe()->$xml : Text
 	
@@ -1203,14 +1185,14 @@ Function xmlSafe()->$xml : Text
 	$xml:=Replace string:C233($xml; "<"; "&lt;")
 	$xml:=Replace string:C233($xml; ">"; "&gt;")
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if text is styled
 Function isStyled
 	var $0 : Boolean
 	
 	$0:=Match regex:C1019("(?i-ms)<span [^>]*>"; String:C10(This:C1470.value); 1)
 	
-	//====================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// ⚠️ Returns a string that can be used in multistyles texts
 Function multistyleCompatible($src : Text)->$text : Text
 	
@@ -1228,7 +1210,7 @@ Function multistyleCompatible($src : Text)->$text : Text
 	$text:=Replace string:C233($text; "<"; "&lt;")
 	$text:=Replace string:C233($text; ">"; "&gt;")
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns, if any, a truncated string with ellipsis character
 Function truncate($maxChar : Integer; $position : Integer)->$truncated : Text
 	
@@ -1273,7 +1255,7 @@ Function truncate($maxChar : Integer; $position : Integer)->$truncated : Text
 			//______________________________________________________
 	End case 
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// 
 Function extract($target : Text; $type : Text) : Variant
 	
@@ -1325,7 +1307,7 @@ Function extract($target : Text; $type : Text) : Variant
 			//…………………………………………………………………………………
 	End case 
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// ⚠️ Compare two string version
 	// -  0 if the version and the reference are equal
 	// -  1 if the version is higher than the reference
@@ -1342,7 +1324,7 @@ Function versionCompare($with : Text; $separator : Text) : Integer
 		
 	End if 
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Return a user friendly string from json prettified string
 Function jsonSimplify($target : Text) : Text
 	
@@ -1357,7 +1339,7 @@ Function jsonSimplify($target : Text) : Text
 	
 	return $target
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Enforcing Standard Password Compliance
 Function passwordCompliance($length : Integer) : Boolean
 	
@@ -1373,7 +1355,7 @@ Function passwordCompliance($length : Integer) : Boolean
 		
 	End if 
 	
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function suitableWithFileName($target : Text) : Text
 	
 	var $length; $position : Integer
@@ -1436,7 +1418,7 @@ con, nul, prn
 	return $target
 	
 	//MARK:-PRIVATE
-	//=======================================================================================================
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _trimInit($parameters : Collection) : Object
 	
 	var $pattern; $target; $trim : Text

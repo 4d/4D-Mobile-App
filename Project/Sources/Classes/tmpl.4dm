@@ -828,9 +828,7 @@ Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Ob
 	
 	var $class; $label; $name; $node; $style; $t : Text
 	var $tips : Text
-	var $found : Boolean
 	var $o; $relation : Object
-	var $c : Collection
 	var $xml : cs:C1710.xml
 	
 	If ($field.kind="relatedEntity")\
@@ -847,7 +845,12 @@ Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Ob
 			
 			$label:=$field.name
 			
-			$found:=(PROJECT.dataModel[$context.tableNumber][String:C10($field.fieldNumber)]#Null:C1517)
+			If (PROJECT.dataModel[$context.tableNumber][String:C10($field.fieldNumber)]=Null:C1517)
+				
+				$class:="error"
+				$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
+				
+			End if 
 			
 			//______________________________________________________
 		: ($field.kind="alias")
@@ -867,7 +870,12 @@ Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Ob
 			
 			$label:=$field.name
 			
-			$found:=(PROJECT.dataModel[$context.tableNumber][$field.name]#Null:C1517)
+			If (PROJECT.dataModel[$context.tableNumber][$field.name]=Null:C1517)
+				
+				$class:="error"
+				$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
+				
+			End if 
 			
 			//______________________________________________________
 		: ($field.kind="relatedEntity")
@@ -883,7 +891,7 @@ Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Ob
 				$tips:=$field.name+"."+$name
 				
 				// Check that the discriminant field is published
-				For each ($t; $relation) Until ($found)
+				For each ($t; $relation)
 					
 					If (Value type:C1509($relation[$t])#Is object:K8:27)
 						
@@ -891,16 +899,15 @@ Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Ob
 						
 					End if 
 					
-					$found:=(String:C10($relation[$t].name)=$name) || (($relation[$t]#Null:C1517) & ($t=$name))
-					
+					If (Not:C34((String:C10($relation[$t].name)=$name) || (($relation[$t]#Null:C1517)\
+						 & ($t=$name))))
+						
+						$class:="error"
+						$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
+						break
+						
+					End if 
 				End for each 
-				
-				If (Not:C34($found))
-					
-					$class:="error"
-					$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
-					
-				End if 
 				
 			Else 
 				
@@ -916,7 +923,12 @@ Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Ob
 			$tips:=$field.label
 			$label:=UI.str.setText(UI.toMany).concat($field.name)
 			
-			$found:=(PROJECT.dataModel[$context.tableNumber][$field.name]#Null:C1517)
+			If (PROJECT.dataModel[$context.tableNumber][$field.name]=Null:C1517)
+				
+				$class:="error"
+				$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($label))
+				
+			End if 
 			
 			//______________________________________________________
 		Else 

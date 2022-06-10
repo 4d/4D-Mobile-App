@@ -216,6 +216,13 @@ If (Num:C11($tableID)>0)
 								
 							End if 
 							
+							//mark:#131257 
+							If ($field.kind="storage")
+								
+								$field.name:=$tableModel[String:C10($field.fieldNumber)].name
+								
+							End if 
+							
 							CLEAR VARIABLE:C89($style)
 							CLEAR VARIABLE:C89($found)
 							CLEAR VARIABLE:C89($tips)

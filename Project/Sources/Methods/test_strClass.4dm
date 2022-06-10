@@ -110,8 +110,11 @@ End for
 // mark:-spaceSeparated()
 ASSERT:C1129($str.setText($str.spaceSeparated("Last Name")).equal("Last Name"))
 ASSERT:C1129($str.setText($str.spaceSeparated("Last_Name")).equal("Last Name"))
+ASSERT:C1129($str.setText($str.spaceSeparated("_Last_Name")).equal("Last Name"))
+ASSERT:C1129($str.setText($str.spaceSeparated("__Last_Name__")).equal("Last Name"))
 ASSERT:C1129($str.setText($str.spaceSeparated("LastName")).equal("Last Name"))
 ASSERT:C1129($str.setText($str.spaceSeparated("LASTNAME")).equal("LASTNAME"))
+ASSERT:C1129($str.setText($str.spaceSeparated("LAST NAME")).equal("LAST NAME"))
 
 // mark:-lowerCamelCase()
 ASSERT:C1129($str.setText($str.lowerCamelCase("First Name")).equal("firstName"))
