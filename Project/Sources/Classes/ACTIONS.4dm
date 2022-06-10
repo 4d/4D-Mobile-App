@@ -219,7 +219,7 @@ Function handleEvents($e : Object)
 				//==============================================
 			: (This:C1470.databaseMethod.catch())
 				
-				UI.editDatabaseMethod("onMobileAppAction")
+				This:C1470.openOnMobileAppActionDatabaseMethod()
 				
 				//==============================================
 		End case 
@@ -917,6 +917,59 @@ Function addMenuManager()
 				//______________________________________________________
 		End case 
 	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+	// Create, if any, & Open the "On Mobile Action" Database method
+Function openOnMobileAppActionDatabaseMethod()
+	
+	var $code : Text
+	var $file : 4D:C1709.File
+	ARRAY TEXT:C222($methods; 0)
+	
+	METHOD GET PATHS:C1163(Path database method:K72:2; $methods; *)
+	$methods{0}:=METHOD Get path:C1164(Path database method:K72:2; "onMobileAppAction")
+	
+	If (Macintosh option down:C545)\
+		 & (Structure file:C489=Structure file:C489(*))
+		
+		If (Find in array:C230($methods; $methods{0})>0)
+			
+			// Delete to recreate.
+			// WARNING: Generates an error if the method is open
+			File:C1566("/PACKAGE/Project/Sources/DatabaseMethods/onMobileAppAction.4dm").delete()
+			DELETE FROM ARRAY:C228($methods; Find in array:C230($methods; $methods{0}))
+			
+		End if 
+	End if 
+	
+	// Create method if not exist
+	If (Find in array:C230($methods; $methods{0})=-1)
+		
+		If (Command name:C538(1)="Somme")
+			
+			// FR language
+			$file:=File:C1566("/RESOURCES/fr.lproj/onMobileAppAction.4dm")
+			
+		Else 
+			
+			$file:=File:C1566("/RESOURCES/onMobileAppAction.4dm")
+			
+		End if 
+		
+		If ($file.exists)
+			
+			// Delete actions performed locally on the mobile
+			var $c : Collection
+			$c:=Form:C1466.actions.query("preset != sort")
+			
+			PROCESS 4D TAGS:C816($file.getText(); $code; $c.extract("name"); $c.extract("label"))
+			METHOD SET CODE:C1194($methods{0}; $code; *)
+			
+		End if 
+	End if 
+	
+	// Open method
+	METHOD OPEN PATH:C1213($methods{0}; *)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function _addParameter($fieldModel : Object; $field : Object; $edit : Boolean)->$parameter : Object
