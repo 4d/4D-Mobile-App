@@ -565,7 +565,6 @@
 		"methods": [
 			"_createPrjForTesting",
 			"Compiler_4dUnit",
-			"Method436",
 			"test_capabilities",
 			"test_catalog",
 			"test_dataSet",

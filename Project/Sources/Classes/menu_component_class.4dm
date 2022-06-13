@@ -8,7 +8,12 @@ Function fillMenu($menu : Object)
 	$menu.append("Show configuration file"; "openConf").method("menu_component")
 	$menu.append("Show current features"; "showFeatures").method("menu_component")
 	$menu.append("Re-load features file"; "reloadFeatureFile").method("menu_component")
+	$menu.line()
+	$menu.append("Git rebase"; "gitRebase").method("menu_component")
+	$menu.append("Git status"; "gitStatus").method("menu_component")
+	$menu.append("Git open modified"; "gitOpenModified").method("menu_component")
 	
+	// MARK:-
 Function injectComponentToCurrentApp
 	// sometime you want to debug other 4d database mobile app
 	// and want to use TRACE or debug
@@ -78,6 +83,7 @@ Function getTCiOSSDK
 		SHOW ON DISK:C922(Folder:C1567(fk user preferences folder:K87:10).platformPath)
 	End if 
 	
+	// MARK:- conf file
 Function openConf
 	SHOW ON DISK:C922(Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile").platformPath)
 	
@@ -86,3 +92,44 @@ Function showFeatures
 	
 Function reloadFeatureFile
 	Feature.loadLocal()
+	
+	// MARK:- source control
+	
+Function gitRebase()
+	var $gitWorker : 4D:C1709.SystemWorker
+	$gitWorker:=4D:C1709.SystemWorker.new("git rebase"; New object:C1471("currentDirectory"; Folder:C1567(fk database folder:K87:14)))
+	
+	ALERT:C41(String:C10($gitWorker.wait(10).response))
+	
+Function gitStatus()
+	var $gitWorker : 4D:C1709.SystemWorker
+	$gitWorker:=4D:C1709.SystemWorker.new("git add ."; New object:C1471("currentDirectory"; Folder:C1567(fk database folder:K87:14)))
+	$gitWorker.wait(2)
+	$gitWorker:=4D:C1709.SystemWorker.new("git status --porcelain"; New object:C1471("currentDirectory"; Folder:C1567(fk database folder:K87:14)))
+	
+	ALERT:C41(String:C10($gitWorker.wait(10).response))
+	
+Function gitOpenModified()
+	var $gitWorker : 4D:C1709.SystemWorker
+	$gitWorker:=4D:C1709.SystemWorker.new("git add ."; New object:C1471("currentDirectory"; Folder:C1567(fk database folder:K87:14)))
+	$gitWorker.wait(2)
+	$gitWorker:=4D:C1709.SystemWorker.new("git status --porcelain"; New object:C1471("currentDirectory"; Folder:C1567(fk database folder:K87:14)))
+	
+	var $lines : Collection
+	$lines:=Split string:C1554(String:C10($gitWorker.wait(10).response); "\n")
+	For each ($line; $lines)
+		If (Position:C15("M "; $line)=1)  // modified line (we `add .` so no MM)
+			$line:=Substring:C12($line; 5; Length:C16($line)-5)
+			Case of 
+				: (Position:C15("Sources/Methods/"; $line)>0)
+					METHOD OPEN PATH:C1213(Folder:C1567($line).name)
+				: (Position:C15("Sources/Classes/"; $line)>0)
+					METHOD OPEN PATH:C1213("[class]/"+Folder:C1567($line).name)
+				: (Position:C15("Sources/DatabaseMethods/"; $line)>0)
+					METHOD OPEN PATH:C1213("[databaseMethod]/"+Folder:C1567($line).name)
+				: (Position:C15("Sources/Forms/"; $line)>0)
+					METHOD OPEN PATH:C1213("[projectForm]/"+Folder:C1567($line).name)
+			End case 
+		End if 
+	End for each 
+	
