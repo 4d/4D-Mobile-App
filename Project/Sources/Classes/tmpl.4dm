@@ -825,6 +825,7 @@ Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Ob
 	var $tips : Text
 	var $o; $relation : Object
 	var $xml : cs:C1710.xml
+	var $paths : Collection
 	
 	If ($field.kind="relatedEntity")\
 		 || ($field.kind="relatedEntities")
@@ -840,13 +841,29 @@ Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Ob
 			
 			$label:=$field.name
 			
-			If (PROJECT.dataModel[$context.tableNumber][String:C10($field.fieldNumber)]=Null:C1517)
+			If (Position:C15("."; $label)>0)
 				
-				$class:="error"
-				$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
+				$paths:=Split string:C1554($label; ".")
+				$paths.pop()
+				$paths.push(String:C10($field.fieldNumber))
+				
+				If (Not:C34(cs:C1710.ob.new(PROJECT.dataModel[$context.tableNumber]).exists($paths)))
+					
+					$class:="error"
+					$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
+					
+				End if 
+				
+			Else 
+				
+				If (PROJECT.dataModel[$context.tableNumber][String:C10($field.fieldNumber)]=Null:C1517)
+					
+					$class:="error"
+					$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
+					
+				End if 
 				
 			End if 
-			
 			//______________________________________________________
 		: ($field.kind="alias")
 			
@@ -865,10 +882,25 @@ Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Ob
 			
 			$label:=$field.name
 			
-			If (PROJECT.dataModel[$context.tableNumber][$field.name]=Null:C1517)
+			If (Position:C15("."; $label)>0)
 				
-				$class:="error"
-				$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
+				$paths:=Split string:C1554($label; ".")
+				
+				If (Not:C34(cs:C1710.ob.new(PROJECT.dataModel[$context.tableNumber]).exists($paths)))
+					
+					$class:="error"
+					$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
+					
+				End if 
+				
+			Else 
+				
+				If (PROJECT.dataModel[$context.tableNumber][$field.name]=Null:C1517)
+					
+					$class:="error"
+					$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
+					
+				End if 
 				
 			End if 
 			

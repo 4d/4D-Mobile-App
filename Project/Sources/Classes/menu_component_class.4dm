@@ -9,6 +9,8 @@ Function fillMenu($menu : Object)
 	$menu.append("Show current features"; "showFeatures").method("menu_component")
 	$menu.append("Re-load features file"; "reloadFeatureFile").method("menu_component")
 	$menu.line()
+	$menu.append("Find resources"; "findLocalizedResources").method("menu_component")
+	$menu.line()
 	$menu.append("Git rebase"; "gitRebase").method("menu_component")
 	$menu.append("Git status"; "gitStatus").method("menu_component")
 	$menu.append("Git open modified"; "gitOpenModified").method("menu_component")
@@ -93,6 +95,27 @@ Function showFeatures
 Function reloadFeatureFile
 	Feature.loadLocal()
 	
+	// MARK:- local
+Function findLocalizedResources
+	var $data : Text
+	$data:=Request:C163("Provide data"; Get text from pasteboard:C524; "Search")
+	If (Length:C16($data)=0)
+		return 
+	End if 
+	
+	var $folder : 4D:C1709.Folder
+	var $file : 4D:C1709.File
+	For each ($folder; Folder:C1567(fk resources folder:K87:11).folders())
+		If ($folder.extension=".lproj")
+			For each ($file; $folder.files())
+				If (($file.extension=".xlf") && (Position:C15($data; $file.getText())>0))
+					OPEN URL:C673("file://"+File:C1566($file.platformPath; fk platform path:K87:2).path; "Code")
+				End if 
+			End for each 
+		End if 
+	End for each 
+	
+	
 	// MARK:- source control
 	
 Function gitRebase()
@@ -117,6 +140,7 @@ Function gitOpenModified()
 	
 	var $lines : Collection
 	$lines:=Split string:C1554(String:C10($gitWorker.wait(10).response); "\n")
+	var $line : Text
 	For each ($line; $lines)
 		If (Position:C15("M "; $line)=1)  // modified line (we `add .` so no MM)
 			$line:=Substring:C12($line; 5; Length:C16($line)-5)
