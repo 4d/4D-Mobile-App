@@ -35,6 +35,8 @@ dependencies {
     // Common
     implementation Libs.androidx_constraintlayout
     implementation Libs.kotlin_coroutines_core
+    implementation Libs.kotlin_reflect
+    implementation Libs.kotlin_stdlib
     implementation Libs.swiperefreshlayout
 
     // Room
