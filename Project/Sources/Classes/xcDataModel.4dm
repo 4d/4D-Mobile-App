@@ -199,6 +199,7 @@ Function _createEntities($options : Object; $Dom_model : Text)->$out : Object
 	// $Dom_model: parent node
 	// $table table data
 Function _createEntity($options : Object; $Dom_model : Text; $tableID : Integer; $table : Object)->$out : Object
+	$out:=New object:C1471()
 	var $result : Object  // result of external function call
 	
 	var $tableInfo : Object
@@ -219,7 +220,7 @@ Function _createEntity($options : Object; $Dom_model : Text; $tableID : Integer;
 	$tTxt_entityValues{3}:="YES"
 	$tTxt_entityValues{4}:="class"
 	
-	var $Dom_userInfo; $Dom_entity; $Dom_node; $Dom_attribute : Text
+	var $Dom_userInfo; $Dom_entity; $Dom_node : Text
 	$Dom_entity:=DOM Create XML element arrays:C1097($Dom_model; "entity"; $tTxt_entityAttributes; $tTxt_entityValues)
 	
 	If (Feature.with("coreDataAbstractEntity"))
@@ -270,7 +271,7 @@ Function _createEntity($options : Object; $Dom_model : Text; $tableID : Integer;
 			$Dom_fetchIndexElement:=DOM Create XML element:C865($Dom_fetchIndex; "fetchIndexElement"; \
 				"property"; formatString("field-name"; String:C10($tableInfo.primaryKey)); "type"; "binary"; "order"; "ascending")
 			
-			C_TEXT:C284($Dom_uniquenessConstraints; $Dom_uniquenessConstraint; $Dom_constraint)
+			var $Dom_uniquenessConstraints; $Dom_uniquenessConstraint; $Dom_constraint : Text
 			$Dom_uniquenessConstraints:=DOM Create XML element:C865($Dom_entity; "uniquenessConstraints")
 			$Dom_uniquenessConstraint:=DOM Create XML element:C865($Dom_uniquenessConstraints; "uniquenessConstraint")
 			$Dom_constraint:=DOM Create XML element:C865($Dom_uniquenessConstraint; "constraint"; "value"; formatString("field-name"; String:C10($tableInfo.primaryKey)))
@@ -279,9 +280,262 @@ Function _createEntity($options : Object; $Dom_model : Text; $tableID : Integer;
 	End if 
 	
 	// Add fetch index for sort action too
-	// TODO extract to function
+	This:C1470._createFetchIndexesFromSortAction($tableID; $Dom_entity)
+	
+	// Add information about data filter, only if validated
+	If ($tableInfo.filter#Null:C1517)
+		
+		If (Bool:C1537($tableInfo.filter.validated))  // Is filter is validated?
+			
+			$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+				"key"; "filter"; \
+				"value"; String:C10($tableInfo.filter.string))
+			
+		Else 
+			
+			ob_warning_add($out; "Filter '"+String:C10($tableInfo.filter.string)+"' of table '"+$Txt_tableName+"' not validated")
+			Logger.warning("Filter '"+String:C10($tableInfo.filter.string)+"' of table '"+$Txt_tableName+"' not validated")
+			
+		End if 
+	End if 
+	
+	var $Txt_field : Text
+	For each ($Txt_field; $table)
+		This:C1470._createAttribute($Txt_field; $table; $tableID; $Dom_entity; $options)
+	End for each   // end fields
+	
+	$out.definition:=$options.definition
+	
+	
+Function _createAttribute($Txt_field : Text; $table : Object; $tableID : Integer; $Dom_entity : Text; $options : Object)
+	var $Dom_attribute; $Dom_userInfo; $Dom_node : Text
+	var $Txt_originalFieldName; $Txt_fieldName : Text
+	var $result : Object
+	Case of 
+			
+			//………………………………………………………………………………………………………………………
+		: (Length:C16($Txt_field)=0)  // Properties
+			
+			// <NOTHING MORE TO DO>
+			
+			//………………………………………………………………………………………………………………………
+		: (PROJECT.isField($Txt_field) | PROJECT.isComputedAttribute($table[$Txt_field]))
+			
+			var $Lon_type : Integer
+			var $Boo_4dType : Boolean
+			
+			If (Value type:C1509($table[$Txt_field])=Is object:K8:27)
+				
+				$Txt_originalFieldName:=String:C10($table[$Txt_field].name)
+				If ((Length:C16($Txt_originalFieldName)=0) && PROJECT.isComputedAttribute($table[$Txt_field]))
+					$Txt_originalFieldName:=$Txt_field
+				End if 
+				$Lon_type:=$table[$Txt_field].fieldType
+				
+			Else 
+				
+				var $Lon_fieldID : Integer
+				ASSERT:C1129(dev_Matrix; "Please avoid to have missing info in dataModel and rely and Field, field name method")
+				$Lon_fieldID:=Num:C11($Txt_field)
+				var $Ptr_field : Pointer
+				$Ptr_field:=Field:C253($tableID; $Lon_fieldID)
+				$Txt_originalFieldName:=Field name:C257($Ptr_field)
+				$Lon_type:=Type:C295($Ptr_field->)
+				$Boo_4dType:=True:C214
+				
+			End if 
+			
+			If (Length:C16($Txt_originalFieldName)>0)
+				
+				$Txt_fieldName:=formatString("field-name"; $Txt_originalFieldName)
+				
+				$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")  // XXX merge with next instruction
+				
+				DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+					"name"; $Txt_fieldName; \
+					"optional"; "YES"; \
+					"indexed"; "NO"; \
+					"syncable"; "YES")
+				
+				$Dom_userInfo:=DOM Create XML element:C865($Dom_attribute; "userInfo")
+				
+				If (Not:C34(str_equal($Txt_fieldName; $Txt_originalFieldName)))
+					
+					$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+						"key"; "keyMapping"; \
+						"value"; $Txt_originalFieldName)
+					
+				End if 
+				
+				If ($table[$Txt_field].aliasOf#Null:C1517)
+					
+					$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+						"key"; "aliasOf"; \
+						"value"; $table[$Txt_field].aliasOf.extract("name").join(","))
+					
+				End if 
+				
+				
+				
+				// add xml attribut for type
+				This:C1470._field($Dom_attribute; $Dom_userInfo; $Lon_type)
+				
+			End if 
+			
+			//……………………………………………………………………………………………………………
+		: (Value type:C1509($table[$Txt_field])#Is object:K8:27)
+			
+			// <NOTHING MORE TO DO>
+			
+			//………………………………………………………………………………………………………………………
+		: (PROJECT.isRelation($table[$Txt_field]))
+			
+			var $Txt_relationName : Text
+			$Txt_relationName:=$Txt_field
+			
+			If (Bool:C1537($options.relationship))  // core data relation ship table
+				
+				var $Txt_formattedRelationName; $Txt_inverseName : Text
+				$Txt_formattedRelationName:=formatString("field-name"; $Txt_relationName)
+				
+				$Txt_inverseName:=String:C10($table[$Txt_relationName].inverseName)
+				If ((Length:C16($Txt_inverseName)=0) && PROJECT.isAlias($table[$Txt_field]))
+					
+					$Txt_inverseName:=String:C10($table[$table[$Txt_field].path].inverseName)
+				End if 
+				
+				If (Length:C16($Txt_inverseName)=0)
+					
+					ASSERT:C1129(dev_Matrix; "Missing inverseName")
+					
+					$result:=_o_structure(New object:C1471(\
+						"action"; "inverseRelationName"; \
+						"table"; $table.name; \
+						"definition"; $options.definition; \
+						"relation"; $Txt_relationName))
+					
+					If ($result.success)
+						
+						$Txt_inverseName:=$result.value
+						$options.definition:=$result.definition  // cache purpose 
+						
+					End if 
+				End if 
+				
+				// relation mode
+				If (PROJECT.isRelationToMany($table[$Txt_relationName]))  // to N
+					
+					// we must have {type:TABLENAMESelection,relatedDataClass:TABLENAME}
+					
+					$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "relationship"; \
+						"name"; $Txt_formattedRelationName; \
+						"destinationEntity"; formatString("table-name"; $table[$Txt_relationName].relatedDataClass); \
+						"inverseEntity"; formatString("table-name"; $table[$Txt_relationName].relatedDataClass); \
+						"inverseName"; formatString("field-name"; $Txt_inverseName); \
+						"toMany"; "YES"; \
+						"optional"; "YES"; \
+						"syncable"; "YES"; \
+						"deletionRule"; "Nullify")
+					
+				Else   // to 1
+					
+					$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "relationship"; \
+						"name"; $Txt_formattedRelationName; \
+						"destinationEntity"; formatString("table-name"; $table[$Txt_relationName].relatedDataClass); \
+						"inverseEntity"; formatString("table-name"; $table[$Txt_relationName].relatedDataClass); \
+						"inverseName"; formatString("field-name"; $Txt_inverseName); \
+						"maxCount"; "1"; \
+						"optional"; "YES"; \
+						"syncable"; "YES"; \
+						"deletionRule"; "Nullify")
+					
+					// XXX: inverse name?
+					// XXX: if we have a relation, we must ensure that the destination table will be created with all wanted fields
+					// or we must add it artificially
+					
+				End if 
+				
+				$Dom_userInfo:=DOM Create XML element:C865($Dom_attribute; "userInfo")
+				
+				If (Not:C34(str_equal($Txt_formattedRelationName; $Txt_relationName)))
+					
+					$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+						"key"; "keyMapping"; \
+						"value"; $Txt_relationName)
+					
+				End if 
+				
+				If (Length:C16(String:C10($table[$Txt_relationName].format))>0)
+					
+					$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+						"key"; "format"; \
+						"value"; String:C10($table[$Txt_relationName].format))
+					
+				End if 
+				
+				// Get all fields to put in expand userInfo
+				var $Col_fields : Collection
+				$Col_fields:=New collection:C1472()
+				
+				var $Txt_buffer; $keyRelation : Text
+				For each ($keyRelation; $table[$Txt_relationName])
+					
+					If (Value type:C1509($table[$Txt_relationName][$keyRelation])=Is object:K8:27)  // field if
+						
+						$Txt_buffer:=$table[$Txt_relationName][$keyRelation].name
+						If (Length:C16($Txt_buffer)>0)
+							$Col_fields.push($Txt_buffer)
+						End if 
+						// Else  // not a field
+						
+					End if 
+				End for each 
+				
+				// Without forgot the primaryKey
+				var $primaryKey : Text
+				$primaryKey:=This:C1470.dataModel[String:C10($table[$Txt_relationName].relatedTableNumber)][""].primaryKey
+				
+				If (Length:C16($primaryKey)>0)
+					
+					If ($Col_fields.indexOf($primaryKey)<0)
+						
+						$Col_fields.push($primaryKey)
+						
+					End if 
+				End if 
+				
+				If ($Col_fields.length>0)
+					
+					$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+						"key"; "expand"; \
+						"value"; $Col_fields.join(","))
+					
+				End if 
+				
+				//__________________________________
+			Else   // mode with one attribute core data for all related fields or flat mode
+				ASSERT:C1129(dev_Matrix; "Using relation=true is now mandatory when generating core data model")
+			End if 
+			
+			//__________________________________
+			
+			//……………………………………………………………………………………………………………
+		: ($table[$Txt_field].relatedEntities#Null:C1517)  // XXX do not edit here without care
+			
+			ASSERT:C1129(False:C215; "Must not be here if relatedDataClass correctly filled")
+			
+			//………………………………………………………………………………………………………………………
+		Else 
+			
+			// simple attribute
+			
+			//………………………………………………………………………………………………………………………
+	End case 
+	
+Function _createFetchIndexesFromSortAction($tableID : Integer; $Dom_entity : Text)
+	var $Dom_fetchIndex; $Dom_fetchIndexElement : Text
+	var $action; $parameter : Object
 	If (This:C1470.actions#Null:C1517)
-		var $action; $parameter : Object
 		For each ($action; This:C1470.actions)
 			If (String:C10($action.preset)="sort")
 				If ($action.parameters#Null:C1517)
@@ -302,253 +556,6 @@ Function _createEntity($options : Object; $Dom_model : Text; $tableID : Integer;
 			End if 
 		End for each 
 	End if 
-	
-	// Add information about data filter, only if validated
-	If ($tableInfo.filter#Null:C1517)
-		
-		If (Bool:C1537($tableInfo.filter.validated))  // Is filter is validated?
-			
-			$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
-				"key"; "filter"; \
-				"value"; String:C10($tableInfo.filter.string))
-			
-		Else 
-			
-			ob_warning_add($out; "Filter '"+String:C10($tableInfo.filter.string)+"' of table '"+$Txt_tableName+"' not validated")
-			Logger.warning("Filter '"+String:C10($tableInfo.filter.string)+"' of table '"+$Txt_tableName+"' not validated")
-			
-		End if 
-	End if 
-	
-	var $Txt_field; $Txt_originalFieldName; $Txt_fieldName : Text
-	
-	For each ($Txt_field; $table)
-		
-		Case of 
-				
-				//………………………………………………………………………………………………………………………
-			: (Length:C16($Txt_field)=0)  // Properties
-				
-				// <NOTHING MORE TO DO>
-				
-				//………………………………………………………………………………………………………………………
-			: (PROJECT.isField($Txt_field) | PROJECT.isComputedAttribute($table[$Txt_field]))
-				
-				var $Lon_type : Integer
-				var $Boo_4dType : Boolean
-				
-				If (Value type:C1509($table[$Txt_field])=Is object:K8:27)
-					
-					$Txt_originalFieldName:=String:C10($table[$Txt_field].name)
-					If ((Length:C16($Txt_originalFieldName)=0) && PROJECT.isComputedAttribute($table[$Txt_field]))
-						$Txt_originalFieldName:=$Txt_field
-					End if 
-					$Lon_type:=$table[$Txt_field].fieldType
-					
-				Else 
-					
-					var $Lon_fieldID : Integer
-					ASSERT:C1129(dev_Matrix; "Please avoid to have missing info in dataModel and rely and Field, field name method")
-					$Lon_fieldID:=Num:C11($Txt_field)
-					var $Ptr_field : Pointer
-					$Ptr_field:=Field:C253($tableID; $Lon_fieldID)
-					$Txt_originalFieldName:=Field name:C257($Ptr_field)
-					$Lon_type:=Type:C295($Ptr_field->)
-					$Boo_4dType:=True:C214
-					
-				End if 
-				
-				If (Length:C16($Txt_originalFieldName)>0)
-					
-					$Txt_fieldName:=formatString("field-name"; $Txt_originalFieldName)
-					
-					$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")  // XXX merge with next instruction
-					
-					DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
-						"name"; $Txt_fieldName; \
-						"optional"; "YES"; \
-						"indexed"; "NO"; \
-						"syncable"; "YES")
-					
-					$Dom_userInfo:=DOM Create XML element:C865($Dom_attribute; "userInfo")
-					
-					If (Not:C34(str_equal($Txt_fieldName; $Txt_originalFieldName)))
-						
-						$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
-							"key"; "keyMapping"; \
-							"value"; $Txt_originalFieldName)
-						
-					End if 
-					
-					If ($table[$Txt_field].aliasOf#Null:C1517)
-						
-						$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
-							"key"; "aliasOf"; \
-							"value"; $table[$Txt_field].aliasOf.extract("name").join(","))
-						
-					End if 
-					
-					
-					
-					// add xml attribut for type
-					This:C1470._field($Dom_attribute; $Dom_userInfo; $Lon_type)
-					
-				End if 
-				
-				//……………………………………………………………………………………………………………
-			: (Value type:C1509($table[$Txt_field])#Is object:K8:27)
-				
-				// <NOTHING MORE TO DO>
-				
-				//………………………………………………………………………………………………………………………
-			: (PROJECT.isRelation($table[$Txt_field]))
-				
-				var $Txt_relationName : Text
-				$Txt_relationName:=$Txt_field
-				
-				If (Bool:C1537($options.relationship))  // core data relation ship table
-					
-					var $Txt_formattedRelationName; $Txt_inverseName : Text
-					$Txt_formattedRelationName:=formatString("field-name"; $Txt_relationName)
-					
-					$Txt_inverseName:=String:C10($table[$Txt_relationName].inverseName)
-					If ((Length:C16($Txt_inverseName)=0) && PROJECT.isAlias($table[$Txt_field]))
-						
-						$Txt_inverseName:=String:C10($table[$table[$Txt_field].path].inverseName)
-					End if 
-					
-					If (Length:C16($Txt_inverseName)=0)
-						
-						ASSERT:C1129(dev_Matrix; "Missing inverseName")
-						
-						$result:=_o_structure(New object:C1471(\
-							"action"; "inverseRelationName"; \
-							"table"; $table.name; \
-							"definition"; $options.definition; \
-							"relation"; $Txt_relationName))
-						
-						If ($result.success)
-							
-							$Txt_inverseName:=$result.value
-							$options.definition:=$result.definition  // cache purpose
-							$out.definition:=$result.definition
-							
-						End if 
-					End if 
-					
-					// relation mode
-					If (PROJECT.isRelationToMany($table[$Txt_relationName]))  // to N
-						
-						// we must have {type:TABLENAMESelection,relatedDataClass:TABLENAME}
-						
-						$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "relationship"; \
-							"name"; $Txt_formattedRelationName; \
-							"destinationEntity"; formatString("table-name"; $table[$Txt_relationName].relatedDataClass); \
-							"inverseEntity"; formatString("table-name"; $table[$Txt_relationName].relatedDataClass); \
-							"inverseName"; formatString("field-name"; $Txt_inverseName); \
-							"toMany"; "YES"; \
-							"optional"; "YES"; \
-							"syncable"; "YES"; \
-							"deletionRule"; "Nullify")
-						
-					Else   // to 1
-						
-						$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "relationship"; \
-							"name"; $Txt_formattedRelationName; \
-							"destinationEntity"; formatString("table-name"; $table[$Txt_relationName].relatedDataClass); \
-							"inverseEntity"; formatString("table-name"; $table[$Txt_relationName].relatedDataClass); \
-							"inverseName"; formatString("field-name"; $Txt_inverseName); \
-							"maxCount"; "1"; \
-							"optional"; "YES"; \
-							"syncable"; "YES"; \
-							"deletionRule"; "Nullify")
-						
-						// XXX: inverse name?
-						// XXX: if we have a relation, we must ensure that the destination table will be created with all wanted fields
-						// or we must add it artificially
-						
-					End if 
-					
-					$Dom_userInfo:=DOM Create XML element:C865($Dom_attribute; "userInfo")
-					
-					If (Not:C34(str_equal($Txt_formattedRelationName; $Txt_relationName)))
-						
-						$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
-							"key"; "keyMapping"; \
-							"value"; $Txt_relationName)
-						
-					End if 
-					
-					If (Length:C16(String:C10($table[$Txt_relationName].format))>0)
-						
-						$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
-							"key"; "format"; \
-							"value"; String:C10($table[$Txt_relationName].format))
-						
-					End if 
-					
-					// Get all fields to put in expand userInfo
-					var $Col_fields : Collection
-					$Col_fields:=New collection:C1472()
-					
-					var $Txt_buffer; $keyRelation : Text
-					For each ($keyRelation; $table[$Txt_relationName])
-						
-						If (Value type:C1509($table[$Txt_relationName][$keyRelation])=Is object:K8:27)  // field if
-							
-							$Txt_buffer:=$table[$Txt_relationName][$keyRelation].name
-							If (Length:C16($Txt_buffer)>0)
-								$Col_fields.push($Txt_buffer)
-							End if 
-							// Else  // not a field
-							
-						End if 
-					End for each 
-					
-					// Without forgot the primaryKey
-					var $primaryKey : Text
-					$primaryKey:=This:C1470.dataModel[String:C10($table[$Txt_relationName].relatedTableNumber)][""].primaryKey
-					
-					If (Length:C16($primaryKey)>0)
-						
-						If ($Col_fields.indexOf($primaryKey)<0)
-							
-							$Col_fields.push($primaryKey)
-							
-						End if 
-					End if 
-					
-					If ($Col_fields.length>0)
-						
-						$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
-							"key"; "expand"; \
-							"value"; $Col_fields.join(","))
-						
-					End if 
-					
-					//__________________________________
-				Else   // mode with one attribute core data for all related fields or flat mode
-					ASSERT:C1129(dev_Matrix; "Using relation=true is now mandatory when generating core data model")
-				End if 
-				
-				//__________________________________
-				
-				//……………………………………………………………………………………………………………
-			: ($table[$Txt_field].relatedEntities#Null:C1517)  // XXX do not edit here without care
-				
-				ASSERT:C1129(False:C215; "Must not be here if relatedDataClass correctly filled")
-				
-				//………………………………………………………………………………………………………………………
-			Else 
-				
-				// simple attribute
-				
-				//………………………………………………………………………………………………………………………
-		End case 
-		
-		
-	End for each   // end fields
-	
 	
 	// MARK: - relation
 Function _relation($table : Object; $options : Object)->$out : Object
