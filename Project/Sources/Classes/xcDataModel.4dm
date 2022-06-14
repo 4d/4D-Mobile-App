@@ -290,8 +290,10 @@ Function _createEntity($options : Object; $Dom_model : Text; $tableID : Integer;
 							$Dom_fetchIndex:=DOM Create XML element:C865($Dom_entity; "fetchIndex"; "name"; formatString("field-name"; String:C10($action.name)))
 							For each ($parameter; $action.parameters)
 								
-								$Dom_fetchIndexElement:=DOM Create XML element:C865($Dom_fetchIndex; "fetchIndexElement"; \
-									"property"; formatString("field-name"; String:C10($parameter.name)); "type"; "binary"; "order"; Choose:C955(String:C10($parameter.format)="ascending"; "ascending"; "descending"))
+								If (Position:C15("."; String:C10($parameter.path))>0)  // fetch index do not support it 
+									$Dom_fetchIndexElement:=DOM Create XML element:C865($Dom_fetchIndex; "fetchIndexElement"; \
+										"property"; formatString("field-name"; ($parameter.path=Null:C1517) ? String:C10($parameter.name) : String:C10($parameter.path)); "type"; "binary"; "order"; Choose:C955(String:C10($parameter.format)="ascending"; "ascending"; "descending"))
+								End if 
 								
 							End for each 
 						End if 
