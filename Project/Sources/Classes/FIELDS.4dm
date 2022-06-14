@@ -904,6 +904,8 @@ Function getFieldList()->$result : Object
 										
 										This:C1470._labels($subfield; $subKey)
 										
+										$subfield.fieldNumber:=Num:C11($subKey)
+										
 										$result.names.push($subfield.path)
 										$result.paths.push($subfield.path)
 										$result.labels.push($subfield.label)

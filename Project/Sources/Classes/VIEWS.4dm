@@ -449,17 +449,25 @@ Function fieldList($table)->$result : Object
 										
 										$subfield2:=$subfield[$sub]
 										
-										If ($subfield2.kind="alias")
-											
-											$subfield2.name:=$attribute+"."+$sub
-											$subfield2.path:=$key+"."+$attribute+"."+$sub
-											
-										Else 
-											
-											$subfield2.name:=($subfield2.kind="storage") ? $subfield2.path : $key+"."+$sub
-											$subfield2.path:=$key+"."+$subfield2.name
-											
-										End if 
+										Case of 
+											: ($subfield2.kind="alias")
+												
+												$subfield2.name:=$attribute+"."+$sub
+												$subfield2.path:=$key+"."+$attribute+"."+$sub
+												
+											: ($subfield2.kind="storage")
+												
+												$subfield2.fieldNumber:=Num:C11($sub)
+												$subfield2.name:=$subfield2.path
+												$subfield2.path:=$key+"."+$subfield2.name
+												
+											Else 
+												
+												$subfield2.fieldNumber:=Num:C11($sub)
+												$subfield2.name:=$key+"."+$sub
+												$subfield2.path:=$key+"."+$subfield2.name
+												
+										End case 
 										
 										$subfield2.$label:=$linkPrefix+$subfield2.name
 										$subfield2.$level:=$subLevel+2

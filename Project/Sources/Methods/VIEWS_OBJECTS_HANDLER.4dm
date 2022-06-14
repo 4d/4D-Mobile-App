@@ -41,6 +41,7 @@ $0:=-1  // Reject drop
 Case of 
 		
 		//==================================================
+		// MARK:-tableWidget
 	: ($e.objectName=$form.tableWidget.name)
 		
 		$formType:=$view.typeForm()
@@ -188,11 +189,13 @@ Case of
 		_o_editor_ui_LISTBOX($form.fieldList.name)
 		
 		//==================================================
+		// MARK:-fieldList
 	: ($e.objectName=$form.fieldList.name)
 		
 		Case of 
 				
 				//______________________________________________________
+				// MARK:On Double Clicked
 			: ($e.code=On Double Clicked:K2:5)
 				
 				If (Num:C11($context.template.manifest.renderer)>=2)
@@ -228,6 +231,7 @@ Case of
 				_o_editor_ui_LISTBOX($e.objectName)
 				
 				//______________________________________________________
+				// MARK:On Clicked & On Selection Change
 			: ($e.code=On Clicked:K2:4)\
 				 | ($e.code=On Selection Change:K2:29)
 				
@@ -312,8 +316,10 @@ Case of
 				End if 
 				
 				//______________________________________________________
+				// MARK:On Begin Drag Over: 
 			: ($e.code=On Begin Drag Over:K2:44)
 				
+				// get row data and put to pasteboard
 				$form.fieldList.cellPosition()
 				
 				// Get the dragged field
@@ -364,11 +370,13 @@ Case of
 				_o_editor_ui_LISTBOX($e.objectName)
 				
 				//______________________________________________________
+				// MARK:On Getting Focus
 			: ($e.code=On Getting Focus:K2:7)
 				
 				_o_editor_ui_LISTBOX($e.objectName; True:C214)
 				
 				//______________________________________________________
+				// MARK:On Losing Focus
 			: ($e.code=On Losing Focus:K2:8)
 				
 				_o_editor_ui_LISTBOX($e.objectName; False:C215)
@@ -456,6 +464,7 @@ End case
 */
 		
 		//==================================================
+		// MARK:-preview
 	: ($e.objectName=$form.preview.name)
 		
 		$context.current:=SVG Find element ID by coordinates:C1054(*; $e.objectName; MOUSEX; MOUSEY)
@@ -658,6 +667,7 @@ End case
 		End case 
 		
 		//==================================================
+		// MARK:-selectorList
 	: ($e.objectName=$form.selectorList.name)\
 		 | ($e.objectName=$form.selectorDetail.name)
 		
