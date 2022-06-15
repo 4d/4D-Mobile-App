@@ -757,16 +757,17 @@ Function isAvailable($dataClass : 4D:C1709.DataClass; $path) : Boolean
 	return ($o#Null:C1517)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function isComputedAttribute($field : cs:C1710.field; $tableName : Text) : Boolean
+Function isComputedAttribute($field : Object; $tableName : Text) : Boolean
 	
 	var $success : Boolean
-	var $table : Object
-	var $catalog : Collection
-	var $target : cs:C1710.field
 	
 	$success:=($field.kind#Null:C1517) && ($field.kind="calculated")
 	
 	If ($success & (Count parameters:C259>=2))
+		
+		var $table : Object
+		var $catalog : Collection
+		var $target : cs:C1710.field
 		
 		$success:=False:C215
 		

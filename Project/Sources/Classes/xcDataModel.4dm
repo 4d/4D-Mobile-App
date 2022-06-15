@@ -387,6 +387,38 @@ Function _createAttribute($Txt_field : Text; $table : Object; $tableID : Integer
 			
 			// <NOTHING MORE TO DO>
 			
+		: (Feature.with("alias") && PROJECT.isAlias($table[$Txt_field]))
+			
+			$Txt_originalFieldName:=String:C10($table[$Txt_field].name)
+			$Lon_type:=$table[$Txt_originalFieldName].fieldType
+			
+			If (Length:C16($Txt_originalFieldName)>0)
+				
+				$Txt_fieldName:=formatString("field-name"; $Txt_originalFieldName)
+				
+				$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")  // XXX merge with next instruction
+				
+				DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+					"name"; $Txt_fieldName; \
+					"optional"; "YES"; \
+					"derived"; "YES"; \
+					"derivationExpression"; Split string:C1554($table[$Txt_field].path; ".").map(Formula:C1597(formatString("field-name"; $1.value))).join("."))
+				
+				$Dom_userInfo:=DOM Create XML element:C865($Dom_attribute; "userInfo")
+				
+				If (Not:C34(str_equal($Txt_fieldName; $Txt_originalFieldName)))
+					
+					$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+						"key"; "keyMapping"; \
+						"value"; $Txt_originalFieldName)
+					
+				End if 
+				
+				// add xml attribut for type
+				This:C1470._field($Dom_attribute; $Dom_userInfo; $Lon_type)
+				
+			End if 
+			
 			//………………………………………………………………………………………………………………………
 		: (PROJECT.isRelation($table[$Txt_field]))
 			
