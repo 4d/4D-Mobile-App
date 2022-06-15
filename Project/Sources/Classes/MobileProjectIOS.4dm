@@ -730,6 +730,7 @@ Function _manageDataSet($out : Object)
 			"digest"; True:C214; \
 			"dataSet"; True:C214; \
 			"key"; $pathname; \
+			"coreDataSet"; True:C214; \
 			"caller"; $in.caller; \
 			"verbose"; This:C1470.verbose; \
 			"keepUI"; True:C214; \
