@@ -796,8 +796,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 				
 				If ($in.posix#Null:C1517)
 					
-					$cmd:=$cmd\
-						+" --asset "+str_singleQuoted($in.posix+"Resources/Assets.xcassets")\
+					$cmd+=" --asset "+str_singleQuoted($in.posix+"Resources/Assets.xcassets")\
 						+" --structure "+str_singleQuoted($in.posix+"Sources/Structures.xcdatamodeld")\
 						+" --output "+str_singleQuoted($in.posix+"Resources")
 					
@@ -806,7 +805,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 					
 					If (Asserted:C1132(OK=1; "LEP failed: "+$cmd))
 						
-						If (Position:C15("[Error]"; $outputStream)=0)
+						If ((Position:C15("[Error]"; $outputStream)=0) || (Position:C15("NSException"; $outputStream)=0))
 							
 							$out.success:=True:C214
 							
@@ -827,6 +826,14 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 									
 								End if 
 							End for each 
+							
+							
+							If ((Position:C15("NSException"; $outputStream)=0))
+								
+								Logger.error("Coredata import exception:\n "+$outputStream)
+								
+							End if 
+							
 						End if 
 						
 					Else 
@@ -837,6 +844,8 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 						If (Length:C16($outputStream)>0)
 							
 							ob_error_add($out; $outputStream)
+							
+							Logger.error("Coredata import exception:\n "+$outputStream)
 							
 						Else 
 							

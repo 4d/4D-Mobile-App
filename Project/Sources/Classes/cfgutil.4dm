@@ -247,11 +247,11 @@ Function properties($property : Text; $device : Object)->$value : Text
 	
 	If ($device#Null:C1517)
 		
-		$cmd:=$cmd+" --ecid "+String:C10($device.ECID)+String:C10($device.ecid)
+		$cmd+=" --ecid "+String:C10($device.ECID)+String:C10($device.ecid)
 		
 	End if 
 	
-	$cmd:=$cmd+" get-property "+Choose:C955($property=""; "supportedPropertyNames"; $property)
+	$cmd+=" get-property "+Choose:C955($property=""; "supportedPropertyNames"; $property)
 	
 	This:C1470.launch($cmd)
 	

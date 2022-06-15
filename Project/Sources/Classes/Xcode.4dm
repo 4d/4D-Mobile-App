@@ -494,8 +494,8 @@ Function close($target : 4D:C1709.Folder)
 	var $o : Object
 	
 	$cmd:="/usr/bin/osascript"
-	$cmd:=$cmd+" -e 'if application \"Xcode\" is running then'"
-	$cmd:=$cmd+" -e 'tell application \"Xcode\"'"
+	$cmd+=" -e 'if application \"Xcode\" is running then'"
+	$cmd+=" -e 'tell application \"Xcode\"'"
 	
 	If (Count parameters:C259>=1)  // Close workspace or project
 		
@@ -509,19 +509,19 @@ Function close($target : 4D:C1709.Folder)
 		
 		If (Bool:C1537($o.exists))
 			
-			$cmd:=$cmd+" -e 'close window \""+$o.fullname+"\"'"
+			$cmd+=" -e 'close window \""+$o.fullname+"\"'"
 			
 		End if 
 		
 	Else 
 		
 		// Quit Xcode
-		$cmd:=$cmd+" -e 'quit'"
+		$cmd+=" -e 'quit'"
 		
 	End if 
 	
-	$cmd:=$cmd+" -e 'end tell'"
-	$cmd:=$cmd+" -e 'end if'"
+	$cmd+=" -e 'end tell'"
+	$cmd+=" -e 'end if'"
 	
 	$o:=This:C1470.lep($cmd)
 	
@@ -538,22 +538,22 @@ Function reveal($path : Text)
 	
 	If (Count parameters:C259>=1)
 		
-		$cmd:=$cmd+" -e '  open file \""+$path+"\"'"
+		$cmd+=" -e '  open file \""+$path+"\"'"
 		
 	End if 
 	
-	$cmd:=$cmd+" -e ' end tell'"\
+	$cmd+=" -e ' end tell'"\
 		+" -e 'end if'"\
 		+" -e 'delay 0.1'"\
 		+" -e 'tell application \"System Events\"'"\
 		+" -e ' tell process \"Xcode\"'"
 	
 	// Move focus to next area, the individual file
-	$cmd:=$cmd+" -e '  keystroke \"`\" using {command down, option down}'"\
+	$cmd+=" -e '  keystroke \"`\" using {command down, option down}'"\
 		+" -e '  delay 0.1'"
 	
 	// Reveal in Project Navigator
-	$cmd:=$cmd+" -e '  keystroke \"j\" using {shift down, command down}'"\
+	$cmd+=" -e '  keystroke \"j\" using {shift down, command down}'"\
 		+" -e ' end tell'"\
 		+" -e 'end tell'"
 	

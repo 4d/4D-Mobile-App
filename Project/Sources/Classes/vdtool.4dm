@@ -48,9 +48,9 @@ Function convert($source : Object/*File or Folder*/; $destination : 4D:C1709.Fol
 	$cmd:="\""+This:C1470.javaExe+"\" -Djava.awt.headless=true -classpath \""+This:C1470.classPath+"\" com.android.ide.common.vectordrawable.VdCommandLineTool"
 	
 	If (Is macOS:C1572)
-		$cmd:=$cmd+" -c -in \""+$source.path+"\" -out \""+$destination.path+"\""
+		$cmd+=" -c -in \""+$source.path+"\" -out \""+$destination.path+"\""
 	Else 
-		$cmd:=$cmd+" -c -in \""+$source.parent.platformPath+$source.name+"\" -out \""+$destination.parent.platformPath+$destination.name+"\""
+		$cmd+=" -c -in \""+$source.parent.platformPath+$source.name+"\" -out \""+$destination.parent.platformPath+$destination.name+"\""
 	End if 
 	
 	This:C1470.launch($cmd)

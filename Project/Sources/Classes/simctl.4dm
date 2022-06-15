@@ -664,12 +664,12 @@ Function isAppInstalled($bundleID : Text; $simulator : Text)->$installed : Boole
 	If (Count parameters:C259>=2)
 		
 		$device:=This:C1470.device($simulator)
-		$cmd:=$cmd+" "+$device.udid+" "
+		$cmd+=" "+$device.udid+" "
 		
 	Else 
 		
 		// Use the current device
-		$cmd:=$cmd+" booted "
+		$cmd+=" booted "
 		
 	End if 
 	
@@ -691,12 +691,12 @@ Function installApp($bundleID : Text; $simulator : Text)
 		If (Count parameters:C259>=2)
 			
 			$device:=This:C1470.device($simulator)
-			$cmd:=$cmd+" "+$device.udid+" "
+			$cmd+=" "+$device.udid+" "
 			
 		Else 
 			
 			// Use the current device
-			$cmd:=$cmd+" booted "
+			$cmd+=" booted "
 			
 		End if 
 		
@@ -718,12 +718,12 @@ Function uninstallApp($bundleID : Text; $simulator : Text)
 		If (Count parameters:C259>=2)
 			
 			$device:=This:C1470.device($simulator)
-			$cmd:=$cmd+" "+$device.udid+" "
+			$cmd+=" "+$device.udid+" "
 			
 		Else 
 			
 			// Use the current device
-			$cmd:=$cmd+" booted "
+			$cmd+=" booted "
 			
 		End if 
 		
@@ -745,12 +745,12 @@ Function launchApp($bundleID : Text; $simulator : Text)
 		If (Count parameters:C259>=2)
 			
 			$device:=This:C1470.device($simulator)
-			$cmd:=$cmd+" "+$device.udid+" "
+			$cmd+=" "+$device.udid+" "
 			
 		Else 
 			
 			// Use the current device
-			$cmd:=$cmd+" booted "
+			$cmd+=" booted "
 			
 		End if 
 		
@@ -772,12 +772,12 @@ Function terminateApp($bundleID : Text; $simulator : Text)
 		If (Count parameters:C259>=2)
 			
 			$device:=This:C1470.device($simulator)
-			$cmd:=$cmd+" "+$device.udid+" "
+			$cmd+=" "+$device.udid+" "
 			
 		Else 
 			
 			// Use the current device
-			$cmd:=$cmd+" booted "
+			$cmd+=" booted "
 			
 		End if 
 		
@@ -799,12 +799,12 @@ Function openUrl($url : Text; $simulator : Text)
 		If (Count parameters:C259>=2)
 			
 			$device:=This:C1470.device($simulator)
-			$cmd:=$cmd+" "+$device.udid+" "
+			$cmd+=" "+$device.udid+" "
 			
 		Else 
 			
 			// Use the current device
-			$cmd:=$cmd+" booted "
+			$cmd+=" booted "
 			
 		End if 
 		
