@@ -18,7 +18,9 @@ If (Value type:C1509($in.catalog)=Is collection:K8:32)
 	$in.catalog:=cs:C1710.CatalogBuildWrapper.new($in.catalog)
 End if 
 
-PROJECT:=cs:C1710.project.new()
+If (PROJECT=Null:C1517)
+	PROJECT:=cs:C1710.project.new()
+End if 
 
 var $recu; $recuOut : Object
 var $fieldKey : Text  // field id or name
