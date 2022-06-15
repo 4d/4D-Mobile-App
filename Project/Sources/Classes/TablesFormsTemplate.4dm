@@ -158,7 +158,8 @@ Function doRun()->$Obj_out : Object
 							End if 
 							
 							$keyPaths:=Split string:C1554($Obj_field.nameOrPath; ".")
-							$keyPaths.pop()  // we remove field leaf name, because we get info from id, not path
+							var $leaf : Text
+							$leaf:=$keyPaths.pop()  // we remove field leaf name, because we get info from id, not path
 							
 							$tmpTableModel:=$Obj_tableModel
 							If ($keyPaths.length>0)  // is it a link?
@@ -170,11 +171,23 @@ Function doRun()->$Obj_out : Object
 							// Add info from dataModel or cache if missing
 							$fieldModel:=Null:C1517
 							If ($tmpTableModel#Null:C1517)
-								If ($Obj_field.id#Null:C1517)
-									$fieldModel:=$tmpTableModel[String:C10($Obj_field.id)]  // OLD CODE
-								End if 
+								Case of 
+									: (PROJECT.isComputedAttribute($Obj_field))
+										$fieldModel:=$tmpTableModel[String:C10($leaf)]
+									: (PROJECT.isField($Obj_field))
+										If ($Obj_field.id#Null:C1517)
+											$fieldModel:=$tmpTableModel[String:C10($Obj_field.id)]  // OLD CODE
+										End if 
+										If ($Obj_field.fieldNumber#Null:C1517)
+											$fieldModel:=$tmpTableModel[String:C10($Obj_field.fieldNumber)]
+										End if 
+								End case 
+								
 								If ($fieldModel=Null:C1517)  // computed or NEW CODE
-									$fieldModel:=This:C1470._field($tmpTableModel; $Obj_field)
+									var $Obj_field0 : Object
+									$Obj_field0:=OB Copy:C1225($Obj_field)
+									$Obj_field0.name:=$leaf
+									$fieldModel:=This:C1470._field($tmpTableModel; $Obj_field0)
 								End if 
 								If ($fieldModel#Null:C1517)
 									$Obj_field:=ob_deepMerge($Obj_field; $fieldModel; False:C215)
@@ -193,7 +206,9 @@ Function doRun()->$Obj_out : Object
 							ASSERT:C1129((Length:C16(String:C10($Obj_field.bindingType))>0); "Not able to compute binding type for field: "+JSON Stringify:C1217($Obj_field)+". Please provide screenshot to support")
 							
 							//……………………………………………………………………………………………………………
-						: ($Obj_field.name#Null:C1517)  // ie. relation or alias
+						: ($Obj_field.name#Null:C1517)  // ie. relation or alias 
+							
+							// CLEAN: merge with previous code
 							
 							$Obj_field:=OB Copy:C1225($Obj_field)
 							

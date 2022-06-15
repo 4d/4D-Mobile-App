@@ -685,7 +685,7 @@ Function isField($field) : Boolean
 		: (Value type:C1509($field)=Is object:K8:27)  // The field itself
 			
 			// Eventually, just the kind will be needed
-			return (Num:C11($field.relatedTableNumber)=0) && ((String:C10($field.kind)="storage") || ($field.fieldType#Null:C1517))
+			return (Num:C11($field.relatedTableNumber)=0) && ((String:C10($field.kind)="storage") || (($field.fieldType#Null:C1517) && ($field.kind=Null:C1517)))
 			
 			//______________________________________________________
 	End case 
