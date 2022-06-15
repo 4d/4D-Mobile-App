@@ -193,7 +193,7 @@ Function doRun()->$Obj_out : Object
 							ASSERT:C1129((Length:C16(String:C10($Obj_field.bindingType))>0); "Not able to compute binding type for field: "+JSON Stringify:C1217($Obj_field)+". Please provide screenshot to support")
 							
 							//……………………………………………………………………………………………………………
-						: ($Obj_field.name#Null:C1517)  // ie. relation
+						: ($Obj_field.name#Null:C1517)  // ie. relation or alias
 							
 							$Obj_field:=OB Copy:C1225($Obj_field)
 							
@@ -221,7 +221,10 @@ Function doRun()->$Obj_out : Object
 							This:C1470._fieldTagify($Obj_field)
 							
 							// Set binding type according to field information
-							//$Obj_field.bindingType:=This.fieldBinding($Obj_field; $Obj_in.formatters).bindingType
+							
+							If (PROJECT.isAlias($Obj_field))
+								$Obj_field.bindingType:=This:C1470.fieldBinding($Obj_field; $Obj_in.formatters).bindingType
+							End if 
 							
 							//……………………………………………………………………………………………………………
 						: ($i<$Lon_count)
@@ -790,7 +793,6 @@ Function fieldBinding($field : Object; $formatter : Object)->$binding : Object
 			End if 
 	End case 
 	
-	
 	// Used to provide a default list of field for forms
 Function _fieldCollection($Obj_dataModel : Object; $addRelation : Boolean; $table : Object)->$fields : Collection
 	$fields:=New collection:C1472()
@@ -806,41 +808,47 @@ Function _fieldCollection($Obj_dataModel : Object; $addRelation : Boolean; $tabl
 		Case of 
 				
 				//………………………………………………………………………………………………………………………
-			: (Match regex:C1019("(?m-si)^\\d+$"; $Txt_field; 1; *))  // XXX or isField and isComputeAttribute if we want it as default list
+			: (Length:C16($Txt_field)=0)
+				// metadata
 				
-				// TODO: Change field.id to field.fieldNumber
+				//………………………………………………………………………………………………………………………
+			: (PROJECT.isField($Txt_field))
+				
 				var $field : Object
 				$field:=OB Copy:C1225($table[$Txt_field])
 				$field.id:=$Txt_field
+				If ($field.fieldNumber=Null:C1517)
+					$field.fieldNumber:=Num:C11($Txt_field)
+				End if 
 				$fields.push($field)
 				
 				//………………………………………………………………………………………………………………………
-			: ((Value type:C1509($table[$Txt_field])=Is object:K8:27))
+			: ((Value type:C1509($table[$Txt_field])#Is object:K8:27))
+				
+				// Ignore scalar properties...
+				
+				//………………………………………………………………………………………………………………………
+			: (PROJECT.isRelationToMany($table[$Txt_field]))  // #110927 
 				
 				If ($addRelation)
 					
-					If ($table[$Txt_field].relatedEntities#Null:C1517)  // To change if relatedEntities deleted and relatedDataClass already filled #109019
+					If ($Obj_dataModel[String:C10($table[$Txt_field].relatedTableNumber)]#Null:C1517)  // only if destination table published
 						
-						// redmine #110927 : want to add relation 1-N if no field specified at all by user
-						// Here we detect 1-N Relation, there is no "kind" or "type" to see it at this level...
+						$fields.push(New object:C1471(\
+							"name"; $Txt_field; \
+							"kind"; "relatedEntities"; \
+							"relatedDataClass"; $table[$Txt_field].relatedEntities; \
+							"relatedTableNumber"; $table[$Txt_field].relatedTableNumber; \
+							"fieldType"; 8859; \
+							"id"; 0))  // TODO field.id change to fieldNumber
 						
-						If ($Obj_dataModel[String:C10($table[$Txt_field].relatedTableNumber)]#Null:C1517)  // only if destination table published
-							
-							$fields.push(New object:C1471(\
-								"name"; $Txt_field; \
-								"relatedDataClass"; $table[$Txt_field].relatedEntities; \
-								"relatedTableNumber"; $table[$Txt_field].relatedTableNumber; \
-								"fieldType"; 8859; \
-								"id"; 0))  // TODO field.id change to fieldNumber
-							
-						End if 
 					End if 
 				End if 
 				
 				//………………………………………………………………………………………………………………………
 			Else 
 				
-				// Ignore
+				// Ignore (alias, computed, to one relation)
 				
 				//………………………………………………………………………………………………………………………
 		End case 

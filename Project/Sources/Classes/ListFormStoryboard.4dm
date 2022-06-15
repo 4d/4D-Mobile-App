@@ -1,43 +1,30 @@
 Class extends Storyboard
 
-Class constructor
-	C_OBJECT:C1216($1)
-	If (Count parameters:C259>0)
-		Super:C1705($1)
-	Else 
-		Super:C1705()
-	End if 
+Class constructor($path : 4D:C1709.File)
+	Super:C1705($path)
 	This:C1470.type:="listform"
-	
 	This:C1470.relationFolder:=cs:C1710.path.new().templates().folder("relation")
 	
-Function run
-	C_OBJECT:C1216($0; $Obj_out)
+	// MARK:- run
+Function run($Obj_template : Object; $target : Object/*4D.Folder*/; $Obj_tags : Object)->$Obj_out : Object
 	$Obj_out:=New object:C1471()
 	$Obj_out.doms:=New collection:C1472()
-	
-	C_OBJECT:C1216($1; $Obj_template)
-	$Obj_template:=$1
-	C_OBJECT:C1216($2; $target)
-	$target:=$2
-	C_OBJECT:C1216($3; $Obj_tags)
-	$Obj_tags:=$3
 	
 	This:C1470.checkStoryboardPath($Obj_template)  // set default path if not defined
 	
 	If (This:C1470.path.exists)
 		
-		C_TEXT:C284($t)
+		var $t : Text
 		$t:=This:C1470.path.getText()
 		
 		If (Length:C16($t)>0)  // a custom template or not well described one (do not warn about it but we could read by reading file)
 			
-			C_OBJECT:C1216($Obj_element)
+			var $Obj_element : Object
 			$Obj_element:=New object:C1471(\
 				"___TABLE_ACTIONS___"; "tableActions"; \
 				"___ENTITY_ACTIONS___"; "recordActions")
 			
-			C_TEXT:C284($Txt_cmd)
+			var $Txt_cmd : Text
 			For each ($Txt_cmd; $Obj_element)
 				
 				If ($Obj_tags.table[$Obj_element[$Txt_cmd]]#Null:C1517)  // there is selection action
@@ -56,19 +43,20 @@ Function run
 		End if 
 		
 		// check if we need to update for relation
-		C_BOOLEAN:C305($Boo_buffer)
+		var $Boo_buffer : Boolean
 		$Boo_buffer:=False:C215
 		
-		C_OBJECT:C1216($Obj_field)
-		C_COLLECTION:C1488($Col_fields)
+		var $Col_fields : Collection
 		$Col_fields:=$Obj_tags.table.fields
 		
-		C_BOOLEAN:C305($Boo_enableBarcode)
+		var $Boo_enableBarcode : Boolean
 		$Boo_enableBarcode:=Bool:C1537($Obj_tags.table.searchableWithBarcode)
 		
 		// Manage relation field?
-		C_BOOLEAN:C305($Boo_hasRelation)
+		var $Boo_hasRelation : Boolean
 		$Boo_hasRelation:=False:C215
+		
+		var $Obj_field : Object
 		For each ($Obj_field; $Col_fields) Until ($Boo_hasRelation)
 			If (This:C1470.isRelationField($Obj_field))  // relation to N field
 				$Boo_hasRelation:=True:C214
@@ -77,7 +65,7 @@ Function run
 		
 		If ($Boo_hasRelation | $Boo_enableBarcode)
 			
-			C_OBJECT:C1216($Dom_root; $Dom_child; $Dom_)
+			var $Dom_root; $Dom_child; $Dom_ : Object/*_o_xml*/
 			$Dom_root:=_o_xml("load"; This:C1470.path)
 			
 			// Edit for relations
@@ -87,7 +75,7 @@ Function run
 				For each ($Obj_field; $Col_fields)
 					If (This:C1470.isRelationField($Obj_field))  // relation to N field
 						If ($Obj_field.isToMany=Null:C1517)
-							$Obj_field.isToMany:=(Num:C11($Obj_field.fieldType)=8859)
+							$Obj_field.isToMany:=(Num:C11($Obj_field.fieldType)=8859) || (String:C10($Obj_field.kind)="relatedEntities")
 						End if 
 						If (This:C1470.xmlAppendRelationAttributeForField($Lon_j; $Dom_root; Bool:C1537($Obj_field.isToMany)).success)
 							$Boo_buffer:=True:C214  // we make modification
@@ -138,6 +126,7 @@ Function run
 		
 	End if 
 	
+	// MARK:- features
 Function xmlAppendSearchWithBarCode($root : Object)->$node : Object
 	
 	var $t : Text

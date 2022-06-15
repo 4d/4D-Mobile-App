@@ -1,55 +1,20 @@
-Class constructor
-	var $1 : Object
+Class constructor($path : 4D:C1709.File)
+	This:C1470.path:=$path
 	
-	If (Count parameters:C259>0)
-		This:C1470.path:=$1
-		
-		If (This:C1470.path#Null:C1517)
-			
-			ASSERT:C1129(OB Instance of:C1731(This:C1470.path; 4D:C1709.File); "storyboard must be a file")
-			
-		End if 
-	End if 
+	// MARK:- ids
+Function _randomID()->$id : Text
+	$id:=Generate UUID:C1066
+	$id:=Substring:C12($id; 1; 3)+"-"+Substring:C12($id; 4; 2)+"-"+Substring:C12($id; 7; 3)
 	
-Function randomID
-	var $0 : Text
-	var $1 : Integer
-	
-	var $t : Text
-	var $i; $l : Integer
-	
-	$0:=Generate UUID:C1066
-	$0:=Substring:C12($0; 1; 3)+"-"+Substring:C12($0; 4; 2)+"-"+Substring:C12($0; 7; 3)
-	
-Function randomIDS
-	var $0 : Collection
-	$0:=New collection:C1472
-	
-	var $l; $1 : Integer
-	$l:=$1
-	
-	var $t : Text
-	
+Function _randomIDS($length : Integer)->$ids : Collection
+	$ids:=New collection:C1472
 	var $i : Integer
-	For ($i; 1; $l; 1)
-		
-		$t:=Generate UUID:C1066
-		$t:=Substring:C12($t; 1; 3)+"-"+Substring:C12($t; 4; 2)+"-"+Substring:C12($t; 7; 3)
-		
-		$0.push($t)
-		
+	For ($i; 1; $length; 1)
+		$ids.push(This:C1470._randomID())
 	End for 
 	
-Function insertInto  // ($Obj_element : Object; $text : Text; $at : Integer)
-	C_OBJECT:C1216($0; $Dom_)
-	
-	var $Obj_element; $1 : Object
-	$Obj_element:=$1
-	var $text; $2 : Text
-	$text:=$2
-	var $at; $3 : Integer
-	$at:=$3
-	
+	// MARK:- XML
+Function insertInto($Obj_element : Object; $text : Text; $at : Integer)->$Dom_ : Object
 	$Dom_:=Null:C1517
 	Case of 
 			
@@ -84,7 +49,6 @@ Function insertInto  // ($Obj_element : Object; $text : Text; $at : Integer)
 		ob_removeFormula($Dom_)  // For debugging purpose remove all formula
 		
 	End if 
-	$0:=$Dom_
 	
 	
 /* If not set, find number of id to inject */
@@ -118,20 +82,12 @@ Function checkIDCount  // ($Obj_element : Object)
 	$Obj_element.idCount:=$Lon_ids
 	
 /* If not set, update default parameters for insert mode */
-Function checkInsertInto  // ($Obj_element : Object; $Obj_tags : Object)
-	var $Obj_element; $1 : Object
-	$Obj_element:=$1
-	
+Function checkInsertInto($Obj_element : Object)
 	If ($Obj_element.insertInto=Null:C1517)
 		$Obj_element.insertInto:=$Obj_element.dom.parent()
 	End if 
 	
-Function checkInsert
-	var $Obj_element; $1 : Object
-	$Obj_element:=$1
-	var $Obj_tags; $2 : Object
-	$Obj_tags:=$2
-	
+Function checkInsert($Obj_element : Object; $Obj_tags : Object)
 	If (Length:C16(String:C10($Obj_element.insertMode))=0)
 		
 		$Obj_element.insertMode:="append"
@@ -151,6 +107,8 @@ Function checkInsert
 			End if 
 		End for each 
 	End if 
+	
+	// MARK: xcode formatting
 	
 	// Reformat storyboard document to follow xcode rules (line ending, attributes order, add missing resources)
 Function format($Obj_in : Object)->$Obj_out : Object  // MAC ONLY
@@ -250,34 +208,36 @@ Function format($Obj_in : Object)->$Obj_out : Object  // MAC ONLY
 		// ----------------------------------------
 	End if 
 	
-Function _ibtoolVersion()->$Obj_out : Object
+/*Function _ibtoolVersion()->$Obj_out : Object
 	
-	// Get storyboard tool version (could be used to replace in storyboard header)
-	var $Txt_cmd; $Txt_error; $Txt_in; $Txt_out : Text
-	$Txt_cmd:="ibtool --version"
-	LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
+// Get storyboard tool version (could be used to replace in storyboard header)
+var $Txt_cmd; $Txt_error; $Txt_in; $Txt_out : Text
+$Txt_cmd:="ibtool --version"
+LAUNCH EXTERNAL PROCESS($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
 	
-	If (Asserted:C1132(OK=1; "LEP failed: "+$Txt_cmd))
-		
-		If (Length:C16($Txt_out)>0)
-			
-			var $File_ : Object
-			$File_:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"ibtool.plist")
-			$File_.setText($Txt_out)
-			$Obj_out:=_o_plist(New object:C1471(\
-				"action"; "object"; \
-				"domain"; $File_.path))
-			$File_.delete()
-			
-			If (($Obj_out.success)\
-				 & ($Obj_out.value#Null:C1517))
-				
-				$Obj_out.version:=String:C10($Obj_out.value["com.apple.ibtool.version"]["bundle-version"])
-				
-			End if 
-		End if 
-	End if 
+If (Asserted(OK=1; "LEP failed: "+$Txt_cmd))
 	
+If (Length($Txt_out)>0)
+	
+var $File_ : Object
+$File_:=Folder(Temporary folder; fk platform path).file(Generate UUID+"ibtool.plist")
+$File_.setText($Txt_out)
+	$Obj_out:=_o_plist(New object(\
+		"action"; "object"; \
+		"domain"; $File_.path))
+$File_.delete()
+	
+	If (($Obj_out.success)\
+		 & ($Obj_out.value#Null))
+	
+$Obj_out.version:=String($Obj_out.value["com.apple.ibtool.version"]["bundle-version"])
+	
+End if 
+End if 
+End if */
+	
+	
+	// MARK: fixes
 /* fix color asset according to theme. issues on simu*/
 Function colorAssetFix($theme : Object)->$Obj_out : Object
 	var $t : Text
@@ -552,6 +512,7 @@ Function checkStoryboardPath
 	This:C1470.path:=Folder:C1567($Obj_template.source; fk platform path:K87:2).file(String:C10($Obj_template.storyboard))
 	
 	
+	// MARK: relation
 Function relationSegue($relation : Object)
 	C_TEXT:C284($0; $Txt_buffer)
 	If ($relation.transition=Null:C1517)
@@ -647,7 +608,7 @@ Function injectElement
 				C_OBJECT:C1216($Obj_storyboardID)
 				$Obj_storyboardID:=New object:C1471(\
 					"tagInterfix"; $Obj_element.tagInterfix; \
-					"storyboardIDs"; This:C1470.randomIDS($Obj_element.idCount))
+					"storyboardIDs"; This:C1470._randomIDS($Obj_element.idCount))
 				
 				$Obj_tags.storyboardID.push($Obj_storyboardID)  // By using a collection we have now TAG for previous elements also injected (could be useful for "connections")
 				
@@ -758,7 +719,7 @@ Function injectSegue
 			"insertMode"; "append"\
 			)
 		
-		C_TEXT:C284($Txt_buffer)
+		var $Txt_buffer : Text
 		$Txt_buffer:=This:C1470.relationSegue($Obj_template.relation)
 		$Obj_element.insertInto:=$Obj_element.insertInto.findOrCreate("connections")  // Find its <connections> children, if not exist create it
 		$Obj_element.dom:=_o_xml("parse"; New object:C1471("variable"; $Txt_buffer))
@@ -773,23 +734,15 @@ Function injectSegue
 		
 	End if 
 	
-Function exportDom
-	C_OBJECT:C1216($1; $Obj_template)
-	$Obj_template:=$1
-	C_OBJECT:C1216($2; $target)
-	$target:=$2
-	C_OBJECT:C1216($3; $Obj_tags)
-	$Obj_tags:=$3
-	C_OBJECT:C1216($4; $Dom_root)
-	$Dom_root:=$4
-	
-	C_TEXT:C284($Txt_buffer)
+	// MARK:- export
+Function exportDom($template : Object; $target : Object/* 4D.Folder */; $tags : Object; $Dom_root : Object/*Pseudo xml class*/)
+	var $Txt_buffer : Text
 	$Txt_buffer:=$Dom_root.export().variable
-	$Txt_buffer:=Process_tags($Txt_buffer; $Obj_tags; New collection:C1472("storyboard"; "___TABLE___"))
+	$Txt_buffer:=Process_tags($Txt_buffer; $tags; New collection:C1472("storyboard"; "___TABLE___"))
 	$Txt_buffer:=Replace string:C233($Txt_buffer; "<userDefinedRuntimeAttribute type=\"image\" keyPath=\"image\"/>"; "")  // Remove useless empty image
 	
-	C_OBJECT:C1216($File_)
-	$File_:=$target.file(Process_tags(String:C10($Obj_template.storyboard); $Obj_tags; New collection:C1472("filename")))
-	$File_.setText($Txt_buffer; "UTF-8"; Document with CRLF:K24:20)
+	var $file : 4D:C1709.File
+	$file:=$target.file(Process_tags(String:C10($template.storyboard); $tags; New collection:C1472("filename")))
+	$file.setText($Txt_buffer; "UTF-8"; Document with CRLF:K24:20)
 	
-	This:C1470.format($File_)
+	This:C1470.format($file)

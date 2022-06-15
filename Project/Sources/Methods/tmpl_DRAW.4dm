@@ -219,7 +219,7 @@ If (Num:C11($tableID)>0)
 							$field:=OB Copy:C1225($field)  // do not let a draw modify project data
 							//mark:#131257 
 							If ($field.kind="storage")
-								If (Position:C15("."; String:C10($field.name))<=0)  // limit to not relation but nothing must be done here I think FIXME:#131257 
+								If ((Position:C15("."; String:C10($field.name))<=0) && ($field.fieldNumber#Null:C1517))  // limit to not relation but nothing must be done here I think FIXME:#131257 
 									$field.name:=$tableModel[String:C10($field.fieldNumber)].name
 								End if 
 							End if 

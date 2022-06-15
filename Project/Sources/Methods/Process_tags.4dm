@@ -59,7 +59,7 @@ End if
 
 Case of   // According to type replace the tag
 		
-		//______________________________________________________
+		//MARK:- swift
 	: ($Col_types.indexOf("swift")#-1)  // Sources file header (*.swift)
 		
 		$Col_oldStrings:=New collection:C1472(\
@@ -76,7 +76,7 @@ Case of   // According to type replace the tag
 			$Obj_tags.copyright\
 			)
 		
-		//______________________________________________________
+		//MARK:- Info.plist
 	: ($Col_types.indexOf("Info.plist")#-1)
 		
 		// The following file could be edited using /usr/libexec/PListBuddy, plutil or default
@@ -108,7 +108,7 @@ Case of   // According to type replace the tag
 			$Obj_tags.sdkVersion\
 			)
 		
-		//______________________________________________________
+		//MARK:- settings
 	: ($Col_types.indexOf("settings")#-1)
 		
 		$Col_oldStrings:=New collection:C1472(\
@@ -135,7 +135,7 @@ Case of   // According to type replace the tag
 			Generate UUID:C1066\
 			)
 		
-		//______________________________________________________
+		//MARK:- asset
 	: ($Col_types.indexOf("asset")#-1)
 		
 		$Col_oldStrings:=New collection:C1472(\
@@ -160,7 +160,7 @@ Case of   // According to type replace the tag
 			$Obj_tags.alpha\
 			)
 		
-		//______________________________________________________
+		//MARK:- project.pbxproj
 	: ($Col_types.indexOf("project.pbxproj")#-1)  // project.pbxproj
 		
 		$Col_oldStrings:=New collection:C1472(\
@@ -219,7 +219,7 @@ Case of   // According to type replace the tag
 		$Col_oldStrings.push("___TABLE___")
 		$Col_newStrings.push($Obj_table.name)
 		
-		//______________________________________________________
+		//MARK:- filename
 	: ($Col_types.indexOf("filename")#-1)
 		
 		$Col_oldStrings:=New collection:C1472(\
@@ -237,7 +237,7 @@ Case of   // According to type replace the tag
 			$Obj_tags.name\
 			)
 		
-		//______________________________________________________
+		//MARK:- navigation.storyboard
 	: ($Col_types.indexOf("navigation.storyboard")#-1)
 		
 		$Col_oldStrings:=New collection:C1472(\
@@ -252,7 +252,7 @@ Case of   // According to type replace the tag
 			$Obj_tags.navigationRowHeight\
 			)
 		
-		//______________________________________________________
+		//MARK:- script
 	: ($Col_types.indexOf("script")#-1)
 		
 		$Col_oldStrings:=New collection:C1472(\
@@ -263,7 +263,7 @@ Case of   // According to type replace the tag
 			$Obj_tags.xCodeVersion\
 			)
 		
-		//______________________________________________________
+		//MARK:- automatic
 	: ($Col_types.indexOf("automatic")#-1)  // if pass a restricted tag object this add all keys
 		
 		$Col_oldStrings:=New collection:C1472
@@ -308,7 +308,7 @@ Case of   // According to type replace the tag
 		//______________________________________________________
 End case 
 
-//___TABLE___ FILES [
+//MARK:-___TABLE___ FILES [
 If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 	
 	$Col_oldStrings.push("___TABLE___")
@@ -317,6 +317,7 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 	Case of 
 			
 			//______________________________________________________
+			//MARK: swift
 		: ($Col_types.indexOf("swift")#-1)  //___TABLE___.swift
 			
 			$Col_oldStrings.combine(New collection:C1472(\
@@ -365,6 +366,7 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 			End for each 
 			
 			//______________________________________________________
+			//MARK: storyboard
 		: ($Col_types.indexOf("storyboard")#-1)  //___TABLE___XXX.storyboard
 			
 			$t:=String:C10($Obj_table.navigationTransition)
@@ -446,6 +448,7 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 			End for each 
 			
 			//______________________________________________________
+			//MARK: detailform
 		: ($Col_types.indexOf("detailform")#-1)  //___TABLE___DetailsForm.storyboard
 			
 			If ($Obj_tags.field#Null:C1517)
@@ -510,6 +513,7 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 			End if 
 			
 			//______________________________________________________
+			//MARK: navigation
 		: ($Col_types.indexOf("navigation")#-1)  // MainNavigation.storyboard
 			
 			$Col_oldStrings.combine(New collection:C1472(\
@@ -535,6 +539,7 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 End if 
 //]
 
+//MARK:- storyboardID
 If ($Col_types.indexOf("storyboardID")#-1)  // Dispatch storyboard id in TAG-<interfix>-<position>
 	
 	If (Length:C16(String:C10($Obj_tags.tagInterfix))>0)  // only one element defined directly at root tag level
@@ -577,6 +582,7 @@ End if
 
 ASSERT:C1129($Col_oldStrings.length=$Col_newStrings.length)
 
+//MARK:- write file
 // Make replacements
 $Txt_out:=$str.setText($Txt_in).replace($Col_oldStrings; $Col_newStrings)
 

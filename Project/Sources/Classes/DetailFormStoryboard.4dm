@@ -1,27 +1,14 @@
 Class extends Storyboard
 
-Class constructor
-	C_OBJECT:C1216($1)
-	If (Count parameters:C259>0)
-		Super:C1705($1)
-	Else 
-		Super:C1705()
-	End if 
+Class constructor($path : 4D:C1709.File)
+	Super:C1705($path)
 	This:C1470.type:="detailform"
-	
 	This:C1470.relationFolder:=cs:C1710.path.new().templates().folder("relation")
 	
-Function run
-	C_OBJECT:C1216($0; $Obj_out)
+	// MARK:- run
+Function run($Obj_template : Object; $target : Object/*4D.Folder*/; $Obj_tags : Object)->$Obj_out : Object
 	$Obj_out:=New object:C1471()
 	$Obj_out.doms:=New collection:C1472()
-	
-	C_OBJECT:C1216($1; $Obj_template)
-	$Obj_template:=$1
-	C_OBJECT:C1216($2; $target)
-	$target:=$2
-	C_OBJECT:C1216($3; $Obj_tags)
-	$Obj_tags:=$3
 	
 	This:C1470.checkStoryboardPath($Obj_template)  // set default path if not defined
 	
@@ -51,7 +38,7 @@ Function run
 		End if 
 		
 		// create elements if not defined in manifest (if defined, this is an opti)
-		This:C1470.checkTemplateElements($Obj_template; $Txt_buffer; $Dom_root)
+		This:C1470._checkTemplateElements($Obj_template; $Txt_buffer; $Dom_root)
 		
 		C_OBJECT:C1216($Folder_template)
 		$Folder_template:=Folder:C1567($Obj_template.source; fk platform path:K87:2)
@@ -389,7 +376,7 @@ Function run
 	$0:=$Obj_out
 	
 	
-Function checkTemplateElements($Obj_template : Object; $Txt_buffer : Text; $Dom_root : Object/*xml node*/)
+Function _checkTemplateElements($Obj_template : Object; $Txt_buffer : Text; $Dom_root : Object/*xml node*/)
 	
 	If ($Obj_template.elements=Null:C1517)
 		

@@ -95,7 +95,7 @@ Function run
 		C_OBJECT:C1216($Obj_table)
 		For each ($Obj_table; $Obj_tags.navigationTables)
 			
-			$Obj_table.segueDestinationId:=This:C1470.randomID()
+			$Obj_table.segueDestinationId:=This:C1470._randomID()
 			
 		End for each 
 		
@@ -118,7 +118,7 @@ Function run
 					If (Length:C16(String:C10($Obj_element.tagInterfix))>0)
 						
 						$Obj_tags.tagInterfix:=$Obj_element.tagInterfix
-						$Obj_tags.storyboardIDs:=This:C1470.randomIDS($Obj_element.idCount)
+						$Obj_tags.storyboardIDs:=This:C1470._randomIDS($Obj_element.idCount)
 						
 					End if 
 					
