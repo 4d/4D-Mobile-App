@@ -5,6 +5,12 @@ If (False:C215)
 	C_OBJECT:C1216(dev_Menu; $1)
 End if 
 
+var $popup : Boolean
+$popup:=$menu=Null:C1517
+If ($popup)
+	$menu:=cs:C1710.menu.new()
+End if 
+
 var $c : Collection
 var $o : cs:C1710.menu
 
@@ -69,7 +75,13 @@ $o.append("Close"; "close").method(Formula:C1597(menu_window).source)
 $o.append("Minimize"; "minimize").method(Formula:C1597(menu_window).source)
 $o.append("Maximize"; "maximize").method(Formula:C1597(menu_window).source)
 $o.append("Centered"; "centered").method(Formula:C1597(menu_window).source)
+$o.line()
+$o.append("Dev"; "dev").method(Formula:C1597(menu_window).source)
 $menu.append("Window"; $o)
 
 $menu.append("DEV"; cs:C1710.menu.new()\
 .append("00_TESTS"; Formula:C1597(00_TESTS).source))
+
+If ($popup)
+	$menu.popup()
+End if 

@@ -54,6 +54,34 @@ Case of
 		SET WINDOW RECT:C444($Lon_left; $Lon_top; $Lon_right; $Lon_bottom; $Win_me)
 		
 		//______________________________________________________
+	: ($Mnu_choice="dev")
+		
+		var $name : Text
+		var $barHeight; $dock; $explo; $vlWnd : Integer
+		
+		$barHeight:=84  // Tool bar height + 30 ?
+		$dock:=90
+		$explo:=304
+		ARRAY LONGINT:C221($alWnd; 0)
+		WINDOW LIST:C442($alWnd)
+		
+		For ($vlWnd; 1; Size of array:C274($alWnd))
+			
+			$name:=Get window title:C450($alWnd{$vlWnd})
+			
+			Case of 
+				: (Length:C16($name)=0)
+				: ($name="4D Mobile App - Explorer")
+					SET WINDOW RECT:C444(0; $barHeight; $explo; Screen height:C188()-90; $alWnd{$vlWnd})
+				: ($name="4D Mobile App - Compiler")
+					SET WINDOW RECT:C444($explo; Screen height:C188()-$explo; Screen width:C187(); Screen height:C188()-$dock; $alWnd{$vlWnd})
+				: (Position:C15("Method: "; $name)=1)
+					SET WINDOW RECT:C444($explo; $barHeight+28; Screen width:C187(); Screen height:C188()-$dock-220; $alWnd{$vlWnd})
+				Else 
+			End case 
+		End for 
+		
+		//______________________________________________________
 	Else 
 		
 		ASSERT:C1129(False:C215; "Unknown menu action ("+$Mnu_choice+")")
