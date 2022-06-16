@@ -798,9 +798,70 @@ Case of
 													End if 
 													
 													//----------------------------------------
-												: ($record[$field.name]#Null:C1517)
+												: ($field.name#Null:C1517)
 													
-													$o:=$record[$field.name]
+													If ($record[$field.name]#Null:C1517)
+														
+														$o:=$record[$field.name]
+														
+													End if 
+													
+													//----------------------------------------
+												: (($field.path#Null:C1517) && ($field.kind="alias"))
+													
+													var $aliasName : Text
+													var $partCol : Collection
+													var $aliasObj : Object
+													var $partCount : Integer
+													
+													If (Position:C15("."; $field.path)>0)
+														
+														$partCol:=Split string:C1554($field.path; ".")
+														
+														$partCount:=1
+														
+														$aliasName:=$partCol[0]
+														
+														If ($record[$aliasName]#Null:C1517)
+															
+															$aliasObj:=$record[$aliasName]
+															
+															$partCol.remove(0)
+															
+															// Go through path parts
+															For each ($aliasName; $partCol)
+																
+																If ($aliasObj#Null:C1517)
+																	
+																	If ($partCount<$partCol.count())
+																		
+																		$aliasObj:=$aliasObj[$aliasName]
+																		
+																	Else   // last path item
+																		
+																		$o:=$aliasObj
+																		
+																	End if 
+																	
+																Else 
+																	break
+																End if 
+																
+																$partCount+=1
+																
+															End for each 
+															
+														End if 
+														
+													Else 
+														
+														If ($record[$aliasName]#Null:C1517)
+															
+															$o:=$record[$aliasName]
+															
+														End if 
+														
+													End if 
 													
 													//----------------------------------------
 											End case 
@@ -1098,7 +1159,7 @@ Case of
 				: (Value type:C1509($in.table[$Txt_field])#Is object:K8:27)
 					
 					//………………………………………………………………………………………………………………………
-				: ($in.table[$Txt_field].relatedDataClass#Null:C1517)  // Is is a link?
+				: ($in.table[$Txt_field].relatedDataClass#Null:C1517)  // Is it a link?
 					
 					For each ($Txt_fieldNumber; $in.table[$Txt_field])
 						
@@ -1119,6 +1180,15 @@ Case of
 							
 						End if 
 					End for each 
+					
+					//………………………………………………………………………………………………………………………
+				: ($in.table[$Txt_field].fieldType#Null:C1517)
+					
+					If ($in.table[$Txt_field].fieldType=Is picture:K8:10)
+						
+						$out.fields.push($in.table[$Txt_field])
+						
+					End if 
 					
 					//………………………………………………………………………………………………………………………
 			End case 
