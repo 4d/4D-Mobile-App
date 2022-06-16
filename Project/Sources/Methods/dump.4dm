@@ -809,7 +809,7 @@ Case of
 													//----------------------------------------
 												: (($field.path#Null:C1517) && ($field.kind="alias"))
 													
-													var $aliasName : Text
+													var $aliasName; $relatedDataClass : Text
 													var $partCol : Collection
 													var $aliasObj : Object
 													var $partCount : Integer
@@ -828,6 +828,9 @@ Case of
 															
 															$partCol.remove(0)
 															
+															// For a scalar field, we want to know the dataclass containing the field
+															$relatedDataClass:=ds:C1482[$meta.name][$aliasName].relatedDataClass
+															
 															// Go through path parts
 															For each ($aliasName; $partCol)
 																
@@ -835,11 +838,17 @@ Case of
 																	
 																	If ($partCount<$partCol.count())
 																		
+																		$relatedDataClass:=ds:C1482[$relatedDataClass][$aliasName].relatedDataClass
+																		
 																		$aliasObj:=$aliasObj[$aliasName]
 																		
 																	Else   // last path item
 																		
-																		$o:=$aliasObj
+																		$o:=$aliasObj[$aliasName]
+																		// Add informations for image file naming
+																		$o.ID:=$aliasObj["__KEY"]
+																		$o.name:=$aliasName
+																		$o.relatedDataClass:=$relatedDataClass
 																		
 																	End if 
 																	
@@ -855,9 +864,13 @@ Case of
 														
 													Else 
 														
-														If ($record[$aliasName]#Null:C1517)
+														If ($record[$field.path]#Null:C1517)
 															
-															$o:=$record[$aliasName]
+															$o:=$record[$field.path]
+															// Add informations for image file naming
+															$o.ID:=$record["__KEY"]
+															$o.name:=$field.path
+															$o.relatedDataClass:=$meta.name
 															
 														End if 
 														
@@ -938,6 +951,22 @@ Case of
 															End if 
 															
 															$File_name:=$meta.name+"("+$ID+")"+"_"+$field.relatedField+"."+$field.name+"_"+$version
+															
+															//----------------------------------------
+															
+														: (($field.path#Null:C1517) && ($field.kind="alias"))
+															
+															If (($o.relatedDataClass#Null:C1517) && ($o.ID#Null:C1517) && ($o.name#Null:C1517))
+																
+																If (Bool:C1537($in.dataSet))
+																	
+																	$outputPathname:=$outputPathname+$o.relatedDataClass+Folder separator:K24:12+$o.relatedDataClass+"("+$o.ID+")"+"_"+$o.name+"_"+$version+".imageset"+Folder separator:K24:12
+																	
+																End if 
+																
+																$File_name:=$o.relatedDataClass+"("+$o.ID+")"+"_"+$o.name+"_"+$version
+																
+															End if 
 															
 															//----------------------------------------
 														Else 
