@@ -836,19 +836,23 @@ Case of
 																
 																If ($aliasObj#Null:C1517)
 																	
-																	If ($partCount<$partCol.count())
+																	If ($aliasObj[$aliasName]#Null:C1517)
 																		
-																		$relatedDataClass:=ds:C1482[$relatedDataClass][$aliasName].relatedDataClass
-																		
-																		$aliasObj:=$aliasObj[$aliasName]
-																		
-																	Else   // last path item
-																		
-																		$o:=$aliasObj[$aliasName]
-																		// Add informations for image file naming
-																		$o.ID:=$aliasObj["__KEY"]
-																		$o.name:=$aliasName
-																		$o.relatedDataClass:=$relatedDataClass
+																		If ($partCount<$partCol.count())
+																			
+																			$relatedDataClass:=ds:C1482[$relatedDataClass][$aliasName].relatedDataClass
+																			
+																			$aliasObj:=$aliasObj[$aliasName]
+																			
+																		Else   // last path item
+																			
+																			$o:=$aliasObj[$aliasName]
+																			// Add informations for image file naming
+																			$o.ID:=$aliasObj["__KEY"]
+																			$o.name:=$aliasName
+																			$o.relatedDataClass:=$relatedDataClass
+																			
+																		End if 
 																		
 																	End if 
 																	
