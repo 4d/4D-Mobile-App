@@ -96,6 +96,7 @@ For each ($fieldKey; $in.table)
 			$recuOut:=$in.catalog.aliasPath($in.table[""].name; $in.table[$fieldKey])
 			
 			$out.fields.push($recuOut.path)
+			$out.fields.combine($recuOut.primaryKeys)
 			
 			// ASKME: do we really need all recursive fields data here, just maybe by doing a first pass to get them,
 			// we could just keep id, and data must be retrieved by their own table request.

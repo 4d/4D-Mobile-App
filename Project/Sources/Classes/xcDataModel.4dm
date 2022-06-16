@@ -398,24 +398,28 @@ Function _createAttribute($Txt_field : Text; $table : Object; $tableID : Integer
 				
 				$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")  // XXX merge with next instruction
 				
-				DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
-					"name"; $Txt_fieldName; \
-					"optional"; "YES"; \
-					"derived"; "YES"; \
-					"derivationExpression"; Split string:C1554($table[$Txt_field].path; ".").map(Formula:C1597(formatString("field-name"; $1.value))).join("."))
-				
-				$Dom_userInfo:=DOM Create XML element:C865($Dom_attribute; "userInfo")
-				
-				If (Not:C34(str_equal($Txt_fieldName; $Txt_originalFieldName)))
+				var $pathElements : Collection
+				$pathElements:=Split string:C1554($table[$Txt_field].path; ".")
+				If ($pathElements.length<=2)  // Seem to not be supported, deep relation : currently unsupported (too many steps)
+					DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
+						"name"; $Txt_fieldName; \
+						"optional"; "YES"; \
+						"derived"; "YES"; \
+						"derivationExpression"; $pathElements.map(Formula:C1597(formatString("field-name"; $1.value))).join("."))
 					
-					$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
-						"key"; "keyMapping"; \
-						"value"; $Txt_originalFieldName)
+					$Dom_userInfo:=DOM Create XML element:C865($Dom_attribute; "userInfo")
 					
+					If (Not:C34(str_equal($Txt_fieldName; $Txt_originalFieldName)))
+						
+						$Dom_node:=DOM Create XML element:C865($Dom_userInfo; "entry"; \
+							"key"; "keyMapping"; \
+							"value"; $Txt_originalFieldName)
+						
+					End if 
+					
+					// add xml attribut for type
+					This:C1470._field($Dom_attribute; $Dom_userInfo; $Lon_type)
 				End if 
-				
-				// add xml attribut for type
-				This:C1470._field($Dom_attribute; $Dom_userInfo; $Lon_type)
 				
 			End if 
 			

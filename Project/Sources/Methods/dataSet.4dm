@@ -805,7 +805,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 					
 					If (Asserted:C1132(OK=1; "LEP failed: "+$cmd))
 						
-						If ((Position:C15("[Error]"; $outputStream)=0) || (Position:C15("NSException"; $outputStream)=0))
+						If ((Position:C15("[Error]"; $outputStream)=0) && (Position:C15("NSException"; $Txt_error)=0))
 							
 							$out.success:=True:C214
 							
@@ -828,9 +828,9 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 							End for each 
 							
 							
-							If ((Position:C15("NSException"; $outputStream)=0))
+							If (Length:C16($Txt_error)>0)
 								
-								Logger.error("Coredata import exception:\n "+$outputStream)
+								Logger.error("Coredata import exception:\n "+$Txt_error)
 								
 							End if 
 							

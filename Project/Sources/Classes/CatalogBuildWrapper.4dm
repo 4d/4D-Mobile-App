@@ -31,6 +31,7 @@ Function aliasPath($tableName : Text; $alias : Object; $recursive : Boolean)->$r
 	
 	$result:=New object:C1471
 	$result.paths:=New collection:C1472
+	$result.primaryKeys:=New collection:C1472
 	
 	var $sourceDataClass; $destination; $previousDataClass; $pathElement : Object
 	$sourceDataClass:=This:C1470.getTable($tableName)
@@ -50,7 +51,9 @@ Function aliasPath($tableName : Text; $alias : Object; $recursive : Boolean)->$r
 		If ($destination.relatedDataClass#Null:C1517)  // Is relatedDataClass filled for alias? like destination field
 			
 			$sourceDataClass:=This:C1470.getTable($destination.relatedDataClass)
-			
+			If (Asserted:C1132($sourceDataClass.primaryKey#Null:C1517; "No primary key for table "+JSON Stringify:C1217($sourceDataClass)))
+				$result.primaryKeys.push($result.paths.extract("path").join(".")+"."+$sourceDataClass.primaryKey)
+			End if 
 			$pathElement.to:=$sourceDataClass.name
 			
 		End if 
