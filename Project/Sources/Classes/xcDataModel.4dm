@@ -396,11 +396,13 @@ Function _createAttribute($Txt_field : Text; $table : Object; $tableID : Integer
 				
 				$Txt_fieldName:=formatString("field-name"; $Txt_originalFieldName)
 				
-				$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")  // XXX merge with next instruction
-				
 				var $pathElements : Collection
 				$pathElements:=Split string:C1554($table[$Txt_field].path; ".")
+				
 				If ($pathElements.length<=2)  // Seem to not be supported, deep relation : currently unsupported (too many steps)
+					
+					$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")  // XXX merge with next instruction
+					
 					DOM SET XML ATTRIBUTE:C866($Dom_attribute; \
 						"name"; $Txt_fieldName; \
 						"optional"; "YES"; \
@@ -419,6 +421,7 @@ Function _createAttribute($Txt_field : Text; $table : Object; $tableID : Integer
 					
 					// add xml attribut for type
 					This:C1470._field($Dom_attribute; $Dom_userInfo; $Lon_type)
+					
 				End if 
 				
 			End if 
