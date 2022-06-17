@@ -399,7 +399,7 @@ Function _createAttribute($Txt_field : Text; $table : Object; $tableID : Integer
 				var $pathElements : Collection
 				$pathElements:=Split string:C1554($table[$Txt_field].path; ".")
 				
-				If ($pathElements.length<=2)  // Seem to not be supported, deep relation : currently unsupported (too many steps)
+				If ($pathElements.length<2)  // Seem to not be supported, deep relation : currently unsupported (too many steps)
 					
 					$Dom_attribute:=DOM Create XML element:C865($Dom_entity; "attribute")  // XXX merge with next instruction
 					
