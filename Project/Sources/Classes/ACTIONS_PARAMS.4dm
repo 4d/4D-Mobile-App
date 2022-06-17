@@ -1195,7 +1195,7 @@ Function addParameterMenuManager($target : Object; $update : Boolean)
 					"label"; $field.label; \
 					"shortLabel"; $field.shortLabel; \
 					"type"; PROJECT.fieldType2type($field.fieldType); \
-					"defaultField"; PROJECT.formatFieldName($field.name))
+					"defaultField"; PROJECT.defaultField($field))
 				
 				If (Bool:C1537($field.mandatory))
 					
@@ -2106,7 +2106,7 @@ Function updateParamater($name : Text)
 	
 	If ($success)  // Linked to a field
 		
-		$parameter.defaultField:=PROJECT.formatFieldName($parameter.name)
+		$parameter.defaultField:=PROJECT.defaultField($parameter)
 		
 	Else 
 		

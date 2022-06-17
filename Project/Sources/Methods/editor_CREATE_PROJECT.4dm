@@ -38,7 +38,7 @@ So we have to rename the project to avoid any conflict.
 			"ideBuildVersion"; String:C10(Motor.buildNumber); \
 			"componentBuild"; String:C10(Component.buildNumber); \
 			"organizationName"; Get localized string:C991("companyName"); \
-			"organization"; UI.str.setText(Get localized string:C991("companyName")).lowerCamelCase(); \
+			"organization"; cs:C1710.str.new(Get localized string:C991("companyName")).lowerCamelCase(); \
 			"productName"; Get localized string:C991("newApplication"); \
 			"year"; String:C10(Year of:C25(Current date:C33)); \
 			"reserved"; Get localized string:C991("allRightsReserved"); \

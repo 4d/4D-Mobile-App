@@ -1409,6 +1409,17 @@ Lower camel case
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Format field for iOS only (allow to known if linked and have correct value immediately)
+Function defaultField($field : Object) : Text
+	return formatString("field-name"; This:C1470.isAlias($field) ? $field.path : $field.name)
+	
+	// or if format field name format correctly without using camel case...
+	//If (This.isAlias($field))
+	//return Split string($field.path; ".").map(Formula($2.formatFieldName($1.value)); This).join(".")
+	//End if 
+	//return This.formatFieldName($field.name)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function formatBundleAppName($name : Text) : Text
 	
 	var $i : Integer

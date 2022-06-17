@@ -47,7 +47,7 @@ End if
 // ----------------------------------------------------
 Case of 
 		
-		//______________________________________________________
+		//MARK:- urlScheme
 	: ($t_format="urlScheme")
 		
 		// Replace accented characters with non accented one.
@@ -56,7 +56,7 @@ Case of
 		// Remove space, other accent, special characters
 		$lError:=Rgx_SubstituteText("[^-+\\.a-zA-Z0-9]"; "-"; ->$t_formated; 0)
 		
-		//______________________________________________________
+		//MARK:- bundleApp
 	: ($t_format="bundleApp")
 		
 		// Replace accented characters with non accented one.
@@ -66,7 +66,7 @@ Case of
 		// Remove space, other accent, special characters
 		$lError:=Rgx_SubstituteText("[^a-zA-Z0-9\\.]"; "-"; ->$t_formated; 0)
 		
-		//______________________________________________________
+		//MARK:- short-label
 	: ($t_format="short-label")
 		
 		$t_formated:=formatString("label"; $t_string)
@@ -77,7 +77,7 @@ Case of
 			
 		End if 
 		
-		//______________________________________________________
+		//MARK:- label
 	: ($t_format="label")
 		
 		Case of 
@@ -119,7 +119,7 @@ Case of
 				//______________________________________________________
 		End case 
 		
-		//______________________________________________________
+		//MARK:- table-name
 	: ($t_format="table-name")
 		
 		// Start with alpha
@@ -166,7 +166,7 @@ Case of
 			
 		End if 
 		
-		//______________________________________________________
+		//MARK:- field-name
 	: ($t_format="field-name")
 		
 		// Start with alpha
@@ -179,6 +179,7 @@ Case of
 			: (Position:C15("."; $t_string)>0)
 				
 				$t_formated:=Split string:C1554($t_string; ".").map("col_formula"; Formula:C1597($1.result:=formatString($t_format; $1.value))).join(".")
+				// $t_formated:=Split string($t_stringh; ".").map(Formula(formatString($t_format; $1.value))).join(".")
 				
 				//----------------------------------------
 			: (Length:C16($t_string)>0)
@@ -232,7 +233,7 @@ Case of
 			
 		End if 
 		
-		//______________________________________________________
+		//MARK:- storyboardProduct
 	: ($t_format="storyboardProduct")
 		
 		C_LONGINT:C283($l)
@@ -278,11 +279,6 @@ Case of
 		End for 
 		
 		$t_formated:=Replace string:C233($t_formated; " "; "_")
-		
-		//______________________________________________________
-	: ($t_format="coreData")
-		
-		ASSERT:C1129(False:C215; "Obsolete entry point")
 		
 		//______________________________________________________
 	Else 
