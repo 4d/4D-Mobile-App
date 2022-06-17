@@ -1,4 +1,5 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
+#DECLARE($oIN : Object)->$oOUT : Object
 // ----------------------------------------------------
 // Project method : formatters
 // Created 2018 by Eric Marchand
@@ -9,15 +10,13 @@
 //  * action = get: get indexed formatter info by name
 // ----------------------------------------------------
 // Declarations
-C_OBJECT:C1216($0)
-C_OBJECT:C1216($1)
 
-C_BOOLEAN:C305($bAppend)
-C_LONGINT:C283($i)
-C_TEXT:C284($t; $tFieldID; $tTable)
-C_OBJECT:C1216($archive; $errors; $folder; $o; $oField; $oFormatter)
-C_OBJECT:C1216($oIN; $oOUT; $oResources; $oResult)
-C_COLLECTION:C1488($c)
+var $bAppend : Boolean
+var $i : Integer
+var $t; $tFieldID; $tTable : Text
+var $archive; $errors; $folder; $o; $oField; $oFormatter : Object
+var $oResources; $oResult : Object
+var $c : Collection
 var $error : cs:C1710.error
 
 If (False:C215)
@@ -27,26 +26,10 @@ End if
 
 // ----------------------------------------------------
 // Initialisations
-If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
-	
-	// Required parameters
-	$oIN:=$1
-	
-	// Optional parameters
-	If (Count parameters:C259>=2)
-		
-		// <NONE>
-		
-	End if 
-	
-	$oOUT:=New object:C1471(\
-		"success"; False:C215)
-	
-Else 
-	
-	ABORT:C156
-	
-End if 
+ASSERT:C1129(Count parameters:C259=1; "Missing parameter")
+
+$oOUT:=New object:C1471(\
+"success"; False:C215)
 
 // ----------------------------------------------------
 
@@ -262,8 +245,8 @@ Case of
 			End if 
 		End if 
 		
-		// MARK:- doExtract
-	: ($oIN.action="doExtract")
+		// MARK:- _doExtract
+	: ($oIN.action="_doExtract")
 		
 		If ($oIN.result=Null:C1517)
 			$oOUT.formatters:=New collection:C1472()
@@ -273,61 +256,102 @@ Case of
 		
 		For each ($tFieldID; $oIN.data)
 			Case of 
-				: (Match regex:C1019("(?m-si)^\\d+$"; $tFieldID; 1; *))
+				: (Length:C16($tFieldID)=0)
 					
-					$oField:=$oIN.data[$tFieldID]
+					// Ignore metadata
 					
-					Case of 
-							
-							//………………………………………………………………………………………………………
-						: (Value type:C1509($oField.format)=Is object:K8:27)
-							
-							$oOUT.formatters.push($oField)
-							
-							//………………………………………………………………………………………………………
-						: (Value type:C1509($oField.format)=Is text:K8:3)
-							
-							If (Value type:C1509($oIN.formatters)=Is object:K8:27)
-								
-								If (Value type:C1509($oIN.formatters[$oField.format])=Is object:K8:27)
-									
-									$oOUT.formatters.push($oIN.formatters[$oField.format])
-									
-								Else 
-									
-									ob_error_add($oOUT; "Unknown data formatter '"+$oField.format+"'")
-									
-								End if 
-								
-							Else 
-								
-								ob_error_add($oOUT; "No list of formatters provided to resolve '"+$oField.format+"'")
-								
-							End if 
-							
-							//………………………………………………………………………………………………………
-						: ($oField.format=Null:C1517)
-							
-							// Ignore if not set
-							
-							//………………………………………………………………………………………………………
-						Else 
-							
-							ob_error_add($oOUT; "Wrong format type defined by field: "+JSON Stringify:C1217($oField))
-							
-							//………………………………………………………………………………………………………
-					End case 
-				: ((Value type:C1509($oIN.data[$tFieldID])=Is object:K8:27))
+				: (Match regex:C1019("(?m-si)^\\d+$"; $tFieldID; 1; *))  // PROJECT.isField($oIN.data[$tFieldID])
 					
-					formatters(New object:C1471(\
-						"action"; "doExtract"; \
+					$oResult:=formatters(New object:C1471(\
+						"action"; "_doExtractOnField"; \
 						"formatters"; $oIN.formatters; \
 						"dataModel"; $oIN.dataModel; \
 						"data"; $oIN.data[$tFieldID]; \
 						"result"; $oOUT.formatters))
 					
+					ob_error_combine($oOUT; $oResult)
+					
+				: ((Value type:C1509($oIN.data[$tFieldID])#Is object:K8:27))
+					
+					// ignore
+					
+				: ((PROJECT.isComputedAttribute($oIN.data[$tFieldID])) || (PROJECT.isAlias($oIN.data[$tFieldID])))
+					
+					$oResult:=formatters(New object:C1471(\
+						"action"; "_doExtractOnField"; \
+						"formatters"; $oIN.formatters; \
+						"dataModel"; $oIN.dataModel; \
+						"data"; $oIN.data[$tFieldID]; \
+						"result"; $oOUT.formatters))
+					
+					ob_error_combine($oOUT; $oResult)
+					
+				Else 
+					// recursion (maybe relation, here we could check if necessary)
+					
+					$oResult:=formatters(New object:C1471(\
+						"action"; "_doExtract"; \
+						"formatters"; $oIN.formatters; \
+						"dataModel"; $oIN.dataModel; \
+						"data"; $oIN.data[$tFieldID]; \
+						"result"; $oOUT.formatters))
+					
+					ob_error_combine($oOUT; $oResult)
+					
 			End case 
 		End for each 
+		
+		// MARK:- _doExtractOnField
+	: ($oIn.action="_doExtractOnField")
+		
+		$oField:=$oIN.data
+		
+		If ($oIN.result=Null:C1517)
+			$oOUT.formatters:=New collection:C1472()
+		Else 
+			$oOUT.formatters:=$oIN.result  // & input pass result to cumulate
+		End if 
+		
+		Case of 
+				
+				//………………………………………………………………………………………………………
+			: (Value type:C1509($oField.format)=Is object:K8:27)
+				
+				$oOUT.formatters.push($oField)
+				
+				//………………………………………………………………………………………………………
+			: (Value type:C1509($oField.format)=Is text:K8:3)
+				
+				If (Value type:C1509($oIN.formatters)=Is object:K8:27)
+					
+					If (Value type:C1509($oIN.formatters[$oField.format])=Is object:K8:27)
+						
+						$oOUT.formatters.push($oIN.formatters[$oField.format])
+						
+					Else 
+						
+						ob_error_add($oOUT; "Unknown data formatter '"+$oField.format+"'")
+						
+					End if 
+					
+				Else 
+					
+					ob_error_add($oOUT; "No list of formatters provided to resolve '"+$oField.format+"'")
+					
+				End if 
+				
+				//………………………………………………………………………………………………………
+			: ($oField.format=Null:C1517)
+				
+				// Ignore if not set
+				
+				//………………………………………………………………………………………………………
+			Else 
+				
+				ob_error_add($oOUT; "Wrong format type defined by field: "+JSON Stringify:C1217($oField))
+				
+				//………………………………………………………………………………………………………
+		End case 
 		
 		// MARK:- extract
 	: ($oIN.action="extract")  // Extract format from data model
@@ -336,12 +360,14 @@ Case of
 		
 		For each ($tTable; $oIN.dataModel)
 			
-			formatters(New object:C1471(\
-				"action"; "doExtract"; \
+			$oResult:=formatters(New object:C1471(\
+				"action"; "_doExtract"; \
 				"formatters"; $oIN.formatters; \
 				"dataModel"; $oIN.dataModel; \
 				"data"; $oIN.dataModel[$tTable]; \
 				"result"; $oOUT.formatters))
+			
+			ob_error_combine($oOUT; $oResult)
 			
 		End for each 
 		
@@ -520,10 +546,3 @@ Case of
 End case 
 
 $oOUT.success:=Not:C34(ob_error_has($oOUT))
-
-// ----------------------------------------------------
-// Return
-$0:=$oOUT
-
-// ----------------------------------------------------
-// End
