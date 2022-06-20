@@ -205,7 +205,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			EXECUTE METHOD:C1007(Formula:C1597(Rest).source; $response; $parameters)
 			
 			//______________________________________________________
-		: ($entryPoint="rest")
+		: ($entryPoint="dump")
 			
 			EXECUTE METHOD:C1007(Formula:C1597(dump).source; $response; $parameters)
 			
