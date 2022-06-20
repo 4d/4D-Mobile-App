@@ -417,12 +417,7 @@ If (Num:C11($tableID)>0)
 												Else 
 													
 													var $c : Collection
-													
-													If ($field.path=Null:C1517)
-														$c:=New collection:C1472()
-													Else 
-														$c:=Split string:C1554($field.path; ".")
-													End if 
+													$c:=$field.path=Null:C1517 ? New collection:C1472 : Split string:C1554($field.path; ".")
 													
 													If ($c.length=1)
 														

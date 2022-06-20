@@ -850,7 +850,7 @@ Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Ob
 				If (Not:C34(cs:C1710.ob.new(PROJECT.dataModel[$context.tableNumber]).exists($paths)))
 					
 					$class:="error"
-					$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
+					$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($label))
 					
 				End if 
 				
@@ -859,7 +859,7 @@ Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Ob
 				If (PROJECT.dataModel[$context.tableNumber][String:C10($field.fieldNumber)]=Null:C1517)
 					
 					$class:="error"
-					$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
+					$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($label))
 					
 				End if 
 				
@@ -889,7 +889,7 @@ Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Ob
 				If (Not:C34(cs:C1710.ob.new(PROJECT.dataModel[$context.tableNumber]).exists($paths)))
 					
 					$class:="error"
-					$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
+					$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($label))
 					
 				End if 
 				
@@ -898,10 +898,9 @@ Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Ob
 				If (PROJECT.dataModel[$context.tableNumber][$field.name]=Null:C1517)
 					
 					$class:="error"
-					$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
+					$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($label))
 					
 				End if 
-				
 			End if 
 			
 			//______________________________________________________
