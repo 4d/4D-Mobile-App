@@ -626,6 +626,9 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 								End if 
 								
 							End if 
+							
+							$out.removeAsset:=Bool:C1537($in.androidDataSet) | Bool:C1537($in.coreDataSet)
+							
 						End if 
 						
 						If (Bool:C1537($in.coreDataSet) & $out.success)
@@ -677,9 +680,9 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 							
 							$out.success:=Not:C34(ob_error_has($out))
 							
-							If ($out.success)
+							If ($out.success & $out.removeAsset)
 								
-								dataSet(New object:C1471(\
+								$out.removeAsset:=dataSet(New object:C1471(\
 									"action"; "removeAsset"; \
 									"path"; $out.path))
 								
