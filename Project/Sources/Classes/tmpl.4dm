@@ -949,11 +949,26 @@ Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Ob
 			$tips:=$field.label
 			$label:=UI.str.setText(UI.toMany).concat($field.name)
 			
-			If (PROJECT.dataModel[$context.tableNumber][$field.name]=Null:C1517)
+			//mark:ACI0103031
+			$paths:=Split string:C1554($field.name; ".")
+			
+			If ($paths.length>1)
 				
-				$class:="error"
-				$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($label))
+				If (PROJECT.dataModel[$context.tableNumber][$paths[0]][$paths[1]]=Null:C1517)
+					
+					$class:="error"
+					$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($label))
+					
+				End if 
 				
+			Else 
+				
+				If (PROJECT.dataModel[$context.tableNumber][$field.name]=Null:C1517)
+					
+					$class:="error"
+					$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($label))
+					
+				End if 
 			End if 
 			
 			//______________________________________________________
