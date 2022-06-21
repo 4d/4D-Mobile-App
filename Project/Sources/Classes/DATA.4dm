@@ -307,7 +307,7 @@ Function tableList()
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function updateTableListWithDataSizes()
 	
-	var $sqlID; $tableName : Text
+	var $sqlID : Text
 	var $size : Integer
 	var $table : Object
 	var $file : 4D:C1709.File
@@ -327,8 +327,6 @@ Function updateTableListWithDataSizes()
 			
 			If (Feature.with("androidDataSet"))
 				
-				$tableName:=PROJECT.formatTableName($table.name)
-				
 				If (Is macOS:C1572)
 					
 					Case of 
@@ -336,24 +334,24 @@ Function updateTableListWithDataSizes()
 							//______________________________________________________
 						: (PROJECT.allTargets())
 							
-							$table.dumpSize:=This:C1470.dumpTableSize($tableName; "ios")+" / "+This:C1470.dumpTableSize($tableName; "android")
+							$table.dumpSize:=This:C1470.dumpTableSize($table.name; "ios")+" / "+This:C1470.dumpTableSize($table.name; "android")
 							
 							//______________________________________________________
 						: (PROJECT.iOS())
 							
-							$table.dumpSize:=This:C1470.dumpTableSize($tableName; "ios")
+							$table.dumpSize:=This:C1470.dumpTableSize($table.name; "ios")
 							
 							//______________________________________________________
 						: (PROJECT.android())
 							
-							$table.dumpSize:=This:C1470.dumpTableSize($tableName; "android")
+							$table.dumpSize:=This:C1470.dumpTableSize($table.name; "android")
 							
 							//______________________________________________________
 					End case 
 					
 				Else 
 					
-					$table.dumpSize:=This:C1470.dumpTableSize($tableName; "android")
+					$table.dumpSize:=This:C1470.dumpTableSize($table.name; "android")
 					
 				End if 
 				

@@ -611,20 +611,15 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 								
 								If (Value type:C1509($in.project.info.target)=Is collection:K8:32)
 									
-									$in.coreDataSet:=$in.project.info.target.indexOf("iOS")>-1  // Bool($in.project.$ios)
-									$in.androidDataSet:=$in.project.info.target.indexOf("android")>-1  // Bool($in.project.$android)
+									$in.coreDataSet:=Is macOS:C1572 && ($in.project.info.target.indexOf("iOS")>-1)
+									$in.androidDataSet:=$in.project.info.target.indexOf("android")>-1
 									
 								Else 
 									
-									$in.coreDataSet:=(String:C10($in.project.info.target)="iOS")
+									$in.coreDataSet:=Is macOS:C1572 && (String:C10($in.project.info.target)="iOS")
 									$in.androidDataSet:=(String:C10($in.project.info.target)="android")
 									
 								End if 
-								
-								If (Not:C34(Is macOS:C1572))
-									$in.coreDataSet:=False:C215
-								End if 
-								
 							End if 
 							
 							$out.removeAsset:=Bool:C1537($in.androidDataSet) | Bool:C1537($in.coreDataSet)

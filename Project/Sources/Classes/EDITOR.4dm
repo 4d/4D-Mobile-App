@@ -911,7 +911,7 @@ Function doGenerate($keyPathname : Text)
 	$window:=Current form window:C827
 	$worker:=This:C1470.worker
 	
-	$ƒ:=Formula:C1597(CALL WORKER:C1389($worker; "dataSet"; New object:C1471(\
+	$ƒ:=Formula:C1597(CALL WORKER:C1389($worker; Formula:C1597(dataSet).source; New object:C1471(\
 		"action"; "create"; \
 		"eraseIfExists"; True:C214; \
 		"project"; PROJECT; \
