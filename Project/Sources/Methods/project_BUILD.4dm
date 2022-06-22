@@ -14,12 +14,13 @@ If (False:C215)
 	C_OBJECT:C1216(project_BUILD; $1)
 End if 
 
-var $t; $target; $tt : Text
+var $tableID; $target; $tt : Text
 var $b; $success : Boolean
-var $l : Integer
-var $manual; $o; $Obj_cancel; $Obj_ok; $project : Object
-var $c; $publishedTableNames : Collection
+var $manual; $message; $messageCancel; $messageOK; $o; $project : Object
+var $rest : Object
+var $folders; $publishedTableNames : Collection
 var $file : 4D:C1709.File
+var $folder : 4D:C1709.Folder
 var $adb : cs:C1710.adb
 var $catalog : cs:C1710.catalog
 var $cfgutil : cs:C1710.cfgutil
@@ -47,35 +48,35 @@ If (Asserted:C1132($project#Null:C1517))
 			
 			If ($data.appFolder.exists)
 				
-				//#ASCENDING_COMPATIBILITY
-				$c:=$data.appFolder.folders()
+				//mark:ASCENDING_COMPATIBILITY
+				$folders:=$data.appFolder.folders()
 				
-				If ($c.query("name=iOS").pop()#Null:C1517)\
-					 | ($c.query("name=Android").pop()#Null:C1517)
+				If ($folders.query("name=iOS").pop()#Null:C1517)\
+					 | ($folders.query("name=Android").pop()#Null:C1517)
 					
 					// <NOTHING MORE TO DO>
 					
 				Else 
 					
-					$o:=$data.appFolder.moveTo(Folder:C1567(Temporary folder:C486; fk platform path:K87:2); Generate UUID:C1066)
+					$folder:=$data.appFolder.moveTo(Folder:C1567(Temporary folder:C486; fk platform path:K87:2); Generate UUID:C1066)
 					$data.appFolder.create()
 					
-					If ($o.folder(".gradle").exists)
+					If ($folder.folder(".gradle").exists)
 						
 						// Move to Android subfolder
-						$success:=$o.moveTo($data.appFolder; "Android").exists
+						$success:=$folder.moveTo($data.appFolder; "Android").exists
 						
 					Else 
 						
 						// Move to iOS subfolder
-						$success:=$o.moveTo($data.appFolder; "iOS").exists
+						$success:=$folder.moveTo($data.appFolder; "iOS").exists
 						
 					End if 
 				End if 
 			End if 
 			
 			// According to the target
-			$data.appFolder:=$data.appFolder.folder(Choose:C955($target="iOS"; "iOS"; "Android"))
+			$data.appFolder:=$data.appFolder.folder($target="iOS" ? "iOS" : "Android")
 			$data.path:=$data.appFolder.platformPath
 			
 		Else 
@@ -98,7 +99,7 @@ If (Asserted:C1132($project#Null:C1517))
 					
 					If ($file.exists)
 						
-						// #ASCENDING_COMPATIBILITY
+						// mark:ASCENDING_COMPATIBILITY
 						$file:=$file.rename($project._name+".ios.fingerprint")
 						
 					Else 
@@ -125,7 +126,7 @@ If (Asserted:C1132($project#Null:C1517))
 				
 				$file:=UI.path.userCache().file($project._name+".android.fingerprint")
 				
-				//#MARK_TODO
+				//todo:?
 				$success:=True:C214
 				
 			End if 
@@ -141,7 +142,7 @@ If (Asserted:C1132($project#Null:C1517))
 			Logger.info("⚠️"+Current method name:C684+" productFolderAlreadyExist")
 			
 			// mark: Product folder already exist. user MUST CONFIRM
-			$o:=New object:C1471(\
+			$message:=New object:C1471(\
 				"action"; "show"; \
 				"type"; "confirm"; \
 				"title"; "theProductFolderAlreadyExist"; \
@@ -149,7 +150,7 @@ If (Asserted:C1132($project#Null:C1517))
 				"CALLBACK"; Formula:C1597(editor_MESSAGE_CALLBACK).source; \
 				"build"; $data)
 			
-			$o:=await_MESSAGE($o; "productFolderAlreadyExist")
+			$message:=await_MESSAGE($message; "productFolderAlreadyExist")
 			
 		End if 
 		
@@ -158,11 +159,11 @@ If (Asserted:C1132($project#Null:C1517))
 			// MARK:-VERIFY THE STRUCTURE
 			$publishedTableNames:=New collection:C1472
 			
-			For each ($t; $project.dataModel)
+			For each ($tableID; $project.dataModel)
 				
-				$publishedTableNames.push($project.dataModel[$t][""].name)
+				$publishedTableNames.push($project.dataModel[$tableID][""].name)
 				
-				For each ($tt; $project.dataModel[$t])
+				For each ($tt; $project.dataModel[$tableID])
 					
 					If (Length:C16($tt)=0)
 						
@@ -170,9 +171,9 @@ If (Asserted:C1132($project#Null:C1517))
 						
 					End if 
 					
-					If ($project.dataModel[$t][$tt].relatedDataClass#Null:C1517)
+					If ($project.dataModel[$tableID][$tt].relatedDataClass#Null:C1517)
 						
-						$publishedTableNames.push($project.dataModel[$t][$tt].relatedDataClass)
+						$publishedTableNames.push($project.dataModel[$tableID][$tt].relatedDataClass)
 						
 					End if 
 				End for each 
@@ -203,7 +204,7 @@ If (Asserted:C1132($project#Null:C1517))
 						
 						Logger.info("⚠️"+Current method name:C684+" someStructuralAdjustmentsAreNeeded")
 						
-						$o:=New object:C1471(\
+						$message:=New object:C1471(\
 							"action"; "show"; \
 							"type"; "confirm"; \
 							"title"; "someStructuralAdjustmentsAreNeeded"; \
@@ -212,7 +213,7 @@ If (Asserted:C1132($project#Null:C1517))
 							"option"; New object:C1471("title"; "rememberMyChoice"; "value"; False:C215); \
 							"CALLBACK"; Formula:C1597(editor_MESSAGE_CALLBACK).source)
 						
-						$o:=await_MESSAGE($o; "someStructuralAdjustmentsAreNeeded")
+						$message:=await_MESSAGE($message; "someStructuralAdjustmentsAreNeeded")
 						
 					End if 
 				End if 
@@ -220,9 +221,9 @@ If (Asserted:C1132($project#Null:C1517))
 				If ($success)
 					
 					// Local web server is mandatory only if data are embedded
-					For each ($t; $project.dataModel) Until ($b)
+					For each ($tableID; $project.dataModel) Until ($b)
 						
-						$b:=Bool:C1537($project.dataModel[$t][""].embedded)
+						$b:=Bool:C1537($project.dataModel[$tableID][""].embedded)
 						
 					End for each 
 					
@@ -236,16 +237,16 @@ If (Asserted:C1132($project#Null:C1517))
 							
 							Logger.info("⚠️"+Current method name:C684+" theWebServerIsNotStarted")
 							
-							$Obj_ok:=New object:C1471(\
+							$messageOK:=New object:C1471(\
 								"action"; "build_startWebServer"; \
 								"build"; $data)
 							
-							$Obj_cancel:=New object:C1471(\
+							//$messageCancel:=New object(\
 								"action"; "build_ignoreServer"; \
 								"build"; $data)
 							
 							// Web server must running to test data synchronization
-							$o:=New object:C1471(\
+							$message:=New object:C1471(\
 								"action"; "show"; \
 								"type"; "confirm"; \
 								"title"; "theWebServerIsNotStarted"; \
@@ -254,7 +255,7 @@ If (Asserted:C1132($project#Null:C1517))
 								"CALLBACK"; Formula:C1597(editor_MESSAGE_CALLBACK).source; \
 								"build"; $data)
 							
-							$o:=await_MESSAGE($o; "theWebServerIsNotStarted")
+							$message:=await_MESSAGE($message; "theWebServerIsNotStarted")
 							
 						End if 
 					End if 
@@ -263,7 +264,7 @@ If (Asserted:C1132($project#Null:C1517))
 			Else 
 				
 				// Check server-database structure, if any
-				$o:=Rest(New object:C1471(\
+				$rest:=Rest(New object:C1471(\
 					"action"; "tables"; \
 					"handler"; "mobileapp"; \
 					"url"; String:C10($project.server.urls.production); \
@@ -271,25 +272,24 @@ If (Asserted:C1132($project#Null:C1517))
 					"X-MobileApp"; "1"; \
 					"Authorization"; "Bearer "+cs:C1710.path.new().key().getText())))
 				
-				$success:=$o.success
+				$success:=$rest.success
 				
-				If ($o.success)
+				If ($success)
 					
-					$o:=$o.response
+					$rest:=$rest.response
 					
-					$success:=($o.dataClasses.extract("name").indexOf(String:C10(SHARED.deletedRecordsTable.name))#-1)
+					$success:=$rest.dataClasses.query("name = :1"; SHARED.deletedRecordsTable.name).pop()#Null:C1517
 					
 					If ($success)
 						
-						For each ($t; $c) While ($success)
+						For each ($folder; $folders) While ($success)
 							
-							$l:=$o.dataClasses.extract("name").indexOf($t)
-							
-							$success:=($l#-1)
+							$o:=$rest.dataClasses.query("name = :1"; $folder.name).pop()
+							$success:=$o#Null:C1517
 							
 							If ($success)
 								
-								$success:=($o.dataClasses[$l].attributes.extract("name").indexOf(String:C10(SHARED.stampField.name))#-1)
+								$success:=$o.attributes.query("name = :1"; SHARED.stampField.name).pop()#Null:C1517
 								
 							End if 
 						End for each 
@@ -298,10 +298,9 @@ If (Asserted:C1132($project#Null:C1517))
 					If (Not:C34($success))
 						
 						// SERVER STRUCTURE IS NOT OK. Confirm if data embed, Alert else
-						For each ($t; $project.dataModel) Until ($b)
+						For each ($tableID; $project.dataModel) Until ($b)
 							
-							//#ACI0100704
-							$b:=Not:C34(Bool:C1537($project.dataModel[$t][""].embedded))
+							$b:=Not:C34(Bool:C1537($project.dataModel[$tableID][""].embedded))
 							
 						End for each 
 						
@@ -333,10 +332,9 @@ If (Asserted:C1132($project#Null:C1517))
 				Else 
 					
 					// SERVER NOT REACHABLE - Ignore if no data embed, Confirm else
-					For each ($t; $project.dataModel) Until ($b)
+					For each ($tableID; $project.dataModel) Until ($b)
 						
-						//#ACI0100704
-						$b:=Not:C34(Bool:C1537($project.dataModel[$t][""].embedded))
+						$b:=Not:C34(Bool:C1537($project.dataModel[$tableID][""].embedded))
 						
 					End for each 
 					
@@ -348,7 +346,7 @@ If (Asserted:C1132($project#Null:C1517))
 							"action"; "show"; \
 							"type"; "alert"; \
 							"title"; "theProductionServerIsNotAvailable"; \
-							"additional"; Localize_server_response($o.httpError)\
+							"additional"; Localize_server_response($rest.httpError)\
 							))
 						
 					End if 
@@ -411,11 +409,11 @@ If (Asserted:C1132($project#Null:C1517))
 							$data:=cs:C1710.project.new($data).cleaned()
 							
 							// Ask for installation
-							$Obj_ok:=New object:C1471(\
+							$messageOK:=New object:C1471(\
 								"action"; "build_waitingForConfigurator"; \
 								"build"; $data)
 							
-							$Obj_cancel:=New object:C1471(\
+							$messageCancel:=New object:C1471(\
 								"action"; "build_manualInstallation"; \
 								"build"; $data)
 							
@@ -424,9 +422,9 @@ If (Asserted:C1132($project#Null:C1517))
 								"type"; "confirm"; \
 								"title"; New collection:C1472("appIsNotInstalled"; $cfgutil.appName); \
 								"additional"; New collection:C1472("wouldYouLikeToInstallNow"; $cfgutil.appName); \
-								"okAction"; JSON Stringify:C1217($Obj_ok); \
+								"okAction"; JSON Stringify:C1217($messageOK); \
 								"cancel"; "manualInstallation"; \
-								"cancelAction"; JSON Stringify:C1217($Obj_cancel)\
+								"cancelAction"; JSON Stringify:C1217($messageCancel)\
 								))
 							
 						End if 
