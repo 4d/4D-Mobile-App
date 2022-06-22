@@ -455,7 +455,7 @@ Function checkingServerResponse($data : Object)
 			If ($result.__ERRORS#Null:C1517)
 				
 				// Oops - Keep the first error message for the tips
-				$result.title:=Localize_server_response($t)
+				$result.message:=Localize_server_response($t)
 				
 			Else 
 				
@@ -467,7 +467,7 @@ Function checkingServerResponse($data : Object)
 				End if 
 				
 				// Use error code
-				$result.title:=Localize_server_response(Num:C11($result.code))
+				$result.message:=Localize_server_response(Num:C11($result.code))
 				
 			End if 
 		End if 
