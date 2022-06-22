@@ -37,7 +37,8 @@ Case of
 		LISTBOX SET PROPERTY:C1440(*; "list"; lk resizing mode:K53:36; lk manual:K53:60)
 		
 		// Init if not a form widget
-		$bDisplay:=(Is nil pointer:C315(OBJECT Get pointer:C1124(Object subform container:K67:4)))
+		//$bDisplay:=(Is nil pointer(OBJECT Get pointer(Object subform container)))
+		$bDisplay:=(Undefined:C82(OBJECT Get subform container value:C1785))
 		
 		//______________________________________________________
 	: ($event.code=On Bound Variable Change:K2:52)

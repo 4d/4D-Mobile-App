@@ -71,7 +71,8 @@ Case of
 					
 					Form:C1466.item:=$index
 					
-					If (Is nil pointer:C315(OBJECT Get pointer:C1124(Object subform container:K67:4)))
+					//If (Is nil pointer(OBJECT Get pointer(Object subform container)))
+					If (Undefined:C82(OBJECT Get subform container value:C1785))
 						
 						ACCEPT:C269  // Auto valid
 						

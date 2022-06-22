@@ -13,7 +13,7 @@ var $container : Object
 
 ARRAY TEXT:C222($widgets; 0)
 
-$container:=(OBJECT Get pointer:C1124(Object subform container:K67:4))->
+$container:=OBJECT Get subform container value:C1785
 
 FORM GET OBJECTS:C898($widgets)
 

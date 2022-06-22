@@ -51,7 +51,6 @@ If (Num:C11($e.row)>0)
 			
 			//%W-533.3
 			$table:=PROJECT.getCatalog().query("name=:1"; (OBJECT Get pointer:C1124(Object named:K67:5; $e.columnName))->{$e.row}).pop()
-			
 			//%W+533.3
 			
 		End if 
@@ -111,7 +110,6 @@ If (Num:C11($e.row)>0)
 							// Get the desynchronized item, if applicable
 							//%W-533.3
 							$o:=$unsynchronized.query("name = :1 OR parent = :1"; $ptr->{$e.row}).pop()
-							
 							//%W+533.3
 							
 							If (Length:C16(String:C10($o.fieldTips))#0)

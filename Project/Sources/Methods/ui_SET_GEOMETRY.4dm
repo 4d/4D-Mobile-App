@@ -58,7 +58,7 @@ $marginV:=2
 $marginH:=14
 
 // ----------------------------------------------------
-If (Not:C34(Is nil pointer:C315(OBJECT Get pointer:C1124(Object subform container:K67:4))))
+If (Not:C34(Undefined:C82(OBJECT Get subform container value:C1785)))
 	
 	// Place the background & the bottom line {
 	OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $height)

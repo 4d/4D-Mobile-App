@@ -120,10 +120,13 @@ Case of
 		// Update task list
 		UI.removeTask($message)
 		
-		// Keep the result
-		Form:C1466.ExposedStructure:=$data
-		
 		If ($data.success)
+			
+			// Keep the result
+			Form:C1466.ExposedStructure:=$data
+			
+			UI.callMeBack("tableList")
+			UI.callMeBack("fieldList")
 			
 			// Perform the structure audit
 			STRUCTURE_AUDIT($data)

@@ -1353,14 +1353,14 @@ Function getCatalog() : Collection
 	Case of 
 			
 			//____________________________________
-		: (This:C1470.$project#Null:C1517)
-			
-			return ((This:C1470.$project.$catalog#Null:C1517) ? This:C1470.$project.$catalog : This:C1470.$project.ExposedStructure.catalog)
-			
-			//____________________________________
 		: (This:C1470.ExposedStructure#Null:C1517)
 			
-			return (This:C1470.ExposedStructure.catalog)
+			return This:C1470.ExposedStructure.catalog
+			
+			//____________________________________
+		: (This:C1470.$project#Null:C1517)
+			
+			return This:C1470.$project.$catalog || This:C1470.$project.ExposedStructure.catalog
 			
 			//____________________________________
 		Else 
