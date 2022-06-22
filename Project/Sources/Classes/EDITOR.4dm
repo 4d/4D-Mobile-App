@@ -33,9 +33,9 @@ Class constructor()
 	This:C1470.pendingTasks:=New collection:C1472
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function get unsynchronizedTables()->$sesult : Collection
+Function get unsynchronizedTables() : Collection
 	
-	$sesult:=Form:C1466.$dialog.unsynchronizedTables
+	return Form:C1466.$project.$dialog.unsynchronizedTables || Form:C1466.$dialog.unsynchronizedTables
 	
 	//MARK:-
 	//=== === === === === === === === === === === === === === === === === === === === ===
@@ -419,11 +419,7 @@ Function goToPage($page : Text)
 	
 	logger.info(Current method name:C684+" ("+$page+")")
 	
-	If (Count parameters:C259>=1)
-		
-		$description:=This:C1470.pages[$page]
-		
-	End if 
+	$description:=Count parameters:C259>=1 ? This:C1470.pages[$page] : Null:C1517
 	
 	This:C1470.firstPage()  // Should be obsolete as opening/creating wizards are used
 	
@@ -742,13 +738,13 @@ Function ribbonContainer($e : Object)
 	// Tests if the project is locked
 Function isLocked() : Boolean
 	
-	If (This:C1470.structure#Null:C1517)
+	If (Form:C1466.structure#Null:C1517)
 		
-		return Bool:C1537(This:C1470.structure.unsynchronized)
+		return Bool:C1537(Form:C1466.structure.unsynchronized)
 		
 	Else 
 		
-		return Bool:C1537(This:C1470.$project.structure.unsynchronized)
+		return Bool:C1537(Form:C1466.$project.structure.unsynchronized)
 		
 	End if 
 	

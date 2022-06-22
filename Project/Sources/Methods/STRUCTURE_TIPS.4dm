@@ -40,6 +40,8 @@ Else
 	
 End if 
 
+//ASSERT(Not(Shift down))
+
 // ----------------------------------------------------
 If (Num:C11($e.row)>0)
 	
@@ -66,7 +68,7 @@ If (Num:C11($e.row)>0)
 	
 	If ($table#Null:C1517)
 		
-		$unsynchronized:=Form:C1466.$dialog.unsynchronizedTables
+		$unsynchronized:=UI.unsynchronizedTables
 		
 		If ($unsynchronized.length>$table.tableNumber)
 			

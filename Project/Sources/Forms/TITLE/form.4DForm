@@ -7,9 +7,6 @@
 	"markerBreak": 220,
 	"markerFooter": 240,
 	"events": [
-		"onLoad",
-		"onUnload",
-		"onTimer",
 		"onBoundVariableChange"
 	],
 	"method": "method.4dm",

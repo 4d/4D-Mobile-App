@@ -348,13 +348,11 @@ Function fieldList()
 		End case 
 		
 		// MARK: HIGHLIGHT
-		If (Form:C1466.$dialog.unsynchronizedTables#Null:C1517)
+		If (UI.unsynchronizedTables#Null:C1517)\
+			 && ($table.tableNumber<=UI.unsynchronizedTables.length)
 			
-			If (Form:C1466.$dialog.unsynchronizedTables.length>$table.tableNumber)
-				
-				$unsynchronized:=Form:C1466.$dialog.unsynchronizedTables[$table.tableNumber]
-				
-			End if 
+			$unsynchronized:=UI.unsynchronizedTables[$table.tableNumber]
+			
 		End if 
 		
 		CLEAR VARIABLE:C89($row)  // ⚠️ USED ABOVE

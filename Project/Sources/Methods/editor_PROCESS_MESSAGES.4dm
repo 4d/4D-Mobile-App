@@ -115,6 +115,8 @@ Case of
 		// MARK:-UPDATE_EXPOSED_CATALOG callback
 	: ($message="checkProject")
 		
+		logger.info("UPDATE_EXPOSED_CATALOG callback")
+		
 		// Update task list
 		UI.removeTask($message)
 		
@@ -123,14 +125,12 @@ Case of
 		
 		If ($data.success)
 			
-			logger.info("UPDATE_EXPOSED_CATALOG callback")
-			
 			// Perform the structure audit
 			STRUCTURE_AUDIT($data)
 			
 		Else 
 			
-			// TODO: Display an error message ?
+			logger.error($data.errors.join("\r"))
 			ASSERT:C1129(False:C215)
 			
 		End if 

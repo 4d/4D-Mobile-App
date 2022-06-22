@@ -583,13 +583,11 @@ If ($cacheFile.exists)
 		End if 
 		
 		// Keep state
-		//PROJECT.$dialog.unsynchronizedTables:=$unsynchronizedTables
 		Form:C1466.$dialog.unsynchronizedTables:=$unsynchronizedTables
 		
 	Else 
 		
 		// Reset
-		//PROJECT.$dialog.unsynchronizedTables:=New collection
 		Form:C1466.$dialog.unsynchronizedTables:=New collection:C1472
 		
 		// Update the cache
@@ -598,8 +596,6 @@ If ($cacheFile.exists)
 		$updateCurrentCatalog:=True:C214
 		
 	End if 
-	
-	return 
 	
 Else 
 	

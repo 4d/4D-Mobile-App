@@ -321,7 +321,7 @@ Case of
 					$context.fieldName:=(OBJECT Get pointer:C1124(Object named:K67:5; $form.fields))->{$row}
 					
 					If ($e.code=On Clicked:K2:4)\
-						 && (UI.isNotLocked())
+						 & (UI.isNotLocked())
 						
 						If (Right click:C712)
 							
@@ -334,30 +334,33 @@ Case of
 								
 								$field:=PROJECT.getCatalog().query("name = :1"; $context.currentTable.name).pop().fields.query("name = :1"; $context.fieldName).pop()
 								
-								If ($field.kind="relatedEntity")\
-									 || (($field.kind="alias") && ($field.fieldType=Is object:K8:27) && ($field.relatedDataClass#Null:C1517))
+								If ($field#Null:C1517)
 									
-									var $selected : Integer
-									$selected:=$class.displayFieldPicker()
-									
-									OBJECT Get pointer:C1124(Object named:K67:5; $form.published)->{$row}:=$selected
-									
-									// UI - update table name style
-									$indx:=Find in array:C230((OBJECT Get pointer:C1124(Object named:K67:5; $form.tableList))->; True:C214)
-									LISTBOX SET ROW FONT STYLE:C1268(*; $form.tableList; $indx; $selected>0 ? Bold:K14:2 : Plain:K14:1)
-									
-								Else 
-									
-									If (Macintosh command down:C546 | Shift down:C543)
+									If ($field.kind="relatedEntity")\
+										 || (($field.kind="alias") && ($field.fieldType=Is object:K8:27) && ($field.relatedDataClass#Null:C1517))
 										
-										// TODO: Invert/propage ?
+										var $selected : Integer
+										$selected:=$class.displayFieldPicker()
+										
+										OBJECT Get pointer:C1124(Object named:K67:5; $form.published)->{$row}:=$selected
+										
+										// UI - update table name style
+										$indx:=Find in array:C230((OBJECT Get pointer:C1124(Object named:K67:5; $form.tableList))->; True:C214)
+										LISTBOX SET ROW FONT STYLE:C1268(*; $form.tableList; $indx; $selected>0 ? Bold:K14:2 : Plain:K14:1)
 										
 									Else 
 										
-										// Invert published status
-										($form.publishedPtr)->{$row}:=1-($form.publishedPtr)->{$row}
-										$class.updateProject()
-										
+										If (Macintosh command down:C546 | Shift down:C543)
+											
+											// TODO: Invert/propage ?
+											
+										Else 
+											
+											// Invert published status
+											($form.publishedPtr)->{$row}:=1-($form.publishedPtr)->{$row}
+											$class.updateProject()
+											
+										End if 
 									End if 
 								End if 
 							End if 
@@ -677,8 +680,8 @@ Case of
 		//// Hide the bottom line
 		//OBJECT SET VISIBLE(*; "bottom.line"; False)
 		//CALL FORM(Current form window; "editor_CALLBACK"; "resizePanel"; New object(\
-																											"panel"; Current form name; \
-																											"offset"; $Lon_vOffset))
+																																	"panel"; Current form name; \
+																																	"offset"; $Lon_vOffset))
 		//End if
 		////______________________________________________________
 		//: ($e.code=On Mouse Leave)

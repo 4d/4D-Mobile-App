@@ -116,7 +116,7 @@ Case of
 				_o_widget($form.allowHelp).moveHorizontally(_o_widget($form.allow).bestSize().coordinates.right+5)
 				
 				UI.callMeBack("description"; New object:C1471(\
-					"show"; Not:C34(Bool:C1537(Form:C1466.$project.structure.dataModel))))
+					"show"; (Form:C1466.$project.structure.dataModel#Null:C1517) && Not:C34(Bool:C1537(Form:C1466.$project.structure.dataModel))))
 				
 				//______________________________________________________
 			: ($Lon_formEvent=On Timer:K2:25)
