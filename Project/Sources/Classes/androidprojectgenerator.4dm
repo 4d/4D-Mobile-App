@@ -772,6 +772,13 @@ Function handleFieldIcon
 		
 	End if 
 	
+	If ($field.id=Null:C1517)
+		
+		// If id is Null here, it's a path element that doesn't need an icon
+		return 
+		
+	End if 
+	
 	// Get defined icon
 	If ($field.icon#Null:C1517)
 		
