@@ -53,8 +53,8 @@ If ($cacheFile.exists)
 	$cachedCatalog:=$cache.structure.definition
 	
 	// Was the structure changed?
-	If (($cachedCatalog#Null:C1517)\
-		 && Not:C34($cachedCatalog.equal($currentCatalog)))
+	If ($cachedCatalog#Null:C1517)\
+		 && Not:C34($cachedCatalog.equal($currentCatalog))
 		
 		$unsynchronizedTables:=New collection:C1472
 		
@@ -574,11 +574,14 @@ If ($cacheFile.exists)
 		Else 
 			
 			// The changes has no influence on the data model -> Update the cache
+			logger.info("STRUCTURE_AUDIT: Update the cache (no-impact changes)")
 			$structure:=$cache.structure=Null:C1517 ? New object:C1471 : $cache.structure
 			$structure.definition:=$currentCatalog
 			$structure.digest:=Generate digest:C1147(JSON Stringify:C1217($currentCatalog); SHA1 digest:K66:2)
 			$cache.structure:=$structure
 			$cacheFile.setText(JSON Stringify:C1217($cache; *))
+			
+			$updateCurrentCatalog:=True:C214
 			
 		End if 
 		
