@@ -32,18 +32,24 @@ Function init($project : Object)
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function load($project) : cs:C1710.project
 	
-	var $o : Object
-	
 	var $file : 4D:C1709.File
+	var $folder : 4D:C1709.Folder
 	
 	Case of 
+			
 			//______________________________________________________
-		: (Value type:C1509($project)=Is text:K8:3)
+		: (Count parameters:C259=0)
+			
+			oops
+			return This:C1470
+			
+			//______________________________________________________
+		: (Value type:C1509($project)=Is text:K8:3)  //platform path
 			
 			$file:=File:C1566($project; fk platform path:K87:2)
 			
 			//______________________________________________________
-		: (Value type:C1509($project)=Is object:K8:27)
+		: (Value type:C1509($project)=Is object:K8:27)  //4D.File
 			
 			If (OB Instance of:C1731($project; 4D:C1709.File))
 				
@@ -51,14 +57,16 @@ Function load($project) : cs:C1710.project
 				
 			Else 
 				
-				// ERROR
+				oops
+				return This:C1470
 				
 			End if 
 			
 			//______________________________________________________
 		Else 
 			
-			// ERROR
+			oops
+			return This:C1470
 			
 			//______________________________________________________
 	End case 
@@ -74,9 +82,9 @@ Function load($project) : cs:C1710.project
 		If (project_Upgrade($project; This:C1470._folder))
 			
 			// If upgraded, keep a copy of the old project…
-			$o:=This:C1470._folder.folder(Replace string:C233(Get localized string:C991("convertedFiles"); "{stamp}"; cs:C1710.dateTime.new().stamp()))
-			$o.create()
-			$file.moveTo($o)
+			$folder:=This:C1470._folder.folder(Replace string:C233(Get localized string:C991("convertedFiles"); "{stamp}"; cs:C1710.dateTime.new().stamp()))
+			$folder.create()
+			$file.moveTo($folder)
 			
 			//… & immediately save
 			This:C1470.save()
@@ -107,7 +115,7 @@ Function load($project) : cs:C1710.project
 		
 	End if 
 	
-	return (This:C1470)
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Prepare the project folder according to the target systems
@@ -577,56 +585,55 @@ Function updateActions
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the collection of the tables of the data model
-Function tables($datamodel : Object)->$tables : Collection
+Function tables($datamodel : Object) : Collection
 	
-	If (Count parameters:C259>=1)
-		
-		$tables:=OB Entries:C1720($datamodel)
-		
-	Else 
-		
-		// Use current
-		$tables:=OB Entries:C1720(This:C1470.dataModel)
-		
-	End if 
+	var $tables : Collection
 	
-	$tables:=$tables.filter("col_formula"; Formula:C1597($1.result:=Match regex:C1019("^\\d+$"; $1.value.key; 1)))
+	$tables:=Count parameters:C259>=1 ? OB Entries:C1720($datamodel) : OB Entries:C1720(This:C1470.dataModel)
+	return $tables.filter(Formula:C1597(col_formula).source; Formula:C1597($1.result:=Match regex:C1019("^\\d+$"; $1.value.key; 1)))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the collection of the fields of a table data model
-Function fields($table : Variant)->$fields : Collection
+Function fields($table : Variant) : Collection
 	
 	var $model : Object
 	
-	If (Count parameters:C259>=1)
-		
-		Case of 
-				
-				//______________________________________________________
-			: (Value type:C1509($table)=Is object:K8:27)  // Table model
-				
-				$model:=$table
-				
-				//______________________________________________________
-			: (Value type:C1509($table)=Is longint:K8:6)\
-				 | (Value type:C1509($table)=Is real:K8:4)  // Table number
-				
-				$model:=This:C1470.dataModel[String:C10($table)]
-				
-				//______________________________________________________
-			Else   // Table name
-				
-				$model:=This:C1470.dataModel[$table]
-				
-				//______________________________________________________
-		End case 
+	Case of 
+			
+			//______________________________________________________
+		: (Count parameters:C259=0)
+			
+			oops
+			return 
+			
+			//______________________________________________________
+		: (Value type:C1509($table)=Is object:K8:27)  // Table model
+			
+			$model:=$table
+			
+			//______________________________________________________
+		: (Value type:C1509($table)=Is longint:K8:6)\
+			 | (Value type:C1509($table)=Is real:K8:4)  // Table number
+			
+			$model:=This:C1470.dataModel[String:C10($table)]
+			
+			//______________________________________________________
+		: (Value type:C1509($table)=Is text:K8:3)  // Table ID
+			
+			$model:=This:C1470.dataModel[$table]
+			
+			//______________________________________________________
+		Else 
+			
+			oops
+			
+			//______________________________________________________
+	End case 
+	
+	If ($model#Null:C1517)
 		
 		//key # "" et object
-		$fields:=OB Entries:C1720($model).filter("col_formula"; Formula:C1597($1.result:=(Length:C16($1.value.key)#0) & (Value type:C1509($1.value.value)=Is object:K8:27)))
-		
-	Else 
-		
-		// #Error
+		return OB Entries:C1720($model).filter(Formula:C1597(col_formula).source; Formula:C1597($1.result:=(Length:C16($1.value.key)#0) & (Value type:C1509($1.value.value)=Is object:K8:27)))
 		
 	End if 
 	
@@ -635,35 +642,43 @@ Function fields($table : Variant)->$fields : Collection
 Function storageFields($table : Variant)->$fields : Collection
 	
 	var $model : Object
+	var $fields : Collection
 	
-	If (Count parameters:C259>=1)
+	Case of 
+			
+			//______________________________________________________
+		: (Count parameters:C259=0)
+			
+			oops
+			return 
+			
+			//______________________________________________________
+		: (Value type:C1509($table)=Is object:K8:27)  // Table model
+			
+			$model:=$table
+			
+			//______________________________________________________
+		: (Value type:C1509($table)=Is longint:K8:6)\
+			 | (Value type:C1509($table)=Is real:K8:4)  // Table number
+			
+			$model:=This:C1470.dataModel[String:C10($table)]
+			
+			//______________________________________________________
+		: (Value type:C1509($table)=Is text:K8:3)  // Table ID
+			
+			$model:=This:C1470.dataModel[$table]
+			
+			//______________________________________________________
+		Else 
+			
+			oops
+			
+			//______________________________________________________
+	End case 
+	
+	If ($model#Null:C1517)
 		
-		Case of 
-				
-				//______________________________________________________
-			: (Value type:C1509($table)=Is object:K8:27)  // Table model
-				
-				$model:=$table
-				
-				//______________________________________________________
-			: (Value type:C1509($table)=Is longint:K8:6)\
-				 | (Value type:C1509($table)=Is real:K8:4)  // Table number
-				
-				$model:=This:C1470.dataModel[String:C10($table)]
-				
-				//______________________________________________________
-			Else   // Table name
-				
-				$model:=This:C1470.dataModel[$table]
-				
-				//______________________________________________________
-		End case 
-		
-		$fields:=OB Entries:C1720($model).filter("col_formula"; Formula:C1597($1.result:=Match regex:C1019("^\\d+$"; $1.value.key; 1)))
-		
-	Else 
-		
-		// #Error
+		$fields:=OB Entries:C1720($model).filter(Formula:C1597(col_formula).source; Formula:C1597($1.result:=Match regex:C1019("^\\d+$"; $1.value.key; 1)))
 		
 	End if 
 	
@@ -671,15 +686,22 @@ Function storageFields($table : Variant)->$fields : Collection
 Function isField($field) : Boolean
 	
 	Case of 
+			
 			//______________________________________________________
-		: ($field=Null:C1517)  // Value type($field)=Is object seems to be true if an object null is passed
+		: (Count parameters:C259=0)
+			
+			oops
+			return 
+			
+			//______________________________________________________
+		: ($field=Null:C1517)
 			
 			return False:C215
 			
 			//______________________________________________________
 		: (Value type:C1509($field)=Is text:K8:3)  // Key property
 			
-			return (Match regex:C1019("(?m-si)^\\d+$"; $field; 1; *))
+			return Match regex:C1019("(?m-si)^\\d+$"; $field; 1; *)
 			
 			//______________________________________________________
 		: (Value type:C1509($field)=Is object:K8:27)  // The field itself
@@ -688,37 +710,35 @@ Function isField($field) : Boolean
 			return (Num:C11($field.relatedTableNumber)=0) && ((String:C10($field.kind)="storage") || (($field.fieldType#Null:C1517) && ($field.kind=Null:C1517)))
 			
 			//______________________________________________________
+		Else 
+			
+			oops
+			
+			//______________________________________________________
 	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if it is a storage or calculated attribute
 Function isFieldAttribute($fieldName : Text; $tableName : Text) : Boolean
 	
-	var $field; $table : Object
+	var $table : cs:C1710.table
 	
 	$table:=This:C1470.getCatalog().query("name = :1"; $tableName).pop()
-	
-	If ($table#Null:C1517)
-		
-		$field:=$table.fields.query("name = :1"; $fieldName).pop()
-		
-	End if 
-	
-	return ($field#Null:C1517)
+	return $table#Null:C1517 && ($table.fields.query("name = :1"; $fieldName).pop()#Null:C1517)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function isRelation($attribute : Variant) : Boolean
 	
-	return (($attribute.relatedTableNumber#Null:C1517)\
+	return ($attribute.relatedTableNumber#Null:C1517)\
 		 || ((This:C1470.isRelationToOne($attribute))\
-		 || (This:C1470.isRelationToMany($attribute))))
+		 || (This:C1470.isRelationToMany($attribute)))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function isRelationToOne($attribute : Variant) : Boolean
 	
 	If (Value type:C1509($attribute)=Is object:K8:27)
 		
-		return (String:C10($attribute.kind)="relatedEntity")
+		return String:C10($attribute.kind)="relatedEntity"
 		
 	End if 
 	
@@ -727,8 +747,7 @@ Function isRelationToMany($attribute : Variant) : Boolean
 	
 	If (Value type:C1509($attribute)=Is object:K8:27)
 		
-		//$is:=(($attribute.relatedEntities#Null) | (String($attribute.kind)="relatedEntities")) | (Bool($attribute.isToMany))
-		return (String:C10($attribute.kind)="relatedEntities")
+		return String:C10($attribute.kind)="relatedEntities"
 		
 	End if 
 	
@@ -736,38 +755,37 @@ Function isRelationToMany($attribute : Variant) : Boolean
 	/// Given a dataclass & a path, returns true if the path is valid (in ds)
 Function isAvailable($dataClass : 4D:C1709.DataClass; $path) : Boolean
 	
-	var $key : Text
+	var $item : Text
 	var $o : Object
 	
 	$o:=$dataClass
 	
-	For each ($key; Split string:C1554($path; "."))
+	For each ($item; Split string:C1554($path; "."))
 		
-		If ($o[$key].relatedDataClass#Null:C1517)
+		If ($o[$item].relatedDataClass#Null:C1517)
 			
-			$o:=ds:C1482[$o[$key].relatedDataClass]
+			$o:=ds:C1482[$o[$item].relatedDataClass]
 			
 		Else 
 			
-			$o:=$o[$key]
+			$o:=$o[$item]
 			
 		End if 
 	End for each 
 	
-	return ($o#Null:C1517)
+	return $o#Null:C1517
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function isComputedAttribute($field : Object; $tableName : Text) : Boolean
 	
 	var $success : Boolean
+	var $catalog : Collection
+	var $target : cs:C1710.field
+	var $table : cs:C1710.table
 	
-	$success:=($field.kind#Null:C1517) && ($field.kind="calculated")
+	$success:=String:C10($field.kind)="calculated"
 	
 	If ($success & (Count parameters:C259>=2))
-		
-		var $table : Object
-		var $catalog : Collection
-		var $target : cs:C1710.field
 		
 		$success:=False:C215
 		
@@ -795,7 +813,7 @@ Function isAlias($attribute : Variant) : Boolean
 	
 	If (Value type:C1509($attribute)=Is object:K8:27)
 		
-		return (String:C10($attribute.kind)="alias")
+		return String:C10($attribute.kind)="alias"
 		
 	End if 
 	
@@ -841,7 +859,7 @@ Function isLink
 		
 	Else 
 		
-		$0:=OB Entries:C1720($1).filter("col_formula"; Formula:C1597($1.result:=(Value type:C1509($1.value)=Is object:K8:27))).length>0
+		$0:=OB Entries:C1720($1).filter(Formula:C1597(col_formula).source; Formula:C1597($1.result:=(Value type:C1509($1.value)=Is object:K8:27))).length>0
 		
 	End if 
 	
@@ -1122,10 +1140,11 @@ Function isSortable($field : Object) : Boolean
 	
 	If ($field.fieldType#Null:C1517)
 		
-		return (($field.fieldType#Is object:K8:27)\
+		return ($field.fieldType#Is object:K8:27)\
 			 && ($field.fieldType#Is BLOB:K8:12)\
 			 && ($field.fieldType#Is picture:K8:10)\
-			 && ($field.fieldType#Is collection:K8:32))
+			 && ($field.fieldType#Is collection:K8:32)\
+			 && ($field.kind#"alias")
 		
 	End if 
 	

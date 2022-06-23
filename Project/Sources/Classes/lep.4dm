@@ -620,23 +620,31 @@ Function escape($text : Text)->$escaped : Text
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Enclose, if necessary, the string in single quotation marks
-Function singleQuoted($string : Text)->$quoted : Text
+Function singleQuoted($string : Text) : Text
 	
-	$quoted:=Choose:C955(Match regex:C1019("^'.*'$"; $string; 1); $string; "'"+$string+"'")  // Already done // Do it
+	return Match regex:C1019("^'.*'$"; $string; 1) ? $string : "'"+$string+"'"
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the string between quotes
-Function quoted($string : Text)->$quoted : Text
+Function quoted($string : Text) : Text
 	
-	If (Match regex:C1019("^\".*\"$"; $string; 1))
-		
-		$quoted:=$string  // Already done
-		
-	Else 
-		
-		$quoted:="\""+$string+"\""  // Do it
-		
-	End if 
+	return Match regex:C1019("^\".*\"$"; $string; 1) ? $string : "\""+$string+"\""
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns the string between spaces
+Function betweenSpaces($string : Text) : Text
+	
+	return This:C1470.endsWithSpace(This:C1470.startsWithSpace($string))
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function startsWithSpace($string : Text) : Text
+	
+	return ($string[[1]]#" ") ? " "+$string : $string
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function endsWithSpace($string : Text) : Text
+	
+	return ($string[[Length:C16($string)]]#" ") ? $string+" " : $string
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Compare two string version

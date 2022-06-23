@@ -121,7 +121,7 @@
 		<field name="blobField" uuid="4C4E45A776EA48278FEE9F52BA4D850E" type="18" never_null="true" id="16"/>
 		<field name="__GlobalStamp" uuid="3A3AB10707514769A89E858FBF0C3245" type="5" id="27"/>
 		<primary_key field_name="ID" field_uuid="2E229433BE754803B3BC16E18675FE09"/>
-		<table_extra input_form="Input" output_form="Form1">
+		<table_extra input_form="Form1" output_form="Form1">
 			<editor_table_info displayable_fields_count="26">
 				<color red="175" green="188" blue="191" alpha="255"/>
 				<coordinates left="0" top="0" width="165.44616699219" height="605.87432861328"/>

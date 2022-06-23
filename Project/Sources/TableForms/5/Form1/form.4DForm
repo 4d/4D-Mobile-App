@@ -13,9 +13,7 @@
 	"bottomMargin": 20,
 	"markerHeader": 30,
 	"markerBody": 60,
-	"events": [
-		"onLoad"
-	],
+	"events": [],
 	"windowTitle": "window title",
 	"destination": "listScreen",
 	"pages": [
@@ -31,9 +29,18 @@
 					"width": 150,
 					"height": 17,
 					"dataSource": "[ALL_TYPES:5]ID:1",
-					"dataSourceTypeHint": "integer"
+					"dataSourceTypeHint": "integer",
+					"enterable": false
 				}
 			}
 		}
-	]
+	],
+	"geometryStamp": 3,
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	}
 }
