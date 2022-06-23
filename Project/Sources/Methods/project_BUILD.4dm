@@ -242,8 +242,8 @@ If (Asserted:C1132($project#Null:C1517))
 								"build"; $data)
 							
 							//$messageCancel:=New object(\
-								"action"; "build_ignoreServer"; \
-								"build"; $data)
+																"action"; "build_ignoreServer"; \
+																"build"; $data)
 							
 							// Web server must running to test data synchronization
 							$message:=New object:C1471(\
@@ -280,7 +280,7 @@ If (Asserted:C1132($project#Null:C1517))
 					
 					$success:=$rest.dataClasses.query("name = :1"; SHARED.deletedRecordsTable.name).pop()#Null:C1517
 					
-					If ($success)
+					If ($success) && ($folders#Null:C1517)
 						
 						For each ($folder; $folders) While ($success)
 							
