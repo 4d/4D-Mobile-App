@@ -2,16 +2,13 @@
 	"____FOR_TESTS": {
 		"methods": [
 			"_test_alias",
-			"_test_dumpFieldNames",
 			"_test_project",
-			"_test_structureClass",
-			"RUN_unitTestSuites"
+			"_test_structureClass"
 		],
 		"classes": [
 			"ALL_TYPESEntity",
 			"EmployesEntity",
 			"ServiceEntity",
-			"test",
 			"UNIT_0Entity",
 			"UNIT_1Entity"
 		]
@@ -68,6 +65,8 @@
 	},
 	"_o_OBSOLETES": {
 		"methods": [
+			"_o_button",
+			"_o_currentForm",
 			"_o_dataModel",
 			"_o_device",
 			"_o_doc_catalog",
@@ -75,11 +74,15 @@
 			"_o_editor_Panel_init",
 			"_o_editor_ui_LISTBOX",
 			"_o_err",
+			"_o_listbox",
 			"_o_mobile_Project_iOS",
+			"_o_picture",
 			"_o_plist",
 			"_o_rest_isValidField",
+			"_o_static",
 			"_o_structure",
 			"_o_tempoFieldType",
+			"_o_thermometer",
 			"_o_tmpl_form",
 			"_o_ui_MOVE",
 			"_o_unzip",
@@ -184,7 +187,6 @@
 		],
 		"classes": [
 			"catalog",
-			"CatalogBuildWrapper",
 			"DataSource",
 			"ExposedStructure",
 			"field",
@@ -643,7 +645,6 @@
 	},
 	"devTable": {
 		"tables": [
-			"__DeletedRecords",
 			"ALL_TYPES",
 			"Commands",
 			"COMPOSITE PRIMARY KEY",
