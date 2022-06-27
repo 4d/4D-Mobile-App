@@ -1208,7 +1208,7 @@ Function backgroundColor($current : Object)->$color
 		
 		$isFocused:=(OBJECT Get name:C1087(Object with focus:K67:3)=This:C1470.actions.name)
 		
-		If (ob_equal(This:C1470.current; $current))  // Selected row
+		If (FORM Event:C1606.isRowSelected)
 			
 			$color:=Choose:C955($isFocused; UI.backgroundSelectedColor; UI.alternateSelectedColor)
 			

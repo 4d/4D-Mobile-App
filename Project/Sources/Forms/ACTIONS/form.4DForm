@@ -73,7 +73,7 @@
 					"selectedItemsSource": "panel.selected",
 					"metaSource": "panel.metaInfo(This:C1470)",
 					"selectionMode": "single",
-					"rowFillSource": "panel.backgroundColor(This:C1470)",
+					"rowFillSource": "panel.backgroundColor()",
 					"method": "ObjectMethods/actions.4dm",
 					"events": [
 						"onClick",
