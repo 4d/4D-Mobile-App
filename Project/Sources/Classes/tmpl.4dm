@@ -393,9 +393,9 @@ Function update()->$this : cs:C1710.tmpl
 							
 						Else 
 							
-							$c:=Split string:C1554($t; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
+							$c:=Split string:C1554($t; ","; sk trim spaces:K86:2).map(Formula:C1597(col_formula).source; Formula:C1597($1.result:=Num:C11($1.value)))
 							
-							If ($c.every("col_formula"; Formula:C1597($1.result:=($1.value<0))))
+							If ($c.every(Formula:C1597(col_formula).source; Formula:C1597($1.result:=($1.value<0))))
 								
 								$c.push(-8859)
 								This:C1470.setAttribute("ios:type"; $c.join(","); $node)
@@ -744,7 +744,7 @@ Function isTypeAccepted($bind : Variant; $type : Integer)->$accepted : Boolean
 					
 				Else 
 					
-					$c:=Split string:C1554($bind; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
+					$c:=Split string:C1554($bind; ","; sk trim spaces:K86:2).map(Formula:C1597(col_formula).source; Formula:C1597($1.result:=Num:C11($1.value)))
 					
 				End if 
 				
@@ -763,7 +763,7 @@ Function isTypeAccepted($bind : Variant; $type : Integer)->$accepted : Boolean
 		
 		If ($c#Null:C1517)
 			
-			If ($c.every("col_formula"; Formula:C1597($1.result:=($1.value>=0))))
+			If ($c.every(Formula:C1597(col_formula).source; Formula:C1597($1.result:=($1.value>=0))))
 				
 				// One of them
 				$accepted:=($c.indexOf(Num:C11($type))#-1)
@@ -771,7 +771,7 @@ Function isTypeAccepted($bind : Variant; $type : Integer)->$accepted : Boolean
 			Else 
 				
 				// None of them
-				$accepted:=($c.filter("col_formula"; Formula:C1597($1.result:=($1.value=-Num:C11($type)))).length=0)
+				$accepted:=($c.filter(Formula:C1597(col_formula).source; Formula:C1597($1.result:=($1.value=-Num:C11($type)))).length=0)
 				
 			End if 
 		End if 
@@ -1094,7 +1094,7 @@ Function reorder($tableID : Text)  //#WIP
 					Else 
 						
 						// Check if the type is compatible
-						$c:=Split string:C1554($attributes["ios:type"]; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
+						$c:=Split string:C1554($attributes["ios:type"]; ","; sk trim spaces:K86:2).map(Formula:C1597(col_formula).source; Formula:C1597($1.result:=Num:C11($1.value)))
 						
 						If ($oIN.target.fields#Null:C1517)
 							
@@ -1237,7 +1237,7 @@ Function enrich($fields : Collection; $previouslyUsedForms : Object)
 		
 		If ($form#$formNotToUse)
 			
-			For each ($o; $previouslyUsedForms[$form].fields.filter("col_formula"; Formula:C1597($1.result:=($1.value#Null:C1517))))
+			For each ($o; $previouslyUsedForms[$form].fields.filter(Formula:C1597(col_formula).source; Formula:C1597($1.result:=($1.value#Null:C1517))))
 				
 				If ($fields.query("name = :1"; $o.name).pop()=Null:C1517)
 					

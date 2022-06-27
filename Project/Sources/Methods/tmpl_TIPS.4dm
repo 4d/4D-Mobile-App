@@ -63,9 +63,9 @@ Else
 		Else 
 			
 			// Get the accepted types
-			$c:=Split string:C1554($t; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
+			$c:=Split string:C1554($t; ","; sk trim spaces:K86:2).map(Formula:C1597(col_formula).source; Formula:C1597($1.result:=Num:C11($1.value)))
 			
-			If ($c.every("col_formula"; Formula:C1597($1.result:=($1.value>=0))))
+			If ($c.every(Formula:C1597(col_formula).source; Formula:C1597($1.result:=($1.value>=0))))
 				
 				If ($c.indexOf(Is integer:K8:5)#-1)\
 					 & ($c.indexOf(Is longint:K8:6)#-1)\

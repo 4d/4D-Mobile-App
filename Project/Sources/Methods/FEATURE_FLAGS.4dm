@@ -103,22 +103,18 @@ If (True:C214)  // DELIVERED
 	Feature.delivered("cancelableDatasetGeneration"; 1940)  // [MOBILE] Data generation
 	Feature.delivered("useTextRestResponse"; 1940)  // [MOBILE] Data generation : for optis
 	
+	// Mark:-R5
+	Feature.delivered("xcDataModelClass")  // Use class to create core data model ie. xcDataModel (useful to refactor for alias)
+	Feature.delivered("iosBuildWithClass")  // Use cs.MobileProjectIOS class
+	Feature.delivered("modernStructure")
+	
 End if 
 
-// Mark:-R5
-Feature.unstable("xcDataModelClass")  // Use class to create core data model ie. xcDataModel (useful to refactor for alias)
-
-Feature.unstable("iosBuildWithClass")  // Use cs.MobileProjectIOS class
-
-Feature.unstable("modernStructure")
-
 // Mark:-R6
+Feature.unstable("131225")  // [MOBILE] Use aliases
+Feature.unstable("127558")  // [ANDROID] Data set
 
 // Mark:-🚧 MAIN
-Feature.main(127558)  // [ANDROID] Data set
-
-Feature.main(131225)  // [MOBILE] Use aliases
-
 Feature.main("listEditor")  // #130828 [MOBILE] Create and edit an input control from the project editor
 
 // Mark:-🚧 WIP

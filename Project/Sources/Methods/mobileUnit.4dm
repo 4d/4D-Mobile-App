@@ -243,9 +243,8 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 				"error"; "Command unavailable for this Windows platform")
 			
 			//________________________________________
-		: (Feature.with("xcDataModelClass") & \
-			(($entryPoint="dataModel")\
-			 | ($entryPoint="xcDataModel")))
+		: ($entryPoint="dataModel")\
+			 | ($entryPoint="xcDataModel")
 			
 			$response:=cs:C1710.xcDataModel.new($parameters).run(\
 				$parameters.path; \
@@ -259,7 +258,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			//________________________________________
 		: ($entryPoint="xcDataModel")
 			
-			EXECUTE METHOD:C1007(Formula:C1597(xcDataModel).source; $response; $parameters)
+			EXECUTE METHOD:C1007(Formula:C1597(_o_xcDataModel).source; $response; $parameters)
 			
 			//________________________________________
 		: ($entryPoint="simulator")
@@ -309,7 +308,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			//________________________________________
 		: ($entryPoint="xcDataModel")
 			
-			EXECUTE METHOD:C1007(Formula:C1597(xcDataModel).source; $response; $parameters)
+			EXECUTE METHOD:C1007(Formula:C1597(_o_xcDataModel).source; $response; $parameters)
 			
 			//________________________________________
 		: ($entryPoint="storyboard")

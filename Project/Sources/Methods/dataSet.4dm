@@ -628,23 +628,9 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 						
 						If (Bool:C1537($in.coreDataSet) & $out.success)
 							
-							If (Feature.with("xcDataModelClass"))
-								
-								$out.coreData:=cs:C1710.xcDataModel.new($in.project).run(\
-									/*path*/Folder:C1567($out.path; fk platform path:K87:2).file("Sources/Structures.xcdatamodeld").platformPath; \
-									/*options*/New object:C1471("flat"; False:C215; "relationship"; True:C214))
-								
-							Else 
-								
-								$out.coreData:=xcDataModel(New object:C1471(\
-									"action"; "xcdatamodel"; \
-									"dataModel"; $dataModel; \
-									"actions"; $actions; \
-									"flat"; False:C215; \
-									"relationship"; True:C214; \
-									"path"; Folder:C1567($out.path; fk platform path:K87:2).file("Sources/Structures.xcdatamodeld").platformPath))  // XXX maybe output in temp directory and pass it to coreDataSet
-								
-							End if 
+							$out.coreData:=cs:C1710.xcDataModel.new($in.project).run(\
+								/*path*/Folder:C1567($out.path; fk platform path:K87:2).file("Sources/Structures.xcdatamodeld").platformPath; \
+								/*options*/New object:C1471("flat"; False:C215; "relationship"; True:C214))
 							
 							ob_error_combine($out; $out.coreData)
 							

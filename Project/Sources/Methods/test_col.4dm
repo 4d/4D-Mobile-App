@@ -6,19 +6,19 @@ err_TRY
 
 // Col_formula
 $c:=New collection:C1472(Get 4D folder:C485(Current resources folder:K5:16); Get 4D folder:C485(Database folder:K5:14))
-$c:=$c.map("col_formula"; "$1.result:=Convert path system to POSIX:C1106($1.value)")
+$c:=$c.map(Formula:C1597(col_formula).source; "$1.result:=Convert path system to POSIX:C1106($1.value)")
 ASSERT:C1129($c[0]=Convert path system to POSIX:C1106(Get 4D folder:C485(Current resources folder:K5:16)))
 ASSERT:C1129($c[1]=Convert path system to POSIX:C1106(Get 4D folder:C485(Database folder:K5:14)))
 
 $c:=New collection:C1472(Get 4D folder:C485(Current resources folder:K5:16); Get 4D folder:C485(Database folder:K5:14))
-$c:=$c.map("col_formula"; Formula:C1597($1.result:=Convert path system to POSIX:C1106($1.value)))
+$c:=$c.map(Formula:C1597(col_formula).source; Formula:C1597($1.result:=Convert path system to POSIX:C1106($1.value)))
 ASSERT:C1129($c[0]=Convert path system to POSIX:C1106(Get 4D folder:C485(Current resources folder:K5:16)))
 ASSERT:C1129($c[1]=Convert path system to POSIX:C1106(Get 4D folder:C485(Database folder:K5:14)))
 
 // _o_Col_notNull
 $c:=New collection:C1472(Null:C1517; 1; Null:C1517; 2)
 $c[10]:=10
-$c:=$c.filter("col_formula"; Formula:C1597($1.result:=($1.value#Null:C1517)))
+$c:=$c.filter(Formula:C1597(col_formula).source; Formula:C1597($1.result:=($1.value#Null:C1517)))
 ASSERT:C1129($c.length=3)
 ASSERT:C1129($c[0]=1)
 ASSERT:C1129($c[1]=2)
@@ -26,7 +26,7 @@ ASSERT:C1129($c[2]=10)
 
 $c:=New collection:C1472(Null:C1517; 1; Null:C1517; 2)
 $c[10]:=10
-$c:=$c.filter("col_formula"; "$1.result:=($1.value#Null:C1517)")
+$c:=$c.filter(Formula:C1597(col_formula).source; "$1.result:=($1.value#Null:C1517)")
 ASSERT:C1129($c.length=3)
 ASSERT:C1129($c[0]=1)
 ASSERT:C1129($c[1]=2)
@@ -34,7 +34,7 @@ ASSERT:C1129($c[2]=10)
 
 $c:=New collection:C1472(Null:C1517; 1; Null:C1517; 2)
 $c[10]:=10
-$c:=$c.filter("col_formula"; Formula:C1597($1.result:=($1.value#Null:C1517)))
+$c:=$c.filter(Formula:C1597(col_formula).source; Formula:C1597($1.result:=($1.value#Null:C1517)))
 ASSERT:C1129($c.length=3)
 ASSERT:C1129($c[0]=1)
 ASSERT:C1129($c[1]=2)
@@ -50,10 +50,10 @@ $c:=$c.reduce("col_distinctObject"; New collection:C1472())
 ASSERT:C1129($c.length=2)
 
 $c:=New collection:C1472(True:C214)
-ASSERT:C1129($c.reduce("col_formula"; False:C215; Formula:C1597($1.accumulator:=$1.accumulator | $1.value)))
+ASSERT:C1129($c.reduce(Formula:C1597(col_formula).source; False:C215; Formula:C1597($1.accumulator:=$1.accumulator | $1.value)))
 $c:=New collection:C1472(False:C215)
-ASSERT:C1129(Not:C34($c.reduce("col_formula"; False:C215; Formula:C1597($1.accumulator:=$1.accumulator | $1.value))))
+ASSERT:C1129(Not:C34($c.reduce(Formula:C1597(col_formula).source; False:C215; Formula:C1597($1.accumulator:=$1.accumulator | $1.value))))
 $c:=New collection:C1472(False:C215; True:C214)
-ASSERT:C1129($c.reduce("col_formula"; False:C215; Formula:C1597($1.accumulator:=$1.accumulator | $1.value)))
+ASSERT:C1129($c.reduce(Formula:C1597(col_formula).source; False:C215; Formula:C1597($1.accumulator:=$1.accumulator | $1.value)))
 
 err_FINALLY

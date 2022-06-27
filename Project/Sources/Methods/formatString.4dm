@@ -178,7 +178,7 @@ Case of
 				//----------------------------------------
 			: (Position:C15("."; $t_string)>0)
 				
-				$t_formated:=Split string:C1554($t_string; ".").map("col_formula"; Formula:C1597($1.result:=formatString($t_format; $1.value))).join(".")
+				$t_formated:=Split string:C1554($t_string; ".").map(Formula:C1597(col_formula).source; Formula:C1597($1.result:=formatString($t_format; $1.value))).join(".")
 				// $t_formated:=Split string($t_stringh; ".").map(Formula(formatString($t_format; $1.value))).join(".")
 				
 				//----------------------------------------

@@ -102,7 +102,7 @@ If (Asserted:C1132($file#Null:C1517; "Missing tag file"))
 						
 						// Create the cache
 						//$archive.root.copyTo($cache)  // could not use it, it add a folder with archive name
-						$archive.files().combine($archive.folders()).map("col_formula"; Formula:C1597($1.value.copyTo($cache)))
+						$archive.files().combine($archive.folders()).map(Formula:C1597(col_formula).source; Formula:C1597($1.value.copyTo($cache)))
 						$Obj_result.success:=True:C214
 						
 					Else 
@@ -113,14 +113,14 @@ If (Asserted:C1132($file#Null:C1517; "Missing tag file"))
 					
 					If ($Obj_result.success)
 						
-						$cache.files().combine($cache.folders()).map("col_formula"; Formula:C1597($1.value.copyTo($target)))
+						$cache.files().combine($cache.folders()).map(Formula:C1597(col_formula).source; Formula:C1597($1.value.copyTo($target)))
 						
 					End if 
 					
 				Else 
 					
 					//$archive.root.copyTo($target) // could not use it, it add a folder with archive name
-					$archive.files().combine($archive.folders()).map("col_formula"; Formula:C1597($1.value.copyTo($target)))
+					$archive.files().combine($archive.folders()).map(Formula:C1597(col_formula).source; Formula:C1597($1.value.copyTo($target)))
 					
 				End if 
 				

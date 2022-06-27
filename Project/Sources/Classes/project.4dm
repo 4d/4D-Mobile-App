@@ -1152,83 +1152,82 @@ Function isSortable($field : Object) : Boolean
 	// Returns True if the resource comes from the host's database.
 Function isCustomResource($resource : Text) : Boolean
 	
-	If (Length:C16($resource)>0)
-		
-		//%W-533.1
-		return ($resource[[1]]="/")
-		//%W+533.1
-		
-	Else 
-		
-		return (False:C215)
-		
-	End if 
+	//%W-533.1
+	return Length:C16($resource)>0 ? $resource[[1]]="/" : False:C215
+	//%W+533.1
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the collection of table's sortable field
-Function getSortableFields($table; $ordered : Boolean)->$fields : Collection
+Function getSortableFields($table; $ordered : Boolean) : Collection
 	
-	var $member; $model : Object
+	var $member : Object
+	var $fields : Collection
+	var $field : cs:C1710.field
+	var $model : cs:C1710.table
 	
 	$fields:=New collection:C1472
 	
-	If (Count parameters:C259>=1)
-		
-		Case of 
-				
-				//______________________________________________________
-			: (Value type:C1509($table)=Is object:K8:27)  // Table model
-				
-				$model:=$table
-				
-				//______________________________________________________
-			: (Value type:C1509($table)=Is longint:K8:6)\
-				 | (Value type:C1509($table)=Is real:K8:4)  // Table number
-				
-				$model:=This:C1470.dataModel[String:C10($table)]
-				
-				//______________________________________________________
-			Else   // Table name
-				
-				$model:=This:C1470.dataModel[$table]
-				
-				//______________________________________________________
-		End case 
-		
-		For each ($member; OB Entries:C1720($model).query("key !=''"))
+	Case of 
 			
-			If (This:C1470.isSortable($member.value))
+			//______________________________________________________
+		: (Count parameters:C259=0)
+			
+			oops
+			return 
+			
+			//______________________________________________________
+		: (Value type:C1509($table)=Is object:K8:27)  // Table model
+			
+			$model:=$table
+			
+			//______________________________________________________
+		: (Value type:C1509($table)=Is longint:K8:6)\
+			 | (Value type:C1509($table)=Is real:K8:4)  // Table number
+			
+			$model:=This:C1470.dataModel[String:C10($table)]
+			
+			
+			//______________________________________________________
+		: (Value type:C1509($table)=Is text:K8:3)  // Table ID
+			
+			$model:=This:C1470.dataModel[$table]
+			
+			//______________________________________________________
+		Else 
+			
+			oops
+			
+			//______________________________________________________
+	End case 
+	
+	For each ($member; OB Entries:C1720($model).query("key !=''"))
+		
+		If (This:C1470.isSortable($member.value))
+			
+			$field:=OB Copy:C1225($member.value)
+			
+			If ($member.value.kind="storage")
 				
-				var $field : cs:C1710.field
-				$field:=OB Copy:C1225($member.value)
+				$field.fieldNumber:=($field.fieldNumber#Null:C1517) ? $field.fieldNumber : Num:C11($member.key)
 				
-				If ($member.value.kind="storage")
-					
-					$field.fieldNumber:=($field.fieldNumber#Null:C1517) ? $field.fieldNumber : Num:C11($member.key)
-					
-				Else 
-					
-					$field.name:=$member.key
-					
-				End if 
+			Else 
 				
-				$fields.push($field)
+				$field.name:=$member.key
 				
 			End if 
-		End for each 
-		
-		If ($ordered)
 			
-			// Sort by name
-			$fields:=$fields.orderBy("name")
+			$fields.push($field)
 			
 		End if 
+	End for each 
+	
+	If ($ordered)  // Sort by name
 		
-	Else 
-		
-		// #Error
+		$fields:=$fields.orderBy("name")
 		
 	End if 
+	
+	return $fields
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Add a table to the data model

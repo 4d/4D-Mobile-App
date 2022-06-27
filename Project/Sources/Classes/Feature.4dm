@@ -66,7 +66,7 @@ Function wip($feature; $version : Integer)
 	/// Storing an alias name for a feature
 Function alias($alias; $original)
 	
-	This:C1470._features[This:C1470._feature($alias)]:=This:C1470._features[This:C1470._feature($original)]
+	This:C1470._features[This:C1470._feature($alias)]:=This:C1470._features[This:C1470._feature(String:C10($original))]
 	
 	//====================================================================
 	/// Storing a feature as pending (not available)

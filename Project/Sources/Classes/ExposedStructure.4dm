@@ -50,55 +50,47 @@ Thus, this function must only be called to obtain an updated datastore.
 */
 Function exposedDatastore() : Object
 	
-	If (Feature.with("modernStructure"))
+	var $key : Text
+	var $datastore; $o : Object
+	var $table : cs:C1710.table
+	var $ds : cs:C1710.DataStore
+	
+	$datastore:=New object:C1471
+	$ds:=ds:C1482
+	
+	For each ($key; $ds)
 		
-		var $key : Text
-		var $datastore; $o : Object
-		var $table : cs:C1710.table
-		var $ds : cs:C1710.DataStore
+		$o:=$ds[$key].getInfo()
 		
-		$datastore:=New object:C1471
-		$ds:=ds:C1482
-		
-		For each ($key; $ds)
+		If (Not:C34($o.exposed))\
+			 || ($key=This:C1470.deletedRecordsTableName)
 			
-			$o:=$ds[$key].getInfo()
+			continue
 			
-			If (Not:C34($o.exposed))\
-				 || ($key=This:C1470.deletedRecordsTableName)
+		End if 
+		
+		$table:=New object:C1471
+		$table[""]:=$o
+		
+		For each ($o; OB Entries:C1720($ds[$key]))
+			
+			If (Not:C34(Bool:C1537($o.value.exposed)))\
+				 || ($o.key=This:C1470.stampFieldName)\
+				 || (Not:C34(This:C1470._managedType($o.value.type)) & ($o.value.relatedDataClass=Null:C1517))
 				
 				continue
 				
 			End if 
 			
-			$table:=New object:C1471
-			$table[""]:=$o
-			
-			For each ($o; OB Entries:C1720($ds[$key]))
-				
-				If (Not:C34(Bool:C1537($o.value.exposed)))\
-					 || ($o.key=This:C1470.stampFieldName)\
-					 || (Not:C34(This:C1470._managedType($o.value.type)) & ($o.value.relatedDataClass=Null:C1517))
-					
-					continue
-					
-				End if 
-				
-				$table[$o.key]:=$o.value
-				
-			End for each 
-			
-			$datastore[$key]:=$table
+			$table[$o.key]:=$o.value
 			
 		End for each 
 		
-		return $datastore
+		$datastore[$key]:=$table
 		
-	Else 
-		
-		return _4D_Build Exposed Datastore:C1598
-		
-	End if 
+	End for each 
+	
+	return $datastore
 	
 	//==================================================================
 /** Returns a collection of all project's dataclasses and their attributes

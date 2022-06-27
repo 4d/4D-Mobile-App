@@ -1084,7 +1084,7 @@ Function setHelpTip($e : Object)
 							
 							var $bind
 							For each ($bind; SHARED.resources.fieldBindingTypes\
-								.reduce("col_formula"; New collection:C1472(); Formula:C1597($1.accumulator.combine(Choose:C955($1.value=Null:C1517; New collection:C1472(); $1.value)))))
+								.reduce(Formula:C1597(col_formula).source; New collection:C1472(); Formula:C1597($1.accumulator.combine(Choose:C955($1.value=Null:C1517; New collection:C1472(); $1.value)))))
 								
 								SHARED.resources.formattersByName[$bind.name]:=$bind
 								

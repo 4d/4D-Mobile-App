@@ -33,7 +33,7 @@ If (Asserted:C1132(Count parameters:C259>=2; "Missing parameter"))
 			//___________________________
 		: (Value type:C1509($1)=Is text:K8:3)
 			
-			$c:=Split string:C1554($1; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
+			$c:=Split string:C1554($1; ","; sk trim spaces:K86:2).map(Formula:C1597(col_formula).source; Formula:C1597($1.result:=Num:C11($1.value)))
 			
 			//___________________________
 		: (Value type:C1509($1)=Is collection:K8:32)
@@ -57,7 +57,7 @@ Else
 End if 
 
 // ----------------------------------------------------
-If ($c.every("col_formula"; Formula:C1597($1.result:=($1.value>=0))))
+If ($c.every(Formula:C1597(col_formula).source; Formula:C1597($1.result:=($1.value>=0))))
 	
 	// One of them
 	$0:=($c.indexOf($l)#-1)
@@ -65,6 +65,6 @@ If ($c.every("col_formula"; Formula:C1597($1.result:=($1.value>=0))))
 Else 
 	
 	// None of them
-	$0:=($c.filter("col_formula"; Formula:C1597($1.result:=($1.value=-$l))).length=0)
+	$0:=($c.filter(Formula:C1597(col_formula).source; Formula:C1597($1.result:=($1.value=-$l))).length=0)
 	
 End if 

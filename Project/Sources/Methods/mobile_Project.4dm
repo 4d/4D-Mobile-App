@@ -8,13 +8,6 @@ If ((String:C10($data.project._buildTarget)="android")\
 	
 Else 
 	
-	If (Feature.with("iosBuildWithClass"))
-		
-		return (cs:C1710.MobileProjectIOS.new($data).main())
-		
-	Else 
-		
-		return (_o_mobile_Project_iOS($data))
-		
-	End if 
+	return (cs:C1710.MobileProjectIOS.new($data).main())
+	
 End if 

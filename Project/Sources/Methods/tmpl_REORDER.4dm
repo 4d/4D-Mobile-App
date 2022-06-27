@@ -101,11 +101,11 @@ Else
 								Else 
 									
 									// Check if the type is compatible
-									$c:=Split string:C1554($oAttributes["ios:type"]; ","; sk trim spaces:K86:2).map("col_formula"; Formula:C1597($1.result:=Num:C11($1.value)))
+									$c:=Split string:C1554($oAttributes["ios:type"]; ","; sk trim spaces:K86:2).map(Formula:C1597(col_formula).source; Formula:C1597($1.result:=Num:C11($1.value)))
 									
 									If ($oIN.target.fields#Null:C1517)
 										
-										For each ($oField; $oIN.target.fields.filter("col_formula"; Formula:C1597($1.result:=($1.value#Null:C1517)))) Until ($isCompatible)
+										For each ($oField; $oIN.target.fields.filter(Formula:C1597(col_formula).source; Formula:C1597($1.result:=($1.value#Null:C1517)))) Until ($isCompatible)
 											
 											If ($oField#Null:C1517)
 												

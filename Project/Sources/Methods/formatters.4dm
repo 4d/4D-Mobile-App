@@ -69,10 +69,10 @@ Case of
 		End for each 
 		
 		// Others formatter
-		For each ($c; $oResources.fieldBindingTypes.filter("col_formula"; "$1.result:=(Value type:C1509($1.value)=42)"); 1)
+		For each ($c; $oResources.fieldBindingTypes.filter(Formula:C1597(col_formula).source; "$1.result:=(Value type:C1509($1.value)=42)"); 1)
 			
 			// Keep only formats with defined name
-			$c:=$c.filter("col_formula"; "$1.result:=($1.value.name#Null:C1517)&(String:C10($1.value.name)#\"-\")")
+			$c:=$c.filter(Formula:C1597(col_formula).source; "$1.result:=($1.value.name#Null:C1517)&(String:C10($1.value.name)#\"-\")")
 			
 			For each ($oFormatter; $c)
 				

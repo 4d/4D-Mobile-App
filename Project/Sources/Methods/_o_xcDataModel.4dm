@@ -22,8 +22,8 @@ ARRAY TEXT:C222($tTxt_relationFields; 0)
 ARRAY TEXT:C222($tTxt_tables; 0)
 
 If (False:C215)
-	C_OBJECT:C1216(xcDataModel; $0)
-	C_OBJECT:C1216(xcDataModel; $1)
+	C_OBJECT:C1216(_o_xcDataModel; $0)
+	C_OBJECT:C1216(_o_xcDataModel; $1)
 End if 
 
 // ----------------------------------------------------
@@ -143,7 +143,7 @@ Case of
 						
 						If (Bool:C1537($Obj_in.relationship))  // core data relation ship table
 							
-							$Obj_buffer:=xcDataModel(New object:C1471(\
+							$Obj_buffer:=_o_xcDataModel(New object:C1471(\
 								"action"; "xcdatamodel_relation"; \
 								"dataModel"; $Obj_dataModel; \
 								"definition"; $Obj_in.definition))
@@ -156,7 +156,7 @@ Case of
 							End if 
 						End if   // end pre-parsing for relationship
 						
-						$Obj_buffer:=xcDataModel(New object:C1471(\
+						$Obj_buffer:=_o_xcDataModel(New object:C1471(\
 							"action"; "xcdatamodel_primaryKey"; \
 							"dataModel"; $Obj_dataModel))
 						
@@ -343,7 +343,7 @@ Case of
 												End if 
 												
 												// add xml attribut for type
-												xcDataModel(New object:C1471(\
+												_o_xcDataModel(New object:C1471(\
 													"action"; "xcdatamodel_field"; \
 													"type"; $Lon_type; \
 													"fieldType"; $Lon_type; \
@@ -405,7 +405,7 @@ Case of
 																	$Lon_type:=$Obj_table[$Txt_relationName][$tTxt_relationFields{$Lon_relationField}].fieldType
 																	
 																	// CLEAN call this method with $Lon_type not converted, and do a method which support that?
-																	xcDataModel(New object:C1471(\
+																	_o_xcDataModel(New object:C1471(\
 																		"action"; "xcdatamodel_field"; \
 																		"type"; $Lon_type; \
 																		"4d"; $Boo_4dType; \

@@ -646,19 +646,9 @@ Function _manageDataSet($out : Object)
 	
 	If (Feature.with("buildWithCmd"))
 		
-		If (Feature.with("xcDataModelClass"))
-			$out.coreData:=cs:C1710.xcDataModel.new($project).run(\
-				/*path*/$in.path+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"; \
-				/*options*/New object:C1471("flat"; False:C215; "relationship"; True:C214))
-		Else 
-			$out.coreData:=xcDataModel(New object:C1471(\
-				"action"; "xcdatamodel"; \
-				"dataModel"; $project.dataModel; \
-				"actions"; $project.actions; \
-				"flat"; False:C215; \
-				"relationship"; True:C214; \
-				"path"; $in.path+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"))
-		End if 
+		$out.coreData:=cs:C1710.xcDataModel.new($project).run(\
+			/*path*/$in.path+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"; \
+			/*options*/New object:C1471("flat"; False:C215; "relationship"; True:C214))
 		
 		ob_error_combine($out; $out.coreData)
 		
@@ -751,19 +741,9 @@ Function _manageDataSet($out : Object)
 	
 	If (Feature.disabled("buildWithCmd"))
 		
-		If (Feature.with("xcDataModelClass"))
-			$out.coreData:=cs:C1710.xcDataModel.new($project).run(\
-				/*path*/$in.path+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"; \
-				/*options*/New object:C1471("flat"; False:C215; "relationship"; True:C214))
-		Else 
-			$out.coreData:=xcDataModel(New object:C1471(\
-				"action"; "xcdatamodel"; \
-				"dataModel"; $project.dataModel; \
-				"actions"; $project.actions; \
-				"flat"; False:C215; \
-				"relationship"; True:C214; \
-				"path"; $in.path+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"))
-		End if 
+		$out.coreData:=cs:C1710.xcDataModel.new($project).run(\
+			/*path*/$in.path+"Sources"+Folder separator:K24:12+"Structures.xcdatamodeld"; \
+			/*options*/New object:C1471("flat"; False:C215; "relationship"; True:C214))
 		
 		ob_error_combine($out; $out.coreData)
 		
@@ -887,7 +867,7 @@ Function _generateCapabilities($out : Object; $appFolder : 4D:C1709.Folder)
 	
 	If ($isSearchable.success)
 		
-		If ($isSearchable.value.reduce("col_formula"; False:C215; Formula:C1597($1.accumulator:=$1.accumulator | $1.value)))
+		If ($isSearchable.value.reduce(Formula:C1597(col_formula).source; False:C215; Formula:C1597($1.accumulator:=$1.accumulator | $1.value)))
 			
 			// XXX could check that we have positive value? $isSearchable
 			$out.computedCapabilities.capabilities.camera:=True:C214

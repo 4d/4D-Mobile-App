@@ -306,7 +306,7 @@ Function doRun()->$Obj_out : Object
 								$Obj_table.searchableField:=$Obj_table.searchableField.join(",")
 								
 							Else 
-								$Obj_table.searchableField:=$Obj_tableList.searchableField.extract("name").map("col_formula"; Formula:C1597($1.result:=formatString("field-name"; String:C10($1.value)))).join(",")
+								$Obj_table.searchableField:=$Obj_tableList.searchableField.extract("name").map(Formula:C1597(col_formula).source; Formula:C1597($1.result:=formatString("field-name"; String:C10($1.value)))).join(",")
 							End if 
 							
 							//……………………………………………………………………………………………………………
@@ -352,7 +352,7 @@ Function doRun()->$Obj_out : Object
 								$Obj_table.sortField:=$Obj_table.sortField.join(",")
 								
 							Else 
-								$Obj_table.sortField:=$Obj_tableList.sortField.extract("name").map("col_formula"; Formula:C1597($1.result:=formatString("field-name"; String:C10($1.value)))).join(",")
+								$Obj_table.sortField:=$Obj_tableList.sortField.extract("name").map(Formula:C1597(col_formula).source; Formula:C1597($1.result:=formatString("field-name"; String:C10($1.value)))).join(",")
 							End if 
 							
 							//……………………………………………………………………………………………………………

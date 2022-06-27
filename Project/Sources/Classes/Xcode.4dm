@@ -217,7 +217,7 @@ Function checkRequiredVersion($version : Text)
 		End if 
 		
 		var $currentInstances : Collection
-		$currentInstances:=$instances.filter("col_formula"; Formula:C1597($1.result:=(($1.value.version=$instances[0].version) & (($1.value.pathname+"/")=$pathname))))
+		$currentInstances:=$instances.filter(Formula:C1597(col_formula).source; Formula:C1597($1.result:=(($1.value.version=$instances[0].version) & (($1.value.pathname+"/")=$pathname))))
 		
 		If ($currentInstances.length=1)
 			
