@@ -68,6 +68,42 @@ ASSERT:C1129($str.setText($in).wordWrap()=$out)
 $str.setText("")
 ASSERT:C1129($str.wordWrap($in)=$out)
 
+// Mark:-keywords()
+$str.setText($in)
+
+var $c : Collection
+$c:=$str.keywords()
+ASSERT:C1129($c.length=36)
+ASSERT:C1129($c[0]="The")
+ASSERT:C1129($c[35]="user")
+
+$c:=$str.keywords(True:C214)
+ASSERT:C1129($c.length=36)
+ASSERT:C1129($c[0]="a")
+ASSERT:C1129($c[35]="XLIFF")
+
+$c:=$str.keywords("world hello")
+ASSERT:C1129($c.length=2)
+ASSERT:C1129($c[0]="world")
+ASSERT:C1129($c[1]="hello")
+
+$c:=$str.keywords("world hello"; True:C214)
+ASSERT:C1129($c.length=2)
+ASSERT:C1129($c[0]="hello")
+ASSERT:C1129($c[1]="world")
+
+// Mark:-htmlEncode()
+$str.setText($in)
+ASSERT:C1129($str.htmlEncode()=$in)
+
+ASSERT:C1129($str.htmlEncode("\"hello\" & <world>")="&quot;hello&quot; &amp; &lt;world&gt;")
+
+// Mark:-multistyleCompatible()
+$str.setText($in)
+ASSERT:C1129($str.multistyleCompatible()=$in)
+
+ASSERT:C1129($str.multistyleCompatible("hello & world")="hello &amp; world")
+
 // mark:-uperCamelCase()
 ASSERT:C1129($str.setText("").uperCamelCase()="")
 
@@ -208,6 +244,7 @@ ASSERT:C1129($str.match("today"; "(?m-si)^(?:today|tomorrow|yesterday)$"))
 ASSERT:C1129($str.match("tomorrow"; "(?m-si)^(?:today|tomorrow|yesterday)$"))
 ASSERT:C1129($str.match("Hello world"; "h|Hello"))
 ASSERT:C1129(Not:C34($str.match("Hello world"; "(?m-si)^(?:today|tomorrow|yesterday)$")))
+
 
 // mark:-fixedLength()
 ASSERT:C1129($str.setText("").fixedLength(5; "0")="00000")
@@ -519,6 +556,27 @@ ASSERT:C1129($str.setText("[1,2,3,null]").isJsonArray())
 ASSERT:C1129($str.setText("[1,2,{\"test\":1}]").isJsonArray())
 ASSERT:C1129(Not:C34($str.setText("[hello] {world}").isJsonArray()))
 ASSERT:C1129(Not:C34($str.setText("{\"test\":1,\"test\":1}").isJsonArray()))
+
+
+$str.setText("")
+
+ASSERT:C1129($str.isJson("{\"test\":1,\"test\":1}"))
+ASSERT:C1129($str.isJson("[1,2,{\"test\":1}]"))
+ASSERT:C1129(Not:C34($str.isJson("hello {world}")))
+
+ASSERT:C1129($str.isJsonObject("{\"test\":1,\"test\":1}"))
+ASSERT:C1129($str.isJsonObject("{\"test\":{\"test\":1}}"))
+ASSERT:C1129(Not:C34($str.isJsonObject("hello {world}")))
+ASSERT:C1129(Not:C34($str.isJsonObject("[\"test\":1,\"test\":1]")))
+
+ASSERT:C1129($str.isJsonArray("[1,2,3,null]"))
+ASSERT:C1129($str.isJsonArray("[1,2,{\"test\":1}]"))
+ASSERT:C1129(Not:C34($str.isJsonArray("[hello] {world}")))
+ASSERT:C1129(Not:C34($str.isJsonArray("{\"test\":1,\"test\":1}")))
+
+
+
+
 
 // mark:-versionCompare()
 ASSERT:C1129($str.setText("9.0").versionCompare("9.1.2")=-1)

@@ -975,15 +975,7 @@ Function match($target : Text; $pattern) : Boolean
 	//  ⚠️ Returns the localized string & made replacement if any 
 Function localized($replacements) : Text
 	
-	If (Count parameters:C259>=1)
-		
-		return Super:C1706.localized(This:C1470.value; $replacements)
-		
-	Else 
-		
-		return Super:C1706.localized(This:C1470.value)
-		
-	End if 
+	return Count parameters:C259>=1 ? Super:C1706.localized(This:C1470.value; $replacements) : Super:C1706.localized(This:C1470.value)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//  ⚠️ Returns the available localized string for the given "resname" and makes replacements, if any. 
@@ -991,15 +983,7 @@ Function localize($resname : Text; $replacements) : Text
 	
 	This:C1470.setText($resname)
 	
-	If (Count parameters:C259>=2)
-		
-		return Super:C1706.localized(This:C1470.value; $replacements)
-		
-	Else 
-		
-		return Super:C1706.localized(This:C1470.value)
-		
-	End if 
+	return Count parameters:C259>=2 ? Super:C1706.localized(This:C1470.value; $replacements) : Super:C1706.localized(This:C1470.value)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Concatenates the values ​​given to the original string
@@ -1109,9 +1093,10 @@ Function replace
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns a HTML encoded string
-Function htmlEncode()->$html : Text
-	var $code; $i : Integer
-	var $char; $substitute : Text
+Function htmlEncode($target : Text) : Text
+	
+	var $char; $encoded : Text
+	var $code : Integer
 	var $o : Object
 	
 	$o:=New object:C1471(\
@@ -1121,41 +1106,41 @@ Function htmlEncode()->$html : Text
 		"\""; "&quot;"; \
 		"\r"; "<br/>")
 	
-	For ($i; 1; Length:C16(This:C1470.value); 1)
-		
-		//%W-533.1
-		$char:=This:C1470.value[[$i]]
-		//%W+533.1
+	$target:=Count parameters:C259<1 ? This:C1470.value : $target
+	
+	For each ($char; Split string:C1554($target; ""))
 		
 		If ($o[$char]=Null:C1517)
 			
 			$code:=Character code:C91($char)
-			
-			$substitute:=Choose:C955($code<32; "&#"+String:C10($code)+";"; $char)
+			$char:=$code<32 ? "&#"+String:C10($code)+";" : $char
 			
 		Else 
 			
-			$substitute:=$o[$char]
+			$char:=$o[$char]
 			
 		End if 
 		
-		$html:=$html+$substitute
+		$encoded+=$char
 		
-	End for 
+	End for each 
+	
+	return $encoded
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns a XML encoded string
-Function xmlEncode()->$xml : Text
+Function xmlEncode($target : Text) : Text
+	
 	var $root; $t : Text
 	
-	$xml:=This:C1470.value
+	$target:=Count parameters:C259<1 ? This:C1470.value : $target
 	
 	// Use DOM api to encode XML
 	$root:=DOM Create XML Ref:C861("r")
 	
 	If (OK=1)
 		
-		DOM SET XML ATTRIBUTE:C866($root; "v"; $xml)
+		DOM SET XML ATTRIBUTE:C866($root; "v"; $target)
 		
 		If (OK=1)
 			
@@ -1164,7 +1149,7 @@ Function xmlEncode()->$xml : Text
 			If (OK=1)  // Extract from result
 				
 				$t:=Substring:C12($t; Position:C15("v=\""; $t)+3)
-				$xml:=Substring:C12($t; 1; Length:C16($t)-4)
+				$target:=Substring:C12($t; 1; Length:C16($t)-4)
 				
 			End if 
 		End if 
@@ -1173,42 +1158,41 @@ Function xmlEncode()->$xml : Text
 		
 	End if 
 	
+	return $target
+	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Replacing characters that could be wrongfully interpreted as markup
-Function xmlSafe()->$xml : Text
+Function xmlSafe($target : Text) : Text
 	
-	$xml:=This:C1470.value
+	$target:=Count parameters:C259<1 ? This:C1470.value : $target
 	
-	$xml:=Replace string:C233($xml; "&"; "&amp;")
-	$xml:=Replace string:C233($xml; "'"; "&apos;")
-	$xml:=Replace string:C233($xml; "\""; "&quot;")
-	$xml:=Replace string:C233($xml; "<"; "&lt;")
-	$xml:=Replace string:C233($xml; ">"; "&gt;")
+	$target:=Replace string:C233($target; "&"; "&amp;")
+	$target:=Replace string:C233($target; "'"; "&apos;")
+	$target:=Replace string:C233($target; "\""; "&quot;")
+	$target:=Replace string:C233($target; "<"; "&lt;")
+	$target:=Replace string:C233($target; ">"; "&gt;")
+	
+	return $target
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns True if text is styled
-Function isStyled
-	var $0 : Boolean
+	// Returns True if text is a 4D styled text
+Function isStyled($target : Text) : Boolean
 	
-	$0:=Match regex:C1019("(?i-ms)<span [^>]*>"; String:C10(This:C1470.value); 1)
+	$target:=Count parameters:C259<1 ? This:C1470.value : $target
+	
+	return Match regex:C1019("(?i-ms)<span [^>]*>"; String:C10($target); 1)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// ⚠️ Returns a string that can be used in multistyles texts
-Function multistyleCompatible($src : Text)->$text : Text
+Function multistyleCompatible($target : Text) : Text
 	
-	//$text:=Super.multistyleCompatible(This.value)
+	$target:=Count parameters:C259<1 ? This:C1470.value : $target
 	
-	$text:=This:C1470.value
+	$target:=Replace string:C233($target; "&"; "&amp;")
+	$target:=Replace string:C233($target; "<"; "&lt;")
+	$target:=Replace string:C233($target; ">"; "&gt;")
 	
-	If (Count parameters:C259>=1)
-		
-		$text:=$src
-		
-	End if 
-	
-	$text:=Replace string:C233($text; "&"; "&amp;")
-	$text:=Replace string:C233($text; "<"; "&lt;")
-	$text:=Replace string:C233($text; ">"; "&gt;")
+	return $target
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns, if any, a truncated string with ellipsis character
@@ -1254,6 +1238,49 @@ Function truncate($maxChar : Integer; $position : Integer)->$truncated : Text
 			
 			//______________________________________________________
 	End case 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns a collection of unique words
+Function keywords($target; $sorted : Boolean) : Collection
+	
+	var $keywords : Collection
+	
+	ARRAY TEXT:C222($a; 0)
+	
+	Case of 
+			
+			//______________________________________
+		: (Count parameters:C259=0)
+			
+			$target:=This:C1470.value
+			
+			//______________________________________
+		: (Count parameters:C259=1)\
+			 && (Value type:C1509($target)=Is boolean:K8:9)
+			
+			$sorted:=$target
+			$target:=This:C1470.value
+			
+			//______________________________________
+		Else 
+			
+			$target:=String:C10($target)
+			
+			//______________________________________
+	End case 
+	
+	$keywords:=New collection:C1472
+	GET TEXT KEYWORDS:C1141($target; $a; *)
+	
+	If ($sorted)
+		
+		SORT ARRAY:C229($a)
+		
+	End if 
+	
+	ARRAY TO COLLECTION:C1563($keywords; $a)
+	
+	return $keywords
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// 
