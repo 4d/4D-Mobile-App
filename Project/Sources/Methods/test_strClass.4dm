@@ -161,7 +161,7 @@ ASSERT:C1129($str.setText($str.lowerCamelCase("FirstName")).equal("firstName"))
 ASSERT:C1129($str.setText("").length=0)
 ASSERT:C1129($str.setText("Hello world").length=Length:C16("Hello world"))
 
-/// mark-:isStyled()
+// mark:-isStyled()
 ASSERT:C1129(Not:C34($str.setText("Hello world").isStyled()))
 ASSERT:C1129(Not:C34($str.setText("xxx\r\nyyy").isStyled()))
 ASSERT:C1129($str.setText("<SPAN STYLE=\"font-family: DESDEMONA\">Hello world</SPAN>").isStyled())
@@ -557,7 +557,6 @@ ASSERT:C1129($str.setText("[1,2,{\"test\":1}]").isJsonArray())
 ASSERT:C1129(Not:C34($str.setText("[hello] {world}").isJsonArray()))
 ASSERT:C1129(Not:C34($str.setText("{\"test\":1,\"test\":1}").isJsonArray()))
 
-
 $str.setText("")
 
 ASSERT:C1129($str.isJson("{\"test\":1,\"test\":1}"))
@@ -573,10 +572,6 @@ ASSERT:C1129($str.isJsonArray("[1,2,3,null]"))
 ASSERT:C1129($str.isJsonArray("[1,2,{\"test\":1}]"))
 ASSERT:C1129(Not:C34($str.isJsonArray("[hello] {world}")))
 ASSERT:C1129(Not:C34($str.isJsonArray("{\"test\":1,\"test\":1}")))
-
-
-
-
 
 // mark:-versionCompare()
 ASSERT:C1129($str.setText("9.0").versionCompare("9.1.2")=-1)
@@ -596,12 +591,38 @@ ASSERT:C1129($str.setText("9/1/2").versionCompare("9/0"; "/")=1)
 
 // mark:-truncate()
 ASSERT:C1129($str.setText("hello").truncate(1)="h…")
-ASSERT:C1129($str.setText("hello").truncate(2)="he…")
-ASSERT:C1129($str.setText("hello").truncate(3)="hel…")
-ASSERT:C1129($str.setText("hello").truncate(4)="hell…")
-ASSERT:C1129($str.setText("hello").truncate(5)="hello")
-ASSERT:C1129($str.setText("hello").truncate(10)="hello")
+ASSERT:C1129($str.truncate(2)="he…")
+ASSERT:C1129($str.truncate(3)="hel…")
+ASSERT:C1129($str.truncate(4)="hell…")
+ASSERT:C1129($str.truncate(5)="hello")
+ASSERT:C1129($str.truncate(10)="hello")
 ASSERT:C1129($str.setText("hello world").truncate(12)="hello world")
+
+ASSERT:C1129($str.setText("hello").truncate(1; Align left:K42:2)="h…")
+ASSERT:C1129($str.truncate(2; Align left:K42:2)="he…")
+ASSERT:C1129($str.truncate(3; Align left:K42:2)="hel…")
+ASSERT:C1129($str.truncate(4; Align left:K42:2)="hell…")
+ASSERT:C1129($str.truncate(5; Align left:K42:2)="hello")
+ASSERT:C1129($str.truncate(10; Align left:K42:2)="hello")
+ASSERT:C1129($str.setText("hello world"; Align left:K42:2).truncate(12)="hello world")
+
+ASSERT:C1129($str.setText("hello").truncate(1; Align right:K42:4)="…o")
+ASSERT:C1129($str.truncate(2; Align right:K42:4)="…lo")
+ASSERT:C1129($str.truncate(3; Align right:K42:4)="…llo")
+ASSERT:C1129($str.truncate(4; Align right:K42:4)="…ello")
+ASSERT:C1129($str.truncate(5; Align right:K42:4)="hello")
+ASSERT:C1129($str.truncate(10; Align right:K42:4)="hello")
+ASSERT:C1129($str.setText("hello world").truncate(12; Align right:K42:4)="hello world")
+
+$t:=$str.setText("hello").truncate(1; Align center:K42:3)
+
+ASSERT:C1129($str.setText("hello").truncate(1; Align center:K42:3)="h…")
+ASSERT:C1129($str.truncate(2; Align center:K42:3)="h…o")
+ASSERT:C1129($str.truncate(3; Align center:K42:3)="h…o")
+ASSERT:C1129($str.truncate(4; Align center:K42:3)="he…lo")
+ASSERT:C1129($str.truncate(5; Align center:K42:3)="hello")
+ASSERT:C1129($str.truncate(10; Align center:K42:3)="hello")
+ASSERT:C1129($str.setText("hello world").truncate(12; Align center:K42:3)="hello world")
 
 // mark:-lastOccurrenceOf()
 $t:="hello world hello world hello world"
@@ -628,6 +649,21 @@ $str.setText($t)
 ASSERT:C1129($str.lastOccurrenceOf("é")=13)
 ASSERT:C1129($str.lastOccurrenceOf("é"; True:C214)=12)
 
+// mark:-passwordCompliance()
+ASSERT:C1129($str.setText("HG!9BhWBZ").passwordCompliance())
+ASSERT:C1129($str.setText("HG!9BhWBZ").passwordCompliance(9))
+ASSERT:C1129(Not:C34($str.setText("").passwordCompliance()))
+
+ASSERT:C1129($str.passwordCompliance("HG!9BhWBZ"))
+ASSERT:C1129($str.passwordCompliance("HG!9BhWBZ"; 9))
+ASSERT:C1129(Not:C34($str.passwordCompliance("")))
+ASSERT:C1129(Not:C34($str.passwordCompliance(9)))
+
+ASSERT:C1129(Not:C34($str.setText("Hello World").passwordCompliance()))
+ASSERT:C1129(Not:C34($str.setText("HG!9BhWBZ").passwordCompliance(10)))
+ASSERT:C1129(Not:C34($str.setText("HG!9BhW").passwordCompliance()))
+
+// mark:-suitableWithFileName()
 ASSERT:C1129($str.setText(".monFichier").suitableWithFileName()="monFichier")
 ASSERT:C1129($str.setText("mon/fichier").suitableWithFileName()="monFichier")
 ASSERT:C1129($str.setText("mon\\fichier").suitableWithFileName()="monFichier")
@@ -640,6 +676,20 @@ ASSERT:C1129($str.setText("mon>fichier").suitableWithFileName()="monFichier")
 ASSERT:C1129($str.setText("mon|fichier").suitableWithFileName()="monFichier")
 ASSERT:C1129($str.setText("..m/o\\n:F*i?c\"h<i>e|r  ").suitableWithFileName()="monFichier")
 
+$str.setText("")
+ASSERT:C1129($str.suitableWithFileName(".monFichier")="monFichier")
+ASSERT:C1129($str.suitableWithFileName("mon/fichier")="monFichier")
+ASSERT:C1129($str.suitableWithFileName("mon\\fichier")="monFichier")
+ASSERT:C1129($str.suitableWithFileName("mon:fichier")="monFichier")
+ASSERT:C1129($str.suitableWithFileName("mon*fichier")="monFichier")
+ASSERT:C1129($str.suitableWithFileName("mon?fichier")="monFichier")
+ASSERT:C1129($str.suitableWithFileName("mon\"fichier")="monFichier")
+ASSERT:C1129($str.suitableWithFileName("mon<fichier")="monFichier")
+ASSERT:C1129($str.suitableWithFileName("mon>fichier")="monFichier")
+ASSERT:C1129($str.suitableWithFileName("mon|fichier")="monFichier")
+ASSERT:C1129($str.suitableWithFileName("..m/o\\n:F*i?c\"h<i>e|r  ")="monFichier")
+
+// mark:-base64()
 $str.setText("https://doc.4d.com/4Dv19/4D/19.1/BASE64-ENCODE.301-5653982.en.html")
 ASSERT:C1129($str.base64()="aHR0cHM6Ly9kb2MuNGQuY29tLzREdjE5LzRELzE5LjEvQkFTRTY0LUVOQ09ERS4zMDEtNTY1Mzk4Mi5lbi5odG1s")
 

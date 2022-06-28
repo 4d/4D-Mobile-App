@@ -1196,7 +1196,10 @@ Function multistyleCompatible($target : Text) : Text
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns, if any, a truncated string with ellipsis character
-Function truncate($maxChar : Integer; $position : Integer)->$truncated : Text
+Function truncate($maxChar : Integer; $position : Integer) : Text
+	
+	var $truncated : Text
+	var $midle : Integer
 	
 	$truncated:=This:C1470.value
 	
@@ -1225,19 +1228,42 @@ Function truncate($maxChar : Integer; $position : Integer)->$truncated : Text
 			
 			If (This:C1470.length>$maxChar)
 				
-				$truncated:="…"+Substring:C12($truncated; Length:C16($truncated)-$maxChar)
+				$truncated:="…"+Substring:C12($truncated; Length:C16($truncated)-$maxChar+1)
 				
 			End if 
 			
 			//______________________________________________________
 		: ($position=Align center:K42:3)
 			
-			var $midle : Integer
-			$midle:=$maxChar\2
-			$truncated:=Substring:C12($truncated; 1; $midle)+"…"+Substring:C12($truncated; Length:C16($truncated)-$midle)
+			If (This:C1470.length>$maxChar)
+				
+				$midle:=$maxChar\2
+				
+				Case of 
+						
+						//_________________
+					: ($midle=0)
+						
+						$truncated:=Substring:C12($truncated; 1; $maxChar)+"…"
+						
+						//_________________
+					: ($midle>=1) & (($midle%2)#0) & (($midle%2)#1)
+						
+						$truncated:=Substring:C12($truncated; 1; 1)+"…"+Substring:C12($truncated; Length:C16($truncated)-$midle)
+						
+						//_________________
+					Else 
+						
+						$truncated:=Substring:C12($truncated; 1; $midle)+"…"+Substring:C12($truncated; Length:C16($truncated)-$midle+1)
+						
+						//______________________________________________________
+				End case 
+			End if 
 			
 			//______________________________________________________
 	End case 
+	
+	return $truncated
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns a collection of unique words
@@ -1368,21 +1394,43 @@ Function jsonSimplify($target : Text) : Text
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Enforcing Standard Password Compliance
-Function passwordCompliance($length : Integer) : Boolean
+Function passwordCompliance($target; $length : Integer) : Boolean
 	
-	If (Count parameters:C259>=1)
-		
-		// At least $length characters with at least one number, one lower case, one upper case and one special character
-		return Match regex:C1019("(?m-si)^(?=.{"+String:C10($length)+",})(?=.*[[:digit:]])(?=.*[[:lower:]])(?=.*[[:upper:]])(?=.*[[:punct:]]).*$"; This:C1470.value; 1)
-		
-	Else 
-		
-		// At least 8 characters with at least one number, one lower case, one upper case and one special character
-		return Match regex:C1019("(?m-si)^(?=.{8,})(?=.*[[:digit:]])(?=.*[[:lower:]])(?=.*[[:upper:]])(?=.*[[:punct:]]).*$"; This:C1470.value; 1)
-		
-	End if 
+	// At least $length characters with at least one number, one lower case, one upper case and one special character
+	
+	Case of 
+			
+			//______________________________________________________
+		: (Count parameters:C259=0)
+			
+			$target:=This:C1470.value
+			$length:=8  // Default length
+			
+			//______________________________________________________
+		: (Value type:C1509($target)=Is text:K8:3)
+			
+			$length:=Count parameters:C259<2 ? 8 : $length
+			
+			//______________________________________________________
+		: (Value type:C1509($target)=Is real:K8:4) || (Value type:C1509($target)=Is integer:K8:5)
+			
+			$length:=$target
+			$target:=This:C1470.value
+			
+			//______________________________________________________
+		Else 
+			
+			ASSERT:C1129(False:C215; "Incompatible argument type")
+			
+			return 
+			
+			//______________________________________________________
+	End case 
+	
+	return Match regex:C1019("(?m-si)^(?=.{"+String:C10($length)+",})(?=.*[[:digit:]])(?=.*[[:lower:]])(?=.*[[:upper:]])(?=.*[[:punct:]]).*$"; $target; 1)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns a string compatible with a file name
 Function suitableWithFileName($target : Text) : Text
 	
 	var $length; $position : Integer
@@ -1399,7 +1447,7 @@ All non-permitted characters are removed. Example: way*fast becomes wayfast:
 .(Period)or space at the begin or end of the file or folder name
 */
 	
-	$target:=Count parameters:C259>=1 ? $target : This:C1470.value
+	$target:=Count parameters:C259<1 ? This:C1470.value : $target
 	
 	While (Match regex:C1019("(?mi-s)((?:^[\\.\\s]+)|(?:[\\.\\s]+$)|(?:[:\\\\*?\"<>|/]+))+"; $target; 1; $position; $length))
 		
