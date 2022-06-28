@@ -821,6 +821,7 @@ Function truncateLabelIfTooBig($o : Object)
 	/// Add a "one field" widget to the template
 Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Object; $background : Text; $offset : Integer)->$height : Integer
 	
+	var $found : Boolean
 	var $class; $label; $name; $node; $style; $t : Text
 	var $tips : Text
 	var $o; $relation : Object
@@ -917,23 +918,40 @@ Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Ob
 				$tips:=$field.name+"."+$name
 				
 				// Check that the discriminant field is published
-				For each ($t; $relation)
+				If ($relation[$field.name]#Null:C1517)
 					
-					If (Value type:C1509($relation[$t])#Is object:K8:27)
+					For each ($t; $relation)
 						
-						continue
+						If (Value type:C1509($relation[$t])#Is object:K8:27)
+							
+							continue
+							
+						End if 
 						
-					End if 
+						$o:=$relation[$t]
+						
+						If (String:C10($o.name)=$name) || (($o#Null:C1517)\
+							 & ($t=$name))
+							
+							$found:=True:C214
+							break
+							
+						End if 
+					End for each 
 					
-					If (Not:C34((String:C10($relation[$t].name)=$name) || (($relation[$t]#Null:C1517)\
-						 & ($t=$name))))
+					If (Not:C34($found))
 						
 						$class:="error"
 						$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
-						break
 						
 					End if 
-				End for each 
+					
+				Else 
+					
+					$class:="error"
+					$tips:=UI.str.setText(UI.alert).concat(cs:C1710.str.new("theFieldIsNoMorePublished").localized($name))
+					
+				End if 
 				
 			Else 
 				
