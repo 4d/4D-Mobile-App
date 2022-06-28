@@ -1615,7 +1615,7 @@ Function fieldAvailable($tableID; $field : Object) : Boolean
 			// TODO:Remove computed
 			// Check the data class
 			If ($field.relatedTableNumber#Null:C1517)\
-				 | ($field.kind="calculated")\
+				 | (String:C10($field.kind)="calculated")\
 				 | (Bool:C1537($field.computed))
 				
 				If ($field.path#Null:C1517) && Not:C34(Bool:C1537($field.computed))
