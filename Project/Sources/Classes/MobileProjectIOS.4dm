@@ -121,37 +121,32 @@ Function build()->$result : Object
 	
 	Logger.info(Current method name:C684)
 	
-	$result:=New object:C1471
-	$result.success:=False:C215
-	
-	var $Obj_result_build : Object
-	
 	If (This:C1470.input.realDevice)
 		
-		$Obj_result_build:=This:C1470._archive($result)  // Real device need ipa
+		$result:=This:C1470._archive()  // Real device need ipa
 		
 	Else 
 		
-		$Obj_result_build:=This:C1470._build($result)
+		$result:=This:C1470._build()
 		
 	End if 
 	
-	If ($Obj_result_build.app=Null:C1517)
+	If ($result.app=Null:C1517)
 		
 		var $pathname : 4D:C1709.Folder
 		$pathname:=Folder:C1567(This:C1470.input.path; fk platform path:K87:2).folder("build/Build/Products/Debug-iphonesimulator/"+This:C1470._schemeName+".app")
 		
 		If ($pathname.exists)
 			
-			$Obj_result_build.app:=$pathname.path
+			$result.app:=$pathname.path
 			
 		End if 
 	End if 
 	
-	$result.success:=$Obj_result_build.success
-	This:C1470.build:=$Obj_result_build
+	This:C1470.build:=$result
 	
 	If (Not:C34($result.success))
+		
 		This:C1470.postError(ob_error_string($result))
 		This:C1470.logError("Build or Archive Failed")
 		
@@ -163,27 +158,27 @@ Function run()->$result : Object
 	
 	Logger.info(Current method name:C684)
 	
-	$result:=New object:C1471
-	
 	If (This:C1470.input.realDevice)
 		
-		This:C1470.install($result)
+		$result:=This:C1470.install()
 		
 	Else 
 		
-		This:C1470._runSimulator($result)
+		$result:=This:C1470._runSimulator()
 		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Running the application on a simulator
-Function _runSimulator($out : Object)
+Function _runSimulator()->$out : Object
 	var $in; $simctl; $project : Object
 	$in:=This:C1470.input
 	$simctl:=This:C1470.simctl  // CLEAN: Maybe init only here
 	$project:=This:C1470.project
 	
 	$in.product:=This:C1470.build.app
+	
+	$out:=New object:C1471
 	
 	If ($in.product=Null:C1517)
 		ASSERT:C1129(dev_Matrix; "product to install not found")
@@ -283,7 +278,7 @@ Function get _schemeName()->$scheme : Text
 Function get _archiveName()->$archive : Text
 	$archive:=This:C1470.productName
 	
-Function _archive($out : Object)->$Obj_result_build : Object
+Function _archive()->$Obj_result_build : Object
 	This:C1470.postStep("projectArchive")
 	This:C1470.logInfo("Archiving project")
 	
@@ -307,8 +302,6 @@ Function _archive($out : Object)->$Obj_result_build : Object
 	
 	This:C1470.logFolder.file("lastArchive.xlog").setText(String:C10($Obj_result_build.out))
 	
-	ob_error_combine($out; $Obj_result_build)
-	
 	If ($Obj_result_build.success)
 		
 		// And export
@@ -327,8 +320,6 @@ Function _archive($out : Object)->$Obj_result_build : Object
 		
 		This:C1470.logFolder.file("lastExportArchive.xlog").setText(String:C10($Obj_result_build.out))
 		
-		ob_error_combine($out; $Obj_result_build)
-		
 	Else 
 		
 		// Failed to archive
@@ -336,7 +327,7 @@ Function _archive($out : Object)->$Obj_result_build : Object
 		
 	End if 
 	
-Function _build($out : Object)->$Obj_result_build : Object
+Function _build()->$Obj_result_build : Object
 	var $in : Object
 	$in:=This:C1470.input
 	
@@ -352,8 +343,6 @@ Function _build($out : Object)->$Obj_result_build : Object
 		"verbose"; This:C1470.debug; \
 		"test"; Bool:C1537($in.test); \
 		"target"; Convert path system to POSIX:C1106($in.path+"build"+Folder separator:K24:12)))
-	
-	ob_error_combine($out; $Obj_result_build)
 	
 	This:C1470.logFolder.file("lastBuild.xlog").setText(String:C10($Obj_result_build.out))
 	

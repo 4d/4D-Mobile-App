@@ -19,29 +19,30 @@ Class constructor($project : Object)
 	// Build and …
 Function main()->$result : Object
 	
-	var $o : Object
-	
 	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	$o:=This:C1470.create()
+	$result.create:=This:C1470.create()
+	ob_error_combine($result; $result.create)
 	
-	If ($o.success)
+	If ($result.create.success)
 		
 		If (Bool:C1537(This:C1470.input.build))
 			
-			$o:=This:C1470.build()
+			$result.build:=This:C1470.build()
+			ob_error_combine($result; $result.build)
 			
-			If ($o.success)
+			If ($result.build.success)
 				
 				Case of 
 						//______________________________________________________
 					: (Bool:C1537(This:C1470.input.run))
 						
-						$o:=This:C1470.run()
+						$result.run:=This:C1470.run()
+						ob_error_combine($result; $result.run)
 						
-						If ($o.success)
+						If ($result.run.success)
 							
 							$result.success:=True:C214
 							This:C1470.notification()
@@ -55,9 +56,10 @@ Function main()->$result : Object
 						//______________________________________________________
 					: (Bool:C1537(This:C1470.input.archive))
 						
-						$o:=This:C1470.install()
+						$result.install:=This:C1470.install()
+						ob_error_combine($result; $result.install)
 						
-						If ($o.success)
+						If ($result.install.success)
 							
 							$result.success:=True:C214
 							This:C1470.notification()
@@ -95,8 +97,6 @@ Function main()->$result : Object
 		Logger.error("❌ ERROR OCCURRED WHILE CREATING PROJECT")
 		
 	End if 
-	
-	$result.errors:=$o.errors
 	
 	If (This:C1470.withUI)
 		
