@@ -1263,9 +1263,10 @@ Function actionMenuManager()
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Returns the table filter label
-Function tableFilterLabel()->$label : Text
+Function tableFilterLabel() : Text
 	
 	var $context : Object
+	
 	$context:=This:C1470.context
 	
 	Case of 
@@ -1274,13 +1275,13 @@ Function tableFilterLabel()->$label : Text
 		: (Length:C16(String:C10($context.tableFilter))=0)\
 			 & (Not:C34(Bool:C1537($context.tableFilterPublished)))
 			
-			// NOTHING MORE TO DO
+			return 
 			
 			//………………………………………………………………………………………
 		: (Length:C16(String:C10($context.tableFilter))>0)\
 			 & (Bool:C1537($context.tableFilterPublished))
 			
-			$label:=Get localized string:C991("filteredBy")\
+			return Get localized string:C991("filteredBy")\
 				+Char:C90(Space:K15:42)\
 				+"<span style=\"-d4-ref-user:'filter'\">"\
 				+Get localized string:C991("structName")\
@@ -1290,7 +1291,7 @@ Function tableFilterLabel()->$label : Text
 			//………………………………………………………………………………………
 		: (Length:C16(String:C10($context.tableFilter))>0)
 			
-			$label:=Get localized string:C991("filteredBy")\
+			return Get localized string:C991("filteredBy")\
 				+Char:C90(Space:K15:42)\
 				+"<span style=\"-d4-ref-user:'filter'\">"\
 				+Get localized string:C991("structName")\
@@ -1299,7 +1300,7 @@ Function tableFilterLabel()->$label : Text
 			//………………………………………………………………………………………
 		: (Bool:C1537($context.tableFilterPublished))
 			
-			$label:=Get localized string:C991("filteredBy")\
+			return Get localized string:C991("filteredBy")\
 				+Char:C90(Space:K15:42)\
 				+"<span style=\"-d4-ref-user:'filter'\">"\
 				+Get localized string:C991("published")\
@@ -1310,9 +1311,10 @@ Function tableFilterLabel()->$label : Text
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Update the field filter label
-Function fieldFilterLabel()->$label : Text
+Function fieldFilterLabel() : Text
 	
 	var $context : Object
+	
 	$context:=This:C1470.context
 	
 	Case of 
@@ -1321,13 +1323,13 @@ Function fieldFilterLabel()->$label : Text
 		: (Length:C16(String:C10($context.fieldFilter))=0)\
 			 & (Not:C34(Bool:C1537($context.fieldFilterPublished)))
 			
-			// NOTHING MORE TO DO
+			return 
 			
 			//………………………………………………………………………………………
 		: (Length:C16(String:C10($context.fieldFilter))>0)\
 			 & (Bool:C1537($context.fieldFilterPublished))
 			
-			$label:=Get localized string:C991("filteredBy")\
+			return Get localized string:C991("filteredBy")\
 				+Char:C90(Space:K15:42)\
 				+"<span style=\"-d4-ref-user:'filter'\">"\
 				+Get localized string:C991("structName")\
@@ -1337,7 +1339,7 @@ Function fieldFilterLabel()->$label : Text
 			//………………………………………………………………………………………
 		: (Length:C16(String:C10($context.fieldFilter))>0)
 			
-			$label:=Get localized string:C991("filteredBy")\
+			return Get localized string:C991("filteredBy")\
 				+Char:C90(Space:K15:42)\
 				+"<span style=\"-d4-ref-user:'filter'\">"\
 				+Get localized string:C991("structName")\
@@ -1346,7 +1348,7 @@ Function fieldFilterLabel()->$label : Text
 			//………………………………………………………………………………………
 		: (Bool:C1537($context.fieldFilterPublished))
 			
-			$label:=Get localized string:C991("filteredBy")\
+			return Get localized string:C991("filteredBy")\
 				+Char:C90(Space:K15:42)\
 				+"<span style=\"-d4-ref-user:'filter'\">"\
 				+Get localized string:C991("published")\

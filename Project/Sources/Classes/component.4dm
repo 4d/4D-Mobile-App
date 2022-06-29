@@ -20,24 +20,24 @@ Function get name() : Text
 	// === === === === === === === === === === === === === === === === === === ===
 Function get version() : Text
 	
-	var $t : Text
-	var $content : Object
+	var $version : Text
+	var $plist : Object
 	
 	If (File:C1566("/PACKAGE/Info.plist").exists)
 		
-		$content:=cs:C1710.plist.new(File:C1566("/PACKAGE/Info.plist")).content
+		$plist:=cs:C1710.plist.new(File:C1566("/PACKAGE/Info.plist")).content
 		
-		If ($content.CFBundleShortVersionString#Null:C1517)
+		If ($plist.CFBundleShortVersionString#Null:C1517)
 			
-			$t:=$content.CFBundleShortVersionString
+			$version:=$plist.CFBundleShortVersionString
 			
-			If (Num:C11($content.CFBundleVersion)#0)
+			If (Num:C11($plist.CFBundleVersion)#0)
 				
-				$t+=" ("+String:C10($content.CFBundleVersion)+")"
+				$version+=" ("+String:C10($plist.CFBundleVersion)+")"
 				
 			End if 
 			
-			return $t
+			return $version
 			
 		Else 
 			
@@ -54,21 +54,12 @@ Function get version() : Text
 	// === === === === === === === === === === === === === === === === === === ===
 Function get buildNumber() : Integer
 	
-	var $content : Object
+	var $plist : Object
 	
 	If (File:C1566("/PACKAGE/Info.plist").exists)
 		
-		$content:=cs:C1710.plist.new(File:C1566("/PACKAGE/Info.plist")).content
-		
-		If ($content.CFBundleVersion#Null:C1517)
-			
-			return Num:C11($content.CFBundleVersion)
-			
-		Else 
-			
-			return Num:C11(This:C1470._ideBuildNumber())
-			
-		End if 
+		$plist:=cs:C1710.plist.new(File:C1566("/PACKAGE/Info.plist")).content
+		return Num:C11($plist.CFBundleVersion#Null:C1517 ? $plist.CFBundleVersion : This:C1470._ideBuildNumber())
 		
 	Else 
 		
@@ -77,33 +68,49 @@ Function get buildNumber() : Integer
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === ===
+Function clearCompiledCode()
+	
+	var $folder : 4D:C1709.Folder
+	
+	If (This:C1470.isMatrix)
+		
+		If (This:C1470.structureFile.parent.folder("DerivedData/CompiledCode").exists)
+			
+			This:C1470.structureFile.parent.folder("DerivedData/CompiledCode").delete(Delete with contents:K24:24)
+			
+		End if 
+		
+		For each ($folder; This:C1470.databaseFolder.folders().query("name = userPreferences"))
+			
+			If ($folder.folder("CompilerIntermediateFiles").exists)
+				
+				$folder.folder("CompilerIntermediateFiles").delete(Delete with contents:K24:24)
+				
+			End if 
+		End for each 
+	End if 
+	
+	// MARK:-
+	// === === === === === === === === === === === === === === === === === === ===
 Function _ideVersion() : Text
 	
-	var $major; $release; $revision; $version : Text
+	var $major; $release; $revision : Text
+	var $c : Collection
 	
-	$version:=Application version:C493
-	
-	//%W-533.1
-	$major:=$version[[1]]+$version[[2]]  // LTS version
-	$release:=$version[[3]]  // Release number
-	$revision:=$version[[4]]  // Revision number
-	
-	//%W+533.1
+	$c:=Split string:C1554(Application version:C493; "")
+	$major:=$c[0]+$c[1]  // LTS version
+	$release:=$c[2]  // Release number
+	$revision:=$c[3]  // Revision number
 	
 	If ($release="0")
 		
-		// Revision number
-		$major+=$revision#"0" ? ("."+$revision) : ""
+		return $major+($revision#"0" ? ("."+$revision) : "")
 		
 	Else 
 		
-		// Release number
-		$major+="R"
-		$major+=$release
+		return $major+"R"+$release
 		
 	End if 
-	
-	return $major
 	
 	// === === === === === === === === === === === === === === === === === === ===
 Function _ideBuildNumber() : Text

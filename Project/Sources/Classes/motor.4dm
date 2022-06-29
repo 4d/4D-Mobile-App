@@ -2,9 +2,7 @@ Class constructor
 	
 	This:C1470.exe:=Is macOS:C1572 ? Folder:C1567(Application file:C491; fk platform path:K87:2) : File:C1566(Application file:C491; fk platform path:K87:2)
 	
-	var $buildNumber : Integer
-	This:C1470._version:=Application version:C493($buildNumber)
-	This:C1470.buildNumber:=$buildNumber
+	This:C1470._version:=Application version:C493
 	This:C1470.__version:=Application version:C493(*)
 	
 	This:C1470.type:=Application type:C494
@@ -58,9 +56,13 @@ Function get branch() : Text
 	return This:C1470.getInfos("branch")
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === ===
-Function get build() : Integer
+Function get buildNumber() : Integer
 	
-	return Num:C11(This:C1470.getInfos("build"))
+	var $version : Text
+	var $buildNumber : Integer
+	
+	$version:=Application version:C493($buildNumber)
+	return $buildNumber
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === ===
 Function get version() : Text
@@ -139,6 +141,7 @@ Function rejectNewConnections
 Function getInfos($type : Text) : Text
 	
 	var $major; $release; $revision : Text
+	var $c : Collection
 	
 /*
 The Application version command returns an encoded string value that expresses
@@ -162,19 +165,18 @@ ie:
 	
 formatted as follows:
 1      "F" denotes a final version
-"B" denotes a beta version
-Other characters denote an 4D internal version
+       "B" denotes a beta version
+       Other characters denote an 4D internal version
 2-3-4  Internal 4D compilation number
 5-6    LTS version
 7      Release number
 8      Revision number
 */
 	
-	//%W-533.1
-	$major:=This:C1470._version[[1]]+This:C1470._version[[2]]  // LTS version
-	$release:=This:C1470._version[[3]]  // Release number
-	$revision:=This:C1470._version[[4]]  // Revision number
-	//%W+533.1
+	$c:=Split string:C1554(This:C1470._version; "")
+	$major:=$c[0]+$c[1]  // LTS version
+	$release:=$c[2]  // Release number
+	$revision:=$c[3]  // Revision number
 	
 	Case of 
 			
@@ -217,27 +219,27 @@ Marketing + minor or release + build
 			//______________________________________________________
 		: ($type="long-version")
 			
-			//%W-533.1
+			$c:=Split string:C1554(This:C1470.__version; "")
+			
 			Case of 
 					
 					//………………………………………………………
-				: (This:C1470._version[[1]]="F")  // "F" denotes a final version
+				: ($c[0]="F")  // "F" denotes a final version
 					
 					return This:C1470.getInfos("version")
 					
 					//………………………………………………………
-				: (This:C1470._version[[1]]="B")  // "B" denotes a beta version
+				: ($c[0]="B")  // "B" denotes a beta version
 					
-					return This:C1470.getInfos("version")+" (beta "+String:C10(Num:C11(Substring:C12(This:C1470._version; 2; 3)))+")"
+					return This:C1470.getInfos("version")+" (beta "+$c[1]+$c[2]+")"
 					
 					//………………………………………………………
 				Else   // Other characters denote an 4D internal version ie: 4D v18 R6 build 18R6.257882 (A1)
 					
-					return This:C1470.getInfos("version")+" ("+This:C1470._version[[1]]+String:C10(Num:C11(Substring:C12(This:C1470._version; 2; 3)))+")"
+					return This:C1470.getInfos("version")+" ("+$c[0]+$c[3]+")"
 					
 					//………………………………………………………
 			End case 
-			//%W+533.1
 			
 			//______________________________________________________
 		: ($type="short-version")
