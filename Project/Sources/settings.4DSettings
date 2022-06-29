@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><preferences stamp="9">
+<?xml version="1.0" encoding="UTF-8"?><preferences stamp="10">
 	<com.4d>
 		<general execute_host_database_event="true"/>
 		<php ip_address="127.0.0.1"/>
@@ -28,6 +28,7 @@
 		<web>
 			<standalone_server>
 				<rest launch_at_startup="true"/>
+				<configuration session_mode="1"/>
 			</standalone_server>
 		</web>
 	</com.4d>

@@ -6,8 +6,10 @@ exposed Alias aka_Nom Name
 exposed Alias aka_data data
 
 exposed Alias aka_ServiceName service.Name
+exposed Alias aka_ServiceNom service.aka_Nom
 
 exposed Alias aka_relatedEntity service
+exposed Alias aka_ServiceNom2 aka_relatedEntity.aka_Nom
 
 exposed Alias relatedEntities serviceManaged
 
