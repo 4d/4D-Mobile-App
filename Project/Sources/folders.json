@@ -2,13 +2,16 @@
 	"____FOR_TESTS": {
 		"methods": [
 			"_test_alias",
+			"_test_dumpFieldNames",
 			"_test_project",
-			"_test_structureClass"
+			"_test_structureClass",
+			"RUN_unitTestSuites"
 		],
 		"classes": [
 			"ALL_TYPESEntity",
 			"EmployesEntity",
 			"ServiceEntity",
+			"test",
 			"UNIT_0Entity",
 			"UNIT_1Entity"
 		]
@@ -283,6 +286,7 @@
 			"xloc"
 		],
 		"classes": [
+			"CatalogBuildWrapper",
 			"cfgutil",
 			"MobileProjectIOS",
 			"simctl",
@@ -644,6 +648,7 @@
 	},
 	"devTable": {
 		"tables": [
+			"__DeletedRecords",
 			"ALL_TYPES",
 			"Commands",
 			"COMPOSITE PRIMARY KEY",

@@ -31,12 +31,12 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	// ----------------------------------------------------
 	Case of 
 			
-			//______________________________________________________
+			//MARK:- uninstallAndroidStudio
 		: ($entryPoint="uninstallAndroidStudio")
 			
 			cs:C1710.studio.new().uninstall()
 			
-			//______________________________________________________
+			//MARK:- testSuites
 		: ($entryPoint="testSuites")
 			
 			$response:=New object:C1471
@@ -70,13 +70,13 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 				
 			End if 
 			
-			//______________________________________________________
+			//MARK:- featuresFlags
 		: ($entryPoint="featuresFlags")
 			
 			$response:=New object:C1471(\
 				"features"; Formula:C1597(Feature))
 			
-			//______________________________________________________
+			//MARK:- loadProject
 		: ($entryPoint="loadProject")
 			
 			If (Asserted:C1132($parameters.project#Null:C1517; "Expected 'project' key into object parameter"))
@@ -88,18 +88,18 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 				
 			End if 
 			
-			//______________________________________________________
+			//MARK:- checkRest
 		: ($entryPoint="checkRest")
 			
 			EXECUTE METHOD:C1007(Formula:C1597(databaseSettings).source; $response; "rest")
 			
-			//______________________________________________________
+			//MARK:- checkInstall
 		: ($entryPoint="checkInstall")
 			
 			// Check without message
 			EXECUTE METHOD:C1007(Formula:C1597(Xcode_CheckInstall).source; $response; New object:C1471("silent"; True:C214))
 			
-			//________________________________________
+			//MARK:- error: Missing object parameter
 		: (Not:C34(Count parameters:C259=2))
 			
 			// ALL SUBSEQUENT ENTRY POINTS REQUIRE AT LEAST 2 PARAMETERS
@@ -107,19 +107,19 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 				"success"; False:C215; \
 				"error"; "Missing object parameter")
 			
-			//______________________________________________________
+			//MARK:- downloadSDK
 		: ($entryPoint="downloadSDK")
 			
 			$t:=String:C10($parameters.target)
 			
 			Case of 
 					
-					//______________________________________________________
+					//MARK: android
 				: ($t="android")
 					
 					$o:=cs:C1710.path.new().cacheSdkAndroidUnzipped()
 					
-					//______________________________________________________
+					//MARK: ios
 				: ($t="ios")
 					
 					$o:=cs:C1710.path.new().cacheSdkAppleUnzipped()
@@ -184,32 +184,32 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 				End if 
 			End if 
 			
-			//______________________________________________________
+			//MARK:- structure
 		: ($entryPoint="structure")
 			
 			EXECUTE METHOD:C1007(Formula:C1597(_o_structure).source; $response; $parameters)
 			
-			//________________________________________
+			//MARK:- templates
 		: ($entryPoint="templates")
 			
 			$response:=TemplateInstanceFactory($parameters).run()
 			
-			//______________________________________________________
+			//MARK:- device
 		: ($entryPoint="device")
 			
 			EXECUTE METHOD:C1007(Formula:C1597(_o_device).source; $response; $parameters)
 			
-			//______________________________________________________
+			//MARK:- rest
 		: ($entryPoint="rest")
 			
 			EXECUTE METHOD:C1007(Formula:C1597(Rest).source; $response; $parameters)
 			
-			//______________________________________________________
+			//MARK:- dump
 		: ($entryPoint="dump")
 			
 			EXECUTE METHOD:C1007(Formula:C1597(dump).source; $response; $parameters)
 			
-			//______________________________________________________
+			//MARK:- pathname
 		: ($entryPoint="pathname")
 			
 			If (Asserted:C1132($parameters.target#Null:C1517; "Expected 'target' key into object parameter"))
@@ -225,7 +225,8 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 				End if 
 				
 			End if 
-			//______________________________________________________
+			
+			//MARK:- featuresFlags
 		: ($entryPoint="featuresFlags")
 			
 			// see if a feature is activated and exist
@@ -242,75 +243,75 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 				"success"; False:C215; \
 				"error"; "Command unavailable for this Windows platform")
 			
-			//________________________________________
+			//MARK:- xcDataModel
 		: ($entryPoint="dataModel")\
 			 | ($entryPoint="xcDataModel")
 			
 			$response:=cs:C1710.xcDataModel.new($parameters).run(\
 				$parameters.path; \
 				$parameters)
+/*
+//________________________________________
+: ($entryPoint="dataModel")
 			
-			//________________________________________
-		: ($entryPoint="dataModel")
+EXECUTE METHOD(Formula(_o_dataModel).source; $response; $parameters)
 			
-			EXECUTE METHOD:C1007(Formula:C1597(_o_dataModel).source; $response; $parameters)
+//________________________________________
+: ($entryPoint="xcDataModel")
 			
-			//________________________________________
-		: ($entryPoint="xcDataModel")
-			
-			EXECUTE METHOD:C1007(Formula:C1597(_o_xcDataModel).source; $response; $parameters)
-			
+EXECUTE METHOD(Formula(_o_xcDataModel).source; $response; $parameters)
+*/
 			//________________________________________
 		: ($entryPoint="simulator")
 			
 			ASSERT:C1129(False:C215; "Deprecated endpoint")
 			
-			//________________________________________
+			//MARK:- xcode
 		: ($entryPoint="xcode")
 			
 			EXECUTE METHOD:C1007(Formula:C1597(Xcode).source; $response; $parameters)
 			
-			//________________________________________
+			//MARK:- xcodeProj
 		: ($entryPoint="xcodeProj")
 			
 			EXECUTE METHOD:C1007(Formula:C1597(XcodeProj).source; $response; $parameters)
 			
-			//________________________________________
+			//MARK:- plist
 		: ($entryPoint="plist")
 			
 			EXECUTE METHOD:C1007(Formula:C1597(_o_plist).source; $response; $parameters)
 			
-			//________________________________________
+			//MARK:- asset
 		: ($entryPoint="asset")
 			
 			EXECUTE METHOD:C1007(Formula:C1597(asset).source; $response; $parameters)
 			
-			//________________________________________
+			//MARK:- colors
 		: ($entryPoint="colors")
 			
 			EXECUTE METHOD:C1007(Formula:C1597(colors).source; $response; $parameters)
 			
-			//________________________________________
+			//MARK:- provisioningProfiles
 		: ($entryPoint="provisioningProfiles")
 			
 			EXECUTE METHOD:C1007(Formula:C1597(provisioningProfiles).source; $response; $parameters)
 			
-			//________________________________________
+			//MARK:- dataSet
 		: ($entryPoint="dataSet")
 			
 			EXECUTE METHOD:C1007(Formula:C1597(dataSet).source; $response; $parameters)
 			
-			//________________________________________
-		: ($entryPoint="dataModel")
+/*
+: ($entryPoint="dataModel")
 			
-			EXECUTE METHOD:C1007(Formula:C1597(_o_dataModel).source; $response; $parameters)
+EXECUTE METHOD(Formula(_o_dataModel).source; $response; $parameters)
 			
-			//________________________________________
-		: ($entryPoint="xcDataModel")
+//________________________________________
+: ($entryPoint="xcDataModel")
 			
-			EXECUTE METHOD:C1007(Formula:C1597(_o_xcDataModel).source; $response; $parameters)
-			
-			//________________________________________
+EXECUTE METHOD(Formula(_o_xcDataModel).source; $response; $parameters)
+*/
+			//MARK:- storyboard
 		: ($entryPoint="storyboard")
 			
 			//EXECUTE METHOD(Formula(_o_storyboard).source; $response; $parameters)
@@ -318,77 +319,78 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 				"success"; False:C215; \
 				"error"; "OBSOLETE CALL SINCE 18R6")
 			
-			//________________________________________
+			//MARK:- TEMPLATE
 		: ($entryPoint="TEMPLATE")
 			
 			EXECUTE METHOD:C1007(Formula:C1597(template).source; $response; $parameters)
 			
-			//________________________________________
+			//MARK:- sdk
 		: ($entryPoint="sdk")
 			
 			EXECUTE METHOD:C1007(Formula:C1597(sdk).source; $response; $parameters)
 			
-			//________________________________________
+			//MARK:- git
 		: ($entryPoint="git")
 			
 			EXECUTE METHOD:C1007(Formula:C1597(git).source; $response; $parameters)
 			
-			//________________________________________
+			//MARK:- itunes_lookup
 		: ($entryPoint="itunes_lookup")
 			
 			EXECUTE METHOD:C1007(Formula:C1597(itunes_lookup).source; $response; $parameters)
 			
-			//________________________________________
+			//MARK:- xloc
 		: ($entryPoint="xloc")
 			
 			EXECUTE METHOD:C1007(Formula:C1597(xloc).source; $response; $parameters)
 			
-			//________________________________________
+			//MARK:- formatters
 		: ($entryPoint="formatters")
 			
 			EXECUTE METHOD:C1007(Formula:C1597(formatters).source; $response; $parameters)
 			
-			//________________________________________
+			//MARK:- PROJECT_HANDLER
 		: ($entryPoint="PROJECT_HANDLER")
 			
 			EXECUTE METHOD:C1007(Formula:C1597(PROJECT_Handler).source; $response; $parameters)
 			
-			//________________________________________
+			//MARK:- project_Audit
 		: ($entryPoint="project_Audit")
 			
 			EXECUTE METHOD:C1007(Formula:C1597(project_Audit).source; $response; $parameters)
+/*
+// MARK:- _o_device
+: ($entryPoint="project_Audit")
 			
-			//________________________________________
-		: ($entryPoint="device")
+EXECUTE METHOD(Formula(_o_device).source; $response; $parameters)
+*/
 			
-			EXECUTE METHOD:C1007(Formula:C1597(_o_device).source; $response; $parameters)
-			
-			//________________________________________
+			//MARK:- teamId
 		: ($entryPoint="teamId")
 			
 			EXECUTE METHOD:C1007(Formula:C1597(teamId).source; $response; $parameters)
 			
-			//________________________________________
+			//MARK:- swiftPM
 		: ($entryPoint="swiftPM")
 			
 			EXECUTE METHOD:C1007(Formula:C1597(swiftPM).source; $response; $parameters)
 			
-			//________________________________________
+			//MARK:- certificate
 		: ($entryPoint="certificate")
 			
 			EXECUTE METHOD:C1007(Formula:C1597(certificate).source; $response; $parameters)
 			
-			//______________________________________________________
+			//MARK:- project
 		: ($entryPoint="project")
 			
 			EXECUTE METHOD:C1007(Formula:C1597(mobile_Project).source; $response; $parameters)
 			
-			//______________________________________________________
+			//MARK:- _internalWebser
 		: ($entryPoint="_internalWebser")
 			
 			$response:=WEB Server:C1674().start($parameters)
 			
-			//______________________________________________________
+			//MARK:- Process_tags
 		: ($entryPoint="Process_tags")
 			
 			If (Asserted:C1132($parameters.text#Null:C1517; "Expected 'text' key into object parameter"))
@@ -420,7 +422,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 				
 			End if 
 			
-			//______________________________________________________
+			//MARK:- Process_tags_on_file
 		: ($entryPoint="Process_tags_on_file")
 			
 			If (Asserted:C1132($parameters.text#Null:C1517; "Expected 'text' key into object parameter"))
@@ -445,7 +447,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 				End case 
 			End if 
 			
-			//______________________________________________________
+			//MARK:- Unknown entry point
 		Else 
 			
 			$response:=New object:C1471(\
