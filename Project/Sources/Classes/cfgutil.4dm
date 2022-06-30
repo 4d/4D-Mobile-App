@@ -98,7 +98,7 @@ Function ecid($device : Object)->$ecid : Text
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Installs the given IPA file on the attached device
-Function installApp($device : Object; $apk : 4D:C1709.File)->$this : cs:C1710.cfgutil
+Function installApp($device : Object; $ipa : 4D:C1709.File)->$this : cs:C1710.cfgutil
 	
 	var $cmd : Text
 	
@@ -112,7 +112,7 @@ Function installApp($device : Object; $apk : 4D:C1709.File)->$this : cs:C1710.cf
 			$cmd:=This:C1470.singleQuoted(This:C1470.exe.path)\
 				+" --format JSON"\
 				+" -e "+String:C10($device.ECID)+String:C10($device.ecid)\
-				+" install-app "+This:C1470.singleQuoted($apk.path)
+				+" install-app "+This:C1470.singleQuoted($ipa.path)
 			
 			This:C1470.launch($cmd)
 			This:C1470.success:=Bool:C1537(OK) & Match regex:C1019("(?msi)^\\{.*\\}$"; This:C1470.outputStream; 1)

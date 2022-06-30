@@ -348,7 +348,35 @@ Function _build()->$Obj_result_build : Object
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Installing the IPA on a connected device
-Function install()
+Function install()->$result : Object
+	
+	$result:=New object:C1471("success"; False:C215)
+	
+	var $device; $o : Object
+	
+	$device:=This:C1470.project.project._device
+	
+	If (This:C1470.cfgutil.isDeviceConnected($device.udid))
+		
+		This:C1470.postStep("installingTheApplication")
+		
+		This:C1470.cfgutil.uninstallApp($device; This:C1470.input.project.product.bundleIdentifier)
+		
+		$o:=This:C1470.cfgutil.installApp($device; File:C1566(Replace string:C233(This:C1470.build.archivePath; ".xcarchive"; ".ipa")))
+		$result.success:=$o.success
+		
+		If (Not:C34($result.success))
+			
+			This:C1470.postError($o.lastError)
+			
+		End if 
+		
+	Else 
+		
+		This:C1470.postError(Replace string:C233(Get localized string:C991("theDeviceIsNotReachable"); "{device}"; $device.name))
+		
+	End if 
+	
 	
 	// MARK:-[PRIVATE]
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
