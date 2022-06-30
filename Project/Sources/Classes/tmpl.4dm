@@ -490,11 +490,44 @@ Function fieldDescription($field : Object; $target : Object; $tableID : Text) : 
 			//______________________________________________________
 		: ($field.kind="alias")
 			
-			$field:=New object:C1471(\
-				"kind"; "alias"; \
-				"fieldType"; $field.fieldType; \
-				"path"; $field.path; \
-				"name"; $field.name)
+			// Check for the same root
+			Case of 
+					
+					//……………………………………………………………………………………………………
+				: ($current.length=$dropped.length)
+					
+					$field:=New object:C1471(\
+						"kind"; "alias"; \
+						"fieldType"; $field.fieldType; \
+						"path"; $field.path; \
+						"name"; $field.name)
+					
+					//……………………………………………………………………………………………………
+				: ($current.length=1)\
+					 & ($dropped.length=2)  // A field droped on a relation
+					
+					If ($target.kind="relatedEntity") || ($target.fieldType=8858)  // 1 -> N relation
+						
+						If ($current[0]=$dropped[0])  // Same related table
+							
+							$relation:=$table[$target.name]
+							
+							// Switch to relation & update the long label
+							$field:=New object:C1471(\
+								"kind"; "relatedEntity"; \
+								"name"; $dropped[0]; \
+								"path"; $dropped[0]; \
+								"relatedDataClass"; $relation.relatedDataClass; \
+								"relatedTableNumber"; $relation.relatedTableNumber; \
+								"inverseName"; $relation.inverseName)
+							
+							$relation.label:="%"+$dropped[1]+"%"
+							
+						End if 
+					End if 
+					
+					//……………………………………………………………………………………………………
+			End case 
 			
 			//______________________________________________________
 		: ($field.kind="relatedEntity")  // N -> 1 relation
@@ -918,7 +951,7 @@ Function appendOneField($index : Integer; $field : cs:C1710.field; $context : Ob
 				$tips:=$field.name+"."+$name
 				
 				// Check that the discriminant field is published
-				If ($relation[$field.name]#Null:C1517)
+				If ($relation#Null:C1517)
 					
 					For each ($t; $relation)
 						
