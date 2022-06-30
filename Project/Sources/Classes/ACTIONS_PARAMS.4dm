@@ -1687,9 +1687,9 @@ Function dataSourceMenuManager()
 Function editList()
 	
 /*
-							$form:=New object(\
-																										"static"; $static; \
-																										"host"; This.path.hostInputControls(True))
+								$form:=New object(\
+																												"static"; $static; \
+																												"host"; This.path.hostInputControls(True))
 	
 $form.folder:=This.path.hostInputControls()
 $manifest:=$form.folder.file("manifest.json")
@@ -2234,16 +2234,7 @@ Function metaInfo($current : Object)->$result
 		"cell"; New object:C1471(\
 		"names"; New object:C1471))
 	
-	If (FORM Event:C1606.isRowSelected)
-		
-		// Selected item
-		$result.cell.names.stroke:=UI.errorRGB
-		
-	Else 
-		
-		$result.cell.names.stroke:=Choose:C955(UI.darkScheme; "white"; "black")
-		
-	End if 
+	$result.cell.names.stroke:=Choose:C955(UI.darkScheme; "white"; "black")
 	
 	//MARK:-[PRIVATE]
 	//=== === === === === === === === === === === === === === === === === === === === ===
