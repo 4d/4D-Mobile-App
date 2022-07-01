@@ -3,6 +3,9 @@
     "4D Progress"
   ],
   "postBuild": {
+    "remove": [
+      "Documentation"
+    ],
     "copy": [
       "4D Mobile App.htm"
     ]
