@@ -354,15 +354,15 @@ Function install()->$result : Object
 	
 	var $device; $o : Object
 	
-	$device:=This:C1470.project.project._device
+	$device:=This:C1470.project._device
 	
-	If (This:C1470.cfgutil.isDeviceConnected($device.udid))
+	If (This:C1470.cfgutil.isDeviceConnected($device))
 		
 		This:C1470.postStep("installingTheApplication")
 		
 		This:C1470.cfgutil.uninstallApp($device; This:C1470.input.project.product.bundleIdentifier)
 		
-		$o:=This:C1470.cfgutil.installApp($device; File:C1566(Replace string:C233(This:C1470.build.archivePath; ".xcarchive"; ".ipa")))
+		$o:=This:C1470.cfgutil.installApp($device; File:C1566(Replace string:C233(This:C1470.build.archivePath; ".xcarchive/"; ".ipa")))
 		$result.success:=$o.success
 		
 		If (Not:C34($result.success))

@@ -61,8 +61,15 @@ Function plugged($refresh : Boolean)->$devices : Collection
 	/// Returns True if the device is attached
 	// MARK: #TODO : accept text (udid, name,…)
 Function isDeviceConnected($device : Object)->$connected : Boolean
-	
+	This:C1470._checkECID($device)
 	$connected:=This:C1470.plugged().query("ECID = :1"; String:C10($device.ECID)+String:C10($device.ecid)).pop()#Null:C1517
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	/// Fill ecid of a device if missing according to uuid (uuid could be get from xtrace see simctl)
+Function _checkECID($device : Object)
+	If (($device.udid#Null:C1517) && ($device.ECID=Null:C1517) && ($device.ecid=Null:C1517))
+		$device.ecid:=This:C1470.ecid($device)
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Returns ecid of a device
@@ -81,7 +88,7 @@ Function ecid($device : Object)->$ecid : Text
 		
 		$udid:=String:C10($device.udid)+String:C10($device.UDID)
 		
-		$devices:=This:C1470.plugged()
+		$devices:=This:C1470.plugged(True:C214)
 		
 		If (This:C1470.success)
 			
@@ -99,7 +106,7 @@ Function ecid($device : Object)->$ecid : Text
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Installs the given IPA file on the attached device
 Function installApp($device : Object; $ipa : 4D:C1709.File)->$this : cs:C1710.cfgutil
-	
+	This:C1470._checkECID($device)
 	var $cmd : Text
 	
 	This:C1470.success:=This:C1470.exe.exists
@@ -136,7 +143,7 @@ Function installApp($device : Object; $ipa : 4D:C1709.File)->$this : cs:C1710.cf
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Removes the app with the given bundle identifier from attached device
 Function uninstallApp($device : Object; $bundleIdentifier : Text)->$this : cs:C1710.cfgutil
-	
+	This:C1470._checkECID($device)
 	var $cmd : Text
 	
 	This:C1470.success:=This:C1470.exe.exists
