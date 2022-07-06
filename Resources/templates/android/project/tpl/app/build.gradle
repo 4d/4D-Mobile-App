@@ -32,26 +32,14 @@ dependencies {
     implementation(QMobileUI) { changing = true }
     {{/debug_mode}}
 
-    // Common
-    implementation Libs.androidx_constraintlayout
-    implementation Libs.kotlin_coroutines_core
-    implementation Libs.kotlin_reflect
-    implementation Libs.kotlin_stdlib
-    implementation Libs.swiperefreshlayout
-
     // Room
-    kapt Libs.sqlite_jdbc
     implementation Libs.androidx_room
     implementation Libs.androidx_room_runtime
     kapt Libs.androidx_room_compiler
     implementation Libs.room_paging
 
-    // Paging
-    implementation Libs.androidx_paging3
-
     // Navigation
     implementation Libs.androidx_navigation_fragment
-    implementation Libs.androidx_navigation_ui
 
     // Glide
     implementation Libs.glide
@@ -63,14 +51,14 @@ dependencies {
     // Utils
     implementation Libs.material
     implementation Libs.multidex
-    implementation Libs.retrofit_converter_gson
     implementation Libs.timber
 
     // Testing
-    implementation Libs.rxandroid
-    implementation Libs.rxjava
-
     testImplementation Libs.junit
     androidTestImplementation Libs.androidx_junit
     androidTestImplementation Libs.androidx_espresso
+}
+
+configurations.implementation {
+    exclude group: "com.squareup.okhttp3", module: "okhttp"
 }
