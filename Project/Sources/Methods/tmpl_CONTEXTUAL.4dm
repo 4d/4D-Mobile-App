@@ -59,9 +59,12 @@ If ($infos#Null:C1517)
 			
 		Else   // old code to remove if "file" validated
 			
-			$menu\
-				.line()\
-				.append("forgetThisTemplate"; "forget")
+			If (String:C10($infos.type)#"more")
+				
+				$menu\
+					.line()\
+					.append("forgetThisTemplate"; "forget")
+			End if 
 			
 		End if 
 	End if 
@@ -90,6 +93,13 @@ If ($infos#Null:C1517)
 				End if 
 			End if 
 		End if 
+	End if 
+	
+	If (dev_Matrix && (String:C10($infos.type)="more"))
+		
+		$menu\
+			.append("downloadFromURL"; "downloadFromURL")
+		
 	End if 
 	
 	$menu.popup()
@@ -245,6 +255,43 @@ If ($infos#Null:C1517)
 				
 				CALL SUBFORM CONTAINER:C1086(-2)
 				
+			End if 
+			
+			//______________________________________________________
+		: ($menu.choice="downloadFromURL")
+			
+			$form:=Request:C163("Provide the template archive download URL")
+			
+			If (Length:C16($form)>0)
+				
+				$download:=browser_DOWNLOAD(New object:C1471(\
+					"url"; $form; \
+					"overwrite"; True:C214))
+				
+				Case of 
+						
+						//______________________________________________________
+					: ($download.success) | ($download.error=Null:C1517)
+						
+						// <NOTHING MORE TO DO>
+						
+						//______________________________________________________
+					: ($download.error="cannotResolveAlias")
+						
+						ALERT:C41(Get localized string:C991("theAliasMobileOriginalCan'tBeFound"))
+						
+						//______________________________________________________
+					: ($download.error="fileNotFound")
+						
+						ALERT:C41(Get localized string:C991("fileNotFound'tBeFound"))
+						
+						//______________________________________________________
+					Else 
+						
+						ALERT:C41($download.error)
+						
+						//______________________________________________________
+				End case 
 			End if 
 			
 			//______________________________________________________

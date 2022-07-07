@@ -607,11 +607,13 @@ $oPicker.helpTips.insert(1;$str.setText("downloadMoreResources").localized($ƒ.t
 $oPicker.infos.push(Null)
 */
 
+$o:=New object:C1471("type"; "more")
+
 // Put at the end
 $picker.pictures.push($svg.picture())
 $picker.pathnames.push(Null:C1517)
 $picker.helpTips.push($str.setText("downloadMoreResources").localized($data.type))
-$picker.infos.push(Null:C1517)
+$picker.infos.push($o)
 
 $picker.hideSelection:=True:C214  // The selected item is already highlighted
 
