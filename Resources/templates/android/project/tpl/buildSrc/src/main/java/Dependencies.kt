@@ -136,6 +136,7 @@ object Libs {
     const val androidx_navigation_ui = "androidx.navigation:navigation-ui-ktx:${Versions.navigation}"
 
     // CameraX
+    const val androidx_camera2 = "androidx.camera:camera-camera2:${Versions.camerax}"
     const val androidx_camera_lifecycle = "androidx.camera:camera-lifecycle:${Versions.camerax}"
     const val androidx_camera_view = "androidx.camera:camera-view:${Versions.camerax}"
     const val barcode_scanning = "com.google.mlkit:barcode-scanning:${Versions.barcode_scanning}"
