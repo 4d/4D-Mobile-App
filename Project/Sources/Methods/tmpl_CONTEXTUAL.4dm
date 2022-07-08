@@ -5,6 +5,7 @@ var $form : Text
 var $download : Object
 var $file : 4D:C1709.File
 var $menu : cs:C1710.menu
+var $destination : 4D:C1709.Folder
 
 If ($infos#Null:C1517)
 	
@@ -100,6 +101,9 @@ If ($infos#Null:C1517)
 		$menu\
 			.append("downloadFromURL"; "downloadFromURL")
 		
+		$menu\
+			.append("cloneFromGit"; "cloneFromGit")
+		
 	End if 
 	
 	$menu.popup()
@@ -136,7 +140,6 @@ If ($infos#Null:C1517)
 				// CLEAN: extract code to a class about template? like cs.tmpl (allowing us to make TU) ; but this class do too much things in init
 				
 				// copy to new folder
-				var $destination : 4D:C1709.Folder
 				Case of 
 					: ($infos.type="listform")  // could also do  cs.path.new()["host"+xx].call() but ase must match
 						$destination:=cs:C1710.path.new().hostlistForms()
@@ -264,8 +267,19 @@ If ($infos#Null:C1517)
 			
 			If (Length:C16($form)>0)
 				
+				Case of 
+					: ($infos.data.type="list")  // could also do  cs.path.new()["host"+xx].call() but ase must match
+						$destination:=cs:C1710.path.new().hostlistForms(True:C214)
+					: ($infos.data.type="detail")
+						$destination:=cs:C1710.path.new().hostdetailForms(True:C214)
+					Else 
+						ASSERT:C1129(False:C215; "not implemented type "+String:C10($infos.data.type))
+						return 
+				End case 
+				
 				$download:=browser_DOWNLOAD(New object:C1471(\
 					"url"; $form; \
+					"folder"; $destination; \
 					"overwrite"; True:C214))
 				
 				Case of 
@@ -293,6 +307,44 @@ If ($infos#Null:C1517)
 						//______________________________________________________
 				End case 
 			End if 
+			
+			//______________________________________________________
+		: ($menu.choice="cloneFromGit")
+			
+			$form:=Request:C163("Provide the template git url to clone")
+			
+			If (Length:C16($form)>0)
+				
+				Case of 
+					: ($infos.data.type="list")  // could also do  cs.path.new()["host"+xx].call() but ase must match
+						$destination:=cs:C1710.path.new().hostlistForms(True:C214)
+					: ($infos.data.type="detail")
+						$destination:=cs:C1710.path.new().hostdetailForms(True:C214)
+					Else 
+						ASSERT:C1129(False:C215; "not implemented type "+String:C10($infos.data.type))
+						return 
+				End case 
+				
+				$download:=git(New object:C1471(\
+					"action"; "clone "+$form; \
+					"path"; $destination))
+				
+				Case of 
+						
+						//______________________________________________________
+					: ($download.success) | ($download.error=Null:C1517)
+						
+						// <NOTHING MORE TO DO>
+						
+						//______________________________________________________
+					Else 
+						
+						ALERT:C41($download.error)  // Not really on error, git provide info in error stream
+						
+						//______________________________________________________
+				End case 
+			End if 
+			
 			
 			//______________________________________________________
 		Else 

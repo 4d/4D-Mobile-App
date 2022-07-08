@@ -11,6 +11,10 @@ $out:=New object:C1471(\
 
 // Create destination folder if any
 Case of 
+		//……………………………………………………………………………………
+	: ($out.folder#Null:C1517)
+		
+		// Nothing if already provided, the above code is not very reliable
 		
 		//……………………………………………………………………………………
 	: ($out.form="form-list@")

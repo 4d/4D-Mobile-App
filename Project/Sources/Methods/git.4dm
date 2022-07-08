@@ -73,7 +73,11 @@ Case of
 		Else 
 			
 			If ($Obj_param.posix=Null:C1517)
-				$Obj_param.posix:=Convert path system to POSIX:C1106($Obj_param.path)
+				If (Value type:C1509($Obj_param.path)=Is object:K8:27)  // suppose 4D.Folder
+					$Obj_param.posix:=$Obj_param.path.path
+				Else 
+					$Obj_param.posix:=Convert path system to POSIX:C1106($Obj_param.path)
+				End if 
 			End if 
 			$Txt_cmd:="git"
 			If (Is Windows:C1573)

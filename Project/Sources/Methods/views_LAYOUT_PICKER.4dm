@@ -607,7 +607,7 @@ $oPicker.helpTips.insert(1;$str.setText("downloadMoreResources").localized($ƒ.t
 $oPicker.infos.push(Null)
 */
 
-$o:=New object:C1471("type"; "more")
+$o:=New object:C1471("type"; "more"; "data"; $data)
 
 // Put at the end
 $picker.pictures.push($svg.picture())
