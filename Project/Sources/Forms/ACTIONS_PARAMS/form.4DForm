@@ -759,7 +759,8 @@
 					"width": 920,
 					"height": 33,
 					"visibility": "visible",
-					"stroke": "#C4C4C4"
+					"stroke": "#C4C4C4",
+					"class": "border"
 				},
 				"01_description": {
 					"type": "input",
@@ -768,15 +769,11 @@
 					"width": 903,
 					"height": 17,
 					"visibility": "visible",
-					"dataSource": "panel.current.description",
-					"fill": "transparent",
-					"borderStyle": "none",
-					"hideFocusRing": true,
-					"method": "ACTIONS_PARAMS_OBJECTS_HANDLER",
 					"dragging": "none",
 					"events": [
 						"onDataChange"
-					]
+					],
+					"dataSource": "panel.action.description"
 				}
 			}
 		}
@@ -785,7 +782,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 582,
+	"geometryStamp": 584,
 	"editor": {
 		"groups": {
 			"Group": [

@@ -7,8 +7,7 @@ var $catalog : Collection
 PROJECT.repairStructure(UI.unsynchronizedTables)
 
 // Update status & cache
-OB REMOVE:C1226(Form:C1466.$dialog; "unsynchronizedTableFields")
-//OB REMOVE(PROJECT.$project.structure; "unsynchronized")
+OB REMOVE:C1226(Form:C1466.$dialog; "unsynchronizedTables")
 
 $file:=PROJECT.getCatalogFile()
 

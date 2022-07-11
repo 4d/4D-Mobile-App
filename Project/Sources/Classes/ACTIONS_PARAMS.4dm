@@ -625,6 +625,7 @@ Function update()
 	If (Form:C1466.actions=Null:C1517)\
 		 | (Num:C11(Form:C1466.actions.length)=0)  // No actions
 		
+		This:C1470.goToPage(1)
 		This:C1470.noAction.show()
 		
 	Else 
@@ -634,6 +635,7 @@ Function update()
 		
 		If ($action=Null:C1517)  // No action selected
 			
+			This:C1470.goToPage(1)
 			This:C1470.noSelection.show()
 			
 		Else 
@@ -655,7 +657,6 @@ Function update()
 						
 						This:C1470.goToPage(2)
 						This:C1470.title.setTitle("description").show()
-						This:C1470.description.setPlaceholder("")
 						
 					Else 
 						
@@ -665,7 +666,7 @@ Function update()
 					End if 
 					
 					//______________________________________________________
-				: ((String:C10($action.preset)="openURL") && Feature.with("openURLAction"))
+				: (String:C10($action.preset)="openURL")  // Feature.with("openURLAction")
 					
 					This:C1470.goToPage(2)
 					This:C1470.title.setTitle("url").show()
@@ -1695,9 +1696,9 @@ Function dataSourceMenuManager()
 Function editList()
 	
 /*
-								$form:=New object(\
-																												"static"; $static; \
-																												"host"; This.path.hostInputControls(True))
+										$form:=New object(\
+																																"static"; $static; \
+																																"host"; This.path.hostInputControls(True))
 	
 $form.folder:=This.path.hostInputControls()
 $manifest:=$form.folder.file("manifest.json")

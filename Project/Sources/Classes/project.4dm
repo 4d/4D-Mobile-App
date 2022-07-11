@@ -1616,13 +1616,23 @@ Function fieldAvailable($tableID; $field : Object) : Boolean
 			// Check the data class
 			If ($field.relatedTableNumber#Null:C1517)\
 				 | (String:C10($field.kind)="calculated")\
+				 | (String:C10($field.kind)="alias")\
 				 | (Bool:C1537($field.computed))
 				
 				If ($field.path#Null:C1517) && Not:C34(Bool:C1537($field.computed))
 					
-					$c:=Split string:C1554($field.path; ".")
+					If ($field.kind="alias")
+						
+						$c:=Split string:C1554($field.name; ".")
+						
+					Else 
+						
+						$c:=Split string:C1554($field.path; ".")
+						
+					End if 
 					
-					$o:=This:C1470.dataModel[$tableID]
+					//$o:=This.dataModel[$tableID]
+					$o:=ds:C1482[PROJECT.table($tableID)[""].name]
 					
 					For each ($t; $c)
 						

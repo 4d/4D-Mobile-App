@@ -578,8 +578,11 @@ Function addMenuManager()
 			.append(":xliff:deleteActionFor"; $deleteMenu)\
 			.append(":xliff:shareActionFor"; $shareMenu)\
 			.append(":xliff:sortActionFor"; $sortMenu)
+		
 		If (Feature.with("openURLAction"))
+			
 			$menu.append(":xliff:openURLActionFor"; $openURLMenu)
+			
 		End if 
 		
 		For each ($o; $c)
@@ -589,8 +592,11 @@ Function addMenuManager()
 			$editMenu.append($o.tableName; "edit_"+$o.tableID)
 			$deleteMenu.append($o.tableName; "delete_"+$o.tableID)
 			$shareMenu.append($o.tableName; "share_"+$o.tableID)
+			
 			If (Feature.with("openURLAction"))
+				
 				$openURLMenu.append($o.tableName; "openURL_"+$o.tableID)
+				
 			End if 
 			
 			$fieldsMenu:=cs:C1710.menu.new()
@@ -634,6 +640,11 @@ Function addMenuManager()
 		
 		$menu.append(":xliff:sortAction"; $fieldsMenu)
 		
+		If (Feature.with("openURLAction"))
+			
+			$menu.append(":xliff:openURLAction"; "openURL_"+$o.tableID)
+			
+		End if 
 	End if 
 	
 	$menu.popup(This:C1470.add)
@@ -663,16 +674,14 @@ Function addMenuManager()
 				$menu.add:=($t="add_@")
 				$menu.share:=($t="share_@")
 				$menu.sort:=($t="sort_@")
-				$menu.openURL:=($t="openURL_@")  // && Feature.with("openURLAction")
+				$menu.openURL:=($t="openURL_@")
 				
 				$t:=Replace string:C233($t; "edit_"; "")
 				$t:=Replace string:C233($t; "delete_"; "")
 				$t:=Replace string:C233($t; "add_"; "")
 				$t:=Replace string:C233($t; "share_"; "")
 				$t:=Replace string:C233($t; "sort_"; "")
-				If (Feature.with("openURLAction"))
-					$t:=Replace string:C233($t; "openURL_"; "")
-				End if 
+				$t:=Replace string:C233($t; "openURL_"; "")
 				
 				If ($menu.sort)
 					
@@ -737,7 +746,7 @@ Function addMenuManager()
 						$icon:=UI.getIcon($menu.icon)
 						
 						//……………………………………………………………………
-					: ($menu.openURL)  // && Feature.with("openURLAction")
+					: ($menu.openURL)  // Feature.with("openURLAction")
 						
 						$menu.preset:="openURL"
 						$menu.icon:="actions/Globe.svg"
@@ -842,8 +851,9 @@ Function addMenuManager()
 						$action.parameters.push($parameter)
 						
 						//-------------------------------------------
-					: ($menu.openURL)  // && Feature.with("openURLAction")
+					: ($menu.openURL)  // Feature.with("openURLAction")
 						
+						// <NOTHING MORE TO DO>
 						
 						//-------------------------------------------
 					Else 

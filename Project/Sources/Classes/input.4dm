@@ -15,7 +15,7 @@ Class constructor($name : Text; $datasource)
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function get asPassword() : Boolean
 	
-	return (OBJECT Get font:C1069(*; This:C1470.name)="%password")
+	return OBJECT Get font:C1069(*; This:C1470.name)="%password"
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function set asPassword($password : Boolean)
@@ -38,7 +38,7 @@ Function set asPassword($password : Boolean)
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function get filter() : Text
 	
-	return (OBJECT Get filter:C1073(*; This:C1470.name))
+	return OBJECT Get filter:C1073(*; This:C1470.name)
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function set filter($filter)
@@ -88,6 +88,17 @@ Function set filter($filter)
 		OBJECT SET FILTER:C235(*; This:C1470.name; String:C10($filter))
 		
 	End if 
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function get placeholder() : Text
+	
+	return OBJECT Get placeholder:C1296(*; This:C1470.name)
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function set placeholder($placeholder : Text)
+	
+	This:C1470.setPlaceholder($placeholder)
+	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function highlight($startSel : Integer; $endSel : Integer) : cs:C1710.input
 	
@@ -119,7 +130,7 @@ Function highlight($startSel : Integer; $endSel : Integer) : cs:C1710.input
 			//______________________________________________________
 	End case 
 	
-	return (This:C1470)
+	return This:C1470
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	// From the last character entered to the end
@@ -127,7 +138,7 @@ Function highlightLastToEnd() : cs:C1710.input
 	
 	HIGHLIGHT TEXT:C210(*; This:C1470.name; This:C1470.highlightingStart()+1; MAXLONG:K35:2)
 	
-	return (This:C1470)
+	return This:C1470
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function highlighted() : Object
@@ -154,21 +165,23 @@ Function highlighted() : Object
 		
 	End if 
 	
-	return ($o)
+	return $o
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function highlightingStart() : Integer
 	
 	var $end; $start : Integer
 	GET HIGHLIGHT:C209(*; This:C1470.name; $start; $end)
-	return ($start)
+	
+	return $start
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function highlightingEnd() : Integer
 	
 	var $end; $start : Integer
 	GET HIGHLIGHT:C209(*; This:C1470.name; $start; $end)
-	return ($end)
+	
+	return $end
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 /*
@@ -236,9 +249,37 @@ Function setFilter($filter; $separator : Text) : cs:C1710.input
 		
 	End if 
 	
-	return (This:C1470)
+	return This:C1470
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function getFilter() : Text
 	
-	return (OBJECT Get filter:C1073(*; This:C1470.name))
+	return OBJECT Get filter:C1073(*; This:C1470.name)
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function setPlaceholder($placeholder : Text) : cs:C1710.formObject
+	
+	var $t : Text
+	
+	If (Length:C16($placeholder)>0)\
+		 & (Length:C16($placeholder)<=255)
+		
+		//%W-533.1
+		If ($placeholder[[1]]#Char:C90(1))
+			
+			$t:=Get localized string:C991($placeholder)
+			$t:=Length:C16($t)>0 ? $t : $placeholder  // Revert if no localization
+			
+		End if 
+		//%W+533.1
+		
+	Else 
+		
+		$t:=$placeholder
+		
+	End if 
+	
+	OBJECT SET PLACEHOLDER:C1295(*; This:C1470.name; $t)
+	
+	return This:C1470
+	
