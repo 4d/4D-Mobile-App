@@ -111,6 +111,16 @@ Function set title($title : Text)
 	
 	This:C1470.setTitle($title)
 	
+	// === === === === === === === === === === === === === === === === === === ===
+Function get placeholder() : Text
+	
+	return (OBJECT Get placeholder:C1296(*; This:C1470.name))
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function set placeholder($placeholder : Text)
+	
+	This:C1470.setPlaceholder($placeholder)
+	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 Function get width() : Integer
 	
@@ -322,6 +332,34 @@ Function setTitle($title : Text) : cs:C1710.formObject
 	End if 
 	
 	OBJECT SET TITLE:C194(*; This:C1470.name; $t)
+	
+	return (This:C1470)
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function setPlaceholder($placeholder : Text) : cs:C1710.formObject
+	
+	var $t : Text
+	
+	If (Count parameters:C259>=1)
+		
+		$t:=$placeholder
+		
+		If (Length:C16($placeholder)>0)\
+			 & (Length:C16($placeholder)<=255)
+			
+			//%W-533.1
+			If ($placeholder[[1]]#Char:C90(1))
+				
+				$t:=Get localized string:C991($placeholder)
+				$t:=Length:C16($t)>0 ? $t : $placeholder  // Revert if no localization
+				
+			End if 
+			//%W+533.1
+			
+		End if 
+	End if 
+	
+	OBJECT SET PLACEHOLDER:C1295(*; This:C1470.name; $t)
 	
 	return (This:C1470)
 	

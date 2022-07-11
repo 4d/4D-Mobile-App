@@ -116,6 +116,7 @@ Feature.unstable("127558")  // [ANDROID] Data set
 
 // Mark:-🚧 MAIN
 Feature.main("listEditor")  // #130828 [MOBILE] Create and edit an input control from the project editor
+Feature.main("openURLAction")  // azure:3625 [MOBILE] Execute an action that open web area
 
 // Mark:-🚧 WIP
 Feature.wip(131983)  // [MOBILE] Launch an action from the Tab bar

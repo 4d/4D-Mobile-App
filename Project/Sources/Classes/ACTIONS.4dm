@@ -545,7 +545,7 @@ Function addMenuManager()
 	var $i : Integer
 	var $action; $catalog; $field; $o; $parameter; $tableModel : Object
 	var $c; $fields : Collection
-	var $addMenu; $deleteMenu; $editMenu; $fieldsMenu; $menu; $newMenu; $shareMenu; $sortMenu : cs:C1710.menu
+	var $addMenu; $deleteMenu; $editMenu; $fieldsMenu; $menu; $newMenu; $shareMenu; $sortMenu; $openURLMenu : cs:C1710.menu
 	
 	// Extract datamodel to collection
 	$c:=New collection:C1472
@@ -566,6 +566,9 @@ Function addMenuManager()
 		$deleteMenu:=cs:C1710.menu.new()
 		$shareMenu:=cs:C1710.menu.new()
 		$sortMenu:=cs:C1710.menu.new()
+		If (Feature.with("openURLAction"))
+			$openURLMenu:=cs:C1710.menu.new()
+		End if 
 		
 		$menu:=cs:C1710.menu.new()\
 			.append(":xliff:newActionFor"; $newMenu)\
@@ -575,6 +578,9 @@ Function addMenuManager()
 			.append(":xliff:deleteActionFor"; $deleteMenu)\
 			.append(":xliff:shareActionFor"; $shareMenu)\
 			.append(":xliff:sortActionFor"; $sortMenu)
+		If (Feature.with("openURLAction"))
+			$menu.append(":xliff:openURLActionFor"; $openURLMenu)
+		End if 
 		
 		For each ($o; $c)
 			
@@ -583,6 +589,9 @@ Function addMenuManager()
 			$editMenu.append($o.tableName; "edit_"+$o.tableID)
 			$deleteMenu.append($o.tableName; "delete_"+$o.tableID)
 			$shareMenu.append($o.tableName; "share_"+$o.tableID)
+			If (Feature.with("openURLAction"))
+				$openURLMenu.append($o.tableName; "openURL_"+$o.tableID)
+			End if 
 			
 			$fieldsMenu:=cs:C1710.menu.new()
 			
@@ -654,12 +663,16 @@ Function addMenuManager()
 				$menu.add:=($t="add_@")
 				$menu.share:=($t="share_@")
 				$menu.sort:=($t="sort_@")
+				$menu.openURL:=($t="openURL_@")  // && Feature.with("openURLAction")
 				
 				$t:=Replace string:C233($t; "edit_"; "")
 				$t:=Replace string:C233($t; "delete_"; "")
 				$t:=Replace string:C233($t; "add_"; "")
 				$t:=Replace string:C233($t; "share_"; "")
 				$t:=Replace string:C233($t; "sort_"; "")
+				If (Feature.with("openURLAction"))
+					$t:=Replace string:C233($t; "openURL_"; "")
+				End if 
 				
 				If ($menu.sort)
 					
@@ -721,6 +734,15 @@ Function addMenuManager()
 						$menu.icon:="actions/Sort.svg"
 						$menu.scope:="table"
 						$menu.label:=Get localized string:C991("sort...")
+						$icon:=UI.getIcon($menu.icon)
+						
+						//……………………………………………………………………
+					: ($menu.openURL)  // && Feature.with("openURLAction")
+						
+						$menu.preset:="openURL"
+						$menu.icon:="actions/Globe.svg"
+						$menu.scope:="table"
+						$menu.label:=Get localized string:C991("open...")
 						$icon:=UI.getIcon($menu.icon)
 						
 						//……………………………………………………………………
@@ -818,6 +840,10 @@ Function addMenuManager()
 						End case 
 						
 						$action.parameters.push($parameter)
+						
+						//-------------------------------------------
+					: ($menu.openURL)  // && Feature.with("openURLAction")
+						
 						
 						//-------------------------------------------
 					Else 

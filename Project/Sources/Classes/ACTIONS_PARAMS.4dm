@@ -655,6 +655,7 @@ Function update()
 						
 						This:C1470.goToPage(2)
 						This:C1470.title.setTitle("description").show()
+						This:C1470.description.setPlaceholder("")
 						
 					Else 
 						
@@ -662,6 +663,13 @@ Function update()
 						This:C1470.noParameters.show()
 						
 					End if 
+					
+					//______________________________________________________
+				: ((String:C10($action.preset)="openURL") && Feature.with("openURLAction"))
+					
+					This:C1470.goToPage(2)
+					This:C1470.title.setTitle("url").show()
+					This:C1470.description.setPlaceholder("https://www.example.com")
 					
 					//______________________________________________________
 				: (String:C10($action.preset)="sort")
