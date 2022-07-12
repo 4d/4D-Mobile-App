@@ -19,9 +19,9 @@ Class constructor($objectName : Text; $datasource)
 	// ⚠️
 Function getCoordinates() : Object
 	
-	return (Super:C1706.getCoordinates())
-	
 	This:C1470.getSubform()
+	
+	return Super:C1706.getCoordinates()
 	
 	// === === === === === === === === === === === === === === === === === === ===
 Function getParent() : Object

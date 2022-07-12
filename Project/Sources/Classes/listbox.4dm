@@ -34,13 +34,13 @@ Class constructor($name : Text; $datasource)
 	// Gives the number of columns
 Function columnsNumber() : Integer
 	
-	return (LISTBOX Get number of columns:C831(*; This:C1470.name))
+	return LISTBOX Get number of columns:C831(*; This:C1470.name)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Gives the number of rows
 Function rowsNumber() : Integer
 	
-	return (LISTBOX Get number of rows:C915(*; This:C1470.name))
+	return LISTBOX Get number of rows:C915(*; This:C1470.name)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Giving a column, a header or a footer name, returns the corresponding column pointer
@@ -69,7 +69,7 @@ Function columnPtr($name : Text) : Pointer
 	
 	If ($indx>0)
 		
-		return ($columnsPtr{$indx})
+		return $columnsPtr{$indx}
 		
 	Else 
 		
@@ -77,7 +77,7 @@ Function columnPtr($name : Text) : Pointer
 		
 		If ($indx>0)
 			
-			return ($columnsPtr{$indx})
+			return $columnsPtr{$indx}
 			
 		Else 
 			
@@ -85,7 +85,7 @@ Function columnPtr($name : Text) : Pointer
 			
 			If ($indx>0)
 				
-				return ($columnsPtr{$indx})
+				return $columnsPtr{$indx}
 				
 			End if 
 		End if 
@@ -126,7 +126,7 @@ Function columnNumber($name : Text) : Integer
 		End if 
 	End if 
 	
-	return ($indx)
+	return $indx
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Current cell indexes {column,row}
@@ -148,20 +148,20 @@ Function cellPosition($e : Object) : Object
 		
 	End if 
 	
-	return (New object:C1471(\
+	return New object:C1471(\
 		"column"; $column; \
-		"row"; $row))
+		"row"; $row)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// ⚠️ 
 Function getCoordinates() : Object
 	
-	return (Super:C1706.getCoordinates())
-	
 	This:C1470.getScrollPosition()
 	This:C1470.getScrollbars()
 	This:C1470.updateDefinition()
 	This:C1470.updateCell()
+	
+	return Super:C1706.getCoordinates()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns a row coordinates
@@ -186,11 +186,11 @@ Function rowCoordinates($row : Integer) : Object
 	
 	$bottom:=($bottom>This:C1470.coordinates.bottom) ? This:C1470.coordinates.bottom : $bottom
 	
-	return (New object:C1471(\
+	return New object:C1471(\
 		"left"; $left; \
 		"top"; $top; \
 		"right"; $right; \
-		"bottom"; $bottom))
+		"bottom"; $bottom)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function cellCoordinates($column : Integer; $row : Integer) : Object
@@ -236,13 +236,13 @@ Function cellCoordinates($column : Integer; $row : Integer) : Object
 		
 	End if 
 	
-	return (This:C1470.cellBox)
+	return This:C1470.cellBox
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Gives the number of selected rows
 Function selected() : Integer
 	
-	return (Count in array:C907((This:C1470.pointer)->; True:C214))
+	return Count in array:C907((This:C1470.pointer)->; True:C214)
 	
 	// MARK: - Selection
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -263,7 +263,7 @@ Function select($row : Integer) : cs:C1710.listbox
 	
 	OBJECT SET SCROLL POSITION:C906(*; This:C1470.name; $row)
 	
-	return (This:C1470)
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Unselect row(s)
@@ -281,7 +281,7 @@ Function unselect($row : Integer) : cs:C1710.listbox
 		
 	End if 
 	
-	return (This:C1470)
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Select the last row
@@ -297,7 +297,7 @@ Function selectFirstRow() : cs:C1710.listbox
 		
 	End if 
 	
-	return (This:C1470)
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Select the last row
@@ -308,7 +308,7 @@ Function selectLastRow() : cs:C1710.listbox
 	$row:=This:C1470.rowsNumber()
 	This:C1470.select($row)
 	
-	return (This:C1470)
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Select the last touched row (last mouse click, last selection made via the keyboard or last drop)
@@ -332,17 +332,17 @@ Function doSafeSelect($row : Integer) : cs:C1710.listbox
 			//______________________________
 		: ($row<=$rowNumber)
 			
-			return (This:C1470.select($row))
+			return This:C1470.select($row)
 			
 			//______________________________
 		: ($rowNumber>0)
 			
-			return (This:C1470.select($rowNumber))
+			return This:C1470.select($rowNumber)
 			
 			//______________________________
 		Else 
 			
-			return (This:C1470.unselect())
+			return This:C1470.unselect()
 			
 			//______________________________
 	End case 
@@ -350,7 +350,7 @@ Function doSafeSelect($row : Integer) : cs:C1710.listbox
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function selectAll() : cs:C1710.listbox
 	
-	return (This:C1470.select())
+	return This:C1470.select()
 	
 	// MARK: - 
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -430,7 +430,7 @@ Function reveal($row : Integer) : cs:C1710.listbox
 	LISTBOX SELECT ROW:C912(*; This:C1470.name; $row; lk replace selection:K53:1)
 	OBJECT SET SCROLL POSITION:C906(*; This:C1470.name; $row)
 	
-	return (This:C1470)
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Update the listbox columns/rows definition
@@ -486,7 +486,7 @@ Function updateDefinition() : cs:C1710.listbox
 	
 	This:C1470.getScrollbars()
 	
-	return (This:C1470)
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Update the current cell indexes and coordinates
@@ -495,7 +495,7 @@ Function updateCell() : cs:C1710.listbox
 	This:C1470.cellPosition()
 	This:C1470.cellCoordinates()
 	
-	return (This:C1470)
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Displays a cs.menu at the bottom left of the current cell
@@ -521,7 +521,7 @@ Function popup($menu : cs:C1710.menu; $default : Text) : cs:C1710.menu
 		
 	End if 
 	
-	return ($menu)
+	return $menu
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function showColumn($column; $visible : Boolean)
@@ -579,7 +579,7 @@ Function clear() : cs:C1710.listbox
 		
 	End for each 
 	
-	return (This:C1470)
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function deleteRows($row : Integer) : cs:C1710.listbox
@@ -596,7 +596,7 @@ Function deleteRows($row : Integer) : cs:C1710.listbox
 		
 	End if 
 	
-	return (This:C1470)
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns all properties of the column or listbox
@@ -648,23 +648,23 @@ Function getProperty($property : Integer; $column : Text) : Variant
 	
 	If (Count parameters:C259=0)
 		
-		return (LISTBOX Get property:C917(*; This:C1470.name; $property))
+		return LISTBOX Get property:C917(*; This:C1470.name; $property)
 		
 	Else 
 		
-		return (LISTBOX Get property:C917(*; $column; $property))
+		return LISTBOX Get property:C917(*; $column; $property)
 		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function highlight($enabled : Boolean) : cs:C1710.listbox
 	
-	return (This:C1470.setProperty(lk hide selection highlight:K53:41; $enabled ? lk yes:K53:69 : lk no:K53:68))
+	return This:C1470.setProperty(lk hide selection highlight:K53:41; $enabled ? lk yes:K53:69 : lk no:K53:68)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function noHighlight() : cs:C1710.listbox
 	
-	return (This:C1470.setProperty(lk hide selection highlight:K53:41; lk no:K53:68))
+	return This:C1470.setProperty(lk hide selection highlight:K53:41; lk no:K53:68)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function movableLines($enabled : Boolean) : cs:C1710.listbox
@@ -673,12 +673,12 @@ Function movableLines($enabled : Boolean) : cs:C1710.listbox
 	
 	This:C1470.setProperty(lk movable rows:K53:76; Choose:C955($enabled; lk yes:K53:69; lk no:K53:68))
 	
-	return (This:C1470)
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function nonMovableLines() : cs:C1710.listbox
 	
-	return (This:C1470.movableLines(False:C215))
+	return This:C1470.movableLines(False:C215)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function selectable($enabled : Boolean; $mode : Integer) : cs:C1710.listbox
@@ -705,22 +705,22 @@ Function selectable($enabled : Boolean; $mode : Integer) : cs:C1710.listbox
 		
 	End if 
 	
-	return (This:C1470)
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function notSelectable() : cs:C1710.listbox
 	
-	return (This:C1470.selectable(False:C215))
+	return This:C1470.selectable(False:C215)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function singleSelectable() : cs:C1710.listbox
 	
-	return (This:C1470.setProperty(lk selection mode:K53:35; lk single:K53:58))
+	return This:C1470.setProperty(lk selection mode:K53:35; lk single:K53:58)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function multipleSelectable() : cs:C1710.listbox
 	
-	return (This:C1470.setProperty(lk selection mode:K53:35; lk multiple:K53:59))
+	return This:C1470.setProperty(lk selection mode:K53:35; lk multiple:K53:59)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function sortable($enabled : Boolean) : cs:C1710.listbox
@@ -736,19 +736,19 @@ Function sortable($enabled : Boolean) : cs:C1710.listbox
 	
 	This:C1470.setProperty(lk movable rows:K53:76; Choose:C955($sortable; lk yes:K53:69; lk no:K53:68))
 	
-	return (This:C1470)
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function notSortable() : cs:C1710.listbox
 	
-	return (This:C1470.sortable(False:C215))
+	return This:C1470.sortable(False:C215)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function setProperty($property : Integer; $value) : cs:C1710.listbox
 	
 	LISTBOX SET PROPERTY:C1440(*; This:C1470.name; $property; $value)
 	
-	return (This:C1470)
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function setRowsHeight($height : Integer; $unit : Integer) : cs:C1710.listbox
@@ -763,7 +763,7 @@ Function setRowsHeight($height : Integer; $unit : Integer) : cs:C1710.listbox
 		
 	End if 
 	
-	return (This:C1470)
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function restoreProperties() : cs:C1710.listbox
@@ -806,7 +806,7 @@ Function restoreProperties() : cs:C1710.listbox
 	
 	This:C1470.setScrollbars(This:C1470.properties.horScrollbar; This:C1470.properties.verScrollbar)
 	
-	return (This:C1470)
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function saveProperties()

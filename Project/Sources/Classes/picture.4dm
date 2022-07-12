@@ -42,9 +42,9 @@ Function getDimensions() : Object
 	
 	PICTURE PROPERTIES:C457($p; $width; $height)
 	
-	return (New object:C1471(\
+	return New object:C1471(\
 		"width"; $width; \
-		"height"; $height))
+		"height"; $height)
 	
 Function read($file : 4D:C1709.File) : cs:C1710.picture
 	
@@ -69,7 +69,7 @@ Function read($file : 4D:C1709.File) : cs:C1710.picture
 		End if 
 	End if 
 	
-	return (This:C1470)
+	return This:C1470
 	
 Function thumbnail
 	

@@ -23,10 +23,10 @@ Function get colors() : Object
 	var $altBackground; $background; $foreground : Text
 	
 	OBJECT GET RGB COLORS:C1074(*; This:C1470.name; $foreground; $background; $altBackground)
-	return (New object:C1471(\
+	return New object:C1471(\
 		"foreground"; $foreground; \
 		"background"; $background; \
-		"altBackground"; $altBackground))
+		"altBackground"; $altBackground)
 	
 	// === === === === === === === === === === === === === === === === === === ===
 Function set colors($colors : Object)
@@ -70,7 +70,7 @@ Function set foregroundColor($color)
 	OBJECT SET RGB COLORS:C628(*; This:C1470.name; $color)
 	
 	// === === === === === === === === === === === === === === === === === === ===
-Function get bacgroundColor() : Variant
+Function get backgroundColor() : Variant
 	
 	var $foreground; $background
 	
@@ -78,7 +78,7 @@ Function get bacgroundColor() : Variant
 	return $background
 	
 	// === === === === === === === === === === === === === === === === === === ===
-Function set bacgroundColor($color)
+Function set backgroundColor($color)
 	
 	var $foreground; $background; $altBackground
 	
@@ -177,14 +177,20 @@ Function set dimensions($dimensions : Object)
 	This:C1470.updateCoordinates($o.left; $o.top; $o.right; $o.bottom)
 	
 	// === === === === === === === === === === === === === === === === === === ===
+Function get coordinates() : Object
+	
+	This:C1470.getCoordinates()
+	return This:C1470._coordinates
+	
+	// === === === === === === === === === === === === === === === === === === ===
 Function get windowCoordinates() : Object
 	
 	var $bottom; $left; $right; $top : Integer
 	
-	$left:=This:C1470.coordinates.left
-	$top:=This:C1470.coordinates.top
-	$right:=This:C1470.coordinates.right
-	$bottom:=This:C1470.coordinates.bottom
+	$left:=This:C1470._coordinates.left
+	$top:=This:C1470._coordinates.top
+	$right:=This:C1470._coordinates.right
+	$bottom:=This:C1470._coordinates.bottom
 	
 	CONVERT COORDINATES:C1365($left; $top; XY Current form:K27:5; XY Current window:K27:6)
 	CONVERT COORDINATES:C1365($right; $bottom; XY Current form:K27:5; XY Current window:K27:6)
@@ -201,14 +207,39 @@ Function get visible() : Boolean
 	return OBJECT Get visible:C1075(*; This:C1470.name)
 	
 	// === === === === === === === === === === === === === === === === === === ===
+Function set visible($visible : Boolean)
+	
+	OBJECT SET VISIBLE:C603(*; This:C1470.name; $visible)
+	
+	// === === === === === === === === === === === === === === === === === === ===
 Function get hidden() : Boolean
 	
 	return Not:C34(OBJECT Get visible:C1075(*; This:C1470.name))
 	
 	// === === === === === === === === === === === === === === === === === === ===
+Function set hidden($hidden : Boolean)
+	
+	OBJECT SET VISIBLE:C603(*; This:C1470.name; Not:C34($hidden))
+	
+	// === === === === === === === === === === === === === === === === === === ===
 Function get enabled() : Boolean
 	
 	return OBJECT Get enabled:C1079(*; This:C1470.name)
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function set enabled($enabled : Boolean)
+	
+	OBJECT SET ENABLED:C1123(*; This:C1470.name; $enabled)
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function get disabled() : Boolean
+	
+	return Not:C34(OBJECT Get enabled:C1079(*; This:C1470.name))
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function set disabled($disabled : Boolean)
+	
+	OBJECT SET VISIBLE:C603(*; This:C1470.name; Not:C34($disabled))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
 Function get horizontalAlignment() : Integer
@@ -239,6 +270,26 @@ Function get font() : Text
 Function set font($font : Text)
 	
 	OBJECT SET FONT:C164(*; This:C1470.name; $font)
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function get fontStyle() : Integer
+	
+	return OBJECT Get font style:C1071(*; This:C1470.name)
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function set fontStyle($tyle : Integer)
+	
+	OBJECT SET FONT STYLE:C166(*; This:C1470.name; $tyle)
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function get fontSize() : Integer
+	
+	return OBJECT Get font size:C1070(*; This:C1470.name)
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function set fontSize($size : Integer)
+	
+	OBJECT SET FONT SIZE:C165(*; This:C1470.name; $size)
 	
 	// MARK:-
 	// === === === === === === === === === === === === === === === === === === ===
@@ -345,67 +396,6 @@ Function setFontStyle($style : Integer) : cs:C1710.formObject
 	End if 
 	
 	return This:C1470
-	
-	// === === === === === === === === === === === === === === === === === === ===
-Function setCoordinates($left; $top : Integer; $right : Integer; $bottom : Integer) : cs:C1710.formObject
-	
-	var $o : Object
-	
-	If (Value type:C1509($left)=Is object:K8:27)
-		
-		$o:=New object:C1471(\
-			"left"; Num:C11($left.left); \
-			"top"; Num:C11($left.top))
-		
-		If ($left.right#Null:C1517)
-			
-			$o.right:=Num:C11($left.right)
-			
-		End if 
-		
-		If ($left.bottom#Null:C1517)
-			
-			$o.bottom:=Num:C11($left.bottom)
-			
-		End if 
-		
-	Else 
-		
-		$o:=New object:C1471(\
-			"left"; Num:C11($left); \
-			"top"; Num:C11($top))
-		
-		If (Count parameters:C259>=3)
-			
-			$o.right:=Num:C11($right)
-			$o.bottom:=Num:C11($bottom)
-			
-		End if 
-	End if 
-	
-	If ($o.right#Null:C1517)
-		
-		OBJECT SET COORDINATES:C1248(*; This:C1470.name; $o.left; $o.top; $o.right; $o.bottom)
-		
-	Else 
-		
-		OBJECT SET COORDINATES:C1248(*; This:C1470.name; $o.left; $o.top)
-		
-	End if 
-	
-	This:C1470.updateCoordinates($o.left; $o.top; $o.right; $o.bottom)
-	
-	return This:C1470
-	
-	// === === === === === === === === === === === === === === === === === === ===
-Function getCoordinates() : Object
-	
-	var $bottom; $left; $right; $top : Integer
-	
-	OBJECT GET COORDINATES:C663(*; This:C1470.name; $left; $top; $right; $bottom)
-	This:C1470.updateCoordinates($left; $top; $right; $bottom)
-	
-	return This:C1470.coordinates
 	
 	// === === === === === === === === === === === === === === === === === === ===
 Function bestSize($alignment; $minWidth : Integer; $maxWidth : Integer) : cs:C1710.formObject
@@ -655,6 +645,74 @@ Function moveAndResizeVertically($offset : Integer; $resize : Integer) : cs:C171
 	return This:C1470
 	
 	// === === === === === === === === === === === === === === === === === === ===
+Function setCoordinates($left; $top : Integer; $right : Integer; $bottom : Integer) : cs:C1710.formObject
+	
+	var $o : Object
+	
+	If (Value type:C1509($left)=Is object:K8:27)
+		
+		$o:=New object:C1471(\
+			"left"; Num:C11($left.left); \
+			"top"; Num:C11($left.top))
+		
+		If ($left.right#Null:C1517)
+			
+			$o.right:=Num:C11($left.right)
+			
+		End if 
+		
+		If ($left.bottom#Null:C1517)
+			
+			$o.bottom:=Num:C11($left.bottom)
+			
+		End if 
+		
+	Else 
+		
+		$o:=New object:C1471(\
+			"left"; Num:C11($left); \
+			"top"; Num:C11($top))
+		
+		If (Count parameters:C259>=3)
+			
+			$o.right:=Num:C11($right)
+			$o.bottom:=Num:C11($bottom)
+			
+		End if 
+	End if 
+	
+	If ($o.right#Null:C1517)
+		
+		OBJECT SET COORDINATES:C1248(*; This:C1470.name; $o.left; $o.top; $o.right; $o.bottom)
+		
+	Else 
+		
+		OBJECT SET COORDINATES:C1248(*; This:C1470.name; $o.left; $o.top)
+		
+	End if 
+	
+	This:C1470.updateCoordinates($o.left; $o.top; $o.right; $o.bottom)
+	
+	return This:C1470
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function updateCoordinates($left : Integer; $top : Integer; $right : Integer; $bottom : Integer) : cs:C1710.formObject
+	
+	If (Count parameters:C259<4)
+		
+		OBJECT GET COORDINATES:C663(*; This:C1470.name; $left; $top; $right; $bottom)
+		
+	End if 
+	
+	This:C1470._coordinates:=New object:C1471(\
+		"left"; $left; \
+		"top"; $top; \
+		"right"; $right; \
+		"bottom"; $bottom)
+	
+	return This:C1470
+	
+	// === === === === === === === === === === === === === === === === === === ===
 Function setDimensions($width : Integer; $height : Integer) : cs:C1710.formObject
 	
 	var $o : Object
@@ -739,11 +797,6 @@ Function setColors($foreground : Variant; $background : Variant; $altBackground 
 	return This:C1470
 	
 	// === === === === === === === === === === === === === === === === === === ===
-Function getForegroundColor()->$color
-	
-	OBJECT GET RGB COLORS:C1074(*; This:C1470.name; $color)
-	
-	// === === === === === === === === === === === === === === === === === === ===
 Function alignLeft() : cs:C1710.formObject
 	
 	OBJECT SET HORIZONTAL ALIGNMENT:C706(*; This:C1470.name; Align left:K42:2)
@@ -783,18 +836,12 @@ Function alignCenter($vertical : Boolean) : cs:C1710.formObject
 	return This:C1470
 	
 	// === === === === === === === === === === === === === === === === === === ===
-Function updateCoordinates($left : Integer; $top : Integer; $right : Integer; $bottom : Integer) : cs:C1710.formObject
+Function getCoordinates() : Object
 	
-	If (Count parameters:C259<4)
-		
-		OBJECT GET COORDINATES:C663(*; This:C1470.name; $left; $top; $right; $bottom)
-		
-	End if 
+	var $bottom; $left; $right; $top : Integer
 	
-	This:C1470.coordinates:=New object:C1471(\
-		"left"; $left; \
-		"top"; $top; \
-		"right"; $right; \
-		"bottom"; $bottom)
+	OBJECT GET COORDINATES:C663(*; This:C1470.name; $left; $top; $right; $bottom)
+	This:C1470.updateCoordinates($left; $top; $right; $bottom)
 	
-	return This:C1470
+	return This:C1470._coordinates
+	

@@ -6,13 +6,31 @@ The `formObject` class is the parent class of all form objects classes<img src
 	
 ## Properties
 
-|Properties|Description|Type||
-|----------|-----------|:--:|-------|
-|**.name** | The name of the form object| `Text`
-|**.type** | The type of the form object| `Integer` | Use the [Form object Types](https://doc.4d.com/4Dv18R6/4D/18-R6/Form-Object-Types.302-5199153.en.html) constant theme
-|**.coordinates** | The coordinates of the form object in the form| `Object` |{`left`,`top`,`right`,`bottom`}|
-|**.dimensions** | The dimensions of the form object| `Object` |{`width`,`height`}|
-|**.windowCoordinates** | The coordinates of the form object in the current window| `Object` |{`left`,`top`,`right`,`bottom`}|
+|Properties|Description|Type||Read only|
+|----------|-----------|:--:|-------|:--:|
+|**.name** | The name of the form object| `Text` ||✔️|
+|**.type** | The type of the form object| `Integer` | Use the [**Form object Types**](https://doc.4d.com/4Dv18R6/4D/18-R6/Form-Object-Types.302-5199153.en.html) constant theme |✔️|
+|**.title** | The title of the object when it is relevant | `Text` |You can pass a resname to use the localized string||
+|**.width** | The width of the object\* | `Integer` |||
+|**.height** | The height of the object\* | `Integer` |||
+|**.dimensions** | The dimensions of the form object\*| `Object` |{`width`,<br>`height`} ||
+|**.coordinates** | The coordinates of the form object in the form| `Object` |{`left`,<br>`top`,<br>`right`,<br>`bottom`}| ✔️|
+|**.windowCoordinates** | The coordinates of the form object in the current window| `Object` |{`left`,<br>`top`,<br>`right`,<br>`bottom`} |✔️|
+|**.colors** | The color of the object | `Object` |{`foreground`,<br>`background`,<br>`altBackground`}||
+|**.foregroundColor** | The foreground color of the object | `Variant` |Accepts the color formats managed by [**OBJECT SET RGB COLORS**](https://doc.4d.com/4Dv19/4D/19.1/OBJECT-SET-RGB-COLORS.301-5653493.en.html) ||
+|**.backgroundColor** | The background color of the object | `Variant` |Accepts the color formats managed by [**OBJECT SET RGB COLORS**](https://doc.4d.com/4Dv19/4D/19.1/OBJECT-SET-RGB-COLORS.301-5653493.en.html) ||
+|**.altBackgroundColor** | The alternating color of the rows for a listbox | `Variant` |Accepts the color formats managed by [**OBJECT SET RGB COLORS**](https://doc.4d.com/4Dv19/4D/19.1/OBJECT-SET-RGB-COLORS.301-5653493.en.html) ||
+|**.visible** | The visibility status of the object | `Boolean` |||
+|**.hidden** | The hidden status of the object | `Boolean` |||
+|**.enabled** | The enabled status of the object | `Boolean` |||
+|**.disabled** | The disabled status of the object | `Boolean` |||
+|**.horizontalAlignment** | The type of the horizontal alignment of the object | `Integer` |Use the [**Form Objects (Properties)**](https://doc.4d.com/4Dv19/4D/19.1/Form-Objects-Properties.302-5654316.en.html) constants||
+|**.verticalAlignment** | The type of the vertical alignment of the object | `Integer` |Use the [**Form Objects (Properties)**](https://doc.4d.com/4Dv19/4D/19.1/Form-Objects-Properties.302-5654316.en.html) constants||
+|**.font** | The font of the object | `Text` |||
+|**.fontStyle** | The font style used by the object | `Integer` |Use the [**Font Styles**](https://doc.4d.com/4Dv19/4D/19.1/Font-Styles.302-5654394.en.html) constant theme ||
+|**.fontSize** | The font size (in point) used by the object | `Integer` |||
+
+\* When assigned, automatically updates the `coordinates`, `dimensions` and `windowCoordinates` properties. 
 
 ## 🔸 cs.formObject.new()
 
@@ -46,15 +64,10 @@ If the `formObjectName` parameter is ommited, the constructor use the result of 
 |.**setHeight** (height`:Integer`) →`cs.formObject` | To modify the object height \*  |
 |.**setWidth** (width`:Integer` ) →`cs.formObject` | To modify the object width \*  |
 |.**setTitle** (title`:Text`) →`cs.formObject` | To change the title of the object (if the title is a `resname`, the localization is performed) \** |
-|.**title** () →`Text` | Returns the title of the object \** |
 |.**setFont** (fontName`:Text`}) →`cs.formObject` | To set the font|
 |.**setFontStyle** ({style`:Integer`}) →`cs.formObject` | To set the style of the title (use the 4D constants _Bold_, _Italic_, _Plain_, _Underline_) Default = _Plain_ \** |
 |.**setColors** (foreground{; background{; altBackground }}) →`cs.formObject` | To set the object color(s)  |
-|.**getForegroundColor** () →`Text` | To get the foreground color of the object |
-|.**isVisible** () →`Boolean` | Returns **True** if the object is visible and **False** otherwise |
-|.**isHidden** () →`Boolean` | Returns **False** if the object is not visible and **False** otherwise |
-|.**isEnabled** () →`Boolean` | Returns **True** if the object is enabled and **False** otherwise |
-|.**updateCoordinates** (left`:Integer`; top`:Integer`; right`:Integer`; bottom`:Integer`)   →`cs.formObject` | To update `coordinates`, `dimensions` and `windowCoordinates` properties |
+|.**updateCoordinates** (left`:Integer`; top`:Integer`; right`:Integer`; bottom`:Integer`)   →`cs.formObject` | To force update `coordinates`, `dimensions` and `windowCoordinates` properties |
 |.**addToGroup** (group : cs.group) →`cs.formObject` | Adds the current widget to a [**`group`**](group.md) |
     
 \* Automatically update the `coordinates`, `dimensions` and `windowCoordinates` properties.    
