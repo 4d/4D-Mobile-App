@@ -583,12 +583,16 @@ Function _createFetchIndexesFromSortAction($tableID : Integer; $Dom_entity : Tex
 							$Dom_fetchIndex:=DOM Create XML element:C865($Dom_entity; "fetchIndex"; "name"; formatString("field-name"; String:C10($action.name)))
 							For each ($parameter; $action.parameters)
 								
-								If (Position:C15("."; String:C10($parameter.path))>0)  // fetch index do not support it 
+								If (Position:C15("."; String:C10($parameter.path))<1)  // fetch index do not support it 
 									$Dom_fetchIndexElement:=DOM Create XML element:C865($Dom_fetchIndex; "fetchIndexElement"; \
 										"property"; formatString("field-name"; ($parameter.path=Null:C1517) ? String:C10($parameter.name) : String:C10($parameter.path)); "type"; "binary"; "order"; Choose:C955(String:C10($parameter.format)="ascending"; "ascending"; "descending"))
 								End if 
 								
 							End for each 
+							If (DOM Count XML elements:C726($Dom_fetchIndex; "fetchIndexElement")=0)
+								DOM REMOVE XML ELEMENT:C869($Dom_fetchIndex)
+							End if 
+							
 						End if 
 					End if 
 				End if 
