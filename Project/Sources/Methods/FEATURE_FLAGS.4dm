@@ -119,7 +119,7 @@ Feature.main("listEditor")  // #130828 [MOBILE] Create and edit an input control
 Feature.main("openURLAction")  // azure:3625 [MOBILE] Execute an action that open web area
 
 // Mark:-🚧 WIP
-Feature.wip(131983)  // [MOBILE] Launch an action from the Tab bar
+Feature.wip("actionsInTabBar")
 
 // FEATURE.wip("simuARMOnAppleProcessor") // Mac M1 build for simu using arm64
 Feature.wip("duplicateTemplate")  // Allow to duplicate template in host database and show on disk https:// Project.4d.com/issues/98054
@@ -161,7 +161,6 @@ Feature.loadLocal()
 
 // Mark:-→ Alias
 Feature.alias("debug"; 8858)
-Feature.alias("actionsInTabBar"; 131983)
 Feature.alias("androidDataSet"; 127558)
 Feature.alias("many-one-many"; 129953)
 Feature.alias("alias"; 131225)

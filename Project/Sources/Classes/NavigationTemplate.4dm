@@ -51,46 +51,48 @@ Function _actionsInTabBarProcess()
 		return   // guard
 	End if 
 	
-	var $dataModel; $table : Object
+	var $dataModel; $action; $item : Object
 	$dataModel:=This:C1470.input.project.dataModel
 	
-	var $Col_tables : Collection
+	// MARK: if nothing defined in project.main.order use all tables
+	var $Col_items : Collection
 	If (Value type:C1509(This:C1470.input.project.main.order)=Is collection:K8:32)
 		
-		$Col_tables:=This:C1470.input.project.main.order
+		$Col_items:=This:C1470.input.project.main.order
 		
 	Else 
 		
 		// all tables in model (BACKUP_STRAT)
 		OB GET PROPERTY NAMES:C1232($dataModel; $tTxt_tables)
-		$Col_tables:=New collection:C1472()
-		ARRAY TO COLLECTION:C1563($Col_tables; $tTxt_tables)
+		$Col_items:=New collection:C1472()
+		ARRAY TO COLLECTION:C1563($Col_items; $tTxt_tables)
 		
 	End if 
 	
 	// TODO: remove test code about actionsInTabBar
 	If (False:C215)
-		$Col_tables.push(New object:C1471("name"; "itName"; "label"; "itLabel"; "shortLabel"; "itShort"; "icon"; "actions/Adjust.svg"; "actions"; New collection:C1472("acName")))
-		$Col_tables.push(New object:C1471("name"; "itName2"; "label"; "itLabel2"; "shortLabel"; "itShort2"; "actions"; New collection:C1472("acName2z")))
+		$Col_items.push(New object:C1471("name"; "itName"; "label"; "itLabel"; "shortLabel"; "itShort"; "icon"; "actions/Adjust.svg"; "actions"; New collection:C1472("acName")))
+		$Col_items.push(New object:C1471("name"; "itName2"; "label"; "itLabel2"; "shortLabel"; "itShort2"; "actions"; New collection:C1472("acName2z")))
+		$Col_items.push(New object:C1471("action"; "acName2z"))
 	End if 
 	
 	This:C1470.input.tags.navigationTables:=New collection:C1472
 	
 	var $navigationItem : Variant
-	For each ($navigationItem; $Col_tables)
+	For each ($navigationItem; $Col_items)
 		
 		Case of 
 			: (Value type:C1509($navigationItem)=Is text:K8:3)
 				
 				If ($dataModel[$navigationItem]#Null:C1517)
 					
-					$table:=OB Copy:C1225($dataModel[$navigationItem])  // to not alter caller
-					$table.tableNumber:=Num:C11($navigationItem)
+					$item:=OB Copy:C1225($dataModel[$navigationItem])  // to not alter caller
+					$item.tableNumber:=Num:C11($navigationItem)
 					
-					$table.originalName:=$table[""].name
-					$table.name:=formatString("table-name"; $table[""].name)
+					$item.originalName:=$item[""].name
+					$item.name:=formatString("table-name"; $item[""].name)
 					
-					This:C1470.input.tags.navigationTables.push($table)
+					This:C1470.input.tags.navigationTables.push($item)
 					
 				Else 
 					
@@ -98,15 +100,21 @@ Function _actionsInTabBarProcess()
 					
 				End if 
 				
-			: ((Value type:C1509($navigationItem)=Is object:K8:27) && ($table.actions#Null:C1517))
+			: ((Value type:C1509($navigationItem)=Is object:K8:27) && (($navigationItem.actions#Null:C1517) || ($navigationItem.action#Null:C1517)))
 				
-				$table:=OB Copy:C1225($navigationItem)  // to not alter caller
-				$table[""]:=OB Copy:C1225($table)  // to simulate meta data behaviour or table (but must be clean)
+				$item:=OB Copy:C1225($navigationItem)  // to not alter caller
+				$item[""]:=OB Copy:C1225($item)  // to simulate meta data behaviour or table (but must be clean)
 				
-				$table.actions:=mobile_actions("getFilteredActions"; New object:C1471("project"; This:C1470.input.project; "names"; $table.actions)).actions  // replace by action data
+				If ($item.actions=Null:C1517)
+					$item.actions:=New collection:C1472($item.action)
+					
+/*$table.name:=$table.name || $table.action.name
+$table.label:=$table.label || $table.action.label
+$table.shortLabel:=$table.shortLabel || $table.action.shortLabel*/
+				End if 
+				$item.actions:=mobile_actions("getFilteredActions"; New object:C1471("project"; This:C1470.input.project; "names"; $item.actions)).actions  // replace by action data
 				
-				// TODO:actionsInTabBar: create items for actions, maybe format according
-				This:C1470.input.tags.navigationTables.push($table)
+				This:C1470.input.tags.navigationTables.push($item)
 				
 			Else 
 				// Unknown menu item type
@@ -115,10 +123,32 @@ Function _actionsInTabBarProcess()
 		
 	End for each 
 	
-	// TODO:actionsInTabBar: create storyboards for each action item
+	// MARK: add not consumed global actions at the end
+	var $actionsConsumed; $globalActions : Collection
+	$actionsConsumed:=This:C1470.input.tags.navigationTables\
+		.map(Formula:C1597($1.value.actions))\
+		.filter(Formula:C1597($1.value#Null:C1517))\
+		/*.flat()*/.reduce(New collection:C1472; Formula:C1597($1.result.combine($1.value)))\
+		.map(Formula:C1597($1.value.name))
+	
+	$globalActions:=mobile_actions("form"; New object:C1471(\
+		"project"; This:C1470.input.project; \
+		"scope"; "global")).actions
+	$globalActions:=$globalActions.filter(Formula:C1597($actionsConsumed.indexOf($1.value.name)<0))
+	
+	For each ($action; $globalActions)
+		
+		$action[""]:=OB Copy:C1225($action)  // to simulate meta data behaviour or table (but must be clean)
+		$action.actions:=New collection:C1472(OB Copy:C1225($action))
+		
+		This:C1470.input.tags.navigationTables.push($action)
+		
+	End for each 
+	
+	// MARK: create storyboards for each action item
 	var $o : Object
-	For each ($table; This:C1470.input.tags.navigationTables)
-		If ($table.actions#Null:C1517)  //TODO:test:actionsInTabBar:  or any criteria to see if action instead of table
+	For each ($item; This:C1470.input.tags.navigationTables)
+		If ($item.actions#Null:C1517)  //TODO:test:actionsInTabBar:  or any criteria to see if action instead of table
 			
 			var $templateFolder : 4D:C1709.Folder
 			$templateFolder:=This:C1470.path.forms().folder("actionsMenu")
@@ -131,9 +161,9 @@ Function _actionsInTabBarProcess()
 			//$o.projfile:=This.input.projfile
 			//$o.path:=This.input.path
 			$o.tags:=OB Copy:C1225(This:C1470.input.tags)
-			$o.tags.table:=$table
-			$table.tableActions:=$table.actions  // tag ___TABLE_ACTIONS___ (or do a new tag system with only ACTIONS)
-			$table.fields:=New collection:C1472  // no fields // used by swift (CLEAN: in process tag allow to not have fields)
+			$o.tags.table:=$item
+			$item.tableActions:=$item.actions  // tag ___TABLE_ACTIONS___ (or do a new tag system with only ACTIONS)
+			$item.fields:=New collection:C1472  // no fields // used by swift (CLEAN: in process tag allow to not have fields)
 			$o:=TemplateInstanceFactory($o).run()  // <================================== RECURSIVE
 			// TODO:XXX errors?
 			
