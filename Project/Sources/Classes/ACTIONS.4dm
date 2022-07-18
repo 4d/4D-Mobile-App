@@ -355,9 +355,9 @@ Function actionListManager()->$allow : Integer
 				
 				If ($e.row=-1)  // After the last line
 					
-					If ($o.src#$me.rowsNumber())  // Not if the source was the last line
+					If ($o.src#$me.rowsNumber)  // Not if the source was the last line
 						
-						$o:=$me.rowCoordinates($me.rowsNumber())
+						$o:=$me.rowCoordinates($me.rowsNumber)
 						$o.top:=$o.bottom
 						$o.right:=$me.coordinates.right
 						$allow:=0  // Allow drop
@@ -1199,7 +1199,7 @@ Function _addAction($action : Object)
 		
 		// Update UI
 		This:C1470.actions.focus()
-		This:C1470.actions.reveal(This:C1470.actions.rowsNumber()+Num:C11(This:C1470.actions.rowsNumber()=0))
+		This:C1470.actions.reveal(This:C1470.actions.rowsNumber+Num:C11(This:C1470.actions.rowsNumber=0))
 		
 		This:C1470.updateParameters($action)
 		

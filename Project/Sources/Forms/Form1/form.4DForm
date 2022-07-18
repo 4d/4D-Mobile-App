@@ -88,7 +88,6 @@
 								"timeFormat": "hh_mm_ss"
 							},
 							"enterable": false,
-							"truncateMode": "none",
 							"verticalAlign": "middle"
 						}
 					]
@@ -311,7 +310,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 81,
+	"geometryStamp": 92,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

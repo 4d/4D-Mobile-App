@@ -41,13 +41,13 @@ Function bestSize()->$height : Integer
 	// Must be called from the host allow to resize the container
 	If (This:C1470.predicting.data.length<3)
 		
-		$height:=This:C1470.predicting.properties.rowHeight*3
+		$height:=This:C1470.predicting.properties.rowsHeight*3
 		
 	Else 
 		
-		$height:=This:C1470.predicting.properties.rowHeight*This:C1470.predicting.data.length
+		$height:=This:C1470.predicting.properties.rowsHeight*This:C1470.predicting.data.length
 		
 	End if 
 	
-	$height:=$height+3
+	$height+=3
 	

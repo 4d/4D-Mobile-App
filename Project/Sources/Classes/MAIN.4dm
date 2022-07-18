@@ -73,7 +73,7 @@ Function handleEvents($e : Object) : Integer
 				var $x : Blob
 				var $o : Object
 				
-				$o:=This:C1470._dataModel.cellPosition($e)
+				//$o:=This._dataModel.cellPosition($e)
 				
 				Case of 
 						
@@ -132,7 +132,7 @@ Function handleEvents($e : Object) : Integer
 				var $x : Blob
 				var $o : Object
 				
-				$o:=This:C1470.displayed.cellPosition($e)
+				//$o:=This.displayed.cellPosition($e)
 				
 				Case of 
 						
@@ -178,9 +178,7 @@ Function handleEvents($e : Object) : Integer
 				//==============================================
 			: (This:C1470.addOne.catch($e; On Clicked:K2:4))
 				
-				$o:=This:C1470._dataModel.cellPosition($e)
-				
-				This:C1470._add("one"; $o.row)
+				This:C1470._add("one"; This:C1470._dataModel.cellPosition($e).row)
 				
 				//==============================================
 			: (This:C1470.addAll.catch($e; On Clicked:K2:4))
@@ -402,15 +400,15 @@ Function mainHandleEvents($e : Object)->$allow : Integer
 				
 				//$me:=This.displayed
 				//If ($e.row=-1)  // After the last line
-				//If ($o.src#$me.rowsNumber())  // Not if the source was the last line
-				//$o:=$me.rowCoordinates($me.rowsNumber())
+				//If ($o.src#$me.rowsNumber)  // Not if the source was the last line
+				//$o:=$me.rowCoordinates($me.rowsNumber)
 				//$o.top:=$o.bottom
 				//$o.right:=$me.coordinates.right
 				//$allow:=0  // Allow drop
 				// End if
 				// Else
 				//If ($o.src#$e.row)\
-																																								& ($e.row#($o.src+1))  // Not the same or the next one
+																																																		& ($e.row#($o.src+1))  // Not the same or the next one
 				//$o:=$me.rowCoordinates($e.row)
 				//$o.bottom:=$o.top
 				//$o.right:=$me.coordinates.right

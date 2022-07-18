@@ -436,7 +436,7 @@ Function doStaticDragAndDrop()->$allowed : Integer
 	//This.dropCursor.hide()
 	//Else 
 	//If ($e.row=-1)  // After the last line
-	//$rows:=$list.rowsNumber()
+	//$rows:=$list.rowsNumber
 	//If ($o.src#$rows)  // Not if the source was the last line
 	//$allowed:=0
 	//$o:=$list.rowCoordinates($rows)
@@ -445,7 +445,7 @@ Function doStaticDragAndDrop()->$allowed : Integer
 	//End if 
 	//Else 
 	//If ($o.src#$e.row)\
-		 & ($e.row#($o.src+1))  // Not the same or the next one
+				 & ($e.row#($o.src+1))  // Not the same or the next one
 	//$allowed:=0
 	//$o:=$list.rowCoordinates($e.row)
 	//$o.bottom:=$o.top

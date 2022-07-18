@@ -408,9 +408,9 @@ Function parameterListManager()->$allow : Integer
 				
 				If ($e.row=-1)  // After the last line
 					
-					If ($o.src#$me.rowsNumber())  // Not if the source was the last line
+					If ($o.src#$me.rowsNumber)  // Not if the source was the last line
 						
-						$o:=$me.rowCoordinates($me.rowsNumber())
+						$o:=$me.rowCoordinates($me.rowsNumber)
 						$o.top:=$o.bottom
 						$o.right:=$me.coordinates.right
 						$allow:=0  // Allow drop
@@ -1696,9 +1696,9 @@ Function dataSourceMenuManager()
 Function editList()
 	
 /*
-										$form:=New object(\
-																																"static"; $static; \
-																																"host"; This.path.hostInputControls(True))
+											$form:=New object(\
+																																		"static"; $static; \
+																																		"host"; This.path.hostInputControls(True))
 	
 $form.folder:=This.path.hostInputControls()
 $manifest:=$form.folder.file("manifest.json")
@@ -2390,7 +2390,7 @@ Function _addParameter($parameter : Object)
 	
 	This:C1470.parameters.focus()
 	This:C1470.saveContext($parameter)
-	This:C1470.parameters.reveal(This:C1470.parameters.rowsNumber()+Num:C11(This:C1470.parameters.rowsNumber()=0))
+	This:C1470.parameters.reveal(This:C1470.parameters.rowsNumber+Num:C11(This:C1470.parameters.rowsNumber=0))
 	This:C1470.refresh()
 	
 Function _newUserControl($static : Boolean)

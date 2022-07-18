@@ -29,16 +29,15 @@ Class constructor($name : Text; $datasource)
 	// Backup design properties
 	This:C1470.saveProperties()
 	
-	// MARK: - Informations
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Gives the number of columns
-Function columnsNumber() : Integer
+Function get columnsNumber() : Integer
 	
 	return LISTBOX Get number of columns:C831(*; This:C1470.name)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Gives the number of rows
-Function rowsNumber() : Integer
+Function get rowsNumber() : Integer
 	
 	return LISTBOX Get number of rows:C915(*; This:C1470.name)
 	
@@ -173,7 +172,7 @@ Function rowCoordinates($row : Integer) : Object
 	This:C1470.getCoordinates()
 	
 	LISTBOX GET CELL COORDINATES:C1330(*; This:C1470.name; 1; $row; $left; $top; $l; $l)
-	LISTBOX GET CELL COORDINATES:C1330(*; This:C1470.name; This:C1470.columnsNumber(); $row; $l; $l; $right; $bottom)
+	LISTBOX GET CELL COORDINATES:C1330(*; This:C1470.name; This:C1470.columnsNumber; $row; $l; $l; $right; $bottom)
 	
 	// Adjust according to the visible part
 	$left:=($left<This:C1470.coordinates.left) ? This:C1470.coordinates.left : $left
@@ -219,22 +218,12 @@ Function cellCoordinates($column : Integer; $row : Integer) : Object
 	
 	LISTBOX GET CELL COORDINATES:C1330(*; This:C1470.name; $column; $row; $left; $top; $right; $bottom)
 	
-	If (This:C1470.cellBox=Null:C1517)
-		
-		This:C1470.cellBox:=New object:C1471(\
-			"left"; $left; \
-			"top"; $top; \
-			"right"; $right; \
-			"bottom"; $bottom)
-		
-	Else 
-		
-		This:C1470.cellBox.left:=$left
-		This:C1470.cellBox.top:=$top
-		This:C1470.cellBox.right:=$right
-		This:C1470.cellBox.bottom:=$bottom
-		
-	End if 
+	This:C1470.cellBox:=This:C1470.cellBox || New object:C1471
+	
+	This:C1470.cellBox.left:=$left
+	This:C1470.cellBox.top:=$top
+	This:C1470.cellBox.right:=$right
+	This:C1470.cellBox.bottom:=$bottom
 	
 	return This:C1470.cellBox
 	
@@ -303,10 +292,7 @@ Function selectFirstRow() : cs:C1710.listbox
 	// Select the last row
 Function selectLastRow() : cs:C1710.listbox
 	
-	var $row : Integer
-	
-	$row:=This:C1470.rowsNumber()
-	This:C1470.select($row)
+	This:C1470.select(This:C1470.rowsNumber)
 	
 	return This:C1470
 	
@@ -322,22 +308,19 @@ Function autoSelect()
 	// Useful to maintain a selection after a deletion
 Function doSafeSelect($row : Integer) : cs:C1710.listbox
 	
-	var $rowNumber : Integer
-	
 	LISTBOX SELECT ROW:C912(*; This:C1470.name; 0; lk remove from selection:K53:3)
-	$rowNumber:=This:C1470.rowsNumber()
 	
 	Case of 
 			
 			//______________________________
-		: ($row<=$rowNumber)
+		: ($row<=This:C1470.rowsNumber)
 			
 			return This:C1470.select($row)
 			
 			//______________________________
-		: ($rowNumber>0)
+		: (This:C1470.rowsNumber>0)
 			
-			return This:C1470.select($rowNumber)
+			return This:C1470.select(This:C1470.rowsNumber)
 			
 			//______________________________
 		Else 
@@ -492,7 +475,6 @@ Function updateDefinition() : cs:C1710.listbox
 	// Update the current cell indexes and coordinates
 Function updateCell() : cs:C1710.listbox
 	
-	This:C1470.cellPosition()
 	This:C1470.cellCoordinates()
 	
 	return This:C1470
@@ -524,19 +506,11 @@ Function popup($menu : cs:C1710.menu; $default : Text) : cs:C1710.menu
 	return $menu
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function showColumn($column; $visible : Boolean)
+Function showColumn($column; $visible : Boolean) : cs:C1710.listbox
 	
-	var $name : Text
-	var $show : Boolean
 	var $o : Object
 	
-	$show:=True:C214
-	
-	If (Count parameters:C259>=2)
-		
-		$show:=$visible
-		
-	End if 
+	$visible:=Count parameters:C259>=2 ? $visible : True:C214
 	
 	This:C1470.updateDefinition()
 	
@@ -544,7 +518,7 @@ Function showColumn($column; $visible : Boolean)
 		
 		If (Asserted:C1132($column<=This:C1470.definition.length; "Index out of range"))
 			
-			$name:=This:C1470.definition[$column].name
+			OBJECT SET VISIBLE:C603(*; This:C1470.definition[$column].name; $visible)
 			
 		End if 
 		
@@ -554,17 +528,17 @@ Function showColumn($column; $visible : Boolean)
 		
 		If (Asserted:C1132($o#Null:C1517; "Unknown column name"))
 			
-			$name:=$o.name
+			OBJECT SET VISIBLE:C603(*; $o.name; $visible)
 			
 		End if 
 	End if 
 	
-	OBJECT SET VISIBLE:C603(*; $name; $show)
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function hideColumn($column)
+Function hideColumn($column) : cs:C1710.listbox
 	
-	This:C1470.showColumn($column; False:C215)
+	return This:C1470.showColumn($column; False:C215)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function clear() : cs:C1710.listbox
@@ -587,7 +561,7 @@ Function deleteRows($row : Integer) : cs:C1710.listbox
 	If (Count parameters:C259=0)
 		
 		// Delete all rows
-		LISTBOX DELETE ROWS:C914(*; This:C1470.name; 1; This:C1470.rowsNumber())
+		LISTBOX DELETE ROWS:C914(*; This:C1470.name; 1; This:C1470.rowsNumber)
 		
 	Else 
 		
@@ -600,48 +574,32 @@ Function deleteRows($row : Integer) : cs:C1710.listbox
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns all properties of the column or listbox
-Function getProperties($column : Text)->$properties : Object
+Function getProperties($column : Text) : Object
 	
-	var $target : Text
+	var $key; $target : Text
+	var $o; $properties : Object
 	
 	If (Count parameters:C259>=1)
 		
 		$target:=$column
+		$o:=This:C1470._columnProperties()
 		
 	Else 
 		
 		$target:=This:C1470.name
+		$o:=This:C1470._listboxProperties()
 		
 	End if 
 	
-	$properties:=New object:C1471(\
-		"enterable"; OBJECT Get enterable:C1067(*; $target); \
-		"allowWordwrap"; LISTBOX Get property:C917(*; $target; lk allow wordwrap:K53:39); \
-		"autoRowHeight"; LISTBOX Get property:C917(*; $target; lk auto row height:K53:72); \
-		"backgroundColorExpression"; LISTBOX Get property:C917(*; $target; lk background color expression:K53:47); \
-		"columnMinWidth"; LISTBOX Get property:C917(*; $target; lk column min width:K53:50); \
-		"columnResizable"; LISTBOX Get property:C917(*; $target; lk column resizable:K53:40); \
-		"detailFormName"; LISTBOX Get property:C917(*; $target; lk detail form name:K53:44); \
-		"displayFooter"; LISTBOX Get property:C917(*; $target; lk display footer:K53:20); \
-		"displayHeader"; LISTBOX Get property:C917(*; $target; lk display header:K53:4); \
-		"displayType"; LISTBOX Get property:C917(*; $target; lk display type:K53:46); \
-		"doubleClickOnRow"; LISTBOX Get property:C917(*; $target; lk double click on row:K53:43); \
-		"extraRows"; LISTBOX Get property:C917(*; $target; lk extra rows:K53:38); \
-		"fontColorExpression"; LISTBOX Get property:C917(*; $target; lk font color expression:K53:48); \
-		"fontStyleExpression"; LISTBOX Get property:C917(*; $target; lk font style expression:K53:49); \
-		"hideSelectionHighlight"; LISTBOX Get property:C917(*; $target; lk hide selection highlight:K53:41); \
-		"highlightSet"; LISTBOX Get property:C917(*; $target; lk highlight set:K53:66); \
-		"horScrollbarHeight"; LISTBOX Get property:C917(*; $target; lk hor scrollbar height:K53:7); \
-		"multiStyle"; LISTBOX Get property:C917(*; $target; lk multi style:K53:71); \
-		"namedSelection"; LISTBOX Get property:C917(*; $target; lk named selection:K53:67); \
-		"resizingMode"; LISTBOX Get property:C917(*; $target; lk resizing mode:K53:36); \
-		"rowHeightUnit"; LISTBOX Get property:C917(*; $target; lk row height unit:K53:42); \
-		"selectionMode"; LISTBOX Get property:C917(*; $target; lk selection mode:K53:35); \
-		"singleClickEdit"; LISTBOX Get property:C917(*; $target; lk single click edit:K53:70); \
-		"sortable"; LISTBOX Get property:C917(*; $target; lk sortable:K53:45); \
-		"truncate"; LISTBOX Get property:C917(*; $target; lk truncate:K53:37); \
-		"verScrollbarWidth"; LISTBOX Get property:C917(*; $target; lk ver scrollbar width:K53:9)\
-		)
+	$properties:=New object:C1471
+	
+	For each ($key; $o)
+		
+		$properties[$key]:=LISTBOX Get property:C917(*; $target; $o[$key].k)
+		
+	End for each 
+	
+	return $properties
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function getProperty($property : Integer; $column : Text) : Variant
@@ -669,9 +627,9 @@ Function noHighlight() : cs:C1710.listbox
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function movableLines($enabled : Boolean) : cs:C1710.listbox
 	
-	$enabled:=(Count parameters:C259>=1) ? $enabled : True:C214
+	$enabled:=Count parameters:C259>=1 ? $enabled : True:C214
 	
-	This:C1470.setProperty(lk movable rows:K53:76; Choose:C955($enabled; lk yes:K53:69; lk no:K53:68))
+	This:C1470.setProperty(lk movable rows:K53:76; $enabled ? lk yes:K53:69 : lk no:K53:68)
 	
 	return This:C1470
 	
@@ -686,26 +644,14 @@ Function selectable($enabled : Boolean; $mode : Integer) : cs:C1710.listbox
 	If (Count parameters:C259=0)
 		
 		// Restore design mode definition
-		This:C1470.setProperty(lk selection mode:K53:35; This:C1470.properties.selectionMode)
+		return This:C1470.setProperty(lk selection mode:K53:35; This:C1470.properties.selectionMode)
 		
 	Else 
 		
 		$enabled:=Count parameters:C259>=1 ? $enabled : True:C214
-		
-		If ($enabled)
-			
-			// Restore design mode definition
-			This:C1470.setProperty(lk selection mode:K53:35; $mode)
-			
-		Else 
-			
-			This:C1470.setProperty(lk selection mode:K53:35; lk none:K53:57)
-			
-		End if 
+		return $enabled ? This:C1470.setProperty(lk selection mode:K53:35; $mode) : This:C1470.setProperty(lk selection mode:K53:35; lk none:K53:57)
 		
 	End if 
-	
-	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function notSelectable() : cs:C1710.listbox
@@ -725,18 +671,8 @@ Function multipleSelectable() : cs:C1710.listbox
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function sortable($enabled : Boolean) : cs:C1710.listbox
 	
-	var $sortable : Boolean
-	$sortable:=True:C214
-	
-	If (Count parameters:C259>=1)
-		
-		$sortable:=$enabled
-		
-	End if 
-	
-	This:C1470.setProperty(lk movable rows:K53:76; Choose:C955($sortable; lk yes:K53:69; lk no:K53:68))
-	
-	return This:C1470
+	$enabled:=Count parameters:C259>=1 ? $enabled : True:C214
+	return This:C1470.setProperty(lk movable rows:K53:76; $enabled ? lk yes:K53:69 : lk no:K53:68)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function notSortable() : cs:C1710.listbox
@@ -753,107 +689,146 @@ Function setProperty($property : Integer; $value) : cs:C1710.listbox
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function setRowsHeight($height : Integer; $unit : Integer) : cs:C1710.listbox
 	
-	If (Count parameters:C259>=2)
-		
-		LISTBOX SET ROWS HEIGHT:C835(*; This:C1470.name; $height; $unit)
-		
-	Else 
-		
-		LISTBOX SET ROWS HEIGHT:C835(*; This:C1470.name; $height)
-		
-	End if 
-	
-	return This:C1470
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function restoreProperties() : cs:C1710.listbox
-	
-	This:C1470.setProperty(lk allow wordwrap:K53:39; This:C1470.properties.allowWordwrap)
-	This:C1470.setProperty(lk auto row height:K53:72; This:C1470.properties.autoRowHeight)
-	This:C1470.setProperty(lk background color expression:K53:47; This:C1470.properties.backgroundColorExpression)
-	This:C1470.setProperty(lk double click on row:K53:43; This:C1470.properties.doubleClickOnRow)
-	This:C1470.setProperty(lk extra rows:K53:38; This:C1470.properties.extraRows)
-	This:C1470.setProperty(lk font color expression:K53:48; This:C1470.properties.fontColorExpression)
-	This:C1470.setProperty(lk font style expression:K53:49; This:C1470.properties.fontStyleExpression)
-	This:C1470.setProperty(lk hide selection highlight:K53:41; This:C1470.properties.hideSelectionHighlight)
-	This:C1470.setProperty(lk highlight set:K53:66; This:C1470.properties.highlightSet)
-	This:C1470.setProperty(lk hor scrollbar height:K53:7; This:C1470.properties.horScrollbarHeight)
-	This:C1470.setProperty(lk meta expression:K53:75; This:C1470.properties.metaExpression)
-	This:C1470.setProperty(lk movable rows:K53:76; This:C1470.properties.movableRows)
-	This:C1470.setProperty(lk named selection:K53:67; This:C1470.properties.namedSelection)
-	This:C1470.setProperty(lk resizing mode:K53:36; This:C1470.properties.resizingMode)
-	
-	This:C1470.setProperty(lk display footer:K53:20; This:C1470.properties.displayFooter)
-	LISTBOX SET FOOTERS HEIGHT:C1145(*; This:C1470.name; This:C1470.properties.footerHeight; This:C1470.properties.footerHeightUnit)
-	This:C1470.setProperty(lk display header:K53:4; This:C1470.properties.displayHeader)
-	LISTBOX SET HEADERS HEIGHT:C1143(*; This:C1470.name; This:C1470.properties.headerHeight; This:C1470.properties.headerHeightUnit)
-	
-	This:C1470.setRowsHeight(This:C1470.properties.rowHeight; This:C1470.properties.rowHeightUnit)
-	This:C1470.setProperty(lk row height unit:K53:42; This:C1470.properties.rowHeightUnit)
-	
-	If (This:C1470.isArray)
-		
-		This:C1470.setProperty(lk row max height:K53:74; This:C1470.properties.rowMaxHeight)
-		This:C1470.setProperty(lk row min height:K53:73; This:C1470.properties.rowMinHeight)
-		
-	End if 
-	
-	This:C1470.setProperty(lk selection mode:K53:35; This:C1470.properties.selectionMode)
-	This:C1470.setProperty(lk single click edit:K53:70; This:C1470.properties.singleClickEdit)
-	This:C1470.setProperty(lk sortable:K53:45; This:C1470.properties.sortable)
-	This:C1470.setProperty(lk truncate:K53:37; This:C1470.properties.truncate)
-	This:C1470.setProperty(lk ver scrollbar width:K53:9; This:C1470.properties.verScrollbarWidth)
-	
-	This:C1470.setScrollbars(This:C1470.properties.horScrollbar; This:C1470.properties.verScrollbar)
+	LISTBOX SET ROWS HEIGHT:C835(*; This:C1470.name; $height; $unit)
 	
 	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function saveProperties()
 	
-	This:C1470.properties:=New object:C1471
+	var $key : Text
+	var $unit : Integer
+	var $o; $properties : Object
 	
-	This:C1470.properties.selectionMode:=LISTBOX Get property:C917(*; This:C1470.name; lk selection mode:K53:35)
-	This:C1470.properties.singleClickEdit:=LISTBOX Get property:C917(*; This:C1470.name; lk single click edit:K53:70)
-	This:C1470.properties.sortable:=LISTBOX Get property:C917(*; This:C1470.name; lk sortable:K53:45)
-	This:C1470.properties.truncate:=LISTBOX Get property:C917(*; This:C1470.name; lk truncate:K53:37)
-	This:C1470.properties.allowWordwrap:=LISTBOX Get property:C917(*; This:C1470.name; lk allow wordwrap:K53:39)
-	This:C1470.properties.doubleClickOnRow:=LISTBOX Get property:C917(*; This:C1470.name; lk double click on row:K53:43)
-	This:C1470.properties.extraRows:=LISTBOX Get property:C917(*; This:C1470.name; lk extra rows:K53:38)
-	This:C1470.properties.hideSelectionHighlight:=LISTBOX Get property:C917(*; This:C1470.name; lk hide selection highlight:K53:41)
-	This:C1470.properties.movableRows:=LISTBOX Get property:C917(*; This:C1470.name; lk movable rows:K53:76)
-	This:C1470.properties.resizingMode:=LISTBOX Get property:C917(*; This:C1470.name; lk resizing mode:K53:36)
+	$properties:=New object:C1471
 	
-	This:C1470.properties.displayFooter:=LISTBOX Get property:C917(*; This:C1470.name; lk display footer:K53:20)
-	This:C1470.properties.footerHeight:=LISTBOX Get footers height:C1146(*; This:C1470.name)
-	This:C1470.properties.displayHeader:=LISTBOX Get property:C917(*; This:C1470.name; lk display header:K53:4)
-	This:C1470.properties.headerHeight:=LISTBOX Get headers height:C1144(*; This:C1470.name)
+	$o:=This:C1470._listboxProperties()
 	
-	This:C1470.properties.rowHeight:=LISTBOX Get rows height:C836(*; This:C1470.name; lk pixels:K53:22)
-	This:C1470.properties.autoRowHeight:=LISTBOX Get property:C917(*; This:C1470.name; lk auto row height:K53:72)
-	This:C1470.properties.rowHeightUnit:=LISTBOX Get property:C917(*; This:C1470.name; lk row height unit:K53:42)
-	
-	If (This:C1470.isArray)
+	For each ($key; $o)
 		
-		// These properties returns -1 for a collection listbox
-		This:C1470.properties.rowMaxHeight:=LISTBOX Get property:C917(*; This:C1470.name; lk row max height:K53:74)
-		This:C1470.properties.rowMinHeight:=LISTBOX Get property:C917(*; This:C1470.name; lk row min height:K53:73)
+		$properties[$key]:=LISTBOX Get property:C917(*; This:C1470.name; $o[$key].k)
+		
+	End for each 
+	
+	$properties.headerHeight:=LISTBOX Get headers height:C1144(*; This:C1470.name)
+	$properties.footerHeight:=LISTBOX Get footers height:C1146(*; This:C1470.name)
+	
+	If (Bool:C1537($properties.autoRowHeight))
+		
+		$properties.rowMaxHeight:=LISTBOX Get auto row height:C1502(*; This:C1470.name; lk row max height:K53:74)
+		$properties.rowMinHeight:=LISTBOX Get auto row height:C1502(*; This:C1470.name; lk row min height:K53:73)
+		
+	Else 
+		
+		$properties.rowsHeight:=LISTBOX Get rows height:C836(*; This:C1470.name)
 		
 	End if 
 	
-	This:C1470.properties.highlightSet:=LISTBOX Get property:C917(*; This:C1470.name; lk highlight set:K53:66)
-	This:C1470.properties.metaExpression:=LISTBOX Get property:C917(*; This:C1470.name; lk meta expression:K53:75)
-	This:C1470.properties.namedSelection:=LISTBOX Get property:C917(*; This:C1470.name; lk named selection:K53:67)
-	This:C1470.properties.backgroundColorExpression:=LISTBOX Get property:C917(*; This:C1470.name; lk background color expression:K53:47)
-	This:C1470.properties.fontColorExpression:=LISTBOX Get property:C917(*; This:C1470.name; lk font color expression:K53:48)
-	This:C1470.properties.fontStyleExpression:=LISTBOX Get property:C917(*; This:C1470.name; lk font style expression:K53:49)
-	
 	var $horizontal; $vertical : Integer
 	OBJECT GET SCROLLBAR:C1076(*; This:C1470.name; $horizontal; $vertical)
-	This:C1470.properties.horScrollbar:=$horizontal
-	This:C1470.properties.verScrollbar:=$vertical
-	This:C1470.properties.horScrollbarHeight:=LISTBOX Get property:C917(*; This:C1470.name; lk hor scrollbar height:K53:7)
-	This:C1470.properties.verScrollbarWidth:=LISTBOX Get property:C917(*; This:C1470.name; lk ver scrollbar width:K53:9)
+	$properties.horScrollbar:=$horizontal
+	$properties.verScrollbar:=$vertical
+	
+	This:C1470.properties:=$properties
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function restoreProperties()
+	
+	var $key : Text
+	var $o; $properties : Object
+	
+	$properties:=This:C1470.properties
+	$o:=This:C1470._listboxProperties()
+	
+	For each ($key; $o)
+		
+		LISTBOX SET PROPERTY:C1440(*; This:C1470.name; $o[$key].k; $properties[$key])
+		
+	End for each 
+	
+	LISTBOX SET FOOTERS HEIGHT:C1145(*; This:C1470.name; $properties.footerHeight)
+	LISTBOX SET HEADERS HEIGHT:C1143(*; This:C1470.name; $properties.headerHeight)
+	
+	If (Bool:C1537($properties.autoRowHeight))
+		
+		LISTBOX SET AUTO ROW HEIGHT:C1501(*; This:C1470.name; lk row max height:K53:74; $properties.rowMaxHeight; lk pixels:K53:22)
+		LISTBOX SET AUTO ROW HEIGHT:C1501(*; This:C1470.name; lk row min height:K53:73; $properties.rowMinHeight; lk pixels:K53:22)
+		
+	Else 
+		
+		LISTBOX SET ROWS HEIGHT:C835(*; This:C1470.name; $properties.rowsHeight)
+		
+	End if 
+	
+	This:C1470.setScrollbars($properties.horScrollbar; $properties.verScrollbar)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _listboxProperties() : Object
+	
+	var $o : Object
+	
+	$o:=This:C1470._commonProperties()
+	
+	$o.detailFormName:=New object:C1471("k"; lk detail form name:K53:44)
+	$o.displayFooter:=New object:C1471("k"; lk display footer:K53:20)
+	$o.displayHeader:=New object:C1471("k"; lk display header:K53:4)
+	$o.doubleClickOnRow:=New object:C1471("k"; lk double click on row:K53:43)
+	$o.extraRows:=New object:C1471("k"; lk extra rows:K53:38)
+	$o.hideSelectionHighlight:=New object:C1471("k"; lk hide selection highlight:K53:41)
+	$o.highlightSet:=New object:C1471("k"; lk highlight set:K53:66)
+	$o.horScrollbarHeight:=New object:C1471("k"; lk hor scrollbar height:K53:7)
+	$o.movableRows:=New object:C1471("k"; lk movable rows:K53:76)
+	$o.namedSelection:=New object:C1471("k"; lk named selection:K53:67)
+	$o.resizingMode:=New object:C1471("k"; lk resizing mode:K53:36)
+	$o.rowHeightUnit:=New object:C1471("k"; lk row height unit:K53:42)
+	$o.selectionMode:=New object:C1471("k"; lk selection mode:K53:35)
+	$o.singleClickEdit:=New object:C1471("k"; lk single click edit:K53:70)
+	$o.sortable:=New object:C1471("k"; lk sortable:K53:45)
+	$o.verScrollbarWidth:=New object:C1471("k"; lk ver scrollbar width:K53:9)
+	
+	Case of 
+			
+			//______________________________________________________
+		: (This:C1470.isCollection)
+			
+			$o.metaExpression:=New object:C1471("k"; lk meta expression:K53:75)
+			
+			//______________________________________________________
+	End case 
+	
+	return $o
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _columnProperties() : Object
+	
+	var $o : Object
+	
+	$o:=This:C1470._commonProperties()
+	
+	$o.allowWordwrap:=New object:C1471("k"; lk allow wordwrap:K53:39)
+	$o.columnMaxWidth:=New object:C1471("k"; lk column max width:K53:51)
+	$o.columnMinWidth:=New object:C1471("k"; lk column min width:K53:50)
+	$o.columnResizable:=New object:C1471("k"; lk column resizable:K53:40)
+	$o.displayType:=New object:C1471("k"; lk display type:K53:46)
+	$o.multiStyle:=New object:C1471("k"; lk multi style:K53:71)
+	
+	return $o
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _commonProperties() : Object
+	
+	var $o : Object
+	$o:=New object:C1471
+	
+	$o.autoRowHeight:=New object:C1471("k"; lk auto row height:K53:72)
+	$o.backgroundColorExpression:=New object:C1471("k"; lk background color expression:K53:47)
+	$o.cellHorizontalPadding:=New object:C1471("k"; lk cell horizontal padding:K53:77)
+	$o.cellVerticalPadding:=New object:C1471("k"; lk cell vertical padding:K53:78)
+	$o.fontColorExpression:=New object:C1471("k"; lk font color expression:K53:48)
+	$o.fontStyleExpression:=New object:C1471("k"; lk font style expression:K53:49)
+	$o.truncate:=New object:C1471("k"; lk truncate:K53:37)
+	
+	return $o
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// ⚠️ ONLY WORKS WITH ARRAY TYPE LIST BOXES
@@ -861,15 +836,9 @@ Function setRowFontStyle($row : Integer; $tyle : Integer)
 	
 	If (Asserted:C1132(This:C1470.isArray; "setRowFontStyle() only works with array type list boxes!"))
 		
-		If (Count parameters:C259>=2)
-			
-			LISTBOX SET ROW FONT STYLE:C1268(*; This:C1470.name; $row; $tyle)
-			
-		Else 
-			
-			// Default is plain
-			LISTBOX SET ROW FONT STYLE:C1268(*; This:C1470.name; $row; Plain:K14:1)
-			
-		End if 
+		// Default is plain
+		$tyle:=Count parameters:C259>=2 ? $tyle : Plain:K14:1
+		LISTBOX SET ROW FONT STYLE:C1268(*; This:C1470.name; $row; $tyle)
+		
 	End if 
 	
