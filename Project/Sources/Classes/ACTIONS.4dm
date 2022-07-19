@@ -996,7 +996,7 @@ Function openOnMobileAppActionDatabaseMethod()
 			
 			// Delete actions performed locally on the mobile
 			var $c : Collection
-			$c:=Form:C1466.actions.query("preset != sort")
+			$c:=Form:C1466.actions.query("NOT(preset IN :1)"; New collection:C1472("sort"; "openURL"))
 			
 			PROCESS 4D TAGS:C816($file.getText(); $code; $c.extract("name"); $c.extract("label"))
 			METHOD SET CODE:C1194($methods{0}; $code; *)
