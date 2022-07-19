@@ -12,6 +12,6 @@ If (False:C215)
 	C_TEXT:C284(_o_doc_catalog; $2)
 	
 	//______________________________________________________
-	C_OBJECT:C1216(_o_doc_UNLOCK_DIRECTORY; $1)
+	//C_OBJECT(_o_doc_UNLOCK_DIRECTORY; $1)
 	//______________________________________________________
 End if 

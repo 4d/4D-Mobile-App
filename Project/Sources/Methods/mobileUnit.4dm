@@ -250,17 +250,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			$response:=cs:C1710.xcDataModel.new($parameters).run(\
 				$parameters.path; \
 				$parameters)
-/*
-//________________________________________
-: ($entryPoint="dataModel")
 			
-EXECUTE METHOD(Formula(_o_dataModel).source; $response; $parameters)
-			
-//________________________________________
-: ($entryPoint="xcDataModel")
-			
-EXECUTE METHOD(Formula(_o_xcDataModel).source; $response; $parameters)
-*/
 			//________________________________________
 		: ($entryPoint="simulator")
 			
@@ -301,16 +291,6 @@ EXECUTE METHOD(Formula(_o_xcDataModel).source; $response; $parameters)
 			
 			EXECUTE METHOD:C1007(Formula:C1597(dataSet).source; $response; $parameters)
 			
-/*
-: ($entryPoint="dataModel")
-			
-EXECUTE METHOD(Formula(_o_dataModel).source; $response; $parameters)
-			
-//________________________________________
-: ($entryPoint="xcDataModel")
-			
-EXECUTE METHOD(Formula(_o_xcDataModel).source; $response; $parameters)
-*/
 			//MARK:- storyboard
 		: ($entryPoint="storyboard")
 			

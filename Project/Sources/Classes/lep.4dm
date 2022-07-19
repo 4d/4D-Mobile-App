@@ -17,14 +17,14 @@ Class constructor
 	//MARK:- 📌 COMPUTED ATTRIBUTES
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// The time spend in millisecondes since the last countTimeInit() call
-Function get timeSpent()->$duration : Integer
+Function get timeSpent() : Integer
 	
-	$duration:=Milliseconds:C459-This:C1470.startTime
+	return Milliseconds:C459-This:C1470.startTime
 	
 	//MARK:- 📌 FUNCTIONS
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Restores the initial values of the class
-Function reset()->$this : cs:C1710.lep
+Function reset() : cs:C1710.lep
 	
 	This:C1470.success:=True:C214
 	This:C1470.errors:=New collection:C1472
@@ -44,7 +44,7 @@ Function reset()->$this : cs:C1710.lep
 	
 	This:C1470.countTimeInit()
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Initialization of the counting of the time spent
@@ -54,7 +54,7 @@ Function countTimeInit()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Pause current process if the condition is true, in any case returns the time spent. 
-Function delay($condition : Boolean; $delay : Integer)->$duration : Integer
+Function delay($condition : Boolean; $delay : Integer) : Integer
 	
 	If ($condition)
 		
@@ -63,22 +63,22 @@ Function delay($condition : Boolean; $delay : Integer)->$duration : Integer
 		
 	End if 
 	
-	$duration:=This:C1470.timeSpent
+	return This:C1470.timeSpent
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function setCharSet($charset : Text)->$this : cs:C1710.lep
+Function setCharSet($charset : Text) : cs:C1710.lep
 	
 	This:C1470.charSet:=$charset="" ? "UTF-8" : $charset
-	$this:=This:C1470
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function setOutputType($outputType : Integer)->$this : cs:C1710.lep
+Function setOutputType($outputType : Integer) : cs:C1710.lep
 	
 	This:C1470.outputType:=$outputType=0 ? Is text:K8:3 : $outputType
-	$this:=This:C1470
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function setEnvironnementVariable($variables; $value : Text)->$this : cs:C1710.lep
+Function setEnvironnementVariable($variables; $value : Text) : cs:C1710.lep
 	
 	var $v : Variant
 	var $o : Object
@@ -169,28 +169,30 @@ Function setEnvironnementVariable($variables; $value : Text)->$this : cs:C1710.l
 			//______________________________________________________
 	End case 
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Execute the external process in asynchronous mode then restore the default synchronous mode
-Function launchAsync($command; $arguments : Variant)->$this : cs:C1710.lep
+Function launchAsync($command; $arguments : Variant) : cs:C1710.lep
 	
 	This:C1470.asynchronous()
 	
 	If (Count parameters:C259>=2)
 		
-		$this:=This:C1470.launch($command; $arguments)
+		This:C1470.launch($command; $arguments)
 		
 	Else 
 		
-		$this:=This:C1470.launch($command)
+		This:C1470.launch($command)
 		
 	End if 
 	
 	This:C1470.synchronous()
 	
+	return This:C1470
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function launch($command; $arguments : Variant)->$this : cs:C1710.lep
+Function launch($command; $arguments : Variant) : cs:C1710.lep
 	
 	var $inputStream; $outputStream : Blob
 	var $errorStream; $t : Text
@@ -407,52 +409,55 @@ Function launch($command; $arguments : Variant)->$this : cs:C1710.lep
 		
 	End if 
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Execute the external process in synchronous mode
 	// ⚠️ Must be call before .launch()
-Function synchronous($mode : Boolean)->$this : cs:C1710.lep
+Function synchronous($mode : Boolean) : cs:C1710.lep
 	
 	This:C1470.setEnvironnementVariable("asynchronous"; (Count parameters:C259>=1) ? ($mode ? "true" : "false") : "true")
-	$this:=This:C1470
+	
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Execute the external process in asynchronous mode
 	// ⚠️ Must be call before .launch()
-Function asynchronous($mode : Boolean)->$this : cs:C1710.lep
+Function asynchronous($mode : Boolean) : cs:C1710.lep
 	
 	This:C1470.setEnvironnementVariable("asynchronous"; (Count parameters:C259>=1) ? ($mode ? "false" : "true") : "false")
-	$this:=This:C1470
+	
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function setDirectory($folder : 4D:C1709.Folder)->$this : cs:C1710.lep
+Function setDirectory($folder : 4D:C1709.Folder) : cs:C1710.lep
 	
 	This:C1470.environmentVariables["_4D_OPTION_CURRENT_DIRECTORY"]:=Count parameters:C259>=1 ? $folder.platformPath : ""
 	This:C1470.success:=True:C214
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function showConsole()->$this : cs:C1710.lep
+Function showConsole() : cs:C1710.lep
 	
 	This:C1470.environmentVariables["_4D_OPTION_HIDE_CONSOLE"]:="false"
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function hideConsole()->$this : cs:C1710.lep
+Function hideConsole() : cs:C1710.lep
 	
 	This:C1470.environmentVariables["_4D_OPTION_HIDE_CONSOLE"]:="true"
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns an object containing all the environment variables
-Function getEnvironnementVariables()->$variables : Object
+Function getEnvironnementVariables() : Object
 	
-	var $c : Collection
 	var $t : Text
+	var $variables : Object
+	var $c : Collection
 	
 	This:C1470.launch(Choose:C955(Is macOS:C1572; "/usr/bin/env"; "set"))
 	
@@ -482,33 +487,27 @@ Function getEnvironnementVariables()->$variables : Object
 		End for each 
 	End if 
 	
+	return $variables
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the content of an environment variable from its name
-Function getEnvironnementVariable($name : Text; $nonDiacritic : Boolean)->$value : Text
+Function getEnvironnementVariable($name : Text; $isDiacritic : Boolean) : Text
 	
 	var $o : Object
-	var $t : Text
-	var $isDiacritic : Boolean
 	
 	This:C1470.success:=Count parameters:C259>=1
 	
 	If (This:C1470.success)
 		
-		$isDiacritic:=True:C214
+		$isDiacritic:=Count parameters:C259>=2 ? $isDiacritic : True:C214
 		
-		If (Count parameters:C259>=2)
-			
-			$isDiacritic:=$nonDiacritic
-			
-		End if 
-		
-		$t:=This:C1470._shortcut($name)
+		$name:=This:C1470._shortcut($name)
 		
 		If ($isDiacritic)
 			
-			If (This:C1470.environmentVariables[$t]#Null:C1517)
+			If (This:C1470.environmentVariables[$name]#Null:C1517)
 				
-				$value:=This:C1470.environmentVariables[$t]
+				return This:C1470.environmentVariables[$name]
 				
 			Else 
 				
@@ -517,7 +516,7 @@ Function getEnvironnementVariable($name : Text; $nonDiacritic : Boolean)->$value
 				
 				If (This:C1470.success)
 					
-					$value:=$o[$name]
+					return $o[$name]
 					
 				Else 
 					
@@ -528,19 +527,16 @@ Function getEnvironnementVariable($name : Text; $nonDiacritic : Boolean)->$value
 			
 		Else 
 			
-			$o:=OB Entries:C1720(This:C1470.environmentVariables).query("key = :1"; $t).pop()
+			$o:=OB Entries:C1720(This:C1470.environmentVariables).query("key = :1"; $name).pop()
 			
 			If ($o=Null:C1517)
 				
-				$o:=OB Entries:C1720(This:C1470.getEnvironnementVariables()).query("key = :1"; $t).pop()
+				$o:=OB Entries:C1720(This:C1470.getEnvironnementVariables()).query("key = :1"; $name).pop()
 				
 			End if 
 			
-			If ($o#Null:C1517)
-				
-				$value:=$o.value
-				
-			End if 
+			return String:C10($o.value)
+			
 		End if 
 		
 	Else 
@@ -574,25 +570,29 @@ https://apple.stackexchange.com/questions/23494/what-option-should-i-give-the-su
 	
 	If ($script.exists)
 		
-		If (Count parameters:C259>=2)
+		If (Length:C16($title)>0)
 			
 			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_TITLE"; $title)
 			
 		End if 
 		
-		$message:=$message ? $message : Get localized string:C991("enterYourPasswordToAllowThis")
-		$message:=$message ? $message : "Enter your password to allow this."
+		If (Length:C16($message)=0)
+			
+			$message:=Get localized string:C991("enterYourPasswordToAllowThis")
+			$message+="Enter your password to allow this."
+			
+		End if 
 		
 		SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_MESSAGE"; $message)
 		SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS"; $script.path)
 		
-		This:C1470.lastError:=""
-		
-		If ($cmd#"sudo -A @")
+		If (Position:C15("sudo -A "; $cmd)#1)
 			
 			$cmd:="sudo -A "+$cmd
 			
 		End if 
+		
+		This:C1470.lastError:=""
 		
 		This:C1470.launch($cmd)
 		
@@ -651,21 +651,13 @@ Function endsWithSpace($string : Text) : Text
 	// -  0 if the version and the reference are equal
 	// -  1 if the version is higher than the reference
 	// - -1 if the version is lower than the reference
-Function versionCompare($current : Text; $reference : Text; $separator : Text)->$result : Integer
+Function versionCompare($current : Text; $reference : Text; $separator : Text) : Integer
 	
 	var $sep : Text
 	var $i : Integer
 	var $c1; $c2 : Collection
 	
-	ASSERT:C1129(Count parameters:C259>=2)
-	
-	$sep:="."  // Default separator
-	
-	If (Count parameters:C259>=3)
-		
-		$sep:=$separator
-		
-	End if 
+	$sep:=Length:C16($separator)=0 ? "." : $sep  // Default is dot
 	
 	$c1:=Split string:C1554($current; $sep)
 	$c2:=Split string:C1554($reference; $sep)
@@ -692,14 +684,12 @@ Function versionCompare($current : Text; $reference : Text; $separator : Text)->
 				//______________________________________________________
 			: (Num:C11($c1[$i])>Num:C11($c2[$i]))
 				
-				$result:=1
-				$i:=MAXLONG:K35:2-1  // Break
+				return 1
 				
 				//______________________________________________________
 			: (Num:C11($c1[$i])<Num:C11($c2[$i]))
 				
-				$result:=-1
-				$i:=MAXLONG:K35:2-1  // Break
+				return -1
 				
 				//______________________________________________________
 			Else 
@@ -712,7 +702,7 @@ Function versionCompare($current : Text; $reference : Text; $separator : Text)->
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Set write accesses to a file or a directory with all its subfolders and files
-Function makeWritable($cible : 4D:C1709.Document)->$this : cs:C1710.lep
+Function makeWritable($cible : 4D:C1709.Document) : cs:C1710.lep
 	
 	If (Bool:C1537($cible.exists))
 		
@@ -797,48 +787,39 @@ ATTRIB [+R | -R] [+A | -A ] [+S | -S] [+H | -H] [+I | -I]
 		
 	End if 
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//Set write accesses to a directory with all its sub-folders and files
-Function unlockDirectory($cible : 4D:C1709.Folder)->$this : cs:C1710.lep
+Function unlockDirectory($cible : 4D:C1709.Folder) : cs:C1710.lep
 	
-	If (Bool:C1537($cible.exists))
+	If (Not:C34($cible.exists))
 		
-		If ($cible.isFolder)
-			
-			This:C1470.setEnvironnementVariable("directory"; $cible.platformPath)
-			
-			If (Is Windows:C1573)
-				
-				This:C1470.launch("attrib.exe -R /D /S")
-				
-			Else 
-				
-				This:C1470.launch("chmod -R u+rwX "+This:C1470.singleQuoted($cible.path))
-				
-			End if 
-			
-		Else 
-			
-			This:C1470._pushError($cible.path+" is not a directory!")
-			
-		End if 
-		
-	Else 
-		
-		This:C1470._pushError("Invalid pathname: "+String:C10($cible.path))
+		This:C1470._pushError("Folder not found: "+String:C10($cible.path))
+		return This:C1470
 		
 	End if 
 	
-	$this:=This:C1470
+	If (Not:C34($cible.isFolder))
+		
+		This:C1470._pushError($cible.path+" is not a directory!")
+		return This:C1470
+		
+	End if 
+	
+	This:C1470.setEnvironnementVariable("directory"; $cible.platformPath)
+	
+	return Is Windows:C1573 ? \
+		This:C1470.launch("attrib.exe -R /D /S") : \
+		This:C1470.launch("chmod -R u+rwX "+This:C1470.singleQuoted($cible.path))
+	
 	
 	//MARK:- 📌 PRIVATES
-	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Remove unnecessary carriage returns and line breaks from the error/output stream
-Function _cleanupStream($textToCleanUp : Text)->$cleaned : Text
+Function _cleanupStream($textToCleanUp : Text) : Text
 	
+	var $cleaned : Text
 	var $stop : Boolean
 	
 	$cleaned:=$textToCleanUp
@@ -899,8 +880,10 @@ Function _cleanupStream($textToCleanUp : Text)->$cleaned : Text
 		End if 
 	End if 
 	
+	return $cleaned
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function _shortcut($string : Text)->$variable : Text
+Function _shortcut($string : Text) : Text
 	
 	Case of   // Shortcuts
 			
@@ -908,24 +891,24 @@ Function _shortcut($string : Text)->$variable : Text
 		: ($string="directory")\
 			 | ($string="currentDirectory")
 			
-			$variable:="_4D_OPTION_CURRENT_DIRECTORY"
+			return "_4D_OPTION_CURRENT_DIRECTORY"
 			
 			//…………………………………………………………………………………………
 		: ($string="asynchronous")\
 			 | ($string="non-blocking")
 			
-			$variable:="_4D_OPTION_BLOCKING_EXTERNAL_PROCESS"
+			return "_4D_OPTION_BLOCKING_EXTERNAL_PROCESS"
 			
 			//…………………………………………………………………………………………
 		: ($string="console")\
 			 | ($string="hideConsole")
 			
-			$variable:="_4D_OPTION_HIDE_CONSOLE"
+			return "_4D_OPTION_HIDE_CONSOLE"
 			
 			//…………………………………………………………………………………………
 		Else 
 			
-			$variable:=$string
+			return $string
 			
 			//…………………………………………………………………………………………
 	End case 

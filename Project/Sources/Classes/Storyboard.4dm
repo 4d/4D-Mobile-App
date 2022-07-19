@@ -222,13 +222,13 @@ If (Length($Txt_out)>0)
 var $File_ : Object
 $File_:=Folder(Temporary folder; fk platform path).file(Generate UUID+"ibtool.plist")
 $File_.setText($Txt_out)
-	$Obj_out:=_o_plist(New object(\
-		"action"; "object"; \
-		"domain"; $File_.path))
+		$Obj_out:=_o_plist(New object(\
+				"action"; "object"; \
+				"domain"; $File_.path))
 $File_.delete()
 	
-	If (($Obj_out.success)\
-		 & ($Obj_out.value#Null))
+		If (($Obj_out.success)\
+				 & ($Obj_out.value#Null))
 	
 $Obj_out.version:=String($Obj_out.value["com.apple.ibtool.version"]["bundle-version"])
 	
@@ -322,8 +322,12 @@ Function colorAssetFix($theme : Object)->$Obj_out : Object
 		If ($asModification)
 			
 			// write if there is one named colors (could also do it only if one attribute change)
-			_o_doc_UNLOCK_DIRECTORY(New object:C1471(\
+			
+			//_o_doc_UNLOCK_DIRECTORY(New object(\
 				"path"; $File_.parent.platformPath))
+			
+			cs:C1710.lep.new().unlockDirectory($File_.parent)
+			
 			$root.save($File_)
 			
 			This:C1470.format()

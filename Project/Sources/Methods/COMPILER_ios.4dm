@@ -12,10 +12,6 @@ C_OBJECT:C1216(_o_dataModel; $1)
 C_OBJECT:C1216(TemplateInstanceFactory; $0)
 C_OBJECT:C1216(TemplateInstanceFactory; $1)
 
-//__________________________________________________________
-C_OBJECT:C1216(_o_xcDataModel; $0)
-C_OBJECT:C1216(_o_xcDataModel; $1)
-
 //__________________________________________________
 C_OBJECT:C1216(xloc; $0)
 C_OBJECT:C1216(xloc; $1)
