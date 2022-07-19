@@ -248,33 +248,34 @@ Function onLoad()
 	//FIXME: Use a listbox collection
 	COLLECTION TO ARRAY:C1562(This:C1470.available; This:C1470.srcIdPtr->; "id"; This:C1470.srcNamePtr->; "name")
 	
-	This:C1470._dataModel.setScrollbars(0; 2).unselect()  //.noHighlight()
-	This:C1470.displayed.setScrollbars(0; 2).unselect()  //.noHighlight()
+	This:C1470._dataModel.setScrollbars(0; 2).unselect()
+	This:C1470.displayed.setScrollbars(0; 2).unselect()
 	
 	If (UI.isLocked())
 		
-		This:C1470._dataModel.notDraggable()\
-			.notSelectable()
+		This:C1470._dataModel.draggable:=False:C215
+		This:C1470._dataModel.selectable:=False:C215
 		
-		This:C1470.displayed.notSelectable()\
-			.nonMovableLines()\
-			.notDraggable()\
-			.notDroppable()
+		This:C1470.displayed.movableLines:=False:C215
+		This:C1470.displayed.selectable:=False:C215
+		This:C1470.displayed.draggable:=False:C215
+		This:C1470.displayed.droppable:=False:C215
 		
 	Else 
 		
-		This:C1470._dataModel.multipleSelectable()\
-			.draggable()
+		This:C1470._dataModel.draggable:=True:C214
+		This:C1470._dataModel.selectable:=True:C214
 		
-		This:C1470.displayed.singleSelectable()\
-			.movableLines()\
-			.draggable()\
-			.droppable()
+		This:C1470.displayed.movableLines:=True:C214
+		This:C1470.displayed.selectable:=True:C214
+		This:C1470.displayed.draggable:=True:C214
+		This:C1470.displayed.droppable:=True:C214
 		
 	End if 
 	
 	This:C1470._dataModel.focus()
 	
+	// Add the events that we cannot select in the form properties 😇
 	This:C1470.appendEvents(On Row Moved:K2:32)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
@@ -408,7 +409,7 @@ Function mainHandleEvents($e : Object)->$allow : Integer
 				// End if
 				// Else
 				//If ($o.src#$e.row)\
-																																																		& ($e.row#($o.src+1))  // Not the same or the next one
+																																																							& ($e.row#($o.src+1))  // Not the same or the next one
 				//$o:=$me.rowCoordinates($e.row)
 				//$o.bottom:=$o.top
 				//$o.right:=$me.coordinates.right

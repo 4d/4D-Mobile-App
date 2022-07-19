@@ -935,8 +935,9 @@ Function beginDrag($uri : Text; $data; $dragIcon : Picture)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
-Function getPasteboard($uri : Text)->$value
+Function getPasteboard($uri : Text) : Variant
 	
+	var $value
 	var $data : Blob
 	
 	GET PASTEBOARD DATA:C401($uri; $data)
@@ -945,6 +946,8 @@ Function getPasteboard($uri : Text)->$value
 		
 		BLOB TO VARIABLE:C533($data; $value)
 		SET BLOB SIZE:C606($data; 0)
+		
+		return $value
 		
 	End if 
 	

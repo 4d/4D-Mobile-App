@@ -97,7 +97,6 @@
 						"onSelectionChange",
 						"onBeginDragOver"
 					],
-					"selectionMode": "single",
 					"columns": [
 						{
 							"name": "table_ids",
@@ -176,6 +175,7 @@
 					],
 					"movableRows": true,
 					"method": "ObjectMethods/02_displayed.4dm",
+					"selectionMode": "single",
 					"columns": [
 						{
 							"name": "main_ids",

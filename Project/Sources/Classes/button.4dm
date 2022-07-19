@@ -87,14 +87,16 @@ Function setPicture($proxy : Text) : cs:C1710.button
 			
 			//______________________________________________________
 		: (Position:C15("path:"; $proxy)=1)\
-			 | (Position:C15("file:"; $proxy)=1)
+			 || (Position:C15("file:"; $proxy)=1)\
+			 || (Position:C15("var:"; $proxy)=1)\
+			 || (Position:C15("!"; $proxy)=1)
 			
 			Super:C1706.setPicture($proxy)
 			
 			//______________________________________________________
 		: (Position:C15("#"; $proxy)=1)  // Shortcut for Resources folder
 			
-			Super:C1706.setPicture("path:/RESOURCES/"+Replace string:C233($proxy; "#"; ""))
+			Super:C1706.setPicture("path:/RESOURCES/"+Delete string:C232($proxy; 1; 1))
 			
 			//______________________________________________________
 		: (Position:C15("/"; $proxy)=1)

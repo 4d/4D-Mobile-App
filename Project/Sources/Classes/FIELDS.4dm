@@ -395,10 +395,10 @@ Function updateFieldList
 	End if 
 	
 	$enterable:=UI.isNotLocked()
-	This:C1470.labels.enterable($enterable)
-	This:C1470.shortLabels.enterable($enterable)
-	This:C1470.formats.enterable($enterable)
-	This:C1470.titles.enterable($enterable)
+	This:C1470.labels.enterable:=$enterable
+	This:C1470.shortLabels.enterable:=$enterable
+	This:C1470.formats.enterable:=$enterable
+	This:C1470.titles.enterable:=$enterable
 	
 	This:C1470.fieldList.unselect()
 	

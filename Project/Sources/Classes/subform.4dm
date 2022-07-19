@@ -14,12 +14,15 @@ Class constructor($objectName : Text; $datasource)
 	End if 
 	
 	This:C1470.parent:=This:C1470.getParent()
+	This:C1470.events:=Null:C1517
 	
-	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	
+	// Mark:-
+	// === === === === === === === === === === === === === === === === === === ===
 	// ⚠️
 Function getCoordinates() : Object
 	
-	This:C1470.getSubform()
+	This:C1470.getSubforms()
 	
 	return Super:C1706.getCoordinates()
 	
@@ -28,19 +31,13 @@ Function getParent() : Object
 	
 	var $height; $width : Integer
 	
-/*
-	
-If the command is called from a form that is not being used as a subform,
-	
-it returns the current size of the form window.
-*/
 	OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $height)
 	
-	return (New object:C1471(\
+	return New object:C1471(\
 		"name"; Current form name:C1298; \
 		"dimensions"; New object:C1471(\
 		"width"; $width; \
-		"height"; $height)))
+		"height"; $height))
 	
 	// === === === === === === === === === === === === === === === === === === ===
 Function getParentDimensions() : Object
@@ -49,9 +46,9 @@ Function getParentDimensions() : Object
 	
 	OBJECT GET SUBFORM CONTAINER SIZE:C1148($width; $height)
 	
-	return (New object:C1471(\
+	return New object:C1471(\
 		"width"; $width; \
-		"height"; $height))
+		"height"; $height)
 	
 	// === === === === === === === === === === === === === === === === === === ===
 Function callParent($eventCode : Integer)
@@ -96,7 +93,7 @@ Function alignHorizontally($alignment : Integer; $reference)
 	End case 
 	
 	// === === === === === === === === === === === === === === === === === === ===
-Function getSubform()
+Function getSubforms()
 	
 	var $detail; $list : Text
 	var $ptr : Pointer
@@ -147,3 +144,9 @@ Function currentPage() : Integer
 Function goToPage($page : Integer)
 	
 	FORM GOTO PAGE:C247($page; *)
+	
+	// === === === === === === === === === === === === === === === === === === ===
+	// The event codes triggered in the container method
+Function setEvents($events : Object)
+	
+	This:C1470.events:=$events || New object:C1471

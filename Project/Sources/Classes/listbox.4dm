@@ -29,6 +29,7 @@ Class constructor($name : Text; $datasource)
 	// Backup design properties
 	This:C1470.saveProperties()
 	
+	//mark:-[READ ONLY]
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Gives the number of columns
 Function get columnsNumber() : Integer
@@ -41,6 +42,77 @@ Function get rowsNumber() : Integer
 	
 	return LISTBOX Get number of rows:C915(*; This:C1470.name)
 	
+	//mark:-[READ & WRITE]
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function get movableLines() : Boolean
+	
+	return Bool:C1537(LISTBOX Get property:C917(*; This:C1470.name; lk movable rows:K53:76))
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function set movableLines($on : Boolean)
+	
+	LISTBOX SET PROPERTY:C1440(*; This:C1470.name; lk movable rows:K53:76; $on ? lk yes:K53:69 : lk no:K53:68)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function get selectable() : Boolean
+	
+	return Bool:C1537(LISTBOX Get property:C917(*; This:C1470.name; lk selection mode:K53:35))
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function set selectable($on : Boolean)
+	
+	If ($on)
+		
+		// Try to restore design selection mode
+		LISTBOX SET PROPERTY:C1440(*; This:C1470.name; lk selection mode:K53:35; Num:C11(This:C1470.properties.selectionMode)=0 ? lk yes:K53:69 : This:C1470.properties.selectionMode)
+		
+	Else 
+		
+		LISTBOX SET PROPERTY:C1440(*; This:C1470.name; lk selection mode:K53:35; lk no:K53:68)
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function get singleSelection() : Boolean
+	
+	return LISTBOX Get property:C917(*; This:C1470.name; lk selection mode:K53:35)=lk single:K53:58
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function set singleSelection($on : Boolean)
+	
+	LISTBOX SET PROPERTY:C1440(*; This:C1470.name; lk selection mode:K53:35; $on ? lk single:K53:58 : lk multiple:K53:59)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function get multipleSelection() : Boolean
+	
+	return LISTBOX Get property:C917(*; This:C1470.name; lk selection mode:K53:35)=lk multiple:K53:59
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function set multipleSelection($on : Boolean)
+	
+	LISTBOX SET PROPERTY:C1440(*; This:C1470.name; lk selection mode:K53:35; $on ? lk multiple:K53:59 : lk single:K53:58)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function get sortable() : Boolean
+	
+	return Bool:C1537(LISTBOX Get property:C917(*; This:C1470.name; lk sortable:K53:45))
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function set sortable($on : Boolean)
+	
+	LISTBOX SET PROPERTY:C1440(*; This:C1470.name; lk sortable:K53:45; $on ? lk yes:K53:69 : lk no:K53:68)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function get selectionHighlight() : Boolean
+	
+	return Bool:C1537(LISTBOX Get property:C917(*; This:C1470.name; lk hide selection highlight:K53:41))
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function set selectionHighlight($on : Boolean) : cs:C1710.listbox
+	
+	LISTBOX SET PROPERTY:C1440(*; This:C1470.name; lk hide selection highlight:K53:41; $on ? lk yes:K53:69 : lk no:K53:68)
+	
+	//mark:-
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Giving a column, a header or a footer name, returns the corresponding column pointer
 	// ⚠️ Could return a nil pointer if the colunmn isn't found or if column data source is an expression
@@ -233,7 +305,7 @@ Function selected() : Integer
 	
 	return Count in array:C907((This:C1470.pointer)->; True:C214)
 	
-	// MARK: - Selection
+	// MARK: - [SELECTION]
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Select row(s)
 Function select($row : Integer) : cs:C1710.listbox
@@ -419,16 +491,18 @@ Function reveal($row : Integer) : cs:C1710.listbox
 	// Update the listbox columns/rows definition
 Function updateDefinition() : cs:C1710.listbox
 	
+	var $key : Text
 	var $i : Integer
+	var $o : Object
 	
+	ARRAY TEXT:C222($columns; 0)
+	ARRAY TEXT:C222($footers; 0)
+	ARRAY TEXT:C222($headers; 0)
 	ARRAY BOOLEAN:C223($isVisible; 0)
 	ARRAY POINTER:C280($columnsPtr; 0)
 	ARRAY POINTER:C280($footersPtr; 0)
 	ARRAY POINTER:C280($headersPtr; 0)
 	ARRAY POINTER:C280($stylesPtr; 0)
-	ARRAY TEXT:C222($columns; 0)
-	ARRAY TEXT:C222($footers; 0)
-	ARRAY TEXT:C222($headers; 0)
 	
 	LISTBOX GET ARRAYS:C832(*; This:C1470.name; \
 		$columns; $headers; \
@@ -446,6 +520,8 @@ Function updateDefinition() : cs:C1710.listbox
 	
 	This:C1470.columns:=New object:C1471
 	
+	$o:=This:C1470._columnProperties()
+	
 	For ($i; 1; Size of array:C274($columns); 1)
 		
 		This:C1470.columns[$columns{$i}]:=New object:C1471(\
@@ -453,18 +529,13 @@ Function updateDefinition() : cs:C1710.listbox
 			"visible"; $isVisible{$i}; \
 			"enterable"; OBJECT Get enterable:C1067(*; $columns{$i}); \
 			"height"; LISTBOX Get row height:C1408(*; This:C1470.name; $i); \
-			"wordwrap"; LISTBOX Get property:C917(*; $columns{$i}; lk allow wordwrap:K53:39); \
-			"autoRowHeight"; LISTBOX Get property:C917(*; $columns{$i}; lk auto row height:K53:72); \
-			"maxWidth"; LISTBOX Get property:C917(*; $columns{$i}; lk column max width:K53:51); \
-			"minWidth"; LISTBOX Get property:C917(*; $columns{$i}; lk column min width:K53:50); \
-			"resizable"; LISTBOX Get property:C917(*; $columns{$i}; lk column resizable:K53:40); \
-			"displayType"; LISTBOX Get property:C917(*; $columns{$i}; lk display type:K53:46); \
-			"fontColorExpression"; LISTBOX Get property:C917(*; $columns{$i}; lk font color expression:K53:48); \
-			"fontStyleExpression"; LISTBOX Get property:C917(*; $columns{$i}; lk font style expression:K53:49); \
-			"multiStyle"; LISTBOX Get property:C917(*; $columns{$i}; lk multi style:K53:71); \
-			"truncate"; LISTBOX Get property:C917(*; $columns{$i}; lk truncate:K53:37); \
 			"pointer"; $columnsPtr{$i})
 		
+		For each ($key; $o)
+			
+			This:C1470.columns[$columns{$i}][$key]:=LISTBOX Get property:C917(*; $columns{$i}; $o[$key].k)
+			
+		End for each 
 	End for 
 	
 	This:C1470.getScrollbars()
@@ -573,7 +644,7 @@ Function deleteRows($row : Integer) : cs:C1710.listbox
 	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns all properties of the column or listbox
+	// Returns all properties of a column or the listbox
 Function getProperties($column : Text) : Object
 	
 	var $key; $target : Text
@@ -615,17 +686,17 @@ Function getProperty($property : Integer; $column : Text) : Variant
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function highlight($enabled : Boolean) : cs:C1710.listbox
+Function withSelectionHighlight($enabled : Boolean) : cs:C1710.listbox
 	
 	return This:C1470.setProperty(lk hide selection highlight:K53:41; $enabled ? lk yes:K53:69 : lk no:K53:68)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function noHighlight() : cs:C1710.listbox
+Function withoutSelectionHighlight() : cs:C1710.listbox
 	
-	return This:C1470.setProperty(lk hide selection highlight:K53:41; lk no:K53:68)
+	return This:C1470.withSelectionHighlight(False:C215)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function movableLines($enabled : Boolean) : cs:C1710.listbox
+Function setMovableLines($enabled : Boolean) : cs:C1710.listbox
 	
 	$enabled:=Count parameters:C259>=1 ? $enabled : True:C214
 	
@@ -634,12 +705,12 @@ Function movableLines($enabled : Boolean) : cs:C1710.listbox
 	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function nonMovableLines() : cs:C1710.listbox
+Function setNotMovableLines() : cs:C1710.listbox
 	
-	return This:C1470.movableLines(False:C215)
+	return This:C1470.setMovableLines(False:C215)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function selectable($enabled : Boolean; $mode : Integer) : cs:C1710.listbox
+Function setSelectable($enabled : Boolean; $mode : Integer) : cs:C1710.listbox
 	
 	If (Count parameters:C259=0)
 		
@@ -654,30 +725,30 @@ Function selectable($enabled : Boolean; $mode : Integer) : cs:C1710.listbox
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function notSelectable() : cs:C1710.listbox
+Function setNotSelectable() : cs:C1710.listbox
 	
-	return This:C1470.selectable(False:C215)
+	return This:C1470.setSelectable(False:C215)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function singleSelectable() : cs:C1710.listbox
+Function setSingleSelectable() : cs:C1710.listbox
 	
 	return This:C1470.setProperty(lk selection mode:K53:35; lk single:K53:58)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function multipleSelectable() : cs:C1710.listbox
+Function setMultipleSelectable() : cs:C1710.listbox
 	
 	return This:C1470.setProperty(lk selection mode:K53:35; lk multiple:K53:59)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function sortable($enabled : Boolean) : cs:C1710.listbox
+Function setSortable($enabled : Boolean) : cs:C1710.listbox
 	
 	$enabled:=Count parameters:C259>=1 ? $enabled : True:C214
-	return This:C1470.setProperty(lk movable rows:K53:76; $enabled ? lk yes:K53:69 : lk no:K53:68)
+	return This:C1470.setProperty(lk sortable:K53:45; $enabled ? lk yes:K53:69 : lk no:K53:68)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function notSortable() : cs:C1710.listbox
+Function setNotSortable() : cs:C1710.listbox
 	
-	return This:C1470.sortable(False:C215)
+	return This:C1470.setSortable(False:C215)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function setProperty($property : Integer; $value) : cs:C1710.listbox
@@ -762,6 +833,7 @@ Function restoreProperties()
 	
 	This:C1470.setScrollbars($properties.horScrollbar; $properties.verScrollbar)
 	
+	//mark:-[PRIVATE]
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _listboxProperties() : Object
 	

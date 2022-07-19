@@ -166,6 +166,7 @@ listbox {
 	movableRows: false;
 	verticalAlign: middle;
 	hideExtraBlankRows: true;
+	horizontalPadding:2;
 }
 
 

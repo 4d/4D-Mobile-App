@@ -236,7 +236,7 @@ Case of
 	: ($e.code=On Bound Variable Change:K2:52)
 		
 		// * SET THE SWITCH BUTTON PICTURE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		$form.switch.setPicture("#images/toolbar/"+Choose:C955(Form:C1466.state="open"; "reduce"; "expand")+".png")
+		$form.switch.setPicture("#images/toolbar/"+(Form:C1466.state="open" ? "reduce" : "expand")+".png")
 		
 		// * UPDATE THE SECTION BUTTONS
 		For each ($page; $form.pages)

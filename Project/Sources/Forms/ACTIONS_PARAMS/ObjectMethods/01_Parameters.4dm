@@ -1,3 +1,3 @@
 #DECLARE() : Integer
 
-return (panel.parameterListManager())
+return panel.parameterListManager()

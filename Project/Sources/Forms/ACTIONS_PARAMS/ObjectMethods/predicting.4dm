@@ -1,1 +1,1 @@
-panel.predictingManager()
+panel.predictingManager(FORM Event:C1606)
