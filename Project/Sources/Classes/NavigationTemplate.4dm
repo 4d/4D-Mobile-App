@@ -128,7 +128,7 @@ $table.shortLabel:=$table.shortLabel || $table.action.shortLabel*/
 	$actionsConsumed:=This:C1470.input.tags.navigationTables\
 		.map(Formula:C1597($1.value.actions))\
 		.filter(Formula:C1597($1.value#Null:C1517))\
-		/*.flat()*/.reduce(New collection:C1472; Formula:C1597($1.result.combine($1.value)))\
+		/*.flat()*/.reduce(Formula:C1597($1.result.combine($1.value)); New collection:C1472)\
 		.map(Formula:C1597($1.value.name))
 	
 	$globalActions:=mobile_actions("form"; New object:C1471(\
