@@ -465,7 +465,11 @@ If (Asserted:C1132($project#Null:C1517))
 			
 			Logger.info(Current method name:C684+": CALL WORKER(mobile_Project)")
 			
-			CALL WORKER:C1389(UI.worker; Formula:C1597(mobile_Project).source; $data)
+			If (Feature.with("buildWith4DAction"))
+				mobile_Project_web_post($data)
+			Else 
+				CALL WORKER:C1389(UI.worker; Formula:C1597(mobile_Project).source; $data)
+			End if 
 			
 		End if 
 		

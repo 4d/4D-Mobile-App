@@ -13,6 +13,10 @@ If (False:C215)
 	C_OBJECT:C1216(mobile_Project; $0)
 	
 	//__________________________________________________
+	C_OBJECT:C1216(mobile_Project_web_post; $1)
+	C_OBJECT:C1216(mobile_Project_web_post; $0)
+	
+	//__________________________________________________
 	//C_OBJECT(_o_mobile_Project_iOS; $1)
 	//C_OBJECT(_o_mobile_Project_iOS; $0)
 	

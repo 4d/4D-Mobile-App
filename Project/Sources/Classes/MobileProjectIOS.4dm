@@ -18,7 +18,7 @@ Class constructor($project : Object)
 	Case of 
 		: (Value type:C1509(This:C1470.project.name)=Is text:K8:3)
 			This:C1470.productName:=This:C1470.project.name
-		: (This:C1470.project._folder#Null:C1517)
+		: (Value type:C1509(This:C1470.project._folder)=Is object:K8:27)
 			This:C1470.productName:=This:C1470.project._folder.name
 		: (Value type:C1509($project.$project.product)=Is text:K8:3)
 			This:C1470.productName:=$project.$project.product

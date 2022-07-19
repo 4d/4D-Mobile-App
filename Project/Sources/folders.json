@@ -743,7 +743,9 @@
 		"methods": [
 			"COMPILER_mobile",
 			"mobile_actions",
-			"mobile_Project"
+			"mobile_Project",
+			"mobile_Project_web_post",
+			"mobile_Project_web_receive"
 		]
 	},
 	"ob": {
