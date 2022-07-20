@@ -291,7 +291,7 @@ Function update()
 	
 	This:C1470.updateParameters()
 	
-	This:C1470.remove.enable(Num:C11(This:C1470.index)#0)
+	This:C1470.remove.enable((Form:C1466.actions#Null:C1517) && (Form:C1466.actions.length>0))
 	
 	METHOD GET PATHS:C1163(Path database method:K72:2; $paths; *)
 	$success:=(Find in array:C230($paths; METHOD Get path:C1164(Path database method:K72:2; "onMobileAppAction"))>0)
@@ -475,67 +475,12 @@ Function setIcon($data : Object)
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function newAction($tableNumber : Integer)
 	
-	var $t : Text
-	var $i; $index : Integer
 	var $action : Object
-	var $c : Collection
 	
-	$t:="action_"+String:C10($index)
+	$action:=PROJECT.newAction($tableNumber)
 	
-	If (Form:C1466.actions#Null:C1517)
-		
-		// Generate a unique name
-		$index:=Form:C1466.actions.count()+1
-		
-		Repeat 
-			
-			$c:=Form:C1466.actions.query("name=:1"; $t)
-			
-			If ($c.length>0)
-				
-				$index:=$index+1
-				$t:="action_"+String:C10($index)
-				
-			End if 
-		Until ($c.length=0)
-	End if 
-	
-	$action:=New object:C1471(\
-		"name"; $t; \
-		"scope"; "table"; \
-		"shortLabel"; $t; \
-		"label"; $t; \
-		"$icon"; UI.getIcon(""))
-	
-	$action.parameters:=New collection:C1472
-	$action.parameters.push(New object:C1471(\
-		"name"; Get localized string:C991("newParameter"); \
-		"label"; Get localized string:C991("addParameter"); \
-		"shortLabel"; Get localized string:C991("addParameter"); \
-		"type"; "string"))
-	
-	If (Count parameters:C259=0)
-		
-		// Auto define the target table if only one is published
-		For each ($t; Form:C1466.dataModel) While ($i<2)
-			
-			$i+=1
-			
-		End for each 
-		
-		If ($i=1)
-			
-			$action.tableNumber:=Num:C11($t)
-			
-		End if 
-		
-	Else 
-		
-		$action.tableNumber:=$tableNumber
-		
-	End if 
-	
-	This:C1470._addAction($action)
+	$action.$icon:=UI.getIcon("")
+	This:C1470._addAction($action; True:C214)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function addMenuManager()
@@ -566,8 +511,11 @@ Function addMenuManager()
 		$deleteMenu:=cs:C1710.menu.new()
 		$shareMenu:=cs:C1710.menu.new()
 		$sortMenu:=cs:C1710.menu.new()
+		
 		If (Feature.with("openURLAction"))
+			
 			$openURLMenu:=cs:C1710.menu.new()
+			
 		End if 
 		
 		$menu:=cs:C1710.menu.new()\
@@ -948,7 +896,34 @@ Function addMenuManager()
 						//-------------------------------------------
 				End case 
 				
-				This:C1470._addAction($action)
+				Case of 
+						
+						//______________________________________________________
+					: ($menu.openURL)
+						
+						$action:=PROJECT.urlAction($menu.tableID)
+						$action.$icon:=UI.getIcon($menu.icon)
+						This:C1470._addAction($action; True:C214)
+						
+						//______________________________________________________
+					: ($menu.delete)
+						
+						$action:=PROJECT.deleteAction($menu.tableID)
+						$action.$icon:=UI.getIcon($menu.icon)
+						This:C1470._addAction($action; True:C214)
+						
+						//______________________________________________________
+					: (False:C215)
+						
+						
+						
+						//______________________________________________________
+					Else 
+						
+						This:C1470._addAction($action)
+						
+						//______________________________________________________
+				End case 
 				
 				//______________________________________________________
 		End case 
@@ -1052,9 +1027,7 @@ Function removeAction()
 	
 	var $index : Integer
 	
-	$index:=Form:C1466.actions.indexOf(This:C1470.current)
-	Form:C1466.actions.remove($index; 1)
-	PROJECT.save()
+	$index:=PROJECT.removeAction(This:C1470.current)
 	
 	// Update UI
 	This:C1470.actions.doSafeSelect($index+1)  // Collection index to listbox index
@@ -1183,28 +1156,21 @@ Function showIconPicker()
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function _addAction($action : Object)
+Function _addAction($action : Object; $skip : Boolean)
 	
 	If ($action#Null:C1517)  // An action was created
 		
-		// Ensure the action collection exists
-		If (Form:C1466.actions=Null:C1517)
+		If (Not:C34($skip))  // #TEMPO
 			
-			Form:C1466.actions:=New collection:C1472
+			PROJECT._appendAction($action)
 			
 		End if 
-		
-		Form:C1466.actions.push($action)
-		PROJECT.save()
 		
 		// Update UI
 		This:C1470.actions.focus()
 		This:C1470.actions.reveal(This:C1470.actions.rowsNumber+Num:C11(This:C1470.actions.rowsNumber=0))
 		
 		This:C1470.updateParameters($action)
-		
-		// Warning edit stop code execution -> must be delegate
-		// EDIT ITEM(*;$Obj_form.name;Form.actions.length)
 		
 		This:C1470.refresh()
 		

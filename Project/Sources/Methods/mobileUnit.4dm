@@ -31,6 +31,38 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	// ----------------------------------------------------
 	Case of 
 			
+			//MARK:[ACTIONS]
+		: ($entryPoint="actions")
+			
+			If (Asserted:C1132($parameters.project#Null:C1517; "Missing project file"))
+				
+				If (Asserted:C1132($parameters.test#Null:C1517; "missing test purpose"))
+					
+					var $project : cs:C1710.project
+					$project:=cs:C1710.project.new().load($parameters.project)
+					
+					Case of 
+							//______________________________________________________
+						: ($parameters.test="new")
+							
+							$project.newAction($parameters.table)
+							
+							//______________________________________________________
+						: (False:C215)
+							
+							
+							
+							//______________________________________________________
+						Else 
+							
+							// A "Case of" statement should never omit "Else"
+							
+							//______________________________________________________
+					End case 
+				End if 
+			End if 
+			
+			
 			//MARK:- uninstallAndroidStudio
 		: ($entryPoint="uninstallAndroidStudio")
 			

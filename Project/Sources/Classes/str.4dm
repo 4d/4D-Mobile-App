@@ -490,6 +490,25 @@ Function distinctLetters($delimitor : Text) : Variant
 	return (Count parameters:C259>=1 ? $c.join($delimitor) : $c)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Replace spaces, accented characters & special characters
+Function alphaNum($target : Text; $replacement : Text) : Text
+	
+	var $i : Integer
+	
+	$target:=Count parameters:C259=0 ? This:C1470.value : $target
+	
+	For ($i; 1; Length:C16($target); 1)
+		
+		If (Position:C15($target[[$i]]; "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789."; *)=0)
+			
+			$target[[$i]]:=$replacement
+			
+		End if 
+	End for 
+	
+	return $target
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns value as fixed length string
 Function fixedLength($length : Integer; $filler; $alignment : Integer) : Text
 	

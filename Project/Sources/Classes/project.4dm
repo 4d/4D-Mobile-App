@@ -1336,14 +1336,196 @@ Function removeFromMain($table)
 	
 	This:C1470.save()
 	
+	//mark:-[ACTIONS]
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function newAction($table) : Object
+	
+	var $name : Text
+	var $action; $o : Object
+	
+	$name:=This:C1470._actionName("action")
+	
+	$o:=This:C1470._tableAction($table)
+	
+	$action:=New object:C1471(\
+		"name"; $name; \
+		"scope"; "table"; \
+		"shortLabel"; This:C1470.shortLabel($name); \
+		"label"; This:C1470.label($name))
+	
+	If ($o#Null:C1517)
+		
+		$action.tableNumber:=Num:C11($o.id)
+		
+	End if 
+	
+	$action.parameters:=New collection:C1472
+	
+	$name:=Get localized string:C991("newParameter")
+	
+	$action.parameters.push(New object:C1471(\
+		"name"; $name; \
+		"label"; This:C1470.label($name); \
+		"shortLabel"; This:C1470.label($name); \
+		"type"; "string"))
+	
+	This:C1470._appendAction($action)
+	
+	return $action
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function urlAction($table) : Object
+	
+	var $action; $o : Object
+	
+	$o:=This:C1470._tableAction($table)
+	
+	$action:=New object:C1471(\
+		"preset"; "openURL"; \
+		"name"; This:C1470._actionName("openURL"); \
+		"scope"; "table"; \
+		"label"; Get localized string:C991("open..."); \
+		"shortLabel"; Get localized string:C991("open..."); \
+		"icon"; "actions/Globe.svg")
+	
+	If ($o#Null:C1517)
+		
+		$action.tableNumber:=Num:C11($o.id)
+		
+	End if 
+	
+	This:C1470._appendAction($action)
+	
+	return $action
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function deleteAction($table) : Object
+	
+	var $action; $o : Object
+	
+	$o:=This:C1470._tableAction($table)
+	
+	//$t:=cs.str.new(This.label($o.name)).uperCamelCase()
+	
+	$action:=New object:C1471(\
+		"preset"; "delete"; \
+		"style"; "destructive"; \
+		"name"; This:C1470._actionName("delete"+cs:C1710.str.new(This:C1470.label($o.name)).uperCamelCase()); \
+		"scope"; "currentRecord"; \
+		"label"; Get localized string:C991("remove"); \
+		"shortLabel"; Get localized string:C991("remove"); \
+		"icon"; "actions/Delete.svg")
+	
+	If ($o#Null:C1517)
+		
+		$action.tableNumber:=Num:C11($o.id)
+		
+	End if 
+	
+	This:C1470._appendAction($action)
+	
+	return $action
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function removeAction($action) : Integer
+	
+	var $index : Integer
+	
+	// It can be an action or an index in the action collection.
+	$index:=Value type:C1509($action)=Is object:K8:27 ? This:C1470.actions.indexOf($action) : Num:C11($action)
+	
+	This:C1470.actions.remove($index; 1)
+	
+	If (This:C1470.actions.length=0)
+		
+		OB REMOVE:C1226(This:C1470; "actions")
+		
+	End if 
+	
+	This:C1470.save()
+	
+	return $index
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Generate a unique name
+Function _actionName($prefix : Text) : Text
+	
+	var $name : Text
+	var $index : Integer
+	
+	$name:=$prefix
+	$index:=1
+	
+	If (This:C1470.actions=Null:C1517)
+		
+		return $name
+		
+	End if 
+	
+	Repeat 
+		
+		If (This:C1470.actions.query("name=:1"; $name).length=0)
+			
+			break
+			
+		End if 
+		
+		$index+=1
+		$name:=$prefix+"_"+String:C10($index)
+		
+	Until (False:C215)
+	
+	return $name
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _appendAction($action : Object)
+	
+	This:C1470.actions:=This:C1470.actions || New collection:C1472
+	This:C1470.actions.push($action)
+	This:C1470.save()
+	
+Function _tableAction($table) : Object
+	
+	var $tableID : Text
+	var $c : Collection
+	
+	If (Value type:C1509($table)=Is object:K8:27)\
+		 || (Value type:C1509($table)=Is text:K8:3)\
+		 || (((Value type:C1509($table)=Is real:K8:4) || (Value type:C1509($table)=Is longint:K8:6)) && (Num:C11($table)>0))
+		
+		$tableID:=This:C1470._tableID($table)
+		
+		If (Length:C16($tableID)>0)\
+			 && (This:C1470.dataModel[$tableID]#Null:C1517)
+			
+			return New object:C1471(\
+				"id"; $tableID; \
+				"name"; This:C1470.dataModel[$tableID][""].name)
+			
+		End if 
+		
+	Else 
+		
+		// Auto define the table if only one is published
+		$c:=OB Keys:C1719(This:C1470.dataModel)
+		
+		If ($c.length=1)
+			
+			return New object:C1471(\
+				"id"; $c[0]; \
+				"name"; This:C1470.dataModel[$c[0]][""].name)
+			
+		End if 
+	End if 
+	
+	//mark:-
 	/// Create list and detail form entries
 Function createFormEntries($table)
 	
 	var $tableID : Text
 	
-	This:C1470.list:=This:C1470.list=Null:C1517 ? New object:C1471 : This:C1470.list
-	This:C1470.detail:=This:C1470.detail=Null:C1517 ? New object:C1471 : This:C1470.detail
+	This:C1470.list:=This:C1470.list || New object:C1471
+	This:C1470.detail:=This:C1470.detail || New object:C1471
 	
 	$tableID:=This:C1470._tableID($table)
 	
@@ -1440,62 +1622,47 @@ Function defaultField($field : Object) : Text
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function formatBundleAppName($name : Text) : Text
 	
-	var $i : Integer
 	var $str : cs:C1710.str
 	
 	$str:=cs:C1710.str.new()
-	$name:=$str.trim($str.unaccented($name))
+	return $str.alphaNum($str.trim($str.unaccented($name)); "-")
 	
-	// Remove space, other accent, special characters
-	For ($i; 1; Length:C16($name); 1)
-		
-		If (Position:C15($name[[$i]]; "abcdefghijklmnopqrstuvwxyz0123456789.")=0)
-			
-			$name[[$i]]:="-"
-			
-		End if 
-	End for 
-	
-	return $name
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function label  // Format labels
-	var $0 : Text
-	var $1 : Text
+Function label($text : Text) : Text  // Format labels
 	
-	var $t : Text
 	var $i : Integer
 	
 	ARRAY TEXT:C222($words; 0)
 	
-	$t:=$1
-	
 	Case of 
 			
 			//______________________________________________________
-		: (Not:C34(Match regex:C1019("(?mi-s)^[[:ascii:]]*$"; $t; 1)))  //#ACI0099182
+		: (Not:C34(Match regex:C1019("(?mi-s)^[[:ascii:]]*$"; $text; 1)))  //#ACI0099182
 			
-			$0:=$t
+			return $text
 			
 			//______________________________________________________
-		: (Match regex:C1019("(?m-si)%[^%]*%"; $t; 1))  //#122850
+		: (Match regex:C1019("(?m-si)%[^%]*%"; $text; 1))  //#122850
 			
-			$0:=$t
+			return $text
 			
 			//______________________________________________________
 		Else 
 			
-			$t:=Replace string:C233($t; "_"; " ")
+			$text:=Replace string:C233($text; "_"; " ")
 			
-			// Camelcase to spaced
-			If (Rgx_SubstituteText("(?m-si)([[:lower:]])([[:upper:]])"; "\\1 \\2"; ->$t)=0)
+			// CamelCase to spaced
+			If (Rgx_SubstituteText("(?m-si)([[:lower:]])([[:upper:]])"; "\\1 \\2"; ->$text)=0)
 				
-				$t:=Lowercase:C14($t)
+				$text:=Lowercase:C14($text)
 				
 			End if 
 			
 			// Capitalize first letter of words
-			GET TEXT KEYWORDS:C1141($t; $words)
+			GET TEXT KEYWORDS:C1141($text; $words)
+			
+			$text:=""
 			
 			For ($i; 1; Size of array:C274($words); 1)
 				
@@ -1506,31 +1673,35 @@ Function label  // Format labels
 					
 				End if 
 				
-				$0:=$0+((" ")*Num:C11($i>1))+$words{$i}
+				$text+=((" ")*Num:C11($i>1))+$words{$i}
 				
 			End for 
 			
-			If ($0="id")
+			If ($text="id")
 				
-				$0:=Replace string:C233($0; "id"; "ID")
+				$text:=Replace string:C233($text; "id"; "ID")
 				
 			End if 
+			
+			return $text
 			
 			//______________________________________________________
 	End case 
 	
 	//====================================
-Function shortLabel  // Format short labels
-	var $0 : Text
-	var $1 : Text
+Function shortLabel($text : Text) : Text  // Format short labels
 	
-	$0:=This:C1470.label($1)
+	var $label : Text
 	
-	If (Length:C16($0)>10)
+	$label:=This:C1470.label($text)
+	
+	If (Length:C16($label)>10)
 		
-		$0:=Substring:C12($0; 1; 10)
+		$label:=Substring:C12($label; 1; 10)
 		
 	End if 
+	
+	return $label
 	
 	//====================================
 Function labelList  // List of x
