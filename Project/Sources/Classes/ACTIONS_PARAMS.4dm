@@ -659,8 +659,8 @@ Function update()
 				: (String:C10($action.preset)="openURL")  // Feature.with("openURLAction")
 					
 					This:C1470.goToPage(2)
-					This:C1470.title.setTitle("url").show()
-					This:C1470.description.setPlaceholder("https://www.example.com")
+					This:C1470.title.setTitle("urlToOpenWithThisAction").show()
+					This:C1470.description.setPlaceholder("urlPlaceholder")
 					
 					//______________________________________________________
 				: (String:C10($action.preset)="sort")
@@ -1694,9 +1694,9 @@ Function dataSourceMenuManager()
 Function editList()
 	
 /*
-													$form:=New object(\
-																																						"static"; $static; \
-																																						"host"; This.path.hostInputControls(True))
+														$form:=New object(\
+																																								"static"; $static; \
+																																								"host"; This.path.hostInputControls(True))
 	
 $form.folder:=This.path.hostInputControls()
 $manifest:=$form.folder.file("manifest.json")
