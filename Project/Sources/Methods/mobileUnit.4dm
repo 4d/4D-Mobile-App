@@ -34,19 +34,21 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			//MARK:-[ACTIONS]
 		: ($entryPoint="actions")
 			
-			If ($parameters.project=Null:C1517)
+			If ($parameters.project=Null:C1517)\
+				 || (Not:C34(OB Instance of:C1731($parameters.project; 4D:C1709.File)))
 				
 				return New object:C1471(\
 					"success"; False:C215; \
-					"error"; "Missing project file")
+					"error"; "Missing project file or bad type")
 				
 			End if 
 			
-			If ($parameters.test=Null:C1517)
+			If ($parameters.test=Null:C1517)\
+				 || (Value type:C1509($parameters.test)#Is text:K8:3)
 				
 				return New object:C1471(\
 					"success"; False:C215; \
-					"error"; "Missing test purpose")
+					"error"; "Missing test key or bad type")
 				
 			End if 
 			

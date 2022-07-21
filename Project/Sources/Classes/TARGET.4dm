@@ -45,7 +45,7 @@ Function handleEvents($e : Object)
 				//______________________________________________________
 			: ($e.code=On Bound Variable Change:K2:52)
 				
-				PROJECT.setTarget()
+				UI.setTarget()
 				
 				// Update UI
 				This:C1470.displayTarget()
@@ -88,11 +88,11 @@ Function handleEvents($e : Object)
 							 & Not:C34(Form:C1466.$android)
 							
 							// Force iOS
-							PROJECT.setTarget(True:C214; "ios")
+							UI.setTarget("ios"; True:C214)
 							
 						Else 
 							
-							PROJECT.setTarget(OBJECT Get value:C1743($e.objectName); $e.objectName)
+							UI.setTarget($e.objectName; OBJECT Get value:C1743($e.objectName))
 							
 						End if 
 						

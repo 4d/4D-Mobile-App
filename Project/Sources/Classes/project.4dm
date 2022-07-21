@@ -8,10 +8,10 @@ Class constructor($project : Object)
 		
 	End if 
 	
-	This:C1470.$regexParameters:="(?mi-s)(=|==|===|IS|!=|#|!==|IS NOT|>|<|>=|<=|%)\\s*:[^\\s]*"
 	This:C1470.$errors:=New collection:C1472
 	This:C1470.$lastError:=""
 	This:C1470.$success:=True:C214
+	This:C1470.$regexParameters:="(?mi-s)(=|==|===|IS|!=|#|!==|IS NOT|>|<|>=|<=|%)\\s*:[^\\s]*"
 	
 	// MARK: [COMPUTED]
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -43,13 +43,20 @@ Function load($project) : cs:C1710.project
 			//______________________________________________________
 		: (Count parameters:C259=0)
 			
-			oops
+			This:C1470._pushError("Missing project")
 			return This:C1470
 			
 			//______________________________________________________
 		: (Value type:C1509($project)=Is text:K8:3)  //platform path
 			
 			$file:=File:C1566($project; fk platform path:K87:2)
+			
+			If (Not:C34($file.exists))
+				
+				This:C1470._pushError("project not found")
+				return This:C1470
+				
+			End if 
 			
 			//______________________________________________________
 		: (Value type:C1509($project)=Is object:K8:27)  //4D.File
@@ -60,7 +67,7 @@ Function load($project) : cs:C1710.project
 				
 			Else 
 				
-				oops
+				This:C1470._pushError("project is not a 4D.File")
 				return This:C1470
 				
 			End if 
@@ -68,55 +75,47 @@ Function load($project) : cs:C1710.project
 			//______________________________________________________
 		Else 
 			
-			oops
+			This:C1470._pushError("Bad type for project")
 			return This:C1470
 			
 			//______________________________________________________
 	End case 
 	
-	If (Bool:C1537($file.exists))
+	// *SHORTCUTS
+	This:C1470._folder:=Folder:C1567($file.parent.platformPath; fk platform path:K87:2)
+	This:C1470._name:=This:C1470._folder.fullName
+	
+	$project:=JSON Parse:C1218($file.getText())
+	
+	If (project_Upgrade($project; This:C1470._folder))
 		
-		// *SHORTCUTS
-		This:C1470._folder:=Folder:C1567($file.parent.platformPath; fk platform path:K87:2)
-		This:C1470._name:=This:C1470._folder.fullName
+		// If upgraded, keep a copy of the old project…
+		$folder:=This:C1470._folder.folder(Replace string:C233(Get localized string:C991("convertedFiles"); "{stamp}"; cs:C1710.dateTime.new().stamp()))
+		$folder.create()
+		$file.moveTo($folder)
 		
-		$project:=JSON Parse:C1218($file.getText())
+		//… & immediately save
+		This:C1470.save()
 		
-		If (project_Upgrade($project; This:C1470._folder))
-			
-			// If upgraded, keep a copy of the old project…
-			$folder:=This:C1470._folder.folder(Replace string:C233(Get localized string:C991("convertedFiles"); "{stamp}"; cs:C1710.dateTime.new().stamp()))
-			$folder.create()
-			$file.moveTo($folder)
-			
-			//… & immediately save
-			This:C1470.save()
-			
-		End if 
+	End if 
+	
+	This:C1470.init($project)
+	
+	If (Value type:C1509($project.info.target)=Is collection:K8:32)
 		
-		This:C1470.init($project)
-		
-		If (Value type:C1509($project.info.target)=Is collection:K8:32)
-			
-			This:C1470.$android:=($project.info.target.indexOf("android")#-1)
-			This:C1470.$ios:=($project.info.target.indexOf("android")#-1)
-			
-		Else 
-			
-			This:C1470.$android:=($project.info.target="android")
-			This:C1470.$ios:=($project.info.target="iOS")
-			
-		End if 
-		
-		This:C1470.$project:=Form:C1466
-		
-		This:C1470.prepare()
+		This:C1470.$android:=($project.info.target.indexOf("android")#-1)
+		This:C1470.$ios:=($project.info.target.indexOf("android")#-1)
 		
 	Else 
 		
-		// ERROR
+		This:C1470.$android:=($project.info.target="android")
+		This:C1470.$ios:=($project.info.target="iOS")
 		
 	End if 
+	
+	This:C1470.$project:=Form:C1466  // Null if no UI
+	
+	This:C1470.prepare()
 	
 	return This:C1470
 	
@@ -124,33 +123,28 @@ Function load($project) : cs:C1710.project
 	// Prepare the project folder according to the target systems
 Function prepare($icon : Picture)
 	
-	var $iconƒ : Picture
 	var $AndroidFolder; $iosFolder : 4D:C1709.Folder
 	
 	$iosFolder:=This:C1470._folder.folder("Assets.xcassets/AppIcon.appiconset")
 	$AndroidFolder:=This:C1470._folder.folder("Android")
 	
-	If (Count parameters:C259>=1)
-		
-		$iconƒ:=$icon
-		
-	Else 
+	If (Count parameters:C259=0)
 		
 		If ($AndroidFolder.file("main/ic_launcher-playstore.png").exists)
 			
 			// Get the picture as default
-			READ PICTURE FILE:C678($AndroidFolder.file("main/ic_launcher-playstore.png").platformPath; $iconƒ)
+			READ PICTURE FILE:C678($AndroidFolder.file("main/ic_launcher-playstore.png").platformPath; $icon)
 			
 			// ⚠️ the picture size is 512x512 instead of 1024x1024
-			TRANSFORM PICTURE:C988($iconƒ; Scale:K61:2; 2; 2)
+			TRANSFORM PICTURE:C988($icon; Scale:K61:2; 2; 2)
 			
 		End if 
 	End if 
 	
-	If (Picture size:C356($iconƒ)=0)
+	If (Picture size:C356($icon)=0)
 		
 		// Get the default icon
-		READ PICTURE FILE:C678(File:C1566("/RESOURCES/Images/4d.png").platformPath; $iconƒ)
+		READ PICTURE FILE:C678(File:C1566("/RESOURCES/Images/4d.png").platformPath; $icon)
 		
 	End if 
 	
@@ -158,12 +152,12 @@ Function prepare($icon : Picture)
 		
 		If (Not:C34($iosFolder.exists))  // Create & populate
 			
-			This:C1470.AppIconSet($iconƒ)
+			This:C1470.AppIconSet($icon)
 			
 		End if 
 		
 		// Keep the picture for Android
-		READ PICTURE FILE:C678($iosFolder.file("ios-marketing1024.png").platformPath; $iconƒ)
+		READ PICTURE FILE:C678($iosFolder.file("ios-marketing1024.png").platformPath; $icon)
 		
 	Else 
 		
@@ -179,7 +173,7 @@ Function prepare($icon : Picture)
 		
 		If (Not:C34($AndroidFolder.exists))  // Create & populate
 			
-			This:C1470.AndroidIconSet($iconƒ)
+			This:C1470.AndroidIconSet($icon)
 			
 		End if 
 		
@@ -375,7 +369,7 @@ Function allTargets() : Boolean
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Populate the target value into the project
-Function setTarget($checkDevTools : Boolean; $target : Text)
+Function setTarget()
 	
 	If (This:C1470.$ios & This:C1470.$android)
 		
@@ -387,10 +381,7 @@ Function setTarget($checkDevTools : Boolean; $target : Text)
 			
 			// According to platform
 			This:C1470.info.target:=Is macOS:C1572 ? "iOS" : "android"
-			
-			var $t : Text
-			$t:=This:C1470.info.target
-			This:C1470["$"+Lowercase:C14($t)]:=True:C214
+			This:C1470["$"+Lowercase:C14(This:C1470.info.target)]:=True:C214
 			
 		Else 
 			
@@ -402,51 +393,6 @@ Function setTarget($checkDevTools : Boolean; $target : Text)
 	// Save & update the project folder
 	This:C1470.save()
 	This:C1470.prepare()
-	
-	// TODO:Move to EDITOR class
-	UI.ios:=This:C1470.$ios
-	UI.android:=This:C1470.$android
-	
-	If (Count parameters:C259>=1)
-		
-		If ($checkDevTools)  // Audit of development tools
-			
-			If (Count parameters:C259>=2)  // Set the build target
-				
-				Case of 
-						
-						//________________________
-					: ($target="ios") & This:C1470.$ios
-						
-						This:C1470._buildTarget:=$target
-						
-						If (UI.xCode#Null:C1517)
-							
-							UI.xCode.canceled:=False:C215
-							UI.xCode.alreadyNotified:=False:C215
-							
-						End if 
-						
-						//________________________
-					: ($target="android") & This:C1470.$ios
-						
-						This:C1470._buildTarget:=$target
-						
-						If (UI.studio#Null:C1517)
-							
-							UI.studio.canceled:=False:C215
-							UI.studio.alreadyNotified:=False:C215
-							
-						End if 
-						
-						//________________________
-				End case 
-			End if 
-			
-			UI.checkDevTools()
-			
-		End if 
-	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns a cleaned project

@@ -287,7 +287,7 @@ Case of
 				UI.ios:=True:C214
 				PROJECT._device:=$device
 				PROJECT._simulator:=$device.udid
-				PROJECT.setTarget(True:C214; "ios")
+				UI.setTarget("ios"; True:C214)
 				
 				//______________________________________________________
 			: (Match regex:C1019("(?m-si)[[:xdigit:]]{8}-[[:xdigit:]]{16}"; $menu.choice; 1))  // iOS plugged Device
@@ -302,7 +302,7 @@ Case of
 				UI.ios:=True:C214
 				PROJECT._device:=$device
 				PROJECT._simulator:=$device.udid
-				PROJECT.setTarget(True:C214; "ios")
+				UI.setTarget("ios"; True:C214)
 				
 				//______________________________________________________
 			Else 
@@ -323,7 +323,7 @@ Case of
 				UI.android:=True:C214
 				PROJECT._device:=$device
 				PROJECT._simulator:=$device.udid
-				PROJECT.setTarget(True:C214; "android")
+				UI.setTarget("android"; True:C214)
 				
 				//______________________________________________________
 		End case 

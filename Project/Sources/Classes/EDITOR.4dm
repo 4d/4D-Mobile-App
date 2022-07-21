@@ -589,6 +589,50 @@ Function updateHeader($data : Object)
 		
 	End if 
 	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function setTarget($target : Text; $checkDevTools : Boolean)
+	
+	PROJECT.setTarget()
+	
+	This:C1470.ios:=PROJECT.$ios
+	This:C1470.android:=PROJECT.$android
+	
+	If ($checkDevTools)  // Audit of development tools
+		
+		// Set the build target
+		Case of 
+				
+				//________________________
+			: ($target="ios") & PROJECT.$ios
+				
+				PROJECT._buildTarget:=$target
+				
+				If (This:C1470.xCode#Null:C1517)
+					
+					This:C1470.xCode.canceled:=False:C215
+					This:C1470.xCode.alreadyNotified:=False:C215
+					
+				End if 
+				
+				//________________________
+			: ($target="android") & PROJECT.$ios
+				
+				PROJECT._buildTarget:=$target
+				
+				If (This:C1470.studio#Null:C1517)
+					
+					This:C1470.studio.canceled:=False:C215
+					This:C1470.studio.alreadyNotified:=False:C215
+					
+				End if 
+				
+				//________________________
+		End case 
+		
+		This:C1470.checkDevTools()
+		
+	End if 
+	
 	//MARK:-Widget methods
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function messageContainer($e : Object)
