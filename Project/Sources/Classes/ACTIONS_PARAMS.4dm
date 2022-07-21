@@ -1194,7 +1194,7 @@ Function addParameterMenuManager($target : Object; $update : Boolean)
 					"label"; $field.label; \
 					"shortLabel"; $field.shortLabel; \
 					"type"; PROJECT.fieldType2type($field.fieldType); \
-					"defaultField"; PROJECT.defaultField($field))
+					"defaultField"; PROJECT._actionDefaultField($field))
 				
 				If (Bool:C1537($field.mandatory))
 					
@@ -1694,9 +1694,9 @@ Function dataSourceMenuManager()
 Function editList()
 	
 /*
-														$form:=New object(\
-																																								"static"; $static; \
-																																								"host"; This.path.hostInputControls(True))
+																$form:=New object(\
+																																												"static"; $static; \
+																																												"host"; This.path.hostInputControls(True))
 	
 $form.folder:=This.path.hostInputControls()
 $manifest:=$form.folder.file("manifest.json")
@@ -2112,7 +2112,7 @@ Function updateParamater($name : Text)
 	
 	If ($success)  // Linked to a field
 		
-		$parameter.defaultField:=PROJECT.defaultField($parameter)
+		$parameter.defaultField:=PROJECT._actionDefaultField($parameter)
 		
 	Else 
 		

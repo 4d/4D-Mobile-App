@@ -31,37 +31,98 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 	// ----------------------------------------------------
 	Case of 
 			
-			//MARK:[ACTIONS]
+			//MARK:-[ACTIONS]
 		: ($entryPoint="actions")
 			
-			If (Asserted:C1132($parameters.project#Null:C1517; "Missing project file"))
+			If ($parameters.project=Null:C1517)
 				
-				If (Asserted:C1132($parameters.test#Null:C1517; "missing test purpose"))
-					
-					var $project : cs:C1710.project
-					$project:=cs:C1710.project.new().load($parameters.project)
-					
-					Case of 
-							//______________________________________________________
-						: ($parameters.test="new")
-							
-							$project.newAction($parameters.table)
-							
-							//______________________________________________________
-						: (False:C215)
-							
-							
-							
-							//______________________________________________________
-						Else 
-							
-							// A "Case of" statement should never omit "Else"
-							
-							//______________________________________________________
-					End case 
-				End if 
+				return New object:C1471(\
+					"success"; False:C215; \
+					"error"; "Missing project file")
+				
 			End if 
 			
+			If ($parameters.test=Null:C1517)
+				
+				return New object:C1471(\
+					"success"; False:C215; \
+					"error"; "Missing test purpose")
+				
+			End if 
+			
+			var $project : cs:C1710.project
+			$project:=cs:C1710.project.new().load($parameters.project)
+			
+			Case of 
+					
+					//______________________________________________________
+				: ($parameters.test="new")
+					
+					$project.actionNew($parameters.table)
+					
+					//______________________________________________________
+				: ($parameters.test="add")
+					
+					$project.actionAdd($parameters.table)
+					
+					//______________________________________________________
+				: ($parameters.test="edit")
+					
+					$project.actionEdit($parameters.table)
+					
+					//______________________________________________________
+				: ($parameters.test="delete")
+					
+					$project.actionDelete($parameters.table)
+					
+					//______________________________________________________
+				: ($parameters.test="sort")
+					
+					If ($parameters.field=Null:C1517)
+						
+						return New object:C1471(\
+							"success"; False:C215; \
+							"error"; "Missing field identifier")
+						
+					End if 
+					
+					$project.actionSort($parameters.table; $parameters.field)
+					
+					//______________________________________________________
+				: ($parameters.test="share")
+					
+					$project.actionShare($parameters.table)
+					
+					//______________________________________________________
+				: ($parameters.test="url")
+					
+					$project.actionURL($parameters.table)
+					
+					//______________________________________________________
+				Else 
+					
+					return New object:C1471(\
+						"success"; False:C215; \
+						"error"; "Unknown entry point \""+String:C10($parameters.test)+"\"")
+					
+					//______________________________________________________
+			End case 
+			
+			If (Not:C34($project.$success))
+				
+				return New object:C1471(\
+					"success"; False:C215; \
+					"error"; $project.$lastError; \
+					"errors"; $project.$errors; \
+					"project"; $project.cleaned())
+				
+			Else 
+				
+				return New object:C1471(\
+					"success"; True:C214; \
+					"project"; $project.cleaned())
+				
+			End if 
 			
 			//MARK:- uninstallAndroidStudio
 		: ($entryPoint="uninstallAndroidStudio")

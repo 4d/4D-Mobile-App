@@ -9,6 +9,9 @@ Class constructor($project : Object)
 	End if 
 	
 	This:C1470.$regexParameters:="(?mi-s)(=|==|===|IS|!=|#|!==|IS NOT|>|<|>=|<=|%)\\s*:[^\\s]*"
+	This:C1470.$errors:=New collection:C1472
+	This:C1470.$lastError:=""
+	This:C1470.$success:=True:C214
 	
 	// MARK: [COMPUTED]
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -447,15 +450,15 @@ Function setTarget($checkDevTools : Boolean; $target : Text)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns a cleaned project
-Function cleaned()->$project : Object
+Function cleaned() : cs:C1710.project
 	
-	var $t; $tt : Text
-	var $o; $project : Object
+	var $t : Text
+	var $o : Object
+	var $project : cs:C1710.project
 	
 	$project:=OB Copy:C1225(This:C1470)
 	
 	For each ($t; $project)
-		
 		
 		Case of 
 				
@@ -506,6 +509,8 @@ Function cleaned()->$project : Object
 		OB REMOVE:C1226($project; $o.key)
 		
 	End for each 
+	
+	return $project
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Cleaning inner objects
@@ -1338,20 +1343,20 @@ Function removeFromMain($table)
 	
 	//mark:-[ACTIONS]
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function newAction($table) : Object
+Function actionNew($table) : Object
 	
-	var $name : Text
+	var $label; $name : Text
 	var $action; $o : Object
 	
+	$o:=This:C1470._actionTable($table)
 	$name:=This:C1470._actionName("action")
-	
-	$o:=This:C1470._tableAction($table)
+	$label:=This:C1470.label($name)
 	
 	$action:=New object:C1471(\
 		"name"; $name; \
 		"scope"; "table"; \
-		"shortLabel"; This:C1470.shortLabel($name); \
-		"label"; This:C1470.label($name))
+		"shortLabel"; $label; \
+		"label"; $label)
 	
 	If ($o#Null:C1517)
 		
@@ -1374,18 +1379,199 @@ Function newAction($table) : Object
 	return $action
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function urlAction($table) : Object
+Function actionAdd($table) : Object
 	
+	var $label; $name : Text
 	var $action; $o : Object
 	
-	$o:=This:C1470._tableAction($table)
+	$o:=This:C1470._actionTable($table)
+	$name:=This:C1470._actionName("add"+cs:C1710.str.new(This:C1470.label($o.name)).uperCamelCase())
+	$label:=Get localized string:C991("add...")
+	
+	$action:=New object:C1471(\
+		"preset"; "add"; \
+		"name"; $name; \
+		"scope"; "table"; \
+		"label"; $label; \
+		"shortLabel"; $label; \
+		"icon"; "actions 2/Add.svg"; \
+		"parameters"; New collection:C1472)
+	
+	If ($o#Null:C1517)
+		
+		$action.tableNumber:=Num:C11($o.id)
+		
+		This:C1470._actionEditableParameters($action; $o.id)
+		
+	End if 
+	
+	This:C1470._appendAction($action)
+	
+	return $action
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function actionEdit($table) : Object
+	
+	var $label; $name : Text
+	var $action; $o : Object
+	
+	$o:=This:C1470._actionTable($table)
+	$name:=This:C1470._actionName("edit"+cs:C1710.str.new(This:C1470.label($o.name)).uperCamelCase())
+	$label:=Get localized string:C991("edit...")
+	
+	$action:=New object:C1471(\
+		"preset"; "edit"; \
+		"name"; $name; \
+		"scope"; "currentRecord"; \
+		"label"; $label; \
+		"shortLabel"; $label; \
+		"icon"; "actions/Edit.svg"; \
+		"parameters"; New collection:C1472)
+	
+	If ($o#Null:C1517)
+		
+		$action.tableNumber:=Num:C11($o.id)
+		
+		This:C1470._actionEditableParameters($action; $o.id; True:C214)
+		
+	End if 
+	
+	This:C1470._appendAction($action)
+	
+	return $action
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function actionSort($table; $field) : Object
+	
+	var $fieldID; $label; $name : Text
+	var $action; $o : Object
+	
+	$o:=This:C1470._actionTable($table)
+	
+	If ($o=Null:C1517)
+		
+		This:C1470._pushError("Table not found")
+		return 
+		
+	End if 
+	
+	$field:=This:C1470.field($o.id; $field)
+	
+	If ($field=Null:C1517)
+		
+		This:C1470._pushError("Field not found")
+		return 
+		
+	End if 
+	
+	If (Not:C34(This:C1470.isSortable($field)))
+		
+		This:C1470._pushError("The field is not sortable")
+		return 
+		
+	End if 
+	
+	$name:=This:C1470._actionName("sort"+cs:C1710.str.new(This:C1470.label($o.name)).uperCamelCase())
+	$label:=Get localized string:C991("sort...")
+	
+	$action:=New object:C1471(\
+		"preset"; "sort"; \
+		"name"; $name; \
+		"scope"; "table"; \
+		"label"; $label; \
+		"shortLabel"; $label; \
+		"icon"; "actions/Sort.svg"; \
+		"parameters"; New collection:C1472)
+	
+	$action.tableNumber:=Num:C11($o.id)
+	
+	Case of 
+			
+			//______________________________________________________
+		: (Not:C34(This:C1470.isSortable($field)))
+			
+			// <NOTHING MORE TO DO>
+			
+			//______________________________________________________
+		: ($field.kind="storage")
+			
+			$action.parameters.push(New object:C1471(\
+				"fieldNumber"; ($field.fieldNumber#Null:C1517) ? $field.fieldNumber : Num:C11($fieldID); \
+				"name"; $field.name; \
+				"type"; This:C1470.fieldType2type($field.fieldType); \
+				"format"; "ascending"))
+			
+			//______________________________________________________
+		: ($field.kind="calculated")
+			
+			$action.parameters.push(New object:C1471(\
+				"name"; $fieldID; \
+				"type"; This:C1470.fieldType2type($field.fieldType); \
+				"format"; "ascending"))
+			
+			//______________________________________________________
+		Else 
+			
+			oops
+			
+			//______________________________________________________
+	End case 
+	
+	
+	This:C1470._appendAction($action)
+	
+	return $action
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function actionShare($table) : Object
+	
+	var $label; $name : Text
+	var $action; $o : Object
+	
+	$o:=This:C1470._actionTable($table)
+	$name:=This:C1470._actionName("share"+cs:C1710.str.new(This:C1470.label($o.name)).uperCamelCase())
+	$label:=Get localized string:C991("share...")
+	
+	$action:=New object:C1471(\
+		"preset"; "share"; \
+		"name"; $name; \
+		"scope"; "currentRecord"; \
+		"label"; $label; \
+		"shortLabel"; $label; \
+		"icon"; "actions/Send-basic.svg")
+	
+	If (Feature.with("sharedActionWithDescription"))
+		
+		$action.description:=""
+		
+	End if 
+	
+	If ($o#Null:C1517)
+		
+		$action.tableNumber:=Num:C11($o.id)
+		
+	End if 
+	
+	This:C1470._appendAction($action)
+	
+	return $action
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function actionURL($table) : Object
+	
+	var $label; $name : Text
+	var $action; $o : Object
+	
+	$o:=This:C1470._actionTable($table)
+	$name:=This:C1470._actionName("openURL")
+	$label:=Get localized string:C991("open...")
 	
 	$action:=New object:C1471(\
 		"preset"; "openURL"; \
-		"name"; This:C1470._actionName("openURL"); \
+		"name"; $name; \
 		"scope"; "table"; \
-		"label"; Get localized string:C991("open..."); \
-		"shortLabel"; Get localized string:C991("open..."); \
+		"label"; $label; \
+		"shortLabel"; $label; \
 		"icon"; "actions/Globe.svg")
 	
 	If ($o#Null:C1517)
@@ -1399,21 +1585,22 @@ Function urlAction($table) : Object
 	return $action
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function deleteAction($table) : Object
+Function actionDelete($table) : Object
 	
+	var $label; $name : Text
 	var $action; $o : Object
 	
-	$o:=This:C1470._tableAction($table)
-	
-	//$t:=cs.str.new(This.label($o.name)).uperCamelCase()
+	$o:=This:C1470._actionTable($table)
+	$name:=This:C1470._actionName("delete"+cs:C1710.str.new(This:C1470.label($o.name)).uperCamelCase())
+	$label:=Get localized string:C991("remove")
 	
 	$action:=New object:C1471(\
 		"preset"; "delete"; \
 		"style"; "destructive"; \
-		"name"; This:C1470._actionName("delete"+cs:C1710.str.new(This:C1470.label($o.name)).uperCamelCase()); \
+		"name"; $name; \
 		"scope"; "currentRecord"; \
-		"label"; Get localized string:C991("remove"); \
-		"shortLabel"; Get localized string:C991("remove"); \
+		"label"; $label; \
+		"shortLabel"; $label; \
 		"icon"; "actions/Delete.svg")
 	
 	If ($o#Null:C1517)
@@ -1447,7 +1634,6 @@ Function removeAction($action) : Integer
 	return $index
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Generate a unique name
 Function _actionName($prefix : Text) : Text
 	
 	var $name : Text
@@ -1484,7 +1670,8 @@ Function _appendAction($action : Object)
 	This:C1470.actions.push($action)
 	This:C1470.save()
 	
-Function _tableAction($table) : Object
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _actionTable($table) : Object
 	
 	var $tableID : Text
 	var $c : Collection
@@ -1518,7 +1705,158 @@ Function _tableAction($table) : Object
 		End if 
 	End if 
 	
-	//mark:-
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _actionEditableParameters($action : Object; $tableID : Text; $edit : Boolean)
+	
+	var $key : Text
+	var $catalog; $field : Object
+	var $fields : Collection
+	var $target : cs:C1710.field
+	var $table : cs:C1710.table
+	
+	//$table:=OB Copy(This.dataModel[$tableID])
+	
+	$table:=This:C1470.dataModel[$tableID]
+	
+	$catalog:=This:C1470.getCatalog().query("name = :1"; $table[""].name).pop()
+	$fields:=$catalog.fields
+	
+	For each ($key; $table)
+		
+		Case of 
+				
+				//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+			: (Length:C16($key)=0)
+				
+				continue  // Meta
+				
+				//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+			: ($table[$key].kind="storage")
+				
+				Case of 
+						
+						//======================================
+					: ($table[$key].name=$catalog.primaryKey)
+						
+						continue  // Do not add a primary key
+						
+						//======================================
+					: ($table[$key].fieldType=Is object:K8:27)
+						
+						continue  // Do not add object field
+						
+						//======================================
+					Else 
+						
+						$field:=$fields.query("name = :1"; $table[$key].name).pop()
+						$action.parameters.push(This:C1470._actionParamDefinition($field; $table[$key]; $edit))
+						
+						//======================================
+				End case 
+				
+				//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+			: ($table[$key].kind="calculated")
+				
+				$field:=$fields.query("name = :1"; $key).pop()
+				
+				If (Bool:C1537($field.readOnly))
+					
+					continue  // Do not add not writable calculated field
+					
+				End if 
+				
+				$action.parameters.push(This:C1470._actionParamDefinition($field; $table[$key]; $edit))
+				
+				//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+			: ($table[$key].kind="alias")
+				
+				$field:=$fields.query("name = :1"; $key).pop()
+				
+				If ($field.fieldType=Is collection:K8:32)
+					
+					continue  // Do not add non-scalar alias
+					
+				End if 
+				
+				// Get the targeted field
+				$target:=This:C1470.getAliasTarget($table[""].name; $field)
+				
+				If ($target.fieldType#Null:C1517) && ($target.fieldType#Is object:K8:27)
+					
+					$action.parameters.push(This:C1470._actionParamDefinition($field; $table[$key]; $edit))
+					
+				End if 
+				
+				//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+			: ($table[$key].kind="relatedEntity")\
+				 | ($table[$key].kind="relatedEntities")
+				
+				// <NOTHING MORE TO DO>
+				
+				//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+			Else 
+				
+				oops
+				
+				//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+		End case 
+	End for each 
+	
+	$action.parameters:=$action.parameters.orderBy("name")
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _actionParamDefinition($fieldModel : Object; $field : cs:C1710.field; $edit : Boolean) : Object
+	
+	var $parameter : Object
+	
+	$parameter:=New object:C1471(\
+		"fieldNumber"; $fieldModel.fieldNumber; \
+		"name"; $fieldModel.name; \
+		"label"; $field.label; \
+		"shortLabel"; $field.shortLabel; \
+		"type"; Choose:C955($fieldModel.fieldType=Is time:K8:8; "time"; $fieldModel.valueType))
+	
+	If ($edit)
+		
+		$parameter.defaultField:=This:C1470._actionDefaultField($fieldModel)
+		
+	End if 
+	
+	If (Bool:C1537($field.mandatory))
+		
+		$parameter.rules:=New collection:C1472("mandatory")
+		
+	End if 
+	
+	// Preset formats
+	Case of 
+			
+			//................................
+		: ($field.fieldType=Is integer:K8:5)\
+			 | ($field.fieldType=Is longint:K8:6)\
+			 | ($field.fieldType=Is integer 64 bits:K8:25)
+			
+			$parameter.format:="integer"
+			
+			//................................
+		: ($parameter.type="date")
+			
+			$parameter.format:="shortDate"
+			
+			//................................
+	End case 
+	
+	return $parameter
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Format field for iOS only (allow to known if linked and have correct value immediately)
+Function _actionDefaultField($field : Object) : Text
+	
+	return This:C1470.formatFieldName(This:C1470.isAlias($field) ? $field.path : $field.name)
+	
+	
+	//mark:-[FORMS]
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Create list and detail form entries
 Function createFormEntries($table)
 	
@@ -1529,8 +1867,8 @@ Function createFormEntries($table)
 	
 	$tableID:=This:C1470._tableID($table)
 	
-	This:C1470.list[$tableID]:=This:C1470.list[$tableID]=Null:C1517 ? New object:C1471 : This:C1470.list[$tableID]
-	This:C1470.detail[$tableID]:=This:C1470.detail[$tableID]=Null:C1517 ? New object:C1471 : This:C1470.detail[$tableID]
+	This:C1470.list[$tableID]:=This:C1470.list[$tableID] || New object:C1471
+	This:C1470.detail[$tableID]:=This:C1470.detail[$tableID] || New object:C1471
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Delete entries for the list and detail forms
@@ -1538,14 +1876,15 @@ Function deleteFormEntries($table)
 	
 	var $tableID : Text
 	
-	This:C1470.list:=This:C1470.list=Null:C1517 ? New object:C1471 : This:C1470.list
-	This:C1470.detail:=This:C1470.detail=Null:C1517 ? New object:C1471 : This:C1470.detail
+	This:C1470.list:=This:C1470.list || New object:C1471
+	This:C1470.detail:=This:C1470.detail || New object:C1471
 	
 	$tableID:=This:C1470._tableID($table)
 	
 	OB REMOVE:C1226(This:C1470.list; $tableID)
 	OB REMOVE:C1226(This:C1470.detail; $tableID)
 	
+	//mark:-
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Get the current catalog
 Function getCatalog() : Collection
@@ -1570,6 +1909,7 @@ Function getCatalog() : Collection
 			//____________________________________
 	End case 
 	
+	//mark:-[FORMATS]
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function formatTableName($name : Text) : Text
 	
@@ -1609,17 +1949,6 @@ Lower camel case
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Format field for iOS only (allow to known if linked and have correct value immediately)
-Function defaultField($field : Object) : Text
-	return formatString("field-name"; This:C1470.isAlias($field) ? $field.path : $field.name)
-	
-	// or if format field name format correctly without using camel case...
-	//If (This.isAlias($field))
-	//return Split string($field.path; ".").map(Formula($2.formatFieldName($1.value)); This).join(".")
-	//End if 
-	//return This.formatFieldName($field.name)
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function formatBundleAppName($name : Text) : Text
 	
 	var $str : cs:C1710.str
@@ -1629,7 +1958,7 @@ Function formatBundleAppName($name : Text) : Text
 	
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function label($text : Text) : Text  // Format labels
+Function label($text : Text) : Text
 	
 	var $i : Integer
 	
@@ -1688,28 +2017,35 @@ Function label($text : Text) : Text  // Format labels
 			//______________________________________________________
 	End case 
 	
-	//====================================
-Function shortLabel($text : Text) : Text  // Format short labels
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function shortLabel($text : Text) : Text
 	
-	var $label : Text
+	$text:=This:C1470.label($text)
 	
-	$label:=This:C1470.label($text)
+	return Length:C16($text)>10 ? Substring:C12($text; 1; 10) : $text
 	
-	If (Length:C16($label)>10)
-		
-		$label:=Substring:C12($label; 1; 10)
-		
-	End if 
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function labelList($name : Text) : Text
 	
-	return $label
+	return This:C1470.label(Replace string:C233(Get localized string:C991("listOf"); "{values}"; $name))
 	
-	//====================================
-Function labelList  // List of x
-	var $0 : Text
-	var $1 : Text
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _formatName($name : Text) : cs:C1710.str
 	
-	$0:=This:C1470.label(Replace string:C233(Get localized string:C991("listOf"); "{values}"; $1))
+	var $str : cs:C1710.str
 	
+	// Remove the forbidden at beginning characters
+	Rgx_SubstituteText("(?mi-s)^[^[:alpha:]]*([^$]*)$"; "\\1"; ->$name; 0)
+	
+	// Remove dots and underscores
+	return cs:C1710.str.new(Replace string:C233(Replace string:C233($name; "_"; " "); "."; " "))
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _obfuscateReservedNames($name : Text) : Text
+	
+	return $name+("_"*Num:C11(SHARED.resources.coreDataForbiddenNames.indexOf($name)#-1))
+	
+	//mark:-
 	// === === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Convert legacy type (integer) to orda type (text)
 Function fieldType2type($legacyFieldType : Integer)->$fieldType : Text
@@ -1803,7 +2139,7 @@ Function fieldAvailable($tableID; $field : Object) : Boolean
 					End if 
 					
 					//$o:=This.dataModel[$tableID]
-					$o:=ds:C1482[PROJECT.table($tableID)[""].name]
+					$o:=ds:C1482[This:C1470.table($tableID)[""].name]
 					
 					For each ($t; $c)
 						
@@ -2027,7 +2363,7 @@ Function publishedTables()->$tables : Collection
 			
 			If ($meta.label=Null:C1517)
 				
-				$meta.label:=PROJECT.label($meta.name)
+				$meta.label:=This:C1470.label($meta.name)
 				
 			End if 
 			
@@ -2044,7 +2380,7 @@ Function publishedTables()->$tables : Collection
 				"shortLabel"; $meta.shortLabel; \
 				"embedded"; Bool:C1537($meta.embedded); \
 				"iconPath"; String:C10($meta.icon); \
-				"icon"; PROJECT.getIcon(String:C10($meta.icon)))
+				"icon"; This:C1470.getIcon(String:C10($meta.icon)))
 			
 			If ($meta.filter#Null:C1517)
 				
@@ -2071,11 +2407,12 @@ Function table($table) : cs:C1710.table
 	/// Gets a datamodel field definition from ID, field number, name or object
 Function field($table; $field) : Object
 	
+	var $t : Text
+	
 	$table:=This:C1470.table($table)
 	
 	If ($table#Null:C1517)
 		
-		var $t : Text
 		$t:=This:C1470._fieldID($field; $table)
 		
 		If (Length:C16($t)>0)
@@ -2470,41 +2807,11 @@ Function repairProject()
 	//MARK:-[PRIVATE]
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function _obfuscateReservedNames($name : Text) : Text
+Function _pushError($error : Text)
 	
-	return $name+("_"*Num:C11(SHARED.resources.coreDataForbiddenNames.indexOf($name)#-1))
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function _formatName($name : Text) : cs:C1710.str
-	
-	var $str : cs:C1710.str
-	
-	// Remove the forbidden at beginning characters
-	Rgx_SubstituteText("(?mi-s)^[^[:alpha:]]*([^$]*)$"; "\\1"; ->$name; 0)
-	
-	// Remove dots and underscores
-	return cs:C1710.str.new(Replace string:C233(Replace string:C233($name; "_"; " "); "."; " "))
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-Function _capitalizeFirtsLetter($string : Text; $separator : Text) : Text
-	
-	var $t : Text
-	var $i : Integer
-	var $c : Collection
-	
-	// Remove spaces
-	$c:=Split string:C1554($string; " "; sk ignore empty strings:K86:1)
-	
-	// Capitalize first letter of words
-	For ($i; 0; $c.length-1; 1)
-		
-		$t:=$c[$i]
-		$t[[1]]:=Uppercase:C13($t[[1]])
-		$c[$i]:=$t
-		
-	End for 
-	
-	return $c.join($separator)
+	This:C1470.$lastError:=$error
+	This:C1470.$errors.push($error)
+	This:C1470.$success:=False:C215
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _fieldID($field; $table) : Text

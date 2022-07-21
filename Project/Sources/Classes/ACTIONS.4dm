@@ -477,7 +477,7 @@ Function newAction($tableNumber : Integer)
 	
 	var $action : Object
 	
-	$action:=PROJECT.newAction($tableNumber)
+	$action:=PROJECT.actionNew($tableNumber)
 	
 	$action.$icon:=UI.getIcon("")
 	This:C1470._addAction($action; True:C214)
@@ -486,11 +486,9 @@ Function newAction($tableNumber : Integer)
 Function addMenuManager()
 	
 	var $t : Text
-	var $icon : Picture
-	var $i : Integer
-	var $action; $catalog; $field; $o; $parameter; $tableModel : Object
-	var $c; $fields : Collection
-	var $addMenu; $deleteMenu; $editMenu; $fieldsMenu; $menu; $newMenu; $shareMenu; $sortMenu; $openURLMenu : cs:C1710.menu
+	var $action; $field; $o : Object
+	var $c : Collection
+	var $addMenu; $deleteMenu; $editMenu; $fieldsMenu; $menu; $newMenu; $openURLMenu; $shareMenu; $sortMenu : cs:C1710.menu
 	
 	// Extract datamodel to collection
 	$c:=New collection:C1472
@@ -635,7 +633,7 @@ Function addMenuManager()
 					
 					$c:=Split string:C1554($t; ",")
 					$menu.tableID:=$c[0]
-					$menu.fieldIdentifier:=$c[1]
+					$menu.fieldID:=$c[1]
 					
 				Else 
 					
@@ -643,284 +641,54 @@ Function addMenuManager()
 					
 				End if 
 				
-				$menu.tableNumber:=Num:C11($menu.tableID)
-				
 				Case of 
 						
-						//……………………………………………………………………
-					: ($menu.edit)
-						
-						$menu.preset:="edit"
-						$menu.icon:="actions/Edit.svg"
-						$menu.scope:="currentRecord"
-						$menu.label:=Get localized string:C991("edit...")
-						$icon:=UI.getIcon($menu.icon)
-						
-						//……………………………………………………………………
+						//______________________________________________________
 					: ($menu.add)
 						
-						$menu.preset:="add"
-						$menu.icon:="actions 2/Add.svg"
-						$menu.scope:="table"
-						$menu.label:=Get localized string:C991("add...")
-						$icon:=UI.getIcon($menu.icon)
+						$action:=PROJECT.actionAdd($menu.tableID)
+						$action.$icon:=UI.getIcon("actions 2/Add.svg")
+						This:C1470._addAction($action; True:C214)
 						
-						//……………………………………………………………………
+						//______________________________________________________
+					: ($menu.edit)
+						
+						$action:=PROJECT.actionEdit($menu.tableID)
+						$action.$icon:=UI.getIcon("actions/Edit.svg")
+						This:C1470._addAction($action; True:C214)
+						
+						//______________________________________________________
 					: ($menu.delete)
 						
-						$menu.preset:="delete"
-						$menu.icon:="actions/Delete.svg"
-						$menu.scope:="currentRecord"
-						$menu.label:=Get localized string:C991("remove")
-						$icon:=UI.getIcon($menu.icon)
+						$action:=PROJECT.actionDelete($menu.tableID)
+						$action.$icon:=UI.getIcon("actions/Delete.svg")
+						This:C1470._addAction($action; True:C214)
 						
-						//……………………………………………………………………
-					: ($menu.share)
-						
-						$menu.preset:="share"
-						$menu.icon:="actions/Send-basic.svg"
-						$menu.scope:="currentRecord"
-						$menu.label:=Get localized string:C991("share...")
-						$icon:=UI.getIcon($menu.icon)
-						$menu.description:=""
-						
-						//……………………………………………………………………
+						//______________________________________________________
 					: ($menu.sort)
 						
-						$menu.preset:="sort"
-						$menu.icon:="actions/Sort.svg"
-						$menu.scope:="table"
-						$menu.label:=Get localized string:C991("sort...")
-						$icon:=UI.getIcon($menu.icon)
+						$action:=PROJECT.actionSort($menu.tableID; $menu.fieldID)
+						$action.$icon:=UI.getIcon("actions/Sort.svg")
+						This:C1470._addAction($action; True:C214)
 						
-						//……………………………………………………………………
-					: ($menu.openURL)  // Feature.with("openURLAction")
-						
-						$menu.preset:="openURL"
-						$menu.icon:="actions/Globe.svg"
-						$menu.scope:="table"
-						$menu.label:=Get localized string:C991("open...")
-						$icon:=UI.getIcon($menu.icon)
-						
-						//……………………………………………………………………
-				End case 
-				
-				$tableModel:=OB Copy:C1225(Form:C1466.dataModel[$menu.tableID])
-				
-				// Generate a unique name
-				$t:=UI.str.setText(formatString("label"; $tableModel[""].name)).uperCamelCase()
-				
-				$menu.name:=$menu.preset+$t
-				
-				If (Form:C1466.actions#Null:C1517)
-					
-					Repeat 
-						
-						$c:=Form:C1466.actions.query("name=:1"; $menu.name)
-						
-						If ($c.length>0)
-							
-							$i:=$i+1+Num:C11($i=0)
-							$menu.name:=$menu.preset+$t+String:C10($i)
-							
-						End if 
-					Until ($c.length=0)
-				End if 
-				
-				$action:=New object:C1471(\
-					"tableNumber"; $menu.tableNumber; \
-					"name"; $menu.name; \
-					"preset"; $menu.preset; \
-					"scope"; $menu.scope; \
-					"icon"; $menu.icon; \
-					"label"; $menu.label; \
-					"shortLabel"; $menu.label; \
-					"$icon"; $icon)
-				
-				Case of 
-						
-						//-------------------------------------------
-					: ($menu.delete)
-						
-						$action.style:="destructive"
-						
-						//-------------------------------------------
+						//______________________________________________________
 					: ($menu.share)
 						
-						If (Feature.with("sharedActionWithDescription"))
-							
-							$action.description:=$menu.description
-							
-						End if 
-						
-						//-------------------------------------------
-					: ($menu.sort)
-						
-						$action.parameters:=New collection:C1472
-						
-						$field:=$tableModel[$menu.fieldIdentifier]
-						
-						Case of 
-								
-								//______________________________________________________
-							: ($field.kind="storage")
-								
-								$parameter:=New object:C1471(\
-									"fieldNumber"; ($field.fieldNumber#Null:C1517) ? $field.fieldNumber : Num:C11($menu.fieldIdentifier); \
-									"name"; $field.name; \
-									"type"; PROJECT.fieldType2type($field.fieldType); \
-									"format"; "ascending")
-								
-								//______________________________________________________
-							: ($field.kind="calculated")
-								
-								$parameter:=New object:C1471(\
-									"name"; $menu.fieldIdentifier; \
-									"type"; PROJECT.fieldType2type($field.fieldType); \
-									"format"; "ascending")
-								
-								//______________________________________________________
-							: ($field.kind="alias")
-								
-								$parameter:=New object:C1471(\
-									"name"; $menu.fieldIdentifier; \
-									"path"; $field.path; \
-									"type"; PROJECT.fieldType2type($field.fieldType); \
-									"format"; "ascending")
-								
-								//______________________________________________________
-							Else 
-								
-								oops
-								
-								//______________________________________________________
-						End case 
-						
-						$action.parameters.push($parameter)
-						
-						//-------------------------------------------
-					: ($menu.openURL)  // Feature.with("openURLAction")
-						
-						// <NOTHING MORE TO DO>
-						
-						//-------------------------------------------
-					Else 
-						
-						$action.parameters:=New collection:C1472
-						
-						$catalog:=PROJECT.getCatalog().query("name = :1"; $tableModel[""].name).pop()
-						$fields:=$catalog.fields
-						
-						For each ($t; $tableModel)
-							
-							Case of 
-									
-									//……………………………………………………………………………………
-								: (Length:C16($t)=0)  // Meta
-									
-									continue
-									
-									//……………………………………………………………………………………
-								: ($tableModel[$t].kind="storage")
-									
-									Case of 
-											
-											//======================================
-										: ($tableModel[$t].name=$catalog.primaryKey)
-											
-											continue  // DO NOT ADD A PRIMARY KEY
-											
-											//======================================
-										: ($tableModel[$t].fieldType=Is object:K8:27)
-											
-											continue  // DO NOT ADD OBJECT FIELD
-											
-											//======================================
-										Else 
-											
-											$field:=$fields.query("name = :1"; $tableModel[$t].name).pop()
-											$action.parameters.push(This:C1470._addParameter($field; $tableModel[$t]; $menu.edit))
-											
-											//======================================
-									End case 
-									
-									//……………………………………………………………………………………
-								: ($tableModel[$t].kind="calculated")
-									
-									$field:=$fields.query("name = :1"; $t).pop()
-									
-									If (Not:C34(Bool:C1537($field.readOnly)))
-										
-										$action.parameters.push(This:C1470._addParameter($field; $tableModel[$t]; $menu.edit))
-										
-									End if 
-									
-									//……………………………………………………………………………………
-								: ($tableModel[$t].kind="alias")
-									
-									$field:=$fields.query("name = :1"; $t).pop()
-									
-									If ($field.fieldType=Is collection:K8:32)
-										
-										continue  // NOT SELECTION
-										
-									End if 
-									
-									// Get the targeted field
-									var $target : cs:C1710.field
-									$target:=PROJECT.getAliasTarget($tableModel[""].name; $field)
-									
-									If ($target.fieldType#Null:C1517) && ($target.fieldType#Is object:K8:27)
-										
-										$action.parameters.push(This:C1470._addParameter($field; $tableModel[$t]; $menu.edit))
-										
-									End if 
-									
-									//……………………………………………………………………………………
-								: ($tableModel[$t].kind="relatedEntity")\
-									 | ($tableModel[$t].kind="relatedEntities")
-									
-									// <NOTHING MORE TO DO>
-									
-									//……………………………………………………………………………………
-								Else 
-									
-									oops
-									
-									//……………………………………………………………………………………
-							End case 
-						End for each 
-						
-						$action.parameters:=$action.parameters.orderBy("name")
-						
-						//-------------------------------------------
-				End case 
-				
-				Case of 
+						$action:=PROJECT.actionShare($menu.tableID)
+						$action.$icon:=UI.getIcon("actions/Send-basic.svg")
+						This:C1470._addAction($action; True:C214)
 						
 						//______________________________________________________
 					: ($menu.openURL)
 						
-						$action:=PROJECT.urlAction($menu.tableID)
-						$action.$icon:=UI.getIcon($menu.icon)
+						$action:=PROJECT.actionURL($menu.tableID)
+						$action.$icon:=UI.getIcon("actions/Globe.svg")
 						This:C1470._addAction($action; True:C214)
-						
-						//______________________________________________________
-					: ($menu.delete)
-						
-						$action:=PROJECT.deleteAction($menu.tableID)
-						$action.$icon:=UI.getIcon($menu.icon)
-						This:C1470._addAction($action; True:C214)
-						
-						//______________________________________________________
-					: (False:C215)
-						
-						
 						
 						//______________________________________________________
 					Else 
 						
-						This:C1470._addAction($action)
+						oops
 						
 						//______________________________________________________
 				End case 
@@ -981,46 +749,6 @@ Function openOnMobileAppActionDatabaseMethod()
 	
 	// Open method
 	METHOD OPEN PATH:C1213($methods{0}; *)
-	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-Function _addParameter($fieldModel : Object; $field : Object; $edit : Boolean)->$parameter : Object
-	
-	$parameter:=New object:C1471(\
-		"fieldNumber"; $fieldModel.fieldNumber; \
-		"name"; $fieldModel.name; \
-		"label"; $field.label; \
-		"shortLabel"; $field.shortLabel; \
-		"type"; Choose:C955($fieldModel.fieldType=Is time:K8:8; "time"; $fieldModel.valueType))
-	
-	If ($edit)
-		
-		$parameter.defaultField:=PROJECT.defaultField($fieldModel)
-		
-	End if 
-	
-	If (Bool:C1537($field.mandatory))
-		
-		$parameter.rules:=New collection:C1472("mandatory")
-		
-	End if 
-	
-	// Preset formats
-	Case of 
-			
-			//................................
-		: ($field.fieldType=Is integer:K8:5)\
-			 | ($field.fieldType=Is longint:K8:6)\
-			 | ($field.fieldType=Is integer 64 bits:K8:25)
-			
-			$parameter.format:="integer"
-			
-			//................................
-		: ($parameter.type="date")
-			
-			$parameter.format:="shortDate"
-			
-			//................................
-	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function removeAction()
