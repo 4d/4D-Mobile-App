@@ -69,12 +69,12 @@ Case of
 							//______________________________________________________
 						: (Bool:C1537($panel.noSeparator))  //& False
 							
-							EXECUTE METHOD IN SUBFORM:C1085($e.objectName; Formula:C1597(panel_LAST).source)
+							EXECUTE METHOD IN SUBFORM:C1085($e.objectName; Formula:C1597(panel_LAST))
 							
 							//______________________________________________________
 						: (($index+1)=$c.length)  // Last panel
 							
-							EXECUTE METHOD IN SUBFORM:C1085($e.objectName; Formula:C1597(panel_LAST).source)
+							EXECUTE METHOD IN SUBFORM:C1085($e.objectName; Formula:C1597(panel_LAST))
 							
 							//______________________________________________________
 					End case 
