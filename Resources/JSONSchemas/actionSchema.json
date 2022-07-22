@@ -33,9 +33,10 @@
         "global"
       ]
     },
-    "id": {
+    "identifier": {
       "type": "integer",
-      "exclusiveMinimum": 0
+      "minimum": 0,
+      "exclusiveMinimum": true
     },
     "icon": {
       "type": "string"
@@ -89,7 +90,7 @@
           "type": "string"
         },
         "fieldNumber": {
-          "$ref": "#/definitions/id"
+          "$ref": "#/definitions/identifier"
         },
         "default": {
           "type": [
@@ -115,6 +116,22 @@
       },
       "minItems": 1,
       "uniqueItems": true
+    },
+    "delete-style-is-required": {
+      "anyOf": [
+        {
+          "not": {
+            "properties": {
+              "preset": {
+                "const": "delete"
+              }
+            }
+          },
+          "required": [
+            "style"
+          ]
+        }
+      ]
     }
   },
   "type": "object",
@@ -144,7 +161,7 @@
       ]
     },
     "tableNumber": {
-      "$ref": "#/definitions/id"
+      "$ref": "#/definitions/identifier"
     },
     "description": {
       "type": "string"
