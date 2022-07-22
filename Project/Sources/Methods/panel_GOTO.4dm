@@ -48,7 +48,7 @@ Repeat
 			If ($isOpened)
 				
 				GOTO OBJECT:C206(*; "panel."+String:C10($cursor))
-				EXECUTE METHOD IN SUBFORM:C1085("panel."+String:C10($cursor); Formula:C1597(panel_SET_FOCUS))
+				EXECUTE METHOD IN SUBFORM:C1085("panel."+String:C10($cursor); Formula:C1597(panel_SET_FOCUS).source)
 				
 			End if 
 		End if 

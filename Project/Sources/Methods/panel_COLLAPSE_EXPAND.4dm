@@ -69,7 +69,7 @@ Case of
 			GOTO OBJECT:C206(*; $Txt_panel)
 			
 			// Give the focus to the firts object
-			EXECUTE METHOD IN SUBFORM:C1085($Txt_panel; Formula:C1597(panel_SET_FOCUS))
+			EXECUTE METHOD IN SUBFORM:C1085($Txt_panel; Formula:C1597(panel_SET_FOCUS).source)
 			
 		Else 
 			
@@ -178,7 +178,7 @@ Case of
 			GOTO OBJECT:C206(*; $Txt_panel)
 			
 			// Give the focus to the firts object
-			EXECUTE METHOD IN SUBFORM:C1085($Txt_panel; Formula:C1597(panel_SET_FOCUS))
+			EXECUTE METHOD IN SUBFORM:C1085($Txt_panel; Formula:C1597(panel_SET_FOCUS).source)
 			
 		Else 
 			
