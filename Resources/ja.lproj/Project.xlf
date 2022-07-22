@@ -1352,7 +1352,7 @@ This may take a few minutes…</source>
         </trans-unit>
         <trans-unit id="rzY10kgopsFYir+n3SONKQ" resname="dataMustBeGenerated">
           <source>Data must be generated</source>
-          <target state="new">データを生成する必要があります</target>
+          <target>データを生成する必要があります</target>
         </trans-unit>
         <trans-unit id="OUJcki1Z0GZnLiepuHDmKQ" resname="dataMustBeRegeneratedBuiltInDataForTargetIsMissing">
           <source>Data must be regenerated, built-in data for {targetOS} is missing</source>
@@ -1587,11 +1587,11 @@ This may take a few minutes…</source>
         </trans-unit>
         <trans-unit id="hMNI7qn9n7EFhDRn5UGEdQ" resname="urlToOpenWithThisAction">
           <source>URL to open with this action</source>
-          <target state="new">URL to open with this action</target>
+          <target>このアクションで開きたいURL</target>
         </trans-unit>
         <trans-unit id="Q007fJTR7E+LDig4GKg5kA" resname="urlPlaceholder">
           <source>https://www.example.com OR /?table={{dataClass}}&amp;key={{entity.primaryKey}}</source>
-          <target state="new">https://www.example.com OR /?table={{dataClass}}&amp;key={{entity.primaryKey}}</target>
+          <target>https://www.example.com または /?table={{dataClass}}&amp;key={{entity.primaryKey}}</target>
         </trans-unit>
       </group>
       <group resname="Features">
