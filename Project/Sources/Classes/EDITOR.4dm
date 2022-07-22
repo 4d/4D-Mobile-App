@@ -592,7 +592,28 @@ Function updateHeader($data : Object)
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function setTarget($target : Text; $checkDevTools : Boolean)
 	
-	PROJECT.setTarget()
+	If (PROJECT.$ios & PROJECT.$android)
+		
+		PROJECT.info.target:=New collection:C1472("iOS"; "android")
+		
+	Else 
+		
+		If (Not:C34(PROJECT.$android))
+			
+			// According to platform
+			PROJECT.info.target:=Is macOS:C1572 ? "iOS" : "android"
+			PROJECT["$"+Lowercase:C14(PROJECT.info.target)]:=True:C214
+			
+		Else 
+			
+			PROJECT.info.target:=PROJECT.$android ? "android" : "iOS"
+			
+		End if 
+	End if 
+	
+	// Save & update the project folder
+	PROJECT.save()
+	PROJECT.prepare()
 	
 	This:C1470.ios:=PROJECT.$ios
 	This:C1470.android:=PROJECT.$android

@@ -1,0 +1,163 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$id": "https://4D.com",
+  "title": "4D Go Mobile action schemas",
+  "definitions": {
+    "name": {
+      "type": "string"
+    },
+    "label": {
+      "type": "string",
+      "minLength": 1
+    },
+    "shortLabel": {
+      "type": "string",
+      "minLength": 1
+    },
+    "preset": {
+      "type": "string",
+      "enum": [
+        "add",
+        "edit",
+        "sort",
+        "share",
+        "openURL",
+        "delete"
+      ]
+    },
+    "scope": {
+      "type": "string",
+      "required": [
+        "table",
+        "currentRecord",
+        "global"
+      ]
+    },
+    "id": {
+      "type": "integer",
+      "exclusiveMinimum": 0
+    },
+    "icon": {
+      "type": "string"
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": [
+          "object",
+          "string"
+        ],
+        "properties": {
+          "min": {
+            "type": "number"
+          },
+          "max": {
+            "type": "number"
+          },
+          "mandatory": {}
+        }
+      }
+    },
+    "parameter": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "$ref": "#/definitions/name"
+        },
+        "label": {
+          "$ref": "#/definitions/label"
+        },
+        "shortLabel": {
+          "$ref": "#/definitions/shortLabel"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "string",
+            "text",
+            "number",
+            "date",
+            "time",
+            "bool",
+            "image"
+          ]
+        },
+        "format": {
+          "type": "string"
+        },
+        "defaultField": {
+          "type": "string"
+        },
+        "fieldNumber": {
+          "$ref": "#/definitions/id"
+        },
+        "default": {
+          "type": [
+            "number",
+            "string"
+          ]
+        },
+        "placeholder": {
+          "type": "string"
+        },
+        "rules": {
+          "$ref": "#/definitions/rules"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "parameters": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/parameter"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    }
+  },
+  "type": "object",
+  "properties": {
+    "name": {
+      "$ref": "#/definitions/name"
+    },
+    "scope": {
+      "$ref": "#/definitions/scope"
+    },
+    "label": {
+      "$ref": "#/definitions/label"
+    },
+    "shortLabel": {
+      "$ref": "#/definitions/shortLabel"
+    },
+    "preset": {
+      "$ref": "#/definitions/preset"
+    },
+    "icon": {
+      "$ref": "#/definitions/icon"
+    },
+    "style": {
+      "type": "string",
+      "enum": [
+        "destructive"
+      ]
+    },
+    "tableNumber": {
+      "$ref": "#/definitions/id"
+    },
+    "description": {
+      "type": "string"
+    },
+    "parameters": {
+      "$ref": "#/definitions/parameters"
+    }
+  },
+  "required": [
+    "name",
+    "scope",
+    "label",
+    "shortLabel"
+  ],
+  "additionalProperties": false
+}

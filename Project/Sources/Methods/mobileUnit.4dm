@@ -60,26 +60,48 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 					//______________________________________________________
 				: ($parameters.test="new")
 					
+					// Create a new default action
 					$project.actionNew($parameters.table)
 					
 					//______________________________________________________
 				: ($parameters.test="add")
 					
-					$project.actionAdd($parameters.table)
+					If ($parameters.action#Null:C1517)
+						
+						// Add the specified action
+						If (Value type:C1509($parameters.action)#Is object:K8:27)
+							
+							return New object:C1471(\
+								"success"; False:C215; \
+								"error"; "action must be an object")
+							
+						End if 
+						
+						$project.addAction($parameters.action)
+						
+					Else 
+						
+						// Create an "add" default action
+						$project.actionAdd($parameters.table)
+						
+					End if 
 					
 					//______________________________________________________
 				: ($parameters.test="edit")
 					
+					// Create an "edit" default action
 					$project.actionEdit($parameters.table)
 					
 					//______________________________________________________
 				: ($parameters.test="delete")
 					
+					// Create a "delete" default action
 					$project.actionDelete($parameters.table)
 					
 					//______________________________________________________
 				: ($parameters.test="sort")
 					
+					// Create a "sort" default action
 					If ($parameters.field=Null:C1517)
 						
 						return New object:C1471(\
@@ -93,11 +115,13 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 					//______________________________________________________
 				: ($parameters.test="share")
 					
+					// Create a "share" default action
 					$project.actionShare($parameters.table)
 					
 					//______________________________________________________
 				: ($parameters.test="url")
 					
+					// Create a "openURL" default action
 					$project.actionURL($parameters.table)
 					
 					//______________________________________________________

@@ -890,7 +890,7 @@ Function _addAction($action : Object; $skip : Boolean)
 		
 		If (Not:C34($skip))  // #TEMPO
 			
-			PROJECT._appendAction($action)
+			PROJECT.addAction($action)
 			
 		End if 
 		

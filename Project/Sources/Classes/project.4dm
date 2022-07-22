@@ -368,33 +368,6 @@ Function allTargets() : Boolean
 	return (This:C1470.targets().length=2)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Populate the target value into the project
-Function setTarget()
-	
-	If (This:C1470.$ios & This:C1470.$android)
-		
-		This:C1470.info.target:=New collection:C1472("iOS"; "android")
-		
-	Else 
-		
-		If (Not:C34(This:C1470.$android))
-			
-			// According to platform
-			This:C1470.info.target:=Is macOS:C1572 ? "iOS" : "android"
-			This:C1470["$"+Lowercase:C14(This:C1470.info.target)]:=True:C214
-			
-		Else 
-			
-			This:C1470.info.target:=This:C1470.$android ? "android" : "iOS"
-			
-		End if 
-	End if 
-	
-	// Save & update the project folder
-	This:C1470.save()
-	This:C1470.prepare()
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns a cleaned project
 Function cleaned() : cs:C1710.project
 	
@@ -484,54 +457,6 @@ Function cleanup($dirtyObject : Object)->$cleanObject : Object
 			
 		End for each 
 		
-	End if 
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function updateActions
-	var $indx : Integer
-	var $dataModel; $parameter; $table : Object
-	var $actions : Collection
-	
-	$actions:=This:C1470.actions
-	
-	If ($actions#Null:C1517)
-		
-		$dataModel:=This:C1470.dataModel
-		
-		For each ($table; $actions)
-			
-			If ($dataModel[String:C10($table.tableNumber)]#Null:C1517)
-				
-				If ($table.parameters#Null:C1517)
-					
-					For each ($parameter; $table.parameters)
-						
-						If ($dataModel[String:C10($table.tableNumber)][String:C10($parameter.fieldNumber)]=Null:C1517)
-							
-							// ❌ THE FIELD DOESN'T EXIST ANYMORE
-							$table.parameters.remove($table.parameters.indexOf($parameter))
-							
-						End if 
-					End for each 
-				End if 
-				
-			Else 
-				
-				// ❌ THE TABLE DOESN'T EXIST ANYMORE
-				$actions.remove($indx)
-				
-			End if 
-			
-			$indx:=$indx+1
-			
-		End for each 
-		
-		If ($actions.length=0)
-			
-			// ❌ NO MORE ACTION
-			OB REMOVE:C1226(This:C1470; "actions")
-			
-		End if 
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -1320,7 +1245,7 @@ Function actionNew($table) : Object
 		"shortLabel"; This:C1470.label($name); \
 		"type"; "string"))
 	
-	This:C1470._appendAction($action)
+	This:C1470.addAction($action)
 	
 	return $action
 	
@@ -1351,7 +1276,7 @@ Function actionAdd($table) : Object
 		
 	End if 
 	
-	This:C1470._appendAction($action)
+	This:C1470.addAction($action)
 	
 	return $action
 	
@@ -1382,7 +1307,7 @@ Function actionEdit($table) : Object
 		
 	End if 
 	
-	This:C1470._appendAction($action)
+	This:C1470.addAction($action)
 	
 	return $action
 	
@@ -1464,7 +1389,7 @@ Function actionSort($table; $field) : Object
 	End case 
 	
 	
-	This:C1470._appendAction($action)
+	This:C1470.addAction($action)
 	
 	return $action
 	
@@ -1498,7 +1423,7 @@ Function actionShare($table) : Object
 		
 	End if 
 	
-	This:C1470._appendAction($action)
+	This:C1470.addAction($action)
 	
 	return $action
 	
@@ -1526,7 +1451,7 @@ Function actionURL($table) : Object
 		
 	End if 
 	
-	This:C1470._appendAction($action)
+	This:C1470.addAction($action)
 	
 	return $action
 	
@@ -1555,9 +1480,20 @@ Function actionDelete($table) : Object
 		
 	End if 
 	
-	This:C1470._appendAction($action)
+	This:C1470.addAction($action)
 	
 	return $action
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function addAction($action : Object)
+	
+	If (This:C1470._validate($action; File:C1566("/RESOURCES/JSONSchemas/actionSchema.json")))
+		
+		This:C1470.actions:=This:C1470.actions || New collection:C1472
+		This:C1470.actions.push($action)
+		This:C1470.save()
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function removeAction($action) : Integer
@@ -1578,6 +1514,54 @@ Function removeAction($action) : Integer
 	This:C1470.save()
 	
 	return $index
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function updateActions
+	var $indx : Integer
+	var $dataModel; $parameter; $table : Object
+	var $actions : Collection
+	
+	$actions:=This:C1470.actions
+	
+	If ($actions#Null:C1517)
+		
+		$dataModel:=This:C1470.dataModel
+		
+		For each ($table; $actions)
+			
+			If ($dataModel[String:C10($table.tableNumber)]#Null:C1517)
+				
+				If ($table.parameters#Null:C1517)
+					
+					For each ($parameter; $table.parameters)
+						
+						If ($dataModel[String:C10($table.tableNumber)][String:C10($parameter.fieldNumber)]=Null:C1517)
+							
+							// ❌ THE FIELD DOESN'T EXIST ANYMORE
+							$table.parameters.remove($table.parameters.indexOf($parameter))
+							
+						End if 
+					End for each 
+				End if 
+				
+			Else 
+				
+				// ❌ THE TABLE DOESN'T EXIST ANYMORE
+				$actions.remove($indx)
+				
+			End if 
+			
+			$indx:=$indx+1
+			
+		End for each 
+		
+		If ($actions.length=0)
+			
+			// ❌ NO MORE ACTION
+			OB REMOVE:C1226(This:C1470; "actions")
+			
+		End if 
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _actionName($prefix : Text) : Text
@@ -1608,13 +1592,6 @@ Function _actionName($prefix : Text) : Text
 	Until (False:C215)
 	
 	return $name
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function _appendAction($action : Object)
-	
-	This:C1470.actions:=This:C1470.actions || New collection:C1472
-	This:C1470.actions.push($action)
-	This:C1470.save()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _actionTable($table) : Object
@@ -1799,7 +1776,6 @@ Function _actionParamDefinition($fieldModel : Object; $field : cs:C1710.field; $
 Function _actionDefaultField($field : Object) : Text
 	
 	return This:C1470.formatFieldName(This:C1470.isAlias($field) ? $field.path : $field.name)
-	
 	
 	//mark:-[FORMS]
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -2751,7 +2727,23 @@ Function repairProject()
 	Form:C1466.status.project:=True:C214
 	
 	//MARK:-[PRIVATE]
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _validate($object : Object; $schema : 4D:C1709.File) : Boolean
 	
+	var $o; $result : Object
+	
+	$result:=JSON Validate:C1456($object; JSON Parse:C1218($schema.getText()))
+	
+	If (Not:C34($result.success))
+		
+		For each ($o; $result.errors)
+			
+			This:C1470._pushError($o.message)
+			
+		End for each 
+	End if 
+	
+	return $result.success
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _pushError($error : Text)
 	
