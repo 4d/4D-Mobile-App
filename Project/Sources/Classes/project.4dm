@@ -2769,7 +2769,7 @@ Function _fieldID($field; $table) : Text
 					return (String:C10($field.id))
 					
 					//======================================
-				: (Length:C16(String:C10($field.name))>0
+				: (Length:C16(String:C10($field.name))>0)
 					
 					If ($table#Null:C1517)
 						
@@ -2778,7 +2778,6 @@ Function _fieldID($field; $table) : Text
 							return (String:C10($field.name))
 							
 						Else 
-							
 							
 							For each ($key; $table)
 								
@@ -2807,6 +2806,12 @@ Function _fieldID($field; $table) : Text
 			End case 
 			
 			//______________________________________________________
+		: (Value type:C1509($field)=Is longint:K8:6)\
+			 | (Value type:C1509($field)=Is real:K8:4)
+			
+			return (String:C10($field))
+			
+			//______________________________________________________
 		: (Value type:C1509($field)=Is text:K8:3)
 			
 			If (Match regex:C1019("(?m-si)^\\d+$"; $field; 1; *))  // ID
@@ -2822,7 +2827,6 @@ Function _fieldID($field; $table) : Text
 						return ($field)
 						
 					Else 
-						
 						
 						For each ($key; $table)
 							
@@ -2842,12 +2846,6 @@ Function _fieldID($field; $table) : Text
 					End if 
 				End if 
 			End if 
-			
-			//______________________________________________________
-		: (Value type:C1509($field)=Is longint:K8:6)\
-			 | (Value type:C1509($field)=Is real:K8:4)
-			
-			return (String:C10($field))
 			
 			//______________________________________________________
 		Else 
