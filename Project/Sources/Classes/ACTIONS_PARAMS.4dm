@@ -1694,9 +1694,9 @@ Function dataSourceMenuManager()
 Function editList()
 	
 /*
-																$form:=New object(\
-																																												"static"; $static; \
-																																												"host"; This.path.hostInputControls(True))
+																	$form:=New object(\
+																																														"static"; $static; \
+																																														"host"; This.path.hostInputControls(True))
 	
 $form.folder:=This.path.hostInputControls()
 $manifest:=$form.folder.file("manifest.json")

@@ -660,7 +660,7 @@ Case of
 		
 		For each ($t; panels)
 			
-			UI.callChild($t; "panel_REFRESH")
+			UI.callChild($t; Formula:C1597(panel_REFRESH).source)
 			
 		End for each 
 		
@@ -673,7 +673,7 @@ Case of
 			
 			If (Length:C16($container)>0)
 				
-				UI.callChild($container; "panel_REFRESH")
+				UI.callChild($container; Formula:C1597(panel_REFRESH).source)
 				
 			End if 
 		End if 

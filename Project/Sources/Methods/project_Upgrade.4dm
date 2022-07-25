@@ -545,7 +545,7 @@ If (Num:C11($project.info.version)<6)
 	
 End if 
 
-// MARK:v6 - POPULATE field.kind
+// MARK:v7 - POPULATE field.kind
 If (Num:C11($project.info.version)<7)
 	
 	If ($project.dataModel#Null:C1517)
@@ -654,6 +654,38 @@ If (Num:C11($project.info.version)<7)
 	
 	$isUpgraded:=True:C214
 	$project.info.version:=7
+	Logger.warning("Upadted to version: "+String:C10($project.info.version))
+	
+End if 
+
+// MARK:v8 - Add fieldNumber in the data model for storage
+If (Num:C11($project.info.version)<8)
+	
+	If ($project.dataModel#Null:C1517)
+		
+		For each ($tableID; $project.dataModel)
+			
+			For each ($t; $project.dataModel[$tableID])
+				
+				If (Length:C16($t)=0)
+					
+					continue
+					
+				End if 
+				
+				$field:=$project.dataModel[$tableID][$t]
+				
+				If ($field.kind="storage")
+					
+					$field.fieldNumber:=Num:C11($t)
+					
+				End if 
+			End for each 
+		End for each 
+	End if 
+	
+	$isUpgraded:=True:C214
+	$project.info.version:=8
 	Logger.warning("Upadted to version: "+String:C10($project.info.version))
 	
 End if 

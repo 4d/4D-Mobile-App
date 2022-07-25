@@ -595,12 +595,10 @@ Function isField($field) : Boolean
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if it is a storage or calculated attribute
+	//todo: accept table (variant)
 Function isFieldAttribute($fieldName : Text; $tableName : Text) : Boolean
 	
-	var $table : cs:C1710.table
-	
-	$table:=This:C1470.getCatalog().query("name = :1"; $tableName).pop()
-	return $table#Null:C1517 && ($table.fields.query("name = :1"; $fieldName).pop()#Null:C1517)
+	return (This:C1470._fieldID($fieldName; This:C1470.table(This:C1470._tableID($tableName)))#"")
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function isRelation($attribute : Variant) : Boolean
@@ -1314,8 +1312,9 @@ Function actionEdit($table) : Object
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function actionSort($table; $field) : Object
 	
-	var $fieldID; $label; $name : Text
+	var $label; $name : Text
 	var $action; $o : Object
+	var $oField : cs:C1710.field
 	
 	$o:=This:C1470._actionTable($table)
 	
@@ -1326,21 +1325,23 @@ Function actionSort($table; $field) : Object
 		
 	End if 
 	
-	$field:=This:C1470.field($o.id; $field)
+	$oField:=This:C1470.field($o.id; $field)
 	
-	If ($field=Null:C1517)
+	If ($oField=Null:C1517)
 		
 		This:C1470._pushError("Field not found")
 		return 
 		
 	End if 
 	
-	If (Not:C34(This:C1470.isSortable($field)))
+	If (Not:C34(This:C1470.isSortable($oField)))
 		
 		This:C1470._pushError("The field is not sortable")
 		return 
 		
 	End if 
+	
+	$field:=$oField
 	
 	$name:=This:C1470._actionName("sort"+cs:C1710.str.new(This:C1470.label($o.name)).uperCamelCase())
 	$label:=Get localized string:C991("sort...")
@@ -1359,15 +1360,10 @@ Function actionSort($table; $field) : Object
 	Case of 
 			
 			//______________________________________________________
-		: (Not:C34(This:C1470.isSortable($field)))
-			
-			// <NOTHING MORE TO DO>
-			
-			//______________________________________________________
 		: ($field.kind="storage")
 			
 			$action.parameters.push(New object:C1471(\
-				"fieldNumber"; ($field.fieldNumber#Null:C1517) ? $field.fieldNumber : Num:C11($fieldID); \
+				"fieldNumber"; $field.fieldNumber; \
 				"name"; $field.name; \
 				"type"; This:C1470.fieldType2type($field.fieldType); \
 				"format"; "ascending"))
@@ -1376,7 +1372,7 @@ Function actionSort($table; $field) : Object
 		: ($field.kind="calculated")
 			
 			$action.parameters.push(New object:C1471(\
-				"name"; $fieldID; \
+				"name"; $field.name; \
 				"type"; This:C1470.fieldType2type($field.fieldType); \
 				"format"; "ascending"))
 			
@@ -1387,7 +1383,6 @@ Function actionSort($table; $field) : Object
 			
 			//______________________________________________________
 	End case 
-	
 	
 	This:C1470.addAction($action)
 	
@@ -2774,29 +2769,33 @@ Function _fieldID($field; $table) : Text
 					return (String:C10($field.id))
 					
 					//======================================
-				: (Length:C16(String:C10($field.name))>0)
+				: (Length:C16(String:C10($field.name))>0
 					
-					If ($table[String:C10($field.name)]#Null:C1517)  // Name refrenced
+					If ($table#Null:C1517)
 						
-						return (String:C10($field.name))
-						
-					Else 
-						
-						For each ($key; $table)
+						If ($table[String:C10($field.name)]#Null:C1517)  // Name refrenced
 							
-							If (Length:C16($key)=0)
-								
-								continue
-								
-							End if 
+							return (String:C10($field.name))
 							
-							If (Match regex:C1019("(?m-si)^\\d+$"; $key; 1; *))\
-								 && ($table[$key].name=String:C10($field.name))
+						Else 
+							
+							
+							For each ($key; $table)
 								
-								return ($key)
+								If (Length:C16($key)=0)
+									
+									continue
+									
+								End if 
 								
-							End if 
-						End for each 
+								If (Match regex:C1019("(?m-si)^\\d+$"; $key; 1; *))\
+									 && ($table[$key].name=String:C10($field.name))
+									
+									return ($key)
+									
+								End if 
+							End for each 
+						End if 
 					End if 
 					
 					//======================================
@@ -2816,27 +2815,31 @@ Function _fieldID($field; $table) : Text
 				
 			Else 
 				
-				If ($table[$field]#Null:C1517)  // Name refrenced
+				If ($table#Null:C1517)
 					
-					return ($field)
-					
-				Else 
-					
-					For each ($key; $table)
+					If ($table[$field]#Null:C1517)  // Name refrenced
 						
-						If (Length:C16($key)=0)
-							
-							continue
-							
-						End if 
+						return ($field)
 						
-						If (Match regex:C1019("(?m-si)^\\d+$"; $key; 1; *))\
-							 && ($table[$key].name=$field)
+					Else 
+						
+						
+						For each ($key; $table)
 							
-							return ($key)
+							If (Length:C16($key)=0)
+								
+								continue
+								
+							End if 
 							
-						End if 
-					End for each 
+							If (Match regex:C1019("(?m-si)^\\d+$"; $key; 1; *))\
+								 && ($table[$key].name=$field)
+								
+								return ($key)
+								
+							End if 
+						End for each 
+					End if 
 				End if 
 			End if 
 			

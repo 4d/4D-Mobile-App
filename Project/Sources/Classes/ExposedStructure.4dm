@@ -914,6 +914,7 @@ Function _fieldModel($field : cs:C1710.field; $relatedCatalog : Object)->$fieldM
 		: ($field.kind="storage")  // Attribute
 			
 			$fieldModel:=New object:C1471(\
+				"fieldNumber"; $field.id; \
 				"name"; $field.name; \
 				"kind"; $field.kind; \
 				"fieldType"; $field.fieldType; \

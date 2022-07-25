@@ -480,7 +480,7 @@ Function newAction($tableNumber : Integer)
 	$action:=PROJECT.actionNew($tableNumber)
 	
 	$action.$icon:=UI.getIcon("")
-	This:C1470._addAction($action; True:C214)
+	This:C1470._addAction($action)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function addMenuManager()
@@ -648,42 +648,42 @@ Function addMenuManager()
 						
 						$action:=PROJECT.actionAdd($menu.tableID)
 						$action.$icon:=UI.getIcon("actions 2/Add.svg")
-						This:C1470._addAction($action; True:C214)
+						This:C1470._addAction($action)
 						
 						//______________________________________________________
 					: ($menu.edit)
 						
 						$action:=PROJECT.actionEdit($menu.tableID)
 						$action.$icon:=UI.getIcon("actions/Edit.svg")
-						This:C1470._addAction($action; True:C214)
+						This:C1470._addAction($action)
 						
 						//______________________________________________________
 					: ($menu.delete)
 						
 						$action:=PROJECT.actionDelete($menu.tableID)
 						$action.$icon:=UI.getIcon("actions/Delete.svg")
-						This:C1470._addAction($action; True:C214)
+						This:C1470._addAction($action)
 						
 						//______________________________________________________
 					: ($menu.sort)
 						
 						$action:=PROJECT.actionSort($menu.tableID; $menu.fieldID)
 						$action.$icon:=UI.getIcon("actions/Sort.svg")
-						This:C1470._addAction($action; True:C214)
+						This:C1470._addAction($action)
 						
 						//______________________________________________________
 					: ($menu.share)
 						
 						$action:=PROJECT.actionShare($menu.tableID)
 						$action.$icon:=UI.getIcon("actions/Send-basic.svg")
-						This:C1470._addAction($action; True:C214)
+						This:C1470._addAction($action)
 						
 						//______________________________________________________
 					: ($menu.openURL)
 						
 						$action:=PROJECT.actionURL($menu.tableID)
 						$action.$icon:=UI.getIcon("actions/Globe.svg")
-						This:C1470._addAction($action; True:C214)
+						This:C1470._addAction($action)
 						
 						//______________________________________________________
 					Else 
@@ -884,25 +884,14 @@ Function showIconPicker()
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function _addAction($action : Object; $skip : Boolean)
+Function _addAction($action : Object)
 	
-	If ($action#Null:C1517)  // An action was created
-		
-		If (Not:C34($skip))  // #TEMPO
-			
-			PROJECT.addAction($action)
-			
-		End if 
-		
-		// Update UI
-		This:C1470.actions.focus()
-		This:C1470.actions.reveal(This:C1470.actions.rowsNumber+Num:C11(This:C1470.actions.rowsNumber=0))
-		
-		This:C1470.updateParameters($action)
-		
-		This:C1470.refresh()
-		
-	End if 
+	This:C1470.actions.focus()
+	This:C1470.actions.reveal(This:C1470.actions.rowsNumber+Num:C11(This:C1470.actions.rowsNumber=0))
+	
+	This:C1470.updateParameters($action)
+	
+	This:C1470.refresh()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Text displayed in the Tables column
