@@ -85,7 +85,7 @@ object Libs {
     const val androidx_preference_ktx = "androidx.preference:preference-ktx:${Versions.preference}"
     const val multidex = "androidx.multidex:multidex:${Versions.multidex}"
     const val kotlin_coroutines_core =
-        "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.kotlin_coroutines}"
+        "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:${Versions.kotlin_coroutines}"
     const val kotlin_reflect = "org.jetbrains.kotlin:kotlin-reflect:${Versions.kotlin}"
 
     // Common + Layout
