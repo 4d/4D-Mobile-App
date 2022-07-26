@@ -91,6 +91,7 @@ Function load($project) : cs:C1710.project
 		
 		// If upgraded, keep a copy of the old project…
 		$folder:=This:C1470._folder.folder(Replace string:C233(Get localized string:C991("convertedFiles"); "{stamp}"; cs:C1710.dateTime.new().stamp()))
+		$folder.delete(Delete with contents:K24:24)
 		$folder.create()
 		$file.moveTo($folder)
 		
@@ -1438,7 +1439,8 @@ Function actionURL($table) : Object
 		"scope"; "table"; \
 		"label"; $label; \
 		"shortLabel"; $label; \
-		"icon"; "actions/Globe.svg")
+		"icon"; "actions/Globe.svg"; \
+		"description"; "")
 	
 	If ($o#Null:C1517)
 		

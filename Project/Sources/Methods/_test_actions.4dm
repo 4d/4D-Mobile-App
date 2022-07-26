@@ -97,7 +97,7 @@ If (Asserted:C1132($response.success))
 	End if 
 End if 
 
-// mark:With table name
+// Mark:With table name
 $parameters:=New object:C1471(\
 "test"; "new"; \
 "project"; $original.copyTo($temporary; fk overwrite:K87:5); \
@@ -140,7 +140,7 @@ If (Asserted:C1132($response.success))
 	End if 
 End if 
 
-// mark:With table object
+// Mark:With table object
 $parameters:=New object:C1471(\
 "test"; "new"; \
 "project"; $original.copyTo($temporary; fk overwrite:K87:5))
@@ -223,7 +223,7 @@ End if
 
 // Mark:-[Sort action]
 // Mark:With only field if only 1 table
-//fixme:The name is modified by 4D
+// Fixme:The name is modified by 4D
 $parameters:=New object:C1471(\
 "test"; "sort"; \
 "project"; $original.copyTo($temporary; fk overwrite:K87:5); \
@@ -254,7 +254,8 @@ If (Asserted:C1132($response.success))
 					If (Asserted:C1132($project.actions[0].parameters.length=1))
 						
 						ASSERT:C1129($project.actions[0].parameters[0].format="ascending")
-						//fixme:The name is modified by 4D
+						
+						// Fixme:The name is modified by 4D
 						ASSERT:C1129($project.actions[0].parameters[0].name="Alpha_Field")
 						ASSERT:C1129($project.actions[0].parameters[0].type="string")
 						
@@ -297,7 +298,8 @@ If (Asserted:C1132($response.success))
 					If (Asserted:C1132($project.actions[0].parameters.length=1))
 						
 						ASSERT:C1129($project.actions[0].parameters[0].format="ascending")
-						//fixme:The name is modified by 4D
+						
+						// Fixme:The name is modified by 4D
 						ASSERT:C1129($project.actions[0].parameters[0].name="Alpha_Field")
 						ASSERT:C1129($project.actions[0].parameters[0].type="string")
 						
@@ -324,7 +326,7 @@ If (Asserted:C1132(Not:C34($response.success)))
 	
 End if 
 
-//Mark : With bad field
+// Mark : With bad field
 $parameters:=New object:C1471(\
 "test"; "sort"; \
 "project"; $original.copyTo($temporary; fk overwrite:K87:5); \
@@ -341,7 +343,7 @@ If (Asserted:C1132(Not:C34($response.success)))
 End if 
 
 // Mark:-[Add an action]
-//Mark : With well formed action
+// Mark: delete with well formed action
 $action:=New object:C1471(\
 "preset"; "delete"; \
 "style"; "destructive"; \
@@ -361,9 +363,9 @@ $parameters:=New object:C1471(\
 
 $response:=mobileUnit("actions"; $parameters)
 
-ASSERT:C1129($response.success; "The cration of the action failed")
+ASSERT:C1129($response.success; "The creation of the action failed")
 
-//Mark : With bad formed action
+// Mark: delete with missing name
 $action:=New object:C1471(\
 "preset"; "delete"; \
 "style"; "destructive"; \
@@ -382,12 +384,86 @@ $parameters:=New object:C1471(\
 
 $response:=mobileUnit("actions"; $parameters)
 
-ASSERT:C1129(Not:C34($response.success); "The creation of the action should have failed")
-ASSERT:C1129($response.error="The required property \"name\" is missing.")
-ASSERT:C1129($response.project.actions=Null:C1517; "The action should not be created")
+If (Asserted:C1132(Not:C34($response.success); "The creation of the action should have failed"))
+	
+	ASSERT:C1129($response.errors.indexOf("The required property \"name\" is missing.")#-1)
+	ASSERT:C1129($response.project.actions=Null:C1517; "The action should not be created")
+	
+End if 
 
+// Mark: delete with missing specific style
+$action:=New object:C1471(\
+"preset"; "delete"; \
+"name"; "deleteAllTypes"; \
+"scope"; "currentRecord"; \
+"label"; "Remove"; \
+"shortLabel"; "Remove"; \
+"icon"; "actions/Delete.svg"; \
+"tableNumber"; 5\
+)
 
+$parameters:=New object:C1471(\
+"test"; "add"; \
+"project"; $original.copyTo($temporary; fk overwrite:K87:5); \
+"table"; "ALL_TYPES"; \
+"action"; $action)
 
+$response:=mobileUnit("actions"; $parameters)
 
+If (Asserted:C1132(Not:C34($response.success); "The creation of the action should have failed"))
+	
+	ASSERT:C1129($response.errors.indexOf("The required property \"style\" is missing.")#-1)
+	ASSERT:C1129($response.project.actions=Null:C1517; "The action should not be created")
+	
+End if 
 
+// Mark: sort with empty parameters
+$action:=New object:C1471(\
+"preset"; "sort"; \
+"name"; "sortAllTypes"; \
+"scope"; "table"; \
+"label"; "Sort"; \
+"shortLabel"; "Sort"; \
+"parameters"; New collection:C1472\
+)
+
+$parameters:=New object:C1471(\
+"test"; "add"; \
+"project"; $original.copyTo($temporary; fk overwrite:K87:5); \
+"table"; "ALL_TYPES"; \
+"action"; $action)
+
+$response:=mobileUnit("actions"; $parameters)
+
+If (Asserted:C1132(Not:C34($response.success); "The creation of the action should have failed"))
+	
+	ASSERT:C1129($response.errors.indexOf("The array contains less items than specified in the schema.")#-1)
+	ASSERT:C1129($response.project.actions=Null:C1517; "The action should not be created")
+	
+End if 
+
+// Mark: sort with empty parameters
+$action:=New object:C1471(\
+"preset"; "sort"; \
+"name"; "sortAllTypes"; \
+"scope"; "table"; \
+"label"; "Sort"; \
+"shortLabel"; "Sort"; \
+"parameters"; New collection:C1472(New object:C1471)\
+)
+
+$parameters:=New object:C1471(\
+"test"; "add"; \
+"project"; $original.copyTo($temporary; fk overwrite:K87:5); \
+"table"; "ALL_TYPES"; \
+"action"; $action)
+
+$response:=mobileUnit("actions"; $parameters)
+
+If (Asserted:C1132(Not:C34($response.success); "The creation of the action should have failed"))
+	
+	//ASSERT($response.errors.indexOf("The array contains less items than specified in the schema.")#-1)
+	ASSERT:C1129($response.project.actions=Null:C1517; "The action should not be created")
+	
+End if 
 

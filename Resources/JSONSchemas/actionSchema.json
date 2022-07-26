@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "$id": "https://4D.com",
   "title": "4D Go Mobile action schemas",
-  "definitions": {
+  "def": {
     "name": {
       "type": "string"
     },
@@ -31,6 +31,12 @@
         "table",
         "currentRecord",
         "global"
+      ]
+    },
+    "style": {
+      "type": "string",
+      "enum": [
+        "destructive"
       ]
     },
     "identifier": {
@@ -63,13 +69,13 @@
       "type": "object",
       "properties": {
         "name": {
-          "$ref": "#/definitions/name"
+          "$ref": "#/def/name"
         },
         "label": {
-          "$ref": "#/definitions/label"
+          "$ref": "#/def/label"
         },
         "shortLabel": {
-          "$ref": "#/definitions/shortLabel"
+          "$ref": "#/def/shortLabel"
         },
         "type": {
           "type": "string",
@@ -90,7 +96,7 @@
           "type": "string"
         },
         "fieldNumber": {
-          "$ref": "#/definitions/identifier"
+          "$ref": "#/def/identifier"
         },
         "default": {
           "type": [
@@ -102,7 +108,7 @@
           "type": "string"
         },
         "rules": {
-          "$ref": "#/definitions/rules"
+          "$ref": "#/def/rules"
         }
       },
       "required": [
@@ -112,62 +118,94 @@
     "parameters": {
       "type": "array",
       "items": {
-        "$ref": "#/definitions/parameter"
+        "$ref": "#/def/parameter"
       },
       "minItems": 1,
       "uniqueItems": true
     },
-    "delete-style-is-required": {
-      "anyOf": [
-        {
-          "not": {
-            "properties": {
-              "preset": {
-                "const": "delete"
-              }
-            }
-          },
-          "required": [
-            "style"
+    "_noPreset": {
+      "not": {
+        "required": [
+          "preset"
+        ]
+      },
+      "required": [
+        "parameters"
+      ]
+    },
+    "_editAddSort": {
+      "properties": {
+        "preset": {
+          "enum": [
+            "edit",
+            "add",
+            "sort"
           ]
         }
+      },
+      "required": [
+        "parameters"
+      ]
+    },
+    "_delete": {
+      "properties": {
+        "preset": {
+          "const": "delete"
+        }
+      },
+      "required": [
+        "style"
+      ]
+    },
+    "_share": {
+      "properties": {
+        "preset": {
+          "const": "share"
+        }
+      }
+    },
+    "_openURL": {
+      "properties": {
+        "preset": {
+          "const": "openURL"
+        }
+      },
+      "required": [
+        "description"
       ]
     }
   },
   "type": "object",
   "properties": {
     "name": {
-      "$ref": "#/definitions/name"
+      "$ref": "#/def/name"
     },
     "scope": {
-      "$ref": "#/definitions/scope"
+      "$ref": "#/def/scope"
     },
     "label": {
-      "$ref": "#/definitions/label"
+      "$ref": "#/def/label"
     },
     "shortLabel": {
-      "$ref": "#/definitions/shortLabel"
+      "$ref": "#/def/shortLabel"
     },
     "preset": {
-      "$ref": "#/definitions/preset"
+      "$ref": "#/def/preset"
     },
     "icon": {
-      "$ref": "#/definitions/icon"
-    },
-    "style": {
-      "type": "string",
-      "enum": [
-        "destructive"
-      ]
+      "$ref": "#/def/icon"
     },
     "tableNumber": {
-      "$ref": "#/definitions/identifier"
+      "$ref": "#/def/identifier"
+    },
+    "parameters": {
+      "$ref": "#/def/parameters"
+    },
+    "style": {
+      "$ref": "#/def/style"
     },
     "description": {
       "type": "string"
-    },
-    "parameters": {
-      "$ref": "#/definitions/parameters"
     }
   },
   "required": [
@@ -175,6 +213,23 @@
     "scope",
     "label",
     "shortLabel"
+  ],
+  "anyOf": [
+    {
+      "$ref": "#/def/_noPreset"
+    },
+    {
+      "$ref": "#/def/_delete"
+    },
+    {
+      "$ref": "#/def/_editAddSort"
+    },
+    {
+      "$ref": "#/def/_openURL"
+    },
+    {
+      "$ref": "#/def/_share"
+    }
   ],
   "additionalProperties": false
 }
