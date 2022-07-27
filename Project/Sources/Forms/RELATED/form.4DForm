@@ -42,7 +42,6 @@
 					"currentItemPositionSource": "Form:C1466.position",
 					"selectedItemsSource": "Form:C1466.selected",
 					"selectionMode": "none",
-					"scrollbarVertical": "automatic",
 					"events": [],
 					"focusable": false,
 					"rowStyleSource": "Choose:C955(Bool:C1537(This:C1470.kind=\"alias\"); Italic:K14:3; Plain:K14:1)",

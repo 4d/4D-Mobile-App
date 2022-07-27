@@ -20,9 +20,9 @@
         "add",
         "edit",
         "sort",
+        "delete",
         "share",
-        "openURL",
-        "delete"
+        "openURL"
       ]
     },
     "scope": {
@@ -112,8 +112,9 @@
         }
       },
       "required": [
-        "name"
-      ]
+        "name","type"
+      ],
+  		"additionalProperties": false
     },
     "parameters": {
       "type": "array",
@@ -122,57 +123,6 @@
       },
       "minItems": 1,
       "uniqueItems": true
-    },
-    "_noPreset": {
-      "not": {
-        "required": [
-          "preset"
-        ]
-      },
-      "required": [
-        "parameters"
-      ]
-    },
-    "_editAddSort": {
-      "properties": {
-        "preset": {
-          "enum": [
-            "edit",
-            "add",
-            "sort"
-          ]
-        }
-      },
-      "required": [
-        "parameters"
-      ]
-    },
-    "_delete": {
-      "properties": {
-        "preset": {
-          "const": "delete"
-        }
-      },
-      "required": [
-        "style"
-      ]
-    },
-    "_share": {
-      "properties": {
-        "preset": {
-          "const": "share"
-        }
-      }
-    },
-    "_openURL": {
-      "properties": {
-        "preset": {
-          "const": "openURL"
-        }
-      },
-      "required": [
-        "description"
-      ]
     }
   },
   "type": "object",
@@ -216,19 +166,52 @@
   ],
   "anyOf": [
     {
-      "$ref": "#/def/_noPreset"
+      "properties": {
+        "preset": {
+          "enum": [
+            "null",
+            "add",
+            "edit",
+            "sort"
+          ]
+        }
+      },
+      "required": [
+        "scope",
+        "parameters"
+      ]
     },
     {
-      "$ref": "#/def/_delete"
+      "properties": {
+        "preset": {
+          "const": "delete"
+        }
+      },
+      "required": [
+        "scope",
+        "style"
+      ]
     },
     {
-      "$ref": "#/def/_editAddSort"
+      "properties": {
+        "preset": {
+          "const": "share"
+        }
+      },
+      "required": [
+        "scope"
+      ]
     },
     {
-      "$ref": "#/def/_openURL"
-    },
-    {
-      "$ref": "#/def/_share"
+      "properties": {
+        "preset": {
+          "const": "openURL"
+        }
+      },
+      "required": [
+        "scope",
+        "description"
+      ]
     }
   ],
   "additionalProperties": false

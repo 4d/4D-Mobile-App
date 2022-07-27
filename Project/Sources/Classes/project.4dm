@@ -2741,6 +2741,7 @@ Function _validate($object : Object; $schema : 4D:C1709.File) : Boolean
 	End if 
 	
 	return $result.success
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _pushError($error : Text)
 	

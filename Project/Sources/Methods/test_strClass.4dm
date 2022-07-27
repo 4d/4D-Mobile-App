@@ -92,6 +92,11 @@ ASSERT:C1129($c.length=2)
 ASSERT:C1129($c[0]="hello")
 ASSERT:C1129($c[1]="world")
 
+// mark:-initials()
+ASSERT:C1129($str.initials("Object Relational Data Access")="ORDA")
+ASSERT:C1129($str.initials("John Williams")="JW")
+ASSERT:C1129($str.initials("vincent de lachaux")="VL")
+
 // Mark:-htmlEncode()
 $str.setText($in)
 ASSERT:C1129($str.htmlEncode()=$in)

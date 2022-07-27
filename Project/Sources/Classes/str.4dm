@@ -672,6 +672,25 @@ Function spaceSeparated($target : Text) : Text
 	return $c.join(" ")
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns the initials of the content text or the given text.
+Function initials($target : Text) : Text
+	
+	var $initials; $word : Text
+	
+	$target:=Count parameters:C259=0 ? This:C1470.value : $target
+	
+	For each ($word; Split string:C1554($target; " "; sk ignore empty strings:K86:1))
+		
+		If (Length:C16($word)>2)
+			
+			$initials+=Uppercase:C13($word[[1]])
+			
+		End if 
+	End for each 
+	
+	return $initials
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Trims Trailing spaces or passed
 Function trimTrailing($target : Text; $trim : Text) : Text
 	
