@@ -6,6 +6,8 @@
 
 package {{package}}.app
 
+import com.google.android.material.color.DynamicColors
+import com.google.android.material.color.DynamicColorsOptions
 import com.qmobile.qmobileapi.utils.SharedPreferencesHolder
 import com.qmobile.qmobiledatastore.db.AppDatabaseFactory
 import com.qmobile.qmobiledatasync.app.BaseApp
@@ -22,6 +24,10 @@ class App : BaseApp() {
 
     override fun onCreate() {
         super.onCreate()
+
+        // Apply dynamic color
+        val dynamicColorOptions = DynamicColorsOptions.Builder().setThemeOverlay(R.style.Theme_MyApplication).build()
+        DynamicColors.applyToActivitiesIfAvailable(this, dynamicColorOptions)
 
         // Sets interfaces to get data coming from outside the SDK
         daoProvider =

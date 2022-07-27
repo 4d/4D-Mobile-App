@@ -1,16 +1,31 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<resources>
     <style name="Theme.MyApplication" parent="Theme.QMobileApp">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">{{theme_color_primary}}</item>
-        <item name="colorPrimaryVariant">{{theme_color_primary_darker}}</item>
-        <item name="colorOnPrimary">{{theme_color_on_primary}}</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/brown_light</item>
-        <item name="colorSecondaryVariant">@color/brown_light</item>
-        <item name="colorOnSecondary">@android:color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/theme_dark_primary</item>
+        <item name="colorOnPrimary">@color/theme_dark_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/theme_dark_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/theme_dark_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/theme_dark_secondary</item>
+        <item name="colorOnSecondary">@color/theme_dark_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/theme_dark_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/theme_dark_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/theme_dark_tertiary</item>
+        <item name="colorOnTertiary">@color/theme_dark_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/theme_dark_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/theme_dark_onTertiaryContainer</item>
+        <item name="colorError">@color/theme_dark_error</item>
+        <item name="colorErrorContainer">@color/theme_dark_errorContainer</item>
+        <item name="colorOnError">@color/theme_dark_onError</item>
+        <item name="colorOnErrorContainer">@color/theme_dark_onErrorContainer</item>
+        <item name="android:colorBackground">@color/theme_dark_background</item>
+        <item name="colorOnBackground">@color/theme_dark_onBackground</item>
+        <item name="colorSurface">@color/theme_dark_surface</item>
+        <item name="colorOnSurface">@color/theme_dark_onSurface</item>
+        <item name="colorSurfaceVariant">@color/theme_dark_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/theme_dark_onSurfaceVariant</item>
+        <item name="colorOutline">@color/theme_dark_outline</item>
+        <item name="colorOnSurfaceInverse">@color/theme_dark_inverseOnSurface</item>
+        <item name="colorSurfaceInverse">@color/theme_dark_inverseSurface</item>
+        <item name="elevationOverlayColor">@color/theme_dark_surfaceTint</item>
+        <item name="colorPrimaryInverse">@color/theme_dark_inversePrimary</item>
     </style>
 </resources>

@@ -1,36 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    {{#logo_colors_defined}}
-    <color name="primary_neutral">{{color_primary_neutral}}</color>
-    <color name="primary_darker_1">{{color_primary_darker_08}}</color>
-    <color name="primary_darker_2">{{color_primary_darker_06}}</color>
-    <color name="primary_darker_3">{{color_primary_darker_04}}</color>
-    <color name="primary_lighter_1">{{color_primary_lighter_12}}</color>
-    <color name="primary_lighter_2">{{color_primary_lighter_14}}</color>
-    <color name="primary_lighter_3">{{color_primary_lighter_16}}</color>
-    {{/logo_colors_defined}}
-
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-
-    <!--  Other sets of colors for another theme  -->
-    <color name="pink_light">#FFFA5788</color>
-    <color name="pink_700">#FFC2185B</color>
-    <color name="pink_dark">#FF8C0032</color>
-
-    <color name="amber_light">#FFFFD149</color>
-    <color name="amber_700">#FFFFA000</color>
-    <color name="amber_dark">#FFC67100</color>
-
-    <color name="cyan_light">#FF428E92</color>
-    <color name="cyan_900">#FF006064</color>
-    <color name="cyan_dark">#FF00363A</color>
-
-    <color name="brown_light">#FF8B6B61</color>
-    <color name="brown_700">#FF5D4037</color>
-    <color name="brown_dark">#FF321911</color>
-
+    <color name="seed">{{seed}}</color>
+    <color name="theme_light_primary">{{theme_light_primary}}</color>
+    <color name="theme_light_onPrimary">{{theme_light_onPrimary}}</color>
+    <color name="theme_light_primaryContainer">{{theme_light_primaryContainer}}</color>
+    <color name="theme_light_onPrimaryContainer">{{theme_light_onPrimaryContainer}}</color>
+    <color name="theme_light_secondary">{{theme_light_secondary}}</color>
+    <color name="theme_light_onSecondary">{{theme_light_onSecondary}}</color>
+    <color name="theme_light_secondaryContainer">{{theme_light_secondaryContainer}}</color>
+    <color name="theme_light_onSecondaryContainer">{{theme_light_onSecondaryContainer}}</color>
+    <color name="theme_light_tertiary">{{theme_light_tertiary}}</color>
+    <color name="theme_light_onTertiary">{{theme_light_onTertiary}}</color>
+    <color name="theme_light_tertiaryContainer">{{theme_light_tertiaryContainer}}</color>
+    <color name="theme_light_onTertiaryContainer">{{theme_light_onTertiaryContainer}}</color>
+    <color name="theme_light_error">{{theme_light_error}}</color>
+    <color name="theme_light_errorContainer">{{theme_light_errorContainer}}</color>
+    <color name="theme_light_onError">{{theme_light_onError}}</color>
+    <color name="theme_light_onErrorContainer">{{theme_light_onErrorContainer}}</color>
+    <color name="theme_light_background">{{theme_light_background}}</color>
+    <color name="theme_light_onBackground">{{theme_light_onBackground}}</color>
+    <color name="theme_light_surface">{{theme_light_surface}}</color>
+    <color name="theme_light_onSurface">{{theme_light_onSurface}}</color>
+    <color name="theme_light_surfaceVariant">{{theme_light_surfaceVariant}}</color>
+    <color name="theme_light_onSurfaceVariant">{{theme_light_onSurfaceVariant}}</color>
+    <color name="theme_light_outline">{{theme_light_outline}}</color>
+    <color name="theme_light_inverseOnSurface">{{theme_light_inverseOnSurface}}</color>
+    <color name="theme_light_inverseSurface">{{theme_light_inverseSurface}}</color>
+    <color name="theme_light_inversePrimary">{{theme_light_inversePrimary}}</color>
+    <color name="theme_light_shadow">{{theme_light_shadow}}</color>
+    <color name="theme_light_surfaceTint">{{theme_light_surfaceTint}}</color>
+    <color name="theme_light_surfaceTintColor">{{theme_light_surfaceTintColor}}</color>
+    <color name="theme_dark_primary">{{theme_dark_primary}}</color>
+    <color name="theme_dark_onPrimary">{{theme_dark_onPrimary}}</color>
+    <color name="theme_dark_primaryContainer">{{theme_dark_primaryContainer}}</color>
+    <color name="theme_dark_onPrimaryContainer">{{theme_dark_onPrimaryContainer}}</color>
+    <color name="theme_dark_secondary">{{theme_dark_secondary}}</color>
+    <color name="theme_dark_onSecondary">{{theme_dark_onSecondary}}</color>
+    <color name="theme_dark_secondaryContainer">{{theme_dark_secondaryContainer}}</color>
+    <color name="theme_dark_onSecondaryContainer">{{theme_dark_onSecondaryContainer}}</color>
+    <color name="theme_dark_tertiary">{{theme_dark_tertiary}}</color>
+    <color name="theme_dark_onTertiary">{{theme_dark_onTertiary}}</color>
+    <color name="theme_dark_tertiaryContainer">{{theme_dark_tertiaryContainer}}</color>
+    <color name="theme_dark_onTertiaryContainer">{{theme_dark_onTertiaryContainer}}</color>
+    <color name="theme_dark_error">{{theme_dark_error}}</color>
+    <color name="theme_dark_errorContainer">{{theme_dark_errorContainer}}</color>
+    <color name="theme_dark_onError">{{theme_dark_onError}}</color>
+    <color name="theme_dark_onErrorContainer">{{theme_dark_onErrorContainer}}</color>
+    <color name="theme_dark_background">{{theme_dark_background}}</color>
+    <color name="theme_dark_onBackground">{{theme_dark_onBackground}}</color>
+    <color name="theme_dark_surface">{{theme_dark_surface}}</color>
+    <color name="theme_dark_onSurface">{{theme_dark_onSurface}}</color>
+    <color name="theme_dark_surfaceVariant">{{theme_dark_surfaceVariant}}</color>
+    <color name="theme_dark_onSurfaceVariant">{{theme_dark_onSurfaceVariant}}</color>
+    <color name="theme_dark_outline">{{theme_dark_outline}}</color>
+    <color name="theme_dark_inverseOnSurface">{{theme_dark_inverseOnSurface}}</color>
+    <color name="theme_dark_inverseSurface">{{theme_dark_inverseSurface}}</color>
+    <color name="theme_dark_inversePrimary">{{theme_dark_inversePrimary}}</color>
+    <color name="theme_dark_shadow">{{theme_dark_shadow}}</color>
+    <color name="theme_dark_surfaceTint">{{theme_dark_surfaceTint}}</color>
+    <color name="theme_dark_surfaceTintColor">{{theme_dark_surfaceTintColor}}</color>
 </resources>

@@ -1,22 +1,35 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<resources>
     <style name="Theme.MyApplication" parent="Theme.QMobileApp">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">{{theme_color_primary}}</item>
-        <item name="colorPrimaryVariant">{{theme_color_primary_darker}}</item>
-        <item name="colorOnPrimary">{{theme_color_on_primary}}</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/brown_light</item>
-        <item name="colorSecondaryVariant">@color/brown_700</item>
-        <item name="colorOnSecondary">@android:color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/theme_light_primary</item>
+        <item name="colorOnPrimary">@color/theme_light_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/theme_light_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/theme_light_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/theme_light_secondary</item>
+        <item name="colorOnSecondary">@color/theme_light_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/theme_light_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/theme_light_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/theme_light_tertiary</item>
+        <item name="colorOnTertiary">@color/theme_light_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/theme_light_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/theme_light_onTertiaryContainer</item>
+        <item name="colorError">@color/theme_light_error</item>
+        <item name="colorErrorContainer">@color/theme_light_errorContainer</item>
+        <item name="colorOnError">@color/theme_light_onError</item>
+        <item name="colorOnErrorContainer">@color/theme_light_onErrorContainer</item>
+        <item name="android:colorBackground">@color/theme_light_background</item>
+        <item name="colorOnBackground">@color/theme_light_onBackground</item>
+        <item name="colorSurface">@color/theme_light_surface</item>
+        <item name="colorOnSurface">@color/theme_light_onSurface</item>
+        <item name="colorSurfaceVariant">@color/theme_light_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/theme_light_onSurfaceVariant</item>
+        <item name="colorOutline">@color/theme_light_outline</item>
+        <item name="colorOnSurfaceInverse">@color/theme_light_inverseOnSurface</item>
+        <item name="colorSurfaceInverse">@color/theme_light_inverseSurface</item>
+        <item name="elevationOverlayColor">@color/theme_light_surfaceTint</item>
+        <item name="colorPrimaryInverse">@color/theme_light_inversePrimary</item>
     </style>
 
     <style name="Theme.MyApplication.LoginTheme" parent="Theme.MyApplication">
         <item name="android:windowBackground">@drawable/launch_screen</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
     </style>
 </resources>

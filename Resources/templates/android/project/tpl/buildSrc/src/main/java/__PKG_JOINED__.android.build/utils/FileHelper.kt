@@ -71,14 +71,11 @@ private fun String.replaceSpecialChars(): String =
         else -> this.unaccent().replace("[^a-zA-Z0-9._]".toRegex(), "_")
     }
 
-private fun String.lowerCustomProperties() =
-    if (this in arrayOf("__KEY", "__STAMP", "__GlobalStamp", "__TIMESTAMP"))
-        this
-    else
-        if (this.startsWith("__") && this.endsWith("Key"))
-            this.removeSuffix("Key").lowercase(Locale.getDefault()) + "Key"
-        else
-            this.lowercase(Locale.getDefault())
+private fun String.lowerCustomProperties() = when {
+    this in arrayOf("__KEY", "__STAMP", "__GlobalStamp", "__TIMESTAMP") -> this
+    this.startsWith("__") && this.endsWith("Key") -> this.removeSuffix("Key").replaceFirstChar { it.lowercaseChar() } + "Key"
+    else -> this.replaceFirstChar { it.lowercaseChar() }
+}
 
 private fun String.decapitalizeExceptID() = 
     if (this == "ID") this.lowercase(Locale.getDefault()) else this.replaceFirstChar {

@@ -9,6 +9,7 @@ package {{package}}.utils
 import androidx.databinding.ViewDataBinding
 import com.qmobile.qmobiledatasync.utils.CustomEntityListFragment
 import com.qmobile.qmobiledatasync.utils.GenericTableFragmentHelper
+import com.qmobile.qmobiledatasync.utils.LayoutType
 import com.qmobile.qmobileui.detail.EntityDetailFragment
 {{#has_custom_formatter_images}}
 import {{package}}.R
@@ -40,11 +41,11 @@ class CustomTableFragmentHelper :
     /**
      * Provides the list form type
      */
-    override fun layoutType(tableName: String): String = when (tableName) {
+    override fun layoutType(tableName: String): LayoutType = when (tableName) {
         {{#tableNames_layout}}
-        "{{name}}" -> "{{layout_manager_type}}"
+        "{{name}}" -> {{layout_manager_type}}
         {{/tableNames_layout}}
-        else -> "LINEAR"
+        else -> LayoutType.LINEAR
     }
 
     /**

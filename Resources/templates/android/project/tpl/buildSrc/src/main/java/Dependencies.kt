@@ -24,6 +24,7 @@ object Versions {
     const val fragment_ktx = "1.4.1"
     const val glide = "4.13.2"
     const val glide_transformations = "4.3.0"
+    const val insetter = "0.6.1"
     const val jackson = "2.13.3"
     const val json = "20220320"
     const val junit = "4.13.2"
@@ -31,7 +32,7 @@ object Versions {
     const val kotlin_coroutines = "1.6.3"
     const val leakcanary = "2.0"
     const val lifecycle = "2.4.1"
-    const val material = "1.7.0-alpha02"
+    const val material = "1.7.0-alpha03"
     const val mockito = "4.6.1"
     const val mockk = "1.12.4"
     const val multidex = "2.0.1"
@@ -106,6 +107,8 @@ object Libs {
         "jp.wasabeef:glide-transformations:${Versions.glide_transformations}"
 
     // Lifecycle
+    const val lifecycle_livedata_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.lifecycle}"
+    const val lifecycle_viewmodel_ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle}"
     const val lifecycle_runtime_ktx = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycle}"
 
     // OkHttp
@@ -143,6 +146,7 @@ object Libs {
 
     // Utils
     const val dynamic_toasts = "com.pranavpandey.android:dynamic-toasts:${Versions.dynamic_toasts}"
+    const val insetter = "dev.chrisbanes.insetter:insetter:${Versions.insetter}"
     const val leakcanary = "com.squareup.leakcanary:leakcanary-android:${Versions.leakcanary}"
     const val signature_pad = "com.github.gcacace:signature-pad:${Versions.signature_pad}"
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
