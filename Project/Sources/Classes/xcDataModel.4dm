@@ -949,12 +949,15 @@ Function _hasGlobalStamp($tableName : Text)->$has : Boolean
 Function _inverseRelatedFields($tableName : Text; $relationKey : Text; $cache : Object)->$result : Object
 	If (Feature.with("alias"))
 		
-		$result:=_o_structure(New object:C1471(\
-			"action"; "inverseRelatedFields"; \
-			"table"; $tableName; \
-			"relation"; $relationKey; \
-			"definition"; $cache))
-		// TODO: remove  _o_structure  inverseRelatedFields
+		$result:=New object:C1471("success"; False:C215)
+		$result.table:=This:C1470._tableFromCatalog($tableName)
+		If ($result.table#Null:C1517)
+			$result.fields:=$result.table.fields.query("name = :1"; $relationKey)
+			$result.fields:=$result.fields.map(Formula:C1597($2._tableFromCatalog($1.value.relatedDataClass).fields.query("name = :1"; $1.value.inverseName)[0]); This:C1470)
+			
+			$result.success:=($result.fields.length>0)
+		End if 
+		
 	Else 
 		$result:=_o_structure(New object:C1471(\
 			"action"; "inverseRelatedFields"; \
