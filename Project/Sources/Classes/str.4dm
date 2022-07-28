@@ -569,6 +569,7 @@ Function uperCamelCase($target : Text) : Text
 			
 		Else 
 			
+			$target[[1]]:=Uppercase:C13($target[[1]])
 			return $target
 			
 		End if 
