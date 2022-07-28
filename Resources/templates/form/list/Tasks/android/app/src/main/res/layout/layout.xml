@@ -113,12 +113,12 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:contentDescription="Arrow Image"
-            app:imageDrawable="@{@drawable/baseline_chevron_right_24}"
+            app:imageDrawable="@{@drawable/chevron_right}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="?colorOnSurface"
-            tools:background="@drawable/baseline_chevron_right_24" />
+            tools:background="@drawable/chevron_right" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
