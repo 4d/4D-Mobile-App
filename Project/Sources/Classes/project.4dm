@@ -1484,7 +1484,7 @@ Function actionDelete($table) : Object
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function addAction($action : Object)
 	
-	If (This:C1470._validate($action; File:C1566("/RESOURCES/JSONSchemas/actionSchema.json")))
+	If (This:C1470._validate($action; File:C1566("/RESOURCES/Schemas/action.json")))
 		
 		This:C1470.actions:=This:C1470.actions || New collection:C1472
 		This:C1470.actions.push($action)
