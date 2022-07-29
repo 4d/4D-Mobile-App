@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$id": "parameter",
+  "title": "4D Go Mobile action parameter schemas",
+  "$ref": "#/definitions/parameter",
+  "definitions": {
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": [
+          "object",
+          "string"
+        ],
+        "properties": {
+          "min": {
+            "type": "number"
+          },
+          "max": {
+            "type": "number"
+          },
+          "mandatory": {}
+        }
+      }
+    },
+    "parameter": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "$ref": "/RESOURCES/Schemas/common.json#/name"
+        },
+        "label": {
+          "$ref": "/RESOURCES/Schemas/common.json#/label"
+        },
+        "shortLabel": {
+          "$ref": "/RESOURCES/Schemas/common.json#/shortLabel"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "string",
+            "text",
+            "number",
+            "date",
+            "time",
+            "bool",
+            "image"
+          ]
+        },
+        "format": {
+          "type": "string"
+        },
+        "definitionsaultField": {
+          "type": "string"
+        },
+        "fieldNumber": {
+          "$ref": "/RESOURCES/Schemas/common.json#/identifier"
+        },
+        "definitionsault": {
+          "type": [
+            "number",
+            "string"
+          ]
+        },
+        "placeholder": {
+          "type": "string"
+        },
+        "rules": {
+          "$ref": "#/definitions/rules"
+        }
+      },
+      "required": [
+        "name",
+        "type"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

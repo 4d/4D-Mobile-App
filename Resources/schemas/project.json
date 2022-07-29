@@ -1,196 +1,203 @@
 {
-    "$schema": "http://json-schema.org/draft-06/schema#",
-    "$ref": "#/definitions/project",
-    "definitions": {
-        "project": {
-            "type": "object",
-            "additionalProperties": true,
-            "properties": {
-                "info": {
-                    "$ref": "#/definitions/info"
-                },
-                "product": {
-                    "$ref": "#/definitions/product"
-                },
-                "organization": {
-                    "$ref": "#/definitions/organization"
-                },
-                "developer": {
-                    "$ref": "#/definitions/developer"
-                },
-                "server": {
-                    "$ref": "#/definitions/server"
-                },
-                "main": {
-                    "$ref": "#/definitions/main"
-                },
-                "dataSource": {
-                    "$ref": "#/definitions/dataSource"
-                }
-            },
-            "required": [
-                "dataSource",
-                "developer",
-                "info",
-                "main",
-                "organization",
-                "product",
-                "server"
-            ],
-            "title": "project"
-        },
-        "dataSource": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "source": {
-                    "type": "string"
-                },
-                "doNotGenerateDataAtEachBuild": {
-                    "type": "boolean"
-                }
-            },
-            "required": [
-                "doNotGenerateDataAtEachBuild",
-                "source"
-            ],
-            "title": "dataSource"
-        },
-        "developer": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "id",
-                "name"
-            ],
-            "title": "developer"
-        },
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$id": "project",
+  "title": "4D Go Mobile project schemas",
+  "$ref": "#/definitions/project",
+  "definitions": {
+    "project": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
         "info": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "version": {
-                    "type": "integer",
-                    "enum": [1,2,3,4]
-                },
-                "target": {
-                    "type": "string"
-                },
-                "ideVersion": {
-                    "type": "string"
-                },
-                "ideBuildVersion": {
-                    "type": "string"
-                },
-                "componentBuild": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "componentBuild",
-                "ideBuildVersion",
-                "ideVersion",
-                "target",
-                "version"
-            ],
-            "title": "info"
-        },
-        "main": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "navigationTitle": {
-                    "type": "string"
-                },
-                "navigationType": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "navigationTitle",
-                "navigationType"
-            ],
-            "title": "main"
-        },
-        "organization": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "teamId": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "id",
-                "name",
-                "teamId"
-            ],
-            "title": "organization"
+          "$ref": "#/definitions/info"
         },
         "product": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "version": {
-                    "type": "string"
-                },
-                "copyright": {
-                    "type": "string"
-                },
-                "bundleIdentifier": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "bundleIdentifier",
-                "copyright",
-                "name",
-                "version"
-            ],
-            "title": "product"
+          "$ref": "#/definitions/product"
+        },
+        "organization": {
+          "$ref": "#/definitions/organization"
+        },
+        "developer": {
+          "$ref": "#/definitions/developer"
         },
         "server": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "urls": {
-                    "$ref": "#/definitions/Urls"
-                }
-            },
-            "required": [
-                "urls"
-            ],
-            "title": "server"
+          "$ref": "#/definitions/server"
         },
-        "Urls": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "production": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "production"
-            ],
-            "title": "Urls"
+        "main": {
+          "$ref": "#/definitions/main"
+        },
+        "dataSource": {
+          "$ref": "#/definitions/dataSource"
         }
+      },
+      "required": [
+        "dataSource",
+        "developer",
+        "info",
+        "main",
+        "organization",
+        "product",
+        "server"
+      ],
+      "title": "project"
+    },
+    "dataSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "type": "string"
+        },
+        "doNotGenerateDataAtEachBuild": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "doNotGenerateDataAtEachBuild",
+        "source"
+      ],
+      "title": "dataSource"
+    },
+    "developer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "title": "developer"
+    },
+    "info": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "type": "integer",
+          "enum": [
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        "target": {
+          "type": "string"
+        },
+        "ideVersion": {
+          "type": "string"
+        },
+        "ideBuildVersion": {
+          "type": "string"
+        },
+        "componentBuild": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentBuild",
+        "ideBuildVersion",
+        "ideVersion",
+        "target",
+        "version"
+      ],
+      "title": "info"
+    },
+    "main": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "navigationTitle": {
+          "type": "string"
+        },
+        "navigationType": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "navigationTitle",
+        "navigationType"
+      ],
+      "title": "main"
+    },
+    "organization": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "teamId": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "teamId"
+      ],
+      "title": "organization"
+    },
+    "product": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "copyright": {
+          "type": "string"
+        },
+        "bundleIdentifier": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "bundleIdentifier",
+        "copyright",
+        "name",
+        "version"
+      ],
+      "title": "product"
+    },
+    "server": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "urls": {
+          "$ref": "#/definitions/Urls"
+        }
+      },
+      "required": [
+        "urls"
+      ],
+      "title": "server"
+    },
+    "Urls": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "production": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "production"
+      ],
+      "title": "Urls"
     }
+  }
 }

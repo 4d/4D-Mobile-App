@@ -1,19 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "$id": "https://4D.com",
+  "$id": "action",
   "title": "4D Go Mobile action schemas",
-  "def": {
-    "name": {
-      "type": "string"
-    },
-    "label": {
-      "type": "string",
-      "minLength": 1
-    },
-    "shortLabel": {
-      "type": "string",
-      "minLength": 1
-    },
+  "definitions": {
     "preset": {
       "type": "string",
       "enum": [
@@ -38,121 +27,41 @@
       "enum": [
         "destructive"
       ]
-    },
-    "identifier": {
-      "type": "integer",
-      "minimum": 0,
-      "exclusiveMinimum": true
-    },
-    "icon": {
-      "type": "string"
-    },
-    "rules": {
-      "type": "array",
-      "items": {
-        "type": [
-          "object",
-          "string"
-        ],
-        "properties": {
-          "min": {
-            "type": "number"
-          },
-          "max": {
-            "type": "number"
-          },
-          "mandatory": {}
-        }
-      }
-    },
-    "parameter": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "$ref": "#/def/name"
-        },
-        "label": {
-          "$ref": "#/def/label"
-        },
-        "shortLabel": {
-          "$ref": "#/def/shortLabel"
-        },
-        "type": {
-          "type": "string",
-          "enum": [
-            "string",
-            "text",
-            "number",
-            "date",
-            "time",
-            "bool",
-            "image"
-          ]
-        },
-        "format": {
-          "type": "string"
-        },
-        "defaultField": {
-          "type": "string"
-        },
-        "fieldNumber": {
-          "$ref": "#/def/identifier"
-        },
-        "default": {
-          "type": [
-            "number",
-            "string"
-          ]
-        },
-        "placeholder": {
-          "type": "string"
-        },
-        "rules": {
-          "$ref": "#/def/rules"
-        }
-      },
-      "required": [
-        "name","type"
-      ],
-  		"additionalProperties": false
-    },
-    "parameters": {
-      "type": "array",
-      "items": {
-        "$ref": "#/def/parameter"
-      },
-      "minItems": 1,
-      "uniqueItems": true
     }
   },
   "type": "object",
   "properties": {
     "name": {
-      "$ref": "#/def/name"
+      "$ref": "/RESOURCES/Schemas/common.json#/name"
     },
     "scope": {
-      "$ref": "#/def/scope"
+      "$ref": "#/definitions/scope"
     },
     "label": {
-      "$ref": "#/def/label"
+      "$ref": "/RESOURCES/Schemas/common.json#/label"
     },
     "shortLabel": {
-      "$ref": "#/def/shortLabel"
+      "$ref": "/RESOURCES/Schemas/common.json#/shortLabel"
     },
     "preset": {
-      "$ref": "#/def/preset"
+      "$ref": "#/definitions/preset"
     },
     "icon": {
-      "$ref": "#/def/icon"
+      "$ref": "/RESOURCES/Schemas/common.json#/icon"
     },
     "tableNumber": {
-      "$ref": "#/def/identifier"
+      "$ref": "/RESOURCES/Schemas/common.json#/identifier"
     },
     "parameters": {
-      "$ref": "#/def/parameters"
+      "type": "array",
+      "items": {
+        "$ref": "/RESOURCES/Schemas/parameter.json"
+      },
+      "minItems": 1,
+      "uniqueItems": true
     },
     "style": {
-      "$ref": "#/def/style"
+      "$ref": "#/definitions/style"
     },
     "description": {
       "type": "string"
