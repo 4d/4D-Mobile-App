@@ -26,13 +26,13 @@
       "type": "object",
       "properties": {
         "name": {
-          "$ref": "/RESOURCES/Schemas/common.json#/name"
+          "$ref": "common.json#/name"
         },
         "label": {
-          "$ref": "/RESOURCES/Schemas/common.json#/label"
+          "$ref": "common.json#/label"
         },
         "shortLabel": {
-          "$ref": "/RESOURCES/Schemas/common.json#/shortLabel"
+          "$ref": "common.json#/shortLabel"
         },
         "type": {
           "type": "string",
@@ -53,7 +53,7 @@
           "type": "string"
         },
         "fieldNumber": {
-          "$ref": "/RESOURCES/Schemas/common.json#/identifier"
+          "$ref": "common.json#/identifier"
         },
         "definitionsault": {
           "type": [
