@@ -53,8 +53,7 @@
 
     <fragment
         android:id="@+id/actionParametersFragment"
-        android:name="com.qmobile.qmobileui.action.actionparameters.ActionParametersFragment"
-        android:label="{navbarTitle}">
+        android:name="com.qmobile.qmobileui.action.actionparameters.ActionParametersFragment">
 
         <action
             android:id="@+id/action_parameters_to_scanner"
