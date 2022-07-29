@@ -1592,6 +1592,10 @@ This may take a few minutes…</source>
         <trans-unit id="Q007fJTR7E+LDig4GKg5kA" resname="urlPlaceholder" translate="no">
           <source>/index.html</source>
         </trans-unit>
+        <trans-unit id="0ETjj8a0jQetK4s2zCFqbQ" resname="noTargetTableDefined">
+          <source>No target table defined</source>
+          <target state="new">No target table defined</target>
+        </trans-unit>
       </group>
       <group resname="Features">
         <trans-unit id="8Uc/+zgjnk5kAMkT9zoKUA" resname="deepLinking">

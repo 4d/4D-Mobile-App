@@ -82,7 +82,7 @@
 					"height": 16,
 					"visibility": "hidden",
 					"sizingX": "grow",
-					"text": "No target table defined",
+					"text": ":xliff:noTargetTableDefined",
 					"class": "label",
 					"stroke": "#ff0000",
 					"fontSize": 16
