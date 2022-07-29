@@ -1595,12 +1595,11 @@ Isso pode levar alguns minutos...</target>
           <target>Abrir URL</target>
         </trans-unit>
         <trans-unit id="hMNI7qn9n7EFhDRn5UGEdQ" resname="urlToOpenWithThisAction">
-          <source>URL to open with this action</source>
-          <target>URL para abrir com esta ação</target>
+          <source>4D server path to open with this action</source>
+          <target state="needs-review-translation">URL para abrir com esta ação</target>
         </trans-unit>
-        <trans-unit id="Q007fJTR7E+LDig4GKg5kA" resname="urlPlaceholder">
-          <source>https://www.example.com OR /?table={{dataClass}}&amp;key={{entity.primaryKey}}</source>
-          <target>https://www.example.com OR /?table={{dataClass}}&amp;key={{entity.primaryKey}}</target>
+        <trans-unit id="Q007fJTR7E+LDig4GKg5kA" resname="urlPlaceholder" translate="no">
+          <source>/index.html</source>
         </trans-unit>
       </group>
       <group resname="Features">
