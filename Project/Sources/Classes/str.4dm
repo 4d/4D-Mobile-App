@@ -834,7 +834,7 @@ Function toNum($target : Text) : Real
 	return This:C1470.extract($target; "numeric")
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// Returns the number of occurennces of $1 into the string
+	// Returns the number of occurennces of a substring
 Function occurrencesOf($target : Text; $toFind : Text) : Integer
 	
 	If (Count parameters:C259<2)
@@ -845,6 +845,33 @@ Function occurrencesOf($target : Text; $toFind : Text) : Integer
 	End if 
 	
 	return Split string:C1554($target; $toFind; sk trim spaces:K86:2).length-1
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns the last occurence of a substring
+Function lastOccurenceOf($target : Text; $toFind : Text) : Integer
+	
+	var $t : Text
+	var $len; $pos : Integer
+	
+	If (Count parameters:C259<2)
+		
+		$toFind:=$target
+		$target:=This:C1470.value
+		
+	End if 
+	
+	// Escape special charaters
+	For each ($t; New collection:C1472("\\"; "("; ")"; "["; "]"; "."; "*"; "?"; "+"; "^"; "|"; "$"))
+		
+		$toFind:=Replace string:C233($toFind; $t; "\\"+$t)
+		
+	End for each 
+	
+	If (Match regex:C1019("(?mi-s)("+$toFind+")(?!.*\\1)"; $target; 1; $pos; $len))
+		
+		return $pos
+		
+	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Replace accented and special characters with non-accented or equivalent characters.

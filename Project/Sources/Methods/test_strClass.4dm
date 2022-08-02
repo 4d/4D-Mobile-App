@@ -488,6 +488,25 @@ ASSERT:C1129($str.occurrencesOf($t; " ")=22)
 ASSERT:C1129($str.occurrencesOf($t; "hello")=0)
 ASSERT:C1129($str.occurrencesOf($t; "\r")=0)
 
+// mark:-lastOccurenceOf()
+$t:="The Split string command returns a collection of strings, created by splitting stringToSplit into substrings at the boundaries specified by the separator parameter\\."
+ASSERT:C1129($str.setText($t).lastOccurenceOf("string")=102)
+ASSERT:C1129($str.setText($t).lastOccurenceOf("s")=145)
+ASSERT:C1129($str.setText($t).lastOccurenceOf(" ")=154)
+ASSERT:C1129($str.setText($t).lastOccurenceOf("hello")=0)
+ASSERT:C1129($str.setText($t).lastOccurenceOf("\r")=0)
+ASSERT:C1129($str.setText($t).lastOccurenceOf(".")=Length:C16($t))
+ASSERT:C1129($str.setText($t).lastOccurenceOf("\\")=(Length:C16($t)-1))
+
+$str.setText("")
+ASSERT:C1129($str.lastOccurenceOf($t; "string")=102)
+ASSERT:C1129($str.lastOccurenceOf($t; "s")=145)
+ASSERT:C1129($str.lastOccurenceOf($t; " ")=154)
+ASSERT:C1129($str.lastOccurenceOf($t; "hello")=0)
+ASSERT:C1129($str.lastOccurenceOf($t; "\r")=0)
+ASSERT:C1129($str.lastOccurenceOf($t; ".")=Length:C16($t))
+ASSERT:C1129($str.lastOccurenceOf($t; "\\")=(Length:C16($t)-1))
+
 // mark:-insert()
 $str.setText("hello world")
 
