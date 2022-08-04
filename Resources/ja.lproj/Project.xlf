@@ -1587,14 +1587,14 @@ This may take a few minutes…</source>
         </trans-unit>
         <trans-unit id="hMNI7qn9n7EFhDRn5UGEdQ" resname="urlToOpenWithThisAction">
           <source>4D server path to open with this action</source>
-          <target state="needs-review-translation">このアクションで開きたいURL</target>
+          <target>このアクションで開きたい4D Serverパス</target>
         </trans-unit>
         <trans-unit id="Q007fJTR7E+LDig4GKg5kA" resname="urlPlaceholder" translate="no">
           <source>/index.html</source>
         </trans-unit>
         <trans-unit id="0ETjj8a0jQetK4s2zCFqbQ" resname="noTargetTableDefined">
           <source>No target table defined</source>
-          <target state="new">No target table defined</target>
+          <target>ターゲットテーブルが定義されていません</target>
         </trans-unit>
       </group>
       <group resname="Features">
