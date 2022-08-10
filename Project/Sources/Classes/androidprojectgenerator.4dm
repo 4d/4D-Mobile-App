@@ -402,10 +402,6 @@ Function copyIcons
 		// Actions images
 		If ($2#Null:C1517)
 			
-			var $shouldCreateMissingActionIcon : Boolean
-			
-			$shouldCreateMissingActionIcon:=This:C1470.willRequireActionIcons($2)
-			
 			var $action : Object
 			
 			For each ($action; $2)
@@ -413,7 +409,7 @@ Function copyIcons
 				// Check for action icon
 				var $Obj_handleAction : Object
 				
-				$Obj_handleAction:=This:C1470.handleActionIcon($action; $shouldCreateMissingActionIcon)
+				$Obj_handleAction:=This:C1470.handleActionIcon($action)
 				
 				If (Not:C34($Obj_handleAction.success))
 					
@@ -520,33 +516,6 @@ Function willRequireFieldIcons
 			End if 
 			
 			// Else: table metadata
-		End if 
-		
-	End for each 
-	
-	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-	//
-Function willRequireActionIcons
-	var $0 : Boolean
-	var $1 : Collection  // actions collection
-	var $action : Object
-	
-	$0:=False:C215
-	
-	For each ($action; $1)  // For each action
-		
-		If ($action.icon#Null:C1517)
-			
-			If (Value type:C1509($action.icon)=Is text:K8:3)
-				
-				If ($action.icon#"")
-					
-					$0:=True:C214
-					
-				End if 
-				
-			End if 
-			
 		End if 
 		
 	End for each 
@@ -876,10 +845,8 @@ Function handleFieldIcon
 Function handleActionIcon
 	var $0 : Object
 	var $1 : Object  // Action object
-	var $2 : Boolean  // if should create icon if missing
 	
 	var $currentFile : 4D:C1709.File
-	var $shouldCreateMissingActionIcon : Boolean
 	var $action : Object
 	
 	$0:=New object:C1471(\
@@ -887,7 +854,6 @@ Function handleActionIcon
 		"errors"; New collection:C1472)
 	
 	$action:=$1
-	$shouldCreateMissingActionIcon:=$2
 	
 	// Get defined icon
 	If ($action.icon#Null:C1517)
@@ -911,38 +877,12 @@ Function handleActionIcon
 		// Else : no icon
 	End if 
 	
-	// Create icon if missing
-	If ((Not:C34(Bool:C1537($currentFile.exists))) & ($shouldCreateMissingActionIcon=True:C214))
-		
-		var $Obj_createIcon : Object
-		
-		$Obj_createIcon:=This:C1470.createIconAssets($action)
-		
-		If ($Obj_createIcon.success)
-			
-			$currentFile:=$Obj_createIcon.icon
-			
-		Else 
-			
-			$0.success:=False:C215
-			$0.errors.combine($Obj_createIcon.errors)
-			
-		End if 
-		
-		// Else : already handled
-	End if 
-	
 	// Copy icon
 	If (Bool:C1537($currentFile.exists))
 		
 		var $Obj_copy : Object
-		var $newName : Text
 		
-		$newName:=$currentFile.name
-		
-		$newName:=Replace string:C233($newName; "qmobile_android_missing_icon"; "action_icon_"+String:C10($action.name))
-		
-		$Obj_copy:=This:C1470.copyIcon($currentFile; $newName)
+		$Obj_copy:=This:C1470.copyIcon($currentFile; $currentFile.name)
 		
 		If (Not:C34($Obj_copy.success))
 			
