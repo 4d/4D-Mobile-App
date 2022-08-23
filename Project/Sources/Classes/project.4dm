@@ -96,11 +96,14 @@ Function load($project) : cs:C1710.project
 		$file.moveTo($folder)
 		
 		//… & immediately save
+		This:C1470.init($project)
 		This:C1470.save()
 		
+	Else 
+		
+		This:C1470.init($project)
+		
 	End if 
-	
-	This:C1470.init($project)
 	
 	If (Value type:C1509($project.info.target)=Is collection:K8:32)
 		
