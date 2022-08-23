@@ -2,11 +2,11 @@ Class extends androidProcess
 
 /*
 lep ━ androidProcess ━┳━ adb 
-┣━ androidEmulator 
-┣━ androidProjectGenerator
-┣━ avd
-┣━ gradlew
-┗━ sdkmanager
+                       ┣━ androidEmulator 
+                       ┣━ androidProjectGenerator
+                       ┣━ avd
+                       ┣━ gradlew
+                       ┗━ sdkmanager
 */
 
 //=== === === === === === === === === === === === === === === === === === === === === === === === === ===

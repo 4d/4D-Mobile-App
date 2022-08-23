@@ -88,14 +88,12 @@ Class constructor
 		End if 
 		
 		This:C1470.success:=This:C1470.isReady()
+		
 		If (Not:C34(This:C1470.success))
 			
 			This:C1470.success:=This:C1470.acceptLicences()
 			
 		End if 
-		
-		//This.success:=This.exe.exists
-		
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===

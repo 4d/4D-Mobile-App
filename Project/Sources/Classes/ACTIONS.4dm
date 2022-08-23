@@ -768,22 +768,25 @@ Function tableMenuManager()
 	var $t : Text
 	var $menu : cs:C1710.menu
 	
-	$menu:=cs:C1710.menu.new()
-	
-	For each ($t; Form:C1466.dataModel)
+	If (This:C1470.current.scope#"global")
 		
-		$menu.append(Form:C1466.dataModel[$t][""].name; $t; Num:C11(This:C1470.current.tableNumber)=Num:C11($t))
+		$menu:=cs:C1710.menu.new()
 		
-	End for each 
-	
-	If (This:C1470.actions.popup($menu).selected)
+		For each ($t; Form:C1466.dataModel)
+			
+			$menu.append(Form:C1466.dataModel[$t][""].name; $t; Num:C11(This:C1470.current.tableNumber)=Num:C11($t))
+			
+		End for each 
 		
-		This:C1470.current.tableNumber:=Num:C11($menu.choice)
-		PROJECT.save()
-		
-		// Update UI
-		This:C1470.refresh()
-		
+		If (This:C1470.actions.popup($menu).selected)
+			
+			This:C1470.current.tableNumber:=Num:C11($menu.choice)
+			PROJECT.save()
+			
+			// Update UI
+			This:C1470.refresh()
+			
+		End if 
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
@@ -800,10 +803,10 @@ Function scopeMenuManager()
 	
 	Repeat 
 		
-		$i:=$i+1
+		$i+=1
 		$t:=Get localized string:C991("scope_"+String:C10($i))
 		
-		If (Length:C16($t)>0)  // #ACI0100966
+		If (Length:C16($t)>0)
 			
 			$menu.append(":xliff:"+$t; $t; String:C10(This:C1470.current.scope)=$t)
 			
@@ -824,7 +827,7 @@ Function scopeMenuManager()
 					//________________________________________
 			End case 
 		End if 
-	Until (Length:C16($t)=0)  // #ACI0100966
+	Until (Length:C16($t)=0)
 	
 	If (This:C1470.actions.popup($menu).selected)
 		
@@ -888,40 +891,27 @@ Function _addAction($action : Object)
 	
 	This:C1470.actions.focus()
 	This:C1470.actions.reveal(This:C1470.actions.rowsNumber+Num:C11(This:C1470.actions.rowsNumber=0))
-	
 	This:C1470.updateParameters($action)
-	
 	This:C1470.refresh()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Text displayed in the Tables column
-Function tableLabel($data : Object)->$label : Text
+Function tableLabel($data : Object) : Text
 	
-	If (Num:C11($data.tableNumber)#0)
-		
-		$label:=Table name:C256($data.tableNumber)
-		
-	Else 
-		
-		// Invite
-		$label:=Get localized string:C991("choose...")
-		
-	End if 
+	return Num:C11($data.tableNumber)#0 ? Table name:C256($data.tableNumber) : Get localized string:C991("choose...")
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Text displayed in the Scope column
-Function scopeLabel($data : Object)->$label : Text
+Function scopeLabel($data : Object) : Text
 	
-	$label:=Get localized string:C991(String:C10($data.scope))
+	return Get localized string:C991(String:C10($data.scope))
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// <Background Color Expression> ******************** VERY SIMILAR TO ACTIONS_PARAMS.backgroundColor() ********************
-Function backgroundColor($current : Object)->$color
+Function backgroundColor($current : Object) : Variant
 	
 	var $v  // could be an integer or a text
 	var $isFocused : Boolean
-	
-	$color:="transparent"
 	
 	If (Num:C11(This:C1470.index)#0)
 		
@@ -929,23 +919,26 @@ Function backgroundColor($current : Object)->$color
 		
 		If (FORM Event:C1606.isRowSelected)
 			
-			$color:=Choose:C955($isFocused; UI.backgroundSelectedColor; UI.alternateSelectedColor)
+			return $isFocused ? UI.backgroundSelectedColor : UI.alternateSelectedColor
 			
 		Else 
 			
-			$v:=Choose:C955($isFocused; UI.highlightColor; UI.highlightColorNoFocus)
-			$color:=Choose:C955($isFocused; $v; "transparent")
+			return $isFocused ? ($isFocused ? UI.highlightColor : UI.highlightColorNoFocus) : "transparent"
 			
 		End if 
 	End if 
 	
+	return "transparent"
+	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// <Meta info expression>
-Function metaInfo($current : Object)->$result
+Function metaInfo($current : Object) : Object
+	
+	var $meta : Object
 	
 	// Default values
-	$result:=New object:C1471(\
-		"stroke"; Choose:C955(UI.darkScheme; "white"; "black"); \
+	$meta:=New object:C1471(\
+		"stroke"; UI.darkScheme ? "white" : "black"; \
 		"fontWeight"; "normal"; \
 		"cell"; New object:C1471(\
 		"tables"; New object:C1471; \
@@ -955,20 +948,14 @@ Function metaInfo($current : Object)->$result
 	// Mark not or missing assigned table
 	If (Form:C1466.dataModel[String:C10($current.tableNumber)]=Null:C1517)
 		
-		// Not published table
-		$result.cell.tables.stroke:=UI.errorRGB
+		$meta.cell.tables.stroke:=$current.scope="global" ? "silver" : UI.errorRGB
 		
 	Else 
 		
 		// Not assigned table
 		If (Num:C11($current.tableNumber)=0)
 			
-			// Missing table
-			$result.cell.names.stroke:=UI.errorRGB
-			
-		Else 
-			
-			$result.cell.names.stroke:=Choose:C955(UI.darkScheme; "white"; "black")
+			$meta.cell.names.stroke:=UI.errorRGB
 			
 		End if 
 	End if 
@@ -976,16 +963,15 @@ Function metaInfo($current : Object)->$result
 	// Mark duplicate names
 	If (Form:C1466.actions.indices("name = :1"; $current.name).length>1)
 		
-		// Duplicate
-		$result.cell.names.stroke:=UI.errorRGB
-		
-	Else 
-		
-		$result.cell.names.stroke:=Choose:C955(UI.darkScheme; "white"; "black")
+		$meta.cell.names.stroke:=UI.errorRGB
 		
 	End if 
 	
-	// Redmine:#129995 : The short label value of a sort action shall be greyed and not
-	// editable from the action section of the project editor
-	$result.cell.shorts.stroke:=Choose:C955(String:C10($current.preset)="sort"; "silver"; Choose:C955(UI.darkScheme; "white"; "black"))
+	// The short label value of a sort action must be greyed
+	If (String:C10($current.preset)="sort")
+		
+		$meta.cell.shorts.stroke:="silver"
+		
+	End if 
 	
+	return $meta

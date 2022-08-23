@@ -211,7 +211,7 @@ If (Num:C11($project.info.version)<2)
 	End if 
 	
 	$project.info.version:=2
-	Logger.warning("Upadted to version: "+String:C10($project.info.version))
+	Logger.warning("Updated to version: "+String:C10($project.info.version))
 	
 End if 
 
@@ -246,7 +246,7 @@ If (Num:C11($project.info.version)<3)
 		End for each 
 		
 		$project.info.version:=3
-		Logger.warning("Upadted to version: "+String:C10($project.info.version))
+		Logger.warning("Updated to version: "+String:C10($project.info.version))
 		
 	End if 
 End if 
@@ -451,7 +451,7 @@ If (Num:C11($project.info.version)<=4)
 	End if 
 	
 	$project.info.version:=4
-	Logger.warning("Upadted to version: "+String:C10($project.info.version))
+	Logger.warning("Updated to version: "+String:C10($project.info.version))
 	
 End if 
 
@@ -509,7 +509,7 @@ If (Num:C11($project.info.version)<5)
 	End if 
 	
 	$project.info.version:=5
-	Logger.warning("Upadted to version: "+String:C10($project.info.version))
+	Logger.warning("Updated to version: "+String:C10($project.info.version))
 	
 End if 
 
@@ -541,7 +541,7 @@ If (Num:C11($project.info.version)<6)
 	End if 
 	
 	$project.info.version:=6
-	Logger.warning("Upadted to version: "+String:C10($project.info.version))
+	Logger.warning("Updated to version: "+String:C10($project.info.version))
 	
 End if 
 
@@ -654,7 +654,7 @@ If (Num:C11($project.info.version)<7)
 	
 	$isUpgraded:=True:C214
 	$project.info.version:=7
-	Logger.warning("Upadted to version: "+String:C10($project.info.version))
+	Logger.warning("Updated to version: "+String:C10($project.info.version))
 	
 End if 
 
@@ -686,7 +686,7 @@ If (Num:C11($project.info.version)<8)
 	
 	$isUpgraded:=True:C214
 	$project.info.version:=8
-	Logger.warning("Upadted to version: "+String:C10($project.info.version))
+	Logger.warning("Updated to version: "+String:C10($project.info.version))
 	
 End if 
 

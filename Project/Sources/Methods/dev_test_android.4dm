@@ -2,6 +2,45 @@
 
 
 Case of 
+		
+		//______________________________________________________
+	: (True:C214)
+		
+		var $studio : cs:C1710.studio
+		$studio:=cs:C1710.studio.new()
+		$studio.installLatestCommandLineTools()
+		$studio.installLatestCommandLineTools(Num:C11(JSON Parse:C1218(File:C1566("/RESOURCES/android.json").getText()).latestCommandLineTools))
+		
+		//______________________________________________________
+	: (True:C214)
+		
+		var $sdk : cs:C1710.sdkmanager
+		$sdk:=cs:C1710.sdkmanager.new()
+		
+		var $c : Collection
+		$c:=$sdk.installedPackages()
+		
+		//______________________________________________________
+	: (True:C214)
+		
+		var $sdk : cs:C1710.sdkmanager
+		$sdk:=cs:C1710.sdkmanager.new()
+		
+		var $ready : Boolean
+		$ready:=$sdk.isReady()
+		
+		//If (Not($ready))
+		
+		////$ready:=$sdk.update()
+		
+		//$sdk.acceptLicences()
+		
+		
+		//$ready:=$sdk.isReady()
+		
+		//End if
+		
+		
 		//______________________________________________________
 	: (True:C214)
 		
@@ -191,26 +230,6 @@ Case of
 		var $studio : cs:C1710.studio
 		$studio:=cs:C1710.studio.new()
 		$studio.installLatestCommandLineTools()
-		
-		//______________________________________________________
-	: (True:C214)
-		
-		var $sdk : cs:C1710.sdkmanager
-		$sdk:=cs:C1710.sdkmanager.new()
-		
-		var $ready : Boolean
-		$ready:=$sdk.isReady()
-		
-		//If (Not($ready))
-		
-		////$ready:=$sdk.update()
-		
-		//$sdk.acceptLicences()
-		
-		
-		//$ready:=$sdk.isReady()
-		
-		//End if
 		
 		//______________________________________________________
 	: (True:C214)
