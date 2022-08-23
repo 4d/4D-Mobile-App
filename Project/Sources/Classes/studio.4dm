@@ -75,6 +75,8 @@ Function installLatestCommandLineTools($version)
 	var $folder : 4D:C1709.Folder
 	var $http : cs:C1710.http
 	
+	ASSERT:C1129($version#Null:C1517)
+	
 	$file:=This:C1470.sdkFolder().file(Choose:C955(Is macOS:C1572; ".downloadIntermediates"; ".temp")+"/cmdline-tools.zip")
 	$http:=cs:C1710.http.new("https://dl.google.com/android/repository/commandlinetools-"+Choose:C955(Is macOS:C1572; "mac"; "win")+"-"+String:C10($version)+"_latest.zip")
 	$http.setResponseType(Is a document:K24:1; $file)
@@ -98,6 +100,58 @@ Function installLatestCommandLineTools($version)
 		
 		If (This:C1470.success)
 			
+			// Update package.xml (licence)
+			var $properties : 4D:C1709.File
+			$properties:=$folder.file("latest/source.properties")
+			
+			If ($properties.exists)
+				
+				var $t : Text
+				
+				ARRAY LONGINT:C221($pos; 0)
+				ARRAY LONGINT:C221($len; 0)
+				
+				$t:=$properties.getText()
+				
+				If (Match regex:C1019("(?m-si)Pkg.Revision=(.*)"; $t; 1; $pos; $len))
+					
+					var $c : Collection
+					$c:=Split string:C1554(Substring:C12($t; $pos{1}; $len{1}); ".")
+					
+					$t:="<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"\
+						+"<ns2:repository xmlns:ns2=\"http://schemas.android.com/repository/android/common/02\" xmlns:ns3=\"http://schemas.android.com/repository/android/common/01\" xmlns:ns4=\"http://schemas.android.com/repository/android/generic/01\" xmlns:ns5=\"http://schemas.andr"+"oid.com/repository/android/generic/02\" xmlns:ns6=\"http://schemas.android.com/sdk/android/repo/addon2/01\" xmlns:ns7=\"http://schemas.android.com/sdk/android/repo/addon2/02\" xmlns:ns8=\"http://schemas.android.com/sdk/android/repo/addon2/03\" xmlns:ns9=\"htt"+"p://schemas.android.com/sdk/android/repo/repository2/01\" xmlns:ns10=\"http://schemas.android.com/sdk/android/repo/repository2/02\" xmlns:ns11=\"http://schemas.android.com/sdk/android/repo/repository2/03\" xmlns:ns12=\"http://schemas.android.com/sdk/android"+"/repo/sys-img2/03\" xmlns:ns13=\"http://schemas.android.com/sdk/android/repo/sys-img2/02\" xmlns:ns14=\"http://schemas.android.com/sdk/android/repo/sys-img2/01\">"\
+						+"<license id=\"android-sdk-license\" type=\"text\">Terms and Conditions</license>"\
+						+"<localPackage path=\"cmdline-tools;latest\" obsolete=\"false\">"\
+						+"<type-details xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:type=\"ns5:genericDetailsType\"/>"\
+						+"<revision>"\
+						+"  <major>"+$c[0]+"</major>"\
+						+"  <minor>"+$c[1]+"</minor>"\
+						+"</revision>"\
+						+"<display-name>Android SDK Command-line Tools (latest)</display-name>"\
+						+"<uses-license ref=\"android-sdk-license\"/>"\
+						+"</localPackage>"\
+						+"</ns2:repository>"
+					
+					var $dom : Text
+					$dom:=DOM Parse XML variable:C720($t)
+					DOM EXPORT TO FILE:C862($dom; $folder.file("latest/package.xml").platformPath)
+					DOM CLOSE XML:C722($dom)
+					
+				Else 
+					
+					This:C1470.success:=False:C215
+					
+				End if 
+				
+			Else 
+				
+				This:C1470.success:=False:C215
+				
+			End if 
+			
+			ASSERT:C1129(This:C1470.success)
+			
+			// Delete temporary files
 			$folder:=$file.parent
 			$folder.delete(fk recursive:K87:7)
 			$folder.create()
