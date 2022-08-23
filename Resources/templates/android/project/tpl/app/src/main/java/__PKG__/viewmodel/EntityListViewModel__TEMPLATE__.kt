@@ -12,7 +12,6 @@ import {{package}}.data.model.entity.{{tableName}}
 import timber.log.Timber
 
 class EntityListViewModel{{tableName}}(
-
     tableName: String,
     apiService: ApiService
 ) :
