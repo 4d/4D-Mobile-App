@@ -667,7 +667,7 @@ Function update()
 						This:C1470.description.setPlaceholder("urlPlaceholder")
 						
 						// The 4D mobile developer shall not be allowed to enter an URL (no host, no scheme). If so, the url shall be turned in red.
-						This:C1470.description.foregroundColor:=Match regex:C1019("(?mi-s)^[[:alpha:]](?:[[:alnum:]]|[-+\\.\\s])*:[^$]*$"; String:C10($action.description); 1)\
+						This:C1470.description.foregroundColor:=Match regex:C1019("(?mi-s)^[[:alpha:]](?:[[:alnum:]]|[-+\\.])*:"; String:C10($action.description); 1)\
 							 ? UI.errorColor\
 							 : Foreground color:K23:1
 						
@@ -1710,9 +1710,9 @@ Function dataSourceMenuManager()
 Function editList()
 	
 /*
-																		$form:=New object(\
-																																																"static"; $static; \
-																																																"host"; This.path.hostInputControls(True))
+																			$form:=New object(\
+																																																		"static"; $static; \
+																																																		"host"; This.path.hostInputControls(True))
 	
 $form.folder:=This.path.hostInputControls()
 $manifest:=$form.folder.file("manifest.json")

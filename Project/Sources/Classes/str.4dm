@@ -1008,6 +1008,13 @@ Function isUrl($target : Text) : Boolean
 		"}-\\x{ffff}0-9]+)*(?:\\.(?:[a-z\\x{00a1}-\\x{ffff}]{2,}))))(?::\\d{2,5})?(?:/[^\\s]*)?$"; $target; 1)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Returns True if the text conforms to the URI schemes grammar followed by a colon (:). 
+Function isURI($target : Text) : Boolean
+	
+	$target:=Count parameters:C259=0 ? This:C1470.value : $target
+	return Match regex:C1019("(?mi-s)^[[:alpha:]](?:[[:arlnum:]]|[-+\\.])*:"; $target; 1)
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if the text is a json string
 Function isJson($target : Text) : Boolean
 	

@@ -22,7 +22,7 @@ Function init() : Object
 Function handleEvents($eventCode; $eventCode2 : Integer; $eventCodeN : Integer)->$e : Object
 	
 	var ${2} : Integer
-	var $forward : Boolean
+	var $pass : Boolean
 	var $height; $i; $width : Integer
 	var $c : Collection
 	
@@ -69,7 +69,7 @@ Function handleEvents($eventCode; $eventCode2 : Integer; $eventCodeN : Integer)-
 			If (This:C1470.focused="")\
 				 && (This:C1470.entryOrder.length>0)
 				
-				// Focus the first
+				// * FOCUS ON THE FIRST WIDGET
 				GOTO OBJECT:C206(*; This:C1470.entryOrder[0])
 				
 			End if 
@@ -82,6 +82,7 @@ Function handleEvents($eventCode; $eventCode2 : Integer; $eventCodeN : Integer)-
 			//______________________________________________________
 		: ($e.code=On Timer:K2:25)
 			
+			// * ALWAYS START BY STOPPING THE TIMER
 			SET TIMER:C645(0)
 			
 			//______________________________________________________
@@ -89,40 +90,14 @@ Function handleEvents($eventCode; $eventCode2 : Integer; $eventCodeN : Integer)-
 	
 	If (Count parameters:C259>=1)
 		
-		// FIXME:Remove for 19R6+
-		If (Num:C11(Application version:C493)>=1960)
-			
-			If (Value type:C1509($eventCode)#Is collection:K8:32)
-				
-				$eventCode:=Copy parameters:C1790
-				
-			End if 
-			
-			$forward:=($eventCode.indexOf($e.code)#-1)
-			
-		Else 
-			
-			If (Value type:C1509($eventCode)=Is collection:K8:32)
-				
-				$forward:=($eventCode.indexOf($e.code)#-1)
-				
-			Else 
-				
-				For ($i; 1; Count parameters:C259; 1)
-					
-					If (Num:C11(${$i})=$e.code)
-						
-						$forward:=True:C214
-						break
-						
-					End if 
-				End for 
-			End if 
-		End if 
+		$eventCode:=Value type:C1509($eventCode)=Is collection:K8:32 ? $eventCode : Copy parameters:C1790
+		$pass:=($eventCode.indexOf($e.code)#-1)
+		
 	End if 
 	
-	If (Not:C34($forward))
+	If (Not:C34($pass))
 		
+		// * RESET THE EVENT CODE
 		$e.code:=0
 		$e.description:="Treated in panel.handleEvents()"
 		

@@ -1,30 +1,27 @@
 //%attributes = {}
-
-var $pattern; $target : Text
 var $rgx : cs:C1710.regex
 
 err_TRY
 
-$target:="Hello world"
-$pattern:="world"
-$rgx:=cs:C1710.regex.new($target; $pattern).match()
+//mark:match()
+$rgx:=cs:C1710.regex.new("Hello world"; "world").match()
 ASSERT:C1129($rgx.success)
 ASSERT:C1129($rgx.matches.length=1)
 ASSERT:C1129($rgx.matches[0].data="world")
 ASSERT:C1129($rgx.matches[0].position=7)
 ASSERT:C1129($rgx.matches[0].length=5)
 
-$pattern:="^Hello world$"
-$rgx.setPattern($pattern).match()
+$rgx.pattern:="^Hello world$"
+$rgx.match()
 ASSERT:C1129($rgx.success)
 ASSERT:C1129($rgx.matches.length=1)
-ASSERT:C1129($rgx.matches[0].data=$target)
+ASSERT:C1129($rgx.matches[0].data="Hello world")
 ASSERT:C1129($rgx.matches[0].position=1)
 ASSERT:C1129($rgx.matches[0].length=11)
 
-$target:="fields[10]"
-$pattern:="(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"
-$rgx.setTarget($target).setPattern($pattern).match()
+$rgx.target:="fields[10]"
+$rgx.pattern:="(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"
+$rgx.match()
 ASSERT:C1129($rgx.success)
 ASSERT:C1129($rgx.matches.length=3)
 ASSERT:C1129($rgx.matches.extract("data").equal(New collection:C1472("fields[10]"; "fields"; "10")))
@@ -32,9 +29,7 @@ ASSERT:C1129($rgx.matches.extract("position").equal(New collection:C1472(1; 1; 8
 ASSERT:C1129($rgx.matches.extract("length").equal(New collection:C1472(10; 6; 2)))
 
 // First occurence
-$target:="fields[10] fields[11]"
-$pattern:="(?mi-s)(\\w+)\\[(\\d+)]"
-$rgx.setTarget($target).setPattern($pattern).match()
+$rgx.setTarget("fields[10] fields[11]").setPattern("(?mi-s)(\\w+)\\[(\\d+)]").match()
 ASSERT:C1129($rgx.success)
 ASSERT:C1129($rgx.matches.length=3)
 ASSERT:C1129($rgx.matches.extract("data").equal(New collection:C1472("fields[10]"; "fields"; "10")))
@@ -78,18 +73,35 @@ ASSERT:C1129($rgx.matches.extract("position").equal(New collection:C1472(1; 1; 8
 ASSERT:C1129($rgx.matches.extract("length").equal(New collection:C1472(10; 6; 2; 10; 6; 2)))
 
 // Failed match
-$target:="fields[]"
-$pattern:="(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"
-$rgx.setTarget($target).setPattern($pattern).match()
+$rgx.target:="fields[]"
+$rgx.pattern:="(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"
+$rgx.match()
 ASSERT:C1129(Not:C34($rgx.success))
 ASSERT:C1129($rgx.matches.length=0)
+ASSERT:C1129($rgx.errorCode=0)
+ASSERT:C1129($rgx.errors.length=0)
 
 // Pattern error
-$pattern:="(\\w+\\[(\\d+)]"
-$rgx.setPattern($pattern).match()
+$rgx.pattern:="(\\w+\\[(\\d+)]"
+$rgx.match()
 ASSERT:C1129(Not:C34($rgx.success))
 ASSERT:C1129($rgx.matches.length=0)
-ASSERT:C1129($rgx.error=-1)
+ASSERT:C1129($rgx.errorCode=-1)
+
+
+
+//mark:substitute()
+//var $text : Text
+
+//$text:=Lowercase("Hello World")
+
+//Rgx_SubstituteText("[^a-z0-9]"; "_"; ->$text; 0)
+
+
+//$text:="123helloWorld"
+//Rgx_SubstituteText("(?mi-s)^[^[:alpha:]]*([^$]*)$"; "\\1"; ->$text; 0)
+
+
 
 err_FINALLY
 
