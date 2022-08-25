@@ -242,7 +242,7 @@ Case of
 						
 						ARRAY TEXT:C222($tTxt_buffer; 0x0000)
 						
-						If (Rgx_MatchText("(.*) \\((.*)\\) \\[(.*)]$"; $Txt_buffer; ->$tTxt_buffer)=0)
+						If (_o_Rgx_MatchText("(.*) \\((.*)\\) \\[(.*)]$"; $Txt_buffer; ->$tTxt_buffer)=0)
 							
 							$Obj_:=New object:C1471("name"; $tTxt_buffer{1}; "os"; $tTxt_buffer{2}; "udid"; $tTxt_buffer{3})
 							

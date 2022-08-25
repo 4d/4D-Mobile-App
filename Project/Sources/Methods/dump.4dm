@@ -191,7 +191,7 @@ Case of
 		
 		var $rgx : cs:C1710.regex
 		$rgx:=cs:C1710.regex.new()
-		$rgx.setPattern("(?mi-s),\"__GlobalStamp\":(\\d+),\"__COUNT\":(\\d+),\"__FIRST\":(\\d+).*,\"__SENT\":(\\d+).{1,10}$")
+		$rgx.pattern:="(?mi-s),\"__GlobalStamp\":(\\d+),\"__COUNT\":(\\d+),\"__FIRST\":(\\d+).*,\"__SENT\":(\\d+).{1,10}$"
 		
 		var $count; $page; $pages : Integer
 		
@@ -303,6 +303,7 @@ Case of
 								
 								If ($pages=0)
 									
+									//fixme:PAS DE TARGET ET PAS D'APPEL DE $rgx.match() - Est-ce encore utile ?
 									$count:=Num:C11($rgx.matches[2].data)
 									$pages:=($count\SHARED.data.dump.limit)+Num:C11(($count%SHARED.data.dump.limit)>0)
 									
@@ -360,9 +361,9 @@ Case of
 						If ($out.success)
 							
 							// Analyse response
-							$rgx.setTarget($rest.response).match()
+							$rgx.setTarget($rest.response)
 							
-							If ($rgx.success)
+							If ($rgx.match())
 								
 								$rest.globalStamp:=Num:C11($rgx.matches[1].data)
 								

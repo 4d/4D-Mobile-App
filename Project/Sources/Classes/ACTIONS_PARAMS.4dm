@@ -826,9 +826,9 @@ Function update()
 												If (Position:C15($t; "todayyesterdaytomorrow")=0)
 													
 													var $rgx : cs:C1710.regex
-													$rgx:=cs:C1710.regex.new($t; "(?m-si)^(\\d{2})!(\\d{2})!(\\d{4})$").match()
+													$rgx:=cs:C1710.regex.new($t; "(?m-si)^(\\d{2})!(\\d{2})!(\\d{4})$")
 													
-													If ($rgx.success)
+													If ($rgx.match())
 														
 														This:C1470.defaultValue.setValue(String:C10(Add to date:C393(!00-00-00!; Num:C11($rgx.matches[3].data); Num:C11($rgx.matches[2].data); Num:C11($rgx.matches[1].data))))
 														
@@ -1710,9 +1710,9 @@ Function dataSourceMenuManager()
 Function editList()
 	
 /*
-																			$form:=New object(\
-																																																		"static"; $static; \
-																																																		"host"; This.path.hostInputControls(True))
+																				$form:=New object(\
+																																																				"static"; $static; \
+																																																				"host"; This.path.hostInputControls(True))
 	
 $form.folder:=This.path.hostInputControls()
 $manifest:=$form.folder.file("manifest.json")

@@ -315,9 +315,9 @@ Case of
 			If (Length:C16($Txt_out)>0)
 				
 				var $rgx : cs:C1710.regex
-				$rgx:=cs:C1710.regex.new($Txt_out; "(?s-mi)Xcode (\\d{1,}(?:\\.\\d)*).*version\\s*([A-Z0-9]*)").match()
+				$rgx:=cs:C1710.regex.new($Txt_out; "(?s-mi)Xcode (\\d{1,}(?:\\.\\d)*).*version\\s*([A-Z0-9]*)")
 				
-				If ($rgx.success)
+				If ($rgx.match())
 					
 					If ($rgx.matches.length=3)
 						
@@ -348,7 +348,7 @@ Case of
 				
 				ARRAY TEXT:C222($tTxt_buffer; 0x0000)
 				
-				If (Rgx_MatchText("(?mi-s)Apple Swift version ((?:\\d\\.)*\\d)"; $Txt_out; ->$tTxt_buffer)=0)
+				If (_o_Rgx_MatchText("(?mi-s)Apple Swift version ((?:\\d\\.)*\\d)"; $Txt_out; ->$tTxt_buffer)=0)
 					
 					If (Size of array:C274($tTxt_buffer)>0)
 						
@@ -1234,19 +1234,19 @@ Get system info should not be called frequently (consumer) as the processor will
 				End case 
 				
 				// Cannot check command return status so, check output content
-				If (Rgx_MatchText($Txt_buffer; $Txt_out)=0)
+				If (_o_Rgx_MatchText($Txt_buffer; $Txt_out)=0)
 					
 					$Obj_result.success:=True:C214
 					
 					// Get the app pathname
-					If (Rgx_MatchText("(?mi-s)builtin-validationUtility\\s([^\\n]*)\\n"; $Txt_out; ->$tTxt_found)=0)
+					If (_o_Rgx_MatchText("(?mi-s)builtin-validationUtility\\s([^\\n]*)\\n"; $Txt_out; ->$tTxt_found)=0)
 						
 						$tTxt_found{1}:=Replace string:C233($tTxt_found{1}; "\\"; "")
 						$Obj_result.app:=$tTxt_found{1}
 						
 					Else 
 						
-						If (Rgx_MatchText("(?mi-s)/usr/bin/touch -c\\s([^\\n]*)\\n"; $Txt_out; ->$tTxt_found)=0)
+						If (_o_Rgx_MatchText("(?mi-s)/usr/bin/touch -c\\s([^\\n]*)\\n"; $Txt_out; ->$tTxt_found)=0)
 							
 							$tTxt_found{1}:=Replace string:C233($tTxt_found{1}; "\\"; "")
 							$Obj_result.app:=$tTxt_found{1}
@@ -1287,7 +1287,7 @@ Get system info should not be called frequently (consumer) as the processor will
 			If (Length:C16($Txt_out)>0)
 				
 				// Cannot check command return status so, check output content
-				If (Rgx_MatchText("CLEAN SUCCEEDED"; $Txt_out)=0)
+				If (_o_Rgx_MatchText("CLEAN SUCCEEDED"; $Txt_out)=0)
 					
 					$Obj_result.success:=True:C214
 					

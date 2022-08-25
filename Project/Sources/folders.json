@@ -67,6 +67,9 @@
 		]
 	},
 	"_o_OBSOLETES": {
+		"groups": [
+			"rgx (thread-safe)"
+		],
 		"methods": [
 			"_o_button",
 			"_o_currentForm",
@@ -706,7 +709,6 @@
 			"ob",
 			"ob_error",
 			"pic",
-			"rgx (thread-safe)",
 			"semver",
 			"str",
 			"xml (thread-safe)"
@@ -859,14 +861,14 @@
 	},
 	"rgx (thread-safe)": {
 		"methods": [
-			"Compiler_Rgx",
-			"Rgx_ExtractText",
-			"Rgx_Get_Pattern",
-			"Rgx_MatchText",
-			"rgx_NO_ERROR",
-			"rgx_Options",
-			"Rgx_SplitText",
-			"Rgx_SubstituteText"
+			"_o_Rgx_ExtractText",
+			"_o_Rgx_Get_Pattern",
+			"_o_Rgx_MatchText",
+			"_o_rgx_NO_ERROR",
+			"_o_rgx_Options",
+			"_o_Rgx_SplitText",
+			"_o_Rgx_SubstituteText",
+			"Compiler_Rgx"
 		]
 	},
 	"Search": {

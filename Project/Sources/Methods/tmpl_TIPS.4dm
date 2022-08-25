@@ -30,9 +30,9 @@ Else
 	$Obj_target:=Form:C1466[This:C1470.$.typeForm()][This:C1470.$.tableNumber]
 	
 	var $rgx : cs:C1710.regex
-	$rgx:=cs:C1710.regex.new($Txt_bind; "(?mi-s)(\\w+)\\[(\\d+)]").match()
+	$rgx:=cs:C1710.regex.new($Txt_bind; "(?mi-s)(\\w+)\\[(\\d+)]")
 	
-	If ($rgx.success)  // List of fields
+	If ($rgx.match())  // List of fields
 		
 		$b:=(Num:C11($rgx.matches[2].data)>=$Obj_target[$rgx.matches[1].data].length)
 		

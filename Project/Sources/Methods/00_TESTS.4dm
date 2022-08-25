@@ -22,6 +22,26 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
+		$t:="Bundle 4 Dé ö aze äapp ?"
+		
+		_o_Rgx_SubstituteText("[ÂÃÄÅ]"; "A"; ->$t; 0)
+		_o_Rgx_SubstituteText("[àáâãäå]"; "a"; ->$t; 0)
+		_o_Rgx_SubstituteText("[ÈÉÊË]"; "E"; ->$t; 0)
+		_o_Rgx_SubstituteText("[èéêë]"; "e"; ->$t; 0)
+		_o_Rgx_SubstituteText("[ÌÍÎÏ]"; "I"; ->$t; 0)
+		_o_Rgx_SubstituteText("[ìíîï]"; "i"; ->$t; 0)
+		_o_Rgx_SubstituteText("[ÒÓÔÕÖ]"; "O"; ->$t; 0)
+		_o_Rgx_SubstituteText("[ðñòóôõö]"; "o"; ->$t; 0)
+		_o_Rgx_SubstituteText("[ÙÚÛÜ]"; "U"; ->$t; 0)
+		_o_Rgx_SubstituteText("[ùúûü]"; "u"; ->$t; 0)
+		
+		$Lon_error:=_o_Rgx_SubstituteText("[^a-zA-Z0-9]"; "-"; ->$t; 0)
+		
+		ALERT:C41($t)
+		
+		//________________________________________
+	: (True:C214)
+		
 		$t:=Select document:C905(Get 4D folder:C485(MobileApps folder:K5:47; *); "mobileapp"; Get localized string:C991("selectTheKeyFile"); Use sheet window:K24:11+Package open:K24:8)
 		
 		If (Bool:C1537(OK))
@@ -745,26 +765,6 @@ Case of
 		$c:=findFirstPathComponentInCatalog($Col_2)
 		
 		ALERT:C41(JSON Stringify:C1217($c))
-		
-		//________________________________________
-	: (True:C214)
-		
-		$t:="Bundle 4 Dé ö aze äapp ?"
-		
-		Rgx_SubstituteText("[ÂÃÄÅ]"; "A"; ->$t; 0)
-		Rgx_SubstituteText("[àáâãäå]"; "a"; ->$t; 0)
-		Rgx_SubstituteText("[ÈÉÊË]"; "E"; ->$t; 0)
-		Rgx_SubstituteText("[èéêë]"; "e"; ->$t; 0)
-		Rgx_SubstituteText("[ÌÍÎÏ]"; "I"; ->$t; 0)
-		Rgx_SubstituteText("[ìíîï]"; "i"; ->$t; 0)
-		Rgx_SubstituteText("[ÒÓÔÕÖ]"; "O"; ->$t; 0)
-		Rgx_SubstituteText("[ðñòóôõö]"; "o"; ->$t; 0)
-		Rgx_SubstituteText("[ÙÚÛÜ]"; "U"; ->$t; 0)
-		Rgx_SubstituteText("[ùúûü]"; "u"; ->$t; 0)
-		
-		$Lon_error:=Rgx_SubstituteText("[^a-zA-Z0-9]"; "-"; ->$t; 0)
-		
-		ALERT:C41($t)
 		
 		//________________________________________
 End case 

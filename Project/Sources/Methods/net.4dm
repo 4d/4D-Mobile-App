@@ -69,9 +69,9 @@ Case of
 			
 		End if 
 		
-		$rgx:=cs:C1710.regex.new($Obj_in.url; "(?mi-s)^(:?https?://)?+(:?www\\.)?+([^:]*)(:?[^\\n$]*)$").match()
+		$rgx:=cs:C1710.regex.new($Obj_in.url; "(?mi-s)^(:?https?://)?+(:?www\\.)?+([^:]*)(:?[^\\n$]*)$")
 		
-		If ($rgx.success)
+		If ($rgx.match())
 			
 			$Obj_in.url:=$rgx.matches[3].data
 			
@@ -147,9 +147,9 @@ Case of
 					//statistics ---\n1 packets transmitted, 1 packets received, 0.0% packet 
 					//loss\nround-trip min/avg/max/stddev = 16.989/16.989/16.989/0.000 ms\n
 					
-					$rgx:=cs:C1710.regex.new($Obj_result.response; "(?m-si)PING\\s[^(]*\\(([^)]*)").match()
+					$rgx:=cs:C1710.regex.new($Obj_result.response; "(?m-si)PING\\s[^(]*\\(([^)]*)")
 					
-					$Obj_out.success:=$rgx.success
+					$Obj_out.success:=$rgx.match()
 					
 					If ($Obj_out.success)
 						
@@ -167,9 +167,9 @@ Case of
 					// Dur‚e approximative des boucles en millisecondes :\r\n
 					//    Minimum = 12ms, Maximum = 12ms, Moyenne = 12ms\r\n
 					
-					$rgx:=cs:C1710.regex.new($Obj_result.response; "(?i-ms)[^[]*\\[([^\\]]*)\\]").match()
+					$rgx:=cs:C1710.regex.new($Obj_result.response; "(?i-ms)[^[]*\\[([^\\]]*)\\]")
 					
-					$Obj_out.success:=$rgx.success
+					$Obj_out.success:=$rgx.match()
 					
 					If ($Obj_out.success)
 						

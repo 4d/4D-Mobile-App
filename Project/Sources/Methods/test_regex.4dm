@@ -1,107 +1,157 @@
 //%attributes = {}
-var $rgx : cs:C1710.regex
+var $pattern; $target : Text
+var $result : Collection
+var $regex : cs:C1710.regex
 
 err_TRY
 
-//mark:match()
-$rgx:=cs:C1710.regex.new("Hello world"; "world").match()
-ASSERT:C1129($rgx.success)
-ASSERT:C1129($rgx.matches.length=1)
-ASSERT:C1129($rgx.matches[0].data="world")
-ASSERT:C1129($rgx.matches[0].position=7)
-ASSERT:C1129($rgx.matches[0].length=5)
+// Mark:-match()
+$regex:=cs:C1710.regex.new("Hello world"; "world")
 
-$rgx.pattern:="^Hello world$"
-$rgx.match()
-ASSERT:C1129($rgx.success)
-ASSERT:C1129($rgx.matches.length=1)
-ASSERT:C1129($rgx.matches[0].data="Hello world")
-ASSERT:C1129($rgx.matches[0].position=1)
-ASSERT:C1129($rgx.matches[0].length=11)
+If ($regex.match())
+	
+	ASSERT:C1129($regex.matches.length=1)
+	ASSERT:C1129($regex.matches[0].data="world")
+	ASSERT:C1129($regex.matches[0].position=7)
+	ASSERT:C1129($regex.matches[0].length=5)
+	
+End if 
 
-$rgx.target:="fields[10]"
-$rgx.pattern:="(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"
-$rgx.match()
-ASSERT:C1129($rgx.success)
-ASSERT:C1129($rgx.matches.length=3)
-ASSERT:C1129($rgx.matches.extract("data").equal(New collection:C1472("fields[10]"; "fields"; "10")))
-ASSERT:C1129($rgx.matches.extract("position").equal(New collection:C1472(1; 1; 8)))
-ASSERT:C1129($rgx.matches.extract("length").equal(New collection:C1472(10; 6; 2)))
+$regex.pattern:="^Hello world$"
+
+If ($regex.match())
+	
+	ASSERT:C1129($regex.matches.length=1)
+	ASSERT:C1129($regex.matches[0].data="Hello world")
+	ASSERT:C1129($regex.matches[0].position=1)
+	ASSERT:C1129($regex.matches[0].length=11)
+	
+End if 
+
+$regex.target:="fields[10]"
+$regex.pattern:="(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"
+
+If ($regex.match())
+	
+	ASSERT:C1129($regex.matches.length=3)
+	ASSERT:C1129($regex.matches.extract("data").equal(New collection:C1472("fields[10]"; "fields"; "10")))
+	ASSERT:C1129($regex.matches.extract("position").equal(New collection:C1472(1; 1; 8)))
+	ASSERT:C1129($regex.matches.extract("length").equal(New collection:C1472(10; 6; 2)))
+	
+End if 
 
 // First occurence
-$rgx.setTarget("fields[10] fields[11]").setPattern("(?mi-s)(\\w+)\\[(\\d+)]").match()
-ASSERT:C1129($rgx.success)
-ASSERT:C1129($rgx.matches.length=3)
-ASSERT:C1129($rgx.matches.extract("data").equal(New collection:C1472("fields[10]"; "fields"; "10")))
-ASSERT:C1129($rgx.matches.extract("position").equal(New collection:C1472(1; 1; 8)))
-ASSERT:C1129($rgx.matches.extract("length").equal(New collection:C1472(10; 6; 2)))
+$regex.setTarget("fields[10] fields[11]").setPattern("(?mi-s)(\\w+)\\[(\\d+)]")
 
-$rgx.match(1)
-ASSERT:C1129($rgx.success)
-ASSERT:C1129($rgx.matches.length=3)
-ASSERT:C1129($rgx.matches.extract("data").equal(New collection:C1472("fields[10]"; "fields"; "10")))
-ASSERT:C1129($rgx.matches.extract("position").equal(New collection:C1472(1; 1; 8)))
-ASSERT:C1129($rgx.matches.extract("length").equal(New collection:C1472(10; 6; 2)))
+If ($regex.match())
+	
+	ASSERT:C1129($regex.matches.length=3)
+	ASSERT:C1129($regex.matches.extract("data").equal(New collection:C1472("fields[10]"; "fields"; "10")))
+	ASSERT:C1129($regex.matches.extract("position").equal(New collection:C1472(1; 1; 8)))
+	ASSERT:C1129($regex.matches.extract("length").equal(New collection:C1472(10; 6; 2)))
+	
+End if 
 
-$rgx.match(1; False:C215)
-ASSERT:C1129($rgx.success)
-ASSERT:C1129($rgx.matches.length=3)
-ASSERT:C1129($rgx.matches.extract("data").equal(New collection:C1472("fields[10]"; "fields"; "10")))
-ASSERT:C1129($rgx.matches.extract("position").equal(New collection:C1472(1; 1; 8)))
-ASSERT:C1129($rgx.matches.extract("length").equal(New collection:C1472(10; 6; 2)))
+If ($regex.match(1))
+	
+	ASSERT:C1129($regex.matches.length=3)
+	ASSERT:C1129($regex.matches.extract("data").equal(New collection:C1472("fields[10]"; "fields"; "10")))
+	ASSERT:C1129($regex.matches.extract("position").equal(New collection:C1472(1; 1; 8)))
+	ASSERT:C1129($regex.matches.extract("length").equal(New collection:C1472(10; 6; 2)))
+	
+End if 
 
-$rgx.match(False:C215)
-ASSERT:C1129($rgx.success)
-ASSERT:C1129($rgx.matches.length=3)
-ASSERT:C1129($rgx.matches.extract("data").equal(New collection:C1472("fields[10]"; "fields"; "10")))
-ASSERT:C1129($rgx.matches.extract("position").equal(New collection:C1472(1; 1; 8)))
-ASSERT:C1129($rgx.matches.extract("length").equal(New collection:C1472(10; 6; 2)))
+If ($regex.match(1; False:C215))
+	
+	ASSERT:C1129($regex.matches.length=3)
+	ASSERT:C1129($regex.matches.extract("data").equal(New collection:C1472("fields[10]"; "fields"; "10")))
+	ASSERT:C1129($regex.matches.extract("position").equal(New collection:C1472(1; 1; 8)))
+	ASSERT:C1129($regex.matches.extract("length").equal(New collection:C1472(10; 6; 2)))
+	
+End if 
+
+If ($regex.match(False:C215))
+	
+	ASSERT:C1129($regex.matches.length=3)
+	ASSERT:C1129($regex.matches.extract("data").equal(New collection:C1472("fields[10]"; "fields"; "10")))
+	ASSERT:C1129($regex.matches.extract("position").equal(New collection:C1472(1; 1; 8)))
+	ASSERT:C1129($regex.matches.extract("length").equal(New collection:C1472(10; 6; 2)))
+	
+End if 
 
 // All occurences
-$rgx.match(True:C214)
-ASSERT:C1129($rgx.success)
-ASSERT:C1129($rgx.matches.length=6)
-ASSERT:C1129($rgx.matches.extract("data").equal(New collection:C1472("fields[10]"; "fields"; "10"; "fields[11]"; "fields"; "11")))
-ASSERT:C1129($rgx.matches.extract("position").equal(New collection:C1472(1; 1; 8; 12; 12; 19)))
-ASSERT:C1129($rgx.matches.extract("length").equal(New collection:C1472(10; 6; 2; 10; 6; 2)))
 
-$rgx.match(1; True:C214)
-ASSERT:C1129($rgx.success)
-ASSERT:C1129($rgx.matches.length=6)
-ASSERT:C1129($rgx.matches.extract("data").equal(New collection:C1472("fields[10]"; "fields"; "10"; "fields[11]"; "fields"; "11")))
-ASSERT:C1129($rgx.matches.extract("position").equal(New collection:C1472(1; 1; 8; 12; 12; 19)))
-ASSERT:C1129($rgx.matches.extract("length").equal(New collection:C1472(10; 6; 2; 10; 6; 2)))
+If ($regex.match(True:C214))
+	
+	ASSERT:C1129($regex.matches.length=6)
+	ASSERT:C1129($regex.matches.extract("data").equal(New collection:C1472("fields[10]"; "fields"; "10"; "fields[11]"; "fields"; "11")))
+	ASSERT:C1129($regex.matches.extract("position").equal(New collection:C1472(1; 1; 8; 12; 12; 19)))
+	ASSERT:C1129($regex.matches.extract("length").equal(New collection:C1472(10; 6; 2; 10; 6; 2)))
+	
+End if 
 
-// Failed match
-$rgx.target:="fields[]"
-$rgx.pattern:="(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"
-$rgx.match()
-ASSERT:C1129(Not:C34($rgx.success))
-ASSERT:C1129($rgx.matches.length=0)
-ASSERT:C1129($rgx.errorCode=0)
-ASSERT:C1129($rgx.errors.length=0)
+If ($regex.match(1; True:C214))
+	
+	ASSERT:C1129($regex.matches.length=6)
+	ASSERT:C1129($regex.matches.extract("data").equal(New collection:C1472("fields[10]"; "fields"; "10"; "fields[11]"; "fields"; "11")))
+	ASSERT:C1129($regex.matches.extract("position").equal(New collection:C1472(1; 1; 8; 12; 12; 19)))
+	ASSERT:C1129($regex.matches.extract("length").equal(New collection:C1472(10; 6; 2; 10; 6; 2)))
+	
+End if 
 
-// Pattern error
-$rgx.pattern:="(\\w+\\[(\\d+)]"
-$rgx.match()
-ASSERT:C1129(Not:C34($rgx.success))
-ASSERT:C1129($rgx.matches.length=0)
-ASSERT:C1129($rgx.errorCode=-1)
+// Mark:-Pattern error
+$regex.pattern:="(\\w+\\[(\\d+)]"
+ASSERT:C1129(Not:C34($regex.match()))
+ASSERT:C1129($regex.matches.length=0)
+ASSERT:C1129($regex.errorCode=-1)
+ASSERT:C1129($regex.lastError=("Error while parsing pattern \""+$regex.pattern+"\""))
 
+// Mark:-extract()
+$regex:=cs:C1710.regex.new("hello world"; "(?m-si)([[:alnum:]]*)\\s([[:alnum:]]*)")
+$result:=$regex.extract()
+ASSERT:C1129($result.equal(New collection:C1472("hello world"; "hello"; "world")))
+$result:=$regex.extract("0")
+ASSERT:C1129($result.equal(New collection:C1472("hello world")))
+$result:=$regex.extract(0)
+ASSERT:C1129($result.equal(New collection:C1472("hello world")))
+$result:=$regex.extract(1)
+ASSERT:C1129($result.equal(New collection:C1472("hello")))
+$result:=$regex.extract(2)
+ASSERT:C1129($result.equal(New collection:C1472("world")))
+$result:=$regex.extract("1 2")
+ASSERT:C1129($result.equal(New collection:C1472("hello"; "world")))
+$result:=$regex.extract(New collection:C1472(1; 2))
+ASSERT:C1129($result.equal(New collection:C1472("hello"; "world")))
 
+// Mark:-substitute()
+$target:="[This pattern will look for a string of numbers separated by commas and replace "\
++"the final comma with \"and\". It will also trim excess spaces around the final "\
++"comma and after the final number.]\r\r1, 2, 3, 4, 5\r1, 2 , 3\r1, 2, 3, 4 , 5 "\
++"\n1,2"
+$pattern:="(?mi-s)\\x20*,\\x20*(\\d+)\\x20*$"
 
-//mark:substitute()
-//var $text : Text
+$regex:=cs:C1710.regex.new($target; $pattern)
+ASSERT:C1129($regex.substitute(" and \\1")=("[This pattern will look for a string of numbers separated by commas and replace "\
++"the final comma with \"and\". It will also trim excess spaces around the final "\
++"comma and after the final number.]\r\r1, 2, 3, 4 and 5\r1, 2 and 3\r1, 2, 3, 4 "\
++"and 5\n1 and 2"))
 
-//$text:=Lowercase("Hello World")
+$regex.target:="hello world"
+$regex.pattern:="[^a-z0-9]"
+ASSERT:C1129($regex.substitute("_")="hello_world")
 
-//Rgx_SubstituteText("[^a-z0-9]"; "_"; ->$text; 0)
+$regex.target:="123helloWorld"
+$regex.pattern:="(?mi-s)^[^[:alpha:]]*([^$]*)$"
+ASSERT:C1129($regex.substitute("\\1")="helloWorld")
 
-
-//$text:="123helloWorld"
-//Rgx_SubstituteText("(?mi-s)^[^[:alpha:]]*([^$]*)$"; "\\1"; ->$text; 0)
-
-
+$regex.target:="Each of these lines ends with some white space. This one ends with a space. "\
++"\n\nThis one ends with a tab.\t\n\nThis one ends with some spaces.    \n\nThis "\
++"one ends with some tabs.\t\t\t\n\nThis one ends with a mixture of spaces and "\
++"tabs.  \t\t  \n\nSince the pattern only matches trailing whitespace, we can "\
++"replace it with nothing to get the result we want."
+$regex.pattern:="(?mi-s)[\\x20\\t]+$"
+ASSERT:C1129(Length:C16($regex.substitute(""))=327)
 
 err_FINALLY
 
+BEEP:C151

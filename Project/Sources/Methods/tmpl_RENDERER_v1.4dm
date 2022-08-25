@@ -140,7 +140,7 @@ If (Asserted:C1132($svg.success; "Missing cookery element"))
 		
 		If (Asserted:C1132($o["ios:bind"]#Null:C1517))
 			
-			If (Rgx_MatchText("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"; $o["ios:bind"])=-1)
+			If (_o_Rgx_MatchText("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"; $o["ios:bind"])=-1)
 				
 				// Single value field (Not aaaaa[000]) ie 'searchableField' or 'sectionField'
 				If ($target[$o["ios:bind"]]#Null:C1517)

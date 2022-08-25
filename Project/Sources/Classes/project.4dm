@@ -769,7 +769,7 @@ Function checkRestQueryFilter($table : Object)
 			
 			$buffer:=$filter.string
 			
-			If (Rgx_SubstituteText(This:C1470.$regexParameters; "\\1\"@\""; ->$buffer)=0)
+			If (_o_Rgx_SubstituteText(This:C1470.$regexParameters; "\\1\"@\""; ->$buffer)=0)
 				
 				$response:=Rest(New object:C1471(\
 					"action"; "records"; \
@@ -868,7 +868,7 @@ Function checkLocalQueryFilter($table : Object)
 				
 				$buffer:=$filter.string
 				
-				If (Rgx_SubstituteText(This:C1470.$regexParameters; "\\1:1"; ->$buffer)=0)
+				If (_o_Rgx_SubstituteText(This:C1470.$regexParameters; "\\1:1"; ->$buffer)=0)
 					
 					//mark: - START TRAPPING ERRORS
 					$error:=cs:C1710.error.new("capture")
@@ -1904,7 +1904,7 @@ Function label($text : Text) : Text
 			$text:=Replace string:C233($text; "_"; " ")
 			
 			// CamelCase to spaced
-			If (Rgx_SubstituteText("(?m-si)([[:lower:]])([[:upper:]])"; "\\1 \\2"; ->$text)=0)
+			If (_o_Rgx_SubstituteText("(?m-si)([[:lower:]])([[:upper:]])"; "\\1 \\2"; ->$text)=0)
 				
 				$text:=Lowercase:C14($text)
 				
@@ -1957,7 +1957,7 @@ Function _formatName($name : Text) : cs:C1710.str
 	var $str : cs:C1710.str
 	
 	// Remove the forbidden at beginning characters
-	Rgx_SubstituteText("(?mi-s)^[^[:alpha:]]*([^$]*)$"; "\\1"; ->$name; 0)
+	_o_Rgx_SubstituteText("(?mi-s)^[^[:alpha:]]*([^$]*)$"; "\\1"; ->$name; 0)
 	
 	// Remove dots and underscores
 	return cs:C1710.str.new(Replace string:C233(Replace string:C233($name; "_"; " "); "."; " "))

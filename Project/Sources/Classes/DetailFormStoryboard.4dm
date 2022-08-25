@@ -387,7 +387,7 @@ Function _checkTemplateElements($Obj_template : Object; $Txt_buffer : Text; $Dom
 		C_COLLECTION:C1488($Col_)
 		Case of 
 				// ----------------------------------------
-			: (Rgx_ExtractText("TAG-(.?.?)-001"; $Txt_buffer; "1"; ->$tTxt_result)=0)
+			: (_o_Rgx_ExtractText("TAG-(.?.?)-001"; $Txt_buffer; "1"; ->$tTxt_result)=0)
 				
 				$Col_:=New collection:C1472()
 				ARRAY TO COLLECTION:C1563($Col_; $tTxt_result)

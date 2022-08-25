@@ -6,7 +6,6 @@ Class constructor($target; $pattern : Text)
 	This:C1470.matches:=Null:C1517
 	This:C1470.errorCode:=0
 	This:C1470.errors:=New collection:C1472
-	This:C1470.lastError:=""
 	
 	If (Count parameters:C259>=1)
 		
@@ -40,6 +39,15 @@ Function set pattern($pattern : Text)
 	This:C1470._pattern:=$pattern
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function get lastError() : Text
+	
+	If (This:C1470.errors.length>0)
+		
+		return This:C1470.errors[This:C1470.errors.length-1]
+		
+	End if 
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Sets the string where will be perform the search.
 	// Could be a text or a disk file
 Function setTarget($target) : cs:C1710.regex
@@ -57,7 +65,7 @@ Function setPattern($pattern : Text) : cs:C1710.regex
 	return This:C1470
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function match($start; $all : Boolean) : cs:C1710.regex
+Function match($start; $all : Boolean) : Boolean
 	
 	var $methodCalledOnError : Text
 	var $match : Boolean
@@ -106,10 +114,11 @@ Function match($start; $all : Boolean) : cs:C1710.regex
 				
 				For ($i; 0; Size of array:C274($positions); 1)
 					
-					$item:=New object:C1471(\
+					This:C1470.matches.push(New object:C1471(\
+						"index"; $i; \
 						"data"; Substring:C12(This:C1470._target; $positions{$i}; $lengths{$i}); \
 						"position"; $positions{$i}; \
-						"length"; $lengths{$i})
+						"length"; $lengths{$i}))
 					
 					If ($lengths{$i}=0)
 						
@@ -121,8 +130,6 @@ Function match($start; $all : Boolean) : cs:C1710.regex
 							
 						End if 
 					End if 
-					
-					This:C1470.matches.push($item)
 					
 					If ($positions{$i}>0)
 						
@@ -145,13 +152,18 @@ Function match($start; $all : Boolean) : cs:C1710.regex
 	
 	This:C1470._errorCatch($methodCalledOnError)
 	
-	return This:C1470
+	return This:C1470.success
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function extract($group : Text) : cs:C1710.regex
+Function extract($groups) : Collection
 	
 	var $methodCalledOnError : Text
-	var $start : Integer
+	var $match : Boolean
+	var $current; $groupIndex; $i; $index; $start : Integer
+	var $v
+	
+	ARRAY LONGINT:C221($lengths; 0)
+	ARRAY LONGINT:C221($positions; 0)
 	
 	This:C1470.success:=False:C215
 	This:C1470.matches:=New collection:C1472
@@ -159,29 +171,219 @@ Function extract($group : Text) : cs:C1710.regex
 	
 	$start:=1
 	
+	Case of 
+			
+			//___________________________________
+		: ($groups=Null:C1517)
+			
+			$groups:=New collection:C1472
+			
+			//___________________________________
+		: (Value type:C1509($groups)=Is longint:K8:6) | (Value type:C1509($groups)=Is real:K8:4)
+			
+			$groups:=New collection:C1472(String:C10($groups))
+			
+			//___________________________________
+		: (Value type:C1509($groups)=Is text:K8:3)
+			
+			$groups:=Split string:C1554($groups; " ")
+			
+			//___________________________________
+		: (Value type:C1509($groups)=Is collection:K8:32)
+			
+			// Transform into text if necessary
+			For each ($v; $groups)
+				
+				$groups[$i]:=String:C10($v)
+				$i+=1
+				
+			End for each 
+			
+			//___________________________________
+		Else 
+			
+			This:C1470.errorCode:=54  // Argument types are incompatible.
+			This:C1470._pushError("The \"groups\" argument must be an integer, a text or a collection.")
+			return 
+			
+			//___________________________________
+	End case 
+	
 	$methodCalledOnError:=This:C1470._errorCatch()
+	
+	Repeat 
+		
+		//$index+=1
+		ERROR:=0
+		
+		$match:=Match regex:C1019(This:C1470._pattern; This:C1470._target; $start; $positions; $lengths)
+		
+		If (ERROR=0)
+			
+			If ($match)
+				
+				This:C1470.success:=True:C214
+				
+				$current:=0
+				
+				For ($i; 0; Size of array:C274($positions); 1)
+					
+					$groupIndex:=$groups.length>0 ? $groups.indexOf(String:C10($current)) : $current
+					
+					If ($groupIndex>=0)
+						
+						If ($i>0) | ($index=0)
+							
+							This:C1470.matches.push(New object:C1471(\
+								"index"; $index; \
+								"data"; Substring:C12(This:C1470._target; $positions{$i}; $lengths{$i}); \
+								"pos"; $positions{$i}; \
+								"len"; $lengths{$i}))
+							
+						End if 
+					End if 
+					
+					If ($positions{$i}>0)
+						
+						$start:=$positions{$i}+$lengths{$i}
+						
+					End if 
+					
+					$current+=1
+					
+				End for 
+			End if 
+			
+		Else 
+			
+			This:C1470.errorCode:=ERROR
+			This:C1470._pushError("Error while parsing pattern \""+This:C1470._pattern+"\"")
+			return 
+			
+		End if 
+		
+		$index+=1
+		
+	Until (Not:C34($match))
 	
 	This:C1470._errorCatch($methodCalledOnError)
 	
-	return This:C1470
+	return This:C1470.matches.extract("data")
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function substitute($replacement : Text) : cs:C1710.regex
+Function substitute($replacement : Text; $count : Integer; $position : Integer) : Text
 	
-	var $methodCalledOnError : Text
-	var $start : Integer
+	var $backup; $methodCalledOnError; $replacedText; $subexpression : Text
+	var $match : Boolean
+	var $i; $index; $start : Integer
+	var $o : Object
+	
+	ARRAY LONGINT:C221($lengths; 0)
+	ARRAY LONGINT:C221($positions; 0)
 	
 	This:C1470.success:=False:C215
 	This:C1470.matches:=New collection:C1472
 	This:C1470.errorCode:=0
 	
+	//todo:Manage count and position
+	
 	$start:=1
+	$backup:=$replacement
 	
 	$methodCalledOnError:=This:C1470._errorCatch()
 	
+	Repeat 
+		
+		$match:=Match regex:C1019(This:C1470._pattern; This:C1470._target; $start; $positions; $lengths)
+		
+		If (ERROR=0)
+			
+			If ($match)
+				
+				$index:=0
+				
+				For ($i; 0; Size of array:C274($positions); 1)
+					
+					If ($positions{$i}>0)
+						
+						$start:=$positions{$i}+$lengths{$i}
+						
+					End if 
+					
+					If ($lengths{$i}=0)
+						
+						$match:=($i>0)
+						
+						If ($match)
+							
+							$match:=($positions{$i}#$positions{$i-1})
+							
+						End if 
+					End if 
+					
+					If ($match)
+						
+						This:C1470.matches.push(New object:C1471(\
+							"index"; $index; \
+							"data"; Substring:C12(This:C1470._target; $positions{$i}; $lengths{$i}); \
+							"pos"; $positions{$i}; \
+							"len"; $lengths{$i}))
+						
+						$index+=1
+						
+					Else 
+						
+						break
+						
+					End if 
+				End for 
+			End if 
+			
+		Else 
+			
+			This:C1470.errorCode:=ERROR
+			This:C1470._pushError("Error while parsing pattern \""+This:C1470._pattern+"\"")
+			return 
+			
+		End if 
+	Until (Not:C34($match))
+	
+	$replacedText:=This:C1470._target
+	
+	If (This:C1470.matches.length>0)
+		
+		$index:=This:C1470.matches.length-1
+		
+		Repeat 
+			
+			$o:=This:C1470.matches[$index]
+			
+			If ($o.index#0)
+				
+				$subexpression:="\\"+String:C10($o.index)
+				
+				If (Position:C15($subexpression; $replacement)>0)
+					
+					$replacement:=Replace string:C233($replacement; $subexpression; $o.data)
+					
+				End if 
+				
+			Else 
+				
+				$replacedText:=Delete string:C232($replacedText; $o.pos; $o.len)
+				$replacedText:=Insert string:C231($replacedText; $replacement; $o.pos)
+				$replacement:=$backup
+				
+			End if 
+			
+			$index-=1
+			
+		Until ($index=-1)
+	End if 
+	
 	This:C1470._errorCatch($methodCalledOnError)
 	
-	return This:C1470
+	return $replacedText
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _errorCatch($onErrCallMethod : Text)->$currentOnErrCallMethod : Text
@@ -201,11 +403,11 @@ Function _errorCatch($onErrCallMethod : Text)->$currentOnErrCallMethod : Text
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _pushError($error : Text)
 	
-	This:C1470.lastError:=$error
+	//This.lastError:=$error
 	This:C1470.errors.push($error)
 	This:C1470.success:=False:C215
 	
-	ASSERT:C1129(Structure file:C489#Structure file:C489(*))
+	//ASSERT(Structure file#Structure file(*))
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _setTarget($target)

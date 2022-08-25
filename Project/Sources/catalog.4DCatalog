@@ -164,7 +164,11 @@
 			<field_extra position="3"/>
 		</field>
 		<field name="Name" uuid="6E2B9BA4BCE040D995CC8C180A4D7B59" type="10" limiting_length="255" never_null="true" id="2">
-			<field_extra position="1"/>
+			<field_extra position="1">
+				<editor_field_info>
+					<color red="255" green="255" blue="255" alpha="0"/>
+				</editor_field_info>
+			</field_extra>
 		</field>
 		<field name="managerID" uuid="376B869EAC3242CF98A1997FEB3C02C4" type="4" never_null="true" id="3">
 			<field_extra position="2"/>

@@ -58,7 +58,7 @@ If (Length:C16($cible)>0)
 			SVG GET ATTRIBUTE:C1056(*; $preview; $cible; "ios:bind"; $binding)
 			
 			ARRAY TEXT:C222($tMatches; 0x0000)
-			Rgx_MatchText("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"; $binding; ->$tMatches)
+			_o_Rgx_MatchText("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"; $binding; ->$tMatches)
 			
 			If (Size of array:C274($tMatches)=2)  // List of fields
 				

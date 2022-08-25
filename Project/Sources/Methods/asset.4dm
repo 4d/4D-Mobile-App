@@ -156,7 +156,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 								
 								ARRAY TEXT:C222($tTxt_result; 0x0000)
 								
-								If (Rgx_ExtractText($Obj_formatter.choicePattern; $file.fullName; "1"; ->$tTxt_result)=0)
+								If (_o_Rgx_ExtractText($Obj_formatter.choicePattern; $file.fullName; "1"; ->$tTxt_result)=0)
 									
 									$Obj_formatter.choiceList[$tTxt_result{1}]:=$file.fullName
 									

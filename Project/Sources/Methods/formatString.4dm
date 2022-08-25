@@ -54,7 +54,7 @@ Case of
 		$t_formated:=cs:C1710.str.new($t_string).unaccented()
 		
 		// Remove space, other accent, special characters
-		$lError:=Rgx_SubstituteText("[^-+\\.a-zA-Z0-9]"; "-"; ->$t_formated; 0)
+		$lError:=_o_Rgx_SubstituteText("[^-+\\.a-zA-Z0-9]"; "-"; ->$t_formated; 0)
 		
 		//MARK:- bundleApp
 	: ($t_format="bundleApp")
@@ -64,7 +64,7 @@ Case of
 		$t_formated:=cs:C1710.str.new($t_formated).unaccented()
 		
 		// Remove space, other accent, special characters
-		$lError:=Rgx_SubstituteText("[^a-zA-Z0-9\\.]"; "-"; ->$t_formated; 0)
+		$lError:=_o_Rgx_SubstituteText("[^a-zA-Z0-9\\.]"; "-"; ->$t_formated; 0)
 		
 		//MARK:- short-label
 	: ($t_format="short-label")
@@ -93,7 +93,7 @@ Case of
 				$t_string:=Replace string:C233($t_string; "_"; " ")
 				
 				// Camelcase to spaced
-				If (Rgx_SubstituteText("(?m-si)([[:lower:]])([[:upper:]])"; "\\1 \\2"; ->$t_string)=0)
+				If (_o_Rgx_SubstituteText("(?m-si)([[:lower:]])([[:upper:]])"; "\\1 \\2"; ->$t_string)=0)
 					
 					$t_string:=Lowercase:C14($t_string)
 					
@@ -129,7 +129,7 @@ Case of
 		If (Length:C16($t_string)>0)
 			
 			// Remove the forbidden at beginning characters
-			$lError:=Rgx_SubstituteText("(?mi-s)^[^[:alpha:]]*([^$]*)$"; "\\1"; ->$t_string; 0)
+			$lError:=_o_Rgx_SubstituteText("(?mi-s)^[^[:alpha:]]*([^$]*)$"; "\\1"; ->$t_string; 0)
 			$t_string:=Replace string:C233($t_string; "."; " ")  // #98373
 			
 			// Replace accented characters with non accented one.
@@ -185,7 +185,7 @@ Case of
 			: (Length:C16($t_string)>0)
 				
 				// Remove the forbidden at beginning characters
-				$lError:=Rgx_SubstituteText("(?mi-s)^[^[:alpha:]]*([^$]*)$"; "\\1"; ->$t_string; 0)
+				$lError:=_o_Rgx_SubstituteText("(?mi-s)^[^[:alpha:]]*([^$]*)$"; "\\1"; ->$t_string; 0)
 				
 				// Replace dot by space
 				$t_string:=Replace string:C233($t_string; "."; " ")  // #98373

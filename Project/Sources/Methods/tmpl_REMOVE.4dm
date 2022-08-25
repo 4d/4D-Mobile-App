@@ -86,7 +86,7 @@ Else
 	
 	If (Asserted:C1132(Length:C16($binding)>0))
 		
-		Rgx_MatchText("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"; $binding; ->$tTxt_results)
+		_o_Rgx_MatchText("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"; $binding; ->$tTxt_results)
 		
 		If (Size of array:C274($tTxt_results)=2)
 			
