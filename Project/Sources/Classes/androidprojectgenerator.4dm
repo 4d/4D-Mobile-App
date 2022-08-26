@@ -816,8 +816,7 @@ Function handleFieldIcon
 				End if 
 			End if 
 			
-			$fieldName:=Lowercase:C14($fieldName)
-			_o_Rgx_SubstituteText("[^a-z0-9]"; "_"; ->$fieldName; 0)
+			$fieldName:=cs:C1710.regex.new(Lowercase:C14($fieldName); "[^a-z0-9]").substitute("_")
 			
 			$newName:=Replace string:C233($newName; "qmobile_android_missing_icon"; "related_field_icon_"+$1+"_"+String:C10($4)+"_"+$fieldName)
 			
@@ -1081,11 +1080,8 @@ Function copyFormatterImagesToApp
 			
 			var $correctedFormatName; $correctedImageName : Text
 			
-			$correctedFormatName:=Lowercase:C14($formatName)
-			_o_Rgx_SubstituteText("[^a-z0-9]"; "_"; ->$correctedFormatName; 0)
-			
-			$correctedImageName:=Lowercase:C14($imageFile.name)
-			_o_Rgx_SubstituteText("[^a-z0-9]"; "_"; ->$correctedImageName; 0)
+			$correctedFormatName:=cs:C1710.regex.new(Lowercase:C14($formatName); "[^a-z0-9]").substitute("_")
+			$correctedImageName:=cs:C1710.regex.new(Lowercase:C14($imageFile.name); "[^a-z0-9]").substitute("_")
 			
 			$correctedImageName:=$correctedFormatName+"_"+$correctedImageName+$imageFile.extension
 			
@@ -1390,8 +1386,7 @@ Function adjustIconName
 	var $2 : Text  // File extension
 	var $newName : Text
 	
-	$newName:=Lowercase:C14($1)
-	_o_Rgx_SubstituteText("[^a-z0-9]"; "_"; ->$newName; 0)
+	$newName:=cs:C1710.regex.new(Lowercase:C14($1); "[^a-z0-9]").substitute("_")
 	$0:=$newName+$2
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===

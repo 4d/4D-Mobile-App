@@ -3,7 +3,7 @@
 // ID[0D905E8F790C46B59B505B1A340AB759]
 // Created 18-5-2017 by Vincent de Lachaux
 // ----------------------------------------------------
-C_TEXT:C284($1)
+#DECLARE($signature : Text)
 
 If (False:C215)
 	C_TEXT:C284(err_TRY; $1)
@@ -11,7 +11,6 @@ End if
 
 COMPILER_err
 
-// ----------------------------------------------------
 CLEAR VARIABLE:C89(ERROR)
 CLEAR VARIABLE:C89(ERROR METHOD)
 CLEAR VARIABLE:C89(ERROR LINE)
@@ -33,7 +32,7 @@ Use (errStack)
 	
 	If (Count parameters:C259>=1)
 		
-		errStack.signature:=$1
+		errStack.signature:=$signature
 		
 	End if 
 	
@@ -58,5 +57,3 @@ Else
 	ON ERR CALL:C155("err_CATCH")
 	
 End if 
-
-// ----------------------------------------------------

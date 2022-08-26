@@ -12,7 +12,7 @@ C_TEXT:C284($0)
 C_TEXT:C284($1)
 C_TEXT:C284($2)
 
-C_LONGINT:C283($i; $lError; $number)
+C_LONGINT:C283($i; $number)
 C_TEXT:C284($t_format; $t_formated; $t_string)
 
 ARRAY TEXT:C222($aTxt_words; 0)
@@ -54,7 +54,7 @@ Case of
 		$t_formated:=cs:C1710.str.new($t_string).unaccented()
 		
 		// Remove space, other accent, special characters
-		$lError:=_o_Rgx_SubstituteText("[^-+\\.a-zA-Z0-9]"; "-"; ->$t_formated; 0)
+		$t_formated:=cs:C1710.regex.new($t_formated; "[^-+\\.a-zA-Z0-9]").substitute("-")
 		
 		//MARK:- bundleApp
 	: ($t_format="bundleApp")
@@ -64,7 +64,7 @@ Case of
 		$t_formated:=cs:C1710.str.new($t_formated).unaccented()
 		
 		// Remove space, other accent, special characters
-		$lError:=_o_Rgx_SubstituteText("[^a-zA-Z0-9\\.]"; "-"; ->$t_formated; 0)
+		$t_formated:=cs:C1710.regex.new($t_formated; "[^a-zA-Z0-9\\.]").substitute("-")
 		
 		//MARK:- short-label
 	: ($t_format="short-label")
@@ -93,11 +93,7 @@ Case of
 				$t_string:=Replace string:C233($t_string; "_"; " ")
 				
 				// Camelcase to spaced
-				If (_o_Rgx_SubstituteText("(?m-si)([[:lower:]])([[:upper:]])"; "\\1 \\2"; ->$t_string)=0)
-					
-					$t_string:=Lowercase:C14($t_string)
-					
-				End if 
+				$t_string:=Lowercase:C14(cs:C1710.regex.new($t_string; "(?m-si)([[:lower:]])([[:upper:]])").substitute("\\1 \\2"))
 				
 				// Capitalize first letter of words
 				GET TEXT KEYWORDS:C1141($t_string; $aTxt_words)
@@ -129,7 +125,9 @@ Case of
 		If (Length:C16($t_string)>0)
 			
 			// Remove the forbidden at beginning characters
-			$lError:=_o_Rgx_SubstituteText("(?mi-s)^[^[:alpha:]]*([^$]*)$"; "\\1"; ->$t_string; 0)
+			$t_string:=cs:C1710.regex.new($t_string; "(?mi-s)^[^[:alpha:]]*([^$]*)$").substitute("\\1")
+			
+			// Replace dot by space
 			$t_string:=Replace string:C233($t_string; "."; " ")  // #98373
 			
 			// Replace accented characters with non accented one.
@@ -185,7 +183,7 @@ Case of
 			: (Length:C16($t_string)>0)
 				
 				// Remove the forbidden at beginning characters
-				$lError:=_o_Rgx_SubstituteText("(?mi-s)^[^[:alpha:]]*([^$]*)$"; "\\1"; ->$t_string; 0)
+				$t_string:=cs:C1710.regex.new($t_string; "(?mi-s)^[^[:alpha:]]*([^$]*)$").substitute("\\1")
 				
 				// Replace dot by space
 				$t_string:=Replace string:C233($t_string; "."; " ")  // #98373

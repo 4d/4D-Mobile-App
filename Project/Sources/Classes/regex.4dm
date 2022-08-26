@@ -4,7 +4,6 @@ Class constructor($target; $pattern : Text)
 	This:C1470._pattern:=""
 	This:C1470.success:=True:C214
 	This:C1470.matches:=Null:C1517
-	This:C1470.errorCode:=0
 	This:C1470.errors:=New collection:C1472
 	
 	If (Count parameters:C259>=1)
@@ -39,7 +38,7 @@ Function set pattern($pattern : Text)
 	This:C1470._pattern:=$pattern
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function get lastError() : Text
+Function get lastError() : Object
 	
 	If (This:C1470.errors.length>0)
 		
@@ -94,9 +93,7 @@ Function match($start; $all : Boolean) : Boolean
 		
 	End if 
 	
-	This:C1470.success:=False:C215
-	This:C1470.matches:=New collection:C1472
-	This:C1470.errorCode:=0
+	This:C1470._init()
 	
 	$methodCalledOnError:=This:C1470._errorCatch()
 	
@@ -144,8 +141,7 @@ Function match($start; $all : Boolean) : Boolean
 			
 		Else 
 			
-			This:C1470.errorCode:=ERROR
-			This:C1470._pushError("Error while parsing pattern \""+This:C1470._pattern+"\"")
+			This:C1470._pushError(Current method name:C684; ERROR; "Error while parsing pattern \""+This:C1470._pattern+"\"")
 			
 		End if 
 	Until (Not:C34($match))
@@ -165,11 +161,9 @@ Function extract($groups) : Collection
 	ARRAY LONGINT:C221($lengths; 0)
 	ARRAY LONGINT:C221($positions; 0)
 	
-	This:C1470.success:=False:C215
-	This:C1470.matches:=New collection:C1472
-	This:C1470.errorCode:=0
-	
 	$start:=1
+	
+	This:C1470._init()
 	
 	Case of 
 			
@@ -179,7 +173,8 @@ Function extract($groups) : Collection
 			$groups:=New collection:C1472
 			
 			//___________________________________
-		: (Value type:C1509($groups)=Is longint:K8:6) | (Value type:C1509($groups)=Is real:K8:4)
+		: (Value type:C1509($groups)=Is longint:K8:6)\
+			 | (Value type:C1509($groups)=Is real:K8:4)
 			
 			$groups:=New collection:C1472(String:C10($groups))
 			
@@ -202,8 +197,8 @@ Function extract($groups) : Collection
 			//___________________________________
 		Else 
 			
-			This:C1470.errorCode:=54  // Argument types are incompatible.
-			This:C1470._pushError("The \"groups\" argument must be an integer, a text or a collection.")
+			// Argument types are incompatible.
+			This:C1470._pushError(Current method name:C684; 54; "The \"groups\" argument must be an integer, a text or a collection.")
 			return 
 			
 			//___________________________________
@@ -213,7 +208,6 @@ Function extract($groups) : Collection
 	
 	Repeat 
 		
-		//$index+=1
 		ERROR:=0
 		
 		$match:=Match regex:C1019(This:C1470._pattern; This:C1470._target; $start; $positions; $lengths)
@@ -232,7 +226,8 @@ Function extract($groups) : Collection
 					
 					If ($groupIndex>=0)
 						
-						If ($i>0) | ($index=0)
+						If ($i>0)\
+							 | ($index=0)
 							
 							This:C1470.matches.push(New object:C1471(\
 								"index"; $index; \
@@ -256,9 +251,7 @@ Function extract($groups) : Collection
 			
 		Else 
 			
-			This:C1470.errorCode:=ERROR
-			This:C1470._pushError("Error while parsing pattern \""+This:C1470._pattern+"\"")
-			return 
+			This:C1470._pushError(Current method name:C684; ERROR; "Error while parsing pattern \""+This:C1470._pattern+"\"")
 			
 		End if 
 		
@@ -281,14 +274,12 @@ Function substitute($replacement : Text; $count : Integer; $position : Integer) 
 	ARRAY LONGINT:C221($lengths; 0)
 	ARRAY LONGINT:C221($positions; 0)
 	
-	This:C1470.success:=False:C215
-	This:C1470.matches:=New collection:C1472
-	This:C1470.errorCode:=0
-	
-	//todo:Manage count and position
+	// Todo:Manage count and position
 	
 	$start:=1
 	$backup:=$replacement
+	
+	This:C1470._init()
 	
 	$methodCalledOnError:=This:C1470._errorCatch()
 	
@@ -341,8 +332,7 @@ Function substitute($replacement : Text; $count : Integer; $position : Integer) 
 			
 		Else 
 			
-			This:C1470.errorCode:=ERROR
-			This:C1470._pushError("Error while parsing pattern \""+This:C1470._pattern+"\"")
+			This:C1470._pushError(Current method name:C684; ERROR; "Error while parsing pattern \""+This:C1470._pattern+"\"")
 			return 
 			
 		End if 
@@ -386,6 +376,12 @@ Function substitute($replacement : Text; $count : Integer; $position : Integer) 
 	return $replacedText
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _init()
+	
+	This:C1470.success:=False:C215
+	This:C1470.matches:=New collection:C1472
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _errorCatch($onErrCallMethod : Text)->$currentOnErrCallMethod : Text
 	
 	If (Count parameters:C259>=1)
@@ -401,13 +397,13 @@ Function _errorCatch($onErrCallMethod : Text)->$currentOnErrCallMethod : Text
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function _pushError($error : Text)
+Function _pushError($method : Text; $code : Integer; $desc : Text)
 	
-	//This.lastError:=$error
-	This:C1470.errors.push($error)
 	This:C1470.success:=False:C215
-	
-	//ASSERT(Structure file#Structure file(*))
+	This:C1470.errors.push(New object:C1471(\
+		"code"; $code; \
+		"method"; $method; \
+		"desc"; $desc))
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _setTarget($target)
@@ -430,20 +426,23 @@ Function _setTarget($target)
 					
 				Else 
 					
-					This:C1470._pushError("file not found")
+					// File not found.
+					This:C1470._pushError(Current method name:C684; -43; "File not found.")
 					
 				End if 
 				
 			Else 
 				
-				This:C1470._pushError("target is not a 4D File")
+				// Argument types are incompatible.
+				This:C1470._pushError(Current method name:C684; 54; "The \"target\" object is not a 4D.File.")
 				
 			End if 
 			
 			//…………………………………………………………………………………………
 		Else 
 			
-			This:C1470._pushError("target must be text or file")
+			// Argument types are incompatible.
+			This:C1470._pushError(Current method name:C684; 54; "The \"target\" argument  must be Text or 4D.File.")
 			
 			//…………………………………………………………………………………………
 	End case 

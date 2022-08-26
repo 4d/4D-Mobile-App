@@ -721,32 +721,25 @@ Function getAliasTarget($table; $field : cs:C1710.field) : cs:C1710.field
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// ??
-Function isLink
-	var $0 : Boolean
-	var $1 : Object
+Function isLink($field : cs:C1710.field) : Boolean
 	
-	var $t : Text
+	var $key : Text
 	
-	If (True:C214)
+	For each ($key; OB Keys:C1719($field))
 		
-		For each ($t; OB Keys:C1719($1)) Until ($0)
+		If (Value type:C1509($field[$key])=Is object:K8:27)
 			
-			$0:=Value type:C1509($1[$t])=Is object:K8:27
+			return True:C214
 			
-		End for each 
-		
-	Else 
-		
-		$0:=OB Entries:C1720($1).filter(Formula:C1597(col_formula).source; Formula:C1597($1.result:=(Value type:C1509($1.value)=Is object:K8:27))).length>0
-		
-	End if 
+		End if 
+	End for each 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function checkRestQueryFilter($table : Object)
 	
-	var $buffer : Text
 	var $success : Boolean
 	var $filter; $response : Object
+	var $regex : cs:C1710.regex
 	
 	If ($table.filter#Null:C1517)
 		
@@ -767,9 +760,10 @@ Function checkRestQueryFilter($table : Object)
 			
 			OB REMOVE:C1226($filter; "embedded")
 			
-			$buffer:=$filter.string
+			$regex:=cs:C1710.regex.new($filter.string; This:C1470.$regexParameters)
+			$success:=$regex.match()
 			
-			If (_o_Rgx_SubstituteText(This:C1470.$regexParameters; "\\1\"@\""; ->$buffer)=0)
+			If ($success)
 				
 				$response:=Rest(New object:C1471(\
 					"action"; "records"; \
@@ -777,12 +771,10 @@ Function checkRestQueryFilter($table : Object)
 					"url"; This:C1470.server.urls.production; \
 					"handler"; "mobileapp"; \
 					"queryEncode"; True:C214; \
-					"query"; New object:C1471("$filter"; $buffer; \
+					"query"; New object:C1471("$filter"; $regex.substitute("\\1\"@\""); \
 					"$limit"; "1")))
 				
-			Else 
-				
-				$success:=True:C214
+				$success:=$response.success
 				
 			End if 
 			
@@ -798,9 +790,9 @@ Function checkRestQueryFilter($table : Object)
 				"queryEncode"; True:C214; \
 				"query"; New object:C1471("$filter"; $filter.string)))
 			
+			$success:=$response.success
+			
 		End if 
-		
-		$success:=$response.success
 		
 		Case of 
 				
@@ -825,7 +817,6 @@ Function checkRestQueryFilter($table : Object)
 				$filter.httpError:=$response.httpError
 				$filter.error:=".Server error ("+String:C10($response.httpError)+")"
 				
-				
 				//______________________________________________________
 		End case 
 		
@@ -837,11 +828,11 @@ Function checkRestQueryFilter($table : Object)
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function checkLocalQueryFilter($table : Object)
 	
-	var $buffer : Text
 	var $success : Boolean
 	var $filter; $o : Object
 	var $es : 4D:C1709.EntitySelection
 	var $error : cs:C1710.error
+	var $regex : cs:C1710.regex
 	
 	If ($table#Null:C1517)
 		
@@ -860,29 +851,20 @@ Function checkLocalQueryFilter($table : Object)
 			OB REMOVE:C1226($table; "count")
 			
 			// Detect a query with parameters
-			$filter.parameters:=(Match regex:C1019(This:C1470.$regexParameters; $filter.string; 1))
+			$regex:=cs:C1710.regex.new($filter.string; This:C1470.$regexParameters)
+			$filter.parameters:=$regex.match()
 			
 			If ($filter.parameters)
 				
 				OB REMOVE:C1226($filter; "embedded")
 				
-				$buffer:=$filter.string
+				//mark: - START TRAPPING ERRORS
+				$error:=cs:C1710.error.new("capture")
+				ds:C1482[$table.name].query($regex.substitute("\\1:1"); "@")
+				$error.release()
+				//mark: - STOP TRAPPING ERRORS
 				
-				If (_o_Rgx_SubstituteText(This:C1470.$regexParameters; "\\1:1"; ->$buffer)=0)
-					
-					//mark: - START TRAPPING ERRORS
-					$error:=cs:C1710.error.new("capture")
-					ds:C1482[$table.name].query($buffer; "@")
-					$error.release()
-					//mark: - STOP TRAPPING ERRORS
-					
-					$success:=Bool:C1537(Num:C11($error.lastError().error)=0)
-					
-				Else 
-					
-					$success:=True:C214
-					
-				End if 
+				$success:=Bool:C1537(Num:C11($error.lastError().error)=0)
 				
 			Else 
 				
@@ -890,10 +872,7 @@ Function checkLocalQueryFilter($table : Object)
 				
 				//mark: - START TRAPPING ERRORS
 				$error:=cs:C1710.error.new("capture")
-				
-				var $es : 4D:C1709.EntitySelection
 				$es:=ds:C1482[$table.name].query($filter.string)
-				
 				$error.release()
 				//mark: - STOP TRAPPING ERRORS
 				
@@ -1878,7 +1857,6 @@ Function formatBundleAppName($name : Text) : Text
 	$str:=cs:C1710.str.new()
 	return $str.alphaNum($str.trim($str.unaccented($name)); "-")
 	
-	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function label($text : Text) : Text
 	
@@ -1904,11 +1882,7 @@ Function label($text : Text) : Text
 			$text:=Replace string:C233($text; "_"; " ")
 			
 			// CamelCase to spaced
-			If (_o_Rgx_SubstituteText("(?m-si)([[:lower:]])([[:upper:]])"; "\\1 \\2"; ->$text)=0)
-				
-				$text:=Lowercase:C14($text)
-				
-			End if 
+			$text:=Lowercase:C14(cs:C1710.regex.new($text; "(?m-si)([[:lower:]])([[:upper:]])").substitute("\\1 \\2"))
 			
 			// Capitalize first letter of words
 			GET TEXT KEYWORDS:C1141($text; $words)
@@ -1957,7 +1931,7 @@ Function _formatName($name : Text) : cs:C1710.str
 	var $str : cs:C1710.str
 	
 	// Remove the forbidden at beginning characters
-	_o_Rgx_SubstituteText("(?mi-s)^[^[:alpha:]]*([^$]*)$"; "\\1"; ->$name; 0)
+	$name:=cs:C1710.regex.new($name; "(?mi-s)^[^[:alpha:]]*([^$]*)$").substitute("\\1")
 	
 	// Remove dots and underscores
 	return cs:C1710.str.new(Replace string:C233(Replace string:C233($name; "_"; " "); "."; " "))

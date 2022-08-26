@@ -80,7 +80,6 @@ If ($regex.match(False:C215))
 End if 
 
 // All occurences
-
 If ($regex.match(True:C214))
 	
 	ASSERT:C1129($regex.matches.length=6)
@@ -103,8 +102,9 @@ End if
 $regex.pattern:="(\\w+\\[(\\d+)]"
 ASSERT:C1129(Not:C34($regex.match()))
 ASSERT:C1129($regex.matches.length=0)
-ASSERT:C1129($regex.errorCode=-1)
-ASSERT:C1129($regex.lastError=("Error while parsing pattern \""+$regex.pattern+"\""))
+ASSERT:C1129($regex.lastError.code=-1)
+ASSERT:C1129($regex.lastError.method="regex.match")
+ASSERT:C1129($regex.lastError.desc=("Error while parsing pattern \""+$regex.pattern+"\""))
 
 // Mark:-extract()
 $regex:=cs:C1710.regex.new("hello world"; "(?m-si)([[:alnum:]]*)\\s([[:alnum:]]*)")
@@ -123,6 +123,8 @@ ASSERT:C1129($result.equal(New collection:C1472("hello"; "world")))
 $result:=$regex.extract(New collection:C1472(1; 2))
 ASSERT:C1129($result.equal(New collection:C1472("hello"; "world")))
 
+$result:=$regex.extract("2 1")
+
 // Mark:-substitute()
 $target:="[This pattern will look for a string of numbers separated by commas and replace "\
 +"the final comma with \"and\". It will also trim excess spaces around the final "\
@@ -136,21 +138,21 @@ ASSERT:C1129($regex.substitute(" and \\1")=("[This pattern will look for a strin
 +"comma and after the final number.]\r\r1, 2, 3, 4 and 5\r1, 2 and 3\r1, 2, 3, 4 "\
 +"and 5\n1 and 2"))
 
-$regex.target:="hello world"
-$regex.pattern:="[^a-z0-9]"
-ASSERT:C1129($regex.substitute("_")="hello_world")
+ASSERT:C1129($regex.setTarget("hello world").setPattern("[^a-z0-9]").substitute("_")="hello_world")
 
 $regex.target:="123helloWorld"
 $regex.pattern:="(?mi-s)^[^[:alpha:]]*([^$]*)$"
 ASSERT:C1129($regex.substitute("\\1")="helloWorld")
 
-$regex.target:="Each of these lines ends with some white space. This one ends with a space. "\
-+"\n\nThis one ends with a tab.\t\n\nThis one ends with some spaces.    \n\nThis "\
-+"one ends with some tabs.\t\t\t\n\nThis one ends with a mixture of spaces and "\
-+"tabs.  \t\t  \n\nSince the pattern only matches trailing whitespace, we can "\
-+"replace it with nothing to get the result we want."
-$regex.pattern:="(?mi-s)[\\x20\\t]+$"
-ASSERT:C1129(Length:C16($regex.substitute(""))=327)
+$regex.target:="Each of these lines ends with some white space. "\
++"This one ends with a space. \n\n"\
++"This one ends with a tab.\t\n\n"\
++"This one ends with some spaces.    \n\n"\
++"This one ends with some tabs.\t\t\t\n\n"\
++"This one ends with a mixture of spaces and tabs.  \t\t  \n\n"\
++"Since the pattern only matches trailing whitespace, we can replace it with nothing to get the result we want."
+$regex.pattern:="(?mi-s)[[:blank:]]+$"
+ASSERT:C1129(Length:C16($regex.substitute())=327)
 
 err_FINALLY
 

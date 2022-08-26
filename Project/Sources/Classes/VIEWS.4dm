@@ -155,15 +155,12 @@ Function removeField()
 	
 	var $binding; $targetField; $testClass : Text
 	var $indx : Integer
-	var $target : Object
+	var $form; $target : Object
 	var $c : Collection
 	var $field : cs:C1710.field
 	var $menu : cs:C1710.menu
 	
-	ARRAY TEXT:C222($tTxt_results; 0)
-	
 	//FIXME:Tempo
-	var $form : Object
 	$form:=This:C1470.form
 	
 	$targetField:=Replace string:C233(This:C1470.context.current; ".cancel"; "")
@@ -228,26 +225,26 @@ Function removeField()
 		
 		If (Asserted:C1132(Length:C16($binding)>0))
 			
-			_o_Rgx_MatchText("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"; $binding; ->$tTxt_results)
+			$c:=cs:C1710.regex.new($binding; "(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$").extract("1 2")
 			
-			If (Size of array:C274($tTxt_results)=2)
+			If ($c.length=2)  // List of fields
 				
-				If ($target[$tTxt_results{1}]#Null:C1517)
+				If ($target[$c[0]]#Null:C1517)
 					
-					$indx:=Num:C11($tTxt_results{2})
+					$indx:=Num:C11($c[1])
 					
-					If ($target[$tTxt_results{1}].length>$indx)
+					If ($target[$c[0]].length>$indx)
 						
 						SVG GET ATTRIBUTE:C1056(*; $form.preview.name; $targetField; "4D-isOfClass-multivalued"; $testClass)
 						
 						If ($testClass="true")
 							
-							$target[$tTxt_results{1}].remove($indx)
+							$target[$c[0]].remove($indx)
 							
 						Else 
 							
 							// Empty
-							$target[$tTxt_results{1}][$indx]:=Null:C1517
+							$target[$c[0]][$indx]:=Null:C1517
 							
 						End if 
 					End if 

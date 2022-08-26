@@ -242,9 +242,15 @@ Case of
 						
 						ARRAY TEXT:C222($tTxt_buffer; 0x0000)
 						
-						If (_o_Rgx_MatchText("(.*) \\((.*)\\) \\[(.*)]$"; $Txt_buffer; ->$tTxt_buffer)=0)
+						var $regex : cs:C1710.regex
+						$regex:=cs:C1710.regex.new($Txt_buffer; "(.*) \\((.*)\\) \\[(.*)]$")
+						
+						If ($regex.match())
 							
-							$Obj_:=New object:C1471("name"; $tTxt_buffer{1}; "os"; $tTxt_buffer{2}; "udid"; $tTxt_buffer{3})
+							$Obj_:=New object:C1471(\
+								"name"; $regex.matches[1].data; \
+								"os"; $regex.matches[2].data; \
+								"udid"; $regex.matches[3].data)
 							
 							If ($Obj_out.devices=Null:C1517)
 								

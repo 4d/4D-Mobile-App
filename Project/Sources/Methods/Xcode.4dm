@@ -21,7 +21,6 @@ C_OBJECT:C1216($subfolder)
 C_COLLECTION:C1488($Col_folder; $Col_paths)
 
 ARRAY TEXT:C222($tTxt_folders; 0)
-ARRAY TEXT:C222($tTxt_found; 0)
 ARRAY TEXT:C222($tTxt_frameworks; 0)
 
 If (False:C215)
@@ -346,14 +345,15 @@ Case of
 			
 			If (Length:C16($Txt_out)>0)
 				
-				ARRAY TEXT:C222($tTxt_buffer; 0x0000)
+				var $regex : cs:C1710.regex
+				$regex:=cs:C1710.regex.new($Txt_out; "(?mi-s)Apple Swift version ((?:\\d\\.)*\\d)")
 				
-				If (_o_Rgx_MatchText("(?mi-s)Apple Swift version ((?:\\d\\.)*\\d)"; $Txt_out; ->$tTxt_buffer)=0)
+				If ($regex.match())
 					
-					If (Size of array:C274($tTxt_buffer)>0)
+					If ($regex.matches.length>0)
 						
 						$Obj_result.success:=True:C214
-						$Obj_result.swift:=$tTxt_buffer{1}
+						$Obj_result.swift:=$regex.matches[1].data
 						
 					End if 
 				End if 
@@ -1234,22 +1234,23 @@ Get system info should not be called frequently (consumer) as the processor will
 				End case 
 				
 				// Cannot check command return status so, check output content
-				If (_o_Rgx_MatchText($Txt_buffer; $Txt_out)=0)
+				var $regex : cs:C1710.regex
+				$regex:=cs:C1710.regex.new($Txt_out; $Txt_buffer)
+				
+				If ($regex.match())
 					
 					$Obj_result.success:=True:C214
 					
 					// Get the app pathname
-					If (_o_Rgx_MatchText("(?mi-s)builtin-validationUtility\\s([^\\n]*)\\n"; $Txt_out; ->$tTxt_found)=0)
+					If ($regex.setPattern("(?mi-s)builtin-validationUtility\\s([^\\n]*)\\n").match())
 						
-						$tTxt_found{1}:=Replace string:C233($tTxt_found{1}; "\\"; "")
-						$Obj_result.app:=$tTxt_found{1}
+						$Obj_result.app:=Replace string:C233($regex.matches[1].data; "\\"; "")
 						
 					Else 
 						
-						If (_o_Rgx_MatchText("(?mi-s)/usr/bin/touch -c\\s([^\\n]*)\\n"; $Txt_out; ->$tTxt_found)=0)
+						If ($regex.setPattern("(?mi-s)/usr/bin/touch -c\\s([^\\n]*)\\n").match())
 							
-							$tTxt_found{1}:=Replace string:C233($tTxt_found{1}; "\\"; "")
-							$Obj_result.app:=$tTxt_found{1}
+							$Obj_result.app:=Replace string:C233($regex.matches[1].data; "\\"; "")
 							
 						End if 
 					End if 
@@ -1287,12 +1288,7 @@ Get system info should not be called frequently (consumer) as the processor will
 			If (Length:C16($Txt_out)>0)
 				
 				// Cannot check command return status so, check output content
-				If (_o_Rgx_MatchText("CLEAN SUCCEEDED"; $Txt_out)=0)
-					
-					$Obj_result.success:=True:C214
-					
-				End if 
-				
+				$Obj_result.success:=cs:C1710.regex.new($Txt_out; "CLEAN SUCCEEDED").match()
 				$Obj_result.error:=$Txt_error
 				$Obj_result.out:=$Txt_out
 				

@@ -12,6 +12,7 @@ var $bind; $binding; $buffer; $cible; $currentForm; $preview : Text
 var $fixed; $indx : Integer
 var $x : Blob
 var $context; $target : Object
+var $c : Collection
 var $field : cs:C1710.field
 var $tmpl : cs:C1710.tmpl
 
@@ -54,16 +55,13 @@ If (Length:C16($cible)>0)
 		If ($tmpl.isTypeAccepted($bind; $field.fieldType))
 			
 			$target:=Form:C1466[This:C1470.$.typeForm()][$context.tableNumber]
-			
 			SVG GET ATTRIBUTE:C1056(*; $preview; $cible; "ios:bind"; $binding)
+			$c:=cs:C1710.regex.new($binding; "(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$").extract("1 2")
 			
-			ARRAY TEXT:C222($tMatches; 0x0000)
-			_o_Rgx_MatchText("(?m-si)^([^\\[]+)\\[(\\d+)]\\s*$"; $binding; ->$tMatches)
-			
-			If (Size of array:C274($tMatches)=2)  // List of fields
+			If ($c.length=2)  // List of fields
 				
 				// Belt and braces
-				$target[$tMatches{1}]:=$target[$tMatches{1}]=Null:C1517 ? New collection:C1472 : $target[$tMatches{1}]
+				$target[$c[0]]:=$target[$c[0]] || New collection:C1472
 				
 				If ($field.fromIndex#Null:C1517)  // Internal D&D
 					
@@ -79,13 +77,13 @@ If (Length:C16($cible)>0)
 					
 				Else 
 					
-					$field:=$tmpl.fieldDescription($field; $target[$tMatches{1}][Num:C11($tMatches{2})]; $context.tableNumber)
+					$field:=$tmpl.fieldDescription($field; $target[$c[0]][Num:C11($c[1])]; $context.tableNumber)
 					
 				End if 
 				
 				PROJECT.minimumField($field)
 				
-				$target[$tMatches{1}][Num:C11($tMatches{2})]:=$field
+				$target[$c[0]][Num:C11($c[1])]:=$field
 				
 			Else   // Single value field (Not aaaaa[000]) ie 'searchableField' or 'sectionField'
 				

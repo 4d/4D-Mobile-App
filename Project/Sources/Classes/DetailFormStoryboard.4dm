@@ -376,21 +376,22 @@ Function run($Obj_template : Object; $target : Object/*4D.Folder*/; $Obj_tags : 
 	$0:=$Obj_out
 	
 	
-Function _checkTemplateElements($Obj_template : Object; $Txt_buffer : Text; $Dom_root : Object/*xml node*/)
+Function _checkTemplateElements($Obj_template : Object; $Txt_buffer : Text; $Dom_root : Object)
+	
+	var $Txt_id : Text
+	var $Obj_element; $result : Object
+	var $Col_ : Collection
 	
 	If ($Obj_template.elements=Null:C1517)
 		
-		C_OBJECT:C1216($Obj_element)
 		// Elements not defined in manifest, try to compute it using storyboard XMLs
-		ARRAY TEXT:C222($tTxt_result; 0)
 		
-		C_COLLECTION:C1488($Col_)
+		$Col_:=cs:C1710.regex.new($Txt_buffer; "TAG-(.?.?)-001").extract("1")
+		
 		Case of 
 				// ----------------------------------------
-			: (_o_Rgx_ExtractText("TAG-(.?.?)-001"; $Txt_buffer; "1"; ->$tTxt_result)=0)
+			: ($Col_.length>0)
 				
-				$Col_:=New collection:C1472()
-				ARRAY TO COLLECTION:C1563($Col_; $tTxt_result)
 				$Col_:=$Col_.distinct()
 				$Col_:=$Col_.map("col_valueToObject"; "tagInterfix")
 				
@@ -400,7 +401,6 @@ Function _checkTemplateElements($Obj_template : Object; $Txt_buffer : Text; $Dom
 			: (Value type:C1509($Obj_template.elementsID)=Is collection:K8:32)  // alernative way not documented, declare id of elements
 				
 				$Col_:=New collection:C1472()
-				C_TEXT:C284($Txt_id)
 				For each ($Txt_id; $Obj_template.elementsID)
 					
 					$Obj_element:=New object:C1471()
@@ -415,7 +415,6 @@ Function _checkTemplateElements($Obj_template : Object; $Txt_buffer : Text; $Dom
 			Else 
 				
 				// find by attributes? find by children kel value?
-				C_OBJECT:C1216($result)
 				$result:=$Dom_root.findByAttribute("userLabel"; "stack")
 				If ($result.success)
 					If ($result.elements.length>0)  // Value type($result.elements)=Is collection)

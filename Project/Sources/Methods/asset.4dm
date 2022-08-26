@@ -148,17 +148,17 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 						
 						If (Value type:C1509($Obj_formatter.choicePattern)=Is text:K8:3)
 							
-							$Obj_formatter.choiceList:=New object:C1471(\
-								)
+							$Obj_formatter.choiceList:=New object:C1471
 							
 							var $file : 4D:C1709.File
 							For each ($file; Folder:C1567($Dir_source; fk platform path:K87:2).files())
 								
-								ARRAY TEXT:C222($tTxt_result; 0x0000)
+								var $c : Collection
+								$c:=cs:C1710.regex.new($file.fullName; $Obj_formatter.choicePattern).extract("1")
 								
-								If (_o_Rgx_ExtractText($Obj_formatter.choicePattern; $file.fullName; "1"; ->$tTxt_result)=0)
+								If ($c.length>0)
 									
-									$Obj_formatter.choiceList[$tTxt_result{1}]:=$file.fullName
+									$Obj_formatter.choiceList[$c[0]]:=$file.fullName
 									
 								End if 
 							End for each 

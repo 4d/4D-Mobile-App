@@ -67,9 +67,6 @@
 		]
 	},
 	"_o_OBSOLETES": {
-		"groups": [
-			"rgx (thread-safe)"
-		],
 		"methods": [
 			"_o_button",
 			"_o_currentForm",
@@ -113,6 +110,12 @@
 			"net",
 			"showTestOnDisk",
 			"tester_net"
+		]
+	},
+	"(rgx (thread-safe))": {
+		"methods": [
+			"(_o_rgx_NO_ERROR)",
+			"(Compiler_Rgx)"
 		]
 	},
 	"[android]": {
@@ -859,18 +862,6 @@
 			"ob findPropertyValues"
 		]
 	},
-	"rgx (thread-safe)": {
-		"methods": [
-			"_o_Rgx_ExtractText",
-			"_o_Rgx_Get_Pattern",
-			"_o_Rgx_MatchText",
-			"_o_rgx_NO_ERROR",
-			"_o_rgx_Options",
-			"_o_Rgx_SplitText",
-			"_o_Rgx_SubstituteText",
-			"Compiler_Rgx"
-		]
-	},
 	"Search": {
 		"methods": [
 			"COMPILER_search",
@@ -942,7 +933,6 @@
 			"tmpl_INFOS",
 			"tmpl_On_drag_over",
 			"tmpl_ON_DROP",
-			"tmpl_REMOVE",
 			"tmpl_RENDERER_v1",
 			"tmpl_REORDER",
 			"tmpl_TIPS"
@@ -983,5 +973,9 @@
 			"test_xml"
 		]
 	},
-	"trash": {}
+	"trash": {
+		"groups": [
+			"(rgx (thread-safe))"
+		]
+	}
 }

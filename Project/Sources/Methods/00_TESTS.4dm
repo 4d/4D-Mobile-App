@@ -22,22 +22,20 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		$t:="Bundle 4 Dé ö aze äapp ?"
+		var $regex : cs:C1710.regex
 		
-		_o_Rgx_SubstituteText("[ÂÃÄÅ]"; "A"; ->$t; 0)
-		_o_Rgx_SubstituteText("[àáâãäå]"; "a"; ->$t; 0)
-		_o_Rgx_SubstituteText("[ÈÉÊË]"; "E"; ->$t; 0)
-		_o_Rgx_SubstituteText("[èéêë]"; "e"; ->$t; 0)
-		_o_Rgx_SubstituteText("[ÌÍÎÏ]"; "I"; ->$t; 0)
-		_o_Rgx_SubstituteText("[ìíîï]"; "i"; ->$t; 0)
-		_o_Rgx_SubstituteText("[ÒÓÔÕÖ]"; "O"; ->$t; 0)
-		_o_Rgx_SubstituteText("[ðñòóôõö]"; "o"; ->$t; 0)
-		_o_Rgx_SubstituteText("[ÙÚÛÜ]"; "U"; ->$t; 0)
-		_o_Rgx_SubstituteText("[ùúûü]"; "u"; ->$t; 0)
-		
-		$Lon_error:=_o_Rgx_SubstituteText("[^a-zA-Z0-9]"; "-"; ->$t; 0)
-		
-		ALERT:C41($t)
+		$regex:=cs:C1710.regex.new("Bundle 4 Dé ö aze äapp ?")
+		$t:=$regex.setPattern("[ÂÃÄÅ]").substitute("A")
+		$t:=$regex.setTarget($t).setPattern("[àáâãäå]").substitute("a")
+		$t:=$regex.setTarget($t).setPattern("[ÈÉÊË]").substitute("E")
+		$t:=$regex.setTarget($t).setPattern("[èéêë]").substitute("e")
+		$t:=$regex.setTarget($t).setPattern("[ÌÍÎÏ]").substitute("I")
+		$t:=$regex.setTarget($t).setPattern("[ìíîï]").substitute("i")
+		$t:=$regex.setTarget($t).setPattern("[ÒÓÔÕÖ]").substitute("O")
+		$t:=$regex.setTarget($t).setPattern("[ðñòóôõö]").substitute("o")
+		$t:=$regex.setTarget($t).setPattern("[ÙÚÛÜ]").substitute("U")
+		$t:=$regex.setTarget($t).setPattern("[ùúûü]").substitute("u")
+		$t:=$regex.setTarget($t).setPattern("[^a-zA-Z0-9]").substitute("-")
 		
 		//________________________________________
 	: (True:C214)
