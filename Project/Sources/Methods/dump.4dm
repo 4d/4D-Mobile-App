@@ -301,9 +301,8 @@ Case of
 							
 							If ($withUI)
 								
-								If ($pages=0)
+								If ($pages=0) & ($rgx.matches.length>0)
 									
-									//fixme:PAS DE TARGET ET PAS D'APPEL DE $rgx.match() - Est-ce encore utile ?
 									$count:=Num:C11($rgx.matches[2].data)
 									$pages:=($count\SHARED.data.dump.limit)+Num:C11(($count%SHARED.data.dump.limit)>0)
 									
@@ -479,7 +478,7 @@ Case of
 						
 					Else 
 						
-						If ((Num:C11($rgx.matches[3].data)+Num:C11($rgx.matches[4].data))>=Num:C11($rgx.matches[2].data))
+						If ($rgx.matches.length=0) || ((Num:C11($rgx.matches[3].data)+Num:C11($rgx.matches[4].data))>=Num:C11($rgx.matches[2].data))
 							
 							$page:=MAXLONG:K35:2-1  // BREAK
 							

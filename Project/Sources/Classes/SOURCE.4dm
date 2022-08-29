@@ -165,8 +165,8 @@ Function onLoad()
 	This:C1470.server.bestSize().setValue(This:C1470.remote)
 	This:C1470.testServer.distributeLeftToRight()
 	
-	This:C1470.doNotExportImages.bestSize().setValue(This:C1470._dataSource.doNotExportImages)
-	This:C1470.doNotGenerate.bestSize().setValue(This:C1470._dataSource.doNotGenerateDataAtEachBuild)
+	This:C1470.doNotExportImages.bestSize().setValue(Bool:C1537(This:C1470._dataSource.doNotExportImages))
+	This:C1470.doNotGenerate.bestSize().setValue(Bool:C1537(This:C1470._dataSource.doNotGenerateDataAtEachBuild))
 	
 	This:C1470._generation.distributeLeftToRight()
 	
