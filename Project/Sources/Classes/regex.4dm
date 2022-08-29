@@ -68,7 +68,7 @@ Function match($start; $all : Boolean) : Boolean
 	
 	var $methodCalledOnError : Text
 	var $match : Boolean
-	var $i : Integer
+	var $i; $index : Integer
 	var $item : Object
 	
 	ARRAY LONGINT:C221($positions; 0)
@@ -112,7 +112,7 @@ Function match($start; $all : Boolean) : Boolean
 				For ($i; 0; Size of array:C274($positions); 1)
 					
 					This:C1470.matches.push(New object:C1471(\
-						"index"; $i; \
+						"index"; $index; \
 						"data"; Substring:C12(This:C1470._target; $positions{$i}; $lengths{$i}); \
 						"position"; $positions{$i}; \
 						"length"; $lengths{$i}))
@@ -139,6 +139,8 @@ Function match($start; $all : Boolean) : Boolean
 				
 			End if 
 			
+			$index+=1
+			
 		Else 
 			
 			This:C1470._pushError(Current method name:C684; ERROR; "Error while parsing pattern \""+This:C1470._pattern+"\"")
@@ -155,7 +157,7 @@ Function extract($groups) : Collection
 	
 	var $methodCalledOnError : Text
 	var $match : Boolean
-	var $current; $groupIndex; $i; $index; $start : Integer
+	var $current; $groupIndex; $i; $index; $indx; $start : Integer
 	var $v
 	
 	ARRAY LONGINT:C221($lengths; 0)
@@ -230,10 +232,12 @@ Function extract($groups) : Collection
 							 | ($index=0)
 							
 							This:C1470.matches.push(New object:C1471(\
-								"index"; $index; \
+								"index"; $indx; \
 								"data"; Substring:C12(This:C1470._target; $positions{$i}; $lengths{$i}); \
 								"pos"; $positions{$i}; \
 								"len"; $lengths{$i}))
+							
+							$indx+=1
 							
 						End if 
 					End if 
@@ -268,7 +272,7 @@ Function substitute($replacement : Text; $count : Integer; $position : Integer) 
 	
 	var $backup; $methodCalledOnError; $replacedText; $subexpression : Text
 	var $match : Boolean
-	var $i; $index; $start : Integer
+	var $i; $sub; $index; $start : Integer
 	var $o : Object
 	
 	ARRAY LONGINT:C221($lengths; 0)
@@ -291,7 +295,7 @@ Function substitute($replacement : Text; $count : Integer; $position : Integer) 
 			
 			If ($match)
 				
-				$index:=0
+				$sub:=0
 				
 				For ($i; 0; Size of array:C274($positions); 1)
 					
@@ -318,8 +322,10 @@ Function substitute($replacement : Text; $count : Integer; $position : Integer) 
 							"index"; $index; \
 							"data"; Substring:C12(This:C1470._target; $positions{$i}; $lengths{$i}); \
 							"pos"; $positions{$i}; \
-							"len"; $lengths{$i}))
+							"len"; $lengths{$i}; \
+							"_subpattern"; $sub))
 						
+						$sub+=1
 						$index+=1
 						
 					Else 
@@ -348,9 +354,9 @@ Function substitute($replacement : Text; $count : Integer; $position : Integer) 
 			
 			$o:=This:C1470.matches[$index]
 			
-			If ($o.index#0)
+			If ($o._subpattern#0)
 				
-				$subexpression:="\\"+String:C10($o.index)
+				$subexpression:="\\"+String:C10($o._subpattern)
 				
 				If (Position:C15($subexpression; $replacement)>0)
 					
@@ -369,6 +375,12 @@ Function substitute($replacement : Text; $count : Integer; $position : Integer) 
 			$index-=1
 			
 		Until ($index=-1)
+		
+		For each ($o; This:C1470.matches)
+			
+			OB REMOVE:C1226($o; "_subpattern")
+			
+		End for each 
 	End if 
 	
 	This:C1470._errorCatch($methodCalledOnError)

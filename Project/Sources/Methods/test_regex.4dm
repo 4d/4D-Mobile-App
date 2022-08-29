@@ -6,14 +6,53 @@ var $regex : cs:C1710.regex
 err_TRY
 
 // Mark:-match()
-$regex:=cs:C1710.regex.new("Hello world"; "world")
+$regex:=cs:C1710.regex.new("Hello world, the world is wonderful but the world is in danger"; "world")
 
-If ($regex.match())
+If ($regex.match())  //Test first occurrence
 	
 	ASSERT:C1129($regex.matches.length=1)
 	ASSERT:C1129($regex.matches[0].data="world")
 	ASSERT:C1129($regex.matches[0].position=7)
 	ASSERT:C1129($regex.matches[0].length=5)
+	
+End if 
+
+If ($regex.match(10))  // Starts search at 10th character
+	
+	ASSERT:C1129($regex.matches.length=1)
+	ASSERT:C1129($regex.matches[0].data="world")
+	ASSERT:C1129($regex.matches[0].position=18)
+	ASSERT:C1129($regex.matches[0].length=5)
+	
+End if 
+
+If ($regex.match(True:C214))  // Retrieves all occurrences
+	
+	ASSERT:C1129($regex.matches.length=3)
+	ASSERT:C1129($regex.matches[0].data="world")
+	ASSERT:C1129($regex.matches[0].position=7)
+	ASSERT:C1129($regex.matches[0].length=5)
+	
+	ASSERT:C1129($regex.matches[1].data="world")
+	ASSERT:C1129($regex.matches[1].position=18)
+	ASSERT:C1129($regex.matches[1].length=5)
+	
+	ASSERT:C1129($regex.matches[2].data="world")
+	ASSERT:C1129($regex.matches[2].position=45)
+	ASSERT:C1129($regex.matches[2].length=5)
+	
+End if 
+
+If ($regex.match(10; True:C214))  // Starts search at 10th character & retrieves all next occurences
+	
+	ASSERT:C1129($regex.matches.length=2)
+	ASSERT:C1129($regex.matches[0].data="world")
+	ASSERT:C1129($regex.matches[0].position=18)
+	ASSERT:C1129($regex.matches[0].length=5)
+	
+	ASSERT:C1129($regex.matches[1].data="world")
+	ASSERT:C1129($regex.matches[1].position=45)
+	ASSERT:C1129($regex.matches[1].length=5)
 	
 End if 
 
@@ -123,7 +162,6 @@ ASSERT:C1129($result.equal(New collection:C1472("hello"; "world")))
 $result:=$regex.extract(New collection:C1472(1; 2))
 ASSERT:C1129($result.equal(New collection:C1472("hello"; "world")))
 
-$result:=$regex.extract("2 1")
 
 // Mark:-substitute()
 $target:="[This pattern will look for a string of numbers separated by commas and replace "\
