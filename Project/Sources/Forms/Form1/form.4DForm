@@ -290,6 +290,19 @@
 					"left": 19,
 					"width": 186,
 					"height": 16
+				},
+				"ComboBox": {
+					"type": "combo",
+					"left": 35,
+					"top": 473,
+					"width": 217,
+					"height": 23,
+					"events": [
+						"onGettingFocus",
+						"onDataChange"
+					],
+					"method": "ObjectMethods/ComboBox.4dm",
+					"dataSource": "Form:C1466.combo.data"
 				}
 			},
 			"entryOrder": [
@@ -302,7 +315,8 @@
 				"Radio Button",
 				"Radio Button1",
 				"password",
-				"👀"
+				"👀",
+				"ComboBox"
 			]
 		}
 	],
@@ -310,7 +324,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 92,
+	"geometryStamp": 95,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

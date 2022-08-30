@@ -35,3 +35,5 @@ Form:C1466.tabdetail:=cs:C1710.widget.new("tab.detail")
 // A password input
 Form:C1466.password:=cs:C1710.input.new("password")
 Form:C1466.password.asPassword:=True:C214
+
+Form:C1466.combo:=cs:C1710.comboBox.new("ComboBox"; New object:C1471("values"; New collection:C1472("UN"; "DEUX"; "TROIS")))

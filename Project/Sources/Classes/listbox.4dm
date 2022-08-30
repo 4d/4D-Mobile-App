@@ -16,7 +16,6 @@ Class constructor($name : Text; $datasource)
 	ASSERT:C1129(This:C1470.type=Object type listbox:K79:8)
 	
 	This:C1470.isCollection:=Is nil pointer:C315(OBJECT Get data source:C1265(*; This:C1470.name))
-	This:C1470.isArray:=Not:C34(This:C1470.isCollection)
 	
 	If (This:C1470.isCollection)
 		
@@ -111,6 +110,45 @@ Function get selectionHighlight() : Boolean
 Function set selectionHighlight($on : Boolean) : cs:C1710.listbox
 	
 	LISTBOX SET PROPERTY:C1440(*; This:C1470.name; lk hide selection highlight:K53:41; $on ? lk yes:K53:69 : lk no:K53:68)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function get dataSourceType() : Text
+	
+	var $name : Text
+	var $table : Integer
+	
+	LISTBOX GET TABLE SOURCE:C1014(*; This:C1470.name; $table; $name)
+	
+	If ($table>0)
+		
+		return Length:C16($name)=0 ? "Current Selection" : "Named Selection"
+		
+	Else 
+		
+		Case of 
+				
+				//–––––––––––––––––––––––––––––––––
+			: (This:C1470._pointer=Null:C1517)
+				
+				//–––––––––––––––––––––––––––––––––
+			: (Type:C295(This:C1470._pointer->)=Is collection:K8:32)
+				
+				return "Collection"
+				
+				//–––––––––––––––––––––––––––––––––
+			: (Type:C295(This:C1470._pointer->)=Boolean array:K8:21)
+				
+				return "Array"
+				
+				//–––––––––––––––––––––––––––––––––
+			: (Type:C295(This:C1470._pointer->)=Is longint:K8:6)\
+				 | (Type:C295(This:C1470._pointer->)=Is real:K8:4)
+				
+				return "Entity Selection"
+				
+				//–––––––––––––––––––––––––––––––––
+		End case 
+	End if 
 	
 	//mark:-
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -906,7 +944,7 @@ Function _commonProperties() : Object
 	// ⚠️ ONLY WORKS WITH ARRAY TYPE LIST BOXES
 Function setRowFontStyle($row : Integer; $tyle : Integer)
 	
-	If (Asserted:C1132(This:C1470.isArray; "setRowFontStyle() only works with array type list boxes!"))
+	If (Asserted:C1132(This:C1470.dataSourceType="Array"; "setRowFontStyle() only works with array type list boxes!"))
 		
 		// Default is plain
 		$tyle:=Count parameters:C259>=2 ? $tyle : Plain:K14:1

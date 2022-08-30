@@ -23,7 +23,7 @@ This class use the **[Match regex](https://doc.4d.com/4Dv19/4D/19.1/Match-regex.
 
 |Function|Action|
 |--------|------|  
-|.**setTarget** (target : `Text` \| `4D.File`) → `cs.regex`|Defines the string on which the next operations will be performed.<br/>Can be a text or a disk file (see below).
+|.**setTarget** (target : `Text` \| `4D.File` \| `Blob`) → `cs.regex`|Defines the string on which the next operations will be performed.<br/>Can be a text, a blob or a disk file.
 |.**setPattern** (pattern : `Text`) → `cs.regex`|Defines the pattern to use for future operations.
 |.**[match](#match)** () → `Boolean`<br/>.**[match](#match)** ({start : `Integer`} {;} {all : `Boolean`}) → `Boolean`|Returns True if the pattern matches the string.
 |.**[extract](#extract)** ( {group : `Text` \| `Integer` \| `Collection`} ) → `Collection`|Returns the list of texts extracted based on the pattern definition

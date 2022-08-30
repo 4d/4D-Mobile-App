@@ -451,10 +451,16 @@ Function _setTarget($target)
 			End if 
 			
 			//…………………………………………………………………………………………
+		: (Value type:C1509($target)=Is BLOB:K8:12)
+			
+			This:C1470._target:=Convert to text:C1012($target; "UTF-8")
+			This:C1470.success:=Bool:C1537(OK)
+			
+			//…………………………………………………………………………………………
 		Else 
 			
 			// Argument types are incompatible.
-			This:C1470._pushError(Current method name:C684; 54; "The \"target\" argument  must be Text or 4D.File.")
+			This:C1470._pushError(Current method name:C684; 54; "The \"target\" argument  must be Text, a Blob or 4D.File.")
 			
 			//…………………………………………………………………………………………
 	End case 

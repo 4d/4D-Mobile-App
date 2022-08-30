@@ -275,7 +275,7 @@ Function create()->$result : Object
 					
 					For each ($parameter; $actions[$i].parameters)
 						
-						If (Length:C16($parameter.defaultField)>0) && ($parameter.defaultField[[Length:C16($parameter.defaultField)]]="_")
+						If (Length:C16(String:C10($parameter.defaultField))>0) && ($parameter.defaultField[[Length:C16($parameter.defaultField)]]="_")
 							
 							$t:=Delete string:C232($parameter.defaultField; Length:C16($parameter.defaultField); 1)
 							
