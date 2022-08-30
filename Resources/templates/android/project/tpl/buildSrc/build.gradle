@@ -1,6 +1,6 @@
 buildscript {
     project.ext.set("sdkPath", "{{cache_4d_sdk_path}}")
-    ext.kotlinVersion = '1.5.31'
+    ext.kotlinVersion = '1.7.10'
 
     repositories {
         maven { url file(project.sdkPath) }
