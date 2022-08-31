@@ -1,0 +1,1 @@
+Form:C1466.combo.currentValue:=Form:C1466.dropdown.currentValue

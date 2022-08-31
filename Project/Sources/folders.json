@@ -112,12 +112,7 @@
 			"tester_net"
 		]
 	},
-	"(rgx (thread-safe))": {
-		"methods": [
-			"(_o_rgx_NO_ERROR)",
-			"(Compiler_Rgx)"
-		]
-	},
+	"(rgx (thread-safe))": {},
 	"[android]": {
 		"methods": [
 			"COMPILER_android",
@@ -386,6 +381,7 @@
 			"attention",
 			"button",
 			"comboBox",
+			"dropDown",
 			"form",
 			"formObject",
 			"group",

@@ -161,7 +161,8 @@
 					"events": [
 						"onClick"
 					],
-					"method": "ObjectMethods/Button1.4dm"
+					"method": "ObjectMethods/Button1.4dm",
+					"focusable": false
 				},
 				"tab.list": {
 					"type": "radio",
@@ -234,7 +235,8 @@
 					],
 					"dataSource": "Form:C1466.radio",
 					"dataSourceTypeHint": "boolean",
-					"radioGroup": "radio"
+					"radioGroup": "radio",
+					"focusable": false
 				},
 				"Radio Button1": {
 					"type": "radio",
@@ -248,7 +250,8 @@
 					],
 					"dataSource": "Not:C34(Form:C1466.radio)",
 					"dataSourceTypeHint": "boolean",
-					"radioGroup": "radio"
+					"radioGroup": "radio",
+					"focusable": false
 				},
 				"password": {
 					"type": "input",
@@ -291,23 +294,80 @@
 					"width": 186,
 					"height": 16
 				},
-				"ComboBox": {
+				"Combo Box": {
 					"type": "combo",
 					"left": 35,
 					"top": 473,
 					"width": 217,
-					"height": 23,
+					"height": 22,
 					"events": [
-						"onGettingFocus",
 						"onDataChange"
 					],
-					"method": "ObjectMethods/ComboBox.4dm",
-					"dataSource": "Form:C1466.combo.data"
+					"method": "ObjectMethods/Combo Box.4dm",
+					"dataSource": "Form:C1466.combo.data",
+					"dataSourceTypeHint": "object"
+				},
+				"Check Box": {
+					"type": "checkbox",
+					"text": "automaticExpand",
+					"top": 475,
+					"left": 283,
+					"width": 138,
+					"height": 18,
+					"events": [
+						"onClick"
+					],
+					"dataSourceTypeHint": "boolean",
+					"dataSource": "Form:C1466.combo.automaticExpand",
+					"method": "ObjectMethods/Check Box.4dm",
+					"focusable": false
+				},
+				"Button": {
+					"type": "button",
+					"text": "Reset",
+					"top": 499,
+					"left": 289,
+					"width": 116,
+					"height": 22,
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/Button.4dm",
+					"focusable": false
+				},
+				"Popup Dropdown List": {
+					"type": "dropdown",
+					"left": 35,
+					"top": 552,
+					"width": 217,
+					"height": 22,
+					"events": [
+						"onDataChange"
+					],
+					"focusable": false,
+					"dataSource": "Form:C1466.dropdown.data",
+					"method": "ObjectMethods/Popup Dropdown List.4dm",
+					"dataSourceTypeHint": "object"
+				},
+				"Button2": {
+					"type": "button",
+					"text": "Reset",
+					"top": 552,
+					"left": 289,
+					"width": 116,
+					"height": 22,
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/Button2.4dm",
+					"focusable": false
 				}
 			},
 			"entryOrder": [
 				"Variable2",
 				"Variable1",
+				"Combo Box",
+				"Popup Dropdown List",
 				"Variable",
 				"Button1",
 				"tab.list",
@@ -316,7 +376,9 @@
 				"Radio Button1",
 				"password",
 				"👀",
-				"ComboBox"
+				"Check Box",
+				"Button",
+				"Button2"
 			]
 		}
 	],
@@ -324,7 +386,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 95,
+	"geometryStamp": 127,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

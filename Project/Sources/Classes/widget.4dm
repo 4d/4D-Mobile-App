@@ -121,16 +121,29 @@ Function setDatasource($datasource)
 	
 	This:C1470.dataSource:=$datasource
 	
-	If (Value type:C1509($datasource)=Is object:K8:27)
-		
-		// Formula
-		This:C1470.value:=This:C1470.dataSource.call()
-		
-	Else 
-		
-		This:C1470.value:=Formula from string:C1601($datasource).call()
-		
-	End if 
+	Case of 
+			//______________________________________________________
+		: (Value type:C1509($datasource)=Is object:K8:27)
+			
+			If (Asserted:C1132(OB Instance of:C1731($datasource; 4D:C1709.Function); "datasource object is not a formula"))
+				
+				// Formula
+				This:C1470.value:=This:C1470.dataSource.call()
+				
+			End if 
+			
+			//______________________________________________________
+		: (Value type:C1509($datasource)=Is text:K8:3)
+			
+			This:C1470.value:=Formula from string:C1601($datasource).call()
+			
+			//______________________________________________________
+		Else 
+			
+			ASSERT:C1129(False:C215; "datasource must be a formula or a text formula")
+			
+			//______________________________________________________
+	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === ===
 Function setFormat($format : Text) : cs:C1710.widget
@@ -690,7 +703,7 @@ Function removeEvent($event) : cs:C1710.widget
 	// ⚠️ Could return a nil pointer if data source is an expression
 Function get pointer() : Pointer
 	
-	If (Asserted:C1132(This:C1470.assignable; "No pointer if the data source is an expression"))
+	If (This:C1470.assignable)
 		
 		return OBJECT Get pointer:C1124(Object named:K67:5; This:C1470.name)
 		

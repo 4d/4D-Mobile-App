@@ -36,4 +36,13 @@ Form:C1466.tabdetail:=cs:C1710.widget.new("tab.detail")
 Form:C1466.password:=cs:C1710.input.new("password")
 Form:C1466.password.asPassword:=True:C214
 
-Form:C1466.combo:=cs:C1710.comboBox.new("ComboBox"; New object:C1471("values"; New collection:C1472("UN"; "DEUX"; "TROIS")))
+Form:C1466.combo:=cs:C1710.comboBox.new("Combo Box"; New object:C1471(\
+"values"; New collection:C1472("apples"; "nuts"; "pears"; "oranges"; "carrots"); \
+"currentValue"; "Enter a fruit name…"; \
+"automaticExpand"; True:C214; \
+"ordered"; True:C214))
+
+Form:C1466.dropdown:=cs:C1710.dropDown.new("Popup Dropdown List"; New object:C1471(\
+"values"; New collection:C1472("apples"; "nuts"; "pears"; "oranges"; "carrots"); \
+"currentValue"; "Select…"; \
+"index"; -1))
