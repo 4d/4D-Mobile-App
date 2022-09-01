@@ -6,12 +6,7 @@ Class constructor($name : Text; $data : Object)
 	Super:C1705($name; $data)
 	
 	This:C1470._ordered:=Bool:C1537($data.ordered)
-	
-	If (Bool:C1537(This:C1470.data.automaticExpand))
-		
-		This:C1470._automaticExpandInit()
-		
-	End if 
+	This:C1470.automaticExpand:=Bool:C1537($data.automaticExpand)
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function get automaticExpand() : Boolean
@@ -124,7 +119,5 @@ Function automaticInsertion($ordered : Boolean)
 	// Set On Getting focus event, if any
 Function _automaticExpandInit()
 	
-	ARRAY LONGINT:C221($events; 1)
-	$events{1}:=On Getting Focus:K2:7
-	OBJECT SET EVENTS:C1239(*; This:C1470.name; $events; Enable events others unchanged:K42:38)
+	This:C1470.addEvent(On Getting Focus:K2:7)
 	
