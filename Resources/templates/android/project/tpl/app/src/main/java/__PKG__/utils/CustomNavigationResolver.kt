@@ -45,9 +45,8 @@ class CustomNavigationResolver : GenericNavigationResolver {
         key: String,
         query: String,
         sourceTable: String,
-        destinationTable: String,
+        relationName: String,
         parentItemId: String,
-        parentTableName: String,
         path: String
     ) {
         viewDataBinding.root.findNavController().navigate(
@@ -55,9 +54,8 @@ class CustomNavigationResolver : GenericNavigationResolver {
                 key,
                 sourceTable,
                 query,
-                destinationTable,
+                relationName,
                 parentItemId,
-                parentTableName,
                 path
             )
         )
@@ -76,7 +74,7 @@ class CustomNavigationResolver : GenericNavigationResolver {
             {{#isAlias}}
             (roomEntity as {{relation_source}}RoomEntity?)?.{{relation_name}}?.{{pathToManyWithoutFirst}}?.let {
                 val action = EntityListFragmentDirections.actionListToListRelation(
-                    destinationTable = "{{relation_target}}",
+                    relationName = relationName,
                     parentItemId = (roomEntity.__entity as EntityModel?)?.__KEY ?: "",
                     parentTableName = "{{relation_source}}",
                     path = "{{path}}",
@@ -86,7 +84,7 @@ class CustomNavigationResolver : GenericNavigationResolver {
             {{^isAlias}}
             (roomEntity as? {{relation_source}}RoomEntity?)?.{{relation_name}}?.takeIf { it.isNotEmpty() }?.let {
                 val action = EntityListFragmentDirections.actionListToListRelation(
-                    destinationTable = "{{relation_target}}",
+                    relationName = relationName,
                     parentItemId = (roomEntity.__entity as EntityModel?)?.__KEY ?: "",
                     parentTableName = "{{relation_source}}",
                     path = "{{path}}",
@@ -107,7 +105,7 @@ class CustomNavigationResolver : GenericNavigationResolver {
             {{#isAlias}}
             (roomEntity as {{relation_source}}RoomEntity?)?.{{relation_name}}?.{{pathToManyWithoutFirst}}?.let {
                 val action = EntityViewPagerFragmentDirections.actionDetailToListRelation(
-                    destinationTable = "{{relation_target}}",
+                    relationName = relationName,
                     parentItemId = (roomEntity.__entity as EntityModel?)?.__KEY ?: "",
                     parentTableName = "{{relation_source}}",
                     path = "{{path}}",
@@ -117,7 +115,7 @@ class CustomNavigationResolver : GenericNavigationResolver {
             {{^isAlias}}
             (roomEntity as? {{relation_source}}RoomEntity?)?.{{relation_name}}?.takeIf { it.isNotEmpty() }?.let {
                 val action = EntityViewPagerFragmentDirections.actionDetailToListRelation(
-                    destinationTable = "{{relation_target}}",
+                    relationName = relationName,
                     parentItemId = (roomEntity.__entity as EntityModel?)?.__KEY ?: "",
                     parentTableName = "{{relation_source}}",
                     path = "{{path}}",

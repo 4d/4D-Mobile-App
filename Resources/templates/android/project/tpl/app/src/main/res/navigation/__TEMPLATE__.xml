@@ -113,15 +113,11 @@
             app:argType="string" />
 
         <argument
-            android:name="destinationTable"
+            android:name="relationName"
             app:argType="string" />
 
         <argument
             android:name="parentItemId"
-            app:argType="string" />
-
-      <argument
-            android:name="parentTableName"
             app:argType="string" />
 
         <argument
@@ -176,7 +172,7 @@
             app:popExitAnim="@anim/slide_out_right" />
 
         <argument
-            android:name="destinationTable"
+            android:name="relationName"
             app:argType="string" />
 
         <argument
