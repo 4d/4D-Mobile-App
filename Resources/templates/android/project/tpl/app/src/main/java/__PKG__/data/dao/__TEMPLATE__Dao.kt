@@ -15,8 +15,8 @@ import androidx.room.RawQuery
 import androidx.room.Transaction
 import androidx.sqlite.db.SupportSQLiteQuery
 import com.qmobile.qmobiledatastore.dao.BaseDao
-import {{package}}.data.model.entity.{{tableName}}RoomEntity
 import {{package}}.data.model.entity.{{tableName}}
+import {{package}}.data.model.entity.{{tableName}}RoomEntity
 
 @Dao
 abstract class {{tableName}}Dao :

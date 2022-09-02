@@ -18,8 +18,9 @@ class EntityListFragment{{tableName}}(private val binding: ViewDataBinding) : Cu
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         (binding as? FragmentListBinding)?.let {
             for (i in 0 until binding.fragmentListRecyclerView.itemDecorationCount) {
-                if (binding.fragmentListRecyclerView.getItemDecorationAt(i) is DividerItemDecoration)
+                if (binding.fragmentListRecyclerView.getItemDecorationAt(i) is DividerItemDecoration) {
                     binding.fragmentListRecyclerView.removeItemDecorationAt(i)
+                }
             }
         }
     }

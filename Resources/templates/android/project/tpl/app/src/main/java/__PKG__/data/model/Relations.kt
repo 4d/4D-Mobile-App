@@ -11,8 +11,8 @@ import androidx.room.Relation
 {{#tableNames}}
 import {{package}}.data.model.entity.{{name}}
 {{/tableNames}}
-
 {{#relations_embedded_return_type}}
+
 data class {{className}}(
     @Embedded val {{relation_source_camelCase}}: {{relation_source}},
     @Relation(
@@ -33,5 +33,4 @@ data class {{className}}(
     val {{relation_part_name}}: {{relation_embedded_return_type}}? = null
     {{/firstIsToMany}}
 )
-
 {{/relations_embedded_return_type}}
