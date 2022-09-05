@@ -1,7 +1,7 @@
 //%attributes = {}
 var $group; $space : Text
-var $bottom; $height; $left; $right; $screen; $top : Integer
-var $width : Integer
+var $bottom; $height; $left; $maxHeight; $maxWidth; $right : Integer
+var $screen; $top; $width : Integer
 var $svg : cs:C1710.svg
 
 $svg:=cs:C1710.svg.new()\
