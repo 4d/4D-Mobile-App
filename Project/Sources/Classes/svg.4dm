@@ -1239,6 +1239,48 @@ Function setAttributes($attributes : Variant; $value : Variant; $applyTo) : cs:C
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
+Function viewbox($left; $top : Real; $width : Real; $height : Real; $applyTo) : cs:C1710.svg
+	
+	var $name; $node; $viewbox : Text
+	var $c : Collection
+	
+	If (Count parameters:C259>=5)
+		
+		$node:=This:C1470._getTarget($applyTo)
+		
+	Else 
+		
+		$node:=This:C1470._getTarget("root")
+		
+	End if 
+	
+	DOM GET XML ELEMENT NAME:C730($node; $name)
+	
+	$c:=New collection:C1472("svg"; "symbol"; "marker"; "pattern"; "view")
+	
+	If ($c.indexOf($name)#-1)
+		
+		If (Value type:C1509($left)=Is text:K8:3)
+			
+			$viewbox:=$left
+			
+		Else 
+			
+			$viewbox:=String:C10(Num:C11($left); "&xml")+" "+String:C10($top; "&xml")+" "+String:C10($width; "&xml")+" "+String:C10($height; "&xml")
+			
+		End if 
+		
+		Super:C1706.setAttribute($node; "viewbox"; $viewbox)
+		
+	Else 
+		
+		ASSERT:C1129(False:C215; Current method name:C684+": The element must be \""+$c.join("\", ")+"\"")
+		
+	End if 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
 Function id($id : Text; $applyTo) : cs:C1710.svg
 	
 	var $node : Text
@@ -3308,6 +3350,24 @@ Function getTextHeight($string : Text; $fontAttributes : Object)->$height : Inte
 		$o.font($fontAttributes)
 		
 	End if 
+	
+	//———————————————————————————————————————————————————————————
+Function setText($text : Text; $applyTo)
+	
+	var $node : Text
+	
+	If (Count parameters:C259>=2)
+		
+		$node:=This:C1470._getTarget(String:C10($applyTo))
+		
+	Else 
+		
+		$node:=This:C1470._getTarget()
+		
+	End if 
+	
+	DOM SET XML ELEMENT VALUE:C868($node; "")
+	$node:=DOM Append XML child node:C1080($node; XML DATA:K45:12; $text)
 	
 	//MARK:-PRIVATES
 	//———————————————————————————————————————————————————————————

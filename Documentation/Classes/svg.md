@@ -104,6 +104,7 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**symbol** ( name : `Text` {; applyTo } ) → `cs.svg` | To define a symbol
 |.**use** ( symbol : `Text` {; attachTo } ) → `cs.svg` | To place an occurence of a symbol
 |.**styleSheet** ( file : `4D.File` ) → `cs.svg` | Attach a style sheet
+|.**viewbox** ( left : `Real`; top : `Real` ; width : `Real` ; height : `Real` {; attachTo } ) → `cs.svg` | Sets the `viewBox` attribute of an SVG viewport.
 
 \* After the execution,`.root`is null but `.graphic` & `.xml` are always available
 
@@ -126,6 +127,7 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**show** ( { applyTo } ) → `cs.svg` | Make visible
 |.**hide** ( { applyTo } ) → `cs.svg` | Make invisible
 |.**setValue** ( value : `Text` {; applyTo }{; CDATA : `Boolean` } ) → `cs.svg` | Sets the element value
+|.**setText** ( text : `Text` {; applyTo } )| To set the text value of a `text` or a `textArea`
 |.**attachTo** ( parent : `Text` ) → `cs.svg` | Adds item to parent item
 |.**clone** ( source : `Text` {; attachTo} ) → `cs.svg` |To create a copy of a svg object
 |.**addClass** ( class : `Text` {; applyTo} ) → `cs.svg` | Add a value to the node class
