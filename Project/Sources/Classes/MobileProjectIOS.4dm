@@ -596,7 +596,7 @@ Function _generateTemplates($out : Object; $tags : Object)
 	If ($project._folder#Null:C1517)
 		$template.assets.source:=This:C1470.project._folder.folder($template.assets.name).platformPath
 	End if 
-	If ($template.assets.source=Null:C1517 || Not:C34(Folder:C1567($template.assets.source; fk platform path:K87:2).exists))
+	If (($template.assets.source=Null:C1517) || Not:C34(Folder:C1567($template.assets.source; fk platform path:K87:2).exists))
 		// expected path for mobile project file
 		$template.assets.source:=This:C1470.paths.projects().folder(This:C1470.productName).folder($template.assets.name).platformPath
 	End if 
