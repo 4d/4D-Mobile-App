@@ -627,7 +627,7 @@ Function toList($refPtr : Pointer; $xpath : Text; $root : Text) : Integer
 					If ($name#"")
 						
 						APPEND TO LIST:C376($list; $name; $ref)
-						SET LIST ITEM PARAMETER:C986($list; 0; "Value"; $value)
+						SET LIST ITEM PARAMETER:C986($list; 0; "value"; This:C1470._convert($value))
 						SET LIST ITEM PARAMETER:C986($list; 0; "dom"; $root)
 						
 						For ($i; 1; $count; 1)
