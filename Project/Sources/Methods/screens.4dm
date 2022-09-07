@@ -1,7 +1,7 @@
 //%attributes = {}
 var $group; $space : Text
-var $bottom; $height; $left; $maxHeight; $maxWidth; $right : Integer
-var $screen; $top; $width : Integer
+var $bottom; $height; $left; $maxBottom; $maxRight; $minLeft : Integer
+var $minTop; $right; $screen; $top; $width : Integer
 var $svg : cs:C1710.svg
 
 $svg:=cs:C1710.svg.new()\
@@ -11,22 +11,23 @@ $svg:=cs:C1710.svg.new()\
 .fontSize(36)\
 .fontStyle(Bold:K14:2)
 
-$maxWidth:=0
-$maxHeight:=0
+$minLeft:=0
+$minTop:=0
+$maxRight:=0
+$maxBottom:=0
 
 For ($screen; 1; Count screens:C437; 1)
 	
 	SCREEN COORDINATES:C438($left; $top; $right; $bottom; $screen)
 	
+	$minLeft:=$left<$minLeft ? $left : $minLeft
+	$minTop:=$top<$minTop ? $top : $minTop
+	
+	$maxRight:=$right>$maxRight ? $right : $maxRight
+	$maxBottom:=$bottom>$maxBottom ? $bottom : $maxBottom
+	
 	$width:=$right-$left
 	$height:=$bottom-$top
-	
-	$maxWidth+=$width
-	If ($height>$maxHeight)
-		
-		$maxHeight:=$height
-		
-	End if 
 	
 	$group:="screen_"+String:C10($screen)
 	$svg.group($group; "root")
@@ -79,9 +80,15 @@ For ($screen; 1; Count screens:C437; 1)
 		.fontStyle(Plain:K14:1)\
 		.alignment(Align center:K42:3)
 	
+	$svg.text("left "+String:C10($left)+", top "+String:C10($top)+", right "+String:C10($right)+", bottom "+String:C10($bottom); $group)\
+		.position($left+($width/2)-48; $top+($height/2))\
+		.fontSize(48)\
+		.fontStyle(Plain:K14:1)\
+		.alignment(Align center:K42:3)
+	
 End for 
 
-$svg.viewbox(0; 0; $maxWidth; $maxHeight)
-$svg.setAttributes(New object:C1471("width"; $maxWidth; "height"; $maxHeight); $svg._getTarget("root"))
+$svg.viewbox($minLeft; $minTop; $maxRight-$minLeft; $maxBottom-$minTop)
+$svg.translate((Abs:C99($minLeft)+20)*0.25; (Abs:C99($minTop)+20)*0.25; "root")
 
 $svg.preview()
