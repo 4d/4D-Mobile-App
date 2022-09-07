@@ -47,6 +47,7 @@ Function aliasPath($tableName : Text; $alias : Object; $recursive : Boolean)->$r
 			"path"; $path; \
 			"from"; $sourceDataClass.name)
 		$result.paths.push($pathElement)
+		$result.field:=$destination
 		
 		If ($destination.relatedDataClass#Null:C1517)  // Is relatedDataClass filled for alias? like destination field
 			
@@ -66,8 +67,9 @@ Function aliasPath($tableName : Text; $alias : Object; $recursive : Boolean)->$r
 		If (String:C10($result.field.kind)="alias")  // Maybe an alias too
 			
 			var $rs : Object
-			$rs:=This:C1470.aliasPath($previousDataClass; $result.field; True:C214)
+			$rs:=This:C1470.aliasPath($previousDataClass.name; $result.field; True:C214)
 			
+			$result.paths.pop()
 			$result.paths.combine($rs.paths)
 			$result.field:=$rs
 			

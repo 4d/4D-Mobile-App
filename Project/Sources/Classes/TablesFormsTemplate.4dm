@@ -13,6 +13,8 @@ Function doRun()->$Obj_out : Object
 	$Obj_in:=This:C1470.input
 	$Obj_template:=This:C1470.template
 	
+	This:C1470.catalog:=cs:C1710.CatalogBuildWrapper.new($Obj_in.project.getCatalog())
+	
 	// Manage root templates for all tables forms according to user choice
 	// Get the user choice information
 	$Obj_userChoice:=$Obj_in.project[String:C10($Obj_template.userChoiceTag)]  // list or detail from project
@@ -214,7 +216,11 @@ Function doRun()->$Obj_out : Object
 							
 							$Obj_field.nameOrPath:=$Obj_field.name
 							If (Feature.with("alias") && ($Obj_field.path#Null:C1517))
-								$Obj_field.nameOrPath:=$Obj_field.path
+								If (PROJECT.isAlias($Obj_field))
+									$Obj_field.nameOrPath:=This:C1470.catalog.aliasPath($Obj_table.originalName; $Obj_field; True:C214).path
+								Else 
+									$Obj_field.nameOrPath:=$Obj_field.path
+								End if 
 							End if 
 							
 							$tmpTableModel:=$Obj_tableModel[$Obj_field.nameOrPath]
