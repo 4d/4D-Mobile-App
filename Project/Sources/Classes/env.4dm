@@ -1,3 +1,5 @@
+//USE: envScreens
+
 Class constructor
 	
 	This:C1470.machineName:=Current machine:C483

@@ -1,7 +1,7 @@
 //%attributes = {}
 var $group; $space : Text
-var $bottom; $height; $left; $maxBottom; $maxRight; $minLeft : Integer
-var $minTop; $right; $screen; $top; $width : Integer
+var $bottom; $height; $left; $maxBottom; $maxRight; $midHeight : Integer
+var $minLeft; $minTop; $right; $screen; $top; $width : Integer
 var $svg : cs:C1710.svg
 
 $svg:=cs:C1710.svg.new()\
@@ -11,18 +11,12 @@ $svg:=cs:C1710.svg.new()\
 .fontSize(36)\
 .fontStyle(Bold:K14:2)
 
-$minLeft:=0
-$minTop:=0
-$maxRight:=0
-$maxBottom:=0
-
 For ($screen; 1; Count screens:C437; 1)
 	
 	SCREEN COORDINATES:C438($left; $top; $right; $bottom; $screen)
 	
 	$minLeft:=$left<$minLeft ? $left : $minLeft
 	$minTop:=$top<$minTop ? $top : $minTop
-	
 	$maxRight:=$right>$maxRight ? $right : $maxRight
 	$maxBottom:=$bottom>$maxBottom ? $bottom : $maxBottom
 	
@@ -37,7 +31,7 @@ For ($screen; 1; Count screens:C437; 1)
 		.fillColor("white")\
 		.strokeColor("blue")
 	
-	If ($width=Screen width:C187) && ($height=Screen height:C188)  // Main screen
+	If ($screen=Menu bar screen:C441)  // Main screen
 		
 		$svg.rect($width; 65; $group)\
 			.position($left; $top)\
@@ -68,23 +62,41 @@ For ($screen; 1; Count screens:C437; 1)
 		
 	End if 
 	
+	$midHeight:=$top+($height/2)
+	
 	$svg.text(String:C10($screen); $group)\
-		.position($left+($width/2)-48; $top+($height/2)-256)\
+		.position($left+($width/2)-48; $midHeight-256)\
 		.fontSize(96*2)\
 		.fillColor("blue")\
 		.alignment(Align center:K42:3)
 	
-	$svg.text(String:C10($width)+"px x "+String:C10($height)+"px"; $group)\
-		.position($left+($width/2)-48; $top+($height/2)-80)\
+	$svg.text("Resolution: "+String:C10($width)+" x "+String:C10($height); $group)\
+		.position($left+($width/2)-48; $midHeight-80)\
 		.fontSize(72)\
 		.fontStyle(Plain:K14:1)\
+		.color("black")\
 		.alignment(Align center:K42:3)
 	
 	$svg.text("left "+String:C10($left)+", top "+String:C10($top)+", right "+String:C10($right)+", bottom "+String:C10($bottom); $group)\
-		.position($left+($width/2)-48; $top+($height/2))\
+		.position($left+($width/2)-48; $midHeight)\
 		.fontSize(48)\
 		.fontStyle(Plain:K14:1)\
 		.alignment(Align center:K42:3)
+	
+	//SCREEN DEPTH($depth; $color; $screen)
+	//If (Bool($color))
+	//$svg.text("Color"; $group)\
+				.position($left+($width/2)-48; $midHeight+60)\
+				.fontSize(48)\
+				.fontStyle(Plain)\
+				.alignment(Align center)
+	// Else
+	//$svg.text("Gray scale"; $group)\
+				.position($left+($width/2)-48; $midHeight+60)\
+				.fontSize(48)\
+				.fontStyle(Plain)\
+				.alignment(Align center)
+	// End if
 	
 End for 
 
