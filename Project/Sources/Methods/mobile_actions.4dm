@@ -16,6 +16,8 @@ var $action; $parameter; $manifest; $dataModel : Object
 var $hasImage; $isObject : Boolean
 var $format : Variant/*Text or Object*/
 var $folder; $formatFolder : 4D:C1709.Folder
+var $formatFile : 4D:C1709.File
+var $formatZipFolder : 4D:C1709.ZipFolder
 var $formats : Collection
 
 
@@ -112,9 +114,19 @@ Case of
 			Case of 
 				: (Value type:C1509($format)=Is text:K8:3)
 					$formatFolder:=$folder.folder(Substring:C12($format; 2))
-					$manifest:=ob_parseFile($formatFolder.file("manifest.json")).value
+					Case of 
+						: ($formatFolder.exists)
+							$manifest:=ob_parseFile($formatFolder.file("manifest.json")).value
+						: (Feature.with("inputControlArchive") && $folder.file(Substring:C12($format; 2)+".zip").exists)
+							ASSERT:C1129(Not:C34(dev_Matrix); "We must not be in text format anymore, we must have manifest object with all info")
+							$manifest:=ob_parseFile(ZIP Read archive:C1637($folder.file(Substring:C12($format; 2)+".zip")).root.file("manifest.json")).value
+						Else 
+							$manifest:=New object:C1471
+							ASSERT:C1129(Not:C34(dev_Matrix); "Not able to find format with its name using folder. Use manifest object instead")
+					End case 
+					
 				: (Value type:C1509($format)=Is object:K8:27)
-					$formatFolder:=$format.folder
+					//$formatFolder:=$format.folder
 					$manifest:=$format
 				Else 
 					$manifest:=New object:C1471
@@ -327,6 +339,9 @@ Case of
 								If ($manifest=Null:C1517)
 									// clean must be obsolete if not needed
 									$manifest:=ob_parseFile(cs:C1710.path.new().hostInputControls().folder($format).file("manifest.json")).value
+									If (Feature.with("inputControlArchive"))
+										$manifest:=ob_parseFile(ZIP Read archive:C1637(cs:C1710.path.new().hostInputControls().file($format+".zip")).root.file("manifest.json")).value
+									End if 
 								End if 
 								If ($manifest#Null:C1517)
 									
@@ -486,6 +501,26 @@ Case of
 					End if 
 				End if 
 			End for each 
+			If (Feature.with("inputControlArchive"))
+				For each ($formatFile; $folder.files())
+					If ($formatFile.extension=".zip")
+						
+						$formatZipFolder:=ZIP Read archive:C1637($formatFile).root
+						$manifest:=ob_parseFile($formatZipFolder.file("manifest.json")).value
+						
+						If ($manifest#Null:C1517)
+							$manifest.folder:=$formatFile
+							$manifest.isHost:=True:C214
+							$manifest.isArchive:=True:C214
+							If (Value type:C1509($manifest.name)=Is text:K8:3)
+								$Obj_out.inputControls[$manifest.name]:=$manifest
+							End if 
+						End if 
+					End if 
+					
+				End for each 
+				
+			End if 
 		End if 
 		
 		$Obj_out.success:=True:C214
@@ -517,18 +552,21 @@ Case of
 								If ($manifest=Null:C1517)
 									$formatFolder:=$folder.folder($format)
 									$manifest:=ob_parseFile($formatFolder.file("manifest.json")).value
-									If ($manifest#Null:C1517)
-										$manifest.folder:=$formatFolder
-									End if 
+									Case of 
+										: ($manifest#Null:C1517)
+											$manifest.folder:=$formatFolder
+										: ((Feature.with("inputControlArchive")) && ($folder.file($format+".zip").exists))
+											$manifest.folder:=ZIP Read archive:C1637($folder.file($format+".zip")).root
+									End case 
 								End if 
-								
-								If ($manifest#Null:C1517)
-									$Obj_out.formats.push($manifest)
-								End if 
-								$manifest:=Null:C1517
-							Else 
-								$Obj_out.formats.push($parameter.format)
 							End if 
+							
+							If ($manifest#Null:C1517)
+								$Obj_out.formats.push($manifest)
+							End if 
+							$manifest:=Null:C1517
+						Else 
+							$Obj_out.formats.push($parameter.format)
 						End if 
 					End for each 
 				End if 

@@ -127,6 +127,8 @@ Feature.wip("newFormatterChoiceList")  // Menu to create formatter choice list d
 Feature.wip("taskIndicator")  // UI for background tasks executing
 Feature.wip("DataSourceClass")  // Work with DataSource class class to test the data source
 Feature.wip("buildWithCmd")  // Allow to build using cmd only
+Feature.wip("inputControlWithCodeAndroid")  // Allow to use inputControl with code, feature by azure:3862 [Android] Input controls with Kotlin code
+Feature.wip("inputControlArchive")  // Allow to use zip for inputControl, as requested by azure:5424 The mobile project shall support a zip format for input control with Android and iOS.
 
 // Mark:-👨‍💻 Eric
 $c:=New collection:C1472("emarchand"; "phimage")
