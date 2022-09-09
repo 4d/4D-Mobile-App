@@ -37,6 +37,7 @@ Class constructor($project : Object)
 	This:C1470.project.hasRelations:=True:C214
 	This:C1470.project.hasActions:=True:C214
 	This:C1470.project.hasDataSet:=Feature.with("androidDataSet")
+	This:C1470.project.hasOpenUrlAction:=Feature.with("openURLAction")
 	
 	This:C1470.project.debugMode:=((Shift down:C543) && (Bool:C1537(dev_Matrix)=True:C214)) ? True:C214 : False:C215
 	
