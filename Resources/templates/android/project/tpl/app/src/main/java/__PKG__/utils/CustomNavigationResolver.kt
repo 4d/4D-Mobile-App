@@ -230,4 +230,26 @@ class CustomNavigationResolver : GenericNavigationResolver {
             SettingsFragmentDirections.toPendingTasks(tableName = tableName, currentItemId = currentItemId)
         )
     }
+
+    /**
+     * Navigates to ActionWebViewFragment
+     */
+    override fun navigateToActionWebView(
+        viewDataBinding: ViewDataBinding, 
+        path: String, 
+        actionName: String, 
+        actionLabel: String?, 
+        actionShortLabel: String?, 
+        base64EncodedContext: String
+    ) {
+        viewDataBinding.root.findNavController().navigate(
+            EntityListFragmentDirections.toActionWebView(
+                path = path,
+                actionName = actionName,
+                actionLabel = actionLabel ?: "",
+                actionShortLabel = actionShortLabel ?: "",
+                base64EncodedContext = base64EncodedContext
+            )
+        )
+    }
 }
