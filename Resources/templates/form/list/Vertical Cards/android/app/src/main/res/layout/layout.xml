@@ -12,82 +12,92 @@
 
     <!-- Generated with list form template named "Vertical Cards" -->
 
-    <com.google.android.material.card.MaterialCardView
-        style="?attr/materialCardViewElevatedStyle"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_gravity="center"
-        android:layout_marginHorizontal="8dp"
-        android:layout_marginVertical="4dp">
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="4dp"
+        android:paddingHorizontal="8dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.card.MaterialCardView
+            style="?attr/materialCardViewElevatedStyle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="400dp"
+            android:layout_gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/___SPECIFIC_ID_1___"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:contentDescription="Image"
-                android:elevation="4dp"
-                android:scaleType="centerCrop"
-                app:imageUrl="___IMAGE_1___"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:background="@tools:sample/avatars" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:background="@drawable/gradient_top_to_bottom"
-                android:elevation="4dp"
-                app:layout_constraintBottom_toBottomOf="@+id/___SPECIFIC_ID_1___"
-                app:layout_constraintEnd_toEndOf="@+id/___SPECIFIC_ID_1___"
-                app:layout_constraintStart_toStartOf="@+id/___SPECIFIC_ID_1___"
-                app:layout_constraintTop_toTopOf="@+id/___SPECIFIC_ID_1___" />
+                <ImageView
+                    android:id="@+id/___SPECIFIC_ID_1___"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:contentDescription="Image"
+                    android:elevation="4dp"
+                    android:scaleType="centerCrop"
+                    app:imageUrl="___IMAGE_1___"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:background="@tools:sample/avatars" />
 
-            <TextView
-                android:id="@+id/___SPECIFIC_ID_2___"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:elevation="4dp"
-                android:maxLines="2"
-                android:scrollbars="none"
-                android:text="___TEXT_2___"
-                android:textAlignment="textStart"
-                android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-                android:textColor="@android:color/white"
-                app:layout_constraintBottom_toTopOf="@id/___SPECIFIC_ID_3___"
-                app:layout_constraintStart_toStartOf="@+id/___SPECIFIC_ID_1___"
-                app:layout_constraintTop_toTopOf="@+id/___SPECIFIC_ID_1___"
-                tools:text="My field 2" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/gradient_top_to_bottom"
+                    android:elevation="4dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/___SPECIFIC_ID_1___"
+                    app:layout_constraintEnd_toEndOf="@+id/___SPECIFIC_ID_1___"
+                    app:layout_constraintStart_toStartOf="@+id/___SPECIFIC_ID_1___"
+                    app:layout_constraintTop_toTopOf="@+id/___SPECIFIC_ID_1___" />
 
-            <TextView
-                android:id="@+id/___SPECIFIC_ID_3___"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:elevation="4dp"
-                android:maxLines="2"
-                android:scrollbars="none"
-                android:text="___TEXT_3___"
-                android:textAlignment="textStart"
-                android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-                android:textColor="@android:color/white"
-                app:layout_constraintStart_toStartOf="@+id/___SPECIFIC_ID_1___"
-                app:layout_constraintTop_toBottomOf="@+id/___SPECIFIC_ID_2___"
-                tools:text="My field 3" />
+                <TextView
+                    android:id="@+id/___SPECIFIC_ID_2___"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:elevation="4dp"
+                    android:maxLines="2"
+                    android:scrollbars="none"
+                    android:text="___TEXT_2___"
+                    android:textAlignment="textStart"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                    android:textColor="@android:color/white"
+                    app:layout_constraintBottom_toTopOf="@id/___SPECIFIC_ID_3___"
+                    app:layout_constraintStart_toStartOf="@+id/___SPECIFIC_ID_1___"
+                    app:layout_constraintTop_toTopOf="@+id/___SPECIFIC_ID_1___"
+                    tools:text="My field 2" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/___SPECIFIC_ID_3___"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:elevation="4dp"
+                    android:maxLines="2"
+                    android:scrollbars="none"
+                    android:text="___TEXT_3___"
+                    android:textAlignment="textStart"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                    android:textColor="@android:color/white"
+                    app:layout_constraintStart_toStartOf="@+id/___SPECIFIC_ID_1___"
+                    app:layout_constraintTop_toBottomOf="@+id/___SPECIFIC_ID_2___"
+                    tools:text="My field 3" />
 
-    </com.google.android.material.card.MaterialCardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
