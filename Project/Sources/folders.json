@@ -112,7 +112,6 @@
 			"tester_net"
 		]
 	},
-	"(rgx (thread-safe))": {},
 	"[android]": {
 		"methods": [
 			"COMPILER_android",
@@ -970,9 +969,5 @@
 			"test_xml"
 		]
 	},
-	"trash": {
-		"groups": [
-			"(rgx (thread-safe))"
-		]
-	}
+	"trash": {}
 }

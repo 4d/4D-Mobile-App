@@ -46,10 +46,12 @@ Thumbs.db
 DEV/
 Project/Sources/DatabaseMethods/onMobileAppAction.4dm
 Project/Sources/DatabaseMethods/onMobileAppAuthentication.4dm
+Project/Sources/DatabaseMethods/onWebConnection.4dm
 Project/Trash/
 Resources/php.ini
 Resources/images/library/
 Resources/sdk
+Resources/sdk/ios.zip
 sdk
 Resources/templates.zip
 Resources/mobile
