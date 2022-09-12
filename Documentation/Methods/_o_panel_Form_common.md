@@ -1,1 +1,0 @@
-﻿<!----------------------------------------------------Long Integer := panel_Form_common ( Param_1 ; … ; N ) -> Param_1 ; … ; N (Long Integer)-->Long Integer := panel_Form_common ( Param_1 ; … ; N )

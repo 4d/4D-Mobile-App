@@ -1,1 +1,0 @@
-﻿<!----------------------------------------------------Long Integer := VIEWS_OBJECTS_HANDLER-->Long Integer := VIEWS_OBJECTS_HANDLER

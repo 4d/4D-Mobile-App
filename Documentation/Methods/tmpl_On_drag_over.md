@@ -1,1 +1,0 @@
-﻿<!----------------------------------------------------Long Integer := tmpl_On_drag_over-->Long Integer := tmpl_On_drag_over

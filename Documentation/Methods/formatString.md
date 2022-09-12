@@ -1,1 +1,0 @@
-﻿<!----------------------------------------------------formated := formatString ( format ; string ) -> format (Text) -> string (Text) <- formated (Text)-->formated := formatString ( selector ; stringToFormat )

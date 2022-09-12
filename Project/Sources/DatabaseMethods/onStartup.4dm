@@ -43,4 +43,7 @@ If (Not:C34(Is compiled mode:C492))
 		EXECUTE METHOD:C1007("quickOpenPushAction"; *; $o)
 		
 	End if 
+	
+	checkGitBranch
+	
 End if 

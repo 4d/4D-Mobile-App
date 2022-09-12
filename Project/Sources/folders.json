@@ -49,6 +49,7 @@
 			"_NEW_MOBILE_PROJECT",
 			"_OPEN_MOBILE_PROJECT",
 			"01_LASTBUILD",
+			"checkGitBranch",
 			"dev_test_android",
 			"dev_tests_iOS",
 			"oops"
@@ -183,7 +184,6 @@
 			"Process_tags_on_file",
 			"Rest",
 			"sdk",
-			"template",
 			"unzip"
 		],
 		"classes": [
@@ -312,7 +312,6 @@
 			"project_Defaults",
 			"project_Fix",
 			"PROJECT_FORM_CALLBACK",
-			"PROJECT_Handler",
 			"PROJECT_OBJECT_HANDLER",
 			"PROJECT_ON_ACTIVATE",
 			"project_PROCESS_MESSAGES",
@@ -530,7 +529,6 @@
 		],
 		"methods": [
 			"COMPILER_views",
-			"VIEWS_Handler",
 			"views_LAYOUT_PICKER",
 			"VIEWS_OBJECTS_HANDLER"
 		],

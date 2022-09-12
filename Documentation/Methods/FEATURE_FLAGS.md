@@ -1,1 +1,0 @@
-﻿<!----------------------------------------------------FEATURE_FLAGS ( stable_version ; preferences ) -> stable_version (Long Integer) -> preferences (Object)-->FEATURE_FLAGS ( mainVersion )

@@ -1,1 +1,0 @@
-﻿<!----------------------------------------------------e := panel_Form ( Param_1 ; … ; N ) -> Param_1 ; … ; N (Long Integer) <- e (Object)-->e := panel_Form ( Param_1 ; … ; N )
