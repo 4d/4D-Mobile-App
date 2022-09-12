@@ -292,7 +292,7 @@ If (OB Is empty:C1297(SHARED)) | $reset
 End if 
 
 // MARK:-FEATURES FLAGS
-var Feature : cs:C1710.feature
+var Feature : cs:C1710.Feature
 If (OB Is empty:C1297(Feature)) | $reset
 	
 	var $version : Integer

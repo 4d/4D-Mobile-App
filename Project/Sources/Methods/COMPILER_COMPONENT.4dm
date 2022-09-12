@@ -6,7 +6,7 @@ var Database : cs:C1710.database
 var Logger : cs:C1710.logger
 var Component : cs:C1710.component
 
-var Feature : cs:C1710.feature  // Feature flags
+var Feature : cs:C1710.Feature  // Feature flags
 
 var SHARED : Object  // Common values
 

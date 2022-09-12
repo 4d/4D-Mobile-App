@@ -354,7 +354,7 @@
 			"doc",
 			"env",
 			"error",
-			"feature",
+			"Feature",
 			"http",
 			"lep",
 			"logger",

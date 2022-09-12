@@ -3,7 +3,7 @@
 
 var $c : Collection
 
-Feature:=cs:C1710.feature.new($version; $file)
+Feature:=cs:C1710.Feature.new($version; $file)
 
 If (True:C214)  // DELIVERED
 	
