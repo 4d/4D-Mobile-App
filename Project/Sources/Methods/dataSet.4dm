@@ -737,11 +737,11 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 					"action"; "path"; \
 					"project"; $in.project)).path
 				
-				$pathname:=asset(New object:C1471("action"; "path"; "path"; $in.path)).path+"Catalog"
+				$folder:=asset(New object:C1471("action"; "path"; "path"; $in.path)).path.folder("Catalog")
 				
-				If (Folder:C1567($pathname; fk platform path:K87:2).exists)
+				If ($folder.exists)
 					
-					For each ($file; Folder:C1567($pathname; fk platform path:K87:2).files())
+					For each ($file; $folder.files())
 						
 						If (Position:C15(".catalog.json"; $file.fullName)>0)
 							

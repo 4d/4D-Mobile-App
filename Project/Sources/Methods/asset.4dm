@@ -7,13 +7,15 @@
 // Description: Create, Edit Xcode asset
 // ----------------------------------------------------
 // Declarations
-C_BOOLEAN:C305($Boo_)
-C_LONGINT:C283($Lon_height; $Lon_i; $Lon_parameters; $Lon_scale; $Lon_width)
-C_PICTURE:C286($Pic_buffer; $Pic_icon)
-C_TEXT:C284($Dir_source; $File_source; $Txt_buffer; $Txt_name; $Txt_value)
-C_OBJECT:C1216($Obj_; $Obj_buffer; $Obj_file; $Obj_formatter; $Obj_image; $Obj_in)
-C_OBJECT:C1216($Obj_out; $Obj_path; $Obj_template)
-C_OBJECT:C1216($Folder_buffer)
+var $Boo_ : Boolean
+var $Lon_height; $Lon_i; $Lon_parameters; $Lon_scale; $Lon_width : Integer
+var $Pic_buffer; $Pic_icon : Picture
+var $Dir_source; $File_source; $Txt_buffer; $Txt_name; $Txt_value : Text
+var $Obj_; $Obj_buffer; $Obj_file; $Obj_formatter; $Obj_image; $Obj_in : Object
+var $Obj_out; $Obj_path; $Obj_template : Object
+var $Folder_buffer : Object
+var $target; $path; $source : 4D:C1709.Folder
+var $contentsFile : 4D:C1709.File
 
 If (False:C215)
 	C_OBJECT:C1216(asset; $0)
@@ -45,7 +47,7 @@ End if
 If (($Obj_in.path=Null:C1517)\
  & ($Obj_in.posix#Null:C1517))
 	
-	$Obj_in.path:=Convert path POSIX to system:C1107($Obj_in.posix)
+	$Obj_in.path:=Folder:C1567($Obj_in.posix; fk posix path:K87:1)
 	
 End if 
 
@@ -57,24 +59,34 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 			// MARK:- path
 		: ($Obj_in.action="path")
 			
-			$Txt_buffer:="Resources"+Folder separator:K24:12+"Assets.xcassets"+Folder separator:K24:12
-			
 			Case of 
 					
 					//----------------------------------------
-				: (Length:C16(String:C10($Obj_in.path))=0)
+				: ($Obj_in.path=Null:C1517)
 					
-					$Obj_out.path:=$Txt_buffer
+					If (Bool:C1537($Obj_in.posixForce))  // to use if possible by caller
+						$Obj_out.path:="Resources/Assets.xcassets"
+					Else 
+						$Obj_out.path:="Resources"+Folder separator:K24:12+"Assets.xcassets"+Folder separator:K24:12
+					End if 
+					//ASSERT(Not(dev_Matrix); "no path provided by asset?")
 					
 					//----------------------------------------
-				: (Substring:C12($Obj_in.path; Length:C16($Obj_in.path); 1)=Folder separator:K24:12)
+				: ((Value type:C1509($Obj_in.path)=Is text:K8:3) && (Length:C16(String:C10($Obj_in.path))=0))
 					
-					$Obj_out.path:=$Obj_in.path+$Txt_buffer
+					$Obj_out.path:="Resources"+Folder separator:K24:12+"Assets.xcassets"+Folder separator:K24:12
+					ASSERT:C1129(Not:C34(dev_Matrix); "empty path provided by asset?")
 					
 					//----------------------------------------
-				Else 
+				: ((Value type:C1509($Obj_in.path)=Is text:K8:3))
 					
-					$Obj_out.path:=$Obj_in.path+Folder separator:K24:12+$Txt_buffer
+					$Obj_out.path:=Folder:C1567($Obj_in.path; fk platform path:K87:2).folder("Resources/Assets.xcassets")
+					
+					//----------------------------------------
+				Else   // expect object 4D.folder
+					ASSERT:C1129(OB Instance of:C1731($Obj_in.path; 4D:C1709.Folder); "asset path not a 4D.Folder")
+					
+					$Obj_out.path:=$Obj_in.path.folder("Resources/Assets.xcassets")
 					
 					//----------------------------------------
 			End case 
@@ -84,6 +96,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 			// MARK:- formatter
 		: ($Obj_in.action="formatter") | ($Obj_in.action="input")
 			
+			// Check errors
 			Case of 
 					
 					//----------------------------------------
@@ -97,19 +110,44 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 					$Obj_out.errors:=New collection:C1472("No formatter name defined."+JSON Stringify:C1217($Obj_in.formatter))
 					
 					//----------------------------------------
-				: (Length:C16(String:C10($Obj_in.target))=0)
+				: ($Obj_in.target=Null:C1517)
 					
 					$Obj_out.errors:=New collection:C1472("No target defined when creating formatter asset.")
 					
 					//----------------------------------------
-				Else 
+				: (Value type:C1509($Obj_in.target)=Is text:K8:3 && (Length:C16(String:C10($Obj_in.target))=0))
 					
-					If (Not:C34(Folder:C1567($Obj_in.target+$Obj_in.formatter.name; fk platform path:K87:2).exists))
+					$Obj_out.errors:=New collection:C1472("No target defined when creating formatter asset (empty defined).")
+					
+					//----------------------------------------
+				: ((Value type:C1509($Obj_in.target)=Is object:K8:27) && (Not:C34(OB Instance of:C1731($Obj_in.target; 4D:C1709.Folder))))
+					
+					$Obj_out.errors:=New collection:C1472("No target defined as 4D.Folder but in other type of object.")
+					
+					//----------------------------------------
+				: (Not:C34((Value type:C1509($Obj_in.target)=Is text:K8:3) || (Value type:C1509($Obj_in.target)=Is object:K8:27)))
+					
+					$Obj_out.errors:=New collection:C1472("No target defined with good types."+String:C10(Value type:C1509($Obj_in.target)))
+					
+					//----------------------------------------
+				Else 
+					// no errors, go on
+					
+					Case of 
+						: (Value type:C1509($Obj_in.target)=Is text:K8:3)
+							$target:=Folder:C1567($Obj_in.target+$Obj_in.formatter.name; fk platform path:K87:2)
+							// $target:=Folder($Obj_in.target; fk platform path).folder($Obj_in.formatter.name) // TO CHECK if has separator or not
+						: (Value type:C1509($Obj_in.target)=Is object:K8:27)
+							$target:=$Obj_in.target.folder($Obj_in.formatter.name)
+					End case 
+					
+					
+					If (Not:C34($target.exists))
 						
 						asset(New object:C1471(\
 							"action"; "create"; \
 							"type"; "folder"; \
-							"target"; $Obj_in.target+$Obj_in.formatter.name))
+							"target"; $target))
 						
 					End if 
 					
@@ -121,27 +159,29 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 							//........................................
 						: (Length:C16(String:C10($Obj_in.source))>0)
 							
-							$Dir_source:=$Obj_in.source  // specify the path as argument (useful for testing)
+							$source:=Folder:C1567($Obj_in.source; fk platform path:K87:2)  // specify the path as argument (useful for testing)
 							
 							//........................................
 						: (Length:C16(String:C10($Obj_in.assets.source))>0)
 							
-							$Dir_source:=$Obj_in.assets.source  // specify the source in formatter
+							$source:=Folder:C1567($Obj_in.assets.source; fk platform path:K87:2)  // specify the source in formatter
 							
 							//........................................
-						: (Bool:C1537($Obj_formatter.isHost))  // with /, host formatters? XXX maybe find another way to identifiy it
+						: (Bool:C1537($Obj_formatter.isHost))
 							
-							$Dir_source:=Choose:C955(Length:C16(String:C10($Obj_formatter.path))>0; $Obj_formatter.path; cs:C1710.path.new().hostFormatters().platformPath+$Obj_formatter.name+Folder separator:K24:12)
+							$source:=Choose:C955(Length:C16(String:C10($Obj_formatter.path))>0; Folder:C1567($Obj_formatter.path; fk platform path:K87:2); cs:C1710.path.new().hostFormatters().folder($Obj_formatter.name))
 							
-							$Dir_source:=$Dir_source+"images"+Folder separator:K24:12
+							$source:=$source.folder("images")
 							
 							//........................................
 						Else 
 							
-							$Dir_source:=cs:C1710.path.new().actionIcons().platformPath  // never called?
+							$source:=cs:C1710.path.new().actionIcons()
 							
 							//........................................
 					End case 
+					
+					$Dir_source:=$source.platformPath
 					
 					// Could create a choice list from pattern and file on disk
 					If ($Obj_formatter.choiceList=Null:C1517)
@@ -151,7 +191,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 							$Obj_formatter.choiceList:=New object:C1471
 							
 							var $file : 4D:C1709.File
-							For each ($file; Folder:C1567($Dir_source; fk platform path:K87:2).files())
+							For each ($file; $source.files())
 								
 								var $c : Collection
 								$c:=cs:C1710.regex.new($file.fullName; $Obj_formatter.choicePattern).extract("1")
@@ -199,7 +239,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 								"type"; "imageset"; \
 								"source"; $File_source; \
 								"tags"; New object:C1471("name"; $Txt_value); \
-								"target"; $Obj_in.target+$Obj_formatter.name+Folder separator:K24:12; \
+								"target"; $target.folder($Obj_formatter.name); \
 								"format"; $Obj_formatter.assets.format; \
 								"template"; $isTemplate; \
 								"size"; $Obj_formatter.assets.size))
@@ -324,14 +364,21 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 					
 					If ($Obj_out.success)
 						
-						If (Not:C34(Folder:C1567($Obj_in.target; fk platform path:K87:2).exists))
+						Case of 
+							: (Value type:C1509($Obj_in.target)=Is text:K8:3)
+								$target:=Folder:C1567($Obj_in.target; fk platform path:K87:2)
+							: (Value type:C1509($Obj_in.target)=Is object:K8:27)
+								$target:=$Obj_in.target
+						End case 
+						
+						If (Not:C34($target.exists))
 							
 							// Create intermediate asset folder if necessary
 							var $directories : Collection
 							$directories:=New collection:C1472
 							
 							var $directory : 4D:C1709.Folder
-							$directory:=Folder:C1567($Obj_in.target; fk platform path:K87:2)
+							$directory:=$target
 							
 							While (Not:C34($directory.exists))
 								
@@ -345,16 +392,16 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 								asset(New object:C1471(\
 									"action"; "create"; \
 									"type"; "folder"; \
-									"target"; $directory.parent.platformPath; \
+									"target"; $directory.parent; \
 									"tags"; New object:C1471(\
 									"name"; $directory.name+$directory.extension)))
 								
 							End for each 
 						End if 
 						
-						$Obj_out.template:=template(New object:C1471(\
+						$Obj_out.template:=TEMPLATE(New object:C1471(\
 							"source"; $Txt_buffer; \
-							"target"; $Obj_in.target; \
+							"target"; $target.platformPath; \
 							"tags"; $Obj_in.tags; \
 							"catalog"; _o_doc_catalog($Txt_buffer)))
 						
@@ -364,8 +411,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 							
 							$Txt_buffer:=Process_tags($Obj_template.contents; $Obj_in.tags; New collection:C1472("filename"))
 							
-							var $contentsFile : 4D:C1709.File
-							$contentsFile:=File:C1566($Obj_in.target+$Txt_buffer+Folder separator:K24:12+"Contents.json"; fk platform path:K87:2)
+							$contentsFile:=$target.folder($Txt_buffer).file("Contents.json")
 							$Obj_:=ob_parseFile($contentsFile).value
 							
 							If (Bool:C1537($Obj_in.template))
@@ -383,15 +429,17 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 									$Obj_out.errors:=New collection:C1472
 									
 									// Read source file (XXX here source is String; later could have object or collection if image is already scaled)
-									var $source : Text
-									$source:=String:C10($Obj_in.source)
-									
 									var $sourceFile : 4D:C1709.File
-									$sourceFile:=File:C1566($source; fk platform path:K87:2)
+									Case of 
+										: (Value type:C1509($Obj_in.source)=Is text:K8:3)
+											$sourceFile:=File:C1566($Obj_in.source; fk platform path:K87:2)
+										Else 
+											$sourceFile:=$Obj_in.source
+									End case 
 									
 									If ($sourceFile.exists)
 										
-										READ PICTURE FILE:C678($source; $Pic_buffer)
+										READ PICTURE FILE:C678($sourceFile.platformPath; $Pic_buffer)
 										
 										If ($Obj_in.size=Null:C1517)  // if no size, take from picture
 											
@@ -487,12 +535,11 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 									End if 
 									
 									// dark ?
-									$source:=Replace string:C233($source; $sourceFile.extension; "_dark"+$sourceFile.extension)
-									$sourceFile:=File:C1566($source; fk platform path:K87:2)
+									$sourceFile:=File:C1566(Replace string:C233($sourceFile.path; $sourceFile.extension; "_dark"+$sourceFile.extension); fk platform path:K87:2)
 									
 									If ($sourceFile.exists)
 										
-										READ PICTURE FILE:C678($source; $Pic_buffer)
+										READ PICTURE FILE:C678($sourceFile.platformPath; $Pic_buffer)
 										
 										If ($Obj_in.size=Null:C1517)  // if no size, take from picture
 											
@@ -634,9 +681,17 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 			
 			If ($Obj_in.path#Null:C1517)
 				
-				If (Folder:C1567($Obj_in.path; fk platform path:K87:2).file("Contents.json").exists)
+				Case of 
+					: (Value type:C1509($Obj_in.path)=Is text:K8:3)
+						$path:=Folder:C1567($Obj_in.path; fk platform path:K87:2)
+					Else 
+						$path:=$Obj_in.path
+				End case 
+				
+				$contentsFile:=$path.file("Contents.json")
+				If ($contentsFile.exists)
 					
-					$Obj_out.value:=ob_parseFile(Folder:C1567($Obj_in.path; fk platform path:K87:2).file("Contents.json")).value
+					$Obj_out.value:=ob_parseFile($contentsFile).value
 					$Obj_out.success:=True:C214
 					
 				Else 
@@ -656,9 +711,13 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 			
 			If ($Obj_in.path#Null:C1517)
 				
-				// Remove final folder separator
-				var $path : 4D:C1709.Folder
-				$path:=Folder:C1567($Obj_in.path; fk platform path:K87:2)
+				Case of 
+					: (Value type:C1509($Obj_in.path)=Is text:K8:3)
+						$path:=Folder:C1567($Obj_in.path; fk platform path:K87:2)
+					Else 
+						$path:=$Obj_in.path
+				End case 
+				
 				
 				If ($path.exists)
 					
@@ -666,9 +725,10 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 					
 					If (Bool:C1537($Obj_in.contents))
 						
-						If ($path.file("Contents.json").exists)
+						$contentsFile:=$path.file("Contents.json")
+						If ($contentsFile.exists)
 							
-							$Obj_out.contents:=ob_parseFile($path.file("Contents.json")).value
+							$Obj_out.contents:=ob_parseFile($contentsFile).value
 							
 							// Else error
 							
@@ -695,6 +755,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 						$Obj_:=New object:C1471(\
 							"name"; $Txt_name; \
 							"type"; $Txt_buffer; \
+							"folder"; $folder; \
 							"path"; $folder.platformPath)
 						
 						$Boo_:=True:C214
@@ -710,9 +771,10 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 							
 							If (Bool:C1537($Obj_in.contents))
 								
-								If ($folder.file("Contents.json").exists)
+								$contentsFile:=$folder.file("Contents.json")
+								If ($contentsFile.exists)
 									
-									$Obj_.contents:=ob_parseFile($folder.file("Contents.json")).value
+									$Obj_.contents:=ob_parseFile($contentsFile).value
 									
 									// Else errors?
 									
@@ -725,7 +787,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 							
 							$Obj_.children:=asset(New object:C1471(\
 								"action"; "list"; \
-								"path"; $Obj_.path; \
+								"path"; $Obj_.folder; \
 								"contents"; $Obj_in.contents; \
 								"recursive"; $Obj_in.recursive; \
 								"filter"; $Obj_in.filter))

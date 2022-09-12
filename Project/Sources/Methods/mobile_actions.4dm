@@ -241,7 +241,7 @@ Case of
 					
 					$Obj_out.results:=New object:C1471
 					
-					$Obj_out.path:=asset(New object:C1471("action"; "path"; "path"; $Obj_in.target)).path+"Actions"+Folder separator:K24:12
+					$Obj_out.path:=asset(New object:C1471("action"; "path"; "path"; $Obj_in.target)).path.folder("Actions")
 					
 					For each ($action; $Obj_in.actions)
 						
@@ -609,7 +609,7 @@ Case of
 /*var $Col_catalog : Collection
 $Col_catalog:=doc_catalog(This.template.source; This.getCatalogExcludePattern())*/
 				var $copyFilesResult : Object
-				$copyFilesResult:=template(New object:C1471(\
+				$copyFilesResult:=TEMPLATE(New object:C1471(\
 					"source"; $formatFolder.platformPath; \
 					"target"; $Obj_in.path; \
 					"tags"; $Obj_in.tags\
