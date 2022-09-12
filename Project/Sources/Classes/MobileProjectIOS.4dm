@@ -606,7 +606,7 @@ Function _generateTemplates($out : Object; $tags : Object)
 	
 	// I need a map, string -> format to be able to support folder name different from manifest name
 	$out.formatters:=formatters(New object:C1471("action"; "getByName")).formatters
-	$out.inputControls:=mobile_actions("getByName").inputControls
+	$out.inputControls:=mobile_actions("getByName"; New object:C1471("target"; "ios")).inputControls
 	
 	// Duplicate the template {
 	$out.template:=cs:C1710.MainTemplate.new(New object:C1471(\

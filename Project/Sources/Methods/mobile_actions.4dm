@@ -321,6 +321,8 @@ Case of
 			
 			
 			$dataModel:=$Obj_in.project.dataModel
+			var $hostInputControls : 4D:C1709.Folder
+			$hostInputControls:=cs:C1710.path.new().hostInputControls()
 			
 			For each ($action; $Obj_in.project.actions)
 				
@@ -338,10 +340,7 @@ Case of
 								$manifest:=$Obj_in.inputControls[$format]
 								If ($manifest=Null:C1517)
 									// clean must be obsolete if not needed
-									$manifest:=ob_parseFile(cs:C1710.path.new().hostInputControls().folder($format).file("manifest.json")).value
-									If (Feature.with("inputControlArchive"))
-										$manifest:=ob_parseFile(ZIP Read archive:C1637(cs:C1710.path.new().hostInputControls().file($format+".zip")).root.file("manifest.json")).value
-									End if 
+									// $manifest:=ob_parseFile($hostInputControls.folder($format).file("manifest.json")).value
 								End if 
 								If ($manifest#Null:C1517)
 									
@@ -370,13 +369,19 @@ Case of
 											End if 
 											
 											// generate images
-											$folder:=Folder:C1567($Obj_in.path; fk platform path:K87:2).folder("Resources/Assets.xcassets/Action/Input")
+											Case of 
+												: (Value type:C1509($Obj_in.path)=Is text:K8:3)
+													$folder:=Folder:C1567($Obj_in.path; fk platform path:K87:2).folder("Resources/Assets.xcassets/Action/Input")
+												: (Value type:C1509($Obj_in.path)=Is object:K8:27)
+													$folder:=$Obj_in.path.folder("Resources/Assets.xcassets/Action/Input")
+											End case 
+											
 											$manifest.isHost:=True:C214
 											If ($manifest.folder=Null:C1517)
 												// obsolete?
-												$manifest.path:=cs:C1710.path.new().hostInputControls().folder($format).platformPath
+												$manifest.path:=cs:C1710.path.new().hostInputControls().folder($format)
 											Else 
-												$manifest.path:=$manifest.folder.platformPath
+												$manifest.path:=$manifest.folder
 											End if 
 											If (Not:C34($folder.folder($format).exists))
 												
@@ -491,16 +496,6 @@ Case of
 		
 		$folder:=cs:C1710.path.new().hostInputControls()
 		If ($folder.exists)
-			For each ($formatFolder; $folder.folders())
-				$manifest:=ob_parseFile($formatFolder.file("manifest.json")).value
-				If ($manifest#Null:C1517)
-					$manifest.folder:=$formatFolder
-					$manifest.isHost:=True:C214
-					If (Value type:C1509($manifest.name)=Is text:K8:3)
-						$Obj_out.inputControls[$manifest.name]:=$manifest
-					End if 
-				End if 
-			End for each 
 			If (Feature.with("inputControlArchive"))
 				For each ($formatFile; $folder.files())
 					If ($formatFile.extension=".zip")
@@ -509,18 +504,76 @@ Case of
 						$manifest:=ob_parseFile($formatZipFolder.file("manifest.json")).value
 						
 						If ($manifest#Null:C1517)
+							$manifest.valid:=Value type:C1509($manifest.name)=Is text:K8:3
+							// compute default target if not filled
+							If (Feature.with("inputControlWithCodeAndroid"))
+								If ($manifest.target=Null:C1517)
+									$manifest.target:=New collection:C1472()
+									If ($formatFolder.folder("ios").exists)
+										$manifest.target.push("ios")
+									End if 
+									If ($formatFolder.folder("android").exists)
+										$manifest.target.push("android")
+									End if 
+									If ($manifest.length=0)
+										$manifest.target.push("ios")
+									End if 
+								End if 
+								If (Value type:C1509($manifest.target)=Is text:K8:3)
+									$manifest.target:=New collection:C1472($manifest.target)
+								End if 
+								// filter if target requested
+								If (($Obj_in#Null:C1517) && ($Obj_in.target#Null:C1517))
+									$manifest.valid:=$manifest.valid && ($manifest.target.indexOf($Obj_in.target)>=0)
+								End if 
+							End if 
+							
 							$manifest.folder:=$formatFile
 							$manifest.isHost:=True:C214
 							$manifest.isArchive:=True:C214
-							If (Value type:C1509($manifest.name)=Is text:K8:3)
+							If ($manifest.valid)
 								$Obj_out.inputControls[$manifest.name]:=$manifest
 							End if 
 						End if 
 					End if 
-					
 				End for each 
-				
 			End if 
+			
+			For each ($formatFolder; $folder.folders())
+				$manifest:=ob_parseFile($formatFolder.file("manifest.json")).value
+				If ($manifest#Null:C1517)
+					$manifest.valid:=Value type:C1509($manifest.name)=Is text:K8:3
+					If (Feature.with("inputControlWithCodeAndroid"))
+						// compute default target if not filled
+						If ($manifest.target=Null:C1517)
+							$manifest.target:=New collection:C1472()
+							If ($formatFolder.folder("ios").exists)
+								$manifest.target.push("ios")
+							End if 
+							If ($formatFolder.folder("android").exists)
+								$manifest.target.push("android")
+							End if 
+							If ($manifest.length=0)
+								$manifest.target.push("ios")
+							End if 
+						End if 
+						If (Value type:C1509($manifest.target)=Is text:K8:3)
+							$manifest.target:=New collection:C1472($manifest.target)
+						End if 
+						// filter if target requested
+						If (($Obj_in#Null:C1517) && ($Obj_in.target#Null:C1517))
+							$manifest.valid:=$manifest.valid && ($manifest.target.indexOf($Obj_in.target)>=0)
+						End if 
+					End if 
+					
+					$manifest.folder:=$formatFolder
+					$manifest.isHost:=True:C214
+					If ($manifest.valid)
+						$Obj_out.inputControls[$manifest.name]:=$manifest
+					End if 
+				End if 
+			End for each 
+			
 		End if 
 		
 		$Obj_out.success:=True:C214
