@@ -109,10 +109,24 @@ Function systemCache()->$folder : 4D:C1709.Folder  // 4D Mobile cache folder
 	$folder.create()
 	
 /*========================================================*/
-Function sdk() : 4D:C1709.Folder  // sdk folder ||||||||||| TEST PURPOSE ||||||||||||
+Function sdk() : 4D:C1709.Folder
 	
 	This:C1470.target:=Folder:C1567("/RESOURCES/sdk")
 	This:C1470.exists:=This:C1470.target.exists
+	
+	return (This:C1470.target)
+	
+/*========================================================*/
+Function sdkApple() : 4D:C1709.File  // ios zip sdk
+	
+	This:C1470.target:=This:C1470.sdk().file("ios.zip")
+	This:C1470.exists:=This:C1470.target.exists
+	If (dev_Matrix)
+		If (Not:C34(This:C1470.exists))
+			This:C1470.target:=Folder:C1567(Application file:C491; fk platform path:K87:2).file("Contents/Resources/Internal User Components/4D Mobile App.4dbase/Resources/sdk/ios.zip")
+			This:C1470.exists:=This:C1470.target.exists
+		End if 
+	End if 
 	
 	return (This:C1470.target)
 	

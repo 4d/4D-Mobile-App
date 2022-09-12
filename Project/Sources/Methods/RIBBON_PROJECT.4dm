@@ -228,9 +228,7 @@ Case of
 						$menu.append("🔑 Install certificates"; "_installCertificats")\
 							.line()
 						
-						$menu.append("💣 Remove SDK"; "_removeSDK")\
-							.line()\
-							.append("💣 Clear Mobiles projects"; "_removeMobilesProjects")\
+						$menu.append("💣 Clear Mobiles projects"; "_removeMobilesProjects")\
 							.line()\
 							.append("⚙️ Show config file "; "_showConfigFile")\
 							.append("➕ Add sources to Xcode Project"; "_addSources")\
@@ -459,11 +457,6 @@ Case of
 				
 				UI.path.cacheSdkAppleUnzipped().delete(fk recursive:K87:7)
 				UI.path.cacheSdkAndroidUnzipped().delete(fk recursive:K87:7)
-				
-				//______________________________________________________
-			: ($menu.choice="_removeSDK")
-				
-				Folder:C1567("/RESOURCES/sdk/").file("ios.zip").delete()
 				
 				//______________________________________________________
 			: ($menu.choice="_removeMobilesProjects")

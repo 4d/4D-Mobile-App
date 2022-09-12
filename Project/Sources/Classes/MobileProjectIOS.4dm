@@ -86,7 +86,7 @@ Function create()->$result : Object
 	
 	$result.sdk:=sdk(New object:C1471(\
 		"action"; "install"; \
-		"file"; This:C1470.paths.sdk().platformPath+"ios.zip"; \
+		"file"; This:C1470.paths.sdkApple().platformPath; \
 		"target"; This:C1470.input.path))
 	
 	If (Not:C34($result.sdk.success))
