@@ -184,6 +184,7 @@
 			"Process_tags_on_file",
 			"Rest",
 			"sdk",
+			"TEMPLATE",
 			"unzip"
 		],
 		"classes": [
@@ -312,6 +313,7 @@
 			"project_Defaults",
 			"project_Fix",
 			"PROJECT_FORM_CALLBACK",
+			"PROJECT_HANDLER",
 			"PROJECT_OBJECT_HANDLER",
 			"PROJECT_ON_ACTIVATE",
 			"project_PROCESS_MESSAGES",
@@ -529,6 +531,7 @@
 		],
 		"methods": [
 			"COMPILER_views",
+			"views_Handler",
 			"views_LAYOUT_PICKER",
 			"VIEWS_OBJECTS_HANDLER"
 		],
