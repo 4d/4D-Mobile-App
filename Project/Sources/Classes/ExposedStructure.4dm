@@ -1028,13 +1028,15 @@ Function _fields($tableName : Text)->$fields : Collection
 		
 		If (Not:C34(Bool:C1537($field.exposed))\
 			 || ($fieldName=This:C1470.stampFieldName))\
-			 || (Position:C15("."; $fieldName)>0)
+			 || (Position:C15("."; $fieldName)>0)\
+			 || ($field.fieldType=7)
 			
 /*
 Don't keep:
--not exposed field
--stamp field
--attribute name with dot
+- Not exposed field
+- Stamp field
+- Attribute name with dot
+- Subtable (ACI0103214)
 */
 			
 			continue
