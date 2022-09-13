@@ -1107,7 +1107,7 @@ Function copyKotlinCustomFormatterFiles
 	var $1 : Object  // Datamodel object
 	var $2 : Text  // Package name
 	
-	var $dataModel; $field; $subField; $handleKotlinCustomFormatterFile : Object
+	var $dataModel; $field; $handleKotlinCustomFormatterFile : Object
 	
 	$0:=New object:C1471(\
 		"success"; True:C214; \
@@ -1143,11 +1143,10 @@ Function handleKotlinCustomFormatterFiles
 	var $1 : Object  // field object
 	var $2 : Text  // Package name
 	
-	var $packageName; $packageNamePath; $format; $formatName; $fileContent : Text
+	var $packageName; $format; $formatName : Text
 	$packageName:=$2
-	var $field; $subField; $copyFormatterFilesToApp; $handleKotlinCustomFormatterFile : Object
-	var $bindingAdapterFile; $copyDest : 4D:C1709.File
-	var $bindingFolder; $formattersFolder; $customFormatterFolder; $formattersFolderInFormatter : 4D:C1709.Folder
+	var $field; $copyFormatterFilesToApp : Object
+	var $formattersFolder; $customFormatterFolder : 4D:C1709.Folder
 	
 	$0:=New object:C1471(\
 		"success"; True:C214; \
@@ -1281,8 +1280,8 @@ Function copyFormatterFilesToApp
 	var $1 : 4D:C1709.Folder  // Formatter folder
 	var $2 : Text  // package name
 	
-	var $formattersFolderInFormatter; $bindingFolder; $resInFormatter; $mainFolder; $resCopyDest : 4D:C1709.Folder
-	var $bindingAdapterFile; $copyDest; $res : 4D:C1709.File
+	var $formattersFolderInFormatter; $bindingFolder : 4D:C1709.Folder
+	var $bindingAdapterFile; $copyDest : 4D:C1709.File
 	var $packageName; $packageNamePath; $fileContent : Text
 	
 	$packageName:=$2
@@ -1318,6 +1317,210 @@ Function copyFormatterFilesToApp
 		End for each 
 		
 		// Else : no Formatters folder inside kotlin custom data formatter
+	End if 
+	
+	var $Obj_copyFilesRecursively : Object
+	
+	$Obj_copyFilesRecursively:=This:C1470.copyFilesRecursively($1.folder("android/res"); Folder:C1567(This:C1470.projectPath+"app/src/main/res"))
+	
+	If (Not:C34($Obj_copyFilesRecursively.success))
+		
+		// Copy failed
+		$0.success:=False:C215
+		$0.errors.combine($Obj_copyFilesRecursively.errors)
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function copyCustomInputControlFiles
+	var $0 : Object
+	var $1 : Collection  // actions collection
+	var $2 : Text  // Package name
+	
+	var $action; $actionParameter; $handleInputControlFile : Object
+	
+	$0:=New object:C1471(\
+		"success"; True:C214; \
+		"errors"; New collection:C1472)
+	
+	For each ($action; $1)
+		
+		For each ($actionParameter; OB Entries:C1720($action))
+			
+			$handleInputControlFile:=This:C1470.handleCustomInputControlFiles($actionParameter; $2)
+			
+			If (Not:C34($handleInputControlFile.success))
+				
+				$0.success:=False:C215
+				$0.errors.combine($handleInputControlFile.errors)
+				
+				// Else : all ok
+			End if 
+			
+		End for each 
+		
+	End for each 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function handleCustomInputControlFiles
+	var $0 : Object
+	var $1 : Object  // action parameter object
+	var $2 : Text  // Package name
+	
+	var $packageName; $format; $inputControlName : Text
+	$packageName:=$2
+	var $actionParameter; $copyInputControlFilesToApp : Object
+	var $inputControlFolder; $customInputControlFolder : 4D:C1709.Folder
+	
+	$0:=New object:C1471(\
+		"success"; True:C214; \
+		"errors"; New collection:C1472)
+	
+	$actionParameter:=$1
+	
+	If (Value type:C1509($actionParameter.value)=Is object:K8:27)
+		
+		If ($actionParameter.value.format#Null:C1517)
+			
+			If (Value type:C1509($actionParameter.value.format)=Is text:K8:3)
+				
+				$format:=$actionParameter.value.format
+				
+				If ($format#"")
+					
+					If (Substring:C12($format; 1; 1)="/")
+						
+						$inputControlFolder:=This:C1470.path.hostInputControls()
+						
+						If ($inputControlFolder.exists)
+							
+							$inputControlName:=Substring:C12($format; 2)
+							
+							$customInputControlFolder:=$inputControlFolder.folder($inputControlName)
+							
+							If ($customInputControlFolder.exists)
+								
+								$copyInputControlFilesToApp:=This:C1470.copyInputControlFilesToApp($customInputControlFolder; $packageName)
+								
+								If (Not:C34($copyInputControlFilesToApp.success))
+									
+									$0.success:=False:C215
+									$0.errors.combine($copyInputControlFilesToApp.errors)
+									
+									// Else : all ok
+								End if 
+								
+							Else 
+								
+								// check for ZIP
+								
+								var $customInputControlZipFile : 4D:C1709.File
+								
+								$customInputControlZipFile:=$inputControlFolder.file($inputControlName)
+								
+								If ($customInputControlZipFile.exists)
+									
+									var $archive : 4D:C1709.ZipArchive
+									
+									$archive:=ZIP Read archive:C1637($customInputControlZipFile)
+									
+									var $unzipDest : 4D:C1709.Folder
+									
+									$unzipDest:=$archive.root.copyTo($customInputControlZipFile.parent; "android_temporary_"+$customInputControlZipFile.name; fk overwrite:K87:5)
+									
+									If ($unzipDest.exists)
+										
+										$copyInputControlFilesToApp:=This:C1470.copyInputControlFilesToApp($unzipDest; $packageName)
+										
+										If (Not:C34($copyInputControlFilesToApp.success))
+											
+											$0.success:=False:C215
+											$0.errors.combine($copyInputControlFilesToApp.errors)
+											
+											// Else : all ok
+										End if 
+										
+										$unzipDest.delete(Delete with contents:K24:24)
+										
+									Else 
+										// error
+										$0.success:=False:C215
+										$0.errors.push("Could not unzip to destination: "+$unzipDest.path)
+										
+									End if 
+									
+								Else 
+									// error
+									$0.success:=False:C215
+									$0.errors.push("Input Control \""+$format+"\" couldn't be found at path: "+$customInputControlFolder.path)
+								End if 
+								
+								
+							End if 
+							
+							// Else : no input control folder
+						End if 
+						
+						// Else : no custom input control
+					End if 
+					
+					// Else : format empty
+				End if 
+				
+				// Else : actionParameter.format is not Text
+			End if 
+			
+			// Else : no input control
+		End if 
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function copyInputControlFilesToApp
+	var $0 : Object
+	var $1 : 4D:C1709.Folder  // Input Control folder
+	var $2 : Text  // package name
+	
+	var $inputControlFolderInFormatter; $inputControlFolder : 4D:C1709.Folder
+	var $inputControlFile; $copyDest : 4D:C1709.File
+	var $packageName; $packageNamePath; $fileContent : Text
+	
+	$packageName:=$2
+	$packageNamePath:=Replace string:C233($packageName; "."; "/")
+	
+	$0:=New object:C1471(\
+		"success"; True:C214; \
+		"errors"; New collection:C1472)
+	
+	$inputControlFolderInFormatter:=$1.folder("android/inputControl")
+	
+	If ($inputControlFolderInFormatter.exists)
+		
+		For each ($inputControlFile; $inputControlFolderInFormatter.files(fk ignore invisible:K87:22))
+			
+			$inputControlFolder:=Folder:C1567(This:C1470.projectPath+"app/src/main/java/"+$packageNamePath+"/inputcontrol")
+			
+			$copyDest:=$inputControlFile.copyTo($inputControlFolder; $inputControlFile.fullName; fk overwrite:K87:5)
+			
+			If ($copyDest.exists)
+				
+				// replace ___PACKAGE___ in file content
+				$fileContent:=$copyDest.getText()
+				$fileContent:=Replace string:C233($fileContent; "___PACKAGE___"; $packageName+".binding")
+				$copyDest.setText($fileContent)
+				
+			Else 
+				// Copy failed
+				$0.success:=False:C215
+				$0.errors.push("Could not copy file to destination: "+$copyDest.path)
+			End if 
+			
+		End for each 
+		
+		// Else : no Input Control folder
 	End if 
 	
 	var $Obj_copyFilesRecursively : Object
