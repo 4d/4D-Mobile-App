@@ -15,7 +15,8 @@ var $o; $oResult : Object
 var $action; $parameter; $manifest; $dataModel : Object
 var $hasImage; $isObject : Boolean
 var $format : Variant/*Text or Object*/
-var $folder; $formatFolder : 4D:C1709.Folder
+var $folder; $tmp : 4D:C1709.Folder
+var $formatFolder : Object  // 4D.Folder or 4D.ZipFolder
 var $formatFile : 4D:C1709.File
 var $formatZipFolder : 4D:C1709.ZipFolder
 var $formats : Collection
@@ -509,13 +510,13 @@ Case of
 							If (Feature.with("inputControlWithCodeAndroid"))
 								If ($manifest.target=Null:C1517)
 									$manifest.target:=New collection:C1472()
-									If ($formatFolder.folder("ios").exists)
+									If ($formatZipFolder.folder("ios").exists)
 										$manifest.target.push("ios")
 									End if 
-									If ($formatFolder.folder("android").exists)
+									If ($formatZipFolder.folder("android").exists)
 										$manifest.target.push("android")
 									End if 
-									If ($manifest.length=0)
+									If ($manifest.target.length=0)
 										$manifest.target.push("ios")
 									End if 
 								End if 
@@ -528,9 +529,12 @@ Case of
 								End if 
 							End if 
 							
-							$manifest.folder:=$formatFile
+							$manifest.folder:=$formatZipFolder
 							$manifest.isHost:=True:C214
 							$manifest.isArchive:=True:C214
+							If ($manifest.inject=Null:C1517)
+								$manifest.inject:=$manifest.folder.folder("ios").exists
+							End if 
 							If ($manifest.valid)
 								$Obj_out.inputControls[$manifest.name]:=$manifest
 							End if 
@@ -553,7 +557,7 @@ Case of
 							If ($formatFolder.folder("android").exists)
 								$manifest.target.push("android")
 							End if 
-							If ($manifest.length=0)
+							If ($manifest.target.length=0)
 								$manifest.target.push("ios")
 							End if 
 						End if 
@@ -568,6 +572,10 @@ Case of
 					
 					$manifest.folder:=$formatFolder
 					$manifest.isHost:=True:C214
+					$manifest.isArchive:=False:C215
+					If ($manifest.inject=Null:C1517)
+						$manifest.inject:=$manifest.folder.folder("ios").exists
+					End if 
 					If ($manifest.valid)
 						$Obj_out.inputControls[$manifest.name]:=$manifest
 					End if 
@@ -596,10 +604,10 @@ Case of
 						If (PROJECT.isCustomResource($format))
 							If ($isObject)
 								$format:=Delete string:C232($format; 1; 1)
-								If ($Obj_in.inputControls#Null:C1517)  // ASSERT it.?
+								If ($Obj_in.inputControls#Null:C1517)
 									$manifest:=$Obj_in.inputControls[$format]
 								Else 
-									ASSERT:C1129(dev_assert; "input control map not passed, we could not find some control")
+									ASSERT:C1129(Not:C34(dev_Matrix); "input control map not passed, we could not find some control")
 								End if 
 								
 								If ($manifest=Null:C1517)
@@ -659,14 +667,34 @@ Case of
 					$formatFolder:=$formatFolder.folder("ios")
 				End if 
 				
+				
+				var $copyFilesResult : Object
+				If ((Feature.with("inputControlArchive")) && OB Instance of:C1731($formatFolder; 4D:C1709.ZipFolder))
+					// solution 1: create a new TEMPLATE method that support Folder/ZipFolder etc...
+					// solution 2: (tmp) unzip to a temp dir to copy then remove
+					
+					$tmp:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).folder(Generate UUID:C1066)
+					$tmp.create()
+					$formatFolder.copyTo($tmp)
+					
+					$copyFilesResult:=TEMPLATE(New object:C1471(\
+						"source"; $tmp.folder($formatFolder.name).platformPath; \
+						"target"; $Obj_in.path; \
+						"tags"; $Obj_in.tags\
+						))
+					
+					$tmp.delete(fk recursive:K87:7)
+					
+				Else 
 /*var $Col_catalog : Collection
 $Col_catalog:=doc_catalog(This.template.source; This.getCatalogExcludePattern())*/
-				var $copyFilesResult : Object
-				$copyFilesResult:=TEMPLATE(New object:C1471(\
-					"source"; $formatFolder.platformPath; \
-					"target"; $Obj_in.path; \
-					"tags"; $Obj_in.tags\
-					))
+					$copyFilesResult:=TEMPLATE(New object:C1471(\
+						"source"; $formatFolder.platformPath; \
+						"target"; $Obj_in.path; \
+						"tags"; $Obj_in.tags\
+						))
+					
+				End if 
 				
 				$copyFilesResult:=XcodeProjInject(New object:C1471(\
 					"node"; $copyFilesResult; \

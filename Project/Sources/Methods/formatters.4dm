@@ -18,6 +18,7 @@ var $archive; $errors; $folder; $o; $oField; $oFormatter : Object
 var $oResources; $oResult : Object
 var $c : Collection
 var $error : cs:C1710.error
+var $tmp : 4D:C1709.Folder
 
 If (False:C215)
 	C_OBJECT:C1216(formatters; $0)
@@ -411,10 +412,31 @@ Case of
 								
 								If ($folder.exists)
 									
-									$oResult:=template(New object:C1471(\
-										"source"; $folder.platformPath; \
-										"tags"; $oIN.tags; \
-										"target"; $oIN.target+$t+Folder separator:K24:12))
+									
+									If ((Feature.with("inputControlArchive")) && OB Instance of:C1731($folder; 4D:C1709.ZipFolder))
+										
+										// solution 1: create a new TEMPLATE method that support Folder/ZipFolder etc...
+										// solution 2: (tmp) unzip to a temp dir to copy then remove
+										
+										$tmp:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).folder(Generate UUID:C1066)
+										$tmp.create()
+										$folder.copyTo($tmp)
+										
+										$oResult:=TEMPLATE(New object:C1471(\
+											"source"; $tmp.folder($folder.name).platformPath; \
+											"tags"; $oIN.tags; \
+											"target"; $oIN.target+$t+Folder separator:K24:12))
+										
+										$tmp.delete(fk recursive:K87:7)
+										
+									Else 
+										
+										$oResult:=TEMPLATE(New object:C1471(\
+											"source"; $folder.platformPath; \
+											"tags"; $oIN.tags; \
+											"target"; $oIN.target+$t+Folder separator:K24:12))
+										
+									End if 
 									
 									// to inject in project file
 									$oOUT.children.push($oResult)
