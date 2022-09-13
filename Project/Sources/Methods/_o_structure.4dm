@@ -161,6 +161,11 @@ Don't keep:
 									err_PUSH($OUT; "Name conflict for the attribute \""+$fieldName+"\" of the dataclass \""+$tableName+"\""; Warning message:K38:2)
 									
 									//…………………………………………………………………………………………………
+								: ($field.fieldType=7) || ($field.name="@@")
+									
+									err_PUSH($OUT; "Ignored subtable attribute \""+$fieldName+"\" of the dataclass \""+$tableName+"\""; Warning message:K38:2)
+									
+									//…………………………………………………………………………………………………
 								: ($field.kind="storage")  // Storage attribute
 									
 									If ($allowedTypes.indexOf($field.type)>=0)

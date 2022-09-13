@@ -76,7 +76,9 @@ Function exposedDatastore() : Object
 			
 			If (Not:C34(Bool:C1537($o.value.exposed)))\
 				 || ($o.key=This:C1470.stampFieldName)\
-				 || (Not:C34(This:C1470._managedType($o.value.type)) & ($o.value.relatedDataClass=Null:C1517))
+				 || (Not:C34(This:C1470._managedType($o.value.type)) & ($o.value.relatedDataClass=Null:C1517))\
+				 || ($o.value.fieldType=7)\
+				 || ($o.value.name="@id_added_by_converter@")
 				
 				continue
 				
@@ -1029,7 +1031,8 @@ Function _fields($tableName : Text)->$fields : Collection
 		If (Not:C34(Bool:C1537($field.exposed))\
 			 || ($fieldName=This:C1470.stampFieldName))\
 			 || (Position:C15("."; $fieldName)>0)\
-			 || ($field.fieldType=7)
+			 || ($field.fieldType=7)\
+			 || ($field.name="@id_added_by_converter@")
 			
 /*
 Don't keep:

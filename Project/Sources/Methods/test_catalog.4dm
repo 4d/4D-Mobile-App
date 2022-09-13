@@ -47,7 +47,7 @@ $b:=$b & $o.success
 
 If (Asserted:C1132($o.success))
 	
-	ASSERT:C1129($o.fields.length=30)
+	ASSERT:C1129($o.fields.length=32)
 	ASSERT:C1129($o.errors=Null:C1517)
 	
 	If (Asserted:C1132($o.infos#Null:C1517))
@@ -78,7 +78,7 @@ $b:=$b & $o.success
 
 If (Asserted:C1132($o.success))
 	
-	ASSERT:C1129($o.fields.length=21)
+	ASSERT:C1129($o.fields.length=23)
 	
 	If (Asserted:C1132($o.infos#Null:C1517))
 		
@@ -108,7 +108,7 @@ $b:=$b & $o.success
 
 If (Asserted:C1132($o.success))
 	
-	ASSERT:C1129($o.fields.length=24)
+	ASSERT:C1129($o.fields.length=26)
 	
 	If (Asserted:C1132($o.infos#Null:C1517))
 		
@@ -138,7 +138,7 @@ $b:=$b & $o.success
 
 If (Asserted:C1132($o.success))
 	
-	ASSERT:C1129($o.fields.length=27)
+	ASSERT:C1129($o.fields.length=29)
 	
 	If (Asserted:C1132($o.infos#Null:C1517))
 		

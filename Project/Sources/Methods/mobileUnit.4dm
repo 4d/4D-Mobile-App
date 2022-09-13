@@ -170,7 +170,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			
 			$o:=New signal:C1641
 			
-			CALL WORKER:C1389(1; Formula:C1597(unitTestSuites).source; $o)
+			CALL WORKER:C1389("unitTestSuite"; Formula:C1597(unitTestSuites).source; $o)
 			
 			If ($o.wait(10))
 				
@@ -188,6 +188,8 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 				$response.errors:="Failed to load internal test methods"
 				
 			End if 
+			
+			KILL WORKER:C1390("unitTestSuite")
 			
 			//MARK:- featuresFlags
 		: ($entryPoint="featuresFlags")
@@ -421,7 +423,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			//MARK:- TEMPLATE
 		: ($entryPoint="TEMPLATE")
 			
-			EXECUTE METHOD:C1007(Formula:C1597(template).source; $response; $parameters)
+			EXECUTE METHOD:C1007(Formula:C1597(TEMPLATE).source; $response; $parameters)
 			
 			//MARK:- sdk
 		: ($entryPoint="sdk")
@@ -451,7 +453,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			//MARK:- PROJECT_HANDLER
 		: ($entryPoint="PROJECT_HANDLER")
 			
-			EXECUTE METHOD:C1007(Formula:C1597(PROJECT_Handler).source; $response; $parameters)
+			EXECUTE METHOD:C1007(Formula:C1597(PROJECT_HANDLER).source; $response; $parameters)
 			
 			//MARK:- project_Audit
 		: ($entryPoint="project_Audit")
