@@ -10,11 +10,13 @@
 var $Boo_ : Boolean
 var $Lon_height; $Lon_i; $Lon_parameters; $Lon_scale; $Lon_width : Integer
 var $Pic_buffer; $Pic_icon : Picture
-var $Dir_source; $File_source; $Txt_buffer; $Txt_name; $Txt_value : Text
+var $Dir_source; $Txt_buffer; $Txt_name; $Txt_value : Text
 var $Obj_; $Obj_buffer; $Obj_file; $Obj_formatter; $Obj_image; $Obj_in : Object
 var $Obj_out; $Obj_path; $Obj_template : Object
 var $Folder_buffer : Object
-var $target; $path; $source : 4D:C1709.Folder
+var $target; $path : 4D:C1709.Folder
+var $source : Object
+var $sourceFile : Object
 var $contentsFile : 4D:C1709.File
 
 If (False:C215)
@@ -169,9 +171,24 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 							//........................................
 						: (Bool:C1537($Obj_formatter.isHost))
 							
-							$source:=Choose:C955(Length:C16(String:C10($Obj_formatter.path))>0; Folder:C1567($Obj_formatter.path; fk platform path:K87:2); cs:C1710.path.new().hostFormatters().folder($Obj_formatter.name))
+							Case of 
+								: (Value type:C1509($Obj_formatter.path)=Is text:K8:3)
+									$source:=Choose:C955(Length:C16(String:C10($Obj_formatter.path))>0; Folder:C1567($Obj_formatter.path; fk platform path:K87:2); cs:C1710.path.new().hostFormatters().folder($Obj_formatter.name))
+								: (Value type:C1509($Obj_formatter.path)=Is object:K8:27)
+									Case of 
+										: (OB Instance of:C1731($Obj_formatter.path; 4D:C1709.Folder))
+											$source:=$Obj_formatter.path
+										: (OB Instance of:C1731($Obj_formatter.path; 4D:C1709.ZipFolder))
+											$source:=$Obj_formatter.path
+										Else 
+											ASSERT:C1129(False:C215; "Wrong type of path for to create asset "+String:C10(OB Class:C1730($Obj_formatter.path).name))
+									End case 
+							End case 
 							
 							$source:=$source.folder("images")
+							If (Not:C34($source.exists))
+								$source:=$source.folder("Images")
+							End if 
 							
 							//........................................
 						Else 
@@ -180,8 +197,6 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 							
 							//........................................
 					End case 
-					
-					$Dir_source:=$source.platformPath
 					
 					// Could create a choice list from pattern and file on disk
 					If ($Obj_formatter.choiceList=Null:C1517)
@@ -222,8 +237,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 								$Txt_value:=$Obj_formatter.name+"_"+$Txt_buffer
 							End if 
 							
-							$File_source:=$Dir_source+$Obj_[$Txt_buffer]
-							
+							$sourceFile:=$source.file($Obj_[$Txt_buffer])
 							
 							var $isTemplate : Boolean
 							$isTemplate:=False:C215
@@ -237,9 +251,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 							$Obj_buffer:=asset(New object:C1471(\
 								"action"; "create"; \
 								"type"; "imageset"; \
-								"source"; $File_source; \
+								"source"; $sourceFile; \
 								"tags"; New object:C1471("name"; $Txt_value); \
-								"target"; $target.folder($Obj_formatter.name); \
+								"target"; $target; \
 								"format"; $Obj_formatter.assets.format; \
 								"template"; $isTemplate; \
 								"size"; $Obj_formatter.assets.size))
@@ -429,7 +443,6 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 									$Obj_out.errors:=New collection:C1472
 									
 									// Read source file (XXX here source is String; later could have object or collection if image is already scaled)
-									var $sourceFile : 4D:C1709.File
 									Case of 
 										: (Value type:C1509($Obj_in.source)=Is text:K8:3)
 											$sourceFile:=File:C1566($Obj_in.source; fk platform path:K87:2)
@@ -439,7 +452,12 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 									
 									If ($sourceFile.exists)
 										
-										READ PICTURE FILE:C678($sourceFile.platformPath; $Pic_buffer)
+										Case of 
+											: (OB Instance of:C1731($sourceFile; 4D:C1709.ZipFile))
+												BLOB TO PICTURE:C682($sourceFile.getContent(); $Pic_buffer)
+											Else 
+												READ PICTURE FILE:C678($sourceFile.platformPath; $Pic_buffer)
+										End case 
 										
 										If ($Obj_in.size=Null:C1517)  // if no size, take from picture
 											
@@ -507,35 +525,35 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 												
 												If (OK=1)
 													
-													WRITE PICTURE FILE:C680($Obj_in.target+$Txt_buffer+Folder separator:K24:12+$Obj_image.filename; $Pic_icon; "."+$Obj_in.format)
+													WRITE PICTURE FILE:C680($target.folder($Txt_buffer).file($Obj_image.filename).platformPath; $Pic_icon; "."+$Obj_in.format)
 													
 													If (OK=0)
 														
-														$Obj_out.errors.push("Failed to write picture "+$Obj_in.target+$Txt_buffer+Folder separator:K24:12+$Obj_image.filename+", created from "+$Obj_in.source+" with format ."+$Obj_in.format)
+														$Obj_out.errors.push("Failed to write picture "+$target.folder($Txt_buffer).file($Obj_image.filename).platformPath+", created from "+$Obj_in.source+" with format ."+$Obj_in.format)
 														
 													End if 
 													
 												Else 
 													
-													$Obj_out.errors.push("Failed to create thumbnail for "+$Obj_in.source+" with size "+JSON Stringify:C1217($Obj_in.size)+" and scale "+$Lon_scale)
+													$Obj_out.errors.push("Failed to create thumbnail for "+$sourceFile.platformPath+" with size "+JSON Stringify:C1217($Obj_in.size)+" and scale "+$Lon_scale)
 													
 												End if 
 											End for each 
 											
 										Else 
 											
-											$Obj_out.errors.push("Failed to read picture "+$Obj_in.source)
+											$Obj_out.errors.push("Failed to read picture "+$sourceFile.platformPath)
 											
 										End if 
 										
 									Else 
 										
-										$Obj_out.errors.push("No source file to read picture "+String:C10($Obj_in.source))
+										$Obj_out.errors.push("No source file to read picture "+$sourceFile.platformPath)
 										
 									End if 
 									
 									// dark ?
-									$sourceFile:=File:C1566(Replace string:C233($sourceFile.path; $sourceFile.extension; "_dark"+$sourceFile.extension); fk platform path:K87:2)
+									$sourceFile:=$sourceFile.parent.file(Replace string:C233($sourceFile.fullName; $sourceFile.extension; "_dark"+$sourceFile.extension))
 									
 									If ($sourceFile.exists)
 										
