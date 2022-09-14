@@ -651,6 +651,8 @@
 		"tables": [
 			"__DeletedRecords",
 			"ALL_TYPES",
+			"Ambulatoire",
+			"Ambulatoire_Actes",
 			"Commands",
 			"COMPOSITE PRIMARY KEY",
 			"Employes",

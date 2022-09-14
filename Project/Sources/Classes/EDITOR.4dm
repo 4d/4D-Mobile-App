@@ -18,7 +18,8 @@ Class constructor()
 		"str"; \
 		"path"; \
 		"tips"; \
-		"svg"))
+		"svg"; \
+		"error"))
 		
 		This:C1470._instantiate($t)
 		
