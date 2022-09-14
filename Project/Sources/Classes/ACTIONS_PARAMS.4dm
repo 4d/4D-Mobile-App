@@ -1808,9 +1808,9 @@ Function dataSourceMenuManager()
 Function editList()
 	
 /*
-																						$form:=New object(\
-																																																								"static"; $static; \
-																																																								"host"; This.path.hostInputControls(True))
+																							$form:=New object(\
+																																																										"static"; $static; \
+																																																										"host"; This.path.hostInputControls(True))
 	
 $form.folder:=This.path.hostInputControls()
 $manifest:=$form.folder.file("manifest.json")
@@ -2486,8 +2486,6 @@ Function _withDataSource($format : Text)->$with : Boolean
 	$with:=This:C1470.customInputControls.indexOf($format)>=0
 	
 	If (Not:C34($with))
-		
-		//$file:=This.path.hostInputControls().file($format+".zip")
 		
 		$file:=This:C1470.path.hostInputControls().file($format+"/manifest.json")
 		
