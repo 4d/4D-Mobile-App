@@ -1333,7 +1333,7 @@ Function getFormats() : Object
 	If (Feature.with("inputControlArchive"))
 		
 		var $item : Object
-		
+		var $target : Collection
 		$target:=Value type:C1509(PROJECT.info.target)=Is collection:K8:32 ? PROJECT.info.target : New collection:C1472(PROJECT.info.target)
 		
 		For each ($item; $folder.folders().combine($folder.files().query("extension = :1"; SHARED.archiveExtension)))
@@ -1808,9 +1808,9 @@ Function dataSourceMenuManager()
 Function editList()
 	
 /*
-																					$form:=New object(\
-																																																						"static"; $static; \
-																																																						"host"; This.path.hostInputControls(True))
+																						$form:=New object(\
+																																																								"static"; $static; \
+																																																								"host"; This.path.hostInputControls(True))
 	
 $form.folder:=This.path.hostInputControls()
 $manifest:=$form.folder.file("manifest.json")
@@ -2359,7 +2359,7 @@ Function metaInfo($current : Object)->$result
 	//MARK:-[PRIVATE]
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	/// Create the "target" property according to the folders found
-Function _createTarget($manifest : Object; $item : cs:C1710.formatter)
+Function _createTarget($manifest : Object; $item : 4D:C1709.Folder)
 	
 	var $android; $ios : Boolean
 	
