@@ -1412,7 +1412,7 @@ Function getFormats() : Object
 						End if 
 						
 						var $format : Text
-						$format:="/"+$manifest.name+($isArchive ? ".zip" : "")
+						$format:="/"+$manifest.name  //+($isArchive ? ".zip" : "")
 						
 						If ($formats[$type].indexOf($format)<0)
 							
@@ -1808,9 +1808,9 @@ Function dataSourceMenuManager()
 Function editList()
 	
 /*
-																							$form:=New object(\
-																																																										"static"; $static; \
-																																																										"host"; This.path.hostInputControls(True))
+																								$form:=New object(\
+																																																												"static"; $static; \
+																																																												"host"; This.path.hostInputControls(True))
 	
 $form.folder:=This.path.hostInputControls()
 $manifest:=$form.folder.file("manifest.json")
