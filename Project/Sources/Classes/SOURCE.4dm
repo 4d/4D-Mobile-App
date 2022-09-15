@@ -191,12 +191,11 @@ Function update()
 	
 	If (This:C1470.testServer.isRunning)
 		
+		This:C1470.generate.disable()
 		This:C1470.dataSourceStatus.hide()
 		
 		This:C1470.serverInTest.start()
 		This:C1470.testServer.show()
-		
-		This:C1470.generate.disable()
 		
 	Else 
 		
@@ -549,7 +548,10 @@ Function localizeKeyFile()
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function doGenerate()
 	
-	var $keyPathname : Text
+	var $keyPath : Text
+	var $file : 4D:C1709.File
+	
+	$keyPath:=Form:C1466.dataSource.keyPath
 	
 	If (Not:C34(This:C1470.generate.isRunning))
 		
@@ -559,24 +561,31 @@ Function doGenerate()
 		
 		If (This:C1470.remote)
 			
-			// ***************************************************************
-			// #RUSTINE: ne devrait plus être nécessaire
-			If (Test path name:C476($keyPathname)#Is a document:K24:1)
+			$file:=File:C1566($keyPath)
+			
+			If (Not:C34($file.exists))
 				
-				Logger.warning(String:C10(Form:C1466.dataSource.keyPath)+" -> "+$keyPathname)
-				$keyPathname:=Convert path POSIX to system:C1107(Form:C1466.dataSource.keyPath)
+				// Try relative
+				$file:=File:C1566(Folder:C1567(Folder:C1567(fk database folder:K87:14).platformPath; fk platform path:K87:2).path+$keyPath)
 				
 			End if 
-			// ***************************************************************
 			
 		Else 
 			
 			// Default location
-			$keyPathname:=UI.path.key().platformPath
+			$file:=UI.path.key()
 			
 		End if 
 		
-		UI.doGenerate($keyPathname)
+		If ($file.exists)
+			
+			UI.doGenerate($file.platformPath)
+			
+		Else 
+			
+			ASSERT:C1129(Database.isMatrix; "keyPath not found: "+$keyPath)
+			
+		End if 
 		
 	Else 
 		
