@@ -51,6 +51,7 @@ dependencies {
     // Utils
     implementation Libs.material
     implementation Libs.multidex
+    implementation Libs.play_services_location
     implementation Libs.timber
 
     // Testing
