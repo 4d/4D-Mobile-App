@@ -22,6 +22,37 @@ Class constructor($id : Text; $options : Variant)
 	// ⚠️ In some cases (Surface), the Home folder is not the parent of the desktop folder.
 	This:C1470.home:=Folder:C1567(Split string:C1554(Folder:C1567(fk desktop folder:K87:19).path; "/").resize(3).join("/"))
 	
+	//MARK:-TOOLS
+Function resolve($path : Text) : Object
+	
+	If ($path[[1]]="/")\
+		 && (Position:C15("/Volumes/"; $path; *)=0)\
+		 && (Position:C15("/Users/"; $path; *)=0)  // Relative path
+		
+		If ($path="@/")
+			
+			return Folder:C1567(database.databaseFolder.path+$path)
+			
+		Else 
+			
+			return File:C1566(database.databaseFolder.path+$path)
+			
+		End if 
+		
+	Else 
+		
+		If ($path="@/")
+			
+			return Folder:C1567($path)
+			
+		Else 
+			
+			return File:C1566($path)
+			
+		End if 
+	End if 
+	//%W+533.1
+	
 	//MARK:-USER
 Function userCache()->$folder : 4D:C1709.Folder
 	

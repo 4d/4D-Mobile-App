@@ -250,7 +250,7 @@ Function checkingDatasourceConfiguration()
 	
 	var $success : Boolean
 	var $pos; $len; $port : Integer
-	var $keypath; $url : Text
+	var $keyPath; $url : Text
 	var $c : Collection
 	var $webServer : 4D:C1709.WebServer
 	var $file : 4D:C1709.File
@@ -284,25 +284,11 @@ Function checkingDatasourceConfiguration()
 			
 			If ($success)
 				
-				$keypath:=String:C10(This:C1470._dataSource.keyPath)
+				$keyPath:=String:C10(This:C1470._dataSource.keyPath)
 				
-				If (Length:C16($keypath)>0)
+				If (Length:C16($keyPath)>0)
 					
-					//%W-533.1
-					If ($keypath[[1]]="/")\
-						 && (Position:C15("/Volumes/"; $keypath; *)=0)\
-						 && (Position:C15("/Users/"; $keypath; *)=0)
-						
-						// Relative path
-						$file:=Folder:C1567(Folder:C1567(fk database folder:K87:14; *).platformPath; fk platform path:K87:2)\
-							.file(Substring:C12($keypath; 2))
-						
-					Else 
-						
-						$file:=File:C1566($keypath)
-						
-					End if 
-					//%W+533.1
+					$file:=UI.path.resolve($keyPath)
 					
 					If ($file.exists)
 						
@@ -561,14 +547,7 @@ Function doGenerate()
 		
 		If (This:C1470.remote)
 			
-			$file:=File:C1566($keyPath)
-			
-			If (Not:C34($file.exists))
-				
-				// Try relative
-				$file:=File:C1566(Folder:C1567(Folder:C1567(fk database folder:K87:14).platformPath; fk platform path:K87:2).path+$keyPath)
-				
-			End if 
+			$file:=UI.path.resolve($keyPath)
 			
 		Else 
 			
