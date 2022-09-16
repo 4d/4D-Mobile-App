@@ -1333,12 +1333,12 @@ Function copyFormatterFilesToApp
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function copyCustomInputControlFiles
+Function copyKotlinInputControlFiles
 	var $0 : Object
 	var $1 : Collection  // actions collection
 	var $2 : Text  // Package name
 	
-	var $action; $actionParameter; $handleInputControlFile : Object
+	var $action; $actionParameter; $handleKotlinInputControlFile : Object
 	
 	$0:=New object:C1471(\
 		"success"; True:C214; \
@@ -1348,12 +1348,12 @@ Function copyCustomInputControlFiles
 		
 		For each ($actionParameter; OB Entries:C1720($action))
 			
-			$handleInputControlFile:=This:C1470.handleCustomInputControlFiles($actionParameter; $2)
+			$handleKotlinInputControlFile:=This:C1470.handleKotlinInputControlFiles($actionParameter; $2)
 			
-			If (Not:C34($handleInputControlFile.success))
+			If (Not:C34($handleKotlinInputControlFile.success))
 				
 				$0.success:=False:C215
-				$0.errors.combine($handleInputControlFile.errors)
+				$0.errors.combine($handleKotlinInputControlFile.errors)
 				
 				// Else : all ok
 			End if 
@@ -1364,7 +1364,7 @@ Function copyCustomInputControlFiles
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function handleCustomInputControlFiles
+Function handleKotlinInputControlFiles
 	var $0 : Object
 	var $1 : Object  // action parameter object
 	var $2 : Text  // Package name

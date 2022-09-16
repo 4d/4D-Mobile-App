@@ -38,7 +38,7 @@ Class constructor($project : Object)
 	This:C1470.project.hasActions:=True:C214
 	This:C1470.project.hasDataSet:=True:C214
 	This:C1470.project.hasOpenUrlAction:=Feature.with("openURLAction")
-	This:C1470.project.hasInputControls:=Feature.with("inputControlWithCodeAndroid")
+	This:C1470.project.hasKotlinInputControls:=Feature.with("inputControlWithCodeAndroid")
 	
 	This:C1470.project.debugMode:=((Shift down:C543) && (Bool:C1537(dev_Matrix)=True:C214)) ? True:C214 : False:C215
 	
@@ -314,7 +314,7 @@ Function create()->$result : Object
 		If (Feature.with("inputControlWithCodeAndroid"))
 			
 			// MARK:COPY CUSTOM INPUT CONTROL FILES
-			$o:=This:C1470.androidprojectgenerator.copyCustomInputControlFiles(This:C1470.project.project.actions; This:C1470.project.package)
+			$o:=This:C1470.androidprojectgenerator.copyKotlinInputControlFiles(This:C1470.project.project.actions; This:C1470.project.package)
 			
 		End if 
 		
