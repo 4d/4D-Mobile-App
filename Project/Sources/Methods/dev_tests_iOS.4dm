@@ -73,6 +73,10 @@ Case of
 		//If ($simctl.isAppInstalled("com.myCompany.My-App-7"; $device.udid))
 		
 		// End if
+		var $devmodectl : cs:C1710.devmodectl
+		$devmodectl:=cs:C1710.devmodectl.new()
+		
+		$pluggedDevices:=$devmodectl.list()
 		
 		//______________________________________________________
 	: (True:C214)
