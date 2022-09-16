@@ -15,7 +15,7 @@ Class constructor
 	Super:C1705()
 	
 	This:C1470.exe:=This:C1470._exe()
-	This:C1470.cmd:=This:C1470.quoted(This:C1470.exe.path)
+	This:C1470.cmd:=Replace string:C233(This:C1470.exe.path; "\\s"; "\\\\s")
 	
 	var $studio : cs:C1710.studio
 	$studio:=cs:C1710.studio.new()
