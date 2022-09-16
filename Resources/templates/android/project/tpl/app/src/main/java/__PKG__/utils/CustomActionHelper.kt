@@ -8,7 +8,7 @@ package {{package}}.utils
 
 
 import android.view.View
-import com.qmobile.qmobiledatasync.utils.BaseInputControl
+import com.qmobile.qmobiledatasync.utils.BaseKotlinInputControl
 import com.qmobile.qmobiledatasync.utils.GenericActionHelper
 {{#kotlin_input_controls}}
 import {{package}}.inputcontrol.{{class_name}}
@@ -22,7 +22,7 @@ class CustomActionHelper : GenericActionHelper {
     /**
      * Gets the appropriate input control class
      */
-    override fun getInputControl(itemView: View, format: String?): BaseInputControl? = when (format) {
+    override fun getKotlinInputControl(itemView: View, format: String?): BaseKotlinInputControl? = when (format) {
         {{#kotlin_input_controls}}
         "/{{name}}" -> {{class_name}}(itemView)
         {{/kotlin_input_controls}}
