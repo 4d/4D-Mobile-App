@@ -1091,7 +1091,7 @@ Function setHelpTip($e : Object)
 							End for each 
 						End if 
 						
-						$tip:=String:C10(SHARED.resources.formattersByName[This:C1470.name].tips)
+						$tip:=String:C10(SHARED.resources.formattersByName[$field.format].tips)
 						
 					End if 
 				End if 
