@@ -189,6 +189,8 @@ Function start($avdName : Text; $wait : Boolean)->$result : Object
 	
 	If (This:C1470.success)
 		
+		This:C1470.bringToFront()
+		
 		If (Count parameters:C259>=2)
 			
 			var $startTime : Integer
@@ -221,8 +223,6 @@ Function start($avdName : Text; $wait : Boolean)->$result : Object
 				
 			End if 
 			
-			This:C1470.bringToFront(This:C1470.pid)
-			
 		Else 
 			
 			$result.success:=True:C214
@@ -247,8 +247,30 @@ Function isBooted($avdName : Text)->$booted : Boolean
 	// Bringing the Emulator to the forefront
 Function bringToFront()
 	
-	//je ne sais pas comment faire pour le moment
-	
+	If (Is macOS:C1572)
+		
+		This:C1470.launch("osascript -e 'tell application \"System Events\" to set frontmost of process \"qemu-system-x86_64\" to true'")
+		
+	Else 
+		
+		//fixme:I don't know how to do it right now
+		
+/*
+Title %vTitle%
+:: preparation (initialisation)
+@echo WScript.CreateObject("WScript.Shell").AppActivate(WScript.Arguments.Item(0))>%tmp%\switch.vbs
+:: some cmd lines exposing other windows
+:: ...
+:: just as an example to start the notepad
+start "" notepad
+:: use 1: focus back on this cmd window
+%tmp%\switch.vbs %vTitle%
+:: ...
+:: use 2: focus to an application with <application name> 
+%tmp%\switch.vbs "<application name>"
+*/
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// [PRIVATE] Get simulator options
