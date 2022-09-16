@@ -25,33 +25,29 @@ Class constructor($id : Text; $options : Variant)
 	//MARK:-TOOLS
 Function resolve($path : Text) : Object
 	
-	If ($path[[1]]="/")\
-		 && (Position:C15("/Volumes/"; $path; *)=0)\
-		 && (Position:C15("/Users/"; $path; *)=0)  // Relative path
+	If (Length:C16($path)=0)
 		
-		If ($path="@/")
-			
-			return Folder:C1567(database.databaseFolder.path+$path)
-			
-		Else 
-			
-			return File:C1566(database.databaseFolder.path+$path)
-			
-		End if 
+		return File:C1566("📄")
+		
+	End if 
+	
+	If ($path="/@")\
+		 && (Position:C15("/Volumes/"; $path; *)=0)\
+		 && (Position:C15("/Users/"; $path; *)=0)
+		
+		// Relative 
+		return $path="@/"\
+			 ? Folder:C1567(database.databaseFolder.path+$path)\
+			 : File:C1566(database.databaseFolder.path+$path)
 		
 	Else 
 		
-		If ($path="@/")
-			
-			return Folder:C1567($path)
-			
-		Else 
-			
-			return File:C1566($path)
-			
-		End if 
+		// Absolute
+		return $path="@/"\
+			 ? Folder:C1567($path)\
+			 : File:C1566($path)
+		
 	End if 
-	//%W+533.1
 	
 	//MARK:-USER
 Function userCache()->$folder : 4D:C1709.Folder
@@ -552,8 +548,6 @@ Function hostNavigationForms($create : Boolean) : 4D:C1709.Folder  // form/navig
 	End if 
 	
 	return (This:C1470.target)
-	
-	
 	
 /*========================================================*/
 Function iOSDb($relativePath : Variant) : 4D:C1709.File

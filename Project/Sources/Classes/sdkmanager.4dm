@@ -98,13 +98,13 @@ Class constructor
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Get the current version of sdkmanager
-Function getVersion()->$version : Text
+Function getVersion() : Text
 	
 	This:C1470.launch(This:C1470.cmd; "--version")
 	
 	If (This:C1470.success)
 		
-		$version:=This:C1470.outputStream
+		return This:C1470.outputStream
 		
 	Else 
 		
@@ -120,7 +120,7 @@ Function update()
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Check if all licenses have been accepted, return True if yes, False if not
-Function isReady()->$ready : Boolean
+Function isReady() : Boolean
 	
 	If (Is macOS:C1572)
 		
@@ -134,11 +134,11 @@ Function isReady()->$ready : Boolean
 		
 	End if 
 	
-	$ready:=Match regex:C1019("(?mi-s)All SDK package licenses accepted"; This:C1470.outputStream; 1)
+	return Match regex:C1019("(?mi-s)All SDK package licenses accepted"; This:C1470.outputStream; 1)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Try to accept the licenses
-Function acceptLicences()->$ready : Boolean
+Function acceptLicences() : Boolean
 	
 	//If (Is macOS)
 	//This.launch("sh -c \"y | "+This.cmd+" --licenses\"")
@@ -170,14 +170,14 @@ Function acceptLicences()->$ready : Boolean
 		
 	End for each 
 	
-	$ready:=This:C1470.isReady()
+	return This:C1470.isReady()
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Install package(s)
-Function install($package : Text)->$success : Boolean
+Function install($package : Text) : Boolean
 	
 	This:C1470.launch(This:C1470.cmd; This:C1470.quoted($package))
-	$success:=(Position:C15("100% Unzipping"; This:C1470.outputStream)>0)
+	return (Position:C15("100% Unzipping"; This:C1470.outputStream)>0)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// List installed and available packages
