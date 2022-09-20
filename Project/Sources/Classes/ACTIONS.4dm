@@ -702,7 +702,11 @@ Function addMenuManager()
 Function openOnMobileAppActionDatabaseMethod()
 	
 	var $code : Text
+	var $i : Integer
+	var $o : Object
+	var $c : Collection
 	var $file : 4D:C1709.File
+	
 	ARRAY TEXT:C222($methods; 0)
 	
 	METHOD GET PATHS:C1163(Path database method:K72:2; $methods; *)
@@ -735,16 +739,36 @@ Function openOnMobileAppActionDatabaseMethod()
 			
 		End if 
 		
-		If ($file.exists)
+		If ($file.exists)\
+			 && (Form:C1466.actions#Null:C1517)
 			
 			// Delete actions performed locally on the mobile
-			var $c : Collection
-			$c:=Form:C1466.actions.query("NOT(preset IN :1)"; New collection:C1472("sort"; "openURL"))
+			$c:=Form:C1466.actions.query("NOT(preset IN :1)"; New collection:C1472("sort"; "openURL")).copy()
 			
-			PROCESS 4D TAGS:C816($file.getText(); $code; $c.extract("name"); $c.extract("label"))
-			METHOD SET CODE:C1194($methods{0}; $code; *)
-			
+			If ($c.length>0)
+				
+				For ($i; 0; $c.length-1; 1)
+					
+					$o:=$c[$i]
+					
+					If ($o.scope="table")
+						
+						$o.comment:=String:C10(project.dataModel[String:C10($o.tableNumber)][""].name)+" dataclass"
+						
+					Else 
+						
+						$o.comment:=String:C10(project.dataModel[String:C10($o.tableNumber)][""].name)+" entity"
+						
+					End if 
+				End for 
+				
+				PROCESS 4D TAGS:C816($file.getText(); $code; $c)
+				
+			End if 
 		End if 
+		
+		METHOD SET CODE:C1194($methods{0}; $code; *)
+		
 	End if 
 	
 	// Open method
