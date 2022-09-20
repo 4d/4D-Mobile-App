@@ -424,6 +424,8 @@ Function dumpTableSize($tableName : Text; $target : Text) : Text
 		
 	Else 
 		
+		$tableName:=This:C1470._formatTableNameAndroid($tableName)
+		
 		If (This:C1470.datasetAndroid=Null:C1517)\
 			 || (This:C1470.datasetAndroid.tables=Null:C1517)\
 			 || (This:C1470.datasetAndroid.tables[$tableName]=Null:C1517)
@@ -433,7 +435,7 @@ Function dumpTableSize($tableName : Text; $target : Text) : Text
 		End if 
 		
 		//mark:ACI0103230
-		$size:=Num:C11(This:C1470.datasetAndroid.tables[This:C1470._formatTableNameAndroid($tableName)])
+		$size:=Num:C11(This:C1470.datasetAndroid.tables[$tableName])
 		
 	End if 
 	
