@@ -432,7 +432,8 @@ Function dumpTableSize($tableName : Text; $target : Text) : Text
 			
 		End if 
 		
-		$size:=Num:C11(This:C1470.datasetAndroid.tables[$tableName])
+		//mark:ACI0103230
+		$size:=Num:C11(This:C1470.datasetAndroid.tables[This:C1470._formatTableNameAndroid($tableName)])
 		
 	End if 
 	
@@ -449,6 +450,112 @@ Function dumpTableSize($tableName : Text; $target : Text) : Text
 	End if 
 	
 	return (doc_bytesToString($size))
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function _formatTableNameAndroid($tableName : Text) : Text
+	
+	var $regex : cs:C1710.regex
+	var $str : cs:C1710.str
+	
+	// Remove spaces
+	$tableName:=Replace string:C233($tableName; " "; "")
+	
+	// First letter in uppercase
+	$tableName[[1]]:=Uppercase:C13($tableName[[1]])
+	
+	// Replace accented characters with non-accented characters
+	$str:=cs:C1710.str.new($tableName)
+	$tableName:=$str.unaccented()
+	
+	// Replace special characters with underscores
+	$regex:=cs:C1710.regex.new($tableName; "[^a-zA-Z0-9._]")
+	$tableName:=$regex.substitute("_")
+	
+	// Prefix names beginning with an underscore
+	$tableName:=$tableName[[1]]="_" ? "Q"+$tableName : $tableName
+	
+	// Manage reserved words for Kotin or Java
+	If (New collection:C1472("as"; \
+		"break"; \
+		"class"; \
+		"continue"; \
+		"do"; \
+		"else"; \
+		"false"; \
+		"for"; \
+		"fun"; \
+		"if"; \
+		"in"; \
+		"is"; \
+		"null"; \
+		"object"; \
+		"package"; \
+		"return"; \
+		"super"; \
+		"this"; \
+		"throw"; \
+		"true"; \
+		"try"; \
+		"typealias"; \
+		"typeof"; \
+		"val"; \
+		"var"; \
+		"when"; \
+		"while"; \
+		"by"; \
+		"catch"; \
+		"constructor"; \
+		"delegate"; \
+		"dynamic"; \
+		"field"; \
+		"file"; \
+		"finally"; \
+		"get"; \
+		"import"; \
+		"init"; \
+		"param"; \
+		"property"; \
+		"receiver"; \
+		"set"; \
+		"setparam"; \
+		"where"; \
+		"actual"; \
+		"abstract"; \
+		"annotation"; \
+		"companion"; \
+		"const"; \
+		"crossinline"; \
+		"data"; \
+		"enum"; \
+		"expect"; \
+		"external"; \
+		"final"; \
+		"infix"; \
+		"inline"; \
+		"inner"; \
+		"internal"; \
+		"lateinit"; \
+		"noinline"; \
+		"open"; \
+		"operator"; \
+		"out"; \
+		"override"; \
+		"private"; \
+		"protected"; \
+		"public"; \
+		"reified"; \
+		"sealed"; \
+		"suspend"; \
+		"tailrec"; \
+		"vararg"; \
+		"field"; \
+		"it").indexOf($tableName)#-1)
+		
+		$tableName:="QMobile_"+$tableName
+		
+	End if 
+	
+	return $tableName
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Display filter status
