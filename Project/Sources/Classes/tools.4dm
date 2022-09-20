@@ -12,13 +12,18 @@ Class constructor
 	This:C1470.errors:=New collection:C1472
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function clone($class : Object) : Object
+	
+	return OB Copy:C1225($class)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function first($c : Collection) : Variant
 	
 	If ($c#Null:C1517)
 		
 		If ($c.length>0)
 			
-			return ($c[0])
+			return $c[0]
 			
 		End if 
 	End if 
@@ -30,7 +35,7 @@ Function last($c : Collection) : Variant
 		
 		If ($c.length>0)
 			
-			return ($c[$c.length-1])
+			return $c[$c.length-1]
 			
 		End if 
 	End if 
@@ -116,7 +121,7 @@ Function lep($command : Text; $inputStream) : Object
 		
 	End if 
 	
-	return ($o)
+	return $o
 	
 	//====================================================================
 Function escape($tring : Text) : Text
@@ -132,7 +137,7 @@ Function escape($tring : Text) : Text
 		End for each 
 	End if 
 	
-	return ($tring)
+	return $tring
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Compare two string version
@@ -191,19 +196,19 @@ Function versionCompare($version : Text; $reference : Text; $separator : Text) :
 		End case 
 	End for 
 	
-	return ($result)
+	return $result
 	
 	//====================================================================
 	// Enclose, if necessary, the string in single quotation marks
 Function singleQuoted($tring : Text) : Text
 	
-	return (Match regex:C1019("^'.*'$"; $tring; 1) ? $tring : "'"+$tring+"'")
+	return Match regex:C1019("^'.*'$"; $tring; 1) ? $tring : "'"+$tring+"'"
 	
 	//====================================================================
 	// Returns the string between quotes
 Function quoted($tring : Text) : Text
 	
-	return (Match regex:C1019("^\".*\"$"; $tring; 1) ? $tring : "\""+$tring+"\"")
+	return Match regex:C1019("^\".*\"$"; $tring; 1) ? $tring : "\""+$tring+"\""
 	
 	//====================================================================
 	// Returns the localized string corresponding to the $resname resname & made replacement if any
@@ -293,7 +298,7 @@ Function localized($resname : Text; $replacement; $replacementN : Text)->$locali
 	// Returns True if text match given pattern
 Function match($pattern : Text; $tring : Text) : Boolean
 	
-	return (Match regex:C1019($pattern; $tring; 1))
+	return Match regex:C1019($pattern; $tring; 1)
 	
 	//====================================================================
 	// Returns a string that can be used in multistyles texts
@@ -303,7 +308,7 @@ Function multistyleCompatible($tring : Text) : Text
 	$tring:=Replace string:C233($tring; "<"; "&lt;")
 	$tring:=Replace string:C233($tring; ">"; "&gt;")
 	
-	return ($tring)
+	return $tring
 	
 	//====================================================================
 	// Returns a digest signature of the contents of a folder

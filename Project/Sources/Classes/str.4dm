@@ -19,6 +19,21 @@ Class constructor($content)
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function clone($content) : cs:C1710.str
+	
+	var $class : cs:C1710.str
+	
+	$class:=Super:C1706.clone(This:C1470)
+	
+	If (Count parameters:C259>=1)
+		
+		$class.setText($content)
+		
+	End if 
+	
+	return $class
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Defines the contents of the string & returns the updated object string
 Function setText($content) : cs:C1710.str
 	
@@ -48,6 +63,7 @@ Function setText($content) : cs:C1710.str
 			//______________________________________________________
 	End case 
 	
+	This:C1470.success:=True:C214
 	This:C1470.length:=Length:C16(This:C1470.value)
 	This:C1470.styled:=This:C1470.isStyled()
 	

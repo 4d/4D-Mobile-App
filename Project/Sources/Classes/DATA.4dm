@@ -424,7 +424,9 @@ Function dumpTableSize($tableName : Text; $target : Text) : Text
 		
 	Else 
 		
+		//MARK:-ACI0103230
 		$tableName:=This:C1470._formatTableNameAndroid($tableName)
+		//MARK:-
 		
 		If (This:C1470.datasetAndroid=Null:C1517)\
 			 || (This:C1470.datasetAndroid.tables=Null:C1517)\
@@ -434,7 +436,6 @@ Function dumpTableSize($tableName : Text; $target : Text) : Text
 			
 		End if 
 		
-		//mark:ACI0103230
 		$size:=Num:C11(This:C1470.datasetAndroid.tables[$tableName])
 		
 	End if 
@@ -476,7 +477,7 @@ Function _formatTableNameAndroid($tableName : Text) : Text
 	// Prefix names beginning with an underscore
 	$tableName:=$tableName[[1]]="_" ? "Q"+$tableName : $tableName
 	
-	// Manage reserved words for Kotin or Java
+	//FIXME:Seems to be useless - Manage reserved words for Kotin or Java
 	If (New collection:C1472("as"; \
 		"break"; \
 		"class"; \
