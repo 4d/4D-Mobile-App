@@ -521,7 +521,7 @@ Case of
 					$Obj_buffer:=$in.table[$Txt_field]
 					
 					Case of 
-						: (Feature.with("alias") && PROJECT.isAlias($Obj_buffer))
+						: (PROJECT.isAlias($Obj_buffer))
 							
 							$out.fields.push($Obj_buffer.path)
 							
@@ -566,7 +566,7 @@ Case of
 										: (Value type:C1509($Obj_buffer[$Txt_fieldNumber])=Is object:K8:27)
 											
 											Case of 
-												: (Feature.with("alias") && PROJECT.isAlias($Obj_buffer[$Txt_fieldNumber]))
+												: (PROJECT.isAlias($Obj_buffer[$Txt_fieldNumber]))
 													
 													$out.fields.push($Txt_field+"."+$Obj_buffer[$Txt_fieldNumber].path)
 													
@@ -605,24 +605,16 @@ Case of
 		// Add primary key if needed for expanded data
 		For each ($Txt_field; $out.expand)
 			
-			If (Feature.with("alias"))
-				
-				ASSERT:C1129($in.catalog#Null:C1517; "Need catalog definition to dump data")
-				
-				$Obj_table:=$in.catalog.query("name = :1"; $in.table[""].name).pop()
-				
-				// TODO: if contain "." split and get first, and loop
-				$field:=$Obj_table.fields.query("name = :1"; $Txt_field).pop()
-				
-				$Obj_buffer:=New object:C1471
-				$Obj_buffer.tableInfo:=$in.catalog.query("name = :1"; String:C10($field.relatedDataClass)).pop()
-				$Obj_buffer.success:=$Obj_buffer.tableInfo#Null:C1517
-				
-			Else 
-				$Obj_buffer:=_o_structure(New object:C1471(\
-					"action"; "tableInfo"; \
-					"name"; String:C10($in.table[$Txt_field].relatedDataClass)))
-			End if 
+			ASSERT:C1129($in.catalog#Null:C1517; "Need catalog definition to dump data")
+			
+			$Obj_table:=$in.catalog.query("name = :1"; $in.table[""].name).pop()
+			
+			// TODO: if contain "." split and get first, and loop
+			$field:=$Obj_table.fields.query("name = :1"; $Txt_field).pop()
+			
+			$Obj_buffer:=New object:C1471
+			$Obj_buffer.tableInfo:=$in.catalog.query("name = :1"; String:C10($field.relatedDataClass)).pop()
+			$Obj_buffer.success:=$Obj_buffer.tableInfo#Null:C1517
 			
 			If ($Obj_buffer.success)
 				
@@ -636,11 +628,7 @@ Case of
 				
 			Else 
 				
-				If (Feature.with("alias"))
-					ob_warning_add($out; "Cannot get information for related table , related by link "+$Txt_field+" in "+$in.table+")")
-				Else 
-					ob_warning_add($out; "Cannot get information for related table "+String:C10($in.table[$Txt_field].relatedDataClass)+"(related by "+$Txt_field+" in "+$in.table+")")
-				End if 
+				ob_warning_add($out; "Cannot get information for related table , related by link "+$Txt_field+" in "+$in.table+")")
 				
 			End if 
 		End for each 

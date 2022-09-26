@@ -129,13 +129,9 @@ Function handleEvents($e : Object)
 					
 				End if 
 				
-				If (Feature.with("androidDataSet"))
-					
-					This:C1470.datasetAndroid:=Null:C1517
-					This:C1470.sqlite:=Null:C1517
-					This:C1470.callMeBack("updateSourcePanel")
-					
-				End if 
+				This:C1470.datasetAndroid:=Null:C1517
+				This:C1470.sqlite:=Null:C1517
+				This:C1470.callMeBack("updateSourcePanel")
 				
 				PROJECT.save()
 				This:C1470.update()
@@ -193,7 +189,7 @@ Function onLoad()
 	
 	This:C1470.queryWidget.setValue(cs:C1710.svg.new($t).picture())
 	
-	If (Feature.with("androidDataSet")) && Is macOS:C1572 && (PROJECT.allTargets())
+	If (Is macOS:C1572 && PROJECT.allTargets())
 		
 		This:C1470.dataSizeLabel.title:=This:C1470.dataSizeLabel.title+" (iOS / Android)"
 		This:C1470.dumpSize.horizontalAlignment:=Align center:K42:3
@@ -325,68 +321,32 @@ Function updateTableListWithDataSizes()
 		If (Bool:C1537($table.embedded))\
 			 & (Not:C34(Bool:C1537($table.filter.parameters)))
 			
-			If (Feature.with("androidDataSet"))
+			If (Is macOS:C1572)
 				
-				If (Is macOS:C1572)
-					
-					Case of 
-							
-							//______________________________________________________
-						: (PROJECT.allTargets())
-							
-							$table.dumpSize:=This:C1470.dumpTableSize($table.name; "ios")+" / "+This:C1470.dumpTableSize($table.name; "android")
-							
-							//______________________________________________________
-						: (PROJECT.iOS())
-							
-							$table.dumpSize:=This:C1470.dumpTableSize($table.name; "ios")
-							
-							//______________________________________________________
-						: (PROJECT.android())
-							
-							$table.dumpSize:=This:C1470.dumpTableSize($table.name; "android")
-							
-							//______________________________________________________
-					End case 
-					
-				Else 
-					
-					$table.dumpSize:=This:C1470.dumpTableSize($table.name; "android")
-					
-				End if 
+				Case of 
+						
+						//______________________________________________________
+					: (PROJECT.allTargets())
+						
+						$table.dumpSize:=This:C1470.dumpTableSize($table.name; "ios")+" / "+This:C1470.dumpTableSize($table.name; "android")
+						
+						//______________________________________________________
+					: (PROJECT.iOS())
+						
+						$table.dumpSize:=This:C1470.dumpTableSize($table.name; "ios")
+						
+						//______________________________________________________
+					: (PROJECT.android())
+						
+						$table.dumpSize:=This:C1470.dumpTableSize($table.name; "android")
+						
+						//______________________________________________________
+				End case 
 				
 			Else 
 				
-				If (This:C1470.sqlite#Null:C1517)
-					
-					$table.dumpSize:=This:C1470.dumpTableSize($table.name)
-					
-				Else 
-					
-					$file:=PROJECT._folder.file("project.dataSet/Resources/Assets.xcassets/Data/"+$table.name+".dataset/"+$table.name+".data.json")
-					
-					If ($file.exists)
-						
-						// Get document size
-						$size:=$file.size
-						
-						// Add pictures size if any
-						$file:=PROJECT._folder.file("Resources/Assets.xcassets/Pictures/"+$table.name+"/manifest.json")
-						
-						If ($file.exists)
-							
-							$size:=$size+JSON Parse:C1218($file.getText()).contentSize
-							
-						End if 
-						
-						$table.dumpSize:=doc_bytesToString($size)
-						
-					Else 
-						
-						$table.dumpSize:=Get localized string:C991("notAvailable")
-						
-					End if 
-				End if 
+				$table.dumpSize:=This:C1470.dumpTableSize($table.name; "android")
+				
 			End if 
 			
 		Else 
@@ -944,8 +904,7 @@ Function queryWidgetManager()
 	var $menu : cs:C1710.menu
 	var $str : cs:C1710.str
 	
-	$ID:=This:C1470.queryWidget.findByCoordinates()
-	
+	$ID:=SVG Find element ID by coordinates:C1054(*; This:C1470.queryWidget.name; MOUSEX; MOUSEY)
 	$table:=This:C1470.current
 	
 	$menu:=cs:C1710.menu.new()

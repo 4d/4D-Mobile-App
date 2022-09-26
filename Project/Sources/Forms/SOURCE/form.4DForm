@@ -16,6 +16,18 @@
 		null,
 		{
 			"objects": {
+				"lastGeneration": {
+					"type": "text",
+					"top": 62,
+					"left": 659,
+					"width": 279,
+					"height": 56,
+					"fontStyle": "italic",
+					"class": "comment",
+					"text": "========== HELLO WORLD ==========",
+					"visibility": "hidden",
+					"borderStyle": "none"
+				},
 				"local": {
 					"type": "radio",
 					"top": 5,
@@ -106,24 +118,6 @@
 					"text": ":xliff:checkingServerAvailability",
 					"class": "label"
 				},
-				"dataGeneration": {
-					"type": "spinner",
-					"top": 62,
-					"left": 659,
-					"width": 20,
-					"height": 19,
-					"visibility": "hidden"
-				},
-				"dataGenerationLabel": {
-					"type": "text",
-					"top": 63,
-					"left": 680,
-					"width": 258,
-					"height": 46,
-					"visibility": "hidden",
-					"text": ":xliff:dataSetGeneration",
-					"class": "label"
-				},
 				"doNotExportImages": {
 					"type": "checkbox",
 					"top": 5,
@@ -137,18 +131,6 @@
 						"onClick"
 					],
 					"dataSourceTypeHint": "boolean"
-				},
-				"lastGeneration": {
-					"type": "text",
-					"top": 62,
-					"left": 659,
-					"width": 279,
-					"height": 56,
-					"fontStyle": "italic",
-					"class": "comment",
-					"text": "========== HELLO WORLD ==========",
-					"visibility": "hidden",
-					"borderStyle": "none"
 				}
 			},
 			"entryOrder": [
@@ -166,7 +148,7 @@
 		"kind": "form"
 	},
 	"method": "panel_HANDLE_EVENT",
-	"geometryStamp": 67,
+	"geometryStamp": 69,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

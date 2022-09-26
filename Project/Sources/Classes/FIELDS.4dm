@@ -363,7 +363,7 @@ Function updateFieldList
 			
 			LISTBOX SET ROW COLOR:C1270(*; This:C1470.names.name; $i+1; $o.nameColors[$i]; lk font color:K53:24)
 			
-			If (Feature.with("alias") && ($o.targets[$i].kind="alias"))
+			If ($o.targets[$i].kind="alias")
 				
 				LISTBOX SET ROW FONT STYLE:C1268(*; This:C1470.names.name; $i+1; Italic:K14:3)
 				
@@ -496,7 +496,7 @@ Function getFieldList()->$result : Object
 							$result.targets.push($field)
 							
 							//……………………………………………………………………………………………………………
-						: (Feature.with("alias") && ($field.kind="alias"))
+						: ($field.kind="alias")
 							
 							If (PROJECT.$project.ExposedStructure.aliasTarget(ds:C1482[$table[""].name]; $field).target.relatedDataClass=Null:C1517)
 								
@@ -571,7 +571,7 @@ Function getFieldList()->$result : Object
 											$result.targets.push($subfield)
 											
 											//______________________________________________________
-										: (Feature.with("alias") && ($subfield.kind="alias"))
+										: ($subfield.kind="alias")
 											
 											This:C1470._labels($subfield; $subKey)
 											
@@ -647,7 +647,7 @@ Function getFieldList()->$result : Object
 														$result.targets.push($subfield2)
 														
 														//______________________________________________________
-													: (Feature.with("alias") && ($subfield.kind="alias"))
+													: ($subfield.kind="alias")
 														
 														This:C1470._labels($subfield2; $subKey2)
 														
@@ -730,7 +730,7 @@ Function getFieldList()->$result : Object
 										$result.targets.push($subfield)
 										
 										//______________________________________________________
-									: (Feature.with("alias") && ($subfield.kind="alias"))
+									: ($subfield.kind="alias")
 										
 										This:C1470._labels($subfield; $subKey)
 										
@@ -806,7 +806,7 @@ Function getFieldList()->$result : Object
 													$result.targets.push($subfield2)
 													
 													//______________________________________________________
-												: (Feature.with("alias") && ($subfield2.kind="alias"))
+												: ($subfield2.kind="alias")
 													
 													This:C1470._labels($subfield2; $subKey2)
 													
@@ -843,7 +843,7 @@ Function getFieldList()->$result : Object
 					Case of 
 							
 							//……………………………………………………………………………………………………………
-						: (Feature.with("alias") && ($field.kind="alias"))
+						: ($field.kind="alias")
 							
 							If (PROJECT.$project.ExposedStructure.aliasTarget(ds:C1482[$table[""].name]; $field).target.relatedDataClass#Null:C1517)
 								

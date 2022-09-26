@@ -1052,13 +1052,10 @@ Function updateProject()
 		End if 
 	End if 
 	
-	If (Feature.with("androidDataSet"))
+	If (Not:C34(New collection:C1472($tableModel).equal(New collection:C1472($tableBackup))))
 		
-		If (Not:C34(New collection:C1472($tableModel).equal(New collection:C1472($tableBackup))))
-			
-			UI.deleteDBFiles()
-			
-		End if 
+		UI.deleteDBFiles()
+		
 	End if 
 	
 	PROJECT.save()

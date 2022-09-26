@@ -36,7 +36,7 @@ Class constructor($project : Object)
 	
 	This:C1470.project.hasRelations:=True:C214
 	This:C1470.project.hasActions:=True:C214
-	This:C1470.project.hasDataSet:=Feature.with("androidDataSet")
+	This:C1470.project.hasDataSet:=True:C214
 	This:C1470.project.hasOpenUrlAction:=Feature.with("openURLAction")
 	
 	This:C1470.project.debugMode:=((Shift down:C543) && (Bool:C1537(dev_Matrix)=True:C214)) ? True:C214 : False:C215
@@ -115,46 +115,43 @@ Function create()->$result : Object
 	
 	$o:=New object:C1471("success"; True:C214)
 	
-	If (Feature.with("androidDataSet"))
+	// MARK:CREATE DATASET
+	If (This:C1470.mustDoDataSet())
 		
-		// MARK:CREATE DATASET
-		If (This:C1470.mustDoDataSet())
-			
-			This:C1470.postStep("dataSetGeneration")
-			
-			$o:=This:C1470.dataSet()
-			
-			If (Not:C34($o.success))
-				
-				$o.errors:=New collection:C1472
-				$o.errors.push("Failed to dump data")
-				
-			End if 
-		End if 
+		This:C1470.postStep("dataSetGeneration")
 		
-		If ($o.success)
+		$o:=This:C1470.dataSet()
+		
+		If (Not:C34($o.success))
 			
-			// Not in constructor, because we want to add $dumpedTables and $dumpedStamp that is generated after dataSet
-			
-			var $dumpInfoFile : 4D:C1709.File
-			$dumpInfoFile:=This:C1470.project.project._folder.file("project.dataSet/android/dump_info.json")
-			
-			If ($dumpInfoFile.exists)
-				
-				var $dumpInfoObj : Object
-				
-				$dumpInfoObj:=JSON Parse:C1218($dumpInfoFile.getText())
-				This:C1470.project.dumpedStamp:=$dumpInfoObj.dumped_stamp
-				This:C1470.project.dumpedTables:=$dumpInfoObj.dumped_tables
-				
-			End if 
-			
-			This:C1470.file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"projecteditor.json")
-			This:C1470.file.setText(JSON Stringify:C1217(This:C1470.project))
-			
-			This:C1470.file.copyTo(This:C1470.logFolder; "lastBuild.android.4dmobile"; fk overwrite:K87:5)
+			$o.errors:=New collection:C1472
+			$o.errors.push("Failed to dump data")
 			
 		End if 
+	End if 
+	
+	If ($o.success)
+		
+		// Not in constructor, because we want to add $dumpedTables and $dumpedStamp that is generated after dataSet
+		
+		var $dumpInfoFile : 4D:C1709.File
+		$dumpInfoFile:=This:C1470.project.project._folder.file("project.dataSet/android/dump_info.json")
+		
+		If ($dumpInfoFile.exists)
+			
+			var $dumpInfoObj : Object
+			
+			$dumpInfoObj:=JSON Parse:C1218($dumpInfoFile.getText())
+			This:C1470.project.dumpedStamp:=$dumpInfoObj.dumped_stamp
+			This:C1470.project.dumpedTables:=$dumpInfoObj.dumped_tables
+			
+		End if 
+		
+		This:C1470.file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"projecteditor.json")
+		This:C1470.file.setText(JSON Stringify:C1217(This:C1470.project))
+		
+		This:C1470.file.copyTo(This:C1470.logFolder; "lastBuild.android.4dmobile"; fk overwrite:K87:5)
+		
 	End if 
 	
 	If ($o.success)
@@ -231,19 +228,15 @@ Function create()->$result : Object
 		End if 
 	End if 
 	
-	If (Feature.with("androidDataSet"))
+	If ($o.success)
 		
-		If ($o.success)
-			
-			$o:=This:C1470.androidprojectgenerator.copyGeneratedDb(This:C1470.project.project._folder)
-			
-		End if 
+		$o:=This:C1470.androidprojectgenerator.copyGeneratedDb(This:C1470.project.project._folder)
 		
-		If ($o.success)
-			
-			$o:=This:C1470.androidprojectgenerator.copyDataSetPictures(This:C1470.project.project._folder)
-			
-		End if 
+	End if 
+	
+	If ($o.success)
+		
+		$o:=This:C1470.androidprojectgenerator.copyDataSetPictures(This:C1470.project.project._folder)
 		
 	End if 
 	

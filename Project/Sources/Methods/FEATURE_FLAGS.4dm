@@ -104,19 +104,21 @@ If (True:C214)  // DELIVERED
 	Feature.delivered("useTextRestResponse"; 1940)  // [MOBILE] Data generation : for optis
 	
 	// Mark:-R5
-	Feature.delivered("xcDataModelClass")  // Use class to create core data model ie. xcDataModel (useful to refactor for alias)
-	Feature.delivered("iosBuildWithClass")  // Use cs.MobileProjectIOS class
-	Feature.delivered("modernStructure")
+	Feature.delivered("xcDataModelClass"; 1950)  // Use class to create core data model ie. xcDataModel (useful to refactor for alias)
+	Feature.delivered("iosBuildWithClass"; 1950)  // Use cs.MobileProjectIOS class
+	Feature.delivered("modernStructure"; 1950)
+	
+	// Mark:-R6
+	Feature.delivered("alias"; 1960)  // [MOBILE] Use aliases
+	Feature.delivered("androidDataSet"; 1960)  // [ANDROID] Data set
 	
 End if 
 
-// Mark:-R6
-Feature.unstable("131225")  // [MOBILE] Use aliases
-Feature.unstable("127558")  // [ANDROID] Data set
+// Mark:-R7
+Feature.unstable("openURLAction")  // azure:3625 [MOBILE] Execute an action that open web area
 
 // Mark:-🚧 MAIN
 Feature.main("listEditor")  // #130828 [MOBILE] Create and edit an input control from the project editor
-Feature.main("openURLAction")  // azure:3625 [MOBILE] Execute an action that open web area
 
 // Mark:-🚧 WIP
 Feature.wip("actionsInTabBar")
@@ -164,6 +166,4 @@ Feature.loadLocal()
 
 // Mark:-→ Alias
 Feature.alias("debug"; 8858)
-Feature.alias("androidDataSet"; 127558)
 Feature.alias("many-one-many"; 129953)
-Feature.alias("alias"; 131225)

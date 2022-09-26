@@ -71,16 +71,12 @@ Function handleEvents($e : Object)
 						//______________________________________________________
 					: ($e.code=On Clicked:K2:4)
 						
-						If (Feature.with("androidDataSet"))
-							
-							// Keep current status
-							var $o : Object
-							$o:=New object:C1471(\
-								"before"; New object:C1471(\
-								"ios"; PROJECT.iOS(); \
-								"android"; PROJECT.android()))
-							
-						End if 
+						// Keep current status
+						var $o : Object
+						$o:=New object:C1471(\
+							"before"; New object:C1471(\
+							"ios"; PROJECT.iOS(); \
+							"android"; PROJECT.android()))
 						
 						If (Is macOS:C1572)\
 							 & ($e.objectName=This:C1470.android.name)\
@@ -96,32 +92,29 @@ Function handleEvents($e : Object)
 							
 						End if 
 						
-						If (Feature.with("androidDataSet"))
+						// Invalidate dataset if target was modified
+						// But don't delete the db files
+						$o.after:=New object:C1471(\
+							"ios"; PROJECT.iOS(); \
+							"android"; PROJECT.android())
+						
+						If (Not:C34(New collection:C1472($o.before).equal(New collection:C1472($o.after))))
 							
-							// Invalidate dataset if target was modified
-							// But don't delete the db files
-							$o.after:=New object:C1471(\
-								"ios"; PROJECT.iOS(); \
-								"android"; PROJECT.android())
+							var $data : cs:C1710.DATA
+							$data:=panel("DATA")
 							
-							If (Not:C34(New collection:C1472($o.before).equal(New collection:C1472($o.after))))
+							If ($data#Null:C1517)
 								
-								var $data : cs:C1710.DATA
-								$data:=panel("DATA")
+								If ($o.before.ios#$o.after.ios)
+									
+									OB REMOVE:C1226($data; "sqlite")
+									
+								End if 
 								
-								If ($data#Null:C1517)
+								If ($o.before.android#$o.after.android)
 									
-									If ($o.before.ios#$o.after.ios)
-										
-										OB REMOVE:C1226($data; "sqlite")
-										
-									End if 
+									OB REMOVE:C1226($data; "datasetAndroid")
 									
-									If ($o.before.android#$o.after.android)
-										
-										OB REMOVE:C1226($data; "datasetAndroid")
-										
-									End if 
 								End if 
 							End if 
 						End if 

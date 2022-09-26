@@ -680,7 +680,7 @@ Function _manageDataSet($out : Object)
 	$out.dump:=dataSet(New object:C1471(\
 		"action"; "check"; \
 		"digest"; True:C214; \
-		"coreDataSet"; Feature.with("androidDataSet"); \
+		"coreDataSet"; True:C214; \
 		"project"; $project))
 	ob_error_combine($out; $out.dump)
 	

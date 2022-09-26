@@ -91,7 +91,7 @@ For each ($fieldKey; $in.table)
 			End for each 
 			
 			//………………………………………………………………………………………………………
-		: (Feature.with("alias") && PROJECT.isAlias($in.table[$fieldKey]))
+		: (PROJECT.isAlias($in.table[$fieldKey]))
 			
 			$recuOut:=$in.catalog.aliasPath($in.table[""].name; $in.table[$fieldKey])
 			

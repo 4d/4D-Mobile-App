@@ -296,7 +296,7 @@ Function dataSetLegacy()->$dump : Object  // TODO: to remove with Not(FEATURE.wi
 	$dump:=dataSet(New object:C1471(\
 		"action"; "check"; \
 		"digest"; True:C214; \
-		"androidDataSet"; Feature.with("androidDataSet"); \
+		"androidDataSet"; True:C214; \
 		"project"; $project))
 	
 	If (Bool:C1537($dump.exists))
@@ -353,7 +353,7 @@ Function dataSetLegacy()->$dump : Object  // TODO: to remove with Not(FEATURE.wi
 			"digest"; True:C214; \
 			"dataSet"; True:C214; \
 			"key"; $pathname; \
-			"androidDataSet"; Feature.with("androidDataSet"); \
+			"androidDataSet"; True:C214; \
 			"caller"; This:C1470.input.caller; \
 			"verbose"; This:C1470.input.verbose; \
 			"keepUI"; True:C214; \
@@ -405,7 +405,7 @@ Function dataSet()->$dump : Object
 		"digest"; True:C214; \
 		"dataSet"; True:C214; \
 		"key"; $pathname; \
-		"androidDataSet"; Feature.with("androidDataSet"); \
+		"androidDataSet"; True:C214; \
 		"caller"; This:C1470.input.caller; \
 		"verbose"; This:C1470.input.verbose; \
 		"keepUI"; True:C214; \
@@ -426,7 +426,7 @@ Function mustDoDataSet()->$doIt : Boolean
 		$dump:=dataSet(New object:C1471(\
 			"action"; "check"; \
 			"digest"; True:C214; \
-			"androidDataSet"; Feature.with("androidDataSet"); \
+			"androidDataSet"; True:C214; \
 			"project"; $project))
 		
 		If (Bool:C1537($dump.exists))

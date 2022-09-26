@@ -54,24 +54,9 @@ Function init()
 	This:C1470.button("doNotExportImages")
 	This:C1470.button("doNotGenerate")
 	
-	If (Feature.with("androidDataSet"))
-		
-		$group:=This:C1470.group("_generation")
-		This:C1470.button("generate").addToGroup($group)
-		This:C1470.formObject("lastGeneration").addToGroup($group)
-		
-	Else 
-		
-		This:C1470.button("generate")
-		
-		$group:=This:C1470.group("dataInGeneration")
-		This:C1470.stepper("dataGeneration").addToGroup($group)
-		This:C1470.formObject("dataGenerationLabel").addToGroup($group)
-		
-		This:C1470.group("_generation").addMember(This:C1470.generate)
-		This:C1470._generation.addMember($group)
-		
-	End if 
+	$group:=This:C1470.group("_generation")
+	This:C1470.button("generate").addToGroup($group)
+	This:C1470.formObject("lastGeneration").addToGroup($group)
 	
 	This:C1470.testServer.isRunning:=False:C215  // A flag to know if the test server is running
 	This:C1470.generate.isRunning:=False:C215  // A flag to indicate if a data generation is in progress and prevent re-entry
@@ -170,18 +155,8 @@ Function onLoad()
 	
 	This:C1470._generation.distributeLeftToRight()
 	
-	If (Feature.with("androidDataSet"))
-		
-		This:C1470.lastGeneration.hide()
-		This:C1470.generate.disable()
-		
-	Else 
-		
-		This:C1470.generate.bestSize().disable()
-		This:C1470.dataGenerationLabel.setTitle(Replace string:C233(Get localized string:C991("dataSetGeneration"); "\n\n"; "\r"))
-		This:C1470.dataInGeneration.distributeLeftToRight()
-		
-	End if 
+	This:C1470.lastGeneration.hide()
+	This:C1470.generate.bestSize().disable()
 	
 	This:C1470.checkingDatasourceConfiguration()
 	

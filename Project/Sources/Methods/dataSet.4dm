@@ -337,53 +337,16 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 			
 			If ($out.success)
 				
-				If (Feature.with("androidDataSet"))
+				var $source; $target : 4D:C1709.Folder
+				
+				$target:=Folder:C1567($in.target; fk platform path:K87:2)
+				$source:=Folder:C1567($out.path; fk platform path:K87:2)
+				
+				For each ($pathname; New collection:C1472("Sources"; "Resources"))
 					
-					var $source; $target : 4D:C1709.Folder
+					folder_copyMerge($source.folder($pathname); $target)
 					
-					$target:=Folder:C1567($in.target; fk platform path:K87:2)
-					$source:=Folder:C1567($out.path; fk platform path:K87:2)
-					
-					For each ($pathname; New collection:C1472("Sources"; "Resources"))
-						
-						folder_copyMerge($source.folder($pathname); $target)
-						
-					End for each 
-					
-				Else 
-					
-					ASSERT:C1129(Value type:C1509($in.target)=Is text:K8:3; "target attribute must be a Text value (platform path)")
-					
-					If (Value type:C1509($in.target)=Is text:K8:3) && (Test path name:C476($in.target)=Is a document:K24:1)
-						
-						$out.errors:=New collection:C1472("Destination "+$in.target+" is a document")
-						
-					Else 
-						
-						$cmd:="cp -R "+str_singleQuoted(Convert path system to POSIX:C1106($out.path))+" "+str_singleQuoted(Convert path system to POSIX:C1106($in.target))
-						
-						SET ENVIRONMENT VARIABLE:C812("_4D_OPTION_HIDE_CONSOLE"; "true")
-						LAUNCH EXTERNAL PROCESS:C811($cmd; $inputStream; $outputStream; $Txt_error)
-						
-						If (Asserted:C1132(OK=1; "copy failed: "+$cmd))
-							
-							If (Length:C16($Txt_error)#0)
-								
-								$out.errors:=New collection:C1472($Txt_error)
-								
-							Else 
-								
-								$out.success:=True:C214
-								
-							End if 
-							
-						Else 
-							
-							$out.errors:=New collection:C1472("Unable to copy dataSet")
-							
-						End if 
-					End if 
-				End if 
+				End for each 
 			End if 
 			
 			// MARK:- create
@@ -551,7 +514,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 							"dataSet"; $in.dataSet; \
 							"debug"; Bool:C1537($in.debug); \
 							"dataModel"; $dataModel; \
-							"catalog"; (Feature.with("alias") ? $in.project.getCatalog() : Null:C1517); \
+							"catalog"; $in.project.getCatalog(); \
 							"caller"; $in.caller; \
 							"method"; $in.method))
 						
@@ -605,26 +568,22 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 							
 						End if 
 						
-						If (Feature.with("androidDataSet"))
+						If (Bool:C1537($in.accordingToTarget))
 							
-							If (Bool:C1537($in.accordingToTarget))
+							If (Value type:C1509($in.project.info.target)=Is collection:K8:32)
 								
-								If (Value type:C1509($in.project.info.target)=Is collection:K8:32)
-									
-									$in.coreDataSet:=Is macOS:C1572 && ($in.project.info.target.indexOf("iOS")>-1)
-									$in.androidDataSet:=$in.project.info.target.indexOf("android")>-1
-									
-								Else 
-									
-									$in.coreDataSet:=Is macOS:C1572 && (String:C10($in.project.info.target)="iOS")
-									$in.androidDataSet:=(String:C10($in.project.info.target)="android")
-									
-								End if 
+								$in.coreDataSet:=Is macOS:C1572 && ($in.project.info.target.indexOf("iOS")>-1)
+								$in.androidDataSet:=$in.project.info.target.indexOf("android")>-1
+								
+							Else 
+								
+								$in.coreDataSet:=Is macOS:C1572 && (String:C10($in.project.info.target)="iOS")
+								$in.androidDataSet:=(String:C10($in.project.info.target)="android")
+								
 							End if 
-							
-							$out.removeAsset:=Bool:C1537($in.androidDataSet) | Bool:C1537($in.coreDataSet)
-							
 						End if 
+						
+						$out.removeAsset:=Bool:C1537($in.androidDataSet) | Bool:C1537($in.coreDataSet)
 						
 						If (Bool:C1537($in.coreDataSet) & $out.success)
 							
@@ -645,31 +604,27 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 							
 						End if 
 						
-						If (Feature.with("androidDataSet"))
+						If (Bool:C1537($in.androidDataSet) & $out.success)
 							
-							If (Bool:C1537($in.androidDataSet) & $out.success)
-								
-								$out.androidDataSet:=dataSet(New object:C1471(\
-									"action"; "androidDataSet"; \
-									"path"; $out.path; \
-									"project"; $in.project; \
-									"caller"; $in.caller))
-								
-								ob_error_combine($out; $out.androidDataSet)
-								
-							End if 
+							$out.androidDataSet:=dataSet(New object:C1471(\
+								"action"; "androidDataSet"; \
+								"path"; $out.path; \
+								"project"; $in.project; \
+								"caller"; $in.caller))
 							
-							$out.success:=Not:C34(ob_error_has($out))
+							ob_error_combine($out; $out.androidDataSet)
 							
-							If ($out.success & $out.removeAsset)
-								
-								$out.removeAsset:=dataSet(New object:C1471(\
-									"action"; "removeAsset"; \
-									"path"; $out.path))
-								
-							End if 
 						End if 
 						
+						$out.success:=Not:C34(ob_error_has($out))
+						
+						If ($out.success & $out.removeAsset)
+							
+							$out.removeAsset:=dataSet(New object:C1471(\
+								"action"; "removeAsset"; \
+								"path"; $out.path))
+							
+						End if 
 						// Generate a digest according to structure
 						If (Bool:C1537($in.digest) & $out.success)
 							

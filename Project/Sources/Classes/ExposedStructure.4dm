@@ -442,7 +442,7 @@ Function relatedCatalog($tableName : Text; $relationName : Text; $recursive : Bo
 	$field:=$ds[$tableName][$relationName]
 	
 	If ($field.kind="relatedEntity")\
-		 || (Feature.with("alias") && ($field.kind="alias") && ($field.fieldType=Is object:K8:27) && ($field.relatedDataClass#Null:C1517))
+		 || (($field.kind="alias") && ($field.fieldType=Is object:K8:27) && ($field.relatedDataClass#Null:C1517))
 		
 		$result:=New object:C1471(\
 			"success"; True:C214; \
@@ -739,7 +739,7 @@ Function addField($table : Object; $field : cs:C1710.field)
 			//………………………………………………………………………………………………………
 		: ($field.kind="calculated")\
 			 || ($field.kind="relatedEntities")\
-			 || (Feature.with("alias") && ($field.kind="alias"))
+			 || ($field.kind="alias")
 			
 			$table[$field.name]:=This:C1470._fieldModel($field)
 			
@@ -816,7 +816,7 @@ Function addField($table : Object; $field : cs:C1710.field)
 							$o[$relatedField.name].path:=$relatedField.path
 							
 							//______________________________________________________
-						: (Feature.with("alias")) && (($relatedField.kind="alias"))
+						: ($relatedField.kind="alias")
 							
 							If ($path.length>1)
 								
@@ -928,7 +928,7 @@ Function _fieldModel($field : cs:C1710.field; $relatedCatalog : Object)->$fieldM
 			$fieldModel.type:=$field.type
 			
 			//………………………………………………………………………………………………………
-		: (Feature.with("alias") && ($field.kind="alias"))  // Alias
+		: ($field.kind="alias")  // Alias
 			
 			$fieldModel:=New object:C1471(\
 				"kind"; $field.kind; \
