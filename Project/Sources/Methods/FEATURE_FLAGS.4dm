@@ -114,21 +114,24 @@ End if
 Feature.unstable("131225")  // [MOBILE] Use aliases
 Feature.unstable("127558")  // [ANDROID] Data set
 
-// Mark:-🚧 MAIN
-Feature.main("listEditor")  // #130828 [MOBILE] Create and edit an input control from the project editor
+// Mark:-R7
 Feature.main("openURLAction")  // azure:3625 [MOBILE] Execute an action that open web area
 
+
+// Mark:-🚧 MAIN
+//Feature.main("listEditor")  // #130828 [MOBILE] Create and edit an input control from the project editor
+
 // Mark:-🚧 WIP
-Feature.wip("actionsInTabBar")
+//Feature.wip("actionsInTabBar")
 
 // FEATURE.wip("simuARMOnAppleProcessor") // Mac M1 build for simu using arm64
-Feature.wip("duplicateTemplate")  // Allow to duplicate template in host database and show on disk https:// Project.4d.com/issues/98054
-Feature.wip("newFormatterChoiceList")  // Menu to create formatter choice list directly , from data
-Feature.wip("taskIndicator")  // UI for background tasks executing
-Feature.wip("DataSourceClass")  // Work with DataSource class class to test the data source
-Feature.wip("buildWithCmd")  // Allow to build using cmd only
-Feature.wip("inputControlWithCodeAndroid")  // Allow to use inputControl with code, feature by azure:3862 [Android] Input controls with Kotlin code
-Feature.wip("inputControlArchive")  // Allow to use zip for inputControl, as requested by azure:5424 The mobile project shall support a zip format for input control with Android and iOS.
+//Feature.wip("duplicateTemplate")  // Allow to duplicate template in host database and show on disk https:// Project.4d.com/issues/98054
+//Feature.wip("newFormatterChoiceList")  // Menu to create formatter choice list directly , from data
+//Feature.wip("taskIndicator")  // UI for background tasks executing
+//Feature.wip("DataSourceClass")  // Work with DataSource class class to test the data source
+//Feature.wip("buildWithCmd")  // Allow to build using cmd only
+//Feature.wip("inputControlWithCodeAndroid")  // Allow to use inputControl with code, feature by azure:3862 [Android] Input controls with Kotlin code
+//Feature.wip("inputControlArchive")  // Allow to use zip for inputControl, as requested by azure:5424 The mobile project shall support a zip format for input control with Android and iOS.
 
 // Mark:-👨‍💻 Eric
 $c:=New collection:C1472("emarchand"; "phimage")
