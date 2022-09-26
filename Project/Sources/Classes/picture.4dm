@@ -26,6 +26,7 @@ Class constructor($name : Text; $picture)
 			This:C1470.fileName:=""
 			This:C1470.size:=0
 			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	End case 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -34,7 +35,7 @@ Function findByCoordinates() : Text
 	return SVG Find element ID by coordinates:C1054(*; This:C1470.name; MOUSEX; MOUSEY)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function getSvgAttribute($id : Text; $attribute : Text; $type : Integer) : Variant
+Function getAttribute($id : Text; $attribute : Text; $type : Integer) : Variant
 	
 	var $value : Text
 	SVG GET ATTRIBUTE:C1056(*; This:C1470.name; $id; $attribute; $value)
@@ -56,15 +57,24 @@ Function getSvgAttribute($id : Text; $attribute : Text; $type : Integer) : Varia
 			//______________________________________
 		Else 
 			
-			
 			return JSON Parse:C1218($value; Is longint:K8:6)
 			
 			//______________________________________
 	End case 
 	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function setAttributes($id : Text; $attributes : Collection)
+	
+	var $o : Object
+	
+	For each ($o; $attributes)
+		
+		This:C1470.setAttribute($id; $o.name; $o.value)
+		
+	End for each 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function setSvgAttribute($id : Text; $attribute : Text; $value)
+Function setAttribute($id : Text; $name : Text; $value)
 	
 	var $t : Text
 	var $type : Integer
@@ -80,22 +90,24 @@ Function setSvgAttribute($id : Text; $attribute : Text; $value)
 			$value:=$t
 			
 			//______________________________________
-		: ($type=Is text:K8:3)
+		: ($type=Is text:K8:3)\
+			 | ($type=Is longint:K8:6)\
+			 | ($type=Is integer:K8:5)
 			
 			// <NOTHING MORE TO DO>
 			
-			//______________________________________________________
+			//______________________________________
 		Else 
 			
 			$value:=String:C10($value)
 			
-			//______________________________________________________
+			//______________________________________
 	End case 
 	
-	SVG SET ATTRIBUTE:C1055(*; This:C1470.name; $id; $attribute; $value)
+	SVG SET ATTRIBUTE:C1055(*; This:C1470.name; $id; $name; $value)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-	// ⚠️ 
+	// ⚠️
 Function getCoordinates()->$coordinates : Object
 	
 	$coordinates:=Super:C1706.getCoordinates()
@@ -179,7 +191,7 @@ Function getThumbnail($width : Integer; $height : Integer; $mode : Integer) : Pi
 	
 	$p:=This:C1470.getValue()
 	
-	$width:=$width=0 ? 48 : $width  //default 48x48 px
+	$width:=$width=0 ? 48 : $width  // Default 48x48 px
 	$height:=$height=0 ? $width : $height  // Square if no height
 	$mode:=$mode=0 ? Scaled to fit prop centered:K6:6 : $mode
 	
