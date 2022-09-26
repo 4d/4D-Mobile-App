@@ -33,7 +33,7 @@ If (This:C1470.$.vInsert#Null:C1517)
 	
 End if 
 
-This:C1470.$.current:=SVG Find element ID by coordinates:C1054(*; "preview"; MOUSEX; MOUSEY)
+This:C1470.$.current:=SVG Find element ID by coordinates:C1054(*; $preview; MOUSEX; MOUSEY)
 $cible:=This:C1470.$.current
 
 // ----------------------------------------------------

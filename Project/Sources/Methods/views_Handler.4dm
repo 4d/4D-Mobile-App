@@ -12,8 +12,8 @@ var $0 : Object
 var $1 : Object
 
 If (False:C215)
-	C_OBJECT:C1216(VIEWS_Handler; $0)
-	C_OBJECT:C1216(VIEWS_Handler; $1)
+	C_OBJECT:C1216(views_Handler; $0)
+	C_OBJECT:C1216(views_Handler; $1)
 End if 
 
 var $formName; $t; $typeForm : Text
@@ -70,7 +70,7 @@ If (OB Is empty:C1297($context))  // First load
 	cs:C1710.ob.new($context).createPath("constraints.rules"; Is collection:K8:32)
 	
 	$context.constraints.rules.push(New object:C1471(\
-		"formula"; Formula:C1597(VIEWS_Handler(New object:C1471(\
+		"formula"; Formula:C1597(views_Handler(New object:C1471(\
 		"action"; "geometry")))))
 	
 	$context.constraints.rules.push(New object:C1471(\
@@ -94,11 +94,11 @@ If (OB Is empty:C1297($context))  // First load
 	$context.typeForm:=Formula:C1597(Choose:C955(Num:C11(This:C1470.selector)=2; "detail"; "list"))
 	
 	// Update selected tab
-	$context.setTab:=Formula:C1597(VIEWS_Handler(New object:C1471(\
+	$context.setTab:=Formula:C1597(views_Handler(New object:C1471(\
 		"action"; "setTab")))
 	
 	// Update geometry
-	$context.setGeometry:=Formula:C1597(VIEWS_Handler(New object:C1471(\
+	$context.setGeometry:=Formula:C1597(views_Handler(New object:C1471(\
 		"action"; "geometry")))
 	
 End if 
@@ -175,7 +175,7 @@ Case of
 				($form.tabdetail.pointer())->:=Num:C11($context.selector=2)
 				
 				// Draw the table list
-				($form.tableWidget.pointer())->:=$view.tableWidget($datamodel; New object:C1471(\
+				($form.tableWidget.pointer())->:=$view.buildTableWidget($datamodel; New object:C1471(\
 					"tableNumber"; $context.tableNum()))
 				
 				SVG SHOW ELEMENT:C1108(*; $form.tableWidget.name; $context.tableNum(); 0)
@@ -217,7 +217,7 @@ Case of
 				End if 
 				
 				// Draw the table list
-				OBJECT SET VALUE:C1742($form.tableWidget.name; $view.tableWidget($datamodel; New object:C1471(\
+				OBJECT SET VALUE:C1742($form.tableWidget.name; $view.buildTableWidget($datamodel; New object:C1471(\
 					"tableNumber"; $context.tableNum())))
 				
 				SVG SHOW ELEMENT:C1108(*; $form.tableWidget.name; $context.tableNum(); 0)

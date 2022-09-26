@@ -944,7 +944,8 @@ Function queryWidgetManager()
 	var $menu : cs:C1710.menu
 	var $str : cs:C1710.str
 	
-	$ID:=SVG Find element ID by coordinates:C1054(*; This:C1470.queryWidget.name; MOUSEX; MOUSEY)
+	$ID:=This:C1470.queryWidget.findByCoordinates()
+	
 	$table:=This:C1470.current
 	
 	$menu:=cs:C1710.menu.new()
