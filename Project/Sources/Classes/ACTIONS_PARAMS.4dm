@@ -1030,17 +1030,61 @@ Function dataSourceValue() : Text
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Returns the source folder of a host resource
-Function sourceFolder($name : Text; $control : Boolean) : 4D:C1709.Folder
+Function sourceFolder($name : Text; $control : Boolean) : Object
 	
-	var $found : Boolean
-	var $manifest : Object
+	var $item; $manifest; $root : Object
 	var $file : 4D:C1709.File
 	var $folder; $source : 4D:C1709.Folder
 	
 	$source:=Folder:C1567("❓")
 	$folder:=This:C1470.path.hostInputControls()
 	
-	If ($folder.exists)
+	If (Not:C34($folder.exists))
+		
+		return $source
+		
+	End if 
+	
+	If (Feature.with("inputControlArchive"))
+		
+		For each ($item; $folder.folders().combine($folder.files().query("extension = :1"; SHARED.archiveExtension)))
+			
+			$root:=$item.isFolder ? $item : ZIP Read archive:C1637($item).root
+			
+			$file:=$root.file("manifest.json")
+			
+			If (Not:C34($file.exists))
+				
+				continue  // Not a valid formatter
+				
+			End if 
+			
+			$manifest:=JSON Parse:C1218($file.getText())
+			
+			If ($manifest.name#$name)
+				
+				continue  // Not the one we're looking for
+				
+			End if 
+			
+			If ($control)
+				
+				If (Delete string:C232(This:C1470.current.format; 1; 1)=($manifest.format#Null:C1517 ? $manifest.format : "push"))
+					
+					return $item
+					
+				End if 
+				
+			Else 
+				
+				return $item
+				
+			End if 
+		End for each 
+		
+	Else 
+		
+		var $found : Boolean
 		
 		For each ($folder; $folder.folders()) Until ($found)
 			
@@ -1067,9 +1111,10 @@ Function sourceFolder($name : Text; $control : Boolean) : 4D:C1709.Folder
 				End if 
 			End if 
 		End for each 
+		
+		return $source
+		
 	End if 
-	
-	return $source
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Add a user parameter except for sort when adding is not possible
@@ -1808,9 +1853,9 @@ Function dataSourceMenuManager()
 Function editList()
 	
 /*
-																										$form:=New object(\
-																																																																"static"; $static; \
-																																																																"host"; This.path.hostInputControls(True))
+																											$form:=New object(\
+																																																																		"static"; $static; \
+																																																																		"host"; This.path.hostInputControls(True))
 	
 $form.folder:=This.path.hostInputControls()
 $manifest:=$form.folder.file("manifest.json")
