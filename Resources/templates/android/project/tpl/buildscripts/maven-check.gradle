@@ -37,7 +37,7 @@ static def currentGitBranch() {
     proc.waitFor()
   }
   if (branch == null) {
-    branch = "master"
+    branch = "main"
   }
   branch.replace("/", "_")
 }
@@ -77,7 +77,7 @@ def branch(String repoName) {
   if (urlExists(getUrl(repoName)))
     return currentGitBranch()
   else
-    return "master"
+    return "main"
 }
 
 // Export methods by turning them into closures

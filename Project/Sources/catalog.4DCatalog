@@ -122,9 +122,9 @@
 		<field name="__GlobalStamp" uuid="3A3AB10707514769A89E858FBF0C3245" type="5" id="27"/>
 		<primary_key field_name="ID" field_uuid="2E229433BE754803B3BC16E18675FE09"/>
 		<table_extra input_form="Form1" output_form="Form1">
-			<editor_table_info displayable_fields_count="26">
+			<editor_table_info displayable_fields_count="17">
 				<color red="175" green="188" blue="191" alpha="255"/>
-				<coordinates left="0" top="0" width="165.44616699219" height="605.87432861328"/>
+				<coordinates left="0" top="0" width="153" height="398.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -153,9 +153,9 @@
 		<field name="data" uuid="23D3822998C34E7EA26D2648D07CB18F" type="21" blob_switch_size="2147483647" never_null="true" id="8"/>
 		<primary_key field_name="ID" field_uuid="0A26D100922E475A92C49657B6C02271"/>
 		<table_extra input_form="Input" output_form="Output">
-			<editor_table_info displayable_fields_count="13">
+			<editor_table_info displayable_fields_count="8">
 				<color red="150" green="216" blue="175" alpha="255"/>
-				<coordinates left="221.29174804688" top="862.47894287109" width="147.86834716797" height="320.84118652344"/>
+				<coordinates left="221.29174804688" top="862.47894287109" width="140" height="209.33203125"/>
 			</editor_table_info>
 		</table_extra>
 	</table>
@@ -342,6 +342,12 @@
 		<field name="__TableName" uuid="5F36717761F6422DB09F3A335B7E3F19" type="10" limiting_length="255" id="4"/>
 		<field name="__PrimaryKey" uuid="5F646B5401A940AB9FA97266BDDE492C" type="10" limiting_length="255" id="5"/>
 		<primary_key field_name="ID" field_uuid="506386D9BCD44F41B6C3A3D43C82B1F1"/>
+		<table_extra>
+			<editor_table_info fields_ordering="1" displayable_fields_count="5">
+				<color red="255" green="255" blue="255" alpha="0"/>
+				<coordinates left="3.400634765625" top="438.74182128906" width="138" height="146.33203125"/>
+			</editor_table_info>
+		</table_extra>
 	</table>
 	<table name="Offices" uuid="9530473090624E829F824BFFA4F81FC0" id="19">
 		<field name="ID" uuid="87AFAE6B7DD645E283CC7951EF00451E" type="4" unique="true" autosequence="true" not_null="true" id="1"/>
@@ -394,52 +400,6 @@
 			</editor_table_info>
 		</table_extra>
 	</table>
-	<table name="Ambulatoire" uuid="5E8A2ADA61D9B348AF56CDF6FB77025A" id="29">
-		<field name="xNumID" uuid="AEC5819D8BBF1748AEB490879D5CD460" type="4" never_null="true" id="1"/>
-		<field name="Nom" uuid="F182E6952BDC094AA01DA0679D0C00E9" type="10" limiting_length="50" never_null="true" id="2"/>
-		<field name="Actes" uuid="8EEFB1CD5B4E1D4DA2876A95EC34C8F4" type="15" never_null="true" id="3"/>
-		<field name="StampParametre" uuid="97AADA8776CCCD43A178574F9FA9B8F3" type="4" never_null="true" id="4"/>
-		<field name="Licence" uuid="52A9CADE2BC99E43A8DD4217C9F5B903" type="10" limiting_length="13" unique="true" never_null="true" id="5"/>
-		<primary_key field_name="Licence" field_uuid="52A9CADE2BC99E43A8DD4217C9F5B903"/>
-		<table_extra visible="false">
-			<editor_table_info displayable_fields_count="8">
-				<color red="0" green="0" blue="0" alpha="0"/>
-				<coordinates left="437.27738952637" top="1154.2554626465" width="146" height="222.28326416015"/>
-			</editor_table_info>
-		</table_extra>
-	</table>
-	<table name="Ambulatoire_Actes" uuid="F321B5D8F9811547BD2877804204FC8B" id="273">
-		<field name="NomenID" uuid="781678D99BF92A47AB7A21F0DC6449BC" type="4" never_null="true" id="1"/>
-		<field name="Nombre" uuid="D4F7FA2261EABB4CB22CF15AA0089A62" type="6" never_null="true" id="2"/>
-		<field name="id_added_by_converter" uuid="A65E0DF9E1CEC045A8FA1999090AD5C2" type="16" id="3">
-			<field_extra visible="false" enterable="false" modifiable="false"/>
-		</field>
-		<field name="ID" uuid="72EFB7535E09194F92D91D65EDA374FD" type="4" unique="true" autosequence="true" id="4"/>
-		<primary_key field_name="ID" field_uuid="72EFB7535E09194F92D91D65EDA374FD"/>
-		<table_extra>
-			<editor_table_info displayable_fields_count="4">
-				<color red="0" green="0" blue="0" alpha="0"/>
-				<coordinates left="673.95347595208" top="1216.1722412109" width="254.27563476562" height="133.56625366211"/>
-			</editor_table_info>
-		</table_extra>
-	</table>
-	<relation uuid="F8989172B58974488F6AF694F0F2870C" name_Nto1="Actes_subtable_10_id_added_by_converter" name_1toN="id_added_by_converter_subtable_10_Actes" auto_load_Nto1="false" auto_load_1toN="false" foreign_key="false" state="1" integrity="delete">
-		<related_field kind="source">
-			<field_ref uuid="A65E0DF9E1CEC045A8FA1999090AD5C2" name="id_added_by_converter">
-				<table_ref uuid="F321B5D8F9811547BD2877804204FC8B" name="Ambulatoire_Actes"/>
-			</field_ref>
-		</related_field>
-		<related_field kind="destination">
-			<field_ref uuid="8EEFB1CD5B4E1D4DA2876A95EC34C8F4" name="Actes">
-				<table_ref uuid="5E8A2ADA61D9B348AF56CDF6FB77025A" name="Ambulatoire"/>
-			</field_ref>
-		</related_field>
-		<relation_extra>
-			<editor_relation_info>
-				<color red="110" green="124" blue="136" alpha="255"/>
-			</editor_relation_info>
-		</relation_extra>
-	</relation>
 	<relation uuid="558D9845ABB949E8B3E946F29688441A" name_Nto1="theme" name_1toN="commands" auto_load_Nto1="true" auto_load_1toN="false" foreign_key="false" state="1" integrity="delete">
 		<related_field kind="source">
 			<field_ref uuid="3CB8EAC487694A26BC2443332F55E7C9" name="themeID">
@@ -732,11 +692,6 @@
 			<table_ref uuid="E0EF4D9E925848A8893B9926694CF58E" name="Table_2"/>
 		</field_ref>
 	</index>
-	<index kind="regular" uuid="35077481928B4C869E742CC89C5263D9" type="1">
-		<field_ref uuid="8EEFB1CD5B4E1D4DA2876A95EC34C8F4" name="Actes">
-			<table_ref uuid="5E8A2ADA61D9B348AF56CDF6FB77025A" name="Ambulatoire"/>
-		</field_ref>
-	</index>
 	<index kind="regular" uuid="35932768CD364B9ABE48F3D4CF97C24A" type="7">
 		<field_ref uuid="2DB718A64ACF4C41803A142CF8DB2493" name="Name">
 			<table_ref uuid="F199D0D03F864B939EF3CD9CF9BC0F24" name="Employes"/>
@@ -760,11 +715,6 @@
 	<index kind="regular" unique_keys="true" uuid="57B45A49B0F74FD08EC540F82A4AEC0F" type="7">
 		<field_ref uuid="12D6937F179B4449895346EC8BC3C3B2" name="ID">
 			<table_ref uuid="A7F05DD39BF141959331A84CAECF5267" name="Service"/>
-		</field_ref>
-	</index>
-	<index kind="regular" unique_keys="true" uuid="587D5C03C7744F42A18BDD5AFA7AE987" type="1">
-		<field_ref uuid="52A9CADE2BC99E43A8DD4217C9F5B903" name="Licence">
-			<table_ref uuid="5E8A2ADA61D9B348AF56CDF6FB77025A" name="Ambulatoire"/>
 		</field_ref>
 	</index>
 	<index kind="regular" name="__GlobalStamp_table_3" uuid="61BCED41D26142D9B8397C6C6C8DF7D0" type="7">
@@ -810,11 +760,6 @@
 			<table_ref uuid="DE40BD82B9154CEB8926B7B9CC6B43D5" name="EmployesOffices"/>
 		</field_ref>
 	</index>
-	<index kind="regular" unique_keys="true" uuid="8447D18E770D4D548DC660558D71BFEB" type="1">
-		<field_ref uuid="72EFB7535E09194F92D91D65EDA374FD" name="ID">
-			<table_ref uuid="F321B5D8F9811547BD2877804204FC8B" name="Ambulatoire_Actes"/>
-		</field_ref>
-	</index>
 	<index kind="regular" uuid="846B2AC9634646BD8026EE56940334E5" type="7">
 		<field_ref uuid="3446D143AA2B4BEFB57C38620EE2C14F" name="Field_3">
 			<table_ref uuid="30E13DEEB95C4BABA4D0449FDF2C55DC" name="Table_3"/>
@@ -833,11 +778,6 @@
 	<index kind="regular" unique_keys="true" uuid="98043E014ADA49FA93D3A9E496C0A581" type="7">
 		<field_ref uuid="D8E83F00B3F54EC2B7AB21C3AC0978F4" name="ID">
 			<table_ref uuid="DE40BD82B9154CEB8926B7B9CC6B43D5" name="EmployesOffices"/>
-		</field_ref>
-	</index>
-	<index kind="regular" uuid="9B2227EDA5064A978A0C2235F65B28BA" type="3">
-		<field_ref uuid="A65E0DF9E1CEC045A8FA1999090AD5C2" name="id_added_by_converter">
-			<table_ref uuid="F321B5D8F9811547BD2877804204FC8B" name="Ambulatoire_Actes"/>
 		</field_ref>
 	</index>
 	<index kind="regular" unique_keys="true" uuid="A69F840ED60F4163A118DB2901544CB7" type="7">

@@ -15,7 +15,7 @@ Class constructor
 	Super:C1705()
 	
 	This:C1470.exe:=This:C1470._exe()
-	This:C1470.cmd:=This:C1470.quoted(This:C1470.exe.path)
+	This:C1470.cmd:=Replace string:C233(This:C1470.exe.path; "\\s"; "\\\\s")
 	
 	var $studio : cs:C1710.studio
 	$studio:=cs:C1710.studio.new()
@@ -48,25 +48,30 @@ Function _exe()->$file : 4D:C1709.File
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Create a new AVD.
-	// You must provide a name for the AVD and specify the ID of the SDK package to use
-Function createAvd($avd : Object)->$this : cs:C1710.avd  // #TO_DO : 3 parameters: name, image {,definition} to be more clear
+	// You must provide a name for the AVD and specify the ID (image) of the SDK package to use
+Function createAvd($name : Text; $image : Text; $definition : Text) : cs:C1710.avd
 	
 	var $command : Text
 	
-	ASSERT:C1129($avd.name#Null:C1517)
-	ASSERT:C1129($avd.image#Null:C1517)
-	
-	$command:=This:C1470.cmd+" create avd --force -n "+This:C1470.quoted($avd.name)+" -k "+This:C1470.quoted($avd.image)
-	
-	If ($avd.definition#Null:C1517)
+	If (Length:C16($name)>0) & (Length:C16($image)>0)
 		
-		$command:=$command+" --device "+This:C1470.quoted($avd.definition)
+		$command:=This:C1470.cmd+" create avd --force -n "+This:C1470.quoted($name)+" -k "+This:C1470.quoted($image)
+		
+		If (Count parameters:C259>=3)
+			
+			$command+=" --device "+This:C1470.quoted($definition)
+			
+		End if 
+		
+		This:C1470.launch($command)
+		
+	Else 
+		
+		This:C1470._pushError(Current method name:C684+": Parameter name and/or image missing")
 		
 	End if 
 	
-	This:C1470.launch($command)
-	
-	$this:=This:C1470
+	return This:C1470
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns a collection of potential device simulators

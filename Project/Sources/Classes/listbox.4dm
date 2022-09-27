@@ -1,3 +1,4 @@
+
 Class extends scrollable
 
 //=== === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -838,6 +839,11 @@ Function saveProperties()
 	$properties.horScrollbar:=$horizontal
 	$properties.verScrollbar:=$vertical
 	
+	$o:=This:C1470.colors
+	$properties.foreground:=$o.foreground
+	$properties.background:=$o.background
+	$properties.altBackground:=$o.altBackground
+	
 	This:C1470.properties:=$properties
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -870,6 +876,8 @@ Function restoreProperties()
 	End if 
 	
 	This:C1470.setScrollbars($properties.horScrollbar; $properties.verScrollbar)
+	
+	OBJECT SET RGB COLORS:C628(*; This:C1470.name; $properties.foreground; $properties.background; $properties.altBackground)
 	
 	//mark:-[PRIVATE]
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===

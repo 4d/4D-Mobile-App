@@ -18,7 +18,8 @@ Class constructor()
 		"str"; \
 		"path"; \
 		"tips"; \
-		"svg"))
+		"svg"; \
+		"error"))
 		
 		This:C1470._instantiate($t)
 		
@@ -977,8 +978,8 @@ Function doGenerate($keyPathname : Text)
 		"eraseIfExists"; True:C214; \
 		"project"; PROJECT; \
 		"digest"; True:C214; \
-		"accordingToTarget"; Feature.with("androidDataSet"); \
-		"coreDataSet"; Feature.disabled("androidDataSet"); \
+		"accordingToTarget"; True:C214; \
+		"coreDataSet"; False:C215; \
 		"key"; $keyPathname; \
 		"dataSet"; True:C214; \
 		"caller"; $window; \

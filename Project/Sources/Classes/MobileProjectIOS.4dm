@@ -97,7 +97,7 @@ Function create()->$result : Object
 		// Failed to unzip sdk
 		This:C1470.postError("failedDecompressTheSdk")
 		This:C1470.logError("Failed to unzip sdk")
-		return   // Guard stop
+		return $result  // Guard stop
 		
 	End if 
 	
@@ -107,7 +107,7 @@ Function create()->$result : Object
 	
 	If (Not:C34($result.success))
 		
-		return   // Guard stop: no need to do dump if failed to create the app
+		return $result  // Guard stop: no need to do dump if failed to create the app
 		
 	End if 
 	
@@ -680,7 +680,7 @@ Function _manageDataSet($out : Object)
 	$out.dump:=dataSet(New object:C1471(\
 		"action"; "check"; \
 		"digest"; True:C214; \
-		"coreDataSet"; Feature.with("androidDataSet"); \
+		"coreDataSet"; True:C214; \
 		"project"; $project))
 	ob_error_combine($out; $out.dump)
 	

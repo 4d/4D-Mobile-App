@@ -155,7 +155,7 @@ Function doRun()->$Obj_out : Object
 							$Obj_field:=OB Copy:C1225($Obj_field)
 							
 							$Obj_field.nameOrPath:=$Obj_field.name
-							If (Feature.with("alias") && ($Obj_field.path#Null:C1517))
+							If ($Obj_field.path#Null:C1517)
 								$Obj_field.nameOrPath:=$Obj_field.path
 							End if 
 							
@@ -215,7 +215,7 @@ Function doRun()->$Obj_out : Object
 							$Obj_field:=OB Copy:C1225($Obj_field)
 							
 							$Obj_field.nameOrPath:=$Obj_field.name
-							If (Feature.with("alias") && ($Obj_field.path#Null:C1517))
+							If ($Obj_field.path#Null:C1517)
 								If (PROJECT.isAlias($Obj_field))
 									$Obj_field.nameOrPath:=This:C1470.catalog.aliasPath($Obj_table.originalName; $Obj_field; True:C214).path
 								Else 
@@ -294,33 +294,21 @@ Function doRun()->$Obj_out : Object
 							//……………………………………………………………………………………………………………
 						: (Value type:C1509($Obj_tableList.searchableField)=Is object:K8:27)
 							
-							If (Feature.with("alias"))
-								$Obj_table.searchableField:=formatString("field-name"; String:C10($Obj_tableList.searchableField.path || $Obj_tableList.searchableField.name))
-							Else 
-								$Obj_table.searchableField:=formatString("field-name"; String:C10($Obj_tableList.searchableField.name))
-							End if 
+							$Obj_table.searchableField:=formatString("field-name"; String:C10($Obj_tableList.searchableField.path || $Obj_tableList.searchableField.name))
 							
 							//……………………………………………………………………………………………………………
 						: (Value type:C1509($Obj_tableList.searchableField)=Is collection:K8:32)
 							
-							If (Feature.with("alias"))
-								
-								$Obj_table.searchableField:=New collection:C1472
-								For each ($item; $Obj_tableList.searchableField)
-									$Obj_table.searchableField.push(formatString("field-name"; String:C10($item.path || $item.name)))
-								End for each 
-								$Obj_table.searchableField:=$Obj_table.searchableField.join(",")
-								
-							Else 
-								$Obj_table.searchableField:=$Obj_tableList.searchableField.extract("name").map(Formula:C1597(col_formula).source; Formula:C1597($1.result:=formatString("field-name"; String:C10($1.value)))).join(",")
-							End if 
+							$Obj_table.searchableField:=New collection:C1472
+							For each ($item; $Obj_tableList.searchableField)
+								$Obj_table.searchableField.push(formatString("field-name"; String:C10($item.path || $item.name)))
+							End for each 
+							$Obj_table.searchableField:=$Obj_table.searchableField.join(",")
 							
 							//……………………………………………………………………………………………………………
 						: (Value type:C1509($Obj_tableList.searchableField)=Is text:K8:3)
 							
-							If (Asserted:C1132(Not:C34(Feature.with("alias")); "Old way to defined searchable field"))
-								$Obj_table.searchableField:=formatString("field-name"; String:C10($Obj_tableList.searchableField))
-							End if 
+							ASSERT:C1129(False:C215; "Old way to defined searchable field")
 							
 							//……………………………………………………………………………………………………………
 					End case 
@@ -340,33 +328,21 @@ Function doRun()->$Obj_out : Object
 							//……………………………………………………………………………………………………………
 						: (Value type:C1509($Obj_tableList.sortField)=Is object:K8:27)
 							
-							If (Feature.with("alias"))
-								$Obj_table.sortField:=formatString("field-name"; String:C10($Obj_tableList.sortField.path || $Obj_tableList.sortField.name))
-							Else 
-								$Obj_table.sortField:=formatString("field-name"; String:C10($Obj_tableList.sortField.name))
-							End if 
+							$Obj_table.sortField:=formatString("field-name"; String:C10($Obj_tableList.sortField.path || $Obj_tableList.sortField.name))
 							
 							//……………………………………………………………………………………………………………
 						: (Value type:C1509($Obj_tableList.sortField)=Is collection:K8:32)
 							
-							If (Feature.with("alias"))
-								
-								$Obj_table.sortField:=New collection:C1472
-								For each ($item; $Obj_tableList.sortField)
-									$Obj_table.sortField.push(formatString("field-name"; String:C10($item.path || $item.name)))
-								End for each 
-								$Obj_table.sortField:=$Obj_table.sortField.join(",")
-								
-							Else 
-								$Obj_table.sortField:=$Obj_tableList.sortField.extract("name").map(Formula:C1597(col_formula).source; Formula:C1597($1.result:=formatString("field-name"; String:C10($1.value)))).join(",")
-							End if 
+							$Obj_table.sortField:=New collection:C1472
+							For each ($item; $Obj_tableList.sortField)
+								$Obj_table.sortField.push(formatString("field-name"; String:C10($item.path || $item.name)))
+							End for each 
+							$Obj_table.sortField:=$Obj_table.sortField.join(",")
 							
 							//……………………………………………………………………………………………………………
 						: (Value type:C1509($Obj_tableList.sortField)=Is text:K8:3)
 							
-							If (Asserted:C1132(Not:C34(Feature.with("alias")); "Old way to defined sort field"))
-								$Obj_table.sortField:=formatString("field-name"; String:C10($Obj_tableList.sortField))
-							End if 
+							ASSERT:C1129(False:C215; "Old way to defined sort field")
 							
 							//……………………………………………………………………………………………………………
 					End case 
@@ -387,11 +363,7 @@ Function doRun()->$Obj_out : Object
 									 && ($Obj_field.fieldType#Is picture:K8:10)\
 									 && ($Obj_field.fieldType#-1))  // not image or not defined or not relation
 									
-									If (Feature.with("alias"))
-										$Obj_table.sortField:=$Obj_field.path || $Obj_field.name  // formatString ("field-name";String($Obj_field.originalName))
-									Else 
-										$Obj_table.sortField:=$Obj_field.name  // formatString ("field-name";String($Obj_field.originalName))
-									End if 
+									$Obj_table.sortField:=$Obj_field.path || $Obj_field.name  // formatString ("field-name";String($Obj_field.originalName))
 									
 								End if 
 							End for each 
@@ -412,11 +384,7 @@ Function doRun()->$Obj_out : Object
 				
 				If ($Obj_tableList.sectionField#Null:C1517)
 					
-					If (Feature.with("alias"))
-						$Obj_table.sectionField:=formatString("field-name"; String:C10($Obj_tableList.sectionField.path || $Obj_tableList.sectionField.name))
-					Else 
-						$Obj_table.sectionField:=formatString("field-name"; String:C10($Obj_tableList.sectionField.name))
-					End if 
+					$Obj_table.sectionField:=formatString("field-name"; String:C10($Obj_tableList.sectionField.path || $Obj_tableList.sectionField.name))
 					$Obj_table.sectionFieldBindingType:=""
 					
 					// Get format of section field$Obj_tableList
@@ -569,14 +537,9 @@ Function _createDummyField()->$dummy : Object
 	// change name attribute and add missing value
 Function _fieldTagify($Obj_field : Object)
 	$Obj_field.originalName:=$Obj_field.name
-	If (Feature.with("alias"))
-		$Obj_field.originalPath:=$Obj_field.path
-		$Obj_field.nameIcon:=$Obj_field.name
-		$Obj_field.name:=formatString("field-name"; $Obj_field.nameOrPath)  // NAME is used in tag for binding, but we need path now because name seems to be shortened sometimes...
-	Else 
-		$Obj_field.nameIcon:=$Obj_field.name
-		$Obj_field.name:=formatString("field-name"; $Obj_field.originalName)
-	End if 
+	$Obj_field.originalPath:=$Obj_field.path
+	$Obj_field.nameIcon:=$Obj_field.name
+	$Obj_field.name:=formatString("field-name"; $Obj_field.nameOrPath)  // NAME is used in tag for binding, but we need path now because name seems to be shortened sometimes...
 	
 	If ($Obj_field.label=Null:C1517)
 		
@@ -610,19 +573,15 @@ Function sortFieldFromAction($table : Object)->$sortFields : Text
 						If ($parameter.fieldNumber#Null:C1517)
 							$sortFields:=$sortFields+formatString("field-name"; String:C10($table[String:C10($parameter.fieldNumber)].name))
 						Else 
-							If (Feature.with("alias"))
-								If ($parameter.path=Null:C1517)  // WORKAROUND if missing path (could be removed)
-									var $field : Object
-									$field:=This:C1470.input.project.dataModel[String:C10($action.tableNumber)][$parameter.name]
-									If (This:C1470.input.project.isAlias($field))
-										$parameter.path:=$field.path
-									End if 
+							If ($parameter.path=Null:C1517)  // WORKAROUND if missing path (could be removed)
+								var $field : Object
+								$field:=This:C1470.input.project.dataModel[String:C10($action.tableNumber)][$parameter.name]
+								If (This:C1470.input.project.isAlias($field))
+									$parameter.path:=$field.path
 								End if 
-								
-								$sortFields:=$sortFields+formatString("field-name"; $parameter.path || $parameter.name)
-							Else 
-								ASSERT:C1129(Not:C34(dev_Matrix); "Missing fieldNumber in sort action: "+JSON Stringify:C1217($action))
 							End if 
+							
+							$sortFields:=$sortFields+formatString("field-name"; $parameter.path || $parameter.name)
 						End if 
 					End for each 
 				End if 

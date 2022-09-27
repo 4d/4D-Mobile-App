@@ -53,8 +53,8 @@ Function getByType($type : Integer; $host : Boolean)->$formatters : Collection
 	
 	var $errors; $manifest : Object
 	var $target : Collection
-	var $formator; $resources : 4D:C1709.Folder
-	var $o : cs:C1710.formatter
+	var $folder; $resources : 4D:C1709.Folder
+	var $formatter : cs:C1710.formatter
 	
 	$target:=Value type:C1509(PROJECT.info.target)=Is collection:K8:32 ? PROJECT.info.target : New collection:C1472(PROJECT.info.target)
 	
@@ -67,13 +67,13 @@ Function getByType($type : Integer; $host : Boolean)->$formatters : Collection
 			
 			$errors:=cs:C1710.error.new().hide()
 			
-			For each ($formator; $resources.folders().combine($resources.files().query("extension = :1"; SHARED.archiveExtension)))
+			For each ($folder; $resources.folders().combine($resources.files().query("extension = :1"; SHARED.archiveExtension)))
 				
-				$o:=cs:C1710.formatter.new("/"+$formator.fullName)
+				$formatter:=cs:C1710.formatter.new("/"+$folder.fullName)
 				
-				If ($o.isValid())
+				If ($formatter.isValid())
 					
-					$manifest:=JSON Parse:C1218($o.source.file("manifest.json").getText())
+					$manifest:=JSON Parse:C1218($formatter.source.file("manifest.json").getText())
 					
 					// Transform the type into a collection, if necessary
 					$manifest.type:=(Value type:C1509($manifest.type)=Is collection:K8:32) ? $manifest.type : New collection:C1472(String:C10($manifest.type))
@@ -87,7 +87,7 @@ Function getByType($type : Integer; $host : Boolean)->$formatters : Collection
 							
 						Else 
 							
-							This:C1470._createTarget($manifest; $o)
+							This:C1470._createTarget($manifest; $formatter)
 							
 						End if 
 						
@@ -95,8 +95,8 @@ Function getByType($type : Integer; $host : Boolean)->$formatters : Collection
 							 || (($target.length=1) & ($manifest.target.indexOf($target[0])#-1))
 							
 							$formatters.push(New object:C1471(\
-								"name"; $o.label; \
-								"source"; $o))
+								"name"; $formatter.label; \
+								"source"; $formatter))
 							
 						End if 
 					End if 

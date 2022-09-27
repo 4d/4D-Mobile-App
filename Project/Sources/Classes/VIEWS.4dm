@@ -23,7 +23,7 @@ Class constructor
 		cs:C1710.ob.new(This:C1470.context).createPath("constraints.rules"; Is collection:K8:32)
 		
 		This:C1470.context.constraints.rules.push(New object:C1471(\
-			"formula"; Formula:C1597(VIEWS_Handler(New object:C1471(\
+			"formula"; Formula:C1597(views_Handler(New object:C1471(\
 			"action"; "geometry")))))
 		
 		This:C1470.context.constraints.rules.push(New object:C1471(\
@@ -713,7 +713,7 @@ Function templatePicker($formType : Text)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Building the table selector
-Function tableWidget($dataModel : Object; $options : Object)->$widget : Picture
+Function buildTableWidget($dataModel : Object; $options : Object)->$widget : Picture
 	
 	var $name; $table; $typeForm : Text
 	var $picture : Picture

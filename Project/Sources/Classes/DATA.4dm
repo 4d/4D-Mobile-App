@@ -129,13 +129,9 @@ Function handleEvents($e : Object)
 					
 				End if 
 				
-				If (Feature.with("androidDataSet"))
-					
-					This:C1470.datasetAndroid:=Null:C1517
-					This:C1470.sqlite:=Null:C1517
-					This:C1470.callMeBack("updateSourcePanel")
-					
-				End if 
+				This:C1470.datasetAndroid:=Null:C1517
+				This:C1470.sqlite:=Null:C1517
+				This:C1470.callMeBack("updateSourcePanel")
 				
 				PROJECT.save()
 				This:C1470.update()
@@ -193,7 +189,7 @@ Function onLoad()
 	
 	This:C1470.queryWidget.setValue(cs:C1710.svg.new($t).picture())
 	
-	If (Feature.with("androidDataSet")) && Is macOS:C1572 && (PROJECT.allTargets())
+	If (Is macOS:C1572 && PROJECT.allTargets())
 		
 		This:C1470.dataSizeLabel.title:=This:C1470.dataSizeLabel.title+" (iOS / Android)"
 		This:C1470.dumpSize.horizontalAlignment:=Align center:K42:3
@@ -325,68 +321,32 @@ Function updateTableListWithDataSizes()
 		If (Bool:C1537($table.embedded))\
 			 & (Not:C34(Bool:C1537($table.filter.parameters)))
 			
-			If (Feature.with("androidDataSet"))
+			If (Is macOS:C1572)
 				
-				If (Is macOS:C1572)
-					
-					Case of 
-							
-							//______________________________________________________
-						: (PROJECT.allTargets())
-							
-							$table.dumpSize:=This:C1470.dumpTableSize($table.name; "ios")+" / "+This:C1470.dumpTableSize($table.name; "android")
-							
-							//______________________________________________________
-						: (PROJECT.iOS())
-							
-							$table.dumpSize:=This:C1470.dumpTableSize($table.name; "ios")
-							
-							//______________________________________________________
-						: (PROJECT.android())
-							
-							$table.dumpSize:=This:C1470.dumpTableSize($table.name; "android")
-							
-							//______________________________________________________
-					End case 
-					
-				Else 
-					
-					$table.dumpSize:=This:C1470.dumpTableSize($table.name; "android")
-					
-				End if 
+				Case of 
+						
+						//______________________________________________________
+					: (PROJECT.allTargets())
+						
+						$table.dumpSize:=This:C1470.dumpTableSize($table.name; "ios")+" / "+This:C1470.dumpTableSize($table.name; "android")
+						
+						//______________________________________________________
+					: (PROJECT.iOS())
+						
+						$table.dumpSize:=This:C1470.dumpTableSize($table.name; "ios")
+						
+						//______________________________________________________
+					: (PROJECT.android())
+						
+						$table.dumpSize:=This:C1470.dumpTableSize($table.name; "android")
+						
+						//______________________________________________________
+				End case 
 				
 			Else 
 				
-				If (This:C1470.sqlite#Null:C1517)
-					
-					$table.dumpSize:=This:C1470.dumpTableSize($table.name)
-					
-				Else 
-					
-					$file:=PROJECT._folder.file("project.dataSet/Resources/Assets.xcassets/Data/"+$table.name+".dataset/"+$table.name+".data.json")
-					
-					If ($file.exists)
-						
-						// Get document size
-						$size:=$file.size
-						
-						// Add pictures size if any
-						$file:=PROJECT._folder.file("Resources/Assets.xcassets/Pictures/"+$table.name+"/manifest.json")
-						
-						If ($file.exists)
-							
-							$size:=$size+JSON Parse:C1218($file.getText()).contentSize
-							
-						End if 
-						
-						$table.dumpSize:=doc_bytesToString($size)
-						
-					Else 
-						
-						$table.dumpSize:=Get localized string:C991("notAvailable")
-						
-					End if 
-				End if 
+				$table.dumpSize:=This:C1470.dumpTableSize($table.name; "android")
+				
 			End if 
 			
 		Else 
@@ -424,6 +384,10 @@ Function dumpTableSize($tableName : Text; $target : Text) : Text
 		
 	Else 
 		
+		//MARK:-ACI0103230
+		$tableName:=This:C1470._formatTableNameAndroid($tableName)
+		//MARK:-
+		
 		If (This:C1470.datasetAndroid=Null:C1517)\
 			 || (This:C1470.datasetAndroid.tables=Null:C1517)\
 			 || (This:C1470.datasetAndroid.tables[$tableName]=Null:C1517)
@@ -449,6 +413,112 @@ Function dumpTableSize($tableName : Text; $target : Text) : Text
 	End if 
 	
 	return (doc_bytesToString($size))
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function _formatTableNameAndroid($tableName : Text) : Text
+	
+	var $regex : cs:C1710.regex
+	var $str : cs:C1710.str
+	
+	// Remove spaces
+	$tableName:=Replace string:C233($tableName; " "; "")
+	
+	// First letter in uppercase
+	$tableName[[1]]:=Uppercase:C13($tableName[[1]])
+	
+	// Replace accented characters with non-accented characters
+	$str:=cs:C1710.str.new($tableName)
+	$tableName:=$str.unaccented()
+	
+	// Replace special characters with underscores
+	$regex:=cs:C1710.regex.new($tableName; "[^a-zA-Z0-9._]")
+	$tableName:=$regex.substitute("_")
+	
+	// Prefix names beginning with an underscore
+	$tableName:=$tableName[[1]]="_" ? "Q"+$tableName : $tableName
+	
+	//FIXME:Seems to be useless - Manage reserved words for Kotin or Java
+	If (New collection:C1472("as"; \
+		"break"; \
+		"class"; \
+		"continue"; \
+		"do"; \
+		"else"; \
+		"false"; \
+		"for"; \
+		"fun"; \
+		"if"; \
+		"in"; \
+		"is"; \
+		"null"; \
+		"object"; \
+		"package"; \
+		"return"; \
+		"super"; \
+		"this"; \
+		"throw"; \
+		"true"; \
+		"try"; \
+		"typealias"; \
+		"typeof"; \
+		"val"; \
+		"var"; \
+		"when"; \
+		"while"; \
+		"by"; \
+		"catch"; \
+		"constructor"; \
+		"delegate"; \
+		"dynamic"; \
+		"field"; \
+		"file"; \
+		"finally"; \
+		"get"; \
+		"import"; \
+		"init"; \
+		"param"; \
+		"property"; \
+		"receiver"; \
+		"set"; \
+		"setparam"; \
+		"where"; \
+		"actual"; \
+		"abstract"; \
+		"annotation"; \
+		"companion"; \
+		"const"; \
+		"crossinline"; \
+		"data"; \
+		"enum"; \
+		"expect"; \
+		"external"; \
+		"final"; \
+		"infix"; \
+		"inline"; \
+		"inner"; \
+		"internal"; \
+		"lateinit"; \
+		"noinline"; \
+		"open"; \
+		"operator"; \
+		"out"; \
+		"override"; \
+		"private"; \
+		"protected"; \
+		"public"; \
+		"reified"; \
+		"sealed"; \
+		"suspend"; \
+		"tailrec"; \
+		"vararg"; \
+		"field"; \
+		"it").indexOf($tableName)#-1)
+		
+		$tableName:="QMobile_"+$tableName
+		
+	End if 
+	
+	return $tableName
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
 	/// Display filter status

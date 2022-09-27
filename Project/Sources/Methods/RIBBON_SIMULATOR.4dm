@@ -234,26 +234,37 @@ Case of
 						
 						$success:=$sdk.install($defaultAvd.image)
 						
+						$progress.close()
+						
 					End if 
 					
 					If ($success)
 						
-						cs:C1710.avd.new().createAvd($defaultAvd)
+						var $avd : cs:C1710.avd
+						$avd:=cs:C1710.avd.new().createAvd($defaultAvd.name; $defaultAvd.image; $defaultAvd.definition)
 						
-						// * UPDATE DEVICE LIST
-						UI.getDevices()
+						If ($avd.success)
+							
+							// * UPDATE DEVICE LIST
+							UI.getDevices()
+							
+							UI.currentDevice:=$defaultAvd.name
+							
+						Else 
+							
+							Logger.error("Failed to create default simulator")
+							
+						End if 
 						
-					End if 
-					
-					If ($progress#Null:C1517)
+					Else 
 						
-						$progress.close()
+						Logger.error("Failed to install default sdk image")
 						
 					End if 
 					
 				Else 
 					
-					Logger.error("missing default avd definition")
+					Logger.error("Missing default avd definition")
 					
 				End if 
 				

@@ -54,24 +54,9 @@ Function init()
 	This:C1470.button("doNotExportImages")
 	This:C1470.button("doNotGenerate")
 	
-	If (Feature.with("androidDataSet"))
-		
-		$group:=This:C1470.group("_generation")
-		This:C1470.button("generate").addToGroup($group)
-		This:C1470.formObject("lastGeneration").addToGroup($group)
-		
-	Else 
-		
-		This:C1470.button("generate")
-		
-		$group:=This:C1470.group("dataInGeneration")
-		This:C1470.stepper("dataGeneration").addToGroup($group)
-		This:C1470.formObject("dataGenerationLabel").addToGroup($group)
-		
-		This:C1470.group("_generation").addMember(This:C1470.generate)
-		This:C1470._generation.addMember($group)
-		
-	End if 
+	$group:=This:C1470.group("_generation")
+	This:C1470.button("generate").addToGroup($group)
+	This:C1470.formObject("lastGeneration").addToGroup($group)
 	
 	This:C1470.testServer.isRunning:=False:C215  // A flag to know if the test server is running
 	This:C1470.generate.isRunning:=False:C215  // A flag to indicate if a data generation is in progress and prevent re-entry
@@ -170,18 +155,8 @@ Function onLoad()
 	
 	This:C1470._generation.distributeLeftToRight()
 	
-	If (Feature.with("androidDataSet"))
-		
-		This:C1470.lastGeneration.hide()
-		This:C1470.generate.disable()
-		
-	Else 
-		
-		This:C1470.generate.bestSize().disable()
-		This:C1470.dataGenerationLabel.setTitle(Replace string:C233(Get localized string:C991("dataSetGeneration"); "\n\n"; "\r"))
-		This:C1470.dataInGeneration.distributeLeftToRight()
-		
-	End if 
+	This:C1470.lastGeneration.hide()
+	This:C1470.generate.bestSize().disable()
 	
 	This:C1470.checkingDatasourceConfiguration()
 	
@@ -191,12 +166,11 @@ Function update()
 	
 	If (This:C1470.testServer.isRunning)
 		
+		This:C1470.generate.disable()
 		This:C1470.dataSourceStatus.hide()
 		
 		This:C1470.serverInTest.start()
 		This:C1470.testServer.show()
-		
-		This:C1470.generate.disable()
 		
 	Else 
 		
@@ -251,7 +225,7 @@ Function checkingDatasourceConfiguration()
 	
 	var $success : Boolean
 	var $pos; $len; $port : Integer
-	var $keypath; $url : Text
+	var $keyPath; $url : Text
 	var $c : Collection
 	var $webServer : 4D:C1709.WebServer
 	var $file : 4D:C1709.File
@@ -285,25 +259,11 @@ Function checkingDatasourceConfiguration()
 			
 			If ($success)
 				
-				$keypath:=String:C10(This:C1470._dataSource.keyPath)
+				$keyPath:=String:C10(This:C1470._dataSource.keyPath)
 				
-				If (Length:C16($keypath)>0)
+				If (Length:C16($keyPath)>0)
 					
-					//%W-533.1
-					If ($keypath[[1]]="/")\
-						 && (Position:C15("/Volumes/"; $keypath; *)=0)\
-						 && (Position:C15("/Users/"; $keypath; *)=0)
-						
-						// Relative path
-						$file:=Folder:C1567(Folder:C1567(fk database folder:K87:14; *).platformPath; fk platform path:K87:2)\
-							.file(Substring:C12($keypath; 2))
-						
-					Else 
-						
-						$file:=File:C1566($keypath)
-						
-					End if 
-					//%W+533.1
+					$file:=UI.path.resolve($keyPath)
 					
 					If ($file.exists)
 						
@@ -549,7 +509,10 @@ Function localizeKeyFile()
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function doGenerate()
 	
-	var $keyPathname : Text
+	var $keyPath : Text
+	var $file : 4D:C1709.File
+	
+	$keyPath:=Form:C1466.dataSource.keyPath
 	
 	If (Not:C34(This:C1470.generate.isRunning))
 		
@@ -559,24 +522,24 @@ Function doGenerate()
 		
 		If (This:C1470.remote)
 			
-			// ***************************************************************
-			// #RUSTINE: ne devrait plus être nécessaire
-			If (Test path name:C476($keyPathname)#Is a document:K24:1)
-				
-				Logger.warning(String:C10(Form:C1466.dataSource.keyPath)+" -> "+$keyPathname)
-				$keyPathname:=Convert path POSIX to system:C1107(Form:C1466.dataSource.keyPath)
-				
-			End if 
-			// ***************************************************************
+			$file:=UI.path.resolve($keyPath)
 			
 		Else 
 			
 			// Default location
-			$keyPathname:=UI.path.key().platformPath
+			$file:=UI.path.key()
 			
 		End if 
 		
-		UI.doGenerate($keyPathname)
+		If ($file.exists)
+			
+			UI.doGenerate($file.platformPath)
+			
+		Else 
+			
+			ASSERT:C1129(Database.isMatrix; "keyPath not found: "+$keyPath)
+			
+		End if 
 		
 	Else 
 		

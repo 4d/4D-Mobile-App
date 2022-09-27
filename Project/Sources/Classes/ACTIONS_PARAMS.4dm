@@ -667,9 +667,9 @@ Function update()
 						This:C1470.description.setPlaceholder("urlPlaceholder")
 						
 						// The 4D mobile developer shall not be allowed to enter an URL (no host, no scheme). If so, the url shall be turned in red.
-						This:C1470.description.foregroundColor:=Match regex:C1019("(?mi-s)^[[:alpha:]](?:[[:alnum:]]|[-+\\.])*:"; String:C10($action.description); 1)\
-							 ? UI.errorColor\
-							 : Foreground color:K23:1
+						This:C1470.description.foregroundColor:=Match regex:C1019("(?mi-s)^/(?:[[:alnum:]]*)(?:\\.[[:alpha:]]{3,})?(?:#[[:alnum:]]*)?$"; String:C10($action.description); 1)\
+							 ? Foreground color:K23:1\
+							 : UI.errorColor
 						
 					Else 
 						
@@ -1308,7 +1308,7 @@ Function getFormats() : Object
 	var $type : Text
 	var $index : Integer
 	var $formats; $manifest : Object
-	var $c : Collection
+	var $types : Collection
 	var $file : 4D:C1709.File
 	var $folder : 4D:C1709.Folder
 	
@@ -1323,69 +1323,166 @@ Function getFormats() : Object
 		
 	End if 
 	
-	$c:=New collection:C1472(\
+	$types:=New collection:C1472(\
 		"text"; \
 		"real"; \
 		"integer"; \
 		"boolean"; \
 		"picture")
 	
-	For each ($folder; $folder.folders())
+	If (Feature.with("inputControlArchive"))
 		
-		$file:=$folder.file("manifest.json")
+		var $item : Object
+		var $target : Collection
+		$target:=Value type:C1509(PROJECT.info.target)=Is collection:K8:32 ? PROJECT.info.target : New collection:C1472(PROJECT.info.target)
 		
-		If (Not:C34($file.exists))
+		For each ($item; $folder.folders().combine($folder.files().query("extension = :1"; SHARED.archiveExtension)))
 			
-			continue  // Not a valid formatter
+			var $isArchive : Boolean
+			$isArchive:=$item.isFile
 			
-		End if 
-		
-		$manifest:=JSON Parse:C1218($file.getText())
-		
-		If ($manifest.choiceList#Null:C1517)
-			
-			continue  // We do not want choice list formatter, only custom one without data source.
-			
-		End if 
-		
-		// I'm being nice to you and making a collection if not.
-		$manifest.type:=Value type:C1509($manifest.type)=Is text:K8:3 ? New collection:C1472($manifest.type) : $manifest.type
-		
-		If (Value type:C1509($manifest.type)#Is collection:K8:32)
-			
-			continue  // Not a valid formatter
-			
-		End if 
-		
-		// Add to each type, the compatible formatter
-		For each ($type; $manifest.type)
-			
-			$index:=$c.indexOf($type)
-			
-			If ($index>=0)
+			If ($isArchive)
 				
-				$type:=Choose:C955($index; \
-					"string"; \
-					"number"; \
-					"number"; \
-					"bool"; \
-					"image")
+				$item:=ZIP Read archive:C1637($item).root
 				
 			End if 
 			
-			If ($formats[$type]=Null:C1517)
+			$file:=$item.file("manifest.json")
+			
+			If (Not:C34($file.exists))
 				
-				continue  // IGNORE
+				continue  // Not a valid formatter
 				
 			End if 
 			
-			If ($formats[$type].indexOf("/"+$manifest.name)<0)
+			$manifest:=JSON Parse:C1218($file.getText())
+			
+			If ($manifest.choiceList#Null:C1517)
 				
-				$formats[$type].push("/"+$manifest.name)
+				continue  // We do not want choice list formatter, only custom one without data source.
 				
+			End if 
+			
+			If ($manifest.name=Null:C1517)\
+				 || ($manifest.inject=Null:C1517)\
+				 || ($manifest.type=Null:C1517)\
+				 || ($manifest.capabilities=Null:C1517)
+				
+				continue  // The manifest.json shall contain the name, inject, type and capabilities attributes.
+				
+			Else 
+				
+				If ($manifest.target#Null:C1517)
+					
+					// Transform the target into a collection, if necessary
+					$manifest.target:=(Value type:C1509($manifest.target)=Is collection:K8:32) ? $manifest.target : New collection:C1472(String:C10($manifest.target))
+					
+				Else 
+					
+					This:C1470._createTarget($manifest; $item)  // The manifest.json shall contain the target attributes
+					
+				End if 
+				
+				If (($manifest.target.length=2) & ($target.length=2))\
+					 || (($target.length=1) & ($manifest.target.indexOf($target[0])#-1))
+					
+					// I'm being nice to you and making a collection if not.
+					$manifest.type:=Value type:C1509($manifest.type)=Is text:K8:3 ? New collection:C1472($manifest.type) : $manifest.type
+					
+					// Add to each type, the compatible formatter
+					For each ($type; $manifest.type)
+						
+						$index:=$types.indexOf($type)
+						
+						If ($index>=0)
+							
+							$type:=Choose:C955($index; \
+								"string"; \
+								"number"; \
+								"number"; \
+								"bool"; \
+								"image")
+							
+						End if 
+						
+						If ($formats[$type]=Null:C1517)
+							
+							continue  // IGNORE
+							
+						End if 
+						
+						var $format : Text
+						$format:="/"+$manifest.name  //+($isArchive ? ".zip" : "")
+						
+						If ($formats[$type].indexOf($format)<0)
+							
+							$formats[$type].push($format)
+							
+						End if 
+					End for each 
+				End if 
 			End if 
 		End for each 
-	End for each 
+		
+	Else 
+		
+		For each ($folder; $folder.folders())
+			
+			$file:=$folder.file("manifest.json")
+			
+			If (Not:C34($file.exists))
+				
+				continue  // Not a valid formatter
+				
+			End if 
+			
+			$manifest:=JSON Parse:C1218($file.getText())
+			
+			If ($manifest.choiceList#Null:C1517)
+				
+				continue  // We do not want choice list formatter, only custom one without data source.
+				
+			End if 
+			
+			// I'm being nice to you and making a collection if not.
+			$manifest.type:=Value type:C1509($manifest.type)=Is text:K8:3 ? New collection:C1472($manifest.type) : $manifest.type
+			
+			If (Value type:C1509($manifest.type)#Is collection:K8:32)
+				
+				continue  // Not a valid formatter
+				
+			End if 
+			
+			// Add to each type, the compatible formatter
+			For each ($type; $manifest.type)
+				
+				$index:=$types.indexOf($type)
+				
+				If ($index>=0)
+					
+					$type:=Choose:C955($index; \
+						"string"; \
+						"number"; \
+						"number"; \
+						"bool"; \
+						"image")
+					
+				End if 
+				
+				If ($formats[$type]=Null:C1517)
+					
+					continue  // IGNORE
+					
+				End if 
+				
+				If ($formats[$type].indexOf("/"+$manifest.name)<0)
+					
+					$formats[$type].push("/"+$manifest.name)
+					
+				End if 
+			End for each 
+		End for each 
+	End if 
 	
 	return $formats
 	
@@ -1451,7 +1548,8 @@ Function formatMenuManager()
 			
 			If ($formats[$type].length>0)
 				
-				$label:=Choose:C955($type="string"; "text"; $type)
+				// Map string to text
+				$label:=$type="string" ? "text" : $type
 				
 				$subMenu:=cs:C1710.menu.new()\
 					.append(":xliff:default"; $label; $currentFormat=$label).setData("type"; $label)\
@@ -1710,9 +1808,9 @@ Function dataSourceMenuManager()
 Function editList()
 	
 /*
-																				$form:=New object(\
-																																																				"static"; $static; \
-																																																				"host"; This.path.hostInputControls(True))
+																									$form:=New object(\
+																																																														"static"; $static; \
+																																																														"host"; This.path.hostInputControls(True))
 	
 $form.folder:=This.path.hostInputControls()
 $manifest:=$form.folder.file("manifest.json")
@@ -2259,6 +2357,43 @@ Function metaInfo($current : Object)->$result
 	$result.cell.names.stroke:=Choose:C955(UI.darkScheme; "white"; "black")
 	
 	//MARK:-[PRIVATE]
+	//=== === === === === === === === === === === === === === === === === === === === ===
+	/// Create the "target" property according to the folders found
+Function _createTarget($manifest : Object; $item : 4D:C1709.Folder)
+	
+	var $android; $ios : Boolean
+	
+	$manifest.target:=New collection:C1472
+	
+	$android:=($item.folders().query("name = android").pop()#Null:C1517)
+	$ios:=($item.folders().query("name = ios").pop()#Null:C1517)
+	
+	Case of 
+			
+			//_______________________________________
+		: ($android & $ios)
+			
+			$manifest.target.push("ios")
+			$manifest.target.push("android")
+			
+			//_______________________________________
+		: ($android)
+			
+			$manifest.target.push("android")
+			
+			//_______________________________________
+		: ($ios)
+			
+			$manifest.target.push("ios")
+			
+			//_______________________________________
+		Else 
+			
+			//invalid
+			
+			//_______________________________________
+	End case 
+	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function _getParameterFields($table : cs:C1710.table; $preset : Text) : Collection
 	

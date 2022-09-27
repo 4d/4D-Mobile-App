@@ -21,7 +21,9 @@ If (Count parameters:C259>=1)
 End if 
 
 $ƒ:=panel
-$ƒ.tableNumber:=Num:C11($ƒ.tableLink.call())
+
+//mark:ACI0103199
+$ƒ.tableNumber:=$ƒ.tableLink#Null:C1517 ? Num:C11($ƒ.tableLink.call()) : 0
 
 // ----------------------------------------------------
 Case of 
@@ -32,14 +34,14 @@ Case of
 		ASSERT:C1129(False:C215; "Missing parameter \"action\"")
 		
 		//________________________________________________________________
-	: ($action="update")  // Display published tables according to data model
-		
-		$ƒ.updateFieldList()
-		
-		//________________________________________________________________
 	: ($ƒ.tableNumber=0)
 		
 		// <NOTHING MORE TO DO>
+		
+		//________________________________________________________________
+	: ($action="update")  // Display published tables according to data model
+		
+		$ƒ.updateFieldList()
 		
 		//________________________________________________________________
 	: ($action="fieldIcons")  // Call back from picker

@@ -22,6 +22,33 @@ Class constructor($id : Text; $options : Variant)
 	// ⚠️ In some cases (Surface), the Home folder is not the parent of the desktop folder.
 	This:C1470.home:=Folder:C1567(Split string:C1554(Folder:C1567(fk desktop folder:K87:19).path; "/").resize(3).join("/"))
 	
+	//MARK:-TOOLS
+Function resolve($path : Text) : Object
+	
+	If (Length:C16($path)=0)
+		
+		return File:C1566("📄")
+		
+	End if 
+	
+	If ($path="/@")\
+		 && (Position:C15("/Volumes/"; $path; *)=0)\
+		 && (Position:C15("/Users/"; $path; *)=0)
+		
+		// Relative 
+		return $path="@/"\
+			 ? Folder:C1567(database.databaseFolder.path+$path)\
+			 : File:C1566(database.databaseFolder.path+$path)
+		
+	Else 
+		
+		// Absolute
+		return $path="@/"\
+			 ? Folder:C1567($path)\
+			 : File:C1566($path)
+		
+	End if 
+	
 	//MARK:-USER
 Function userCache()->$folder : 4D:C1709.Folder
 	
@@ -521,8 +548,6 @@ Function hostNavigationForms($create : Boolean) : 4D:C1709.Folder  // form/navig
 	End if 
 	
 	return (This:C1470.target)
-	
-	
 	
 /*========================================================*/
 Function iOSDb($relativePath : Variant) : 4D:C1709.File

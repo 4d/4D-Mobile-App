@@ -320,7 +320,6 @@ Case of
 		// Add choice lists if any to action parameters
 		If ($Obj_in.project.actions#Null:C1517)
 			
-			
 			$dataModel:=$Obj_in.project.dataModel
 			var $hostInputControls : 4D:C1709.Folder
 			$hostInputControls:=cs:C1710.path.new().hostInputControls()
@@ -474,6 +473,8 @@ Case of
 				End if 
 			End for each 
 		End if 
+		
+		$Obj_out.success:=True:C214
 		
 		// MARK:- hasAction
 	: ($Txt_action="hasAction")
@@ -705,6 +706,8 @@ $Col_catalog:=doc_catalog(This.template.source; This.getCatalogExcludePattern())
 				
 			End if 
 		End for each 
+		
+		$Obj_out.success:=True:C214
 		
 		// MARK:- putTableNames
 	: ($Txt_action="putTableNames")
