@@ -35,7 +35,7 @@ allprojects {
 }
 
 ext {
-    masterBranch = "master"
+    masterBranch = "main"
     QMobileAPI = QMobileLibs.qmobileapi + '-' + masterBranch
     QMobileDataStore = QMobileLibs.qmobiledatastore + '-' + masterBranch
     QMobileDataSync = QMobileLibs.qmobiledatasync + '-' + masterBranch
