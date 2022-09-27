@@ -104,9 +104,9 @@ If (True:C214)  // DELIVERED
 	Feature.delivered("useTextRestResponse"; 1940)  // [MOBILE] Data generation : for optis
 	
 	// Mark:-R5
-	Feature.delivered("xcDataModelClass")  // Use class to create core data model ie. xcDataModel (useful to refactor for alias)
-	Feature.delivered("iosBuildWithClass")  // Use cs.MobileProjectIOS class
-	Feature.delivered("modernStructure")
+	Feature.delivered("xcDataModelClass"; 1950)  // Use class to create core data model ie. xcDataModel (useful to refactor for alias)
+	Feature.delivered("iosBuildWithClass"; 1950)  // Use cs.MobileProjectIOS class
+	Feature.delivered("modernStructure"; 1950)
 	
 End if 
 
@@ -115,7 +115,7 @@ Feature.unstable("131225")  // [MOBILE] Use aliases
 Feature.unstable("127558")  // [ANDROID] Data set
 
 // Mark:-R7
-Feature.main("openURLAction")  // azure:3625 [MOBILE] Execute an action that open web area
+Feature.unstable("openURLAction")  // azure:3625 [MOBILE] Execute an action that open web area
 
 
 // Mark:-🚧 MAIN
