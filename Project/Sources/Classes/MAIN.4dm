@@ -409,7 +409,7 @@ Function mainHandleEvents($e : Object)->$allow : Integer
 				// End if
 				// Else
 				//If ($o.src#$e.row)\
-																																																							& ($e.row#($o.src+1))  // Not the same or the next one
+																																																												& ($e.row#($o.src+1))  // Not the same or the next one
 				//$o:=$me.rowCoordinates($e.row)
 				//$o.bottom:=$o.top
 				//$o.right:=$me.coordinates.right
@@ -539,6 +539,8 @@ Function __add($id : Text; $name : Text; $row : Integer)
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function _updateOrder()
 	
+	var $index : Integer
+	var $item
 	var $order : Collection
 	
 	$order:=Form:C1466.main.order.copy()  // Current order
@@ -547,17 +549,21 @@ Function _updateOrder()
 	ARRAY TO COLLECTION:C1563(Form:C1466.main.order; This:C1470.dstIdPtr->)
 	
 	If (Feature.with("actionsInTabBar"))
-		var $index : Integer
-		var $item : Variant
-		$index:=0
+		
 		For each ($item; $order)
+			
 			If (Form:C1466.main.order.indexOf($item)<0)
-				// maybe removed or unknow item type
-				If (Value type:C1509($item)=Is object:K8:27)  // currently object are ignored
-					Form:C1466.main.order.insert($index; $item)  // try to put at same pos, not really smart like a Diffable algo
+				
+				// Maybe removed or unknow item type
+				If (Value type:C1509($item)=Is object:K8:27)  // Currently object are ignored
+					
+					Form:C1466.main.order.insert($index; $item)  // Try to put at same pos, not really smart like a Diffable algo
+					
 				End if 
 			End if 
+			
 			$index+=1
+			
 		End for each 
 		
 	End if 

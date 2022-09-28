@@ -48,19 +48,19 @@ Function delivered($feature; $version : Integer)
 	
 	//====================================================================
 	/// Storing a feature as debug (only available in dev mode)
-Function debug($feature; $version : Integer)
+Function debug($feature)
 	
 	This:C1470._features[This:C1470._feature($feature)]:=(Structure file:C489=Structure file:C489(*))
 	
 	//====================================================================
 	/// Storing a feature as only available in main branch
-Function main($feature; $version : Integer)
+Function main($feature)
 	
 	This:C1470._features[This:C1470._feature($feature)]:=(Application version:C493(*)[[1]]="A")
 	
 	//====================================================================
 	/// Storing a feature as work in progress (only available in dev mode)
-Function wip($feature; $version : Integer)
+Function wip($feature)
 	
 	This:C1470._features[This:C1470._feature($feature)]:=(Structure file:C489=Structure file:C489(*))
 	
@@ -72,7 +72,7 @@ Function alias($alias; $original)
 	
 	//====================================================================
 	/// Storing a feature as pending (not available)
-Function pending($feature; $version : Integer)
+Function pending($feature)
 	
 	This:C1470._features[This:C1470._feature($feature)]:=False:C215
 	
