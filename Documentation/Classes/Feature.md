@@ -114,6 +114,11 @@ Feature.wip("DataSourceClass")  // Work with DataSource class class to test the 
 // Mark:-→ Local preferencesFeature.loadLocal()
 
 // Mark:-→ AliasFeature.alias("many-one-many"; 129953)
+
+// Logs the status (enabled/disabled) of all features
+Logger:=cs.logger.new()Feature.log(Formula(Logger.log($1)))
+
+SET ASSERT ENABLED(Feature.with("debug"); *)
 ```
 
 ### Usage in the code
