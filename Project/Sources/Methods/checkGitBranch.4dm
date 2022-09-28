@@ -23,7 +23,7 @@ If ($file.exists)
 		If (Application version:C493(*)="A@")
 			
 			$version:="DEV ("+$major+"R"+$c[2]+")"
-			$success:=$branch="main"
+			$success:=($branch="main") || ($branch=($major+Choose:C955($c[2]="0"; "."+$c[3]; "R"+$c[2])))
 			
 		Else 
 			
