@@ -14,6 +14,7 @@ Class constructor($version : Integer; $file : 4D:C1709.File)
 	// Get the config file, if any
 	This:C1470.localFile:=$file
 	
+	//MARK:[CHECK STATE]
 	//====================================================================
 	/// Returns True if the feature is activated
 Function with($feature) : Boolean
@@ -32,6 +33,7 @@ Function disabled($feature) : Boolean
 	
 	return (Not:C34(Bool:C1537(This:C1470._features[This:C1470._feature($feature)])))
 	
+	//MARK:-[STORING]
 	//====================================================================
 	/// Storing a feature as unstable
 Function unstable($feature)
@@ -75,7 +77,7 @@ Function pending($feature; $version : Integer)
 	This:C1470._features[This:C1470._feature($feature)]:=False:C215
 	
 	//====================================================================
-	/// Storing a feature as only availbale for a particular user
+	/// Storing a feature as only available for a particular user
 Function dev($feature; $user)
 	
 	Case of 
@@ -92,12 +94,12 @@ Function dev($feature; $user)
 			//______________________________________________________
 		Else 
 			
-			BEEP:C151
 			This:C1470._features[This:C1470._feature($feature)]:=False:C215
 			
 			//______________________________________________________
 	End case 
 	
+	//MARK:-[TOOLS]
 	//====================================================================
 	/// Override features activation with local preferences, if any
 Function loadLocal()
@@ -200,6 +202,10 @@ Function loadLocal()
 	End if 
 	
 	//====================================================================
+/** 
+Logs the status (enabled/disabled) of all declared features
+using the host database logging system passed as a formula.
+*/
 Function log($logger : 4D:C1709.Function)
 	
 	var $key; $t : Text
@@ -216,7 +222,7 @@ Function log($logger : 4D:C1709.Function)
 		End if 
 	End for each 
 	
-	// MARK:[PRIVATE]
+	// MARK:-[PRIVATE]
 	//====================================================================
 Function _feature($feature) : Text
 	

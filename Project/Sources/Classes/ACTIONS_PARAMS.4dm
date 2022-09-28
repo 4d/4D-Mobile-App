@@ -244,15 +244,7 @@ Function handleEvents($e : Object)
 				//==============================================
 			: (This:C1470.formatPopup.catch($e; On Clicked:K2:4))
 				
-				If (Shift down:C543)
-					
-					This:C1470.showFormatOnDisk()
-					
-				Else 
-					
-					This:C1470.formatMenuManager()
-					
-				End if 
+				This:C1470.formatMenuManager()
 				
 				//==============================================
 			: (This:C1470.dataSourcePopup.catch($e; On Clicked:K2:4))
@@ -324,7 +316,7 @@ Function handleEvents($e : Object)
 				//==================================================
 			: (This:C1470.revealFormat.catch($e; On Clicked:K2:4))
 				
-				SHOW ON DISK:C922(This:C1470.sourceFolder(Delete string:C232(This:C1470.current.format; 1; 1)).platformPath)
+				This:C1470.showFormatOnDisk()
 				
 				//==================================================
 			: (This:C1470.revealDatasource.catch($e; On Clicked:K2:4))
@@ -591,8 +583,10 @@ Function restoreContext()
 	// Update UI
 Function update()
 	
-	var $isLinked; $withDataSource; $withDefault : Boolean
+	var $t : Text
+	var $isCustom; $isLinked; $withDataSource; $withDefault : Boolean
 	var $action; $current : Object
+	var $rgx : cs:C1710.regex
 	
 	This:C1470.noSelection.hide()
 	This:C1470.noTable.hide()
@@ -820,12 +814,10 @@ Function update()
 												GET SYSTEM FORMAT:C994(Date separator:K60:10; $t)
 												This:C1470.defaultValue.setFilter("&\"0-9;"+$t+";-;/;"+UI.str.setText("todayyesterdaytomorrow").distinctLetters(";")+"\"")
 												
-												var $t
 												$t:=String:C10(This:C1470.defaultValue.getValue())
 												
 												If (Position:C15($t; "todayyesterdaytomorrow")=0)
 													
-													var $rgx : cs:C1710.regex
 													$rgx:=cs:C1710.regex.new($t; "(?m-si)^(\\d{2})!(\\d{2})!(\\d{4})$")
 													
 													If ($rgx.match())
@@ -888,8 +880,31 @@ Function update()
 									End if 
 								End if 
 								
-								$t:=String:C10($current.format)
-								This:C1470.revealFormat.show((Position:C15("/"; $t)=1) & (This:C1470.customInputControls.indexOf(Delete string:C232($t; 1; 1))=-1))
+								If (Feature.with("inputControlArchive"))  //🚧
+									
+									$t:=String:C10($current.format)
+									$isCustom:=(Position:C15("/"; $t)=1)
+									
+									If ($isCustom)\
+										 && (This:C1470.customInputControls.indexOf(Delete string:C232($t; 1; 1))=-1)
+										
+										This:C1470.revealFormat.show()
+										
+										// Check availability
+										This:C1470.format.foregroundColor:=This:C1470.checkFormat(Delete string:C232($t; 1; 1)) ? Foreground color:K23:1 : UI.errorColor
+										
+									Else 
+										
+										This:C1470.revealFormat.hide()
+										
+									End if 
+									
+								Else 
+									
+									$t:=String:C10($current.format)
+									This:C1470.revealFormat.show((Position:C15("/"; $t)=1) & (This:C1470.customInputControls.indexOf(Delete string:C232($t; 1; 1))=-1))
+									
+								End if 
 								
 							Else 
 								
@@ -1032,26 +1047,31 @@ Function dataSourceValue() : Text
 	// Returns the source folder of a host resource
 Function sourceFolder($name : Text; $control : Boolean) : Object
 	
-	var $item; $manifest; $root : Object
+	var $item; $manifest : Object
 	var $file : 4D:C1709.File
-	var $folder; $source : 4D:C1709.Folder
+	var $folder : 4D:C1709.Folder
 	
-	$source:=Folder:C1567("❓")
 	$folder:=This:C1470.path.hostInputControls()
 	
-	If (Not:C34($folder.exists))
+	If (Feature.with("inputControlArchive"))  //🚧
 		
-		return $source
-		
-	End if 
-	
-	If (Feature.with("inputControlArchive"))
+		If (Not:C34($folder.exists))
+			
+			return 
+			
+		End if 
 		
 		For each ($item; $folder.folders().combine($folder.files().query("extension = :1"; SHARED.archiveExtension)))
 			
-			$root:=$item.isFolder ? $item : ZIP Read archive:C1637($item).root
+			$folder:=This:C1470._source($item)
 			
-			$file:=$root.file("manifest.json")
+			If ($folder=Null:C1517)
+				
+				continue  // Not a valid formatter
+				
+			End if 
+			
+			$file:=$folder.file("manifest.json")
 			
 			If (Not:C34($file.exists))
 				
@@ -1071,18 +1091,28 @@ Function sourceFolder($name : Text; $control : Boolean) : Object
 				
 				If (Delete string:C232(This:C1470.current.format; 1; 1)=($manifest.format#Null:C1517 ? $manifest.format : "push"))
 					
-					return $item
+					return $folder
 					
 				End if 
 				
 			Else 
 				
-				return $item
+				return $folder
 				
 			End if 
 		End for each 
 		
 	Else 
+		
+		var $source : 4D:C1709.Folder
+		
+		$source:=Folder:C1567("❓")
+		
+		If (Not:C34($folder.exists))
+			
+			return $source
+			
+		End if 
 		
 		var $found : Boolean
 		
@@ -1350,10 +1380,10 @@ Function mandatoryManager()
 	// Format list
 Function getFormats() : Object
 	
-	var $type : Text
+	var $format; $type : Text
 	var $index : Integer
-	var $formats; $manifest : Object
-	var $types : Collection
+	var $formats; $item; $manifest : Object
+	var $target; $types : Collection
 	var $file : 4D:C1709.File
 	var $folder : 4D:C1709.Folder
 	
@@ -1375,24 +1405,21 @@ Function getFormats() : Object
 		"boolean"; \
 		"picture")
 	
-	If (Feature.with("inputControlArchive"))
+	If (Feature.with("inputControlArchive"))  //🚧
 		
-		var $item : Object
-		var $target : Collection
 		$target:=Value type:C1509(PROJECT.info.target)=Is collection:K8:32 ? PROJECT.info.target : New collection:C1472(PROJECT.info.target)
 		
 		For each ($item; $folder.folders().combine($folder.files().query("extension = :1"; SHARED.archiveExtension)))
 			
-			var $isArchive : Boolean
-			$isArchive:=$item.isFile
+			$folder:=This:C1470._source($item)
 			
-			If ($isArchive)
+			If ($folder=Null:C1517)
 				
-				$item:=ZIP Read archive:C1637($item).root
+				continue  // Not a valid formatter
 				
 			End if 
 			
-			$file:=$item.file("manifest.json")
+			$file:=$folder.file("manifest.json")
 			
 			If (Not:C34($file.exists))
 				
@@ -1424,7 +1451,7 @@ Function getFormats() : Object
 					
 				Else 
 					
-					This:C1470._createTarget($manifest; $item)  // The manifest.json shall contain the target attributes
+					This:C1470._createTarget($manifest; $folder)  // The manifest.json shall contain the target attributes
 					
 				End if 
 				
@@ -1456,7 +1483,6 @@ Function getFormats() : Object
 							
 						End if 
 						
-						var $format : Text
 						$format:="/"+$manifest.name
 						
 						If ($formats[$type].indexOf($format)<0)
@@ -1532,23 +1558,79 @@ Function getFormats() : Object
 	return $formats
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
+Function checkFormat($name : Text) : Boolean
+	
+	var $manifest : Object
+	var $target : Collection
+	var $file : 4D:C1709.File
+	var $folder : 4D:C1709.Folder
+	
+	$folder:=This:C1470.sourceFolder($name)
+	
+	If ($folder#Null:C1517)
+		
+		$file:=$folder.file("manifest.json")
+		
+		If ($file.exists)
+			
+			$manifest:=JSON Parse:C1218($file.getText())
+			
+			If ($manifest.target#Null:C1517)
+				
+				// Transform the target into a collection, if necessary
+				$manifest.target:=(Value type:C1509($manifest.target)=Is collection:K8:32) ? $manifest.target : New collection:C1472(String:C10($manifest.target))
+				
+			Else 
+				
+				This:C1470._createTarget($manifest; $folder)  // The manifest.json shall contain the target attributes
+				
+			End if 
+			
+			$target:=Value type:C1509(PROJECT.info.target)=Is collection:K8:32 ? PROJECT.info.target : New collection:C1472(PROJECT.info.target)
+			
+			If (($manifest.target.length=2) & ($target.length=2))\
+				 || (($target.length=1) & ($manifest.target.indexOf($target[0])#-1))
+				
+				return True:C214
+				
+			End if 
+		End if 
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Show current format on disk
 Function showFormatOnDisk
 	
-	var $format : Text
-	var $folder : 4D:C1709.Folder
-	
-	$format:=String:C10(This:C1470.current.format)
-	
-	If (PROJECT.isCustomResource($format))
+	If (Feature.with("inputControlArchive"))  //🚧
 		
-		$folder:=This:C1470.path.hostInputControls(True:C214).folder(Delete string:C232($format; 1; 1))
+		var $format : Text
+		var $item : Object
+		var $file : 4D:C1709.File
+		var $folder : 4D:C1709.Folder
 		
-		If ($folder.exists)
+		$format:=Delete string:C232(This:C1470.current.format; 1; 1)
+		$folder:=This:C1470.path.hostInputControls()
+		
+		For each ($item; $folder.folders().combine($folder.files().query("extension = :1"; SHARED.archiveExtension)))
 			
-			SHOW ON DISK:C922($folder.platformPath)
+			$folder:=This:C1470._source($item)
+			$file:=$folder.file("manifest.json")
 			
-		End if 
+			If ($file.exists)
+				
+				If (JSON Parse:C1218($file.getText()).name=$format)
+					
+					SHOW ON DISK:C922($item.platformPath)
+					break
+					
+				End if 
+			End if 
+		End for each 
+		
+	Else 
+		
+		SHOW ON DISK:C922(This:C1470.sourceFolder(Delete string:C232(This:C1470.current.format; 1; 1)).platformPath)
+		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
@@ -1853,9 +1935,9 @@ Function dataSourceMenuManager()
 Function editList()
 	
 /*
-																											$form:=New object(\
-																																																																		"static"; $static; \
-																																																																		"host"; This.path.hostInputControls(True))
+	$form:=New object(\
+		"static"; $static; \
+		"host"; This.path.hostInputControls(True))
 	
 $form.folder:=This.path.hostInputControls()
 $manifest:=$form.folder.file("manifest.json")
@@ -2401,7 +2483,30 @@ Function metaInfo($current : Object)->$result
 	
 	$result.cell.names.stroke:=Choose:C955(UI.darkScheme; "white"; "black")
 	
-	//MARK:-[PRIVATE]
+	//MARK:-
+	//=== === === === === === === === === === === === === === === === === === === === ===
+	// Returns the root folder of a custom input control, even if it is an archive
+Function _source($item : Object) : 4D:C1709.Folder
+	
+	var $folder : 4D:C1709.Folder
+	
+	If ($item.isFile)  // Archive
+		
+		$folder:=ZIP Read archive:C1637($item).root
+		
+		If ($folder.files().length=0)\
+			 & ($folder.folders().length>0)
+			
+			return $folder.folders().query("name != '__MACOSX'").pop()
+			
+		End if 
+		
+	Else 
+		
+		return $item
+		
+	End if 
+	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	/// Create the "target" property according to the folders found
 Function _createTarget($manifest : Object; $item : 4D:C1709.Folder)

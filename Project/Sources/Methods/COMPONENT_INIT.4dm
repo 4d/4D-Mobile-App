@@ -331,6 +331,7 @@ If ($process.cooperative)\
 	
 	Logger.line()
 	
+	// Logs the status (enabled/disabled) of all features
 	Feature.log(Formula:C1597(Logger.log($1)))
 	
 	Logger.line()

@@ -114,8 +114,12 @@ If (True:C214)  // DELIVERED
 	
 End if 
 
-// Mark:R7
-Feature.unstable("openURLAction")  // azure:3625 [MOBILE] Execute an action that open web area
+If (True:C214)  // UNSTABLE
+	
+	// Mark:-R7
+	Feature.unstable("openURLAction")  // azure:3625 [MOBILE] Execute an action that open web area
+	
+End if 
 
 // Mark:-🚧 MAIN
 Feature.main("listEditor")  // #130828 [MOBILE] Create and edit an input control from the project editor
