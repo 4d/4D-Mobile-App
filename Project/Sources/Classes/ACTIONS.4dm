@@ -794,7 +794,7 @@ Function tableMenuManager()
 	
 	If (This:C1470.current.scope#"global")
 		
-		$menu:=cs:C1710.menu.new()
+		$menu:=cs:C1710.menu.new("no-localization")
 		
 		For each ($t; Form:C1466.dataModel)
 			
@@ -823,7 +823,7 @@ Function scopeMenuManager()
 	
 	$preset:=String:C10(This:C1470.current.preset)
 	
-	$menu:=cs:C1710.menu.new()
+	$menu:=cs:C1710.menu.new("no-localization")
 	
 	Repeat 
 		
