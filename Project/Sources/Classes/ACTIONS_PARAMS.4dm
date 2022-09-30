@@ -1189,7 +1189,7 @@ Function addParameterMenuManager($target : Object; $update : Boolean)
 	var $menu : cs:C1710.menu
 	
 	$isSortAction:=String:C10(This:C1470.action.preset)="sort"
-	$menu:=cs:C1710.menu.new()
+	$menu:=cs:C1710.menu.new("no-localization")
 	
 	If (Not:C34($isSortAction))
 		
@@ -1648,7 +1648,7 @@ Function formatMenuManager()
 	$currentFormat:=String:C10($current.format)
 	
 	$formats:=This:C1470.getFormats()
-	$menu:=cs:C1710.menu.new()
+	$menu:=cs:C1710.menu.new("no-localization")
 	
 	If (PROJECT.isFieldAttribute($current.name; Table name:C256(This:C1470.action.tableNumber)))
 		
@@ -1935,9 +1935,9 @@ Function dataSourceMenuManager()
 Function editList()
 	
 /*
-	$form:=New object(\
-		"static"; $static; \
-		"host"; This.path.hostInputControls(True))
+		$form:=New object(\
+				"static"; $static; \
+				"host"; This.path.hostInputControls(True))
 	
 $form.folder:=This.path.hostInputControls()
 $manifest:=$form.folder.file("manifest.json")
