@@ -120,6 +120,7 @@ object Libs {
     const val okhttp_jvm = "com.squareup.okhttp3:okhttp-jvm:${Versions.okhttp}"
     const val okhttp_logging_interceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.okhttp}"
     const val okhttp_mockwebserver = "com.squareup.okhttp3:mockwebserver:${Versions.okhttp}"
+    const val okhttp_tls = "com.squareup.okhttp3:okhttp-tls:${Versions.okhttp}"
 
     // Paging
     const val androidx_paging3 = "androidx.paging:paging-runtime:${Versions.paging3}"
