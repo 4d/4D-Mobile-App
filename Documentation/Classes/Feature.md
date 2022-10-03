@@ -88,11 +88,11 @@ You can define more than one key for a feature:
   }
 }
 ```
-*In this case, the fearure "theFeature" will be activated if the 4D version is 15R2 or more only on macOS and in 64-bit*
+*In this case, the feature "theFeature" will be activated if the 4D version is 15R2 or more only on macOS and in 64-bit*
 
 ## Examples
 
-### Declaration des flags
+### Declaration of flags
 
 ```4d
 Feature:=cs.Feature.new(1980; Folder(fk user preferences folder).file("4d.mobile"))
