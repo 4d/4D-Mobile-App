@@ -667,7 +667,7 @@ Function update()
 						This:C1470.description.setPlaceholder("urlPlaceholder")
 						
 						// The 4D mobile developer shall not be allowed to enter an URL (no host, no scheme). If so, the url shall be turned in red.
-						This:C1470.description.foregroundColor:=Match regex:C1019("(?mi-s)^/(?:[[:alnum:]]*)(?:\\.[[:alpha:]]{3,})?(?:#[[:alnum:]]*)?$"; String:C10($action.description); 1)\
+						This:C1470.description.foregroundColor:=(Length:C16(String:C10($action.description))>0) && Match regex:C1019("(?m-si)^/(?:[[:alnum:]_]*)(?:/[[:alnum:]_]*)*(?:\\.[[:alpha:]]{3,})?(?:#[[:alnum:]]*)?$"; String:C10($action.description); 1)\
 							 ? Foreground color:K23:1\
 							 : UI.errorColor
 						
