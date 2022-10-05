@@ -75,7 +75,7 @@ Class constructor($range)
 						
 						If ($length>=3)
 							
-							This:C1470.min:=cs:C1710.version.new(Delete string:C232($range; 1; 1))
+							This:C1470.min:=cs:C1710.version.new(Delete string:C232($range; 1; 2))
 							
 						Else 
 							
