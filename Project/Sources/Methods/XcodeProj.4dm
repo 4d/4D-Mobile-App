@@ -56,7 +56,42 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 	
 	Case of 
 			
-		// MARK:- read
+			//______________________________________________________
+		: ($Obj_in.action="projectName")
+			
+			// Get the project name (use regex lib)
+			
+			If (($Obj_in.path#Null:C1517) | ($Obj_in.posix#Null:C1517))
+				
+				If ($Obj_in.path=Null:C1517)
+					$Obj_in.path:=Convert path POSIX to system:C1107($Obj_in.posix)
+				End if 
+				
+				Case of 
+					: (Value type:C1509($Obj_in.path)=Is text:K8:3)
+						$Txt_buffer:=Document to text:C1236($Obj_in.path)
+					: ((Value type:C1509($Obj_in.path)=Is object:K8:27) && OB Instance of:C1731($Obj_in.path; 4D:C1709.File))
+						$Txt_buffer:=$Obj_in.path.getText()
+					Else 
+						$Txt_buffer:=""
+				End case 
+				
+				var $regex : Object
+				$regex:=cs:C1710.regex.new($Txt_buffer; "(?m-si)Build configuration list for PBXProject \\\"(.*)\\\"")
+				If ($regex.match())
+					
+					$Obj_out.success:=True:C214
+					$Obj_out.value:=$regex.matches[1].data
+					
+				End if 
+				
+			Else 
+				
+				$Obj_out.errors:=New collection:C1472("path must be defined")
+				
+			End if 
+			
+			// MARK:- read
 		: ($Obj_in.action="read")
 			
 			If ($Obj_in.path#Null:C1517)
@@ -82,7 +117,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 				
 			End if 
 			
-		// MARK:- write
+			// MARK:- write
 		: ($Obj_in.action="write")
 			
 			If (($Obj_in.path#Null:C1517) & ($Obj_in.object#Null:C1517))
@@ -121,7 +156,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 			End if 
 			
 			
-		// MARK:- mapping
+			// MARK:- mapping
 		: ($Obj_in.action="mapping")
 			
 			If ($Obj_in.projObject#Null:C1517)
@@ -171,7 +206,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 				$Obj_out.errors:=New collection:C1472("projObject be defined")
 				
 			End if 
-		// MARK:- randomObjectId
+			// MARK:- randomObjectId
 		: ($Obj_in.action="randomObjectId")
 			
 			// Maybe parameters are encapsulated into a project object
@@ -209,7 +244,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 			$Obj_out.success:=True:C214
 			$Obj_out.value:=$Txt_buffer
 			
-		// MARK:- addGroup
+			// MARK:- addGroup
 		: ($Obj_in.action="addGroup")
 			
 			If (($Obj_in.proj#Null:C1517) & ($Obj_in.uuid#Null:C1517) & ($Obj_in.name#Null:C1517))
@@ -261,7 +296,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 			End if 
 			
 			
-		// MARK:- addFile
+			// MARK:- addFile
 		: ($Obj_in.action="addFile")
 			
 			$Obj_types:=XcodeProj(New object:C1471(\
@@ -389,7 +424,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 					
 			End case 
 			
-		// MARK:- addSwift
+			// MARK:- addSwift
 		: ($Obj_in.action="addSwift")  // XXX or build object
 			
 			If (($Obj_in.proj#Null:C1517) & ($Obj_in.uuid#Null:C1517) & ($Obj_in.name#Null:C1517))
@@ -452,7 +487,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 				$Obj_out.errors:=New collection:C1472("proj, uuid and name must be defined")
 				
 			End if 
-		// MARK:- addStoryboard
+			// MARK:- addStoryboard
 		: ($Obj_in.action="addStoryboard")  // XXX or resource object
 			
 			If (($Obj_in.proj#Null:C1517) & ($Obj_in.uuid#Null:C1517) & ($Obj_in.name#Null:C1517))
@@ -511,7 +546,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 				
 			End if 
 			
-		// MARK:- addTableForm
+			// MARK:- addTableForm
 		: ($Obj_in.action="addTableForm")
 			
 			If (($Obj_in.proj#Null:C1517) & ($Obj_in.table#Null:C1517) & ($Obj_in.uuid#Null:C1517))
@@ -639,7 +674,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 				
 			End if 
 			
-		// MARK:- addTableJSON
+			// MARK:- addTableJSON
 		: ($Obj_in.action="addTableJSON")
 			
 			If (($Obj_in.proj#Null:C1517) & ($Obj_in.table#Null:C1517) & ($Obj_in.uuid#Null:C1517))
@@ -706,7 +741,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 				
 			End if 
 			
-		// MARK:- tree
+			// MARK:- tree
 		: ($Obj_in.action="tree")
 			// Replace all object references by the corresponding object
 			
@@ -872,7 +907,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 				
 			End if 
 			
-		// MARK:- untree
+			// MARK:- untree
 		: ($Obj_in.action="untree")
 			// Replace all objects by the corresponding object reference
 			
@@ -1002,7 +1037,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 				
 			End if 
 			
-		// MARK:- refsToCollection
+			// MARK:- refsToCollection
 		: ($Obj_in.action="refsToCollection")
 			
 			// Replace the references in .object[.key] collection by its object
@@ -1034,7 +1069,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 			End if 
 			
 			
-		// MARK:- filetype
+			// MARK:- filetype
 		: ($Obj_in.action="filetype")
 			// Replace all objects by the corresponding object reference
 			
