@@ -1084,7 +1084,7 @@ Function actionMenuManager()
 	$publishedPtr:=This:C1470.publishedPtr
 	
 	// ----------------------------------------------------
-	$menu:=cs:C1710.menu.new()
+	$menu:=cs:C1710.menu.new("no-localization")
 	
 	Case of 
 			

@@ -947,7 +947,7 @@ Function queryWidgetManager()
 	$ID:=SVG Find element ID by coordinates:C1054(*; This:C1470.queryWidget.name; MOUSEX; MOUSEY)
 	$table:=This:C1470.current
 	
-	$menu:=cs:C1710.menu.new()
+	$menu:=cs:C1710.menu.new("no-localization")
 	
 	If (Length:C16($ID)#0)
 		

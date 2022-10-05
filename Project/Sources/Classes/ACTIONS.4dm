@@ -503,20 +503,20 @@ Function addMenuManager()
 	
 	If ($c.length>1)
 		
-		$newMenu:=cs:C1710.menu.new()
-		$addMenu:=cs:C1710.menu.new()
-		$editMenu:=cs:C1710.menu.new()
-		$deleteMenu:=cs:C1710.menu.new()
-		$shareMenu:=cs:C1710.menu.new()
-		$sortMenu:=cs:C1710.menu.new()
+		$newMenu:=cs:C1710.menu.new("no-localization")
+		$addMenu:=cs:C1710.menu.new("no-localization")
+		$editMenu:=cs:C1710.menu.new("no-localization")
+		$deleteMenu:=cs:C1710.menu.new("no-localization")
+		$shareMenu:=cs:C1710.menu.new("no-localization")
+		$sortMenu:=cs:C1710.menu.new("no-localization")
 		
 		If (Feature.with("openURLAction"))
 			
-			$openURLMenu:=cs:C1710.menu.new()
+			$openURLMenu:=cs:C1710.menu.new("no-localization")
 			
 		End if 
 		
-		$menu:=cs:C1710.menu.new()\
+		$menu:=cs:C1710.menu.new("no-localization")\
 			.append(":xliff:newActionFor"; $newMenu)\
 			.line()\
 			.append(":xliff:addActionFor"; $addMenu)\
@@ -545,7 +545,7 @@ Function addMenuManager()
 				
 			End if 
 			
-			$fieldsMenu:=cs:C1710.menu.new()
+			$fieldsMenu:=cs:C1710.menu.new("no-localization")
 			
 			For each ($field; PROJECT.getSortableFields(Form:C1466.dataModel[$o.tableID]; True:C214))
 				
@@ -561,7 +561,7 @@ Function addMenuManager()
 		
 		$o:=$c[0]
 		
-		$menu:=cs:C1710.menu.new()\
+		$menu:=cs:C1710.menu.new("no-localization")\
 			.append(":xliff:newAction"; "new")\
 			.line()\
 			.append(":xliff:addAction"; "add_"+$o.tableID)\
@@ -569,7 +569,7 @@ Function addMenuManager()
 			.append(":xliff:deleteAction"; "delete_"+$o.tableID)\
 			.append(":xliff:shareAction"; "share_"+$o.tableID)
 		
-		$fieldsMenu:=cs:C1710.menu.new()
+		$fieldsMenu:=cs:C1710.menu.new("no-localization")
 		
 		For each ($field; PROJECT.getSortableFields(Form:C1466.dataModel[$o.tableID]; True:C214))
 			
@@ -794,7 +794,7 @@ Function tableMenuManager()
 	
 	If (This:C1470.current.scope#"global")
 		
-		$menu:=cs:C1710.menu.new()
+		$menu:=cs:C1710.menu.new("no-localization")
 		
 		For each ($t; Form:C1466.dataModel)
 			
@@ -823,7 +823,7 @@ Function scopeMenuManager()
 	
 	$preset:=String:C10(This:C1470.current.preset)
 	
-	$menu:=cs:C1710.menu.new()
+	$menu:=cs:C1710.menu.new("no-localization")
 	
 	Repeat 
 		

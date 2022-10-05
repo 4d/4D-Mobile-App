@@ -919,7 +919,7 @@ Function sortOrderMenuManager()
 	
 	var $menu : cs:C1710.menu
 	
-	$menu:=cs:C1710.menu.new()\
+	$menu:=cs:C1710.menu.new("no-localization")\
 		.append(":xliff:ascending"; "ascending"; String:C10(This:C1470.current.format)="ascending")\
 		.append(":xliff:descending"; "descending"; String:C10(This:C1470.current.format)="descending")
 	
@@ -1114,7 +1114,7 @@ Function addParameterMenuManager($target : Object; $update : Boolean)
 	var $menu : cs:C1710.menu
 	
 	$isSortAction:=String:C10(This:C1470.action.preset)="sort"
-	$menu:=cs:C1710.menu.new()
+	$menu:=cs:C1710.menu.new("no-localization")
 	
 	If (Not:C34($isSortAction))
 		
@@ -1521,7 +1521,7 @@ Function formatMenuManager()
 	$currentFormat:=String:C10($current.format)
 	
 	$formats:=This:C1470.getFormats()
-	$menu:=cs:C1710.menu.new()
+	$menu:=cs:C1710.menu.new("no-localization")
 	
 	If (PROJECT.isFieldAttribute($current.name; Table name:C256(This:C1470.action.tableNumber)))
 		
@@ -1551,7 +1551,7 @@ Function formatMenuManager()
 				// Map string to text
 				$label:=$type="string" ? "text" : $type
 				
-				$subMenu:=cs:C1710.menu.new()\
+				$subMenu:=cs:C1710.menu.new("no-localization")\
 					.append(":xliff:default"; $label; $currentFormat=$label).setData("type"; $label)\
 					.line()
 				
@@ -1677,7 +1677,7 @@ Function dataSourceMenuManager()
 	
 	$tab:="    "
 	$current:=This:C1470.current
-	$menu:=cs:C1710.menu.new()
+	$menu:=cs:C1710.menu.new("no-localization")
 	
 	// Search for custom input controls
 	$folder:=This:C1470.path.hostInputControls()
@@ -1723,7 +1723,7 @@ Function dataSourceMenuManager()
 	
 	If ($subset.length>0)
 		
-		$menu.append("choiceList").disable()
+		$menu.append(":xliff:choiceList").disable()
 		
 		For each ($o; $subset)
 			
@@ -1737,7 +1737,7 @@ Function dataSourceMenuManager()
 		If (Feature.with("listEditor"))  //🚧
 			
 			// Allow to create a custom input control
-			$menu.append("newChoiceList"; "newChoiceList")
+			$menu.append(":xliff:newChoiceList"; "newChoiceList")
 			
 		End if 
 		
@@ -1750,7 +1750,7 @@ Function dataSourceMenuManager()
 	
 	If ($subset.length>0)
 		
-		$menu.append("fromDataclass").disable()
+		$menu.append(":xliff:fromDataclass").disable()
 		
 		For each ($o; $subset)
 			
@@ -1764,7 +1764,7 @@ Function dataSourceMenuManager()
 		If (Feature.with("listEditor"))  //🚧
 			
 			// Allow to create a custom input control
-			$menu.append("newDatasource"; "newDataSource")
+			$menu.append(":xliff:newDatasource"; "newDataSource")
 			
 		End if 
 		
@@ -1808,9 +1808,9 @@ Function dataSourceMenuManager()
 Function editList()
 	
 /*
-																									$form:=New object(\
-																																																														"static"; $static; \
-																																																														"host"; This.path.hostInputControls(True))
+																										$form:=New object(\
+																																																																"static"; $static; \
+																																																																"host"; This.path.hostInputControls(True))
 	
 $form.folder:=This.path.hostInputControls()
 $manifest:=$form.folder.file("manifest.json")

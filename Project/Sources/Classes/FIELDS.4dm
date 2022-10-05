@@ -1275,7 +1275,7 @@ Function formatMenuManager($e : Object)
 	// Get the field definition
 	$field:=This:C1470.context.cache[$e.row-1]
 	
-	$menu:=cs:C1710.menu.new()
+	$menu:=cs:C1710.menu.new("no-localization")
 	$formatter:=cs:C1710.formatter.new()
 	
 	// Get current format
@@ -1339,7 +1339,7 @@ Function formatMenuManager($e : Object)
 			)
 			$menu.line()
 			
-			$menu.append("newChoiceList"; "$new")
+			$menu.append(":xliff:newChoiceList"; "$new")
 			
 		End if 
 	End if 
