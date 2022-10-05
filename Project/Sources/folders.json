@@ -363,11 +363,9 @@
 			"plist",
 			"preferences",
 			"process",
-			"progress",
 			"regex",
 			"str",
 			"svg",
-			"tips",
 			"tools",
 			"xml"
 		]
@@ -387,11 +385,13 @@
 			"input",
 			"listbox",
 			"picture",
+			"progress",
 			"scrollable",
 			"selector",
 			"stepper",
 			"subform",
 			"thermometer",
+			"tips",
 			"webArea",
 			"widget"
 		]
