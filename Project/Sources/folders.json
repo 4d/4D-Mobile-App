@@ -224,9 +224,7 @@
 			"11] MAIN",
 			"12] VIEWS",
 			"13] SERVER",
-			"14] FEATURES",
-			"panel",
-			"widgets"
+			"14] FEATURES"
 		],
 		"methods": [
 			"BUILD"
