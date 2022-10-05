@@ -30,7 +30,7 @@ Case of
 		//______________________________________________________
 	: ($e.code=On Clicked:K2:4)
 		
-		$menu:=cs:C1710.menu.new()
+		$menu:=cs:C1710.menu.new("no-localization")
 		
 		$lastDevice:=UI.preferences.get("lastDevice")
 		$tab:="       "
@@ -148,11 +148,11 @@ Case of
 					
 				Else 
 					
-					$menu.append("createASimulator"; "createAVD").line()
+					$menu.append(":xliff:createASimulator"; "createAVD").line()
 					
 				End if 
 				
-				$menu.append("openTheAvdManager"; "avdManager")
+				$menu.append(":xliff:openTheAvdManager"; "avdManager")
 				
 			Else 
 				
@@ -163,7 +163,7 @@ Case of
 		
 		If (UI.xCode.ready) | (UI.studio.ready)
 			
-			$menu.line().append("updatingTheListOfDevices"; "updateTheDeviceList")
+			$menu.line().append(":xliff:updatingTheListOfDevices"; "updateTheDeviceList")
 			
 		End if 
 		

@@ -293,7 +293,7 @@ Function append($item; $param; $mark : Boolean) : cs:C1710.menu
 			//______________________________________________________
 	End case 
 	
-	return (This:C1470)
+	return This:C1470
 	
 	// ===============================================
 Function add($ref : Text; $text : Text; $param : Variant; $mark : Boolean)
@@ -306,7 +306,7 @@ Function line() : cs:C1710.menu
 	
 	APPEND MENU ITEM:C411(This:C1470.ref; "-(")
 	
-	return (This:C1470)
+	return This:C1470
 	
 	// ===============================================
 	// Defines the project method associated with a menu item
@@ -323,7 +323,7 @@ Function method($method : Text; $index : Integer) : cs:C1710.menu
 		
 	End if 
 	
-	return (This:C1470)
+	return This:C1470
 	
 	// ===============================================
 	// Delete an item or the last added item
@@ -339,7 +339,7 @@ Function delete($index : Integer) : cs:C1710.menu
 		
 	End if 
 	
-	return (This:C1470)
+	return This:C1470
 	
 	// ===============================================
 	// Defines the activated status of a menu item
@@ -381,7 +381,7 @@ Function enable($enabled : Boolean; $index : Integer) : cs:C1710.menu
 			//______________________________________________________
 	End case 
 	
-	return (This:C1470)
+	return This:C1470
 	
 	// ===============================================
 	// Disable a menu item
@@ -397,7 +397,7 @@ Function disable($index : Integer) : cs:C1710.menu
 		
 	End if 
 	
-	return (This:C1470)
+	return This:C1470
 	
 	// ===============================================
 	// Associate a standard action with a menu item
@@ -413,7 +413,7 @@ Function action($action : Variant; $index : Integer) : cs:C1710.menu
 		
 	End if 
 	
-	return (This:C1470)
+	return This:C1470
 	
 	// ===============================================
 	// Associates a custom parameter to a menu item
@@ -429,7 +429,7 @@ Function parameter($param : Text; $index : Integer) : cs:C1710.menu
 		
 	End if 
 	
-	return (This:C1470)
+	return This:C1470
 	
 	// ===============================================
 	// Associates a property to a menu item
@@ -449,7 +449,7 @@ Function property($property : Text; $value : Variant; $index : Integer) : cs:C17
 		
 	End if 
 	
-	return (This:C1470)
+	return This:C1470
 	
 	// ===============================================
 	// Returns a property of a menu item
@@ -500,7 +500,7 @@ Function setData($name : Text; $value : Variant; $index : Integer) : cs:C1710.me
 		
 	End if 
 	
-	return (This:C1470)
+	return This:C1470
 	
 	// ===============================================
 	// Retrieve data associated to selected menu item
@@ -551,7 +551,7 @@ Function mark($checked : Boolean; $index : Integer) : cs:C1710.menu
 			//______________________________________________________
 	End case 
 	
-	return (This:C1470)
+	return This:C1470
 	
 	// ===============================================
 	// Replaces the shortcut key associated with the menu item
@@ -584,7 +584,7 @@ Function shortcut($key; $modifier : Integer; $index : Integer) : cs:C1710.menu
 		End if 
 	End if 
 	
-	return (This:C1470)
+	return This:C1470
 	
 	// ===============================================
 	// Modifies the icon associated with a menu item
@@ -621,7 +621,7 @@ Function icon($icon : Text; $index : Integer) : cs:C1710.menu
 		
 	End if 
 	
-	return (This:C1470)
+	return This:C1470
 	
 	// ===============================================
 	// Changes the font style of the menu item
@@ -637,7 +637,7 @@ Function setStyle($tyle : Integer; $index : Integer) : cs:C1710.menu
 		
 	End if 
 	
-	return (This:C1470)
+	return This:C1470
 	
 	// ===============================================
 	// Replaces the current menu bar with the current menu
@@ -720,7 +720,7 @@ Function popup($where : Variant; $x : Variant; $y : Integer) : cs:C1710.menu
 		
 	End if 
 	
-	return (This:C1470)
+	return This:C1470
 	
 	// ===============================================
 	// Returns the number of menu items present in the menu
@@ -747,7 +747,7 @@ Function file() : cs:C1710.menu
 	
 	This:C1470.append(":xliff:CommonMenuItemQuit").action(ak quit:K76:61).shortcut("Q")
 	
-	return (This:C1470)
+	return This:C1470
 	
 	// ===============================================
 	// Standard Edit menu
@@ -764,7 +764,7 @@ Function edit() : cs:C1710.menu
 	This:C1470.line()
 	This:C1470.append(":xliff:CommonMenuItemShowClipboard").action(ak show clipboard:K76:58)
 	
-	return (This:C1470)
+	return This:C1470
 	
 	// ===============================================
 	// Fonts menu with or without styles
@@ -831,7 +831,7 @@ Function fonts($withStyle : Boolean) : cs:C1710.menu
 		End for 
 	End if 
 	
-	return (This:C1470)
+	return This:C1470
 	
 	// ===============================================
 	// Windows menu
@@ -883,7 +883,7 @@ Function windows() : cs:C1710.menu
 		End for each 
 	End if 
 	
-	return (This:C1470)
+	return This:C1470
 	
 	// ===============================================
 	// Create a default minimal menu bar
@@ -892,7 +892,7 @@ Function defaultMinimalMenuBar() : cs:C1710.menu
 	This:C1470.append(":xliff:CommonMenuFile"; cs:C1710.menu.new().file())
 	This:C1470.append(":xliff:CommonMenuEdit"; cs:C1710.menu.new().edit())
 	
-	return (This:C1470)
+	return This:C1470
 	
 	// ===============================================
 	// Returns a menu item from its title or index
