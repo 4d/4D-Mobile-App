@@ -235,14 +235,14 @@ class CustomNavigationResolver : GenericNavigationResolver {
      * Navigates to ActionWebViewFragment
      */
     override fun navigateToActionWebView(
-        viewDataBinding: ViewDataBinding, 
+        fragmentActivity: FragmentActivity, 
         path: String, 
         actionName: String, 
         actionLabel: String?, 
         actionShortLabel: String?, 
         base64EncodedContext: String
     ) {
-        viewDataBinding.root.findNavController().navigate(
+        Navigation.findNavController(fragmentActivity, R.id.nav_host_container).navigate(
             EntityListFragmentDirections.toActionWebView(
                 path = path,
                 actionName = actionName,
