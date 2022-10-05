@@ -59,13 +59,13 @@ Class constructor($range)
 					//======================================
 				: ($length>=2) && ($range[[1]]="^")  // Up to major
 					
-					This:C1470.min:=cs:C1710.version.new(Substring:C12($range; 2))
+					This:C1470.min:=cs:C1710.version.new(Delete string:C232($range; 1; 1))
 					This:C1470.max:=This:C1470.min.maxMajor()
 					
 					//======================================
 				: ($length>=2) && ($range[[1]]="~")  // Up to minor
 					
-					This:C1470.min:=cs:C1710.version.new(Substring:C12($range; 2))
+					This:C1470.min:=cs:C1710.version.new(Delete string:C232($range; 1; 1))
 					This:C1470.max:=This:C1470.min.maxMinor()
 					
 					//======================================
@@ -75,7 +75,7 @@ Class constructor($range)
 						
 						If ($length>=3)
 							
-							This:C1470.min:=cs:C1710.version.new(Substring:C12($range; 3))
+							This:C1470.min:=cs:C1710.version.new(Delete string:C232($range; 1; 1))
 							
 						Else 
 							
@@ -85,7 +85,7 @@ Class constructor($range)
 						
 					Else 
 						
-						This:C1470.min:=cs:C1710.version.new(Substring:C12($range; 2))
+						This:C1470.min:=cs:C1710.version.new(Delete string:C232($range; 1; 1))
 						This:C1470.min.increment("patch")
 						
 					End if 
@@ -100,7 +100,7 @@ Class constructor($range)
 						
 						If ($length>=3)
 							
-							This:C1470.max:=cs:C1710.version.new(Substring:C12($range; 3))
+							This:C1470.max:=cs:C1710.version.new(Delete string:C232($range; 1; 2))
 							
 						Else 
 							
@@ -110,7 +110,7 @@ Class constructor($range)
 						
 					Else 
 						
-						This:C1470.max:=cs:C1710.version.new(Substring:C12($range; 2))
+						This:C1470.max:=cs:C1710.version.new(Delete string:C232($range; 1; 1))
 						This:C1470.max.decrement("patch")
 						
 					End if 
@@ -121,7 +121,7 @@ Class constructor($range)
 					//======================================
 				: ($length>=2) && ($range[[1]]="=")  // Equal to
 					
-					This:C1470.min:=cs:C1710.version.new(Substring:C12($range; 2))
+					This:C1470.min:=cs:C1710.version.new(Delete string:C232($range; 1; 1))
 					This:C1470.max:=This:C1470.min
 					
 					//======================================
