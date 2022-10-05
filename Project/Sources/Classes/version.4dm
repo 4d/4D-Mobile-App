@@ -1,195 +1,350 @@
-
-
-Class constructor
-	C_VARIANT:C1683($1; $2; $3)
+// === === === === === === === === === === === === === === === === === === === === ===
+Class constructor($version; $minor; $patch)
+	
 	var $counts : Integer
+	var $c : Collection
+	
 	$counts:=Count parameters:C259
-	//Case of   // fix count parameters from formula
-	//: (Undefined($1))
-	//$counts:=0
-	//: (Undefined($2))
-	//$counts:=1
-	//: (Undefined($3))
-	//$counts:=2
-	//End case 
+	
 	This:C1470.valid:=True:C214
+	
 	Case of 
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		: ($counts=1)
 			
 			Case of 
-				: (Value type:C1509($1)=Is text:K8:3)
-					C_COLLECTION:C1488($col)
-					$col:=Split string:C1554($1; ".")
+					
+					//======================================
+				: (Value type:C1509($version)=Is text:K8:3)
+					
+					$c:=Split string:C1554($version; ".")
+					
 					Case of 
-						: ($col.length>2)
-							This:C1470.major:=Num:C11($col[0])
-							This:C1470.minor:=Num:C11($col[1])
-							This:C1470.patch:=Num:C11($col[2])
-						: ($col.length>1)
-							This:C1470.major:=Num:C11($col[0])
-							This:C1470.minor:=Num:C11($col[1])
+							
+							//……………………………………………………………………………………………………
+						: ($c.length>2)
+							
+							This:C1470.major:=Num:C11($c[0])
+							This:C1470.minor:=Num:C11($c[1])
+							This:C1470.patch:=Num:C11($c[2])
+							
+							//……………………………………………………………………………………………………
+						: ($c.length>1)
+							
+							This:C1470.major:=Num:C11($c[0])
+							This:C1470.minor:=Num:C11($c[1])
 							This:C1470.patch:=0
-						: ($col.length>0)
-							This:C1470.major:=Num:C11($col[0])
+							
+							//……………………………………………………………………………………………………
+						: ($c.length>0)
+							
+							This:C1470.major:=Num:C11($c[0])
 							This:C1470.minor:=0
 							This:C1470.patch:=0
+							
+							//……………………………………………………………………………………………………
 						Else 
+							
 							This:C1470.major:=0
 							This:C1470.minor:=0
 							This:C1470.patch:=0
 							This:C1470.valid:=False:C215
+							
+							//……………………………………………………………………………………………………
 					End case 
 					
-				: (Value type:C1509($1)=Is collection:K8:32)
+					//======================================
+				: (Value type:C1509($version)=Is collection:K8:32)
+					
 					Case of 
-						: ($1.length>2)
-							This:C1470.major:=Num:C11($1[0])
-							This:C1470.minor:=Num:C11($1[1])
-							This:C1470.patch:=Num:C11($1[2])
-						: ($1.length>1)
-							This:C1470.major:=Num:C11($1[0])
-							This:C1470.minor:=Num:C11($1[1])
+							
+							//……………………………………………………………………………………………………
+						: ($version.length>2)
+							
+							This:C1470.major:=Num:C11($version[0])
+							This:C1470.minor:=Num:C11($version[1])
+							This:C1470.patch:=Num:C11($version[2])
+							
+							//……………………………………………………………………………………………………
+						: ($version.length>1)
+							
+							This:C1470.major:=Num:C11($version[0])
+							This:C1470.minor:=Num:C11($version[1])
 							This:C1470.patch:=0
-						: ($1.length>0)
-							This:C1470.major:=Num:C11($1[0])
+							
+							//……………………………………………………………………………………………………
+						: ($version.length>0)
+							
+							This:C1470.major:=Num:C11($version[0])
 							This:C1470.minor:=0
 							This:C1470.patch:=0
+							
+							//……………………………………………………………………………………………………
 						Else 
+							
 							This:C1470.major:=0
 							This:C1470.minor:=0
 							This:C1470.patch:=0
 							This:C1470.valid:=False:C215
+							
+							//……………………………………………………………………………………………………
 					End case 
-				: (Value type:C1509($1)=Is object:K8:27)
-					This:C1470.major:=$1.major
-					This:C1470.minor:=$1.minor
-					This:C1470.patch:=$1.patch
-				Else   // expect num
-					This:C1470.major:=Num:C11($1)
+					
+					//======================================
+				: (Value type:C1509($version)=Is object:K8:27)
+					
+					This:C1470.major:=$version.major
+					This:C1470.minor:=$version.minor
+					This:C1470.patch:=$version.patch
+					
+					//======================================
+				Else   // Expect num
+					
+					This:C1470.major:=Num:C11($version)
 					This:C1470.minor:=0
 					This:C1470.patch:=0
+					
+					//======================================
 			End case 
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		: ($counts=2)
-			This:C1470.major:=Num:C11($1)
-			This:C1470.minor:=Num:C11($2)
+			
+			This:C1470.major:=Num:C11($version)
+			This:C1470.minor:=Num:C11($minor)
 			This:C1470.patch:=0
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		: ($counts>2)
-			This:C1470.major:=Num:C11($1)
-			This:C1470.minor:=Num:C11($2)
-			This:C1470.patch:=Num:C11($3)
+			
+			This:C1470.major:=Num:C11($version)
+			This:C1470.minor:=Num:C11($minor)
+			This:C1470.patch:=Num:C11($patch)
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		Else 
+			
 			This:C1470.major:=0
 			This:C1470.minor:=0
 			This:C1470.patch:=0
 			This:C1470.valid:=False:C215
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	End case 
 	
-Function compareTo($version : Variant)->$result : Integer
-	var $that : Object
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function compareTo($version) : Integer
+	
+	var $that : cs:C1710.version
+	
 	$that:=cs:C1710.version.new($version)
 	
 	Case of 
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		: (This:C1470.major>$that.major)
-			$result:=1
+			
+			return 1
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		: (This:C1470.major<$that.major)
-			$result:=-1
-		Else   // major equal
+			
+			return -1
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+		Else   // Major equal
+			
 			Case of 
+					
+					//======================================
 				: (This:C1470.minor>$that.minor)
-					$result:=1
+					
+					return 1
+					
+					//======================================
 				: (This:C1470.minor<$that.minor)
-					$result:=-1
-				Else   // minor equal
+					
+					return -1
+					
+					//======================================
+				Else   // Minor equal
+					
 					Case of 
+							
+							//……………………………………………………………………………………………………
 						: (This:C1470.patch>$that.patch)
-							$result:=1
+							
+							return 1
+							
+							//……………………………………………………………………………………………………
 						: (This:C1470.patch<$that.patch)
-							$result:=-1
-						Else   // patch equal
-							$result:=0
+							
+							return -1
+							
+							//……………………………………………………………………………………………………
+						Else   // Patch equal
+							
+							return 0
+							
+							//……………………………………………………………………………………………………
 					End case 
+					
+					//======================================
 			End case 
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	End case 
 	
-Function gt($version : Variant)->$result : Boolean
-	$result:=This:C1470.compareTo($version)>0
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function gt($version) : Boolean
 	
-Function gte($version : Variant)->$result : Boolean
-	$result:=This:C1470.compareTo($version)>=0
+	return This:C1470.compareTo($version)>0
 	
-Function lt($version : Variant)->$result : Boolean
-	$result:=This:C1470.compareTo($version)<0
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function gte($version) : Boolean
 	
-Function lte($version : Variant)->$result : Boolean
-	$result:=This:C1470.compareTo($version)<=0
+	return This:C1470.compareTo($version)>=0
 	
-Function eq($version : Variant)->$result : Boolean
-	$result:=This:C1470.equalTo($version)
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function lt($version) : Boolean
 	
-Function neq($version : Variant)->$result : Boolean
-	$result:=Not:C34(This:C1470.eq($version))  // PERF: implement it instead of using Not
+	return This:C1470.compareTo($version)<0
 	
-Function equalTo($version : Variant)->$result : Boolean
-	var $that : Object
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function lte($version) : Boolean
+	
+	return This:C1470.compareTo($version)<=0
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function eq($version) : Boolean
+	
+	return This:C1470.equalTo($version)
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function neq($version) : Boolean
+	
+	return Not:C34(This:C1470.eq($version))  // PERF: implement it instead of using Not
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function equalTo($version : Variant) : Boolean
+	
+	var $that : cs:C1710.version
+	
 	$that:=cs:C1710.version.new($version)
 	
 	If (This:C1470.major#$that.major)
-		$result:=False:C215
-	Else   // major equal
+		
+		return False:C215
+		
+	Else   // Major equal
+		
 		If (This:C1470.minor#$that.minor)
-			$result:=False:C215
-		Else   // minor equal
+			
+			return False:C215
+			
+		Else   // Minor equal
+			
 			If (This:C1470.patch#$that.patch)
-				$result:=False:C215
-			Else   // patch equal
-				$result:=True:C214
+				
+				return False:C215
+				
+			Else   // Patch equal
+				
+				return True:C214
+				
 			End if 
 		End if 
 	End if 
 	
+	// === === === === === === === === === === === === === === === === === === === === ===
 Function inc($part : Text)
+	
 	This:C1470.increment($part)
 	
+	// === === === === === === === === === === === === === === === === === === === === ===
 Function increment($part : Text)
+	
 	Case of 
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		: ($part="major")
+			
 			This:C1470.major:=This:C1470.major+1
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		: ($part="minor")
+			
 			This:C1470.minor:=This:C1470.minor+1
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		: ($part="patch")
+			
 			This:C1470.patch:=This:C1470.patch+1
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		Else 
+			
 			ASSERT:C1129(False:C215; "Incorrect type of level "+String:C10($part))
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	End case 
 	
+	// === === === === === === === === === === === === === === === === === === === === ===
 Function decrement($part : Text)
+	
 	Case of 
-		: ($part="major")
-			ASSERT:C1129(This:C1470.major>0; "Cannot decrement a 0 major version")
-			This:C1470.major:=This:C1470.major-1
 			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+		: ($part="major")
+			
+			ASSERT:C1129(This:C1470.major>0; "Cannot decrement a 0 major version")
+			This:C1470.major:=This:C1470.major>0 ? This:C1470.major-1 : 0
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		: ($part="minor")
+			
 			If (This:C1470.minor=0)
+				
 				This:C1470.minor:=MAXLONG:K35:2
 				This:C1470.decrement("major")
+				
 			Else 
-				This:C1470.minor:=This:C1470.minor-1
+				
+				ASSERT:C1129(This:C1470.minor>0; "Cannot decrement a 0 minor version")
+				This:C1470.minor:=This:C1470.minor>0 ? This:C1470.minor-1 : 0
+				
 			End if 
 			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		: ($part="patch")
+			
 			If (This:C1470.patch=0)
+				
 				This:C1470.patch:=MAXLONG:K35:2
 				This:C1470.decrement("minor")
+				
 			Else 
-				This:C1470.patch:=This:C1470.patch-1
+				
+				ASSERT:C1129(This:C1470.patch>0; "Cannot decrement a 0 patch version")
+				This:C1470.patch:=This:C1470.patch>0 ? This:C1470.patch-1 : 0
+				
 			End if 
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		Else 
+			
 			ASSERT:C1129(False:C215; "Incorrect type of level "+String:C10($part))
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	End case 
 	
-Function maxMinor()->$version : Object
-	$version:=cs:C1710.version.new(This:C1470.major; This:C1470.minor; MAXLONG:K35:2)
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function maxMinor() : Object
 	
-Function maxMajor()->$version : Object
-	$version:=cs:C1710.version.new(This:C1470.major; MAXLONG:K35:2; MAXLONG:K35:2)
+	return cs:C1710.version.new(This:C1470.major; This:C1470.minor; MAXLONG:K35:2)
 	
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function maxMajor() : Object
+	
+	return cs:C1710.version.new(This:C1470.major; MAXLONG:K35:2; MAXLONG:K35:2)

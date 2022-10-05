@@ -1,91 +1,165 @@
-
-Class constructor($variant : Variant)
+// === === === === === === === === === === === === === === === === === === === === ===
+Class constructor($range)
+	
+	var $length : Integer
+	var $c : Collection
 	
 	Case of 
-		: (Value type:C1509($variant)=Is collection:K8:32)
 			
-			ASSERT:C1129(($variant.length=2); "range must count two version")
-			This:C1470.min:=$variant[0]/*first*/
-			This:C1470.max:=$variant[$variant.length-1]/*last*/
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+		: (Value type:C1509($range)=Is collection:K8:32)
 			
-		: (Value type:C1509($variant)=Is object:K8:27)
-			
-			If (($variant.min#Null:C1517) & ($variant.max#Null:C1517))
-				This:C1470.min:=cs:C1710.version.new($variant.min)
-				This:C1470.max:=cs:C1710.version.new($variant.max)
-			Else   // one version passed?
-				This:C1470.min:=cs:C1710.version.new($variant)
-				This:C1470.max:=This:C1470.min
+			If (Asserted:C1132($range.length=2; "range must count two version"))
+				
+				This:C1470.min:=$range[0]/*first*/
+				This:C1470.max:=$range[1]/*last*/
+				
+			Else 
+				
+				// ERROR
+				
 			End if 
 			
-		: (Value type:C1509($variant)=Is text:K8:3)
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+		: (Value type:C1509($range)=Is object:K8:27)
 			
-			ASSERT:C1129(Length:C16($variant)>0; "range could not be empty text")
+			If (Asserted:C1132($range.min#Null:C1517; "missing range.min attribute"))
+				
+				If ($range.max#Null:C1517)
+					
+					This:C1470.min:=cs:C1710.version.new($range.min)
+					This:C1470.max:=cs:C1710.version.new($range.max)
+					
+				Else   // One version passed?
+					
+					This:C1470.min:=cs:C1710.version.new($range)
+					This:C1470.max:=This:C1470.min
+					
+				End if 
+				
+			Else 
+				
+				// ERROR
+				
+			End if 
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+		: (Value type:C1509($range)=Is text:K8:3)
+			
+			$length:=Length:C16($range)
 			
 			//%W-533.1
 			Case of 
-				: ($variant[[1]]="^")  // up to major
 					
-					This:C1470.min:=cs:C1710.version.new(Substring:C12($variant; 2))
+					//======================================
+				: ($length=0)
+					
+					// ERROR
+					
+					//======================================
+				: ($length>=2) && ($range[[1]]="^")  // Up to major
+					
+					This:C1470.min:=cs:C1710.version.new(Substring:C12($range; 2))
 					This:C1470.max:=This:C1470.min.maxMajor()
 					
-				: ($variant[[1]]="~")  // up to minor
+					//======================================
+				: ($length>=2) && ($range[[1]]="~")  // Up to minor
 					
-					This:C1470.min:=cs:C1710.version.new(Substring:C12($variant; 2))
+					This:C1470.min:=cs:C1710.version.new(Substring:C12($range; 2))
 					This:C1470.max:=This:C1470.min.maxMinor()
 					
-				: ($variant[[1]]=">")  // up to minor
+					//======================================
+				: ($length>=2) && ($range[[1]]=">")  // Up to minor
 					
-					If ($variant[[2]]="=")  // up to minor
-						This:C1470.min:=cs:C1710.version.new(Substring:C12($variant; 3))
+					If ($range[[2]]="=")  // Up to minor
+						
+						If ($length>=3)
+							
+							This:C1470.min:=cs:C1710.version.new(Substring:C12($range; 3))
+							
+						Else 
+							
+							// ERROR
+							
+						End if 
+						
 					Else 
-						This:C1470.min:=cs:C1710.version.new(Substring:C12($variant; 2))
+						
+						This:C1470.min:=cs:C1710.version.new(Substring:C12($range; 2))
 						This:C1470.min.increment("patch")
+						
 					End if 
-					If (This:C1470.semver=Null:C1517)
-						This:C1470.semver:=cs:C1710.semver.new()
-					End if 
+					
+					This:C1470.semver:=This:C1470.semver || cs:C1710.semver.new()
 					This:C1470.max:=This:C1470.semver.vMax
 					
-				: ($variant[[1]]="<")  // up to minor
+					//======================================
+				: ($length>=2) && ($range[[1]]="<")  // Up to minor
 					
-					If ($variant[[2]]="=")
-						This:C1470.max:=cs:C1710.version.new(Substring:C12($variant; 3))
+					If ($range[[2]]="=")
+						
+						If ($length>=3)
+							
+							This:C1470.max:=cs:C1710.version.new(Substring:C12($range; 3))
+							
+						Else 
+							
+							// ERROR
+							
+						End if 
+						
 					Else 
-						This:C1470.max:=cs:C1710.version.new(Substring:C12($variant; 2))
+						
+						This:C1470.max:=cs:C1710.version.new(Substring:C12($range; 2))
 						This:C1470.max.decrement("patch")
+						
 					End if 
-					If (This:C1470.semver=Null:C1517)
-						This:C1470.semver:=cs:C1710.semver.new()
-					End if 
+					
+					This:C1470.semver:=This:C1470.semver || cs:C1710.semver.new()
 					This:C1470.min:=This:C1470.semver.v0
 					
-				: ($variant[[1]]="=")  // equal to
+					//======================================
+				: ($length>=2) && ($range[[1]]="=")  // Equal to
 					
-					This:C1470.min:=cs:C1710.version.new(Substring:C12($variant; 2))
+					This:C1470.min:=cs:C1710.version.new(Substring:C12($range; 2))
 					This:C1470.max:=This:C1470.min
 					
-				: (Position:C15(" - "; $variant)>0)
-					var $versions : Collection
-					$versions:=Split string:C1554($variant; " - ")
-					This:C1470.min:=cs:C1710.version.new($versions[0])
-					This:C1470.max:=cs:C1710.version.new($versions[1])
+					//======================================
+				: ($length>=2) && (Position:C15(" - "; $range)>0)
 					
-				Else   // simple one, ie. exact version
-					This:C1470.min:=cs:C1710.version.new($variant)
+					$c:=Split string:C1554($range; " - ")
+					This:C1470.min:=cs:C1710.version.new($c[0])
+					This:C1470.max:=cs:C1710.version.new($c[1])
+					
+					//======================================
+				Else   // Simple one, ie. exact version
+					
+					This:C1470.min:=cs:C1710.version.new($range)
 					This:C1470.max:=This:C1470.min
+					
+					//======================================
 			End case 
 			//%W+533.1
 			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		Else 
 			
 			ASSERT:C1129(False:C215; "Unknown input for range version")
 			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	End case 
 	
-Function satisfiedBy($version : Variant)->$result : Boolean
+	// === === === === === === === === === === === === === === === === === === === === ===
+Function satisfiedBy($version) : Boolean
+	
+	var $result : Boolean
+	
 	$result:=This:C1470.min.lte($version)
+	
 	If ($result)
+		
 		$result:=This:C1470.max.gte($version)
+		
 	End if 
 	
+	return $result
