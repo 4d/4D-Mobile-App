@@ -96,7 +96,13 @@ Function getRequirements()
 		End if 
 	End if 
 	
-	This:C1470.requirement:=$content[Choose:C955(Application version:C493(*)[[1]]="A"; ""; Application version:C493)].xcode
+	var $versionKey : Text
+	$versionKey:=Choose:C955(Application version:C493(*)[[1]]="A"; ""; Application version:C493)
+	If ($content[$versionKey]#Null:C1517)
+		This:C1470.requirement:=$content[$versionKey].xcode
+	Else   // fallback to default main version if not defined
+		This:C1470.requirement:=$content[""].xcode
+	End if 
 	
 	//====================================================================
 	// Populate Application with the default path
