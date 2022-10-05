@@ -18,85 +18,11 @@ Class constructor($project : Object)
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Build and …
 Function main()->$result : Object
-	
 	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	$result.create:=This:C1470.create()
-	ob_error_combine($result; $result.create)
-	
-	If ($result.create.success)
-		
-		If (Bool:C1537(This:C1470.input.build))
-			
-			$result.build:=This:C1470.build()
-			ob_error_combine($result; $result.build)
-			
-			If ($result.build.success)
-				
-				Case of 
-						//______________________________________________________
-					: (Bool:C1537(This:C1470.input.run))
-						
-						$result.run:=This:C1470.run()
-						ob_error_combine($result; $result.run)
-						
-						If ($result.run.success)
-							
-							$result.success:=True:C214
-							This:C1470.notification()
-							
-						Else 
-							
-							Logger.error("❌ ERROR OCCURRED WHILE RUNNING PROJECT")
-							
-						End if 
-						
-						//______________________________________________________
-					: (Bool:C1537(This:C1470.input.archive))
-						
-						$result.install:=This:C1470.install()
-						ob_error_combine($result; $result.install)
-						
-						If ($result.install.success)
-							
-							$result.success:=True:C214
-							This:C1470.notification()
-							
-						Else 
-							
-							Logger.error("❌ ERROR OCCURRED WHILE INSTALLING APP")
-							
-						End if 
-						
-						//______________________________________________________
-					Else 
-						
-						// * NO EXECUTION OR INSTALLATION HAS BEEN REQUESTED
-						$result.success:=True:C214
-						
-						//______________________________________________________
-				End case 
-				
-			Else 
-				
-				Logger.error("❌ ERROR OCCURRED WHILE BUILDING PROJECT")
-				
-			End if 
-			
-		Else 
-			
-			// No build requested
-			$result.success:=True:C214
-			
-		End if 
-		
-	Else 
-		
-		Logger.error("❌ ERROR OCCURRED WHILE CREATING PROJECT")
-		
-	End if 
+	This:C1470._main($result)
 	
 	If (This:C1470.withUI)
 		
@@ -106,9 +32,86 @@ Function main()->$result : Object
 		
 	End if 
 	
+Function _main($result : Object)
+	If (Bool:C1537(This:C1470.input.create) && False:C215)
+		$result.create:=This:C1470.create()
+	Else 
+		$result.create:=This:C1470.alreadyCreated()
+	End if 
+	ob_error_combine($result; $result.create)
+	
+	If (Not:C34($result.create.success))
+		Logger.error("❌ ERROR OCCURRED WHILE CREATING PROJECT")
+		return 
+	End if 
+	
+	If (Not:C34(Bool:C1537(This:C1470.input.build)))
+		$result.success:=True:C214
+		return 
+	End if 
+	
+	$result.build:=This:C1470.build()
+	ob_error_combine($result; $result.build)
+	
+	If (Not:C34($result.build.success))
+		Logger.error("❌ ERROR OCCURRED WHILE BUILDING PROJECT")
+		return 
+	End if 
+	
+	Case of 
+			//______________________________________________________
+		: (Bool:C1537(This:C1470.input.run))
+			
+			$result.run:=This:C1470.run()
+			ob_error_combine($result; $result.run)
+			
+			If ($result.run.success)
+				
+				$result.success:=True:C214
+				This:C1470.notification()
+				
+			Else 
+				
+				Logger.error("❌ ERROR OCCURRED WHILE RUNNING PROJECT")
+				
+			End if 
+			
+			//______________________________________________________
+		: (Bool:C1537(This:C1470.input.archive))
+			
+			$result.install:=This:C1470.install()
+			ob_error_combine($result; $result.install)
+			
+			If ($result.install.success)
+				
+				$result.success:=True:C214
+				This:C1470.notification()
+				
+			Else 
+				
+				Logger.error("❌ ERROR OCCURRED WHILE INSTALLING APP")
+				
+			End if 
+			
+			//______________________________________________________
+		Else 
+			
+			// * NO EXECUTION OR INSTALLATION HAS BEEN REQUESTED
+			$result.success:=True:C214
+			
+			//______________________________________________________
+	End case 
+	
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// ⚠️ MUST BE OVERRIDEN
 Function create()
+	
+	ASSERT:C1129(False:C215; "👀 Must be overriden")
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// ⚠️ MUST BE OVERRIDEN
+Function alreadyCreated()
 	
 	ASSERT:C1129(False:C215; "👀 Must be overriden")
 	
@@ -451,7 +454,7 @@ Function mustDoDataSet()->$doIt : Boolean
 	
 	// MARK:-[PRIVATES]
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function _createManifest($project : Object) : Object
+Function _createManifest($project : Object; $noWrite : Boolean) : Object
 	
 	var $manifest : Object
 	
@@ -480,7 +483,9 @@ Function _createManifest($project : Object) : Object
 	End if 
 	
 	// Write to app data (to use with 4D Mobile App Server)
-	This:C1470._getAppDataFolder($project).file("manifest.json").setText(JSON Stringify:C1217($manifest; *))
+	If (Not:C34(Bool:C1537($noWrite)))
+		This:C1470._getAppDataFolder($project).file("manifest.json").setText(JSON Stringify:C1217($manifest; *))
+	End if 
 	
 	return $manifest
 	
