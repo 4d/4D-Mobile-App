@@ -18,11 +18,91 @@ Class constructor($project : Object)
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Build and …
 Function main()->$result : Object
+	
 	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470._main($result)
+	If (Feature.with("buildWithCmd"))
+		This:C1470._main($result)
+		// no caller event for build with cmd
+		return 
+	End if 
+	
+	$result.create:=This:C1470.create()
+	ob_error_combine($result; $result.create)
+	
+	If ($result.create.success)
+		
+		If (Bool:C1537(This:C1470.input.build))
+			
+			$result.build:=This:C1470.build()
+			ob_error_combine($result; $result.build)
+			
+			If ($result.build.success)
+				
+				Case of 
+						//______________________________________________________
+					: (Bool:C1537(This:C1470.input.run))
+						
+						$result.run:=This:C1470.run()
+						ob_error_combine($result; $result.run)
+						
+						If ($result.run.success)
+							
+							$result.success:=True:C214
+							This:C1470.notification()
+							
+						Else 
+							
+							Logger.error("❌ ERROR OCCURRED WHILE RUNNING PROJECT")
+							
+						End if 
+						
+						//______________________________________________________
+					: (Bool:C1537(This:C1470.input.archive))
+						
+						$result.install:=This:C1470.install()
+						ob_error_combine($result; $result.install)
+						
+						If ($result.install.success)
+							
+							$result.success:=True:C214
+							This:C1470.notification()
+							
+						Else 
+							
+							Logger.error("❌ ERROR OCCURRED WHILE INSTALLING APP")
+							
+						End if 
+						
+						//______________________________________________________
+					Else 
+						
+						// * NO EXECUTION OR INSTALLATION HAS BEEN REQUESTED
+						$result.success:=True:C214
+						
+						//______________________________________________________
+				End case 
+				
+			Else 
+				
+				Logger.error("❌ ERROR OCCURRED WHILE BUILDING PROJECT")
+				
+			End if 
+			
+		Else 
+			
+			// No build requested
+			$result.success:=True:C214
+			
+		End if 
+		
+	Else 
+		
+		Logger.error("❌ ERROR OCCURRED WHILE CREATING PROJECT")
+		
+	End if 
 	
 	If (This:C1470.withUI)
 		

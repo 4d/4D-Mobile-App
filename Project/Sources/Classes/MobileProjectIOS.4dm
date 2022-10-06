@@ -118,6 +118,9 @@ Function create()->$result : Object
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Check if there is already a created app, to build it for instance
 Function alreadyCreated()->$result : Object
+	
+	ASSERT:C1129(Feature.with("buildWithCmd"))
+	
 	$result:=New object:C1471("success"; True:C214)
 	
 	$result.tags:=This:C1470._createTags()
