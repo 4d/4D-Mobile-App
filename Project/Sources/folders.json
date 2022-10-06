@@ -691,6 +691,14 @@
 			"test_err"
 		]
 	},
+	"file": {
+		"methods": [
+			"COMPILER_file",
+			"FileFrom",
+			"FolderFrom",
+			"TestPathName"
+		]
+	},
 	"let": {
 		"methods": [
 			"COMPILER_let",
@@ -705,6 +713,7 @@
 			"dev",
 			"doc",
 			"err",
+			"file",
 			"let",
 			"ob",
 			"ob_error",

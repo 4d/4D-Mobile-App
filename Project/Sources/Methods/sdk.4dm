@@ -112,6 +112,17 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 				
 			End if 
 			
+			// MARK:- link
+		: ($Obj_param.action="link")
+			
+			ASSERT:C1129(Feature.with("buildWithCmd"))
+			
+			$Obj_result.version:=String:C10($Obj_param.version)
+			$Obj_result.success:=True:C214
+			
+			// TODO write into $Obj_param.target sdkVersion file with needed version info
+			// and maybe other things
+			
 			// MARK:- installAdditionnalSDK
 		: ($Obj_param.action="installAdditionnalSDK")
 			

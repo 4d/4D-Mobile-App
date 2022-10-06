@@ -140,7 +140,7 @@ Feature.wip("DataSourceClass")  // Work with DataSource class class to test the 
 $c:=New collection:C1472("emarchand"; "phimage")
 Feature.dev("gitCommit"; $c)  // Commit to git generated project
 Feature.dev("generateForDev"; $c)  // Add framework sources and do not add compiled frameworks to workspace, deactivate code signing on framework
-Feature.dev("buildWith4DAction"; $c)  // Use a 4DAction to launch app build from prj editor
+//Feature.dev("buildWith4DAction"; $c)  // Use a 4DAction to launch app build from prj editor
 
 //FEATURE.dev("devGallery"; $c)  // Allow to dev with local http gallery
 

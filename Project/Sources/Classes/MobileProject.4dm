@@ -25,7 +25,15 @@ Function main()->$result : Object
 	
 	If (Feature.with("buildWithCmd"))
 		This:C1470._main($result)
-		// no caller event for build with cmd
+		
+		If (This:C1470.withUI)
+			
+			POST_MESSAGE(New object:C1471(\
+				"target"; This:C1470.input.caller; \
+				"action"; "hide"))
+			
+		End if 
+		
 		return 
 	End if 
 	
@@ -113,7 +121,7 @@ Function main()->$result : Object
 	End if 
 	
 Function _main($result : Object)
-	If (Bool:C1537(This:C1470.input.create) && False:C215)
+	If (Bool:C1537(This:C1470.input.create))
 		$result.create:=This:C1470.create()
 	Else 
 		$result.create:=This:C1470.alreadyCreated()

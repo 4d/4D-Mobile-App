@@ -15,8 +15,9 @@ Case of
 		// NOTHING MORE TO DO
 		
 		//______________________________________________________
-	: ($choice="buildAndRun")
+	: ($choice="createBuildAndRun")
 		
+		PROJECT._buildTarget:="iOS"
 		UI.runBuild(New object:C1471(\
 			"project"; PROJECT; \
 			"create"; True:C214; \
@@ -26,19 +27,19 @@ Case of
 			"verbose"; True:C214))
 		
 		//______________________________________________________
-	: (Position:C15("create"; $choice)=1)
+	: ($choice="createAndBuild")
 		
-		PROJECT._buildTarget:=Substring:C12($choice; Length:C16("create")+1)
+		PROJECT._buildTarget:="iOS"
 		UI.runBuild(New object:C1471(\
 			"project"; PROJECT; \
 			"create"; True:C214; \
-			"build"; False:C215; \
+			"build"; True:C214; \
 			"run"; False:C215; \
 			"target"; PROJECT._buildTarget; \
 			"verbose"; True:C214))
 		
 		//______________________________________________________
-	: ($choice="build")
+	: ($choice="buildAndRun")
 		
 		UI.runBuild(New object:C1471(\
 			"project"; PROJECT; \
@@ -48,9 +49,49 @@ Case of
 			"target"; PROJECT._buildTarget; \
 			"verbose"; True:C214))
 		
-		//______________________________________________________
-	: ($choice="run")
 		
+		//______________________________________________________
+	: (Position:C15("createNoDataNoSDK"; $choice)=1)
+		
+		PROJECT._buildTarget:="iOS"
+		UI.runBuild(New object:C1471(\
+			"project"; PROJECT; \
+			"create"; True:C214; \
+			"build"; False:C215; \
+			"run"; False:C215; \
+			"noSDK"; True:C214; \
+			"noData"; True:C214; \
+			"target"; PROJECT._buildTarget; \
+			"verbose"; True:C214))
+		
+		//______________________________________________________
+	: (Position:C15("create_"; $choice)=1)
+		
+		PROJECT._buildTarget:=Substring:C12($choice; Length:C16("create_")+1)
+		UI.runBuild(New object:C1471(\
+			"project"; PROJECT; \
+			"create"; True:C214; \
+			"build"; False:C215; \
+			"run"; False:C215; \
+			"target"; PROJECT._buildTarget; \
+			"verbose"; True:C214))
+		
+		//______________________________________________________
+	: (Position:C15("build_"; $choice)=1)
+		
+		PROJECT._buildTarget:=Substring:C12($choice; Length:C16("build_")+1)
+		UI.runBuild(New object:C1471(\
+			"project"; PROJECT; \
+			"create"; False:C215; \
+			"build"; True:C214; \
+			"run"; False:C215; \
+			"target"; PROJECT._buildTarget; \
+			"verbose"; True:C214))
+		
+		//______________________________________________________
+	: (Position:C15("run_"; $choice)=1)
+		
+		PROJECT._buildTarget:=Substring:C12($choice; Length:C16("run_")+1)
 		UI.runBuild(New object:C1471(\
 			"project"; PROJECT; \
 			"create"; False:C215; \

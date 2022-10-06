@@ -74,7 +74,7 @@ Function create()->$result : Object
 	
 	// Target folder
 	var $destinationFolder : 4D:C1709.Folder
-	$destinationFolder:=Folder:C1567(This:C1470.input.path; fk platform path:K87:2)
+	$destinationFolder:=FolderFrom(This:C1470.input.path)
 	$destinationFolder.create()
 	
 	// Cache the last build in generated project
@@ -82,12 +82,14 @@ Function create()->$result : Object
 	ob_writeToFile(This:C1470._cleanCopyProject(This:C1470.input); $destinationFolder.file("project.4dmobile"); True:C214)
 	
 	//===============================================================
+	
 	This:C1470.postStep("decompressionOfTheSdk")
 	
 	$result.sdk:=sdk(New object:C1471(\
-		"action"; "install"; \
+		"action"; Bool:C1537(This:C1470.input.noSDK) ? "link" : "install"; \
 		"file"; This:C1470.paths.sdkApple().platformPath; \
-		"target"; This:C1470.input.path))
+		"target"; This:C1470.input.path; \
+		"version"; This:C1470.input.sdkVersion))
 	
 	If (Not:C34($result.sdk.success))
 		
