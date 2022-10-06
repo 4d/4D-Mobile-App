@@ -283,18 +283,9 @@ Case of
 		
 		If (Length:C16($Txt_buffer)#0)
 			
-			$Obj_result:=_o_plist(New object:C1471(\
-				"action"; "read"; \
-				"domain"; $Txt_buffer+"/Contents/Info.plist"; \
-				"key"; "CFBundleShortVersionString"))
-			
-			If ($Obj_result.success)
-				
-				$Obj_result.version:=$Obj_result.value
-				
-				OB REMOVE:C1226($Obj_result; "value")
-				
-			End if 
+			$Obj_result:=New object:C1471
+			$Obj_result.version:=String:C10(cs:C1710.plist.new(Folder:C1567($Txt_buffer).file("Contents/Info.plist")).content["CFBundleShortVersionString"])
+			$Obj_result.success:=Length:C16($Obj_result.version)>0
 			
 		Else 
 			

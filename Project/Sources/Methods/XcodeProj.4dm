@@ -1,4 +1,5 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
+#DECLARE($Obj_in : Object)->$Obj_out : Object
 // ----------------------------------------------------
 // Project method : XcodeProj
 // Created 2017 by Eric Marchand
@@ -7,8 +8,6 @@
 
 // ----------------------------------------------------
 // Declarations
-C_OBJECT:C1216($0)
-C_OBJECT:C1216($1)
 
 C_LONGINT:C283($Lon_parameters; $Lon_i)
 C_TEXT:C284($Txt_buffer; $Txt_objectRef)
@@ -26,37 +25,16 @@ If (False:C215)
 	C_OBJECT:C1216(XcodeProj; $1)
 End if 
 
-// ----------------------------------------------------
-// Initialisations
-$Lon_parameters:=Count parameters:C259
+$Obj_out:=New object:C1471(\
+"success"; False:C215)
 
-If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
-	
-	// Required parameters
-	$Obj_in:=$1
-	
-	// Optional parameters
-	If ($Lon_parameters>=2)
-		
-		// <NONE>
-		
-	End if 
-	
-	$Obj_out:=New object:C1471(\
-		"success"; False:C215)
-	
-Else 
-	
-	ABORT:C156
-	
-End if 
 
 // ----------------------------------------------------
 If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 	
 	Case of 
 			
-			//______________________________________________________
+			// MARK:- projectName
 		: ($Obj_in.action="projectName")
 			
 			// Get the project name (use regex lib)
@@ -1250,10 +1228,6 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 	End case 
 	
 End if 
-
-// ----------------------------------------------------
-// Return
-$0:=$Obj_out
 
 // ----------------------------------------------------
 // End
