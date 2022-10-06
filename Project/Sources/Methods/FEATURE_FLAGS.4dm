@@ -127,6 +127,7 @@ Feature.main("inputControlArchive")  // Allow to use zip for inputControl, as re
 Feature.main("inputControlWithCodeAndroid")  // Allow to use inputControl with code, feature by azure:3862 [Android] Input controls with Kotlin code
 
 // Mark:-🚧 WIP
+Feature.wip("buildWithCmd")  // Allow to create/build using cmd only: azure:3628
 Feature.wip("actionsInTabBar")
 
 // FEATURE.wip("simuARMOnAppleProcessor") // Mac M1 build for simu using arm64
@@ -134,7 +135,6 @@ Feature.wip("duplicateTemplate")  // Allow to duplicate template in host databas
 Feature.wip("newFormatterChoiceList")  // Menu to create formatter choice list directly , from data
 Feature.wip("taskIndicator")  // UI for background tasks executing
 Feature.wip("DataSourceClass")  // Work with DataSource class class to test the data source
-Feature.wip("buildWithCmd")  // Allow to build using cmd only
 
 // Mark:-👨‍💻 Eric
 $c:=New collection:C1472("emarchand"; "phimage")

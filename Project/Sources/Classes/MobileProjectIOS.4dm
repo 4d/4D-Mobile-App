@@ -116,6 +116,37 @@ Function create()->$result : Object
 	This:C1470._devFeatures($result)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Check if there is already a created app, to build it for instance
+Function alreadyCreated()->$result : Object
+	
+	ASSERT:C1129(Feature.with("buildWithCmd"))
+	
+	$result:=New object:C1471("success"; True:C214)
+	
+	$result.tags:=This:C1470._createTags()
+	
+	var $file : 4D:C1709.File
+	var $inputPath : 4D:C1709.Folder
+	$inputPath:=Folder:C1567(This:C1470.input.path; fk platform path:K87:2)
+	
+	$file:=$inputPath.file("Sources/Structures.xcdatamodeld/Structures.xcdatamodel/contents")
+	$result.coreData:=New object:C1471("path"; $file.platformPath; "success"; $file.exists)
+	$result.manifest:=This:C1470._createManifest(This:C1470.project; True:C214)
+	
+	$result.projfile:=XcodeProj(New object:C1471(\
+		"action"; "read"; \
+		"path"; $inputPath.platformPath))
+	
+	// TODO: make change on project according to passed arguments like team to build and sign app ?
+	// or use XConf file maybe
+	// if we do it:
+	// look for object of type "isa": "XCBuildConfiguration" then change DEVELOPMENT_TEAM in buildSettings
+	
+	// TODO: according to subobject fill correct "success" value
+	
+	$result.success:=$result.coreData.success && $result.projfile.success
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Building the App
 Function build()->$result : Object
 	
