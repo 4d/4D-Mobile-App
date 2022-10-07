@@ -118,7 +118,7 @@ Function loadLocal()
 				
 				If (Value type:C1509($o.enabled)=Is boolean:K8:9)
 					
-					This:C1470._features[This:C1470._feature($o.id)]:=Bool:C1537($o.enabled)
+					This:C1470._features[This:C1470._feature(($o.id=Null:C1517) ? $o.name : $o.id)]:=Bool:C1537($o.enabled)
 					
 				Else 
 					
@@ -194,7 +194,7 @@ Function loadLocal()
 						End case 
 					End for each 
 					
-					This:C1470._features[This:C1470._feature($o.id)]:=$enabled
+					This:C1470._features[This:C1470._feature(($o.id=Null:C1517) ? $o.name : $o.id)]:=$enabled
 					
 				End if 
 			End for each 
