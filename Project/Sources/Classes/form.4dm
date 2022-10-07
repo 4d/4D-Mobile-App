@@ -283,6 +283,11 @@ Function refresh($delay : Integer)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 
+Function stopTimer()
+	
+	SET TIMER:C645(0)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === 
 	// Creates a CALL FORM of the current form (callback) & with current callback method
 	// .callMeBack ()
 	// .callMeBack ( param : Collection )
