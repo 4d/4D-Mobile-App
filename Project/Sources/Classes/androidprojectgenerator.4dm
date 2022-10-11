@@ -407,14 +407,14 @@ Function copyIcons
 			For each ($action; $2)
 				
 				// Check for action icon
-				var $Obj_handleAction : Object
+				var $Obj_handleActionIcon : Object
 				
-				$Obj_handleAction:=This:C1470.handleActionIcon($action)
+				$Obj_handleActionIcon:=This:C1470.handleActionIcon($action)
 				
-				If (Not:C34($Obj_handleAction.success))
+				If (Not:C34($Obj_handleActionIcon.success))
 					
 					$0.success:=False:C215
-					$0.errors.combine($Obj_handleAction.errors)
+					$0.errors.combine($Obj_handleActionIcon.errors)
 					
 					// Else : all ok
 				End if 
@@ -937,7 +937,7 @@ Function copyFormatterImage
 			
 			var $format; $formatName : Text
 			var $copyDest : 4D:C1709.File
-			var $copyFormatterImagesToApp : Object
+			var $copyFolderImagesToApp : Object
 			
 			If (Value type:C1509($1.value.format)=Is text:K8:3)
 				
@@ -959,12 +959,12 @@ Function copyFormatterImage
 							
 							If ($customFormatterFolder.exists)
 								
-								$copyFormatterImagesToApp:=This:C1470.copyFormatterImagesToApp($customFormatterFolder; $formatName)
+								$copyFolderImagesToApp:=This:C1470.copyFolderImagesToApp($customFormatterFolder; $formatName)
 								
-								If (Not:C34($copyFormatterImagesToApp.success))
+								If (Not:C34($copyFolderImagesToApp.success))
 									
 									$0.success:=False:C215
-									$0.errors.combine($copyFormatterImagesToApp.errors)
+									$0.errors.combine($copyFolderImagesToApp.errors)
 									
 									// Else : all ok
 								End if 
@@ -988,12 +988,12 @@ Function copyFormatterImage
 									
 									If ($unzipDest.exists)
 										
-										$copyFormatterImagesToApp:=This:C1470.copyFormatterImagesToApp($unzipDest; $formatName)
+										$copyFolderImagesToApp:=This:C1470.copyFolderImagesToApp($unzipDest; $formatName)
 										
-										If (Not:C34($copyFormatterImagesToApp.success))
+										If (Not:C34($copyFolderImagesToApp.success))
 											
 											$0.success:=False:C215
-											$0.errors.combine($copyFormatterImagesToApp.errors)
+											$0.errors.combine($copyFolderImagesToApp.errors)
 											
 											// Else : all ok
 										End if 
@@ -1057,7 +1057,7 @@ Function copyFormatterImage
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function copyFormatterImagesToApp
+Function copyFolderImagesToApp
 	var $0 : Object
 	var $1 : 4D:C1709.Folder  // Formatter folder
 	var $2 : Text  // format name
@@ -1073,6 +1073,12 @@ Function copyFormatterImagesToApp
 		"errors"; New collection:C1472)
 	
 	$imagesFolderInFormatter:=$1.folder("Images")
+	
+	If (Not:C34($imagesFolderInFormatter.exists))
+		
+		$imagesFolderInFormatter:=$1.folder("images")
+		
+	End if 
 	
 	If ($imagesFolderInFormatter.exists)
 		
@@ -1346,19 +1352,27 @@ Function copyKotlinInputControlFiles
 	
 	For each ($action; $1)
 		
-		For each ($actionParameter; OB Entries:C1720($action))
+		If ($action.parameters#Null:C1517)
 			
-			$handleKotlinInputControlFile:=This:C1470.handleKotlinInputControlFiles($actionParameter; $2)
-			
-			If (Not:C34($handleKotlinInputControlFile.success))
+			If (Value type:C1509($action.parameters)=Is collection:K8:32)
 				
-				$0.success:=False:C215
-				$0.errors.combine($handleKotlinInputControlFile.errors)
+				For each ($actionParameter; $action.parameters)
+					
+					$handleKotlinInputControlFile:=This:C1470.handleKotlinInputControlFiles($actionParameter; $2)
+					
+					If (Not:C34($handleKotlinInputControlFile.success))
+						
+						$0.success:=False:C215
+						$0.errors.combine($handleKotlinInputControlFile.errors)
+						
+						// Else : all ok
+					End if 
+					
+				End for each 
 				
-				// Else : all ok
 			End if 
 			
-		End for each 
+		End if 
 		
 	End for each 
 	
@@ -1372,7 +1386,7 @@ Function handleKotlinInputControlFiles
 	var $packageName; $format; $inputControlName : Text
 	$packageName:=$2
 	var $actionParameter; $copyInputControlFilesToApp : Object
-	var $inputControlFolder; $customInputControlFolder : 4D:C1709.Folder
+	var $inputControlsFolder : 4D:C1709.Folder
 	
 	$0:=New object:C1471(\
 		"success"; True:C214; \
@@ -1380,29 +1394,31 @@ Function handleKotlinInputControlFiles
 	
 	$actionParameter:=$1
 	
-	If (Value type:C1509($actionParameter.value)=Is object:K8:27)
+	If (Value type:C1509($actionParameter)=Is object:K8:27)
 		
-		If ($actionParameter.value.format#Null:C1517)
+		If ($actionParameter.format#Null:C1517)
 			
-			If (Value type:C1509($actionParameter.value.format)=Is text:K8:3)
+			If (Value type:C1509($actionParameter.format)=Is text:K8:3)
 				
-				$format:=$actionParameter.value.format
+				$format:=$actionParameter.format
 				
 				If ($format#"")
 					
 					If (Substring:C12($format; 1; 1)="/")
 						
-						$inputControlFolder:=This:C1470.path.hostInputControls()
+						$inputControlsFolder:=This:C1470.path.hostInputControls()
 						
-						If ($inputControlFolder.exists)
+						If ($inputControlsFolder.exists)
 							
 							$inputControlName:=Substring:C12($format; 2)
 							
-							$customInputControlFolder:=$inputControlFolder.folder($inputControlName)
+							var $Obj_findFolderByManifestName : Object
 							
-							If ($customInputControlFolder.exists)
+							$Obj_findFolderByManifestName:=This:C1470.findFolderByManifestName($inputControlsFolder; $inputControlName)
+							
+							If ($Obj_findFolderByManifestName.folder#Null:C1517)
 								
-								$copyInputControlFilesToApp:=This:C1470.copyInputControlFilesToApp($customInputControlFolder; $packageName)
+								$copyInputControlFilesToApp:=This:C1470.copyInputControlFilesToApp($Obj_findFolderByManifestName.folder; $packageName)
 								
 								If (Not:C34($copyInputControlFilesToApp.success))
 									
@@ -1418,7 +1434,7 @@ Function handleKotlinInputControlFiles
 								
 								var $customInputControlZipFile : 4D:C1709.File
 								
-								$customInputControlZipFile:=$inputControlFolder.file($inputControlName)
+								$customInputControlZipFile:=$inputControlsFolder.file($inputControlName)
 								
 								If ($customInputControlZipFile.exists)
 									
@@ -1454,9 +1470,8 @@ Function handleKotlinInputControlFiles
 								Else 
 									// error
 									$0.success:=False:C215
-									$0.errors.push("Input Control \""+$format+"\" couldn't be found at path: "+$customInputControlFolder.path)
+									$0.errors.push("Input Control \""+$format+"\" couldn't be found")
 								End if 
-								
 								
 							End if 
 							
@@ -1509,7 +1524,7 @@ Function copyInputControlFilesToApp
 				
 				// replace ___PACKAGE___ in file content
 				$fileContent:=$copyDest.getText()
-				$fileContent:=Replace string:C233($fileContent; "___PACKAGE___"; $packageName+".binding")
+				$fileContent:=Replace string:C233($fileContent; "___PACKAGE___"; $packageName+".inputcontrol")
 				$copyDest.setText($fileContent)
 				
 			Else 
@@ -1577,6 +1592,70 @@ Function copyFilesRecursively($entry : 4D:C1709.Folder; $target : 4D:C1709.Folde
 			End if 
 			
 		End for each 
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function findFolderByManifestName
+	var $0 : Object
+	var $1 : 4D:C1709.Folder  // folder to browse
+	var $2 : Text  // name value to be found in manifest.json file
+	
+	$0:=New object:C1471(\
+		"success"; False:C215; \
+		"errors"; New collection:C1472)
+	
+	var $folder : 4D:C1709.Folder
+	
+	var $found : Boolean
+	
+	$found:=False:C215
+	
+	If ($1#Null:C1517)
+		
+		If ($1.exists)
+			
+			For each ($folder; $1.folders()) Until ($found)
+				
+				var $file : 4D:C1709.File
+				
+				For each ($file; $folder.files()) Until ($found)
+					
+					If ($file.fullName="manifest.json")
+						
+						var $manifestContent : Object
+						
+						$manifestContent:=JSON Parse:C1218($file.getText())
+						
+						If ($manifestContent.name#Null:C1517)
+							
+							If (Value type:C1509($manifestContent.name)=Is text:K8:3)
+								
+								If ($manifestContent.name=$2)
+									
+									$found:=True:C214
+									
+									If ($1.folder($folder.name).exists)
+										
+										$0.success:=True:C214
+										$0.folder:=$1.folder($folder.name)
+										
+									End if 
+									
+								End if 
+								
+							End if 
+							
+						End if 
+						
+					End if 
+					
+				End for each 
+				
+			End for each 
+			
+		End if 
 		
 	End if 
 	
