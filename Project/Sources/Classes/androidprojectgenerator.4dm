@@ -419,6 +419,19 @@ Function copyIcons
 					// Else : all ok
 				End if 
 				
+				// Check for input control image files
+				var $Obj_handleInputControlImages : Object
+				
+				$Obj_handleInputControlImages:=This:C1470.handleInputControlImages($action)
+				
+				If (Not:C34($Obj_handleInputControlImages.success))
+					
+					$0.success:=False:C215
+					$0.errors.combine($Obj_handleInputControlImages.errors)
+					
+					// Else : all ok
+				End if 
+				
 			End for each 
 			// Else : no action defined
 		End if 
@@ -917,6 +930,122 @@ Function copyIcon
 		$0.errors.push("Could not copy file to destination: "+$copyDest.path)
 		
 		// Else : all ok
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function handleInputControlImages
+	var $0 : Object
+	var $1 : Object  // Action object
+	
+	var $currentFile : 4D:C1709.File
+	var $action; $parameter; $copyFolderImagesToApp : Object
+	
+	$0:=New object:C1471(\
+		"success"; True:C214; \
+		"errors"; New collection:C1472)
+	
+	$action:=$1
+	
+	If ($action.parameters#Null:C1517)
+		
+		If (Value type:C1509($action.parameters)=Is collection:K8:32)
+			
+			For each ($parameter; $action.parameters)
+				
+				If (Value type:C1509($parameter)=Is object:K8:27)
+					
+					If ($parameter.source#Null:C1517)
+						
+						If (Value type:C1509($parameter.source)=Is text:K8:3)
+							
+							var $inputControlsFolder; $customInputControlFolder; $imagesFolderInInputControl : 4D:C1709.Folder
+							
+							$inputControlsFolder:=This:C1470.path.hostInputControls()
+							
+							If ($inputControlsFolder.exists)
+								
+								var $source : Text
+								
+								$source:=Substring:C12($parameter.source; 2)
+								
+								var $Obj_findFolderByManifestName : Object
+								
+								$Obj_findFolderByManifestName:=This:C1470.findFolderByManifestName($inputControlsFolder; $source)
+								
+								If ($Obj_findFolderByManifestName.folder#Null:C1517)
+									
+									$copyFolderImagesToApp:=This:C1470.copyFolderImagesToApp($Obj_findFolderByManifestName.folder; $source)
+									
+									If (Not:C34($copyFolderImagesToApp.success))
+										
+										$0.success:=False:C215
+										$0.errors.combine($copyFolderImagesToApp.errors)
+										
+										// Else : all ok
+									End if 
+									
+								Else 
+									
+									// Check for ZIP
+									var $customInputControlZipFile : 4D:C1709.File
+									
+									$customInputControlZipFile:=$inputControlsFolder.file($source)
+									
+									If ($customInputControlZipFile.exists)
+										
+										var $archive : 4D:C1709.ZipArchive
+										
+										$archive:=ZIP Read archive:C1637($customInputControlZipFile)
+										
+										var $unzipDest : 4D:C1709.Folder
+										
+										$unzipDest:=$archive.root.copyTo($customInputControlZipFile.parent; "android_temporary_"+$customInputControlZipFile.name; fk overwrite:K87:5)
+										
+										If ($unzipDest.exists)
+											
+											$copyFolderImagesToApp:=This:C1470.copyFolderImagesToApp($unzipDest; $source)
+											
+											If (Not:C34($copyFolderImagesToApp.success))
+												
+												$0.success:=False:C215
+												$0.errors.combine($copyFolderImagesToApp.errors)
+												
+												// Else : all ok
+											End if 
+											
+											$unzipDest.delete(Delete with contents:K24:24)
+											
+										Else 
+											// error
+											$0.success:=False:C215
+											$0.errors.push("Could not unzip to destination: "+$unzipDest.path)
+											
+										End if 
+										
+									Else 
+										
+										// error
+										$0.success:=False:C215
+										$0.errors.push("Custom input control \""+$parameter.source+"\" couldn't be found")
+										
+									End if 
+									
+								End if 
+								
+								// Else : no input control folder
+							End if 
+						End if 
+						
+					End if 
+					
+				End if 
+				
+			End for each 
+			
+		End if 
+		
+		// Else: no parameter
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
