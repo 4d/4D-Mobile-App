@@ -85,15 +85,14 @@ Class constructor()
 	This:C1470.components:=$signal.components.copy()
 	This:C1470.plugins:=$signal.plugins.copy()
 	
-	If ($signal.parameters#Null:C1517)
-		
-		This:C1470.parameters:=Value type:C1509($signal.parameters)=Is text:K8:3 ? $signal.parameters : $signal.parameters.copy()
-		
-	Else 
-		
-		This:C1470.parameters:=Null:C1517
-		
-	End if 
+	Case of 
+		: (Value type:C1509($signal.parameters)=Is collection:K8:32)
+			This:C1470.parameters:=$signal.parameters.copy()
+		: (Value type:C1509($signal.parameters)=Is object:K8:27)
+			This:C1470.parameters:=OB Copy:C1225($signal.parameters)
+		Else 
+			This:C1470.parameters:=$signal.parameters
+	End case 
 	
 	// === === === === === === === === === === === === === === ===
 Function get mode() : Text

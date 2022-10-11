@@ -49,7 +49,7 @@ Case of
 						//______________________________________________________
 					: (Match regex:C1019("(?m-si)^\\{.*\\}$"; $t; 1))  // Json object
 						
-						$signal.parameters:=JSON Parse:C1218($t).copy(ck shared:K85:29; $signal)
+						$signal.parameters:=OB Copy:C1225(JSON Parse:C1218($t); ck shared:K85:29; $signal)
 						
 						//______________________________________________________
 					: (Match regex:C1019("(?m-si)^\\[.*\\]$"; $t; 1))  // Json array
