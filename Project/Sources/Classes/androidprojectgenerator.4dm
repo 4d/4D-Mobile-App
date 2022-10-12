@@ -1525,6 +1525,7 @@ Function copyInputControlFilesToApp
 				// replace ___PACKAGE___ in file content
 				$fileContent:=$copyDest.getText()
 				$fileContent:=Replace string:C233($fileContent; "___PACKAGE___"; $packageName+".inputcontrol")
+				$fileContent:=Replace string:C233($fileContent; "___APP_PACKAGE___"; $packageName)
 				$copyDest.setText($fileContent)
 				
 			Else 
