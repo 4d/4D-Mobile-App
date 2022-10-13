@@ -48,8 +48,8 @@ If (False:C215)
 	C_COLLECTION:C1488(Process_tags; $3)
 	
 	// ----------------------------------------------------
-	C_TEXT:C284(Process_tags_on_file; $1)
-	C_TEXT:C284(Process_tags_on_file; $2)
+	C_VARIANT:C1683(Process_tags_on_file; $1)
+	C_VARIANT:C1683(Process_tags_on_file; $2)
 	C_OBJECT:C1216(Process_tags_on_file; $3)
 	C_COLLECTION:C1488(Process_tags_on_file; $4)
 	
@@ -62,8 +62,8 @@ If (False:C215)
 	C_OBJECT:C1216(_o_structure; $1)
 	
 	// ----------------------------------------------------
-	C_OBJECT:C1216(template; $0)
-	C_OBJECT:C1216(template; $1)
+	C_OBJECT:C1216(TEMPLATE; $0)
+	C_OBJECT:C1216(TEMPLATE; $1)
 	
 	// ----------------------------------------------------
 	C_OBJECT:C1216(getSQLite; $1)

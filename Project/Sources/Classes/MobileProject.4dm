@@ -581,7 +581,7 @@ Function _createManifest($project : Object; $noWrite : Boolean) : Object
 Function _getAppDataFolder($project : Object) : 4D:C1709.Folder
 	
 	var $folder : 4D:C1709.Folder
-	$folder:=This:C1470.This.paths.mobileApps().folder(This:C1470._getAppId($project))
+	$folder:=This:C1470.paths.mobileApps().folder(This:C1470._getAppId($project))
 	$folder.create()
 	
 	return $folder

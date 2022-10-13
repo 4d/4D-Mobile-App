@@ -1,4 +1,5 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
+#DECLARE($Obj_input : Object)->$Obj_output : Object
 // ----------------------------------------------------
 // Project method : template
 // ID[9D7291F8EA044C9C92BEF06808B65A17]
@@ -8,90 +9,64 @@
 // -
 // ----------------------------------------------------
 // Declarations
-C_OBJECT:C1216($0)
-C_OBJECT:C1216($1)
 
 C_BOOLEAN:C305($Boo_copy; $Boo_processTags)
-C_LONGINT:C283($i; $ii; $Lon_parameters)
-C_TEXT:C284($Dir_tgt; $File_src; $File_tgt; $t; $Txt_fileName; $Txt_folder)
-C_OBJECT:C1216($o; $Obj_input; $Obj_output; $Obj_result; $Obj_tempo)
+C_LONGINT:C283($i; $ii)
+C_TEXT:C284($t; $Txt_fileName; $Txt_folder)
+C_OBJECT:C1216($o; $Obj_result; $Obj_tempo)
 C_COLLECTION:C1488($Col_catalog; $Col_pathComponents; $Col_types)
+var $Dir_tgt : 4D:C1709.Folder
+var $File_src; $File_tgt : 4D:C1709.File
 
 ARRAY TEXT:C222($tTxt_buffer; 0)
 
 If (False:C215)
-	C_OBJECT:C1216(template; $0)
-	C_OBJECT:C1216(template; $1)
+	C_OBJECT:C1216(TEMPLATE; $0)
+	C_OBJECT:C1216(TEMPLATE; $1)
 End if 
 
 // ----------------------------------------------------
 // Initialisations
-$Lon_parameters:=Count parameters:C259
 
-If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
-	
-	// Required parameters
-	$Obj_input:=$1
-	
-	// Optional parameters
-	If ($Lon_parameters>=2)
+// Check parameters
+ASSERT:C1129($Obj_input.source#Null:C1517)
+ASSERT:C1129($Obj_input.target#Null:C1517)
+
+$Obj_output:=New object:C1471(\
+"success"; False:C215; \
+"children"; New collection:C1472; \
+"source"; String:C10($Obj_input.source))
+
+$Obj_input.source:=FolderFrom($Obj_input.source)
+$Obj_input.target:=FolderFrom($Obj_input.target)
+
+$Obj_input.target.create()
+
+Case of 
 		
-		// <NONE>
+		//________________________________________
+	: (Value type:C1509($Obj_input.catalog)=Is collection:K8:32)
 		
-	End if 
-	
-	// Check parameters
-	ASSERT:C1129($Obj_input.source#Null:C1517)
-	ASSERT:C1129($Obj_input.target#Null:C1517)
-	ASSERT:C1129(Value type:C1509($Obj_input.source)=Is text:K8:3)
-	ASSERT:C1129(Value type:C1509($Obj_input.target)=Is text:K8:3)
-	
-	$Obj_output:=New object:C1471(\
-		"success"; False:C215; \
-		"children"; New collection:C1472; \
-		"source"; String:C10($Obj_input.source))
-	
-	$o:=Path to object:C1547($Obj_input.source)
-	$o.isFolder:=True:C214
-	$Obj_input.source:=Object to path:C1548($o)
-	
-	$o:=Path to object:C1547($Obj_input.target)
-	$o.isFolder:=True:C214
-	$Obj_input.target:=Object to path:C1548($o)
-	
-	CREATE FOLDER:C475($Obj_input.target; *)
-	
-	Case of 
-			
-			//________________________________________
-		: (Value type:C1509($Obj_input.catalog)=Is collection:K8:32)
-			
-			$Col_catalog:=$Obj_input.catalog
-			
-			//________________________________________
-		: (Folder:C1567($Obj_input.source; fk platform path:K87:2).exists)  // Get catalog from source
-			
-			$Col_catalog:=_o_doc_catalog($Obj_input.source)
-			
-			//________________________________________
-		Else 
-			
-			$Obj_output.error:="Template folder '"+$Obj_input.source+"' not exist"
-			$Obj_output.needProjectAudit:=True:C214
-			
-			ASSERT:C1129(dev_Matrix; "Template has no valid source to get doc catalog: "+$Obj_input.source)
-			
-			//________________________________________
-	End case 
-	
-	var $str : cs:C1710.str
-	$str:=cs:C1710.str.new()  // init class
-	
-Else 
-	
-	ABORT:C156
-	
-End if 
+		$Col_catalog:=$Obj_input.catalog
+		
+		//________________________________________
+	: ($Obj_input.source.exists)  // Get catalog from source
+		
+		$Col_catalog:=_o_doc_catalog($Obj_input.source.platformPath)
+		
+		//________________________________________
+	Else 
+		
+		$Obj_output.error:="Template folder '"+$Obj_input.source.path+"' not exist"
+		$Obj_output.needProjectAudit:=True:C214
+		
+		ASSERT:C1129(dev_Matrix; "Template has no valid source to get doc catalog: "+$Obj_input.source.path)
+		
+		//________________________________________
+End case 
+
+var $str : cs:C1710.str
+$str:=cs:C1710.str.new()  // init class
 
 // ----------------------------------------------------
 $Boo_processTags:=$Obj_input.tags#Null:C1517
@@ -122,16 +97,16 @@ If ($Col_catalog#Null:C1517)
 					
 				End if 
 				
-				$Dir_tgt:=$Obj_input.target+$Txt_folder+Folder separator:K24:12
-				CREATE FOLDER:C475($Dir_tgt; *)
+				$Dir_tgt:=$Obj_input.target.folder($Txt_folder)
+				$Dir_tgt.create()
 				
 				$Obj_tempo:=OB Copy:C1225($Obj_input)
-				$Obj_tempo.source:=$Obj_input.source+$tTxt_buffer{1}+Folder separator:K24:12
+				$Obj_tempo.source:=$Obj_input.source.folder($tTxt_buffer{1})
 				$Obj_tempo.target:=$Dir_tgt
 				
 				$Obj_tempo.catalog:=$o[$tTxt_buffer{1}]
 				
-				$Obj_result:=template($Obj_tempo)  // <================================== RECURSIVE
+				$Obj_result:=TEMPLATE($Obj_tempo)  // <================================== RECURSIVE
 				$Obj_output.children.push($Obj_result)
 				ob_error_combine($Obj_output; $Obj_result)
 				
@@ -157,10 +132,10 @@ If ($Col_catalog#Null:C1517)
 			
 			ASSERT:C1129(Length:C16($Txt_fileName)>0; "file name empty")
 			
-			$File_tgt:=$Obj_input.target+$Txt_fileName
-			$File_src:=$Obj_input.source+$t
+			$File_tgt:=$Obj_input.target.file($Txt_fileName)
+			$File_src:=$Obj_input.source.file($t)
 			
-			If (File:C1566($File_tgt; fk platform path:K87:2).exists)
+			If ($File_tgt.exists)
 				
 				If ($Txt_fileName="manifest.json")
 					
@@ -176,8 +151,8 @@ If ($Col_catalog#Null:C1517)
 							
 						End for 
 						
-						CREATE FOLDER:C475($Obj_input.target+$Col_pathComponents.join(Folder separator:K24:12)+Folder separator:K24:12; *)
-						$File_tgt:=$Obj_input.target+$Col_pathComponents.join(Folder separator:K24:12)+Folder separator:K24:12+$Txt_fileName
+						Folder:C1567($Obj_input.target.platformPath+$Col_pathComponents.join(Folder separator:K24:12)+Folder separator:K24:12; fk platform path:K87:2).create()  // XXX simplify?
+						$File_tgt:=File:C1566($Obj_input.target.platformPath+$Col_pathComponents.join(Folder separator:K24:12)+Folder separator:K24:12+$Txt_fileName; fk platform path:K87:2)
 						
 					End if 
 					
@@ -185,7 +160,7 @@ If ($Col_catalog#Null:C1517)
 					
 					// XXX see if we autorize overriding files
 					LOG_EVENT(New object:C1471(\
-						"message"; "A file '"+$Txt_fileName+"' already exist at destination '"+$Obj_input.target+"' when copying '"+$File_src+"'"; \
+						"message"; "A file '"+$Txt_fileName+"' already exist at destination '"+$Obj_input.target.path+"' when copying '"+$File_src.path+"'"; \
 						"importance"; Warning message:K38:2))
 					
 				End if 
@@ -248,9 +223,9 @@ If ($Col_catalog#Null:C1517)
 			
 			If (Not:C34($Boo_processTags))\
 				 || ($Txt_fileName="manifest.json")\
-				 || (Is picture file:C1113($File_src))\
-				 || (Position:C15(".git"+Folder separator:K24:12; $File_src)>0)\
-				 || (File:C1566($File_src; fk platform path:K87:2).isAlias)
+				 || (Is picture file:C1113($File_src.platformPath))\
+				 || (Position:C15(".git"+Folder separator:K24:12; $File_src.platformPath)>0)\
+				 || ($File_src.isAlias)
 				
 				// Ignore
 				
@@ -263,8 +238,11 @@ If ($Col_catalog#Null:C1517)
 			
 			If ($Boo_copy)
 				
-				COPY DOCUMENT:C541($File_src; $File_tgt; *)
-				
+				If (Feature.with("buildWithCmd"))
+					$File_src.copyTo($File_tgt.parent; $File_tgt.name)
+				Else 
+					COPY DOCUMENT:C541($File_src.platformPath; $File_tgt.platformPaths; *)
+				End if 
 			Else 
 				
 				// Already copied by process tags
@@ -272,8 +250,8 @@ If ($Col_catalog#Null:C1517)
 			End if 
 			
 			$Obj_output.children.push(New object:C1471(\
-				"source"; $File_src; \
-				"target"; $File_tgt; \
+				"source"; $File_src.platformPath; \
+				"target"; $File_tgt.platformPath; \
 				"types"; $Col_types))
 			
 		End if 
@@ -282,10 +260,3 @@ If ($Col_catalog#Null:C1517)
 	$Obj_output.success:=($Obj_output.children.length>0)
 	
 End if 
-
-// ----------------------------------------------------
-// Return
-$0:=$Obj_output
-
-// ----------------------------------------------------
-// End
