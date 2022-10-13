@@ -918,8 +918,20 @@ Version : {version}</target>
         </trans-unit>
         <trans-unit id="AhxJYM04JEYJkwDB8UITGA" resname="accessTheGithubRepository">
           <source>Open on Github</source>
-          <target>Accédez au dépôt Github</target>
+          <target>Accéder au dépôt Github</target>
         </trans-unit>
+        <trans-unit id="wDB8UITGAAhxJYM04JEYJk" resname="showOnDisk">
+          <source>Show on Disk</source>
+          <target>Montrer sur le disque</target>
+        </trans-unit>
+        <trans-unit id="wDB8UIYM04JEYJkTGAAhxJ" resname="openWithGithubDesktop">
+          <source>Open with Github Desktop</source>
+          <target>Ouvrir avec Github Desktop</target>
+        </trans-unit>
+        <trans-unit id="4JEYAAhxJwDB8UITGYM0Jk" resname="duplicate">
+          <source>Duplicate</source>
+          <target>Dupliquer</target>
+        </trans-unit>        
         <trans-unit id="ZxYxVNxb6NTHVXEouCDrMQ" resname="downloadTheLatestRevision">
           <source>Download the latest revision</source>
           <target>Téléchargez la dernière version</target>
