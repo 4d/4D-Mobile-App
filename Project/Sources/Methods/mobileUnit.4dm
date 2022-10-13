@@ -356,6 +356,11 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 			
 			$response.success:=($response.value#Null:C1517)
 			
+			//MARK:- project
+		: ($entryPoint="project")
+			
+			EXECUTE METHOD:C1007(Formula:C1597(mobile_Project).source; $response; $parameters)
+			
 			//________________________________________
 		: (Not:C34(Is macOS:C1572))
 			
@@ -480,11 +485,6 @@ EXECUTE METHOD(Formula(_o_device).source; $response; $parameters)
 		: ($entryPoint="certificate")
 			
 			EXECUTE METHOD:C1007(Formula:C1597(certificate).source; $response; $parameters)
-			
-			//MARK:- project
-		: ($entryPoint="project")
-			
-			EXECUTE METHOD:C1007(Formula:C1597(mobile_Project).source; $response; $parameters)
 			
 			//MARK:- _internalWebser
 		: ($entryPoint="_internalWebser")

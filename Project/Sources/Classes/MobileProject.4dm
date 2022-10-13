@@ -582,7 +582,12 @@ Function _getAppDataFolder($project : Object) : 4D:C1709.Folder
 	
 	var $folder : 4D:C1709.Folder
 	
-	$folder:=Folder:C1567(fk mobileApps folder:K87:18; *).folder(This:C1470._getAppId($project))
+	If (Is macOS:C1572 || Is Windows:C1573)
+		$folder:=Folder:C1567(fk mobileApps folder:K87:18; *).folder(This:C1470._getAppId($project))
+	Else 
+		// TEMPORARY with dataless on linux only: ask to make it compatible with dataless
+		$folder:=Folder:C1567(fk database folder:K87:14; *).folder("MobileApps").folder(This:C1470._getAppId($project))
+	End if 
 	$folder.create()
 	
 	return $folder

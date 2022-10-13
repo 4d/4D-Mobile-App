@@ -5,11 +5,28 @@ Class constructor
 	This:C1470.machineName:=Current machine:C483
 	This:C1470.userName:=Current system user:C484
 	
-	This:C1470.home:=Folder:C1567(Split string:C1554(Folder:C1567(fk desktop folder:K87:19).path; "/").resize(3).join("/"))
-	This:C1470.desktop:=Folder:C1567(System folder:C487(Desktop:K41:16); fk platform path:K87:2)
-	This:C1470.documents:=Folder:C1567(System folder:C487(Documents folder:K41:18); fk platform path:K87:2)
-	This:C1470.systemFolder:=Folder:C1567(This:C1470.isWindows ? System folder:C487(System Win:K41:13) : System folder:C487(System:K41:1); fk platform path:K87:2)
-	This:C1470.applicationsFolder:=Folder:C1567(System folder:C487(Applications or program files:K41:17); fk platform path:K87:2)
+	If (Feature.with("buildWithCmd"))
+		var $path : cs:C1710.path
+		$path:=cs:C1710.path.new()
+		
+		This:C1470.home:=$path.userHome()
+		This:C1470.desktop:=$path.userDesktop()
+		This:C1470.documents:=Folder:C1567(fk documents folder:K87:21)
+		
+		If (Is macOS:C1572 || Is Windows:C1573)
+			This:C1470.systemFolder:=Folder:C1567(This:C1470.isWindows ? System folder:C487(System Win:K41:13) : System folder:C487(System:K41:1); fk platform path:K87:2)
+			This:C1470.applicationsFolder:=Folder:C1567(System folder:C487(Applications or program files:K41:17); fk platform path:K87:2)
+		End if 
+		
+	Else 
+		
+		This:C1470.home:=Folder:C1567(Split string:C1554(Folder:C1567(fk desktop folder:K87:19).path; "/").resize(3).join("/"))
+		This:C1470.desktop:=Folder:C1567(System folder:C487(Desktop:K41:16); fk platform path:K87:2)
+		This:C1470.documents:=Folder:C1567(System folder:C487(Documents folder:K41:18); fk platform path:K87:2)
+		This:C1470.systemFolder:=Folder:C1567(This:C1470.isWindows ? System folder:C487(System Win:K41:13) : System folder:C487(System:K41:1); fk platform path:K87:2)
+		This:C1470.applicationsFolder:=Folder:C1567(System folder:C487(Applications or program files:K41:17); fk platform path:K87:2)
+		
+	End if 
 	
 	If (Is macOS:C1572 || Is Windows:C1573)
 		

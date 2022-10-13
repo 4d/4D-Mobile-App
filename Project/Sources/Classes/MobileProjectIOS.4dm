@@ -30,16 +30,20 @@ Class constructor($project : Object)
 			This:C1470.productName:="debug"
 	End case 
 	
-	If ((This:C1470.project._folder=Null:C1517) && (Folder:C1567($project.$project.project; fk platform path:K87:2).exists))
+	If ((This:C1470.project._folder=Null:C1517) && (($project.$project.project#Null:C1517) && (Folder:C1567(String:C10($project.$project.project); fk platform path:K87:2).exists)))
 		This:C1470.project._folder:=Folder:C1567($project.$project.project; fk platform path:K87:2)
 	End if 
 	
 	// Keep the last used project
-	This:C1470.logFolder.file("lastBuild.ios.4dmobile").setText(JSON Stringify:C1217(This:C1470.project; *))
+	If (This:C1470.logFolder#Null:C1517)
+		This:C1470.logFolder.file("lastBuild.ios.4dmobile").setText(JSON Stringify:C1217(This:C1470.project; *))
+	End if 
 	
 	// Some utilities (mainly fake singleton)
-	This:C1470.simctl:=cs:C1710.simctl.new()  // ASK: SHARED.iosDeploymentTarget ?
-	This:C1470.cfgutil:=cs:C1710.cfgutil.new()
+	If (Is macOS:C1572)
+		This:C1470.simctl:=cs:C1710.simctl.new()  // ASK: SHARED.iosDeploymentTarget ?
+		This:C1470.cfgutil:=cs:C1710.cfgutil.new()
+	End if 
 	
 	// MARK:-[STEPS]
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -625,7 +629,12 @@ Function _generateTemplates($out : Object; $tags : Object)
 	Else 
 		$template.source:=$Dir_template.platformPath
 	End if 
-	$template.assets.target:=$in.path+Convert path POSIX to system:C1107($template.assets.path)+Folder separator:K24:12+$template.assets.name+Folder separator:K24:12
+	
+	If (Feature.with("buildWithCmd"))
+		$template.assets.target:=Folder:C1567($in.path; fk platform path:K87:2).folder($template.assets.path).folder($template.assets.name).platformPath
+	Else 
+		$template.assets.target:=$in.path+Convert path POSIX to system:C1107($template.assets.path)+Folder separator:K24:12+$template.assets.name+Folder separator:K24:12
+	End if 
 	If ($project._folder#Null:C1517)
 		$template.assets.source:=This:C1470.project._folder.folder($template.assets.name).platformPath
 	End if 

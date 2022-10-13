@@ -50,32 +50,63 @@ Function resolve($path : Text) : Object
 	End if 
 	
 	//MARK:-USER
-Function userCache()->$folder : 4D:C1709.Folder
-	
-	If (Is macOS:C1572)
-		
-		$folder:=This:C1470.home.folder("Library/Caches/com.4d.mobile")
-		
+Function userHome() : 4D:C1709.Folder
+	If (Is macOS:C1572 || Is Windows:C1573)
+		return Folder:C1567(Split string:C1554(Folder:C1567(fk desktop folder:K87:19).path; "/").resize(3).join("/"))
 	Else 
-		
-		$folder:=This:C1470.home.folder("AppData/Local/4D Mobile")
-		
+		var $in; $out; $err : Text
+		LAUNCH EXTERNAL PROCESS:C811("xdg-user-dir HOME"; $in; $out; $err)
+		return Folder:C1567($out)
 	End if 
 	
-	$folder.create()
+/*========================================================*/
+Function userDesktop() : 4D:C1709.Folder
+	If (Is macOS:C1572 || Is Windows:C1573)
+		return Folder:C1567(fk desktop folder:K87:19)
+	Else 
+		var $in; $out; $err : Text
+		LAUNCH EXTERNAL PROCESS:C811("xdg-user-dir DESKTOP"; $in; $out; $err)
+		return Folder:C1567($out)
+	End if 
 	
+/*========================================================*/
+Function userCache()->$folder : 4D:C1709.Folder
+	
+	Case of 
+		: (Is macOS:C1572)
+			
+			$folder:=This:C1470.userHome().folder("Library/Caches/com.4d.mobile")
+			
+		: (Is Windows:C1573)
+			
+			$folder:=This:C1470.userHome().folder("AppData/Local/4D Mobile")
+			
+		Else 
+			
+			$folder:=This:C1470.userHome().folder(".cache/com.4d.mobile")
+			
+	End case 
+	
+	If ($folder#Null:C1517)
+		$folder.create()
+	End if 
 /*========================================================*/
 Function userlibrary() : 4D:C1709.Folder
 	
-	If (Is macOS:C1572)
-		
-		return (This:C1470.home.folder("Library"))
-		
-	Else 
-		
-		return (This:C1470.home.folder("AppData/LocalLow/"))
-		
-	End if 
+	Case of 
+		: (Is macOS:C1572)
+			
+			return (This:C1470.userHome().folder("Library"))
+			
+		: (Is Windows:C1573)
+			
+			return (This:C1470.userHome().folder("AppData/LocalLow/"))
+			
+		Else 
+			
+			return Folder:C1567("/usr/local/lib")
+			
+	End case 
 	
 /*========================================================*/
 Function preferences($fileName : Text) : Object
@@ -122,16 +153,21 @@ Function cacheSDK() : 4D:C1709.Folder
 /*========================================================*/
 Function systemCache()->$folder : 4D:C1709.Folder  // 4D Mobile cache folder
 	
-	If (Is macOS:C1572)
-		
-		$folder:=Folder:C1567("/Library/Caches/com.4D.mobile")
-		
-	Else 
-		
-		// Use ProgramData
-		$folder:=Folder:C1567(fk system folder:K87:13).parent.folder("ProgramData/4D Mobile")
-		
-	End if 
+	Case of 
+		: (Is macOS:C1572)
+			
+			$folder:=Folder:C1567("/Library/Caches/com.4D.mobile")
+			
+		: (Is Windows:C1573)
+			
+			// Use ProgramData
+			$folder:=Folder:C1567(fk system folder:K87:13).parent.folder("ProgramData/4D Mobile")
+			
+		Else 
+			
+			$folder:=Folder:C1567("/var/cache/com.4D.mobile")
+			
+	End case 
 	
 	$folder.create()
 	
@@ -379,7 +415,7 @@ Function host($create : Boolean) : 4D:C1709.Folder  // Mobile folder
 	
 	C_OBJECT:C1216($o)
 	
-	$o:=Folder:C1567(Get 4D folder:C485(Current resources folder:K5:16; *); fk platform path:K87:2)
+	$o:=Folder:C1567(Folder:C1567(fk resources folder:K87:11; *).platformPath; fk platform path:K87:2)
 	
 	If ($o.file("mobile").exists)
 		

@@ -285,7 +285,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 				If (Folder:C1567($Obj_param.path+SHARED.thirdParty; fk platform path:K87:2).exists)  // well known sdk path
 					
 					var $cacheFolder : 4D:C1709.Folder
-					$cacheFolder:=cs:C1710.path.new().home.folder("Library/Caches")
+					$cacheFolder:=cs:C1710.path.new().userHome().folder("Library/Caches")
 					
 					If (Not:C34($cacheFolder.exists))
 						
