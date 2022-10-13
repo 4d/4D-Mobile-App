@@ -95,7 +95,7 @@ Function setTarget($target) : cs:C1710.logger
 					
 				Else 
 					
-					$file:=File:C1566(Replace string:C233($target; "~"; Folder:C1567(fk documents folder:K87:21).parent.path))
+					$file:=File:C1566(Replace string:C233($target; "~"; cs:C1710.path.new().userHome()))
 					
 				End if 
 				

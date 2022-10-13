@@ -19,8 +19,6 @@ Class constructor($id : Text; $options : Variant)
 		
 	End if 
 	
-	// ⚠️ In some cases (Surface), the Home folder is not the parent of the desktop folder.
-	This:C1470.home:=Folder:C1567(Split string:C1554(Folder:C1567(fk desktop folder:K87:19).path; "/").resize(3).join("/"))
 	
 	//MARK:-TOOLS
 Function resolve($path : Text) : Object
@@ -56,7 +54,7 @@ Function userHome() : 4D:C1709.Folder
 	Else 
 		var $in; $out; $err : Text
 		LAUNCH EXTERNAL PROCESS:C811("xdg-user-dir HOME"; $in; $out; $err)
-		return Folder:C1567($out)
+		return Folder:C1567(Replace string:C233($out; "\n"; ""))
 	End if 
 	
 /*========================================================*/
@@ -66,7 +64,17 @@ Function userDesktop() : 4D:C1709.Folder
 	Else 
 		var $in; $out; $err : Text
 		LAUNCH EXTERNAL PROCESS:C811("xdg-user-dir DESKTOP"; $in; $out; $err)
-		return Folder:C1567($out)
+		return Folder:C1567(Replace string:C233($out; "\n"; ""))
+	End if 
+	
+/*========================================================*/
+Function userDocuments() : 4D:C1709.Folder
+	If (Is macOS:C1572 || Is Windows:C1573)
+		return Folder:C1567(fk documents folder:K87:21)
+	Else 
+		var $in; $out; $err : Text
+		LAUNCH EXTERNAL PROCESS:C811("xdg-user-dir DOCUMENTS"; $in; $out; $err)
+		return Folder:C1567(Replace string:C233($out; "\n"; ""))
 	End if 
 	
 /*========================================================*/
@@ -165,7 +173,8 @@ Function systemCache()->$folder : 4D:C1709.Folder  // 4D Mobile cache folder
 			
 		Else 
 			
-			$folder:=Folder:C1567("/var/cache/com.4D.mobile")
+			// $folder:=Folder("/var/cache/com.4D.mobile")  // need sudo to create, so we provide user cache instead
+			$folder:=This:C1470.userCache()
 			
 	End case 
 	
@@ -646,10 +655,20 @@ Function androidDb($relativePath : Variant) : 4D:C1709.File
 		
 	End if 
 	
+	
+/*========================================================*/
+Function mobileApps() : 4D:C1709.Folder
+	If (Is macOS:C1572 || Is Windows:C1573)
+		return Folder:C1567(fk mobileApps folder:K87:18; *)
+	Else 
+		// TEMPORARY with dataless on linux only: ask to make it compatible with dataless
+		return Folder:C1567(fk database folder:K87:14; *).folder("MobileApps")
+	End if 
+	
 /*========================================================*/
 Function key() : 4D:C1709.File
 	
-	return (Folder:C1567(MobileApps folder:K5:47; *).file("key.mobileapp"))
+	return This:C1470.mobileApps().file("key.mobileapp")
 	
 /*========================================================*/
 Function icon($relativePath : Text) : 4D:C1709.File

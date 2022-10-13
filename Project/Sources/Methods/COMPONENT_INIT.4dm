@@ -35,9 +35,14 @@ SET ASSERT ENABLED:C1131(Component.isInterpreted; *)
 // MARK:-DATABASE
 var Database : cs:C1710.database
 Database:=Database || cs:C1710.database.new()
-Database.projects:=Database.databaseFolder.folder("Mobile Projects")
-Database.projects.create()  // Make sure the directory exists
-Database.products:=Database.databaseFolder.parent.folder(Database.structureFile.name+" - Mobile")
+
+If (Database.databaseFolder#Null:C1517)
+	Database.projects:=Database.databaseFolder.folder("Mobile Projects")
+	Database.projects.create()  // Make sure the directory exists
+	If (Database.structureFile#Null:C1517)
+		Database.products:=Database.databaseFolder.parent.folder(Database.structureFile.name+" - Mobile")
+	End if 
+End if 
 
 // MARK:-LOGGER
 var Logger : cs:C1710.logger  // General journal

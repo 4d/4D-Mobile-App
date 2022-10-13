@@ -73,9 +73,14 @@ Class constructor()
 		End if 
 	End if 
 	
-	This:C1470.userPreferencesFolder:=Folder:C1567(fk user preferences folder:K87:10).folder(This:C1470.name)
+	This:C1470.userPreferencesFolder:=Folder:C1567(fk user preferences folder:K87:10).folder(This:C1470.name || "projet")
 	
 	// Non-thread-safe commands are delegated to the application process
+	
+	If (Not:C34(Is macOS:C1572) && Not:C34(Is Windows:C1573))
+		return 
+	End if 
+	
 	$signal:=New signal:C1641("env")
 	CALL WORKER:C1389(1; "envDatabase"; $signal)
 	$signal.wait()

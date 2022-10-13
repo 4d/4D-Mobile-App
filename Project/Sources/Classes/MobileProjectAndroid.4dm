@@ -22,7 +22,7 @@ Class constructor($project : Object)
 	
 	This:C1470.project.sdk:=This:C1470.androidProcess.androidSDKFolder().path
 	This:C1470.project.cache_4d_sdk:=This:C1470.paths.cacheSdkAndroidUnzipped().path
-	This:C1470.project.path:=Convert path system to POSIX:C1106(This:C1470.project.path)
+	This:C1470.project.path:=Folder:C1567(This:C1470.project.path; fk platform path:K87:2).path
 	
 	// MARK:GET THE PROJECT FOLDER
 	var $folder : 4D:C1709.Folder
@@ -66,8 +66,10 @@ Class constructor($project : Object)
 	This:C1470.gradlew:=cs:C1710.gradlew.new(This:C1470.project.path)
 	
 	// MARK:Classes for run()
-	This:C1470.emulator:=cs:C1710.androidEmulator.new()
-	This:C1470.adb:=cs:C1710.adb.new()
+	If (Is macOS:C1572 || Is Windows:C1573)
+		This:C1470.emulator:=cs:C1710.androidEmulator.new()
+		This:C1470.adb:=cs:C1710.adb.new()
+	End if 
 	
 	This:C1470.init()
 	
@@ -83,8 +85,12 @@ Function init
 Function setEnvVarToAll($envVar : Variant/* Object or Collection of objects */)
 	This:C1470.androidprojectgenerator.setEnvironnementVariable($envVar)
 	This:C1470.gradlew.setEnvironnementVariable($envVar)
-	This:C1470.emulator.setEnvironnementVariable($envVar)
-	This:C1470.adb.setEnvironnementVariable($envVar)
+	If (This:C1470.emulator#Null:C1517)
+		This:C1470.emulator.setEnvironnementVariable($envVar)
+	End if 
+	If (This:C1470.adb#Null:C1517)
+		This:C1470.adb.setEnvironnementVariable($envVar)
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//

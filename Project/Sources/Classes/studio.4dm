@@ -31,6 +31,7 @@ Class constructor($useDefaultPath : Boolean)
 		This:C1470.version:=This:C1470._getVersion()
 		This:C1470._getJava()
 		
+		
 		If (This:C1470.success)
 			
 			This:C1470.setEnvironnementVariable("JAVA_HOME"; This:C1470.javaHome.path)
@@ -167,15 +168,20 @@ Function defaultPath()
 	
 	This:C1470.exe:=Null:C1517
 	
-	If (This:C1470.macOS)
-		
-		$exe:=Folder:C1567("/Applications/Android Studio.app")
-		
-	Else 
-		
-		$exe:=File:C1566("C:\\Program Files\\Android\\Android Studio\\bin\\studio64.exe"; fk platform path:K87:2)
-		
-	End if 
+	Case of 
+		: (This:C1470.macOS)
+			
+			$exe:=Folder:C1567("/Applications/Android Studio.app")
+			
+		: (This:C1470.window)
+			
+			$exe:=File:C1566("C:\\Program Files\\Android\\Android Studio\\bin\\studio64.exe"; fk platform path:K87:2)
+			
+		Else 
+			
+			$exe:=File:C1566("/snap/bin/android-studio")
+			
+	End case 
 	
 	This:C1470.success:=$exe.exists
 	
@@ -246,7 +252,7 @@ Function isDefaultPath()->$isDefault : Boolean
 	
 	If (This:C1470.macOS)
 		
-		$isDefault:=(This:C1470.exe.path=Folder:C1567("/Applications/Xcode.app").path)
+		$isDefault:=(This:C1470.exe.path=Folder:C1567("/Applications/Android Studio.app").path)
 		
 	Else 
 		
@@ -262,44 +268,55 @@ Function paths()->$instances : Collection
 	var $instances : Collection
 	var $file : 4D:C1709.File
 	
-	If (This:C1470.macOS)
-		
-		This:C1470.launch("mdfind \"kMDItemCFBundleIdentifier == 'com.google.android.studio'\"")
-		
-		If (This:C1470.success)
+	Case of 
+		: (This:C1470.macOS)
 			
-			$instances:=Split string:C1554(This:C1470.outputStream; "\n"; sk ignore empty strings:K86:1)
-			
-		End if 
-		
-	Else 
-		
-		$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file("Uninstall.txt")
-		$file.delete()
-		
-		This:C1470.launch("reg export HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall "+$file.platformPath)
-		
-		If (This:C1470.success)
-			
-			$t:=$file.getText()
-			
-			ARRAY LONGINT:C221($pos; 0x0000)
-			ARRAY LONGINT:C221($len; 0x0000)
-			This:C1470.success:=Match regex:C1019("(?m-si)\"DisplayName\"=\"Android Studio\"\\R\"DisplayVersion\"=\"(4.1)\"(?:\\R\"[^\"]*\"=\"[^\"]*\")*\\R\"DisplayIcon\"=\"([^\"]*)\""; $t; 1; $pos; $len)
+			This:C1470.launch("mdfind \"kMDItemCFBundleIdentifier == 'com.google.android.studio'\"")
 			
 			If (This:C1470.success)
 				
-				$instances:=New collection:C1472(Replace string:C233(Substring:C12($t; $pos{2}; $len{2}); "\\\\"; "\\"))
+				$instances:=Split string:C1554(This:C1470.outputStream; "\n"; sk ignore empty strings:K86:1)
 				
 			End if 
-		End if 
-		
-		If ($instances=Null:C1517)
 			
-			This:C1470.lastError:="No Android Studio installed"
+		: (This:C1470.window)
 			
-		End if 
-	End if 
+			$file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file("Uninstall.txt")
+			$file.delete()
+			
+			This:C1470.launch("reg export HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall "+$file.platformPath)
+			
+			If (This:C1470.success)
+				
+				$t:=$file.getText()
+				
+				ARRAY LONGINT:C221($pos; 0x0000)
+				ARRAY LONGINT:C221($len; 0x0000)
+				This:C1470.success:=Match regex:C1019("(?m-si)\"DisplayName\"=\"Android Studio\"\\R\"DisplayVersion\"=\"(4.1)\"(?:\\R\"[^\"]*\"=\"[^\"]*\")*\\R\"DisplayIcon\"=\"([^\"]*)\""; $t; 1; $pos; $len)
+				
+				If (This:C1470.success)
+					
+					$instances:=New collection:C1472(Replace string:C233(Substring:C12($t; $pos{2}; $len{2}); "\\\\"; "\\"))
+					
+				End if 
+			End if 
+			
+			If ($instances=Null:C1517)
+				
+				This:C1470.lastError:="No Android Studio installed"
+				
+			End if 
+		Else 
+			
+			// ubuntu with snap
+/* This.launch("snap list android-studio")  // or snap info android-studio
+If (This.success)
+			
+$instances:=Split string(This.outputStream; "\n"; sk ignore empty strings)
+			
+End if */
+			
+	End case 
 	
 	//====================================================================
 Function _getVersion($target : 4D:C1709.Folder)->$version
@@ -318,6 +335,14 @@ Function _getVersion($target : 4D:C1709.Folder)->$version
 		// Use current
 		$targetƒ:=This:C1470.exe
 		
+	End if 
+	
+	If (Not:C34(Is macOS:C1572) && Not:C34(Is Windows:C1573))
+		This:C1470.success:=Folder:C1567("/snap/android-studio/current/android-studio").file("product-info.json").exists
+		If (This:C1470.success)
+			$version:=JSON Parse:C1218(Folder:C1567("/snap/android-studio/current/android-studio").file("product-info.json").getText()).buildNumber
+		End if 
+		return 
 	End if 
 	
 	If (This:C1470.macOS)
@@ -388,15 +413,20 @@ Function checkVersion($minimumVersion : Text)->$ok : Boolean
 	// ⚠️ FAILED IF THE INSTALLATION WAS MADE BY NOT USING THE DEFAULT LOCATION
 Function sdkFolder()->$folder : 4D:C1709.Folder
 	
-	If (Is macOS:C1572)
-		
-		$folder:=This:C1470.home.folder("Library/Android/sdk")
-		
-	Else 
-		
-		$folder:=This:C1470.home.folder("AppData/Local/Android/Sdk")
-		
-	End if 
+	Case of 
+		: (Is macOS:C1572)
+			
+			$folder:=This:C1470.home.folder("Library/Android/sdk")
+			
+		: (Is Windows:C1573)
+			
+			$folder:=This:C1470.home.folder("AppData/Local/Android/Sdk")
+			
+		Else 
+			
+			$folder:=Folder:C1567("/usr/lib/android-sdk/")  // if installed using apt-get
+			
+	End case 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Open the Android Studio application
@@ -518,6 +548,26 @@ Function _getJava()
 	This:C1470.javaHome:=Null:C1517
 	This:C1470.java:=Null:C1517
 	
+	If (Not:C34(Is Windows:C1573) && Not:C34(Is macOS:C1572))
+		This:C1470.java:=File:C1566("/usr/bin/java")
+		$javaHome:=Folder:C1567("/usr/lib/jvm/default-java")  // or using android-studio ? 
+		
+		If (Not:C34($javaHome.exists))
+			$javaHome:=Folder:C1567("/snap/android-studio/current/android-studio/jre")
+		End if 
+		
+		If ($javaHome.exists)
+			
+			This:C1470.javaHome:=$javaHome
+			This:C1470.java:=This:C1470.javaHome.file("bin/java")
+			
+		End if 
+		
+		This:C1470.success:=(This:C1470.java#Null:C1517)
+		
+		return 
+	End if 
+	
 	If (This:C1470.exe#Null:C1517)
 		
 		If (This:C1470.macOS)
@@ -581,15 +631,20 @@ Function _getKotlinc()
 	
 	If (This:C1470.exe#Null:C1517)
 		
-		If (This:C1470.macOS)
-			
-			$kotlinc:=This:C1470.exe.file("Contents/plugins/Kotlin/kotlinc/bin/kotlinc")
-			
-		Else 
-			
-			$kotlinc:=This:C1470.exe.parent.parent.file("plugins/Kotlin/kotlinc/bin/kotlinc.bat")
-			
-		End if 
+		Case of 
+			: (This:C1470.macOS)
+				
+				$kotlinc:=This:C1470.exe.file("Contents/plugins/Kotlin/kotlinc/bin/kotlinc")
+				
+			: (This:C1470.window)
+				
+				$kotlinc:=This:C1470.exe.parent.parent.file("plugins/Kotlin/kotlinc/bin/kotlinc.bat")
+				
+			Else 
+				
+				$kotlinc:=File:C1566("/snap/android-studio/current/android-studio/plugins/Kotlin/kotlinc/bin/kotlinc")
+				
+		End case 
 		
 		If ($kotlinc.exists)
 			
