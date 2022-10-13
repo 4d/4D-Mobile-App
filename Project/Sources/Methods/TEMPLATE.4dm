@@ -32,13 +32,13 @@ End if
 ASSERT:C1129($Obj_input.source#Null:C1517)
 ASSERT:C1129($Obj_input.target#Null:C1517)
 
+$Obj_input.source:=FolderFrom($Obj_input.source)
+$Obj_input.target:=FolderFrom($Obj_input.target)
+
 $Obj_output:=New object:C1471(\
 "success"; False:C215; \
 "children"; New collection:C1472; \
-"source"; String:C10($Obj_input.source))
-
-$Obj_input.source:=FolderFrom($Obj_input.source)
-$Obj_input.target:=FolderFrom($Obj_input.target)
+"source"; String:C10($Obj_input.source.platformPath))
 
 $Obj_input.target.create()
 
@@ -239,9 +239,9 @@ If ($Col_catalog#Null:C1517)
 			If ($Boo_copy)
 				
 				If (Feature.with("buildWithCmd"))
-					$File_src.copyTo($File_tgt.parent; $File_tgt.name)
+					$File_src.copyTo($File_tgt.parent; $File_tgt.fullName; fk overwrite:K87:5)
 				Else 
-					COPY DOCUMENT:C541($File_src.platformPath; $File_tgt.platformPaths; *)
+					COPY DOCUMENT:C541($File_src.platformPath; $File_tgt.platformPath; *)
 				End if 
 			Else 
 				

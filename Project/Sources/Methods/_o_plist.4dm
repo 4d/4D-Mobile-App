@@ -39,7 +39,7 @@ If ($Obj_in.domain=Null:C1517)
 		
 		If ($Obj_in.path#Null:C1517)
 			
-			$Obj_in.domain:=Folder:C1567($Obj_in.path; fk platform path:K87:2).path
+			$Obj_in.domain:=File:C1566($Obj_in.path; fk platform path:K87:2).path
 			
 		End if 
 	End if 
