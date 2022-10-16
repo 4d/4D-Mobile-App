@@ -1935,9 +1935,9 @@ Function dataSourceMenuManager()
 Function editList()
 	
 /*
-			$form:=New object(\
-						"static"; $static; \
-						"host"; This.path.hostInputControls(True))
+				$form:=New object(\
+								"static"; $static; \
+								"host"; This.path.hostInputControls(True))
 	
 $form.folder:=This.path.hostInputControls()
 $manifest:=$form.folder.file("manifest.json")
@@ -2493,6 +2493,12 @@ Function _source($item : Object) : 4D:C1709.Folder
 	If ($item.isFile)  // Archive
 		
 		$folder:=ZIP Read archive:C1637($item).root
+		
+		If ($folder.file("manifest.json").exists)
+			
+			return $folder
+			
+		End if 
 		
 		If ($folder.files().length=0)\
 			 & ($folder.folders().length>0)
