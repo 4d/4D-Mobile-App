@@ -1710,6 +1710,8 @@ Function formatMenuManager()
 	// Position according to the box
 	If ($menu.popup(This:C1470.formatBorder; $current.type).selected)
 		
+		This:C1470.format.foregroundColor:=Foreground color:K23:1
+		
 		Case of 
 				
 				//________________________________________
