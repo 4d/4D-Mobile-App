@@ -44,6 +44,11 @@ Class constructor($project : Object)
 	
 	This:C1470.checkPackage()
 	
+	This:C1470.noData:=False:C215
+	If (Feature.with("buildWithCmd"))
+		This:C1470.noData:=Bool:C1537(This:C1470.project.noData)
+	End if 
+	
 	If (Feature.disabled("androidDataSet"))
 		
 		This:C1470.file:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"projecteditor.json")
@@ -123,7 +128,7 @@ Function create()->$result : Object
 	$o:=New object:C1471("success"; True:C214)
 	
 	// MARK:CREATE DATASET
-	If (This:C1470.mustDoDataSet())
+	If (This:C1470.mustDoDataSet() && Not:C34(This:C1470.noData))
 		
 		This:C1470.postStep("dataSetGeneration")
 		
@@ -188,7 +193,7 @@ Function create()->$result : Object
 		
 	End if 
 	
-	If (Feature.disabled("androidDataSet"))
+	If (Feature.disabled("androidDataSet") && Not:C34(This:C1470.noData))
 		
 		If ($o.success)
 			
@@ -235,15 +240,19 @@ Function create()->$result : Object
 		End if 
 	End if 
 	
-	If ($o.success)
+	If (Not:C34(This:C1470.noData))
 		
-		$o:=This:C1470.androidprojectgenerator.copyGeneratedDb(This:C1470.project.project._folder)
+		If ($o.success)
+			
+			$o:=This:C1470.androidprojectgenerator.copyGeneratedDb(This:C1470.project.project._folder)
+			
+		End if 
 		
-	End if 
-	
-	If ($o.success)
-		
-		$o:=This:C1470.androidprojectgenerator.copyDataSetPictures(This:C1470.project.project._folder)
+		If ($o.success)
+			
+			$o:=This:C1470.androidprojectgenerator.copyDataSetPictures(This:C1470.project.project._folder)
+			
+		End if 
 		
 	End if 
 	
