@@ -1350,31 +1350,36 @@ Function copyKotlinInputControlFiles
 		"success"; True:C214; \
 		"errors"; New collection:C1472)
 	
-	For each ($action; $1)
+	If ($1#Null:C1517)
 		
-		If ($action.parameters#Null:C1517)
+		For each ($action; $1)
 			
-			If (Value type:C1509($action.parameters)=Is collection:K8:32)
+			If ($action.parameters#Null:C1517)
 				
-				For each ($actionParameter; $action.parameters)
+				If (Value type:C1509($action.parameters)=Is collection:K8:32)
 					
-					$handleKotlinInputControlFile:=This:C1470.handleKotlinInputControlFiles($actionParameter; $2)
-					
-					If (Not:C34($handleKotlinInputControlFile.success))
+					For each ($actionParameter; $action.parameters)
 						
-						$0.success:=False:C215
-						$0.errors.combine($handleKotlinInputControlFile.errors)
+						$handleKotlinInputControlFile:=This:C1470.handleKotlinInputControlFiles($actionParameter; $2)
 						
-						// Else : all ok
-					End if 
+						If (Not:C34($handleKotlinInputControlFile.success))
+							
+							$0.success:=False:C215
+							$0.errors.combine($handleKotlinInputControlFile.errors)
+							
+							// Else : all ok
+						End if 
+						
+					End for each 
 					
-				End for each 
+				End if 
 				
 			End if 
 			
-		End if 
+		End for each 
 		
-	End for each 
+		// Else : no action
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
