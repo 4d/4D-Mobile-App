@@ -1918,12 +1918,17 @@ Function prepareSdk
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function copySdkVersion
-	var $0 : Object
+Function copySdkVersion()->$result : Object
 	var $sdkVersion; $copyDest : 4D:C1709.File
 	var $unzippedSdk : 4D:C1709.Folder
 	
-	$0:=New object:C1471(\
+	If (Feature.with("buildWithCmd") && Bool:C1537(This:C1470.input.noSDK))
+		Folder:C1567(This:C1470.projectPath+"app/src/main/assets").file("sdkVersion").setText(String:C10(This:C1470.input.sdkVersion))
+		$result:=New object:C1471("success"; This:C1470.input.sdkVersion#Null:C1517)
+		return 
+	End if 
+	
+	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
@@ -1939,22 +1944,22 @@ Function copySdkVersion
 			
 			If ($copyDest.exists)
 				
-				$0.success:=True:C214
+				$result.success:=True:C214
 				
 			Else 
 				
 				// Copy failed
-				$0.errors.push("Could not copy sdkVersion file to destination: "+$copyDest.path)
+				$result.errors.push("Could not copy sdkVersion file to destination: "+$copyDest.path)
 				
 			End if 
 			
 		Else 
 			// Missing sdkVersion file
-			$0.errors.push("Could not find sdkVersion file at destination: "+$sdkVersion.path)
+			$result.errors.push("Could not find sdkVersion file at destination: "+$sdkVersion.path)
 			
 		End if 
 		
 	Else 
 		// Missing unzipped sdk
-		$0.errors.push("Could not find unzipped sdk folder at destination: "+$unzippedSdk.path)
+		$result.errors.push("Could not find unzipped sdk folder at destination: "+$unzippedSdk.path)
 	End if 
