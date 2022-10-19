@@ -179,7 +179,7 @@ Function defaultPath()
 			
 		Else 
 			
-			$exe:=File:C1566("/snap/bin/android-studio")
+			$exe:=File:C1566("/snap/android-studio/current/android-studio/bin/studio.sh")
 			
 	End case 
 	

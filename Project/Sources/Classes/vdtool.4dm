@@ -13,17 +13,23 @@ Class constructor()
 		
 		var $androidStudio : Text
 		
-		If (Is macOS:C1572)
-			
-			$androidStudio:=Folder:C1567($studio.exe.path+"Contents").path
-			This:C1470.classPath:=This:C1470.classPath+":"+$androidStudio+"/lib/*:"+$androidStudio+"/plugins/android/lib/*:"+$androidStudio+"/plugins/android-layoutlib/lib/*"
-			
-		Else 
-			
-			$androidStudio:=Folder:C1567($studio.exe.platformPath; fk platform path:K87:2).parent.parent.platformPath
-			This:C1470.classPath:=This:C1470.classPath+";"+$androidStudio+"lib\\*;"+$androidStudio+"plugins\\android\\lib\\*;"+$androidStudio+"plugins\\android-layoutlib\\lib\\*"
-			
-		End if 
+		Case of 
+			: (Is macOS:C1572)
+				
+				$androidStudio:=Folder:C1567($studio.exe.path+"Contents").path
+				This:C1470.classPath:=This:C1470.classPath+":"+$androidStudio+"/lib/*:"+$androidStudio+"/plugins/android/lib/*:"+$androidStudio+"/plugins/android-layoutlib/lib/*"
+				
+			: (Is Windows:C1573)
+				
+				$androidStudio:=Folder:C1567($studio.exe.platformPath; fk platform path:K87:2).parent.parent.platformPath
+				This:C1470.classPath:=This:C1470.classPath+";"+$androidStudio+"lib\\*;"+$androidStudio+"plugins\\android\\lib\\*;"+$androidStudio+"plugins\\android-layoutlib\\lib\\*"
+				
+			Else 
+				
+				$androidStudio:=File:C1566($studio.exe.path).parent.parent.path
+				This:C1470.classPath:=This:C1470.classPath+":"+$androidStudio+"/lib/*:"+$androidStudio+"/plugins/android/lib/*:"+$androidStudio+"/plugins/android-layoutlib/lib/*:"+Folder:C1567(fk resources folder:K87:11; *).folder("lib").path
+				
+		End case 
 		
 		If (Bool:C1537($studio.javaHome.exists))
 			
