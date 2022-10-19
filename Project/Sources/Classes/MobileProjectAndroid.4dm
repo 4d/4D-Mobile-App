@@ -34,20 +34,26 @@ Class constructor($project : Object)
 	This:C1470.project.remote_url:=This:C1470.remoteUrl()
 	This:C1470.project.package:=This:C1470.project.project.product.bundleIdentifier
 	
+	If (Feature.with("buildWithCmd"))
+		This:C1470.project.noData:=Bool:C1537(This:C1470.project.noData)
+		This:C1470.project.noSDK:=Bool:C1537(This:C1470.project.noSDK)
+	Else 
+		This:C1470.project.noData:=False:C215
+		This:C1470.project.noSDK:=False:C215
+	End if 
+	
 	This:C1470.project.hasRelations:=True:C214
 	This:C1470.project.hasActions:=True:C214
 	This:C1470.project.hasDataSet:=True:C214
 	This:C1470.project.hasOpenUrlAction:=Feature.with("openURLAction")
 	This:C1470.project.hasKotlinInputControls:=Feature.with("inputControlWithCodeAndroid")
+	This:C1470.project.hasBuildWithCmd:=Feature.with("buildWithCmd")
+	This:C1470.project.hasNoData:=This:C1470.project.noData
+	This:C1470.project.hasNoSDK:=This:C1470.project.noSDK
 	
 	This:C1470.project.debugMode:=((Shift down:C543) && (Bool:C1537(dev_Matrix)=True:C214)) ? True:C214 : False:C215
 	
 	This:C1470.checkPackage()
-	
-	This:C1470.noData:=False:C215
-	If (Feature.with("buildWithCmd"))
-		This:C1470.noData:=Bool:C1537(This:C1470.project.noData)
-	End if 
 	
 	If (Feature.disabled("androidDataSet"))
 		
@@ -128,7 +134,7 @@ Function create()->$result : Object
 	$o:=New object:C1471("success"; True:C214)
 	
 	// MARK:CREATE DATASET
-	If (This:C1470.mustDoDataSet() && Not:C34(This:C1470.noData))
+	If (This:C1470.mustDoDataSet() && Not:C34(This:C1470.project.noData))
 		
 		This:C1470.postStep("dataSetGeneration")
 		
@@ -193,7 +199,7 @@ Function create()->$result : Object
 		
 	End if 
 	
-	If (Feature.disabled("androidDataSet") && Not:C34(This:C1470.noData))
+	If (Feature.disabled("androidDataSet") && Not:C34(This:C1470.project.noData))
 		
 		If ($o.success)
 			
@@ -240,7 +246,7 @@ Function create()->$result : Object
 		End if 
 	End if 
 	
-	If (Not:C34(This:C1470.noData))
+	If (Not:C34(This:C1470.project.noData))
 		
 		If ($o.success)
 			
