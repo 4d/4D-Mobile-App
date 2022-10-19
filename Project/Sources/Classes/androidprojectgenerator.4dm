@@ -1765,7 +1765,7 @@ Function createIconAssets
 	
 	// Generate asset using first table letter
 	var $file : 4D:C1709.File
-	$file:=File:C1566("/RESOURCES/Images/missingIcon.svg")
+	$file:=File:C1566("/RESOURCES/images/missingIcon.svg")
 	
 	var $svg : cs:C1710.svg
 	$svg:=cs:C1710.svg.new($file)

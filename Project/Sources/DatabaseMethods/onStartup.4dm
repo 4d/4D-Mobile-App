@@ -14,7 +14,7 @@ If (Not:C34(Is compiled mode:C492))
 		ON EVENT CALL:C190("quickOpenEventHandler"; "$quickOpenListener")
 		
 		// Add custom actions
-		READ PICTURE FILE:C678(File:C1566("/RESOURCES/Images/phone-blue.png").platformPath; $icon)
+		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/phone-blue.png").platformPath; $icon)
 		$o:=New object:C1471(\
 			"name"; "Open Mobile Project"; \
 			"formula"; Formula:C1597(_OPEN_MOBILE_PROJECT); \
@@ -27,14 +27,14 @@ If (Not:C34(Is compiled mode:C492))
 			"icon"; $icon)
 		EXECUTE METHOD:C1007("quickOpenPushAction"; *; $o)
 		
-		READ PICTURE FILE:C678(File:C1566("/RESOURCES/Images/phone-orange.png").platformPath; $icon)
+		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/phone-orange.png").platformPath; $icon)
 		$o:=New object:C1471(\
 			"name"; "Mobile Project folder"; \
 			"formula"; Formula:C1597(SHOW ON DISK:C922(Folder:C1567(fk database folder:K87:14).folder("Mobile Projects").platformPath; *)); \
 			"icon"; $icon)
 		EXECUTE METHOD:C1007("quickOpenPushAction"; *; $o)
 		
-		READ PICTURE FILE:C678(File:C1566("/RESOURCES/Images/phone-red.png").platformPath; $icon)
+		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/phone-red.png").platformPath; $icon)
 		$o:=New object:C1471(\
 			"name"; "Test"; \
 			"formula"; Formula:C1597(00_TESTS); \

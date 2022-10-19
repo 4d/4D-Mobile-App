@@ -179,7 +179,7 @@ Case of
 				
 				If (Bool:C1537(JSON Parse:C1218($o.getText()).noUpdate))
 					
-					$menu.icon("Images/light_off.png")
+					$menu.icon("images/light_off.png")
 					
 				End if 
 			End if 
@@ -194,7 +194,7 @@ Case of
 					
 					If (Bool:C1537(JSON Parse:C1218($o.getText()).noUpdate))
 						
-						$menu.icon("Images/light_off.png")
+						$menu.icon("images/light_off.png")
 						
 					End if 
 				End if 

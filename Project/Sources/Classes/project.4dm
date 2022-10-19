@@ -148,7 +148,7 @@ Function prepare($icon : Picture)
 	If (Picture size:C356($icon)=0)
 		
 		// Get the default icon
-		READ PICTURE FILE:C678(File:C1566("/RESOURCES/Images/4d.png").platformPath; $icon)
+		READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/4d.png").platformPath; $icon)
 		
 	End if 
 	
@@ -226,7 +226,7 @@ Function AppIconSet($icon : Picture)
 	End if 
 	
 	// Transparency is not allowed, so we add a white background.
-	READ PICTURE FILE:C678(File:C1566("/RESOURCES/Images/blanck.png").platformPath; $blank)
+	READ PICTURE FILE:C678(File:C1566("/RESOURCES/images/blanck.png").platformPath; $blank)
 	COMBINE PICTURES:C987($icon; $blank; Superimposition:K61:10; $icon; (1024-$width)\2; (1024-$height)\2)
 	
 	$folder:=This:C1470._folder.folder("Assets.xcassets/AppIcon.appiconset")

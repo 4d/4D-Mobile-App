@@ -579,7 +579,7 @@ Case of
 		//________________________________________
 	: (True:C214)  // Volume from path
 		
-		$t:=Get 4D folder:C485(Current resources folder:K5:16)+"Images"+Folder separator:K24:12+"action.png"
+		$t:=Get 4D folder:C485(Current resources folder:K5:16)+"images"+Folder separator:K24:12+"action.png"
 		
 		$t:="Z:\\Bases_Bugs\\Andrei\\ACI0094320"
 		
