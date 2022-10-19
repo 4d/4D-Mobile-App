@@ -1435,25 +1435,17 @@ Function handleKotlinInputControlFiles
 								
 							Else 
 								
-								// check for ZIP
+								// Check for zip
 								
-								var $customInputControlZipFile : 4D:C1709.File
+								var $Obj_findZipByManifestName : Object
 								
-								$customInputControlZipFile:=$inputControlsFolder.file($inputControlName)
+								$Obj_findZipByManifestName:=This:C1470.findZipByManifestName($inputControlsFolder; $inputControlName)
 								
-								If ($customInputControlZipFile.exists)
+								If ($Obj_findZipByManifestName.success)
 									
-									var $archive : 4D:C1709.ZipArchive
-									
-									$archive:=ZIP Read archive:C1637($customInputControlZipFile)
-									
-									var $unzipDest : 4D:C1709.Folder
-									
-									$unzipDest:=$archive.root.copyTo($customInputControlZipFile.parent; "android_temporary_"+$customInputControlZipFile.name; fk overwrite:K87:5)
-									
-									If ($unzipDest.exists)
+									If ($Obj_findZipByManifestName.folder#Null:C1517)
 										
-										$copyInputControlFilesToApp:=This:C1470.copyInputControlFilesToApp($unzipDest; $packageName)
+										$copyInputControlFilesToApp:=This:C1470.copyInputControlFilesToApp($Obj_findZipByManifestName.folder; $packageName)
 										
 										If (Not:C34($copyInputControlFilesToApp.success))
 											
@@ -1463,19 +1455,15 @@ Function handleKotlinInputControlFiles
 											// Else : all ok
 										End if 
 										
-										$unzipDest.delete(Delete with contents:K24:24)
-										
-									Else 
-										// error
-										$0.success:=False:C215
-										$0.errors.push("Could not unzip to destination: "+$unzipDest.path)
+										$Obj_findZipByManifestName.folder.delete(Delete with contents:K24:24)
 										
 									End if 
 									
 								Else 
-									// error
+									
 									$0.success:=False:C215
-									$0.errors.push("Input Control \""+$format+"\" couldn't be found")
+									$0.errors.combine($Obj_findZipByManifestName.errors)
+									
 								End if 
 								
 							End if 
@@ -1665,6 +1653,93 @@ Function findFolderByManifestName
 		
 	End if 
 	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function findZipByManifestName
+	var $0 : Object  // returns unzipped destination folder
+	var $1 : 4D:C1709.Folder  // folder to browse
+	var $2 : Text  // name value to be found in manifest.json file
+	
+	$0:=New object:C1471(\
+		"success"; False:C215; \
+		"errors"; New collection:C1472)
+	
+	var $file : 4D:C1709.File
+	
+	var $found : Boolean
+	
+	$found:=False:C215
+	
+	If ($1#Null:C1517)
+		
+		If ($1.exists)
+			
+			For each ($file; $1.files()) Until ($found)
+				
+				If ($file.extension=".zip")
+					
+					var $archive : 4D:C1709.ZipArchive
+					
+					$archive:=ZIP Read archive:C1637($file)
+					
+					If ($archive#Null:C1517)
+						
+						var $unzipDest : 4D:C1709.Folder
+						
+						$unzipDest:=$archive.root.copyTo($1; "android_temporary_"+$file.name; fk overwrite:K87:5)
+						
+						If ($unzipDest.exists)
+							
+							var $isTargetZip : Boolean
+							
+							$isTargetZip:=False:C215
+							
+							var $archiveChild : 4D:C1709.File
+							
+							For each ($archiveChild; $unzipDest.files())
+								
+								If ($archiveChild.fullName="manifest.json")
+									
+									var $manifestContent : Object
+									
+									$manifestContent:=JSON Parse:C1218($archiveChild.getText())
+									
+									If (Value type:C1509($manifestContent.name)=Is text:K8:3)
+										
+										If ($manifestContent.name=$2)
+											
+											$found:=True:C214
+											$isTargetZip:=True:C214
+											$0.success:=True:C214
+											$0.folder:=$unzipDest
+											
+										End if 
+										
+									End if 
+									
+								End if 
+								
+							End for each 
+							
+							If (Not:C34($isTargetZip))
+								
+								$unzipDest.delete(Delete with contents:K24:24)
+								
+								// Else: will be deleted in calling function
+							End if 
+							
+						End if 
+						
+						// Else : not a zip archive
+					End if 
+					
+				End if 
+				
+			End for each 
+			
+		End if 
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
