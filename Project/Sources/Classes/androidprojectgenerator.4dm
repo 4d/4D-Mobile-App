@@ -1522,7 +1522,7 @@ Function handleKotlinInputControlFiles
 				
 				$format:=$actionParameter.format
 				
-				If ($format#"")
+				If ($format#"" && $actionParameter.source=Null:C1517)  // If source is not null, it's a custom input control
 					
 					If (Substring:C12($format; 1; 1)="/")
 						
