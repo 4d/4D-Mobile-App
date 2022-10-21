@@ -18,51 +18,27 @@
 
         <action
             android:id="@+id/action_list_to_viewpager"
-            app:destination="@id/{{tableName_lowercase}}ViewPager"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/{{tableName_lowercase}}ViewPager" />
 
         <action
             android:id="@+id/action_list_to_list_relation"
-            app:destination="@id/relationList"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/relationList" />
 
         <action
             android:id="@+id/action_list_to_detail_relation"
-            app:destination="@id/relationDetail"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/relationDetail" />
 
         <action
             android:id="@+id/to_action_form"
-            app:destination="@id/actionParametersFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/actionParametersFragment" />
 
         <action
             android:id="@+id/to_pending_tasks"
-            app:destination="@id/tasksFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/tasksFragment" />
         
         <action
             android:id="@+id/to_action_web_view"
-            app:destination="@id/actionWebViewFragment"
-            app:enterAnim="@anim/slide_in_bottom"
-            app:exitAnim="@anim/slide_out_top"
-            app:popEnterAnim="@anim/slide_in_top"
-            app:popExitAnim="@anim/slide_out_bottom" />
+            app:destination="@id/actionWebViewFragment" />
 
         <argument
             android:name="tableName"
@@ -78,43 +54,23 @@
 
         <action
             android:id="@+id/action_detail_to_list_relation"
-            app:destination="@id/relationList"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/relationList" />
 
         <action
             android:id="@+id/action_detail_to_detail_relation"
-            app:destination="@id/relationDetail"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/relationDetail" />
 
         <action
             android:id="@+id/to_action_form"
-            app:destination="@id/actionParametersFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/actionParametersFragment" />
 
         <action
             android:id="@+id/to_pending_tasks"
-            app:destination="@id/tasksFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/tasksFragment" />
 
         <action
             android:id="@+id/to_action_web_view"
-            app:destination="@id/actionWebViewFragment"
-            app:enterAnim="@anim/slide_in_bottom"
-            app:exitAnim="@anim/slide_out_top"
-            app:popEnterAnim="@anim/slide_in_top"
-            app:popExitAnim="@anim/slide_out_bottom" />
+            app:destination="@id/actionWebViewFragment" />
 
         <argument
             android:name="key"
@@ -149,51 +105,27 @@
 
         <action
             android:id="@+id/action_list_to_viewpager"
-            app:destination="@id/{{tableName_lowercase}}ViewPager"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/{{tableName_lowercase}}ViewPager" />
 
         <action
             android:id="@+id/action_list_to_list_relation"
-            app:destination="@id/relationList"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/relationList" />
 
         <action
             android:id="@+id/action_list_to_detail_relation"
-            app:destination="@id/relationDetail"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/relationDetail" />
 
         <action
             android:id="@+id/to_action_form"
-            app:destination="@id/actionParametersFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/actionParametersFragment" />
                     
         <action
             android:id="@+id/to_pending_tasks"
-            app:destination="@id/tasksFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/tasksFragment" />
 
         <action
             android:id="@+id/to_action_web_view"
-            app:destination="@id/actionWebViewFragment"
-            app:enterAnim="@anim/slide_in_bottom"
-            app:exitAnim="@anim/slide_out_top"
-            app:popEnterAnim="@anim/slide_in_top"
-            app:popExitAnim="@anim/slide_out_bottom" />
+            app:destination="@id/actionWebViewFragment" />
 
         <argument
             android:name="relationName"
@@ -223,43 +155,23 @@
 
         <action
             android:id="@+id/action_detail_to_list_relation"
-            app:destination="@id/relationList"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/relationList" />
 
         <action
             android:id="@+id/action_detail_to_detail_relation"
-            app:destination="@id/relationDetail"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/relationDetail" />
 
         <action
             android:id="@+id/to_action_form"
-            app:destination="@id/actionParametersFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/actionParametersFragment" />
         
         <action
             android:id="@+id/to_pending_tasks"
-            app:destination="@id/tasksFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/tasksFragment" />
 
         <action
             android:id="@+id/to_action_web_view"
-            app:destination="@id/actionWebViewFragment"
-            app:enterAnim="@anim/slide_in_bottom"
-            app:exitAnim="@anim/slide_out_top"
-            app:popEnterAnim="@anim/slide_in_top"
-            app:popExitAnim="@anim/slide_out_bottom" />
+            app:destination="@id/actionWebViewFragment" />
 
         <argument
             android:name="tableName"
@@ -281,11 +193,11 @@
 
         <action
             android:id="@+id/action_parameters_to_scanner"
-            app:destination="@id/barCodeFragment"
-            app:enterAnim="@anim/slide_in_bottom"
-            app:exitAnim="@anim/slide_out_top"
-            app:popEnterAnim="@anim/slide_in_top"
-            app:popExitAnim="@anim/slide_out_bottom" />
+            app:destination="@id/barCodeFragment" />
+
+        <action
+            android:id="@+id/action_parameters_to_push_input_control"
+            app:destination="@id/input_control_push" />
 
         <argument
             android:name="tableName"
@@ -328,16 +240,26 @@
     </fragment>
 
     <fragment
+        android:id="@+id/input_control_push"
+        android:name="com.qmobile.qmobileui.action.inputcontrols.PushInputControlFragment">
+
+        <argument
+            android:name="name"
+            app:argType="string" />
+
+        <argument
+            android:name="mandatory"
+            app:argType="boolean" />
+
+    </fragment>
+
+    <fragment
         android:id="@+id/tasksFragment"
         android:name="com.qmobile.qmobileui.action.pendingtasks.TasksFragment">
 
         <action
             android:id="@+id/to_action_form"
-            app:destination="@id/actionParametersFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/actionParametersFragment" />
 
         <argument
             android:name="tableName"

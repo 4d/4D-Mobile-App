@@ -33,7 +33,7 @@
         </activity>
 
         <activity android:name="com.qmobile.qmobileui.activity.mainactivity.MainActivity"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustPan"/>
 
         <meta-data
             android:name="com.qmobile.qmobileui.glide.AppGlideModule"
