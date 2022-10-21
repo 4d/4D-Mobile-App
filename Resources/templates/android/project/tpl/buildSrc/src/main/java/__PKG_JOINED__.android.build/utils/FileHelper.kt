@@ -47,7 +47,7 @@ private fun getAppInfoFile(): File? {
     if (file.exists()) {
         return file
     }
-    println("app_info.json file does not exists : ${file.absolutePath}")
+    println("appInfo.json file does not exists : ${file.absolutePath}")
     return null
 }
 

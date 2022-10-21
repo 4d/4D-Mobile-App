@@ -13,19 +13,11 @@
 
         <action
             android:id="@+id/to_action_form"
-            app:destination="@id/actionParametersFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/actionParametersFragment" />
 
         <action
             android:id="@+id/to_pending_tasks"
-            app:destination="@id/tasksFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/tasksFragment" />
 
     </fragment>
 
@@ -35,11 +27,7 @@
 
         <action
             android:id="@+id/to_action_form"
-            app:destination="@id/actionParametersFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/actionParametersFragment" />
 
         <argument
             android:name="tableName"
@@ -57,11 +45,11 @@
 
         <action
             android:id="@+id/action_parameters_to_scanner"
-            app:destination="@id/barCodeFragment"
-            app:enterAnim="@anim/slide_in_bottom"
-            app:exitAnim="@anim/slide_out_top"
-            app:popEnterAnim="@anim/slide_in_top"
-            app:popExitAnim="@anim/slide_out_bottom" />
+            app:destination="@id/barCodeFragment" />
+
+        <action
+            android:id="@+id/action_parameters_to_push_input_control"
+            app:destination="@id/input_control_push" />
 
         <argument
             android:name="tableName"
@@ -100,6 +88,20 @@
         <argument
             android:name="position"
             app:argType="integer" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/input_control_push"
+        android:name="com.qmobile.qmobileui.action.inputcontrols.PushInputControlFragment">
+
+        <argument
+            android:name="name"
+            app:argType="string" />
+
+        <argument
+            android:name="mandatory"
+            app:argType="boolean" />
 
     </fragment>
 

@@ -9,11 +9,11 @@ package {{package}}.android.build.utils
 import org.json.JSONArray
 
 fun integrateGlobalStamp(initialGlobalStamp: Int) {
-    println("Updating initialGlobalStamp value in app_info.json file with value $initialGlobalStamp")
+    println("Updating initialGlobalStamp value in appInfo.json file with value $initialGlobalStamp")
     addToAppinfo(INITIAL_GLOBALSTAMP_KEY, initialGlobalStamp)
 }
 
 fun integrateDumpedTables(tableNames: List<String>) {
-    println("Updating dumpedTables value in app_info.json file with value ${tableNames.joinToString()}")
+    println("Updating dumpedTables value in appInfo.json file with value ${tableNames.joinToString()}")
     addToAppinfo(DUMPED_TABLES_KEY, JSONArray(tableNames))
 }

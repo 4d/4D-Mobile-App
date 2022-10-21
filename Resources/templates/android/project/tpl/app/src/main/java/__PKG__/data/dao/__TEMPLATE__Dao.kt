@@ -17,6 +17,7 @@ import androidx.sqlite.db.SupportSQLiteQuery
 import com.qmobile.qmobiledatastore.dao.BaseDao
 import {{package}}.data.model.entity.{{tableName}}
 import {{package}}.data.model.entity.{{tableName}}RoomEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 abstract class {{tableName}}Dao :
@@ -35,6 +36,9 @@ abstract class {{tableName}}Dao :
 
     @Query("DELETE FROM {{tableName}}")
     abstract override suspend fun deleteAll()
+
+    @RawQuery(observedEntities = [{{tableName}}::class])
+    abstract override fun getAllFlow(sqLiteQuery: SupportSQLiteQuery): Flow<List<{{tableName}}RoomEntity>>
 
     @Transaction
     @RawQuery(observedEntities = [{{tableName}}::class])

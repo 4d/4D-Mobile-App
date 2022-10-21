@@ -45,20 +45,20 @@ class CustomRelationHelper : GenericRelationHelper {
     override fun relationsEquals(oldItem: RoomEntity, newItem: RoomEntity): Boolean {   
         {{#relations_many_to_one}}
         {{#isAlias}}
-        if (oldItem is {{relation_source}}RoomEntity && oldItem.{{relation_name}}?.{{pathToOneWithoutFirst}}?.__STAMP != (newItem as {{relation_source}}RoomEntity?)?.{{relation_name}}?.{{pathToOneWithoutFirst}}?.__STAMP) {
+        if (oldItem is {{relation_source}}RoomEntity && oldItem.{{relation_name}}?.{{pathToOneWithoutFirst}}?.__STAMP != (newItem as? {{relation_source}}RoomEntity)?.{{relation_name}}?.{{pathToOneWithoutFirst}}?.__STAMP) {
         {{/isAlias}}
         {{^isAlias}}
-        if (oldItem is {{relation_source}}RoomEntity && oldItem.{{relation_name}}?.__STAMP != (newItem as {{relation_source}}RoomEntity?)?.{{relation_name}}?.__STAMP) {
+        if (oldItem is {{relation_source}}RoomEntity && oldItem.{{relation_name}}?.__STAMP != (newItem as? {{relation_source}}RoomEntity)?.{{relation_name}}?.__STAMP) {
         {{/isAlias}}
             return false
         }
         {{/relations_many_to_one}}
         {{#relations_one_to_many}}
         {{#isAlias}}
-        if (oldItem is {{relation_source}}RoomEntity && oldItem.{{relation_name}}?.{{pathToManyWithoutFirst}}?.size != (newItem as {{relation_source}}RoomEntity?)?.{{relation_name}}?.{{pathToManyWithoutFirst}}?.size) {
+        if (oldItem is {{relation_source}}RoomEntity && oldItem.{{relation_name}}?.{{pathToManyWithoutFirst}}?.size != (newItem as? {{relation_source}}RoomEntity)?.{{relation_name}}?.{{pathToManyWithoutFirst}}?.size) {
         {{/isAlias}}
         {{^isAlias}}
-        if (oldItem is {{relation_source}}RoomEntity && oldItem.{{relation_name}}?.size != (newItem as {{relation_source}}RoomEntity?)?.{{relation_name}}?.size) {
+        if (oldItem is {{relation_source}}RoomEntity && oldItem.{{relation_name}}?.size != (newItem as? {{relation_source}}RoomEntity)?.{{relation_name}}?.size) {
         {{/isAlias}}
             return false
         }
