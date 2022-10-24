@@ -47,7 +47,7 @@ Function makeTheChoice
 			//$pathForm:=_o_tmpl_form($Txt_name; String($Obj_template.projectTag))
 			$pathForm:=cs:C1710.tmpl.new().getSources($Txt_name; String:C10($Obj_template.projectTag))
 			
-			If (Path to object:C1547($Txt_name).extension=SHARED.archiveExtension)  // Archive
+			If (GetFileExtension($Txt_name)=SHARED.archiveExtension)  // Archive
 				
 				// Extract
 				$copyResult:=$pathForm.copyTo(Folder:C1567(Temporary folder:C486; fk platform path:K87:2); "template"; fk overwrite:K87:5)

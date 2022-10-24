@@ -278,11 +278,10 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 			
 			If (String:C10($Obj_param.path)#"")
 				
-				$Obj_:=Path to object:C1547($Obj_param.path)
-				$Obj_.isFolder:=True:C214  // Ensure ensure end separator
-				$Obj_param.path:=Object to path:C1548($Obj_)
+				$Obj_:=Folder:C1567($Obj_param.path)
+				$Obj_:=Folder:C1567($Obj_.platformPath+SHARED.thirdParty; fk platform path:K87:2)
 				
-				If (Folder:C1567($Obj_param.path+SHARED.thirdParty; fk platform path:K87:2).exists)  // well known sdk path
+				If ($Obj_.exists)  // well known sdk path
 					
 					var $cacheFolder : 4D:C1709.Folder
 					$cacheFolder:=cs:C1710.path.new().userHome().folder("Library/Caches")
@@ -301,7 +300,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 						
 					End if 
 					
-					$Txt_cmd:="mv -f "+str_singleQuoted(Convert path system to POSIX:C1106($Obj_param.path+SHARED.thirdParty))\
+					$Txt_cmd:="mv -f "+str_singleQuoted($Obj_.path)\
 						+" "+str_singleQuoted($cacheFolder.path)
 					
 					LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
@@ -335,7 +334,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 			$sdkVersionFile:=New object:C1471("exists"; False:C215)
 			
 			var $isFolder : Boolean
-			$isFolder:=Path to object:C1547($Obj_param.file).isFolder
+			$isFolder:=TestPathName($Obj_param.file)=Is a folder:K24:2
 			
 			Case of 
 					

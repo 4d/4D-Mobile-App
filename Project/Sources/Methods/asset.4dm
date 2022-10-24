@@ -535,7 +535,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 													
 												Else 
 													
-													$Obj_out.errors.push("Failed to create thumbnail for "+$sourceFile.platformPath+" with size "+JSON Stringify:C1217($Obj_in.size)+" and scale "+$Lon_scale)
+													$Obj_out.errors.push("Failed to create thumbnail for "+String:C10($sourceFile.platformPath)+" with size "+JSON Stringify:C1217($Obj_in.size)+" and scale "+String:C10($Lon_scale))
 													
 												End if 
 											End for each 

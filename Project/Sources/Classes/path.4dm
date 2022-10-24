@@ -404,8 +404,13 @@ Function products($create : Boolean) : 4D:C1709.Folder  // Products folder
 	var $o : Object
 	
 	//#WARNING - Folder(Database folder;*).parent = Null
-	$o:=Path to object:C1547(Get 4D folder:C485(Database folder:K5:14; *))
-	This:C1470.target:=Folder:C1567($o.parentFolder+$o.name+" - Mobile"; fk platform path:K87:2)
+	If (Feature.with("buildWithCmd"))
+		$o:=Folder:C1567(Folder:C1567(Database folder:K5:14; *).platformPath; fk platform path:K87:2)
+		This:C1470.target:=$o.parent.folder($o.fullName+" - Mobile")
+	Else 
+		$o:=Path to object:C1547(Get 4D folder:C485(Database folder:K5:14; *))  // not server l compliant
+		This:C1470.target:=Folder:C1567($o.parentFolder+$o.name+" - Mobile"; fk platform path:K87:2)
+	End if 
 	
 	If (Count parameters:C259>=1)
 		
@@ -743,7 +748,7 @@ Function _getResource($relativePath : Text; $type : Text)->$target : Object
 				//……………………………………………………………………………
 		End case 
 		
-		If (Path to object:C1547($relativePath).extension=SHARED.archiveExtension)
+		If (GetFileExtension($relativePath)=SHARED.archiveExtension)
 			
 /* START HIDING ERRORS */
 			$error:=cs:C1710.error.new().hide()

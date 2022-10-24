@@ -642,7 +642,7 @@ Case of
 		
 		If ($Obj_result.success)
 			
-			$Obj_result:=_o_plist(New object:C1471(\
+			$Obj_result:=plistconvert(New object:C1471(\
 				"action"; "object"; \
 				"domain"; $Obj_result.folder.file("project.pbxproj").path))
 			
@@ -663,7 +663,7 @@ Case of
 				$Obj_param.format:="openstep"
 				$Obj_param.domain:=$Obj_result.folder.file("project.pbxproj").path
 				
-				$Obj_result:=_o_plist($Obj_param)
+				$Obj_result:=plistconvert($Obj_param)
 				
 			Else 
 				

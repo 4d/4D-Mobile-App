@@ -245,7 +245,7 @@ Function iconManager()->$allow : Integer
 					If ((OK=0) && Is macOS:C1572)
 						
 						// Accept applications
-						OK:=Num:C11(Path to object:C1547(DOCUMENT).extension=".app")
+						OK:=Num:C11(GetFileExtension(DOCUMENT)=".app")
 						
 					End if 
 				End if 

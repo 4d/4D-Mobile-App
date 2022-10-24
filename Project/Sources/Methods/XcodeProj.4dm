@@ -82,7 +82,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 				If ($Obj_out.success)
 					
 					$Obj_file:=$Obj_out.folder.file("project.pbxproj")
-					$Obj_out:=_o_plist(New object:C1471(\
+					$Obj_out:=plistconvert(New object:C1471(\
 						"action"; "object"; \
 						"path"; $Obj_file.platformPath))
 					$Obj_out.path:=$Obj_file.platformPath
@@ -117,7 +117,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 					
 				End if 
 				
-				$Obj_out:=_o_plist(New object:C1471(\
+				$Obj_out:=plistconvert(New object:C1471(\
 					"action"; "fromobject"; \
 					"object"; $Obj_in.object; \
 					"format"; "openstep"; \
@@ -1053,7 +1053,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 			
 			$Obj_out.success:=True:C214
 			
-			$Obj_in.extension:=Path to object:C1547($Obj_in.filename).extension
+			$Obj_in.extension:=GetFileExtension($Obj_in.filename)
 			
 			Case of 
 					

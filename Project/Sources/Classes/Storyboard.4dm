@@ -156,7 +156,7 @@ Function format($Obj_in : Object)->$Obj_out : Object  // MAC ONLY
 				
 				$File_:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).file(Generate UUID:C1066+"ibtool.plist")
 				$File_.setText($Txt_out)
-				$Obj_out:=_o_plist(New object:C1471(\
+				$Obj_out:=plistconvert(New object:C1471(\
 					"action"; "object"; \
 					"domain"; $File_.path))
 				$File_.delete()  // delete temporary file
@@ -222,18 +222,18 @@ If (Length($Txt_out)>0)
 var $File_ : Object
 $File_:=Folder(Temporary folder; fk platform path).file(Generate UUID+"ibtool.plist")
 $File_.setText($Txt_out)
-		$Obj_out:=_o_plist(New object(\
-				"action"; "object"; \
-				"domain"; $File_.path))
+	$Obj_out:=_o_plist(New object(\
+						"action"; "object"; \
+						"domain"; $File_.path))
 $File_.delete()
 	
-		If (($Obj_out.success)\
-				 & ($Obj_out.value#Null))
+	If (($Obj_out.success)\
+						 & ($Obj_out.value#Null))
 	
 $Obj_out.version:=String($Obj_out.value["com.apple.ibtool.version"]["bundle-version"])
 	
-End if 
-End if 
+End if
+End if
 End if */
 	
 	
@@ -324,7 +324,7 @@ Function colorAssetFix($theme : Object)->$Obj_out : Object
 			// write if there is one named colors (could also do it only if one attribute change)
 			
 			//_o_doc_UNLOCK_DIRECTORY(New object(\
-				"path"; $File_.parent.platformPath))
+								"path"; $File_.parent.platformPath))
 			
 			cs:C1710.lep.new().unlockDirectory($File_.parent)
 			

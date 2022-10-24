@@ -10,41 +10,41 @@ If multiple devices are booted when the "booted" device is selected, simctl
 will choose one of them.
 
 Subcmds (those used are preceded by a dash):
-  create              Create a new device.
-  clone               Clone an existing device.
-  upgrade             Upgrade a device to a newer runtime.
+create              Create a new device.
+clone               Clone an existing device.
+upgrade             Upgrade a device to a newer runtime.
 - delete              Delete spcified devices, unavailable devices, or all devices.
-  pair                Create a new watch and phone pair.
-  unpair              Unpair a watch and phone pair.
-  pair_activate       Set a given pair as active.
+pair                Create a new watch and phone pair.
+unpair              Unpair a watch and phone pair.
+pair_activate       Set a given pair as active.
 - erase               Erase a device's contents and settings.
 - boot                Boot a device.
 - shutdown            Shutdown a device.
-  rename              Rename a device.
-  getenv              Print an environment variable from a running device.
+rename              Rename a device.
+getenv              Print an environment variable from a running device.
 - openurl             Open a URL in a device.
-  addmedia            Add photos, live photos, videos, or contacts to the library of a device.
+addmedia            Add photos, live photos, videos, or contacts to the library of a device.
 - install             Install an app on a device.
 - uninstall           Uninstall an app from a device.
 - get_app_container   Print the path of the installed app's container
-  install_app_data    Install an xcappdata package to a device, replacing the current contents of the container.
+install_app_data    Install an xcappdata package to a device, replacing the current contents of the container.
 - launch              Launch an application by identifier on a device.
 - terminate           Terminate an application by identifier on a device.
-  spawn               Spawn a process by executing a given executable on a device.
+spawn               Spawn a process by executing a given executable on a device.
 - list                List available devices, device types, runtimes, or device pairs.
-  icloud_sync         Trigger iCloud sync on a device.
-  pbsync              Sync the pasteboard content from one pasteboard to another.
-  pbcopy              Copy standard input onto the device pasteboard.
-  pbpaste             Print the contents of the device's pasteboard to standard output.
-  help                Prints the usage for a given subcmd.
-  io                  Set up a device IO operation.
-  diagnose            Collect diagnostic information and logs.
-  logverbose          enable or disable verbose logging for a device
-  status_bar          Set or clear status bar overrides
-  ui                  Get or Set UI options
-  push                Send a simulated push notification
-  privacy             Grant, revoke, or reset privacy and permissions
-  keychain            Manipulate a device's keychain
+icloud_sync         Trigger iCloud sync on a device.
+pbsync              Sync the pasteboard content from one pasteboard to another.
+pbcopy              Copy standard input onto the device pasteboard.
+pbpaste             Print the contents of the device's pasteboard to standard output.
+help                Prints the usage for a given subcmd.
+io                  Set up a device IO operation.
+diagnose            Collect diagnostic information and logs.
+logverbose          enable or disable verbose logging for a device
+status_bar          Set or clear status bar overrides
+ui                  Get or Set UI options
+push                Send a simulated push notification
+privacy             Grant, revoke, or reset privacy and permissions
+keychain            Manipulate a device's keychain
 */
 
 Class extends lep
@@ -912,7 +912,7 @@ Function deviceApp($Obj_in : Object)->$Obj_out : Object
 							
 							If ($File_.exists)
 								
-								$o:=_o_plist(New object:C1471(\
+								$o:=plistconvert(New object:C1471(\
 									"action"; "object"; \
 									"path"; $File_.platformPath))
 								
@@ -945,7 +945,7 @@ Function deviceApp($Obj_in : Object)->$Obj_out : Object
 					
 					If ($File_.exists)
 						
-						$o:=_o_plist(New object:C1471(\
+						$o:=plistconvert(New object:C1471(\
 							"action"; "object"; \
 							"path"; $File_))
 						

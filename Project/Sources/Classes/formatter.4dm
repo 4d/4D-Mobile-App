@@ -128,7 +128,7 @@ Function sources($name : Text)->$sources : 4D:C1709.Folder
 		
 		$name:=Delete string:C232($name; 1; 1)  // Remove initial slash
 		
-		If (Path to object:C1547($name).extension=SHARED.archiveExtension)  // Archive
+		If (GetFileExtension($name)=SHARED.archiveExtension)  // Archive
 			
 			$error:=cs:C1710.error.new().hide()
 			$archive:=ZIP Read archive:C1637(cs:C1710.path.new().hostFormatters().file($name))
@@ -140,7 +140,7 @@ Function sources($name : Text)->$sources : 4D:C1709.Folder
 				
 				// Deal with archives that have an additional folder in the root
 				// of the same name as the archive
-				$name:=Path to object:C1547($name).name  // Remove the extension
+				$name:=GetFileName($name)  // Remove the extension
 				
 				If ($sources.folder($name).exists)
 					

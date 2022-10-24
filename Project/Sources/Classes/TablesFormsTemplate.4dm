@@ -62,7 +62,7 @@ Function doRun()->$Obj_out : Object
 			
 			If (Bool:C1537($pathForm.exists))
 				
-				If (Path to object:C1547($t).extension=SHARED.archiveExtension)  // Archive
+				If (GetFileExtension($t)=SHARED.archiveExtension)  // Archive
 					
 					// Extract
 					$folder:=$pathForm.copyTo(Folder:C1567(Temporary folder:C486; fk platform path:K87:2); "template"; fk overwrite:K87:5)

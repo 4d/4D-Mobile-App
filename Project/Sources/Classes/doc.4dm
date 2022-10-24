@@ -101,17 +101,7 @@ Class constructor($target; $reference)
 					
 				End if 
 				
-				If (Path to object:C1547(This:C1470.platformPath).isFolder)
-					
-					// Folder
-					This:C1470.target:=Folder:C1567(This:C1470.platformPath; fk platform path:K87:2)
-					
-				Else 
-					
-					// File
-					This:C1470.target:=File:C1566(This:C1470.platformPath; fk platform path:K87:2)
-					
-				End if 
+				This:C1470.target:=FileOrFolderFrom(This:C1470.platformPath)
 				
 				//______________________________________________________
 			Else 

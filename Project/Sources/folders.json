@@ -79,7 +79,6 @@
 			"_o_err",
 			"_o_listbox",
 			"_o_picture",
-			"_o_plist",
 			"_o_rest_isValidField",
 			"_o_static",
 			"_o_structure",
@@ -273,6 +272,7 @@
 			"colors",
 			"COMPILER_ios",
 			"COMPILER_macOS",
+			"plistconvert",
 			"provisioningProfiles",
 			"swiftPM",
 			"teamId",
@@ -695,7 +695,11 @@
 		"methods": [
 			"COMPILER_file",
 			"FileFrom",
+			"FileOrFolderFrom",
 			"FolderFrom",
+			"GetFileExtension",
+			"GetFileName",
+			"test_file",
 			"TestPathName"
 		]
 	},

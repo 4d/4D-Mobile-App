@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><preferences stamp="10">
+<?xml version="1.0" encoding="UTF-8"?><preferences stamp="13">
 	<com.4d>
 		<general execute_host_database_event="true"/>
 		<php ip_address="127.0.0.1"/>
@@ -11,7 +11,7 @@
 			</network>
 		</server>
 		<compiler>
-			<options compilation_path="3" symbol_file="true" target="all"/>
+			<options compilation_path="3" symbol_file="true" target="active"/>
 			<typage default_for_button="2"/>
 			<method_suffix arrays="" interprocess_arrays="" interprocess_variables="" methods="" variables=""/>
 		</compiler>
@@ -28,7 +28,8 @@
 		<web>
 			<standalone_server>
 				<rest launch_at_startup="true"/>
-				<configuration session_mode="1"/>
+				<configuration port_number="8080" session_mode="1"/>
+				<webstudio enabled="true"/>
 			</standalone_server>
 		</web>
 	</com.4d>

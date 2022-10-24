@@ -120,7 +120,7 @@ If (Asserted:C1132($in.action#Null:C1517; "Missing tag \"action\""))
 							//........................................
 						: (File:C1566($in.project; fk platform path:K87:2).exists)
 							
-							$out.path:=Path to object:C1547($in.project).parentFolder+"project.dataSet"+Folder separator:K24:12
+							$out.path:=File:C1566($in.project; fk platform path:K87:2).parent.platformPath+"project.dataSet"+Folder separator:K24:12
 							$out.success:=True:C214
 							
 							//........................................

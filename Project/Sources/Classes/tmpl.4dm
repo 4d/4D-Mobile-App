@@ -671,7 +671,7 @@ Function getSources($name : Text; $type : Text)->$template : 4D:C1709.Folder
 			
 			$formName:=Delete string:C232($formName; 1; 1)  // Remove initial slash
 			
-			If (Path to object:C1547($formName).extension=SHARED.archiveExtension)  // Archive
+			If (GetFileExtension($formName)=SHARED.archiveExtension)  // Archive
 				
 				$error:=cs:C1710.error.new().hide()
 				$archive:=ZIP Read archive:C1637(cs:C1710.path.new()["host"+$formType+"Forms"]().file($formName))

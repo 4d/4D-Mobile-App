@@ -10,8 +10,8 @@ If (False:C215)
 	C_OBJECT:C1216(unzip; $1)
 	
 	//__________________________________________________
-	C_OBJECT:C1216(_o_plist; $0)
-	C_OBJECT:C1216(_o_plist; $1)
+	C_OBJECT:C1216(plistconvert; $0)
+	C_OBJECT:C1216(plistconvert; $1)
 	
 	
 	//__________________________________________________
