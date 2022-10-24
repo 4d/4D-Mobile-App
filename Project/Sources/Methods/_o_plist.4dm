@@ -62,7 +62,11 @@ Case of
 		// MARK: - convert
 	: ($Obj_in.action="convert")
 		
-		$Txt_cmd:="plutil"
+		If (Is macOS:C1572)
+			$Txt_cmd:="plutil"
+		Else 
+			$Txt_cmd:="plistconvert"  // str_singleQuoted(Folder(Folder(fk database folder; *).platformPath; fk platform path).folder("bin").file("plistconvert").path)
+		End if 
 		
 		If (($Obj_in.domain#Null:C1517) & ($Obj_in.format#Null:C1517))
 			
@@ -87,13 +91,19 @@ Case of
 				
 			Else 
 				
-				$Txt_cmd:=$Txt_cmd+" -convert "+$format
+				If (Is macOS:C1572)
+					$Txt_cmd:=$Txt_cmd+" -convert "+$format
+				Else 
+					$Txt_cmd:=$Txt_cmd+" --convert "+$format
+				End if 
 				
 			End if 
 			
-			If ($format="openstep")
+			If (($format="openstep") && Is macOS:C1572)
 				
-				$Txt_cmd:=str_singleQuoted(cs:C1710.path.new().scripts().file("xprojstep").path)
+				If (Is macOS:C1572)
+					$Txt_cmd:=str_singleQuoted(cs:C1710.path.new().scripts().file("xprojstep").path)
+				End if 
 				
 				If (String:C10($Obj_in.project)#"")
 					//$Txt_cmd:=$Txt_cmd+" --projectName "+singleQuote ($Obj_in.project)
@@ -105,7 +115,7 @@ Case of
 				
 			Else 
 				
-				$Txt_cmd:=Choose:C955($Obj_in.output#Null:C1517; $Txt_cmd+" -o "+str_singleQuoted($Obj_in.output); $Txt_cmd+" -o -")  // stdout
+				$Txt_cmd:=Choose:C955($Obj_in.output#Null:C1517; $Txt_cmd+" -o "+str_singleQuoted($Obj_in.output); Is macOS:C1572 ? ($Txt_cmd+" -o -") : ($Txt_cmd+" -o /dev/stdout"))  // stdout
 				
 			End if 
 			
@@ -159,11 +169,11 @@ Case of
 		If (($Obj_in.domain#Null:C1517) & ($Obj_in.object#Null:C1517))
 			
 			//TEXT TO DOCUMENT(Convert path POSIX to system($Obj_in.domain); JSON Stringify($Obj_in.object; *))
-			File:C1566(Convert path POSIX to system:C1107($Obj_in.domain); fk platform path:K87:2).setText(JSON Stringify:C1217($Obj_in.object; *))
+			File:C1566($Obj_in.domain).setText(JSON Stringify:C1217($Obj_in.object; *))
 			
 			If ($Obj_in.format#Null:C1517)
 				
-				If ($Obj_in.format="openstep")
+				If (($Obj_in.format="openstep") && Is macOS:C1572)
 					
 					$Obj_in.format:="xml1"  // convert to xml before
 					$Obj_in.openstep:=True:C214
