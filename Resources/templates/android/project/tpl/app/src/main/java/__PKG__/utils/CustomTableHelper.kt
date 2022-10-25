@@ -14,6 +14,7 @@ import com.qmobile.qmobiledatasync.relation.RelationHelper
 import com.qmobile.qmobiledatasync.utils.GenericTableHelper
 import com.qmobile.qmobiledatasync.viewmodel.EntityListViewModel
 import com.qmobile.qmobiledatasync.viewmodel.EntityViewModel
+import SectionField
 {{#tableNames}}
 import {{package}}.data.model.entity.{{name}}
 {{/tableNames}}
@@ -97,4 +98,13 @@ class CustomTableHelper : GenericTableHelper {
             {{/tableNames}}
             else -> throw IllegalArgumentException("Missing entityListViewModel class for table: $tableName")
         }
+
+    override fun getSectionFieldForTable(tableName: String): SectionField? {
+        return  when (tableName) {
+            {{#section_fields}}
+                "{{tableName}}" -> SectionField("{{name}}","{{valueType}}","{{path}}")
+            {{/section_fields}}
+            else -> null
+        }
+    }
 }
