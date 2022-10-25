@@ -56,4 +56,3 @@ Members can then be added with the function of this class **.addMember()** or th
 * The spacing in pixels to respect between the elements ("spacing":`Integer`)
 * The minimum width to respect in pixels ("minWidth":`Integer`)
 * The maximum width to respect in pixels ("maxWidth":`Integer`)
-

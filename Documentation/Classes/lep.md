@@ -111,4 +111,3 @@ If any, the arguments are automatically escaped and a space will be automaticall
 
 ## 🔹 .reset()
 The `.reset()` function reinitializes all the properties of the class to their default values. The error stack is thus emptied. 4D-specific environment variables are also reinitialized and user environment variables are forgotten. 
-
