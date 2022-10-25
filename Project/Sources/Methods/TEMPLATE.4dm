@@ -52,7 +52,11 @@ Case of
 		//________________________________________
 	: ($Obj_input.source.exists)  // Get catalog from source
 		
-		$Col_catalog:=_o_doc_catalog($Obj_input.source.platformPath)
+		If ($Obj_input.exclude#Null:C1517)  // could do this code in one line if _o_doc_catalog check if null or length emptys
+			$Col_catalog:=_o_doc_catalog($Obj_input.source.platformPath; $Obj_input.exclude)
+		Else 
+			$Col_catalog:=_o_doc_catalog($Obj_input.source.platformPath)
+		End if 
 		
 		//________________________________________
 	Else 

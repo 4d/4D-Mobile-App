@@ -681,18 +681,19 @@ Case of
 					$copyFilesResult:=TEMPLATE(New object:C1471(\
 						"source"; $tmp.folder($formatFolder.name).platformPath; \
 						"target"; $Obj_in.path; \
-						"tags"; $Obj_in.tags\
+						"tags"; $Obj_in.tags; \
+						"exclude"; JSON Stringify:C1217(SHARED.template.exclude)\
 						))
 					
 					$tmp.delete(fk recursive:K87:7)
 					
 				Else 
-/*var $Col_catalog : Collection
-$Col_catalog:=doc_catalog(This.template.source; This.getCatalogExcludePattern())*/
+					
 					$copyFilesResult:=TEMPLATE(New object:C1471(\
 						"source"; $formatFolder.platformPath; \
 						"target"; $Obj_in.path; \
-						"tags"; $Obj_in.tags\
+						"tags"; $Obj_in.tags; \
+						"exclude"; JSON Stringify:C1217(SHARED.template.exclude)\
 						))
 					
 				End if 
