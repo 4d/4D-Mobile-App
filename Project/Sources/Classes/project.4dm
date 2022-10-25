@@ -2024,7 +2024,7 @@ Function fieldAvailable($tableID; $field : Object) : Boolean
 				
 				If ($field.path#Null:C1517) && Not:C34(Bool:C1537($field.computed))
 					
-					If ($field.kind="alias")
+					If (String:C10($field.kind)="alias")
 						
 						$c:=Split string:C1554($field.name; ".")
 						
