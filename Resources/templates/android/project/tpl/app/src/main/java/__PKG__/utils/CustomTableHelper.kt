@@ -102,7 +102,7 @@ class CustomTableHelper : GenericTableHelper {
     override fun getSectionFieldForTable(tableName: String): SectionField? {
         return  when (tableName) {
             {{#section_fields}}
-                "{{tableName}}" -> SectionField("{{name}}","{{valueType}}","{{path}}")
+                "{{tableName}}" -> SectionField("{{name}}", "{{valueType}}", "{{path}}")
             {{/section_fields}}
             else -> null
         }
