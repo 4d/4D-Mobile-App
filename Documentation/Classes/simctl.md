@@ -38,6 +38,7 @@ In addition of the class lep:
 > 
 > - The "App" functions which will be performed on the `booted` device.  
 
+
  
 ### Device
 
