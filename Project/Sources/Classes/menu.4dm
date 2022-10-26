@@ -167,28 +167,29 @@ Function append($item; $param; $mark : Boolean) : cs:C1710.menu
 					
 					If (Asserted:C1132(OB Instance of:C1731($param; cs:C1710.menu)))
 						
-						If ($param.itemCount()>0)  // Don't do it if there are no items in the sub-menu
+						//FIXME:Remove empty submenu in the cleanup phase
+						//If ($param.itemCount()>0)  // Don't do it if there are no items in the sub-menu
+						
+						If (This:C1470.metacharacters)
 							
-							If (This:C1470.metacharacters)
-								
-								APPEND MENU ITEM:C411(This:C1470.ref; $t; $param.ref)
-								
-							Else 
-								
-								APPEND MENU ITEM:C411(This:C1470.ref; $t; $param.ref; *)
-								
-							End if 
+							APPEND MENU ITEM:C411(This:C1470.ref; $t; $param.ref)
 							
-							// Keep the sub-menu structure
-							This:C1470.submenus.push($param)
+						Else 
 							
-							// Keep datas, if any
-							For each ($o; $param.data)
-								
-								This:C1470.data.push($o)
-								
-							End for each 
+							APPEND MENU ITEM:C411(This:C1470.ref; $t; $param.ref; *)
+							
 						End if 
+						
+						// Keep the sub-menu structure
+						This:C1470.submenus.push($param)
+						
+						// Keep datas, if any
+						For each ($o; $param.data)
+							
+							This:C1470.data.push($o)
+							
+						End for each 
+						//End if 
 						
 						If ($param.autoRelease)
 							
