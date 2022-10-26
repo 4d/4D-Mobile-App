@@ -301,7 +301,7 @@ Function _callback
 	End if 
 	
 	// comment this line if command no supported in 18R, or maybe a rest request instead to check?
-	ASSERT:C1129(String:C10(Get Global Stamp:C1676)=This:C1470.lastCallbackInfo.globalStamp; "Not sync to "+String:C10(Get Global Stamp:C1676)+" but only "+This:C1470.lastCallbackInfo.globalStamp)
+	//ASSERT(String(Get Global Stamp)=This.lastCallbackInfo.globalStamp; "Not sync to "+String(Get Global Stamp)+" but only "+This.lastCallbackInfo.globalStamp)
 	
 	This:C1470.waiting:=True:C214
 	$url:=$scheme+"://x-callback-url/dump?x-success="+$callback+"?success=1&x-error="+$callback+"?success=0"

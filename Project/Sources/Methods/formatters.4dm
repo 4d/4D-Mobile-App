@@ -425,7 +425,9 @@ Case of
 										$oResult:=TEMPLATE(New object:C1471(\
 											"source"; $tmp.folder($folder.name).platformPath; \
 											"tags"; $oIN.tags; \
-											"target"; $oIN.target+$t+Folder separator:K24:12))
+											"target"; $oIN.target+$t+Folder separator:K24:12; \
+											"exclude"; JSON Stringify:C1217(SHARED.template.exclude)\
+											))
 										
 										$tmp.delete(fk recursive:K87:7)
 										
@@ -434,7 +436,9 @@ Case of
 										$oResult:=TEMPLATE(New object:C1471(\
 											"source"; $folder.platformPath; \
 											"tags"; $oIN.tags; \
-											"target"; $oIN.target+$t+Folder separator:K24:12))
+											"target"; $oIN.target+$t+Folder separator:K24:12; \
+											"exclude"; JSON Stringify:C1217(SHARED.template.exclude)\
+											))
 										
 									End if 
 									
