@@ -20,6 +20,7 @@ class EntityListFragment{{tableName}}(private val binding: ViewDataBinding) : Cu
             for (i in 0 until binding.fragmentListRecyclerView.itemDecorationCount) {
                 if (binding.fragmentListRecyclerView.getItemDecorationAt(i) is DividerItemDecoration) {
                     binding.fragmentListRecyclerView.removeItemDecorationAt(i)
+                    break
                 }
             }
         }
