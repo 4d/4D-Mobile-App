@@ -14,7 +14,7 @@ import com.qmobile.qmobiledatasync.relation.RelationHelper
 import com.qmobile.qmobiledatasync.utils.GenericTableHelper
 import com.qmobile.qmobiledatasync.viewmodel.EntityListViewModel
 import com.qmobile.qmobiledatasync.viewmodel.EntityViewModel
-import SectionField
+import com.qmobile.qmobiledatasync.section.SectionField
 {{#tableNames}}
 import {{package}}.data.model.entity.{{name}}
 {{/tableNames}}
