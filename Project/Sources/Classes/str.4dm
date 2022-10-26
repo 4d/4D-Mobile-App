@@ -990,7 +990,9 @@ Function isBoolean($target : Text) : Boolean
 Function isDate($target : Text) : Boolean
 	
 	$target:=Count parameters:C259=0 ? This:C1470.value : $target
-	return Match regex:C1019("(?m-si)^\\d+/\\d+/\\d+$"; $target; 1)
+	
+	GET SYSTEM FORMAT:C994(Date separator:K60:10; $t)
+	return Match regex:C1019("(?m-si)^\\d+"+$t+"\\d+"+$t+"\\d+$"; $target; 1)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns True if text is a numeric
