@@ -989,6 +989,8 @@ Function isBoolean($target : Text) : Boolean
 	// Returns True if the text is a date string (DOES NOT CHECK IF THE DATE IS VALID)
 Function isDate($target : Text) : Boolean
 	
+	var $t : Text
+	
 	$target:=Count parameters:C259=0 ? This:C1470.value : $target
 	
 	GET SYSTEM FORMAT:C994(Date separator:K60:10; $t)
