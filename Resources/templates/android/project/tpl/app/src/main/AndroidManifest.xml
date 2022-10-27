@@ -11,7 +11,6 @@
     {{/permissions}}
     <application
         android:name=".app.App"
-        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
@@ -33,7 +32,7 @@
         </activity>
 
         <activity android:name="com.qmobile.qmobileui.activity.mainactivity.MainActivity"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustResize"/>
 
         <meta-data
             android:name="com.qmobile.qmobileui.glide.AppGlideModule"
