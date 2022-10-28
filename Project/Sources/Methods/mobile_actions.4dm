@@ -383,6 +383,16 @@ Case of
 											Else 
 												$manifest.path:=$manifest.folder
 											End if 
+											
+											// map value to asset values "(input_)<format name>_<key>"
+											$parameter.choiceList:=$parameter.choiceList.map(Formula:C1597(New object:C1471("key"; $1.value.key; "value"; $format+"_"+$1.value.key)))
+											
+											If ($parameter.type="bool")  // Keep only 2 values
+												
+												$manifest.choiceList.resize(2)
+												
+											End if 
+											
 											If (Not:C34($folder.folder($format).exists))
 												
 												$oResult:=asset(New object:C1471(\
