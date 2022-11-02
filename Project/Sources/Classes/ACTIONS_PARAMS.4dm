@@ -1937,9 +1937,9 @@ Function dataSourceMenuManager()
 Function editList()
 	
 /*
-				$form:=New object(\
-								"static"; $static; \
-								"host"; This.path.hostInputControls(True))
+					$form:=New object(\
+										"static"; $static; \
+										"host"; This.path.hostInputControls(True))
 	
 $form.folder:=This.path.hostInputControls()
 $manifest:=$form.folder.file("manifest.json")
@@ -2879,8 +2879,7 @@ Function _actionFormatterChoiceList($menu : cs:C1710.menu; $type : Text)
 			$parameter:="/"+$control+"/"+$type
 			$selected:=$parameter=(String:C10(This:C1470.current.format)+"/"+This:C1470.current.type)
 			
-			//fixme:🚧 #132599: Add tag iOS only for unsupported type
-			$menu.append($control+Get localized string:C991("iosOnly"); $parameter; $selected)\
+			$menu.append($control; $parameter; $selected)\
 				.setData("type"; $type)\
 				.setData("format"; "/"+$control)
 			
