@@ -753,6 +753,15 @@ Function checkRestQueryFilter($table : Object)
 		
 		OB REMOVE:C1226($table; "count")
 		
+		//
+		var $keyPath : Text
+		$keyPath:=String:C10(This:C1470.dataSource.keyPath)
+		ASSERT:C1129($keyPath#"")
+		
+		var $file : 4D:C1709.File
+		$file:=UI.path.resolve($keyPath)
+		ASSERT:C1129($file.exists)
+		
 		// Detect a query with parameters
 		$filter.parameters:=(Match regex:C1019(This:C1470.$regexParameters; $filter.string; 1))
 		
@@ -771,8 +780,9 @@ Function checkRestQueryFilter($table : Object)
 					"url"; This:C1470.server.urls.production; \
 					"handler"; "mobileapp"; \
 					"queryEncode"; True:C214; \
-					"query"; New object:C1471("$filter"; $regex.substitute("\\1\"@\""); \
-					"$limit"; "1")))
+					"query"; New object:C1471("$filter"; $regex.substitute("\\1\"@\""); "$limit"; "1"); \
+					"headers"; New object:C1471("X-MobileApp"; "1"; "Authorization"; "Bearer "+$file.getText())\
+					))
 				
 				$success:=$response.success
 				
@@ -788,7 +798,9 @@ Function checkRestQueryFilter($table : Object)
 				"url"; This:C1470.server.urls.production; \
 				"handler"; "mobileapp"; \
 				"queryEncode"; True:C214; \
-				"query"; New object:C1471("$filter"; $filter.string)))
+				"query"; New object:C1471("$filter"; $filter.string); \
+				"headers"; New object:C1471("X-MobileApp"; "1"; "Authorization"; "Bearer "+$file.getText())\
+				))
 			
 			$success:=$response.success
 			
