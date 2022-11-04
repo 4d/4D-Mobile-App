@@ -1,1 +1,41 @@
-﻿{	"info": {		"version": 7,		"target": "iOS",		"ideVersion": "$4DEVAL($1.ideVersion)",		"ideBuildVersion": "$4DEVAL($1.ideBuildVersion)",		"componentBuild": "$4DEVAL($1.componentBuild)"	},	"product": {		"name": "$4DEVAL($1.productName)",		"version": "1.0",		"copyright": "©$4DEVAL($1.year)$4DEVAL($1.companyName) $4DEVAL($1.reserved)",		"bundleIdentifier": "com.$4DEVAL($1.organization).$4DEVAL($1.bundle)"	},	"organization": {		"name": "$4DEVAL($1.organizationName)",		"teamId": "",		"id": "com.$4DEVAL($1.organization)"	},	"developer": {		"name":"$4DEVAL($1.developerName)",		"id":""	},	"server": {		"urls": {			"production": ""		}	},	"main" :{		"navigationTitle":"$4DEVAL($1.productName)",		"navigationType": "tabbar"	},	"dataSource": {		"source": "local",		"doNotGenerateDataAtEachBuild": false,		"doNotExportImages": false	},	"ui": {		"navigationTransition": "PresentSlideSegue"	}}
+{
+  "info": {
+    "version": 8,
+    "target": "iOS",
+    "ideVersion": "$4DEVAL($1.ideVersion)",
+    "ideBuildVersion": $4DEVAL($1.ideBuildVersion),
+    "componentBuild": $4DEVAL($1.componentBuild)
+  },
+  "product": {
+    "name": "$4DEVAL($1.productName)",
+    "version": "1.0",
+    "copyright": "\u00a9$4DEVAL($1.year)$4DEVAL($1.companyName) $4DEVAL($1.reserved)",
+    "bundleIdentifier": "com.$4DEVAL($1.organization).$4DEVAL($1.bundle)"
+  },
+  "organization": {
+    "name": "$4DEVAL($1.organizationName)",
+    "teamId": "",
+    "id": "com.$4DEVAL($1.organization)"
+  },
+  "developer": {
+    "name": "$4DEVAL($1.developerName)",
+    "id": ""
+  },
+  "server": {
+    "urls": {
+      "production": ""
+    }
+  },
+  "main": {
+    "navigationTitle": "$4DEVAL($1.productName)",
+    "navigationType": "tabbar"
+  },
+  "dataSource": {
+    "source": "local",
+    "doNotGenerateDataAtEachBuild": false,
+    "doNotExportImages": false
+  },
+  "ui": {
+    "navigationTransition": "PresentSlideSegue"
+  }
+}
