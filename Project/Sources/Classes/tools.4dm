@@ -171,6 +171,10 @@ Function versionCompare($version : Text; $reference : Text; $separator : Text) :
 			//______________________________________________________
 	End case 
 	
+	//FIXME: map to avoid num(xxx)
+	//$splitVersion.map(Formula($1.result:=Num($1.value)))
+	//$splitReference.map(Formula($1.result:=Num($1.value)))
+	
 	For ($i; 0; $splitReference.length-1; 1)
 		
 		Case of 
@@ -178,14 +182,12 @@ Function versionCompare($version : Text; $reference : Text; $separator : Text) :
 				//______________________________________________________
 			: (Num:C11($splitVersion[$i])>Num:C11($splitReference[$i]))
 				
-				$result:=1
-				break
+				return 1
 				
 				//______________________________________________________
 			: (Num:C11($splitVersion[$i])<Num:C11($splitReference[$i]))
 				
-				$result:=-1
-				break
+				return -1
 				
 				//______________________________________________________
 			Else 
