@@ -315,6 +315,7 @@ Function toolsPath
 	
 	//====================================================================
 Function lastPath
+	
 	var $pathname; $t; $version : Text
 	var $o : Object
 	var $c : Collection
@@ -330,9 +331,10 @@ Function lastPath
 			
 			$version:=This:C1470.getVersion(Folder:C1567($pathname))
 			
-			If (This:C1470.versionCompare($t)>=0)  // Equal or higher
+			If (This:C1470.versionCompare($t; $version)>=0)  // Equal or higher
 				
 				$t:=$version
+				
 				This:C1470.version:=$version
 				This:C1470.application:=Folder:C1567($pathname)
 				This:C1470.success:=True:C214
@@ -372,7 +374,7 @@ Function paths()->$instances : Collection
 	End if 
 	
 	//====================================================================
-Function getVersion($target : 4D:C1709.Folder)->$version
+Function getVersion($target : 4D:C1709.Folder) : Text
 	
 	var $o : Object
 	var $file : 4D:C1709.File
@@ -394,12 +396,11 @@ Function getVersion($target : 4D:C1709.Folder)->$version
 	If (This:C1470.success)
 		
 		//defaults [-currentHost | -host hostname] read [domain [key]]
-		
 		$o:=This:C1470.lep("defaults read"+" '"+$file.path+"' CFBundleShortVersionString")
 		
 		If ($o.success)
 			
-			$version:=$o.out
+			return $o.out
 			
 		End if 
 	End if 
