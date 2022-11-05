@@ -15,6 +15,16 @@ Function updateAssets
 	$Obj_template:=This:C1470.template
 	
 	// Update Assets
+	
+	If (This:C1470.project._folder.file("app_icon.png").exists)
+		
+		var $picture : Picture
+		READ PICTURE FILE:C678(This:C1470.project._folder.file("app_icon.png").platformPath; $picture)
+		
+		This:C1470.project.AppIconSet($picture)
+		
+	End if 
+	
 	If (String:C10($Obj_template.assets.source)#"")
 		
 		$Obj_out.assets:=TEMPLATE(New object:C1471(\
