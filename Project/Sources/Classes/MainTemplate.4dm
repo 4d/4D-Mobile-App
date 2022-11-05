@@ -17,7 +17,7 @@ Function updateAssets
 	// Update Assets
 	If (String:C10($Obj_template.assets.source)#"")
 		
-		$Obj_out.assets:=template(New object:C1471(\
+		$Obj_out.assets:=TEMPLATE(New object:C1471(\
 			"source"; $Obj_template.assets.source; \
 			"target"; $Obj_template.assets.target; \
 			"catalog"; _o_doc_catalog($Obj_template.assets.source)\
@@ -90,6 +90,9 @@ Function _o_rgb()->$rgb
 	
 	var $file : 4D:C1709.File
 	$file:=Folder:C1567(This:C1470.template.assets.source; fk platform path:K87:2).folder("AppIcon.appiconset").file("ios-marketing1024.png")
+	If (Not:C34($file.exists))
+		$file:=Folder:C1567(This:C1470.template.assets.source; fk platform path:K87:2).folder("AppIcon.appiconset").file("universal1024.png")
+	End if 
 	var $l : Integer
 	$l:=SHARED.theme.colorjuicer.scale
 	

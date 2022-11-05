@@ -161,7 +161,7 @@ Function prepare($icon : Picture)
 		End if 
 		
 		// Keep the picture for Android
-		READ PICTURE FILE:C678($iosFolder.file("ios-marketing1024.png").platformPath; $icon)
+		READ PICTURE FILE:C678($iosFolder.file("universal1024.png").platformPath; $icon)
 		
 	Else 
 		
@@ -236,8 +236,9 @@ Function AppIconSet($icon : Picture)
 	
 	If (Not:C34($file.exists))
 		
-		$file:=File:C1566("/RESOURCES/iOS.json")
-		$file.copyTo($folder; "Contents.json")
+		$file.setText(JSON Stringify:C1217(New object:C1471(\
+			"images"; New collection:C1472(New object:C1471("filename"; "universal1024.png"; "idiom"; "universal"; "platform"; "ios"; "size"; "1024x1024")); \
+			"info"; New object:C1471("author"; "xcode"; "version"; 1)); *))
 		
 	End if 
 	
@@ -251,13 +252,13 @@ Function AppIconSet($icon : Picture)
 		If ($pos>0)
 			
 			$size:=Num:C11(Replace string:C233(Substring:C12($t; 1; $pos-1); "."; $decimalSeparator))
-			$pixels:=$size*Num:C11($o.scale)
+			$pixels:=$size*($o.scale ? Num:C11($o.scale) : 1)
 			
 			CREATE THUMBNAIL:C679($icon; $picture; $pixels; $pixels; Scaled to fit prop centered:K6:6)
 			
 			$fileName:=$o.idiom+Replace string:C233(String:C10($size); $decimalSeparator; "")
 			
-			If ($o.scale#"1x")
+			If (($o.scale#Null:C1517) && ($o.scale#"1x"))
 				
 				//%W-533.1
 				$fileName:=$fileName+"@"+$o.scale[[1]]

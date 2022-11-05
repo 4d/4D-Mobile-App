@@ -339,26 +339,21 @@ Function displayIcon
 	var $picture : Picture
 	var $folder : 4D:C1709.Folder
 	
-	$folder:=Form:C1466._folder.folder("Assets.xcassets/AppIcon.appiconset")
-	
-	If ($folder.exists)
+	var $iconFile : 4D:C1709.File
+	For each ($iconFile; New collection:C1472(\
+		Form:C1466._folder.file("app_icon.png"); \
+		Form:C1466._folder.file("Assets.xcassets/AppIcon.appiconset/universal1024.png"); \
+		Form:C1466._folder.file("Assets.xcassets/AppIcon.appiconset/ios-marketing1024.png"); \
+		Form:C1466._folder.file("android/main/ic_launcher-playstore.png"); \
+		File:C1566(UI.errorIcon; fk platform path:K87:2)))
 		
-		READ PICTURE FILE:C678($folder.file("ios-marketing1024.png").platformPath; $picture)
-		
-	Else 
-		
-		$folder:=Form:C1466._folder.folder("Android")
-		
-		If ($folder.exists)
-			
-			READ PICTURE FILE:C678($folder.file("main/ic_launcher-playstore.png").platformPath; $picture)
-			
-		Else 
-			
-			READ PICTURE FILE:C678(UI.errorIcon; $picture)
-			
+		If ($iconFile.exists)
+			READ PICTURE FILE:C678($iconFile.platformPath; $picture)
+			break
 		End if 
-	End if 
+		
+	End for each 
+	
 	
 	This:C1470.icon.setValue($picture)
 	

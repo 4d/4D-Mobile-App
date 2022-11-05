@@ -841,22 +841,18 @@ If (True:C214)
 		//
 		If (Count parameters:C259>=2)
 			
-			$folder:=$folder.folder("Assets.xcassets/AppIcon.appiconset")
-			
-			If ($folder.exists)
+			var $iconFile : 4D:C1709.File
+			For each ($iconFile; New collection:C1472(\
+				$folder.file("app_icon.png"); \
+				Form:C1466._folder.file("Assets.xcassets/AppIcon.appiconset/universal1024.png"); \
+				Form:C1466._folder.file("Assets.xcassets/AppIcon.appiconset/ios-marketing1024.png"); \
+				Form:C1466._folder.file("android/main/ic_launcher-playstore.png")))
 				
-				READ PICTURE FILE:C678($folder.file("ios-marketing1024.png").platformPath; $picture)
-				
-			Else 
-				
-				$folder:=$folder.folder("Android")
-				
-				If ($folder.exists)
-					
-					READ PICTURE FILE:C678($folder.file("main/ic_launcher-playstore.png").platformPath; $picture)
-					
+				If ($iconFile.exists)
+					READ PICTURE FILE:C678($iconFile.platformPath; $picture)
+					break
 				End if 
-			End if 
+			End for each 
 			
 			If (Picture size:C356($picture)>0)
 				
