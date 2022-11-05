@@ -49,33 +49,15 @@ Function resolve($path : Text) : Object
 	
 	//MARK:-USER
 Function userHome() : 4D:C1709.Folder
-	If (Is macOS:C1572 || Is Windows:C1573)
-		return Folder:C1567(Split string:C1554(Folder:C1567(fk desktop folder:K87:19).path; "/").resize(3).join("/"))
-	Else 
-		var $in; $out; $err : Text
-		LAUNCH EXTERNAL PROCESS:C811("xdg-user-dir HOME"; $in; $out; $err)
-		return Folder:C1567(Replace string:C233($out; "\n"; ""))
-	End if 
+	return Folder:C1567(fk home folder:K87:24)
 	
 /*========================================================*/
 Function userDesktop() : 4D:C1709.Folder
-	If (Is macOS:C1572 || Is Windows:C1573)
-		return Folder:C1567(fk desktop folder:K87:19)
-	Else 
-		var $in; $out; $err : Text
-		LAUNCH EXTERNAL PROCESS:C811("xdg-user-dir DESKTOP"; $in; $out; $err)
-		return Folder:C1567(Replace string:C233($out; "\n"; ""))
-	End if 
+	return Folder:C1567(fk desktop folder:K87:19)
 	
 /*========================================================*/
 Function userDocuments() : 4D:C1709.Folder
-	If (Is macOS:C1572 || Is Windows:C1573)
-		return Folder:C1567(fk documents folder:K87:21)
-	Else 
-		var $in; $out; $err : Text
-		LAUNCH EXTERNAL PROCESS:C811("xdg-user-dir DOCUMENTS"; $in; $out; $err)
-		return Folder:C1567(Replace string:C233($out; "\n"; ""))
-	End if 
+	return Folder:C1567(fk documents folder:K87:21)
 	
 /*========================================================*/
 Function userCache()->$folder : 4D:C1709.Folder
