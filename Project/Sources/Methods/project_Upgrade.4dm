@@ -844,9 +844,9 @@ If (True:C214)
 			var $iconFile : 4D:C1709.File
 			For each ($iconFile; New collection:C1472(\
 				$folder.file("app_icon.png"); \
-				Form:C1466._folder.file("Assets.xcassets/AppIcon.appiconset/universal1024.png"); \
-				Form:C1466._folder.file("Assets.xcassets/AppIcon.appiconset/ios-marketing1024.png"); \
-				Form:C1466._folder.file("android/main/ic_launcher-playstore.png")))
+				$folder.file("Assets.xcassets/AppIcon.appiconset/universal1024.png"); \
+				$folder.file("Assets.xcassets/AppIcon.appiconset/ios-marketing1024.png"); \
+				$folder.file("android/main/ic_launcher-playstore.png")))
 				
 				If ($iconFile.exists)
 					READ PICTURE FILE:C678($iconFile.platformPath; $picture)

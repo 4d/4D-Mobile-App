@@ -337,7 +337,6 @@ Function iconMenuManager()
 Function displayIcon
 	
 	var $picture : Picture
-	var $folder : 4D:C1709.Folder
 	
 	var $iconFile : 4D:C1709.File
 	For each ($iconFile; New collection:C1472(\
