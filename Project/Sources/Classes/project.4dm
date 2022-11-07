@@ -1832,13 +1832,12 @@ Function formatTableName($name : Text) : Text
 /*
 Start with alpha
 No space, No accent
-Uper camel case
 */
 	
 	If (Length:C16($name)>0)
 		
 		$str:=This:C1470._formatName($name)
-		$name:=$str.uperCamelCase($str.unaccented())
+		$name:=Replace string:C233($str.unaccented(); " "; "_")
 		return This:C1470._obfuscateReservedNames($name)
 		
 	End if 
@@ -1851,13 +1850,12 @@ Function formatFieldName($name : Text) : Text
 /*
 Start with alpha
 No space, No accent
-Lower camel case
 */
 	
 	If (Length:C16($name)>0)
 		
 		$str:=This:C1470._formatName($name)
-		$name:=$str.lowerCamelCase($str.unaccented())
+		$name:=Replace string:C233($str.unaccented(); " "; "_")
 		return This:C1470._obfuscateReservedNames($name)
 		
 	End if 
