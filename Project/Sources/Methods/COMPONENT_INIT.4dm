@@ -272,7 +272,7 @@ If (OB Is empty:C1297(SHARED)) | $reset
 	SHARED.thirdParty:="Carthage"
 	SHARED.thirdPartySources:=SHARED.thirdParty+"/Checkouts"
 	
-	$file:=File:C1566("/RESOURCES/Resources.json")
+	$file:=File:C1566("/RESOURCES/resources.json")
 	
 	If ($file.exists)
 		
@@ -285,7 +285,7 @@ If (OB Is empty:C1297(SHARED)) | $reset
 			
 		Else 
 			
-			Logger.error("Failed to parse "+File:C1566("/RESOURCES/Resources.json").path)
+			Logger.error("Failed to parse "+$file.path)
 			
 		End if 
 		
