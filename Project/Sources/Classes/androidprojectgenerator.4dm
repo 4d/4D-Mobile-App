@@ -648,10 +648,14 @@ Function handleField
 				
 				If (Value type:C1509($relatedField.value)=Is object:K8:27)
 					
-					If ($relatedField.value.kind="alias")
+					If ($relatedfield.value.kind#Null:C1517)
 						
-						// Add alias name key in object
-						$relatedField.value.aliasName:=$relatedField.key
+						If ($relatedField.value.kind="alias")
+							
+							// Add alias name key in object
+							$relatedField.value.aliasName:=$relatedField.key
+							
+						End if 
 						
 					End if 
 					
@@ -672,10 +676,14 @@ Function handleField
 						
 						If (Value type:C1509($subField.value)=Is object:K8:27)
 							
-							If ($subField.value.kind="alias")
+							If ($subField.value.kind#Null:C1517)
 								
-								// Add alias name key in object
-								$subField.value.aliasName:=$subField.key
+								If ($subField.value.kind="alias")
+									
+									// Add alias name key in object
+									$subField.value.aliasName:=$subField.key
+									
+								End if 
 								
 							End if 
 							
@@ -748,7 +756,17 @@ Function handleFieldIcon
 	
 	// Computed fields has no id
 	//TODO:Remove computed
-	If ($field.kind="calculated") || (Bool:C1537($field.computed))
+	If ($field.kind#Null:C1517)
+		
+		If ($field.kind="calculated")
+			
+			$field.id:=$field.name
+			
+		End if 
+		
+	End if 
+	
+	If (Bool:C1537($field.computed))
 		
 		$field.id:=$field.name
 		
