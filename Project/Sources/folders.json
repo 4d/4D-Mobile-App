@@ -274,6 +274,7 @@
 			"COMPILER_macOS",
 			"plistconvert",
 			"provisioningProfiles",
+			"readPicture",
 			"swiftPM",
 			"teamId",
 			"Xcode",

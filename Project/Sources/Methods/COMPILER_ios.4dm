@@ -20,3 +20,6 @@ C_OBJECT:C1216(xloc; $1)
 C_OBJECT:C1216(XcodeProjInject; $0)
 C_OBJECT:C1216(XcodeProjInject; $1)
 
+//__________________________________________________
+C_PICTURE:C286(readPicture; $0)
+C_OBJECT:C1216(readPicture; $1)

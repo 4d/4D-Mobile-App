@@ -452,12 +452,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 									
 									If ($sourceFile.exists)
 										
-										Case of 
-											: (OB Instance of:C1731($sourceFile; 4D:C1709.ZipFile))
-												BLOB TO PICTURE:C682($sourceFile.getContent(); $Pic_buffer)
-											Else 
-												READ PICTURE FILE:C678($sourceFile.platformPath; $Pic_buffer)
-										End case 
+										$Pic_buffer:=readPicture($sourceFile)
 										
 										If ($Obj_in.size=Null:C1517)  // if no size, take from picture
 											
@@ -557,7 +552,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 									
 									If ($sourceFile.exists)
 										
-										READ PICTURE FILE:C678($sourceFile.platformPath; $Pic_buffer)
+										$Pic_buffer:=readPicture($sourceFile)
 										
 										If ($Obj_in.size=Null:C1517)  // if no size, take from picture
 											
