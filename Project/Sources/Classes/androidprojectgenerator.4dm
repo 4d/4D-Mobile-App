@@ -648,14 +648,10 @@ Function handleField
 				
 				If (Value type:C1509($relatedField.value)=Is object:K8:27)
 					
-					If ($relatedfield.value.kind#Null:C1517)
+					If (String:C10($relatedfield.value.kind)="alias")
 						
-						If ($relatedField.value.kind="alias")
-							
-							// Add alias name key in object
-							$relatedField.value.aliasName:=$relatedField.key
-							
-						End if 
+						// Add alias name key in object
+						$relatedField.value.aliasName:=$relatedField.key
 						
 					End if 
 					
@@ -676,14 +672,10 @@ Function handleField
 						
 						If (Value type:C1509($subField.value)=Is object:K8:27)
 							
-							If ($subField.value.kind#Null:C1517)
+							If (String:C10($subField.value.kind)="alias")
 								
-								If ($subField.value.kind="alias")
-									
-									// Add alias name key in object
-									$subField.value.aliasName:=$subField.key
-									
-								End if 
+								// Add alias name key in object
+								$subField.value.aliasName:=$subField.key
 								
 							End if 
 							
