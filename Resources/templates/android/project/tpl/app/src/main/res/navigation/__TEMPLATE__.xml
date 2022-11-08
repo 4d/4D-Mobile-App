@@ -77,6 +77,10 @@
             app:argType="string" />
 
         <argument
+            android:name="position"
+            app:argType="integer" />
+
+        <argument
             android:name="tableName"
             app:argType="string" />
 

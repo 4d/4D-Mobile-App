@@ -7,7 +7,6 @@
 package {{package}}.data.dao
 
 import androidx.lifecycle.LiveData
-import androidx.paging.DataSource
 import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Query
@@ -39,10 +38,6 @@ abstract class {{tableName}}Dao :
 
     @RawQuery(observedEntities = [{{tableName}}::class])
     abstract override fun getAllFlow(sqLiteQuery: SupportSQLiteQuery): Flow<List<{{tableName}}RoomEntity>>
-
-    @Transaction
-    @RawQuery(observedEntities = [{{tableName}}::class])
-    abstract override fun getAllPagedList(sqLiteQuery: SupportSQLiteQuery): DataSource.Factory<Int, {{tableName}}RoomEntity>
 
     @Transaction
     @RawQuery(observedEntities = [{{tableName}}::class])
