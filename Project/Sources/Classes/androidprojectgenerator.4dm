@@ -756,17 +756,7 @@ Function handleFieldIcon
 	
 	// Computed fields has no id
 	//TODO:Remove computed
-	If ($field.kind#Null:C1517)
-		
-		If ($field.kind="calculated")
-			
-			$field.id:=$field.name
-			
-		End if 
-		
-	End if 
-	
-	If (Bool:C1537($field.computed))
+	If (String:C10($field.kind)="calculated") || (Bool:C1537($field.computed))
 		
 		$field.id:=$field.name
 		
