@@ -35,8 +35,7 @@
 		],
 		"classes": [
 			"DataStore",
-			"dateTime",
-			"with"
+			"dateTime"
 		]
 	},
 	"_[DEV]": {
@@ -351,6 +350,7 @@
 			"component",
 			"database",
 			"debugLog",
+			"dev",
 			"doc",
 			"env",
 			"error",

@@ -25,6 +25,10 @@ var _o_UI : Object  // UI constants
 $reset:=Macintosh option down:C545
 $process:=cs:C1710.process.new()
 
+// MARK:-DEV
+var Dev : cs:C1710.component
+Dev:=Dev || cs:C1710.dev.new()
+
 // MARK:-COMPONENT
 var Component : cs:C1710.component
 Component:=Component || cs:C1710.component.new()
@@ -37,10 +41,14 @@ var Database : cs:C1710.database
 Database:=Database || cs:C1710.database.new()
 
 If (Database.databaseFolder#Null:C1517)
+	
 	Database.projects:=Database.databaseFolder.folder("Mobile Projects")
 	Database.projects.create()  // Make sure the directory exists
+	
 	If (Database.structureFile#Null:C1517)
+		
 		Database.products:=Database.databaseFolder.parent.folder(Database.structureFile.name+" - Mobile")
+		
 	End if 
 End if 
 
