@@ -186,6 +186,7 @@
 			"unzip"
 		],
 		"classes": [
+			"_downloadSDK",
 			"catalog",
 			"DataSource",
 			"ExposedStructure",

@@ -13,11 +13,7 @@ Class constructor($title : Text)
 	This:C1470.isVisible:=True:C214
 	
 	// Unfortunately there is no way to create an invisible progress
-	
-	//This.id:=Progress New
-	var $id : Integer
-	$id:=Progress New
-	This:C1470.id:=$id
+	This:C1470.id:=Progress New
 	
 	If (Count parameters:C259>=1)
 		
@@ -26,54 +22,39 @@ Class constructor($title : Text)
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === ===
-Function setDelay($tiks : Integer)->$this : cs:C1710.progress
+Function setDelay($tiks : Integer) : cs:C1710.progress
 	
 	This:C1470.hide()
 	
 	This:C1470.delay:=$tiks
 	This:C1470.start:=Tickcount:C458
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	// === === === === === === === === === === === === === === === === === === ===
 Function update()
 	
-	If (Not:C34(This:C1470.isVisible))
+	If (Not:C34(This:C1470.isVisible))\
+		 && ((Tickcount:C458-This:C1470.start)>This:C1470.delay)
 		
-		If ((Tickcount:C458-This:C1470.start)>This:C1470.delay)
-			
-			This:C1470.show()
-			
-		End if 
+		This:C1470.show()
+		
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === ===
-Function show($visible : Boolean; $foreground : Boolean)->$this : cs:C1710.progress
+Function show($visible : Boolean; $foreground : Boolean) : cs:C1710.progress
 	
-	If (Count parameters:C259>=1)
-		
-		This:C1470.isVisible:=$visible
-		
-		If (Count parameters:C259>=2)
-			
-			This:C1470.isForeground:=$foreground
-			
-		End if 
-		
-	Else 
-		
-		This:C1470.isVisible:=True:C214
-		
-	End if 
+	This:C1470.isVisible:=Count parameters:C259>=1 ? $visible : True:C214
+	This:C1470.isForeground:=Count parameters:C259>=2 ? $foreground : This:C1470.isForeground
 	
 	Progress SET WINDOW VISIBLE(This:C1470.isVisible; -1; -1; This:C1470.isForeground)
 	
 	This:C1470.isStopped()
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	// === === === === === === === === === === === === === === === === === === ===
-Function bringToFront()->$this : cs:C1710.progress
+Function bringToFront() : cs:C1710.progress
 	
 	This:C1470.isForeground:=True:C214
 	This:C1470.visible:=True:C214
@@ -82,14 +63,14 @@ Function bringToFront()->$this : cs:C1710.progress
 	
 	This:C1470.isStopped()
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	// === === === === === === === === === === === === === === === === === === ===
-Function hide()->$this : cs:C1710.progress
+Function hide() : cs:C1710.progress
 	
 	This:C1470.show(False:C215)
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	// === === === === === === === === === === === === === === === === === === ===
 Function close()
@@ -97,76 +78,47 @@ Function close()
 	Progress QUIT(This:C1470.id)
 	
 	// === === === === === === === === === === === === === === === === === === ===
-Function setTitle($title : Text)->$this : cs:C1710.progress
+Function setTitle($title : Text) : cs:C1710.progress
 	
-	var $t : Text
-	
-	If (Count parameters:C259>=1)
-		
-		$t:=$title
-		
-		If (Length:C16($title)>0)\
-			 & (Length:C16($title)<=255)
-			
-			//%W-533.1
-			If ($title[[1]]#Char:C90(1))
-				
-				$t:=Get localized string:C991($title)
-				$t:=Choose:C955(Length:C16($t)>0; $t; $title)  // Revert if no localization
-				
-			End if 
-			//%W+533.1
-			
-		End if 
-		
-	End if 
-	
-	This:C1470.title:=$t
+	This:C1470.title:=This:C1470._localize($title)
 	Progress SET TITLE(This:C1470.id; This:C1470.title)
 	
 	This:C1470.isStopped()
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	// === === === === === === === === === === === === === === === === === === ===
-Function setMessage($message : Text; $foreground : Boolean)->$this : cs:C1710.progress
+Function setMessage($message : Text; $foreground : Boolean) : cs:C1710.progress
 	
-	var $t : Text
+	This:C1470.message:=This:C1470._localize($message)
+	This:C1470.isForeground:=Count parameters:C259>=2 ? $foreground : This:C1470.isForeground
 	
-	If (Count parameters:C259>=1)
-		
-		$t:=$message
-		
-		If (Length:C16($message)>0)\
-			 & (Length:C16($message)<=255)
-			
-			//%W-533.1
-			If ($message[[1]]#Char:C90(1))
-				
-				$t:=Get localized string:C991($message)
-				$t:=Choose:C955(Length:C16($t)>0; $t; $message)  // Revert if no localization
-				
-			End if 
-			//%W+533.1
-			
-		End if 
-		
-		If (Count parameters:C259>=2)
-			
-			This:C1470.isForeground:=$foreground
-			
-		End if 
-	End if 
-	
-	This:C1470.message:=$t
 	Progress SET MESSAGE(This:C1470.id; This:C1470.message; This:C1470.isForeground)
 	
 	This:C1470.isStopped()
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	// === === === === === === === === === === === === === === === === === === ===
-Function setProgress($progress; $foreground : Boolean)->$this : cs:C1710.progress
+Function _localize($message : Text) : Text
+	
+	var $localized : Text
+	
+	//%W-533.1
+	If (Length:C16($message)=0)\
+		 || (Length:C16($message)>255)\
+		 || ($message[[1]]=Char:C90(1))
+		
+		return $message
+		
+	End if 
+	//%W+533.1
+	
+	$localized:=Get localized string:C991($message)
+	return Length:C16($localized)>0 ? $localized : $message  // Revert if no localization
+	
+	// === === === === === === === === === === === === === === === === === === ===
+Function setProgress($progress; $foreground : Boolean) : cs:C1710.progress
 	
 	If (Value type:C1509($progress)=Is text:K8:3)
 		
@@ -202,20 +154,12 @@ Function setProgress($progress; $foreground : Boolean)->$this : cs:C1710.progres
 	
 	This:C1470.isStopped()
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	// === === === === === === === === === === === === === === === === === === ===
-Function setIcon($icon : Picture; $foreground : Boolean)->$this : cs:C1710.progress
+Function setIcon($icon : Picture; $foreground : Boolean) : cs:C1710.progress
 	
-	var $p : Picture
-	
-	If (Count parameters:C259>=1)
-		
-		$p:=$icon
-		
-	End if 
-	
-	This:C1470.icon:=$p
+	This:C1470.icon:=$icon
 	
 	If (Count parameters:C259>=2)
 		
@@ -229,21 +173,17 @@ Function setIcon($icon : Picture; $foreground : Boolean)->$this : cs:C1710.progr
 	
 	This:C1470.isStopped()
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	// === === === === === === === === === === === === === === === === === === ===
-Function setPosition($x : Integer; $y : Integer; $foreground : Boolean)->$this : cs:C1710.progress
+Function setPosition($x : Integer; $y : Integer; $foreground : Boolean) : cs:C1710.progress
 	
 	If (Count parameters:C259>=2)
 		
 		This:C1470.x:=$x
 		This:C1470.y:=$y
 		
-		If (Count parameters:C259>=3)
-			
-			This:C1470.isForeground:=$foreground
-			
-		End if 
+		This:C1470.isForeground:=Count parameters:C259>=3 ? $foreground : This:C1470.isForeground
 		
 		Progress SET WINDOW VISIBLE(This:C1470.visible; This:C1470.x; This:C1470.y; This:C1470.isForeground)
 		
@@ -256,10 +196,10 @@ Function setPosition($x : Integer; $y : Integer; $foreground : Boolean)->$this :
 	
 	This:C1470.isStopped()
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	// === === === === === === === === === === === === === === === === === === ===
-Function showStop($show : Boolean)->$this : cs:C1710.progress
+Function showStop($show : Boolean) : cs:C1710.progress
 	
 	If (Count parameters:C259>=1)
 		
@@ -276,49 +216,38 @@ Function showStop($show : Boolean)->$this : cs:C1710.progress
 	
 	This:C1470.isStopped()
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	// === === === === === === === === === === === === === === === === === === ===
-Function hideStop()->$this : cs:C1710.progress
+Function hideStop() : cs:C1710.progress
 	
 	This:C1470.showStop(False:C215)
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	// === === === === === === === === === === === === === === === === === === ===
-Function setStopTitle($title : Text)->$this : cs:C1710.progress
+Function setStopTitle($title : Text) : cs:C1710.progress
 	
-	If (Count parameters:C259>=1)
-		
-		This:C1470.stopTitle:=$title
-		
-	Else 
-		
-		// Default is True
-		This:C1470.stopTitle:="Stop"
-		
-	End if 
-	
+	This:C1470.stopTitle:=$title || "Stop"
 	Progress SET BUTTON TITLE(This:C1470.id; This:C1470.stopTitle)
 	
 	This:C1470.isStopped()
 	
-	$this:=This:C1470
+	return This:C1470
 	
 	// === === === === === === === === === === === === === === === === === === ===
-Function isStopped()->$stopped : Boolean
+Function isStopped() : Boolean
 	
 	This:C1470.stopped:=Progress Stopped(This:C1470.id)
 	
-	$stopped:=This:C1470.stopped
+	return This:C1470.stopped
 	
 	// === === === === === === === === === === === === === === === === === === ===
-Function forEach($target; $formula : Object; $keepOpen : Boolean)->$this : cs:C1710.progress
+Function forEach($target; $formula : Object; $keep : Boolean) : cs:C1710.progress
 	
 	var $i; $size : Integer
 	var $v : Variant
 	var $t : Text
-	var $keep : Boolean
 	
 	Case of 
 			
@@ -354,7 +283,7 @@ Function forEach($target; $formula : Object; $keepOpen : Boolean)->$this : cs:C1
 			
 			If (Not:C34(This:C1470.isStopped()))
 				
-				$i:=$i+1
+				$i+=1
 				$t:=String:C10($formula.call(Null:C1517; $v; $target; $i))
 				
 				If ($size#0)
@@ -377,7 +306,6 @@ Function forEach($target; $formula : Object; $keepOpen : Boolean)->$this : cs:C1
 			End if 
 		End for each 
 		
-		
 	Else 
 		
 		This:C1470.stopped:=False:C215
@@ -386,7 +314,7 @@ Function forEach($target; $formula : Object; $keepOpen : Boolean)->$this : cs:C1
 			
 			This:C1470.update()
 			
-			$i:=$i+1
+			$i+=1
 			$t:=String:C10($formula.call(Null:C1517; $v; $target; $i))
 			
 			If ($size#0)
@@ -404,12 +332,6 @@ Function forEach($target; $formula : Object; $keepOpen : Boolean)->$this : cs:C1
 		
 	End if 
 	
-	If (Count parameters:C259>=3)
-		
-		$keep:=$keepOpen
-		
-	End if 
-	
 	If ($keep)
 		
 		This:C1470.setProgress(-1).setMessage("")
@@ -420,4 +342,4 @@ Function forEach($target; $formula : Object; $keepOpen : Boolean)->$this : cs:C1
 		
 	End if 
 	
-	$this:=This:C1470
+	return This:C1470

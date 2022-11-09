@@ -358,13 +358,13 @@ Function paths()->$instances : Collection
 		
 		$instances:=Split string:C1554($o.out; "\n"; sk ignore empty strings:K86:1)
 		
-		// maybe current working path in not indexed by spotlight, so add it
-		If (This:C1470.application#Null:C1517)
-			If (This:C1470.application.exists)
-				If ($instances.indexOf(This:C1470.application.path)<0)
-					$instances.push(This:C1470.application.path)
-				End if 
-			End if 
+		// Maybe current working path in not indexed by spotlight, so add it
+		If (This:C1470.application#Null:C1517)\
+			 && (This:C1470.application.exists)\
+			 && ($instances.indexOf(This:C1470.application.path)<0)
+			
+			$instances.push(This:C1470.application.path)
+			
 		End if 
 		
 	Else 

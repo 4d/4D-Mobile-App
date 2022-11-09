@@ -16,11 +16,9 @@ var $run; $withUI : Boolean
 var $buildNumber : Integer
 var $manifest; $o : Object
 var $fileManifest; $preferences : 4D:C1709.File
-var $folder : 4D:C1709.Folder
+var $request : 4D:C1709.HTTPRequest
 var $sdk : 4D:C1709.ZipFile
-var $error : cs:C1710.error
-var $http : cs:C1710.http
-var $progress : cs:C1710.progress
+var $callback : cs:C1710._downloadSDK
 
 ASSERT:C1129(Count parameters:C259>=2)
 
@@ -31,16 +29,9 @@ Logger.verbose:=Component.isMatrix
 
 Logger.info("Verify "+$target+" SDK, Server: "+$server)
 
-$withUI:=True:C214
-
-If (Count parameters:C259>=3)
-	
-	$withUI:=Not:C34($silent)
-	
-End if 
+$withUI:=True:C214 & Not:C34($silent)
 
 $applicationVersion:=Application version:C493($buildNumber; *)
-$run:=True:C214
 
 Case of 
 		
@@ -48,16 +39,17 @@ Case of
 	: ($target="android")
 		
 		$sdk:=cs:C1710.path.new().cacheSdkAndroid()
+		$run:=True:C214
 		
 		//______________________________________________________
 	: ($target="ios")
 		
 		$sdk:=cs:C1710.path.new().cacheSdkApple()
+		$run:=True:C214
 		
 		//______________________________________________________
 	Else 
 		
-		$run:=False:C215
 		Logger.error("Uknown SDK target: "+$target)
 		
 		//______________________________________________________
@@ -117,7 +109,6 @@ Case of
 						
 						If ($applicationVersion[[1]]="A")
 							
-							//http://srv-build:8111/repository/download/id4dmobile_QMobile_Main_Android_Sdk_Build/.lastSuccessful/android.zip
 							$url:=$url+"id4dmobile_QMobile_Main_Android_Sdk_Build/.lastSuccessful/android.zip"
 							
 						Else 
@@ -126,12 +117,10 @@ Case of
 							
 							If ($applicationVersion[[7]]="0")
 								
-								//http://srv-build:8111/repository/download/id4dmobile_QMobile_19x_Android_Sdk_Build/.lastSuccessful/android.zip
 								$url:=$url+"x_Android_Sdk_Build/.lastSuccessful/android.zip"
 								
 							Else 
 								
-								//http://srv-build:8111/repository/download/id4dmobile_QMobile_18r6_IOS_Sdk_Build/.lastSuccessful/android.zip
 								$url:=$url+"r"+$applicationVersion[[7]]+"_IOS_Sdk_Build/.lastSuccessful/android.zip"
 								
 							End if 
@@ -142,7 +131,6 @@ Case of
 						
 						If ($applicationVersion[[1]]="A")
 							
-							//http://srv-build:8111/repository/download/id4dmobile_4dIOSSdk_Build/.lastSuccessful/ios.zip
 							$url:=$url+"id4dmobile_4dIOSSdk_Build/.lastSuccessful/ios.zip"
 							
 						Else 
@@ -151,12 +139,10 @@ Case of
 							
 							If ($applicationVersion[[7]]="0")
 								
-								//http://srv-build:8111/repository/download/id4dmobile_QMobile_19x_IOS_Sdk_Build/.lastSuccessful/ios.zip
 								$url:=$url+"x_IOS_Sdk_Build/.lastSuccessful/ios.zip"
 								
 							Else 
 								
-								//http://srv-build:8111/repository/download/id4dmobile_QMobile_18r6_IOS_Sdk_Build/.lastSuccessful/ios.zip
 								$url:=$url+"r"+$applicationVersion[[7]]+"x_IOS_Sdk_Build/.lastSuccessful/ios.zip"
 								
 							End if 
@@ -190,231 +176,64 @@ Case of
 		//______________________________________________________
 	Else 
 		
-		$run:=False:C215
 		Logger.error("Unknown server: "+$server)
+		$run:=False:C215
 		
 		//______________________________________________________
 End case 
 
 If ($run)
 	
-	$http:=cs:C1710.http.new($url).setResponseType(Is a document:K24:1; $sdk)
+	$request:=4D:C1709.HTTPRequest.new($url; New object:C1471("method"; "HEAD")).wait(10)
 	
-	$fileManifest:=$sdk.parent.file("manifest.json")
-	
-	If ($fileManifest.exists)
+	If (Num:C11($request.response.status)=200)
 		
-		$manifest:=JSON Parse:C1218($fileManifest.getText())
+		$run:=True:C214
 		
-		$run:=Not:C34(Bool:C1537($manifest.noUpdate))  // Possibility to block the automatic update for the dev
+		$fileManifest:=$sdk.parent.file("manifest.json")
 		
-		If ($run)
+		If ($fileManifest.exists)
 			
-			$run:=Num:C11($manifest.build)<$buildNumber  // Not for the same build
+			$manifest:=JSON Parse:C1218($fileManifest.getText())
 			
-		Else 
-			
-			$http.status:=8858
-			
-		End if 
-		
-		If ($run)
-			
-			$run:=$http.newerRelease(String:C10($manifest.ETag); String:C10($manifest["Last-Modified"]))
-			$run:=$run & ($http.status=200)
-			
-			// ============================== //
-			//  TEMPORARY FALLBACK TO GITHUB  //
-			// ============================== //
-			If ($http.status=404)\
-				 & ($server="aws")\
-				 & ($target="android")\
-				 & (Application version:C493[[3]]="0")\
-				 & (Process number:C372("unit_BATCH_EXECUTE")=0)
-				
-				$http.setURL("https://github.com/4d-go-mobile/sdk/releases/download/19.x/android.zip")
-				$run:=$http.newerRelease(String:C10($manifest.ETag); String:C10($manifest["Last-Modified"]))
-				$run:=$run & ($http.status=200)
-				
-				If ($run)
-					
-					$server:="github"
-					
-				End if 
-			End if 
-			// ============================== //
-			
+			$run:=Not:C34(Bool:C1537($manifest.noUpdate))  // Possibility to block the automatic update for the dev
 			
 			If ($run)
 				
-				If ($server="aws")
-					
-					// Verify the SDK version
-					$o:=$http.responseHeaders.query("name = 'x-amz-meta-version'").pop()
-					
-					If ($o#Null:C1517)
-						
-						$run:=($o.value#$manifest.version)
-						
-					End if 
-				End if 
-			End if 
-			
-			If (Count parameters:C259>=5)
-				
-				$run:=$run | $force
-				
-			End if 
-		End if 
-	End if 
-	
-	Case of 
-			
-			//______________________________________________________
-		: ($run)
-			
-			Logger.info("Downloading: "+$url)
-			
-			If ($withUI)
-				
-				$progress:=cs:C1710.progress.new("downloadInProgress")\
-					.setMessage(Replace string:C233(Get localized string:C991("downloadingSDK"); "{os}"; Choose:C955($target="android"; "Android"; "iOS")))  //.bringToFront()
-				
-			End if 
-			
-			$http.get()
-			
-			// ============================== //
-			//  TEMPORARY FALLBACK TO GITHUB  //
-			// ============================== //
-			If ($http.status=404)\
-				 & ($server="aws")\
-				 & ($target="android")\
-				 & (Application version:C493[[3]]="0")\
-				 & (Process number:C372("unit_BATCH_EXECUTE")=0)
-				
-				$http.setURL("https://github.com/mesopelagique/sdk_docs/releases/download/19.x/android.zip")
-				$run:=$http.newerRelease(String:C10($manifest.ETag); String:C10($manifest["Last-Modified"]))
-				$run:=$run & ($http.status=200)
-				
-				If ($run)
-					
-					$server:="github"
-					$http.get()
-					
-				End if 
-			End if 
-			// ============================== //
-			
-			If ($http.success)
-				
-				// Delete the old SDK folder, if any
-				$o:=$sdk.parent.folder("sdk")
-				
-				If ($o.exists)
-					
-					$o.delete(Delete with contents:K24:24)
-					
-				End if 
-				
-				// Extract all files
-				If ($withUI)
-					
-					$progress.setMessage("unzipping")
-					
-				End if 
-				
-				Logger.info("Unzipping: "+$sdk.path)
-				
-/* START HIDING ERRORS */
-				$error:=cs:C1710.error.new("hide")
-				
-				$folder:=ZIP Read archive:C1637($sdk).root.copyTo($o.parent)
-				
-/* STOP HIDING ERRORS */
-				$error.show()
-				
-				If ($folder.exists)
-					
-					ARRAY LONGINT:C221($pos; 0x0000)
-					ARRAY LONGINT:C221($len; 0x0000)
-					If (Match regex:C1019("(?mi-s)^(https?://)[^@]*@(.*)$"; $http.url; 1; $pos; $len))
-						
-						$http.url:=Substring:C12($http.url; $pos{1}; $len{1})+Substring:C12($http.url; $pos{2}; $len{2})
-						
-					End if 
-					
-					$manifest:=New object:C1471(\
-						"source"; $server; \
-						"url"; $http.url; \
-						"version"; "unknown"; \
-						"build"; 0)
-					
-					If ($folder.file("sdkVersion").exists)
-						
-						$manifest.version:=Replace string:C233($folder.file("sdkVersion").getText(); "\r"; "")
-						
-					End if 
-					
-					For each ($o; $http.headers)
-						
-						$manifest[$o.name]:=$o.value
-						
-						If ($o.name="x-amz-meta-build")
-							
-							$manifest.build:=Num:C11($o.value)
-							
-						End if 
-					End for each 
-					
-					$fileManifest.setText(JSON Stringify:C1217($manifest; *))
-					
-					Logger.info("The 4D Mobile "+$target+" SDK was updated to version "+$manifest.version)
-					
-					//$sdk.delete()
-					
-					If (Count parameters:C259>=4)
-						
-						CALL FORM:C1391($caller; "editor_CALLBACK"; "updateRibbon")
-						
-					End if 
-					
-				Else 
-					
-					Logger.warning("Failed to unarchive "+$sdk.path)
-					
-				End if 
+				$run:=Num:C11($manifest.build)<$buildNumber  // Not for the same build
 				
 			Else 
 				
-				Logger.warning($http.url+": "+$http.lastError)
+				Logger.warning("The update of 4D Mobile "+$target+" SDK is locked")
 				
 			End if 
 			
-			If ($withUI)
+			If ($run)
 				
-				$progress.close()
+				$run:=(String:C10($manifest.ETag)#String:C10($request.response.headers.ETag))  // True if newer version
 				
 			End if 
+		End if 
+		
+		If ($run | $force)
 			
-			//______________________________________________________
-		: ($http.status=8858)
+			Logger.info("Downloading: "+$url)
 			
-			Logger.warning("The update of 4D Mobile "+$target+" SDK is locked")
+			$callback:=cs:C1710._downloadSDK.new("GET"; \
+				Num:C11($request.response.headers["Content-Length"]); \
+				$sdk; \
+				$fileManifest; \
+				$withUI ? Replace string:C233(Get localized string:C991("downloadingSDK"); "{os}"; Choose:C955($target="android"; "Android"; "iOS")) : ""; \
+				New object:C1471("window"; $caller; "method"; "editor_CALLBACK"; "message"; "updateRibbon"))
 			
-			//______________________________________________________
-		: ($http.status=200)
+			$request:=4D:C1709.HTTPRequest.new($url; $callback)
 			
-			// Force manifest modification date to avoid a new execution today
-			$fileManifest.setText($fileManifest.getText())
-			
-			Logger.info("The 4D Mobile "+$target+" SDK is up to date")
-			
-			//______________________________________________________
-		Else 
-			
-			Logger.error($http.url+": "+$http.lastError)
-			
-			//______________________________________________________
-	End case 
+		End if 
+		
+	Else 
+		
+		// ERROR
+		Logger.error($request.URL+" "+$request.method+": "+$request.errors.extract("message").join("\r"))
+		
+	End if 
 End if 
