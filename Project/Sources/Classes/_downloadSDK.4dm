@@ -102,7 +102,7 @@ Function onTerminate($request : 4D:C1709.HTTPRequest; $e : Object)
 			End if 
 			
 			$manifest:=New object:C1471(\
-				"url"; $request.URL; \
+				"url"; $request.url; \
 				"version"; "unknown"; \
 				"build"; 0)
 			
@@ -147,6 +147,6 @@ Function onTerminate($request : 4D:C1709.HTTPRequest; $e : Object)
 	Else 
 		
 		// TODO:Error management
-		Logger.error($request.URL+": "+$request.errors.extract("message").join("\r"))
+		Logger.error($request.url+": "+$request.errors.extract("message").join("\r"))
 		
 	End if 

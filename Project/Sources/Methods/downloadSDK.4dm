@@ -233,7 +233,7 @@ If ($run)
 	Else 
 		
 		// ERROR
-		Logger.error($request.URL+" "+$request.method+": "+$request.errors.extract("message").join("\r"))
+		Logger.error($request.url+" "+$request.method+": "+$request.errors.extract("message").join("\r"))
 		
 	End if 
 End if 
