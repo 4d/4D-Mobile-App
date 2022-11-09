@@ -14,6 +14,8 @@ Class constructor($java : 4D:C1709.File; $kotlinc : 4D:C1709.File; $projectPath 
 	This:C1470.path:=cs:C1710.path.new()
 	This:C1470.vdtool:=cs:C1710.vdtool.new()
 	
+	This:C1470._copyJarIfmissing()
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
 Function generate($project : Object; $mobileProj : 4D:C1709.Folder)->$result : Object
@@ -83,6 +85,14 @@ Function generate($project : Object; $mobileProj : 4D:C1709.Folder)->$result : O
 		$result.errors.push(This:C1470.errorStream)
 		
 		// Else : all ok
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function _copyJarIfmissing
+	If (Not:C34(Folder:C1567(fk resources folder:K87:11).folder("scripts").file("androidprojectgenerator.jar").exists))
+		Folder:C1567(Application file:C491; fk platform path:K87:2).file("Contents/Resources/Internal User Components/4D Mobile App.4dbase/Resources/scripts/androidprojectgenerator.jar")\
+			.copyTo(Folder:C1567(fk resources folder:K87:11).folder("scripts"))
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===

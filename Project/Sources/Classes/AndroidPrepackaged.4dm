@@ -26,12 +26,21 @@ Class constructor
 	//
 Function init
 	This:C1470.setJavaHome()
+	This:C1470._copyJarIfmissing()
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
 Function setJavaHome
 	
 	This:C1470.setEnvironnementVariable(New object:C1471("JAVA_HOME"; This:C1470.studio.javaHome.path))
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function _copyJarIfmissing
+	If (Not:C34(Folder:C1567(fk resources folder:K87:11).folder("scripts").file("androidprojectgenerator.jar").exists))
+		Folder:C1567(Application file:C491; fk platform path:K87:2).file("Contents/Resources/Internal User Components/4D Mobile App.4dbase/Resources/scripts/androidprojectgenerator.jar")\
+			.copyTo(Folder:C1567(fk resources folder:K87:11).folder("scripts"))
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
