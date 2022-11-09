@@ -171,22 +171,30 @@ Function copyEmbeddedDataLib
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function copyResources
-	var $0 : Object
-	var $1 : 4D:C1709.Folder  // 4D Mobile Project
-	var $androidAssets; $currentFolder : 4D:C1709.Folder
+Function copyResources($project : cs:C1710.process)->$result : Object
+	
+	var $projectFolder; $androidAssets; $currentFolder : 4D:C1709.Folder
 	var $currentFile; $copyDest : 4D:C1709.File
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
 	// Copy "android" resources
-	$androidAssets:=$1.folder("android")
+	$projectFolder:=$project._folder
+	$androidAssets:=$projectFolder.folder("android")
+	
+	If (Not:C34($androidAssets.exists) && ($projectFolder.file("app_icon.png").exists))
+		
+		var $picture : Picture
+		READ PICTURE FILE:C678($projectFolder.file("app_icon.png").platformPath; $picture)
+		$project.AndroidIconSet($picture)
+		
+	End if 
 	
 	If ($androidAssets.exists)
 		
-		$0.success:=True:C214
+		$result.success:=True:C214
 		
 		For each ($currentFolder; $androidAssets.folders())
 			
@@ -219,8 +227,8 @@ Function copyResources
 				
 				If (Not:C34($copyDest.exists))
 					// Copy failed
-					$0.success:=False:C215
-					$0.errors.push("Could not copy file to destination: "+$copyDest.path)
+					$result.success:=False:C215
+					$result.errors.push("Could not copy file to destination: "+$copyDest.path)
 					
 					//Else : all ok
 				End if 
@@ -231,7 +239,7 @@ Function copyResources
 		
 	Else 
 		// Missing Android folder
-		$0.errors.push("Missing source file for copy: "+$androidAssets.path)
+		$result.errors.push("Missing source file for copy: "+$androidAssets.path)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===

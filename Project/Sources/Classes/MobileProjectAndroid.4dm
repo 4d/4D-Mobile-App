@@ -267,7 +267,7 @@ Function create()->$result : Object
 		// MARK:COPY RESOURCES
 		This:C1470.postStep("copyingResources")
 		
-		$o:=This:C1470.androidprojectgenerator.copyResources(This:C1470.project.project._folder)
+		$o:=This:C1470.androidprojectgenerator.copyResources(This:C1470.project.project)
 		
 	End if 
 	
