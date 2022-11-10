@@ -50,15 +50,11 @@ class App : BaseApp() {
         // Sets the drawable resource id for login page logo
         loginLogoDrawable = R.drawable.logo
 
-        // Sets the menu resource id for bottom navigation
-        bottomNavigationMenu = R.menu.bottom_nav
-
         // Sets navigation graphs id list for navigation
         navGraphIds = listOf(
             {{#tableNames_navigation_for_navbar}}
-            R.navigation.{{nameLowerCase}},
+            R.navigation.{{nameLowerCase}}{{^-last}}, {{/-last}}
             {{/tableNames_navigation_for_navbar}}
-            R.navigation.settings
         )
     }
 }
