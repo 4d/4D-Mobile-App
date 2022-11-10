@@ -111,6 +111,12 @@
 			"tester_net"
 		]
 	},
+	"(pic)": {
+		"methods": [
+			"(COMPILER_pic)",
+			"(pic_isTransparent)"
+		]
+	},
 	"[android]": {
 		"methods": [
 			"COMPILER_android",
@@ -723,7 +729,6 @@
 			"let",
 			"ob",
 			"ob_error",
-			"pic",
 			"semver",
 			"str",
 			"xml (thread-safe)"
@@ -777,12 +782,9 @@
 			"ob_parseFile",
 			"ob_removeFormula",
 			"ob_removeProperty",
-			"ob_setProperties",
 			"ob_testPath",
 			"ob_writeToDocument",
 			"ob_writeToFile",
-			"sharedCollection",
-			"sharedObject",
 			"test_ob_"
 		]
 	},
@@ -836,12 +838,6 @@
 		],
 		"classes": [
 			"pathPicker"
-		]
-	},
-	"pic": {
-		"methods": [
-			"COMPILER_pic",
-			"pic_isTransparent"
 		]
 	},
 	"Picture grid": {
@@ -985,5 +981,9 @@
 			"test_xml"
 		]
 	},
-	"trash": {}
+	"trash": {
+		"groups": [
+			"(pic)"
+		]
+	}
 }

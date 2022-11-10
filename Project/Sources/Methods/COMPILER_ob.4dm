@@ -36,24 +36,13 @@ If (False:C215)
 	C_OBJECT:C1216(ob_MERGE; $2)
 	
 	//__________________________________________________
-	C_OBJECT:C1216(ob_setProperties; $0)
-	C_OBJECT:C1216(ob_setProperties; $1)
-	C_OBJECT:C1216(ob_setProperties; $2)
-	
-	//__________________________________________________
 	C_BOOLEAN:C305(ob_testPath; $0)
 	C_OBJECT:C1216(ob_testPath; $1)
 	C_TEXT:C284(ob_testPath; $2)
 	C_TEXT:C284(ob_testPath; ${3})
 	
 	
-	//__________________________________________________
-	C_COLLECTION:C1488(sharedCollection; $1)
-	C_COLLECTION:C1488(sharedCollection; $2)
 	
-	//__________________________________________________
-	C_OBJECT:C1216(sharedObject; $1)
-	C_OBJECT:C1216(sharedObject; $2)
 	
 	//__________________________________________________
 	C_OBJECT:C1216(ob_writeToDocument; $0)
