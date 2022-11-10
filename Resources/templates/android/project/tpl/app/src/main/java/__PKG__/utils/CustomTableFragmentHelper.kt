@@ -91,4 +91,19 @@ class CustomTableFragmentHelper :
         {{/tableNames_navigation}}
         else -> null
     }
+
+    /**
+     * Provides drawable resources for navigation tabs
+     */
+    override fun getNavIcon(tableName: String): Int? = when (tableName) {
+        {{#tableNames_navigation_for_navbar}}
+        {{#hasIcon}}
+        "{{label}}" -> {{icon}}
+        {{/hasIcon}}
+        {{^hasIcon}}
+        "{{label}}" -> null
+        {{/hasIcon}}
+        {{/tableNames_navigation_for_navbar}}
+        else -> null
+    }
 }

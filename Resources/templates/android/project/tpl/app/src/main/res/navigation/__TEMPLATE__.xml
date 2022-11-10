@@ -8,17 +8,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/{{tableName_lowercase}}"
-    app:startDestination="@id/{{tableName_lowercase}}List">
+    app:startDestination="@id/list">
+
+    <include app:graph="@navigation/action_parameters" />
+    <include app:graph="@navigation/action_webview" />
+    <include app:graph="@navigation/pending_tasks" />
+    <include app:graph="@navigation/base_action_nav" />
+    <include app:graph="@navigation/base_nav" />
+    <include app:graph="@navigation/settings" />
 
     <fragment
-        android:id="@+id/{{tableName_lowercase}}List"
+        android:id="@+id/list"
         android:name="com.qmobile.qmobileui.list.EntityListFragment"
         android:label="{{tableName_original}}"
         tools:layout="@layout/fragment_list">
 
         <action
             android:id="@+id/action_list_to_viewpager"
-            app:destination="@id/{{tableName_lowercase}}ViewPager" />
+            app:destination="@id/viewPager" />
 
         <action
             android:id="@+id/action_list_to_list_relation"
@@ -30,15 +37,19 @@
 
         <action
             android:id="@+id/to_action_form"
-            app:destination="@id/actionParametersFragment" />
+            app:destination="@id/action_parameters" />
 
         <action
             android:id="@+id/to_pending_tasks"
-            app:destination="@id/tasksFragment" />
+            app:destination="@id/pending_tasks" />
         
         <action
-            android:id="@+id/to_action_web_view"
-            app:destination="@id/actionWebViewFragment" />
+            android:id="@+id/to_action_webview"
+            app:destination="@id/action_webview" />
+
+        <action
+            android:id="@+id/to_settings"
+            app:destination="@+id/settings"/>
 
         <argument
             android:name="tableName"
@@ -48,7 +59,7 @@
     </fragment>
 
     <fragment
-        android:id="@+id/{{tableName_lowercase}}ViewPager"
+        android:id="@+id/viewPager"
         android:name="com.qmobile.qmobileui.detail.viewpager.EntityViewPagerFragment"
         android:label="{{tableName_original}}">
 
@@ -62,15 +73,23 @@
 
         <action
             android:id="@+id/to_action_form"
-            app:destination="@id/actionParametersFragment" />
+            app:destination="@id/action_parameters" />
 
         <action
             android:id="@+id/to_pending_tasks"
-            app:destination="@id/tasksFragment" />
+            app:destination="@id/pending_tasks" />
 
         <action
-            android:id="@+id/to_action_web_view"
-            app:destination="@id/actionWebViewFragment" />
+            android:id="@+id/to_action_webview"
+            app:destination="@id/action_webview" />
+
+        <action
+            android:id="@+id/to_settings"
+            app:destination="@+id/settings"/>
+
+        <argument
+            android:name="tableName"
+            app:argType="string" />
 
         <argument
             android:name="key"
@@ -79,10 +98,6 @@
         <argument
             android:name="position"
             app:argType="integer" />
-
-        <argument
-            android:name="tableName"
-            app:argType="string" />
 
         <argument
             android:name="searchQueryPattern"
@@ -109,7 +124,7 @@
 
         <action
             android:id="@+id/action_list_to_viewpager"
-            app:destination="@id/{{tableName_lowercase}}ViewPager" />
+            app:destination="@id/viewPager" />
 
         <action
             android:id="@+id/action_list_to_list_relation"
@@ -121,15 +136,19 @@
 
         <action
             android:id="@+id/to_action_form"
-            app:destination="@id/actionParametersFragment" />
-                    
-        <action
-            android:id="@+id/to_pending_tasks"
-            app:destination="@id/tasksFragment" />
+            app:destination="@id/action_parameters" />
 
         <action
-            android:id="@+id/to_action_web_view"
-            app:destination="@id/actionWebViewFragment" />
+            android:id="@+id/to_pending_tasks"
+            app:destination="@id/pending_tasks" />
+
+        <action
+            android:id="@+id/to_action_webview"
+            app:destination="@id/action_webview" />
+
+        <action
+            android:id="@+id/to_settings"
+            app:destination="@+id/settings"/>
 
         <argument
             android:name="relationName"
@@ -167,15 +186,19 @@
 
         <action
             android:id="@+id/to_action_form"
-            app:destination="@id/actionParametersFragment" />
-        
+            app:destination="@id/action_parameters" />
+
         <action
             android:id="@+id/to_pending_tasks"
-            app:destination="@id/tasksFragment" />
+            app:destination="@id/pending_tasks" />
 
         <action
-            android:id="@+id/to_action_web_view"
-            app:destination="@id/actionWebViewFragment" />
+            android:id="@+id/to_action_webview"
+            app:destination="@id/action_webview" />
+
+        <action
+            android:id="@+id/to_settings"
+            app:destination="@+id/settings"/>
 
         <argument
             android:name="tableName"
@@ -189,116 +212,6 @@
             android:name="navbarTitle"
             app:argType="string" />
 
-    </fragment>
-
-    <fragment
-        android:id="@+id/actionParametersFragment"
-        android:name="com.qmobile.qmobileui.action.actionparameters.ActionParametersFragment">
-
-        <action
-            android:id="@+id/action_parameters_to_scanner"
-            app:destination="@id/barCodeFragment" />
-
-        <action
-            android:id="@+id/action_parameters_to_push_input_control"
-            app:destination="@id/input_control_push" />
-
-        <argument
-            android:name="tableName"
-            app:argType="string" />
-
-        <argument
-            android:name="itemId"
-            app:argType="string" />
-
-        <argument
-            android:name="relationName"
-            app:argType="string" />
-
-        <argument
-            android:name="parentItemId"
-            app:argType="string" />
-                 
-        <argument
-            android:name="taskId"
-            app:argType="string" />
-
-        <argument
-            android:name="actionUUID"
-            app:argType="string" />
-
-        <argument
-            android:name="navbarTitle"
-            app:argType="string" />
-
-    </fragment>
-
-     <fragment
-        android:id="@+id/barCodeFragment"
-        android:name="com.qmobile.qmobileui.action.barcode.BarcodeScannerFragment">
-     
-        <argument
-            android:name="position"
-            app:argType="integer" />
-
-    </fragment>
-
-    <fragment
-        android:id="@+id/input_control_push"
-        android:name="com.qmobile.qmobileui.action.inputcontrols.PushInputControlFragment">
-
-        <argument
-            android:name="name"
-            app:argType="string" />
-
-        <argument
-            android:name="mandatory"
-            app:argType="boolean" />
-
-    </fragment>
-
-    <fragment
-        android:id="@+id/tasksFragment"
-        android:name="com.qmobile.qmobileui.action.pendingtasks.TasksFragment">
-
-        <action
-            android:id="@+id/to_action_form"
-            app:destination="@id/actionParametersFragment" />
-
-        <argument
-            android:name="tableName"
-            app:argType="string" />
-
-        <argument
-            android:name="currentItemId"
-            app:argType="string" />
-
-    </fragment>
-
-    <fragment
-        android:id="@+id/actionWebViewFragment"
-        android:name="com.qmobile.qmobileui.action.webview.ActionWebViewFragment">
-
-        <argument
-            android:name="path"
-            app:argType="string" />
-
-        <argument
-            android:name="actionName"
-            app:argType="string" />
-
-        <argument
-            android:name="actionLabel"
-            app:argType="string" />
-
-        <argument
-            android:name="actionShortLabel"
-            app:argType="string" />
-
-        <argument
-            android:name="base64EncodedContext"
-            app:argType="string" />
-            
     </fragment>
 
 </navigation>

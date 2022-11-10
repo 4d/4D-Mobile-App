@@ -319,7 +319,7 @@ Function create()->$result : Object
 	If ($o.success)
 		
 		// MARK:COPY ICONS
-		$o:=This:C1470.androidprojectgenerator.copyIcons(This:C1470.project.project.dataModel; $actions)
+		$o:=This:C1470.androidprojectgenerator.copyIcons(This:C1470.project.project.dataModel; This:C1470.project.project.main.order; $actions)
 		
 	End if 
 	

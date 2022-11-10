@@ -8,16 +8,16 @@ package {{package}}.utils
 
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.FragmentActivity
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.qmobile.qmobileapi.model.entity.EntityModel
 import com.qmobile.qmobiledatastore.data.RoomEntity
 import com.qmobile.qmobiledatasync.utils.GenericNavigationResolver
-import com.qmobile.qmobileui.R
+import com.qmobile.qmobileui.BaseActionNavDirections
+import com.qmobile.qmobileui.BaseNavDirections
 import com.qmobile.qmobileui.action.actionparameters.ActionParametersFragmentDirections
+import com.qmobile.qmobileui.activity.mainactivity.MainActivity
 import com.qmobile.qmobileui.detail.viewpager.EntityViewPagerFragmentDirections
 import com.qmobile.qmobileui.list.EntityListFragmentDirections
-import com.qmobile.qmobileui.settings.SettingsFragmentDirections
 import com.qmobile.qmobileui.ui.disableLink
 import com.qmobile.qmobileui.ui.setOnNavigationClickListener
 {{#tableNames}}
@@ -41,19 +41,19 @@ class CustomNavigationResolver : GenericNavigationResolver {
      */
     override fun navigateFromListToViewPager(
         viewDataBinding: ViewDataBinding,
+        sourceTable: String,
         key: String,
         position: Int,
         query: String,
-        sourceTable: String,
         relationName: String,
         parentItemId: String,
         path: String
     ) {
         viewDataBinding.root.findNavController().navigate(
             EntityListFragmentDirections.actionListToViewpager(
+                sourceTable,
                 key,
                 position,
-                sourceTable,
                 query,
                 relationName,
                 parentItemId,
@@ -190,7 +190,7 @@ class CustomNavigationResolver : GenericNavigationResolver {
         navbarTitle: String
     ) {
         viewDataBinding.root.findNavController().navigate(
-            SettingsFragmentDirections.toActionForm(
+            BaseActionNavDirections.toActionForm(
                 tableName = tableName,
                 itemId = itemId,
                 relationName = relationName,
@@ -215,8 +215,8 @@ class CustomNavigationResolver : GenericNavigationResolver {
      * Navigates to TasksFragment
      */
     override fun navigateToPendingTasks(fragmentActivity: FragmentActivity, tableName: String, currentItemId: String) {
-        Navigation.findNavController(fragmentActivity, R.id.nav_host_container).navigate(
-            SettingsFragmentDirections.toPendingTasks(tableName = tableName, currentItemId = currentItemId)
+        (fragmentActivity as? MainActivity)?.navController?.navigate(
+            BaseNavDirections.toPendingTasks(tableName = tableName, currentItemId = currentItemId)
         )
     }
 
@@ -231,8 +231,8 @@ class CustomNavigationResolver : GenericNavigationResolver {
         actionShortLabel: String?, 
         base64EncodedContext: String
     ) {
-        Navigation.findNavController(fragmentActivity, R.id.nav_host_container).navigate(
-            EntityListFragmentDirections.toActionWebView(
+        (fragmentActivity as? MainActivity)?.navController?.navigate(
+            BaseActionNavDirections.toActionWebview(
                 path = path,
                 actionName = actionName,
                 actionLabel = actionLabel ?: "",
@@ -255,6 +255,15 @@ class CustomNavigationResolver : GenericNavigationResolver {
                 name = inputControlName,
                 mandatory = mandatory
             )
+        )
+    }
+
+    /**
+     * Navigates to SettingsFragment
+     */
+    override fun navigateToSettings(fragmentActivity: FragmentActivity) {
+        (fragmentActivity as? MainActivity)?.navController?.navigate(
+            BaseNavDirections.toSettings()
         )
     }
 }

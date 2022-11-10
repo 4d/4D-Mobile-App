@@ -345,7 +345,8 @@ Function copyDataSetPictures
 Function copyIcons
 	var $0 : Object
 	var $1 : Object  // Datamodel object
-	var $2 : Collection  // Actions collection
+	var $2 : Collection  // navigation table order
+	var $3 : Collection  // Actions collection
 	
 	var $tableIcons : 4D:C1709.Folder
 	
@@ -359,26 +360,34 @@ Function copyIcons
 		
 		$0.success:=True:C214
 		
+		var $shouldCreateMissingDMIcon : Boolean
+		
+		$shouldCreateMissingDMIcon:=This:C1470.willRequireDataModelIcons($2; $1)
+		
 		var $dataModel; $field; $subField : Object
 		
 		For each ($dataModel; OB Entries:C1720($1))
 			
-			// Check for table image
-			var $Obj_handleDataModelIcon : Object
-			
-			$Obj_handleDataModelIcon:=This:C1470.handleDataModelIcon($dataModel)
-			
-			If (Not:C34($Obj_handleDataModelIcon.success))
+			If ($shouldCreateMissingDMIcon)
 				
-				$0.success:=False:C215
-				$0.errors.combine($Obj_handleDataModelIcon.errors)
+				// Check for table image
+				var $Obj_handleDataModelIcon : Object
 				
-				// Else : all ok
+				$Obj_handleDataModelIcon:=This:C1470.handleDataModelIcon($dataModel)
+				
+				If (Not:C34($Obj_handleDataModelIcon.success))
+					
+					$0.success:=False:C215
+					$0.errors.combine($Obj_handleDataModelIcon.errors)
+					
+					// Else : all ok
+				End if 
+				
 			End if 
 			
-			var $shouldCreateMissingIcon : Boolean
+			var $shouldCreateMissingFieldIcon : Boolean
 			
-			$shouldCreateMissingIcon:=This:C1470.willRequireFieldIcons($dataModel)
+			$shouldCreateMissingFieldIcon:=This:C1470.willRequireFieldIcons($dataModel)
 			
 			For each ($field; OB Entries:C1720($dataModel.value))  // For each field in dataModel
 				
@@ -400,7 +409,7 @@ Function copyIcons
 					// Check for field icon
 					var $Obj_handleField : Object
 					
-					$Obj_handleField:=This:C1470.handleField($dataModel.key; $field; $shouldCreateMissingIcon)
+					$Obj_handleField:=This:C1470.handleField($dataModel.key; $field; $shouldCreateMissingFieldIcon)
 					
 					If (Not:C34($Obj_handleField.success))
 						
@@ -418,11 +427,11 @@ Function copyIcons
 		End for each 
 		
 		// Actions images
-		If ($2#Null:C1517)
+		If ($3#Null:C1517)
 			
 			var $action : Object
 			
-			For each ($action; $2)
+			For each ($action; $3)
 				
 				// Check for action icon
 				var $Obj_handleActionIcon : Object
@@ -496,7 +505,6 @@ Function willRequireFieldIcons
 	var $1 : Object  // dataModel key value object
 	
 	var $field; $subField : Object
-	var $handleWillRequireFieldIcons : Boolean
 	
 	$0:=False:C215
 	
@@ -548,6 +556,63 @@ Function willRequireFieldIcons
 			
 			// Else: table metadata
 		End if 
+		
+	End for each 
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function willRequireDataModelIcons
+	var $0 : Boolean
+	var $1 : Collection  // navigation table order
+	var $2 : Object  // dataModel object
+	
+	var $tableId : Text
+	var $dataModel; $elem : Object
+	
+	$0:=False:C215
+	
+	For each ($tableId; $1)
+		var $dmFound : Boolean
+		
+		$dmFound:=False:C215
+		
+		For each ($dataModel; OB Entries:C1720($2)) Until ($dmFound)
+			
+			If ($dataModel.key=$tableId)
+				
+				$dmFound:=True:C214
+				
+				var $mainElemFound : Boolean
+				
+				$mainElemFound:=False:C215
+				
+				For each ($elem; OB Entries:C1720($dataModel.value)) Until ($mainElemFound)
+					
+					If ($elem.key="")
+						
+						$mainElemFound:=True:C214
+						
+						If ($elem.icon#Null:C1517)
+							
+							If (Value type:C1509($elem.icon)=Is text:K8:3)
+								
+								If ($elem.icon#"")
+									
+									$0:=True:C214
+									return 
+									
+								End if 
+								
+							End if 
+							
+						End if 
+						
+					End if 
+					
+				End for each 
+				
+			End if 
+			
+		End for each 
 		
 	End for each 
 	
