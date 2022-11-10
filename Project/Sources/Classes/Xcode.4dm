@@ -73,9 +73,9 @@ Function getRequirements()
 				// Fix the date of the last check
 				$requirement.setText(JSON Stringify:C1217($content; *))
 				
-			End if   //Not($run)
-		End if   //Length($ETag)#0
-	End if   //$run
+			End if 
+		End if 
+	End if 
 	
 	If ($run)
 		
@@ -98,10 +98,15 @@ Function getRequirements()
 	
 	var $versionKey : Text
 	$versionKey:=Choose:C955(Application version:C493(*)[[1]]="A"; ""; Application version:C493)
+	
 	If ($content[$versionKey]#Null:C1517)
+		
 		This:C1470.requirement:=$content[$versionKey].xcode
-	Else   // fallback to default main version if not defined
+		
+	Else   // Fallback to default main version if not defined
+		
 		This:C1470.requirement:=$content[""].xcode
+		
 	End if 
 	
 	//====================================================================

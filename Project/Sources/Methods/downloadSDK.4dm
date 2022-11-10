@@ -14,11 +14,10 @@ End if
 var $applicationVersion; $url : Text
 var $run; $withUI : Boolean
 var $buildNumber : Integer
-var $manifest; $o : Object
+var $manifest; $o; $param : Object
 var $fileManifest; $preferences : 4D:C1709.File
 var $request : 4D:C1709.HTTPRequest
 var $sdk : 4D:C1709.ZipFile
-var $callback : cs:C1710._downloadSDK
 
 ASSERT:C1129(Count parameters:C259>=2)
 
@@ -182,58 +181,57 @@ Case of
 		//______________________________________________________
 End case 
 
-If ($run)
+If ($run | $force)
 	
-	$request:=4D:C1709.HTTPRequest.new($url; New object:C1471("method"; "HEAD")).wait(10)
+	$request:=4D:C1709.HTTPRequest.new($url; New object:C1471("method"; "HEAD"))
 	
-	If (Num:C11($request.response.status)=200)
+	$fileManifest:=$sdk.parent.file("manifest.json")
+	
+	If ($fileManifest.exists)
 		
-		$run:=True:C214
+		$manifest:=JSON Parse:C1218($fileManifest.getText())
 		
-		$fileManifest:=$sdk.parent.file("manifest.json")
+		$run:=Not:C34(Bool:C1537($manifest.noUpdate))  // Possibility to block the automatic update for the dev
 		
-		If ($fileManifest.exists)
+		If ($run)
 			
-			$manifest:=JSON Parse:C1218($fileManifest.getText())
+			$run:=Num:C11($manifest.build)<$buildNumber  // Not for the same build
 			
-			$run:=Not:C34(Bool:C1537($manifest.noUpdate))  // Possibility to block the automatic update for the dev
+		Else 
 			
-			If ($run)
-				
-				$run:=Num:C11($manifest.build)<$buildNumber  // Not for the same build
-				
-			Else 
-				
-				Logger.warning("The update of 4D Mobile "+$target+" SDK is locked")
-				
-			End if 
+			Logger.warning("The update of 4D Mobile "+$target+" SDK is locked")
 			
-			If ($run)
-				
-				$run:=(String:C10($manifest.ETag)#String:C10($request.response.headers.ETag))  // True if newer version
-				
-			End if 
 		End if 
+	End if 
+	
+	If ($run | $force)
+		
+		While (Not:C34($request.terminated))
+			
+			IDLE:C311
+			
+		End while 
+		
+		$run:=$manifest=Null:C1517 || (String:C10($manifest.ETag)#String:C10($request.response.headers.ETag))  // True if newer version
 		
 		If ($run | $force)
 			
 			Logger.info("Downloading: "+$url)
 			
-			$callback:=cs:C1710._downloadSDK.new("GET"; \
-				Num:C11($request.response.headers["Content-Length"]); \
-				$sdk; \
-				$fileManifest; \
-				$withUI ? Replace string:C233(Get localized string:C991("downloadingSDK"); "{os}"; Choose:C955($target="android"; "Android"; "iOS")) : ""; \
-				New object:C1471("window"; $caller; "method"; "editor_CALLBACK"; "message"; "updateRibbon"))
+			$param:=New object:C1471(\
+				"what"; "SDK"; \
+				"sdk"; $sdk; \
+				"manifest"; $fileManifest)
 			
-			$request:=4D:C1709.HTTPRequest.new($url; $callback)
+			If ($withUI)
+				
+				$param.title:=Replace string:C233(Get localized string:C991("downloadingSDK"); "{os}"; $target="android" ? "Android" : "iOS")
+				$param.caller:=New object:C1471("window"; $caller; "method"; "editor_CALLBACK"; "message"; "updateRibbon")
+				
+			End if 
+			
+			$request:=4D:C1709.HTTPRequest.new($url; cs:C1710._download.new($param))
 			
 		End if 
-		
-	Else 
-		
-		// ERROR
-		Logger.error($request.url+" "+$request.method+": "+$request.errors.extract("message").join("\r"))
-		
 	End if 
 End if 
