@@ -591,18 +591,10 @@ Function willRequireDataModelIcons
 						
 						$mainElemFound:=True:C214
 						
-						If ($elem.icon#Null:C1517)
+						If (String:C10($elem.value.icon)#"")
 							
-							If (Value type:C1509($elem.icon)=Is text:K8:3)
-								
-								If ($elem.icon#"")
-									
-									$0:=True:C214
-									return 
-									
-								End if 
-								
-							End if 
+							$0:=True:C214
+							return 
 							
 						End if 
 						
