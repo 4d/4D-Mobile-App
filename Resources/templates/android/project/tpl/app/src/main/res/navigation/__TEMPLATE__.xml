@@ -53,7 +53,7 @@
 
         <argument
             android:name="tableName"
-            android:defaultValue="{{tableName}}"
+            android:defaultValue="{{table_label}}"
             app:argType="string" />
 
     </fragment>
