@@ -928,6 +928,7 @@
 			"DetailFormTemplate",
 			"FormTemplate",
 			"ListFormTemplate",
+			"LoginTemplate",
 			"NavigationTemplate",
 			"TablesFormsTemplate"
 		]
