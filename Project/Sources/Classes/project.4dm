@@ -1227,6 +1227,10 @@ Function actionNew($table) : Object
 		
 		$action.tableNumber:=Num:C11($o.id)
 		
+	Else 
+		
+		$action.scope:=Get localized string:C991("scope_3")
+		
 	End if 
 	
 	$action.parameters:=New collection:C1472

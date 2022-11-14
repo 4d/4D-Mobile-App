@@ -557,6 +557,13 @@ Function addMenuManager()
 			
 		End for each 
 		
+		If (Feature.with("actionsInTabBar"))
+			
+			$newMenu.line()
+			$newMenu.append(This:C1470.scopeLabel(New object:C1471("scope"; Get localized string:C991("scope_3"))); "new_"+Get localized string:C991("scope_3"))
+			
+		End if 
+		
 	Else 
 		
 		$o:=$c[0]
@@ -837,17 +844,33 @@ Function scopeMenuManager()
 			Case of 
 					
 					//________________________________________
-				: ($i=1)\
-					 & ($preset="delete")  // Table
+				: /*Table*/($i=1)\
+					 && (($preset="delete") | ($preset="edit"))
 					
 					$menu.disable()
 					
 					//________________________________________
-				: ($i=2)\
-					 & (($preset="add") | ($preset="sort"))  // Current entity
+				: /*Current entity*/($i=2)\
+					 && (($preset="add") | ($preset="sort"))
 					
 					$menu.disable()
 					
+					//________________________________________
+				: /*Global main menu*/($i=3)
+					
+					If (Feature.with("actionsInTabBar"))
+						
+						If (($preset="add") | ($preset="sort") | ($preset="delete") | ($preset="edit"))
+							
+							$menu.disable()
+							
+						End if 
+						
+					Else 
+						
+						$menu.delete()
+						
+					End if 
 					//________________________________________
 			End case 
 		End if 
@@ -856,6 +879,9 @@ Function scopeMenuManager()
 	If (This:C1470.actions.popup($menu).selected)
 		
 		This:C1470.current.scope:=$menu.choice
+		If (Feature.with("actionsInTabBar") && $menu.choice=Get localized string:C991("scope_3"))
+			OB REMOVE:C1226(This:C1470.current; "tableNumber")
+		End if 
 		PROJECT.save()
 		
 		// Update UI
@@ -922,7 +948,11 @@ Function _addAction($action : Object)
 	// Text displayed in the Tables column
 Function tableLabel($data : Object) : Text
 	
-	return Num:C11($data.tableNumber)#0 ? Table name:C256($data.tableNumber) : Get localized string:C991("choose...")
+	If (Feature.with("actionsInTabBar") && String:C10($data.scope)=Get localized string:C991("scope_3"))
+		return ""
+	Else 
+		return Num:C11($data.tableNumber)#0 ? Table name:C256($data.tableNumber) : Get localized string:C991("choose...")
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Text displayed in the Scope column
@@ -968,6 +998,13 @@ Function metaInfo($current : Object) : Object
 		"tables"; New object:C1471; \
 		"names"; New object:C1471; \
 		"shorts"; New object:C1471))
+	
+	If (Feature.with("actionsInTabBar") && String:C10($current.scope)=Get localized string:C991("scope_3"))
+		
+		$result.cell.names.stroke:=Choose:C955(UI.darkScheme; "white"; "black")
+		return 
+		
+	End if 
 	
 	// Mark not or missing assigned table
 	If (Form:C1466.dataModel[String:C10($current.tableNumber)]=Null:C1517)

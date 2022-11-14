@@ -708,8 +708,9 @@ Function update()
 					
 					This:C1470.goToPage(1)
 					
-					If ($action.tableNumber=Null:C1517)  // No target table
-						
+					If (($action.tableNumber=Null:C1517)\
+						 && ((Not:C34(Feature.with("actionsInTabBar"))) || (String:C10($action.scope)#Get localized string:C991("scope_3"))))
+						// No table defined
 						This:C1470.noTable.show()
 						This:C1470.properties.hide()
 						This:C1470.remove.disable()
@@ -718,7 +719,7 @@ Function update()
 					Else 
 						
 						This:C1470.title.setTitle(\
-							UI.str.localize("actionParameters"; New collection:C1472($action.shortLabel; Table name:C256($action.tableNumber)))).show()
+							UI.str.localize($action.tableNumber=Null:C1517 ? "actionParametersNoTable" : "actionParameters"; New collection:C1472($action.shortLabel; Table name:C256(Num:C11($action.tableNumber))))).show()
 						This:C1470.withSelection.show()
 						This:C1470.add.enable()
 						This:C1470.remove.enable($current#Null:C1517)
@@ -1650,7 +1651,7 @@ Function formatMenuManager()
 	$formats:=This:C1470.getFormats()
 	$menu:=cs:C1710.menu.new("no-localization")
 	
-	If (PROJECT.isFieldAttribute($current.name; Table name:C256(This:C1470.action.tableNumber)))
+	If ((This:C1470.action.tableNumber#Null:C1517) && PROJECT.isFieldAttribute($current.name; Table name:C256(This:C1470.action.tableNumber)))
 		
 		$menu.append(":xliff:byDefault"; "null"; $current.format=Null:C1517).line()
 		
@@ -1937,9 +1938,9 @@ Function dataSourceMenuManager()
 Function editList()
 	
 /*
-					$form:=New object(\
-										"static"; $static; \
-										"host"; This.path.hostInputControls(True))
+						$form:=New object(\
+												"static"; $static; \
+												"host"; This.path.hostInputControls(True))
 	
 $form.folder:=This.path.hostInputControls()
 $manifest:=$form.folder.file("manifest.json")
