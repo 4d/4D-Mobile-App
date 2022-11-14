@@ -2,6 +2,7 @@
 
 Function fillMenu($menu : Object)
 	$menu.append("Inject component in 4D app"; "injectComponentToCurrentApp").method("menu_component")
+	$menu.append("Inject the builded component in 4D app"; "injectComponentBuildToCurrentApp").method("menu_component")
 	$menu.append("Get iOS SDK from 4D app"; "getAppiOSSDK").method("menu_component")
 	$menu.append("Get iOS SDK from TC"; "getTCiOSSDK").method("menu_component")
 	$menu.line()
@@ -34,7 +35,32 @@ Function injectComponentToCurrentApp
 	var $result : 4D:C1709.Folder
 	$result:=Folder:C1567(fk database folder:K87:14).copyTo($appComponent.parent; "4D Mobile App.4dbase")
 	
-	SHOW ON DISK:C922($result.platformPath)
+	If (Shift down:C543)
+		RESTART 4D:C1292
+	Else 
+		SHOW ON DISK:C922($result.platformPath)
+	End if 
+	
+Function injectComponentBuildToCurrentApp()
+	
+	var $app : 4D:C1709.Folder
+	$app:=Folder:C1567(Application file:C491; fk platform path:K87:2)
+	
+	var $appComponent : 4D:C1709.Folder
+	$appComponent:=$app.folder("Contents/Resources/Internal User Components/4D Mobile App.4dbase/")
+	
+	If ($appComponent.exists)
+		$appComponent.delete(Delete with contents:K24:24)
+	End if 
+	
+	var $result : 4D:C1709.Folder
+	$result:=Folder:C1567(Folder:C1567(fk database folder:K87:14).platformPath; fk platform path:K87:2).parent.folder("Build/Components").folder("4D Mobile App.4dbase").copyTo($appComponent.parent; "4D Mobile App.4dbase")
+	
+	If (Shift down:C543)
+		RESTART 4D:C1292
+	Else 
+		SHOW ON DISK:C922($result.platformPath)
+	End if 
 	
 Function getAppiOSSDK
 	
