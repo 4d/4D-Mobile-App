@@ -95,7 +95,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 			
 			$Obj_out.success:=True:C214
 			
-			// MARK:- formatter
+			// MARK:- formatter & input
 		: ($Obj_in.action="formatter") | ($Obj_in.action="input")
 			
 			// Check errors
@@ -117,7 +117,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 					$Obj_out.errors:=New collection:C1472("No target defined when creating formatter asset.")
 					
 					//----------------------------------------
-				: (Value type:C1509($Obj_in.target)=Is text:K8:3 && (Length:C16(String:C10($Obj_in.target))=0))
+				: ((Value type:C1509($Obj_in.target)=Is text:K8:3) && (Length:C16(String:C10($Obj_in.target))=0))
 					
 					$Obj_out.errors:=New collection:C1472("No target defined when creating formatter asset (empty defined).")
 					
