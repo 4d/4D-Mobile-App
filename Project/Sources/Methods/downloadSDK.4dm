@@ -212,7 +212,7 @@ If ($run | $force)
 			
 		End while 
 		
-		$run:=$manifest=Null:C1517 || (String:C10($manifest.ETag)#String:C10($request.response.headers.ETag))  // True if newer version
+		$run:=($manifest=Null:C1517) || (String:C10($manifest.ETag)#String:C10($request.response.headers.ETag))  // True if newer version
 		
 		If ($run | $force)
 			
