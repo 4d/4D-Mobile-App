@@ -11,9 +11,7 @@ import com.qmobile.qmobiledatasync.utils.CustomEntityListFragment
 import com.qmobile.qmobiledatasync.utils.GenericTableFragmentHelper
 import com.qmobile.qmobiledatasync.utils.LayoutType
 import com.qmobile.qmobileui.detail.EntityDetailFragment
-{{#has_custom_formatter_images}}
 import {{package}}.R
-{{/has_custom_formatter_images}}
 {{#tableNames_navigation}}
 import {{package}}.detail.EntityFragment{{name}}
 {{/tableNames_navigation}}
@@ -98,7 +96,7 @@ class CustomTableFragmentHelper :
     override fun getNavIcon(tableName: String): Int? = when (tableName) {
         {{#tableNames_navigation_for_navbar}}
         {{#hasIcon}}
-        "{{label}}" -> {{icon}}
+        "{{label}}" -> R.drawable.{{icon}}
         {{/hasIcon}}
         {{^hasIcon}}
         "{{label}}" -> null
