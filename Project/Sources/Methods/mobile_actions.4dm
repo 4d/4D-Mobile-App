@@ -364,9 +364,6 @@ Case of
 										End if 
 										
 										If (String:C10($manifest.binding)="imageNamed")
-											If ((String:C10($manifest.format)="sheet") | (String:C10($manifest.format)="picker"))
-												ob_warning_add($Obj_out; "Image format not compatible with sheet or picker")
-											End if 
 											
 											// generate images
 											Case of 
