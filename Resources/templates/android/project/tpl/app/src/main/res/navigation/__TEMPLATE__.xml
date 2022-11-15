@@ -53,6 +53,11 @@
 
         <argument
             android:name="tableName"
+            android:defaultValue="{{tableName}}"
+            app:argType="string" />
+
+        <argument
+            android:name="navbarTitle"
             android:defaultValue="{{table_label}}"
             app:argType="string" />
 
@@ -113,6 +118,10 @@
 
         <argument
             android:name="path"
+            app:argType="string" />
+            
+        <argument
+            android:name="navbarTitle"
             app:argType="string" />
 
     </fragment>

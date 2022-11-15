@@ -47,7 +47,8 @@ class CustomNavigationResolver : GenericNavigationResolver {
         query: String,
         relationName: String,
         parentItemId: String,
-        path: String
+        path: String,
+        navbarTitle: String
     ) {
         viewDataBinding.root.findNavController().navigate(
             EntityListFragmentDirections.actionListToViewpager(
@@ -57,7 +58,8 @@ class CustomNavigationResolver : GenericNavigationResolver {
                 query,
                 relationName,
                 parentItemId,
-                path
+                path,
+                navbarTitle
             )
         )
     }
@@ -147,7 +149,7 @@ class CustomNavigationResolver : GenericNavigationResolver {
                 val action = EntityListFragmentDirections.actionListToDetailRelation(
                     tableName = "{{relation_target}}",
                     itemId = relationId,
-                    navbarTitle = ""
+                    navbarTitle = "{{navbarTitle}}"
                 )
                 viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnNavigationClickListener(viewDataBinding, action)
             } ?: kotlin.run {
@@ -166,7 +168,7 @@ class CustomNavigationResolver : GenericNavigationResolver {
                 val action = EntityViewPagerFragmentDirections.actionDetailToDetailRelation(
                     tableName = "{{relation_target}}",
                     itemId = relationId,
-                    navbarTitle = ""
+                    navbarTitle = "{{navbarTitle}}"
                 )
                 viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnNavigationClickListener(viewDataBinding, action)
             } ?: kotlin.run {
