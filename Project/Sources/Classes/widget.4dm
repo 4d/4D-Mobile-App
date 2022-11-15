@@ -64,8 +64,9 @@ Function get draggable() : Boolean
 	//=== === === === === === === === === === === === === === === === === === ===
 Function set draggable($on : Boolean)
 	
-	var $automaticDrag; $automaticDrop; $droppable : Boolean
+	var $automaticDrag; $automaticDrop; $draggable; $droppable : Boolean
 	
+	OBJECT GET DRAG AND DROP OPTIONS:C1184(*; This:C1470.name; $draggable; $automaticDrag; $droppable; $automaticDrop)
 	OBJECT SET DRAG AND DROP OPTIONS:C1183(*; This:C1470.name; $on; $automaticDrag; $droppable; $automaticDrop)
 	
 	//=== === === === === === === === === === === === === === === === === === ===
@@ -80,8 +81,9 @@ Function get droppable() : Boolean
 	//=== === === === === === === === === === === === === === === === === === ===
 Function set droppable($on : Boolean)
 	
-	var $automaticDrag; $automaticDrop; $draggable : Boolean
+	var $automaticDrag; $automaticDrop; $draggable; $droppable : Boolean
 	
+	OBJECT GET DRAG AND DROP OPTIONS:C1184(*; This:C1470.name; $draggable; $automaticDrag; $droppable; $automaticDrop)
 	OBJECT SET DRAG AND DROP OPTIONS:C1183(*; This:C1470.name; $draggable; $automaticDrag; $on; $automaticDrop)
 	
 	//=== === === === === === === === === === === === === === === === === === ===
