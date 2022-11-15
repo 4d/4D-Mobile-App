@@ -22,7 +22,8 @@
         <activity
             android:name="com.qmobile.qmobileui.activity.loginactivity.LoginActivity"
             android:exported="true"
-            android:theme="@style/Theme.MyApplication.LoginTheme">
+            android:theme="@style/Theme.MyApplication.LoginTheme"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
