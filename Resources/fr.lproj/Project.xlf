@@ -931,7 +931,7 @@ Version : {version}</target>
         <trans-unit id="4JEYAAhxJwDB8UITGYM0Jk" resname="duplicate">
           <source>Duplicate</source>
           <target>Dupliquer</target>
-        </trans-unit>        
+        </trans-unit>
         <trans-unit id="ZxYxVNxb6NTHVXEouCDrMQ" resname="downloadTheLatestRevision">
           <source>Download the latest revision</source>
           <target>Téléchargez la dernière version</target>
@@ -1595,6 +1595,13 @@ Cela peut prendre plusieurs minutes…</target>
         <trans-unit id="0ETjj8a0jQetK4s2zCFqbQ" resname="noTargetTableDefined">
           <source>No target table defined</source>
           <target>Pas de table cible définie</target>
+        </trans-unit>
+        <trans-unit id="aAUsA9jDOUc9bwEmAAPs6Q" resname="scope_3" translate="no">
+          <source>global</source>
+        </trans-unit>
+        <trans-unit id="Fn146UgTfc0zlq9jxZO9CA" resname="global">
+          <source>Global</source>
+          <target>Global</target>
         </trans-unit>
       </group>
       <group resname="Features">

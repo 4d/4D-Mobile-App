@@ -1208,24 +1208,32 @@ Function removeFromMain($table)
 	
 	//mark:-[ACTIONS]
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function actionNew($table) : Object
+Function actionNew($table : Integer) : Object
 	
 	var $label; $name : Text
 	var $action; $o : Object
 	
-	$o:=This:C1470._actionTable($table)
 	$name:=This:C1470._actionName("action")
 	$label:=This:C1470.label($name)
 	
-	$action:=New object:C1471(\
-		"name"; $name; \
-		"scope"; "table"; \
-		"shortLabel"; $label; \
-		"label"; $label)
-	
-	If ($o#Null:C1517)
+	If ($table=-1)  // Global
 		
-		$action.tableNumber:=Num:C11($o.id)
+		$action:=New object:C1471(\
+			"name"; $name; \
+			"scope"; Get localized string:C991("scope_3"); \
+			"shortLabel"; $label; \
+			"label"; $label)
+		
+	Else 
+		
+		$o:=This:C1470._actionTable($table)
+		
+		$action:=New object:C1471(\
+			"name"; $name; \
+			"scope"; "table"; \
+			"shortLabel"; $label; \
+			"label"; $label; \
+			"tableNumber"; Num:C11($o.id))
 		
 	End if 
 	

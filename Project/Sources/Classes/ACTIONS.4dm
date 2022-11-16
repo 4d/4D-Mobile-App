@@ -473,11 +473,11 @@ Function setIcon($data : Object)
 	This:C1470.refresh()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function newAction($tableNumber : Integer)
+Function newAction($cope : Integer)
 	
 	var $action : Object
 	
-	$action:=PROJECT.actionNew($tableNumber)
+	$action:=PROJECT.actionNew($cope)
 	
 	$action.$icon:=UI.getIcon("")
 	This:C1470._addAction($action)
@@ -557,6 +557,13 @@ Function addMenuManager()
 			
 		End for each 
 		
+		If (Feature.with("actionsInTabBar"))
+			
+			$newMenu.line()\
+				.append(This:C1470.scopeLabel(New object:C1471("scope"; Get localized string:C991("scope_3"))); "global")
+			
+		End if 
+		
 	Else 
 		
 		$o:=$c[0]
@@ -591,6 +598,13 @@ Function addMenuManager()
 			$menu.append(":xliff:openURLAction"; "openURL_"+$o.tableID)
 			
 		End if 
+		
+		If (Feature.with("actionsInTabBar"))
+			
+			$menu.line()\
+				.append(This:C1470.scopeLabel(New object:C1471("scope"; Get localized string:C991("scope_3"))); "global")
+			
+		End if 
 	End if 
 	
 	$menu.popup(This:C1470.add)
@@ -609,6 +623,11 @@ Function addMenuManager()
 				
 				$t:=Replace string:C233($menu.choice; "new_"; "")
 				This:C1470.newAction(Num:C11($t))
+				
+				//______________________________________________________
+			: ($menu.choice="global")
+				
+				This:C1470.newAction(-1)
 				
 				//______________________________________________________
 			Else 
@@ -838,15 +857,35 @@ Function scopeMenuManager()
 					
 					//________________________________________
 				: ($i=1)\
-					 & ($preset="delete")  // Table
+					 && (($preset="delete") | ($preset="edit"))  // Table
 					
 					$menu.disable()
 					
 					//________________________________________
 				: ($i=2)\
-					 & (($preset="add") | ($preset="sort"))  // Current entity
+					 && (($preset="add") | ($preset="sort"))  // Current entity
 					
 					$menu.disable()
+					
+					//________________________________________
+				: ($i=3)  // Global main menu
+					
+					If (Feature.with("actionsInTabBar"))
+						
+						If (($preset="add")\
+							 | ($preset="sort")\
+							 | ($preset="delete")\
+							 | ($preset="edit"))
+							
+							$menu.disable()
+							
+						End if 
+						
+					Else 
+						
+						$menu.delete()
+						
+					End if 
 					
 					//________________________________________
 			End case 
@@ -856,6 +895,24 @@ Function scopeMenuManager()
 	If (This:C1470.actions.popup($menu).selected)
 		
 		This:C1470.current.scope:=$menu.choice
+		
+		If ($menu.choice="global")
+			
+			OB REMOVE:C1226(This:C1470.current; "tableNumber")
+			
+		Else 
+			
+			// Auto-selection if only one table is published
+			var $c : Collection
+			$c:=OB Keys:C1719(Form:C1466.dataModel)
+			
+			If ($c.length=1)
+				
+				This:C1470.current.tableNumber:=Num:C11($c[0])
+				
+			End if 
+		End if 
+		
 		PROJECT.save()
 		
 		// Update UI
@@ -920,21 +977,28 @@ Function _addAction($action : Object)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Text displayed in the Tables column
-Function tableLabel($data : Object) : Text
+Function tableLabel($this : Object) : Text
 	
-	return Num:C11($data.tableNumber)#0 ? Table name:C256($data.tableNumber) : Get localized string:C991("choose...")
+	If (String:C10($this.scope)="global")
+		
+		return   // Leave blank
+		
+	Else 
+		
+		return Num:C11($this.tableNumber)#0 ? Table name:C256($this.tableNumber) : Get localized string:C991("choose...")
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Text displayed in the Scope column
-Function scopeLabel($data : Object) : Text
+Function scopeLabel($this : Object) : Text
 	
-	return Get localized string:C991(String:C10($data.scope))
+	return Get localized string:C991(String:C10($this.scope))
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// <Background Color Expression> ******************** VERY SIMILAR TO ACTIONS_PARAMS.backgroundColor() ********************
-Function backgroundColor($current : Object) : Variant
+Function backgroundColor() : Variant
 	
-	var $v  // could be an integer or a text
 	var $isFocused : Boolean
 	
 	If (Num:C11(This:C1470.index)#0)
@@ -956,7 +1020,7 @@ Function backgroundColor($current : Object) : Variant
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// <Meta info expression>
-Function metaInfo($current : Object) : Object
+Function metaInfo($this : Object) : Object
 	
 	var $meta : Object
 	
@@ -969,32 +1033,33 @@ Function metaInfo($current : Object) : Object
 		"names"; New object:C1471; \
 		"shorts"; New object:C1471))
 	
-	// Mark not or missing assigned table
-	If (Form:C1466.dataModel[String:C10($current.tableNumber)]=Null:C1517)
-		
-		$meta.cell.tables.stroke:=$current.scope="global" ? "silver" : UI.errorRGB
-		
-	Else 
-		
-		// Not assigned table
-		If (Num:C11($current.tableNumber)=0)
+	Case of 
 			
-			$meta.cell.names.stroke:=UI.errorRGB
+			//______________________________________________________
+		: ($this.scope="global")
 			
-		End if 
-	End if 
+			$meta.cell.tables.stroke:="silver"  // Deactivated
+			
+			//______________________________________________________
+		: (Num:C11($this.tableNumber)=0)\
+			 | (Form:C1466.dataModel[String:C10($this.tableNumber)]=Null:C1517)
+			
+			$meta.cell.tables.stroke:=UI.errorRGB
+			
+			//______________________________________________________
+	End case 
 	
 	// Mark duplicate names
-	If (Form:C1466.actions.indices("name = :1"; $current.name).length>1)
+	If (Form:C1466.actions.indices("name = :1"; $this.name).length>1)
 		
 		$meta.cell.names.stroke:=UI.errorRGB
 		
 	End if 
 	
 	// The short label value of a sort action must be greyed
-	If (String:C10($current.preset)="sort")
+	If (String:C10($this.preset)="sort")
 		
-		$meta.cell.shorts.stroke:="silver"
+		$meta.cell.shorts.stroke:="silver"  // Deactivated
 		
 	End if 
 	
