@@ -10,11 +10,12 @@ Function doRun
 	$0:=Super:C1706.doRun()  // copy files
 	$0:=ob_deepMerge($0; This:C1470.generateAssets())
 	
-Function generateAssets
-	C_OBJECT:C1216($0; $Obj_out)
-	$Obj_out:=New object:C1471()
+Function generateAssets()->$Obj_out : Object
+	var $assetFolder : 4D:C1709.Folder
+	var $file : 4D:C1709.File
+	var $Obj_in; $Obj_template; $o : Object
 	
-	C_OBJECT:C1216($Obj_in; $Obj_template)
+	$Obj_out:=New object:C1471()
 	$Obj_in:=This:C1470.input
 	$Obj_template:=This:C1470.template
 	
@@ -28,10 +29,9 @@ Function generateAssets
 		ARRAY TEXT:C222($tTxt_keys; 0x0000)
 		OB GET PROPERTY NAMES:C1232($Obj_template.assets; $tTxt_keys)
 		
-		C_LONGINT:C283($i)
+		var $i : Integer
 		For ($i; 1; Size of array:C274($tTxt_keys); 1)
 			
-			C_OBJECT:C1216($o; $file)
 			
 			// Hardcoding image path (maybe could do better)
 			Case of 
@@ -39,8 +39,17 @@ Function generateAssets
 					//________________________________________
 				: ($tTxt_keys{$i}="center")
 					
+					$assetFolder:=FolderFrom($Obj_template.parent.assets.source)
+					
 					// Temporary or by default take app icon, later could be customizable by UI, and must be managed like AppIcon
-					$file:=Folder:C1567($Obj_template.parent.assets.source; fk platform path:K87:2).folder("AppIcon.appiconset").file("ios-marketing1024.png")
+					For each ($file; New collection:C1472(\
+						$assetFolder.parent.file("app_icon.png"); \
+						$assetFolder.file("Assets.xcassets/AppIcon.appiconset/universal1024.png"); \
+						$assetFolder.file("Assets.xcassets/AppIcon.appiconset/ios-marketing1024.png")))
+						If ($file.exists)
+							break
+						End if 
+					End for each 
 					
 					//________________________________________
 				: ($tTxt_keys{$i}="background")
@@ -113,4 +122,3 @@ Function generateAssets
 		End for 
 	End if 
 	
-	$0:=$Obj_out
