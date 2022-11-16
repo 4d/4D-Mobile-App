@@ -1612,6 +1612,10 @@ Esto puede tardar unos minutos...</target>
           <source>Global</source>
           <target state="new">Global</target>
         </trans-unit>
+        <trans-unit id="Jr4y6+C2Zj+93vYAQjtVig" resname="actionParametersNoTable">
+          <source>Parameters of the "{action}" action</source>
+          <target state="new">Parameters of the "{action}" action</target>
+        </trans-unit>
       </group>
       <group resname="Features">
         <trans-unit id="8Uc/+zgjnk5kAMkT9zoKUA" resname="deepLinking">

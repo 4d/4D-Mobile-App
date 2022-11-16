@@ -314,7 +314,7 @@ Function launch($command; $arguments : Variant) : cs:C1710.lep
 	
 	$t:=This:C1470._cleanupStream($t)
 	
-	If (This:C1470.success & Length:C16($t)>0)  // (Length($errorStream)=0)
+	If (This:C1470.success & (Length:C16($t)>0))  // (Length($errorStream)=0)
 		
 		If (Not:C34(This:C1470.resultInErrorStream))
 			
