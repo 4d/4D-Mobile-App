@@ -194,7 +194,7 @@ Function launchAsync($command; $arguments : Variant) : cs:C1710.lep
 Function launch($command; $arguments : Variant) : cs:C1710.lep
 	
 	var $inputStream; $outputStream : Blob
-	var $errorStream; $t : Text
+	var $errorStream; $response; $t : Text
 	var $len; $pid; $pos : Integer
 	
 	This:C1470.outputStream:=Null:C1517
@@ -296,35 +296,31 @@ Function launch($command; $arguments : Variant) : cs:C1710.lep
 	
 	If (This:C1470.resultInErrorStream)
 		
-		$t:=$errorStream
+		$response:=$errorStream
 		CLEAR VARIABLE:C89($errorStream)
 		
 	Else 
 		
 		If (BLOB size:C605($outputStream)>0)  // Else OK is reset to 0
 			
-			$t:=Convert to text:C1012($outputStream; This:C1470.charSet)
-			
-		Else 
-			
-			CLEAR VARIABLE:C89($t)
+			$response:=Convert to text:C1012($outputStream; This:C1470.charSet)
 			
 		End if 
 	End if 
 	
-	$t:=This:C1470._cleanupStream($t)
+	$response:=This:C1470._cleanupStream($response)
 	
-	If (This:C1470.success & (Length:C16($t)>0))  // (Length($errorStream)=0)
+	If (This:C1470.success & (Length:C16($response)>0))  // (Length($errorStream)=0)
 		
 		If (Not:C34(This:C1470.resultInErrorStream))
 			
 			// ⚠️ Some commands return the error in the output stream
 			
-			If (Position:C15("ERROR"; $t; *)=1)\
-				 | (Position:C15("FAILED"; $t; *)=1)\
-				 | (Position:C15("Failure"; $t; *)=1)
+			If (Position:C15("ERROR"; $response; *)=1)\
+				 | (Position:C15("FAILED"; $response; *)=1)\
+				 | (Position:C15("Failure"; $response; *)=1)
 				
-				$errorStream:=$t
+				$errorStream:=$response
 				This:C1470.success:=False:C215
 				
 			End if 
@@ -346,36 +342,36 @@ Function launch($command; $arguments : Variant) : cs:C1710.lep
 				//……………………………………………………………………
 			: (This:C1470.outputType=Is text:K8:3)
 				
-				This:C1470.outputStream:=$t
+				This:C1470.outputStream:=$response
 				
 				//……………………………………………………………………
 			: (This:C1470.outputType=Is object:K8:27)
 				
-				If (Length:C16($t)>0)
+				If (Length:C16($response)>0)
 					
-					This:C1470.success:=(Match regex:C1019("(?si-m)^(?:\\{.*\\})|(?:^\\[.*\\])$"; $t; 1))
+					This:C1470.success:=(Match regex:C1019("(?si-m)^(?:\\{.*\\})|(?:^\\[.*\\])$"; $response; 1))
 					
 				End if 
 				
 				If (This:C1470.success)
 					
-					This:C1470.outputStream:=JSON Parse:C1218($t)
+					This:C1470.outputStream:=JSON Parse:C1218($response)
 					
 				Else 
 					
-					This:C1470.errorStream:=$t
+					This:C1470.errorStream:=$response
 					
 				End if 
 				
 				//……………………………………………………………………
 			: (This:C1470.outputType=Is collection:K8:32)
 				
-				This:C1470.outputStream:=Split string:C1554($t; "\n")
+				This:C1470.outputStream:=Split string:C1554($response; "\n")
 				
 				//……………………………………………………………………
 			: (This:C1470.outputType=Is boolean:K8:9)
 				
-				This:C1470.outputStream:=($t="true")
+				This:C1470.outputStream:=($response="true")
 				
 				//……………………………………………………………………
 			: (This:C1470.outputType=Is longint:K8:6)\
@@ -383,7 +379,7 @@ Function launch($command; $arguments : Variant) : cs:C1710.lep
 				 | (This:C1470.outputType=Is integer 64 bits:K8:25)\
 				 | (This:C1470.outputType=Is real:K8:4)
 				
-				This:C1470.outputStream:=Num:C11($t)
+				This:C1470.outputStream:=Num:C11($response)
 				
 				//……………………………………………………………………
 			Else 
@@ -396,7 +392,7 @@ Function launch($command; $arguments : Variant) : cs:C1710.lep
 	Else 
 		
 		This:C1470.pid:=0
-		This:C1470.outputStream:=$t
+		This:C1470.outputStream:=$response
 		This:C1470.errorStream:=This:C1470._cleanupStream($errorStream)
 		This:C1470._pushError(This:C1470.errorStream)
 		

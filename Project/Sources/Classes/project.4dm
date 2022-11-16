@@ -1213,11 +1213,10 @@ Function actionNew($table : Integer) : Object
 	var $label; $name : Text
 	var $action; $o : Object
 	
-	$name:=This:C1470._actionName("action")
-	$label:=This:C1470.label($name)
-	
 	If ($table=-1)  // Global
 		
+		$name:=This:C1470._actionName("globalAction")
+		$label:=This:C1470.label($name)
 		$action:=New object:C1471(\
 			"name"; $name; \
 			"scope"; Get localized string:C991("scope_3"); \
@@ -1226,6 +1225,8 @@ Function actionNew($table : Integer) : Object
 		
 	Else 
 		
+		$name:=This:C1470._actionName("action")
+		$label:=This:C1470.label($name)
 		$o:=This:C1470._actionTable($table)
 		
 		$action:=New object:C1471(\

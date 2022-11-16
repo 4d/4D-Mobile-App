@@ -125,10 +125,10 @@ End if
 Feature.main("listEditor")  // #130828 [MOBILE] Create and edit an input control from the project editor
 Feature.main("inputControlArchive")  // Allow to use zip for inputControl, as requested by azure:5424 The mobile project shall support a zip format for input control with Android and iOS.
 Feature.main("inputControlWithCodeAndroid")  // Allow to use inputControl with code, feature by azure:3862 [Android] Input controls with Kotlin code
+Feature.main("actionsInTabBar")
 
 // Mark:-🚧 WIP
 Feature.wip("buildWithCmd")  // Allow to create/build using cmd only: azure:3628
-Feature.wip("actionsInTabBar")
 
 // FEATURE.wip("simuARMOnAppleProcessor") // Mac M1 build for simu using arm64
 Feature.wip("duplicateTemplate")  // Allow to duplicate template in host database and show on disk https:// Project.4d.com/issues/98054
