@@ -79,7 +79,7 @@ Case of
 					If (Not:C34($fileManifest.exists))\
 						 | ($fileManifest.modificationDate#Current date:C33)
 						
-						// Get the last 4D Mobile Android SDK from AWS server if any
+						// Get the last 4D Mobile iOS SDK from AWS server if any
 						CALL WORKER:C1389(Is compiled mode:C492 ? 1 : "$worker"; Formula:C1597(downloadSDK).source; "aws"; "ios"; False:C215; $in.caller)
 						
 					End if 

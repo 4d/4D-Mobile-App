@@ -126,6 +126,7 @@ Feature.main("listEditor")  // #130828 [MOBILE] Create and edit an input control
 Feature.main("inputControlArchive")  // Allow to use zip for inputControl, as requested by azure:5424 The mobile project shall support a zip format for input control with Android and iOS.
 Feature.main("inputControlWithCodeAndroid")  // Allow to use inputControl with code, feature by azure:3862 [Android] Input controls with Kotlin code
 Feature.main("actionsInTabBar")
+Feature.main("iosSDKfromAWS")  // Download iOS SDK from AWS
 
 // Mark:-🚧 WIP
 Feature.wip("buildWithCmd")  // Allow to create/build using cmd only: azure:3628
@@ -159,7 +160,6 @@ Feature.pending("sharedActionWithDescription")  // [MOBILE] Add a description pa
 Feature.pending("withWidgetActions")  // Enable widget actions
 Feature.pending(114338)  // Support Collection of field injected into detail template https:// Project.4d.com/issues/114338
 Feature.pending("droppingNext"; 114338)  // Allow to drop a multivalued field next to another existing dropped multivalued fields
-Feature.pending("iosSDKfromAWS")  // Download iOS SDK from AWS
 
 Feature.pending("coreDataAbstractEntity")  // Add in coreData model Record abstract entity
 
