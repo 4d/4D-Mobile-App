@@ -171,7 +171,7 @@ Function copyEmbeddedDataLib
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function copyResources($project : cs:C1710.process)->$result : Object
+Function copyResources($project : cs:C1710.project)->$result : Object
 	
 	var $projectFolder; $androidAssets; $currentFolder : 4D:C1709.Folder
 	var $currentFile; $copyDest : 4D:C1709.File
