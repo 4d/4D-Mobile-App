@@ -1613,6 +1613,13 @@ Dies kann einige Minuten dauern</target>
           <source>No target table defined</source>
           <target>Keine Ziel-Tabelle definiert</target>
         </trans-unit>
+        <trans-unit id="aAUsA9jDOUc9bwEmAAPs6Q" resname="scope_3" translate="no">
+          <source>global</source>
+        </trans-unit>
+        <trans-unit id="Fn146UgTfc0zlq9jxZO9CA" resname="global">
+          <source>Global</source>
+          <target state="new">Global</target>
+        </trans-unit>
       </group>
       <group resname="Features">
         <trans-unit id="8Uc/+zgjnk5kAMkT9zoKUA" resname="deepLinking">
