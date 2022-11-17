@@ -73,6 +73,7 @@ Function setSeparatePopupMenu() : cs:C1710.button
 Function setNoPopupMenu() : cs:C1710.button
 	
 	return (This:C1470._setPopupMenu("none"))
+	
 	//═════════════════════════════════════════════════
 	/// Picture linked to a button
 Function setPicture($proxy : Text) : cs:C1710.button

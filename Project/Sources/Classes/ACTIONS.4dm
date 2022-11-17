@@ -15,6 +15,8 @@ Class constructor
 		
 	End if 
 	
+	This:C1470.globalScope:=Get localized string:C991("scope_3")
+	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	/// Design definition
 Function init()
@@ -478,8 +480,7 @@ Function newAction($cope : Integer)
 	var $action : Object
 	
 	$action:=PROJECT.actionNew($cope)
-	
-	$action.$icon:=UI.getIcon("")
+	$action.$icon:=UI.getIcon(($cope=-1) ? "commerce/Product.svg" : "")
 	This:C1470._addAction($action)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
@@ -560,7 +561,7 @@ Function addMenuManager()
 		If (Feature.with("actionsInTabBar"))
 			
 			$newMenu.line()\
-				.append(This:C1470.scopeLabel(New object:C1471("scope"; Get localized string:C991("scope_3"))); "global")
+				.append(This:C1470.scopeLabel(New object:C1471("scope"; This:C1470.globalScope)); "global")
 			
 		End if 
 		
@@ -602,7 +603,7 @@ Function addMenuManager()
 		If (Feature.with("actionsInTabBar"))
 			
 			$menu.line()\
-				.append(This:C1470.scopeLabel(New object:C1471("scope"; Get localized string:C991("scope_3"))); "global")
+				.append(This:C1470.scopeLabel(New object:C1471("scope"; This:C1470.globalScope)); "global")
 			
 		End if 
 	End if 

@@ -22,6 +22,8 @@ Class constructor
 	This:C1470.typesAllowingCustomInputControls:=New collection:C1472("string"; "bool"; "number")
 	This:C1470.customInputControlsWithoutPlaceholder:=New collection:C1472("/segmented"; "/picker")
 	
+	This:C1470.globalScope:=Get localized string:C991("scope_3")
+	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	/// Design definition
 Function init()
@@ -619,6 +621,10 @@ Function update()
 		$action:=This:C1470.action
 		$current:=This:C1470.current
 		
+		var $preset; $scope : Text
+		$preset:=String:C10($action.preset)
+		$scope:=String:C10($action.scope)
+		
 		If ($action=Null:C1517)  // No action selected
 			
 			This:C1470.goToPage(1)
@@ -631,13 +637,13 @@ Function update()
 			Case of 
 					
 					//______________________________________________________
-				: (String:C10($action.preset)="delete")
+				: ($preset="delete")
 					
 					This:C1470.goToPage(1)
 					This:C1470.noParameters.show()
 					
 					//______________________________________________________
-				: (String:C10($action.preset)="share")
+				: ($preset="share")
 					
 					If (Feature.with("sharedActionWithDescription"))  //🚧
 						
@@ -652,7 +658,7 @@ Function update()
 					End if 
 					
 					//______________________________________________________
-				: (String:C10($action.preset)="openURL")
+				: ($preset="openURL")
 					
 					If (Feature.with("openURLAction"))  //🚧
 						
@@ -673,7 +679,7 @@ Function update()
 					End if 
 					
 					//______________________________________________________
-				: (String:C10($action.preset)="sort")
+				: ($preset="sort")
 					
 					This:C1470.goToPage(1)
 					This:C1470.title.setTitle(\
@@ -704,12 +710,49 @@ Function update()
 					End if 
 					
 					//______________________________________________________
+				: ($scope=This:C1470.globalScope)
+					
+					This:C1470.goToPage(1)
+					
+					If (Feature.with("actionsInTabBar"))
+						
+						This:C1470.title.setTitle(\
+							UI.str.localize("actionParametersNoTable"; New collection:C1472($action.shortLabel))).show()
+						
+						This:C1470.withSelection.show()
+						This:C1470.add.setNoPopupMenu().enable()
+						This:C1470.remove.enable($current#Null:C1517)
+						
+						If ($current=Null:C1517)
+							
+							// No parameter
+							This:C1470.properties.hide()
+							
+						Else 
+							
+							This:C1470.updateParameters(True:C214)
+							
+						End if 
+						
+					Else 
+						
+						// Not managed
+						This:C1470.title.setTitle("UNAVAILABLE").show()
+						This:C1470.properties.hide()
+						This:C1470.remove.disable()
+						This:C1470.add.disable()
+						
+					End if 
+					
+					//______________________________________________________
 				Else 
 					
 					This:C1470.goToPage(1)
 					
-					If (($action.tableNumber=Null:C1517)\
-						 && ((Not:C34(Feature.with("actionsInTabBar"))) || (String:C10($action.scope)#Get localized string:C991("scope_3"))))
+					var $global : Boolean
+					
+					If ($action.tableNumber=Null:C1517)
+						
 						// No table defined
 						This:C1470.noTable.show()
 						This:C1470.properties.hide()
@@ -719,207 +762,228 @@ Function update()
 					Else 
 						
 						This:C1470.title.setTitle(\
-							UI.str.localize($action.tableNumber=Null:C1517 ? "actionParametersNoTable" : "actionParameters"; New collection:C1472($action.shortLabel; Table name:C256(Num:C11($action.tableNumber))))).show()
+							UI.str.localize("actionParameters"; New collection:C1472($action.shortLabel; Table name:C256(Num:C11($action.tableNumber))))).show()
+						
 						This:C1470.withSelection.show()
-						This:C1470.add.enable()
+						This:C1470.add.setSeparatePopupMenu().enable()
 						This:C1470.remove.enable($current#Null:C1517)
 						
-						If ($current=Null:C1517)  // No current parameter
+						If ($current=Null:C1517)
 							
+							// No parameter
 							This:C1470.properties.hide()
 							
 						Else 
 							
-							If ($action.parameters.length>0)
-								
-								This:C1470.properties.show()
-								This:C1470.sortOrderGroup.hide()
-								This:C1470.dataSourceGroup.hide()
-								
-								$isLinked:=PROJECT.isFieldAttribute($current.name; Table name:C256($action.tableNumber))
-								
-								If ($isLinked)
-									
-									This:C1470.field.show()
-									This:C1470.field.setValue(UI.str.localize("thisParameterIsLinkedToTheField"; $current.name))
-									
-								Else 
-									
-									This:C1470.field.hide()
-									
-								End if 
-								
-								This:C1470.number.show(String:C10($current.type)="number")
-								This:C1470.mandatory.setValue(This:C1470.mandatoryValue())
-								This:C1470.min.setValue(String:C10(This:C1470.ruleValue("min")))
-								This:C1470.max.setValue(String:C10(This:C1470.ruleValue("max")))
-								
-								If (Position:C15("/"; String:C10($current.format))=1)
-									
-									$withDataSource:=This:C1470._withDataSource(Delete string:C232($current.format; 1; 1))
-									
-								End if 
-								
-								If ($withDataSource)
-									
-									This:C1470.dataSourceGroup.show()
-									This:C1470.revealDatasource.show(String:C10($current.source)="/@")
-									This:C1470.placeholderGroup.show(This:C1470.customInputControlsWithoutPlaceholder.indexOf($current.format)=-1)
-									This:C1470.defaultValueGroup.hide()
-									
-								Else 
-									
-									This:C1470.revealDatasource.hide()
-									This:C1470.placeholderGroup.show(This:C1470.typesWithoutPlaceholder.indexOf($current.type)=-1)
-									
-									If ((String:C10($current.type)#"image"))
-										
-										$withDefault:=Choose:C955(String:C10($action.preset)#"edit"; True:C214; Not:C34($isLinked))
-										
-									End if 
-									
-									If ($withDefault)
-										
-										This:C1470.defaultValueGroup.show()
-										This:C1470.defaultValue.setValue(String:C10($current.default))
-										
-										Case of 
-												
-												//…………………………………………………………………………………………………………………………………………
-											: ($current.type="number")
-												
-												Case of 
-														
-														//________________________________________
-													: (String:C10($current.format)="integer")
-														
-														This:C1470.defaultValue.setFilter(Is integer:K8:5)
-														
-														//________________________________________
-													: (String:C10($current.format)="spellOut")
-														
-														This:C1470.defaultValue.setFilter(Is integer:K8:5)
-														
-														//________________________________________
-													Else 
-														
-														This:C1470.defaultValue.setFilter(Is real:K8:4)
-														
-														//________________________________________
-												End case 
-												
-												//…………………………………………………………………………………………………………………………………………
-											: ($current.type="date")
-												
-												// Should accept "today", "yesterday", "tomorrow"
-												GET SYSTEM FORMAT:C994(Date separator:K60:10; $t)
-												This:C1470.defaultValue.setFilter("&\"0-9;"+$t+";-;/;"+UI.str.setText("todayyesterdaytomorrow").distinctLetters(";")+"\"")
-												
-												$t:=String:C10(This:C1470.defaultValue.getValue())
-												
-												If (Position:C15($t; "todayyesterdaytomorrow")=0)
-													
-													$rgx:=cs:C1710.regex.new($t; "(?m-si)^(\\d{2})!(\\d{2})!(\\d{4})$")
-													
-													If ($rgx.match())
-														
-														This:C1470.defaultValue.setValue(String:C10(Add to date:C393(!00-00-00!; Num:C11($rgx.matches[3].data); Num:C11($rgx.matches[2].data); Num:C11($rgx.matches[1].data))))
-														
-													End if 
-												End if 
-												
-												//…………………………………………………………………………………………………………………………………………
-											: ($current.type="time")
-												
-												This:C1470.defaultValue.setFilter(Is time:K8:8)
-												
-												//…………………………………………………………………………………………………………………………………………
-											: ($current.type="string")
-												
-												This:C1470.defaultValue.setFilter(Is text:K8:3)
-												
-												//…………………………………………………………………………………………………………………………………………
-											: ($current.type="bool")
-												
-												If (String:C10($current.format)="check")
-													
-													If ($current.default#Null:C1517)
-														
-														If (Value type:C1509($current.default)=Is boolean:K8:9)
-															
-															This:C1470.defaultValue.setValue(Choose:C955($current.default; "checked"; "unchecked"))
-															
-														End if 
-													End if 
-													
-													// Should accept "checked", "unchecked", 0 or 1
-													This:C1470.defaultValue.setFilter("&\"0;1;"+cs:C1710.str.new("unchecked").distinctLetters(";")+"\"")
-													
-												Else 
-													
-													If ($current.default#Null:C1517)
-														
-														If (Value type:C1509($current.default)=Is boolean:K8:9)
-															
-															This:C1470.defaultValue.setValue(Choose:C955($current.default; "true"; "false"))
-															
-														End if 
-													End if 
-													
-													// Should accept "true", "false", 0 or 1
-													This:C1470.defaultValue.setFilter("&\"0;1;"+cs:C1710.str.new("truefalse").distinctLetters(";")+"\"")
-													
-												End if 
-												
-												//…………………………………………………………………………………………………………………………………………
-										End case 
-										
-									Else 
-										
-										This:C1470.defaultValueGroup.hide()
-										
-									End if 
-								End if 
-								
-								If (Feature.with("inputControlArchive"))  //🚧
-									
-									$t:=String:C10($current.format)
-									$isCustom:=(Position:C15("/"; $t)=1)
-									
-									If ($isCustom)\
-										 && (This:C1470.customInputControls.indexOf(Delete string:C232($t; 1; 1))=-1)
-										
-										This:C1470.revealFormat.show()
-										
-										// Check availability
-										This:C1470.format.foregroundColor:=This:C1470.checkFormat(Delete string:C232($t; 1; 1)) ? Foreground color:K23:1 : UI.errorColor
-										
-									Else 
-										
-										This:C1470.revealFormat.hide()
-										
-									End if 
-									
-								Else 
-									
-									$t:=String:C10($current.format)
-									This:C1470.revealFormat.show((Position:C15("/"; $t)=1) & (This:C1470.customInputControls.indexOf(Delete string:C232($t; 1; 1))=-1))
-									
-								End if 
-								
-							Else 
-								
-								This:C1470.properties.hide()
-								This:C1470.remove.disable()
-								
-							End if 
+							This:C1470.updateParameters()
+							
 						End if 
+						
 					End if 
 					//______________________________________________________
 			End case 
 		End if 
 		
 		This:C1470.restoreContext()
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function updateParameters($global : Boolean)
+	
+	var $t : Text
+	var $isCustom; $isLinked; $withDataSource; $withDefault : Boolean
+	var $action; $current : Object
+	var $rgx : cs:C1710.regex
+	
+	$action:=This:C1470.action
+	$current:=This:C1470.current
+	
+	If ($action.parameters.length>0)
+		
+		This:C1470.properties.show()
+		This:C1470.sortOrderGroup.hide()
+		This:C1470.dataSourceGroup.hide()
+		
+		If (Not:C34($global))
+			
+			$isLinked:=PROJECT.isFieldAttribute($current.name; Table name:C256($action.tableNumber))
+			
+		End if 
+		
+		If ($isLinked)
+			
+			This:C1470.field.show()
+			This:C1470.field.setValue(UI.str.localize("thisParameterIsLinkedToTheField"; $current.name))
+			
+		Else 
+			
+			This:C1470.field.hide()
+			
+		End if 
+		
+		This:C1470.number.show(String:C10($current.type)="number")
+		This:C1470.mandatory.setValue(This:C1470.mandatoryValue())
+		This:C1470.min.setValue(String:C10(This:C1470.ruleValue("min")))
+		This:C1470.max.setValue(String:C10(This:C1470.ruleValue("max")))
+		
+		If (Position:C15("/"; String:C10($current.format))=1)
+			
+			$withDataSource:=This:C1470._withDataSource(Delete string:C232($current.format; 1; 1))
+			
+		End if 
+		
+		If ($withDataSource)
+			
+			This:C1470.dataSourceGroup.show()
+			This:C1470.revealDatasource.show(String:C10($current.source)="/@")
+			This:C1470.placeholderGroup.show(This:C1470.customInputControlsWithoutPlaceholder.indexOf($current.format)=-1)
+			This:C1470.defaultValueGroup.hide()
+			
+		Else 
+			
+			This:C1470.revealDatasource.hide()
+			This:C1470.placeholderGroup.show(This:C1470.typesWithoutPlaceholder.indexOf($current.type)=-1)
+			
+			If ((String:C10($current.type)#"image"))
+				
+				$withDefault:=Choose:C955(String:C10($action.preset)#"edit"; True:C214; Not:C34($isLinked))
+				
+			End if 
+			
+			If ($withDefault)
+				
+				This:C1470.defaultValueGroup.show()
+				This:C1470.defaultValue.setValue(String:C10($current.default))
+				
+				Case of 
+						
+						//…………………………………………………………………………………………………………………………………………
+					: ($current.type="number")
+						
+						Case of 
+								
+								//________________________________________
+							: (String:C10($current.format)="integer")
+								
+								This:C1470.defaultValue.setFilter(Is integer:K8:5)
+								
+								//________________________________________
+							: (String:C10($current.format)="spellOut")
+								
+								This:C1470.defaultValue.setFilter(Is integer:K8:5)
+								
+								//________________________________________
+							Else 
+								
+								This:C1470.defaultValue.setFilter(Is real:K8:4)
+								
+								//________________________________________
+						End case 
+						
+						//…………………………………………………………………………………………………………………………………………
+					: ($current.type="date")
+						
+						// Should accept "today", "yesterday", "tomorrow"
+						GET SYSTEM FORMAT:C994(Date separator:K60:10; $t)
+						This:C1470.defaultValue.setFilter("&\"0-9;"+$t+";-;/;"+UI.str.setText("todayyesterdaytomorrow").distinctLetters(";")+"\"")
+						
+						$t:=String:C10(This:C1470.defaultValue.getValue())
+						
+						If (Position:C15($t; "todayyesterdaytomorrow")=0)
+							
+							$rgx:=cs:C1710.regex.new($t; "(?m-si)^(\\d{2})!(\\d{2})!(\\d{4})$")
+							
+							If ($rgx.match())
+								
+								This:C1470.defaultValue.setValue(String:C10(Add to date:C393(!00-00-00!; Num:C11($rgx.matches[3].data); Num:C11($rgx.matches[2].data); Num:C11($rgx.matches[1].data))))
+								
+							End if 
+						End if 
+						
+						//…………………………………………………………………………………………………………………………………………
+					: ($current.type="time")
+						
+						This:C1470.defaultValue.setFilter(Is time:K8:8)
+						
+						//…………………………………………………………………………………………………………………………………………
+					: ($current.type="string")
+						
+						This:C1470.defaultValue.setFilter(Is text:K8:3)
+						
+						//…………………………………………………………………………………………………………………………………………
+					: ($current.type="bool")
+						
+						If (String:C10($current.format)="check")
+							
+							If ($current.default#Null:C1517)
+								
+								If (Value type:C1509($current.default)=Is boolean:K8:9)
+									
+									This:C1470.defaultValue.setValue(Choose:C955($current.default; "checked"; "unchecked"))
+									
+								End if 
+							End if 
+							
+							// Should accept "checked", "unchecked", 0 or 1
+							This:C1470.defaultValue.setFilter("&\"0;1;"+cs:C1710.str.new("unchecked").distinctLetters(";")+"\"")
+							
+						Else 
+							
+							If ($current.default#Null:C1517)
+								
+								If (Value type:C1509($current.default)=Is boolean:K8:9)
+									
+									This:C1470.defaultValue.setValue(Choose:C955($current.default; "true"; "false"))
+									
+								End if 
+							End if 
+							
+							// Should accept "true", "false", 0 or 1
+							This:C1470.defaultValue.setFilter("&\"0;1;"+cs:C1710.str.new("truefalse").distinctLetters(";")+"\"")
+							
+						End if 
+						
+						//…………………………………………………………………………………………………………………………………………
+				End case 
+				
+			Else 
+				
+				This:C1470.defaultValueGroup.hide()
+				
+			End if 
+		End if 
+		
+		If (Feature.with("inputControlArchive"))  //🚧
+			
+			$t:=String:C10($current.format)
+			$isCustom:=(Position:C15("/"; $t)=1)
+			
+			If ($isCustom)\
+				 && (This:C1470.customInputControls.indexOf(Delete string:C232($t; 1; 1))=-1)
+				
+				This:C1470.revealFormat.show()
+				
+				// Check availability
+				This:C1470.format.foregroundColor:=This:C1470.checkFormat(Delete string:C232($t; 1; 1)) ? Foreground color:K23:1 : UI.errorColor
+				
+			Else 
+				
+				This:C1470.revealFormat.hide()
+				
+			End if 
+			
+		Else 
+			
+			$t:=String:C10($current.format)
+			This:C1470.revealFormat.show((Position:C15("/"; $t)=1) & (This:C1470.customInputControls.indexOf(Delete string:C232($t; 1; 1))=-1))
+			
+		End if 
+		
+	Else 
+		
+		This:C1470.properties.hide()
+		This:C1470.remove.disable()
 		
 	End if 
 	
@@ -1938,9 +2002,9 @@ Function dataSourceMenuManager()
 Function editList()
 	
 /*
-						$form:=New object(\
-												"static"; $static; \
-												"host"; This.path.hostInputControls(True))
+							$form:=New object(\
+														"static"; $static; \
+														"host"; This.path.hostInputControls(True))
 	
 $form.folder:=This.path.hostInputControls()
 $manifest:=$form.folder.file("manifest.json")
@@ -2131,6 +2195,22 @@ Function nameManager($e : Object)
 	
 	Case of 
 			
+		: (String:C10(panel.action.scope)=This:C1470.globalScope)
+			
+			If ($e.code=On Before Keystroke:K2:6)
+				
+				$charCode:=Character code:C91(Keystroke:C390)
+				
+				If ($charCode=ReturnKey:K12:27)  // Validate
+					
+					FILTER KEYSTROKE:C389("")
+					This:C1470.current.name:=Get edited text:C655
+					This:C1470.postKeyDown(Tab:K15:37)
+					This:C1470.update()
+					
+				End if 
+			End if 
+			
 			//______________________________________________________
 		: ($e.code=On Before Keystroke:K2:6)  // Filtering
 			
@@ -2303,57 +2383,60 @@ Function updateParamater($name : Text)
 	var $field : cs:C1710.field
 	
 	$parameter:=This:C1470.current
-	$tableModel:=Form:C1466.dataModel[String:C10(This:C1470.action.tableNumber)]
 	
-	For each ($key; $tableModel) Until ($success)
+	If (This:C1470.action.tableNumber#Null:C1517)
 		
-		If (Length:C16($key)=0)
-			
-			continue
-			
-		End if 
+		$tableModel:=Form:C1466.dataModel[String:C10(This:C1470.action.tableNumber)]
 		
-		$field:=$tableModel[$key]
-		
-		If ($field.fieldType#Null:C1517) && ($field.fieldType#Is object:K8:27)
+		For each ($key; $tableModel) Until ($success)
 			
-			$identifier:=($field.name#Null:C1517 ? $field.name : $key)
-			
-			$success:=($identifier=$name)
-			
-			If ($success)
+			If (Length:C16($key)=0)
 				
-				$parameter.name:=$identifier
-				$parameter.label:=$field.label
-				$parameter.shortLabel:=$field.shortLabel
-				$parameter.type:=PROJECT.fieldType2type($field.fieldType)
-				
-				If ($field.path#Null:C1517)
-					
-					$parameter.path:=$field.path
-					
-				Else 
-					
-					OB REMOVE:C1226($parameter; "path")
-					
-				End if 
-				
-				If (Num:C11($key)#0)
-					
-					$parameter.fieldNumber:=Num:C11($key)
-					
-				Else 
-					
-					OB REMOVE:C1226($parameter; "fieldNumber")
-					
-				End if 
-				
-				This:C1470.field.setValue(UI.str.localize("thisParameterIsLinkedToTheField"; $name))
+				continue
 				
 			End if 
-		End if 
-	End for each 
-	
+			
+			$field:=$tableModel[$key]
+			
+			If ($field.fieldType#Null:C1517) && ($field.fieldType#Is object:K8:27)
+				
+				$identifier:=($field.name#Null:C1517 ? $field.name : $key)
+				
+				$success:=($identifier=$name)
+				
+				If ($success)
+					
+					$parameter.name:=$identifier
+					$parameter.label:=$field.label
+					$parameter.shortLabel:=$field.shortLabel
+					$parameter.type:=PROJECT.fieldType2type($field.fieldType)
+					
+					If ($field.path#Null:C1517)
+						
+						$parameter.path:=$field.path
+						
+					Else 
+						
+						OB REMOVE:C1226($parameter; "path")
+						
+					End if 
+					
+					If (Num:C11($key)#0)
+						
+						$parameter.fieldNumber:=Num:C11($key)
+						
+					Else 
+						
+						OB REMOVE:C1226($parameter; "fieldNumber")
+						
+					End if 
+					
+					This:C1470.field.setValue(UI.str.localize("thisParameterIsLinkedToTheField"; $name))
+					
+				End if 
+			End if 
+		End for each 
+	End if 
 	If ($success)  // Linked to a field
 		
 		$parameter.defaultField:=PROJECT._actionDefaultField($parameter)
