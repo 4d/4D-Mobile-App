@@ -40,6 +40,7 @@ Class constructor($project : Object)
 	This:C1470.project.hasOpenUrlAction:=Feature.with("openURLAction")
 	
 	This:C1470.project.debugMode:=((Shift down:C543) && (Bool:C1537(dev_Matrix)=True:C214)) ? True:C214 : False:C215
+	This:C1470.project.canUseLocalSource:=(Shift down:C543) ? True:C214 : False:C215
 	
 	This:C1470.checkPackage()
 	
