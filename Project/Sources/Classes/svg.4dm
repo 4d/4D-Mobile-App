@@ -1994,33 +1994,40 @@ Function fontStyle($style : Integer; $applyTo) : cs:C1710.svg
 		
 	Else 
 		
-		If ($style>=8)  // Line-through
-			
-			Super:C1706.setAttribute($node; "text-decoration"; "line-through")
-			$style:=$style-8
-			
-		End if 
+		var $c : Collection
 		
-		If (This:C1470.success)\
-			 & ($style>=Underline:K14:4)
-			
-			Super:C1706.setAttribute($node; "text-decoration"; "underline")
-			$style:=$style-Underline:K14:4
-			
-		End if 
-		
-		If (This:C1470.success)\
-			 & ($style>=Italic:K14:3)
-			
-			Super:C1706.setAttribute($node; "font-style"; "italic")
-			$style:=$style-Italic:K14:3
-			
-		End if 
-		
-		If (This:C1470.success)\
-			 & ($style=Bold:K14:2)
+		// Mark:font-weight
+		If ($style ?? 0)
 			
 			Super:C1706.setAttribute($node; "font-weight"; "bold")
+			
+		End if 
+		
+		// Mark:font-style
+		If ($style ?? 1)
+			
+			Super:C1706.setAttribute($node; "font-style"; "italic")
+			
+		End if 
+		
+		// Mark:text-decoration
+		$c:=New collection:C1472
+		
+		If ($style ?? 2)  // Underline
+			
+			$c.push("underline")
+			
+		End if 
+		
+		If ($style ?? 3)  // Line-through
+			
+			$c.push("line-through")
+			
+		End if 
+		
+		If ($c.length>0)
+			
+			Super:C1706.setAttribute($node; "text-decoration"; $c.join(" "))
 			
 		End if 
 	End if 
