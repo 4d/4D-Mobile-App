@@ -69,7 +69,7 @@ Function setColor($color : Integer) : cs:C1710.color
 	This:C1470.hsl:=This:C1470.colorToHSL($color)
 	This:C1470.css:=This:C1470.colorToCSS($color)
 	
-	return (This:C1470)
+	return This:C1470
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// 4RGB color from 4DPalette index (1-256)
@@ -81,7 +81,7 @@ Function setColorIndexed($color : Integer) : cs:C1710.color
 		
 	End if 
 	
-	return (This:C1470)
+	return This:C1470
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// RGB Color
@@ -92,7 +92,7 @@ Function setRGB($rgb : Object) : cs:C1710.color
 	This:C1470.hsl:=This:C1470.colorToHSL(This:C1470.main)
 	This:C1470.css:=This:C1470.colorToCSS(This:C1470.main)
 	
-	return (This:C1470)
+	return This:C1470
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// HSL Color
@@ -103,7 +103,7 @@ Function setHSL($hsl : Object) : cs:C1710.color
 	This:C1470.main:=(This:C1470.rgb.red << 16)+(This:C1470.rgb.green << 8)+This:C1470.rgb.blue
 	This:C1470.css:=This:C1470.colorToCSS(This:C1470.main)
 	
-	return (This:C1470)
+	return This:C1470
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// HTML Color
@@ -184,18 +184,20 @@ Function setCSS($css : Text) : cs:C1710.color
 			//______________________________________________________
 	End case 
 	
-	return (This:C1470)
+	return This:C1470
 	
 	//MARK:-[CONVERTERS]
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function colorToRGB($color) : Object
 	
-	return (This:C1470._convertColor($color))
+	return This:C1470._convertColor($color)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function colorToCSS($color : Integer; $type : Text)->$css
+Function colorToCSS($color : Integer; $type : Text) : Variant
 	
+	var $hex : Text
 	var $blue; $green; $red : Integer
+	var $o : Object
 	
 	$red:=(($color & 0x00FF0000) >> 16)
 	$green:=(($color & 0xFF00) >> 8)
@@ -208,7 +210,7 @@ Function colorToCSS($color : Integer; $type : Text)->$css
 				//______________________________________________________
 			: ($type="components")
 				
-				$css:="rgb("\
+				return "rgb("\
 					+String:C10($red)+","\
 					+String:C10($green)+","\
 					+String:C10($blue)+")"
@@ -216,34 +218,32 @@ Function colorToCSS($color : Integer; $type : Text)->$css
 				//______________________________________________________
 			: ($type="percentages")
 				
-				$css:="rgb("+String:C10(Round:C94(($red*100)/255; 0); "&xml")+"%,"\
+				return "rgb("+String:C10(Round:C94(($red*100)/255; 0); "&xml")+"%,"\
 					+String:C10(Round:C94(($green*100)/255; 0); "&xml")+"%,"\
 					+String:C10(Round:C94(($blue*100)/255; 0); "&xml")+"%)"
 				
 				//______________________________________________________
 			: ($type="hex")
 				
-				var $hex : Text
 				$hex:=Substring:C12(String:C10($color+0x01000000; "&x"); 5)
-				$css:="#"+$hex[[1]]+$hex[[3]]+$hex[[5]]
+				return "#"+$hex[[1]]+$hex[[3]]+$hex[[5]]
 				
 				//______________________________________________________
 			: ($type="hexLong")
 				
-				$css:="#"+Substring:C12(String:C10($color+0x01000000; "&x"); 5)
+				return "#"+Substring:C12(String:C10($color+0x01000000; "&x"); 5)
 				
 				//______________________________________________________
 			: ($type="hsl")
 				
-				var $o : Object
 				$o:=This:C1470.colorToHSL($color)
-				$css:="hsl("+String:C10($o.hue)+","+String:C10($o.saturation)+"%,"+String:C10($o.lightness)+"%)"
+				return "hsl("+String:C10($o.hue)+","+String:C10($o.saturation)+"%,"+String:C10($o.lightness)+"%)"
 				
 				//______________________________________________________
 			: ($type="named")
 				
 				$o:=JSON Parse:C1218(File:C1566("/RESOURCES/colors.json").getText()).named.query("red = :1 AND green = :2 AND blue = :3"; $red; $green; $blue).pop()
-				$css:=String:C10($o.name)
+				return String:C10($o.name)
 				
 				//______________________________________________________
 		End case 
@@ -252,13 +252,13 @@ Function colorToCSS($color : Integer; $type : Text)->$css
 		
 		$o:=JSON Parse:C1218(File:C1566("/RESOURCES/colors.json").getText()).named.query("red = :1 AND green = :2 AND blue = :3"; $red; $green; $blue).pop()
 		
-		$css:=New object:C1471(\
+		return New object:C1471(\
 			"components"; This:C1470.colorToCSS($color; "components"); \
 			"percentages"; This:C1470.colorToCSS($color; "percentages"); \
 			"hex"; This:C1470.colorToCSS($color; "hex"); \
 			"hexLong"; This:C1470.colorToCSS($color; "hexLong"); \
 			"hsl"; This:C1470.colorToCSS($color; "hsl"); \
-			"name"; Choose:C955($o=Null:C1517; Null:C1517; $o.name)\
+			"name"; $o=Null:C1517 ? Null:C1517 : $o.name\
 			)
 		
 	End if 
@@ -266,36 +266,38 @@ Function colorToCSS($color : Integer; $type : Text)->$css
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function colorToHSL($color : Integer) : Object
 	
-	return (This:C1470._convertColor($color; "hsl"))
+	return This:C1470._convertColor($color; "hsl")
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function hslToRGB($hsl : Object) : Object
 	
-	return (This:C1470._convertHSL($hsl; "rgb"))
+	return This:C1470._convertHSL($hsl; "rgb")
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function hslToColor($hsl : Object) : Integer
 	
-	return (This:C1470._convertHSL($hsl))
+	return This:C1470._convertHSL($hsl)
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function hslToCss($hsl : Object) : Text
 	
-	return (This:C1470._convertHSL($hsl; "css"))
+	return This:C1470._convertHSL($hsl; "css")
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function rgbToColor($rgb : Object) : Integer
 	
-	return (This:C1470._convertRgb($rgb; "color"))
+	return This:C1470._convertRgb($rgb; "color")
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function rgbToHSL($rgb : Object) : Object
 	
-	return (This:C1470._convertRgb($rgb; "hsl"))
+	return This:C1470._convertRgb($rgb; "hsl")
 	
 	//MARK:-[UTILITIES]
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function getMatchingColors($kind : Integer)->$palette : Collection
+Function getMatchingColors($kind : Integer) : Collection
+	
+	var $palette : Collection
 	
 	$palette:=New collection:C1472
 	
@@ -688,6 +690,8 @@ Function getMatchingColors($kind : Integer)->$palette : Collection
 			//______________________________________________________
 	End case 
 	
+	return $palette
+	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function fontColor($backgroundColor; $green : Integer; $blue : Integer) : Text
 	
@@ -732,15 +736,16 @@ Function fontColor($backgroundColor; $green : Integer; $blue : Integer) : Text
 	
 	If ($rgb#Null:C1517)
 		
+		// Counting the perceptive luminance - human eye favors green color...
 		$lightness:=1-(((0.299*$rgb.red)+(0.587*$rgb.green)+(0.114*$rgb.blue))/255)
-		return ($lightness<0.5 ? "black" : "white")
+		return ($lightness<0.5) ? "black" : "white"
 		
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function isValid() : Boolean
 	
-	return ((This:C1470.rgb#Null:C1517) & (This:C1470.hsl#Null:C1517) & (This:C1470.css#Null:C1517))
+	return (This:C1470.rgb#Null:C1517) & (This:C1470.hsl#Null:C1517) & (This:C1470.css#Null:C1517)
 	
 	//MARK:-[PRIVATES]
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -760,24 +765,24 @@ Function _convertColor($color : Integer; $format : Text) : Variant
 			//………………………………………………………………………………………………………
 		: ($format="rgb")
 			
-			return (New object:C1471(\
+			return New object:C1471(\
 				"alpha"; $alpha; \
 				"red"; $red; \
 				"green"; $green; \
 				"blue"; $blue\
-				))
+				)
 			
 			//………………………………………………………………………………………………………
 		: ($format="hsl")
 			
-			return (This:C1470._rgb2Hsl($red; $green; $blue))
+			return This:C1470._rgb2Hsl($red; $green; $blue)
 			
 			//………………………………………………………………………………………………………
 		: ($format="css")
 			
-			return ("rgb("+String:C10($red)+","\
+			return "rgb("+String:C10($red)+","\
 				+String:C10($green)+","\
-				+String:C10($blue)+")")
+				+String:C10($blue)+")"
 			
 			//………………………………………………………………………………………………………
 	End case 
@@ -795,17 +800,17 @@ Function _convertRgb($color : Object; $format : Text) : Variant
 			//………………………………………………………………………………………………………
 		: ($format="color")
 			
-			return ((Num:C11($rgb.alpha) << 24)+(Num:C11($rgb.red) << 16)+(Num:C11($rgb.green) << 8)+Num:C11($rgb.blue))
+			return (Num:C11($rgb.alpha) << 24)+(Num:C11($rgb.red) << 16)+(Num:C11($rgb.green) << 8)+Num:C11($rgb.blue)
 			
 			//………………………………………………………………………………………………………
 		: ($format="hsl")
 			
-			return (This:C1470._rgb2Hsl(Num:C11($rgb.red); Num:C11($rgb.green); Num:C11($rgb.blue)))
+			return This:C1470._rgb2Hsl(Num:C11($rgb.red); Num:C11($rgb.green); Num:C11($rgb.blue))
 			
 			//………………………………………………………………………………………………………
 		: ($format="css")
 			
-			return ("rgb("+String:C10(Num:C11($rgb.red))+","+String:C10(Num:C11($rgb.green))+","+String:C10(Num:C11($rgb.blue))+")")
+			return "rgb("+String:C10(Num:C11($rgb.red))+","+String:C10(Num:C11($rgb.green))+","+String:C10(Num:C11($rgb.blue))+")"
 			
 			//………………………………………………………………………………………………………
 	End case 
@@ -1032,22 +1037,22 @@ Function _convertHSL($color : Object; $format : Text) : Variant
 			//………………………………………………………………………………………………………
 		: ($format="color")
 			
-			return (0+($red << 16)+($green << 8)+$blue)
+			return 0+($red << 16)+($green << 8)+$blue
 			
 			//………………………………………………………………………………………………………
 		: ($format="rgb")
 			
-			return (New object:C1471(\
+			return New object:C1471(\
 				"red"; $red; \
 				"green"; $green; \
-				"blue"; $blue))
+				"blue"; $blue)
 			
 			//………………………………………………………………………………………………………
 		: ($format="css")
 			
-			return ("hsl("+String:C10($hsl.hue)+","\
+			return "hsl("+String:C10($hsl.hue)+","\
 				+String:C10($hsl.saturation)+"%,"\
-				+String:C10($hsl.lightness)+"%)")
+				+String:C10($hsl.lightness)+"%)"
 			
 			//………………………………………………………………………………………………………
 	End case 
@@ -1075,22 +1080,22 @@ Function _hueToRGB($v1 : Real; $v2 : Real; $vH : Real) : Integer
 			//…………………………………………………………………………………………………
 		: ((6*$vH)<1)
 			
-			return ($v1+(($v2-$v1)*6*$vH))
+			return $v1+(($v2-$v1)*6*$vH)
 			
 			//…………………………………………………………………………………………………
 		: ((2*$vH)<1)
 			
-			return ($v2)
+			return $v2
 			
 			//…………………………………………………………………………………………………
 		: ((3*$vH)<2)
 			
-			return ($v1+(($v2-$v1)*((2/3)-$vH)*6))
+			return $v1+(($v2-$v1)*((2/3)-$vH)*6)
 			
 			//…………………………………………………………………………………………………
 		Else 
 			
-			return ($v1)
+			return $v1
 			
 			//…………………………………………………………………………………………………
 	End case 
