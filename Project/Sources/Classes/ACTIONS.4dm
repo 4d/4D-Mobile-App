@@ -291,7 +291,7 @@ Function update()
 	
 	This:C1470.updateParameters()
 	
-	This:C1470.remove.enable((Form:C1466.actions#Null:C1517) && (Form:C1466.actions.length>0))
+	This:C1470.remove.enable((Form:C1466.actions#Null:C1517) && (Form:C1466.actions.length>0) && (This:C1470.current#Null:C1517))
 	
 	METHOD GET PATHS:C1163(Path database method:K72:2; $paths; *)
 	$success:=(Find in array:C230($paths; METHOD Get path:C1164(Path database method:K72:2; "onMobileAppAction"))>0)
