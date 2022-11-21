@@ -110,4 +110,16 @@ class CustomTableHelper : GenericTableHelper {
             else -> null
         }
     }
+
+    /**
+     * Provides the appropriate default sort field
+     */
+    override fun getDefaultSortFieldForTable(tableName: String): SectionField? {
+        return when (tableName) {
+            {{#default_sort_fields}}
+                "{{tableName}}" -> SectionField("{{name}}", "{{valueType}}", null)
+            {{/default_sort_fields}}
+            else -> null
+        }
+    }
 }
