@@ -127,6 +127,7 @@ Feature.main("inputControlArchive")  // Allow to use zip for inputControl, as re
 Feature.main("inputControlWithCodeAndroid")  // Allow to use inputControl with code, feature by azure:3862 [Android] Input controls with Kotlin code
 Feature.main("actionsInTabBar")
 Feature.main("iosSDKfromAWS")  // Download iOS SDK from AWS
+Feature.main("customLoginForms")  // [Android] Custom login
 
 // Mark:-🚧 WIP
 Feature.wip("buildWithCmd")  // Allow to create/build using cmd only: azure:3628

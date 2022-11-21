@@ -27,9 +27,27 @@ Function init()
 	// * LOGIN
 	This:C1470.button("loginRequired"; "01_login")
 	
-	$group:=This:C1470.group("authenticationGroup")
+	$group:=This:C1470.group("authentication")
 	This:C1470.formObject("authenticationLabel"; "authentication.label").addToGroup($group)
 	This:C1470.button("authenticationButton"; "authentication").addToGroup($group)
+	
+	
+	If (Feature.with("customLoginForms"))
+		
+		$group:=This:C1470.group("authenticationGroup")
+		This:C1470.input("loginFormValue").addToGroup($group)
+		This:C1470.formObject("loginFormLabel").addToGroup($group)
+		This:C1470.formObject("loginFormBorder").addToGroup($group)
+		This:C1470.button("loginFormPopup").addToGroup($group)
+		This:C1470.button("loginFormReveal").addToGroup($group)
+		
+	Else 
+		
+		This:C1470.group("authenticationGroup")
+		
+	End if 
+	
+	This:C1470.authenticationGroup.addMember(This:C1470.authentication)
 	
 	// * PUSH NOTIFICATION
 	This:C1470.button("pushNotification"; "02_pushNotification")
@@ -64,6 +82,7 @@ Function init()
 	This:C1470.formObject("deepLinkLabel"; "associatedDomain.label").addToGroup($group)
 	This:C1470.formObject("deepLinkBorder"; "associatedDomain.border").addToGroup($group)
 	
+	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	/// Events handler
 Function handleEvents($e : Object)
@@ -97,7 +116,8 @@ Function handleEvents($e : Object)
 				Form:C1466.server.authentication.email:=Bool:C1537(Form:C1466.server.authentication.email)
 				PROJECT.save()
 				
-				This:C1470.authenticationGroup.show(Form:C1466.server.authentication.email)
+				//This.authenticationGroup.show(Form.server.authentication.email)
+				This:C1470.update()
 				
 				//==============================================
 			: (This:C1470.authenticationButton.catch($e; On Clicked:K2:4))
@@ -176,12 +196,9 @@ Function handleEvents($e : Object)
 Function onLoad()
 	
 	This:C1470.loginRequired.bestSize()
-	This:C1470.authenticationGroup.distributeLeftToRight()\
-		.show(Form:C1466.server.authentication.email)
-	
+	This:C1470.authentication.distributeLeftToRight()  //.show(Form.server.authentication.email)
 	This:C1470.pushNotification.bestSize()
-	This:C1470.certificateGroup.distributeLeftToRight()\
-		.show(Form:C1466.server.pushNotification)
+	This:C1470.certificateGroup.distributeLeftToRight()  //.show(Form.server.pushNotification)
 	
 	This:C1470.deepLinking.bestSize()
 	This:C1470.deepLinkingGroup.show(Form:C1466.deepLinking.enabled)
@@ -190,7 +207,28 @@ Function onLoad()
 	// Update UI
 Function update()
 	
-	This:C1470.authenticationGroup.show(Form:C1466.server.authentication.email)
+	If (Feature.with("customLoginForms"))
+		
+		If (Form:C1466.server.authentication.email)
+			
+			This:C1470.authenticationGroup.show()
+			
+			//TODO:Move expand
+			
+		Else 
+			
+			This:C1470.authenticationGroup.hide()
+			
+			//TODO:Move collapse
+			
+		End if 
+		
+	Else 
+		
+		This:C1470.authenticationGroup.show(Form:C1466.server.authentication.email)
+		
+	End if 
+	
 	This:C1470.certificateGroup.show(Form:C1466.server.pushNotification)
 	This:C1470.deepLinkingGroup.show(Form:C1466.deepLinking.enabled)
 	
@@ -234,6 +272,19 @@ Function update()
 	This:C1470.certificate.picker.browse:=(Is macOS:C1572 & PROJECT.$ios)
 	This:C1470.deepLinking.enable(Is macOS:C1572 & PROJECT.$ios)
 	This:C1470.deepLinkingGroup.enable(Is macOS:C1572 & PROJECT.$ios)
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function loginFormValue() : Text
+	BEEP:C151
+	If (PROJECT.server.authentication.form=Null:C1517)
+		
+		return ".Default"
+		
+	Else 
+		
+		return ".toDo"
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function checkAuthenticationMethod
