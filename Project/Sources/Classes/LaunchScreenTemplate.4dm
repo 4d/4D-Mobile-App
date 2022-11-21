@@ -44,8 +44,8 @@ Function generateAssets()->$Obj_out : Object
 					// Temporary or by default take app icon, later could be customizable by UI, and must be managed like AppIcon
 					For each ($file; New collection:C1472(\
 						$assetFolder.parent.file("app_icon.png"); \
-						$assetFolder.file("Assets.xcassets/AppIcon.appiconset/universal1024.png"); \
-						$assetFolder.file("Assets.xcassets/AppIcon.appiconset/ios-marketing1024.png")))
+						$assetFolder.file("AppIcon.appiconset/universal1024.png"); \
+						$assetFolder.file("AppIcon.appiconset/ios-marketing1024.png")))
 						If ($file.exists)
 							break
 						End if 

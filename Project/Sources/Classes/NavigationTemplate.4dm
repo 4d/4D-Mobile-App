@@ -69,13 +69,6 @@ Function _actionsInTabBarProcess()
 		
 	End if 
 	
-	// TODO: remove test code about actionsInTabBar
-	If (False:C215)
-		$Col_items.push(New object:C1471("name"; "itName"; "label"; "itLabel"; "shortLabel"; "itShort"; "icon"; "actions/Adjust.svg"; "actions"; New collection:C1472("acName")))
-		$Col_items.push(New object:C1471("name"; "itName2"; "label"; "itLabel2"; "shortLabel"; "itShort2"; "actions"; New collection:C1472("acName2z")))
-		$Col_items.push(New object:C1471("action"; "acName2z"))
-	End if 
-	
 	This:C1470.input.tags.navigationTables:=New collection:C1472
 	
 	var $navigationItem : Variant

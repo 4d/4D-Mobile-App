@@ -123,7 +123,7 @@ Case of
 							$manifest:=ob_parseFile(ZIP Read archive:C1637($folder.file(Substring:C12($format; 2)+".zip")).root.file("manifest.json")).value
 						Else 
 							$manifest:=New object:C1471
-							ASSERT:C1129(Not:C34(dev_Matrix); "Not able to find format with its name using folder. Use manifest object instead")
+							// ASSERT(Not(dev_Matrix); "Not able to find format with its name using folder. Use manifest object instead")
 					End case 
 					
 				: (Value type:C1509($format)=Is object:K8:27)
