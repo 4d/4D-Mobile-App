@@ -21,7 +21,6 @@ object Versions {
     const val atsl_junit = "1.1.2"
     const val barcode_scanning = "17.0.2"
     const val camerax = "1.1.0"
-    const val dynamic_toasts = "4.1.2"
     const val espresso = "3.4.0"
     const val espresso_contrib = "3.0.2"
     const val fragment_ktx = "1.5.2"
@@ -150,7 +149,6 @@ object Libs {
     const val barcode_scanning = "com.google.mlkit:barcode-scanning:${Versions.barcode_scanning}"
 
     // Utils
-    const val dynamic_toasts = "com.pranavpandey.android:dynamic-toasts:${Versions.dynamic_toasts}"
     const val insetter = "dev.chrisbanes.insetter:insetter:${Versions.insetter}"
     const val leakcanary = "com.squareup.leakcanary:leakcanary-android:${Versions.leakcanary}"
     const val play_services_location = "com.google.android.gms:play-services-location:${Versions.play_services}"
