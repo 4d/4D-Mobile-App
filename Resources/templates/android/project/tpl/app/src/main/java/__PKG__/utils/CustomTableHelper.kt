@@ -100,13 +100,25 @@ class CustomTableHelper : GenericTableHelper {
         }
 
     /**
-     * Provides the appropriate SectionField
+     * Provides the appropriate section field
      */
-    override fun getSectionFieldForTable(tableName: String): SectionField? {
+    override fun getSectionFieldForTable(tableName: String): QueryField? {
         return when (tableName) {
             {{#section_fields}}
-            "{{tableName}}" -> SectionField("{{name}}", "{{valueType}}", "{{path}}")
+            "{{tableName}}" -> QueryField("{{name}}", "{{valueType}}", "{{path}}")
             {{/section_fields}}
+            else -> null
+        }
+    }
+
+    /**
+     * Provides the appropriate default sort field
+     */
+    override fun getDefaultSortFieldForTable(tableName: String): QueryField? {
+        return when (tableName) {
+            {{#default_sort_fields}}
+            "{{tableName}}" -> QueryField("{{name}}", "{{valueType}}", null)
+            {{/default_sort_fields}}
             else -> null
         }
     }
