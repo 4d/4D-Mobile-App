@@ -44,8 +44,22 @@ If ($file.exists)
 		
 		If (Not:C34($success))
 			
-			ALERT:C41("WARNING:\n\nYou are editing the \""+$branch+"\" branch of \""+$file.parent.parent.name+"\" with a "+$version+" version of 4D.")
+			ALERT:C41("WARNING:\n\nYou are editing the \""+$branch+"\" branch of \""+$file.parent.parent.name+"\" with a "+$version+" version of 4D.\n\n(Maintain Shift to try to switch branch)")
 			
+			If (Shift down:C543)
+				
+				var $param; $result : Object
+				
+				$branch:=$version
+				If (Position:C15("DEV"; $branch)=1)
+					$branch:="main"
+				End if 
+				$param:=New object:C1471("action"; "checkout "+$branch; "path"; Folder:C1567(Folder:C1567(fk database folder:K87:14).platformPath; fk platform path:K87:2))
+				$result:=git($param)
+				
+				ALERT:C41(JSON Stringify:C1217($result))
+				
+			End if 
 		End if 
 	End if 
 End if 
