@@ -42,7 +42,6 @@ class CustomNavigationResolver : GenericNavigationResolver {
     override fun navigateFromListToViewPager(
         viewDataBinding: ViewDataBinding,
         sourceTable: String,
-        key: String,
         position: Int,
         query: String,
         relationName: String,
@@ -53,7 +52,6 @@ class CustomNavigationResolver : GenericNavigationResolver {
         viewDataBinding.root.findNavController().navigate(
             EntityListFragmentDirections.actionListToViewpager(
                 sourceTable,
-                key,
                 position,
                 query,
                 relationName,
