@@ -398,7 +398,7 @@ Function _checkToReloadData()
 	$authentication.reloadData:=False:C215
 	
 	// 1] If there is at least a filter with parameters
-	For each ($key; $datamodel) Until (Not:C34($authentication.reloadData))
+	For each ($key; $datamodel) Until ($authentication.reloadData)
 		
 		If (Value type:C1509($datamodel[$key][""].filter)=Is object:K8:27)
 			
@@ -413,7 +413,7 @@ Function _checkToReloadData()
 	// 2] No embedded data for at least one table
 	If (Not:C34($authentication.reloadData))
 		
-		For each ($key; $datamodel)
+		For each ($key; $datamodel) Until ($authentication.reloadData)
 			
 			If (Not:C34(Bool:C1537($datamodel[$key][""].embedded)))
 				
