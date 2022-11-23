@@ -117,7 +117,7 @@ class CustomTableHelper : GenericTableHelper {
     override fun getDefaultSortFieldForTable(tableName: String): QueryField? {
         return when (tableName) {
             {{#default_sort_fields}}
-            "{{tableName}}" -> QueryField("{{name}}", "{{valueType}}", null)
+            "{{tableName}}" -> QueryField("{{name}}", "{{valueType}}")
             {{/default_sort_fields}}
             else -> null
         }
