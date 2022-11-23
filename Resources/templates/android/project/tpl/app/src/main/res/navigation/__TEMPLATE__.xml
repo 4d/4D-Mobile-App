@@ -122,10 +122,6 @@
             app:popExitAnim="@anim/slide_out_bottom" />
 
         <argument
-            android:name="key"
-            app:argType="string" />
-
-        <argument
             android:name="position"
             app:argType="integer" />
 
