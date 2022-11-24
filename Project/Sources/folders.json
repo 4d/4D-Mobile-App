@@ -111,12 +111,6 @@
 			"tester_net"
 		]
 	},
-	"(pic)": {
-		"methods": [
-			"(COMPILER_pic)",
-			"(pic_isTransparent)"
-		]
-	},
 	"[android]": {
 		"methods": [
 			"COMPILER_android",
@@ -982,9 +976,5 @@
 			"test_xml"
 		]
 	},
-	"trash": {
-		"groups": [
-			"(pic)"
-		]
-	}
+	"trash": {}
 }
