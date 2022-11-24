@@ -147,6 +147,7 @@ Function verifyStructureAdjustments($publishedTableNames : Collection) : Boolean
 	
 	If ($dataclass=Null:C1517)
 		
+		This:C1470.errors.push("The table \""+SHARED.deletedRecordsTable.name+"\" doesn't exists")
 		return 
 		
 	End if 
@@ -222,6 +223,140 @@ Function verifyStructureAdjustments($publishedTableNames : Collection) : Boolean
 				return 
 				
 			End if 
+		End for each 
+	End if 
+	
+	return True:C214
+	
+/* === === === === === === === === === === === === === === === === === === === === === === === === === ===
+Performs a validity check of the structure from the REST response.
+Returns True if everything is OK.
+Returns False and an error list if we can't solve the problem.
+*/
+Function checkServerStructure($publishedTableNames : Collection; $rest : Object) : Boolean
+	
+	var $table : Text
+	var $success : Boolean
+	var $attribute; $dataclass; $dataClasses; $field; $map; $o : Object
+	var $pk : Object
+	
+	// Mark:Verify __DeletedRecords dataclasses
+	If ($rest.response.dataClasses.query("name = :1"; SHARED.deletedRecordsTable.name).pop()=Null:C1517)
+		
+		This:C1470.errors.push("The dataclass \""+SHARED.deletedRecordsTable.name+"\" is missing or is not exposed")
+		return 
+		
+	End if 
+	
+	// Transform collection to object
+	$dataClasses:=New object:C1471
+	
+	For each ($dataclass; $rest.response.dataClasses)
+		
+		$dataClasses[$dataclass.name]:=New object:C1471
+		
+		For each ($attribute; $dataclass.attributes)
+			
+			$dataClasses[$dataclass.name][$attribute.name]:=$attribute
+			
+		End for each 
+	End for each 
+	
+	$pk:=$dataclass.ID
+	
+	Case of 
+			
+			//______________________________________________________
+		: ($pk=Null:C1517)
+			
+			This:C1470.errors.push("The dataclass \""+SHARED.deletedRecordsTable.name+"\" attribute ID is missing")
+			return 
+			
+			//______________________________________________________
+		: (Not:C34(Bool:C1537($pk.identifying)))
+			
+			This:C1470.errors.push("The dataclass \""+SHARED.deletedRecordsTable.name+"\" primary key is not the \"ID\" attribute")
+			return 
+			
+			//______________________________________________________
+		: (Not:C34(Bool:C1537($pk.exposed)))
+			
+			This:C1470.errors.push("The dataclass \""+SHARED.deletedRecordsTable.name+"\" primary key is not exposed")
+			return 
+			
+			//______________________________________________________
+	End case 
+	
+	// Map rest types to ds types
+	$map:=New object:C1471
+	$map.long:="INT32"
+	$map.long64:="INT64"
+	$map.string:="VARCHAR(255)"
+	
+	For each ($o; SHARED.deletedRecordsTable.fields)
+		
+		$field:=$dataclass[$o.name]
+		
+		Case of 
+				
+				//______________________________________________________
+			: ($field=Null:C1517)
+				
+				This:C1470.errors.push("The attribute \""+$o.name+"\" of the dataclass \""+SHARED.deletedRecordsTable.name+"\" is missing or not exposed")
+				return 
+				
+				//______________________________________________________
+			: (Not:C34(Bool:C1537($field.exposed)))
+				
+				This:C1470.errors.push("The attribute \""+$o.name+"\" of the dataclass \""+SHARED.deletedRecordsTable.name+"\" is not exposed")
+				return 
+				
+				//______________________________________________________
+			: ($map[$field.type]#$o.type)
+				
+				This:C1470.errors.push("The type of the attribute \""+$o.name+"\" is not correct")
+				return 
+				
+				//______________________________________________________
+		End case 
+	End for each 
+	
+	If (Not:C34($success))
+		
+		return 
+		
+	End if 
+	
+	// Mark:Verify __GlobalStamp for published dataclasses
+	If ($publishedTableNames#Null:C1517)\
+		 && ($publishedTableNames.length>0)
+		
+		For each ($table; $publishedTableNames)
+			
+			$dataclass:=$dataClasses[$table]
+			
+			Case of 
+					
+					//______________________________________________________
+				: ($dataclass=Null:C1517)
+					
+					This:C1470.errors.push("The publishing dataclass \""+$table+"\" is missing on the server")
+					return 
+					
+					//______________________________________________________
+				: ($dataclass[SHARED.stampField.name]=Null:C1517)
+					
+					This:C1470.errors.push("The attribute \""+SHARED.stampField.name+"\" of the dataclass \""+$table+"\" is missing or not exposed")
+					return 
+					
+					//______________________________________________________
+				: ($map[$dataclass[SHARED.stampField.name].type]#SHARED.stampField.type)
+					
+					This:C1470.errors.push("The type of the attribute \""+SHARED.stampField.name+"\" of the dataclass \""+$table+"\" is not correct")
+					return 
+					
+					//______________________________________________________
+			End case 
 		End for each 
 	End if 
 	
