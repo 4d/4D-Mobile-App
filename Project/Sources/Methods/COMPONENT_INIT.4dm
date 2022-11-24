@@ -26,7 +26,7 @@ $reset:=Macintosh option down:C545
 $process:=cs:C1710.process.new()
 
 // MARK:-DEV
-var Dev : cs:C1710.component
+var Dev : cs:C1710.dev
 Dev:=Dev || cs:C1710.dev.new()
 
 // MARK:-COMPONENT
