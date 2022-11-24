@@ -242,8 +242,8 @@ If (Asserted:C1132($project#Null:C1517))
 								"build"; $data)
 							
 							//$messageCancel:=New object(\
-																"action"; "build_ignoreServer"; \
-																"build"; $data)
+																								"action"; "build_ignoreServer"; \
+																								"build"; $data)
 							
 							// Web server must running to test data synchronization
 							$message:=New object:C1471(\
@@ -263,7 +263,7 @@ If (Asserted:C1132($project#Null:C1517))
 				
 			Else 
 				
-				// Check server-database structure, if any
+				// Check server-database structure
 				$rest:=Rest(New object:C1471(\
 					"action"; "tables"; \
 					"handler"; "mobileapp"; \
@@ -276,24 +276,7 @@ If (Asserted:C1132($project#Null:C1517))
 				
 				If ($success)
 					
-					$rest:=$rest.response
-					
-					$success:=$rest.dataClasses.query("name = :1"; SHARED.deletedRecordsTable.name).pop()#Null:C1517
-					
-					If ($success) && ($folders#Null:C1517)
-						
-						For each ($folder; $folders) While ($success)
-							
-							$o:=$rest.dataClasses.query("name = :1"; $folder.name).pop()
-							$success:=$o#Null:C1517
-							
-							If ($success)
-								
-								$success:=$o.attributes.query("name = :1"; SHARED.stampField.name).pop()#Null:C1517
-								
-							End if 
-						End for each 
-					End if 
+					$success:=$catalog.checkServerStructure($publishedTableNames; $rest)
 					
 					If (Not:C34($success))
 						
