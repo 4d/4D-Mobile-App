@@ -1736,6 +1736,152 @@ Function copyInputControlFilesToApp
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
+Function copyCustomLoginFormFiles
+	var $0 : Object
+	var $1 : Text  // Login form name
+	var $2 : Text  // Package name
+	
+	var $loginFormName; $packageName : Text
+	var $copyLoginFormFilesToApp; $Obj_findFolderByManifestName : Object
+	var $customLoginFolder : 4D:C1709.Folder
+	
+	$packageName:=$2
+	
+	$0:=New object:C1471(\
+		"success"; True:C214; \
+		"errors"; New collection:C1472)
+	
+	If ((String:C10($1)#"default") && (String:C10($1)#""))
+		
+		If (Substring:C12($1; 1; 1)="/")
+			
+			$customLoginFolder:=This:C1470.path.hostloginForms()
+			
+			If ($customLoginFolder.exists)
+				
+				$loginFormName:=Substring:C12($1; 2)
+				
+				var $Obj_findFolderByManifestName : Object
+				
+				$Obj_findFolderByManifestName:=This:C1470.findFolderByManifestName($customLoginFolder; $loginFormName)
+				
+				If ($Obj_findFolderByManifestName.folder#Null:C1517)
+					
+					$copyLoginFormFilesToApp:=This:C1470.copyLoginFormFilesToApp($Obj_findFolderByManifestName.folder; $packageName)
+					
+					If (Not:C34($copyLoginFormFilesToApp.success))
+						
+						$0.success:=False:C215
+						$0.errors.combine($copyLoginFormFilesToApp.errors)
+						
+						// Else : all ok
+					End if 
+					
+				Else 
+					
+					// Check for zip
+					
+					var $Obj_findZipByManifestName : Object
+					
+					$Obj_findZipByManifestName:=This:C1470.findZipByManifestName($customLoginFolder; $loginFormName)
+					
+					If ($Obj_findZipByManifestName.success)
+						
+						If ($Obj_findZipByManifestName.folder#Null:C1517)
+							
+							$copyLoginFormFilesToApp:=This:C1470.copyLoginFormFilesToApp($Obj_findZipByManifestName.folder; $packageName)
+							
+							If (Not:C34($copyLoginFormFilesToApp.success))
+								
+								$0.success:=False:C215
+								$0.errors.combine($copyLoginFormFilesToApp.errors)
+								
+								// Else : all ok
+							End if 
+							
+							$Obj_findZipByManifestName.folder.delete(Delete with contents:K24:24)
+							
+						End if 
+						
+					Else 
+						
+						$0.success:=False:C215
+						$0.errors.combine($Obj_findZipByManifestName.errors)
+						
+					End if 
+					
+				End if 
+				
+				// Else : no input control folder
+			End if 
+			
+			// Else : no custom login form
+		End if 
+		
+		// Else : no custom login form
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function copyLoginFormFilesToApp
+	var $0 : Object
+	var $1 : 4D:C1709.Folder  // Custom login form folder
+	var $2 : Text  // package name
+	
+	var $formFolderInCustomLoginForms; $loginFormFolder : 4D:C1709.Folder
+	var $loginFormFile; $copyDest : 4D:C1709.File
+	var $packageName; $packageNamePath; $fileContent : Text
+	
+	$packageName:=$2
+	$packageNamePath:=Replace string:C233($packageName; "."; "/")
+	
+	$0:=New object:C1471(\
+		"success"; True:C214; \
+		"errors"; New collection:C1472)
+	
+	$formFolderInCustomLoginForms:=$1.folder("android/login")
+	
+	If ($formFolderInCustomLoginForms.exists)
+		
+		For each ($loginFormFile; $formFolderInCustomLoginForms.files(fk ignore invisible:K87:22))
+			
+			$loginFormFolder:=Folder:C1567(This:C1470.projectPath+"app/src/main/java/"+$packageNamePath+"/login")
+			
+			$copyDest:=$loginFormFile.copyTo($loginFormFolder; $loginFormFile.fullName; fk overwrite:K87:5)
+			
+			If ($copyDest.exists)
+				
+				// replace ___PACKAGE___ in file content
+				$fileContent:=$copyDest.getText()
+				$fileContent:=Replace string:C233($fileContent; "___PACKAGE___"; $packageName+".login")
+				$fileContent:=Replace string:C233($fileContent; "___APP_PACKAGE___"; $packageName)
+				$copyDest.setText($fileContent)
+				
+			Else 
+				// Copy failed
+				$0.success:=False:C215
+				$0.errors.push("Could not copy file to destination: "+$copyDest.path)
+			End if 
+			
+		End for each 
+		
+		// Else : no login form folder
+	End if 
+	
+	var $Obj_copyFilesRecursively : Object
+	
+	$Obj_copyFilesRecursively:=This:C1470.copyFilesRecursively($1.folder("android/res"); Folder:C1567(This:C1470.projectPath+"app/src/main/res"))
+	
+	If (Not:C34($Obj_copyFilesRecursively.success))
+		
+		// Copy failed
+		$0.success:=False:C215
+		$0.errors.combine($Obj_copyFilesRecursively.errors)
+		
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
 Function copyFilesRecursively($entry : 4D:C1709.Folder; $target : 4D:C1709.Folder)->$result : Object
 	
 	$result:=New object:C1471(\
@@ -1748,12 +1894,20 @@ Function copyFilesRecursively($entry : 4D:C1709.Folder; $target : 4D:C1709.Folde
 		
 		For each ($file; $entry.files(fk ignore invisible:K87:22))
 			
-			$fileCopyDest:=$file.copyTo($target; fk overwrite:K87:5)
-			
-			If (Not:C34($fileCopyDest.exists))
+			If (($target.file($file.fullName).exists) && ($file.extension=".xml"))
 				
-				$result.success:=False:C215
-				$result.errors.push("Could not copy kotlin custom formatter resource file to destination: "+$fileCopyDest.path)
+				This:C1470.concatResourceFile($file; $target.file($file.fullName))
+				
+			Else 
+				
+				$fileCopyDest:=$file.copyTo($target; fk overwrite:K87:5)
+				
+				If (Not:C34($fileCopyDest.exists))
+					
+					$result.success:=False:C215
+					$result.errors.push("Could not copy kotlin custom formatter resource file to destination: "+$fileCopyDest.path)
+					
+				End if 
 				
 			End if 
 			
@@ -1778,6 +1932,49 @@ Function copyFilesRecursively($entry : 4D:C1709.Folder; $target : 4D:C1709.Folde
 		End for each 
 		
 	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function concatResourceFile
+	var $0 : Object
+	var $1 : 4D:C1709.File  // new .xml file
+	var $2 : 4D:C1709.File  // old .xml file
+	
+	$0:=New object:C1471(\
+		"success"; True:C214; \
+		"errors"; New collection:C1472)
+	
+	If (Not:C34($1.exists) || Not:C34($2.exists))
+		return 
+	End if 
+	
+	var $newFile; $oldFile : 4D:C1709.File
+	$newFile:=$1
+	$oldFile:=$2
+	
+	var $newFileContent; $oldFileContent : Text
+	$newFileContent:=$newFile.getText()
+	$oldFileContent:=$oldFile.getText()
+	
+	var $startResourceKey; $endResourceKey : Text
+	$startResourceKey:="<resources>"
+	$endResourceKey:="</resources>"
+	
+	If ((Position:C15($startResourceKey; $newFileContent)=0) || (Position:C15($endResourceKey; $newFileContent)=0))
+		return 
+	End if 
+	
+	var $startPos; $endPos : Integer
+	$startPos:=Position:C15($startResourceKey; $newFileContent)+Length:C16($startResourceKey)
+	$endPos:=Position:C15($endResourceKey; $newFileContent)
+	
+	$newFileContent:=Substring:C12($newFileContent; $startPos; $endPos-Length:C16($endResourceKey))
+	
+	var $anchorPos : Integer
+	$anchorPos:=Position:C15($endResourceKey; $oldFileContent)
+	$oldFileContent:=Insert string:C231($oldFileContent; $newFileContent+Char:C90(Carriage return:K15:38); $anchorPos)
+	$oldFile.setText($oldFileContent)
+	
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//

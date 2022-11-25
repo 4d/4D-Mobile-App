@@ -151,6 +151,7 @@ object Libs {
     // Utils
     const val insetter = "dev.chrisbanes.insetter:insetter:${Versions.insetter}"
     const val leakcanary = "com.squareup.leakcanary:leakcanary-android:${Versions.leakcanary}"
+    const val play_services_auth = "com.google.android.gms:play-services-auth:${Versions.play_services}"
     const val play_services_location = "com.google.android.gms:play-services-location:${Versions.play_services}"
     const val signature_pad = "com.github.gcacace:signature-pad:${Versions.signature_pad}"
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
