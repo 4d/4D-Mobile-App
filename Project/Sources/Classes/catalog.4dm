@@ -231,22 +231,14 @@ Function verifyStructureAdjustments($publishedTableNames : Collection) : Boolean
 /* === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Performs a validity check of the structure from the REST response.
 Returns True if everything is OK.
-Returns False and an error list if we can't solve the problem.
+Returns False and an error list.
+We can't solve the problem !
 */
 Function checkServerStructure($publishedTableNames : Collection; $rest : Object) : Boolean
 	
 	var $table : Text
-	var $success : Boolean
 	var $attribute; $dataclass; $dataClasses; $field; $map; $o : Object
 	var $pk : Object
-	
-	// Mark:Verify __DeletedRecords dataclasses
-	If ($rest.response.dataClasses.query("name = :1"; SHARED.deletedRecordsTable.name).pop()=Null:C1517)
-		
-		This:C1470.errors.push("The dataclass \""+SHARED.deletedRecordsTable.name+"\" is missing or is not exposed")
-		return 
-		
-	End if 
 	
 	// Transform collection to object
 	$dataClasses:=New object:C1471
@@ -261,6 +253,16 @@ Function checkServerStructure($publishedTableNames : Collection; $rest : Object)
 			
 		End for each 
 	End for each 
+	
+	// Mark:Verify __DeletedRecords dataclasses
+	$dataclass:=$dataClasses[SHARED.deletedRecordsTable.name]
+	
+	If ($dataclass=Null:C1517)
+		
+		This:C1470.errors.push("The dataclass \""+SHARED.deletedRecordsTable.name+"\" is missing or is not exposed")
+		return 
+		
+	End if 
 	
 	$pk:=$dataclass.ID
 	
@@ -321,12 +323,6 @@ Function checkServerStructure($publishedTableNames : Collection; $rest : Object)
 		End case 
 	End for each 
 	
-	If (Not:C34($success))
-		
-		return 
-		
-	End if 
-	
 	// Mark:Verify __GlobalStamp for published dataclasses
 	If ($publishedTableNames#Null:C1517)\
 		 && ($publishedTableNames.length>0)
@@ -380,11 +376,11 @@ Function doStructureAdjustments($publishedTableNames : Collection) : Boolean
 	
 	For each ($o; SHARED.deletedRecordsTable.fields)
 		
-		DOCUMENT:=DOCUMENT+" "+String:C10($o.name)+" "+String:C10($o.type)+","
+		DOCUMENT+=" "+String:C10($o.name)+" "+String:C10($o.type)+","
 		
 		If (Bool:C1537($o.primaryKey))
 			
-			DOCUMENT:=DOCUMENT+" PRIMARY KEY ("+String:C10($o.name)+"),"
+			DOCUMENT+=" PRIMARY KEY ("+String:C10($o.name)+"),"
 			
 		End if 
 	End for each 
@@ -392,7 +388,7 @@ Function doStructureAdjustments($publishedTableNames : Collection) : Boolean
 	// Delete the last ","
 	DOCUMENT:=Delete string:C232(DOCUMENT; Length:C16(DOCUMENT); 1)
 	
-	DOCUMENT:=DOCUMENT+");"
+	DOCUMENT+=");"
 	
 	Begin SQL
 		
