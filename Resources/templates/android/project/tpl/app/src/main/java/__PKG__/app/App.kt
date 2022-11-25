@@ -14,10 +14,10 @@ import com.qmobile.qmobiledatasync.app.BaseApp
 import com.qmobile.qmobiledatasync.utils.RuntimeDataHolder
 import {{package}}.BuildConfig
 import {{package}}.R
-import {{package}}.data.db.AppDatabase
-import {{package}}.utils.CustomActionHelper
+import {{package}}.data.db.getAppDatabase
 import {{package}}.utils.CustomNavigationResolver
 import {{package}}.utils.CustomRelationHelper
+import {{package}}.utils.CustomResourceHelper
 import {{package}}.utils.CustomTableFragmentHelper
 import {{package}}.utils.CustomTableHelper
 
@@ -37,7 +37,7 @@ class App : BaseApp() {
         genericRelationHelper = CustomRelationHelper()
         genericTableFragmentHelper = CustomTableFragmentHelper()
         genericNavigationResolver = CustomNavigationResolver()
-        genericActionHelper = CustomActionHelper()
+        genericResourceHelper = CustomResourceHelper()
 
         // Init SharedPreferences, persisting data
         sharedPreferencesHolder = SharedPreferencesHolder.getInstance(this).apply {

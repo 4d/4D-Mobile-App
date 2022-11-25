@@ -9,7 +9,7 @@ package {{package}}.utils
 
 import android.view.View
 import com.qmobile.qmobiledatasync.utils.BaseKotlinInputControl
-import com.qmobile.qmobiledatasync.utils.GenericActionHelper
+import com.qmobile.qmobiledatasync.utils.GenericResourceHelper
 import com.qmobile.qmobiledatasync.utils.LoginHandler
 import com.qmobile.qmobileui.activity.loginactivity.LoginActivity
 {{#kotlin_input_controls}}
@@ -25,7 +25,7 @@ import com.qmobile.qmobileui.activity.loginactivity.DefaultLogin
 /**
  * Provides different elements depending of the generated type
  */
-class CustomResourceHelper : GenericActionHelper {
+class CustomResourceHelper : GenericResourceHelper {
 
     /**
      * Gets the appropriate input control class
