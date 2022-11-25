@@ -179,9 +179,9 @@ If (Asserted:C1132($project#Null:C1517))
 				End for each 
 			End for each 
 			
+			$catalog:=cs:C1710.catalog.new()
+			
 			If ($project.dataSource.source="local")
-				
-				$catalog:=cs:C1710.catalog.new()
 				
 				$success:=$catalog.verifyStructureAdjustments($publishedTableNames)
 				
@@ -242,8 +242,8 @@ If (Asserted:C1132($project#Null:C1517))
 								"build"; $data)
 							
 							//$messageCancel:=New object(\
-																								"action"; "build_ignoreServer"; \
-																								"build"; $data)
+																																"action"; "build_ignoreServer"; \
+																																"build"; $data)
 							
 							// Web server must running to test data synchronization
 							$message:=New object:C1471(\
