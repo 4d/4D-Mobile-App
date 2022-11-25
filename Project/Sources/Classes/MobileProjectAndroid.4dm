@@ -344,6 +344,13 @@ Function create()->$result : Object
 	
 	If ($o.success)
 		
+		// MARK:COPY CUSTOM LOGIN FORM FILES
+		$o:=This:C1470.androidprojectgenerator.copyCustomLoginFormFiles(This:C1470.project.project.login; This:C1470.project.package)
+		
+	End if 
+	
+	If ($o.success)
+		
 		$o:=This:C1470.androidprojectgenerator.copySdkVersion()
 		
 	End if 
