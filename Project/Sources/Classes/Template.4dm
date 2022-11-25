@@ -119,7 +119,7 @@ Function copyFiles
 	$Col_catalog:=_o_doc_catalog(This:C1470.template.source; This:C1470.getCatalogExcludePattern())
 	
 	// and finally copy with tag processing
-	This:C1470.copyFilesResult:=template(New object:C1471(\
+	This:C1470.copyFilesResult:=TEMPLATE(New object:C1471(\
 		"source"; This:C1470.template.source; \
 		"target"; This:C1470.input.path; \
 		"tags"; This:C1470.input.tags; \

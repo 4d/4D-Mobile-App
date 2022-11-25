@@ -783,30 +783,33 @@ Case of
 			
 			// Workonly if project or workspace if selected
 			
-			// Close project
-			Xcode(New object:C1471(\
-				"action"; "close"; \
-				"folder"; $folder; \
-				"path"; $Obj_param.path; \
-				"type"; "xcodeproj"))
-			
-			// or workspace
-			Xcode(New object:C1471(\
-				"action"; "close"; \
-				"folder"; $folder; \
-				"path"; $Obj_param.path; \
-				"type"; "xcworkspace"))
-			
-			If (Feature.with(568))  // FAST SDK MOVE
-				
-				sdk(New object:C1471(\
-					"action"; "cache"; \
+			If (Is macOS:C1572)
+				// Close project
+				Xcode(New object:C1471(\
+					"action"; "close"; \
 					"folder"; $folder; \
-					"path"; $Obj_param.path))
+					"path"; $Obj_param.path; \
+					"type"; "xcodeproj"))
 				
+				// or workspace
+				Xcode(New object:C1471(\
+					"action"; "close"; \
+					"folder"; $folder; \
+					"path"; $Obj_param.path; \
+					"type"; "xcworkspace"))
+				
+				If (Feature.with(568))  // FAST SDK MOVE
+					
+					sdk(New object:C1471(\
+						"action"; "cache"; \
+						"folder"; $folder; \
+						"path"; $Obj_param.path))
+					
+				End if 
+				
+				cs:C1710.lep.new().unlockDirectory($folder)
 			End if 
 			
-			cs:C1710.lep.new().unlockDirectory($folder)
 			$folder.delete(Delete with contents:K24:24)
 			
 		End if 

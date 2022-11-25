@@ -1,16 +1,14 @@
 Class extends Template
 
-Class constructor
-	C_OBJECT:C1216($1)
-	Super:C1705($1)
+Class constructor($input : Object)
+	Super:C1705($input)
 	ASSERT:C1129(This:C1470.template.type="main")
 	
-Function updateAssets
-	C_OBJECT:C1216($0; $Obj_out)
+Function updateAssets()->$Obj_out : Object
 	
 	$Obj_out:=New object:C1471()
 	
-	C_OBJECT:C1216($Obj_in; $Obj_template)
+	var $Obj_in; $Obj_template : Object
 	$Obj_in:=This:C1470.input
 	$Obj_template:=This:C1470.template
 	
@@ -19,10 +17,19 @@ Function updateAssets
 	If (This:C1470.project._folder.file("app_icon.png").exists)
 		
 		var $picture : Picture
-		READ PICTURE FILE:C678(This:C1470.project._folder.file("app_icon.png").platformPath; $picture)
+		$picture:=readPicture(This:C1470.project._folder.file("app_icon.png"))
 		
-		This:C1470.project.AppIconSet($picture)
-		
+		If (OB Instance of:C1731(This:C1470.project.AppIconSet; 4D:C1709.Function))
+			This:C1470.project.AppIconSet($picture)
+		Else 
+			var $assetFolder : 4D:C1709.Folder
+			$assetFolder:=This:C1470.project._folder.folder("Assets.xcassets/AppIcon.appiconset/")
+			If (Not:C34($assetFolder.exists))
+				$assetFolder.create()
+				This:C1470.project._folder.file("app_icon.png").copyTo($assetFolder; "universal1024.png"; fk overwrite:K87:5)
+				$assetFolder.file("Contents.json").setText("{\"images\":[{\"filename\":\"universal1024.png\",\"idiom\":\"universal\",\"platform\":\"ios\",\"size\":\"1024x1024\"}],\"info\":{\"author\":\"xcode\",\"version\":1}}")
+			End if 
+		End if 
 	End if 
 	
 	If (String:C10($Obj_template.assets.source)#"")
@@ -40,7 +47,7 @@ Function updateAssets
 	$Obj_in.theme:=This:C1470.theme()
 	
 	$Obj_out.success:=Not:C34(ob_error_has($Obj_out))
-	$0:=$Obj_out
+	
 	
 Function theme()->$theme : Object
 	$theme:=New object:C1471("success"; False:C215)
