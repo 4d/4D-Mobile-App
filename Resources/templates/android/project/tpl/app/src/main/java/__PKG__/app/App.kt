@@ -14,7 +14,7 @@ import com.qmobile.qmobiledatasync.app.BaseApp
 import com.qmobile.qmobiledatasync.utils.RuntimeDataHolder
 import {{package}}.BuildConfig
 import {{package}}.R
-import {{package}}.data.db.getAppDatabase
+import {{package}}.data.db.AppDatabase
 import {{package}}.utils.CustomNavigationResolver
 import {{package}}.utils.CustomRelationHelper
 import {{package}}.utils.CustomResourceHelper

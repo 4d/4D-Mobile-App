@@ -8,6 +8,7 @@ package {{package}}.utils
 
 
 import android.view.View
+import androidx.fragment.app.FragmentActivity
 import com.qmobile.qmobiledatasync.utils.BaseKotlinInputControl
 import com.qmobile.qmobiledatasync.utils.GenericResourceHelper
 import com.qmobile.qmobiledatasync.utils.LoginHandler
