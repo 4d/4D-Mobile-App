@@ -1618,11 +1618,11 @@ Dies kann einige Minuten dauern</target>
         </trans-unit>
         <trans-unit id="Fn146UgTfc0zlq9jxZO9CA" resname="global">
           <source>Global</source>
-          <target state="new">Global</target>
+          <target>Global</target>
         </trans-unit>
         <trans-unit id="Jr4y6+C2Zj+93vYAQjtVig" resname="actionParametersNoTable">
           <source>Parameters of the "{action}" action</source>
-          <target state="new">Parameters of the "{action}" action</target>
+          <target>Parameter der Aktion "{action}"</target>
         </trans-unit>
       </group>
       <group resname="Features">
