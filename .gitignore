@@ -14,6 +14,12 @@
 *.Match
 
 #--------------------------------
+# Ignore backup
+#--------------------------------
+*.4BK
+backupHistory.json
+
+#--------------------------------
 # Ignore derived data
 #--------------------------------
 Project/DerivedData/
