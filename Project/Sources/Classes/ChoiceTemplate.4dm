@@ -64,7 +64,7 @@ Function makeTheChoice()->$Obj_out : Object
 	
 	If (Not:C34(This:C1470._isValidChoice($Obj_out.template; $pathForm)))
 		
-		ob_error_combine($Obj_out; "Template do not exist at path "+$pathForm.path+" or not for iOS. Default will be used")
+		ob_warning_add($Obj_out; "Template do not exist at path "+String:C10($pathForm.path)+" or not for iOS. Default will be used")
 		$pathForm:=$defaultPathForm
 		$Obj_out.template:=ob_parseFile($pathForm.file("manifest.json"))
 		
