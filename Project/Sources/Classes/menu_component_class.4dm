@@ -3,6 +3,7 @@
 Function fillMenu($menu : Object)
 	$menu.append("Inject component in 4D app"; "injectComponentToCurrentApp").method("menu_component")
 	$menu.append("Inject the builded component in 4D app"; "injectComponentBuildToCurrentApp").method("menu_component")
+	$menu.append("Build and inject the component in 4D app"; "buildAndInjectComponentToCurrentApp").method("menu_component")
 	$menu.append("Get iOS SDK from 4D app"; "getAppiOSSDK").method("menu_component")
 	$menu.append("Get iOS SDK from TC"; "getTCiOSSDK").method("menu_component")
 	$menu.line()
@@ -25,6 +26,7 @@ Function injectComponentToCurrentApp
 	var $app : 4D:C1709.Folder
 	$app:=Folder:C1567(Application file:C491; fk platform path:K87:2)
 	
+	ASSERT:C1129(Is macOS:C1572)  // remove this if you implement components paths
 	var $appComponent : 4D:C1709.Folder
 	$appComponent:=$app.folder("Contents/Resources/Internal User Components/4D Mobile App.4dbase/")
 	
@@ -46,6 +48,7 @@ Function injectComponentBuildToCurrentApp()
 	var $app : 4D:C1709.Folder
 	$app:=Folder:C1567(Application file:C491; fk platform path:K87:2)
 	
+	ASSERT:C1129(Is macOS:C1572)  // remove this if you implement components paths
 	var $appComponent : 4D:C1709.Folder
 	$appComponent:=$app.folder("Contents/Resources/Internal User Components/4D Mobile App.4dbase/")
 	
@@ -61,6 +64,63 @@ Function injectComponentBuildToCurrentApp()
 	Else 
 		SHOW ON DISK:C922($result.platformPath)
 	End if 
+	
+Function buildAndInjectComponentToCurrentApp()
+	var $result; $options : Object
+	
+	$options:=New object:C1471("components"; New collection:C1472)
+	
+	
+	// include dependencies?
+	var $makeFile : 4D:C1709.File
+	$makeFile:=Folder:C1567(fk database folder:K87:14).file("make.json")
+	If ($makeFile.exists)
+		
+		var $app : 4D:C1709.Folder
+		$app:=Folder:C1567(Application file:C491; fk platform path:K87:2)
+		ASSERT:C1129(Is macOS:C1572)  // remove this if you implement components paths
+		
+		var $components; $paths : Collection
+		$components:=JSON Parse:C1218($makeFile.getText()).components
+		var $componentName : Text
+		For each ($componentName; $components)
+			
+			$paths:=$app.folder("Contents/Components").folders().combine(\
+				$app.folder("Contents/Resources/Internal Components").folders()).combine(\
+				$app.folder("Contents/Resources/Internal User Components").folders()).filter(Formula:C1597($1.value.name=$componentName))
+			If ($paths.length>0)
+				$options.components.push($paths[0].file($componentName+".4DZ"))
+			End if 
+			
+		End for each 
+	End if 
+	
+	$componentName:="4D Mobile App"  // Folder(fk database folder).name?
+	$result:=Compile project:C1760(Folder:C1567(fk database folder:K87:14).folder("Project").file($componentName+".4DProject"); $options)
+	
+	If ($result.success)
+		
+		var $appComponent : 4D:C1709.Folder
+		$appComponent:=$app.folder("Contents/Resources/Internal User Components/"+$componentName+".4dbase/")
+		
+		If ($appComponent.file($componentName+".4DZ").exists)
+			$appComponent.file($componentName+".4DZ").delete()
+		End if 
+		
+		$result:=ZIP Create archive:C1640(Folder:C1567(fk database folder:K87:14).folder("Project"); $appComponent.file($componentName+".4DZ"))
+		// TODO: copy other things like resources
+		
+		If ($result.success)
+			If (Shift down:C543)
+				RESTART 4D:C1292
+			Else 
+				SHOW ON DISK:C922($appComponent.file($componentName+".4DZ").platformPath)
+			End if 
+		End if 
+		
+	End if 
+	
+	ALERT:C41(JSON Stringify:C1217($result))
 	
 Function getAppiOSSDK
 	
