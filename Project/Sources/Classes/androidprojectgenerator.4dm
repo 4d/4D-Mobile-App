@@ -205,6 +205,9 @@ Function copyResources($project : cs:C1710.project)->$result : Object
 					// for Play Store
 					$copyDest:=$currentFile.copyTo(Folder:C1567(This:C1470.projectPath+"app/src/main"); fk overwrite:K87:5)
 					
+					// for login form, splash screen
+					$copyDest:=$currentFile.copyTo(Folder:C1567(This:C1470.projectPath+"app/src/main/res/drawable"); "logo.png"; fk overwrite:K87:5)
+					
 				Else 
 					
 					// for API > 25
@@ -215,13 +218,6 @@ Function copyResources($project : cs:C1710.project)->$result : Object
 					
 					// for API < 25
 					$copyDest:=$currentFile.copyTo(Folder:C1567(This:C1470.projectPath+"app/src/main/res/"+$currentFolder.name); "ic_launcher.png"; fk overwrite:K87:5)
-					
-					If ($currentFolder.name="mipmap-xxxhdpi")
-						
-						// for login form, splash screen
-						$copyDest:=$currentFile.copyTo(Folder:C1567(This:C1470.projectPath+"app/src/main/res/drawable"); "logo.png"; fk overwrite:K87:5)
-						
-					End if 
 					
 				End if 
 				
@@ -1742,8 +1738,8 @@ Function copyCustomLoginFormFiles
 	var $2 : Text  // Package name
 	
 	var $loginFormName; $packageName : Text
-	var $copyLoginFormFilesToApp; $Obj_findFolderByManifestName : Object
-	var $customLoginFolder : 4D:C1709.Folder
+	var $copyLoginFormFilesToApp : Object
+	var $customLoginFolder; $folder : 4D:C1709.Folder
 	
 	$packageName:=$2
 	
@@ -1761,58 +1757,98 @@ Function copyCustomLoginFormFiles
 				
 				$loginFormName:=Substring:C12($1; 2)
 				
-				var $Obj_findFolderByManifestName : Object
+				var $found : Boolean
+				$found:=False:C215
 				
-				$Obj_findFolderByManifestName:=This:C1470.findFolderByManifestName($customLoginFolder; $loginFormName)
-				
-				If ($Obj_findFolderByManifestName.folder#Null:C1517)
+				For each ($folder; $customLoginFolder.folders()) Until ($found)
 					
-					$copyLoginFormFilesToApp:=This:C1470.copyLoginFormFilesToApp($Obj_findFolderByManifestName.folder; $packageName)
-					
-					If (Not:C34($copyLoginFormFilesToApp.success))
+					If ($folder.name=$loginFormName)
 						
-						$0.success:=False:C215
-						$0.errors.combine($copyLoginFormFilesToApp.errors)
+						$found:=True:C214
 						
-						// Else : all ok
+						$copyLoginFormFilesToApp:=This:C1470.copyLoginFormFilesToApp($folder; $packageName)
+						
+						If (Not:C34($copyLoginFormFilesToApp.success))
+							
+							$0.success:=False:C215
+							$0.errors.combine($copyLoginFormFilesToApp.errors)
+							
+							// Else : all ok
+						End if 
+						
+						
 					End if 
 					
-				Else 
+				End for each 
+				
+				If (Not:C34($found))
 					
 					// Check for zip
 					
-					var $Obj_findZipByManifestName : Object
+					var $zipFile : 4D:C1709.File
 					
-					$Obj_findZipByManifestName:=This:C1470.findZipByManifestName($customLoginFolder; $loginFormName)
-					
-					If ($Obj_findZipByManifestName.success)
+					For each ($zipFile; $customLoginFolder.files()) Until ($found)
 						
-						If ($Obj_findZipByManifestName.folder#Null:C1517)
+						If ($zipFile.extension=".zip")
 							
-							$copyLoginFormFilesToApp:=This:C1470.copyLoginFormFilesToApp($Obj_findZipByManifestName.folder; $packageName)
-							
-							If (Not:C34($copyLoginFormFilesToApp.success))
+							If ($zipFile.fullName=$loginFormName)
 								
-								$0.success:=False:C215
-								$0.errors.combine($copyLoginFormFilesToApp.errors)
+								$found:=True:C214
 								
-								// Else : all ok
+								var $archive : 4D:C1709.ZipArchive
+								
+								$archive:=ZIP Read archive:C1637($zipFile)
+								
+								If ($archive#Null:C1517)
+									
+									var $unzipDest : 4D:C1709.Folder
+									
+									$unzipDest:=$archive.root.copyTo($customLoginFolder; "android_temporary_"+$zipFile.name; fk overwrite:K87:5)
+									
+									If ($unzipDest.exists)
+										
+										$copyLoginFormFilesToApp:=This:C1470.copyLoginFormFilesToApp($unzipDest; $packageName)
+										
+										If (Not:C34($copyLoginFormFilesToApp.success))
+											
+											$0.success:=False:C215
+											$0.errors.combine($copyLoginFormFilesToApp.errors)
+											
+											// Else : all ok
+										End if 
+										
+										$unzipDest.delete(Delete with contents:K24:24)
+										
+									Else 
+										
+										$0.success:=False:C215
+										$0.errors.push("Could not unzip archive. Destination does not exist "+$unzipDest.path)
+										
+									End if 
+									
+								Else 
+									// not a zip archive
+									$0.success:=False:C215
+									$0.errors.push("Could not read archive: "+$zipFile.path)
+									
+								End if 
+								
 							End if 
-							
-							$Obj_findZipByManifestName.folder.delete(Delete with contents:K24:24)
 							
 						End if 
 						
-					Else 
-						
-						$0.success:=False:C215
-						$0.errors.combine($Obj_findZipByManifestName.errors)
-						
-					End if 
+					End for each 
 					
 				End if 
 				
-				// Else : no input control folder
+				If (Not:C34($found))
+					
+					$0.success:=False:C215
+					$0.errors.push("Could not find custom login form: "+$loginFormName)
+					
+				End if 
+				
+				// Else : no custom login folder
 			End if 
 			
 			// Else : no custom login form
