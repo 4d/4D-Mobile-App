@@ -17,12 +17,11 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MyApplication"
+        android:theme="@style/Theme.MyApplication.Starting"
         tools:targetApi="n">
         <activity
             android:name="com.qmobile.qmobileui.activity.loginactivity.LoginActivity"
             android:exported="true"
-            android:theme="@style/Theme.MyApplication.LoginTheme"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

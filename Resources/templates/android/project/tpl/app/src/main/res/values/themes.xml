@@ -29,7 +29,8 @@
         <item name="colorPrimaryInverse">@color/theme_light_inversePrimary</item>
     </style>
 
-    <style name="Theme.MyApplication.LoginTheme" parent="Theme.MyApplication">
-        <item name="android:windowBackground">@drawable/launch_screen</item>
+    <style name="Theme.MyApplication.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenAnimatedIcon">@drawable/launch_screen</item>
+        <item name="postSplashScreenTheme">@style/Theme.MyApplication</item>
     </style>
 </resources>

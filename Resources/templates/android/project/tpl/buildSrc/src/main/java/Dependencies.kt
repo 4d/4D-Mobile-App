@@ -51,6 +51,7 @@ object Versions {
     const val rx_android = "2.1.1"
     const val rxjava2 = "2.2.21"
     const val signature_pad = "1.3.1"
+    const val splashscreen = "1.0.0"
     const val swiperefreshlayout = "1.1.0"
     const val timber = "5.0.1"
 }
@@ -94,6 +95,7 @@ object Libs {
 
     // Common + Layout
     const val material = "com.google.android.material:material:${Versions.material}"
+    const val splashscreen = "androidx.core:core-splashscreen:${Versions.splashscreen}"
     const val swiperefreshlayout =
         "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swiperefreshlayout}"
 
