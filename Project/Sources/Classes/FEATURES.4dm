@@ -275,7 +275,7 @@ Function update()
 		
 	Else 
 		
-		This:C1470.authenticationGroup.show(Form:C1466.server.authentication.email)
+		This:C1470.authenticationGroup.hide()
 		
 	End if 
 	
