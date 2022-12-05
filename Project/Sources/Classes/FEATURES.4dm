@@ -261,6 +261,7 @@ Function update()
 		If (Form:C1466.server.authentication.email)
 			
 			This:C1470.authenticationGroup.show()
+			This:C1470.loginFormReveal.show(PROJECT.server.authentication.form#Null:C1517)
 			
 			//TODO:Move expand
 			
@@ -271,8 +272,6 @@ Function update()
 			//TODO:Move collapse
 			
 		End if 
-		
-		This:C1470.loginFormReveal.show(PROJECT.server.authentication.form#Null:C1517)
 		
 	Else 
 		
@@ -375,7 +374,7 @@ Function getUserLoginForms() : Collection
 						
 					End if 
 					
-					If ($sources.folder("iOS").exists) | ($sources.folder("Sources").exists)
+					If ($sources.folder("ios").exists) | ($sources.folder("Sources").exists)
 						
 						$manifest.target.push("iOS")
 						
