@@ -99,7 +99,7 @@
 					"type": "rectangle",
 					"top": 91,
 					"left": 38,
-					"width": 204,
+					"width": 320,
 					"height": 33,
 					"class": "border",
 					"visibility": "hidden"
@@ -117,7 +117,7 @@
 					"type": "input",
 					"top": 99,
 					"left": 77,
-					"width": 157,
+					"width": 273,
 					"height": 17,
 					"dataSource": "panel.loginForm",
 					"hideFocusRing": true,
@@ -157,7 +157,7 @@
 					"type": "button",
 					"text": "",
 					"top": 99,
-					"left": 248,
+					"left": 363,
 					"width": 16,
 					"height": 16,
 					"events": [
@@ -175,7 +175,8 @@
 					"left": 38,
 					"width": 320,
 					"height": 33,
-					"class": "border"
+					"class": "border",
+					"visibility": "hidden"
 				},
 				"urlScheme.border": {
 					"type": "rectangle",
@@ -184,7 +185,8 @@
 					"width": 320,
 					"height": 33,
 					"right": 358,
-					"class": "border"
+					"class": "border",
+					"visibility": "hidden"
 				},
 				"03_deepLinking": {
 					"type": "checkbox",
@@ -223,7 +225,8 @@
 					],
 					"hideFocusRing": true,
 					"borderStyle": "none",
-					"right": 350
+					"right": 350,
+					"visibility": "hidden"
 				},
 				"associatedDomain.label": {
 					"type": "text",
@@ -247,7 +250,8 @@
 					],
 					"placeholder": ":xliff:universalLinksPlaceholder",
 					"hideFocusRing": true,
-					"borderStyle": "none"
+					"borderStyle": "none",
+					"visibility": "hidden"
 				},
 				"urlScheme.alert": {
 					"type": "button",
@@ -259,7 +263,8 @@
 					"events": [
 						"onMouseEnter",
 						"onMouseLeave"
-					]
+					],
+					"visibility": "hidden"
 				}
 			},
 			"entryOrder": [
@@ -281,7 +286,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 476,
+	"geometryStamp": 508,
 	"editor": {
 		"activeView": "customLoginForms",
 		"defaultView": "Main",

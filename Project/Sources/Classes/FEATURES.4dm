@@ -189,6 +189,57 @@ Function handleEvents($e : Object)
 				This:C1470.deepLink.setHelpTip(Choose:C955(Length:C16(Form:C1466.deepLinking.associatedDomain)>0; "universalLinksTips"; ""))
 				
 				//==============================================
+			: (This:C1470.loginFormPopup.catch($e; On Clicked:K2:4))
+				
+				var $current : Text
+				var $form : Object
+				var $menu : cs:C1710.menu
+				
+				$current:=String:C10(PROJECT.server.authentication.form)
+				
+				$menu:=cs:C1710.menu.new()\
+					.append("default"; "default"; Length:C16($current)=0)\
+					.line()
+				
+				// Append custom login forms, if any
+				
+				For each ($form; This:C1470.getUserLoginForms())
+					
+					$menu.append($form.name; $form.source; $current=$form.source)
+					
+				End for each 
+				
+				If ($menu.popup(This:C1470.loginFormPopup).selected)
+					
+					If ($menu.choice="default")
+						
+						OB REMOVE:C1226(PROJECT.server.authentication; "form")
+						
+					Else 
+						
+						PROJECT.server.authentication.form:=$menu.choice
+						
+					End if 
+					
+					PROJECT.save()
+					This:C1470.refresh()
+					
+				End if 
+				
+				//==============================================
+			: (This:C1470.loginFormReveal.catch($e; On Clicked:K2:4))
+				
+				If (PROJECT.server.authentication.form="@.zip")
+					
+					SHOW ON DISK:C922(cs:C1710.path.new().hostloginForms().file(Delete string:C232(PROJECT.server.authentication.form; 1; 1)).platformPath)
+					
+				Else 
+					
+					SHOW ON DISK:C922(cs:C1710.path.new().hostloginForms().folder(Delete string:C232(PROJECT.server.authentication.form; 1; 1)).platformPath)
+					
+				End if 
+				
+				//==============================================
 		End case 
 	End if 
 	
@@ -196,12 +247,10 @@ Function handleEvents($e : Object)
 Function onLoad()
 	
 	This:C1470.loginRequired.bestSize()
-	This:C1470.authentication.distributeLeftToRight()  //.show(Form.server.authentication.email)
+	This:C1470.authentication.distributeLeftToRight()
 	This:C1470.pushNotification.bestSize()
-	This:C1470.certificateGroup.distributeLeftToRight()  //.show(Form.server.pushNotification)
-	
+	This:C1470.certificateGroup.distributeLeftToRight()
 	This:C1470.deepLinking.bestSize()
-	This:C1470.deepLinkingGroup.show(Form:C1466.deepLinking.enabled)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Update UI
@@ -222,6 +271,8 @@ Function update()
 			//TODO:Move collapse
 			
 		End if 
+		
+		This:C1470.loginFormReveal.show(PROJECT.server.authentication.form#Null:C1517)
 		
 	Else 
 		
@@ -282,15 +333,101 @@ Function get loginForm() : Text
 		
 	Else 
 		
-		return "#TODO"
+		return Delete string:C232(PROJECT.server.authentication.form; 1; 1)
 		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function getUserLoginForms() : Collection
 	
+	var $indx : Integer
+	var $loginForm; $manifest : Object
+	var $forms; $target : Collection
+	var $resources; $sources : 4D:C1709.Folder
+	var $errors : cs:C1710.error
 	
+	$forms:=New collection:C1472
 	
+	$resources:=cs:C1710.path.new().hostloginForms()
+	
+	If ($resources.exists)
+		
+		$errors:=cs:C1710.error.new().hide()
+		
+		// Transform the target into a collection, if necessary
+		$target:=(Value type:C1509(PROJECT.info.target)=Is collection:K8:32) ? PROJECT.info.target : New collection:C1472(String:C10(PROJECT.info.target))
+		
+		For each ($loginForm; $resources.folders().combine($resources.files().query("extension = :1"; SHARED.archiveExtension)))
+			
+			$sources:=$loginForm.isFile ? ZIP Read archive:C1637($loginForm).root : $loginForm
+			
+			If ($sources.file("manifest.json").exists)
+				
+				$manifest:=JSON Parse:C1218($sources.file("manifest.json").getText())
+				
+				If ($manifest.target=Null:C1517)
+					
+					$manifest.target:=New collection:C1472
+					
+					If ($sources.folder("android").exists)
+						
+						$manifest.target.push("android")
+						
+					End if 
+					
+					If ($sources.folder("iOS").exists) | ($sources.folder("Sources").exists)
+						
+						$manifest.target.push("iOS")
+						
+					End if 
+					
+				Else 
+					
+					// Transform the target into a collection, if necessary
+					$manifest.target:=(Value type:C1509($manifest.target)=Is collection:K8:32) ? $manifest.target : New collection:C1472(String:C10($manifest.target))
+					
+				End if 
+				
+				If (($manifest.target.length=2) & ($target.length=2))\
+					 || (($target.length=1) & ($manifest.target.indexOf($target[0])#-1))
+					
+					If ($loginForm.isFolder)
+						
+						$forms.push(New object:C1471(\
+							"name"; $manifest.name; \
+							"source"; "/"+$loginForm.name))
+						
+						// Remove zip if any
+						$indx:=$forms.indexOf($loginForm.name+SHARED.archiveExtension)
+						
+						If ($indx#-1)
+							
+							$forms.remove($indx)
+							
+						End if 
+						
+					Else 
+						
+						// Don't append if folder exists
+						$indx:=$forms.indexOf(Replace string:C233($loginForm.name; "."+SHARED.archiveExtension; ""))
+						
+						If ($indx=-1)
+							
+							$forms.push(New object:C1471(\
+								"name"; $manifest.name; \
+								"source"; "/"+$loginForm.fullName))
+							
+						End if 
+					End if 
+				End if 
+			End if 
+		End for each 
+		
+		$errors.show()
+		
+	End if 
+	
+	return $forms
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function checkAuthenticationMethod

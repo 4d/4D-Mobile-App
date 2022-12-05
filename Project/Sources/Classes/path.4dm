@@ -49,14 +49,17 @@ Function resolve($path : Text) : Object
 	
 	//MARK:-USER
 Function userHome() : 4D:C1709.Folder
-	return Folder:C1567(118/*fk home folder*/)
+	
+	return Folder:C1567(fk home folder:K87:24)
 	
 /*========================================================*/
 Function userDesktop() : 4D:C1709.Folder
+	
 	return Folder:C1567(fk desktop folder:K87:19)
 	
 /*========================================================*/
 Function userDocuments() : 4D:C1709.Folder
+	
 	return Folder:C1567(fk documents folder:K87:21)
 	
 /*========================================================*/
