@@ -261,15 +261,33 @@ Function update()
 		If (Form:C1466.server.authentication.email)
 			
 			This:C1470.authenticationGroup.show()
-			This:C1470.loginFormReveal.show(PROJECT.server.authentication.form#Null:C1517)
 			
-			//TODO:Move expand
+			If (PROJECT.server.authentication.form=Null:C1517)
+				
+				This:C1470.loginFormReveal.hide()
+				
+			Else 
+				
+				If (This:C1470.getUserLoginForms().query("source = :1"; PROJECT.server.authentication.form).pop()=Null:C1517)
+					
+					This:C1470.loginFormValue.foregroundColor:=UI.errorColor
+					This:C1470.loginFormReveal.hide()
+					
+				Else 
+					
+					This:C1470.loginFormValue.foregroundColor:=Foreground color:K23:1
+					This:C1470.loginFormReveal.show()
+					
+				End if 
+			End if 
+			
+			//TODO:Move expand ?
 			
 		Else 
 			
 			This:C1470.authenticationGroup.hide()
 			
-			//TODO:Move collapse
+			//TODO:Move collapse ?
 			
 		End if 
 		
@@ -408,9 +426,7 @@ Function getUserLoginForms() : Collection
 					Else 
 						
 						// Don't append if folder exists
-						$indx:=$forms.indexOf(Replace string:C233($loginForm.name; "."+SHARED.archiveExtension; ""))
-						
-						If ($indx=-1)
+						If ($forms.query("source = :1"; "/"+Replace string:C233($loginForm.fullName; SHARED.archiveExtension; "")).pop()=Null:C1517)
 							
 							$forms.push(New object:C1471(\
 								"name"; $manifest.name; \
