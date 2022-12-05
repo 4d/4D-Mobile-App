@@ -152,9 +152,19 @@ Function design()
 		"title"; Get localized string:C991("server"); \
 		"form"; "SERVER"))
 	
-	$o.panels.push(New object:C1471(\
-		"title"; Get localized string:C991("features"); \
-		"form"; "FEATURES"))
+	If (Feature.with("customLoginForms"))
+		
+		$o.panels.push(New object:C1471(\
+			"title"; Get localized string:C991("features"); \
+			"form"; "FEATURES"))
+		
+	Else 
+		
+		$o.panels.push(New object:C1471(\
+			"title"; Get localized string:C991("features"); \
+			"form"; "_FEATURES"))
+		
+	End if 
 	
 	If (False:C215)
 		

@@ -2,7 +2,7 @@
 	"destination": "detailScreen",
 	"inheritedForm": "panel_template",
 	"width": 960,
-	"height": 291,
+	"height": 236,
 	"markerHeader": 15,
 	"markerBody": 200,
 	"markerBreak": 220,
@@ -20,6 +20,23 @@
 		null,
 		{
 			"objects": {
+				"associatedDomain.border": {
+					"type": "rectangle",
+					"top": 183,
+					"left": 38,
+					"width": 320,
+					"height": 33,
+					"class": "border"
+				},
+				"urlScheme.border": {
+					"type": "rectangle",
+					"top": 120,
+					"left": 38,
+					"width": 320,
+					"height": 33,
+					"right": 358,
+					"class": "border"
+				},
 				"01_login": {
 					"type": "checkbox",
 					"top": 8,
@@ -95,100 +112,9 @@
 					"visibility": "hidden",
 					"class": "label"
 				},
-				"loginFormBorder": {
-					"type": "rectangle",
-					"top": 91,
-					"left": 38,
-					"width": 204,
-					"height": 33,
-					"class": "border",
-					"visibility": "hidden"
-				},
-				"05_type.popup.border": {
-					"type": "rectangle",
-					"top": 91,
-					"left": 38,
-					"width": 33,
-					"height": 33,
-					"class": "border",
-					"visibility": "hidden"
-				},
-				"loginFormValue": {
-					"type": "input",
-					"top": 99,
-					"left": 77,
-					"width": 157,
-					"height": 17,
-					"dataSource": "panel.loginForm",
-					"hideFocusRing": true,
-					"dragging": "none",
-					"focusable": false,
-					"class": "infos",
-					"contextMenu": "none",
-					"events": [],
-					"visibility": "hidden"
-				},
-				"loginFormLabel": {
-					"type": "text",
-					"top": 69,
-					"left": 38,
-					"width": 140,
-					"height": 17,
-					"text": ":xliff:loginForm",
-					"class": "label",
-					"visibility": "hidden"
-				},
-				"loginFormPopup": {
-					"type": "button",
-					"top": 91,
-					"left": 38,
-					"width": 33,
-					"height": 33,
-					"icon": "/RESOURCES/images/common/down.png",
-					"iconFrames": 4,
-					"style": "custom",
-					"events": [
-						"onClick"
-					],
-					"focusable": false,
-					"visibility": "hidden"
-				},
-				"loginFormReveal": {
-					"type": "button",
-					"text": "",
-					"top": 99,
-					"left": 248,
-					"width": 16,
-					"height": 16,
-					"events": [
-						"onClick"
-					],
-					"style": "toolbar",
-					"icon": "/RESOURCES/images/common/show.png",
-					"focusable": false,
-					"iconFrames": 4,
-					"visibility": "hidden"
-				},
-				"associatedDomain.border": {
-					"type": "rectangle",
-					"top": 248,
-					"left": 38,
-					"width": 320,
-					"height": 33,
-					"class": "border"
-				},
-				"urlScheme.border": {
-					"type": "rectangle",
-					"top": 185,
-					"left": 38,
-					"width": 320,
-					"height": 33,
-					"right": 358,
-					"class": "border"
-				},
 				"03_deepLinking": {
 					"type": "checkbox",
-					"top": 134,
+					"top": 69,
 					"left": 14,
 					"width": 344,
 					"height": 18,
@@ -203,7 +129,7 @@
 				"urlScheme.label": {
 					"type": "text",
 					"text": ":xliff:urlScheme",
-					"top": 163,
+					"top": 98,
 					"left": 38,
 					"width": 118,
 					"height": 16,
@@ -213,7 +139,7 @@
 				"03_urlScheme.input": {
 					"type": "input",
 					"left": 45,
-					"top": 193,
+					"top": 128,
 					"width": 305,
 					"height": 17,
 					"dataSource": "Form:C1466.deepLinking.urlScheme",
@@ -228,7 +154,7 @@
 				"associatedDomain.label": {
 					"type": "text",
 					"text": ":xliff:universalLinks",
-					"top": 226,
+					"top": 161,
 					"left": 38,
 					"width": 118,
 					"height": 16,
@@ -238,7 +164,7 @@
 				"04_associatedDomain.input": {
 					"type": "input",
 					"left": 45,
-					"top": 256,
+					"top": 191,
 					"width": 305,
 					"height": 17,
 					"dataSource": "Form:C1466.deepLinking.associatedDomain",
@@ -251,7 +177,7 @@
 				},
 				"urlScheme.alert": {
 					"type": "button",
-					"top": 191,
+					"top": 126,
 					"left": 14,
 					"width": 20,
 					"height": 20,
@@ -267,9 +193,6 @@
 				"02_pushNotification",
 				"authentication",
 				"certificatePicker",
-				"loginFormValue",
-				"loginFormPopup",
-				"loginFormReveal",
 				"03_deepLinking",
 				"03_urlScheme.input",
 				"04_associatedDomain.input",
@@ -281,28 +204,12 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 476,
+	"geometryStamp": 385,
 	"editor": {
-		"activeView": "customLoginForms",
-		"defaultView": "Main",
+		"activeView": "View 1",
+		"defaultView": "View 1",
 		"views": {
-			"Main": {},
-			"customLoginForms": {
-				"objects": [
-					"01_login",
-					"authentication",
-					"authentication.label",
-					"02_pushNotification",
-					"certificatePicker",
-					"certificateLabel",
-					"loginFormBorder",
-					"05_type.popup.border",
-					"loginFormValue",
-					"loginFormLabel",
-					"loginFormPopup",
-					"loginFormReveal"
-				]
-			}
+			"View 1": {}
 		}
 	}
 }
