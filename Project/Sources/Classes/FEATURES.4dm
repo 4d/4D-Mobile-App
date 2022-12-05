@@ -31,7 +31,6 @@ Function init()
 	This:C1470.formObject("authenticationLabel"; "authentication.label").addToGroup($group)
 	This:C1470.button("authenticationButton"; "authentication").addToGroup($group)
 	
-	
 	If (Feature.with("customLoginForms"))
 		
 		$group:=This:C1470.group("authenticationGroup")
@@ -81,7 +80,6 @@ Function init()
 	This:C1470.input("deepLink"; "04_associatedDomain.input").addToGroup($group)
 	This:C1470.formObject("deepLinkLabel"; "associatedDomain.label").addToGroup($group)
 	This:C1470.formObject("deepLinkBorder"; "associatedDomain.border").addToGroup($group)
-	
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	/// Events handler
@@ -281,13 +279,13 @@ Function update()
 				End if 
 			End if 
 			
-			//TODO:Move expand ?
+			// TODO:Move expand ?
 			
 		Else 
 			
 			This:C1470.authenticationGroup.hide()
 			
-			//TODO:Move collapse ?
+			// TODO:Move collapse ?
 			
 		End if 
 		
@@ -344,21 +342,15 @@ Function update()
 	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
 Function get loginForm() : Text
 	
-	If (PROJECT.server.authentication.form=Null:C1517)
-		
-		return Get localized string:C991("default")
-		
-	Else 
-		
-		return Delete string:C232(PROJECT.server.authentication.form; 1; 1)
-		
-	End if 
+	return PROJECT.server.authentication.form=Null:C1517\
+		 ? Get localized string:C991("default")\
+		 : Delete string:C232(PROJECT.server.authentication.form; 1; 1)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function getUserLoginForms() : Collection
 	
 	var $indx : Integer
-	var $loginForm; $manifest : Object
+	var $loginForm; $manifest; $o : Object
 	var $forms; $target : Collection
 	var $resources; $sources : 4D:C1709.Folder
 	var $errors : cs:C1710.error
@@ -414,12 +406,12 @@ Function getUserLoginForms() : Collection
 							"name"; $manifest.name; \
 							"source"; "/"+$loginForm.name))
 						
-						// Remove zip if any
-						$indx:=$forms.indexOf($loginForm.name+SHARED.archiveExtension)
+						// Remove zip occurence, if any
+						$o:=$forms.query("source = :1"; "/"+$loginForm.name+SHARED.archiveExtension).pop()
 						
-						If ($indx#-1)
+						If ($o#Null:C1517)
 							
-							$forms.remove($indx)
+							$forms.remove($forms.indexOf($o))
 							
 						End if 
 						
