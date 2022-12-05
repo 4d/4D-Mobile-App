@@ -41,7 +41,8 @@ object Versions {
     const val navigation = "2.5.1"
     const val okhttp = "5.0.0-alpha.10"
     const val paging3 = "3.1.1"
-    const val play_services = "20.0.0"
+    const val play_services_auth = "20.4.0"
+    const val play_services_location = "21.0.1"
     const val preference = "1.2.0"
     const val retrofit = "2.9.0"
     const val robolectric = "4.8.2"
@@ -153,8 +154,9 @@ object Libs {
     // Utils
     const val insetter = "dev.chrisbanes.insetter:insetter:${Versions.insetter}"
     const val leakcanary = "com.squareup.leakcanary:leakcanary-android:${Versions.leakcanary}"
-    const val play_services_auth = "com.google.android.gms:play-services-auth:${Versions.play_services}"
-    const val play_services_location = "com.google.android.gms:play-services-location:${Versions.play_services}"
+    const val play_services_auth = "com.google.android.gms:play-services-auth:${Versions.play_services_auth}"
+    const val play_services_location =
+        "com.google.android.gms:play-services-location:${Versions.play_services_location}"
     const val signature_pad = "com.github.gcacace:signature-pad:${Versions.signature_pad}"
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
 
