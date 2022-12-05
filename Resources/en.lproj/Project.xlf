@@ -1635,6 +1635,10 @@ and end with "://".</source>
 followed by letters, digits, plus ("+"), period ("."), or hyphen ("-")
 and end with "://".</target>
         </trans-unit>
+        <trans-unit id="ynpx1XfDHlyebcQNO6daOQ" resname="loginForm">
+          <source>Login Form</source>
+          <target>Login Form</target>
+        </trans-unit>
       </group>
     </body>
   </file>

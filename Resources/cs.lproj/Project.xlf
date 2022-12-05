@@ -1637,6 +1637,10 @@ and end with "://".</source>
 následovaném písmeny, čísly, plusem ("+"), tečkou ("."), nebo pomlčkou ("-")
 a končit "://".</target>
         </trans-unit>
+        <trans-unit id="ynpx1XfDHlyebcQNO6daOQ" resname="loginForm">
+          <source>Login Form</source>
+          <target state="new">Login Form</target>
+        </trans-unit>
       </group>
     </body>
   </file>

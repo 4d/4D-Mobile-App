@@ -119,7 +119,7 @@
 					"left": 77,
 					"width": 157,
 					"height": 17,
-					"dataSource": "panel.loginFormValue()",
+					"dataSource": "panel.loginForm",
 					"hideFocusRing": true,
 					"dragging": "none",
 					"focusable": false,
@@ -134,7 +134,7 @@
 					"left": 38,
 					"width": 140,
 					"height": 17,
-					"text": ".Login form",
+					"text": ":xliff:loginForm",
 					"class": "label",
 					"visibility": "hidden"
 				},

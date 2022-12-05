@@ -1637,6 +1637,10 @@ and end with "://".</source>
 suivi de lettres, chiffres, plus ("+"), point ("."), ou trait d'union ("-")
 et se terminer par "://".</target>
         </trans-unit>
+        <trans-unit id="ynpx1XfDHlyebcQNO6daOQ" resname="loginForm">
+          <source>Login Form</source>
+          <target>Formulaire de connexion</target>
+        </trans-unit>
       </group>
     </body>
   </file>

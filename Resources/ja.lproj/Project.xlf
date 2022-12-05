@@ -1637,6 +1637,10 @@ and end with "://".</source>
 その後には文字、数字、プラス("+")、ピリオド(".")、ハイフン("-")が使用できます。
 最後は"://"で終える必要があります。</target>
         </trans-unit>
+        <trans-unit id="ynpx1XfDHlyebcQNO6daOQ" resname="loginForm">
+          <source>Login Form</source>
+          <target state="new">Login Form</target>
+        </trans-unit>
       </group>
     </body>
   </file>

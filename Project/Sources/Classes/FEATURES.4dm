@@ -273,18 +273,24 @@ Function update()
 	This:C1470.deepLinking.enable(Is macOS:C1572 & PROJECT.$ios)
 	This:C1470.deepLinkingGroup.enable(Is macOS:C1572 & PROJECT.$ios)
 	
-	//=== === === === === === === === === === === === === === === === === === === === ===
-Function loginFormValue() : Text
-	BEEP:C151
+	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
+Function get loginForm() : Text
+	
 	If (PROJECT.server.authentication.form=Null:C1517)
 		
-		return ".Default"
+		return Get localized string:C991("default")
 		
 	Else 
 		
-		return ".toDo"
+		return "#TODO"
 		
 	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function getUserLoginForms() : Collection
+	
+	
+	
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function checkAuthenticationMethod
