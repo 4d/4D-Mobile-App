@@ -15,6 +15,10 @@ apply from: "$rootDir/buildscripts/maven-check.gradle"
 apply from: "$rootDir/buildscripts/git-hash.gradle"
 {{/debug_mode}}
 
+android {
+    namespace '{{package}}'
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 

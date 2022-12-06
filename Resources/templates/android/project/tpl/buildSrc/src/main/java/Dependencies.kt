@@ -13,21 +13,22 @@ object Versions {
     const val qmobiledatasync = "0.0.1"
     const val qmobileui = "0.0.1"
 
-    const val android_gradle_plugin = "7.2.1"
+    const val activity = "1.6.1"
+    const val android_gradle_plugin = "7.3.1"
     const val androidx_core = "1.4.0"
-    const val appcompat = "1.5.0"
+    const val appcompat = "1.5.1"
     const val arch_core = "2.1.0"
-    const val artifactory = "4.29.0"
+    const val artifactory = "4.29.3"
     const val atsl_junit = "1.1.2"
     const val barcode_scanning = "17.0.2"
     const val camerax = "1.1.0"
     const val espresso = "3.4.0"
     const val espresso_contrib = "3.0.2"
     const val fragment_ktx = "1.5.2"
-    const val glide = "4.13.2"
+    const val glide = "4.14.2"
     const val glide_transformations = "4.3.0"
     const val insetter = "0.6.1"
-    const val jackson = "2.13.3"
+    const val jackson = "2.14.0"
     const val json = "20220320"
     const val junit = "4.13.2"
     const val kotlin = "1.7.10"
@@ -38,7 +39,7 @@ object Versions {
     const val mockito = "4.7.0"
     const val mockk = "1.12.4"
     const val multidex = "2.0.1"
-    const val navigation = "2.5.1"
+    const val navigation = "2.5.3"
     const val okhttp = "5.0.0-alpha.10"
     const val paging3 = "3.1.1"
     const val play_services_auth = "20.4.0"
@@ -46,7 +47,7 @@ object Versions {
     const val preference = "1.2.0"
     const val retrofit = "2.9.0"
     const val robolectric = "4.8.2"
-    const val room = "2.5.0-alpha02"
+    const val room = "2.5.0-beta02"
     const val rules = "1.4.0"
     const val runner = "1.4.0"
     const val rx_android = "2.1.1"
@@ -59,9 +60,9 @@ object Versions {
 
 object Config {
     const val buildTools = "30.0.3"
-    const val compileSdk = 32
+    const val compileSdk = 33
     const val minSdk = 21
-    const val targetSdk = 32
+    const val targetSdk = 33
 }
 
 object Tools {
@@ -86,6 +87,7 @@ object QMobileLibs {
 object Libs {
 
     // Common
+    const val androidx_activity_ktx = "androidx.activity:activity-ktx:${Versions.activity}"
     const val androidx_appcompat = "androidx.appcompat:appcompat:${Versions.appcompat}"
     const val androidx_fragment_ktx = "androidx.fragment:fragment-ktx:${Versions.fragment_ktx}"
     const val androidx_preference_ktx = "androidx.preference:preference-ktx:${Versions.preference}"
