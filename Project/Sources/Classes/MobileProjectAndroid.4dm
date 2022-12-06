@@ -47,6 +47,7 @@ Class constructor($project : Object)
 	This:C1470.project.hasDataSet:=True:C214
 	This:C1470.project.hasOpenUrlAction:=Feature.with("openURLAction")
 	This:C1470.project.hasKotlinInputControls:=Feature.with("inputControlWithCodeAndroid")
+	This:C1470.project.hasCustomLoginForms:=Feature.with("customLoginForms")
 	This:C1470.project.hasBuildWithCmd:=Feature.with("buildWithCmd")
 	This:C1470.project.hasNoData:=This:C1470.project.noData
 	This:C1470.project.hasNoSDK:=This:C1470.project.noSDK
@@ -344,8 +345,12 @@ Function create()->$result : Object
 	
 	If ($o.success)
 		
-		// MARK:COPY CUSTOM LOGIN FORM FILES
-		$o:=This:C1470.androidprojectgenerator.copyCustomLoginFormFiles(This:C1470.project.project.login; This:C1470.project.package)
+		If (Feature.with("customLoginForms"))
+			
+			// MARK:COPY CUSTOM LOGIN FORM FILES
+			$o:=This:C1470.androidprojectgenerator.copyCustomLoginFormFiles(This:C1470.project.project.login; This:C1470.project.package)
+			
+		End if 
 		
 	End if 
 	
