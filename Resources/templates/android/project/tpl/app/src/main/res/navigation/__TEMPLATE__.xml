@@ -15,6 +15,7 @@
     <include app:graph="@navigation/pending_tasks" />
     <include app:graph="@navigation/base_action_nav" />
     <include app:graph="@navigation/base_nav" />
+    <include app:graph="@navigation/scanner" />
     <include app:graph="@navigation/settings" />
 
     <fragment
@@ -46,6 +47,10 @@
         <action
             android:id="@+id/to_action_webview"
             app:destination="@id/action_webview" />
+
+        <action
+            android:id="@+id/to_scanner"
+            app:destination="@id/scanner" />
 
         <action
             android:id="@+id/to_settings"

@@ -203,11 +203,12 @@ class CustomNavigationResolver : GenericNavigationResolver {
     }
 
     /**
-     * Navigates from action form to barcode scanner fragment
+     * Navigates to barcode scanner fragment
      */
-    override fun navigateToActionScanner(viewDataBinding: ViewDataBinding) {
-        viewDataBinding.root.findNavController().navigate(
-            ActionParametersFragmentDirections.actionParametersToScanner()
+    override fun navigateToActionScanner(fragmentActivity: FragmentActivity, fragmentResultKey: String) {
+        (fragmentActivity as? MainActivity)?.navController?.navigate(
+            BaseNavDirections.toScanner(fragmentResultKey = fragmentResultKey)
+
         )
     }
 
