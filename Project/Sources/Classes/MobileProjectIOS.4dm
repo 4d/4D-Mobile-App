@@ -184,8 +184,21 @@ Function build()->$result : Object
 	
 	If (Not:C34($result.success))
 		
-		This:C1470.postError(ob_error_string($result))
-		This:C1470.logError("Build or Archive Failed")
+		var $errorMessage : Text
+		$errorMessage:=ob_error_string($result)
+		If (Position:C15("--- xcodebuild: WARNING:"; $errorMessage)=1)
+			var $startPos : Integer
+			$startPos:=Position:C15("** BUILD FAILED **"; $errorMessage)
+			If ($startPos>0)
+				$errorMessage:=Substring:C12($errorMessage; $startPos)
+			End if 
+		End if 
+		If (Position:C15("Your session has expired. Please log in"; $errorMessage)>0)
+			$errorMessage:="Open Xcode and relog in your account in settings\n"+$errorMessage
+		End if 
+		
+		This:C1470.postError($errorMessage)
+		This:C1470.logError("Build or Archive Failed\n"+$errorMessage)
 		
 	End if 
 	
@@ -338,6 +351,9 @@ Function _archive()->$Obj_result_build : Object
 		"archivePath"; $archivePath.path))
 	
 	This:C1470.logFolder.file("lastArchive.xlog").setText(String:C10($Obj_result_build.out))
+	If (Length:C16(String:C10($Obj_result_build.error))>0)
+		This:C1470.logFolder.file("lastArchive.error.xlog").setText(String:C10($Obj_result_build.error))
+	End if 
 	
 	If ($Obj_result_build.success)
 		
@@ -382,6 +398,9 @@ Function _build()->$Obj_result_build : Object
 		"target"; Convert path system to POSIX:C1106($in.path+"build"+Folder separator:K24:12)))
 	
 	This:C1470.logFolder.file("lastBuild.xlog").setText(String:C10($Obj_result_build.out))
+	If (Length:C16(String:C10($Obj_result_build.error))>0)
+		This:C1470.logFolder.file("lastBuild.error.xlog").setText(String:C10($Obj_result_build.error))
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Installing the IPA on a connected device
