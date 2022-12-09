@@ -20,9 +20,19 @@
 
     <fragment
         android:id="@+id/list"
+        {{#isGoogleMapsPlatformUsedForTable}}
+        android:name="com.qmobile.qmobileui.list.maps.MapsFragment"
+        {{/isGoogleMapsPlatformUsedForTable}}
+        {{^isGoogleMapsPlatformUsedForTable}}
         android:name="com.qmobile.qmobileui.list.EntityListFragment"
+        {{/isGoogleMapsPlatformUsedForTable}}
         android:label="{{tableName_original}}"
+        {{#isGoogleMapsPlatformUsedForTable}}
+        tools:layout="@layout/fragment_maps">
+        {{/isGoogleMapsPlatformUsedForTable}}
+        {{^isGoogleMapsPlatformUsedForTable}}
         tools:layout="@layout/fragment_list">
+        {{/isGoogleMapsPlatformUsedForTable}}
 
         <action
             android:id="@+id/action_list_to_viewpager"
@@ -129,8 +139,14 @@
 
     <fragment
         android:id="@+id/relationList"
+        {{#isGoogleMapsPlatformUsedForTable}}
+        android:name="com.qmobile.qmobileui.list.maps.MapsFragment"
+        tools:layout="@layout/fragment_maps">
+        {{/isGoogleMapsPlatformUsedForTable}}
+        {{^isGoogleMapsPlatformUsedForTable}}
         android:name="com.qmobile.qmobileui.list.EntityListFragment"
         tools:layout="@layout/fragment_list">
+        {{/isGoogleMapsPlatformUsedForTable}}
 
         <action
             android:id="@+id/action_list_to_viewpager"

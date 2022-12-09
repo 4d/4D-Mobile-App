@@ -35,6 +35,7 @@ object Versions {
     const val kotlin_coroutines = "1.6.4"
     const val leakcanary = "2.0"
     const val lifecycle = "2.5.1"
+    const val maps_ktx = "3.3.0"
     const val material = "1.8.0-alpha03"
     const val mockito = "4.7.0"
     const val mockk = "1.12.4"
@@ -44,6 +45,7 @@ object Versions {
     const val paging3 = "3.1.1"
     const val play_services_auth = "20.4.0"
     const val play_services_location = "21.0.1"
+    const val play_services_maps = "18.1.0"
     const val preference = "1.2.0"
     const val retrofit = "2.9.0"
     const val robolectric = "4.8.2"
@@ -52,6 +54,7 @@ object Versions {
     const val runner = "1.4.0"
     const val rx_android = "2.1.1"
     const val rxjava2 = "2.2.21"
+    const val secrets = "2.0.1"
     const val signature_pad = "1.3.1"
     const val splashscreen = "1.0.0"
     const val swiperefreshlayout = "1.1.0"
@@ -71,6 +74,8 @@ object Tools {
     const val kotlin_gradle_plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     const val navigation_safe_args_gradle_plugin =
         "androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.navigation}"
+    const val secrets_gradle_plugin =
+        "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:${Versions.secrets}"
 }
 
 object QMobileLibs {
@@ -153,12 +158,19 @@ object Libs {
     const val androidx_camera_view = "androidx.camera:camera-view:${Versions.camerax}"
     const val barcode_scanning = "com.google.mlkit:barcode-scanning:${Versions.barcode_scanning}"
 
-    // Utils
-    const val insetter = "dev.chrisbanes.insetter:insetter:${Versions.insetter}"
-    const val leakcanary = "com.squareup.leakcanary:leakcanary-android:${Versions.leakcanary}"
+    // Maps
+    const val maps_ktx = "com.google.maps.android:maps-ktx:${Versions.maps_ktx}"
+    const val maps_utils_ktx = "com.google.maps.android:maps-utils-ktx:${Versions.maps_ktx}"
+
+    // Google Play Services
     const val play_services_auth = "com.google.android.gms:play-services-auth:${Versions.play_services_auth}"
     const val play_services_location =
         "com.google.android.gms:play-services-location:${Versions.play_services_location}"
+    const val play_services_maps = "com.google.android.gms:play-services-maps:${Versions.play_services_maps}"
+
+    // Utils
+    const val insetter = "dev.chrisbanes.insetter:insetter:${Versions.insetter}"
+    const val leakcanary = "com.squareup.leakcanary:leakcanary-android:${Versions.leakcanary}"
     const val signature_pad = "com.github.gcacace:signature-pad:${Versions.signature_pad}"
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
 

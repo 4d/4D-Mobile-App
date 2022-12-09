@@ -1523,6 +1523,8 @@ Function copyFormatterFilesToApp
 		
 	End if 
 	
+	This:C1470.concatLocalProperties($1.folder("android").file("local.properties"); Folder:C1567(This:C1470.projectPath).file("local.properties"))
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
 Function copyKotlinInputControlFiles
@@ -1730,6 +1732,8 @@ Function copyInputControlFilesToApp
 		
 	End if 
 	
+	This:C1470.concatLocalProperties($1.folder("android").file("local.properties"); Folder:C1567(This:C1470.projectPath).file("local.properties"))
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
 Function copyCustomLoginFormFiles
@@ -1747,7 +1751,7 @@ Function copyCustomLoginFormFiles
 		"success"; True:C214; \
 		"errors"; New collection:C1472)
 	
-	If ((String:C10($1)#"default") && (String:C10($1)#""))
+	If (String:C10($1)#"")
 		
 		If (Substring:C12($1; 1; 1)="/")
 			
@@ -1916,6 +1920,27 @@ Function copyLoginFormFilesToApp
 		
 	End if 
 	
+	This:C1470.concatLocalProperties($1.folder("android").file("local.properties"); Folder:C1567(This:C1470.projectPath).file("local.properties"))
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function concatLocalProperties($newFile : 4D:C1709.File; $oldFile : 4D:C1709.File)->$result : Object
+	
+	$result:=New object:C1471(\
+		"success"; True:C214; \
+		"errors"; New collection:C1472)
+	
+	If ($newFile.exists && $oldFile.exists)
+		
+		var $newFileContent; $oldFileContent : Text
+		$newFileContent:=$newFile.getText()
+		$oldFileContent:=$oldFile.getText()
+		
+		$oldFileContent:=$oldFileContent+Char:C90(Carriage return:K15:38)+$newFileContent
+		$oldFile.setText($oldFileContent)
+		
+	End if 
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
 Function copyFilesRecursively($entry : 4D:C1709.Folder; $target : 4D:C1709.Folder)->$result : Object
@@ -1930,11 +1955,20 @@ Function copyFilesRecursively($entry : 4D:C1709.Folder; $target : 4D:C1709.Folde
 		
 		For each ($file; $entry.files(fk ignore invisible:K87:22))
 			
-			If (($target.file($file.fullName).exists) && ($file.extension=".xml"))
+			var $shouldCopy : Boolean
+			$shouldCopy:=True:C214
+			
+			If (($target.file($file.fullName).exists) && ($file.extension=".xml") && ($file.parent.name="values"))
 				
-				This:C1470.concatResourceFile($file; $target.file($file.fullName))
+				var $Obj_concat : Object
 				
-			Else 
+				$Obj_concat:=This:C1470.concatResourceFile($file; $target.file($file.fullName))
+				
+				$shouldCopy:=Not:C34($Obj_concat.success)
+				
+			End if 
+			
+			If ($shouldCopy)
 				
 				$fileCopyDest:=$file.copyTo($target; fk overwrite:K87:5)
 				
@@ -1997,6 +2031,12 @@ Function concatResourceFile
 	$endResourceKey:="</resources>"
 	
 	If ((Position:C15($startResourceKey; $newFileContent)=0) || (Position:C15($endResourceKey; $newFileContent)=0))
+		$0.success:=False:C215
+		return 
+	End if 
+	
+	If ((Position:C15($startResourceKey; $oldFileContent)=0) || (Position:C15($endResourceKey; $oldFileContent)=0))
+		$0.success:=False:C215
 		return 
 	End if 
 	
@@ -2004,13 +2044,12 @@ Function concatResourceFile
 	$startPos:=Position:C15($startResourceKey; $newFileContent)+Length:C16($startResourceKey)
 	$endPos:=Position:C15($endResourceKey; $newFileContent)
 	
-	$newFileContent:=Substring:C12($newFileContent; $startPos; $endPos-Length:C16($endResourceKey))
+	$newFileContent:=Substring:C12($newFileContent; $startPos; $endPos-$startPos)
 	
 	var $anchorPos : Integer
 	$anchorPos:=Position:C15($endResourceKey; $oldFileContent)
 	$oldFileContent:=Insert string:C231($oldFileContent; $newFileContent+Char:C90(Carriage return:K15:38); $anchorPos)
 	$oldFile.setText($oldFileContent)
-	
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//

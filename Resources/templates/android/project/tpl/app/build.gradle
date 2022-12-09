@@ -2,6 +2,9 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
 apply plugin: 'kotlin-kapt'
+{{#isGoogleMapsPlatformUsed}}
+apply plugin: 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+{{/isGoogleMapsPlatformUsed}}
 
 apply from: "$rootDir/buildscripts/ktlint.gradle"
 apply from: "$rootDir/buildscripts/testlog.gradle"
@@ -74,3 +77,9 @@ dependencies {
 configurations.implementation {
     exclude group: "com.squareup.okhttp3", module: "okhttp"
 }
+
+{{#isGoogleMapsPlatformUsed}}
+secrets {
+    defaultPropertiesFileName = 'local.properties'
+}
+{{/isGoogleMapsPlatformUsed}}
