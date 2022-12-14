@@ -72,25 +72,28 @@ Function newCanvas($attributes : Object) : cs:C1710.svg
 		End if 
 	End if 
 	
-	If (This:C1470.success && ($attributes#Null:C1517))
+	If (This:C1470.success)
 		
-		For each ($t; $attributes)
+		If ($attributes#Null:C1517)
 			
-			Case of 
-					
-					//_______________________
-				: ($t="keepReference")
-					
-					This:C1470.autoClose:=Bool:C1537($attributes[$t])
-					
-					//_______________________
-				Else 
-					
-					Super:C1706.setAttribute(This:C1470.root; $t; $attributes[$t])
-					
-					//______________________
-			End case 
-		End for each 
+			For each ($t; $attributes)
+				
+				Case of 
+						
+						//_______________________
+					: ($t="keepReference")
+						
+						This:C1470.autoClose:=Bool:C1537($attributes[$t])
+						
+						//_______________________
+					Else 
+						
+						Super:C1706.setAttribute(This:C1470.root; $t; $attributes[$t])
+						
+						//______________________
+				End case 
+			End for each 
+		End if 
 		
 	Else 
 		
@@ -883,9 +886,17 @@ Function polygon($points : Variant; $attachTo) : cs:C1710.svg
 	
 	//———————————————————————————————————————————————————————————
 	// Defines a new path element.
-Function path($data : Variant; $attachTo) : cs:C1710.svg
+Function path($data : Text; $attachTo) : cs:C1710.svg
 	
-	//FIXME:TO_DO
+	var $node : Text
+	
+	//TODO:Accept other data formats (Collection, …)
+	$node:=Count parameters:C259=2 ? This:C1470._getContainer($attachTo) : This:C1470._getContainer()
+	
+	This:C1470.latest:=Super:C1706.create($node; "path")
+	This:C1470.setAttribute("d"; $data)
+	
+	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
 	// Populate the "points" property of a polyline, polygon
@@ -965,73 +976,57 @@ Function points($points : Variant; $applyTo) : cs:C1710.svg
 Function M($points : Variant; $applyTo) : cs:C1710.svg
 	
 	var $data; $element; $node : Text
-	var $paramNumber : Integer
 	
-	$paramNumber:=Count parameters:C259
-	
-	If (This:C1470._requiredParams($paramNumber; 1))
+	If (Not:C34(This:C1470._requiredParams(Count parameters:C259; 1)))
 		
-		If ($paramNumber>=2)
+		return This:C1470
+		
+	End if 
+	
+	Case of 
+			//______________________________________________________
+		: (Value type:C1509($points)=Is collection:K8:32)
 			
-			$node:=This:C1470._getTarget($applyTo)
+			$data:=String:C10($points[0]; "&xml")+","+String:C10($points[1]; "&xml")
 			
+			//______________________________________________________
+		: (Value type:C1509($points)=Is text:K8:3)
+			
+			$data:=$points
+			
+			//______________________________________________________
 		Else 
 			
-			// Auto
-			$node:=This:C1470._getTarget()
+			This:C1470._pushError(Current method name:C684+" Points must be passed as string or collection")
+			return This:C1470
 			
-		End if 
-		
-		DOM GET XML ELEMENT NAME:C730($node; $element)
-		
-		Case of 
-				
-				//…………………………………………………………………………………………………
-			: ($element="polyline")\
-				 | ($element="polygon")
-				
-				Case of 
-						//______________________________________________________
-					: (Value type:C1509($points)=Is collection:K8:32)
-						
-						$data:=String:C10($points[0]; "&xml")+","+String:C10($points[1]; "&xml")
-						
-						//______________________________________________________
-					: (Value type:C1509($points)=Is text:K8:3)
-						
-						$data:=$points
-						
-						//______________________________________________________
-					Else 
-						
-						// #ERROR
-						
-						//______________________________________________________
-				End case 
-				
-				If (Length:C16($data)>0)
-					
-					Super:C1706.setAttribute($node; "points"; $data)
-					
-				Else 
-					
-					This:C1470._pushError("For a "+$element+", points must be passed as string or collection")
-					
-				End if 
-				
-				//…………………………………………………………………………………………………
-			: ($element="path")
-				
-				//FIXME:TO_DO
-				
-				//…………………………………………………………………………………………………
-			Else 
-				
-				This:C1470._pushError("The element \""+$element+"\" is not compatible withe \"points\" property")
-				
-				//…………………………………………………………………………………………………
-		End case 
-	End if 
+			//______________________________________________________
+	End case 
+	
+	$node:=Count parameters:C259>=2 ? This:C1470._getTarget($applyTo) : This:C1470._getTarget()
+	
+	DOM GET XML ELEMENT NAME:C730($node; $element)
+	
+	Case of 
+			
+			//…………………………………………………………………………………………………
+		: ($element="polyline")\
+			 | ($element="polygon")
+			
+			Super:C1706.setAttribute($node; "points"; $data)
+			
+			//…………………………………………………………………………………………………
+		: ($element="path")
+			
+			Super:C1706.setAttribute($node; "d"; Super:C1706.getAttribute($node; "d")+$data)
+			
+			//…………………………………………………………………………………………………
+		Else 
+			
+			This:C1470._pushError(Current method name:C684+" The element \""+$element+"\" is not compatible with \"points\" property")
+			
+			//…………………………………………………………………………………………………
+	End case 
 	
 	return This:C1470
 	
@@ -1040,89 +1035,70 @@ Function M($points : Variant; $applyTo) : cs:C1710.svg
 Function L($points : Variant; $applyTo) : cs:C1710.svg
 	
 	var $data; $name; $node; $element : Text
-	var $i; $paramNumber : Integer
+	var $i : Integer
 	
-	$paramNumber:=Count parameters:C259
-	
-	If (This:C1470._requiredParams($paramNumber; 1))
+	If (Not:C34(This:C1470._requiredParams(Count parameters:C259; 1)))
 		
-		If ($paramNumber>=2)
-			
-			$node:=This:C1470._getTarget($applyTo)
-			
-		Else 
-			
-			// Auto
-			$node:=This:C1470._getTarget()
-			
-		End if 
-		
-		DOM GET XML ELEMENT NAME:C730($node; $element)
-		
-		Case of 
-				
-				//…………………………………………………………………………………………………
-			: ($element="polyline")\
-				 | ($element="polygon")
-				
-				Case of 
-						//______________________________________________________
-					: (Value type:C1509($points)=Is collection:K8:32)
-						
-						If ($points.length%2=0)
-							
-							For ($i; 0; $points.length-1; 2)
-								
-								$data:=$data+String:C10($points[$i]; "&xml")+" "+String:C10($points[$i+1]; "&xml")
-								
-							End for 
-							
-							$data:=String:C10(This:C1470.getAttribute($node; "points"))+" "+$data
-							
-						Else 
-							
-							// #ERROR
-							
-						End if 
-						
-						//______________________________________________________
-					: (Value type:C1509($points)=Is text:K8:3)
-						
-						$data:=String:C10(This:C1470.getAttribute($node; "points"))+" "+$points
-						
-						//______________________________________________________
-					Else 
-						
-						// #ERROR
-						
-						//______________________________________________________
-				End case 
-				
-				If (Length:C16($data)>0)
-					
-					Super:C1706.setAttribute($node; "points"; $data)
-					
-				Else 
-					
-					This:C1470._pushError("For a "+$element+", points must be passed as string or collection")
-					
-				End if 
-				
-				//…………………………………………………………………………………………………
-			: ($element="path")
-				
-				//FIXME:TO_DO
-				
-				//…………………………………………………………………………………………………
-			Else 
-				
-				This:C1470._pushError("he element \""+$element+"\" is not compatible withe \"points\" property")
-				
-				//…………………………………………………………………………………………………
-		End case 
-		
+		return This:C1470
 		
 	End if 
+	
+	Case of 
+			//______________________________________________________
+		: (Value type:C1509($points)=Is collection:K8:32)
+			
+			If ($points.length%2=0)
+				
+				For ($i; 0; $points.length-1; 2)
+					
+					$data:=$data+String:C10($points[$i]; "&xml")+" "+String:C10($points[$i+1]; "&xml")
+					
+				End for 
+				
+			Else 
+				
+				This:C1470._pushError(Current method name:C684+" The length of the point collection must be a multiple of 2")
+				return This:C1470
+				
+			End if 
+			
+			//______________________________________________________
+		: (Value type:C1509($points)=Is text:K8:3)
+			
+			$data:=$points
+			
+			//______________________________________________________
+		Else 
+			
+			This:C1470._pushError(Current method name:C684+" Points must be passed as string or collection")
+			return This:C1470
+			
+			//______________________________________________________
+	End case 
+	
+	$node:=Count parameters:C259>=2 ? This:C1470._getTarget($applyTo) : This:C1470._getTarget()
+	DOM GET XML ELEMENT NAME:C730($node; $element)
+	
+	Case of 
+			
+			//…………………………………………………………………………………………………
+		: ($element="polyline")\
+			 | ($element="polygon")
+			
+			Super:C1706.setAttribute($node; "points"; String:C10(This:C1470.getAttribute($node; "points"))+" "+$data)
+			
+			//…………………………………………………………………………………………………
+		: ($element="path")
+			
+			Super:C1706.setAttribute($node; "d"; Super:C1706.getAttribute($node; "d")+$data)
+			
+			//…………………………………………………………………………………………………
+		Else 
+			
+			This:C1470._pushError(Current method name:C684+" The element \""+$element+"\" is not compatible with \"points\" property")
+			
+			//…………………………………………………………………………………………………
+	End case 
 	
 	return This:C1470
 	
@@ -1131,18 +1107,62 @@ Function L($points : Variant; $applyTo) : cs:C1710.svg
 Function m($points : Variant; $applyTo) : cs:C1710.svg
 	
 	//FIXME:TO_DO
+	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
 	// Relative lineTo
 Function l($points : Variant; $applyTo) : cs:C1710.svg
 	
 	//FIXME:TO_DO
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Close path
+Function Z($applyTo) : cs:C1710.svg
+	
+	var $element; $node : Text
+	
+	$node:=Count parameters:C259>=1 ? This:C1470._getTarget($applyTo) : This:C1470._getTarget()
+	DOM GET XML ELEMENT NAME:C730($node; $element)
+	
+	If ($element="path")
+		
+		Super:C1706.setAttribute($node; "d"; Super:C1706.getAttribute($node; "d")+"Z")
+		
+	Else 
+		
+		This:C1470._pushError(Current method name:C684+" The element \""+$element+"\" is not compatible with \"points\" property")
+		
+	End if 
+	
+	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
 	// Populate the "d" property of a path
-Function d($data : Variant; $applyTo) : cs:C1710.svg
+Function d($data : Text; $applyTo) : cs:C1710.svg
 	
-	//FIXME:TO_DO
+	var $element; $node : Text
+	
+	If (Not:C34(This:C1470._requiredParams(Count parameters:C259; 1)))
+		
+		return This:C1470
+		
+	End if 
+	
+	$node:=Count parameters:C259>=2 ? This:C1470._getTarget($applyTo) : This:C1470._getTarget()
+	DOM GET XML ELEMENT NAME:C730($node; $element)
+	
+	If ($element="path")
+		
+		Super:C1706.setAttribute($node; "d"; $data)
+		
+	Else 
+		
+		This:C1470._pushError(Current method name:C684+" The element \""+$element+"\" is not compatible with \"points\" property")
+		
+	End if 
+	
+	return This:C1470
 	
 	//MARK:-ATTRIBUTES
 	//———————————————————————————————————————————————————————————
