@@ -189,20 +189,17 @@ Function handleEvents($e : Object)
 				//==============================================
 			: (This:C1470.loginFormPopup.catch($e; On Clicked:K2:4))
 				
-				var $current : Text
 				var $form : Object
 				var $menu : cs:C1710.menu
 				
-				$current:=String:C10(PROJECT.server.authentication.form)
-				
 				$menu:=cs:C1710.menu.new()\
-					.append("default"; "default"; Length:C16($current)=0)\
+					.append("default"; "default"; PROJECT.login=Null:C1517)\
 					.line()
 				
 				// Append custom login forms, if any
 				For each ($form; This:C1470.getUserLoginForms())
 					
-					$menu.append($form.name; $form.source; $current=$form.source)
+					$menu.append($form.name; $form.source; String:C10(PROJECT.login)=$form.source)
 					
 				End for each 
 				
@@ -210,11 +207,11 @@ Function handleEvents($e : Object)
 					
 					If ($menu.choice="default")
 						
-						OB REMOVE:C1226(PROJECT.server.authentication; "form")
+						OB REMOVE:C1226(PROJECT; "login")
 						
 					Else 
 						
-						PROJECT.server.authentication.form:=$menu.choice
+						PROJECT.login:=$menu.choice
 						
 					End if 
 					
@@ -226,13 +223,13 @@ Function handleEvents($e : Object)
 				//==============================================
 			: (This:C1470.loginFormReveal.catch($e; On Clicked:K2:4))
 				
-				If (PROJECT.server.authentication.form="@.zip")
+				If (PROJECT.login="@.zip")
 					
-					SHOW ON DISK:C922(cs:C1710.path.new().hostloginForms().file(Delete string:C232(PROJECT.server.authentication.form; 1; 1)).platformPath)
+					SHOW ON DISK:C922(cs:C1710.path.new().hostloginForms().file(Delete string:C232(PROJECT.login; 1; 1)).platformPath)
 					
 				Else 
 					
-					SHOW ON DISK:C922(cs:C1710.path.new().hostloginForms().folder(Delete string:C232(PROJECT.server.authentication.form; 1; 1)).platformPath)
+					SHOW ON DISK:C922(cs:C1710.path.new().hostloginForms().folder(Delete string:C232(PROJECT.login; 1; 1)).platformPath)
 					
 				End if 
 				
@@ -259,14 +256,14 @@ Function update()
 			
 			This:C1470.authenticationGroup.show()
 			
-			If (PROJECT.server.authentication.form=Null:C1517)
+			If (PROJECT.login=Null:C1517)
 				
 				This:C1470.loginFormValue.foregroundColor:=Foreground color:K23:1
 				This:C1470.loginFormReveal.hide()
 				
 			Else 
 				
-				If (This:C1470.getUserLoginForms().query("source = :1"; PROJECT.server.authentication.form).pop()=Null:C1517)
+				If (This:C1470.getUserLoginForms().query("source = :1"; PROJECT.login).pop()=Null:C1517)
 					
 					This:C1470.loginFormValue.foregroundColor:=UI.errorColor
 					This:C1470.loginFormReveal.hide()
@@ -344,14 +341,14 @@ Function get loginForm() : Text
 	
 	var $o : Object
 	
-	If (PROJECT.server.authentication.form=Null:C1517)
+	If (PROJECT.login=Null:C1517)
 		
 		return Get localized string:C991("default")
 		
 	Else 
 		
-		$o:=This:C1470.getUserLoginForms().query("source = :1"; PROJECT.server.authentication.form).pop()
-		return $o=Null:C1517 ? PROJECT.server.authentication.form : $o.name
+		$o:=This:C1470.getUserLoginForms().query("source = :1"; PROJECT.login).pop()
+		return $o=Null:C1517 ? PROJECT.login : $o.name
 		
 	End if 
 	
