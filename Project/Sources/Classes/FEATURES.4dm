@@ -200,7 +200,6 @@ Function handleEvents($e : Object)
 					.line()
 				
 				// Append custom login forms, if any
-				
 				For each ($form; This:C1470.getUserLoginForms())
 					
 					$menu.append($form.name; $form.source; $current=$form.source)
@@ -262,6 +261,7 @@ Function update()
 			
 			If (PROJECT.server.authentication.form=Null:C1517)
 				
+				This:C1470.loginFormValue.foregroundColor:=Foreground color:K23:1
 				This:C1470.loginFormReveal.hide()
 				
 			Else 
@@ -342,9 +342,18 @@ Function update()
 	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
 Function get loginForm() : Text
 	
-	return PROJECT.server.authentication.form=Null:C1517\
-		 ? Get localized string:C991("default")\
-		 : Delete string:C232(PROJECT.server.authentication.form; 1; 1)
+	var $o : Object
+	
+	If (PROJECT.server.authentication.form=Null:C1517)
+		
+		return Get localized string:C991("default")
+		
+	Else 
+		
+		$o:=This:C1470.getUserLoginForms().query("source = :1"; PROJECT.server.authentication.form).pop()
+		return $o=Null:C1517 ? PROJECT.server.authentication.form : $o.name
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function getUserLoginForms() : Collection
