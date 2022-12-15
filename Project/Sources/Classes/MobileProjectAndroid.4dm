@@ -348,7 +348,11 @@ Function create()->$result : Object
 		If (Feature.with("customLoginForms"))
 			
 			// MARK:COPY CUSTOM LOGIN FORM FILES
-			$o:=This:C1470.androidprojectgenerator.copyCustomLoginFormFiles(This:C1470.project.project.server.authentication.form; This:C1470.project.package)
+			If (Bool:C1537(This:C1470.project.project.server.authentication.email)=True:C214)
+				
+				$o:=This:C1470.androidprojectgenerator.copyCustomLoginFormFiles(This:C1470.project.project.login; This:C1470.project.package)
+				
+			End if 
 			
 		End if 
 		
