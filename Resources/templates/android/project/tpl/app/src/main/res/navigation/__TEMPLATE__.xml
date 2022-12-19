@@ -17,6 +17,7 @@
     <include app:graph="@navigation/base_nav" />
     <include app:graph="@navigation/scanner" />
     <include app:graph="@navigation/settings" />
+    <include app:graph="@navigation/feedback" />
 
     <fragment
         android:id="@+id/list"
