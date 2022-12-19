@@ -66,34 +66,42 @@ Function userDocuments() : 4D:C1709.Folder
 Function userCache()->$folder : 4D:C1709.Folder
 	
 	Case of 
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		: (Is macOS:C1572)
 			
 			$folder:=This:C1470.userHome().folder("Library/Caches/com.4d.mobile")
 			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		: (Is Windows:C1573)
 			
 			$folder:=This:C1470.userHome().folder("AppData/Local/4D Mobile")
 			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		Else 
 			
 			$folder:=This:C1470.userHome().folder(".cache/com.4d.mobile")
 			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	End case 
 	
 	If ($folder#Null:C1517)
+		
 		$folder.create()
+		
 	End if 
+	
 /*========================================================*/
 Function userlibrary() : 4D:C1709.Folder
 	
 	Case of 
 		: (Is macOS:C1572)
 			
-			return (This:C1470.userHome().folder("Library"))
+			return This:C1470.userHome().folder("Library")
 			
 		: (Is Windows:C1573)
 			
-			return (This:C1470.userHome().folder("AppData/LocalLow/"))
+			return This:C1470.userHome().folder("AppData/LocalLow/")
 			
 		Else 
 			
@@ -116,54 +124,59 @@ Function preferences($fileName : Text) : Object
 	
 	This:C1470.exists:=This:C1470.target.exists
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 	//MARK:-INTERNAL
 Function cacheSdkApple() : 4D:C1709.ZipFile
 	
-	return (This:C1470.cacheSDK().folder(Application version:C493+"/iOS/").file("sdk.zip"))
+	return This:C1470.cacheSDK().folder(Application version:C493+"/iOS/").file("sdk.zip")
 	
 /*========================================================*/
 Function cacheSdkAppleUnzipped() : 4D:C1709.Folder
 	
-	return (This:C1470.cacheSDK().folder(Application version:C493+"/iOS/sdk"))
+	return This:C1470.cacheSDK().folder(Application version:C493+"/iOS/sdk")
 	
 /*========================================================*/
 Function cacheSdkAndroid() : 4D:C1709.ZipFile
 	
-	return (This:C1470.cacheSDK().folder(Application version:C493+"/Android/").file("sdk.zip"))
+	return This:C1470.cacheSDK().folder(Application version:C493+"/Android/").file("sdk.zip")
 	
 /*========================================================*/
 Function cacheSdkAndroidUnzipped() : 4D:C1709.Folder
 	
-	return (This:C1470.cacheSDK().folder(Application version:C493+"/Android/sdk"))
+	return This:C1470.cacheSDK().folder(Application version:C493+"/Android/sdk")
 	
 /*========================================================*/
 Function cacheSDK() : 4D:C1709.Folder
 	
-	return (This:C1470.systemCache().folder("sdk"))
+	return This:C1470.systemCache().folder("sdk")
 	
 /*========================================================*/
 Function systemCache()->$folder : 4D:C1709.Folder  // 4D Mobile cache folder
 	
 	Case of 
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		: (Is macOS:C1572)
 			
 			$folder:=Folder:C1567("/Library/Caches/com.4D.mobile")
 			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		: (Is Windows:C1573)
 			
 			// Use ProgramData
 			$folder:=Folder:C1567(fk system folder:K87:13).parent.folder("ProgramData/4D Mobile")
 			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		Else 
 			
-			// $folder:=Folder("/var/cache/com.4D.mobile")  // need sudo to create, so we provide user cache instead
+			// $folder:=Folder("/var/cache/com.4D.mobile")  // Need sudo to create, so we provide user cache instead
 			$folder:=This:C1470.userCache()
 			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	End case 
 	
-	$folder.create()
+	return $folder.create()
 	
 /*========================================================*/
 Function sdk() : 4D:C1709.Folder
@@ -171,21 +184,25 @@ Function sdk() : 4D:C1709.Folder
 	This:C1470.target:=Folder:C1567("/RESOURCES/sdk")
 	This:C1470.exists:=This:C1470.target.exists
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 /*========================================================*/
 Function sdkApple() : 4D:C1709.File  // ios zip sdk
 	
 	This:C1470.target:=This:C1470.sdk().file("ios.zip")
 	This:C1470.exists:=This:C1470.target.exists
+	
 	If (dev_Matrix)
+		
 		If (Not:C34(This:C1470.exists))
+			
 			This:C1470.target:=Folder:C1567(Application file:C491; fk platform path:K87:2).file("Contents/Resources/Internal User Components/4D Mobile App.4dbase/Resources/sdk/ios.zip")
 			This:C1470.exists:=This:C1470.target.exists
+			
 		End if 
 	End if 
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 /*========================================================*/
 Function defaultroject() : 4D:C1709.Folder  // project folder
@@ -193,7 +210,7 @@ Function defaultroject() : 4D:C1709.Folder  // project folder
 	This:C1470.target:=Folder:C1567("/RESOURCES/default project")
 	This:C1470.exists:=This:C1470.target.exists
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 /*========================================================*/
 Function project() : 4D:C1709.Folder  // project folder
@@ -201,7 +218,7 @@ Function project() : 4D:C1709.Folder  // project folder
 	This:C1470.target:=Folder:C1567("/RESOURCES/default project")
 	This:C1470.exists:=This:C1470.target.exists
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 /*========================================================*/
 Function templates() : 4D:C1709.Folder  // templates folder
@@ -227,7 +244,7 @@ Function templates() : 4D:C1709.Folder  // templates folder
 	
 	This:C1470.exists:=This:C1470.target.exists
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 /*========================================================*/
 Function scripts() : 4D:C1709.Folder  // scripts folder
@@ -236,22 +253,22 @@ Function scripts() : 4D:C1709.Folder  // scripts folder
 	This:C1470.target:=Folder:C1567(Folder:C1567("/RESOURCES/scripts").platformPath; fk platform path:K87:2)
 	This:C1470.exists:=This:C1470.target.exists
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 /*========================================================*/
 Function tableIcons() : 4D:C1709.Folder
 	
-	return (This:C1470._icons())
+	return This:C1470._icons()
 	
 /*========================================================*/
 Function fieldIcons() : 4D:C1709.Folder
 	
-	return (This:C1470._icons())
+	return This:C1470._icons()
 	
 /*========================================================*/
 Function actionIcons() : 4D:C1709.Folder
 	
-	return (This:C1470._icons())
+	return This:C1470._icons()
 	
 /*========================================================*/
 Function forms() : 4D:C1709.Folder  // forms folder
@@ -259,7 +276,7 @@ Function forms() : 4D:C1709.Folder  // forms folder
 	This:C1470.target:=Folder:C1567("/RESOURCES/templates/form")
 	This:C1470.exists:=This:C1470.target.exists
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 /*========================================================*/
 Function listForms() : 4D:C1709.Folder  // list forms folder
@@ -267,7 +284,7 @@ Function listForms() : 4D:C1709.Folder  // list forms folder
 	This:C1470.target:=Folder:C1567("/RESOURCES/templates/form/list")
 	This:C1470.exists:=This:C1470.target.exists
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 /*========================================================*/
 Function detailForms() : 4D:C1709.Folder  // detail forms folder
@@ -275,7 +292,7 @@ Function detailForms() : 4D:C1709.Folder  // detail forms folder
 	This:C1470.target:=Folder:C1567("/RESOURCES/templates/form/detail")
 	This:C1470.exists:=This:C1470.target.exists
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 /*========================================================*/
 Function navigationForms() : 4D:C1709.Folder  // navigation forms folder
@@ -283,7 +300,7 @@ Function navigationForms() : 4D:C1709.Folder  // navigation forms folder
 	This:C1470.target:=Folder:C1567("/RESOURCES/templates/form/navigation")
 	This:C1470.exists:=This:C1470.target.exists
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 /*========================================================*/
 Function loginForms() : 4D:C1709.Folder  // login forms folder
@@ -291,7 +308,7 @@ Function loginForms() : 4D:C1709.Folder  // login forms folder
 	This:C1470.target:=Folder:C1567("/RESOURCES/templates/form/login")
 	This:C1470.exists:=This:C1470.target.exists
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 /*========================================================*/
 Function androidTemplates() : 4D:C1709.Folder  // android templates folder
@@ -299,7 +316,7 @@ Function androidTemplates() : 4D:C1709.Folder  // android templates folder
 	This:C1470.target:=Folder:C1567(Folder:C1567("/RESOURCES/templates/android").platformPath; fk platform path:K87:2)
 	This:C1470.exists:=This:C1470.target.exists
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 /*========================================================*/
 Function androidForms() : 4D:C1709.Folder  // android forms folder
@@ -307,7 +324,7 @@ Function androidForms() : 4D:C1709.Folder  // android forms folder
 	This:C1470.target:=Folder:C1567(Folder:C1567("/RESOURCES/templates/form").platformPath; fk platform path:K87:2)
 	This:C1470.exists:=This:C1470.target.exists
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 /*========================================================*/
 Function androidListForms() : 4D:C1709.Folder  // android list forms folder
@@ -315,7 +332,7 @@ Function androidListForms() : 4D:C1709.Folder  // android list forms folder
 	This:C1470.target:=This:C1470.androidForms().folder("list")
 	This:C1470.exists:=This:C1470.target.exists
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 /*========================================================*/
 Function androidDetailForms() : 4D:C1709.Folder  // android detail forms folder
@@ -323,7 +340,7 @@ Function androidDetailForms() : 4D:C1709.Folder  // android detail forms folder
 	This:C1470.target:=This:C1470.androidForms().folder("detail")
 	This:C1470.exists:=This:C1470.target.exists
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 /*========================================================*/
 Function androidProject() : 4D:C1709.Folder  // android project files folder
@@ -331,7 +348,7 @@ Function androidProject() : 4D:C1709.Folder  // android project files folder
 	This:C1470.target:=Folder:C1567(Folder:C1567("/RESOURCES/templates/android/project").platformPath; fk platform path:K87:2)
 	This:C1470.exists:=This:C1470.target.exists
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 /*========================================================*/
 Function androidProjectFilesToCopy() : 4D:C1709.Folder  // android project files to copy folder
@@ -339,7 +356,7 @@ Function androidProjectFilesToCopy() : 4D:C1709.Folder  // android project files
 	This:C1470.target:=Folder:C1567(Folder:C1567("/RESOURCES/templates/android/project/copy").platformPath; fk platform path:K87:2)
 	This:C1470.exists:=This:C1470.target.exists
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 /*========================================================*/
 Function androidProjectTemplateFiles() : 4D:C1709.Folder  // android project template files folder
@@ -347,7 +364,7 @@ Function androidProjectTemplateFiles() : 4D:C1709.Folder  // android project tem
 	This:C1470.target:=Folder:C1567(Folder:C1567("/RESOURCES/templates/android/project/tpl").platformPath; fk platform path:K87:2)
 	This:C1470.exists:=This:C1470.target.exists
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 	//MARK:-USER DATABASE
 Function databasePreferences($fileName : Text) : Object  //  Writable user database preferences folder
@@ -364,7 +381,7 @@ Function databasePreferences($fileName : Text) : Object  //  Writable user datab
 	
 	This:C1470.exists:=This:C1470.target.exists
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 /*========================================================*/
 Function projects($create : Boolean) : 4D:C1709.Folder  // Projects folder
@@ -381,7 +398,7 @@ Function projects($create : Boolean) : 4D:C1709.Folder  // Projects folder
 		
 	End if 
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 /*========================================================*/
 Function products($create : Boolean) : 4D:C1709.Folder  // Products folder
@@ -407,7 +424,7 @@ Function products($create : Boolean) : 4D:C1709.Folder  // Products folder
 		
 	End if 
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 /*========================================================*/
 Function host($create : Boolean) : 4D:C1709.Folder  // Mobile folder
@@ -446,7 +463,7 @@ Function host($create : Boolean) : 4D:C1709.Folder  // Mobile folder
 		End if 
 	End if 
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 /*========================================================*/
 Function hostForms($create : Boolean) : 4D:C1709.Folder  // Form folder
@@ -463,7 +480,7 @@ Function hostForms($create : Boolean) : 4D:C1709.Folder  // Form folder
 		
 	End if 
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 /*========================================================*/
 Function hostFormatters($create : Boolean) : 4D:C1709.Folder  // Formatters folder
@@ -480,7 +497,7 @@ Function hostFormatters($create : Boolean) : 4D:C1709.Folder  // Formatters fold
 		
 	End if 
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 /*========================================================*/
 Function hostInputControls($create : Boolean) : 4D:C1709.Folder  // Action Parameter input controls folder
@@ -497,7 +514,7 @@ Function hostInputControls($create : Boolean) : 4D:C1709.Folder  // Action Param
 		
 	End if 
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 /*========================================================*/
 Function hostIcons($create : Boolean) : 4D:C1709.Folder  // Icons folder
@@ -514,7 +531,7 @@ Function hostIcons($create : Boolean) : 4D:C1709.Folder  // Icons folder
 		
 	End if 
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 /*========================================================*/
 Function hostlistForms($create : Boolean) : 4D:C1709.Folder  // form/list folder
@@ -531,7 +548,7 @@ Function hostlistForms($create : Boolean) : 4D:C1709.Folder  // form/list folder
 		
 	End if 
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 /*========================================================*/
 Function hostloginForms($create : Boolean) : 4D:C1709.Folder  // login folder
@@ -548,7 +565,7 @@ Function hostloginForms($create : Boolean) : 4D:C1709.Folder  // login folder
 		
 	End if 
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 /*========================================================*/
 Function hostdetailForms($create : Boolean) : 4D:C1709.Folder  // form/detail folder
@@ -565,7 +582,7 @@ Function hostdetailForms($create : Boolean) : 4D:C1709.Folder  // form/detail fo
 		
 	End if 
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 /*========================================================*/
 Function hostNavigationForms($create : Boolean) : 4D:C1709.Folder  // form/navigation folder
@@ -582,7 +599,7 @@ Function hostNavigationForms($create : Boolean) : 4D:C1709.Folder  // form/navig
 		
 	End if 
 	
-	return (This:C1470.target)
+	return This:C1470.target
 	
 /*========================================================*/
 Function iOSDb($relativePath : Variant) : 4D:C1709.File
@@ -590,23 +607,27 @@ Function iOSDb($relativePath : Variant) : 4D:C1709.File
 	var $currentFolder : 4D:C1709.Folder
 	
 	Case of 
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		: (Value type:C1509($relativePath)=Is text:K8:3)
 			
 			$currentFolder:=Folder:C1567($relativePath; fk platform path:K87:2)
 			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		: ((Value type:C1509($relativePath)=Is object:K8:27) && OB Instance of:C1731($relativePath; 4D:C1709.Folder))
 			
 			$currentFolder:=$relativePath
 			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	End case 
 	
 	If ($currentFolder.fullName="project.dataSet")
 		
-		return ($currentFolder.file("Resources/Structures.sqlite"))
+		return $currentFolder.file("Resources/Structures.sqlite")
 		
 	Else 
 		
-		return ($currentFolder.file("project.dataSet/Resources/Structures.sqlite"))
+		return $currentFolder.file("project.dataSet/Resources/Structures.sqlite")
 		
 	End if 
 	
@@ -616,43 +637,56 @@ Function androidDb($relativePath : Variant) : 4D:C1709.File
 	var $currentFolder : 4D:C1709.Folder
 	
 	Case of 
+			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		: (Value type:C1509($relativePath)=Is text:K8:3)
 			
 			// General build process provide now platform path,
-			// but some android class do not take into account path and use This.project._folder.path
-			// until all code has been changed to pass 4d folder, we make a code that support any type of path
+			// But some android class do not take into account path and use This.project._folder.path
+			// Until all code has been changed to pass 4d folder, we make a code that support any type of path
 			If (Is Windows:C1573)
+				
 				$currentFolder:=(Position:C15("\\"; $relativePath)=0) ? Folder:C1567($relativePath) : Folder:C1567($relativePath; fk platform path:K87:2)
+				
 			Else 
+				
 				//%W-533.1
 				$currentFolder:=($relativePath[[1]]="/" ? Folder:C1567($relativePath) : Folder:C1567($relativePath; fk platform path:K87:2))
 				//%W+533.1
+				
 			End if 
 			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		: ((Value type:C1509($relativePath)=Is object:K8:27) && OB Instance of:C1731($relativePath; 4D:C1709.Folder))
 			
 			$currentFolder:=$relativePath
 			
+			//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	End case 
 	
 	If ($currentFolder.fullName="project.dataSet")
 		
-		return ($currentFolder.file("android/static.db"))
+		return $currentFolder.file("android/static.db")
 		
 	Else 
 		
-		return ($currentFolder.file("project.dataSet/android/static.db"))
+		return $currentFolder.file("project.dataSet/android/static.db")
 		
 	End if 
 	
 	
 /*========================================================*/
 Function mobileApps() : 4D:C1709.Folder
+	
 	If (Is macOS:C1572 || Is Windows:C1573)
+		
 		return Folder:C1567(fk mobileApps folder:K87:18; *)
+		
 	Else 
+		
 		// TEMPORARY with dataless on linux only: ask to make it compatible with dataless
 		return Folder:C1567(fk database folder:K87:14; *).folder("MobileApps")
+		
 	End if 
 	
 /*========================================================*/
@@ -663,22 +697,22 @@ Function key() : 4D:C1709.File
 /*========================================================*/
 Function icon($relativePath : Text) : 4D:C1709.File
 	
-	return (This:C1470._getResource($relativePath; "icon"))
+	return This:C1470._getResource($relativePath; "icon")
 	
 /*========================================================*/
 Function list($relativePath : Text) : 4D:C1709.Folder
 	
-	return (This:C1470._getResource($relativePath; "list"))
+	return This:C1470._getResource($relativePath; "list")
 	
 /*========================================================*/
 Function detail($relativePath : Text) : 4D:C1709.Folder
 	
-	return (This:C1470._getResource($relativePath; "detail"))
+	return This:C1470._getResource($relativePath; "detail")
 	
 /*========================================================*/
 Function navigation($relativePath : Text) : 4D:C1709.Folder
 	
-	return (This:C1470._getResource($relativePath; "navigation"))
+	return This:C1470._getResource($relativePath; "navigation")
 	
 	//MARK:-[PRIVATE]
 /*========================================================*/
@@ -788,4 +822,4 @@ Function _icons() : 4D:C1709.Folder  // icons folder
 	This:C1470.target:=Folder:C1567("/RESOURCES/images/tableIcons")
 	This:C1470.exists:=This:C1470.target.exists
 	
-	return (This:C1470.target)
+	return This:C1470.target
