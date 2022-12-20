@@ -510,12 +510,7 @@ Function addMenuManager()
 		$deleteMenu:=cs:C1710.menu.new("no-localization")
 		$shareMenu:=cs:C1710.menu.new("no-localization")
 		$sortMenu:=cs:C1710.menu.new("no-localization")
-		
-		If (Feature.with("openURLAction"))
-			
-			$openURLMenu:=cs:C1710.menu.new("no-localization")
-			
-		End if 
+		$openURLMenu:=cs:C1710.menu.new("no-localization")
 		
 		$menu:=cs:C1710.menu.new("no-localization")\
 			.append(":xliff:newActionFor"; $newMenu)\
@@ -524,13 +519,8 @@ Function addMenuManager()
 			.append(":xliff:editActionFor"; $editMenu)\
 			.append(":xliff:deleteActionFor"; $deleteMenu)\
 			.append(":xliff:shareActionFor"; $shareMenu)\
-			.append(":xliff:sortActionFor"; $sortMenu)
-		
-		If (Feature.with("openURLAction"))
-			
-			$menu.append(":xliff:openURLActionFor"; $openURLMenu)
-			
-		End if 
+			.append(":xliff:sortActionFor"; $sortMenu)\
+			.append(":xliff:openURLActionFor"; $openURLMenu)
 		
 		For each ($o; $c)
 			
@@ -539,12 +529,8 @@ Function addMenuManager()
 			$editMenu.append($o.tableName; "edit_"+$o.tableID)
 			$deleteMenu.append($o.tableName; "delete_"+$o.tableID)
 			$shareMenu.append($o.tableName; "share_"+$o.tableID)
+			$openURLMenu.append($o.tableName; "openURL_"+$o.tableID)
 			
-			If (Feature.with("openURLAction"))
-				
-				$openURLMenu.append($o.tableName; "openURL_"+$o.tableID)
-				
-			End if 
 			
 			$fieldsMenu:=cs:C1710.menu.new("no-localization")
 			
@@ -593,12 +579,7 @@ Function addMenuManager()
 		End for each 
 		
 		$menu.append(":xliff:sortAction"; $fieldsMenu)
-		
-		If (Feature.with("openURLAction"))
-			
-			$menu.append(":xliff:openURLAction"; "openURL_"+$o.tableID)
-			
-		End if 
+		$menu.append(":xliff:openURLAction"; "openURL_"+$o.tableID)
 		
 		If (Feature.with("actionsInTabBar"))
 			

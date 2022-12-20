@@ -112,22 +112,24 @@ If (True:C214)  // DELIVERED
 	Feature.delivered("alias"; 1960)  // [MOBILE] Use aliases
 	Feature.delivered("androidDataSet"; 1960)  // [ANDROID] Data set
 	
+	// Mark:R7
+	Feature.delivered("openURLAction"; 1970)  // azure:3625 [MOBILE] Execute an action that open web area
+	
 End if 
 
 If (True:C214)  // UNSTABLE
 	
-	// Mark:-R7
-	Feature.unstable("openURLAction")  // azure:3625 [MOBILE] Execute an action that open web area
+	// Mark:R8
+	Feature.unstable("customLoginForms")  // [Android] Custom login
+	Feature.unstable("inputControlArchive")  // Allow to use zip for inputControl, as requested by azure:5424 The mobile project shall support a zip format for input control with Android and iOS.
+	Feature.unstable("inputControlWithCodeAndroid")  // Allow to use inputControl with code, feature by azure:3862 [Android] Input controls with Kotlin code
 	
 End if 
 
 // Mark:-🚧 MAIN
 Feature.main("listEditor")  // #130828 [MOBILE] Create and edit an input control from the project editor
-Feature.main("inputControlArchive")  // Allow to use zip for inputControl, as requested by azure:5424 The mobile project shall support a zip format for input control with Android and iOS.
-Feature.main("inputControlWithCodeAndroid")  // Allow to use inputControl with code, feature by azure:3862 [Android] Input controls with Kotlin code
 Feature.main("actionsInTabBar")
 Feature.main("iosSDKfromAWS")  // Download iOS SDK from AWS
-Feature.main("customLoginForms")  // [Android] Custom login
 
 // Mark:-🚧 WIP
 Feature.wip("buildWithCmd")  // Allow to create/build using cmd only: azure:3628
