@@ -164,6 +164,7 @@ Function systemCache()->$folder : 4D:C1709.Folder  // 4D Mobile cache folder
 	End case 
 	
 	$folder.create()
+	return $folder
 	
 /*========================================================*/
 Function sdk() : 4D:C1709.Folder
