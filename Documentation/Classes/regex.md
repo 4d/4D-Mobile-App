@@ -10,12 +10,13 @@ This class use the **[Match regex](https://doc.4d.com/4Dv19/4D/19.1/Match-regex.
 
 |Properties|Type|Description|Initial value|Read only|
 |---------|:----:|------|:------:|:------:|
-|**target**|Text|The string data|Empty string|
-|**pattern**|Text|The pattern to use for future operations|Empty string|
-|**success**|Boolean|The status of the last operation|**True**|
-|**lastError**|Object|The last error encountered during operation|**Null**|✔️
-|**errors**|Collection|The list of all errors since class inititialisation|Empty collection|
-|**matches**|Collection|The match list of the extracted segments during the last operation (see below)|**Null**|✔️
+|**target**|`Text`|The string data|Empty string|
+|**pattern**|`Text`|The pattern to use for future operations|Empty string|
+|**success**|`Boolean`|The status of the last operation|**True**|
+|**lastError**|`Object`|The last error encountered during operation|**Null**|✔️
+|**errors**|`Collection`|The list of all errors since class inititialisation|Empty collection|
+|**matches**|`Collection`|The match list of the extracted segments during the last operation (see below)|**Null**|✔️
+|**time**|`Integer`|The time, in milliseconds, to execute the last regex function.|**0**|
 
 > 📌 The "setXXX" functions returns the original `cs.regex` object, so you can include one call after another (See [substitute ()](#substitute) example).
 
@@ -28,6 +29,7 @@ This class use the **[Match regex](https://doc.4d.com/4Dv19/4D/19.1/Match-regex.
 |.**[match](#match)** () → `Boolean`<br/>.**[match](#match)** ({start : `Integer`} {;} {all : `Boolean`}) → `Boolean`|Returns True if the pattern matches the string.
 |.**[extract](#extract)** ( {group : `Text` \| `Integer` \| `Collection`} ) → `Collection`|Returns the list of texts extracted based on the pattern definition
 |.**[substitute](#substitute)** ( {replacement : `Text`} ) → `Text`|Returns the result of the replacement in the target string
+|.**countWords** ($text : `Text`) → `Integer`|Returns the number of words in a string.<br>• Words" are defined as any sequence of letters or numbers, possibly containing a single apostrophe. <br>• For example, "don't" is one word, but "don''t" counts as two words. <br>• Words that begin or end with an apostrophe (or other punctuation) are also suitable, such as `'tis` or `Stans'` <br>• A word with a closing single quote is counted the same as an apostrophe, like `don`**&rsquo;**`t` but not an opening single quote like `doesn`**&lsquo;**`t` (2 words there).<br>• Single letter words like `a` will be properly counted. <br>• Punctuation sequences like `#$%&$#` are ignored.
 
 > 📌 The `match()`, `extract()` & `substitute()` functions populates the `matches` property. The first element of the collection contain the whole pattern match, and the others matched subpatterns. Each element is described in an object with its order number ("index"), its value ("data"), its position ("pos") and its length ("len").
 
@@ -40,7 +42,7 @@ The constructor of the class also accepts two optional parameters, which allows 
 >`cs.regex.new("hello world")` // Fills the target   
 >`cs.regex.new("hello world"; "[Hh]ello")` // Fills the target and the pattern
 
-The target parameter can be a text value or a 4D.File. In the second case, the contents of the file are loaded from disk and used to fill the target property.
+The target parameter can be a text value, a blob or a 4D.File. In the last case, the contents of the file are loaded from disk and used to fill the target property.
 
 ## 🔹<a name="match">match ()</a>
 
@@ -50,8 +52,43 @@ It is possible to pass `start` to specify the position where the search will sta
 
 ```4d
 $regex:=cs.regex.new("Hello world, the world is wonderful but the world is in danger"; "world")
-If ($regex.match())	// Test first occurrence	ASSERT($regex.matches.length=1)	ASSERT($regex.matches[0].data="world")	ASSERT($regex.matches[0].position=7)	ASSERT($regex.matches[0].length=5)	End if 
-If ($regex.match(10))	// Starts search at 10th character	ASSERT($regex.matches.length=1)	ASSERT($regex.matches[0].data="world")	ASSERT($regex.matches[0].position=18)	ASSERT($regex.matches[0].length=5)	End if If ($regex.match(True))	 // Retrieves all occurrences	ASSERT($regex.matches.length=3)	ASSERT($regex.matches[0].data="world")	ASSERT($regex.matches[0].position=7)	ASSERT($regex.matches[0].length=5)		ASSERT($regex.matches[1].data="world")	ASSERT($regex.matches[1].position=18)	ASSERT($regex.matches[1].length=5)		ASSERT($regex.matches[2].data="world")	ASSERT($regex.matches[2].position=45)	ASSERT($regex.matches[2].length=5)	End if If ($regex.match(10; True))	// Starts search at 10th character & retrieves all next occurences	ASSERT($regex.matches.length=2)	ASSERT($regex.matches[0].data="world")	ASSERT($regex.matches[0].position=18)	ASSERT($regex.matches[0].length=5)		ASSERT($regex.matches[1].data="world")	ASSERT($regex.matches[1].position=45)	ASSERT($regex.matches[1].length=5)	End if 
+
+If ($regex.match())	// Test first occurrence
+	ASSERT($regex.matches.length=1)
+	ASSERT($regex.matches[0].data="world")
+	ASSERT($regex.matches[0].position=7)
+	ASSERT($regex.matches[0].length=5)	
+End if 
+
+If ($regex.match(10))	// Starts search at 10th character
+	ASSERT($regex.matches.length=1)
+	ASSERT($regex.matches[0].data="world")
+	ASSERT($regex.matches[0].position=18)
+	ASSERT($regex.matches[0].length=5)	
+End if 
+
+If ($regex.match(True))	 // Retrieves all occurrences
+	ASSERT($regex.matches.length=3)
+	ASSERT($regex.matches[0].data="world")
+	ASSERT($regex.matches[0].position=7)
+	ASSERT($regex.matches[0].length=5)	
+	ASSERT($regex.matches[1].data="world")
+	ASSERT($regex.matches[1].position=18)
+	ASSERT($regex.matches[1].length=5)	
+	ASSERT($regex.matches[2].data="world")
+	ASSERT($regex.matches[2].position=45)
+	ASSERT($regex.matches[2].length=5)	
+End if 
+
+If ($regex.match(10; True))	// Starts search at 10th character & retrieves all next occurences
+	ASSERT($regex.matches.length=2)
+	ASSERT($regex.matches[0].data="world")
+	ASSERT($regex.matches[0].position=18)
+	ASSERT($regex.matches[0].length=5)	
+	ASSERT($regex.matches[1].data="world")
+	ASSERT($regex.matches[1].position=45)
+	ASSERT($regex.matches[1].length=5)	
+End if 
 ```
 ## 🔹<a name="extract">extract ()</a>
 
@@ -66,7 +103,14 @@ Parameter `group` specifies the group(s) to be extracted, it can be a text, an i
 > For example, by specifing "1 2", all matches of the first and second sub-pattern will be extracted (order is ignored).  
 
 ```4d
-$regex:=cs.regex.new("hello world"; "(?m-si)([[:alnum:]]*)\\s([[:alnum:]]*)")$result:=$regex.extract()   // → ["hello world"; "hello"; "world"]$result:=$regex.extract("0")   // → ["hello world"]$result:=$regex.extract(0)   // → ["hello world"]$result:=$regex.extract(1)   // → ["hello"]$result:=$regex.extract(2)   // → ["world"]$result:=$regex.extract("1 2")   // → ["hello"; "world"]$result:=$regex.extract(New collection(1; 2))   // → ["hello"; "world"]
+$regex:=cs.regex.new("hello world"; "(?m-si)([[:alnum:]]*)\\s([[:alnum:]]*)")
+$result:=$regex.extract()   // → ["hello world"; "hello"; "world"]
+$result:=$regex.extract("0")   // → ["hello world"]
+$result:=$regex.extract(0)   // → ["hello world"]
+$result:=$regex.extract(1)   // → ["hello"]
+$result:=$regex.extract(2)   // → ["world"]
+$result:=$regex.extract("1 2")   // → ["hello"; "world"]
+$result:=$regex.extract(New collection(1; 2))   // → ["hello"; "world"]
 ```  
 
 ## 🔹<a name="substitute">substitute ()</a>
@@ -83,5 +127,4 @@ $regex:=cs.regex.new()\
    .setPattern("(?mi-s)^[^[:alpha:]]*([^$]*)$")\
    .substitute("\\1") // → "helloWorld" 
 ```
-
 

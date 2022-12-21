@@ -162,7 +162,6 @@ ASSERT:C1129($result.equal(New collection:C1472("hello"; "world")))
 $result:=$regex.extract(New collection:C1472(1; 2))
 ASSERT:C1129($result.equal(New collection:C1472("hello"; "world")))
 
-
 // Mark:-substitute()
 $target:="[This pattern will look for a string of numbers separated by commas and replace "\
 +"the final comma with \"and\". It will also trim excess spaces around the final "\
@@ -191,6 +190,21 @@ $regex.target:="Each of these lines ends with some white space. "\
 +"Since the pattern only matches trailing whitespace, we can replace it with nothing to get the result we want."
 $regex.pattern:="(?mi-s)[[:blank:]]+$"
 ASSERT:C1129(Length:C16($regex.substitute())=327)
+
+// Mark:-countWords()
+$target:="This pattern will count the words in a string. \"Words\" are defined as any run "\
++"of letters or numbers, optionally containing a single apostrophe. For example, "\
++"\"don't\" is a word, but \"don''t\" counts as two words. Words that start or end "\
++"with an apostrophe (or any punctuation) are fine too, like 'tis or Stans'. A "\
++"word with close-curled apostrophe is counted the same as an apostrophe, like "\
++"\"don’t\" but not an open-curled apostrophe like \"doesn‘t\" (two words "\
++"there).\r\rSingle letter words like \"a\" will be properly counted. Runs of "\
++"punctuation like \"#$%&$#\" are ignored.\r\rIn the end, if you look at the "\
++"bottom of this window, you'll see that this little blurb has 118 words."
+
+$regex:=cs:C1710.regex.new()
+
+ASSERT:C1129($regex.countWords($target)=118; "Expected: 118")
 
 err_FINALLY
 

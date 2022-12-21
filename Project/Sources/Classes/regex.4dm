@@ -2,6 +2,7 @@ Class constructor($target; $pattern : Text)
 	
 	This:C1470._target:=""
 	This:C1470._pattern:=""
+	This:C1470.time:=0
 	This:C1470.success:=True:C214
 	This:C1470.matches:=Null:C1517
 	This:C1470.errors:=New collection:C1472
@@ -68,11 +69,13 @@ Function match($start; $all : Boolean) : Boolean
 	
 	var $methodCalledOnError : Text
 	var $match : Boolean
-	var $i; $index : Integer
+	var $begin; $i; $index : Integer
 	var $item : Object
 	
 	ARRAY LONGINT:C221($positions; 0)
 	ARRAY LONGINT:C221($lengths; 0)
+	
+	$begin:=Milliseconds:C459
 	
 	If (Count parameters:C259>=1)
 		
@@ -150,18 +153,31 @@ Function match($start; $all : Boolean) : Boolean
 	
 	This:C1470._errorCatch($methodCalledOnError)
 	
+	This:C1470.time:=Milliseconds:C459-$begin
+	
 	return This:C1470.success
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Count the words in a string
+Function countWords($target : Text) : Integer
+	
+	This:C1470.target:=Length:C16($target)>0 ? $target : This:C1470.target
+	This:C1470.pattern:="(?mi-s)((?:[^[:punct:]\\$\\s[:cntrl:]'‘’]+[’'][^[:punct:]\\$\\s[:cntrl:]'‘’]+)|[^[:punct:]\\s[:cntrl:]'‘’\\$]+)"
+	
+	return This:C1470.extract().length
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function extract($groups) : Collection
 	
 	var $methodCalledOnError : Text
 	var $match : Boolean
-	var $current; $groupIndex; $i; $index; $indx; $start : Integer
+	var $begin; $current; $groupIndex; $i; $index; $indx; $start : Integer
 	var $v
 	
 	ARRAY LONGINT:C221($lengths; 0)
 	ARRAY LONGINT:C221($positions; 0)
+	
+	$begin:=Milliseconds:C459
 	
 	$start:=1
 	
@@ -231,14 +247,17 @@ Function extract($groups) : Collection
 						If ($i>0)\
 							 | ($index=0)
 							
-							This:C1470.matches.push(New object:C1471(\
-								"index"; $indx; \
-								"data"; Substring:C12(This:C1470._target; $positions{$i}; $lengths{$i}); \
-								"pos"; $positions{$i}; \
-								"len"; $lengths{$i}))
-							
-							$indx+=1
-							
+							If (This:C1470.matches.query("data = :1 & pos = :2"; Substring:C12(This:C1470._target; $positions{$i}; $lengths{$i}); $positions{$i}).pop()=Null:C1517)
+								
+								This:C1470.matches.push(New object:C1471(\
+									"index"; $indx; \
+									"data"; Substring:C12(This:C1470._target; $positions{$i}; $lengths{$i}); \
+									"pos"; $positions{$i}; \
+									"len"; $lengths{$i}))
+								
+								$indx+=1
+								
+							End if 
 						End if 
 					End if 
 					
@@ -264,6 +283,8 @@ Function extract($groups) : Collection
 	Until (Not:C34($match))
 	
 	This:C1470._errorCatch($methodCalledOnError)
+	
+	This:C1470.time:=Milliseconds:C459-$begin
 	
 	return This:C1470.matches.extract("data")
 	
