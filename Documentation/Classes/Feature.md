@@ -26,11 +26,11 @@ var Feature : cs.FeatureFeature:=cs.Feature.new(1980; Folder(fk user preference
 
 |Function|Action|
 |--------|------|   
-|.**unstable** ( `feature` ) | Store a feature as unstable
+|.**unstable** ( `feature` ) | Store a feature as unstable (component version ≥ 4D version)
 |.**delivered** ( `feature` ; `version` ) | Store a feature as delivered for the given version
-|.**debug** ( `feature` ) | Store a feature as debug (only available in dev mode)
+|.**debug** ( `feature` ) | Store a feature as debug (only available in dev mode - Matrix database)
 |.**wip** ( `feature` ) | Alias of **debug**
-|.**main** ( `feature` ) | Store a feature as only available in main branch
+|.**main** ( `feature` ) | Store a feature as only available in main branch (Alpha)
 |.**pending** ( `feature` ) | Store a feature as pending (not available)
 |.**dev** ( `feature` ; user : `Text` \| `Collection` ) | Store a feature as only available for a particular sytem user
 |.**alias** ( name : `Text` ; `feature` ) | Store an alias name for a feature
@@ -95,6 +95,7 @@ You can define more than one key for a feature:
 ### Declaration of flags
 
 ```4d
+// Create the class for the 19R8 version of the component and with a local file
 Feature:=cs.Feature.new(1980; Folder(fk user preferences folder).file("4d.mobile"))
 
 // Mark:R6Feature.delivered("alias"; 1960)  // [MOBILE] Use aliasesFeature.delivered("androidDataSet"; 1960)  // [ANDROID] Data set
@@ -107,7 +108,7 @@ Feature.unstable("openURLAction")  // azure:3625 [MOBILE] Execute an action that
 // Mark:-🚧 WIP
 Feature.wip("DataSourceClass")  // Work with DataSource class class to test the data source
 
-// Mark:-👴🏻 VincentFeature.dev("vdl"; $New collection("vdelachaux"; "Vincent de LACHAUX"))
+// Mark:-👴🏻 VincentFeature.dev("vdl"; New collection("vdelachaux"; "Vincent de LACHAUX"))
 
 // Mark:-⛔ PENDINGFeature.pending(129953)  // [MOBILE] Handle Many-one-Many relations
 
