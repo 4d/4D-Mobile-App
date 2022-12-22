@@ -278,4 +278,131 @@ class CustomNavigationResolver : GenericNavigationResolver {
             SettingsFragmentDirections.toFeedback(type)
         )
     }
+
+
+
+            /**
+             * Navigates from detail form to (1>N) relation  when coming from deeplink
+             */
+            override fun navigateToDeepLinkOneToManyRelation(
+                    fragmentActivity: FragmentActivity,
+                    viewDataBinding: ViewDataBinding,
+                    relationName: String,
+                    roomEntity: RoomEntity
+            ) {
+
+                var  action : NavDirections? = null
+
+                {{#relations_one_to_many_for_list}}
+                if (viewDataBinding is RecyclerviewItem{{relation_source_camelCase}}Binding && relationName == "{{relation_name}}") {
+                    {{#isAlias}}
+                    (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.{{pathToManyWithoutFirst}}?.takeIf { it.isNotEmpty() }?.let {
+                    action = EntityListFragmentDirections.actionListToListRelation(
+                            relationName = relationName,
+                            parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: "",
+                            parentTableName = "{{relation_source}}",
+                            path = "{{path}}",
+                            navbarTitle = "{{navbarTitle}}"
+                    )
+                    {{/isAlias}}
+                    {{^isAlias}}
+                    (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.takeIf { it.isNotEmpty() }?.let {
+                    action = EntityListFragmentDirections.actionListToListRelation(
+                            relationName = relationName,
+                            parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: "",
+                            parentTableName = "{{relation_source}}",
+                            path = "{{path}}",
+                            navbarTitle = "{{navbarTitle}}"
+                    )
+                    {{/isAlias}}
+                }
+                }
+                {{/relations_one_to_many_for_list}}
+                {{#relations_one_to_many_for_detail}}
+                    if (viewDataBinding is FragmentDetail{{relation_source_camelCase}}Binding && relationName == "{{relation_name}}") {
+                    {{#isAlias}}
+                    (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.{{pathToManyWithoutFirst}}?.takeIf { it.isNotEmpty() }?.let {
+                    action = EntityViewPagerFragmentDirections.actionDetailToListRelation(
+                            relationName = relationName,
+                            parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: "",
+                            parentTableName = "{{relation_source}}",
+                            path = "{{path}}",
+                            navbarTitle = "{{navbarTitle}}"
+                    )
+                    {{/isAlias}}
+                    {{^isAlias}}
+                    (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.takeIf { it.isNotEmpty() }?.let {
+                    action = EntityViewPagerFragmentDirections.actionDetailToListRelation(
+                            relationName = relationName,
+                            parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: "",
+                            parentTableName = "{{relation_source}}",
+                            path = "{{path}}",
+                            navbarTitle = "{{navbarTitle}}"
+                    )
+                    {{/isAlias}}
+                }
+                }
+                {{/relations_one_to_many_for_detail}}
+
+
+                    action?.let {
+                        (fragmentActivity as? MainActivity)?.navController?.navigate(
+                                it
+                        )
+                    }
+                }
+
+                    /**
+                     * Navigates from detail form to (N>1) relation  when coming from deeplink
+                     */
+                    override fun navigateToDeepLinkManyToOneRelation(
+                            fragmentActivity: FragmentActivity,
+                            viewDataBinding: ViewDataBinding,
+                            relationName: String,
+                            roomEntity: RoomEntity
+                    ) {
+                        var  action : NavDirections? = null
+
+                        {{#relations_many_to_one_for_list}}
+                        if (viewDataBinding is RecyclerviewItem{{relation_source_camelCase}}Binding && relationName == "{{relation_name}}") {
+                            {{#isAlias}}
+                            (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.{{pathToOneWithoutFirst}}?.__KEY?.let { relationId ->
+                            {{/isAlias}}
+                            {{^isAlias}}
+                            (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.__KEY?.let { relationId ->
+                            {{/isAlias}}
+                            action = EntityListFragmentDirections.actionListToDetailRelation(
+                                    tableName = "{{relation_target}}",
+                                    itemId = relationId,
+                                    navbarTitle = "{{navbarTitle}}"
+                            )
+                            viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnNavigationClickListener(viewDataBinding, action)
+                        }
+                        }
+                        {{/relations_many_to_one_for_list}}
+                        {{#relations_many_to_one_for_detail}}
+                            if (viewDataBinding is FragmentDetail{{relation_source_camelCase}}Binding && relationName == "{{relation_name}}") {
+                            {{#isAlias}}
+                            (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.{{pathToOneWithoutFirst}}?.__KEY?.let { relationId ->
+                            {{/isAlias}}
+                            {{^isAlias}}
+                            (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.__KEY?.let { relationId ->
+                            {{/isAlias}}
+                            action = EntityViewPagerFragmentDirections.actionDetailToDetailRelation(
+                                    tableName = "{{relation_target}}",
+                                    itemId = relationId,
+                                    navbarTitle = "{{navbarTitle}}"
+                            )
+                        }
+                        }
+                        {{/relations_many_to_one_for_detail}}
+
+                            action?.let {
+                                (fragmentActivity as? MainActivity)?.navController?.navigate(
+                                        it
+                                )
+                            }
+                        }
+
+
 }
