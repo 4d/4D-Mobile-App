@@ -26,6 +26,9 @@ class App : BaseApp() {
     override fun onCreate() {
         super.onCreate()
 
+        //        System.loadLibrary("exceptions-lib")
+        //        Thread.setDefaultUncaughtExceptionHandler(TopExceptionHandler(this))
+
         // Apply dynamic color
         val dynamicColorOptions = DynamicColorsOptions.Builder().setThemeOverlay(R.style.Theme_MyApplication).build()
         DynamicColors.applyToActivitiesIfAvailable(this, dynamicColorOptions)
