@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
 import com.qmobile.qmobileapi.model.entity.EntityModel
 import com.qmobile.qmobiledatastore.data.RoomEntity
+import com.qmobile.qmobiledatasync.utils.FeedbackType
 import com.qmobile.qmobiledatasync.utils.GenericNavigationResolver
 import com.qmobile.qmobileui.BaseActionNavDirections
 import com.qmobile.qmobileui.BaseNavDirections
@@ -18,6 +19,7 @@ import com.qmobile.qmobileui.action.actionparameters.ActionParametersFragmentDir
 import com.qmobile.qmobileui.activity.mainactivity.MainActivity
 import com.qmobile.qmobileui.detail.viewpager.EntityViewPagerFragmentDirections
 import com.qmobile.qmobileui.list.EntityListFragmentDirections
+import com.qmobile.qmobileui.settings.SettingsFragmentDirections
 import com.qmobile.qmobileui.ui.disableLink
 import com.qmobile.qmobileui.ui.setOnNavigationClickListener
 {{#tableNames}}
@@ -265,6 +267,15 @@ class CustomNavigationResolver : GenericNavigationResolver {
     override fun navigateToSettings(fragmentActivity: FragmentActivity) {
         (fragmentActivity as? MainActivity)?.navController?.navigate(
             BaseNavDirections.toSettings()
+        )
+    }
+
+    /**
+     * Navigates to FeedbackFragment
+     */
+    override fun navigateToFeedback(fragmentActivity: FragmentActivity, type: FeedbackType) {
+        (fragmentActivity as? MainActivity)?.navController?.navigate(
+            SettingsFragmentDirections.toFeedback(type)
         )
     }
 }
