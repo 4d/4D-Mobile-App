@@ -12,6 +12,7 @@ import com.qmobile.qmobileapi.utils.SharedPreferencesHolder
 import com.qmobile.qmobiledatastore.db.AppDatabaseFactory
 import com.qmobile.qmobiledatasync.app.BaseApp
 import com.qmobile.qmobiledatasync.utils.RuntimeDataHolder
+import com.qmobile.qmobileui.crash.TopExceptionHandler
 import {{package}}.BuildConfig
 import {{package}}.R
 import {{package}}.data.db.AppDatabase
@@ -26,8 +27,8 @@ class App : BaseApp() {
     override fun onCreate() {
         super.onCreate()
 
-        //        System.loadLibrary("exceptions-lib")
-        //        Thread.setDefaultUncaughtExceptionHandler(TopExceptionHandler(this))
+        System.loadLibrary("exceptions-lib")
+        Thread.setDefaultUncaughtExceptionHandler(TopExceptionHandler(this))
 
         // Apply dynamic color
         val dynamicColorOptions = DynamicColorsOptions.Builder().setThemeOverlay(R.style.Theme_MyApplication).build()
