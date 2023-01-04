@@ -1858,6 +1858,7 @@ Function formatFieldName($name : Text) : Text
 	
 /*
 Start with alpha
+Start with lowercase letter
 No space, No accent
 */
 	
@@ -1865,8 +1866,12 @@ No space, No accent
 		
 		$str:=This:C1470._formatName($name)
 		$name:=Replace string:C233($str.unaccented(); " "; "_")
-		return This:C1470._obfuscateReservedNames($name)
-		
+		If (Length:C16($name)>0)
+			
+			$name[[1]]:=Lowercase:C14($name[[1]])
+			return This:C1470._obfuscateReservedNames($name)
+			
+		End if 
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
