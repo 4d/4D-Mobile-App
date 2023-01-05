@@ -1836,17 +1836,38 @@ Function getCatalog() : Collection
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function formatTableName($name : Text) : Text
 	
+	var $i : Integer
+	var $c : Collection
 	var $str : cs:C1710.str
 	
 /*
+No accent
 Start with alpha
-No space, No accent
+Start with a capital letter
+Space to CamelCase (respect the case of the 2nd and following characters)
 */
 	
 	If (Length:C16($name)>0)
 		
 		$str:=This:C1470._formatName($name)
-		$name:=Replace string:C233($str.unaccented(); " "; "_")
+		$name:=$str.unaccented()
+		
+	End if 
+	
+	If (Length:C16($name)>0)
+		
+		$c:=Split string:C1554($name; " "; sk ignore empty strings:K86:1)
+		
+		For ($i; 0; $c.length-1; 1)
+			
+			$name:=$c[$i]
+			$name[[1]]:=Uppercase:C13($name[[1]])
+			$c[$i]:=$name
+			
+		End for 
+		
+		$name:=$c.join("")
+		
 		return This:C1470._obfuscateReservedNames($name)
 		
 	End if 
@@ -1854,17 +1875,45 @@ No space, No accent
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function formatFieldName($name : Text) : Text
 	
+	var $i : Integer
+	var $c : Collection
 	var $str : cs:C1710.str
 	
 /*
+No accent
 Start with alpha
-No space, No accent
+Start with lowercase letter
+Space to CamelCase (respect the case of the 2nd and following characters)
 */
 	
 	If (Length:C16($name)>0)
 		
 		$str:=This:C1470._formatName($name)
-		$name:=Replace string:C233($str.unaccented(); " "; "_")
+		$name:=$str.unaccented()
+		
+	End if 
+	
+	If (Length:C16($name)>0)
+		
+		$c:=Split string:C1554($name; " "; sk ignore empty strings:K86:1)
+		
+		$name:=$c[0]
+		$name[[1]]:=Lowercase:C14($name[[1]])
+		$c[0]:=$name
+		
+		If ($c.length>1)
+			
+			For ($i; 1; $c.length-1; 1)
+				
+				$name:=$c[$i]
+				$name[[1]]:=Uppercase:C13($name[[1]])
+				$c[$i]:=$name
+				
+			End for 
+		End if 
+		
+		$name:=$c.join("")
+		
 		return This:C1470._obfuscateReservedNames($name)
 		
 	End if 
@@ -1953,8 +2002,10 @@ Function _formatName($name : Text) : cs:C1710.str
 	// Remove the forbidden at beginning characters
 	$name:=cs:C1710.regex.new($name; "(?mi-s)^[^[:alpha:]]*([^$]*)$").substitute("\\1")
 	
-	// Remove dots and underscores
-	return cs:C1710.str.new(Replace string:C233(Replace string:C233($name; "_"; " "); "."; " "))
+	// Replace dots by spaces
+	$name:=Replace string:C233($name; "."; " ")
+	
+	return cs:C1710.str.new($name)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _obfuscateReservedNames($name : Text) : Text
