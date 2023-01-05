@@ -32,7 +32,25 @@
         </activity>
 
         <activity android:name="com.qmobile.qmobileui.activity.mainactivity.MainActivity"
-            android:windowSoftInputMode="adjustResize"/>
+                  android:exported="true"
+                  android:windowSoftInputMode="adjustResize">
+
+            {{#deep_link}}
+            {{#enabled}}
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                        android:host="{{scheme}}"
+                        android:pathPrefix="/show"
+                        android:scheme="my-app"/>
+            </intent-filter>
+            {{/enabled}}
+            {{/deep_link}}
+
+        </activity>
 
         <meta-data
             android:name="com.qmobile.qmobileui.glide.AppGlideModule"
