@@ -152,6 +152,9 @@
         [
             {
                 "name": "text"
+            },
+            {
+                "name": "imageURL"
             }
         ],
         {
@@ -160,6 +163,9 @@
         [
             {
                 "name": "text"
+            },
+            {
+                "name": "imageURL"
             }
         ],
         [
