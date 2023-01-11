@@ -18,7 +18,12 @@ import com.qmobile.qmobileui.BaseNavDirections
 import com.qmobile.qmobileui.action.actionparameters.ActionParametersFragmentDirections
 import com.qmobile.qmobileui.activity.mainactivity.MainActivity
 import com.qmobile.qmobileui.detail.viewpager.EntityViewPagerFragmentDirections
+{{#isGoogleMapsPlatformUsedForTable}}
+import com.qmobile.qmobileui.list.maps.MapsFragmentDirections
+{{/isGoogleMapsPlatformUsedForTable}}
+{{^isGoogleMapsPlatformUsedForTable}}
 import com.qmobile.qmobileui.list.EntityListFragmentDirections
+{{/isGoogleMapsPlatformUsedForTable}}
 import com.qmobile.qmobileui.settings.SettingsFragmentDirections
 import com.qmobile.qmobileui.ui.disableLink
 import com.qmobile.qmobileui.ui.setOnNavigationClickListener
@@ -52,7 +57,12 @@ class CustomNavigationResolver : GenericNavigationResolver {
         navbarTitle: String
     ) {
         viewDataBinding.root.findNavController().navigate(
+            {{#isGoogleMapsPlatformUsedForTable}}
             EntityListFragmentDirections.actionListToViewpager(
+            {{/isGoogleMapsPlatformUsedForTable}}
+            {{^isGoogleMapsPlatformUsedForTable}}
+            MapsFragmentDirections.actionListToViewpager(
+            {{/isGoogleMapsPlatformUsedForTable}}
                 sourceTable,
                 position,
                 query,
