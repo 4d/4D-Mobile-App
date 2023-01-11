@@ -280,6 +280,19 @@ class CustomNavigationResolver : GenericNavigationResolver {
         )
     }
 
+    /**
+     * Navigates to details from deepLink
+     */
+    override fun navigateToDetailsFromDeepLink(fragmentActivity: FragmentActivity, tableName: String, itemId: String, navbarTitle: String) {
+        val action = EntityListFragmentDirections.actionListToDetailRelation(
+                tableName = tableName,
+                itemId = itemId,
+                navbarTitle = tableName
+        )
+        (fragmentActivity as? MainActivity)?.navController?.navigate(
+                action
+        )
+    }
 
 
     /**
