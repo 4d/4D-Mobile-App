@@ -54,7 +54,7 @@
 
         <TextView
             android:id="@+id/___SPECIFIC_ID_1___"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
@@ -66,13 +66,14 @@
             android:textColor="?attr/colorOnSurface"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/___SPECIFIC_ID_2___"
+            app:layout_constraintEnd_toStartOf="@+id/arrow"
             app:layout_constraintStart_toEndOf="@+id/___SPECIFIC_ID_4___"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="My field 1" />
 
         <TextView
             android:id="@+id/___SPECIFIC_ID_2___"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
@@ -82,6 +83,7 @@
             android:text="___TEXT_2___"
             android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
             android:textColor="?attr/colorOnSurface"
+            app:layout_constraintEnd_toStartOf="@+id/arrow"
             app:layout_constraintStart_toEndOf="@+id/___SPECIFIC_ID_4___"
             app:layout_constraintTop_toBottomOf="@+id/___SPECIFIC_ID_1___"
             tools:text="My field 2" />
@@ -101,11 +103,13 @@
             android:text="___TEXT_3___"
             android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/arrow"
             app:layout_constraintStart_toEndOf="@+id/___SPECIFIC_ID_4___"
             app:layout_constraintTop_toBottomOf="@id/___SPECIFIC_ID_2___"
             tools:text="My field 3" />
 
         <ImageView
+            android:id="@+id/arrow"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="8dp"
