@@ -90,7 +90,8 @@ $o.append("Dev"; "dev").method(Formula:C1597(menu_window).source)
 $menu.append("Window"; $o)
 
 $menu.append("DEV"; cs:C1710.menu.new()\
-.append("00_TESTS"; Formula:C1597(00_TESTS).source))
+.append("00_TESTS"; Formula:C1597(00_TESTS).source)\
+.append("Download from gallery"; Formula:C1597(dev_dl_gallery).source))
 
 If ($popup)
 	$menu.popup()
