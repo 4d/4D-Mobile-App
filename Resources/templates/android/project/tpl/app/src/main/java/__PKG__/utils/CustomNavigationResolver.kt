@@ -58,10 +58,10 @@ class CustomNavigationResolver : GenericNavigationResolver {
     ) {
         viewDataBinding.root.findNavController().navigate(
             {{#isGoogleMapsPlatformUsedForTable}}
-            EntityListFragmentDirections.actionListToViewpager(
+            MapsFragmentDirections.actionListToViewpager(
             {{/isGoogleMapsPlatformUsedForTable}}
             {{^isGoogleMapsPlatformUsedForTable}}
-            MapsFragmentDirections.actionListToViewpager(
+            EntityListFragmentDirections.actionListToViewpager(
             {{/isGoogleMapsPlatformUsedForTable}}
                 sourceTable,
                 position,
