@@ -161,10 +161,19 @@ Function match($start; $all : Boolean) : Boolean
 	// Count the words in a string
 Function countWords($target : Text) : Integer
 	
-	This:C1470.target:=Length:C16($target)>0 ? $target : This:C1470.target
+	This:C1470.target:=$target || This:C1470.target
 	This:C1470.pattern:="(?mi-s)((?:[^[:punct:]\\$\\s[:cntrl:]'‘’]+[’'][^[:punct:]\\$\\s[:cntrl:]'‘’]+)|[^[:punct:]\\s[:cntrl:]'‘’\\$]+)"
 	
 	return This:C1470.extract().length
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Validate an email address
+Function validateMail($target : Text) : Boolean
+	
+	This:C1470.target:=$target || This:C1470.target
+	This:C1470.pattern:="^([-a-zA-Z0-9_]+(?:\\.[-a-zA-Z0-9_]+)*)(?:@)([-a-zA-Z0-9\\._]+(?:\\.[a-zA-Z0-9]{2,}"+")+)$"
+	
+	return This:C1470.match()
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function extract($groups) : Collection

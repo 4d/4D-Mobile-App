@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><preferences stamp="13">
+<?xml version="1.0" encoding="UTF-8"?><preferences stamp="14">
 	<com.4d>
 		<general execute_host_database_event="true"/>
 		<php ip_address="127.0.0.1"/>
@@ -21,6 +21,7 @@
 				<cancel_input_form alt="false" command="false" ctrl="false" key_code="0" shift="false"/>
 				<add_subform alt="false" command="false" ctrl="false" key_code="0" shift="false"/>
 			</shortcuts>
+			<developper display_toolbar="true"/>
 		</interface>
 		<database>
 			<misc mac_use_lf="true" no_bom="true" standard_xpath="true"/>
