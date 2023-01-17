@@ -307,64 +307,64 @@ class CustomNavigationResolver : GenericNavigationResolver {
 
         var  action : NavDirections? = null
 
-        {{#relations_one_to_many_for_list}}
+        {{#relations_deeplink_one_to_many}}
         if (viewDataBinding is RecyclerviewItem{{relation_source_camelCase}}Binding && relationName == "{{relation_name}}") {
-            {{#isAlias}}
-            (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.{{pathToManyWithoutFirst}}?.takeIf { it.isNotEmpty() }?.let {
-            action = EntityListFragmentDirections.actionListToListRelation(
-                    relationName = relationName,
-                    parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: "",
-                    parentTableName = "{{relation_source}}",
-                    path = "{{path}}",
-                    navbarTitle = "{{navbarTitle}}"
-            )
-            {{/isAlias}}
-            {{^isAlias}}
-            (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.takeIf { it.isNotEmpty() }?.let {
-            action = EntityListFragmentDirections.actionListToListRelation(
-                    relationName = relationName,
-                    parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: "",
-                    parentTableName = "{{relation_source}}",
-                    path = "{{path}}",
-                    navbarTitle = "{{navbarTitle}}"
-            )
-            {{/isAlias}}
+        {{#isAlias}}
+        (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.{{pathToManyWithoutFirst}}?.takeIf { it.isNotEmpty() }?.let {
+        action = EntityListFragmentDirections.actionListToListRelation(
+                relationName = relationName,
+                parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: "",
+                parentTableName = "{{relation_source}}",
+                path = "{{path}}",
+                navbarTitle = "{{navbarTitle}}"
+        )
+        {{/isAlias}}
+        {{^isAlias}}
+        (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.takeIf { it.isNotEmpty() }?.let {
+        action = EntityListFragmentDirections.actionListToListRelation(
+                relationName = relationName,
+                parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: "",
+                parentTableName = "{{relation_source}}",
+                path = "{{path}}",
+                navbarTitle = "{{navbarTitle}}"
+        )
+        {{/isAlias}}
         }
-        }
-        {{/relations_one_to_many_for_list}}
-        {{#relations_one_to_many_for_detail}}
-            if (viewDataBinding is FragmentDetail{{relation_source_camelCase}}Binding && relationName == "{{relation_name}}") {
-            {{#isAlias}}
-            (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.{{pathToManyWithoutFirst}}?.takeIf { it.isNotEmpty() }?.let {
-            action = EntityViewPagerFragmentDirections.actionDetailToListRelation(
-                    relationName = relationName,
-                    parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: "",
-                    parentTableName = "{{relation_source}}",
-                    path = "{{path}}",
-                    navbarTitle = "{{navbarTitle}}"
-            )
-            {{/isAlias}}
-            {{^isAlias}}
-            (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.takeIf { it.isNotEmpty() }?.let {
-            action = EntityViewPagerFragmentDirections.actionDetailToListRelation(
-                    relationName = relationName,
-                    parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: "",
-                    parentTableName = "{{relation_source}}",
-                    path = "{{path}}",
-                    navbarTitle = "{{navbarTitle}}"
-            )
-            {{/isAlias}}
-        }
-        }
-        {{/relations_one_to_many_for_detail}}
+    }
+    {{/relations_deeplink_one_to_many}}
+    {{#relations_deeplink_one_to_many}}
+        if (viewDataBinding is FragmentDetail{{relation_source_camelCase}}Binding && relationName == "{{relation_name}}") {
+        {{#isAlias}}
+        (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.{{pathToManyWithoutFirst}}?.takeIf { it.isNotEmpty() }?.let {
+        action = EntityViewPagerFragmentDirections.actionDetailToListRelation(
+                relationName = relationName,
+                parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: "",
+                parentTableName = "{{relation_source}}",
+                path = "{{path}}",
+                navbarTitle = "{{navbarTitle}}"
+        )
+        {{/isAlias}}
+        {{^isAlias}}
+        (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.takeIf { it.isNotEmpty() }?.let {
+        action = EntityViewPagerFragmentDirections.actionDetailToListRelation(
+                relationName = relationName,
+                parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: "",
+                parentTableName = "{{relation_source}}",
+                path = "{{path}}",
+                navbarTitle = "{{navbarTitle}}"
+        )
+        {{/isAlias}}
+    }
+    }
+    {{/relations_deeplink_one_to_many}}
 
 
-            action?.let {
-                (fragmentActivity as? MainActivity)?.navController?.navigate(
-                        it
-                )
-            }
+    action?.let {
+        (fragmentActivity as? MainActivity)?.navController?.navigate(
+                it
+        )
         }
+    }
 
     /**
      * Navigates from detail form to (N>1) relation  when coming from deeplink
@@ -377,7 +377,7 @@ class CustomNavigationResolver : GenericNavigationResolver {
     ) {
         var  action : NavDirections? = null
 
-        {{#relations_many_to_one_for_list}}
+        {{#relations_deeplink_many_to_one}}
         if (viewDataBinding is RecyclerviewItem{{relation_source_camelCase}}Binding && relationName == "{{relation_name}}") {
             {{#isAlias}}
             (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.{{pathToOneWithoutFirst}}?.__KEY?.let { relationId ->
@@ -390,11 +390,10 @@ class CustomNavigationResolver : GenericNavigationResolver {
                     itemId = relationId,
                     navbarTitle = "{{navbarTitle}}"
             )
-            viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnNavigationClickListener(viewDataBinding, action)
         }
         }
-        {{/relations_many_to_one_for_list}}
-        {{#relations_many_to_one_for_detail}}
+        {{/relations_deeplink_many_to_one}}
+        {{#relations_deeplink_many_to_one}}
             if (viewDataBinding is FragmentDetail{{relation_source_camelCase}}Binding && relationName == "{{relation_name}}") {
             {{#isAlias}}
             (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.{{pathToOneWithoutFirst}}?.__KEY?.let { relationId ->
@@ -409,7 +408,7 @@ class CustomNavigationResolver : GenericNavigationResolver {
             )
         }
         }
-        {{/relations_many_to_one_for_detail}}
+        {{/relations_deeplink_many_to_one}}
 
             action?.let {
                 (fragmentActivity as? MainActivity)?.navController?.navigate(
@@ -417,4 +416,4 @@ class CustomNavigationResolver : GenericNavigationResolver {
                 )
             }
         }
-    }
+}
