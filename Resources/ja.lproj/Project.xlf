@@ -1607,6 +1607,10 @@ This may take a few minutes…</source>
           <source>Parameters of the "{action}" action</source>
           <target state="new">Parameters of the "{action}" action</target>
         </trans-unit>
+        <trans-unit id="4eXEdbV+E4jbjS2ZgULD3Q" resname="_imageURL">
+          <source>Image URL</source>
+          <target state="new">Image URL</target>
+        </trans-unit>
       </group>
       <group resname="Features">
         <trans-unit id="8Uc/+zgjnk5kAMkT9zoKUA" resname="deepLinking">
