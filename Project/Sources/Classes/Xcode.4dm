@@ -336,7 +336,7 @@ Function lastPath
 			
 			$version:=This:C1470.getVersion(Folder:C1567($pathname))
 			
-			If (This:C1470.versionCompare($t; $version)>=0)  // Equal or higher
+			If (Length:C16($t)=0) || (This:C1470.versionCompare($t; $version)>=0)  // Equal or higher 
 				
 				$t:=$version
 				
@@ -396,9 +396,8 @@ Function getVersion($target : 4D:C1709.Folder) : Text
 	End if 
 	
 	$file:=$directory.file("Contents/Info.plist")
-	This:C1470.success:=$file.exists
 	
-	If (This:C1470.success)
+	If ($file.exists)
 		
 		//defaults [-currentHost | -host hostname] read [domain [key]]
 		$o:=This:C1470.lep("defaults read"+" '"+$file.path+"' CFBundleShortVersionString")

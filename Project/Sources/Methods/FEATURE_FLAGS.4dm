@@ -128,11 +128,11 @@ If (True:C214)  // UNSTABLE
 End if 
 
 // Mark:-2️⃣0️⃣
+Feature.unstable("iosSDKfromAWS")  // Download iOS SDK from AWS
 
 // Mark:-🚧 MAIN
 Feature.main("listEditor")  // #130828 [MOBILE] Create and edit an input control from the project editor
-Feature.main("actionsInTabBar")
-Feature.main("iosSDKfromAWS")  // Download iOS SDK from AWS
+Feature.wip("actionsInTabBar")
 
 // Mark:-🚧 WIP
 Feature.wip("buildWithCmd")  // Allow to create/build using cmd only: azure:3628

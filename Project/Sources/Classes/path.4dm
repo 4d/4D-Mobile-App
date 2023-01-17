@@ -189,21 +189,24 @@ Function sdk() : 4D:C1709.Folder
 	
 /*========================================================*/
 Function sdkApple() : 4D:C1709.File  // ios zip sdk
-	
-	This:C1470.target:=This:C1470.sdk().file("ios.zip")
-	This:C1470.exists:=This:C1470.target.exists
-	
-	If (dev_Matrix)
+	If (Feature.with("iosSDKfromAWS"))
+		return This:C1470.cacheSdkApple()
+	Else 
+		This:C1470.target:=This:C1470.sdk().file("ios.zip")
+		This:C1470.exists:=This:C1470.target.exists
 		
-		If (Not:C34(This:C1470.exists))
+		If (dev_Matrix)
 			
-			This:C1470.target:=Folder:C1567(Application file:C491; fk platform path:K87:2).file("Contents/Resources/Internal User Components/4D Mobile App.4dbase/Resources/sdk/ios.zip")
-			This:C1470.exists:=This:C1470.target.exists
-			
+			If (Not:C34(This:C1470.exists))
+				
+				This:C1470.target:=Folder:C1567(Application file:C491; fk platform path:K87:2).file("Contents/Resources/Internal User Components/4D Mobile App.4dbase/Resources/sdk/ios.zip")
+				This:C1470.exists:=This:C1470.target.exists
+				
+			End if 
 		End if 
+		
+		return This:C1470.target
 	End if 
-	
-	return This:C1470.target
 	
 /*========================================================*/
 Function defaultroject() : 4D:C1709.Folder  // project folder

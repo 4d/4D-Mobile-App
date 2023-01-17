@@ -30,6 +30,7 @@ This class use the **[Match regex](https://doc.4d.com/4Dv19/4D/19.1/Match-regex.
 |.**[extract](#extract)** ( {group} ) → `Collection`|Returns the list of texts extracted based on the pattern definition
 |.**[substitute](#substitute)** ( {replacement : `Text`} ) → `Text`|Returns the result of the replacement in the target string
 |.**countWords** ($text : `Text`) → `Integer`|Returns the number of words in a string.<br>• "Words" are defined as any sequence of letters or numbers, possibly containing a single apostrophe. For example, "`don't`" is one word, but "`don''t`" counts as two words. <br>• Words that begin or end with an apostrophe (or other punctuation) are also suitable, such as "`'tis`" or "`Stans'`" <br>• A word with a closing single quote is counted the same as an apostrophe, like "`don`**&rsquo;**`t`" but not an opening single quote like "`doesn`**&lsquo;**`t`" (2 words there).<br>• Single letter words like "`a`" will be properly counted. <br>• Punctuation sequences like "`#$%&$#`" are ignored.
+|.**validateMail** ($text : `Text`) → `Boolean`| Validate an e-mail address
 
 > 📌 The `match()`, `extract()` & `substitute()` functions populates the `matches` property. The first element of the collection contain the whole pattern match, and the others matched subpatterns. Each element is described in an object with its order number ("index"), its value ("data"), its position ("pos") and its length ("len").
 

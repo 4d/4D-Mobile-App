@@ -9,17 +9,22 @@ package {{package}}.utils
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
-import androidx.navigation.NavDirections
 import com.qmobile.qmobileapi.model.entity.EntityModel
 import com.qmobile.qmobiledatastore.data.RoomEntity
 import com.qmobile.qmobiledatasync.utils.FeedbackType
+import androidx.navigation.NavDirections
 import com.qmobile.qmobiledatasync.utils.GenericNavigationResolver
 import com.qmobile.qmobileui.BaseActionNavDirections
 import com.qmobile.qmobileui.BaseNavDirections
 import com.qmobile.qmobileui.action.actionparameters.ActionParametersFragmentDirections
 import com.qmobile.qmobileui.activity.mainactivity.MainActivity
 import com.qmobile.qmobileui.detail.viewpager.EntityViewPagerFragmentDirections
+{{#isGoogleMapsPlatformUsedForTable}}
+import com.qmobile.qmobileui.list.maps.MapsFragmentDirections
+{{/isGoogleMapsPlatformUsedForTable}}
+{{^isGoogleMapsPlatformUsedForTable}}
 import com.qmobile.qmobileui.list.EntityListFragmentDirections
+{{/isGoogleMapsPlatformUsedForTable}}
 import com.qmobile.qmobileui.settings.SettingsFragmentDirections
 import com.qmobile.qmobileui.ui.disableLink
 import com.qmobile.qmobileui.ui.setOnNavigationClickListener
@@ -43,25 +48,30 @@ class CustomNavigationResolver : GenericNavigationResolver {
      * Navigates from list form to ViewPager (which displays one detail form)
      */
     override fun navigateFromListToViewPager(
-            viewDataBinding: ViewDataBinding,
-            sourceTable: String,
-            position: Int,
-            query: String,
-            relationName: String,
-            parentItemId: String,
-            path: String,
-            navbarTitle: String
+        viewDataBinding: ViewDataBinding,
+        sourceTable: String,
+        position: Int,
+        query: String,
+        relationName: String,
+        parentItemId: String,
+        path: String,
+        navbarTitle: String
     ) {
         viewDataBinding.root.findNavController().navigate(
-                EntityListFragmentDirections.actionListToViewpager(
-                        sourceTable,
-                        position,
-                        query,
-                        relationName,
-                        parentItemId,
-                        path,
-                        navbarTitle
-                )
+            {{#isGoogleMapsPlatformUsedForTable}}
+            MapsFragmentDirections.actionListToViewpager(
+            {{/isGoogleMapsPlatformUsedForTable}}
+            {{^isGoogleMapsPlatformUsedForTable}}
+            EntityListFragmentDirections.actionListToViewpager(
+            {{/isGoogleMapsPlatformUsedForTable}}
+                sourceTable,
+                position,
+                query,
+                relationName,
+                parentItemId,
+                path,
+                navbarTitle
+            )
         )
     }
 
@@ -69,75 +79,75 @@ class CustomNavigationResolver : GenericNavigationResolver {
      * Navigates from list or detail form to a relation list form (One to Many relation)
      */
     override fun setupOneToManyRelationButtonOnClickAction(
-            viewDataBinding: ViewDataBinding,
-            relationName: String,
-            roomEntity: RoomEntity
+        viewDataBinding: ViewDataBinding,
+        relationName: String,
+        roomEntity: RoomEntity
     ) {
         {{#relations_one_to_many_for_list}}
         if (viewDataBinding is RecyclerviewItem{{relation_source_camelCase}}Binding && relationName == "{{relation_name}}") {
             {{#isAlias}}
             (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.{{pathToManyWithoutFirst}}?.takeIf { it.isNotEmpty() }?.let {
-            val action = EntityListFragmentDirections.actionListToListRelation(
+                val action = EntityListFragmentDirections.actionListToListRelation(
                     relationName = relationName,
                     parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: "",
                     parentTableName = "{{relation_source}}",
                     path = "{{path}}",
                     navbarTitle = "{{navbarTitle}}"
-            )
+                )
             {{/isAlias}}
             {{^isAlias}}
             (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.takeIf { it.isNotEmpty() }?.let {
-            val action = EntityListFragmentDirections.actionListToListRelation(
+                val action = EntityListFragmentDirections.actionListToListRelation(
                     relationName = relationName,
                     parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: "",
                     parentTableName = "{{relation_source}}",
                     path = "{{path}}",
                     navbarTitle = "{{navbarTitle}}"
-            )
+                )
             {{/isAlias}}
-            viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnNavigationClickListener(viewDataBinding, action)
-        } ?: kotlin.run {
-            viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.disableLink()
-        }
+                viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnNavigationClickListener(viewDataBinding, action)
+            } ?: kotlin.run {
+                viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.disableLink()
+            }
         }
         {{/relations_one_to_many_for_list}}
         {{#relations_one_to_many_for_detail}}
-            if (viewDataBinding is FragmentDetail{{relation_source_camelCase}}Binding && relationName == "{{relation_name}}") {
+        if (viewDataBinding is FragmentDetail{{relation_source_camelCase}}Binding && relationName == "{{relation_name}}") {
             {{#isAlias}}
             (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.{{pathToManyWithoutFirst}}?.takeIf { it.isNotEmpty() }?.let {
-            val action = EntityViewPagerFragmentDirections.actionDetailToListRelation(
+                val action = EntityViewPagerFragmentDirections.actionDetailToListRelation(
                     relationName = relationName,
                     parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: "",
                     parentTableName = "{{relation_source}}",
                     path = "{{path}}",
                     navbarTitle = "{{navbarTitle}}"
-            )
+                )
             {{/isAlias}}
             {{^isAlias}}
             (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.takeIf { it.isNotEmpty() }?.let {
-            val action = EntityViewPagerFragmentDirections.actionDetailToListRelation(
+                val action = EntityViewPagerFragmentDirections.actionDetailToListRelation(
                     relationName = relationName,
                     parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: "",
                     parentTableName = "{{relation_source}}",
                     path = "{{path}}",
                     navbarTitle = "{{navbarTitle}}"
-            )
+                )
             {{/isAlias}}
-            viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnNavigationClickListener(viewDataBinding, action)
-        } ?: kotlin.run {
-            viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.disableLink()
-        }
+                viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnNavigationClickListener(viewDataBinding, action)
+            } ?: kotlin.run {
+                viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.disableLink()
+            }
         }
         {{/relations_one_to_many_for_detail}}
-        }
+    }
 
     /**
      * Navigates from list or detail form to a relation detail form (Many to One relation)
      */
     override fun setupManyToOneRelationButtonOnClickAction(
-            viewDataBinding: ViewDataBinding,
-            relationName: String,
-            roomEntity: RoomEntity
+        viewDataBinding: ViewDataBinding,
+        relationName: String,
+        roomEntity: RoomEntity
     ) {
         {{#relations_many_to_one_for_list}}
         if (viewDataBinding is RecyclerviewItem{{relation_source_camelCase}}Binding && relationName == "{{relation_name}}") {
@@ -147,61 +157,61 @@ class CustomNavigationResolver : GenericNavigationResolver {
             {{^isAlias}}
             (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.__KEY?.let { relationId ->
             {{/isAlias}}
-            val action = EntityListFragmentDirections.actionListToDetailRelation(
+                val action = EntityListFragmentDirections.actionListToDetailRelation(
                     tableName = "{{relation_target}}",
                     itemId = relationId,
                     navbarTitle = "{{navbarTitle}}"
-            )
-            viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnNavigationClickListener(viewDataBinding, action)
-        } ?: kotlin.run {
-            viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.disableLink()
-        }
+                )
+                viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnNavigationClickListener(viewDataBinding, action)
+            } ?: kotlin.run {
+                viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.disableLink()
+            }
         }
         {{/relations_many_to_one_for_list}}
         {{#relations_many_to_one_for_detail}}
-            if (viewDataBinding is FragmentDetail{{relation_source_camelCase}}Binding && relationName == "{{relation_name}}") {
+        if (viewDataBinding is FragmentDetail{{relation_source_camelCase}}Binding && relationName == "{{relation_name}}") {
             {{#isAlias}}
             (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.{{pathToOneWithoutFirst}}?.__KEY?.let { relationId ->
             {{/isAlias}}
             {{^isAlias}}
             (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.__KEY?.let { relationId ->
             {{/isAlias}}
-            val action = EntityViewPagerFragmentDirections.actionDetailToDetailRelation(
+                val action = EntityViewPagerFragmentDirections.actionDetailToDetailRelation(
                     tableName = "{{relation_target}}",
                     itemId = relationId,
                     navbarTitle = "{{navbarTitle}}"
-            )
-            viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnNavigationClickListener(viewDataBinding, action)
-        } ?: kotlin.run {
-            viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.disableLink()
-        }
+                )
+                viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnNavigationClickListener(viewDataBinding, action)
+            } ?: kotlin.run {
+                viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.disableLink()
+            }
         }
         {{/relations_many_to_one_for_detail}}
-        }
+    }
 
     /**
      * Navigates from list or detail form to action form
      */
     override fun navigateToActionForm(
-            viewDataBinding: ViewDataBinding,
-            tableName: String,
-            itemId: String,
-            relationName: String,
-            parentItemId: String,
-            pendingTaskId: String,
-            actionUUID: String,
-            navbarTitle: String
+        viewDataBinding: ViewDataBinding,
+        tableName: String,
+        itemId: String,
+        relationName: String,
+        parentItemId: String,
+        pendingTaskId: String,
+        actionUUID: String,
+        navbarTitle: String
     ) {
         viewDataBinding.root.findNavController().navigate(
-                BaseActionNavDirections.toActionForm(
-                        tableName = tableName,
-                        itemId = itemId,
-                        relationName = relationName,
-                        parentItemId = parentItemId,
-                        taskId = pendingTaskId,
-                        actionUUID = actionUUID,
-                        navbarTitle = navbarTitle
-                )
+            BaseActionNavDirections.toActionForm(
+                tableName = tableName,
+                itemId = itemId,
+                relationName = relationName,
+                parentItemId = parentItemId,
+                taskId = pendingTaskId,
+                actionUUID = actionUUID,
+                navbarTitle = navbarTitle
+            )
         )
     }
 
@@ -210,7 +220,7 @@ class CustomNavigationResolver : GenericNavigationResolver {
      */
     override fun navigateToActionScanner(fragmentActivity: FragmentActivity, fragmentResultKey: String) {
         (fragmentActivity as? MainActivity)?.navController?.navigate(
-                BaseNavDirections.toScanner(fragmentResultKey = fragmentResultKey)
+            BaseNavDirections.toScanner(fragmentResultKey = fragmentResultKey)
 
         )
     }
@@ -220,7 +230,7 @@ class CustomNavigationResolver : GenericNavigationResolver {
      */
     override fun navigateToPendingTasks(fragmentActivity: FragmentActivity, tableName: String, currentItemId: String) {
         (fragmentActivity as? MainActivity)?.navController?.navigate(
-                BaseNavDirections.toPendingTasks(tableName = tableName, currentItemId = currentItemId)
+            BaseNavDirections.toPendingTasks(tableName = tableName, currentItemId = currentItemId)
         )
     }
 
@@ -228,37 +238,37 @@ class CustomNavigationResolver : GenericNavigationResolver {
      * Navigates to ActionWebViewFragment
      */
     override fun navigateToActionWebView(
-            fragmentActivity: FragmentActivity,
-            path: String,
-            actionName: String,
-            actionLabel: String?,
-            actionShortLabel: String?,
-            base64EncodedContext: String
+        fragmentActivity: FragmentActivity, 
+        path: String, 
+        actionName: String, 
+        actionLabel: String?, 
+        actionShortLabel: String?, 
+        base64EncodedContext: String
     ) {
         (fragmentActivity as? MainActivity)?.navController?.navigate(
-                BaseActionNavDirections.toActionWebview(
-                        path = path,
-                        actionName = actionName,
-                        actionLabel = actionLabel ?: "",
-                        actionShortLabel = actionShortLabel ?: "",
-                        base64EncodedContext = base64EncodedContext
-                )
+            BaseActionNavDirections.toActionWebview(
+                path = path,
+                actionName = actionName,
+                actionLabel = actionLabel ?: "",
+                actionShortLabel = actionShortLabel ?: "",
+                base64EncodedContext = base64EncodedContext
+            )
         )
     }
-
+    
     /**
      * Navigates to PushInputControlFragment
      */
     override fun navigateToPushInputControl(
-            viewDataBinding: ViewDataBinding,
-            inputControlName: String,
-            mandatory: Boolean
+        viewDataBinding: ViewDataBinding,
+        inputControlName: String,
+        mandatory: Boolean
     ) {
         viewDataBinding.root.findNavController().navigate(
-                ActionParametersFragmentDirections.actionParametersToPushInputControl(
-                        name = inputControlName,
-                        mandatory = mandatory
-                )
+            ActionParametersFragmentDirections.actionParametersToPushInputControl(
+                name = inputControlName,
+                mandatory = mandatory
+            )
         )
     }
 
@@ -267,7 +277,7 @@ class CustomNavigationResolver : GenericNavigationResolver {
      */
     override fun navigateToSettings(fragmentActivity: FragmentActivity) {
         (fragmentActivity as? MainActivity)?.navController?.navigate(
-                BaseNavDirections.toSettings()
+            BaseNavDirections.toSettings()
         )
     }
 
@@ -276,9 +286,11 @@ class CustomNavigationResolver : GenericNavigationResolver {
      */
     override fun navigateToFeedback(fragmentActivity: FragmentActivity, type: FeedbackType) {
         (fragmentActivity as? MainActivity)?.navController?.navigate(
-                SettingsFragmentDirections.toFeedback(type)
+            SettingsFragmentDirections.toFeedback(type)
         )
     }
+
+
 
     /**
      * Navigates to details from deepLink
