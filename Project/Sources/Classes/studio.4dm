@@ -549,11 +549,14 @@ Function _getJava()
 	This:C1470.java:=Null:C1517
 	
 	If (Not:C34(Is Windows:C1573) && Not:C34(Is macOS:C1572))
+		
 		This:C1470.java:=File:C1566("/usr/bin/java")
-		$javaHome:=Folder:C1567("/usr/lib/jvm/default-java")  // or using android-studio ? 
+		$javaHome:=Folder:C1567("/usr/lib/jvm/default-java")  // Or using android-studio ?
 		
 		If (Not:C34($javaHome.exists))
+			
 			$javaHome:=Folder:C1567("/snap/android-studio/current/android-studio/jre")
+			
 		End if 
 		
 		If ($javaHome.exists)
@@ -566,16 +569,32 @@ Function _getJava()
 		This:C1470.success:=(This:C1470.java#Null:C1517)
 		
 		return 
+		
 	End if 
 	
 	If (This:C1470.exe#Null:C1517)
 		
 		If (This:C1470.macOS)
 			
-			$javaHome:=This:C1470.exe.folder("Contents/jre/jdk/Contents/Home")
-			If (Not:C34($javaHome.exists))
-				$javaHome:=This:C1470.exe.folder("Contents/jre/Contents/Home")
-			End if 
+			Case of 
+					//______________________________________________________
+				: (This:C1470.version="2022.1@")  // Electric Eel | 2022.1.1
+					
+					$javaHome:=This:C1470.exe.folder("Contents/jbr/Contents/Home")
+					
+					//______________________________________________________
+				Else 
+					
+					$javaHome:=This:C1470.exe.folder("Contents/jre/jdk/Contents/Home")
+					
+					If (Not:C34($javaHome.exists))
+						
+						$javaHome:=This:C1470.exe.folder("Contents/jre/Contents/Home")
+						
+					End if 
+					
+					//______________________________________________________
+			End case 
 			
 		Else 
 			
@@ -603,7 +622,7 @@ Function _getJava()
 				
 			Else 
 				
-				// java command was not found
+				// Java command was not found
 				
 			End if 
 			
