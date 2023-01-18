@@ -577,8 +577,9 @@ Function _getJava()
 		If (This:C1470.macOS)
 			
 			Case of 
+					
 					//______________________________________________________
-				: (This:C1470.version="2022.1@")  // Electric Eel | 2022.1.1
+				: (This:C1470.versionCompare(This:C1470.version; "2022")>=0)  // Electric Eel | 2022.1.1
 					
 					$javaHome:=This:C1470.exe.folder("Contents/jbr/Contents/Home")
 					
@@ -598,8 +599,20 @@ Function _getJava()
 			
 		Else 
 			
-			$javaHome:=This:C1470.exe.parent.parent.folder("jre")
-			
+			Case of 
+					
+					//______________________________________________________
+				: (This:C1470.versionCompare(This:C1470.version; "2022")>=0)  // Electric Eel | 2022.1.1
+					
+					$javaHome:=This:C1470.exe.parent.parent.folder("jbr")
+					
+					//______________________________________________________
+				Else 
+					
+					$javaHome:=This:C1470.exe.parent.parent.folder("jre")
+					
+					//______________________________________________________
+			End case 
 		End if 
 		
 		If ($javaHome.exists)
