@@ -1601,11 +1601,11 @@ Zabere to několik minut</target>
         </trans-unit>
         <trans-unit id="Fn146UgTfc0zlq9jxZO9CA" resname="global">
           <source>Global</source>
-          <target state="new">Global</target>
+          <target>Globální</target>
         </trans-unit>
         <trans-unit id="Jr4y6+C2Zj+93vYAQjtVig" resname="actionParametersNoTable">
           <source>Parameters of the "{action}" action</source>
-          <target state="new">Parameters of the "{action}" action</target>
+          <target>Parametry akce "{action}"</target>
         </trans-unit>
         <trans-unit id="4eXEdbV+E4jbjS2ZgULD3Q" resname="_imageURL">
           <source>Image URL</source>
@@ -1643,7 +1643,7 @@ a končit "://".</target>
         </trans-unit>
         <trans-unit id="ynpx1XfDHlyebcQNO6daOQ" resname="loginForm">
           <source>Login Form</source>
-          <target state="new">Login Form</target>
+          <target>Formulář přihlášení</target>
         </trans-unit>
       </group>
     </body>
