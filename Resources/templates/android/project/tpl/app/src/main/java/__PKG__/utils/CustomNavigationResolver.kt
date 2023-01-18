@@ -406,7 +406,7 @@ class CustomNavigationResolver : GenericNavigationResolver {
         }
         {{/relations_deeplink_many_to_one}}
         {{#relations_deeplink_many_to_one}}
-            if (viewDataBinding is FragmentDetail{{relation_source_camelCase}}Binding && relationName == "{{relation_name}}") {
+        if (viewDataBinding is FragmentDetail{{relation_source_camelCase}}Binding && relationName == "{{relation_name}}") {
             {{#isAlias}}
             (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.{{pathToOneWithoutFirst}}?.__KEY?.let { relationId ->
             {{/isAlias}}
