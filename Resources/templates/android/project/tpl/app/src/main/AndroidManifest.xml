@@ -29,12 +29,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <activity android:name="com.qmobile.qmobileui.activity.mainactivity.MainActivity"
-                  android:exported="true"
-                  android:windowSoftInputMode="adjustResize">
-
             {{#deep_link}}
             {{#enabled}}
             <intent-filter>
@@ -43,14 +37,16 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data
-                        android:host="{{scheme}}"
+                        android:scheme="{{scheme}}"
                         android:pathPrefix="/show"
-                        android:scheme="my-app"/>
+                        android:host="mobileapp"/>
             </intent-filter>
             {{/enabled}}
             {{/deep_link}}
-
         </activity>
+
+        <activity android:name="com.qmobile.qmobileui.activity.mainactivity.MainActivity"
+            android:windowSoftInputMode="adjustResize"/>
 
         <meta-data
             android:name="com.qmobile.qmobileui.glide.AppGlideModule"
