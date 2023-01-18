@@ -1609,7 +1609,7 @@ Zabere to několik minut</target>
         </trans-unit>
         <trans-unit id="4eXEdbV+E4jbjS2ZgULD3Q" resname="_imageURL">
           <source>Image URL</source>
-          <target state="new">Image URL</target>
+          <target>URL obrázku</target>
         </trans-unit>
       </group>
       <group resname="Features">
