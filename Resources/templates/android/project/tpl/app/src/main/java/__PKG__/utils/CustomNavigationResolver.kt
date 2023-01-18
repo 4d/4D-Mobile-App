@@ -297,9 +297,9 @@ class CustomNavigationResolver : GenericNavigationResolver {
      */
     override fun navigateToDetailsFromDeepLink(fragmentActivity: FragmentActivity, tableName: String, itemId: String, navbarTitle: String) {
         val action = EntityListFragmentDirections.actionListToDetailRelation(
-                tableName = tableName,
-                itemId = itemId,
-                navbarTitle = tableName
+        tableName = tableName,
+        itemId = itemId,
+        navbarTitle = tableName
         )
         (fragmentActivity as? MainActivity)?.navController?.navigate(
                 action
@@ -324,21 +324,21 @@ class CustomNavigationResolver : GenericNavigationResolver {
         {{#isAlias}}
         (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.{{pathToManyWithoutFirst}}?.takeIf { it.isNotEmpty() }?.let {
         action = EntityListFragmentDirections.actionListToListRelation(
-                relationName = relationName,
-                parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: "",
-                parentTableName = "{{relation_source}}",
-                path = "{{path}}",
-                navbarTitle = "{{navbarTitle}}"
+        relationName = relationName,
+        parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: "",
+        parentTableName = "{{relation_source}}",
+        path = "{{path}}",
+        navbarTitle = "{{navbarTitle}}"
         )
         {{/isAlias}}
         {{^isAlias}}
         (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.takeIf { it.isNotEmpty() }?.let {
         action = EntityListFragmentDirections.actionListToListRelation(
-                relationName = relationName,
-                parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: "",
-                parentTableName = "{{relation_source}}",
-                path = "{{path}}",
-                navbarTitle = "{{navbarTitle}}"
+        relationName = relationName,
+        parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: "",
+        parentTableName = "{{relation_source}}",
+        path = "{{path}}",
+        navbarTitle = "{{navbarTitle}}"
         )
         {{/isAlias}}
         }
@@ -349,21 +349,21 @@ class CustomNavigationResolver : GenericNavigationResolver {
         {{#isAlias}}
         (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.{{pathToManyWithoutFirst}}?.takeIf { it.isNotEmpty() }?.let {
         action = EntityViewPagerFragmentDirections.actionDetailToListRelation(
-                relationName = relationName,
-                parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: "",
-                parentTableName = "{{relation_source}}",
-                path = "{{path}}",
-                navbarTitle = "{{navbarTitle}}"
+        relationName = relationName,
+        parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: "",
+        parentTableName = "{{relation_source}}",
+        path = "{{path}}",
+        navbarTitle = "{{navbarTitle}}"
         )
         {{/isAlias}}
         {{^isAlias}}
         (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.takeIf { it.isNotEmpty() }?.let {
         action = EntityViewPagerFragmentDirections.actionDetailToListRelation(
-                relationName = relationName,
-                parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: "",
-                parentTableName = "{{relation_source}}",
-                path = "{{path}}",
-                navbarTitle = "{{navbarTitle}}"
+        relationName = relationName,
+        parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: "",
+        parentTableName = "{{relation_source}}",
+        path = "{{path}}",
+        navbarTitle = "{{navbarTitle}}"
         )
         {{/isAlias}}
     }
@@ -398,9 +398,9 @@ class CustomNavigationResolver : GenericNavigationResolver {
             (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.__KEY?.let { relationId ->
             {{/isAlias}}
             action = EntityListFragmentDirections.actionListToDetailRelation(
-                    tableName = "{{relation_target}}",
-                    itemId = relationId,
-                    navbarTitle = "{{navbarTitle}}"
+            tableName = "{{relation_target}}",
+            itemId = relationId,
+            navbarTitle = "{{navbarTitle}}"
             )
         }
         }
@@ -414,9 +414,9 @@ class CustomNavigationResolver : GenericNavigationResolver {
             (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.__KEY?.let { relationId ->
             {{/isAlias}}
             action = EntityViewPagerFragmentDirections.actionDetailToDetailRelation(
-                    tableName = "{{relation_target}}",
-                    itemId = relationId,
-                    navbarTitle = "{{navbarTitle}}"
+            tableName = "{{relation_target}}",
+            itemId = relationId,
+            navbarTitle = "{{navbarTitle}}"
             )
         }
         }
