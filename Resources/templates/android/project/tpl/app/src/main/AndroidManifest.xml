@@ -32,16 +32,17 @@
             {{#deep_link}}
             {{#enabled}}
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
                 <data
-                        android:scheme="{{scheme}}"
-                        android:pathPrefix="/show"
-                        android:host="mobileapp"/>
+                    android:scheme="{{scheme}}"
+                    android:pathPrefix="/show"
+                    android:host="mobileapp" />
             </intent-filter>
             {{/enabled}}
+            
             {{/deep_link}}
         </activity>
 
