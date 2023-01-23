@@ -1626,7 +1626,7 @@ Dies kann einige Minuten dauern</target>
         </trans-unit>
         <trans-unit id="4eXEdbV+E4jbjS2ZgULD3Q" resname="_imageURL">
           <source>Image URL</source>
-          <target state="new">Image URL</target>
+          <target>Bild URL</target>
         </trans-unit>
       </group>
       <group resname="Features">
@@ -1660,7 +1660,7 @@ und mit "://" enden.</target>
         </trans-unit>
         <trans-unit id="ynpx1XfDHlyebcQNO6daOQ" resname="loginForm">
           <source>Login Form</source>
-          <target state="new">Login Form</target>
+          <target>Login Formular</target>
         </trans-unit>
       </group>
     </body>
