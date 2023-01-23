@@ -136,6 +136,12 @@ Function warning($message) : cs:C1710.logger
 	return (This:C1470._pushMessage($message; Warning message:K38:2))
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
+Function alert($message) : cs:C1710.logger
+	
+	ALERT:C41($message)
+	return This:C1470.error($message)
+	
+	// === === === === === === === === === === === === === === === === === === === === ===
 Function error($message) : cs:C1710.logger
 	
 	return (This:C1470._pushMessage($message; Error message:K38:3))

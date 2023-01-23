@@ -35,6 +35,11 @@ $applicationVersion:=Application version:C493($buildNumber; *)
 Case of 
 		
 		//______________________________________________________
+	: ($buildNumber=0)
+		
+		Logger.alert("It is not possible to download the SDK "+$target+" without build number.")
+		
+		//______________________________________________________
 	: ($target="android")
 		
 		$sdk:=cs:C1710.path.new().cacheSdkAndroid()
