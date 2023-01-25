@@ -664,3 +664,7 @@ a Java package name, such as com.example.myapp.
 Function _o_themeImageFile()->$file : 4D:C1709.File
 	$file:=This:C1470.input.project._folder.file("android/main/ic_launcher-playstore.png")
 	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Override: no team id for android
+Function _getAppId($project : Object) : Text
+	return String:C10($project.product.bundleIdentifier)
