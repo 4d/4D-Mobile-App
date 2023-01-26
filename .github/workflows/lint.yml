@@ -25,6 +25,6 @@ jobs:
 
       - name: Lint Xliff
         run: |
-          find / -name "xmllint"
+          sudo apt-get install libxml2-utils
           # shellcheck disable=2046
-          xmllint --noout $(find . -name "*.xlf")
+          xmllint --noout $(find . -iname '*.xlf' -o -iname '*.4DCatalog' -o -iname '*.4DSettings')
