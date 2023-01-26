@@ -182,7 +182,11 @@ Function build()->$result : Object
 	
 	This:C1470.build:=$result
 	
-	If (Not:C34($result.success))
+	If ($result.success)
+		
+		This:C1470.notification()
+		
+	Else 
 		
 		var $errorMessage : Text
 		$errorMessage:=ob_error_string($result)
