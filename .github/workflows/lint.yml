@@ -24,4 +24,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Lint Xliff
-        run: xmllint --noout $(find . -name "*.xlf")
+        run: |
+          # shellcheck disable=2046
+          xmllint --noout $(find . -name "*.xlf")
