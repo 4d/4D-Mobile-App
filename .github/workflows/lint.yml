@@ -25,6 +25,6 @@ jobs:
 
       - name: Lint Xliff
         run: |
-          # shellcheck disable=2046
           find / -name "xmllint"
+          # shellcheck disable=2046
           xmllint --noout $(find . -name "*.xlf")
