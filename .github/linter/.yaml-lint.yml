@@ -24,8 +24,6 @@ rules:
     max-spaces-before: 0
     max-spaces-after: 1
   document-start: disable
-    level: warning
-    present: true
   empty-lines:
     level: warning
     max: 2
