@@ -82,9 +82,11 @@ Function create()->$result : Object
 	$destinationFolder.create()
 	
 	// Cache the last build in generated project
-	This:C1470.input.appFolder:=Null:C1517  // Cyclic
+	var $appFolder : Object
+	$appFolder:=This:C1470.input.appFolder
+	This:C1470.input.appFolder:=Null:C1517  // Cyclic for json export
 	ob_writeToFile(This:C1470._cleanCopyProject(This:C1470.input); $destinationFolder.file("project.4dmobile"); True:C214)
-	
+	This:C1470.input.appFolder:=$appFolder
 	//===============================================================
 	
 	This:C1470.postStep("decompressionOfTheSdk")
