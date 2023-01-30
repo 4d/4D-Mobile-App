@@ -1,4 +1,4 @@
-//%attributes = {"invisible":true,"publishedWeb":true}
+//%attributes = {"invisible":true}
 
 
 ARRAY TEXT:C222($anames; 0)

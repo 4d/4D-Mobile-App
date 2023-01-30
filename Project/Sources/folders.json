@@ -93,6 +93,9 @@
 			"_o_xml_refToObject",
 			"OBSOLETE",
 			"TURN_AROUND_Field_name"
+		],
+		"forms": [
+			"_FEATURES"
 		]
 	},
 	"_ui": {
