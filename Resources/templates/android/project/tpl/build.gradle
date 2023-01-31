@@ -60,7 +60,7 @@ subprojects {
                     minSdkVersion Config.minSdk
                     targetSdkVersion Config.targetSdk
                     versionCode 1
-                    versionName "1.0"
+                    versionName "{{app_version}}"
                     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
                     vectorDrawables.useSupportLibrary = true
 
