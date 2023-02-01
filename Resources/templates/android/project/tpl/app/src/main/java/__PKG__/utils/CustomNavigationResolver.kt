@@ -175,7 +175,10 @@ class CustomNavigationResolver : GenericNavigationResolver {
                 {{/isGoogleMapsPlatformUsedForTable}}
                     tableName = "{{relation_target}}",
                     itemId = relationId,
-                    navbarTitle = "{{navbarTitle}}"
+                    navbarTitle = "{{navbarTitle}}",
+                    relationName = "{{relation_name}}",
+                    parentTableName = "{{relation_source_camelCase}}",
+                    parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: ""
                 )
                 viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnNavigationClickListener(viewDataBinding, action)
             } ?: kotlin.run {
@@ -194,7 +197,10 @@ class CustomNavigationResolver : GenericNavigationResolver {
                 val action = EntityViewPagerFragmentDirections.actionDetailToDetailRelation(
                     tableName = "{{relation_target}}",
                     itemId = relationId,
-                    navbarTitle = "{{navbarTitle}}"
+                    navbarTitle = "{{navbarTitle}}",
+                    relationName = "{{relation_name}}",
+                    parentTableName = "{{relation_source_camelCase}}",
+                    parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: ""
                 )
                 viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnNavigationClickListener(viewDataBinding, action)
             } ?: kotlin.run {
@@ -322,7 +328,10 @@ class CustomNavigationResolver : GenericNavigationResolver {
         {{/isGoogleMapsPlatformUsedForTable}}
             tableName = tableName,
             itemId = itemId,
-            navbarTitle = tableName
+            navbarTitle = tableName,
+            relationName = "",
+            parentTableName = "",
+            parentItemId = ""
         )
         (fragmentActivity as? MainActivity)?.navController?.navigate(action)
     }
@@ -431,7 +440,10 @@ class CustomNavigationResolver : GenericNavigationResolver {
                 {{/isGoogleMapsPlatformUsedForTable}}
                     tableName = "{{relation_target}}",
                     itemId = relationId,
-                    navbarTitle = "{{navbarTitle}}"
+                    navbarTitle = "{{navbarTitle}}",
+                    relationName = "{{relation_name}}",
+                    parentTableName = "{{relation_source_camelCase}}",
+                    parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: ""
                 )
             }
         }
@@ -447,7 +459,10 @@ class CustomNavigationResolver : GenericNavigationResolver {
                 action = EntityViewPagerFragmentDirections.actionDetailToDetailRelation(
                     tableName = "{{relation_target}}",
                     itemId = relationId,
-                    navbarTitle = "{{navbarTitle}}"
+                    navbarTitle = "{{navbarTitle}}",
+                    relationName = "{{relation_name}}",
+                    parentTableName = "{{relation_source_camelCase}}",
+                    parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: ""
                 )
             }
         }

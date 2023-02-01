@@ -239,6 +239,18 @@
             android:name="navbarTitle"
             app:argType="string" />
 
+        <argument
+            android:name="relationName"
+            app:argType="string" />
+            
+        <argument
+            android:name="parentTableName"
+            app:argType="string" />
+
+        <argument
+            android:name="parentItemId"
+            app:argType="string" />
+
     </fragment>
 
 </navigation>
