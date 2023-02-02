@@ -237,6 +237,7 @@ Function notification()
 			"build"; This:C1470.input.build; \
 			"run"; This:C1470.input.run; \
 			"archive"; This:C1470.input.archive; \
+			"appFolder"; This:C1470.input.appFolder; \
 			"project"; This:C1470.input.project)
 		
 		CALL FORM:C1391(This:C1470.input.caller; "editor_CALLBACK"; "build"; New object:C1471(\
