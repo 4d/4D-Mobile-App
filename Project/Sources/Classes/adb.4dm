@@ -126,6 +126,18 @@ Class constructor
 	
 	This:C1470._adbStartRetried:=False:C215
 	
+	var $studio : cs:C1710.studio
+	$studio:=cs:C1710.studio.new()
+	
+	If ($studio.success)
+		
+		If (Bool:C1537($studio.javaHome.exists))
+			
+			This:C1470.setEnvironnementVariable("JAVA_HOME"; $studio.javaHome.path)
+			
+		End if 
+	End if 
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Returns a collection of attached devices ID (connected and authorized devices or booted simulators)
 	// if 'androidDeploymentTarget' is passed, keeps only devices where the version of Android is higher or equal

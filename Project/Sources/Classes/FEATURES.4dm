@@ -307,25 +307,25 @@ Function update()
 	Case of 
 			
 			//______________________________________________________
-		: (Bool:C1537(Form:C1466.server.pushNotification))\
-			 & (Bool:C1537(Form:C1466.deepLinking.enabled))
+			//: (Bool(Form.server.pushNotification))\
+				 & (Bool(Form.deepLinking.enabled))
 			
-			androidLimitations(False:C215; "Push notifications and Deep Linking are coming soon for Android")
+			//androidLimitations(False; "Push notifications and Deep Linking are coming soon for Android")
 			
 			//______________________________________________________
 		: (Bool:C1537(Form:C1466.server.pushNotification))
 			
 			androidLimitations(False:C215; "Push notifications is coming soon for Android")
 			
-			//______________________________________________________
-		: (Bool:C1537(Form:C1466.deepLinking.enabled))
+			////______________________________________________________
+			//: (Bool(Form.deepLinking.enabled))
 			
-			androidLimitations(False:C215; "Deep Linking is coming soon for Android")
+			//androidLimitations(False; "Deep Linking is coming soon for Android")
 			
-			//______________________________________________________
-		Else 
+			////______________________________________________________
+			//Else 
 			
-			androidLimitations(False:C215; "Push notifications and Deep Linking are coming soon for Android")
+			//androidLimitations(False; "Push notifications and Deep Linking are coming soon for Android")
 			
 			//______________________________________________________
 	End case 
