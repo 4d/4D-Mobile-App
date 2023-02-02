@@ -65,6 +65,8 @@ Function path($useDefaultPath : Boolean)
 			
 			// Verify the tools
 			
+			LOG EVENT:C667(Into 4D debug message:K38:5; "AS EXE Path: "+This:C1470.exe.path; Error message:K38:3)
+			
 		End if 
 	End if 
 	
@@ -189,9 +191,13 @@ Function defaultPath()
 		
 		This:C1470.exe:=$exe
 		
+		LOG EVENT:C667(Into 4D debug message:K38:5; "AS EXE Default Path: "+This:C1470.exe.path; Error message:K38:3)
+		
 	Else 
 		
 		This:C1470.exe:=Null:C1517
+		
+		LOG EVENT:C667(Into 4D debug message:K38:5; "AS EXE Default Path not found: "+$exe.path; Error message:K38:3)
 		
 	End if 
 	
@@ -237,6 +243,8 @@ Function lastPath
 				Else 
 					
 					This:C1470.exe:=File:C1566($pathname; fk platform path:K87:2)
+					LOG EVENT:C667(Into 4D debug message:K38:5; "AS EXE last Path not found: "+This:C1470.exe.path; Error message:K38:3)
+					
 					
 				End if 
 				
@@ -604,7 +612,7 @@ Function _getJava()
 					//______________________________________________________
 				: (This:C1470.versionCompare(This:C1470.version; "2022")>=0)  // Electric Eel | 2022.1.1
 					
-					$javaHome:=This:C1470.exe.parent.folder("jbr/bin")
+					$javaHome:=This:C1470.exe.parent.parent.folder("jbr/bin")
 					
 					//______________________________________________________
 				Else 
