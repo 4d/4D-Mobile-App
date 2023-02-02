@@ -646,8 +646,7 @@ Function _getJava()
 		Else 
 			
 			// JAVA_HOME was not found
-			LOG EVENT:C667(Into 4D debug message:K38:5; "JAVA_HOME not found: "+$javaCmd.path; Error message:K38:3)
-			
+			LOG EVENT:C667(Into 4D debug message:K38:5; "JAVA_HOME not found: "+$javaHome.path; Error message:K38:3)
 			
 		End if 
 		
