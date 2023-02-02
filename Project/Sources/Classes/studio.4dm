@@ -604,7 +604,7 @@ Function _getJava()
 					//______________________________________________________
 				: (This:C1470.versionCompare(This:C1470.version; "2022")>=0)  // Electric Eel | 2022.1.1
 					
-					$javaHome:=This:C1470.exe.parent.parent.folder("jbr")
+					$javaHome:=This:C1470.exe.parent.folder("jbr/bin")
 					
 					//______________________________________________________
 				Else 
