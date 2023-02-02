@@ -625,8 +625,20 @@ Function _getJava()
 				
 			Else 
 				
-				$javaCmd:=This:C1470.javaHome.file("bin/java.exe")
-				
+				Case of 
+						
+						//______________________________________________________
+					: (This:C1470.versionCompare(This:C1470.version; "2022")>=0)  // Electric Eel | 2022.1.1
+						
+						$javaCmd:=This:C1470.javaHome.file("java.exe")
+						
+						//______________________________________________________
+					Else 
+						
+						$javaCmd:=This:C1470.javaHome.file("bin/java.exe")
+						
+						//______________________________________________________
+				End case 
 			End if 
 			
 			If ($javaCmd.exists)
