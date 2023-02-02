@@ -604,12 +604,12 @@ Function _getJava()
 					//______________________________________________________
 				: (This:C1470.versionCompare(This:C1470.version; "2022")>=0)  // Electric Eel | 2022.1.1
 					
-					$javaHome:=This:C1470.exe.parent.folder("jbr/bin")
+					$javaHome:=This:C1470.exe.folder("../jbr/bin")
 					
 					//______________________________________________________
 				Else 
 					
-					$javaHome:=This:C1470.exe.parent.parent.folder("jre")
+					$javaHome:=This:C1470.exe.folder("../../jre")
 					
 					//______________________________________________________
 			End case 
@@ -633,15 +633,21 @@ Function _getJava()
 				
 				This:C1470.java:=$javaCmd
 				
+				LOG EVENT:C667(Into 4D debug message:K38:5; "Java found")
+				
 			Else 
 				
 				// Java command was not found
+				LOG EVENT:C667(Into 4D debug message:K38:5; "Java EXE not found: "+$javaCmd.path; Error message:K38:3)
+				
 				
 			End if 
 			
 		Else 
 			
 			// JAVA_HOME was not found
+			LOG EVENT:C667(Into 4D debug message:K38:5; "JAVA_HOME not found: "+$javaCmd.path; Error message:K38:3)
+			
 			
 		End if 
 		
