@@ -307,25 +307,38 @@ Function update()
 	Case of 
 			
 			//______________________________________________________
-			//: (Bool(Form.server.pushNotification))\
-				 & (Bool(Form.deepLinking.enabled))
-			
-			//androidLimitations(False; "Push notifications and Deep Linking are coming soon for Android")
-			
-			//______________________________________________________
 		: (Bool:C1537(Form:C1466.server.pushNotification))
 			
 			androidLimitations(False:C215; "Push notifications is coming soon for Android")
 			
-			////______________________________________________________
-			//: (Bool(Form.deepLinking.enabled))
+			//______________________________________________________
+		: (Feature.with("androidDeepLinking"))
 			
-			//androidLimitations(False; "Deep Linking is coming soon for Android")
+			//
 			
-			////______________________________________________________
-			//Else 
+			//______________________________________________________
+		: (Bool:C1537(Form:C1466.deepLinking.enabled))
 			
-			//androidLimitations(False; "Push notifications and Deep Linking are coming soon for Android")
+			androidLimitations(False:C215; "Deep Linking is coming soon for Android")
+			
+			//______________________________________________________
+		: (Bool:C1537(Form:C1466.server.pushNotification))\
+			 & Bool:C1537(Form:C1466.deepLinking.enabled)
+			
+			androidLimitations(False:C215; "Push notifications and Deep Linking are coming soon for Android")
+			
+			//______________________________________________________
+		Else 
+			
+			If (Feature.with("androidDeepLinking"))
+				
+				androidLimitations(False:C215; "Push notifications is coming soon for Android")
+				
+			Else 
+				
+				androidLimitations(False:C215; "Push notifications and Deep Linking are coming soon for Android")
+				
+			End if 
 			
 			//______________________________________________________
 	End case 
@@ -333,7 +346,13 @@ Function update()
 	This:C1470.pushNotification.enable(Is macOS:C1572 & PROJECT.$ios)
 	This:C1470.certificateGroup.enable(Is macOS:C1572 & PROJECT.$ios)
 	This:C1470.certificate.picker.browse:=(Is macOS:C1572 & PROJECT.$ios)
-	This:C1470.deepLinking.enable(Is macOS:C1572 & PROJECT.$ios)
+	
+	If (Not:C34(Feature.with("androidDeepLinking")))
+		
+		This:C1470.deepLinking.enable(Is macOS:C1572 & PROJECT.$ios)
+		
+	End if 
+	
 	This:C1470.deepLinkingGroup.enable(Is macOS:C1572 & PROJECT.$ios)
 	
 	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
