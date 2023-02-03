@@ -266,8 +266,6 @@ Function doLinkedTo()
 			
 		Else 
 			
-			BEEP:C151
-			
 			This:C1470.label.setValue(True:C214)
 			This:C1470.image.setValue(False:C215)
 			This:C1470.name.focus()

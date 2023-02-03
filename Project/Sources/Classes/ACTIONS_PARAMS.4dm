@@ -1993,9 +1993,9 @@ Function dataSourceMenuManager()
 Function editList()
 	
 /*
-							$form:=New object(\
-														"static"; $static; \
-														"host"; This.path.hostInputControls(True))
+								$form:=New object(\
+																"static"; $static; \
+																"host"; This.path.hostInputControls(True))
 	
 $form.folder:=This.path.hostInputControls()
 $manifest:=$form.folder.file("manifest.json")
@@ -2168,7 +2168,6 @@ Function defaultValueManager()
 	If ($inError)
 		
 		$toRemove:=True:C214
-		BEEP:C151
 		This:C1470.defaultValue.focus()
 		
 	End if 

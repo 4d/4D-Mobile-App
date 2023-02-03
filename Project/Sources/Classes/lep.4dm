@@ -980,8 +980,6 @@ Function _pushError($message : Text)
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _log()
 	
-	BEEP:C151
-	
 	var $current; $o : Object
 	var $c; $log : Collection
 	
