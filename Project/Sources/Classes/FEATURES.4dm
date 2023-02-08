@@ -350,10 +350,10 @@ Function update()
 	If (Not:C34(Feature.with("androidDeepLinking")))
 		
 		This:C1470.deepLinking.enable(Is macOS:C1572 & PROJECT.$ios)
+		This:C1470.deepLinkingGroup.enable(Is macOS:C1572 & PROJECT.$ios)
 		
 	End if 
 	
-	This:C1470.deepLinkingGroup.enable(Is macOS:C1572 & PROJECT.$ios)
 	
 	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
 Function get loginForm() : Text
