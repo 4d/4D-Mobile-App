@@ -56,7 +56,7 @@ Function main()->$result : Object
 						$result.run:=This:C1470.run()
 						ob_error_combine($result; $result.run)
 						
-						If ($result.run.success)
+						If (Bool:C1537($result.run.success))
 							
 							$result.success:=True:C214
 							This:C1470.notification()
