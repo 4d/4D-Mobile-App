@@ -86,7 +86,6 @@
 			"_o_thermometer",
 			"_o_tmpl_form",
 			"_o_ui_MOVE",
-			"_o_unzip",
 			"_o_widget",
 			"_o_xml",
 			"_o_xml_elementToObject",
@@ -171,6 +170,7 @@
 		"methods": [
 			"catalog",
 			"COMPILER_backend",
+			"copyOrUnzip",
 			"dataSet",
 			"downloadSDK",
 			"dump",
@@ -798,6 +798,9 @@
 		]
 	},
 	"panel": {
+		"groups": [
+			"widgets"
+		],
 		"methods": [
 			"_o_panel_Common",
 			"_o_panel_Form_common",

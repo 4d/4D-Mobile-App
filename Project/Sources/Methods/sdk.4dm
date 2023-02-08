@@ -101,8 +101,24 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 					
 				End if 
 				
+				If (Not:C34(File:C1566($Obj_param.file; fk platform path:K87:2).exists))
+					
+					var $request : 4D:C1709.HTTPRequest
+					$request:=downloadSDK("aws"; "ios"; /*silent=*/True:C214; 0; True:C214)
+					$request.wait(60)
+					
+					If ($Obj_param.cacheFolder.file("sdkVersion").exists)  // already unziped
+						
+						$Obj_param.cache:=$Obj_param.cacheFolder.platformPath  // for zip
+						$Obj_param.file:=$Obj_param.cacheFolder.file("sdkVersion").platformPath  // tricky way to make unzip code to just copy without failing
+						$Obj_result.fileVersion:=$Obj_result.cacheVersion
+						$Obj_result.noZip:=True:C214
+						
+					End if 
+					
+				End if 
 				// Unzip the SDK
-				$Obj_result:=_o_unzip($Obj_param)
+				$Obj_result:=copyOrUnzip($Obj_param)
 				$Obj_result.file:=$Obj_param.file
 				
 			End if 
@@ -175,7 +191,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 					// TODO maybe do some additional stuff like merging Cartfile.resolved instead of replace it
 					
 					$Obj_param.file:=$Obj_param.file.platformPath  // to keep compatibility
-					$Obj_result:=_o_unzip($Obj_param)
+					$Obj_result:=copyOrUnzip($Obj_param)
 					
 					// Add to installed framework
 					$Obj_.sdk.installed[$Obj_param.file]:=$Obj_result
