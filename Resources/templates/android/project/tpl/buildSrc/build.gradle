@@ -30,6 +30,6 @@ dependencies {
     configurations.sqlite.each { File file ->
         loader.addURL(file.toURI().toURL())
     }
-    implementation 'org.json:json:20210307'
+    implementation 'org.json:json:20220924'
     implementation 'commons-io:commons-io:2.8.0'
 }
