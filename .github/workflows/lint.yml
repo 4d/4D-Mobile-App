@@ -25,6 +25,7 @@ jobs:
           FILTER_REGEX_EXCLUDE: Resources/templates/.*
 
       - name: Lint Xliff
+        if: always()
         run: |
           sudo apt-get install libxml2-utils
           # shellcheck disable=2046
