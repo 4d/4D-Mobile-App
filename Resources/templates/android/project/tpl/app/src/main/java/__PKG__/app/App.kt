@@ -6,6 +6,10 @@
 
 package {{package}}.app
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.os.Build
 import com.google.android.material.color.DynamicColors
 import com.google.android.material.color.DynamicColorsOptions
 import com.qmobile.qmobileapi.utils.SharedPreferencesHolder
@@ -60,5 +64,23 @@ class App : BaseApp() {
             R.navigation.{{nameLowerCase}}{{^-last}}, {{/-last}}
             {{/tableNames_navigation_for_navbar}}
         )
+
+        if (runtimeDataHolder.pushNotification) {
+            createNotificationChannel()
+        }
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                resources.getString(R.string.push_channel_id),
+                "QMobileAndroid",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            channel.description = resources.getString(R.string.push_channel_description)
+
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
     }
 }

@@ -174,7 +174,7 @@ Function copyEmbeddedDataLib
 Function copyResources($project : cs:C1710.project)->$result : Object
 	
 	var $projectFolder; $androidAssets; $currentFolder : 4D:C1709.Folder
-	var $currentFile; $copyDest : 4D:C1709.File
+	var $currentFile; $copyDest; $googleServices : 4D:C1709.File
 	
 	$result:=New object:C1471(\
 		"success"; False:C215; \
@@ -237,6 +237,32 @@ Function copyResources($project : cs:C1710.project)->$result : Object
 		// Missing Android folder
 		$result.errors.push("Missing source file for copy: "+$androidAssets.path)
 	End if 
+	
+	If (Bool:C1537($project.server.pushNotification))
+		// Copy google-services.json for push notifications
+		
+		$googleServices:=$projectFolder.file("google-services.json")
+		
+		If ($googleServices.exists)
+			
+			$copyDest:=$googleServices.copyTo(Folder:C1567(This:C1470.projectPath+"app"); fk overwrite:K87:5)
+			
+			If (Not:C34($copyDest.exists))
+				// Copy failed
+				$result.success:=False:C215
+				$result.errors.push("Could not copy file to destination: "+$copyDest.path)
+				
+				//Else : all ok
+			End if 
+			
+		Else 
+			// Missing google-services.json file
+			$result.errors.push("Missing google-services.json file : "+$googleServices.path)
+			
+		End if 
+		
+	End if 
+	
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
