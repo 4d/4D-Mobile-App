@@ -1430,19 +1430,28 @@ Function actionShare($table) : Object
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function actionURL($table) : Object
 	
-	var $label; $name : Text
+	var $label; $name; $scope : Text
 	var $action; $o : Object
 	
-	$o:=This:C1470._actionTable($table)
 	$name:=This:C1470._actionName("openURL")
 	$label:=Get localized string:C991("open...")
+	If (Num:C11($table)=-1)  // Global
+		
+		$scope:=Get localized string:C991("scope_3")
+		
+	Else 
+		
+		$o:=This:C1470._actionTable($table)
+		$scope:="table"
+		
+	End if 
 	
 	$action:=New object:C1471(\
 		"preset"; "openURL"; \
 		"name"; $name; \
-		"scope"; "table"; \
 		"label"; $label; \
 		"shortLabel"; $label; \
+		"scope"; $scope; \
 		"icon"; "actions/Globe.svg"; \
 		"description"; "")
 	
