@@ -133,7 +133,8 @@ Feature.unstable("androidDeepLinking")  // Enable deep linking for android proje
 
 // Mark:-🚧 MAIN
 Feature.main("listEditor")  // #130828 [MOBILE] Create and edit an input control from the project editor
-Feature.wip("actionsInTabBar")
+Feature.wip("openURLActionsInTabBar")
+// Feature.wip("actionsInTabBar") // ie. all type of action
 
 // Mark:-🚧 WIP
 Feature.wip("buildWithCmd")  // Allow to create/build using cmd only: azure:3628

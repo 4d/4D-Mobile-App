@@ -14,7 +14,7 @@ Function doRun()->$Obj_out : Object
 	$Obj_template:=This:C1470.template
 	
 	// Get navigation tables or other items as tag
-	If (Feature.with("actionsInTabBar"))
+	If (Feature.with("openURLActionsInTabBar"))
 		This:C1470._actionsInTabBarProcess()
 	Else 
 		This:C1470.input.tags.navigationTables:=This:C1470._tableCollection()

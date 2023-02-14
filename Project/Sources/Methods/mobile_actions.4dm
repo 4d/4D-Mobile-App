@@ -719,7 +719,7 @@ Case of
 		
 		// MARK:- putTableNames
 	: ($Txt_action="putTableNames")
-		ASSERT:C1129(Feature.with("actionsInTabBar"); "For this feature")
+		ASSERT:C1129(Feature.with("actionsInTabBar"); "For actionsInTabBar feature")
 		
 		// Add table names instead of number
 		If ($Obj_in.project.actions#Null:C1517)

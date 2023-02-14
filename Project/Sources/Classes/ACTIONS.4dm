@@ -544,7 +544,7 @@ Function addMenuManager()
 			
 		End for each 
 		
-		If (Feature.with("actionsInTabBar"))
+		If (Feature.with("actionsInTabBar"))  // menu available only if no preset action could be in main menu
 			
 			$newMenu.line()\
 				.append(This:C1470.scopeLabel(New object:C1471("scope"; This:C1470.globalScope)); "global")
@@ -581,7 +581,7 @@ Function addMenuManager()
 		$menu.append(":xliff:sortAction"; $fieldsMenu)
 		$menu.append(":xliff:openURLAction"; "openURL_"+$o.tableID)
 		
-		If (Feature.with("actionsInTabBar"))
+		If (Feature.with("actionsInTabBar"))  // menu available only if no preset action could be in main menu
 			
 			$menu.line()\
 				.append(This:C1470.scopeLabel(New object:C1471("scope"; This:C1470.globalScope)); "global")
@@ -852,12 +852,13 @@ Function scopeMenuManager()
 					//________________________________________
 				: ($i=3)  // Global main menu
 					
-					If (Feature.with("actionsInTabBar"))
+					If (Feature.with("openURLActionsInTabBar"))
 						
 						If (($preset="add")\
 							 | ($preset="sort")\
 							 | ($preset="delete")\
-							 | ($preset="edit"))
+							 | ($preset="edit")\
+							 | ((Length:C16($preset)=0) && Not:C34(Feature.with("actionsInTabBar"))))
 							
 							$menu.disable()
 							

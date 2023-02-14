@@ -409,7 +409,7 @@ Function mainHandleEvents($e : Object)->$allow : Integer
 				// End if
 				// Else
 				//If ($o.src#$e.row)\
-																																																												& ($e.row#($o.src+1))  // Not the same or the next one
+																																																																	& ($e.row#($o.src+1))  // Not the same or the next one
 				//$o:=$me.rowCoordinates($e.row)
 				//$o.bottom:=$o.top
 				//$o.right:=$me.coordinates.right
@@ -548,7 +548,7 @@ Function _updateOrder()
 	// FIXME: Use a listbox collection
 	ARRAY TO COLLECTION:C1563(Form:C1466.main.order; This:C1470.dstIdPtr->)
 	
-	If (Feature.with("actionsInTabBar"))
+	If (Feature.with("openURLActionsInTabBar"))
 		
 		For each ($item; $order)
 			
