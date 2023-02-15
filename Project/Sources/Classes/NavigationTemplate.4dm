@@ -98,6 +98,9 @@ Function _actionsInTabBarProcess()
 				$item:=OB Copy:C1225($navigationItem)  // to not alter caller
 				$item[""]:=OB Copy:C1225($item)  // to simulate meta data behaviour or table (but must be clean)
 				
+				$item.originalName:=$item[""].name
+				$item.name:=formatString("table-name"; $item[""].name)
+				
 				If ($item.actions=Null:C1517)
 					$item.actions:=New collection:C1472($item.action)
 					
@@ -134,6 +137,9 @@ $table.shortLabel:=$table.shortLabel || $table.action.shortLabel*/
 		$action[""]:=OB Copy:C1225($action)  // to simulate meta data behaviour or table (but must be clean)
 		$action.actions:=New collection:C1472(OB Copy:C1225($action))
 		
+		$action.originalName:=$action[""].name
+		$action.name:=formatString("table-name"; $action[""].name)
+		
 		This:C1470.input.tags.navigationTables.push($action)
 		
 	End for each 
@@ -162,7 +168,7 @@ $table.shortLabel:=$table.shortLabel || $table.action.shortLabel*/
 			// get name of storyboard to inject in main segue menu in storyboard.run
 			$item.storyboard:=Replace string:C233(Replace string:C233($o.template.storyboard; "Sources/Forms/ActionsMenu/___TABLE___/"; ""); ".storyboard"; "")
 			
-			$item.navigationIcon:="Main"+$item.name  // need now, because icon create after that
+			$item.navigationIcon:="Main"+$item[""].name  // need now, because icon create after that
 			$item.tableActions:=New object:C1471("actions"; $item.actions)  // tag ___TABLE_ACTIONS___ (or do a new tag system with only ACTIONS)
 			$item.fields:=New collection:C1472  // no fields // used by swift (CLEAN: in process tag allow to not have fields)
 			$o:=TemplateInstanceFactory($o).run()  // <================================== RECURSIVE
@@ -219,8 +225,6 @@ Function _createIconAssets()->$Obj_out : Object
 			$Obj_table.labelAlignment:="left"
 			
 			Case of 
-/*: ($Obj_table.actions#Null)
-$Obj_table.navigationIcon:=$Obj_table.name*/  // if we want to use one created by action process (but maybe not correct size)
 				: (Length:C16(String:C10($Obj_table.originalName))>0)
 					$Obj_table.navigationIcon:="Main"+$Obj_table.originalName
 				: ($Obj_table[""]#Null:C1517)
