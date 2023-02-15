@@ -125,6 +125,10 @@ Function run
 					// Insert after processing tags
 					C_TEXT:C284($Txt_buffer)
 					$Txt_buffer:=$Obj_element.dom.export().variable
+					If ($Obj_table.storyboard#Null:C1517)  // for action for instance is not a list form, so replace
+						$Txt_buffer:=Replace string:C233($Txt_buffer; "___TABLE___ListForm"; $Obj_table.storyboard)
+					End if 
+					
 					$Txt_buffer:=Process_tags($Txt_buffer; $Obj_tags; $Obj_template.tagtypes)
 					
 					$Dom_:=Null:C1517

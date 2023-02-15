@@ -1,0 +1,8 @@
+{
+  "type": "actionopenurlform",
+  "name": "actionopenurlform",
+  "sources": "Sources/Forms/ActionsMenu/",
+  "storyboard": "Sources/Forms/ActionsMenu/___TABLE___/___TABLE___ActionOpenURLForm.storyboard",
+  "tagtypes": ["___TABLE___", "storyboardID"],
+  "inject": true
+}

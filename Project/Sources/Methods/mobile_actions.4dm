@@ -145,7 +145,7 @@ Case of
 		$Obj_out.success:=True:C214
 		
 		// MARK:- form
-	: ($Txt_action="form")
+	: ($Txt_action="form@")
 		
 		$Obj_out.success:=True:C214
 		
@@ -162,7 +162,7 @@ Case of
 				End if 
 			End for each 
 			
-			If (Length:C16(String:C10($action.icon))>0)
+			If ((Length:C16(String:C10($action.icon))>0) && ($Txt_action="form"))
 				
 				$action.icon:=$action.name
 				

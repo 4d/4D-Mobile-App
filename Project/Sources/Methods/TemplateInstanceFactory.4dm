@@ -27,6 +27,8 @@ Case of
 		$instance:=cs:C1710.TablesFormsTemplate.new($input)
 	: ($type="actionsmenuform")
 		$instance:=cs:C1710.ActionsMenuFormTemplate.new($input)
+	: ($type="actionopenurlform")
+		$instance:=cs:C1710.ActionOpenURLFormTemplate.new($input)
 	: ($type="login")
 		$instance:=cs:C1710.LoginTemplate.new($input)
 	Else 

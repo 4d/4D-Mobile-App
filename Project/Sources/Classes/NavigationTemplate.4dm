@@ -14,7 +14,7 @@ Function doRun()->$Obj_out : Object
 	$Obj_template:=This:C1470.template
 	
 	// Get navigation tables or other items as tag
-	If (Feature.with("openURLActionsInTabBar"))
+	If (Feature.with("openURLActionsInTabBar") || Feature.with("actionsInTabBar"))
 		This:C1470._actionsInTabBarProcess()
 	Else 
 		This:C1470.input.tags.navigationTables:=This:C1470._tableCollection()
@@ -124,7 +124,7 @@ $table.shortLabel:=$table.shortLabel || $table.action.shortLabel*/
 		/*.flat()*/.reduce(Formula:C1597($1.result.combine($1.value)); New collection:C1472)\
 		.map(Formula:C1597($1.value.name))
 	
-	$globalActions:=mobile_actions("form"; New object:C1471(\
+	$globalActions:=mobile_actions("form-nav"; New object:C1471(\
 		"project"; This:C1470.input.project; \
 		"scope"; "global")).actions
 	$globalActions:=$globalActions.filter(Formula:C1597($actionsConsumed.indexOf($1.value.name)<0))
@@ -145,6 +145,9 @@ $table.shortLabel:=$table.shortLabel || $table.action.shortLabel*/
 			
 			var $templateFolder : 4D:C1709.Folder
 			$templateFolder:=This:C1470.path.forms().folder("actionsMenu")
+			If (($item.actions.length=1) && ($item.actions[0].preset="openURL"))
+				$templateFolder:=This:C1470.path.forms().folder("actionOpenURL")
+			End if 
 			
 			$o:=OB Copy:C1225(This:C1470.input)
 			$o.template:=ob_parseFile($templateFolder.file("manifest.json")).value
@@ -155,7 +158,12 @@ $table.shortLabel:=$table.shortLabel || $table.action.shortLabel*/
 			//$o.path:=This.input.path
 			$o.tags:=OB Copy:C1225(This:C1470.input.tags)
 			$o.tags.table:=$item
-			$item.tableActions:=$item.actions  // tag ___TABLE_ACTIONS___ (or do a new tag system with only ACTIONS)
+			
+			// get name of storyboard to inject in main segue menu in storyboard.run
+			$item.storyboard:=Replace string:C233(Replace string:C233($o.template.storyboard; "Sources/Forms/ActionsMenu/___TABLE___/"; ""); ".storyboard"; "")
+			
+			$item.navigationIcon:="Main"+$item.name  // need now, because icon create after that
+			$item.tableActions:=New object:C1471("actions"; $item.actions)  // tag ___TABLE_ACTIONS___ (or do a new tag system with only ACTIONS)
 			$item.fields:=New collection:C1472  // no fields // used by swift (CLEAN: in process tag allow to not have fields)
 			$o:=TemplateInstanceFactory($o).run()  // <================================== RECURSIVE
 			// TODO:XXX errors?
@@ -201,6 +209,7 @@ Function _createIconAssets()->$Obj_out : Object
 	var $Boo_withIcons : Boolean
 	$Boo_withIcons:=Bool:C1537(This:C1470.template.assets.mandatory)\
 		 | (This:C1470.input.tags.navigationTables.query("icon != ''").length>0)
+	// TODO: add if there is an action with icon?
 	
 	var $Obj_table; $Obj_metaData : Object
 	For each ($Obj_table; This:C1470.input.tags.navigationTables)
@@ -208,7 +217,10 @@ Function _createIconAssets()->$Obj_out : Object
 		If ($Boo_withIcons)
 			
 			$Obj_table.labelAlignment:="left"
+			
 			Case of 
+/*: ($Obj_table.actions#Null)
+$Obj_table.navigationIcon:=$Obj_table.name*/  // if we want to use one created by action process (but maybe not correct size)
 				: (Length:C16(String:C10($Obj_table.originalName))>0)
 					$Obj_table.navigationIcon:="Main"+$Obj_table.originalName
 				: ($Obj_table[""]#Null:C1517)

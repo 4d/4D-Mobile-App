@@ -925,6 +925,7 @@
 	},
 	"templateFormClass": {
 		"classes": [
+			"ActionOpenURLFormTemplate",
 			"ActionsMenuFormTemplate",
 			"DetailFormTemplate",
 			"FormTemplate",
