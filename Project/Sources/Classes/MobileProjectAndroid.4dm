@@ -49,6 +49,7 @@ Class constructor($project : Object)
 	This:C1470.project.hasKotlinInputControls:=Feature.with("inputControlWithCodeAndroid")
 	This:C1470.project.hasCustomLoginForms:=Feature.with("customLoginForms")
 	This:C1470.project.hasBuildWithCmd:=Feature.with("buildWithCmd")
+	This:C1470.project.hasOpenFromTabBar:=Feature.with("openURLActionsInTabBar")
 	This:C1470.project.hasNoData:=This:C1470.project.noData
 	This:C1470.project.hasNoSDK:=This:C1470.project.noSDK
 	
