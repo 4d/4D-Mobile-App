@@ -1,5 +1,7 @@
 Class extends MobileProject
 
+property gradlew : cs:C1710.gradlew
+
 //=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Class constructor($project : Object)
 	
@@ -405,6 +407,11 @@ Function build()->$result : Object
 	This:C1470.postStep("projectBuild")
 	
 	$o:=This:C1470.gradlew.assembleDebug()
+	
+	This:C1470.signingReport:=This:C1470.gradlew.signingReport()
+	If (This:C1470.signingReport["SHA-256"]#Null:C1517)
+		This:C1470.addToManifest(This:C1470.project.project; "SIGN_SHA-256"; This:C1470.signingReport["SHA-256"])
+	End if 
 	
 	// Log outputs
 	This:C1470.logFolder.file("lastBuild.android.out.log").setText(String:C10($o.outputStream))

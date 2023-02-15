@@ -577,6 +577,19 @@ Function _createManifest($project : Object; $noWrite : Boolean) : Object
 	
 	return $manifest
 	
+Function addToManifest($project : Object; $key : Text; $value : Variant)
+	
+	var $file : 4D:C1709.File
+	$file:=This:C1470._getAppDataFolder($project).file("manifest.json")
+	If ($file.exists)
+		var $manifest : Object
+		$manifest:=JSON Parse:C1218($file.getText())  // read
+		$manifest[$key]:=$value  // update
+		$file.setText(JSON Stringify:C1217($manifest; *))  // write
+	Else 
+		ASSERT:C1129(False:C215; "you try to add something to the not created manifest")
+	End if 
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function _getAppDataFolder($project : Object) : 4D:C1709.Folder
 	
