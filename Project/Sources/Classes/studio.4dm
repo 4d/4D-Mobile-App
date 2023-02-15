@@ -576,43 +576,34 @@ Function _getJava()
 		
 		If (This:C1470.macOS)
 			
-			Case of 
-					
-					//______________________________________________________
-				: (This:C1470.versionCompare(This:C1470.version; "2022")>=0)  // Electric Eel | 2022.1.1
-					
-					$javaHome:=This:C1470.exe.folder("Contents/jbr/Contents/Home")
-					
-					//______________________________________________________
-				Else 
-					
-					$javaHome:=This:C1470.exe.folder("Contents/jre/jdk/Contents/Home")
-					
-					If (Not:C34($javaHome.exists))
-						
-						$javaHome:=This:C1470.exe.folder("Contents/jre/Contents/Home")
-						
-					End if 
-					
-					//______________________________________________________
-			End case 
+			If (This:C1470.exe.folder("Contents/jbr/Contents/Home").exists)  // since Electric Eel | 2022.1.1
+				
+				$javaHome:=This:C1470.exe.folder("Contents/jbr/Contents/Home")
+				
+			Else 
+				
+				$javaHome:=This:C1470.exe.folder("Contents/jre/jdk/Contents/Home")
+				
+			End if 
+			
+			If (Not:C34($javaHome.exists))
+				
+				$javaHome:=This:C1470.exe.folder("Contents/jre/Contents/Home")
+				
+			End if 
 			
 		Else 
 			
-			Case of 
-					
-					//______________________________________________________
-				: (This:C1470.versionCompare(This:C1470.version; "2022")>=0)  // Electric Eel | 2022.1.1
-					
-					$javaHome:=This:C1470.exe.parent.folder("jbr/bin")
-					
-					//______________________________________________________
-				Else 
-					
-					$javaHome:=This:C1470.exe.parent.parent.folder("jre")
-					
-					//______________________________________________________
-			End case 
+			If (This:C1470.exe.parent.parent.folder("jbr").exists)  // since Electric Eel | 2022.1.1
+				
+				$javaHome:=This:C1470.exe.parent.parent.folder("jbr")
+				
+			Else 
+				
+				$javaHome:=This:C1470.exe.parent.parent.folder("jre")
+				
+			End if 
+			
 		End if 
 		
 		If ($javaHome.exists)
@@ -625,20 +616,8 @@ Function _getJava()
 				
 			Else 
 				
-				Case of 
-						
-						//______________________________________________________
-					: (This:C1470.versionCompare(This:C1470.version; "2022")>=0)  // Electric Eel | 2022.1.1
-						
-						$javaCmd:=This:C1470.javaHome.file("java.exe")
-						
-						//______________________________________________________
-					Else 
-						
-						$javaCmd:=This:C1470.javaHome.file("bin/java.exe")
-						
-						//______________________________________________________
-				End case 
+				$javaCmd:=This:C1470.javaHome.file("bin/java.exe")
+				
 			End if 
 			
 			If ($javaCmd.exists)
@@ -814,4 +793,3 @@ Function uninstall()
 		ASSERT:C1129(False:C215; "If you have the time, do not hesitate...")
 		
 	End if 
-	
