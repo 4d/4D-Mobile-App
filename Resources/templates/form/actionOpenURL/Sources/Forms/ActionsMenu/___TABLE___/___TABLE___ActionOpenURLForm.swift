@@ -10,8 +10,8 @@ import QMobileUI
 
 class ___TABLE___ActionOpenURLForm: OpenURLForm {
 
-    override open func viewDidLoad() {
-        super.viewDidLoad()
+    override open func onLoad() {
+        super.onLoad()
     }
 
 }
