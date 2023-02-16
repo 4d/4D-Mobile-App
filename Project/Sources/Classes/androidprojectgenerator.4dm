@@ -241,7 +241,7 @@ Function copyResources($project : cs:C1710.project)->$result : Object
 	If (Bool:C1537($project.server.pushNotification))
 		// Copy google-services.json for push notifications
 		
-		$googleServices:=$projectFolder.file("google-services.json")
+		$googleServices:=This:C1470.path.mobileApps().folder($project.product.bundleIdentifier).file("google-services.json")
 		
 		If ($googleServices.exists)
 			
