@@ -68,6 +68,9 @@ Function _actionsInTabBarProcess()
 		ARRAY TO COLLECTION:C1563($Col_items; $tTxt_tables)
 		
 	End if 
+	If (This:C1470.input.project._folder.file("mainOrder.json").exists)
+		$Col_items:=JSON Parse:C1218(This:C1470.input.project._folder.file("mainOrder.json").getText())
+	End if 
 	
 	This:C1470.input.tags.navigationTables:=New collection:C1472
 	
@@ -84,6 +87,9 @@ Function _actionsInTabBarProcess()
 					
 					$item.originalName:=$item[""].name
 					$item.name:=formatString("table-name"; $item[""].name)
+					$item.label:=$item[""].label
+					$item.shortLabel:=$item[""].shortLabel
+					$item.icon:=$item[""].icon
 					
 					This:C1470.input.tags.navigationTables.push($item)
 					
@@ -96,19 +102,21 @@ Function _actionsInTabBarProcess()
 			: ((Value type:C1509($navigationItem)=Is object:K8:27) && (($navigationItem.actions#Null:C1517) || ($navigationItem.action#Null:C1517)))
 				
 				$item:=OB Copy:C1225($navigationItem)  // to not alter caller
-				$item[""]:=OB Copy:C1225($item)  // to simulate meta data behaviour or table (but must be clean)
+				If ($item.actions=Null:C1517)
+					$item.actions:=New collection:C1472($item.action)
+				End if 
+				$item.actions:=mobile_actions("getFilteredActions"; New object:C1471("project"; This:C1470.input.project; "names"; $item.actions)).actions  // replace by action data
+				If ($item.actions.length=1)
+					$item[""]:=OB Copy:C1225($item.actions[0])
+				Else 
+					$item[""]:=OB Copy:C1225($item)
+				End if 
 				
 				$item.originalName:=$item[""].name
 				$item.name:=formatString("table-name"; $item[""].name)
-				
-				If ($item.actions=Null:C1517)
-					$item.actions:=New collection:C1472($item.action)
-					
-/*$table.name:=$table.name || $table.action.name
-$table.label:=$table.label || $table.action.label
-$table.shortLabel:=$table.shortLabel || $table.action.shortLabel*/
-				End if 
-				$item.actions:=mobile_actions("getFilteredActions"; New object:C1471("project"; This:C1470.input.project; "names"; $item.actions)).actions  // replace by action data
+				$item.icon:=$item[""].icon
+				$item.label:=$item[""].label
+				$item.shortLabel:=$item[""].shortLabel
 				
 				This:C1470.input.tags.navigationTables.push($item)
 				
@@ -124,7 +132,7 @@ $table.shortLabel:=$table.shortLabel || $table.action.shortLabel*/
 	$actionsConsumed:=This:C1470.input.tags.navigationTables\
 		.map(Formula:C1597($1.value.actions))\
 		.filter(Formula:C1597($1.value#Null:C1517))\
-		/*.flat()*/.reduce(Formula:C1597($1.result.combine($1.value)); New collection:C1472)\
+		/*.flat()*/.reduce(Formula:C1597($1.accumulator.combine($1.value)); New collection:C1472)\
 		.map(Formula:C1597($1.value.name))
 	
 	$globalActions:=mobile_actions("form-nav"; New object:C1471(\
