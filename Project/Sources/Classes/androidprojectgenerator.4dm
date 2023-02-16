@@ -670,17 +670,20 @@ Function willRequireDataModelIcons
 			
 		End for each 
 		
-		// Check for global scope actions
-		For each ($action; $3)
-			
-			If ((String:C10($action.scope)="global") & (String:C10($action.icon)#""))
+		If ($3#Null:C1517)
+			// Check for global scope actions
+			For each ($action; $3)
 				
-				$0:=True:C214
-				return 
+				If ((String:C10($action.scope)="global") & (String:C10($action.icon)#""))
+					
+					$0:=True:C214
+					return 
+					
+				End if 
 				
-			End if 
+			End for each 
 			
-		End for each 
+		End if 
 		
 	End for each 
 	
