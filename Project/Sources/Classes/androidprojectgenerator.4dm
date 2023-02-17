@@ -474,16 +474,20 @@ Function copyIcons
 					
 					If ($shouldCreateMissingDMIcon)
 						
-						var $Obj_handleGlobalActionIcon : Object
-						
-						$Obj_handleGlobalActionIcon:=This:C1470.handleGlobalActionIcon($action)
-						
-						If (Not:C34($Obj_handleGlobalActionIcon.success))
+						If (Feature.with("openURLActionsInTabBar"))
 							
-							$0.success:=False:C215
-							$0.errors.combine($Obj_handleGlobalActionIcon.errors)
+							var $Obj_handleGlobalActionIcon : Object
 							
-							// Else : all ok
+							$Obj_handleGlobalActionIcon:=This:C1470.handleGlobalActionIcon($action)
+							
+							If (Not:C34($Obj_handleGlobalActionIcon.success))
+								
+								$0.success:=False:C215
+								$0.errors.combine($Obj_handleGlobalActionIcon.errors)
+								
+								// Else : all ok
+							End if 
+							
 						End if 
 						
 					End if 
@@ -670,7 +674,7 @@ Function willRequireDataModelIcons
 			
 		End for each 
 		
-		If ($3#Null:C1517)
+		If (($3#Null:C1517) & (Feature.with("openURLActionsInTabBar")))
 			// Check for global scope actions
 			For each ($action; $3)
 				
