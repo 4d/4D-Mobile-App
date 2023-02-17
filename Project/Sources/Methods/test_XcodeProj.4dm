@@ -1,4 +1,4 @@
-//%attributes = {"executedOnServer":true,"published4DMobile":{"scope":"table","table":"Table_1"}}
+//%attributes = {"executedOnServer":true}
 // ----------------------------------------------------
 // Project method : test_XcodeProj
 // Created #2017 by Eric Marchand
