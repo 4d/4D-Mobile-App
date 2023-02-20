@@ -106,11 +106,16 @@ Function _actionsInTabBarProcess()
 					$item.actions:=New collection:C1472($item.action)
 				End if 
 				$item.actions:=mobile_actions("getFilteredActions"; New object:C1471("project"; This:C1470.input.project; "names"; $item.actions)).actions  // replace by action data
-				If ($item.actions.length=1)
-					$item[""]:=OB Copy:C1225($item.actions[0])
-				Else 
-					$item[""]:=OB Copy:C1225($item)
-				End if 
+				Case of 
+					: ($item.actions.length=0)
+						// Action not found
+						Logger.warning("Action maybe defined by external mainOrder.json is no more in projet: "+JSON Stringify:C1217($item))
+						continue
+					: ($item.actions.length=1)
+						$item[""]:=OB Copy:C1225($item.actions[0])
+					Else 
+						$item[""]:=OB Copy:C1225($item)
+				End case 
 				
 				$item.originalName:=$item[""].name
 				$item.name:=formatString("table-name"; $item[""].name)
