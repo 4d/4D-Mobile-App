@@ -901,7 +901,7 @@ Function _generateCapabilities($out : Object; $appFolder : 4D:C1709.Folder)
 			
 			If ($certificateFile.exists)
 				
-				$certificateFile.copyTo(This:C1470._getAppDataFolder(); fk overwrite:K87:5)
+				$certificateFile.copyTo(This:C1470._getAppDataFolder($project); fk overwrite:K87:5)
 				
 			Else 
 				
