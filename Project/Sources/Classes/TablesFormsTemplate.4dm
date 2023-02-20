@@ -388,10 +388,10 @@ Function doRun()->$Obj_out : Object
 					$Obj_table.sectionFieldBindingType:=""
 					
 					// Get format of section field$Obj_tableList
-					If ($Obj_tableModel[String:C10($Obj_tableList.sectionField.id || $Obj_tableList.sectionField.name)]#Null:C1517)
+					If ($Obj_tableModel[String:C10($Obj_tableList.sectionField.fieldNumber || $Obj_tableList.sectionField.name)]#Null:C1517)
 						
 						$Obj_field:=New object:C1471  // maybe get other info from  $Obj_tableList.fields
-						$Obj_field:=ob_deepMerge($Obj_field; $Obj_tableModel[String:C10($Obj_tableList.sectionField.id || $Obj_tableList.sectionField.name)])
+						$Obj_field:=ob_deepMerge($Obj_field; $Obj_tableModel[String:C10($Obj_tableList.sectionField.fieldNumber || $Obj_tableList.sectionField.name)])
 						
 						$Obj_table.sectionFieldBindingType:=This:C1470.fieldBinding($Obj_field; $Obj_in.formatters).bindingType
 						
