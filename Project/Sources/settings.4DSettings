@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><preferences stamp="14">
+<?xml version="1.0" encoding="UTF-8"?><preferences stamp="15">
 	<com.4d>
 		<general execute_host_database_event="true"/>
 		<php ip_address="127.0.0.1"/>
@@ -29,8 +29,11 @@
 		<web>
 			<standalone_server>
 				<rest launch_at_startup="true"/>
-				<configuration port_number="8080" session_mode="1"/>
+				<configuration allow_ssl="false" port_number="8080" session_mode="1"/>
 				<webstudio enabled="true"/>
+				<webservices>
+					<server allow_requests="false"/>
+				</webservices>
 			</standalone_server>
 		</web>
 	</com.4d>

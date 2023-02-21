@@ -11,6 +11,25 @@ Case of
 		//______________________________________________________
 	: (True:C214)
 		
+		var $simctl : cs:C1710.simctl
+		$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
+		
+		$pluggedDevices:=$simctl.plugged()
+		
+		If ($pluggedDevices.length>0)
+			
+			$device:=$pluggedDevices[0]
+			
+			var $devmodectl : cs:C1710.devmodectl
+			$devmodectl:=cs:C1710.devmodectl.new()
+			
+			$pluggedDevices:=$devmodectl.list()
+			
+		End if 
+		
+		//______________________________________________________
+	: (True:C214)
+		
 		var $pluggedDevices : Collection
 		
 		var $cfgutil : cs:C1710.cfgutil
