@@ -1,7 +1,7 @@
 Class extends panel
 
-property certificateGroup : cs:C1710.group
-property configureFileGroup : cs:C1710.group
+//property certificateGroup : cs.group
+//property configureFileGroup : cs.group
 
 //=== === === === === === === === === === === === === === === === === === === === ===
 Class constructor
