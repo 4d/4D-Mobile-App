@@ -2,6 +2,7 @@
 <!--Translation file.
 This file is distributed under the same license as the product package.-->
 <xliff version="1.0" xmlns:d4="http://www.4d.com/d4-ns">
+
   <file datatype="x-STR#" original="undefined" source-language="en-US" target-language="en">
     <header>
       <prop-group name="Xliff-Editor.4dbase">
@@ -695,6 +696,16 @@ Make sure the device is connected to your computer with a USB cable.</target>
         <trans-unit id="5PQalvARDkTsLxPS67LTyg" resname="irrelevant">
           <source>Irrelevant</source>
           <target>Irrelevant</target>
+        </trans-unit>
+        <trans-unit id="alVxIkCrhW+MpzfTnqiiow" resname="iOS" translate="no">
+          <source>iOS</source>
+        </trans-unit>
+        <trans-unit id="+3h+YW7zM6asAhGXO2XeVQ" resname="android" translate="no">
+          <source>Android</source>
+        </trans-unit>
+        <trans-unit id="2GnJW7UsSwQnhqhum+e42Q" resname="file">
+          <source>File</source>
+          <target>File</target>
         </trans-unit>
       </group>
       <group resname="default values">

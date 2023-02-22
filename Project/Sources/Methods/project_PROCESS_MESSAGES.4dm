@@ -44,7 +44,8 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 		"actions"; "ACTIONS"; \
 		"actionParameters"; "ACTIONS_PARAMS"; \
 		"ribbon"; "RIBBON"; \
-		"footer"; "FOOTER")
+		"footer"; "FOOTER"; \
+		"features"; "FEATURES")
 	
 	$currentForm:=Current form name:C1298
 	$isProjectForm:=($currentForm="PROJECT")
@@ -170,7 +171,7 @@ Case of
 				: (String:C10($data.action)="forms")
 					
 					$data.action:=Choose:C955(Bool:C1537($data.onResize); "show"; $selector)
-					VIEWS_Handler($data)
+					views_Handler($data)
 					
 					//……………………………………………………………………………………………
 			End case 
@@ -235,7 +236,7 @@ Case of
 					//……………………………………………………………………………………………
 				: ($currentForm=$ƒ.views)
 					
-					VIEWS_Handler($data)
+					views_Handler($data)
 					
 					//……………………………………………………………………………………………
 				: ($currentForm=$ƒ.actions)
@@ -369,14 +370,14 @@ Case of
 		//______________________________________________________
 	: ($selector="projectAudit")  // Verify the project integrity
 		
-		PROJECT_Handler(New object:C1471("action"; $selector))
+		PROJECT_HANDLER(New object:C1471("action"; $selector))
 		
 		//mark:projectFixErrors
 		//______________________________________________________
 	: ($selector="projectFixErrors")  // Fix the project errors
 		
 		$data.action:=$selector
-		PROJECT_Handler($data)
+		PROJECT_HANDLER($data)
 		
 		//mark:-mainMenu
 		//______________________________________________________
@@ -615,7 +616,7 @@ Case of
 		Else 
 			
 			$data.action:=$selector
-			VIEWS_Handler($data)
+			views_Handler($data)
 			
 		End if 
 		
@@ -628,7 +629,7 @@ Case of
 			
 		Else 
 			
-			VIEWS_Handler($data)
+			views_Handler($data)
 			
 		End if 
 		
@@ -651,7 +652,7 @@ Case of
 				
 			End if 
 			
-			VIEWS_Handler($data)
+			views_Handler($data)
 			
 		End if 
 		
@@ -674,6 +675,20 @@ Case of
 			If (Length:C16($container)>0)
 				
 				UI.callChild($container; Formula:C1597(panel_REFRESH).source)
+				
+			End if 
+		End if 
+		
+		//______________________________________________________
+	: ($selector="resetGoogleCertificat")  // Reset android configuration file
+		
+		If ($isProjectForm)
+			
+			$container:=panel_Find($ƒ.features)
+			
+			If (Length:C16($container)>0)
+				
+				EXECUTE METHOD IN SUBFORM:C1085($container; Formula:C1597(panel.resetGoogleCertificat()))
 				
 			End if 
 		End if 

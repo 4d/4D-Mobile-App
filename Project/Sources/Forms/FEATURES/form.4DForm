@@ -73,9 +73,9 @@
 				},
 				"certificatePicker": {
 					"type": "subform",
-					"left": 566,
+					"left": 561,
 					"top": 34,
-					"width": 369,
+					"width": 374,
 					"height": 23,
 					"detailForm": "PATH PICKER",
 					"dataSource": "panel.certificate.picker",
@@ -89,11 +89,12 @@
 					"type": "text",
 					"text": ":xliff:certificate",
 					"top": 37,
-					"left": 489,
-					"width": 77,
+					"left": 464,
+					"width": 91,
 					"height": 16,
 					"visibility": "hidden",
-					"class": "label"
+					"class": "label",
+					"textAlign": "right"
 				},
 				"loginFormBorder": {
 					"type": "rectangle",
@@ -265,6 +266,31 @@
 						"onMouseLeave"
 					],
 					"visibility": "hidden"
+				},
+				"configureFilePicker": {
+					"type": "subform",
+					"left": 561,
+					"top": 63,
+					"width": 374,
+					"height": 23,
+					"detailForm": "PATH PICKER",
+					"dataSource": "panel.configureFile.picker",
+					"events": [
+						"onDataChange"
+					],
+					"focusable": false,
+					"visibility": "hidden"
+				},
+				"configureFileLabel": {
+					"type": "text",
+					"text": ":xliff:android",
+					"top": 66,
+					"left": 464,
+					"width": 91,
+					"height": 16,
+					"visibility": "hidden",
+					"class": "label",
+					"textAlign": "right"
 				}
 			},
 			"entryOrder": [
@@ -278,7 +304,8 @@
 				"03_deepLinking",
 				"03_urlScheme.input",
 				"04_associatedDomain.input",
-				"urlScheme.alert"
+				"urlScheme.alert",
+				"configureFilePicker"
 			]
 		}
 	],
@@ -286,28 +313,12 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 508,
+	"geometryStamp": 591,
 	"editor": {
-		"activeView": "customLoginForms",
+		"activeView": "Main",
 		"defaultView": "Main",
 		"views": {
-			"Main": {},
-			"customLoginForms": {
-				"objects": [
-					"01_login",
-					"authentication",
-					"authentication.label",
-					"02_pushNotification",
-					"certificatePicker",
-					"certificateLabel",
-					"loginFormBorder",
-					"05_type.popup.border",
-					"loginFormValue",
-					"loginFormLabel",
-					"loginFormPopup",
-					"loginFormReveal"
-				]
-			}
+			"Main": {}
 		}
 	}
 }

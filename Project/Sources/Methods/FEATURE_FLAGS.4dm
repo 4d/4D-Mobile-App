@@ -130,6 +130,7 @@ End if
 // Mark:-2️⃣0️⃣
 Feature.unstable("iosSDKfromAWS")  // Download iOS SDK from AWS
 Feature.unstable("androidDeepLinking")  // Enable deep linking for android project
+Feature.unstable("androidPushNotifications")  // Enable push notifications for android project
 
 // Mark:-🚧 MAIN
 Feature.main("listEditor")  // #130828 [MOBILE] Create and edit an input control from the project editor

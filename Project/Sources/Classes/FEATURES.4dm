@@ -1,5 +1,8 @@
 Class extends panel
 
+property certificateGroup : cs:C1710.group
+property configureFileGroup : cs:C1710.group
+
 //=== === === === === === === === === === === === === === === === === === === === ===
 Class constructor
 	
@@ -66,6 +69,23 @@ Function init()
 		"placeHolder"; "selectACertificate"; \
 		"callback"; Formula:C1597($o.certificateCallback($1))))
 	
+	If (Feature.with("androidPushNotifications"))
+		
+		$group:=This:C1470.group("configureFileGroup")
+		This:C1470.formObject("configureFileLabel").addToGroup($group)
+		This:C1470.widget("configureFile"; "configureFilePicker").addToGroup($group)
+		
+		This:C1470.configureFile.picker:=cs:C1710.pathPicker.new(String:C10(Form:C1466.server.configurationFile); New object:C1471(\
+			"fileTypes"; ".json"; \
+			"directory"; 8858; \
+			"copyPath"; False:C215; \
+			"openItem"; True:C214; \
+			"message"; "selectAConfigurationFile"; \
+			"placeHolder"; "selectAConfigurationFile"; \
+			"callback"; Formula:C1597($o.configureFileCallback($1))))
+		
+	End if 
+	
 	// * DEEP LINKING
 	This:C1470.button("deepLinking"; "03_deepLinking")
 	
@@ -129,7 +149,6 @@ Function handleEvents($e : Object)
 				Form:C1466.server.pushNotification:=Bool:C1537(Form:C1466.server.pushNotification)
 				PROJECT.save()
 				
-				This:C1470.certificateGroup.show(Form:C1466.server.pushNotification)
 				This:C1470.refresh()
 				
 				//==============================================
@@ -243,7 +262,27 @@ Function onLoad()
 	This:C1470.loginRequired.bestSize()
 	This:C1470.authentication.distributeLeftToRight()
 	This:C1470.pushNotification.bestSize()
-	This:C1470.certificateGroup.distributeLeftToRight()
+	
+	If (Feature.with("androidPushNotifications"))
+		
+		If (PROJECT.$ios)
+			
+			If (PROJECT.$android)
+				
+				This:C1470.certificateLabel.title:="iOS"
+				
+			End if 
+			
+		Else 
+			
+			var $o : cs:C1710.coordinates
+			$o:=This:C1470.certificateGroup.enclosingRect()
+			This:C1470.configureFileGroup.moveVertically(-($o.bottom-$o.top))
+			This:C1470.configureFileLabel.title:="file"
+			
+		End if 
+	End if 
+	
 	This:C1470.deepLinking.bestSize()
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
@@ -292,7 +331,17 @@ Function update()
 		
 	End if 
 	
-	This:C1470.certificateGroup.show(Form:C1466.server.pushNotification)
+	If (Feature.with("androidPushNotifications"))
+		
+		This:C1470.certificateGroup.show(Form:C1466.server.pushNotification & PROJECT.$ios)
+		This:C1470.configureFileGroup.show(Form:C1466.server.pushNotification & PROJECT.$android)
+		
+	Else 
+		
+		This:C1470.certificateGroup.show(Form:C1466.server.pushNotification)
+		
+	End if 
+	
 	This:C1470.deepLinkingGroup.show(Form:C1466.deepLinking.enabled)
 	
 	This:C1470.certificate.touch()
@@ -309,7 +358,11 @@ Function update()
 			//______________________________________________________
 		: (Bool:C1537(Form:C1466.server.pushNotification))
 			
-			androidLimitations(False:C215; "Push notifications is coming soon for Android")
+			If (Feature.disabled("androidPushNotifications"))
+				
+				androidLimitations(False:C215; "Push notifications is coming soon for Android")
+				
+			End if 
 			
 			//______________________________________________________
 		: (Feature.with("androidDeepLinking"))
@@ -343,9 +396,18 @@ Function update()
 			//______________________________________________________
 	End case 
 	
-	This:C1470.pushNotification.enable(Is macOS:C1572 & PROJECT.$ios)
-	This:C1470.certificateGroup.enable(Is macOS:C1572 & PROJECT.$ios)
-	This:C1470.certificate.picker.browse:=(Is macOS:C1572 & PROJECT.$ios)
+	If (Feature.with("androidPushNotifications"))
+		
+		This:C1470.certificateGroup.enable(Is macOS:C1572)
+		This:C1470.certificateGroup.picker.browse:=Is macOS:C1572
+		
+	Else 
+		
+		This:C1470.pushNotification.enable(Is macOS:C1572 & PROJECT.$ios)
+		This:C1470.certificateGroup.enable(Is macOS:C1572 & PROJECT.$ios)
+		This:C1470.certificateGroup.picker.browse:=(Is macOS:C1572 & PROJECT.$ios)
+		
+	End if 
 	
 	If (Not:C34(Feature.with("androidDeepLinking")))
 		
@@ -514,3 +576,36 @@ Function certificateCallback($file : 4D:C1709.File)
 		PROJECT.save()
 		
 	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+	// Callback from pathPicker widget
+Function configureFileCallback($file : 4D:C1709.File)
+	
+	If ($file#Null:C1517)\
+		 && ($file.exists)\
+		 && ($file.path#String:C10(PROJECT.server.configurationFile))
+		
+		If ($file.name="google-services")
+			
+			$file:=$file.copyTo(PROJECT._folder; fk overwrite:K87:5)
+			PROJECT.server.configurationFile:=cs:C1710.doc.new($file).relativePath
+			PROJECT.save()
+			
+		Else 
+			
+			POST_MESSAGE(New object:C1471(\
+				"target"; Current form window:C827; \
+				"action"; "show"; \
+				"type"; "alert"; \
+				"title"; "wrongFileName"; \
+				"additional"; "theFileNameMustBeExactlyGoogleServices"; \
+				"okFormula"; Formula:C1597(CALL FORM:C1391(Current form window:C827; Formula:C1597(editor_CALLBACK).source; "resetGoogleCertificat"))))
+			
+		End if 
+	End if 
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function resetGoogleCertificat()
+	
+	This:C1470.configureFile.picker.path:=String:C10(Form:C1466.server.configurationFile)
+	This:C1470.configureFile.picker:=This:C1470.configureFile.picker

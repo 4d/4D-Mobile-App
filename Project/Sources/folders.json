@@ -798,9 +798,6 @@
 		]
 	},
 	"panel": {
-		"groups": [
-			"widgets"
-		],
 		"methods": [
 			"_o_panel_Common",
 			"_o_panel_Form_common",
