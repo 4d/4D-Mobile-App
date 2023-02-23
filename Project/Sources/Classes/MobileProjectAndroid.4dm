@@ -409,11 +409,13 @@ Function build()->$result : Object
 	
 	$o:=This:C1470.gradlew.assembleDebug()
 	
-	This:C1470.signingReport:=This:C1470.gradlew.signingReport()
-	If (This:C1470.signingReport["SHA-256"]#Null:C1517)
-		This:C1470.addToManifest(This:C1470.project.project; "SIGN_SHA-256"; This:C1470.signingReport["SHA-256"])
+	If (Feature.with("androidUniversalLinking") && (Bool:C1537(This:C1470.project.project.deepLinking.enabled)))
+		This:C1470.signingReport:=This:C1470.gradlew.signingReport()
+		If (This:C1470.signingReport["SHA-256"]#Null:C1517)
+			This:C1470.addToManifest(This:C1470.project.project; "signingReport"; New object:C1471("SHA-256"; This:C1470.signingReport["SHA-256"]))
+			// This.addToManifest(This.project.project; "signingReport"; This.signingReport) // to add all if needed
+		End if 
 	End if 
-	
 	// Log outputs
 	This:C1470.logFolder.file("lastBuild.android.out.log").setText(String:C10($o.outputStream))
 	This:C1470.logFolder.file("lastBuild.android.err.log").setText(String:C10($o.errorStream))
