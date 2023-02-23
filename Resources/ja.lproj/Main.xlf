@@ -697,6 +697,16 @@ Make sure the device is connected to your computer with a USB cable.</source>
           <source>Irrelevant</source>
           <target state="new">Irrelevant</target>
         </trans-unit>
+        <trans-unit id="alVxIkCrhW+MpzfTnqiiow" resname="iOS" translate="no">
+          <source>iOS</source>
+        </trans-unit>
+        <trans-unit id="+3h+YW7zM6asAhGXO2XeVQ" resname="android" translate="no">
+          <source>Android</source>
+        </trans-unit>
+        <trans-unit id="2GnJW7UsSwQnhqhum+e42Q" resname="file">
+          <source>File</source>
+          <target state="new">File</target>
+        </trans-unit>
       </group>
       <group resname="default values">
         <trans-unit id="uvcuS+6kvyLtejaBCimjbw" resname="newApplication">

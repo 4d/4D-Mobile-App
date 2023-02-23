@@ -9,7 +9,8 @@ Class constructor
 	
 	Super:C1705()
 	
-	This:C1470.home:=cs:C1710.path.new().userHome()
+	This:C1470.home:=Folder:C1567(fk home folder:K87:24)
+	This:C1470.history:=New collection:C1472
 	
 	This:C1470.reset()
 	
@@ -36,6 +37,8 @@ Function reset() : cs:C1710.lep
 	
 	This:C1470.resultInErrorStream:=False:C215  // Allows, if True, to reroutes stderr message to stdout
 	This:C1470.debug:=Not:C34(Is compiled mode:C492)
+	
+	This:C1470.history:=New collection:C1472
 	
 	This:C1470.setCharSet()
 	This:C1470.setOutputType()
@@ -194,7 +197,7 @@ Function launchAsync($command; $arguments : Variant) : cs:C1710.lep
 Function launch($command; $arguments : Variant) : cs:C1710.lep
 	
 	var $inputStream; $outputStream : Blob
-	var $errorStream; $response; $t : Text
+	var $errorStream; $history; $response; $variable : Text
 	var $len; $pid; $pos : Integer
 	
 	This:C1470.outputStream:=Null:C1517
@@ -250,9 +253,9 @@ Function launch($command; $arguments : Variant) : cs:C1710.lep
 		End case 
 	End if 
 	
-	For each ($t; This:C1470.environmentVariables)
+	For each ($variable; This:C1470.environmentVariables)
 		
-		SET ENVIRONMENT VARIABLE:C812($t; String:C10(This:C1470.environmentVariables[$t]))
+		SET ENVIRONMENT VARIABLE:C812($variable; String:C10(This:C1470.environmentVariables[$variable]))
 		
 	End for each 
 	
@@ -290,6 +293,8 @@ Function launch($command; $arguments : Variant) : cs:C1710.lep
 			//……………………………………………………………………
 	End case 
 	
+	$history:="% "+$command+"\n"
+	
 	LAUNCH EXTERNAL PROCESS:C811(This:C1470.command; $inputStream; $outputStream; $errorStream; $pid)
 	
 	This:C1470.success:=Bool:C1537(OK)
@@ -301,16 +306,22 @@ Function launch($command; $arguments : Variant) : cs:C1710.lep
 		
 	Else 
 		
-		If (BLOB size:C605($outputStream)>0)  // Else OK is reset to 0
+		If (BLOB size:C605($outputStream)>0)  // ⚠️ Else Convert to text sets OK to 0
 			
 			$response:=Convert to text:C1012($outputStream; This:C1470.charSet)
+			
+		Else 
+			
+			CLEAR VARIABLE:C89($response)
 			
 		End if 
 	End if 
 	
 	$response:=This:C1470._cleanupStream($response)
 	
-	If (This:C1470.success)  //& (Length($response)>0))  // (Length($errorStream)=0)
+	If (This:C1470.success)
+		
+		$history+=" | "+Replace string:C233($response; "\n"; "\n | ")
 		
 		If (Not:C34(This:C1470.resultInErrorStream))
 			
@@ -398,11 +409,13 @@ Function launch($command; $arguments : Variant) : cs:C1710.lep
 		
 	End if 
 	
-	If (This:C1470.debug)
-		
-		This:C1470._log()
-		
-	End if 
+	This:C1470.history.push($history)
+	
+	//If (This.debug)
+	
+	This:C1470._log()
+	
+	//End if 
 	
 	return This:C1470
 	
@@ -450,7 +463,7 @@ Function hideConsole() : cs:C1710.lep
 	// Returns an object containing all the environment variables
 Function getEnvironnementVariables() : Object
 	
-	var $t : Text
+	var $variable : Text
 	var $variables : Object
 	var $c : Collection
 	
@@ -460,9 +473,9 @@ Function getEnvironnementVariables() : Object
 		
 		$variables:=New object:C1471
 		
-		For each ($t; Split string:C1554(This:C1470.outputStream; "\n"; sk ignore empty strings:K86:1))
+		For each ($variable; Split string:C1554(This:C1470.outputStream; "\n"; sk ignore empty strings:K86:1))
 			
-			$c:=Split string:C1554($t; "=")
+			$c:=Split string:C1554($variable; "=")
 			
 			If ($c.length=2)
 				
@@ -472,11 +485,11 @@ Function getEnvironnementVariables() : Object
 		End for each 
 		
 		// Add the currents variables
-		For each ($t; This:C1470.environmentVariables)
+		For each ($variable; This:C1470.environmentVariables)
 			
-			If ($variables[$t]=Null:C1517)
+			If ($variables[$variable]=Null:C1517)
 				
-				$variables[$t]:=This:C1470.environmentVariables[$t]
+				$variables[$variable]:=This:C1470.environmentVariables[$variable]
 				
 			End if 
 		End for each 

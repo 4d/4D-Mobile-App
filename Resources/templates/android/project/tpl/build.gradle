@@ -11,6 +11,9 @@ buildscript {
         {{#isGoogleMapsPlatformUsed}}
         classpath Tools.secrets_gradle_plugin
         {{/isGoogleMapsPlatformUsed}}
+        {{#hasPushNotifications}}
+        classpath Tools.google_services
+        {{/hasPushNotifications}}
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -60,7 +63,7 @@ subprojects {
                     minSdkVersion Config.minSdk
                     targetSdkVersion Config.targetSdk
                     versionCode 1
-                    versionName "1.0"
+                    versionName "{{app_version}}"
                     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
                     vectorDrawables.useSupportLibrary = true
 

@@ -1645,6 +1645,18 @@ et se terminer par "://".</target>
           <source>Login Form</source>
           <target>Formulaire de connexion</target>
         </trans-unit>
+        <trans-unit id="MOWM1SdpasurMQ7t4LxLmw" resname="selectAConfigurationFile">
+          <source>Select a configuration file</source>
+          <target>Choisir un fichier de configuration</target>
+        </trans-unit>
+        <trans-unit id="SP6L8Pgqc/UrYpDqU1sRgw" resname="wrongFileName">
+          <source>Wrong file name</source>
+          <target>Mauvais nom de fichier</target>
+        </trans-unit>
+        <trans-unit id="kcwNpKNVwqNAprgKtYXt2Q" resname="theFileNameMustBeExactlyGoogleServices">
+          <source>The file name must be exactly: "google-services"</source>
+          <target>Le nom du fichier doit être exactement : "google-services"</target>
+        </trans-unit>
       </group>
     </body>
   </file>

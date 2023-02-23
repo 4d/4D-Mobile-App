@@ -1,7 +1,7 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
 // -> silent  =   No interface for progression
 // -> force   =   Force the download even if the file is up to date (see verification code)
-#DECLARE($server : Text; $target : Text; $silent : Boolean; $caller : Integer; $force : Boolean)
+#DECLARE($server : Text; $target : Text; $silent : Boolean; $caller : Integer; $force : Boolean)->$request : 4D:C1709.HTTPRequest
 
 If (False:C215)
 	C_TEXT:C284(downloadSDK; $1)
@@ -16,7 +16,6 @@ var $run; $withUI : Boolean
 var $buildNumber : Integer
 var $manifest; $o; $param : Object
 var $fileManifest; $preferences : 4D:C1709.File
-var $request : 4D:C1709.HTTPRequest
 var $sdk : 4D:C1709.ZipFile
 
 ASSERT:C1129(Count parameters:C259>=2)
@@ -33,6 +32,11 @@ $withUI:=True:C214 & Not:C34($silent)
 $applicationVersion:=Application version:C493($buildNumber; *)
 
 Case of 
+		
+		//______________________________________________________
+	: ($buildNumber=0)
+		
+		Logger.alert("It is not possible to download the SDK "+$target+" without build number.")
 		
 		//______________________________________________________
 	: ($target="android")
@@ -212,7 +216,8 @@ If ($run | $force)
 			
 		End while 
 		
-		$run:=($manifest=Null:C1517) || (String:C10($manifest.ETag)#String:C10($request.response.headers.ETag))  // True if newer version
+		// MARK:ACI0103670
+		$run:=($manifest=Null:C1517) || (String:C10($manifest.ETag || $manifest.etag)#String:C10($request.response.headers.etag))  // True if newer version
 		
 		If ($run | $force)
 			

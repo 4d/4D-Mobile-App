@@ -72,10 +72,6 @@ Function set worker($worker)
 		
 		This:C1470._worker:=$worker
 		
-	Else 
-		
-		BEEP:C151
-		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === 

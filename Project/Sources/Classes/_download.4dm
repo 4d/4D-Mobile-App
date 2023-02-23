@@ -26,19 +26,17 @@ Function get withUI() : Boolean
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function onHeaders($request : 4D:C1709.HTTPRequest; $e : Object)
 	
-	//
+	If (Num:C11(This:C1470.data.length)=0)
+		
+		This:C1470.data.length:=Num:C11($request.response.headers["Content-Length"] || $request.response.headers["content-length"])
+		
+	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function onData($request : 4D:C1709.HTTPRequest; $e : Object)
 	
 	If (This:C1470.withUI)\
 		 && (Not:C34(Bool:C1537($request.terminated)))  // Reception is in progress
-		
-		If (Num:C11(This:C1470.data.length)=0)
-			
-			This:C1470.data.length:=Num:C11($request.response.headers["Content-Length"])
-			
-		End if 
 		
 		This:C1470.received+=Num:C11($e.data.size)
 		
@@ -64,6 +62,12 @@ Function onError($request : 4D:C1709.HTTPRequest; $e : Object)
 	
 	// TODO:Error management
 	
+	If (This:C1470.withUI)
+		
+		This:C1470.progress.close()
+		
+	End if 
+	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function onTerminate($request : 4D:C1709.HTTPRequest; $e : Object)
 	
@@ -76,9 +80,11 @@ Function onTerminate($request : 4D:C1709.HTTPRequest; $e : Object)
 		
 		Logger.error($request.url+": "+$request.errors.extract("message").join("\r"))
 		
+		// TODO:Error management
+		
 		If (This:C1470.withUI)
 			
-			// TODO:Error management
+			This:C1470.progress.close()
 			
 		End if 
 	End if 
@@ -150,6 +156,8 @@ Function SDK($request : 4D:C1709.HTTPRequest; $e : Object)
 		This:C1470.data.manifest.setText(JSON Stringify:C1217($manifest; *))
 		
 		Logger.info("The 4D Mobile "+String:C10($manifest["x-amz-meta-platform"])+" SDK was updated to version "+$manifest.version)
+		
+		This:C1470.data.sdk.delete()
 		
 	Else 
 		

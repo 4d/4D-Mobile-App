@@ -51,6 +51,7 @@ Class constructor($project : Object)
 	This:C1470.project.hasKotlinInputControls:=Feature.with("inputControlWithCodeAndroid")
 	This:C1470.project.hasCustomLoginForms:=Feature.with("customLoginForms")
 	This:C1470.project.hasBuildWithCmd:=Feature.with("buildWithCmd")
+	This:C1470.project.hasOpenFromTabBar:=Feature.with("openURLActionsInTabBar")
 	This:C1470.project.hasNoData:=This:C1470.project.noData
 	This:C1470.project.hasNoSDK:=This:C1470.project.noSDK
 	
@@ -671,3 +672,7 @@ a Java package name, such as com.example.myapp.
 Function _o_themeImageFile()->$file : 4D:C1709.File
 	$file:=This:C1470.input.project._folder.file("android/main/ic_launcher-playstore.png")
 	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Override: no team id for android
+Function _getAppId($project : Object) : Text
+	return String:C10($project.product.bundleIdentifier)

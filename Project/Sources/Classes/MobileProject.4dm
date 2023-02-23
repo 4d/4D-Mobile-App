@@ -56,7 +56,7 @@ Function main()->$result : Object
 						$result.run:=This:C1470.run()
 						ob_error_combine($result; $result.run)
 						
-						If ($result.run.success)
+						If (Bool:C1537($result.run.success))
 							
 							$result.success:=True:C214
 							This:C1470.notification()
@@ -237,6 +237,7 @@ Function notification()
 			"build"; This:C1470.input.build; \
 			"run"; This:C1470.input.run; \
 			"archive"; This:C1470.input.archive; \
+			"appFolder"; This:C1470.input.appFolder; \
 			"project"; This:C1470.input.project)
 		
 		CALL FORM:C1391(This:C1470.input.caller; "editor_CALLBACK"; "build"; New object:C1471(\

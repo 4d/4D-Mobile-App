@@ -67,6 +67,14 @@ Libraries/lib4d-arm64.dylib
 DEV/
 
 #--------------------------------
+# Don't ignore .github workflow
+#--------------------------------
+
+!.github/
+!.github/**/.*
+.github/.DS_Store
+
+#--------------------------------
 # Added by user
 #--------------------------------
 Project/Sources/DatabaseMethods/onMobileAppAction.4dm

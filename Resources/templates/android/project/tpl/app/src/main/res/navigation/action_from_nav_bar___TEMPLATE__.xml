@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Created by {{author}} on {{date_day}}/{{date_month}}/{{date_year}}.
+  ~ {{company_header}}
+  ~ Copyright (c) {{date_year}} {{author}}. All rights reserved.
+  -->
+
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/{{actionName_lowercase}}"
+    app:startDestination="@id/view">
+
+    <fragment
+        android:id="@+id/view"
+        android:name="com.qmobile.qmobileui.action.webview.ActionWebViewFragment"
+        android:label="{{action_nav_label}}"
+        tools:layout="@layout/fragment_action_webview">
+
+        <argument
+            android:name="path"
+            android:defaultValue="{{action_path}}"
+            app:argType="string" />
+
+        <argument
+            android:name="actionName"
+            android:defaultValue="{{actionName}}"
+            app:argType="string" />
+
+        <argument
+            android:name="actionLabel"
+            android:defaultValue="{{action_label}}"
+            app:argType="string" />
+
+        <argument
+            android:name="actionShortLabel"
+            android:defaultValue="{{action_shortLabel}}"
+            app:argType="string" />
+
+        <argument
+            android:name="isGlobalActionFromNavBar"
+            android:defaultValue="true"
+            app:argType="boolean" />
+
+    </fragment>
+
+</navigation>

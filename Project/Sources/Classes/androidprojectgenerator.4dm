@@ -174,7 +174,7 @@ Function copyEmbeddedDataLib
 Function copyResources($project : cs:C1710.project)->$result : Object
 	
 	var $projectFolder; $androidAssets; $currentFolder : 4D:C1709.Folder
-	var $currentFile; $copyDest : 4D:C1709.File
+	var $currentFile; $copyDest; $googleServices : 4D:C1709.File
 	
 	$result:=New object:C1471(\
 		"success"; False:C215; \
@@ -237,6 +237,32 @@ Function copyResources($project : cs:C1710.project)->$result : Object
 		// Missing Android folder
 		$result.errors.push("Missing source file for copy: "+$androidAssets.path)
 	End if 
+	
+	If (Bool:C1537($project.server.pushNotification))
+		// Copy google-services.json for push notifications
+		
+		$googleServices:=This:C1470.path.mobileApps().folder($project.product.bundleIdentifier).file("google-services.json")
+		
+		If ($googleServices.exists)
+			
+			$copyDest:=$googleServices.copyTo(Folder:C1567(This:C1470.projectPath+"app"); fk overwrite:K87:5)
+			
+			If (Not:C34($copyDest.exists))
+				// Copy failed
+				$result.success:=False:C215
+				$result.errors.push("Could not copy file to destination: "+$copyDest.path)
+				
+				//Else : all ok
+			End if 
+			
+		Else 
+			// Missing google-services.json file
+			$result.errors.push("Missing google-services.json file : "+$googleServices.path)
+			
+		End if 
+		
+	End if 
+	
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
@@ -358,28 +384,43 @@ Function copyIcons
 		
 		var $shouldCreateMissingDMIcon : Boolean
 		
-		$shouldCreateMissingDMIcon:=This:C1470.willRequireDataModelIcons($2; $1)
+		$shouldCreateMissingDMIcon:=This:C1470.willRequireDataModelIcons($2; $1; $3)
 		
 		var $dataModel; $field; $subField : Object
 		
 		For each ($dataModel; OB Entries:C1720($1))
 			
-			If ($shouldCreateMissingDMIcon)
+			var $navKey : Variant
+			
+			For each ($navKey; $2)
 				
-				// Check for table image
-				var $Obj_handleDataModelIcon : Object
-				
-				$Obj_handleDataModelIcon:=This:C1470.handleDataModelIcon($dataModel)
-				
-				If (Not:C34($Obj_handleDataModelIcon.success))
+				If (Value type:C1509($navKey)=Is text:K8:3)
 					
-					$0.success:=False:C215
-					$0.errors.combine($Obj_handleDataModelIcon.errors)
+					// Only do the following if is a navigation item
+					If ($navKey=$dataModel.key)
+						
+						If ($shouldCreateMissingDMIcon)
+							
+							// Check for table image
+							var $Obj_handleDataModelIcon : Object
+							
+							$Obj_handleDataModelIcon:=This:C1470.handleDataModelIcon($dataModel)
+							
+							If (Not:C34($Obj_handleDataModelIcon.success))
+								
+								$0.success:=False:C215
+								$0.errors.combine($Obj_handleDataModelIcon.errors)
+								
+								// Else : all ok
+							End if 
+							
+						End if 
+						
+					End if 
 					
-					// Else : all ok
 				End if 
 				
-			End if 
+			End for each 
 			
 			var $shouldCreateMissingFieldIcon : Boolean
 			
@@ -429,30 +470,56 @@ Function copyIcons
 			
 			For each ($action; $3)
 				
-				// Check for action icon
-				var $Obj_handleActionIcon : Object
-				
-				$Obj_handleActionIcon:=This:C1470.handleActionIcon($action)
-				
-				If (Not:C34($Obj_handleActionIcon.success))
+				If ($action.scope="global")
 					
-					$0.success:=False:C215
-					$0.errors.combine($Obj_handleActionIcon.errors)
+					If ($shouldCreateMissingDMIcon)
+						
+						If (Feature.with("openURLActionsInTabBar"))
+							
+							var $Obj_handleGlobalActionIcon : Object
+							
+							$Obj_handleGlobalActionIcon:=This:C1470.handleGlobalActionIcon($action)
+							
+							If (Not:C34($Obj_handleGlobalActionIcon.success))
+								
+								$0.success:=False:C215
+								$0.errors.combine($Obj_handleGlobalActionIcon.errors)
+								
+								// Else : all ok
+							End if 
+							
+						End if 
+						
+					End if 
 					
-					// Else : all ok
-				End if 
-				
-				// Check for input control image files
-				var $Obj_handleInputControlImages : Object
-				
-				$Obj_handleInputControlImages:=This:C1470.handleInputControlImages($action)
-				
-				If (Not:C34($Obj_handleInputControlImages.success))
+				Else 
 					
-					$0.success:=False:C215
-					$0.errors.combine($Obj_handleInputControlImages.errors)
+					// Check for action icon
+					var $Obj_handleActionIcon : Object
 					
-					// Else : all ok
+					$Obj_handleActionIcon:=This:C1470.handleActionIcon($action)
+					
+					If (Not:C34($Obj_handleActionIcon.success))
+						
+						$0.success:=False:C215
+						$0.errors.combine($Obj_handleActionIcon.errors)
+						
+						// Else : all ok
+					End if 
+					
+					// Check for input control image files
+					var $Obj_handleInputControlImages : Object
+					
+					$Obj_handleInputControlImages:=This:C1470.handleInputControlImages($action)
+					
+					If (Not:C34($Obj_handleInputControlImages.success))
+						
+						$0.success:=False:C215
+						$0.errors.combine($Obj_handleInputControlImages.errors)
+						
+						// Else : all ok
+					End if 
+					
 				End if 
 				
 			End for each 
@@ -560,9 +627,10 @@ Function willRequireDataModelIcons
 	var $0 : Boolean
 	var $1 : Collection  // navigation table order
 	var $2 : Object  // dataModel object
+	var $3 : Collection  // Actions collection
 	
-	var $tableId : Text
-	var $dataModel; $elem : Object
+	var $tableId : Variant
+	var $dataModel; $elem; $action : Object
 	
 	$0:=False:C215
 	
@@ -573,34 +641,53 @@ Function willRequireDataModelIcons
 		
 		For each ($dataModel; OB Entries:C1720($2)) Until ($dmFound)
 			
-			If ($dataModel.key=$tableId)
+			If (Value type:C1509($tableId)=Is text:K8:3)
 				
-				$dmFound:=True:C214
-				
-				var $mainElemFound : Boolean
-				
-				$mainElemFound:=False:C215
-				
-				For each ($elem; OB Entries:C1720($dataModel.value)) Until ($mainElemFound)
+				If ($dataModel.key=$tableId)
 					
-					If ($elem.key="")
+					$dmFound:=True:C214
+					
+					var $mainElemFound : Boolean
+					
+					$mainElemFound:=False:C215
+					
+					For each ($elem; OB Entries:C1720($dataModel.value)) Until ($mainElemFound)
 						
-						$mainElemFound:=True:C214
-						
-						If (String:C10($elem.value.icon)#"")
+						If ($elem.key="")
 							
-							$0:=True:C214
-							return 
+							$mainElemFound:=True:C214
+							
+							If (String:C10($elem.value.icon)#"")
+								
+								$0:=True:C214
+								return 
+								
+							End if 
 							
 						End if 
 						
-					End if 
+					End for each 
 					
-				End for each 
+				End if 
 				
 			End if 
 			
 		End for each 
+		
+		If (($3#Null:C1517) & (Feature.with("openURLActionsInTabBar")))
+			// Check for global scope actions
+			For each ($action; $3)
+				
+				If ((String:C10($action.scope)="global") & (String:C10($action.icon)#""))
+					
+					$0:=True:C214
+					return 
+					
+				End if 
+				
+			End for each 
+			
+		End if 
 		
 	End for each 
 	
@@ -681,6 +768,83 @@ Function handleDataModelIcon
 		// Else : already handled
 	End if 
 	
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//
+Function handleGlobalActionIcon
+	var $0 : Object
+	var $1 : Object  // action object
+	var $currentFile : 4D:C1709.File
+	
+	$0:=New object:C1471(\
+		"success"; True:C214; \
+		"errors"; New collection:C1472)
+	
+	// Get defined icon
+	If ($1.icon#Null:C1517)
+		
+		If (Value type:C1509($1.icon)=Is text:K8:3)
+			
+			var $iconPath : Text
+			
+			$iconPath:=$1.icon
+			
+			If ($iconPath#"")
+				
+				$currentFile:=This:C1470.path.icon($iconPath)
+				
+				// Else : icon empty
+			End if 
+			
+			// Else : $action.icon is not Text
+		End if 
+		
+		// Else : no icon
+	End if 
+	
+	
+	// Create icon if missing
+	If (Not:C34(Bool:C1537($currentFile.exists)))
+		
+		var $Obj_createIcon : Object
+		
+		$Obj_createIcon:=This:C1470.createIconAssets($1)
+		
+		If ($Obj_createIcon.success)
+			
+			$currentFile:=$Obj_createIcon.icon
+			
+		Else 
+			
+			$0.success:=False:C215
+			$0.errors.combine($Obj_createIcon.errors)
+			
+		End if 
+		
+		// Else : already handled
+	End if 
+	
+	
+	// Copy icon
+	If (Bool:C1537($currentFile.exists))
+		
+		var $Obj_copy : Object
+		var $newName : Text
+		
+		$newName:=Replace string:C233($currentFile.name; "qmobile_android_missing_icon"; "nav_icon_"+$1.name)
+		
+		$Obj_copy:=This:C1470.copyIcon($currentFile; $newName)
+		
+		If (Not:C34($Obj_copy.success))
+			
+			$0.success:=False:C215
+			$0.errors.combine($Obj_copy.errors)
+			
+			// Else : all ok
+		End if 
+		
+		// Else : already handled
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//

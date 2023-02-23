@@ -317,7 +317,7 @@ Function onLoad()
 	This:C1470.selectors.distributeLeftToRight()
 	
 	// Place the download button
-	This:C1470.resources.title:=UI.str.localize("downloadMoreResources"; Lowercase:C14(Get localized string:C991("formatters")))
+	This:C1470.resources.title:=UI.str.localize("downloadMoreResources"; Get localized string:C991("formatters"))
 	This:C1470.resources.bestSize(Align right:K42:4)
 	
 	// Initialize the Fields/Relations tab

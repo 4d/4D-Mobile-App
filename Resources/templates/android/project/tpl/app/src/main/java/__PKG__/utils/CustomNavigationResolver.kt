@@ -87,7 +87,12 @@ class CustomNavigationResolver : GenericNavigationResolver {
         if (viewDataBinding is RecyclerviewItem{{relation_source_camelCase}}Binding && relationName == "{{relation_name}}") {
             {{#isAlias}}
             (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.{{pathToManyWithoutFirst}}?.takeIf { it.isNotEmpty() }?.let {
+                {{#isGoogleMapsPlatformUsedForTable}}
+                val action = MapsFragmentDirections.actionListToListRelation(
+                {{/isGoogleMapsPlatformUsedForTable}}
+                {{^isGoogleMapsPlatformUsedForTable}}
                 val action = EntityListFragmentDirections.actionListToListRelation(
+                {{/isGoogleMapsPlatformUsedForTable}}
                     relationName = relationName,
                     parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: "",
                     parentTableName = "{{relation_source}}",
@@ -97,7 +102,12 @@ class CustomNavigationResolver : GenericNavigationResolver {
             {{/isAlias}}
             {{^isAlias}}
             (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.takeIf { it.isNotEmpty() }?.let {
+                {{#isGoogleMapsPlatformUsedForTable}}
+                val action = MapsFragmentDirections.actionListToListRelation(
+                {{/isGoogleMapsPlatformUsedForTable}}
+                {{^isGoogleMapsPlatformUsedForTable}}
                 val action = EntityListFragmentDirections.actionListToListRelation(
+                {{/isGoogleMapsPlatformUsedForTable}}
                     relationName = relationName,
                     parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: "",
                     parentTableName = "{{relation_source}}",
@@ -157,10 +167,18 @@ class CustomNavigationResolver : GenericNavigationResolver {
             {{^isAlias}}
             (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.__KEY?.let { relationId ->
             {{/isAlias}}
+                {{#isGoogleMapsPlatformUsedForTable}}
+                val action = MapsFragmentDirections.actionListToDetailRelation(
+                {{/isGoogleMapsPlatformUsedForTable}}
+                {{^isGoogleMapsPlatformUsedForTable}}
                 val action = EntityListFragmentDirections.actionListToDetailRelation(
+                {{/isGoogleMapsPlatformUsedForTable}}
                     tableName = "{{relation_target}}",
                     itemId = relationId,
-                    navbarTitle = "{{navbarTitle}}"
+                    navbarTitle = "{{navbarTitle}}",
+                    relationName = "{{relation_name}}",
+                    parentTableName = "{{relation_source_camelCase}}",
+                    parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: ""
                 )
                 viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnNavigationClickListener(viewDataBinding, action)
             } ?: kotlin.run {
@@ -179,7 +197,10 @@ class CustomNavigationResolver : GenericNavigationResolver {
                 val action = EntityViewPagerFragmentDirections.actionDetailToDetailRelation(
                     tableName = "{{relation_target}}",
                     itemId = relationId,
-                    navbarTitle = "{{navbarTitle}}"
+                    navbarTitle = "{{navbarTitle}}",
+                    relationName = "{{relation_name}}",
+                    parentTableName = "{{relation_source_camelCase}}",
+                    parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: ""
                 )
                 viewDataBinding.{{tableNameLowercase}}FieldValue{{associatedViewId}}.setOnNavigationClickListener(viewDataBinding, action)
             } ?: kotlin.run {
@@ -299,10 +320,18 @@ class CustomNavigationResolver : GenericNavigationResolver {
         itemId: String,
         navbarTitle: String
     ) {
+        {{#isGoogleMapsPlatformUsedForTable}}
+        val action = MapsFragmentDirections.actionListToDetailRelation(
+        {{/isGoogleMapsPlatformUsedForTable}}
+        {{^isGoogleMapsPlatformUsedForTable}}
         val action = EntityListFragmentDirections.actionListToDetailRelation(
+        {{/isGoogleMapsPlatformUsedForTable}}
             tableName = tableName,
             itemId = itemId,
-            navbarTitle = tableName
+            navbarTitle = tableName,
+            relationName = "",
+            parentTableName = "",
+            parentItemId = ""
         )
         (fragmentActivity as? MainActivity)?.navController?.navigate(action)
     }
@@ -322,7 +351,12 @@ class CustomNavigationResolver : GenericNavigationResolver {
         if (viewDataBinding is RecyclerviewItem{{relation_source_camelCase}}Binding && relationName == "{{relation_name}}") {
         {{#isAlias}}
             (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.{{pathToManyWithoutFirst}}?.takeIf { it.isNotEmpty() }?.let {
+                {{#isGoogleMapsPlatformUsedForTable}}
+                action = MapsFragmentDirections.actionListToListRelation(
+                {{/isGoogleMapsPlatformUsedForTable}}
+                {{^isGoogleMapsPlatformUsedForTable}}
                 action = EntityListFragmentDirections.actionListToListRelation(
+                {{/isGoogleMapsPlatformUsedForTable}}
                     relationName = relationName,
                     parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: "",
                     parentTableName = "{{relation_source}}",
@@ -332,7 +366,12 @@ class CustomNavigationResolver : GenericNavigationResolver {
         {{/isAlias}}
         {{^isAlias}}
             (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.takeIf { it.isNotEmpty() }?.let {
+                {{#isGoogleMapsPlatformUsedForTable}}
+                action = MapsFragmentDirections.actionListToListRelation(
+                {{/isGoogleMapsPlatformUsedForTable}}
+                {{^isGoogleMapsPlatformUsedForTable}}
                 action = EntityListFragmentDirections.actionListToListRelation(
+                {{/isGoogleMapsPlatformUsedForTable}}
                     relationName = relationName,
                     parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: "",
                     parentTableName = "{{relation_source}}",
@@ -393,10 +432,18 @@ class CustomNavigationResolver : GenericNavigationResolver {
             {{^isAlias}}
             (roomEntity as? {{relation_source}}RoomEntity)?.{{relation_name}}?.__KEY?.let { relationId ->
             {{/isAlias}}
+                {{#isGoogleMapsPlatformUsedForTable}}
+                action = MapsFragmentDirections.actionListToDetailRelation(
+                {{/isGoogleMapsPlatformUsedForTable}}
+                {{^isGoogleMapsPlatformUsedForTable}}
                 action = EntityListFragmentDirections.actionListToDetailRelation(
+                {{/isGoogleMapsPlatformUsedForTable}}
                     tableName = "{{relation_target}}",
                     itemId = relationId,
-                    navbarTitle = "{{navbarTitle}}"
+                    navbarTitle = "{{navbarTitle}}",
+                    relationName = "{{relation_name}}",
+                    parentTableName = "{{relation_source_camelCase}}",
+                    parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: ""
                 )
             }
         }
@@ -412,7 +459,10 @@ class CustomNavigationResolver : GenericNavigationResolver {
                 action = EntityViewPagerFragmentDirections.actionDetailToDetailRelation(
                     tableName = "{{relation_target}}",
                     itemId = relationId,
-                    navbarTitle = "{{navbarTitle}}"
+                    navbarTitle = "{{navbarTitle}}",
+                    relationName = "{{relation_name}}",
+                    parentTableName = "{{relation_source_camelCase}}",
+                    parentItemId = (roomEntity.__entity as? EntityModel)?.__KEY ?: ""
                 )
             }
         }

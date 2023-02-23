@@ -82,9 +82,11 @@ Function create()->$result : Object
 	$destinationFolder.create()
 	
 	// Cache the last build in generated project
-	This:C1470.input.appFolder:=Null:C1517  // Cyclic
+	var $appFolder : Object
+	$appFolder:=This:C1470.input.appFolder
+	This:C1470.input.appFolder:=Null:C1517  // Cyclic for json export
 	ob_writeToFile(This:C1470._cleanCopyProject(This:C1470.input); $destinationFolder.file("project.4dmobile"); True:C214)
-	
+	This:C1470.input.appFolder:=$appFolder
 	//===============================================================
 	
 	This:C1470.postStep("decompressionOfTheSdk")
@@ -182,7 +184,11 @@ Function build()->$result : Object
 	
 	This:C1470.build:=$result
 	
-	If (Not:C34($result.success))
+	If ($result.success)
+		
+		This:C1470.notification()
+		
+	Else 
 		
 		var $errorMessage : Text
 		$errorMessage:=ob_error_string($result)
@@ -901,7 +907,7 @@ Function _generateCapabilities($out : Object; $appFolder : 4D:C1709.Folder)
 			
 			If ($certificateFile.exists)
 				
-				$certificateFile.copyTo(This:C1470._getAppDataFolder(); fk overwrite:K87:5)
+				$certificateFile.copyTo(This:C1470._getAppDataFolder($project); fk overwrite:K87:5)
 				
 			Else 
 				
@@ -953,6 +959,19 @@ Function _generateCapabilities($out : Object; $appFolder : 4D:C1709.Folder)
 		End if 
 	End if 
 	
+	If (String:C10(This:C1470.project.organization.teamId)="")
+		// if empty, Xcode seems to put FAKETEAMID or find a real team id but I do not known how
+		// So we choose to force FAKETEAMID for authentification by defined in info.plist the key TeamID
+		// to be coherent with folder used to create manifest.json that use `_getAppId`
+		
+		If ($out.computedCapabilities.capabilities.info=Null:C1517)
+			$out.computedCapabilities.capabilities.info:=New collection:C1472
+		End if 
+		$out.computedCapabilities.capabilities.info.push(New object:C1471(\
+			"TeamID"; "FAKETEAMID"))
+		
+	End if 
+	
 	// Manage app capabilities
 	$out.capabilities:=capabilities(\
 		New object:C1471("action"; "inject"; "target"; $in.path; "tags"; $tags; \
@@ -1000,3 +1019,10 @@ Function _devFeatures($out : Object)
 	End if 
 	//}
 	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _getAppId($project : Object) : Text
+	If (Length:C16(String:C10($project.organization.teamId))=0)
+		return "FAKETEAMID."+String:C10($project.product.bundleIdentifier)
+	Else 
+		return Super:C1706._getAppId($project)
+	End if 

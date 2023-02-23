@@ -82,7 +82,7 @@ Function handleEvents($e : Object)
 			: (This:C1470.teamMenu.catch())
 				
 				$menu:=cs:C1710.menu.new()\
-					.append("none"; "none").mark(Length:C16(String:C10(PROJECT.organization.teamId))=0)
+					.append("none"; "​").mark(Length:C16(String:C10(PROJECT.organization.teamId))=0)
 				
 				If (UI.teams.length>0)
 					
@@ -98,7 +98,9 @@ Function handleEvents($e : Object)
 				$menu.popup(This:C1470.teamBorder)
 				
 				If ($menu.selected)
-					
+					If ($menu.choice="​")  // zero width space
+						$menu.choice:=""
+					End if 
 					This:C1470.setTeamID($menu.choice)
 					
 				End if 

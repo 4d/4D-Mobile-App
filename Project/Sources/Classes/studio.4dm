@@ -65,6 +65,8 @@ Function path($useDefaultPath : Boolean)
 			
 			// Verify the tools
 			
+			LOG EVENT:C667(Into 4D debug message:K38:5; "AS EXE Path: "+This:C1470.exe.path; Error message:K38:3)
+			
 		End if 
 	End if 
 	
@@ -189,9 +191,13 @@ Function defaultPath()
 		
 		This:C1470.exe:=$exe
 		
+		LOG EVENT:C667(Into 4D debug message:K38:5; "AS EXE Default Path: "+This:C1470.exe.path; Error message:K38:3)
+		
 	Else 
 		
 		This:C1470.exe:=Null:C1517
+		
+		LOG EVENT:C667(Into 4D debug message:K38:5; "AS EXE Default Path not found: "+$exe.path; Error message:K38:3)
 		
 	End if 
 	
@@ -237,6 +243,8 @@ Function lastPath
 				Else 
 					
 					This:C1470.exe:=File:C1566($pathname; fk platform path:K87:2)
+					LOG EVENT:C667(Into 4D debug message:K38:5; "AS EXE last Path not found: "+This:C1470.exe.path; Error message:K38:3)
+					
 					
 				End if 
 				
@@ -576,43 +584,34 @@ Function _getJava()
 		
 		If (This:C1470.macOS)
 			
-			Case of 
-					
-					//______________________________________________________
-				: (This:C1470.versionCompare(This:C1470.version; "2022")>=0)  // Electric Eel | 2022.1.1
-					
-					$javaHome:=This:C1470.exe.folder("Contents/jbr/Contents/Home")
-					
-					//______________________________________________________
-				Else 
-					
-					$javaHome:=This:C1470.exe.folder("Contents/jre/jdk/Contents/Home")
-					
-					If (Not:C34($javaHome.exists))
-						
-						$javaHome:=This:C1470.exe.folder("Contents/jre/Contents/Home")
-						
-					End if 
-					
-					//______________________________________________________
-			End case 
+			If (This:C1470.exe.folder("Contents/jbr/Contents/Home").exists)  // since Electric Eel | 2022.1.1
+				
+				$javaHome:=This:C1470.exe.folder("Contents/jbr/Contents/Home")
+				
+			Else 
+				
+				$javaHome:=This:C1470.exe.folder("Contents/jre/jdk/Contents/Home")
+				
+			End if 
+			
+			If (Not:C34($javaHome.exists))
+				
+				$javaHome:=This:C1470.exe.folder("Contents/jre/Contents/Home")
+				
+			End if 
 			
 		Else 
 			
-			Case of 
-					
-					//______________________________________________________
-				: (This:C1470.versionCompare(This:C1470.version; "2022")>=0)  // Electric Eel | 2022.1.1
-					
-					$javaHome:=This:C1470.exe.parent.parent.folder("jbr")
-					
-					//______________________________________________________
-				Else 
-					
-					$javaHome:=This:C1470.exe.parent.parent.folder("jre")
-					
-					//______________________________________________________
-			End case 
+			If (This:C1470.exe.parent.parent.folder("jbr").exists)  // since Electric Eel | 2022.1.1
+				
+				$javaHome:=This:C1470.exe.parent.parent.folder("jbr")
+				
+			Else 
+				
+				$javaHome:=This:C1470.exe.parent.parent.folder("jre")
+				
+			End if 
+			
 		End if 
 		
 		If ($javaHome.exists)
@@ -633,15 +632,20 @@ Function _getJava()
 				
 				This:C1470.java:=$javaCmd
 				
+				LOG EVENT:C667(Into 4D debug message:K38:5; "Java found")
+				
 			Else 
 				
 				// Java command was not found
+				LOG EVENT:C667(Into 4D debug message:K38:5; "Java EXE not found: "+$javaCmd.path; Error message:K38:3)
+				
 				
 			End if 
 			
 		Else 
 			
 			// JAVA_HOME was not found
+			LOG EVENT:C667(Into 4D debug message:K38:5; "JAVA_HOME not found: "+$javaHome.path; Error message:K38:3)
 			
 		End if 
 		

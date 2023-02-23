@@ -544,7 +544,15 @@ Function addMenuManager()
 			
 		End for each 
 		
-		If (Feature.with("actionsInTabBar"))
+		
+		If (Feature.with("openURLActionsInTabBar"))
+			
+			$openURLMenu.line()\
+				.append(This:C1470.scopeLabel(New object:C1471("scope"; This:C1470.globalScope)); "global-openURL")
+			
+		End if 
+		
+		If (Feature.with("actionsInTabBar"))  // menu available only if no preset action could be in main menu
 			
 			$newMenu.line()\
 				.append(This:C1470.scopeLabel(New object:C1471("scope"; This:C1470.globalScope)); "global")
@@ -581,12 +589,22 @@ Function addMenuManager()
 		$menu.append(":xliff:sortAction"; $fieldsMenu)
 		$menu.append(":xliff:openURLAction"; "openURL_"+$o.tableID)
 		
-		If (Feature.with("actionsInTabBar"))
+		If (Feature.with("actionsInTabBar") || (False:C215 && Feature.with("openURLActionsInTabBar")))
+			$menu.line()
+		End if 
+		
+		If (Feature.with("actionsInTabBar"))  // menu available only if no preset action could be in main menu
 			
-			$menu.line()\
-				.append(This:C1470.scopeLabel(New object:C1471("scope"; This:C1470.globalScope)); "global")
+			$menu.append(This:C1470.scopeLabel(New object:C1471("scope"; This:C1470.globalScope)); "global")
 			
 		End if 
+		
+		If (False:C215 && Feature.with("openURLActionsInTabBar"))  // not mandatory, a user could create an open url on the unique table and change scope
+			
+			$menu.append(This:C1470.scopeLabel(New object:C1471("scope"; This:C1470.globalScope))+" - "+Get localized string:C991("openURLAction"); "global-openURL")
+			
+		End if 
+		
 	End if 
 	
 	$menu.popup(This:C1470.add)
@@ -610,6 +628,13 @@ Function addMenuManager()
 			: ($menu.choice="global")
 				
 				This:C1470.newAction(-1)
+				
+				//______________________________________________________
+			: ($menu.choice="global-openURL")
+				
+				$action:=PROJECT.actionURL(-1)
+				$action.$icon:=UI.getIcon("actions/Globe.svg")
+				This:C1470._addAction($action)
 				
 				//______________________________________________________
 			Else 
@@ -852,12 +877,13 @@ Function scopeMenuManager()
 					//________________________________________
 				: ($i=3)  // Global main menu
 					
-					If (Feature.with("actionsInTabBar"))
+					If (Feature.with("openURLActionsInTabBar"))
 						
 						If (($preset="add")\
 							 | ($preset="sort")\
 							 | ($preset="delete")\
-							 | ($preset="edit"))
+							 | ($preset="edit")\
+							 | ((Length:C16($preset)=0) && Not:C34(Feature.with("actionsInTabBar"))))
 							
 							$menu.disable()
 							

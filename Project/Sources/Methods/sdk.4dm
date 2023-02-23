@@ -67,50 +67,70 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 					$Obj_param.file:=$Txt_buffer
 				End if 
 				
-				// Finally unzip if SDK exist
-				If (File:C1566($Obj_param.file; fk platform path:K87:2).exists)
+				$Obj_result.success:=False:C215
+				
+				$Obj_param.cacheFolder:=cs:C1710.path.new().cacheSdkAppleUnzipped()
+				
+				If ($Obj_param.cacheFolder.exists)
 					
-					$Obj_result.success:=False:C215
-					
-					$Obj_param.cacheFolder:=cs:C1710.path.new().cacheSdkAppleUnzipped()
 					$Obj_param.cache:=$Obj_param.cacheFolder.platformPath  // for zip
-					If ($Obj_param.cacheFolder.exists)
-						
+					
+					$Obj_result.cacheVersion:=sdk(New object:C1471(\
+						"action"; "sdkVersion"; \
+						"file"; $Obj_param.cacheFolder.platformPath))
+					
+					If (File:C1566($Obj_param.file; fk platform path:K87:2).exists)
 						// If zip version and cache folder different, remove the cache
 						$Obj_result.fileVersion:=sdk(New object:C1471(\
 							"action"; "sdkVersion"; \
 							"file"; $Obj_param.file))
-						
-						$Obj_result.cacheVersion:=sdk(New object:C1471(\
-							"action"; "sdkVersion"; \
-							"file"; $Obj_param.cacheFolder.platformPath))
 						
 						If (Num:C11(String:C10($Obj_result.cacheVersion.build))<Num:C11(String:C10($Obj_result.fileVersion.build)))
 							
 							$Obj_param.cacheFolder.delete(Delete with contents:K24:24)
 							
 						End if 
+						
+					Else 
+						
+						$Obj_param.file:=$Obj_param.cacheFolder.file("sdkVersion").platformPath  // tricky way to make unzip code to just copy without failing
+						$Obj_result.fileVersion:=$Obj_result.cacheVersion
+						$Obj_result.noZip:=True:C214
+						
 					End if 
 					
-					// Unzip the SDK
-					$Obj_result:=_o_unzip($Obj_param)
-					$Obj_result.file:=$Obj_param.file
-					
 				End if 
 				
-				If ($Obj_result.success)
+				If (Not:C34(File:C1566($Obj_param.file; fk platform path:K87:2).exists))
 					
-					$Obj_result.version:=sdk(New object:C1471(\
-						"action"; "sdkVersion"; \
-						"file"; $Obj_param.target)).version
+					var $request : 4D:C1709.HTTPRequest
+					$request:=downloadSDK("aws"; "ios"; /*silent=*/True:C214; 0; True:C214)
+					$request.wait(60)
+					
+					If ($Obj_param.cacheFolder.file("sdkVersion").exists)  // already unziped
+						
+						$Obj_param.cache:=$Obj_param.cacheFolder.platformPath  // for zip
+						$Obj_param.file:=$Obj_param.cacheFolder.file("sdkVersion").platformPath  // tricky way to make unzip code to just copy without failing
+						$Obj_result.fileVersion:=$Obj_result.cacheVersion
+						$Obj_result.noZip:=True:C214
+						
+					End if 
 					
 				End if 
-				
-			Else 
-				
-				$Obj_result.errors:=New collection:C1472("No SDK")
+				// Unzip the SDK
+				$Obj_result:=copyOrUnzip($Obj_param)
+				$Obj_result.file:=$Obj_param.file
 				
 			End if 
+			
+			If ($Obj_result.success)
+				
+				$Obj_result.version:=sdk(New object:C1471(\
+					"action"; "sdkVersion"; \
+					"file"; $Obj_param.target)).version
+				
+			End if 
+			
 			
 			// MARK:- link
 		: ($Obj_param.action="link")
@@ -171,7 +191,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 					// TODO maybe do some additional stuff like merging Cartfile.resolved instead of replace it
 					
 					$Obj_param.file:=$Obj_param.file.platformPath  // to keep compatibility
-					$Obj_result:=_o_unzip($Obj_param)
+					$Obj_result:=copyOrUnzip($Obj_param)
 					
 					// Add to installed framework
 					$Obj_.sdk.installed[$Obj_param.file]:=$Obj_result

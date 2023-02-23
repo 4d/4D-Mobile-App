@@ -86,13 +86,15 @@
 			"_o_thermometer",
 			"_o_tmpl_form",
 			"_o_ui_MOVE",
-			"_o_unzip",
 			"_o_widget",
 			"_o_xml",
 			"_o_xml_elementToObject",
 			"_o_xml_refToObject",
 			"OBSOLETE",
 			"TURN_AROUND_Field_name"
+		],
+		"forms": [
+			"_FEATURES"
 		]
 	},
 	"_ui": {
@@ -168,6 +170,7 @@
 		"methods": [
 			"catalog",
 			"COMPILER_backend",
+			"copyOrUnzip",
 			"dataSet",
 			"downloadSDK",
 			"dump",
@@ -919,6 +922,7 @@
 	},
 	"templateFormClass": {
 		"classes": [
+			"ActionOpenURLFormTemplate",
 			"ActionsMenuFormTemplate",
 			"DetailFormTemplate",
 			"FormTemplate",

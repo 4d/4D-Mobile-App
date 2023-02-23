@@ -47,4 +47,7 @@ abstract class {{tableName}}Dao :
     @Transaction
     @RawQuery(observedEntities = [{{tableName}}::class])
     abstract override fun getAllPagingData(sqLiteQuery: SupportSQLiteQuery): PagingSource<Int, {{tableName}}RoomEntity>
+
+    @Query("SELECT EXISTS(SELECT * FROM {{tableName}} WHERE __KEY = :id)")
+    abstract override fun doesEntityExist(id: String): LiveData<Boolean>
 }

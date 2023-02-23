@@ -44,6 +44,7 @@ Function androidSDKFolder()->$folder : 4D:C1709.Folder
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	//FIXME: UNUSED ??
 Function getJavaHome()
 	
 	If (Is macOS:C1572)
