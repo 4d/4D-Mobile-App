@@ -334,11 +334,17 @@ Function update()
 	If (Feature.with("androidPushNotifications"))
 		
 		This:C1470.certificateGroup.show(Form:C1466.server.pushNotification & PROJECT.$ios)
+		This:C1470.certificateGroup.enable(Is macOS:C1572)
+		This:C1470.certificate.picker.browse:=Is macOS:C1572
+		
 		This:C1470.configureFileGroup.show(Form:C1466.server.pushNotification & PROJECT.$android)
 		
 	Else 
 		
 		This:C1470.certificateGroup.show(Form:C1466.server.pushNotification)
+		This:C1470.pushNotification.enable(Is macOS:C1572 & PROJECT.$ios)
+		This:C1470.certificateGroup.enable(Is macOS:C1572 & PROJECT.$ios)
+		This:C1470.certificate.picker.browse:=(Is macOS:C1572 & PROJECT.$ios)
 		
 	End if 
 	
@@ -395,19 +401,6 @@ Function update()
 			
 			//______________________________________________________
 	End case 
-	
-	If (Feature.with("androidPushNotifications"))
-		
-		This:C1470.certificateGroup.enable(Is macOS:C1572)
-		This:C1470.certificateGroup.picker.browse:=Is macOS:C1572
-		
-	Else 
-		
-		This:C1470.pushNotification.enable(Is macOS:C1572 & PROJECT.$ios)
-		This:C1470.certificateGroup.enable(Is macOS:C1572 & PROJECT.$ios)
-		This:C1470.certificateGroup.picker.browse:=(Is macOS:C1572 & PROJECT.$ios)
-		
-	End if 
 	
 	If (Not:C34(Feature.with("androidDeepLinking")))
 		
