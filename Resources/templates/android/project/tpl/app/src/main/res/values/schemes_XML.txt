@@ -2,7 +2,9 @@
 <resources>
     <string-array name="url_schemes">
         {{#deep_link}}
+        {{#enabled}}
         <item>{{scheme}}</item>
+        {{/enabled}}
         {{/deep_link}}
     </string-array>
 </resources>
