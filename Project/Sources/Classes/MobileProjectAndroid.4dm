@@ -48,6 +48,8 @@ Class constructor($project : Object)
 	This:C1470.project.hasActions:=True:C214
 	This:C1470.project.hasDataSet:=True:C214
 	This:C1470.project.hasOpenUrlAction:=True:C214
+	This:C1470.project.hasAndroidDeepLinking:=Feature.with("androidDeepLinking")
+	
 	This:C1470.project.hasKotlinInputControls:=Feature.with("inputControlWithCodeAndroid")
 	This:C1470.project.hasCustomLoginForms:=Feature.with("customLoginForms")
 	This:C1470.project.hasBuildWithCmd:=Feature.with("buildWithCmd")
