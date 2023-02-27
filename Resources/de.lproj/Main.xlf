@@ -696,7 +696,7 @@ Stellen Sie sicher, das das Gerät mit einem USB-Kabel mit Ihrem Computer verbun
         </trans-unit>
         <trans-unit id="5PQalvARDkTsLxPS67LTyg" resname="irrelevant">
           <source>Irrelevant</source>
-          <target state="new">Irrelevant</target>
+          <target>Irrelevant</target>
         </trans-unit>
         <trans-unit id="alVxIkCrhW+MpzfTnqiiow" resname="iOS" translate="no">
           <source>iOS</source>
@@ -706,7 +706,7 @@ Stellen Sie sicher, das das Gerät mit einem USB-Kabel mit Ihrem Computer verbun
         </trans-unit>
         <trans-unit id="2GnJW7UsSwQnhqhum+e42Q" resname="file">
           <source>File</source>
-          <target state="new">File</target>
+          <target>Datei</target>
         </trans-unit>
       </group>
       <group resname="default values">
