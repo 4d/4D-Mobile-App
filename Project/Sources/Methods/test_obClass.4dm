@@ -3,7 +3,7 @@ var $t : Text
 var $o : Object
 var $c : Collection
 var $file : 4D:C1709.File
-var $ob; $obj2 : cs:C1710.ob
+var $ob : cs:C1710.ob
 
 err_TRY
 

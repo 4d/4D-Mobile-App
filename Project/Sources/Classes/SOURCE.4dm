@@ -224,7 +224,7 @@ Function update()
 Function checkingDatasourceConfiguration()
 	
 	var $success : Boolean
-	var $pos; $len; $port : Integer
+	var $port : Integer
 	var $keyPath; $url : Text
 	var $c : Collection
 	var $webServer : 4D:C1709.WebServer

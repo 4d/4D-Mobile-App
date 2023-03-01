@@ -11,11 +11,8 @@
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
-C_LONGINT:C283($index; $Lon_formEvent; $Lon_parameters; $published)
-C_TEXT:C284($t)
-C_OBJECT:C1216($o; $context; $fieldModel; $field; $form; $IN)
-C_OBJECT:C1216($Obj_out)
-C_COLLECTION:C1488($c)
+C_LONGINT:C283($index; $Lon_formEvent)
+C_OBJECT:C1216($o; $context; $form; $IN)
 
 If (False:C215)
 	C_OBJECT:C1216(STRUCTURE_Handler; $0)

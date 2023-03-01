@@ -8,9 +8,8 @@
 // ----------------------------------------------------
 // Declarations
 
-C_OBJECT:C1216($Obj_result; $Obj_; $Obj_proj; $Obj_objects; $Obj_object; $Obj_object_child; $Obj_template)
-C_TEXT:C284($File_; $Dir_; $Txt_key; $Txt_subkey; $Txt_test; $File_tmp; $Txt_projectName; $Txt_testTable)
-C_COLLECTION:C1488($Col_children; $Col_files)
+C_OBJECT:C1216($Obj_result; $Obj_; $Obj_proj; $Obj_objects; $Obj_object; $Obj_template)
+C_TEXT:C284($File_; $Txt_key; $File_tmp; $Txt_projectName; $Txt_testTable)
 
 // ----------------------------------------------------
 // Init test files

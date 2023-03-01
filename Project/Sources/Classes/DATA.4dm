@@ -303,7 +303,6 @@ Function tableList()
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function updateTableListWithDataSizes()
 	
-	var $sqlID : Text
 	var $size : Integer
 	var $table : Object
 	var $file : 4D:C1709.File

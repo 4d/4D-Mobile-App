@@ -429,7 +429,6 @@ Function get loginForm() : Text
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function getUserLoginForms() : Collection
 	
-	var $indx : Integer
 	var $loginForm; $manifest; $o : Object
 	var $forms; $target : Collection
 	var $resources; $sources : 4D:C1709.Folder

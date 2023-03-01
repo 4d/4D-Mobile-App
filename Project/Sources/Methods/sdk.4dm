@@ -10,14 +10,11 @@
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
-C_BLOB:C604($x)
 C_BOOLEAN:C305($Boo_install)
-C_LONGINT:C283($Lon_httpResponse; $Lon_i; $Lon_parameters)
+C_LONGINT:C283($Lon_parameters)
 C_TEXT:C284($Txt_buffer; $Txt_cmd; $Txt_error; $Txt_fileRef; $Txt_in; $Txt_out)
-C_OBJECT:C1216($errors; $Obj_; $Obj_objects; $Obj_param; $Obj_result)
+C_OBJECT:C1216($Obj_; $Obj_objects; $Obj_param; $Obj_result)
 C_COLLECTION:C1488($Col_)
-
-ARRAY TEXT:C222($tTxt_folders; 0)
 
 If (False:C215)
 	C_OBJECT:C1216(sdk; $0)

@@ -1,43 +1,43 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
-  // ----------------------------------------------------
-  // Project method : swiftPM
-  // Created 2019 by Eric Marchand
-  // ----------------------------------------------------
-  // Description: Call swift package manager function
+// ----------------------------------------------------
+// Project method : swiftPM
+// Created 2019 by Eric Marchand
+// ----------------------------------------------------
+// Description: Call swift package manager function
 
-  // ----------------------------------------------------
-  // Declarations
+// ----------------------------------------------------
+// Declarations
 C_OBJECT:C1216($0)
 C_OBJECT:C1216($1)
 
-C_LONGINT:C283($Lon_parameters;$Lon_i)
-C_TEXT:C284($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
-C_OBJECT:C1216($Obj_in;$Obj_out)
+C_LONGINT:C283($Lon_parameters)
+C_TEXT:C284($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
+C_OBJECT:C1216($Obj_in; $Obj_out)
 
 
 If (False:C215)
-	C_OBJECT:C1216(swiftPM ;$0)
-	C_OBJECT:C1216(swiftPM ;$1)
+	C_OBJECT:C1216(swiftPM; $0)
+	C_OBJECT:C1216(swiftPM; $1)
 End if 
 
-  // ----------------------------------------------------
-  // Initialisations
+// ----------------------------------------------------
+// Initialisations
 $Lon_parameters:=Count parameters:C259
 
-If (Asserted:C1132($Lon_parameters>=1;"Missing parameter"))
+If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
 	
-	  // Required parameters
+	// Required parameters
 	$Obj_in:=$1
 	
-	  // Optional parameters
+	// Optional parameters
 	If ($Lon_parameters>=2)
 		
-		  // <NONE>
+		// <NONE>
 		
 	End if 
 	
 	$Obj_out:=New object:C1471(\
-		"success";False:C215)
+		"success"; False:C215)
 	
 Else 
 	
@@ -45,13 +45,13 @@ Else
 	
 End if 
 
-  // ----------------------------------------------------
-If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
+// ----------------------------------------------------
+If (Asserted:C1132($Obj_in.action#Null:C1517; "Missing the tag \"action\""))
 	
 	Case of 
 			
 			
-		// MARK:- describe
+			// MARK:- describe
 		: ($Obj_in.action="describe")
 			
 			If ($Obj_in.path#Null:C1517)
@@ -67,9 +67,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			
 			If ($Obj_in.posix#Null:C1517)
 				
-				$Txt_cmd:="swift package --package-path "+str_singleQuoted ($Obj_in.posix)+" describe --type json"
+				$Txt_cmd:="swift package --package-path "+str_singleQuoted($Obj_in.posix)+" describe --type json"
 				
-				LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
+				LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
 				
 				If (Length:C16($Txt_error)=0)
 					
@@ -88,7 +88,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				
 			End if 
 			
-		// MARK:- package
+			// MARK:- package
 		: ($Obj_in.action="package")
 			
 			If ($Obj_in.path#Null:C1517)
@@ -104,9 +104,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			
 			If ($Obj_in.posix#Null:C1517)
 				
-				$Txt_cmd:="swift package --package-path "+str_singleQuoted ($Obj_in.posix)+" dump-package"
+				$Txt_cmd:="swift package --package-path "+str_singleQuoted($Obj_in.posix)+" dump-package"
 				
-				LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
+				LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
 				
 				If (Length:C16($Txt_error)=0)
 					
@@ -125,7 +125,7 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				
 			End if 
 			
-		// MARK:- dependencies
+			// MARK:- dependencies
 		: ($Obj_in.action="dependencies")
 			
 			If ($Obj_in.path#Null:C1517)
@@ -141,9 +141,9 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 			
 			If ($Obj_in.posix#Null:C1517)
 				
-				$Txt_cmd:="swift package --package-path "+str_singleQuoted ($Obj_in.posix)+" show-dependencies --format json"
+				$Txt_cmd:="swift package --package-path "+str_singleQuoted($Obj_in.posix)+" show-dependencies --format json"
 				
-				LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
+				LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
 				
 				If (Length:C16($Txt_error)=0)
 					
@@ -162,12 +162,12 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				
 			End if 
 			
-		// MARK:- toolsVersion
+			// MARK:- toolsVersion
 		: ($Obj_in.action="toolsVersion")
 			
 			$Txt_cmd:="swift package tools-version"
 			
-			LAUNCH EXTERNAL PROCESS:C811($Txt_cmd;$Txt_in;$Txt_out;$Txt_error)
+			LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
 			
 			If (Length:C16($Txt_error)=0)
 				
@@ -180,21 +180,21 @@ If (Asserted:C1132($Obj_in.action#Null:C1517;"Missing the tag \"action\""))
 				
 			End if 
 			
-			  //________________________________________
+			//________________________________________
 		Else 
 			
-			ob_warning_add ($Obj_out;"Unknown type of file '"+String:C10($Obj_in.extension)+"'. Could not be added to final project")
-			ASSERT:C1129(dev_Matrix ;"Unknown type of file "+String:C10($Obj_in.extension))
+			ob_warning_add($Obj_out; "Unknown type of file '"+String:C10($Obj_in.extension)+"'. Could not be added to final project")
+			ASSERT:C1129(dev_Matrix; "Unknown type of file "+String:C10($Obj_in.extension))
 			$Obj_out.success:=False:C215
 			
-			  //________________________________________
+			//________________________________________
 	End case 
 	
 End if 
 
-  // ----------------------------------------------------
-  // Return
+// ----------------------------------------------------
+// Return
 $0:=$Obj_out
 
-  // ----------------------------------------------------
-  // End
+// ----------------------------------------------------
+// End

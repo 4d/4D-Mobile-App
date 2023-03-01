@@ -58,7 +58,7 @@ ASSERT:C1129($scene.elementRef=Null:C1517)
 ASSERT:C1129($scenes.root().elementRef=$xml.elementRef; "Failed to get root of dom element")
 
 // browsing
-C_OBJECT:C1216($element; $result)
+C_OBJECT:C1216($result)
 $result:=$scenes.findByName("scene")
 ASSERT:C1129(Num:C11($result.elements.length)=3)
 

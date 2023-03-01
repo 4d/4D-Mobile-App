@@ -620,8 +620,8 @@ Function decodeDateTime($dateTimeString : Text) : Object
 	
 	var $o : Object
 	
-	ARRAY LONGINT:C221($pos; 0x0000)
-	ARRAY LONGINT:C221($len; 0x0000)
+	ARRAY LONGINT:C221($pos; 0)
+	ARRAY LONGINT:C221($len; 0)
 	
 	$o:=New object:C1471(\
 		"date"; !00-00-00!; \
@@ -679,7 +679,7 @@ Function publicIP() : Text
 Function localIP($ssl : Boolean) : Text
 	
 	var $ip : Text
-	var $defaultPort; $port : Integer
+	var $port : Integer
 	var $webServer : 4D:C1709.WebServer
 	
 	$webServer:=WEB Server:C1674

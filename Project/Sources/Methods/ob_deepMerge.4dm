@@ -15,7 +15,7 @@ C_OBJECT:C1216($1)
 C_OBJECT:C1216($2)
 C_BOOLEAN:C305($3)
 
-C_LONGINT:C283($Lon_i; $Lon_parameters; $Lon_sourceType; $Lon_targetType)
+C_LONGINT:C283($Lon_parameters; $Lon_sourceType)
 C_TEXT:C284($Txt_property)
 C_OBJECT:C1216($Obj_source; $Obj_target)
 var $overwrite : Boolean

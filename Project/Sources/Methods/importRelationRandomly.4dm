@@ -4,7 +4,7 @@
 C_OBJECT:C1216($classStore)
 C_OBJECT:C1216($entities; $entity; $related)
 C_TEXT:C284($key)
-C_LONGINT:C283($one; $two)
+C_LONGINT:C283($one)
 
 If (Shift down:C543)
 	$classStore:=ds:C1482[Request:C163("class store name?")]

@@ -11,10 +11,8 @@
 // ----------------------------------------------------
 // Declarations
 var $t : Text
-var $icon : Picture
 var $reset : Boolean
-var $l : Integer
-var $o; $pref : Object
+var $pref : Object
 
 var $folder : 4D:C1709.Folder
 var $file : 4D:C1709.File

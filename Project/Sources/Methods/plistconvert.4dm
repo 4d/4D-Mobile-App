@@ -11,7 +11,6 @@
 // Declarations
 
 C_BOOLEAN:C305($Bool_errorInOut; $Bool_ReplaceLS)
-C_LONGINT:C283($Lon_parameters)
 C_TEXT:C284($format; $Txt_cmd; $Txt_error; $Txt_in; $Txt_out)
 C_OBJECT:C1216($Obj_in; $Obj_out)
 

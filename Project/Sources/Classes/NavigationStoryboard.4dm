@@ -25,7 +25,7 @@ Function run
 	
 	If (This:C1470.path.exists)
 		
-		C_OBJECT:C1216($Dom_root; $Dom_child; $Dom_)
+		C_OBJECT:C1216($Dom_root; $Dom_)
 		$Dom_root:=_o_xml("load"; This:C1470.path)
 		
 		// Look up first all the elements. Dom could be modifyed

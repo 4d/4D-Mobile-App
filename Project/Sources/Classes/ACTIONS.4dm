@@ -439,7 +439,6 @@ Function actionListManager()->$allow : Integer
 	// Load project actions
 Function loadActions()
 	
-	var $icon : Picture
 	var $action : Object
 	var $file : 4D:C1709.File
 	

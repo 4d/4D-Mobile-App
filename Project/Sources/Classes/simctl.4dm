@@ -189,7 +189,7 @@ Function plugged($iosDeploymentTarget : Text)->$plugged : Collection
 	$plugged:=New collection:C1472
 	
 	var $minVers : Text
-	var $index; $start : Integer
+	var $start : Integer
 	var $str : cs:C1710.str
 	
 	ARRAY LONGINT:C221($len; 0)

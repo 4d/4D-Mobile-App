@@ -122,8 +122,6 @@ Function setContent($content) : Object
 	// Load from a json file
 Function load($file : 4D:C1709.File)->$object : Object
 	
-	var $methodCalledOnError : Text
-	
 	This:C1470.success:=OB Instance of:C1731($file; 4D:C1709.File)
 	
 	If (This:C1470.success)

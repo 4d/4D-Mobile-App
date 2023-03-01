@@ -8,13 +8,12 @@
 //
 // ----------------------------------------------------
 // Declarations
-var $fieldID; $t : Text
+var $t : Text
 var $b : Boolean
-var $bottom; $column; $count; $height; $i; $indx; $l; $left; $Lon_button; $Lon_targetBottom : Integer
-var $Lon_targetTop; $Lon_unpublished; $Lon_vOffset; $right; $row; $top; $width : Integer
-var $Ptr_; $Ptr_me; $Ptr_published : Pointer
-var $context; $e; $form; $linkDataModel; $menu; $o; $relatedCatalog; $tableDataModel : Object
-var $c : Collection
+var $column; $i; $indx; $l : Integer
+var $Lon_unpublished; $row : Integer
+var $Ptr_me; $Ptr_published : Pointer
+var $context; $e; $form; $menu; $o : Object
 var $field : cs:C1710.field
 
 // ----------------------------------------------------
@@ -219,7 +218,7 @@ Case of
 				ST SET TEXT:C1115(*; $form.tableFilter; $class.tableFilterLabel(); ST Start text:K78:15; ST End text:K78:16)
 				
 				OBJECT SET VISIBLE:C603(*; $form.tableFilter; True:C214)
-				OBJECT SET RGB COLORS:C628(*; $e.objectName; Foreground color:K23:1; 0x00FFFFFF; 0x00FFFFFF)
+				OBJECT SET RGB COLORS:C628(*; $e.objectName; Foreground color:K23:1; 16777215; 16777215)
 				SET TIMER:C645(-1)  // Restore visual selection
 				
 				//______________________________________________________
@@ -468,7 +467,7 @@ Case of
 				ST SET TEXT:C1115(*; $form.fieldFilter; $class.fieldFilterLabel(); ST Start text:K78:15; ST End text:K78:16)
 				
 				OBJECT SET VISIBLE:C603(*; $form.fields+".filter"; True:C214)
-				OBJECT SET RGB COLORS:C628(*; $e.objectName; Foreground color:K23:1; 0x00FFFFFF; 0x00FFFFFF)
+				OBJECT SET RGB COLORS:C628(*; $e.objectName; Foreground color:K23:1; 16777215; 16777215)
 				SET TIMER:C645(-1)  // Restore visual selection
 				
 				//______________________________________________________
@@ -680,8 +679,8 @@ Case of
 		//// Hide the bottom line
 		//OBJECT SET VISIBLE(*; "bottom.line"; False)
 		//CALL FORM(Current form window; "editor_CALLBACK"; "resizePanel"; New object(\
-																																	"panel"; Current form name; \
-																																	"offset"; $Lon_vOffset))
+																																				"panel"; Current form name; \
+																																				"offset"; $Lon_vOffset))
 		//End if
 		////______________________________________________________
 		//: ($e.code=On Mouse Leave)

@@ -443,7 +443,7 @@ Function doStaticDragAndDrop()->$allowed : Integer
 	//End if 
 	//Else 
 	//If ($o.src#$e.row)\
-				 & ($e.row#($o.src+1))  // Not the same or the next one
+						 & ($e.row#($o.src+1))  // Not the same or the next one
 	//$allowed:=0
 	//$o:=$list.rowCoordinates($e.row)
 	//$o.bottom:=$o.top
@@ -513,7 +513,6 @@ Function listMeta($this : Object)->$style
 	// <Background Color Expression>
 Function listBackgroundColor($this : Object)->$color
 	
-	var $v  // could be an integer or a text
 	var $isFocused : Boolean
 	
 	$color:="transparent"

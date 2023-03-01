@@ -12,7 +12,7 @@ Function run($Obj_template : Object; $target : Object/*4D.Folder*/; $Obj_tags : 
 	
 	This:C1470.checkStoryboardPath($Obj_template)  // set default path if not defined
 	
-	C_OBJECT:C1216($Dom_root; $Dom_child; $Dom_)
+	C_OBJECT:C1216($Dom_root)
 	$Dom_root:=_o_xml("load"; This:C1470.path)
 	
 	If ($Dom_root.success)
@@ -204,7 +204,6 @@ Function run($Obj_template : Object; $target : Object/*4D.Folder*/; $Obj_tags : 
 					
 				Else   // not defined, we an check
 					
-					C_LONGINT:C283($Lon_ids)
 					If (Not:C34($Dom_relation.isDefault))  // fix id count if not defined by reading dom
 						This:C1470.checkIDCount($Obj_element)
 					Else 

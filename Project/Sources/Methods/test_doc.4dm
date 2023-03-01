@@ -1,7 +1,6 @@
 //%attributes = {}
-C_TEXT:C284($Dir_; $Dir_resources; $File_; $t; $t2; $Txt_expected)
-C_TEXT:C284($Txt_nullDateTime; $Txt_reference)
-C_OBJECT:C1216($o; $Obj_expected; $oFile; $oRoot)
+
+C_OBJECT:C1216($o; $oFile; $oRoot)
 C_COLLECTION:C1488($c)
 
 err_TRY

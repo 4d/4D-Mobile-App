@@ -10,9 +10,9 @@
 var $Boo_ : Boolean
 var $Lon_height; $Lon_i; $Lon_parameters; $Lon_scale; $Lon_width : Integer
 var $Pic_buffer; $Pic_icon : Picture
-var $Dir_source; $Txt_buffer; $Txt_name; $Txt_value : Text
-var $Obj_; $Obj_buffer; $Obj_file; $Obj_formatter; $Obj_image; $Obj_in : Object
-var $Obj_out; $Obj_path; $Obj_template : Object
+var $Txt_buffer; $Txt_name; $Txt_value : Text
+var $Obj_; $Obj_buffer; $Obj_formatter; $Obj_image; $Obj_in : Object
+var $Obj_out; $Obj_template : Object
 var $Folder_buffer : Object
 var $target; $path : 4D:C1709.Folder
 var $source : Object

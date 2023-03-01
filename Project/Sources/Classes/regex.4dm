@@ -70,7 +70,6 @@ Function match($start; $all : Boolean) : Boolean
 	var $methodCalledOnError : Text
 	var $match : Boolean
 	var $begin; $i; $index : Integer
-	var $item : Object
 	
 	ARRAY LONGINT:C221($positions; 0)
 	ARRAY LONGINT:C221($lengths; 0)

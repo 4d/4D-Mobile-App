@@ -14,7 +14,7 @@
 var $bAppend : Boolean
 var $i : Integer
 var $t; $tFieldID; $tTable : Text
-var $archive; $errors; $folder; $o; $oField; $oFormatter : Object
+var $archive; $folder; $o; $oField; $oFormatter : Object
 var $oResources; $oResult : Object
 var $c : Collection
 var $error : cs:C1710.error

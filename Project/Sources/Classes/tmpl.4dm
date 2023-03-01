@@ -646,7 +646,7 @@ Function getSources($name : Text; $type : Text)->$template : 4D:C1709.Folder
 	var $formName; $formType; $item : Text
 	var $success : Boolean
 	var $o : Object
-	var $folder; $path : 4D:C1709.Folder
+	var $folder : 4D:C1709.Folder
 	var $manifest : 4D:C1709.File
 	var $archive : 4D:C1709.ZipArchive
 	var $error : cs:C1710.error

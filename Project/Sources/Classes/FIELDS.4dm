@@ -1118,7 +1118,6 @@ Function updateForms($field : Object; $row : Integer)
 	// Show the icon picker
 Function showIconPicker($e : Object)
 	
-	var $c : Collection
 	var $o : Object
 	var $field : cs:C1710.field
 	

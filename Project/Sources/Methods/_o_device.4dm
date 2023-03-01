@@ -240,8 +240,6 @@ Case of
 					
 					For each ($Txt_buffer; Split string:C1554($Txt_out; "\\n"); 1)
 						
-						ARRAY TEXT:C222($tTxt_buffer; 0x0000)
-						
 						var $regex : cs:C1710.regex
 						$regex:=cs:C1710.regex.new($Txt_buffer; "(.*) \\((.*)\\) \\[(.*)]$")
 						

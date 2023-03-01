@@ -8,7 +8,7 @@
 var $lastDevice : Text
 var $isDeviceSelected; $isDevToolAvailable; $isProjectOK; $withTeamID; $isSdkAvailable : Boolean
 var $currentPage : Integer
-var $constraints; $device; $e; $form; $o; $page; $plist : Object
+var $constraints; $e; $form; $page : Object
 
 // ----------------------------------------------------
 // Initialisations

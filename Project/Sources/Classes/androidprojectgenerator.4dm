@@ -1329,7 +1329,7 @@ Function handleInputControlImages
 						
 						If (Value type:C1509($parameter.source)=Is text:K8:3)
 							
-							var $inputControlsFolder; $customInputControlFolder; $imagesFolderInInputControl : 4D:C1709.Folder
+							var $inputControlsFolder : 4D:C1709.Folder
 							
 							$inputControlsFolder:=This:C1470.path.hostInputControls()
 							

@@ -5,9 +5,7 @@
 // Created 19-11-2020 by Vincent de Lachaux
 // ----------------------------------------------------
 // Declarations
-var $bottom; $left; $right; $top : Integer
-var $device; $e : Object
-var $menu : cs:C1710.menu
+var $e : Object
 
 // ----------------------------------------------------
 // Initialisations

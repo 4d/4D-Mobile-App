@@ -24,7 +24,6 @@ Function handleEvents($eventCode; $eventCode2 : Integer; $eventCodeN : Integer)-
 	var ${2} : Integer
 	var $pass : Boolean
 	var $height; $i; $width : Integer
-	var $c : Collection
 	
 	$e:=FORM Event:C1606
 	

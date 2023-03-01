@@ -12,8 +12,7 @@ C_OBJECT:C1216($1)
 
 C_LONGINT:C283($Lon_parameters)
 C_OBJECT:C1216($Obj_in; $Obj_out; $Obj_capability; $Obj_buffer; $Obj_params; $Obj_types)
-C_TEXT:C284($File_entitlements; $File_info; $Txt_fileType)
-C_OBJECT:C1216($Col_fileTypes)
+C_TEXT:C284($Txt_fileType)
 
 If (False:C215)
 	C_OBJECT:C1216(capabilities; $0)

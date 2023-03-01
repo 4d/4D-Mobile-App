@@ -20,7 +20,7 @@ Class constructor()
 	// List connected devices and their Developer Mode
 Function list()->$devices : Collection
 	
-	var $cmd; $line : Text
+	var $line : Text
 	var $c; $lines : Collection
 	
 	This:C1470.launch("xcrun devmodectl list")

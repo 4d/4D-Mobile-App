@@ -198,7 +198,7 @@ Function launch($command; $arguments : Variant) : cs:C1710.lep
 	
 	var $inputStream; $outputStream : Blob
 	var $errorStream; $history; $response; $variable : Text
-	var $len; $pid; $pos : Integer
+	var $pid : Integer
 	
 	This:C1470.outputStream:=Null:C1517
 	This:C1470.errorStream:=""

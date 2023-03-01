@@ -9,7 +9,7 @@
 // ----------------------------------------------------
 // Declarations
 
-C_LONGINT:C283($Lon_parameters; $Lon_i)
+C_LONGINT:C283($Lon_i)
 C_TEXT:C284($Txt_buffer; $Txt_objectRef)
 C_TEXT:C284($Txt_formType; $Txt_fileRef; $Txt_buildfileRef; $Txt_tableName)
 C_TEXT:C284($Txt_tableName)

@@ -7,7 +7,7 @@
 // Declarations
 var $pathName; $t : Text
 var $bottom; $left; $right; $top : Integer
-var $could; $device; $e; $menuApp; $o; $project : Object
+var $could; $device; $e; $menuApp; $o : Object
 var $folder; $sdkCacheFolder : 4D:C1709.Folder
 var $menu : cs:C1710.menu
 var $simctl : cs:C1710.simctl

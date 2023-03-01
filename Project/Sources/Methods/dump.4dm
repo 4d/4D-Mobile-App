@@ -18,8 +18,7 @@ End if
 var $File_name; $outputPathname; $format; $tableID; $t; $handler : Text
 var $ID; $url; $version : Text
 var $imageFound : Boolean
-var $i; $posBegin; $posEnd : Integer
-var $dataModel; $delay; $meta; $o; $field; $record : Object
+var $dataModel; $meta; $o; $field; $record : Object
 var $query; $rest; $result; $table : Object
 var $fields : Collection
 var $destinationFile; $file : 4D:C1709.File

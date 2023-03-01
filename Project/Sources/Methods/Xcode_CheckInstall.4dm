@@ -20,7 +20,7 @@ If (False:C215)
 	C_OBJECT:C1216(Xcode_CheckInstall; $1)
 End if 
 
-var $inƒ; $requirement; $signal : Object
+var $inƒ; $signal : Object
 var $requestedVersion : Text
 var $Xcode : cs:C1710.Xcode
 

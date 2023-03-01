@@ -16,7 +16,6 @@ End if
 
 var $description; $t : Text
 var $validated : Boolean
-var $c : Collection
 var $error : cs:C1710.error
 
 // ----------------------------------------------------

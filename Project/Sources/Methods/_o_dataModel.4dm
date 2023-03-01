@@ -6,21 +6,10 @@
 
 // ----------------------------------------------------
 // Declarations
-var $Boo_4dType; $Boo_found : Boolean
-var $Lon_attributs; $Lon_field; $Lon_field2; $Lon_fieldID; $Lon_parameters; $Lon_relatedTableID : Integer
-var $Lon_relationField; $Lon_table; $Lon_table2; $Lon_tableID; $Lon_type : Integer
-var $Ptr_field : Pointer
-var $Dom_attribute; $Dom_elements; $Dom_entity; $Dom_model; $Dom_node; $Dom_userInfo : Text
-var $File_; $t; $tt; $Txt_buffer; $Txt_field; $Txt_fieldName : Text
-var $Txt_fieldNumber; $Txt_inverseName; $Txt_relationName; $Txt_tableName; $Txt_tableNumber; $Txt_value : Text
-var $o; $Obj_buffer; $Obj_dataModel; $Obj_field; $Obj_in : Object
-var $Obj_out; $Obj_path; $Obj_relationTable; $Obj_table : Object
-var $relatedField : Variant
-var $Col_fields; $Col_tables; $actions : Collection
+var $t; $tt : Text
+var $Obj_dataModel; $Obj_in : Object
+var $Obj_out : Object
 
-ARRAY TEXT:C222($tTxt_fields; 0)
-ARRAY TEXT:C222($tTxt_relationFields; 0)
-ARRAY TEXT:C222($tTxt_tables; 0)
 
 If (False:C215)
 	C_OBJECT:C1216(_o_dataModel; $0)

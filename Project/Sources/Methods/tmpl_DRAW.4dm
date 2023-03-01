@@ -14,7 +14,7 @@ If (False:C215)
 	C_OBJECT:C1216(tmpl_DRAW; $1)
 End if 
 
-var $background; $binding; $formName; $formType; $key; $label; $name; $node; $parent : Text
+var $background; $binding; $formName; $formType; $label; $name; $node; $parent : Text
 var $style; $t; $tableID; $tips : Text
 var $found; $isToMany; $isToOne; $stop : Boolean
 var $avalaibleWidth; $count; $height; $indx : Integer

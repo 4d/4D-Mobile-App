@@ -352,7 +352,6 @@ Function lastPath
 	// Get all installed Xcode applications using Spotlight
 Function paths()->$instances : Collection
 	
-	var $pos : Integer
 	var $o : Object
 	
 	$o:=This:C1470.lep("mdfind \"kMDItemCFBundleIdentifier == 'com.apple.dt.Xcode'\"")

@@ -313,7 +313,6 @@ Function _callback
 		TRACE:C157
 	Else 
 		//var $dumpFolder : 4D.Folder
-		C_TEXT:C284($path)
 		$dumpFolder:=Folder:C1567(This:C1470.lastCallbackInfo.path)
 		var $dbFile; $jsonFile : 4D:C1709.File
 		$dbFile:=$dumpFolder.file("Structures.sqlite")

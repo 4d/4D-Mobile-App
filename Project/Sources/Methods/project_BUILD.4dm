@@ -16,7 +16,7 @@ End if
 
 var $tableID; $target; $tt : Text
 var $b; $success : Boolean
-var $manual; $message; $messageCancel; $messageOK; $o; $project : Object
+var $manual; $message; $messageCancel; $messageOK; $project : Object
 var $rest : Object
 var $folders; $publishedTableNames : Collection
 var $file : 4D:C1709.File

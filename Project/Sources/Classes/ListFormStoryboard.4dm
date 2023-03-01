@@ -65,7 +65,7 @@ Function run($Obj_template : Object; $target : Object/*4D.Folder*/; $Obj_tags : 
 		
 		If ($Boo_hasRelation | $Boo_enableBarcode)
 			
-			var $Dom_root; $Dom_child; $Dom_ : Object/*_o_xml*/
+			var $Dom_root : Object/*_o_xml*/
 			$Dom_root:=_o_xml("load"; This:C1470.path)
 			
 			// Edit for relations

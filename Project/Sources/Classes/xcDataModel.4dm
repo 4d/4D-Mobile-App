@@ -617,7 +617,6 @@ Function _relation($table : Object; $options : Object)->$out : Object
 				
 				$Obj_field:=$table[$Txt_field]
 				
-				var $Boo_found : Boolean
 				var $Txt_relationName : Text
 				$Txt_relationName:=$Txt_field  // CLEAN maybe remove var
 				
