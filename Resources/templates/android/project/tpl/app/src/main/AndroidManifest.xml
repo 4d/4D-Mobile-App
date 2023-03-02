@@ -29,8 +29,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
             {{#deep_link}}
-            
             {{#enabled}}
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -40,7 +40,7 @@
                 <data
                     android:host="mobileapp"
                     android:pathPrefix="/show"
-                    android:scheme="{{scheme}}" />
+                    android:scheme="@string/deeplink_scheme" />
             </intent-filter>
             {{/enabled}}
             {{/deep_link}}
@@ -54,8 +54,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
                     android:host="{{host}}"
-                    android:scheme="{{scheme}}"
-                    android:pathPattern="{{pathPattern}}"/>
+                    android:pathPattern="{{pathPattern}}"
+                    android:scheme="{{scheme}}" />
             </intent-filter>
             {{/enabled}}
             {{/universal_link}}

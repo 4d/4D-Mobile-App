@@ -8,4 +8,22 @@
     <string name="tableName_origin_{{nameLowerCase}}">{{name_original}}</string>
     {{/tableNames_navigation}}
 
+    {{#deep_link}}
+    {{#enabled}}
+    <string name="deeplink_scheme">{{scheme}}</string>
+    {{/enabled}}
+    {{^enabled}}
+    <string name="deeplink_scheme"></string>
+    {{/enabled}}
+    {{/deep_link}}
+    {{#universal_link}}
+    {{#enabled}}
+    <string name="universal_link_scheme">{{scheme}}</string>
+    <string name="universal_link_host">{{host}}</string>
+    {{/enabled}}
+    {{^enabled}}
+    <string name="universal_link_scheme"></string>
+    <string name="universal_link_host"></string>
+    {{/enabled}}
+    {{/universal_link}}
 </resources>
