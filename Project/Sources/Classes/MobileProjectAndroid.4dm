@@ -61,6 +61,12 @@ Class constructor($project : Object)
 	This:C1470.project.ideBuildVersion:=This:C1470.project.project.info.ideBuildVersion
 	This:C1470.project.ideVersion:=This:C1470.project.project.info.ideVersion
 	
+	If (Feature.with("openURLActionsInTabBar") || Feature.with("actionsInTabBar"))
+		If (This:C1470.project.project._folder.file("mainOrder.json").exists)
+			This:C1470.project.project.main.order:=JSON Parse:C1218(This:C1470.project.project._folder.file("mainOrder.json").getText())
+		End if 
+	End if 
+	
 	This:C1470.checkPackage()
 	
 	If (Feature.disabled("androidDataSet"))
