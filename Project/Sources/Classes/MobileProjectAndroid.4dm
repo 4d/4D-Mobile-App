@@ -200,6 +200,7 @@ Function create()->$result : Object
 		If ($o.success)
 			
 			// Create the app manifest
+			This:C1470.project.project.organization.teamId:=""  // project is a copy of original prj so no worry
 			$o.manifest:=This:C1470._createManifest(This:C1470.project.project)
 			
 			// MARK:GRADLEW ACCESS RIGHTS
@@ -683,3 +684,8 @@ Function _o_themeImageFile()->$file : 4D:C1709.File
 	// Override: no team id for android
 Function _getAppId($project : Object) : Text
 	return String:C10($project.product.bundleIdentifier)
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+	// Provide os for manifest
+Function _getManifestInfoTarget() : Text
+	return "android"
