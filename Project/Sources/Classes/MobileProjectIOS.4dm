@@ -540,6 +540,9 @@ Function _tmpRemoveAlias($project : Object/*in place*/)->$removedEntries : Colle
 		End for each 
 	End for each 
 	
+Function _getManifestInfoTarget() : Text
+	return "iOS"
+	
 	// MARK:-[PRIVATES]
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Create tags object for template

@@ -551,8 +551,13 @@ Function _createManifest($project : Object; $noWrite : Boolean) : Object
 		"application"; New object:C1471(\
 		"id"; $project.product.bundleIdentifier; \
 		"name"; $project.product.name); \
-		"team"; New object:C1471("id"; $project.organization.teamId); \
 		"info"; $project.info)
+	
+	If (Length:C16(String:C10($project.organization.teamId))>0)
+		$manifest["team"]:=New object:C1471("id"; $project.organization.teamId)
+	End if 
+	
+	$manifest.info.target:=This:C1470._getManifestInfoTarget()
 	
 	// • Deep linking
 	If (Bool:C1537($project.deepLinking.enabled))
@@ -578,6 +583,12 @@ Function _createManifest($project : Object; $noWrite : Boolean) : Object
 	
 	return $manifest
 	
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function _getManifestInfoTarget() : Text
+	return ""
+	
+	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function addToManifest($project : Object; $key : Text; $value : Variant)
 	
 	var $file : 4D:C1709.File
@@ -662,4 +673,3 @@ Function _o_themeFromImageFile()->$theme : Object
 		$file.delete()  // Delete scaled files
 		
 	End if 
-	
