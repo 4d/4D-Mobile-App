@@ -97,8 +97,6 @@ Function handleEvents($e : Object) : Integer
 						This:C1470._dataModel.foregroundColor:=Foreground color:K23:1
 						This:C1470["_dataModel.border"].foregroundColor:=UI.selectedColor
 						
-						//_o_editor_ui_LISTBOX(This._dataModel.name; True)
-						
 						//______________________________________________________
 					: ($e.code=On Begin Drag Over:K2:44)
 						
@@ -115,8 +113,6 @@ Function handleEvents($e : Object) : Integer
 						
 						This:C1470._dataModel.foregroundColor:=Foreground color:K23:1
 						This:C1470["_dataModel.border"].foregroundColor:=UI.backgroundUnselectedColor
-						
-						_o_editor_ui_LISTBOX(This:C1470._dataModel.name; False:C215)
 						
 						//______________________________________________________
 				End case 
@@ -141,12 +137,15 @@ Function handleEvents($e : Object) : Integer
 						This:C1470.displayed.foregroundColor:=Foreground color:K23:1
 						This:C1470.displayedBorder.foregroundColor:=UI.selectedColor
 						
-						_o_editor_ui_LISTBOX(This:C1470.displayed.name; True:C214)
-						
 						//______________________________________________________
 					: ($e.code=On Begin Drag Over:K2:44)
 						
-						This:C1470.beginDrag("com.4d.private.4dmobile.table"; This:C1470.available[$e.row-1])
+						This:C1470.beginDrag("com.4d.private.4dmobile.table"; This:C1470.main[$e.row-1])
+						
+						//______________________________________________________
+					: ($e.code=On Drop:K2:12)
+						
+						This:C1470.mainHandleEvents($e)
 						
 						//______________________________________________________
 					: ($e.code=On Getting Focus:K2:7)
@@ -159,8 +158,6 @@ Function handleEvents($e : Object) : Integer
 						
 						This:C1470.displayed.foregroundColor:=Foreground color:K23:1
 						This:C1470.displayedBorder.foregroundColor:=UI.backgroundUnselectedColor
-						
-						_o_editor_ui_LISTBOX(This:C1470.displayed.name; False:C215)
 						
 						//______________________________________________________
 				End case 
@@ -375,6 +372,14 @@ Function mainHandleEvents($e : Object)->$allow : Integer
 				BEEP:C151
 				
 			Else 
+				
+				If ($e.newPosition>$e.oldPosition)
+					This:C1470.main.insert($e.newPosition; This:C1470.main[$e.oldPosition-1])
+					This:C1470.main.remove($e.oldPosition-1)
+				Else 
+					This:C1470.main.insert($e.newPosition-1; This:C1470.main[$e.oldPosition-1])
+					This:C1470.main.remove($e.oldPosition)
+				End if 
 				
 				This:C1470._updateOrder()
 				
