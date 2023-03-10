@@ -68,6 +68,7 @@ Function handleEvents($e : Object) : Integer
 		Case of 
 				
 				//==============================================
+				// MARK: _dataModel
 			: (This:C1470._dataModel.catch())
 				
 				var $x : Blob
@@ -103,8 +104,8 @@ Function handleEvents($e : Object) : Integer
 						
 						//%W-533.3
 						$o:=New object:C1471(\
-							"name"; (This:C1470.srcNamePtr)->{$e.row}; \
-							"tableNumber"; (This:C1470.srcIdPtr)->{$e.row})
+							"name"; This:C1470.available[$e.row-1].name; \
+							"tableNumber"; This:C1470.available[$e.row-1].id)
 						//%W+533.3
 						
 						This:C1470.beginDrag("com.4d.private.4dmobile.table"; $o)
@@ -127,6 +128,7 @@ Function handleEvents($e : Object) : Integer
 				End case 
 				
 				//==============================================
+				// MARK: displayed
 			: (This:C1470.displayed.catch())
 				
 				var $x : Blob
@@ -152,8 +154,8 @@ Function handleEvents($e : Object) : Integer
 						
 						//%W-533.3
 						$o:=New object:C1471(\
-							"name"; (This:C1470.srcNamePtr)->{$e.row}; \
-							"tableNumber"; (This:C1470.srcIdPtr)->{$e.row})
+							"name"; This:C1470.available[$e.row-1].name; \
+							"tableNumber"; This:C1470.available[$e.row-1].id)
 						//%W+533.3
 						
 						This:C1470.beginDrag("com.4d.private.4dmobile.table"; $o)
@@ -176,20 +178,23 @@ Function handleEvents($e : Object) : Integer
 				End case 
 				
 				//==============================================
+				// MARK: addOne
 			: (This:C1470.addOne.catch($e; On Clicked:K2:4))
 				
 				This:C1470._add("one"; This:C1470._dataModel.cellPosition($e).row)
 				
 				//==============================================
+				// MARK: addAll
 			: (This:C1470.addAll.catch($e; On Clicked:K2:4))
 				
 				This:C1470._add("all")
 				
 				//==============================================
+				// MARK: removeOne
 			: (This:C1470.removeOne.catch($e; On Clicked:K2:4))
 				
 				var $indx : Integer
-				$indx:=Find in array:C230((This:C1470.displayed.pointer)->; True:C214)
+				$indx:=(This:C1470.displayed.pointer)->
 				
 				If ($indx>0)
 					
@@ -200,17 +205,20 @@ Function handleEvents($e : Object) : Integer
 				This:C1470._updateOrder()
 				
 				//==============================================
+				// MARK: removeAll
 			: (This:C1470.removeAll.catch($e; On Clicked:K2:4))
 				
 				This:C1470.displayed.deleteRows()
 				This:C1470._updateOrder()
 				
 				//==============================================
+				// MARK: up
 			: (This:C1470.up.catch($e; On Clicked:K2:4))
 				
 				//TODO:TODO
 				
 				//==============================================
+				// MARK: down
 			: (This:C1470.down.catch($e; On Clicked:K2:4))
 				
 				//TODO:TODO
@@ -221,12 +229,6 @@ Function handleEvents($e : Object) : Integer
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function onLoad()
-	
-	This:C1470.srcIdPtr:=This:C1470._dataModel.columnPtr("table_ids")
-	This:C1470.srcNamePtr:=This:C1470._dataModel.columnPtr("table_names")
-	
-	This:C1470.dstIdPtr:=This:C1470.displayed.columnPtr("main_ids")
-	This:C1470.dstNamePtr:=This:C1470.displayed.columnPtr("main_names")
 	
 	// Tables available in the data model
 	This:C1470.available:=New collection:C1472
@@ -239,14 +241,28 @@ Function onLoad()
 		For each ($tableID; Form:C1466.dataModel)
 			
 			This:C1470.available.push(New object:C1471(\
+				"type"; "table"; \
 				"name"; Form:C1466.dataModel[$tableID][""].label; \
+				"icon"; Form:C1466.dataModel[$tableID][""].icon; \
+				"data"; $tableID; \
 				"id"; $tableID))
 			
 		End for each 
+		
+		If (True:C214)
+			For each ($action; Form:C1466.actions || New collection:C1472)
+				
+				This:C1470.available.push(New object:C1471(\
+					"type"; "action"; \
+					"name"; $action.name+" ("+$action.label+")"; \
+					"icon"; $action.icon; \
+					"data"; New object:C1471("action"; $action.name); \
+					"id"; $action.name))
+				
+			End for each 
+		End if 
+		
 	End if 
-	
-	//FIXME: Use a listbox collection
-	COLLECTION TO ARRAY:C1562(This:C1470.available; This:C1470.srcIdPtr->; "id"; This:C1470.srcNamePtr->; "name")
 	
 	This:C1470._dataModel.setScrollbars(0; 2).unselect()
 	This:C1470.displayed.setScrollbars(0; 2).unselect()
@@ -311,9 +327,6 @@ Function update()
 			End if 
 		End if 
 	End for each 
-	
-	// FIXME: Use a listbox collection
-	COLLECTION TO ARRAY:C1562(This:C1470.main; This:C1470.displayed.columnPtr("main_ids")->; "id"; This:C1470.displayed.columnPtr("main_names")->; "name")
 	
 	This:C1470.noDataModel.show(This:C1470.available.length=0)
 	This:C1470.withDataModel.show(This:C1470.available.length>0)
@@ -384,7 +397,7 @@ Function mainHandleEvents($e : Object)->$allow : Integer
 			
 			$allow:=-1  // Reject drop
 			
-			// TODO: Don(t allow if already present
+			// TODO: Don't allow if already present
 			If (This:C1470.getPasteboard($uri)#Null:C1517)
 				
 				$allow:=0
@@ -409,7 +422,7 @@ Function mainHandleEvents($e : Object)->$allow : Integer
 				// End if
 				// Else
 				//If ($o.src#$e.row)\
-																																																																	& ($e.row#($o.src+1))  // Not the same or the next one
+																																																																																															& ($e.row#($o.src+1))  // Not the same or the next one
 				//$o:=$me.rowCoordinates($e.row)
 				//$o.bottom:=$o.top
 				//$o.right:=$me.coordinates.right
@@ -488,25 +501,25 @@ Function _add($target : Text; $row : Integer)
 	
 	If ($target="one")
 		
-		$row:=$row || Find in array:C230((This:C1470._dataModel.pointer)->; True:C214)
+		$row:=$row || (This:C1470._dataModel.pointer)->
 		
 		If ($row>0)
 			
-			This:C1470.__add((This:C1470.srcIdPtr)->{$row}; (This:C1470.srcNamePtr)->{$row}; Find in array:C230((This:C1470.displayed.pointer)->; True:C214))
+			This:C1470.__add(This:C1470.available[$row-1].id; This:C1470.available[$row-1].name; This:C1470.displayed.selectedIndex)
 			
 		End if 
 		
 	Else 
 		
-		For ($i; 1; Size of array:C274(This:C1470.srcIdPtr->); 1)
+		For ($i; 1; This:C1470.available.length; 1)
 			
-			If (Find in array:C230(This:C1470.dstIdPtr->; (This:C1470.srcIdPtr)->{$i})>0)
+			If (This:C1470.main.extract("id").indexOf(This:C1470.available[$i-1].id)>0)
 				
 				continue
 				
 			End if 
 			
-			This:C1470.__add((This:C1470.srcIdPtr)->{$i}; (This:C1470.srcNamePtr)->{$i})
+			This:C1470.__add(This:C1470.available[$i-1].id; This:C1470.available[$i-1].name)
 			
 		End for 
 	End if 
@@ -515,23 +528,17 @@ Function _add($target : Text; $row : Integer)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 Function __add($id : Text; $name : Text; $row : Integer)
-	
-	If (Find in array:C230(This:C1470.dstIdPtr->; $id)=-1)
+	var $obj : Object
+	$obj:=New object:C1471("id"; $id; "name"; $name)
+	If (This:C1470.main.extract("id").indexOf($id)=-1)
 		
 		If ($row>0)
 			
-			INSERT IN ARRAY:C227(This:C1470.dstIdPtr->; $row)
-			INSERT IN ARRAY:C227(This:C1470.dstNamePtr->; $row)
-			
-			//%W-533.3
-			(This:C1470.dstIdPtr)->{$row}:=$id
-			(This:C1470.dstNamePtr)->{$row}:=$name
-			//%W+533.3
+			This:C1470.main.insert($row; $obj)
 			
 		Else 
 			
-			APPEND TO ARRAY:C911(This:C1470.dstIdPtr->; $id)
-			APPEND TO ARRAY:C911(This:C1470.dstNamePtr->; $name)
+			This:C1470.main.push($obj)
 			
 		End if 
 	End if 
@@ -545,8 +552,7 @@ Function _updateOrder()
 	
 	$order:=Form:C1466.main.order.copy()  // Current order
 	
-	// FIXME: Use a listbox collection
-	ARRAY TO COLLECTION:C1563(Form:C1466.main.order; This:C1470.dstIdPtr->)
+	Form:C1466.main.order:=This:C1470.main.extract("id")
 	
 	If (Feature.with("openURLActionsInTabBar"))
 		

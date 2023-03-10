@@ -97,36 +97,9 @@
 						"onSelectionChange",
 						"onBeginDragOver"
 					],
+					"listboxType": "collection",
+					"dataSource": "Form:C1466.$dialog.MAIN.available",
 					"columns": [
-						{
-							"name": "table_ids",
-							"width": 20,
-							"minWidth": 20,
-							"maxWidth": 20,
-							"resizable": false,
-							"enterable": false,
-							"visibility": "hidden",
-							"stroke": "#FF9300",
-							"textAlign": "left",
-							"verticalAlign": "middle",
-							"fontSize": 10,
-							"events": [
-								"onDataChange"
-							],
-							"header": {
-								"name": "Header4",
-								"text": "Header4",
-								"textAlign": "left",
-								"verticalAlign": "middle",
-								"fontWeight": "bold"
-							},
-							"footer": {
-								"name": "Footer4",
-								"timeFormat": "hh_mm_ss",
-								"textAlign": "left",
-								"verticalAlign": "middle"
-							}
-						},
 						{
 							"name": "table_names",
 							"width": 305,
@@ -150,7 +123,20 @@
 								"timeFormat": "hh_mm_ss",
 								"textAlign": "left",
 								"verticalAlign": "middle"
-							}
+							},
+							"dataSource": "This:C1470.name"
+						},
+						{
+							"header": {
+								"name": "Header1",
+								"text": "Header1"
+							},
+							"name": "Column1",
+							"footer": {
+								"name": "Footer1"
+							},
+							"dataSourceTypeHint": "text",
+							"enterable": false
 						}
 					]
 				},
@@ -176,36 +162,9 @@
 					"movableRows": true,
 					"method": "ObjectMethods/02_displayed.4dm",
 					"selectionMode": "single",
+					"dataSource": "Form:C1466.$dialog.MAIN.main",
+					"listboxType": "collection",
 					"columns": [
-						{
-							"name": "main_ids",
-							"width": 20,
-							"minWidth": 20,
-							"maxWidth": 20,
-							"resizable": false,
-							"enterable": false,
-							"visibility": "hidden",
-							"stroke": "#FF9300",
-							"textAlign": "left",
-							"verticalAlign": "middle",
-							"fontSize": 10,
-							"events": [
-								"onDataChange"
-							],
-							"header": {
-								"name": "Header1",
-								"text": "Header4",
-								"textAlign": "left",
-								"verticalAlign": "middle",
-								"fontWeight": "bold"
-							},
-							"footer": {
-								"name": "Footer1",
-								"timeFormat": "hh_mm_ss",
-								"textAlign": "left",
-								"verticalAlign": "middle"
-							}
-						},
 						{
 							"name": "main_names",
 							"width": 305,
@@ -230,7 +189,8 @@
 								"timeFormat": "hh_mm_ss",
 								"textAlign": "left",
 								"verticalAlign": "middle"
-							}
+							},
+							"dataSource": "This:C1470.name"
 						}
 					]
 				},
@@ -372,7 +332,7 @@
 		"kind": "form"
 	},
 	"method": "panel_HANDLE_EVENT",
-	"geometryStamp": 37,
+	"geometryStamp": 42,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

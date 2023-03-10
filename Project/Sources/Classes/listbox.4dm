@@ -341,7 +341,9 @@ Function cellCoordinates($column : Integer; $row : Integer) : Object
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Gives the number of selected rows
 Function selected() : Integer
-	
+	If (Value type:C1509((This:C1470.pointer)->)=Is longint:K8:6)
+		return (This:C1470.pointer)->
+	End if 
 	return Count in array:C907((This:C1470.pointer)->; True:C214)
 	
 	// MARK: - [SELECTION]
