@@ -87,7 +87,7 @@ Function handleEvents($e : Object) : Integer
 						This:C1470._dataModel.foregroundColor:=Foreground color:K23:1
 						This:C1470["_dataModel.border"].foregroundColor:=UI.selectedColor
 						
-						_o_editor_ui_LISTBOX(This:C1470._dataModel.name; True:C214)
+						//_o_editor_ui_LISTBOX(This._dataModel.name; True)
 						
 						//______________________________________________________
 					: ($e.code=On Double Clicked:K2:5)
@@ -97,18 +97,12 @@ Function handleEvents($e : Object) : Integer
 						This:C1470._dataModel.foregroundColor:=Foreground color:K23:1
 						This:C1470["_dataModel.border"].foregroundColor:=UI.selectedColor
 						
-						_o_editor_ui_LISTBOX(This:C1470._dataModel.name; True:C214)
+						//_o_editor_ui_LISTBOX(This._dataModel.name; True)
 						
 						//______________________________________________________
 					: ($e.code=On Begin Drag Over:K2:44)
 						
-						//%W-533.3
-						$o:=New object:C1471(\
-							"name"; This:C1470.available[$e.row-1].name; \
-							"tableNumber"; This:C1470.available[$e.row-1].id)
-						//%W+533.3
-						
-						This:C1470.beginDrag("com.4d.private.4dmobile.table"; $o)
+						This:C1470.beginDrag("com.4d.private.4dmobile.table"; This:C1470.available[$e.row-1])
 						
 						//______________________________________________________
 					: ($e.code=On Getting Focus:K2:7)
@@ -152,13 +146,7 @@ Function handleEvents($e : Object) : Integer
 						//______________________________________________________
 					: ($e.code=On Begin Drag Over:K2:44)
 						
-						//%W-533.3
-						$o:=New object:C1471(\
-							"name"; This:C1470.available[$e.row-1].name; \
-							"tableNumber"; This:C1470.available[$e.row-1].id)
-						//%W+533.3
-						
-						This:C1470.beginDrag("com.4d.private.4dmobile.table"; $o)
+						This:C1470.beginDrag("com.4d.private.4dmobile.table"; This:C1470.available[$e.row-1])
 						
 						//______________________________________________________
 					: ($e.code=On Getting Focus:K2:7)
@@ -194,11 +182,11 @@ Function handleEvents($e : Object) : Integer
 			: (This:C1470.removeOne.catch($e; On Clicked:K2:4))
 				
 				var $indx : Integer
-				$indx:=(This:C1470.displayed.pointer)->
+				$indx:=This:C1470.mainCurrentPos
 				
 				If ($indx>0)
 					
-					This:C1470.displayed.deleteRows($indx)
+					This:C1470.main.remove($indx-1)
 					
 				End if 
 				
@@ -208,7 +196,7 @@ Function handleEvents($e : Object) : Integer
 				// MARK: removeAll
 			: (This:C1470.removeAll.catch($e; On Clicked:K2:4))
 				
-				This:C1470.displayed.deleteRows()
+				This:C1470.main.clear()
 				This:C1470._updateOrder()
 				
 				//==============================================
@@ -250,6 +238,7 @@ Function onLoad()
 		End for each 
 		
 		If (True:C214)
+			var $action : Object
 			For each ($action; Form:C1466.actions || New collection:C1472)
 				
 				This:C1470.available.push(New object:C1471(\
@@ -314,18 +303,39 @@ Function update()
 	// Selected tables
 	This:C1470.main:=New collection:C1472
 	
+	var $itemObject : Object
 	For each ($item; Form:C1466.main.order)
 		
-		If (Value type:C1509($item)=Is text:K8:3)
-			
-			If (Form:C1466.dataModel[$item]#Null:C1517)
+		Case of 
+			: (Value type:C1509($item)=Is text:K8:3)
 				
-				This:C1470.main.push(New object:C1471(\
-					"name"; Form:C1466.dataModel[$item][""].label; \
-					"id"; $item))
+				$itemObject:=Form:C1466.dataModel[$item]
 				
-			End if 
-		End if 
+				If ($itemObject#Null:C1517)
+					
+					This:C1470.main.push(New object:C1471(\
+						"type"; "table"; \
+						"name"; $itemObject[""].label; \
+						"icon"; $itemObject[""].icon; \
+						"id"; $item))
+					
+				End if 
+				
+			: ((Value type:C1509($item)=Is object:K8:27) && ($item.action#Null:C1517)) && (Form:C1466.actions#Null:C1517)  // XXX if actions? (not supported yet)
+				
+				$itemObject:=Form:C1466.actions.find(Formula:C1597($1.value.name=$item.action))
+				
+				If ($itemObject#Null:C1517)
+					
+					This:C1470.main.push(New object:C1471(\
+						"type"; "action"; \
+						"name"; $itemObject.name+" ("+$itemObject.label+")"; \
+						"icon"; $itemObject.icon; \
+						"id"; $item.action))
+					
+				End if 
+				
+		End case 
 	End for each 
 	
 	This:C1470.noDataModel.show(This:C1470.available.length=0)
@@ -422,7 +432,7 @@ Function mainHandleEvents($e : Object)->$allow : Integer
 				// End if
 				// Else
 				//If ($o.src#$e.row)\
-																																																																																															& ($e.row#($o.src+1))  // Not the same or the next one
+																																																																																																																			& ($e.row#($o.src+1))  // Not the same or the next one
 				//$o:=$me.rowCoordinates($e.row)
 				//$o.bottom:=$o.top
 				//$o.right:=$me.coordinates.right
@@ -440,26 +450,16 @@ Function mainHandleEvents($e : Object)->$allow : Integer
 			$o:=This:C1470.getPasteboard($uri)
 			
 			If ($o#Null:C1517)
+				var $tgt : Integer
+				$tgt:=Drop position:C608
 				
-				$o.tgt:=Drop position:C608
-				
-				If ($o.tgt=-1)  // After the last line
+				If ($tgt=-1)  // After the last line
 					
-					// This.action.parameters.push(This.current)
-					//This.action.parameters.remove($o.src-1)
-					
-					This:C1470.__add($o.tableNumber; $o.name)
+					This:C1470.__add($o; $tgt)
 					
 				Else 
 					
-					//This.action.parameters.insert($o.tgt-1; This.current)
-					//If ($o.tgt<$o.src)
-					//This.action.parameters.remove($o.src)
-					// Else
-					//This.action.parameters.remove($o.src-1)
-					// End if
-					
-					This:C1470.__add($o.tableNumber; $o.name; $o.tgt)
+					This:C1470.__add($o; $tgt-1)
 					
 				End if 
 				
@@ -485,9 +485,9 @@ Function _updateButtons()
 		
 	Else 
 		
-		This:C1470.addOne.enable((This:C1470.available.length>Form:C1466.main.order.length) && (This:C1470._dataModel.selected()>0))
+		This:C1470.addOne.enable((This:C1470.available.length>Form:C1466.main.order.length) && (This:C1470.availableSelected#Null:C1517) && (This:C1470.availableSelected.length>0))
 		This:C1470.addAll.enable(This:C1470.available.length>Form:C1466.main.order.length)
-		This:C1470.removeOne.enable(This:C1470.displayed.selected()>0)
+		This:C1470.removeOne.enable((This:C1470.mainSelected#Null:C1517) && (This:C1470.mainSelected.length>0))
 		This:C1470.removeAll.enable(Form:C1466.main.order.length>0)
 		
 	End if 
@@ -501,11 +501,11 @@ Function _add($target : Text; $row : Integer)
 	
 	If ($target="one")
 		
-		$row:=$row || (This:C1470._dataModel.pointer)->
+		$row:=$row || (This:C1470.availableCurrentIndex+1)
 		
 		If ($row>0)
 			
-			This:C1470.__add(This:C1470.available[$row-1].id; This:C1470.available[$row-1].name; This:C1470.displayed.selectedIndex)
+			This:C1470.__add(This:C1470.available[$row-1]; This:C1470.mainCurrentPos-1)
 			
 		End if 
 		
@@ -519,20 +519,20 @@ Function _add($target : Text; $row : Integer)
 				
 			End if 
 			
-			This:C1470.__add(This:C1470.available[$i-1].id; This:C1470.available[$i-1].name)
+			This:C1470.__add(This:C1470.available[$i-1]; -1)
 			
 		End for 
 	End if 
 	
 	This:C1470._updateOrder()
 	
+	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function __add($id : Text; $name : Text; $row : Integer)
-	var $obj : Object
-	$obj:=New object:C1471("id"; $id; "name"; $name)
-	If (This:C1470.main.extract("id").indexOf($id)=-1)
+Function __add($obj : Object; $row : Integer)
+	
+	If (This:C1470.main.extract("id").indexOf($obj.id)=-1)
 		
-		If ($row>0)
+		If ($row>=0)
 			
 			This:C1470.main.insert($row; $obj)
 			
@@ -547,32 +547,23 @@ Function __add($id : Text; $name : Text; $row : Integer)
 Function _updateOrder()
 	
 	var $index : Integer
-	var $item
+	var $item : Variant
 	var $order : Collection
 	
 	$order:=Form:C1466.main.order.copy()  // Current order
 	
-	Form:C1466.main.order:=This:C1470.main.extract("id")
+	Form:C1466.main.order:=New collection:C1472()
+	For each ($item; This:C1470.main)
+		Case of 
+			: (String:C10($item.type)="action")
+				Form:C1466.main.order.push(New object:C1471("action"; $item.id))  // XXX or name
+			Else 
+				Form:C1466.main.order.push($item.id)
+		End case 
+	End for each 
 	
-	If (Feature.with("openURLActionsInTabBar"))
-		
-		For each ($item; $order)
-			
-			If (Form:C1466.main.order.indexOf($item)<0)
-				
-				// Maybe removed or unknow item type
-				If (Value type:C1509($item)=Is object:K8:27)  // Currently object are ignored
-					
-					Form:C1466.main.order.insert($index; $item)  // Try to put at same pos, not really smart like a Diffable algo
-					
-				End if 
-			End if 
-			
-			$index+=1
-			
-		End for each 
-		
-	End if 
+	This:C1470._dataModel.touch()
+	This:C1470.displayed.touch()
 	
 	If (Not:C34(Form:C1466.main.order.equal($order)))
 		
@@ -582,3 +573,51 @@ Function _updateOrder()
 	
 	This:C1470.update()
 	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function backgroundColor($current : Text)->$color
+	var $isFocused : Boolean
+	$isFocused:=(OBJECT Get name:C1087(Object with focus:K67:3)=$current)
+	If (FORM Event:C1606.isRowSelected)
+		
+		return $isFocused ? UI.backgroundSelectedColor : UI.alternateSelectedColor
+		
+	Else 
+		
+		return $isFocused ? ($isFocused ? UI.highlightColor : UI.highlightColorNoFocus) : "transparent"
+		
+	End if 
+	
+	return "transparent"
+	
+	
+	//=== === === === === === === === === === === === === === === === === === === === ===
+Function metaInfo($this : Object) : Object
+	
+	var $meta : Object
+	
+	// Default values
+	$meta:=New object:C1471(\
+		"stroke"; UI.darkScheme ? "white" : "black"; \
+		"fontWeight"; "normal"; \
+		"cell"; New object:C1471(\
+		"table_names"; New object:C1471; \
+		"main_names"; New object:C1471))
+	
+	Case of 
+			
+			//______________________________________________________
+		: ((String:C10($this.type)="table") && (Form:C1466.dataModel[String:C10($this.id)]=Null:C1517))
+			
+			$meta.cell.main_names.stroke:=UI.errorRGB
+			
+			//______________________________________________________
+		: ((String:C10($this.type)="action") && (Form:C1466.actions.find(Formula:C1597($1.value.name=$item.name))#Null:C1517))
+			
+			$meta.cell.main_names.stroke:=UI.errorRGB
+			
+			//______________________________________________________
+	End case 
+	
+	
+	
+	return $meta

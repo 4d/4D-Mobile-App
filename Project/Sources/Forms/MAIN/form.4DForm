@@ -99,6 +99,11 @@
 					],
 					"listboxType": "collection",
 					"dataSource": "Form:C1466.$dialog.MAIN.available",
+					"selectedItemsSource": "Form:C1466.$dialog.MAIN.availableSelected",
+					"currentItemSource": "Form:C1466.$dialog.MAIN.availableCurrent",
+					"currentItemPositionSource": "Form:C1466.$dialog.MAIN.availableCurrentPos",
+					"metaSource": "panel.metaInfo(This:C1470)",
+					"rowFillSource": "panel.backgroundColor(\"_dataModel\")",
 					"columns": [
 						{
 							"name": "table_names",
@@ -125,18 +130,6 @@
 								"verticalAlign": "middle"
 							},
 							"dataSource": "This:C1470.name"
-						},
-						{
-							"header": {
-								"name": "Header1",
-								"text": "Header1"
-							},
-							"name": "Column1",
-							"footer": {
-								"name": "Footer1"
-							},
-							"dataSourceTypeHint": "text",
-							"enterable": false
 						}
 					]
 				},
@@ -164,6 +157,11 @@
 					"selectionMode": "single",
 					"dataSource": "Form:C1466.$dialog.MAIN.main",
 					"listboxType": "collection",
+					"currentItemSource": "Form:C1466.$dialog.MAIN.mainCurrent",
+					"currentItemPositionSource": "Form:C1466.$dialog.MAIN.mainCurrentPos",
+					"selectedItemsSource": "Form:C1466.$dialog.MAIN.mainSelected",
+					"metaSource": "panel.metaInfo(This:C1470)",
+					"rowFillSource": "panel.backgroundColor(\"02_displayed\")",
 					"columns": [
 						{
 							"name": "main_names",
@@ -190,7 +188,8 @@
 								"textAlign": "left",
 								"verticalAlign": "middle"
 							},
-							"dataSource": "This:C1470.name"
+							"dataSource": "This:C1470.name",
+							"rowFillSource": ""
 						}
 					]
 				},
@@ -332,7 +331,7 @@
 		"kind": "form"
 	},
 	"method": "panel_HANDLE_EVENT",
-	"geometryStamp": 42,
+	"geometryStamp": 44,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
