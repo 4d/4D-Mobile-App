@@ -859,8 +859,8 @@ Por exemplo, o nome do desenvolvedor é usado na fonte e no cabeçalho.</target>
           <target>Associar ícones e etiquetas para tabelas e campos</target>
         </trans-unit>
         <trans-unit id="OsoNlhxeLKmCB3E7TNKG5Q" resname="comment_main">
-          <source>Order your tables in the Tabbar</source>
-          <target>Ordenar suas tabelas no menú</target>
+          <source>Select the elements to put in the Tabbar and order it</source>
+          <target state="needs-review-translation">Ordenar suas tabelas no menú</target>
         </trans-unit>
         <trans-unit id="t5w7OAPDSQ8feyEvtCDqQw" resname="comment_views">
           <source>Build list and detail forms for each table</source>
@@ -1004,6 +1004,14 @@ Ele será substituído por uma versão genérica</target>
         <trans-unit id="Ia0HuoEYIeZ4xeyWiDqqfg" resname="availableTables">
           <source>Available Tables</source>
           <target>Tabelas disponíveis</target>
+        </trans-unit>
+        <trans-unit id="5J1S8mRI7kQY8V1LBRtbUw" resname="availableMainElements">
+          <source>Available elements for the main menu</source>
+          <target state="new">Available elements for the main menu</target>
+        </trans-unit>
+        <trans-unit id="86CFeT93x0PYbFFIO4tJsw" resname="selectedMainElements">
+          <source>Selected elements for the main menu</source>
+          <target state="new">Selected elements for the main menu</target>
         </trans-unit>
       </group>
       <group resname="Welcome">
