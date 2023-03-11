@@ -229,9 +229,9 @@
 					"type": "text",
 					"top": 5,
 					"left": 17,
-					"width": 261,
-					"height": 17,
-					"text": ":xliff:availableTables",
+					"width": 343,
+					"height": 16,
+					"text": ":xliff:availableMainElements",
 					"class": "label"
 				},
 				"addOne": {
@@ -300,9 +300,9 @@
 					"type": "text",
 					"top": 5,
 					"left": 500,
-					"width": 150,
-					"height": 17,
-					"text": ":xliff:selectedTables",
+					"width": 335,
+					"height": 16,
+					"text": ":xliff:selectedMainElements",
 					"class": "label"
 				},
 				"up": {
@@ -363,7 +363,7 @@
 		"kind": "form"
 	},
 	"method": "panel_HANDLE_EVENT",
-	"geometryStamp": 49,
+	"geometryStamp": 52,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
