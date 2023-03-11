@@ -97,29 +97,35 @@
 						"onSelectionChange",
 						"onBeginDragOver"
 					],
-					"listboxType": "collection",
-					"dataSource": "Form:C1466.$dialog.MAIN.available",
-					"selectedItemsSource": "Form:C1466.$dialog.MAIN.availableSelected",
-					"currentItemSource": "Form:C1466.$dialog.MAIN.availableCurrent",
-					"currentItemPositionSource": "Form:C1466.$dialog.MAIN.availableCurrentPos",
-					"metaSource": "panel.metaInfo(This:C1470)",
-					"rowFillSource": "panel.backgroundColor(\"_dataModel\")",
-					"showHeaders": false,
 					"columns": [
 						{
+							"name": "table_ids",
+							"width": 20,
+							"minWidth": 20,
+							"maxWidth": 20,
+							"resizable": false,
+							"enterable": false,
+							"visibility": "hidden",
+							"stroke": "#FF9300",
+							"textAlign": "left",
+							"verticalAlign": "middle",
+							"fontSize": 10,
+							"events": [
+								"onDataChange"
+							],
 							"header": {
-								"name": "Header1",
-								"text": "Header1"
+								"name": "Header4",
+								"text": "Header4",
+								"textAlign": "left",
+								"verticalAlign": "middle",
+								"fontWeight": "bold"
 							},
-							"name": "table_icons",
-							"dataSourceTypeHint": "picture",
-							"dataSource": "This:C1470.$icon",
 							"footer": {
-								"name": "Footer1"
-							},
-							"width": 40,
-							"horizontalPadding": 2,
-							"pictureFormat": "truncatedCenter"
+								"name": "Footer4",
+								"timeFormat": "hh_mm_ss",
+								"textAlign": "left",
+								"verticalAlign": "middle"
+							}
 						},
 						{
 							"name": "table_names",
@@ -144,8 +150,7 @@
 								"timeFormat": "hh_mm_ss",
 								"textAlign": "left",
 								"verticalAlign": "middle"
-							},
-							"dataSource": "This:C1470.name"
+							}
 						}
 					]
 				},
@@ -171,29 +176,35 @@
 					"movableRows": true,
 					"method": "ObjectMethods/02_displayed.4dm",
 					"selectionMode": "single",
-					"dataSource": "Form:C1466.$dialog.MAIN.main",
-					"listboxType": "collection",
-					"currentItemSource": "Form:C1466.$dialog.MAIN.mainCurrent",
-					"currentItemPositionSource": "Form:C1466.$dialog.MAIN.mainCurrentPos",
-					"selectedItemsSource": "Form:C1466.$dialog.MAIN.mainSelected",
-					"metaSource": "panel.metaInfo(This:C1470)",
-					"rowFillSource": "panel.backgroundColor(\"02_displayed\")",
-					"showHeaders": false,
 					"columns": [
 						{
+							"name": "main_ids",
+							"width": 20,
+							"minWidth": 20,
+							"maxWidth": 20,
+							"resizable": false,
+							"enterable": false,
+							"visibility": "hidden",
+							"stroke": "#FF9300",
+							"textAlign": "left",
+							"verticalAlign": "middle",
+							"fontSize": 10,
+							"events": [
+								"onDataChange"
+							],
 							"header": {
-								"name": "Header3",
-								"text": ".icon"
+								"name": "Header1",
+								"text": "Header4",
+								"textAlign": "left",
+								"verticalAlign": "middle",
+								"fontWeight": "bold"
 							},
-							"name": "Column1",
 							"footer": {
-								"name": "Footer3"
-							},
-							"width": 40,
-							"dataSourceTypeHint": "picture",
-							"dataSource": "This:C1470.$icon",
-							"verticalPadding": 0,
-							"pictureFormat": "truncatedCenter"
+								"name": "Footer1",
+								"timeFormat": "hh_mm_ss",
+								"textAlign": "left",
+								"verticalAlign": "middle"
+							}
 						},
 						{
 							"name": "main_names",
@@ -219,9 +230,7 @@
 								"timeFormat": "hh_mm_ss",
 								"textAlign": "left",
 								"verticalAlign": "middle"
-							},
-							"dataSource": "This:C1470.name",
-							"rowFillSource": ""
+							}
 						}
 					]
 				},
@@ -229,9 +238,9 @@
 					"type": "text",
 					"top": 5,
 					"left": 17,
-					"width": 343,
-					"height": 16,
-					"text": ":xliff:availableMainElements",
+					"width": 261,
+					"height": 17,
+					"text": ":xliff:availableTables",
 					"class": "label"
 				},
 				"addOne": {
@@ -300,9 +309,9 @@
 					"type": "text",
 					"top": 5,
 					"left": 500,
-					"width": 335,
-					"height": 16,
-					"text": ":xliff:selectedMainElements",
+					"width": 150,
+					"height": 17,
+					"text": ":xliff:selectedTables",
 					"class": "label"
 				},
 				"up": {
@@ -347,8 +356,8 @@
 				},
 				"noDataModel": {
 					"type": "subform",
-					"left": 41,
-					"top": 183,
+					"left": 30,
+					"top": 35,
 					"width": 412,
 					"height": 19,
 					"detailForm": "NO_DATAMODEL",
@@ -363,7 +372,7 @@
 		"kind": "form"
 	},
 	"method": "panel_HANDLE_EVENT",
-	"geometryStamp": 52,
+	"geometryStamp": 37,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

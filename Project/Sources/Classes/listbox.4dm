@@ -959,4 +959,3 @@ Function setRowFontStyle($row : Integer; $tyle : Integer)
 		LISTBOX SET ROW FONT STYLE:C1268(*; This:C1470.name; $row; $tyle)
 		
 	End if 
-	

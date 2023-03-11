@@ -224,6 +224,7 @@
 			"08] ACTIONS_PARAMS",
 			"09] TABLES",
 			"10] FIELDS",
+			"11] _O_MAIN",
 			"11] MAIN",
 			"12] VIEWS",
 			"13] SERVER",
@@ -520,6 +521,14 @@
 		],
 		"classes": [
 			"FIELDS"
+		]
+	},
+	"11] _O_MAIN": {
+		"forms": [
+			"_O_MAIN"
+		],
+		"classes": [
+			"_O_MAIN"
 		]
 	},
 	"11] MAIN": {

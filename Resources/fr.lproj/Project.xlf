@@ -855,7 +855,7 @@ Par exemple, ce nom est utilisé dans les chaînes de droits d'auteur de fichier
           <target>Associez des libellés et des icônes à vos tables et vos champs</target>
         </trans-unit>
         <trans-unit id="OsoNlhxeLKmCB3E7TNKG5Q" resname="comment_main">
-          <source>Order your tables in the Tabbar</source>
+          <source>Select the elements to put in the Tabbar and order it</source>
           <target>Définissez l'ordre de vos tables dans le menu</target>
         </trans-unit>
         <trans-unit id="t5w7OAPDSQ8feyEvtCDqQw" resname="comment_views">
@@ -997,6 +997,14 @@ Il sera remplacée par une version générique</target>
         <trans-unit id="Ia0HuoEYIeZ4xeyWiDqqfg" resname="availableTables">
           <source>Available Tables</source>
           <target>Tables disponibles</target>
+        </trans-unit>
+        <trans-unit id="5J1S8mRI7kQY8V1LBRtbUw" resname="availableMainElements">
+          <source>Available elements for the main menu</source>
+          <target state="needs-review-translation">Elements disponibles pour le menu principal</target>
+        </trans-unit>
+        <trans-unit id="86CFeT93x0PYbFFIO4tJsw" resname="selectedMainElements">
+          <source>Selected elements for the main menu</source>
+          <target>Elements sélectionnés pour le menu principal</target>
         </trans-unit>
       </group>
       <group resname="Welcome">

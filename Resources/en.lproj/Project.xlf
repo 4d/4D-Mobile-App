@@ -853,8 +853,8 @@ For example, the developer name is used in both the source and header.</target>
           <target>Associate labels and icons to your tables / fields</target>
         </trans-unit>
         <trans-unit id="OsoNlhxeLKmCB3E7TNKG5Q" resname="comment_main">
-          <source>Order your tables in the Tabbar</source>
-          <target>Order your tables in the Tabbar</target>
+          <source>Select the elements to put in the Tabbar and order it</source>
+          <target>Select the elements to put in the Tabbar and order it</target>
         </trans-unit>
         <trans-unit id="t5w7OAPDSQ8feyEvtCDqQw" resname="comment_views">
           <source>Build list and detail forms for each table</source>
@@ -995,6 +995,14 @@ It will be replaced by a generic version</target>
         <trans-unit id="Ia0HuoEYIeZ4xeyWiDqqfg" resname="availableTables">
           <source>Available Tables</source>
           <target>Available Tables</target>
+        </trans-unit>
+        <trans-unit id="5J1S8mRI7kQY8V1LBRtbUw" resname="availableMainElements">
+          <source>Available elements for the main menu</source>
+          <target>Available elements for the main menu</target>
+        </trans-unit>
+        <trans-unit id="86CFeT93x0PYbFFIO4tJsw" resname="selectedMainElements">
+          <source>Selected elements for the main menu</source>
+          <target>Selected elements for the main menu</target>
         </trans-unit>
       </group>
       <group resname="Welcome">
