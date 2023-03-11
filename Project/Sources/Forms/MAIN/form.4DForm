@@ -104,7 +104,23 @@
 					"currentItemPositionSource": "Form:C1466.$dialog.MAIN.availableCurrentPos",
 					"metaSource": "panel.metaInfo(This:C1470)",
 					"rowFillSource": "panel.backgroundColor(\"_dataModel\")",
+					"showHeaders": false,
 					"columns": [
+						{
+							"header": {
+								"name": "Header1",
+								"text": "Header1"
+							},
+							"name": "table_icons",
+							"dataSourceTypeHint": "picture",
+							"dataSource": "This:C1470.$icon",
+							"footer": {
+								"name": "Footer1"
+							},
+							"width": 40,
+							"horizontalPadding": 2,
+							"pictureFormat": "truncatedCenter"
+						},
 						{
 							"name": "table_names",
 							"width": 305,
@@ -162,7 +178,23 @@
 					"selectedItemsSource": "Form:C1466.$dialog.MAIN.mainSelected",
 					"metaSource": "panel.metaInfo(This:C1470)",
 					"rowFillSource": "panel.backgroundColor(\"02_displayed\")",
+					"showHeaders": false,
 					"columns": [
+						{
+							"header": {
+								"name": "Header3",
+								"text": ".icon"
+							},
+							"name": "Column1",
+							"footer": {
+								"name": "Footer3"
+							},
+							"width": 40,
+							"dataSourceTypeHint": "picture",
+							"dataSource": "This:C1470.$icon",
+							"verticalPadding": 0,
+							"pictureFormat": "truncatedCenter"
+						},
 						{
 							"name": "main_names",
 							"width": 305,
@@ -315,8 +347,8 @@
 				},
 				"noDataModel": {
 					"type": "subform",
-					"left": 30,
-					"top": 35,
+					"left": 41,
+					"top": 183,
 					"width": 412,
 					"height": 19,
 					"detailForm": "NO_DATAMODEL",
@@ -331,7 +363,7 @@
 		"kind": "form"
 	},
 	"method": "panel_HANDLE_EVENT",
-	"geometryStamp": 44,
+	"geometryStamp": 49,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

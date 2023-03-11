@@ -113,6 +113,7 @@ Function handleEvents($e : Object) : Integer
 						
 						This:C1470._dataModel.foregroundColor:=Foreground color:K23:1
 						This:C1470["_dataModel.border"].foregroundColor:=UI.backgroundUnselectedColor
+						This:C1470._dataModel.touch()
 						
 						//______________________________________________________
 				End case 
@@ -158,6 +159,7 @@ Function handleEvents($e : Object) : Integer
 						
 						This:C1470.displayed.foregroundColor:=Foreground color:K23:1
 						This:C1470.displayedBorder.foregroundColor:=UI.backgroundUnselectedColor
+						This:C1470.displayed.touch()
 						
 						//______________________________________________________
 				End case 
@@ -229,6 +231,7 @@ Function onLoad()
 				"type"; "table"; \
 				"name"; Form:C1466.dataModel[$tableID][""].label; \
 				"icon"; Form:C1466.dataModel[$tableID][""].icon; \
+				"$icon"; UI.getIcon(Form:C1466.dataModel[$tableID][""].icon); \
 				"data"; $tableID; \
 				"id"; $tableID))
 			
@@ -237,10 +240,14 @@ Function onLoad()
 		var $action : Object
 		For each ($action; Form:C1466.actions || New collection:C1472)
 			
+			If ($action.scope#"global")
+				continue
+			End if 
 			This:C1470.available.push(New object:C1471(\
 				"type"; "action"; \
 				"name"; $action.name+" ("+$action.label+")"; \
 				"icon"; $action.icon; \
+				"$icon"; UI.getIcon($action.icon); \
 				"data"; New object:C1471("action"; $action.name); \
 				"id"; $action.name))
 			
@@ -312,6 +319,7 @@ Function update()
 						"type"; "table"; \
 						"name"; $itemObject[""].label; \
 						"icon"; $itemObject[""].icon; \
+						"$icon"; UI.getIcon($itemObject[""].icon); \
 						"id"; $item))
 					
 				End if 
@@ -326,6 +334,7 @@ Function update()
 						"type"; "action"; \
 						"name"; $itemObject.name+" ("+$itemObject.label+")"; \
 						"icon"; $itemObject.icon; \
+						"$icon"; UI.getIcon($itemObject.icon); \
 						"id"; $item.action))
 					
 				End if 
@@ -388,7 +397,6 @@ Function mainHandleEvents($e : Object)->$allow : Integer
 			
 			This:C1470.displayed.foregroundColor:=Foreground color:K23:1
 			This:C1470.displayedBorder.foregroundColor:=UI.selectedColor
-			
 			//______________________________________________________
 		: ($e.code=On Losing Focus:K2:8)
 			
@@ -426,7 +434,7 @@ Function mainHandleEvents($e : Object)->$allow : Integer
 			Else 
 				
 				//This.dropCursor.setCoordinates($o.left; $o.top; $o.right; $o.bottom)
-				//This.dropCursor.show()
+				// This.dropCursor.show()
 				
 			End if 
 			
