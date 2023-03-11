@@ -354,5 +354,3 @@ Logger.info(Is compiled mode:C492 ? "COMPILED MODE" : "INTERPRETED MODE")
 // MARK:-AFTER FLAGS
 SET ASSERT ENABLED:C1131(Component.isInterpreted | Feature.with("debug"); *)
 Logger.info("Assert "+Choose:C955(Get assert enabled:C1130; "Enabled"; "Disabled"))
-
-MAINFormName:="MAIN"

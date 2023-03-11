@@ -131,11 +131,11 @@ End if
 Feature.unstable("iosSDKfromAWS")  // Download iOS SDK from AWS
 Feature.unstable("androidDeepLinking")  // Enable deep linking for android project
 Feature.unstable("androidPushNotifications")  // Enable push notifications for android project
+Feature.unstable("openURLActionsInTabBar")  // azure:3624 action with preset:openURL 
 
 // Mark:-🚧 MAIN
 Feature.main("listEditor")  // #130828 [MOBILE] Create and edit an input control from the project editor
-Feature.main("openURLActionsInTabBar")  // azure:3624 action with preset:openURL & 
-// Feature.wip("actionsInTabBar") // ie. all type of action
+// Feature.wip("actionsInTabBar") // ie. all type of action type
 
 // Mark:-🚧 WIP
 Feature.wip("buildWithCmd")  // Allow to create/build using cmd only: azure:3628

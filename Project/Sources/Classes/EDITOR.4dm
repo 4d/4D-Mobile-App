@@ -11,6 +11,8 @@ Class constructor()
 	// Mark: Associated worker
 	This:C1470.worker:="4D Mobile ("+String:C10(This:C1470.window)+")"
 	
+	This:C1470.MAINFormName:=Feature.with("openURLActionsInTabBar") ? "MAIN" : "_O_MAIN"
+	
 	This:C1470.design()
 	
 	// Mark:Embedded classes
@@ -116,7 +118,7 @@ Function design()
 	
 	$o.panels.push(New object:C1471(\
 		"title"; Get localized string:C991("mainMenu"); \
-		"form"; MAINFormName; \
+		"form"; This:C1470.MAINFormName; \
 		"noTitle"; True:C214))
 	
 	// MARK:VIEWS

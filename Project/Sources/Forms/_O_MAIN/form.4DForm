@@ -1,0 +1,383 @@
+{
+	"destination": "detailScreen",
+	"inheritedForm": "panel_template",
+	"width": 960,
+	"height": 359,
+	"markerHeader": 15,
+	"markerBody": 200,
+	"markerBreak": 220,
+	"markerFooter": 240,
+	"events": [
+		"onLoad",
+		"onClick",
+		"onDoubleClick",
+		"onLosingFocus",
+		"onGettingFocus",
+		"onDrop",
+		"onDragOver",
+		"onUnload",
+		"onTimer",
+		"onSelectionChange",
+		"onBeginDragOver",
+		"onBoundVariableChange"
+	],
+	"pages": [
+		null,
+		{
+			"objects": {
+				"00_title.border": {
+					"type": "rectangle",
+					"top": 408,
+					"left": 16,
+					"width": 344,
+					"height": 33,
+					"stroke": "#C4C4C4"
+				},
+				"00_title": {
+					"type": "input",
+					"top": 416,
+					"left": 23,
+					"width": 329,
+					"height": 17,
+					"dataSource": "Form:C1466.main.navigationTitle",
+					"focusable": false,
+					"fill": "transparent",
+					"borderStyle": "none",
+					"enterable": false,
+					"hideFocusRing": true,
+					"dragging": "none",
+					"dropping": "custom",
+					"events": [
+						"onDataChange"
+					]
+				},
+				"00_title.label": {
+					"type": "text",
+					"top": 385,
+					"left": 17,
+					"width": 69,
+					"height": 17,
+					"stroke": "#808080",
+					"textAlign": "left",
+					"text": ":xliff:title"
+				},
+				"02_displayed.border": {
+					"type": "rectangle",
+					"top": 26,
+					"left": 500,
+					"width": 438,
+					"height": 314,
+					"fill": "transparent",
+					"stroke": "#AAAAAA"
+				},
+				"_dataModel.border": {
+					"type": "rectangle",
+					"top": 26,
+					"left": 16,
+					"width": 439,
+					"height": 314,
+					"fill": "transparent",
+					"stroke": "#AAAAAA"
+				},
+				"_dataModel": {
+					"type": "listbox",
+					"top": 28,
+					"left": 17,
+					"width": 436,
+					"height": 311,
+					"movableRows": false,
+					"dragging": "custom",
+					"hideSystemHighlight": true,
+					"rowHeight": "32px",
+					"events": [
+						"onClick",
+						"onDoubleClick",
+						"onLosingFocus",
+						"onGettingFocus",
+						"onSelectionChange",
+						"onBeginDragOver"
+					],
+					"columns": [
+						{
+							"name": "table_ids",
+							"width": 20,
+							"minWidth": 20,
+							"maxWidth": 20,
+							"resizable": false,
+							"enterable": false,
+							"visibility": "hidden",
+							"stroke": "#FF9300",
+							"textAlign": "left",
+							"verticalAlign": "middle",
+							"fontSize": 10,
+							"events": [
+								"onDataChange"
+							],
+							"header": {
+								"name": "Header4",
+								"text": "Header4",
+								"textAlign": "left",
+								"verticalAlign": "middle",
+								"fontWeight": "bold"
+							},
+							"footer": {
+								"name": "Footer4",
+								"timeFormat": "hh_mm_ss",
+								"textAlign": "left",
+								"verticalAlign": "middle"
+							}
+						},
+						{
+							"name": "table_names",
+							"width": 305,
+							"minWidth": 10,
+							"maxWidth": 305,
+							"enterable": false,
+							"textAlign": "left",
+							"verticalAlign": "middle",
+							"events": [
+								"onDataChange"
+							],
+							"header": {
+								"name": "Header5",
+								"text": ".Tables",
+								"textAlign": "left",
+								"verticalAlign": "middle",
+								"fontWeight": "bold"
+							},
+							"footer": {
+								"name": "Footer5",
+								"timeFormat": "hh_mm_ss",
+								"textAlign": "left",
+								"verticalAlign": "middle"
+							}
+						}
+					]
+				},
+				"02_displayed": {
+					"type": "listbox",
+					"top": 28,
+					"left": 501,
+					"width": 435,
+					"height": 311,
+					"dropping": "custom",
+					"hideSystemHighlight": true,
+					"rowHeight": "32px",
+					"events": [
+						"onClick",
+						"onLosingFocus",
+						"onGettingFocus",
+						"onDrop",
+						"onDragOver",
+						"onSelectionChange",
+						"onRowMove",
+						"onBeginDragOver"
+					],
+					"movableRows": true,
+					"method": "ObjectMethods/02_displayed.4dm",
+					"selectionMode": "single",
+					"columns": [
+						{
+							"name": "main_ids",
+							"width": 20,
+							"minWidth": 20,
+							"maxWidth": 20,
+							"resizable": false,
+							"enterable": false,
+							"visibility": "hidden",
+							"stroke": "#FF9300",
+							"textAlign": "left",
+							"verticalAlign": "middle",
+							"fontSize": 10,
+							"events": [
+								"onDataChange"
+							],
+							"header": {
+								"name": "Header1",
+								"text": "Header4",
+								"textAlign": "left",
+								"verticalAlign": "middle",
+								"fontWeight": "bold"
+							},
+							"footer": {
+								"name": "Footer1",
+								"timeFormat": "hh_mm_ss",
+								"textAlign": "left",
+								"verticalAlign": "middle"
+							}
+						},
+						{
+							"name": "main_names",
+							"width": 305,
+							"minWidth": 10,
+							"maxWidth": 305,
+							"enterable": false,
+							"textAlign": "left",
+							"verticalAlign": "middle",
+							"fontWeight": "bold",
+							"events": [
+								"onDataChange"
+							],
+							"header": {
+								"name": "Header2",
+								"text": ".Tables",
+								"textAlign": "left",
+								"verticalAlign": "middle",
+								"fontWeight": "bold"
+							},
+							"footer": {
+								"name": "Footer2",
+								"timeFormat": "hh_mm_ss",
+								"textAlign": "left",
+								"verticalAlign": "middle"
+							}
+						}
+					]
+				},
+				"01_available.label": {
+					"type": "text",
+					"top": 5,
+					"left": 17,
+					"width": 261,
+					"height": 17,
+					"text": ":xliff:availableTables",
+					"class": "label"
+				},
+				"addOne": {
+					"type": "button",
+					"top": 59,
+					"left": 465,
+					"width": 24,
+					"height": 29,
+					"shortcutKey": "[right arrow]",
+					"icon": "/RESOURCES/images/common/next.png",
+					"iconFrames": 4,
+					"style": "custom",
+					"events": [
+						"onClick"
+					],
+					"focusable": false
+				},
+				"removeAll": {
+					"type": "button",
+					"top": 148,
+					"left": 465,
+					"width": 24,
+					"height": 29,
+					"shortcutKey": "[left arrow]",
+					"shortcutShift": true,
+					"focusable": false,
+					"icon": "/RESOURCES/Images/common/previousAll.png",
+					"iconFrames": 4,
+					"style": "custom",
+					"events": [
+						"onClick"
+					]
+				},
+				"removeOne": {
+					"type": "button",
+					"top": 118,
+					"left": 465,
+					"width": 24,
+					"height": 29,
+					"shortcutKey": "[left arrow]",
+					"focusable": false,
+					"icon": "/RESOURCES/images/common/previous.png",
+					"iconFrames": 4,
+					"style": "custom",
+					"events": [
+						"onClick"
+					]
+				},
+				"addAll": {
+					"type": "button",
+					"top": 88,
+					"left": 465,
+					"width": 24,
+					"height": 29,
+					"shortcutKey": "[right arrow]",
+					"shortcutShift": true,
+					"focusable": false,
+					"icon": "/RESOURCES/Images/common/nextAll.png",
+					"iconFrames": 4,
+					"style": "custom",
+					"events": [
+						"onClick"
+					]
+				},
+				"02_displayed.label": {
+					"type": "text",
+					"top": 5,
+					"left": 500,
+					"width": 150,
+					"height": 17,
+					"text": ":xliff:selectedTables",
+					"class": "label"
+				},
+				"up": {
+					"type": "button",
+					"top": 6,
+					"left": 904,
+					"width": 16,
+					"height": 16,
+					"visibility": "hidden",
+					"shortcutKey": "[up arrow]",
+					"icon": "/RESOURCES/images/common/up.png",
+					"iconFrames": 4,
+					"style": "custom",
+					"events": [
+						"onClick"
+					],
+					"focusable": false,
+					"shortcutAccel": false,
+					"shortcutControl": false,
+					"shortcutShift": true,
+					"shortcutAlt": false
+				},
+				"down": {
+					"type": "button",
+					"top": 6,
+					"left": 921,
+					"width": 16,
+					"height": 16,
+					"visibility": "hidden",
+					"shortcutKey": "[down arrow]",
+					"shortcutShift": true,
+					"focusable": false,
+					"icon": "/RESOURCES/images/common/down.png",
+					"iconFrames": 4,
+					"style": "custom",
+					"events": [
+						"onClick"
+					],
+					"shortcutAccel": false,
+					"shortcutControl": false,
+					"shortcutAlt": false
+				},
+				"noDataModel": {
+					"type": "subform",
+					"left": 30,
+					"top": 35,
+					"width": 412,
+					"height": 19,
+					"detailForm": "NO_DATAMODEL",
+					"focusable": false,
+					"visibility": "hidden"
+				}
+			}
+		}
+	],
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	},
+	"method": "panel_HANDLE_EVENT",
+	"geometryStamp": 37,
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	}
+}
