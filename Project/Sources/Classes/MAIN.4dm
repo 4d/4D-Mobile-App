@@ -337,6 +337,13 @@ Function update()
 						"$icon"; UI.getIcon($itemObject.icon); \
 						"id"; $item.action))
 					
+				Else 
+					
+					This:C1470.main.push(New object:C1471(\
+						"type"; "action"; \
+						"name"; $item.action; \
+						"id"; $item.action))
+					
 				End if 
 				
 		End case 
@@ -606,7 +613,7 @@ Function metaInfo($this : Object) : Object
 			$meta.cell.main_names.stroke:=UI.errorRGB
 			
 			//______________________________________________________
-		: ((String:C10($this.type)="action") && (Form:C1466.actions.find(Formula:C1597($1.value.name=$this.name))#Null:C1517))
+		: ((String:C10($this.type)="action") && ((Form:C1466.actions=Null:C1517) || (Form:C1466.actions.find(Formula:C1597($1.value.name=$2); $this.id)=Null:C1517)))
 			
 			$meta.cell.main_names.stroke:=UI.errorRGB
 			
