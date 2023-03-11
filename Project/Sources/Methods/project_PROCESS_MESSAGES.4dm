@@ -36,7 +36,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 		"structure"; "STRUCTURE"; \
 		"tableProperties"; "TABLES"; \
 		"fieldProperties"; "FIELDS"; \
-		"mainMenu"; "MAIN"; \
+		"mainMenu"; MAINFormName; \
 		"views"; "VIEWS"; \
 		"server"; "SERVER"; \
 		"data"; "DATA"; \

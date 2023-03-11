@@ -116,7 +116,7 @@ Function design()
 	
 	$o.panels.push(New object:C1471(\
 		"title"; Get localized string:C991("mainMenu"); \
-		"form"; "MAIN"; \
+		"form"; MAINFormName; \
 		"noTitle"; True:C214))
 	
 	// MARK:VIEWS
@@ -1217,4 +1217,3 @@ Function deleteDBFiles()
 		$file.delete()
 		
 	End if 
-	
