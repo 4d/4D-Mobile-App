@@ -73,7 +73,7 @@ Case of
 		For each ($o; $o.folders)
 			
 			//$oo:=JSON Parse(Document to text($o.parentFolder+$o.name+Folder separator+"manifest.json"))
-			$oo:=JSON Parse:C1218(Folder:C1567($o.parentFolder; fk platform path:K87:2).file($o.name+"/manifest.json"))
+			$oo:=JSON Parse:C1218(Folder:C1567($o.parentFolder; fk platform path:K87:2).file($o.name+"/manifest.json").getText())
 			
 			If (Length:C16(String:C10($oo.target))=0)\
 				 | (Position:C15(String:C10($oo.target); $Txt_type)>0)
