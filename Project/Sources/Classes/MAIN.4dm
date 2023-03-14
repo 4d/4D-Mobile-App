@@ -107,13 +107,13 @@ Function handleEvents($e : Object) : Integer
 						
 						This:C1470._dataModel.foregroundColor:=Foreground color:K23:1
 						This:C1470["_dataModel.border"].foregroundColor:=UI.selectedColor
+						This:C1470.displayed.touch()
 						
 						//______________________________________________________
 					: ($e.code=On Losing Focus:K2:8)
 						
 						This:C1470._dataModel.foregroundColor:=Foreground color:K23:1
 						This:C1470["_dataModel.border"].foregroundColor:=UI.backgroundUnselectedColor
-						This:C1470._dataModel.touch()
 						
 						//______________________________________________________
 				End case 
@@ -153,13 +153,13 @@ Function handleEvents($e : Object) : Integer
 						
 						This:C1470.displayed.foregroundColor:=Foreground color:K23:1
 						This:C1470.displayedBorder.foregroundColor:=UI.selectedColor
+						This:C1470._dataModel.touch()
 						
 						//______________________________________________________
 					: ($e.code=On Losing Focus:K2:8)
 						
 						This:C1470.displayed.foregroundColor:=Foreground color:K23:1
 						This:C1470.displayedBorder.foregroundColor:=UI.backgroundUnselectedColor
-						This:C1470.displayed.touch()
 						
 						//______________________________________________________
 				End case 
