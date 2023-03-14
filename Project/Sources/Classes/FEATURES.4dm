@@ -58,8 +58,8 @@ Function init()
 	This:C1470.formObject("certificateLabel").addToGroup($group)
 	This:C1470.widget("certificate"; "certificatePicker").addToGroup($group)
 	
-	var $o : cs:C1710.FEATURES
-	$o:=OB Copy:C1225(This:C1470)
+	var $this : cs:C1710.FEATURES
+	$this:=OB Copy:C1225(This:C1470)
 	This:C1470.certificate.picker:=cs:C1710.pathPicker.new(String:C10(Form:C1466.server.pushCertificate); New object:C1471(\
 		"fileTypes"; ".p8"; \
 		"directory"; 8858; \
@@ -67,7 +67,7 @@ Function init()
 		"openItem"; True:C214; \
 		"message"; "selectACertificate"; \
 		"placeHolder"; "selectACertificate"; \
-		"callback"; Formula:C1597($o.certificateCallback($1))))
+		"callback"; Formula:C1597($this.certificateCallback($1))))
 	
 	If (Feature.with("androidPushNotifications"))
 		
@@ -75,14 +75,14 @@ Function init()
 		This:C1470.formObject("configureFileLabel").addToGroup($group)
 		This:C1470.widget("configureFile"; "configureFilePicker").addToGroup($group)
 		
-		This:C1470.configureFile.picker:=cs:C1710.pathPicker.new(String:C10(Form:C1466.server.configurationFile); New object:C1471(\
+		This:C1470.configureFile.picker:=cs:C1710.pathPicker.new(cs:C1710.doc.new(String:C10(Form:C1466.server.configurationFile)).target; New object:C1471(\
 			"fileTypes"; ".json"; \
 			"directory"; 8858; \
 			"copyPath"; False:C215; \
 			"openItem"; True:C214; \
 			"message"; "selectAConfigurationFile"; \
 			"placeHolder"; "selectAConfigurationFile"; \
-			"callback"; Formula:C1597($o.configureFileCallback($1))))
+			"callback"; Formula:C1597($this.configureFileCallback($1))))
 		
 	End if 
 	
@@ -336,8 +336,10 @@ Function update()
 		This:C1470.certificateGroup.show(Form:C1466.server.pushNotification & PROJECT.$ios)
 		This:C1470.certificateGroup.enable(Is macOS:C1572)
 		This:C1470.certificate.picker.browse:=Is macOS:C1572
+		This:C1470.certificate.touch()
 		
 		This:C1470.configureFileGroup.show(Form:C1466.server.pushNotification & PROJECT.$android)
+		This:C1470.configureFile.touch()
 		
 	Else 
 		
@@ -345,12 +347,12 @@ Function update()
 		This:C1470.pushNotification.enable(Is macOS:C1572 & PROJECT.$ios)
 		This:C1470.certificateGroup.enable(Is macOS:C1572 & PROJECT.$ios)
 		This:C1470.certificate.picker.browse:=(Is macOS:C1572 & PROJECT.$ios)
+		This:C1470.certificate.touch()
 		
 	End if 
 	
 	This:C1470.deepLinkingGroup.show(Form:C1466.deepLinking.enabled)
 	
-	This:C1470.certificate.touch()
 	This:C1470.checkAuthenticationMethod()
 	
 	If (Form:C1466.deepLinking.enabled)
@@ -408,7 +410,6 @@ Function update()
 		This:C1470.deepLinkingGroup.enable(Is macOS:C1572 & PROJECT.$ios)
 		
 	End if 
-	
 	
 	// <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==> <==>
 Function get loginForm() : Text
