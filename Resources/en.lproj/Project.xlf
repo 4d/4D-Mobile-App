@@ -418,10 +418,6 @@ For example, the organization name is used in both the source and header.</targe
           <source>Select a certificate</source>
           <target>Select a certificate</target>
         </trans-unit>
-        <trans-unit id="T4kWBgvv7PFdz9nVfoXWpg" resname="certificate">
-          <source>Certificate</source>
-          <target>Certificate</target>
-        </trans-unit>
       </group>
       <group resname="Common">
         <trans-unit id="zvsuXgdhmzTyWETfWvmAWg" resname="none">
@@ -1662,6 +1658,14 @@ and end with "://".</target>
         <trans-unit id="kcwNpKNVwqNAprgKtYXt2Q" resname="theFileNameMustBeExactlyGoogleServices">
           <source>The file name must be exactly: "google-services"</source>
           <target>The file name must be exactly: "google-services"</target>
+        </trans-unit>
+        <trans-unit id="+7p658xkZnozZGvK7Qvozw" resname="googleConfigurationFile">
+          <source>Google™ configuration file</source>
+          <target>Google™ configuration file</target>
+        </trans-unit>
+        <trans-unit id="DtWbp1OokNxJ7F00+omJ5w" resname="appleAuthenticationCertificate">
+          <source>Apple™ Authentication Certificate</source>
+          <target>Apple™ Authentication Certificate</target>
         </trans-unit>
       </group>
     </body>

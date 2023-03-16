@@ -263,24 +263,12 @@ Function onLoad()
 	This:C1470.authentication.distributeLeftToRight()
 	This:C1470.pushNotification.bestSize()
 	
-	If (Feature.with("androidPushNotifications"))
+	If (Not:C34(PROJECT.$ios))
 		
-		If (PROJECT.$ios)
-			
-			If (PROJECT.$android)
-				
-				This:C1470.certificateLabel.title:="iOS"
-				
-			End if 
-			
-		Else 
-			
-			var $o : cs:C1710.coordinates
-			$o:=This:C1470.certificateGroup.enclosingRect()
-			This:C1470.configureFileGroup.moveVertically(-($o.bottom-$o.top))
-			This:C1470.configureFileLabel.title:="file"
-			
-		End if 
+		var $o : cs:C1710.coordinates
+		$o:=This:C1470.certificateGroup.enclosingRect()
+		This:C1470.configureFileGroup.moveVertically(-($o.bottom-$o.top)-7)
+		
 	End if 
 	
 	This:C1470.deepLinking.bestSize()

@@ -420,10 +420,6 @@ Par exemple, le nom de l'organisme est utilisé dans les chaînes de droits d'au
           <source>Select a certificate</source>
           <target>Sélectionnez un certificat</target>
         </trans-unit>
-        <trans-unit id="T4kWBgvv7PFdz9nVfoXWpg" resname="certificate">
-          <source>Certificate</source>
-          <target>Certificat</target>
-        </trans-unit>
       </group>
       <group resname="Common">
         <trans-unit id="zvsuXgdhmzTyWETfWvmAWg" resname="none">
@@ -1664,6 +1660,14 @@ et se terminer par "://".</target>
         <trans-unit id="kcwNpKNVwqNAprgKtYXt2Q" resname="theFileNameMustBeExactlyGoogleServices">
           <source>The file name must be exactly: "google-services"</source>
           <target>Le nom du fichier doit être exactement : "google-services"</target>
+        </trans-unit>
+        <trans-unit id="+7p658xkZnozZGvK7Qvozw" resname="googleConfigurationFile">
+          <source>Google™ configuration file</source>
+          <target>Fichier de configuration Google™</target>
+        </trans-unit>
+        <trans-unit id="DtWbp1OokNxJ7F00+omJ5w" resname="appleAuthenticationCertificate">
+          <source>Apple™ Authentication Certificate</source>
+          <target>Certificat d'authentification Apple™</target>
         </trans-unit>
       </group>
     </body>

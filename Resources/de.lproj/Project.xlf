@@ -433,10 +433,6 @@ weitere Optionen hier klicken.</target>
           <source>Select a certificate</source>
           <target>Wählen Sie ein Zertifikat</target>
         </trans-unit>
-        <trans-unit id="T4kWBgvv7PFdz9nVfoXWpg" resname="certificate">
-          <source>Certificate</source>
-          <target>Zertifikat</target>
-        </trans-unit>
       </group>
       <group resname="Common">
         <trans-unit id="zvsuXgdhmzTyWETfWvmAWg" resname="none">
@@ -1681,6 +1677,14 @@ und mit "://" enden.</target>
         <trans-unit id="kcwNpKNVwqNAprgKtYXt2Q" resname="theFileNameMustBeExactlyGoogleServices">
           <source>The file name must be exactly: "google-services"</source>
           <target>Der Dateiname muss exakt: "google-services" sein</target>
+        </trans-unit>
+        <trans-unit id="+7p658xkZnozZGvK7Qvozw" resname="googleConfigurationFile">
+          <source>Google™ configuration file</source>
+          <target state="new">Google™ configuration file</target>
+        </trans-unit>
+        <trans-unit id="DtWbp1OokNxJ7F00+omJ5w" resname="appleAuthenticationCertificate">
+          <source>Apple™ Authentication Certificate</source>
+          <target state="new">Apple™ Authentication Certificate</target>
         </trans-unit>
       </group>
     </body>

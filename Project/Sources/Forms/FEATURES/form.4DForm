@@ -73,9 +73,9 @@
 				},
 				"certificatePicker": {
 					"type": "subform",
-					"left": 561,
-					"top": 34,
-					"width": 374,
+					"left": 489,
+					"top": 60,
+					"width": 446,
 					"height": 23,
 					"detailForm": "PATH PICKER",
 					"dataSource": "panel.certificate.picker",
@@ -87,14 +87,13 @@
 				},
 				"certificateLabel": {
 					"type": "text",
-					"text": ":xliff:certificate",
+					"text": ":xliff:appleAuthenticationCertificate",
 					"top": 37,
-					"left": 464,
-					"width": 91,
+					"left": 489,
+					"width": 446,
 					"height": 16,
 					"visibility": "hidden",
-					"class": "label",
-					"textAlign": "right"
+					"class": "label"
 				},
 				"loginFormBorder": {
 					"type": "rectangle",
@@ -269,9 +268,9 @@
 				},
 				"configureFilePicker": {
 					"type": "subform",
-					"left": 561,
-					"top": 63,
-					"width": 374,
+					"left": 489,
+					"top": 113,
+					"width": 446,
 					"height": 23,
 					"detailForm": "PATH PICKER",
 					"dataSource": "panel.configureFile.picker",
@@ -283,14 +282,13 @@
 				},
 				"configureFileLabel": {
 					"type": "text",
-					"text": ":xliff:android",
-					"top": 66,
-					"left": 464,
-					"width": 91,
+					"text": ":xliff:googleConfigurationFile",
+					"top": 90,
+					"left": 489,
+					"width": 446,
 					"height": 16,
 					"visibility": "hidden",
-					"class": "label",
-					"textAlign": "right"
+					"class": "label"
 				}
 			},
 			"entryOrder": [
@@ -313,7 +311,7 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"geometryStamp": 591,
+	"geometryStamp": 606,
 	"editor": {
 		"activeView": "Main",
 		"defaultView": "Main",
