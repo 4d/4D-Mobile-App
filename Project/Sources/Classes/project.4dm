@@ -1528,7 +1528,7 @@ Function removeAction($action) : Integer
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function updateActions
 	var $indx : Integer
-	var $dataModel; $parameter; $table : Object
+	var $dataModel; $parameter; $action : Object
 	var $actions : Collection
 	
 	$actions:=This:C1470.actions
@@ -1537,29 +1537,34 @@ Function updateActions
 		
 		$dataModel:=This:C1470.dataModel
 		
-		For each ($table; $actions)
+		For each ($action; $actions)
 			
-			If ($dataModel[String:C10($table.tableNumber)]#Null:C1517)
-				
-				If ($table.parameters#Null:C1517)
+			Case of 
+				: ($dataModel[String:C10($action.tableNumber)]#Null:C1517)
 					
-					For each ($parameter; $table.parameters)
+					If ($action.parameters#Null:C1517)
 						
-						If ($dataModel[String:C10($table.tableNumber)][String:C10($parameter.fieldNumber)]=Null:C1517)
+						For each ($parameter; $action.parameters)
 							
-							// ❌ THE FIELD DOESN'T EXIST ANYMORE
-							$table.parameters.remove($table.parameters.indexOf($parameter))
-							
-						End if 
-					End for each 
-				End if 
-				
-			Else 
-				
-				// ❌ THE TABLE DOESN'T EXIST ANYMORE
-				$actions.remove($indx)
-				
-			End if 
+							If ($dataModel[String:C10($action.tableNumber)][String:C10($parameter.fieldNumber)]=Null:C1517)
+								
+								// ❌ THE FIELD DOESN'T EXIST ANYMORE
+								$action.parameters.remove($action.parameters.indexOf($parameter))
+								
+							End if 
+						End for each 
+					End if 
+					
+				: (String:C10($action.scope)="global")
+					
+					// ignore global, not linked to a table
+					
+				Else 
+					
+					// ❌ THE TABLE DOESN'T EXIST ANYMORE
+					$actions.remove($indx)
+					
+			End case 
 			
 			$indx:=$indx+1
 			
