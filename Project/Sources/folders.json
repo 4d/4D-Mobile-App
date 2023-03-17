@@ -1,11 +1,13 @@
 {
 	"____FOR_TESTS": {
 		"methods": [
+			"_test_actions",
 			"_test_alias",
 			"_test_dumpFieldNames",
 			"_test_project",
 			"_test_structureClass",
-			"RUN_unitTestSuites"
+			"RUN_unitTestSuites",
+			"runTestSuite"
 		],
 		"classes": [
 			"ALL_TYPESEntity",
@@ -605,6 +607,9 @@
 			"[UI]",
 			"Pseudo-Class",
 			"Tests"
+		],
+		"classes": [
+			"coordinates"
 		]
 	},
 	"col": {

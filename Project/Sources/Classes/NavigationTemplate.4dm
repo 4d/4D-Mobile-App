@@ -56,7 +56,9 @@ Function _actionsInTabBarProcess()
 	
 	// MARK: if nothing defined in project.main.order use all tables
 	var $Col_items : Collection
-	If (Value type:C1509(This:C1470.input.project.main.order)=Is collection:K8:32)
+	var $hasMainOrder : Boolean
+	$hasMainOrder:=Value type:C1509(This:C1470.input.project.main.order)=Is collection:K8:32
+	If ($hasMainOrder)
 		
 		$Col_items:=This:C1470.input.project.main.order
 		
@@ -133,29 +135,32 @@ Function _actionsInTabBarProcess()
 	End for each 
 	
 	// MARK: add not consumed global actions at the end
-	var $actionsConsumed; $globalActions : Collection
-	$actionsConsumed:=This:C1470.input.tags.navigationTables\
-		.map(Formula:C1597($1.value.actions))\
-		.filter(Formula:C1597($1.value#Null:C1517))\
-		/*.flat()*/.reduce(Formula:C1597($1.accumulator.combine($1.value)); New collection:C1472)\
-		.map(Formula:C1597($1.value.name))
 	
-	$globalActions:=mobile_actions("form-nav"; New object:C1471(\
-		"project"; This:C1470.input.project; \
-		"scope"; "global")).actions
-	$globalActions:=$globalActions.filter(Formula:C1597($actionsConsumed.indexOf($1.value.name)<0))
-	
-	For each ($action; $globalActions)
+	If (Not:C34($hasMainOrder))  // only if nothing defined in main order
+		var $actionsConsumed; $globalActions : Collection
+		$actionsConsumed:=This:C1470.input.tags.navigationTables\
+			.map(Formula:C1597($1.value.actions))\
+			.filter(Formula:C1597($1.value#Null:C1517))\
+			/*.flat()*/.reduce(Formula:C1597($1.accumulator.combine($1.value)); New collection:C1472)\
+			.map(Formula:C1597($1.value.name))
 		
-		$action[""]:=OB Copy:C1225($action)  // to simulate meta data behaviour or table (but must be clean)
-		$action.actions:=New collection:C1472(OB Copy:C1225($action))
+		$globalActions:=mobile_actions("form-nav"; New object:C1471(\
+			"project"; This:C1470.input.project; \
+			"scope"; "global")).actions
+		$globalActions:=$globalActions.filter(Formula:C1597($actionsConsumed.indexOf($1.value.name)<0))
 		
-		$action.originalName:=$action[""].name
-		$action.name:=formatString("table-name"; $action[""].name)
-		
-		This:C1470.input.tags.navigationTables.push($action)
-		
-	End for each 
+		For each ($action; $globalActions)
+			
+			$action[""]:=OB Copy:C1225($action)  // to simulate meta data behaviour or table (but must be clean)
+			$action.actions:=New collection:C1472(OB Copy:C1225($action))
+			
+			$action.originalName:=$action[""].name
+			$action.name:=formatString("table-name"; $action[""].name)
+			
+			This:C1470.input.tags.navigationTables.push($action)
+			
+		End for each 
+	End if 
 	
 	// MARK: create storyboards for each action item
 	var $o : Object
