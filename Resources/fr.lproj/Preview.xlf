@@ -1,1 +1,114 @@
-﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?><xliff version="1.0" xmlns:d4="http://www.4d.com/d4-ns">  <file datatype="plaintext" original="Undefined" source-language="en" target-language="fr">    <header>      <prop-group name="Xliff-Editor.4dbase">        <prop-group prop-type="version">2.0</prop-group>        <prop prop-type="version">2.0</prop>      </prop-group>    </header>    <body>      <group resname="labels">        <trans-unit id="iT11dZ9uZSlQXmCrvzlmng" resname="fieldToUseForSearch">          <source>Field to use for search</source>          <target>Champ à utiliser pour la recherche</target>        </trans-unit>        <trans-unit id="TbslRq9u1ubfYE7ZCk4AWQ" resname="fieldToUseAsSection">          <source>Field to use as Section</source>          <target>Champ à utiliser en tant que section</target>        </trans-unit>        <trans-unit id="Tg65Q/ga3rtoychWKq3UXg" resname="titleField">          <source>Title</source>          <target>Titre</target>        </trans-unit>        <trans-unit id="L0sD3CuDNnpBzII2t0gaQw" resname="subtitleField">          <source>Subtitle</source>          <target>Sous-titre</target>        </trans-unit>        <trans-unit id="OSeRHaXQ2+nw0GHeBBaezA" resname="pictureField">          <source>Picture</source>          <target>Image</target>        </trans-unit>        <trans-unit id="ntGkv49lzxZ8InKeLNAKKQ" resname="field[n]">          <source>Field </source>          <target>Champ </target>        </trans-unit>        <trans-unit id="GblGUuEoS4ziaHmNDHrXbg" resname="picture">          <source>Picture</source>          <target>Image</target>        </trans-unit>        <trans-unit id="tyCJXX5TntR4a6fmFrMV6Q" resname="footer">          <source>Footer Field</source>          <target>Pied de page</target>        </trans-unit>        <trans-unit id="3gVVdJ+c0YXEeaKyJDubYQ" resname="multiCriteriaSearch">          <source>Multi-criteria Search</source>          <target>Recherche multi-critères</target>        </trans-unit>        <trans-unit id="EOYjsJL5l86iRyMfdHTszA" resname="dropAFieldHere">          <source>Drop a field here</source>          <target>Déposez un champ ici</target>        </trans-unit>      </group>      <group resname="tips">        <trans-unit id="bAuAn/0OUWvB0AEQk0sq3g" resname="dropHereAFieldThatMustBe_">          <source>Accepts a field that must be of {type} type</source>          <target>Accepte un champ qui doit être de type {type}</target>        </trans-unit>        <trans-unit id="b7pThvBGwVWQmH9j5YdctA" resname="_or_">          <source> or </source>          <target> ou </target>          <note>Warning: starts and ends with a space</note>        </trans-unit>        <trans-unit id="HFJ9nxSjtEjqXJNue0V+8Q" resname="dropHereAFieldWhoseTypeMustNotBe_">          <source>Accepts a field that must not be of {type} type</source>          <target>Accepte un champ qui ne doit pas être de type {type}</target>        </trans-unit>        <trans-unit id="jPV5pOsnrXVUTB/Gpl86Ug" resname="thisFieldIsOptional">          <source>This field is not required</source>          <target>Ce champ est facultatif</target>        </trans-unit>        <trans-unit id="G4184Cl2S3W1jaHXQ1cBBw" resname="searchBoxTips">          <source>If you drop a field here, a search box will be displayed at the top of the page.</source>          <target>Si vous déposez ici un champ, une zone de recherche sera affichée en haut de la page.</target>        </trans-unit>        <trans-unit id="aHtzeChDu8oM5naWPp+PWg" resname="sectionTips">          <source>If you fill in this area, the field value will be used to arrange the list.</source>          <target>Si vous remplissez cette zone, la valeur du champ sera utilisée pour ordonner la liste.</target>        </trans-unit>        <trans-unit id="+6uYSXBWJxcPZVLfsNBKLA" resname="theFieldTypeMustBe_">          <source>Field type must be {type}</source>          <target>Le type de champ doit être {type}</target>        </trans-unit>        <trans-unit id="Rj8Kkm+iDTq+XP9PJJ1oEg" resname="theFieldTypeMustNotBe_">          <source>Field type must not be {type}</source>          <target>Le type de champ ne doit pas être {type}</target>        </trans-unit>        <trans-unit id="naDy7QgwrE2dX2XLBRIK1w" resname="thisFieldAcceptsSeveralValues">          <source>This field accepts several values</source>          <target>Ce champ accepte plusieurs valeurs</target>        </trans-unit>        <trans-unit id="CW+PLeoDB+QPfvMbmTP4BA" resname="dropHereAFieldOfAnyType">          <source>Accepts a field of any type</source>          <target>Accepte un champ de tout type</target>        </trans-unit>        <trans-unit id="RYVdMZBxaDmHV5XY/kJPTQ" resname="thisFieldWillAllowYouToNavigateToListOf">          <source>This field will allow you to navigate to open the list of "{table}"</source>          <target>Ce champ vous permettra d'ouvrir la liste des "{table}"</target>        </trans-unit>      </group>      <group resname="menus">        <trans-unit id="Cn9Te3NkzXqDxmOm9x3JSA" resname="removeAllFields">          <source>Remove all fields</source>          <target>Supprimer tous les champs</target>        </trans-unit>        <trans-unit id="PFT6lKs7YZufen25AsYnMQ" resname="removeField">          <source>Remove "{field}"</source>          <target>Supprimer "{field}"</target>        </trans-unit>      </group>    </body>  </file></xliff>
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<xliff version="1.0" xmlns:d4="http://www.4d.com/d4-ns">
+
+  <file datatype="plaintext" original="Undefined" source-language="en" target-language="fr">
+    <header>
+      <prop-group name="Xliff-Editor.4dbase">
+        <prop-group prop-type="version">2.0</prop-group>
+        <prop prop-type="version">2.0</prop>
+      </prop-group>
+    </header>
+    <body>
+      <group resname="labels">
+        <trans-unit id="iT11dZ9uZSlQXmCrvzlmng" resname="fieldToUseForSearch">
+          <source>Field to use for search</source>
+          <target>Champ à utiliser pour la recherche</target>
+        </trans-unit>
+        <trans-unit id="TbslRq9u1ubfYE7ZCk4AWQ" resname="fieldToUseAsSection">
+          <source>Field to use as Section</source>
+          <target>Champ à utiliser en tant que section</target>
+        </trans-unit>
+        <trans-unit id="Tg65Q/ga3rtoychWKq3UXg" resname="titleField">
+          <source>Title</source>
+          <target>Titre</target>
+        </trans-unit>
+        <trans-unit id="L0sD3CuDNnpBzII2t0gaQw" resname="subtitleField">
+          <source>Subtitle</source>
+          <target>Sous-titre</target>
+        </trans-unit>
+        <trans-unit id="OSeRHaXQ2+nw0GHeBBaezA" resname="pictureField">
+          <source>Picture</source>
+          <target>Image</target>
+        </trans-unit>
+        <trans-unit id="ntGkv49lzxZ8InKeLNAKKQ" resname="field[n]">
+          <source>Field </source>
+          <target>Champ </target>
+        </trans-unit>
+        <trans-unit id="GblGUuEoS4ziaHmNDHrXbg" resname="picture">
+          <source>Picture</source>
+          <target>Image</target>
+        </trans-unit>
+        <trans-unit id="tyCJXX5TntR4a6fmFrMV6Q" resname="footer">
+          <source>Footer Field</source>
+          <target>Pied de page</target>
+        </trans-unit>
+        <trans-unit id="3gVVdJ+c0YXEeaKyJDubYQ" resname="multiCriteriaSearch">
+          <source>Multi-criteria Search</source>
+          <target>Recherche multi-critères</target>
+        </trans-unit>
+        <trans-unit id="EOYjsJL5l86iRyMfdHTszA" resname="dropAFieldHere">
+          <source>Drop a field here</source>
+          <target>Déposez un champ ici</target>
+        </trans-unit>
+      </group>
+      <group resname="tips">
+        <trans-unit id="bAuAn/0OUWvB0AEQk0sq3g" resname="dropHereAFieldThatMustBe_">
+          <source>Accepts a field that must be of {type} type</source>
+          <target>Accepte un champ qui doit être de type {type}</target>
+        </trans-unit>
+        <trans-unit id="b7pThvBGwVWQmH9j5YdctA" resname="_or_">
+          <source> or </source>
+          <target> ou </target>
+          <note>Warning: starts and ends with a space</note>
+        </trans-unit>
+        <trans-unit id="HFJ9nxSjtEjqXJNue0V+8Q" resname="dropHereAFieldWhoseTypeMustNotBe_">
+          <source>Accepts a field that must not be of {type} type</source>
+          <target>Accepte un champ qui ne doit pas être de type {type}</target>
+        </trans-unit>
+        <trans-unit id="jPV5pOsnrXVUTB/Gpl86Ug" resname="thisFieldIsOptional">
+          <source>This field is not required</source>
+          <target>Ce champ est facultatif</target>
+        </trans-unit>
+        <trans-unit id="G4184Cl2S3W1jaHXQ1cBBw" resname="searchBoxTips">
+          <source>If you drop a field here, a search box will be displayed at the top of the page.</source>
+          <target>Si vous déposez ici un champ, une zone de recherche sera affichée en haut de la page.</target>
+        </trans-unit>
+        <trans-unit id="aHtzeChDu8oM5naWPp+PWg" resname="sectionTips">
+          <source>If you fill in this area, the field value will be used to arrange the list.</source>
+          <target>Si vous remplissez cette zone, la valeur du champ sera utilisée pour ordonner la liste.</target>
+        </trans-unit>
+        <trans-unit id="+6uYSXBWJxcPZVLfsNBKLA" resname="theFieldTypeMustBe_">
+          <source>Field type must be {type}</source>
+          <target>Le type de champ doit être {type}</target>
+        </trans-unit>
+        <trans-unit id="Rj8Kkm+iDTq+XP9PJJ1oEg" resname="theFieldTypeMustNotBe_">
+          <source>Field type must not be {type}</source>
+          <target>Le type de champ ne doit pas être {type}</target>
+        </trans-unit>
+        <trans-unit id="naDy7QgwrE2dX2XLBRIK1w" resname="thisFieldAcceptsSeveralValues">
+          <source>This field accepts several values</source>
+          <target>Ce champ accepte plusieurs valeurs</target>
+        </trans-unit>
+        <trans-unit id="CW+PLeoDB+QPfvMbmTP4BA" resname="dropHereAFieldOfAnyType">
+          <source>Accepts a field of any type</source>
+          <target>Accepte un champ de tout type</target>
+        </trans-unit>
+        <trans-unit id="RYVdMZBxaDmHV5XY/kJPTQ" resname="thisFieldWillAllowYouToNavigateToListOf">
+          <source>This field will allow you to navigate to open the list of "{table}"</source>
+          <target>Ce champ vous permettra d'ouvrir la liste des "{table}"</target>
+        </trans-unit>
+      </group>
+      <group resname="menus">
+        <trans-unit id="Cn9Te3NkzXqDxmOm9x3JSA" resname="removeAllFields">
+          <source>Remove all fields</source>
+          <target>Supprimer tous les champs</target>
+        </trans-unit>
+        <trans-unit id="PFT6lKs7YZufen25AsYnMQ" resname="removeField">
+          <source>Remove "{field}"</source>
+          <target>Supprimer "{field}"</target>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+
+</xliff>

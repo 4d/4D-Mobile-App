@@ -1,1 +1,121 @@
-﻿{	"list" :	[		{			"old": "Cube",			"new": "form-list-Cube.zip"		},		{			"old": "Dynamic Table",			"new": "form-list-DynamicTable.zip"		},		{			"old": "Horizontal Cards",			"new": "form-list-Horizontal-Cards.zip"		},		{			"old": "Mozaic",			"new": "form-list-Mozaic.zip"		},		{			"old": "Numbers",			"new": "form-list-Numbers.zip"		},		{			"old": "Parallax",			"new": "form-list-Parallax.zip"		},		{			"old": "Profile",			"new": "form-list-Profile.zip"		},		{			"old": "Simple Collection",			"new": "form-list-SimpleCollection.zip"		},		{			"old": "Simple Visual Table",			"new": "form-list-SimpleVisualTable.zip"		},		{			"old": "Smooth Table",			"new": "form-list-SmoothTable.zip"		},		{			"old": "Square Profile",			"new": "form-list-SquareProfile.zip"		},		{			"old": "Tasks",			"new": "form-list-Tasks.zip"		},		{			"old": "Vertical Cards",			"new": "form-list-VerticalCards.zip"		},		{			"old": "Visual Table",			"new": "form-list-VisualTable.zip"		}	],	"detail" :	[		{			"old": "Cards",			"new": "form-detail-Cards.zip"		},		{			"old": "Circle",			"new": "form-detail-Circle.zip"		},		{			"old": "Dashboard",			"new": "form-detail-Dashboard.zip"		},		{			"old": "Left Cut Header",			"new": "form-detail-LeftCutHeader.zip"		},		{			"old": "Numbers",			"new": "form-detail-Numbers.zip"		},		{			"old": "Parallax Header",			"new": "form-detail-ParallaxHeader.zip"		},		{			"old": "Right Cut Header",			"new": "form-detail-RightCutHeader.zip"		},		{			"old": "Simple Contact",			"new": "form-detail-SimpleContact.zip"		},		{			"old": "Simple Header",			"new": "form-detail-SimpleHeader.zip"		},		{			"old": "Sliding Header",			"new": "form-detail-SlidingHeader.zip"		},		{			"old": "Tasks",			"new": "form-detail-Tasks.zip"		},		{			"old": "Tasks Plus",			"new": "form-detail-TasksPlus.zip"		},		{			"old": "Triple Circle",			"new": "form-detail-TripleCircle.zip"		},		{			"old": "Visual Contact",			"new": "form-detail-VisualContact.zip"		}	]}
+{
+	"list" :
+	[
+		{
+			"old": "Cube",
+			"new": "form-list-Cube.zip"
+		},
+		{
+			"old": "Dynamic Table",
+			"new": "form-list-DynamicTable.zip"
+		},
+		{
+			"old": "Horizontal Cards",
+			"new": "form-list-Horizontal-Cards.zip"
+		},
+		{
+			"old": "Mozaic",
+			"new": "form-list-Mozaic.zip"
+		},
+		{
+			"old": "Numbers",
+			"new": "form-list-Numbers.zip"
+		},
+		{
+			"old": "Parallax",
+			"new": "form-list-Parallax.zip"
+		},
+		{
+			"old": "Profile",
+			"new": "form-list-Profile.zip"
+		},
+		{
+			"old": "Simple Collection",
+			"new": "form-list-SimpleCollection.zip"
+		},
+		{
+			"old": "Simple Visual Table",
+			"new": "form-list-SimpleVisualTable.zip"
+		},
+		{
+			"old": "Smooth Table",
+			"new": "form-list-SmoothTable.zip"
+		},
+		{
+			"old": "Square Profile",
+			"new": "form-list-SquareProfile.zip"
+		},
+		{
+			"old": "Tasks",
+			"new": "form-list-Tasks.zip"
+		},
+		{
+			"old": "Vertical Cards",
+			"new": "form-list-VerticalCards.zip"
+		},
+		{
+			"old": "Visual Table",
+			"new": "form-list-VisualTable.zip"
+		}
+	],
+	"detail" :
+	[
+		{
+			"old": "Cards",
+			"new": "form-detail-Cards.zip"
+		},
+		{
+			"old": "Circle",
+			"new": "form-detail-Circle.zip"
+		},
+		{
+			"old": "Dashboard",
+			"new": "form-detail-Dashboard.zip"
+		},
+		{
+			"old": "Left Cut Header",
+			"new": "form-detail-LeftCutHeader.zip"
+		},
+		{
+			"old": "Numbers",
+			"new": "form-detail-Numbers.zip"
+		},
+		{
+			"old": "Parallax Header",
+			"new": "form-detail-ParallaxHeader.zip"
+		},
+		{
+			"old": "Right Cut Header",
+			"new": "form-detail-RightCutHeader.zip"
+		},
+		{
+			"old": "Simple Contact",
+			"new": "form-detail-SimpleContact.zip"
+		},
+		{
+			"old": "Simple Header",
+			"new": "form-detail-SimpleHeader.zip"
+		},
+		{
+			"old": "Sliding Header",
+			"new": "form-detail-SlidingHeader.zip"
+		},
+		{
+			"old": "Tasks",
+			"new": "form-detail-Tasks.zip"
+		},
+		{
+			"old": "Tasks Plus",
+			"new": "form-detail-TasksPlus.zip"
+		},
+		{
+			"old": "Triple Circle",
+			"new": "form-detail-TripleCircle.zip"
+		},
+		{
+			"old": "Visual Contact",
+			"new": "form-detail-VisualContact.zip"
+		}
+	]
+}
+
