@@ -54,14 +54,24 @@ Function getRequirements()
 		
 	End if 
 	
-	$content:=JSON Parse:C1218($requirement.getText())
+	$content:=ob_parseFile($requirement)
+	If ($content.success)
+		$content:=JSON Parse:C1218($content.value)
+	Else 
+		$run:=True:C214
+	End if 
 	
 	If ($run)
 		
 		$http:=cs:C1710.http.new("https://4d-go-mobile.github.io/sdk/xcode.json").setResponseType(Is a document:K24:1; $requirement)
 		
-		$content:=JSON Parse:C1218($requirement.getText())
-		$ETag:=String:C10($content.Etag)
+		$content:=ob_parseFile($requirement)
+		If ($content.success)
+			$content:=JSON Parse:C1218($content.value)
+			$ETag:=String:C10($content.Etag)
+		Else 
+			$ETag:=""
+		End if 
 		
 		If (Length:C16($ETag)#0)
 			
