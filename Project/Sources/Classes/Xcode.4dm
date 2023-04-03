@@ -56,7 +56,7 @@ Function getRequirements()
 	
 	$content:=ob_parseFile($requirement)
 	If ($content.success)
-		$content:=JSON Parse:C1218($content.value)
+		$content:=$content.value
 	Else 
 		$run:=True:C214
 	End if 
@@ -67,7 +67,7 @@ Function getRequirements()
 		
 		$content:=ob_parseFile($requirement)
 		If ($content.success)
-			$content:=JSON Parse:C1218($content.value)
+			$content:=$content.value
 			$ETag:=String:C10($content.Etag)
 		Else 
 			$ETag:=""
