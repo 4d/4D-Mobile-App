@@ -962,6 +962,14 @@ Il sera remplacée par une version générique</target>
           <source>The {model} model is no longer available</source>
           <target>Le modèle {model} n'est plus disponible</target>
         </trans-unit>
+        <trans-unit id="QVN4W4enS2+FgBD+2sYS4Q" resname="templateNameAlreadyExists">
+          <source>This template name already exists</source>
+          <target>Ce nom de template existe déjà</target>
+        </trans-unit>
+        <trans-unit id="Dsusx2Ck8EdVAXYx5WTegQ" resname="nameOfTheTemplate">
+          <source>Name of the template</source>
+          <target>Nom du modèle</target>
+        </trans-unit>
       </group>
       <group resname="Fields">
         <trans-unit id="1jvwZTgT0WIE2/R+QVhl5A" resname="selectATableToDisplayItsFields">

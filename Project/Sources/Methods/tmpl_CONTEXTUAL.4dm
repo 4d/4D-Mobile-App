@@ -135,7 +135,7 @@ If ($infos#Null:C1517)
 			
 			// ask new name
 			var $form : Text
-			$form:=Request:C163("New template name?")
+			$form:=Request:C163(UI.str.localize("nameOfTheTemplate"))
 			If (Length:C16($form)>0)
 				// CLEAN: extract code to a class about template? like cs.tmpl (allowing us to make TU) ; but this class do too much things in init
 				
@@ -153,7 +153,7 @@ If ($infos#Null:C1517)
 					: ($destination=Null:C1517)
 						// ignore
 					: ($destination.folder($form).exists)
-						ALERT:C41("A template with same name already exists")
+						ALERT:C41(UI.str.localize("templateNameAlreadyExists"))
 					Else 
 						If ($destination#Null:C1517)
 							
@@ -175,6 +175,9 @@ If ($infos#Null:C1517)
 							
 							// close form
 							CALL SUBFORM CONTAINER:C1086(-2)
+							
+							//PROJECT[$infos.data.type][$infos.data.dialog.$.tableNumber].form:="/"+$form
+							//PROJECT.save() // could not do that, will be overriden by other code of picker
 							
 							// finally show on disk (maybe ask user?)
 							SHOW ON DISK:C922($destination.folder($form).platformPath)

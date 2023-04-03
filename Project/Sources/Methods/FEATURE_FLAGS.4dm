@@ -131,7 +131,11 @@ End if
 Feature.unstable("iosSDKfromAWS")  // Download iOS SDK from AWS
 Feature.unstable("androidDeepLinking")  // Enable deep linking for android project
 Feature.unstable("androidPushNotifications")  // Enable push notifications for android project
-Feature.unstable("openURLActionsInTabBar")  // azure:3624 action with preset:openURL 
+Feature.unstable("openURLActionsInTabBar")  // azure:3624 action with preset:openURL
+
+// Mark:R8
+
+Feature.unstable("duplicateTemplate")  // Allow to duplicate template in host database and show on disk https:// Project.4d.com/issues/98054 
 
 // Mark:-🚧 MAIN
 Feature.main("listEditor")  // #130828 [MOBILE] Create and edit an input control from the project editor
@@ -141,7 +145,6 @@ Feature.main("listEditor")  // #130828 [MOBILE] Create and edit an input control
 Feature.wip("buildWithCmd")  // Allow to create/build using cmd only: azure:3628
 
 // FEATURE.wip("simuARMOnAppleProcessor") // Mac M1 build for simu using arm64
-Feature.wip("duplicateTemplate")  // Allow to duplicate template in host database and show on disk https:// Project.4d.com/issues/98054
 Feature.wip("newFormatterChoiceList")  // Menu to create formatter choice list directly , from data
 Feature.wip("taskIndicator")  // UI for background tasks executing
 Feature.wip("DataSourceClass")  // Work with DataSource class class to test the data source

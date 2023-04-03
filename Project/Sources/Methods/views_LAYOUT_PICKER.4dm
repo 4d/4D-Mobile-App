@@ -41,7 +41,7 @@ If (Asserted:C1132(Count parameters:C259>=1; "Missing parameter"))
 		"cell"; New object:C1471("width"; 140; "height"; 180); \
 		"icon"; New object:C1471("width"; 300; "height"; 300); \
 		"forms"; New collection:C1472; \
-		"dialog"; VIEWS_Handler(New object:C1471("action"; "init")); \
+		"dialog"; views_Handler(New object:C1471("action"; "init")); \
 		"github"; $p\
 		)
 	
@@ -408,6 +408,7 @@ For ($i; 1; Size of array:C274($formsArray); 1)
 				
 				$o:=JSON Parse:C1218($template.file("manifest.json").getText())
 				$o.file:=$template
+				$o.data:=$data
 				
 				If ($o.homepage#Null:C1517)  // See tmpl_INFOS
 					
