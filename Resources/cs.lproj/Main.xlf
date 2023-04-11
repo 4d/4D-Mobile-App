@@ -705,7 +705,7 @@ Ujistěte se, že je zařízení připojeno k počítači pomocí kabelu USB.</t
         </trans-unit>
         <trans-unit id="2GnJW7UsSwQnhqhum+e42Q" resname="file">
           <source>File</source>
-          <target state="new">File</target>
+          <target>Soubor</target>
         </trans-unit>
       </group>
       <group resname="default values">
