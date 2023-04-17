@@ -41,7 +41,7 @@ allprojects {
 }
 
 ext {
-    masterBranch = "20.x"
+    masterBranch = "{{branch_version}}"
     QMobileAPI = QMobileLibs.qmobileapi + '-' + masterBranch
     QMobileDataStore = QMobileLibs.qmobiledatastore + '-' + masterBranch
     QMobileDataSync = QMobileLibs.qmobiledatasync + '-' + masterBranch
