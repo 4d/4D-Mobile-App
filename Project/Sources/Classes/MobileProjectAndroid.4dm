@@ -61,6 +61,33 @@ Class constructor($project : Object)
 	This:C1470.project.ideBuildVersion:=This:C1470.project.project.info.ideBuildVersion
 	This:C1470.project.ideVersion:=This:C1470.project.project.info.ideVersion
 	
+	var $applicationVersion : Text
+	var $buildNumber : Integer
+	$applicationVersion:=Application version:C493($buildNumber; *)
+	
+	
+	If ($applicationVersion[[1]]="A")
+		
+		$applicationVersion:="main"
+		
+	Else 
+		
+		If (Num:C11($applicationVersion[[7]])=0)
+			
+			// LTS
+			$applicationVersion:=$applicationVersion[[5]]+$applicationVersion[[6]]+".x"
+			
+		Else 
+			
+			// Release
+			$applicationVersion:=$applicationVersion[[5]]+$applicationVersion[[6]]+"R"+$applicationVersion[[7]]
+			
+		End if 
+		
+	End if 
+	
+	This:C1470.project.branch_version:=String:C10($applicationVersion)
+	
 	If (Feature.with("openURLActionsInTabBar") || Feature.with("actionsInTabBar"))
 		If (This:C1470.project.project._folder.file("mainOrder.json").exists)
 			This:C1470.project.project.main.order:=JSON Parse:C1218(This:C1470.project.project._folder.file("mainOrder.json").getText())
