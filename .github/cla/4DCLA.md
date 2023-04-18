@@ -6,9 +6,9 @@
 
 **Before signing this CLA, you shall indicate below (by ticking the right box) whether you are submitting Contributions in the course of work for Your employer  or not.**
 
-**To accept and sign the CLA, you must write or copy the text "I have read the CLA Document and I hereby sign the CLA".**
+**To accept and sign the CLA, you must write the text "I have read the CLA Document and I hereby sign the CLA".**
 
-**If you do not accept the terms of the CLA, please do not write or copy the acceptance text and do not submit any Contribution.**
+**If you do not accept the terms of the CLA, please do not write the acceptance text and do not submit any Contribution.**
 
 I accept and agree to the terms of this Contribution License Agreement for my present and future Contributions to 4D.
 
