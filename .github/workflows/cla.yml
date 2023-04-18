@@ -26,4 +26,4 @@ jobs:
           path-to-document: 'https://github.com/4d/4D-Mobile-App/blob/main/.github/cla/4DCLA.md'
           # branch should not be protected
           branch: 'main'
-          allowlist: bot*,4DMobileTeam,4D-Admins,4D-Dev-Team,4D-Localizers,Documentation
+          allowlist: bot*,e-marchand,quentinmarciset,vdelachaux,david-azancot,laurent-esnault,pfhuillet
