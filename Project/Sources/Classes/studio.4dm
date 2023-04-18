@@ -296,15 +296,23 @@ Function paths()->$instances : Collection
 			
 			If (This:C1470.success)
 				
-				$t:=$file.getText()
-				
-				ARRAY LONGINT:C221($pos; 0x0000)
-				ARRAY LONGINT:C221($len; 0x0000)
-				This:C1470.success:=Match regex:C1019("(?m-si)\"DisplayName\"=\"Android Studio\"\\R\"DisplayVersion\"=\"(4.1)\"(?:\\R\"[^\"]*\"=\"[^\"]*\")*\\R\"DisplayIcon\"=\"([^\"]*)\""; $t; 1; $pos; $len)
-				
-				If (This:C1470.success)
+				If ($file.exists)
 					
-					$instances:=New collection:C1472(Replace string:C233(Substring:C12($t; $pos{2}; $len{2}); "\\\\"; "\\"))
+					$t:=$file.getText()
+					
+					ARRAY LONGINT:C221($pos; 0x0000)
+					ARRAY LONGINT:C221($len; 0x0000)
+					This:C1470.success:=Match regex:C1019("(?m-si)\"DisplayName\"=\"Android Studio\"\\R\"DisplayVersion\"=\"(4.1)\"(?:\\R\"[^\"]*\"=\"[^\"]*\")*\\R\"DisplayIcon\"=\"([^\"]*)\""; $t; 1; $pos; $len)
+					
+					If (This:C1470.success)
+						
+						$instances:=New collection:C1472(Replace string:C233(Substring:C12($t; $pos{2}; $len{2}); "\\\\"; "\\"))
+						
+					End if 
+					
+				Else 
+					
+					LOG EVENT:C667(Into 4D debug message:K38:5; "Exporting installed software to find android studio do not work"; Error message:K38:3)
 					
 				End if 
 			End if 
