@@ -23,7 +23,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path-to-signatures: '.github/cla/signatures.json'
-          path-to-document: 'https://github.com/4d/4D-Mobile-App/blob/main/.github/cla/4DCLA.md'
+          path-to-document: 'https://github.com/${GITHUB_REPOSITORY}/blob/main/.github/cla/4DCLA.md'
           # branch should not be protected
           branch: 'main'
-          allowlist: bot*,e-marchand,quentinmarciset,vdelachaux,david-azancot,laurent-esnault,pfhuillet
+          allowlist: 4DBuildMgr,DamienFuzeau,JarosMachacek,Mohammed-Ouakani,Roland-Lannuzel,Souhail-Elmouhtadi,ThomasMaul,abdelkrim-bouhoute,ahmed-rajouani-alaoui,amine-maqrot,anass-talii,arnaud4d,brahim-boukobba,david-azancot,delahaye-4D,djotandjigora,e-marchand,emmanuel-craeymeersch,fabrice-mainguene,franck-louvigne,francois-marchal,guillaume-kotulski,halima-laghroubi,htemanni92,jacques-quidu,jean-laguerre,laurent-esnault,lribardi,majda-elmaazouzi,mathieu-ferry,michel-blaise,mickael-cerisier,migad-negib,moussa-bellahcene,ms-landrieu,nicolas-brachfogel,nobuteshima,noreddine-margoum,omar-hcine,omar-lakrari,ossama-mourini,patrick-poly,pfhuillet,quentinmarciset,sclairet,vdelachaux,vincent-laluque,vtalbot4D,walid-chekkouri,yannicktrinh,zineb-aslioui
