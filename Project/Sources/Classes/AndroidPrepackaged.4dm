@@ -37,9 +37,36 @@ Function setJavaHome
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
 Function _copyJarIfmissing
-	If (Not:C34(Folder:C1567(fk resources folder:K87:11).folder("scripts").file("androidprojectgenerator.jar").exists))
-		Folder:C1567(Application file:C491; fk platform path:K87:2).file("Contents/Resources/Internal User Components/4D Mobile App.4dbase/Resources/scripts/androidprojectgenerator.jar")\
-			.copyTo(Folder:C1567(fk resources folder:K87:11).folder("scripts"))
+	var $file : 4D:C1709.File
+	$file:=Folder:C1567(fk resources folder:K87:11).folder("scripts").file("androidprojectgenerator.jar")
+	
+	If (Not:C34($file.exists))
+		// try from 4d app (deprecated)
+		If (Folder:C1567(Application file:C491; fk platform path:K87:2).file("Contents/Resources/Internal User Components/4D Mobile App.4dbase/Resources/scripts/androidprojectgenerator.jar").exists)
+			
+			Folder:C1567(Application file:C491; fk platform path:K87:2).file("Contents/Resources/Internal User Components/4D Mobile App.4dbase/Resources/scripts/androidprojectgenerator.jar")\
+				.copyTo($file.parent)
+			
+		End if 
+		
+	End if 
+	
+	
+	If (Not:C34($file.exists))
+		
+		var $url; $content : Text
+		$url:="https://github.com/4d/android-ProjectGenerator/releases/latest/download/androidprojectgenerator.jar"
+		
+		var $data : Blob
+		var $code : Integer
+		$code:=HTTP Request:C1158(HTTP GET method:K71:1; $url; $content; $data)
+		
+		If (($code>=200) && ($code<300))
+			
+			$file.setContent($data)
+			
+		End if 
+		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
