@@ -1293,7 +1293,7 @@ Get system info should not be called frequently (consumer) as the processor will
 		
 		If (Bool:C1537($Obj_param.sudo))
 			
-			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_TITLE"; cs:C1710.str.new.setText("fixThePath").localized("4dForIos"))
+			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_TITLE"; cs:C1710.str.new().setText("fixThePath").localized("4dForIos"))
 			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_MESSAGE"; Get localized string:C991("enterYourPasswordToAllowThis"))
 			SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS"; cs:C1710.path.new().scripts().file("sudo-askpass").path)
 			
