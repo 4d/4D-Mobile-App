@@ -58,6 +58,18 @@ Case of
 		//______________________________________________________
 End case 
 
+var $pref : Object
+$preferences:=Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile")
+If ($preferences.exists)
+	$pref:=JSON Parse:C1218($preferences.getText())
+Else 
+	$pref:=New object:C1471
+End if 
+
+If ($pref.sdk.server#Null:C1517)  // allow to force type of download
+	$server:=String:C10($pref.sdk.server)
+End if 
+
 Case of 
 		
 		//______________________________________________________
@@ -66,9 +78,17 @@ Case of
 		// <NOTHING MORE TO DO>
 		
 		//______________________________________________________
-	: ($server="aws")
+	: (($server="aws") || ($server="") || ($server="github"))
 		
-		$url:="https://resources-download.4d.com/sdk/{version}/{build}/{target}/{target}.zip"
+		Case of 
+			: ($server="github")
+				$url:="https://github.com/4d/{target}-sdk/releases/latest/download/{target}.zip"
+				$target:=Lowercase:C14($target)
+			: ($pref.sdk.url#Null:C1517)
+				$url:=$pref.sdk.url
+			Else 
+				$url:="https://resources-download.4d.com/sdk/{version}/{build}/{target}/{target}.zip"
+		End case 
 		
 		If ($applicationVersion[[1]]="A")
 			
@@ -95,11 +115,9 @@ Case of
 		//______________________________________________________
 	: ($server="TeamCity")
 		
-		$preferences:=Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile")
-		
 		If ($preferences.exists)
 			
-			$o:=JSON Parse:C1218($preferences.getText())
+			$o:=$pref
 			
 			If ($o.tc#Null:C1517)
 				
@@ -179,7 +197,7 @@ Case of
 		//______________________________________________________
 	Else 
 		
-		Logger.error("Unknown server: "+$server)
+		Logger.error("Unknown server  "+$server+" type to download sdk. You could add new code or just set server to empty string, and specify and url")
 		$run:=False:C215
 		
 		//______________________________________________________
