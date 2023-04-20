@@ -128,23 +128,34 @@ Function preferences($fileName : Text) : Object
 	
 	//MARK:-INTERNAL
 Function cacheSdkApple() : 4D:C1709.ZipFile
-	
-	return This:C1470.cacheSDK().folder(Application version:C493+"/iOS/").file("sdk.zip")
+	return This:C1470.cacheSdkVersion().folder("iOS").file("sdk.zip")
 	
 /*========================================================*/
 Function cacheSdkAppleUnzipped() : 4D:C1709.Folder
 	
-	return This:C1470.cacheSDK().folder(Application version:C493+"/iOS/sdk")
+	return This:C1470.cacheSdkVersion().folder("iOS/sdk")
 	
 /*========================================================*/
 Function cacheSdkAndroid() : 4D:C1709.ZipFile
-	
-	return This:C1470.cacheSDK().folder(Application version:C493+"/Android/").file("sdk.zip")
+	return This:C1470.cacheSdkVersion().folder("Android").file("sdk.zip")
 	
 /*========================================================*/
 Function cacheSdkAndroidUnzipped() : 4D:C1709.Folder
 	
-	return This:C1470.cacheSDK().folder(Application version:C493+"/Android/sdk")
+	return This:C1470.cacheSdkVersion().folder("Android/sdk")
+	
+/*========================================================*/
+Function cacheSdkVersion() : 4D:C1709.Folder
+	var $cache : 4D:C1709.Folder
+	$cache:=This:C1470.cacheSDK()
+	
+	If ($cache.folder("latest").exists)
+		
+		return $cache.folder("latest")
+		
+	End if 
+	
+	return $cache.folder(Application version:C493)
 	
 /*========================================================*/
 Function cacheSDK() : 4D:C1709.Folder
