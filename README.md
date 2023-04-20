@@ -10,18 +10,27 @@ https://github.com/4d/go-mobile
 
 ## Installation
 
-Download this component and add it to your base `Components` folder.
+Download this component and add it to your base `Components` folder. Be sure to name it `.4dbase`
+
+What follows contains more detailled instructions
 
 ### Download artefact or sources
 
-Go to release or download source using this link 
-- for instance for main version https://github.com/4d/4D-Mobile-App/archive/refs/heads/main.zip
+1️⃣ Download sources using github `Download` button, or by going to a specific release and getting sources
+- for instance for main version `Download` button will download https://github.com/4d/4D-Mobile-App/archive/refs/heads/main.zip
 
-Then unzip into your `Components` folder, and rename it folder to `4D-Mobile-App.4dbase` if needed
+2️⃣ Then unzip into your `Components` folder, and rename it folder to `4D-Mobile-App.4dbase` if needed
 
-### if your are in git a repository
+> 💡  if your are in git a repository
+> Adding `Components` or `Components/4D-Mobile-App.4dbase` in your `.gitignore` file is recommended
 
-Add `Components` or `Components/4D-Mobile-App.4dbase` in your `.gitignore` file is recommended
+
+> 🍎 On macOS the following command line will do the job for you.
+> Open a terminal, go to your component root folder (`cd /your/base/path/`) and type:
+
+```bash
+curl -sL https://raw.githubusercontent.com/4d/4D-Mobile-App/main/download.sh | sh
+```
 
 ### Using git
 
