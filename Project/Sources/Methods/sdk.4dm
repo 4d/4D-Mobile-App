@@ -155,6 +155,43 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 				
 			End if 
 			
+			If (Not:C34($Obj_param.file.exists))
+				
+				$Obj_param.file:=cs:C1710.path.new().hostSDK(True:C214).file(String:C10($Obj_param.template.sdk.name)+".zip")
+				
+			End if 
+			
+			If (Not:C34($Obj_param.file.exists))
+				// in last resort try to download latest release
+				var $map : Object
+				$map:=New object:C1471("TRMosaicLayout"; "https://github.com/4d-for-ios/TRMosaicLayout/releases/latest/download/TRMosaicLayout.zip"; \
+					"AnimatedCollectionViewLayout"; "https://github.com/4d-for-ios/AnimatedCollectionViewLayout/releases/latest/download/AnimatedCollectionViewLayout.zip")
+				// TODO: extract map of templates into config files instead
+				
+				var $url : Text
+				$url:=String:C10($map[String:C10($Obj_param.template.sdk.name)])
+				
+				If (Length:C16($url)>0)
+					
+					var $code : Integer
+					var $data : Blob
+					var $content : Text
+					$code:=HTTP Request:C1158(HTTP GET method:K71:1; $url; $content; $data)
+					
+					If (($code<300) && ($code>=200))
+						
+						$Obj_param.file.setContent($data)
+						
+					End if 
+					
+					If (($Obj_param.file.exists) && ($Obj_param.file.size=0))  // it seems that dowload failure could create empty file
+						$Obj_param.file.delete()
+					End if 
+					
+				End if 
+			End if 
+			
+			
 			If ($Obj_param.file.exists)
 				
 				// Get the root template to keep SDK information in it

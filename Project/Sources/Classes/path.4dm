@@ -487,6 +487,23 @@ Function hostForms($create : Boolean) : 4D:C1709.Folder  // Form folder
 	return This:C1470.target
 	
 /*========================================================*/
+Function hostSDK($create : Boolean) : 4D:C1709.Folder  // SDK folder
+	
+	This:C1470.target:=This:C1470.host().folder("sdk")
+	
+	If (Count parameters:C259>=1)
+		
+		This:C1470._create($create)
+		
+	Else 
+		
+		This:C1470.exists:=This:C1470.target.exists
+		
+	End if 
+	
+	return This:C1470.target
+	
+/*========================================================*/
 Function hostFormatters($create : Boolean) : 4D:C1709.Folder  // Formatters folder
 	
 	This:C1470.target:=This:C1470.host().folder("formatters")
