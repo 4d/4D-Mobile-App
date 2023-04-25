@@ -173,7 +173,7 @@ Case of
 			
 			$menu.append(Replace string:C233(Get localized string:C991("downloadTheSDK"); "{os}"; "Android"); "downloadAndroidSdk")
 			
-			$o:=UI.path.cacheSdkAndroid().parent.file("manifest.json")
+			$o:=UI.path.cacheSdkAndroidManifest()
 			
 			If ($o.exists)
 				
@@ -188,7 +188,7 @@ Case of
 				
 				$menu.append(Replace string:C233(Get localized string:C991("downloadTheSDK"); "{os}"; "iOS"); "downloadIosSdk")
 				
-				$o:=UI.path.cacheSdkApple().parent.file("manifest.json")
+				$o:=UI.path.cacheSdkAppleManifest()
 				
 				If ($o.exists)
 					

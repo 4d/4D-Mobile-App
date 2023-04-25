@@ -39,7 +39,7 @@ Case of
 			
 			If ($android)
 				
-				$fileManifest:=cs:C1710.path.new().cacheSdkAndroid().parent.file("manifest.json")
+				$fileManifest:=cs:C1710.path.new().cacheSdkAndroidManifest()
 				
 				If (Not:C34($fileManifest.exists))\
 					 | ($fileManifest.modificationDate#Current date:C33)
@@ -74,7 +74,7 @@ Case of
 				
 				If (Feature.with("iosSDKfromAWS"))
 					
-					$fileManifest:=cs:C1710.path.new().cacheSdkApple().parent.file("manifest.json")
+					$fileManifest:=cs:C1710.path.new().cacheSdkAppleManifest()
 					
 					If (Not:C34($fileManifest.exists))\
 						 | ($fileManifest.modificationDate#Current date:C33)
@@ -112,7 +112,7 @@ Case of
 			
 			If (Bool:C1537($out.studio.ready))
 				
-				$fileManifest:=cs:C1710.path.new().cacheSdkAndroid().parent.file("manifest.json")
+				$fileManifest:=cs:C1710.path.new().cacheSdkAndroidManifest()
 				
 				If (Not:C34($fileManifest.exists))\
 					 | ($fileManifest.modificationDate#Current date:C33)

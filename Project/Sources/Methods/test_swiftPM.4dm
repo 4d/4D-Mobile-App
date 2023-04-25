@@ -6,7 +6,7 @@ var $Obj_framework : 4D:C1709.Folder
 err_TRY
 //_____________________________________________________________
 
-$Obj_framework:=cs:C1710.path.new().cacheSdkApple().parent.folder("sdk")
+$Obj_framework:=cs:C1710.path.new().cacheSdkAppleUnzipped()
 
 If ($Obj_framework.exists)
 	// Else maybe unzip it later...
