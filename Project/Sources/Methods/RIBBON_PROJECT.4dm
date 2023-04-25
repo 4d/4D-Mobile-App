@@ -332,19 +332,29 @@ Case of
 			: ($menu.choice="downloadAndroidSdk")\
 				 | ($menu.choice="downloadIosSdk")
 				
-				var $fromTeamCity : Boolean
+				var $server : Text
+				$server:="aws"
 				
 				If (Shift down:C543)
 					
 					If (Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile").exists)
+						// private feature to change default server // could use sdk.server or sdk.url too
+						var $pref : Object
+						$pref:=JSON Parse:C1218(Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile").getText())
 						
-						$fromTeamCity:=(JSON Parse:C1218(Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile").getText()).tc#Null:C1517)
+						If ($pref.tc#Null:C1517)
+							$server:="TeamCity"
+						End if 
+						
+						If ($pref.githubToken#Null:C1517)
+							$server:="github"
+						End if 
 						
 					End if 
 				End if 
 				
 				CALL WORKER:C1389(Is compiled mode:C492 ? 1 : "$worker"; Formula:C1597(downloadSDK).source; \
-					$fromTeamCity ? "TeamCity" : "aws"; \
+					$server; \
 					$menu.choice="downloadAndroidSdk" ? "android" : "ios"; \
 					False:C215; \
 					UI.window)

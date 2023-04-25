@@ -548,6 +548,11 @@ EXECUTE METHOD(Formula(_o_device).source; $response; $parameters)
 				End case 
 			End if 
 			
+			//MARK:- downloadSDK
+		: ($entryPoint="downloadSDK")
+			
+			$response:=downloadSDK(String:C10($parameters.server); String:C10($parameters.target); Bool:C1537($parameters.silent); Num:C11($parameters.caller); Bool:C1537($parameters.force))
+			
 			//MARK:- Unknown entry point
 		Else 
 			
