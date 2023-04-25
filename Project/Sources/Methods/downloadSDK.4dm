@@ -1,5 +1,8 @@
 //%attributes = {"invisible":true,"preemptive":"capable"}
+// -> server  =   server used to download such as aws, github
+// -> target  =   mobile OS: ios or android
 // -> silent  =   No interface for progression
+// -> caller  =   caller thread number to notify progression
 // -> force   =   Force the download even if the file is up to date (see verification code)
 #DECLARE($server : Text; $target : Text; $silent : Boolean; $caller : Integer; $force : Boolean)->$request : 4D:C1709.HTTPRequest
 
@@ -11,7 +14,7 @@ If (False:C215)
 	C_BOOLEAN:C305(downloadSDK; $5)
 End if 
 
-var $applicationVersion; $url : Text
+var $applicationVersion; $url; $version : Text
 var $run; $withUI : Boolean
 var $buildNumber : Integer
 var $manifest; $o; $param : Object
@@ -80,35 +83,36 @@ Case of
 		//______________________________________________________
 	: (($server="aws") || ($server="") || ($server="github"))
 		
+		$version:=/*Main*/($applicationVersion[[1]]="A") ? "main"\
+			 : /*LTS*/((Num:C11($applicationVersion[[7]])=0) ? $applicationVersion[[5]]+$applicationVersion[[6]]+".x"\
+			 : /*Release*/$applicationVersion[[5]]+$applicationVersion[[6]]+"R"+$applicationVersion[[7]])
+		
 		Case of 
+				//___ github release
 			: ($server="github")
-				$url:="https://github.com/4d/{target}-sdk/releases/latest/download/{target}.zip"
-				$target:=Lowercase:C14($target)
+				
+				If ($version="main")
+					$url:="https://github.com/4d/{target}-sdk/releases/latest/download/{target}.zip"  // maybe find some link to pre-release instead?
+				Else 
+					$url:="https://github.com/4d/{target}-sdk/releases/download/{version}/{target}.zip"
+				End if 
+				If (Length:C16(String:C10($pref.githubToken))>0)  // to support if private
+					$url:=Replace string:C233($url; "https://"; "https://"+String:C10($pref.githubToken)+"@")
+				End if 
+				
+				$target:=Lowercase:C14($target)  // to be sure (sometimes github is casesensitive)
+				
+				//___ custom ones
 			: ($pref.sdk.url#Null:C1517)
+				
 				$url:=$pref.sdk.url
+				
+				//___ aws
 			Else 
 				$url:="https://resources-download.4d.com/sdk/{version}/{build}/{target}/{target}.zip"
 		End case 
 		
-		If ($applicationVersion[[1]]="A")
-			
-			$url:=Replace string:C233($url; "{version}"; "main")
-			
-		Else 
-			
-			If (Num:C11($applicationVersion[[7]])=0)
-				
-				// LTS
-				$url:=Replace string:C233($url; "{version}"; $applicationVersion[[5]]+$applicationVersion[[6]]+".x")
-				
-			Else 
-				
-				// Release
-				$url:=Replace string:C233($url; "{version}"; $applicationVersion[[5]]+$applicationVersion[[6]]+"R"+$applicationVersion[[7]])
-				
-			End if 
-		End if 
-		
+		$url:=Replace string:C233($url; "{version}"; $version)
 		$url:=Replace string:C233($url; "{build}"; String:C10($buildNumber))
 		$url:=Replace string:C233($url; "{target}"; $target)
 		
@@ -130,19 +134,19 @@ Case of
 						
 						If ($applicationVersion[[1]]="A")
 							
-							$url:=$url+"id4dmobile_QMobile_Main_Android_Sdk_Build/.lastSuccessful/android.zip"
+							$url:=$url+"Build4D_Main_Mobile_Android_Sdk_Build/.lastSuccessful/android.zip"
 							
 						Else 
 							
-							$url:=$url+"id4dmobile_QMobile_"+$applicationVersion[[5]]+$applicationVersion[[6]]
+							$url:=$url+"Build4D_"+$applicationVersion[[5]]+$applicationVersion[[6]]
 							
 							If ($applicationVersion[[7]]="0")
 								
-								$url:=$url+"x_Android_Sdk_Build/.lastSuccessful/android.zip"
+								$url:=$url+"x_NightlyGit_Mobile_Android_Sdk_Build/.lastSuccessful/android.zip"
 								
 							Else 
 								
-								$url:=$url+"r"+$applicationVersion[[7]]+"_IOS_Sdk_Build/.lastSuccessful/android.zip"
+								$url:=$url+"r"+$applicationVersion[[7]]+"_NightlyGit_Mobile_Android_Sdk_Build/.lastSuccessful/android.zip"
 								
 							End if 
 						End if 
@@ -152,19 +156,19 @@ Case of
 						
 						If ($applicationVersion[[1]]="A")
 							
-							$url:=$url+"id4dmobile_4dIOSSdk_Build/.lastSuccessful/ios.zip"
+							$url:=$url+"Build4D_Main_Mobile_IOS_Sdk_Build/.lastSuccessful/ios.zip"
 							
 						Else 
 							
-							$url:=$url+"id4dmobile_QMobile_"+$applicationVersion[[5]]+$applicationVersion[[6]]
+							$url:=$url+"Build4D_"+$applicationVersion[[5]]+$applicationVersion[[6]]
 							
 							If ($applicationVersion[[7]]="0")
 								
-								$url:=$url+"x_IOS_Sdk_Build/.lastSuccessful/ios.zip"
+								$url:=$url+"x_NightlyGit_Mobile_IOS_Sdk_Build/.lastSuccessful/ios.zip"
 								
 							Else 
 								
-								$url:=$url+"r"+$applicationVersion[[7]]+"x_IOS_Sdk_Build/.lastSuccessful/ios.zip"
+								$url:=$url+"r"+$applicationVersion[[7]]+"_NightlyGit_Mobile_IOS_Sdk_Build/.lastSuccessful/ios.zip"
 								
 							End if 
 						End if 
