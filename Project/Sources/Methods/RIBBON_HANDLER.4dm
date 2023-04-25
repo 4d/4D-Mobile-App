@@ -124,7 +124,7 @@ Case of
 				End if 
 				
 				$isDeviceSelected:=(UI.currentDevice#Null:C1517)
-				$isSdkAvailable:=cs:C1710.path.new().cacheSdkAndroidUnzipped().exists
+				$isSdkAvailable:=cs:C1710.path.new().isSdkAndroidExists() || cs:C1710.path.new().isSdkAppleExists()
 				
 				//______________________________________________________
 			: (Bool:C1537(UI.ios))
@@ -141,7 +141,7 @@ Case of
 					
 				End if 
 				
-				$isSdkAvailable:=True:C214
+				$isSdkAvailable:=cs:C1710.path.new().isSdkAppleExists()
 				
 				//______________________________________________________
 			: (Bool:C1537(UI.android))
@@ -158,7 +158,7 @@ Case of
 					
 				End if 
 				
-				$isSdkAvailable:=cs:C1710.path.new().cacheSdkAndroidUnzipped().exists
+				$isSdkAvailable:=cs:C1710.path.new().isSdkAndroidExists()
 				
 				//______________________________________________________
 		End case 
