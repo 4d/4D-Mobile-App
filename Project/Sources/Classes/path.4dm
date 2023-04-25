@@ -127,8 +127,14 @@ Function preferences($fileName : Text) : Object
 	return This:C1470.target
 	
 	//MARK:-INTERNAL
-Function cacheSdkApple() : 4D:C1709.ZipFile
+Function cacheSdkApple() : 4D:C1709.File
+	
 	return This:C1470.cacheSdkVersion().folder("iOS").file("sdk.zip")
+	
+/*========================================================*/
+Function cacheSdkAppleManifest() : 4D:C1709.File
+	
+	return This:C1470.cacheSdkVersion().folder("iOS").file("manifest.json")
 	
 /*========================================================*/
 Function cacheSdkAppleUnzipped() : 4D:C1709.Folder
@@ -136,8 +142,14 @@ Function cacheSdkAppleUnzipped() : 4D:C1709.Folder
 	return This:C1470.cacheSdkVersion().folder("iOS/sdk")
 	
 /*========================================================*/
-Function cacheSdkAndroid() : 4D:C1709.ZipFile
+Function cacheSdkAndroid() : 4D:C1709.File
+	
 	return This:C1470.cacheSdkVersion().folder("Android").file("sdk.zip")
+	
+/*========================================================*/
+Function cacheSdkAndroidManifest() : 4D:C1709.File
+	
+	return This:C1470.cacheSdkVersion().folder("Android").file("manifest.json")
 	
 /*========================================================*/
 Function cacheSdkAndroidUnzipped() : 4D:C1709.Folder
@@ -200,6 +212,13 @@ Function sdk() : 4D:C1709.Folder
 	
 /*========================================================*/
 Function sdkApple() : 4D:C1709.File  // ios zip sdk
+	
+	This:C1470.target:=This:C1470.sdk().file("ios.zip")  // if embedded it re-become the one used
+	If (This:C1470.exists)
+		This:C1470.exists:=This:C1470.target.exists
+		return This:C1470.target
+	End if 
+	
 	If (Feature.with("iosSDKfromAWS"))
 		return This:C1470.cacheSdkApple()
 	Else 
@@ -218,6 +237,17 @@ Function sdkApple() : 4D:C1709.File  // ios zip sdk
 		
 		return This:C1470.target
 	End if 
+	
+	
+/*========================================================*/
+Function sdkAndroid() : 4D:C1709.File  // android zip sdk
+	This:C1470.target:=This:C1470.sdk().file("android.zip")  // if embedded it become the one used
+	If (This:C1470.target.exists)
+		This:C1470.exists:=This:C1470.target.exists
+		return This:C1470.target
+	End if 
+	
+	return This:C1470.cacheSdkAndroid()
 	
 /*========================================================*/
 Function defaultroject() : 4D:C1709.Folder  // project folder

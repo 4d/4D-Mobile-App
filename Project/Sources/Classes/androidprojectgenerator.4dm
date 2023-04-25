@@ -2547,13 +2547,13 @@ Function prepareSdk
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	$cacheSdkAndroid:=This:C1470.path.cacheSdkAndroid()
+	$cacheSdkAndroid:=This:C1470.path.sdkAndroid()
 	
 	If ($cacheSdkAndroid.exists)
 		
 		$archive:=ZIP Read archive:C1637($cacheSdkAndroid)
 		
-		$unzipDest:=$archive.root.copyTo($cacheSdkAndroid.parent; fk overwrite:K87:5)
+		$unzipDest:=$archive.root.copyTo(This:C1470.path.cacheSdkAndroid().parent; fk overwrite:K87:5)  // CLEAN: use cacheSdkAndroidUnzipped? without creating "sdk"?
 		
 		If ($unzipDest.exists)
 			
@@ -2586,7 +2586,7 @@ Function copySdkVersion()->$result : Object
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	$unzippedSdk:=This:C1470.path.cacheSdkAndroid().parent.folder("sdk")
+	$unzippedSdk:=This:C1470.path.cacheSdkAndroidUnzipped()
 	
 	If ($unzippedSdk.exists)
 		
