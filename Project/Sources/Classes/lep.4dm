@@ -347,6 +347,7 @@ Function launch($command; $arguments : Variant) : cs:C1710.lep
 	If (This:C1470.success)
 		
 		This:C1470.pid:=$pid
+		This:C1470.errorStream:=This:C1470._cleanupStream($errorStream)
 		
 		Case of 
 				
