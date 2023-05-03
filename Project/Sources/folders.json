@@ -644,7 +644,6 @@
 			"dev_test_data",
 			"importData",
 			"importRelationRandomly",
-			"populateCommands",
 			"removeAllEntities",
 			"removeRelations"
 		],
