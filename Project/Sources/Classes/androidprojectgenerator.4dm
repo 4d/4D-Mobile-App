@@ -2524,7 +2524,7 @@ Function chmod
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.launch(This:C1470.chmodCmd+" +x "+This:C1470.singleQuoted(This:C1470.projectPath+"gradlew")+" "+This:C1470.singleQuoted(This:C1470.kotlinc))
+	This:C1470.launch(This:C1470.chmodCmd+" +x "+This:C1470.singleQuoted(This:C1470.projectPath+"gradlew"))
 	
 	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 	
@@ -2588,32 +2588,43 @@ Function copySdkVersion()->$result : Object
 	
 	$unzippedSdk:=This:C1470.path.cacheSdkAndroidUnzipped()
 	
-	If ($unzippedSdk.exists)
+	If (Not:C34($unzippedSdk.exists))
+		This:C1470.prepareSdk()
+	End if 
+	
+	If (Not:C34($unzippedSdk.exists))  // Missing unzipped sdk
+		$result.errors.push("Could not find unzipped sdk folder at destination: "+$unzippedSdk.path)
+		return 
+	End if 
+	
+	$sdkVersion:=$unzippedSdk.file("sdkVersion")
+	
+	If (Not:C34($sdkVersion.exists))  // Missing sdkVersion file
+		$result.errors.push("Could not find sdkVersion file at destination: "+$sdkVersion.path)
+		return 
+	End if 
+	
+	var $cacheSdkAndroid; $archive : Object
+	$cacheSdkAndroid:=This:C1470.path.sdkAndroid()
+	If ($cacheSdkAndroid.exists)
+		$archive:=ZIP Read archive:C1637($cacheSdkAndroid)
 		
-		$sdkVersion:=$unzippedSdk.file("sdkVersion")
-		
-		If ($sdkVersion.exists)
+		If (($archive.root.file("sdkVersion").exists) && ($archive.root.file("sdkVersion").getText()#$sdkVersion.getText()))
 			
-			$copyDest:=$sdkVersion.copyTo(Folder:C1567(This:C1470.projectPath+"app/src/main/assets"); fk overwrite:K87:5)
-			
-			If ($copyDest.exists)
-				
-				$result.success:=True:C214
-				
-			Else 
-				
-				// Copy failed
-				$result.errors.push("Could not copy sdkVersion file to destination: "+$copyDest.path)
-				
-			End if 
-			
-		Else 
-			// Missing sdkVersion file
-			$result.errors.push("Could not find sdkVersion file at destination: "+$sdkVersion.path)
+			$unzippedSdk.delete(Delete with contents:K24:24)
+			This:C1470.prepareSdk()
 			
 		End if 
-		
-	Else 
-		// Missing unzipped sdk
-		$result.errors.push("Could not find unzipped sdk folder at destination: "+$unzippedSdk.path)
 	End if 
+	
+	$copyDest:=$sdkVersion.copyTo(Folder:C1567(This:C1470.projectPath+"app/src/main/assets"); fk overwrite:K87:5)
+	
+	If (Not:C34($copyDest.exists))  // Copy failed
+		$result.errors.push("Could not copy sdkVersion file to destination: "+$copyDest.path)
+		return 
+	End if 
+	
+	$result.success:=True:C214
+	
+	
+	
