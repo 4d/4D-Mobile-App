@@ -94,7 +94,7 @@ Case of
 				If ($version="main")
 					$url:="https://github.com/4d/{target}-sdk/releases/latest/download/{target}.zip"  // maybe find some link to pre-release instead?
 				Else 
-					$url:="https://github.com/4d/{target}-sdk/releases/download/{version}/{target}.zip"
+					$url:="https://github.com/4d/{target}-sdk/releases/download/v{version}/{target}.zip"  // use vXXX for tag to not be in conflict with branches
 				End if 
 				If (Length:C16(String:C10($pref.githubToken))>0)  // to support if private
 					$url:=Replace string:C233($url; "https://"; "https://"+String:C10($pref.githubToken)+"@")
