@@ -60,33 +60,7 @@ Class constructor($project : Object)
 	This:C1470.project.componentBuild:=String:C10(This:C1470.project.project.info.componentBuild)
 	This:C1470.project.ideBuildVersion:=This:C1470.project.project.info.ideBuildVersion
 	This:C1470.project.ideVersion:=This:C1470.project.project.info.ideVersion
-	
-	var $applicationVersion : Text
-	var $buildNumber : Integer
-	$applicationVersion:=Application version:C493($buildNumber; *)
-	
-	
-	If ($applicationVersion[[1]]="A")
-		
-		$applicationVersion:="main"
-		
-	Else 
-		
-		If (Num:C11($applicationVersion[[7]])=0)
-			
-			// LTS
-			$applicationVersion:=$applicationVersion[[5]]+$applicationVersion[[6]]+".x"
-			
-		Else 
-			
-			// Release
-			$applicationVersion:=$applicationVersion[[5]]+$applicationVersion[[6]]+"R"+$applicationVersion[[7]]
-			
-		End if 
-		
-	End if 
-	
-	This:C1470.project.branch_version:=String:C10($applicationVersion)
+	This:C1470.project.branch_version:=This:C1470._expectedSDKVersion()
 	
 	If (Feature.with("openURLActionsInTabBar") || Feature.with("actionsInTabBar"))
 		If (This:C1470.project.project._folder.file("mainOrder.json").exists)
@@ -124,6 +98,61 @@ Class constructor($project : Object)
 	End if 
 	
 	This:C1470.init()
+	
+Function _expectedSDKVersion() : Text
+	var $preferences : Object
+	$preferences:=ob_parseFile(Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile"))
+	
+	Case of 
+		: ($preferences.value.android.sdk.version#Null:C1517)  // we force sdk version
+			
+			return String:C10($preferences.value.android.sdk.version)
+			
+		: (This:C1470.paths.sdkAndroid().exists)
+			
+			var $archive : Object
+			var $version : Text
+			
+			$archive:=ZIP Read archive:C1637(This:C1470.paths.sdkAndroid())
+			If ($archive.root.file("sdkVersion").exists)
+				$version:=$archive.root.file("sdkVersion").getText()
+				
+				If (Position:C15("@"; $version)>0)
+					return Substring:C12($version; 1; Position:C15("@"; $version)-1)
+				End if 
+				
+			End if 
+			
+			return This:C1470._4dVersion()
+			
+		Else 
+			
+			return This:C1470._4dVersion()
+			
+	End case 
+	
+Function _4dVersion() : Text
+	var $applicationVersion : Text
+	var $buildNumber : Integer
+	$applicationVersion:=Application version:C493($buildNumber; *)
+	
+	If ($applicationVersion[[1]]="A")  // Main
+		
+		return "main"
+		
+	Else 
+		
+		If (Num:C11($applicationVersion[[7]])=0)  // LTS
+			
+			return $applicationVersion[[5]]+$applicationVersion[[6]]+".x"
+			
+		Else   // Release
+			
+			return $applicationVersion[[5]]+$applicationVersion[[6]]+"R"+$applicationVersion[[7]]
+			
+		End if 
+		
+	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
