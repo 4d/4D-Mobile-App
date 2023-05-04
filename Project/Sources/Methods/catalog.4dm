@@ -55,7 +55,7 @@ Case of
 		// MARK:- datastore
 	: ($Txt_action="datastore")
 		
-		$Obj_datastore:=_4D_Build Exposed Datastore:C1598
+		$Obj_datastore:=_o_structure(New object:C1471("action"; "ds")).value
 		
 		$Obj_out.success:=($Obj_datastore#Null:C1517)
 		
