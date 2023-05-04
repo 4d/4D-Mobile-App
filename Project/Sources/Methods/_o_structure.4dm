@@ -54,6 +54,13 @@ Case of
 		
 		ASSERT:C1129(False:C215)
 		
+		// MARK:- ds
+	: ($IN.action="ds")  // Return ds
+		
+		$OUT.value:=ds:C1482
+		$OUT.success:=True:C214
+		
+		
 		// MARK:- catalog
 	: ($IN.action="catalog")  // Return the exposed datastore
 		
@@ -73,7 +80,7 @@ Case of
 		var $allowedTypes : Collection
 		$allowedTypes:=New collection:C1472("string"; "bool"; "date"; "number"; "image"; "object")
 		
-		$datastore:=_4D_Build Exposed Datastore:C1598
+		$datastore:=_o_structure(New object:C1471("action"; "ds")).value
 		
 		$OUT.success:=($datastore#Null:C1517)
 		
@@ -471,7 +478,7 @@ Don't keep:
 		ASSERT:C1129($IN.table#Null:C1517)
 		ASSERT:C1129($IN.relatedEntity#Null:C1517)
 		
-		$datastore:=_4D_Build Exposed Datastore:C1598
+		$datastore:=_o_structure(New object:C1471("action"; "ds")).value
 		
 		$field:=$datastore[$IN.table][$IN.relatedEntity]
 		
@@ -564,7 +571,7 @@ Don't keep:
 				//…………………………………………………………………………………………………
 			Else 
 				
-				$datastore:=_4D_Build Exposed Datastore:C1598
+				$datastore:=_o_structure(New object:C1471("action"; "ds")).value
 				$table:=$datastore[String:C10($IN.table)]
 				
 				If ($table#Null:C1517)
@@ -606,7 +613,7 @@ Don't keep:
 							//For each ($Txt_field;$Obj_relatedDataClass)
 							
 							//If (($Obj_relatedDataClass[$Txt_field].kind="relatedEntity")\
-																																
+																																								
 							//If ($Obj_relatedDataClass[$Txt_field].relatedDataClass=$Obj_in.table)
 							
 							//$Obj_out.fields.push($Obj_relatedDataClass[$Txt_field])
@@ -707,7 +714,7 @@ Don't keep:
 		// MARK:- createField
 	: ($IN.action="createField")  // CALLER: [dataModel] (add missing primary key field)
 		
-		$datastore:=_4D_Build Exposed Datastore:C1598
+		$datastore:=_o_structure(New object:C1471("action"; "ds")).value
 		$table:=$datastore[String:C10($IN.table)]
 		
 		If ($table#Null:C1517)
@@ -745,7 +752,7 @@ Don't keep:
 				//…………………………………………………………………………………………………
 			Else 
 				
-				$datastore:=_4D_Build Exposed Datastore:C1598
+				$datastore:=_o_structure(New object:C1471("action"; "ds")).value
 				$table:=$datastore[String:C10($IN.table)]
 				
 				If ($table#Null:C1517)
@@ -771,7 +778,7 @@ Don't keep:
 		
 		If (Asserted:C1132($IN.name#Null:C1517; "missing 'name' key"))
 			
-			$datastore:=_4D_Build Exposed Datastore:C1598
+			$datastore:=_o_structure(New object:C1471("action"; "ds")).value
 			
 			$OUT.success:=($datastore[$IN.name]#Null:C1517)
 			
@@ -787,7 +794,7 @@ Don't keep:
 		
 		If (Asserted:C1132($IN.name#Null:C1517; "missing 'name' key"))
 			
-			$datastore:=_4D_Build Exposed Datastore:C1598
+			$datastore:=_o_structure(New object:C1471("action"; "ds")).value
 			
 			$OUT.success:=($datastore[$IN.name]#Null:C1517)
 			
@@ -1042,7 +1049,7 @@ Don't keep:
 				//…………………………………………………………………………………………………………………
 			: ($IN.action="verify")
 				
-				$datastore:=_4D_Build Exposed Datastore:C1598
+				$datastore:=_o_structure(New object:C1471("action"; "ds")).value
 				
 				$OUT.success:=_o_structure(New object:C1471(\
 					"action"; "verifyDeletedRecords"; \
@@ -1076,7 +1083,7 @@ Don't keep:
 				
 				If ($IN.catalog=Null:C1517)
 					
-					$IN.catalog:=_4D_Build Exposed Datastore:C1598
+					$IN.catalog:=_o_structure(New object:C1471("action"; "ds")).value
 					
 				End if 
 				
@@ -1092,7 +1099,7 @@ Don't keep:
 					
 					If ($IN.catalog=Null:C1517)
 						
-						$IN.catalog:=_4D_Build Exposed Datastore:C1598
+						$IN.catalog:=_o_structure(New object:C1471("action"; "ds")).value
 						
 					End if 
 					
@@ -1119,8 +1126,7 @@ Don't keep:
 				ASSERT:C1129($IN.tables#Null:C1517)
 				
 				$OUT.success:=_o_structure(New object:C1471(\
-					"action"; "createDeletedRecords"; \
-					"catalog"; _4D_Build Exposed Datastore:C1598)).success
+					"action"; "createDeletedRecords")).success
 				
 				If ($OUT.success)
 					
