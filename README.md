@@ -29,7 +29,7 @@ This project has some dependencies on some other projects
 
 | Name  | Usefulness | Path | Integrated |
 |-|-|-|-|
-| [iOS SDK](https://github.com/4d/ios-sdk) | the SDK copied to mobile iOS App | `Resources/sdk/ios.zip` <br> `<your base>/Resources/mobile/sdk/ios.zip` <br> or downloaded from [latest release](https://github.com/4d/ios-sdk/releases/latest) | NO |
+| [iOS SDK](https://github.com/4d/ios-sdk) | the SDK copied to mobile iOS Apps | • `Resources/sdk/ios.zip` <br>• `<your base>/Resources/mobile/sdk/ios.zip` <br>• or downloaded from [latest release](https://github.com/4d/ios-sdk/releases/latest) | NO |
 
 #### for android
 
@@ -37,13 +37,13 @@ This project has some dependencies on some other projects
 
 | Name  | Usefulness | Path | Integrated |
 |-|-|-|-|
-| [ProjectGenerator](https://github.com/4d/android-ProjectGenerator) | Create android project | `Resources/scripts/androidprojectgenerator.jar` <br> or downloaded from [latest release](https://github.com/4d/android-ProjectGenerator/releases/latest) | NO |
+| [ProjectGenerator](https://github.com/4d/android-ProjectGenerator) | Create android project | • `Resources/scripts/androidprojectgenerator.jar` <br>• or downloaded from [latest release](https://github.com/4d/android-ProjectGenerator/releases/latest) | NO |
 
 ##### android mobile native SDK
 
 | Name  | Usefulness | Path | Integrated |
 |-|-|-|-|
-| [Android SDK](https://github.com/4d/android-sdk) | the SDK copied to mobile Android App | `Resources/sdk/android.zip` <br> `<your base>/Resources/mobile/sdk/android.zip` <br> or downloaded from [latest release](https://github.com/4d/android-sdk/releases/latest) | NO |
+| [Android SDK](https://github.com/4d/android-sdk) | the SDK copied to mobile Android Apps | • `Resources/sdk/android.zip` <br>• `<your base>/Resources/mobile/sdk/android.zip` <br>• or downloaded from [latest release](https://github.com/4d/android-sdk/releases/latest) | NO |
 
 
 ### Download instructions
