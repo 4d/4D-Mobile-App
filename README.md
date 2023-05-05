@@ -6,7 +6,7 @@ You could find more information into the [official documentation](https://develo
 
 ## Installation
 
-Download this component and add it to your base `Components` folder. 
+Download this component and add it to your base `Components` folder.
 
 > ⚠️ Be sure to name it with extension `.4dbase`
 
@@ -51,7 +51,7 @@ This project has some dependencies on some other projects
 #### Download artefact or sources
 
 1️⃣ Download sources using github `Download` button, or by going to a specific release and getting sources
-- for instance for main version `Download` button will download https://github.com/4d/4D-Mobile-App/archive/refs/heads/main.zip
+- for instance for main version `Download` button will download component using URL: [https://github.com/4d/4D-Mobile-App/archive/refs/heads/main.zip](https://github.com/4d/4D-Mobile-App/archive/refs/heads/main.zip)
 
 2️⃣ Then unzip into your `Components` folder, and rename it folder to `4D-Mobile-App.4dbase` if needed
 
