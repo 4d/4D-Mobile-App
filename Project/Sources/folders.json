@@ -745,7 +745,6 @@
 			"xml (thread-safe)"
 		],
 		"methods": [
-			"databaseSettings",
 			"killWorker",
 			"LOG_EVENT",
 			"noError"
