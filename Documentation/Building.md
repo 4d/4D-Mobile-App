@@ -10,12 +10,12 @@ Some tools must be inside [Resources/scripts](../Resources/scripts)
 
 This iOS tools are already commited but you could rebuild them using each projects instructions
 
-- `Resources/scripts/xprojstep` [XProjStep](https://github.com/4d/ios-XProjStep)
-- `Resources/scripts/coredataimport` [CoreDataImport](https://github.com/4d/ios-CoreDataImport)
+- `Resources/scripts/xprojstep` [XProjStep](https://github.com/4d/ios-XProjStep#build)
+- `Resources/scripts/coredataimport` [CoreDataImport](hhttps://github.com/4d/ios-CoreDataImport#build)
 
 ### android tool
 
-- `Resources/scripts/androidprojectgenerator.jar` [ProjectGenerator](https://github.com/4d/android-ProjectGenerator)
+- `Resources/scripts/androidprojectgenerator.jar` [ProjectGenerator](https://github.com/4d/android-ProjectGenerator#build)
 
 This one will be downloaded from [latest release](https://github.com/4d/android-ProjectGenerator/releases) if it not present inside expected path. It could also be builded using provided script.
 
@@ -29,7 +29,7 @@ But you also choose to build yourself using provided `build.sh` of each project 
 
 ##### iOS mobile native SDK
 
-[iOS SDK](https://github.com/4d/ios-sdk) could be put in
+[iOS SDK](https://github.com/4d/ios-sdk#build) could be put in
 
 - `Resources/sdk/ios.zip`
 - `<your base>/Resources/mobile/sdk/ios.zip`
@@ -38,7 +38,7 @@ or downloaded from [latest release](https://github.com/4d/ios-sdk/releases/lates
 
 ##### android mobile native SDK
 
-[Android SDK](https://github.com/4d/android-sdk) could be put in
+[Android SDK](https://github.com/4d/android-sdk#build) could be put in
 
 - `Resources/sdk/android.zip`
 - `<your base>/Resources/mobile/sdk/android.zip`
