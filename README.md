@@ -14,7 +14,9 @@ _[More detailled instructions to download bellow](#download-instructions)_
 
 ### Dependencies
 
-This project has some dependencies on some other projects
+This project has some dependencies on some other projects described bellow. 
+
+> You could find also this information in [building documentation](Documentation/Building.md) 
 
 #### for iOS
 
@@ -44,7 +46,6 @@ This project has some dependencies on some other projects
 | Name  | Usefulness | Path | Integrated |
 |-|-|-|-|
 | [Android SDK](https://github.com/4d/android-sdk) | the SDK copied to mobile Android Apps | • `Resources/sdk/android.zip` <br>• `<your base>/Resources/mobile/sdk/android.zip` <br>• or downloaded from [latest release](https://github.com/4d/android-sdk/releases/latest) | NO |
-
 
 ### Download instructions
 
