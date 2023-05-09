@@ -19,7 +19,7 @@ This iOS tools are already commited but you could rebuild them using each projec
 - `Resources/scripts/xprojstep` [XProjStep](https://github.com/4d/ios-XProjStep#build)
 - `Resources/scripts/coredataimport` [CoreDataImport](https://github.com/4d/ios-CoreDataImport#build)
 
-#### android tool
+#### Android tool
 
 - `Resources/scripts/androidprojectgenerator.jar` [ProjectGenerator](https://github.com/4d/android-ProjectGenerator#build)
 
@@ -29,7 +29,7 @@ This one will be downloaded from [latest release](https://github.com/4d/android-
 
 Native SDK are files copied to the generated mobile application according to target OS.
 
-The 4D code of method [downloadSDK](../Project/Sources/Methods/downloadSDK.4dm) will try to download the latest available components from github release.
+The 4D code of method [downloadSDK](../Project/Sources/Methods/downloadSDK.4dm) will try to download the latest available components from GitHub release.
 
 But you also choose to build yourself using provided `build.sh` of each project and inject it in this component or your component by using path defined bellow.
 
@@ -42,7 +42,7 @@ But you also choose to build yourself using provided `build.sh` of each project 
 
 or downloaded from [latest release](https://github.com/4d/ios-sdk/releases/latest)
 
-#### android mobile native SDK
+#### Android mobile native SDK
 
 [Android SDK](https://github.com/4d/android-sdk#build) could be put in
 
