@@ -11,7 +11,7 @@ Some tools must be inside [Resources/scripts](../Resources/scripts)
 This iOS tools are already commited but you could rebuild them using each projects instructions
 
 - `Resources/scripts/xprojstep` [XProjStep](https://github.com/4d/ios-XProjStep#build)
-- `Resources/scripts/coredataimport` [CoreDataImport](hhttps://github.com/4d/ios-CoreDataImport#build)
+- `Resources/scripts/coredataimport` [CoreDataImport](https://github.com/4d/ios-CoreDataImport#build)
 
 ### android tool
 
