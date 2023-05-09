@@ -4,7 +4,7 @@ This page contains detailled information on how to build the component with all 
 
 ## Tools
 
-Some tools must be inside [Resources/scripts](Resources/scripts)
+Some tools must be inside [Resources/scripts](../Resources/scripts)
 
 ### iOS tools
 
@@ -23,7 +23,7 @@ This one will be downloaded from [latest release](https://github.com/4d/android-
 
 Native SDK are files copied to the generated mobile application according to target OS.
 
-The 4D code of method [downloadSDK](Project/Sources/Methods/downloadSDK.4dm) will try to download the latest available components from github release.
+The 4D code of method [downloadSDK](../Project/Sources/Methods/downloadSDK.4dm) will try to download the latest available components from github release.
 
 But you also choose to build yourself using provided `build.sh` of each project and inject it in this component or your component by using path defined bellow.
 
