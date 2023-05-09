@@ -16,7 +16,7 @@ _[More detailled instructions to download bellow](#download-instructions)_
 
 This project has some dependencies on some other projects described bellow. 
 
-> You could find also this information in [building documentation](Documentation/Building.md) 
+> You could find also this information in ["building documentation"](Documentation/Building.md) 
 
 #### for iOS
 
