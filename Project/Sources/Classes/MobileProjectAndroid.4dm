@@ -244,6 +244,8 @@ Function create()->$result : Object
 	
 	If ($o.success)
 		
+		This:C1470.androidprojectgenerator.copySDKIfNeeded()
+		
 		// MARK:GENERATE PROJECT FILES
 		This:C1470.postStep("workspaceCreation")
 		
