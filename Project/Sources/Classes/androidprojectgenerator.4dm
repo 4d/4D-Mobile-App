@@ -2628,5 +2628,15 @@ Function copySdkVersion()->$result : Object
 	
 	$result.success:=True:C214
 	
+Function copySDKIfNeeded()
+	
+	var $unzippedSdk : 4D:C1709.Folder
+	$unzippedSdk:=This:C1470.path.cacheSdkAndroidUnzipped()
+	
+	If (Not:C34($unzippedSdk.exists))
+		This:C1470.prepareSdk()
+	End if 
+	
+	
 	
 	
