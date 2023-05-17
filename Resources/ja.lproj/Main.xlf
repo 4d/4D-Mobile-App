@@ -695,7 +695,7 @@ Make sure the device is connected to your computer with a USB cable.</source>
         </trans-unit>
         <trans-unit id="5PQalvARDkTsLxPS67LTyg" resname="irrelevant">
           <source>Irrelevant</source>
-          <target state="new">Irrelevant</target>
+          <target>無関係</target>
         </trans-unit>
       </group>
       <group resname="default values">
