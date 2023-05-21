@@ -852,7 +852,7 @@ Například jméno vývojáře se používá jak v zdroji, tak v záhlaví.</tar
         </trans-unit>
         <trans-unit id="OsoNlhxeLKmCB3E7TNKG5Q" resname="comment_main">
           <source>Select the elements to put in the Tabbar and order it</source>
-          <target state="needs-review-translation">Uspořádejte vaše tabulky v Tabbar</target>
+          <target>Vyberte prvky k umístění v liště tab. a uspořádejte je</target>
         </trans-unit>
         <trans-unit id="t5w7OAPDSQ8feyEvtCDqQw" resname="comment_views">
           <source>Build list and detail forms for each table</source>
@@ -996,11 +996,11 @@ Bude nahrazen generickou verzí</target>
         </trans-unit>
         <trans-unit id="5J1S8mRI7kQY8V1LBRtbUw" resname="availableMainElements">
           <source>Available elements for the main menu</source>
-          <target state="new">Available elements for the main menu</target>
+          <target>Dostupné prvky pro hlavní nabídku</target>
         </trans-unit>
         <trans-unit id="86CFeT93x0PYbFFIO4tJsw" resname="selectedMainElements">
           <source>Selected elements for the main menu</source>
-          <target state="new">Selected elements for the main menu</target>
+          <target>Vyberte prvky pro hlavní nabídku</target>
         </trans-unit>
       </group>
       <group resname="Welcome">
