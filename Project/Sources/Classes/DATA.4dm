@@ -687,7 +687,10 @@ Function displayFilter($table : Object)
 								
 							Else 
 								
-								$Comment:=UI.str.localize("entitiesEmbeddedUponConnection"; New collection:C1472(String:C10($table.count; This:C1470.numbereFormat); String:C10($table.total; This:C1470.numbereFormat)))
+								$Comment:=UI.str.localize("entitiesEmbeddedUponConnection"; New object:C1471(\
+									"count"; String:C10($table.count; \
+									This:C1470.numbereFormat); "total"; \
+									String:C10($table.total; This:C1470.numbereFormat)))
 								
 							End if 
 							
@@ -700,7 +703,10 @@ Function displayFilter($table : Object)
 								
 							Else 
 								
-								$Comment:=UI.str.localize("entitiesLoadedUponConnection"; New collection:C1472(String:C10($table.count; This:C1470.numbereFormat); String:C10($table.total; This:C1470.numbereFormat)))
+								$Comment:=UI.str.localize("entitiesLoadedUponConnection"; New object:C1471(\
+									"count"; String:C10($table.count; \
+									This:C1470.numbereFormat); "total"; \
+									String:C10($table.total; This:C1470.numbereFormat)))
 								
 							End if 
 						End if 

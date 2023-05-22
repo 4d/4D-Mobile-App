@@ -122,7 +122,9 @@ If ($cacheFile.exists)
 													//______________________________________________________
 												: ($field.nameMismatch)
 													
-													$field.tableTips:=$str.localize("theFieldNameWasRenamed"; New collection:C1472($field.name; $field.current.name))
+													$field.tableTips:=$str.localize("theFieldNameWasRenamed"; New object:C1471(\
+														"old"; $field.name; \
+														"new"; $field.current.name))
 													$field.fieldTips:=$str.localize("theFieldWasRenamed"; $field.current.name)
 													
 													//______________________________________________________
@@ -172,7 +174,9 @@ If ($cacheFile.exists)
 													//______________________________________________________
 												: ($field.nameMismatch)
 													
-													$field.tableTips:=$str.localize("theFieldNameWasRenamed"; New collection:C1472($item.key; $field.current.name))
+													$field.tableTips:=$str.localize("theFieldNameWasRenamed"; New object:C1471(\
+														"old"; $item.key; \
+														"new"; $field.current.name))
 													$field.fieldTips:=$str.localize("theFieldWasRenamed"; $field.current.name)
 													
 													//______________________________________________________
@@ -229,7 +233,9 @@ If ($cacheFile.exists)
 													//______________________________________________________
 												: ($field.nameMismatch)
 													
-													$field.tableTips:=$str.localize("theFieldNameWasRenamed"; New collection:C1472($item.key; $field.current.name))
+													$field.tableTips:=$str.localize("theFieldNameWasRenamed"; New object:C1471(\
+														"old"; $item.key; \
+														"new"; $field.current.name))
 													$field.fieldTips:=$field.tableTips
 													
 													//______________________________________________________
@@ -334,7 +340,9 @@ If ($cacheFile.exists)
 																	//______________________________________________________
 																: ($relatedField.nameMismatch)
 																	
-																	$relatedField.tableTips:=$str.localize("theFieldNameWasRenamed"; New collection:C1472($relatedField.name; $relatedField.current.name))
+																	$relatedField.tableTips:=$str.localize("theFieldNameWasRenamed"; New object:C1471(\
+																		"old"; $relatedField.name; \
+																		"new"; $relatedField.current.name))
 																	$relatedField.fieldTips:=$relatedField.tableTips
 																	
 																	//______________________________________________________
@@ -380,7 +388,9 @@ If ($cacheFile.exists)
 																	//______________________________________________________
 																: ($relatedField.nameMismatch)
 																	
-																	$relatedField.tableTips:=$str.localize("theFieldNameWasRenamed"; New collection:C1472($relatedItem.key; String:C10($relatedField.name)))
+																	$relatedField.tableTips:=$str.localize("theFieldNameWasRenamed"; New object:C1471(\
+																		"old"; $relatedItem.key; \
+																		"new"; String:C10($relatedField.name)))
 																	$relatedField.fieldTips:=$relatedField.tableTips
 																	
 																	//______________________________________________________
@@ -442,7 +452,9 @@ If ($cacheFile.exists)
 																		//______________________________________________________
 																	: ($linkedField.nameMismatch)
 																		
-																		$linkedField.tableTips:=$str.localize("theFieldNameWasRenamed"; New collection:C1472($linkedField.name; $linkedField.current.name))
+																		$linkedField.tableTips:=$str.localize("theFieldNameWasRenamed"; New object:C1471(\
+																			"old"; $linkedField.name; \
+																			"new"; $linkedField.current.name))
 																		$linkedField.fieldTips:=$linkedField.tableTips
 																		
 																		//______________________________________________________
@@ -491,7 +503,9 @@ If ($cacheFile.exists)
 																	//______________________________________________________
 																: ($relatedField.nameMismatch)
 																	
-																	$relatedField.tableTips:=$str.localize("theFieldNameWasRenamed"; New collection:C1472($relatedItem.key; $relatedField.current.name))
+																	$relatedField.tableTips:=$str.localize("theFieldNameWasRenamed"; New object:C1471(\
+																		"old"; $relatedItem.key; \
+																		"new"; $relatedField.current.name))
 																	$relatedField.fieldTips:=$relatedField.tableTips
 																	
 																	//______________________________________________________

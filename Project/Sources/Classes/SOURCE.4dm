@@ -649,7 +649,9 @@ Function updateDatasetComment()
 							
 							If ($file.exists)
 								
-								This:C1470.lastGeneration.title:=UI.str.localize("lastGeneration"; New collection:C1472($file.modificationDate; Time string:C180($file.modificationTime)))
+								This:C1470.lastGeneration.title:=UI.str.localize("lastGeneration"; New object:C1471(\
+									"date"; $file.modificationDate; \
+									"time"; Time string:C180($file.modificationTime)))
 								This:C1470.lastGeneration.foregroundColor:=UI.commentColor
 								
 							Else 
