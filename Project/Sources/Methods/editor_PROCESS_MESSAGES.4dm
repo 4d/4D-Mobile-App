@@ -232,7 +232,7 @@ Case of
 		//______________________________________________________
 	: ($message="projectAuditResult")
 		
-		PROJECT_Handler(New object:C1471(\
+		PROJECT_HANDLER(New object:C1471(\
 			"action"; $message; \
 			"audit"; $data))
 		
@@ -312,7 +312,9 @@ Case of
 						
 						DISPLAY NOTIFICATION:C910($title; \
 							UI.str.setText("theApplicationHasBeenSuccessfullyInstalled")\
-							.localized(New collection:C1472($project.product.name; $project._device.name)))
+							.localized(New object:C1471(\
+							"app"; $project.product.name; \
+							"device"; $project._device.name)))
 						
 					End if 
 					
@@ -323,7 +325,9 @@ Case of
 						
 						DISPLAY NOTIFICATION:C910($title; \
 							UI.str.setText("theApplicationHasBeenSuccessfullyInstalled")\
-							.localized(New collection:C1472($project.product.name; $project._device.name)))
+							.localized(New object:C1471(\
+							"app"; $project.product.name; \
+							"device"; $project._device.name)))
 						
 					Else 
 						

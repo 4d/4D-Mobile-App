@@ -674,7 +674,10 @@ Function update()
 					
 					This:C1470.goToPage(1)
 					This:C1470.title.setTitle(\
-						UI.str.localize("sortCriteria"; New collection:C1472($action.shortLabel; Table name:C256($action.tableNumber)))).show()
+						UI.str.localize("sortCriteria"; New object:C1471(\
+						"action"; $action.shortLabel; \
+						"table"; Table name:C256($action.tableNumber)))).show()
+					
 					This:C1470.withSelection.show()
 					
 					This:C1470.add.enable()
@@ -708,7 +711,7 @@ Function update()
 					If (Feature.with("openURLActionsInTabBar"))
 						
 						This:C1470.title.setTitle(\
-							UI.str.localize("actionParametersNoTable"; New collection:C1472($action.shortLabel))).show()
+							UI.str.localize("actionParametersNoTable"; New object:C1471("action"; $action.shortLabel))).show()
 						
 						This:C1470.withSelection.show()
 						This:C1470.add.setNoPopupMenu().enable()
@@ -753,7 +756,9 @@ Function update()
 					Else 
 						
 						This:C1470.title.setTitle(\
-							UI.str.localize("actionParameters"; New collection:C1472($action.shortLabel; Table name:C256(Num:C11($action.tableNumber))))).show()
+							UI.str.localize("actionParameters"; New object:C1471(\
+							"action"; $action.shortLabel; \
+							"table"; Table name:C256(Num:C11($action.tableNumber))))).show()
 						
 						This:C1470.withSelection.show()
 						This:C1470.add.setSeparatePopupMenu().enable()
@@ -1993,9 +1998,9 @@ Function dataSourceMenuManager()
 Function editList()
 	
 /*
-									$form:=New object(\
-																		"static"; $static; \
-																		"host"; This.path.hostInputControls(True))
+												$form:=New object(\
+																								"static"; $static; \
+																								"host"; This.path.hostInputControls(True))
 	
 $form.folder:=This.path.hostInputControls()
 $manifest:=$form.folder.file("manifest.json")
