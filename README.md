@@ -16,7 +16,7 @@ Alternatively you could download this project sources. _[More detailled instruct
 
 > ⚠️ If you download sources be sure to name the folder with extension `.4dbase`
 
-If you do so, you must integrated manually some of the dependencies described bellow.
+If you do so, you must integrated manually some of the dependencies described bellow (even if at runtime the code will try to download latest version).
 
 ## Dependencies
 
