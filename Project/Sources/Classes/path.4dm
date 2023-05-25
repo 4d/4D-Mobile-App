@@ -134,7 +134,6 @@ Function isSdkAppleExists() : Boolean
 	
 Function cacheSdkApple() : 4D:C1709.File
 	
-	return This:C1470.cacheSdkAppleUnzipped().folder("iOS").file("sdk.zip")
 	return This:C1470.cacheSdkVersion().folder("iOS").file("sdk.zip")
 /*========================================================*/
 Function cacheSdkAppleManifest() : 4D:C1709.File
