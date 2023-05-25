@@ -104,7 +104,7 @@ If (OB Is empty:C1297(SHARED)) | $reset
 	SHARED.useXcodeDefaultPath:=True:C214
 	
 	// 1] Android
-	SHARED.studioMinVersion:="4.1"
+	SHARED.studioMinVersion:="2022.2"
 	
 	// Project config
 	SHARED.swift:=New object:C1471(\
