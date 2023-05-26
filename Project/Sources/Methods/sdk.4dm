@@ -101,7 +101,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 				If (Not:C34(File:C1566($Obj_param.file; fk platform path:K87:2).exists))
 					
 					var $request : 4D:C1709.HTTPRequest
-					$request:=downloadSDK("aws"; "ios"; /*silent=*/True:C214; 0; True:C214)
+					$request:=downloadSDK("github"; "ios"; /*silent=*/True:C214; 0; True:C214)
 					$request.wait(60)
 					
 					If ($Obj_param.cacheFolder.file("sdkVersion").exists)  // already unziped
