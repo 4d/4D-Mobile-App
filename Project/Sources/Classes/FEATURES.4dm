@@ -319,19 +319,21 @@ Function update()
 		
 	End if 
 	
+	This:C1470._checkMobileAppServer()
+	
 	If (Feature.with("androidPushNotifications"))
 		
-		This:C1470.certificateGroup.show(Form:C1466.server.pushNotification & PROJECT.$ios)
+		This:C1470.certificateGroup.show(Bool:C1537(Form:C1466.server.pushNotification) & PROJECT.$ios)
 		This:C1470.certificateGroup.enable(Is macOS:C1572)
 		This:C1470.certificate.picker.browse:=Is macOS:C1572
 		This:C1470.certificate.touch()
 		
-		This:C1470.configureFileGroup.show(Form:C1466.server.pushNotification & PROJECT.$android)
+		This:C1470.configureFileGroup.show(Bool:C1537(Form:C1466.server.pushNotification) & PROJECT.$android)
 		This:C1470.configureFile.touch()
 		
 	Else 
 		
-		This:C1470.certificateGroup.show(Form:C1466.server.pushNotification)
+		This:C1470.certificateGroup.show(Bool:C1537(Form:C1466.server.pushNotification))
 		This:C1470.pushNotification.enable(Is macOS:C1572 & PROJECT.$ios)
 		This:C1470.certificateGroup.enable(Is macOS:C1572 & PROJECT.$ios)
 		This:C1470.certificate.picker.browse:=(Is macOS:C1572 & PROJECT.$ios)
@@ -590,3 +592,20 @@ Function resetGoogleCertificat()
 	
 	This:C1470.configureFile.picker.path:=String:C10(Form:C1466.server.configurationFile)
 	This:C1470.configureFile.picker:=This:C1470.configureFile.picker
+	
+	
+Function _checkMobileAppServer()
+	var $hasFeatures : Boolean
+	$hasFeatures:=Bool:C1537(Form:C1466.server.authentication.email) || Bool:C1537(Form:C1466.server.pushNotification) || Bool:C1537(Form:C1466.deepLinking.enabled)
+	var $message : Object
+	$message:=New object:C1471("message"; ""; "type"; "message")
+	
+	If ($hasFeatures)
+		Database:=Database || cs:C1710.database.new()
+		If (Not:C34(Database.isComponentAvailable("4D Mobile App Server")))
+			$message.message:="💡 You could install 4d component https://github.com/4d/4D-Mobile-App-Server"
+			$message.url:="https://github.com/4d/4D-Mobile-App-Server"
+		End if 
+	End if 
+	
+	UI.callMeBack("footer"; $message)
