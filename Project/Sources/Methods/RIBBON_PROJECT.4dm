@@ -333,7 +333,7 @@ Case of
 				 | ($menu.choice="downloadIosSdk")
 				
 				var $server : Text
-				$server:="aws"
+				$server:="github"
 				
 				If (Shift down:C543)
 					

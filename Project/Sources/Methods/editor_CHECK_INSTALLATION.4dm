@@ -48,7 +48,7 @@ Case of
 					 | ($fileManifest.modificationDate#Current date:C33)
 					
 					// Get the last 4D Mobile Android SDK from AWS server if any
-					CALL WORKER:C1389($process; Formula:C1597(downloadSDK).source; "aws"; "android"; False:C215; $in.caller)
+					CALL WORKER:C1389($process; Formula:C1597(downloadSDK).source; "github"; "android"; False:C215; $in.caller)
 					
 				End if 
 			End if 
@@ -83,7 +83,7 @@ Case of
 						 | ($fileManifest.modificationDate#Current date:C33)
 						
 						// Get the last 4D Mobile iOS SDK from AWS server if any
-						CALL WORKER:C1389($process; Formula:C1597(downloadSDK).source; "aws"; "ios"; False:C215; $in.caller)
+						CALL WORKER:C1389($process; Formula:C1597(downloadSDK).source; "github"; "ios"; False:C215; $in.caller)
 						
 					End if 
 				End if 
@@ -121,7 +121,7 @@ Case of
 					 | ($fileManifest.modificationDate#Current date:C33)
 					
 					// Get the last 4D Mobile Android SDK from AWS server if any
-					CALL WORKER:C1389($process; Formula:C1597(downloadSDK).source; "aws"; "android"; False:C215; $in.caller)
+					CALL WORKER:C1389($process; Formula:C1597(downloadSDK).source; "github"; "android"; False:C215; $in.caller)
 					
 				End if 
 			End if 
