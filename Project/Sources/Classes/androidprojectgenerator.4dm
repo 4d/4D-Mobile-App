@@ -2619,6 +2619,11 @@ Function copySdkVersion()->$result : Object
 		End if 
 	End if 
 	
+	If (Not:C34($sdkVersion.exists))
+		$result.errors.push("Could not copy missing sdkVersion file at : "+$sdkVersion.path)
+		return 
+	End if 
+	
 	$copyDest:=$sdkVersion.copyTo(Folder:C1567(This:C1470.projectPath+"app/src/main/assets"); fk overwrite:K87:5)
 	
 	If (Not:C34($copyDest.exists))  // Copy failed
