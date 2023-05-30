@@ -37,7 +37,7 @@ This project has some dependencies on some other projects described bellow.
 
 | Name  | Usefulness | Path | Integrated |
 |-|-|-|-|
-| [iOS SDK](https://github.com/4d/ios-sdk) | the SDK copied to mobile iOS Apps | • `Resources/sdk/ios.zip` <br>• `<your base>/Resources/mobile/sdk/ios.zip` <br>• or downloaded from [latest release](https://github.com/4d/ios-sdk/releases/latest) | NO |
+| [iOS SDK](https://github.com/4d/ios-sdk) | the SDK copied to mobile iOS Apps | • `<your base>/Resources/mobile/sdk/ios.zip` <br>• or `<4D mobile app>/Resources/sdk/ios.zip` <br>• or downloaded from [latest release](https://github.com/4d/ios-sdk/releases/latest) | NO |
 
 ### for android
 
@@ -51,7 +51,7 @@ This project has some dependencies on some other projects described bellow.
 
 | Name  | Usefulness | Path | Integrated |
 |-|-|-|-|
-| [Android SDK](https://github.com/4d/android-sdk) | the SDK copied to mobile Android Apps | • `Resources/sdk/android.zip` <br>• `<your base>/Resources/mobile/sdk/android.zip` <br>• or downloaded from [latest release](https://github.com/4d/android-sdk/releases/latest) | NO |
+| [Android SDK](https://github.com/4d/android-sdk) | the SDK copied to mobile Android Apps | • `<your base>/Resources/mobile/sdk/android.zip` <br>• or `<4D mobile app>/Resources/sdk/android.zip` <br>• or downloaded from [latest release](https://github.com/4d/android-sdk/releases/latest) | NO |
 
 ---
 
