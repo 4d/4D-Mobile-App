@@ -71,7 +71,7 @@ This project has some dependencies on some other projects described bellow.
 
 On macOS the following command line will do the job for you.
 
-Open a terminal, go to your component root folder (`cd /your/base/path/`) and type:
+Open a terminal, go to your 4d database root folder (`cd /your/base/path/`) and type:
 
 ```bash
 curl -sL https://raw.githubusercontent.com/4d/4D-Mobile-App/main/download.sh | sh
@@ -79,7 +79,7 @@ curl -sL https://raw.githubusercontent.com/4d/4D-Mobile-App/main/download.sh | s
 
 ### Alternatively using git
 
-Go to your component root folder (`cd /your/base/path/`) and clone it using the commande line
+Go to your 4d database root folder (`cd /your/base/path/`) and clone it using the commande line
 
 ```bash
 git clone git@github.com:4d/4D-Mobile-App.git Components/4D-Mobile-App.4dbase
