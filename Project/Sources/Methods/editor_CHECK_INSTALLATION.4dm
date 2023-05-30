@@ -15,8 +15,11 @@ var $android; $ios : Boolean
 var $studio; $xcode : Object
 var $fileManifest : 4D:C1709.File
 var $process : Variant
+var $path : cs:C1710.path
 
 $process:=Is compiled mode:C492 ? 1 : "$worker"
+
+$path:=cs:C1710.path.new()
 
 // ----------------------------------------------------
 Case of 
@@ -40,9 +43,9 @@ Case of
 		
 		If ($studio.ready)
 			
-			If ($android)
+			If ($android && Not:C34($path.isSDKAndroidEmbedded()))
 				
-				$fileManifest:=cs:C1710.path.new().cacheSdkAndroidManifest()
+				$fileManifest:=$path.cacheSdkAndroidManifest()
 				
 				If (Not:C34($fileManifest.exists))\
 					 | ($fileManifest.modificationDate#Current date:C33)
@@ -73,11 +76,11 @@ Case of
 		
 		If ($xcode.ready)
 			
-			If ($ios)
+			If ($ios && Not:C34($path.isSDKAppleEmbedded()))
 				
 				If (Feature.with("iosSDKfromAWS"))
 					
-					$fileManifest:=cs:C1710.path.new().cacheSdkAppleManifest()
+					$fileManifest:=$path.cacheSdkAppleManifest()
 					
 					If (Not:C34($fileManifest.exists))\
 						 | ($fileManifest.modificationDate#Current date:C33)
@@ -113,9 +116,9 @@ Case of
 				"ready"; False:C215); \
 				"studio"; studioCheckInstall($in))
 			
-			If (Bool:C1537($out.studio.ready))
+			If (Bool:C1537($out.studio.ready) && Not:C34($path.isSDKAndroidEmbedded()))
 				
-				$fileManifest:=cs:C1710.path.new().cacheSdkAndroidManifest()
+				$fileManifest:=$path.cacheSdkAndroidManifest()
 				
 				If (Not:C34($fileManifest.exists))\
 					 | ($fileManifest.modificationDate#Current date:C33)

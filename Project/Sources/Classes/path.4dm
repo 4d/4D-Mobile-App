@@ -238,6 +238,17 @@ Function sdkApple() : 4D:C1709.File  // ios zip sdk
 		return This:C1470.target
 	End if 
 	
+/*========================================================*/
+Function isSDKAppleEmbedded() : Boolean
+	This:C1470.target:=This:C1470.hostSDK().file("ios.zip")  // could be placed in client base
+	If (This:C1470.target.exists)
+		return True:C214
+	End if 
+	This:C1470.target:=This:C1470.sdk().file("ios.zip")  // if embedded it re-become the one used
+	If (This:C1470.target.exists)
+		return True:C214
+	End if 
+	return False:C215
 	
 /*========================================================*/
 Function sdkAndroid() : 4D:C1709.File  // android zip sdk
@@ -248,6 +259,18 @@ Function sdkAndroid() : 4D:C1709.File  // android zip sdk
 	End if 
 	
 	return This:C1470.cacheSdkAndroid()
+	
+/*========================================================*/
+Function isSDKAndroidEmbedded() : Boolean
+	This:C1470.target:=This:C1470.hostSDK().file("android.zip")  // could be placed in client base
+	If (This:C1470.target.exists)
+		return True:C214
+	End if 
+	This:C1470.target:=This:C1470.sdk().file("android.zip")  // if embedded it re-become the one used
+	If (This:C1470.target.exists)
+		return True:C214
+	End if 
+	return False:C215
 	
 /*========================================================*/
 Function defaultroject() : 4D:C1709.Folder  // project folder
