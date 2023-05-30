@@ -146,6 +146,21 @@ Function cacheSdkAppleUnzipped() : 4D:C1709.Folder
 	return This:C1470.cacheSdkVersion().folder("iOS/sdk")
 	
 /*========================================================*/
+Function sdkAppleVersion() : 4D:C1709.File
+	
+	This:C1470.target:=This:C1470.cacheSdkAppleUnzipped().file("sdkVersion")
+	If (This:C1470.target.exists)
+		return This:C1470.target
+	End if 
+	
+	This:C1470.target:=This:C1470.sdkApple()
+	If (This:C1470.target.exists)
+		This:C1470.target:=ZIP Read archive:C1637(This:C1470.target).root.file("sdkVersion")
+	End if 
+	
+	return This:C1470.target
+	
+/*========================================================*/
 	
 Function isSdkAndroidExists() : Boolean
 	
@@ -165,6 +180,21 @@ Function cacheSdkAndroidManifest() : 4D:C1709.File
 Function cacheSdkAndroidUnzipped() : 4D:C1709.Folder
 	
 	return This:C1470.cacheSdkVersion().folder("Android/sdk")
+	
+/*========================================================*/
+Function sdkAndroidVersion() : 4D:C1709.File
+	
+	This:C1470.target:=This:C1470.cacheSdkAndroidUnzipped().file("sdkVersion")
+	If (This:C1470.target.exists)
+		return This:C1470.target
+	End if 
+	
+	This:C1470.target:=This:C1470.sdkAndroid()
+	If (This:C1470.target.exists)
+		This:C1470.target:=ZIP Read archive:C1637(This:C1470.target).root.file("sdkVersion")
+	End if 
+	
+	return This:C1470.target
 	
 /*========================================================*/
 Function cacheSdkVersion() : 4D:C1709.Folder
