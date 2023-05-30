@@ -41,6 +41,7 @@ Function handleEvents($e : Object)
 			: ($e.code=On Load:K2:1)
 				
 				This:C1470.onLoad()
+				This:C1470.path:=cs:C1710.path.new()
 				
 				//______________________________________________________
 			: ($e.code=On Bound Variable Change:K2:52)
@@ -129,11 +130,25 @@ Function handleEvents($e : Object)
 						// Highlights
 						This:C1470[$e.objectName].foregroundColor:=UI.selectedColor
 						
+						var $version : Text
+						$version:=""
+						var $error : cs:C1710.error
+						$error:=cs:C1710.error.new("capture")
+						If ($e.objectName="android")
+							$version:=This:C1470.path.sdkAndroidVersion().getText()
+						Else 
+							$version:=This:C1470.path.sdkAppleVersion().getText()
+						End if 
+						$error.release()
+						
+						This:C1470[$e.objectName].setHelpTip($version)
+						
 						//______________________________________________________
 					: ($e.code=On Mouse Leave:K2:34)
 						
 						// Restore
 						This:C1470[$e.objectName].foregroundColor:=Foreground color:K23:1
+						This:C1470[$e.objectName].setHelpTip("")
 						
 						//______________________________________________________
 				End case 
