@@ -100,6 +100,15 @@ If (Asserted:C1132($project#Null:C1517))
 					If ($file.exists)
 						
 						// mark:ASCENDING_COMPATIBILITY
+						var $tempo : 4D:C1709.File
+						$tempo:=UI.path.userCache().file($project._name+".ios.fingerprint")
+						
+						If ($tempo.exists)
+							
+							$tempo.delete()
+							
+						End if 
+						
 						$file:=$file.rename($project._name+".ios.fingerprint")
 						
 					Else 
@@ -242,8 +251,8 @@ If (Asserted:C1132($project#Null:C1517))
 								"build"; $data)
 							
 							//$messageCancel:=New object(\
-																																"action"; "build_ignoreServer"; \
-																																"build"; $data)
+																																								"action"; "build_ignoreServer"; \
+																																								"build"; $data)
 							
 							// Web server must running to test data synchronization
 							$message:=New object:C1471(\
