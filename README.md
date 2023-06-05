@@ -8,7 +8,7 @@ You could find more information into the [official documentation](https://develo
 
 Download this component and add it to your base `Components` folder.
 
-You could download a full packaged and compiled version from [latest release](https://github.com/4d/4D-Mobile-App/releases/latest)
+You could download a full packaged and compiled version from the [latest release](https://github.com/4d/4D-Mobile-App/releases/latest)
 
 or launch this command line on macOS in your database root folder:
 
