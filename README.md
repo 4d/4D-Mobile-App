@@ -10,6 +10,8 @@ Download this component and add it to your base `Components` folder.
 
 You could download a full packaged and compiled version from [latest release](https://github.com/4d/4D-Mobile-App/releases/latest)
 
+or launch this command line on macOS in your database root folder:
+
 ```bash
 cd Your/Base/Path
 curl -sL https://raw.githubusercontent.com/4d/4D-Mobile-App/main/install.sh | sh # will download the latest release in Components
