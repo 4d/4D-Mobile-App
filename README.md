@@ -97,3 +97,13 @@ _or using submodule if you use already git as vcs_
 ```bash
 git submodule add git@github.com:4d/4D-Mobile-App.git Components/4D-Mobile-App.4dbase
 ```
+
+## Contributing
+
+You can contribute by fixing bugs or adding new features. 
+
+When submitting a pull request 
+- please follow the [contributing guide](.github/CONTRIBUTING.md)
+- be sure that you have the right to license your contribution to the community, and agree by submitting the patch that your contributions are licensed under the [following license](LICENSE.md)
+- sign the [contributing](.github/cla/4DCLA.md) for your first pull request
+
