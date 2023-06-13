@@ -28,9 +28,9 @@ This file is distributed under the same license as the product package.-->
           <source>This project already exists.
 
 Do you want to replace it?</source>
-          <target>Este projeto j√° existe.
+          <target>Este projeto já existe.
 
-Voc√™ quer substitu√≠-lo?</target>
+Você quer substituí-lo?</target>
         </trans-unit>
         <trans-unit id="GAtIydVCgYLbZUtSym8V1A" resname="selectTheProjectToOpen">
           <source>Select the project to open</source>
@@ -46,27 +46,27 @@ Voc√™ quer substitu√≠-lo?</target>
         </trans-unit>
         <trans-unit id="G3DdvHXQf8087yYs371vtg" resname="decompressionOfTheSdk">
           <source>Installing the SDK</source>
-          <target>Instala√ß√£o do SDK</target>
+          <target>Instalação do SDK</target>
         </trans-unit>
         <trans-unit id="vys84xoAdfaLGYjQAEZxuw" resname="workspaceCreation">
           <source>Creating the WorkSpace</source>
-          <target>Criando o espa√ßo de trabalho</target>
+          <target>Criando o espaço de trabalho</target>
         </trans-unit>
         <trans-unit id="Oj/j4LAeJ7x7neqOiGTtSg" resname="projectBuild">
           <source>Building the project.
 
-This may take a few minutes‚Ä¶</source>
-          <target>Constru√ß√£o do projeto.
+This may take a few minutes…</source>
+          <target>Construção do projeto.
 
 Isto pode levar alguns minutos...</target>
         </trans-unit>
         <trans-unit id="7vcJzJw4w3xiLYjY231hdg" resname="launchingTheSimulator">
           <source>Launching the simulator</source>
-          <target>Lan√ßamento do simulador</target>
+          <target>Lançamento do simulador</target>
         </trans-unit>
         <trans-unit id="hqqAV7m7CoahTHmn+iMSDg" resname="installingTheApplication">
           <source>Installing the application</source>
-          <target>Instala√ß√£o do aplicativo</target>
+          <target>Instalação do aplicativo</target>
         </trans-unit>
         <trans-unit id="7Rg1FmmM3bgG24HCZ8IMGA" resname="launchingTheApplication">
           <source>Launching the application</source>
@@ -78,7 +78,7 @@ Isto pode levar alguns minutos...</target>
         </trans-unit>
         <trans-unit id="KVwx0s0n82Z9VZfjfb6tdA" resname="4dMobileRequiresXcode">
           <source>{product} requires the installation of Xcode.</source>
-          <target>{product} requer a instala√ß√£o de Xcode.</target>
+          <target>{product} requer a instalação de Xcode.</target>
         </trans-unit>
         <trans-unit id="S2lGEoShatzDd/IyptgEFA" resname="wouldYouLikeToInstallNow">
           <source>Do you want to install {app}?</source>
@@ -86,27 +86,27 @@ Isto pode levar alguns minutos...</target>
         </trans-unit>
         <trans-unit id="kkPpRMP8+S9EWkTjvJYw1w" resname="theProductNameIsMandatory">
           <source>The product name is mandatory.</source>
-          <target>O nome do produto √© obrigat√≥rio.</target>
+          <target>O nome do produto é obrigatório.</target>
         </trans-unit>
         <trans-unit id="jZ6HTaOXF38tDv7PucMGdg" resname="pleaseGiveNameToYourProduct">
           <source>Before proceeding, please give your product a name.</source>
-          <target>D√™ um nome para o produto antes de continuar.</target>
+          <target>Dê um nome para o produto antes de continuar.</target>
         </trans-unit>
         <trans-unit id="mzyoW6/Gqwp8HOojFTMo/A" resname="allContentWillBeReplaced">
           <source>All changes will be lost.
 
 Do you want to continue ?</source>
-          <target>Todas as altera√ß√µes ser√£o perdidas.
+          <target>Todas as alterações serão perdidas.
 
-Voc√™ quer continuar?</target>
+Você quer continuar?</target>
         </trans-unit>
         <trans-unit id="WtJQA9hkO4ZmMop6mgWuYw" resname="theWebServerIsNotStarted">
           <source>The Web Server is not started.</source>
-          <target>O servidor web n√£o foi iniciado.</target>
+          <target>O servidor web não foi iniciado.</target>
         </trans-unit>
         <trans-unit id="ecFbAMsMrW7og6dA9ojb/Q" resname="DoYouWantToStartTheWebServer">
           <source>Do you want to start the web server?</source>
-          <target>Voc√™ quer iniciar o servidor de web?</target>
+          <target>Você quer iniciar o servidor de web?</target>
         </trans-unit>
         <trans-unit id="Y1nSZ24MNrfzuhNZz6Ivkg" resname="fixThePath">
           <source>{product} wants to fix the path to the development tools</source>
@@ -114,7 +114,7 @@ Voc√™ quer continuar?</target>
         </trans-unit>
         <trans-unit id="KjwuhiuL+qrFRI0+LBhheA" resname="theDevelopmentToolsAreNotProperlyInstalled">
           <source>The path to the development tools is not set correctly.</source>
-          <target>O caminho para as ferramentas de desenvolvimento n√£o est√° definido corretamente.</target>
+          <target>O caminho para as ferramentas de desenvolvimento não está definido corretamente.</target>
         </trans-unit>
         <trans-unit id="Y9bAze8v2UN2kh+ZrwUu7A" resname="doYouWantToFixTheToolsPath">
           <source>Want to fix the path?
@@ -122,27 +122,27 @@ Voc√™ quer continuar?</target>
 (macOS password required)</source>
           <target>Deseja definir o caminho?
 
-(macOS senha necess√°ria)</target>
+(macOS senha necessária)</target>
         </trans-unit>
         <trans-unit id="Cw9h1MWUu45eT/HdtPd2qw" resname="failedToRepairThePathOfTheDevelopmentTools">
           <source>Failed to repair the path to the development tools.</source>
-          <target>N√£o conseguiram reparar o caminho para as ferramentas de desenvolvimento.</target>
+          <target>Não conseguiram reparar o caminho para as ferramentas de desenvolvimento.</target>
         </trans-unit>
         <trans-unit id="OVuLwimuwoETKTQ3xWsBIA" resname="tryDoingThisFromTheXcodeApplication">
           <source>Try doing this from the Xcode application.</source>
-          <target>Tente fazer isso da aplica√ß√£o Xcode.</target>
+          <target>Tente fazer isso da aplicação Xcode.</target>
         </trans-unit>
         <trans-unit id="D8vqVhesodXD5ITg/yx++w" resname="obsoleteVersionofApp">
           <source>{product} needs version {version} or higher of {application}.</source>
-          <target>{product} precisa de vers√£o {version} ou superior de {application}.</target>
+          <target>{product} precisa de versão {version} ou superior de {application}.</target>
         </trans-unit>
         <trans-unit id="/JS1iuAaRDVDTbXnYaHQ2g" resname="xcodeIsNotFullyFunctional">
           <source>Xcode is not fully functional</source>
-          <target>Xcode n√£o est√° totalmente funcional</target>
+          <target>Xcode não está totalmente funcional</target>
         </trans-unit>
         <trans-unit id="0ZaqweZVGFnx8f5+m4Jv/g" resname="wouldYouLikeToLaunchAppNow">
           <source>Would you like to launch {application} now to complete its installation?</source>
-          <target>Voc√™ gostaria de lan√ßar {application} agora para concluir sua instala√ß√£o?</target>
+          <target>Você gostaria de lançar {application} agora para concluir sua instalação?</target>
         </trans-unit>
         <trans-unit id="OZdO2goSGiYdTW+aF+1yoQ" resname="theDatabaseStructureWasModified">
           <source>The database structure was modified.</source>
@@ -152,9 +152,9 @@ Voc√™ quer continuar?</target>
           <source>The data model is no longer valid and must be updated.
 
 Would you want to update it now?</source>
-          <target>O modelo de dados n√£o √© mais v√°lido e deve ser atualizado.
+          <target>O modelo de dados não é mais válido e deve ser atualizado.
 
-Voc√™ gostaria de atualiz√°-lo agora?</target>
+Você gostaria de atualizá-lo agora?</target>
         </trans-unit>
         <trans-unit id="MA/m4T00dDQKa8N99ooXDQ" resname="reviewing">
           <source>Review errors</source>
@@ -162,15 +162,15 @@ Voc√™ gostaria de atualiz√°-lo agora?</target>
         </trans-unit>
         <trans-unit id="1RQAqM8gd2y4BdxkgCZ4jA" resname="update">
           <source>Update the Project</source>
-          <target>Atualiza√ß√£o</target>
+          <target>Atualização</target>
         </trans-unit>
         <trans-unit id="8Ca9DawZkoaFpIurxGpcVQ" resname="updateTheProject">
           <source>Update the Project</source>
-          <target>Atualiza√ß√£o</target>
+          <target>Atualização</target>
         </trans-unit>
         <trans-unit id="04YzK0niQjd6owbiCKmaWg" resname="aBackupWillBeCreatedIntoTheProjectFolder">
           <source>A Backup will be created in the Project Folder.</source>
-          <target>Um Backup ser√° criado na pasta do projeto.</target>
+          <target>Um Backup será criado na pasta do projeto.</target>
         </trans-unit>
         <trans-unit id="bOAnFJFUn//ZwZHK4c0V0g" resname="theApplicationHasBeenSuccessfullyGenerated">
           <source>The application "{app}" has been successfully generated.</source>
@@ -178,39 +178,39 @@ Voc√™ gostaria de atualiz√°-lo agora?</target>
         </trans-unit>
         <trans-unit id="SJcL0Fui9Pgko+EpaHrbhA" resname="youMustPublishAtLeastOneFieldToBeAbleToBuildYourApplication">
           <source>You must publish at least one field to be able to build your application.</source>
-          <target>Voc√™ deve publicar pelo menos um campo para ser capaz de construir seu aplicativo.</target>
+          <target>Você deve publicar pelo menos um campo para ser capaz de construir seu aplicativo.</target>
         </trans-unit>
         <trans-unit id="PCHmP5L20eXHETSF2g5nVA" resname="projectArchive">
           <source>Project Archive.
 
-This may take a few minutes‚Ä¶</source>
+This may take a few minutes…</source>
           <target>Arquivo de projeto</target>
         </trans-unit>
         <trans-unit id="XzRAwFR1k8v92FfdNDLJpA" resname="projectArchiveExport">
           <source>Archive Export.
 
-This may take a few minutes‚Ä¶</source>
-          <target>Exporta√ß√£o de arquivo</target>
+This may take a few minutes…</source>
+          <target>Exportação de arquivo</target>
         </trans-unit>
         <trans-unit id="BUXRKOcSnokBUs14nxz/9A" resname="archiveCreationSuccessful">
           <source>Archive creation successful</source>
-          <target>Cria√ß√£o de arquivo bem-sucedida</target>
+          <target>Criação de arquivo bem-sucedida</target>
         </trans-unit>
         <trans-unit id="PDwQrNiC1396rZNnf65/Bw" resname="wouldYouLikeToRevealInFinder">
           <source>Would you like to reveal in Finder</source>
-          <target>Gostaria de mostr√°-lo no Finder?</target>
+          <target>Gostaria de mostrá-lo no Finder?</target>
         </trans-unit>
         <trans-unit id="NyLcBi8GzierZ/4c5bcCsw" resname="projectCreationSuccessful">
           <source>Project creation successful</source>
-          <target>Cria√ß√£o bem sucedida do projeto </target>
+          <target>Criação bem sucedida do projeto </target>
         </trans-unit>
         <trans-unit id="qWyrqkvRzUwguoP/yHwLwA" resname="appIsNotInstalled">
           <source>{app} is not installed.</source>
-          <target>{app} n√£o est√° instalada.</target>
+          <target>{app} não está instalada.</target>
         </trans-unit>
         <trans-unit id="o5D0IMhrl9ckUQ69M69FsA" resname="appleConfigurator2Installation">
-          <source>Apple Configurator 2 installation‚Ä¶</source>
-          <target>Instala√ß√£o de Apple Configurator 2...</target>
+          <source>Apple Configurator 2 installation…</source>
+          <target>Instalação de Apple Configurator 2...</target>
         </trans-unit>
         <trans-unit id="Ky5nosbBA9C5eYj/dH78lA" resname="clicContinueWhenAppleConfigurator2IsInstalledOnYourMac">
           <source>Clic "Continue" when Apple configurator 2 is installed on your Mac.</source>
@@ -218,11 +218,11 @@ This may take a few minutes‚Ä¶</source>
         </trans-unit>
         <trans-unit id="Yt5Us9e7SWqjyJriuoe+BQ" resname="noDeviceFound">
           <source>No Device Found</source>
-          <target>N√£o h√° dispositivos encontrados</target>
+          <target>Não há dispositivos encontrados</target>
         </trans-unit>
         <trans-unit id="Sp5dYmXcBeJY87r1n69syQ" resname="makeSureThatADeviceIsConnected">
           <source> Make sure that the device is connected to your computer using a USB cable.</source>
-          <target> Certifique-se que um dispositivo √© conectado ao seu computador usando um cabo USB.</target>
+          <target> Certifique-se que um dispositivo é conectado ao seu computador usando um cabo USB.</target>
         </trans-unit>
         <trans-unit id="0P8BRDlzntJyfCqvVZMM+w" resname="theApplicationHasBeenSuccessfullyInstalled">
           <source>The "{app}" application has been successfully installed on the "{device}" device.</source>
@@ -235,26 +235,26 @@ This may take a few minutes‚Ä¶</source>
         <trans-unit id="wNebbT76gPyAEts9DBlZ0Q" resname="someListeningPortsAreAlreadyUsed">
           <source>Some listening ports are already used or unavailable.
 Check HTTP Port ({http}) or HTTPS Port ({https}).</source>
-          <target>Algumas portas de escuta s√£o j√° utilizadas ou n√£o est√£o dispon√≠veis.
+          <target>Algumas portas de escuta são já utilizadas ou não estão disponíveis.
 Verifique a porta HTTP ({http}) ou HTTPS ({https}).</target>
         </trans-unit>
         <trans-unit id="GgTK6TU3VUIgrqn4p6O5Xg" resname="preparations">
           <source>Preparing for build</source>
-          <target>Prepara√ß√£o do projeto</target>
+          <target>Preparação do projeto</target>
         </trans-unit>
         <trans-unit id="OLNtikLFn5pTrZE52P43Hw" resname="theProjectNameCanNotBeEmpty">
           <source>The project name can not be empty.
 Please enter a name or cancel.</source>
-          <target>O nome do projeto n√£o pode ser vazio.
+          <target>O nome do projeto não pode ser vazio.
 Por favor insira um nome ou cancelar.</target>
         </trans-unit>
         <trans-unit id="4+m6G2BYIrly0BRWiDmWhA" resname="someStructuralAdjustmentsAreNeeded">
           <source>Some adjustments of the structure are needed for an optimized update of mobile data.</source>
-          <target>Alguns ajustes da estrutura s√£o necess√°rios para uma atualiza√ß√£o otimizada de dados m√≥veis.</target>
+          <target>Alguns ajustes da estrutura são necessários para uma atualização otimizada de dados móveis.</target>
         </trans-unit>
         <trans-unit id="0b/DeSQ/l928x1y4m1DHYQ" resname="doYouAllow4dToModifyStructure">
           <source>Do you allow 4D to modify the database structure?</source>
-          <target>Voc√™ autoriza o 4D a modificar a estrutura do banco de dados?</target>
+          <target>Você autoriza o 4D a modificar a estrutura do banco de dados?</target>
         </trans-unit>
         <trans-unit id="+xLH0EtaFqJGDGsoxb5pUA" resname="noTableDefinedInTheMainMenu">
           <source>No table defined in the main menu</source>
@@ -262,51 +262,51 @@ Por favor insira um nome ou cancelar.</target>
         </trans-unit>
         <trans-unit id="x8lM2mcgtdUDV61P7LWlBA" resname="youMustSetAtLeastOneTableIntoTheMainMenu">
           <source>You must set at least one table into the main menu</source>
-          <target>Voc√™ deve definir pelo menos uma tabela no menu principal</target>
+          <target>Você deve definir pelo menos uma tabela no menu principal</target>
         </trans-unit>
         <trans-unit id="M1xrw5jeieA25jVgbDwYBg" resname="waitingForXcode">
-          <source>Checking Xcode‚Ä¶</source>
+          <source>Checking Xcode…</source>
           <target>Verificando Xcode...</target>
         </trans-unit>
         <trans-unit id="nvzgdC+jpMFK7+d0f7I/iA" resname="theStructureOfTheProductionServerIsNotOptimizedForThisProject">
           <source>The structure of the production server is not optimized for this project.</source>
-          <target>A estrutura do servidor de produ√ß√£o n√£o √© otimizada para este projeto.</target>
+          <target>A estrutura do servidor de produção não é otimizada para este projeto.</target>
         </trans-unit>
         <trans-unit id="45fpE/5i2+NXN4ayyC/9QQ" resname="youMustUpdateTheStructureOfTheProductionServer">
           <source>You must update the structure of the production server before generating the application, otherwise the data to embed will not be generated.</source>
-          <target>Voc√™ deve atualizar a estrutura do servidor de produ√ß√£o antes de gerar o aplicativo, caso contr√°rio, os dados para incorporar n√£o ser√£o gerados.</target>
+          <target>Você deve atualizar a estrutura do servidor de produção antes de gerar o aplicativo, caso contrário, os dados para incorporar não serão gerados.</target>
         </trans-unit>
         <trans-unit id="yXUxy3XuQwnbobd49S/Ljw" resname="theProductionServerIsNotAvailable">
           <source>The production server is not available</source>
-          <target>O servidor de produ√ß√£o n√£o est√° dispon√≠vel</target>
+          <target>O servidor de produção não está disponível</target>
         </trans-unit>
         <trans-unit id="c6UEdn9DAW3lYI6K7g8jbg" resname="itIsNotPossibleToBuildTheProject">
           <source>It is not possible to build the project</source>
-          <target>N√£o √© poss√≠vel construir o projeto</target>
+          <target>Não é possível construir o projeto</target>
         </trans-unit>
         <trans-unit id="Ild/z6I8YPxaZRLZLJH6Xg" resname="generationOfTheDatasetIsInProgress">
           <source>A generation of the dataset is in progress</source>
-          <target>Uma gera√ß√£o do conjunto de dados est√° em andamento</target>
+          <target>Uma geração do conjunto de dados está em andamento</target>
         </trans-unit>
         <trans-unit id="SXb1rafNPYpdc2aSZTooiw" resname="failedToLaunchTheSimulator">
           <source>Failed to launch the Simulator</source>
-          <target>N√£o conseguiu lan√ßar o Simulador</target>
+          <target>Não conseguiu lançar o Simulador</target>
         </trans-unit>
         <trans-unit id="JsdJZ42YxywOUyleDw/U+g" resname="failedToOpenSimulator">
           <source>Failed to open Simulator</source>
-          <target>N√£o conseguiu abrir Simulator</target>
+          <target>Não conseguiu abrir Simulator</target>
         </trans-unit>
         <trans-unit id="uFV/rBlD4yOSl3n/T9ZL/Q" resname="failedDecompressTheSdk">
           <source>Failed decompress the sdk</source>
-          <target>N√£o conseguiu descompactar o sdk</target>
+          <target>Não conseguiu descompactar o sdk</target>
         </trans-unit>
         <trans-unit id="5/RXjWPFGhzatJ6oPmh3MQ" resname="failedToArchive">
           <source>Failed to create archive</source>
-          <target>N√£o conseguiu criar arquivo</target>
+          <target>Não conseguiu criar arquivo</target>
         </trans-unit>
         <trans-unit id="rxnRnwraz6tq4r2ChOJwJg" resname="theAliasMobileOriginalCan'tBeFound">
           <source>The alias "mobile" can't be used because the original can't be found</source>
-          <target>O alias "mobile" n√£o pode ser usado porque o original n√£o pode ser encontrado</target>
+          <target>O alias "mobile" não pode ser usado porque o original não pode ser encontrado</target>
         </trans-unit>
         <trans-unit id="LqAIKjlMxhHw6lekwdN3zQ" resname="unableToGenerateApp">
           <source>Unable to generate App</source>
@@ -315,12 +315,12 @@ Por favor insira um nome ou cancelar.</target>
         <trans-unit id="wEnpAnOeJPy4XbFyOw2k4A" resname="theprojectmustbelocatedrinthemobileprojectsfolder">
           <source>For the build process, the project must be located
 in the "Mobile Projects" folder.</source>
-          <target>Para a gera√ß√£o, o projeto deve ser localizado
+          <target>Para a geração, o projeto deve ser localizado
 na pasta "Mobile Projects".</target>
         </trans-unit>
         <trans-unit id="HeYnZhBnU9tF0D/pgopP9w" resname="theDirectoryIsLockedOrTheDiskIsFull">
           <source>The directory is locked or the disk is full</source>
-          <target>O diret√≥rio est√° bloqueado ou o disco est√° cheio</target>
+          <target>O diretório está bloqueado ou o disco está cheio</target>
         </trans-unit>
         <trans-unit id="a17UOx3+GN2qO71UajMEFQ" resname="4dMobileRequiresAndroidStudio">
           <source>{product} requires the installation of Android Studio.</source>
@@ -332,15 +332,15 @@ na pasta "Mobile Projects".</target>
         </trans-unit>
         <trans-unit id="x+ocRvyV7CLdA0UyVAyGgg" resname="androidStudioMustBeLaunchedAtLeastOnceToBeFullyInstalled">
           <source>Android Studio must be launched at least once to be fully installed.</source>
-          <target>O Android Studio deve ser lan√ßado pelo menos uma vez para ser totalmente instalado.</target>
+          <target>O Android Studio deve ser lançado pelo menos uma vez para ser totalmente instalado.</target>
         </trans-unit>
         <trans-unit id="Bao4vvbxgtNljiP85l6wzg" resname="wantToLaunchAndroidStudio">
           <source>Want to launch Android Studio?</source>
-          <target>Quer come√ßar o Android Studio?</target>
+          <target>Quer começar o Android Studio?</target>
         </trans-unit>
         <trans-unit id="MvaD8Ajiw7DepAUsP3aBLw" resname="youMustFirstSelectASimulator">
           <source>You must first select a simulator</source>
-          <target>Primeiro, voc√™ deve selecionar um simulador</target>
+          <target>Primeiro, você deve selecionar um simulador</target>
         </trans-unit>
         <trans-unit id="+ZiFXNZD3tMOFjrIELc+LQ" resname="downloadingSDK">
           <source>Downloading 4D for {os} SDK</source>
@@ -348,15 +348,15 @@ na pasta "Mobile Projects".</target>
         </trans-unit>
         <trans-unit id="3CavNiVIwiCc2w9bpCzMCQ" resname="yourVersionOf4dMobileSdkUpToDate">
           <source>Your version of 4D Mobile SDK for {os} is up to date.</source>
-          <target>Sua vers√£o do 4D Mobile SDK for {os} est√° atualizada.</target>
+          <target>Sua versão do 4D Mobile SDK for {os} está atualizada.</target>
         </trans-unit>
         <trans-unit id="hK09xxBMItxyMWDNk9ZZSA" resname="projectBuildFailure">
           <source>Project Build Failure</source>
-          <target>Gera√ß√£o de projetos falhou</target>
+          <target>Geração de projetos falhou</target>
         </trans-unit>
         <trans-unit id="0qFKoMgdXurDIHPMB1tlAw" resname="creatingADefaultDevice">
-          <source>Creating a default device‚Ä¶</source>
-          <target>Criando um simulador padr√£o...</target>
+          <source>Creating a default device…</source>
+          <target>Criando um simulador padrão...</target>
         </trans-unit>
         <trans-unit id="AbyoEe/AfXVUTUsb6A0bpQ" resname="failedToCreateTheProject">
           <source>Failed to create the project</source>
@@ -368,55 +368,55 @@ na pasta "Mobile Projects".</target>
         </trans-unit>
         <trans-unit id="unFcSfKilo4GTsw9ovLL6A" resname="theIconIsMandatory">
           <source>The icon is mandatory</source>
-          <target>O √≠cone √© obrigat√≥rio</target>
+          <target>O ícone é obrigatório</target>
         </trans-unit>
         <trans-unit id="P3yglsT6c6GhN9cCB4EYzw" resname="unzipping">
-          <source>Unzipping‚Ä¶</source>
-          <target>Descompress√£o...</target>
+          <source>Unzipping…</source>
+          <target>Descompressão...</target>
         </trans-unit>
         <trans-unit id="q1uk4E78lBtlSo0fBLxZMA" resname="4dForAndroidNeedsToInstallHardwareAccelerationTools">
           <source>4D for Android needs to install hardware acceleration tools to improve performance of the emulator.</source>
-          <target>O 4D for Android precisa instalar ferramentas de acelera√ß√£o de hardware para melhorar o desempenho do emulador.</target>
+          <target>O 4D for Android precisa instalar ferramentas de aceleração de hardware para melhorar o desempenho do emulador.</target>
         </trans-unit>
         <trans-unit id="yHuDmKhBfPSl8P58q7UGqw" resname="doYouWantToInstallHaxm">
-          <source>Do you want to install "Intel¬Æ Hardware Accelerated Execution Manager" (HAXM)?
+          <source>Do you want to install "Intel® Hardware Accelerated Execution Manager" (HAXM)?
 
 The installer will need your password.</source>
-          <target>Deseja instalar o "Intel¬Æ Hardware Accelerated Execution Manager" (HAXM)?
+          <target>Deseja instalar o "Intel® Hardware Accelerated Execution Manager" (HAXM)?
 
-O instalador precisar√° da sua senha.</target>
+O instalador precisará da sua senha.</target>
         </trans-unit>
         <trans-unit id="mNW4LC0ot2agO/7t5C7+xg" resname="tooRecentVersion">
           <source>{product} requires at most {application} version {version}.</source>
-          <target>{product} requer na maioria {aplica√ß√£o} vers√£o {vers√£o}.</target>
+          <target>{product} requer na maioria {aplicação} versão {versão}.</target>
         </trans-unit>
         <trans-unit id="BZ1whUnnRogn3/l10w9DuA" resname="versionNotSupported">
           <source>{application} version not supported</source>
-          <target>{application} vers√£o n√£o suportada</target>
+          <target>{application} versão não suportada</target>
         </trans-unit>
         <trans-unit id="RBMSAEl1dYEXrGrv7vUJAw" resname="switchTheActiveDevelopperDirectory">
           <source>{product} wants to switch the active developper directory</source>
-          <target>{produto} quer alterar o diret√≥rio ativo do desenvolvedor.</target>
+          <target>{produto} quer alterar o diretório ativo do desenvolvedor.</target>
         </trans-unit>
         <trans-unit id="0gTTip5aW5/aFxQRQsnepA" resname="needsSetXcodeAsActiveVersion">
           <source>{product} needs set Xcode {version} as active version.</source>
-          <target>{produto} precisa definir Xcode {vers√£o} como a vers√£o ativa.</target>
+          <target>{produto} precisa definir Xcode {versão} como a versão ativa.</target>
         </trans-unit>
         <trans-unit id="OaQEoTk6jv1x9W+gTwHMNw" resname="doYouWantToSwitchTheActiveDevelopperDirectory">
           <source>Do you want to switch the active developper directory?
 
 (macOS password required)</source>
-          <target>Deseja mudar o diret√≥rio ativo do desenvolvedor?
+          <target>Deseja mudar o diretório ativo do desenvolvedor?
 
-(senha macOS necess√°ria)</target>
+(senha macOS necessária)</target>
         </trans-unit>
         <trans-unit id="ltAjeyMiy5vhwHNkK4Jhkw" resname="tooOldVersion">
           <source>{product} requires at least {application} version {version}.</source>
-          <target>{produto} requer pelo menos {application} vers√£o {vers√£o}.</target>
+          <target>{produto} requer pelo menos {application} versão {versão}.</target>
         </trans-unit>
         <trans-unit id="d9Xn2sCIDZpN64qibzwjTA" resname="thePackageNameShouldUseOnlyLettersNumbersAndUnderscores">
           <source>The package identifier should use only letters, numbers and underscores ({identifier}).</source>
-          <target>O identificador do pacote deve usar apenas letras, n√∫meros e sublinhados ({identifier}).</target>
+          <target>O identificador do pacote deve usar apenas letras, números e sublinhados ({identifier}).</target>
         </trans-unit>
         <trans-unit id="Hk/xDQGQxzJDO8xSatvc3w" resname="thePackageNameMustHaveAtLeast2SegmentsSeparatedByADot">
           <source>The package name must have at least 2 segments separated by a dot ({packageName})</source>
@@ -424,31 +424,31 @@ O instalador precisar√° da sua senha.</target>
         </trans-unit>
         <trans-unit id="CYizpP6c7kUsz3KZqQ+25g" resname="thePackageNameMustBeginWithALetter">
           <source>The package name must begin with a letter ({packageName})</source>
-          <target>O nome do pacote deve come√ßar com uma letra ({packageName})</target>
+          <target>O nome do pacote deve começar com uma letra ({packageName})</target>
         </trans-unit>
         <trans-unit id="MDtmzadlZicdL2ZiSF5k3A" resname="thePackageNameMustNotEndWithADot">
           <source>The package name must not end with a dot ({packageName})</source>
-          <target>O nome do pacote n√£o deve terminar com um ponto ({packageName})</target>
+          <target>O nome do pacote não deve terminar com um ponto ({packageName})</target>
         </trans-unit>
         <trans-unit id="cRehBhjHNQ23ZXzrVix6tA" resname="aPackageNameSegmentMustStartWithALetter">
           <source>A package name segment must start with a letter ({packageName})</source>
-          <target>Um segmento de nome de pacote deve come√ßar com uma letra ({packageName})</target>
+          <target>Um segmento de nome de pacote deve começar com uma letra ({packageName})</target>
         </trans-unit>
         <trans-unit id="QR/6FwBbJ7oAADGwGjB+dg" resname="invalidProject">
           <source>Invalid project</source>
-          <target>Projeto inv√°lido</target>
+          <target>Projeto inválido</target>
         </trans-unit>
         <trans-unit id="zkjipuH78V0sx3jDVx3eEw" resname="thisProjectCannotBeLoadedWith4dV19">
           <source>This project cannot be used with 4D v19</source>
-          <target>Este projeto n√£o pode ser usado com v19 4D</target>
+          <target>Este projeto não pode ser usado com v19 4D</target>
         </trans-unit>
         <trans-unit id="/drrmLBE6awjCztTC/hGVQ" resname="theDeviceIsNotReachable">
           <source>The "{device}" device is not reachable.
 
 Make sure the device is connected to your computer with a USB cable.</source>
-          <target>O dispositivo "{device}" n√£o est√° acess√≠vel.
+          <target>O dispositivo "{device}" não está acessível.
 
-Certifique-se de que o dispositivo est√° conectado ao computador com um cabo USB.</target>
+Certifique-se de que o dispositivo está conectado ao computador com um cabo USB.</target>
         </trans-unit>
         <trans-unit id="nWw5TXsAr/eT/aEpwGMdbA" resname="areYouSure">
           <source>Are you sure?</source>
@@ -460,15 +460,15 @@ Certifique-se de que o dispositivo est√° conectado ao computador com um cabo 
         </trans-unit>
         <trans-unit id="bjHOVi4ujjDWBMtv82TZzQ" resname="cancelledOperation">
           <source>Cancelled operation</source>
-          <target>Opera√ß√£o cancelada</target>
+          <target>Operação cancelada</target>
         </trans-unit>
         <trans-unit id="/Q1oyOUgZkZGcoRUwDP1Nw" resname="datagenerationPreparations">
-          <source>Preparations‚Ä¶</source>
-          <target>Preparations‚Ä¶</target>
+          <source>Preparations…</source>
+          <target>Preparations…</target>
         </trans-unit>
         <trans-unit id="ZsjYstol/hxXYvXmJiXXyQ" resname="doYouWantToCancelTheDataGenerationProcess">
           <source>Do you want to cancel the data generation process?</source>
-          <target>Deseja cancelar o processo de gera√ß√£o de dados?</target>
+          <target>Deseja cancelar o processo de geração de dados?</target>
         </trans-unit>
       </group>
       <group resname="help-tips">
@@ -478,15 +478,15 @@ Certifique-se de que o dispositivo est√° conectado ao computador com um cabo 
         </trans-unit>
         <trans-unit id="DL/ObXm8FfTezIx0ECRLWg" resname="youNeedXcodeToPerformThisOperation">
           <source>You need xCode to perform this operation</source>
-          <target>Voc√™ precisa de XCode para executar esta opera√ß√£o</target>
+          <target>Você precisa de XCode para executar esta operação</target>
         </trans-unit>
         <trans-unit id="BMwBCCahahq6GxKXQWUfig" resname="youMustPublishAtLeastOneFieldToPerformThisOperation">
           <source>You must publish at least one field to perform this operation</source>
-          <target>Voc√™ deve publicar pelo menos um campo para executar esta opera√ß√£o</target>
+          <target>Você deve publicar pelo menos um campo para executar esta operação</target>
         </trans-unit>
         <trans-unit id="/8T/65MWJzGzEGgx2jr/Mg" resname="defineYourTeamIdToPerformThisOperation">
           <source>Define your Team ID to perform this operation</source>
-          <target>Defina seu Team ID para realizar esta opera√ß√£o</target>
+          <target>Defina seu Team ID para realizar esta operação</target>
         </trans-unit>
       </group>
       <group resname="common">
@@ -500,7 +500,7 @@ Certifique-se de que o dispositivo est√° conectado ao computador com um cabo 
         </trans-unit>
         <trans-unit id="AztKs48IYq18Gb1nN/y8xQ" resname="notNow">
           <source>Not now</source>
-          <target>Agora n√£o</target>
+          <target>Agora não</target>
         </trans-unit>
         <trans-unit id="xHbZr3ruNAekSYBmI+pMlg" resname="4dProductName" translate="no">
           <source>4D Mobile</source>
@@ -511,7 +511,7 @@ Certifique-se de que o dispositivo est√° conectado ao computador com um cabo 
         </trans-unit>
         <trans-unit id="+f4N+SQfqds4LrZGQaZ2ng" resname="doubleClickToEdit">
           <source>Double click to edit.</source>
-          <target>D√™ um duplo clique para editar.</target>
+          <target>Dê um duplo clique para editar.</target>
         </trans-unit>
         <trans-unit id="a44NaLWnfUIXH/PiwUazKw" resname="clickToSet">
           <source>Click to set</source>
@@ -531,7 +531,7 @@ Certifique-se de que o dispositivo est√° conectado ao computador com um cabo 
         </trans-unit>
         <trans-unit id="+b3wof+tzoPXsivXKSayjw" resname="manualInstallation">
           <source>Manual installation</source>
-          <target>Instala√ß√£o manual</target>
+          <target>Instalação manual</target>
         </trans-unit>
         <trans-unit id="B04Xa7zekU88zyJC3v6CqQ" resname="error:">
           <source>Error: </source>
@@ -543,7 +543,7 @@ Certifique-se de que o dispositivo est√° conectado ao computador com um cabo 
         </trans-unit>
         <trans-unit id="gW2TvIqGEGqJvzV5I1GgYA" resname="invalidUrl">
           <source>Invalid URL</source>
-          <target>URL inv√°lido</target>
+          <target>URL inválido</target>
         </trans-unit>
         <trans-unit id="qS1lLxFKj3ogvVz+g/lqQA" resname="comparators">
           <source>Comparators</source>
@@ -559,7 +559,7 @@ Certifique-se de que o dispositivo est√° conectado ao computador com um cabo 
         </trans-unit>
         <trans-unit id="DgNWXiQk3/ptkwL4VIn3cQ" resname="replacedFiles">
           <source>Replaced Files {stamp}</source>
-          <target>Arquivos substitu√≠dos {Stamp}</target>
+          <target>Arquivos substituídos {Stamp}</target>
         </trans-unit>
         <trans-unit id="LOWBV9k49Av1oJ8DiNPdMw" resname="rememberMyChoice">
           <source>Remember my choice</source>
@@ -570,7 +570,7 @@ Certifique-se de que o dispositivo est√° conectado ao computador com um cabo 
           <target>Autorizar</target>
         </trans-unit>
         <trans-unit id="Sd8ZqffOjBc7iqkxmcmOwQ" resname="choose...">
-          <source>Choose‚Ä¶</source>
+          <source>Choose…</source>
           <target>Escolher...</target>
         </trans-unit>
         <trans-unit id="H04h367zwAsynDhOHLcTjg" resname="#NA">
@@ -583,7 +583,7 @@ Certifique-se de que o dispositivo est√° conectado ao computador com um cabo 
         </trans-unit>
         <trans-unit id="2zeau/YvEjNyCgp4G7qxAQ" resname="mandatory">
           <source>Mandatory</source>
-          <target>Obrigat√≥rio</target>
+          <target>Obrigatório</target>
         </trans-unit>
         <trans-unit id="iM3N8PGRjDksISszpikvcg" resname="placeholder">
           <source>Placeholder</source>
@@ -591,11 +591,11 @@ Certifique-se de que o dispositivo est√° conectado ao computador com um cabo 
         </trans-unit>
         <trans-unit id="i43VrVGtG4H2zqpHiDEcKA" resname="minimum">
           <source>Minimum</source>
-          <target>M√≠nimo</target>
+          <target>Mínimo</target>
         </trans-unit>
         <trans-unit id="eNlT0g85ckhtBLO/XrN3ww" resname="maximum">
           <source>Maximum</source>
-          <target>M√°ximo</target>
+          <target>Máximo</target>
         </trans-unit>
         <trans-unit id="xCqmpOWrkjTSem1IhkN5lg" resname="listOf">
           <source>List of {values}</source>
@@ -610,7 +610,7 @@ Certifique-se de que o dispositivo est√° conectado ao computador com um cabo 
           <target>Desativar</target>
         </trans-unit>
         <trans-unit id="K3gmwpf7rjooqR9YIDapOw" resname="downloadInProgress">
-          <source>Download in progress‚Ä¶</source>
+          <source>Download in progress…</source>
           <target>Download em andamento...</target>
         </trans-unit>
         <trans-unit id="IZiKFZUjvCPggxO/k/UMtw" resname="back">
@@ -623,7 +623,7 @@ Certifique-se de que o dispositivo est√° conectado ao computador com um cabo 
         </trans-unit>
         <trans-unit id="dvzeko0zyv/E0PNHvumgTg" resname="fileNotFound">
           <source>File not found</source>
-          <target>Arquivo n√£o encontrado</target>
+          <target>Arquivo não encontrado</target>
         </trans-unit>
         <trans-unit id="cx0uA9XEqaA2pmrdT55vhg" resname="4dForIos" translate="no">
           <source>4D for iOS</source>
@@ -639,14 +639,14 @@ Certifique-se de que o dispositivo est√° conectado ao computador com um cabo 
         </trans-unit>
         <trans-unit id="N/3f21sCqhgbE2r+h2+1UA" resname="editorWindowTitle">
           <source>Mobile Project: {name}</source>
-          <target>Projeto m√≥vel: {name}</target>
+          <target>Projeto móvel: {name}</target>
         </trans-unit>
         <trans-unit id="SnEbElOo6cxBwqKXT0osEg" resname="targetOs">
           <source>Target OS</source>
           <target>Objetivo de SO</target>
         </trans-unit>
         <trans-unit id="lP5NwUd02X/BqS+PJoOpkQ" resname="openAnotherProject">
-          <source>Open another project‚Ä¶</source>
+          <source>Open another project…</source>
           <target>Abra outro projeto...</target>
         </trans-unit>
         <trans-unit id="L1gdRTWNlUb2of/0UhFggw" resname="open">
@@ -655,7 +655,7 @@ Certifique-se de que o dispositivo est√° conectado ao computador com um cabo 
         </trans-unit>
         <trans-unit id="XyP2bYzcNiWl75T2OEKD4w" resname="missingFile">
           <source>Missing file "{file}"</source>
-          <target>Arquivo "{file}" est√° faltando</target>
+          <target>Arquivo "{file}" está faltando</target>
         </trans-unit>
         <trans-unit id="0g8I65SK0Ef31qJvPuKjaA" resname="later">
           <source>Later</source>
@@ -663,11 +663,11 @@ Certifique-se de que o dispositivo est√° conectado ao computador com um cabo 
         </trans-unit>
         <trans-unit id="OmNEArykE8RlCdpCMgksIg" resname="choiceList">
           <source>Choice List</source>
-          <target>Lista de op√ß√µes</target>
+          <target>Lista de opções</target>
         </trans-unit>
         <trans-unit id="uBuydu1C09oVuucu2FRy1A" resname="default">
           <source>Default</source>
-          <target>Por padr√£o</target>
+          <target>Por padrão</target>
         </trans-unit>
         <trans-unit id="8te1yIPlh6NPggTJZLz77A" resname="true">
           <source>True</source>
@@ -686,8 +686,8 @@ Certifique-se de que o dispositivo est√° conectado ao computador com um cabo 
           <target>Hoje</target>
         </trans-unit>
         <trans-unit id="Pk3MfYvT4fIU5ungFlOtYw" resname="open...">
-          <source>Open‚Ä¶</source>
-          <target>Abrir‚Ä¶</target>
+          <source>Open…</source>
+          <target>Abrir…</target>
         </trans-unit>
         <trans-unit id="5PQalvARDkTsLxPS67LTyg" resname="irrelevant">
           <source>Irrelevant</source>
@@ -707,7 +707,7 @@ Certifique-se de que o dispositivo est√° conectado ao computador com um cabo 
       <group resname="default values">
         <trans-unit id="uvcuS+6kvyLtejaBCimjbw" resname="newApplication">
           <source>My App</source>
-          <target>Minha aplica√ß√£o</target>
+          <target>Minha aplicação</target>
         </trans-unit>
         <trans-unit id="cfN+o3Ry0FEUA9v7KXEX8w" resname="companyName">
           <source>My Company</source>
@@ -743,15 +743,15 @@ Certifique-se de que o dispositivo est√° conectado ao computador com um cabo 
       <group resname="ERRORS">
         <trans-unit id="bED/fpei/FAE7MlOk9WbZA" resname="ERR_MOBL_1">
           <source>Invalid session description object</source>
-          <target>Objeto de descri√ß√£o de sess√£o inv√°lido</target>
+          <target>Objeto de descrição de sessão inválido</target>
         </trans-unit>
         <trans-unit id="1Of+1DDAUQq7EPbrFH6DBg" resname="ERR_MOBL_2">
           <source>Failed to delete session file</source>
-          <target>Falha ao excluir arquivo de sess√£o</target>
+          <target>Falha ao excluir arquivo de sessão</target>
         </trans-unit>
         <trans-unit id="9jl8jT/JEPIfuEXfY8gH8Q" resname="ERR_MOBL_3">
           <source>Failed to update session file</source>
-          <target>Falha ao atualizar arquivo de sess√£o</target>
+          <target>Falha ao atualizar arquivo de sessão</target>
         </trans-unit>
       </group>
       <group resname="field types">
@@ -801,7 +801,7 @@ Certifique-se de que o dispositivo est√° conectado ao computador com um cabo 
         </trans-unit>
         <trans-unit id="llri5274v1KSR0zeld4Kgw" resname="number">
           <source>Number</source>
-          <target>N√∫mero</target>
+          <target>Número</target>
         </trans-unit>
         <trans-unit id="kcZOIC34bL5UORd8s7s4hA" resname="image">
           <source>Image</source>
@@ -839,11 +839,11 @@ Certifique-se de que o dispositivo est√° conectado ao computador com um cabo 
         </trans-unit>
         <trans-unit id="5DAVYexMhygj6w9QXvILaQ" resname="containsKeyword">
           <source>Contains keyword</source>
-          <target>Cont√©m a palavra-chave</target>
+          <target>Contém a palavra-chave</target>
         </trans-unit>
         <trans-unit id="vjV5UW+UCHkJ/emrPE4CMA" resname="parentheses">
           <source>Parentheses</source>
-          <target>Par√™nteses</target>
+          <target>Parênteses</target>
         </trans-unit>
       </group>
       <group resname="formats">
@@ -853,7 +853,7 @@ Certifique-se de que o dispositivo est√° conectado ao computador com um cabo 
         </trans-unit>
         <trans-unit id="xtMm6HmUhcLURdjTNGvIjw" resname="f_zipCode">
           <source>Zip code</source>
-          <target>C√≥digo Postal</target>
+          <target>Código Postal</target>
         </trans-unit>
         <trans-unit id="HtXxLxovqcaxUZ7bR+cOyA" resname="f_textArea">
           <source>Text area</source>
@@ -861,7 +861,7 @@ Certifique-se de que o dispositivo est√° conectado ao computador com um cabo 
         </trans-unit>
         <trans-unit id="LNrHdITNPmVdN9g/tkSdPg" resname="f_name">
           <source>Capitalized text</source>
-          <target>Texto em mai√∫sculas</target>
+          <target>Texto em maiúsculas</target>
         </trans-unit>
         <trans-unit id="6Knfh23wVHpZCZxHFKyt9A" resname="f_account">
           <source>Account</source>
@@ -869,11 +869,11 @@ Certifique-se de que o dispositivo est√° conectado ao computador com um cabo 
         </trans-unit>
         <trans-unit id="N91uUYKQbWOoDXT1tMhRIA" resname="f_standard">
           <source>Standard</source>
-          <target>Padr√£o</target>
+          <target>Padrão</target>
         </trans-unit>
         <trans-unit id="bMb459OUgBKtjtlHIIzVrg" resname="f_scientific">
           <source>Scientific</source>
-          <target>Cient√≠fico</target>
+          <target>Científico</target>
         </trans-unit>
         <trans-unit id="ABuGtMhC4YZTQod62T/y2A" resname="f_energy">
           <source>Energy</source>
@@ -889,11 +889,11 @@ Certifique-se de que o dispositivo est√° conectado ao computador com um cabo 
         </trans-unit>
         <trans-unit id="XcYe01x5171zJAlfcchE4w" resname="f_email">
           <source>Mail address</source>
-          <target>Endere√ßo de correio</target>
+          <target>Endereço de correio</target>
         </trans-unit>
         <trans-unit id="Y0gV3NAwvspd8f+dJYbNXQ" resname="f_phone">
           <source>Phone Number</source>
-          <target>N√∫mero de telefone</target>
+          <target>Número de telefone</target>
         </trans-unit>
         <trans-unit id="Vkn2NAijDB1visYJnvqzzw" resname="f_url">
           <source>URL</source>
@@ -917,11 +917,11 @@ Certifique-se de que o dispositivo est√° conectado ao computador com um cabo 
         </trans-unit>
         <trans-unit id="27Sekublxso9s9EPsWXL3Q" resname="f_spellOut">
           <source>Spell Out</source>
-          <target>N√∫mero em letras</target>
+          <target>Número em letras</target>
         </trans-unit>
         <trans-unit id="rq4EhKk5zDWZyVtTilozBQ" resname="f_duration">
           <source>Duration</source>
-          <target>Dura√ß√£o</target>
+          <target>Duração</target>
         </trans-unit>
         <trans-unit id="ei+ffVhQIJCzbfRxgmOvpw" resname="f_image">
           <source>Image</source>
@@ -951,7 +951,7 @@ Certifique-se de que o dispositivo est√° conectado ao computador com um cabo 
       <group resname="tasks">
         <trans-unit id="KFFcrqFjFKTy9jWBVmEh4w" resname="getDevices">
           <source>Available devices</source>
-          <target>Dispositivos dispon√≠veis</target>
+          <target>Dispositivos disponíveis</target>
         </trans-unit>
         <trans-unit id="cOn/py2JN/Rdwqqz3IBdDw" resname="checkDevTools">
           <source>Checking dev environment</source>
@@ -959,7 +959,7 @@ Certifique-se de que o dispositivo est√° conectado ao computador com um cabo 
         </trans-unit>
         <trans-unit id="pF0XDVVhBND7cRyYvkr42g" resname="checkProject">
           <source>Audit of the project</source>
-          <target>Verifica√ß√£o do projeto</target>
+          <target>Verificação do projeto</target>
         </trans-unit>
       </group>
     </body>
