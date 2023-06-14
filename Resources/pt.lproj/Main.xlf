@@ -456,7 +456,7 @@ Certifique-se de que o dispositivo está conectado ao computador com um cabo USB
         </trans-unit>
         <trans-unit id="HH0YT2MGLYMUyJVSkhE05A" resname="stop">
           <source>Stop</source>
-          <target>Stop</target>
+          <target>Parar</target>
         </trans-unit>
         <trans-unit id="bjHOVi4ujjDWBMtv82TZzQ" resname="cancelledOperation">
           <source>Cancelled operation</source>
@@ -691,7 +691,7 @@ Certifique-se de que o dispositivo está conectado ao computador com um cabo USB
         </trans-unit>
         <trans-unit id="5PQalvARDkTsLxPS67LTyg" resname="irrelevant">
           <source>Irrelevant</source>
-          <target state="new">Irrelevant</target>
+          <target>Irrelevant</target>
         </trans-unit>
         <trans-unit id="alVxIkCrhW+MpzfTnqiiow" resname="iOS" translate="no">
           <source>iOS</source>
@@ -701,7 +701,7 @@ Certifique-se de que o dispositivo está conectado ao computador com um cabo USB
         </trans-unit>
         <trans-unit id="2GnJW7UsSwQnhqhum+e42Q" resname="file">
           <source>File</source>
-          <target state="new">File</target>
+          <target>Arquivo</target>
         </trans-unit>
       </group>
       <group resname="default values">
@@ -857,7 +857,7 @@ Certifique-se de que o dispositivo está conectado ao computador com um cabo USB
         </trans-unit>
         <trans-unit id="HtXxLxovqcaxUZ7bR+cOyA" resname="f_textArea">
           <source>Text area</source>
-          <target>√Årea de texto</target>
+          <target>Área de texto</target>
         </trans-unit>
         <trans-unit id="LNrHdITNPmVdN9g/tkSdPg" resname="f_name">
           <source>Capitalized text</source>
