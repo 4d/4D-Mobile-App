@@ -5,9 +5,9 @@ echo "Script to use all sources and packages"
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 RESOURCES_DIR="$SCRIPT_DIR/Resources"
 
-root="./.."
+root="$SCRIPT_DIR/.."
 if [ ! -d "$root/ios-sdk" ]; then # if existing as sibling
-  root="./.checkout" # else we use an hiddent folder to checkout
+  root="$SCRIPT_DIR/.checkout" # else we use an hiddent folder to checkout
   mkdir -p "$root"
 fi
 echo "Work inside $(realpath $root)"
@@ -20,7 +20,7 @@ else
   >&2 echo "❌ You are not in git repository, git branch $GIT_BRANCH will be used"
 fi
 
-if [ -d "$root/ios-sdk" ]; then
+if [ ! -d "$root/ios-sdk" ]; then
   cd "$root"
   git clone https://github.com/4d/ios-sdk.git
 fi
@@ -28,7 +28,7 @@ cd "$root/ios-sdk" || exit 1
 git checkout "$GIT_BRANCH"
 cd "$SCRIPT_DIR" || exit 1
 
-if [ -d "$root/android-sdk" ]; then
+if [ ! -d "$root/android-sdk" ]; then
   cd "$root" || exit 1
   git clone https://github.com/4d/android-sdk.git
 fi
@@ -36,7 +36,7 @@ cd "$root/android-sdk" || exit 1
 git checkout "$GIT_BRANCH"
 cd "$SCRIPT_DIR" || exit 1
 
-if [ -d "$root/android-ProjectGenerator" ]; then
+if [ ! -d "$root/android-ProjectGenerator" ]; then
   cd "$root" || exit 1
   git clone https://github.com/4d/android-ProjectGenerator.git
 fi
