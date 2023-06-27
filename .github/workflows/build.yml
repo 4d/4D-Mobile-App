@@ -1,4 +1,4 @@
-name: build
+name: Build
 on:
   push:
     paths:
@@ -19,5 +19,9 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
+    - name: Dependencies
+      run: |
+        mkdir -p Components
+        git clone git@github.com:4d/4D-Progress.git Components/4D-Progress.4dbase
     - name: Build
       uses: 4d/build4d-action@main
