@@ -10,12 +10,8 @@ on:
 
 jobs:
   build:
-    name: "Build on ${{ matrix.os }}"
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ windows-latest ]
-    runs-on: ${{ matrix.os }}
+    name: "Build"
+    runs-on: windows-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -24,5 +20,7 @@ jobs:
       with:
         repository: 4d/4D-Progress
         path: Components/4D-Progress.4dbase
+    - name: Run a one-line script
+      run: find "Components/4D-Progress.4dbase"
     - name: Build
       uses: 4d/build4d-action@main
