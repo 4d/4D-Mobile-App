@@ -10,16 +10,12 @@ on:
 
 jobs:
   build:
-    name: "Build on ${{ matrix.os }}"
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ windows-latest ]
-    runs-on: ${{ matrix.os }}
+    name: "Build"
+    runs-on: windows-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-    - name: Check out dependencies
+    - name: Check out 4D-Progress
       uses: actions/checkout@v3
       with:
         repository: 4d/4D-Progress
