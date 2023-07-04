@@ -21,6 +21,7 @@ jobs:
         repository: 4d/4D-Progress
         path: Components/4D-Progress.4dbase
     - name: Run a one-line script
+      shell: bash
       run: find "Components/4D-Progress.4dbase"
     - name: Build
       uses: 4d/build4d-action@main
