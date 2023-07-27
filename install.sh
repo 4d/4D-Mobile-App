@@ -34,3 +34,9 @@ echo "🧹 Clean temporary files"
 echo "rm -rf $TMP"
 
 open "$dst"
+
+echo "✅ Installed into $dst"
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  open "$dst"
+fi
