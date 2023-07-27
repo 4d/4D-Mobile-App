@@ -10,7 +10,7 @@ Download this component and add it to your base `Components` folder.
 
 You could download a full packaged and compiled version from the [latest release](https://github.com/4d/4D-Mobile-App/releases/latest)
 
-or launch this command line on macOS in your database root folder:
+or launch this command line on macOS (or windows using MINGW64/git bash) in your database root folder:
 
 ```bash
 cd Your/Base/Path
