@@ -6,9 +6,9 @@ root=$(pwd)
 
 TMP="${TMPDIR}"
 if [ "x$TMP" = "x" ]; then
-  TMP="/tmp/"
+  TMP="/tmp"
 fi
-TMP="${TMP}$package.$$"
+TMP="${TMP}/$package.$$"
 rm -rf "$TMP" || true
 mkdir "$TMP"
 if [ $? -ne 0 ]; then
