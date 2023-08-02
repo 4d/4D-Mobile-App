@@ -536,13 +536,13 @@ Case of
 		//________________________________________
 	: (False:C215)  // Create themes
 		
-		For each ($o; ds:C1482.Commands.all())
+		For each ($o; ds:C1482["Commands"].all())
 			
-			$o2:=ds:C1482.Themes.query("Name = :1"; $o.themeName)
+			$o2:=ds:C1482["Themes"].query("Name = :1"; $o.themeName)
 			
 			If ($o2.length=0)
 				
-				$o1:=ds:C1482.Themes.new()
+				$o1:=ds:C1482["Themes"].new()
 				$o1.Name:=$o.themeName
 				$result:=$o1.save()
 				
