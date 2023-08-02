@@ -17,7 +17,11 @@ cd Your/Base/Path
 curl -sL https://raw.githubusercontent.com/4d/4D-Mobile-App/main/install.sh | sh # will download the latest release in Components
 ```
 
+alternatively you could use this code [download.4dm](Documentation/download.4dm) in your component to download
+
 ### Using sources
+
+> ⚠️ This part is for advanced user that want to compile this component, use custom android or ios sdk etc. It will not work if some part are missing. See not integrated tools.
 
 Alternatively you could download this project sources. _[More detailled instructions to download from source bellow if you want](#download-from-sources-instructions)_
 
