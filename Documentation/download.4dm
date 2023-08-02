@@ -19,9 +19,11 @@ If ($response.status=200)
 	End if 
 	$archiveFolder.copyTo(Folder(fk database folder).folder("Components"); "4D Mobile App.4dbase")
 	$archive:=Null
+	$archiveFolder:=Null
 	
 	$archiveFile.delete()
 	
 	RESTART 4D
-	
+Else 
+	ALERT("Cannot download from latest release")
 End if 
