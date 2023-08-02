@@ -2552,12 +2552,14 @@ Function prepareSdk
 	If ($cacheSdkAndroid.exists)
 		
 		$archive:=ZIP Read archive:C1637($cacheSdkAndroid)
+		$unzipDest:=This:C1470.path.cacheSdkAndroidUnzipped()
 		
-		$unzipDest:=$archive.root.copyTo(This:C1470.path.cacheSdkAndroid().parent; fk overwrite:K87:5)  // CLEAN: use cacheSdkAndroidUnzipped? without creating "sdk"?
+		$archive.root.files().combine($archive.root.folders()).map(Formula:C1597($1.value.copyTo($unzipDest)))
 		
 		If ($unzipDest.exists)
 			
-			$0.success:=True:C214
+			$0.success:=($unzipDest.files().length>0) || ($unzipDest.folders().length>0)
+			// XXX maybe delete empty folder to avoid miss integration
 			
 		Else 
 			

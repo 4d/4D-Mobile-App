@@ -127,10 +127,14 @@ Function preferences($fileName : Text) : Object
 	return This:C1470.target
 	
 	//MARK:-INTERNAL
+	
+Function isSdkAppleExists() : Boolean
+	
+	return This:C1470.cacheSdkAppleUnzipped().exists || This:C1470.sdkApple().exists/*will be unzipped*/
+	
 Function cacheSdkApple() : 4D:C1709.File
 	
 	return This:C1470.cacheSdkVersion().folder("iOS").file("sdk.zip")
-	
 /*========================================================*/
 Function cacheSdkAppleManifest() : 4D:C1709.File
 	
@@ -248,10 +252,15 @@ Function sdk() : 4D:C1709.Folder
 	
 /*========================================================*/
 Function sdkApple() : 4D:C1709.File  // ios zip sdk
+	This:C1470.target:=This:C1470.hostSDK().file("ios.zip")  // could be placed in client base
+	If (This:C1470.target.exists)
+		This:C1470.exists:=True:C214
+		return This:C1470.target
+	End if 
 	
 	This:C1470.target:=This:C1470.sdk().file("ios.zip")  // if embedded it re-become the one used
-	If (This:C1470.exists)
-		This:C1470.exists:=This:C1470.target.exists
+	If (This:C1470.target.exists)
+		This:C1470.exists:=True:C214
 		return This:C1470.target
 	End if 
 	
@@ -288,9 +297,15 @@ Function isSDKAppleEmbedded() : Boolean
 	
 /*========================================================*/
 Function sdkAndroid() : 4D:C1709.File  // android zip sdk
+	This:C1470.target:=This:C1470.hostSDK().file("android.zip")  // could be placed in client base
+	If (This:C1470.target.exists)
+		This:C1470.exists:=True:C214
+		return This:C1470.target
+	End if 
+	
 	This:C1470.target:=This:C1470.sdk().file("android.zip")  // if embedded it become the one used
 	If (This:C1470.target.exists)
-		This:C1470.exists:=This:C1470.target.exists
+		This:C1470.exists:=True:C214
 		return This:C1470.target
 	End if 
 	

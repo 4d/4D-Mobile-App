@@ -10,6 +10,7 @@
 	"windowMaxWidth": 32767,
 	"windowMaxHeight": 32767,
 	"events": [
+		"onDoubleClick",
 		"onBoundVariableChange"
 	],
 	"windowTitle": "window title",
@@ -55,7 +56,10 @@
 					"sizingX": "grow",
 					"dataSource": "Form:C1466.message",
 					"textAlign": "center",
-					"focusable": false
+					"focusable": false,
+					"events": [
+						"onDoubleClick"
+					]
 				}
 			}
 		}
