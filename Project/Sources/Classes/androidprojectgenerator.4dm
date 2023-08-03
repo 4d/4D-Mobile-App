@@ -561,6 +561,7 @@ Function copyIcons
 			
 			$0.success:=False:C215
 			$0.errors.push("Error when converting SVG to XML files")
+			$0.errors.push(This:C1470.errorStream)
 			
 			// Else : all ok
 		End if 
