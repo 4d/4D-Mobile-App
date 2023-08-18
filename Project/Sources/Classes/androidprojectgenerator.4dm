@@ -2614,7 +2614,9 @@ Function copySdkVersion()->$result : Object
 		
 		If (($archive.root.file("sdkVersion").exists) && ($archive.root.file("sdkVersion").getText()#$sdkVersion.getText()))
 			
+			$sdkVersion:=Null:C1517  // to allow delete content 
 			$unzippedSdk.delete(Delete with contents:K24:24)
+			$sdkVersion:=$unzippedSdk.file("sdkVersion")
 			This:C1470.prepareSdk()
 			
 		End if 
