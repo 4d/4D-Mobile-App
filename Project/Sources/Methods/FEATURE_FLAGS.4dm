@@ -116,22 +116,18 @@ If (True:C214)  // DELIVERED
 	// Mark:R7
 	Feature.delivered("openURLAction"; 1970)  // azure:3625 [MOBILE] Execute an action that open web area
 	
-End if 
-
-If (True:C214)  // UNSTABLE
-	
 	// Mark:R8
-	Feature.unstable("customLoginForms")  // [Android] Custom login
-	Feature.unstable("inputControlArchive")  // Allow to use zip for inputControl, as requested by azure:5424 The mobile project shall support a zip format for input control with Android and iOS.
-	Feature.unstable("inputControlWithCodeAndroid")  // Allow to use inputControl with code, feature by azure:3862 [Android] Input controls with Kotlin code
+	Feature.delivered("customLoginForms"; 1980)  // [Android] Custom login
+	Feature.delivered("inputControlArchive"; 1980)  // Allow to use zip for inputControl, as requested by azure:5424 The mobile project shall support a zip format for input control with Android and iOS.
+	Feature.delivered("inputControlWithCodeAndroid"; 1980)  // Allow to use inputControl with code, feature by azure:3862 [Android] Input controls with Kotlin code
 	
 End if 
 
 // Mark:-2️⃣0️⃣
-Feature.unstable("iosSDKfromAWS")  // Download iOS SDK from AWS
-Feature.unstable("androidDeepLinking")  // Enable deep linking for android project
-Feature.unstable("androidPushNotifications")  // Enable push notifications for android project
-Feature.unstable("openURLActionsInTabBar")  // azure:3624 action with preset:openURL 
+Feature.delivered("iosSDKfromAWS"; 2000)  // Download iOS SDK from AWS
+Feature.delivered("androidDeepLinking"; 2000)  // Enable deep linking for android project
+Feature.delivered("androidPushNotifications"; 2000)  // Enable push notifications for android project
+Feature.delivered("openURLActionsInTabBar"; 2000)  // azure:3624 action with preset:openURL 
 
 // Mark:-🚧 MAIN
 Feature.main("listEditor")  // #130828 [MOBILE] Create and edit an input control from the project editor
