@@ -64,6 +64,12 @@ This project has some dependencies on some other projects described bellow.
 |-|-|-|-|
 | [Android SDK](https://github.com/4d/android-sdk) | the SDK copied to mobile Android Apps | • `<your base>/Resources/mobile/sdk/android.zip` <br>• or `<4D mobile app>/Resources/sdk/android.zip` <br>• or downloaded from [latest release](https://github.com/4d/android-sdk/releases/latest) | NO |
 
+#### android vd-tool
+
+| Name  | Usefulness | Path | Integrated |
+|-|-|-|-|
+| [vd-tool](https://github.com/e-marchand/vdtool) | convert svg to android image | • `Resources/scripts/vd-tool.jar` <br>• or downloaded from [latest release](https://github.com/e-marchand/vdtool/releases/latest) | YES |
+
 ---
 
 ## Download from sources instructions
