@@ -1658,6 +1658,8 @@ Function checkFormat($name : Text) : Boolean
 		End if 
 	End if 
 	
+	return False:C215
+	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Show current format on disk
 Function showFormatOnDisk
@@ -1998,9 +2000,9 @@ Function dataSourceMenuManager()
 Function editList()
 	
 /*
-												$form:=New object(\
-																								"static"; $static; \
-																								"host"; This.path.hostInputControls(True))
+													$form:=New object(\
+																										"static"; $static; \
+																										"host"; This.path.hostInputControls(True))
 	
 $form.folder:=This.path.hostInputControls()
 $manifest:=$form.folder.file("manifest.json")
