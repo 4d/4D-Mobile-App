@@ -167,11 +167,11 @@ Function ping($url : Text) : Boolean
 		
 		return True:C214
 		
-	Else 
-		
-		This:C1470._decodeError()
-		
 	End if 
+	
+	This:C1470._decodeError()
+	
+	return False:C215
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the methods allowed on the server
