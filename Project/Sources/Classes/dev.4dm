@@ -57,7 +57,7 @@ Function _doAssert($data : Object) : Boolean
 	
 	If ($data=Null:C1517)
 		
-		return   // Force
+		return False:C215  // Force
 		
 	End if 
 	

@@ -148,7 +148,7 @@ Function verifyStructureAdjustments($publishedTableNames : Collection) : Boolean
 	If ($dataclass=Null:C1517)
 		
 		This:C1470.errors.push("The table \""+SHARED.deletedRecordsTable.name+"\" doesn't exists")
-		return 
+		return False:C215
 		
 	End if 
 	
@@ -176,7 +176,7 @@ Function verifyStructureAdjustments($publishedTableNames : Collection) : Boolean
 				//______________________________________________________
 		End case 
 		
-		return 
+		return False:C215
 		
 	End if 
 	
@@ -203,7 +203,7 @@ Function verifyStructureAdjustments($publishedTableNames : Collection) : Boolean
 					//______________________________________________________
 			End case 
 			
-			return 
+			return False:C215
 			
 		End if 
 	End for each 
@@ -220,7 +220,7 @@ Function verifyStructureAdjustments($publishedTableNames : Collection) : Boolean
 				 || ($dataclass[SHARED.stampField.name]=Null:C1517)\
 				 || ($dataclass[SHARED.stampField.name].type#SHARED.stampField._type)
 				
-				return 
+				return False:C215
 				
 			End if 
 		End for each 
@@ -260,7 +260,7 @@ Function checkServerStructure($publishedTableNames : Collection; $rest : Object)
 	If ($dataclass=Null:C1517)
 		
 		This:C1470.errors.push("The dataclass \""+SHARED.deletedRecordsTable.name+"\" is missing or is not exposed")
-		return 
+		return False:C215
 		
 	End if 
 	
@@ -272,19 +272,19 @@ Function checkServerStructure($publishedTableNames : Collection; $rest : Object)
 		: ($pk=Null:C1517)
 			
 			This:C1470.errors.push("The dataclass \""+SHARED.deletedRecordsTable.name+"\" attribute ID is missing")
-			return 
+			return False:C215
 			
 			//______________________________________________________
 		: (Not:C34(Bool:C1537($pk.identifying)))
 			
 			This:C1470.errors.push("The dataclass \""+SHARED.deletedRecordsTable.name+"\" primary key is not the \"ID\" attribute")
-			return 
+			return False:C215
 			
 			//______________________________________________________
 		: (Not:C34(Bool:C1537($pk.exposed)))
 			
 			This:C1470.errors.push("The dataclass \""+SHARED.deletedRecordsTable.name+"\" primary key is not exposed")
-			return 
+			return False:C215
 			
 			//______________________________________________________
 	End case 
@@ -305,19 +305,19 @@ Function checkServerStructure($publishedTableNames : Collection; $rest : Object)
 			: ($field=Null:C1517)
 				
 				This:C1470.errors.push("The attribute \""+$o.name+"\" of the dataclass \""+SHARED.deletedRecordsTable.name+"\" is missing or not exposed")
-				return 
+				return False:C215
 				
 				//______________________________________________________
 			: (Not:C34(Bool:C1537($field.exposed)))
 				
 				This:C1470.errors.push("The attribute \""+$o.name+"\" of the dataclass \""+SHARED.deletedRecordsTable.name+"\" is not exposed")
-				return 
+				return False:C215
 				
 				//______________________________________________________
 			: ($map[$field.type]#$o.type)
 				
 				This:C1470.errors.push("The type of the attribute \""+$o.name+"\" is not correct")
-				return 
+				return False:C215
 				
 				//______________________________________________________
 		End case 
@@ -337,19 +337,19 @@ Function checkServerStructure($publishedTableNames : Collection; $rest : Object)
 				: ($dataclass=Null:C1517)
 					
 					This:C1470.errors.push("The publishing dataclass \""+$table+"\" is missing on the server")
-					return 
+					return False:C215
 					
 					//______________________________________________________
 				: ($dataclass[SHARED.stampField.name]=Null:C1517)
 					
 					This:C1470.errors.push("The attribute \""+SHARED.stampField.name+"\" of the dataclass \""+$table+"\" is missing or not exposed")
-					return 
+					return False:C215
 					
 					//______________________________________________________
 				: ($map[$dataclass[SHARED.stampField.name].type]#SHARED.stampField.type)
 					
 					This:C1470.errors.push("The type of the attribute \""+SHARED.stampField.name+"\" of the dataclass \""+$table+"\" is not correct")
-					return 
+					return False:C215
 					
 					//______________________________________________________
 			End case 
@@ -415,7 +415,8 @@ Function doStructureAdjustments($publishedTableNames : Collection) : Boolean
 			If ($error.withError())
 				
 				This:C1470.errors.push(JSON Stringify:C1217($error.errors())+" ("+DOCUMENT+")")
-				return 
+				$error.release()
+				return False:C215
 				
 			End if 
 		End for each 
@@ -446,7 +447,8 @@ Function doStructureAdjustments($publishedTableNames : Collection) : Boolean
 					Else 
 						
 						This:C1470.errors.push(JSON Stringify:C1217($error.errors())+" ("+DOCUMENT+")")
-						return 
+						$error.release()
+						return False:C215
 						
 					End if 
 				End if 
@@ -506,7 +508,8 @@ Function doStructureAdjustments($publishedTableNames : Collection) : Boolean
 							Else 
 								
 								This:C1470.errors.push(JSON Stringify:C1217($error.errors())+" ("+DOCUMENT+")")
-								return 
+								$error.release()
+								return False:C215
 								
 							End if 
 						End if 

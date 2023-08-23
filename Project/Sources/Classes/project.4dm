@@ -735,6 +735,8 @@ Function isLink($field : cs:C1710.field) : Boolean
 		End if 
 	End for each 
 	
+	return False:C215
+	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function checkRestQueryFilter($table : Object)
 	
