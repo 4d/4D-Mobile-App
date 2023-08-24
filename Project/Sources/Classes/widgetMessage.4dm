@@ -202,7 +202,8 @@ Function display()
 								 | ($o.name="background")
 								
 								// Grow
-								This:C1470[$o.name].coordinates.bottom:=This:C1470[$o.name].coordinates.bottom+$offset
+								This:C1470[$o.name].newCoordinates:=OB Copy:C1225(This:C1470[$o.name].coordinates)
+								This:C1470[$o.name].newCoordinates.bottom:=This:C1470[$o.name].newCoordinates.bottom+$offset
 								
 								//______________________________________________________
 						End case 
@@ -289,10 +290,9 @@ Function update($data : Object)
 				This:C1470[$o.name].setCoordinates(This:C1470[$o.name].coordinates)
 				
 				// ---------------------------------------
-			: ($o.name="additional")\
+			: ($o.name="additional")
 				
-				
-				This:C1470[$o.name].setCoordinates(This:C1470[$o.name].coordinates)
+				This:C1470[$o.name].setCoordinates(This:C1470[$o.name].newCoordinates=Null:C1517 ? This:C1470[$o.name].coordinates : This:C1470[$o.name].newCoordinates)
 				This:C1470[$o.name].setVerticalScrollbar(Bool:C1537(This:C1470.scrollbar))
 				
 				// ---------------------------------------
