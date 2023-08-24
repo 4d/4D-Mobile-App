@@ -99,7 +99,7 @@ If (OB Is empty:C1297(SHARED)) | $reset
 	//***********************
 	
 	// 1] iOS
-	SHARED.xCodeMinVersion:="14.1"
+	SHARED.xCodeMinVersion:="14.3.1"
 	SHARED.iosDeploymentTarget:="16.0"
 	SHARED.useXcodeDefaultPath:=True:C214
 	
@@ -108,7 +108,7 @@ If (OB Is empty:C1297(SHARED)) | $reset
 	
 	// Project config
 	SHARED.swift:=New object:C1471(\
-		"Version"; "5.7.1"; \
+		"Version"; "5.8.1"; \
 		"Export"; New object:C1471("stripSwiftSymbols"; False:C215; "method"; "development"); \
 		"Flags"; New object:C1471("Debug"; ""; "Release"; ""); \
 		"OptimizationLevel"; New object:C1471(\
