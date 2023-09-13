@@ -493,7 +493,7 @@ Function parameterListManager() : Integer
 Function predictingManager($e : Object)
 	
 	var $height : Integer
-	var $content; $e : Object
+	var $content : Object
 	var $me : cs:C1710.subform
 	
 	$e:=$e || FORM Event:C1606
@@ -2000,9 +2000,9 @@ Function dataSourceMenuManager()
 Function editList()
 	
 /*
-													$form:=New object(\
-																										"static"; $static; \
-																										"host"; This.path.hostInputControls(True))
+														$form:=New object(\
+																												"static"; $static; \
+																												"host"; This.path.hostInputControls(True))
 	
 $form.folder:=This.path.hostInputControls()
 $manifest:=$form.folder.file("manifest.json")

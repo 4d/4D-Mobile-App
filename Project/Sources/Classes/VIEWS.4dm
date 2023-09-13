@@ -512,7 +512,7 @@ Function setTemplate($browser : Object)
 	
 	var $currentTemplate; $newTemplate; $selector; $tableID; $url : Text
 	var $update : Boolean
-	var $browser; $context; $o; $target : Object
+	var $context; $o; $target : Object
 	var $c : Collection
 	var $template : cs:C1710.tmpl
 	

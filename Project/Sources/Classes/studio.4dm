@@ -273,7 +273,6 @@ Function isDefaultPath()->$isDefault : Boolean
 Function paths()->$instances : Collection
 	
 	var $t : Text
-	var $instances : Collection
 	var $file : 4D:C1709.File
 	
 	Case of 

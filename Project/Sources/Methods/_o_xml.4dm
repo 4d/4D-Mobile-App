@@ -19,7 +19,7 @@ End if
 
 C_OBJECT:C1216($o)
 C_BLOB:C604($x)
-C_TEXT:C284($t; $tt)
+C_TEXT:C284($t; $tt; $Txt_methodOnError)
 
 // ----------------------------------------------------
 If (This:C1470[""]=Null:C1517)  // Constructor
@@ -113,7 +113,6 @@ If (This:C1470[""]=Null:C1517)  // Constructor
 			If ($2.variable#Null:C1517)
 				
 				// TRY (
-				C_TEXT:C284($Txt_methodOnError)
 				$Txt_methodOnError:=Method called on error:C704
 				xml_ERROR:=0
 				ON ERR CALL:C155("_o_xml_NO_ERROR")
@@ -278,7 +277,6 @@ Else
 				: ($1="getAttribute")
 					
 					// TRY (
-					C_TEXT:C284($Txt_methodOnError)
 					$Txt_methodOnError:=Method called on error:C704
 					xml_ERROR:=0
 					ON ERR CALL:C155("_o_xml_NO_ERROR")
@@ -512,7 +510,6 @@ Else
 				: ($1="append")
 					
 					// TRY (
-					C_TEXT:C284($Txt_methodOnError)
 					$Txt_methodOnError:=Method called on error:C704
 					xml_ERROR:=0
 					ON ERR CALL:C155("_o_xml_NO_ERROR")
@@ -574,7 +571,6 @@ Else
 				: ($1="insertAt")
 					
 					// TRY (
-					C_TEXT:C284($Txt_methodOnError)
 					$Txt_methodOnError:=Method called on error:C704
 					xml_ERROR:=0
 					ON ERR CALL:C155("_o_xml_NO_ERROR")

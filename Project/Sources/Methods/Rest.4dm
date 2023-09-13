@@ -20,7 +20,7 @@ End if
 var $query; $queryValue : Text
 var $caller; $i; $port; $timeout : Integer
 var $x : Blob
-var $in; $out; $requestResult; $webServerInfos : Object
+var $requestResult; $webServerInfos : Object
 var $requestResultAsBlob : Blob
 var $requestResultAsText : Text
 var $error : cs:C1710.error

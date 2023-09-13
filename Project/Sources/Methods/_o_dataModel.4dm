@@ -7,8 +7,7 @@
 // ----------------------------------------------------
 // Declarations
 var $t; $tt : Text
-var $Obj_dataModel; $Obj_in : Object
-var $Obj_out : Object
+var $Obj_dataModel : Object
 
 
 If (False:C215)

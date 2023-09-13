@@ -821,43 +821,41 @@ Function waitStartApp
 		// Else : all ok 
 	End if 
 	
-Function uninstallAppIfInstalled($package : Text; $serial : Text)
+Function uninstallAppIfInstalled($package : Text; $serial : Text)->$result : Object
 	
 	
-	var $0 : Object
-	var $1 : Text  // emulator serial
-	var $2 : Text  // package name (app name)
+	
 	var $Obj_isInstalled; $Obj_uninstall : Object
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	$Obj_isInstalled:=This:C1470.isAppAlreadyInstalled($1; $2)
+	$Obj_isInstalled:=This:C1470.isAppAlreadyInstalled($package; $serial)
 	
 	If ($Obj_isInstalled.success)
 		
 		If ($Obj_isInstalled.isInstalled)
 			
-			$Obj_uninstall:=This:C1470.waitUninstallApp($1; $2)
+			$Obj_uninstall:=This:C1470.waitUninstallApp($package; $serial)
 			
 			If ($Obj_uninstall.success)
 				
-				$0.success:=True:C214
+				$result.success:=True:C214
 				
 			Else 
 				
-				$0.errors:=$Obj_uninstall.errors
+				$result.errors:=$Obj_uninstall.errors
 				
 			End if 
 			
 		Else 
 			// App not installed
-			$0.success:=True:C214
+			$result.success:=True:C214
 		End if 
 		
 	Else 
-		$0.errors:=$Obj_isInstalled.errors
+		$result.errors:=$Obj_isInstalled.errors
 	End if 
 	
 Function waitForDevicePackageList

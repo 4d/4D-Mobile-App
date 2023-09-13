@@ -12,8 +12,6 @@
 
 C_BLOB:C604($x)
 C_TEXT:C284($Txt_content)
-C_OBJECT:C1216($Obj_tags)
-C_COLLECTION:C1488($Col_types)
 
 If (False:C215)
 	C_VARIANT:C1683(Process_tags_on_file; $1)

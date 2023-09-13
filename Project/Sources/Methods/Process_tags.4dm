@@ -330,7 +330,6 @@ If ($Col_types.indexOf("___TABLE___")#-1)  // ___TABLE___.* or file part
 				$Obj_tags.listFormType\
 				))
 			
-			C_VARIANT:C1683($Var_field)
 			For each ($Var_field; $Obj_table.fields)
 				
 				If (Value type:C1509($Var_field)=Is object:K8:27)  // No real #114338

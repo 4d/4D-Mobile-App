@@ -14,7 +14,7 @@
 // Declarations
 var $Boo_push : Boolean
 var $Lon_parameters : Integer
-var $Col_catalog; $Col_exclude; $children : Collection
+var $Col_exclude; $children : Collection
 
 If (False:C215)
 	C_COLLECTION:C1488(_o_doc_catalog; $0)

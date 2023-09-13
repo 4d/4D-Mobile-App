@@ -19,7 +19,9 @@ End if
 var $databasePatgname; $message; $selector : Text
 var $target : Integer
 var $cancel; $in; $ok; $params; $webServerInfos : Object
+var $status : Object
 var $error : cs:C1710.error
+var $web : 4D:C1709.WebServer
 
 // ----------------------------------------------------
 // Initialisations
@@ -113,9 +115,6 @@ Case of
 		//______________________________________________________
 	: ($selector="build_startWebServer")\
 		 | ($selector="startWebServer")
-		
-		var $status : Object
-		var $web : 4D:C1709.WebServer
 		
 		$web:=WEB Server:C1674(Web server host database:K73:31)
 		
@@ -225,8 +224,6 @@ Case of
 		//______________________________________________________
 	: ($selector="stopWebServer")
 		
-		var $status : Object
-		var $web : 4D:C1709.WebServer
 		
 		$web:=WEB Server:C1674(Web server host database:K73:31)
 		

@@ -81,7 +81,6 @@ ASSERT:C1129(Method called on error:C704="err_HIDE")
 
 $o.reset()
 
-C_TEXT:C284($t)
 $t:=$o.$
 
 $o.show()

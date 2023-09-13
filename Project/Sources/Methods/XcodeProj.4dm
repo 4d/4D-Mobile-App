@@ -12,8 +12,6 @@
 C_LONGINT:C283($Lon_i)
 C_TEXT:C284($Txt_buffer; $Txt_objectRef)
 C_TEXT:C284($Txt_formType; $Txt_fileRef; $Txt_buildfileRef; $Txt_tableName)
-C_TEXT:C284($Txt_tableName)
-C_OBJECT:C1216($Obj_in; $Obj_out)
 C_OBJECT:C1216($Obj_objects; $Obj_tableGroup; $Obj_file; $Obj_buildfile; $Obj_object; $Obj_object_child; $Obj_types)
 C_COLLECTION:C1488($Col_children)
 ARRAY TEXT:C222($tTxt_keys; 0)

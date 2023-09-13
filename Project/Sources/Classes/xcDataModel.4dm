@@ -670,7 +670,6 @@ Function _relation($table : Object; $options : Object)->$out : Object
 					
 					If ($Obj_buffer.success)
 						
-						var $Obj_field : Object
 						For each ($Obj_field; $Obj_buffer.fields)  // CLEAN must only have one
 							
 							// Create the inverse field

@@ -719,7 +719,6 @@ a Java package name, such as com.example.myapp.
 			
 			This:C1470.isOnError:=False:C215
 			
-			var $t : Text
 			For each ($t; Split string:C1554(This:C1470.project.package; ".")) While (Not:C34(This:C1470.isOnError))
 				
 				If (Match regex:C1019("^[\\._0-9]"; $t; 1))

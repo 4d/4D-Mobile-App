@@ -12,7 +12,6 @@
 
 C_BOOLEAN:C305($Bool_errorInOut; $Bool_ReplaceLS)
 C_TEXT:C284($format; $Txt_cmd; $Txt_error; $Txt_in; $Txt_out)
-C_OBJECT:C1216($Obj_in; $Obj_out)
 
 If (False:C215)
 	C_OBJECT:C1216(plistconvert; $0)

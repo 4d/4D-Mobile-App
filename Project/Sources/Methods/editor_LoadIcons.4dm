@@ -22,6 +22,7 @@ var $i; $iconHeight; $iconWidth; $length : Integer
 var $params : Object
 var $host; $icons; $pathnames : Collection
 var $folder : 4D:C1709.Folder
+var $svg : cs:C1710.svg
 
 // ----------------------------------------------------
 // Initialisations
@@ -73,7 +74,6 @@ For each ($path; $pathnames)
 	
 	If (UI.darkScheme) && ($path="@.svg")
 		
-		var $svg : cs:C1710.svg
 		$svg:=cs:C1710.svg.new(File:C1566($path; fk platform path:K87:2))
 		
 		If ($svg.success)
@@ -120,7 +120,6 @@ If ($folder.exists)
 		
 		If (UI.darkScheme) && ($path="@.svg")
 			
-			var $svg : cs:C1710.svg
 			$svg:=cs:C1710.svg.new(File:C1566($path; fk platform path:K87:2))
 			
 			If ($svg.success)
@@ -152,7 +151,6 @@ End if
 // ----------------------------------------------------
 If (UI.darkScheme) && (UI.noIcon="@.svg")
 	
-	var $svg : cs:C1710.svg
 	$svg:=cs:C1710.svg.new(File:C1566(UI.noIcon; fk platform path:K87:2))
 	
 	If ($svg.success)

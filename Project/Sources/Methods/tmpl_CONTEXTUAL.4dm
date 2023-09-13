@@ -134,7 +134,6 @@ If ($infos#Null:C1517)
 		: ($menu.choice="duplicate")
 			
 			// ask new name
-			var $form : Text
 			$form:=Request:C163("New template name?")
 			If (Length:C16($form)>0)
 				// CLEAN: extract code to a class about template? like cs.tmpl (allowing us to make TU) ; but this class do too much things in init

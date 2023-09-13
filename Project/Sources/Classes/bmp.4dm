@@ -327,7 +327,6 @@ Function getHeader()->$header : Object
 			
 			// INT16 Reserved Field(1)
 			// INT16 Reserved Field(2)
-			var $offset : Integer
 			$offset:=0x000A
 			
 			// UINT32 Starting Position of Image Data (offset in bytes)

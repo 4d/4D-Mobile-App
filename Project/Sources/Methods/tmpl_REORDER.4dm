@@ -17,7 +17,7 @@ End if
 var $dom; $Dom_field; $root; $t; $key : Text
 var $isCompatible; $isMultiCriteria : Boolean
 var $indx; $Lon_keyType : Integer
-var $cache; $o; $oAttributes; $oField; $oIN : Object
+var $cache; $o; $oAttributes; $oField : Object
 var $c; $affected; $binding : Collection
 var $template : cs:C1710.tmpl
 

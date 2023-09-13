@@ -8,6 +8,7 @@ var $null : Variant
 var $file; $folder; $o; $o1; $o2; $Obj_formula; $Obj_new; $result; $Obj_target; $Obj_template : Object
 var $zip : Object
 var $c; $c1; $Col_2; $cUserdCommands : Collection
+var $error : cs:C1710.error
 
 ARRAY TEXT:C222($tTxt_; 0)
 
@@ -65,7 +66,6 @@ Case of
 	: (True:C214)
 		
 		var $status : Object
-		var $error : cs:C1710.error
 		var $web : 4D:C1709.WebServer
 		
 		$web:=WEB Server:C1674(Web server host database:K73:31)
@@ -210,7 +210,6 @@ Case of
 		//________________________________________
 	: (True:C214)
 		
-		var $error : cs:C1710.error
 		$error:=cs:C1710.error.new("capture")
 		
 		Formula from string:C1601("$b:=true").call()

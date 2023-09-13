@@ -16,6 +16,7 @@ If (False:C215)
 End if 
 
 var $File_name; $outputPathname; $format; $tableID; $t; $handler : Text
+var $Txt_field : Text
 var $ID; $url; $version : Text
 var $imageFound : Boolean
 var $dataModel; $meta; $o; $field; $record : Object
@@ -24,6 +25,7 @@ var $fields : Collection
 var $destinationFile; $file : 4D:C1709.File
 var $ouputFolder : 4D:C1709.Folder
 var $error : cs:C1710.error
+var $targetFolder : 4D:C1709.Folder
 
 // ----------------------------------------------------
 // Initialisations
@@ -200,7 +202,6 @@ Case of
 		var $notify : 4D:C1709.Function
 		$notify:=Formula:C1597(CALL FORM:C1391($in.caller; $in.method; "dump"; $1))
 		
-		var $targetFolder : 4D:C1709.Folder
 		$targetFolder:=Folder:C1567($in.output; fk platform path:K87:2)
 		
 		// Make sure the folder exist
@@ -499,7 +500,6 @@ Case of
 		$out.fields:=New collection:C1472()
 		$out.expand:=New collection:C1472()
 		
-		var $Txt_field : Text
 		For each ($Txt_field; $in.table)
 			
 			Case of 
@@ -912,7 +912,6 @@ Case of
 													End if 
 													
 													// Make sure the folder exist
-													var $targetFolder : 4D:C1709.Folder
 													$targetFolder:=Folder:C1567($in.output; fk platform path:K87:2)
 													$targetFolder.create()
 													
@@ -1163,7 +1162,6 @@ Case of
 		
 		$out.success:=True:C214
 		
-		var $Txt_field : Text
 		For each ($Txt_field; $in.table)
 			Case of 
 					//………………………………………………………………………………………………………………………

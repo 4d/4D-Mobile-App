@@ -9,7 +9,6 @@ ASSERT:C1129($xml.success)
 $xml.close()
 
 // Create by parsing
-C_OBJECT:C1216($xml)
 $xml:=_o_xml("parse"; New object:C1471("variable"; "<html><header></header><body></body></html>"))
 ASSERT:C1129($xml.success)
 $xml.close()

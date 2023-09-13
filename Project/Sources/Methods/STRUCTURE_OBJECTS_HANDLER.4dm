@@ -187,7 +187,6 @@ Case of
 				OBJECT SET VISIBLE:C603(*; $form.action; True:C214)
 				//]
 				
-				var $o : Object
 				$o:=OBJECT Get value:C1743($form.search)
 				
 				If ($o=Null:C1517)
@@ -446,7 +445,6 @@ Case of
 				OBJECT SET VISIBLE:C603(*; $form.action; True:C214)
 				//]
 				
-				var $o : Object
 				$o:=OBJECT Get value:C1743($form.search)
 				
 				If ($o=Null:C1517)
@@ -679,8 +677,8 @@ Case of
 		//// Hide the bottom line
 		//OBJECT SET VISIBLE(*; "bottom.line"; False)
 		//CALL FORM(Current form window; "editor_CALLBACK"; "resizePanel"; New object(\
-																																				"panel"; Current form name; \
-																																				"offset"; $Lon_vOffset))
+																																							"panel"; Current form name; \
+																																							"offset"; $Lon_vOffset))
 		//End if
 		////______________________________________________________
 		//: ($e.code=On Mouse Leave)

@@ -11,8 +11,7 @@
 // ----------------------------------------------------
 // Declarations
 #DECLARE($params : Object)->$response : Object
-var $0 : Object
-var $1 : Object
+
 
 If (False:C215)
 	C_OBJECT:C1216(provisioningProfiles; $0)

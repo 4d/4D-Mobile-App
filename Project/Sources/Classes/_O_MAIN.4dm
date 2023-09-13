@@ -65,13 +65,12 @@ Function handleEvents($e : Object) : Integer
 		
 	Else   // <== WIDGETS METHOD
 		
+		var $x : Blob
+		var $o : Object
 		Case of 
 				
 				//==============================================
 			: (This:C1470._dataModel.catch())
-				
-				var $x : Blob
-				var $o : Object
 				
 				//$o:=This._dataModel.cellPosition($e)
 				
@@ -128,9 +127,6 @@ Function handleEvents($e : Object) : Integer
 				
 				//==============================================
 			: (This:C1470.displayed.catch())
-				
-				var $x : Blob
-				var $o : Object
 				
 				//$o:=This.displayed.cellPosition($e)
 				
@@ -409,7 +405,7 @@ Function mainHandleEvents($e : Object)->$allow : Integer
 				// End if
 				// Else
 				//If ($o.src#$e.row)\
-																																																																	& ($e.row#($o.src+1))  // Not the same or the next one
+																																																																						& ($e.row#($o.src+1))  // Not the same or the next one
 				//$o:=$me.rowCoordinates($e.row)
 				//$o.bottom:=$o.top
 				//$o.right:=$me.coordinates.right

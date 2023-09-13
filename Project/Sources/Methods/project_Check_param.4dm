@@ -16,7 +16,7 @@ If (False:C215)
 End if 
 
 var $field; $table : Text
-var $dataModel; $in; $o; $project; $result : Object
+var $dataModel; $o; $project : Object
 
 // ----------------------------------------------------
 // Initialisations

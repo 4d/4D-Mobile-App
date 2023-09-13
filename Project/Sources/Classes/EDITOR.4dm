@@ -679,8 +679,6 @@ Function messageContainer($e : Object)
 			//______________________________________________________
 		: ($e.code<0)  // <SUBFORM EVENTS>
 			
-			var $data; $display : Object
-			
 			$data:=This:C1470.message.getValue()
 			$display:=$data.ƒ
 			
@@ -699,9 +697,6 @@ Function messageContainer($e : Object)
 					
 					//…………………………………………………………………………………………………
 				: ($e.code=-8858)  // Resize
-					
-					var $offset : Integer
-					var $coordinates; $display : Object
 					
 					$coordinates:=This:C1470.message.getCoordinates()
 					$coordinates.bottom:=$coordinates.bottom+$display.offset

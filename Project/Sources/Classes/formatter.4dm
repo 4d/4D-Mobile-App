@@ -249,6 +249,7 @@ Function create($type : Variant; $data : Collection)->$file : 4D:C1709.File
 				"$comment"; "Map database values to some display values using choiceList"; \
 				"binding"; "localizedText")
 			
+			var $datum : Variant
 			$manifest.choiceList:=This:C1470.defaultChoiceList($typeString; True:C214)
 			Case of 
 				: (($typeString="bool") | ($typeString="boolean"))
@@ -257,7 +258,6 @@ Function create($type : Variant; $data : Collection)->$file : 4D:C1709.File
 				: (($typeString="number") | ($typeString="integer") | ($typeString="real"))
 					If (Count parameters:C259>1)
 						$manifest.choiceList:=New object:C1471()
-						var $datum : Variant
 						For each ($datum; $data)
 							$manifest.choiceList[String:C10($datum)]:=String:C10($datum)
 						End for each 
@@ -267,7 +267,6 @@ Function create($type : Variant; $data : Collection)->$file : 4D:C1709.File
 				: (($typeString="string") | ($typeString="text"))
 					If (Count parameters:C259>1)
 						$manifest.choiceList:=New object:C1471()
-						var $datum : Variant
 						For each ($datum; $data)
 							$manifest.choiceList[String:C10($datum)]:=String:C10($datum)
 						End for each 

@@ -3,6 +3,7 @@ var $device; $o : Object
 var $availableDevices; $iPads; $iPhones : Collection
 var $folder : 4D:C1709.Folder
 var $simctl : cs:C1710.simctl
+var $plist : cs:C1710.plist
 
 COMPILER_COMPONENT
 
@@ -48,7 +49,6 @@ Case of
 			
 			//ALERT("Apple Configurator 2 not found")
 			
-			var $simctl : cs:C1710.simctl
 			$simctl:=cs:C1710.simctl.new(SHARED.iosDeploymentTarget)
 			
 			$pluggedDevices:=$simctl.plugged()
@@ -87,14 +87,12 @@ Case of
 		//______________________________________________________
 	: (True:C214)
 		
-		var $plist : cs:C1710.plist
 		$plist:=cs:C1710.plist.new(File:C1566("/Users/vdl/Desktop/TO BE TRASHED/test.plist"))
 		
 		//______________________________________________________
 	: (True:C214)
 		
 		//$device:=$simctl.defaultDevice()
-		var $plist : cs:C1710.plist
 		$plist:=cs:C1710.plist.new(File:C1566("/Users/vdl/Desktop/DEV/com.apple.iphonesimulator.plist"))
 		
 		$plist.set("hello"; "world")

@@ -222,13 +222,13 @@ If (Length($Txt_out)>0)
 var $File_ : Object
 $File_:=Folder(Temporary folder; fk platform path).file(Generate UUID+"ibtool.plist")
 $File_.setText($Txt_out)
-	$Obj_out:=_o_plist(New object(\
-						"action"; "object"; \
-						"domain"; $File_.path))
+		$Obj_out:=_o_plist(New object(\
+								"action"; "object"; \
+								"domain"; $File_.path))
 $File_.delete()
 	
-	If (($Obj_out.success)\
-						 & ($Obj_out.value#Null))
+		If (($Obj_out.success)\
+								 & ($Obj_out.value#Null))
 	
 $Obj_out.version:=String($Obj_out.value["com.apple.ibtool.version"]["bundle-version"])
 	
@@ -324,7 +324,7 @@ Function colorAssetFix($theme : Object)->$Obj_out : Object
 			// write if there is one named colors (could also do it only if one attribute change)
 			
 			//_o_doc_UNLOCK_DIRECTORY(New object(\
-								"path"; $File_.parent.platformPath))
+												"path"; $File_.parent.platformPath))
 			
 			cs:C1710.lep.new().unlockDirectory($File_.parent)
 			
@@ -639,15 +639,7 @@ Function injectElement
 	End for each 
 	
 	
-Function xmlAppendRelationAttributeForField()->$response : Object
-	C_LONGINT:C283($Lon_j; $1)
-	$Lon_j:=$1
-	C_OBJECT:C1216($Dom_root; $2)
-	$Dom_root:=$2
-	C_BOOLEAN:C305($IsToMany; $3)
-	$IsToMany:=$3
-	C_OBJECT:C1216($Dom_; $0)
-	
+Function xmlAppendRelationAttributeForField($Lon_j : Integer; $Dom_root : Object; $IsToMany : Boolean)->$Dom_ : Object
 	
 	// find the element $Lon_j by looking at userDefinedRuntimeAttribute
 	$Dom_:=$Dom_root.findByXPath("//*/userDefinedRuntimeAttribute[@keyPath='bindTo.record.___FIELD_"+String:C10($Lon_j)+"___']")  // or value="___FIELD_1_BINDING_TYPE___"
@@ -678,8 +670,6 @@ Function xmlAppendRelationAttributeForField()->$response : Object
 		End if 
 		
 	End if 
-	
-	$0:=$Dom_
 	
 Function injectSegue
 	C_LONGINT:C283($Lon_j; $1)

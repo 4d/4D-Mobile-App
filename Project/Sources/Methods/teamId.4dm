@@ -14,7 +14,7 @@ If (False:C215)
 	C_OBJECT:C1216(teamId; $1)
 End if 
 
-var $o; $params; $response : Object
+var $o : Object
 var $c : Collection
 
 // ----------------------------------------------------

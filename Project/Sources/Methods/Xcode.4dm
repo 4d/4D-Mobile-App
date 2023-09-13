@@ -19,6 +19,7 @@ C_OBJECT:C1216($Obj_buffer; $Obj_param; $Obj_result; $Obj_version)
 C_OBJECT:C1216($Dom_fileRef; $Dom_root; $Dom_group; $Dom_child)
 C_OBJECT:C1216($subfolder)
 C_COLLECTION:C1488($Col_folder; $Col_paths)
+var $regex : cs:C1710.regex
 
 If (False:C215)
 	C_OBJECT:C1216(Xcode; $0)
@@ -333,7 +334,6 @@ Case of
 			
 			If (Length:C16($Txt_out)>0)
 				
-				var $regex : cs:C1710.regex
 				$regex:=cs:C1710.regex.new($Txt_out; "(?mi-s)Apple Swift version ((?:\\d\\.)*\\d)")
 				
 				If ($regex.match())
@@ -1225,7 +1225,6 @@ Get system info should not be called frequently (consumer) as the processor will
 				End case 
 				
 				// Cannot check command return status so, check output content
-				var $regex : cs:C1710.regex
 				$regex:=cs:C1710.regex.new($Txt_out; $Txt_buffer)
 				
 				If ($regex.match())

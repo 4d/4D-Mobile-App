@@ -1,12 +1,19 @@
 //%attributes = {}
 
 
+var $sdk : cs:C1710.sdkmanager
+var $adb : cs:C1710.adb
+var $studio : cs:C1710.studio
+var $avd : cs:C1710.avd
+
+var $c; $availableDevices; $plugged; $packages : Collection
+var $serial : Text
+
 Case of 
 		
 		//______________________________________________________
 	: (True:C214)
 		
-		var $studio : cs:C1710.studio
 		$studio:=cs:C1710.studio.new()
 		$studio.installLatestCommandLineTools()
 		$studio.installLatestCommandLineTools(Num:C11(JSON Parse:C1218(File:C1566("/RESOURCES/android.json").getText()).latestCommandLineTools))
@@ -14,16 +21,13 @@ Case of
 		//______________________________________________________
 	: (True:C214)
 		
-		var $sdk : cs:C1710.sdkmanager
 		$sdk:=cs:C1710.sdkmanager.new()
 		
-		var $c : Collection
 		$c:=$sdk.installedPackages()
 		
 		//______________________________________________________
 	: (True:C214)
 		
-		var $sdk : cs:C1710.sdkmanager
 		$sdk:=cs:C1710.sdkmanager.new()
 		
 		var $ready : Boolean
@@ -50,20 +54,16 @@ Case of
 		//var $possibleSimulators : Collection
 		//$possibleSimulators:=$emulator.availableSimulators()
 		
-		var $adb : cs:C1710.adb
 		$adb:=cs:C1710.adb.new()
 		
-		var $plugged : Collection
 		$plugged:=$adb.plugged()  // -> Plugged devices
 		
-		var $serial : Text
 		If ($plugged.length>0)
 			
 			$serial:=$plugged[0].udid
 			
 			$o:=$adb.getDeviceProperties($serial)
 			
-			var $packages : Collection
 			$packages:=$adb.packageList($serial)
 			$packages:=$adb.userPackageList($serial)
 			
@@ -83,7 +83,6 @@ Case of
 		
 		
 		
-		var $adb : cs:C1710.adb
 		$adb:=cs:C1710.adb.new()
 		
 		$adb.launch($adb.cmd+" --help")
@@ -99,10 +98,8 @@ Case of
 		var $possibleSimulators : Collection
 		$possibleSimulators:=$emulator.availableSimulators()
 		
-		var $adb : cs:C1710.adb
 		$adb:=cs:C1710.adb.new()
 		
-		var $availableDevices : Collection
 		$availableDevices:=$adb.availableDevices()  // -> Attached devices (plugged devices & booted simulators)
 		
 		If ($emulator.isBooted("emulator-5554"))
@@ -124,20 +121,16 @@ Case of
 		var $folder : 4D:C1709.Folder
 		$folder:=$androidProcess.androidSDKFolder()
 		
-		var $adb : cs:C1710.adb
 		$adb:=cs:C1710.adb.new()
 		
-		var $availableDevices : Collection
 		$availableDevices:=$adb.availableDevices()  // -> Attached devices (plugged devices & booted simulators)
 		
 		$availableDevices:=$adb.availableDevices("9")
 		$availableDevices:=$adb.availableDevices("11")
 		$availableDevices:=$adb.availableDevices("12")
 		
-		var $plugged : Collection
 		$plugged:=$adb.plugged()  // -> Plugged devices
 		
-		var $serial : Text
 		If ($plugged.length>0)
 			
 			$serial:=$plugged[0].udid
@@ -167,7 +160,6 @@ Case of
 			
 			$adb.installApp("/Users/vdl/Sources_4D/depot/4eDimension/main/4DComponents/Internal User Components/4D Mobile App - Mobile/My App 4/Android/My App 4/app/build/outputs/apk/debug/app-debug.apk"; $serial)
 			
-			var $packages : Collection
 			$packages:=$adb.packageList($serial)
 			$packages:=$adb.userPackageList($serial)
 			
@@ -227,17 +219,14 @@ Case of
 		//______________________________________________________
 	: (True:C214)
 		
-		var $studio : cs:C1710.studio
 		$studio:=cs:C1710.studio.new()
 		$studio.installLatestCommandLineTools()
 		
 		//______________________________________________________
 	: (True:C214)
 		
-		var $avd : cs:C1710.avd
 		$avd:=cs:C1710.avd.new()
 		
-		var $c : Collection
 		$c:=$avd.availableDevices()
 		
 		//______________________________________________________
@@ -254,7 +243,6 @@ Case of
 			var $result : Object
 			$result:=$emu.start($listOfEmu[0]; True:C214/*async*/)  // seem to block until close, maybe run start in background or not using option of LAUNCH Exxternal process
 			
-			var $adb : cs:C1710.adb
 			$adb:=cs:C1710.adb.new()
 			
 			//$result:=$adb.kill($listOfEmu[0])  // seems to no work

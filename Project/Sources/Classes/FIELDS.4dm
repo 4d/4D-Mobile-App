@@ -408,9 +408,9 @@ Function updateFieldList
 	// Gets the list of fields/reports according to the selected table as collections
 Function getFieldList()->$result : Object
 	
-	var $key; $subKey; $tableID : Text
+	var $key; $subKey; $subKey2; $tableID : Text
 	var $target : Collection
-	var $field; $subfield : cs:C1710.field
+	var $field; $subfield; $subfield2 : cs:C1710.field
 	var $table : cs:C1710.table
 	var $formatters : 4D:C1709.Folder
 	
@@ -592,7 +592,6 @@ Function getFieldList()->$result : Object
 											//______________________________________________________
 										: ($subfield.kind="relatedEntity")
 											
-											var $subKey2 : Text
 											For each ($subKey2; $field)
 												
 												If (Value type:C1509($subfield[$subKey2])#Is object:K8:27)
@@ -601,7 +600,6 @@ Function getFieldList()->$result : Object
 													
 												End if 
 												
-												var $subfield2 : cs:C1710.field
 												$subfield2:=$subfield[$subKey2]
 												
 												Case of 
@@ -751,7 +749,6 @@ Function getFieldList()->$result : Object
 										//______________________________________________________
 									: ($subfield.kind="relatedEntity")
 										
-										var $subKey2 : Text
 										For each ($subKey2; $subfield)
 											
 											If (Value type:C1509($subfield[$subKey2])#Is object:K8:27)
@@ -760,7 +757,6 @@ Function getFieldList()->$result : Object
 												
 											End if 
 											
-											var $subfield2 : cs:C1710.field
 											$subfield2:=$subfield[$subKey2]
 											
 											Case of 

@@ -523,7 +523,6 @@ Function fields($table : Variant) : Collection
 Function storageFields($table : Variant)->$fields : Collection
 	
 	var $model : Object
-	var $fields : Collection
 	
 	Case of 
 			
@@ -2594,7 +2593,6 @@ Function repairStructure($audit : Collection)
 											//======================================
 										: ($relatedField.kind="relatedEntity")
 											
-											var $linkedItem : Object
 											For each ($linkedItem; This:C1470.storageFields($relatedField))
 												
 												$field:=$table.query("fieldNumber = :1"; Num:C11($linkedItem.key)).pop()
