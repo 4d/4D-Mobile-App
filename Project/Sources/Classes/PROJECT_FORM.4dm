@@ -39,7 +39,7 @@ Function update()
 	
 	For each ($panel; panels)
 		
-		This:C1470.callChild(Formula:C1597(panel_UI).source; $data)
+		This:C1470.callChild($panel; Formula:C1597(panel_UI).source; $data)
 		
 	End for each 
 	

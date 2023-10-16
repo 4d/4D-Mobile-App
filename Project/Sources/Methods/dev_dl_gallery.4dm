@@ -1,6 +1,6 @@
 //%attributes = {}
 var $data; $item; $path : Object
-var $content : Object
+var $content : Blob
 var $status : Integer
 var $topics; $topicFs; $tmp : Collection
 $topics:=New collection:C1472("form-list"; "form-detail"; "form-login"; "formatter"; "input-control")
