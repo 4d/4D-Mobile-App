@@ -380,7 +380,7 @@ Function checkingServerResponse($data : Object)
 		
 		$result:=$data.response ? $data.response : $data
 		
-		If ($data.success)\
+		If (Bool:C1537($data.success))\
 			 && (Bool:C1537($data.response.ok))
 			
 			$result.type:=0
