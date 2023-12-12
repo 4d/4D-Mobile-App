@@ -9,15 +9,21 @@ You could find more information into the [official documentation](https://develo
 Download this component and add it to your base `Components` folder.
 
 You could download a full packaged and compiled version from the [latest release](https://github.com/4d/4D-Mobile-App/releases/latest)
+> ⚠️ On macOS if you have some issue about to use it with some errors like "cannot open lib4d-arm64.dylib", it's because the component is not yet notarized, so Apple block it.
+> 💡 To fix that you could open the file using MacOS Finder:
+> - Right clic on "4D Mobile App.4dbase" and select "Show package content" to enter inside.
+> - Then find the file "lib4d-arm64.dylib" inside "Library" and do a right click to "Open" it.
+> - An alert must also be displayed but this time you could accept to open it.
+> - Then relaunch your database.
 
-or launch this command line on macOS (or windows using MINGW64/git bash) in your database root folder:
+or better launch this command line on macOS (or windows using MINGW64/git bash) in your database root folder:
 
 ```bash
 cd Your/Base/Path
 curl -sL https://raw.githubusercontent.com/4d/4D-Mobile-App/main/install.sh | sh # will download the latest release in Components
 ```
 
-alternatively you could use this code [download.4dm](Documentation/download.4dm) in your component to download
+> alternatively you could use this code [download.4dm](Documentation/download.4dm) in your component to also download this time using 4D code.
 
 ### Using sources
 
