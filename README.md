@@ -16,7 +16,7 @@ You could download a full packaged and compiled version from the [latest release
 > - An alert must also be displayed but this time you could accept to open it.
 > - Then relaunch your database.
 
-or better launch this command line on macOS (or windows using MINGW64/git bash) in your database root folder:
+or better launch this command-line on macOS (or windows using MINGW64/git bash) in your database root folder:
 
 ```bash
 cd Your/Base/Path
@@ -37,13 +37,13 @@ If you do so, you must integrated manually some of the dependencies described be
 
 ## Dependencies
 
-This project has some dependencies on some other projects described bellow. 
+This project has some dependencies on some other projects described bellow.
 
-> You could find also this information in ["building dependencies documentation"](Documentation/Building.md) 
+> You could find also this information in ["building dependencies documentation"](Documentation/Building.md)
 
 ### for iOS
 
-#### iOS cli tools
+#### iOS command-line tools
 
 | Name  | Usefulness | Path | Integrated |
 |-|-|-|-|
@@ -56,25 +56,25 @@ This project has some dependencies on some other projects described bellow.
 |-|-|-|-|
 | [iOS SDK](https://github.com/4d/ios-sdk) | the SDK copied to mobile iOS Apps | • `<your base>/Resources/mobile/sdk/ios.zip` <br>• or `<4D mobile app>/Resources/sdk/ios.zip` <br>• or downloaded from [latest release](https://github.com/4d/ios-sdk/releases/latest) | NO |
 
-### for android
+### for Android
 
-#### android cli tools
+#### Android command-line tools
 
 | Name  | Usefulness | Path | Integrated |
 |-|-|-|-|
-| [ProjectGenerator](https://github.com/4d/android-ProjectGenerator) | Create android project | • `Resources/scripts/androidprojectgenerator.jar` <br>• or downloaded from [latest release](https://github.com/4d/android-ProjectGenerator/releases/latest) | NO |
+| [ProjectGenerator](https://github.com/4d/android-ProjectGenerator) | Create Android project | • `Resources/scripts/androidprojectgenerator.jar` <br>• or downloaded from [latest release](https://github.com/4d/android-ProjectGenerator/releases/latest) | NO |
 
-#### android mobile native SDK
+#### Android mobile native SDK
 
 | Name  | Usefulness | Path | Integrated |
 |-|-|-|-|
 | [Android SDK](https://github.com/4d/android-sdk) | the SDK copied to mobile Android Apps | • `<your base>/Resources/mobile/sdk/android.zip` <br>• or `<4D mobile app>/Resources/sdk/android.zip` <br>• or downloaded from [latest release](https://github.com/4d/android-sdk/releases/latest) | NO |
 
-#### android vd-tool
+#### Android vd-tool
 
 | Name  | Usefulness | Path | Integrated |
 |-|-|-|-|
-| [vd-tool](https://github.com/e-marchand/vdtool) | convert svg to android image | • `Resources/scripts/vd-tool.jar` <br>• or downloaded from [latest release](https://github.com/e-marchand/vdtool/releases/latest) | YES |
+| [vd-tool](https://github.com/e-marchand/vdtool) | convert svg to Android image | • `Resources/scripts/vd-tool.jar` <br>• or downloaded from [latest release](https://github.com/e-marchand/vdtool/releases/latest) | YES |
 
 ---
 
@@ -82,7 +82,7 @@ This project has some dependencies on some other projects described bellow.
 
 ### Download on web interface
 
-1️⃣ Download sources using github `Download` button, or by going to a specific release and getting sources
+1️⃣ Download sources using GitHub `Download` button, or by going to a specific release and getting sources
 - for instance for main version `Download` button will download component using URL: [https://github.com/4d/4D-Mobile-App/archive/refs/heads/main.zip](https://github.com/4d/4D-Mobile-App/archive/refs/heads/main.zip)
 
 2️⃣ Then unzip into your `Components` folder, and rename it folder to `4D-Mobile-App.4dbase` if needed
@@ -92,7 +92,7 @@ This project has some dependencies on some other projects described bellow.
 
 #### macOS one line command to download
 
-On macOS the following command line will do the job for you.
+On macOS the following command-line will do the job for you.
 
 Open a terminal, go to your 4d database root folder (`cd /your/base/path/`) and type:
 
@@ -116,9 +116,9 @@ git submodule add git@github.com:4d/4D-Mobile-App.git Components/4D-Mobile-App.4
 
 ## Contributing
 
-You can contribute by fixing bugs or adding new features. 
+You can contribute by fixing bugs or adding new features.
 
-When submitting a pull request 
+When submitting a pull request
 - please follow the [contributing guide](.github/CONTRIBUTING.md)
 - be sure that you have the right to license your contribution to the community, and agree by submitting the patch that your contributions are licensed under the [following license](LICENSE.md)
 - sign the [contributing](.github/cla/4DCLA.md) for your first pull request
