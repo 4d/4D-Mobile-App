@@ -101,7 +101,7 @@ Class constructor($target; $reference)
 					
 				End if 
 				
-				This:C1470.target:=FileOrFolderFrom(This:C1470.platformPath)
+				This:C1470.target:=FileOrFolderFrom(String:C10(This:C1470.platformPath))
 				
 				//______________________________________________________
 			Else 

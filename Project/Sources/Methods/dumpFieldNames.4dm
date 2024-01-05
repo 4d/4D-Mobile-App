@@ -1,5 +1,5 @@
 //%attributes = {}
-#DECLARE($in)->$out : Object
+#DECLARE($in : Object)->$out : Object
 
 $out:=New object:C1471()
 

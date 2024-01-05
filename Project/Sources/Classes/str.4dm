@@ -581,7 +581,7 @@ Function uperCamelCase($target : Text) : Text
 				
 			End for 
 			
-			return $c.join()
+			return $c.join("")
 			
 		Else 
 			
@@ -623,7 +623,7 @@ Function lowerCamelCase($target : Text) : Text
 					
 				End for 
 				
-				return $c.join()
+				return $c.join("")
 				
 			Else 
 				

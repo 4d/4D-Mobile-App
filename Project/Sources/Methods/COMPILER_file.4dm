@@ -7,7 +7,7 @@ If (False:C215)
 	
 	//______________________________________
 	C_OBJECT:C1216(FileOrFolderFrom; $0)
-	C_VARIANT:C1683(FileOrFolderFrom; $1)
+	C_TEXT:C284(FileOrFolderFrom; $1)
 	
 	//______________________________________
 	C_OBJECT:C1216(FolderFrom; $0)
