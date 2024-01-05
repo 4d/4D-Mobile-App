@@ -975,6 +975,21 @@ Function _generateCapabilities($out : Object; $appFolder : 4D:C1709.Folder)
 		
 	End if 
 	
+	
+	var $editActionHasUniqueTask : Object
+	$editActionHasUniqueTask:=ob findPropertyValues($project; "editActionHasUniqueTask")
+	
+	If ($editActionHasUniqueTask.success)
+		
+		If ($out.computedCapabilities.capabilities.settings=Null:C1517)
+			$out.computedCapabilities.capabilities.settings:=New collection:C1472
+		End if 
+		
+		$out.computedCapabilities.capabilities.settings.push(New object:C1471(\
+			"action.edit.hasUniqueTask"; $editActionHasUniqueTask.value.reduce(Formula:C1597(col_formula).source; False:C215; Formula:C1597($1.accumulator:=$1.accumulator | $1.value))))
+		
+	End if 
+	
 	// Manage app capabilities
 	$out.capabilities:=capabilities(\
 		New object:C1471("action"; "inject"; "target"; $in.path; "tags"; $tags; \
