@@ -383,7 +383,8 @@ Function paths()->$instances : Collection
 		
 	Else 
 		
-		This:C1470._pushError(Choose:C955(Length:C16($o.error)=0; "No Xcode installed"; $o.error))
+		$instances:=New collection:C1472
+		This:C1470._pushError(Choose:C955(Length:C16($o.error)=0; "No Xcode installed (or error when getting list)"; $o.error))
 		
 	End if 
 	
