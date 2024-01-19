@@ -323,7 +323,12 @@ Function handleEvents($e : Object)
 				//==================================================
 			: (This:C1470.revealDatasource.catch($e; On Clicked:K2:4))
 				
-				SHOW ON DISK:C922(This:C1470.sourceFolder(Delete string:C232(This:C1470.current.source; 1; 1); True:C214).platformPath)
+				var $sourceFolder : 4D:C1709.Folder  //
+				$sourceFolder:=This:C1470.sourceFolder(Delete string:C232(This:C1470.current.source; 1; 1); True:C214)
+				
+				If ($sourceFolder#Null:C1517)
+					SHOW ON DISK:C922($sourceFolder.platformPath)
+				End if 
 				
 				//==================================================
 			: ($e.code=On Data Change:K2:15)\
