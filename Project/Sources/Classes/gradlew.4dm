@@ -4,11 +4,17 @@ Class constructor($projectPath : Text)
 	
 	Super:C1705()
 	
-	If (Is macOS:C1572)
-		This:C1470.cmd:="gradlew"
-	Else 
+	If (Is Windows:C1573)
 		This:C1470.cmd:=Folder:C1567($projectPath).file("gradlew.bat").path
+	Else 
+		This:C1470.cmd:="gradlew"
 	End if 
+	
+Function execute($command : Text)
+	This:C1470.launch(This:C1470.cmd+" "+$command)
+	
+Function stop()
+	This:C1470.execute("--stop")
 	
 	
 Function assembleDebug
@@ -20,7 +26,7 @@ Function assembleDebug
 		"errorStream"; ""; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.launch(This:C1470.cmd+" assembleDebug")
+	This:C1470.execute("assembleDebug")
 	
 	$0.outputStream:=This:C1470.outputStream
 	$0.errorStream:=This:C1470.errorStream
@@ -36,7 +42,6 @@ Function assembleDebug
 		
 	End if 
 	
-	
 Function createEmbeddedDatabase
 	var $0 : Object
 	
@@ -44,7 +49,7 @@ Function createEmbeddedDatabase
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.launch(This:C1470.cmd+" app:createDataBase")
+	This:C1470.execute("app:createDataBase")
 	
 	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 	
@@ -61,7 +66,7 @@ Function signingReport()->$result : Object
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.launch(This:C1470.cmd+" signingReport")
+	This:C1470.execute("signingReport")
 	
 	var $dataPos : Integer
 	$dataPos:=Position:C15("> Task :app:signingReport"; This:C1470.outputStream)

@@ -508,6 +508,8 @@ Function build()->$result : Object
 		
 	End if 
 	
+	This:C1470.gradlew.stop()
+	
 	If (Not:C34($o.success))
 		
 		This:C1470.isOnError:=True:C214
