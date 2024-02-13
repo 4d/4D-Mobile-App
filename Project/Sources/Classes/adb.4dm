@@ -188,13 +188,20 @@ Function availableDevices($androidDeploymentTarget : Text)->$devices : Collectio
 		End for each 
 	End if 
 	
+Function execute($command : Text)
+	If ((Is Windows:C1573) && (Position:C15(" "; This:C1470.cmd)=0))  // do not support path with space yet (need to escape correctly things with cmd.exe start)
+		This:C1470.launch("bat"; This:C1470.cmd+" "+$command)
+	Else 
+		This:C1470.launch(This:C1470.cmd+" "+$command)
+	End if 
+	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// wait-for-device
 Function waiForDevice()->$pluggedDevice : Boolean
 	
 	Repeat 
 		
-		This:C1470.launch(This:C1470.cmd+" wait-for-device devices")
+		This:C1470.execute("wait-for-device devices")
 		
 		If (Not:C34(This:C1470.success))
 			
@@ -280,7 +287,7 @@ Function isDeviceConnected($serial)->$connected : Boolean
 	/// Returns the Android version of a connected device or a booted emulator from its UUID
 Function getDeviceAndroidVersion($serial : Text)->$version : Text
 	
-	This:C1470.launch(This:C1470.cmd+" -s "+$serial+" shell getprop ro.build.version.release")
+	This:C1470.execute("-s "+$serial+" shell getprop ro.build.version.release")
 	
 	If (This:C1470.success)
 		
@@ -296,7 +303,7 @@ Function getDeviceAndroidVersion($serial : Text)->$version : Text
 	/// Returns the name of a connected device or a booted emulator from its UUID
 Function getDeviceSDKVersion($serial : Text)->$version : Text
 	
-	This:C1470.launch(This:C1470.cmd+" -s "+$serial+" shell getprop ro.system.build.version.sdk")
+	This:C1470.execute("-s "+$serial+" shell getprop ro.system.build.version.sdk")
 	
 	If (This:C1470.success)
 		
@@ -313,7 +320,7 @@ Function getDeviceSDKVersion($serial : Text)->$version : Text
 Function getDeviceName($serial : Text)->$name : Text
 	
 	// https://stackoverflow.com/questions/54810404/is-there-a-way-to-get-the-device-name-using-adb-for-example-if-the-device-name
-	This:C1470.launch(This:C1470.cmd+" -s "+$serial+" shell dumpsys bluetooth_manager | \\grep 'name:' | cut -c9-")
+	This:C1470.execute("-s "+$serial+" shell dumpsys bluetooth_manager | \\grep 'name:' | cut -c9-")
 	
 	If (This:C1470.success)
 		
@@ -336,7 +343,7 @@ Function getDeviceProperties($serial : Text)->$properties : Object
 	ARRAY LONGINT:C221($len; 0x0000)
 	ARRAY LONGINT:C221($pos; 0x0000)
 	
-	This:C1470.launch(This:C1470.cmd+" -s "+$serial+" shell getprop")
+	This:C1470.execute("-s "+$serial+" shell getprop")
 	
 	If (This:C1470.success)
 		
@@ -509,12 +516,12 @@ Function installApp($apk; $serial : Text; $test : Boolean)->$this : cs:C1710.adb
 		If (Count parameters:C259>=1)
 			
 			// -s <serial number>
-			This:C1470.launch(This:C1470.cmd+" -s "+$serial+" install -r "+Choose:C955($test; "-t "; "")+This:C1470.quoted($file.path))
+			This:C1470.execute("-s "+$serial+" install -r "+Choose:C955($test; "-t "; "")+This:C1470.quoted($file.path))
 			
 		Else 
 			
 			// - directs command to the only connected USB device...
-			This:C1470.launch(This:C1470.cmd+" -d install -r "+Choose:C955($test; "-t "; "")+This:C1470.quoted($file.path))
+			This:C1470.execute("-d install -r "+Choose:C955($test; "-t "; "")+This:C1470.quoted($file.path))
 			
 		End if 
 		
@@ -541,11 +548,11 @@ Function uninstallApp($bundleIdentifier : Text; $serial : Text)
 	
 	If (This:C1470.userPackageList($serial).indexOf($bundleIdentifier)>=0)
 		
-		This:C1470.launch(This:C1470.cmd+" -s "+$serial+" uninstall "+Lowercase:C14($bundleIdentifier))
+		This:C1470.execute("-s "+$serial+" uninstall "+Lowercase:C14($bundleIdentifier))
 		
 		If (Not:C34(This:C1470.success))
 			
-			This:C1470.launch(This:C1470.cmd+" -s "+$serial+" shell pm uninstall "+Lowercase:C14($bundleIdentifier))
+			This:C1470.execute("-s "+$serial+" shell pm uninstall "+Lowercase:C14($bundleIdentifier))
 			
 		End if 
 	End if 
@@ -557,7 +564,7 @@ Function launchApp($bundleIdentifier : Text)->$this : cs:C1710.adb
 	
 	//monkey -p com.package.name -v 1
 	This:C1470.resultInErrorStream:=True:C214
-	This:C1470.launch(This:C1470.cmd+" shell monkey -p "+Lowercase:C14($bundleIdentifier)+" -v 1")
+	This:C1470.execute("shell monkey -p "+Lowercase:C14($bundleIdentifier)+" -v 1")
 	This:C1470.resultInErrorStream:=False:C215
 	
 	$this:=This:C1470
@@ -566,7 +573,7 @@ Function launchApp($bundleIdentifier : Text)->$this : cs:C1710.adb
 	// list info on one package
 Function getAppProperties($appName : Text; $serial : Text)
 	
-	This:C1470.launch(This:C1470.cmd+" -s "+$serial+" shell dump "+This:C1470._packageName($appName))
+	This:C1470.execute("-s "+$serial+" shell dump "+This:C1470._packageName($appName))
 	
 	//#TO_DO
 	
@@ -649,7 +656,7 @@ Function listBootedDevices  // List booted devices
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.launch(This:C1470.cmd+" devices")
+	This:C1470.execute("devices")
 	
 	If (Position:C15("daemon started successfully"; String:C10(This:C1470.errorStream))>0)  // adb was not ready, restart command
 		
@@ -737,7 +744,7 @@ Function getAvdName  // #TO_DO : NOT THE SAME AS getDeviceName() -> MOVE TO avd
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.launch(This:C1470.cmd+" -s \""+$1+"\" emu avd name")
+	This:C1470.execute("-s \""+$1+"\" emu avd name")
 	
 	If ((This:C1470.outputStream#Null:C1517) & (String:C10(This:C1470.outputStream)#""))
 		
@@ -805,7 +812,7 @@ Function waitStartApp
 		IDLE:C311
 		DELAY PROCESS:C323(Current process:C322; 120)
 		
-		This:C1470.launch(This:C1470.cmd+" -s \""+$1+"\" shell am start -n \""+$2+"/"+$3+"\"")
+		This:C1470.execute("-s \""+$1+"\" shell am start -n \""+$2+"/"+$3+"\"")
 		
 		$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 		
@@ -876,7 +883,7 @@ Function waitForDevicePackageList
 		IDLE:C311
 		DELAY PROCESS:C323(Current process:C322; 120)
 		
-		This:C1470.launch(This:C1470.cmd+" -s \""+$1+"\" shell pm list packages")
+		This:C1470.execute("-s \""+$1+"\" shell pm list packages")
 		
 		$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 		
@@ -931,7 +938,7 @@ Function waitUninstallApp
 	
 	Repeat 
 		
-		This:C1470.launch(This:C1470.cmd+" -s \""+$1+"\" uninstall \""+$2+"\"")
+		This:C1470.execute("-s \""+$1+"\" uninstall \""+$2+"\"")
 		$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 		
 		If (Not:C34($0.success))
@@ -971,7 +978,7 @@ Function waitInstallApp
 		IDLE:C311
 		DELAY PROCESS:C323(Current process:C322; 120)
 		
-		This:C1470.launch(This:C1470.cmd+" -s \""+$1+"\" install -t \""+$2.path+"\"")
+		This:C1470.execute("-s \""+$1+"\" install -t \""+$2.path+"\"")
 		
 		$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 		
@@ -992,7 +999,7 @@ Function waitInstallApp
 	// [PRIVATE] Returns the current version of the tool
 Function _version($cmd : Text)->$version : Text
 	
-	This:C1470.launch($cmd; "version")
+	This:C1470.execute("version")
 	
 	ARRAY LONGINT:C221($pos; 0x0000)
 	ARRAY LONGINT:C221($len; 0x0000)
@@ -1031,11 +1038,11 @@ Function _packageList($serial : Text; $options)->$packages : Collection
 		
 		If (Count parameters:C259=1)
 			
-			This:C1470.launch(This:C1470.cmd+" -s "+$serial+" shell pm list packages")
+			This:C1470.execute("-s "+$serial+" shell pm list packages")
 			
 		Else 
 			
-			This:C1470.launch(This:C1470.cmd+" -s "+$serial+" shell pm list packages "+$options)
+			This:C1470.execute("-s "+$serial+" shell pm list packages "+$options)
 			
 		End if 
 		
@@ -1071,7 +1078,7 @@ Function _devices($firstAttempt : Boolean)
 		
 	End if 
 	
-	This:C1470.launch(This:C1470.cmd+" devices")
+	This:C1470.execute("devices")
 	
 	If (This:C1470.success)
 		
@@ -1107,11 +1114,8 @@ Function _devices($firstAttempt : Boolean)
 		
 	End if 
 	
-/*Function killServer
-var $0 : Object
-	
-$0:=This.launch(This.cmd; "-kill-server")
-*/
+Function killServer
+	This:C1470.execute("kill-server")
 	
 /*Function kill
 var $0 : Object
