@@ -467,6 +467,17 @@ Function startWebServer()
 		$status:=$webServer.start()
 		$error.release()
 		
+		If (Is Windows:C1573)  // retry after killing daemon android process
+			If (Not:C34($status.success))
+				cs:C1710.gradlew.new(cs:C1710.path.new().androidTemplates().folder("project/copy").path).stop()
+				cs:C1710.adb.new().killServer()
+				
+				$error:=cs:C1710.error.new("capture")
+				$status:=$webServer.start()
+				$error.release()
+			End if 
+		End if 
+		
 	End if 
 	
 	If ($status.success)
@@ -670,4 +681,5 @@ Function updateDatasetComment()
 			End if 
 		End if 
 	End if 
+	
 	

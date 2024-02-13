@@ -42,6 +42,17 @@ Case of
 				$status:=$web.start()
 /* STOP TRAPPING ERRORS */$error.release()
 				
+				If (Is Windows:C1573)  // retry after killing daemon android process
+					If (Not:C34($status.success))
+						cs:C1710.gradlew.new(cs:C1710.path.new().androidTemplates().folder("project/copy").path).stop()
+						cs:C1710.adb.new().killServer()
+						
+/* START TRAPPING ERRORS */$error:=cs:C1710.error.new("capture")
+						$status:=$web.start()
+/* STOP TRAPPING ERRORS */$error.release()
+					End if 
+				End if 
+				
 			Else 
 				
 				// Already started
