@@ -4,7 +4,9 @@ var $catalog : Collection
 
 
 //MARK: Audit result should be in EDITOR not into PROJECT.$dialog
-PROJECT.repairStructure(UI.unsynchronizedTables)
+If (UI.unsynchronizedTables#Null:C1517)
+	PROJECT.repairStructure(UI.unsynchronizedTables)
+End if 
 
 // Update status & cache
 OB REMOVE:C1226(Form:C1466.$dialog; "unsynchronizedTables")
