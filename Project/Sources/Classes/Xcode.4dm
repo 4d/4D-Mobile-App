@@ -32,7 +32,7 @@ Class constructor($useDefaultPath : Boolean)
 	End if 
 	
 	//====================================================================
-Function getRequirements()
+Function getRequirements($force : Boolean)
 	
 	var $ETag : Text
 	var $run : Boolean
@@ -61,7 +61,7 @@ Function getRequirements()
 		$run:=True:C214
 	End if 
 	
-	If ($run)
+	If ($run || Bool:C1537($force))
 		
 		$http:=cs:C1710.http.new("https://4d-go-mobile.github.io/sdk/xcode.json").setResponseType(Is a document:K24:1; $requirement)
 		

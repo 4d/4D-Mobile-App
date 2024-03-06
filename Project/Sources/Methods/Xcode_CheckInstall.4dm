@@ -64,7 +64,7 @@ $Xcode:=cs:C1710.Xcode.new(True:C214)
 If ($Xcode.success)
 	
 	// *CHECK IF MORE THAN ONE INSTANCE OF XCODE IS INSTALLED TO USE THE BEST ONE...
-	$Xcode.getRequirements()
+	$Xcode.getRequirements(Bool:C1537($in.force))
 	$requestedVersion:=$Xcode.requirement
 	
 	// *** POUR LE TEST ***

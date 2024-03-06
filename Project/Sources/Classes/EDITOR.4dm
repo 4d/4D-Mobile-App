@@ -910,13 +910,14 @@ Function postMessage($message : Object)
 	This:C1470.callMe(Formula:C1597(DO_MESSAGE).source; $message)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function checkDevTools()
+Function checkDevTools($force : Boolean)
 	
 	This:C1470.addTask("checkDevTools")
 	This:C1470.callWorker(Formula:C1597(editor_CHECK_INSTALLATION).source; New object:C1471(\
 		"caller"; This:C1470.window; \
 		"method"; Formula:C1597(editor_CALLBACK).source; \
 		"message"; "checkDevTools"; \
+		"force"; Bool:C1537($force); \
 		"xCode"; This:C1470.xCode; \
 		"studio"; This:C1470.studio; \
 		"android"; PROJECT.$android; \

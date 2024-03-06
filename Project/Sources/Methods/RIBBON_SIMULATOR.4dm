@@ -200,7 +200,7 @@ Case of
 				End if 
 				
 				// Launch checking the development environment
-				UI.checkDevTools()
+				UI.checkDevTools(True:C214)
 				
 				//______________________________________________________
 			: ($menu.choice="XcodeDeviceManager")
