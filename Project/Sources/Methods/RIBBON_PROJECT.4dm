@@ -337,10 +337,10 @@ Case of
 				
 				If (Shift down:C543)
 					
-					If (Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile").exists)
+					If (cs:C1710.path.new().preferencesFile().exists)
 						// private feature to change default server // could use sdk.server or sdk.url too
 						var $pref : Object
-						$pref:=JSON Parse:C1218(Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile").getText())
+						$pref:=JSON Parse:C1218(cs:C1710.path.new().preferencesFile().getText())
 						
 						If ($pref.tc#Null:C1517)
 							$server:="TeamCity"
@@ -483,7 +483,7 @@ Case of
 				//______________________________________________________
 			: ($menu.choice="_showConfigFile")
 				
-				SHOW ON DISK:C922(Get 4D folder:C485(Active 4D Folder:K5:10)+"4d.mobile")
+				SHOW ON DISK:C922(cs:C1710.path.new().preferencesFile().platformPath)
 				
 				//______________________________________________________
 			: ($menu.choice="_generateDataModel")

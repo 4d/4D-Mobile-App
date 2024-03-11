@@ -485,6 +485,15 @@ Function androidProjectTemplateFiles() : 4D:C1709.Folder  // android project tem
 	
 	return This:C1470.target
 	
+	
+/*========================================================*/
+Function preferencesFile() : 4D:C1709.File
+	
+	This:C1470.target:=Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile")
+	This:C1470.exists:=This:C1470.target.exists
+	
+	return This:C1470.target
+	
 	//MARK:-USER DATABASE
 Function databasePreferences($fileName : Text) : Object  //  Writable user database preferences folder
 	

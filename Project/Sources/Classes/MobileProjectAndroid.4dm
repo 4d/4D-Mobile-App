@@ -54,8 +54,18 @@ Class constructor($project : Object)
 	This:C1470.project.hasNoData:=This:C1470.project.noData
 	This:C1470.project.hasNoSDK:=This:C1470.project.noSDK
 	
-	This:C1470.project.debugMode:=((Shift down:C543) && (Bool:C1537(dev_Matrix)=True:C214)) ? True:C214 : False:C215
-	This:C1470.project.canUseLocalSource:=(Shift down:C543) ? True:C214 : False:C215
+	var $confFile : 4D:C1709.File
+	$confFile:=cs:C1710.path.new().preferencesFile()
+	var $conf : Object
+	$conf:=($confFile.exists) ? ob_parseFile($confFile).value : New object:C1471
+	
+	This:C1470.project.debugMode:=Bool:C1537($conf.android.debugMode) || (Shift down:C543 && dev_Matrix)
+	This:C1470.project.canUseLocalSource:=Bool:C1537($conf.android.canUseLocalSource) || (Shift down:C543)
+	
+	If ($conf.android.sourcePath#Null:C1517)
+		This:C1470.sourcePath:=$conf.android.sourcePath
+	End if 
+	
 	
 	This:C1470.project.componentBuild:=String:C10(This:C1470.project.project.info.componentBuild)
 	This:C1470.project.ideBuildVersion:=This:C1470.project.project.info.ideBuildVersion
@@ -467,6 +477,9 @@ Function build()->$result : Object
 	End if 
 	
 	This:C1470.gradlew.setEnvironnementVariable("currentDirectory"; This:C1470.project.path)
+	If (This:C1470.sourcePath#Null:C1517)
+		This:C1470.gradlew.setEnvironnementVariable("ANDROID_4D_SDK_SOURCE_PATH"; This:C1470.sourcePath)
+	End if 
 	
 	// * BUILD PROJECT
 	This:C1470.postStep("projectBuild")

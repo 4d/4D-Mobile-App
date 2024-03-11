@@ -34,6 +34,9 @@ $withUI:=True:C214 & Not:C34($silent)
 
 $applicationVersion:=Application version:C493($buildNumber; *)
 
+var $pathUtils : cs:C1710.path
+$pathUtils:=cs:C1710.path.new()
+
 Case of 
 		
 		//______________________________________________________
@@ -44,13 +47,13 @@ Case of
 		//______________________________________________________
 	: ($target="android")
 		
-		$sdk:=cs:C1710.path.new().cacheSdkAndroid()
+		$sdk:=$pathUtils.cacheSdkAndroid()
 		$run:=True:C214
 		
 		//______________________________________________________
 	: ($target="ios")
 		
-		$sdk:=cs:C1710.path.new().cacheSdkApple()
+		$sdk:=$pathUtils.cacheSdkApple()
 		$run:=True:C214
 		
 		//______________________________________________________
@@ -62,7 +65,7 @@ Case of
 End case 
 
 var $pref : Object
-$preferences:=Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile")
+$preferences:=$pathUtils.preferencesFile()
 If ($preferences.exists)
 	$pref:=JSON Parse:C1218($preferences.getText())
 Else 

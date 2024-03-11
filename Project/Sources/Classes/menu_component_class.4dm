@@ -147,7 +147,7 @@ Function getTCiOSSDK
 	// if there is new 4D app because of build failure, allow to get last one from build chain
 	var $credential : 4D:C1709.File
 	
-	$credential:=Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile")
+	$credential:=cs:C1710.path.new().preferencesFile()
 	If ($credential.exists)
 		
 		var $url : Text
@@ -173,7 +173,7 @@ Function getTCiOSSDK
 	
 	// MARK:- conf file
 Function openConf
-	SHOW ON DISK:C922(Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile").platformPath)
+	SHOW ON DISK:C922(cs:C1710.path.new().preferencesFile().platformPath)
 	
 Function showFeatures
 	ALERT:C41(JSON Stringify:C1217(Feature; *))

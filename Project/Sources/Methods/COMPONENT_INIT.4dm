@@ -164,8 +164,11 @@ If (OB Is empty:C1297(SHARED)) | $reset
 		
 	End if 
 	
+	var $pathUtils : cs:C1710.path
+	$pathUtils:=cs:C1710.path.new()
+	
 	// Get the config file
-	$file:=Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile")
+	$file:=$pathUtils.preferencesFile()
 	$pref:=$file.exists ? JSON Parse:C1218($file.getText()) : New object:C1471
 	
 	If (SHARED.component.build#Num:C11($pref.lastBuild)) | $reset
@@ -323,7 +326,7 @@ If (OB Is empty:C1297(Feature)) | $reset
 		
 	End if 
 	
-	FEATURE_FLAGS($version; Folder:C1567(fk user preferences folder:K87:10).file("4d.mobile"))
+	FEATURE_FLAGS($version; $pathUtils.preferencesFile())
 	
 	If (Feature.with("vdl"))
 		
