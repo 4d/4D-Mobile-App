@@ -6,6 +6,7 @@
 //  ___COPYRIGHT___
 
 import Foundation
+import UIKit
 import QMobileUI
 
 // Override main to inject 4D framework by settings QApplication as Application class
