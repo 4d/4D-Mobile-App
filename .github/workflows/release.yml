@@ -15,9 +15,10 @@ jobs:
         uses: actions/checkout@v4
       - name: download sdks & generator
         run: |
-           curl -sL https://github.com/4d/ios-sdk/releases/latest/download/ios.zip -o Resources/sdk/ios.zip
-           curl -sL https://github.com/4d/android-sdk/releases/latest/download/android.zip -o Resources/sdk/android.zip
-           curl -sL https://github.com/4d/android-ProjectGenerator/releases/latest/download/androidprojectgenerator.jar -o Resources/scripts/androidprojectgenerator.jar
+           mkdir ./Resources/sdk
+           curl -sL https://github.com/4d/ios-sdk/releases/latest/download/ios.zip -o ./Resources/sdk/ios.zip
+           curl -sL https://github.com/4d/android-sdk/releases/latest/download/android.zip -o ./Resources/sdk/android.zip
+           curl -sL https://github.com/4d/android-ProjectGenerator/releases/latest/download/androidprojectgenerator.jar -o ./Resources/scripts/androidprojectgenerator.jar
       - name: Check out 4D-Progress
         uses: actions/checkout@v4
         with:
