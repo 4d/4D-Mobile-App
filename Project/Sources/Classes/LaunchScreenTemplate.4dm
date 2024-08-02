@@ -6,7 +6,7 @@ Class constructor($value : Object)
 	
 Function doRun()->$result : Object
 	$result:=Super:C1706.doRun()  // copy files
-	$result:=ob_deepMerge($result)
+	$result:=ob_deepMerge($result; This:C1470.generateAssets())
 	
 Function generateAssets()->$Obj_out : Object
 	var $assetFolder : 4D:C1709.Folder
