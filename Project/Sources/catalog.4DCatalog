@@ -400,7 +400,7 @@
 			</editor_table_info>
 		</table_extra>
 	</table>
-	<relation uuid="558D9845ABB949E8B3E946F29688441A" name_Nto1="theme" name_1toN="commands" auto_load_Nto1="true" auto_load_1toN="false" foreign_key="false" state="1" integrity="delete">
+	<relation uuid="558D9845ABB949E8B3E946F29688441A" name_Nto1="theme" name_1toN="commands" auto_load_Nto1="true" state="1" integrity="delete">
 		<related_field kind="source">
 			<field_ref uuid="3CB8EAC487694A26BC2443332F55E7C9" name="themeID">
 				<table_ref uuid="4AED578B39014B59AB3054B0278F6453" name="Commands"/>
@@ -417,7 +417,7 @@
 			</editor_relation_info>
 		</relation_extra>
 	</relation>
-	<relation uuid="3D9F4E3234FE4D3A8B65A6592CACD8EE" name_Nto1="manager" name_1toN="subordinates" auto_load_Nto1="false" auto_load_1toN="false" foreign_key="false" state="1">
+	<relation uuid="3D9F4E3234FE4D3A8B65A6592CACD8EE" name_Nto1="manager" name_1toN="subordinates" state="1">
 		<related_field kind="source">
 			<field_ref uuid="E75E6ABE82C746F581998E13F6ED82CD" name="managerID">
 				<table_ref uuid="F199D0D03F864B939EF3CD9CF9BC0F24" name="Employes"/>
@@ -434,7 +434,7 @@
 			</editor_relation_info>
 		</relation_extra>
 	</relation>
-	<relation uuid="F142050AA98F458684BA7691DC1DAAB6" name_Nto1="service" name_1toN="employees" auto_load_Nto1="false" auto_load_1toN="false" foreign_key="false" state="1">
+	<relation uuid="F142050AA98F458684BA7691DC1DAAB6" name_Nto1="service" name_1toN="employees" state="1">
 		<related_field kind="source">
 			<field_ref uuid="88C84BC7D870430DB278E8BA49A8EB9D" name="ServiceID">
 				<table_ref uuid="F199D0D03F864B939EF3CD9CF9BC0F24" name="Employes"/>
@@ -451,7 +451,7 @@
 			</editor_relation_info>
 		</relation_extra>
 	</relation>
-	<relation uuid="F61E58698B6845B89C562D81E3569E34" name_Nto1="manager" name_1toN="serviceManaged" auto_load_Nto1="false" auto_load_1toN="false" foreign_key="false" state="1">
+	<relation uuid="F61E58698B6845B89C562D81E3569E34" name_Nto1="manager" name_1toN="serviceManaged" state="1">
 		<related_field kind="source">
 			<field_ref uuid="376B869EAC3242CF98A1997FEB3C02C4" name="managerID">
 				<table_ref uuid="A7F05DD39BF141959331A84CAECF5267" name="Service"/>
@@ -468,7 +468,7 @@
 			</editor_relation_info>
 		</relation_extra>
 	</relation>
-	<relation uuid="669F53C647AA4457AF4F95B8E77E8FC8" name_Nto1="r_2_3" name_1toN="Link_12_return" auto_load_Nto1="false" auto_load_1toN="false" foreign_key="false" state="1">
+	<relation uuid="669F53C647AA4457AF4F95B8E77E8FC8" name_Nto1="r_2_3" name_1toN="Link_12_return" state="1">
 		<related_field kind="source">
 			<field_ref uuid="8614BD5D242D4FE190589F4AF417A67B" name="ID">
 				<table_ref uuid="48FFFC552AD84341B07402752A8BCA33" name="UNIT_2"/>
@@ -485,7 +485,7 @@
 			</editor_relation_info>
 		</relation_extra>
 	</relation>
-	<relation uuid="CAAC5D593E374D6F9F2C4FFCEEC724C9" name_Nto1="r_1" name_1toN="Link_8_return" auto_load_Nto1="false" auto_load_1toN="false" foreign_key="false" state="1">
+	<relation uuid="CAAC5D593E374D6F9F2C4FFCEEC724C9" name_Nto1="r_1" name_1toN="Link_8_return" state="1">
 		<related_field kind="source">
 			<field_ref uuid="7E44B41602BD4A07A5884F22889ACFD0" name="ID">
 				<table_ref uuid="19473CD8716E4AE3A637B9B88E664639" name="UNIT_0"/>
@@ -502,7 +502,7 @@
 			</editor_relation_info>
 		</relation_extra>
 	</relation>
-	<relation uuid="D26CE9B9610B4ECEAC749060BBF71BD6" name_Nto1="r_2" name_1toN="Link_9_return" auto_load_Nto1="false" auto_load_1toN="false" foreign_key="false" state="1">
+	<relation uuid="D26CE9B9610B4ECEAC749060BBF71BD6" name_Nto1="r_2" name_1toN="Link_9_return" state="1">
 		<related_field kind="source">
 			<field_ref uuid="E9119FBE7A2A447E8B5CCBD6FB5B08EA" name="Field_3">
 				<table_ref uuid="19473CD8716E4AE3A637B9B88E664639" name="UNIT_0"/>
@@ -519,7 +519,7 @@
 			</editor_relation_info>
 		</relation_extra>
 	</relation>
-	<relation uuid="465D8E5819AB40B784A274151C1690B1" name_Nto1="recursive_0" name_1toN="Link_10_return" auto_load_Nto1="false" auto_load_1toN="false" foreign_key="false" state="1">
+	<relation uuid="465D8E5819AB40B784A274151C1690B1" name_Nto1="recursive_0" name_1toN="Link_10_return" state="1">
 		<related_field kind="source">
 			<field_ref uuid="49DB40D057134576A0784A05B556C07F" name="Field_4">
 				<table_ref uuid="19473CD8716E4AE3A637B9B88E664639" name="UNIT_0"/>
@@ -536,7 +536,7 @@
 			</editor_relation_info>
 		</relation_extra>
 	</relation>
-	<relation uuid="7A83DD3F19B24289A5B55B7C8D6645C2" name_Nto1="r_1_2" name_1toN="Link_11_return" auto_load_Nto1="false" auto_load_1toN="false" foreign_key="false" state="1">
+	<relation uuid="7A83DD3F19B24289A5B55B7C8D6645C2" name_Nto1="r_1_2" name_1toN="Link_11_return" state="1">
 		<related_field kind="source">
 			<field_ref uuid="2D601B889A324589B8F19B393E0F5F30" name="ID">
 				<table_ref uuid="F424BB5BA046482089DE52E10314CF34" name="UNIT_1"/>
@@ -553,7 +553,7 @@
 			</editor_relation_info>
 		</relation_extra>
 	</relation>
-	<relation uuid="B85A19E89AF846EA86D61917787D587F" name_Nto1="duplicate" name_1toN="Link_13_return" auto_load_Nto1="false" auto_load_1toN="false" foreign_key="false" state="1">
+	<relation uuid="B85A19E89AF846EA86D61917787D587F" name_Nto1="duplicate" name_1toN="Link_13_return" state="1">
 		<related_field kind="source">
 			<field_ref uuid="BEA41C5CEFBC46A9B7B53363CC10CF2C" name="duplicate">
 				<table_ref uuid="6A24BB0C42844B26AA22357C0545137E" name="Table_1"/>
@@ -570,7 +570,7 @@
 			</editor_relation_info>
 		</relation_extra>
 	</relation>
-	<relation uuid="9DF1CD5C145148988BA6910F8BCEA435" name_Nto1="r_3_0" name_1toN="Link_15_return" auto_load_Nto1="false" auto_load_1toN="false" foreign_key="false" state="1">
+	<relation uuid="9DF1CD5C145148988BA6910F8BCEA435" name_Nto1="r_3_0" name_1toN="Link_15_return" state="1">
 		<related_field kind="source">
 			<field_ref uuid="18C55B8F79B447938D34998786C6B2BE" name="Field_3_3">
 				<table_ref uuid="3E04F710AD5541B4B341EB3A4BD40708" name="UNIT_3"/>
@@ -587,7 +587,7 @@
 			</editor_relation_info>
 		</relation_extra>
 	</relation>
-	<relation uuid="70C8231C26894FF8BEF6053322BF4D1C" name_Nto1="duplicate" name_1toN="Field_2_return" auto_load_Nto1="false" auto_load_1toN="false" foreign_key="false" state="1">
+	<relation uuid="70C8231C26894FF8BEF6053322BF4D1C" name_Nto1="duplicate" name_1toN="Field_2_return" state="1">
 		<related_field kind="source">
 			<field_ref uuid="0A0571E2BC7848A190753D9A5736D8FE" name="ID">
 				<table_ref uuid="6A24BB0C42844B26AA22357C0545137E" name="Table_1"/>
@@ -604,7 +604,7 @@
 			</editor_relation_info>
 		</relation_extra>
 	</relation>
-	<relation uuid="D66418839FFD4E9A9B73584399E8AEBE" name_Nto1="office" name_1toN="office_return" auto_load_Nto1="false" auto_load_1toN="false" foreign_key="false" state="1">
+	<relation uuid="D66418839FFD4E9A9B73584399E8AEBE" name_Nto1="office" name_1toN="office_return" state="1">
 		<related_field kind="source">
 			<field_ref uuid="59DA89D690934C6A92C73C86402A86CE" name="officeID">
 				<table_ref uuid="DE40BD82B9154CEB8926B7B9CC6B43D5" name="EmployesOffices"/>
@@ -621,7 +621,7 @@
 			</editor_relation_info>
 		</relation_extra>
 	</relation>
-	<relation uuid="2B679824C8044660935893D0331C22FC" name_Nto1="employee" name_1toN="employee_return" auto_load_Nto1="false" auto_load_1toN="false" foreign_key="false" state="1">
+	<relation uuid="2B679824C8044660935893D0331C22FC" name_Nto1="employee" name_1toN="employee_return" state="1">
 		<related_field kind="source">
 			<field_ref uuid="9DDD8593B07D4FF99077255CD0CE6FA6" name="employeeID">
 				<table_ref uuid="DE40BD82B9154CEB8926B7B9CC6B43D5" name="EmployesOffices"/>
@@ -638,7 +638,7 @@
 			</editor_relation_info>
 		</relation_extra>
 	</relation>
-	<relation uuid="EADD80CEB6C54A26BA65DF4221263FDC" name_Nto1="ToNotExposedTable" name_1toN="fromNotExposedTable" auto_load_Nto1="false" auto_load_1toN="false" foreign_key="false" state="1">
+	<relation uuid="EADD80CEB6C54A26BA65DF4221263FDC" name_Nto1="ToNotExposedTable" name_1toN="fromNotExposedTable" state="1">
 		<related_field kind="source">
 			<field_ref uuid="4B754EB7AC2E4DC5A7DB7F3A1C5EE73E" name="Alpha Field">
 				<table_ref uuid="677711DF5FAF4C00A69092ED84B50A2D" name="ALL_TYPES"/>
@@ -655,7 +655,7 @@
 			</editor_relation_info>
 		</relation_extra>
 	</relation>
-	<relation uuid="DCF4B303A08C4D5C9030F0BDD2803958" name_Nto1="fromNotExposedField" name_1toN="toNotExposedField" auto_load_Nto1="false" auto_load_1toN="false" foreign_key="false" state="1">
+	<relation uuid="DCF4B303A08C4D5C9030F0BDD2803958" name_Nto1="fromNotExposedField" name_1toN="toNotExposedField" state="1">
 		<related_field kind="source">
 			<field_ref uuid="B5404EF87EF84309B8102778905CFC05" name="NOT EXPOSED">
 				<table_ref uuid="49B3FBDD5F7247559052EF4FA3386A5D" name="とてもとても長いフィールド"/>

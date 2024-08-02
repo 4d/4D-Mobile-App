@@ -182,8 +182,6 @@ Function build()->$result : Object
 		End if 
 	End if 
 	
-	This:C1470.build:=$result
-	
 	If ($result.success)
 		
 		This:C1470.notification()

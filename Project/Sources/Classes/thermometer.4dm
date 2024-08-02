@@ -50,7 +50,7 @@ Function isProgress() : Boolean
 Function indicatorType($type : Integer) : cs:C1710.thermometer
 	
 	OBJECT SET INDICATOR TYPE:C1246(*; This:C1470.name; $type)
-	This:C1470.indicatorType:=$type
+	This:C1470._indicatorType:=$type
 	
 	return (This:C1470)
 	

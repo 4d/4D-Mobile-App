@@ -251,8 +251,8 @@ If (Asserted:C1132($project#Null:C1517))
 								"build"; $data)
 							
 							//$messageCancel:=New object(\
-																																								"action"; "build_ignoreServer"; \
-																																								"build"; $data)
+																																																"action"; "build_ignoreServer"; \
+																																																"build"; $data)
 							
 							// Web server must running to test data synchronization
 							$message:=New object:C1471(\
@@ -334,11 +334,14 @@ If (Asserted:C1132($project#Null:C1517))
 					
 					If (Not:C34($success))
 						
+						var $forError : Variant
+						$forError:=($rest.httpError=Null:C1517) ? $rest.code : $rest.httpError
+						
 						UI.postMessage(New object:C1471(\
 							"action"; "show"; \
 							"type"; "alert"; \
 							"title"; "theProductionServerIsNotAvailable"; \
-							"additional"; Localize_server_response($rest.httpError)\
+							"additional"; Localize_server_response($forError)\
 							))
 						
 					End if 
