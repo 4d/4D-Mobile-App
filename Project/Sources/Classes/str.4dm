@@ -1147,25 +1147,24 @@ Function concat
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns the string after replacements
-Function replace
-	var $0 : Text
-	var $1 : Variant  // Old
-	var $2 : Variant  // New
+Function replace($old : Variant; $new : Variant) : Text
+	
 	
 	var $t : Text
 	var $i : Integer
 	
-	$0:=This:C1470.value
+	var $result : Text
+	$result:=This:C1470.value
 	
-	If (Value type:C1509($1)=Is collection:K8:32)
+	If (Value type:C1509($old)=Is collection:K8:32)
 		
-		If ((Value type:C1509($2)=Is collection:K8:32))
+		If ((Value type:C1509($new)=Is collection:K8:32))
 			
-			If (Asserted:C1132($1.length<=$2.length))
+			If (Asserted:C1132($old.length<=$new.length))
 				
-				For each ($t; $1)
+				For each ($t; $old)
 					
-					$0:=Replace string:C233($0; $t; Choose:C955($2[$i]=Null:C1517; ""; String:C10($2[$i])))
+					$result:=Replace string:C233($result; $t; Choose:C955($new[$i]=Null:C1517; ""; String:C10($new[$i])))
 					
 					$i:=$i+1
 					
@@ -1174,15 +1173,17 @@ Function replace
 			
 		Else 
 			
-			$0:=Replace string:C233($0; $t; Choose:C955($2=Null:C1517; ""; String:C10($2)))
+			$result:=Replace string:C233($result; $t; Choose:C955($new=Null:C1517; ""; String:C10($new)))
 			
 		End if 
 		
 	Else 
 		
-		$0:=Replace string:C233($0; String:C10($1); Choose:C955($2=Null:C1517; ""; String:C10($2)))
+		$result:=Replace string:C233($result; String:C10($old); Choose:C955($new=Null:C1517; ""; String:C10($new)))
 		
 	End if 
+	
+	return $result
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Returns a HTML encoded string

@@ -52,9 +52,8 @@ Function insertInto($Obj_element : Object; $text : Text; $at : Integer)->$Dom_ :
 	
 	
 /* If not set, find number of id to inject */
-Function checkIDCount  // ($Obj_element : Object)
-	var $Obj_element; $1 : Object
-	$Obj_element:=$1
+Function checkIDCount($Obj_element : Object)
+	
 	
 	C_LONGINT:C283($Lon_ids)
 	$Lon_ids:=Num:C11($Obj_element.idCount)
@@ -222,13 +221,13 @@ If (Length($Txt_out)>0)
 var $File_ : Object
 $File_:=Folder(Temporary folder; fk platform path).file(Generate UUID+"ibtool.plist")
 $File_.setText($Txt_out)
-		$Obj_out:=_o_plist(New object(\
-								"action"; "object"; \
-								"domain"; $File_.path))
+			$Obj_out:=_o_plist(New object(\
+										"action"; "object"; \
+										"domain"; $File_.path))
 $File_.delete()
 	
-		If (($Obj_out.success)\
-								 & ($Obj_out.value#Null))
+			If (($Obj_out.success)\
+										 & ($Obj_out.value#Null))
 	
 $Obj_out.version:=String($Obj_out.value["com.apple.ibtool.version"]["bundle-version"])
 	
@@ -324,7 +323,7 @@ Function colorAssetFix($theme : Object)->$Obj_out : Object
 			// write if there is one named colors (could also do it only if one attribute change)
 			
 			//_o_doc_UNLOCK_DIRECTORY(New object(\
-												"path"; $File_.parent.platformPath))
+																"path"; $File_.parent.platformPath))
 			
 			cs:C1710.lep.new().unlockDirectory($File_.parent)
 			
@@ -505,9 +504,8 @@ Function fixDomChildID($element : Object)->$result : Object
 	
 	// MARK : Form (extract to StoryboardForm?)
 	
-Function checkStoryboardPath
-	C_OBJECT:C1216($Obj_template; $1)
-	$Obj_template:=$1
+Function checkStoryboardPath($Obj_template : Object)
+	
 	If ($Obj_template.storyboard=Null:C1517)  // set default path if not defined
 		
 		$Obj_template.storyboard:=$Obj_template.parent[This:C1470.type].storyboard
@@ -517,8 +515,7 @@ Function checkStoryboardPath
 	
 	
 	// MARK: relation
-Function relationSegue($relation : Object)
-	C_TEXT:C284($0; $Txt_buffer)
+Function relationSegue($relation : Object)->$Txt_buffer : Text
 	If ($relation.transition=Null:C1517)
 		$relation.transition:=New object:C1471()
 	End if 
@@ -545,21 +542,11 @@ Function relationSegue($relation : Object)
 	$Txt_buffer:=$Txt_buffer+" kind=\""+String:C10($relation.transition.kind)+"\""
 	$Txt_buffer:=$Txt_buffer+" identifier=\"___FIELD___\" id=\"TAG-SG-001\"/>"
 	
-	$0:=$Txt_buffer
 	
 Function isRelationField($field : Object)->$is : Boolean
 	$is:=PROJECT.isRelation($field)
 	
-Function injectElement
-	C_OBJECT:C1216($Obj_field; $1; $Obj_tags; $2; $Obj_template; $3; $Obj_out; $6)
-	C_LONGINT:C283($Lon_j; $4)
-	C_BOOLEAN:C305($isHorizontal; $5)
-	$Obj_field:=$1
-	$Obj_tags:=$2
-	$Obj_template:=$3
-	$Lon_j:=$4
-	$isHorizontal:=$5
-	$Obj_out:=$6  // result (could be $0 if caller merge result)
+Function injectElement($Obj_field : Object; $Obj_tags : Object; $Obj_template : Object; $Lon_j : Integer; $isHorizontal : Boolean; $Obj_out : Object)
 	
 	C_TEXT:C284($Txt_buffer)
 	
@@ -671,19 +658,7 @@ Function xmlAppendRelationAttributeForField($Lon_j : Integer; $Dom_root : Object
 		
 	End if 
 	
-Function injectSegue
-	C_LONGINT:C283($Lon_j; $1)
-	$Lon_j:=$1
-	C_OBJECT:C1216($Dom_root; $2)
-	$Dom_root:=$2
-	C_OBJECT:C1216($3; $Obj_field)
-	$Obj_field:=$3
-	C_OBJECT:C1216($4; $Obj_tags)
-	$Obj_tags:=$4
-	C_OBJECT:C1216($5; $Obj_template)
-	$Obj_template:=$5
-	C_OBJECT:C1216($6; $Obj_out)
-	$Obj_out:=$6  // result (could be $0 if caller merge result)
+Function injectSegue($Lon_j : Integer; $Dom_root : Object; $Obj_field : Object; $Obj_tags : Object; $Obj_template : Object; $Obj_out : Object)
 	
 	If (Length:C16(String:C10($Obj_field.bindingType))=0)
 		$Obj_field.bindingType:="relation"  // TODO this must be done before when we are looking for binding

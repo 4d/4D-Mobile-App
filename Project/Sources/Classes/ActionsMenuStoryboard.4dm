@@ -1,9 +1,8 @@
 Class extends Storyboard
 
-Class constructor
-	C_OBJECT:C1216($1)
+Class constructor($in : Object)
 	If (Count parameters:C259>0)
-		Super:C1705($1)
+		Super:C1705($in)
 	Else 
 		Super:C1705()
 	End if 

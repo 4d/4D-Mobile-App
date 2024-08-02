@@ -111,8 +111,7 @@ Function getCatalogExcludePattern()->$pattern : Text
 	End case 
 	
 	
-Function copyFiles
-	C_OBJECT:C1216($0)
+Function copyFiles() : Object
 	
 	// get files to copy
 	C_COLLECTION:C1488($Col_catalog)
@@ -127,22 +126,18 @@ Function copyFiles
 		"catalog"; $Col_catalog\
 		))
 	
-	$0:=This:C1470.copyFilesResult
+	return This:C1470.copyFilesResult
 	
-Function doRun
-	C_OBJECT:C1216($0)
-	
-	$0:=This:C1470.copyFiles()
-	$0.capabilities:=This:C1470.template.capabilities
+Function doRun()->$result : Object
+	$result:=This:C1470.copyFiles()
+	$result.capabilities:=This:C1470.template.capabilities
 	
 	
-Function getXcodeProj
-	C_OBJECT:C1216($0)
+Function getXcodeProj() : Object
 	ASSERT:C1129(This:C1470.input.projfile#Null:C1517)  // must has been transfered and read one time by main template
-	$0:=This:C1470.input.projfile
+	return This:C1470.input.projfile
 	
-Function manageChildren
-	C_OBJECT:C1216($Obj_out; $0)
+Function manageChildren()->$Obj_out : Object
 	$Obj_out:=New object:C1471()
 	
 	C_OBJECT:C1216($Obj_in; $Obj_template)
@@ -192,21 +187,14 @@ Function manageChildren
 	
 	$Obj_out.success:=Not:C34(ob_error_has($Obj_out))
 	
-	$0:=$Obj_out
 	
-Function afterChildren
-	C_OBJECT:C1216($0)
-	$0:=New object:C1471("success"; True:C214)
+Function afterChildren() : Object
+	return New object:C1471("success"; True:C214)
 	// nothing to do at this level
 	
-Function injectSources
-	C_OBJECT:C1216($0)  // result of injections
-	C_OBJECT:C1216($1)  // node computed (instruction to add
+Function injectSources($nodes : Object) : Object
 	
-	C_OBJECT:C1216($nodes)
-	If (Count parameters:C259>0)
-		$nodes:=$1
-	Else 
+	If (Count parameters:C259=0)
 		$nodes:=This:C1470.copyFilesResult
 	End if 
 	
@@ -214,28 +202,29 @@ Function injectSources
 		
 		ASSERT:C1129($nodes#Null:C1517; "Nothing has been copyed and could be injected?")
 		
-		$0:=XcodeProjInject(New object:C1471(\
+		return XcodeProjInject(New object:C1471(\
 			"node"; $nodes; \
 			"mapping"; This:C1470.input.projfile.mapping; \
 			"proj"; This:C1470.input.projfile.value; \
 			"target"; This:C1470.input.path; \
 			"uuid"; ob_inHierarchy(This:C1470.template; "uuid").uuid))
-	Else 
-		$0:=Null:C1517
+		
 	End if 
 	
-Function injectSDK
-	C_OBJECT:C1216($0)  // result of injections
+	return Null:C1517
 	
+Function injectSDK() : Object
 	If (Value type:C1509(This:C1470.template.sdk)=Is object:K8:27)
 		
 		If (Length:C16(String:C10(This:C1470.template.sdk.name))>0)
 			
-			$0:=sdk(New object:C1471(\
+			return sdk(New object:C1471(\
 				"action"; "installAdditionnalSDK"; \
 				"template"; This:C1470.template; \
 				"target"; This:C1470.input.path))
 			
 		End if 
 	End if 
+	
+	return Null:C1517
 	

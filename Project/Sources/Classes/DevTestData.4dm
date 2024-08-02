@@ -59,18 +59,16 @@ Function run
 	removeAllEntities(This:C1470.ds)
 	This:C1470.notify()
 	
-Function newEntityOfEach
+Function newEntityOfEach()->$result : Object
 	var $dataClassName : Text
-	var $0; $result : Object
 	$result:=New object:C1471()
 	For each ($dataClassName; This:C1470.ds)
 		$result[$dataClassName]:=This:C1470.newEntity(This:C1470.ds[$dataClassName])
 	End for each 
-	$0:=$result
 	
-Function randomDeleteOneOfEach
+Function randomDeleteOneOfEach()->$result : Object
 	var $dataClassName : Text
-	var $0; $result : Object
+	
 	var $all : Object  // sel
 	
 	$result:=New object:C1471()
@@ -78,11 +76,8 @@ Function randomDeleteOneOfEach
 		$all:=This:C1470.ds[$dataClassName].all()
 		$result[$dataClassName]:=$all[Random:C100%$all.length].drop()
 	End for each 
-	$0:=$result
 	
-Function attach
-	var $entitiesByDataClass; $1 : Object
-	$entitiesByDataClass:=$1
+Function attach($entitiesByDataClass : Object)
 	
 	var $entities : Variant  // Collection or Selection -> iterable of object
 	$entities:=$entitiesByDataClass[OB Keys:C1719($entitiesByDataClass)[0]]

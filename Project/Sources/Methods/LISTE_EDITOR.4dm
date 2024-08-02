@@ -14,7 +14,7 @@ If ($e.objectName=Null:C1517)  // <== FORM METHOD
 			If (Form:C1466.$=Null:C1517)
 				
 				// Instantiation of the dialog class
-				Form:C1466.$:=cs:C1710.LIST_EDITOR.new(Form:C1466)
+				Form:C1466.$:=cs:C1710.LIST_EDITOR.new()
 				
 			End if 
 			

@@ -134,8 +134,7 @@ Function _o_rgb()->$rgb
 		
 	End if 
 	
-Function getXcodeProj
-	C_OBJECT:C1216($0)
+Function getXcodeProj() : Object
 	
 	If (This:C1470.input.projfile=Null:C1517)
 		
@@ -151,7 +150,7 @@ Function getXcodeProj
 		
 	End if 
 	
-	$0:=This:C1470.input.projfile
+	return This:C1470.input.projfile
 	
 	// Manage the project file for main template
 Function afterChildren()->$Obj_out : Object

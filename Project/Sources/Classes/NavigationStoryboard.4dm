@@ -1,25 +1,18 @@
 Class extends Storyboard
 
-Class constructor
-	C_OBJECT:C1216($1)
+Class constructor($in : Object)
 	If (Count parameters:C259>0)
-		Super:C1705($1)
+		Super:C1705($in)
 	Else 
 		Super:C1705()
 	End if 
 	This:C1470.type:="navigation"
 	
-Function run
-	C_OBJECT:C1216($0; $Obj_out)
+Function run($Obj_template : Object; $target : Object; $Obj_tags : Object)->$Obj_out : Object
 	$Obj_out:=New object:C1471()
 	$Obj_out.doms:=New collection:C1472()
 	
-	C_OBJECT:C1216($1; $Obj_template)
-	$Obj_template:=$1
-	C_OBJECT:C1216($2; $target)
-	$target:=$2
-	C_OBJECT:C1216($3; $Obj_tags)
-	$Obj_tags:=$3
+	
 	
 	This:C1470.checkStoryboardPath($Obj_template)  // set default path if not defined
 	

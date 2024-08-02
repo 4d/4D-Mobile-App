@@ -1,15 +1,14 @@
 Class extends panel
 
 //=== === === === === === === === === === === === === === === === === === === === ===
-Class constructor
+Class constructor($form : Object)
 	
 	Super:C1705(Formula:C1597(editor_CALLBACK).source)
 	
 	//MARK:TEMPO 🚧
 	If (Count parameters:C259>=1)
 		
-		var $1 : Object
-		This:C1470.form:=$1  // #TEMPO
+		This:C1470.form:=$form  // #TEMPO
 		
 	End if 
 	

@@ -1,10 +1,9 @@
-Class constructor
-	var $1 : Object
+Class constructor($path : Object)
 	
 	var $file : Object
 	
-	This:C1470.path:=$1
-	ASSERT:C1129(OB Instance of:C1731($1; 4D:C1709.Folder))
+	This:C1470.path:=$path
+	ASSERT:C1129(OB Instance of:C1731($path; 4D:C1709.Folder))
 	
 	This:C1470.storyboards:=New collection:C1472()
 	
@@ -17,15 +16,12 @@ Class constructor
 		End if 
 	End for each 
 	
-Function colorAssetFix
-	var $0 : Object
-	var $1 : Object
+Function colorAssetFix($theme : Object)->$Obj_out : Object
 	
-	var $Obj_out; $result; $storyboard; $theme : Object
+	var $result; $storyboard : Object
 	
 	$Obj_out:=New object:C1471
 	$Obj_out.files:=New collection:C1472
-	$theme:=$1
 	
 	For each ($storyboard; This:C1470.storyboards)
 		
@@ -37,12 +33,10 @@ Function colorAssetFix
 	End for each 
 	
 	$Obj_out.success:=Not:C34(ob_error_has($Obj_out))
-	$0:=$Obj_out
 	
-Function imageAssetFix
-	var $0 : Object
+Function imageAssetFix()->$Obj_out : Object
 	
-	var $Obj_out; $result; $storyboard : Object
+	var $result; $storyboard : Object
 	
 	$Obj_out:=New object:C1471
 	$Obj_out.files:=New collection:C1472
@@ -57,4 +51,4 @@ Function imageAssetFix
 	End for each 
 	
 	$Obj_out.success:=Not:C34(ob_error_has($Obj_out))
-	$0:=$Obj_out
+	

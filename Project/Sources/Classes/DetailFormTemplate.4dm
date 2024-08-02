@@ -1,12 +1,10 @@
 Class extends FormTemplate
 
-Class constructor
-	C_OBJECT:C1216($1)
-	Super:C1705($1)
+Class constructor($in : Object)
+	Super:C1705($in)
 	ASSERT:C1129(This:C1470.template.type="detailform")
 	
-Function doRun
-	C_OBJECT:C1216($0; $Obj_out)
+Function doRun()->$Obj_out : Object
 	$Obj_out:=New object:C1471()
 	
 	// modify tags (CHECK why we cannot use fields?)
@@ -39,7 +37,6 @@ Function doRun
 		
 	End if 
 	
-	$0:=$Obj_out
 	
 Function storyboard()->$result : Object
 	$result:=cs:C1710.DetailFormStoryboard.new()

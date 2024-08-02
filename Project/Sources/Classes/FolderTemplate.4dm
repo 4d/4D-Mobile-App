@@ -1,8 +1,7 @@
 Class extends Template
 
-Class constructor
-	C_OBJECT:C1216($1)
-	Super:C1705($1)
+Class constructor($in : Object)
+	Super:C1705($in)
 	ASSERT:C1129(This:C1470.template.type="folder")
 	
 Function doRun

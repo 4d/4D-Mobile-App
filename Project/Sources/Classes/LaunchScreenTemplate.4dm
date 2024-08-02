@@ -1,14 +1,12 @@
 Class extends Template
 
-Class constructor
-	C_OBJECT:C1216($1)
-	Super:C1705($1)
+Class constructor($value : Object)
+	Super:C1705($value)
 	ASSERT:C1129(This:C1470.template.type="ls")
 	
-Function doRun
-	C_OBJECT:C1216($0)
-	$0:=Super:C1706.doRun()  // copy files
-	$0:=ob_deepMerge($0; This:C1470.generateAssets())
+Function doRun()->$result : Object
+	$result:=Super:C1706.doRun()  // copy files
+	$result:=ob_deepMerge($result)
 	
 Function generateAssets()->$Obj_out : Object
 	var $assetFolder : 4D:C1709.Folder

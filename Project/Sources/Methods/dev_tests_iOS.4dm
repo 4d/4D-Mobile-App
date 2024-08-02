@@ -119,7 +119,7 @@ Case of
 		$device:=$simctl.defaultDevice()
 		$simctl.setDefaultDevice("none")
 		$o:=$simctl.defaultDevice()
-		$simctl.setDefaultDevice($device.udid; True:C214)
+		$simctl.setDefaultDevice($device.udid)
 		$o:=$simctl.defaultDevice()
 		
 		//______________________________________________________
