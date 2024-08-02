@@ -7,19 +7,14 @@
 //
 // ----------------------------------------------------
 // Declarations
-C_OBJECT:C1216($0)
-C_OBJECT:C1216($1)
+#DECLARE($Obj_param : Object)->$Obj_result : Object
 
 C_BOOLEAN:C305($Boo_install)
 C_LONGINT:C283($Lon_parameters)
 C_TEXT:C284($Txt_buffer; $Txt_cmd; $Txt_error; $Txt_fileRef; $Txt_in; $Txt_out)
-C_OBJECT:C1216($Obj_; $Obj_objects; $Obj_param; $Obj_result)
+C_OBJECT:C1216($Obj_; $Obj_objects)
 C_COLLECTION:C1488($Col_)
 
-If (False:C215)
-	C_OBJECT:C1216(sdk; $0)
-	C_OBJECT:C1216(sdk; $1)
-End if 
 
 // ----------------------------------------------------
 // Initialisations
@@ -27,24 +22,14 @@ $Lon_parameters:=Count parameters:C259
 
 If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
 	
-	// Required parameters
-	$Obj_param:=$1
-	
-	// Optional parameters
-	If ($Lon_parameters>=2)
-		
-		// <NONE>
-		
-	End if 
-	
-	$Obj_result:=New object:C1471(\
-		"success"; False:C215)
-	
 Else 
 	
 	ABORT:C156
 	
 End if 
+
+$Obj_result:=New object:C1471(\
+"success"; False:C215)
 
 // ----------------------------------------------------
 If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
@@ -265,6 +250,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 				
 				For each ($child; $children)
 					
+					
 					If ($child.extension=".framework")
 						
 						// in source tree group
@@ -323,8 +309,69 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 				
 			Else 
 				
-				$Obj_result.errors:=New collection:C1472("Framework folder '"+$Txt_buffer+"' does not exist")
+				$folder:=$folder.parent  // check parent without "iOS" for xcframework
+				var $paramfolder : Text
+				$paramfolder:=Path to object:C1547($Obj_param.folder; Path is POSIX:K24:26).parentFolder
 				
+				If ($folder.exists)
+					
+					$children:=$folder.folders().filter(Formula:C1597($1.value.extension=".xcframework"))
+					If ($children.length>0)
+						$Obj_param.projfile.mustSave:=True:C214
+					Else 
+						
+						$Obj_result.errors:=New collection:C1472("Framework folder '"+$Obj_param.folder+"' does not exist")
+						
+					End if 
+					
+					For each ($child; $children)
+						
+						$Txt_buffer:=XcodeProj(New object:C1471("action"; "randomObjectId"; "proj"; $Obj_param.projfile.value)).value
+						$Obj_:=New object:C1471("name"; $child.fullName; "isa"; "PBXFileReference"; "lastKnownFileType"; "wrapper.xcframework"; "path"; $paramfolder+$child.fullName; "sourceTree"; "<group>")
+						
+						
+						$Obj_objects[$Txt_buffer]:=$Obj_
+						If (Position:C15("QMobile"; $child.name)=1)
+							$Col_:=$Obj_result.group["qmobile"]
+						Else 
+							$Col_:=$Obj_result.group["thirdparty"]
+						End if 
+						$Col_.push($Txt_buffer)
+						$Txt_fileRef:=$Txt_buffer
+						
+						// in Frameworks // PBXFrameworksBuildPhase
+						$Txt_buffer:=XcodeProj(New object:C1471("action"; "randomObjectId"; "proj"; $Obj_param.projfile.value)).value
+						$Obj_:=New object:C1471("isa"; "PBXBuildFile"; "fileRef"; $Txt_fileRef)
+						$Obj_objects[$Txt_buffer]:=$Obj_
+						$Col_:=$Obj_result.phase.linked.files
+						$Col_.push($Txt_buffer)
+						
+						// in Embed Frameworks // PBXCopyFilesBuildPhase
+						$Txt_buffer:=XcodeProj(New object:C1471("action"; "randomObjectId"; "proj"; $Obj_param.projfile.value)).value
+						
+						$Obj_:=New object:C1471("isa"; "PBXBuildFile"; "fileRef"; $Txt_fileRef)
+						$Obj_.settings:=New object:C1471("ATTRIBUTES"; New collection:C1472("CodeSignOnCopy"))  // ;"RemoveHeadersOnCopy"
+						
+						$Col_:=$Obj_result.phase.embed.files
+						$Col_.push($Txt_buffer)
+						
+						
+						// in Copy Frameworks // PBXShellScriptBuildPhase
+						If (Value type:C1509($Obj_result.phase.copy)=Is object:K8:27)
+							
+							$Obj_result.phase.copy.inputPaths.push("$(SRCROOT)/"+$Obj_param.folder+$child.fullName)
+							$Obj_result.phase.copy.outputPaths.push("$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/"+$child.fullName)
+							
+						End if 
+						
+						
+					End for each 
+					
+				Else 
+					
+					$Obj_result.errors:=New collection:C1472("Framework folder '"+$Obj_param.folder+"' does not exist")
+					
+				End if 
 			End if 
 			
 			// MARK:- cache
@@ -444,9 +491,3 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 	End case 
 End if 
 
-// ----------------------------------------------------
-// Return
-$0:=$Obj_result
-
-// ----------------------------------------------------
-// End
