@@ -293,7 +293,7 @@ Function launch($command; $arguments : Variant) : cs:C1710.lep
 			//……………………………………………………………………
 	End case 
 	
-	$history:="% "+$command+"\n"
+	$history:="% "+String:C10(This:C1470.command)+"\n"
 	
 	LAUNCH EXTERNAL PROCESS:C811(This:C1470.command; $inputStream; $outputStream; $errorStream; $pid)
 	
