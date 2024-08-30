@@ -2,6 +2,9 @@
 If (False:C215)
 	
 	//______________________________________
+	C_OBJECT:C1216(DummyFile; $0)
+	
+	//______________________________________
 	C_OBJECT:C1216(FileFrom; $0)
 	C_VARIANT:C1683(FileFrom; $1)
 	

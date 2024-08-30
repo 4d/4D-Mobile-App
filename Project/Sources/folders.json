@@ -608,9 +608,6 @@
 			"Pseudo-Class",
 			"Tests"
 		],
-		"methods": [
-			"DummyFile"
-		],
 		"classes": [
 			"coordinates"
 		]
@@ -716,6 +713,7 @@
 	"file": {
 		"methods": [
 			"COMPILER_file",
+			"DummyFile",
 			"FileFrom",
 			"FileOrFolderFrom",
 			"FolderFrom",
