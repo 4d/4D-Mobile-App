@@ -7,7 +7,7 @@ Class constructor($url)
 	This:C1470.reset($url)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function get timeout() : Integer
+Function get timeout() : Variant
 	
 	var $timeout : Integer
 	
