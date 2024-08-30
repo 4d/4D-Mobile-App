@@ -17,10 +17,9 @@ Function stop()
 	This:C1470.execute("--stop")
 	
 	
-Function assembleDebug
-	var $0 : Object
+Function assembleDebug->$result : Object
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"outputStream"; ""; \
 		"errorStream"; ""; \
@@ -28,34 +27,33 @@ Function assembleDebug
 	
 	This:C1470.execute("assembleDebug")
 	
-	$0.outputStream:=This:C1470.outputStream
-	$0.errorStream:=This:C1470.errorStream
+	$result.outputStream:=This:C1470.outputStream
+	$result.errorStream:=This:C1470.errorStream
 	
 	If (Position:C15("BUILD FAILED"; This:C1470.errorStream)=0)
 		
-		$0.success:=True:C214
+		$result.success:=True:C214
 		
 	Else 
 		
-		$0.errors.push("Failed to build project with task \"assembleDebug\"")
-		$0.errors.push(This:C1470.errorStream)
+		$result.errors.push("Failed to build project with task \"assembleDebug\"")
+		$result.errors.push(This:C1470.errorStream)
 		
 	End if 
 	
-Function createEmbeddedDatabase
-	var $0 : Object
+Function createEmbeddedDatabase()->$result : Object
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
 	This:C1470.execute("app:createDataBase")
 	
-	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
+	$result.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 	
-	If (Not:C34($0.success))
+	If (Not:C34($result.success))
 		
-		$0.errors.push("Failed to create embedded database")
+		$result.errors.push("Failed to create embedded database")
 		
 		// Else : all ok
 	End if 
@@ -92,16 +90,14 @@ Function signingReport()->$result : Object
 	End if 
 	
 	
-Function checkAPKExists
-	var $0 : Object
-	var $1 : 4D:C1709.File  // apk
+Function checkAPKExists($apkFile : 4D:C1709.File)->$result : Object
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	If ($1.exists)
-		$0.success:=True:C214
+	If ($apkFile.exists)
+		$result.success:=True:C214
 	Else 
-		$0.errors.push("Missing APK file: "+$1.path)
+		$result.errors.push("Missing APK file: "+$apkFile.path)
 	End if 

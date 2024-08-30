@@ -1,9 +1,8 @@
 
 
-Class constructor
-	var $1 : Object
+Class constructor($ds : Object)
 	If (Count parameters:C259>0)
-		This:C1470.ds:=$1
+		This:C1470.ds:=$ds
 	Else 
 		This:C1470.ds:=ds:C1482
 	End if 
@@ -122,10 +121,7 @@ $entity[$key]:=$related*/
 	End for each 
 	
 	
-Function unattach
-	var $entitiesByDataClass; $1 : Object
-	$entitiesByDataClass:=$1
-	
+Function unattach($entitiesByDataClass : Object)
 	var $entities : Variant  // Collection or Selection -> iterable of object
 	$entities:=$entitiesByDataClass[OB Keys:C1719($entitiesByDataClass)[0]]
 	
@@ -155,10 +151,8 @@ Function unattach
 		
 	End for each 
 	
-Function newEntity
-	var $0; $entities : Collection
-	var $1; $classStore : Object
-	$classStore:=$1
+Function newEntity($classStore : Object)->$entities : Collection
+	
 	$entities:=New collection:C1472()
 	
 	var $max; $maxStr; $i; $j : Integer
@@ -211,13 +205,11 @@ Function newEntity
 		ASSERT:C1129($status.success; "Failed to save an entity:"+JSON Stringify:C1217($status))
 		$entities.push($entity)
 	End for 
-	$0:=$entities
 	
-Function stat
+Function stat()->$stat : Object
 	var $dataClassName : Text
 	var $entity : 4D:C1709.Entity
 	
-	var $0; $stat : Object
 	$stat:=New object:C1471()
 	
 	var $all : Object
@@ -231,16 +223,11 @@ Function stat
 		
 	End for each 
 	
-	$0:=$stat
 	
-Function statRelation
-	var $1; $dataClass : 4D:C1709.DataClass  // 
-	var $2; $entities : Object  //selection
-	$dataClass:=$1
-	$entities:=$2
+Function statRelation($dataClass : 4D:C1709.DataClass; $entities : Object)->$result : Object
 	var $entity : 4D:C1709.Entity
-	var $0 : Object
-	$0:=New object:C1471()
+	
+	$result:=New object:C1471()
 	
 	var $key : Text
 	For each ($key; $dataClass)
@@ -249,11 +236,11 @@ Function statRelation
 				// reverve stat?
 				
 			: ($dataClass[$key].kind="relatedEntity")
-				$0[$key]:=0
+				$result[$key]:=0
 				// $0[$key]:=$entities.count($key) // not working with relation? why? not user friendly
 				For each ($entity; $entities)
 					If ($entity[$key]#Null:C1517)
-						$0[$key]:=$0[$key]+1
+						$result[$key]:=$result[$key]+1
 					End if 
 				End for each 
 				
@@ -270,9 +257,8 @@ Function notify
 		This:C1470._callback(This:C1470.stat())
 	End if 
 	
-Function _callback
-	var $1; $stat : Object  //stat
-	$stat:=$1
+Function _callback($stat : Object)
+	
 	C_OBJECT:C1216($dumpFolder)
 	// here we could launch task, study mobile app etc.., or pass a "callback" function to this class
 	
@@ -338,16 +324,13 @@ Function _callback
 		End for each 
 	End if 
 	
-Function mobileStat
-	var $0; $1; $dataClass; $2 : Object
-	$0:=New object:C1471("count"; $2.records.length; "relation"; This:C1470.mobileStatRelation($1; $2.records))
+Function mobileStat($dataClass : Object; $res : Object) : Object
+	return New object:C1471("count"; $res.records.length; "relation"; This:C1470.mobileStatRelation($dataClass; $res.records))
 	
 	
-Function mobileStatRelation
-	var $0; $1; $dataClass : Object
-	var $2 : Collection
-	$dataClass:=$1
-	$0:=New object:C1471()
+Function mobileStatRelation($dataClass : Object; $col : Collection)->$result : Object
+	
+	$result:=New object:C1471()
 	var $key : Text
 	For each ($key; $dataClass)
 		Case of 
@@ -358,11 +341,11 @@ Function mobileStatRelation
 				
 				var $keyExist : Boolean
 				$keyExist:=False:C215
-				$0[$key]:=0
+				$result[$key]:=0
 				var $entity : Object
-				For each ($entity; $2)
+				For each ($entity; $col)
 					If ($entity[$key]#Null:C1517)
-						$0[$key]:=$0[$key]+1
+						$result[$key]:=$result[$key]+1
 					End if 
 					//%W-518.7
 					If (Not:C34(Undefined:C82($entity[$key])))  // null must be defined (we want here a method ob has key
@@ -371,7 +354,7 @@ Function mobileStatRelation
 					//%W+518.7
 				End for each 
 				If (Not:C34($keyExist))
-					OB REMOVE:C1226($0; $key)
+					OB REMOVE:C1226($result; $key)
 				End if 
 			Else 
 				// ignore
@@ -392,14 +375,13 @@ End while */
 	End while 
 	// XXX maybe also add a time max, and stop current process if too much time
 	
-Function xCallback
-	var $1 : Object
-	This:C1470.lastCallbackInfo:=$1
+Function xCallback($info : Object)
+	This:C1470.lastCallbackInfo:=$info
 	This:C1470.lastCallbackInfo.success:=Bool:C1537(Num:C11(This:C1470.lastCallbackInfo.success))
 	
 	var $html : Text
 	$html:="<html><body><h1><font size=\"7\">"
-	$html:=$html+JSON Stringify:C1217($1)
+	$html:=$html+JSON Stringify:C1217($info)
 	$html:=$html+"</h1></font></body></html>"
 	WEB SEND TEXT:C677($html)  // just to have a response from this 4daction (maybe add later progress)
 	

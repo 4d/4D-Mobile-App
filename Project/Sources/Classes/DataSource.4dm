@@ -1,4 +1,4 @@
-Class constructor
+Class constructor($url : Text)
 	
 	This:C1470.handler:="mobileapp"
 	This:C1470.method:=HTTP GET method:K71:1
@@ -7,11 +7,10 @@ Class constructor
 	
 	This:C1470.path:=""
 	
-	var $1 : Text
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.setURL($1)
+		This:C1470.setURL($url)
 		
 	Else 
 		
@@ -20,13 +19,11 @@ Class constructor
 	End if 
 	
 	// === === === === === === === === === === === === === === === === === === === === ===
-Function setURL
-	
-	var $1 : Text
+Function setURL($url : Text)
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.url:=$1
+		This:C1470.url:=$url
 		
 		// Add missing / if necessary
 		If (Not:C34(Match regex:C1019("/$"; This:C1470.url; 1)))

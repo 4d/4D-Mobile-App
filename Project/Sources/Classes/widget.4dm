@@ -550,11 +550,8 @@ Function execute
 /*══════════════════════════
 .getHelpTip() -> text
 ══════════════════════════*/
-Function getHelpTip
-	
-	C_TEXT:C284($0)
-	
-	$0:=OBJECT Get help tip:C1182(*; This:C1470.name)
+Function getHelpTip() : Text
+	return OBJECT Get help tip:C1182(*; This:C1470.name)
 	
 /*══════════════════════════
 .setHelpTip(text| resname) -> This

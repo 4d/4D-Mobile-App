@@ -344,22 +344,19 @@ Function isDeviceAvailable($device : Text)->$available : Boolean
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function listAvds  // List emulators
-	var $0 : Text  // returns complete output
+Function listAvds() : Text  // List emulators
 	
 	This:C1470.launch(This:C1470.cmd+" list avd")
 	
 	If (This:C1470.errorStream#Null:C1517)
-		$0:=This:C1470.errorStream
+		return This:C1470.errorStream
 	Else 
-		$0:=String:C10(This:C1470.outputStream)
+		return String:C10(This:C1470.outputStream)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function isAvdExisting  // Check if avd already exists
-	var $0 : Boolean
-	var $1 : Text  // avd name
+Function isAvdExisting($avdName : Text) : Boolean  // Check if avd already exists
 	var $listOutput; $separator : Text
 	
 	$listOutput:=This:C1470.listAvds()
@@ -367,11 +364,11 @@ Function isAvdExisting  // Check if avd already exists
 	$separator:=Choose:C955(Is macOS:C1572; "/"; "\\")
 	
 	// Searching for "/avd_name.avd" expression
-	If (Position:C15($separator+$1+".avd\n"; String:C10($listOutput))=0)
+	If (Position:C15($separator+$avdName+".avd\n"; String:C10($listOutput))=0)
 		// avd name not found, means it doesn't exists
-		$0:=False:C215
+		return False:C215
 	Else 
 		// avd name found, means it already exists
-		$0:=True:C214
+		return True:C214
 	End if 
 	
