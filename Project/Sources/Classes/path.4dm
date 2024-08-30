@@ -25,7 +25,7 @@ Function resolve($path : Text) : Object
 	
 	If (Length:C16($path)=0)
 		
-		return File:C1566("📄")
+		return DummyFile()
 		
 	End if 
 	

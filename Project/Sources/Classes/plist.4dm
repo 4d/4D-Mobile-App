@@ -17,7 +17,7 @@ Class constructor($file : 4D:C1709.File)
 	
 	Super:C1705()
 	
-	This:C1470.file:=File:C1566("?")  // A non existing file
+	This:C1470.file:=DummyFile()  // A non existing file
 	
 	This:C1470.isConverted:=False:C215
 	This:C1470.isBinary:=False:C215
