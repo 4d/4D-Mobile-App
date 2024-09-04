@@ -184,7 +184,7 @@ Case of
 		
 		
 		$c:=$adb.availableDevices()
-		$c:=$adb.listBootedDevices()
+		$o:=$adb.listBootedDevices()
 		$c:=$adb.plugged()
 		
 		//var $avd : cs.avd
