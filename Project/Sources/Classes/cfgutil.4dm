@@ -269,7 +269,7 @@ Function properties($property : Text; $device : Object)->$value : Text
 Function _getExe($bundleName : Text)->$exe : 4D:C1709.File
 	
 	var $bundle : 4D:C1709.Folder
-	$bundle:=Folder:C1567("Applications/"+$bundleName+".app")
+	$bundle:=Folder:C1567("/Applications/"+$bundleName+".app")
 	
 	If (Not:C34($bundle.exists))
 		
@@ -283,7 +283,7 @@ Function _getExe($bundleName : Text)->$exe : 4D:C1709.File
 			
 			If ($c.length>0)
 				
-				$bundle:=Folder:C1567("Applications/"+$c[0])
+				$bundle:=Folder:C1567("/Applications/"+$c[0])
 				
 			End if 
 		End if 
