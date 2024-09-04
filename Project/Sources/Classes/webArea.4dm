@@ -73,8 +73,7 @@ Function init
 	This:C1470.success:=True:C214
 	
 	//==================================================
-Function openURL
-	var $1 : Variant
+Function openURL($url : Variant)
 	
 	This:C1470.success:=True:C214
 	
@@ -86,16 +85,16 @@ Function openURL
 			// <NOTHING MORE TO DO>
 			
 			//……………………………………………………………………………………………………
-		: (Value type:C1509($1)=Is text:K8:3)
+		: (Value type:C1509($url)=Is text:K8:3)
 			
-			This:C1470.url:=$1
+			This:C1470.url:=$url
 			
 			//……………………………………………………………………………………………………
-		: (Value type:C1509($1)=Is object:K8:27)
+		: (Value type:C1509($url)=Is object:K8:27)
 			
-			If (OB Instance of:C1731($1; 4D:C1709.File))
+			If (OB Instance of:C1731($url; 4D:C1709.File))
 				
-				This:C1470.url:="file:///"+$1.path
+				This:C1470.url:="file:///"+$url.path
 				
 			Else 
 				
@@ -289,10 +288,9 @@ Function execute
 	End if 
 	
 	//==================================================
-Function content
-	var $0 : Text
+Function content() : Text
 	
-	$0:=WA Get page content:C1038(*; This:C1470.name)
+	return WA Get page content:C1038(*; This:C1470.name)
 	
 	//==================================================
 Function back
@@ -305,16 +303,14 @@ Function forward
 	WA OPEN FORWARD URL:C1022(*; This:C1470.name)
 	
 	//==================================================
-Function isLoaded
-	var $0 : Boolean
+Function isLoaded() : Boolean
 	
-	$0:=(WA Get current URL:C1025(*; This:C1470.name)=This:C1470.url)
+	return (WA Get current URL:C1025(*; This:C1470.name)=This:C1470.url)
 	
 	//==================================================
-Function lastFiltered
-	var $0 : Text
+Function lastFiltered() : Text
 	
-	$0:=WA Get last filtered URL:C1035(*; This:C1470.name)
+	return WA Get last filtered URL:C1035(*; This:C1470.name)
 	
 	//==================================================
 Function refresh
@@ -322,79 +318,62 @@ Function refresh
 	This:C1470.openURL(This:C1470.url)
 	
 	//==================================================
-Function getTitle
-	var $0 : Text
+Function getTitle() : Text
 	
-	$0:=WA Get page title:C1036(*; This:C1470.name)
+	return WA Get page title:C1036(*; This:C1470.name)
 	
 	//==================================================
-Function allow
-	var $1 : Variant
-	var $2 : Boolean
+Function allow($data; $allow : Boolean)
 	
 	var $filter : Text
-	var $allow : Boolean
 	
 	ARRAY TEXT:C222($_filters; 0)
 	ARRAY BOOLEAN:C223($_allowed; 0)
 	
-	If (Count parameters:C259>=1)
+	
+	If (Count parameters:C259<2)
 		
-		If (Count parameters:C259>=2)
-			
-			$allow:=$2
-			
-		Else 
-			
-			$allow:=True:C214
-			
-		End if 
-		
-		This:C1470.success:=True:C214
-		WA GET URL FILTERS:C1031(*; This:C1470.name; $_filters; $_allowed)
-		
-		Case of 
-				
-				//______________________________________________________
-			: (Value type:C1509($1)=Is text:K8:3)
-				
-				APPEND TO ARRAY:C911($_filters; $1)
-				APPEND TO ARRAY:C911($_allowed; $allow)
-				
-				//______________________________________________________
-			: (Value type:C1509($1)=Is collection:K8:32)
-				
-				For each ($filter; $1)
-					
-					APPEND TO ARRAY:C911($_filters; $filter)
-					APPEND TO ARRAY:C911($_allowed; $allow)
-					
-				End for each 
-				
-				//______________________________________________________
-			Else 
-				
-				This:C1470.success:=False:C215
-				This:C1470.lastError:="$1 must be a text or a text collection"
-				This:C1470.errors.push(This:C1470.lastError)
-				
-				//______________________________________________________
-		End case 
-		
-		WA SET URL FILTERS:C1030(*; This:C1470.name; $_filters; $_allowed)
-		
-	Else 
-		
-		This:C1470.lastError:=Current method name:C684+": Missing parameter"
-		This:C1470.errors.push(This:C1470.lastError)
+		$allow:=True:C214
 		
 	End if 
 	
-	//==================================================
-Function deny
-	var $1 : Variant
+	This:C1470.success:=True:C214
+	WA GET URL FILTERS:C1031(*; This:C1470.name; $_filters; $_allowed)
 	
-	This:C1470.allow($1; False:C215)
+	Case of 
+			
+			//______________________________________________________
+		: (Value type:C1509($1)=Is text:K8:3)
+			
+			APPEND TO ARRAY:C911($_filters; $1)
+			APPEND TO ARRAY:C911($_allowed; $allow)
+			
+			//______________________________________________________
+		: (Value type:C1509($1)=Is collection:K8:32)
+			
+			For each ($filter; $1)
+				
+				APPEND TO ARRAY:C911($_filters; $filter)
+				APPEND TO ARRAY:C911($_allowed; $allow)
+				
+			End for each 
+			
+			//______________________________________________________
+		Else 
+			
+			This:C1470.success:=False:C215
+			This:C1470.lastError:="$1 must be a text or a text collection"
+			This:C1470.errors.push(This:C1470.lastError)
+			
+			//______________________________________________________
+	End case 
+	
+	WA SET URL FILTERS:C1030(*; This:C1470.name; $_filters; $_allowed)
+	
+	
+	//==================================================
+Function deny($data : Variant)
+	This:C1470.allow($data; False:C215)
 	
 	//==================================================
 	// Detect which web rendering engine is being used for the Web Area

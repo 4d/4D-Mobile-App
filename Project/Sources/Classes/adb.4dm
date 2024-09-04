@@ -648,10 +648,9 @@ Function getSerial($avdName : Text)->$result : Object
 		
 	End if 
 	
-Function listBootedDevices  // List booted devices
-	var $0 : Object
+Function listBootedDevices()->$result : Object  // List booted devices
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"bootedDevices"; New collection:C1472; \
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
@@ -664,44 +663,43 @@ Function listBootedDevices  // List booted devices
 			
 			This:C1470._adbStartRetried:=True:C214
 			
-			$0:=This:C1470.listBootedDevices()
+			$result:=This:C1470.listBootedDevices()
 			
 		Else 
 			
-			$0.success:=False:C215
-			$0.errors.push(This:C1470.errorStream)
+			$result.success:=False:C215
+			$result.errors.push(This:C1470.errorStream)
 			
 		End if 
 		
 	Else   // No issue with adb started status
 		
-		$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
+		$result.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 		
-		If ($0.success)
+		If ($result.success)
 			
-			$0.bootedDevices:=Split string:C1554(String:C10(This:C1470.outputStream); "\n")
-			$0.bootedDevices.shift().pop()  // removing first and last entries
+			$result.bootedDevices:=Split string:C1554(String:C10(This:C1470.outputStream); "\n")
+			$result.bootedDevices.shift().pop()  // removing first and last entries
 			
 		Else 
 			
-			$0.errors.push("(failed to get adb device list)")
+			$result.errors.push("(failed to get adb device list)")
 			
 		End if 
 	End if 
 	
-Function findSerial
-	var $0 : Object
-	var $1 : Collection  // booted devices list
-	var $2 : Text  // searched avd name
+Function findSerial($bootedList : Collection; $avdName : Text)->$result : Object
+	
+	
 	var $emulatorLine; $serial : Text
 	var $Obj_avdName : Object
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"serial"; ""; \
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	For each ($emulatorLine; $1) Until ($0.serial#"")
+	For each ($emulatorLine; $bootedList) Until ($result.serial#"")
 		
 		If (Position:C15("\tdevice"; $emulatorLine)>0)
 			
@@ -718,33 +716,32 @@ Function findSerial
 		
 		If ($Obj_avdName.success)
 			
-			If ($Obj_avdName.avdName=$2)
+			If ($Obj_avdName.avdName=$avdName)
 				
 				// found avd name, means that tested serial is correct
-				$0.serial:=$serial
-				$0.success:=True:C214
+				$result.serial:=$serial
+				$result.success:=True:C214
 				
 				// Else : not the associated serial
 			End if 
 			
 		Else 
 			// getAvdName failed
-			$0.errors.combine($Obj_avdName.errors)
+			$result.errors.combine($Obj_avdName.errors)
 		End if 
 		
 	End for each 
 	
-Function getAvdName  // #TO_DO : NOT THE SAME AS getDeviceName() -> MOVE TO avd
-	var $0 : Object
-	var $1 : Text  // serial
+Function getAvdName($serial : Text)->$result : Object  // #TO_DO : NOT THE SAME AS getDeviceName() -> MOVE TO avd
+	
 	var $avdName_Col : Collection
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"avdName"; ""; \
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.execute("-s \""+$1+"\" emu avd name")
+	This:C1470.execute("-s \""+$serial+"\" emu avd name")
 	
 	If ((This:C1470.outputStream#Null:C1517) & (String:C10(This:C1470.outputStream)#""))
 		
@@ -753,54 +750,47 @@ Function getAvdName  // #TO_DO : NOT THE SAME AS getDeviceName() -> MOVE TO avd
 		If ($avdName_Col.length>1)
 			// First line is the avd name
 			// Warning : on Windows, it is avd name + "\r"
-			$0.avdName:=Replace string:C233($avdName_Col[0]; "\r"; "")
-			$0.success:=True:C214
+			$result.avdName:=Replace string:C233($avdName_Col[0]; "\r"; "")
+			$result.success:=True:C214
 			
 		Else 
 			// can't find avd name
-			$0.errors.push("(can't get avd name for this emulator)")
+			$result.errors.push("(can't get avd name for this emulator)")
 		End if 
 		
 		// Else : serial not found
 	End if 
 	
-Function forceInstallApp
-	var $0 : Object
-	var $1 : Text  // emulator serial
-	var $2 : Text  // package name (app name)
-	var $3 : 4D:C1709.File  // apk
+Function forceInstallApp($emuSerial : Text; $package : Text; $apkFile : 4D:C1709.File)->$result : Object
+	
 	var $Obj_uninstallAppIfInstalled; $Obj_install : Object
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	$Obj_uninstallAppIfInstalled:=This:C1470.uninstallAppIfInstalled($1; $2)
+	$Obj_uninstallAppIfInstalled:=This:C1470.uninstallAppIfInstalled($emuSerial; $package)
 	
 	If ($Obj_uninstallAppIfInstalled.success)
 		
-		$Obj_install:=This:C1470.waitInstallApp($1; $3)
+		$Obj_install:=This:C1470.waitInstallApp($emuSerial; $apkFile)
 		
 		If ($Obj_install.success)
-			$0.success:=True:C214
+			$result.success:=True:C214
 		Else 
-			$0.errors:=$Obj_install.errors
+			$result.errors:=$Obj_install.errors
 		End if 
 		
 	Else 
-		$0.errors:=$Obj_uninstallAppIfInstalled.errors
+		$result.errors:=$Obj_uninstallAppIfInstalled.errors
 	End if 
 	
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
-Function waitStartApp
-	var $0 : Object
-	var $1 : Text  // emulator serial
-	var $2 : Text  // package name (app name)
-	var $3 : Text  // activity name (com.qmobile.qmobileui.activity.loginactivity.LoginActivity)
+Function waitStartApp($emuSerial : Text; $package : Text; $activity : Text)->$result : Object
 	var $startTime; $stepTime : Integer
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
@@ -812,24 +802,23 @@ Function waitStartApp
 		IDLE:C311
 		DELAY PROCESS:C323(Current process:C322; 120)
 		
-		This:C1470.execute("-s \""+$1+"\" shell am start -n \""+$2+"/"+$3+"\"")
+		This:C1470.execute("-s \""+$emuSerial+"\" shell am start -n \""+$package+"/"+$activity+"\"")
 		
-		$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
+		$result.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 		
 		$stepTime:=Milliseconds:C459-$startTime
 		
-	Until ($0.success=True:C214)\
+	Until ($result.success=True:C214)\
 		 | ($stepTime>This:C1470.appStartTimeOut)
 	
 	If ($stepTime>This:C1470.appStartTimeOut)  // Timeout
 		
-		$0.errors.push("(timeout reached when starting the app)")
+		$result.errors.push("(timeout reached when starting the app)")
 		
 		// Else : all ok 
 	End if 
 	
-Function uninstallAppIfInstalled($package : Text; $serial : Text)->$result : Object
-	
+Function uninstallAppIfInstalled($emuSerial : Text; $package : Text)->$result : Object
 	
 	
 	var $Obj_isInstalled; $Obj_uninstall : Object
@@ -838,13 +827,13 @@ Function uninstallAppIfInstalled($package : Text; $serial : Text)->$result : Obj
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	$Obj_isInstalled:=This:C1470.isAppAlreadyInstalled($package; $serial)
+	$Obj_isInstalled:=This:C1470.isAppAlreadyInstalled($emuSerial; $package)
 	
 	If ($Obj_isInstalled.success)
 		
 		If ($Obj_isInstalled.isInstalled)
 			
-			$Obj_uninstall:=This:C1470.waitUninstallApp($package; $serial)
+			$Obj_uninstall:=This:C1470.waitUninstallApp($emuSerial; $package)
 			
 			If ($Obj_uninstall.success)
 				
@@ -865,12 +854,11 @@ Function uninstallAppIfInstalled($package : Text; $serial : Text)->$result : Obj
 		$result.errors:=$Obj_isInstalled.errors
 	End if 
 	
-Function waitForDevicePackageList
-	var $0 : Object
-	var $1 : Text  // emulator serial
+Function waitForDevicePackageList($emuSerial : Text)->$result : Object
+	
 	var $startTime; $stepTime : Integer
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"packageList"; ""; \
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
@@ -883,53 +871,49 @@ Function waitForDevicePackageList
 		IDLE:C311
 		DELAY PROCESS:C323(Current process:C322; 120)
 		
-		This:C1470.execute("-s \""+$1+"\" shell pm list packages")
+		This:C1470.execute("-s \""+$emuSerial+"\" shell pm list packages")
 		
-		$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
+		$result.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 		
-		$0.packageList:=This:C1470.outputStream
+		$result.packageList:=This:C1470.outputStream
 		
 		$stepTime:=Milliseconds:C459-$startTime
 		
-	Until (($0.success=True:C214) & ($0.packageList#""))\
+	Until (($result.success=True:C214) & ($result.packageList#""))\
 		 | ($stepTime>This:C1470.packageListTimeOut)
 	
 	If ($stepTime>This:C1470.packageListTimeOut)  // Timeout
 		
-		$0.errors.push("(timeout reached when getting package list)")
+		$result.errors.push("(timeout reached when getting package list)")
 		
 		// Else : all ok 
 	End if 
 	
-Function isAppAlreadyInstalled
-	var $0 : Object
-	var $1 : Text  // emulator serial
-	var $2 : Text  // package name (app name)
+Function isAppAlreadyInstalled($emuSerial : Text; $packageName : Text)->$result : Object
+	
 	var $Obj_packageList : Object
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"isInstalled"; False:C215; \
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	$Obj_packageList:=This:C1470.waitForDevicePackageList($1)
+	$Obj_packageList:=This:C1470.waitForDevicePackageList($emuSerial)
 	
 	If ($Obj_packageList.success)
 		
-		$0.success:=True:C214
-		$0.isInstalled:=(Position:C15($2; $Obj_packageList.packageList)>0)
+		$result.success:=True:C214
+		$result.isInstalled:=(Position:C15($packageName; $Obj_packageList.packageList)>0)
 		
 	Else 
-		$0.errors:=$Obj_packageList.errors
+		$result.errors:=$Obj_packageList.errors
 	End if 
 	
-Function waitUninstallApp
-	var $0 : Object
-	var $1 : Text  // emulator serial
-	var $2 : Text  // package name (app name)
+Function waitUninstallApp($emuSerial : Text; $packageName : Text)->$result : Object
+	
 	var $startTime; $stepTime : Integer
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
@@ -938,10 +922,10 @@ Function waitUninstallApp
 	
 	Repeat 
 		
-		This:C1470.execute("-s \""+$1+"\" uninstall \""+$2+"\"")
-		$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
+		This:C1470.execute("-s \""+$emuSerial+"\" uninstall \""+$packageName+"\"")
+		$result.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 		
-		If (Not:C34($0.success))
+		If (Not:C34($result.success))
 			
 			IDLE:C311
 			DELAY PROCESS:C323(Current process:C322; 120)
@@ -950,23 +934,21 @@ Function waitUninstallApp
 			
 		End if 
 		
-	Until ($0.success=True:C214)\
+	Until ($result.success=True:C214)\
 		 | ($stepTime>This:C1470.timeOut)
 	
 	If ($stepTime>This:C1470.timeOut)  // Timeout
 		
-		$0.errors.push("(timeout reached when uninstalling the app)")
+		$result.errors.push("(timeout reached when uninstalling the app)")
 		
 		// Else : all ok 
 	End if 
 	
-Function waitInstallApp
-	var $0 : Object
-	var $1 : Text  // emulator serial
-	var $2 : 4D:C1709.File  // apk
+Function waitInstallApp($emuSerial : Text; $apkFile : 4D:C1709.File)->$result : Object
+	
 	var $startTime; $stepTime : Integer
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
@@ -978,18 +960,18 @@ Function waitInstallApp
 		IDLE:C311
 		DELAY PROCESS:C323(Current process:C322; 120)
 		
-		This:C1470.execute("-s \""+$1+"\" install -t \""+$2.path+"\"")
+		This:C1470.execute("-s \""+$emuSerial+"\" install -t \""+$apkFile.path+"\"")
 		
-		$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
+		$result.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 		
 		$stepTime:=Milliseconds:C459-$startTime
 		
-	Until ($0.success=True:C214)\
+	Until ($result.success=True:C214)\
 		 | ($stepTime>This:C1470.timeOut)
 	
 	If ($stepTime>This:C1470.timeOut)  // Timeout
 		
-		$0.errors.push("(timeout reached when installing the app)")
+		$result.errors.push("(timeout reached when installing the app)")
 		
 		// Else : all ok 
 	End if 

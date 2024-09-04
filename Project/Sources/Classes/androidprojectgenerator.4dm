@@ -2246,12 +2246,9 @@ Function concatResourceFile
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function findFolderByManifestName
-	var $0 : Object
-	var $1 : 4D:C1709.Folder  // folder to browse
-	var $2 : Text  // name value to be found in manifest.json file
+Function findFolderByManifestName($folderToSearch : 4D:C1709.Folder; $nameToSearch : Text)->$result : Object
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
@@ -2261,11 +2258,11 @@ Function findFolderByManifestName
 	
 	$found:=False:C215
 	
-	If ($1#Null:C1517)
+	If ($folderToSearch#Null:C1517)
 		
-		If ($1.exists)
+		If ($folderToSearch.exists)
 			
-			For each ($folder; $1.folders()) Until ($found)
+			For each ($folder; $folderToSearch.folders()) Until ($found)
 				
 				var $file : 4D:C1709.File
 				
@@ -2281,14 +2278,14 @@ Function findFolderByManifestName
 							
 							If (Value type:C1509($manifestContent.name)=Is text:K8:3)
 								
-								If ($manifestContent.name=$2)
+								If ($manifestContent.name=$nameToSearch)
 									
 									$found:=True:C214
 									
-									If ($1.folder($folder.name).exists)
+									If ($folderToSearch.folder($folder.name).exists)
 										
-										$0.success:=True:C214
-										$0.folder:=$1.folder($folder.name)
+										$result.success:=True:C214
+										$result.folder:=$folderToSearch.folder($folder.name)
 										
 									End if 
 									
@@ -2398,14 +2395,10 @@ Function findZipByManifestName
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function adjustIconName
-	var $0 : Text
-	var $1 : Text  // File name
-	var $2 : Text  // File extension
+Function adjustIconName($filename : Text; $extension : Text) : Text
 	var $newName : Text
-	
-	$newName:=cs:C1710.regex.new(Lowercase:C14($1); "[^a-z0-9]").substitute("_")
-	$0:=$newName+$2
+	$newName:=cs:C1710.regex.new(Lowercase:C14($filename); "[^a-z0-9]").substitute("_")
+	return $newName+$extension
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
@@ -2518,33 +2511,31 @@ Function createIconAssets
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function chmod
-	var $0 : Object
+Function chmod()->$result : Object
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
 	This:C1470.launch(This:C1470.chmodCmd+" +x "+This:C1470.singleQuoted(This:C1470.projectPath+"gradlew"))
 	
-	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
+	$result.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 	
 	If (Not:C34($0.success))
 		
-		$0.errors.push("Failed chmod command")
+		$result.errors.push("Failed chmod command")
 		
 		// Else : all ok
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function prepareSdk
-	var $0 : Object
+Function prepareSdk()->$result : Object
 	var $cacheSdkAndroid : 4D:C1709.File
 	var $archive : 4D:C1709.ZipArchive
 	var $unzipDest : 4D:C1709.Folder
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
@@ -2559,18 +2550,18 @@ Function prepareSdk
 		
 		If ($unzipDest.exists)
 			
-			$0.success:=($unzipDest.files().length>0) || ($unzipDest.folders().length>0)
+			$result.success:=($unzipDest.files().length>0) || ($unzipDest.folders().length>0)
 			// XXX maybe delete empty folder to avoid miss integration
 			
 		Else 
 			
-			$0.errors.push("Could not unzip to destination: "+$unzipDest.path)
+			$result.errors.push("Could not unzip to destination: "+$unzipDest.path)
 			
 		End if 
 		
 	Else 
 		// Missing sdk archive
-		$0.errors.push("Missing 4D Mobile SDK archive: "+$cacheSdkAndroid.path)
+		$result.errors.push("Missing 4D Mobile SDK archive: "+$cacheSdkAndroid.path)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
