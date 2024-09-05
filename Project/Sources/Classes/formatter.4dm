@@ -122,7 +122,7 @@ Function sources($name : Text)->$sources : 4D:C1709.Folder
 	
 	$name:=(Count parameters:C259>=1) ? $name : This:C1470.name
 	
-	$sources:=Folder:C1567("📁")
+	$sources:=DummyFile()  // folder
 	
 	If ($name[[1]]="/")  // Host database resources
 		
