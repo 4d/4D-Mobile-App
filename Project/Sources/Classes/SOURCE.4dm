@@ -579,7 +579,7 @@ Function endOfDatasetGeneration($data : Object)
 				UI.postMessage(New object:C1471(\
 					"action"; "show"; \
 					"type"; "alert"; \
-					"additional"; $data.errors.join("\n")))
+					"additional"; ob_error_string($data)))
 				
 			End if 
 		End if 
