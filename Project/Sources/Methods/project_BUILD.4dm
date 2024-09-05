@@ -348,11 +348,14 @@ If (Asserted:C1132($project#Null:C1517))
 						var $forError : Variant
 						$forError:=($rest.httpError=Null:C1517) ? $rest.code : $rest.httpError
 						
+						var $httpError : Text
+						$httpError:=Localize_server_response($forError)
+						
 						UI.postMessage(New object:C1471(\
 							"action"; "show"; \
 							"type"; "alert"; \
 							"title"; "theProductionServerIsNotAvailable"; \
-							"additional"; Localize_server_response($forError)\
+							"additional"; $httpError\
 							))
 						
 					End if 

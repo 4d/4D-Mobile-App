@@ -314,6 +314,13 @@ WARNING: "localhost" may not find the server if the computer is connected to a n
 				End if 
 			End if 
 			
+			If (($out.httpError=Null:C1517) && ($out.errors#Null:C1517) && ($out.errors.length>0))
+				$out.httpError:=String:C10($out.errors.first().message)
+				If (Length:C16($out.httpError)=0)
+					OB REMOVE:C1226($out; "httpError")
+				End if 
+			End if 
+			
 			$out.headers:=New object:C1471
 			
 			For ($i; 1; Size of array:C274($headerNames); 1)

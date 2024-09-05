@@ -23,6 +23,11 @@ Else
 			$message:=Get localized string:C991("theWebServerIsNotReachable")
 			
 			//……………………………………………………………………………
+		: ($in=401)
+			
+			$message:=Get localized string:C991("unauthorizedAccess")
+			
+			//……………………………………………………………………………
 		: ($in=403)
 			
 			$message:=Get localized string:C991("unauthorizedAccess")
