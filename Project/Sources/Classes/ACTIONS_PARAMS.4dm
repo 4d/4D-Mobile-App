@@ -1172,7 +1172,7 @@ Function sourceFolder($name : Text; $control : Boolean) : Object
 		
 		var $source : 4D:C1709.Folder
 		
-		$source:=Folder:C1567("❓")
+		$source:=DummyFile()  //folder
 		
 		If (Not:C34($folder.exists))
 			
@@ -2006,8 +2006,8 @@ Function editList()
 	
 /*
 														$form:=New object(\
-																												"static"; $static; \
-																												"host"; This.path.hostInputControls(True))
+"static"; $static; \
+"host"; This.path.hostInputControls(True))
 	
 $form.folder:=This.path.hostInputControls()
 $manifest:=$form.folder.file("manifest.json")

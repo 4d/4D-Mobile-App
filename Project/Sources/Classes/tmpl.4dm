@@ -663,7 +663,7 @@ Function getSources($name : Text; $type : Text)->$template : 4D:C1709.Folder
 		
 	End if 
 	
-	$template:=Folder:C1567("😱")
+	$template:=DummyFile()  // folder
 	
 	If (Length:C16($formName)>0)
 		
