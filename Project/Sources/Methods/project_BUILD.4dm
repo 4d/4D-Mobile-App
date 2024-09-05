@@ -251,8 +251,8 @@ If (Asserted:C1132($project#Null:C1517))
 								"build"; $data)
 							
 							//$messageCancel:=New object(\
-																																																"action"; "build_ignoreServer"; \
-																																																"build"; $data)
+								"action"; "build_ignoreServer"; \
+								"build"; $data)
 							
 							// Web server must running to test data synchronization
 							$message:=New object:C1471(\
@@ -272,6 +272,17 @@ If (Asserted:C1132($project#Null:C1517))
 				
 			Else 
 				
+				var $keyFile : 4D:C1709.File
+				$keyFile:=cs:C1710.path.new().key()
+				
+				var $keyText : Text
+				If ($keyFile.exists)
+					$keyText:=$keyFile.getText()
+				Else 
+					$keyText:=""
+				End if 
+				// TODO: do not try with no key, it will failed
+				
 				// Check server-database structure
 				$rest:=Rest(New object:C1471(\
 					"action"; "tables"; \
@@ -279,7 +290,7 @@ If (Asserted:C1132($project#Null:C1517))
 					"url"; String:C10($project.server.urls.production); \
 					"headers"; New object:C1471(\
 					"X-MobileApp"; "1"; \
-					"Authorization"; "Bearer "+cs:C1710.path.new().key().getText())))
+					"Authorization"; "Bearer "+$keyText)))
 				
 				$success:=$rest.success
 				
