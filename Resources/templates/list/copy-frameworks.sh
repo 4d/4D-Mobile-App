@@ -54,6 +54,13 @@ do
   rm -Rf "$FRAMEWORK_OUT"
   cp -R "$FRAMEWORK" "$FRAMEWORK_OUT"
 
+  ## skip xcframework, no lipo
+  if [[ "$FRAMEWORK" == *.xcframework ]]
+  then
+    echo "info: $i - $FRAMEWORK copied, lipo skipped"
+    continue
+  fi
+
   ## and removes unused architectures.
   ## TODO use lipo -info and -remove instead
   EXTRACTED_ARCHS=()
