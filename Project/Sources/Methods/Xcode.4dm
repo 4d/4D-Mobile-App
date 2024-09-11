@@ -25,6 +25,8 @@ If (False:C215)
 	C_OBJECT:C1216(Xcode; $1)
 End if 
 
+$Obj_result:=New object:C1471("success"; False:C215)
+
 // ----------------------------------------------------
 
 Case of 
