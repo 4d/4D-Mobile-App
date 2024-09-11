@@ -8,47 +8,21 @@
 //
 // ----------------------------------------------------
 // Declarations
-C_OBJECT:C1216($0)
-C_OBJECT:C1216($1)
+#DECLARE($Obj_param)->$Obj_result
 
-C_BOOLEAN:C305($Boo_search)
-C_LONGINT:C283($Lon_i; $Lon_parameters; $Lon_x)
-C_TEXT:C284($File_subpath; $Txt_buffer)
-C_TEXT:C284($Txt_cmd; $Txt_error; $Txt_in; $Txt_name; $Txt_newPath; $Txt_out)
-C_OBJECT:C1216($Obj_buffer; $Obj_param; $Obj_result; $Obj_version)
-C_OBJECT:C1216($Dom_fileRef; $Dom_root; $Dom_group; $Dom_child)
-C_OBJECT:C1216($subfolder)
-C_COLLECTION:C1488($Col_folder; $Col_paths)
+var $Boo_search : Boolean
+var $Lon_i; $Lon_x : Integer
+var $File_subpath; $Txt_buffer : Text
+var $Txt_cmd; $Txt_error; $Txt_in; $Txt_name; $Txt_newPath; $Txt_out : Text
+var $Obj_buffer; $Obj_version : Object
+var $Dom_fileRef; $Dom_root; $Dom_group; $Dom_child : Object
+var $subfolder : Object
+var $Col_folder; $Col_paths : Collection
 var $regex : cs:C1710.regex
 
 If (False:C215)
 	C_OBJECT:C1216(Xcode; $0)
 	C_OBJECT:C1216(Xcode; $1)
-End if 
-
-// ----------------------------------------------------
-// Initialisations
-$Lon_parameters:=Count parameters:C259
-
-If (Asserted:C1132($Lon_parameters>=1; "Missing parameter"))
-	
-	// Required parameters
-	$Obj_param:=$1
-	
-	// Optional parameters
-	If ($Lon_parameters>=2)
-		
-		// <NONE>
-		
-	End if 
-	
-	$Obj_result:=New object:C1471(\
-		"success"; False:C215)
-	
-Else 
-	
-	ABORT:C156
-	
 End if 
 
 // ----------------------------------------------------
@@ -1245,6 +1219,13 @@ Get system info should not be called frequently (consumer) as the processor will
 						End if 
 					End if 
 					
+					// remove some trailing data like -infoplist-subpath Info.plist
+					If (Position:C15(".app "; $Obj_result.app)>0)  // XXX: last pos
+						
+						$Obj_result.app:=Substring:C12($Obj_result.app; 1; Position:C15(".app "; $Obj_result.app)+3)
+						
+					End if 
+					
 				Else 
 					
 					$Obj_result.error:=$Txt_error
@@ -1529,9 +1510,3 @@ Get system info should not be called frequently (consumer) as the processor will
 		//______________________________________________________
 End case 
 
-// ----------------------------------------------------
-// Return
-$0:=$Obj_result
-
-// ----------------------------------------------------
-// End
