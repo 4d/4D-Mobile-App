@@ -1080,16 +1080,13 @@ Function localize($resname : Text; $replacements) : Text
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// Concatenates the values ​​given to the original string
-Function concat
-	var $0 : Text
-	var $1 : Variant
-	var $2 : Text
+Function concat($p1 : Variant; $p2 : Text)->$result : Text
 	
 	var $t; $text; $tSeparator : Text
 	
 	If (Count parameters:C259>=2)
 		
-		$tSeparator:=String:C10($2)
+		$tSeparator:=String:C10($p2)
 		
 	Else 
 		
@@ -1098,11 +1095,11 @@ Function concat
 		
 	End if 
 	
-	$0:=This:C1470.value
+	$result:=This:C1470.value
 	
-	If (Value type:C1509($1)=Is collection:K8:32)
+	If (Value type:C1509($p1)=Is collection:K8:32)
 		
-		For each ($t; $1)
+		For each ($t; $p1)
 			
 			If (Length:C16($t)>0)\
 				 & (Length:C16($t)<=255)
@@ -1119,29 +1116,29 @@ Function concat
 			End if 
 			
 			If (Position:C15($tSeparator; $text)#1)\
-				 & (Position:C15($tSeparator; $0)#Length:C16($0))
+				 & (Position:C15($tSeparator; $result)#Length:C16($result))
 				
-				$0:=$0+$tSeparator
+				$result+=$tSeparator
 				
 			End if 
 			
-			$0:=$0+$text
+			$result+=$text
 			
 		End for each 
 		
 	Else 
 		
-		$text:=Get localized string:C991($1)
-		$text:=Choose:C955(Length:C16($text)>0; $text; $1)
+		$text:=Get localized string:C991($p1)
+		$text:=Choose:C955(Length:C16($text)>0; $text; $p1)
 		
 		If (Position:C15($tSeparator; $text)#1)\
-			 & (Position:C15($tSeparator; $0)#Length:C16($0))
+			 & (Position:C15($tSeparator; $result)#Length:C16($result))
 			
-			$0:=$0+$tSeparator
+			$result+=$tSeparator
 			
 		End if 
 		
-		$0:=$0+$text
+		$result+=$text
 		
 	End if 
 	

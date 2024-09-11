@@ -18,11 +18,11 @@ Function run($Obj_template : Object; $target : Object; $Obj_tags : Object)->$Obj
 	
 	If (This:C1470.path.exists)
 		
-		C_OBJECT:C1216($Dom_root; $Dom_)
+		var $Dom_root; $Dom_ : Object
 		$Dom_root:=_o_xml("load"; This:C1470.path)
 		
 		// Look up first all the elements. Dom could be modifyed
-		C_OBJECT:C1216($Obj_element)
+		var $Obj_element : Object
 		For each ($Obj_element; $Obj_template.elements)
 			
 			If (Length:C16(String:C10($Obj_element.xpath))>0)
@@ -46,7 +46,7 @@ Function run($Obj_template : Object; $target : Object; $Obj_tags : Object)->$Obj
 				
 			Else 
 				
-				C_LONGINT:C283($Lon_length)
+				var $Lon_length : Integer
 				$Lon_length:=Length:C16(String:C10($Obj_element.tagInterfix))
 				
 				Case of 
@@ -85,7 +85,7 @@ Function run($Obj_template : Object; $target : Object; $Obj_tags : Object)->$Obj
 		End for each 
 		
 		// For each table create a storyboard id shared by all xml elements
-		C_OBJECT:C1216($Obj_table)
+		var $Obj_table : Object
 		For each ($Obj_table; $Obj_tags.navigationTables)
 			
 			$Obj_table.segueDestinationId:=This:C1470._randomID()
@@ -98,7 +98,7 @@ Function run($Obj_template : Object; $target : Object; $Obj_tags : Object)->$Obj
 			If ($Obj_element.dom#Null:C1517)
 				
 				// ... and table
-				C_LONGINT:C283($Lon_j)
+				var $Lon_j : Integer
 				$Lon_j:=0
 				
 				For each ($Obj_table; $Obj_tags.navigationTables)
@@ -116,7 +116,7 @@ Function run($Obj_template : Object; $target : Object; $Obj_tags : Object)->$Obj
 					End if 
 					
 					// Insert after processing tags
-					C_TEXT:C284($Txt_buffer)
+					var $Txt_buffer : Text
 					$Txt_buffer:=$Obj_element.dom.export().variable
 					If ($Obj_table.storyboard#Null:C1517)  // for action for instance is not a list form, so replace
 						$Txt_buffer:=Replace string:C233($Txt_buffer; "___TABLE___ListForm"; $Obj_table.storyboard)
@@ -149,7 +149,7 @@ Function run($Obj_template : Object; $target : Object; $Obj_tags : Object)->$Obj
 		$Dom_root.close()
 		$Txt_buffer:=Process_tags($Txt_buffer; $Obj_tags; New collection:C1472(This:C1470.type+".storyboard"))
 		
-		C_OBJECT:C1216($File_)
+		var $File_ : Object
 		$File_:=$target.file(String:C10($Obj_template.storyboard))
 		$File_.setText($Txt_buffer; "UTF-8"; Document with CRLF:K24:20)
 		
@@ -164,4 +164,3 @@ Function run($Obj_template : Object; $target : Object; $Obj_tags : Object)->$Obj
 		
 	End if 
 	
-	$0:=$Obj_out

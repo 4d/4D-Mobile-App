@@ -40,7 +40,6 @@ Function doRun()->$Obj_out : Object
 		
 	End if 
 	
-	$0:=$Obj_out
 	
 	// MARK: - items
 Function _actionsInTabBarProcess()

@@ -12,19 +12,19 @@ Function run($Obj_template : Object; $target : Object/*4D.Folder*/; $Obj_tags : 
 	
 	This:C1470.checkStoryboardPath($Obj_template)  // set default path if not defined
 	
-	C_OBJECT:C1216($Dom_root)
+	var $Dom_root : Object
 	$Dom_root:=_o_xml("load"; This:C1470.path)
 	
 	If ($Dom_root.success)
 		
-		C_TEXT:C284($Txt_buffer)
+		var $Txt_buffer : Text
 		$Txt_buffer:=This:C1470.path.getText()
 		
 		If (Length:C16($Txt_buffer)>0)  // a little check on record action if needed to inject it
 			
 			If ($Obj_tags.table.recordActions#Null:C1517)
 				
-				C_TEXT:C284($Txt_cmd)
+				var $Txt_cmd : Text
 				$Txt_cmd:="___ENTITY_ACTIONS___"
 				
 				If (Position:C15($Txt_cmd; $Txt_buffer)=0)
@@ -40,7 +40,7 @@ Function run($Obj_template : Object; $target : Object/*4D.Folder*/; $Obj_tags : 
 		// create elements if not defined in manifest (if defined, this is an opti)
 		This:C1470._checkTemplateElements($Obj_template; $Txt_buffer; $Dom_root)
 		
-		C_OBJECT:C1216($Folder_template)
+		var $Folder_template : Object
 		$Folder_template:=Folder:C1567($Obj_template.source; fk platform path:K87:2)
 		
 		// Try to determine if must duplicate or not element
@@ -50,7 +50,7 @@ Function run($Obj_template : Object; $target : Object/*4D.Folder*/; $Obj_tags : 
 			 | (($Obj_template.fields.max#Null:C1517) & (Num:C11($Obj_template.fields.max)=0))\
 			 | (Num:C11($Obj_template.fields.max)>Num:C11($Obj_template.fields.count)))
 			
-			C_BOOLEAN:C305($Boo_buffer)
+			var $Boo_buffer : Boolean
 			$Boo_buffer:=True:C214  // We found some element to duplicate, so we must write to file
 			
 			If ($Obj_template.elements=Null:C1517)
@@ -58,7 +58,7 @@ Function run($Obj_template : Object; $target : Object/*4D.Folder*/; $Obj_tags : 
 			End if 
 			
 			// Look up first all the elements in Dom. Dom could be modifyed
-			C_OBJECT:C1216($Obj_element)
+			var $Obj_element : Object
 			For each ($Obj_element; $Obj_template.elements)
 				
 				Case of 
@@ -92,7 +92,7 @@ Function run($Obj_template : Object; $target : Object/*4D.Folder*/; $Obj_tags : 
 						
 					Else   // or look up with id TAG-INTERFIX-001
 						
-						C_LONGINT:C283($Lon_length)
+						var $Lon_length : Integer
 						$Lon_length:=Length:C16(String:C10($Obj_element.tagInterfix))
 						
 						Case of 
@@ -136,9 +136,9 @@ Function run($Obj_template : Object; $target : Object/*4D.Folder*/; $Obj_tags : 
 			
 			// Find a node to duplicate for relation
 			
-			C_BOOLEAN:C305($Boo_hasRelation)
+			var $Boo_hasRelation : Boolean
 			$Boo_hasRelation:=False:C215
-			C_OBJECT:C1216($Obj_field)
+			var $Obj_field : Object
 			For each ($Obj_field; $Obj_tags.table.fields; Num:C11($Obj_template.fields.count)) Until ($Boo_hasRelation)
 				If (This:C1470.isRelationField($Obj_field))  // relation to N field
 					$Boo_hasRelation:=True:C214
@@ -153,7 +153,7 @@ Function run($Obj_template : Object; $target : Object/*4D.Folder*/; $Obj_tags : 
 				$Obj_template.relation.elements:=New collection:C1472()
 				
 				
-				C_OBJECT:C1216($Dom_relation)
+				var $Dom_relation : Object
 				
 				Case of 
 					: (Length:C16(String:C10($Obj_template.relation.xpath))>0)  // specified by xpath in current storyboard
@@ -212,7 +212,7 @@ Function run($Obj_template : Object; $target : Object/*4D.Folder*/; $Obj_tags : 
 				End if 
 				
 				// Must be inserted into a stack view (with a subviews as intermediate)
-				C_OBJECT:C1216($Obj_)
+				var $Obj_ : Object
 				For each ($Obj_; $Obj_template.elements) Until ($Obj_element.insertInto#Null:C1517)
 					If (String:C10($Obj_.insertInto.parent().getName().name)="stackView")
 						$Obj_element.insertInto:=$Obj_.insertInto
@@ -238,7 +238,7 @@ Function run($Obj_template : Object; $target : Object/*4D.Folder*/; $Obj_tags : 
 				
 				// find controller of where we inject relation element button
 				$Obj_element.insertInto:=$Obj_template.relation.elements[0].insertInto.parentWithName("viewController")
-				C_LONGINT:C283($Lon_j)
+				var $Lon_j : Integer
 				If (Not:C34($Obj_element.insertInto.success))  // find with old code
 					$Lon_j:=3
 					Repeat 
@@ -269,7 +269,7 @@ Function run($Obj_template : Object; $target : Object/*4D.Folder*/; $Obj_tags : 
 			
 			// ... and fields
 			$Lon_j:=Num:C11($Obj_template.fields.count)  // Start at first element, not in header
-			C_VARIANT:C1683($Var_field)
+			var $Var_field : Variant
 			For each ($Var_field; $Obj_tags.table.fields; Num:C11($Obj_template.fields.count))
 				
 				Case of 
@@ -324,7 +324,7 @@ Function run($Obj_template : Object; $target : Object/*4D.Folder*/; $Obj_tags : 
 			
 		End if 
 		
-		C_COLLECTION:C1488($Col_fields)
+		var $Col_fields : Collection
 		$Col_fields:=$Obj_tags.table.fields.slice(0; Num:C11($Obj_template.fields.count))
 		
 		// Manage relation in header fields (before stack view and diplicated element)
@@ -371,8 +371,6 @@ Function run($Obj_template : Object; $target : Object/*4D.Folder*/; $Obj_tags : 
 		$Obj_out.success:=False:C215
 		
 	End if 
-	
-	$0:=$Obj_out
 	
 	
 Function _checkTemplateElements($Obj_template : Object; $Txt_buffer : Text; $Dom_root : Object)

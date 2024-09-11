@@ -628,7 +628,7 @@ ASSERT:C1129($str.truncate(3; Align left:K42:2)="hel…")
 ASSERT:C1129($str.truncate(4; Align left:K42:2)="hell…")
 ASSERT:C1129($str.truncate(5; Align left:K42:2)="hello")
 ASSERT:C1129($str.truncate(10; Align left:K42:2)="hello")
-ASSERT:C1129($str.setText("hello world"; Align left:K42:2).truncate(12)="hello world")
+ASSERT:C1129($str.setText("hello world").truncate(12; Align left:K42:2)="hello world")
 
 ASSERT:C1129($str.setText("hello").truncate(1; Align right:K42:4)="…o")
 ASSERT:C1129($str.truncate(2; Align right:K42:4)="…lo")

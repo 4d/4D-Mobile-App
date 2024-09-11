@@ -2,13 +2,11 @@
 Class extends formObject
 /*═══════════════════*/
 
-Class constructor
-	var $1 : Text
-	var $2 : Variant
+Class constructor($name : Text; $url : Variant)
 	
 	If (Count parameters:C259>=1)
 		
-		Super:C1705($1)
+		Super:C1705($name)
 		
 	Else 
 		
@@ -22,9 +20,9 @@ Class constructor
 	
 	This:C1470.url:=WA Get current URL:C1025(*; This:C1470.name)
 	
-	If (Count parameters:C259>=1)
+	If (Count parameters:C259>1)
 		
-		This:C1470.init($1)
+		This:C1470.init($url)
 		
 	Else 
 		
@@ -33,8 +31,7 @@ Class constructor
 	End if 
 	
 	//==================================================
-Function init
-	var $1 : Variant
+Function init($urls : Variant)
 	
 	ARRAY TEXT:C222($_filters; 0x0000)
 	ARRAY BOOLEAN:C223($_allowed; 0x0000)
@@ -50,7 +47,7 @@ Function init
 	
 	If (Count parameters:C259>=1)
 		
-		This:C1470.allow($1)
+		This:C1470.allow($urls)
 		
 	Else 
 		
@@ -73,8 +70,7 @@ Function init
 	This:C1470.success:=True:C214
 	
 	//==================================================
-Function openURL
-	var $1 : Variant
+Function openURL($url : Variant)
 	
 	This:C1470.success:=True:C214
 	
@@ -86,16 +82,16 @@ Function openURL
 			// <NOTHING MORE TO DO>
 			
 			//……………………………………………………………………………………………………
-		: (Value type:C1509($1)=Is text:K8:3)
+		: (Value type:C1509($url)=Is text:K8:3)
 			
-			This:C1470.url:=$1
+			This:C1470.url:=$url
 			
 			//……………………………………………………………………………………………………
-		: (Value type:C1509($1)=Is object:K8:27)
+		: (Value type:C1509($url)=Is object:K8:27)
 			
-			If (OB Instance of:C1731($1; 4D:C1709.File))
+			If (OB Instance of:C1731($url; 4D:C1709.File))
 				
-				This:C1470.url:="file:///"+$1.path
+				This:C1470.url:="file:///"+$url.path
 				
 			Else 
 				
@@ -146,29 +142,21 @@ Function openURL
 	WA OPEN URL:C1020(*; This:C1470.name; This:C1470.url)
 	
 	//==================================================
-Function setContent
-	var $1 : Text
-	var $2 : Text
+Function setContent($content : Text; $base : Text)
 	
-	var $base : Text
 	
-	If (Count parameters:C259>=2)
-		
-		$base:=$2
-		
-	Else 
+	If (Count parameters:C259<2)
 		
 		$base:="/"
 		
 	End if 
 	
-	WA SET PAGE CONTENT:C1037(*; This:C1470.name; $1; $base)
+	WA SET PAGE CONTENT:C1037(*; This:C1470.name; $content; $base)
 	
 	This:C1470.success:=True:C214
 	
 	//==================================================
-Function load
-	var $1 : 4D:C1709.File
+Function load($fileContent : 4D:C1709.File)
 	
 	var $text : Text
 	var $index : Integer
@@ -179,11 +167,11 @@ Function load
 	
 	If (This:C1470.success)
 		
-		This:C1470.success:=$1.exists
+		This:C1470.success:=$fileContent.exists
 		
 		If (This:C1470.success)
 			
-			DOCUMENT TO BLOB:C525($1.platformPath; $x)
+			DOCUMENT TO BLOB:C525($fileContent.platformPath; $x)
 			This:C1470.success:=Bool:C1537(OK)
 			
 			If (This:C1470.success)
@@ -269,30 +257,26 @@ Function load
 	End if 
 	
 	//==================================================
-Function execute
-	var $0 : Variant
-	var $1 : Text
-	var $2 : Integer
+Function execute($p1 : Text; $p2 : Integer)->$result : Variant
 	
 	If (Count parameters:C259>=1)
 		
 		If (Count parameters:C259>=2)
 			
-			$0:=WA Evaluate JavaScript:C1029(*; This:C1470.name; $1; $2)
+			$result:=WA Evaluate JavaScript:C1029(*; This:C1470.name; $p1; $p2)
 			
 		Else 
 			
-			$0:=WA Evaluate JavaScript:C1029(*; This:C1470.name; $1)
+			$result:=WA Evaluate JavaScript:C1029(*; This:C1470.name; $p1)
 			
 		End if 
 		
 	End if 
 	
 	//==================================================
-Function content
-	var $0 : Text
+Function content() : Text
 	
-	$0:=WA Get page content:C1038(*; This:C1470.name)
+	return WA Get page content:C1038(*; This:C1470.name)
 	
 	//==================================================
 Function back
@@ -305,16 +289,14 @@ Function forward
 	WA OPEN FORWARD URL:C1022(*; This:C1470.name)
 	
 	//==================================================
-Function isLoaded
-	var $0 : Boolean
+Function isLoaded() : Boolean
 	
-	$0:=(WA Get current URL:C1025(*; This:C1470.name)=This:C1470.url)
+	return (WA Get current URL:C1025(*; This:C1470.name)=This:C1470.url)
 	
 	//==================================================
-Function lastFiltered
-	var $0 : Text
+Function lastFiltered() : Text
 	
-	$0:=WA Get last filtered URL:C1035(*; This:C1470.name)
+	return WA Get last filtered URL:C1035(*; This:C1470.name)
 	
 	//==================================================
 Function refresh
@@ -322,33 +304,19 @@ Function refresh
 	This:C1470.openURL(This:C1470.url)
 	
 	//==================================================
-Function getTitle
-	var $0 : Text
+Function getTitle() : Text
 	
-	$0:=WA Get page title:C1036(*; This:C1470.name)
+	return WA Get page title:C1036(*; This:C1470.name)
 	
 	//==================================================
-Function allow
-	var $1 : Variant
-	var $2 : Boolean
+Function allow($urls : Variant; $allow : Boolean)
 	
 	var $filter : Text
-	var $allow : Boolean
 	
 	ARRAY TEXT:C222($_filters; 0)
 	ARRAY BOOLEAN:C223($_allowed; 0)
 	
 	If (Count parameters:C259>=1)
-		
-		If (Count parameters:C259>=2)
-			
-			$allow:=$2
-			
-		Else 
-			
-			$allow:=True:C214
-			
-		End if 
 		
 		This:C1470.success:=True:C214
 		WA GET URL FILTERS:C1031(*; This:C1470.name; $_filters; $_allowed)
@@ -356,13 +324,13 @@ Function allow
 		Case of 
 				
 				//______________________________________________________
-			: (Value type:C1509($1)=Is text:K8:3)
+			: (Value type:C1509($urls)=Is text:K8:3)
 				
 				APPEND TO ARRAY:C911($_filters; $1)
 				APPEND TO ARRAY:C911($_allowed; $allow)
 				
 				//______________________________________________________
-			: (Value type:C1509($1)=Is collection:K8:32)
+			: (Value type:C1509($urls)=Is collection:K8:32)
 				
 				For each ($filter; $1)
 					
@@ -391,10 +359,9 @@ Function allow
 	End if 
 	
 	//==================================================
-Function deny
-	var $1 : Variant
+Function deny($urls : Variant)
 	
-	This:C1470.allow($1; False:C215)
+	This:C1470.allow($urls; False:C215)
 	
 	//==================================================
 	// Detect which web rendering engine is being used for the Web Area

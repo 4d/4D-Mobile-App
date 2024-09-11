@@ -1273,16 +1273,11 @@ Function reorder($tableID : Text)  //#WIP
 	
 	//============================================================================
 	// Enrich a binding with the fields already used during the session
-Function enrich($fields : Collection; $previouslyUsedForms : Object)
-	var $3 : Text
-	var $form; $formNotToUse : Text
+Function enrich($fields : Collection; $previouslyUsedForms : Object; $formNotToUse : Text)
+	
+	var $form : Text
 	var $o : Object
 	
-	If (Count parameters:C259>=3)
-		
-		$formNotToUse:=$3  // Default is empty
-		
-	End if 
 	
 	For each ($form; $previouslyUsedForms)
 		

@@ -528,14 +528,13 @@ Function initScheme
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
-Function validateScheme
-	var $0 : Boolean
+Function validateScheme()->$result : Boolean
 	
 	This:C1470.initScheme()
 	
-	$0:=Match regex:C1019("(?mi-s)^[[:alpha:]][-+\\.[:alpha:][:digit:]]+(?:://)?$"; Form:C1466.deepLinking.urlScheme; 1)
+	$result:=Match regex:C1019("(?mi-s)^[[:alpha:]][-+\\.[:alpha:][:digit:]]+(?:://)?$"; Form:C1466.deepLinking.urlScheme; 1)
 	
-	If ($0)
+	If ($result)
 		
 		Form:C1466.deepLinking.urlScheme:=formatString("urlScheme"; Replace string:C233(Form:C1466.deepLinking.urlScheme; "://"; ""))+"://"
 		This:C1470.deepSchemeAlert.reset()

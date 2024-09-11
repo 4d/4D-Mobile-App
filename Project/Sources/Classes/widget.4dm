@@ -421,42 +421,38 @@ Function touch() : cs:C1710.widget
 /*══════════════════════════
 .on(e;callback) -> bool
 ══════════════════════════*/
-Function on
-	
-	C_BOOLEAN:C305($0)
-	C_VARIANT:C1683($1)
-	C_OBJECT:C1216($2)
+Function on($event : Variant; $callback : Object)->$result : Boolean
 	
 	If (Asserted:C1132(This:C1470.type#-1; "Does not apply to a group"))
 		
 		If (Count parameters:C259=0)
 			
-			$0:=(This:C1470.name=FORM Event:C1606.objectName)
+			$result:=(This:C1470.name=FORM Event:C1606.objectName)
 			
 		Else 
 			
-			If (Value type:C1509($1)=Is object:K8:27)
+			If (Value type:C1509($event)=Is object:K8:27)
 				
 				If (Count parameters:C259>=2)
 					
-					$0:=(This:C1470.name=String:C10($1.objectName))\
-						 & ($1.code=$2)
+					$result:=(This:C1470.name=String:C10($event.objectName))\
+						 & ($event.code=$callback)  // FIXME: sure we could compare?
 					
 				Else 
 					
-					$0:=(This:C1470.name=String:C10($1.objectName))
+					$result:=(This:C1470.name=String:C10($event.objectName))
 					
 				End if 
 			Else 
 				
-				$0:=(This:C1470.name=String:C10($1))
+				$result:=(This:C1470.name=String:C10($event))
 				
 			End if 
 		End if 
 		
-		If ($0)
+		If ($result)
 			
-			$2.call()
+			$callback.call()
 			
 		End if 
 	End if 
@@ -597,8 +593,8 @@ Function removeHelpTip() : cs:C1710.widget
 ══════════════════════════*/
 Function getShortcut : Object
 	
-	C_TEXT:C284($t)
-	C_LONGINT:C283($l)
+	var $t : Text
+	var $l : Integer
 	
 	OBJECT GET SHORTCUT:C1186(*; This:C1470.name; $t; $l)
 	
