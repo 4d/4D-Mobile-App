@@ -125,17 +125,15 @@ Function _copyJarIfmissing
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function buildEmbeddedDataLib
-	var $0 : Object
-	var $1 : Text  // package name (app name)
+Function buildEmbeddedDataLib($packageName : Text/* app name */)->$result : Object
 	var $staticDataInitializerFile; $targetFile : 4D:C1709.File
 	var $libFolder : 4D:C1709.Folder
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	$staticDataInitializerFile:=File:C1566(This:C1470.projectPath+"buildSrc/src/main/java/"+$1+".android.build/database/StaticDataInitializer.kt")
+	$staticDataInitializerFile:=File:C1566(This:C1470.projectPath+"buildSrc/src/main/java/"+$packageName+".android.build/database/StaticDataInitializer.kt")
 	
 	If ($staticDataInitializerFile.exists)
 		
@@ -148,29 +146,28 @@ Function buildEmbeddedDataLib
 			+" -verbose \""+$staticDataInitializerFile.path+"\""\
 			+" -d \""+$targetFile.path+"\"")
 		
-		$0.success:=$targetFile.exists
+		$result.success:=$targetFile.exists
 		
 	Else 
 		
-		$0.errors.push("Missing file : "+$staticDataInitializerFile.path)
+		$result.errors.push("Missing file : "+$staticDataInitializerFile.path)
 		
 	End if 
 	
-	If (Not:C34($0.success))
+	If (Not:C34($result.success))
 		
-		$0.errors.push("Failed to build embedded data library")
+		$result.errors.push("Failed to build embedded data library")
 		
 		// Else : all ok
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function copyEmbeddedDataLib
-	var $0 : Object
+Function copyEmbeddedDataLib()->$result : Object
 	var $copySrc; $copyDest : 4D:C1709.File
 	var $targetLibFolder : 4D:C1709.Folder
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
@@ -185,16 +182,16 @@ Function copyEmbeddedDataLib
 		
 		If ($copyDest.exists)
 			
-			$0.success:=True:C214
+			$result.success:=True:C214
 			
 		Else 
 			// Copy failed
-			$0.errors.push("Could not copy file to destination: "+$copyDest.path)
+			$result.errors.push("Could not copy file to destination: "+$copyDest.path)
 		End if 
 		
 	Else 
 		// Missing file
-		$0.errors.push("Missing source file for copy: "+$copySrc.path)
+		$result.errors.push("Missing source file for copy: "+$copySrc.path)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
@@ -294,17 +291,15 @@ Function copyResources($project : cs:C1710.project)->$result : Object
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function copyDataSet
-	var $0 : Object
-	var $1 : 4D:C1709.Folder  // 4D Mobile Project
+Function copyDataSet($4dMobileProject : 4D:C1709.Folder)->$result : Object
 	var $xcassets; $copyDest : 4D:C1709.Folder
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
 	// Copy dataSet resources
-	$xcassets:=$1.folder("project.dataSet/Resources/Assets.xcassets")
+	$xcassets:=$4dMobileProject.folder("project.dataSet/Resources/Assets.xcassets")
 	
 	If ($xcassets.exists)
 		
@@ -312,33 +307,31 @@ Function copyDataSet
 		
 		If ($copyDest.exists)
 			
-			$0.success:=True:C214
+			$result.success:=True:C214
 			
 		Else 
 			// Copy failed
-			$0.success:=False:C215
-			$0.errors.push("Could not copy directory to destination: "+$copyDest.path)
+			$result.success:=False:C215
+			$result.errors.push("Could not copy directory to destination: "+$copyDest.path)
 			
 		End if 
 		
 	Else 
 		// Missing Assets.xcassets folder
-		$0.errors.push("Missing source directory for copy: "+$xcassets.path)
+		$result.errors.push("Missing source directory for copy: "+$xcassets.path)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function copyGeneratedDb
-	var $0 : Object
-	var $1 : 4D:C1709.Folder  // 4D Mobile Project
+Function copyGeneratedDb($4dMobileProject : 4D:C1709.Folder)->$result : Object
 	var $dbFile; $copyDest : 4D:C1709.File
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
 	// Copy db file
-	$dbFile:=This:C1470.path.androidDb($1.path)
+	$dbFile:=This:C1470.path.androidDb($4dMobileProject.path)
 	
 	If ($dbFile.exists)
 		
@@ -346,33 +339,31 @@ Function copyGeneratedDb
 		
 		If ($copyDest.exists)
 			
-			$0.success:=True:C214
+			$result.success:=True:C214
 			
 		Else 
 			// Copy failed
-			$0.success:=False:C215
-			$0.errors.push("Could not copy db file to destination: "+$copyDest.path)
+			$result.success:=False:C215
+			$result.errors.push("Could not copy db file to destination: "+$copyDest.path)
 			
 		End if 
 		
 	Else 
 		// Missing generated db file
-		$0.errors.push("Missing db file for copy: "+$dbFile.path)
+		$result.errors.push("Missing db file for copy: "+$dbFile.path)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function copyDataSetPictures
-	var $0 : Object
-	var $1 : 4D:C1709.Folder  // 4D Mobile Project
+Function copyDataSetPictures($4dMobileProject : 4D:C1709.Folder)->$result : Object
 	var $picturesFolder; $copyDest : 4D:C1709.Folder
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; True:C214; \
 		"errors"; New collection:C1472)
 	
 	// Copy dataSet pictures
-	$picturesFolder:=$1.folder("project.dataSet/Resources/Assets.xcassets/Pictures")
+	$picturesFolder:=$4dMobileProject.folder("project.dataSet/Resources/Assets.xcassets/Pictures")
 	
 	If ($picturesFolder.exists)
 		
@@ -381,8 +372,8 @@ Function copyDataSetPictures
 		If (Not:C34($copyDest.exists))
 			
 			// Copy failed
-			$0.success:=False:C215
-			$0.errors.push("Could not copy directory to destination: "+$copyDest.path)
+			$result.success:=False:C215
+			$result.errors.push("Could not copy directory to destination: "+$copyDest.path)
 			
 			// Else : all ok
 		End if 
@@ -392,15 +383,11 @@ Function copyDataSetPictures
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function copyIcons
-	var $0 : Object
-	var $1 : Object  // Datamodel object
-	var $2 : Collection  // navigation table order
-	var $3 : Collection  // Actions collection
+Function copyIcons($datamodelObject : Object; $navigationTableOrder : Collection; $actionsCollection : Collection)->$result : Object
 	
 	var $tableIcons : 4D:C1709.Folder
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
@@ -408,19 +395,19 @@ Function copyIcons
 	
 	If ($tableIcons.exists)
 		
-		$0.success:=True:C214
+		$result.success:=True:C214
 		
 		var $shouldCreateMissingDMIcon : Boolean
 		
-		$shouldCreateMissingDMIcon:=This:C1470.willRequireDataModelIcons($2; $1; $3)
+		$shouldCreateMissingDMIcon:=This:C1470.willRequireDataModelIcons($navigationTableOrder; $datamodelObject; $actionsCollection)
 		
 		var $dataModel; $field; $subField : Object
 		
-		For each ($dataModel; OB Entries:C1720($1))
+		For each ($dataModel; OB Entries:C1720($datamodelObject))
 			
 			var $navKey : Variant
 			
-			For each ($navKey; $2)
+			For each ($navKey; $navigationTableOrder)
 				
 				If (Value type:C1509($navKey)=Is text:K8:3)
 					
@@ -436,8 +423,8 @@ Function copyIcons
 							
 							If (Not:C34($Obj_handleDataModelIcon.success))
 								
-								$0.success:=False:C215
-								$0.errors.combine($Obj_handleDataModelIcon.errors)
+								$result.success:=False:C215
+								$result.errors.combine($Obj_handleDataModelIcon.errors)
 								
 								// Else : all ok
 							End if 
@@ -465,8 +452,8 @@ Function copyIcons
 					
 					If (Not:C34($Obj_copyFormatterImage.success))
 						
-						$0.success:=False:C215
-						$0.errors.combine($Obj_copyFormatterImage.errors)
+						$result.success:=False:C215
+						$result.errors.combine($Obj_copyFormatterImage.errors)
 						
 						// Else : all ok
 					End if 
@@ -478,8 +465,8 @@ Function copyIcons
 					
 					If (Not:C34($Obj_handleField.success))
 						
-						$0.success:=False:C215
-						$0.errors.combine($Obj_handleField.errors)
+						$result.success:=False:C215
+						$result.errors.combine($Obj_handleField.errors)
 						
 						// Else : all ok
 					End if 
@@ -492,11 +479,11 @@ Function copyIcons
 		End for each 
 		
 		// Actions images
-		If ($3#Null:C1517)
+		If ($actionsCollection#Null:C1517)
 			
 			var $action : Object
 			
-			For each ($action; $3)
+			For each ($action; $actionsCollection)
 				
 				If ($action.scope="global")
 					
@@ -510,8 +497,8 @@ Function copyIcons
 							
 							If (Not:C34($Obj_handleGlobalActionIcon.success))
 								
-								$0.success:=False:C215
-								$0.errors.combine($Obj_handleGlobalActionIcon.errors)
+								$result.success:=False:C215
+								$result.errors.combine($Obj_handleGlobalActionIcon.errors)
 								
 								// Else : all ok
 							End if 
@@ -529,8 +516,8 @@ Function copyIcons
 					
 					If (Not:C34($Obj_handleActionIcon.success))
 						
-						$0.success:=False:C215
-						$0.errors.combine($Obj_handleActionIcon.errors)
+						$result.success:=False:C215
+						$result.errors.combine($Obj_handleActionIcon.errors)
 						
 						// Else : all ok
 					End if 
@@ -542,8 +529,8 @@ Function copyIcons
 					
 					If (Not:C34($Obj_handleInputControlImages.success))
 						
-						$0.success:=False:C215
-						$0.errors.combine($Obj_handleInputControlImages.errors)
+						$result.success:=False:C215
+						$result.errors.combine($Obj_handleInputControlImages.errors)
 						
 						// Else : all ok
 					End if 
@@ -559,15 +546,15 @@ Function copyIcons
 		
 		If (Not:C34(This:C1470.vdtool.success))
 			
-			$0.success:=False:C215
-			$0.errors.push("Error when converting SVG to XML files")
-			$0.errors.push(This:C1470.errorStream)
+			$result.success:=False:C215
+			$result.errors.push("Error when converting SVG to XML files")
+			$result.errors.push(This:C1470.errorStream)
 			
 			// Else : all ok
 		End if 
 		
 		// Delete SVG files converted
-		If ($0.success)
+		If ($result.success)
 			
 			var $drawable : 4D:C1709.File
 			
@@ -587,20 +574,18 @@ Function copyIcons
 		
 	Else 
 		// Missing icons folder
-		$0.errors.push("Missing icons folder : "+$tableIcons.path)
+		$result.errors.push("Missing icons folder : "+$tableIcons.path)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function willRequireFieldIcons
-	var $0 : Boolean
-	var $1 : Object  // dataModel key value object
+Function willRequireFieldIcons($datamodelKeyValueObject : Object)->$result : Boolean
 	
 	var $field; $subField : Object
 	
-	$0:=False:C215
+	$result:=False:C215
 	
-	For each ($field; OB Entries:C1720($1.value))  // For each field in dataModel
+	For each ($field; OB Entries:C1720($datamodelKeyValueObject.value))  // For each field in dataModel
 		
 		If ($field.key#"")
 			
@@ -612,7 +597,7 @@ Function willRequireFieldIcons
 						
 						If ($field.value.icon#"")
 							
-							$0:=True:C214
+							$result:=True:C214
 							return 
 							
 						End if 
@@ -631,7 +616,7 @@ Function willRequireFieldIcons
 								
 								If ($subField.value.icon#"")
 									
-									$0:=True:C214
+									$result:=True:C214
 									return 
 									
 								End if 
@@ -652,23 +637,19 @@ Function willRequireFieldIcons
 	End for each 
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function willRequireDataModelIcons
-	var $0 : Boolean
-	var $1 : Collection  // navigation table order
-	var $2 : Object  // dataModel object
-	var $3 : Collection  // Actions collection
+Function willRequireDataModelIcons($navigationTableOrder : Collection; $datamodelObject : Object; $actionsCollection : Collection)->$result : Boolean
 	
 	var $tableId : Variant
 	var $dataModel; $elem; $action : Object
 	
-	$0:=False:C215
+	$result:=False:C215
 	
-	For each ($tableId; $1)
+	For each ($tableId; $navigationTableOrder)
 		var $dmFound : Boolean
 		
 		$dmFound:=False:C215
 		
-		For each ($dataModel; OB Entries:C1720($2)) Until ($dmFound)
+		For each ($dataModel; OB Entries:C1720($datamodelObject)) Until ($dmFound)
 			
 			If (Value type:C1509($tableId)=Is text:K8:3)
 				
@@ -688,7 +669,7 @@ Function willRequireDataModelIcons
 							
 							If (String:C10($elem.value.icon)#"")
 								
-								$0:=True:C214
+								$result:=True:C214
 								return 
 								
 							End if 
@@ -703,13 +684,13 @@ Function willRequireDataModelIcons
 			
 		End for each 
 		
-		If (($3#Null:C1517) & (Feature.with("openURLActionsInTabBar")))
+		If (($actionsCollection#Null:C1517) & (Feature.with("openURLActionsInTabBar")))
 			// Check for global scope actions
-			For each ($action; $3)
+			For each ($action; $actionsCollection)
 				
 				If ((String:C10($action.scope)="global") & (String:C10($action.icon)#""))
 					
-					$0:=True:C214
+					$result:=True:C214
 					return 
 					
 				End if 
@@ -722,23 +703,21 @@ Function willRequireDataModelIcons
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function handleDataModelIcon
-	var $0 : Object
-	var $1 : Object  // dataModel key value object
+Function handleDataModelIcon($datamodelKeyValueObject : Object)->$result : Object
 	var $currentFile : 4D:C1709.File
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; True:C214; \
 		"errors"; New collection:C1472)
 	
 	// Get defined icon
-	If ($1.value[""].icon#Null:C1517)
+	If ($datamodelKeyValueObject.value[""].icon#Null:C1517)
 		
-		If (Value type:C1509($1.value[""].icon)=Is text:K8:3)
+		If (Value type:C1509($datamodelKeyValueObject.value[""].icon)=Is text:K8:3)
 			
 			var $iconPath : Text
 			
-			$iconPath:=$1.value[""].icon
+			$iconPath:=$datamodelKeyValueObject.value[""].icon
 			
 			If ($iconPath#"")
 				
@@ -759,7 +738,7 @@ Function handleDataModelIcon
 		
 		var $Obj_createIcon : Object
 		
-		$Obj_createIcon:=This:C1470.createIconAssets($1.value[""])
+		$Obj_createIcon:=This:C1470.createIconAssets($datamodelKeyValueObject.value[""])
 		
 		If ($Obj_createIcon.success)
 			
@@ -767,8 +746,8 @@ Function handleDataModelIcon
 			
 		Else 
 			
-			$0.success:=False:C215
-			$0.errors.combine($Obj_createIcon.errors)
+			$result.success:=False:C215
+			$result.errors.combine($Obj_createIcon.errors)
 			
 		End if 
 		
@@ -782,14 +761,14 @@ Function handleDataModelIcon
 		var $Obj_copy : Object
 		var $newName : Text
 		
-		$newName:=Replace string:C233($currentFile.name; "qmobile_android_missing_icon"; "nav_icon_"+$1.key)
+		$newName:=Replace string:C233($currentFile.name; "qmobile_android_missing_icon"; "nav_icon_"+$datamodelKeyValueObject.key)
 		
 		$Obj_copy:=This:C1470.copyIcon($currentFile; $newName)
 		
 		If (Not:C34($Obj_copy.success))
 			
-			$0.success:=False:C215
-			$0.errors.combine($Obj_copy.errors)
+			$result.success:=False:C215
+			$result.errors.combine($Obj_copy.errors)
 			
 			// Else : all ok
 		End if 
@@ -800,23 +779,21 @@ Function handleDataModelIcon
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function handleGlobalActionIcon
-	var $0 : Object
-	var $1 : Object  // action object
+Function handleGlobalActionIcon($actionObject : Object)->$result : Object
 	var $currentFile : 4D:C1709.File
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; True:C214; \
 		"errors"; New collection:C1472)
 	
 	// Get defined icon
-	If ($1.icon#Null:C1517)
+	If ($actionObject.icon#Null:C1517)
 		
-		If (Value type:C1509($1.icon)=Is text:K8:3)
+		If (Value type:C1509($actionObject.icon)=Is text:K8:3)
 			
 			var $iconPath : Text
 			
-			$iconPath:=$1.icon
+			$iconPath:=$actionObject.icon
 			
 			If ($iconPath#"")
 				
@@ -837,7 +814,7 @@ Function handleGlobalActionIcon
 		
 		var $Obj_createIcon : Object
 		
-		$Obj_createIcon:=This:C1470.createIconAssets($1)
+		$Obj_createIcon:=This:C1470.createIconAssets($actionObject)
 		
 		If ($Obj_createIcon.success)
 			
@@ -845,8 +822,8 @@ Function handleGlobalActionIcon
 			
 		Else 
 			
-			$0.success:=False:C215
-			$0.errors.combine($Obj_createIcon.errors)
+			$result.success:=False:C215
+			$result.errors.combine($Obj_createIcon.errors)
 			
 		End if 
 		
@@ -860,14 +837,14 @@ Function handleGlobalActionIcon
 		var $Obj_copy : Object
 		var $newName : Text
 		
-		$newName:=Replace string:C233($currentFile.name; "qmobile_android_missing_icon"; "nav_icon_"+$1.name)
+		$newName:=Replace string:C233($currentFile.name; "qmobile_android_missing_icon"; "nav_icon_"+$actionObject.name)
 		
 		$Obj_copy:=This:C1470.copyIcon($currentFile; $newName)
 		
 		If (Not:C34($Obj_copy.success))
 			
-			$0.success:=False:C215
-			$0.errors.combine($Obj_copy.errors)
+			$result.success:=False:C215
+			$result.errors.combine($Obj_copy.errors)
 			
 			// Else : all ok
 		End if 
@@ -877,38 +854,34 @@ Function handleGlobalActionIcon
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function handleField
-	var $0 : Object
-	var $1 : Text  // dataModel key
-	var $2 : Object  // field key value object
-	var $3 : Boolean  // if should create icon if missing
+Function handleField($datamodelKey : Text; $fieldKeyValueObject : Object; $ifShouldCreateIconIfMissing : Boolean)->$result : Object
 	var $isRelation : Boolean
 	var $Obj_handleFieldIcon : Object
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; True:C214; \
 		"errors"; New collection:C1472)
 	
-	$Obj_handleFieldIcon:=This:C1470.handleFieldIcon($1; $2; $3; -1; ""; "")
+	$Obj_handleFieldIcon:=This:C1470.handleFieldIcon($datamodelKey; $fieldKeyValueObject; $ifShouldCreateIconIfMissing; -1; ""; "")
 	
 	If (Not:C34($Obj_handleFieldIcon.success))
 		
-		$0.success:=False:C215
-		$0.errors:=$Obj_handleFieldIcon.errors
+		$result.success:=False:C215
+		$result.errors:=$Obj_handleFieldIcon.errors
 		
 		// Else : all ok
 	End if 
 	
 	
-	If (Value type:C1509($2.value)=Is object:K8:27)
+	If (Value type:C1509($fieldKeyValueObject.value)=Is object:K8:27)
 		
-		$isRelation:=($2.value.relatedDataClass#Null:C1517)
+		$isRelation:=($fieldKeyValueObject.value.relatedDataClass#Null:C1517)
 		
 		If ($isRelation)  // related field
 			
 			var $relatedField : Object
 			
-			For each ($relatedField; OB Entries:C1720($2.value))  // For each field in related table
+			For each ($relatedField; OB Entries:C1720($fieldKeyValueObject.value))  // For each field in related table
 				
 				If (Value type:C1509($relatedField.value)=Is object:K8:27)
 					
@@ -919,12 +892,12 @@ Function handleField
 						
 					End if 
 					
-					$Obj_handleFieldIcon:=This:C1470.handleFieldIcon($1; $relatedField.value; $3; $2.value.relatedTableNumber; $2.value.id; "")
+					$Obj_handleFieldIcon:=This:C1470.handleFieldIcon($datamodelKey; $relatedField.value; $ifShouldCreateIconIfMissing; $fieldKeyValueObject.value.relatedTableNumber; $fieldKeyValueObject.value.id; "")
 					
 					If (Not:C34($Obj_handleFieldIcon.success))
 						
-						$0.success:=False:C215
-						$0.errors.combine($Obj_handleFieldIcon.errors)
+						$result.success:=False:C215
+						$result.errors.combine($Obj_handleFieldIcon.errors)
 						
 						// Else : all ok
 					End if 
@@ -943,12 +916,12 @@ Function handleField
 								
 							End if 
 							
-							$Obj_handleFieldIcon:=This:C1470.handleFieldIcon($1; $subField.value; $3; $2.value.relatedTableNumber; $2.value.id; $relatedField.key)
+							$Obj_handleFieldIcon:=This:C1470.handleFieldIcon($datamodelKey; $subField.value; $ifShouldCreateIconIfMissing; $fieldKeyValueObject.value.relatedTableNumber; $fieldKeyValueObject.value.id; $relatedField.key)
 							
 							If (Not:C34($Obj_handleFieldIcon.success))
 								
-								$0.success:=False:C215
-								$0.errors.combine($Obj_handleFieldIcon.errors)
+								$result.success:=False:C215
+								$result.errors.combine($Obj_handleFieldIcon.errors)
 								
 								// Else : all ok
 							End if 
@@ -969,42 +942,35 @@ Function handleField
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function handleFieldIcon
-	var $0 : Object
-	var $1 : Text  // dataModel key
-	var $2 : Object  // field key value object
-	var $3 : Boolean  // if should create icon if missing
-	var $4 : Integer  // relatedTableNumber if is related field
-	var $5 : Text  // parent name if is related field
-	var $6 : Text  // grand parent name if is sub related field
+Function handleFieldIcon($datamodelKey : Text; $fieldKeyValueObject : Object; $ifShouldCreateIconIfMissing : Boolean; $relatedtablenumberIfIsRelatedFi : Integer; $parentNameIfIsRelatedField : Text; $grandParentNameIfIsSubRelatedFi : Text)->$result : Object
 	var $currentFile : 4D:C1709.File
 	var $shouldCreateMissingIcon : Boolean
 	var $field : Object
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; True:C214; \
 		"errors"; New collection:C1472)
 	
-	$shouldCreateMissingIcon:=$3
+	$shouldCreateMissingIcon:=$ifShouldCreateIconIfMissing
 	
-	If ($2.value#Null:C1517)  // direct field
+	If ($fieldKeyValueObject.value#Null:C1517)  // direct field
 		
-		$field:=$2.value
+		$field:=$fieldKeyValueObject.value
 		
 		// For 1-N relation, set key as id
 		If ($field.id=Null:C1517)
 			
-			$field.id:=$2.key
+			$field.id:=$fieldKeyValueObject.key
 			
 		End if 
 		
 	Else   // related field
 		
-		$field:=$2
+		$field:=$fieldKeyValueObject
 		
 		If ($field.id=Null:C1517)
 			
-			$field.id:=$2.name
+			$field.id:=$fieldKeyValueObject.name
 			
 		End if 
 		
@@ -1060,8 +1026,8 @@ Function handleFieldIcon
 			
 		Else 
 			
-			$0.success:=False:C215
-			$0.errors.combine($Obj_createIcon.errors)
+			$result.success:=False:C215
+			$result.errors.combine($Obj_createIcon.errors)
 			
 		End if 
 		
@@ -1076,30 +1042,30 @@ Function handleFieldIcon
 		
 		$newName:=$currentFile.name
 		
-		If ($4>0)  // related field
+		If ($relatedtablenumberIfIsRelatedFi>0)  // related field
 			
 			var $fieldName : Text
 			If ($field.name#Null:C1517)
-				If ($6="")
-					$fieldName:=String:C10($5)+"_"+String:C10($field.name)
+				If ($grandParentNameIfIsSubRelatedFi="")
+					$fieldName:=String:C10($parentNameIfIsRelatedField)+"_"+String:C10($field.name)
 				Else 
-					$fieldName:=String:C10($5)+"_"+String:C10($6)+"_"+String:C10($field.name)
+					$fieldName:=String:C10($parentNameIfIsRelatedField)+"_"+String:C10($grandParentNameIfIsSubRelatedFi)+"_"+String:C10($field.name)
 				End if 
 			Else 
-				If ($6="")
-					$fieldName:=String:C10($5)+"_"+String:C10($2.aliasName)
+				If ($grandParentNameIfIsSubRelatedFi="")
+					$fieldName:=String:C10($parentNameIfIsRelatedField)+"_"+String:C10($fieldKeyValueObject.aliasName)
 				Else 
-					$fieldName:=String:C10($5)+"_"+String:C10($6)+"_"+String:C10($2.aliasName)
+					$fieldName:=String:C10($parentNameIfIsRelatedField)+"_"+String:C10($grandParentNameIfIsSubRelatedFi)+"_"+String:C10($fieldKeyValueObject.aliasName)
 				End if 
 			End if 
 			
 			$fieldName:=cs:C1710.regex.new(Lowercase:C14($fieldName); "[^a-z0-9]").substitute("_")
 			
-			$newName:=Replace string:C233($newName; "qmobile_android_missing_icon"; "related_field_icon_"+$1+"_"+String:C10($4)+"_"+$fieldName)
+			$newName:=Replace string:C233($newName; "qmobile_android_missing_icon"; "related_field_icon_"+$datamodelKey+"_"+String:C10($relatedtablenumberIfIsRelatedFi)+"_"+$fieldName)
 			
 		Else   // direct field
 			
-			$newName:=Replace string:C233($newName; "qmobile_android_missing_icon"; "field_icon_"+$1+"_"+String:C10($field.id))
+			$newName:=Replace string:C233($newName; "qmobile_android_missing_icon"; "field_icon_"+$datamodelKey+"_"+String:C10($field.id))
 			
 		End if 
 		
@@ -1107,8 +1073,8 @@ Function handleFieldIcon
 		
 		If (Not:C34($Obj_copy.success))
 			
-			$0.success:=False:C215
-			$0.errors.combine($Obj_copy.errors)
+			$result.success:=False:C215
+			$result.errors.combine($Obj_copy.errors)
 			
 			// Else : all ok
 		End if 
@@ -1118,18 +1084,16 @@ Function handleFieldIcon
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function handleActionIcon
-	var $0 : Object
-	var $1 : Object  // Action object
+Function handleActionIcon($actionObject : Object)->$result : Object
 	
 	var $currentFile : 4D:C1709.File
 	var $action : Object
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; True:C214; \
 		"errors"; New collection:C1472)
 	
-	$action:=$1
+	$action:=$actionObject
 	
 	// Get defined icon
 	If ($action.icon#Null:C1517)
@@ -1162,8 +1126,8 @@ Function handleActionIcon
 		
 		If (Not:C34($Obj_copy.success))
 			
-			$0.success:=False:C215
-			$0.errors.combine($Obj_copy.errors)
+			$result.success:=False:C215
+			$result.errors.combine($Obj_copy.errors)
 			
 			// Else : all ok
 		End if 
@@ -1173,52 +1137,47 @@ Function handleActionIcon
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function copyIcon
-	var $0 : Object
-	var $1 : Object  // icon file
-	var $2 : Text  // new icon name
+Function copyIcon($iconFile : Object; $newIconName : Text)->$result : Object
 	var $newName : Text
 	var $copyDest : 4D:C1709.File
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; True:C214; \
 		"errors"; New collection:C1472)
 	
-	$newName:=This:C1470.adjustIconName($2; $1.extension)
+	$newName:=This:C1470.adjustIconName($newIconName; $iconFile.extension)
 	
-	$copyDest:=$1.copyTo(This:C1470.drawableFolder; $newName; fk overwrite:K87:5)
+	$copyDest:=$iconFile.copyTo(This:C1470.drawableFolder; $newName; fk overwrite:K87:5)
 	
 	If (Not:C34($copyDest.exists))  // Copy failed
 		
-		$0.success:=False:C215
-		$0.errors.push("Could not copy file to destination: "+$copyDest.path)
+		$result.success:=False:C215
+		$result.errors.push("Could not copy file to destination: "+$copyDest.path)
 		
 		// Else : all ok
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function copyFormatterImage
-	var $0 : Object
-	var $1 : Object  // field key value object
+Function copyFormatterImage($fieldKeyValueObject : Object)->$result : Object
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; True:C214; \
 		"errors"; New collection:C1472)
 	
 	
-	If (Value type:C1509($1.value)=Is object:K8:27)
+	If (Value type:C1509($fieldKeyValueObject.value)=Is object:K8:27)
 		
 		// Check for formatter image to copy
-		If ($1.value.format#Null:C1517)
+		If ($fieldKeyValueObject.value.format#Null:C1517)
 			
 			var $format; $formatName : Text
 			var $copyDest : 4D:C1709.File
 			var $copyFolderImagesToApp : Object
 			
-			If (Value type:C1509($1.value.format)=Is text:K8:3)
+			If (Value type:C1509($fieldKeyValueObject.value.format)=Is text:K8:3)
 				
-				$format:=$1.value.format
+				$format:=$fieldKeyValueObject.value.format
 				
 				If ($format#"")
 					
@@ -1240,8 +1199,8 @@ Function copyFormatterImage
 								
 								If (Not:C34($copyFolderImagesToApp.success))
 									
-									$0.success:=False:C215
-									$0.errors.combine($copyFolderImagesToApp.errors)
+									$result.success:=False:C215
+									$result.errors.combine($copyFolderImagesToApp.errors)
 									
 									// Else : all ok
 								End if 
@@ -1269,8 +1228,8 @@ Function copyFormatterImage
 										
 										If (Not:C34($copyFolderImagesToApp.success))
 											
-											$0.success:=False:C215
-											$0.errors.combine($copyFolderImagesToApp.errors)
+											$result.success:=False:C215
+											$result.errors.combine($copyFolderImagesToApp.errors)
 											
 											// Else : all ok
 										End if 
@@ -1279,15 +1238,15 @@ Function copyFormatterImage
 										
 									Else 
 										// error
-										$0.success:=False:C215
-										$0.errors.push("Could not unzip to destination: "+$unzipDest.path)
+										$result.success:=False:C215
+										$result.errors.push("Could not unzip to destination: "+$unzipDest.path)
 										
 									End if 
 									
 								Else 
 									// error
-									$0.success:=False:C215
-									$0.errors.push("Custom formatter \""+$format+"\" couldn't be found at path: "+$customFormatterFolder.path)
+									$result.success:=False:C215
+									$result.errors.push("Custom formatter \""+$format+"\" couldn't be found at path: "+$customFormatterFolder.path)
 								End if 
 								
 							End if 
@@ -1311,7 +1270,7 @@ Function copyFormatterImage
 		
 		var $subField; $copyFormatterImage : Object
 		
-		For each ($subField; OB Entries:C1720($1.value))  // For each subField in field
+		For each ($subField; OB Entries:C1720($fieldKeyValueObject.value))  // For each subField in field
 			
 			If (Value type:C1509($subField)=Is object:K8:27)
 				
@@ -1319,8 +1278,8 @@ Function copyFormatterImage
 				
 				If (Not:C34($copyFormatterImage.success))
 					
-					$0.success:=False:C215
-					$0.errors.combine($copyFormatterImage.errors)
+					$result.success:=False:C215
+					$result.errors.combine($copyFormatterImage.errors)
 					
 					// Else : all ok
 				End if 
@@ -1333,18 +1292,16 @@ Function copyFormatterImage
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function handleInputControlImages
-	var $0 : Object
-	var $1 : Object  // Action object
+Function handleInputControlImages($actionObject : Object)->$result : Object
 	
 	var $currentFile : 4D:C1709.File
 	var $action; $parameter; $copyFolderImagesToApp : Object
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; True:C214; \
 		"errors"; New collection:C1472)
 	
-	$action:=$1
+	$action:=$actionObject
 	
 	If ($action.parameters#Null:C1517)
 		
@@ -1378,8 +1335,8 @@ Function handleInputControlImages
 									
 									If (Not:C34($copyFolderImagesToApp.success))
 										
-										$0.success:=False:C215
-										$0.errors.combine($copyFolderImagesToApp.errors)
+										$result.success:=False:C215
+										$result.errors.combine($copyFolderImagesToApp.errors)
 										
 										// Else : all ok
 									End if 
@@ -1400,8 +1357,8 @@ Function handleInputControlImages
 											
 											If (Not:C34($copyFolderImagesToApp.success))
 												
-												$0.success:=False:C215
-												$0.errors.combine($copyFolderImagesToApp.errors)
+												$result.success:=False:C215
+												$result.errors.combine($copyFolderImagesToApp.errors)
 												
 												// Else : all ok
 											End if 
@@ -1412,8 +1369,8 @@ Function handleInputControlImages
 										
 									Else 
 										
-										$0.success:=False:C215
-										$0.errors.combine($Obj_findZipByManifestName.errors)
+										$result.success:=False:C215
+										$result.errors.combine($Obj_findZipByManifestName.errors)
 										
 									End if 
 									
@@ -1436,26 +1393,22 @@ Function handleInputControlImages
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function copyFolderImagesToApp
-	var $0 : Object
-	var $1 : 4D:C1709.Folder  // Formatter folder
-	var $2 : Text  // format name
+Function copyFolderImagesToApp($formatterFolder : 4D:C1709.Folder; $formatName : Text)->$result : Object
 	
 	var $imagesFolderInFormatter; $copyDest : 4D:C1709.Folder
 	var $imageFile : 4D:C1709.File
-	var $formatName : Text
 	
-	$formatName:=$2
+	$formatName:=$formatName
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; True:C214; \
 		"errors"; New collection:C1472)
 	
-	$imagesFolderInFormatter:=$1.folder("Images")
+	$imagesFolderInFormatter:=$formatterFolder.folder("Images")
 	
 	If (Not:C34($imagesFolderInFormatter.exists))
 		
-		$imagesFolderInFormatter:=$1.folder("images")
+		$imagesFolderInFormatter:=$formatterFolder.folder("images")
 		
 	End if 
 	
@@ -1474,8 +1427,8 @@ Function copyFolderImagesToApp
 			
 			If (Not:C34($copyDest.exists))  // Copy failed
 				
-				$0.success:=False:C215
-				$0.errors.push("Could not copy file to destination: "+$copyDest.path)
+				$result.success:=False:C215
+				$result.errors.push("Could not copy file to destination: "+$copyDest.path)
 				
 				//Else : all ok
 			End if 
@@ -1487,29 +1440,26 @@ Function copyFolderImagesToApp
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function copyKotlinCustomFormatterFiles
-	var $0 : Object
-	var $1 : Object  // Datamodel object
-	var $2 : Text  // Package name
+Function copyKotlinCustomFormatterFiles($datamodelObject : Object; $packageName : Text)->$result : Object
 	
 	var $dataModel; $field; $handleKotlinCustomFormatterFile : Object
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; True:C214; \
 		"errors"; New collection:C1472)
 	
-	For each ($dataModel; OB Entries:C1720($1))
+	For each ($dataModel; OB Entries:C1720($datamodelObject))
 		
 		For each ($field; OB Entries:C1720($dataModel.value))  // For each field in dataModel
 			
 			If ($field.key#"")
 				
-				$handleKotlinCustomFormatterFile:=This:C1470.handleKotlinCustomFormatterFiles($field; $2)
+				$handleKotlinCustomFormatterFile:=This:C1470.handleKotlinCustomFormatterFiles($field; $packageName)
 				
 				If (Not:C34($handleKotlinCustomFormatterFile.success))
 					
-					$0.success:=False:C215
-					$0.errors.combine($handleKotlinCustomFormatterFile.errors)
+					$result.success:=False:C215
+					$result.errors.combine($handleKotlinCustomFormatterFile.errors)
 					
 					// Else : all ok
 				End if 
@@ -1523,21 +1473,17 @@ Function copyKotlinCustomFormatterFiles
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function handleKotlinCustomFormatterFiles
-	var $0 : Object
-	var $1 : Object  // field object
-	var $2 : Text  // Package name
+Function handleKotlinCustomFormatterFiles($fieldObject : Object; $packageName : Text)->$result : Object
 	
-	var $packageName; $format; $formatName : Text
-	$packageName:=$2
+	var $format; $formatName : Text
 	var $field; $copyFormatterFilesToApp : Object
 	var $formattersFolder; $customFormatterFolder : 4D:C1709.Folder
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; True:C214; \
 		"errors"; New collection:C1472)
 	
-	$field:=$1
+	$field:=$fieldObject
 	
 	If (Value type:C1509($field.value)=Is object:K8:27)
 		
@@ -1565,8 +1511,8 @@ Function handleKotlinCustomFormatterFiles
 								
 								If (Not:C34($copyFormatterFilesToApp.success))
 									
-									$0.success:=False:C215
-									$0.errors.combine($copyFormatterFilesToApp.errors)
+									$result.success:=False:C215
+									$result.errors.combine($copyFormatterFilesToApp.errors)
 									
 									// Else : all ok
 								End if 
@@ -1595,8 +1541,8 @@ Function handleKotlinCustomFormatterFiles
 										
 										If (Not:C34($copyFormatterFilesToApp.success))
 											
-											$0.success:=False:C215
-											$0.errors.combine($copyFormatterFilesToApp.errors)
+											$result.success:=False:C215
+											$result.errors.combine($copyFormatterFilesToApp.errors)
 											
 											// Else : all ok
 										End if 
@@ -1605,15 +1551,15 @@ Function handleKotlinCustomFormatterFiles
 										
 									Else 
 										// error
-										$0.success:=False:C215
-										$0.errors.push("Could not unzip to destination: "+$unzipDest.path)
+										$result.success:=False:C215
+										$result.errors.push("Could not unzip to destination: "+$unzipDest.path)
 										
 									End if 
 									
 								Else 
 									// error
-									$0.success:=False:C215
-									$0.errors.push("Custom formatter \""+$format+"\" couldn't be found at path: "+$customFormatterFolder.path)
+									$result.success:=False:C215
+									$result.errors.push("Custom formatter \""+$format+"\" couldn't be found at path: "+$customFormatterFolder.path)
 								End if 
 								
 								
@@ -1642,12 +1588,12 @@ Function handleKotlinCustomFormatterFiles
 			
 			If (Value type:C1509($subField)=Is object:K8:27)
 				
-				$handleKotlinCustomFormatterFile:=This:C1470.handleKotlinCustomFormatterFiles($subField; $2)
+				$handleKotlinCustomFormatterFile:=This:C1470.handleKotlinCustomFormatterFiles($subField; $packageName)
 				
 				If (Not:C34($handleKotlinCustomFormatterFile.success))
 					
-					$0.success:=False:C215
-					$0.errors.combine($handleKotlinCustomFormatterFile.errors)
+					$result.success:=False:C215
+					$result.errors.combine($handleKotlinCustomFormatterFile.errors)
 					
 					// Else : all ok
 				End if 
@@ -1660,23 +1606,19 @@ Function handleKotlinCustomFormatterFiles
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function copyFormatterFilesToApp
-	var $0 : Object
-	var $1 : 4D:C1709.Folder  // Formatter folder
-	var $2 : Text  // package name
+Function copyFormatterFilesToApp($formatterFolder : 4D:C1709.Folder; $packageName : Text)->$result : Object
 	
 	var $formattersFolderInFormatter; $bindingFolder : 4D:C1709.Folder
 	var $bindingAdapterFile; $copyDest : 4D:C1709.File
-	var $packageName; $packageNamePath; $fileContent : Text
+	var $packageNamePath; $fileContent : Text
 	
-	$packageName:=$2
 	$packageNamePath:=Replace string:C233($packageName; "."; "/")
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; True:C214; \
 		"errors"; New collection:C1472)
 	
-	$formattersFolderInFormatter:=$1.folder("android/Formatters")
+	$formattersFolderInFormatter:=$formatterFolder.folder("android/Formatters")
 	
 	If ($formattersFolderInFormatter.exists)
 		
@@ -1695,8 +1637,8 @@ Function copyFormatterFilesToApp
 				
 			Else 
 				// Copy failed
-				$0.success:=False:C215
-				$0.errors.push("Could not copy file to destination: "+$copyDest.path)
+				$result.success:=False:C215
+				$result.errors.push("Could not copy file to destination: "+$copyDest.path)
 			End if 
 			
 		End for each 
@@ -1706,34 +1648,31 @@ Function copyFormatterFilesToApp
 	
 	var $Obj_copyFilesRecursively : Object
 	
-	$Obj_copyFilesRecursively:=This:C1470.copyFilesRecursively($1.folder("android/res"); Folder:C1567(This:C1470.projectPath+"app/src/main/res"))
+	$Obj_copyFilesRecursively:=This:C1470.copyFilesRecursively($formatterFolder.folder("android/res"); Folder:C1567(This:C1470.projectPath+"app/src/main/res"))
 	
 	If (Not:C34($Obj_copyFilesRecursively.success))
 		
 		// Copy failed
-		$0.success:=False:C215
-		$0.errors.combine($Obj_copyFilesRecursively.errors)
+		$result.success:=False:C215
+		$result.errors.combine($Obj_copyFilesRecursively.errors)
 		
 	End if 
 	
-	This:C1470.concatLocalProperties($1.folder("android").file("local.properties"); Folder:C1567(This:C1470.projectPath).file("local.properties"))
+	This:C1470.concatLocalProperties($formatterFolder.folder("android").file("local.properties"); Folder:C1567(This:C1470.projectPath).file("local.properties"))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function copyKotlinInputControlFiles
-	var $0 : Object
-	var $1 : Collection  // actions collection
-	var $2 : Text  // Package name
+Function copyKotlinInputControlFiles($actionsCollection : Collection; $packageName : Text)->$result : Object
 	
 	var $action; $actionParameter; $handleKotlinInputControlFile : Object
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; True:C214; \
 		"errors"; New collection:C1472)
 	
-	If ($1#Null:C1517)
+	If ($actionsCollection#Null:C1517)
 		
-		For each ($action; $1)
+		For each ($action; $actionsCollection)
 			
 			If ($action.parameters#Null:C1517)
 				
@@ -1741,12 +1680,12 @@ Function copyKotlinInputControlFiles
 					
 					For each ($actionParameter; $action.parameters)
 						
-						$handleKotlinInputControlFile:=This:C1470.handleKotlinInputControlFiles($actionParameter; $2)
+						$handleKotlinInputControlFile:=This:C1470.handleKotlinInputControlFiles($actionParameter; $packageName)
 						
 						If (Not:C34($handleKotlinInputControlFile.success))
 							
-							$0.success:=False:C215
-							$0.errors.combine($handleKotlinInputControlFile.errors)
+							$result.success:=False:C215
+							$result.errors.combine($handleKotlinInputControlFile.errors)
 							
 							// Else : all ok
 						End if 
@@ -1764,21 +1703,17 @@ Function copyKotlinInputControlFiles
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function handleKotlinInputControlFiles
-	var $0 : Object
-	var $1 : Object  // action parameter object
-	var $2 : Text  // Package name
+Function handleKotlinInputControlFiles($actionParameterObject : Object; $packageName : Text)->$result : Object
 	
-	var $packageName; $format; $inputControlName : Text
-	$packageName:=$2
+	var $format; $inputControlName : Text
 	var $actionParameter; $copyInputControlFilesToApp : Object
 	var $inputControlsFolder : 4D:C1709.Folder
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; True:C214; \
 		"errors"; New collection:C1472)
 	
-	$actionParameter:=$1
+	$actionParameter:=$actionParameterObject
 	
 	If (Value type:C1509($actionParameter)=Is object:K8:27)
 		
@@ -1808,8 +1743,8 @@ Function handleKotlinInputControlFiles
 								
 								If (Not:C34($copyInputControlFilesToApp.success))
 									
-									$0.success:=False:C215
-									$0.errors.combine($copyInputControlFilesToApp.errors)
+									$result.success:=False:C215
+									$result.errors.combine($copyInputControlFilesToApp.errors)
 									
 									// Else : all ok
 								End if 
@@ -1830,8 +1765,8 @@ Function handleKotlinInputControlFiles
 										
 										If (Not:C34($copyInputControlFilesToApp.success))
 											
-											$0.success:=False:C215
-											$0.errors.combine($copyInputControlFilesToApp.errors)
+											$result.success:=False:C215
+											$result.errors.combine($copyInputControlFilesToApp.errors)
 											
 											// Else : all ok
 										End if 
@@ -1842,8 +1777,8 @@ Function handleKotlinInputControlFiles
 									
 								Else 
 									
-									$0.success:=False:C215
-									$0.errors.combine($Obj_findZipByManifestName.errors)
+									$result.success:=False:C215
+									$result.errors.combine($Obj_findZipByManifestName.errors)
 									
 								End if 
 								
@@ -1868,23 +1803,19 @@ Function handleKotlinInputControlFiles
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function copyInputControlFilesToApp
-	var $0 : Object
-	var $1 : 4D:C1709.Folder  // Input Control folder
-	var $2 : Text  // package name
+Function copyInputControlFilesToApp($inputControlFolder : 4D:C1709.Folder; $packageName : Text)->$result : Object
 	
-	var $inputControlFolderInFormatter; $inputControlFolder : 4D:C1709.Folder
+	var $inputControlFolderInFormatter : 4D:C1709.Folder
 	var $inputControlFile; $copyDest : 4D:C1709.File
-	var $packageName; $packageNamePath; $fileContent : Text
+	var $packageNamePath; $fileContent : Text
 	
-	$packageName:=$2
 	$packageNamePath:=Replace string:C233($packageName; "."; "/")
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; True:C214; \
 		"errors"; New collection:C1472)
 	
-	$inputControlFolderInFormatter:=$1.folder("android/inputControl")
+	$inputControlFolderInFormatter:=$inputControlFolder.folder("android/inputControl")
 	
 	If ($inputControlFolderInFormatter.exists)
 		
@@ -1904,8 +1835,8 @@ Function copyInputControlFilesToApp
 				
 			Else 
 				// Copy failed
-				$0.success:=False:C215
-				$0.errors.push("Could not copy file to destination: "+$copyDest.path)
+				$result.success:=False:C215
+				$result.errors.push("Could not copy file to destination: "+$copyDest.path)
 			End if 
 			
 		End for each 
@@ -1915,44 +1846,39 @@ Function copyInputControlFilesToApp
 	
 	var $Obj_copyFilesRecursively : Object
 	
-	$Obj_copyFilesRecursively:=This:C1470.copyFilesRecursively($1.folder("android/res"); Folder:C1567(This:C1470.projectPath+"app/src/main/res"))
+	$Obj_copyFilesRecursively:=This:C1470.copyFilesRecursively($inputControlFolder.folder("android/res"); Folder:C1567(This:C1470.projectPath+"app/src/main/res"))
 	
 	If (Not:C34($Obj_copyFilesRecursively.success))
 		
 		// Copy failed
-		$0.success:=False:C215
-		$0.errors.combine($Obj_copyFilesRecursively.errors)
+		$result.success:=False:C215
+		$result.errors.combine($Obj_copyFilesRecursively.errors)
 		
 	End if 
 	
-	This:C1470.concatLocalProperties($1.folder("android").file("local.properties"); Folder:C1567(This:C1470.projectPath).file("local.properties"))
+	This:C1470.concatLocalProperties($inputControlFolder.folder("android").file("local.properties"); Folder:C1567(This:C1470.projectPath).file("local.properties"))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function copyCustomLoginFormFiles
-	var $0 : Object
-	var $1 : Text  // Login form name
-	var $2 : Text  // Package name
+Function copyCustomLoginFormFiles($loginFormName : Text; $packageName : Text)->$result : Object
 	
-	var $loginFormName; $packageName : Text
 	var $copyLoginFormFilesToApp : Object
 	var $customLoginFolder; $folder : 4D:C1709.Folder
 	
-	$packageName:=$2
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; True:C214; \
 		"errors"; New collection:C1472)
 	
-	If (String:C10($1)#"")
+	If (String:C10($loginFormName)#"")
 		
-		If (Substring:C12($1; 1; 1)="/")
+		If (Substring:C12($loginFormName; 1; 1)="/")
 			
 			$customLoginFolder:=This:C1470.path.hostloginForms()
 			
 			If ($customLoginFolder.exists)
 				
-				$loginFormName:=Substring:C12($1; 2)
+				$loginFormName:=Substring:C12($loginFormName; 2)
 				
 				var $found : Boolean
 				$found:=False:C215
@@ -1967,8 +1893,8 @@ Function copyCustomLoginFormFiles
 						
 						If (Not:C34($copyLoginFormFilesToApp.success))
 							
-							$0.success:=False:C215
-							$0.errors.combine($copyLoginFormFilesToApp.errors)
+							$result.success:=False:C215
+							$result.errors.combine($copyLoginFormFilesToApp.errors)
 							
 							// Else : all ok
 						End if 
@@ -2008,8 +1934,8 @@ Function copyCustomLoginFormFiles
 										
 										If (Not:C34($copyLoginFormFilesToApp.success))
 											
-											$0.success:=False:C215
-											$0.errors.combine($copyLoginFormFilesToApp.errors)
+											$result.success:=False:C215
+											$result.errors.combine($copyLoginFormFilesToApp.errors)
 											
 											// Else : all ok
 										End if 
@@ -2018,15 +1944,15 @@ Function copyCustomLoginFormFiles
 										
 									Else 
 										
-										$0.success:=False:C215
-										$0.errors.push("Could not unzip archive. Destination does not exist "+$unzipDest.path)
+										$result.success:=False:C215
+										$result.errors.push("Could not unzip archive. Destination does not exist "+$unzipDest.path)
 										
 									End if 
 									
 								Else 
 									// not a zip archive
-									$0.success:=False:C215
-									$0.errors.push("Could not read archive: "+$zipFile.path)
+									$result.success:=False:C215
+									$result.errors.push("Could not read archive: "+$zipFile.path)
 									
 								End if 
 								
@@ -2040,8 +1966,8 @@ Function copyCustomLoginFormFiles
 				
 				If (Not:C34($found))
 					
-					$0.success:=False:C215
-					$0.errors.push("Could not find custom login form: "+$loginFormName)
+					$result.success:=False:C215
+					$result.errors.push("Could not find custom login form: "+$loginFormName)
 					
 				End if 
 				
@@ -2056,23 +1982,19 @@ Function copyCustomLoginFormFiles
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function copyLoginFormFilesToApp
-	var $0 : Object
-	var $1 : 4D:C1709.Folder  // Custom login form folder
-	var $2 : Text  // package name
+Function copyLoginFormFilesToApp($customLoginFormFolder : 4D:C1709.Folder; $packageName : Text)->$result : Object
 	
 	var $formFolderInCustomLoginForms; $loginFormFolder : 4D:C1709.Folder
 	var $loginFormFile; $copyDest : 4D:C1709.File
-	var $packageName; $packageNamePath; $fileContent : Text
+	var $packageNamePath; $fileContent : Text
 	
-	$packageName:=$2
 	$packageNamePath:=Replace string:C233($packageName; "."; "/")
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; True:C214; \
 		"errors"; New collection:C1472)
 	
-	$formFolderInCustomLoginForms:=$1.folder("android/login")
+	$formFolderInCustomLoginForms:=$customLoginFormFolder.folder("android/login")
 	
 	If ($formFolderInCustomLoginForms.exists)
 		
@@ -2092,8 +2014,8 @@ Function copyLoginFormFilesToApp
 				
 			Else 
 				// Copy failed
-				$0.success:=False:C215
-				$0.errors.push("Could not copy file to destination: "+$copyDest.path)
+				$result.success:=False:C215
+				$result.errors.push("Could not copy file to destination: "+$copyDest.path)
 			End if 
 			
 		End for each 
@@ -2103,17 +2025,17 @@ Function copyLoginFormFilesToApp
 	
 	var $Obj_copyFilesRecursively : Object
 	
-	$Obj_copyFilesRecursively:=This:C1470.copyFilesRecursively($1.folder("android/res"); Folder:C1567(This:C1470.projectPath+"app/src/main/res"))
+	$Obj_copyFilesRecursively:=This:C1470.copyFilesRecursively($customLoginFormFolder.folder("android/res"); Folder:C1567(This:C1470.projectPath+"app/src/main/res"))
 	
 	If (Not:C34($Obj_copyFilesRecursively.success))
 		
 		// Copy failed
-		$0.success:=False:C215
-		$0.errors.combine($Obj_copyFilesRecursively.errors)
+		$result.success:=False:C215
+		$result.errors.combine($Obj_copyFilesRecursively.errors)
 		
 	End if 
 	
-	This:C1470.concatLocalProperties($1.folder("android").file("local.properties"); Folder:C1567(This:C1470.projectPath).file("local.properties"))
+	This:C1470.concatLocalProperties($customLoginFormFolder.folder("android").file("local.properties"); Folder:C1567(This:C1470.projectPath).file("local.properties"))
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
@@ -2198,22 +2120,19 @@ Function copyFilesRecursively($entry : 4D:C1709.Folder; $target : 4D:C1709.Folde
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function concatResourceFile
-	var $0 : Object
-	var $1 : 4D:C1709.File  // new .xml file
-	var $2 : 4D:C1709.File  // old .xml file
+Function concatResourceFile($newXmlFile : 4D:C1709.File; $oldXmlFile : 4D:C1709.File)->$result : Object
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; True:C214; \
 		"errors"; New collection:C1472)
 	
-	If (Not:C34($1.exists) || Not:C34($2.exists))
+	If (Not:C34($newXmlFile.exists) || Not:C34($oldXmlFile.exists))
 		return 
 	End if 
 	
 	var $newFile; $oldFile : 4D:C1709.File
-	$newFile:=$1
-	$oldFile:=$2
+	$newFile:=$newXmlFile
+	$oldFile:=$oldXmlFile
 	
 	var $newFileContent; $oldFileContent : Text
 	$newFileContent:=$newFile.getText()
@@ -2224,12 +2143,12 @@ Function concatResourceFile
 	$endResourceKey:="</resources>"
 	
 	If ((Position:C15($startResourceKey; $newFileContent)=0) || (Position:C15($endResourceKey; $newFileContent)=0))
-		$0.success:=False:C215
+		$result.success:=False:C215
 		return 
 	End if 
 	
 	If ((Position:C15($startResourceKey; $oldFileContent)=0) || (Position:C15($endResourceKey; $oldFileContent)=0))
-		$0.success:=False:C215
+		$result.success:=False:C215
 		return 
 	End if 
 	
@@ -2246,12 +2165,9 @@ Function concatResourceFile
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function findFolderByManifestName
-	var $0 : Object
-	var $1 : 4D:C1709.Folder  // folder to browse
-	var $2 : Text  // name value to be found in manifest.json file
+Function findFolderByManifestName($folderToBrowse : 4D:C1709.Folder; $nameValueToBeFoundInManifestJso : Text)->$result : Object
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
@@ -2261,11 +2177,11 @@ Function findFolderByManifestName
 	
 	$found:=False:C215
 	
-	If ($1#Null:C1517)
+	If ($folderToBrowse#Null:C1517)
 		
-		If ($1.exists)
+		If ($folderToBrowse.exists)
 			
-			For each ($folder; $1.folders()) Until ($found)
+			For each ($folder; $folderToBrowse.folders()) Until ($found)
 				
 				var $file : 4D:C1709.File
 				
@@ -2281,14 +2197,14 @@ Function findFolderByManifestName
 							
 							If (Value type:C1509($manifestContent.name)=Is text:K8:3)
 								
-								If ($manifestContent.name=$2)
+								If ($manifestContent.name=$nameValueToBeFoundInManifestJso)
 									
 									$found:=True:C214
 									
-									If ($1.folder($folder.name).exists)
+									If ($folderToBrowse.folder($folder.name).exists)
 										
-										$0.success:=True:C214
-										$0.folder:=$1.folder($folder.name)
+										$result.success:=True:C214
+										$result.folder:=$folderToBrowse.folder($folder.name)
 										
 									End if 
 									
@@ -2310,12 +2226,9 @@ Function findFolderByManifestName
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function findZipByManifestName
-	var $0 : Object  // returns unzipped destination folder
-	var $1 : 4D:C1709.Folder  // folder to browse
-	var $2 : Text  // name value to be found in manifest.json file
+Function findZipByManifestName($folderToBrowse : 4D:C1709.Folder; $nameValueToBeFoundInManifestJso : Text)->$result : Object  // returns unzipped destination folder
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
@@ -2325,11 +2238,11 @@ Function findZipByManifestName
 	
 	$found:=False:C215
 	
-	If ($1#Null:C1517)
+	If ($folderToBrowse#Null:C1517)
 		
-		If ($1.exists)
+		If ($folderToBrowse.exists)
 			
-			For each ($file; $1.files()) Until ($found)
+			For each ($file; $folderToBrowse.files()) Until ($found)
 				
 				If ($file.extension=".zip")
 					
@@ -2341,7 +2254,7 @@ Function findZipByManifestName
 						
 						var $unzipDest : 4D:C1709.Folder
 						
-						$unzipDest:=$archive.root.copyTo($1; "android_temporary_"+$file.name; fk overwrite:K87:5)
+						$unzipDest:=$archive.root.copyTo($folderToBrowse; "android_temporary_"+$file.name; fk overwrite:K87:5)
 						
 						If ($unzipDest.exists)
 							
@@ -2361,12 +2274,12 @@ Function findZipByManifestName
 									
 									If (Value type:C1509($manifestContent.name)=Is text:K8:3)
 										
-										If ($manifestContent.name=$2)
+										If ($manifestContent.name=$nameValueToBeFoundInManifestJso)
 											
 											$found:=True:C214
 											$isTargetZip:=True:C214
-											$0.success:=True:C214
-											$0.folder:=$unzipDest
+											$result.success:=True:C214
+											$result.folder:=$unzipDest
 											
 										End if 
 										
@@ -2398,22 +2311,17 @@ Function findZipByManifestName
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function adjustIconName
-	var $0 : Text
-	var $1 : Text  // File name
-	var $2 : Text  // File extension
+Function adjustIconName($fileName : Text; $fileExtension : Text)->$result : Text
 	var $newName : Text
 	
-	$newName:=cs:C1710.regex.new(Lowercase:C14($1); "[^a-z0-9]").substitute("_")
-	$0:=$newName+$2
+	$newName:=cs:C1710.regex.new(Lowercase:C14($fileName); "[^a-z0-9]").substitute("_")
+	$result:=$newName+$fileExtension
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function createIconAssets
-	var $0 : Object
-	var $1 : Object  // Table or Field or Action object metadata or related field
+Function createIconAssets($tableOrFieldOrActionObjectMetad : Object)->$result : Object
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"icon"; New object:C1471; \
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
@@ -2431,17 +2339,17 @@ Function createIconAssets
 		
 		Case of 
 				
-			: ($1.shortLabel#"")
+			: ($tableOrFieldOrActionObjectMetad.shortLabel#"")
 				
-				$t:=$1.shortLabel
+				$t:=$tableOrFieldOrActionObjectMetad.shortLabel
 				
-			: ($1.label#"")
+			: ($tableOrFieldOrActionObjectMetad.label#"")
 				
-				$t:=$1.label
+				$t:=$tableOrFieldOrActionObjectMetad.label
 				
 			Else 
 				//%W-533.1
-				$t:=$1.name  // 4D table names are not empty
+				$t:=$tableOrFieldOrActionObjectMetad.name  // 4D table names are not empty
 				//%W+533.1
 		End case 
 		
@@ -2479,18 +2387,18 @@ Function createIconAssets
 					
 					If (OK=0)
 						
-						$0.errors.push("Failed to write picture "+$newFile.path)
+						$result.errors.push("Failed to write picture "+$newFile.path)
 						
 					Else 
 						
 						If ($newFile.exists)
 							
-							$0.success:=True:C214
-							$0.icon:=$newFile
+							$result.success:=True:C214
+							$result.icon:=$newFile
 							
 						Else 
 							
-							$0.errors.push("Failed to create file "+$newFile.path)
+							$result.errors.push("Failed to create file "+$newFile.path)
 							
 						End if 
 						
@@ -2498,19 +2406,19 @@ Function createIconAssets
 					
 				Else 
 					
-					$0.errors.push("Failed to create thumbnail for "+$file.path)
+					$result.errors.push("Failed to create thumbnail for "+$file.path)
 					
 				End if 
 				
 			Else 
 				
-				$0.errors.push("Failed to read picture : "+$file.path)
+				$result.errors.push("Failed to read picture : "+$file.path)
 				
 			End if 
 			
 		Else 
 			
-			$0.errors.push("Could not create icon asset : "+$file.path)
+			$result.errors.push("Could not create icon asset : "+$file.path)
 			
 		End if 
 		
@@ -2518,33 +2426,31 @@ Function createIconAssets
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function chmod
-	var $0 : Object
+Function chmod()->$result : Object
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
 	This:C1470.launch(This:C1470.chmodCmd+" +x "+This:C1470.singleQuoted(This:C1470.projectPath+"gradlew"))
 	
-	$0.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
+	$result.success:=Not:C34((This:C1470.errorStream#Null:C1517) & (String:C10(This:C1470.errorStream)#""))
 	
-	If (Not:C34($0.success))
+	If (Not:C34($result.success))
 		
-		$0.errors.push("Failed chmod command")
+		$result.errors.push("Failed chmod command")
 		
 		// Else : all ok
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	//
-Function prepareSdk
-	var $0 : Object
+Function prepareSdk()->$result : Object
 	var $cacheSdkAndroid : 4D:C1709.File
 	var $archive : 4D:C1709.ZipArchive
 	var $unzipDest : 4D:C1709.Folder
 	
-	$0:=New object:C1471(\
+	$result:=New object:C1471(\
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
@@ -2559,18 +2465,18 @@ Function prepareSdk
 		
 		If ($unzipDest.exists)
 			
-			$0.success:=($unzipDest.files().length>0) || ($unzipDest.folders().length>0)
+			$result.success:=($unzipDest.files().length>0) || ($unzipDest.folders().length>0)
 			// XXX maybe delete empty folder to avoid miss integration
 			
 		Else 
 			
-			$0.errors.push("Could not unzip to destination: "+$unzipDest.path)
+			$result.errors.push("Could not unzip to destination: "+$unzipDest.path)
 			
 		End if 
 		
 	Else 
 		// Missing sdk archive
-		$0.errors.push("Missing 4D Mobile SDK archive: "+$cacheSdkAndroid.path)
+		$result.errors.push("Missing 4D Mobile SDK archive: "+$cacheSdkAndroid.path)
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
