@@ -508,7 +508,7 @@ Function getFieldList()->$result : Object
 								$result.shortLabels.push($field.shortLabel)
 								$result.iconPaths.push(String:C10($field.icon))
 								$result.icons.push(UI.getIcon(String:C10($field.icon)))
-								$result.formats.push(This:C1470._computeFormat($field; $result; $target))
+								$result.formats.push(This:C1470._computeFormat($field; $result))
 								$result.formatColors.push(Foreground color:K23:1)
 								$result.nameColors.push(Foreground color:K23:1)
 								

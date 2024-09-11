@@ -164,7 +164,7 @@ Feature.pending("formatMarketPlace")  // Manage format as archive
 Feature.pending("sharedActionWithDescription")  // [MOBILE] Add a description parameter to predefined share action
 Feature.pending("withWidgetActions")  // Enable widget actions
 Feature.pending(114338)  // Support Collection of field injected into detail template https:// Project.4d.com/issues/114338
-Feature.pending("droppingNext"; 114338)  // Allow to drop a multivalued field next to another existing dropped multivalued fields
+Feature.pending("droppingNext")  // Allow to drop a multivalued field next to another existing dropped multivalued fields
 
 Feature.pending("coreDataAbstractEntity")  // Add in coreData model Record abstract entity
 

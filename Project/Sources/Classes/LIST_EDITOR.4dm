@@ -88,7 +88,7 @@ Function init()
 	// === === === === === === === === === === === === === === === === === === === === ===
 Function onLoad()
 	
-	This:C1470.appendEvents(On Double Clicked:K2:5; On Selection Change:K2:29)  // Allow double click to edit list items
+	This:C1470.appendEvents(New collection:C1472(On Double Clicked:K2:5; On Selection Change:K2:29))  // Allow double click to edit list items
 	
 	This:C1470.dropCursor.foregroundColor:=Highlight menu background color:K23:7
 	
@@ -443,7 +443,7 @@ Function doStaticDragAndDrop()->$allowed : Integer
 	//End if 
 	//Else 
 	//If ($o.src#$e.row)\
-						 & ($e.row#($o.src+1))  // Not the same or the next one
+		& ($e.row#($o.src+1))  // Not the same or the next one
 	//$allowed:=0
 	//$o:=$list.rowCoordinates($e.row)
 	//$o.bottom:=$o.top
