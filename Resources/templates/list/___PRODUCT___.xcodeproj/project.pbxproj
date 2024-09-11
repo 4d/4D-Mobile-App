@@ -553,6 +553,7 @@
 				ENABLE_ON_DEMAND_RESOURCES = "___ENABLE_ON_DEMAND_RESOURCES___";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 					"$(PROJECT_DIR)",
 				);
@@ -585,6 +586,7 @@
 				ENABLE_ON_DEMAND_RESOURCES = "___ENABLE_ON_DEMAND_RESOURCES___";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 					"$(PROJECT_DIR)",
 				);
