@@ -638,9 +638,9 @@ Function install()->$result : Object
 		
 		This:C1470.postStep("installingTheApplication")
 		
-		This:C1470.adb.uninstallApp(This:C1470.input.project.product.bundleIdentifier; $device.udid)
+		This:C1470.adb.uninstallApp($device.udid; This:C1470.input.project.product.bundleIdentifier)
 		
-		$o:=This:C1470.adb.installApp(This:C1470.apk.path; $device.udid)
+		$o:=This:C1470.adb.installApp($device.udid; This:C1470.apk.path)
 		$result.success:=$o.success
 		
 		If (Not:C34($result.success))

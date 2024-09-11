@@ -143,7 +143,7 @@ Class constructor
 	// if 'androidDeploymentTarget' is passed, keeps only devices where the version of Android is higher or equal
 Function availableDevices($androidDeploymentTarget : Text)->$devices : Collection
 	
-	var $minVers; $serial; $t : Text
+	var $minVers; $emulatorSerial; $t : Text
 	var $keep : Boolean
 	var $device : Object
 	
@@ -170,18 +170,18 @@ Function availableDevices($androidDeploymentTarget : Text)->$devices : Collectio
 			
 			If (Match regex:C1019("(?m-si)^((?:emulator-\\d*)|[A-Z0-9]*)\\tdevice$"; $t; 1; $pos; $len))
 				
-				$serial:=Substring:C12($t; $pos{1}; $len{1})
+				$emulatorSerial:=Substring:C12($t; $pos{1}; $len{1})
 				$keep:=True:C214
 				
 				If (Count parameters:C259>=1)
 					
-					$keep:=(This:C1470.versionCompare($minVers; This:C1470.getDeviceAndroidVersion($serial))<=0)
+					$keep:=(This:C1470.versionCompare($minVers; This:C1470.getDeviceAndroidVersion($emulatorSerial))<=0)
 					
 				End if 
 				
 				If ($keep)
 					
-					$devices.push($serial)
+					$devices.push($emulatorSerial)
 					
 				End if 
 			End if 
@@ -218,7 +218,7 @@ Function waiForDevice()->$pluggedDevice : Boolean
 	// if 'androidDeploymentTarget' is passed, keeps only devices where the version of Android is higher or equal
 Function plugged($androidDeploymentTarget : Text)->$devices : Collection
 	
-	var $minVers; $serial; $t : Text
+	var $minVers; $emulatorSerial; $t : Text
 	var $keep : Boolean
 	var $device : Object
 	
@@ -245,20 +245,20 @@ Function plugged($androidDeploymentTarget : Text)->$devices : Collection
 			
 			If (Match regex:C1019("(?m-si)^(?!emulator)([^\\t]*)\\t(device|unauthorized)$"; $t; 1; $pos; $len))
 				
-				$serial:=Substring:C12($t; $pos{1}; $len{1})
+				$emulatorSerial:=Substring:C12($t; $pos{1}; $len{1})
 				$keep:=True:C214
 				
 				If (Count parameters:C259>=1)
 					
-					$keep:=(This:C1470.versionCompare($minVers; This:C1470.getDeviceAndroidVersion($serial))<=0)
+					$keep:=(This:C1470.versionCompare($minVers; This:C1470.getDeviceAndroidVersion($emulatorSerial))<=0)
 					
 				End if 
 				
 				If ($keep)
 					
 					$device:=New object:C1471(\
-						"udid"; $serial; \
-						"name"; This:C1470.getDeviceName($serial); \
+						"udid"; $emulatorSerial; \
+						"name"; This:C1470.getDeviceName($emulatorSerial); \
 						"type"; "device"; \
 						"unauthorized"; Substring:C12($t; $pos{2}; $len{2})="unauthorized")
 					
@@ -273,21 +273,21 @@ Function plugged($androidDeploymentTarget : Text)->$devices : Collection
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Test if a device is connacted from its UUID
-Function isDeviceConnected($serial)->$connected : Boolean
+Function isDeviceConnected($emulatorSerial)->$connected : Boolean
 	
 	This:C1470._devices(True:C214)
 	
 	If (This:C1470.success)
 		
-		$connected:=Match regex:C1019("(?m-si)"+$serial+"\\tdevice"; This:C1470.outputStream; 1)
+		$connected:=Match regex:C1019("(?m-si)"+$emulatorSerial+"\\tdevice"; This:C1470.outputStream; 1)
 		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Returns the Android version of a connected device or a booted emulator from its UUID
-Function getDeviceAndroidVersion($serial : Text)->$version : Text
+Function getDeviceAndroidVersion($emulatorSerial : Text)->$version : Text
 	
-	This:C1470.execute("-s "+$serial+" shell getprop ro.build.version.release")
+	This:C1470.execute("-s "+$emulatorSerial+" shell getprop ro.build.version.release")
 	
 	If (This:C1470.success)
 		
@@ -295,15 +295,15 @@ Function getDeviceAndroidVersion($serial : Text)->$version : Text
 		
 	Else 
 		
-		This:C1470._pushError("Can't get Android version for the device "+$serial)
+		This:C1470._pushError("Can't get Android version for the device "+$emulatorSerial)
 		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Returns the name of a connected device or a booted emulator from its UUID
-Function getDeviceSDKVersion($serial : Text)->$version : Text
+Function getDeviceSDKVersion($emulatorSerial : Text)->$version : Text
 	
-	This:C1470.execute("-s "+$serial+" shell getprop ro.system.build.version.sdk")
+	This:C1470.execute("-s "+$emulatorSerial+" shell getprop ro.system.build.version.sdk")
 	
 	If (This:C1470.success)
 		
@@ -311,16 +311,16 @@ Function getDeviceSDKVersion($serial : Text)->$version : Text
 		
 	Else 
 		
-		This:C1470._pushError("Can't get Android version for the device "+$serial)
+		This:C1470._pushError("Can't get Android version for the device "+$emulatorSerial)
 		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Returns the name of a connected device from its serial
-Function getDeviceName($serial : Text)->$name : Text
+Function getDeviceName($emulatorSerial : Text)->$name : Text
 	
 	// https://stackoverflow.com/questions/54810404/is-there-a-way-to-get-the-device-name-using-adb-for-example-if-the-device-name
-	This:C1470.execute("-s "+$serial+" shell dumpsys bluetooth_manager | \\grep 'name:' | cut -c9-")
+	This:C1470.execute("-s "+$emulatorSerial+" shell dumpsys bluetooth_manager | \\grep 'name:' | cut -c9-")
 	
 	If (This:C1470.success)
 		
@@ -328,13 +328,13 @@ Function getDeviceName($serial : Text)->$name : Text
 		
 	Else 
 		
-		This:C1470._pushError("Can't get name for the device "+$serial)
+		This:C1470._pushError("Can't get name for the device "+$emulatorSerial)
 		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Returns a connected device or emulator properties from its serial
-Function getDeviceProperties($serial : Text)->$properties : Object
+Function getDeviceProperties($emulatorSerial : Text)->$properties : Object
 	
 	var $buffer; $key; $subkey; $t : Text
 	var $o : Object
@@ -343,7 +343,7 @@ Function getDeviceProperties($serial : Text)->$properties : Object
 	ARRAY LONGINT:C221($len; 0x0000)
 	ARRAY LONGINT:C221($pos; 0x0000)
 	
-	This:C1470.execute("-s "+$serial+" shell getprop")
+	This:C1470.execute("-s "+$emulatorSerial+" shell getprop")
 	
 	If (This:C1470.success)
 		
@@ -452,31 +452,31 @@ Function getDeviceProperties($serial : Text)->$properties : Object
 		
 	Else 
 		
-		This:C1470._pushError("Failed to obtain device properties "+$serial)
+		This:C1470._pushError("Failed to obtain device properties "+$emulatorSerial)
 		
 	End if 
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Test if an app is installed on a connected device
-Function isAppInstalled($package : Text; $serial : Text)->$installed : Boolean
+Function isAppInstalled($emulatorSerial : Text; $package : Text)->$installed : Boolean
 	
-	$installed:=This:C1470.userPackageList($serial).indexOf($package)>=0
+	$installed:=This:C1470.userPackageList($emulatorSerial).indexOf($package)>=0
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Returns a collection of package names for a connected device
-Function packageList($serial : Text)->$packages : Collection
+Function packageList($emulatorSerial : Text)->$packages : Collection
 	
-	$packages:=This:C1470._packageList($serial)
+	$packages:=This:C1470._packageList($emulatorSerial)
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Returns a collection of 3rd party package names for a connected device
-Function userPackageList($serial : Text)->$packages : Collection
+Function userPackageList($emulatorSerial : Text)->$packages : Collection
 	
-	$packages:=This:C1470._packageList($serial; "-3")
+	$packages:=This:C1470._packageList($emulatorSerial; "-3")
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Install an APK on a connected device giving its path or File object
-Function installApp($apk; $serial : Text; $test : Boolean)->$this : cs:C1710.adb
+Function installApp($emulatorSerial : Text; $apk : Variant; $test : Boolean)->$this : cs:C1710.adb
 	
 	var $file : 4D:C1709.File
 	
@@ -516,7 +516,7 @@ Function installApp($apk; $serial : Text; $test : Boolean)->$this : cs:C1710.adb
 		If (Count parameters:C259>=1)
 			
 			// -s <serial number>
-			This:C1470.execute("-s "+$serial+" install -r "+Choose:C955($test; "-t "; "")+This:C1470.quoted($file.path))
+			This:C1470.execute("-s "+$emulatorSerial+" install -r "+Choose:C955($test; "-t "; "")+This:C1470.quoted($file.path))
 			
 		Else 
 			
@@ -542,17 +542,17 @@ Function installApp($apk; $serial : Text; $test : Boolean)->$this : cs:C1710.adb
 	
 	//=== === === === === === === === === === === === === === === === === === === === === === === === === ===
 	/// Uninstalling app from a connected device
-Function uninstallApp($bundleIdentifier : Text; $serial : Text)
+Function uninstallApp($emulatorSerial : Text; $bundleIdentifier : Text)
 	
 	$bundleIdentifier:=Replace string:C233($bundleIdentifier; "-"; "_")
 	
-	If (This:C1470.userPackageList($serial).indexOf($bundleIdentifier)>=0)
+	If (This:C1470.userPackageList($emulatorSerial).indexOf($bundleIdentifier)>=0)
 		
-		This:C1470.execute("-s "+$serial+" uninstall "+Lowercase:C14($bundleIdentifier))
+		This:C1470.execute("-s "+$emulatorSerial+" uninstall "+Lowercase:C14($bundleIdentifier))
 		
 		If (Not:C34(This:C1470.success))
 			
-			This:C1470.execute("-s "+$serial+" shell pm uninstall "+Lowercase:C14($bundleIdentifier))
+			This:C1470.execute("-s "+$emulatorSerial+" shell pm uninstall "+Lowercase:C14($bundleIdentifier))
 			
 		End if 
 	End if 
@@ -565,15 +565,14 @@ Function launchApp($bundleIdentifier : Text)->$this : cs:C1710.adb
 	//monkey -p com.package.name -v 1
 	This:C1470.resultInErrorStream:=True:C214
 	This:C1470.execute("shell monkey -p "+Lowercase:C14($bundleIdentifier)+" -v 1")
-	This:C1470.resultInErrorStream:=False:C215
 	
 	$this:=This:C1470
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// list info on one package
-Function getAppProperties($appName : Text; $serial : Text)
+Function getAppProperties($emulatorSerial : Text; $appName : Text)
 	
-	This:C1470.execute("-s "+$serial+" shell dump "+This:C1470._packageName($appName))
+	This:C1470.execute("-s "+$emulatorSerial+" shell dump "+This:C1470._packageName($appName))
 	
 	//#TO_DO
 	
@@ -689,7 +688,7 @@ Function listBootedDevices()->$result : Object  // List booted devices
 	End if 
 	
 Function findSerial($bootedDevicesList : Collection; $searchedAvdName : Text)->$result : Object
-	var $emulatorLine; $serial : Text
+	var $emulatorLine; $emulatorSerial : Text
 	var $Obj_avdName : Object
 	
 	$result:=New object:C1471(\
@@ -701,23 +700,23 @@ Function findSerial($bootedDevicesList : Collection; $searchedAvdName : Text)->$
 		
 		If (Position:C15("\tdevice"; $emulatorLine)>0)
 			
-			$serial:=Substring:C12($emulatorLine; 1; (Position:C15("\tdevice"; $emulatorLine)-1))
+			$emulatorSerial:=Substring:C12($emulatorLine; 1; (Position:C15("\tdevice"; $emulatorLine)-1))
 			
 		Else 
 			
-			$serial:=Substring:C12($emulatorLine; 1; (Position:C15("\toffline"; $emulatorLine)-1))
+			$emulatorSerial:=Substring:C12($emulatorLine; 1; (Position:C15("\toffline"; $emulatorLine)-1))
 			
 		End if 
 		
 		// Get associated avd name
-		$Obj_avdName:=This:C1470.getAvdName($serial)
+		$Obj_avdName:=This:C1470.getAvdName($emulatorSerial)
 		
 		If ($Obj_avdName.success)
 			
 			If ($Obj_avdName.avdName=$searchedAvdName)
 				
 				// found avd name, means that tested serial is correct
-				$result.serial:=$serial
+				$result.serial:=$emulatorSerial
 				$result.success:=True:C214
 				
 				// Else : not the associated serial
@@ -730,7 +729,7 @@ Function findSerial($bootedDevicesList : Collection; $searchedAvdName : Text)->$
 		
 	End for each 
 	
-Function getAvdName($serial : Text)->$result : Object  // #TO_DO : NOT THE SAME AS getDeviceName() -> MOVE TO avd
+Function getAvdName($emulatorSerial : Text)->$result : Object  // #TO_DO : NOT THE SAME AS getDeviceName() -> MOVE TO avd
 	var $avdName_Col : Collection
 	
 	$result:=New object:C1471(\
@@ -738,7 +737,7 @@ Function getAvdName($serial : Text)->$result : Object  // #TO_DO : NOT THE SAME 
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	This:C1470.execute("-s \""+$serial+"\" emu avd name")
+	This:C1470.execute("-s \""+$emulatorSerial+"\" emu avd name")
 	
 	If ((This:C1470.outputStream#Null:C1517) & (String:C10(This:C1470.outputStream)#""))
 		
@@ -814,7 +813,7 @@ Function waitStartApp($emulatorSerial : Text; $packageName : Text/* app name */;
 		// Else : all ok 
 	End if 
 	
-Function uninstallAppIfInstalled($package : Text; $serial : Text)->$result : Object
+Function uninstallAppIfInstalled($emulatorSerial : Text; $package : Text)->$result : Object
 	
 	
 	
@@ -824,13 +823,13 @@ Function uninstallAppIfInstalled($package : Text; $serial : Text)->$result : Obj
 		"success"; False:C215; \
 		"errors"; New collection:C1472)
 	
-	$Obj_isInstalled:=This:C1470.isAppAlreadyInstalled($package; $serial)
+	$Obj_isInstalled:=This:C1470.isAppAlreadyInstalled($emulatorSerial; $package)
 	
 	If ($Obj_isInstalled.success)
 		
 		If ($Obj_isInstalled.isInstalled)
 			
-			$Obj_uninstall:=This:C1470.waitUninstallApp($package; $serial)
+			$Obj_uninstall:=This:C1470.waitUninstallApp($emulatorSerial; $package)
 			
 			If ($Obj_uninstall.success)
 				
@@ -1002,7 +1001,7 @@ Function _packageName($appName : Text)->$pakageName : Text
 	
 	//________________________________________________________________________________
 	// [PRIVATE] - Run shell pm list packages
-Function _packageList($serial : Text; $options)->$packages : Collection
+Function _packageList($emulatorSerial : Text; $options)->$packages : Collection
 	
 	var $t : Text
 	var $spendTime : Integer
@@ -1013,11 +1012,11 @@ Function _packageList($serial : Text; $options)->$packages : Collection
 		
 		If (Count parameters:C259=1)
 			
-			This:C1470.execute("-s "+$serial+" shell pm list packages")
+			This:C1470.execute("-s "+$emulatorSerial+" shell pm list packages")
 			
 		Else 
 			
-			This:C1470.execute("-s "+$serial+" shell pm list packages "+$options)
+			This:C1470.execute("-s "+$emulatorSerial+" shell pm list packages "+$options)
 			
 		End if 
 		
