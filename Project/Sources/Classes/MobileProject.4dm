@@ -45,6 +45,7 @@ Function main()->$result : Object
 		If (Bool:C1537(This:C1470.input.build))
 			
 			$result.build:=This:C1470.build()
+			This:C1470.buildResult:=$result.build
 			ob_error_combine($result; $result.build)
 			
 			If ($result.build.success)
@@ -139,6 +140,7 @@ Function _main($result : Object)
 	End if 
 	
 	$result.build:=This:C1470.build()
+	This:C1470.buildResult:=$result.build
 	ob_error_combine($result; $result.build)
 	
 	If (Not:C34($result.build.success))

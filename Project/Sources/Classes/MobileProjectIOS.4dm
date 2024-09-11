@@ -230,7 +230,7 @@ Function _runSimulator()->$out : Object
 	$simctl:=This:C1470.simctl  // CLEAN: Maybe init only here
 	$project:=This:C1470.project
 	
-	$in.product:=This:C1470.build.app
+	$in.product:=This:C1470.buildResult.app
 	
 	$out:=New object:C1471("success"; False:C215)
 	
@@ -424,7 +424,7 @@ Function install()->$result : Object
 		
 		This:C1470.cfgutil.uninstallApp($device; This:C1470.input.project.product.bundleIdentifier)
 		
-		$o:=This:C1470.cfgutil.installApp($device; File:C1566(Replace string:C233(This:C1470.build.archivePath; ".xcarchive/"; ".ipa")))
+		$o:=This:C1470.cfgutil.installApp($device; File:C1566(Replace string:C233(This:C1470.buildResult.archivePath; ".xcarchive/"; ".ipa")))
 		$result.success:=$o.success
 		
 		If (Not:C34($result.success))
