@@ -359,7 +359,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 						// in Copy Frameworks // PBXShellScriptBuildPhase
 						If (Value type:C1509($Obj_result.phase.copy)=Is object:K8:27)
 							
-							$Obj_result.phase.copy.inputPaths.push("$(SRCROOT)/"+$Obj_param.folder+$child.fullName)
+							$Obj_result.phase.copy.inputPaths.push("$(SRCROOT)/"+$paramfolder+$child.fullName)
 							$Obj_result.phase.copy.outputPaths.push("$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/"+$child.fullName)
 							
 						End if 
