@@ -232,12 +232,13 @@ Function _runSimulator()->$out : Object
 	
 	$in.product:=This:C1470.build.app
 	
-	$out:=New object:C1471
+	$out:=New object:C1471("success"; False:C215)
 	
 	If ($in.product=Null:C1517)
 		ASSERT:C1129(dev_Matrix; "product to install not found")
 		This:C1470.logError("product to install not found")
-		return 
+		//ob_error_add($out; "product to install not found")
+		return $out
 	End if 
 	
 	This:C1470.postStep("launchingTheSimulator")
@@ -249,7 +250,8 @@ Function _runSimulator()->$out : Object
 		
 		This:C1470.postError("failedToOpenSimulator")
 		This:C1470.logError("device not found")
-		return   // guard
+		//ob_error_add($out; "device not found "+String($in.project._simulator))
+		return $out  // guard
 	End if 
 	
 	// boot if not booted
@@ -266,7 +268,7 @@ Function _runSimulator()->$out : Object
 	If (Not:C34($simctl.isDeviceBooted($out.device.udid)))
 		This:C1470.postError("failedToOpenSimulator")
 		This:C1470.logError("device not booted")
-		return   //guard
+		return $out  //guard
 	End if 
 	
 	$simctl.bringSimulatorAppToFront()
@@ -770,7 +772,7 @@ Function _manageDataSet($out : Object)
 	
 	If (Not:C34(Bool:C1537($out.dump.exists)))
 		
-		If (String:C10($in.dataSource.source)="server")
+		If (String:C10($in.project.dataSource.source)="server")
 			
 			// <NOTHING MORE TO DO>
 			
@@ -778,7 +780,7 @@ Function _manageDataSet($out : Object)
 			var $keyPath : 4D:C1709.File
 			var $pathname : Text
 			
-			$keyPath:=This:C1470.paths.key()
+			$keyPath:=This:C1470.paths.key()  // local, do not try with path from $in.project.dataSource.keyPath
 			
 			$pathname:=$keyPath.platformPath
 			

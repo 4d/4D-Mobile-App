@@ -172,6 +172,9 @@ Case of
 				
 				$result[$meta.name]:=$rest
 				
+				If (Not:C34($rest.success))
+					ob_error_add($out; "Failed to dump data class '"+String:C10($meta.name)+"' definition")
+				End if 
 				ob_error_combine($out; $rest)
 				
 			Else 
@@ -355,6 +358,9 @@ Case of
 						End if 
 						
 						$out.success:=$rest.success
+						If (Not:C34($rest.success))
+							ob_error_add($out; "Failed to dump data class '"+String:C10($meta.name)+"' data")
+						End if 
 						ob_error_combine($out; $rest)
 						
 						If ($out.success)

@@ -15,7 +15,7 @@ If (False:C215)
 End if 
 
 var $tableID; $target; $tt : Text
-var $b; $success : Boolean
+var $hasEmbedded; $success : Boolean
 var $manual; $message; $messageCancel; $messageOK; $project : Object
 var $rest : Object
 var $folders; $publishedTableNames : Collection
@@ -230,15 +230,16 @@ If (Asserted:C1132($project#Null:C1517))
 				If ($success)
 					
 					// Local web server is mandatory only if data are embedded
-					For each ($tableID; $project.dataModel) Until ($b)
+					$hasEmbedded:=False:C215
+					For each ($tableID; $project.dataModel) Until ($hasEmbedded)
 						
-						$b:=Bool:C1537($project.dataModel[$tableID][""].embedded)
+						$hasEmbedded:=Bool:C1537($project.dataModel[$tableID][""].embedded)
 						
 					End for each 
 					
-					$success:=Not:C34($b)
+					$success:=Not:C34($hasEmbedded)
 					
-					If (Not:C34($success))
+					If ($hasEmbedded)
 						
 						$success:=WEB Is server running:C1313 | Bool:C1537($data.ignoreServer)
 						
@@ -273,26 +274,33 @@ If (Asserted:C1132($project#Null:C1517))
 			Else 
 				
 				var $keyFile : 4D:C1709.File
-				$keyFile:=cs:C1710.path.new().key()
+				If (($project.dataSource.keyPath#Null:C1517) && Length:C16(String:C10($project.dataSource.keyPath))>0)
+					$keyFile:=File:C1566($project.dataSource.keyPath)
+				Else 
+					$keyFile:=cs:C1710.path.new().key()  // try with default one
+				End if 
 				
 				var $keyText : Text
-				If ($keyFile.exists)
-					$keyText:=$keyFile.getText()
+				$keyText:=($keyFile.exists) ? $keyFile.getText() : ""
+				
+				If (Length:C16($keyText)=0)
+					
+					// Check server-database structure
+					$rest:=Rest(New object:C1471(\
+						"action"; "tables"; \
+						"handler"; "mobileapp"; \
+						"url"; String:C10($project.server.urls.production); \
+						"headers"; New object:C1471(\
+						"X-MobileApp"; "1"; \
+						"Authorization"; "Bearer "+$keyText)))
+					
+					$success:=$rest.success
+					
 				Else 
-					$keyText:=""
+					
+					$success:=False:C215  // will failed with no key, so do not try
+					
 				End if 
-				// TODO: do not try with no key, it will failed
-				
-				// Check server-database structure
-				$rest:=Rest(New object:C1471(\
-					"action"; "tables"; \
-					"handler"; "mobileapp"; \
-					"url"; String:C10($project.server.urls.production); \
-					"headers"; New object:C1471(\
-					"X-MobileApp"; "1"; \
-					"Authorization"; "Bearer "+$keyText)))
-				
-				$success:=$rest.success
 				
 				If ($success)
 					
@@ -300,23 +308,24 @@ If (Asserted:C1132($project#Null:C1517))
 					
 					If (Not:C34($success))
 						
-						// SERVER STRUCTURE IS NOT OK. Confirm if data embed, Alert else
-						For each ($tableID; $project.dataModel) Until ($b)
+						// SERVER STRUCTURE IS NOT OK. Confirm if data embed, Alert else (?? no alert code?)
+						$hasEmbedded:=False:C215
+						For each ($tableID; $project.dataModel) Until ($hasEmbedded)
 							
-							$b:=Not:C34(Bool:C1537($project.dataModel[$tableID][""].embedded))
+							$hasEmbedded:=Bool:C1537($project.dataModel[$tableID][""].embedded)
 							
 						End for each 
 						
-						$success:=Not:C34($b)
+						$success:=Not:C34($hasEmbedded)
 						
-						If (Not:C34($success))
+						If ($hasEmbedded)
 							
 							$success:=(Bool:C1537($project.$_ignoreServerStructureAdjustement))
 							OB REMOVE:C1226($project; "$_ignoreServerStructureAdjustement")
 							
 						End if 
 						
-						If (Not:C34($success))
+						If ($hasEmbedded)
 							
 							UI.postMessage(New object:C1471(\
 								"action"; "show"; \
@@ -334,16 +343,17 @@ If (Asserted:C1132($project#Null:C1517))
 					
 				Else 
 					
-					// SERVER NOT REACHABLE - Ignore if no data embed, Confirm else
-					For each ($tableID; $project.dataModel) Until ($b)
+					// SERVER NOT REACHABLE - Ignore if no data embed, Alert else
+					$hasEmbedded:=False:C215
+					For each ($tableID; $project.dataModel) Until ($hasEmbedded)
 						
-						$b:=Not:C34(Bool:C1537($project.dataModel[$tableID][""].embedded))
+						$hasEmbedded:=Bool:C1537($project.dataModel[$tableID][""].embedded)
 						
 					End for each 
 					
-					$success:=Not:C34($b)
+					$success:=Not:C34($hasEmbedded)
 					
-					If (Not:C34($success))
+					If ($hasEmbedded)
 						
 						var $forError : Variant
 						$forError:=($rest.httpError=Null:C1517) ? $rest.code : $rest.httpError
