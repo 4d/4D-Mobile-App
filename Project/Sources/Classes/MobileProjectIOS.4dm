@@ -321,6 +321,8 @@ Function _runSimulator()->$out : Object
 		
 		$simctl.bringSimulatorAppToFront()
 		
+		$out.success:=True:C214  // we could not know error after launching app (like crash etc...)
+		
 	Else 
 		
 		This:C1470.postError($simctl.lastError)

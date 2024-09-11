@@ -32,6 +32,16 @@ do
   FRAMEWORK_OUT="$(eval echo \${SCRIPT_OUTPUT_FILE_${i}})"
   SYMBOL_PATH=$(dirname "$FRAMEWORK")
 
+  ## xcframework, just copy, no lipo
+  if [[ "$FRAMEWORK" == *.xcframework ]]
+  then
+    rm -Rf "$FRAMEWORK_OUT"
+    cp -R "$FRAMEWORK" "$FRAMEWORK_OUT"
+  
+    echo "info: $i - $FRAMEWORK copied, lipo skipped"
+    continue
+  fi
+
   # Read executable name
   FRAMEWORK_EXECUTABLE_NAME=$(defaults read "$FRAMEWORK/Info.plist" CFBundleExecutable)
 
@@ -53,13 +63,6 @@ do
   ## do copy (replace)
   rm -Rf "$FRAMEWORK_OUT"
   cp -R "$FRAMEWORK" "$FRAMEWORK_OUT"
-
-  ## skip xcframework, no lipo
-  if [[ "$FRAMEWORK" == *.xcframework ]]
-  then
-    echo "info: $i - $FRAMEWORK copied, lipo skipped"
-    continue
-  fi
 
   ## and removes unused architectures.
   ## TODO use lipo -info and -remove instead
