@@ -9,11 +9,11 @@
 // Declarations
 #DECLARE($Obj_param : Object)->$Obj_result : Object
 
-C_BOOLEAN:C305($Boo_install)
-C_LONGINT:C283($Lon_parameters)
-C_TEXT:C284($Txt_buffer; $Txt_cmd; $Txt_error; $Txt_fileRef; $Txt_in; $Txt_out)
-C_OBJECT:C1216($Obj_; $Obj_objects)
-C_COLLECTION:C1488($Col_)
+var $Boo_install : Boolean
+var $Lon_parameters : Integer
+var $Txt_buffer; $Txt_cmd; $Txt_error; $Txt_fileRef; $Txt_in; $Txt_out : Text
+var $Obj_; $Obj_objects : Object
+var $Col_ : Collection
 
 
 // ----------------------------------------------------
@@ -352,6 +352,7 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 						$Obj_:=New object:C1471("isa"; "PBXBuildFile"; "fileRef"; $Txt_fileRef)
 						$Obj_.settings:=New object:C1471("ATTRIBUTES"; New collection:C1472("CodeSignOnCopy"))  // ;"RemoveHeadersOnCopy"
 						
+						$Obj_objects[$Txt_buffer]:=$Obj_
 						$Col_:=$Obj_result.phase.embed.files
 						$Col_.push($Txt_buffer)
 						
@@ -359,8 +360,9 @@ If (Asserted:C1132($Obj_param.action#Null:C1517; "Missing the tag \"action\""))
 						// in Copy Frameworks // PBXShellScriptBuildPhase
 						If (Value type:C1509($Obj_result.phase.copy)=Is object:K8:27)
 							
-							$Obj_result.phase.copy.inputPaths.push("$(SRCROOT)/"+$paramfolder+$child.fullName)
-							$Obj_result.phase.copy.outputPaths.push("$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/"+$child.fullName)
+							// We do not copy like that xcframework, script do not transform correctly
+							// $Obj_result.phase.copy.inputPaths.push("$(SRCROOT)/"+$paramfolder+$child.fullName)
+							// $Obj_result.phase.copy.outputPaths.push("$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/"+$child.fullName)
 							
 						End if 
 						

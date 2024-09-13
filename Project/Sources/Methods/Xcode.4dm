@@ -1414,16 +1414,16 @@ Get system info should not be called frequently (consumer) as the processor will
 		// MARK:- openPrefs
 	: ($Obj_param.action="openPrefs")  // Quick Access to Preferences
 		
-		$Txt_buffer:="xcpref:// GeneralPrefs"
+		$Txt_cmd:="xcpref:// GeneralPrefs"
 		
 		If (String:C10($Obj_param.tab)#"")
 			
 			// General, Accounts, Alert, KeyBindings, FontAndColor, Navigation, Locations
-			$Txt_buffer:="xcpref://"+$Obj_param.tab+"Prefs"
+			$Txt_cmd:="xcpref://"+$Obj_param.tab+"Prefs"
 			
 		End if 
 		
-		OPEN URL:C673($Txt_buffer)
+		OPEN URL:C673($Txt_cmd)
 		$Obj_result.success:=True:C214
 		
 		// MARK:- openXXXPrefs
@@ -1437,11 +1437,15 @@ Get system info should not be called frequently (consumer) as the processor will
 		//______________________________________________________
 End case 
 
-var $log : Collection
-$log:=New collection:C1472
-$log.push("CMD: "+$Txt_cmd)
-$log.push("STATUS: "+($Obj_result.success ? "success" : "failed"))
-$log.push("OUTPUT: "+String:C10($Obj_result.out))
-$log.push("ERROR: "+String:C10($Obj_result.error))
-
-LOG EVENT:C667(Into 4D debug message:K38:5; $log.join("\r"); ($Obj_result.success ? Information message:K38:1 : Error message:K38:3))
+If (Length:C16($Txt_cmd)>0)
+	
+	var $log : Collection
+	$log:=New collection:C1472
+	$log.push("CMD: "+$Txt_cmd)
+	$log.push("STATUS: "+($Obj_result.success ? "success" : "failed"))
+	$log.push("OUTPUT: "+String:C10($Obj_result.out))
+	$log.push("ERROR: "+String:C10($Obj_result.error))
+	
+	LOG EVENT:C667(Into 4D debug message:K38:5; $log.join("\r"); ($Obj_result.success ? Information message:K38:1 : Error message:K38:3))
+	
+End if 
