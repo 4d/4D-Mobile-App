@@ -67,6 +67,7 @@ Case of
 				$menu.line()
 				
 				$menu.append($tab+Get localized string:C991("openTheXcodeSimulatorsManager"); "XcodeDeviceManager")
+				$menu.append($tab+Get localized string:C991("downloadIOSPlatform"); "downloadIOSPlatform")
 				
 			Else 
 				
@@ -206,6 +207,15 @@ Case of
 			: ($menu.choice="XcodeDeviceManager")
 				
 				cs:C1710.Xcode.new().showDevicesWindow()
+				
+				//______________________________________________________
+			: ($menu.choice="downloadIOSPlatform")
+				
+				// TODO: launch asynchronously (to not block), and maybe show message from command that download % of it
+				var $resultDl : Object
+				$resultDl:=(Shift down:C543) ? cs:C1710.Xcode.new().downloadAllPlatform() : cs:C1710.Xcode.new().downloadIOSPlatform()
+				
+				ALERT:C41($resultDl.message+$resultDl.error)
 				
 				//______________________________________________________
 			: ($menu.choice="createAVD")

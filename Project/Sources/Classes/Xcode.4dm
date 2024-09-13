@@ -600,6 +600,18 @@ Function showDevicesWindow
 	LAUNCH EXTERNAL PROCESS:C811("open xcdevice://showDevicesWindow")
 	
 	//====================================================================
+Function downloadIOSPlatform() : Object
+	var $in; $out; $err : Text
+	LAUNCH EXTERNAL PROCESS:C811("xcodebuild -downloadPlatform iOS"; $in; $out; $err)
+	return New object:C1471("message"; $out; "error"; $err)
+	
+	//====================================================================
+Function downloadAllPlatform() : Object
+	var $in; $out; $err : Text
+	LAUNCH EXTERNAL PROCESS:C811("xcodebuild -downloadAllPlatforms"; $in; $out; $err)
+	return New object:C1471("message"; $out; "error"; $err)
+	
+	//====================================================================
 Function isCancelled()->$is : Boolean
 	
 	$is:=(Position:C15("User cancelled. (-128)"; This:C1470.lastError)>0)

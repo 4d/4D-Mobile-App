@@ -743,6 +743,10 @@ Make sure the device is connected to your computer with a USB cable.</target>
           <source>Open the Xcode Simulators manager...</source>
           <target>Open the Xcode Simulators manager...</target>
         </trans-unit>
+        <trans-unit id="OEvOjjzmAnsaAYWrPucY/A" resname="downloadIOSPlatform">
+          <source>Download iOS platform for Xcode...</source>
+          <target>Download iOS platform for Xcode...</target>
+        </trans-unit>
       </group>
       <group resname="ERRORS">
         <trans-unit id="bED/fpei/FAE7MlOk9WbZA" resname="ERR_MOBL_1">

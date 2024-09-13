@@ -743,6 +743,10 @@ Assurez-vous que le périphérique est connecté à votre ordinateur à l'aide d
           <source>Open the Xcode Simulators manager...</source>
           <target>Ouvrir le gestionnaire des simulateurs Xcode…</target>
         </trans-unit>
+        <trans-unit id="OEvOjjzmAnsaAYWrPucY/A" resname="downloadIOSPlatform">
+          <source>Download iOS platform for Xcode...</source>
+          <target>Télécharger la platform iOS pour Xcode...</target>
+        </trans-unit>
       </group>
       <group resname="ERRORS">
         <trans-unit id="bED/fpei/FAE7MlOk9WbZA" resname="ERR_MOBL_1">
