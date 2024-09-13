@@ -868,14 +868,11 @@ Case of
 			$Txt_cmd:=$Txt_cmd+" -sdk "+$Obj_param.sdk
 			
 			If (Position:C15("simulator"; $Obj_param.sdk)>0)
-/*
-WARNING:
-Get system info should not be called frequently (consumer) as the processor will not change during the execution of the code
-*/
-				If (Feature.with("simuARMOnAppleProcessor") && (Get system info:C1571().processor="@Apple@"))
-					$Txt_cmd:=$Txt_cmd+" -arch arm64"  // TODO APPLE SILICON: according to if silicon or not set good arch for simu
-				Else 
-					$Txt_cmd:=$Txt_cmd+" -arch x86_64"  // TODO APPLE SILICON: according to if silicon or not set good arch for simu
+				
+				If (Feature.with("isForceIntelSimulator") && (Get system info:C1571().processor="@Apple@"))
+					
+					$Txt_cmd:=$Txt_cmd+" -arch x86_64"  // not more needed with xcframework (XXX: maybe add it if old framework?)
+					
 				End if 
 				
 			End if 

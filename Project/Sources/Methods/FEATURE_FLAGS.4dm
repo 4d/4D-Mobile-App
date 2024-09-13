@@ -136,7 +136,6 @@ Feature.main("listEditor")  // #130828 [MOBILE] Create and edit an input control
 // Mark:-🚧 WIP
 // Feature.wip("buildWithCmd")  // Allow to create/build using cmd only: azure:3628
 
-// Feature.wip("simuARMOnAppleProcessor") // Mac M1 build for simu using arm64
 // Feature.wip("duplicateTemplate")  // Allow to duplicate template in host database and show on disk https:// Project.4d.com/issues/98054
 // Feature.wip("newFormatterChoiceList")  // Menu to create formatter choice list directly , from data
 Feature.wip("taskIndicator")  // UI for background tasks executing
