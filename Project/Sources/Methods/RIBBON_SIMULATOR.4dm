@@ -215,7 +215,7 @@ Case of
 				var $resultDl : Object
 				$resultDl:=(Shift down:C543) ? cs:C1710.Xcode.new().downloadAllPlatform() : cs:C1710.Xcode.new().downloadIOSPlatform()
 				
-				ALERT:C41($resultDl.message+$resultDl.error)
+				ALERT:C41(String:C10($resultDl.out)+String:C10($resultDl.error))
 				
 				//______________________________________________________
 			: ($menu.choice="createAVD")

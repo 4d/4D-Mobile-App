@@ -119,6 +119,39 @@ Function getRequirements($force : Boolean)
 		
 	End if 
 	
+	// If embedded iOS sdk use it as reference
+	var $sdk : 4D:C1709.File
+	$sdk:=cs:C1710.path.new().sdkApple()
+	
+	If ($sdk.exists)
+		
+		var $version : Object
+		var $xcodeVersionFile : 4D:C1709.ZipFile
+		var $archive : 4D:C1709.ZipArchive
+		var $Txt_methodOnErrorCall : Text
+		$Txt_methodOnErrorCall:=Method called on error:C704
+		ON ERR CALL:C155("ob_noError")
+		$archive:=ZIP Read archive:C1637($sdk)
+		ON ERR CALL:C155($Txt_methodOnErrorCall)
+		If ($archive#Null:C1517)
+			
+			$xcodeVersionFile:=$archive.root.file("xcodeVersion")
+			
+			If ($xcodeVersionFile.exists)
+				
+				$version:=This:C1470._xcodeBuildVersion(New object:C1471("out"; $xcodeVersionFile.getText()))
+				If ($version.success)
+					
+					This:C1470.requirement:="~"+$version.version  // accept minor? (expecting not breaking change)
+					
+				End if 
+				
+			End if 
+			
+		End if 
+		
+	End if 
+	
 	//====================================================================
 	// Populate Application with the default path
 Function defaultPath()
@@ -601,15 +634,64 @@ Function showDevicesWindow
 	
 	//====================================================================
 Function downloadIOSPlatform() : Object
-	var $in; $out; $err : Text
-	LAUNCH EXTERNAL PROCESS:C811("xcodebuild -downloadPlatform iOS"; $in; $out; $err)
-	return New object:C1471("message"; $out; "error"; $err)
+	
+	return This:C1470.lep("xcodebuild -downloadPlatform iOS")
 	
 	//====================================================================
 Function downloadAllPlatform() : Object
-	var $in; $out; $err : Text
-	LAUNCH EXTERNAL PROCESS:C811("xcodebuild -downloadAllPlatforms"; $in; $out; $err)
-	return New object:C1471("message"; $out; "error"; $err)
+	
+	return This:C1470.lep("xcodebuild -downloadAllPlatforms")
+	
+	//====================================================================
+Function sdks() : Object
+	
+	return This:C1470.lep("xcodebuild -showsdks")
+	
+	//====================================================================
+Function xcodeBuildVersion() : Object
+	
+	return This:C1470._xcodeBuildVersion(This:C1470.lep("xcodebuild -version"))
+	
+Function _xcodeBuildVersion($result : Object) : Object
+	
+	var $regex : cs:C1710.regex
+	$regex:=cs:C1710.regex.new(String:C10($result.out); "(?s-mi)Xcode (\\d{1,}(?:\\.\\d)*).*version\\s*([A-Z0-9]*)")
+	
+	$result.success:=False:C215
+	
+	If ($regex.match())
+		
+		If ($regex.matches.length=3)
+			
+			$result.success:=True:C214
+			$result.version:=$regex.matches[1].data
+			$result.build:=$regex.matches[2].data
+			
+		End if 
+	End if 
+	
+	return $result
+	
+	//====================================================================
+Function swiftVersion() : Object
+	
+	var $result : Object
+	$result:=This:C1470.lep("xcrun swift --version")
+	
+	var $regex : cs:C1710.regex
+	$regex:=cs:C1710.regex.new(String:C10($result.out); "(?mi-s)Apple Swift version ((?:\\d\\.)*\\d)")
+	
+	If ($regex.match())
+		
+		If ($regex.matches.length>0)
+			
+			$result.success:=True:C214
+			$result.swift:=$regex.matches[1].data
+			
+		End if 
+	End if 
+	
+	return $result
 	
 	//====================================================================
 Function isCancelled()->$is : Boolean

@@ -8,7 +8,7 @@
 //
 // ----------------------------------------------------
 // Declarations
-#DECLARE($Obj_param)->$Obj_result
+#DECLARE($Obj_param : Object)->$Obj_result : Object
 
 var $Boo_search : Boolean
 var $Lon_i; $Lon_x : Integer
@@ -20,10 +20,6 @@ var $subfolder : Object
 var $Col_folder; $Col_paths : Collection
 var $regex : cs:C1710.regex
 
-If (False:C215)
-	C_OBJECT:C1216(Xcode; $0)
-	C_OBJECT:C1216(Xcode; $1)
-End if 
 
 $Obj_result:=New object:C1471("success"; False:C215)
 
@@ -270,64 +266,13 @@ Case of
 		// MARK:- xbuild-version
 	: ($Obj_param.action="xbuild-version")
 		
-		$Txt_cmd:="xcodebuild -version"
-		
-		LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
-		
-		If (Asserted:C1132(OK=1; "LEP failed: "+$Txt_cmd))
-			
-			If (Length:C16($Txt_out)>0)
-				
-				var $rgx : cs:C1710.regex
-				$rgx:=cs:C1710.regex.new($Txt_out; "(?s-mi)Xcode (\\d{1,}(?:\\.\\d)*).*version\\s*([A-Z0-9]*)")
-				
-				If ($rgx.match())
-					
-					If ($rgx.matches.length=3)
-						
-						$Obj_result.success:=True:C214
-						$Obj_result.version:=$rgx.matches[1].data
-						$Obj_result.build:=$rgx.matches[2].data
-						
-					End if 
-				End if 
-				
-			Else 
-				
-				$Obj_result.error:=$Txt_error
-				
-			End if 
-		End if 
+		$Obj_result:=cs:C1710.Xcode.new().xcodeBuildVersion()
 		
 		// MARK:- swift-version
 	: ($Obj_param.action="swift-version")
 		
-		$Txt_cmd:="xcrun swift --version"
+		$Obj_result:=cs:C1710.Xcode.new().swiftVersion()
 		
-		LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
-		
-		If (Asserted:C1132(OK=1; "LEP failed: "+$Txt_cmd))
-			
-			If (Length:C16($Txt_out)>0)
-				
-				$regex:=cs:C1710.regex.new($Txt_out; "(?mi-s)Apple Swift version ((?:\\d\\.)*\\d)")
-				
-				If ($regex.match())
-					
-					If ($regex.matches.length>0)
-						
-						$Obj_result.success:=True:C214
-						$Obj_result.swift:=$regex.matches[1].data
-						
-					End if 
-				End if 
-				
-			Else 
-				
-				$Obj_result.error:=$Txt_error
-				
-			End if 
-		End if 
 		
 		// MARK:- find
 	: ($Obj_param.action="find")
@@ -814,21 +759,7 @@ Case of
 		// MARK:- showsdks
 	: ($Obj_param.action="showsdks")
 		
-		$Txt_cmd:="xcodebuild -showsdks"
-		LAUNCH EXTERNAL PROCESS:C811($Txt_cmd; $Txt_in; $Txt_out; $Txt_error)
-		
-		If (Asserted:C1132(OK=1; "LEP failed: "+$Txt_cmd))
-			
-			If (Length:C16($Txt_out)>0)
-				
-				$Obj_result.success:=True:C214
-				
-			Else 
-				
-				$Obj_result.error:=$Txt_error
-				
-			End if 
-		End if 
+		$Obj_result:=cs:C1710.Xcode.new().sdks()
 		
 		// MARK:- set-tool-path
 	: ($Obj_param.action="set-tool-path")
@@ -1465,12 +1396,6 @@ Get system info should not be called frequently (consumer) as the processor will
 			End if 
 		End if 
 		
-		// MARK:- showDevicesWindow
-	: ($Obj_param.action="showDevicesWindow")
-		
-		OPEN URL:C673("xcdevice://ShowDevicesWindow"; *)
-		// LAUNCH EXTERNAL PROCESS("open xcdevice://showDevicesWindow")
-		$Obj_result.success:=True:C214
 		
 		// MARK:- enableForDevelopment
 	: ($Obj_param.action="enableForDevelopment")
@@ -1512,3 +1437,11 @@ Get system info should not be called frequently (consumer) as the processor will
 		//______________________________________________________
 End case 
 
+var $log : Collection
+$log:=New collection:C1472
+$log.push("CMD: "+$Txt_cmd)
+$log.push("STATUS: "+($Obj_result.success ? "success" : "failed"))
+$log.push("OUTPUT: "+String:C10($Obj_result.out))
+$log.push("ERROR: "+String:C10($Obj_result.error))
+
+LOG EVENT:C667(Into 4D debug message:K38:5; $log.join("\r"); ($Obj_result.success ? Information message:K38:1 : Error message:K38:3))
