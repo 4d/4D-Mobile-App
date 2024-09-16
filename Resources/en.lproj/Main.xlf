@@ -228,6 +228,10 @@ This may take a few minutes…</target>
           <source> Make sure that the device is connected to your computer using a USB cable.</source>
           <target> Make sure that the device is connected to your computer using a USB cable.</target>
         </trans-unit>
+        <trans-unit id="JY87r1n69syQSp5dYmXcBe" resname="makeSureThatADeviceIslocked">
+          <source> Make sure that the connected device is unlocked and trust this computer.</source>
+          <target> Make sure that the connected device is unlocked and trust this computer.</target>
+        </trans-unit>
         <trans-unit id="0P8BRDlzntJyfCqvVZMM+w" resname="theApplicationHasBeenSuccessfullyInstalled">
           <source>The "{app}" application has been successfully installed on the "{device}" device.</source>
           <target>The "{app}" application has been successfully installed on the "{device}" device.</target>

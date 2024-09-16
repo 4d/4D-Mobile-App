@@ -213,14 +213,30 @@ Function plugged($iosDeploymentTarget : Text)->$plugged : Collection
 		
 		$start:=1
 		
+		var $offline : Boolean
+		
 		While (Match regex:C1019("(?m-si)^([^(]*)\\s\\(([^)]*)\\)\\s\\(([[:xdigit:]]{8}-[[:xdigit:]]{16})\\)$"; This:C1470.outputStream; $start; $pos; $len))
 			
 			If ($str.setText(Substring:C12(This:C1470.outputStream; $pos{2}; $len{2})).versionCompare($minVers)>=0)
 				
+				var $name : Text
+				$name:=Substring:C12(This:C1470.outputStream; $pos{1}; $len{1})
+				If (Position:C15("== Devices Offline =="; $name)>0)
+					
+					$offline:=True:C214  // now device are offline
+					$name:=Replace string:C233(Replace string:C233($name; "== Devices Offline =="; ""); "\n"; "")
+					
+				End if 
+				
+				If ($offline)
+					$name:="🔒"+$name
+				End if 
+				
 				$plugged.push(New object:C1471(\
-					"name"; Substring:C12(This:C1470.outputStream; $pos{1}; $len{1}); \
+					"name"; $name; \
 					"version"; Substring:C12(This:C1470.outputStream; $pos{2}; $len{2}); \
 					"udid"; Substring:C12(This:C1470.outputStream; $pos{3}; $len{3}); \
+					"offline"; $offline; \
 					"type"; "device"))
 				
 			End if 

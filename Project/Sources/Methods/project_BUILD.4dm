@@ -380,6 +380,12 @@ If (Asserted:C1132($project#Null:C1517))
 				
 				Case of 
 						
+					: (Bool:C1537($data.getDevices))
+						
+						UI.getDevices()  // async (could not work immeditely, maybe see how to relaunch after it a build or just update current project with result)
+						
+						$data.getDevices:=False:C215
+						
 						//______________________________________________________
 					: (Bool:C1537($data.manualInstallation))
 						
@@ -402,7 +408,9 @@ If (Asserted:C1132($project#Null:C1517))
 						If ($success)
 							
 							// Verify that at least one device is plugged
-							$success:=($cfgutil.plugged(True:C214).length>0)
+							var $pluggeds : Collection
+							$pluggeds:=$cfgutil.plugged(True:C214)
+							$success:=($pluggeds.length>0)
 							
 							If (Not:C34($success))
 								
@@ -417,6 +425,33 @@ If (Asserted:C1132($project#Null:C1517))
 									"additional"; "makeSureThatADeviceIsConnected"; \
 									"ok"; "continue"; \
 									"okFormula"; Formula:C1597(UI.callMe(Formula:C1597(BUILD).source; $data)); \
+									"cancel"; "manualInstallation"; \
+									"cancelFormula"; Formula:C1597(UI.callMe(Formula:C1597(BUILD).source; $manual))\
+									))
+								
+							End if 
+							
+							// check not unlocked 
+							// $pluggeds:=$pluggeds.filter(Formula(Not(Bool($1.value.offline)))) // NOT WORKING for cfgutil, not returned offline param
+							If (($pluggeds.length=1) && (Bool:C1537($project._device.offline)))
+								$success:=False:C215
+							End if 
+							
+							If (Not:C34($success))
+								
+								$data:=cs:C1710.project.new($data).cleaned()
+								var $getDevices : Object
+								$getDevices:=OB Copy:C1225($data)
+								$getDevices.getDevices:=True:C214
+								$manual:=OB Copy:C1225($data)
+								
+								UI.postMessage(New object:C1471(\
+									"action"; "show"; \
+									"type"; "confirm"; \
+									"title"; "noDeviceFound"; \
+									"additional"; "makeSureThatADeviceIslocked"; \
+									"ok"; "continue"; \
+									"okFormula"; Formula:C1597(UI.callMe(Formula:C1597(BUILD).source; $getDevices)); \
 									"cancel"; "manualInstallation"; \
 									"cancelFormula"; Formula:C1597(UI.callMe(Formula:C1597(BUILD).source; $manual))\
 									))
