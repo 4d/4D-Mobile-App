@@ -283,7 +283,7 @@ If (Asserted:C1132($project#Null:C1517))
 				var $keyText : Text
 				$keyText:=($keyFile.exists) ? $keyFile.getText() : ""
 				
-				If (Length:C16($keyText)=0)
+				If (Length:C16($keyText)#0)
 					
 					// Check server-database structure
 					$rest:=Rest(New object:C1471(\
