@@ -154,8 +154,7 @@ Trotzdem fortfahren?</target>
 Would you want to update it now?</source>
           <target>Das Datenmodell ist nicht mehr gültig und muss aktualisiert werden.
 
-Jetzt aktualisieren?
-</target>
+Jetzt aktualisieren?</target>
         </trans-unit>
         <trans-unit id="MA/m4T00dDQKa8N99ooXDQ" resname="reviewing">
           <source>Review errors</source>
@@ -743,6 +742,10 @@ Stellen Sie sicher, das das Gerät mit einem USB-Kabel mit Ihrem Computer verbun
         <trans-unit id="OEnsaAYWrvOjjzmAPucY/A" resname="openTheXcodeSimulatorsManager">
           <source>Open the Xcode Simulators manager...</source>
           <target>Öffne Xcode Simulators Manager...</target>
+        </trans-unit>
+        <trans-unit id="OEvOjjzmAnsaAYWrPucY/A" resname="downloadIOSPlatform">
+          <source>Download iOS platform for Xcode...</source>
+          <target>iOS-Plattform für Xcode herunterladen...</target>
         </trans-unit>
       </group>
       <group resname="ERRORS">
