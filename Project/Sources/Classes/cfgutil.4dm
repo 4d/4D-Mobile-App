@@ -283,8 +283,21 @@ Function _getExe($bundleName : Text)->$exe : 4D:C1709.File
 			
 			If ($c.length>0)
 				
-				$bundle:=Folder:C1567("/Applications/"+$c[0])
-				
+				If (Position:C15("/Applications/"; $c[0])=1)
+					
+					$bundle:=Folder:C1567($c[0])
+					
+				Else 
+					
+					$bundle:=Folder:C1567("/Applications/"+$c[0])  // seems to not be correct
+					
+					If (Not:C34($bundle.exists))
+						
+						$bundle:=Folder:C1567($c[0])
+						
+					End if 
+					
+				End if 
 			End if 
 		End if 
 	End if 
