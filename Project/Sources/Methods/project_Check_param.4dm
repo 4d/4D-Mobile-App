@@ -103,7 +103,7 @@ redmine:#117188
 [BUG] error generating a mobile project if the project.4dmobileapp file is not in the Mobile Projects folder
 */
 	
-	$result.success:=(cs:C1710.doc.new($in.project._folder.parent).relativePath="/Mobile Projects/")
+	$result.success:=(String:C10(cs:C1710.doc.new($in.project._folder.parent).relativePath)="/Mobile Projects/")
 	
 	If (Not:C34($result.success))
 		
