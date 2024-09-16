@@ -173,12 +173,15 @@ Function build()->$result : Object
 	If ($result.app=Null:C1517)
 		
 		var $pathname : 4D:C1709.Folder
-		$pathname:=Folder:C1567(This:C1470.input.path; fk platform path:K87:2).folder("build/Build/Products/Debug-iphonesimulator/"+This:C1470._schemeName+".app")
-		
-		If ($pathname.exists)
+		If ($result.exportPath=Null:C1517)
 			
-			$result.app:=$pathname.path
+			$pathname:=Folder:C1567(This:C1470.input.path; fk platform path:K87:2).folder("build/Build/Products/Debug-iphonesimulator/"+This:C1470._schemeName+".app")
 			
+			If ($pathname.exists)
+				
+				$result.app:=$pathname.path
+				
+			End if 
 		End if 
 	End if 
 	

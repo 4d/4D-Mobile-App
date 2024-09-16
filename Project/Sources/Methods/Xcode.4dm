@@ -1150,7 +1150,7 @@ Case of
 					End if 
 					
 					// remove some trailing data like -infoplist-subpath Info.plist
-					If (Position:C15(".app "; $Obj_result.app)>0)  // XXX: last pos
+					If (Position:C15(".app "; String:C10($Obj_result.app))>0)  // XXX: last pos
 						
 						$Obj_result.app:=Substring:C12($Obj_result.app; 1; Position:C15(".app "; $Obj_result.app)+3)
 						
