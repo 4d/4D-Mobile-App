@@ -316,7 +316,7 @@ Case of
 				$device:=UI.devices.plugged.apple.query("udid = :1"; $menu.choice).pop()
 				
 				$selectedDevice:=$menu.choice
-				UI.preferences.set("lastIosConnected"; $selectedDevice)  // Last iOS plugged device
+				UI.preferences.set("lastIosDevice"; $selectedDevice)  // Last iOS plugged device
 				
 				PROJECT.$ios:=True:C214  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++
 				
