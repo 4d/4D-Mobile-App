@@ -20,7 +20,7 @@ cd $TMP
 
 echo "⬇️  Download $package component from latest release"
 archive=$TMP/$package.zip 
-curl -sL https://github.com/4d/$package/releases/latest/download/4D.Mobile.App.4dbase.zip -o $archive
+curl -sL https://github.com/4d/$package/releases/latest/download/4D.Mobile.App.zip -o $archive
 
 dst="$root/Components"
 if [ ! -d "$dst" ]; then
