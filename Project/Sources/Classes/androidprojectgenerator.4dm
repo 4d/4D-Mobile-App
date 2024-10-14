@@ -1805,7 +1805,7 @@ Function handleKotlinInputControlFiles($actionParameterObject : Object; $package
 	//
 Function copyInputControlFilesToApp($inputControlFolder : 4D:C1709.Folder; $packageName : Text)->$result : Object
 	
-	var $inputControlFolderInFormatter : 4D:C1709.Folder
+	var $inputControlFolderInFormatter; $inputControlFolderCode : 4D:C1709.Folder
 	var $inputControlFile; $copyDest : 4D:C1709.File
 	var $packageNamePath; $fileContent : Text
 	
@@ -1821,9 +1821,9 @@ Function copyInputControlFilesToApp($inputControlFolder : 4D:C1709.Folder; $pack
 		
 		For each ($inputControlFile; $inputControlFolderInFormatter.files(fk ignore invisible:K87:22))
 			
-			$inputControlFolder:=Folder:C1567(This:C1470.projectPath+"app/src/main/java/"+$packageNamePath+"/inputcontrol")
+			$inputControlFolderCode:=Folder:C1567(This:C1470.projectPath+"app/src/main/java/"+$packageNamePath+"/inputcontrol")
 			
-			$copyDest:=$inputControlFile.copyTo($inputControlFolder; $inputControlFile.fullName; fk overwrite:K87:5)
+			$copyDest:=$inputControlFile.copyTo($inputControlFolderCode; $inputControlFile.fullName; fk overwrite:K87:5)
 			
 			If ($copyDest.exists)
 				
