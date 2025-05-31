@@ -639,13 +639,14 @@ Function addMenuManager()
 			Else 
 				
 				$t:=$menu.choice
-				
-				$menu.edit:=($t="edit_@")
-				$menu.delete:=($t="delete_@")
-				$menu.add:=($t="add_@")
-				$menu.share:=($t="share_@")
-				$menu.sort:=($t="sort_@")
-				$menu.openURL:=($t="openURL_@")
+				var $menuInfo : Object
+				$menuInfo:={}
+				$menuInfo.edit:=($t="edit_@")
+				$menuInfo.delete:=($t="delete_@")
+				$menuInfo.add:=($t="add_@")
+				$menuInfo.share:=($t="share_@")
+				$menuInfo.sort:=($t="sort_@")
+				$menuInfo.openURL:=($t="openURL_@")
 				
 				$t:=Replace string:C233($t; "edit_"; "")
 				$t:=Replace string:C233($t; "delete_"; "")
@@ -654,7 +655,7 @@ Function addMenuManager()
 				$t:=Replace string:C233($t; "sort_"; "")
 				$t:=Replace string:C233($t; "openURL_"; "")
 				
-				If ($menu.sort)
+				If ($menuInfo.sort)
 					
 					$c:=Split string:C1554($t; ",")
 					$menu.tableID:=$c[0]
@@ -669,42 +670,42 @@ Function addMenuManager()
 				Case of 
 						
 						//______________________________________________________
-					: ($menu.add)
+					: ($menuInfo.add)
 						
 						$action:=PROJECT.actionAdd($menu.tableID)
 						$action.$icon:=UI.getIcon("actions 2/Add.svg")
 						This:C1470._addAction($action)
 						
 						//______________________________________________________
-					: ($menu.edit)
+					: ($menuInfo.edit)
 						
 						$action:=PROJECT.actionEdit($menu.tableID)
 						$action.$icon:=UI.getIcon("actions/Edit.svg")
 						This:C1470._addAction($action)
 						
 						//______________________________________________________
-					: ($menu.delete)
+					: ($menuInfo.delete)
 						
 						$action:=PROJECT.actionDelete($menu.tableID)
 						$action.$icon:=UI.getIcon("actions/Delete.svg")
 						This:C1470._addAction($action)
 						
 						//______________________________________________________
-					: ($menu.sort)
+					: ($menuInfo.sort)
 						
 						$action:=PROJECT.actionSort($menu.tableID; $menu.fieldID)
 						$action.$icon:=UI.getIcon("actions/Sort.svg")
 						This:C1470._addAction($action)
 						
 						//______________________________________________________
-					: ($menu.share)
+					: ($menuInfo.share)
 						
 						$action:=PROJECT.actionShare($menu.tableID)
 						$action.$icon:=UI.getIcon("actions/Send-basic.svg")
 						This:C1470._addAction($action)
 						
 						//______________________________________________________
-					: ($menu.openURL)
+					: ($menuInfo.openURL)
 						
 						$action:=PROJECT.actionURL($menu.tableID)
 						$action.$icon:=UI.getIcon("actions/Globe.svg")
