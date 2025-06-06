@@ -49,7 +49,7 @@ Function show($visible : Boolean; $foreground : Boolean) : cs:C1710.progress
 	This:C1470.isVisible:=Count parameters:C259>=1 ? $visible : True:C214
 	This:C1470.isForeground:=Count parameters:C259>=2 ? $foreground : This:C1470.isForeground
 	
-	EXECUTE METHOD:C1007("Progress SET WINDOW VISIBLE"; Null:C1517; This:C1470.isVisible; -1; -1; This:C1470.isForeground)
+	EXECUTE METHOD:C1007("Progress SET WINDOW VISIBLE"; *; This:C1470.isVisible; -1; -1; This:C1470.isForeground)
 	
 	This:C1470.isStopped()
 	
@@ -61,7 +61,7 @@ Function bringToFront() : cs:C1710.progress
 	This:C1470.isForeground:=True:C214
 	This:C1470.visible:=True:C214
 	
-	EXECUTE METHOD:C1007("Progress SET WINDOW VISIBLE"; Null:C1517; This:C1470.visible; -1; -1; This:C1470.isForeground)
+	EXECUTE METHOD:C1007("Progress SET WINDOW VISIBLE"; *; This:C1470.visible; -1; -1; This:C1470.isForeground)
 	
 	This:C1470.isStopped()
 	
@@ -77,13 +77,13 @@ Function hide() : cs:C1710.progress
 	// === === === === === === === === === === === === === === === === === === ===
 Function close()
 	
-	EXECUTE METHOD:C1007("Progress QUIT"; Null:C1517; This:C1470.id)
+	EXECUTE METHOD:C1007("Progress QUIT"; *; This:C1470.id)
 	
 	// === === === === === === === === === === === === === === === === === === ===
 Function setTitle($title : Text) : cs:C1710.progress
 	
 	This:C1470.title:=This:C1470._localize($title)
-	EXECUTE METHOD:C1007("Progress SET TITLE"; Null:C1517; This:C1470.id; This:C1470.title)
+	EXECUTE METHOD:C1007("Progress SET TITLE"; *; This:C1470.id; This:C1470.title)
 	
 	This:C1470.isStopped()
 	
@@ -95,7 +95,7 @@ Function setMessage($message : Text; $foreground : Boolean) : cs:C1710.progress
 	This:C1470.message:=This:C1470._localize($message)
 	This:C1470.isForeground:=Count parameters:C259>=2 ? $foreground : This:C1470.isForeground
 	
-	EXECUTE METHOD:C1007("Progress SET MESSAGE"; Null:C1517; This:C1470.id; This:C1470.message; This:C1470.isForeground)
+	EXECUTE METHOD:C1007("Progress SET MESSAGE"; *; This:C1470.id; This:C1470.message; This:C1470.isForeground)
 	
 	This:C1470.isStopped()
 	
@@ -152,7 +152,7 @@ Function setProgress($progress; $foreground : Boolean) : cs:C1710.progress
 		
 	End if 
 	
-	EXECUTE METHOD:C1007("Progress SET PROGRESS"; Null:C1517; This:C1470.id; This:C1470.progress; This:C1470.message; This:C1470.isForeground)
+	EXECUTE METHOD:C1007("Progress SET PROGRESS"; *; This:C1470.id; This:C1470.progress; This:C1470.message; This:C1470.isForeground)
 	
 	This:C1470.isStopped()
 	
@@ -165,11 +165,11 @@ Function setIcon($icon : Picture; $foreground : Boolean) : cs:C1710.progress
 	
 	If (Count parameters:C259>=2)
 		
-		EXECUTE METHOD:C1007("Progress SET ICON"; Null:C1517; This:C1470.id; This:C1470.icon; $foreground)
+		EXECUTE METHOD:C1007("Progress SET ICON"; *; This:C1470.id; This:C1470.icon; $foreground)
 		
 	Else 
 		
-		EXECUTE METHOD:C1007("Progress SET ICON"; Null:C1517; This:C1470.id; This:C1470.icon)
+		EXECUTE METHOD:C1007("Progress SET ICON"; *; This:C1470.id; This:C1470.icon)
 		
 	End if 
 	
@@ -187,12 +187,12 @@ Function setPosition($x : Integer; $y : Integer; $foreground : Boolean) : cs:C17
 		
 		This:C1470.isForeground:=Count parameters:C259>=3 ? $foreground : This:C1470.isForeground
 		
-		EXECUTE METHOD:C1007("Progress SET WINDOW VISIBLE"; Null:C1517; This:C1470.visible; This:C1470.x; This:C1470.y; This:C1470.isForeground)
+		EXECUTE METHOD:C1007("Progress SET WINDOW VISIBLE"; *; This:C1470.visible; This:C1470.x; This:C1470.y; This:C1470.isForeground)
 		
 	Else 
 		
 		This:C1470.x:=$x
-		EXECUTE METHOD:C1007("Progress SET WINDOW VISIBLE"; Null:C1517; This:C1470.visible; This:C1470.x; -1; This:C1470.isForeground)
+		EXECUTE METHOD:C1007("Progress SET WINDOW VISIBLE"; *; This:C1470.visible; This:C1470.x; -1; This:C1470.isForeground)
 		
 	End if 
 	
@@ -231,7 +231,7 @@ Function hideStop() : cs:C1710.progress
 Function setStopTitle($title : Text) : cs:C1710.progress
 	
 	This:C1470.stopTitle:=$title || "Stop"
-	EXECUTE METHOD:C1007("Progress SET BUTTON TITLE"; Null:C1517; This:C1470.id; This:C1470.stopTitle)
+	EXECUTE METHOD:C1007("Progress SET BUTTON TITLE"; *; This:C1470.id; This:C1470.stopTitle)
 	
 	This:C1470.isStopped()
 	
