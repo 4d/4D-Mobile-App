@@ -61,9 +61,18 @@ Class constructor
 	
 	This:C1470.setCharSet("US-ASCII")
 	
-	This:C1470.exe:=Choose:C955(Is macOS:C1572; \
-		This:C1470.home.file("Library/Android/sdk/tools/bin/sdkmanager"); \
-		This:C1470.home.file("AppData/Local/Android/sdk/tools/bin/sdkmanager.bat"))
+	This:C1470.root:=Is macOS:C1572 ? This:C1470.home.folder("Library/Android/sdk") : \
+		This:C1470.home.file("AppData/Local/Android/sdk")
+	
+	This:C1470.exe:=Is macOS:C1572 ? This:C1470.root.file("tools/bin/sdkmanager") : \
+		This:C1470.root.file("tools/bin/sdkmanager.bat")
+	
+	If (Not:C34((This:C1470.exe.exists)))
+		
+		This:C1470.exe:=Is macOS:C1572 ? This:C1470.root.file("cmdline-tools/latest/bin/sdkmanager") : \
+			This:C1470.root.file("cmdline-tools/latest/bin/sdkmanager.bat")
+		
+	End if 
 	
 	If (This:C1470.exe.exists)
 		

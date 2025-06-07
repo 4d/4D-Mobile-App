@@ -5,11 +5,38 @@ var $sdk : cs:C1710.sdkmanager
 var $adb : cs:C1710.adb
 var $studio : cs:C1710.studio
 var $avd : cs:C1710.avd
+var $emulator : cs:C1710.androidEmulator
 
+var $folder : 4D:C1709.Folder
 var $c; $availableDevices; $plugged; $packages : Collection
 var $serial : Text
+var $success : Boolean
 
 Case of 
+	: (True:C214)
+		
+		$avd:=cs:C1710.avd.new()
+		
+		var $defaultAvd : Object
+		$defaultAvd:=JSON Parse:C1218(File:C1566("/RESOURCES/android.json").getText()).device
+		
+		If ($defaultAvd#Null:C1517)
+			
+			$sdk:=cs:C1710.sdkmanager.new()
+			$folder:=$sdk.root.folder(Split string:C1554($defaultAvd.image; ";").join("/"))
+			$success:=$folder.exists
+			
+			If (Not:C34($success))
+				
+				$sdk.install($defaultAvd.image)
+				
+			End if 
+			
+			
+			$avd:=cs:C1710.avd.new().createAvd($defaultAvd.name; $defaultAvd.image; $defaultAvd.definition)
+			
+		End if 
+		
 		
 		//______________________________________________________
 	: (True:C214)
@@ -48,13 +75,10 @@ Case of
 		//______________________________________________________
 	: (True:C214)
 		
-		//var $emulator : cs.androidEmulator
-		//$emulator:=cs.androidEmulator.new()
-		
-		//var $possibleSimulators : Collection
-		//$possibleSimulators:=$emulator.availableSimulators()
-		
 		$adb:=cs:C1710.adb.new()
+		
+		var $devices : Collection
+		$devices:=$adb.availableDevices()
 		
 		$plugged:=$adb.plugged()  // -> Plugged devices
 		
@@ -91,7 +115,6 @@ Case of
 	: (True:C214)
 		
 		
-		var $emulator : cs:C1710.androidEmulator
 		$emulator:=cs:C1710.androidEmulator.new()
 		
 		
@@ -118,7 +141,6 @@ Case of
 		var $androidProcess : cs:C1710.androidProcess
 		$androidProcess:=cs:C1710.androidProcess.new()
 		
-		var $folder : 4D:C1709.Folder
 		$folder:=$androidProcess.androidSDKFolder()
 		
 		$adb:=cs:C1710.adb.new()

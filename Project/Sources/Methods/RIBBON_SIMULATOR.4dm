@@ -232,7 +232,7 @@ Case of
 					
 					// * CHECK IF THE SYSTEM IMAGE IS AVAILABLE
 					$sdk:=cs:C1710.sdkmanager.new()
-					$package:=$sdk.exe.parent.parent.parent.folder(Split string:C1554($defaultAvd.image; ";").join("/"))
+					$package:=$sdk.root.folder(Split string:C1554($defaultAvd.image; ";").join("/"))
 					$success:=$package.exists
 					
 					If (Not:C34($success))
