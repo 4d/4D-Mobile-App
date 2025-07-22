@@ -226,7 +226,7 @@ Function lastPath
 				
 			Else 
 				
-				$version:=This:C1470._getVersion(File:C1566($pathname; fk platform path:K87:2))
+				$version:=This:C1470._getVersion(Folder:C1567($pathname; fk platform path:K87:2))
 				
 			End if 
 			

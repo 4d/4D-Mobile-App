@@ -897,7 +897,9 @@ Function _cleanupOldDevices()
 	// Get app of device
 Function deviceApp($Obj_in : Object)->$Obj_out : Object
 	var $childrenFolder; $subFolder : 4D:C1709.Folder
+	var $Folder_ : 4D:C1709.Folder
 	var $File_ : 4D:C1709.File
+	
 	var $o : Object
 	var $Lon_x : Integer
 	
@@ -918,13 +920,13 @@ Function deviceApp($Obj_in : Object)->$Obj_out : Object
 				
 				For each ($childrenFolder; $Obj_out.path.folders())
 					
-					$File_:=$childrenFolder.folder("Library/Preferences")
+					$Folder_:=$childrenFolder.folder("Library/Preferences")
 					
-					If ($childrenFolder.folder("Library/Preferences").exists)
+					If ($Folder_.exists)
 						
-						If ($childrenFolder.folder("Library/Preferences").files().length>0)  // Check that app have user default (as any 4d for ios app, this speed up  menu loading ))
+						If ($Folder_.files().length>0)  // Check that app have user default (as any 4d for ios app, this speed up  menu loading ))
 							
-							$File_:=$childrenFolder.folder("Library/Preferences").file(".com.apple.mobile_container_manager.metadata.plist")
+							$File_:=$Folder_.file(".com.apple.mobile_container_manager.metadata.plist")
 							
 							If ($File_.exists)
 								

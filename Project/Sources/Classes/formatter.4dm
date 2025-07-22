@@ -115,7 +115,7 @@ Function getByType($type : Integer; $host : Boolean)->$formatters : Collection
 	
 	//============================================================================
 	// Returns the source folder (may be a zip)
-Function sources($name : Text)->$sources : 4D:C1709.Folder
+Function sources($name : Text)->$sources : 4D:C1709.Directory
 	
 	var $archive : 4D:C1709.ZipArchive
 	var $error : cs:C1710.error
@@ -254,7 +254,7 @@ Function create($type : Variant; $data : Collection)->$file : 4D:C1709.File
 			Case of 
 				: (($typeString="bool") | ($typeString="boolean"))
 					$manifest.type:=New collection:C1472("boolean")
-					$manifest.$doc:=Get localized string:C991("creatingDataFormatterIntegerToString")
+					$manifest.$doc:=Localized string:C991("creatingDataFormatterIntegerToString")
 				: (($typeString="number") | ($typeString="integer") | ($typeString="real"))
 					If (Count parameters:C259>1)
 						$manifest.choiceList:=New object:C1471()
@@ -263,7 +263,7 @@ Function create($type : Variant; $data : Collection)->$file : 4D:C1709.File
 						End for each 
 					End if 
 					$manifest.type:=New collection:C1472("real"; "integer")
-					$manifest.$doc:=Get localized string:C991("creatingDataFormatterIntegerToString")
+					$manifest.$doc:=Localized string:C991("creatingDataFormatterIntegerToString")
 				: (($typeString="string") | ($typeString="text"))
 					If (Count parameters:C259>1)
 						$manifest.choiceList:=New object:C1471()
@@ -272,7 +272,7 @@ Function create($type : Variant; $data : Collection)->$file : 4D:C1709.File
 						End for each 
 					End if 
 					$manifest.type:=New collection:C1472("text")
-					$manifest.$doc:=Get localized string:C991("creatingDataFormatterText")
+					$manifest.$doc:=Localized string:C991("creatingDataFormatterText")
 				Else 
 					ASSERT:C1129(dev_Matrix; "Missing binding for type "+String:C10($typeString)+" to create formatter")
 			End case 
