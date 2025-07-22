@@ -126,7 +126,7 @@ Function getRequirements($force : Boolean)
 	If ($sdk.exists)
 		
 		var $version : Object
-		var $xcodeVersionFile : 4D:C1709.ZipFile
+		var $xcodeVersionFile : 4D:C1709.File
 		var $archive : 4D:C1709.ZipArchive
 		var $Txt_methodOnErrorCall : Text
 		$Txt_methodOnErrorCall:=Method called on error:C704
@@ -731,7 +731,7 @@ https://apple.stackexchange.com/questions/23494/what-option-should-i-give-the-su
 			
 		End if 
 		
-		SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_MESSAGE"; Get localized string:C991("enterYourPasswordToAllowThis"))
+		SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS_MESSAGE"; Localized string:C991("enterYourPasswordToAllowThis"))
 		SET ENVIRONMENT VARIABLE:C812("SUDO_ASKPASS"; $script.path)
 		
 		This:C1470.lastError:=""

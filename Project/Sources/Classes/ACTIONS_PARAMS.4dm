@@ -22,7 +22,7 @@ Class constructor
 	This:C1470.typesAllowingCustomInputControls:=New collection:C1472("string"; "bool"; "number")
 	This:C1470.customInputControlsWithoutPlaceholder:=New collection:C1472("/segmented"; "/picker")
 	
-	This:C1470.globalScope:=Get localized string:C991("scope_3")
+	This:C1470.globalScope:=Localized string:C991("scope_3")
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	/// Design definition
@@ -992,7 +992,7 @@ Function updateParameters($global : Boolean)
 	// "format": "descending or "ascending"
 Function sortOrderValue() : Text
 	
-	return Get localized string:C991(This:C1470.current.format)
+	return Localized string:C991(This:C1470.current.format)
 	
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Format choice
@@ -1063,7 +1063,7 @@ Function formatValue() : Text
 		: (Length:C16(String:C10($current.format))=0)
 			
 			// Take type
-			return Get localized string:C991($current.type="string" ? "text" : String:C10($current.type))
+			return Localized string:C991($current.type="string" ? "text" : String:C10($current.type))
 			
 			//________________________________________
 		: (PROJECT.isCustomResource($current.format))  // Host custom action parameter format
@@ -1085,7 +1085,7 @@ Function formatValue() : Text
 		Else 
 			
 			// Prefer format
-			return Get localized string:C991($current.format#$current.type ? "f_"+String:C10($current.format) : String:C10($current.type))
+			return Localized string:C991($current.format#$current.type ? "f_"+String:C10($current.format) : String:C10($current.type))
 			
 			//________________________________________
 	End case 
@@ -1233,9 +1233,9 @@ Function newParameter()
 	var $parameter : Object
 	
 	$parameter:=New object:C1471(\
-		"name"; Get localized string:C991("newParameter"); \
-		"label"; Get localized string:C991("addParameter"); \
-		"shortLabel"; Get localized string:C991("addParameter"); \
+		"name"; Localized string:C991("newParameter"); \
+		"label"; Localized string:C991("addParameter"); \
+		"shortLabel"; Localized string:C991("addParameter"); \
 		"type"; "string")
 	
 	This:C1470._addParameter($parameter)
@@ -2574,9 +2574,9 @@ Function metaInfo($current : Object)->$result
 	//MARK:-
 	//=== === === === === === === === === === === === === === === === === === === === ===
 	// Returns the root folder of a custom input control, even if it is an archive
-Function _source($item : Object) : 4D:C1709.Folder
+Function _source($item : Object) : 4D:C1709.Directory
 	
-	var $folder : 4D:C1709.Folder
+	var $folder : 4D:C1709.Directory
 	
 	If ($item.isFile)  // Archive
 		
@@ -2801,20 +2801,20 @@ Function _newUserControl($static : Boolean)
 		: (($current.type="bool")\
 			 | ($current.type="boolean"))
 			
-			$data.$doc:=Get localized string:C991("creatingDataFormatterIntegerToString")
+			$data.$doc:=Localized string:C991("creatingDataFormatterIntegerToString")
 			
 			//________________________________________
 		: (($current.type="number")\
 			 | ($current.type="integer")\
 			 | ($current.type="real"))
 			
-			$data.$doc:=Get localized string:C991("creatingDataFormatterIntegerToString")
+			$data.$doc:=Localized string:C991("creatingDataFormatterIntegerToString")
 			
 			//________________________________________
 		: (($current.type="string")\
 			 | ($current.type="text"))
 			
-			$data.$doc:=Get localized string:C991("creatingDataFormatterText")
+			$data.$doc:=Localized string:C991("creatingDataFormatterText")
 			
 			//______________________________________________________
 	End case 

@@ -75,7 +75,7 @@ Function _test()
 	var $vdtool : Object
 	$vdtool:=cs:C1710.vdtool.new()
 	
-	var $source : 4D:C1709.File
+	var $source : 4D:C1709.Folder
 	var $destination : 4D:C1709.Folder
 	$source:=Folder:C1567(Folder:C1567(fk resources folder:K87:11).platformPath; fk platform path:K87:2).folder("images/tableIcons/actions")
 	$destination:=Folder:C1567(Temporary folder:C486; fk platform path:K87:2).folder(Generate UUID:C1066)

@@ -19,7 +19,7 @@ var $run; $withUI : Boolean
 var $buildNumber : Integer
 var $manifest; $o; $param : Object
 var $fileManifest; $preferences : 4D:C1709.File
-var $sdk : 4D:C1709.ZipFile
+var $sdk : 4D:C1709.File
 
 ASSERT:C1129(Count parameters:C259>=2)
 
@@ -255,7 +255,7 @@ If ($run | $force)
 			
 			If ($withUI)
 				
-				$param.title:=Replace string:C233(Get localized string:C991("downloadingSDK"); "{os}"; $target="android" ? "Android" : "iOS")
+				$param.title:=Replace string:C233(Localized string:C991("downloadingSDK"); "{os}"; $target="android" ? "Android" : "iOS")
 				$param.caller:=New object:C1471("window"; $caller; "method"; "editor_CALLBACK"; "message"; "updateRibbon")
 				
 			End if 

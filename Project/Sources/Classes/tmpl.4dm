@@ -641,7 +641,7 @@ Function _getPictureAsData()
 	
 	//============================================================================
 	// Return the source folder of the template (could be a zip)
-Function getSources($name : Text; $type : Text)->$template : 4D:C1709.Folder
+Function getSources($name : Text; $type : Text)->$template : 4D:C1709.Directory
 	
 	var $formName; $formType; $item : Text
 	var $success : Boolean
@@ -757,7 +757,7 @@ Function css()->$file : 4D:C1709.File
 /* ============================================================================*/
 Function label($resname : Text)->$localized : Text
 	
-	$localized:=Get localized string:C991($resname)
+	$localized:=Localized string:C991($resname)
 	
 	//============================================================================
 	// Check that a field type is validated against the bind attribute

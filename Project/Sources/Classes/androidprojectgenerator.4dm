@@ -1395,7 +1395,8 @@ Function handleInputControlImages($actionObject : Object)->$result : Object
 	//
 Function copyFolderImagesToApp($formatterFolder : 4D:C1709.Folder; $formatName : Text)->$result : Object
 	
-	var $imagesFolderInFormatter; $copyDest : 4D:C1709.Folder
+	var $imagesFolderInFormatter : 4D:C1709.Folder
+	var $copyDest : 4D:C1709.File
 	var $imageFile : 4D:C1709.File
 	
 	$formatName:=$formatName
