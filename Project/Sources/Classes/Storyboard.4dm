@@ -4,14 +4,36 @@ Class constructor($path : 4D:C1709.File)
 	// MARK:- ids
 Function _randomID()->$id : Text
 	$id:=Generate UUID:C1066
-	$id:=Substring:C12($id; 1; 3)+"-"+Substring:C12($id; 4; 2)+"-"+Substring:C12($id; 7; 3)
+	$id:=Substring:C12($id; 25; 3)+"-"+Substring:C12($id; 28; 2)+"-"+Substring:C12($id; 30; 3)
+	//$id:=Substring($id; 1; 3)+"-"+Substring($id; 5; 2)+"-"+Substring($id; 7; 3)
 	
 Function _randomIDS($length : Integer)->$ids : Collection
-	$ids:=New collection:C1472
+	var $idsObject : Object
+	$idsObject:=New object:C1471()
+	
+	var $fallbackCounter : Integer
+	$fallbackCounter:=0
+	
 	var $i : Integer
 	For ($i; 1; $length; 1)
-		$ids.push(This:C1470._randomID())
+		var $retryCount : Integer
+		$retryCount:=0
+		Repeat 
+			var $newId : Text
+			$newId:=This:C1470._randomID()
+			$retryCount:=$retryCount+1
+			If ($retryCount>100)  // to prevent infinite loop
+				// ASSERT(False; "Unable to generate unique random ID after 100 attempts")
+				
+				// Generate sequential fallback ID with same format: XXX-XX-XXX
+				$fallbackCounter:=$fallbackCounter+1
+				$newId:=String:C10($fallbackCounter; "000")+"-"+String:C10($fallbackCounter; "00")+"-"+String:C10($fallbackCounter; "000")
+			End if 
+		Until ($idsObject[$newId]=Null:C1517)
+		$idsObject[$newId]:=True:C214  // Mark as used
 	End for 
+	
+	$ids:=OB Keys:C1719($idsObject)  // Extract keys as collection at the end 
 	
 	// MARK:- XML
 Function insertInto($Obj_element : Object; $text : Text; $at : Integer)->$Dom_ : Object

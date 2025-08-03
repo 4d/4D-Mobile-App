@@ -31,7 +31,7 @@ If ($file.exists)
 			
 			If ($c[2]#"0")
 				
-				$version:=$major+"R"+$c[2]
+				$version:=$major+"R"+$c[2]  // FIXME: for 20RA=>20R10
 				$success:=($branch=($version)) | ($branch=($major+"RX"))
 				
 			Else 
