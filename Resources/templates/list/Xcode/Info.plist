@@ -90,5 +90,7 @@
 	<true/>
 	<key>UIRequiresFullScreen~ipad</key>
 	<false/>
+	<key>UIDesignRequiresCompatibility</key>
+	<true/>
 </dict>
 </plist>
