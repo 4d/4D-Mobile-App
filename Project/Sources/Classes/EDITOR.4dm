@@ -57,19 +57,19 @@ Function design()
 	$o:=This:C1470.pages.general
 	
 	$o.panels.push(New object:C1471(\
-		"title"; Get localized string:C991("targetOs"); \
+		"title"; Localized string:C991("targetOs"); \
 		"form"; "TARGET"))
 	
 	$o.panels.push(New object:C1471(\
-		"title"; Get localized string:C991("organization"); \
+		"title"; Localized string:C991("organization"); \
 		"form"; "ORGANIZATION"))
 	
 	$o.panels.push(New object:C1471(\
-		"title"; Get localized string:C991("product"); \
+		"title"; Localized string:C991("product"); \
 		"form"; "PRODUCT"))
 	
 	$o.panels.push(New object:C1471(\
-		"title"; Get localized string:C991("developer"); \
+		"title"; Localized string:C991("developer"); \
 		"form"; "DEVELOPER"))
 	
 	// MARK:STRUCTURE
@@ -79,7 +79,7 @@ Function design()
 	$o:=This:C1470.pages.structure
 	
 	$o.panels.push(New object:C1471(\
-		"title"; Get localized string:C991("publishedStructure"); \
+		"title"; Localized string:C991("publishedStructure"); \
 		"form"; "STRUCTURE"; \
 		"noTitle"; True:C214))
 	
@@ -102,11 +102,11 @@ Function design()
 	$o:=This:C1470.pages.properties
 	
 	$o.panels.push(New object:C1471(\
-		"title"; Get localized string:C991("tablesProperties"); \
+		"title"; Localized string:C991("tablesProperties"); \
 		"form"; "TABLES"))
 	
 	$o.panels.push(New object:C1471(\
-		"title"; Get localized string:C991("fieldsProperties"); \
+		"title"; Localized string:C991("fieldsProperties"); \
 		"form"; "FIELDS"; \
 		"noTitle"; True:C214))
 	
@@ -117,7 +117,7 @@ Function design()
 	$o:=This:C1470.pages.main
 	
 	$o.panels.push(New object:C1471(\
-		"title"; Get localized string:C991("mainMenu"); \
+		"title"; Localized string:C991("mainMenu"); \
 		"form"; This:C1470.MAINFormName; \
 		"noTitle"; True:C214))
 	
@@ -128,7 +128,7 @@ Function design()
 	$o:=This:C1470.pages.views
 	
 	$o.panels.push(New object:C1471(\
-		"title"; Get localized string:C991("forms"); \
+		"title"; Localized string:C991("forms"); \
 		"form"; "VIEWS"; \
 		"noTitle"; True:C214))
 	
@@ -151,19 +151,19 @@ Function design()
 	$o:=This:C1470.pages.deployment
 	
 	$o.panels.push(New object:C1471(\
-		"title"; Get localized string:C991("server"); \
+		"title"; Localized string:C991("server"); \
 		"form"; "SERVER"))
 	
 	If (Feature.with("customLoginForms"))
 		
 		$o.panels.push(New object:C1471(\
-			"title"; Get localized string:C991("features"); \
+			"title"; Localized string:C991("features"); \
 			"form"; "FEATURES"))
 		
 	Else 
 		
 		$o.panels.push(New object:C1471(\
-			"title"; Get localized string:C991("features"); \
+			"title"; Localized string:C991("features"); \
 			"form"; "_FEATURES"))
 		
 	End if 
@@ -183,12 +183,12 @@ Function design()
 	$o:=This:C1470.pages.data
 	
 	$o.panels.push(New object:C1471(\
-		"title"; Get localized string:C991("source"); \
+		"title"; Localized string:C991("source"); \
 		"form"; "SOURCE"; \
 		"help"; True:C214))
 	
 	$o.panels.push(New object:C1471(\
-		"title"; Get localized string:C991("properties"); \
+		"title"; Localized string:C991("properties"); \
 		"form"; "DATA"; \
 		"help"; True:C214))
 	
@@ -203,7 +203,7 @@ Function design()
 		"noTitle"; True:C214))
 	
 	$o.panels.push(New object:C1471(\
-		"title"; Get localized string:C991("page_action_params"); \
+		"title"; Localized string:C991("page_action_params"); \
 		"form"; "ACTIONS_PARAMS"; \
 		"noTitle"; True:C214))
 	
@@ -274,17 +274,17 @@ Function preload()
 	
 	// FIELD TYPE NAMES
 	This:C1470.typeNames:=New collection:C1472
-	This:C1470.typeNames[Is alpha field:K8:1]:=Get localized string:C991("alpha")
-	This:C1470.typeNames[Is integer:K8:5]:=Get localized string:C991("integer")
-	This:C1470.typeNames[Is longint:K8:6]:=Get localized string:C991("longInteger")
-	This:C1470.typeNames[Is integer 64 bits:K8:25]:=Get localized string:C991("integer64Bits")
-	This:C1470.typeNames[Is real:K8:4]:=Get localized string:C991("real")
-	This:C1470.typeNames[_o_Is float:K8:26]:=Get localized string:C991("float")
-	This:C1470.typeNames[Is boolean:K8:9]:=Get localized string:C991("boolean")
-	This:C1470.typeNames[Is time:K8:8]:=Get localized string:C991("time")
-	This:C1470.typeNames[Is date:K8:7]:=Get localized string:C991("date")
-	This:C1470.typeNames[Is text:K8:3]:=Get localized string:C991("text")
-	This:C1470.typeNames[Is picture:K8:10]:=Get localized string:C991("picture")
+	This:C1470.typeNames[Is alpha field:K8:1]:=Localized string:C991("alpha")
+	This:C1470.typeNames[Is integer:K8:5]:=Localized string:C991("integer")
+	This:C1470.typeNames[Is longint:K8:6]:=Localized string:C991("longInteger")
+	This:C1470.typeNames[Is integer 64 bits:K8:25]:=Localized string:C991("integer64Bits")
+	This:C1470.typeNames[Is real:K8:4]:=Localized string:C991("real")
+	This:C1470.typeNames[_o_Is float:K8:26]:=Localized string:C991("float")
+	This:C1470.typeNames[Is boolean:K8:9]:=Localized string:C991("boolean")
+	This:C1470.typeNames[Is time:K8:8]:=Localized string:C991("time")
+	This:C1470.typeNames[Is date:K8:7]:=Localized string:C991("date")
+	This:C1470.typeNames[Is text:K8:3]:=Localized string:C991("text")
+	This:C1470.typeNames[Is picture:K8:10]:=Localized string:C991("picture")
 	
 	This:C1470.noIcon:=File:C1566("/RESOURCES/images/noIcon.svg").platformPath
 	This:C1470.errorIcon:=File:C1566("/RESOURCES/images/errorIcon.svg").platformPath
@@ -899,7 +899,7 @@ The real build process (project_BUILD) will autostart at the message is posted
 	This:C1470.postMessage(New object:C1471(\
 		"action"; "show"; \
 		"type"; "progress"; \
-		"title"; Get localized string:C991("product")+" - "+PROJECT.product.name+" ["+(PROJECT._buildTarget="android" ? "Android" : "iOS")+"]"; \
+		"title"; Localized string:C991("product")+" - "+PROJECT.product.name+" ["+(PROJECT._buildTarget="android" ? "Android" : "iOS")+"]"; \
 		"additional"; "preparations"; \
 		"autostart"; Formula:C1597(CALL FORM:C1391(Current form window:C827; Formula:C1597(project_BUILD).source; $data))))
 	
@@ -980,6 +980,33 @@ Function doGenerate($keyPathname : Text)
 	// Make a copy for the Formula
 	$window:=Current form window:C827
 	$worker:=This:C1470.worker
+	
+	var $roles:=cs:C1710.roles.new()
+	If (Bool:C1537($roles.forceLogin))
+		
+		If ($roles.getPrivilege("4DMobileAppDev")=Null:C1517)
+			
+			
+			If (Not:C34($roles.hasReadDataStorePermission("4DMobileAppDev")))
+				If (Shift down:C543)
+					
+					$roles.addReadDataStorePermission("4DMobileAppDev")
+					
+					CALL FORM:C1391($window; Formula:C1597(editor_CALLBACK).source; "endOfDatasetGeneration"; New object:C1471("errors"; New collection:C1472("'4DMobileAppDev' with DataStore right has been added locally. Please retry or put role on server if distant dump")))
+					
+					WEB STOP SERVER:C618
+					WEB START SERVER:C617
+					
+					return 
+					
+				Else 
+					CALL FORM:C1391($window; Formula:C1597(editor_CALLBACK).source; "endOfDatasetGeneration"; New object:C1471("errors"; New collection:C1472("You have activated forceLogin.\nYou need to add '4DMobileAppDev' with DataStore right. (locally or on remote server)")))
+					
+					return 
+				End if 
+			End if 
+		End if 
+	End if 
 	
 	$ƒ:=Formula:C1597(CALL WORKER:C1389($worker; Formula:C1597(dataSet).source; New object:C1471(\
 		"action"; "create"; \
