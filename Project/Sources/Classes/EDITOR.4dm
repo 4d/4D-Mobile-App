@@ -981,7 +981,8 @@ Function doGenerate($keyPathname : Text)
 	$window:=Current form window:C827
 	$worker:=This:C1470.worker
 	
-	var $roles:=cs:C1710.roles.new()
+	var $roles : cs:C1710.roles
+	$roles:=cs:C1710.roles.new()
 	If (Bool:C1537($roles.forceLogin))
 		
 		If ($roles.getPrivilege("4DMobileAppDev")=Null:C1517)
