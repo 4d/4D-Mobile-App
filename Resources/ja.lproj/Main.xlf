@@ -228,6 +228,10 @@ This may take a few minutes…</source>
           <source> Make sure that the device is connected to your computer using a USB cable.</source>
           <target> デバイスがUSBケーブル経由でコンピューターに接続されていることを確認してください。</target>
         </trans-unit>
+        <trans-unit id="JY87r1n69syQSp5dYmXcBe" resname="makeSureThatADeviceIslocked">
+          <source> Make sure that the connected device is unlocked and trust this computer.</source>
+          <target> 接続されたデバイスのロックが解除されていて、このコンピューターを信頼していることを確認してください。</target>
+        </trans-unit>
         <trans-unit id="0P8BRDlzntJyfCqvVZMM+w" resname="theApplicationHasBeenSuccessfullyInstalled">
           <source>The "{app}" application has been successfully installed on the "{device}" device.</source>
           <target>"{app}"アプリケーションは"{device}"のデバイスに正常にインストールされました。</target>
@@ -742,6 +746,10 @@ Make sure the device is connected to your computer with a USB cable.</source>
         <trans-unit id="OEnsaAYWrvOjjzmAPucY/A" resname="openTheXcodeSimulatorsManager">
           <source>Open the Xcode Simulators manager...</source>
           <target>Xcode シミュレーターマネージャーを開く...</target>
+        </trans-unit>
+        <trans-unit id="OEvOjjzmAnsaAYWrPucY/A" resname="downloadIOSPlatform">
+          <source>Download iOS platform for Xcode...</source>
+          <target>Xcode用のiOSプラットフォームをダウンロードする...</target>
         </trans-unit>
       </group>
       <group resname="ERRORS">
