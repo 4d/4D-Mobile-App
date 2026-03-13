@@ -13,7 +13,7 @@ jobs:
       contents: write # for asset upload
     steps:
       - name: ⬇️ Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: download sdks & generator
         run: |
            mkdir -p ./Resources/sdk
@@ -25,7 +25,7 @@ jobs:
            echo "Download Android Project Generator"
            curl -sL https://github.com/4d/android-ProjectGenerator/releases/latest/download/androidprojectgenerator.jar -o ./Resources/scripts/androidprojectgenerator.jar
       - name: Check out 4D-Progress
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: 4d/4D-Progress
           path: Components/4D-Progress.4dbase
