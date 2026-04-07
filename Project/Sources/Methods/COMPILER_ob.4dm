@@ -63,7 +63,6 @@ If (False:C215)
 	C_OBJECT:C1216(ob_findProperty; $3)
 	
 	//__________________________________________________
-	C_OBJECT:C1216(ob_removeProperty; $0)
 	C_OBJECT:C1216(ob_removeProperty; $1)
 	C_TEXT:C284(ob_removeProperty; $2)
 	

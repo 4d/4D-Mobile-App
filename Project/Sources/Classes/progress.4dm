@@ -116,7 +116,7 @@ Function _localize($message : Text) : Text
 	End if 
 	//%W+533.1
 	
-	$localized:=Get localized string:C991($message)
+	$localized:=Localized string:C991($message)
 	return Length:C16($localized)>0 ? $localized : $message  // Revert if no localization
 	
 	// === === === === === === === === === === === === === === === === === === ===
@@ -214,7 +214,7 @@ Function showStop($show : Boolean) : cs:C1710.progress
 		
 	End if 
 	
-	EXECUTE METHOD:C1007("Progress SET BUTTON ENABLED"; Null:C1517; This:C1470.id; This:C1470.stopEnabled)
+	EXECUTE METHOD:C1007("Progress SET BUTTON ENABLED"; *; This:C1470.id; This:C1470.stopEnabled)
 	
 	This:C1470.isStopped()
 	
